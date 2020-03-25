@@ -1,13 +1,12 @@
-import React, { PureComponent } from 'react';
+// @flow
+import React from 'react';
 
-class App extends PureComponent {
-    render() {
-        return(
-            <div>
-                Hello world :D
-            </div>
-        )
-    }
+const App = () => {
+    return(
+        <div>
+            Hello world :D
+        </div>
+    )
 }
 
 export default App;

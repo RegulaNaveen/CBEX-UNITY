@@ -11,8 +11,15 @@ module.exports = {
         rules: [{
             exclude: /node_modules/,
             test: /\.(js|jsx)$/,
-            include: path.resolve(__dirname, 'src'),
-            use: ['babel-loader']
+            loader: 'babel-loader'
+        },
+        {
+            test: /\.(js|jsx)$/,
+            enforce: 'pre',
+            loader: 'eslint-loader',
+            options: {
+                emitWarning: true
+            }
         }]
     },
     resolve: {

@@ -37,5 +37,17 @@
         "prettier",
         "flowtype"
     ],
-    "rules": {}
+    "rules": {
+        "react/jsx-no-bind": [
+            "error",
+            {
+                "allowArrowFunctions": false,
+                "allowFunctions": false,
+                "allowBind": false
+            }
+        ],
+        "no-console": 0,
+        "react/default-props-match-prop-types": 0,
+        "prefer-promise-reject-errors": 0
+    }
 }
