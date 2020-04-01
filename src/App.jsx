@@ -1,5 +1,5 @@
 // @flow
-import './App.scss'
+import '../styles/App.scss'
 import React from 'react';
 
 const App = () => {

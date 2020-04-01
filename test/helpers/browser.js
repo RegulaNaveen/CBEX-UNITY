@@ -3,6 +3,10 @@ require('@babel/polyfill');
 const Enzyme = require('enzyme');
 const Adapter = require('enzyme-adapter-react-16');
 
+const noop = () => null;
+require.extensions['.css'] = noop;
+require.extensions['.scss'] = noop;
+
 Enzyme.configure({ adapter: new Adapter() });
 
 // Initialize jsdom-global to simulate
