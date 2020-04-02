@@ -32,7 +32,11 @@ module.exports = {
                 // Compiles Sass to CSS
                 'sass-loader',
             ],
-        },]
+        },
+        {
+            test: /\.(gif|svg|jpg|png|jpeg)$/,
+            loader: 'url-loader'
+        }]
     },
     resolve: {
         extensions: ['.js', '.jsx'],

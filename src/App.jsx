@@ -1,5 +1,4 @@
 // @flow
-import '../styles/App.scss'
 import React from 'react';
 import { BrowserRouter, Switch, Route, Link, Redirect } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
