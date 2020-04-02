@@ -1,0 +1,73 @@
+.proposalInfo-wrapper {
+  box-sizing: border-box;
+  height: 256px;
+  width: 1092px;
+  margin-top: 19px;
+  margin-left: 13px;
+  margin-bottom: 26px;
+  border: 1px solid #E9E9E9;
+  border-radius: 4px;
+  background-color: #FFFFFF;
+  box-shadow: 0 4px 4px 0 rgba(0,0,0,0.04), 0 16px 24px 0 rgba(0,0,0,0.08);
+
+  .proposalInfo-title {
+    height: 48px;
+    width: 279px;
+    color: #000000;
+    font-family: "Proxima Nova";
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 48px;
+    margin-top: 10px;
+    margin-left: 18px;
+    margin-bottom: 6px;
+  }
+
+  .proposalInfo-subtitle {
+    height: 30px;
+    width: 102px;
+    color: #000000;
+    font-family: "Proxima Nova";
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 30px;
+    margin-left: 44px;
+  }
+
+  .proposalInfo-details-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 125px;
+    padding-left: 44px;
+    
+    .proposalInfo-details-info {
+      width: 450px;
+
+      .proposalInfo-details-segment {
+        display: flex;
+        flex-direction: row;
+
+        .proposalInfo-details-data {
+          width: 215px;
+          color: #000000;
+          font-family: "Proxima Nova";
+          font-size: 16px;
+          letter-spacing: 0;
+          line-height: 24px;
+        }
+
+        .proposalInfo-details-name {
+          width: 150px;
+          color: #000000;
+          font-family: "Proxima Nova";
+          font-size: 16px;
+          letter-spacing: 0;
+          line-height: 24px;
+        }
+      }
+    }
+  }
+}
