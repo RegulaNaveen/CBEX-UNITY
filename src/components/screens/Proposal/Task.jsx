@@ -22,7 +22,16 @@ function Task() {
             Resources
           </div>
           <div className='task-title'>
-            Resources
+            Answer
+          </div>
+          <div className='task-title'>
+            Owner
+          </div>
+          <div className='task-title'>
+            Due Date
+          </div>
+          <div className='task-title'>
+            Date Completed
           </div>
         </div>
       </div>}
