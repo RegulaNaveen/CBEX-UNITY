@@ -5,13 +5,11 @@ import { PrimaryButton, LinkButton } from '../common/Button';
 
 const LoginForm = () => {
   return (
-    <div className='login-form-container'>
-      <div className='test'>
-        <p className='iqvia-living-proposal-title'>IQVIA Living Proposal</p>
-      </div>
-      <form>
-        <div className='input-container'>
-          <label htmlFor='email' className='label-input'>
+    <div className='login-form-wrapper'>
+      <p className='living-proposal-title'>IQVIA Living Proposal</p>
+      <form className='login-input-wrapper'>
+        <div>
+          <label htmlFor='email' className='login-label-input'>
             Email
             <br />
             <input
@@ -24,8 +22,8 @@ const LoginForm = () => {
             <br />
           </label>
         </div>
-        <div className='inputs'>
-          <label htmlFor='password' className='label-input'>
+        <div className='password-input-wrapper'>
+          <label htmlFor='password' className='login-label-input'>
             Password
             <br />
             <input
@@ -39,12 +37,14 @@ const LoginForm = () => {
           </label>
         </div>
       </form>
-      <div className='checkbox-container'>
-        <Checkbox />
-      </div>
-      <div className='button-container'>
-        <PrimaryButton />
-        <LinkButton />
+      <Checkbox />
+      <div className='login-button-wrapper'>
+        <div className='login-button'>
+          <PrimaryButton />
+        </div>
+        <div className='forgot-password-link'>
+          <LinkButton />
+        </div>
       </div>
     </div>
   );

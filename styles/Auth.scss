@@ -1,102 +1,105 @@
 //LOGIN
-.login-container {
+.login-wrapper {
+  display: flex;
   width: 100%;
   height: 769px;
+}
+
+.login-background-img {
+  height: 769px;
+  width: 561px;
+}
+
+.gradient-background-img {
+  position: absolute;
+  height: 769px;
+  width: 561px;
+  background: radial-gradient(circle, #0076ae 0%, #250056 100%);
+  z-index: 10;
+  opacity: 0.66;
+}
+
+.login-form {
+  background-color: #f8f9fb;
+  width: 100%;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
 
-  .login-background-img {
-    height: 769px;
-    width: 561px;
-  }
-
-  .gradient-background-img {
-    position: absolute;
-    height: 769px;
-    width: 561px;
-    background: radial-gradient(circle, #0076ae 0%, #250056 100%);
-    z-index: 10;
-    opacity: 0.66;
-  }
-
-  .login-form {
-    display: inline-block;
-    background-color: #f8f9fb;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
-
-    .copyright-text {
-      height: 16px;
-      width: 100%;
-      color: #4a4a4a;
-      font-family: 'Proxima Nova';
-      font-size: 13px;
-      letter-spacing: 0;
-      line-height: 16px;
-      bottom: 16px;
-      margin-left: 24px;
-      position: absolute;
-    }
-  }
+.copyright-text {
+  height: 16px;
+  width: 100%;
+  color: #4a4a4a;
+  font-family: 'Proxima Nova';
+  font-size: 13px;
+  letter-spacing: 0;
+  line-height: 16px;
+  bottom: 16px;
+  margin-left: 24px;
+  position: absolute;
 }
 
 // LOGIN FORM
-.login-form-container {
+.login-form-wrapper {
   display: flex;
   flex-direction: column;
-  position: absolute;
   padding: 20px;
-  margin-left: 50px;
+  margin-left: 85px;
+}
 
-  .iqvia-living-proposal-title {
-    height: 48px;
-    width: 100%;
-    color: #000000;
-    font-family: 'Proxima Nova';
-    font-size: 40px;
-    font-weight: 600;
-    letter-spacing: 0;
-    line-height: 48px;
-  }
+.living-proposal-title {
+  height: 48px;
+  width: 100%;
+  color: #000000;
+  font-family: 'Proxima Nova';
+  font-size: 40px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 48px;
+}
 
-  .input-container {
-    margin-bottom: 28px;
-  }
+.login-input-wrapper {
+  margin-bottom: 28px;
+  margin-top: 48px;
+}
 
-  .label-input {
-    height: 21px;
-    width: 95.39px;
-    color: #444444;
-    font-family: 'Proxima Nova';
-    font-size: 14px;
-    letter-spacing: 0;
-    line-height: 21px;
-  }
+.password-input-wrapper {
+  margin-top: 28px;
+}
 
-  .input-login {
-    height: 40px;
-    width: 303px;
-    border: none;
-    border: 0.5px solid lightgray;
-    border-radius: 5px;
-    padding: 10px;
-    margin-top: 5px;
-  }
+.login-label-input {
+  height: 21px;
+  width: 95.39px;
+  color: #444444;
+  font-family: 'Proxima Nova';
+  font-size: 14px;
+  letter-spacing: 0;
+  line-height: 21px;
+}
 
-  input::placeholder {
-    color: lightgray;
-    font-size: 14px;
-  }
+.input-login {
+  height: 40px;
+  width: 303px;
+  border: none;
+  border: 0.5px solid lightgray;
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 5px;
+}
 
-  .checkbox-container {
-    margin-top: 28px;
-  }
+.input-login::placeholder {
+  color: lightgray;
+  font-size: 14px;
+}
 
-  .button-container {
-    display: flex;
-    flex-direction: column;
-    margin-top: 48px;
-  }
+.login-button-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-top: 48px;
+}
+
+.forgot-password-link {
+  margin-top: 28px;
 }

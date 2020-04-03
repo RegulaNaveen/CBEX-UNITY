@@ -5,17 +5,15 @@ import img from '../../../img/login-background.png';
 
 const Login = () => {
   return (
-    <form className='login-container'>
+    <form className='login-wrapper'>
+      <div className='gradient-background-img' />
       <div>
-        <div className='gradient-background-img' />
-        <div>
-          <img
-            className='login-background-img'
-            src={img}
-            alt='Login background'
-            role='presentation'
-          />
-        </div>
+        <img
+          className='login-background-img'
+          src={img}
+          alt='Login background'
+          role='presentation'
+        />
       </div>
       <div className='login-form'>
         <LoginForm />
