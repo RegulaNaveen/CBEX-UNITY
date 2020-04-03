@@ -51,4 +51,17 @@ module.exports = {
             template: "src/index.html"
         })
     ]
+  },
+  resolve: {
+    extensions: ['.js', '.jsx']
+  },
+  devServer: {
+    contentBase: path.resolve(__dirname, 'dist'),
+    port: 8080
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: 'src/index.html'
+    })
+  ]
 };

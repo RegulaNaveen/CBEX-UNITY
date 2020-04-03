@@ -1,4 +1,12 @@
 //LOGIN
+.main-login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
 .login-wrapper {
   display: flex;
   width: 100%;
@@ -15,7 +23,6 @@
   height: 769px;
   width: 561px;
   background: radial-gradient(circle, #0076ae 0%, #250056 100%);
-  z-index: 10;
   opacity: 0.66;
 }
 
@@ -45,7 +52,6 @@
 .login-form-wrapper {
   display: flex;
   flex-direction: column;
-  padding: 20px;
   margin-left: 85px;
 }
 
@@ -102,4 +108,38 @@
 
 .forgot-password-link {
   margin-top: 28px;
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .login-wrapper {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .login-form {
+    width: 100%;
+    height: 796px;
+    position: absolute;
+    background-color: transparent !important;
+    align-items: center;
+  }
+
+  .login-form-wrapper {
+    background-color: #f8f9fb;
+    width: 340px;
+    padding: 30px;
+    margin-left: 0;
+    border-radius: 10px;
+    align-items: center;
+  }
+
+  .living-proposal-title {
+    text-align: center;
+  }
+
+  .copyright-text {
+    text-align: center;
+    color: white;
+  }
 }
