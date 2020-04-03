@@ -1,10 +1,14 @@
 // @flow
 import React from 'react'
+import Task from './Task'
 
 function TasksList() {
   return (
-    <div>
-      This is the task list
+    <div className='tasksList-wrapper'>
+      <div className='tasksList-title'>
+        Questions
+      </div>
+      <Task/>
     </div>
   )
 }

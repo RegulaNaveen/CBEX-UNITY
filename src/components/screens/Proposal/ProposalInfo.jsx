@@ -5,13 +5,13 @@ function ProposalInfo() {
   return (
     <div className='proposalInfo-wrapper'>
       <div className='proposalInfo-title'>
-        Proposal: RFP-1028
+        RFP-1028
       </div>
       <div className='proposalInfo-subtitle'>
         Details
       </div>
       <div className='proposalInfo-details-wrapper'>
-        <div className='proposalInfo-details-info'>
+        <div className='proposalInfo-details-column'>
           <div className='proposalInfo-details-segment'>
             <div className='proposalInfo-details-data'>
               Account Executive:
@@ -28,6 +28,8 @@ function ProposalInfo() {
               Dwight Schrute
             </div>
           </div>
+        </div>
+        <div className='proposalInfo-details-column'>
           <div className='proposalInfo-details-segment'>
             <div className='proposalInfo-details-data'>
               Proposal Director: 
@@ -45,25 +47,35 @@ function ProposalInfo() {
             </div>
           </div>
         </div>
-        <div className='proposalInfo-details-info'>
-          <div className='proposalInfo-details-segment'>
-            <div className='proposalInfo-details-name'>
-              Indication:
+        <div className='proposalInfo-details-column'>
+          <div className='proposalInfo-details-row-segment'>
+            <div className='proposalInfo-details-data'>
+              Synopsis Sent:
             </div>
             <div className='proposalInfo-details-data'>
-              Myopia
+              Yes
             </div>
           </div>
-          <div className='proposalInfo-details-segment'>
-            <div className='proposalInfo-details-name'>
-              Phase
+          <div className='proposalInfo-details-row-segment'>
+            <div className='proposalInfo-details-data'>
+              Phase:
             </div>
             <div className='proposalInfo-details-data'>
               2
             </div>
           </div>
+          <div className='proposalInfo-details-row-segment'>
+            <div className='proposalInfo-details-data'>
+              Number of Sites:
+            </div>
+            <div className='proposalInfo-details-data'>
+              12
+            </div>
+          </div>
+        </div>
+        <div className='proposalInfo-details-column'>
           <div className='proposalInfo-details-segment'>
-            <div className='proposalInfo-details-name'>
+            <div className='proposalInfo-details-data'>
               Countries: 
             </div>
             <div className='proposalInfo-details-data'>
@@ -71,19 +83,11 @@ function ProposalInfo() {
             </div>
           </div>
           <div className='proposalInfo-details-segment'>
-            <div className='proposalInfo-details-name'>
-              # of Sites:
+            <div className='proposalInfo-details-data'>
+              Indication:
             </div>
             <div className='proposalInfo-details-data'>
-              12
-            </div>
-          </div>
-          <div className='proposalInfo-details-segment'>
-            <div className='proposalInfo-details-name'>
-              Synopsis Sent:
-            </div>
-            <div className='proposalInfo-details-data'>
-              Yes
+              Myopia
             </div>
           </div>
         </div>

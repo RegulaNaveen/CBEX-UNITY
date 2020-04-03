@@ -1,7 +1,18 @@
 .tasksList-wrapper {
-  height: 256px;
-  width: 1092px;
-  margin-left: 13px;
-  background-color: #FFFFFF;
-  background-color: red;
+  flex: 1;
+  padding-top: 12px;
+  padding-left: 32px;
+  padding-right: 75px;
+  padding-bottom: 20px;
+  background-color: green;
+
+  .tasksList-title {
+    color: #000000;
+    font-family: "Proxima Nova";
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 22px;
+    margin-bottom: 20px;
+  }
 }
