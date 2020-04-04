@@ -22,7 +22,7 @@ const App = () => {
         </ul>
         <Switch>
           <Route path={LOGIN} component={Login} />
-          <PrivateRoute authenticated={false}>
+          <PrivateRoute isAuthenticated={false}>
             <Proposals />
           </PrivateRoute>
           <Redirect to="/" />
