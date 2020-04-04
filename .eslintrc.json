@@ -48,6 +48,7 @@
         ],
         "no-console": 0,
         "react/default-props-match-prop-types": 0,
-        "prefer-promise-reject-errors": 0
+        "prefer-promise-reject-errors": 0,
+        "no-underscore-dangle": 0
     }
 }
