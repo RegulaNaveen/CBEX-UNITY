@@ -1,8 +1,8 @@
 // @flow
-import React from "react";
-import { BrowserRouter, Switch, Route, Link, Redirect } from "react-router-dom";
-import PrivateRoute from "./PrivateRoute";
-import { LOGIN, PROPOSALS } from "./routes";
+import React from 'react';
+import { BrowserRouter, Switch, Route, Link, Redirect } from 'react-router-dom';
+import PrivateRoute from './PrivateRoute';
+import { LOGIN, PROPOSALS } from './routes';
 
 const Login = () => <div>Login Page :D</div>;
 

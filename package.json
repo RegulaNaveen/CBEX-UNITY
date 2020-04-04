@@ -8,6 +8,7 @@
     "build": "webpack --mode production",
     "coverage": "nyc _mocha test/helpers/browser.js 'test/**/*.spec.{js,jsx}' --timeout=3000",
     "test": "mocha test/helpers/browser.js 'test/**/*.spec.{js,jsx}'",
+    "lint:fix": "eslint --ext .js,.jsx src test --fix",
     "flow:chk": "yarn run flow",
     "lint:chk": "eslint src/**/*.js src/**/*.jsx",
     "sanity": "yarn flow:chk && yarn lint:chk && yarn test"

@@ -1,12 +1,12 @@
 // @flow
-import React, { PureComponent } from "react";
-import type { Node } from "react";
-import { Route, Redirect } from "react-router-dom";
-import { LOGIN } from "./routes";
+import React, { PureComponent } from 'react';
+import type { Node } from 'react';
+import { Route, Redirect } from 'react-router-dom';
+import { LOGIN } from './routes';
 
 type Props = {
   children: Node,
-  isAuthenticated: boolean,
+  isAuthenticated: boolean
 };
 
 class PrivateRoute extends PureComponent<Props> {
