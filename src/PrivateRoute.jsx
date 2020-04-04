@@ -6,13 +6,13 @@ import { LOGIN } from "./routes";
 
 type Props = {
   children: Node,
-  authenticated: boolean,
+  isAuthenticated: boolean,
 };
 
 class PrivateRoute extends PureComponent<Props> {
   renderRoute = () => {
-    const { authenticated, children } = this.props;
-    return authenticated ? children : <Redirect to={LOGIN} />;
+    const { isAuthenticated, children } = this.props;
+    return isAuthenticated ? children : <Redirect to={LOGIN} />;
   };
 
   render() {
