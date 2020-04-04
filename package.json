@@ -17,9 +17,13 @@
   "license": "ISC",
   "dependencies": {
     "and": "^0.0.3",
+    "css-loader": "^3.4.2",
+    "node-sass": "^4.13.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-router-dom": "^5.1.2"
+    "react-router-dom": "^5.1.2",
+    "sass-loader": "^8.0.2",
+    "style-loader": "^1.1.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
