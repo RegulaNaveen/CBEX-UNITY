@@ -5,7 +5,7 @@ import img from '../../../img/login-background.png';
 
 const Login = () => {
   return (
-    <div className='main-login-wrapper'>
+    <div className='login-wrapper'>
       <div className='gradient-background-img' />
         <div>
           <img
