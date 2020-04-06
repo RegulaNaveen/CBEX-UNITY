@@ -8,6 +8,7 @@
     "build": "webpack --mode production",
     "coverage": "nyc _mocha test/helpers/browser.js 'test/**/*.spec.{js,jsx}' --timeout=3000",
     "test": "mocha test/helpers/browser.js 'test/**/*.spec.{js,jsx}'",
+    "lint:fix": "eslint --ext .js,.jsx src test --fix",
     "flow:chk": "yarn run flow",
     "lint:chk": "eslint src/**/*.js src/**/*.jsx",
     "sanity": "yarn flow:chk && yarn lint:chk && yarn test"
@@ -20,12 +21,14 @@
     "node-sass": "^4.13.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-router-dom": "^5.1.2",
     "sass-loader": "^8.0.2",
     "style-loader": "^1.1.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.0",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/polyfill": "^7.8.7",
     "@babel/preset-env": "^7.9.0",
     "@babel/preset-flow": "^7.9.0",
@@ -47,8 +50,8 @@
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.19.0",
     "expect": "^25.1.0",
-    "flow-bin": "^0.121.0",
-    "flow-typed": "^3.1.0",
+    "flow-bin": "^0.84.0",
+    "flow-typed": "^2.2.3",
     "html-webpack-plugin": "^4.0.1",
     "jsdom": "^16.2.1",
     "jsdom-global": "^3.0.2",

@@ -50,9 +50,7 @@ global.URL.createObjectURL = function(blobOrMediaSource) {
       blobOrMediaSource.toString() === '[object MediaSource]') ||
     blobOrMediaSource.toString() === '[object Blob]'
   ) {
-    return `blob:${global.location.protocol}://${global.location.hostname}:${
-      global.location.port
-    }/2691603b-393d-4c5b-b2eb-b6b7fe86287e`;
+    return `blob:${global.location.protocol}://${global.location.hostname}:${global.location.port}/2691603b-393d-4c5b-b2eb-b6b7fe86287e`;
   }
   throw new TypeError(
     "Failed to execute 'createObjectURL' on 'URL': No function was found that matched the signature provided."
