@@ -5,7 +5,7 @@ import TasksList from './TasksList';
 
 const Proposal = () => {
   return (
-    <div className="stuff">
+    <div className="proposal-wrapper">
       This is the Proposal Screen
       <ProposalInfo />
       <TasksList />
