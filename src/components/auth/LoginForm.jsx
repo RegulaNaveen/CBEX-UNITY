@@ -4,11 +4,6 @@ import { PrimaryButton, LinkButton } from '../common/Button';
 import InputField from '../common/InputField';
 import Checkbox from '../common/Checkbox';
 
-type Props = {
-  onEmailChange: Function,
-  onPasswordChange: Function
-};
-
 type State = {
   email: string,
   password: string,
@@ -16,7 +11,7 @@ type State = {
 };
 
 class LoginForm extends PureComponent<Props, State> {
-  constructor(props: any) {
+  constructor(props: Object) {
     super(props);
 
     this.state = {

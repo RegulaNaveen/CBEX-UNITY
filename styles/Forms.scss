@@ -21,7 +21,7 @@
   outline: none !important;
 }
 
-@media (max-width: 991.98px) {
+@media (max-width: $loginResponsiveWidth) {
   .link-button {
     text-align: center;
   }

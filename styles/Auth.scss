@@ -79,7 +79,7 @@
   margin-top: 28px;
 }
 
-@media (max-width: 991.98px) {
+@media (max-width: $loginResponsiveWidth) {
   .login-wrapper {
     justify-content: center;
     align-items: center;
@@ -105,5 +105,15 @@
   .copyright-text {
     margin-left: 0;
     text-align: center;
+  }
+
+  .gradient-background-img {
+    height: 100%;
+    width: 100%;
+  }
+
+  .login-background-img {
+    height: 100%;
+    width: 100%;
   }
 }
