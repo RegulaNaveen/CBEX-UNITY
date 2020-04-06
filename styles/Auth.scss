@@ -1,26 +1,18 @@
 //LOGIN
 .main-login-wrapper {
   display: flex;
-  justify-content: center;
-  align-items: center;
   height: 100%;
   width: 100%;
 }
 
-.login-wrapper {
-  display: flex;
-  width: 100%;
-  height: 769px;
-}
-
 .login-background-img {
-  height: 769px;
+  height: 100%;
   width: 561px;
 }
 
 .gradient-background-img {
   position: absolute;
-  height: 769px;
+  height: 100%;
   width: 561px;
   background: radial-gradient(circle, #0076ae 0%, #250056 100%);
   opacity: 0.66;
@@ -31,7 +23,6 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   position: relative;
 }
 
