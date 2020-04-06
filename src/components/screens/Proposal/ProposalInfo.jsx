@@ -4,7 +4,7 @@ import React from 'react';
 function ProposalInfo() {
   return (
     <div className="proposalInfo-wrapper">
-      <div className="proposalInfo-title">RFP-1028</div>
+      <p className="proposalInfo-title">RFP-1028</p>
       <div className="proposalInfo-subtitle">Details</div>
       <div className="proposalInfo-details-wrapper">
         <div className="proposalInfo-details-column">

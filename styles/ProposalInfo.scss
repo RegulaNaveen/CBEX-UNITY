@@ -1,9 +1,6 @@
 .proposalInfo-wrapper {
   flex: 1;
-  padding-top: 12px;
-  padding-left: 32px;
-  padding-bottom: 20px;
-  padding-right: 163px;
+  margin-top: 28px;
   background-color: red;
 
   .proposalInfo-title {
@@ -15,6 +12,7 @@
     font-weight: 600;
     letter-spacing: 0;
     line-height: 29px;
+    margin-bottom: 31px;
   }
 
   .proposalInfo-subtitle {
@@ -26,6 +24,8 @@
     font-weight: 600;
     letter-spacing: 0;
     line-height: 30px;
+    margin-left: 23px;
+    margin-bottom: 26px;
   }
 
   .proposalInfo-details-wrapper {
@@ -33,6 +33,7 @@
     flex-direction: row;
     justify-content: space-between;
     height: 125px;
+    margin-left: 23px;
     
     .proposalInfo-details-column {
       display: flex;
