@@ -12,12 +12,12 @@ type Props = {
 };
 
 const CheckBox = ({ id, value, name, onChange, checked, children }: Props) => (
-  <label id={id} htmlFor={id} className='checkbox' tabIndex={-1}>
+  <label id={id} htmlFor={id} className="checkbox" tabIndex={-1}>
     <input
       id={id}
       name={name}
       value={value}
-      type='checkbox'
+      type="checkbox"
       onChange={onChange}
       checked={checked}
     />

@@ -9,49 +9,75 @@ type Props = {
   onPasswordChange: Function
 };
 
-class LoginForm extends PureComponent<Props> {
-  // TODO: Uncommet when react-router PR is merged
-  // onEmailChange = (text: string) => {
-  // };
+type State = {
+  email: string,
+  password: string,
+  checked: boolean
+};
 
-  // onPasswordChange = (text: string) => {
-  // };
+class LoginForm extends PureComponent<Props, State> {
+  constructor(props: any) {
+    super(props);
+
+    this.state = {
+      email: '',
+      password: '',
+      checked: false
+    };
+  }
+
+  onEmailChange = (text: SyntheticInputEvent<EventTarget>) => {
+    this.setState({ email: text.target.value });
+  };
+
+  onPasswordChange = (text: SyntheticInputEvent<EventTarget>) => {
+    this.setState({ password: text.target.value });
+  };
+
+  handleChecked = () => {
+    const { checked } = this.state;
+    this.setState({ checked: !checked });
+  };
 
   render() {
+    const { checked, email, password } = this.state;
     return (
-      <div className='form-wrapper'>
-        <p className='form-title'>IQVIA Living Proposal</p>
-        <div className='input-wrapper'>
+      <div className="form-wrapper">
+        <p className="form-title">IQVIA Living Proposal</p>
+        <div className="input-wrapper">
           <InputField
-            id='login-input-email'
-            title='Email'
-            placeholder='Email'
-            type='email'
-            //onChange={this.onEmailChange}
+            id="login-input-email"
+            title="Email"
+            placeholder="Email"
+            type="email"
+            onChange={this.onEmailChange}
+            value={email}
           />
         </div>
-        <div className='input-wrapper'>
+        <div className="input-wrapper">
           <InputField
-            id='login-input-password'
-            title='Password'
-            placeholder='Password'
-            type='password'
-            //onChange={this.onPasswordChange}
+            id="login-input-password"
+            title="Password"
+            placeholder="Password"
+            type="password"
+            onChange={this.onPasswordChange}
+            value={password}
           />
         </div>
         <Checkbox
-          id='remember-username-checkbox'
-          value='username'
-          name='username'
-          checked
+          id="remember-username-checkbox"
+          value="username"
+          name="username"
+          onChange={this.handleChecked}
+          checked={checked}
         >
           Remember my username
         </Checkbox>
-        <div className='login-button-wrapper'>
-          <div className='login-button'>
+        <div className="login-button-wrapper">
+          <div className="login-button">
             <PrimaryButton />
           </div>
-          <div className='forgot-password-link'>
+          <div className="forgot-password-link">
             <LinkButton />
           </div>
         </div>

@@ -11,10 +11,10 @@ type Props = {
 
 const InputField = ({ title, placeholder, onChange, type, id }: Props) => (
   <>
-    <p className='input-title'>{title}</p>
+    <p className="input-title">{title}</p>
     <input
       id={id}
-      className='input'
+      className="input"
       placeholder={placeholder}
       type={type}
       onChange={onChange}
@@ -23,7 +23,7 @@ const InputField = ({ title, placeholder, onChange, type, id }: Props) => (
 );
 
 InputField.defaultProps = {
-    id: undefined
-}
+  id: undefined
+};
 
-export default InputField
+export default InputField;

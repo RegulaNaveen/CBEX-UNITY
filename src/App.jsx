@@ -9,7 +9,6 @@ const App = () => {
   return (
     <BrowserRouter>
       <Switch>
-        {/* TODO: Add Login Component */}
         <Route path={LOGIN} component={Login} />
         <PrivateRoute isAuthenticated={false}>
           {/* TODO: Add here Proposals component */}
