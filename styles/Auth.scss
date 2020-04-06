@@ -49,6 +49,12 @@
 }
 
 // LOGIN FORM
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 28px;
+}
+
 .login-form-wrapper {
   display: flex;
   flex-direction: column;
@@ -73,31 +79,6 @@
 
 .password-input-wrapper {
   margin-top: 28px;
-}
-
-.login-label-input {
-  height: 21px;
-  width: 95.39px;
-  color: #444444;
-  font-family: 'Proxima Nova';
-  font-size: 14px;
-  letter-spacing: 0;
-  line-height: 21px;
-}
-
-.input-login {
-  height: 40px;
-  width: 303px;
-  border: none;
-  border: 0.5px solid lightgray;
-  border-radius: 5px;
-  padding: 10px;
-  margin-top: 5px;
-}
-
-.input-login::placeholder {
-  color: lightgray;
-  font-size: 14px;
 }
 
 .login-button-wrapper {
