@@ -79,13 +79,24 @@
       .proposalInfo-details-row-segment{
         display: flex;
 
-        .proposalInfo-details-data {
+        .proposalInfo-details {
           color: #000000;
           font-family: "Proxima Nova";
           font-size: 16px;
           letter-spacing: 0;
           line-height: 24px;
           padding-left: 5px;
+
+          &-title {
+            font-family: "Proxima Nova";
+            margin-bottom: 20px;
+          }
+
+          &-data {
+            font-family: "Proxima Nova Bold";
+            margin-bottom: 23px;
+            margin-left: 5px;
+          }
         }
       }
     }

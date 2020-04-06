@@ -13,46 +13,46 @@ function ProposalInfo() {
             <p className="proposalInfo-details-subtitle">Jan Levinson-Gould</p>
           </div>
           <div className="proposalInfo-details-column">
-            <div className="proposalInfo-details-data">
+            <div className="proposalInfo-details-title">
               Business Development:
             </div>
-            <div className="proposalInfo-details-data">Dwight Schrute</div>
+            <div className="proposalInfo-details-subtitle">Dwight Schrute</div>
           </div>
         </div>
         <div className="proposalInfo-details-row">
           <div className="proposalInfo-details-column">
-            <div className="proposalInfo-details-data">Proposal Director:</div>
-            <div className="proposalInfo-details-data">Michael Scott</div>
+            <div className="proposalInfo-details-title">Proposal Director:</div>
+            <div className="proposalInfo-details-subtitle">Michael Scott</div>
           </div>
           <div className="proposalInfo-details-column">
-            <div className="proposalInfo-details-data">Labs:</div>
-            <div className="proposalInfo-details-data">Kevin Malone</div>
+            <div className="proposalInfo-details-title">Labs:</div>
+            <div className="proposalInfo-details-subtitle">Kevin Malone</div>
           </div>
         </div>
         <div className="proposalInfo-details-row">
-          <div className="proposalInfo-details-column">
-            <div className="proposalInfo-details-data">Synopsis Sent:</div>
+          <div className="proposalInfo-details-row-segment">
+            <div className="proposalInfo-details-title">Synopsis Sent:</div>
             <div className="proposalInfo-details-data">Yes</div>
           </div>
-          <div className="proposalInfo-details-column">
-            <div className="proposalInfo-details-data">Phase:</div>
+          <div className="proposalInfo-details-row-segment">
+            <div className="proposalInfo-details-title">Phase:</div>
             <div className="proposalInfo-details-data">2</div>
           </div>
-          <div className="proposalInfo-details-column">
-            <div className="proposalInfo-details-data">Number of Sites:</div>
+          <div className="proposalInfo-details-row-segment">
+            <div className="proposalInfo-details-title">Number of Sites:</div>
             <div className="proposalInfo-details-data">12</div>
           </div>
         </div>
         <div className="proposalInfo-details-row">
           <div className="proposalInfo-details-column">
-            <div className="proposalInfo-details-data">Countries:</div>
-            <div className="proposalInfo-details-data">
+            <div className="proposalInfo-details-title">Countries:</div>
+            <div className="proposalInfo-details-subtitle">
               France, UK, Italy, Spain
             </div>
           </div>
           <div className="proposalInfo-details-column">
-            <div className="proposalInfo-details-data">Indication:</div>
-            <div className="proposalInfo-details-data">Myopia</div>
+            <div className="proposalInfo-details-title">Indication:</div>
+            <div className="proposalInfo-details-subtitle">Myopia</div>
           </div>
         </div>
       </div>
