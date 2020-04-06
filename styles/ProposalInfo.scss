@@ -28,21 +28,42 @@
     margin-bottom: 26px;
   }
 
-  .proposalInfo-details-wrapper {
+  .proposalInfo-details {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    height: 125px;
+    flex-grow: 1;
     margin-left: 23px;
+    margin-bottom: 16px;
     
-    .proposalInfo-details-column {
+    .proposalInfo-details-row {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      min-width: 165px;
+      margin-right: 180px;
 
-      .proposalInfo-details-segment {
+      &:last-child {
+        margin-right: 0;
+      }
+
+      .proposalInfo-details-column {
         display: flex;
         flex-direction: column;
+
+        .proposalInfo-details {
+          color: #444444;
+          font-size: 16px;
+          letter-spacing: 0;
+          line-height: 24px;
+
+          &-title {
+            font-family: "Proxima Nova";
+            margin-bottom: 5px;
+          }
+
+          &-subtitle {
+            font-family: "Proxima Nova Bold";
+            margin-bottom: 20px;
+          }
+        }
 
         .proposalInfo-details-data {
           color: #000000;
