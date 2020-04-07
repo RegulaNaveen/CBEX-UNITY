@@ -4,7 +4,7 @@ import { describe, it } from 'mocha';
 import LoginModel from '../../../models/LoginModel';
 
 describe('Login component', () => {
-  describe('remderomg', () => {
+  describe('rendering', () => {
     it('should render Login component', () => {
       const wrapper = new LoginModel();
       expect(wrapper.hasLogin()).toBe(true);
@@ -12,7 +12,7 @@ describe('Login component', () => {
 
     it('should have an image', () => {
       const wrapper = new LoginModel();
-      expect(wrapper.hasAnImage()).toBe(1);
+      expect(wrapper.hasAnImage()).toBe(true);
     });
   });
 });

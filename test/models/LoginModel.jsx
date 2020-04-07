@@ -14,7 +14,9 @@ export default class LoginModel {
 
   _login = (): ShallowWrapper => this._wrapper.find(LoginForm);
 
+  _anImage = (): ShallowWrapper => this._wrapper.find('img');
+
   hasLogin = (): boolean => this._login().length === 1;
 
-  hasAnImage = (): boolean => this._wrapper.find('img');
+  hasAnImage = (): boolean => this._anImage().length === 1;
 }

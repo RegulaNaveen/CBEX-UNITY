@@ -2,9 +2,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
-import Checkbox from '../../src/components/common/Checkbox';
+import InputField from '../../src/components/common/InputField';
 
-export default class CheckboxModel {
+export default class LoginModel {
   constructor(
     id: string,
     value: string,
@@ -26,17 +26,9 @@ export default class CheckboxModel {
 
   _wrapper: ShallowWrapper;
 
-  _checkbox = (): ShallowWrapper => this._wrapper.find(Checkbox);
+  _checkbox = (): ShallowWrapper => this._wrapper.find(LoginModel);
 
-  _lblCheckbox = (): ShallowWrapper => this._wrapper.find('label');
-
-  _inputCheckbox = (): ShallowWrapper => this._wrapper.find('input');
-
-  hasCheckbox = (): boolean => this._lblCheckbox().length === 1;
-
-  hasLblCheckbox = (): boolean => this._lblCheckbox().length === 1;
-
-  hasInputCheckbox = (): boolean => this._inputCheckbox().length === 1;
+  hasCheckbox = (): boolean => this._checkbox().length === 1;
 
   getIdCheckbox = (): string => this._checkbox().prop('id');
 
