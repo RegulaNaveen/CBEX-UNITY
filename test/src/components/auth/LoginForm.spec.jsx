@@ -5,7 +5,7 @@ import sinon from 'sinon';
 import LoginFormModel from '../../../models/LoginFormModel';
 
 describe('Login component', () => {
-  describe('remderomg', () => {
+  describe('rendering', () => {
     it('should render Login Form component', () => {
       const wrapper = new LoginFormModel();
       expect(wrapper.hasLoginForm()).toBe(true);

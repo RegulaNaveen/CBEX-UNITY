@@ -5,16 +5,15 @@ import sinon from 'sinon';
 import Checkbox from '../../../models/CheckboxModel';
 
 describe('Login component', () => {
-  const onChanceStub = sinon.stub();
-  const id = 'Fake id';
-  const value = 'Fake value';
-  const name = 'Fake name';
-  const onChange = onChanceStub;
-  const checked = false;
-  const children = 'Fake text';
-
-  describe('remderomg', () => {
+  describe('rendering', () => {
     it('should render Checkbox component with the correct props', () => {
+      const onChanceStub = sinon.stub();
+      const id = 'Fake id';
+      const value = 'Fake value';
+      const name = 'Fake name';
+      const onChange = onChanceStub;
+      const checked = false;
+      const children = 'Fake text';
       const wrapper = new Checkbox(
         id,
         value,
@@ -25,6 +24,12 @@ describe('Login component', () => {
       );
 
       expect(wrapper.hasCheckbox()).toBe(true);
+      expect(wrapper.getIdCheckbox()).toBe(id);
+      expect(wrapper.getValueCheckbox()).toBe(value);
+      expect(wrapper.getNameCheckbox()).toBe(name);
+      expect(wrapper.getOnChangeCheckbox()).toBe(onChange);
+      expect(wrapper.getCheckedCheckbox()).toBe(checked);
+      expect(wrapper.getChildrenCheckbox()).toBe(children);
     });
   });
 });
