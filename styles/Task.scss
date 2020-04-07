@@ -43,6 +43,7 @@
     display: flex;
     align-items: center;
     align-self: flex-start;
+    width: 37px;
     height: 60px;
     color: #000000;
     font-family: "Proxima Nova";
@@ -110,6 +111,17 @@
     .task-table-row {
       display: flex;
       height: 55px;
+
+
+      .task-table-row-checkmark {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 37px;
+        height: 55px;
+        color: #000000;
+        margin-left: -37px;
+      }
 
       .task-table-row-question {
         flex: 1;

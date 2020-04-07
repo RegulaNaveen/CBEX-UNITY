@@ -14,7 +14,7 @@ class Task extends Component<Props, State> {
     super(props);
 
     this.state = {
-      collapsed: false
+      collapsed: true
     };
   }
 
@@ -65,6 +65,7 @@ class Task extends Component<Props, State> {
             </div>
             {testArray.map(item => (
               <div className="task-table-row">
+                <div className="task-table-row-checkmark">✓</div>
                 <div className="task-table-row-question">{item.question}</div>
                 <div className="task-table-row-answer">{item.answer}</div>
                 <div className="task-table-row-owner">{item.owner}</div>
