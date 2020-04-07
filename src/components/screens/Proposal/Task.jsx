@@ -45,23 +45,21 @@ class Task extends Component<Props, State> {
         </div>
         {!collapsed ? (
           <div className="task-title-wrapper">
-            <div className="task-title">Resources</div>
+            <p className="task-title">Resources</p>
             <div className="task-status-wrapper">
-              <div className="task-status-description">8 Incomplete</div>
+              <p className="task-status-description">8 Incomplete</p>
             </div>
           </div>
         ) : (
           <div className="task-table-wrapper">
             <div className="task-table-headers">
-              <div className="task-title">Resources</div>
-              <div className="task-subtitle task-subtitle-answer">Answer</div>
-              <div className="task-subtitle task-subtitle-owner">Owner</div>
-              <div className="task-subtitle task-subtitle-due-date">
-                Due Date
-              </div>
-              <div className="task-subtitle task-subtitle-completion-date">
+              <p className="task-title">Resources</p>
+              <p className="task-subtitle task-subtitle-answer">Answer</p>
+              <p className="task-subtitle task-subtitle-owner">Owner</p>
+              <p className="task-subtitle task-subtitle-due-date">Due Date</p>
+              <p className="task-subtitle task-subtitle-completion-date">
                 Date Completed
-              </div>
+              </p>
             </div>
             {testArray.map(item => (
               <div className="task-table-row">

@@ -1,11 +1,11 @@
-.proposalInfo-wrapper {
+.pi-wrapper {
   flex: 1;
   padding-top: 12px;
   padding-left: 29px;
   padding-bottom: 20px;
   padding-right: 163px;
 
-  .proposalInfo-title {
+  .pi-title {
     height: 29px;
     width: 103px;
     color: #000000;
@@ -17,7 +17,7 @@
     margin-bottom: 31px;
   }
 
-  .proposalInfo-subtitle {
+  .pi-subtitle {
     height: 30px;
     width: 102px;
     color: #000000;
@@ -30,13 +30,13 @@
     margin-bottom: 26px;
   }
 
-  .proposalInfo-details {
+  .pi-details {
     display: flex;
     flex-grow: 1;
     margin-left: 3px;
     margin-bottom: 16px;
     
-    .proposalInfo-details-row {
+    .pi-details-row {
       display: flex;
       flex-direction: column;
       min-width: 165px;
@@ -46,11 +46,11 @@
         margin-right: 0;
       }
 
-      .proposalInfo-details-column {
+      .pi-details-column {
         display: flex;
         flex-direction: column;
 
-        .proposalInfo-details {
+        .pi-details {
           color: #444444;
           font-size: 16px;
           letter-spacing: 0;
@@ -67,7 +67,7 @@
           }
         }
 
-        .proposalInfo-details-data {
+        .pi-details-data {
           color: #000000;
           font-family: "Proxima Nova";
           font-size: 16px;
@@ -76,10 +76,10 @@
         }
       }
 
-      .proposalInfo-details-row-segment{
+      .pi-details-row-segment{
         display: flex;
 
-        .proposalInfo-details {
+        .pi-details {
           color: #000000;
           font-family: "Proxima Nova";
           font-size: 16px;

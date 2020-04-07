@@ -3,56 +3,52 @@ import React from 'react';
 
 function ProposalInfo() {
   return (
-    <div className="proposalInfo-wrapper">
-      <p className="proposalInfo-title">RFP-1028</p>
-      <p className="proposalInfo-subtitle">Details</p>
-      <div className="proposalInfo-details">
-        <div className="proposalInfo-details-row">
-          <div className="proposalInfo-details-column">
-            <p className="proposalInfo-details-title">Account Executive:</p>
-            <p className="proposalInfo-details-subtitle">Jan Levinson-Gould</p>
+    <div className="pi-wrapper">
+      <p className="pi-title">RFP-1028</p>
+      <p className="pi-subtitle">Details</p>
+      <div className="pi-details">
+        <div className="pi-details-row">
+          <div className="pi-details-column">
+            <p className="pi-details-title">Account Executive:</p>
+            <p className="pi-details-subtitle">Jan Levinson-Gould</p>
           </div>
-          <div className="proposalInfo-details-column">
-            <div className="proposalInfo-details-title">
-              Business Development:
-            </div>
-            <div className="proposalInfo-details-subtitle">Dwight Schrute</div>
+          <div className="pi-details-column">
+            <p className="pi-details-title">Business Development:</p>
+            <p className="pi-details-subtitle">Dwight Schrute</p>
           </div>
         </div>
-        <div className="proposalInfo-details-row">
-          <div className="proposalInfo-details-column">
-            <div className="proposalInfo-details-title">Proposal Director:</div>
-            <div className="proposalInfo-details-subtitle">Michael Scott</div>
+        <div className="pi-details-row">
+          <div className="pi-details-column">
+            <p className="pi-details-title">Proposal Director:</p>
+            <p className="pi-details-subtitle">Michael Scott</p>
           </div>
-          <div className="proposalInfo-details-column">
-            <div className="proposalInfo-details-title">Labs:</div>
-            <div className="proposalInfo-details-subtitle">Kevin Malone</div>
-          </div>
-        </div>
-        <div className="proposalInfo-details-row">
-          <div className="proposalInfo-details-row-segment">
-            <div className="proposalInfo-details-title">Synopsis Sent:</div>
-            <div className="proposalInfo-details-data">Yes</div>
-          </div>
-          <div className="proposalInfo-details-row-segment">
-            <div className="proposalInfo-details-title">Phase:</div>
-            <div className="proposalInfo-details-data">2</div>
-          </div>
-          <div className="proposalInfo-details-row-segment">
-            <div className="proposalInfo-details-title">Number of Sites:</div>
-            <div className="proposalInfo-details-data">12</div>
+          <div className="pi-details-column">
+            <p className="pi-details-title">Labs:</p>
+            <p className="pi-details-subtitle">Kevin Malone</p>
           </div>
         </div>
-        <div className="proposalInfo-details-row">
-          <div className="proposalInfo-details-column">
-            <div className="proposalInfo-details-title">Countries:</div>
-            <div className="proposalInfo-details-subtitle">
-              France, UK, Italy, Spain
-            </div>
+        <div className="pi-details-row">
+          <div className="pi-details-row-segment">
+            <p className="pi-details-title">Synopsis Sent:</p>
+            <p className="pi-details-data">Yes</p>
           </div>
-          <div className="proposalInfo-details-column">
-            <div className="proposalInfo-details-title">Indication:</div>
-            <div className="proposalInfo-details-subtitle">Myopia</div>
+          <div className="pi-details-row-segment">
+            <p className="pi-details-title">Phase:</p>
+            <p className="pi-details-data">2</p>
+          </div>
+          <div className="pi-details-row-segment">
+            <p className="pi-details-title">Number of Sites:</p>
+            <p className="pi-details-data">12</p>
+          </div>
+        </div>
+        <div className="pi-details-row">
+          <div className="pi-details-column">
+            <p className="pi-details-title">Countries:</p>
+            <p className="pi-details-subtitle">France, UK, Italy, Spain</p>
+          </div>
+          <div className="pi-details-column">
+            <p className="pi-details-title">Indication:</p>
+            <p className="pi-details-subtitle">Myopia</p>
           </div>
         </div>
       </div>
