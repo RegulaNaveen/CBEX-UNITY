@@ -28,8 +28,6 @@ export default class CheckboxModel {
 
   _checkbox = (): ShallowWrapper => this._wrapper.find(Checkbox);
 
-  hasCheckbox = (): boolean => this._checkbox().length === 1;
-
   getIdCheckbox = (): string => this._checkbox().prop('id');
 
   getValueCheckbox = (): string => this._checkbox().prop('value');

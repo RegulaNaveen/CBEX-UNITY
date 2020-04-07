@@ -15,7 +15,6 @@ describe('InputField component', () => {
       const id = 'Fake id';
       const wrapper = new InputField(title, placeholder, onChange, type, id);
 
-      expect(wrapper.hasInputField()).toBe(true);
       expect(wrapper.getTitleInputField()).toBe(title);
       expect(wrapper.getPlaceholderInput()).toBe(placeholder);
       expect(wrapper.getOnChangeInputField()).toBe(onChange);
