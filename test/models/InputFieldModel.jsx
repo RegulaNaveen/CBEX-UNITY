@@ -4,41 +4,37 @@ import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
 import InputField from '../../src/components/common/InputField';
 
-export default class LoginModel {
+export default class InputFieldModel {
   constructor(
-    id: string,
-    value: string,
-    name: string,
+    title: string,
+    placeholder: string,
     onChange: Function,
-    checked: boolean,
-    children: any
+    type: string,
+    id: string
   ) {
     const props = {
-      id,
-      value,
-      name,
+      title,
+      placeholder,
       onChange,
-      checked,
-      children
+      type,
+      id
     };
-    this._wrapper = shallow(<Checkbox {...props} />);
+    this._wrapper = shallow(<InputField {...props} />);
   }
 
   _wrapper: ShallowWrapper;
 
-  _checkbox = (): ShallowWrapper => this._wrapper.find(LoginModel);
+  _inpuField = (): ShallowWrapper => this._wrapper.find(InputField);
 
-  hasCheckbox = (): boolean => this._checkbox().length === 1;
+  hasInputField = (): boolean => this._inpuField().length === 1;
 
-  getIdCheckbox = (): string => this._checkbox().prop('id');
+  getTitleInputField = (): string => this._inpuField().prop('title');
 
-  getValueCheckbox = (): string => this._checkbox().prop('value');
+  getPlaceholderInput = (): string => this._inpuField().prop('placeholder');
 
-  getNameCheckbox = (): string => this._checkbox().prop('name');
+  getOnChangeInputField = (): Function => this._inpuField().prop('onChange');
 
-  getOnChangeCheckbox = (): Function => this._checkbox().prop('onChange');
+  getTypeInputField = (): boolean => this._inpuField().prop('type');
 
-  getCheckedCheckbox = (): boolean => this._checkbox().prop('checked');
-
-  getChildrenCheckbox = (): string => this._checkbox().prop('children');
+  getIdInputField = (): string => this._inpuField().prop('id');
 }
