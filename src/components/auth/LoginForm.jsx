@@ -39,6 +39,14 @@ class LoginForm extends PureComponent<Props, State> {
     this.setState({ checked: !checked });
   };
 
+  Login = () => {
+    // TOOD: Login functionality
+  };
+
+  forgotPassword = () => {
+    // TOOD: forgot password functionality
+  };
+
   render() {
     const { checked, email, password } = this.state;
     return (
@@ -75,10 +83,14 @@ class LoginForm extends PureComponent<Props, State> {
         </Checkbox>
         <div className="login-button-wrapper">
           <div className="login-button">
-            <PrimaryButton />
+            <PrimaryButton type="submit" onChange={this.Login}>
+              Log in
+            </PrimaryButton>
           </div>
           <div className="forgot-password-link">
-            <LinkButton />
+            <LinkButton type="submit" onChange={this.forgotPassword}>
+              Forgot your password?
+            </LinkButton>
           </div>
         </div>
       </div>

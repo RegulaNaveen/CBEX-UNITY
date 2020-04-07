@@ -1,15 +1,23 @@
 // @flow
 import React from 'react';
 
-const PrimaryButton = () => (
-  <button type="submit" className="primary-button">
-    Log in
+type Props = {
+  children: string,
+  type: string,
+  onChange: Function
+};
+
+const PrimaryButton = ({ type, onChange, children }: Props) => (
+  // eslint-disable-next-line react/button-has-type
+  <button type={type} className="primary-button" onChange={onChange}>
+    {children}
   </button>
 );
 
-const LinkButton = () => (
-  <button type="submit" className="link-button">
-    Forgot your password?
+const LinkButton = ({ type, onChange, children }: Props) => (
+  // eslint-disable-next-line react/button-has-type
+  <button type={type} className="link-button" onChange={onChange}>
+    {children}
   </button>
 );
 
