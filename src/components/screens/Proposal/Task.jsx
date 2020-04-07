@@ -6,10 +6,29 @@ type State = {
 };
 
 type Props = {
-  testArray?: Array<Object>
+  data?: Array<Object>
 };
 
 class Task extends Component<Props, State> {
+  static defaultProps = {
+    data: [
+      {
+        question: 'Question',
+        answer: 'Answer',
+        owner: 'Owner',
+        dueDate: '02-Apr-2020',
+        completionDate: '02-Apr-2020'
+      },
+      {
+        question: 'Question',
+        answer: 'Answer',
+        owner: 'Owner',
+        dueDate: '02-Apr-2020',
+        completionDate: '02-Apr-2020'
+      }
+    ]
+  };
+
   constructor(props: Object) {
     super(props);
 
@@ -31,7 +50,7 @@ class Task extends Component<Props, State> {
 
   render() {
     const { collapsed } = this.state;
-    const { testArray } = this.props;
+    const { data } = this.props;
     return (
       <div className="task-wrapper">
         <div
@@ -61,42 +80,24 @@ class Task extends Component<Props, State> {
                 Date Completed
               </p>
             </div>
-            {testArray.map(item => (
-              <div className="task-table-row">
-                <div className="task-table-row-checkmark">✓</div>
-                <div className="task-table-row-question">{item.question}</div>
-                <div className="task-table-row-answer">{item.answer}</div>
-                <div className="task-table-row-owner">{item.owner}</div>
-                <div className="task-table-row-due-date">{item.dueDate}</div>
-                <div className="task-table-row-completion-date">
-                  {item.completionDate}
+            {data &&
+              data.map(item => (
+                <div className="task-table-row">
+                  <div className="task-table-row-checkmark">✓</div>
+                  <div className="task-table-row-question">{item.question}</div>
+                  <div className="task-table-row-answer">{item.answer}</div>
+                  <div className="task-table-row-owner">{item.owner}</div>
+                  <div className="task-table-row-due-date">{item.dueDate}</div>
+                  <div className="task-table-row-completion-date">
+                    {item.completionDate}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         )}
       </div>
     );
   }
 }
-
-Task.defaultProps = {
-  testArray: [
-    {
-      question: 'Question',
-      answer: 'Answer',
-      owner: 'Owner',
-      dueDate: '02-Apr-2020',
-      completionDate: '02-Apr-2020'
-    },
-    {
-      question: 'Question',
-      answer: 'Answer',
-      owner: 'Owner',
-      dueDate: '02-Apr-2020',
-      completionDate: '02-Apr-2020'
-    }
-  ]
-};
 
 export default Task;
