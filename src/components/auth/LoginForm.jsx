@@ -78,12 +78,20 @@ class LoginForm extends PureComponent<Props, State> {
         </Checkbox>
         <div className="login-button-wrapper">
           <div className="login-button">
-            <PrimaryButton type="submit" onChange={this.Login}>
+            <PrimaryButton
+              type="submit"
+              id="login-button"
+              onChange={this.Login}
+            >
               Log in
             </PrimaryButton>
           </div>
           <div className="forgot-password-link">
-            <LinkButton type="submit" onChange={this.forgotPassword}>
+            <LinkButton
+              type="submit"
+              id="forgot-password"
+              onChange={this.forgotPassword}
+            >
               Forgot your password?
             </LinkButton>
           </div>

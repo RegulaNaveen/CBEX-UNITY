@@ -7,7 +7,7 @@ describe('Login component', () => {
   describe('remderomg', () => {
     it('should render Login component', () => {
       const wrapper = new LoginModel();
-      expect(wrapper.hasLoginForm()).toBe(true);
+      expect(wrapper.hasLogin()).toBe(true);
     });
 
     it('should have a image', () => {
