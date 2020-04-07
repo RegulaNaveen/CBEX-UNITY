@@ -30,7 +30,23 @@ export default class LoginFormModel {
 
   hasLinkButton = (): boolean => this._LinkButton().lenght === 1;
 
-  hasInputField = (): boolean => this._InputField().lenght === 1;
+  hasInputField = (): boolean => this._InputField().lenght === 2;
 
   hasCheckBox = (): boolean => this._CheckBox().lenght === 1;
+
+  getTypeInput = (): string => this._InputField().prop('type');
+
+  getIdInput = (): string => this._InputField().prop('id');
+
+  getOnChangeInput = (): boolean => this._InputField().prop('onChange');
+
+  getIdCheckbox = (): string => this._CheckBox().prop('id');
+
+  getIdButton = (): string => this._PrimaryButton().prop('id');
+
+  getOnChangeButton = (): boolean => this._PrimaryButton().prop('onChange');
+
+  getIdLink = (): string => this._LinkButton().prop('id');
+
+  getOnChangeLink = (): boolean => this._LinkButton().prop('onChange');
 }

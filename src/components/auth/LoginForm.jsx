@@ -34,11 +34,11 @@ class LoginForm extends PureComponent<Props, State> {
     this.setState({ checked: !checked });
   };
 
-  Login = () => {
+  handleLogin = () => {
     // TOOD: Login functionality
   };
 
-  forgotPassword = () => {
+  handleForgotPassword = () => {
     // TOOD: forgot password functionality
   };
 
@@ -81,7 +81,7 @@ class LoginForm extends PureComponent<Props, State> {
             <PrimaryButton
               type="submit"
               id="login-button"
-              onChange={this.Login}
+              onChange={this.handleLogin}
             >
               Log in
             </PrimaryButton>
@@ -90,7 +90,7 @@ class LoginForm extends PureComponent<Props, State> {
             <LinkButton
               type="submit"
               id="forgot-password"
-              onChange={this.forgotPassword}
+              onChange={this.handleForgotPassword}
             >
               Forgot your password?
             </LinkButton>

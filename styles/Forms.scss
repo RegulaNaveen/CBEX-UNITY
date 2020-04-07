@@ -2,7 +2,7 @@
 .primary-button {
   height: 40px;
   width: 303px;
-  background-color: #005ff1;
+  background-color: $blue;
   color: white;
   cursor: pointer;
   border: none;
@@ -13,12 +13,12 @@
 .link-button {
   height: 40px;
   width: 303px;
-  color: #005ff1;
+  color: $blue;
   cursor: pointer;
   text-align: left;
   border: none;
   background-color: Transparent;
-  outline: none !important;
+  outline: none;
 }
 
 @media (max-width: $loginResponsiveWidth) {

@@ -10,7 +10,7 @@ describe('Login component', () => {
       expect(wrapper.hasLogin()).toBe(true);
     });
 
-    it('should have a image', () => {
+    it('should have an image', () => {
       const wrapper = new LoginModel();
       expect(wrapper.hasAnImage()).toBe(1);
     });

@@ -3,7 +3,7 @@ import React from 'react';
 import '../../../styles/App.scss';
 
 type Props = {
-  id: string,
+  id?: string,
   value: string,
   name: string,
   onChange: Function,
@@ -26,6 +26,7 @@ const CheckBox = ({ id, value, name, onChange, checked, children }: Props) => (
 );
 
 CheckBox.defaultProps = {
+  id: undefined,
   checked: false
 };
 
