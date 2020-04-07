@@ -56,3 +56,7 @@ global.URL.createObjectURL = function(blobOrMediaSource) {
     "Failed to execute 'createObjectURL' on 'URL': No function was found that matched the signature provided."
   );
 };
+
+require.extensions['.png'] = function() {
+  return null;
+};
