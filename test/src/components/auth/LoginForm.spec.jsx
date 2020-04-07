@@ -4,7 +4,7 @@ import { describe, it } from 'mocha';
 import sinon from 'sinon';
 import LoginFormModel from '../../../models/LoginFormModel';
 
-describe('Login component', () => {
+describe('LoginForm component', () => {
   describe('rendering', () => {
     it('should render Login Form component', () => {
       const wrapper = new LoginFormModel();
