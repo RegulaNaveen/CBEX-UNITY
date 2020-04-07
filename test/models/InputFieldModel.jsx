@@ -24,15 +24,17 @@ export default class InputFieldModel {
 
   _wrapper: ShallowWrapper;
 
-  _inpuField = (): ShallowWrapper => this._wrapper.find(InputField);
+  _getTitle = (): ShallowWrapper => this._wrapper.find('p');
 
-  getTitleInputField = (): string => this._inpuField().prop('title');
+  _getInput = (): ShallowWrapper => this._wrapper.find('input');
 
-  getPlaceholderInput = (): string => this._inpuField().prop('placeholder');
+  getTitleInputField = (): string => this._getTitle().prop('children');
 
-  getOnChangeInputField = (): Function => this._inpuField().prop('onChange');
+  getPlaceholderInput = (): string => this._getInput().prop('placeholder');
 
-  getTypeInputField = (): boolean => this._inpuField().prop('type');
+  getOnChangeInputField = (): Function => this._getInput().prop('onChange');
 
-  getIdInputField = (): string => this._inpuField().prop('id');
+  getTypeInputField = (): boolean => this._getInput().prop('type');
+
+  getIdInputField = (): string => this._getInput().prop('id');
 }
