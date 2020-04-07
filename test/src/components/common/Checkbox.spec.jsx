@@ -23,7 +23,6 @@ describe('Checkbox component', () => {
         children
       );
 
-      expect(wrapper.hasCheckbox()).toBe(true);
       expect(wrapper.getIdCheckbox()).toBe(id);
       expect(wrapper.getValueCheckbox()).toBe(value);
       expect(wrapper.getNameCheckbox()).toBe(name);

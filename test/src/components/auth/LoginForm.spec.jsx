@@ -6,11 +6,6 @@ import LoginFormModel from '../../../models/LoginFormModel';
 
 describe('LoginForm component', () => {
   describe('rendering', () => {
-    it('should render Login Form component', () => {
-      const wrapper = new LoginFormModel();
-      expect(wrapper.hasLoginForm()).toBe(true);
-    });
-
     it('should render two input fields', () => {
       const inputTypeEmail = 'email';
       const inputTypePassword = 'password';
@@ -18,7 +13,7 @@ describe('LoginForm component', () => {
       const inputIdPassword = 'login-input-password';
 
       const wrapper = new LoginFormModel();
-      expect(wrapper.hasInputField()).toBe(2);
+      expect(wrapper.hasInputField()).toBe(true);
 
       // Email
       expect(wrapper.getTypeInput()).toBe(inputTypeEmail);
@@ -33,7 +28,7 @@ describe('LoginForm component', () => {
       const checkId = 'remember-username-checkbox';
 
       const wrapper = new LoginFormModel();
-      expect(wrapper.hasCheckBox()).toBe(1);
+      expect(wrapper.hasCheckBox()).toBe(true);
 
       expect(wrapper.getIdCheckbox()).toBe(checkId);
     });

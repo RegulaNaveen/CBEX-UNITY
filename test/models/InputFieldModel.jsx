@@ -26,8 +26,6 @@ export default class InputFieldModel {
 
   _inpuField = (): ShallowWrapper => this._wrapper.find(InputField);
 
-  hasInputField = (): boolean => this._inpuField().length === 1;
-
   getTitleInputField = (): string => this._inpuField().prop('title');
 
   getPlaceholderInput = (): string => this._inpuField().prop('placeholder');
