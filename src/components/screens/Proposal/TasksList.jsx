@@ -6,8 +6,8 @@ function TasksList() {
   return (
     <div className="tasksList-wrapper">
       <div className="tasksList-title">Questions</div>
-      <div className="tasksList-separator" />
       <Task collapsed />
+      <div className="tasksList-separator" />
       <Task collapsed={false} />
     </div>
   );
