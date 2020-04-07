@@ -4,7 +4,7 @@ import { describe, it } from 'mocha';
 import sinon from 'sinon';
 import Checkbox from '../../../models/CheckboxModel';
 
-describe('Login component', () => {
+describe('Checkbox component', () => {
   describe('rendering', () => {
     it('should render Checkbox component with the correct props', () => {
       const onChanceStub = sinon.stub();
