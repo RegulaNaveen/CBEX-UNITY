@@ -46,7 +46,7 @@ class LoginForm extends PureComponent<Props, State> {
     const { checked, email, password } = this.state;
     return (
       <div className="form-wrapper">
-        <p className="form-title">IQVIA Living Proposal</p>
+        <p className="form-title">IQVIA Unity</p>
         <div className="input-wrapper">
           <InputField
             id="login-input-email"
