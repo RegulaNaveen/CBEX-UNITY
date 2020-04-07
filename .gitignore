@@ -11,3 +11,4 @@ yarn-error.log*
 yarn-debug.log*
 config.user.json
 package-lock.json
+yarn.lock
