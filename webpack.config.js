@@ -39,7 +39,7 @@ module.exports = {
         loader: 'url-loader'
       },
       {
-        test: /\.(otf|svg|ttf|woff|woff2)$/,
+        test: /\.(otf|svg|ttf|woff|woff2|png)$/,
         loader: 'file-loader'
       }
     ]
