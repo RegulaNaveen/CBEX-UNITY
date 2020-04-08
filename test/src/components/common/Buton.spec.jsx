@@ -16,7 +16,6 @@ describe('Button component', () => {
     it('should render PrimaryButton component with the correct props', () => {
       const wrapper = new PrimaryButton(id, children, type, onChange);
 
-      expect(wrapper.hasPrimaryButton()).toBe(true);
       expect(wrapper.getIdPrimaryButton()).toBe(id);
       expect(wrapper.getChildrenPrimaryButton()).toBe(children);
       expect(wrapper.getTypePrimaryButton()).toBe(type);
@@ -26,7 +25,6 @@ describe('Button component', () => {
     it('should render LinkButton component with the correct props', () => {
       const wrapper = new LinkButton(id, children, type, onChange);
 
-      expect(wrapper.hasLinkButton()).toBe(true);
       expect(wrapper.getIdLinkButton()).toBe(id);
       expect(wrapper.getChildrenLinkButton()).toBe(children);
       expect(wrapper.getTypeLinkButton()).toBe(type);

@@ -17,9 +17,7 @@ export default class LinkButtonModel {
 
   _wrapper: ShallowWrapper;
 
-  _linkButton = (): ShallowWrapper => this._wrapper.find(LinkButton);
-
-  hasLinkButton = (): boolean => this._linkButton().length === 1;
+  _linkButton = (): ShallowWrapper => this._wrapper.find('button');
 
   getIdLinkButton = (): string => this._linkButton().prop('id');
 

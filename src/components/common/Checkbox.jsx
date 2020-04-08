@@ -8,7 +8,7 @@ type Props = {
   name: string,
   onChange: Function,
   checked?: boolean,
-  children: any
+  children: string
 };
 
 const CheckBox = ({ id, value, name, onChange, checked, children }: Props) => (

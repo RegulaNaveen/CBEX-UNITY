@@ -23,12 +23,12 @@ describe('Checkbox component', () => {
         children
       );
 
+      expect(wrapper.getIdTitleCheckbox()).toBe(id);
       expect(wrapper.getIdCheckbox()).toBe(id);
       expect(wrapper.getValueCheckbox()).toBe(value);
       expect(wrapper.getNameCheckbox()).toBe(name);
       expect(wrapper.getOnChangeCheckbox()).toBe(onChange);
       expect(wrapper.getCheckedCheckbox()).toBe(checked);
-      expect(wrapper.getChildrenCheckbox()).toBe(children);
     });
   });
 });

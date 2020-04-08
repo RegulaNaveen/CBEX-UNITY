@@ -17,9 +17,7 @@ export default class PrimaryButtonModel {
 
   _wrapper: ShallowWrapper;
 
-  _primaryButton = (): ShallowWrapper => this._wrapper.find(PrimaryButton);
-
-  hasPrimaryButton = (): boolean => this._primaryButton().length === 1;
+  _primaryButton = (): ShallowWrapper => this._wrapper.find('button');
 
   getIdPrimaryButton = (): string => this._primaryButton().prop('id');
 
