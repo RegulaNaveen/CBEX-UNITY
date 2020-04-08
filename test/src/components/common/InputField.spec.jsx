@@ -13,6 +13,7 @@ describe('InputField component', () => {
       const onChange = onChanceStub;
       const type = 'Fake type';
       const id = 'Fake id';
+
       const wrapper = new InputField(title, placeholder, onChange, type, id);
 
       expect(wrapper.getTitleInputField()).toBe(title);

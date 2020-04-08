@@ -26,17 +26,19 @@ export default class CheckboxModel {
 
   _wrapper: ShallowWrapper;
 
-  _checkbox = (): ShallowWrapper => this._wrapper.find(Checkbox);
+  _getTitle = (): ShallowWrapper => this._wrapper.find('label');
 
-  getIdCheckbox = (): string => this._checkbox().prop('id');
+  _getInput = (): ShallowWrapper => this._wrapper.find('input');
 
-  getValueCheckbox = (): string => this._checkbox().prop('value');
+  getIdTitleCheckbox = (): string => this._getTitle().prop('id');
 
-  getNameCheckbox = (): string => this._checkbox().prop('name');
+  getIdCheckbox = (): string => this._getInput().prop('id');
 
-  getOnChangeCheckbox = (): Function => this._checkbox().prop('onChange');
+  getValueCheckbox = (): string => this._getInput().prop('value');
 
-  getCheckedCheckbox = (): boolean => this._checkbox().prop('checked');
+  getNameCheckbox = (): string => this._getInput().prop('name');
 
-  getChildrenCheckbox = (): string => this._checkbox().prop('children');
+  getOnChangeCheckbox = (): Function => this._getInput().prop('onChange');
+
+  getCheckedCheckbox = (): boolean => this._getInput().prop('checked');
 }
