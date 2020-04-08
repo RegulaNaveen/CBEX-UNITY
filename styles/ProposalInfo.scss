@@ -9,7 +9,7 @@
     height: 29px;
     width: 103px;
     color: #000000;
-    font-family: "Proxima Nova";
+    font-family: 'Proxima Nova';
     font-size: 24px;
     font-weight: 600;
     letter-spacing: 0;
@@ -21,7 +21,7 @@
     height: 30px;
     width: 102px;
     color: #000000;
-    font-family: "Proxima Nova";
+    font-family: 'Proxima Nova';
     font-size: 20px;
     font-weight: 600;
     letter-spacing: 0;
@@ -35,12 +35,29 @@
     flex-grow: 1;
     margin-left: 3px;
     margin-bottom: 16px;
-    
+    color: #444444;
+    font-size: 16px;
+    letter-spacing: 0;
+    line-height: 24px;
+    flex-wrap: wrap;
+    align-content: space-between;
+
+    &-title {
+      font-family: 'Proxima Nova';
+      margin-bottom: 5px;
+    }
+
+    &-subtitle {
+      font-family: 'Proxima Nova Bold';
+      margin-bottom: 20px;
+    }
+
     .pi-details-row {
       display: flex;
+      flex-grow: 1;
       flex-direction: column;
       min-width: 165px;
-      margin-right: 180px;
+      margin-right: 25px;
 
       &:last-child {
         margin-right: 0;
@@ -50,50 +67,33 @@
         display: flex;
         flex-direction: column;
 
-        .pi-details {
-          color: #444444;
-          font-size: 16px;
-          letter-spacing: 0;
-          line-height: 24px;
-
-          &-title {
-            font-family: "Proxima Nova";
-            margin-bottom: 5px;
-          }
-
-          &-subtitle {
-            font-family: "Proxima Nova Bold";
-            margin-bottom: 20px;
-          }
-        }
-
         .pi-details-data {
           color: #000000;
-          font-family: "Proxima Nova";
+          font-family: 'Proxima Nova';
           font-size: 16px;
           letter-spacing: 0;
           line-height: 24px;
         }
       }
 
-      .pi-details-row-segment{
+      .pi-details-row-segment {
         display: flex;
 
         .pi-details {
           color: #000000;
-          font-family: "Proxima Nova";
+          font-family: 'Proxima Nova';
           font-size: 16px;
           letter-spacing: 0;
           line-height: 24px;
           padding-left: 5px;
 
           &-title {
-            font-family: "Proxima Nova";
+            font-family: 'Proxima Nova';
             margin-bottom: 20px;
           }
 
           &-data {
-            font-family: "Proxima Nova Bold";
+            font-family: 'Proxima Nova Bold';
             margin-bottom: 23px;
             margin-left: 5px;
           }
