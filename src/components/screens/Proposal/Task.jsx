@@ -15,14 +15,14 @@ class Task extends Component<Props, State> {
       {
         question: 'Question',
         answer: 'Answer',
-        owner: 'Owner',
+        owner: ['Owner', 'Pedro'],
         dueDate: '02-Apr-2020',
         completionDate: '02-Apr-2020'
       },
       {
         question: 'Question',
         answer: 'Answer',
-        owner: 'Owner',
+        owner: ['Awner', 'Homer', 'jesus'],
         dueDate: '02-Apr-2020',
         completionDate: '02-Apr-2020'
       }
@@ -86,7 +86,13 @@ class Task extends Component<Props, State> {
                   <div className="task-table-row-checkmark">✓</div>
                   <div className="task-table-row-question">{item.question}</div>
                   <div className="task-table-row-answer">{item.answer}</div>
-                  <div className="task-table-row-owner">{item.owner}</div>
+                  <div className="task-table-row-owner">
+                    {item.owner.map(owner => (
+                      <div className="task-table-row-owner-icon">
+                        {owner.charAt(0).toUpperCase()}
+                      </div>
+                    ))}
+                  </div>
                   <div className="task-table-row-due-date">{item.dueDate}</div>
                   <div className="task-table-row-completion-date">
                     {item.completionDate}

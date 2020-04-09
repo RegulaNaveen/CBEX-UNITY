@@ -151,11 +151,29 @@
         display: flex;
         align-items: center;
         height: 55px;
-        color: $black;
-        font-family: $proximaNova;
-        font-size: 16px;
-        letter-spacing: 0;
-        line-height: 19px;
+
+        &-icon{
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-sizing: border-box;
+          height: 27px;
+          width: 27px;
+          padding-top: 1px;
+          border: 2px solid $white;
+          border-radius: 50%;
+          background-color: $purple;
+          color: $white;
+          font-family: $proximaNova;
+          font-size: 16px;
+          letter-spacing: 0;
+          line-height: 19px;
+          margin-left: -10px;
+
+          &:first-child {
+            margin-left: 0;
+          }
+        }
       }
 
       &-due-date {
