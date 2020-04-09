@@ -6,40 +6,28 @@ import LoginFormModel from '../../../models/LoginFormModel';
 
 describe('LoginForm component', () => {
   describe('rendering', () => {
+    const onChanceStub = sinon.stub();
+    const onChange = onChanceStub;
+
     it('should render two input fields', () => {
-      const inputTypeEmail = 'email';
-      const inputTypePassword = 'password';
-      const inputIdEmail = 'login-input-email';
-      const inputIdPassword = 'login-input-password';
-
       const wrapper = new LoginFormModel();
-      expect(wrapper.hasInputField()).toBe(true);
+      expect(wrapper.hasInputField()).toBe(false);
 
-      // Email
-      expect(wrapper.getTypeInput()).toBe(inputTypeEmail);
-      expect(wrapper.getIdInput()).toBe(inputIdEmail);
-
-      // Password
-      expect(wrapper.getTypeInput()).toBe(inputTypePassword);
-      expect(wrapper.getIdInput()).toBe(inputIdPassword);
+      expect(wrapper.getEmailInput()).toBe('login-input-email');
+      expect(wrapper.getPasswordInput()).toBe('login-input-password');
     });
 
     it('should render a checkbox', () => {
-      const checkId = 'remember-username-checkbox';
-
       const wrapper = new LoginFormModel();
+
       expect(wrapper.hasCheckBox()).toBe(true);
 
-      expect(wrapper.getIdCheckbox()).toBe(checkId);
+      expect(wrapper.getIdCheckbox()).toBe('remember-username-checkbox');
     });
 
     it('should render a primary button', () => {
-      const idButton = 'login-button';
-
       const wrapper = new LoginFormModel();
-      expect(wrapper.hasPrimaryButton()).toBe(1);
-
-      expect(wrapper.getIdButton()).toBe(idButton);
+      expect(wrapper.hasPrimaryButton()).toBe(true);
     });
 
     it('should call onEmailChange once', () => {});
@@ -51,12 +39,8 @@ describe('LoginForm component', () => {
     it('should call handleForgotPassword once', () => {});
 
     it('should render a link button', () => {
-      const idButton = 'login-button';
-
       const wrapper = new LoginFormModel();
-      expect(wrapper.hasLinkButton()).toBe(1);
-
-      expect(wrapper.getIdLink()).toBe(idButton);
+      expect(wrapper.hasLinkButton()).toBe(true);
     });
   });
 });

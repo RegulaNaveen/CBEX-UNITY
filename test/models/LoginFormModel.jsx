@@ -28,11 +28,19 @@ export default class LoginFormModel {
 
   hasInputField = (): boolean => this._InputField().lenght === 1;
 
+  getEmailInput = (): string =>
+    this._InputField()
+      .at(0)
+      .prop('id');
+
+  getPasswordInput = (): string =>
+    this._InputField()
+      .at(1)
+      .prop('id');
+
   hasCheckBox = (): boolean => this._CheckBox().lenght === 1;
 
   getTypeInput = (): string => this._InputField().prop('type');
-
-  getIdInput = (): string => this._InputField().prop('id');
 
   getOnChangeInput = (): boolean => this._InputField().prop('onChange');
 
