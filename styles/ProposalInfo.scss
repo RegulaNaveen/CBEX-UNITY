@@ -2,14 +2,11 @@
   flex: 1;
   padding-top: 12px;
   padding-left: 29px;
-  padding-bottom: 20px;
   padding-right: 163px;
 
   .pi-title {
-    height: 29px;
-    width: 103px;
-    color: #000000;
-    font-family: 'Proxima Nova';
+    color: $black;
+    font-family: $proximaNova;
     font-size: 24px;
     font-weight: 600;
     letter-spacing: 0;
@@ -20,8 +17,8 @@
   .pi-subtitle {
     height: 30px;
     width: 102px;
-    color: #000000;
-    font-family: 'Proxima Nova';
+    color: $black;
+    font-family: $proximaNova;
     font-size: 20px;
     font-weight: 600;
     letter-spacing: 0;
@@ -35,7 +32,8 @@
     flex-grow: 1;
     margin-left: 3px;
     margin-bottom: 16px;
-    color: #444444;
+    font-family: $proximaNova;
+    color: $neutral8;
     font-size: 16px;
     letter-spacing: 0;
     line-height: 24px;
@@ -43,12 +41,11 @@
     align-content: space-between;
 
     &-title {
-      font-family: 'Proxima Nova';
       margin-bottom: 5px;
     }
 
     &-subtitle {
-      font-family: 'Proxima Nova Bold';
+      font-weight: 600;
       margin-bottom: 20px;
     }
 
@@ -68,8 +65,8 @@
         flex-direction: column;
 
         .pi-details-data {
-          color: #000000;
-          font-family: 'Proxima Nova';
+          color: $black;
+          font-family: $proximaNova;
           font-size: 16px;
           letter-spacing: 0;
           line-height: 24px;
@@ -80,20 +77,19 @@
         display: flex;
 
         .pi-details {
-          color: #000000;
-          font-family: 'Proxima Nova';
+          color: $black;
+          font-family: $proximaNova;
           font-size: 16px;
           letter-spacing: 0;
           line-height: 24px;
           padding-left: 5px;
 
           &-title {
-            font-family: 'Proxima Nova';
             margin-bottom: 20px;
           }
 
           &-data {
-            font-family: 'Proxima Nova Bold';
+            font-weight: 600;
             margin-bottom: 23px;
             margin-left: 5px;
           }
