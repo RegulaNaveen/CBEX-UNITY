@@ -5,19 +5,19 @@ type Props = {
   id?: string,
   children: string,
   type: string,
-  onChange: Function
+  onClick: Function
 };
 
-const PrimaryButton = ({ id, type, onChange, children }: Props) => (
+const PrimaryButton = ({ id, type, onClick, children }: Props) => (
   // eslint-disable-next-line react/button-has-type
-  <button id={id} type={type} className="primary-button" onChange={onChange}>
+  <button id={id} type={type} className="primary-button" onClick={onClick}>
     {children}
   </button>
 );
 
-const LinkButton = ({ id, type, onChange, children }: Props) => (
+const LinkButton = ({ id, type, onClick, children }: Props) => (
   // eslint-disable-next-line react/button-has-type
-  <button id={id} type={type} className="link-button" onChange={onChange}>
+  <button id={id} type={type} className="link-button" onClick={onClick}>
     {children}
   </button>
 );
