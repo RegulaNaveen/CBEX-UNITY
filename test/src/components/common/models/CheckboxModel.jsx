@@ -50,5 +50,5 @@ export default class CheckboxModel {
 
   resetEventHandlers = () => {
     this._onChangeStub.reset();
-  }
+  };
 }
