@@ -17,11 +17,99 @@ const Proposal = () => {
     indication: 'Myopia'
   };
 
+  const tasks = [
+    {
+      data: [
+        {
+          question: 'Question',
+          answer: 'Answer',
+          owner: ['Owner', 'Pedro'],
+          dueDate: '02-Apr-2020',
+          completionDate: '02-Apr-2020',
+          complete: true
+        },
+        {
+          question: 'Question',
+          answer: 'Answer',
+          owner: ['Awner', 'Homer', 'jesus'],
+          dueDate: '02-Apr-2020',
+          completionDate: '02-Apr-2020',
+          complete: true
+        }
+      ],
+      complete: false,
+      title: 'Resources',
+      incomplete: 8
+    },
+    {
+      data: [
+        {
+          question: 'Question',
+          answer: 'Answer',
+          owner: ['Owner', 'Pedro'],
+          dueDate: '02-Apr-2020',
+          completionDate: '02-Apr-2020',
+          complete: false
+        },
+        {
+          question: 'Question',
+          answer: 'Answer',
+          owner: ['Awner', 'Homer', 'jesus'],
+          dueDate: '02-Apr-2020',
+          completionDate: '02-Apr-2020',
+          complete: false
+        },
+        {
+          question: 'Question',
+          answer: 'Answer',
+          owner: ['Awner', 'Homer', 'jesus'],
+          dueDate: '02-Apr-2020',
+          completionDate: '02-Apr-2020',
+          complete: true
+        },
+        {
+          question: 'Question',
+          answer: 'Answer',
+          owner: ['Awner', 'Homer', 'jesus'],
+          dueDate: '02-Apr-2020',
+          completionDate: '02-Apr-2020',
+          complete: true
+        }
+      ],
+      complete: false,
+      title: 'Labs',
+      incomplete: 2
+    },
+    {
+      data: [
+        {
+          question: 'Question',
+          answer: 'Answer',
+          owner: ['Owner', 'Pedro'],
+          dueDate: '02-Apr-2020',
+          completionDate: '02-Apr-2020',
+          complete: true
+        },
+        {
+          question: 'Question',
+          answer: 'Answer',
+          owner: ['Awner', 'Homer', 'jesus'],
+          dueDate: '02-Apr-2020',
+          completionDate: '02-Apr-2020',
+          complete: true
+        }
+      ],
+      complete: true,
+      title: 'Medical',
+      incomplete: 0
+    }
+  ];
+
   return (
     <div className="proposal-wrapper">
       This is the Proposal Screen
       <ProposalInfo data={data} />
-      <TasksList />
+      <TasksList tasks={tasks} />
     </div>
   );
 };

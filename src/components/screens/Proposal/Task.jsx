@@ -6,31 +6,13 @@ type State = {
 };
 
 type Props = {
-  data?: Array<Object>,
-  complete?: boolean
+  data: Array<Object>,
+  complete: Boolean,
+  title: String,
+  incomplete: Number
 };
 
 class Task extends Component<Props, State> {
-  static defaultProps = {
-    data: [
-      {
-        question: 'Question',
-        answer: 'Answer',
-        owner: ['Owner', 'Pedro'],
-        dueDate: '02-Apr-2020',
-        completionDate: '02-Apr-2020'
-      },
-      {
-        question: 'Question',
-        answer: 'Answer',
-        owner: ['Awner', 'Homer', 'jesus'],
-        dueDate: '02-Apr-2020',
-        completionDate: '02-Apr-2020'
-      }
-    ],
-    complete: false
-  };
-
   constructor(props: Object) {
     super(props);
 
@@ -52,7 +34,7 @@ class Task extends Component<Props, State> {
 
   render() {
     const { collapsed } = this.state;
-    const { data, complete } = this.props;
+    const { data, complete, title, incomplete } = this.props;
     return (
       <div className={complete ? 'task-wrapper complete' : 'task-wrapper'}>
         <div
@@ -66,7 +48,7 @@ class Task extends Component<Props, State> {
         </div>
         {!collapsed ? (
           <div className="task-title-wrapper">
-            <p className="task-title">Resources</p>
+            <p className="task-title">{title}</p>
             {complete ? (
               <div className="task-status-wrapper">
                 <div className="task-status-checkmark">✓</div>
@@ -74,7 +56,9 @@ class Task extends Component<Props, State> {
               </div>
             ) : (
               <div className="task-status-wrapper">
-                <p className="task-status-description">8 Incomplete</p>
+                <p className="task-status-description">
+                  {`${incomplete.toString()} Incomplete`}
+                </p>
               </div>
             )}
           </div>
@@ -105,9 +89,11 @@ class Task extends Component<Props, State> {
             {data &&
               data.map(item => (
                 <div className="task-table-row">
-                  <div className="task-table-row-checkmark icon-highlight">
-                    ✓
-                  </div>
+                  {item.complete ? (
+                    <div className="task-table-row-checkmark icon-highlight">
+                      ✓
+                    </div>
+                  ) : null}
                   <p className="task-table-row-question">{item.question}</p>
                   <div className="task-table-row-answer">{item.answer}</div>
                   <div className="task-table-row-owner">

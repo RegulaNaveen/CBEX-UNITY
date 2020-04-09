@@ -2,13 +2,28 @@
 import React from 'react';
 import Task from './Task';
 
-function TasksList() {
+type Props = {
+  tasks: Array<Object>
+};
+
+function TasksList({ tasks }: Props) {
   return (
     <div className="tasksList-wrapper">
       <div className="tasksList-title">Questions</div>
-      <Task />
-      <div className="tasksList-separator" />
-      <Task complete />
+      {tasks.map(task => {
+        const { complete, data, title, incomplete } = task;
+        return (
+          <div>
+            <Task
+              data={data}
+              title={title}
+              complete={complete}
+              incomplete={incomplete}
+            />
+            <div className="tasksList-separator" />
+          </div>
+        );
+      })}
     </div>
   );
 }
