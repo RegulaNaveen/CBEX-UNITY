@@ -9,11 +9,11 @@ type Props = {
 function TasksList({ tasks }: Props) {
   return (
     <div className="tasksList-wrapper">
-      <div className="tasksList-title">Questions</div>
+      <p className="tasksList-title">Questions</p>
       {tasks.map(task => {
         const { complete, data, title, incomplete } = task;
         return (
-          <div>
+          <div key={title}>
             <Task
               data={data}
               title={title}
