@@ -6,7 +6,8 @@ type State = {
 };
 
 type Props = {
-  data?: Array<Object>
+  data?: Array<Object>,
+  complete?: boolean
 };
 
 class Task extends Component<Props, State> {
@@ -26,14 +27,15 @@ class Task extends Component<Props, State> {
         dueDate: '02-Apr-2020',
         completionDate: '02-Apr-2020'
       }
-    ]
+    ],
+    complete: false
   };
 
   constructor(props: Object) {
     super(props);
 
     this.state = {
-      collapsed: true
+      collapsed: false
     };
   }
 
@@ -50,9 +52,9 @@ class Task extends Component<Props, State> {
 
   render() {
     const { collapsed } = this.state;
-    const { data } = this.props;
+    const { data, complete } = this.props;
     return (
-      <div className="task-wrapper">
+      <div className={complete ? 'task-wrapper complete' : 'task-wrapper'}>
         <div
           className="task-icon"
           onClick={this.handleCollapse}
@@ -65,9 +67,16 @@ class Task extends Component<Props, State> {
         {!collapsed ? (
           <div className="task-title-wrapper">
             <p className="task-title">Resources</p>
-            <div className="task-status-wrapper">
-              <p className="task-status-description">8 Incomplete</p>
-            </div>
+            {complete ? (
+              <div className="task-status-wrapper">
+                <div className="task-status-checkmark">✓</div>
+                <p className="task-status-description">Complete</p>
+              </div>
+            ) : (
+              <div className="task-status-wrapper">
+                <p className="task-status-description">8 Incomplete</p>
+              </div>
+            )}
           </div>
         ) : (
           <div className="task-table-wrapper">
@@ -96,7 +105,9 @@ class Task extends Component<Props, State> {
             {data &&
               data.map(item => (
                 <div className="task-table-row">
-                  <div className="task-table-row-checkmark icon-highlight">✓</div>
+                  <div className="task-table-row-checkmark icon-highlight">
+                    ✓
+                  </div>
                   <p className="task-table-row-question">{item.question}</p>
                   <div className="task-table-row-answer">{item.answer}</div>
                   <div className="task-table-row-owner">
@@ -110,6 +121,7 @@ class Task extends Component<Props, State> {
                   <p className="task-table-row-completion-date">
                     {item.completionDate}
                   </p>
+                  <div className="task-table-row-edit">✏</div>
                 </div>
               ))}
           </div>

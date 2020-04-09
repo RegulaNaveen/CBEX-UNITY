@@ -1,3 +1,4 @@
+
 .task-wrapper {
   flex: 1;
   display: flex;
@@ -7,12 +8,11 @@
   box-sizing: border-box;
   border: 1px solid $neutral4;
   border-radius: 4px;
-  background-color: $white;
 
   .task-title-wrapper {
     display: flex;
     flex: 1;
-    justify-content: space-between  ;
+    justify-content: space-between;
 
     .task-title {
       color: $black;
@@ -34,6 +34,14 @@
         letter-spacing: 0;
         line-height: 19px;
         padding-right: 23px;
+      }
+
+      .task-status-checkmark {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        color: $black;
       }
     }
   }
@@ -108,7 +116,7 @@
 
       .filter-icon {
         display: flex;
-        margin-left: 10px;
+        margin-left: 6px;
         height: 60px;
         width: 22px;
         align-items: center;
@@ -121,11 +129,11 @@
       height: 55px;
 
       &:hover{
-        background-color: $hover;
+        background-color: $neutral2;
       }
 
       &:hover .icon-highlight{
-        background-color: $hover;
+        background-color: $neutral2;
       }
 
       &-checkmark {
@@ -205,7 +213,7 @@
       }
 
       &-completion-date {
-        width: 138px;
+        width: 103px;
         display: flex;
         align-items: center;
         height: 55px;
@@ -215,6 +223,18 @@
         letter-spacing: 0;
         line-height: 19px;
       }
+
+      &-edit {
+        width: 16px;
+        display: flex;
+        align-items: center;
+        margin-right: 10px;
+        margin-left: 9px;
+      }
     }
   }
+}
+
+.complete {
+  background-color: $neutral2;
 }

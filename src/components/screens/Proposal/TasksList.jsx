@@ -8,7 +8,7 @@ function TasksList() {
       <div className="tasksList-title">Questions</div>
       <Task />
       <div className="tasksList-separator" />
-      <Task />
+      <Task complete />
     </div>
   );
 }
