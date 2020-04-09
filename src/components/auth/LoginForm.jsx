@@ -5,11 +5,13 @@ import { PROPOSALS } from '../../routes';
 import { PrimaryButton, LinkButton } from '../common/Buttons';
 import InputField from '../common/InputField';
 import Checkbox from '../common/Checkbox';
+import ModalProposal from '../ModalProposal';
 
 type State = {
   email: string,
   password: string,
-  checked: boolean
+  checked: boolean,
+  showModal: boolean
 };
 
 type Props = {
@@ -23,9 +25,24 @@ class LoginForm extends Component<Props, State> {
     this.state = {
       email: '',
       password: '',
-      checked: false
+      checked: false,
+      showModal: false
     };
   }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.escFunction);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.escFunction);
+  }
+
+  escFunction = (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      this.handleLogin();
+    }
+  };
 
   onEmailChange = (text: SyntheticInputEvent<EventTarget>) => {
     this.setState({ email: text.target.value });
@@ -42,6 +59,9 @@ class LoginForm extends Component<Props, State> {
 
   handleLogin = () => {
     // TODO: Login functionality
+    // CODE TO TEST MODAL
+    const { showModal } = this.state;
+    this.setState({ showModal: !showModal });
     // TODO: Remove navigation test code
     const { history } = this.props;
     history.push(PROPOSALS);
@@ -52,7 +72,7 @@ class LoginForm extends Component<Props, State> {
   };
 
   render() {
-    const { checked, email, password } = this.state;
+    const { checked, email, password, showModal } = this.state;
     return (
       <div className="form-wrapper">
         <p className="form-title">IQVIA Unity</p>
@@ -105,6 +125,7 @@ class LoginForm extends Component<Props, State> {
             </LinkButton>
           </div>
         </div>
+        <ModalProposal showModal={showModal} />
       </div>
     );
   }

@@ -7,7 +7,7 @@ import LoginForm from '../../../../../src/components/auth/LoginForm';
 import {
   PrimaryButton,
   LinkButton
-} from '../../../../../src/components/common/Buttons';
+} from '../../../../../src/components/common/Button';
 import InputField from '../../../../../src/components/common/InputField';
 import Checkbox from '../../../../../src/components/common/Checkbox';
 
