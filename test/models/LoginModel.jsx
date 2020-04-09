@@ -14,9 +14,13 @@ export default class LoginModel {
 
   _login = (): ShallowWrapper => this._wrapper.find(LoginForm);
 
-  _anImage = (): ShallowWrapper => this._wrapper.find('img');
+  _getImage = (): ShallowWrapper => this._wrapper.find('img');
+
+  _getParagraph = (): ShallowWrapper => this._wrapper.find('p');
 
   hasLogin = (): boolean => this._login().length === 1;
 
-  hasAnImage = (): boolean => this._anImage().length === 1;
+  hasAnImage = (): boolean => this._getImage().length === 1;
+
+  getCopyright = (): string => this._getParagraph().prop('children');
 }

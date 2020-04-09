@@ -14,5 +14,12 @@ describe('Login component', () => {
       const wrapper = new LoginModel();
       expect(wrapper.hasAnImage()).toBe(true);
     });
+
+    it('should render copyright text', () => {
+      const wrapper = new LoginModel();
+      expect(wrapper.getCopyright()).toBe(
+        'Copyright @ 2019. All rights reserved'
+      );
+    });
   });
 });
