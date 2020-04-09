@@ -6,13 +6,13 @@ type Props = {
   id?: string,
   value: string,
   name: string,
-  onChange: Function,
   checked?: boolean,
-  children: string
+  children: string,
+  onChange: Function
 };
 
 const CheckBox = ({ id, value, name, onChange, checked, children }: Props) => (
-  <label id={id} htmlFor={id} className="checkbox" tabIndex={-1}>
+  <label htmlFor={id} className="checkbox" tabIndex={-1}>
     <input
       id={id}
       name={name}

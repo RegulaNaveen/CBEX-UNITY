@@ -2,6 +2,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
+import sinon from 'sinon';
+import type { stub } from 'sinon';
 import Checkbox from '../../../../../src/components/common/Checkbox';
 
 export default class CheckboxModel {
@@ -9,36 +11,44 @@ export default class CheckboxModel {
     id: string,
     value: string,
     name: string,
-    onChange: Function,
     checked: boolean,
     children: any
   ) {
+    this._onChangeStub = sinon.stub();
     const props = {
       id,
       value,
       name,
-      onChange,
       checked,
-      children
+      children,
+      onChange: this._onChangeStub
     };
     this._wrapper = shallow(<Checkbox {...props} />);
   }
 
   _wrapper: ShallowWrapper;
 
-  _getTitle = (): ShallowWrapper => this._wrapper.find('label');
+  _onChangeStub: stub;
+
+  _getLabel = (): ShallowWrapper => this._wrapper.find('label');
 
   _getInput = (): ShallowWrapper => this._wrapper.find('input');
 
-  getIdTitleCheckbox = (): string => this._getTitle().prop('id');
+  getId = (): string => this._getInput().prop('id');
 
-  getIdCheckbox = (): string => this._getInput().prop('id');
+  getName = (): string => this._getInput().prop('name');
 
-  getValueCheckbox = (): string => this._getInput().prop('value');
+  getValue = (): string => this._getInput().prop('value');
 
-  getNameCheckbox = (): string => this._getInput().prop('name');
+  getChecked = (): string => this._getInput().prop('checked');
 
-  getOnChangeCheckbox = (): Function => this._getInput().prop('onChange');
+  getChildren = (): any => this._getLabel().prop('children')[1];
 
-  getCheckedCheckbox = (): boolean => this._getInput().prop('checked');
+  doOnChange = () => this._getInput().prop('onChange')();
+
+  onChangeCalledOnce = () => this._onChangeStub.calledOnce === true;
+
+  resetEventHandlers = () => {
+    this._onChangeStub.reset();
+  }
 }
