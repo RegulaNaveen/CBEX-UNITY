@@ -1,26 +1,41 @@
 // @flow
 import expect from 'expect';
 import { describe, it } from 'mocha';
-import sinon from 'sinon';
 import InputField from './models/InputFieldModel';
 
 describe('InputField component', () => {
+  const title = 'Fake title';
+  const placeholder = 'Fake placeholder';
+  const type = 'Fake type';
+  const id = 'Fake id';
   describe('rendering', () => {
-    it('should render InputField component with the correct props', () => {
-      const onChanceStub = sinon.stub();
-      const title = 'Fake title';
-      const placeholder = 'Fake placeholder';
-      const onChange = onChanceStub;
-      const type = 'Fake type';
-      const id = 'Fake id';
+    it('should render the correct id', () => {
+      const wrapper = new InputField(title, placeholder, type, id);
+      expect(wrapper.getId()).toBe(id);
+    });
 
-      const wrapper = new InputField(title, placeholder, onChange, type, id);
+    it('should render the correct title', () => {
+      const wrapper = new InputField(title, placeholder, type, id);
+      expect(wrapper.getTitle()).toBe(title);
+    });
 
-      expect(wrapper.getTitleInputField()).toBe(title);
-      expect(wrapper.getPlaceholderInput()).toBe(placeholder);
-      expect(wrapper.getOnChangeInputField()).toBe(onChange);
-      expect(wrapper.getTypeInputField()).toBe(type);
-      expect(wrapper.getIdInputField()).toBe(id);
+    it('should render the correct placeholder', () => {
+      const wrapper = new InputField(title, placeholder, type, id);
+      expect(wrapper.getPlaceholder()).toBe(placeholder);
+    });
+
+    it('should render the correct type', () => {
+      const wrapper = new InputField(title, placeholder, type, id);
+      expect(wrapper.getType()).toBe(type);
+    });
+  });
+
+  describe('interactions', () => {
+    it('should handle onChange handler', () => {
+      const wrapper = new InputField(title, placeholder, type, id);
+      wrapper.doOnChange();
+      expect(wrapper.onChangeCalledOnce()).toBe(true);
+      wrapper.resetEventHandlers();
     });
   });
 });

@@ -4,12 +4,12 @@ import React from 'react';
 type Props = {
   title: string,
   placeholder: string,
-  onChange: Function,
   type: string,
-  id?: string
+  id?: string,
+  onChange: Function
 };
 
-const InputField = ({ title, placeholder, onChange, type, id }: Props) => (
+const InputField = ({ title, placeholder, type, id, onChange }: Props) => (
   <>
     <p className="input-title">{title}</p>
     <input
