@@ -72,13 +72,26 @@ class Task extends Component<Props, State> {
         ) : (
           <div className="task-table-wrapper">
             <div className="task-table-headers">
-              <p className="task-title">Resources</p>
-              <p className="task-subtitle task-subtitle-answer">Answer</p>
-              <p className="task-subtitle task-subtitle-owner">Owner</p>
-              <p className="task-subtitle task-subtitle-due-date">Due Date</p>
-              <p className="task-subtitle task-subtitle-completion-date">
-                Date Completed
-              </p>
+              <div className="task-title">
+                <p>Resources</p>
+                <div className="filter-icon">↑</div>
+              </div>
+              <div className="task-subtitle task-subtitle-answer">
+                <p>Answer</p>
+                <div className="filter-icon">↑</div>
+              </div>
+              <div className="task-subtitle task-subtitle-owner">
+                <p>Owner</p>
+                <div className="filter-icon">↑</div>
+              </div>
+              <div className="task-subtitle task-subtitle-due-date">
+                <p>Due Date</p>
+                <div className="filter-icon">↑</div>
+              </div>
+              <div className="task-subtitle task-subtitle-completion-date">
+                <p>Date Completed</p>
+                <div className="filter-icon">↑</div>
+              </div>
             </div>
             {data &&
               data.map(item => (

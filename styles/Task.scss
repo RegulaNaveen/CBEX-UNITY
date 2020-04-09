@@ -105,6 +105,15 @@
       .task-subtitle-completion-date {
         width: 138px;
       }
+
+      .filter-icon {
+        display: flex;
+        margin-left: 10px;
+        height: 60px;
+        width: 22px;
+        align-items: center;
+        justify-content: center;
+      }
     }
 
     .task-table-row {
