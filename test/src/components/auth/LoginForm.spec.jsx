@@ -2,7 +2,7 @@
 import expect from 'expect';
 import { describe, it } from 'mocha';
 import sinon from 'sinon';
-import LoginFormModel from '../../../models/LoginFormModel';
+import LoginFormModel from './models/LoginFormModel';
 
 describe('LoginForm component', () => {
   describe('rendering', () => {

@@ -2,7 +2,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
-import Checkbox from '../../src/components/common/Checkbox';
+import Checkbox from '../../../../../src/components/common/Checkbox';
 
 export default class CheckboxModel {
   constructor(

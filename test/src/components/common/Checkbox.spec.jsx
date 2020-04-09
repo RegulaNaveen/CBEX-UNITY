@@ -2,7 +2,7 @@
 import expect from 'expect';
 import { describe, it } from 'mocha';
 import sinon from 'sinon';
-import Checkbox from '../../../models/CheckboxModel';
+import Checkbox from './models/CheckboxModel';
 
 describe('Checkbox component', () => {
   describe('rendering', () => {

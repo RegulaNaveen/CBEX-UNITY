@@ -2,10 +2,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
-import LoginForm from '../../src/components/auth/LoginForm';
-import { PrimaryButton, LinkButton } from '../../src/components/common/Button';
-import InputField from '../../src/components/common/InputField';
-import Checkbox from '../../src/components/common/Checkbox';
+import LoginForm from '../../../../../src/components/auth/LoginForm';
+import { PrimaryButton, LinkButton } from '../../../../../src/components/common/Buttons';
+import InputField from '../../../../../src/components/common/InputField';
+import Checkbox from '../../../../../src/components/common/Checkbox';
 
 export default class LoginFormModel {
   constructor() {

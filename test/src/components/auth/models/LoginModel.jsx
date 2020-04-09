@@ -2,8 +2,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
-import Login from '../../src/components/auth/Login';
-import LoginForm from '../../src/components/auth/LoginForm';
+import Login from '../../../../../src/components/auth/Login';
+import LoginForm from '../../../../../src/components/auth/LoginForm';
 
 export default class LoginModel {
   constructor() {

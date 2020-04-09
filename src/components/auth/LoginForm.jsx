@@ -1,6 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
-import { PrimaryButton, LinkButton } from '../common/Button';
+import { PrimaryButton, LinkButton } from '../common/Buttons';
 import InputField from '../common/InputField';
 import Checkbox from '../common/Checkbox';
 

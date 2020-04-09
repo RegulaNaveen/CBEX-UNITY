@@ -2,7 +2,7 @@
 import expect from 'expect';
 import { describe, it } from 'mocha';
 import sinon from 'sinon';
-import InputField from '../../../models/InputFieldModel';
+import InputField from './models/InputFieldModel';
 
 describe('InputField component', () => {
   describe('rendering', () => {

@@ -1,7 +1,7 @@
 // @flow
 import expect from 'expect';
 import { describe, it } from 'mocha';
-import LoginModel from '../../../models/LoginModel';
+import LoginModel from './models/LoginModel';
 
 describe('Login component', () => {
   describe('rendering', () => {

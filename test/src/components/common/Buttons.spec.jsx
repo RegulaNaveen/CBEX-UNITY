@@ -2,8 +2,8 @@
 import expect from 'expect';
 import { describe, it } from 'mocha';
 import sinon from 'sinon';
-import PrimaryButton from '../../../models/PrimaryButtonModel';
-import LinkButton from '../../../models/LinkButtonModel';
+import PrimaryButton from './models/PrimaryButtonModel';
+import LinkButton from './models/LinkButtonModel';
 
 describe('Button component', () => {
   describe('rendering', () => {
