@@ -36,5 +36,5 @@ export default class LinkButtonModel {
 
   resetEventHandlers = () => {
     this._onClickStub.reset();
-  }
+  };
 }
