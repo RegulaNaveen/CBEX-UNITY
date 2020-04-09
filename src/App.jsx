@@ -1,19 +1,14 @@
 // @flow
-import '../styles/App.scss'
 import React from 'react';
-import { BrowserRouter, Switch, Route, Link, Redirect } from 'react-router-dom';
-import PrivateRoute from './PrivateRoute';
-import { LOGIN, PROPOSALS } from './routes';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { LOGIN } from './routes';
+import Login from './components/auth/Login';
 
 const App = () => {
   return (
     <BrowserRouter>
       <Switch>
-        {/* TODO: Add Login Component */}
-        {/* <Route path={LOGIN} component={Login} /> */}
-        <PrivateRoute isAuthenticated={false}>
-          {/* TODO: Add here Proposals component */}
-        </PrivateRoute>
+        <Route path={LOGIN} component={Login} />
         <Redirect to="/" />
       </Switch>
     </BrowserRouter>
