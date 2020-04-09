@@ -96,20 +96,20 @@ class Task extends Component<Props, State> {
             {data &&
               data.map(item => (
                 <div className="task-table-row">
-                  <div className="task-table-row-checkmark">✓</div>
-                  <div className="task-table-row-question">{item.question}</div>
+                  <div className="task-table-row-checkmark icon-highlight">✓</div>
+                  <p className="task-table-row-question">{item.question}</p>
                   <div className="task-table-row-answer">{item.answer}</div>
                   <div className="task-table-row-owner">
                     {item.owner.map(owner => (
-                      <div className="task-table-row-owner-icon">
+                      <p className="task-table-row-owner-icon">
                         {owner.charAt(0).toUpperCase()}
-                      </div>
+                      </p>
                     ))}
                   </div>
-                  <div className="task-table-row-due-date">{item.dueDate}</div>
-                  <div className="task-table-row-completion-date">
+                  <p className="task-table-row-due-date">{item.dueDate}</p>
+                  <p className="task-table-row-completion-date">
                     {item.completionDate}
-                  </div>
+                  </p>
                 </div>
               ))}
           </div>
