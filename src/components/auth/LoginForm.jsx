@@ -10,6 +10,8 @@ type State = {
   checked: boolean
 };
 
+type Props = {};
+
 class LoginForm extends PureComponent<Props, State> {
   constructor(props: Object) {
     super(props);
@@ -35,11 +37,11 @@ class LoginForm extends PureComponent<Props, State> {
   };
 
   handleLogin = () => {
-    // TOOD: Login functionality
+    // TODO: Login functionality
   };
 
   handleForgotPassword = () => {
-    // TOOD: forgot password functionality
+    // TODO: forgot password functionality
   };
 
   render() {
@@ -81,7 +83,7 @@ class LoginForm extends PureComponent<Props, State> {
             <PrimaryButton
               type="submit"
               id="login-button"
-              onChange={this.handleLogin}
+              onClick={this.handleLogin}
             >
               Log in
             </PrimaryButton>
@@ -90,7 +92,7 @@ class LoginForm extends PureComponent<Props, State> {
             <LinkButton
               type="submit"
               id="forgot-password"
-              onChange={this.handleForgotPassword}
+              onClick={this.handleForgotPassword}
             >
               Forgot your password?
             </LinkButton>

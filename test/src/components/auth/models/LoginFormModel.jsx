@@ -3,7 +3,10 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
 import LoginForm from '../../../../../src/components/auth/LoginForm';
-import { PrimaryButton, LinkButton } from '../../../../../src/components/common/Buttons';
+import {
+  PrimaryButton,
+  LinkButton
+} from '../../../../../src/components/common/Buttons';
 import InputField from '../../../../../src/components/common/InputField';
 import Checkbox from '../../../../../src/components/common/Checkbox';
 
@@ -14,43 +17,43 @@ export default class LoginFormModel {
 
   _wrapper: ShallowWrapper;
 
-  _PrimaryButton = (): ShallowWrapper => this._wrapper.find(PrimaryButton);
+  _getPrimaryButton = (): ShallowWrapper => this._wrapper.find(PrimaryButton);
 
-  _LinkButton = (): ShallowWrapper => this._wrapper.find(LinkButton);
+  _getLinkButton = (): ShallowWrapper => this._wrapper.find(LinkButton);
 
-  _InputField = (): ShallowWrapper => this._wrapper.find(InputField);
+  _getInputFields = (): ShallowWrapper => this._wrapper.find(InputField);
 
-  _CheckBox = (): ShallowWrapper => this._wrapper.find(Checkbox);
+  _getCheckBox = (): ShallowWrapper => this._wrapper.find(Checkbox);
 
-  hasPrimaryButton = (): boolean => this._PrimaryButton().lenght === 1;
+  hasPrimaryButton = (): boolean => this._getPrimaryButton().length === 1;
 
-  hasLinkButton = (): boolean => this._LinkButton().lenght === 1;
+  hasLinkButton = (): boolean => this._getLinkButton().length === 1;
 
-  hasInputField = (): boolean => this._InputField().lenght === 1;
+  hasInputFields = (): boolean => this._getInputFields().length === 2;
 
   getEmailInput = (): string =>
-    this._InputField()
+    this._getInputFields()
       .at(0)
       .prop('id');
 
   getPasswordInput = (): string =>
-    this._InputField()
+    this._getInputFields()
       .at(1)
       .prop('id');
 
-  hasCheckBox = (): boolean => this._CheckBox().lenght === 1;
+  hasCheckBox = (): boolean => this._getCheckBox().length === 1;
 
-  getTypeInput = (): string => this._InputField().prop('type');
+  getTypeInput = (): string => this._getInputFields().prop('type');
 
-  getOnChangeInput = (): boolean => this._InputField().prop('onChange');
+  getOnChangeInput = (): boolean => this._getInputFields().prop('onChange');
 
-  getIdCheckbox = (): string => this._CheckBox().prop('id');
+  getIdCheckbox = (): string => this._getCheckBox().prop('id');
 
-  getIdButton = (): string => this._PrimaryButton().prop('id');
+  getIdButton = (): string => this._getPrimaryButton().prop('id');
 
-  getOnChangeButton = (): boolean => this._PrimaryButton().prop('onChange');
+  getOnChangeButton = (): boolean => this._getPrimaryButton().prop('onChange');
 
-  getIdLink = (): string => this._LinkButton().prop('id');
+  getIdLink = (): string => this._getLinkButton().prop('id');
 
-  getOnChangeLink = (): boolean => this._LinkButton().prop('onChange');
+  getOnChangeLink = (): boolean => this._getLinkButton().prop('onChange');
 }

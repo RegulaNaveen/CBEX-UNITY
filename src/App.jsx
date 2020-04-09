@@ -1,8 +1,7 @@
 // @flow
 import React from 'react';
-import { BrowserRouter, Switch, Route, Link, Redirect } from 'react-router-dom';
-import PrivateRoute from './PrivateRoute';
-import { LOGIN, PROPOSALS } from './routes';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { LOGIN } from './routes';
 import Login from './components/auth/Login';
 
 const App = () => {
@@ -10,10 +9,7 @@ const App = () => {
     <BrowserRouter>
       <Switch>
         <Route path={LOGIN} component={Login} />
-        <PrivateRoute isAuthenticated={false}>
-          {/* TODO: Add here Proposals component */}
-        </PrivateRoute>
-        <Redirect to='/' />
+        <Redirect to="/" />
       </Switch>
     </BrowserRouter>
   );
