@@ -7,9 +7,9 @@ type State = {
 
 type Props = {
   data: Array<Object>,
-  complete: Boolean,
-  title: String,
-  incomplete: Number
+  complete: boolean,
+  title: string,
+  incomplete: number
 };
 
 class Task extends Component<Props, State> {
@@ -66,7 +66,7 @@ class Task extends Component<Props, State> {
           <div className="task-table-wrapper">
             <div className="task-table-headers">
               <div className="task-title">
-                <p>Resources</p>
+                <p>{title}</p>
                 <div className="filter-icon">↑</div>
               </div>
               <div className="task-subtitle task-subtitle-answer">
@@ -88,7 +88,7 @@ class Task extends Component<Props, State> {
             </div>
             {data &&
               data.map(item => (
-                <div className="task-table-row">
+                <div key={item.id} className="task-table-row">
                   {item.complete ? (
                     <div className="task-table-row-checkmark icon-highlight">
                       ✓
@@ -98,7 +98,7 @@ class Task extends Component<Props, State> {
                   <div className="task-table-row-answer">{item.answer}</div>
                   <div className="task-table-row-owner">
                     {item.owner.map(owner => (
-                      <p className="task-table-row-owner-icon">
+                      <p key={owner} className="task-table-row-owner-icon">
                         {owner.charAt(0).toUpperCase()}
                       </p>
                     ))}

@@ -21,6 +21,7 @@ const Proposal = () => {
     {
       data: [
         {
+          id: 1,
           question: 'Question',
           answer: 'Answer',
           owner: ['Owner', 'Pedro'],
@@ -29,6 +30,7 @@ const Proposal = () => {
           complete: true
         },
         {
+          id: 2,
           question: 'Question',
           answer: 'Answer',
           owner: ['Awner', 'Homer', 'jesus'],
@@ -44,6 +46,7 @@ const Proposal = () => {
     {
       data: [
         {
+          id: 1,
           question: 'Question',
           answer: 'Answer',
           owner: ['Owner', 'Pedro'],
@@ -52,6 +55,7 @@ const Proposal = () => {
           complete: false
         },
         {
+          id: 2,
           question: 'Question',
           answer: 'Answer',
           owner: ['Awner', 'Homer', 'jesus'],
@@ -60,6 +64,7 @@ const Proposal = () => {
           complete: false
         },
         {
+          id: 3,
           question: 'Question',
           answer: 'Answer',
           owner: ['Awner', 'Homer', 'jesus'],
@@ -68,6 +73,7 @@ const Proposal = () => {
           complete: true
         },
         {
+          id: 4,
           question: 'Question',
           answer: 'Answer',
           owner: ['Awner', 'Homer', 'jesus'],
@@ -83,6 +89,7 @@ const Proposal = () => {
     {
       data: [
         {
+          id: 1,
           question: 'Question',
           answer: 'Answer',
           owner: ['Owner', 'Pedro'],
@@ -91,6 +98,7 @@ const Proposal = () => {
           complete: true
         },
         {
+          id: 2,
           question: 'Question',
           answer: 'Answer',
           owner: ['Awner', 'Homer', 'jesus'],
