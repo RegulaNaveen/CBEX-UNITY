@@ -1,0 +1,60 @@
+.dd-wrapper{
+  position: absolute;
+}
+
+.dd-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  top:45px;
+  right:0px;
+  width: 100%;
+  background-color: white;
+  position: absolute;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  font-family: "Proxima Nova";
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: 24px;
+  cursor: pointer;
+}
+
+.dd-list-item {
+  padding: 8px 16px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.dd-list-item:hover {
+  background-color: $color-neutral-4;
+}
+
+.dd-header{
+  display: flex;
+  align-items: center;
+  width: 352px;
+  height: 40px;
+  background-color: $white;
+  border-radius: 5px;
+  border: 1px solid #D9D9D9;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);
+  cursor: pointer;
+}
+
+.dd-header-title {
+  font-family: "Proxima Nova";
+  font-weight:bold;
+  color: lightgrey;
+  margin-left: 5px;
+}
+
+.dd-header:before{
+    content:"";
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    border: 7px solid;
+    border-color: $color-neutral-8 transparent transparent transparent;
+    right: 6px;
+    top: 18px;
+}

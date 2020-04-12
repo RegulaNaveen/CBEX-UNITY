@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 import Modal from './common/Modal';
 import { CloseButton, OkayButton } from './common/Button';
 import Checkbox from './common/Checkbox';
+import Dropdown from './common/Dropdown';
 
 type Props = {
   showModal: boolean
@@ -10,7 +11,9 @@ type Props = {
 
 type State = {
   hideModal: boolean,
-  checked: boolean
+  checked: boolean,
+  listOpen: boolean,
+  location: any
 };
 
 class ModalProposal extends PureComponent<Props, State> {
@@ -19,7 +22,34 @@ class ModalProposal extends PureComponent<Props, State> {
 
     this.state = {
       hideModal: false,
-      checked: false
+      checked: false,
+      listOpen: false,
+      location: [
+        {
+          id: 0,
+          title: 'New York',
+          selected: false,
+          key: 'location'
+        },
+        {
+          id: 1,
+          title: 'Dublin',
+          selected: false,
+          key: 'location'
+        },
+        {
+          id: 2,
+          title: 'California',
+          selected: false,
+          key: 'location'
+        },
+        {
+          id: 3,
+          title: 'Istanbul',
+          selected: false,
+          key: 'location'
+        }
+      ]
     };
   }
 
@@ -30,9 +60,14 @@ class ModalProposal extends PureComponent<Props, State> {
 
   handleCancel = () => {};
 
+  toggleList = () => {
+    const { listOpen } = this.state;
+    this.setState({ listOpen: !listOpen });
+  };
+
   render() {
     const { showModal } = this.props;
-    const { checked } = this.state;
+    const { checked, listOpen, location } = this.state;
     const handleShowModal = showModal
       ? 'modal display-bloc'
       : 'modal display-none';
@@ -56,7 +91,16 @@ class ModalProposal extends PureComponent<Props, State> {
                 </div>
               </div>
               <div className="question-segment">
-                <div className="question-segment-row">dropdown</div>
+                <div className="question-segment-row">
+                  <p className="dd-title">Answer Type</p>
+                  <Dropdown
+                    id="dd-answer-type"
+                    title="Select"
+                    listOpen={listOpen}
+                    items={location}
+                    onClick={this.toggleList}
+                  />
+                </div>
               </div>
               <div className="question-segment">selectedTeams</div>
               <div className="question-segment">
