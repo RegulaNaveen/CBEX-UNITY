@@ -7,6 +7,8 @@
   align-items: center;
   border: $border;
   border-radius: 4px;
+  padding-left: 20px;
+  padding-right: 23px;
 
   &:hover {
     cursor: pointer;
@@ -58,7 +60,6 @@
     line-height: 19px;
     margin-right: 12px;
     margin-top: 17px;
-    margin-left: 20px;
     border: none;
     background-color: transparent;
   }
