@@ -66,7 +66,11 @@ class Task extends Component<Props, State> {
             <p className="task-title">{title}</p>
             {complete ? (
               <div className="task-status-wrapper">
-                <div className="task-status-checkmark">✓</div>
+                <img
+                  src={checkIcon}
+                  alt="check task"
+                  className="task-status-checkmark"
+                />
                 <p className="task-status-description">Complete</p>
               </div>
             ) : (
