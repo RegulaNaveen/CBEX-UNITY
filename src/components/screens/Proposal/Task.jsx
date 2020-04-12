@@ -33,6 +33,7 @@ class Task extends Component<Props, State> {
 
   handleKeyPress = (event: KeyboardEvent) => {
     if (event.key === 'Enter') {
+      event.preventDefault();
       this.handleCollapse();
     }
   };
