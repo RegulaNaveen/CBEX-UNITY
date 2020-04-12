@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import arrowUpIcon from '../../../../img/arrow-right.svg';
 import arrowDownIcon from '../../../../img/arrow-down.svg';
+import { getRandomColor } from '../../../utils/colors';
 
 type State = {
   collapsed: boolean
@@ -115,7 +116,11 @@ class Task extends Component<Props, State> {
                   <div className="task-table-row-answer">{item.answer}</div>
                   <div className="task-table-row-owner">
                     {item.owner.map(owner => (
-                      <p key={owner} className="task-table-row-owner-icon">
+                      <p
+                        key={owner}
+                        className="task-table-row-owner-icon"
+                        style={{ backgroundColor: getRandomColor() }}
+                      >
                         {owner.charAt(0).toUpperCase()}
                       </p>
                     ))}
