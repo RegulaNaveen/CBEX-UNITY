@@ -35,11 +35,11 @@ module.exports = {
         ]
       },
       {
-        test: /\.(gif|svg|jpg|png|jpeg)$/,
+        test: /\.(gif|jpg|png|jpeg)$/,
         loader: 'url-loader'
       },
       {
-        test: /\.(otf|svg|ttf|woff|woff2)$/,
+        test: /\.(otf|ttf|woff|woff2)$/,
         loader: 'file-loader'
       }
     ]

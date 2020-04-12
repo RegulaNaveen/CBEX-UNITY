@@ -1,5 +1,7 @@
 // @flow
 import React, { Component } from 'react';
+import arrowUpIcon from '../../../../img/arrow-right.svg';
+import arrowDownIcon from '../../../../img/arrow-down.svg';
 
 type State = {
   collapsed: boolean
@@ -37,15 +39,18 @@ class Task extends Component<Props, State> {
     const { data, complete, title, incomplete } = this.props;
     return (
       <div className={complete ? 'task-wrapper complete' : 'task-wrapper'}>
-        <div
+        <button
           className="task-icon"
           onClick={this.handleCollapse}
           onKeyDown={this.handleKeyPress}
-          role="button"
+          type="button"
           tabIndex={0}
         >
-          {'>'}
-        </div>
+          <img
+            src={collapsed ? arrowDownIcon : arrowUpIcon}
+            alt="question arrow"
+          />
+        </button>
         {!collapsed ? (
           <div className="task-title-wrapper">
             <p className="task-title">{title}</p>

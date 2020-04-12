@@ -15,7 +15,7 @@ const App = () => {
         <PrivateRoute isAuthenticated>
           <Route path={PROPOSALS} component={Proposal} />
         </PrivateRoute>
-        <Redirect to="/" />
+        <Redirect to={LOGIN} />
       </Switch>
     </BrowserRouter>
   );
