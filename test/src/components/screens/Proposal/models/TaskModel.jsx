@@ -38,8 +38,7 @@ export default class TaskModel {
   _getTableWrapper = (): ShallowWrapper =>
     this._wrapper.find('div.task-table-wrapper');
 
-  _getCollapseButton = (): ShallowWrapper =>
-    this._wrapper.find('div.task-icon');
+  _getCollapseButton = (): ShallowWrapper => this._wrapper.find('#arrow-icon');
 
   _getQuestionRows = (): ShallowWrapper =>
     this._wrapper.find('div.task-table-row');
