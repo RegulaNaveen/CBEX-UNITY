@@ -64,9 +64,11 @@ class Task extends Component<Props, State> {
         </button>
         {!collapsed ? (
           <div className="task-title-wrapper">
-            <p className="task-title">{title}</p>
+            <p id="task-title" className="task-title">
+              {title}
+            </p>
             {complete ? (
-              <div className="task-status-wrapper">
+              <div id="complete-status" className="task-status-wrapper">
                 <img
                   src={checkIcon}
                   alt="check task"

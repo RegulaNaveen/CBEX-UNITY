@@ -18,22 +18,16 @@ export default class TaskModel {
       incomplete
     };
     this._wrapper = shallow(<Task {...props} />);
-    this._receivedProps = props;
   }
 
   _wrapper: ShallowWrapper;
 
-  _receivedProps: Object;
-
   _getParagraphs = (): ShallowWrapper => this._wrapper.find('p');
 
-  getTitle = (): string =>
-    this._getParagraphs()
-      .at(0)
-      .prop('children');
+  _getTitleParagraph = (): ShallowWrapper => this._wrapper.find('#task-title');
 
-  _getTitleWrapper = (): ShallowWrapper =>
-    this._wrapper.find('div.task-title-wrapper');
+  _getCompleteStatus = (): ShallowWrapper =>
+    this._wrapper.find('#complete-status');
 
   _getTableWrapper = (): ShallowWrapper =>
     this._wrapper.find('div.task-table-wrapper');
@@ -43,10 +37,20 @@ export default class TaskModel {
   _getQuestionRows = (): ShallowWrapper =>
     this._wrapper.find('div.task-table-row');
 
-  hasTitleWrapper = (): boolean => this._getTitleWrapper().length === 1;
+  getTitle = (): string => this._getTitleParagraph().prop('children');
+
+  getCompleteText = (): string =>
+    this._getCompleteStatus()
+      .find('p')
+      .prop('children');
+
+  hasTitleWrapper = (): boolean => this._getTitleParagraph().length === 1;
 
   hasTableWrapper = (): boolean => this._getTableWrapper().length === 1;
 
-  hasQuestionRows = (): boolean =>
-    this._getQuestionRows().length === this._receivedProps.data.length;
+  hasQuestionRows = (questionsLength: number): boolean =>
+    this._getQuestionRows().length === questionsLength;
+
+  // Interactions
+  doClick = () => this._getCollapseButton().simulate('click');
 }
