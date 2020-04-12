@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import arrowUpIcon from '../../../../img/arrow-right.svg';
 import arrowDownIcon from '../../../../img/arrow-down.svg';
 import checkIcon from '../../../../img/check.svg';
+import editIcon from '../../../../img/edit.svg';
 import { getRandomColor } from '../../../utils/colors';
 
 type State = {
@@ -132,7 +133,11 @@ class Task extends Component<Props, State> {
                   <p className="task-table-row-completion-date">
                     {item.completionDate}
                   </p>
-                  <div className="task-table-row-edit">✏</div>
+                  <img
+                    src={editIcon}
+                    alt="edit"
+                    className="task-table-row-edit"
+                  />
                 </div>
               ))}
           </div>
