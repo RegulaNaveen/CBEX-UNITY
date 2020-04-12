@@ -1,6 +1,6 @@
 .pi-wrapper {
   flex: 1;
-  padding-top: 12px;
+  padding-top: 20px;
   padding-left: 29px;
   padding-right: 163px;
 
@@ -11,7 +11,7 @@
     font-weight: 600;
     letter-spacing: 0;
     line-height: 29px;
-    margin-bottom: 31px;
+    margin-bottom: 17px;
   }
 
   .pi-subtitle {
@@ -23,14 +23,14 @@
     font-weight: 600;
     letter-spacing: 0;
     line-height: 30px;
-    margin-left: 3px;
+    margin-left: 3.5px;
     margin-bottom: 26px;
   }
 
   .pi-details {
     display: flex;
     flex-grow: 1;
-    margin-left: 3px;
+    margin-left: 3.5px;
     margin-bottom: 16px;
     font-family: $proximaNova;
     color: $neutral8;
@@ -41,7 +41,7 @@
     align-content: space-between;
 
     &-title {
-      margin-bottom: 5px;
+      margin-bottom: 1px;
     }
 
     &-subtitle {
@@ -54,7 +54,7 @@
       flex-grow: 1;
       flex-direction: column;
       min-width: 165px;
-      margin-right: 25px;
+      padding-right: 20px;
 
       &:last-child {
         margin-right: 0;

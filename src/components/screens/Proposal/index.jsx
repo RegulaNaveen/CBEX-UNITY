@@ -115,7 +115,6 @@ const Proposal = () => {
 
   return (
     <div className="proposal-wrapper">
-      This is the Proposal Screen
       <ProposalInfo data={data} />
       <TasksList tasks={tasks} />
     </div>
