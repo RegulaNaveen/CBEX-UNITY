@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import arrowUpIcon from '../../../../img/arrow-right.svg';
 import arrowDownIcon from '../../../../img/arrow-down.svg';
+import checkIcon from '../../../../img/check.svg';
 import { getRandomColor } from '../../../utils/colors';
 
 type State = {
@@ -108,9 +109,11 @@ class Task extends Component<Props, State> {
               data.map(item => (
                 <div key={item.id} className="task-table-row">
                   {item.complete && (
-                    <div className="task-table-row-checkmark icon-highlight">
-                      ✓
-                    </div>
+                    <img
+                      src={checkIcon}
+                      alt="check task"
+                      className="task-table-row-checkmark icon-highlight"
+                    />
                   )}
                   <p className="task-table-row-question">{item.question}</p>
                   <div className="task-table-row-answer">{item.answer}</div>
