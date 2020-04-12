@@ -38,8 +38,15 @@ class Task extends Component<Props, State> {
     const { collapsed } = this.state;
     const { data, complete, title, incomplete } = this.props;
     return (
-      <div className={complete ? 'task-wrapper complete' : 'task-wrapper'}>
+      <div
+        className={complete ? 'task-wrapper complete' : 'task-wrapper'}
+        onClick={this.handleCollapse}
+        onKeyDown={this.handleKeyPress}
+        role="button"
+        tabIndex={-1}
+      >
         <button
+          id="arrow-icon"
           className="task-icon"
           onClick={this.handleCollapse}
           onKeyDown={this.handleKeyPress}
@@ -72,33 +79,38 @@ class Task extends Component<Props, State> {
             <div className="task-table-headers">
               <div className="task-title">
                 <p>{title}</p>
-                <div className="filter-icon">↑</div>
+                {/* TODO: Add filter feature */}
+                {/* <div className="filter-icon">↑</div> */}
               </div>
               <div className="task-subtitle task-subtitle-answer">
                 <p>Answer</p>
-                <div className="filter-icon">↑</div>
+                {/* TODO: Add filter feature */}
+                {/* <div className="filter-icon">↑</div> */}
               </div>
               <div className="task-subtitle task-subtitle-owner">
                 <p>Owner</p>
-                <div className="filter-icon">↑</div>
+                {/* TODO: Add filter feature */}
+                {/* <div className="filter-icon">↑</div> */}
               </div>
               <div className="task-subtitle task-subtitle-due-date">
                 <p>Due Date</p>
-                <div className="filter-icon">↑</div>
+                {/* TODO: Add filter feature */}
+                {/* <div className="filter-icon">↑</div> */}
               </div>
               <div className="task-subtitle task-subtitle-completion-date">
                 <p>Date Completed</p>
-                <div className="filter-icon">↑</div>
+                {/* TODO: Add filter feature */}
+                {/* <div className="filter-icon">↑</div> */}
               </div>
             </div>
             {data &&
               data.map(item => (
                 <div key={item.id} className="task-table-row">
-                  {item.complete ? (
+                  {item.complete && (
                     <div className="task-table-row-checkmark icon-highlight">
                       ✓
                     </div>
-                  ) : null}
+                  )}
                   <p className="task-table-row-question">{item.question}</p>
                   <div className="task-table-row-answer">{item.answer}</div>
                   <div className="task-table-row-owner">
