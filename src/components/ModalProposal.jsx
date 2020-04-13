@@ -1,7 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 import Modal from './common/Modal';
-import { CloseButton, OkayButton } from './common/Button';
+import { PrimaryButton } from './common/Button';
 import Checkbox from './common/Checkbox';
 import Dropdown from './common/Dropdown';
 import closeIcon from '../../img/close.svg';
@@ -155,22 +155,24 @@ class ModalProposal extends PureComponent<Props, State> {
             </div>
             <footer className="question-segment-footer">
               <div className="question-button-cancel">
-                <CloseButton
+                <PrimaryButton
+                  className="close-button"
                   type="submit"
                   id="cancel-button"
                   onClick={this.handleCancel}
                 >
                   Cancel
-                </CloseButton>
+                </PrimaryButton>
               </div>
               <div className="question-button-okay">
-                <OkayButton
+                <PrimaryButton
+                  className="okay-button"
                   type="submit"
                   id="okay-button"
                   onClick={this.handleOkay}
                 >
                   Okay
-                </OkayButton>
+                </PrimaryButton>
               </div>
             </footer>
             <div className="modal-content" />

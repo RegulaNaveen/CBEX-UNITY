@@ -5,33 +5,30 @@ type Props = {
   id?: string,
   children: string,
   type: string,
-  onClick: Function
+  onClick: Function,
+  className: string
 };
 
-const PrimaryButton = ({ id, type, onClick, children }: Props) => (
+const PrimaryButton = ({ id, type, onClick, children, className }: Props) => (
   // eslint-disable-next-line react/button-has-type
-  <button id={id} type={type} className="primary-button" onClick={onClick}>
+  <button
+    id={id}
+    type={type}
+    className={className || 'primary-button'}
+    onClick={onClick}
+  >
     {children}
   </button>
 );
 
-const LinkButton = ({ id, type, onClick, children }: Props) => (
+const LinkButton = ({ id, type, onClick, children, className }: Props) => (
   // eslint-disable-next-line react/button-has-type
-  <button id={id} type={type} className="link-button" onClick={onClick}>
-    {children}
-  </button>
-);
-
-const CloseButton = ({ id, type, onClick, children }: Props) => (
-  // eslint-disable-next-line react/button-has-type
-  <button id={id} type={type} className="close-button" onClick={onClick}>
-    {children}
-  </button>
-);
-
-const OkayButton = ({ id, type, onClick, children }: Props) => (
-  // eslint-disable-next-line react/button-has-type
-  <button id={id} type={type} className="okay-button" onClick={onClick}>
+  <button
+    id={id}
+    type={type}
+    className={className || 'link-button'}
+    onClick={onClick}
+  >
     {children}
   </button>
 );
@@ -42,7 +39,5 @@ const defaultProps = {
 
 PrimaryButton.defaultProps = defaultProps;
 LinkButton.defaultProps = defaultProps;
-CloseButton.defaultProps = defaultProps;
-OkayButton.defaultProps = defaultProps;
 
-export { PrimaryButton, LinkButton, CloseButton, OkayButton };
+export { PrimaryButton, LinkButton };
