@@ -101,7 +101,8 @@ describe('TasksList component', () => {
 
     it('should render proper ammount of Task components', () => {
       const wrapper = new TasksListModel(tasks);
-      expect(wrapper.hasTasks()).toBe(true);
+      const tasksLength = tasks.length;
+      expect(wrapper.hasTasks(tasksLength)).toBe(true);
     });
   });
 });

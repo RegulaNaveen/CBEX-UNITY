@@ -11,19 +11,16 @@ export default class TaskListModel {
       tasks
     };
     this._wrapper = shallow(<TaskList {...props} />);
-    this._receivedProps = props;
   }
 
   _wrapper: ShallowWrapper;
-
-  _receivedProps: Object;
 
   _getTasks = (): ShallowWrapper => this._wrapper.find(Task);
 
   _getParagraph = (): ShallowWrapper => this._wrapper.find('p');
 
-  hasTasks = (): boolean =>
-    this._getTasks().length === this._receivedProps.tasks.length;
+  hasTasks = (tasksLength: number): boolean =>
+    this._getTasks().length === tasksLength;
 
   hasParagraph = (): boolean => this._getParagraph().length === 1;
 

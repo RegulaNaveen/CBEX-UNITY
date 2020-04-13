@@ -33,7 +33,7 @@ class Task extends Component<Props, State> {
 
   handleKeyPress = (event: KeyboardEvent) => {
     if (event.key === 'Enter') {
-      event.preventDefault();
+      if (event.preventDefault) event.preventDefault();
       this.handleCollapse();
     }
   };
@@ -45,7 +45,7 @@ class Task extends Component<Props, State> {
       <div
         className={isComplete ? 'task-wrapper complete' : 'task-wrapper'}
         onClick={this.handleCollapse}
-        onKeyDown={this.handleKeyPress}
+        onKeyPress={this.handleKeyPress}
         role="button"
         tabIndex={-1}
       >
@@ -53,7 +53,7 @@ class Task extends Component<Props, State> {
           id="arrow-icon"
           className="task-icon"
           onClick={this.handleCollapse}
-          onKeyDown={this.handleKeyPress}
+          onKeyPress={this.handleKeyPress}
           type="button"
           tabIndex={0}
         >

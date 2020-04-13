@@ -76,5 +76,18 @@ describe('Task component', () => {
       expect(wrapper.hasTableWrapper()).toBe(true);
       expect(wrapper.hasQuestionRows(data.length)).toBe(true);
     });
+
+    it('should render collapsed components when button keyPress enter triggers', () => {
+      const wrapper = new TaskModel(
+        data,
+        complete,
+        title,
+        uncompletedQuestions
+      );
+      wrapper.doEnterKeyPress();
+      expect(wrapper.hasTitleWrapper()).toBe(false);
+      expect(wrapper.hasTableWrapper()).toBe(true);
+      expect(wrapper.hasQuestionRows(data.length)).toBe(true);
+    });
   });
 });
