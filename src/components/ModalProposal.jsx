@@ -74,7 +74,7 @@ class ModalProposal extends PureComponent<Props, State> {
     return (
       <div className={handleShowModal}>
         <Modal>
-          <div className="header-content">
+          <div className="modal-content">
             <header className="modal-title">
               <div className="question-segment-title">
                 <p className="question-title">Add New Question</p>
@@ -83,24 +83,33 @@ class ModalProposal extends PureComponent<Props, State> {
               <div className="question-subtitle">Optional Subtitle</div>
             </header>
             <div className="body-wrapper">
+              <p className="dd-title">Enter Question Text</p>
               <div className="question-segment">Text input</div>
               <div className="question-segment">
-                <div className="question-segment-row">
-                  <div>dropdown</div>
-                  <div>picker</div>
-                </div>
-              </div>
-              <div className="question-segment">
-                <div className="question-segment-row">
+                <div className="dd-answer-type">
                   <p className="dd-title">Answer Type</p>
                   <Dropdown
-                    id="dd-answer-type"
+                    id="dd-andwer-type"
                     title="Select"
                     listOpen={listOpen}
                     items={location}
                     onClick={this.toggleList}
                   />
                 </div>
+                <div className="question-picker">
+                  <p className="dd-title">Label</p>
+                  <div>picker</div>
+                </div>
+              </div>
+              <p className="dd-title">Which team member roles will answer</p>
+              <div className="question-segment">
+                <Dropdown
+                  id="dd-team-member"
+                  title="Select"
+                  listOpen={listOpen}
+                  items={location}
+                  onClick={this.toggleList}
+                />
               </div>
               <div className="question-segment">selectedTeams</div>
               <div className="question-segment">
