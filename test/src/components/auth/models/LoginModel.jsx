@@ -2,12 +2,14 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
+import type { NavigationHistory } from 'react-router-dom';
 import Login from '../../../../../src/components/auth/Login';
 import LoginForm from '../../../../../src/components/auth/LoginForm';
 
 export default class LoginModel {
-  constructor() {
-    this._wrapper = shallow(<Login />);
+  constructor(history: NavigationHistory) {
+    const props = { history };
+    this._wrapper = shallow(<Login {...props} />);
   }
 
   _wrapper: ShallowWrapper;

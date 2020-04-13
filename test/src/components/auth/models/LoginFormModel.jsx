@@ -2,6 +2,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
+import type { NavigationHistory } from 'react-router-dom';
 import LoginForm from '../../../../../src/components/auth/LoginForm';
 import {
   PrimaryButton,
@@ -11,8 +12,9 @@ import InputField from '../../../../../src/components/common/InputField';
 import Checkbox from '../../../../../src/components/common/Checkbox';
 
 export default class LoginFormModel {
-  constructor() {
-    this._wrapper = shallow(<LoginForm />);
+  constructor(history: NavigationHistory) {
+    const props = { history };
+    this._wrapper = shallow(<LoginForm {...props} />);
   }
 
   _wrapper: ShallowWrapper;
