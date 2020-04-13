@@ -1,9 +1,14 @@
 // @flow
 import React from 'react';
+import type { NavigationHistory } from 'react-router-dom';
 import LoginForm from './LoginForm';
 import img from '../../../img/login-background.png';
 
-const Login = () => {
+type Props = {
+  history: NavigationHistory
+};
+
+const Login = ({ history }: Props) => {
   return (
     <div className="login-wrapper">
       <div className="gradient-background-img" />
@@ -14,7 +19,7 @@ const Login = () => {
         role="presentation"
       />
       <div className="login-form">
-        <LoginForm />
+        <LoginForm history={history} />
         <p className="copyright-text">Copyright @ 2019. All rights reserved</p>
       </div>
     </div>
