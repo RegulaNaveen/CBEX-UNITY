@@ -55,5 +55,8 @@ export default class TaskModel {
   doClick = () => this._getCollapseButton().simulate('click');
 
   doEnterKeyPress = () =>
-    this._getCollapseButton().simulate('keypress', { key: 'Enter' });
+    this._getCollapseButton().simulate('keypress', {
+      key: 'Enter',
+      preventDefault: () => {}
+    });
 }
