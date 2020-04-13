@@ -2,6 +2,7 @@
 import React from 'react';
 import ProposalInfo from './ProposalInfo';
 import TasksList from './TasksList';
+import Toolbar from '../../Toolbar';
 
 const Proposal = () => {
   const data = {
@@ -115,6 +116,7 @@ const Proposal = () => {
 
   return (
     <div className="proposal-wrapper">
+      <Toolbar />
       <ProposalInfo data={data} />
       <TasksList tasks={tasks} />
     </div>
