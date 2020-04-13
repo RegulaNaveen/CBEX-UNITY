@@ -5,7 +5,7 @@ type Props = {
   id?: string,
   title: string,
   listOpen: boolean,
-  items: any,
+  items: Array<Object>,
   onClick: Function
 };
 

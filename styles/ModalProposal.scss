@@ -13,6 +13,11 @@
   display: none;
 }
 
+.close-icon {
+  cursor: pointer;
+  outline: none;
+}
+
 .body-wrapper {
   flex-direction: column;
   margin-bottom: 40px;

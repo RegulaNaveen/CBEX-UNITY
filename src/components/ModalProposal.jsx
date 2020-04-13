@@ -4,6 +4,7 @@ import Modal from './common/Modal';
 import { CloseButton, OkayButton } from './common/Button';
 import Checkbox from './common/Checkbox';
 import Dropdown from './common/Dropdown';
+import closeIcon from '../../img/close.svg';
 
 type Props = {
   showModal: boolean
@@ -13,7 +14,7 @@ type State = {
   hideModal: boolean,
   checked: boolean,
   listOpen: boolean,
-  location: any
+  location: Array<Object>
 };
 
 class ModalProposal extends PureComponent<Props, State> {
@@ -60,6 +61,8 @@ class ModalProposal extends PureComponent<Props, State> {
 
   handleCancel = () => {};
 
+  handleOkay = () => {};
+
   toggleList = () => {
     const { listOpen } = this.state;
     this.setState({ listOpen: !listOpen });
@@ -78,7 +81,18 @@ class ModalProposal extends PureComponent<Props, State> {
             <header className="modal-title">
               <div className="question-segment-title">
                 <p className="question-title">Add New Question</p>
-                <div className="hide-modal-icon">X</div>
+                <div className="close-modal-icon">
+                  <button
+                    id="close-icon"
+                    className="close-icon"
+                    onClick={this.handleCancel}
+                    onKeyPress={this.handleCancel}
+                    type="button"
+                    tabIndex={0}
+                  >
+                    <img src={closeIcon} alt="close modal" />
+                  </button>
+                </div>
               </div>
               <div className="question-subtitle">Optional Subtitle</div>
             </header>
@@ -138,7 +152,7 @@ class ModalProposal extends PureComponent<Props, State> {
                 <OkayButton
                   type="submit"
                   id="okay-button"
-                  onClick={this.handleCancel}
+                  onClick={this.handleOkay}
                 >
                   Okay
                 </OkayButton>
