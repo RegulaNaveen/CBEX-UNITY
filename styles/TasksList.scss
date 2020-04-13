@@ -4,13 +4,33 @@
   padding-right: 30px;
   padding-bottom: 5px;
 
-  .tasksList-title {
-    color: $black;
-    font-family: $proximaNova;
-    font-size: 18px;
-    font-weight: 600;
-    letter-spacing: 0;
-    line-height: 22px;
-    margin-bottom: 24px;
+  .tasksList-title-wrapper {
+    display: flex;
+    justify-content: space-between;
+
+    .tasksList-add-icon-wrapper {
+      display: flex;
+      height: 32px;
+      width: 32px;
+      border-radius: 50%;
+      background-color: #0557D5;
+      box-shadow: 0 4px 8px 0 rgba(41,125,253,0.16), 0 4px 4px 0 rgba(0,0,0,0.04), 0 8px 16px 0 rgba(41,125,253,0.32);
+      justify-content: center;
+      align-items: center;
+
+      .tasksList-add-icon {
+        padding: 10px;
+      }
+    }
+
+    .tasksList-title {
+      color: $black;
+      font-family: $proximaNova;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0;
+      line-height: 22px;
+      margin-bottom: 24px;
+    }
   }
 }
