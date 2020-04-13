@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
-import arrowUpIcon from '../../../../img/arrow-right.svg';
-import arrowDownIcon from '../../../../img/arrow-down.svg';
+import chevronRight from '../../../../img/chevron-right.svg';
+import chevronDown from '../../../../img/chevron-down.svg';
 import checkIcon from '../../../../img/check.svg';
 import editIcon from '../../../../img/edit.svg';
 import { getRandomColor } from '../../../utils/colors';
@@ -51,14 +51,15 @@ class Task extends Component<Props, State> {
       >
         <button
           id="arrow-icon"
-          className="task-icon"
+          className="task-icon-wrapper"
           onClick={this.handleCollapse}
           onKeyPress={this.handleKeyPress}
           type="button"
           tabIndex={0}
         >
           <img
-            src={isCollapsed ? arrowDownIcon : arrowUpIcon}
+            className="task-icon"
+            src={isCollapsed ? chevronDown : chevronRight}
             alt="question arrow"
           />
         </button>
@@ -143,7 +144,7 @@ class Task extends Component<Props, State> {
                   <img
                     src={editIcon}
                     alt="edit"
-                    className="task-table-row-edit"
+                    className="task-table-row-edit icon-highlight"
                   />
                 </div>
               ))}

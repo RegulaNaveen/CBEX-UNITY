@@ -52,14 +52,18 @@
     }
   }
 
-  .task-icon {
+  .task-icon-wrapper {
     display: flex;
     align-self: flex-start;
     margin-right: 12px;
-    margin-top: 17px;
+    margin-top: 20px;
     border: none;
     background-color: transparent;
     cursor: pointer;
+
+    .task-icon {
+      width: 18px;
+    }
   }
 
   .task-table-wrapper {
@@ -83,7 +87,6 @@
         font-weight: 600;
         letter-spacing: 0;
         line-height: 19px;
-        align-self: center;
       }
   
       .task-subtitle {
@@ -141,10 +144,10 @@
         align-items: center;
         justify-content: center;
         width: 14px;
-        color: $black;
         margin-left: -57px;
-        padding-left: 25px;
-        padding-right: 18px;
+        padding-left: 29px;
+        padding-right: 14px;
+        padding-bottom: 2px;
       }
 
       &-question {
@@ -213,7 +216,7 @@
       }
 
       &-completion-date {
-        width: 103px;
+        width: 110px;
         display: flex;
         align-items: center;
         height: 55px;
@@ -225,8 +228,10 @@
       }
 
       &-edit {
-        width: 16px;
-        margin-left: 14px;
+        width: 14px;
+        padding-left: 14px;
+        padding-right: 24px;
+        margin-right: -24px;
       }
     }
   }
