@@ -7,15 +7,15 @@ import Task from '../../../../../../src/components/screens/Proposal/Task';
 export default class TaskModel {
   constructor(
     data: Array<Object>,
-    complete: boolean,
+    isComplete: boolean,
     title: string,
-    incomplete: number
+    uncompletedQuestions: number
   ) {
     const props = {
       data,
-      complete,
+      isComplete,
       title,
-      incomplete
+      uncompletedQuestions
     };
     this._wrapper = shallow(<Task {...props} />);
   }

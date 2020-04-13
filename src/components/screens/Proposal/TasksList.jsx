@@ -13,15 +13,13 @@ function TasksList({ tasks }: Props) {
       {tasks.map(task => {
         const { complete, data, title, incomplete } = task;
         return (
-          <div key={title}>
-            <Task
-              data={data}
-              title={title}
-              complete={complete}
-              incomplete={incomplete}
-            />
-            <div className="tasksList-separator" />
-          </div>
+          <Task
+            data={data}
+            title={title}
+            isComplete={complete}
+            uncompletedQuestions={incomplete}
+            key={title}
+          />
         );
       })}
     </div>

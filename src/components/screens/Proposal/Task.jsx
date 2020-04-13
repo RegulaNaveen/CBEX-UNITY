@@ -7,14 +7,14 @@ import editIcon from '../../../../img/edit.svg';
 import { getRandomColor } from '../../../utils/colors';
 
 type State = {
-  collapsed: boolean
+  isCollapsed: boolean
 };
 
 type Props = {
   data: Array<Object>,
-  complete: boolean,
+  isComplete: boolean,
   title: string,
-  incomplete: number
+  uncompletedQuestions: number
 };
 
 class Task extends Component<Props, State> {
@@ -22,13 +22,13 @@ class Task extends Component<Props, State> {
     super(props);
 
     this.state = {
-      collapsed: false
+      isCollapsed: false
     };
   }
 
   handleCollapse = () => {
-    const { collapsed } = this.state;
-    this.setState({ collapsed: !collapsed });
+    const { isCollapsed } = this.state;
+    this.setState({ isCollapsed: !isCollapsed });
   };
 
   handleKeyPress = (event: KeyboardEvent) => {
@@ -39,11 +39,11 @@ class Task extends Component<Props, State> {
   };
 
   render() {
-    const { collapsed } = this.state;
-    const { data, complete, title, incomplete } = this.props;
+    const { isCollapsed } = this.state;
+    const { data, isComplete, title, uncompletedQuestions } = this.props;
     return (
       <div
-        className={complete ? 'task-wrapper complete' : 'task-wrapper'}
+        className={isComplete ? 'task-wrapper complete' : 'task-wrapper'}
         onClick={this.handleCollapse}
         onKeyDown={this.handleKeyPress}
         role="button"
@@ -58,16 +58,16 @@ class Task extends Component<Props, State> {
           tabIndex={0}
         >
           <img
-            src={collapsed ? arrowDownIcon : arrowUpIcon}
+            src={isCollapsed ? arrowDownIcon : arrowUpIcon}
             alt="question arrow"
           />
         </button>
-        {!collapsed ? (
+        {!isCollapsed ? (
           <div className="task-title-wrapper">
             <p id="task-title" className="task-title">
               {title}
             </p>
-            {complete ? (
+            {isComplete ? (
               <div id="complete-status" className="task-status-wrapper">
                 <img
                   src={checkIcon}
@@ -79,7 +79,7 @@ class Task extends Component<Props, State> {
             ) : (
               <div className="task-status-wrapper">
                 <p className="task-status-description">
-                  {`${incomplete.toString()} Incomplete`}
+                  {`${uncompletedQuestions.toString()} Incomplete`}
                 </p>
               </div>
             )}

@@ -26,16 +26,26 @@ describe('Task component', () => {
   ];
   const complete = false;
   const title = 'Resources';
-  const incomplete = 8;
+  const uncompletedQuestions = 8;
 
   describe('rendering', () => {
     it('should render proper Title text', () => {
-      const wrapper = new TaskModel(data, complete, title, incomplete);
+      const wrapper = new TaskModel(
+        data,
+        complete,
+        title,
+        uncompletedQuestions
+      );
       expect(wrapper.getTitle()).toBe(title);
     });
 
     it('should render un-collapsed components', () => {
-      const wrapper = new TaskModel(data, complete, title, incomplete);
+      const wrapper = new TaskModel(
+        data,
+        complete,
+        title,
+        uncompletedQuestions
+      );
       expect(wrapper.hasTitleWrapper()).toBe(true);
       expect(wrapper.hasTableWrapper()).toBe(false);
     });
@@ -55,7 +65,12 @@ describe('Task component', () => {
 
   describe('interactions', () => {
     it('should render collapsed components when row is clicked', () => {
-      const wrapper = new TaskModel(data, complete, title, incomplete);
+      const wrapper = new TaskModel(
+        data,
+        complete,
+        title,
+        uncompletedQuestions
+      );
       wrapper.doClick();
       expect(wrapper.hasTitleWrapper()).toBe(false);
       expect(wrapper.hasTableWrapper()).toBe(true);
