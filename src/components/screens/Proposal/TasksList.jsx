@@ -24,6 +24,6 @@ const TasksList = ({ tasks }: Props) => {
       })}
     </div>
   );
-}
+};
 
 export default TasksList;
