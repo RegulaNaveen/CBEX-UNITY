@@ -31,9 +31,9 @@ describe('App component', () => {
       expect(wrapper.getProposalPath()).toBe(PROPOSALS);
     });
 
-    // it('should render a PrivateRoute component', () => {
-    //   const wrapper = new AppModel();
-    //   expect(wrapper.hasPrivateRoute()).toBe(true);
-    // });
+    it('should render a PrivateRoute component', () => {
+      const wrapper = new AppModel();
+      expect(wrapper.hasPrivateRoute()).toBe(true);
+    });
   });
 });

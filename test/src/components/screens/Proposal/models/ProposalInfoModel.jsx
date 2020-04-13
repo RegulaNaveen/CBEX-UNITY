@@ -10,9 +10,39 @@ export default class ProposalInfoModel {
       data
     };
     this._wrapper = shallow(<ProposalInfo {...props} />);
+    this._titleIndex = 0;
+    this._accountExecutiveIndex = 3;
+    this._businessDevelopmentIndex = 5;
+    this._proposalDirectorIndex = 7;
+    this._labsIndex = 9;
+    this._synopsisIndex = 11;
+    this._phaseIndex = 13;
+    this._sitesIndex = 15;
+    this._countriesIndex = 17;
+    this._indicationIndex = 19;
   }
 
   _wrapper: ShallowWrapper;
+
+  _titleIndex: number;
+
+  _accountExecutiveIndex: number;
+
+  _businessDevelopmentIndex: number;
+
+  _proposalDirectorIndex: number;
+
+  _labsIndex: number;
+
+  _synopsisIndex: number;
+
+  _phaseIndex: number;
+
+  _sitesIndex: number;
+
+  _countriesIndex: number;
+
+  _indicationIndex: number;
 
   _getParagraphs = (): ShallowWrapper => this._wrapper.find('p');
 
@@ -20,51 +50,51 @@ export default class ProposalInfoModel {
 
   getTitle = (): string =>
     this._getParagraphs()
-      .at(0)
+      .at(this._titleIndex)
       .prop('children');
 
   getAccountExecutive = (): string =>
     this._getParagraphs()
-      .at(3)
+      .at(this._accountExecutiveIndex)
       .prop('children');
 
   getBusinessDevelopment = (): string =>
     this._getParagraphs()
-      .at(5)
+      .at(this._businessDevelopmentIndex)
       .prop('children');
 
   getProposalDirector = (): string =>
     this._getParagraphs()
-      .at(7)
+      .at(this._proposalDirectorIndex)
       .prop('children');
 
   getLabs = (): string =>
     this._getParagraphs()
-      .at(9)
+      .at(this._labsIndex)
       .prop('children');
 
   getSynopsis = (): string =>
     this._getParagraphs()
-      .at(11)
+      .at(this._synopsisIndex)
       .prop('children');
 
   getPhase = (): string =>
     this._getParagraphs()
-      .at(13)
+      .at(this._phaseIndex)
       .prop('children');
 
   getSites = (): string =>
     this._getParagraphs()
-      .at(15)
+      .at(this._sitesIndex)
       .prop('children');
 
   getCountries = (): string =>
     this._getParagraphs()
-      .at(17)
+      .at(this._countriesIndex)
       .prop('children');
 
   getIndication = (): string =>
     this._getParagraphs()
-      .at(19)
+      .at(this._indicationIndex)
       .prop('children');
 }
