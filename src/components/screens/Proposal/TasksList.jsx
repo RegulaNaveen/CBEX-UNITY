@@ -6,7 +6,7 @@ type Props = {
   tasks: Array<Object>
 };
 
-function TasksList({ tasks }: Props) {
+const TasksList = ({ tasks }: Props) => {
   return (
     <div className="tasksList-wrapper">
       <p className="tasksList-title">Questions</p>
