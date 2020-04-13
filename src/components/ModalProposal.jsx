@@ -5,6 +5,7 @@ import { CloseButton, OkayButton } from './common/Button';
 import Checkbox from './common/Checkbox';
 import Dropdown from './common/Dropdown';
 import closeIcon from '../../img/close.svg';
+import TextArea from './common/TextArea';
 
 type Props = {
   showModal: boolean
@@ -14,7 +15,8 @@ type State = {
   hideModal: boolean,
   checked: boolean,
   listOpen: boolean,
-  location: Array<Object>
+  location: Array<Object>,
+  inputText: string
 };
 
 class ModalProposal extends PureComponent<Props, State> {
@@ -25,6 +27,7 @@ class ModalProposal extends PureComponent<Props, State> {
       hideModal: false,
       checked: false,
       listOpen: false,
+      inputText: '',
       location: [
         {
           id: 0,
@@ -63,6 +66,10 @@ class ModalProposal extends PureComponent<Props, State> {
 
   handleOkay = () => {};
 
+  handleInputText = (text: SyntheticInputEvent<EventTarget>) => {
+    this.setState({ inputText: text.target.value });
+  };
+
   toggleList = () => {
     const { listOpen } = this.state;
     this.setState({ listOpen: !listOpen });
@@ -70,7 +77,7 @@ class ModalProposal extends PureComponent<Props, State> {
 
   render() {
     const { showModal } = this.props;
-    const { checked, listOpen, location } = this.state;
+    const { checked, listOpen, location, inputText } = this.state;
     const handleShowModal = showModal
       ? 'modal display-bloc'
       : 'modal display-none';
@@ -98,7 +105,15 @@ class ModalProposal extends PureComponent<Props, State> {
             </header>
             <div className="body-wrapper">
               <p className="dd-title">Enter Question Text</p>
-              <div className="question-segment">Text input</div>
+              <div className="question-segment">
+                <TextArea
+                  id="question-text-area"
+                  className="modal-text-area"
+                  value={inputText}
+                  onChange={this.handleInputText}
+                  placeholder="Hint text..."
+                />
+              </div>
               <div className="question-segment">
                 <div className="dd-answer-type">
                   <p className="dd-title">Answer Type</p>
