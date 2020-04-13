@@ -42,12 +42,8 @@
       }
 
       .task-status-checkmark {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 14px;
-        color: $black;
         margin-right: 9px;
+        margin-top: 1px;
       }
     }
   }
@@ -141,13 +137,11 @@
 
       &-checkmark {
         display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 14px;
-        margin-left: -57px;
-        padding-left: 29px;
+        margin-left: -52px;
+        padding-left: 24px;
         padding-right: 14px;
-        padding-bottom: 2px;
+        padding-top: 20px;
+        padding-bottom: 21px;
       }
 
       &-question {
@@ -228,10 +222,11 @@
       }
 
       &-edit {
-        width: 14px;
         padding-left: 14px;
         padding-right: 24px;
         margin-right: -24px;
+        padding-top: 19px;
+        padding-bottom: 20px;
       }
     }
   }

@@ -2,8 +2,7 @@
 import React, { Component } from 'react';
 import chevronRight from '../../../../img/chevron-right.svg';
 import chevronDown from '../../../../img/chevron-down.svg';
-import checkIcon from '../../../../img/check.svg';
-import editIcon from '../../../../img/edit.svg';
+import { Checkmark, Edit } from '../../svg';
 import { getRandomColor } from '../../../utils/colors';
 
 type State = {
@@ -70,11 +69,7 @@ class Task extends Component<Props, State> {
             </p>
             {isComplete ? (
               <div id="complete-status" className="task-status-wrapper">
-                <img
-                  src={checkIcon}
-                  alt="check task"
-                  className="task-status-checkmark"
-                />
+                <Checkmark className="task-status-checkmark" />
                 <p className="task-status-description">Complete</p>
               </div>
             ) : (
@@ -118,11 +113,7 @@ class Task extends Component<Props, State> {
               data.map(item => (
                 <div key={item.id} className="task-table-row">
                   {item.complete && (
-                    <img
-                      src={checkIcon}
-                      alt="check task"
-                      className="task-table-row-checkmark icon-highlight"
-                    />
+                    <Checkmark className="task-table-row-checkmark icon-highlight" />
                   )}
                   <p className="task-table-row-question">{item.question}</p>
                   <div className="task-table-row-answer">{item.answer}</div>
@@ -141,11 +132,7 @@ class Task extends Component<Props, State> {
                   <p className="task-table-row-completion-date">
                     {item.completionDate}
                   </p>
-                  <img
-                    src={editIcon}
-                    alt="edit"
-                    className="task-table-row-edit icon-highlight"
-                  />
+                  <Edit className="task-table-row-edit icon-highlight" />
                 </div>
               ))}
           </div>
