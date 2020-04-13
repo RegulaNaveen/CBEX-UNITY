@@ -4,16 +4,14 @@ import React from 'react';
 type Props = {
   id?: string,
   children: string,
-  type: string,
   onClick: Function,
   className: string
 };
 
-const PrimaryButton = ({ id, type, onClick, children, className }: Props) => (
-  // eslint-disable-next-line react/button-has-type
+const PrimaryButton = ({ id, onClick, children, className }: Props) => (
   <button
     id={id}
-    type={type}
+    type="button"
     className={className || 'primary-button'}
     onClick={onClick}
   >
@@ -21,11 +19,10 @@ const PrimaryButton = ({ id, type, onClick, children, className }: Props) => (
   </button>
 );
 
-const LinkButton = ({ id, type, onClick, children, className }: Props) => (
-  // eslint-disable-next-line react/button-has-type
+const LinkButton = ({ id, onClick, children, className }: Props) => (
   <button
     id={id}
-    type={type}
+    type="button"
     className={className || 'link-button'}
     onClick={onClick}
   >

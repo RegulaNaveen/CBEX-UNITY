@@ -107,17 +107,12 @@ class LoginForm extends Component<Props, State> {
         </Checkbox>
         <div className="login-button-wrapper">
           <div className="login-button">
-            <PrimaryButton
-              type="submit"
-              id="login-button"
-              onClick={this.handleLogin}
-            >
+            <PrimaryButton id="login-button" onClick={this.handleLogin}>
               Log in
             </PrimaryButton>
           </div>
           <div className="forgot-password-link">
             <LinkButton
-              type="submit"
               id="forgot-password"
               onClick={this.handleForgotPassword}
             >

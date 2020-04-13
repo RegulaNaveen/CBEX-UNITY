@@ -33,7 +33,7 @@
 .question-title {
   height: 32px;
   width: 522px;
-  color: #000000;
+  color: $black;
   font-family: $proximaNova;
   font-size: 20px;
   font-weight: 600;
@@ -44,7 +44,7 @@
 .question-subtitle {
   height: 24px;
   width: 190.06px;
-  color: #000000;
+  color: $black;
   font-family: $proximaNova;
   font-size: 16px;
   letter-spacing: 0;
@@ -60,9 +60,9 @@
 .question-segment {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   margin-bottom: 24px;
   width: 100%;
+  flex-wrap: wrap;
 }
 
 .question-segment-footer {
@@ -87,7 +87,8 @@
 }
 
 .dd-answer-type {
-  width: 353px;
+  width: 352px;
+  margin-right: 17px;
 }
 
 .question-picker {
@@ -98,7 +99,7 @@
   box-sizing: border-box;
   height: 94px;
   width: 100%;
-  border: 1px solid $color-neutral-4;
+  border: 1px solid $neutral4;
   border-radius: 4px;
   background-color: $white;
   box-shadow: 0 2px 4px 0 rgba(0,0,0,0);
@@ -106,4 +107,7 @@
   font-family: $proximaNova;
   padding: 8px;
   resize: none;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: 24px;
 }

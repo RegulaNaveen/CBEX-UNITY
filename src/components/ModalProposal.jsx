@@ -6,6 +6,7 @@ import Checkbox from './common/Checkbox';
 import Dropdown from './common/Dropdown';
 import closeIcon from '../../img/close.svg';
 import TextArea from './common/TextArea';
+import SelectTeam from './common/SelectTeam';
 
 type Props = {
   showModal: boolean
@@ -13,8 +14,8 @@ type Props = {
 
 type State = {
   hideModal: boolean,
-  checked: boolean,
-  listOpen: boolean,
+  isChecked: boolean,
+  isCollapsed: boolean,
   location: Array<Object>,
   inputText: string
 };
@@ -25,8 +26,8 @@ class ModalProposal extends PureComponent<Props, State> {
 
     this.state = {
       hideModal: false,
-      checked: false,
-      listOpen: false,
+      isChecked: false,
+      isCollapsed: false,
       inputText: '',
       location: [
         {
@@ -57,9 +58,9 @@ class ModalProposal extends PureComponent<Props, State> {
     };
   }
 
-  handleChecked = () => {
-    const { checked } = this.state;
-    this.setState({ checked: !checked });
+  handleisChecked = () => {
+    const { isChecked } = this.state;
+    this.setState({ isChecked: !isChecked });
   };
 
   handleCancel = () => {};
@@ -71,13 +72,13 @@ class ModalProposal extends PureComponent<Props, State> {
   };
 
   toggleList = () => {
-    const { listOpen } = this.state;
-    this.setState({ listOpen: !listOpen });
+    const { isCollapsed } = this.state;
+    this.setState({ isCollapsed: !isCollapsed });
   };
 
   render() {
     const { showModal } = this.props;
-    const { checked, listOpen, location, inputText } = this.state;
+    const { isChecked, isCollapsed, location, inputText } = this.state;
     const handleShowModal = showModal
       ? 'modal display-bloc'
       : 'modal display-none';
@@ -120,7 +121,7 @@ class ModalProposal extends PureComponent<Props, State> {
                   <Dropdown
                     id="dd-andwer-type"
                     title="Select"
-                    listOpen={listOpen}
+                    isCollapsed={isCollapsed}
                     items={location}
                     onClick={this.toggleList}
                   />
@@ -135,19 +136,27 @@ class ModalProposal extends PureComponent<Props, State> {
                 <Dropdown
                   id="dd-team-member"
                   title="Select"
-                  listOpen={listOpen}
+                  isCollapsed={isCollapsed}
                   items={location}
                   onClick={this.toggleList}
                 />
               </div>
-              <div className="question-segment">selectedTeams</div>
+              <div className="question-segment">
+                <SelectTeam
+                  id="selected-team-item"
+                  onClick={this.handleCloseTeam}
+                  onKeyPress={this.handleCloseTeam}
+                >
+                  Business Analyst
+                </SelectTeam>
+              </div>
               <div className="question-segment">
                 <Checkbox
                   id="send-notification-checkbox"
                   value="notification"
                   name="notification"
-                  onChange={this.handleChecked}
-                  checked={checked}
+                  onChange={this.handleisChecked}
+                  isChecked={isChecked}
                 >
                   Send notification now
                 </Checkbox>
@@ -157,7 +166,6 @@ class ModalProposal extends PureComponent<Props, State> {
               <div className="question-button-cancel">
                 <PrimaryButton
                   className="close-button"
-                  type="submit"
                   id="cancel-button"
                   onClick={this.handleCancel}
                 >
@@ -167,7 +175,6 @@ class ModalProposal extends PureComponent<Props, State> {
               <div className="question-button-okay">
                 <PrimaryButton
                   className="okay-button"
-                  type="submit"
                   id="okay-button"
                   onClick={this.handleOkay}
                 >
