@@ -2,7 +2,7 @@
 import React, { PureComponent } from 'react';
 import Task from './Task';
 import { Add } from '../../svg';
-import ModalProposal from '../../ModalProposal';
+import ModalProposal from './ModalProposal';
 
 type Props = {
   tasks: Array<Object>

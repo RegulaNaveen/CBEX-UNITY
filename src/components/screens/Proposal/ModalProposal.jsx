@@ -1,12 +1,12 @@
 // @flow
 import React, { PureComponent } from 'react';
-import Modal from './common/Modal';
-import { PrimaryButton } from './common/Button';
-import Checkbox from './common/Checkbox';
-import Dropdown from './common/Dropdown';
-import TextArea from './common/TextArea';
-import SelectTeam from './common/SelectTeam';
-import Close from './svg/Close';
+import Modal from '../../common/Modal';
+import { PrimaryButton } from '../../common/Button';
+import Checkbox from '../../common/Checkbox';
+import Dropdown from '../../common/Dropdown';
+import TextArea from '../../common/TextArea';
+import SelectTeam from '../../common/SelectTeam';
+import Close from '../../svg/Close';
 
 type Props = {
   showModal: boolean
