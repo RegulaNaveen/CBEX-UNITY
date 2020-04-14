@@ -4,9 +4,9 @@ import Modal from './common/Modal';
 import { PrimaryButton } from './common/Button';
 import Checkbox from './common/Checkbox';
 import Dropdown from './common/Dropdown';
-import closeIcon from '../../img/close.svg';
 import TextArea from './common/TextArea';
 import SelectTeam from './common/SelectTeam';
+import Close from './svg/Close';
 
 type Props = {
   showModal: boolean
@@ -25,7 +25,7 @@ class ModalProposal extends PureComponent<Props, State> {
     super(props);
 
     this.state = {
-      hideModal: false,
+      // hideModal: false,
       isChecked: false,
       isCollapsed: false,
       inputText: '',
@@ -89,17 +89,12 @@ class ModalProposal extends PureComponent<Props, State> {
             <header className="modal-title">
               <div className="question-segment-title">
                 <p className="question-title">Add New Question</p>
-                <div className="close-modal-icon">
-                  <button
-                    id="close-icon"
-                    className="close-icon"
-                    onClick={this.handleCancel}
-                    onKeyPress={this.handleCancel}
-                    type="button"
-                    tabIndex={0}
-                  >
-                    <img src={closeIcon} alt="close modal" />
-                  </button>
+                <div
+                  className="close-modal-icon"
+                  role="presentation"
+                  onClick={this.handleCloseModal}
+                >
+                  <Close className="close-icon" />
                 </div>
               </div>
               <div className="question-subtitle">Optional Subtitle</div>
@@ -145,7 +140,6 @@ class ModalProposal extends PureComponent<Props, State> {
                 <SelectTeam
                   id="selected-team-item"
                   onClick={this.handleCloseTeam}
-                  onKeyPress={this.handleCloseTeam}
                 >
                   Business Analyst
                 </SelectTeam>

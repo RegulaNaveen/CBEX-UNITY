@@ -1,34 +1,21 @@
 // @flow
 import React from 'react';
-import closeCircleIcon from '../../../img/close.svg';
+import CloseCircle from '../svg/CloseCircle';
 
 type Props = {
-  id?: string,
   onClick: Function,
-  onKeyPress: Function,
   children: string
 };
 
-const SelectTeam = ({ id, onClick, onKeyPress, children }: Props) => {
+const SelectTeam = ({ onClick, children }: Props) => {
   return (
     <div className="selected-team-wrapper">
       <p className="selected-team-title">{children}</p>
-      <button
-        id={id}
-        className="close-img-icon"
-        onClick={onClick}
-        onKeyPress={onKeyPress}
-        type="button"
-        tabIndex={0}
-      >
-        <img src={closeCircleIcon} alt="close" />
-      </button>
+      <div className="delete-team-icon" role="presentation" onClick={onClick}>
+        <CloseCircle className="close-icon" />
+      </div>
     </div>
   );
-};
-
-SelectTeam.defaultProps = {
-  id: undefined
 };
 
 export default SelectTeam;

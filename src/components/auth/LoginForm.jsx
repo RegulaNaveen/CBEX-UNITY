@@ -2,16 +2,14 @@
 import React, { Component } from 'react';
 import type { NavigationHistory } from 'react-router-dom';
 import { PROPOSALS } from '../../routes';
-import { PrimaryButton, LinkButton } from '../common/Buttons';
+import { PrimaryButton, LinkButton } from '../common/Button';
 import InputField from '../common/InputField';
 import Checkbox from '../common/Checkbox';
-import ModalProposal from '../ModalProposal';
 
 type State = {
   email: string,
   password: string,
-  checked: boolean,
-  showModal: boolean
+  isChecked: boolean
 };
 
 type Props = {
@@ -25,8 +23,7 @@ class LoginForm extends Component<Props, State> {
     this.state = {
       email: '',
       password: '',
-      checked: false,
-      showModal: false
+      isChecked: false
     };
   }
 
@@ -38,12 +35,6 @@ class LoginForm extends Component<Props, State> {
     document.removeEventListener('keydown', this.escFunction);
   }
 
-  escFunction = (event: KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      this.handleLogin();
-    }
-  };
-
   onEmailChange = (text: SyntheticInputEvent<EventTarget>) => {
     this.setState({ email: text.target.value });
   };
@@ -52,16 +43,13 @@ class LoginForm extends Component<Props, State> {
     this.setState({ password: text.target.value });
   };
 
-  handleChecked = () => {
-    const { checked } = this.state;
-    this.setState({ checked: !checked });
+  handleisChecked = () => {
+    const { isChecked } = this.state;
+    this.setState({ isChecked: !isChecked });
   };
 
   handleLogin = () => {
     // TODO: Login functionality
-    // CODE TO TEST MODAL
-    const { showModal } = this.state;
-    this.setState({ showModal: !showModal });
     // TODO: Remove navigation test code
     const { history } = this.props;
     history.push(PROPOSALS);
@@ -72,7 +60,7 @@ class LoginForm extends Component<Props, State> {
   };
 
   render() {
-    const { checked, email, password, showModal } = this.state;
+    const { isChecked, email, password } = this.state;
     return (
       <div className="form-wrapper">
         <p className="form-title">IQVIA Unity</p>
@@ -100,8 +88,8 @@ class LoginForm extends Component<Props, State> {
           id="remember-username-checkbox"
           value="username"
           name="username"
-          onChange={this.handleChecked}
-          checked={checked}
+          onChange={this.handleisChecked}
+          isChecked={isChecked}
         >
           Remember my username
         </Checkbox>
@@ -120,7 +108,6 @@ class LoginForm extends Component<Props, State> {
             </LinkButton>
           </div>
         </div>
-        <ModalProposal showModal={showModal} />
       </div>
     );
   }
