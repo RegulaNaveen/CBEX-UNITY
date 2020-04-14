@@ -5,7 +5,7 @@ type Props = {
   id?: string,
   children: string,
   onClick: Function,
-  className: string
+  className?: string
 };
 
 const PrimaryButton = ({ id, onClick, children, className }: Props) => (
@@ -31,7 +31,8 @@ const LinkButton = ({ id, onClick, children, className }: Props) => (
 );
 
 const defaultProps = {
-  id: undefined
+  id: undefined,
+  className: undefined
 };
 
 PrimaryButton.defaultProps = defaultProps;

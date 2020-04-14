@@ -27,14 +27,6 @@ class LoginForm extends Component<Props, State> {
     };
   }
 
-  componentDidMount() {
-    document.addEventListener('keydown', this.escFunction);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.escFunction);
-  }
-
   onEmailChange = (text: SyntheticInputEvent<EventTarget>) => {
     this.setState({ email: text.target.value });
   };

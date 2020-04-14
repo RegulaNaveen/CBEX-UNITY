@@ -14,7 +14,7 @@ function CloseCircle(props: Props) {
         fillRule="nonzero"
       />
     </svg>
-  )
+  );
 }
 
 export default CloseCircle;

@@ -17,7 +17,6 @@ const TextArea = ({ id, className, value, onChange, placeholder }: Props) => {
       value={value}
       onChange={onChange}
       placeholder={placeholder}
-      multiline
     />
   );
 };

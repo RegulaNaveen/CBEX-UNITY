@@ -13,11 +13,11 @@ type Props = {
 };
 
 type State = {
-  hideModal: boolean,
   isChecked: boolean,
   isCollapsed: boolean,
   location: Array<Object>,
-  inputText: string
+  inputText: string,
+  teams: Array<Object>
 };
 
 class ModalProposal extends PureComponent<Props, State> {
@@ -25,7 +25,6 @@ class ModalProposal extends PureComponent<Props, State> {
     super(props);
 
     this.state = {
-      // hideModal: false,
       isChecked: false,
       isCollapsed: false,
       inputText: '',
@@ -54,6 +53,24 @@ class ModalProposal extends PureComponent<Props, State> {
           selected: false,
           key: 'location'
         }
+      ],
+      teams: [
+        {
+          id: 0,
+          name: 'Business Analyst'
+        },
+        {
+          id: 1,
+          name: 'Account Executive'
+        },
+        {
+          id: 2,
+          name: 'Business Analyst'
+        },
+        {
+          id: 3,
+          name: 'Account Executive'
+        }
       ]
     };
   }
@@ -63,9 +80,17 @@ class ModalProposal extends PureComponent<Props, State> {
     this.setState({ isChecked: !isChecked });
   };
 
-  handleCancel = () => {};
+  handleModal = () => {
+    // TODO: Create an action to handle close/open modal
+  };
 
-  handleOkay = () => {};
+  handleOkay = () => {
+    // TODO: Save new question functionality
+  };
+
+  handleDeleteTeam = () => {
+    // TODO: Delete a team item
+  };
 
   handleInputText = (text: SyntheticInputEvent<EventTarget>) => {
     this.setState({ inputText: text.target.value });
@@ -78,7 +103,7 @@ class ModalProposal extends PureComponent<Props, State> {
 
   render() {
     const { showModal } = this.props;
-    const { isChecked, isCollapsed, location, inputText } = this.state;
+    const { isChecked, isCollapsed, location, inputText, teams } = this.state;
     const handleShowModal = showModal
       ? 'modal display-bloc'
       : 'modal display-none';
@@ -92,7 +117,7 @@ class ModalProposal extends PureComponent<Props, State> {
                 <div
                   className="close-modal-icon"
                   role="presentation"
-                  onClick={this.handleCloseModal}
+                  onClick={this.handleModal}
                 >
                   <Close className="close-icon" />
                 </div>
@@ -137,12 +162,18 @@ class ModalProposal extends PureComponent<Props, State> {
                 />
               </div>
               <div className="question-segment">
-                <SelectTeam
-                  id="selected-team-item"
-                  onClick={this.handleCloseTeam}
-                >
-                  Business Analyst
-                </SelectTeam>
+                {teams.map(team => {
+                  const { id, name } = team;
+                  return (
+                    <SelectTeam
+                      key={id}
+                      id="selected-team-item"
+                      onClick={this.handleDeleteTeam}
+                    >
+                      {name}
+                    </SelectTeam>
+                  );
+                })}
               </div>
               <div className="question-segment">
                 <Checkbox
@@ -161,7 +192,7 @@ class ModalProposal extends PureComponent<Props, State> {
                 <PrimaryButton
                   className="close-button"
                   id="cancel-button"
-                  onClick={this.handleCancel}
+                  onClick={this.handleModal}
                 >
                   Cancel
                 </PrimaryButton>

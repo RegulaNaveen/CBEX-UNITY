@@ -1,27 +1,27 @@
 .selected-team-wrapper {
   display: flex;
   height: 32px;
-  width: 182.49px;
   border-radius: 16px;
   background-color: $neptune-primary;
   box-shadow: 0 4px 16px 0 rgba(0,0,0,0.04), 0 4px 8px 0 rgba(7,104,253,0.32);
   align-items: center;
   margin-right: 15.7px;
   margin-bottom: 5px;
-}
+  padding-left: 12px;
+  padding-right: 9px;
 
-.selected-team-title {
-  height: 24px;
-  width: 138.49px;
-  color: $white;
-  font-family: $proximaNova;
-  font-size: 16px;
-  font-weight: 500;
-  letter-spacing: 0;
-  line-height: 24px;
-  margin-left: 12px;
-}
+  .selected-team-title {
+    height: 24px;
+    color: $white;
+    font-family: $proximaNova;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 24px;
+    margin-right: 9px;
+  }
 
-.delete-team-icon {
-  cursor: pointer;
+  .delete-team-icon {
+    cursor: pointer;
+  }
 }
