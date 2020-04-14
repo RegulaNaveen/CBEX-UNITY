@@ -1,7 +1,7 @@
 .toolbar-wrapper {
   flex: 1;
   display: flex;
-  height: 57px;
+  height: 56px;
   background: linear-gradient(270deg, #0076AE 0%, #250056 100%);
   align-items: center;
   padding-left: 24px;
@@ -27,7 +27,7 @@
   .toolbar-navigation-wrapper {
     display: flex;
     width: 307px;
-    height: 57px;
+    height: 56px;
     margin-left: 108px;
 
     .toolbar-navigation-title {
@@ -52,13 +52,45 @@
     flex: 1;
     display: flex;
     justify-content: flex-end;
-    background-color: red;
 
     .toolbar-profile-wrapper {
       display: flex;
-      width: 307px;
-      height: 57px;
-      background-color: blue;
+      width: 260px;
+      height: 56px;
+    
+      .toolbar-profile-search {
+        height: 20px;
+        width: 20px;
+        padding: 18px;
+      }
+    
+      .toolbar-profile-notifications {
+        height: 20px;
+        width: 20px;
+        padding: 18px;
+      }
+
+      .toolbar-profile-info {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+
+        &-title {
+          color: #FFFFFF;
+          font-family: $proximaNova;
+          font-size: 16px;
+          letter-spacing: 0;
+          line-height: 24px;
+        }
+
+        &-icon {
+          margin-left: 8px;
+          height: 18px;
+          width: 18px;
+        }
+      }
     }
   }
 }

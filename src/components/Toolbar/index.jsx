@@ -1,6 +1,6 @@
 // @flow
-
 import React from 'react';
+import { Search, Bell, DropMenu } from '../svg';
 
 const Toolbar = () => {
   return (
@@ -14,7 +14,12 @@ const Toolbar = () => {
       </div>
       <div className="toolbar-profile-spacer">
         <div className="toolbar-profile-wrapper">
-          <p className="toolbar-navigation-title">Home</p>
+          <Search className="toolbar-profile-search" />
+          <Bell className="toolbar-profile-notifications" />
+          <div className="toolbar-profile-info">
+            <p className="toolbar-profile-info-title">Oliver Queen</p>
+            <DropMenu className="toolbar-profile-info-icon" />
+          </div>
         </div>
       </div>
     </div>
