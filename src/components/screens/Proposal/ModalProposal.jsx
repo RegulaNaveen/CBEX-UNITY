@@ -1,7 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 import Modal from '../../common/Modal';
-import { PrimaryButton } from '../../common/Button';
+import { PrimaryButton } from '../../common/Buttons';
 import Checkbox from '../../common/Checkbox';
 import Dropdown from '../../common/Dropdown';
 import TextArea from '../../common/TextArea';

@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import type { NavigationHistory } from 'react-router-dom';
 import { PROPOSALS } from '../../routes';
-import { PrimaryButton, LinkButton } from '../common/Button';
+import { PrimaryButton, LinkButton } from '../common/Buttons';
 import InputField from '../common/InputField';
 import Checkbox from '../common/Checkbox';
 
