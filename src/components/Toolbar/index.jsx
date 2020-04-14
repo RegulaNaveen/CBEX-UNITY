@@ -11,7 +11,7 @@ class Toolbar extends Component<Props, State> {
     super(props);
 
     this.state = {
-      isCollapsed: false
+      isCollapsed: true
     };
   }
 
@@ -53,7 +53,13 @@ class Toolbar extends Component<Props, State> {
               <DropMenu className="toolbar-profile-info-icon" />
             </div>
             {isCollapsed ? (
-              <div className="toolbar-profile-menu">This is the menu</div>
+              <div className="toolbar-profile-menu">
+                <p className="toolbar-profile-menu-name">Oliver Queen</p>
+                <p className="toolbar-profile-menu-email">
+                  oliver.queen@iqvia.com
+                </p>
+                <div className="toolbar-profile-menu-separator" />
+              </div>
             ) : null}
           </div>
         </div>
