@@ -125,7 +125,6 @@ class ModalProposal extends PureComponent<Props, State> {
               <div className="question-subtitle">Optional Subtitle</div>
             </header>
             <div className="body-wrapper">
-              <p className="dd-title">Enter Question Text</p>
               <div className="question-segment">
                 <TextArea
                   id="question-text-area"
@@ -133,17 +132,18 @@ class ModalProposal extends PureComponent<Props, State> {
                   value={inputText}
                   onChange={this.handleInputText}
                   placeholder="Hint text..."
+                  title="Enter Question Text"
                 />
               </div>
               <div className="question-segment">
                 <div className="dd-answer-type">
-                  <p className="dd-title">Answer Type</p>
                   <Dropdown
                     id="dd-andwer-type"
-                    title="Select"
+                    placeholder="Select"
                     isCollapsed={isCollapsed}
                     items={location}
                     onClick={this.toggleList}
+                    title="Answer Type"
                   />
                 </div>
                 <div className="question-picker">
@@ -151,14 +151,14 @@ class ModalProposal extends PureComponent<Props, State> {
                   <div>picker</div>
                 </div>
               </div>
-              <p className="dd-title">Which team member roles will answer</p>
               <div className="question-segment">
                 <Dropdown
                   id="dd-team-member"
-                  title="Select"
+                  placeholder="Select"
                   isCollapsed={isCollapsed}
                   items={location}
                   onClick={this.toggleList}
+                  title="Which team member roles will answer"
                 />
               </div>
               <div className="question-segment">
