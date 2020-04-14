@@ -48,29 +48,29 @@
     }
   }
 
-  .toolbar-profile-spacer {
+  .toolbar-account-spacer {
     flex: 1;
     display: flex;
     justify-content: flex-end;
 
-    .toolbar-profile-wrapper {
+    .toolbar-account-wrapper {
       display: flex;
       width: 260px;
       height: 56px;
     
-      .toolbar-profile-search {
+      .toolbar-account-search {
         height: 20px;
         width: 20px;
         padding: 18px;
       }
     
-      .toolbar-profile-notifications {
+      .toolbar-account-notifications {
         height: 20px;
         width: 20px;
         padding: 18px;
       }
 
-      .toolbar-profile-info {
+      .toolbar-account-info {
         flex: 1;
         display: flex;
         justify-content: center;
@@ -92,7 +92,7 @@
         }
       }
 
-      .toolbar-profile-menu {
+      .toolbar-account-menu {
         position: absolute;
         top: 56px;
         right: 24px;
@@ -130,6 +130,45 @@
           background-color: $neutral3;
           box-shadow: inset 0 -0.5px 0 0 $neutral4;
           margin-bottom: 8px;
+        }
+
+        &-option {
+          display: flex;
+          align-items: center;
+          height: 40px;
+          width: 100%;
+          cursor: pointer;
+
+          &-icon {
+            height: 18px;
+            width: 18px;
+            margin-right: 8px;
+          }
+
+          &-title {
+            color: $neutral8;
+            font-family: $proximaNova;
+            font-size: 16px;
+            letter-spacing: 0;
+            line-height: 32px;
+          }
+        }
+
+        &-button {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 40px;
+          width: 100%;
+          border-radius: 4px;
+          background-color: #F2F2F2;
+          margin-top: 8px;
+          color: $neutral7;
+          font-family: $proximaNova;
+          font-size: 16px;
+          font-weight: 500;
+          letter-spacing: 0;
+          line-height: 21px;
         }
       }
     }
