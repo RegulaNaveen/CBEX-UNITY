@@ -12,6 +12,11 @@ const Toolbar = () => {
         <p className="toolbar-navigation-title proposals">Proposals</p>
         <p className="toolbar-navigation-title">Q & A</p>
       </div>
+      <div className="toolbar-profile-spacer">
+        <div className="toolbar-profile-wrapper">
+          <p className="toolbar-navigation-title">Home</p>
+        </div>
+      </div>
     </div>
   );
 };

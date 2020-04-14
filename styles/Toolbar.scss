@@ -47,4 +47,18 @@
       background-color: rgba(255,255,255,0.16);
     }
   }
+
+  .toolbar-profile-spacer {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    background-color: red;
+
+    .toolbar-profile-wrapper {
+      display: flex;
+      width: 307px;
+      height: 57px;
+      background-color: blue;
+    }
+  }
 }
