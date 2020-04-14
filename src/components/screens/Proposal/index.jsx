@@ -1,119 +1,149 @@
 // @flow
-import React from 'react';
+import React, { Component } from 'react';
 import ProposalInfo from './ProposalInfo';
 import TasksList from './TasksList';
 import Toolbar from '../../Toolbar';
 import { Add } from '../../svg';
+import ModalProposal from './ModalProposal';
 
-const Proposal = () => {
-  const data = {
-    title: 'RFP-1028',
-    accountExecutive: 'Jan Levinson-Gould',
-    businessDevelopment: 'Dwight Schrute',
-    proposalDirector: 'Michael Scott',
-    labs: 'Kevin Malone',
-    synopsis: true,
-    phase: 2,
-    sites: 12,
-    countries: ['France', 'UK', 'Italy', 'Spain'],
-    indication: 'Myopia'
-  };
+type State = {
+  showModal: boolean,
+  data: Object,
+  tasks: Array<Object>
+};
 
-  const tasks = [
-    {
-      data: [
+type Props = {};
+
+class Proposal extends Component<Props, State> {
+  constructor(props: Object) {
+    super(props);
+
+    this.state = {
+      showModal: false,
+      data: {
+        title: 'RFP-1028',
+        accountExecutive: 'Jan Levinson-Gould',
+        businessDevelopment: 'Dwight Schrute',
+        proposalDirector: 'Michael Scott',
+        labs: 'Kevin Malone',
+        synopsis: true,
+        phase: 2,
+        sites: 12,
+        countries: ['France', 'UK', 'Italy', 'Spain'],
+        indication: 'Myopia'
+      },
+      tasks: [
         {
-          id: 1,
-          question: 'Question',
-          answer: 'Answer',
-          owner: ['Owner', 'Pedro'],
-          dueDate: '02-Apr-2020',
-          completionDate: '02-Apr-2020',
-          complete: true
+          data: [
+            {
+              id: 1,
+              question: 'Question',
+              answer: 'Answer',
+              owner: ['Owner', 'Pedro'],
+              dueDate: '02-Apr-2020',
+              completionDate: '02-Apr-2020',
+              complete: true
+            },
+            {
+              id: 2,
+              question: 'Question',
+              answer: 'Answer',
+              owner: ['Awner', 'Homer', 'jesus'],
+              dueDate: '02-Apr-2020',
+              completionDate: '02-Apr-2020',
+              complete: true
+            }
+          ],
+          complete: false,
+          title: 'Resources',
+          incomplete: 8
         },
         {
-          id: 2,
-          question: 'Question',
-          answer: 'Answer',
-          owner: ['Awner', 'Homer', 'jesus'],
-          dueDate: '02-Apr-2020',
-          completionDate: '02-Apr-2020',
-          complete: true
+          data: [
+            {
+              id: 1,
+              question: 'Question',
+              answer: 'Answer',
+              owner: ['Owner', 'Pedro'],
+              dueDate: '02-Apr-2020',
+              completionDate: '02-Apr-2020',
+              complete: false
+            },
+            {
+              id: 2,
+              question: 'Question',
+              answer: 'Answer',
+              owner: ['Awner', 'Homer', 'jesus'],
+              dueDate: '02-Apr-2020',
+              completionDate: '02-Apr-2020',
+              complete: false
+            },
+            {
+              id: 3,
+              question: 'Question',
+              answer: 'Answer',
+              owner: ['Awner', 'Homer', 'jesus'],
+              dueDate: '02-Apr-2020',
+              completionDate: '02-Apr-2020',
+              complete: true
+            },
+            {
+              id: 4,
+              question: 'Question',
+              answer: 'Answer',
+              owner: ['Awner', 'Homer', 'jesus'],
+              dueDate: '02-Apr-2020',
+              completionDate: '02-Apr-2020',
+              complete: true
+            }
+          ],
+          complete: false,
+          title: 'Labs',
+          incomplete: 2
+        },
+        {
+          data: [
+            {
+              id: 1,
+              question: 'Question',
+              answer: 'Answer',
+              owner: ['Owner', 'Pedro'],
+              dueDate: '02-Apr-2020',
+              completionDate: '02-Apr-2020',
+              complete: true
+            },
+            {
+              id: 2,
+              question: 'Question',
+              answer: 'Answer',
+              owner: ['Awner', 'Homer', 'jesus'],
+              dueDate: '02-Apr-2020',
+              completionDate: '02-Apr-2020',
+              complete: true
+            }
+          ],
+          complete: true,
+          title: 'Medical',
+          incomplete: 0
         }
-      ],
-      complete: false,
-      title: 'Resources',
-      incomplete: 8
-    },
-    {
-      data: [
-        {
-          id: 1,
-          question: 'Question',
-          answer: 'Answer',
-          owner: ['Owner', 'Pedro'],
-          dueDate: '02-Apr-2020',
-          completionDate: '02-Apr-2020',
-          complete: false
-        },
-        {
-          id: 2,
-          question: 'Question',
-          answer: 'Answer',
-          owner: ['Awner', 'Homer', 'jesus'],
-          dueDate: '02-Apr-2020',
-          completionDate: '02-Apr-2020',
-          complete: false
-        },
-        {
-          id: 3,
-          question: 'Question',
-          answer: 'Answer',
-          owner: ['Awner', 'Homer', 'jesus'],
-          dueDate: '02-Apr-2020',
-          completionDate: '02-Apr-2020',
-          complete: true
-        },
-        {
-          id: 4,
-          question: 'Question',
-          answer: 'Answer',
-          owner: ['Awner', 'Homer', 'jesus'],
-          dueDate: '02-Apr-2020',
-          completionDate: '02-Apr-2020',
-          complete: true
-        }
-      ],
-      complete: false,
-      title: 'Labs',
-      incomplete: 2
-    },
-    {
-      data: [
-        {
-          id: 1,
-          question: 'Question',
-          answer: 'Answer',
-          owner: ['Owner', 'Pedro'],
-          dueDate: '02-Apr-2020',
-          completionDate: '02-Apr-2020',
-          complete: true
-        },
-        {
-          id: 2,
-          question: 'Question',
-          answer: 'Answer',
-          owner: ['Awner', 'Homer', 'jesus'],
-          dueDate: '02-Apr-2020',
-          completionDate: '02-Apr-2020',
-          complete: true
-        }
-      ],
-      complete: true,
-      title: 'Medical',
-      incomplete: 0
+      ]
+    };
+  }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.escFunction);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.escFunction);
+  }
+
+  escFunction = (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      // TODO: Create and then use the action to handle modal
+      this.handleModal();
     }
-  ];
+  };
 
   // const { history } = props;
 
@@ -130,10 +160,11 @@ const Proposal = () => {
         >
           <Add className="tasksList-add-icon" />
         </div>
+        <TasksList tasks={tasks} />
+        <ModalProposal showModal={showModal} />
       </div>
-      <TasksList tasks={tasks} />
-    </div>
-  );
-};
+    );
+  }
+}
 
 export default Proposal;
