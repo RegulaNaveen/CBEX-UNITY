@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
-import { Search, Bell, DropMenu, User, Help, Settings } from '../svg';
+import classnames from 'classnames';
+import { DropMenu, User, Help, Settings } from '../svg';
 
 type State = {
   isCollapsed: boolean
@@ -35,16 +36,15 @@ class Toolbar extends Component<Props, State> {
         <p className="toolbar-title-one">IQVIA™</p>
         <p className="toolbar-title-two">Unity</p>
         <div className="toolbar-navigation-wrapper">
-          <p className="toolbar-navigation-title">Home</p>
-          <p className="toolbar-navigation-title proposals">Proposals</p>
-          <p className="toolbar-navigation-title">Q & A</p>
+          <p className="toolbar-navigation-title selected">Proposals</p>
         </div>
         <div className="toolbar-account-spacer">
           <div className="toolbar-account-wrapper">
-            <Search className="toolbar-account-search" />
-            <Bell className="toolbar-account-notifications" />
             <div
-              className="toolbar-account-info"
+              className={classnames(
+                'toolbar-account-info',
+                isCollapsed && 'expanded'
+              )}
               role="button"
               onClick={this.handleCollapse}
               onKeyPress={this.handleKeyPress}

@@ -1,7 +1,8 @@
+$toolbarHight: 57px;
 .toolbar-wrapper {
   flex: 1;
   display: flex;
-  height: 56px;
+  height: $toolbarHight;
   background: linear-gradient(270deg, #0076AE 0%, #250056 100%);
   align-items: center;
   padding-left: 24px;
@@ -26,12 +27,11 @@
 
   .toolbar-navigation-wrapper {
     display: flex;
-    width: 307px;
-    height: 56px;
+    height: $toolbarHight;
     margin-left: 108px;
 
     .toolbar-navigation-title {
-      flex: 1;
+      width: 105px;
       display: flex;
       color: $white;
       font-family: $proximaNova;
@@ -43,7 +43,7 @@
       cursor: pointer;
     }
 
-    .proposals {
+    .selected {
       background-color: rgba(255,255,255,0.16);
     }
   }
@@ -55,8 +55,8 @@
 
     .toolbar-account-wrapper {
       display: flex;
-      width: 260px;
-      height: 56px;
+      width: 146px;
+      height: $toolbarHight;
     
       .toolbar-account-search {
         height: 20px;
@@ -75,6 +75,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        outline: none;
         cursor: pointer;
 
         &-title {
@@ -92,9 +93,13 @@
         }
       }
 
+      .expanded {
+        background-color: #593D7E;
+      }
+
       .toolbar-account-menu {
         position: absolute;
-        top: 56px;
+        top: $toolbarHight;
         right: 24px;
         height: 270px;
         width: 280px;
