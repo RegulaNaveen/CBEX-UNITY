@@ -20,7 +20,7 @@ type State = {
   teams: Array<Object>
 };
 
-class ModalProposal extends PureComponent<Props, State> {
+class AddQuestionModal extends PureComponent<Props, State> {
   constructor(props: Object) {
     super(props);
 
@@ -215,4 +215,4 @@ class ModalProposal extends PureComponent<Props, State> {
   }
 }
 
-export default ModalProposal;
+export default AddQuestionModal;

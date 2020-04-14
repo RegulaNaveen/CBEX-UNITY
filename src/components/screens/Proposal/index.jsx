@@ -4,7 +4,7 @@ import ProposalInfo from './ProposalInfo';
 import TasksList from './TasksList';
 import Toolbar from '../../Toolbar';
 import { Add } from '../../svg';
-import ModalProposal from './ModalProposal';
+import AddQuestionModal from './AddQuestionModal';
 
 type State = {
   showModal: boolean,
@@ -161,7 +161,7 @@ class Proposal extends Component<Props, State> {
           <Add className="tasksList-add-icon" />
         </div>
         <TasksList tasks={tasks} />
-        <ModalProposal showModal={showModal} />
+        <AddQuestionModal showModal={showModal} />
       </div>
     );
   }
