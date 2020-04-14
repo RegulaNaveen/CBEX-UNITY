@@ -9,15 +9,21 @@ import App from '../../src/App';
 export default class AppModel {
   constructor() {
     this._wrapper = shallow(<App />);
+    this._loginIndex = 0;
+    this._proposalIndex = 1;
   }
 
   _wrapper: ShallowWrapper;
+
+  _loginIndex: number;
+
+  _proposalIndex: number;
 
   _getBroswerRouter = (): ShallowWrapper => this._wrapper.find(BrowserRouter);
 
   _getSwitch = (): ShallowWrapper => this._wrapper.find(Switch);
 
-  _getLogin = (): ShallowWrapper => this._wrapper.find(Route);
+  _getRoutes = (): ShallowWrapper => this._wrapper.find(Route);
 
   _getPrivateRoute = (): ShallowWrapper => this._wrapper.find(PrivateRoute);
 
@@ -25,9 +31,17 @@ export default class AppModel {
 
   hasSwitch = (): boolean => this._getSwitch().length === 1;
 
-  hasLoginRoute = (): boolean => this._getLogin().length === 1;
+  hasRoutes = (): boolean => this._getRoutes().length === 2;
 
-  getLoginPath = (): string => this._getLogin().prop('path');
+  getLoginPath = (): string =>
+    this._getRoutes()
+      .at(this._loginIndex)
+      .prop('path');
+
+  getProposalPath = (): string =>
+    this._getRoutes()
+      .at(this._proposalIndex)
+      .prop('path');
 
   hasPrivateRoute = (): boolean => this._getPrivateRoute().length === 1;
 }

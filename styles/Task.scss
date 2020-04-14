@@ -1,0 +1,237 @@
+
+.task-wrapper {
+  flex: 1;
+  display: flex;
+  min-height: 60px;
+  background-color: $white;
+  align-items: center;
+  border: $border;
+  border-radius: 4px;
+  padding-left: 20px;
+  padding-right: 23px;
+  min-width: 630px;
+  margin-bottom: 16px;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  .task-title-wrapper {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+
+    .task-title {
+      color: $black;
+      font-family: $proximaNova;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0;
+      line-height: 19px;
+    }
+
+    .task-status-wrapper {
+      display: flex;
+  
+      .task-status-description {
+        color: $black;
+        font-family: $proximaNova;
+        font-size: 16px;
+        letter-spacing: 0;
+        line-height: 19px;
+      }
+
+      .task-status-checkmark {
+        margin-right: 9px;
+        margin-top: 1px;
+      }
+    }
+  }
+
+  .task-icon-wrapper {
+    display: flex;
+    align-self: flex-start;
+    margin-right: 12px;
+    margin-top: 20px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+
+    .task-icon {
+      width: 18px;
+    }
+  }
+
+  .task-table-wrapper {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    height: 100%;
+
+    .task-table-headers {
+      display: flex;
+      height: 60px;
+
+      .task-title {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        height: 60px;
+        color: $black;
+        font-family: $proximaNova;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: 19px;
+      }
+  
+      .task-subtitle {
+        display: flex;
+        align-items: center;
+        height: 60px;
+        color: $black;
+        font-family: $proximaNova;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: 17px;
+      }
+
+      .task-subtitle-answer {
+        flex: 1;
+      }
+
+      .task-subtitle-owner {
+        width: 118px;
+      }
+
+      .task-subtitle-due-date {
+        width: 142px;
+      }
+
+      .task-subtitle-completion-date {
+        width: 138px;
+      }
+
+      .filter-icon {
+        display: flex;
+        margin-left: 6px;
+        height: 60px;
+        width: 22px;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    .task-table-row {
+      display: flex;
+      height: 55px;
+
+      &:hover{
+        background-color: $neutral2;
+      }
+
+      &:hover .icon-highlight{
+        background-color: $neutral2;
+      }
+
+      &-checkmark {
+        display: flex;
+        margin-left: -52px;
+        padding-left: 24px;
+        padding-right: 14px;
+        padding-top: 20px;
+        padding-bottom: 21px;
+      }
+
+      &-question {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        height: 55px;
+        color: $black;
+        font-family: $proximaNova;
+        font-size: 16px;
+        letter-spacing: 0;
+        line-height: 19px;
+      }
+  
+      &-answer {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        height: 55px;
+        color: $black;
+        font-family: $proximaNova;
+        font-size: 16px;
+        letter-spacing: 0;
+        line-height: 19px;
+      }
+
+      &-owner {
+        width: 118px;
+        display: flex;
+        align-items: center;
+        height: 55px;
+
+        &-icon{
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-sizing: border-box;
+          height: 27px;
+          width: 27px;
+          padding-top: 1px;
+          border: 2px solid $white;
+          border-radius: 50%;
+          color: $white;
+          font-family: $proximaNova;
+          font-size: 16px;
+          letter-spacing: 0;
+          line-height: 19px;
+          margin-left: -10px;
+
+          &:first-child {
+            margin-left: 0;
+          }
+        }
+      }
+
+      &-due-date {
+        width: 142px;
+        display: flex;
+        align-items: center;
+        height: 55px;
+        color: $black;      
+        font-family: $proximaNova;
+        font-size: 16px;
+        letter-spacing: 0;
+        line-height: 19px;
+      }
+
+      &-completion-date {
+        width: 110px;
+        display: flex;
+        align-items: center;
+        height: 55px;
+        color: $black;
+        font-family: $proximaNova;
+        font-size: 16px;
+        letter-spacing: 0;
+        line-height: 19px;
+      }
+
+      &-edit {
+        padding-left: 14px;
+        padding-right: 24px;
+        margin-right: -24px;
+        padding-top: 19px;
+        padding-bottom: 20px;
+      }
+    }
+  }
+}
+
+.complete {
+  background-color: $neutral2;
+}

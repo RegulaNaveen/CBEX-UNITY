@@ -1,5 +1,7 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
+import type { NavigationHistory } from 'react-router-dom';
+import { PROPOSALS } from '../../routes';
 import { PrimaryButton, LinkButton } from '../common/Buttons';
 import InputField from '../common/InputField';
 import Checkbox from '../common/Checkbox';
@@ -10,9 +12,11 @@ type State = {
   checked: boolean
 };
 
-type Props = {};
+type Props = {
+  history: NavigationHistory
+};
 
-class LoginForm extends PureComponent<Props, State> {
+class LoginForm extends Component<Props, State> {
   constructor(props: Object) {
     super(props);
 
@@ -38,6 +42,10 @@ class LoginForm extends PureComponent<Props, State> {
 
   handleLogin = () => {
     // TODO: Login functionality
+    // TODO: Remove navigation test code
+    const { history } = this.props;
+    console.log(this.props);
+    history.push(PROPOSALS);
   };
 
   handleForgotPassword = () => {
