@@ -3,6 +3,7 @@ import React from 'react';
 import ProposalInfo from './ProposalInfo';
 import TasksList from './TasksList';
 import Toolbar from '../../Toolbar';
+import { Add } from '../../svg';
 
 const Proposal = () => {
   const data = {
@@ -120,6 +121,16 @@ const Proposal = () => {
     <div className="proposal-wrapper">
       <Toolbar />
       <ProposalInfo data={data} />
+      <div className="tasksList-title-wrapper">
+        <p className="tasksList-title">Questions</p>
+        <div
+          className="tasksList-add-icon-wrapper"
+          role="presentation"
+          //onClick={this.handleModal}
+        >
+          <Add className="tasksList-add-icon" />
+        </div>
+      </div>
       <TasksList tasks={tasks} />
     </div>
   );

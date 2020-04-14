@@ -1,7 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
 import Task from './Task';
-import { Add } from '../../svg';
 import ModalProposal from './ModalProposal';
 
 type Props = {
@@ -46,16 +45,6 @@ class TasksList extends PureComponent<Props, State> {
     const { showModal } = this.state;
     return (
       <div className="tasksList-wrapper">
-        <div className="tasksList-title-wrapper">
-          <p className="tasksList-title">Questions</p>
-          <div
-            className="tasksList-add-icon-wrapper"
-            role="presentation"
-            onClick={this.handleModal}
-          >
-            <Add className="tasksList-add-icon" />
-          </div>
-        </div>
         {tasks.map(task => {
           const { complete, data, title, incomplete } = task;
           return (
