@@ -11,7 +11,8 @@
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.08), 0 16px 24px 0 rgba(0,0,0,0.16);
   display: flex;
   flex-direction: column;
-  padding: 16px;
+  padding-top: 16px;
+  padding-bottom: 16px;
 
   &-name {
     color: $black;
@@ -20,6 +21,8 @@
     font-weight: 600;
     letter-spacing: 0;
     line-height: 24px;
+    padding-left: 16px;
+    padding-right: 16px;
   }
 
   &-email {
@@ -29,6 +32,8 @@
     letter-spacing: 0;
     line-height: 21px;
     margin-bottom: 16px;
+    padding-left: 16px;
+    padding-right: 16px;
   }
 
   &-separator {
@@ -36,14 +41,22 @@
     background-color: $neutral3;
     box-shadow: inset 0 -0.5px 0 0 $neutral4;
     margin-bottom: 8px;
+    margin-left: 16px;
+    margin-right: 16px;
   }
 
   &-option {
     display: flex;
     align-items: center;
     height: 40px;
-    width: 100%;
+    width: 246px;
     cursor: pointer;
+    padding-left: 16px;
+    padding-right: 16px;
+
+    &:hover {
+      background-color: $neutral2;
+    }
 
     &-icon {
       height: 18px;
@@ -65,7 +78,7 @@
     justify-content: center;
     align-items: center;
     height: 40px;
-    width: 100%;
+    width: 246px;
     border-radius: 4px;
     background-color: $neutral2;
     margin-top: 8px;
@@ -76,6 +89,8 @@
     font-weight: 500;
     letter-spacing: 0;
     line-height: 21px;
+    margin-left: 16px;
+    margin-right: 16px;
 
     &:hover {
       background-color: $neutral4;
