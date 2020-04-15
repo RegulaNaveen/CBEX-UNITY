@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import type { NavigationHistory } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { LOGIN } from '../../routes';
 import { User, Help, Settings } from '../svg';
 
@@ -55,4 +56,4 @@ const ToolbarMenu = (props: Props) => {
   );
 };
 
-export default ToolbarMenu;
+export default withRouter(ToolbarMenu);
