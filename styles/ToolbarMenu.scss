@@ -1,0 +1,79 @@
+.toolbar-account-menu {
+  position: absolute;
+  top: $toolbarHight;
+  right: 24px;
+  height: 270px;
+  width: 280px;
+  box-sizing: border-box;
+  border: $border;
+  border-radius: 0 0 4px 4px;
+  background-color: $white;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.08), 0 16px 24px 0 rgba(0,0,0,0.16);
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+
+  &-name {
+    color: $black;
+    font-family: $proximaNova;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 24px;
+  }
+
+  &-email {
+    color: $neutral7;
+    font-family: $proximaNova;
+    font-size: 14px;
+    letter-spacing: 0;
+    line-height: 21px;
+    margin-bottom: 16px;
+  }
+
+  &-separator {
+    height: 1px;
+    background-color: $neutral3;
+    box-shadow: inset 0 -0.5px 0 0 $neutral4;
+    margin-bottom: 8px;
+  }
+
+  &-option {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    width: 100%;
+    cursor: pointer;
+
+    &-icon {
+      height: 18px;
+      width: 18px;
+      margin-right: 8px;
+    }
+
+    &-title {
+      color: $neutral8;
+      font-family: $proximaNova;
+      font-size: 16px;
+      letter-spacing: 0;
+      line-height: 32px;
+    }
+  }
+
+  &-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 100%;
+    border-radius: 4px;
+    background-color: #F2F2F2;
+    margin-top: 8px;
+    color: $neutral7;
+    font-family: $proximaNova;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 21px;
+  }
+}

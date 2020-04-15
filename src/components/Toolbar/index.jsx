@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import classnames from 'classnames';
+import ToolbarMenu from './ToolbarMenu';
 import { DropMenu, User, Help, Settings } from '../svg';
 
 type State = {
@@ -55,26 +56,7 @@ class Toolbar extends Component<Props, State> {
               <DropMenu className="toolbar-account-info-icon" />
             </div>
             {isCollapsed ? (
-              <div className="toolbar-account-menu">
-                <p className="toolbar-account-menu-name">Oliver Queen</p>
-                <p className="toolbar-account-menu-email">
-                  oliver.queen@iqvia.com
-                </p>
-                <div className="toolbar-account-menu-separator" />
-                <div className="toolbar-account-menu-option">
-                  <User className="toolbar-account-menu-option-icon" />
-                  <p className="toolbar-account-menu-option-title">Profile</p>
-                </div>
-                <div className="toolbar-account-menu-option">
-                  <Settings className="toolbar-account-menu-option-icon" />
-                  <p className="toolbar-account-menu-option-title">Settings</p>
-                </div>
-                <div className="toolbar-account-menu-option">
-                  <Help className="toolbar-account-menu-option-icon" />
-                  <p className="toolbar-account-menu-option-title">Help</p>
-                </div>
-                <div className="toolbar-account-menu-button">Log out</div>
-              </div>
+              <ToolbarMenu name="Oliver Queen" email="oliver.queen@iqvia.com" />
             ) : null}
           </div>
         </div>
