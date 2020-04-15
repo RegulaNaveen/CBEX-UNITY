@@ -9,15 +9,15 @@ import SelectTeam from '../../common/SelectTeam';
 import Close from '../../svg/Close';
 
 type Props = {
-  onClose: Function
+  onClose: Function,
+  onSave: Function,
+  items: Array<Object>,
+  teams: Array<Object>
 };
 
 type State = {
   isChecked: boolean,
-  isCollapsed: boolean,
-  items: Array<Object>,
-  questionText: string,
-  teams: Array<Object>
+  questionText: string
 };
 
 class AddQuestionModal extends PureComponent<Props, State> {
@@ -26,52 +26,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
 
     this.state = {
       isChecked: false,
-      isCollapsed: false,
-      questionText: '',
-      items: [
-        {
-          id: 0,
-          title: 'Item',
-          selected: false,
-          key: 'Item'
-        },
-        {
-          id: 1,
-          title: 'Item',
-          selected: false,
-          key: 'Item'
-        },
-        {
-          id: 2,
-          title: 'Item',
-          selected: false,
-          key: 'Item'
-        },
-        {
-          id: 3,
-          title: 'Item',
-          selected: false,
-          key: 'Item'
-        }
-      ],
-      teams: [
-        {
-          id: 0,
-          name: 'Business Analyst Business'
-        },
-        {
-          id: 1,
-          name: 'Account Executive'
-        },
-        {
-          id: 2,
-          name: 'Business Analyst'
-        },
-        {
-          id: 3,
-          name: 'Account Executive'
-        }
-      ]
+      questionText: ''
     };
   }
 
@@ -80,26 +35,17 @@ class AddQuestionModal extends PureComponent<Props, State> {
     this.setState({ isChecked: !isChecked });
   };
 
-  onSave = () => {
-    // TODO: Save new question functionality
-  };
-
   handleDeleteTeam = () => {
     // TODO: Delete a team item
   };
 
-  handleQuestionText = (text: SyntheticInputEvent<EventTarget>) => {
-    this.setState({ questionText: text.target.value });
-  };
-
-  toggleList = () => {
-    const { isCollapsed } = this.state;
-    this.setState({ isCollapsed: !isCollapsed });
+  handleQuestionText = (event: SyntheticInputEvent<EventTarget>) => {
+    this.setState({ questionText: event.target.value });
   };
 
   render() {
-    const { isChecked, items, questionText, teams } = this.state;
-    const { onClose } = this.props;
+    const { isChecked, questionText } = this.state;
+    const { onClose, onSave, items, teams } = this.props;
     return (
       <Modal>
         <div className="modal-content">
@@ -189,7 +135,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
               <PrimaryButton
                 className="okay-button"
                 id="okay-button"
-                onClick={this.onSave}
+                onClick={onSave}
               >
                 Okay
               </PrimaryButton>

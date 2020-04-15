@@ -27,12 +27,12 @@ class LoginForm extends Component<Props, State> {
     };
   }
 
-  onEmailChange = (text: SyntheticInputEvent<EventTarget>) => {
-    this.setState({ email: text.target.value });
+  onEmailChange = (event: SyntheticInputEvent<EventTarget>) => {
+    this.setState({ email: event.target.value });
   };
 
-  onPasswordChange = (text: SyntheticInputEvent<EventTarget>) => {
-    this.setState({ password: text.target.value });
+  onPasswordChange = (event: SyntheticInputEvent<EventTarget>) => {
+    this.setState({ password: event.target.value });
   };
 
   handleIsChecked = () => {

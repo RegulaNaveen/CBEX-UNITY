@@ -9,7 +9,9 @@ import AddQuestionModal from './AddQuestionModal';
 type State = {
   showModal: boolean,
   data: Object,
-  tasks: Array<Object>
+  tasks: Array<Object>,
+  items: Array<Object>,
+  teams: Array<Object>
 };
 
 type Props = {};
@@ -126,6 +128,50 @@ class Proposal extends Component<Props, State> {
           title: 'Medical',
           incomplete: 0
         }
+      ],
+      items: [
+        {
+          id: 0,
+          title: 'Item',
+          selected: false,
+          key: 'Item'
+        },
+        {
+          id: 1,
+          title: 'Item',
+          selected: false,
+          key: 'Item'
+        },
+        {
+          id: 2,
+          title: 'Item',
+          selected: false,
+          key: 'Item'
+        },
+        {
+          id: 3,
+          title: 'Item',
+          selected: false,
+          key: 'Item'
+        }
+      ],
+      teams: [
+        {
+          id: 0,
+          name: 'Business Analyst Business'
+        },
+        {
+          id: 1,
+          name: 'Account Executive'
+        },
+        {
+          id: 2,
+          name: 'Business Analyst'
+        },
+        {
+          id: 3,
+          name: 'Account Executive'
+        }
       ]
     };
   }
@@ -135,8 +181,12 @@ class Proposal extends Component<Props, State> {
     this.setState({ showModal: !showModal });
   };
 
+  onSave = () => {
+    // TODO: Save new question functionality
+  };
+
   render() {
-    const { showModal, data, tasks } = this.state;
+    const { showModal, data, tasks, items, teams } = this.state;
     return (
       <div className="proposal-wrapper">
         <Toolbar />
@@ -152,7 +202,14 @@ class Proposal extends Component<Props, State> {
           </div>
         </div>
         <TasksList tasks={tasks} />
-        {showModal ? <AddQuestionModal onClose={this.onClose} /> : null}
+        {showModal ? (
+          <AddQuestionModal
+            onClose={this.onClose}
+            onSave={this.onSave}
+            items={items}
+            teams={teams}
+          />
+        ) : null}
       </div>
     );
   }
