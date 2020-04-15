@@ -130,26 +130,29 @@ class Proposal extends Component<Props, State> {
     };
   }
 
-  handleModal = () => {
+  onClose = () => {
     const { showModal } = this.state;
     this.setState({ showModal: !showModal });
   };
 
-  return (
-    <div className="proposal-wrapper">
-      <Toolbar />
-      <ProposalInfo data={data} />
-      <div className="tasksList-title-wrapper">
-        <p className="tasksList-title">Questions</p>
-        <div
-          className="tasksList-add-icon-wrapper"
-          role="presentation"
-          //onClick={this.handleModal}
-        >
-          <Add className="tasksList-add-icon" />
+  render() {
+    const { showModal, data, tasks } = this.state;
+    return (
+      <div className="proposal-wrapper">
+        <Toolbar />
+        <ProposalInfo data={data} />
+        <div className="tasksList-title-wrapper">
+          <p className="tasksList-title">Questions</p>
+          <div
+            className="tasksList-add-icon-wrapper"
+            role="presentation"
+            onClick={this.onClose}
+          >
+            <Add className="tasksList-add-icon" />
+          </div>
         </div>
         <TasksList tasks={tasks} />
-        <AddQuestionModal showModal={showModal} />
+        {showModal ? <AddQuestionModal onClose={this.onClose} /> : null}
       </div>
     );
   }

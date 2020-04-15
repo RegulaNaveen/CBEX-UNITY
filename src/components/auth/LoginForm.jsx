@@ -35,7 +35,7 @@ class LoginForm extends Component<Props, State> {
     this.setState({ password: text.target.value });
   };
 
-  handleisChecked = () => {
+  handleIsChecked = () => {
     const { isChecked } = this.state;
     this.setState({ isChecked: !isChecked });
   };
@@ -80,7 +80,7 @@ class LoginForm extends Component<Props, State> {
           id="remember-username-checkbox"
           value="username"
           name="username"
-          onChange={this.handleisChecked}
+          onChange={this.handleIsChecked}
           isChecked={isChecked}
         >
           Remember my username

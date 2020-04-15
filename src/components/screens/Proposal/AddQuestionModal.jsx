@@ -9,7 +9,7 @@ import SelectTeam from '../../common/SelectTeam';
 import Close from '../../svg/Close';
 
 type Props = {
-  showModal: boolean
+  onClose: Function
 };
 
 type State = {
@@ -75,13 +75,9 @@ class AddQuestionModal extends PureComponent<Props, State> {
     };
   }
 
-  handleisChecked = () => {
+  handleIsChecked = () => {
     const { isChecked } = this.state;
     this.setState({ isChecked: !isChecked });
-  };
-
-  onClose = () => {
-    // TODO: Create an action to handle close/open modal
   };
 
   onSave = () => {
@@ -102,110 +98,105 @@ class AddQuestionModal extends PureComponent<Props, State> {
   };
 
   render() {
-    const { showModal } = this.props;
     const { isChecked, items, questionText, teams } = this.state;
-    const handleShowModal = showModal
-      ? 'modal display-bloc'
-      : 'modal display-none';
+    const { onClose } = this.props;
     return (
-      <div className={handleShowModal}>
-        <Modal>
-          <div className="modal-content">
-            <div className="modal-wrapper-title">
-              <div className="modal-segment-title">
-                <p className="modal-title">Add New Question</p>
-                <div
-                  className="close-modal-icon"
-                  role="presentation"
-                  onClick={this.onClose}
-                >
-                  <Close className="close-icon" />
-                </div>
+      <Modal>
+        <div className="modal-content">
+          <div className="modal-wrapper-title">
+            <div className="modal-segment-title">
+              <p className="modal-title">Add New Question</p>
+              <div
+                className="close-modal-icon"
+                role="presentation"
+                onClick={onClose}
+              >
+                <Close className="close-icon" />
               </div>
-              <div className="modal-subtitle">Optional Subtitle</div>
             </div>
-            <div className="modal-wrapper-body">
-              <div className="modal-segment">
-                <TextArea
-                  id="question-text-area"
-                  className="modal-text-area"
-                  value={questionText}
-                  onChange={this.handleQuestionText}
-                  placeholder="Hint text..."
-                  title="Enter Question Text"
-                />
-              </div>
-              <div className="modal-segment">
-                <div className="modal-answer-type">
-                  <Dropdown
-                    id="dd-andwer-type"
-                    placeholder="Select"
-                    items={items}
-                    title="Answer Type"
-                  />
-                </div>
-                <div className="modal-picker">
-                  <p className="dd-title">Label</p>
-                  <div>picker</div>
-                </div>
-              </div>
-              <div className="modal-segment">
+            <div className="modal-subtitle">Optional Subtitle</div>
+          </div>
+          <div className="modal-wrapper-body">
+            <div className="modal-segment">
+              <TextArea
+                id="question-text-area"
+                className="modal-text-area"
+                value={questionText}
+                onChange={this.handleQuestionText}
+                placeholder="Hint text..."
+                title="Enter Question Text"
+              />
+            </div>
+            <div className="modal-segment">
+              <div className="modal-answer-type">
                 <Dropdown
-                  id="dd-team-member"
+                  id="dd-andwer-type"
                   placeholder="Select"
                   items={items}
-                  title="Which team member roles will answer"
+                  title="Answer Type"
                 />
               </div>
-              <div className="modal-segment">
-                {teams.map(team => {
-                  const { id, name } = team;
-                  return (
-                    <SelectTeam
-                      key={id}
-                      id="selected-team-item"
-                      onClick={this.handleDeleteTeam}
-                    >
-                      {name}
-                    </SelectTeam>
-                  );
-                })}
-              </div>
-              <div className="modal-segment">
-                <Checkbox
-                  id="send-notification-checkbox"
-                  value="notification"
-                  name="notification"
-                  onChange={this.handleisChecked}
-                  isChecked={isChecked}
-                >
-                  Send notification now
-                </Checkbox>
+              <div className="modal-picker">
+                <p className="dd-title">Label</p>
+                <div>picker</div>
               </div>
             </div>
-            <div className="modal-wrapper-footer">
-              <div className="modal-button-cancel">
-                <PrimaryButton
-                  className="close-button"
-                  id="cancel-button"
-                  onClick={this.onClose}
-                >
-                  Cancel
-                </PrimaryButton>
-              </div>
-              <div className="modal-button-okay">
-                <PrimaryButton
-                  className="okay-button"
-                  id="okay-button"
-                  onClick={this.onSave}
-                >
-                  Okay
-                </PrimaryButton>
-              </div>
+            <div className="modal-segment">
+              <Dropdown
+                id="dd-team-member"
+                placeholder="Select"
+                items={items}
+                title="Which team member roles will answer"
+              />
+            </div>
+            <div className="modal-segment">
+              {teams.map(team => {
+                const { id, name } = team;
+                return (
+                  <SelectTeam
+                    key={id}
+                    id="selected-team-item"
+                    onClick={this.handleDeleteTeam}
+                  >
+                    {name}
+                  </SelectTeam>
+                );
+              })}
+            </div>
+            <div className="modal-segment">
+              <Checkbox
+                id="send-notification-checkbox"
+                value="notification"
+                name="notification"
+                onChange={this.handleIsChecked}
+                isChecked={isChecked}
+              >
+                Send notification now
+              </Checkbox>
             </div>
           </div>
-        </Modal>
-      </div>
+          <div className="modal-wrapper-footer">
+            <div className="modal-button-cancel">
+              <PrimaryButton
+                className="close-button"
+                id="cancel-button"
+                onClick={onClose}
+              >
+                Cancel
+              </PrimaryButton>
+            </div>
+            <div className="modal-button-okay">
+              <PrimaryButton
+                className="okay-button"
+                id="okay-button"
+                onClick={this.onSave}
+              >
+                Okay
+              </PrimaryButton>
+            </div>
+          </div>
+        </div>
+      </Modal>
     );
   }
 }
