@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
 import sinon from 'sinon';
 import type { stub } from 'sinon';
-import { LinkButton } from '../../../../../src/components/common/Button';
+import { LinkButton } from '../../../../../src/components/common/Buttons';
 
 export default class LinkButtonModel {
   constructor(id: string, children: string, type: string) {
