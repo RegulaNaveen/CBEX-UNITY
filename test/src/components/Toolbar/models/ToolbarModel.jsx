@@ -2,16 +2,21 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
+import type { NavigationHistory } from 'react-router-dom';
 import Toolbar from '../../../../../src/components/Toolbar';
+import ToolbarMenu from '../../../../../src/components/Toolbar/ToolbarMenu';
 
 export default class ProposalInfoModel {
-  constructor() {
-    this._wrapper = shallow(<Toolbar />);
+  constructor(history: NavigationHistory) {
+    const props = { history };
+    this._wrapper = shallow(<Toolbar {...props} />);
     this._titleOneIndex = 0;
     this._titleTwoIndex = 1;
-    this._navigationHomeTitle = 2;
-    this._navigationProposalsTitle = 3;
-    this._navigationQATitle = 4;
+    // TODO: Uncomment and test when navigation is implemented
+    // this._navigationHomeTitle = 2;
+    this._navigationProposalsTitle = 2;
+    // TODO: Uncomment and test when navigation is implemented
+    // this._navigationQATitle = 4;
   }
 
   _wrapper: ShallowWrapper;
@@ -28,7 +33,13 @@ export default class ProposalInfoModel {
 
   _getParagraphs = (): ShallowWrapper => this._wrapper.find('p');
 
-  hasParagraphs = (): boolean => this._getParagraphs().length === 5;
+  _getCollapseButton = (): ShallowWrapper => this._wrapper.find('#menu-title');
+
+  _getToolbarMenu = (): ShallowWrapper => this._wrapper.find(ToolbarMenu);
+
+  hasParagraphs = (): boolean => this._getParagraphs().length === 4;
+
+  hasToolbarMenu = (): boolean => this._getToolbarMenu().length === 1;
 
   getTitleOne = (): string =>
     this._getParagraphs()
@@ -40,18 +51,29 @@ export default class ProposalInfoModel {
       .at(this._titleTwoIndex)
       .prop('children');
 
-  getNavigationHome = (): string =>
-    this._getParagraphs()
-      .at(this._navigationHomeTitle)
-      .prop('children');
+  // TODO: Uncomment and test when navigation is implemented
+  // getNavigationHome = (): string =>
+  //   this._getParagraphs()
+  //     .at(this._navigationHomeTitle)
+  //     .prop('children');
 
   getNavigationProposals = (): string =>
     this._getParagraphs()
       .at(this._navigationProposalsTitle)
       .prop('children');
 
-  getNavigationQA = (): string =>
-    this._getParagraphs()
-      .at(this._navigationQATitle)
-      .prop('children');
+  // TODO: Uncomment and test when navigation is implemented
+  // getNavigationQA = (): string =>
+  //   this._getParagraphs()
+  //     .at(this._navigationQATitle)
+  //     .prop('children');
+
+  // Interactions
+  doClick = () => this._getCollapseButton().simulate('click');
+
+  doEnterKeyPress = () =>
+    this._getCollapseButton().simulate('keypress', {
+      key: 'Enter',
+      preventDefault: () => {}
+    });
 }

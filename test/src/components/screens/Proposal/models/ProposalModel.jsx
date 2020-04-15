@@ -2,13 +2,15 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
+import type { NavigationHistory } from 'react-router-dom';
 import Proposal from '../../../../../../src/components/screens/Proposal';
 import ProposalInfo from '../../../../../../src/components/screens/Proposal/ProposalInfo';
 import TaskList from '../../../../../../src/components/screens/Proposal/TasksList';
 
 export default class ProposalModel {
-  constructor() {
-    this._wrapper = shallow(<Proposal />);
+  constructor(history: NavigationHistory) {
+    const props = { history };
+    this._wrapper = shallow(<Proposal {...props} />);
   }
 
   _wrapper: ShallowWrapper;

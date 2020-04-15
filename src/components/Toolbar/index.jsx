@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import classnames from 'classnames';
 import type { NavigationHistory } from 'react-router-dom';
 import ToolbarMenu from './ToolbarMenu';
-import { DropMenu, User, Help, Settings } from '../svg';
+import { DropMenu } from '../svg';
 
 type State = {
   isCollapsed: boolean
@@ -18,7 +18,7 @@ class Toolbar extends Component<Props, State> {
     super(props);
 
     this.state = {
-      isCollapsed: true
+      isCollapsed: false
     };
   }
 
@@ -50,6 +50,7 @@ class Toolbar extends Component<Props, State> {
                 'toolbar-account-info',
                 isCollapsed && 'expanded'
               )}
+              id="menu-title"
               role="button"
               onClick={this.handleCollapse}
               onKeyPress={this.handleKeyPress}
