@@ -16,7 +16,7 @@ type State = {
   isChecked: boolean,
   isCollapsed: boolean,
   location: Array<Object>,
-  inputText: string,
+  questionText: string,
   teams: Array<Object>
 };
 
@@ -27,7 +27,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
     this.state = {
       isChecked: false,
       isCollapsed: false,
-      inputText: '',
+      questionText: '',
       location: [
         {
           id: 0,
@@ -80,11 +80,11 @@ class AddQuestionModal extends PureComponent<Props, State> {
     this.setState({ isChecked: !isChecked });
   };
 
-  handleModal = () => {
+  onClose = () => {
     // TODO: Create an action to handle close/open modal
   };
 
-  handleOkay = () => {
+  onSave = () => {
     // TODO: Save new question functionality
   };
 
@@ -92,8 +92,8 @@ class AddQuestionModal extends PureComponent<Props, State> {
     // TODO: Delete a team item
   };
 
-  handleInputText = (text: SyntheticInputEvent<EventTarget>) => {
-    this.setState({ inputText: text.target.value });
+  handlequestionText = (text: SyntheticInputEvent<EventTarget>) => {
+    this.setState({ questionText: text.target.value });
   };
 
   toggleList = () => {
@@ -103,7 +103,13 @@ class AddQuestionModal extends PureComponent<Props, State> {
 
   render() {
     const { showModal } = this.props;
-    const { isChecked, isCollapsed, location, inputText, teams } = this.state;
+    const {
+      isChecked,
+      isCollapsed,
+      location,
+      questionText,
+      teams
+    } = this.state;
     const handleShowModal = showModal
       ? 'modal display-bloc'
       : 'modal display-none';
@@ -111,26 +117,26 @@ class AddQuestionModal extends PureComponent<Props, State> {
       <div className={handleShowModal}>
         <Modal>
           <div className="modal-content">
-            <header className="modal-title">
+            <div className="modal-title">
               <div className="question-segment-title">
                 <p className="question-title">Add New Question</p>
                 <div
                   className="close-modal-icon"
                   role="presentation"
-                  onClick={this.handleModal}
+                  onClick={this.onClose}
                 >
                   <Close className="close-icon" />
                 </div>
               </div>
               <div className="question-subtitle">Optional Subtitle</div>
-            </header>
+            </div>
             <div className="body-wrapper">
               <div className="question-segment">
                 <TextArea
                   id="question-text-area"
                   className="modal-text-area"
-                  value={inputText}
-                  onChange={this.handleInputText}
+                  value={questionText}
+                  onChange={this.handlequestionText}
                   placeholder="Hint text..."
                   title="Enter Question Text"
                 />
@@ -187,12 +193,12 @@ class AddQuestionModal extends PureComponent<Props, State> {
                 </Checkbox>
               </div>
             </div>
-            <footer className="question-segment-footer">
+            <div className="question-segment-footer">
               <div className="question-button-cancel">
                 <PrimaryButton
                   className="close-button"
                   id="cancel-button"
-                  onClick={this.handleModal}
+                  onClick={this.onClose}
                 >
                   Cancel
                 </PrimaryButton>
@@ -201,12 +207,12 @@ class AddQuestionModal extends PureComponent<Props, State> {
                 <PrimaryButton
                   className="okay-button"
                   id="okay-button"
-                  onClick={this.handleOkay}
+                  onClick={this.onSave}
                 >
                   Okay
                 </PrimaryButton>
               </div>
-            </footer>
+            </div>
             <div className="modal-content" />
           </div>
         </Modal>
