@@ -4,14 +4,14 @@ import { describe, it } from 'mocha';
 import ToolbarMenuModel from './models/ToolbarMenuModel';
 
 describe('ToolbarMenu component', () => {
+  const name = 'Test Name';
+  const email = 'Test Name';
+
+  const profileText = 'Profile';
+  const settingsText = 'Settings';
+  const helpText = 'Help';
+
   describe('rendering', () => {
-    const name = 'Test Name';
-    const email = 'Test Name';
-
-    const profileText = 'Profile';
-    const settingsText = 'Settings';
-    const helpText = 'Help';
-
     it('should render all Paragraphs component', () => {
       const wrapper = new ToolbarMenuModel(name, email);
       expect(wrapper.hasParagraphs()).toBe(true);
@@ -19,27 +19,58 @@ describe('ToolbarMenu component', () => {
 
     it('should render Name prop text', () => {
       const wrapper = new ToolbarMenuModel(name, email);
-      expect(wrapper.getName()).toBe(name);
+      expect(wrapper.hasName()).toBe(name);
     });
 
     it('should render Email prop text', () => {
       const wrapper = new ToolbarMenuModel(name, email);
-      expect(wrapper.getEmail()).toBe(email);
+      expect(wrapper.hasEmail()).toBe(email);
     });
 
     it('should render Profile text', () => {
       const wrapper = new ToolbarMenuModel(name, email);
-      expect(wrapper.getProfileText()).toBe(profileText);
+      expect(wrapper.hasProfileText()).toBe(profileText);
+    });
+
+    it('should render Profile icon', () => {
+      const wrapper = new ToolbarMenuModel(name, email);
+      expect(wrapper.hasProfileIcon()).toBe(true);
     });
 
     it('should render Settings text', () => {
       const wrapper = new ToolbarMenuModel(name, email);
-      expect(wrapper.getSettingsText()).toBe(settingsText);
+      expect(wrapper.hasSettingsText()).toBe(settingsText);
+    });
+
+    it('should render Settings icon', () => {
+      const wrapper = new ToolbarMenuModel(name, email);
+      expect(wrapper.hasSettingsIcon()).toBe(true);
     });
 
     it('should render Help text', () => {
       const wrapper = new ToolbarMenuModel(name, email);
-      expect(wrapper.getHelpText()).toBe(helpText);
+      expect(wrapper.hasHelpText()).toBe(helpText);
+    });
+
+    it('should render Help icon', () => {
+      const wrapper = new ToolbarMenuModel(name, email);
+      expect(wrapper.hasHelpIcon()).toBe(true);
+    });
+  });
+
+  describe('interactions', () => {
+    it('should execute handleLogout function properly', () => {
+      const wrapper = new ToolbarMenuModel(name, email);
+      wrapper.handleEventOnClick();
+      expect(wrapper.onHandleEventCalledOnce()).toBe(true);
+      wrapper.resetEventHandlers();
+    });
+
+    it('should execute onKeyPress function properly', () => {
+      const wrapper = new ToolbarMenuModel(name, email);
+      wrapper.handleEventOnKeyPress();
+      expect(wrapper.onHandleEventCalledOnce()).toBe(true);
+      wrapper.resetEventHandlers();
     });
   });
 });

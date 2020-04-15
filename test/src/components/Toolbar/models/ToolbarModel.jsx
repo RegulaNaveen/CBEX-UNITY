@@ -2,14 +2,12 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
-import type { NavigationHistory } from 'react-router-dom';
 import Toolbar from '../../../../../src/components/Toolbar';
 import ToolbarMenu from '../../../../../src/components/Toolbar/ToolbarMenu';
 
 export default class ProposalInfoModel {
-  constructor(history: NavigationHistory) {
-    const props = { history };
-    this._wrapper = shallow(<Toolbar {...props} />);
+  constructor() {
+    this._wrapper = shallow(<Toolbar />);
     this._titleOneIndex = 0;
     this._titleTwoIndex = 1;
     // TODO: Uncomment and test when navigation is implemented

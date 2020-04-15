@@ -5,6 +5,47 @@ import { withRouter } from 'react-router-dom';
 import { LOGIN } from '../../routes';
 import { User, Help, Settings } from '../svg';
 
+type ComponentProps = {
+  name: string,
+  email: string,
+  handleLogout: Function,
+  handleKeyPress: Function
+};
+
+export const ToolbarMenuComponent = (props: ComponentProps) => {
+  const { name, email, handleLogout, handleKeyPress } = props;
+
+  return (
+    <div className="toolbar-account-menu">
+      <p className="toolbar-account-menu-name">{name}</p>
+      <p className="toolbar-account-menu-email">{email}</p>
+      <div className="toolbar-account-menu-separator" />
+      <div className="toolbar-account-menu-option">
+        <User className="toolbar-account-menu-option-icon" />
+        <p className="toolbar-account-menu-option-title">Profile</p>
+      </div>
+      <div className="toolbar-account-menu-option">
+        <Settings className="toolbar-account-menu-option-icon" />
+        <p className="toolbar-account-menu-option-title">Settings</p>
+      </div>
+      <div className="toolbar-account-menu-option">
+        <Help className="toolbar-account-menu-option-icon" />
+        <p className="toolbar-account-menu-option-title">Help</p>
+      </div>
+      <div
+        id="logout-button"
+        className="toolbar-account-menu-button"
+        onClick={handleLogout}
+        onKeyPress={handleKeyPress}
+        role="button"
+        tabIndex={-1}
+      >
+        Log out
+      </div>
+    </div>
+  );
+};
+
 type Props = {
   name: string,
   email: string,
@@ -27,32 +68,12 @@ const ToolbarMenu = (props: Props) => {
   }
 
   return (
-    <div className="toolbar-account-menu">
-      <p className="toolbar-account-menu-name">{name}</p>
-      <p className="toolbar-account-menu-email">{email}</p>
-      <div className="toolbar-account-menu-separator" />
-      <div className="toolbar-account-menu-option">
-        <User className="toolbar-account-menu-option-icon" />
-        <p className="toolbar-account-menu-option-title">Profile</p>
-      </div>
-      <div className="toolbar-account-menu-option">
-        <Settings className="toolbar-account-menu-option-icon" />
-        <p className="toolbar-account-menu-option-title">Settings</p>
-      </div>
-      <div className="toolbar-account-menu-option">
-        <Help className="toolbar-account-menu-option-icon" />
-        <p className="toolbar-account-menu-option-title">Help</p>
-      </div>
-      <div
-        className="toolbar-account-menu-button"
-        onClick={handleLogout}
-        onKeyPress={handleKeyPress}
-        role="button"
-        tabIndex={-1}
-      >
-        Log out
-      </div>
-    </div>
+    <ToolbarMenuComponent
+      name={name}
+      email={email}
+      handleLogout={handleLogout}
+      handleKeyPress={handleKeyPress}
+    />
   );
 };
 
