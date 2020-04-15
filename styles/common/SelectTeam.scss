@@ -8,7 +8,8 @@
   margin-right: 15.7px;
   margin-bottom: 5px;
   padding-left: 12px;
-  padding-right: 9px;
+  width: 195px;
+  justify-content: space-between;
 
   .selected-team-title {
     height: 24px;
@@ -19,9 +20,16 @@
     letter-spacing: 0;
     line-height: 24px;
     margin-right: 9px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    display: block;
+    overflow: hidden;
   }
 
   .delete-team-icon {
+    position: relative;
+    right: 9px;
     cursor: pointer;
   }
 }

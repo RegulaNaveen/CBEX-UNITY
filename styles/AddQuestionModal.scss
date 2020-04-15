@@ -1,4 +1,4 @@
-.modal-content{
+.modal-content {
   display: flex;
   width: 100%;
   height: 100%;
@@ -13,19 +13,14 @@
   display: none;
 }
 
-.body-wrapper {
-  flex-direction: column;
-  margin-bottom: 40px;
-}
-
-.modal-title {
+.modal-wrapper-title {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   margin-bottom: 16px;
 }
 
-.question-title {
+.modal-title {
   height: 32px;
   width: 522px;
   color: $black;
@@ -36,7 +31,7 @@
   line-height: 32px;
 }
 
-.question-subtitle {
+.modal-subtitle {
   height: 24px;
   width: 190.06px;
   color: $black;
@@ -46,13 +41,19 @@
   line-height: 24px;
 }
 
-.question-segment-title {
+.modal-segment-title {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.question-segment {
+
+.modal-wrapper-body {
+  flex-direction: column;
+  margin-bottom: 40px;
+}
+
+.modal-segment {
   display: flex;
   flex-direction: row;
   margin-bottom: 24px;
@@ -60,23 +61,19 @@
   flex-wrap: wrap;
 }
 
-.question-segment-footer {
+.modal-wrapper-footer {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
 }
 
-.question-button-cancel {
+.modal-button-cancel {
   margin-right: 8px;
 }
 
-.dd-answer-type {
+.modal-answer-type {
   width: 352px;
   margin-right: 17px;
-}
-
-.question-picker {
-  width: 174px;
 }
 
 .modal-text-area {

@@ -57,7 +57,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
       teams: [
         {
           id: 0,
-          name: 'Business Analyst'
+          name: 'Business Analyst Business'
         },
         {
           id: 1,
@@ -117,9 +117,9 @@ class AddQuestionModal extends PureComponent<Props, State> {
       <div className={handleShowModal}>
         <Modal>
           <div className="modal-content">
-            <div className="modal-title">
-              <div className="question-segment-title">
-                <p className="question-title">Add New Question</p>
+            <div className="modal-wrapper-title">
+              <div className="modal-segment-title">
+                <p className="modal-title">Add New Question</p>
                 <div
                   className="close-modal-icon"
                   role="presentation"
@@ -128,10 +128,10 @@ class AddQuestionModal extends PureComponent<Props, State> {
                   <Close className="close-icon" />
                 </div>
               </div>
-              <div className="question-subtitle">Optional Subtitle</div>
+              <div className="modal-subtitle">Optional Subtitle</div>
             </div>
-            <div className="body-wrapper">
-              <div className="question-segment">
+            <div className="modal-wrapper-body">
+              <div className="modal-segment">
                 <TextArea
                   id="question-text-area"
                   className="modal-text-area"
@@ -141,8 +141,8 @@ class AddQuestionModal extends PureComponent<Props, State> {
                   title="Enter Question Text"
                 />
               </div>
-              <div className="question-segment">
-                <div className="dd-answer-type">
+              <div className="modal-segment">
+                <div className="modal-answer-type">
                   <Dropdown
                     id="dd-andwer-type"
                     placeholder="Select"
@@ -152,12 +152,12 @@ class AddQuestionModal extends PureComponent<Props, State> {
                     title="Answer Type"
                   />
                 </div>
-                <div className="question-picker">
+                <div className="modal-picker">
                   <p className="dd-title">Label</p>
                   <div>picker</div>
                 </div>
               </div>
-              <div className="question-segment">
+              <div className="modal-segment">
                 <Dropdown
                   id="dd-team-member"
                   placeholder="Select"
@@ -167,7 +167,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
                   title="Which team member roles will answer"
                 />
               </div>
-              <div className="question-segment">
+              <div className="modal-segment">
                 {teams.map(team => {
                   const { id, name } = team;
                   return (
@@ -181,7 +181,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
                   );
                 })}
               </div>
-              <div className="question-segment">
+              <div className="modal-segment">
                 <Checkbox
                   id="send-notification-checkbox"
                   value="notification"
@@ -193,8 +193,8 @@ class AddQuestionModal extends PureComponent<Props, State> {
                 </Checkbox>
               </div>
             </div>
-            <div className="question-segment-footer">
-              <div className="question-button-cancel">
+            <div className="modal-wrapper-footer">
+              <div className="modal-button-cancel">
                 <PrimaryButton
                   className="close-button"
                   id="cancel-button"
@@ -203,7 +203,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
                   Cancel
                 </PrimaryButton>
               </div>
-              <div className="question-button-okay">
+              <div className="modal-button-okay">
                 <PrimaryButton
                   className="okay-button"
                   id="okay-button"
@@ -213,7 +213,6 @@ class AddQuestionModal extends PureComponent<Props, State> {
                 </PrimaryButton>
               </div>
             </div>
-            <div className="modal-content" />
           </div>
         </Modal>
       </div>
