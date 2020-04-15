@@ -15,7 +15,7 @@ type Props = {
 type State = {
   isChecked: boolean,
   isCollapsed: boolean,
-  location: Array<Object>,
+  items: Array<Object>,
   questionText: string,
   teams: Array<Object>
 };
@@ -28,30 +28,30 @@ class AddQuestionModal extends PureComponent<Props, State> {
       isChecked: false,
       isCollapsed: false,
       questionText: '',
-      location: [
+      items: [
         {
           id: 0,
-          title: 'New York',
+          title: 'Item',
           selected: false,
-          key: 'location'
+          key: 'Item'
         },
         {
           id: 1,
-          title: 'Dublin',
+          title: 'Item',
           selected: false,
-          key: 'location'
+          key: 'Item'
         },
         {
           id: 2,
-          title: 'California',
+          title: 'Item',
           selected: false,
-          key: 'location'
+          key: 'Item'
         },
         {
           id: 3,
-          title: 'Istanbul',
+          title: 'Item',
           selected: false,
-          key: 'location'
+          key: 'Item'
         }
       ],
       teams: [
@@ -92,7 +92,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
     // TODO: Delete a team item
   };
 
-  handlequestionText = (text: SyntheticInputEvent<EventTarget>) => {
+  handleQuestionText = (text: SyntheticInputEvent<EventTarget>) => {
     this.setState({ questionText: text.target.value });
   };
 
@@ -103,13 +103,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
 
   render() {
     const { showModal } = this.props;
-    const {
-      isChecked,
-      isCollapsed,
-      location,
-      questionText,
-      teams
-    } = this.state;
+    const { isChecked, items, questionText, teams } = this.state;
     const handleShowModal = showModal
       ? 'modal display-bloc'
       : 'modal display-none';
@@ -136,7 +130,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
                   id="question-text-area"
                   className="modal-text-area"
                   value={questionText}
-                  onChange={this.handlequestionText}
+                  onChange={this.handleQuestionText}
                   placeholder="Hint text..."
                   title="Enter Question Text"
                 />
@@ -146,9 +140,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
                   <Dropdown
                     id="dd-andwer-type"
                     placeholder="Select"
-                    isCollapsed={isCollapsed}
-                    items={location}
-                    onClick={this.toggleList}
+                    items={items}
                     title="Answer Type"
                   />
                 </div>
@@ -161,9 +153,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
                 <Dropdown
                   id="dd-team-member"
                   placeholder="Select"
-                  isCollapsed={isCollapsed}
-                  items={location}
-                  onClick={this.toggleList}
+                  items={items}
                   title="Which team member roles will answer"
                 />
               </div>

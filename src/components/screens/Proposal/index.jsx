@@ -130,22 +130,10 @@ class Proposal extends Component<Props, State> {
     };
   }
 
-  componentDidMount() {
-    document.addEventListener('keydown', this.escFunction);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.escFunction);
-  }
-
-  escFunction = (event: KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      // TODO: Create and then use the action to handle modal
-      this.handleModal();
-    }
+  handleModal = () => {
+    const { showModal } = this.state;
+    this.setState({ showModal: !showModal });
   };
-
-  // const { history } = props;
 
   return (
     <div className="proposal-wrapper">
