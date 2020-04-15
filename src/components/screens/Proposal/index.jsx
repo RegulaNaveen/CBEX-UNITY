@@ -1,10 +1,15 @@
 // @flow
 import React from 'react';
+import type { NavigationHistory } from 'react-router-dom';
 import ProposalInfo from './ProposalInfo';
 import TasksList from './TasksList';
 import Toolbar from '../../Toolbar';
 
-const Proposal = () => {
+type Props = {
+  history: NavigationHistory
+};
+
+const Proposal = (props: Props) => {
   const data = {
     title: 'RFP-1028',
     accountExecutive: 'Jan Levinson-Gould',
@@ -114,9 +119,11 @@ const Proposal = () => {
     }
   ];
 
+  const { history } = props;
+
   return (
     <div className="proposal-wrapper">
-      <Toolbar />
+      <Toolbar history={history} />
       <ProposalInfo data={data} />
       <TasksList tasks={tasks} />
     </div>

@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import classnames from 'classnames';
+import type { NavigationHistory } from 'react-router-dom';
 import ToolbarMenu from './ToolbarMenu';
 import { DropMenu, User, Help, Settings } from '../svg';
 
@@ -8,7 +9,9 @@ type State = {
   isCollapsed: boolean
 };
 
-type Props = {};
+type Props = {
+  history: NavigationHistory
+};
 
 class Toolbar extends Component<Props, State> {
   constructor(props: Object) {
@@ -32,6 +35,7 @@ class Toolbar extends Component<Props, State> {
 
   render() {
     const { isCollapsed } = this.state;
+    const { history } = this.props;
     return (
       <div className="toolbar-wrapper">
         <p className="toolbar-title-one">IQVIA™</p>
@@ -56,7 +60,11 @@ class Toolbar extends Component<Props, State> {
               <DropMenu className="toolbar-account-info-icon" />
             </div>
             {isCollapsed ? (
-              <ToolbarMenu name="Oliver Queen" email="oliver.queen@iqvia.com" />
+              <ToolbarMenu
+                name="Oliver Queen"
+                email="oliver.queen@iqvia.com"
+                history={history}
+              />
             ) : null}
           </div>
         </div>

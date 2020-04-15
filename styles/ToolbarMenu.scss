@@ -67,13 +67,18 @@
     height: 40px;
     width: 100%;
     border-radius: 4px;
-    background-color: #F2F2F2;
+    background-color: $neutral2;
     margin-top: 8px;
+    cursor: pointer;
     color: $neutral7;
     font-family: $proximaNova;
     font-size: 16px;
     font-weight: 500;
     letter-spacing: 0;
     line-height: 21px;
+
+    &:hover {
+      background-color: $neutral4;
+    }
   }
 }
