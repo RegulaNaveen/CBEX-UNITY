@@ -12,6 +12,32 @@
 .dd-wrapper{
   position: relative;
   width: 100%;
+
+  .dd-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    top:45px;
+    right:0px;
+    width: 100%;
+    background-color: $white;
+    position: absolute;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    font-family: $proximaNova;
+    font-size: 16px;
+    letter-spacing: 0;
+    line-height: 24px;
+    cursor: pointer;
+      
+    .dd-list-item {
+      padding: 8px 16px;
+      border-bottom: 1px solid #e5e5e5;
+        
+      &:hover {
+        background-color: $neptune-hover;
+      }
+    }
   }
 
   .dd-header{
@@ -26,12 +52,10 @@
     cursor: pointer;
 
     .dd-header-title {
-      font-family: $proximaNova;
-      color: $neutral6;
+      font-family: "Proxima Nova";
+      font-weight:bold;
+      color: lightgrey;
       margin-left: 5px;
-      font-size: 16px;
-      letter-spacing: 0;
-      line-height: 24px;
     }
       
     &:before{
@@ -43,34 +67,6 @@
       border-color: $neutral8 transparent transparent transparent;
       right: 6px;
       top: 18px;
-    }
-  }
-
-
-.dd-list {
-  list-style-type: none;
-  background-color: $white;
-  font-family: $proximaNova;
-  font-size: 16px;
-  letter-spacing: 0;
-  line-height: 24px;
-
-  box-sizing: border-box;
-  background-color: $white;
-  height: 40px;
-  width: 100%;
-  border: 1px solid #D9D9D9;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0);
-  padding-left: 8px;
-  cursor: pointer;
-    
-  .dd-list-item {
-    padding: 8px 16px;
-    border-bottom: 1px solid #e5e5e5;
-      
-    &:hover {
-      background-color: $neptune-hover;
     }
   }
 }
