@@ -132,25 +132,25 @@ class Proposal extends Component<Props, State> {
       items: [
         {
           id: 0,
-          title: 'Item',
+          title: 'Item 1',
           selected: false,
           key: 'Item'
         },
         {
           id: 1,
-          title: 'Item',
+          title: 'Item 2',
           selected: false,
           key: 'Item'
         },
         {
           id: 2,
-          title: 'Item',
+          title: 'Item 3',
           selected: false,
           key: 'Item'
         },
         {
           id: 3,
-          title: 'Item',
+          title: 'Item 4',
           selected: false,
           key: 'Item'
         }
