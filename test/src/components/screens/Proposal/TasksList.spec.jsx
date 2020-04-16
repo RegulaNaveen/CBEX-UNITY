@@ -93,12 +93,6 @@ describe('TasksList component', () => {
       }
     ];
 
-    it('should render proper Title text', () => {
-      const wrapper = new TasksListModel(tasks);
-      expect(wrapper.hasParagraph()).toBe(true);
-      expect(wrapper.getTitle()).toBe('Questions');
-    });
-
     it('should render proper ammount of Task components', () => {
       const wrapper = new TasksListModel(tasks);
       const tasksLength = tasks.length;
