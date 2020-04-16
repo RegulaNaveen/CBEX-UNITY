@@ -2,7 +2,7 @@
 @import 'Body';
 @import 'common/InputField';
 @import 'common/Checkbox';
-@import 'common/Buttons';
+@import 'common/Button';
 @import 'Auth';
 @import 'Proposal';
 @import 'ProposalInfo';
@@ -10,3 +10,8 @@
 @import 'Task';
 @import 'Toolbar';
 @import 'ToolbarMenu';
+@import 'common/Modal';
+@import 'AddQuestionModal.scss';
+@import './common/Dropdown.scss';
+@import './common/TextArea.scss';
+@import './common/SelectTeam.scss';

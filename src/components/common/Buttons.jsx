@@ -1,32 +1,41 @@
 // @flow
 import React from 'react';
+import classnames from 'classnames';
 
 type Props = {
   id?: string,
   children: string,
-  type: string,
-  onClick: Function
+  onClick: Function,
+  className?: string
 };
-
-const PrimaryButton = ({ id, type, onClick, children }: Props) => (
-  // eslint-disable-next-line react/button-has-type
-  <button id={id} type={type} className="primary-button" onClick={onClick}>
-    {children}
-  </button>
-);
-
-const LinkButton = ({ id, type, onClick, children }: Props) => (
-  // eslint-disable-next-line react/button-has-type
-  <button id={id} type={type} className="link-button" onClick={onClick}>
-    {children}
-  </button>
-);
 
 const defaultProps = {
-  id: undefined
+  id: undefined,
+  className: undefined
 };
 
-PrimaryButton.defaultProps = defaultProps;
-LinkButton.defaultProps = defaultProps;
+export const PrimaryButton = ({ id, onClick, children, className }: Props) => (
+  <button
+    id={id}
+    type="button"
+    className={classnames('primary-button', className)}
+    onClick={onClick}
+  >
+    {children}
+  </button>
+);
 
-export { PrimaryButton, LinkButton };
+PrimaryButton.defaultProps = defaultProps;
+
+export const LinkButton = ({ id, onClick, children, className }: Props) => (
+  <button
+    id={id}
+    type="button"
+    className={classnames('link-button', className)}
+    onClick={onClick}
+  >
+    {children}
+  </button>
+);
+
+LinkButton.defaultProps = defaultProps;

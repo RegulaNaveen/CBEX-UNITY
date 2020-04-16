@@ -9,7 +9,7 @@ import Checkbox from '../common/Checkbox';
 type State = {
   email: string,
   password: string,
-  checked: boolean
+  isChecked: boolean
 };
 
 type Props = {
@@ -23,21 +23,21 @@ class LoginForm extends Component<Props, State> {
     this.state = {
       email: '',
       password: '',
-      checked: false
+      isChecked: false
     };
   }
 
-  onEmailChange = (text: SyntheticInputEvent<EventTarget>) => {
-    this.setState({ email: text.target.value });
+  onEmailChange = (event: SyntheticInputEvent<EventTarget>) => {
+    this.setState({ email: event.target.value });
   };
 
-  onPasswordChange = (text: SyntheticInputEvent<EventTarget>) => {
-    this.setState({ password: text.target.value });
+  onPasswordChange = (event: SyntheticInputEvent<EventTarget>) => {
+    this.setState({ password: event.target.value });
   };
 
-  handleChecked = () => {
-    const { checked } = this.state;
-    this.setState({ checked: !checked });
+  handleIsChecked = () => {
+    const { isChecked } = this.state;
+    this.setState({ isChecked: !isChecked });
   };
 
   handleLogin = () => {
@@ -52,7 +52,7 @@ class LoginForm extends Component<Props, State> {
   };
 
   render() {
-    const { checked, email, password } = this.state;
+    const { isChecked, email, password } = this.state;
     return (
       <div className="form-wrapper">
         <p className="form-title">IQVIA Unity</p>
@@ -80,24 +80,19 @@ class LoginForm extends Component<Props, State> {
           id="remember-username-checkbox"
           value="username"
           name="username"
-          onChange={this.handleChecked}
-          checked={checked}
+          onChange={this.handleIsChecked}
+          isChecked={isChecked}
         >
           Remember my username
         </Checkbox>
         <div className="login-button-wrapper">
           <div className="login-button">
-            <PrimaryButton
-              type="submit"
-              id="login-button"
-              onClick={this.handleLogin}
-            >
+            <PrimaryButton id="login-button" onClick={this.handleLogin}>
               Log in
             </PrimaryButton>
           </div>
           <div className="forgot-password-link">
             <LinkButton
-              type="submit"
               id="forgot-password"
               onClick={this.handleForgotPassword}
             >

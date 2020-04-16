@@ -17,12 +17,6 @@ export default class TaskListModel {
 
   _getTasks = (): ShallowWrapper => this._wrapper.find(Task);
 
-  _getParagraph = (): ShallowWrapper => this._wrapper.find('p');
-
   hasTasks = (tasksLength: number): boolean =>
     this._getTasks().length === tasksLength;
-
-  hasParagraph = (): boolean => this._getParagraph().length === 1;
-
-  getTitle = (): string => this._getParagraph().prop('children');
 }

@@ -1,0 +1,41 @@
+.text-area-title {
+  height: 24px;
+  width: 100%;
+  color: $neutral8;
+  font-family: $proximaNova;
+  font-size: 14px;
+  letter-spacing: 0;
+  line-height: 24px;
+  margin-bottom: 4px;
+}
+
+.text-area-wrapper {
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  border: 1px solid $neutral4;
+  border-radius: 4px;
+  background-color: $white;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0);
+  outline: none;
+  font-family: $proximaNova;
+  padding: 8px;
+  resize: none;
+}
+
+.modal-text-area {
+  box-sizing: border-box;
+  height: 94px;
+  width: 100%;
+  border: 1px solid $neutral4;
+  border-radius: 4px;
+  background-color: $white;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0);
+  outline: none;
+  font-family: $proximaNova;
+  padding: 8px;
+  resize: none;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: 24px;
+}

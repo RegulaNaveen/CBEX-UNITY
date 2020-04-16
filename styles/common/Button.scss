@@ -1,0 +1,89 @@
+.primary-button {
+  height: 40px;
+  width: 303px;
+  background-color: $blue;
+  color: white;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  outline: none;
+
+  &:hover {
+    background-color: $darkerBlue;
+  }
+}
+
+.link-button {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 24px;
+  color: $blue;
+  cursor: pointer;
+  text-align: left;
+  border: none;
+  background-color: Transparent;
+  outline: none;
+
+  &:hover {
+    color: $blue;
+    text-decoration: underline;
+    text-decoration-color: $blue;
+  }
+
+  &:focus {
+    color: $blue;
+    outline: 1px solid $blue;
+    text-decoration: underline;
+  }
+}
+
+.close-button {
+  height: 40px;
+  width: 81px;
+  background-color: $blue;
+  color: $neutral8;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  background-color: $neutral2;
+  font-family: $proximaNova;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 24px;
+  outline: none;
+
+  &:hover {
+    background-color: $neutral4;
+  }
+}
+
+.okay-button {
+  height: 40px;
+  width: 81px;
+  background-color: $blue;
+  color: white;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  font-family: $proximaNova;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 24px;
+  outline: none;
+
+  &:hover {
+    background-color: $darkerBlue;
+  }
+}
+
+@media (max-width: $loginResponsiveWidth) {
+  .link-button {
+    text-align: center;
+  }
+}
