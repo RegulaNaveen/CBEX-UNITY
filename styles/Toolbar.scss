@@ -1,7 +1,7 @@
 .toolbar-wrapper {
   flex: 1;
   display: flex;
-  height: 57px;
+  height: $toolbarHight;
   background: linear-gradient(270deg, #0076AE 0%, #250056 100%);
   align-items: center;
   padding-left: 24px;
@@ -26,12 +26,11 @@
 
   .toolbar-navigation-wrapper {
     display: flex;
-    width: 307px;
-    height: 57px;
+    height: $toolbarHight;
     margin-left: 108px;
 
     .toolbar-navigation-title {
-      flex: 1;
+      width: 105px;
       display: flex;
       color: $white;
       font-family: $proximaNova;
@@ -43,8 +42,63 @@
       cursor: pointer;
     }
 
-    .proposals {
+    .selected {
       background-color: rgba(255,255,255,0.16);
+    }
+  }
+
+  .toolbar-account-spacer {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+
+    .toolbar-account-wrapper {
+      display: flex;
+      width: 146px;
+      height: $toolbarHight;
+
+      &:hover { 
+        background-color: rgba(255,255,255,0.16);
+      }
+    
+      .toolbar-account-search {
+        height: 20px;
+        width: 20px;
+        padding: 18px;
+      }
+    
+      .toolbar-account-notifications {
+        height: 20px;
+        width: 20px;
+        padding: 18px;
+      }
+
+      .toolbar-account-info {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        outline: none;
+        cursor: pointer;
+
+        &-title {
+          color: $white;
+          font-family: $proximaNova;
+          font-size: 16px;
+          letter-spacing: 0;
+          line-height: 24px;
+        }
+
+        &-icon {
+          margin-left: 8px;
+          height: 18px;
+          width: 18px;
+        }
+      }
+
+      .expanded {
+        background-color: #593D7E;
+      }
     }
   }
 }

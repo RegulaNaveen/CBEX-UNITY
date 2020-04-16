@@ -114,6 +114,8 @@ const Proposal = () => {
     }
   ];
 
+  // const { history } = props;
+
   return (
     <div className="proposal-wrapper">
       <Toolbar />

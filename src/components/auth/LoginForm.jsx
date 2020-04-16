@@ -44,7 +44,6 @@ class LoginForm extends Component<Props, State> {
     // TODO: Login functionality
     // TODO: Remove navigation test code
     const { history } = this.props;
-    console.log(this.props);
     history.push(PROPOSALS);
   };
 
