@@ -40,7 +40,9 @@ class Dropdown extends Component<Props, State> {
     const { id, placeholder, items, title } = this.props;
     return (
       <>
-        <p className="dd-title">{title}</p>
+        <p id="dd-title" className="dd-title">
+          {title}
+        </p>
         <div className="dd-wrapper">
           <div
             id={id}
@@ -51,7 +53,7 @@ class Dropdown extends Component<Props, State> {
             {selectedValue ? (
               <div className="dd-header-selected">{selectedValue}</div>
             ) : (
-              <div className="dd-header-title">{placeholder}</div>
+              <div className="dd-header-placeholder">{placeholder}</div>
             )}
           </div>
           {isCollapsed && (

@@ -37,7 +37,7 @@ export default class TaskModel {
   _getQuestionRows = (): ShallowWrapper =>
     this._wrapper.find('div.task-table-row');
 
-  getTitle = (): string => this._getTitleParagraph().prop('children');
+  getTitle = (): string => this._getParagraphs().prop('children');
 
   getCompleteText = (): string =>
     this._getCompleteStatus()
