@@ -1,5 +1,6 @@
 // @flow
 import React, { Component } from 'react';
+import DropdownItem from './DropdownItem';
 
 type Props = {
   id: string,
@@ -28,15 +29,14 @@ class Dropdown extends Component<Props, State> {
     this.setState({ isCollapsed: !isCollapsed });
   };
 
-  onClick = (value: string) => {
+  handleClick = (value: string) => {
     this.setState({ selectedValue: value }, () => {
       this.handleCollapse();
     });
-    console.log(value);
   };
 
   render() {
-    const { isCollapsed } = this.state;
+    const { isCollapsed, selectedValue } = this.state;
     const { id, placeholder, items, title } = this.props;
     return (
       <>
@@ -48,20 +48,20 @@ class Dropdown extends Component<Props, State> {
             role="presentation"
             onClick={this.handleCollapse}
           >
-            <div className="dd-header-title">{placeholder}</div>
+            {selectedValue ? (
+              <div className="dd-header-selected">{selectedValue}</div>
+            ) : (
+              <div className="dd-header-title">{placeholder}</div>
+            )}
           </div>
           {isCollapsed && (
             <ul className="dd-list">
               {items.map(item => (
-                <li
-                  role="presentation"
-                  className="dd-list-item"
-                  key={item.id}
-                  // eslint-disable-next-line react/jsx-no-bind
-                  onClick={() => this.onClick(item.title)}
-                >
-                  {item.title}
-                </li>
+                <DropdownItem
+                  onClick={this.handleClick}
+                  item={item.title}
+                  id={item.id}
+                />
               ))}
             </ul>
           )}

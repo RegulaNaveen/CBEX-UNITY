@@ -32,7 +32,7 @@
       
     .dd-list-item {
       padding: 8px 16px;
-      border-bottom: 1px solid #e5e5e5;
+      border-bottom: 1px solid $neutral3;
         
       &:hover {
         background-color: $neptune-hover;
@@ -47,15 +47,30 @@
     height: 40px;
     background-color: $white;
     border-radius: 5px;
-    border: 1px solid #D9D9D9;
+    border: 1px solid $neutral4;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);
     cursor: pointer;
 
     .dd-header-title {
-      font-family: "Proxima Nova";
-      font-weight:bold;
-      color: lightgrey;
-      margin-left: 5px;
+      height: 24px;
+      width: 44px;
+      color: $neutral6;
+      font-family: $proximaNova;
+      font-size: 16px;
+      letter-spacing: 0;
+      line-height: 24px;
+      margin-left: 8px;
+    }
+
+    .dd-header-selected {
+      height: 24px;
+      width: 138px;
+      color: #000000;
+      font-family: $proximaNova;
+      font-size: 16px;
+      letter-spacing: 0;
+      line-height: 24px;
+      margin-left: 8px;
     }
       
     &:before{
