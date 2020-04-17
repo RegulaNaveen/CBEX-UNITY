@@ -26,7 +26,7 @@ describe('Checkbox component', () => {
       expect(wrapper.getValue()).toBe(value);
     });
 
-    it('shoulkd render the correct checked value', () => {
+    it('should render the correct checked value', () => {
       const wrapper = new Checkbox(id, value, name, checked, children);
       expect(wrapper.getChecked()).toBe(checked);
     });

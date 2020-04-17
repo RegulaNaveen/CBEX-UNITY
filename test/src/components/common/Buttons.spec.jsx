@@ -8,7 +8,7 @@ describe('Button component', () => {
   describe('rendering', () => {
     const id = 'Fake id';
     const children = 'Fake text';
-    const type = 'Fake type';
+    const type = 'button';
 
     describe('PrimaryButton component', () => {
       describe('rendering', () => {

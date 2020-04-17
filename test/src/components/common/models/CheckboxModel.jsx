@@ -40,7 +40,7 @@ export default class CheckboxModel {
 
   getValue = (): string => this._getInput().prop('value');
 
-  getChecked = (): string => this._getInput().prop('checked');
+  getChecked = (): string => this._getInput().prop('isChecked');
 
   getChildren = (): any => this._getLabel().prop('children')[1];
 

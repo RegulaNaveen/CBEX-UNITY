@@ -28,7 +28,7 @@ export default class PrimaryButtonModel {
 
   getChildren = (): string => this._getButton().prop('children');
 
-  getType = (): Function => this._getButton().prop('type');
+  getType = (): string => this._getButton().prop('type');
 
   getOnChange = (): boolean => this._getButton().prop('onChange');
 
