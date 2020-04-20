@@ -68,14 +68,17 @@
   margin-top: 28px;
 }
 
+.checkbox {
+  margin-bottom: 48px;
+}
+
 .login-button-wrapper {
   display: flex;
   flex-direction: column;
-  margin-top: 48px;
 }
 
-.forgot-password-link {
-  margin-top: 28px;
+.login-button {
+  margin-bottom: 28px;
 }
 
 @media (min-width: $viewport-3) {
@@ -91,6 +94,32 @@
 
   .copyright-text {
     text-align: center;
+  }
+}
+
+@media(min-width: $viewport-4) {
+  .form-title {
+    margin-bottom: 10px;
+  }
+
+  .input-wrapper {
+    margin-bottom: 10px;
+  }
+
+  .copyright-text {
+    position: relative;
+  }
+
+  .checkbox {
+    margin-bottom: 10px;
+  }
+
+  .login-button {
+    margin-bottom: 10px;
+  }
+
+  .forgot-password-link {
+    margin-bottom: 20px;
   }
 }
 
