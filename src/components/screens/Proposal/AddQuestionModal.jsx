@@ -1,5 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
+import 'react-day-picker/lib/style.css';
 import Modal from '../../common/Modal';
 import { PrimaryButton } from '../../common/Buttons';
 import Checkbox from '../../common/Checkbox';
@@ -85,7 +87,12 @@ class AddQuestionModal extends PureComponent<Props, State> {
               </div>
               <div className="modal-picker">
                 <p className="dd-title">Label</p>
-                <div>picker</div>
+                <DayPickerInput
+                  onDayChange={day => console.log(day)}
+                  dayPickerProps={{
+                    showOutsideDays: true
+                  }}
+                />
               </div>
             </div>
             <div className="modal-segment">
