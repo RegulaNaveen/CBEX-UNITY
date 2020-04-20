@@ -1,32 +1,50 @@
 //LOGIN
-.login-wrapper {
+@mixin base-login-wrapper {
   display: flex;
   height: 100%;
   width: 100%;
 }
 
-.login-background-img {
+@mixin base-login-background-img {
   // height: 100%;
   // width: 561px;
   display: none;
 }
 
-.gradient-background-img {
-  //position: absolute;
-  // height: 100%;
-  // width: 561px;
-  // background: radial-gradient(circle, #0076ae 0%, #250056 100%);
-  // opacity: 0.66;
-  display: none;
-}
-
-.login-form {
-  background-color: $neutral1;
-  width: 100%;
+@mixin base-gradient-background {
+  position: absolute;
   height: 100%;
+  width: 561px;
+  background: radial-gradient(circle, #0076ae 0%, #250056 100%);
+  opacity: 0.66;
 }
 
-.copyright-text {
+@mixin base-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 28px;
+}
+
+@mixin base-form-title {
+  height: 48px;
+  color: $black;
+  font-family: $proximaNova;
+  font-size: 40px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 48px;
+  margin-bottom: 48px;
+}
+
+@mixin base-checkbox {
+  margin-bottom: 48px;
+}
+
+@mixin base-login-button {
+  margin-bottom: 28px;
+}
+
+@mixin base-copyright-text {
   height: 16px;
   width: 100%;
   color: $neutral8;
@@ -39,11 +57,19 @@
   position: absolute;
 }
 
+.gradient-background-img {
+  display: none;
+}
+
+.login-form {
+  background-color: $neutral1;
+  width: 100%;
+  height: 100%;
+}
+
 // LOGIN FORM
 .input-wrapper {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 28px;
+  @include base-input-wrapper;
 }
 
 .form-wrapper {
@@ -54,22 +80,11 @@
 }
 
 .form-title {
-  height: 48px;
-  color: $black;
-  font-family: $proximaNova;
-  font-size: 40px;
-  font-weight: 600;
-  letter-spacing: 0;
-  line-height: 48px;
-  margin-bottom: 48px;
+  @include base-form-title;
 }
 
 .password-input-wrapper {
   margin-top: 28px;
-}
-
-.checkbox {
-  margin-bottom: 48px;
 }
 
 .login-button-wrapper {
@@ -77,15 +92,28 @@
   flex-direction: column;
 }
 
-.login-button {
-  margin-bottom: 28px;
-}
 
 @media (min-width: $viewport-3) {
+  .login-wrapper {
+    @include base-login-wrapper;
+  }
+
+  .login-background-img {
+    display: none;
+  }
+
   .form-wrapper {
     justify-content: center;
     align-items: center;
     padding-top: 10px;
+  }
+
+  .checkbox {
+    @include base-checkbox;
+  }
+
+  .login-button {
+    @include base-login-button;
   }
 
   .login-button-wrapper {
@@ -93,11 +121,20 @@
   }
 
   .copyright-text {
+    @include base-copyright-text;
     text-align: center;
   }
 }
 
 @media(min-width: $viewport-4) {
+  .login-wrapper {
+    @include base-login-wrapper;
+  }
+
+  .login-background-img {
+    display: none;
+  }
+
   .form-title {
     margin-bottom: 10px;
   }
@@ -107,6 +144,7 @@
   }
 
   .copyright-text {
+    @include base-copyright-text;
     position: relative;
   }
 
@@ -115,6 +153,7 @@
   }
 
   .login-button {
+    @include base-login-button;
     margin-bottom: 10px;
   }
 
@@ -125,10 +164,39 @@
 
 @media (min-width: $viewport-7) {
   .login-wrapper {
+    @include base-login-wrapper;
     justify-content: center;
     align-items: center;
     margin-top: 0;
     margin-left: 0;
+  }
+
+  .login-background-img {
+    @include base-login-background-img;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .input-wrapper {
+    @include base-input-wrapper;
+  }
+
+  .checkbox {
+    @include base-checkbox;
+  }
+
+  .login-button {
+    @include base-login-button;
+  }
+
+  .gradient-background-img {
+    @include base-gradient-background;
+    display: block;
+  }
+
+  .form-title {
+    @include base-form-title;
   }
 
   .form-wrapper {
@@ -147,16 +215,11 @@
   }
 
   .copyright-text {
-    margin-left: 0;
+    @include base-copyright-text;
     text-align: center;
   }
 
   .gradient-background-img {
-    height: 100%;
-    width: 100%;
-  }
-
-  .login-background-img {
     height: 100%;
     width: 100%;
   }
