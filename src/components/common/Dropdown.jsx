@@ -57,14 +57,15 @@ class Dropdown extends Component<Props, State> {
             )}
           </div>
           {isCollapsed && (
-            <ul className="dd-list">
-              {items.map(item => (
-                <DropdownItem
-                  onClick={this.handleClick}
-                  item={item.title}
-                  id={item.id}
-                />
-              ))}
+            <ul id="dd-list-collapsed" className="dd-list">
+              {items &&
+                items.map(item => (
+                  <DropdownItem
+                    onClick={this.handleClick}
+                    item={item.title}
+                    id={item.id}
+                  />
+                ))}
             </ul>
           )}
         </div>

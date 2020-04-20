@@ -46,6 +46,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
   render() {
     const { isChecked, questionText } = this.state;
     const { onClose, onSave, items, teams } = this.props;
+
     return (
       <Modal>
         <div className="modal-content">
@@ -96,18 +97,19 @@ class AddQuestionModal extends PureComponent<Props, State> {
               />
             </div>
             <div className="modal-segment">
-              {teams.map(team => {
-                const { id, name } = team;
-                return (
-                  <SelectTeam
-                    key={id}
-                    id="selected-team-item"
-                    onClick={this.handleDeleteTeam}
-                  >
-                    {name}
-                  </SelectTeam>
-                );
-              })}
+              {teams &&
+                teams.map(team => {
+                  const { id, name } = team;
+                  return (
+                    <SelectTeam
+                      key={id}
+                      id="selected-team-item"
+                      onClick={this.handleDeleteTeam}
+                    >
+                      {name}
+                    </SelectTeam>
+                  );
+                })}
             </div>
             <div className="modal-segment">
               <Checkbox

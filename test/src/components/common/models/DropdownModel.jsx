@@ -39,6 +39,9 @@ export default class DropdownModel {
   _getItemSelected = (): ShallowWrapper =>
     this._wrapper.find('div.dd-header-selected');
 
+  _getItemsRows = (): ShallowWrapper =>
+    this._wrapper.find('#dd-list-collapsed');
+
   _getList = (): ShallowWrapper => this._wrapper.find('ul');
 
   _getDropdownItem = (): ShallowWrapper => this._wrapper.find(DropdownItem);
@@ -48,6 +51,9 @@ export default class DropdownModel {
   hasPlaceholder = (): boolean => this._getPlaceholder().length === 1;
 
   hasItemSelected = (): boolean => this._getItemSelected().length === 1;
+
+  hasItemsRows = (questionsLength: number): boolean =>
+    this._getItemsRows().length === questionsLength;
 
   getTitle = (): string => this._getTitleParagraph().prop('children');
 }

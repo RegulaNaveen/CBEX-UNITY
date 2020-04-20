@@ -1,10 +1,12 @@
 // @flow
 import React, { Component } from 'react';
+import type { NavigationHistory } from 'react-router-dom';
 import ProposalInfo from './ProposalInfo';
 import TasksList from './TasksList';
 import Toolbar from '../../Toolbar';
 import { Add } from '../../svg';
 import AddQuestionModal from './AddQuestionModal';
+import { ADD_NEW_QUESTION } from '../../../routes';
 
 type State = {
   showModal: boolean,
@@ -14,7 +16,9 @@ type State = {
   teams: Array<Object>
 };
 
-type Props = {};
+type Props = {
+  history: NavigationHistory
+};
 
 class Proposal extends Component<Props, State> {
   constructor(props: Object) {
@@ -178,7 +182,10 @@ class Proposal extends Component<Props, State> {
 
   onClose = () => {
     const { showModal } = this.state;
-    this.setState({ showModal: !showModal });
+    const { history } = this.props;
+    this.setState({ showModal: !showModal }, () =>
+      history.push(ADD_NEW_QUESTION)
+    );
   };
 
   onSave = () => {
@@ -187,6 +194,7 @@ class Proposal extends Component<Props, State> {
 
   render() {
     const { showModal, data, tasks, items, teams } = this.state;
+
     return (
       <div className="proposal-wrapper">
         <Toolbar />
