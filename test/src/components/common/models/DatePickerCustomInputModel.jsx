@@ -26,7 +26,8 @@ export default class DatePickerCustomInputModel {
 
   _getInput = (): ShallowWrapper => this._wrapper.find('input');
 
-  hasInput = (): boolean => this._getInput().length === 1;
+  hasInput = (itemValue: string): boolean =>
+    this._getInput().props().value === itemValue;
 
   hasInputPropsValue = (value: string): boolean =>
     this._getInput().prop('value') === value;

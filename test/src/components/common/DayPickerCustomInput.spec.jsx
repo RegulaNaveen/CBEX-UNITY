@@ -9,7 +9,7 @@ describe('DatePickerCustomInput component', () => {
   describe('rendering', () => {
     it('should render correct value prop', () => {
       const wrapper = new DatePickerCustomInputModel(value);
-      expect(wrapper.hasInput()).toBe(true);
+      expect(wrapper.hasInput(value)).toBe(true);
     });
   });
 

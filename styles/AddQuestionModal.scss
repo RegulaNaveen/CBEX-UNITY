@@ -42,15 +42,14 @@
     box-sizing: border-box;
     height: 40px;
     width: 173.59px;
-    border: 1px solid #D9D9D9;
+    border: $border;
     border-radius: 4px;
-    background-color: #FFFFFF;
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,0);
+    background-color: $white;
 
     .datepicker-input {
       height: 24px;
       width: 115px;
-      color: #999999;
+      color: $neutral6;
       font-family: "Proxima Nova";
       font-size: 16px;
       letter-spacing: 0;
