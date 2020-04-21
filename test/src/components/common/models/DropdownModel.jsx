@@ -23,11 +23,14 @@ export default class DropdownModel {
       onClick: this._onClickStub
     };
     this._wrapper = shallow(<Dropdown {...props} />);
+    this._firstItemIndex = 0;
   }
 
   _wrapper: ShallowWrapper;
 
   _onClickStub: stub;
+
+  _firstItemIndex: number;
 
   _getParagraphs = (): ShallowWrapper => this._wrapper.find('p');
 
@@ -39,20 +42,28 @@ export default class DropdownModel {
   _getItemSelected = (): ShallowWrapper =>
     this._wrapper.find('div.dd-header-selected');
 
-  _getItemsRows = (): ShallowWrapper => this._wrapper.find('ul.dd-list');
+  _getCollapseButton = (): ShallowWrapper =>
+    this._wrapper.find('div.dd-header');
 
   _getList = (): ShallowWrapper => this._wrapper.find('ul');
 
   _getDropdownItem = (): ShallowWrapper => this._wrapper.find(DropdownItem);
 
-  hasDropdownItem = (): boolean => this._getDropdownItem().length === 1;
+  hasItemsRows = (itemsLength: number): boolean =>
+    this._getDropdownItem().length === itemsLength;
 
   hasPlaceholder = (): boolean => this._getPlaceholder().length === 1;
 
   hasItemSelected = (): boolean => this._getItemSelected().length === 1;
 
-  hasItemsRows = (itemsLength: number): boolean =>
-    this._getItemsRows().length === itemsLength;
-
   getTitle = (): string => this._getTitleParagraph().prop('children');
+
+  // Interactions
+  doClickToggle = () => this._getCollapseButton().simulate('click');
+
+  doClickSelect = () =>
+    this._getDropdownItem()
+      .at(this._firstItemIndex)
+      .props()
+      .onClick();
 }

@@ -22,8 +22,6 @@ export default class TaskModel {
 
   _wrapper: ShallowWrapper;
 
-  _getParagraphs = (): ShallowWrapper => this._wrapper.find('p');
-
   _getTitleParagraph = (): ShallowWrapper => this._wrapper.find('#task-title');
 
   _getCompleteStatus = (): ShallowWrapper =>
@@ -37,7 +35,7 @@ export default class TaskModel {
   _getQuestionRows = (): ShallowWrapper =>
     this._wrapper.find('div.task-table-row');
 
-  getTitle = (): string => this._getParagraphs().prop('children');
+  getTitle = (): string => this._getTitleParagraph().prop('children');
 
   getCompleteText = (): string =>
     this._getCompleteStatus()

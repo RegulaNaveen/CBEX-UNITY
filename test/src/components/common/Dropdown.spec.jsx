@@ -31,6 +31,7 @@ describe('Dropdown component', () => {
 
     it('should render DropdownItem collapsed component when is clicked', () => {
       const wrapper = new DropdownModel(id, placeholder, items, title);
+      wrapper.doClickToggle();
       expect(wrapper.hasItemsRows(items.length)).toBe(true);
     });
 
@@ -41,6 +42,8 @@ describe('Dropdown component', () => {
 
     it('should render title selected as a placeholder text', () => {
       const wrapper = new DropdownModel(id, placeholder, items, title);
+      wrapper.doClickToggle();
+      wrapper.doClickSelect();
       expect(wrapper.hasItemSelected()).toBe(true);
     });
   });
