@@ -29,22 +29,22 @@ describe('Dropdown component', () => {
       expect(wrapper.getTitle()).toBe(title);
     });
 
-    it('should render DropdownItem collapsed component when is clicked', () => {
+    it('should render DropdownItem collapsed component', () => {
       const wrapper = new DropdownModel(id, placeholder, items, title);
       wrapper.doClickToggle();
-      expect(wrapper.hasItemsRows(items.length)).toBe(true);
+      expect(wrapper.getItemsRows(items.length)).toBe(true);
     });
 
     it('should render placeholder text', () => {
       const wrapper = new DropdownModel(id, placeholder, items, title);
-      expect(wrapper.hasPlaceholder()).toBe(true);
+      expect(wrapper.getPlaceholder()).toBe(true);
     });
 
-    it('should render title selected as a placeholder text', () => {
+    it('should render DropdownItem when is clicked', () => {
       const wrapper = new DropdownModel(id, placeholder, items, title);
       wrapper.doClickToggle();
       wrapper.doClickSelect();
-      expect(wrapper.hasItemSelected()).toBe(true);
+      expect(wrapper.getItemSelected()).toBe(true);
     });
   });
 });

@@ -49,12 +49,12 @@ export default class DropdownModel {
 
   _getDropdownItem = (): ShallowWrapper => this._wrapper.find(DropdownItem);
 
-  hasItemsRows = (itemsLength: number): boolean =>
+  getItemsRows = (itemsLength: number): boolean =>
     this._getDropdownItem().length === itemsLength;
 
-  hasPlaceholder = (): boolean => this._getPlaceholder().length === 1;
+  getPlaceholder = (): boolean => this._getPlaceholder().length === 1;
 
-  hasItemSelected = (): boolean => this._getItemSelected().length === 1;
+  getItemSelected = (): boolean => this._getItemSelected().length === 1;
 
   getTitle = (): string => this._getTitleParagraph().prop('children');
 
