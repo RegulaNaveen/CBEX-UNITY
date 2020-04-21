@@ -1,9 +1,9 @@
 // @flow
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import DropdownItem from './DropdownItem';
 
 type Props = {
-  id: string,
+  id?: string,
   placeholder: string,
   items: Array<Object>,
   title: string
@@ -14,7 +14,11 @@ type State = {
   selectedValue: string
 };
 
-class Dropdown extends Component<Props, State> {
+class Dropdown extends PureComponent<Props, State> {
+  static defaultProps = {
+    id: undefined
+  };
+
   constructor(props: Object) {
     super(props);
 
@@ -40,9 +44,7 @@ class Dropdown extends Component<Props, State> {
     const { id, placeholder, items, title } = this.props;
     return (
       <>
-        <p id="dd-title" className="dd-title">
-          {title}
-        </p>
+        <p className="dd-title">{title}</p>
         <div className="dd-wrapper">
           <div
             id={id}
@@ -57,13 +59,13 @@ class Dropdown extends Component<Props, State> {
             )}
           </div>
           {isCollapsed && (
-            <ul id="dd-list-collapsed" className="dd-list">
+            <ul className="dd-list">
               {items &&
                 items.map(item => (
                   <DropdownItem
                     onClick={this.handleClick}
                     item={item.title}
-                    id={item.id}
+                    key={item.id}
                   />
                 ))}
             </ul>
