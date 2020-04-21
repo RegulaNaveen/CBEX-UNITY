@@ -210,14 +210,14 @@ class Proposal extends Component<Props, State> {
           </div>
         </div>
         <TasksList tasks={tasks} />
-        {showModal ? (
+        {/* {showModal ? (
           <AddQuestionModal
             onClose={this.onClose}
             onSave={this.onSave}
             items={items}
             teams={teams}
           />
-        ) : null}
+        ) : null} */}
       </div>
     );
   }
