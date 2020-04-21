@@ -31,7 +31,7 @@ describe('Dropdown component', () => {
 
     it('should render DropdownItem collapsed component when is clicked', () => {
       const wrapper = new DropdownModel(id, placeholder, items, title);
-      expect(wrapper.hasItemsRows(items.length)).toBe(true)
+      expect(wrapper.hasItemsRows(items.length)).toBe(true);
     });
 
     it('should render placeholder text', () => {
