@@ -4,9 +4,9 @@ import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
 import sinon from 'sinon';
 import type { stub } from 'sinon';
-import DayPickerCustomInput from '../../../../../src/components/common/DayPickerCustomInput';
+import DatePickerCustomInput from '../../../../../src/components/common/DatePickerCustomInput';
 
-export default class DayPickerCustomInputModel {
+export default class DatePickerCustomInputModel {
   constructor(value: string) {
     this._onEventStub = sinon.stub();
     const props = {
@@ -17,7 +17,7 @@ export default class DayPickerCustomInputModel {
       onKeyUp: this._onEventStub,
       onClick: this._onEventStub
     };
-    this._wrapper = shallow(<DayPickerCustomInput {...props} />);
+    this._wrapper = shallow(<DatePickerCustomInput {...props} />);
   }
 
   _wrapper: ShallowWrapper;

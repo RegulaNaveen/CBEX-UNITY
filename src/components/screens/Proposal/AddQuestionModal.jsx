@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
 import Modal from '../../common/Modal';
-import DayPickerCustomInput from '../../common/DayPickerCustomInput';
+import DatePickerCustomInput from '../../common/DatePickerCustomInput';
 import { PrimaryButton } from '../../common/Buttons';
 import Checkbox from '../../common/Checkbox';
 import Dropdown from '../../common/Dropdown';
@@ -99,7 +99,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
                 <DayPickerInput
                   value={selectedDay || 'Select Date'}
                   onDayChange={this.handleDayChange}
-                  component={DayPickerCustomInput}
+                  component={DatePickerCustomInput}
                   dayPickerProps={{
                     showOutsideDays: true
                   }}

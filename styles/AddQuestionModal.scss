@@ -35,7 +35,7 @@
 
 .modal-picker {
 
-  .daypicker-container {
+  .datepicker-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -47,7 +47,7 @@
     background-color: #FFFFFF;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0);
 
-    .daypicker-input {
+    .datepicker-input {
       height: 24px;
       width: 115px;
       color: #999999;
