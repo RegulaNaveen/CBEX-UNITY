@@ -12,7 +12,8 @@ export default class DropdownModel {
     id: string,
     placeholder: string,
     items: Array<Object>,
-    title: string
+    title: string,
+    fakeValue: string = ''
   ) {
     this._onClickStub = sinon.stub();
     const props = {
@@ -24,6 +25,7 @@ export default class DropdownModel {
     };
     this._wrapper = shallow(<Dropdown {...props} />);
     this._firstItemIndex = 0;
+    this._fakeValue = fakeValue;
   }
 
   _wrapper: ShallowWrapper;
@@ -32,38 +34,41 @@ export default class DropdownModel {
 
   _firstItemIndex: number;
 
+  _fakeValue: String;
+
   _getParagraphs = (): ShallowWrapper => this._wrapper.find('p');
 
-  _getTitleParagraph = (): ShallowWrapper => this._wrapper.find('p.dd-title');
+  _getTitleParagraph = (): ShallowWrapper => this._wrapper.find('.dd-title');
 
   _getPlaceholder = (): ShallowWrapper =>
-    this._wrapper.find('div.dd-header-placeholder');
+    this._wrapper.find('.dd-header-placeholder');
 
-  _getItemSelected = (): ShallowWrapper =>
-    this._wrapper.find('div.dd-header-selected');
+  _getSelectedValue = (): ShallowWrapper =>
+    this._wrapper.find('.dd-header-selected');
 
-  _getCollapseButton = (): ShallowWrapper =>
-    this._wrapper.find('div.dd-header');
+  _getCollapseButton = (): ShallowWrapper => this._wrapper.find('.dd-header');
 
   _getList = (): ShallowWrapper => this._wrapper.find('ul');
 
   _getDropdownItem = (): ShallowWrapper => this._wrapper.find(DropdownItem);
 
-  getItemsRows = (itemsLength: number): boolean =>
+  hasItemsRows = (itemsLength: number): boolean =>
     this._getDropdownItem().length === itemsLength;
 
-  getPlaceholder = (): boolean => this._getPlaceholder().length === 1;
+  getPlaceholder = (): boolean => this._getPlaceholder().prop('children');
 
-  getItemSelected = (): boolean => this._getItemSelected().length === 1;
+  getSelectedItem = (): boolean => this._getSelectedValue().prop('children');
 
   getTitle = (): string => this._getTitleParagraph().prop('children');
 
-  // Interactions
-  doClickToggle = () => this._getCollapseButton().simulate('click');
+  isCollapsed = (): boolean => this._wrapper.state('isCollapsed');
 
-  doClickSelect = () =>
+  // Interactions
+  doClick = () => this._getCollapseButton().simulate('click');
+
+  doClickOnItem = () =>
     this._getDropdownItem()
       .at(this._firstItemIndex)
       .props()
-      .onClick();
+      .onClick(this._fakeValue);
 }

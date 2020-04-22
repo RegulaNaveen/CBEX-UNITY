@@ -31,20 +31,35 @@ describe('Dropdown component', () => {
 
     it('should render DropdownItem collapsed component', () => {
       const wrapper = new DropdownModel(id, placeholder, items, title);
-      wrapper.doClickToggle();
-      expect(wrapper.getItemsRows(items.length)).toBe(true);
+      wrapper.doClick();
+      expect(wrapper.hasItemsRows(items.length)).toBe(true);
     });
 
     it('should render placeholder text', () => {
       const wrapper = new DropdownModel(id, placeholder, items, title);
-      expect(wrapper.getPlaceholder()).toBe(true);
+      expect(wrapper.getPlaceholder()).toBe(placeholder);
     });
 
-    it('should render DropdownItem when is clicked', () => {
+    it('should render correct option when clicked on DropdownItem', () => {
+      const fakeValue = 'Fake Value';
+      const wrapper = new DropdownModel(
+        id,
+        placeholder,
+        items,
+        title,
+        fakeValue
+      );
+      wrapper.doClick();
+      wrapper.doClickOnItem();
+      expect(wrapper.getSelectedItem()).toBe(fakeValue);
+    });
+  });
+
+  describe('interactions', () => {
+    it('should collapse when clicked', () => {
       const wrapper = new DropdownModel(id, placeholder, items, title);
-      wrapper.doClickToggle();
-      wrapper.doClickSelect();
-      expect(wrapper.getItemSelected()).toBe(true);
+      wrapper.doClick();
+      expect(wrapper.isCollapsed()).toBe(true);
     });
   });
 });
