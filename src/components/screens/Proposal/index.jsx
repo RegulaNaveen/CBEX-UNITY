@@ -196,13 +196,14 @@ class Proposal extends Component<Props, State> {
   render() {
     const { showModal, data, tasks, items, teams } = this.state;
     const { asdasd } = this.props;
+    console.log(asdasd);
 
     return (
       <div className="proposal-wrapper">
         <Toolbar />
         <ProposalInfo data={data} />
         <div className="tasksList-title-wrapper">
-          <p className="tasksList-title">{asdasd}</p>
+          <p className="tasksList-title">Questions</p>
           <div
             className="tasksList-add-icon-wrapper"
             role="presentation"

@@ -1,14 +1,13 @@
 // @flow
 import axios from 'axios';
 
-const CONTACTS_API_BASE_URL = 'https://api.bizd.in/contacts';
+const PROPOSAL_API_URL =
+  'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/proposals/98625737-615a-4e9a-a249-9dac53ae7fba';
 
-export const getUserContacts = async (userId: string, JWTToken: string): Promise<Object> => {
+export const getProposalInfo = async (): Promise<Object> => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${CONTACTS_API_BASE_URL}/api/contacts/${userId}`, {
-        headers: { Authorization: `Bearer ${JWTToken}` }
-      })
+      .get(`${PROPOSAL_API_URL}`)
       .then(response => {
         resolve(response.data);
       })
