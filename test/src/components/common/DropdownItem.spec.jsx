@@ -8,7 +8,7 @@ describe('DropdowItem component', () => {
   const item = 'Fake item';
 
   describe('rendering', () => {
-    it('should render the correct name', () => {
+    it('should render the correct content', () => {
       const wrapper = new DropdownItemModel(id, item);
       expect(wrapper.getChildren()).toBe(item);
     });

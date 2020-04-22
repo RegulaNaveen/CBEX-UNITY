@@ -15,7 +15,7 @@ export default class ModalModel {
   _wrapper: ShallowWrapper;
 
   _getModalWrapper = (): ShallowWrapper =>
-    this._wrapper.find('div.modal-dialog-wrapper');
+    this._wrapper.find('.modal-dialog-wrapper');
 
   getChildren = (): string => this._getModalWrapper().prop('children');
 }

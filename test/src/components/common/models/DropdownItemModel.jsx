@@ -9,6 +9,7 @@ import DropdownItem from '../../../../../src/components/common/DropdownItem';
 export default class DropdownItemModel {
   constructor(id: string, item: string) {
     this._onClickStub = sinon.stub();
+    this._item = item;
     const props = {
       id,
       item,
@@ -21,11 +22,13 @@ export default class DropdownItemModel {
 
   _onClickStub: stub;
 
-  _getList = (): ShallowWrapper => this._wrapper.find('li');
+  _item: string;
 
-  getChildren = (): string => this._getList().prop('children');
+  _getItem = (): ShallowWrapper => this._wrapper.find('li');
 
-  doOnClick = () => this._getList().prop('onClick')();
+  getChildren = (): string => this._getItem().prop('children');
+
+  doOnClick = () => this._getItem().prop('onClick')();
 
   onChangeCalledOnce = () => this._onClickStub.calledOnce === true;
 
