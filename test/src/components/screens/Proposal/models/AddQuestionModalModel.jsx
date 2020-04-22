@@ -98,41 +98,4 @@ export default class AddQuestoinModalModel {
     this._getPrimaryButton()
       .at(this._okayButtonIndex)
       .prop('children');
-
-  // HJSADHKAJSDKJADSAD
-  // _getModal = (): ShallowWrapper => this._wrapper.find('#task-title');
-
-  // _getCompleteStatus = (): ShallowWrapper =>
-  //   this._wrapper.find('#complete-status');
-
-  // _getTableWrapper = (): ShallowWrapper =>
-  //   this._wrapper.find('div.task-table-wrapper');
-
-  // _getCollapseButton = (): ShallowWrapper => this._wrapper.find('#arrow-icon');
-
-  // _getQuestionRows = (): ShallowWrapper =>
-  //   this._wrapper.find('div.task-table-row');
-
-  // getTitle = (): string => this._getTitleParagraph().prop('children');
-
-  // getCompleteText = (): string =>
-  //   this._getCompleteStatus()
-  //     .find('p')
-  //     .prop('children');
-
-  // hasTitleWrapper = (): boolean => this._getTitleParagraph().length === 1;
-
-  // hasTableWrapper = (): boolean => this._getTableWrapper().length === 1;
-
-  // hasQuestionRows = (questionsLength: number): boolean =>
-  //   this._getQuestionRows().length === questionsLength;
-
-  // // Interactions
-  // doClick = () => this._getCollapseButton().simulate('click');
-
-  // doEnterKeyPress = () =>
-  //   this._getCollapseButton().simulate('keypress', {
-  //     key: 'Enter',
-  //     preventDefault: () => {}
-  //   });
 }
