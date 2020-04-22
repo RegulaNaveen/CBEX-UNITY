@@ -1,6 +1,9 @@
 // @flow
 import React, { PureComponent } from 'react';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
+import 'react-day-picker/lib/style.css';
 import Modal from '../../common/Modal';
+import DatePickerCustomInput from '../../common/DatePickerCustomInput';
 import { PrimaryButton } from '../../common/Buttons';
 import Checkbox from '../../common/Checkbox';
 import Dropdown from '../../common/Dropdown';
@@ -17,7 +20,8 @@ type Props = {
 
 type State = {
   isChecked: boolean,
-  questionText: string
+  questionText: string,
+  selectedDay: string
 };
 
 class AddQuestionModal extends PureComponent<Props, State> {
@@ -26,7 +30,8 @@ class AddQuestionModal extends PureComponent<Props, State> {
 
     this.state = {
       isChecked: false,
-      questionText: ''
+      questionText: '',
+      selectedDay: ''
     };
   }
 
@@ -43,8 +48,14 @@ class AddQuestionModal extends PureComponent<Props, State> {
     this.setState({ questionText: event.target.value });
   };
 
+  handleDayChange = (selectedDay: string) => {
+    this.setState({
+      selectedDay
+    });
+  };
+
   render() {
-    const { isChecked, questionText } = this.state;
+    const { isChecked, questionText, selectedDay } = this.state;
     const { onClose, onSave, items, teams } = this.props;
 
     return (
@@ -85,7 +96,14 @@ class AddQuestionModal extends PureComponent<Props, State> {
               </div>
               <div className="modal-picker">
                 <p className="dd-title">Label</p>
-                <div>picker</div>
+                <DayPickerInput
+                  value={selectedDay || 'Select Date'}
+                  onDayChange={this.handleDayChange}
+                  component={DatePickerCustomInput}
+                  dayPickerProps={{
+                    showOutsideDays: true
+                  }}
+                />
               </div>
             </div>
             <div className="modal-segment">

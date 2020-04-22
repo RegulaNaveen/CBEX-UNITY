@@ -7147,6 +7147,13 @@ raw-body@2.4.0:
     iconv-lite "0.4.24"
     unpipe "1.0.0"
 
+react-day-picker@^7.4.5:
+  version "7.4.5"
+  resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-7.4.5.tgz#b36fb2d91386c5c0895c35a89664d5665d79db91"
+  integrity sha512-Yi7zwWFZBVts+xCT5ukeD6B5n3tqsl7CXNzXgjb8vxLb3wwLp1jsIJV0U4tr4AXBHen3aP5iTeKyGoV85aZqXw==
+  dependencies:
+    prop-types "^15.6.2"
+
 react-dom@^16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.13.1.tgz#c1bd37331a0486c078ee54c4740720993b2e0e7f"

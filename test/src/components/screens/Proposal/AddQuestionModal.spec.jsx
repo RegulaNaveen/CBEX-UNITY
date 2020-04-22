@@ -71,6 +71,11 @@ describe('AddQuestionModal component', () => {
       expect(wrapper.hasLabel()).toBe(label);
     });
 
+    it('should render DayPicker component', () => {
+      const wrapper = new AddQuestionModalModel(items, teams);
+      expect(wrapper.hasDayPicker()).toBe(true);
+    });
+
     it('should render Close icon', () => {
       const wrapper = new AddQuestionModalModel(items, teams);
       expect(wrapper.hasCloseIcon()).toBe(true);

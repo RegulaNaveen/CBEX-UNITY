@@ -4,6 +4,7 @@ import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
 import sinon from 'sinon';
 import type { stub } from 'sinon';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
 import AddQuestoinModal from '../../../../../../src/components/screens/Proposal/AddQuestionModal';
 import Modal from '../../../../../../src/components/common/Modal';
 import { PrimaryButton } from '../../../../../../src/components/common/Buttons';
@@ -57,7 +58,11 @@ export default class AddQuestoinModalModel {
 
   _getPrimaryButton = (): ShallowWrapper => this._wrapper.find(PrimaryButton);
 
+  _getDayPicker = (): ShallowWrapper => this._wrapper.find(DayPickerInput);
+
   hasModalComponent = (): boolean => this._getModalComponent().length === 1;
+
+  hasDayPicker = (): boolean => this._getDayPicker().length === 1;
 
   hasParagraphs = (): boolean => this._getParagraphs().length === 2;
 

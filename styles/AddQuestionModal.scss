@@ -33,12 +33,37 @@
   line-height: 24px;
 }
 
+.modal-picker {
+
+  .datepicker-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    height: 40px;
+    width: 173.59px;
+    border: $border;
+    border-radius: 4px;
+    background-color: $white;
+
+    .datepicker-input {
+      height: 24px;
+      width: 115px;
+      color: $neutral6;
+      font-family: $proximaNova;
+      font-size: 16px;
+      letter-spacing: 0;
+      line-height: 24px;
+      border: none;
+    }
+  }
+}
+
 .modal-segment-title {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
-
 
 .modal-wrapper-body {
   flex-direction: column;
