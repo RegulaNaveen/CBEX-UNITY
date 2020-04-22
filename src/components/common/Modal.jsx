@@ -8,6 +8,7 @@ type Props = {
 const Modal = ({ children }: Props) => {
   return (
     <div className="modal-wrapper">
+      <div className="modal-dialog-blur" />
       <div className="modal-dialog-wrapper">{children}</div>
     </div>
   );

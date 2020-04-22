@@ -34,9 +34,7 @@ export default class SelectTeamModel {
 
   hasIcon = (): boolean => this._getCloseCircle().length === 1;
 
-  hasDivs = (): boolean => this._getIconWrapper().length === 1;
-
-  doOnChange = () => this._getIconWrapper().prop('onChange')();
+  doOnClick = () => this._getIconWrapper().prop('onClick')();
 
   onChangeCalledOnce = (): boolean => this._onClickStub.calledOnce === true;
 

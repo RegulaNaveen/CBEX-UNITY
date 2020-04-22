@@ -187,6 +187,7 @@ class Proposal extends Component<Props, State> {
 
   render() {
     const { showModal, data, tasks, items, teams } = this.state;
+
     return (
       <div className="proposal-wrapper">
         <Toolbar />

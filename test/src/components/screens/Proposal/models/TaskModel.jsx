@@ -22,8 +22,6 @@ export default class TaskModel {
 
   _wrapper: ShallowWrapper;
 
-  _getParagraphs = (): ShallowWrapper => this._wrapper.find('p');
-
   _getTitleParagraph = (): ShallowWrapper => this._wrapper.find('#task-title');
 
   _getCompleteStatus = (): ShallowWrapper =>

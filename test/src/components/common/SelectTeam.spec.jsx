@@ -24,9 +24,9 @@ describe('SelectTeam component', () => {
   });
 
   describe('interactions', () => {
-    it('should handle onChange handler', () => {
+    it('should handle onClick handler', () => {
       const wrapper = new SelectTeam(children);
-      wrapper.doOnChange();
+      wrapper.doOnClick();
       expect(wrapper.onChangeCalledOnce()).toBe(true);
       wrapper.resetEventHandlers();
     });
