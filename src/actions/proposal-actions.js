@@ -7,7 +7,7 @@ export type ProposalInfo = {
   test: string
 };
 
-export const getContacts = (): ThunkAction<ProposalActionType, string> => {
+export const testData = (): ThunkAction<ProposalActionType, string> => {
   return async (dispatch: Dispatch<ProposalActionType, string>) => {
     dispatch({
       type: PROPOSAL_ACTION_TESTING,

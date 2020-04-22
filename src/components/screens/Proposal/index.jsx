@@ -1,5 +1,8 @@
 // @flow
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { testData } from '../../../actions/proposal-actions';
+import { getTestingData } from '../../../selectors';
 import ProposalInfo from './ProposalInfo';
 import TasksList from './TasksList';
 import Toolbar from '../../Toolbar';
@@ -176,9 +179,14 @@ class Proposal extends Component<Props, State> {
     };
   }
 
+  componentDidMount() {
+    // this.props.startAction();
+  }
+
   onClose = () => {
-    const { showModal } = this.state;
-    this.setState({ showModal: !showModal });
+    // const { showModal } = this.state;
+    // this.setState({ showModal: !showModal });
+    this.props.startAction();
   };
 
   onSave = () => {
@@ -187,13 +195,14 @@ class Proposal extends Component<Props, State> {
 
   render() {
     const { showModal, data, tasks, items, teams } = this.state;
+    const { asdasd } = this.props;
 
     return (
       <div className="proposal-wrapper">
         <Toolbar />
         <ProposalInfo data={data} />
         <div className="tasksList-title-wrapper">
-          <p className="tasksList-title">Questions</p>
+          <p className="tasksList-title">{asdasd}</p>
           <div
             className="tasksList-add-icon-wrapper"
             role="presentation"
@@ -216,4 +225,12 @@ class Proposal extends Component<Props, State> {
   }
 }
 
-export default Proposal;
+const mapStateToProps = state => ({
+  asdasd: getTestingData(state)
+});
+
+const mapDispatchToProps = dispatch => ({
+  startAction: () => dispatch(testData)
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Proposal);
