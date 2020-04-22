@@ -186,7 +186,7 @@ class Proposal extends Component<Props, State> {
   onClose = () => {
     // const { showModal } = this.state;
     // this.setState({ showModal: !showModal });
-    this.props.startAction();
+    this.props.testData();
   };
 
   onSave = () => {
@@ -229,8 +229,4 @@ const mapStateToProps = state => ({
   asdasd: getTestingData(state)
 });
 
-const mapDispatchToProps = dispatch => ({
-  startAction: () => dispatch(testData)
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Proposal);
+export default connect(mapStateToProps, { testData })(Proposal);
