@@ -34,7 +34,7 @@ export default class DropdownModel {
 
   _firstItemIndex: number;
 
-  _fakeValue: String;
+  _fakeValue: string;
 
   _getParagraphs = (): ShallowWrapper => this._wrapper.find('p');
 
