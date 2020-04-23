@@ -6,7 +6,7 @@ type Props = {
   id?: string,
   placeholder: string,
   items: Array<Object>,
-  title: string
+  title?: string
 };
 
 type State = {
@@ -16,7 +16,8 @@ type State = {
 
 class Dropdown extends PureComponent<Props, State> {
   static defaultProps = {
-    id: undefined
+    id: undefined,
+    title: undefined
   };
 
   constructor(props: Object) {
@@ -45,7 +46,7 @@ class Dropdown extends PureComponent<Props, State> {
     const { id, placeholder, items, title } = this.props;
     return (
       <>
-        <p className="dd-title">{title}</p>
+        {title ? <p className="dd-title">{title}</p> : null}
         <div className="dd-wrapper">
           <div
             id={id}

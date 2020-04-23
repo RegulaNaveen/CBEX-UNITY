@@ -15,7 +15,7 @@ const TasksList = ({ tasks }: Props) => {
           {
             id: 1,
             question: 'Question',
-            answer: 'Answer',
+            answer: ['Owner', 'Pedro'],
             owner: ['Owner', 'Pedro'],
             dueDate: '02-Apr-2020',
             completionDate: '02-Apr-2020',
@@ -24,14 +24,14 @@ const TasksList = ({ tasks }: Props) => {
           {
             id: 2,
             question: 'Question',
-            answer: 'Answer',
+            answer: ['Owner', 'Pedro'],
             owner: ['Awner', 'Homer', 'jesus'],
             dueDate: '02-Apr-2020',
             completionDate: '02-Apr-2020',
             complete: true
           }
         ];
-        const complete = true;
+        const complete = false;
         const incomplete = 4;
         return (
           <Task

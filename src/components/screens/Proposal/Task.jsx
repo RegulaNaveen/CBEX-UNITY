@@ -4,6 +4,7 @@ import chevronRight from '../../../../img/chevron-right.svg';
 import chevronDown from '../../../../img/chevron-down.svg';
 import { Checkmark, Edit } from '../../svg';
 import { getRandomColor } from '../../../utils/colors';
+import Dropdown from '../../common/Dropdown';
 
 type State = {
   isCollapsed: boolean
@@ -41,13 +42,7 @@ class Task extends Component<Props, State> {
     const { isCollapsed } = this.state;
     const { data, isComplete, title, uncompletedQuestions } = this.props;
     return (
-      <div
-        className={isComplete ? 'task-wrapper complete' : 'task-wrapper'}
-        onClick={this.handleCollapse}
-        onKeyPress={this.handleKeyPress}
-        role="button"
-        tabIndex={-1}
-      >
+      <div className={isComplete ? 'task-wrapper complete' : 'task-wrapper'}>
         <button
           id="arrow-icon"
           className="task-icon-wrapper"
@@ -63,7 +58,13 @@ class Task extends Component<Props, State> {
           />
         </button>
         {!isCollapsed ? (
-          <div className="task-title-wrapper">
+          <div
+            className="task-title-wrapper"
+            role="button"
+            onClick={this.handleCollapse}
+            onKeyPress={this.handleKeyPress}
+            tabIndex={-1}
+          >
             <p id="task-title" className="task-title">
               {title}
             </p>
@@ -82,7 +83,13 @@ class Task extends Component<Props, State> {
           </div>
         ) : (
           <div className="task-table-wrapper">
-            <div className="task-table-headers">
+            <div
+              className="task-table-headers"
+              role="button"
+              onClick={this.handleCollapse}
+              onKeyPress={this.handleKeyPress}
+              tabIndex={-1}
+            >
               <div className="task-title">
                 <p>{title}</p>
                 {/* TODO: Add filter feature */}
@@ -116,7 +123,14 @@ class Task extends Component<Props, State> {
                     <Checkmark className="task-table-row-checkmark icon-highlight" />
                   )}
                   <p className="task-table-row-question">{item.question}</p>
-                  <div className="task-table-row-answer">{item.answer}</div>
+                  <div className="task-table-row-answer">
+                    <Dropdown
+                      key={item.answer}
+                      id="dd-proposal-answer"
+                      placeholder="Select"
+                      items={item.answer}
+                    />
+                  </div>
                   <div className="task-table-row-owner">
                     {item.owner.map(owner => (
                       <p
