@@ -1,19 +1,20 @@
 // @flow
 import { Map, fromJS } from 'immutable';
-import { PROPOSAL_ACTION_TESTING } from '../actions/proposal-types';
+import { PROPOSAL_INFO } from '../actions/proposal-types';
 import type { ApiAction } from '../actions/action-types';
 
 const INITIAL_STATE: Map = fromJS({
-  testingData: undefined
+  proposalQuestions: Map({})
 });
 
-const onGetTestingData = (state, action): Map => {
-  const { payload } = action;
-  return state.set('testingData', payload);
+const onProsalInfoLoaded = (state: Map, action: Object): Map => {
+  const { proposalQuestions } = action.payload;
+  debugger;
+  return state.set('proposalQuestions', proposalQuestions);
 };
 
 const actionMap = {
-  [PROPOSAL_ACTION_TESTING]: onGetTestingData
+  [PROPOSAL_INFO]: onProsalInfoLoaded
 };
 
 export default function(

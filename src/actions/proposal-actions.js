@@ -1,5 +1,5 @@
 // @flow
-import { PROPOSAL_ACTION_TESTING } from './proposal-types';
+import { PROPOSAL_INFO } from './proposal-types';
 import type { ProposalActionType } from './proposal-types';
 import type { Dispatch, ThunkAction } from './action-types';
 import { getProposalInfo } from '../api/proposal';
@@ -8,11 +8,14 @@ export type ProposalInfo = {
   test: Object
 };
 
-export const testData = (): ThunkAction<ProposalActionType, Object> => {
+export const getProposal = (
+  id: string
+): ThunkAction<ProposalActionType, Object> => {
   return async (dispatch: Dispatch<ProposalActionType, Object>) => {
+    const data = await getProposalInfo(id);
     dispatch({
-      type: PROPOSAL_ACTION_TESTING,
-      payload: getProposalInfo()
+      type: PROPOSAL_INFO,
+      payload: data
     });
   };
 };

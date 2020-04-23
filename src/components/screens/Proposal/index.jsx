@@ -1,8 +1,9 @@
 // @flow
 import React, { Component } from 'react';
 import type { Match } from 'react-router-dom';
+import { Map } from 'immutable';
 import { connect } from 'react-redux';
-import { testData } from '../../../actions/proposal-actions';
+import { getProposal } from '../../../actions/proposal-actions';
 import { getTestingData } from '../../../selectors';
 import ProposalInfo from './ProposalInfo';
 import TasksList from './TasksList';
@@ -13,13 +14,14 @@ import AddQuestionModal from './AddQuestionModal';
 type State = {
   showModal: boolean,
   data: Object,
-  tasks: Array<Object>,
   items: Array<Object>,
   teams: Array<Object>
 };
 
 type Props = {
-  match: Match
+  match: Match,
+  questions: Map,
+  getProposalInfo: Function
 };
 
 class Proposal extends Component<Props, State> {
@@ -40,101 +42,6 @@ class Proposal extends Component<Props, State> {
         countries: ['France', 'UK', 'Italy', 'Spain'],
         indication: 'Myopia'
       },
-      tasks: [
-        {
-          data: [
-            {
-              id: 1,
-              question: 'Question',
-              answer: 'Answer',
-              owner: ['Owner', 'Pedro'],
-              dueDate: '02-Apr-2020',
-              completionDate: '02-Apr-2020',
-              complete: true
-            },
-            {
-              id: 2,
-              question: 'Question',
-              answer: 'Answer',
-              owner: ['Awner', 'Homer', 'jesus'],
-              dueDate: '02-Apr-2020',
-              completionDate: '02-Apr-2020',
-              complete: true
-            }
-          ],
-          complete: false,
-          title: 'Resources',
-          incomplete: 8
-        },
-        {
-          data: [
-            {
-              id: 1,
-              question: 'Question',
-              answer: 'Answer',
-              owner: ['Owner', 'Pedro'],
-              dueDate: '02-Apr-2020',
-              completionDate: '02-Apr-2020',
-              complete: false
-            },
-            {
-              id: 2,
-              question: 'Question',
-              answer: 'Answer',
-              owner: ['Awner', 'Homer', 'jesus'],
-              dueDate: '02-Apr-2020',
-              completionDate: '02-Apr-2020',
-              complete: false
-            },
-            {
-              id: 3,
-              question: 'Question',
-              answer: 'Answer',
-              owner: ['Awner', 'Homer', 'jesus'],
-              dueDate: '02-Apr-2020',
-              completionDate: '02-Apr-2020',
-              complete: true
-            },
-            {
-              id: 4,
-              question: 'Question',
-              answer: 'Answer',
-              owner: ['Awner', 'Homer', 'jesus'],
-              dueDate: '02-Apr-2020',
-              completionDate: '02-Apr-2020',
-              complete: true
-            }
-          ],
-          complete: false,
-          title: 'Labs',
-          incomplete: 2
-        },
-        {
-          data: [
-            {
-              id: 1,
-              question: 'Question',
-              answer: 'Answer',
-              owner: ['Owner', 'Pedro'],
-              dueDate: '02-Apr-2020',
-              completionDate: '02-Apr-2020',
-              complete: true
-            },
-            {
-              id: 2,
-              question: 'Question',
-              answer: 'Answer',
-              owner: ['Awner', 'Homer', 'jesus'],
-              dueDate: '02-Apr-2020',
-              completionDate: '02-Apr-2020',
-              complete: true
-            }
-          ],
-          complete: true,
-          title: 'Medical',
-          incomplete: 0
-        }
-      ],
       items: [
         {
           id: 0,
@@ -183,15 +90,13 @@ class Proposal extends Component<Props, State> {
   }
 
   componentDidMount() {
-    const { match } = this.props;
-    console.log(match.params.id);
-    // this.props.startAction();
+    const { getProposalInfo, match } = this.props;
+    getProposalInfo(match.params.id);
   }
 
   onClose = () => {
-    // const { showModal } = this.state;
-    // this.setState({ showModal: !showModal });
-    this.props.testData();
+    const { showModal } = this.state;
+    this.setState({ showModal: !showModal });
   };
 
   onSave = () => {
@@ -199,12 +104,10 @@ class Proposal extends Component<Props, State> {
   };
 
   render() {
-    const { showModal, data, tasks, items, teams } = this.state;
-    const { asdasd } = this.props;
-    console.log(asdasd);
-
+    const { showModal, data, items, teams } = this.state;
+    const { questions } = this.props;
     return (
-      <div className="proposal-wrapper">
+      <div className="proposal-getProposalwrapper">
         <Toolbar />
         <ProposalInfo data={data} />
         <div className="tasksList-title-wrapper">
@@ -217,7 +120,7 @@ class Proposal extends Component<Props, State> {
             <Add className="tasksList-add-icon" />
           </div>
         </div>
-        <TasksList tasks={tasks} />
+        {/* <TasksList tasks={questions} /> */}
         {showModal ? (
           <AddQuestionModal
             onClose={this.onClose}
@@ -231,8 +134,11 @@ class Proposal extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = state => ({
-  asdasd: getTestingData(state)
-});
+const mapStateToProps = (state: Map) => {
+  const questions = state.proposal.get('proposalQuestions');
+  return { questions };
+};
 
-export default connect(mapStateToProps, { testData })(Proposal);
+export default connect(mapStateToProps, { getProposalInfo: getProposal })(
+  Proposal
+);

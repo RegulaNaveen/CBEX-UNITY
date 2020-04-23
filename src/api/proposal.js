@@ -2,12 +2,12 @@
 import axios from 'axios';
 
 const PROPOSAL_API_URL =
-  'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/proposals/98625737-615a-4e9a-a249-9dac53ae7fba';
+  'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/proposals/';
 
-export const getProposalInfo = async (): Promise<Object> => {
+export const getProposalInfo = async (id: string): Promise<Object> => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${PROPOSAL_API_URL}`)
+      .get(`${PROPOSAL_API_URL}/${id}`)
       .then(response => {
         resolve(response.data);
       })
@@ -17,4 +17,4 @@ export const getProposalInfo = async (): Promise<Object> => {
   });
 };
 
-export const k = 0;
+export default function() {}
