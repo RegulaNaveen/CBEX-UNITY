@@ -107,7 +107,7 @@ class Proposal extends Component<Props, State> {
     const { showModal, data, items, teams } = this.state;
     const { questions } = this.props;
     return (
-      <div className="proposal-getProposalwrapper">
+      <div className="proposal-wrapper">
         <Toolbar />
         <ProposalInfo data={data} />
         <div className="tasksList-title-wrapper">
