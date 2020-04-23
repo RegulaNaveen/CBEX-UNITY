@@ -1,5 +1,6 @@
 // @flow
 import React, { Component } from 'react';
+import type { Match } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { testData } from '../../../actions/proposal-actions';
 import { getTestingData } from '../../../selectors';
@@ -17,7 +18,9 @@ type State = {
   teams: Array<Object>
 };
 
-type Props = {};
+type Props = {
+  match: Match
+};
 
 class Proposal extends Component<Props, State> {
   constructor(props: Object) {
@@ -180,6 +183,8 @@ class Proposal extends Component<Props, State> {
   }
 
   componentDidMount() {
+    const { match } = this.props;
+    console.log(match.params.id);
     // this.props.startAction();
   }
 
