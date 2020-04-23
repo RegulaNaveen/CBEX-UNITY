@@ -4,7 +4,7 @@ import type { Match } from 'react-router-dom';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { getProposal } from '../../../actions/proposal-actions';
-import { getTestingData } from '../../../selectors';
+import { getQuestions } from '../../../selectors';
 import ProposalInfo from './ProposalInfo';
 import TasksList from './TasksList';
 import Toolbar from '../../Toolbar';
@@ -120,7 +120,7 @@ class Proposal extends Component<Props, State> {
             <Add className="tasksList-add-icon" />
           </div>
         </div>
-        {/* <TasksList tasks={questions} /> */}
+        <TasksList tasks={questions} />
         {showModal ? (
           <AddQuestionModal
             onClose={this.onClose}
@@ -135,7 +135,7 @@ class Proposal extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: Map) => {
-  const questions = state.proposal.get('proposalQuestions');
+  const questions = getQuestions(state);
   return { questions };
 };
 

@@ -9,7 +9,6 @@ const INITIAL_STATE: Map = fromJS({
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
   const { proposalQuestions } = action.payload;
-  debugger;
   return state.set('proposalQuestions', proposalQuestions);
 };
 
