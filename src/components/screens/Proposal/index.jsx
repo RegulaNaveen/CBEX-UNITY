@@ -29,7 +29,7 @@ class Proposal extends Component<Props, State> {
     super(props);
 
     this.state = {
-      showModal: false,
+      showModal: true,
       data: {
         title: 'RFP-1028',
         accountExecutive: 'Jan Levinson-Gould',
