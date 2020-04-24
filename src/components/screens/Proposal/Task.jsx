@@ -38,6 +38,27 @@ class Task extends Component<Props, State> {
     }
   };
 
+  renderAnswer = (type: string, options: Array<string>) => {
+    switch (type) {
+      case 'text':
+        return <div>Here goes text input</div>;
+      case 'number':
+        return <div>Here goes number input</div>;
+      case 'y/n':
+        return <div>Here goes y/n dropdown</div>;
+      // return (
+      //   <Dropdown
+      //     key={item.answer}
+      //     id="dd-proposal-answer"
+      //     placeholder="Select"
+      //     items={item.answer}
+      //   />
+      // );
+      default:
+        return <div>Answer placeholder</div>;
+    }
+  };
+
   render() {
     const { isCollapsed } = this.state;
     const { data, isComplete, title, uncompletedQuestions } = this.props;
@@ -47,7 +68,6 @@ class Task extends Component<Props, State> {
       completionDate: '02-Apr-2020',
       complete: true
     };
-    // debugger;
     return (
       <div className={isComplete ? 'task-wrapper complete' : 'task-wrapper'}>
         <button
@@ -131,12 +151,10 @@ class Task extends Component<Props, State> {
                   )}
                   <p className="task-table-row-question">{item.questionText}</p>
                   <div className="task-table-row-answer">
-                    <Dropdown
-                      key={item.answer}
-                      id="dd-proposal-answer"
-                      placeholder="Select"
-                      items={item.answer}
-                    />
+                    {this.renderAnswer(
+                      item.answerConfiguration.type,
+                      item.answerConfiguration.options
+                    )}
                   </div>
                   <div className="task-table-row-owner">
                     {hardCode.owner.map(owner => (
