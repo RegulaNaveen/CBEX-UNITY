@@ -1,6 +1,10 @@
 // @flow
 import React, { PureComponent } from 'react';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
+import { DateUtils } from 'react-day-picker';
+import dateFnsFormat from 'date-fns/format';
+import dateFnsParse from 'date-fns/parse';
+import typeof Locale from 'date-fns/locale/en-US';
 import 'react-day-picker/lib/style.css';
 import Modal from '../../common/Modal';
 import DatePickerCustomInput from '../../common/DatePickerCustomInput';
@@ -54,6 +58,18 @@ class AddQuestionModal extends PureComponent<Props, State> {
     });
   };
 
+  parseDate = (str: string, format: string, locale: Locale) => {
+    const parsed = dateFnsParse(str, format, new Date(), { locale });
+    if (DateUtils.isDate(parsed)) {
+      return parsed;
+    }
+    return undefined;
+  };
+
+  formatDate = (date: number, format: string, locale: Locale) => {
+    return dateFnsFormat(date, format, { locale });
+  };
+
   render() {
     const { isChecked, questionText, selectedDay } = this.state;
     const { onClose, onSave, items, teams } = this.props;
@@ -101,6 +117,8 @@ class AddQuestionModal extends PureComponent<Props, State> {
                   onDayChange={this.handleDayChange}
                   component={DatePickerCustomInput}
                   format="MM/dd/yyyy"
+                  formatDate={this.formatDate}
+                  parseDate={this.parseDate}
                   dayPickerProps={{
                     showOutsideDays: true,
                     todayButton: 'Today',
