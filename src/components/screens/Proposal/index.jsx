@@ -4,7 +4,7 @@ import type { Match } from 'react-router-dom';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { getProposal } from '../../../actions/proposal-actions';
-import { getQuestions } from '../../../selectors';
+import { getQuestions, getQuestionsList } from '../../../selectors';
 import ProposalInfo from './ProposalInfo';
 import TasksList from './TasksList';
 import Toolbar from '../../Toolbar';
@@ -21,6 +21,7 @@ type State = {
 type Props = {
   match: Match,
   questions: Map,
+  questionsList: Map,
   getProposalInfo: Function
 };
 
@@ -105,8 +106,10 @@ class Proposal extends Component<Props, State> {
 
   render() {
     const { showModal, data, items, teams } = this.state;
-    const { questions } = this.props;
-    console.log('render.......................', questions);
+    const { questions, questionsList } = this.props;
+    console.log('render SECTIONS', questions);
+
+    console.log('render QUESTIONS', questionsList);
 
     return (
       <div className="proposal-wrapper">
@@ -138,7 +141,8 @@ class Proposal extends Component<Props, State> {
 
 const mapStateToProps = (state: Map) => {
   const questions = getQuestions(state);
-  return { questions };
+  const questionsList = getQuestionsList(state);
+  return { questions, questionsList };
 };
 
 export default connect(mapStateToProps, { getProposalInfo: getProposal })(

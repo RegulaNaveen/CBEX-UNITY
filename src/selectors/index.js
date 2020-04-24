@@ -6,5 +6,8 @@ import * as proposalSelectors from './proposal';
 export const getQuestions = (state: Object): Map =>
   proposalSelectors.getQuestions(state.proposal);
 
+export const getQuestionsList = (state: Object): Map =>
+  proposalSelectors.getQuestionsList(state.proposal);
+
 export const DummyForExport = (state: Map): string =>
   proposalSelectors.DummyForExport(state.proposal);
