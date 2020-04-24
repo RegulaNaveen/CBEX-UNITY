@@ -125,7 +125,7 @@ class Proposal extends Component<Props, State> {
             <Add className="tasksList-add-icon" />
           </div>
         </div>
-        <TasksList tasks={questions} />
+        <TasksList tasks={questions} tasksQuestions={questionsList} />
         {showModal ? (
           <AddQuestionModal
             onClose={this.onClose}

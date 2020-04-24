@@ -4,33 +4,15 @@ import { Map } from 'immutable';
 import Task from './Task';
 
 type Props = {
-  tasks: Map
+  tasks: Map,
+  tasksQuestions: Map
 };
 
-const TasksList = ({ tasks }: Props) => {
+const TasksList = ({ tasks, tasksQuestions }: Props) => {
   return (
     <div className="tasksList-wrapper">
       {tasks.map(task => {
-        const data = [
-          {
-            id: 1,
-            question: 'Question',
-            answer: ['Owner', 'Pedro'],
-            owner: ['Owner', 'Pedro'],
-            dueDate: '02-Apr-2020',
-            completionDate: '02-Apr-2020',
-            complete: true
-          },
-          {
-            id: 2,
-            question: 'Question',
-            answer: ['Owner', 'Pedro'],
-            owner: ['Awner', 'Homer', 'jesus'],
-            dueDate: '02-Apr-2020',
-            completionDate: '02-Apr-2020',
-            complete: true
-          }
-        ];
+        const data = tasksQuestions[task];
         const complete = false;
         const incomplete = 4;
         return (

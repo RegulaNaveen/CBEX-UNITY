@@ -41,6 +41,13 @@ class Task extends Component<Props, State> {
   render() {
     const { isCollapsed } = this.state;
     const { data, isComplete, title, uncompletedQuestions } = this.props;
+    const hardCode = {
+      owner: ['Owner', 'Pedro'],
+      dueDate: '02-Apr-2020',
+      completionDate: '02-Apr-2020',
+      complete: true
+    };
+    // debugger;
     return (
       <div className={isComplete ? 'task-wrapper complete' : 'task-wrapper'}>
         <button
@@ -118,11 +125,11 @@ class Task extends Component<Props, State> {
             </div>
             {data &&
               data.map(item => (
-                <div key={item.id} className="task-table-row">
-                  {item.complete && (
+                <div key={item.questionId} className="task-table-row">
+                  {hardCode.complete && (
                     <Checkmark className="task-table-row-checkmark icon-highlight" />
                   )}
-                  <p className="task-table-row-question">{item.question}</p>
+                  <p className="task-table-row-question">{item.questionText}</p>
                   <div className="task-table-row-answer">
                     <Dropdown
                       key={item.answer}
@@ -132,7 +139,7 @@ class Task extends Component<Props, State> {
                     />
                   </div>
                   <div className="task-table-row-owner">
-                    {item.owner.map(owner => (
+                    {hardCode.owner.map(owner => (
                       <p
                         key={owner}
                         className="task-table-row-owner-icon"
@@ -142,9 +149,9 @@ class Task extends Component<Props, State> {
                       </p>
                     ))}
                   </div>
-                  <p className="task-table-row-due-date">{item.dueDate}</p>
+                  <p className="task-table-row-due-date">{hardCode.dueDate}</p>
                   <p className="task-table-row-completion-date">
-                    {item.completionDate}
+                    {hardCode.completionDate}
                   </p>
                   <Edit className="task-table-row-edit icon-highlight" />
                 </div>
