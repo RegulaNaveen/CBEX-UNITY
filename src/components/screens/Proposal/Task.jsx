@@ -4,7 +4,7 @@ import chevronRight from '../../../../img/chevron-right.svg';
 import chevronDown from '../../../../img/chevron-down.svg';
 import { Checkmark, Edit } from '../../svg';
 import { getRandomColor } from '../../../utils/colors';
-import Dropdown from '../../common/Dropdown';
+// import Dropdown from '../../common/Dropdown';
 
 type State = {
   isCollapsed: boolean
@@ -38,21 +38,23 @@ class Task extends Component<Props, State> {
     }
   };
 
-  renderAnswer = (type: string, options: Array<string>) => {
+  // TODO: Add options: Array<string> to props
+  renderAnswer = (type: string) => {
     switch (type) {
       case 'text':
         return <div>Here goes text input</div>;
       case 'number':
         return <div>Here goes number input</div>;
       case 'y/n':
-        return (
-          <Dropdown
-            key={options}
-            id="dd-proposal-answer"
-            placeholder="Select"
-            items={options}
-          />
-        );
+        return <div>Here goes yes/no dropdown</div>;
+      // return (
+      //   <Dropdown
+      //     key={options}
+      //     id="dd-proposal-answer"
+      //     placeholder="Select"
+      //     items={options}
+      //   />
+      // );
       default:
         return <div>Answer placeholder</div>;
     }
@@ -154,10 +156,8 @@ class Task extends Component<Props, State> {
                     </p>
                   </div>
                   <div className="task-table-row-answer">
-                    {this.renderAnswer(
-                      item.answerConfiguration.type,
-                      item.answerConfiguration.options
-                    )}
+                    {// TODO: Add item.answerConfiguration.options to props
+                    this.renderAnswer(item.answerConfiguration.type)}
                   </div>
                   <div className="task-table-row-owner">
                     {hardCode.owner.map(owner => (

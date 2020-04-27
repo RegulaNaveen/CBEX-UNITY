@@ -2,13 +2,15 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
+import { Map } from 'immutable';
 import TaskList from '../../../../../../src/components/screens/Proposal/TasksList';
 import Task from '../../../../../../src/components/screens/Proposal/Task';
 
 export default class TaskListModel {
-  constructor(tasks: Array<Object>) {
+  constructor(tasks: Map, tasksQuestions: Map) {
     const props = {
-      tasks
+      tasks,
+      tasksQuestions
     };
     this._wrapper = shallow(<TaskList {...props} />);
   }

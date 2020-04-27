@@ -2,8 +2,8 @@
 import expect from 'expect';
 import { describe, it } from 'mocha';
 import { fromJS } from 'immutable';
-import { PROPOSAL_INFO } from '../../../../src/actions/proposal-types';
-import proposalReducer from '../../../../src/reducers/proposal';
+import { PROPOSAL_INFO } from '../../../src/actions/proposal-types';
+import proposalReducer from '../../../src/reducers/proposal';
 
 describe('proposal reducer', () => {
   const initialState = fromJS({
