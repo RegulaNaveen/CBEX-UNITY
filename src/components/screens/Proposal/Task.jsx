@@ -45,15 +45,14 @@ class Task extends Component<Props, State> {
       case 'number':
         return <div>Here goes number input</div>;
       case 'y/n':
-        return <div>Here goes y/n dropdown</div>;
-      // return (
-      //   <Dropdown
-      //     key={item.answer}
-      //     id="dd-proposal-answer"
-      //     placeholder="Select"
-      //     items={item.answer}
-      //   />
-      // );
+        return (
+          <Dropdown
+            key={options}
+            id="dd-proposal-answer"
+            placeholder="Select"
+            items={options}
+          />
+        );
       default:
         return <div>Answer placeholder</div>;
     }
@@ -149,7 +148,11 @@ class Task extends Component<Props, State> {
                   {hardCode.complete && (
                     <Checkmark className="task-table-row-checkmark icon-highlight" />
                   )}
-                  <p className="task-table-row-question">{item.questionText}</p>
+                  <div className="task-table-row-question-content">
+                    <p className="task-table-row-question">
+                      {item.questionText}
+                    </p>
+                  </div>
                   <div className="task-table-row-answer">
                     {this.renderAnswer(
                       item.answerConfiguration.type,
