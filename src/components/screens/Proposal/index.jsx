@@ -107,9 +107,6 @@ class Proposal extends Component<Props, State> {
   render() {
     const { showModal, data, items, teams } = this.state;
     const { questions, questionsList } = this.props;
-    console.log('render SECTIONS', questions);
-
-    console.log('render QUESTIONS', questionsList);
 
     return (
       <div className="proposal-wrapper">
