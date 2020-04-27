@@ -6,21 +6,26 @@ import { Provider } from 'react-redux';
 import store from './store';
 import PrivateRoute from './PrivateRoute';
 import { LOGIN, PROPOSALS } from './routes';
+import SessionHandler from './SessionHandler';
 import Login from './components/auth/Login';
 import Proposal from './components/screens/Proposal';
 
 const App = () => {
+  const isAuthenticated = !!localStorage.getItem('isLoggedin');
+  // const isAuthenticated = true;
   return (
     <Provider store={store}>
-      <BrowserRouter>
+    <BrowserRouter>
+      <SessionHandler>
         <Switch>
           <Route path={LOGIN} component={Login} />
-          <PrivateRoute isAuthenticated>
-            <Route exact path={PROPOSALS} component={Proposal} />
+          <PrivateRoute isAuthenticated={isAuthenticated}>
+            <Route path={PROPOSALS} component={Proposal} />
           </PrivateRoute>
           <Redirect to={LOGIN} />
         </Switch>
-      </BrowserRouter>
+      </SessionHandler>
+    </BrowserRouter>
     </Provider>
   );
 };
