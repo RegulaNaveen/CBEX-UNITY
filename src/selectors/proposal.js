@@ -7,15 +7,17 @@ const getSections = (questions: Array<Object>) => {
 
   questions.forEach((question: Object) => {
     const { section } = question;
-    if (!sections.includes(section)) sections.push(section);
+    if (!sections.includes(section.sectionName))
+      sections.push(section.sectionName);
   });
 
   return sections;
 };
 
 const getQuestionsbySections = (questions: Array<Object>) => {
-  const questionsList = _.mapValues(_.groupBy(questions, 'section'), sections =>
-    sections.map(question => _.omit(question, 'section'))
+  const questionsList = _.mapValues(
+    _.groupBy(questions, 'section.sectionName'),
+    sections => sections.map(question => _.omit(question, 'section'))
   );
 
   return questionsList;

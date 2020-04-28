@@ -63,6 +63,7 @@ class Task extends Component<Props, State> {
   render() {
     const { isCollapsed } = this.state;
     const { data, isComplete, title, uncompletedQuestions } = this.props;
+
     const hardCode = {
       owner: ['Owner', 'Pedro'],
       dueDate: '02-Apr-2020',
