@@ -9,5 +9,8 @@ export const getQuestions = (state: Object): Map =>
 export const getQuestionsList = (state: Object): Map =>
   proposalSelectors.getQuestionsList(state.proposal);
 
-export const DummyForExport = (state: Map): string =>
-  proposalSelectors.DummyForExport(state.proposal);
+export const isProposalLoading = (state: Object): Boolean =>
+  proposalSelectors.isProposalLoading(state.proposal);
+
+export const hasProposalErrors = (state: Object): string =>
+  proposalSelectors.hasProposalErrors(state.proposal);

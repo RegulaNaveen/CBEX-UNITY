@@ -26,7 +26,7 @@ describe('proposal actions', () => {
   const proposal = Map({});
 
   it('getProposal', async () => {
-    const id = '18bffbde-d1f4-4848-8b8e-62e05a11be56';
+    const id = '6ae0130d-b775-4a9f-97e5-cf330c771ae0';
 
     getProposalInfoStub.returns(Promise.resolve(proposal));
 

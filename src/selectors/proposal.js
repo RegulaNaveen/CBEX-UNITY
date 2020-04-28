@@ -27,4 +27,8 @@ export const getQuestions = (proposal: Map): Map =>
 export const getQuestionsList = (proposal: Map): Map =>
   getQuestionsbySections(proposal.get('proposalQuestions'));
 
-export const DummyForExport = (state: Map): Map => state.get('asd');
+export const isProposalLoading = (proposal: Map): Map =>
+  proposal.get('proposalIsLoading');
+
+export const hasProposalErrors = (proposal: Map): Map =>
+  proposal.get('proposalError');

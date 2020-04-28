@@ -1,7 +1,7 @@
 // @flow
 import expect from 'expect';
 import { describe, it } from 'mocha';
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import { PROPOSAL_INFO } from '../../../../src/actions/proposal-types';
 import proposalReducer from '../../../../src/reducers/proposal';
 
@@ -14,15 +14,7 @@ describe('proposal reducer', () => {
     const proposalQuestions = 'Fake proposal info';
     const action = { type: PROPOSAL_INFO, payload: proposalQuestions };
     const newState = proposalReducer(initialState, action);
-    console.log(newState);
-    
-    const expectState = initialState.set(
-      'proposalQuestions',
-      proposalQuestions
-    );
-
-    console.log(expectState);
-    
+    const expectState = Map({});
     expect(newState).toEqual(expectState);
   });
 });
