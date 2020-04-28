@@ -42,8 +42,8 @@ class Dropdown extends PureComponent<Props, State> {
 
   render() {
     const { isCollapsed, selectedValue } = this.state;
-
     const { id, placeholder, items, title } = this.props;
+
     return (
       <>
         {title ? <p className="dd-title">{title}</p> : null}

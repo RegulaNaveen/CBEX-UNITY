@@ -4,10 +4,12 @@ import chevronRight from '../../../../img/chevron-right.svg';
 import chevronDown from '../../../../img/chevron-down.svg';
 import { Checkmark, Edit } from '../../svg';
 import { getRandomColor } from '../../../utils/colors';
-// import Dropdown from '../../common/Dropdown';
+import Dropdown from '../../common/Dropdown';
+import TextArea from '../../common/TextArea';
 
 type State = {
-  isCollapsed: boolean
+  isCollapsed: boolean,
+  answerText: string
 };
 
 type Props = {
@@ -22,7 +24,8 @@ class Task extends Component<Props, State> {
     super(props);
 
     this.state = {
-      isCollapsed: false
+      isCollapsed: false,
+      answerText: ''
     };
   }
 
@@ -38,23 +41,52 @@ class Task extends Component<Props, State> {
     }
   };
 
-  // TODO: Add options: Array<string> to props
+  handleAnswerText = (event: SyntheticInputEvent<EventTarget>) => {
+    this.setState({ answerText: event.target.value });
+  };
+
   renderAnswer = (type: string) => {
+    const { answerText } = this.state;
+    const options = [
+      {
+        id: 1,
+        title: 'Yes'
+      },
+      {
+        id: 2,
+        title: 'No'
+      }
+    ];
     switch (type) {
       case 'text':
-        return <div>Here goes text input</div>;
+        return (
+          <TextArea
+            id="question-text-area"
+            className="proposal-text-area"
+            value={answerText}
+            onChange={this.handleAnswerText}
+            placeholder="Text..."
+          />
+        );
       case 'number':
-        return <div>Here goes number input</div>;
+        return (
+          <TextArea
+            id="question-text-area"
+            className="proposal-text-area"
+            value={answerText}
+            onChange={this.handleAnswerText}
+            placeholder="Number text..."
+            type="number"
+          />
+        );
       case 'y/n':
-        return <div>Here goes yes/no dropdown</div>;
-      // return (
-      //   <Dropdown
-      //     key={options}
-      //     id="dd-proposal-answer"
-      //     placeholder="Select"
-      //     items={options}
-      //   />
-      // );
+        return (
+          <Dropdown
+            id="dd-proposal-answer"
+            placeholder="Select"
+            items={options}
+          />
+        );
       default:
         return <div>Answer placeholder</div>;
     }
@@ -63,7 +95,6 @@ class Task extends Component<Props, State> {
   render() {
     const { isCollapsed } = this.state;
     const { data, isComplete, title, uncompletedQuestions } = this.props;
-
     const hardCode = {
       owner: ['Owner', 'Pedro'],
       dueDate: '02-Apr-2020',
@@ -157,7 +188,7 @@ class Task extends Component<Props, State> {
                     </p>
                   </div>
                   <div className="task-table-row-answer">
-                    {// TODO: Add item.answerConfiguration.options to props
+                    {/* TODO: Add item.anwerConfiguration.options */
                     this.renderAnswer(item.answerConfiguration.type)}
                   </div>
                   <div className="task-table-row-owner">
