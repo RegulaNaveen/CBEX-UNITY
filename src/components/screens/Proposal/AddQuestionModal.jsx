@@ -1,7 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
-import typeof Locale from 'date-fns/locale/en-US';
 import 'react-day-picker/lib/style.css';
 import { parseDate, formatDate } from '../../../utils/DateUtils';
 import Modal from '../../common/Modal';
@@ -56,11 +55,9 @@ class AddQuestionModal extends PureComponent<Props, State> {
     });
   };
 
-  handleDate = (date: string, format: string, locale: Locale) =>
-    parseDate(date, format, locale);
+  handleDate = (date: string, format: string) => parseDate(date, format);
 
-  handleFormatDate = (date: number, format: string, locale: Locale) =>
-    formatDate(date, format, locale);
+  handleFormatDate = (date: Date, format: string) => formatDate(date, format);
 
   render() {
     const { isChecked, questionText, selectedDay } = this.state;
