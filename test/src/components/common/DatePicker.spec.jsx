@@ -18,6 +18,11 @@ describe('DatePicker component', () => {
       expect(wrapper.hasLabel()).toBe(label);
     });
 
+    it('should not render Paragraph component when label is empty', () => {
+      const wrapper = new DatePickerModel('', selectedDay);
+      expect(wrapper.hasParagraphs()).toBe(false);
+    });
+
     it('should render DayPicker component', () => {
       const wrapper = new DatePickerModel(label, selectedDay);
       expect(wrapper.hasDayPicker()).toBe(true);
