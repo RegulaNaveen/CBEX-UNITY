@@ -4,9 +4,9 @@ import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
 import sinon from 'sinon';
 import type { stub } from 'sinon';
-import DayPickerInput from 'react-day-picker/DayPickerInput';
 import AddQuestoinModal from '../../../../../../src/components/screens/Proposal/AddQuestionModal';
 import Modal from '../../../../../../src/components/common/Modal';
+import DatePicker from '../../../../../../src/components/common/DatePicker';
 import { PrimaryButton } from '../../../../../../src/components/common/Buttons';
 import Checkbox from '../../../../../../src/components/common/Checkbox';
 import Dropdown from '../../../../../../src/components/common/Dropdown';
@@ -58,13 +58,15 @@ export default class AddQuestoinModalModel {
 
   _getPrimaryButton = (): ShallowWrapper => this._wrapper.find(PrimaryButton);
 
-  _getDayPicker = (): ShallowWrapper => this._wrapper.find(DayPickerInput);
+  _getDatePicker = (): ShallowWrapper => this._wrapper.find(DatePicker);
+
+  getSelectedDay = (): string => this._wrapper.state('selectedDay');
 
   hasModalComponent = (): boolean => this._getModalComponent().length === 1;
 
-  hasDayPicker = (): boolean => this._getDayPicker().length === 1;
+  hasDatePicker = (): boolean => this._getDatePicker().length === 1;
 
-  hasParagraphs = (): boolean => this._getParagraphs().length === 2;
+  hasParagraphs = (): boolean => this._getParagraphs().length === 1;
 
   hasTitle = (): string =>
     this._getParagraphs()
@@ -103,4 +105,12 @@ export default class AddQuestoinModalModel {
     this._getPrimaryButton()
       .at(this._okayButtonIndex)
       .prop('children');
+
+  // Interactions
+
+  doHandleDayChange = () => {
+    this._getDatePicker()
+      .props()
+      .handleDayChange('testDay');
+  };
 }

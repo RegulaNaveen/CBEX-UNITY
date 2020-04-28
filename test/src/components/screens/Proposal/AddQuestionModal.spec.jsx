@@ -50,7 +50,6 @@ describe('AddQuestionModal component', () => {
     }
   ];
   const title = 'Add New Question';
-  const label = 'Label';
   const checkboxText = 'Send notification now';
   const cancel = 'Cancel';
   const okay = 'Okay';
@@ -66,14 +65,9 @@ describe('AddQuestionModal component', () => {
       expect(wrapper.hasTitle()).toBe(title);
     });
 
-    it('should render Label text', () => {
-      const wrapper = new AddQuestionModalModel(items, teams);
-      expect(wrapper.hasLabel()).toBe(label);
-    });
-
     it('should render DayPicker component', () => {
       const wrapper = new AddQuestionModalModel(items, teams);
-      expect(wrapper.hasDayPicker()).toBe(true);
+      expect(wrapper.hasDatePicker()).toBe(true);
     });
 
     it('should render Close icon', () => {
@@ -107,6 +101,15 @@ describe('AddQuestionModal component', () => {
       expect(wrapper.hasPrimaryButton()).toBe(true);
       expect(wrapper.hasCancelPrimaryButtonText()).toBe(cancel);
       expect(wrapper.hasOkayPrimaryButtonText()).toBe(okay);
+    });
+  });
+
+  describe('interactions', () => {
+    it('should change selectedDay state when handleDayChange is called', () => {
+      const wrapper = new AddQuestionModalModel(items, teams);
+      expect(wrapper.getSelectedDay()).toBe('');
+      wrapper.doHandleDayChange();
+      expect(wrapper.getSelectedDay()).toBe('testDay');
     });
   });
 });
