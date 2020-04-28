@@ -79,6 +79,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
                 className="modal-text-area"
                 placeholder="Hint text..."
                 title="Enter Question Text"
+                type="text"
               />
             </div>
             <div className="modal-segment">

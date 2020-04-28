@@ -33,33 +33,21 @@ class TextArea extends PureComponent<Props, State> {
     this.setState({ textValue: event.target.value });
   };
 
-  handleKeyPress = (event: KeyboardEvent) => {
-    const value = event.key;
-    const isNumber = /[^0-9]/;
-    const { textValue } = this.state;
-    const { type } = this.props;
-    if (type === 'number') {
-      if (!value.match(isNumber)) {
-        this.setState({ textValue });
-      } else {
-        this.setState({ textValue: '' });
-      }
-    }
-  };
-
   render() {
-    const { id, className, placeholder, title } = this.props;
+    const { id, className, placeholder, title, type } = this.props;
     const { textValue } = this.state;
+    console.log(textValue);
+
     return (
       <>
         {title ? <p className="text-area-title">{title}</p> : null}
-        <textarea
+        <input
           id={id}
           className={classnames('text-area-wrapper', className)}
           value={textValue}
           onChange={this.handleText}
           placeholder={placeholder}
-          onKeyPress={this.handleKeyPress}
+          type={type}
         />
       </>
     );

@@ -66,6 +66,7 @@ class Task extends Component<Props, State> {
             value={answerText}
             onChange={this.handleAnswerText}
             placeholder="Text..."
+            type="text"
           />
         );
       case 'number':
