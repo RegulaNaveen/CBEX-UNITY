@@ -1,0 +1,78 @@
+.date-picker {
+  .date-picker-title {
+    height: 24px;
+    width: 100%;
+    color: $neutral8;
+    font-family: $proximaNova;
+    font-size: 14px;
+    letter-spacing: 0;
+    line-height: 24px;
+    margin-bottom: 4px;
+  }
+
+  .datepicker-container {
+    font-family: $proximaNova;
+    display: inline-block;
+    font-size: 1rem;
+  }
+
+  .datepicker-selected {
+    color: $white;
+    font-weight: bold;
+    background-color: $neptune-secondary;
+  }
+
+  .datepicker-footer {
+    padding-top: 0.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .datepicker-today-button {
+    border: none;
+    background-color: transparent;
+    background-image: none;
+    box-shadow: none;
+    color: #4A90E2;
+    font-size: 0.875em;
+    cursor: pointer;
+  }
+
+  .datepicker-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    height: 40px;
+    width: 173.59px;
+    border: $border;
+    border-radius: 4px;
+    background-color: $white;
+
+    .datepicker-icon{
+      width: 16px;
+      height: 16px;
+      margin-right: 8px;
+      padding-bottom: 2px;
+    }
+
+    .datepicker-input {
+      height: 24px;
+      width: 115px;
+      font-family: $proximaNova;
+      font-size: 16px;
+      letter-spacing: 0;
+      line-height: 24px;
+      border: none;
+    }
+
+    .placeholder {
+      color: $neutral6;
+    }
+
+    .date {
+      color: $black;
+    }
+  }
+}

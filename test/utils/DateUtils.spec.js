@@ -3,11 +3,6 @@ import { it, describe } from 'mocha';
 import expect from 'expect';
 import { formatDate, parseDate } from '../../src/utils/DateUtils';
 
-// 04/16/2020
-// MM/dd/yyyy
-
-// Thu Apr 16 2020 00:00:00 GMT-0500 (Central Daylight Time)
-
 describe('Date Utils', () => {
   it('parseDate', () => {
     const parsedDate =

@@ -1,10 +1,9 @@
 // @flow
 import React, { PureComponent } from 'react';
-import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
 import { parseDate, formatDate } from '../../../utils/DateUtils';
 import Modal from '../../common/Modal';
-import DatePickerCustomInput from '../../common/DatePickerCustomInput';
+import DatePicker from '../../common/DatePicker';
 import { PrimaryButton } from '../../common/Buttons';
 import Checkbox from '../../common/Checkbox';
 import Dropdown from '../../common/Dropdown';
@@ -99,53 +98,13 @@ class AddQuestionModal extends PureComponent<Props, State> {
                   title="Answer Type"
                 />
               </div>
-              <div className="date-picker">
-                <p className="dd-title">Label</p>
-                <DayPickerInput
-                  value={selectedDay || 'MM/DD/YYYY'}
-                  onDayChange={this.handleDayChange}
-                  component={DatePickerCustomInput}
-                  format="MM/dd/yyyy"
-                  formatDate={this.handleFormatDate}
-                  parseDate={this.handleDate}
-                  dayPickerProps={{
-                    showOutsideDays: true,
-                    todayButton: 'Today',
-                    classNames: {
-                      container: 'datepicker-container',
-                      wrapper: 'DayPicker-wrapper',
-                      interactionDisabled: 'DayPicker--interactionDisabled',
-                      months: 'DayPicker-Months',
-                      month: 'DayPicker-Month',
-
-                      navBar: 'DayPicker-NavBar',
-                      navButtonPrev:
-                        'DayPicker-NavButton DayPicker-NavButton--prev',
-                      navButtonNext:
-                        'DayPicker-NavButton DayPicker-NavButton--next',
-                      navButtonInteractionDisabled:
-                        'DayPicker-NavButton--interactionDisabled',
-
-                      caption: 'DayPicker-Caption',
-                      weekdays: 'DayPicker-Weekdays',
-                      weekdaysRow: 'DayPicker-WeekdaysRow',
-                      weekday: 'DayPicker-Weekday',
-                      body: 'DayPicker-Body',
-                      week: 'DayPicker-Week',
-                      weekNumber: 'DayPicker-WeekNumber',
-                      day: 'DayPicker-Day',
-                      footer: 'datepicker-footer',
-                      todayButton: 'datepicker-today-button',
-
-                      // default modifiers
-                      today: 'DayPicker-Day--today',
-                      selected: 'datepicker-selected',
-                      disabled: 'DayPicker-Day--disabl',
-                      outside: 'DayPicker-Day--outside'
-                    }
-                  }}
-                />
-              </div>
+              <DatePicker
+                label="Label"
+                selectedDay={selectedDay}
+                handleDayChange={this.handleDayChange}
+                handleFormatDate={this.handleFormatDate}
+                handleDate={this.handleDate}
+              />
             </div>
             <div className="modal-segment">
               <Dropdown
