@@ -1,11 +1,9 @@
 // @flow
 import React, { PureComponent } from 'react';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
-import { DateUtils } from 'react-day-picker';
-import dateFnsFormat from 'date-fns/format';
-import dateFnsParse from 'date-fns/parse';
 import typeof Locale from 'date-fns/locale/en-US';
 import 'react-day-picker/lib/style.css';
+import { parseDate, formatDate } from '../../../utils/DateUtils';
 import Modal from '../../common/Modal';
 import DatePickerCustomInput from '../../common/DatePickerCustomInput';
 import { PrimaryButton } from '../../common/Buttons';
@@ -58,17 +56,11 @@ class AddQuestionModal extends PureComponent<Props, State> {
     });
   };
 
-  parseDate = (str: string, format: string, locale: Locale) => {
-    const parsed = dateFnsParse(str, format, new Date(), { locale });
-    if (DateUtils.isDate(parsed)) {
-      return parsed;
-    }
-    return undefined;
-  };
+  handleDate = (date: string, format: string, locale: Locale) =>
+    parseDate(date, format, locale);
 
-  formatDate = (date: number, format: string, locale: Locale) => {
-    return dateFnsFormat(date, format, { locale });
-  };
+  handleFormatDate = (date: number, format: string, locale: Locale) =>
+    formatDate(date, format, locale);
 
   render() {
     const { isChecked, questionText, selectedDay } = this.state;
@@ -110,15 +102,15 @@ class AddQuestionModal extends PureComponent<Props, State> {
                   title="Answer Type"
                 />
               </div>
-              <div className="modal-picker">
+              <div className="date-picker">
                 <p className="dd-title">Label</p>
                 <DayPickerInput
                   value={selectedDay || 'MM/DD/YYYY'}
                   onDayChange={this.handleDayChange}
                   component={DatePickerCustomInput}
                   format="MM/dd/yyyy"
-                  formatDate={this.formatDate}
-                  parseDate={this.parseDate}
+                  formatDate={this.handleFormatDate}
+                  parseDate={this.handleDate}
                   dayPickerProps={{
                     showOutsideDays: true,
                     todayButton: 'Today',
