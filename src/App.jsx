@@ -12,7 +12,6 @@ import Proposal from './components/screens/Proposal';
 
 const App = () => {
   const isAuthenticated = !!localStorage.getItem('isLoggedin');
-  // const isAuthenticated = true;
   return (
     <Provider store={store}>
     <BrowserRouter>
