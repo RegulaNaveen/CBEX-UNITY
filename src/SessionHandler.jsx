@@ -16,7 +16,6 @@ const SessionHandler = ({ children }: Props) => {
   const setProposalId = () => {
     const proposalId = location.pathname.split('/')[3];
     localStorage.setItem('proposalId', proposalId);
-    console.log('PROPOSALID');
   };
 
   useEffect(() => {
