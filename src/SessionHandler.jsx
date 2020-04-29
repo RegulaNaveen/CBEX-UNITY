@@ -20,6 +20,12 @@ const SessionHandler = ({ children }: Props) => {
     checkSession();
   });
 
+  const setSession = () => {
+    localStorage.setItem('isLoggedin', 'true');
+    const proposalId = location.pathname.split('/')[3];
+    localStorage.setItem('proposalId', proposalId);
+  };
+
   return children;
 };
 
