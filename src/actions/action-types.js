@@ -16,6 +16,7 @@ export type ApiAction<A, T> = {
 export type GetState = () => State;
 
 export type ThunkAction<A, T> = (
+  // eslint-disable-next-line no-use-before-define
   dispatch: Dispatch<A, T>,
   getState: GetState
 ) => any;

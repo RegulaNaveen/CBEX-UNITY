@@ -29,8 +29,8 @@ export default class DatePickerCustomInputModel {
   hasInput = (itemValue: string): boolean =>
     this._getInput().props().value === itemValue;
 
-  hasInputPropsValue = (value: string): boolean =>
-    this._getInput().prop('value') === value;
+  hasProperClassName = (className: string): boolean =>
+    this._getInput().props().className === className;
 
   // Interactions
   doFocus = () => this._getInput().simulate('focus');

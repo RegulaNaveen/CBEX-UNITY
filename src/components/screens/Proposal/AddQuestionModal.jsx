@@ -1,9 +1,9 @@
 // @flow
 import React, { PureComponent } from 'react';
-import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
+import { parseDate, formatDate } from '../../../utils/DateUtils';
 import Modal from '../../common/Modal';
-import DatePickerCustomInput from '../../common/DatePickerCustomInput';
+import DatePicker from '../../common/DatePicker';
 import { PrimaryButton } from '../../common/Buttons';
 import Checkbox from '../../common/Checkbox';
 import Dropdown from '../../common/Dropdown';
@@ -54,6 +54,10 @@ class AddQuestionModal extends PureComponent<Props, State> {
     });
   };
 
+  handleDate = (date: string, format: string) => parseDate(date, format);
+
+  handleFormatDate = (date: Date, format: string) => formatDate(date, format);
+
   render() {
     const { isChecked, questionText, selectedDay } = this.state;
     const { onClose, onSave, items, teams } = this.props;
@@ -94,17 +98,13 @@ class AddQuestionModal extends PureComponent<Props, State> {
                   title="Answer Type"
                 />
               </div>
-              <div className="modal-picker">
-                <p className="dd-title">Label</p>
-                <DayPickerInput
-                  value={selectedDay || 'Select Date'}
-                  onDayChange={this.handleDayChange}
-                  component={DatePickerCustomInput}
-                  dayPickerProps={{
-                    showOutsideDays: true
-                  }}
-                />
-              </div>
+              <DatePicker
+                label="Date"
+                selectedDay={selectedDay}
+                handleDayChange={this.handleDayChange}
+                handleFormatDate={this.handleFormatDate}
+                handleDate={this.handleDate}
+              />
             </div>
             <div className="modal-segment">
               <Dropdown

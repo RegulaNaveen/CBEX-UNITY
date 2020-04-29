@@ -5,11 +5,18 @@ import DatePickerCustomInputModel from './models/DatePickerCustomInputModel';
 
 describe('DatePickerCustomInput component', () => {
   const value = 'value';
+  const placeholder = 'MM/DD/YYYY';
+  const placeholderClassName = 'datepicker-input placeholder';
 
   describe('rendering', () => {
     it('should render correct value prop', () => {
       const wrapper = new DatePickerCustomInputModel(value);
       expect(wrapper.hasInput(value)).toBe(true);
+    });
+
+    it('should render correct value placeholder', () => {
+      const wrapper = new DatePickerCustomInputModel(placeholder);
+      expect(wrapper.hasProperClassName(placeholderClassName)).toBe(true);
     });
   });
 

@@ -28,6 +28,8 @@ const SessionHandler = ({ children }: Props) => {
     checkSession();
   }, [setProposalId]);
 
+  // TODO: Remove eslint-disable line when setSession is ussed
+  // eslint-disable-next-line no-unused-vars
   const setSession = () => {
     localStorage.setItem('isLoggedin', 'true');
     setProposalId();

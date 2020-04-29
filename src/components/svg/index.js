@@ -8,5 +8,17 @@ import Search from './Search';
 import User from './User';
 import Help from './Help';
 import Settings from './Settings';
+import Calendar from './Calendar';
 
-export { Checkmark, Edit, Add, DropMenu, Bell, Search, User, Help, Settings };
+export {
+  Checkmark,
+  Edit,
+  Add,
+  DropMenu,
+  Bell,
+  Search,
+  User,
+  Help,
+  Settings,
+  Calendar
+};
