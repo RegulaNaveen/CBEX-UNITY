@@ -9,21 +9,25 @@ type Props = {
 const SessionHandler = ({ children }: Props) => {
   const location = useLocation();
 
+  const setProposalId = () => {
+    const proposalId = location.pathname.split('/')[3];
+    localStorage.setItem('proposalId', proposalId);
+    console.log('PROPOSALID');
+  };
+
   useEffect(() => {
     function checkSession() {
       const isLoggedin = localStorage.getItem('isLoggedin');
       if (!isLoggedin) {
-        const proposalId = location.pathname.split('/')[3];
-        localStorage.setItem('proposalId', proposalId);
+        setProposalId();
       }
     }
     checkSession();
-  });
+  }, [setProposalId]);
 
   const setSession = () => {
     localStorage.setItem('isLoggedin', 'true');
-    const proposalId = location.pathname.split('/')[3];
-    localStorage.setItem('proposalId', proposalId);
+    setProposalId();
   };
 
   return children;
