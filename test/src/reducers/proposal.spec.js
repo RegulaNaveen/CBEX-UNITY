@@ -14,9 +14,13 @@ describe('Proposal', () => {
 
   it('should load proposal questions', () => {
     const proposalQuestions = ['Fake Question 1', 'Fake Question 2'];
-    const action = { type: PROPOSAL_INFO, payload: { proposalQuestions } };
+    const isProposalLoading = false;
+    const action = {
+      type: PROPOSAL_INFO,
+      payload: { proposalQuestions, isProposalLoading }
+    };
     const newState = proposalReducer(initialState, action);
-    const expectedState = Map({ proposalQuestions });
+    const expectedState = Map({ proposalQuestions, isProposalLoading });
     expect(newState).toEqual(expectedState);
   });
 

@@ -3,6 +3,14 @@
   background-color: #F7F8FC;
   height: 100%;
 
+  .proposal-loader{
+    flex: 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .tasksList-title-wrapper {
     display: flex;
     justify-content: space-between;

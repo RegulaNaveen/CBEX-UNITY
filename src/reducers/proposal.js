@@ -15,7 +15,9 @@ const INITIAL_STATE: Map = fromJS({
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
   const { proposalQuestions } = action.payload;
-  return state.set('proposalQuestions', proposalQuestions);
+  return state
+    .set('proposalQuestions', proposalQuestions)
+    .set('isProposalLoading', false);
 };
 
 const onProposalLoading = (state: Map): Map => {

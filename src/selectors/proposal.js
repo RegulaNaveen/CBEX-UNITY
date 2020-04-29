@@ -30,7 +30,7 @@ export const getQuestionsList = (proposal: Map): Map =>
   getQuestionsbySections(proposal.get('proposalQuestions'));
 
 export const isProposalLoading = (proposal: Map): Map =>
-  proposal.get('proposalIsLoading');
+  proposal.get('isProposalLoading');
 
 export const hasProposalErrors = (proposal: Map): Map =>
   proposal.get('proposalError');

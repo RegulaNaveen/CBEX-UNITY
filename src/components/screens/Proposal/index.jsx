@@ -3,8 +3,13 @@ import React, { Component } from 'react';
 import type { Match } from 'react-router-dom';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
+import Loader from 'react-loader-spinner';
 import { getProposal } from '../../../actions/proposal-actions';
-import { getQuestions, getQuestionsList } from '../../../selectors';
+import {
+  getQuestions,
+  getQuestionsList,
+  isProposalLoading
+} from '../../../selectors';
 import ProposalInfo from './ProposalInfo';
 import TasksList from './TasksList';
 import Toolbar from '../../Toolbar';
@@ -22,10 +27,11 @@ type Props = {
   match: Match,
   questions: Map,
   questionsList: Map,
+  isLoading: boolean,
   getProposalInfo: Function
 };
 
-class Proposal extends Component<Props, State> {
+export class Proposal extends Component<Props, State> {
   constructor(props: Object) {
     super(props);
 
@@ -79,25 +85,46 @@ class Proposal extends Component<Props, State> {
     // TODO: Save new question functionality
   };
 
+  renderContent = (
+    isLoading: boolean,
+    questions: Map,
+    questionsList: Map,
+    data: Object
+  ) => {
+    if (!isLoading && questions && questionsList) {
+      return (
+        <div>
+          <ProposalInfo data={data} />
+          <div className="tasksList-title-wrapper">
+            <p className="tasksList-title">Questions</p>
+            <div
+              className="tasksList-add-icon-wrapper"
+              role="presentation"
+              onClick={this.onClose}
+            >
+              <Add className="tasksList-add-icon" />
+            </div>
+          </div>
+          <TasksList tasks={questions} tasksQuestions={questionsList} />
+        </div>
+      );
+    }
+
+    return (
+      <div className="proposal-loader">
+        <Loader type="TailSpin" color="#297DFD" height={100} width={100} />
+      </div>
+    );
+  };
+
   render() {
     const { showModal, data, items, teams } = this.state;
-    const { questions, questionsList } = this.props;
+    const { questions, questionsList, isLoading } = this.props;
 
     return (
       <div className="proposal-wrapper">
         <Toolbar />
-        <ProposalInfo data={data} />
-        <div className="tasksList-title-wrapper">
-          <p className="tasksList-title">Questions</p>
-          <div
-            className="tasksList-add-icon-wrapper"
-            role="presentation"
-            onClick={this.onClose}
-          >
-            <Add className="tasksList-add-icon" />
-          </div>
-        </div>
-        <TasksList tasks={questions} tasksQuestions={questionsList} />
+        {this.renderContent(isLoading, questions, questionsList, data)}
         {showModal ? (
           <AddQuestionModal
             onClose={this.onClose}
@@ -114,8 +141,9 @@ class Proposal extends Component<Props, State> {
 const mapStateToProps = (state: Map) => {
   const questions = getQuestions(state);
   const questionsList = getQuestionsList(state);
+  const isLoading = isProposalLoading(state);
 
-  return { questions, questionsList };
+  return { questions, questionsList, isLoading };
 };
 
 export default connect(mapStateToProps, { getProposalInfo: getProposal })(
