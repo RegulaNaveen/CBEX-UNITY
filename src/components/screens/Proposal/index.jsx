@@ -140,7 +140,7 @@ const mapStateToProps = (state: Map) => {
   const questions = getQuestions(state);
   const questionsList = getQuestionsList(state);
   console.log(questionsList);
-  
+
   return { questions, questionsList };
 };
 

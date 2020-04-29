@@ -45,18 +45,9 @@ class Task extends Component<Props, State> {
     this.setState({ answerText: event.target.value });
   };
 
-  renderAnswer = (type: string) => {
+  renderAnswer = (type: string, options: Array<Object>) => {
     const { answerText } = this.state;
-    const options = [
-      {
-        id: 1,
-        title: 'Yes'
-      },
-      {
-        id: 2,
-        title: 'No'
-      }
-    ];
+    const optionsYN = ['Yes', 'No'];
     switch (type) {
       case 'text':
         return (
@@ -65,7 +56,7 @@ class Task extends Component<Props, State> {
             className="proposal-text-area"
             value={answerText}
             onChange={this.handleAnswerText}
-            placeholder="Text..."
+            placeholder="Click to answer"
             type="text"
           />
         );
@@ -76,11 +67,19 @@ class Task extends Component<Props, State> {
             className="proposal-text-area"
             value={answerText}
             onChange={this.handleAnswerText}
-            placeholder="Number text..."
+            placeholder="Click to answer"
             type="number"
           />
         );
       case 'y/n':
+        return (
+          <Dropdown
+            id="dd-proposal-answer"
+            placeholder="Select"
+            items={optionsYN}
+          />
+        );
+      case 'single-picklist':
         return (
           <Dropdown
             id="dd-proposal-answer"
@@ -189,8 +188,12 @@ class Task extends Component<Props, State> {
                     </p>
                   </div>
                   <div className="task-table-row-answer">
-                    {/* TODO: Add item.anwerConfiguration.options */
-                    this.renderAnswer(item.answerConfiguration.type)}
+                    {item.answerConfiguration
+                      ? this.renderAnswer(
+                          item.answerConfiguration.type,
+                          item.answerConfiguration.options
+                        )
+                      : this.renderAnswer('', [])}
                   </div>
                   <div className="task-table-row-owner">
                     {hardCode.owner.map(owner => (

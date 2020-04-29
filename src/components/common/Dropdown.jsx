@@ -43,7 +43,8 @@ class Dropdown extends PureComponent<Props, State> {
   render() {
     const { isCollapsed, selectedValue } = this.state;
     const { id, placeholder, items, title } = this.props;
-
+    console.log(items);
+    
     return (
       <>
         {title ? <p className="dd-title">{title}</p> : null}
@@ -66,8 +67,8 @@ class Dropdown extends PureComponent<Props, State> {
                 items.map(item => (
                   <DropdownItem
                     onClick={this.handleClick}
-                    item={item.title}
-                    key={item.id}
+                    item={item}
+                    key={item}
                   />
                 ))}
             </ul>
