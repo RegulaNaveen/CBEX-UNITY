@@ -12,6 +12,12 @@ describe('Date Utils', () => {
     expect(String(parseDate(date, format))).toBe(parsedDate);
   });
 
+  it('parseDate returns undefined', () => {
+    const format = 'MM/dd/yyyy';
+    const date = '';
+    expect(parseDate(date, format)).toBe(undefined);
+  });
+
   it('formatDate', () => {
     const format = 'MM/dd/yyyy';
     const parsedDate = '04/16/2020';

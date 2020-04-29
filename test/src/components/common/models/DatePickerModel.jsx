@@ -8,7 +8,7 @@ import DayPickerInput from 'react-day-picker/DayPickerInput';
 import DatePicker from '../../../../../src/components/common/DatePicker';
 
 export default class DatePickerModel {
-  constructor(label: any, selectedDay: string) {
+  constructor(label: any, selectedDay: any) {
     this._onEventStub = sinon.stub();
     const props = {
       label,
@@ -33,6 +33,9 @@ export default class DatePickerModel {
   _getDayPicker = (): ShallowWrapper => this._wrapper.find(DayPickerInput);
 
   hasDayPicker = (): boolean => this._getDayPicker().length === 1;
+
+  hasDayPickerPlaceholder = (placeholder: string): boolean =>
+    this._getDayPicker().props().value === placeholder;
 
   // Interactions
   doHandleDayChange = () =>

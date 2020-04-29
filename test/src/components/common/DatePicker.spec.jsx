@@ -6,6 +6,7 @@ import DatePickerModel from './models/DatePickerModel';
 describe('DatePicker component', () => {
   const label = 'Label';
   const selectedDay = '4/20/20';
+  const placeholder = 'MM/DD/YYYY';
 
   describe('rendering', () => {
     it('should render all Paragraphs component', () => {
@@ -26,6 +27,11 @@ describe('DatePicker component', () => {
     it('should render DayPicker component', () => {
       const wrapper = new DatePickerModel(label, selectedDay);
       expect(wrapper.hasDayPicker()).toBe(true);
+    });
+
+    it('should render DayPicker placeholder when selectedDay is not passed', () => {
+      const wrapper = new DatePickerModel(label);
+      expect(wrapper.hasDayPickerPlaceholder(placeholder)).toBe(true);
     });
   });
 
