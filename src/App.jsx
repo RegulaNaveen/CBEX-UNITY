@@ -14,17 +14,17 @@ const App = () => {
   const isAuthenticated = !!localStorage.getItem('isLoggedin');
   return (
     <Provider store={store}>
-    <BrowserRouter>
-      <SessionHandler>
-        <Switch>
-          <Route path={LOGIN} component={Login} />
-          <PrivateRoute isAuthenticated={isAuthenticated}>
-            <Route path={PROPOSALS} component={Proposal} />
-          </PrivateRoute>
-          <Redirect to={LOGIN} />
-        </Switch>
-      </SessionHandler>
-    </BrowserRouter>
+      <BrowserRouter>
+        <SessionHandler>
+          <Switch>
+            <Route path={LOGIN} component={Login} />
+            <PrivateRoute isAuthenticated={isAuthenticated}>
+              <Route path={PROPOSALS} component={Proposal} />
+            </PrivateRoute>
+            <Redirect to={LOGIN} />
+          </Switch>
+        </SessionHandler>
+      </BrowserRouter>
     </Provider>
   );
 };
