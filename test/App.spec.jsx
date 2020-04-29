@@ -4,6 +4,19 @@ import { describe, it } from 'mocha';
 import AppModel from './models/AppModel';
 import { LOGIN, PROPOSALS } from '../src/routes';
 
+global.localStorage = {
+  data: {},
+  getItem(key) {
+    return this.data[key];
+  },
+  setItem(key, value) {
+    this.data[key] = value;
+  },
+  removeItem(key) {
+    delete this.data[key];
+  }
+};
+
 describe('App component', () => {
   describe('rendering', () => {
     it('should render a BrowserRouter component', () => {
