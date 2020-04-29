@@ -99,7 +99,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
                 />
               </div>
               <DatePicker
-                label="Label"
+                label="Date"
                 selectedDay={selectedDay}
                 handleDayChange={this.handleDayChange}
                 handleFormatDate={this.handleFormatDate}
