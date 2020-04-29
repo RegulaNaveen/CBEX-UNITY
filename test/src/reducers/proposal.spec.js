@@ -11,13 +11,13 @@ describe('proposal reducer', () => {
   });
 
   it('onProsalInfoLoaded', () => {
-    const proposalQuestions = 'Fake proposal info';
+    const proposalQuestions = Map({});
     const action = { type: PROPOSAL_INFO, payload: proposalQuestions };
     const newState = proposalReducer(initialState, action);
-    const expectState = initialState.set(
+    const expectedState = initialState.set(
       'proposalQuestions',
       proposalQuestions
     );
-    expect(newState).toEqual(expectState);
+    expect(newState).toEqual(expectedState);
   });
 });

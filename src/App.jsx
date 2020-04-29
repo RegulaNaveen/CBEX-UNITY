@@ -18,7 +18,7 @@ const App = () => {
         <SessionHandler>
           <Switch>
             <Route path={LOGIN} component={Login} />
-            <PrivateRoute isAuthenticated={isAuthenticated}>
+            <PrivateRoute isAuthenticated={true}>
               <Route path={PROPOSALS} component={Proposal} />
             </PrivateRoute>
             <Redirect to={LOGIN} />
