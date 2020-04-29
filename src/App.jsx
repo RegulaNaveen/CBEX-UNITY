@@ -6,12 +6,12 @@ import { Provider } from 'react-redux';
 import store from './store';
 import PrivateRoute from './PrivateRoute';
 import { LOGIN, PROPOSALS } from './routes';
-import SessionHandler from './SessionHandler';
+import SessionHandler, { getSession } from './SessionHandler';
 import Login from './components/auth/Login';
 import Proposal from './components/screens/Proposal';
 
 const App = () => {
-  const isAuthenticated = !!localStorage.getItem('isLoggedin');
+  const isAuthenticated = getSession();
   return (
     <Provider store={store}>
       <BrowserRouter>

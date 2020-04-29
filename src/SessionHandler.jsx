@@ -2,6 +2,10 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
+export const getSession = () => {
+  return !!localStorage.getItem('isLoggedin');
+};
+
 type Props = {
   children: any
 };
