@@ -52,7 +52,6 @@ class Task extends Component<Props, State> {
       case 'text':
         return (
           <TextArea
-            id="question-text-area"
             className="proposal-text-area"
             value={answerText}
             onChange={this.handleAnswerText}
@@ -63,7 +62,6 @@ class Task extends Component<Props, State> {
       case 'number':
         return (
           <TextArea
-            id="question-text-area"
             className="proposal-text-area"
             value={answerText}
             onChange={this.handleAnswerText}

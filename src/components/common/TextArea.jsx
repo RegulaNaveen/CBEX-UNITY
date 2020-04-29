@@ -36,7 +36,6 @@ class TextArea extends PureComponent<Props, State> {
   render() {
     const { id, className, placeholder, title, type } = this.props;
     const { textValue } = this.state;
-    console.log(textValue);
 
     return (
       <>

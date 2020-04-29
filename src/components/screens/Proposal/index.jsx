@@ -43,32 +43,7 @@ class Proposal extends Component<Props, State> {
         countries: ['France', 'UK', 'Italy', 'Spain'],
         indication: 'Myopia'
       },
-      items: [
-        {
-          id: 0,
-          title: 'Item 1',
-          selected: false,
-          key: 'Item'
-        },
-        {
-          id: 1,
-          title: 'Item 2',
-          selected: false,
-          key: 'Item'
-        },
-        {
-          id: 2,
-          title: 'Item 3',
-          selected: false,
-          key: 'Item'
-        },
-        {
-          id: 3,
-          title: 'Item 4',
-          selected: false,
-          key: 'Item'
-        }
-      ],
+      items: ['item 1', 'item 2', 'item 3'],
       teams: [
         {
           id: 0,
@@ -139,7 +114,6 @@ class Proposal extends Component<Props, State> {
 const mapStateToProps = (state: Map) => {
   const questions = getQuestions(state);
   const questionsList = getQuestionsList(state);
-  console.log(questionsList);
 
   return { questions, questionsList };
 };
