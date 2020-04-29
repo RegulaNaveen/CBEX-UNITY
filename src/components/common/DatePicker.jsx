@@ -4,7 +4,7 @@ import DayPickerInput from 'react-day-picker/DayPickerInput';
 import DatePickerCustomInput from './DatePickerCustomInput';
 
 type Props = {
-  label?: string,
+  label?: any,
   selectedDay: string,
   handleDayChange: Function,
   handleFormatDate: Function,
@@ -20,7 +20,7 @@ const DatePicker = ({
 }: Props) => {
   return (
     <div className="date-picker">
-      {label !== '' ? <p className="date-picker-title">{label}</p> : null}
+      {label && <p className="date-picker-title">{label}</p>}
       <DayPickerInput
         value={selectedDay || 'MM/DD/YYYY'}
         onDayChange={handleDayChange}
@@ -68,7 +68,7 @@ const DatePicker = ({
 };
 
 DatePicker.defaultProps = {
-  label: ''
+  label: undefined
 };
 
 export default DatePicker;

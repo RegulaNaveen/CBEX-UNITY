@@ -19,7 +19,7 @@ describe('DatePicker component', () => {
     });
 
     it('should not render Paragraph component when label is empty', () => {
-      const wrapper = new DatePickerModel('', selectedDay);
+      const wrapper = new DatePickerModel(undefined, selectedDay);
       expect(wrapper.hasParagraphs()).toBe(false);
     });
 
@@ -29,7 +29,7 @@ describe('DatePicker component', () => {
     });
   });
 
-  describe('interactoins', () => {
+  describe('interactions', () => {
     it('should execute handleDayChange prop function', () => {
       const wrapper = new DatePickerModel(label, selectedDay);
       wrapper.doHandleDayChange();
