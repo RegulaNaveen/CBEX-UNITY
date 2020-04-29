@@ -46,12 +46,12 @@ describe('Proposal Action', () => {
     const id = '';
     const errorMessage = 'error message';
 
-    getProposalInfoStub.returns(Promise.resolve(new Error(errorMessage)));
+    getProposalInfoStub.returns(Promise.reject(new Error(errorMessage)));
 
     await getProposal(id)(dispatch, getState);
     expect(dispatch.calledTwice).toBe(true);
     expect(dispatch.args[0][0].type).toBe(PROPOSAL_INFO_LOADING);
     expect(dispatch.args[1][0].type).toBe(PROPOSAL_INFO_ERROR);
-    expect(dispatch.args[1][0].payload).toEqual('Error: error message');
+    expect(dispatch.args[1][0].payload).toEqual(['Error: error message']);
   });
 });
