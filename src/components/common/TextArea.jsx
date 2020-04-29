@@ -39,7 +39,7 @@ class TextArea extends PureComponent<Props, State> {
 
     return (
       <>
-        {title ? <p className="text-area-title">{title}</p> : null}
+        {title && <p className="text-area-title">{title}</p>}
         <input
           id={id}
           className={classnames('text-area-wrapper', className)}

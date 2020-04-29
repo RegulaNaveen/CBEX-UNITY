@@ -2,14 +2,17 @@
 import React, { Component } from 'react';
 import chevronRight from '../../../../img/chevron-right.svg';
 import chevronDown from '../../../../img/chevron-down.svg';
-import { Checkmark, Edit } from '../../svg';
+import { Checkmark } from '../../svg';
 import { getRandomColor } from '../../../utils/colors';
 import Dropdown from '../../common/Dropdown';
 import TextArea from '../../common/TextArea';
+import DatePicker from '../../common/DatePicker';
+import { parseDate, formatDate } from '../../../utils/DateUtils';
 
 type State = {
   isCollapsed: boolean,
-  answerText: string
+  answerText: string,
+  selectedDay: string
 };
 
 type Props = {
@@ -25,7 +28,8 @@ class Task extends Component<Props, State> {
 
     this.state = {
       isCollapsed: false,
-      answerText: ''
+      answerText: '',
+      selectedDay: ''
     };
   }
 
@@ -45,8 +49,18 @@ class Task extends Component<Props, State> {
     this.setState({ answerText: event.target.value });
   };
 
+  handleDayChange = (selectedDay: string) => {
+    this.setState({
+      selectedDay
+    });
+  };
+
+  handleDate = (date: string, format: string) => parseDate(date, format);
+
+  handleFormatDate = (date: Date, format: string) => formatDate(date, format);
+
   renderAnswer = (type: string, options: Array<Object>) => {
-    const { answerText } = this.state;
+    const { answerText, selectedDay } = this.state;
     const optionsYN = ['Yes', 'No'];
     switch (type) {
       case 'text':
@@ -83,6 +97,15 @@ class Task extends Component<Props, State> {
             id="dd-proposal-answer"
             placeholder="Select"
             items={options}
+          />
+        );
+      case 'date':
+        return (
+          <DatePicker
+            selectedDay={selectedDay}
+            handleDayChange={this.handleDayChange}
+            handleFormatDate={this.handleFormatDate}
+            handleDate={this.handleDate}
           />
         );
       default:
@@ -208,7 +231,8 @@ class Task extends Component<Props, State> {
                   <p className="task-table-row-completion-date">
                     {hardCode.completionDate}
                   </p>
-                  <Edit className="task-table-row-edit icon-highlight" />
+                  {/* TODO: Add edit proposal icon */}
+                  {/* <Edit className="task-table-row-edit icon-highlight" /> */}
                 </div>
               ))}
           </div>

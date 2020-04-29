@@ -11,7 +11,7 @@ import {
 } from '../../../src/actions/proposal-types';
 import * as proposalApi from '../../../src/api/proposal';
 
-describe('proposal actions', () => {
+describe('Proposal Action', () => {
   let getProposalInfoStub;
   let getState;
   let dispatch;
@@ -30,7 +30,7 @@ describe('proposal actions', () => {
 
   const proposal = Map({});
 
-  it('create PROPOSAL_INFO', async () => {
+  it('should create PROPOSAL_INFO', async () => {
     const id = '72f54264-5154-4899-ac6c-95dea210156d';
 
     getProposalInfoStub.returns(Promise.resolve(proposal));
@@ -42,7 +42,7 @@ describe('proposal actions', () => {
     expect(dispatch.args[1][0].payload).toEqual(proposal);
   });
 
-  it('create PROPOSAL_INFO_ERROR', async () => {
+  it('should create PROPOSAL_INFO_ERROR', async () => {
     const id = '';
     const errorMessage = 'error message';
 

@@ -46,7 +46,7 @@ class Dropdown extends PureComponent<Props, State> {
 
     return (
       <>
-        {title ? <p className="dd-title">{title}</p> : null}
+        {title && <p className="dd-title">{title}</p>}
         <div className="dd-wrapper">
           <div
             id={id}
