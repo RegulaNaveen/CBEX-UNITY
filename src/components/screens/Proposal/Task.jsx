@@ -87,7 +87,7 @@ class Task extends Component<Props, State> {
         return (
           <Dropdown
             id="dd-proposal-answer"
-            placeholder="Select"
+            placeholder="Click to answer"
             items={optionsYN}
           />
         );
@@ -95,7 +95,7 @@ class Task extends Component<Props, State> {
         return (
           <Dropdown
             id="dd-proposal-answer"
-            placeholder="Select"
+            placeholder="Click to answer"
             items={options}
           />
         );
@@ -109,7 +109,7 @@ class Task extends Component<Props, State> {
           />
         );
       default:
-        return <div>Answer placeholder</div>;
+        return <div>Click to answer</div>;
     }
   };
 

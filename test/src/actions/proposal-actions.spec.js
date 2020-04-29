@@ -44,7 +44,7 @@ describe('Proposal Action', () => {
 
   it('should create PROPOSAL_INFO_ERROR', async () => {
     const id = '';
-    const errorMessage = 'error message';
+    const errorMessage = 'Fake error message';
 
     getProposalInfoStub.returns(Promise.reject(new Error(errorMessage)));
 
@@ -52,6 +52,6 @@ describe('Proposal Action', () => {
     expect(dispatch.calledTwice).toBe(true);
     expect(dispatch.args[0][0].type).toBe(PROPOSAL_INFO_LOADING);
     expect(dispatch.args[1][0].type).toBe(PROPOSAL_INFO_ERROR);
-    expect(dispatch.args[1][0].payload).toEqual(['Error: error message']);
+    expect(dispatch.args[1][0].payload).toEqual(['Error: Fake error message']);
   });
 });
