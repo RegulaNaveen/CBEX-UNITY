@@ -8,9 +8,11 @@ import PrivateRoute from './PrivateRoute';
 import { LOGIN, PROPOSALS } from './routes';
 import SessionHandler, { getSession } from './SessionHandler';
 import Login from './components/auth/Login';
-import Proposal from './components/screens/Proposal';
+import ProposalComponent from './components/screens/Proposal';
 
-class App extends Component {
+type Props = {};
+
+class App extends Component<Props> {
   forceLogin = () => {
     this.forceUpdate();
   };
@@ -24,7 +26,7 @@ class App extends Component {
             <Switch>
               <Route path={LOGIN} component={Login} />
               <PrivateRoute isAuthenticated={isAuthenticated}>
-                <Route path={PROPOSALS} component={Proposal} />
+                <Route path={PROPOSALS} component={ProposalComponent} />
               </PrivateRoute>
               <Redirect to={LOGIN} />
             </Switch>

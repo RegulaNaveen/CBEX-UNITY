@@ -1,16 +1,23 @@
 // @flow
 import expect from 'expect';
 import { describe, it } from 'mocha';
-import { Map, fromJS } from 'immutable';
-import { getQuestions, getQuestionsList } from '../../../src/selectors';
+import { Map, List } from 'immutable';
+import {
+  getQuestions,
+  getQuestionsList,
+  isProposalLoading,
+  hasProposalErrors
+} from '../../../src/selectors';
 
-describe('index selectors', () => {
-  const proposalQuestionss = [
+describe('Selectors', () => {
+  const proposalQuestions = [
     {
       proposalId: '18bffbde-d1f4-4848-8b8e-62e05a11be56',
       questionId: 'Action List-E8B',
-      sectionName: 'Action List',
       teamName: 'all',
+      section: {
+        sectionName: 'Action List'
+      },
       questionText:
         'What actions are needed to lock down the strategy; who is the owner and what is the deadline?',
       answerConfiguration: [],
@@ -18,21 +25,24 @@ describe('index selectors', () => {
     }
   ];
 
+  const proposalError = 'Fake Error';
+
   const state = {
     proposal: Map({
-      proposalQuestions: proposalQuestionss
+      proposalQuestions,
+      isProposalLoading: true,
+      proposalError
     })
   };
 
-  const getQuestionsRespnse = Map([]);
+  const getQuestionsResponse = List(['Action List']);
 
   const getQuestionsListReponse = {
-    undefined: [
+    'Action List': [
       {
         proposalId: '18bffbde-d1f4-4848-8b8e-62e05a11be56',
         questionId: 'Action List-E8B',
         teamName: 'all',
-        sectionName: 'Action List',
         questionText:
           'What actions are needed to lock down the strategy; who is the owner and what is the deadline?',
         answerConfiguration: [],
@@ -42,11 +52,18 @@ describe('index selectors', () => {
   };
 
   it('should return proposal questions', () => {
-    console.log(getQuestions(state));
-    expect(getQuestions(state)).toBe(getQuestionsRespnse);
+    expect(getQuestions(state)).toEqual(getQuestionsResponse);
   });
 
   it('should return proposal questions list', () => {
     expect(getQuestionsList(state)).toEqual(getQuestionsListReponse);
+  });
+
+  it('should return isProposalLoading value', () => {
+    expect(isProposalLoading(state)).toBe(true);
+  });
+
+  it('should return proposalError value', () => {
+    expect(hasProposalErrors(state)).toEqual(proposalError);
   });
 });
