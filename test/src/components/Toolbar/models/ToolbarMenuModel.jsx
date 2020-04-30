@@ -2,21 +2,18 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
-import type { NavigationHistory } from 'react-router-dom';
 import sinon from 'sinon';
 import type { stub } from 'sinon';
 import { ToolbarMenuComponent } from '../../../../../src/components/Toolbar/ToolbarMenu';
 import { User, Help, Settings } from '../../../../../src/components/svg';
 
 export default class ProposalInfoModel {
-  constructor(name: string, email: string, history: NavigationHistory) {
+  constructor(name: string, email: string) {
     this._handleEventStub = sinon.stub();
     const props = {
       name,
       email,
-      history,
-      handleLogout: this._handleEventStub,
-      handleKeyPress: this._handleEventStub
+      history: { push: this._handleEventStub }
     };
     this._wrapper = shallow(<ToolbarMenuComponent {...props} />);
     this._nameIndex = 0;
@@ -86,7 +83,12 @@ export default class ProposalInfoModel {
   // Interactions
   handleEventOnClick = () => this._getButton().prop('onClick')();
 
-  handleEventOnKeyPress = () => this._getButton().prop('onKeyPress')();
+  handleEventOnKeyPress = (key: string) => {
+    this._getButton().simulate('keypress', {
+      key,
+      preventDefault: () => {}
+    });
+  };
 
   onHandleEventCalledOnce = (): boolean =>
     this._handleEventStub.calledOnce === true;

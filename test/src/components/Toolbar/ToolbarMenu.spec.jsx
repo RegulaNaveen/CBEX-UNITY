@@ -66,10 +66,17 @@ describe('ToolbarMenu component', () => {
       wrapper.resetEventHandlers();
     });
 
-    it('should execute onKeyPress function properly', () => {
+    it('should execute onKeyPress function with Enter', () => {
       const wrapper = new ToolbarMenuModel(name, email);
-      wrapper.handleEventOnKeyPress();
+      wrapper.handleEventOnKeyPress('Enter');
       expect(wrapper.onHandleEventCalledOnce()).toBe(true);
+      wrapper.resetEventHandlers();
+    });
+
+    it('should execute onKeyPress function with any other key', () => {
+      const wrapper = new ToolbarMenuModel(name, email);
+      wrapper.handleEventOnKeyPress('k');
+      expect(wrapper.onHandleEventCalledOnce()).toBe(false);
       wrapper.resetEventHandlers();
     });
   });
