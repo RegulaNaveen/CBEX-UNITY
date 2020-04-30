@@ -200,8 +200,10 @@ class Task extends Component<Props, State> {
             {data &&
               data.map(item => (
                 <div key={item.questionId} className="task-table-row">
-                  {hardCode.complete && (
+                  {hardCode.complete ? (
                     <Checkmark className="task-table-row-checkmark icon-highlight" />
+                  ) : (
+                    <div className="task-table-row-checkmark icon-highlight" />
                   )}
                   <div className="task-table-row-question-content">
                     <p className="task-table-row-question">
@@ -233,6 +235,7 @@ class Task extends Component<Props, State> {
                   </p>
                   {/* TODO: Add edit proposal icon */}
                   {/* <Edit className="task-table-row-edit icon-highlight" /> */}
+                  <div className="task-table-row-edit icon-highlight" />
                 </div>
               ))}
           </div>

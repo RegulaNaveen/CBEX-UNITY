@@ -2,8 +2,20 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-export const getSession = () => {
+let onSessionChange;
+
+export const getSession = (onSessionCallback: Function) => {
+  onSessionChange = onSessionCallback;
   return !!localStorage.getItem('isLoggedin');
+};
+
+export const setSession = () => {
+  localStorage.setItem('isLoggedin', 'true');
+  onSessionChange();
+};
+
+export const getProposalId = () => {
+  return !!localStorage.getItem('proposalId');
 };
 
 type Props = {
@@ -15,7 +27,8 @@ const SessionHandler = ({ children }: Props) => {
 
   const setProposalId = () => {
     const proposalId = location.pathname.split('/')[3];
-    localStorage.setItem('proposalId', proposalId);
+    if (proposalId) localStorage.setItem('proposalId', proposalId);
+    console.log('SessionH', proposalId);
   };
 
   useEffect(() => {
@@ -26,14 +39,7 @@ const SessionHandler = ({ children }: Props) => {
       }
     }
     checkSession();
-  }, [setProposalId]);
-
-  // TODO: Remove eslint-disable line when setSession is ussed
-  // eslint-disable-next-line no-unused-vars
-  const setSession = () => {
-    localStorage.setItem('isLoggedin', 'true');
-    setProposalId();
-  };
+  });
 
   return children;
 };

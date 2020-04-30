@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import type { NavigationHistory } from 'react-router-dom';
+import { setSession } from '../../SessionHandler';
 import { PROPOSALS } from '../../routes';
 import { PrimaryButton, LinkButton } from '../common/Buttons';
 import InputField from '../common/InputField';
@@ -13,7 +14,8 @@ type State = {
 };
 
 type Props = {
-  history: NavigationHistory
+  history: NavigationHistory,
+  forceLogin: Function
 };
 
 class LoginForm extends Component<Props, State> {
@@ -43,8 +45,11 @@ class LoginForm extends Component<Props, State> {
   handleLogin = () => {
     // TODO: Login functionality
     // TODO: Remove navigation test code
+    setSession();
+    const proposalId = localStorage.getItem('proposalId');
+    console.log(proposalId);
     const { history } = this.props;
-    history.push(PROPOSALS);
+    history.push(`/app/proposals/${proposalId}`);
   };
 
   handleForgotPassword = () => {

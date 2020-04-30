@@ -5,10 +5,11 @@ import LoginForm from './LoginForm';
 import img from '../../../img/login-background.png';
 
 type Props = {
-  history: NavigationHistory
+  history: NavigationHistory,
+  forceLogin: Function
 };
 
-const Login = ({ history }: Props) => {
+const Login = ({ history, forceLogin }: Props) => {
   return (
     <div className="login-wrapper">
       <div className="gradient-background-img" />
@@ -19,7 +20,7 @@ const Login = ({ history }: Props) => {
         role="presentation"
       />
       <div className="login-form">
-        <LoginForm history={history} />
+        <LoginForm history={history} forceLogin={forceLogin} />
         <p className="copyright-text">Copyright @ 2019. All rights reserved</p>
       </div>
     </div>
