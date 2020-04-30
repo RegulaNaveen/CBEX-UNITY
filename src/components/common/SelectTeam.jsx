@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import CloseCircle from '../svg/CloseCircle';
+import { CloseCircle } from '../svg';
 
 type Props = {
   onClick: Function,

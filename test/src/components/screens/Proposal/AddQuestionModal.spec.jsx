@@ -111,5 +111,19 @@ describe('AddQuestionModal component', () => {
       wrapper.doHandleDayChange();
       expect(wrapper.getSelectedDay()).toBe('testDay');
     });
+
+    it('should change isChecked state when handleIsChecked is called', () => {
+      const wrapper = new AddQuestionModalModel(items, teams);
+      expect(wrapper.getIsChecked()).toBe(false);
+      wrapper.doHandleIsChecked();
+      expect(wrapper.getIsChecked()).toBe(true);
+    });
+
+    // TODO: Fix test
+    // it('should call handleDeleteTeam on SelectedTeam onClick', () => {
+    //   const wrapper = new AddQuestionModalModel(items, teams);
+    //   wrapper.doHandleDeleteTeam();
+    //   expect(wrapper.getHandleDeleteTeam()).toHaveBeenCalled();
+    // });
   });
 });

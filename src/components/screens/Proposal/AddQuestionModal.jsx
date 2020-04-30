@@ -9,7 +9,7 @@ import Checkbox from '../../common/Checkbox';
 import Dropdown from '../../common/Dropdown';
 import TextArea from '../../common/TextArea';
 import SelectTeam from '../../common/SelectTeam';
-import Close from '../../svg/Close';
+import { Close } from '../../svg';
 
 type Props = {
   onClose: Function,

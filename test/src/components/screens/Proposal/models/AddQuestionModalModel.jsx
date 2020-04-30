@@ -12,7 +12,7 @@ import Checkbox from '../../../../../../src/components/common/Checkbox';
 import Dropdown from '../../../../../../src/components/common/Dropdown';
 import TextArea from '../../../../../../src/components/common/TextArea';
 import SelectTeam from '../../../../../../src/components/common/SelectTeam';
-import Close from '../../../../../../src/components/svg/Close';
+import { Close } from '../../../../../../src/components/svg';
 
 export default class AddQuestoinModalModel {
   constructor(items: Array<Object>, teams: Array<Object>) {
@@ -62,6 +62,8 @@ export default class AddQuestoinModalModel {
 
   getSelectedDay = (): string => this._wrapper.state('selectedDay');
 
+  getIsChecked = (): boolean => this._wrapper.state('isChecked');
+
   hasModalComponent = (): boolean => this._getModalComponent().length === 1;
 
   hasDatePicker = (): boolean => this._getDatePicker().length === 1;
@@ -86,6 +88,11 @@ export default class AddQuestoinModalModel {
 
   hasSelectedTeam = (selectedTeamlength: number): boolean =>
     this._getSelectTeam().length === selectedTeamlength;
+
+  getHandleDeleteTeam = (): Function =>
+    this._getSelectTeam()
+      .at(0)
+      .props().onClick;
 
   hasCheckbox = (): boolean => this._getCheckbox().length === 1;
 
@@ -112,5 +119,18 @@ export default class AddQuestoinModalModel {
     this._getDatePicker()
       .props()
       .handleDayChange('testDay');
+  };
+
+  doHandleIsChecked = () => {
+    this._getCheckbox()
+      .props()
+      .onChange();
+  };
+
+  doHandleDeleteTeam = () => {
+    this._getSelectTeam()
+      .at(0)
+      .props()
+      .onClick();
   };
 }
