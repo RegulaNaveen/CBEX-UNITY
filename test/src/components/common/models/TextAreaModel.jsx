@@ -45,10 +45,12 @@ export default class TextAreaModel {
 
   getPlaceholder = (): boolean => this._getTextArea().prop('placeholder');
 
+  getTextValueState = (): string => this._wrapper.state('textValue');
+
+  // Interactions
+
   doOnChange = (value: string) => {
     const event = { target: { value } };
     this._getTextArea().simulate('change', event);
   };
-
-  getTextValueState = (): string => this._wrapper.state('textValue');
 }

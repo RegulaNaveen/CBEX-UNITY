@@ -23,17 +23,34 @@ describe('LoginForm component', () => {
       expect(wrapper.hasPrimaryButton()).toBe(true);
     });
 
-    it('should call onEmailChange once', () => {});
-
-    it('should call onPasswordChange once', () => {});
-
-    it('should call handleLogin once', () => {});
-
-    it('should call handleForgotPassword once', () => {});
-
     it('should render a link button', () => {
       const wrapper = new LoginFormModel();
       expect(wrapper.hasLinkButton()).toBe(true);
+    });
+  });
+
+  describe('interactions', () => {
+    it('should change email state on onEmailChange call', () => {
+      const email = 'fake@email.com';
+      const wrapper = new LoginFormModel();
+      expect(wrapper.getEmailState()).toBe('');
+      wrapper.doOnEmailChange(email);
+      expect(wrapper.getEmailState()).toBe(email);
+    });
+
+    it('should change password state on onPasswordChange call', () => {
+      const password = 'fakepassword';
+      const wrapper = new LoginFormModel();
+      expect(wrapper.getPasswordState()).toBe('');
+      wrapper.doOnPasswordChange(password);
+      expect(wrapper.getPasswordState()).toBe(password);
+    });
+
+    it('should change isChecked state on handleIsChecked call', () => {
+      const wrapper = new LoginFormModel();
+      expect(wrapper.getIsChecked()).toBe(false);
+      wrapper.doHandleIsChecked();
+      expect(wrapper.getIsChecked()).toBe(true);
     });
   });
 });
