@@ -18,7 +18,7 @@ describe('Login component', () => {
     it('should render copyright text', () => {
       const wrapper = new LoginModel();
       expect(wrapper.getCopyright()).toBe(
-        'Copyright @ 2019. All rights reserved'
+        'Copyright @ 2020. All rights reserved'
       );
     });
   });

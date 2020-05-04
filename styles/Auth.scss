@@ -77,8 +77,14 @@
   @include base-form-title;
 }
 
-.password-input-wrapper {
-  margin-top: 28px;
+.login-form-error {
+  height: 24px;
+  color: $error;
+  font-family: $proximaNova;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: 24px;
+  margin-bottom: 20px;
 }
 
 .login-button-wrapper {
