@@ -165,7 +165,6 @@
         line-height: 19px;
         overflow: hidden;
         text-overflow: ellipsis;
-        white-space: nowrap;
       }
   
       &-answer {
@@ -250,4 +249,14 @@
 
 .complete {
   background-color: $neutral2;
+}
+
+@media (max-width: $viewport-12) {
+  .task-wrapper { 
+    .task-table-row {
+      &-question {
+        white-space: nowrap;
+      }
+    }
+  }
 }
