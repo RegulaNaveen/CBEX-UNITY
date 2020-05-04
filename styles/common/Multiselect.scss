@@ -41,19 +41,20 @@
     }
   }
 
-  .multiselect-header{
+  .multiselect-header {
     display: flex;
     align-items: center;
     width: 100%;
-    height: 40px;
+    min-height: 40px;
     background-color: $white;
     border-radius: 5px;
     border: 1px solid $neutral4;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);
     cursor: pointer;
+    overflow-wrap: break-word;
 
     .multiselect-header-placeholder {
-      height: 24px;
+      min-height: 24px;
       width: 100%;
       color: $neutral6;
       font-family: $proximaNova;
@@ -64,14 +65,15 @@
     }
 
     .multiselect-header-selected {
-      height: 24px;
-      width: 138px;
+      min-height: 24px;
+      width: 90%;
       color: $black;
       font-family: $proximaNova;
       font-size: 16px;
       letter-spacing: 0;
       line-height: 24px;
       margin-left: 8px;
+      margin-right: 10px;
     }
       
     &:before{

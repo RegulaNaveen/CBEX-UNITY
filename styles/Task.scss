@@ -125,7 +125,7 @@
 
     .task-table-row {
       display: flex;
-      height: 55px;
+      min-height: 55px;
       align-items: center;
 
       &:hover{
@@ -170,8 +170,9 @@
       &-answer {
         flex: 1;
         display: flex;
+        width: 138px;
         align-items: center;
-        height: 55px;
+        min-height: 55px;
         color: $black;
         font-family: $proximaNova;
         font-size: 16px;
