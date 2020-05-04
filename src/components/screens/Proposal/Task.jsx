@@ -8,6 +8,7 @@ import Dropdown from '../../common/Dropdown';
 import TextArea from '../../common/TextArea';
 import DatePicker from '../../common/DatePicker';
 import { parseDate, formatDate } from '../../../utils/DateUtils';
+import Multiselect from '../../common/Multiselect';
 
 type State = {
   isCollapsed: boolean,
@@ -108,6 +109,8 @@ class Task extends Component<Props, State> {
             handleDate={this.handleDate}
           />
         );
+      case 'multi-picklist':
+        return <Multiselect placeholder="Click to answer" items={options} />;
       default:
         return <div>Click to answer</div>;
     }
