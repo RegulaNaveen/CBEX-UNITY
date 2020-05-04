@@ -14,13 +14,24 @@ const getSections = (questions: Array<Object>) => {
   return sections;
 };
 
+const sortData = (questions: Array<Object>) => {
+  const questionsData = Object.entries(questions);
+  // eslint-disable-next-line array-callback-return
+  questionsData.map((question: Object) => {
+    const mappedQuestions = _.map(_.orderBy(question[1], 'questionOrder'));
+    // eslint-disable-next-line no-param-reassign
+    question[1] = mappedQuestions;
+  });
+
+  const sortedQuestion = Object.fromEntries(questionsData);
+  return sortedQuestion;
+};
+
 const getQuestionsbySections = (questions: Array<Object>) => {
   const questionsList = _.mapValues(
-    _.groupBy(questions, 'section.sectionName'),
-    sections => sections.map(question => _.omit(question, 'section'))
+    _.groupBy(questions, 'section.sectionName')
   );
-
-  return questionsList;
+  return sortData(questionsList);
 };
 
 export const getQuestions = (proposal: Map): Map =>

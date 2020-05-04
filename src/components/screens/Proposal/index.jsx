@@ -119,7 +119,7 @@ export class Proposal extends Component<Props, State> {
 
   render() {
     const { showModal, data, items, teams } = this.state;
-    const { questions, questionsList, isLoading } = this.props;
+    const { questions, questionsList, isLoading } = this.props; 
 
     return (
       <div className="proposal-wrapper">
