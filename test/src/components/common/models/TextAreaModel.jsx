@@ -3,14 +3,13 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
 import sinon from 'sinon';
-import type { stub } from 'sinon';
+import type { stub, prototype } from 'sinon';
 import TextArea from '../../../../../src/components/common/TextArea';
 
 export default class TextAreaModel {
   constructor(
     id: string,
     className: string,
-    value: string,
     placeholder: string,
     title: string
   ) {
@@ -18,7 +17,6 @@ export default class TextAreaModel {
     const props = {
       id,
       className,
-      value,
       placeholder,
       title,
       onChange: this._onChangeStub
@@ -32,7 +30,7 @@ export default class TextAreaModel {
 
   _getParagraph = (): ShallowWrapper => this._wrapper.find('p');
 
-  _getTextArea = (): ShallowWrapper => this._wrapper.find('textarea');
+  _getTextArea = (): ShallowWrapper => this._wrapper.find('input');
 
   getClassName = (): string => this._getParagraph().prop('className');
 
@@ -40,15 +38,19 @@ export default class TextAreaModel {
 
   getTextClassName = (): string => this._getTextArea().prop('className');
 
-  getValue = (): string => this._getTextArea().prop('value');
+  getValue = (): string => {
+    console.log(this._getTextArea().props());
+    return this._getTextArea().prop('value');
+  };
 
   getPlaceholder = (): boolean => this._getTextArea().prop('placeholder');
 
-  doOnChange = () => this._getTextArea().prop('onChange')();
+  getTextValueState = (): string => this._wrapper.state('textValue');
 
-  onChangeCalledOnce = (): boolean => this._onChangeStub.calledOnce === true;
+  // Interactions
 
-  resetEventHandlers = () => {
-    this._onChangeStub.reset();
+  doOnChange = (value: string) => {
+    const event = { target: { value } };
+    this._getTextArea().simulate('change', event);
   };
 }

@@ -19,6 +19,7 @@
     "and": "^0.0.3",
     "axios": "^0.19.2",
     "classnames": "^2.2.6",
+    "core-js": "2",
     "css-loader": "^3.4.2",
     "date-fns": "^2.12.0",
     "file-loader": "^6.0.0",
@@ -28,6 +29,7 @@
     "react": "^16.13.1",
     "react-day-picker": "^7.4.5",
     "react-dom": "^16.13.1",
+    "react-loader-spinner": "^3.1.14",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.1.2",
     "redux": "^4.0.5",
@@ -46,6 +48,7 @@
     "@babel/preset-flow": "^7.9.0",
     "@babel/preset-react": "^7.9.4",
     "@babel/register": "^7.9.0",
+    "axios-mock-adapter": "^1.18.1",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
     "enzyme": "^3.11.0",
@@ -85,7 +88,8 @@
     "exclude": [
       "src/**/*-compiled.js",
       "dist",
-      "flow-typed"
+      "flow-typed",
+      "src/SessionHandler.jsx"
     ],
     "extension": [
       ".jsx"

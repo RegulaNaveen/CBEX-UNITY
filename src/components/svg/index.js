@@ -9,6 +9,8 @@ import User from './User';
 import Help from './Help';
 import Settings from './Settings';
 import Calendar from './Calendar';
+import Close from './Close';
+import CloseCircle from './CloseCircle';
 
 export {
   Checkmark,
@@ -20,5 +22,7 @@ export {
   User,
   Help,
   Settings,
-  Calendar
+  Calendar,
+  Close,
+  CloseCircle
 };

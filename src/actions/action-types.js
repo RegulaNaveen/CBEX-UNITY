@@ -1,12 +1,5 @@
 // @flow
-import { Map } from 'immutable';
-
-export type State = {
-  auth: Map,
-  dinningPref: Map,
-  profile: Map,
-  contacts: Map
-};
+export type State = {};
 
 export type ApiAction<A, T> = {
   type: A,

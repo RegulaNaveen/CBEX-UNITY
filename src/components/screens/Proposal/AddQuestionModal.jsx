@@ -9,7 +9,7 @@ import Checkbox from '../../common/Checkbox';
 import Dropdown from '../../common/Dropdown';
 import TextArea from '../../common/TextArea';
 import SelectTeam from '../../common/SelectTeam';
-import Close from '../../svg/Close';
+import { Close } from '../../svg';
 
 type Props = {
   onClose: Function,
@@ -20,7 +20,6 @@ type Props = {
 
 type State = {
   isChecked: boolean,
-  questionText: string,
   selectedDay: string
 };
 
@@ -30,7 +29,6 @@ class AddQuestionModal extends PureComponent<Props, State> {
 
     this.state = {
       isChecked: false,
-      questionText: '',
       selectedDay: ''
     };
   }
@@ -44,10 +42,6 @@ class AddQuestionModal extends PureComponent<Props, State> {
     // TODO: Delete a team item
   };
 
-  handleQuestionText = (event: SyntheticInputEvent<EventTarget>) => {
-    this.setState({ questionText: event.target.value });
-  };
-
   handleDayChange = (selectedDay: string) => {
     this.setState({
       selectedDay
@@ -59,7 +53,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
   handleFormatDate = (date: Date, format: string) => formatDate(date, format);
 
   render() {
-    const { isChecked, questionText, selectedDay } = this.state;
+    const { isChecked, selectedDay } = this.state;
     const { onClose, onSave, items, teams } = this.props;
 
     return (
@@ -83,10 +77,9 @@ class AddQuestionModal extends PureComponent<Props, State> {
               <TextArea
                 id="question-text-area"
                 className="modal-text-area"
-                value={questionText}
-                onChange={this.handleQuestionText}
                 placeholder="Hint text..."
                 title="Enter Question Text"
+                type="text"
               />
             </div>
             <div className="modal-segment">

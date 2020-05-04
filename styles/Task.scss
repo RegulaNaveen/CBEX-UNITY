@@ -55,7 +55,7 @@
     margin-top: 20px;
     border: none;
     background-color: transparent;
-    cursor: pointer;
+    cursor: pointer;        
 
     .task-icon {
       width: 18px;
@@ -126,6 +126,7 @@
     .task-table-row {
       display: flex;
       height: 55px;
+      align-items: center;
 
       &:hover{
         background-color: $neutral2;
@@ -137,6 +138,7 @@
 
       &-checkmark {
         display: flex;
+        height: 14px;
         margin-left: -52px;
         padding-left: 24px;
         padding-right: 14px;
@@ -144,16 +146,26 @@
         padding-bottom: 21px;
       }
 
-      &-question {
+      &-question-content {
         flex: 1;
         display: flex;
-        align-items: center;
         height: 55px;
+        width: 100px;
+        align-items: center;
+        margin-right: 10px;
+      }
+
+      &-question {
+        display: block;
+        align-items: center;
         color: $black;
         font-family: $proximaNova;
         font-size: 16px;
         letter-spacing: 0;
         line-height: 19px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
   
       &-answer {
@@ -166,6 +178,7 @@
         font-size: 16px;
         letter-spacing: 0;
         line-height: 19px;
+        margin-right: 10px;
       }
 
       &-owner {
@@ -173,6 +186,7 @@
         display: flex;
         align-items: center;
         height: 55px;
+        margin-right: 10px;
 
         &-icon{
           display: flex;
@@ -207,6 +221,7 @@
         font-size: 16px;
         letter-spacing: 0;
         line-height: 19px;
+        margin-right: 10px;
       }
 
       &-completion-date {
@@ -222,6 +237,7 @@
       }
 
       &-edit {
+        height: 16px;
         padding-left: 14px;
         padding-right: 24px;
         margin-right: -24px;

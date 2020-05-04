@@ -5,7 +5,7 @@ import type { ShallowWrapper } from 'enzyme';
 import sinon from 'sinon';
 import type { stub } from 'sinon';
 import SelectTeam from '../../../../../src/components/common/SelectTeam';
-import CloseCircle from '../../../../../src/components/svg/CloseCircle';
+import { CloseCircle } from '../../../../../src/components/svg';
 
 export default class SelectTeamModel {
   constructor(children: string) {

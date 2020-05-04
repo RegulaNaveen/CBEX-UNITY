@@ -6,7 +6,7 @@ type Props = {
   id?: string,
   placeholder: string,
   items: Array<Object>,
-  title: string
+  title?: string
 };
 
 type State = {
@@ -16,7 +16,8 @@ type State = {
 
 class Dropdown extends PureComponent<Props, State> {
   static defaultProps = {
-    id: undefined
+    id: undefined,
+    title: undefined
   };
 
   constructor(props: Object) {
@@ -41,11 +42,11 @@ class Dropdown extends PureComponent<Props, State> {
 
   render() {
     const { isCollapsed, selectedValue } = this.state;
-
     const { id, placeholder, items, title } = this.props;
+
     return (
       <>
-        <p className="dd-title">{title}</p>
+        {title && <p className="dd-title">{title}</p>}
         <div className="dd-wrapper">
           <div
             id={id}
@@ -65,8 +66,8 @@ class Dropdown extends PureComponent<Props, State> {
                 items.map(item => (
                   <DropdownItem
                     onClick={this.handleClick}
-                    item={item.title}
-                    key={item.id}
+                    item={item}
+                    key={item}
                   />
                 ))}
             </ul>

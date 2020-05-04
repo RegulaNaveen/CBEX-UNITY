@@ -5,15 +5,26 @@ import { withRouter } from 'react-router-dom';
 import { LOGIN } from '../../routes';
 import { User, Help, Settings } from '../svg';
 
-type ComponentProps = {
+type Props = {
   name: string,
   email: string,
-  handleLogout: Function,
-  handleKeyPress: Function
+  history: NavigationHistory
 };
 
-export const ToolbarMenuComponent = (props: ComponentProps) => {
-  const { name, email, handleLogout, handleKeyPress } = props;
+export const ToolbarMenuComponent = (props: Props) => {
+  const { name, email } = props;
+
+  function handleLogout() {
+    // TODO: Remove navigation test code
+    const { history } = props;
+    history.push(LOGIN);
+  }
+
+  function handleKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      handleLogout();
+    }
+  }
 
   return (
     <div className="toolbar-account-menu">
@@ -46,35 +57,4 @@ export const ToolbarMenuComponent = (props: ComponentProps) => {
   );
 };
 
-type Props = {
-  name: string,
-  email: string,
-  history: NavigationHistory
-};
-
-const ToolbarMenu = (props: Props) => {
-  const { name, email } = props;
-
-  function handleLogout() {
-    // TODO: Remove navigation test code
-    const { history } = props;
-    history.push(LOGIN);
-  }
-
-  function handleKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      handleLogout();
-    }
-  }
-
-  return (
-    <ToolbarMenuComponent
-      name={name}
-      email={email}
-      handleLogout={handleLogout}
-      handleKeyPress={handleKeyPress}
-    />
-  );
-};
-
-export default withRouter(ToolbarMenu);
+export default withRouter(ToolbarMenuComponent);

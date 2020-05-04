@@ -2,11 +2,17 @@
 import React, { Component } from 'react';
 import chevronRight from '../../../../img/chevron-right.svg';
 import chevronDown from '../../../../img/chevron-down.svg';
-import { Checkmark, Edit } from '../../svg';
+import { Checkmark } from '../../svg';
 import { getRandomColor } from '../../../utils/colors';
+import Dropdown from '../../common/Dropdown';
+import TextArea from '../../common/TextArea';
+import DatePicker from '../../common/DatePicker';
+import { parseDate, formatDate } from '../../../utils/DateUtils';
 
 type State = {
-  isCollapsed: boolean
+  isCollapsed: boolean,
+  answerText: string,
+  selectedDay: string
 };
 
 type Props = {
@@ -21,7 +27,9 @@ class Task extends Component<Props, State> {
     super(props);
 
     this.state = {
-      isCollapsed: false
+      isCollapsed: false,
+      answerText: '',
+      selectedDay: ''
     };
   }
 
@@ -37,17 +45,85 @@ class Task extends Component<Props, State> {
     }
   };
 
+  handleAnswerText = (event: SyntheticInputEvent<EventTarget>) => {
+    this.setState({ answerText: event.target.value });
+  };
+
+  handleDayChange = (selectedDay: string) => {
+    this.setState({
+      selectedDay
+    });
+  };
+
+  handleDate = (date: string, format: string) => parseDate(date, format);
+
+  handleFormatDate = (date: Date, format: string) => formatDate(date, format);
+
+  renderAnswer = (type: string, options: Array<Object>) => {
+    const { answerText, selectedDay } = this.state;
+    const optionsYN = ['Yes', 'No'];
+    switch (type) {
+      case 'text':
+        return (
+          <TextArea
+            className="proposal-text-area"
+            value={answerText}
+            onChange={this.handleAnswerText}
+            placeholder="Click to answer"
+            type="text"
+          />
+        );
+      case 'number':
+        return (
+          <TextArea
+            className="proposal-text-area"
+            value={answerText}
+            onChange={this.handleAnswerText}
+            placeholder="Click to answer"
+            type="number"
+          />
+        );
+      case 'y/n':
+        return (
+          <Dropdown
+            id="dd-proposal-answer"
+            placeholder="Click to answer"
+            items={optionsYN}
+          />
+        );
+      case 'single-picklist':
+        return (
+          <Dropdown
+            id="dd-proposal-answer"
+            placeholder="Click to answer"
+            items={options}
+          />
+        );
+      case 'date':
+        return (
+          <DatePicker
+            selectedDay={selectedDay}
+            handleDayChange={this.handleDayChange}
+            handleFormatDate={this.handleFormatDate}
+            handleDate={this.handleDate}
+          />
+        );
+      default:
+        return <div>Click to answer</div>;
+    }
+  };
+
   render() {
     const { isCollapsed } = this.state;
     const { data, isComplete, title, uncompletedQuestions } = this.props;
+    const hardCode = {
+      owner: ['Owner', 'Pedro'],
+      dueDate: '02-Apr-2020',
+      completionDate: '02-Apr-2020',
+      complete: true
+    };
     return (
-      <div
-        className={isComplete ? 'task-wrapper complete' : 'task-wrapper'}
-        onClick={this.handleCollapse}
-        onKeyPress={this.handleKeyPress}
-        role="button"
-        tabIndex={-1}
-      >
+      <div className={isComplete ? 'task-wrapper complete' : 'task-wrapper'}>
         <button
           id="arrow-icon"
           className="task-icon-wrapper"
@@ -63,7 +139,13 @@ class Task extends Component<Props, State> {
           />
         </button>
         {!isCollapsed ? (
-          <div className="task-title-wrapper">
+          <div
+            className="task-title-wrapper"
+            role="button"
+            onClick={this.handleCollapse}
+            onKeyPress={this.handleKeyPress}
+            tabIndex={-1}
+          >
             <p id="task-title" className="task-title">
               {title}
             </p>
@@ -82,7 +164,13 @@ class Task extends Component<Props, State> {
           </div>
         ) : (
           <div className="task-table-wrapper">
-            <div className="task-table-headers">
+            <div
+              className="task-table-headers"
+              role="button"
+              onClick={this.handleCollapse}
+              onKeyPress={this.handleKeyPress}
+              tabIndex={-1}
+            >
               <div className="task-title">
                 <p>{title}</p>
                 {/* TODO: Add filter feature */}
@@ -111,14 +199,27 @@ class Task extends Component<Props, State> {
             </div>
             {data &&
               data.map(item => (
-                <div key={item.id} className="task-table-row">
-                  {item.complete && (
+                <div key={item.questionId} className="task-table-row">
+                  {hardCode.complete ? (
                     <Checkmark className="task-table-row-checkmark icon-highlight" />
+                  ) : (
+                    <div className="task-table-row-checkmark icon-highlight" />
                   )}
-                  <p className="task-table-row-question">{item.question}</p>
-                  <div className="task-table-row-answer">{item.answer}</div>
+                  <div className="task-table-row-question-content">
+                    <p className="task-table-row-question">
+                      {item.questionText}
+                    </p>
+                  </div>
+                  <div className="task-table-row-answer">
+                    {item.answerConfiguration
+                      ? this.renderAnswer(
+                          item.answerConfiguration.type,
+                          item.answerConfiguration.options
+                        )
+                      : this.renderAnswer('', [])}
+                  </div>
                   <div className="task-table-row-owner">
-                    {item.owner.map(owner => (
+                    {hardCode.owner.map(owner => (
                       <p
                         key={owner}
                         className="task-table-row-owner-icon"
@@ -128,11 +229,13 @@ class Task extends Component<Props, State> {
                       </p>
                     ))}
                   </div>
-                  <p className="task-table-row-due-date">{item.dueDate}</p>
+                  <p className="task-table-row-due-date">{hardCode.dueDate}</p>
                   <p className="task-table-row-completion-date">
-                    {item.completionDate}
+                    {hardCode.completionDate}
                   </p>
-                  <Edit className="task-table-row-edit icon-highlight" />
+                  {/* TODO: Add edit proposal icon */}
+                  {/* <Edit className="task-table-row-edit icon-highlight" /> */}
+                  <div className="task-table-row-edit icon-highlight" />
                 </div>
               ))}
           </div>

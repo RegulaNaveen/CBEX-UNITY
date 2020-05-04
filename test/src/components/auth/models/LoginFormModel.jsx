@@ -33,15 +33,9 @@ export default class LoginFormModel {
 
   hasInputFields = (): boolean => this._getInputFields().length === 2;
 
-  getEmailInput = (): string =>
-    this._getInputFields()
-      .at(0)
-      .prop('id');
+  getEmailInput = (): ShallowWrapper => this._getInputFields().at(0);
 
-  getPasswordInput = (): string =>
-    this._getInputFields()
-      .at(1)
-      .prop('id');
+  getPasswordInput = (): ShallowWrapper => this._getInputFields().at(1);
 
   hasCheckBox = (): boolean => this._getCheckBox().length === 1;
 
@@ -58,4 +52,28 @@ export default class LoginFormModel {
   getIdLink = (): string => this._getLinkButton().prop('id');
 
   getOnChangeLink = (): boolean => this._getLinkButton().prop('onChange');
+
+  getEmailState = (): string => this._wrapper.state('email');
+
+  getPasswordState = (): string => this._wrapper.state('password');
+
+  getIsChecked = (): boolean => this._wrapper.state('isChecked');
+
+  // Interactions
+
+  doOnEmailChange = (value: string) => {
+    const event = { target: { value } };
+    this.getEmailInput().simulate('change', event);
+  };
+
+  doOnPasswordChange = (value: string) => {
+    const event = { target: { value } };
+    this.getPasswordInput().simulate('change', event);
+  };
+
+  doHandleIsChecked = () => {
+    this._getCheckBox()
+      .props()
+      .onChange();
+  };
 }

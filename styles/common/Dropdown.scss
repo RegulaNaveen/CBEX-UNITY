@@ -12,6 +12,7 @@
 .dd-wrapper{
   position: relative;
   width: 100%;
+  flex: 1;
 
   .dd-list {
     list-style-type: none;
@@ -53,7 +54,7 @@
 
     .dd-header-placeholder {
       height: 24px;
-      width: 44px;
+      width: 100%;
       color: $neutral6;
       font-family: $proximaNova;
       font-size: 16px;
