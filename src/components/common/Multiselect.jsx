@@ -39,10 +39,20 @@ class Multiselect extends PureComponent<Props, State> {
     this.setState({ selectedValues: values });
   };
 
+  onRemove = (value: string) => {
+    this.setState(prevState => ({
+      selectedValues: prevState.selectedValues.filter(item => item !== value)
+    }));
+  };
+
   onSelect = (value: string) => {
     const { selectedValues } = this.state;
-    selectedValues.push(value);
-    this.selectFormat(selectedValues);
+    if (selectedValues.includes(value)) {
+      this.onRemove(value);
+    } else {
+      selectedValues.push(value);
+    }
+    // this.selectFormat(selectedValues);
     this.handleCollapse();
   };
 
@@ -60,7 +70,7 @@ class Multiselect extends PureComponent<Props, State> {
             role="presentation"
             onClick={this.handleCollapse}
           >
-            {selectedValues ? (
+            {selectedValues.length !== 0 ? (
               <div className="multiselect-header-selected">
                 {selectedValues}
               </div>
@@ -78,6 +88,7 @@ class Multiselect extends PureComponent<Props, State> {
                     onClick={this.onSelect}
                     item={item}
                     key={item}
+                    isSelected={selectedValues.includes(item)}
                   />
                 ))}
             </ul>

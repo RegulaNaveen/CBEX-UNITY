@@ -3,7 +3,8 @@ import React, { PureComponent } from 'react';
 
 type Props = {
   onClick: Function,
-  item: string
+  item: string,
+  isSelected: boolean
 };
 
 class MultiselectItem extends PureComponent<Props> {
@@ -13,12 +14,15 @@ class MultiselectItem extends PureComponent<Props> {
   };
 
   render() {
-    const { item } = this.props;
-
+    const { item, isSelected } = this.props;
     return (
       <li
         role="presentation"
-        className="multiselect-list-item"
+        className={
+          isSelected
+            ? 'multiselect-list-item selected'
+            : 'multiselect-list-item'
+        }
         onClick={this.handleClick}
       >
         {item}
