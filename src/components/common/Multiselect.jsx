@@ -34,11 +34,6 @@ class Multiselect extends PureComponent<Props, State> {
     this.setState({ isCollapsed: !isCollapsed });
   };
 
-  selectFormat = (selectedValues: Array<string>) => {
-    const values = selectedValues.join(',').split(' ');
-    this.setState({ selectedValues: values });
-  };
-
   onRemove = (value: string) => {
     this.setState(prevState => ({
       selectedValues: prevState.selectedValues.filter(item => item !== value)
@@ -47,12 +42,11 @@ class Multiselect extends PureComponent<Props, State> {
 
   onSelect = (value: string) => {
     const { selectedValues } = this.state;
-    if (selectedValues.includes(value)) {
-      this.onRemove(value);
+    if (selectedValues.includes(`${value}, `)) {
+      this.onRemove(`${value}, `);
     } else {
-      selectedValues.push(value);
+      selectedValues.push(`${value}, `);
     }
-    // this.selectFormat(selectedValues);
     this.handleCollapse();
   };
 
@@ -88,7 +82,7 @@ class Multiselect extends PureComponent<Props, State> {
                     onClick={this.onSelect}
                     item={item}
                     key={item}
-                    isSelected={selectedValues.includes(item)}
+                    isSelected={selectedValues.includes(`${item}, `)}
                   />
                 ))}
             </ul>
