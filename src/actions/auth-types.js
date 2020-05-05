@@ -1,6 +1,6 @@
 // @flow
-export type AuthActionType = 'login_success' | 'login_loading' | 'login_error';
+export type AuthActionType = 'auth_success' | 'auth_loading' | 'auth_error';
 
-export const LOGIN_SUCCESS: AuthActionType = 'login_success';
-export const LOGIN_LOADING: AuthActionType = 'login_loading';
-export const LOGIN_ERROR: AuthActionType = 'login_error';
+export const AUTH_SUCCESS: AuthActionType = 'auth_success';
+export const AUTH_LOADING: AuthActionType = 'auth_loading';
+export const AUTH_ERROR: AuthActionType = 'auth_error';

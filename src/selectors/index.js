@@ -4,14 +4,14 @@ import * as proposalSelectors from './proposal';
 import * as authSelectors from './auth';
 
 // Auth selectors
-export const getLoginData = (state: Object): Map =>
-  authSelectors.getLoginData(state.auth);
+export const getAuthData = (state: Object): Map =>
+  authSelectors.getAuthData(state.auth);
 
-export const getLoginLoading = (state: Object): boolean =>
-  authSelectors.getLoginLoading(state.auth);
+export const isAuthLoading = (state: Object): boolean =>
+  authSelectors.isAuthLoading(state.auth);
 
-export const getLoginError = (state: Object): string =>
-  authSelectors.getLoginError(state.auth);
+export const authHasErrors = (state: Object): string =>
+  authSelectors.authHasErrors(state.auth);
 
 // Proposal selectors
 export const getQuestions = (state: Object): Map =>

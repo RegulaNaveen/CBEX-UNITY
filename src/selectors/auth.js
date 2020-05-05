@@ -1,9 +1,8 @@
 // @flow
 import { Map } from 'immutable';
 
-export const getLoginData = (auth: Map): Map => auth.get('loginData');
+export const getAuthData = (auth: Map): Map => auth.get('authData');
 
-export const getLoginLoading = (auth: Map): boolean =>
-  auth.get('isLoginLoading');
+export const isAuthLoading = (auth: Map): boolean => auth.get('isAuthLoading');
 
-export const getLoginError = (auth: Map): string => auth.get('loginError');
+export const authHasErrors = (auth: Map): string => auth.get('authError');

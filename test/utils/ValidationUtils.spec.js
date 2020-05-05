@@ -1,16 +1,26 @@
 // @flow
 import { it, describe } from 'mocha';
 import expect from 'expect';
-import { ValidateEmail } from '../../src/utils/ValidationUtils';
+import { isEmailValid, isTextValid } from '../../src/utils/ValidationUtils';
 
 describe('Validation Utils', () => {
-  it('ValidateEmail should return true', () => {
+  it('isEmailValid should return true', () => {
     const email = 'fake@mail.com';
-    expect(ValidateEmail(email)).toBe(true);
+    expect(isEmailValid(email)).toBe(true);
   });
 
-  it('ValidateEmail should return false', () => {
+  it('isEmailValid should return false', () => {
     const email = 'fakemail.com';
-    expect(ValidateEmail(email)).toBe(false);
+    expect(isEmailValid(email)).toBe(false);
+  });
+
+  it('isTextValid should return true', () => {
+    const text = 'faketext';
+    expect(isTextValid(text)).toBe(true);
+  });
+
+  it('isTextValid should return false', () => {
+    const text = '';
+    expect(isTextValid(text)).toBe(false);
   });
 });

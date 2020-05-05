@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
 import sinon from 'sinon';
 import type { stub } from 'sinon';
-import { LoginFormComponent } from '../../../../../src/components/auth/LoginForm';
+import { LoginFormImpl } from '../../../../../src/components/auth/LoginForm';
 import {
   PrimaryButton,
   LinkButton
@@ -17,9 +17,9 @@ export default class LoginFormModel {
     this._doLoginStub = sinon.stub();
     const props = {
       isLoading,
-      doLogin: this._doLoginStub
+      loginUser: this._doLoginStub
     };
-    this._wrapper = shallow(<LoginFormComponent {...props} />);
+    this._wrapper = shallow(<LoginFormImpl {...props} />);
   }
 
   _wrapper: ShallowWrapper;

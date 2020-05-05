@@ -2,9 +2,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
-import { getLoginLoading } from '../../selectors';
-import { Login } from '../../actions/auth-actions';
-import { ValidateEmail } from '../../utils/ValidationUtils';
+import { isAuthLoading } from '../../selectors';
+import { login } from '../../actions/auth-actions';
+import { isEmailValid, isTextValid } from '../../utils/ValidationUtils';
 import { PrimaryButton } from '../common/Buttons';
 import InputField from '../common/InputField';
 import Checkbox from '../common/Checkbox';
@@ -18,10 +18,10 @@ type State = {
 
 type Props = {
   isLoading: boolean,
-  doLogin: Function
+  loginUser: Function
 };
 
-export class LoginFormComponent extends Component<Props, State> {
+export class LoginFormImpl extends Component<Props, State> {
   constructor(props: Object) {
     super(props);
 
@@ -48,15 +48,15 @@ export class LoginFormComponent extends Component<Props, State> {
 
   handleLogin = () => {
     const { email, password } = this.state;
-    if ((email && password) !== '') {
-      if (ValidateEmail(email)) {
-        const { doLogin } = this.props;
-        doLogin(email, password);
+    if (isTextValid(email) && isTextValid(password)) {
+      if (isEmailValid(email)) {
+        const { loginUser } = this.props;
+        loginUser(email, password);
       } else {
         this.setState({ error: 'Invalid email' });
       }
     } else {
-      this.setState({ error: 'Login inputs cannot be empty' });
+      this.setState({ error: 'Please provide an email and password' });
     }
   };
 
@@ -109,9 +109,9 @@ export class LoginFormComponent extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: Map) => {
-  const isLoading = getLoginLoading(state);
+  const isLoading = isAuthLoading(state);
 
   return { isLoading };
 };
 
-export default connect(mapStateToProps, { doLogin: Login })(LoginFormComponent);
+export default connect(mapStateToProps, { loginUser: login })(LoginFormImpl);

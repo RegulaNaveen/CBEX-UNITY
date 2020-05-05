@@ -2,7 +2,11 @@
 import { useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useSelector, shallowEqual } from 'react-redux';
-import { getLoginData, getLoginError } from './selectors';
+import { getAuthData, authHasErrors } from './selectors';
+
+export const setSession = () => {
+  localStorage.setItem('isLoggedin', 'true');
+};
 
 export const getSession = () => {
   return !!localStorage.getItem('isLoggedin');
@@ -20,10 +24,10 @@ const SessionHandler = ({ children }: Props) => {
   const location = useLocation();
   const history = useHistory();
 
-  const { data, serror } = useSelector(
+  const { authData, serror } = useSelector(
     state => ({
-      data: getLoginData(state),
-      serror: getLoginError(state)
+      authData: getAuthData(state),
+      serror: authHasErrors(state)
     }),
     shallowEqual
   );
@@ -50,7 +54,7 @@ const SessionHandler = ({ children }: Props) => {
       }
     }
     checkSession();
-  }, [data, serror]);
+  }, [authData, serror]);
 
   return children;
 };

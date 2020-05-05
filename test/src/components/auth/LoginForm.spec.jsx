@@ -32,7 +32,7 @@ describe('LoginForm component', () => {
 
   describe('interactions', () => {
     it('should render an error when empty inputs error message is produced', () => {
-      const error = 'Login inputs cannot be empty';
+      const error = 'Please provide an email and password';
       const wrapper = new LoginFormModel(false);
       wrapper.doLoginClick();
       expect(wrapper.hasError()).toBe(true);

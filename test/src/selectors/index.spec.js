@@ -3,9 +3,9 @@ import expect from 'expect';
 import { describe, it } from 'mocha';
 import { Map, List } from 'immutable';
 import {
-  getLoginData,
-  getLoginLoading,
-  getLoginError,
+  getAuthData,
+  isAuthLoading,
+  authHasErrors,
   getQuestions,
   getQuestionsList,
   isProposalLoading,
@@ -30,15 +30,17 @@ describe('Selectors', () => {
 
   const proposalError = 'Fake Error';
 
-  const loginData = { email: 'fake@email.com', password: 'fakepassword' };
+  const authData = {
+    data: { email: 'fake@mail.com', password: 'fakepassword' }
+  };
 
-  const loginError = 'Fake Error Message';
+  const authError = { error: 'Fake Error Message' };
 
   const state = {
     auth: Map({
-      loginData,
-      isLoginLoading: true,
-      loginError
+      authData,
+      isAuthLoading: true,
+      authError
     }),
     proposal: Map({
       proposalQuestions,
@@ -63,16 +65,16 @@ describe('Selectors', () => {
     ]
   };
 
-  it('should return loginData', () => {
-    expect(getLoginData(state)).toEqual(loginData);
+  it('should return authData', () => {
+    expect(getAuthData(state)).toEqual(authData);
   });
 
-  it('should return isLoginLoading', () => {
-    expect(getLoginLoading(state)).toEqual(true);
+  it('should return isAuthLoading', () => {
+    expect(isAuthLoading(state)).toEqual(true);
   });
 
-  it('should return loginError', () => {
-    expect(getLoginError(state)).toEqual(loginError);
+  it('should return authError', () => {
+    expect(authHasErrors(state)).toEqual(authError);
   });
 
   it('should return proposal questions', () => {

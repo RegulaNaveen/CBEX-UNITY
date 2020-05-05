@@ -2,8 +2,8 @@
 import expect from 'expect';
 import { describe, it, beforeEach, afterEach } from 'mocha';
 import sinon from 'sinon';
-import { Login } from '../../../src/actions/auth-actions';
-import { LOGIN_SUCCESS, LOGIN_LOADING } from '../../../src/actions/auth-types';
+import { login } from '../../../src/actions/auth-actions';
+import { AUTH_SUCCESS, AUTH_LOADING } from '../../../src/actions/auth-types';
 
 describe('Auth Actions', () => {
   // TODO: Implement doLogin stub
@@ -21,16 +21,16 @@ describe('Auth Actions', () => {
     getState.reset();
   });
 
-  it('should do LOGIN_SUCCESS', async () => {
+  it('should do AUTH_SUCCESS', async () => {
     const email = 'fake@mail.com';
     const password = 'fakepassword';
 
-    const data = { email, password };
+    const response = { data: { email, password } };
 
-    await Login(email, password)(dispatch, getState);
-    expect(dispatch.args[0][0].type).toBe(LOGIN_LOADING);
-    expect(dispatch.args[1][0].type).toBe(LOGIN_SUCCESS);
-    expect(dispatch.args[1][0].payload).toEqual(data);
+    await login(email, password)(dispatch, getState);
+    expect(dispatch.args[0][0].type).toBe(AUTH_LOADING);
+    expect(dispatch.args[1][0].type).toBe(AUTH_SUCCESS);
+    expect(dispatch.args[1][0].payload).toEqual(response);
   });
 
   // TODO: Implement test when api funcion exist so Promisse.reject can be executed

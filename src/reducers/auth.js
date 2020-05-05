@@ -1,36 +1,32 @@
 // @flow
 import { Map, fromJS } from 'immutable';
-import {
-  LOGIN_SUCCESS,
-  LOGIN_LOADING,
-  LOGIN_ERROR
-} from '../actions/auth-types';
+import { AUTH_SUCCESS, AUTH_LOADING, AUTH_ERROR } from '../actions/auth-types';
 import type { ApiAction } from '../actions/action-types';
 
 const INITIAL_STATE: Map = fromJS({
-  loginData: undefined,
-  isLoginLoading: false,
-  loginError: undefined
+  authData: undefined,
+  isAuthLoading: false,
+  authError: undefined
 });
 
-const onLoginSuccess = (state: Map, action: Object): Map => {
+const onAuthSuccess = (state: Map, action: Object): Map => {
   const data = action.payload;
-  return state.set('loginData', data).set('isLoginLoading', false);
+  return state.set('authData', data).set('isAuthLoading', false);
 };
 
-const onLoginLoading = (state: Map): Map => {
-  return state.set('isLoginLoading', true).set('loginError', undefined);
+const onAuthLoading = (state: Map): Map => {
+  return state.set('isAuthLoading', true).set('authError', undefined);
 };
 
-const onLoginError = (state: Map, action: Object): Map => {
-  const { payload } = action;
-  return state.set('loginError', payload).set('isLoginLoading', false);
+const onAuthError = (state: Map, action: Object): Map => {
+  const error = action.payload;
+  return state.set('authError', error).set('isAuthLoading', false);
 };
 
 const actionMap = {
-  [LOGIN_SUCCESS]: onLoginSuccess,
-  [LOGIN_LOADING]: onLoginLoading,
-  [LOGIN_ERROR]: onLoginError
+  [AUTH_SUCCESS]: onAuthSuccess,
+  [AUTH_LOADING]: onAuthLoading,
+  [AUTH_ERROR]: onAuthError
 };
 
 export default function(
