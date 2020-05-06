@@ -27,8 +27,8 @@ describe('Multiselect component', () => {
       expect(wrapper.getPlaceholder()).toBe(placeholder);
     });
 
-    it('should render correct option when clicked on MultiselectItem', () => {
-      const fakeValue = ['Fake Value'];
+    it('should render correct options when clicked on MultiselectItem', () => {
+      const fakeValue = ['Fake Value', 'Fake Value'];
       const wrapper = new MultiselecModel(
         id,
         placeholder,
