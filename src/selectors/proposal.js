@@ -49,3 +49,6 @@ export const hasProposalErrors = (proposal: Map): Map =>
 
 export const sortQuestions = (proposal: Map): Map =>
   sortData(getQuestionsbySections(proposal.get('proposalQuestions')));
+
+export const setProposalAnswer = (proposal: Map): Map =>
+  proposal.get('proposalAnswer');

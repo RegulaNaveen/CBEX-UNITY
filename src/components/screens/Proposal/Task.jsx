@@ -46,10 +46,6 @@ class Task extends Component<Props, State> {
     }
   };
 
-  handleAnswerText = (event: SyntheticInputEvent<EventTarget>) => {
-    this.setState({ answerText: event.target.value });
-  };
-
   handleDayChange = (selectedDay: string) => {
     this.setState({
       selectedDay
@@ -69,7 +65,6 @@ class Task extends Component<Props, State> {
           <TextArea
             className="proposal-text-area"
             value={answerText}
-            onChange={this.handleAnswerText}
             placeholder="Click to answer"
             type="text"
           />
@@ -79,7 +74,6 @@ class Task extends Component<Props, State> {
           <TextArea
             className="proposal-text-area"
             value={answerText}
-            onChange={this.handleAnswerText}
             placeholder="Click to answer"
             type="number"
           />
