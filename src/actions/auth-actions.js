@@ -1,6 +1,5 @@
 // @flow
 import { AUTH_SUCCESS, AUTH_LOADING, AUTH_ERROR } from './auth-types';
-import type { AuthActionType } from './auth-types';
 import type { Dispatch, ThunkAction } from './action-types';
 import { setSession } from '../SessionHandler';
 
@@ -9,8 +8,8 @@ export type ProposalInfo = {};
 export const login = (
   email: string,
   password: string
-): ThunkAction<AuthActionType, Object> => {
-  return async (dispatch: Dispatch<AuthActionType, Object>) => {
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: AUTH_LOADING,
       payload: {}
