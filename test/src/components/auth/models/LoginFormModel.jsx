@@ -2,8 +2,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
-import type { NavigationHistory } from 'react-router-dom';
-import LoginForm from '../../../../../src/components/auth/LoginForm';
+import sinon from 'sinon';
+import type { stub } from 'sinon';
+import { LoginFormImpl } from '../../../../../src/components/auth/LoginForm';
 import {
   PrimaryButton,
   LinkButton
@@ -12,12 +13,18 @@ import InputField from '../../../../../src/components/common/InputField';
 import Checkbox from '../../../../../src/components/common/Checkbox';
 
 export default class LoginFormModel {
-  constructor(history: NavigationHistory) {
-    const props = { history };
-    this._wrapper = shallow(<LoginForm {...props} />);
+  constructor(isLoading: boolean) {
+    this._doLoginStub = sinon.stub();
+    const props = {
+      isLoading,
+      loginUser: this._doLoginStub
+    };
+    this._wrapper = shallow(<LoginFormImpl {...props} />);
   }
 
   _wrapper: ShallowWrapper;
+
+  _doLoginStub: stub;
 
   _getPrimaryButton = (): ShallowWrapper => this._wrapper.find(PrimaryButton);
 
@@ -26,6 +33,13 @@ export default class LoginFormModel {
   _getInputFields = (): ShallowWrapper => this._wrapper.find(InputField);
 
   _getCheckBox = (): ShallowWrapper => this._wrapper.find(Checkbox);
+
+  _getErrorParagraph = (): ShallowWrapper =>
+    this._wrapper.find('p.login-form-error');
+
+  hasError = (): boolean => this._getErrorParagraph().length === 1;
+
+  getErrorState = (): string => this._wrapper.state('error');
 
   hasPrimaryButton = (): boolean => this._getPrimaryButton().length === 1;
 
@@ -76,4 +90,8 @@ export default class LoginFormModel {
       .props()
       .onChange();
   };
+
+  doLoginClick = () => this._getPrimaryButton().simulate('click');
+
+  onDoLoginCalledOnce = (): boolean => this._doLoginStub.calledOnce === true;
 }

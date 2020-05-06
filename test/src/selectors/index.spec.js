@@ -3,6 +3,9 @@ import expect from 'expect';
 import { describe, it } from 'mocha';
 import { Map, List } from 'immutable';
 import {
+  getAuthData,
+  isAuthLoading,
+  authHasErrors,
   getQuestions,
   getQuestionsList,
   isProposalLoading,
@@ -27,7 +30,18 @@ describe('Selectors', () => {
 
   const proposalError = 'Fake Error';
 
+  const authData = {
+    data: { email: 'fake@mail.com', password: 'fakepassword' }
+  };
+
+  const authError = { error: 'Fake Error Message' };
+
   const state = {
+    auth: Map({
+      authData,
+      isAuthLoading: true,
+      authError
+    }),
     proposal: Map({
       proposalQuestions,
       isProposalLoading: true,
@@ -50,6 +64,18 @@ describe('Selectors', () => {
       }
     ]
   };
+
+  it('should return authData', () => {
+    expect(getAuthData(state)).toEqual(authData);
+  });
+
+  it('should return isAuthLoading', () => {
+    expect(isAuthLoading(state)).toEqual(true);
+  });
+
+  it('should return authError', () => {
+    expect(authHasErrors(state)).toEqual(authError);
+  });
 
   it('should return proposal questions', () => {
     expect(getQuestions(state)).toEqual(getQuestionsResponse);

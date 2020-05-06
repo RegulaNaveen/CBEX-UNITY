@@ -1,17 +1,15 @@
 // @flow
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-
-let onSessionChange;
-
-export const getSession = (onSessionCallback: Function) => {
-  onSessionChange = onSessionCallback;
-  return !!localStorage.getItem('isLoggedin');
-};
+import { useLocation, useHistory } from 'react-router-dom';
+import { useSelector, shallowEqual } from 'react-redux';
+import { getAuthData, authHasErrors } from './selectors';
 
 export const setSession = () => {
   localStorage.setItem('isLoggedin', 'true');
-  onSessionChange();
+};
+
+export const getSession = () => {
+  return !!localStorage.getItem('isLoggedin');
 };
 
 export const getProposalId = () => {
@@ -24,6 +22,15 @@ type Props = {
 
 const SessionHandler = ({ children }: Props) => {
   const location = useLocation();
+  const history = useHistory();
+
+  const { authData, serror } = useSelector(
+    state => ({
+      authData: getAuthData(state),
+      serror: authHasErrors(state)
+    }),
+    shallowEqual
+  );
 
   const setProposalId = () => {
     const proposalId = location.pathname.split('/')[3];
@@ -31,15 +38,23 @@ const SessionHandler = ({ children }: Props) => {
     console.log('SessionH', proposalId);
   };
 
+  const navigateFunc = () => {
+    const proposalId = localStorage.getItem('proposalId') || '';
+    console.log(proposalId);
+    history.push(`/app/proposals/${proposalId}`);
+  };
+
   useEffect(() => {
     function checkSession() {
       const isLoggedin = localStorage.getItem('isLoggedin');
       if (!isLoggedin) {
         setProposalId();
+      } else {
+        navigateFunc();
       }
     }
     checkSession();
-  });
+  }, [authData, serror]);
 
   return children;
 };

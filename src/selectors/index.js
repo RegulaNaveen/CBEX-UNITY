@@ -1,6 +1,17 @@
 // @flow
 import { Map } from 'immutable';
 import * as proposalSelectors from './proposal';
+import * as authSelectors from './auth';
+
+// Auth selectors
+export const getAuthData = (state: Object): Map =>
+  authSelectors.getAuthData(state.auth);
+
+export const isAuthLoading = (state: Object): boolean =>
+  authSelectors.isAuthLoading(state.auth);
+
+export const authHasErrors = (state: Object): string =>
+  authSelectors.authHasErrors(state.auth);
 
 // Proposal selectors
 export const getQuestions = (state: Object): Map =>

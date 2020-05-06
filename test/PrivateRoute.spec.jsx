@@ -8,20 +8,19 @@ describe('PrivateRoute component', () => {
   const node = 'Fake Node';
   describe('rendering', () => {
     it('should render a Route component', () => {
-      const isAuthenticated: boolean = false;
-      const wrapper = new PrivateRouteModel(node, isAuthenticated);
+      const wrapper = new PrivateRouteModel(node);
       expect(wrapper.hasRoute()).toBe(true);
     });
 
     it('should render children if isAuthenticated is true', () => {
-      const isAuthenticated: boolean = true;
-      const wrapper = new PrivateRouteModel(node, isAuthenticated);
+      localStorage.setItem('isLoggedin', 'true');
+      const wrapper = new PrivateRouteModel(node);
       expect(wrapper.getRenderedChildren()).toBe(node);
+      localStorage.removeItem('isLoggedin');
     });
 
     it('should redirect to login if isAuthenticated is false', () => {
-      const isAuthenticated: boolean = false;
-      const wrapper = new PrivateRouteModel(node, isAuthenticated);
+      const wrapper = new PrivateRouteModel(node);
       expect(wrapper.getRedirectToPath()).toBe(LOGIN);
     });
   });

@@ -6,10 +6,9 @@ import { Route, Redirect } from 'react-router-dom';
 import PrivateRoute from '../../src/PrivateRoute';
 
 export default class PrivateRouteModel {
-  constructor(children: any, isAuthenticated: boolean) {
+  constructor(children: any) {
     const props = {
-      children,
-      isAuthenticated
+      children
     };
     this._wrapper = shallow(<PrivateRoute {...props} />);
   }

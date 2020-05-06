@@ -89,6 +89,7 @@
       "src/**/*-compiled.js",
       "dist",
       "flow-typed",
+      "src/index.jsx",
       "src/SessionHandler.jsx"
     ],
     "extension": [

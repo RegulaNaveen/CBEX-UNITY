@@ -1,28 +1,34 @@
 // @flow
 import React, { Component } from 'react';
-import type { NavigationHistory } from 'react-router-dom';
-import { setSession } from '../../SessionHandler';
-import { PrimaryButton, LinkButton } from '../common/Buttons';
+import { connect } from 'react-redux';
+import { Map } from 'immutable';
+import { isAuthLoading } from '../../selectors';
+import { login } from '../../actions/auth-actions';
+import { isEmailValid, isTextValid } from '../../utils/ValidationUtils';
+import { PrimaryButton } from '../common/Buttons';
 import InputField from '../common/InputField';
 import Checkbox from '../common/Checkbox';
 
 type State = {
   email: string,
   password: string,
+  error: string,
   isChecked: boolean
 };
 
 type Props = {
-  history: NavigationHistory
+  isLoading: boolean,
+  loginUser: Function
 };
 
-class LoginForm extends Component<Props, State> {
+export class LoginFormImpl extends Component<Props, State> {
   constructor(props: Object) {
     super(props);
 
     this.state = {
       email: '',
       password: '',
+      error: '',
       isChecked: false
     };
   }
@@ -41,21 +47,22 @@ class LoginForm extends Component<Props, State> {
   };
 
   handleLogin = () => {
-    // TODO: Login functionality
-    // TODO: Remove navigation test code
-    setSession();
-    const proposalId = localStorage.getItem('proposalId') || '';
-    console.log(proposalId);
-    const { history } = this.props;
-    history.push(`/app/proposals/${proposalId}`);
-  };
-
-  handleForgotPassword = () => {
-    // TODO: forgot password functionality
+    const { email, password } = this.state;
+    if (isTextValid(email) && isTextValid(password)) {
+      if (isEmailValid(email)) {
+        const { loginUser } = this.props;
+        loginUser(email, password);
+      } else {
+        this.setState({ error: 'Invalid email' });
+      }
+    } else {
+      this.setState({ error: 'Please provide an email and password' });
+    }
   };
 
   render() {
-    const { isChecked, email, password } = this.state;
+    const { isChecked, email, password, error } = this.state;
+    const { isLoading } = this.props;
     return (
       <div className="form-wrapper">
         <p className="form-title">IQVIA Unity</p>
@@ -79,6 +86,7 @@ class LoginForm extends Component<Props, State> {
             value={password}
           />
         </div>
+        {error !== '' && <p className="login-form-error">{error}</p>}
         <Checkbox
           id="remember-username-checkbox"
           value="username"
@@ -94,18 +102,16 @@ class LoginForm extends Component<Props, State> {
               Log in
             </PrimaryButton>
           </div>
-          <div className="forgot-password-link">
-            <LinkButton
-              id="forgot-password"
-              onClick={this.handleForgotPassword}
-            >
-              Forgot your password?
-            </LinkButton>
-          </div>
         </div>
       </div>
     );
   }
 }
 
-export default LoginForm;
+const mapStateToProps = (state: Map) => {
+  const isLoading = isAuthLoading(state);
+
+  return { isLoading };
+};
+
+export default connect(mapStateToProps, { loginUser: login })(LoginFormImpl);
