@@ -45,6 +45,9 @@ describe('Selectors', () => {
         teamName: 'all',
         questionText:
           'What actions are needed to lock down the strategy; who is the owner and what is the deadline?',
+        section: {
+          sectionName: 'Action List'
+        },
         answerConfiguration: [],
         answers: 'answers'
       }
