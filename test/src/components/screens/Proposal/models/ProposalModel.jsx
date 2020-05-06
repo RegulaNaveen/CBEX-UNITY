@@ -17,7 +17,8 @@ export default class ProposalModel {
     match: Match,
     questions: Map,
     questionsList: Map,
-    isLoading: boolean
+    isLoading: boolean,
+    sortedQuestions: Map
   ) {
     this._onEventStub = sinon.stub();
     const props = {
@@ -25,6 +26,7 @@ export default class ProposalModel {
       questions,
       questionsList,
       isLoading,
+      sortedQuestions,
       getProposalInfo: this._onEventStub
     };
     this._wrapper = shallow(<Proposal {...props} />);

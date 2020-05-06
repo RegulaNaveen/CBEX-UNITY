@@ -6,7 +6,8 @@ import {
   getQuestions,
   getQuestionsList,
   isProposalLoading,
-  hasProposalErrors
+  hasProposalErrors,
+  sortQuestions
 } from '../../../src/selectors';
 
 describe('Selectors', () => {
@@ -60,6 +61,10 @@ describe('Selectors', () => {
 
   it('should return proposal questions list', () => {
     expect(getQuestionsList(state)).toEqual(getQuestionsListReponse);
+  });
+
+  it('should return sort proposal question by orderquestion property', () => {
+    expect(sortQuestions(state)).toEqual(getQuestionsListReponse);
   });
 
   it('should return isProposalLoading value', () => {

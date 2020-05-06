@@ -8,6 +8,7 @@ describe('Proposal component', () => {
   const match = { params: { id: 'Test Id' } };
   const questions = Map({});
   const questionsList = Map({});
+  const sortedQuestions = Map({});
   const isLoading = true;
   describe('rendering', () => {
     it('should render Loader component when loading', () => {
@@ -15,6 +16,7 @@ describe('Proposal component', () => {
         match,
         questions,
         questionsList,
+        sortedQuestions,
         isLoading
       );
       expect(wrapper.hasLoader()).toBe(true);
@@ -25,6 +27,7 @@ describe('Proposal component', () => {
         match,
         questions,
         questionsList,
+        sortedQuestions,
         !isLoading
       );
       expect(wrapper.hasProposalInfo()).toBe(true);
@@ -35,6 +38,7 @@ describe('Proposal component', () => {
         match,
         questions,
         questionsList,
+        sortedQuestions,
         !isLoading
       );
       expect(wrapper.hasParagraph()).toBe(true);
@@ -46,6 +50,7 @@ describe('Proposal component', () => {
         match,
         questions,
         questionsList,
+        sortedQuestions,
         !isLoading
       );
       expect(wrapper.hasAddIcon()).toBe(true);
@@ -56,6 +61,7 @@ describe('Proposal component', () => {
         match,
         questions,
         questionsList,
+        sortedQuestions,
         !isLoading
       );
       expect(wrapper.hasTaskList()).toBe(true);

@@ -14,3 +14,6 @@ export const isProposalLoading = (state: Object): Boolean =>
 
 export const hasProposalErrors = (state: Object): string =>
   proposalSelectors.hasProposalErrors(state.proposal);
+
+export const sortQuestions = (state: Object): Map =>
+  proposalSelectors.sortQuestions(state.proposal);

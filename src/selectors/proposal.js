@@ -31,7 +31,8 @@ const getQuestionsbySections = (questions: Array<Object>) => {
   const questionsList = _.mapValues(
     _.groupBy(questions, 'section.sectionName')
   );
-  return sortData(questionsList);
+
+  return questionsList;
 };
 
 export const getQuestions = (proposal: Map): Map =>
@@ -45,3 +46,6 @@ export const isProposalLoading = (proposal: Map): Map =>
 
 export const hasProposalErrors = (proposal: Map): Map =>
   proposal.get('proposalError');
+
+export const sortQuestions = (proposal: Map): Map =>
+  sortData(getQuestionsbySections(proposal.get('proposalQuestions')));
