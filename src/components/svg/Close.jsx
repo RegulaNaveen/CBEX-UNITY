@@ -15,6 +15,6 @@ const Close = ({ className }: Props) => {
       />
     </svg>
   );
-}
+};
 
 export default Close;

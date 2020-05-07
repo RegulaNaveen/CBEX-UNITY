@@ -1,5 +1,7 @@
 // @flow
 import React, { Component } from 'react';
+import { Map } from 'immutable';
+import { connect } from 'react-redux';
 import chevronRight from '../../../../img/chevron-right.svg';
 import chevronDown from '../../../../img/chevron-down.svg';
 import { Checkmark } from '../../svg';
@@ -9,6 +11,7 @@ import TextArea from '../../common/TextArea';
 import DatePicker from '../../common/DatePicker';
 import { parseDate, formatDate } from '../../../utils/DateUtils';
 import Multiselect from '../../common/Multiselect';
+import { setProposalAnswerData } from '../../../actions/proposal-actions';
 
 type State = {
   isCollapsed: boolean,
@@ -20,7 +23,8 @@ type Props = {
   data: Array<Object>,
   isComplete: boolean,
   title: string,
-  uncompletedQuestions: number
+  uncompletedQuestions: number,
+  setProposalAnswer: Function
 };
 
 class Task extends Component<Props, State> {
@@ -47,9 +51,15 @@ class Task extends Component<Props, State> {
   };
 
   handleDayChange = (selectedDay: string) => {
-    this.setState({
-      selectedDay
-    });
+    const { setProposalAnswer } = this.props;
+    this.setState(
+      {
+        selectedDay
+      },
+      () => {
+        // setProposalAnswer(proposalId, questionId,selectedDay);
+      }
+    );
   };
 
   handleDate = (date: string, format: string) => parseDate(date, format);
@@ -250,4 +260,10 @@ class Task extends Component<Props, State> {
   }
 }
 
-export default Task;
+const mapStateToProps = (state: Map) => {
+  return { state };
+};
+
+export default connect(mapStateToProps, {
+  setProposalAnswer: setProposalAnswerData
+})(Task);

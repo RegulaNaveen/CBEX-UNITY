@@ -15,6 +15,6 @@ const CloseCircle = ({ className }: Props) => {
       />
     </svg>
   );
-}
+};
 
 export default CloseCircle;
