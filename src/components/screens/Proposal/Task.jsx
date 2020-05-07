@@ -76,9 +76,16 @@ class Task extends Component<Props, State> {
 
   handleFormatDate = (date: Date, format: string) => formatDate(date, format);
 
-  renderAnswer = (type: string, options: Array<Object>) => {
+  renderAnswer = (
+    type: string,
+    options: Array<Object>,
+    answers: Array<Object>
+  ) => {
     const { selectedDay } = this.state;
     const optionsYN = ['Yes', 'No'];
+    const answer = answers.slice(-1)[0];
+
+    console.log('LAST', answer);
 
     switch (type) {
       case 'text':
@@ -220,12 +227,12 @@ class Task extends Component<Props, State> {
             {data &&
               data.map(item => (
                 <div key={item.questionId} className="task-table-row">
-                  {hardCode.complete ? (
+                  {item.answers.length ? (
                     <div className="task-table-row-checkmark">
                       <div className="task-table-row-checkmark-wrapper icon-highlight">
                         <Checkmark className="task-table-row-checkmark-wrapper-icon" />
-                      </div>
                     </div>
+                      </div>
                   ) : (
                     <div className="task-table-row-checkmark">
                       <div className="task-table-row-checkmark-wrapper icon-highlight" />
@@ -240,9 +247,10 @@ class Task extends Component<Props, State> {
                     {item.answerConfiguration
                       ? this.renderAnswer(
                           item.answerConfiguration.type,
-                          item.answerConfiguration.options
+                          item.answerConfiguration.options,
+                          item.answers
                         )
-                      : this.renderAnswer('', [])}
+                      : this.renderAnswer('', [], [])}
                   </div>
                   <div className="task-table-row-owner">
                     {hardCode.owner.map(owner => (
