@@ -7,7 +7,8 @@ type Props = {
   className: string,
   placeholder: string,
   title?: string,
-  type?: string
+  type?: string,
+  onChange: Function
 };
 
 type State = {
@@ -30,6 +31,8 @@ class TextArea extends PureComponent<Props, State> {
   }
 
   handleText = (event: SyntheticInputEvent<EventTarget>) => {
+    const { onChange } = this.props;
+    onChange(event.target.value);
     this.setState({ textValue: event.target.value });
   };
 

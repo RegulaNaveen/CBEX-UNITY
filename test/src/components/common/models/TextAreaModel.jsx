@@ -39,7 +39,6 @@ export default class TextAreaModel {
   getTextClassName = (): string => this._getTextArea().prop('className');
 
   getValue = (): string => {
-    console.log(this._getTextArea().props());
     return this._getTextArea().prop('value');
   };
 

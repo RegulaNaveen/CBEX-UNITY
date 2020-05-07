@@ -6,7 +6,8 @@ type Props = {
   id?: string,
   placeholder: string,
   items: Array<Object>,
-  title?: string
+  title?: string,
+  onClick: Function
 };
 
 type State = {
@@ -35,6 +36,8 @@ class Dropdown extends PureComponent<Props, State> {
   };
 
   handleClick = (value: string) => {
+    const { onClick } = this.props;
+    onClick(value);
     this.setState({ selectedValue: value }, () => {
       this.handleCollapse();
     });

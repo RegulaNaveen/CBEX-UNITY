@@ -15,7 +15,6 @@ import { setProposalAnswerData } from '../../../actions/proposal-actions';
 
 type State = {
   isCollapsed: boolean,
-  answerText: string,
   selectedDay: string
 };
 
@@ -33,7 +32,6 @@ class Task extends Component<Props, State> {
 
     this.state = {
       isCollapsed: false,
-      answerText: '',
       selectedDay: ''
     };
   }
@@ -50,6 +48,14 @@ class Task extends Component<Props, State> {
     }
   };
 
+  handleTextChange = () => {
+    // Call answer endpoint to send answer
+  };
+
+  onClickChange = () => {
+    // Call answer endpoint to send answer
+  };
+
   handleDayChange = (selectedDay: string) => {
     const { setProposalAnswer } = this.props;
     this.setState(
@@ -57,7 +63,11 @@ class Task extends Component<Props, State> {
         selectedDay
       },
       () => {
-        // setProposalAnswer(proposalId, questionId,selectedDay);
+        setProposalAnswer(
+          '9b28f967-229c-4ca4-9ab6-74e8e681bd50',
+          'Country Strategy-N9P',
+          'Wed May 06 2020 12:00:00 GMT-0500 (Central Daylight Time)'
+        );
       }
     );
   };
@@ -67,25 +77,26 @@ class Task extends Component<Props, State> {
   handleFormatDate = (date: Date, format: string) => formatDate(date, format);
 
   renderAnswer = (type: string, options: Array<Object>) => {
-    const { answerText, selectedDay } = this.state;
+    const { selectedDay } = this.state;
     const optionsYN = ['Yes', 'No'];
+
     switch (type) {
       case 'text':
         return (
           <TextArea
             className="proposal-text-area"
-            value={answerText}
             placeholder="Click to answer"
             type="text"
+            onChange={this.handleTextChange}
           />
         );
       case 'number':
         return (
           <TextArea
             className="proposal-text-area"
-            value={answerText}
             placeholder="Click to answer"
             type="number"
+            onChange={this.handleTextChange}
           />
         );
       case 'y/n':
@@ -94,6 +105,7 @@ class Task extends Component<Props, State> {
             id="dd-proposal-answer"
             placeholder="Click to answer"
             items={optionsYN}
+            onClick={this.onClickChange}
           />
         );
       case 'single-picklist':
@@ -102,6 +114,7 @@ class Task extends Component<Props, State> {
             id="dd-proposal-answer"
             placeholder="Click to answer"
             items={options}
+            onClick={this.onClickChange}
           />
         );
       case 'date':
