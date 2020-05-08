@@ -133,7 +133,7 @@
         background-color: $neutral2;
       }
 
-      &:hover .icon-highlight{
+      &:hover .icon-highlight {
         background-color: $neutral2;
       }
 
@@ -157,6 +157,16 @@
             width: 14px;
           }
         }
+      }
+
+      &-check {
+        display: flex;
+        height: 14px;
+        margin-left: -52px;
+        padding-left: 24px;
+        padding-right: 28px;
+        padding-top: 20px;
+        padding-bottom: 21px;
       }
 
       &-question-content {
