@@ -52,6 +52,14 @@ class AddQuestionModal extends PureComponent<Props, State> {
 
   handleFormatDate = (date: Date, format: string) => formatDate(date, format);
 
+  handleTextChange = () => {
+    // TODO: Get values and make the logic
+  };
+
+  onClickChange = () => {
+    // TODO: Get values and make the logic
+  };
+
   render() {
     const { isChecked, selectedDay } = this.state;
     const { onClose, onSave, items, teams } = this.props;
@@ -80,6 +88,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
                 placeholder="Hint text..."
                 title="Enter Question Text"
                 type="text"
+                onChange={this.handleTextChange}
               />
             </div>
             <div className="modal-segment">
@@ -89,6 +98,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
                   placeholder="Select"
                   items={items}
                   title="Answer Type"
+                  onClick={this.onClickChange}
                 />
               </div>
               <DatePicker
@@ -105,6 +115,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
                 placeholder="Select"
                 items={items}
                 title="Which team member roles will answer"
+                onClick={this.onClickChange}
               />
             </div>
             <div className="modal-segment">

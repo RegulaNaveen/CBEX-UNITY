@@ -49,11 +49,11 @@ class Task extends Component<Props, State> {
   };
 
   handleTextChange = () => {
-    // Call answer endpoint to send answer
+    // TODO: Call answer endpoint to send answer
   };
 
   onClickChange = () => {
-    // Call answer endpoint to send answer
+    // TODO: Call answer endpoint to send answer
   };
 
   handleDayChange = (selectedDay: string) => {
