@@ -7,7 +7,6 @@ import Loader from 'react-loader-spinner';
 import { getProposal } from '../../../actions/proposal-actions';
 import {
   getQuestions,
-  getQuestionsList,
   isProposalLoading,
   sortQuestions
 } from '../../../selectors';
@@ -141,11 +140,10 @@ export class Proposal extends Component<Props, State> {
 
 const mapStateToProps = (state: Map) => {
   const questions = getQuestions(state);
-  const questionsList = getQuestionsList(state);
   const isLoading = isProposalLoading(state);
   const sortedQuestions = sortQuestions(state);
 
-  return { questions, questionsList, isLoading, sortedQuestions };
+  return { questions, isLoading, sortedQuestions };
 };
 
 export default connect(mapStateToProps, { getProposalInfo: getProposal })(
