@@ -9,7 +9,8 @@ import {
   getQuestions,
   getQuestionsList,
   isProposalLoading,
-  hasProposalErrors
+  hasProposalErrors,
+  sortQuestions
 } from '../../../src/selectors';
 
 describe('Selectors', () => {
@@ -59,6 +60,9 @@ describe('Selectors', () => {
         teamName: 'all',
         questionText:
           'What actions are needed to lock down the strategy; who is the owner and what is the deadline?',
+        section: {
+          sectionName: 'Action List'
+        },
         answerConfiguration: [],
         answers: 'answers'
       }
@@ -83,6 +87,10 @@ describe('Selectors', () => {
 
   it('should return proposal questions list', () => {
     expect(getQuestionsList(state)).toEqual(getQuestionsListReponse);
+  });
+
+  it('should return sort proposal question by orderquestion property', () => {
+    expect(sortQuestions(state)).toEqual(getQuestionsListReponse);
   });
 
   it('should return isProposalLoading value', () => {

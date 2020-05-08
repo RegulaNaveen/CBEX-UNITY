@@ -7,8 +7,8 @@ import Loader from 'react-loader-spinner';
 import { getProposal } from '../../../actions/proposal-actions';
 import {
   getQuestions,
-  getQuestionsList,
-  isProposalLoading
+  isProposalLoading,
+  sortQuestions
 } from '../../../selectors';
 import ProposalInfo from './ProposalInfo';
 import TasksList from './TasksList';
@@ -26,9 +26,9 @@ type State = {
 type Props = {
   match: Match,
   questions: Map,
-  questionsList: Map,
   isLoading: boolean,
-  getProposalInfo: Function
+  getProposalInfo: Function,
+  sortedQuestions: Map
 };
 
 export class Proposal extends Component<Props, State> {
@@ -88,10 +88,10 @@ export class Proposal extends Component<Props, State> {
   renderContent = (
     isLoading: boolean,
     questions: Map,
-    questionsList: Map,
+    sortedQuestions: Map,
     data: Object
   ) => {
-    if (!isLoading && questions && questionsList) {
+    if (!isLoading && questions && sortedQuestions) {
       return (
         <div>
           <ProposalInfo data={data} />
@@ -105,7 +105,7 @@ export class Proposal extends Component<Props, State> {
               <Add className="tasksList-add-icon" />
             </div>
           </div>
-          <TasksList tasks={questions} tasksQuestions={questionsList} />
+          <TasksList tasks={questions} tasksQuestions={sortedQuestions} />
         </div>
       );
     }
@@ -119,12 +119,12 @@ export class Proposal extends Component<Props, State> {
 
   render() {
     const { showModal, data, items, teams } = this.state;
-    const { questions, questionsList, isLoading } = this.props;
+    const { questions, isLoading, sortedQuestions } = this.props;
 
     return (
       <div className="proposal-wrapper">
         <Toolbar />
-        {this.renderContent(isLoading, questions, questionsList, data)}
+        {this.renderContent(isLoading, questions, sortedQuestions, data)}
         {showModal ? (
           <AddQuestionModal
             onClose={this.onClose}
@@ -140,10 +140,10 @@ export class Proposal extends Component<Props, State> {
 
 const mapStateToProps = (state: Map) => {
   const questions = getQuestions(state);
-  const questionsList = getQuestionsList(state);
   const isLoading = isProposalLoading(state);
+  const sortedQuestions = sortQuestions(state);
 
-  return { questions, questionsList, isLoading };
+  return { questions, isLoading, sortedQuestions };
 };
 
 export default connect(mapStateToProps, { getProposalInfo: getProposal })(

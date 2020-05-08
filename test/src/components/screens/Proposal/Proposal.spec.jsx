@@ -7,6 +7,7 @@ import ProposalModel from './models/ProposalModel';
 describe('Proposal component', () => {
   const match = { params: { id: 'Test Id' } };
   const questions = Map({});
+  const sortedQuestions = Map({});
   const questionsList = Map({});
   const isLoading = true;
   describe('rendering', () => {
@@ -15,7 +16,8 @@ describe('Proposal component', () => {
         match,
         questions,
         questionsList,
-        isLoading
+        isLoading,
+        sortedQuestions
       );
       expect(wrapper.hasLoader()).toBe(true);
     });
@@ -25,7 +27,8 @@ describe('Proposal component', () => {
         match,
         questions,
         questionsList,
-        !isLoading
+        !isLoading,
+        sortedQuestions
       );
       expect(wrapper.hasProposalInfo()).toBe(true);
     });
@@ -35,7 +38,8 @@ describe('Proposal component', () => {
         match,
         questions,
         questionsList,
-        !isLoading
+        !isLoading,
+        sortedQuestions
       );
       expect(wrapper.hasParagraph()).toBe(true);
       expect(wrapper.getTitle()).toBe('Questions');
@@ -46,7 +50,8 @@ describe('Proposal component', () => {
         match,
         questions,
         questionsList,
-        !isLoading
+        !isLoading,
+        sortedQuestions
       );
       expect(wrapper.hasAddIcon()).toBe(true);
     });
@@ -56,7 +61,8 @@ describe('Proposal component', () => {
         match,
         questions,
         questionsList,
-        !isLoading
+        !isLoading,
+        sortedQuestions
       );
       expect(wrapper.hasTaskList()).toBe(true);
     });
