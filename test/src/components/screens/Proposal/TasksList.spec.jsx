@@ -5,96 +5,45 @@ import TasksListModel from './models/TasksListModel';
 
 describe('TasksList component', () => {
   describe('rendering', () => {
-    const tasks = [
+    const tasks = ['Document Availability'];
+    const tasksQuestions = [
       {
-        data: [
+        'Document Availability': [
           {
-            question: 'Question',
-            answer: 'Answer',
-            owner: ['Owner', 'Pedro'],
-            dueDate: '02-Apr-2020',
-            completionDate: '02-Apr-2020',
-            complete: true
+            answerConfiguration: { type: 'y/n', options: [] },
+            answerDependence: 'Document Availability-B4X',
+            answers: [],
+            documentSource: 'BD Key, BD comp',
+            logic: 'b4x = no',
+            proposalId: '9b28f967-229c-4ca4-9ab6-74e8e681bd50',
+            questionId: 'Document Availability-B4X',
+            questionOrder: 1,
+            questionText: 'Is the protocol synopsis available?',
+            roleName: 'BD',
+            section: { sectionOrder: 7, sectionName: 'Document Availability' },
+            serviceDependence: 'n/a',
+            supportRoles: 'PD'
           },
           {
-            question: 'Question',
-            answer: 'Answer',
-            owner: ['Awner', 'Homer', 'jesus'],
-            dueDate: '02-Apr-2020',
-            completionDate: '02-Apr-2020',
-            complete: true
+            answerConfiguration: { type: 'date', options: [] },
+            answerDependence: 'no',
+            answers: [],
+            proposalId: '9b28f967-229c-4ca4-9ab6-74e8e681bd50',
+            questionId: 'Document Availability-X7B',
+            questionOrder: 2,
+            questionText: 'When will the protocol synopsis be available?',
+            roleName: 'BD',
+            section: { sectionOrder: 7, sectionName: 'Document Availability' },
+            serviceDependence: 'n/a',
+            sfObject: 'n/a',
+            supportRoles: 'PD'
           }
-        ],
-        complete: false,
-        title: 'Resources',
-        incomplete: 8
-      },
-      {
-        data: [
-          {
-            question: 'Question',
-            answer: 'Answer',
-            owner: ['Owner', 'Pedro'],
-            dueDate: '02-Apr-2020',
-            completionDate: '02-Apr-2020',
-            complete: false
-          },
-          {
-            question: 'Question',
-            answer: 'Answer',
-            owner: ['Awner', 'Homer', 'jesus'],
-            dueDate: '02-Apr-2020',
-            completionDate: '02-Apr-2020',
-            complete: false
-          },
-          {
-            question: 'Question',
-            answer: 'Answer',
-            owner: ['Awner', 'Homer', 'jesus'],
-            dueDate: '02-Apr-2020',
-            completionDate: '02-Apr-2020',
-            complete: true
-          },
-          {
-            question: 'Question',
-            answer: 'Answer',
-            owner: ['Awner', 'Homer', 'jesus'],
-            dueDate: '02-Apr-2020',
-            completionDate: '02-Apr-2020',
-            complete: true
-          }
-        ],
-        complete: false,
-        title: 'Labs',
-        incomplete: 2
-      },
-      {
-        data: [
-          {
-            question: 'Question',
-            answer: 'Answer',
-            owner: ['Owner', 'Pedro'],
-            dueDate: '02-Apr-2020',
-            completionDate: '02-Apr-2020',
-            complete: true
-          },
-          {
-            question: 'Question',
-            answer: 'Answer',
-            owner: ['Awner', 'Homer', 'jesus'],
-            dueDate: '02-Apr-2020',
-            completionDate: '02-Apr-2020',
-            complete: true
-          }
-        ],
-        complete: true,
-        title: 'Medical',
-        incomplete: 0
+        ]
       }
     ];
 
     it('should render proper ammount of Task components', () => {
-      const wrapper = new TasksListModel(tasks);
+      const wrapper = new TasksListModel(tasks, tasksQuestions);
       const tasksLength = tasks.length;
       expect(wrapper.hasTasks(tasksLength)).toBe(true);
     });
