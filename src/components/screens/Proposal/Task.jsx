@@ -231,8 +231,8 @@ class Task extends Component<Props, State> {
                     <div className="task-table-row-checkmark">
                       <div className="task-table-row-checkmark-wrapper icon-highlight">
                         <Checkmark className="task-table-row-checkmark-wrapper-icon" />
-                    </div>
                       </div>
+                    </div>
                   ) : (
                     <div className="task-table-row-checkmark">
                       <div className="task-table-row-checkmark-wrapper icon-highlight" />
