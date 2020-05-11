@@ -28,7 +28,8 @@ describe('Multiselect component', () => {
     });
 
     it('should render correct options when clicked on MultiselectItem', () => {
-      const fakeValue = ['Fake Value', 'Fake Value'];
+      const fakeValue = ['Fake Value'];
+      const fakeItem = ['Fake Value, '];
       const wrapper = new MultiselecModel(
         id,
         placeholder,
@@ -39,7 +40,7 @@ describe('Multiselect component', () => {
 
       wrapper.doClick();
       wrapper.doClickOnItem();
-      expect(wrapper.getSelectedItem()).toBe(fakeValue);
+      expect(wrapper.getSelectedItem()).toEqual(fakeItem);
     });
   });
 
