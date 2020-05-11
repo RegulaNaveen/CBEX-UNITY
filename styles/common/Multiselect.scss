@@ -1,4 +1,4 @@
-.dd-title {
+.multiselect-title {
   height: 24px;
   width: 100%;
   color: $neutral8;
@@ -9,17 +9,16 @@
   margin-bottom: 4px;
 }
 
-.dd-wrapper{
+.multiselect-wrapper{
   position: relative;
   width: 100%;
   flex: 1;
 
-  .dd-list {
+  .multiselect-list {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    top:45px;
-    right:0px;
+    right: 0px;
     width: 100%;
     background-color: $white;
     position: absolute;
@@ -31,7 +30,7 @@
     line-height: 24px;
     cursor: pointer;
       
-    .dd-list-item {
+    .multiselect-list-item {
       padding: 8px 16px;
       border-bottom: 1px solid $neutral3;
         
@@ -41,19 +40,24 @@
     }
   }
 
-  .dd-header{
+  .selected {
+    background-color: $neptune-hover;
+  }
+
+  .multiselect-header {
     display: flex;
     align-items: center;
     width: 100%;
-    height: 40px;
+    min-height: 40px;
     background-color: $white;
     border-radius: 5px;
     border: 1px solid $neutral4;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);
     cursor: pointer;
+    // overflow-wrap: break-word;
 
-    .dd-header-placeholder {
-      height: 24px;
+    .multiselect-header-placeholder {
+      min-height: 24px;
       width: 100%;
       color: $neutral6;
       font-family: $proximaNova;
@@ -63,14 +67,16 @@
       margin-left: 8px;
     }
 
-    .dd-header-selected {
-      height: 24px;
+    .multiselect-header-selected {
+      min-height: 24px;
+      width: 90%;
       color: $black;
       font-family: $proximaNova;
       font-size: 16px;
       letter-spacing: 0;
       line-height: 24px;
       margin-left: 8px;
+      margin-right: 10px;
     }
       
     &:before{

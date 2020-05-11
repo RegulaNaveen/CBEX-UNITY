@@ -8,6 +8,7 @@ import Dropdown from '../../common/Dropdown';
 import TextArea from '../../common/TextArea';
 import DatePicker from '../../common/DatePicker';
 import { parseDate, formatDate } from '../../../utils/DateUtils';
+import Multiselect from '../../common/Multiselect';
 
 type State = {
   isCollapsed: boolean,
@@ -108,6 +109,8 @@ class Task extends Component<Props, State> {
             handleDate={this.handleDate}
           />
         );
+      case 'multi-picklist':
+        return <Multiselect placeholder="Click to answer" items={options} />;
       default:
         return <div>Click to answer</div>;
     }
@@ -120,7 +123,7 @@ class Task extends Component<Props, State> {
       owner: ['Owner', 'Pedro'],
       dueDate: '02-Apr-2020',
       completionDate: '02-Apr-2020',
-      complete: true
+      complete: false
     };
     return (
       <div className={isComplete ? 'task-wrapper complete' : 'task-wrapper'}>
@@ -201,9 +204,15 @@ class Task extends Component<Props, State> {
               data.map(item => (
                 <div key={item.questionId} className="task-table-row">
                   {hardCode.complete ? (
-                    <Checkmark className="task-table-row-checkmark icon-highlight" />
+                    <div className="task-table-row-checkmark">
+                      <div className="task-table-row-checkmark-wrapper icon-highlight">
+                        <Checkmark className="task-table-row-checkmark-wrapper-icon" />
+                      </div>
+                    </div>
                   ) : (
-                    <div className="task-table-row-checkmark icon-highlight" />
+                    <div className="task-table-row-checkmark">
+                      <div className="task-table-row-checkmark-wrapper icon-highlight" />
+                    </div>
                   )}
                   <div className="task-table-row-question-content">
                     <p className="task-table-row-question">
@@ -235,7 +244,9 @@ class Task extends Component<Props, State> {
                   </p>
                   {/* TODO: Add edit proposal icon */}
                   {/* <Edit className="task-table-row-edit icon-highlight" /> */}
-                  <div className="task-table-row-edit icon-highlight" />
+                  <div className="task-table-row-edit">
+                    <div className="task-table-row-edit-wrapper icon-highlight" />
+                  </div>
                 </div>
               ))}
           </div>
