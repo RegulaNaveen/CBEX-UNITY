@@ -125,6 +125,7 @@
 
     .task-table-row {
       display: flex;
+      position: relative;
       min-height: 55px;
       align-items: center;
 
@@ -137,13 +138,25 @@
       }
 
       &-checkmark {
+        position: absolute;
         display: flex;
-        height: 14px;
-        margin-left: -52px;
-        padding-left: 24px;
-        padding-right: 14px;
-        padding-top: 20px;
-        padding-bottom: 21px;       
+        flex-direction: column;
+        height: 100%;
+        width: 50px;
+        margin-left: -50px;
+
+        &-wrapper {
+          display: flex;  
+          align-items: center;
+          justify-content: center;
+          flex: 1;
+          width: 100%;
+
+          &-icon {
+            height: 14px;
+            width: 14px;
+          }
+        }
       }
 
       &-question-content {
@@ -237,12 +250,26 @@
       }
 
       &-edit {
-        height: 16px;
-        padding-left: 14px;
-        padding-right: 24px;
-        margin-right: -24px;
-        padding-top: 19px;
-        padding-bottom: 20px;
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 23px;
+        right: 0;
+        margin-right: -23px;
+
+        &-wrapper {
+          display: flex;  
+          align-items: center;
+          justify-content: center;
+          flex: 1;
+          width: 100%;
+
+          &-icon {
+            height: 14px;
+            width: 14px;
+          }
+        }
       }
     }
   }
