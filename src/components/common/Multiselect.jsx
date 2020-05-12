@@ -6,7 +6,8 @@ type Props = {
   id?: string,
   placeholder: string,
   items: Array<Object>,
-  title?: string
+  title?: string,
+  onClick: Function
 };
 
 type State = {
@@ -27,6 +28,14 @@ class Multiselect extends PureComponent<Props, State> {
       isCollapsed: false,
       selectedValues: []
     };
+  }
+
+  componentDidUpdate() {
+    const { selectedValues } = this.state;
+    const { onClick } = this.props;
+    if (selectedValues) {
+      onClick(selectedValues);
+    }
   }
 
   handleCollapse = () => {

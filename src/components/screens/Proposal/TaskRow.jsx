@@ -55,6 +55,12 @@ export class TaskRow extends Component<Props, State> {
     );
   };
 
+  onSelectValues = (selectedValues: Array<string>) => {
+    const { setProposalAnswer, proposalId, questionId } = this.props;
+    console.log('MULTISELECT>>>>>', proposalId, questionId, selectedValues);
+    setProposalAnswer(proposalId, questionId, selectedValues);
+  };
+
   handleDate = (date: string, format: string) => parseDate(date, format);
 
   handleFormatDate = (date: Date, format: string) => formatDate(date, format);
@@ -115,7 +121,13 @@ export class TaskRow extends Component<Props, State> {
           />
         );
       case 'multi-picklist':
-        return <Multiselect placeholder="Click to answer" items={options} />;
+        return (
+          <Multiselect
+            placeholder="Click to answer"
+            items={options}
+            onClick={this.onSelectValues}
+          />
+        );
       default:
         return <div>Click to answer</div>;
     }
