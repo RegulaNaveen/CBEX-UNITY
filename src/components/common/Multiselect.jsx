@@ -7,7 +7,8 @@ type Props = {
   placeholder: string,
   items: Array<Object>,
   title?: string,
-  onClick: Function
+  onClick: Function,
+  value?: Array<string>
 };
 
 type State = {
@@ -18,7 +19,8 @@ type State = {
 class Multiselect extends PureComponent<Props, State> {
   static defaultProps = {
     id: undefined,
-    title: undefined
+    title: undefined,
+    value: undefined
   };
 
   constructor(props: Object) {
@@ -61,7 +63,8 @@ class Multiselect extends PureComponent<Props, State> {
 
   render() {
     const { isCollapsed, selectedValues } = this.state;
-    const { id, placeholder, items, title } = this.props;
+    const { id, placeholder, items, title, value } = this.props;
+    console.log(value);
 
     return (
       <>

@@ -26,8 +26,6 @@ export const setProposalAnswer = async (
   questionId: string,
   answer: string
 ): Promise<Object> => {
-  console.log(proposalId, questionId, answer);
-
   return new Promise((resolve, reject) => {
     axios
       .put(

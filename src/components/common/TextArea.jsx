@@ -8,7 +8,8 @@ type Props = {
   placeholder: string,
   title?: string,
   type?: string,
-  onChange: Function
+  onChange: Function,
+  value?: string
 };
 
 type State = {
@@ -19,7 +20,8 @@ class TextArea extends PureComponent<Props, State> {
   static defaultProps = {
     id: undefined,
     title: undefined,
-    type: undefined
+    type: undefined,
+    value: undefined
   };
 
   constructor(props: Object) {
@@ -37,8 +39,9 @@ class TextArea extends PureComponent<Props, State> {
   };
 
   render() {
-    const { id, className, placeholder, title, type } = this.props;
+    const { id, className, placeholder, title, type, value } = this.props;
     const { textValue } = this.state;
+    console.log(value);
 
     return (
       <>

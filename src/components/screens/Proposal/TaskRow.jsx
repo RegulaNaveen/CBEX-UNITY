@@ -57,7 +57,6 @@ export class TaskRow extends Component<Props, State> {
 
   onSelectValues = (selectedValues: Array<string>) => {
     const { setProposalAnswer, proposalId, questionId } = this.props;
-    console.log('MULTISELECT>>>>>', proposalId, questionId, selectedValues);
     setProposalAnswer(proposalId, questionId, selectedValues);
   };
 
@@ -73,6 +72,7 @@ export class TaskRow extends Component<Props, State> {
     const { selectedDay } = this.state;
     const optionsYN = ['Yes', 'No'];
     const answer = answers.slice(-1)[0];
+    console.log(answer);
 
     switch (type) {
       case 'text':
@@ -82,6 +82,7 @@ export class TaskRow extends Component<Props, State> {
             placeholder="Click to answer"
             type="text"
             onChange={this.handleTextChange}
+            // value={answer}
           />
         );
       case 'number':
@@ -91,6 +92,7 @@ export class TaskRow extends Component<Props, State> {
             placeholder="Click to answer"
             type="number"
             onChange={this.handleTextChange}
+            // value={answer}
           />
         );
       case 'y/n':
@@ -100,6 +102,7 @@ export class TaskRow extends Component<Props, State> {
             placeholder="Click to answer"
             items={optionsYN}
             onClick={this.onClickChange}
+            // value={answer}
           />
         );
       case 'single-picklist':
@@ -109,6 +112,7 @@ export class TaskRow extends Component<Props, State> {
             placeholder="Click to answer"
             items={options}
             onClick={this.onClickChange}
+            // value={answer}
           />
         );
       case 'date':
@@ -126,6 +130,7 @@ export class TaskRow extends Component<Props, State> {
             placeholder="Click to answer"
             items={options}
             onClick={this.onSelectValues}
+            // value={answer}
           />
         );
       default:
