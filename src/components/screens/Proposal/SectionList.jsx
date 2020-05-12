@@ -8,7 +8,7 @@ type Props = {
   tasksQuestions: Map
 };
 
-const TasksList = ({ tasks, tasksQuestions }: Props) => {
+const SectionList = ({ tasks, tasksQuestions }: Props) => {
   return (
     <div className="tasksList-wrapper">
       {tasks.map(task => {
@@ -29,4 +29,4 @@ const TasksList = ({ tasks, tasksQuestions }: Props) => {
   );
 };
 
-export default TasksList;
+export default SectionList;

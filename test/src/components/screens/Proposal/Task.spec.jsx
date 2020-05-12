@@ -6,7 +6,7 @@ import TaskModel from './models/TaskModel';
 describe('Task component', () => {
   const data = [
     {
-      id: 1,
+      questionId: 1,
       question: 'Question',
       answer: 'Answer',
       owner: ['Owner', 'Pedro'],
@@ -15,7 +15,7 @@ describe('Task component', () => {
       complete: true
     },
     {
-      id: 2,
+      questionId: 2,
       question: 'Question',
       answer: 'Answer',
       owner: ['Awner', 'Homer', 'jesus'],

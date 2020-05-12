@@ -3,7 +3,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
 import { Map } from 'immutable';
-import TaskList from '../../../../../../src/components/screens/Proposal/TasksList';
+import SectionList from '../../../../../../src/components/screens/Proposal/SectionList';
 import Task from '../../../../../../src/components/screens/Proposal/Task';
 
 export default class TaskListModel {
@@ -12,7 +12,7 @@ export default class TaskListModel {
       tasks,
       tasksQuestions
     };
-    this._wrapper = shallow(<TaskList {...props} />);
+    this._wrapper = shallow(<SectionList {...props} />);
   }
 
   _wrapper: ShallowWrapper;

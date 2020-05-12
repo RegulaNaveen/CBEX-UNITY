@@ -11,7 +11,7 @@ import {
   sortQuestions
 } from '../../../selectors';
 import ProposalInfo from './ProposalInfo';
-import TasksList from './TasksList';
+import SectionList from './SectionList';
 import Toolbar from '../../Toolbar';
 import { Add } from '../../svg';
 import AddQuestionModal from './AddQuestionModal';
@@ -105,7 +105,7 @@ export class Proposal extends Component<Props, State> {
               <Add className="tasksList-add-icon" />
             </div>
           </div>
-          <TasksList tasks={questions} tasksQuestions={sortedQuestions} />
+          <SectionList tasks={questions} tasksQuestions={sortedQuestions} />
         </div>
       );
     }
