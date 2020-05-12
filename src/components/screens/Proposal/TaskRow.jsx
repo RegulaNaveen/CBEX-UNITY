@@ -72,8 +72,6 @@ export class TaskRow extends Component<Props, State> {
     const optionsYN = ['Yes', 'No'];
     const answer = answers.slice(-1)[0];
 
-    console.log('LAST', answer);
-
     switch (type) {
       case 'text':
         return (
@@ -134,8 +132,7 @@ export class TaskRow extends Component<Props, State> {
       dueDate: '02-Apr-2020',
       completionDate: '02-Apr-2020'
     };
-    // console.log(answerConfiguration);
-    console.log(answers.length);
+
     return (
       <div className="task-table-row">
         {answers.length ? (

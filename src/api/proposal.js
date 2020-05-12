@@ -4,10 +4,14 @@ import axios from 'axios';
 const PROPOSAL_API_URL =
   'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/proposals/';
 
+const API_KEY = 'SpT8axNRgY6BS5fen75PD1ijDgYQsZg41ulKi96e';
+
 export const getProposalInfo = async (id: string): Promise<Object> => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${PROPOSAL_API_URL}/${id}`)
+      .get(`${PROPOSAL_API_URL}/${id}`, {
+        headers: { 'x-api-key': `${API_KEY}` }
+      })
       .then(response => {
         resolve(response.data);
       })
@@ -25,6 +29,7 @@ export const setProposalAnswer = async (
   return new Promise((resolve, reject) => {
     axios
       .put(`${PROPOSAL_API_URL}/${proposalId}/${questionId}`, {
+        headers: { 'x-api-key': `${API_KEY}` },
         answer
       })
       .then(response => {
