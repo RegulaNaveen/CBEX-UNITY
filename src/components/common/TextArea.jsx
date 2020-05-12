@@ -41,7 +41,6 @@ class TextArea extends PureComponent<Props, State> {
   render() {
     const { id, className, placeholder, title, type, value } = this.props;
     const { textValue } = this.state;
-    console.log(value);
 
     return (
       <>
@@ -49,7 +48,7 @@ class TextArea extends PureComponent<Props, State> {
         <input
           id={id}
           className={classnames('text-area-wrapper', className)}
-          value={textValue}
+          value={textValue || value}
           onChange={this.handleText}
           placeholder={placeholder}
           type={type}

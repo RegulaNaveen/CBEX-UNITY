@@ -8,7 +8,8 @@ type Props = {
   selectedDay: string,
   handleDayChange: Function,
   handleFormatDate: Function,
-  handleDate: Function
+  handleDate: Function,
+  value: string
 };
 
 const DatePicker = ({
@@ -16,13 +17,14 @@ const DatePicker = ({
   selectedDay,
   handleDayChange,
   handleFormatDate,
-  handleDate
+  handleDate,
+  value
 }: Props) => {
   return (
     <div className="date-picker">
       {label && <p className="date-picker-title">{label}</p>}
       <DayPickerInput
-        value={selectedDay || 'MM/DD/YYYY'}
+        value={selectedDay || 'MM/DD/YYYY' || value}
         onDayChange={handleDayChange}
         component={DatePickerCustomInput}
         format="MM/dd/yyyy"

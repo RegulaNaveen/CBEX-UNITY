@@ -48,7 +48,6 @@ class Dropdown extends PureComponent<Props, State> {
   render() {
     const { isCollapsed, selectedValue } = this.state;
     const { id, placeholder, items, title, value } = this.props;
-    console.log(value);
 
     return (
       <>
@@ -60,8 +59,8 @@ class Dropdown extends PureComponent<Props, State> {
             role="presentation"
             onClick={this.handleCollapse}
           >
-            {selectedValue ? (
-              <div className="dd-header-selected">{selectedValue}</div>
+            {selectedValue || value ? (
+              <div className="dd-header-selected">{selectedValue || value}</div>
             ) : (
               <div className="dd-header-placeholder">{placeholder}</div>
             )}

@@ -64,7 +64,6 @@ class Multiselect extends PureComponent<Props, State> {
   render() {
     const { isCollapsed, selectedValues } = this.state;
     const { id, placeholder, items, title, value } = this.props;
-    console.log(value);
 
     return (
       <>
@@ -76,9 +75,9 @@ class Multiselect extends PureComponent<Props, State> {
             role="presentation"
             onClick={this.handleCollapse}
           >
-            {selectedValues.length !== 0 ? (
+            {selectedValues.length !== 0 || value ? (
               <div className="multiselect-header-selected">
-                {selectedValues}
+                {selectedValues || value}
               </div>
             ) : (
               <div className="multiselect-header-placeholder">

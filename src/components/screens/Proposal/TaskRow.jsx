@@ -72,7 +72,12 @@ export class TaskRow extends Component<Props, State> {
     const { selectedDay } = this.state;
     const optionsYN = ['Yes', 'No'];
     const answer = answers.slice(-1)[0];
-    console.log(answer);
+    let answerValue = '';
+    let answerValueComplex = [];
+    if (answer !== undefined) {
+      if (typeof answer.answer === 'string') answerValue = answer.answer;
+      answerValueComplex = answer.answer;
+    }
 
     switch (type) {
       case 'text':
@@ -82,7 +87,7 @@ export class TaskRow extends Component<Props, State> {
             placeholder="Click to answer"
             type="text"
             onChange={this.handleTextChange}
-            // value={answer}
+            value={answerValue}
           />
         );
       case 'number':
@@ -92,7 +97,7 @@ export class TaskRow extends Component<Props, State> {
             placeholder="Click to answer"
             type="number"
             onChange={this.handleTextChange}
-            // value={answer}
+            value={answerValue}
           />
         );
       case 'y/n':
@@ -102,7 +107,7 @@ export class TaskRow extends Component<Props, State> {
             placeholder="Click to answer"
             items={optionsYN}
             onClick={this.onClickChange}
-            // value={answer}
+            value={answerValue}
           />
         );
       case 'single-picklist':
@@ -112,7 +117,7 @@ export class TaskRow extends Component<Props, State> {
             placeholder="Click to answer"
             items={options}
             onClick={this.onClickChange}
-            // value={answer}
+            value={answerValue}
           />
         );
       case 'date':
@@ -122,6 +127,7 @@ export class TaskRow extends Component<Props, State> {
             handleDayChange={this.handleDayChange}
             handleFormatDate={this.handleFormatDate}
             handleDate={this.handleDate}
+            value={answerValue}
           />
         );
       case 'multi-picklist':
@@ -130,7 +136,7 @@ export class TaskRow extends Component<Props, State> {
             placeholder="Click to answer"
             items={options}
             onClick={this.onSelectValues}
-            // value={answer}
+            value={answerValueComplex}
           />
         );
       default:
