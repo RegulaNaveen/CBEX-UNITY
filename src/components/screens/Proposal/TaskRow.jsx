@@ -33,28 +33,24 @@ export class TaskRow extends Component<Props, State> {
     };
   }
 
-  handleTextChange = () => {
-    // TODO: Call answer endpoint to send answer
+  handleTextChange = (textValue: string) => {
+    const { setProposalAnswer, proposalId, questionId } = this.props;
+    setProposalAnswer(proposalId, questionId, textValue);
   };
 
-  onClickChange = () => {
-    // TODO: Call answer endpoint to send answer
+  onClickChange = (selectedValue: string) => {
+    const { setProposalAnswer, proposalId, questionId } = this.props;
+    setProposalAnswer(proposalId, questionId, selectedValue);
   };
 
   handleDayChange = (selectedDay: string) => {
     const { setProposalAnswer, proposalId, questionId } = this.props;
-    console.log('PROPID', proposalId);
-    console.log('QID', questionId);
     this.setState(
       {
         selectedDay
       },
       () => {
-        setProposalAnswer(
-          proposalId,
-          questionId,
-          'Wed May 06 2020 12:00:00 GMT-0500 (Central Daylight Time)'
-        );
+        setProposalAnswer(proposalId, questionId, selectedDay);
       }
     );
   };
