@@ -1,5 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
+import _ from 'lodash';
 import MultiselectItem from './MultiselectItem';
 
 type Props = {
@@ -32,12 +33,15 @@ class Multiselect extends PureComponent<Props, State> {
     };
   }
 
+  componentDidMount() {
+    const { value } = this.props;
+    if (!_.isEmpty(value)) this.setState({ selectedValues: value });
+  }
+
   componentDidUpdate() {
     const { selectedValues } = this.state;
     const { onClick } = this.props;
-    if (selectedValues) {
-      onClick(selectedValues);
-    }
+    if (selectedValues) onClick(selectedValues);
   }
 
   handleCollapse = () => {
@@ -63,7 +67,7 @@ class Multiselect extends PureComponent<Props, State> {
 
   render() {
     const { isCollapsed, selectedValues } = this.state;
-    const { id, placeholder, items, title, value } = this.props;
+    const { id, placeholder, items, title } = this.props;
 
     return (
       <>
@@ -75,9 +79,9 @@ class Multiselect extends PureComponent<Props, State> {
             role="presentation"
             onClick={this.handleCollapse}
           >
-            {selectedValues.length !== 0 || value ? (
+            {selectedValues.length !== 0 ? (
               <div className="multiselect-header-selected">
-                {selectedValues || value}
+                {selectedValues}
               </div>
             ) : (
               <div className="multiselect-header-placeholder">
