@@ -35,13 +35,11 @@ class Multiselect extends PureComponent<Props, State> {
 
   componentDidMount() {
     const { value } = this.props;
-    if (!_.isEmpty(value)) this.setState({ selectedValues: value });
-  }
-
-  componentDidUpdate() {
-    const { selectedValues } = this.state;
-    const { onClick } = this.props;
-    if (selectedValues) onClick(selectedValues);
+    console.log('MOUNT', value);
+    if (!_.isEmpty(value)) {
+      this.setState({ selectedValues: value });
+      console.log('SETVALUE');
+    }
   }
 
   handleCollapse = () => {
@@ -56,12 +54,20 @@ class Multiselect extends PureComponent<Props, State> {
   };
 
   onSelect = (value: string) => {
+    const { onClick } = this.props;
     const { selectedValues } = this.state;
+    const currentSelectedValues = selectedValues;
+    let index = -1;
     if (selectedValues.includes(`${value}, `)) {
+      index = currentSelectedValues.indexOf(`${value}, `);
+      if (index > -1) {
+        currentSelectedValues.splice(index, 1);
+      }
       this.onRemove(`${value}, `);
     } else {
       selectedValues.push(`${value}, `);
     }
+    onClick(currentSelectedValues);
     this.handleCollapse();
   };
 
