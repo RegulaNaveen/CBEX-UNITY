@@ -1,6 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
+import _ from 'lodash';
 
 type Props = {
   id?: string,
@@ -32,6 +33,11 @@ class TextArea extends PureComponent<Props, State> {
     };
   }
 
+  componentDidMount() {
+    const { value } = this.props;
+    if (!_.isEmpty(value)) this.setState({ textValue: value });
+  }
+
   handleText = (event: SyntheticInputEvent<EventTarget>) => {
     const { onChange } = this.props;
     onChange(event.target.value);
@@ -39,7 +45,7 @@ class TextArea extends PureComponent<Props, State> {
   };
 
   render() {
-    const { id, className, placeholder, title, type, value } = this.props;
+    const { id, className, placeholder, title, type } = this.props;
     const { textValue } = this.state;
 
     return (
@@ -48,7 +54,7 @@ class TextArea extends PureComponent<Props, State> {
         <input
           id={id}
           className={classnames('text-area-wrapper', className)}
-          value={textValue || value}
+          value={textValue}
           onChange={this.handleText}
           placeholder={placeholder}
           type={type}
