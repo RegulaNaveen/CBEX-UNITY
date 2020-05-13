@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import chevronRight from '../../../../img/chevron-right.svg';
 import chevronDown from '../../../../img/chevron-down.svg';
-import { Checkmark } from '../../svg';
 import TaskRow from './TaskRow';
 
 type State = {
@@ -12,8 +11,8 @@ type State = {
 type Props = {
   data: Array<Object>,
   isComplete: boolean,
-  title: string,
-  uncompletedQuestions: number
+  title: string
+  // uncompletedQuestions: number
 };
 
 class Task extends Component<Props, State> {
@@ -39,7 +38,7 @@ class Task extends Component<Props, State> {
 
   render() {
     const { isCollapsed } = this.state;
-    const { data, isComplete, title, uncompletedQuestions } = this.props;
+    const { data, isComplete, title } = this.props;
     return (
       <div className={isComplete ? 'task-wrapper complete' : 'task-wrapper'}>
         <button
@@ -67,7 +66,8 @@ class Task extends Component<Props, State> {
             <p id="task-title" className="task-title">
               {title}
             </p>
-            {isComplete ? (
+            {/* TODO: Implement complete log functionality */}
+            {/* {isComplete ? (
               <div id="complete-status" className="task-status-wrapper">
                 <Checkmark className="task-status-checkmark" />
                 <p className="task-status-description">Complete</p>
@@ -78,7 +78,7 @@ class Task extends Component<Props, State> {
                   {`${uncompletedQuestions.toString()} Incomplete`}
                 </p>
               </div>
-            )}
+            )} */}
           </div>
         ) : (
           <div className="task-table-wrapper">

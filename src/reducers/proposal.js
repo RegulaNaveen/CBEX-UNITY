@@ -35,8 +35,28 @@ const onProposalError = (state: Map, action: Object): Map => {
   return state.set('proposalError', payload).set('isProposalLoading', false);
 };
 
-const onProposalAnswer = (state: Map): Map => {
+const onProposalAnswer = (state: Map, action: Object): Map => {
+  const {
+    payload: { data, questionId: referenceId }
+  } = action;
+
+  let newState = fromJS({});
+
+  const indexOfListToUpdate = state
+    .get('proposalQuestions')
+    .findIndex(listItem => {
+      return listItem.questionId === referenceId;
+    });
+
+  newState = state.setIn(
+    ['proposalQuestions', indexOfListToUpdate, 'answers'],
+    data
+  );
+
+  const proposalQuestions = newState.get('proposalQuestions');
+
   return state
+    .set('proposalQuestions', proposalQuestions)
     .set('proposalAnswer', INITIAL_STATE.proposalAnswer)
     .set('isProposalAnswerLoading', false);
 };

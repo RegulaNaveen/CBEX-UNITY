@@ -14,13 +14,14 @@ const SectionList = ({ tasks, tasksQuestions }: Props) => {
       {tasks.map(task => {
         const data = tasksQuestions[task];
         const complete = false;
-        const incomplete = 4;
+        // TODO: Pass complete log to Task
+        // const incomplete = 4;
         return (
           <Task
             data={data}
             title={task}
             isComplete={complete}
-            uncompletedQuestions={incomplete}
+            // uncompletedQuestions={incomplete}
             key={task}
           />
         );

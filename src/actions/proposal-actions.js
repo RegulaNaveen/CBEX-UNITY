@@ -50,7 +50,7 @@ export const setProposalAnswerData = (
       const data = await setProposalAnswer(proposalId, questionId, answer);
       dispatch({
         type: PROPOSAL_ANSWER,
-        payload: data
+        payload: { data, questionId }
       });
     } catch (err) {
       dispatch({
