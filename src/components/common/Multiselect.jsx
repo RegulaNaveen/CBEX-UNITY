@@ -35,11 +35,7 @@ class Multiselect extends PureComponent<Props, State> {
 
   componentDidMount() {
     const { value } = this.props;
-    console.log('MOUNT', value);
-    if (!_.isEmpty(value)) {
-      this.setState({ selectedValues: value });
-      console.log('SETVALUE');
-    }
+    if (!_.isEmpty(value)) this.setState({ selectedValues: value });
   }
 
   handleCollapse = () => {
