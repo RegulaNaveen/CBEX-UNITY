@@ -25,17 +25,24 @@ type Props = {
 };
 
 export class TaskRow extends Component<Props, State> {
+  timeout: any;
+
   constructor(props: Object) {
     super(props);
 
     this.state = {
       selectedDay: ''
     };
+
+    this.timeout = 0;
   }
 
   handleTextChange = (textValue: string) => {
     const { setProposalAnswer, proposalId, questionId } = this.props;
-    setProposalAnswer(proposalId, questionId, textValue);
+    if (this.timeout) clearTimeout(this.timeout);
+    this.timeout = setTimeout(() => {
+      setProposalAnswer(proposalId, questionId, textValue);
+    }, 800);
   };
 
   onClickChange = (selectedValue: string) => {
