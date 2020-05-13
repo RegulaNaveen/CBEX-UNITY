@@ -56,18 +56,16 @@ class Multiselect extends PureComponent<Props, State> {
   onSelect = (value: string) => {
     const { onClick } = this.props;
     const { selectedValues } = this.state;
-    const currentSelectedValues = selectedValues;
     let index = -1;
     if (selectedValues.includes(`${value}, `)) {
-      index = currentSelectedValues.indexOf(`${value}, `);
+      index = selectedValues.indexOf(`${value}, `);
       if (index > -1) {
-        currentSelectedValues.splice(index, 1);
+        selectedValues.splice(index, 1);
       }
-      this.onRemove(`${value}, `);
     } else {
       selectedValues.push(`${value}, `);
     }
-    onClick(currentSelectedValues);
+    onClick(selectedValues);
     this.handleCollapse();
   };
 
