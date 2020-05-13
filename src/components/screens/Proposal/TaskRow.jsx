@@ -80,7 +80,7 @@ export class TaskRow extends Component<Props, State> {
     const optionsYN = ['Yes', 'No'];
     const answer = answers.slice(-1)[0];
     let answerValue = '';
-    let answerValueComplex = [];
+    let answerValueComplex;
     if (answer !== undefined) {
       if (typeof answer.answer === 'string') answerValue = answer.answer;
       answerValueComplex = answer.answer;
