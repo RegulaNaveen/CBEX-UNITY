@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
+import _ from 'lodash';
 import DatePickerCustomInput from './DatePickerCustomInput';
 import { formatDate } from '../../utils/DateUtils';
 
@@ -22,7 +23,7 @@ const DatePicker = ({
   value
 }: Props) => {
   let dateFormat = '';
-  if (value !== undefined) {
+  if (!_.isEmpty(value)) {
     const format = 'MM/dd/yyyy';
     const date = new Date(value);
     dateFormat = String(formatDate(date, format));
@@ -32,7 +33,7 @@ const DatePicker = ({
     <div className="date-picker">
       {label && <p className="date-picker-title">{label}</p>}
       <DayPickerInput
-        value={selectedDay || 'MM/DD/YYYY' || dateFormat}
+        value={dateFormat || selectedDay || 'MM/DD/YYYY'}
         onDayChange={handleDayChange}
         component={DatePickerCustomInput}
         format="MM/dd/yyyy"
