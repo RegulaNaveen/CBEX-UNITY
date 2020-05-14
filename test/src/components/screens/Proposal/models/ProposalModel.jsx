@@ -9,7 +9,7 @@ import type { stub } from 'sinon';
 import Loader from 'react-loader-spinner';
 import { Proposal } from '../../../../../../src/components/screens/Proposal';
 import ProposalInfo from '../../../../../../src/components/screens/Proposal/ProposalInfo';
-import TaskList from '../../../../../../src/components/screens/Proposal/TasksList';
+import SectionList from '../../../../../../src/components/screens/Proposal/SectionList';
 import { Add } from '../../../../../../src/components/svg';
 
 export default class ProposalModel {
@@ -44,7 +44,7 @@ export default class ProposalModel {
 
   _getAddIcon = (): ShallowWrapper => this._wrapper.find(Add);
 
-  _taskList = (): ShallowWrapper => this._wrapper.find(TaskList);
+  _taskList = (): ShallowWrapper => this._wrapper.find(SectionList);
 
   hasLoader = (): boolean => this._getLoader().length === 1;
 

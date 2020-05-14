@@ -3,14 +3,20 @@ import { Map, fromJS } from 'immutable';
 import {
   PROPOSAL_INFO,
   PROPOSAL_INFO_LOADING,
-  PROPOSAL_INFO_ERROR
+  PROPOSAL_INFO_ERROR,
+  PROPOSAL_ANSWER,
+  PROPOSAL_ANSWER_LOADING,
+  PROPOSAL_ANSWER_ERROR
 } from '../actions/proposal-types';
 import type { ApiAction } from '../actions/action-types';
 
 const INITIAL_STATE: Map = fromJS({
   proposalQuestions: Map({}),
   isProposalLoading: false,
-  proposalError: undefined
+  proposalError: undefined,
+  proposalAnswer: '',
+  isProposalAnswerLoading: false,
+  proposalAnswerError: undefined
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -29,10 +35,52 @@ const onProposalError = (state: Map, action: Object): Map => {
   return state.set('proposalError', payload).set('isProposalLoading', false);
 };
 
+const onProposalAnswer = (state: Map, action: Object): Map => {
+  const {
+    payload: { data, questionId: referenceId }
+  } = action;
+
+  let newState = fromJS({});
+
+  const indexOfListToUpdate = state
+    .get('proposalQuestions')
+    .findIndex(listItem => {
+      return listItem.questionId === referenceId;
+    });
+
+  newState = state.setIn(
+    ['proposalQuestions', indexOfListToUpdate, 'answers'],
+    data
+  );
+
+  const proposalQuestions = newState.get('proposalQuestions');
+
+  return state
+    .set('proposalQuestions', proposalQuestions)
+    .set('proposalAnswer', INITIAL_STATE.proposalAnswer)
+    .set('isProposalAnswerLoading', false);
+};
+
+const onProposalAnswerLoading = (state: Map): Map => {
+  return state
+    .set('isProposalAnswerLoading', true)
+    .set('proposalAnswerError', undefined);
+};
+
+const onProposalAnswerError = (state: Map, action: Object): Map => {
+  const { payload } = action;
+  return state
+    .set('proposalAnswerError', payload)
+    .set('isProposalAnswerLoading', false);
+};
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
-  [PROPOSAL_INFO_ERROR]: onProposalError
+  [PROPOSAL_INFO_ERROR]: onProposalError,
+  [PROPOSAL_ANSWER]: onProposalAnswer,
+  [PROPOSAL_ANSWER_LOADING]: onProposalAnswerLoading,
+  [PROPOSAL_ANSWER_ERROR]: onProposalAnswerError
 };
 
 export default function(

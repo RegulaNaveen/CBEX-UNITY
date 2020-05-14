@@ -28,3 +28,6 @@ export const hasProposalErrors = (state: Object): string =>
 
 export const sortQuestions = (state: Object): Map =>
   proposalSelectors.sortQuestions(state.proposal);
+
+export const setProposalAnswer = (state: Map): Map =>
+  state.get('proposalAnswer');

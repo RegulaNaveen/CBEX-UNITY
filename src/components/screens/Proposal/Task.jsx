@@ -2,25 +2,17 @@
 import React, { Component } from 'react';
 import chevronRight from '../../../../img/chevron-right.svg';
 import chevronDown from '../../../../img/chevron-down.svg';
-import { Checkmark } from '../../svg';
-import { getRandomColor } from '../../../utils/colors';
-import Dropdown from '../../common/Dropdown';
-import TextArea from '../../common/TextArea';
-import DatePicker from '../../common/DatePicker';
-import { parseDate, formatDate } from '../../../utils/DateUtils';
-import Multiselect from '../../common/Multiselect';
+import TaskRow from './TaskRow';
 
 type State = {
-  isCollapsed: boolean,
-  answerText: string,
-  selectedDay: string
+  isCollapsed: boolean
 };
 
 type Props = {
   data: Array<Object>,
   isComplete: boolean,
-  title: string,
-  uncompletedQuestions: number
+  title: string
+  // uncompletedQuestions: number
 };
 
 class Task extends Component<Props, State> {
@@ -28,9 +20,7 @@ class Task extends Component<Props, State> {
     super(props);
 
     this.state = {
-      isCollapsed: false,
-      answerText: '',
-      selectedDay: ''
+      isCollapsed: false
     };
   }
 
@@ -46,85 +36,9 @@ class Task extends Component<Props, State> {
     }
   };
 
-  handleAnswerText = (event: SyntheticInputEvent<EventTarget>) => {
-    this.setState({ answerText: event.target.value });
-  };
-
-  handleDayChange = (selectedDay: string) => {
-    this.setState({
-      selectedDay
-    });
-  };
-
-  handleDate = (date: string, format: string) => parseDate(date, format);
-
-  handleFormatDate = (date: Date, format: string) => formatDate(date, format);
-
-  renderAnswer = (type: string, options: Array<Object>) => {
-    const { answerText, selectedDay } = this.state;
-    const optionsYN = ['Yes', 'No'];
-    switch (type) {
-      case 'text':
-        return (
-          <TextArea
-            className="proposal-text-area"
-            value={answerText}
-            onChange={this.handleAnswerText}
-            placeholder="Click to answer"
-            type="text"
-          />
-        );
-      case 'number':
-        return (
-          <TextArea
-            className="proposal-text-area"
-            value={answerText}
-            onChange={this.handleAnswerText}
-            placeholder="Click to answer"
-            type="number"
-          />
-        );
-      case 'y/n':
-        return (
-          <Dropdown
-            id="dd-proposal-answer"
-            placeholder="Click to answer"
-            items={optionsYN}
-          />
-        );
-      case 'single-picklist':
-        return (
-          <Dropdown
-            id="dd-proposal-answer"
-            placeholder="Click to answer"
-            items={options}
-          />
-        );
-      case 'date':
-        return (
-          <DatePicker
-            selectedDay={selectedDay}
-            handleDayChange={this.handleDayChange}
-            handleFormatDate={this.handleFormatDate}
-            handleDate={this.handleDate}
-          />
-        );
-      case 'multi-picklist':
-        return <Multiselect placeholder="Click to answer" items={options} />;
-      default:
-        return <div>Click to answer</div>;
-    }
-  };
-
   render() {
     const { isCollapsed } = this.state;
-    const { data, isComplete, title, uncompletedQuestions } = this.props;
-    const hardCode = {
-      owner: ['Owner', 'Pedro'],
-      dueDate: '02-Apr-2020',
-      completionDate: '02-Apr-2020',
-      complete: false
-    };
+    const { data, isComplete, title } = this.props;
     return (
       <div className={isComplete ? 'task-wrapper complete' : 'task-wrapper'}>
         <button
@@ -152,7 +66,8 @@ class Task extends Component<Props, State> {
             <p id="task-title" className="task-title">
               {title}
             </p>
-            {isComplete ? (
+            {/* TODO: Implement complete log functionality */}
+            {/* {isComplete ? (
               <div id="complete-status" className="task-status-wrapper">
                 <Checkmark className="task-status-checkmark" />
                 <p className="task-status-description">Complete</p>
@@ -163,7 +78,7 @@ class Task extends Component<Props, State> {
                   {`${uncompletedQuestions.toString()} Incomplete`}
                 </p>
               </div>
-            )}
+            )} */}
           </div>
         ) : (
           <div className="task-table-wrapper">
@@ -202,52 +117,14 @@ class Task extends Component<Props, State> {
             </div>
             {data &&
               data.map(item => (
-                <div key={item.questionId} className="task-table-row">
-                  {hardCode.complete ? (
-                    <div className="task-table-row-checkmark">
-                      <div className="task-table-row-checkmark-wrapper icon-highlight">
-                        <Checkmark className="task-table-row-checkmark-wrapper-icon" />
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="task-table-row-checkmark">
-                      <div className="task-table-row-checkmark-wrapper icon-highlight" />
-                    </div>
-                  )}
-                  <div className="task-table-row-question-content">
-                    <p className="task-table-row-question">
-                      {item.questionText}
-                    </p>
-                  </div>
-                  <div className="task-table-row-answer">
-                    {item.answerConfiguration
-                      ? this.renderAnswer(
-                          item.answerConfiguration.type,
-                          item.answerConfiguration.options
-                        )
-                      : this.renderAnswer('', [])}
-                  </div>
-                  <div className="task-table-row-owner">
-                    {hardCode.owner.map(owner => (
-                      <p
-                        key={owner}
-                        className="task-table-row-owner-icon"
-                        style={{ backgroundColor: getRandomColor() }}
-                      >
-                        {owner.charAt(0).toUpperCase()}
-                      </p>
-                    ))}
-                  </div>
-                  <p className="task-table-row-due-date">{hardCode.dueDate}</p>
-                  <p className="task-table-row-completion-date">
-                    {hardCode.completionDate}
-                  </p>
-                  {/* TODO: Add edit proposal icon */}
-                  {/* <Edit className="task-table-row-edit icon-highlight" /> */}
-                  <div className="task-table-row-edit">
-                    <div className="task-table-row-edit-wrapper icon-highlight" />
-                  </div>
-                </div>
+                <TaskRow
+                  key={item.questionId}
+                  questionId={item.questionId}
+                  proposalId={item.proposalId}
+                  answers={item.answers}
+                  questionText={item.questionText}
+                  answerConfiguration={item.answerConfiguration}
+                />
               ))}
           </div>
         )}

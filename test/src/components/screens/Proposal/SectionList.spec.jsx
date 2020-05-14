@@ -1,7 +1,7 @@
 // @flow
 import expect from 'expect';
 import { describe, it } from 'mocha';
-import TasksListModel from './models/TasksListModel';
+import SectionListModel from './models/SectionListModel';
 
 describe('TasksList component', () => {
   describe('rendering', () => {
@@ -43,7 +43,7 @@ describe('TasksList component', () => {
     ];
 
     it('should render proper ammount of Task components', () => {
-      const wrapper = new TasksListModel(tasks, tasksQuestions);
+      const wrapper = new SectionListModel(tasks, tasksQuestions);
       const tasksLength = tasks.length;
       expect(wrapper.hasTasks(tasksLength)).toBe(true);
     });

@@ -1,12 +1,15 @@
 // @flow
 import React, { PureComponent } from 'react';
+import _ from 'lodash';
 import MultiselectItem from './MultiselectItem';
 
 type Props = {
   id?: string,
   placeholder: string,
   items: Array<Object>,
-  title?: string
+  title?: string,
+  onClick: Function,
+  value?: Array<string>
 };
 
 type State = {
@@ -17,7 +20,8 @@ type State = {
 class Multiselect extends PureComponent<Props, State> {
   static defaultProps = {
     id: undefined,
-    title: undefined
+    title: undefined,
+    value: undefined
   };
 
   constructor(props: Object) {
@@ -27,6 +31,11 @@ class Multiselect extends PureComponent<Props, State> {
       isCollapsed: false,
       selectedValues: []
     };
+  }
+
+  componentDidMount() {
+    const { value } = this.props;
+    if (!_.isEmpty(value)) this.setState({ selectedValues: value });
   }
 
   handleCollapse = () => {
@@ -41,12 +50,18 @@ class Multiselect extends PureComponent<Props, State> {
   };
 
   onSelect = (value: string) => {
+    const { onClick } = this.props;
     const { selectedValues } = this.state;
+    let index = -1;
     if (selectedValues.includes(`${value}, `)) {
-      this.onRemove(`${value}, `);
+      index = selectedValues.indexOf(`${value}, `);
+      if (index > -1) {
+        selectedValues.splice(index, 1);
+      }
     } else {
       selectedValues.push(`${value}, `);
     }
+    onClick(selectedValues);
     this.handleCollapse();
   };
 

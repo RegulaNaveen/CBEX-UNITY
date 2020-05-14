@@ -8,19 +8,20 @@ type Props = {
   tasksQuestions: Map
 };
 
-const TasksList = ({ tasks, tasksQuestions }: Props) => {
+const SectionList = ({ tasks, tasksQuestions }: Props) => {
   return (
     <div className="tasksList-wrapper">
       {tasks.map(task => {
         const data = tasksQuestions[task];
         const complete = false;
-        const incomplete = 4;
+        // TODO: Pass complete log to Task
+        // const incomplete = 4;
         return (
           <Task
             data={data}
             title={task}
             isComplete={complete}
-            uncompletedQuestions={incomplete}
+            // uncompletedQuestions={incomplete}
             key={task}
           />
         );
@@ -29,4 +30,4 @@ const TasksList = ({ tasks, tasksQuestions }: Props) => {
   );
 };
 
-export default TasksList;
+export default SectionList;

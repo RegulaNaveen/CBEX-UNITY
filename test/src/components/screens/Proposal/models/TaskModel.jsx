@@ -3,6 +3,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
 import Task from '../../../../../../src/components/screens/Proposal/Task';
+import TaskRow from '../../../../../../src/components/screens/Proposal/TaskRow';
 
 export default class TaskModel {
   constructor(
@@ -32,8 +33,7 @@ export default class TaskModel {
 
   _getCollapseButton = (): ShallowWrapper => this._wrapper.find('#arrow-icon');
 
-  _getQuestionRows = (): ShallowWrapper =>
-    this._wrapper.find('div.task-table-row');
+  _getQuestionRows = (): ShallowWrapper => this._wrapper.find(TaskRow);
 
   getTitle = (): string => this._getTitleParagraph().prop('children');
 

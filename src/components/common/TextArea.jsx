@@ -1,13 +1,16 @@
 // @flow
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
+import _ from 'lodash';
 
 type Props = {
   id?: string,
   className: string,
   placeholder: string,
   title?: string,
-  type?: string
+  type?: string,
+  onChange: Function,
+  value?: string
 };
 
 type State = {
@@ -18,7 +21,8 @@ class TextArea extends PureComponent<Props, State> {
   static defaultProps = {
     id: undefined,
     title: undefined,
-    type: undefined
+    type: undefined,
+    value: undefined
   };
 
   constructor(props: Object) {
@@ -29,7 +33,14 @@ class TextArea extends PureComponent<Props, State> {
     };
   }
 
+  componentDidMount() {
+    const { value } = this.props;
+    if (!_.isEmpty(value)) this.setState({ textValue: value });
+  }
+
   handleText = (event: SyntheticInputEvent<EventTarget>) => {
+    const { onChange } = this.props;
+    onChange(event.target.value);
     this.setState({ textValue: event.target.value });
   };
 

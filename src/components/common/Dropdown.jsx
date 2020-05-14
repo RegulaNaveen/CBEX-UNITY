@@ -6,7 +6,9 @@ type Props = {
   id?: string,
   placeholder: string,
   items: Array<Object>,
-  title?: string
+  title?: string,
+  onClick: Function,
+  value?: string
 };
 
 type State = {
@@ -17,7 +19,8 @@ type State = {
 class Dropdown extends PureComponent<Props, State> {
   static defaultProps = {
     id: undefined,
-    title: undefined
+    title: undefined,
+    value: undefined
   };
 
   constructor(props: Object) {
@@ -35,6 +38,8 @@ class Dropdown extends PureComponent<Props, State> {
   };
 
   handleClick = (value: string) => {
+    const { onClick } = this.props;
+    onClick(value);
     this.setState({ selectedValue: value }, () => {
       this.handleCollapse();
     });
@@ -42,7 +47,7 @@ class Dropdown extends PureComponent<Props, State> {
 
   render() {
     const { isCollapsed, selectedValue } = this.state;
-    const { id, placeholder, items, title } = this.props;
+    const { id, placeholder, items, title, value } = this.props;
 
     return (
       <>
@@ -54,8 +59,8 @@ class Dropdown extends PureComponent<Props, State> {
             role="presentation"
             onClick={this.handleCollapse}
           >
-            {selectedValue ? (
-              <div className="dd-header-selected">{selectedValue}</div>
+            {selectedValue || value ? (
+              <div className="dd-header-selected">{selectedValue || value}</div>
             ) : (
               <div className="dd-header-placeholder">{placeholder}</div>
             )}
