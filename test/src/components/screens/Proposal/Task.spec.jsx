@@ -50,17 +50,17 @@ describe('Task component', () => {
       expect(wrapper.hasTableWrapper()).toBe(false);
     });
 
-    it('should render a Complete text when all questions has been answered', () => {
-      const isCompleted = true;
-      const incompleteQuestions = 0;
-      const wrapper = new TaskModel(
-        data,
-        isCompleted,
-        title,
-        incompleteQuestions
-      );
-      expect(wrapper.getCompleteText()).toBe('Complete');
-    });
+    // it('should render a Complete text when all questions has been answered', () => {
+    //   const isCompleted = true;
+    //   const incompleteQuestions = 0;
+    //   const wrapper = new TaskModel(
+    //     data,
+    //     isCompleted,
+    //     title,
+    //     incompleteQuestions
+    //   );
+    //   expect(wrapper.getCompleteText()).toBe('Complete');
+    // });
   });
 
   describe('interactions', () => {
