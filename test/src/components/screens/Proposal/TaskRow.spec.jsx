@@ -132,18 +132,69 @@ describe('TaskRow component', () => {
   });
 
   // TODO: Add interactions testing
-  // describe('interactions', () => {
-  //   it('should render collapsed components when row is clicked', () => {
-  //     const wrapper = new TaskModel(
-  //       data,
-  //       complete,
-  //       title,
-  //       uncompletedQuestions
-  //     );
-  //     wrapper.doClick();
-  //     expect(wrapper.hasTitleWrapper()).toBe(false);
-  //     expect(wrapper.hasTableWrapper()).toBe(true);
-  //     expect(wrapper.hasQuestionRows(data.length)).toBe(true);
-  //   });
-  // });
+  describe('interactions', () => {
+    it('should change value state when handleTextChange is called', () => {
+      const customAnswerConfiguration = {
+        options: [],
+        type: 'text'
+      };
+      const wrapper = new TaskRowModel(
+        questionId,
+        proposalId,
+        answers,
+        questionText,
+        customAnswerConfiguration
+      );
+      wrapper.doHandleTextChange();
+    });
+
+    it('should handle onClickChange event', () => {
+      const customAnswerConfiguration = {
+        options: [],
+        type: 'y/n'
+      };
+      const wrapper = new TaskRowModel(
+        questionId,
+        proposalId,
+        answers,
+        questionText,
+        customAnswerConfiguration
+      );
+      wrapper.doOnClickChange();
+      expect(wrapper.onSetProposalAnswerCalledOnce()).toBe(true);
+    });
+
+    it('should handle onSelectValues event', () => {
+      const customAnswerConfiguration = {
+        options: [],
+        type: 'multi-picklist'
+      };
+      const wrapper = new TaskRowModel(
+        questionId,
+        proposalId,
+        answers,
+        questionText,
+        customAnswerConfiguration
+      );
+      wrapper.doOnSelectValues();
+      expect(wrapper.onSetProposalAnswerCalledOnce()).toBe(true);
+    });
+
+    it('should change selectedDay state when handleDayChange is called', () => {
+      const customAnswerConfiguration = {
+        options: [],
+        type: 'date'
+      };
+      const wrapper = new TaskRowModel(
+        questionId,
+        proposalId,
+        answers,
+        questionText,
+        customAnswerConfiguration
+      );
+      expect(wrapper.getSelectedDay()).toBe('');
+      wrapper.doHandleDayChange();
+      expect(wrapper.getSelectedDay()).toBe('testDay');
+    });
+  });
 });

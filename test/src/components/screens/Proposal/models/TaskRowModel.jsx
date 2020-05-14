@@ -11,7 +11,7 @@ import Dropdown from '../../../../../../src/components/common/Dropdown';
 import DatePicker from '../../../../../../src/components/common/DatePicker';
 import Multiselect from '../../../../../../src/components/common/Multiselect';
 
-export default class TaskModel {
+export default class TaskRowModel {
   constructor(
     questionId: string,
     proposalId: string,
@@ -62,12 +62,45 @@ export default class TaskModel {
 
   hasMultiselect = (): boolean => this._getMultiselect().length === 1;
 
-  // TODO: Add interactions testing
+  getSelectedDay = (): string => this._wrapper.state('selectedDay');
+
+  getTextValue = (): string => this._wrapper.prop('textValue');
+
   // Interactions
   onSetProposalAnswerCalledOnce = (): boolean =>
     this._onSetProposalAnswerStub.calledOnce === true;
 
   resetEventHandlers = () => {
     this._onSetProposalAnswerStub.reset();
+  };
+
+  doHandleTextChange = () => {
+    this._getTextArea()
+      .props()
+      .handleTextChange('textValue');
+  };
+
+  doOnClickChange = () => {
+    this._getDropDown()
+      .props()
+      .onClick();
+  };
+
+  doOnSelectValues = () => {
+    this._getMultiselect()
+      .props()
+      .onClick();
+  };
+
+  doHandleDayChange = () => {
+    this._getDatePicker()
+      .props()
+      .handleDayChange('testDay');
+  };
+
+  doHandleDate = () => {
+    this._getDatePicker()
+      .props()
+      .handleDate();
   };
 }

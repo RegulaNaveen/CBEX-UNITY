@@ -57,6 +57,7 @@ export class TaskRow extends Component<Props, State> {
         selectedDay
       },
       () => {
+        if (this.timeout) clearTimeout(this.timeout);
         this.timeout = setTimeout(() => {
           setProposalAnswer(proposalId, questionId, selectedDay);
         }, 800);
