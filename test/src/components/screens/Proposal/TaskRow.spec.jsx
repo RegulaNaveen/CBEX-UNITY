@@ -131,7 +131,7 @@ describe('TaskRow component', () => {
     });
   });
 
-  // TODO: Add interactions testing
+  // Interactions
   describe('interactions', () => {
     it('should change value state when handleTextChange is called', () => {
       const customAnswerConfiguration = {
