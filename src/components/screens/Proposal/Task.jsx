@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import chevronRight from '../../../../img/chevron-right.svg';
 import chevronDown from '../../../../img/chevron-down.svg';
-import TaskRow from './TaskRow';
+import TaskRowComponent from './TaskRow';
 
 type State = {
   isCollapsed: boolean
@@ -117,7 +117,7 @@ class Task extends Component<Props, State> {
             </div>
             {data &&
               data.map(item => (
-                <TaskRow
+                <TaskRowComponent
                   key={item.questionId}
                   questionId={item.questionId}
                   proposalId={item.proposalId}

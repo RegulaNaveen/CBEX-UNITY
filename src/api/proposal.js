@@ -45,5 +45,3 @@ export const setProposalAnswer = async (
       });
   });
 };
-
-export default function() {}

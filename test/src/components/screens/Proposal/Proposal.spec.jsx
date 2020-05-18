@@ -67,4 +67,20 @@ describe('Proposal component', () => {
       expect(wrapper.hasTaskList()).toBe(true);
     });
   });
+  describe('interactions', () => {
+    it('should change state showModal on onClose call', () => {
+      const wrapper = new ProposalModel(
+        match,
+        questions,
+        questionsList,
+        !isLoading,
+        sortedQuestions
+      );
+      expect(wrapper.getShowModal()).toBe(false);
+      wrapper.doIconOnClose();
+      expect(wrapper.getShowModal()).toBe(true);
+      wrapper.doOnClose();
+      expect(wrapper.getShowModal()).toBe(false);
+    });
+  });
 });

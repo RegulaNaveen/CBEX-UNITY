@@ -57,22 +57,18 @@ export class TaskRow extends Component<Props, State> {
         selectedDay
       },
       () => {
-        if (this.timeout) clearTimeout(this.timeout);
-        this.timeout = setTimeout(() => {
-          setProposalAnswer(proposalId, questionId, selectedDay);
-        }, 800);
+        setProposalAnswer(proposalId, questionId, selectedDay);
       }
     );
   };
 
   onSelectValues = (selectedValues: Array<string>) => {
     const { setProposalAnswer, proposalId, questionId } = this.props;
-    setProposalAnswer(proposalId, questionId, selectedValues);
+    if (this.timeout) clearTimeout(this.timeout);
+    this.timeout = setTimeout(() => {
+      setProposalAnswer(proposalId, questionId, selectedValues);
+    }, 800);
   };
-
-  handleDate = (date: string, format: string) => parseDate(date, format);
-
-  handleFormatDate = (date: Date, format: string) => formatDate(date, format);
 
   renderAnswer = (
     type: string,
@@ -120,7 +116,7 @@ export class TaskRow extends Component<Props, State> {
             value={answerValue}
           />
         );
-      case 'single-picklist':
+      case 'select':
         return (
           <Dropdown
             id="dd-proposal-answer"
@@ -135,12 +131,12 @@ export class TaskRow extends Component<Props, State> {
           <DatePicker
             selectedDay={selectedDay}
             handleDayChange={this.handleDayChange}
-            handleFormatDate={this.handleFormatDate}
-            handleDate={this.handleDate}
+            handleFormatDate={formatDate}
+            handleDate={parseDate}
             value={answerValue}
           />
         );
-      case 'multi-picklist':
+      case 'picklist':
         return (
           <Multiselect
             placeholder="Click to answer"
@@ -150,7 +146,7 @@ export class TaskRow extends Component<Props, State> {
           />
         );
       default:
-        return <div>Click to answer</div>;
+        return <div id="no-configuration">Click to answer</div>;
     }
   };
 
