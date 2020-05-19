@@ -16,7 +16,8 @@ import {
   getQuestionSectionInfo,
   getAnswerTypeInfo,
   getRolesInfo
-} from '../../../selectors/proposal';
+} from '../../../selectors';
+import { getQuestionSection } from '../../../actions/proposal-actions';
 
 type Props = {
   onClose: Function,
@@ -25,7 +26,8 @@ type Props = {
   teams: Array<Object>,
   getQuestionSectionList: Map,
   getAnswerTypesList: Array<string>,
-  getRolesList: Array<string>
+  getRolesList: Array<string>,
+  getQuestionSectionF: Function
 };
 
 type State = {
@@ -41,6 +43,11 @@ class AddQuestionModal extends PureComponent<Props, State> {
       isChecked: false,
       selectedDay: ''
     };
+  }
+
+  componentDidMount() {
+    const { getQuestionSectionF } = this.props;
+    getQuestionSectionF();
   }
 
   handleIsChecked = () => {
@@ -82,7 +89,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
       getRolesList
     } = this.props;
     console.log(
-      'DATA',
+      'DATAONSCREEN',
       getQuestionSectionList,
       getAnswerTypesList,
       getRolesList
@@ -206,11 +213,12 @@ class AddQuestionModal extends PureComponent<Props, State> {
 }
 
 const mapStateToProps = (state: Map) => {
-  console.log('STATE', state);
   const getQuestionSectionList = getQuestionSectionInfo(state);
   const getAnswerTypesList = getAnswerTypeInfo(state);
   const getRolesList = getRolesInfo(state);
   return { getQuestionSectionList, getAnswerTypesList, getRolesList };
 };
 
-export default connect(mapStateToProps, {})(AddQuestionModal);
+export default connect(mapStateToProps, {
+  getQuestionSectionF: getQuestionSection
+})(AddQuestionModal);
