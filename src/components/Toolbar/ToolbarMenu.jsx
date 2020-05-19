@@ -3,7 +3,8 @@ import React from 'react';
 import type { NavigationHistory } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import { LOGIN } from '../../routes';
-import { User, Help, Settings } from '../svg';
+// TODO: Add icons when menu options are implemented
+// import { User, Help, Settings } from '../svg';
 
 type Props = {
   name: string,
@@ -31,7 +32,8 @@ export const ToolbarMenuComponent = (props: Props) => {
       <p className="toolbar-account-menu-name">{name}</p>
       <p className="toolbar-account-menu-email">{email}</p>
       <div className="toolbar-account-menu-separator" />
-      <div className="toolbar-account-menu-option">
+      {/* TODO: Add toodlbar menu options */}
+      {/* <div className="toolbar-account-menu-option">
         <User className="toolbar-account-menu-option-icon" />
         <p className="toolbar-account-menu-option-title">Profile</p>
       </div>
@@ -42,7 +44,7 @@ export const ToolbarMenuComponent = (props: Props) => {
       <div className="toolbar-account-menu-option">
         <Help className="toolbar-account-menu-option-icon" />
         <p className="toolbar-account-menu-option-title">Help</p>
-      </div>
+      </div> */}
       <div
         id="logout-button"
         className="toolbar-account-menu-button"
