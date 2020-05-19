@@ -153,10 +153,15 @@ export class TaskRow extends Component<Props, State> {
   render() {
     const { answers, questionText, answerConfiguration } = this.props;
     const hardCode = {
-      owner: ['Owner', 'Pedro'],
-      dueDate: '02-Apr-2020',
-      completionDate: '02-Apr-2020'
+      owner: ['Owner', 'Pedro']
     };
+    console.log(answers);
+    let answerDate = 'Not Answered';
+    if (answers && answers.length > 0) {
+      const { date } = answers.slice(-1)[0];
+      const format = 'dd-MMM-yyyy';
+      answerDate = formatDate(new Date(date), format);
+    }
 
     return (
       <div className="task-table-row">
@@ -194,10 +199,9 @@ export class TaskRow extends Component<Props, State> {
             </p>
           ))}
         </div>
-        <p className="task-table-row-due-date">{hardCode.dueDate}</p>
-        <p className="task-table-row-completion-date">
-          {hardCode.completionDate}
-        </p>
+        {/* TODO: Add due date */}
+        {/* <p className="task-table-row-due-date">{hardCode.dueDate}</p> */}
+        <p className="task-table-row-completion-date">{answerDate}</p>
         {/* TODO: Add edit proposal icon */}
         {/* <Edit className="task-table-row-edit icon-highlight" /> */}
         <div className="task-table-row-edit">

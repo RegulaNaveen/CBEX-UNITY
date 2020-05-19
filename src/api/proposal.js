@@ -4,7 +4,7 @@ import axios from 'axios';
 const PROPOSAL_API_URL =
   'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/proposals';
 
-const API_KEY = 'ivZrd41WUr2jlCNgC04JT3ovB3tldAZe8c0pCVrM';
+const API_KEY = 'LodOBHeBPI5zGMDaq2Ppv8N2oHialSkR9t4cnQlH';
 
 export const getProposalInfo = async (id: string): Promise<Object> => {
   return new Promise((resolve, reject) => {

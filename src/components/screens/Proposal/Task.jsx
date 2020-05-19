@@ -104,11 +104,11 @@ class Task extends Component<Props, State> {
                 {/* TODO: Add filter feature */}
                 {/* <div className="filter-icon">↑</div> */}
               </div>
-              <div className="task-subtitle task-subtitle-due-date">
+              {/* <div className="task-subtitle task-subtitle-due-date">
                 <p>Due Date</p>
-                {/* TODO: Add filter feature */}
-                {/* <div className="filter-icon">↑</div> */}
-              </div>
+                // TODO: Add filter feature
+                <div className="filter-icon">↑</div>
+              </div> */}
               <div className="task-subtitle task-subtitle-completion-date">
                 <p>Date Completed</p>
                 {/* TODO: Add filter feature */}
