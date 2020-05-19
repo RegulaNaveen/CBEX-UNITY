@@ -3,6 +3,8 @@ import axios from 'axios';
 
 const PROPOSAL_API_URL =
   'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/proposals';
+const PROPOSAL_ANSWER_API_URL =
+  'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/questions';
 const PROPOSAL_SECTIONS_API_URL =
   'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/proposals/sections';
 const PROPOSAL_ANSWERTYPE_API_URL =
@@ -35,7 +37,7 @@ export const setProposalAnswer = async (
   return new Promise((resolve, reject) => {
     axios
       .put(
-        `${PROPOSAL_API_URL}/${proposalId}/${questionId}`,
+        `${PROPOSAL_ANSWER_API_URL}/${proposalId}/${questionId}`,
         {
           answer
         },
