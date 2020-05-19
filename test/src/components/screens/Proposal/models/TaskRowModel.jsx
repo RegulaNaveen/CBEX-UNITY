@@ -62,6 +62,12 @@ export default class TaskRowModel {
 
   hasMultiselect = (): boolean => this._getMultiselect().length === 1;
 
+  _getNoConfigurationDiv = (): ShallowWrapper =>
+    this._wrapper.find('#no-configuration');
+
+  hasNoConfigurationDiv = (): boolean =>
+    this._getNoConfigurationDiv().length === 1;
+
   getSelectedDay = (): string => this._wrapper.state('selectedDay');
 
   getTextValue = (): string => this._wrapper.prop('textValue');
@@ -77,7 +83,7 @@ export default class TaskRowModel {
   doHandleTextChange = () => {
     this._getTextArea()
       .props()
-      .handleTextChange('textValue');
+      .onChange('textValue');
   };
 
   doOnClickChange = () => {

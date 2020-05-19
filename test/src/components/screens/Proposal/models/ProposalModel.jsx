@@ -10,6 +10,7 @@ import Loader from 'react-loader-spinner';
 import { Proposal } from '../../../../../../src/components/screens/Proposal';
 import ProposalInfo from '../../../../../../src/components/screens/Proposal/ProposalInfo';
 import SectionList from '../../../../../../src/components/screens/Proposal/SectionList';
+import AddQuestionModal from '../../../../../../src/components/screens/Proposal/AddQuestionModal';
 import { Add } from '../../../../../../src/components/svg';
 
 export default class ProposalModel {
@@ -46,6 +47,12 @@ export default class ProposalModel {
 
   _taskList = (): ShallowWrapper => this._wrapper.find(SectionList);
 
+  _getAddQuestionModalIcon = (): ShallowWrapper =>
+    this._wrapper.find('div.tasksList-add-icon-wrapper');
+
+  _getAddQuestionModal = (): ShallowWrapper =>
+    this._wrapper.find(AddQuestionModal);
+
   hasLoader = (): boolean => this._getLoader().length === 1;
 
   hasProposalInfo = (): boolean => this._proposalInfo().length === 1;
@@ -57,4 +64,20 @@ export default class ProposalModel {
   getTitle = (): string => this._getParagraph().prop('children');
 
   hasTaskList = (): boolean => this._taskList().length === 1;
+
+  getShowModal = (): string => this._wrapper.state('showModal');
+
+  // Interactions
+
+  doIconOnClose = () => {
+    this._getAddQuestionModalIcon()
+      .props()
+      .onClick();
+  };
+
+  doOnClose = () => {
+    this._getAddQuestionModal()
+      .props()
+      .onClose();
+  };
 }

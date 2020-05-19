@@ -17,7 +17,7 @@ type State = {
 };
 
 type Props = {
-  isLoading: boolean,
+  // isLoading: boolean,
   loginUser: Function
 };
 
@@ -62,7 +62,8 @@ export class LoginFormImpl extends Component<Props, State> {
 
   render() {
     const { isChecked, email, password, error } = this.state;
-    const { isLoading } = this.props;
+    // TODO: Implement functionality with isLoading redux prop
+    // const { isLoading } = this.props;
     return (
       <div className="form-wrapper">
         <p className="form-title">IQVIA Unity</p>

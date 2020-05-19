@@ -7,16 +7,13 @@ import {
   PROPOSAL_ANSWER_LOADING,
   PROPOSAL_ANSWER_ERROR
 } from './proposal-types';
-import type { ProposalActionType } from './proposal-types';
 import type { Dispatch, ThunkAction } from './action-types';
 import { getProposalInfo, setProposalAnswer } from '../api/proposal';
 
 export type ProposalInfo = {};
 
-export const getProposal = (
-  id: string
-): ThunkAction<ProposalActionType, Object> => {
-  return async (dispatch: Dispatch<ProposalActionType, Object>) => {
+export const getProposal = (id: string): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: PROPOSAL_INFO_LOADING,
       payload: ''
@@ -40,8 +37,8 @@ export const setProposalAnswerData = (
   proposalId: string,
   questionId: string,
   answer: string
-): ThunkAction<ProposalActionType, Object> => {
-  return async (dispatch: Dispatch<ProposalActionType, Object>) => {
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: PROPOSAL_ANSWER_LOADING,
       payload: ''

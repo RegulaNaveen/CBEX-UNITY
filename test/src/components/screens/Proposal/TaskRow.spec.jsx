@@ -85,10 +85,10 @@ describe('TaskRow component', () => {
       expect(wrapper.hasDropDown()).toBe(true);
     });
 
-    it('should render proper answer type "single-picklist"', () => {
+    it('should render proper answer type "select"', () => {
       const customAnswerConfiguration = {
         options: [],
-        type: 'single-picklist'
+        type: 'select'
       };
       const wrapper = new TaskRowModel(
         questionId,
@@ -115,10 +115,10 @@ describe('TaskRow component', () => {
       expect(wrapper.hasDatePicker()).toBe(true);
     });
 
-    it('should render proper answer type "multi-picklist"', () => {
+    it('should render proper answer type "picklist"', () => {
       const customAnswerConfiguration = {
         options: [],
-        type: 'multi-picklist'
+        type: 'picklist'
       };
       const wrapper = new TaskRowModel(
         questionId,
@@ -129,25 +129,39 @@ describe('TaskRow component', () => {
       );
       expect(wrapper.hasMultiselect()).toBe(true);
     });
+
+    it('should render proper answer type "picklist"', () => {
+      const customAnswerConfiguration = null;
+      const wrapper = new TaskRowModel(
+        questionId,
+        proposalId,
+        answers,
+        questionText,
+        customAnswerConfiguration
+      );
+      expect(wrapper.hasNoConfigurationDiv()).toBe(true);
+    });
   });
 
   // Interactions
   describe('interactions', () => {
-    // TOD: Fix handleTextChange test
-    // it('should change value state when handleTextChange is called', () => {
-    //   const customAnswerConfiguration = {
-    //     options: [],
-    //     type: 'text'
-    //   };
-    //   const wrapper = new TaskRowModel(
-    //     questionId,
-    //     proposalId,
-    //     answers,
-    //     questionText,
-    //     customAnswerConfiguration
-    //   );
-    //   wrapper.doHandleTextChange();
-    // });
+    it('should call setProposalAnswer on onChange event', () => {
+      const customAnswerConfiguration = {
+        options: [],
+        type: 'text'
+      };
+      const wrapper = new TaskRowModel(
+        questionId,
+        proposalId,
+        answers,
+        questionText,
+        customAnswerConfiguration
+      );
+      wrapper.doHandleTextChange();
+      setTimeout(() => {
+        expect(wrapper.onSetProposalAnswerCalledOnce()).toBe(true);
+      }, 800);
+    });
 
     it('should handle onClickChange event', () => {
       const customAnswerConfiguration = {
@@ -168,7 +182,7 @@ describe('TaskRow component', () => {
     it('should handle onSelectValues event', () => {
       const customAnswerConfiguration = {
         options: [],
-        type: 'multi-picklist'
+        type: 'picklist'
       };
       const wrapper = new TaskRowModel(
         questionId,
@@ -178,7 +192,9 @@ describe('TaskRow component', () => {
         customAnswerConfiguration
       );
       wrapper.doOnSelectValues();
-      expect(wrapper.onSetProposalAnswerCalledOnce()).toBe(true);
+      setTimeout(() => {
+        expect(wrapper.onSetProposalAnswerCalledOnce()).toBe(true);
+      }, 800);
     });
 
     it('should change selectedDay state when handleDayChange is called', () => {
@@ -196,6 +212,7 @@ describe('TaskRow component', () => {
       expect(wrapper.getSelectedDay()).toBe('');
       wrapper.doHandleDayChange();
       expect(wrapper.getSelectedDay()).toBe('testDay');
+      expect(wrapper.onSetProposalAnswerCalledOnce()).toBe(true);
     });
   });
 });

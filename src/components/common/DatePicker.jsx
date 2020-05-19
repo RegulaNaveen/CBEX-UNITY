@@ -25,7 +25,7 @@ const DatePicker = ({
   let dateFormat = '';
   if (!_.isEmpty(value)) {
     const format = 'MM/dd/yyyy';
-    const date = new Date(value);
+    const date = new Date(value || '');
     dateFormat = String(formatDate(date, format));
   }
 
