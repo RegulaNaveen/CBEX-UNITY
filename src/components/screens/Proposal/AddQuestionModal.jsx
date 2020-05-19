@@ -1,6 +1,8 @@
 // @flow
 import React, { PureComponent } from 'react';
 import 'react-day-picker/lib/style.css';
+import { connect } from 'react-redux';
+import { Map } from 'immutable';
 import { parseDate, formatDate } from '../../../utils/DateUtils';
 import Modal from '../../common/Modal';
 import DatePicker from '../../common/DatePicker';
@@ -8,14 +10,22 @@ import { PrimaryButton } from '../../common/Buttons';
 import Checkbox from '../../common/Checkbox';
 import Dropdown from '../../common/Dropdown';
 import TextArea from '../../common/TextArea';
-import SelectTeam from '../../common/SelectTeam';
+// import SelectTeam from '../../common/SelectTeam';
 import { Close } from '../../svg';
+import {
+  getQuestionSectionInfo,
+  getAnswerTypeInfo,
+  getRolesInfo
+} from '../../../selectors/proposal';
 
 type Props = {
   onClose: Function,
   onSave: Function,
   items: Array<Object>,
-  teams: Array<Object>
+  teams: Array<Object>,
+  getQuestionSectionList: Map,
+  getAnswerTypesList: Array<string>,
+  getRolesList: Array<string>
 };
 
 type State = {
@@ -62,7 +72,21 @@ class AddQuestionModal extends PureComponent<Props, State> {
 
   render() {
     const { isChecked, selectedDay } = this.state;
-    const { onClose, onSave, items, teams } = this.props;
+    const {
+      onClose,
+      onSave,
+      items,
+      teams,
+      getQuestionSectionList,
+      getAnswerTypesList,
+      getRolesList
+    } = this.props;
+    console.log(
+      'DATA',
+      getQuestionSectionList,
+      getAnswerTypesList,
+      getRolesList
+    );
 
     return (
       <Modal>
@@ -114,11 +138,21 @@ class AddQuestionModal extends PureComponent<Props, State> {
                 id="dd-team-member"
                 placeholder="Select"
                 items={items}
-                title="Which team member roles will answer"
+                title="Question Section"
                 onClick={this.onClickChange}
               />
             </div>
             <div className="modal-segment">
+              <Dropdown
+                id="dd-team-member"
+                placeholder="Select"
+                items={items}
+                title="Which team member roles will answer"
+                onClick={this.onClickChange}
+              />
+            </div>
+            {/* TODO: Uncomment if will use a select team feature */}
+            {/* <div className="modal-segment">
               {teams &&
                 teams.map(team => {
                   const { id, name } = team;
@@ -132,7 +166,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
                     </SelectTeam>
                   );
                 })}
-            </div>
+            </div> */}
             <div className="modal-segment">
               <Checkbox
                 id="send-notification-checkbox"
@@ -171,4 +205,12 @@ class AddQuestionModal extends PureComponent<Props, State> {
   }
 }
 
-export default AddQuestionModal;
+const mapStateToProps = (state: Map) => {
+  console.log('STATE', state);
+  const getQuestionSectionList = getQuestionSectionInfo(state);
+  const getAnswerTypesList = getAnswerTypeInfo(state);
+  const getRolesList = getRolesInfo(state);
+  return { getQuestionSectionList, getAnswerTypesList, getRolesList };
+};
+
+export default connect(mapStateToProps, {})(AddQuestionModal);
