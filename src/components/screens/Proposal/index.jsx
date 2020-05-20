@@ -142,8 +142,6 @@ const mapStateToProps = (state: Map) => {
   const questions = getQuestions(state);
   const isLoading = isProposalLoading(state);
   const sortedQuestions = sortQuestions(state);
-  console.log(sortedQuestions);
-
   return { questions, isLoading, sortedQuestions };
 };
 

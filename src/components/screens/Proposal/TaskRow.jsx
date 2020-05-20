@@ -155,7 +155,6 @@ export class TaskRow extends Component<Props, State> {
     const hardCode = {
       owner: ['Owner', 'Pedro']
     };
-    console.log(answers);
     let answerDate = 'Not Answered';
     if (answers && answers.length > 0) {
       const { date } = answers.slice(-1)[0];
