@@ -151,13 +151,11 @@ export const setProposalQuestion = (
     });
     try {
       const data = await setProposalQuestionData(proposalId, questionData);
-      console.log('RESPONSE', data);
       dispatch({
         type: PROPOSAL_SET_QUESTION,
         payload: data
       });
     } catch (err) {
-      console.log('RESPONSEERROR', err);
       dispatch({
         type: PROPOSAL_SET_QUESTION_ERROR,
         payload: err

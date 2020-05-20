@@ -111,7 +111,6 @@ export const setProposalQuestionData = async (
       options,
       roleName
     } = questionData;
-    console.log(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}`);
     axios
       .post(
         `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}`,
@@ -127,11 +126,9 @@ export const setProposalQuestionData = async (
         }
       )
       .then(response => {
-        console.log('APIREPONSE', response);
         resolve(response.data);
       })
       .catch(err => {
-        console.log('APIERROR', err);
         reject(err);
       });
   });

@@ -67,9 +67,6 @@ export class Proposal extends Component<Props, State> {
     data: Object
   ) => {
     if (!isLoading && questions && sortedQuestions) {
-      console.log('HELLO');
-      console.log(questions);
-      console.log(sortedQuestions);
       return (
         <div>
           <ProposalInfo data={data} />

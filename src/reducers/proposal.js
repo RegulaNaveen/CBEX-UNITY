@@ -154,7 +154,12 @@ const onRolesError = (state: Map, action: Object): Map => {
 
 const onSetQuestion = (state: Map, action: Object): Map => {
   const data = action.payload;
-  return state.set('setQuestionData', data).set('isSetQuestionLoading', false);
+  const updatedProposalQuestions = state.get('proposalQuestions');
+  updatedProposalQuestions.push(data);
+  return state
+    .set('proposalQuestions', updatedProposalQuestions)
+    .set('setQuestionData', data)
+    .set('isSetQuestionLoading', false);
 };
 
 const onSetQuestionLoading = (state: Map): Map => {

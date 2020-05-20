@@ -148,7 +148,6 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         options: [],
         roleName
       };
-      console.log('DATATOSEND', questionData);
       setProposalQuestionF(proposalId, questionData);
     }
   };
