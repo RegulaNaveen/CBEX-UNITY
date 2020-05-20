@@ -140,13 +140,14 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                   onClick={this.onClickChange}
                 />
               </div>
-              <DatePicker
+              {/* TODO: Uncomment if will use datepicker feature */}
+              {/* <DatePicker
                 label="Date"
                 selectedDay={selectedDay}
                 handleDayChange={this.handleDayChange}
                 handleFormatDate={this.handleFormatDate}
                 handleDate={this.handleDate}
-              />
+              /> */}
             </div>
             <div className="modal-segment">
               <Dropdown
