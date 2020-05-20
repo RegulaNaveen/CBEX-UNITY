@@ -43,7 +43,7 @@ type State = {
   questionText: string,
   section: Object,
   answerType: string,
-  roleName: string
+  roleName: string,
   showAnswerOptions: boolean
 };
 
@@ -56,7 +56,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       questionText: '',
       section: undefined,
       answerType: '',
-      roleName: ''
+      roleName: '',
       showAnswerOptions: false
     };
   }
@@ -113,8 +113,10 @@ export class AddQuestionModal extends PureComponent<Props, State> {
 
   onAnswerTypeChange = (value: string) => {
     this.setState({
-      answerType: value
+      answerType: value,
+      showAnswerOptions: false
     });
+    this.renderAnswerOptions(value);
   };
 
   onRolehange = (value: string) => {
@@ -126,6 +128,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   renderAnswerOptions = (type: string) => {
     if (type === 'select' || type === 'picklist' || type === 'multi-picklist')
       this.setState({ showAnswerOptions: true });
+  };
+
   onSave = () => {
     const { questionText, section, answerType, roleName } = this.state;
     const { setProposalQuestionF } = this.props;
@@ -147,11 +151,6 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       console.log('DATATOSEND', questionData);
       setProposalQuestionF(proposalId, questionData);
     }
-  };
-
-  onClickChange = (selectedValue: string) => {
-    this.setState({ showAnswerOptions: false });
-    this.renderAnswerOptions(selectedValue);
   };
 
   render() {
