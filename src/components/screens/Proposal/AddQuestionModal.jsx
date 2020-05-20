@@ -40,11 +40,11 @@ type Props = {
 
 type State = {
   isChecked: boolean,
-  // selectedDay: string,
   questionText: string,
   section: Object,
   answerType: string,
   roleName: string
+  showAnswerOptions: boolean
 };
 
 export class AddQuestionModal extends PureComponent<Props, State> {
@@ -53,11 +53,11 @@ export class AddQuestionModal extends PureComponent<Props, State> {
 
     this.state = {
       isChecked: false,
-      // selectedDay: '',
       questionText: '',
       section: undefined,
       answerType: '',
       roleName: ''
+      showAnswerOptions: false
     };
   }
 
@@ -123,6 +123,9 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     });
   };
 
+  renderAnswerOptions = (type: string) => {
+    if (type === 'select' || type === 'picklist' || type === 'multi-picklist')
+      this.setState({ showAnswerOptions: true });
   onSave = () => {
     const { questionText, section, answerType, roleName } = this.state;
     const { setProposalQuestionF } = this.props;
@@ -146,8 +149,13 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     }
   };
 
+  onClickChange = (selectedValue: string) => {
+    this.setState({ showAnswerOptions: false });
+    this.renderAnswerOptions(selectedValue);
+  };
+
   render() {
-    // const { selectedDay } = this.state;
+    const { showAnswerOptions } = this.state;
     const {
       onClose,
       getQuestionSectionList,
@@ -201,6 +209,18 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 handleDate={this.handleDate}
               /> */}
             </div>
+            {showAnswerOptions ? (
+              <div className="modal-segment">
+                <TextArea
+                  id="question-text-area"
+                  className="modal-options-text-area"
+                  placeholder="Option 1, Option 2,..."
+                  title="Enter Answer Options"
+                  type="text"
+                  onChange={this.handleTextChange}
+                />
+              </div>
+            ) : null}
             <div className="modal-segment">
               <Dropdown
                 id="dd-team-member"
