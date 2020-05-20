@@ -18,9 +18,7 @@ import AddQuestionModal from './AddQuestionModal';
 
 type State = {
   showModal: boolean,
-  data: Object,
-  items: Array<Object>,
-  teams: Array<Object>
+  data: Object
 };
 
 type Props = {
@@ -48,26 +46,7 @@ export class Proposal extends Component<Props, State> {
         sites: 12,
         countries: ['France', 'UK', 'Italy', 'Spain'],
         indication: 'Myopia'
-      },
-      items: ['item 1', 'item 2', 'item 3'],
-      teams: [
-        {
-          id: 0,
-          name: 'Business Analyst Business'
-        },
-        {
-          id: 1,
-          name: 'Account Executive'
-        },
-        {
-          id: 2,
-          name: 'Business Analyst'
-        },
-        {
-          id: 3,
-          name: 'Account Executive'
-        }
-      ]
+      }
     };
   }
 
@@ -118,7 +97,7 @@ export class Proposal extends Component<Props, State> {
   };
 
   render() {
-    const { showModal, data, items, teams } = this.state;
+    const { showModal, data } = this.state;
     const { questions, isLoading, sortedQuestions } = this.props;
 
     return (
@@ -126,12 +105,7 @@ export class Proposal extends Component<Props, State> {
         <Toolbar />
         {this.renderContent(isLoading, questions, sortedQuestions, data)}
         {showModal ? (
-          <AddQuestionModal
-            onClose={this.onClose}
-            onSave={this.onSave}
-            items={items}
-            teams={teams}
-          />
+          <AddQuestionModal onClose={this.onClose} onSave={this.onSave} />
         ) : null}
       </div>
     );

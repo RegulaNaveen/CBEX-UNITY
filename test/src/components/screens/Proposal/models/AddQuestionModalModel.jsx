@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
 import sinon from 'sinon';
 import type { stub } from 'sinon';
-import AddQuestoinModal from '../../../../../../src/components/screens/Proposal/AddQuestionModal';
+import { AddQuestionModal } from '../../../../../../src/components/screens/Proposal/AddQuestionModal';
 import Modal from '../../../../../../src/components/common/Modal';
 import DatePicker from '../../../../../../src/components/common/DatePicker';
 import { PrimaryButton } from '../../../../../../src/components/common/Buttons';
@@ -23,7 +23,7 @@ export default class AddQuestoinModalModel {
       items,
       teams
     };
-    this._wrapper = shallow(<AddQuestoinModal {...props} />);
+    this._wrapper = shallow(<AddQuestionModal {...props} />);
     this._titleIndex = 0;
     this._labelIndex = 1;
     this._cancelButtonIndex = 0;

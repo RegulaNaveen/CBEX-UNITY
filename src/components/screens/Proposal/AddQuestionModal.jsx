@@ -7,7 +7,7 @@ import { parseDate, formatDate } from '../../../utils/DateUtils';
 import Modal from '../../common/Modal';
 import DatePicker from '../../common/DatePicker';
 import { PrimaryButton } from '../../common/Buttons';
-import Checkbox from '../../common/Checkbox';
+// import Checkbox from '../../common/Checkbox';
 import Dropdown from '../../common/Dropdown';
 import TextArea from '../../common/TextArea';
 // import SelectTeam from '../../common/SelectTeam';
@@ -19,15 +19,13 @@ import {
 } from '../../../selectors';
 import {
   getQuestionSection,
-  getAnswerTypesData,
+  getAnswerTypesInfo,
   getRolesInfo
 } from '../../../actions/proposal-actions';
 
 type Props = {
   onClose: Function,
   onSave: Function,
-  items: Array<Object>,
-  teams: Array<Object>,
   getQuestionSectionList: Map,
   getAnswerTypesList: Array<string>,
   getRolesList: Array<string>,
@@ -41,7 +39,7 @@ type State = {
   selectedDay: string
 };
 
-class AddQuestionModal extends PureComponent<Props, State> {
+export class AddQuestionModal extends PureComponent<Props, State> {
   constructor(props: Object) {
     super(props);
 
@@ -90,12 +88,10 @@ class AddQuestionModal extends PureComponent<Props, State> {
   };
 
   render() {
-    const { isChecked, selectedDay } = this.state;
+    const { selectedDay } = this.state;
     const {
       onClose,
       onSave,
-      items,
-      teams,
       getQuestionSectionList,
       getAnswerTypesList,
       getRolesList
@@ -234,6 +230,6 @@ const mapStateToProps = (state: Map) => {
 
 export default connect(mapStateToProps, {
   getQuestionSectionF: getQuestionSection,
-  getAnswerTypesDataF: getAnswerTypesData,
+  getAnswerTypesDataF: getAnswerTypesInfo,
   getRolesInfoF: getRolesInfo
 })(AddQuestionModal);

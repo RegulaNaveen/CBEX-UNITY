@@ -7,7 +7,7 @@ import {
   getProposal,
   setProposalAnswerData,
   getQuestionSection,
-  getAnswerTypesData,
+  getAnswerTypesInfo,
   getRolesInfo
 } from '../../../src/actions/proposal-actions';
 import {
@@ -150,7 +150,7 @@ describe('Proposal Action', () => {
 
   it('should create QUESTION_SECTION_INFO', async () => {
     getAnswerTypesStub.returns(Promise.resolve(proposal));
-    await getAnswerTypesData()(dispatch, getState);
+    await getAnswerTypesInfo()(dispatch, getState);
     expect(dispatch.calledTwice).toBe(true);
     expect(dispatch.args[0][0].type).toBe(ANSWER_TYPES_LOADING);
     expect(dispatch.args[1][0].type).toBe(ANSWER_TYPES_INFO);
@@ -160,7 +160,7 @@ describe('Proposal Action', () => {
   it('should create QUESTION_SECTION_ERROR', async () => {
     const errorMessage = 'Error: Fake error message';
     getAnswerTypesStub.returns(Promise.reject(errorMessage));
-    await getAnswerTypesData()(dispatch, getState);
+    await getAnswerTypesInfo()(dispatch, getState);
     expect(dispatch.calledTwice).toBe(true);
     expect(dispatch.args[0][0].type).toBe(ANSWER_TYPES_LOADING);
     expect(dispatch.args[1][0].type).toBe(ANSWER_TYPES_ERROR);
