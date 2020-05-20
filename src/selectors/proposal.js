@@ -35,6 +35,15 @@ const getQuestionsbySections = (questions: Array<Object>) => {
   return questionsList;
 };
 
+const getQuestionSections = (items: Array<Object>) => {
+  const sections = [];
+  items.forEach((section: Object) => {
+    const { sectionName } = section;
+    if (!sections.includes(sectionName)) sections.push(sectionName);
+  });
+  return sections;
+};
+
 export const getQuestions = (proposal: Map): Map =>
   fromJS(getSections(proposal.get('proposalQuestions')));
 
@@ -54,10 +63,9 @@ export const setProposalAnswer = (proposal: Map): Map =>
   proposal.get('proposalAnswer');
 
 export const getQuestionSectionInfo = (proposal: Map): Map =>
-  proposal.get('proposalQuestionSection');
+  getQuestionSections(proposal.get('proposalQuestionSection'));
 
 export const getAnswerTypeInfo = (proposal: Map): Map =>
   proposal.get('proposalAnswerTypes');
 
-export const getRolesInfo = (proposal: Map): Map =>
-  proposal.get('proposalRoles');
+export const getRoles = (proposal: Map): Map => proposal.get('proposalRoles');

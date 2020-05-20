@@ -38,5 +38,5 @@ export const getQuestionSectionInfo = (state: Map): Map =>
 export const getAnswerTypeInfo = (state: Map): Map =>
   proposalSelectors.getAnswerTypeInfo(state.proposal);
 
-export const getRolesInfo = (state: Map): Map =>
-  proposalSelectors.getRolesInfo(state.proposal);
+export const getRoles = (state: Map): Map =>
+  proposalSelectors.getRoles(state.proposal);

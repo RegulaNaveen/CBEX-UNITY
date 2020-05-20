@@ -15,7 +15,7 @@ import { Close } from '../../svg';
 import {
   getQuestionSectionInfo,
   getAnswerTypeInfo,
-  getRolesInfo
+  getRoles
 } from '../../../selectors';
 import { getQuestionSection } from '../../../actions/proposal-actions';
 
@@ -144,7 +144,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
               <Dropdown
                 id="dd-team-member"
                 placeholder="Select"
-                items={items}
+                items={getQuestionSectionList}
                 title="Question Section"
                 onClick={this.onClickChange}
               />
@@ -215,7 +215,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
 const mapStateToProps = (state: Map) => {
   const getQuestionSectionList = getQuestionSectionInfo(state);
   const getAnswerTypesList = getAnswerTypeInfo(state);
-  const getRolesList = getRolesInfo(state);
+  const getRolesList = getRoles(state);
   return { getQuestionSectionList, getAnswerTypesList, getRolesList };
 };
 
