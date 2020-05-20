@@ -90,6 +90,9 @@ export const getAnswerTypeInfo = (proposal: Map): Map =>
 
 export const getRoles = (proposal: Map): Map => proposal.get('proposalRoles');
 
+export const setQuestionData = (proposal: Map): Map =>
+  proposal.get('setQuestionData');
+
 export const isSetQuestionLoading = (proposal: Map): Map =>
   proposal.get('isSetQuestionLoading');
 

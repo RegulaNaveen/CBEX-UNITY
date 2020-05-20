@@ -8,7 +8,10 @@ import { getProposal } from '../../../actions/proposal-actions';
 import {
   getQuestions,
   isProposalLoading,
-  sortQuestions
+  sortQuestions,
+  setQuestionData,
+  isSetQuestionLoading,
+  setQuestionError
 } from '../../../selectors';
 import ProposalInfo from './ProposalInfo';
 import SectionList from './SectionList';
@@ -26,7 +29,10 @@ type Props = {
   questions: Map,
   isLoading: boolean,
   getProposalInfo: Function,
-  sortedQuestions: Map
+  sortedQuestions: Map,
+  setQuestion: Map,
+  hasQuestionError: Boolean,
+  isQuestionLoading: Boolean
 };
 
 export class Proposal extends Component<Props, State> {
@@ -53,6 +59,13 @@ export class Proposal extends Component<Props, State> {
   componentDidMount() {
     const { getProposalInfo, match } = this.props;
     getProposalInfo(match.params.id);
+  }
+
+  componentDidUpdate(prevProps: Map) {
+    const { setQuestion, hasQuestionError } = this.props;
+    if (prevProps.isQuestionLoading && setQuestion && !hasQuestionError) {
+      this.onClose();
+    }
   }
 
   onClose = () => {
@@ -112,7 +125,17 @@ const mapStateToProps = (state: Map) => {
   const questions = getQuestions(state);
   const isLoading = isProposalLoading(state);
   const sortedQuestions = sortQuestions(state);
-  return { questions, isLoading, sortedQuestions };
+  const isQuestionLoading = isSetQuestionLoading(state);
+  const hasQuestionError = setQuestionError(state);
+  const setQuestion = setQuestionData(state);
+  return {
+    questions,
+    isLoading,
+    sortedQuestions,
+    setQuestion,
+    isQuestionLoading,
+    hasQuestionError
+  };
 };
 
 export default connect(mapStateToProps, { getProposalInfo: getProposal })(

@@ -18,8 +18,7 @@ import {
   getQuestionSectionInfo,
   getAnswerTypeInfo,
   getRoles,
-  isSetQuestionLoading,
-  setQuestionError
+  isSetQuestionLoading
 } from '../../../selectors';
 import {
   getQuestionSection,
@@ -309,9 +308,6 @@ const mapStateToProps = (state: Map) => {
   const getRolesList = getRoles(state);
   const questionSectionOrderInfo = getQuestionSectionOrderInfo(state);
   const isLoading = isSetQuestionLoading(state);
-  const hasQuestionError = setQuestionError(state);
-  console.log('IS LOADING', isLoading);
-  console.log('ERROR', hasQuestionError);
 
   return {
     getQuestionSectionList,
