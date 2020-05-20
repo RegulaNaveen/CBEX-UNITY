@@ -11,6 +11,21 @@
 
 .text-area-wrapper {
   box-sizing: border-box;
+  height: auto;
+  width: 100%;
+  border: 1px solid $neutral4;
+  border-radius: 4px;
+  background-color: $white;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0);
+  outline: none;
+  font-family: $proximaNova;
+  padding: 8px;
+  resize: none;
+  overflow: hidden;
+}
+
+.text-number-wrapper {
+  box-sizing: border-box;
   height: 100%;
   width: 100%;
   border: 1px solid $neutral4;
