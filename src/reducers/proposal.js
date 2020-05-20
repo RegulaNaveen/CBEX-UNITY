@@ -94,7 +94,6 @@ const onProposalAnswerError = (state: Map, action: Object): Map => {
 
 const onQuestionSectionInfoLoaded = (state: Map, action: Object): Map => {
   const sections = action.payload;
-  console.log('REDUCEr', sections);
   return state
     .set('proposalQuestionSection', sections)
     .set('isQuestionSectionLoading', false);

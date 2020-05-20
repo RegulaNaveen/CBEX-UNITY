@@ -17,7 +17,11 @@ import {
   getAnswerTypeInfo,
   getRoles
 } from '../../../selectors';
-import { getQuestionSection } from '../../../actions/proposal-actions';
+import {
+  getQuestionSection,
+  getAnswerTypesData,
+  getRolesInfo
+} from '../../../actions/proposal-actions';
 
 type Props = {
   onClose: Function,
@@ -27,7 +31,9 @@ type Props = {
   getQuestionSectionList: Map,
   getAnswerTypesList: Array<string>,
   getRolesList: Array<string>,
-  getQuestionSectionF: Function
+  getQuestionSectionF: Function,
+  getAnswerTypesDataF: Function,
+  getRolesInfoF: Function
 };
 
 type State = {
@@ -46,8 +52,14 @@ class AddQuestionModal extends PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    const { getQuestionSectionF } = this.props;
+    const {
+      getQuestionSectionF,
+      getAnswerTypesDataF,
+      getRolesInfoF
+    } = this.props;
     getQuestionSectionF();
+    getAnswerTypesDataF();
+    getRolesInfoF();
   }
 
   handleIsChecked = () => {
@@ -127,7 +139,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
                 <Dropdown
                   id="dd-andwer-type"
                   placeholder="Select"
-                  items={items}
+                  items={getAnswerTypesList}
                   title="Answer Type"
                   onClick={this.onClickChange}
                 />
@@ -153,7 +165,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
               <Dropdown
                 id="dd-team-member"
                 placeholder="Select"
-                items={items}
+                items={getRolesList}
                 title="Which team member roles will answer"
                 onClick={this.onClickChange}
               />
@@ -174,7 +186,8 @@ class AddQuestionModal extends PureComponent<Props, State> {
                   );
                 })}
             </div> */}
-            <div className="modal-segment">
+            {/* TODO: Uncomment to add notification feature */}
+            {/* <div className="modal-segment">
               <Checkbox
                 id="send-notification-checkbox"
                 value="notification"
@@ -184,7 +197,7 @@ class AddQuestionModal extends PureComponent<Props, State> {
               >
                 Send notification now
               </Checkbox>
-            </div>
+            </div> */}
           </div>
           <div className="modal-wrapper-footer">
             <div className="modal-button-cancel">
@@ -220,5 +233,7 @@ const mapStateToProps = (state: Map) => {
 };
 
 export default connect(mapStateToProps, {
-  getQuestionSectionF: getQuestionSection
+  getQuestionSectionF: getQuestionSection,
+  getAnswerTypesDataF: getAnswerTypesData,
+  getRolesInfoF: getRolesInfo
 })(AddQuestionModal);
