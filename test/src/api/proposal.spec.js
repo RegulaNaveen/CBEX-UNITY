@@ -3,11 +3,25 @@ import expect from 'expect';
 import { describe, it } from 'mocha';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { getProposalInfo, setProposalAnswer } from '../../../src/api/proposal';
+import {
+  getProposalInfo,
+  setProposalAnswer,
+  getQuestionSectionInfo,
+  getAnswerTypes,
+  getRoles
+} from '../../../src/api/proposal';
 
 describe('ProposalApi', () => {
   const PROPOSAL_API_URL =
     'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/proposals';
+  const PROPOSAL_ANSWER_API_URL =
+    'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/questions';
+  const PROPOSAL_SECTIONS_API_URL =
+    'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/proposals/sections';
+  const PROPOSAL_ANSWERTYPE_API_URL =
+    'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/proposals/answerTypes';
+  const PROPOSAL_ROLES_API_URL =
+    'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/proposals/roles';
 
   describe('getProposalInfo', () => {
     it('should get proposal info', async () => {
@@ -52,7 +66,7 @@ describe('ProposalApi', () => {
         answer: 'answer'
       };
       mock
-        .onPut(`${PROPOSAL_API_URL}/${proposalId}/${questionId}`)
+        .onPut(`${PROPOSAL_ANSWER_API_URL}/${proposalId}/${questionId}`)
         .reply(200, response);
       const data = await setProposalAnswer(proposalId, questionId, answer);
       expect(data).toEqual(response);
@@ -74,6 +88,114 @@ describe('ProposalApi', () => {
         .reply(200, response);
       const expectedError = async () => {
         await setProposalAnswer(proposalId, questionId, answer);
+      };
+      expect(expectedError()).rejects.toThrowError();
+      mock.reset();
+    });
+  });
+
+  describe('getQuestionSectionInfo', () => {
+    it('should get proposal question sections', async () => {
+      const mock = new MockAdapter(axios);
+      const response = [
+        {
+          sectionOrder: 1,
+          sectionName: 'Opportunity Overview'
+        },
+        {
+          sectionOrder: 2,
+          sectionName: 'Proposal Team'
+        }
+      ];
+      mock.onGet(`${PROPOSAL_SECTIONS_API_URL}`).reply(200, response);
+      const data = await getQuestionSectionInfo();
+      expect(data).toEqual(response);
+      mock.reset();
+    });
+
+    it('should catch error on get proposal question sections', () => {
+      const mock = new MockAdapter(axios);
+      const message = 'Error message';
+      const err = {
+        message
+      };
+      mock.onGet(`${PROPOSAL_SECTIONS_API_URL}`).reply(500, err);
+      const expectedError = async () => {
+        await getQuestionSectionInfo();
+      };
+      expect(expectedError()).rejects.toThrowError();
+      mock.reset();
+    });
+  });
+
+  describe('getAnswerTypes', () => {
+    it('should get answer types', async () => {
+      const mock = new MockAdapter(axios);
+      const response = [
+        'text',
+        'date',
+        'y/n',
+        'currency',
+        'select',
+        'number',
+        'picklist',
+        'multi-picklist'
+      ];
+      mock.onGet(`${PROPOSAL_ANSWERTYPE_API_URL}`).reply(200, response);
+      const data = await getAnswerTypes();
+      expect(data).toEqual(response);
+      mock.reset();
+    });
+
+    it('should catch error on get answer tyoes', () => {
+      const mock = new MockAdapter(axios);
+      const message = 'Error message';
+      const err = {
+        message
+      };
+      mock.onGet(`${PROPOSAL_ANSWERTYPE_API_URL}`).reply(500, err);
+      const expectedError = async () => {
+        await getAnswerTypes();
+      };
+      expect(expectedError()).rejects.toThrowError();
+      mock.reset();
+    });
+  });
+
+  describe('getRoles', () => {
+    it('should get roles', async () => {
+      const mock = new MockAdapter(axios);
+      const response = [
+        'Autocomplete',
+        'Autocomplete + edit',
+        'PD',
+        'BD',
+        'TSL',
+        'Strategic pricing',
+        'Autocomplete + flag',
+        'Medical',
+        'Medic',
+        'Autocomplete + edit ',
+        'DM',
+        'Clinical',
+        'Automated',
+        'All'
+      ];
+      mock.onGet(`${PROPOSAL_ROLES_API_URL}`).reply(200, response);
+      const data = await getRoles();
+      expect(data).toEqual(response);
+      mock.reset();
+    });
+
+    it('should catch error on get roles', () => {
+      const mock = new MockAdapter(axios);
+      const message = 'Error message';
+      const err = {
+        message
+      };
+      mock.onGet(`${PROPOSAL_ROLES_API_URL}`).reply(500, err);
+      const expectedError = async () => {
+        await getRoles();
       };
       expect(expectedError()).rejects.toThrowError();
       mock.reset();
