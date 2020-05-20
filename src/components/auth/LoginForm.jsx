@@ -7,7 +7,7 @@ import { login } from '../../actions/auth-actions';
 import { isEmailValid, isTextValid } from '../../utils/ValidationUtils';
 import { PrimaryButton } from '../common/Buttons';
 import InputField from '../common/InputField';
-import Checkbox from '../common/Checkbox';
+// import Checkbox from '../common/Checkbox';
 
 type State = {
   email: string,
@@ -61,7 +61,8 @@ export class LoginFormImpl extends Component<Props, State> {
   };
 
   render() {
-    const { isChecked, email, password, error } = this.state;
+    // TODO: Addd isChecked to state for implementation
+    const { email, password, error } = this.state;
     // TODO: Implement functionality with isLoading redux prop
     // const { isLoading } = this.props;
     return (
@@ -88,7 +89,8 @@ export class LoginFormImpl extends Component<Props, State> {
           />
         </div>
         {error !== '' && <p className="login-form-error">{error}</p>}
-        <Checkbox
+        {/* TOOD: Implement Remember my Username checkbox */}
+        {/* <Checkbox
           id="remember-username-checkbox"
           value="username"
           name="username"
@@ -96,7 +98,7 @@ export class LoginFormImpl extends Component<Props, State> {
           isChecked={isChecked}
         >
           Remember my username
-        </Checkbox>
+        </Checkbox> */}
         <div className="login-button-wrapper">
           <div className="login-button">
             <PrimaryButton id="login-button" onClick={this.handleLogin}>

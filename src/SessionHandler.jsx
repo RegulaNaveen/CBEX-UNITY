@@ -35,12 +35,10 @@ const SessionHandler = ({ children }: Props) => {
   const setProposalId = () => {
     const proposalId = location.pathname.split('/')[3];
     if (proposalId) localStorage.setItem('proposalId', proposalId);
-    console.log('SessionH', proposalId);
   };
 
   const navigateFunc = () => {
     const proposalId = localStorage.getItem('proposalId') || '';
-    console.log(proposalId);
     history.push(`/app/proposals/${proposalId}`);
   };
 
@@ -50,6 +48,7 @@ const SessionHandler = ({ children }: Props) => {
       if (!isLoggedin) {
         setProposalId();
       } else {
+        setProposalId();
         navigateFunc();
       }
     }
