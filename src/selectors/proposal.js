@@ -89,3 +89,9 @@ export const getAnswerTypeInfo = (proposal: Map): Map =>
   proposal.get('proposalAnswerTypes');
 
 export const getRoles = (proposal: Map): Map => proposal.get('proposalRoles');
+
+export const isSetQuestionLoading = (proposal: Map): Map =>
+  proposal.get('isSetQuestionLoading');
+
+export const setQuestionError = (proposal: Map): Map =>
+  proposal.get('setQuestionError');

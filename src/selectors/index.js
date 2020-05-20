@@ -43,3 +43,9 @@ export const getAnswerTypeInfo = (state: Map): Map =>
 
 export const getRoles = (state: Map): Map =>
   proposalSelectors.getRoles(state.proposal);
+
+export const isSetQuestionLoading = (state: Object): Boolean =>
+  proposalSelectors.isSetQuestionLoading(state.proposal);
+
+export const setQuestionError = (state: Object): string =>
+  proposalSelectors.setQuestionError(state.proposal);
