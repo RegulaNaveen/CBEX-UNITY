@@ -13,7 +13,7 @@ export const getSession = () => {
 };
 
 export const getProposalId = () => {
-  return !!localStorage.getItem('proposalId');
+  return localStorage.getItem('proposalId');
 };
 
 type Props = {

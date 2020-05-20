@@ -15,7 +15,10 @@ import {
   ANSWER_TYPES_ERROR,
   ROLES_INFO,
   ROLES_LOADING,
-  ROLES_ERROR
+  ROLES_ERROR,
+  PROPOSAL_SET_QUESTION,
+  PROPOSAL_SET_QUESTION_LOADING,
+  PROPOSAL_SET_QUESTION_ERROR
 } from '../actions/proposal-types';
 import type { ApiAction } from '../actions/action-types';
 
@@ -34,7 +37,10 @@ const INITIAL_STATE: Map = fromJS({
   AnswerTypesError: undefined,
   proposalRoles: Map({}),
   isRolesLoading: false,
-  rolesError: undefined
+  rolesError: undefined,
+  setQuestionData: Map({}),
+  isSetQuestionLoading: false,
+  setQuestionError: undefined
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -146,6 +152,24 @@ const onRolesError = (state: Map, action: Object): Map => {
   return state.set('rolesError', payload).set('isRolesLoading', false);
 };
 
+const onSetQuestion = (state: Map, action: Object): Map => {
+  const data = action.payload;
+  return state.set('setQuestionData', data).set('isSetQuestionLoading', false);
+};
+
+const onSetQuestionLoading = (state: Map): Map => {
+  return state
+    .set('isSetQuestionLoading', true)
+    .set('setQuestionError', undefined);
+};
+
+const onSetQuestionError = (state: Map, action: Object): Map => {
+  const { payload } = action;
+  return state
+    .set('setQuestionError', payload)
+    .set('isSetQuestionLoading', false);
+};
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
@@ -161,7 +185,10 @@ const actionMap = {
   [ANSWER_TYPES_ERROR]: onAnswerTypesError,
   [ROLES_INFO]: onRolesLoaded,
   [ROLES_LOADING]: onRolesLoading,
-  [ROLES_ERROR]: onRolesError
+  [ROLES_ERROR]: onRolesError,
+  [PROPOSAL_SET_QUESTION]: onSetQuestion,
+  [PROPOSAL_SET_QUESTION_LOADING]: onSetQuestionLoading,
+  [PROPOSAL_SET_QUESTION_ERROR]: onSetQuestionError
 };
 
 export default function(

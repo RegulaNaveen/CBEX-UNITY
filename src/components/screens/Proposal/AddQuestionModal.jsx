@@ -5,14 +5,15 @@ import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { parseDate, formatDate } from '../../../utils/DateUtils';
 import Modal from '../../common/Modal';
-import DatePicker from '../../common/DatePicker';
 import { PrimaryButton } from '../../common/Buttons';
-// import Checkbox from '../../common/Checkbox';
 import Dropdown from '../../common/Dropdown';
 import TextArea from '../../common/TextArea';
+// import DatePicker from '../../common/DatePicker';
+// import Checkbox from '../../common/Checkbox';
 // import SelectTeam from '../../common/SelectTeam';
 import { Close } from '../../svg';
 import {
+  getQuestionSectionOrderInfo,
   getQuestionSectionInfo,
   getAnswerTypeInfo,
   getRoles
@@ -20,23 +21,30 @@ import {
 import {
   getQuestionSection,
   getAnswerTypesInfo,
-  getRolesInfo
+  getRolesInfo,
+  setProposalQuestion
 } from '../../../actions/proposal-actions';
+import { getProposalId } from '../../../SessionHandler';
 
 type Props = {
   onClose: Function,
-  onSave: Function,
+  questionSectionOrderInfo: Map,
   getQuestionSectionList: Map,
   getAnswerTypesList: Array<string>,
   getRolesList: Array<string>,
   getQuestionSectionF: Function,
   getAnswerTypesDataF: Function,
-  getRolesInfoF: Function
+  getRolesInfoF: Function,
+  setProposalQuestionF: Function
 };
 
 type State = {
   isChecked: boolean,
-  selectedDay: string
+  // selectedDay: string,
+  questionText: string,
+  section: Object,
+  answerType: string,
+  roleName: string
 };
 
 export class AddQuestionModal extends PureComponent<Props, State> {
@@ -45,7 +53,11 @@ export class AddQuestionModal extends PureComponent<Props, State> {
 
     this.state = {
       isChecked: false,
-      selectedDay: ''
+      // selectedDay: '',
+      questionText: '',
+      section: undefined,
+      answerType: '',
+      roleName: ''
     };
   }
 
@@ -69,39 +81,79 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     // TODO: Delete a team item
   };
 
-  handleDayChange = (selectedDay: string) => {
-    this.setState({
-      selectedDay
-    });
-  };
+  // handleDayChange = (selectedDay: string) => {
+  //   this.setState({
+  //     selectedDay
+  //   });
+  // };
 
   handleDate = (date: string, format: string) => parseDate(date, format);
 
   handleFormatDate = (date: Date, format: string) => formatDate(date, format);
 
-  handleTextChange = () => {
-    // TODO: Get values and make the logic
+  handleTextChange = (value: string) => {
+    this.setState({
+      questionText: value
+    });
   };
 
-  onClickChange = () => {
-    // TODO: Get values and make the logic
+  onQuestionSectionChange = (value: string) => {
+    const { questionSectionOrderInfo } = this.props;
+    let sectionOrder = -1;
+    questionSectionOrderInfo.forEach((section: Object) => {
+      const { sectionOrder: order, sectionName: name } = section;
+      if (name === value) sectionOrder = order;
+    });
+    if (sectionOrder > -1 && value) {
+      this.setState({
+        section: { sectionOrder, sectionName: value }
+      });
+    }
+  };
+
+  onAnswerTypeChange = (value: string) => {
+    this.setState({
+      answerType: value
+    });
+  };
+
+  onRolehange = (value: string) => {
+    this.setState({
+      roleName: value
+    });
+  };
+
+  onSave = () => {
+    const { questionText, section, answerType, roleName } = this.state;
+    const { setProposalQuestionF } = this.props;
+    if (
+      questionText !== '' &&
+      section &&
+      answerType !== '' &&
+      roleName !== ''
+    ) {
+      const proposalId = getProposalId() || '';
+      const questionData = {
+        proposalId,
+        questionText,
+        section,
+        answerType,
+        options: [],
+        roleName
+      };
+      console.log('DATATOSEND', questionData);
+      setProposalQuestionF(proposalId, questionData);
+    }
   };
 
   render() {
-    const { selectedDay } = this.state;
+    // const { selectedDay } = this.state;
     const {
       onClose,
-      onSave,
       getQuestionSectionList,
       getAnswerTypesList,
       getRolesList
     } = this.props;
-    console.log(
-      'DATAONSCREEN',
-      getQuestionSectionList,
-      getAnswerTypesList,
-      getRolesList
-    );
 
     return (
       <Modal>
@@ -137,7 +189,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                   placeholder="Select"
                   items={getAnswerTypesList}
                   title="Answer Type"
-                  onClick={this.onClickChange}
+                  onClick={this.onAnswerTypeChange}
                 />
               </div>
               {/* TODO: Uncomment if will use datepicker feature */}
@@ -155,7 +207,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 placeholder="Select"
                 items={getQuestionSectionList}
                 title="Question Section"
-                onClick={this.onClickChange}
+                onClick={this.onQuestionSectionChange}
               />
             </div>
             <div className="modal-segment">
@@ -164,7 +216,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 placeholder="Select"
                 items={getRolesList}
                 title="Which team member roles will answer"
-                onClick={this.onClickChange}
+                onClick={this.onRolehange}
               />
             </div>
             {/* TODO: Uncomment if will use a select team feature */}
@@ -210,7 +262,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
               <PrimaryButton
                 className="okay-button"
                 id="okay-button"
-                onClick={onSave}
+                onClick={this.onSave}
               >
                 Okay
               </PrimaryButton>
@@ -226,11 +278,18 @@ const mapStateToProps = (state: Map) => {
   const getQuestionSectionList = getQuestionSectionInfo(state);
   const getAnswerTypesList = getAnswerTypeInfo(state);
   const getRolesList = getRoles(state);
-  return { getQuestionSectionList, getAnswerTypesList, getRolesList };
+  const questionSectionOrderInfo = getQuestionSectionOrderInfo(state);
+  return {
+    getQuestionSectionList,
+    getAnswerTypesList,
+    getRolesList,
+    questionSectionOrderInfo
+  };
 };
 
 export default connect(mapStateToProps, {
   getQuestionSectionF: getQuestionSection,
   getAnswerTypesDataF: getAnswerTypesInfo,
-  getRolesInfoF: getRolesInfo
+  getRolesInfoF: getRolesInfo,
+  setProposalQuestionF: setProposalQuestion
 })(AddQuestionModal);

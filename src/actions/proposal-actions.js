@@ -14,7 +14,10 @@ import {
   ANSWER_TYPES_ERROR,
   ROLES_INFO,
   ROLES_LOADING,
-  ROLES_ERROR
+  ROLES_ERROR,
+  PROPOSAL_SET_QUESTION,
+  PROPOSAL_SET_QUESTION_LOADING,
+  PROPOSAL_SET_QUESTION_ERROR
 } from './proposal-types';
 import type { Dispatch, ThunkAction } from './action-types';
 import {
@@ -22,7 +25,8 @@ import {
   setProposalAnswer,
   getQuestionSectionInfo,
   getAnswerTypes,
-  getRoles
+  getRoles,
+  setProposalQuestionData
 } from '../api/proposal';
 
 export type ProposalInfo = {};
@@ -130,6 +134,32 @@ export const getRolesInfo = (): ThunkAction<string, Object> => {
     } catch (err) {
       dispatch({
         type: ROLES_ERROR,
+        payload: err
+      });
+    }
+  };
+};
+
+export const setProposalQuestion = (
+  proposalId: string,
+  questionData: Object
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: PROPOSAL_SET_QUESTION_LOADING,
+      payload: ''
+    });
+    try {
+      const data = await setProposalQuestionData(proposalId, questionData);
+      console.log('RESPONSE', data);
+      dispatch({
+        type: PROPOSAL_SET_QUESTION,
+        payload: data
+      });
+    } catch (err) {
+      console.log('RESPONSEERROR', err);
+      dispatch({
+        type: PROPOSAL_SET_QUESTION_ERROR,
         payload: err
       });
     }

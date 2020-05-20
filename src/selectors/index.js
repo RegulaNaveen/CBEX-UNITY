@@ -32,6 +32,9 @@ export const sortQuestions = (state: Object): Map =>
 export const setProposalAnswer = (state: Map): Map =>
   state.get('proposalAnswer');
 
+export const getQuestionSectionOrderInfo = (state: Map): Map =>
+  proposalSelectors.getQuestionSectionOrderInfo(state.proposal);
+
 export const getQuestionSectionInfo = (state: Map): Map =>
   proposalSelectors.getQuestionSectionInfo(state.proposal);
 

@@ -62,6 +62,9 @@ export const sortQuestions = (proposal: Map): Map =>
 export const setProposalAnswer = (proposal: Map): Map =>
   proposal.get('proposalAnswer');
 
+export const getQuestionSectionOrderInfo = (proposal: Map): Map =>
+  proposal.get('proposalQuestionSection');
+
 export const getQuestionSectionInfo = (proposal: Map): Map =>
   getQuestionSections(proposal.get('proposalQuestionSection'));
 

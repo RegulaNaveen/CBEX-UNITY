@@ -14,7 +14,7 @@ import ProposalInfo from './ProposalInfo';
 import SectionList from './SectionList';
 import Toolbar from '../../Toolbar';
 import { Add } from '../../svg';
-import AddQuestionModal from './AddQuestionModal';
+import AddQuestionModalComponent from './AddQuestionModal';
 
 type State = {
   showModal: boolean,
@@ -60,10 +60,6 @@ export class Proposal extends Component<Props, State> {
     this.setState({ showModal: !showModal });
   };
 
-  onSave = () => {
-    // TODO: Save new question functionality
-  };
-
   renderContent = (
     isLoading: boolean,
     questions: Map,
@@ -71,6 +67,9 @@ export class Proposal extends Component<Props, State> {
     data: Object
   ) => {
     if (!isLoading && questions && sortedQuestions) {
+      console.log('HELLO');
+      console.log(questions);
+      console.log(sortedQuestions);
       return (
         <div>
           <ProposalInfo data={data} />
@@ -105,7 +104,7 @@ export class Proposal extends Component<Props, State> {
         <Toolbar />
         {this.renderContent(isLoading, questions, sortedQuestions, data)}
         {showModal ? (
-          <AddQuestionModal onClose={this.onClose} onSave={this.onSave} />
+          <AddQuestionModalComponent onClose={this.onClose} />
         ) : null}
       </div>
     );

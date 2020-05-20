@@ -18,3 +18,9 @@ export const ANSWER_TYPES_ERROR: string = 'answer_types_error';
 export const ROLES_INFO: string = 'roles_info';
 export const ROLES_LOADING: string = 'roles_loading';
 export const ROLES_ERROR: string = 'roles_error';
+
+export const PROPOSAL_SET_QUESTION: string = 'proposal-set-question';
+export const PROPOSAL_SET_QUESTION_LOADING: string =
+  'proposal-set-question-loading';
+export const PROPOSAL_SET_QUESTION_ERROR: string =
+  'proposal-set-question-error';

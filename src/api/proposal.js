@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const PROPOSAL_API_URL =
   'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/proposals';
-const PROPOSAL_ANSWER_API_URL =
+const PROPOSAL_QUESTIONS_API_URL =
   'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/questions';
 const PROPOSAL_SECTIONS_API_URL =
   'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/proposals/sections';
@@ -37,7 +37,7 @@ export const setProposalAnswer = async (
   return new Promise((resolve, reject) => {
     axios
       .put(
-        `${PROPOSAL_ANSWER_API_URL}/${proposalId}/${questionId}`,
+        `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`,
         {
           answer
         },
@@ -99,4 +99,40 @@ export const getRoles = async (): Promise<Object> => {
   });
 };
 
-export default function() {}
+export const setProposalQuestionData = async (
+  proposalId: string,
+  questionData: Object
+): Promise<Object> => {
+  return new Promise((resolve, reject) => {
+    const {
+      questionText,
+      section,
+      answerType,
+      options,
+      roleName
+    } = questionData;
+    console.log(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}`);
+    axios
+      .post(
+        `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}`,
+        {
+          questionText,
+          section,
+          answerType,
+          options,
+          roleName
+        },
+        {
+          headers: { 'x-api-key': `${API_KEY}` }
+        }
+      )
+      .then(response => {
+        console.log('APIREPONSE', response);
+        resolve(response.data);
+      })
+      .catch(err => {
+        console.log('APIERROR', err);
+        reject(err);
+      });
+  });
+};
