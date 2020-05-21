@@ -103,5 +103,25 @@ describe('Proposal component', () => {
       wrapper.doOnClose();
       expect(wrapper.getShowModal()).toBe(false);
     });
+
+    it('should call onClose when component updates', () => {
+      const newIsQuestionLoading = true;
+      const newSetQuestion = undefined;
+      const wrapper = new ProposalModel(
+        match,
+        questions,
+        questionsList,
+        !isLoading,
+        sortedQuestions,
+        newSetQuestion,
+        !hasQuestionError,
+        newIsQuestionLoading
+      );
+      expect(wrapper.getShowModal()).toBe(false);
+      wrapper.doIconOnClose();
+      expect(wrapper.getShowModal()).toBe(true);
+      wrapper.doUpdate(isQuestionLoading, setQuestion, hasQuestionError);
+      expect(wrapper.getShowModal()).toBe(false);
+    });
   });
 });

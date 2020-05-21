@@ -82,9 +82,22 @@ export default class ProposalModel {
   };
 
   doOnClose = () => {
-    console.log(this._getAddQuestionModal().length);
     this._getAddQuestionModal()
       .props()
       .onClose();
+  };
+
+  doUpdate = (
+    isQuestionLoading: boolean,
+    setQuestion: Map,
+    hasQuestionError: boolean
+  ) => {
+    // console.log('BEFORE', this._wrapper.props());
+    this._wrapper.setProps({
+      isQuestionLoading,
+      setQuestion,
+      hasQuestionError
+    });
+    // console.log('AFTER', this._wrapper.props());
   };
 }
