@@ -180,7 +180,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                   <Close className="close-icon" />
                 </div>
               </div>
-              <div className="modal-subtitle">Optional Subtitle</div>
+              {/* <div className="modal-subtitle">Optional Subtitle</div> */}
             </div>
             <div className="modal-wrapper-body">
               <div className="modal-segment">
@@ -229,7 +229,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                   id="dd-team-member"
                   placeholder="Select"
                   items={getQuestionSectionList}
-                  title="Question Section"
+                  title="Section"
                   onClick={this.onQuestionSectionChange}
                 />
               </div>
