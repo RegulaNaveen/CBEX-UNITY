@@ -4,6 +4,7 @@ import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
 import sinon from 'sinon';
 import type { stub } from 'sinon';
+import { Map } from 'immutable';
 import { AddQuestionModal } from '../../../../../../src/components/screens/Proposal/AddQuestionModal';
 import Modal from '../../../../../../src/components/common/Modal';
 import DatePicker from '../../../../../../src/components/common/DatePicker';
@@ -15,13 +16,25 @@ import SelectTeam from '../../../../../../src/components/common/SelectTeam';
 import { Close } from '../../../../../../src/components/svg';
 
 export default class AddQuestoinModalModel {
-  constructor(items: Array<Object>, teams: Array<Object>) {
+  constructor(
+    questionSectionOrderInfo: Map,
+    questionSectionList: Array<string>,
+    answerTypesList: Array<string>,
+    rolesList: Array<string>,
+    isLoading: boolean
+  ) {
     this._functionStub = sinon.stub();
     const props = {
       onClose: this._functionStub,
-      onSave: this._functionStub,
-      items,
-      teams
+      questionSectionOrderInfo,
+      questionSectionList,
+      answerTypesList,
+      rolesList,
+      getQuestionSectionF: this._functionStub,
+      getAnswerTypesDataF: this._functionStub,
+      getRolesInfoF: this._functionStub,
+      setProposalQuestionF: this._functionStub,
+      isLoading
     };
     this._wrapper = shallow(<AddQuestionModal {...props} />);
     this._titleIndex = 0;
@@ -84,7 +97,7 @@ export default class AddQuestoinModalModel {
 
   hasTextArea = (): boolean => this._getTextArea().length === 1;
 
-  hasDropDown = (): boolean => this._getDropDown().length === 2;
+  hasDropDown = (): boolean => this._getDropDown().length === 3;
 
   hasSelectedTeam = (selectedTeamlength: number): boolean =>
     this._getSelectTeam().length === selectedTeamlength;

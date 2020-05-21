@@ -10,7 +10,7 @@ import Loader from 'react-loader-spinner';
 import { Proposal } from '../../../../../../src/components/screens/Proposal';
 import ProposalInfo from '../../../../../../src/components/screens/Proposal/ProposalInfo';
 import SectionList from '../../../../../../src/components/screens/Proposal/SectionList';
-import AddQuestionModal from '../../../../../../src/components/screens/Proposal/AddQuestionModal';
+import AddQuestionModalComponent from '../../../../../../src/components/screens/Proposal/AddQuestionModal';
 import { Add } from '../../../../../../src/components/svg';
 
 export default class ProposalModel {
@@ -19,7 +19,10 @@ export default class ProposalModel {
     questions: Map,
     questionsList: Map,
     isLoading: boolean,
-    sortedQuestions: Map
+    sortedQuestions: Map,
+    setQuestion: Map,
+    hasQuestionError: boolean,
+    isQuestionLoading: boolean
   ) {
     this._onEventStub = sinon.stub();
     const props = {
@@ -28,7 +31,10 @@ export default class ProposalModel {
       questionsList,
       isLoading,
       sortedQuestions,
-      getProposalInfo: this._onEventStub
+      getProposalInfo: this._onEventStub,
+      setQuestion,
+      hasQuestionError,
+      isQuestionLoading
     };
     this._wrapper = shallow(<Proposal {...props} />);
   }
@@ -51,7 +57,7 @@ export default class ProposalModel {
     this._wrapper.find('div.tasksList-add-icon-wrapper');
 
   _getAddQuestionModal = (): ShallowWrapper =>
-    this._wrapper.find(AddQuestionModal);
+    this._wrapper.find(AddQuestionModalComponent);
 
   hasLoader = (): boolean => this._getLoader().length === 1;
 
@@ -76,6 +82,7 @@ export default class ProposalModel {
   };
 
   doOnClose = () => {
+    console.log(this._getAddQuestionModal().length);
     this._getAddQuestionModal()
       .props()
       .onClose();

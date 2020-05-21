@@ -10,6 +10,9 @@ describe('Proposal component', () => {
   const sortedQuestions = Map({});
   const questionsList = Map({});
   const isLoading = true;
+  const setQuestion = Map({});
+  const hasQuestionError = false;
+  const isQuestionLoading = false;
   describe('rendering', () => {
     it('should render Loader component when loading', () => {
       const wrapper = new ProposalModel(
@@ -17,7 +20,10 @@ describe('Proposal component', () => {
         questions,
         questionsList,
         isLoading,
-        sortedQuestions
+        sortedQuestions,
+        setQuestion,
+        hasQuestionError,
+        isQuestionLoading
       );
       expect(wrapper.hasLoader()).toBe(true);
     });
@@ -28,7 +34,10 @@ describe('Proposal component', () => {
         questions,
         questionsList,
         !isLoading,
-        sortedQuestions
+        sortedQuestions,
+        setQuestion,
+        hasQuestionError,
+        isQuestionLoading
       );
       expect(wrapper.hasProposalInfo()).toBe(true);
     });
@@ -39,7 +48,10 @@ describe('Proposal component', () => {
         questions,
         questionsList,
         !isLoading,
-        sortedQuestions
+        sortedQuestions,
+        setQuestion,
+        hasQuestionError,
+        isQuestionLoading
       );
       expect(wrapper.hasParagraph()).toBe(true);
       expect(wrapper.getTitle()).toBe('Questions');
@@ -51,7 +63,10 @@ describe('Proposal component', () => {
         questions,
         questionsList,
         !isLoading,
-        sortedQuestions
+        sortedQuestions,
+        setQuestion,
+        hasQuestionError,
+        isQuestionLoading
       );
       expect(wrapper.hasAddIcon()).toBe(true);
     });
@@ -62,7 +77,10 @@ describe('Proposal component', () => {
         questions,
         questionsList,
         !isLoading,
-        sortedQuestions
+        sortedQuestions,
+        setQuestion,
+        hasQuestionError,
+        isQuestionLoading
       );
       expect(wrapper.hasTaskList()).toBe(true);
     });
@@ -74,7 +92,10 @@ describe('Proposal component', () => {
         questions,
         questionsList,
         !isLoading,
-        sortedQuestions
+        sortedQuestions,
+        setQuestion,
+        hasQuestionError,
+        isQuestionLoading
       );
       expect(wrapper.getShowModal()).toBe(false);
       wrapper.doIconOnClose();

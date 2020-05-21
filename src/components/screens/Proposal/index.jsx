@@ -31,8 +31,8 @@ type Props = {
   getProposalInfo: Function,
   sortedQuestions: Map,
   setQuestion: Map,
-  hasQuestionError: Boolean,
-  isQuestionLoading: Boolean
+  hasQuestionError: boolean,
+  isQuestionLoading: boolean
 };
 
 export class Proposal extends Component<Props, State> {

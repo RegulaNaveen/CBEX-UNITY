@@ -31,14 +31,14 @@ import { getProposalId } from '../../../SessionHandler';
 type Props = {
   onClose: Function,
   questionSectionOrderInfo: Map,
-  getQuestionSectionList: Map,
-  getAnswerTypesList: Array<string>,
-  getRolesList: Array<string>,
+  questionSectionList: Array<string>,
+  answerTypesList: Array<string>,
+  rolesList: Array<string>,
   getQuestionSectionF: Function,
   getAnswerTypesDataF: Function,
   getRolesInfoF: Function,
   setProposalQuestionF: Function,
-  isLoading: Boolean
+  isLoading: boolean
 };
 
 type State = {
@@ -159,9 +159,9 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     const { showAnswerOptions } = this.state;
     const {
       onClose,
-      getQuestionSectionList,
-      getAnswerTypesList,
-      getRolesList,
+      questionSectionList,
+      answerTypesList,
+      rolesList,
       isLoading
     } = this.props;
 
@@ -198,7 +198,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                   <Dropdown
                     id="dd-andwer-type"
                     placeholder="Select"
-                    items={getAnswerTypesList}
+                    items={answerTypesList}
                     title="Answer Type"
                     onClick={this.onAnswerTypeChange}
                   />
@@ -228,7 +228,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 <Dropdown
                   id="dd-team-member"
                   placeholder="Select"
-                  items={getQuestionSectionList}
+                  items={questionSectionList}
                   title="Section"
                   onClick={this.onQuestionSectionChange}
                 />
@@ -237,7 +237,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 <Dropdown
                   id="dd-team-member"
                   placeholder="Select"
-                  items={getRolesList}
+                  items={rolesList}
                   title="Which team member roles will answer"
                   onClick={this.onRolehange}
                 />
@@ -303,16 +303,16 @@ export class AddQuestionModal extends PureComponent<Props, State> {
 }
 
 const mapStateToProps = (state: Map) => {
-  const getQuestionSectionList = getQuestionSectionInfo(state);
-  const getAnswerTypesList = getAnswerTypeInfo(state);
-  const getRolesList = getRoles(state);
+  const questionSectionList = getQuestionSectionInfo(state);
+  const answerTypesList = getAnswerTypeInfo(state);
+  const rolesList = getRoles(state);
   const questionSectionOrderInfo = getQuestionSectionOrderInfo(state);
   const isLoading = isSetQuestionLoading(state);
 
   return {
-    getQuestionSectionList,
-    getAnswerTypesList,
-    getRolesList,
+    questionSectionList,
+    answerTypesList,
+    rolesList,
     questionSectionOrderInfo,
     isLoading
   };
