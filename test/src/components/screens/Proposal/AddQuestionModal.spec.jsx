@@ -9,7 +9,7 @@ describe('AddQuestionModal component', () => {
     { sectionOrder: 2, sectionName: 'SectionTwo' }
   ];
   const questionSectionList = ['SectionOne', 'SectionTwo'];
-  const answerTypesList = ['text', 'number', 'y/n'];
+  const answerTypesList = ['text', 'number', 'y/n', 'select', 'picklist'];
   const rolesList = ['RoleOne', 'RoleTwo'];
   const isLoading = false;
   const title = 'Add New Question';
@@ -125,6 +125,98 @@ describe('AddQuestionModal component', () => {
   });
 
   describe('interactions', () => {
+    it('should change questionText state when handleTextChange is called', () => {
+      const testQuestion = 'testQuestion';
+      const wrapper = new AddQuestionModalModel(
+        questionSectionOrderInfo,
+        questionSectionList,
+        answerTypesList,
+        rolesList,
+        isLoading
+      );
+      expect(wrapper.getQuestionText()).toBe('');
+      wrapper.doHandleTextChange(testQuestion);
+      expect(wrapper.getQuestionText()).toBe(testQuestion);
+    });
+
+    it('should change questionText state when handleTextChange is called', () => {
+      const testAnswer = 'text';
+      const wrapper = new AddQuestionModalModel(
+        questionSectionOrderInfo,
+        questionSectionList,
+        answerTypesList,
+        rolesList,
+        isLoading
+      );
+      expect(wrapper.getAnswerType()).toBe('');
+      wrapper.doAnswerTypeChange(testAnswer);
+      expect(wrapper.getAnswerType()).toBe(testAnswer);
+    });
+
+    it('should render correct ammount of TextArea components when answeType is select', () => {
+      const testAnswer = 'select';
+      const wrapper = new AddQuestionModalModel(
+        questionSectionOrderInfo,
+        questionSectionList,
+        answerTypesList,
+        rolesList,
+        isLoading
+      );
+      expect(wrapper.getAnswerType()).toBe('');
+      wrapper.doAnswerTypeChange(testAnswer);
+      expect(wrapper.getAnswerType()).toBe(testAnswer);
+      expect(wrapper.hasTextAreas()).toBe(true);
+    });
+
+    it('should change section state when onQuestionSectionChange is called', () => {
+      const selectedSection = { sectionOrder: 1, sectionName: 'SectionOne' };
+      const testSection = 'SectionOne';
+      const wrapper = new AddQuestionModalModel(
+        questionSectionOrderInfo,
+        questionSectionList,
+        answerTypesList,
+        rolesList,
+        isLoading
+      );
+      expect(wrapper.getSection()).toBe(undefined);
+      wrapper.doQuestionSectionChange(testSection);
+      expect(wrapper.getSection()).toEqual(selectedSection);
+    });
+
+    it('should change roleName state when onRoleChange is called', () => {
+      const testRole = 'RoleOne';
+      const wrapper = new AddQuestionModalModel(
+        questionSectionOrderInfo,
+        questionSectionList,
+        answerTypesList,
+        rolesList,
+        isLoading
+      );
+      expect(wrapper.getRoleName()).toBe('');
+      wrapper.doRoleChange(testRole);
+      expect(wrapper.getRoleName()).toEqual(testRole);
+    });
+
+    it('should setProposalQuestionF be called when Okay button onClick', () => {
+      const testQuestion = 'testQuestion';
+      const testAnswer = 'select';
+      const testSection = 'SectionOne';
+      const testRole = 'RoleOne';
+      const wrapper = new AddQuestionModalModel(
+        questionSectionOrderInfo,
+        questionSectionList,
+        answerTypesList,
+        rolesList,
+        isLoading
+      );
+      wrapper.doHandleTextChange(testQuestion);
+      wrapper.doAnswerTypeChange(testAnswer);
+      wrapper.doQuestionSectionChange(testSection);
+      wrapper.doRoleChange(testRole);
+      wrapper.doSave();
+      expect(wrapper.onProposalQuestionStubCalledOnce()).toBe(true);
+      wrapper.resetEventHandlers();
+    });
     // TODO: Add test when teams functionality is implemented
     // it('should change selectedDay state when handleDayChange is called', () => {
     //   const wrapper = new AddQuestionModalModel(

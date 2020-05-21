@@ -92,12 +92,10 @@ export default class ProposalModel {
     setQuestion: Map,
     hasQuestionError: boolean
   ) => {
-    // console.log('BEFORE', this._wrapper.props());
     this._wrapper.setProps({
       isQuestionLoading,
       setQuestion,
       hasQuestionError
     });
-    // console.log('AFTER', this._wrapper.props());
   };
 }

@@ -42,7 +42,7 @@ type Props = {
 };
 
 type State = {
-  isChecked: boolean,
+  // isChecked: boolean,
   questionText: string,
   section: Object,
   answerType: string,
@@ -55,7 +55,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     super(props);
 
     this.state = {
-      isChecked: false,
+      // isChecked: false,
       questionText: '',
       section: undefined,
       answerType: '',
@@ -75,14 +75,14 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     getRolesInfoF();
   }
 
-  handleIsChecked = () => {
-    const { isChecked } = this.state;
-    this.setState({ isChecked: !isChecked });
-  };
+  // handleIsChecked = () => {
+  //   const { isChecked } = this.state;
+  //   this.setState({ isChecked: !isChecked });
+  // };
 
-  handleDeleteTeam = () => {
-    // TODO: Delete a team item
-  };
+  // handleDeleteTeam = () => {
+  //   // TODO: Delete a team item
+  // };
 
   // handleDayChange = (selectedDay: string) => {
   //   this.setState({
@@ -98,6 +98,12 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     this.setState({
       questionText: value
     });
+  };
+
+  handleOptionsTextChange = () => {
+    // this.setState({
+    //   optionsText: value
+    // });
   };
 
   onQuestionSectionChange = (value: string) => {
@@ -122,7 +128,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     this.renderAnswerOptions(value);
   };
 
-  onRolehange = (value: string) => {
+  onRoleChange = (value: string) => {
     this.setState({
       roleName: value
     });
@@ -220,7 +226,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                     placeholder="Option 1, Option 2,..."
                     title="Enter Answer Options"
                     type="text"
-                    onChange={this.handleTextChange}
+                    onChange={this.handleOptionsTextChange}
                   />
                 </div>
               ) : null}
@@ -239,7 +245,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                   placeholder="Select"
                   items={rolesList}
                   title="Which team member roles will answer"
-                  onClick={this.onRolehange}
+                  onClick={this.onRoleChange}
                 />
               </div>
               {/* TODO: Uncomment if will use a select team feature */}

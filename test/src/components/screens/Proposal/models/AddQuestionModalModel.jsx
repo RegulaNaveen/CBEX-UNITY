@@ -23,17 +23,21 @@ export default class AddQuestoinModalModel {
     rolesList: Array<string>,
     isLoading: boolean
   ) {
-    this._functionStub = sinon.stub();
+    this._onEventStub = sinon.stub();
+    this._getQuestionSectionStub = sinon.stub();
+    this._getAnswerTypesDataStub = sinon.stub();
+    this._getRolesInfoStub = sinon.stub();
+    this._setProposalQuestionStub = sinon.stub();
     const props = {
-      onClose: this._functionStub,
+      onClose: this._onEventStub,
       questionSectionOrderInfo,
       questionSectionList,
       answerTypesList,
       rolesList,
-      getQuestionSectionF: this._functionStub,
-      getAnswerTypesDataF: this._functionStub,
-      getRolesInfoF: this._functionStub,
-      setProposalQuestionF: this._functionStub,
+      getQuestionSectionF: this._getQuestionSectionStub,
+      getAnswerTypesDataF: this._getAnswerTypesDataStub,
+      getRolesInfoF: this._getRolesInfoStub,
+      setProposalQuestionF: this._setProposalQuestionStub,
       isLoading
     };
     this._wrapper = shallow(<AddQuestionModal {...props} />);
@@ -45,7 +49,15 @@ export default class AddQuestoinModalModel {
 
   _wrapper: ShallowWrapper;
 
-  _functionStub: stub;
+  _onEventStub: stub;
+
+  _getQuestionSectionStub: stub;
+
+  _getAnswerTypesDataStub: stub;
+
+  _getRolesInfoStub: stub;
+
+  _setProposalQuestionStub: stub;
 
   _titleIndex: number;
 
@@ -97,6 +109,8 @@ export default class AddQuestoinModalModel {
 
   hasTextArea = (): boolean => this._getTextArea().length === 1;
 
+  hasTextAreas = (): boolean => this._getTextArea().length === 2;
+
   hasDropDown = (): boolean => this._getDropDown().length === 3;
 
   hasSelectedTeam = (selectedTeamlength: number): boolean =>
@@ -126,24 +140,81 @@ export default class AddQuestoinModalModel {
       .at(this._okayButtonIndex)
       .prop('children');
 
+  getOkayPrimaryButton = (): ShallowWrapper =>
+    this._getPrimaryButton().at(this._okayButtonIndex);
+
+  getQuestionText = (): string => this._wrapper.state('questionText');
+
+  getAnswerType = (): string => this._wrapper.state('answerType');
+
+  getSection = (): string => this._wrapper.state('section');
+
+  getRoleName = (): string => this._wrapper.state('roleName');
+
   // Interactions
 
-  doHandleDayChange = () => {
-    this._getDatePicker()
+  doHandleTextChange = (value: string) =>
+    this._getTextArea()
       .props()
-      .handleDayChange('testDay');
-  };
+      .onChange(value);
 
-  doHandleIsChecked = () => {
-    this._getCheckbox()
-      .props()
-      .onChange();
-  };
-
-  doHandleDeleteTeam = () => {
-    this._getSelectTeam()
+  doAnswerTypeChange = (value: string) =>
+    this._getDropDown()
       .at(0)
       .props()
+      .onClick(value);
+
+  doAnswerTypeChange = (value: string) =>
+    this._getDropDown()
+      .at(0)
+      .props()
+      .onClick(value);
+
+  doQuestionSectionChange = (value: string) =>
+    this._getDropDown()
+      .at(1)
+      .props()
+      .onClick(value);
+
+  doRoleChange = (value: string) =>
+    this._getDropDown()
+      .at(2)
+      .props()
+      .onClick(value);
+
+  doSave = () =>
+    this.getOkayPrimaryButton()
+      .props()
       .onClick();
+
+  onProposalQuestionStubCalledOnce = (): boolean =>
+    this._setProposalQuestionStub.calledOnce === true;
+
+  resetEventHandlers = () => {
+    this._onEventStub.reset();
+    this._getQuestionSectionStub.reset();
+    this._getAnswerTypesDataStub.reset();
+    this._getRolesInfoStub.reset();
+    this._setProposalQuestionStub.reset();
   };
+
+  // TODO: Add tests when functionality is implemented
+  // doHandleDayChange = () => {
+  //   this._getDatePicker()
+  //     .props()
+  //     .handleDayChange('testDay');
+  // };
+
+  // doHandleIsChecked = () => {
+  //   this._getCheckbox()
+  //     .props()
+  //     .onChange();
+  // };
+
+  // doHandleDeleteTeam = () => {
+  //   this._getSelectTeam()
+  //     .at(0)
+  //     .props()
+  //     .onClick();
+  // };
 }
