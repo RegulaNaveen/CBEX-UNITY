@@ -3,7 +3,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
 import sinon from 'sinon';
-import type { stub, prototype } from 'sinon';
+import type { stub } from 'sinon';
 import TextArea from '../../../../../src/components/common/TextArea';
 
 export default class TextAreaModel {
@@ -30,13 +30,17 @@ export default class TextAreaModel {
 
   _getParagraph = (): ShallowWrapper => this._wrapper.find('p');
 
-  _getTextArea = (): ShallowWrapper => this._wrapper.find('input');
+  _getTextArea = (): ShallowWrapper => this._wrapper.find('textarea');
+
+  _getInput = (): ShallowWrapper => this._wrapper.find('input');
 
   getClassName = (): string => this._getParagraph().prop('className');
 
   getId = (): string => this._getTextArea().prop('id');
 
   getTextClassName = (): string => this._getTextArea().prop('className');
+
+  getInputClassName = (): string => this._getInput().prop('className');
 
   getValue = (): string => {
     return this._getTextArea().prop('value');

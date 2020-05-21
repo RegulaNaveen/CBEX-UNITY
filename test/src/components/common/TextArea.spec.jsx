@@ -21,11 +21,6 @@ describe('TextArea component', () => {
       expect(wrapper.getClassName()).toBe('text-area-title');
     });
 
-    it('should render the correct id', () => {
-      const wrapper = new TextArea(id, className, placeholder, title);
-      expect(wrapper.getId()).toBe(id);
-    });
-
     it('should render the correct TextArea className', () => {
       const wrapper = new TextArea(id, className, placeholder, title);
       expect(wrapper.getTextClassName()).toBe(`text-area-wrapper ${className}`);
