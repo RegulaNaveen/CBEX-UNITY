@@ -8,13 +8,14 @@ import {
   setProposalAnswer,
   getQuestionSectionInfo,
   getAnswerTypes,
-  getRoles
+  getRoles,
+  setProposalQuestionData
 } from '../../../src/api/proposal';
 
 describe('ProposalApi', () => {
   const PROPOSAL_API_URL =
     'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/proposals';
-  const PROPOSAL_ANSWER_API_URL =
+  const PROPOSAL_QUESTIONS_API_URL =
     'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/questions';
   const PROPOSAL_SECTIONS_API_URL =
     'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/proposals/sections';
@@ -23,10 +24,11 @@ describe('ProposalApi', () => {
   const PROPOSAL_ROLES_API_URL =
     'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/proposals/roles';
 
+  const proposalId = '4d5ef185-56b0-4919-955d-b08046739fb5';
+
   describe('getProposalInfo', () => {
     it('should get proposal info', async () => {
       const mock = new MockAdapter(axios);
-      const proposalId = '9b28f967-229c-4ca4-9ab6-74e8e681bd50';
       const response = {
         data: {
           id: proposalId
@@ -40,7 +42,6 @@ describe('ProposalApi', () => {
 
     it('should catch error on get proposal info', async () => {
       const mock = new MockAdapter(axios);
-      const proposalId = '9b28f967-229c-4ca4-9ab6-74e8e681bd50';
       const message = 'Error message';
       const err = {
         message
@@ -57,7 +58,6 @@ describe('ProposalApi', () => {
   describe('setProposalAnswer', () => {
     it('should set proposal answer', async () => {
       const mock = new MockAdapter(axios);
-      const proposalId = '9b28f967-229c-4ca4-9ab6-74e8e681bd50';
       const questionId = 'Data Strategy-O0U';
       const answer = 'Fake answer';
       const response = {
@@ -66,7 +66,7 @@ describe('ProposalApi', () => {
         answer: 'answer'
       };
       mock
-        .onPut(`${PROPOSAL_ANSWER_API_URL}/${proposalId}/${questionId}`)
+        .onPut(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`)
         .reply(200, response);
       const data = await setProposalAnswer(proposalId, questionId, answer);
       expect(data).toEqual(response);
@@ -75,17 +75,15 @@ describe('ProposalApi', () => {
 
     it('should cath error on set proposal answer', () => {
       const mock = new MockAdapter(axios);
-      const proposalId = '9b28f967-229c-4ca4-9ab6-74e8e681bd50';
       const questionId = 'Data Strategy-O0U';
-      const answer = 'Fake answer';
-      const response = {
-        user: 'user@test.com',
-        date: '2020-05-12T16:52:19.433Z',
-        answer: 'answer'
+      const message = 'Error message';
+      const answer = '';
+      const err = {
+        message
       };
       mock
-        .onPut(`${PROPOSAL_API_URL}/${proposalId}/${questionId}`)
-        .reply(200, response);
+        .onPut(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`)
+        .reply(500, err);
       const expectedError = async () => {
         await setProposalAnswer(proposalId, questionId, answer);
       };
@@ -196,6 +194,64 @@ describe('ProposalApi', () => {
       mock.onGet(`${PROPOSAL_ROLES_API_URL}`).reply(500, err);
       const expectedError = async () => {
         await getRoles();
+      };
+      expect(expectedError()).rejects.toThrowError();
+      mock.reset();
+    });
+  });
+
+  describe('setProposalQuestionData', () => {
+    it('should set proposal question data', async () => {
+      const mock = new MockAdapter(axios);
+      const questionData = {
+        answerType: 'text',
+        options: [],
+        proposalId: '4d5ef185-56b0-4919-955d-b08046739fb5',
+        questionText: 'This is the text for a custom question',
+        roleName: 'BD',
+        section: { sectionName: 'Key stakeholders', sectionOrder: 3 }
+      };
+      const response = {
+        proposalId: '4d5ef185-56b0-4919-955d-b08046739fb5',
+        questionId: '22408c04-a246-4f7f-adac-e657fe2a5ce2',
+        section: {
+          sectionOrder: 22,
+          sectionName: 'Action List'
+        },
+        questionText: 'QUESTION TEXT',
+        answerConfiguration: {
+          type: 'date',
+          options: []
+        },
+        roleName: 'Autocomplete',
+        answers: [
+          {
+            user: 'user@test.com',
+            date: '2020-05-20T23:41:13.669Z',
+            answer: 'testing answer of a custom question'
+          }
+        ],
+        questionOrder: 2
+      };
+
+      mock
+        .onPost(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}`)
+        .reply(200, response);
+      const data = await setProposalQuestionData(proposalId, questionData);
+      expect(data).toEqual(response);
+      mock.reset();
+    });
+
+    it('should cath error on set proposal question', () => {
+      const mock = new MockAdapter(axios);
+      const message = 'Error message';
+      const questionData = {};
+      const err = {
+        message
+      };
+      mock.onPut(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}`).reply(500, err);
+      const expectedError = async () => {
+        await setProposalQuestionData(proposalId, questionData);
       };
       expect(expectedError()).rejects.toThrowError();
       mock.reset();

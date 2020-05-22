@@ -8,7 +8,19 @@ import {
   PROPOSAL_INFO_ERROR,
   PROPOSAL_ANSWER,
   PROPOSAL_ANSWER_LOADING,
-  PROPOSAL_ANSWER_ERROR
+  PROPOSAL_ANSWER_ERROR,
+  QUESTION_SECTION_INFO,
+  QUESTION_SECTION_LOADING,
+  QUESTION_SECTION_ERROR,
+  ANSWER_TYPES_INFO,
+  ANSWER_TYPES_LOADING,
+  ANSWER_TYPES_ERROR,
+  ROLES_INFO,
+  ROLES_LOADING,
+  ROLES_ERROR,
+  PROPOSAL_SET_QUESTION,
+  PROPOSAL_SET_QUESTION_LOADING,
+  PROPOSAL_SET_QUESTION_ERROR
 } from '../../../src/actions/proposal-types';
 import proposalReducer from '../../../src/reducers/proposal';
 
@@ -111,6 +123,106 @@ describe('Proposal reducer', () => {
     const expectedState = initialState
       .set('proposalAnswerError', errorMessage)
       .set('isProposalAnswerLoading', false);
+    expect(newState).toEqual(expectedState);
+  });
+
+  it('should set proposal questions sections error state', () => {
+    const errorMessage = 'Fake Error Message';
+    const action = {
+      type: QUESTION_SECTION_ERROR,
+      payload: 'Fake Error Message'
+    };
+    const newState = proposalReducer(initialState, action);
+    const expectedState = initialState
+      .set('questionSectionError', errorMessage)
+      .set('isQuestionSectionLoading', false);
+    expect(newState).toEqual(expectedState);
+  });
+
+  it('should set proposal questions sections loading state', () => {
+    const action = {
+      type: QUESTION_SECTION_LOADING,
+      payload: ''
+    };
+    const newState = proposalReducer(initialState, action);
+    const expectedState = initialState
+      .set('isQuestionSectionLoading', true)
+      .set('questionSectionError', undefined);
+    expect(newState).toEqual(expectedState);
+  });
+
+  it('should set answer types error state', () => {
+    const errorMessage = 'Fake Error Message';
+    const action = {
+      type: ANSWER_TYPES_ERROR,
+      payload: 'Fake Error Message'
+    };
+    const newState = proposalReducer(initialState, action);
+    const expectedState = initialState
+      .set('AnswerTypesError', errorMessage)
+      .set('isAnswerTypesLoading', false);
+    expect(newState).toEqual(expectedState);
+  });
+
+  it('should set answer types loading state', () => {
+    const action = {
+      type: ANSWER_TYPES_LOADING,
+      payload: ''
+    };
+    const newState = proposalReducer(initialState, action);
+    const expectedState = initialState
+      .set('isAnswerTypesLoading', true)
+      .set('AnswerTypesError', undefined);
+    expect(newState).toEqual(expectedState);
+  });
+
+  it('should set roles error state', () => {
+    const errorMessage = 'Fake Error Message';
+    const action = {
+      type: ROLES_ERROR,
+      payload: 'Fake Error Message'
+    };
+    const newState = proposalReducer(initialState, action);
+    const expectedState = initialState
+      .set('rolesError', errorMessage)
+      .set('isRolesLoading', false);
+    expect(newState).toEqual(expectedState);
+  });
+
+  it('should set roles loading state', () => {
+    const action = {
+      type: ROLES_LOADING,
+      payload: ''
+    };
+    const newState = proposalReducer(initialState, action);
+    const expectedState = initialState
+      .set('isRolesLoading', true)
+      .set('rolesError', undefined);
+    expect(newState).toEqual(expectedState);
+  });
+
+  it('should set question error state', () => {
+    const errorMessage = 'Fake Error Message';
+    const action = {
+      type: PROPOSAL_SET_QUESTION_ERROR,
+      payload: 'Fake Error Message'
+    };
+    const newState = proposalReducer(initialState, action);
+    const expectedState = initialState
+      .set('setQuestionError', errorMessage)
+      .set('isSetQuestionLoading', false);
+    expect(newState).toEqual(expectedState);
+  });
+
+  it('should set question loading state', () => {
+    const action = {
+      type: PROPOSAL_SET_QUESTION_LOADING,
+      payload: ''
+    };
+    const newState = proposalReducer(initialState, action);
+    const expectedState = initialState
+      .set('isSetQuestionLoading', true)
+      .set('setQuestionError', undefined);
     expect(newState).toEqual(expectedState);
   });
 });

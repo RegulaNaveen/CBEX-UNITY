@@ -8,7 +8,8 @@ import {
   setProposalAnswerData,
   getQuestionSection,
   getAnswerTypesInfo,
-  getRolesInfo
+  getRolesInfo,
+  setProposalQuestion
 } from '../../../src/actions/proposal-actions';
 import {
   PROPOSAL_INFO,
@@ -25,7 +26,10 @@ import {
   ANSWER_TYPES_ERROR,
   ROLES_INFO,
   ROLES_LOADING,
-  ROLES_ERROR
+  ROLES_ERROR,
+  PROPOSAL_SET_QUESTION,
+  PROPOSAL_SET_QUESTION_LOADING,
+  PROPOSAL_SET_QUESTION_ERROR
 } from '../../../src/actions/proposal-types';
 import * as proposalApi from '../../../src/api/proposal';
 
@@ -35,6 +39,7 @@ describe('Proposal Action', () => {
   let getQuestionSectionInfoStub;
   let getAnswerTypesStub;
   let getRolesStub;
+  let setProposalQuestionStub;
   let getState;
   let dispatch;
 
@@ -47,6 +52,10 @@ describe('Proposal Action', () => {
     );
     getAnswerTypesStub = sinon.stub(proposalApi, 'getAnswerTypes');
     getRolesStub = sinon.stub(proposalApi, 'getRoles');
+    setProposalQuestionStub = sinon.stub(
+      proposalApi,
+      'setProposalQuestionData'
+    );
     dispatch = sinon.stub();
     getState = sinon.stub();
   });
@@ -57,12 +66,12 @@ describe('Proposal Action', () => {
     getQuestionSectionInfoStub.restore();
     getAnswerTypesStub.restore();
     getRolesStub.restore();
+    setProposalQuestionStub.restore();
     dispatch.reset();
     getState.reset();
   });
 
   const proposal = Map({});
-  // const response = [Object];
 
   it('should create PROPOSAL_INFO', async () => {
     const id = '72f54264-5154-4899-ac6c-95dea210156d';
@@ -183,6 +192,48 @@ describe('Proposal Action', () => {
     expect(dispatch.calledTwice).toBe(true);
     expect(dispatch.args[0][0].type).toBe(ROLES_LOADING);
     expect(dispatch.args[1][0].type).toBe(ROLES_ERROR);
+    expect(dispatch.args[1][0].payload).toEqual('Error: Fake error message');
+  });
+
+  it('should create PROPOSAL_SET_QUESTION', async () => {
+    const proposalId = '4d5ef185-56b0-4919-955d-b08046739fb5';
+    const questionData = {
+      answerType: 'text',
+      options: [],
+      proposalId: '4d5ef185-56b0-4919-955d-b08046739fb5',
+      questionText: 'This is the text for a custom question',
+      roleName: 'BD',
+      section: { sectionOrder: 22, sectionName: 'Action List' }
+    };
+
+    const response = {
+      proposalId: '4d5ef185-56b0-4919-955d-b08046739fb5',
+      questionId: '6f318bba-b0d0-4c21-9798-378a4d133c07',
+      section: { sectionOrder: 22, sectionName: 'Action List' },
+      questionText: 'This is the text for a custom question',
+      answerConfiguration: { type: 'text', options: [] },
+      roleName: 'BD',
+      answers: [],
+      questionOrder: 6
+    };
+
+    setProposalQuestionStub.returns(Promise.resolve(response));
+    await setProposalQuestion(proposalId, questionData)(dispatch, getState);
+    expect(dispatch.calledTwice).toBe(true);
+    expect(dispatch.args[0][0].type).toBe(PROPOSAL_SET_QUESTION_LOADING);
+    expect(dispatch.args[1][0].type).toBe(PROPOSAL_SET_QUESTION);
+    expect(dispatch.args[1][0].payload).toEqual(response);
+  });
+
+  it('should create PROPOSAL_SET_QUESTION_ERROR', async () => {
+    const proposalId = '4d5ef185-56b0-4919-955d-b08046739fb5';
+    const questionData = {};
+    const errorMessage = 'Error: Fake error message';
+    setProposalQuestionStub.returns(Promise.reject(errorMessage));
+    await setProposalQuestion(proposalId, questionData)(dispatch, getState);
+    expect(dispatch.calledTwice).toBe(true);
+    expect(dispatch.args[0][0].type).toBe(PROPOSAL_SET_QUESTION_LOADING);
+    expect(dispatch.args[1][0].type).toBe(PROPOSAL_SET_QUESTION_ERROR);
     expect(dispatch.args[1][0].payload).toEqual('Error: Fake error message');
   });
 });
