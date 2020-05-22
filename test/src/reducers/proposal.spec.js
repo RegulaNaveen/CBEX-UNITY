@@ -281,6 +281,18 @@ describe('Proposal reducer', () => {
   });
 
   it('should set question', () => {
+    const customInitialState = Map({
+      proposalQuestions: [
+        {
+          answerType: 'y/n',
+          options: [],
+          proposalId: '4d5ef185-56b0-4919-955d-b08046739fb5',
+          questionText: 'This is the text for a custom question',
+          roleName: 'BD',
+          section: { sectionName: 'Key stakeholders', sectionOrder: 3 }
+        }
+      ]
+    });
     const data = {
       answerType: 'text',
       options: [],
@@ -290,12 +302,26 @@ describe('Proposal reducer', () => {
       section: { sectionName: 'Key stakeholders', sectionOrder: 3 }
     };
     const isSetQuestionLoading = false;
+    const expectedState = Map({
+      proposalQuestions: [
+        {
+          answerType: 'y/n',
+          options: [],
+          proposalId: '4d5ef185-56b0-4919-955d-b08046739fb5',
+          questionText: 'This is the text for a custom question',
+          roleName: 'BD',
+          section: { sectionName: 'Key stakeholders', sectionOrder: 3 }
+        },
+        data
+      ],
+      setQuestionData: data,
+      isSetQuestionLoading
+    });
     const action = {
       type: PROPOSAL_SET_QUESTION,
-      payload: { data, isSetQuestionLoading }
+      payload: data
     };
-    const newState = proposalReducer(initialState, action);
-    const expectedState = Map({ data, isSetQuestionLoading });
+    const newState = proposalReducer(customInitialState, action);
     expect(newState).toEqual(expectedState);
   });
 
