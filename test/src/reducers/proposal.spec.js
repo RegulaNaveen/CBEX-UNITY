@@ -141,10 +141,13 @@ describe('Proposal reducer', () => {
 
     const action = {
       type: QUESTION_SECTION_INFO,
-      payload: { sections, isQuestionSectionLoading }
+      payload: sections
     };
     const newState = proposalReducer(initialState, action);
-    const expectedState = Map({ sections, isQuestionSectionLoading });
+    const expectedState = Map({
+      proposalQuestionSection: sections,
+      isQuestionSectionLoading
+    });
     expect(newState).toEqual(expectedState);
   });
 
@@ -188,10 +191,13 @@ describe('Proposal reducer', () => {
 
     const action = {
       type: ANSWER_TYPES_INFO,
-      payload: { answerTypes, isAnswerTypesLoading }
+      payload: answerTypes
     };
     const newState = proposalReducer(initialState, action);
-    const expectedState = Map({ answerTypes, isAnswerTypesLoading });
+    const expectedState = Map({
+      proposalAnswerTypes: answerTypes,
+      isAnswerTypesLoading
+    });
     expect(newState).toEqual(expectedState);
   });
 
@@ -241,11 +247,11 @@ describe('Proposal reducer', () => {
 
     const action = {
       type: ROLES_INFO,
-      payload: { roles, isRolesLoading }
+      payload: roles
     };
 
     const newState = proposalReducer(initialState, action);
-    const expectedState = Map({ roles, isRolesLoading });
+    const expectedState = Map({ proposalRoles: roles, isRolesLoading });
     expect(newState).toEqual(expectedState);
   });
 
