@@ -126,6 +126,28 @@ describe('Proposal reducer', () => {
     expect(newState).toEqual(expectedState);
   });
 
+  it('should load proposal questions sections', () => {
+    const sections = [
+      {
+        sectionOrder: 1,
+        sectionName: 'Opportunity Overview'
+      },
+      {
+        sectionOrder: 2,
+        sectionName: 'Proposal Team'
+      }
+    ];
+    const isQuestionSectionLoading = false;
+
+    const action = {
+      type: QUESTION_SECTION_INFO,
+      payload: { sections, isQuestionSectionLoading }
+    };
+    const newState = proposalReducer(initialState, action);
+    const expectedState = Map({ sections, isQuestionSectionLoading });
+    expect(newState).toEqual(expectedState);
+  });
+
   it('should set proposal questions sections error state', () => {
     const errorMessage = 'Fake Error Message';
     const action = {
@@ -148,6 +170,28 @@ describe('Proposal reducer', () => {
     const expectedState = initialState
       .set('isQuestionSectionLoading', true)
       .set('questionSectionError', undefined);
+    expect(newState).toEqual(expectedState);
+  });
+
+  it('should load answer types', () => {
+    const answerTypes = [
+      'text',
+      'date',
+      'y/n',
+      'currency',
+      'select',
+      'number',
+      'picklist',
+      'multi-picklist'
+    ];
+    const isAnswerTypesLoading = false;
+
+    const action = {
+      type: ANSWER_TYPES_INFO,
+      payload: { answerTypes, isAnswerTypesLoading }
+    };
+    const newState = proposalReducer(initialState, action);
+    const expectedState = Map({ answerTypes, isAnswerTypesLoading });
     expect(newState).toEqual(expectedState);
   });
 
@@ -176,6 +220,35 @@ describe('Proposal reducer', () => {
     expect(newState).toEqual(expectedState);
   });
 
+  it('should load roles', () => {
+    const roles = [
+      'Autocomplete',
+      'Autocomplete + edit',
+      'PD',
+      'BD',
+      'TSL',
+      'Strategic pricing',
+      'Autocomplete + flag',
+      'Medical',
+      'Medic',
+      'Autocomplete + edit ',
+      'DM',
+      'Clinical',
+      'Automated',
+      'All'
+    ];
+    const isRolesLoading = false;
+
+    const action = {
+      type: ROLES_INFO,
+      payload: { roles, isRolesLoading }
+    };
+
+    const newState = proposalReducer(initialState, action);
+    const expectedState = Map({ roles, isRolesLoading });
+    expect(newState).toEqual(expectedState);
+  });
+
   it('should set roles error state', () => {
     const errorMessage = 'Fake Error Message';
     const action = {
@@ -198,6 +271,25 @@ describe('Proposal reducer', () => {
     const expectedState = initialState
       .set('isRolesLoading', true)
       .set('rolesError', undefined);
+    expect(newState).toEqual(expectedState);
+  });
+
+  it('should set question', () => {
+    const data = {
+      answerType: 'text',
+      options: [],
+      proposalId: '4d5ef185-56b0-4919-955d-b08046739fb5',
+      questionText: 'This is the text for a custom question',
+      roleName: 'BD',
+      section: { sectionName: 'Key stakeholders', sectionOrder: 3 }
+    };
+    const isSetQuestionLoading = false;
+    const action = {
+      type: PROPOSAL_SET_QUESTION,
+      payload: { data, isSetQuestionLoading }
+    };
+    const newState = proposalReducer(initialState, action);
+    const expectedState = Map({ data, isSetQuestionLoading });
     expect(newState).toEqual(expectedState);
   });
 
