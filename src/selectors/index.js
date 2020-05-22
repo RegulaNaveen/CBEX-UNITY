@@ -35,11 +35,20 @@ export const getQuestionSectionOrderInfo = (state: Map): Map =>
 export const getQuestionSectionInfo = (state: Map): Map =>
   proposalSelectors.getQuestionSectionInfo(state.proposal);
 
+export const isQuestionSectionInfoLoading = (state: Object): Boolean =>
+  proposalSelectors.isQuestionSectionInfoLoading(state.proposal);
+
 export const getAnswerTypeInfo = (state: Map): Map =>
   proposalSelectors.getAnswerTypeInfo(state.proposal);
 
+export const isAnswerTypesInfoLoading = (state: Object): Boolean =>
+  proposalSelectors.isAnswerTypesInfoLoading(state.proposal);
+
 export const getRoles = (state: Map): Map =>
   proposalSelectors.getRoles(state.proposal);
+
+export const isRolesInfoLoading = (state: Object): Boolean =>
+  proposalSelectors.isRolesInfoLoading(state.proposal);
 
 export const setQuestionData = (state: Object): Map =>
   proposalSelectors.setQuestionData(state.proposal);

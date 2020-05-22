@@ -61,10 +61,19 @@ export const getQuestionSectionOrderInfo = (proposal: Map): Map =>
 export const getQuestionSectionInfo = (proposal: Map): Map =>
   getQuestionSections(proposal.get('proposalQuestionSection'));
 
+export const isQuestionSectionInfoLoading = (proposal: Map): Map =>
+  proposal.get('isQuestionSectionLoading');
+
 export const getAnswerTypeInfo = (proposal: Map): Map =>
   proposal.get('proposalAnswerTypes');
 
+export const isAnswerTypesInfoLoading = (proposal: Map): Map =>
+  proposal.get('isAnswerTypesLoading');
+
 export const getRoles = (proposal: Map): Map => proposal.get('proposalRoles');
+
+export const isRolesInfoLoading = (proposal: Map): Map =>
+  proposal.get('isRolesLoading');
 
 export const setQuestionData = (proposal: Map): Map =>
   proposal.get('setQuestionData');
