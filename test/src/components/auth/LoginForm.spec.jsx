@@ -10,13 +10,14 @@ describe('LoginForm component', () => {
       expect(wrapper.hasInputFields()).toBe(true);
     });
 
-    it('should render a checkbox', () => {
-      const wrapper = new LoginFormModel(false);
+    // TODO: Add test when Remember me option is implemented
+    // it('should render a checkbox', () => {
+    //   const wrapper = new LoginFormModel(false);
 
-      expect(wrapper.hasCheckBox()).toBe(true);
+    //   expect(wrapper.hasCheckBox()).toBe(true);
 
-      expect(wrapper.getIdCheckbox()).toBe('remember-username-checkbox');
-    });
+    //   expect(wrapper.getIdCheckbox()).toBe('remember-username-checkbox');
+    // });
 
     it('should render a primary button', () => {
       const wrapper = new LoginFormModel(false);
@@ -55,12 +56,13 @@ describe('LoginForm component', () => {
       expect(wrapper.getPasswordState()).toBe(password);
     });
 
-    it('should change isChecked state on handleIsChecked call', () => {
-      const wrapper = new LoginFormModel(false);
-      expect(wrapper.getIsChecked()).toBe(false);
-      wrapper.doHandleIsChecked();
-      expect(wrapper.getIsChecked()).toBe(true);
-    });
+    // TODO: Add test when Remember me option is implemented
+    // it('should change isChecked state on handleIsChecked call', () => {
+    //   const wrapper = new LoginFormModel(false);
+    //   expect(wrapper.getIsChecked()).toBe(false);
+    //   wrapper.doHandleIsChecked();
+    //   expect(wrapper.getIsChecked()).toBe(true);
+    // });
 
     it('should render an error when invalid email error message is produced', () => {
       const email = 'fake@email';

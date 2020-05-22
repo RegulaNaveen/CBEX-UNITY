@@ -4,14 +4,31 @@ import _ from 'lodash';
 
 const getSections = (questions: Array<Object>) => {
   const sections = [];
+  const orderedSections = [];
 
   questions.forEach((question: Object) => {
     const { section } = question;
-    if (!sections.includes(section.sectionName))
-      sections.push(section.sectionName);
+    let willAdd = true;
+
+    if (sections.length === 0) sections.push(section);
+    else {
+      for (let i = 0; i < sections.length; i += 1) {
+        if (sections[i].sectionName === section.sectionName) {
+          willAdd = false;
+          break;
+        }
+      }
+      if (willAdd) sections.push(section);
+    }
   });
 
-  return sections;
+  for (let i = 1; i < sections.length + 1; i += 1) {
+    sections.forEach((section: Object) => {
+      if (section.sectionOrder === i) orderedSections.push(section.sectionName);
+    });
+  }
+
+  return orderedSections;
 };
 
 const sortData = (questions: Array<Object>) => {
@@ -35,6 +52,15 @@ const getQuestionsbySections = (questions: Array<Object>) => {
   return questionsList;
 };
 
+const getQuestionSections = (items: Array<Object>) => {
+  const sections = [];
+  items.forEach((section: Object) => {
+    const { sectionName } = section;
+    if (!sections.includes(sectionName)) sections.push(sectionName);
+  });
+  return sections;
+};
+
 export const getQuestions = (proposal: Map): Map =>
   fromJS(getSections(proposal.get('proposalQuestions')));
 
@@ -52,3 +78,23 @@ export const sortQuestions = (proposal: Map): Map =>
 
 export const setProposalAnswer = (proposal: Map): Map =>
   proposal.get('proposalAnswer');
+
+export const getQuestionSectionOrderInfo = (proposal: Map): Map =>
+  proposal.get('proposalQuestionSection');
+
+export const getQuestionSectionInfo = (proposal: Map): Map =>
+  getQuestionSections(proposal.get('proposalQuestionSection'));
+
+export const getAnswerTypeInfo = (proposal: Map): Map =>
+  proposal.get('proposalAnswerTypes');
+
+export const getRoles = (proposal: Map): Map => proposal.get('proposalRoles');
+
+export const setQuestionData = (proposal: Map): Map =>
+  proposal.get('setQuestionData');
+
+export const isSetQuestionLoading = (proposal: Map): Map =>
+  proposal.get('isSetQuestionLoading');
+
+export const setQuestionError = (proposal: Map): Map =>
+  proposal.get('setQuestionError');

@@ -1,124 +1,255 @@
 // @flow
 import React, { PureComponent } from 'react';
 import 'react-day-picker/lib/style.css';
-import { parseDate, formatDate } from '../../../utils/DateUtils';
+import { connect } from 'react-redux';
+import { Map } from 'immutable';
+// import { parseDate, formatDate } from '../../../utils/DateUtils';
+import Loader from 'react-loader-spinner';
 import Modal from '../../common/Modal';
-import DatePicker from '../../common/DatePicker';
 import { PrimaryButton } from '../../common/Buttons';
-import Checkbox from '../../common/Checkbox';
 import Dropdown from '../../common/Dropdown';
 import TextArea from '../../common/TextArea';
-import SelectTeam from '../../common/SelectTeam';
+// import DatePicker from '../../common/DatePicker';
+// import Checkbox from '../../common/Checkbox';
+// import SelectTeam from '../../common/SelectTeam';
 import { Close } from '../../svg';
+import {
+  getQuestionSectionOrderInfo,
+  getQuestionSectionInfo,
+  getAnswerTypeInfo,
+  getRoles,
+  isSetQuestionLoading
+} from '../../../selectors';
+import {
+  getQuestionSection,
+  getAnswerTypesInfo,
+  getRolesInfo,
+  setProposalQuestion
+} from '../../../actions/proposal-actions';
+import { getProposalId } from '../../../SessionHandler';
 
 type Props = {
   onClose: Function,
-  onSave: Function,
-  items: Array<Object>,
-  teams: Array<Object>
+  questionSectionOrderInfo: Map,
+  questionSectionList: Array<string>,
+  answerTypesList: Array<string>,
+  rolesList: Array<string>,
+  getQuestionSectionF: Function,
+  getAnswerTypesDataF: Function,
+  getRolesInfoF: Function,
+  setProposalQuestionF: Function,
+  isLoading: boolean
 };
 
 type State = {
-  isChecked: boolean,
-  selectedDay: string
+  // isChecked: boolean,
+  questionText: string,
+  section: Object,
+  answerType: string,
+  roleName: string,
+  showAnswerOptions: boolean
 };
 
-class AddQuestionModal extends PureComponent<Props, State> {
+export class AddQuestionModal extends PureComponent<Props, State> {
   constructor(props: Object) {
     super(props);
 
     this.state = {
-      isChecked: false,
-      selectedDay: ''
+      // isChecked: false,
+      questionText: '',
+      section: undefined,
+      answerType: '',
+      roleName: '',
+      showAnswerOptions: false
     };
   }
 
-  handleIsChecked = () => {
-    const { isChecked } = this.state;
-    this.setState({ isChecked: !isChecked });
-  };
+  componentDidMount() {
+    const {
+      getQuestionSectionF,
+      getAnswerTypesDataF,
+      getRolesInfoF
+    } = this.props;
+    getQuestionSectionF();
+    getAnswerTypesDataF();
+    getRolesInfoF();
+  }
 
-  handleDeleteTeam = () => {
-    // TODO: Delete a team item
-  };
+  // handleIsChecked = () => {
+  //   const { isChecked } = this.state;
+  //   this.setState({ isChecked: !isChecked });
+  // };
 
-  handleDayChange = (selectedDay: string) => {
+  // handleDeleteTeam = () => {
+  //   // TODO: Delete a team item
+  // };
+
+  // handleDayChange = (selectedDay: string) => {
+  //   this.setState({
+  //     selectedDay
+  //   });
+  // };
+
+  // handleDate = (date: string, format: string) => parseDate(date, format);
+
+  // handleFormatDate = (date: Date, format: string) => formatDate(date, format);
+
+  handleTextChange = (value: string) => {
     this.setState({
-      selectedDay
+      questionText: value
     });
   };
 
-  handleDate = (date: string, format: string) => parseDate(date, format);
-
-  handleFormatDate = (date: Date, format: string) => formatDate(date, format);
-
-  handleTextChange = () => {
-    // TODO: Get values and make the logic
+  handleOptionsTextChange = () => {
+    // this.setState({
+    //   optionsText: value
+    // });
   };
 
-  onClickChange = () => {
-    // TODO: Get values and make the logic
+  onQuestionSectionChange = (value: string) => {
+    const { questionSectionOrderInfo } = this.props;
+    let sectionOrder = -1;
+    questionSectionOrderInfo.forEach((section: Object) => {
+      const { sectionOrder: order, sectionName: name } = section;
+      if (name === value) sectionOrder = order;
+    });
+    if (sectionOrder > -1 && value) {
+      this.setState({
+        section: { sectionOrder, sectionName: value }
+      });
+    }
+  };
+
+  onAnswerTypeChange = (value: string) => {
+    this.setState({
+      answerType: value,
+      showAnswerOptions: false
+    });
+    this.renderAnswerOptions(value);
+  };
+
+  onRoleChange = (value: string) => {
+    this.setState({
+      roleName: value
+    });
+  };
+
+  renderAnswerOptions = (type: string) => {
+    if (type === 'select' || type === 'picklist' || type === 'multi-picklist')
+      this.setState({ showAnswerOptions: true });
+  };
+
+  onSave = () => {
+    const { questionText, section, answerType, roleName } = this.state;
+    const { setProposalQuestionF } = this.props;
+    if (
+      questionText !== '' &&
+      section &&
+      answerType !== '' &&
+      roleName !== ''
+    ) {
+      const proposalId = getProposalId() || '';
+      const questionData = {
+        proposalId,
+        questionText,
+        section,
+        answerType,
+        options: [],
+        roleName
+      };
+      setProposalQuestionF(proposalId, questionData);
+    }
   };
 
   render() {
-    const { isChecked, selectedDay } = this.state;
-    const { onClose, onSave, items, teams } = this.props;
+    const { showAnswerOptions } = this.state;
+    const {
+      onClose,
+      questionSectionList,
+      answerTypesList,
+      rolesList,
+      isLoading
+    } = this.props;
 
     return (
       <Modal>
-        <div className="modal-content">
-          <div className="modal-wrapper-title">
-            <div className="modal-segment-title">
-              <p className="modal-title">Add New Question</p>
-              <div
-                className="close-modal-icon"
-                role="presentation"
-                onClick={onClose}
-              >
-                <Close className="close-icon" />
+        {!isLoading ? (
+          <div className="modal-content">
+            <div className="modal-wrapper-title">
+              <div className="modal-segment-title">
+                <p className="modal-title">Add New Question</p>
+                <div
+                  className="close-modal-icon"
+                  role="presentation"
+                  onClick={onClose}
+                >
+                  <Close className="close-icon" />
+                </div>
               </div>
+              {/* <div className="modal-subtitle">Optional Subtitle</div> */}
             </div>
-            <div className="modal-subtitle">Optional Subtitle</div>
-          </div>
-          <div className="modal-wrapper-body">
-            <div className="modal-segment">
-              <TextArea
-                id="question-text-area"
-                className="modal-text-area"
-                placeholder="Hint text..."
-                title="Enter Question Text"
-                type="text"
-                onChange={this.handleTextChange}
-              />
-            </div>
-            <div className="modal-segment">
-              <div className="modal-answer-type">
-                <Dropdown
-                  id="dd-andwer-type"
-                  placeholder="Select"
-                  items={items}
-                  title="Answer Type"
-                  onClick={this.onClickChange}
+            <div className="modal-wrapper-body">
+              <div className="modal-segment">
+                <TextArea
+                  id="question-text-area"
+                  className="modal-text-area"
+                  placeholder="Hint text..."
+                  title="Enter Question Text"
+                  type="text"
+                  onChange={this.handleTextChange}
                 />
               </div>
-              <DatePicker
+              <div className="modal-segment">
+                <div className="modal-answer-type">
+                  <Dropdown
+                    id="dd-andwer-type"
+                    placeholder="Select"
+                    items={answerTypesList}
+                    title="Answer Type"
+                    onClick={this.onAnswerTypeChange}
+                  />
+                </div>
+                {/* TODO: Uncomment if will use datepicker feature */}
+                {/* <DatePicker
                 label="Date"
                 selectedDay={selectedDay}
                 handleDayChange={this.handleDayChange}
                 handleFormatDate={this.handleFormatDate}
                 handleDate={this.handleDate}
-              />
-            </div>
-            <div className="modal-segment">
-              <Dropdown
-                id="dd-team-member"
-                placeholder="Select"
-                items={items}
-                title="Which team member roles will answer"
-                onClick={this.onClickChange}
-              />
-            </div>
-            <div className="modal-segment">
+              /> */}
+              </div>
+              {showAnswerOptions ? (
+                <div className="modal-segment">
+                  <TextArea
+                    id="question-text-area"
+                    className="modal-options-text-area"
+                    placeholder="Option 1, Option 2,..."
+                    title="Enter Answer Options"
+                    type="text"
+                    onChange={this.handleOptionsTextChange}
+                  />
+                </div>
+              ) : null}
+              <div className="modal-segment">
+                <Dropdown
+                  id="dd-team-member"
+                  placeholder="Select"
+                  items={questionSectionList}
+                  title="Section"
+                  onClick={this.onQuestionSectionChange}
+                />
+              </div>
+              <div className="modal-segment">
+                <Dropdown
+                  id="dd-team-member"
+                  placeholder="Select"
+                  items={rolesList}
+                  title="Which team member roles will answer"
+                  onClick={this.onRoleChange}
+                />
+              </div>
+              {/* TODO: Uncomment if will use a select team feature */}
+              {/* <div className="modal-segment">
               {teams &&
                 teams.map(team => {
                   const { id, name } = team;
@@ -132,8 +263,9 @@ class AddQuestionModal extends PureComponent<Props, State> {
                     </SelectTeam>
                   );
                 })}
-            </div>
-            <div className="modal-segment">
+            </div> */}
+              {/* TODO: Uncomment to add notification feature */}
+              {/* <div className="modal-segment">
               <Checkbox
                 id="send-notification-checkbox"
                 value="notification"
@@ -143,32 +275,58 @@ class AddQuestionModal extends PureComponent<Props, State> {
               >
                 Send notification now
               </Checkbox>
+            </div> */}
+            </div>
+            <div className="modal-wrapper-footer">
+              <div className="modal-button-cancel">
+                <PrimaryButton
+                  className="close-button"
+                  id="cancel-button"
+                  onClick={onClose}
+                >
+                  Cancel
+                </PrimaryButton>
+              </div>
+              <div className="modal-button-okay">
+                <PrimaryButton
+                  className="okay-button"
+                  id="okay-button"
+                  onClick={this.onSave}
+                >
+                  Okay
+                </PrimaryButton>
+              </div>
             </div>
           </div>
-          <div className="modal-wrapper-footer">
-            <div className="modal-button-cancel">
-              <PrimaryButton
-                className="close-button"
-                id="cancel-button"
-                onClick={onClose}
-              >
-                Cancel
-              </PrimaryButton>
-            </div>
-            <div className="modal-button-okay">
-              <PrimaryButton
-                className="okay-button"
-                id="okay-button"
-                onClick={onSave}
-              >
-                Okay
-              </PrimaryButton>
-            </div>
+        ) : (
+          <div className="modal-loader">
+            <Loader type="TailSpin" color="#297DFD" height={100} width={100} />
           </div>
-        </div>
+        )}
       </Modal>
     );
   }
 }
 
-export default AddQuestionModal;
+const mapStateToProps = (state: Map) => {
+  const questionSectionList = getQuestionSectionInfo(state);
+  const answerTypesList = getAnswerTypeInfo(state);
+  const rolesList = getRoles(state);
+  const questionSectionOrderInfo = getQuestionSectionOrderInfo(state);
+  const isLoading = isSetQuestionLoading(state);
+
+  return {
+    questionSectionList,
+    answerTypesList,
+    rolesList,
+    questionSectionOrderInfo,
+    isLoading
+  };
+};
+
+export default connect(mapStateToProps, {
+  getQuestionSectionF: getQuestionSection,
+  getAnswerTypesDataF: getAnswerTypesInfo,
+  getRolesInfoF: getRolesInfo,
+  setProposalQuestionF: setProposalQuestion
+})(AddQuestionModal);

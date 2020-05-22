@@ -31,3 +31,24 @@ export const sortQuestions = (state: Object): Map =>
 
 export const setProposalAnswer = (state: Map): Map =>
   state.get('proposalAnswer');
+
+export const getQuestionSectionOrderInfo = (state: Map): Map =>
+  proposalSelectors.getQuestionSectionOrderInfo(state.proposal);
+
+export const getQuestionSectionInfo = (state: Map): Map =>
+  proposalSelectors.getQuestionSectionInfo(state.proposal);
+
+export const getAnswerTypeInfo = (state: Map): Map =>
+  proposalSelectors.getAnswerTypeInfo(state.proposal);
+
+export const getRoles = (state: Map): Map =>
+  proposalSelectors.getRoles(state.proposal);
+
+export const setQuestionData = (state: Object): Map =>
+  proposalSelectors.setQuestionData(state.proposal);
+
+export const isSetQuestionLoading = (state: Object): Boolean =>
+  proposalSelectors.isSetQuestionLoading(state.proposal);
+
+export const setQuestionError = (state: Object): string =>
+  proposalSelectors.setQuestionError(state.proposal);

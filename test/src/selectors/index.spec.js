@@ -20,6 +20,7 @@ describe('Selectors', () => {
       questionId: 'Action List-E8B',
       teamName: 'all',
       section: {
+        sectionOrder: 1,
         sectionName: 'Action List'
       },
       questionText:
@@ -61,6 +62,7 @@ describe('Selectors', () => {
         questionText:
           'What actions are needed to lock down the strategy; who is the owner and what is the deadline?',
         section: {
+          sectionOrder: 1,
           sectionName: 'Action List'
         },
         answerConfiguration: [],

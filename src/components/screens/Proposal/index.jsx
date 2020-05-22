@@ -8,19 +8,20 @@ import { getProposal } from '../../../actions/proposal-actions';
 import {
   getQuestions,
   isProposalLoading,
-  sortQuestions
+  sortQuestions,
+  setQuestionData,
+  isSetQuestionLoading,
+  setQuestionError
 } from '../../../selectors';
 import ProposalInfo from './ProposalInfo';
 import SectionList from './SectionList';
 import Toolbar from '../../Toolbar';
 import { Add } from '../../svg';
-import AddQuestionModal from './AddQuestionModal';
+import AddQuestionModalComponent from './AddQuestionModal';
 
 type State = {
   showModal: boolean,
-  data: Object,
-  items: Array<Object>,
-  teams: Array<Object>
+  data: Object
 };
 
 type Props = {
@@ -28,7 +29,10 @@ type Props = {
   questions: Map,
   isLoading: boolean,
   getProposalInfo: Function,
-  sortedQuestions: Map
+  sortedQuestions: Map,
+  setQuestion: Map,
+  hasQuestionError: boolean,
+  isQuestionLoading: boolean
 };
 
 export class Proposal extends Component<Props, State> {
@@ -48,26 +52,7 @@ export class Proposal extends Component<Props, State> {
         sites: 12,
         countries: ['France', 'UK', 'Italy', 'Spain'],
         indication: 'Myopia'
-      },
-      items: ['item 1', 'item 2', 'item 3'],
-      teams: [
-        {
-          id: 0,
-          name: 'Business Analyst Business'
-        },
-        {
-          id: 1,
-          name: 'Account Executive'
-        },
-        {
-          id: 2,
-          name: 'Business Analyst'
-        },
-        {
-          id: 3,
-          name: 'Account Executive'
-        }
-      ]
+      }
     };
   }
 
@@ -76,13 +61,16 @@ export class Proposal extends Component<Props, State> {
     getProposalInfo(match.params.id);
   }
 
+  componentDidUpdate(prevProps: Map) {
+    const { setQuestion, hasQuestionError } = this.props;
+    if (prevProps.isQuestionLoading && setQuestion && !hasQuestionError) {
+      this.onClose();
+    }
+  }
+
   onClose = () => {
     const { showModal } = this.state;
     this.setState({ showModal: !showModal });
-  };
-
-  onSave = () => {
-    // TODO: Save new question functionality
   };
 
   renderContent = (
@@ -118,7 +106,7 @@ export class Proposal extends Component<Props, State> {
   };
 
   render() {
-    const { showModal, data, items, teams } = this.state;
+    const { showModal, data } = this.state;
     const { questions, isLoading, sortedQuestions } = this.props;
 
     return (
@@ -126,12 +114,7 @@ export class Proposal extends Component<Props, State> {
         <Toolbar />
         {this.renderContent(isLoading, questions, sortedQuestions, data)}
         {showModal ? (
-          <AddQuestionModal
-            onClose={this.onClose}
-            onSave={this.onSave}
-            items={items}
-            teams={teams}
-          />
+          <AddQuestionModalComponent onClose={this.onClose} />
         ) : null}
       </div>
     );
@@ -142,7 +125,17 @@ const mapStateToProps = (state: Map) => {
   const questions = getQuestions(state);
   const isLoading = isProposalLoading(state);
   const sortedQuestions = sortQuestions(state);
-  return { questions, isLoading, sortedQuestions };
+  const isQuestionLoading = isSetQuestionLoading(state);
+  const hasQuestionError = setQuestionError(state);
+  const setQuestion = setQuestionData(state);
+  return {
+    questions,
+    isLoading,
+    sortedQuestions,
+    setQuestion,
+    isQuestionLoading,
+    hasQuestionError
+  };
 };
 
 export default connect(mapStateToProps, { getProposalInfo: getProposal })(

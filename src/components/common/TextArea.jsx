@@ -51,14 +51,25 @@ class TextArea extends PureComponent<Props, State> {
     return (
       <>
         {title && <p className="text-area-title">{title}</p>}
-        <input
-          id={id}
-          className={classnames('text-area-wrapper', className)}
-          value={textValue}
-          onChange={this.handleText}
-          placeholder={placeholder}
-          type={type}
-        />
+        {type === 'number' ? (
+          <input
+            id={id}
+            className={classnames('text-number-wrapper', className)}
+            value={textValue}
+            onChange={this.handleText}
+            placeholder={placeholder}
+            type={type}
+          />
+        ) : (
+          <textarea
+            id={id}
+            className={classnames('text-area-wrapper', className)}
+            value={textValue}
+            onChange={this.handleText}
+            placeholder={placeholder}
+            type={type}
+          />
+        )}
       </>
     );
   }

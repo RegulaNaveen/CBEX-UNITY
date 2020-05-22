@@ -4,7 +4,8 @@ import { shallow } from 'enzyme';
 import type { ShallowWrapper } from 'enzyme';
 import sinon from 'sinon';
 import type { stub } from 'sinon';
-import AddQuestoinModal from '../../../../../../src/components/screens/Proposal/AddQuestionModal';
+import { Map } from 'immutable';
+import { AddQuestionModal } from '../../../../../../src/components/screens/Proposal/AddQuestionModal';
 import Modal from '../../../../../../src/components/common/Modal';
 import DatePicker from '../../../../../../src/components/common/DatePicker';
 import { PrimaryButton } from '../../../../../../src/components/common/Buttons';
@@ -15,15 +16,31 @@ import SelectTeam from '../../../../../../src/components/common/SelectTeam';
 import { Close } from '../../../../../../src/components/svg';
 
 export default class AddQuestoinModalModel {
-  constructor(items: Array<Object>, teams: Array<Object>) {
-    this._functionStub = sinon.stub();
+  constructor(
+    questionSectionOrderInfo: Map,
+    questionSectionList: Array<string>,
+    answerTypesList: Array<string>,
+    rolesList: Array<string>,
+    isLoading: boolean
+  ) {
+    this._onEventStub = sinon.stub();
+    this._getQuestionSectionStub = sinon.stub();
+    this._getAnswerTypesDataStub = sinon.stub();
+    this._getRolesInfoStub = sinon.stub();
+    this._setProposalQuestionStub = sinon.stub();
     const props = {
-      onClose: this._functionStub,
-      onSave: this._functionStub,
-      items,
-      teams
+      onClose: this._onEventStub,
+      questionSectionOrderInfo,
+      questionSectionList,
+      answerTypesList,
+      rolesList,
+      getQuestionSectionF: this._getQuestionSectionStub,
+      getAnswerTypesDataF: this._getAnswerTypesDataStub,
+      getRolesInfoF: this._getRolesInfoStub,
+      setProposalQuestionF: this._setProposalQuestionStub,
+      isLoading
     };
-    this._wrapper = shallow(<AddQuestoinModal {...props} />);
+    this._wrapper = shallow(<AddQuestionModal {...props} />);
     this._titleIndex = 0;
     this._labelIndex = 1;
     this._cancelButtonIndex = 0;
@@ -32,7 +49,15 @@ export default class AddQuestoinModalModel {
 
   _wrapper: ShallowWrapper;
 
-  _functionStub: stub;
+  _onEventStub: stub;
+
+  _getQuestionSectionStub: stub;
+
+  _getAnswerTypesDataStub: stub;
+
+  _getRolesInfoStub: stub;
+
+  _setProposalQuestionStub: stub;
 
   _titleIndex: number;
 
@@ -84,7 +109,9 @@ export default class AddQuestoinModalModel {
 
   hasTextArea = (): boolean => this._getTextArea().length === 1;
 
-  hasDropDown = (): boolean => this._getDropDown().length === 2;
+  hasTextAreas = (): boolean => this._getTextArea().length === 2;
+
+  hasDropDown = (): boolean => this._getDropDown().length === 3;
 
   hasSelectedTeam = (selectedTeamlength: number): boolean =>
     this._getSelectTeam().length === selectedTeamlength;
@@ -113,24 +140,81 @@ export default class AddQuestoinModalModel {
       .at(this._okayButtonIndex)
       .prop('children');
 
+  getOkayPrimaryButton = (): ShallowWrapper =>
+    this._getPrimaryButton().at(this._okayButtonIndex);
+
+  getQuestionText = (): string => this._wrapper.state('questionText');
+
+  getAnswerType = (): string => this._wrapper.state('answerType');
+
+  getSection = (): string => this._wrapper.state('section');
+
+  getRoleName = (): string => this._wrapper.state('roleName');
+
   // Interactions
 
-  doHandleDayChange = () => {
-    this._getDatePicker()
+  doHandleTextChange = (value: string) =>
+    this._getTextArea()
       .props()
-      .handleDayChange('testDay');
-  };
+      .onChange(value);
 
-  doHandleIsChecked = () => {
-    this._getCheckbox()
-      .props()
-      .onChange();
-  };
-
-  doHandleDeleteTeam = () => {
-    this._getSelectTeam()
+  doAnswerTypeChange = (value: string) =>
+    this._getDropDown()
       .at(0)
       .props()
+      .onClick(value);
+
+  doAnswerTypeChange = (value: string) =>
+    this._getDropDown()
+      .at(0)
+      .props()
+      .onClick(value);
+
+  doQuestionSectionChange = (value: string) =>
+    this._getDropDown()
+      .at(1)
+      .props()
+      .onClick(value);
+
+  doRoleChange = (value: string) =>
+    this._getDropDown()
+      .at(2)
+      .props()
+      .onClick(value);
+
+  doSave = () =>
+    this.getOkayPrimaryButton()
+      .props()
       .onClick();
+
+  onProposalQuestionStubCalledOnce = (): boolean =>
+    this._setProposalQuestionStub.calledOnce === true;
+
+  resetEventHandlers = () => {
+    this._onEventStub.reset();
+    this._getQuestionSectionStub.reset();
+    this._getAnswerTypesDataStub.reset();
+    this._getRolesInfoStub.reset();
+    this._setProposalQuestionStub.reset();
   };
+
+  // TODO: Add tests when functionality is implemented
+  // doHandleDayChange = () => {
+  //   this._getDatePicker()
+  //     .props()
+  //     .handleDayChange('testDay');
+  // };
+
+  // doHandleIsChecked = () => {
+  //   this._getCheckbox()
+  //     .props()
+  //     .onChange();
+  // };
+
+  // doHandleDeleteTeam = () => {
+  //   this._getSelectTeam()
+  //     .at(0)
+  //     .props()
+  //     .onClick();
+  // };
 }
