@@ -10,7 +10,6 @@ const generateSections = (proposalQuestions: Object): Map => {
       .setIn([sectionOrder], fromJS({ sectionName }))
       .setIn([sectionOrder, sectionName, questionId], fromJS(question));
   });
-  console.log(questions.toJS());
   return questions;
 };
 
