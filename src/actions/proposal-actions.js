@@ -60,7 +60,7 @@ export const setProposalAnswerData = (
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: PROPOSAL_ANSWER_LOADING,
-      payload: ''
+      payload: {}
     });
     try {
       const data = await setProposalAnswer(proposalId, questionId, answer);
@@ -81,7 +81,7 @@ export const getQuestionSection = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: QUESTION_SECTION_LOADING,
-      payload: ''
+      payload: {}
     });
     try {
       const data = await getQuestionSectionInfo();
@@ -102,7 +102,7 @@ export const getAnswerTypesInfo = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: ANSWER_TYPES_LOADING,
-      payload: ''
+      payload: {}
     });
     try {
       const data = await getAnswerTypes();
@@ -123,7 +123,7 @@ export const getRolesInfo = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: ROLES_LOADING,
-      payload: ''
+      payload: {}
     });
     try {
       const data = await getRoles();
@@ -147,7 +147,7 @@ export const setProposalQuestion = (
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: PROPOSAL_SET_QUESTION_LOADING,
-      payload: ''
+      payload: {}
     });
     try {
       const data = await setProposalQuestionData(proposalId, questionData);
