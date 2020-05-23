@@ -6,9 +6,8 @@ import { connect } from 'react-redux';
 import Loader from 'react-loader-spinner';
 import { getProposal } from '../../../actions/proposal-actions';
 import {
-  getQuestions,
+  getSections,
   isProposalLoading,
-  sortQuestions,
   setQuestionData,
   isSetQuestionLoading,
   setQuestionError
@@ -26,10 +25,9 @@ type State = {
 
 type Props = {
   match: Match,
-  questions: Map,
+  sections: Map,
   isLoading: boolean,
   getProposalInfo: Function,
-  sortedQuestions: Map,
   setQuestion: Map,
   hasQuestionError: boolean,
   isQuestionLoading: boolean
@@ -73,46 +71,41 @@ export class Proposal extends Component<Props, State> {
     this.setState({ showModal: !showModal });
   };
 
-  renderContent = (
-    isLoading: boolean,
-    questions: Map,
-    sortedQuestions: Map,
-    data: Object
-  ) => {
-    if (!isLoading && questions && sortedQuestions) {
+  renderContent = (isLoading: boolean, sections: Map, data: Object) => {
+    if (isLoading) {
       return (
-        <div>
-          <ProposalInfo data={data} />
-          <div className="tasksList-title-wrapper">
-            <p className="tasksList-title">Questions</p>
-            <div
-              className="tasksList-add-icon-wrapper"
-              role="presentation"
-              onClick={this.onClose}
-            >
-              <Add className="tasksList-add-icon" />
-            </div>
-          </div>
-          <SectionList tasks={questions} tasksQuestions={sortedQuestions} />
+        <div className="proposal-loader">
+          <Loader type="TailSpin" color="#297DFD" height={100} width={100} />
         </div>
       );
     }
 
     return (
-      <div className="proposal-loader">
-        <Loader type="TailSpin" color="#297DFD" height={100} width={100} />
+      <div>
+        <ProposalInfo data={data} />
+        <div className="tasksList-title-wrapper">
+          <p className="tasksList-title">Questions</p>
+          <div
+            className="tasksList-add-icon-wrapper"
+            role="presentation"
+            onClick={this.onClose}
+          >
+            <Add className="tasksList-add-icon" />
+          </div>
+        </div>
+        <SectionList sections={sections} />
       </div>
     );
   };
 
   render() {
     const { showModal, data } = this.state;
-    const { questions, isLoading, sortedQuestions } = this.props;
+    const { sections, isLoading } = this.props;
 
     return (
       <div className="proposal-wrapper">
         <Toolbar />
-        {this.renderContent(isLoading, questions, sortedQuestions, data)}
+        {this.renderContent(isLoading, sections, data)}
         {showModal ? (
           <AddQuestionModalComponent onClose={this.onClose} />
         ) : null}
@@ -122,16 +115,14 @@ export class Proposal extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: Map) => {
-  const questions = getQuestions(state);
+  const sections = getSections(state);
   const isLoading = isProposalLoading(state);
-  const sortedQuestions = sortQuestions(state);
   const isQuestionLoading = isSetQuestionLoading(state);
   const hasQuestionError = setQuestionError(state);
   const setQuestion = setQuestionData(state);
   return {
-    questions,
+    sections,
     isLoading,
-    sortedQuestions,
     setQuestion,
     isQuestionLoading,
     hasQuestionError

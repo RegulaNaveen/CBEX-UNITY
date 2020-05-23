@@ -1,28 +1,23 @@
 // @flow
 import React from 'react';
 import { Map } from 'immutable';
-import Task from './Task';
+import CollapsibleList from './CollapsibleList';
 
 type Props = {
-  tasks: Map,
-  tasksQuestions: Map
+  sections: Map
 };
 
-const SectionList = ({ tasks, tasksQuestions }: Props) => {
+const SectionList = ({ sections }: Props) => {
   return (
     <div className="tasksList-wrapper">
-      {tasks.map(task => {
-        const data = tasksQuestions[task];
-        const complete = false;
-        // TODO: Pass complete log to Task
-        // const incomplete = 4;
+      {sections.valueSeq().map(section => {
+        const sectionName = section.get('sectionName');
+        const questions = section.get(sectionName);
         return (
-          <Task
-            data={data}
-            title={task}
-            isComplete={complete}
-            // uncompletedQuestions={incomplete}
-            key={task}
+          <CollapsibleList
+            questions={questions}
+            title={sectionName}
+            key={sectionName}
           />
         );
       })}

@@ -1,21 +1,20 @@
 // @flow
 import React, { Component } from 'react';
+import type { Map } from 'immutable';
 import chevronRight from '../../../../img/chevron-right.svg';
 import chevronDown from '../../../../img/chevron-down.svg';
-import TaskRowComponent from './TaskRow';
+import Question from './Question';
 
 type State = {
   isCollapsed: boolean
 };
 
 type Props = {
-  data: Array<Object>,
-  isComplete: boolean,
+  questions: Map,
   title: string
-  // uncompletedQuestions: number
 };
 
-class Task extends Component<Props, State> {
+class CollapsibleList extends Component<Props, State> {
   constructor(props: Object) {
     super(props);
 
@@ -38,9 +37,9 @@ class Task extends Component<Props, State> {
 
   render() {
     const { isCollapsed } = this.state;
-    const { data, isComplete, title } = this.props;
+    const { questions, title } = this.props;
     return (
-      <div className={isComplete ? 'task-wrapper complete' : 'task-wrapper'}>
+      <div className="task-wrapper">
         <button
           id="arrow-icon"
           className="task-icon-wrapper"
@@ -66,19 +65,6 @@ class Task extends Component<Props, State> {
             <p id="task-title" className="task-title">
               {title}
             </p>
-            {/* TODO: Implement complete log functionality */}
-            {/* {isComplete ? (
-              <div id="complete-status" className="task-status-wrapper">
-                <Checkmark className="task-status-checkmark" />
-                <p className="task-status-description">Complete</p>
-              </div>
-            ) : (
-              <div className="task-status-wrapper">
-                <p className="task-status-description">
-                  {`${uncompletedQuestions.toString()} Incomplete`}
-                </p>
-              </div>
-            )} */}
           </div>
         ) : (
           <div className="task-table-wrapper">
@@ -91,41 +77,27 @@ class Task extends Component<Props, State> {
             >
               <div className="task-title">
                 <p>{title}</p>
-                {/* TODO: Add filter feature */}
-                {/* <div className="filter-icon">↑</div> */}
               </div>
               <div className="task-subtitle task-subtitle-answer">
                 <p>Answer</p>
-                {/* TODO: Add filter feature */}
-                {/* <div className="filter-icon">↑</div> */}
               </div>
               <div className="task-subtitle task-subtitle-owner">
                 <p>Owner</p>
-                {/* TODO: Add filter feature */}
-                {/* <div className="filter-icon">↑</div> */}
               </div>
-              {/* <div className="task-subtitle task-subtitle-due-date">
-                <p>Due Date</p>
-                // TODO: Add filter feature
-                <div className="filter-icon">↑</div>
-              </div> */}
               <div className="task-subtitle task-subtitle-completion-date">
                 <p>Date Completed</p>
-                {/* TODO: Add filter feature */}
-                {/* <div className="filter-icon">↑</div> */}
               </div>
             </div>
-            {data &&
-              data.map(item => (
-                <TaskRowComponent
-                  key={item.questionId}
-                  questionId={item.questionId}
-                  proposalId={item.proposalId}
-                  answers={item.answers}
-                  questionText={item.questionText}
-                  answerConfiguration={item.answerConfiguration}
-                />
-              ))}
+            {questions.valueSeq().map(questionConfig => (
+              <Question
+                key={questionConfig.get('questionId')}
+                questionId={questionConfig.get('questionId')}
+                proposalId={questionConfig.get('proposalId')}
+                answers={questionConfig.get('answers')}
+                questionText={questionConfig.get('questionText')}
+                answerConfiguration={questionConfig.get('answerConfiguration')}
+              />
+            ))}
           </div>
         )}
       </div>
@@ -133,4 +105,4 @@ class Task extends Component<Props, State> {
   }
 }
 
-export default Task;
+export default CollapsibleList;
