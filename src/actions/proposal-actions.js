@@ -35,7 +35,7 @@ export const getProposal = (id: string): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: PROPOSAL_INFO_LOADING,
-      payload: ''
+      payload: {}
     });
     try {
       const data = await getProposalInfo(id);
