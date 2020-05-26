@@ -9,7 +9,7 @@ const generateSections = (proposalQuestions: Object): Map => {
     const { sectionName, sectionOrder } = question.section;
     // Sections are unique so a map is created
     let section = Map({});
-    // Createa new map is no questions object is found
+    // Create new map is no questions map is find
     let questions = sections.getIn([sectionName, 'questions']) || Map({});
     // Add new question
     questions = questions.set(questionId, fromJS(question));
@@ -21,8 +21,8 @@ const generateSections = (proposalQuestions: Object): Map => {
       .set('questions', questions);
     sections = sections.set(sectionName, section);
   });
+  // Sort sections
   sections = sections.sortBy(section => section.get('sectionOrder'));
-  console.log(sections.toJS());
   return sections;
 };
 
