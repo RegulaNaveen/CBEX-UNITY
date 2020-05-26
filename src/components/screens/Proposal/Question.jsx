@@ -70,12 +70,12 @@ export class TaskRow extends Component<Props, State> {
   ) => {
     const { selectedDay } = this.state;
     const optionsYN = ['Yes', 'No'];
-    const answer = lastAnswer.get('answer');
-    debugger;
+    const answer = lastAnswer && lastAnswer.get('answer');
+
     let answerValue = '';
     let answerValueComplex;
     if (answer) {
-      if (typeof answer.answer === 'string') answerValue = answer.answer;
+      if (typeof answer === 'string') answerValue = answer;
       answerValueComplex = answer.answer;
     }
     switch (type) {
