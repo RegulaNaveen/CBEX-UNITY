@@ -45,7 +45,7 @@ class TextArea extends PureComponent<Props, State> {
     const { onChange } = this.props;
     const textValue = event.target.value;
     if (onChange && textValue) {
-      onChange();
+      onChange(textValue);
     }
 
     this.setState({ textValue: event.target.value });
