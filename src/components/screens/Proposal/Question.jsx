@@ -70,11 +70,7 @@ export class TaskRow extends Component<Props, State> {
     }, 800);
   };
 
-  renderAnswer = (
-    type: string,
-    options: Array<Object>,
-    answers: Array<Object>
-  ) => {
+  renderAnswer = (type: string, options: Map, answers: Map) => {
     const { selectedDay } = this.state;
     const optionsYN = ['Yes', 'No'];
     const answer = answers.slice(-1)[0];
@@ -84,7 +80,6 @@ export class TaskRow extends Component<Props, State> {
       if (typeof answer.answer === 'string') answerValue = answer.answer;
       answerValueComplex = answer.answer;
     }
-
     switch (type) {
       case 'text':
         return (
@@ -161,7 +156,6 @@ export class TaskRow extends Component<Props, State> {
       const format = 'dd-MMM-yyyy';
       answerDate = formatDate(new Date(date), format);
     }
-
     return (
       <div className="task-table-row">
         {answers.length ? (
@@ -181,8 +175,8 @@ export class TaskRow extends Component<Props, State> {
         <div className="task-table-row-answer">
           {answerConfiguration
             ? this.renderAnswer(
-                answerConfiguration.type,
-                answerConfiguration.options,
+                answerConfiguration.get('type'),
+                answerConfiguration.get('options'),
                 answers
               )
             : this.renderAnswer('', [], [])}
@@ -198,11 +192,7 @@ export class TaskRow extends Component<Props, State> {
             </p>
           ))}
         </div>
-        {/* TODO: Add due date */}
-        {/* <p className="task-table-row-due-date">{hardCode.dueDate}</p> */}
         <p className="task-table-row-completion-date">{answerDate}</p>
-        {/* TODO: Add edit proposal icon */}
-        {/* <Edit className="task-table-row-edit icon-highlight" /> */}
         <div className="task-table-row-edit">
           <div className="task-table-row-edit-wrapper icon-highlight" />
         </div>
@@ -211,10 +201,6 @@ export class TaskRow extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: Map) => {
-  return { state };
-};
-
-export default connect(mapStateToProps, {
+export default connect(undefined, {
   setProposalAnswer: setProposalAnswerData
 })(TaskRow);
