@@ -1,16 +1,29 @@
 // @flow
 import { Map, fromJS } from 'immutable';
 
+// Creates a order section map where questions are sorted too
 const generateSections = (proposalQuestions: Object): Map => {
-  let questions = Map({});
+  let sections = Map();
   proposalQuestions.forEach(question => {
     const { questionId } = question;
     const { sectionName, sectionOrder } = question.section;
-    questions = questions
-      .setIn([sectionOrder], fromJS({ sectionName }))
-      .setIn([sectionOrder, sectionName, questionId], fromJS(question));
+    // Sections are unique so a map is created
+    let section = Map({});
+    // Createa new map is no questions object is found
+    let questions = sections.getIn([sectionName, 'questions']) || Map({});
+    // Add new question
+    questions = questions.set(questionId, fromJS(question));
+    // Sort questions
+    questions = questions.sortBy(item => item.get('questionOrder'));
+    section = section
+      .set('sectionOrder', sectionOrder)
+      .set('sectionName', sectionName)
+      .set('questions', questions);
+    sections = sections.set(sectionName, section);
   });
-  return questions;
+  sections = sections.sortBy(section => section.get('sectionOrder'));
+  console.log(sections.toJS());
+  return sections;
 };
 
 const getQuestionSections = (items: Array<Object>) => {

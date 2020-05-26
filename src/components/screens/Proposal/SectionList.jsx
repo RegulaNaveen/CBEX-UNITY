@@ -12,7 +12,7 @@ const SectionList = ({ sections }: Props) => {
     <div className="tasksList-wrapper">
       {sections.valueSeq().map(section => {
         const sectionName = section.get('sectionName');
-        const questions = section.get(sectionName);
+        const questions = section.get('questions');
         return (
           <CollapsibleList
             questions={questions}
