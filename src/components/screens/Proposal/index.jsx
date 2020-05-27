@@ -96,8 +96,7 @@ export class Proposal extends Component<Props, State> {
               className="tasksList-refresh-icon-wrapper"
               role="presentation"
             >
-              <Add className="tasksList-add-icon" />
-              {/* <Refresh className="tasksList-add-icon" /> */}
+              <Refresh className="tasksList-add-icon" />
             </div>
             <div
               title="Add New Question"
