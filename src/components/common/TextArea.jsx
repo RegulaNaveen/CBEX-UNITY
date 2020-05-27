@@ -9,8 +9,9 @@ type Props = {
   placeholder: string,
   title?: string,
   type?: string,
-  onChange: Function,
-  value?: string
+  value?: string,
+  onBlur?: Function,
+  onChange?: Function
 };
 
 type State = {
@@ -22,7 +23,9 @@ class TextArea extends PureComponent<Props, State> {
     id: undefined,
     title: undefined,
     type: undefined,
-    value: undefined
+    value: undefined,
+    onBlur: undefined,
+    onChange: undefined
   };
 
   constructor(props: Object) {
@@ -40,8 +43,20 @@ class TextArea extends PureComponent<Props, State> {
 
   handleText = (event: SyntheticInputEvent<EventTarget>) => {
     const { onChange } = this.props;
-    onChange(event.target.value);
+    const textValue = event.target.value;
+    if (onChange && textValue) {
+      onChange(textValue);
+    }
+
     this.setState({ textValue: event.target.value });
+  };
+
+  handleOnBlur = (event: SyntheticInputEvent<EventTarget>) => {
+    const { onBlur } = this.props;
+    const textValue = event.target.value;
+    if (onBlur && textValue) {
+      onBlur(textValue);
+    }
   };
 
   render() {
@@ -57,6 +72,7 @@ class TextArea extends PureComponent<Props, State> {
             className={classnames('text-number-wrapper', className)}
             value={textValue}
             onChange={this.handleText}
+            onBlur={this.handleOnBlur}
             placeholder={placeholder}
             type={type}
           />
@@ -66,6 +82,7 @@ class TextArea extends PureComponent<Props, State> {
             className={classnames('text-area-wrapper', className)}
             value={textValue}
             onChange={this.handleText}
+            onBlur={this.handleOnBlur}
             placeholder={placeholder}
             type={type}
           />

@@ -1,55 +1,29 @@
 // @flow
 import { Map, fromJS } from 'immutable';
-import _ from 'lodash';
 
-const getSections = (questions: Array<Object>) => {
-  const sections = [];
-  const orderedSections = [];
-
-  questions.forEach((question: Object) => {
-    const { section } = question;
-    let willAdd = true;
-
-    if (sections.length === 0) sections.push(section);
-    else {
-      for (let i = 0; i < sections.length; i += 1) {
-        if (sections[i].sectionName === section.sectionName) {
-          willAdd = false;
-          break;
-        }
-      }
-      if (willAdd) sections.push(section);
-    }
+// Creates a order section map where questions are sorted too
+const generateSections = (proposalQuestions: Object): Map => {
+  let sections = Map();
+  proposalQuestions.forEach(question => {
+    const { questionId } = question;
+    const { sectionName, sectionOrder } = question.section;
+    // Sections are unique so a map is created
+    let section = Map({});
+    // Create new map is no questions map is find
+    let questions = sections.getIn([sectionName, 'questions']) || Map({});
+    // Add new question
+    questions = questions.set(questionId, fromJS(question));
+    // Sort questions
+    questions = questions.sortBy(item => item.get('questionOrder'));
+    section = section
+      .set('sectionOrder', sectionOrder)
+      .set('sectionName', sectionName)
+      .set('questions', questions);
+    sections = sections.set(sectionName, section);
   });
-
-  for (let i = 1; i < sections.length + 1; i += 1) {
-    sections.forEach((section: Object) => {
-      if (section.sectionOrder === i) orderedSections.push(section.sectionName);
-    });
-  }
-
-  return orderedSections;
-};
-
-const sortData = (questions: Array<Object>) => {
-  const questionsData = Object.entries(questions);
-  // eslint-disable-next-line array-callback-return
-  questionsData.map((question: Object) => {
-    const mappedQuestions = _.map(_.orderBy(question[1], 'questionOrder'));
-    // eslint-disable-next-line no-param-reassign
-    question[1] = mappedQuestions;
-  });
-
-  const sortedQuestion = Object.fromEntries(questionsData);
-  return sortedQuestion;
-};
-
-const getQuestionsbySections = (questions: Array<Object>) => {
-  const questionsList = _.mapValues(
-    _.groupBy(questions, 'section.sectionName')
-  );
-
-  return questionsList;
+  // Sort sections
+  sections = sections.sortBy(section => section.get('sectionOrder'));
+  return sections;
 };
 
 const getQuestionSections = (items: Array<Object>) => {
@@ -61,20 +35,14 @@ const getQuestionSections = (items: Array<Object>) => {
   return sections;
 };
 
-export const getQuestions = (proposal: Map): Map =>
-  fromJS(getSections(proposal.get('proposalQuestions')));
-
-export const getQuestionsList = (proposal: Map): Map =>
-  getQuestionsbySections(proposal.get('proposalQuestions'));
+export const getSections = (proposal: Map): Map =>
+  generateSections(proposal.get('proposalQuestions'));
 
 export const isProposalLoading = (proposal: Map): Map =>
   proposal.get('isProposalLoading');
 
 export const hasProposalErrors = (proposal: Map): Map =>
   proposal.get('proposalError');
-
-export const sortQuestions = (proposal: Map): Map =>
-  sortData(getQuestionsbySections(proposal.get('proposalQuestions')));
 
 export const setProposalAnswer = (proposal: Map): Map =>
   proposal.get('proposalAnswer');

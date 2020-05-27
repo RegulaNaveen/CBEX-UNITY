@@ -18,7 +18,7 @@ type State = {
 type Props = {
   questionId: string,
   proposalId: string,
-  answers: Array<Object>,
+  answers: Map,
   questionText: string,
   answerConfiguration: Object,
   setProposalAnswer: Function
@@ -33,16 +33,11 @@ export class TaskRow extends Component<Props, State> {
     this.state = {
       selectedDay: ''
     };
-
-    this.timeout = 0;
   }
 
   handleTextChange = (textValue: string) => {
     const { setProposalAnswer, proposalId, questionId } = this.props;
-    if (this.timeout) clearTimeout(this.timeout);
-    this.timeout = setTimeout(() => {
-      setProposalAnswer(proposalId, questionId, textValue);
-    }, 800);
+    setProposalAnswer(proposalId, questionId, textValue);
   };
 
   onClickChange = (selectedValue: string) => {
@@ -64,27 +59,26 @@ export class TaskRow extends Component<Props, State> {
 
   onSelectValues = (selectedValues: Array<string>) => {
     const { setProposalAnswer, proposalId, questionId } = this.props;
-    if (this.timeout) clearTimeout(this.timeout);
-    this.timeout = setTimeout(() => {
-      setProposalAnswer(proposalId, questionId, selectedValues);
-    }, 800);
+    setProposalAnswer(proposalId, questionId, selectedValues);
   };
 
   renderAnswer = (
     type: string,
-    options: Array<Object>,
-    answers: Array<Object>
+    options: Map,
+    answers: Map,
+    lastAnswer: Map
   ) => {
     const { selectedDay } = this.state;
     const optionsYN = ['Yes', 'No'];
-    const answer = answers.slice(-1)[0];
+
+    const answer = lastAnswer && lastAnswer.get('answer');
+
     let answerValue = '';
     let answerValueComplex;
-    if (answer !== undefined) {
-      if (typeof answer.answer === 'string') answerValue = answer.answer;
+    if (answer) {
+      if (typeof answer === 'string') answerValue = answer;
       answerValueComplex = answer.answer;
     }
-
     switch (type) {
       case 'text':
         return (
@@ -92,7 +86,7 @@ export class TaskRow extends Component<Props, State> {
             className="proposal-text-area"
             placeholder="Click to answer"
             type="text"
-            onChange={this.handleTextChange}
+            onBlur={this.handleTextChange}
             value={answerValue}
           />
         );
@@ -102,7 +96,7 @@ export class TaskRow extends Component<Props, State> {
             className="proposal-text-area"
             placeholder="Click to answer"
             type="number"
-            onChange={this.handleTextChange}
+            onBlur={this.handleTextChange}
             value={answerValue}
           />
         );
@@ -156,15 +150,14 @@ export class TaskRow extends Component<Props, State> {
       owner: ['Owner', 'Pedro']
     };
     let answerDate = 'Not Answered';
-    if (answers && answers.length > 0) {
-      const { date } = answers.slice(-1)[0];
+    const lastAnswer = answers.last();
+    if (lastAnswer) {
       const format = 'dd-MMM-yyyy';
-      answerDate = formatDate(new Date(date), format);
+      answerDate = formatDate(new Date(lastAnswer.get('date')), format);
     }
-
     return (
       <div className="task-table-row">
-        {answers.length ? (
+        {lastAnswer ? (
           <div className="task-table-row-checkmark">
             <div className="task-table-row-checkmark-wrapper icon-highlight">
               <Checkmark className="task-table-row-checkmark-wrapper-icon" />
@@ -181,11 +174,12 @@ export class TaskRow extends Component<Props, State> {
         <div className="task-table-row-answer">
           {answerConfiguration
             ? this.renderAnswer(
-                answerConfiguration.type,
-                answerConfiguration.options,
-                answers
+                answerConfiguration.get('type'),
+                answerConfiguration.get('options'),
+                answers,
+                lastAnswer
               )
-            : this.renderAnswer('', [], [])}
+            : this.renderAnswer('', [], [], undefined)}
         </div>
         <div className="task-table-row-owner">
           {hardCode.owner.map(owner => (
@@ -198,11 +192,7 @@ export class TaskRow extends Component<Props, State> {
             </p>
           ))}
         </div>
-        {/* TODO: Add due date */}
-        {/* <p className="task-table-row-due-date">{hardCode.dueDate}</p> */}
         <p className="task-table-row-completion-date">{answerDate}</p>
-        {/* TODO: Add edit proposal icon */}
-        {/* <Edit className="task-table-row-edit icon-highlight" /> */}
         <div className="task-table-row-edit">
           <div className="task-table-row-edit-wrapper icon-highlight" />
         </div>
@@ -211,10 +201,6 @@ export class TaskRow extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: Map) => {
-  return { state };
-};
-
-export default connect(mapStateToProps, {
+export default connect(undefined, {
   setProposalAnswer: setProposalAnswerData
 })(TaskRow);
