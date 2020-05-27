@@ -79,15 +79,37 @@ export class Proposal extends Component<Props, State> {
         <ProposalInfo data={details} />
         <div className="tasksList-title-wrapper">
           <p className="tasksList-title">Questions</p>
-          <div
-            className="tasksList-add-icon-wrapper"
-            role="presentation"
-            onClick={this.onClose}
-          >
-            <Add className="tasksList-add-icon" />
+          <div className="taskList-icon-wrapper">
+            <div className="taskList-checkbox-wrapper">
+              <Checkbox
+                id="send-notification-checkbox"
+                value="notification"
+                name="notification"
+                onChange={this.handleIsChecked}
+                isChecked={isChecked}
+              >
+                All
+              </Checkbox>
+            </div>
+            <div
+              title="Refresh"
+              className="tasksList-refresh-icon-wrapper"
+              role="presentation"
+            >
+              <Add className="tasksList-add-icon" />
+              {/* <Refresh className="tasksList-add-icon" /> */}
+            </div>
+            <div
+              title="Add New Question"
+              className="tasksList-add-icon-wrapper"
+              role="presentation"
+              onClick={this.onClose}
+            >
+              <Add className="tasksList-add-icon" />
+            </div>
           </div>
         </div>
-        <SectionList sections={sections} />
+        <SectionList sections={sections} currentUserRole={currentUserRole} />
       </div>
     );
   };
