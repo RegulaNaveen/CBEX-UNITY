@@ -21,7 +21,7 @@ import AddQuestionModalComponent from './AddQuestionModal';
 import Checkbox from '../../common/Checkbox';
 
 type State = {
-  showModal: boolean
+  showModal: boolean,
   isChecked: boolean,
   currentUserRole: string
 };
@@ -42,7 +42,7 @@ export class Proposal extends Component<Props, State> {
     super(props);
 
     this.state = {
-      showModal: false
+      showModal: false,
       isChecked: false,
       currentUserRole: 'Autocomplete + edit'
     };
@@ -65,7 +65,18 @@ export class Proposal extends Component<Props, State> {
     this.setState({ showModal: !showModal });
   };
 
-  renderContent = (isLoading: boolean, sections: Map, details: Object) => {
+  handleIsChecked = () => {
+    const { isChecked } = this.state;
+    this.setState({ isChecked: !isChecked });
+  };
+
+  renderContent = (
+    isLoading: boolean,
+    sections: Map,
+    details: Object,
+    isChecked: boolean,
+    currentUserRole: string
+  ) => {
     if (isLoading) {
       return (
         <div className="proposal-loader">
@@ -114,13 +125,19 @@ export class Proposal extends Component<Props, State> {
   };
 
   render() {
-    const { showModal } = this.state;
+    const { showModal, isChecked, currentUserRole } = this.state;
     const { sections, isLoading, details } = this.props;
 
     return (
       <div className="proposal-wrapper">
         <Toolbar />
-        {this.renderContent(isLoading, sections, details)}
+        {this.renderContent(
+          isLoading,
+          sections,
+          details,
+          isChecked,
+          currentUserRole
+        )}
         {showModal ? (
           <AddQuestionModalComponent onClose={this.onClose} />
         ) : null}
