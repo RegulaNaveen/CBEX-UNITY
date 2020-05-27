@@ -44,6 +44,9 @@ export const isProposalLoading = (proposal: Map): Map =>
 export const hasProposalErrors = (proposal: Map): Map =>
   proposal.get('proposalError');
 
+export const getProposalDetails = (proposal: Map): Map =>
+  proposal.get('proposalDetails');
+
 export const setProposalAnswer = (proposal: Map): Map =>
   proposal.get('proposalAnswer');
 

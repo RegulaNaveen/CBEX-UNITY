@@ -2,21 +2,22 @@
 import React from 'react';
 
 type Props = {
-  data: Object
+  data: Object,
+  title: string
 };
 
-function ProposalInfo({ data }: Props) {
+function ProposalInfo({ data, title }: Props) {
   const {
-    title,
-    accountExecutive,
-    businessDevelopment,
-    proposalDirector,
-    labs,
-    synopsis,
+    bidDueDate,
+    crm,
+    customer,
+    iqviaBiotech,
+    lineOfBusiness,
     phase,
-    sites,
-    countries,
-    indication
+    productName,
+    protocolNumber,
+    therapeuticArea,
+    verbatimIndication
   } = data;
 
   return (
@@ -26,25 +27,35 @@ function ProposalInfo({ data }: Props) {
       <div className="pi-details">
         <div className="pi-details-row">
           <div className="pi-details-column">
-            <p className="pi-details-title">Account Executive:</p>
-            <p className="pi-details-subtitle">{accountExecutive}</p>
+            <p className="pi-details-title">Customer:</p>
+            <p className="pi-details-subtitle">{customer}</p>
           </div>
           <div className="pi-details-column">
-            <p className="pi-details-title">Business Development:</p>
-            <p className="pi-details-subtitle">{businessDevelopment}</p>
+            <p className="pi-details-title">Therapeutic Area:</p>
+            <p className="pi-details-subtitle">{therapeuticArea}</p>
           </div>
         </div>
         <div className="pi-details-row">
           <div className="pi-details-column">
-            <p className="pi-details-title">Proposal Director:</p>
-            <p className="pi-details-subtitle">{proposalDirector}</p>
+            <p className="pi-details-title">Line of Business:</p>
+            <p className="pi-details-subtitle">{lineOfBusiness}</p>
           </div>
           <div className="pi-details-column">
-            <p className="pi-details-title">Labs:</p>
-            <p className="pi-details-subtitle">{labs}</p>
+            <p className="pi-details-title">Verbatim Indication:</p>
+            <p className="pi-details-subtitle">{verbatimIndication}</p>
           </div>
         </div>
         <div className="pi-details-row">
+          <div className="pi-details-column">
+            <p className="pi-details-title">Product Name:</p>
+            <p className="pi-details-subtitle">{productName}</p>
+          </div>
+          <div className="pi-details-column">
+            <p className="pi-details-title">Protocol Number:</p>
+            <p className="pi-details-subtitle">{protocolNumber}</p>
+          </div>
+        </div>
+        {/* <div className="pi-details-row">
           <div className="pi-details-row-segment">
             <p className="pi-details-title">Synopsis Sent:</p>
             <p className="pi-details-data">{synopsis ? 'Yes' : 'No'}</p>
@@ -57,15 +68,25 @@ function ProposalInfo({ data }: Props) {
             <p className="pi-details-title">Number of Sites:</p>
             <p className="pi-details-data">{sites}</p>
           </div>
+        </div> */}
+        <div className="pi-details-row">
+          <div className="pi-details-column">
+            <p className="pi-details-title">CRM:</p>
+            <p className="pi-details-subtitle">{crm}</p>
+          </div>
+          <div className="pi-details-column">
+            <p className="pi-details-title">IQVIA Biotech:</p>
+            <p className="pi-details-subtitle">{iqviaBiotech}</p>
+          </div>
         </div>
         <div className="pi-details-row">
           <div className="pi-details-column">
-            <p className="pi-details-title">Countries:</p>
-            <p className="pi-details-subtitle">{countries.join(', ')}</p>
+            <p className="pi-details-title">Phase:</p>
+            <p className="pi-details-subtitle">{phase}</p>
           </div>
           <div className="pi-details-column">
-            <p className="pi-details-title">Indication:</p>
-            <p className="pi-details-subtitle">{indication}</p>
+            <p className="pi-details-title">Bid DueDate:</p>
+            <p className="pi-details-subtitle">{bidDueDate}</p>
           </div>
         </div>
       </div>
