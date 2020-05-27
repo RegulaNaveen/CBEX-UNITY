@@ -60,12 +60,7 @@ export class Proposal extends Component<Props, State> {
     this.setState({ showModal: !showModal });
   };
 
-  renderContent = (
-    isLoading: boolean,
-    sections: Map,
-    details: Object,
-    title: string
-  ) => {
+  renderContent = (isLoading: boolean, sections: Map, details: Object) => {
     if (isLoading) {
       return (
         <div className="proposal-loader">
@@ -76,7 +71,7 @@ export class Proposal extends Component<Props, State> {
 
     return (
       <div>
-        <ProposalInfo data={details} title={title} />
+        <ProposalInfo data={details} />
         <div className="tasksList-title-wrapper">
           <p className="tasksList-title">Questions</p>
           <div
@@ -95,12 +90,11 @@ export class Proposal extends Component<Props, State> {
   render() {
     const { showModal } = this.state;
     const { sections, isLoading, details } = this.props;
-    const title = 'RFP-1028';
 
     return (
       <div className="proposal-wrapper">
         <Toolbar />
-        {this.renderContent(isLoading, sections, details, title)}
+        {this.renderContent(isLoading, sections, details)}
         {showModal ? (
           <AddQuestionModalComponent onClose={this.onClose} />
         ) : null}

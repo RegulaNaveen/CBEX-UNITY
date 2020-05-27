@@ -2,11 +2,10 @@
 import React from 'react';
 
 type Props = {
-  data: Object,
-  title: string
+  data: Object
 };
 
-function ProposalInfo({ data, title }: Props) {
+function ProposalInfo({ data }: Props) {
   const {
     bidDueDate,
     crm,
@@ -22,7 +21,7 @@ function ProposalInfo({ data, title }: Props) {
 
   return (
     <div className="pi-wrapper">
-      <p className="pi-title">{title}</p>
+      <p className="pi-title">{crm}</p>
       <p className="pi-subtitle">Details</p>
       <div className="pi-details">
         <div className="pi-details-row">
@@ -55,38 +54,20 @@ function ProposalInfo({ data, title }: Props) {
             <p className="pi-details-subtitle">{protocolNumber}</p>
           </div>
         </div>
-        {/* <div className="pi-details-row">
-          <div className="pi-details-row-segment">
-            <p className="pi-details-title">Synopsis Sent:</p>
-            <p className="pi-details-data">{synopsis ? 'Yes' : 'No'}</p>
-          </div>
-          <div className="pi-details-row-segment">
-            <p className="pi-details-title">Phase:</p>
-            <p className="pi-details-data">{phase}</p>
-          </div>
-          <div className="pi-details-row-segment">
-            <p className="pi-details-title">Number of Sites:</p>
-            <p className="pi-details-data">{sites}</p>
-          </div>
-        </div> */}
         <div className="pi-details-row">
-          <div className="pi-details-column">
-            <p className="pi-details-title">CRM:</p>
-            <p className="pi-details-subtitle">{crm}</p>
-          </div>
-          <div className="pi-details-column">
+          <div className="pi-details-row-segment">
             <p className="pi-details-title">IQVIA Biotech:</p>
-            <p className="pi-details-subtitle">{iqviaBiotech}</p>
+            <p className="pi-details-data">{iqviaBiotech}</p>
           </div>
-        </div>
-        <div className="pi-details-row">
-          <div className="pi-details-column">
+          <div className="pi-details-row-segment">
             <p className="pi-details-title">Phase:</p>
-            <p className="pi-details-subtitle">{phase}</p>
+            <p className="pi-details-data">
+              {phase ? phase.split(' ')[1] : ''}
+            </p>
           </div>
-          <div className="pi-details-column">
+          <div className="pi-details-row-segment">
             <p className="pi-details-title">Bid DueDate:</p>
-            <p className="pi-details-subtitle">{bidDueDate}</p>
+            <p className="pi-details-data">{bidDueDate}</p>
           </div>
         </div>
       </div>
