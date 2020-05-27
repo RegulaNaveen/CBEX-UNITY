@@ -7,65 +7,71 @@ type Props = {
 
 function ProposalInfo({ data }: Props) {
   const {
-    title,
-    accountExecutive,
-    businessDevelopment,
-    proposalDirector,
-    labs,
-    synopsis,
+    bidDueDate,
+    crm,
+    customer,
+    iqviaBiotech,
+    lineOfBusiness,
     phase,
-    sites,
-    countries,
-    indication
+    productName,
+    protocolNumber,
+    therapeuticArea,
+    verbatimIndication
   } = data;
 
   return (
     <div className="pi-wrapper">
-      <p className="pi-title">{title}</p>
+      <p className="pi-title">{crm || 'No data'}</p>
       <p className="pi-subtitle">Details</p>
       <div className="pi-details">
         <div className="pi-details-row">
           <div className="pi-details-column">
-            <p className="pi-details-title">Account Executive:</p>
-            <p className="pi-details-subtitle">{accountExecutive}</p>
+            <p className="pi-details-title">Customer:</p>
+            <p className="pi-details-subtitle">{customer || 'No data'}</p>
           </div>
           <div className="pi-details-column">
-            <p className="pi-details-title">Business Development:</p>
-            <p className="pi-details-subtitle">{businessDevelopment}</p>
+            <p className="pi-details-title">Therapeutic Area:</p>
+            <p className="pi-details-subtitle">
+              {therapeuticArea || 'No data'}
+            </p>
           </div>
         </div>
         <div className="pi-details-row">
           <div className="pi-details-column">
-            <p className="pi-details-title">Proposal Director:</p>
-            <p className="pi-details-subtitle">{proposalDirector}</p>
+            <p className="pi-details-title">Line of Business:</p>
+            <p className="pi-details-subtitle">{lineOfBusiness || 'No data'}</p>
           </div>
           <div className="pi-details-column">
-            <p className="pi-details-title">Labs:</p>
-            <p className="pi-details-subtitle">{labs}</p>
+            <p className="pi-details-title">Verbatim Indication:</p>
+            <p className="pi-details-subtitle">
+              {verbatimIndication || 'No data'}
+            </p>
+          </div>
+        </div>
+        <div className="pi-details-row">
+          <div className="pi-details-column">
+            <p className="pi-details-title">Product Name:</p>
+            <p className="pi-details-subtitle">{productName || 'No data'}</p>
+          </div>
+          <div className="pi-details-column">
+            <p className="pi-details-title">Protocol Number:</p>
+            <p className="pi-details-subtitle">{protocolNumber || 'No data'}</p>
           </div>
         </div>
         <div className="pi-details-row">
           <div className="pi-details-row-segment">
-            <p className="pi-details-title">Synopsis Sent:</p>
-            <p className="pi-details-data">{synopsis ? 'Yes' : 'No'}</p>
+            <p className="pi-details-title">IQVIA Biotech:</p>
+            <p className="pi-details-data">{iqviaBiotech || 'No data'}</p>
           </div>
           <div className="pi-details-row-segment">
             <p className="pi-details-title">Phase:</p>
-            <p className="pi-details-data">{phase}</p>
+            <p className="pi-details-data">
+              {phase ? phase.split(' ')[1] : 'No data'}
+            </p>
           </div>
           <div className="pi-details-row-segment">
-            <p className="pi-details-title">Number of Sites:</p>
-            <p className="pi-details-data">{sites}</p>
-          </div>
-        </div>
-        <div className="pi-details-row">
-          <div className="pi-details-column">
-            <p className="pi-details-title">Countries:</p>
-            <p className="pi-details-subtitle">{countries.join(', ')}</p>
-          </div>
-          <div className="pi-details-column">
-            <p className="pi-details-title">Indication:</p>
-            <p className="pi-details-subtitle">{indication}</p>
+            <p className="pi-details-title">Bid DueDate:</p>
+            <p className="pi-details-data">{bidDueDate || 'No data'}</p>
           </div>
         </div>
       </div>

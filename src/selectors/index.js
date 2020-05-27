@@ -23,6 +23,9 @@ export const isProposalLoading = (state: Object): Boolean =>
 export const hasProposalErrors = (state: Object): string =>
   proposalSelectors.hasProposalErrors(state.proposal);
 
+export const getProposalDetails = (state: Object): Map =>
+  proposalSelectors.getProposalDetails(state.proposal);
+
 export const setProposalAnswer = (state: Map): Map =>
   state.get('proposalAnswer');
 

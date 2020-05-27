@@ -23,6 +23,7 @@ import {
 import type { ApiAction } from '../actions/action-types';
 
 const INITIAL_STATE: Map = fromJS({
+  proposalDetails: Map({}),
   proposalQuestions: Map({}),
   isProposalLoading: false,
   proposalError: undefined,
@@ -44,8 +45,12 @@ const INITIAL_STATE: Map = fromJS({
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
-  const { proposalQuestions } = action.payload;
+  const {
+    proposalQuestions,
+    proposal: { proposalDetails }
+  } = action.payload;
   return state
+    .set('proposalDetails', proposalDetails)
     .set('proposalQuestions', proposalQuestions)
     .set('isProposalLoading', false);
 };

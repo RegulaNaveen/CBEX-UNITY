@@ -2,7 +2,7 @@
   flex: 1;
   padding-top: 20px;
   padding-left: 29px;
-  padding-right: 163px;
+  padding-right: 30px;
   margin-bottom: 26px;
 
   .pi-title {
@@ -30,7 +30,6 @@
 
   .pi-details {
     display: flex;
-    flex-grow: 1;
     margin-left: 3.5px;
     font-family: $proximaNova;
     color: $neutral8;
@@ -41,7 +40,7 @@
     align-content: space-between;
 
     &-title {
-      margin-bottom: 1px;
+      margin-bottom: 2px;
     }
 
     &-subtitle {
@@ -51,6 +50,7 @@
 
     .pi-details-row {
       display: flex;
+      justify-content: space-around;
       flex-grow: 1;
       flex-direction: column;
       min-width: 165px;

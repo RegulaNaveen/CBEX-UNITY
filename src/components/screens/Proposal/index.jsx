@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import Loader from 'react-loader-spinner';
 import { getProposal } from '../../../actions/proposal-actions';
 import {
+  getProposalDetails,
   getSections,
   isProposalLoading,
   setQuestionData,
@@ -19,12 +20,12 @@ import { Add } from '../../svg';
 import AddQuestionModalComponent from './AddQuestionModal';
 
 type State = {
-  showModal: boolean,
-  data: Object
+  showModal: boolean
 };
 
 type Props = {
   match: Match,
+  details: Map,
   sections: Map,
   isLoading: boolean,
   getProposalInfo: Function,
@@ -38,19 +39,7 @@ export class Proposal extends Component<Props, State> {
     super(props);
 
     this.state = {
-      showModal: false,
-      data: {
-        title: 'RFP-1028',
-        accountExecutive: 'Jan Levinson-Gould',
-        businessDevelopment: 'Dwight Schrute',
-        proposalDirector: 'Michael Scott',
-        labs: 'Kevin Malone',
-        synopsis: true,
-        phase: 2,
-        sites: 12,
-        countries: ['France', 'UK', 'Italy', 'Spain'],
-        indication: 'Myopia'
-      }
+      showModal: false
     };
   }
 
@@ -71,7 +60,7 @@ export class Proposal extends Component<Props, State> {
     this.setState({ showModal: !showModal });
   };
 
-  renderContent = (isLoading: boolean, sections: Map, data: Object) => {
+  renderContent = (isLoading: boolean, sections: Map, details: Object) => {
     if (isLoading) {
       return (
         <div className="proposal-loader">
@@ -82,7 +71,7 @@ export class Proposal extends Component<Props, State> {
 
     return (
       <div>
-        <ProposalInfo data={data} />
+        <ProposalInfo data={details} />
         <div className="tasksList-title-wrapper">
           <p className="tasksList-title">Questions</p>
           <div
@@ -99,13 +88,13 @@ export class Proposal extends Component<Props, State> {
   };
 
   render() {
-    const { showModal, data } = this.state;
-    const { sections, isLoading } = this.props;
+    const { showModal } = this.state;
+    const { sections, isLoading, details } = this.props;
 
     return (
       <div className="proposal-wrapper">
         <Toolbar />
-        {this.renderContent(isLoading, sections, data)}
+        {this.renderContent(isLoading, sections, details)}
         {showModal ? (
           <AddQuestionModalComponent onClose={this.onClose} />
         ) : null}
@@ -115,12 +104,14 @@ export class Proposal extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: Map) => {
+  const details = getProposalDetails(state);
   const sections = getSections(state);
   const isLoading = isProposalLoading(state);
   const isQuestionLoading = isSetQuestionLoading(state);
   const hasQuestionError = setQuestionError(state);
   const setQuestion = setQuestionData(state);
   return {
+    details,
     sections,
     isLoading,
     setQuestion,
