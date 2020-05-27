@@ -16,11 +16,14 @@ import {
 import ProposalInfo from './ProposalInfo';
 import SectionList from './SectionList';
 import Toolbar from '../../Toolbar';
-import { Add } from '../../svg';
+import { Add, Refresh } from '../../svg';
 import AddQuestionModalComponent from './AddQuestionModal';
+import Checkbox from '../../common/Checkbox';
 
 type State = {
   showModal: boolean
+  isChecked: boolean,
+  currentUserRole: string
 };
 
 type Props = {
@@ -40,6 +43,8 @@ export class Proposal extends Component<Props, State> {
 
     this.state = {
       showModal: false
+      isChecked: false,
+      currentUserRole: 'Autocomplete + edit'
     };
   }
 

@@ -182,6 +182,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
             <div className="modal-segment-title">
               <p className="modal-title">Add New Question</p>
               <div
+                title="Close"
                 className="close-modal-icon"
                 role="presentation"
                 onClick={onClose}

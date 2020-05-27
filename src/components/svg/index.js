@@ -11,6 +11,7 @@ import Settings from './Settings';
 import Calendar from './Calendar';
 import Close from './Close';
 import CloseCircle from './CloseCircle';
+import Refresh from './Refresh';
 
 export {
   Checkmark,
@@ -24,5 +25,6 @@ export {
   Settings,
   Calendar,
   Close,
-  CloseCircle
+  CloseCircle,
+  Refresh
 };
