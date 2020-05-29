@@ -35,8 +35,8 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    const { getRolesInfoF } = this.props;
-    getRolesInfoF();
+    const { getRolesInfoF, rolesList } = this.props;
+    if (!rolesList) getRolesInfoF();
   }
 
   handleLogout = () => {
