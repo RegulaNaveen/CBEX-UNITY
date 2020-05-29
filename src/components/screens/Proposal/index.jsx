@@ -8,6 +8,7 @@ import { getProposal } from '../../../actions/proposal-actions';
 import {
   getProposalDetails,
   getSections,
+  getFilteredSections,
   isProposalLoading,
   setQuestionData,
   isSetQuestionLoading,
@@ -22,14 +23,14 @@ import Checkbox from '../../common/Checkbox';
 
 type State = {
   showModal: boolean,
-  isChecked: boolean,
-  currentUserRole: string
+  isChecked: boolean
 };
 
 type Props = {
   match: Match,
   details: Map,
   sections: Map,
+  filteredSections: Map,
   isLoading: boolean,
   getProposalInfo: Function,
   setQuestion: Map,
@@ -43,8 +44,7 @@ export class Proposal extends Component<Props, State> {
 
     this.state = {
       showModal: false,
-      isChecked: false,
-      currentUserRole: 'Autocomplete + edit'
+      isChecked: false
     };
   }
 
@@ -74,8 +74,7 @@ export class Proposal extends Component<Props, State> {
     isLoading: boolean,
     sections: Map,
     details: Object,
-    isChecked: boolean,
-    currentUserRole: string
+    isChecked: boolean
   ) => {
     if (isLoading) {
       return (
@@ -99,7 +98,7 @@ export class Proposal extends Component<Props, State> {
                 onChange={this.handleIsChecked}
                 isChecked={isChecked}
               >
-                All
+                Filter by User Role
               </Checkbox>
             </div>
             <div
@@ -119,24 +118,22 @@ export class Proposal extends Component<Props, State> {
             </div>
           </div>
         </div>
-        <SectionList sections={sections} currentUserRole={currentUserRole} />
+        <SectionList sections={sections} />
       </div>
     );
   };
 
   render() {
-    const { showModal, isChecked, currentUserRole } = this.state;
-    const { sections, isLoading, details } = this.props;
-
+    const { showModal, isChecked } = this.state;
+    const { sections, filteredSections, isLoading, details } = this.props;
     return (
       <div className="proposal-wrapper">
         <Toolbar />
         {this.renderContent(
           isLoading,
-          sections,
+          isChecked ? filteredSections : sections,
           details,
-          isChecked,
-          currentUserRole
+          isChecked
         )}
         {showModal ? (
           <AddQuestionModalComponent onClose={this.onClose} />
@@ -149,6 +146,7 @@ export class Proposal extends Component<Props, State> {
 const mapStateToProps = (state: Map) => {
   const details = getProposalDetails(state);
   const sections = getSections(state);
+  const filteredSections = getFilteredSections(state);
   const isLoading = isProposalLoading(state);
   const isQuestionLoading = isSetQuestionLoading(state);
   const hasQuestionError = setQuestionError(state);
@@ -156,6 +154,7 @@ const mapStateToProps = (state: Map) => {
   return {
     details,
     sections,
+    filteredSections,
     isLoading,
     setQuestion,
     isQuestionLoading,

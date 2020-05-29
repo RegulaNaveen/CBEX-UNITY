@@ -17,6 +17,9 @@ export const authHasErrors = (state: Object): string =>
 export const getSections = (state: Object): Map =>
   proposalSelectors.getSections(state.proposal);
 
+export const getFilteredSections = (state: Object): Map =>
+  proposalSelectors.getFilteredSections(state.proposal);
+
 export const isProposalLoading = (state: Object): Boolean =>
   proposalSelectors.isProposalLoading(state.proposal);
 
@@ -27,7 +30,7 @@ export const getProposalDetails = (state: Object): Map =>
   proposalSelectors.getProposalDetails(state.proposal);
 
 export const setProposalAnswer = (state: Map): Map =>
-  state.get('proposalAnswer');
+  proposalSelectors.setProposalAnswer(state.proposal);
 
 export const getQuestionSectionOrderInfo = (state: Map): Map =>
   proposalSelectors.getQuestionSectionOrderInfo(state.proposal);
