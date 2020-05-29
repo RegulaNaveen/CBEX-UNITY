@@ -20,7 +20,7 @@ const onAuthLoading = (state: Map): Map => {
 
 const onAuthError = (state: Map, action: Object): Map => {
   const error = action.payload;
-  return state.set('authError', error).set('isAuthLoading', false);
+  return state.set('authError', error.error).set('isAuthLoading', false);
 };
 
 const actionMap = {

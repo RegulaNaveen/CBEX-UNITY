@@ -2,7 +2,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
-import { isAuthLoading } from '../../selectors';
+import Loader from 'react-loader-spinner';
+import { isAuthLoading, authHasErrors } from '../../selectors';
 import { login } from '../../actions/auth-actions';
 import { isEmailValid, isTextValid } from '../../utils/ValidationUtils';
 import { PrimaryButton } from '../common/Buttons';
@@ -17,7 +18,8 @@ type State = {
 };
 
 type Props = {
-  // isLoading: boolean,
+  isLoading: boolean,
+  isAuthError: string,
   loginUser: Function
 };
 
@@ -48,6 +50,7 @@ export class LoginFormImpl extends Component<Props, State> {
 
   handleLogin = () => {
     const { email, password } = this.state;
+    this.setState({ error: '' });
     if (isTextValid(email) && isTextValid(password)) {
       if (isEmailValid(email)) {
         const { loginUser } = this.props;
@@ -63,8 +66,7 @@ export class LoginFormImpl extends Component<Props, State> {
   render() {
     // TODO: Addd isChecked to state for implementation
     const { email, password, error } = this.state;
-    // TODO: Implement functionality with isLoading redux prop
-    // const { isLoading } = this.props;
+    const { isLoading, isAuthError } = this.props;
     return (
       <div className="form-wrapper">
         <p className="form-title">IQVIA Unity</p>
@@ -88,7 +90,9 @@ export class LoginFormImpl extends Component<Props, State> {
             value={password}
           />
         </div>
-        {error !== '' && <p className="login-form-error">{error}</p>}
+        {error !== '' || isAuthError !== undefined ? (
+          <p className="login-form-error">{error || isAuthError}</p>
+        ) : null}
         {/* TOOD: Implement Remember my Username checkbox */}
         {/* <Checkbox
           id="remember-username-checkbox"
@@ -100,11 +104,17 @@ export class LoginFormImpl extends Component<Props, State> {
           Remember my username
         </Checkbox> */}
         <div className="login-button-wrapper">
-          <div className="login-button">
-            <PrimaryButton id="login-button" onClick={this.handleLogin}>
-              Log in
-            </PrimaryButton>
-          </div>
+          {isLoading ? (
+            <div className="login-loader">
+              <Loader type="TailSpin" color="#297DFD" height={50} width={50} />
+            </div>
+          ) : (
+            <div className="login-button">
+              <PrimaryButton id="login-button" onClick={this.handleLogin}>
+                Log in
+              </PrimaryButton>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -113,8 +123,9 @@ export class LoginFormImpl extends Component<Props, State> {
 
 const mapStateToProps = (state: Map) => {
   const isLoading = isAuthLoading(state);
+  const isAuthError = authHasErrors(state);
 
-  return { isLoading };
+  return { isLoading, isAuthError };
 };
 
 export default connect(mapStateToProps, { loginUser: login })(LoginFormImpl);

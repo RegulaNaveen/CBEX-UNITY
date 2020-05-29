@@ -92,6 +92,14 @@
   flex-direction: column;
 }
 
+.login-loader {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 
 @media screen and (min-width: $viewport-3) {
   .login-wrapper {
