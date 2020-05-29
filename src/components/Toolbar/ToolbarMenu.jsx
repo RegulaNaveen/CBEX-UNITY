@@ -1,62 +1,127 @@
 // @flow
-import React from 'react';
+import React, { PureComponent } from 'react';
 import type { NavigationHistory } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Map } from 'immutable';
+import Loader from 'react-loader-spinner';
 import { LOGIN } from '../../routes';
+import { getRoles, isRolesInfoLoading } from '../../selectors';
+import { getRolesInfo } from '../../actions/proposal-actions';
+import Dropdown from '../common/Dropdown';
 // TODO: Add icons when menu options are implemented
 // import { User, Help, Settings } from '../svg';
 
 type Props = {
   name: string,
   email: string,
+  rolesList: Array<string>,
+  getRolesInfoF: Function,
+  isRolesLoading: boolean,
   history: NavigationHistory
 };
 
-export const ToolbarMenuComponent = (props: Props) => {
-  const { name, email } = props;
-
-  function handleLogout() {
-    // TODO: Remove navigation test code
-    const { history } = props;
-    history.push(LOGIN);
-  }
-
-  function handleKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      handleLogout();
-    }
-  }
-
-  return (
-    <div className="toolbar-account-menu">
-      <p className="toolbar-account-menu-name">{name}</p>
-      <p className="toolbar-account-menu-email">{email}</p>
-      <div className="toolbar-account-menu-separator" />
-      {/* TODO: Add toodlbar menu options */}
-      {/* <div className="toolbar-account-menu-option">
-        <User className="toolbar-account-menu-option-icon" />
-        <p className="toolbar-account-menu-option-title">Profile</p>
-      </div>
-      <div className="toolbar-account-menu-option">
-        <Settings className="toolbar-account-menu-option-icon" />
-        <p className="toolbar-account-menu-option-title">Settings</p>
-      </div>
-      <div className="toolbar-account-menu-option">
-        <Help className="toolbar-account-menu-option-icon" />
-        <p className="toolbar-account-menu-option-title">Help</p>
-      </div> */}
-      <div
-        id="logout-button"
-        className="toolbar-account-menu-button"
-        onClick={handleLogout}
-        onKeyPress={handleKeyPress}
-        role="button"
-        tabIndex={-1}
-      >
-        Log out
-      </div>
-    </div>
-  );
+type State = {
+  roleName: string
 };
 
-export default withRouter(ToolbarMenuComponent);
+export class ToolbarMenuComponent extends PureComponent<Props, State> {
+  constructor(props: Object) {
+    super(props);
+
+    this.state = {
+      roleName: 'BD'
+    };
+  }
+
+  componentDidMount() {
+    const { getRolesInfoF } = this.props;
+    getRolesInfoF();
+  }
+
+  handleLogout = () => {
+    // TODO: Remove navigation test code
+    const { history } = this.props;
+    history.push(LOGIN);
+  };
+
+  handleKeyPress = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      this.handleLogout();
+    }
+  };
+
+  onRoleChange = (value: string) => {
+    this.setState({
+      roleName: value
+    });
+  };
+
+  render() {
+    const { roleName } = this.state;
+    const { name, email, rolesList, isRolesLoading } = this.props;
+
+    return (
+      <div className="toolbar-account-menu">
+        <p className="toolbar-account-menu-name">{name}</p>
+        <p className="toolbar-account-menu-email">{email}</p>
+        <div className="toolbar-account-menu-separator" />
+        <div className="toolbar-account-menu-option">
+          {isRolesLoading ? (
+            <div className="toolbar-account-menu-option-loader">
+              <Loader type="TailSpin" color="#297DFD" height={35} width={35} />
+            </div>
+          ) : (
+            <Dropdown
+              id="dd-team-member"
+              title="User Role"
+              placeholder="Select"
+              items={rolesList}
+              onClick={this.onRoleChange}
+              value={roleName}
+            />
+          )}
+        </div>
+        {/* TODO: Add toodlbar menu options */}
+        {/* <div className="toolbar-account-menu-option">
+            <User className="toolbar-account-menu-option-icon" />
+            <p className="toolbar-account-menu-option-title">Profile</p>
+          </div>
+          <div className="toolbar-account-menu-option">
+            <Settings className="toolbar-account-menu-option-icon" />
+            <p className="toolbar-account-menu-option-title">Settings</p>
+          </div>
+          <div className="toolbar-account-menu-option">
+            <Help className="toolbar-account-menu-option-icon" />
+            <p className="toolbar-account-menu-option-title">Help</p>
+          </div> */}
+        <div
+          id="logout-button"
+          className="toolbar-account-menu-button"
+          onClick={this.handleLogout}
+          onKeyPress={this.handleKeyPress}
+          role="button"
+          tabIndex={-1}
+        >
+          Log out
+        </div>
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = (state: Map) => {
+  const rolesList = getRoles(state);
+  const isRolesLoading = isRolesInfoLoading(state);
+
+  return {
+    rolesList,
+    isRolesLoading
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, {
+    getRolesInfoF: getRolesInfo
+  })(ToolbarMenuComponent)
+);
