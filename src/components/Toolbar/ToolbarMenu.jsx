@@ -9,6 +9,7 @@ import { LOGIN } from '../../routes';
 import { getRoles, isRolesInfoLoading } from '../../selectors';
 import { getRolesInfo } from '../../actions/proposal-actions';
 import Dropdown from '../common/Dropdown';
+import { getUserRole } from '../../SessionHandler';
 // TODO: Add icons when menu options are implemented
 // import { User, Help, Settings } from '../svg';
 
@@ -30,13 +31,15 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     super(props);
 
     this.state = {
-      roleName: 'BD'
+      roleName: ''
     };
   }
 
   componentDidMount() {
     const { getRolesInfoF, rolesList } = this.props;
+    const userRole = getUserRole();
     if (!rolesList) getRolesInfoF();
+    if (userRole) this.setState({ roleName: userRole });
   }
 
   handleLogout = () => {

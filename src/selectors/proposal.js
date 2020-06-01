@@ -1,18 +1,24 @@
 // @flow
 import { Map, fromJS } from 'immutable';
 
+// Returns the user Role from local storage
+const getUserRole = () => {
+  return localStorage.getItem('userRole');
+};
+
 // Creates a order section map where questions are sorted too
 const generateSections = (proposalQuestions: Object, filter: boolean): Map => {
   let sections = Map();
+  const userRole = getUserRole();
   proposalQuestions.forEach(question => {
     const { questionId, roleName } = question;
     const { sectionName, sectionOrder } = question.section;
     // Sections are unique so a map is created
     let section = Map({});
     // let questions = Map({});
-    if (filter) {
+    if (filter && userRole) {
       // TODO: Replace BD for user role
-      if (roleName === 'BD') {
+      if (roleName === userRole) {
         // Create new map if no questions map is found
         let questions = sections.getIn([sectionName, 'questions']) || Map({});
         // Add new question

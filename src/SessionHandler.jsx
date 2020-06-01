@@ -4,12 +4,17 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { useSelector, shallowEqual } from 'react-redux';
 import { getAuthData, authHasErrors } from './selectors';
 
-export const setSession = () => {
+export const setSession = (role: string) => {
   localStorage.setItem('isLoggedin', 'true');
+  localStorage.setItem('userRole', role);
 };
 
 export const getSession = () => {
   return !!localStorage.getItem('isLoggedin');
+};
+
+export const getUserRole = () => {
+  return localStorage.getItem('userRole');
 };
 
 export const getProposalId = () => {
