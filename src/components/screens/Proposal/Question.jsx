@@ -25,8 +25,6 @@ type Props = {
 };
 
 export class TaskRow extends Component<Props, State> {
-  timeout: any;
-
   constructor(props: Object) {
     super(props);
 
