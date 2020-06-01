@@ -13,6 +13,15 @@ export const isAuthLoading = (state: Object): boolean =>
 export const authHasErrors = (state: Object): string =>
   authSelectors.authHasErrors(state.auth);
 
+export const isLogout = (state: Object): Map =>
+  authSelectors.isLogout(state.auth);
+
+export const isLogoutLoading = (state: Object): boolean =>
+  authSelectors.isLogoutLoading(state.auth);
+
+export const logoutHasErrors = (state: Object): string =>
+  authSelectors.logoutHasErrors(state.auth);
+
 // Proposal selectors
 export const getSections = (state: Object): Map =>
   proposalSelectors.getSections(state.proposal);

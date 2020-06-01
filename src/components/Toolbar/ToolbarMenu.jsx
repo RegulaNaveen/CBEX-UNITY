@@ -8,6 +8,7 @@ import Loader from 'react-loader-spinner';
 import { LOGIN } from '../../routes';
 import { getRoles, isRolesInfoLoading } from '../../selectors';
 import { getRolesInfo } from '../../actions/proposal-actions';
+import { logout } from '../../actions/auth-actions';
 import Dropdown from '../common/Dropdown';
 import { getUserRole } from '../../SessionHandler';
 // TODO: Add icons when menu options are implemented
@@ -19,7 +20,8 @@ type Props = {
   rolesList: Array<string>,
   getRolesInfoF: Function,
   isRolesLoading: boolean,
-  history: NavigationHistory
+  history: NavigationHistory,
+  logoutUser: Function
 };
 
 type State = {
@@ -43,8 +45,8 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
   }
 
   handleLogout = () => {
-    // TODO: Remove navigation test code
-    const { history } = this.props;
+    const { history, logoutUser } = this.props;
+    logoutUser();
     history.push(LOGIN);
   };
 
@@ -125,6 +127,7 @@ const mapStateToProps = (state: Map) => {
 
 export default withRouter(
   connect(mapStateToProps, {
-    getRolesInfoF: getRolesInfo
+    getRolesInfoF: getRolesInfo,
+    logoutUser: logout
   })(ToolbarMenuComponent)
 );
