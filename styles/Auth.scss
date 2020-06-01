@@ -90,6 +90,8 @@
 .login-button-wrapper {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
 .login-loader {
