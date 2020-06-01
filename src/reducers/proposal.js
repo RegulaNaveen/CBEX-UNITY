@@ -36,7 +36,7 @@ const INITIAL_STATE: Map = fromJS({
   proposalAnswerTypes: Map({}),
   isAnswerTypesLoading: false,
   AnswerTypesError: undefined,
-  proposalRoles: Map({}),
+  proposalRoles: undefined,
   isRolesLoading: false,
   rolesError: undefined,
   setQuestionData: Map({}),

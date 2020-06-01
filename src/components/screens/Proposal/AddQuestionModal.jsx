@@ -18,7 +18,10 @@ import {
   getQuestionSectionInfo,
   getAnswerTypeInfo,
   getRoles,
-  isSetQuestionLoading
+  isSetQuestionLoading,
+  isQuestionSectionInfoLoading,
+  isAnswerTypesInfoLoading,
+  isRolesInfoLoading
 } from '../../../selectors';
 import {
   getQuestionSection,
@@ -38,7 +41,10 @@ type Props = {
   getAnswerTypesDataF: Function,
   getRolesInfoF: Function,
   setProposalQuestionF: Function,
-  isLoading: boolean
+  isLoading: boolean,
+  isQuestionSectionLoading: boolean,
+  isAnswerTypesLoading: boolean,
+  isRolesLoading: boolean
 };
 
 type State = {
@@ -161,95 +167,93 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     }
   };
 
-  render() {
-    const { showAnswerOptions } = this.state;
-    const {
-      onClose,
-      questionSectionList,
-      answerTypesList,
-      rolesList,
-      isLoading
-    } = this.props;
-
-    return (
-      <Modal>
-        {!isLoading ? (
-          <div className="modal-content">
-            <div className="modal-wrapper-title">
-              <div className="modal-segment-title">
-                <p className="modal-title">Add New Question</p>
-                <div
-                  className="close-modal-icon"
-                  role="presentation"
-                  onClick={onClose}
-                >
-                  <Close className="close-icon" />
-                </div>
+  renderContent = (
+    onClose: Function,
+    questionSectionList: Array<string>,
+    answerTypesList: Array<string>,
+    rolesList: Array<string>,
+    isLoading: boolean,
+    showAnswerOptions: boolean
+  ) => {
+    if (!isLoading) {
+      return (
+        <div className="modal-content">
+          <div className="modal-wrapper-title">
+            <div className="modal-segment-title">
+              <p className="modal-title">Add New Question</p>
+              <div
+                title="Close"
+                className="close-modal-icon"
+                role="presentation"
+                onClick={onClose}
+              >
+                <Close className="close-icon" />
               </div>
-              {/* <div className="modal-subtitle">Optional Subtitle</div> */}
             </div>
-            <div className="modal-wrapper-body">
-              <div className="modal-segment">
-                <TextArea
-                  id="question-text-area"
-                  className="modal-text-area"
-                  placeholder="Hint text..."
-                  title="Enter Question Text"
-                  type="text"
-                  onChange={this.handleTextChange}
+            {/* <div className="modal-subtitle">Optional Subtitle</div> */}
+          </div>
+          <div className="modal-wrapper-body">
+            <div className="modal-segment">
+              <TextArea
+                id="question-text-area"
+                className="modal-text-area"
+                placeholder="Hint text..."
+                title="Enter Question Text"
+                type="text"
+                onChange={this.handleTextChange}
+              />
+            </div>
+            <div className="modal-segment">
+              <div className="modal-answer-type">
+                <Dropdown
+                  id="dd-andwer-type"
+                  placeholder="Select"
+                  items={answerTypesList}
+                  title="Answer Type"
+                  onClick={this.onAnswerTypeChange}
                 />
               </div>
-              <div className="modal-segment">
-                <div className="modal-answer-type">
-                  <Dropdown
-                    id="dd-andwer-type"
-                    placeholder="Select"
-                    items={answerTypesList}
-                    title="Answer Type"
-                    onClick={this.onAnswerTypeChange}
-                  />
-                </div>
-                {/* TODO: Uncomment if will use datepicker feature */}
-                {/* <DatePicker
+              {/* TODO: Uncomment if will use datepicker feature */}
+              {/* <DatePicker
                 label="Date"
                 selectedDay={selectedDay}
                 handleDayChange={this.handleDayChange}
                 handleFormatDate={this.handleFormatDate}
                 handleDate={this.handleDate}
               /> */}
-              </div>
-              {showAnswerOptions ? (
-                <div className="modal-segment">
-                  <TextArea
-                    id="question-text-area"
-                    className="modal-options-text-area"
-                    placeholder="Option 1, Option 2,..."
-                    title="Enter Answer Options"
-                    type="text"
-                    onChange={this.handleOptionsTextChange}
-                  />
-                </div>
-              ) : null}
+            </div>
+            {showAnswerOptions ? (
               <div className="modal-segment">
-                <Dropdown
-                  id="dd-team-member"
-                  placeholder="Select"
-                  items={questionSectionList}
-                  title="Section"
-                  onClick={this.onQuestionSectionChange}
+                <TextArea
+                  id="question-text-area"
+                  className="modal-options-text-area"
+                  placeholder="Option 1, Option 2,..."
+                  title="Enter Answer Options"
+                  type="text"
+                  onChange={this.handleOptionsTextChange}
                 />
               </div>
-              <div className="modal-segment">
-                <Dropdown
-                  id="dd-team-member"
-                  placeholder="Select"
-                  items={rolesList}
-                  title="Which team member roles will answer"
-                  onClick={this.onRoleChange}
-                />
-              </div>
-              {/* TODO: Uncomment if will use a select team feature */}
-              {/* <div className="modal-segment">
+            ) : null}
+            <div className="modal-segment">
+              <Dropdown
+                id="dd-team-member"
+                placeholder="Select"
+                items={questionSectionList}
+                title="Section"
+                onClick={this.onQuestionSectionChange}
+              />
+            </div>
+            <div className="modal-segment">
+              <Dropdown
+                id="dd-team-member"
+                placeholder="Select"
+                items={rolesList}
+                title="Which team member roles will answer"
+                onClick={this.onRoleChange}
+              />
+            </div>
+            {/* TODO: Uncomment if will use a select team feature */}
+            {/* <div className="modal-segment">
               {teams &&
                 teams.map(team => {
                   const { id, name } = team;
@@ -264,8 +268,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                   );
                 })}
             </div> */}
-              {/* TODO: Uncomment to add notification feature */}
-              {/* <div className="modal-segment">
+            {/* TODO: Uncomment to add notification feature */}
+            {/* <div className="modal-segment">
               <Checkbox
                 id="send-notification-checkbox"
                 value="notification"
@@ -276,31 +280,70 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 Send notification now
               </Checkbox>
             </div> */}
+          </div>
+          <div className="modal-wrapper-footer">
+            <div className="modal-button-cancel">
+              <PrimaryButton
+                className="close-button"
+                id="cancel-button"
+                onClick={onClose}
+              >
+                Cancel
+              </PrimaryButton>
             </div>
-            <div className="modal-wrapper-footer">
-              <div className="modal-button-cancel">
-                <PrimaryButton
-                  className="close-button"
-                  id="cancel-button"
-                  onClick={onClose}
-                >
-                  Cancel
-                </PrimaryButton>
-              </div>
-              <div className="modal-button-okay">
-                <PrimaryButton
-                  className="okay-button"
-                  id="okay-button"
-                  onClick={this.onSave}
-                >
-                  Okay
-                </PrimaryButton>
-              </div>
+            <div className="modal-button-okay">
+              <PrimaryButton
+                className="okay-button"
+                id="okay-button"
+                onClick={this.onSave}
+              >
+                Okay
+              </PrimaryButton>
             </div>
           </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="modal-loader">
+        <Loader type="TailSpin" color="#297DFD" height={100} width={100} />
+        <p className="modal-loader-title">Uploading Question</p>
+      </div>
+    );
+  };
+
+  render() {
+    const { showAnswerOptions } = this.state;
+    const {
+      onClose,
+      questionSectionList,
+      answerTypesList,
+      rolesList,
+      isLoading,
+      isQuestionSectionLoading,
+      isAnswerTypesLoading,
+      isRolesLoading
+    } = this.props;
+    return (
+      <Modal>
+        {!isQuestionSectionLoading &&
+        !isAnswerTypesLoading &&
+        !isRolesLoading ? (
+          this.renderContent(
+            onClose,
+            questionSectionList,
+            answerTypesList,
+            rolesList,
+            isLoading,
+            showAnswerOptions
+          )
         ) : (
           <div className="modal-loader">
             <Loader type="TailSpin" color="#297DFD" height={100} width={100} />
+            <p className="modal-loader-title">
+              Loading custom question options
+            </p>
           </div>
         )}
       </Modal>
@@ -314,13 +357,19 @@ const mapStateToProps = (state: Map) => {
   const rolesList = getRoles(state);
   const questionSectionOrderInfo = getQuestionSectionOrderInfo(state);
   const isLoading = isSetQuestionLoading(state);
+  const isQuestionSectionLoading = isQuestionSectionInfoLoading(state);
+  const isAnswerTypesLoading = isAnswerTypesInfoLoading(state);
+  const isRolesLoading = isRolesInfoLoading(state);
 
   return {
     questionSectionList,
     answerTypesList,
     rolesList,
     questionSectionOrderInfo,
-    isLoading
+    isLoading,
+    isQuestionSectionLoading,
+    isAnswerTypesLoading,
+    isRolesLoading
   };
 };
 

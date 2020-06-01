@@ -2,7 +2,7 @@
   position: absolute;
   top: $toolbarHight;
   right: 24px;
-  height: 150px;
+  height: 220px;
   width: 280px;
   box-sizing: border-box;
   border: $border;
@@ -47,16 +47,16 @@
 
   &-option {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    height: 40px;
     width: 246px;
-    cursor: pointer;
+    // cursor: pointer;
     padding-left: 16px;
     padding-right: 16px;
 
-    &:hover {
-      background-color: $neutral2;
-    }
+    // &:hover {
+    //   background-color: $neutral2;
+    // }
 
     &-icon {
       height: 18px;
@@ -70,6 +70,12 @@
       font-size: 16px;
       letter-spacing: 0;
       line-height: 32px;
+    }
+
+    &-loader {
+      display: flex;
+      align-items: center;
+      height: 70px;
     }
   }
 

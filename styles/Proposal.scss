@@ -17,20 +17,48 @@
     padding-left: 32.5px;
     padding-right: 30px;
 
-    .tasksList-add-icon-wrapper {
+    .taskList-icon-wrapper {
       display: flex;
-      height: 32px;
-      width: 32px;
-      border-radius: 50%;
-      background-color: #0557D5;
-      box-shadow: 0 4px 8px 0 rgba(41,125,253,0.16), 0 4px 4px 0 rgba(0,0,0,0.04), 0 8px 16px 0 rgba(41,125,253,0.32);
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
+      flex-direction: row;
 
-      .tasksList-add-icon {
-        padding: 10px;
+      .taskList-checkbox-wrapper {
+        margin-right: 10px;
+        margin-top: 5px;
       }
+
+      .tasksList-refresh-icon-wrapper {
+        display: flex;
+        height: 32px;
+        width: 32px;
+        border-radius: 50%;
+        background-color: #0557D5;
+        box-shadow: 0 4px 8px 0 rgba(41,125,253,0.16), 0 4px 4px 0 rgba(0,0,0,0.04), 0 8px 16px 0 rgba(41,125,253,0.32);
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        margin-right: 10px;
+  
+        .tasksList-add-icon {
+          padding: 10px;
+        }
+      }
+
+      .tasksList-add-icon-wrapper {
+        display: flex;
+        height: 32px;
+        width: 32px;
+        border-radius: 50%;
+        background-color: #0557D5;
+        box-shadow: 0 4px 8px 0 rgba(41,125,253,0.16), 0 4px 4px 0 rgba(0,0,0,0.04), 0 8px 16px 0 rgba(41,125,253,0.32);
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+  
+        .tasksList-add-icon {
+          padding: 10px;
+        }
+      }
+  
     }
 
     .tasksList-title {

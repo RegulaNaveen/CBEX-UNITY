@@ -8,6 +8,7 @@ import { getProposal } from '../../../actions/proposal-actions';
 import {
   getProposalDetails,
   getSections,
+  getFilteredSections,
   isProposalLoading,
   setQuestionData,
   isSetQuestionLoading,
@@ -16,17 +17,20 @@ import {
 import ProposalInfo from './ProposalInfo';
 import SectionList from './SectionList';
 import Toolbar from '../../Toolbar';
-import { Add } from '../../svg';
+import { Add, Refresh } from '../../svg';
 import AddQuestionModalComponent from './AddQuestionModal';
+import Checkbox from '../../common/Checkbox';
 
 type State = {
-  showModal: boolean
+  showModal: boolean,
+  isChecked: boolean
 };
 
 type Props = {
   match: Match,
   details: Map,
   sections: Map,
+  filteredSections: Map,
   isLoading: boolean,
   getProposalInfo: Function,
   setQuestion: Map,
@@ -39,7 +43,8 @@ export class Proposal extends Component<Props, State> {
     super(props);
 
     this.state = {
-      showModal: false
+      showModal: false,
+      isChecked: false
     };
   }
 
@@ -60,7 +65,17 @@ export class Proposal extends Component<Props, State> {
     this.setState({ showModal: !showModal });
   };
 
-  renderContent = (isLoading: boolean, sections: Map, details: Object) => {
+  handleIsChecked = () => {
+    const { isChecked } = this.state;
+    this.setState({ isChecked: !isChecked });
+  };
+
+  renderContent = (
+    isLoading: boolean,
+    sections: Map,
+    details: Object,
+    isChecked: boolean
+  ) => {
     if (isLoading) {
       return (
         <div className="proposal-loader">
@@ -74,12 +89,33 @@ export class Proposal extends Component<Props, State> {
         <ProposalInfo data={details} />
         <div className="tasksList-title-wrapper">
           <p className="tasksList-title">Questions</p>
-          <div
-            className="tasksList-add-icon-wrapper"
-            role="presentation"
-            onClick={this.onClose}
-          >
-            <Add className="tasksList-add-icon" />
+          <div className="taskList-icon-wrapper">
+            <div className="taskList-checkbox-wrapper">
+              <Checkbox
+                id="send-notification-checkbox"
+                value="notification"
+                name="notification"
+                onChange={this.handleIsChecked}
+                isChecked={isChecked}
+              >
+                Filter by User Role
+              </Checkbox>
+            </div>
+            <div
+              title="Refresh"
+              className="tasksList-refresh-icon-wrapper"
+              role="presentation"
+            >
+              <Refresh className="tasksList-add-icon" />
+            </div>
+            <div
+              title="Add New Question"
+              className="tasksList-add-icon-wrapper"
+              role="presentation"
+              onClick={this.onClose}
+            >
+              <Add className="tasksList-add-icon" />
+            </div>
           </div>
         </div>
         <SectionList sections={sections} />
@@ -88,13 +124,17 @@ export class Proposal extends Component<Props, State> {
   };
 
   render() {
-    const { showModal } = this.state;
-    const { sections, isLoading, details } = this.props;
-
+    const { showModal, isChecked } = this.state;
+    const { sections, filteredSections, isLoading, details } = this.props;
     return (
       <div className="proposal-wrapper">
         <Toolbar />
-        {this.renderContent(isLoading, sections, details)}
+        {this.renderContent(
+          isLoading,
+          isChecked ? filteredSections : sections,
+          details,
+          isChecked
+        )}
         {showModal ? (
           <AddQuestionModalComponent onClose={this.onClose} />
         ) : null}
@@ -106,6 +146,7 @@ export class Proposal extends Component<Props, State> {
 const mapStateToProps = (state: Map) => {
   const details = getProposalDetails(state);
   const sections = getSections(state);
+  const filteredSections = getFilteredSections(state);
   const isLoading = isProposalLoading(state);
   const isQuestionLoading = isSetQuestionLoading(state);
   const hasQuestionError = setQuestionError(state);
@@ -113,6 +154,7 @@ const mapStateToProps = (state: Map) => {
   return {
     details,
     sections,
+    filteredSections,
     isLoading,
     setQuestion,
     isQuestionLoading,
