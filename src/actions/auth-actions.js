@@ -5,13 +5,14 @@ import {
   AUTH_ERROR,
   LOGOUT_IN_PROGRESS,
   LOGOUT_SUCCESS,
-  LOGOUT_ERROR
+  LOGOUT_ERROR,
+  PUT_ROLE_IN_PROGRESS,
+  PUT_ROLE_SUCCESS,
+  PUT_ROLE_ERROR
 } from './auth-types';
 import type { Dispatch, ThunkAction } from './action-types';
-import { setSession } from '../SessionHandler';
-import { authentication } from '../api/auth';
-
-export type AuthInfo = {};
+import { setSession, getJwt, getAccessToken } from '../SessionHandler';
+import { authentication, putRole } from '../api/auth';
 
 export const login = (
   email: string,
@@ -24,14 +25,45 @@ export const login = (
     });
     try {
       const data = await authentication(email, password);
+      const {
+        authService: {
+          role,
+          accessToken,
+          jwt: { token }
+        }
+      } = data;
       dispatch({
         type: AUTH_SUCCESS,
         payload: { data }
       });
-      setSession(data.authService.role);
+      setSession(role, accessToken, token);
     } catch (error) {
       dispatch({
         type: AUTH_ERROR,
+        payload: { error }
+      });
+    }
+  };
+};
+
+export const changeRole = (role: string): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: PUT_ROLE_IN_PROGRESS,
+      payload: {}
+    });
+    try {
+      const accessToken = getAccessToken() || '';
+      const jwt = getJwt() || '';
+      const data = await putRole(role, accessToken, jwt);
+      dispatch({
+        type: PUT_ROLE_SUCCESS,
+        payload: { data }
+      });
+      setSession(role, accessToken, jwt);
+    } catch (error) {
+      dispatch({
+        type: PUT_ROLE_ERROR,
         payload: { error }
       });
     }

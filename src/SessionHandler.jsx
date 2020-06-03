@@ -4,9 +4,15 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { useSelector, shallowEqual } from 'react-redux';
 import { getAuthData, authHasErrors } from './selectors';
 
-export const setSession = (role: string) => {
+export const setSession = (
+  role: string,
+  accessToken: string,
+  token: string
+) => {
   localStorage.setItem('isLoggedin', 'true');
   localStorage.setItem('userRole', role);
+  localStorage.setItem('accessToken', accessToken);
+  localStorage.setItem('jwt', token);
 };
 
 export const getSession = () => {
@@ -15,6 +21,14 @@ export const getSession = () => {
 
 export const getUserRole = () => {
   return localStorage.getItem('userRole');
+};
+
+export const getAccessToken = () => {
+  return localStorage.getItem('accessToken');
+};
+
+export const getJwt = () => {
+  return localStorage.getItem('jwt');
 };
 
 export const getProposalId = () => {

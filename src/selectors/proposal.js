@@ -7,9 +7,13 @@ const getUserRole = () => {
 };
 
 // Creates a order section map where questions are sorted too
-const generateSections = (proposalQuestions: Object, filter: boolean): Map => {
+const generateSections = (
+  proposalQuestions: Object,
+  filter: boolean,
+  role: string
+): Map => {
   let sections = Map();
-  const userRole = getUserRole();
+  const userRole = role !== '' ? role || getUserRole() : false;
   proposalQuestions.forEach(question => {
     const { questionId, roleName } = question;
     const { sectionName, sectionOrder } = question.section;
@@ -17,7 +21,6 @@ const generateSections = (proposalQuestions: Object, filter: boolean): Map => {
     let section = Map({});
     // let questions = Map({});
     if (filter && userRole) {
-      // TODO: Replace BD for user role
       if (roleName === userRole) {
         // Create new map if no questions map is found
         let questions = sections.getIn([sectionName, 'questions']) || Map({});
@@ -65,10 +68,14 @@ const getQuestionSections = (items: Array<Object>) => {
 };
 
 export const getSections = (proposal: Map): Map =>
-  generateSections(proposal.get('proposalQuestions'), false);
+  generateSections(proposal.get('proposalQuestions'), false, '');
 
-export const getFilteredSections = (proposal: Map): Map =>
-  generateSections(proposal.get('proposalQuestions'), true);
+export const getFilteredSections = (proposal: Map, auth: Map): Map =>
+  generateSections(
+    proposal.get('proposalQuestions'),
+    true,
+    auth.getIn(['authData', 'data', 'authService', 'role'])
+  );
 
 export const isProposalLoading = (proposal: Map): Map =>
   proposal.get('isProposalLoading');

@@ -8,7 +8,7 @@ import Loader from 'react-loader-spinner';
 import { LOGIN } from '../../routes';
 import { getRoles, isRolesInfoLoading } from '../../selectors';
 import { getRolesInfo } from '../../actions/proposal-actions';
-import { logout } from '../../actions/auth-actions';
+import { logout, changeRole } from '../../actions/auth-actions';
 import Dropdown from '../common/Dropdown';
 import { getUserRole } from '../../SessionHandler';
 // TODO: Add icons when menu options are implemented
@@ -19,6 +19,7 @@ type Props = {
   email: string,
   rolesList: Array<string>,
   getRolesInfoF: Function,
+  changeUserRole: Function,
   isRolesLoading: boolean,
   history: NavigationHistory,
   logoutUser: Function
@@ -57,6 +58,8 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
   };
 
   onRoleChange = (value: string) => {
+    const { changeUserRole } = this.props;
+    changeUserRole(value);
     this.setState({
       roleName: value
     });
@@ -128,6 +131,7 @@ const mapStateToProps = (state: Map) => {
 export default withRouter(
   connect(mapStateToProps, {
     getRolesInfoF: getRolesInfo,
-    logoutUser: logout
+    logoutUser: logout,
+    changeUserRole: changeRole
   })(ToolbarMenuComponent)
 );
