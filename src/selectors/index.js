@@ -27,7 +27,7 @@ export const getSections = (state: Object): Map =>
   proposalSelectors.getSections(state.proposal);
 
 export const getFilteredSections = (state: Object): Map =>
-  proposalSelectors.getFilteredSections(state.proposal);
+  proposalSelectors.getFilteredSections(state.proposal, state.auth);
 
 export const isProposalLoading = (state: Object): Boolean =>
   proposalSelectors.isProposalLoading(state.proposal);
