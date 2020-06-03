@@ -9,7 +9,6 @@ export const authentication = async (
   password: string
 ): Promise<Object> => {
   return new Promise((resolve, reject) => {
-    console.log(`${AUTH_API_URL}/login`);
     axios
       .post(`${AUTH_API_URL}/login`, {
         email,

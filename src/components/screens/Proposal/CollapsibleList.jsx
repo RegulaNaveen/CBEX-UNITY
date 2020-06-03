@@ -88,21 +88,16 @@ class CollapsibleList extends Component<Props, State> {
                 <p>Date Completed</p>
               </div>
             </div>
-            {questions.valueSeq().map(questionConfig => {
-              console.log('ROLENAME', questionConfig.get('roleName'));
-              return (
-                <Question
-                  key={questionConfig.get('questionId')}
-                  questionId={questionConfig.get('questionId')}
-                  proposalId={questionConfig.get('proposalId')}
-                  answers={questionConfig.get('answers')}
-                  questionText={questionConfig.get('questionText')}
-                  answerConfiguration={questionConfig.get(
-                    'answerConfiguration'
-                  )}
-                />
-              );
-            })}
+            {questions.valueSeq().map(questionConfig => (
+              <Question
+                key={questionConfig.get('questionId')}
+                questionId={questionConfig.get('questionId')}
+                proposalId={questionConfig.get('proposalId')}
+                answers={questionConfig.get('answers')}
+                questionText={questionConfig.get('questionText')}
+                answerConfiguration={questionConfig.get('answerConfiguration')}
+              />
+            ))}
           </div>
         )}
       </div>

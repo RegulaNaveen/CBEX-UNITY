@@ -27,7 +27,6 @@ const INITIAL_STATE: Map = fromJS({
 
 const onAuthSuccess = (state: Map, action: Object): Map => {
   const data = action.payload;
-  console.log(data);
   return state.set('authData', data).set('isAuthLoading', false);
 };
 
@@ -64,7 +63,6 @@ const onPutRoleSuccess = (state: Map, action: Object): Map => {
   let newState = fromJS({});
   newState = state.setIn(['authData', 'data', 'authService', 'role'], role);
   const authData = newState.get('authData');
-  console.log(authData);
   return state
     .set('changeRoleData', data)
     .set('changeRoleLoading', false)

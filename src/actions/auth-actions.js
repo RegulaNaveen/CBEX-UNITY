@@ -32,7 +32,6 @@ export const login = (
           jwt: { token }
         }
       } = data;
-      console.log(data);
       dispatch({
         type: AUTH_SUCCESS,
         payload: { data }
@@ -57,7 +56,6 @@ export const changeRole = (role: string): ThunkAction<string, Object> => {
       const accessToken = getAccessToken() || '';
       const jwt = getJwt() || '';
       const data = await putRole(role, accessToken, jwt);
-      console.log('CANGEROLE', data);
       dispatch({
         type: PUT_ROLE_SUCCESS,
         payload: { data }
