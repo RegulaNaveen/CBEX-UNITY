@@ -7,17 +7,18 @@ type Props = {
 
 function ProposalInfo({ data }: Props) {
   const {
-    bidDueDate,
-    crm,
-    customer,
-    iqviaBiotech,
-    lineOfBusiness,
-    phase,
-    productName,
-    protocolNumber,
-    therapeuticArea,
-    verbatimIndication
+    'Bid due date': bidDueDate,
+    'CRM #': crm,
+    Customer,
+    'Is this IQVIA Biotech': iqviaBiotech,
+    'Line of business': lineOfBusiness,
+    Phase,
+    'Product name': productName,
+    'Protocol number': protocolNumber,
+    'Therapeutic area': therapeuticArea,
+    'Verbatim indication': verbatimIndication
   } = data;
+  console.log(data);
 
   return (
     <div className="pi-wrapper">
@@ -27,7 +28,7 @@ function ProposalInfo({ data }: Props) {
         <div className="pi-details-row">
           <div className="pi-details-column">
             <p className="pi-details-title">Customer:</p>
-            <p className="pi-details-subtitle">{customer || 'No data'}</p>
+            <p className="pi-details-subtitle">{Customer || 'No data'}</p>
           </div>
           <div className="pi-details-column">
             <p className="pi-details-title">Therapeutic Area:</p>
@@ -66,7 +67,7 @@ function ProposalInfo({ data }: Props) {
           <div className="pi-details-row-segment">
             <p className="pi-details-title">Phase:</p>
             <p className="pi-details-data">
-              {phase ? phase.split(' ')[1] : 'No data'}
+              {Phase ? Phase.split(' ')[1] : 'No data'}
             </p>
           </div>
           <div className="pi-details-row-segment">
