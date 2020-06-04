@@ -4,7 +4,10 @@ import type { Match } from 'react-router-dom';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import Loader from 'react-loader-spinner';
-import { getProposal } from '../../../actions/proposal-actions';
+import {
+  getProposal,
+  getProposalUpdated
+} from '../../../actions/proposal-actions';
 import {
   getProposalDetails,
   getSections,
@@ -35,7 +38,8 @@ type Props = {
   getProposalInfo: Function,
   setQuestion: Map,
   hasQuestionError: boolean,
-  isQuestionLoading: boolean
+  isQuestionLoading: boolean,
+  getProposalInfoUpdated: Function
 };
 
 export class Proposal extends Component<Props, State> {
@@ -68,6 +72,11 @@ export class Proposal extends Component<Props, State> {
   handleIsChecked = () => {
     const { isChecked } = this.state;
     this.setState({ isChecked: !isChecked });
+  };
+
+  getProposalInfoUpdated = () => {
+    const { getProposalInfoUpdated, match } = this.props;
+    getProposalInfoUpdated(match.params.id);
   };
 
   renderContent = (
@@ -105,6 +114,7 @@ export class Proposal extends Component<Props, State> {
               title="Refresh"
               className="tasksList-refresh-icon-wrapper"
               role="presentation"
+              onClick={this.getProposalInfoUpdated}
             >
               <Refresh className="tasksList-add-icon" />
             </div>
@@ -162,6 +172,7 @@ const mapStateToProps = (state: Map) => {
   };
 };
 
-export default connect(mapStateToProps, { getProposalInfo: getProposal })(
-  Proposal
-);
+export default connect(mapStateToProps, {
+  getProposalInfo: getProposal,
+  getProposalInfoUpdated: getProposalUpdated
+})(Proposal);

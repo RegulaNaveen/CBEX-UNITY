@@ -26,7 +26,8 @@ import {
   getQuestionSectionInfo,
   getAnswerTypes,
   getRoles,
-  setProposalQuestionData
+  setProposalQuestionData,
+  getProposalInfoUpdated
 } from '../api/proposal';
 
 export type ProposalInfo = {};
@@ -158,6 +159,27 @@ export const setProposalQuestion = (
     } catch (err) {
       dispatch({
         type: PROPOSAL_SET_QUESTION_ERROR,
+        payload: err
+      });
+    }
+  };
+};
+
+export const getProposalUpdated = (id: string): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: PROPOSAL_INFO_LOADING,
+      payload: {}
+    });
+    try {
+      const data = await getProposalInfoUpdated(id);
+      dispatch({
+        type: PROPOSAL_INFO,
+        payload: data
+      });
+    } catch (err) {
+      dispatch({
+        type: PROPOSAL_INFO_ERROR,
         payload: err
       });
     }
