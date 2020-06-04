@@ -133,3 +133,22 @@ export const setProposalQuestionData = async (
       });
   });
 };
+
+export const getProposalInfoUpdated = async (id: string): Promise<Object> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .put(
+        `${PROPOSAL_API_URL}/${id}`,
+        {},
+        {
+          headers: { 'x-api-key': `${API_KEY}` }
+        }
+      )
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};

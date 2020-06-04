@@ -18,7 +18,6 @@ function ProposalInfo({ data }: Props) {
     'Therapeutic area': therapeuticArea,
     'Verbatim indication': verbatimIndication
   } = data;
-  console.log(data);
 
   return (
     <div className="pi-wrapper">
