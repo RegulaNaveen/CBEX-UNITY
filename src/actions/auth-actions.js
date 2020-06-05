@@ -11,8 +11,14 @@ import {
   PUT_ROLE_ERROR
 } from './auth-types';
 import type { Dispatch, ThunkAction } from './action-types';
-import { setSession, getJwt, getAccessToken } from '../SessionHandler';
-import { authentication, putRole } from '../api/auth';
+import {
+  setSession,
+  getJwt,
+  getAccessToken,
+  getUserEmail,
+  getRefreshToken
+} from '../SessionHandler';
+import { authentication, putRole, postRefreshToken } from '../api/auth';
 
 export const login = (
   email: string,
@@ -29,14 +35,47 @@ export const login = (
         authService: {
           role,
           accessToken,
-          jwt: { token }
+          jwt: { token },
+          refresh: { token: refreshToken }
         }
       } = data;
       dispatch({
         type: AUTH_SUCCESS,
         payload: { data }
       });
-      setSession(role, accessToken, token);
+      setSession(role, accessToken, token, refreshToken, email);
+    } catch (error) {
+      dispatch({
+        type: AUTH_ERROR,
+        payload: { error }
+      });
+    }
+  };
+};
+
+export const refreshAuthData = (): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: AUTH_LOADING,
+      payload: {}
+    });
+    try {
+      const email = getUserEmail() || '';
+      const refreshToken = getRefreshToken() || '';
+      const data = await postRefreshToken(email, refreshToken);
+      const {
+        authService: {
+          role,
+          accessToken,
+          jwt: { token },
+          refresh: { token: newRefreshToken }
+        }
+      } = data;
+      dispatch({
+        type: AUTH_SUCCESS,
+        payload: { data }
+      });
+      setSession(role, accessToken, token, newRefreshToken, email);
     } catch (error) {
       dispatch({
         type: AUTH_ERROR,
@@ -55,12 +94,14 @@ export const changeRole = (role: string): ThunkAction<string, Object> => {
     try {
       const accessToken = getAccessToken() || '';
       const jwt = getJwt() || '';
+      const email = getUserEmail() || '';
+      const refreshToken = getRefreshToken() || '';
       const data = await putRole(role, accessToken, jwt);
       dispatch({
         type: PUT_ROLE_SUCCESS,
         payload: { data }
       });
-      setSession(role, accessToken, jwt);
+      setSession(role, accessToken, jwt, refreshToken, email);
     } catch (error) {
       dispatch({
         type: PUT_ROLE_ERROR,

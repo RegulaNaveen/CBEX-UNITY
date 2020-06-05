@@ -1,11 +1,6 @@
 // @flow
 import { Map, fromJS } from 'immutable';
 
-// Returns the user Role from local storage
-const getUserRole = () => {
-  return localStorage.getItem('userRole');
-};
-
 // Creates a order section map where questions are sorted too
 const generateSections = (
   proposalQuestions: Object,
@@ -13,7 +8,7 @@ const generateSections = (
   role: string
 ): Map => {
   let sections = Map();
-  const userRole = role !== '' ? role || getUserRole() : false;
+  const userRole = role !== '' ? role : false;
   proposalQuestions.forEach(question => {
     const { questionId, roleName } = question;
     const { sectionName, sectionOrder } = question.section;

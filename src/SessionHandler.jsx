@@ -7,12 +7,16 @@ import { getAuthData, authHasErrors } from './selectors';
 export const setSession = (
   role: string,
   accessToken: string,
-  token: string
+  token: string,
+  refreshToken: string,
+  email: string
 ) => {
   localStorage.setItem('isLoggedin', 'true');
   localStorage.setItem('userRole', role);
   localStorage.setItem('accessToken', accessToken);
   localStorage.setItem('jwt', token);
+  localStorage.setItem('refreshToken', refreshToken);
+  localStorage.setItem('userEmail', email);
 };
 
 export const getSession = () => {
@@ -29,6 +33,10 @@ export const getAccessToken = () => {
 
 export const getJwt = () => {
   return localStorage.getItem('jwt');
+};
+
+export const getRefreshToken = () => {
+  return localStorage.getItem('refreshToken');
 };
 
 export const getProposalId = () => {
@@ -70,7 +78,9 @@ const SessionHandler = ({ children }: Props) => {
       const isLoggedin = localStorage.getItem('isLoggedin');
       if (!isLoggedin) {
         setProposalId();
+        console.log('SESSIONHANDLER');
       } else {
+        console.log('SESSIONHANDLERLOGED');
         setProposalId();
         navigateFunc();
       }
