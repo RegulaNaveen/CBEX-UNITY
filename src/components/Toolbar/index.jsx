@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import classnames from 'classnames';
 import ToolbarMenu from './ToolbarMenu';
 import { DropMenu } from '../svg';
+import { getUserEmail } from '../../SessionHandler';
 
 type State = {
   isCollapsed: boolean
@@ -32,6 +33,7 @@ class Toolbar extends Component<Props, State> {
 
   render() {
     const { isCollapsed } = this.state;
+    const userEmail = getUserEmail();
     return (
       <div className="toolbar-wrapper">
         <p className="toolbar-title-one">IQVIA™</p>
@@ -53,11 +55,11 @@ class Toolbar extends Component<Props, State> {
               type="button"
               tabIndex={-1}
             >
-              <p className="toolbar-account-info-title">Oliver Queen</p>
+              <p className="toolbar-account-info-title">Profile</p>
               <DropMenu className="toolbar-account-info-icon" />
             </div>
             {isCollapsed ? (
-              <ToolbarMenu name="Oliver Queen" email="oliver.queen@iqvia.com" />
+              <ToolbarMenu name="Profile" email={userEmail || ''} />
             ) : null}
           </div>
         </div>

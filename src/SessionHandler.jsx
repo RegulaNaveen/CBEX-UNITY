@@ -35,6 +35,10 @@ export const getProposalId = () => {
   return localStorage.getItem('proposalId');
 };
 
+export const getUserEmail = () => {
+  return localStorage.getItem('userEmail');
+};
+
 type Props = {
   children: any
 };

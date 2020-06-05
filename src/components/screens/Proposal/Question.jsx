@@ -144,9 +144,9 @@ export class TaskRow extends Component<Props, State> {
 
   render() {
     const { answers, questionText, answerConfiguration } = this.props;
-    const hardCode = {
-      owner: ['Owner', 'Pedro']
-    };
+    // const hardCode = {
+    //   owner: ['Owner', 'Pedro']
+    // };
     let answerDate = 'Not Answered';
     const lastAnswer = answers.last();
     if (lastAnswer) {
@@ -179,7 +179,8 @@ export class TaskRow extends Component<Props, State> {
               )
             : this.renderAnswer('', [], [], undefined)}
         </div>
-        <div className="task-table-row-owner">
+        {/* TODO:  Add owners when roles are implemented for this functionality */}
+        {/* <div className="task-table-row-owner">
           {hardCode.owner.map(owner => (
             <p
               key={owner}
@@ -189,7 +190,7 @@ export class TaskRow extends Component<Props, State> {
               {owner.charAt(0).toUpperCase()}
             </p>
           ))}
-        </div>
+        </div> */}
         <p className="task-table-row-completion-date">{answerDate}</p>
         <div className="task-table-row-edit">
           <div className="task-table-row-edit-wrapper icon-highlight" />
