@@ -81,9 +81,10 @@ class CollapsibleList extends Component<Props, State> {
               <div className="task-subtitle task-subtitle-answer">
                 <p>Answer</p>
               </div>
-              <div className="task-subtitle task-subtitle-owner">
+              {/* TODO: Add header when owners functionality are implemented */}
+              {/* <div className="task-subtitle task-subtitle-owner">
                 <p>Owner</p>
-              </div>
+              </div> */}
               <div className="task-subtitle task-subtitle-completion-date">
                 <p>Date Completed</p>
               </div>

@@ -55,6 +55,7 @@ export class LoginFormImpl extends Component<Props, State> {
       if (isEmailValid(email)) {
         const { loginUser } = this.props;
         loginUser(email, password);
+        localStorage.setItem('userEmail', email);
       } else {
         this.setState({ error: 'Invalid email' });
       }
