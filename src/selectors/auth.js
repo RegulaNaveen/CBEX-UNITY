@@ -14,3 +14,6 @@ export const isLogoutLoading = (auth: Map): boolean =>
 
 export const logoutHasErrors = (auth: Map): string =>
   auth.get('logoutHasErrors');
+
+export const getChangeRoleError = (auth: Map): Map =>
+  auth.get('changeRoleError');

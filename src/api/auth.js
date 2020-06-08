@@ -23,6 +23,25 @@ export const authentication = async (
   });
 };
 
+export const postRefreshToken = async (
+  email: string,
+  refreshToken: string
+): Promise<Object> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${AUTH_API_URL}/refresh`, {
+        email,
+        refreshToken
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        reject(err.response.data.message);
+      });
+  });
+};
+
 export const putRole = async (
   role: string,
   accessToken: string,

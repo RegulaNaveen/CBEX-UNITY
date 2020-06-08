@@ -8,7 +8,9 @@ import {
   getProposal,
   getProposalUpdated
 } from '../../../actions/proposal-actions';
+import { refreshAuthData } from '../../../actions/auth-actions';
 import {
+  getAuthData,
   getProposalDetails,
   getSections,
   getFilteredSections,
@@ -30,6 +32,8 @@ type State = {
 };
 
 type Props = {
+  authData: Map,
+  getRefreshAuthData: Function,
   match: Match,
   details: Map,
   sections: Map,
@@ -53,7 +57,10 @@ export class Proposal extends Component<Props, State> {
   }
 
   componentDidMount() {
-    const { getProposalInfo, match } = this.props;
+    const { getProposalInfo, match, authData, getRefreshAuthData } = this.props;
+    if (!authData) {
+      getRefreshAuthData();
+    }
     getProposalInfo(match.params.id);
   }
 
@@ -154,6 +161,7 @@ export class Proposal extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: Map) => {
+  const authData = getAuthData(state);
   const details = getProposalDetails(state);
   const sections = getSections(state);
   const filteredSections = getFilteredSections(state);
@@ -162,6 +170,7 @@ const mapStateToProps = (state: Map) => {
   const hasQuestionError = setQuestionError(state);
   const setQuestion = setQuestionData(state);
   return {
+    authData,
     details,
     sections,
     filteredSections,
@@ -173,6 +182,7 @@ const mapStateToProps = (state: Map) => {
 };
 
 export default connect(mapStateToProps, {
+  getRefreshAuthData: refreshAuthData,
   getProposalInfo: getProposal,
   getProposalInfoUpdated: getProposalUpdated
 })(Proposal);
