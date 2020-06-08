@@ -37,7 +37,6 @@ export const postRefreshToken = async (
         resolve(response.data);
       })
       .catch(err => {
-        console.log(err);
         reject(err.response.data.message);
       });
   });
@@ -64,7 +63,6 @@ export const putRole = async (
         resolve(response.data);
       })
       .catch(err => {
-        console.log('ERROR', err);
         reject(err.response.data.message);
       });
   });

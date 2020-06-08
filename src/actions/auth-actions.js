@@ -92,7 +92,6 @@ export const changeRole = (role: string): ThunkAction<string, Object> => {
       payload: {}
     });
     try {
-      console.log('CALLED');
       const accessToken = getAccessToken() || '';
       const jwt = getJwt() || '';
       const email = getUserEmail() || '';

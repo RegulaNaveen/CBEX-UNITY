@@ -81,9 +81,7 @@ const SessionHandler = ({ children }: Props) => {
       const isLoggedin = localStorage.getItem('isLoggedin');
       if (!isLoggedin) {
         setProposalId();
-        console.log('SESSIONHANDLER');
       } else {
-        console.log('SESSIONHANDLERLOGED');
         setProposalId();
         navigateFunc();
       }
@@ -93,7 +91,6 @@ const SessionHandler = ({ children }: Props) => {
 
   useEffect(() => {
     function renewSession() {
-      console.log('HEREEEEE', changeRoleError);
       if (
         changeRoleError &&
         changeRoleError.error === 'The incoming token has expired'
