@@ -75,9 +75,7 @@ const onPutRoleInProgress = (state: Map): Map => {
 
 const onPutRoleError = (state: Map, action: Object): Map => {
   const error = action.payload;
-  return state
-    .set('changeRoleError', error.error)
-    .set('changeRoleLoading', false);
+  return state.set('changeRoleError', error).set('changeRoleLoading', false);
 };
 
 const actionMap = {

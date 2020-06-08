@@ -58,9 +58,7 @@ export class Proposal extends Component<Props, State> {
 
   componentDidMount() {
     const { getProposalInfo, match, authData, getRefreshAuthData } = this.props;
-    console.log(authData);
     if (!authData) {
-      console.log('NODATA');
       getRefreshAuthData();
     }
     getProposalInfo(match.params.id);

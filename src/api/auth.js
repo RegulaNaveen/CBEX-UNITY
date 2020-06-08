@@ -64,6 +64,7 @@ export const putRole = async (
         resolve(response.data);
       })
       .catch(err => {
+        console.log('ERROR', err);
         reject(err.response.data.message);
       });
   });

@@ -1,8 +1,9 @@
 // @flow
 import { useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
-import { useSelector, shallowEqual } from 'react-redux';
-import { getAuthData, authHasErrors } from './selectors';
+import { useSelector, shallowEqual, useDispatch } from 'react-redux';
+import { getAuthData, authHasErrors, getChangeRoleError } from './selectors';
+import { refreshAuthData, changeRole } from './actions/auth-actions';
 
 export const setSession = (
   role: string,
@@ -54,11 +55,13 @@ type Props = {
 const SessionHandler = ({ children }: Props) => {
   const location = useLocation();
   const history = useHistory();
+  const dispatch = useDispatch();
 
-  const { authData, serror } = useSelector(
+  const { authData, serror, changeRoleError } = useSelector(
     state => ({
       authData: getAuthData(state),
-      serror: authHasErrors(state)
+      serror: authHasErrors(state),
+      changeRoleError: getChangeRoleError(state)
     }),
     shallowEqual
   );
@@ -87,6 +90,20 @@ const SessionHandler = ({ children }: Props) => {
     }
     checkSession();
   }, [authData, serror]);
+
+  useEffect(() => {
+    function renewSession() {
+      console.log('HEREEEEE', changeRoleError);
+      if (
+        changeRoleError &&
+        changeRoleError.error === 'The incoming token has expired'
+      ) {
+        dispatch(refreshAuthData());
+        dispatch(changeRole(changeRoleError.role));
+      }
+    }
+    renewSession();
+  }, [changeRoleError]);
 
   return children;
 };

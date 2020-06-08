@@ -92,6 +92,7 @@ export const changeRole = (role: string): ThunkAction<string, Object> => {
       payload: {}
     });
     try {
+      console.log('CALLED');
       const accessToken = getAccessToken() || '';
       const jwt = getJwt() || '';
       const email = getUserEmail() || '';
@@ -105,7 +106,7 @@ export const changeRole = (role: string): ThunkAction<string, Object> => {
     } catch (error) {
       dispatch({
         type: PUT_ROLE_ERROR,
-        payload: { error }
+        payload: { error, role }
       });
     }
   };

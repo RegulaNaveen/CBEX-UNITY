@@ -22,6 +22,9 @@ export const isLogoutLoading = (state: Object): boolean =>
 export const logoutHasErrors = (state: Object): string =>
   authSelectors.logoutHasErrors(state.auth);
 
+export const getChangeRoleError = (state: Object): string =>
+  authSelectors.getChangeRoleError(state.auth);
+
 // Proposal selectors
 export const getSections = (state: Object): Map =>
   proposalSelectors.getSections(state.proposal);
