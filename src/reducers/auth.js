@@ -70,12 +70,18 @@ const onPutRoleSuccess = (state: Map, action: Object): Map => {
 };
 
 const onPutRoleInProgress = (state: Map): Map => {
-  return state.set('changeRoleLoading', true).set('changeRoleError', undefined);
+  return state
+    .set('changeRoleData', undefined)
+    .set('changeRoleLoading', true)
+    .set('changeRoleError', undefined);
 };
 
 const onPutRoleError = (state: Map, action: Object): Map => {
   const error = action.payload;
-  return state.set('changeRoleError', error).set('changeRoleLoading', false);
+  return state
+    .set('changeRoleError', error)
+    .set('changeRoleLoading', false)
+    .set('changeRoleData', undefined);
 };
 
 const actionMap = {

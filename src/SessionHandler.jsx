@@ -76,6 +76,13 @@ const SessionHandler = ({ children }: Props) => {
     history.push(`/app/proposals/${proposalId}`);
   };
 
+  const renewSession = async (error: string, role: string) => {
+    if (error === 'The incoming token has expired') {
+      await dispatch(refreshAuthData());
+      await dispatch(changeRole(role));
+    }
+  };
+
   useEffect(() => {
     function checkSession() {
       const isLoggedin = localStorage.getItem('isLoggedin');
@@ -90,17 +97,9 @@ const SessionHandler = ({ children }: Props) => {
   }, [authData, serror]);
 
   useEffect(() => {
-    function renewSession() {
-      if (
-        changeRoleError &&
-        changeRoleError.error === 'The incoming token has expired'
-      ) {
-        dispatch(refreshAuthData());
-        dispatch(changeRole(changeRoleError.role));
-      }
-    }
-    renewSession();
-  }, [changeRoleError]);
+    if (changeRoleError)
+      renewSession(changeRoleError.error, changeRoleError.role);
+  }, [changeRoleError, renewSession]);
 
   return children;
 };
