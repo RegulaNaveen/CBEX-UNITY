@@ -22,7 +22,7 @@ import {
 import ProposalInfo from './ProposalInfo';
 import SectionList from './SectionList';
 import Toolbar from '../../Toolbar';
-import { Add, Refresh } from '../../svg';
+import { Add } from '../../svg';
 import AddQuestionModalComponent from './AddQuestionModal';
 import Checkbox from '../../common/Checkbox';
 
@@ -117,14 +117,15 @@ export class Proposal extends Component<Props, State> {
                 Filter by User Role
               </Checkbox>
             </div>
-            <div
+            {/* TODO: Add button to update information functionality */}
+            {/* <div
               title="Refresh"
               className="tasksList-refresh-icon-wrapper"
               role="presentation"
               onClick={this.getProposalInfoUpdated}
             >
               <Refresh className="tasksList-add-icon" />
-            </div>
+            </div> */}
             <div
               title="Add New Question"
               className="tasksList-add-icon-wrapper"

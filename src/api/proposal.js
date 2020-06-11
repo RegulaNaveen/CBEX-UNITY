@@ -2,17 +2,17 @@
 import axios from 'axios';
 
 const PROPOSAL_API_URL =
-  'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/proposals';
+  'https://d0mb8f9mx0.execute-api.us-east-1.amazonaws.com/uat/api/proposals';
 const PROPOSAL_QUESTIONS_API_URL =
-  'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/questions';
+  'https://d0mb8f9mx0.execute-api.us-east-1.amazonaws.com/uat/api/questions';
 const PROPOSAL_SECTIONS_API_URL =
-  'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/proposals/sections';
+  'https://d0mb8f9mx0.execute-api.us-east-1.amazonaws.com/uat/api/proposals/sections';
 const PROPOSAL_ANSWERTYPE_API_URL =
-  'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/proposals/answerTypes';
+  'https://d0mb8f9mx0.execute-api.us-east-1.amazonaws.com/uat/api/proposals/answerTypes';
 const PROPOSAL_ROLES_API_URL =
-  'https://r0udo916g4.execute-api.us-east-2.amazonaws.com/dev/api/proposals/roles';
+  'https://d0mb8f9mx0.execute-api.us-east-1.amazonaws.com/uat/api/proposals/roles';
 
-const API_KEY = 'LodOBHeBPI5zGMDaq2Ppv8N2oHialSkR9t4cnQlH';
+const API_KEY = 'e4e3BACQBxaTdmYdIGKG58BDF7RHXoloCGNlqcIe';
 
 export const getProposalInfo = async (id: string): Promise<Object> => {
   return new Promise((resolve, reject) => {
