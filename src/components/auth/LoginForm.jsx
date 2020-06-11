@@ -35,6 +35,12 @@ export class LoginFormImpl extends Component<Props, State> {
     };
   }
 
+  componentDidMount() {
+    const { isAuthError } = this.props;
+    if (isAuthError === 'Internal server error')
+      this.setState({ error: 'Something went wrong' });
+  }
+
   onEmailChange = (event: SyntheticInputEvent<EventTarget>) => {
     this.setState({ email: event.target.value });
   };

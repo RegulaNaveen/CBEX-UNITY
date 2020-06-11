@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { Checkmark } from '../../svg';
-import { getRandomColor } from '../../../utils/colors';
+// import { getRandomColor } from '../../../utils/colors';
 import Dropdown from '../../common/Dropdown';
 import TextArea from '../../common/TextArea';
 import DatePicker from '../../common/DatePicker';

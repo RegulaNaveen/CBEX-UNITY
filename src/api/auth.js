@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const AUTH_API_URL =
-  'https://4r6g5pw7ji.execute-api.us-east-2.amazonaws.com/dev/api/auth';
+  'https://9l688o9r93.execute-api.us-east-1.amazonaws.com/uat/api/auth';
 
 export const authentication = async (
   email: string,
