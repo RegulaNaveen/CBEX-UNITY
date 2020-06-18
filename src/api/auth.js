@@ -1,8 +1,10 @@
 // @flow
 import axios from 'axios';
 
-const AUTH_API_URL =
-  'https://9l688o9r93.execute-api.us-east-1.amazonaws.com/uat/api/auth';
+const API_ENDPOINT =
+  'https://aiz2k1qjjl.execute-api.us-east-1.amazonaws.com/dev';
+
+const AUTH_API_URL = `${API_ENDPOINT}/api/auth`;
 
 export const authentication = async (
   email: string,
