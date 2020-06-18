@@ -1,18 +1,13 @@
 // @flow
 import axios from 'axios';
 
-const PROPOSAL_API_URL =
-  'https://d0mb8f9mx0.execute-api.us-east-1.amazonaws.com/uat/api/proposals';
-const PROPOSAL_QUESTIONS_API_URL =
-  'https://d0mb8f9mx0.execute-api.us-east-1.amazonaws.com/uat/api/questions';
-const PROPOSAL_SECTIONS_API_URL =
-  'https://d0mb8f9mx0.execute-api.us-east-1.amazonaws.com/uat/api/proposals/sections';
-const PROPOSAL_ANSWERTYPE_API_URL =
-  'https://d0mb8f9mx0.execute-api.us-east-1.amazonaws.com/uat/api/proposals/answerTypes';
-const PROPOSAL_ROLES_API_URL =
-  'https://d0mb8f9mx0.execute-api.us-east-1.amazonaws.com/uat/api/proposals/roles';
+const API_ENDPOINT =
+  'https://puo6dvbged.execute-api.us-east-1.amazonaws.com/dev';
 
-const API_KEY = 'e4e3BACQBxaTdmYdIGKG58BDF7RHXoloCGNlqcIe';
+const PROPOSAL_API_URL = `${API_ENDPOINT}/api/proposals`;
+const PROPOSAL_QUESTIONS_API_URL = `${API_ENDPOINT}/api/questions`;
+
+const API_KEY = 'Wctbuly84485ruXf4Bilz1c8xdckxcfk4GA2NvVe';
 
 export const getProposalInfo = async (id: string): Promise<Object> => {
   return new Promise((resolve, reject) => {
@@ -57,7 +52,7 @@ export const setProposalAnswer = async (
 export const getQuestionSectionInfo = async (): Promise<Object> => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${PROPOSAL_SECTIONS_API_URL}`, {
+      .get(`${PROPOSAL_API_URL}/sections`, {
         headers: { 'x-api-key': `${API_KEY}` }
       })
       .then(response => {
@@ -72,7 +67,7 @@ export const getQuestionSectionInfo = async (): Promise<Object> => {
 export const getAnswerTypes = async (): Promise<Object> => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${PROPOSAL_ANSWERTYPE_API_URL}`, {
+      .get(`${PROPOSAL_API_URL}/answerTypes`, {
         headers: { 'x-api-key': `${API_KEY}` }
       })
       .then(response => {
@@ -87,7 +82,7 @@ export const getAnswerTypes = async (): Promise<Object> => {
 export const getRoles = async (): Promise<Object> => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${PROPOSAL_ROLES_API_URL}`, {
+      .get(`${PROPOSAL_API_URL}/roles`, {
         headers: { 'x-api-key': `${API_KEY}` }
       })
       .then(response => {
