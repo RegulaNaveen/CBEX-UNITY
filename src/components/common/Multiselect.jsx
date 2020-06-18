@@ -35,7 +35,9 @@ class Multiselect extends PureComponent<Props, State> {
 
   componentDidMount() {
     const { value } = this.props;
-    if (!_.isEmpty(value)) this.setState({ selectedValues: value });
+    if (!_.isEmpty(value)) {
+      this.setState({ selectedValues: value });
+    }
   }
 
   handleCollapse = () => {
@@ -68,7 +70,6 @@ class Multiselect extends PureComponent<Props, State> {
   render() {
     const { isCollapsed, selectedValues } = this.state;
     const { id, placeholder, items, title } = this.props;
-
     return (
       <>
         {title && <p className="multiselect-title">{title}</p>}
