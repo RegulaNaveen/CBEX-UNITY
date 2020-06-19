@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const API_ENDPOINT =
-  'https://aiz2k1qjjl.execute-api.us-east-1.amazonaws.com/dev';
+  'https://9l688o9r93.execute-api.us-east-1.amazonaws.com/uat';
 
 const AUTH_API_URL = `${API_ENDPOINT}/api/auth`;
 
