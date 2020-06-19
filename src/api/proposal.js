@@ -2,12 +2,12 @@
 import axios from 'axios';
 
 const API_ENDPOINT =
-  'https://puo6dvbged.execute-api.us-east-1.amazonaws.com/dev';
+  'https://d0mb8f9mx0.execute-api.us-east-1.amazonaws.com/uat';
 
 const PROPOSAL_API_URL = `${API_ENDPOINT}/api/proposals`;
 const PROPOSAL_QUESTIONS_API_URL = `${API_ENDPOINT}/api/questions`;
 
-const API_KEY = 'Wctbuly84485ruXf4Bilz1c8xdckxcfk4GA2NvVe';
+const API_KEY = 'e4e3BACQBxaTdmYdIGKG58BDF7RHXoloCGNlqcIe';
 
 export const getProposalInfo = async (id: string): Promise<Object> => {
   return new Promise((resolve, reject) => {
