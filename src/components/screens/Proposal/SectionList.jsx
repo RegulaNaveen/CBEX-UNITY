@@ -4,10 +4,11 @@ import { Map } from 'immutable';
 import CollapsibleList from './CollapsibleList';
 
 type Props = {
-  sections: Map
+  sections: Map,
+  isCheckedAll: boolean
 };
 
-const SectionList = ({ sections }: Props) => {
+const SectionList = ({ sections, isCheckedAll }: Props) => {
   return (
     <div className="tasksList-wrapper">
       {sections.valueSeq().map(section => {
@@ -18,6 +19,7 @@ const SectionList = ({ sections }: Props) => {
             questions={questions}
             title={sectionName}
             key={sectionName}
+            isCheckedAll={isCheckedAll}
           />
         );
       })}

@@ -28,7 +28,8 @@ import Checkbox from '../../common/Checkbox';
 
 type State = {
   showModal: boolean,
-  isChecked: boolean
+  isChecked: boolean,
+  isCheckedAll: boolean
 };
 
 type Props = {
@@ -52,7 +53,8 @@ export class Proposal extends Component<Props, State> {
 
     this.state = {
       showModal: false,
-      isChecked: false
+      isChecked: false,
+      isCheckedAll: false
     };
   }
 
@@ -81,6 +83,11 @@ export class Proposal extends Component<Props, State> {
     this.setState({ isChecked: !isChecked });
   };
 
+  handleIsCheckedAll = () => {
+    const { isCheckedAll } = this.state;
+    this.setState({ isCheckedAll: !isCheckedAll });
+  };
+
   getProposalInfoUpdated = () => {
     const { getProposalInfoUpdated, match } = this.props;
     getProposalInfoUpdated(match.params.id);
@@ -90,7 +97,8 @@ export class Proposal extends Component<Props, State> {
     isLoading: boolean,
     sections: Map,
     details: Object,
-    isChecked: boolean
+    isChecked: boolean,
+    isCheckedAll: boolean
   ) => {
     if (isLoading) {
       return (
@@ -108,13 +116,24 @@ export class Proposal extends Component<Props, State> {
           <div className="taskList-icon-wrapper">
             <div className="taskList-checkbox-wrapper">
               <Checkbox
-                id="send-notification-checkbox"
+                id="filter-checkbox"
                 value="notification"
                 name="notification"
                 onChange={this.handleIsChecked}
                 isChecked={isChecked}
               >
                 Filter by User Role
+              </Checkbox>
+            </div>
+            <div className="taskList-checkbox-wrapper">
+              <Checkbox
+                id="collapsed-all-checkbox"
+                value="notification"
+                name="notification"
+                onChange={this.handleIsCheckedAll}
+                isChecked={isCheckedAll}
+              >
+                All
               </Checkbox>
             </div>
             <div
@@ -135,13 +154,13 @@ export class Proposal extends Component<Props, State> {
             </div>
           </div>
         </div>
-        <SectionList sections={sections} />
+        <SectionList sections={sections} isCheckedAll={isCheckedAll} />
       </div>
     );
   };
 
   render() {
-    const { showModal, isChecked } = this.state;
+    const { showModal, isChecked, isCheckedAll } = this.state;
     const { sections, filteredSections, isLoading, details } = this.props;
     return (
       <div className="proposal-wrapper">
@@ -150,7 +169,8 @@ export class Proposal extends Component<Props, State> {
           isLoading,
           isChecked ? filteredSections : sections,
           details,
-          isChecked
+          isChecked,
+          isCheckedAll
         )}
         {showModal ? (
           <AddQuestionModalComponent onClose={this.onClose} />

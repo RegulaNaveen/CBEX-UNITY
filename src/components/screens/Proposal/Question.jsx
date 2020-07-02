@@ -68,7 +68,6 @@ export class TaskRow extends Component<Props, State> {
   ) => {
     const { selectedDay } = this.state;
     const optionsYN = ['Yes', 'No'];
-
     const answer = lastAnswer && lastAnswer.get('answer');
 
     let answerValue = '';

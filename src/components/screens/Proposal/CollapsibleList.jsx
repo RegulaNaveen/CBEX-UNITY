@@ -11,7 +11,8 @@ type State = {
 
 type Props = {
   questions: Map,
-  title: string
+  title: string,
+  isCheckedAll: boolean
 };
 
 class CollapsibleList extends Component<Props, State> {
@@ -37,7 +38,7 @@ class CollapsibleList extends Component<Props, State> {
 
   render() {
     const { isCollapsed } = this.state;
-    const { questions, title } = this.props;
+    const { questions, title, isCheckedAll } = this.props;
     return (
       <div className="task-wrapper">
         <button
@@ -54,7 +55,7 @@ class CollapsibleList extends Component<Props, State> {
             alt="question arrow"
           />
         </button>
-        {!isCollapsed ? (
+        {!isCollapsed && !isCheckedAll ? (
           <div
             className="task-title-wrapper"
             role="button"
