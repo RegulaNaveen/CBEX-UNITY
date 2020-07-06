@@ -6,15 +6,17 @@ import Loader from 'react-loader-spinner';
 import { isAuthLoading, authHasErrors } from '../../selectors';
 import { login } from '../../actions/auth-actions';
 import { isEmailValid, isTextValid } from '../../utils/ValidationUtils';
-import { PrimaryButton } from '../common/Buttons';
+import { PrimaryButton, LinkButton } from '../common/Buttons';
 import InputField from '../common/InputField';
 // import Checkbox from '../common/Checkbox';
+import ForgotPassword from './forgotPassword/ForgotPassword';
 
 type State = {
   email: string,
   password: string,
   error: string,
-  isChecked: boolean
+  isChecked: boolean,
+  isForgotPassword: boolean
 };
 
 type Props = {
@@ -31,14 +33,15 @@ export class LoginFormImpl extends Component<Props, State> {
       email: '',
       password: '',
       error: '',
-      isChecked: false
+      isChecked: false,
+      isForgotPassword: false
     };
   }
 
   componentDidMount() {
     const { isAuthError } = this.props;
-    if (isAuthError === 'Internal server error')
-      this.setState({ error: 'Something went wrong' });
+    this.setState({ error: '', email: '', password: '' });
+    if (isAuthError === 'Internal server error') this.setState({ error: '' });
   }
 
   onEmailChange = (event: SyntheticInputEvent<EventTarget>) => {
@@ -69,38 +72,47 @@ export class LoginFormImpl extends Component<Props, State> {
     }
   };
 
+  onForgotPassword = () => {
+    const { isForgotPassword } = this.state;
+    this.setState({ isForgotPassword: !isForgotPassword });
+  };
+
   render() {
     // TODO: Addd isChecked to state for implementation
-    const { email, password, error } = this.state;
+    const { email, password, error, isForgotPassword } = this.state;
     const { isLoading, isAuthError } = this.props;
     return (
       <div className="form-wrapper">
-        <p className="form-title">IQVIA Unity</p>
-        <div className="input-wrapper">
-          <InputField
-            id="login-input-email"
-            title="Email"
-            placeholder="Email"
-            type="email"
-            onChange={this.onEmailChange}
-            value={email}
-          />
-        </div>
-        <div className="input-wrapper">
-          <InputField
-            id="login-input-password"
-            title="Password"
-            placeholder="Password"
-            type="password"
-            onChange={this.onPasswordChange}
-            value={password}
-          />
-        </div>
-        {error !== '' || isAuthError !== undefined ? (
-          <p className="login-form-error">{error || isAuthError}</p>
-        ) : null}
-        {/* TOOD: Implement Remember my Username checkbox */}
-        {/* <Checkbox
+        {isForgotPassword ? (
+          <ForgotPassword handleCancel={this.onForgotPassword} />
+        ) : (
+          <div>
+            <p className="form-title">IQVIA Unity</p>
+            <div className="input-wrapper">
+              <InputField
+                id="login-input-email"
+                title="Email"
+                placeholder="Email"
+                type="email"
+                onChange={this.onEmailChange}
+                value={email}
+              />
+            </div>
+            <div className="input-wrapper">
+              <InputField
+                id="login-input-password"
+                title="Password"
+                placeholder="Password"
+                type="password"
+                onChange={this.onPasswordChange}
+                value={password}
+              />
+            </div>
+            {error !== '' || isAuthError !== undefined ? (
+              <p className="login-form-error">{error || isAuthError}</p>
+            ) : null}
+            {/* TOOD: Implement Remember my Username checkbox */}
+            {/* <Checkbox
           id="remember-username-checkbox"
           value="username"
           name="username"
@@ -109,19 +121,29 @@ export class LoginFormImpl extends Component<Props, State> {
         >
           Remember my username
         </Checkbox> */}
-        <div className="login-button-wrapper">
-          {isLoading ? (
-            <div className="login-loader">
-              <Loader type="TailSpin" color="#297DFD" height={50} width={50} />
+            <div className="login-button-wrapper">
+              {isLoading ? (
+                <div className="login-loader">
+                  <Loader
+                    type="TailSpin"
+                    color="#297DFD"
+                    height={50}
+                    width={50}
+                  />
+                </div>
+              ) : (
+                <div className="login-button">
+                  <PrimaryButton id="login-button" onClick={this.handleLogin}>
+                    Log in
+                  </PrimaryButton>
+                </div>
+              )}
             </div>
-          ) : (
-            <div className="login-button">
-              <PrimaryButton id="login-button" onClick={this.handleLogin}>
-                Log in
-              </PrimaryButton>
-            </div>
-          )}
-        </div>
+            <LinkButton onClick={this.onForgotPassword}>
+              Forgot password?
+            </LinkButton>
+          </div>
+        )}
       </div>
     );
   }

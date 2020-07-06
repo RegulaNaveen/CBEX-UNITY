@@ -102,7 +102,6 @@
   justify-content: center;
 }
 
-
 @media screen and (min-width: $viewport-3) {
   .login-wrapper {
     @include base-login-wrapper;
