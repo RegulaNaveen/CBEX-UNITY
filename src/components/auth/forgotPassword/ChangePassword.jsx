@@ -1,11 +1,25 @@
 // @flow
 import React, { Component } from 'react';
-// import Loader from 'react-loader-spinner';
+import { connect } from 'react-redux';
+import { Map } from 'immutable';
+import Loader from 'react-loader-spinner';
+import {
+  getResetPasswordData,
+  isResetPasswordLoading,
+  getResetPasswordError
+} from '../../../selectors';
+import { sendResetPassword } from '../../../actions/auth-actions';
 import { isTextValid } from '../../../utils/ValidationUtils';
 import { PrimaryButton } from '../../common/Buttons';
 import InputField from '../../common/InputField';
 
-type Props = {};
+type Props = {
+  userEmail: string,
+  isLoading: Boolean,
+  resetPasswordSuccess: Map,
+  resetPasswordError: string,
+  doResetPassword: Function
+};
 
 type State = {
   password: string,
@@ -30,12 +44,25 @@ class ChangePassword extends Component<Props, State> {
     this.setState({ password: '', confirmPassword: '', error: '' });
   }
 
+  componentDidUpdate(prevProps) {
+    const { isLoading, resetPasswordSuccess } = this.props;
+    if (
+      isLoading === false &&
+      prevProps.isLoading === true &&
+      resetPasswordSuccess
+    ) {
+      // Redirection to Login
+      console.log('SHOULD REDIRECT');
+    }
+  }
+
   handleChangePassword = () => {
     const { code, password, confirmPassword } = this.state;
+    const { userEmail, doResetPassword } = this.props;
     this.setState({ error: '' });
     if (isTextValid(password) && isTextValid(code)) {
       if (password === confirmPassword) {
-        // TODO: send code and new password to endoint and then go to login
+        doResetPassword(userEmail, code, password);
       } else {
         this.setState({ error: 'Password do not match' });
       }
@@ -58,6 +85,9 @@ class ChangePassword extends Component<Props, State> {
 
   render() {
     const { password, confirmPassword, error, code } = this.state;
+    const { isLoading, resetPasswordSuccess, resetPasswordError } = this.props;
+    console.log('RESET---DATARENDER', resetPasswordSuccess);
+    console.log('RESET---ERRORRENDER', resetPasswordError);
     return (
       <div className="form-wrapper">
         <p className="form-title">Change Password</p>
@@ -94,24 +124,34 @@ class ChangePassword extends Component<Props, State> {
         {error !== '' ? <p className="login-form-error">{error}</p> : null}
         <div className="login-button-wrapper">
           {/* TODO: Add loader with endpoint response for validate email */}
-          {/* {isLoading ? (
+          {isLoading ? (
             <div className="login-loader">
               <Loader type="TailSpin" color="#297DFD" height={50} width={50} />
             </div>
-          ) : ( */}
-          <div className="login-button">
-            <PrimaryButton
-              id="change-password-button"
-              onClick={this.handleChangePassword}
-            >
-              Change password
-            </PrimaryButton>
-          </div>
-          {/* )} */}
+          ) : (
+            <div className="login-button">
+              <PrimaryButton
+                id="change-password-button"
+                onClick={this.handleChangePassword}
+              >
+                Change password
+              </PrimaryButton>
+            </div>
+          )}
         </div>
       </div>
     );
   }
 }
 
-export default ChangePassword;
+const mapStateToProps = (state: Map) => {
+  const isLoading = isResetPasswordLoading(state);
+  const resetPasswordSuccess = getResetPasswordData(state);
+  const resetPasswordError = getResetPasswordError(state);
+
+  return { isLoading, resetPasswordSuccess, resetPasswordError };
+};
+
+export default connect(mapStateToProps, {
+  doResetPassword: sendResetPassword
+})(ChangePassword);

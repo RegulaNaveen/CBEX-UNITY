@@ -9,7 +9,13 @@ import {
   LOGOUT_ERROR,
   PUT_ROLE_IN_PROGRESS,
   PUT_ROLE_SUCCESS,
-  PUT_ROLE_ERROR
+  PUT_ROLE_ERROR,
+  FORGOT_PASSWORD_IN_PROGRESS,
+  FORGOT_PASSWORD_SUCCESS,
+  FORGOT_PASSWORD_ERROR,
+  RESET_PASSWORD_IN_PROGRESS,
+  RESET_PASSWORD_SUCCESS,
+  RESET_PASSWORD_ERROR
 } from '../actions/auth-types';
 import type { ApiAction } from '../actions/action-types';
 
@@ -22,7 +28,13 @@ const INITIAL_STATE: Map = fromJS({
   logoutHasErrors: undefined,
   changeRoleData: undefined,
   changeRoleLoading: false,
-  changeRoleError: undefined
+  changeRoleError: undefined,
+  forgotPasswordLoading: false,
+  forgotPasswordSuccess: undefined,
+  forgotPasswordError: undefined,
+  resetPasswordLoading: false,
+  resetPasswordSuccess: undefined,
+  resetPasswordError: undefined
 });
 
 const onAuthSuccess = (state: Map, action: Object): Map => {
@@ -84,6 +96,52 @@ const onPutRoleError = (state: Map, action: Object): Map => {
     .set('changeRoleData', undefined);
 };
 
+const onForgotPasswordSuccess = (state: Map, action: Object): Map => {
+  const data = action.payload;
+  return state
+    .set('forgotPasswordSuccess', data)
+    .set('forgotPasswordError', undefined)
+    .set('forgotPasswordLoading', false);
+};
+
+const onForgotPasswordInProgress = (state: Map): Map => {
+  return state
+    .set('forgotPasswordLoading', true)
+    .set('forgotPasswordSuccess', undefined)
+    .set('forgotPasswordError', undefined);
+};
+
+const onForgotPasswordError = (state: Map, action: Object): Map => {
+  const error = action.payload;
+  return state
+    .set('forgotPasswordError', error.error)
+    .set('forgotPasswordSuccess', undefined)
+    .set('forgotPasswordLoading', false);
+};
+
+const onResetPasswordSuccess = (state: Map, action: Object): Map => {
+  const data = action.payload;
+  return state
+    .set('resetPasswordSuccess', data)
+    .set('resetPasswordError', undefined)
+    .set('resetPasswordLoading', false);
+};
+
+const onResetPasswordInProgress = (state: Map): Map => {
+  return state
+    .set('resetPasswordLoading', true)
+    .set('resetPasswordSuccess', undefined)
+    .set('resetPasswordError', undefined);
+};
+
+const onResetPasswordError = (state: Map, action: Object): Map => {
+  const error = action.payload;
+  return state
+    .set('resetPasswordError', error.error)
+    .set('resetPasswordSuccess', undefined)
+    .set('resetPasswordLoading', false);
+};
+
 const actionMap = {
   [AUTH_SUCCESS]: onAuthSuccess,
   [AUTH_LOADING]: onAuthLoading,
@@ -93,7 +151,13 @@ const actionMap = {
   [LOGOUT_ERROR]: onLogoutSuccess,
   [PUT_ROLE_IN_PROGRESS]: onPutRoleInProgress,
   [PUT_ROLE_SUCCESS]: onPutRoleSuccess,
-  [PUT_ROLE_ERROR]: onPutRoleError
+  [PUT_ROLE_ERROR]: onPutRoleError,
+  [FORGOT_PASSWORD_IN_PROGRESS]: onForgotPasswordInProgress,
+  [FORGOT_PASSWORD_SUCCESS]: onForgotPasswordSuccess,
+  [FORGOT_PASSWORD_ERROR]: onForgotPasswordError,
+  [RESET_PASSWORD_IN_PROGRESS]: onResetPasswordInProgress,
+  [RESET_PASSWORD_SUCCESS]: onResetPasswordSuccess,
+  [RESET_PASSWORD_ERROR]: onResetPasswordError
 };
 
 export default function(

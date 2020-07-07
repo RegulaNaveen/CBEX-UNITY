@@ -25,6 +25,42 @@ export const authentication = async (
   });
 };
 
+export const forgotPassword = async (email: string): Promise<Object> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${AUTH_API_URL}/forgot-password`, {
+        email
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        reject(err.response.data.message);
+      });
+  });
+};
+
+export const resetPassword = async (
+  email: string,
+  code: string,
+  newPassword: string
+): Promise<Object> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${AUTH_API_URL}/reset-password`, {
+        email,
+        code,
+        newPassword
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        reject(err.response.data.message);
+      });
+  });
+};
+
 export const postRefreshToken = async (
   email: string,
   refreshToken: string

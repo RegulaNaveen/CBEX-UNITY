@@ -13,6 +13,24 @@ export const isAuthLoading = (state: Object): boolean =>
 export const authHasErrors = (state: Object): string =>
   authSelectors.authHasErrors(state.auth);
 
+export const getForgotPasswordData = (state: Object): Map =>
+  authSelectors.getForgotPasswordData(state.auth);
+
+export const isForgotPasswordLoading = (state: Object): boolean =>
+  authSelectors.isForgotPasswordLoading(state.auth);
+
+export const getForgotPasswordError = (state: Object): string =>
+  authSelectors.getForgotPasswordError(state.auth);
+
+export const getResetPasswordData = (state: Object): Map =>
+  authSelectors.getResetPasswordData(state.auth);
+
+export const isResetPasswordLoading = (state: Object): boolean =>
+  authSelectors.isResetPasswordLoading(state.auth);
+
+export const getResetPasswordError = (state: Object): string =>
+  authSelectors.getResetPasswordError(state.auth);
+
 export const isLogout = (state: Object): Map =>
   authSelectors.isLogout(state.auth);
 

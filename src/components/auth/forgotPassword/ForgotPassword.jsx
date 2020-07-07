@@ -1,13 +1,25 @@
 // @flow
 import React, { Component } from 'react';
-// import Loader from 'react-loader-spinner';
+import { connect } from 'react-redux';
+import { Map } from 'immutable';
+import Loader from 'react-loader-spinner';
+import {
+  getForgotPasswordData,
+  isForgotPasswordLoading,
+  getForgotPasswordError
+} from '../../../selectors';
+import { sendForgotPassword } from '../../../actions/auth-actions';
 import { isEmailValid, isTextValid } from '../../../utils/ValidationUtils';
 import { PrimaryButton } from '../../common/Buttons';
 import InputField from '../../common/InputField';
 import ChangePassword from './ChangePassword';
 
 type Props = {
-  handleCancel: Function
+  handleCancel: Function,
+  isLoading: Boolean,
+  forgotPasswordSuccess: Map,
+  forgotPasswordError: string,
+  doForgotPassword: Function
 };
 
 type State = {
@@ -31,13 +43,29 @@ class ForgotPassword extends Component<Props, State> {
     this.setState({ email: '', error: '' });
   }
 
+  componentDidUpdate(prevProps) {
+    const { isLoading, forgotPasswordSuccess } = this.props;
+    if (
+      isLoading === false &&
+      prevProps.isLoading === true &&
+      forgotPasswordSuccess
+    ) {
+      this.updateForm();
+    }
+  }
+
+  updateForm = () => {
+    const { isChangePassword } = this.state;
+    this.setState({ isChangePassword: !isChangePassword });
+  };
+
   handleForgotPassword = () => {
-    const { email, isChangePassword } = this.state;
+    const { email } = this.state;
+    const { doForgotPassword } = this.props;
     this.setState({ error: '' });
     if (isTextValid(email)) {
       if (isEmailValid(email)) {
-        // send email to endpoint
-        this.setState({ isChangePassword: !isChangePassword });
+        doForgotPassword(email);
       } else {
         this.setState({ error: 'Invalid email' });
       }
@@ -52,11 +80,18 @@ class ForgotPassword extends Component<Props, State> {
 
   render() {
     const { email, error, isChangePassword } = this.state;
-    const { handleCancel } = this.props;
+    const {
+      handleCancel,
+      isLoading,
+      forgotPasswordSuccess,
+      forgotPasswordError
+    } = this.props;
+    console.log('FORGOT---DATARENDER', forgotPasswordSuccess);
+    console.log('FORGOT---ERRORRENDER', forgotPasswordError);
     return (
       <div className="form-wrapper">
         {isChangePassword ? (
-          <ChangePassword />
+          <ChangePassword userEmail={email} />
         ) : (
           <div>
             <p className="form-title">Forgot Password</p>
@@ -72,21 +107,25 @@ class ForgotPassword extends Component<Props, State> {
             </div>
             {error !== '' ? <p className="login-form-error">{error}</p> : null}
             <div className="login-button-wrapper">
-              {/* TODO: Add loader with endpoint response for validate email */}
-              {/* {isLoading ? (
-            <div className="login-loader">
-              <Loader type="TailSpin" color="#297DFD" height={50} width={50} />
-            </div>
-          ) : ( */}
-              <div className="login-button">
-                <PrimaryButton
-                  id="send-email-button"
-                  onClick={this.handleForgotPassword}
-                >
-                  Send email
-                </PrimaryButton>
-              </div>
-              {/* )} */}
+              {isLoading ? (
+                <div className="login-loader">
+                  <Loader
+                    type="TailSpin"
+                    color="#297DFD"
+                    height={50}
+                    width={50}
+                  />
+                </div>
+              ) : (
+                <div className="login-button">
+                  <PrimaryButton
+                    id="send-email-button"
+                    onClick={this.handleForgotPassword}
+                  >
+                    Send email
+                  </PrimaryButton>
+                </div>
+              )}
               <div className="login-button">
                 <PrimaryButton
                   id="cancel-button"
@@ -104,4 +143,14 @@ class ForgotPassword extends Component<Props, State> {
   }
 }
 
-export default ForgotPassword;
+const mapStateToProps = (state: Map) => {
+  const isLoading = isForgotPasswordLoading(state);
+  const forgotPasswordSuccess = getForgotPasswordData(state);
+  const forgotPasswordError = getForgotPasswordError(state);
+
+  return { isLoading, forgotPasswordSuccess, forgotPasswordError };
+};
+
+export default connect(mapStateToProps, {
+  doForgotPassword: sendForgotPassword
+})(ForgotPassword);

@@ -8,7 +8,13 @@ import {
   LOGOUT_ERROR,
   PUT_ROLE_IN_PROGRESS,
   PUT_ROLE_SUCCESS,
-  PUT_ROLE_ERROR
+  PUT_ROLE_ERROR,
+  FORGOT_PASSWORD_IN_PROGRESS,
+  FORGOT_PASSWORD_SUCCESS,
+  FORGOT_PASSWORD_ERROR,
+  RESET_PASSWORD_IN_PROGRESS,
+  RESET_PASSWORD_SUCCESS,
+  RESET_PASSWORD_ERROR
 } from './auth-types';
 import type { Dispatch, ThunkAction } from './action-types';
 import {
@@ -18,7 +24,13 @@ import {
   getUserEmail,
   getRefreshToken
 } from '../SessionHandler';
-import { authentication, putRole, postRefreshToken } from '../api/auth';
+import {
+  authentication,
+  forgotPassword,
+  putRole,
+  postRefreshToken,
+  resetPassword
+} from '../api/auth';
 
 export const login = (
   email: string,
@@ -47,6 +59,54 @@ export const login = (
     } catch (error) {
       dispatch({
         type: AUTH_ERROR,
+        payload: { error }
+      });
+    }
+  };
+};
+
+export const sendForgotPassword = (
+  email: string
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: FORGOT_PASSWORD_IN_PROGRESS,
+      payload: {}
+    });
+    try {
+      const data = await forgotPassword(email);
+      dispatch({
+        type: FORGOT_PASSWORD_SUCCESS,
+        payload: { data }
+      });
+    } catch (error) {
+      dispatch({
+        type: FORGOT_PASSWORD_ERROR,
+        payload: { error }
+      });
+    }
+  };
+};
+
+export const sendResetPassword = (
+  email: string,
+  code: string,
+  newPassword: string
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: RESET_PASSWORD_IN_PROGRESS,
+      payload: {}
+    });
+    try {
+      const data = await resetPassword(email, code, newPassword);
+      dispatch({
+        type: RESET_PASSWORD_SUCCESS,
+        payload: { data }
+      });
+    } catch (error) {
+      dispatch({
+        type: RESET_PASSWORD_ERROR,
         payload: { error }
       });
     }
