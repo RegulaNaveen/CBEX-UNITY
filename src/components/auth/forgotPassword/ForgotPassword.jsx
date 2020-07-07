@@ -80,13 +80,8 @@ class ForgotPassword extends Component<Props, State> {
 
   render() {
     const { email, error, isChangePassword } = this.state;
-    const {
-      handleCancel,
-      isLoading,
-      forgotPasswordSuccess,
-      forgotPasswordError
-    } = this.props;
-    console.log('FORGOT---DATARENDER', forgotPasswordSuccess);
+    const { handleCancel, isLoading, forgotPasswordError } = this.props;
+    // Use forgotPasswordError to show error if any
     console.log('FORGOT---ERRORRENDER', forgotPasswordError);
     return (
       <div className="form-wrapper">

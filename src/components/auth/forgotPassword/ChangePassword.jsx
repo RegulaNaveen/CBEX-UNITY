@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import Loader from 'react-loader-spinner';
 import {
+  getForgotPasswordData,
   getResetPasswordData,
   isResetPasswordLoading,
   getResetPasswordError
@@ -16,6 +17,7 @@ import InputField from '../../common/InputField';
 type Props = {
   userEmail: string,
   isLoading: Boolean,
+  forgotPasswordSuccess: Map,
   resetPasswordSuccess: Map,
   resetPasswordError: string,
   doResetPassword: Function
@@ -85,7 +87,14 @@ class ChangePassword extends Component<Props, State> {
 
   render() {
     const { password, confirmPassword, error, code } = this.state;
-    const { isLoading, resetPasswordSuccess, resetPasswordError } = this.props;
+    const {
+      isLoading,
+      resetPasswordSuccess,
+      resetPasswordError,
+      forgotPasswordSuccess
+    } = this.props;
+    // Use forgotPasswordSuccess as info message for page
+    console.log('RESET---DATARENDER', forgotPasswordSuccess);
     console.log('RESET---DATARENDER', resetPasswordSuccess);
     console.log('RESET---ERRORRENDER', resetPasswordError);
     return (
@@ -147,9 +156,15 @@ class ChangePassword extends Component<Props, State> {
 const mapStateToProps = (state: Map) => {
   const isLoading = isResetPasswordLoading(state);
   const resetPasswordSuccess = getResetPasswordData(state);
+  const forgotPasswordSuccess = getForgotPasswordData(state);
   const resetPasswordError = getResetPasswordError(state);
 
-  return { isLoading, resetPasswordSuccess, resetPasswordError };
+  return {
+    isLoading,
+    resetPasswordSuccess,
+    resetPasswordError,
+    forgotPasswordSuccess
+  };
 };
 
 export default connect(mapStateToProps, {
