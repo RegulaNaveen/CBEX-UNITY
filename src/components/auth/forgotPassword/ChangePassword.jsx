@@ -10,7 +10,8 @@ type Props = {};
 type State = {
   password: string,
   confirmPassword: string,
-  error: string
+  error: string,
+  code: string
 };
 
 class ChangePassword extends Component<Props, State> {
@@ -20,7 +21,8 @@ class ChangePassword extends Component<Props, State> {
     this.state = {
       password: '',
       confirmPassword: '',
-      error: ''
+      error: '',
+      code: ''
     };
   }
 
@@ -29,17 +31,21 @@ class ChangePassword extends Component<Props, State> {
   }
 
   handleChangePassword = () => {
-    const { password, confirmPassword } = this.state;
+    const { code, password, confirmPassword } = this.state;
     this.setState({ error: '' });
-    if (isTextValid(password)) {
+    if (isTextValid(password) && isTextValid(code)) {
       if (password === confirmPassword) {
-        // send new password to endoint and go to login
+        // TODO: send code and new password to endoint and then go to login
       } else {
         this.setState({ error: 'Password do not match' });
       }
     } else {
-      this.setState({ error: 'Please enter your new password' });
+      this.setState({ error: 'Please enter your code and new password' });
     }
+  };
+
+  onCodeChange = (event: SyntheticInputEvent<EventTarget>) => {
+    this.setState({ code: event.target.value });
   };
 
   onPasswordChange = (event: SyntheticInputEvent<EventTarget>) => {
@@ -51,10 +57,20 @@ class ChangePassword extends Component<Props, State> {
   };
 
   render() {
-    const { password, confirmPassword, error } = this.state;
+    const { password, confirmPassword, error, code } = this.state;
     return (
       <div className="form-wrapper">
         <p className="form-title">Change Password</p>
+        <div className="input-wrapper">
+          <InputField
+            id="login-input-email"
+            title="Code"
+            placeholder="Enter code"
+            type="Code"
+            onChange={this.onCodeChange}
+            value={code}
+          />
+        </div>
         <div className="input-wrapper">
           <InputField
             id="login-input-password"

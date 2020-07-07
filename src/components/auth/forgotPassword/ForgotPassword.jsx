@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { isEmailValid, isTextValid } from '../../../utils/ValidationUtils';
 import { PrimaryButton } from '../../common/Buttons';
 import InputField from '../../common/InputField';
-import ValidateCode from './ValidateCode';
+import ChangePassword from './ChangePassword';
 
 type Props = {
   handleCancel: Function
@@ -13,7 +13,7 @@ type Props = {
 type State = {
   email: string,
   error: string,
-  validateCode: boolean
+  isChangePassword: boolean
 };
 
 class ForgotPassword extends Component<Props, State> {
@@ -23,7 +23,7 @@ class ForgotPassword extends Component<Props, State> {
     this.state = {
       email: '',
       error: '',
-      validateCode: false
+      isChangePassword: false
     };
   }
 
@@ -32,12 +32,12 @@ class ForgotPassword extends Component<Props, State> {
   }
 
   handleForgotPassword = () => {
-    const { email, validateCode } = this.state;
+    const { email, isChangePassword } = this.state;
     this.setState({ error: '' });
     if (isTextValid(email)) {
       if (isEmailValid(email)) {
         // send email to endpoint
-        this.setState({ validateCode: !validateCode });
+        this.setState({ isChangePassword: !isChangePassword });
       } else {
         this.setState({ error: 'Invalid email' });
       }
@@ -51,12 +51,12 @@ class ForgotPassword extends Component<Props, State> {
   };
 
   render() {
-    const { email, error, validateCode } = this.state;
+    const { email, error, isChangePassword } = this.state;
     const { handleCancel } = this.props;
     return (
       <div className="form-wrapper">
-        {validateCode ? (
-          <ValidateCode />
+        {isChangePassword ? (
+          <ChangePassword />
         ) : (
           <div>
             <p className="form-title">Forgot Password</p>
