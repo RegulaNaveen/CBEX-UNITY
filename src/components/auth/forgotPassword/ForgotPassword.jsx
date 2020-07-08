@@ -100,7 +100,9 @@ class ForgotPassword extends Component<Props, State> {
                 value={email}
               />
             </div>
-            {error !== '' ? <p className="login-form-error">{error}</p> : null}
+            {error !== '' || forgotPasswordError !== undefined ? (
+              <p className="login-form-error">{error || forgotPasswordError}</p>
+            ) : null}
             <div className="login-button-wrapper">
               {isLoading ? (
                 <div className="login-loader">
@@ -121,15 +123,15 @@ class ForgotPassword extends Component<Props, State> {
                   </PrimaryButton>
                 </div>
               )}
-              <div className="login-button">
-                <PrimaryButton
-                  id="cancel-button"
-                  className="secundary-button"
-                  onClick={handleCancel}
-                >
-                  Cancel
-                </PrimaryButton>
-              </div>
+            </div>
+            <div className="login-button">
+              <PrimaryButton
+                id="cancel-button"
+                className="secundary-button"
+                onClick={handleCancel}
+              >
+                Cancel
+              </PrimaryButton>
             </div>
           </div>
         )}

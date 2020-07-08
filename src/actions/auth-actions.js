@@ -77,7 +77,7 @@ export const sendForgotPassword = (
       const data = await forgotPassword(email);
       dispatch({
         type: FORGOT_PASSWORD_SUCCESS,
-        payload: { data }
+        payload: data.authService
       });
     } catch (error) {
       dispatch({

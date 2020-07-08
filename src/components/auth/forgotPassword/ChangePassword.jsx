@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import Loader from 'react-loader-spinner';
+import type { NavigationHistory } from 'react-router-dom';
 import {
   getForgotPasswordData,
   getResetPasswordData,
@@ -13,6 +14,7 @@ import { sendResetPassword } from '../../../actions/auth-actions';
 import { isTextValid } from '../../../utils/ValidationUtils';
 import { PrimaryButton } from '../../common/Buttons';
 import InputField from '../../common/InputField';
+import { LOGIN } from '../../../routes';
 
 type Props = {
   userEmail: string,
@@ -20,7 +22,8 @@ type Props = {
   forgotPasswordSuccess: Map,
   resetPasswordSuccess: Map,
   resetPasswordError: string,
-  doResetPassword: Function
+  doResetPassword: Function,
+  history: NavigationHistory
 };
 
 type State = {
@@ -53,8 +56,9 @@ class ChangePassword extends Component<Props, State> {
       prevProps.isLoading === true &&
       resetPasswordSuccess
     ) {
-      // Redirection to Login
+      const { history } = this.props;
       console.log('SHOULD REDIRECT');
+      history.push(LOGIN);
     }
   }
 
@@ -100,6 +104,7 @@ class ChangePassword extends Component<Props, State> {
     return (
       <div className="form-wrapper">
         <p className="form-title">Change Password</p>
+        <p className="form-message-success">{forgotPasswordSuccess}</p>
         <div className="input-wrapper">
           <InputField
             id="login-input-email"
@@ -130,7 +135,12 @@ class ChangePassword extends Component<Props, State> {
             value={confirmPassword}
           />
         </div>
-        {error !== '' ? <p className="login-form-error">{error}</p> : null}
+        {error !== '' || resetPasswordError !== undefined ? (
+          <p className="login-form-error">{error || resetPasswordError}</p>
+        ) : null}
+        {resetPasswordSuccess !== undefined ? (
+          <p className="login-form-success">{resetPasswordSuccess}</p>
+        ) : null}
         <div className="login-button-wrapper">
           {/* TODO: Add loader with endpoint response for validate email */}
           {isLoading ? (
@@ -138,7 +148,7 @@ class ChangePassword extends Component<Props, State> {
               <Loader type="TailSpin" color="#297DFD" height={50} width={50} />
             </div>
           ) : (
-            <div className="login-button">
+            <div className="login-button-wrapper">
               <PrimaryButton
                 id="change-password-button"
                 onClick={this.handleChangePassword}
