@@ -86,7 +86,7 @@ class ForgotPassword extends Component<Props, State> {
     return (
       <div className="form-wrapper">
         {isChangePassword ? (
-          <ChangePassword userEmail={email} />
+          <ChangePassword userEmail={email} handleShowLogin={handleCancel} />
         ) : (
           <div>
             <p className="form-title">Forgot Password</p>

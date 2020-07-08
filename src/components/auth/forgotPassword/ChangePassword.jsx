@@ -23,7 +23,7 @@ type Props = {
   resetPasswordSuccess: Map,
   resetPasswordError: string,
   doResetPassword: Function,
-  history: NavigationHistory
+  handleShowLogin: Function
 };
 
 type State = {
@@ -50,17 +50,23 @@ class ChangePassword extends Component<Props, State> {
   }
 
   componentDidUpdate(prevProps) {
+    console.log('UDPATE');
     const { isLoading, resetPasswordSuccess } = this.props;
     if (
       isLoading === false &&
       prevProps.isLoading === true &&
       resetPasswordSuccess
     ) {
-      const { history } = this.props;
       console.log('SHOULD REDIRECT');
-      history.push(LOGIN);
+      this.handleRedirection();
     }
   }
+
+  handleRedirection = () => {
+    const { handleShowLogin } = this.props;
+    console.log('SHOULD REDIRECT');
+    handleShowLogin();
+  };
 
   handleChangePassword = () => {
     const { code, password, confirmPassword } = this.state;
@@ -139,7 +145,9 @@ class ChangePassword extends Component<Props, State> {
           <p className="login-form-error">{error || resetPasswordError}</p>
         ) : null}
         {resetPasswordSuccess !== undefined ? (
-          <p className="login-form-success">{resetPasswordSuccess}</p>
+          <p className="login-form-success">
+            {resetPasswordSuccess.data.authService}
+          </p>
         ) : null}
         <div className="login-button-wrapper">
           {/* TODO: Add loader with endpoint response for validate email */}
