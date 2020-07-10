@@ -145,7 +145,7 @@ export class Proposal extends Component<Props, State> {
     const { sections, filteredSections, isLoading, details } = this.props;
     return (
       <div className="proposal-wrapper">
-        <Toolbar />
+        <Toolbar selected="proposal" />
         {this.renderContent(
           isLoading,
           isChecked ? filteredSections : sections,
