@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import Loader from 'react-loader-spinner';
-import type { NavigationHistory } from 'react-router-dom';
 import {
   getForgotPasswordData,
   getResetPasswordData,
@@ -14,7 +13,6 @@ import { sendResetPassword } from '../../../actions/auth-actions';
 import { isTextValid } from '../../../utils/ValidationUtils';
 import { PrimaryButton } from '../../common/Buttons';
 import InputField from '../../common/InputField';
-import { LOGIN } from '../../../routes';
 
 type Props = {
   userEmail: string,
@@ -50,21 +48,18 @@ class ChangePassword extends Component<Props, State> {
   }
 
   componentDidUpdate(prevProps) {
-    console.log('UDPATE');
     const { isLoading, resetPasswordSuccess } = this.props;
     if (
       isLoading === false &&
       prevProps.isLoading === true &&
       resetPasswordSuccess
     ) {
-      console.log('SHOULD REDIRECT');
       this.handleRedirection();
     }
   }
 
   handleRedirection = () => {
     const { handleShowLogin } = this.props;
-    console.log('SHOULD REDIRECT');
     handleShowLogin();
   };
 
@@ -103,10 +98,6 @@ class ChangePassword extends Component<Props, State> {
       resetPasswordError,
       forgotPasswordSuccess
     } = this.props;
-    // Use forgotPasswordSuccess as info message for page
-    console.log('RESET---DATARENDER', forgotPasswordSuccess);
-    console.log('RESET---DATARENDER', resetPasswordSuccess);
-    console.log('RESET---ERRORRENDER', resetPasswordError);
     return (
       <div className="form-wrapper">
         <p className="form-title">Change Password</p>
