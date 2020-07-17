@@ -91,7 +91,7 @@ class ForgotPassword extends Component<Props, State> {
             <div className="input-wrapper">
               <InputField
                 id="login-input-email"
-                title="Email"
+                label="Email"
                 placeholder="Email"
                 type="email"
                 onChange={this.onEmailChange}

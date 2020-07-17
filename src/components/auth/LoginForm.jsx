@@ -91,7 +91,7 @@ export class LoginFormImpl extends Component<Props, State> {
             <div className="input-wrapper">
               <InputField
                 id="login-input-email"
-                title="Email"
+                label="Email"
                 placeholder="Email"
                 type="email"
                 onChange={this.onEmailChange}
@@ -101,7 +101,7 @@ export class LoginFormImpl extends Component<Props, State> {
             <div className="input-wrapper">
               <InputField
                 id="login-input-password"
-                title="Password"
+                label="Password"
                 placeholder="Password"
                 type="password"
                 onChange={this.onPasswordChange}

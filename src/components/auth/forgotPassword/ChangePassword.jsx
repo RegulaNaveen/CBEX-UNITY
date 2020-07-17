@@ -105,7 +105,7 @@ class ChangePassword extends Component<Props, State> {
         <div className="input-wrapper">
           <InputField
             id="login-input-email"
-            title="Code"
+            label="Code"
             placeholder="Enter code"
             type="Code"
             onChange={this.onCodeChange}
@@ -115,7 +115,8 @@ class ChangePassword extends Component<Props, State> {
         <div className="input-wrapper">
           <InputField
             id="login-input-password"
-            title="Password"
+            title="Password must have more than 8 characters"
+            label="Password"
             placeholder="Password"
             type="password"
             onChange={this.onPasswordChange}
@@ -126,6 +127,7 @@ class ChangePassword extends Component<Props, State> {
           <InputField
             id="login-input-password"
             title="Confirm Password"
+            label="Confirm Password"
             placeholder="Confirm Password"
             type="Password"
             onChange={this.onConfirmPasswordChange}
