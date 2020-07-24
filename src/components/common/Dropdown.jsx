@@ -33,17 +33,32 @@ class Dropdown extends PureComponent<Props, State> {
     };
   }
 
-  handleCollapse = () => {
+  componentDidMount() {
+    window.addEventListener('click', this.closeOnOutsideClick);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('click', this.closeOnOutsideClick);
+  }
+
+  closeOnOutsideClick = () => {
+    this.setState({ isCollapsed: false });
+  };
+
+  handleCollapse = (event: SyntheticEvent<EventTarget>) => {
+    event.stopPropagation();
+
     const { isCollapsed } = this.state;
     this.setState({ isCollapsed: !isCollapsed });
   };
 
-  handleClick = (value: string) => {
+  handleClick = (event: SyntheticEvent<EventTarget>, value: string) => {
+    event.stopPropagation();
+
     const { onClick } = this.props;
     onClick(value);
-    this.setState({ selectedValue: value }, () => {
-      this.handleCollapse();
-    });
+
+    this.setState({ selectedValue: value, isCollapsed: false });
   };
 
   render() {
