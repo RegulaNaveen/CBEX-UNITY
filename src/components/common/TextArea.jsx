@@ -18,7 +18,11 @@ type State = {
   textValue: string
 };
 
+type ReactRefT = { current: any };
+
 class TextArea extends PureComponent<Props, State> {
+  textAreaInput: ReactRefT;
+
   static defaultProps = {
     id: undefined,
     title: undefined,
@@ -31,6 +35,8 @@ class TextArea extends PureComponent<Props, State> {
   constructor(props: Object) {
     super(props);
 
+    this.textAreaInput = React.createRef();
+
     this.state = {
       textValue: ''
     };
@@ -39,6 +45,16 @@ class TextArea extends PureComponent<Props, State> {
   componentDidMount() {
     const { value } = this.props;
     if (!_.isEmpty(value)) this.setState({ textValue: value });
+  }
+
+  componentDidUpdate() {
+    const { textValue: value } = this.state;
+
+    if (value.length < 150) this.textAreaInput.current.style.height = `40px`;
+    else {
+      this.textAreaInput.current.style.height = '5px';
+      this.textAreaInput.current.style.height = `${this.textAreaInput.current.scrollHeight}px`;
+    }
   }
 
   handleText = (event: SyntheticInputEvent<EventTarget>) => {
@@ -57,6 +73,13 @@ class TextArea extends PureComponent<Props, State> {
     if (onBlur && textValue) {
       onBlur(textValue);
     }
+  };
+
+  autoResize = (event: SyntheticInputEvent<EventTarget>) => {
+    /* eslint-disable no-param-reassign */
+    if (event.target.scrollHeight >= 75) event.target.style.overflow = 'auto';
+    else event.target.style.overflow = 'hidden';
+    /* eslint-enable no-param-reassign */
   };
 
   render() {
@@ -79,8 +102,10 @@ class TextArea extends PureComponent<Props, State> {
         ) : (
           <textarea
             id={id}
+            ref={this.textAreaInput}
             className={classnames('text-area-wrapper', className)}
             value={textValue}
+            onInput={this.autoResize}
             onChange={this.handleText}
             onBlur={this.handleOnBlur}
             placeholder={placeholder}
