@@ -34,15 +34,21 @@ class Multiselect extends PureComponent<Props, State> {
   }
 
   componentDidMount() {
+    window.addEventListener('click', this.handleOutsideClick);
+
     const { value } = this.props;
+
     if (!_.isEmpty(value)) {
       this.setState({ selectedValues: value });
     }
   }
 
-  handleCollapse = () => {
-    const { isCollapsed } = this.state;
-    this.setState({ isCollapsed: !isCollapsed });
+  componentWillUnmount() {
+    window.removeEventListener('click', this.handleOutsideClick);
+  }
+
+  handleOutsideClick = () => {
+    this.setState({ isCollapsed: false });
   };
 
   onRemove = (value: string) => {
@@ -51,20 +57,31 @@ class Multiselect extends PureComponent<Props, State> {
     }));
   };
 
-  onSelect = (value: string) => {
+  handleCollapse = (event: SyntheticEvent<EventTarget>) => {
+    event.stopPropagation();
+
+    const { isCollapsed } = this.state;
+    this.setState({ isCollapsed: !isCollapsed });
+  };
+
+  onSelect = (event: SyntheticEvent<EventTarget>, value: string) => {
+    event.stopPropagation();
+
     const { onClick } = this.props;
     const { selectedValues } = this.state;
+
     let index = -1;
+
     if (selectedValues.includes(`${value}, `)) {
       index = selectedValues.indexOf(`${value}, `);
-      if (index > -1) {
-        selectedValues.splice(index, 1);
-      }
-    } else {
-      selectedValues.push(`${value}, `);
-    }
-    onClick(selectedValues);
-    this.handleCollapse();
+      if (index > -1) selectedValues.splice(index, 1);
+    } else selectedValues.push(`${value}, `);
+
+    this.setState({ selectedValues }, () => {
+      onClick(selectedValues);
+    });
+
+    this.forceUpdate();
   };
 
   render() {

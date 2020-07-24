@@ -8,9 +8,9 @@ type Props = {
 };
 
 class MultiselectItem extends PureComponent<Props> {
-  handleClick = () => {
+  handleClick = (event: SyntheticEvent<EventTarget>) => {
     const { onClick, item } = this.props;
-    onClick(item);
+    onClick(event, item);
   };
 
   render() {
