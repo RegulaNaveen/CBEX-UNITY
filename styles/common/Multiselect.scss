@@ -12,9 +12,9 @@
 .multiselect-wrapper{
   position: relative;
   width: 100%;
-  flex: 1;
 
   .multiselect-list {
+    position: absolute;
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -23,8 +23,7 @@
     max-height: 200px;
     overflow-y: scroll;
     width: 100%;
-    background-color: $white;
-    position: absolute;
+    background: $white;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
     font-family: $proximaNova;
@@ -34,12 +33,18 @@
     cursor: pointer;
       
     .multiselect-list-item {
+      display: flex;
       padding: 8px 16px;
       border-bottom: 1px solid $neutral3;
         
       &:hover {
         background-color: $neptune-hover;
       }
+    }
+
+    .multiselect-icon {
+      margin-right: 5px;
+      width: 20px;
     }
   }
 
@@ -57,7 +62,6 @@
     border: 1px solid $neutral4;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);
     cursor: pointer;
-    // overflow-wrap: break-word;
 
     .multiselect-header-placeholder {
       min-height: 24px;

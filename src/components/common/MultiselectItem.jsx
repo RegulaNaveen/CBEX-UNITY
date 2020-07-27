@@ -1,5 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
+import { Check } from '../svg';
 
 type Props = {
   onClick: Function,
@@ -25,6 +26,7 @@ class MultiselectItem extends PureComponent<Props> {
         }
         onClick={this.handleClick}
       >
+        <div className="multiselect-icon">{isSelected ? <Check /> : null}</div>
         {item}
       </li>
     );
