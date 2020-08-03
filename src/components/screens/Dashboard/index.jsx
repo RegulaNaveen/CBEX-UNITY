@@ -16,7 +16,7 @@ export class Dashboard extends Component {
         <Toolbar selected="dashboard" />
         <div>DASHBOARD COMPONENT</div>
         <div className="tab-wrapper">
-          <Tabbar defaultSelected={0}>
+          <Tabbar>
             <div label="Active">Active unity records</div>
             <div label="Inactive">Inactive unity records</div>
             <div label="All">All unity records</div>

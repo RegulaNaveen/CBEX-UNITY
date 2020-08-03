@@ -1,28 +1,28 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React from 'react';
+import classnames from 'classnames';
 
 type Props = {
   onClick: Function,
   item: any,
-  index: Number,
-  selected: Number
+  index: number,
+  selected: number
 };
 
-class TabItem extends PureComponent<Props> {
-  handleClick = () => {
-    const { onClick, index } = this.props;
+const TabItem = ({ onClick, item, index, selected }: Props) => {
+  function handleClick() {
     onClick(index);
-  };
-
-  render() {
-    const { item, index, selected } = this.props;
-    const style = index === selected ? 'selected' : '';
-    return (
-      <li role="presentation" className={style} onClick={this.handleClick}>
-        {item.props.label}
-      </li>
-    );
   }
-}
+
+  return (
+    <li
+      role="presentation"
+      className={classnames(index === selected && 'selected')}
+      onClick={handleClick}
+    >
+      {item.props.label}
+    </li>
+  );
+};
 
 export default TabItem;
