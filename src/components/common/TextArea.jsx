@@ -50,10 +50,12 @@ class TextArea extends PureComponent<Props, State> {
   componentDidUpdate() {
     const { textValue: value } = this.state;
 
-    if (value.length < 150) this.textAreaInput.current.style.height = `40px`;
-    else {
-      this.textAreaInput.current.style.height = '5px';
-      this.textAreaInput.current.style.height = `${this.textAreaInput.current.scrollHeight}px`;
+    if (this.textAreaInput.current !== null) {
+      if (value.length < 150) this.textAreaInput.current.style.height = `40px`;
+      else {
+        this.textAreaInput.current.style.height = '5px';
+        this.textAreaInput.current.style.height = `${this.textAreaInput.current.scrollHeight}px`;
+      }
     }
   }
 
