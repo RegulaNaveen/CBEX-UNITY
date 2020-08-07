@@ -83,7 +83,7 @@ class TextArea extends PureComponent<Props, State> {
   autoResize = (event: SyntheticInputEvent<EventTarget>) => {
     /* eslint-disable no-param-reassign */
     if (event.target.id !== 'question-text-area') {
-      if (event.target.scrollHeight >= 75) event.target.style.overflow = 'auto';
+      if (event.target.scrollHeight >= 65) event.target.style.overflow = 'auto';
       else event.target.style.overflow = 'hidden';
     }
     /* eslint-enable no-param-reassign */
