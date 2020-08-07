@@ -54,7 +54,7 @@ class TextArea extends PureComponent<Props, State> {
       this.textAreaInput.current !== null &&
       this.textAreaInput.current.id !== 'question-text-area'
     ) {
-      if (value.length < 150) this.textAreaInput.current.style.height = `40px`;
+      if (value.length < 120) this.textAreaInput.current.style.height = `40px`;
       else {
         this.textAreaInput.current.style.height = '5px';
         this.textAreaInput.current.style.height = `${this.textAreaInput.current.scrollHeight}px`;
@@ -83,7 +83,7 @@ class TextArea extends PureComponent<Props, State> {
   autoResize = (event: SyntheticInputEvent<EventTarget>) => {
     /* eslint-disable no-param-reassign */
     if (event.target.id !== 'question-text-area') {
-      if (event.target.scrollHeight >= 65) event.target.style.overflow = 'auto';
+      if (event.target.scrollHeight >= 75) event.target.style.overflow = 'auto';
       else event.target.style.overflow = 'hidden';
     }
     /* eslint-enable no-param-reassign */
@@ -107,18 +107,18 @@ class TextArea extends PureComponent<Props, State> {
             type={type}
           />
         ) : (
-            <textarea
-              id={id}
-              ref={this.textAreaInput}
-              className={classnames('text-area-wrapper', className)}
-              value={textValue}
-              onInput={this.autoResize}
-              onChange={this.handleText}
-              onBlur={this.handleOnBlur}
-              placeholder={placeholder}
-              type={type}
-            />
-          )}
+          <textarea
+            id={id}
+            ref={this.textAreaInput}
+            className={classnames('text-area-wrapper', className)}
+            value={textValue}
+            onInput={this.autoResize}
+            onChange={this.handleText}
+            onBlur={this.handleOnBlur}
+            placeholder={placeholder}
+            type={type}
+          />
+        )}
       </>
     );
   }
