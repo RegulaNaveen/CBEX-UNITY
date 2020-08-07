@@ -81,8 +81,9 @@ export class TaskRow extends Component<Props, State> {
     let answerValueComplex;
 
     if (answer) {
-      if (typeof answer === 'string') answerValue = answer;
-      else answerValueComplex = answer.toJS();
+      if (typeof answer === 'string' || typeof answer === 'number') {
+        answerValue = answer.toString();
+      } else answerValueComplex = answer.toJS();
     }
 
     if (sectionName === 'Proposal Team')
