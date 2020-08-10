@@ -1,10 +1,9 @@
 // @flow
 import React, { Component } from 'react';
-import type { Node } from 'react';
 import TabItem from './TabItem';
 
 type Props = {
-  children: Node
+  children: any
 };
 
 type State = {
@@ -12,16 +11,15 @@ type State = {
 };
 
 class Tabbar extends Component<Props, State> {
-  constructor(props) {
+  constructor(props: Object) {
     super(props);
+
     this.state = {
       selected: 0
     };
   }
 
-  handleChange = (index: number) => {
-    this.setState({ selected: index });
-  };
+  handleChange = (index: number) => this.setState({ selected: index });
 
   render() {
     const {
