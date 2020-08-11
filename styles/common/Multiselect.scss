@@ -31,6 +31,7 @@
     letter-spacing: 0;
     line-height: 24px;
     cursor: pointer;
+    scrollbar-width: none;
       
     .multiselect-list-item {
       display: flex;
@@ -40,6 +41,11 @@
       &:hover {
         background-color: $neptune-hover;
       }
+
+    }
+    
+    &::-webkit-scrollbar {
+      display: none;
     }
 
     .multiselect-icon {
@@ -68,14 +74,16 @@
       width: 100%;
       color: $neutral6;
       font-family: $proximaNova;
+      pointer-events: none;
       font-size: 16px;
       letter-spacing: 0;
       line-height: 24px;
       margin-left: 8px;
     }
-
+    
     .multiselect-header-selected {
       min-height: 24px;
+      pointer-events: none;
       width: 90%;
       color: $black;
       font-family: $proximaNova;

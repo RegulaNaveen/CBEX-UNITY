@@ -17,6 +17,8 @@ type State = {
 };
 
 class Dropdown extends PureComponent<Props, State> {
+  ref: any;
+
   static defaultProps = {
     id: undefined,
     placeholder: '',
@@ -26,6 +28,8 @@ class Dropdown extends PureComponent<Props, State> {
 
   constructor(props: Object) {
     super(props);
+
+    this.ref = React.createRef();
 
     this.state = {
       isCollapsed: false,
@@ -41,13 +45,12 @@ class Dropdown extends PureComponent<Props, State> {
     window.removeEventListener('click', this.closeOnOutsideClick);
   }
 
-  closeOnOutsideClick = () => {
-    this.setState({ isCollapsed: false });
+  closeOnOutsideClick = (event: SyntheticEvent<EventTarget>) => {
+    if (this.ref.current !== event.target)
+      this.setState({ isCollapsed: false });
   };
 
-  handleCollapse = (event: SyntheticEvent<EventTarget>) => {
-    event.stopPropagation();
-
+  handleCollapse = () => {
     const { isCollapsed } = this.state;
     this.setState({ isCollapsed: !isCollapsed });
   };
@@ -63,7 +66,7 @@ class Dropdown extends PureComponent<Props, State> {
 
   render() {
     const { isCollapsed, selectedValue } = this.state;
-    const { id, placeholder, items, title, value } = this.props;
+    const { placeholder, id, items, title, value } = this.props;
 
     return (
       <>
@@ -72,14 +75,15 @@ class Dropdown extends PureComponent<Props, State> {
           <div
             id={id}
             className="dd-header"
+            ref={this.ref}
             role="presentation"
             onClick={this.handleCollapse}
           >
             {selectedValue || value ? (
               <div className="dd-header-selected">{selectedValue || value}</div>
             ) : (
-              <div className="dd-header-placeholder">{placeholder}</div>
-            )}
+                <div className="dd-header-placeholder">{placeholder}</div>
+              )}
           </div>
           {isCollapsed && (
             <ul className="dd-list">

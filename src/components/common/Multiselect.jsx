@@ -1,6 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 import _ from 'lodash';
+import { any } from 'expect';
 import MultiselectItem from './MultiselectItem';
 
 type Props = {
@@ -18,6 +19,8 @@ type State = {
 };
 
 class Multiselect extends PureComponent<Props, State> {
+  ref: any;
+
   static defaultProps = {
     id: undefined,
     title: undefined,
@@ -26,6 +29,8 @@ class Multiselect extends PureComponent<Props, State> {
 
   constructor(props: Object) {
     super(props);
+
+    this.ref = React.createRef();
 
     this.state = {
       isCollapsed: false,
@@ -47,8 +52,9 @@ class Multiselect extends PureComponent<Props, State> {
     window.removeEventListener('click', this.handleOutsideClick);
   }
 
-  handleOutsideClick = () => {
-    this.setState({ isCollapsed: false });
+  handleOutsideClick = (event: SyntheticEvent<EventTarget>) => {
+    if (this.ref.current !== event.target)
+      this.setState({ isCollapsed: false });
   };
 
   onRemove = (value: string) => {
@@ -57,9 +63,7 @@ class Multiselect extends PureComponent<Props, State> {
     }));
   };
 
-  handleCollapse = (event: SyntheticEvent<EventTarget>) => {
-    event.stopPropagation();
-
+  handleCollapse = () => {
     const { isCollapsed } = this.state;
     this.setState({ isCollapsed: !isCollapsed });
   };
@@ -93,6 +97,7 @@ class Multiselect extends PureComponent<Props, State> {
         <div className="multiselect-wrapper">
           <div
             id={id}
+            ref={this.ref}
             className="multiselect-header"
             role="presentation"
             onClick={this.handleCollapse}
@@ -102,10 +107,10 @@ class Multiselect extends PureComponent<Props, State> {
                 {selectedValues}
               </div>
             ) : (
-              <div className="multiselect-header-placeholder">
-                {placeholder}
-              </div>
-            )}
+                <div className="multiselect-header-placeholder">
+                  {placeholder}
+                </div>
+              )}
           </div>
           {isCollapsed && (
             <ul className="multiselect-list">
