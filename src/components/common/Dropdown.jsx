@@ -82,8 +82,8 @@ class Dropdown extends PureComponent<Props, State> {
             {selectedValue || value ? (
               <div className="dd-header-selected">{selectedValue || value}</div>
             ) : (
-                <div className="dd-header-placeholder">{placeholder}</div>
-              )}
+              <div className="dd-header-placeholder">{placeholder}</div>
+            )}
           </div>
           {isCollapsed && (
             <ul className="dd-list">

@@ -1,7 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
 import _ from 'lodash';
-import { any } from 'expect';
 import MultiselectItem from './MultiselectItem';
 
 type Props = {
@@ -107,10 +106,10 @@ class Multiselect extends PureComponent<Props, State> {
                 {selectedValues}
               </div>
             ) : (
-                <div className="multiselect-header-placeholder">
-                  {placeholder}
-                </div>
-              )}
+              <div className="multiselect-header-placeholder">
+                {placeholder}
+              </div>
+            )}
           </div>
           {isCollapsed && (
             <ul className="multiselect-list">
