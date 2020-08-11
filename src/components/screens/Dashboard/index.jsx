@@ -3,13 +3,18 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Toolbar from '../../Toolbar';
 import Tabbar from '../../common/Tabbar';
+import TableView from '../../common/TableView';
 
-export class Dashboard extends Component {
+type State = {
+  users: [Object]
+};
+
+export class Dashboard extends Component<[], State> {
   constructor() {
     super();
 
     this.state = {
-      users: []
+      users: [{}]
     };
   }
 
@@ -28,12 +33,14 @@ export class Dashboard extends Component {
       <div id="dashboard">
         <Toolbar selected="dashboard" />
         <div>DASHBOARD COMPONENT</div>
-        
+
         <div className="tab-wrapper">
           <Tabbar>
-            <div label="Active">Active unity records</div>
+            <div label="Active">Active</div>
             <div label="Inactive">Inactive unity records</div>
-            <div label="All">All unity records</div>
+            <div label="All">
+              <TableView data={users} />
+            </div>
           </Tabbar>
         </div>
       </div>
