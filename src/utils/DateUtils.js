@@ -21,5 +21,7 @@ export const dateDiffInDays = (date: Object): number => {
   return Math.floor((utc2 - utc1) / _MS_PER_DAY);
 };
 
-export const parseMomentDate = (date: Date) =>
-  moment(date).format('DD-MM-YYYY');
+export const parseMomentDate = (date: Date) => {
+  if (!date) return date;
+  return moment(date).format('DD-MM-YYYY');
+};
