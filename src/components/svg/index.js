@@ -17,6 +17,9 @@ import ListView from './ListView';
 import Folder from './Folder';
 import Clipboard from './ClipboardPencil';
 import RightArrow from './RightArrow';
+import ArrowLeft from './ArrowLeft';
+import ArrowRight from './ArrowRight';
+import More from './More';
 
 export {
   Checkmark,
@@ -36,5 +39,9 @@ export {
   ListView,
   Folder,
   Clipboard,
-  RightArrow
+  RightArrow,
+  Refresh,
+  ArrowLeft,
+  ArrowRight,
+  More
 };
