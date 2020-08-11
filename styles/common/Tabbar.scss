@@ -41,5 +41,11 @@
       }
     }
   }
+
+  .tab-content {
+    h1 {
+      @include base-form-title;
+    }
+  }
 }
 
