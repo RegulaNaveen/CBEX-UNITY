@@ -17,8 +17,6 @@ const generateSections = (
       section: { sectionName, sectionOrder }
     } = question;
 
-    console.log(question);
-
     const createSections = () => {
       let section = Map({});
       let questions = sections.getIn([sectionName, 'questions']) || Map({});

@@ -1,5 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
+import { isEmpty } from 'lodash';
 import 'react-day-picker/lib/style.css';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -13,6 +14,7 @@ import Modal from '../../common/Modal';
 import { PrimaryButton } from '../../common/Buttons';
 import Multiselect from '../../common/Multiselect';
 import Dropdown from '../../common/Dropdown';
+import Multiselect from '../../common/Multiselect';
 import TextArea from '../../common/TextArea';
 // import DatePicker from '../../common/DatePicker';
 // import Checkbox from '../../common/Checkbox';
@@ -107,9 +109,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   // handleFormatDate = (date: Date, format: string) => formatDate(date, format);
 
   handleTextChange = (value: string) => {
-    this.setState({
-      questionText: value
-    });
+    this.setState({ questionText: value });
   };
 
   handleOptionsTextChange = () => {
@@ -121,10 +121,12 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   onQuestionSectionChange = (value: string) => {
     const { questionSectionOrderInfo } = this.props;
     let sectionOrder = -1;
+
     questionSectionOrderInfo.forEach((section: Object) => {
       const { sectionOrder: order, sectionName: name } = section;
       if (name === value) sectionOrder = order;
     });
+
     if (sectionOrder > -1 && value) {
       this.setState({
         section: { sectionOrder, sectionName: value }
@@ -334,24 +336,24 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     return (
       <Modal>
         {!isQuestionSectionLoading &&
-        !isAnswerTypesLoading &&
-        !isRolesLoading ? (
-          this.renderContent(
-            onClose,
-            questionSectionList,
-            answerTypesList,
-            rolesList,
-            isLoading,
-            showAnswerOptions
-          )
-        ) : (
-          <div className="modal-loader">
-            <Loader type="TailSpin" color="#297DFD" height={100} width={100} />
-            <p className="modal-loader-title">
-              Loading custom question options
+          !isAnswerTypesLoading &&
+          !isRolesLoading ? (
+            this.renderContent(
+              onClose,
+              questionSectionList,
+              answerTypesList,
+              rolesList,
+              isLoading,
+              showAnswerOptions
+            )
+          ) : (
+            <div className="modal-loader">
+              <Loader type="TailSpin" color="#297DFD" height={100} width={100} />
+              <p className="modal-loader-title">
+                Loading custom question options
             </p>
-          </div>
-        )}
+            </div>
+          )}
       </Modal>
     );
   }
