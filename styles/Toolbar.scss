@@ -7,29 +7,25 @@
   padding-left: 24px;
   padding-right: 24px;
 
-  .toolbar-title-one {
+  .toolbar-title {
     color: $white;
     font-family: $proximaNova;
     font-size: 16px;
     letter-spacing: 0;
     line-height: 24px;
+    
+    &:nth-of-type(2) {
+      font-weight: bold;
+    }
   }
 
-  .toolbar-title-two {
-    color: $white;
-    font-family: $proximaNova;
-    font-size: 16px;
-    font-weight: bold;
-    letter-spacing: 0;
-    line-height: 24px;
-  }
 
   .toolbar-navigation-wrapper {
     display: flex;
     height: $toolbarHight;
     margin-left: 108px;
 
-    .toolbar-navigation-title {
+    a {
       width: 105px;
       display: flex;
       color: $white;
@@ -40,11 +36,13 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      text-decoration: none;
+   
+      &.is-selected {
+        background-color: rgba(255,255,255,0.16);
+      }
     }
 
-    .selected {
-      background-color: rgba(255,255,255,0.16);
-    }
   }
 
   .toolbar-account-spacer {

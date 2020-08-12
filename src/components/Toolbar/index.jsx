@@ -1,20 +1,13 @@
 // @flow
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import type { NavigationHistory } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import classnames from 'classnames';
 import ToolbarMenu from './ToolbarMenu';
 import { DropMenu } from '../svg';
-import { DASHBOARD } from '../../routes';
+import { DASHBOARD, PROPOSAL } from '../../routes';
 
-type State = {
-  isCollapsed: boolean
-};
-
-type Props = {
-  selected: string,
-  history: NavigationHistory
-};
+type State = { isCollapsed: boolean };
+type Props = { selected: string };
 
 class Toolbar extends Component<Props, State> {
   constructor(props: Object) {
@@ -25,68 +18,41 @@ class Toolbar extends Component<Props, State> {
     };
   }
 
+  handleKeyPress = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') this.handleCollapse();
+  };
+
   handleCollapse = () => {
     const { isCollapsed } = this.state;
     this.setState({ isCollapsed: !isCollapsed });
   };
 
-  handleKeyPress = (event: KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      this.handleCollapse();
-    }
-  };
-
-  handleRedirectKeyPress = (event: KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      this.handleRedirect();
-    }
-  };
-
-  handleRedirect = () => {
-    const { selected, history } = this.props;
-    if (selected === 'proposal') {
-      history.push(DASHBOARD);
-    } else if (selected === 'dashboard') {
-      const proposalId = localStorage.getItem('proposalId') || '';
-      history.push(`/app/proposals/${proposalId}`);
-    }
-  };
-
   render() {
+    const proposalId = localStorage.getItem('proposalId') || '';
+
     const { isCollapsed } = this.state;
     const { selected } = this.props;
+
     return (
       <div className="toolbar-wrapper">
-        <p className="toolbar-title-one">IQVIA™</p>
-        <p className="toolbar-title-two">Unity</p>
+        <p className="toolbar-title">IQVIA™</p>
+        <p className="toolbar-title">Unity</p>
         <div className="toolbar-navigation-wrapper">
-          <div
-            className={
-              selected === 'dashboard'
-                ? 'toolbar-navigation-title selected'
-                : 'toolbar-navigation-title'
-            }
-            role="button"
-            onClick={this.handleRedirect}
-            onKeyPress={this.handleRedirectKeyPress}
-            tabIndex={-1}
+          <Link
+            to={DASHBOARD}
+            className={classnames({ 'is-selected': selected === 'dashboard' })}
           >
-            Dashboard
-          </div>
-          <div
-            className={
-              selected === 'proposal'
-                ? 'toolbar-navigation-title selected'
-                : 'toolbar-navigation-title'
-            }
-            role="button"
-            onClick={this.handleRedirect}
-            onKeyPress={this.handleRedirectKeyPress}
-            tabIndex={-1}
+            Home
+          </Link>
+
+          <Link
+            to={`${PROPOSAL}${proposalId}`}
+            className={classnames({ 'is-selected': selected === 'proposal' })}
           >
-            Proposal
-          </div>
+            Proposals
+          </Link>
         </div>
+
         <div className="toolbar-account-spacer">
           <div className="toolbar-account-wrapper">
             <div

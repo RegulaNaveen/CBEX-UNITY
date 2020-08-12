@@ -19,10 +19,19 @@ const App = () => {
         <SessionHandler>
           <Switch>
             <Route path={LOGIN} component={Login} />
-            <PrivateRoute isAuthenticated={isAuthenticated}>
-              <Route path={PROPOSALS} component={ProposalComponent} />
-              <Route path={DASHBOARD} component={DashboardComponent} />
-            </PrivateRoute>
+
+            <PrivateRoute
+              path={PROPOSALS}
+              isAuthenticated={isAuthenticated}
+              component={ProposalComponent}
+            />
+
+            <PrivateRoute
+              path={DASHBOARD}
+              isAuthenticated={isAuthenticated}
+              component={DashboardComponent}
+            />
+
             <Redirect to={LOGIN} />
           </Switch>
         </SessionHandler>

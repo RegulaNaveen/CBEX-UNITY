@@ -1,8 +1,10 @@
 // @flow
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import type { Match } from 'react-router-dom';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 import Loader from 'react-loader-spinner';
 import {
   getProposal,
@@ -60,9 +62,11 @@ export class Proposal extends Component<Props, State> {
 
   componentDidMount() {
     const { getProposalInfo, match, authData, getRefreshAuthData } = this.props;
+
     if (!authData) {
       getRefreshAuthData();
     }
+
     getProposalInfo(match.params.id);
   }
 
@@ -201,8 +205,11 @@ const mapStateToProps = (state: Map) => {
   };
 };
 
-export default connect(mapStateToProps, {
-  getRefreshAuthData: refreshAuthData,
-  getProposalInfo: getProposal,
-  getProposalInfoUpdated: getProposalUpdated
-})(Proposal);
+export default compose(
+  withRouter,
+  connect(mapStateToProps, {
+    getRefreshAuthData: refreshAuthData,
+    getProposalInfo: getProposal,
+    getProposalInfoUpdated: getProposalUpdated
+  })
+)(Proposal);
