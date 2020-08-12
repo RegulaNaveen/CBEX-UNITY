@@ -45,14 +45,17 @@ const generateSections = (
 const getQuestionSections = (items: Array<Object>) => {
   const sections = [];
   let index = -1;
-  items.forEach((section: Object) => {
-    const { sectionName } = section;
+
+  items.forEach(({ sectionName }: Object) => {
     if (!sections.includes(sectionName)) sections.push(sectionName);
   });
+
   if (sections.includes('Details')) {
     index = sections.indexOf('Details');
+
     if (index > -1) sections.splice(index, 1);
   }
+
   return sections;
 };
 
