@@ -1,0 +1,27 @@
+.cmplx {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr) 270px;
+  grid-auto-flow: column;
+  align-items: center;
+
+  padding: 12px 16px;
+  background-color: $neutral1;
+  border: 1px solid $neutral3;
+
+  &__rows {
+    display: flex;
+    align-items: center;
+    font-family: $proximaNova;
+    font-size: 13px;
+    color: $neutral8;
+
+    p {
+      margin-right: 9px;
+    }
+  }
+  &__items {
+    font-family: $proximaNova;
+    font-size: 13px;
+    color: $black;
+  }
+}
