@@ -1,17 +1,31 @@
 // @flow
 import React from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { Folder, Clipboard, RightArrow } from '../svg';
 
 type Props = {
-  info: Array<Object>,
   title: string,
+  opportunityName: string,
   daysRemain: number,
-  opportunityName: string
+  dueDate: string,
+  account: string,
+  protocolNumber: number,
+  phase: number,
+  therapeuticArea: string,
+  verbatimIndication: string
 };
 
 // TODO: Replace data structure when we know how object is structured.
-const ProposalCard = ({ info, title, daysRemain, opportunityName }: Props) => (
+const ProposalCard = ({
+  title,
+  opportunityName,
+  daysRemain,
+  dueDate,
+  account,
+  protocolNumber,
+  phase,
+  therapeuticArea,
+  verbatimIndication
+}: Props) => (
   <div className="card">
     <div className="header-section">
       <div>
@@ -24,12 +38,18 @@ const ProposalCard = ({ info, title, daysRemain, opportunityName }: Props) => (
       </div>
     </div>
     <div className="info-section">
-      {info.map(item => (
-        <>
-          <p key={uuidv4()}>{item.label}</p>
-          <p key={uuidv4()}>{item.info}</p>
-        </>
-      ))}
+      <p>Due Date:</p>
+      <p>{dueDate}</p>
+      <p>Account: </p>
+      <p>{account}</p>
+      <p>Protocol Number:</p>
+      <p>{protocolNumber}</p>
+      <p>Phase:</p>
+      <p>{phase}</p>
+      <p>Therapeutic Area</p>
+      <p>{therapeuticArea}</p>
+      <p>Verbatim Indication</p>
+      <p>{verbatimIndication}</p>
     </div>
     <div className="buttons-section">
       <Clipboard className="icon" />
