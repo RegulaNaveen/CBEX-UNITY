@@ -1,0 +1,19 @@
+.switch {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  button {
+    background-color: $white;
+    border: none;
+    outline: none;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  button:nth-child(1) {
+    margin-right: 10px;
+  }
+}
