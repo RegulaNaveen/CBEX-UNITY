@@ -14,6 +14,9 @@ import CloseCircle from './CloseCircle';
 import Refresh from './Refresh';
 import CardView from './CardView';
 import ListView from './ListView';
+import Folder from './Folder';
+import Clipboard from './ClipboardPencil';
+import RightArrow from './RightArrow';
 
 export {
   Checkmark,
@@ -31,4 +34,7 @@ export {
   Refresh,
   CardView,
   ListView
+  Folder,
+  Clipboard,
+  RightArrow
 };

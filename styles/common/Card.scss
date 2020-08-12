@@ -1,0 +1,144 @@
+.card {
+    display: grid;
+    grid-template-rows: 80px 198px 81px 41px;
+    background-color: red;
+    box-sizing: border-box;
+    width: 420px;
+    border: 1px solid #E9E9E9;
+    border-radius: 4px;
+    background-color: #FFFFFF;
+    box-shadow: 0 4px 4px 0 rgba(0,0,0,0.04), 0 16px 24px 0 rgba(0,0,0,0.08);
+    .header-section{
+        display: grid;
+        grid-template-columns: 228px 190px;
+        align-items: center;
+        border-bottom: 1px solid #E9E9E9;
+        div:first-child{
+            margin-left: 24px;
+            #title {
+                height: 24px;
+                width: 282px;
+                color: #000000;
+                font-family: $proximaNova;
+                font-size: 20px;
+                font-weight: 600;
+                letter-spacing: 0;
+                line-height: 24px;
+            }
+            #proposal-name {
+                height: 17px;
+                width: 205px;
+                color: #4D4D4D;
+                font-family: $proximaNova;
+                font-size: 14px;
+                font-weight: 500;
+                letter-spacing: 0;
+                line-height: 17px;
+                overflow:hidden;
+                white-space:nowrap;
+                text-overflow: ellipsis;
+            }
+        }
+        div:last-child{
+            #remain-days{
+                margin-left: 80px;
+                height: 49px;
+                width: 30px;
+                color: #DF216D;
+                font-family: $proximaNova;
+                font-size: 48px;
+                font-weight: 600;
+                letter-spacing: 0;
+                line-height: 58px;
+            }
+            #info-days{
+                margin-left: 46px;
+                height: 17px;
+                width: 98px;
+                color: #575757;
+                font-family: $proximaNova;
+                font-size: 14px;
+                font-weight: 500;
+                letter-spacing: 0;
+                line-height: 17px;
+            }
+        }
+    }
+    
+    .info-section {
+        display: grid;
+        grid-template-columns: repeat(2, 209px);
+        grid-template-rows: auto;
+        margin-top: 10px;
+        border-bottom: 1px solid #E9E9E9;
+        p{
+            margin-left: 24px;
+            height: 25px;
+            width: 372px;
+            font-family: $proximaNova;
+            font-size: 14px;
+            letter-spacing: 0;
+            line-height: 24px;
+            color: #626262;
+        }
+        :nth-child(-n + 4){
+            color: #848484;
+        }
+        p:nth-child(even){
+            margin-left: 40px;
+        }
+    }
+    
+    .buttons-section {
+        display: grid;
+        grid-template-columns: repeat(2, 150px);
+        grid-template-rows: repeat(2, 40px);
+        justify-self: center;
+        .questions{
+            grid-column: 1 / 2;
+            grid-row: 2 / 3;
+            justify-self: center;
+            align-self: center;
+        }
+        .documents {
+            justify-self: center;
+            align-self: center;
+        }
+        .icon{
+            align-self: center;
+            justify-self: center;
+            margin-top: 14px;
+            cursor: pointer;
+        }
+        p{
+            height: 19px;
+            width: 73px;
+            color: #646464;
+            font-family: $proximaNova;
+            font-size: 13px;
+            letter-spacing: 0;
+        }
+    }
+    
+    .link-section{
+        display: grid;
+        grid-template-columns: 251px 167px;
+        border-top: 1px solid #E9E9E9;
+        background-color: #F8F9FB;
+        p{
+            color: #4986FF;
+            font-family: $proximaNova;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0;
+            line-height: 24px;
+            justify-self: end;
+            align-self: center;
+            cursor: pointer;
+        }
+        .right-arrow{
+            align-self: center;
+            cursor: pointer;
+        }
+    }
+}
