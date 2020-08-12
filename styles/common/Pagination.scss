@@ -1,0 +1,48 @@
+.pagination {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: repeat(8, 25px);
+  align-items: center;
+  column-gap: 10px;
+
+  &__arrow {
+    border: 1px solid $neutral4;
+    border-radius: 10%;
+    background-color: $neutral1;
+    outline: none;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &__page {
+    font-family: $proximaNova;
+    font-size: 14px;
+    color: $neutral7;
+    width: 25px;
+    height: 22px;
+    text-align: center;
+    border: none;
+    background-color: transparent;
+    outline: none;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .selected {
+    background-color: $neptune-secondary;
+    color: $white;
+    border-radius: 4px;
+  }
+
+  &__svg {
+    fill: $neutral7;
+  }
+}
