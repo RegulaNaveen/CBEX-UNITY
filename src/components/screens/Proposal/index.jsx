@@ -63,18 +63,15 @@ export class Proposal extends Component<Props, State> {
   componentDidMount() {
     const { getProposalInfo, match, authData, getRefreshAuthData } = this.props;
 
-    if (!authData) {
-      getRefreshAuthData();
-    }
+    if (!authData) getRefreshAuthData();
 
     getProposalInfo(match.params.id);
   }
 
   componentDidUpdate(prevProps: Map) {
     const { setQuestion, hasQuestionError } = this.props;
-    if (prevProps.isQuestionLoading && setQuestion && !hasQuestionError) {
+    if (prevProps.isQuestionLoading && setQuestion && !hasQuestionError)
       this.onClose();
-    }
   }
 
   onClose = () => {
