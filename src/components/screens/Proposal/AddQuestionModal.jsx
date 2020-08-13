@@ -336,24 +336,24 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     return (
       <Modal>
         {!isQuestionSectionLoading &&
-          !isAnswerTypesLoading &&
-          !isRolesLoading ? (
-            this.renderContent(
-              onClose,
-              questionSectionList,
-              answerTypesList,
-              rolesList,
-              isLoading,
-              showAnswerOptions
-            )
-          ) : (
-            <div className="modal-loader">
-              <Loader type="TailSpin" color="#297DFD" height={100} width={100} />
-              <p className="modal-loader-title">
-                Loading custom question options
+        !isAnswerTypesLoading &&
+        !isRolesLoading ? (
+          this.renderContent(
+            onClose,
+            questionSectionList,
+            answerTypesList,
+            rolesList,
+            isLoading,
+            showAnswerOptions
+          )
+        ) : (
+          <div className="modal-loader">
+            <Loader type="TailSpin" color="#297DFD" height={100} width={100} />
+            <p className="modal-loader-title">
+              Loading custom question options
             </p>
-            </div>
-          )}
+          </div>
+        )}
       </Modal>
     );
   }
