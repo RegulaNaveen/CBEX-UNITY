@@ -13,11 +13,12 @@ type Props = {
   protocolNumber: number,
   phase: number,
   therapeuticArea: string,
-  verbatimIndication: string
+  verbatimIndication: string,
+  proposalId: string
 };
 
 // TODO: Replace data structure when we know how object is structured.
-const proposalId = localStorage.getItem('proposalId') || '';
+// TODO: Replace Link to prop in Documents.
 const ProposalCard = ({
   title,
   opportunityName,
@@ -27,7 +28,8 @@ const ProposalCard = ({
   protocolNumber,
   phase,
   therapeuticArea,
-  verbatimIndication
+  verbatimIndication,
+  proposalId
 }: Props) => (
   <div className="card">
     <div className="header-section">
