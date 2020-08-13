@@ -40,7 +40,6 @@ export {
   Folder,
   Clipboard,
   RightArrow,
-  Refresh,
   ArrowLeft,
   ArrowRight,
   More
