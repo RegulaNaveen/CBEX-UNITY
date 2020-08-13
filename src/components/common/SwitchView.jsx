@@ -1,14 +1,14 @@
 // @flow
 import React from 'react';
 
-import { List, Card } from '../svg/index';
+import { ListView, CardView } from '../svg';
 
 type Props = {
   isTypeCard: boolean,
   setTypeCard: Function
 };
 
-const Switch = (props: Props) => {
+const SwitchView = (props: Props) => {
   const { isTypeCard, setTypeCard } = props;
 
   const activeColor = '#0256D2';
@@ -23,16 +23,16 @@ const Switch = (props: Props) => {
   }
 
   return (
-    <div className="switch">
+    <div className="switch-view">
       <button type="button" onClick={handleListSelected}>
-        <List
-          className="switch__icon"
+        <ListView
+          className="switch-view__icon"
           fill={!isTypeCard ? activeColor : inactiveColor}
         />
       </button>
       <button type="button" onClick={handleCardSelected}>
-        <Card
-          className="switch__icon"
+        <CardView
+          className="switch-view__icon"
           fill={isTypeCard ? activeColor : inactiveColor}
         />
       </button>
@@ -40,4 +40,4 @@ const Switch = (props: Props) => {
   );
 };
 
-export default Switch;
+export default SwitchView;

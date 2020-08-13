@@ -6,7 +6,7 @@ type Props = {
   fill?: string
 };
 
-const Card = ({ className, fill }: Props) => {
+const CardView = ({ className, fill }: Props) => {
   return (
     <svg width={24} height={24} viewBox="0 0 24 24" className={className}>
       <defs>
@@ -28,8 +28,8 @@ const Card = ({ className, fill }: Props) => {
   );
 };
 
-Card.defaultProps = {
+CardView.defaultProps = {
   fill: '#000'
 };
 
-export default Card;
+export default CardView;

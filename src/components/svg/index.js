@@ -12,8 +12,8 @@ import Calendar from './Calendar';
 import Close from './Close';
 import CloseCircle from './CloseCircle';
 import Refresh from './Refresh';
-import Card from './Card';
-import List from './List';
+import CardView from './CardView';
+import ListView from './ListView';
 
 export {
   Checkmark,
@@ -29,6 +29,6 @@ export {
   Close,
   CloseCircle,
   Refresh,
-  Card,
-  List
+  CardView,
+  ListView
 };

@@ -6,7 +6,7 @@ type Props = {
   fill?: string
 };
 
-const List = ({ className, fill }: Props) => {
+const ListView = ({ className, fill }: Props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -35,8 +35,8 @@ const List = ({ className, fill }: Props) => {
   );
 };
 
-List.defaultProps = {
+ListView.defaultProps = {
   fill: '#000'
 };
 
-export default List;
+export default ListView;
