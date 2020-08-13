@@ -33,7 +33,7 @@ export {
   CloseCircle,
   Refresh,
   CardView,
-  ListView
+  ListView,
   Folder,
   Clipboard,
   RightArrow
