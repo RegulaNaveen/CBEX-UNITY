@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import TableView from '../../common/TableView';
-import ProposalCard from '../../common/ProposalCard';
 
 type Props = {};
 
@@ -34,17 +33,6 @@ class MyDocketTab extends Component<Props, State> {
     return (
       <section id="all-tab" className="tab-content">
         <h1>My Docket</h1>
-        <ProposalCard
-          title="Title"
-          opportunityName="Opportunity Name"
-          daysRemain={8}
-          dueDate="Due Date"
-          account="Eli Acccount"
-          protocolNumber={123456789}
-          phase={2}
-          therapeuticArea="Neurology"
-          verbatimIndication="Prostate Cancer"
-        />
         <TableView data={users} />
       </section>
     );
