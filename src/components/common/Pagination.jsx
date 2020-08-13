@@ -1,48 +1,64 @@
 // @flow
-import React from 'react';
-import classnames from 'classnames';
-import { chunk } from 'lodash';
+import React, { PureComponent } from "react";
+import classnames from "classnames";
+import { chunk } from "lodash";
 
-import { ArrowLeft, ArrowRight, More } from '../svg/index';
+import { ArrowLeft, ArrowRight, More } from "../svg";
 
 type Props = {
-  currentPage: number,
   maxRows: number,
   totalItems: number,
-  currentChunk: number,
-  setCurrentChunk: Function
+  getCurrentPage: Function
 };
 
-const Pagination = (props: Props) => {
-  const {
-    currentPage,
-    maxRows,
-    totalItems,
-    currentChunk,
-    setCurrentChunk
-  } = props;
+type State = {
+  currentPage: number,
+  currentChunk: number
+};
 
-  const chunks = chunk(
-    [...Array.from(Array(Math.ceil(totalItems / maxRows)), (_, i) => i + 1)],
-    4
-  );
+class Pagination extends PureComponent<Props, State> {
+  constructor(props: Object) {
+    super(props);
 
-  function handlePreviousChunk() {
-    if (currentChunk - 1 >= 0) setCurrentChunk(currentChunk - 1);
+    this.state = {
+      currentPage: 1,
+      currentChunk: 0
+    };
   }
 
-  function handleNextChunk() {
-    console.log(setCurrentChunk);
-    if (currentChunk + 1 < chunks.length) setCurrentChunk(currentChunk + 1);
-  }
+  setCurrentPage = (value: number) => {
+    const { getCurrentPage } = this.props;
+    this.setState({ currentPage: value });
+    getCurrentPage(value);
+  };
 
-  function renderLeftControls() {
+  handlePreviousChunk = () => {
+    const { currentChunk } = this.state;
+    if (currentChunk - 1 >= 0)
+      this.setState({ currentChunk: currentChunk - 1 });
+  };
+
+  handleNextChunk = () => {
+    const { currentChunk } = this.state;
+    const { totalItems, maxRows } = this.props;
+
+    const chunks = chunk(
+      [...Array.from(Array(Math.ceil(totalItems / maxRows)), (_, i) => i + 1)],
+      4
+    );
+
+    if (currentChunk + 1 < chunks.length)
+      this.setState({ currentChunk: currentChunk + 1 });
+  };
+
+  renderLeftControls() {
+    const { currentChunk } = this.state;
     if (currentChunk !== 0)
       return [
         <button
           type="button"
           className="pagination__arrow"
-          onClick={handlePreviousChunk}
+          onClick={this.handlePreviousChunk}
         >
           <ArrowLeft className="pagination__svg" />
         </button>,
@@ -52,14 +68,22 @@ const Pagination = (props: Props) => {
     return [<div />, <div />];
   }
 
-  function renderRightControls() {
+  renderRightControls() {
+    const { currentChunk } = this.state;
+    const { totalItems, maxRows } = this.props;
+
+    const chunks = chunk(
+      [...Array.from(Array(Math.ceil(totalItems / maxRows)), (_, i) => i + 1)],
+      4
+    );
+
     if (currentChunk !== chunks.length - 1)
       return [
         <More className="pagination__svg" />,
         <button
           type="button"
           className="pagination__arrow"
-          onClick={handleNextChunk}
+          onClick={this.handleNextChunk}
         >
           <ArrowRight className="pagination__svg" />
         </button>
@@ -68,22 +92,33 @@ const Pagination = (props: Props) => {
     return [<div />, <div />];
   }
 
-  return (
-    <div className="pagination">
-      {renderLeftControls()}
-      {chunks[currentChunk].map(page => (
-        <button
-          type="button"
-          className={classnames('pagination__page', {
-            selected: page === currentPage
-          })}
-        >
-          {page}
-        </button>
-      ))}
-      {renderRightControls()}
-    </div>
-  );
-};
+  render() {
+    const { currentPage, currentChunk } = this.state;
+    const { maxRows, totalItems } = this.props;
+
+    const chunks = chunk(
+      [...Array.from(Array(Math.ceil(totalItems / maxRows)), (_, i) => i + 1)],
+      4
+    );
+
+    return (
+      <div className="pagination">
+        {this.renderLeftControls()}
+        {chunks[currentChunk].map(page => (
+          <button
+            type="button"
+            className={classnames("pagination__page", {
+              selected: page === currentPage
+            })}
+            onClick={this.setCurrentPage.bind(this, page)}
+          >
+            {page}
+          </button>
+        ))}
+        {this.renderRightControls()}
+      </div>
+    );
+  }
+}
 
 export default Pagination;

@@ -1,35 +1,39 @@
 // @flow
-import React, { PureComponent } from 'react';
-import { chunk } from 'lodash';
-import Dropwdown from './Dropdown';
-import Pagination from './Pagination';
+import React, { Component } from "react";
+import { chunk } from "lodash";
+import Dropwdown from "./Dropdown";
+import Pagination from "./Pagination";
 
 type Props = {
-  totalItems: number,
+  totalItems: number
+};
+
+type State = {
   currentPage: number,
   maxRows: number
 };
 
-type State = {
-  currentChunk: number
-};
-
-class ComplexPagination extends PureComponent<Props, State> {
+class ComplexPagination extends Component<Props, State> {
   constructor(props: Object) {
     super(props);
 
     this.state = {
-      currentChunk: 0
+      currentPage: 1,
+      maxRows: 10
     };
   }
 
-  setCurrentChunk = (value: number) => {
-    this.setState({ currentChunk: value });
+  setMaxRows = (maxRows: number) => {
+    this.setState({ maxRows });
+  };
+
+  getCurrentPage = (currentPage: number) => {
+    this.setState({ currentPage });
   };
 
   render() {
-    const { currentChunk } = this.state;
-    const { totalItems, currentPage, maxRows } = this.props;
+    const { currentPage, maxRows } = this.state;
+    const { totalItems } = this.props;
 
     const chunks = chunk(
       [...Array.from(Array(totalItems), (_, i) => i + 1)],
@@ -37,9 +41,24 @@ class ComplexPagination extends PureComponent<Props, State> {
     );
 
     const handleCountItems = () => {
-      const firstOfList = chunks[currentPage - 1][0];
-      const lastOfList =
-        maxRows * (currentPage - 1) + chunks[currentPage - 1].length;
+      let firstOfList = 1;
+      let lastOfList = 10;
+
+      if (chunks[currentPage - 1]) {
+        const [first] = chunks[currentPage - 1];
+        firstOfList = first;
+        lastOfList =
+          maxRows * (currentPage - 1) + chunks[currentPage - 1].length;
+      } else {
+        console.log('ENTRO');
+        // const chunksLength = chunks.length;
+        // const [first] = chunks[chunksLength - 1];
+        // firstOfList = first;
+        // lastOfList =
+        //   maxRows * (chunksLength - 1) + chunks[chunksLength - 1].length;
+        // this.setCurrentChunk(chunks.length - 1);
+      }
+
       return `Showing ${firstOfList}-${lastOfList} of ${totalItems}`;
     };
 
@@ -47,22 +66,20 @@ class ComplexPagination extends PureComponent<Props, State> {
       <div className="cmplx">
         <div className="cmplx__rows">
           <p>Rows</p>
-          <div style={{ width: '52px' }}>
+          <div style={{ width: "52px" }}>
             <Dropwdown
               placeholder="Test"
               value="10"
-              onClick={val => console.log(val)}
-              items={['10', '20', '50', '100']}
+              onClick={this.setMaxRows}
+              items={["10", "20", "50", "100"]}
             />
           </div>
         </div>
         <p className="cmplx__items">{handleCountItems()}</p>
         <Pagination
-          currentPage={currentPage}
           maxRows={maxRows}
           totalItems={totalItems}
-          currentChunk={currentChunk}
-          setCurrentChunk={this.setCurrentChunk}
+          getCurrentPage={this.getCurrentPage}
         />
       </div>
     );
