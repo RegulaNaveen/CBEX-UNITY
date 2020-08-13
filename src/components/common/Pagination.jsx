@@ -1,9 +1,9 @@
 // @flow
-import React, { PureComponent } from "react";
-import classnames from "classnames";
-import { chunk } from "lodash";
+import React, { PureComponent } from 'react';
+import classnames from 'classnames';
+import { chunk, last } from 'lodash';
 
-import { ArrowLeft, ArrowRight, More } from "../svg";
+import { ArrowLeft, ArrowRight, More } from '../svg';
 
 type Props = {
   maxRows: number,
@@ -17,6 +17,8 @@ type State = {
 };
 
 class Pagination extends PureComponent<Props, State> {
+  chunks: Array<Array<number>>;
+
   constructor(props: Object) {
     super(props);
 
@@ -26,7 +28,8 @@ class Pagination extends PureComponent<Props, State> {
     };
   }
 
-  setCurrentPage = (value: number) => {
+  setCurrentPage = (event: SyntheticInputEvent<EventTarget>) => {
+    const value = Number(event.target.id);
     const { getCurrentPage } = this.props;
     this.setState({ currentPage: value });
     getCurrentPage(value);
@@ -34,83 +37,91 @@ class Pagination extends PureComponent<Props, State> {
 
   handlePreviousChunk = () => {
     const { currentChunk } = this.state;
-    if (currentChunk - 1 >= 0)
-      this.setState({ currentChunk: currentChunk - 1 });
+    const { getCurrentPage } = this.props;
+
+    if (currentChunk - 1 >= 0) {
+      const lastItem = last(this.chunks[currentChunk - 1]);
+      this.setState({ currentChunk: currentChunk - 1, currentPage: lastItem });
+      getCurrentPage(lastItem);
+    }
   };
 
   handleNextChunk = () => {
     const { currentChunk } = this.state;
-    const { totalItems, maxRows } = this.props;
+    const { getCurrentPage } = this.props;
 
-    const chunks = chunk(
-      [...Array.from(Array(Math.ceil(totalItems / maxRows)), (_, i) => i + 1)],
-      4
-    );
-
-    if (currentChunk + 1 < chunks.length)
-      this.setState({ currentChunk: currentChunk + 1 });
+    if (currentChunk + 1 < this.chunks.length) {
+      const [first] = this.chunks[currentChunk + 1];
+      this.setState({ currentChunk: currentChunk + 1, currentPage: first });
+      getCurrentPage(first);
+    }
   };
 
   renderLeftControls() {
     const { currentChunk } = this.state;
-    if (currentChunk !== 0)
-      return [
-        <button
-          type="button"
-          className="pagination__arrow"
-          onClick={this.handlePreviousChunk}
-        >
-          <ArrowLeft className="pagination__svg" />
-        </button>,
-        <More className="pagination__svg" />
-      ];
+    if (currentChunk === 0) return null;
 
-    return [<div />, <div />];
+    return [
+      <button
+        type="button"
+        className="pagination__arrow arrow__left"
+        onClick={this.handlePreviousChunk}
+      >
+        <ArrowLeft className="pagination__svg" />
+      </button>,
+      <More className="pagination__svg more__left" />
+    ];
   }
 
   renderRightControls() {
     const { currentChunk } = this.state;
-    const { totalItems, maxRows } = this.props;
+    if (currentChunk === this.chunks.length - 1) return null;
 
-    const chunks = chunk(
-      [...Array.from(Array(Math.ceil(totalItems / maxRows)), (_, i) => i + 1)],
-      4
-    );
-
-    if (currentChunk !== chunks.length - 1)
-      return [
-        <More className="pagination__svg" />,
-        <button
-          type="button"
-          className="pagination__arrow"
-          onClick={this.handleNextChunk}
-        >
-          <ArrowRight className="pagination__svg" />
-        </button>
-      ];
-
-    return [<div />, <div />];
+    return [
+      <More className="pagination__svg more__right" />,
+      <button
+        type="button"
+        className="pagination__arrow arrow__right"
+        onClick={this.handleNextChunk}
+      >
+        <ArrowRight className="pagination__svg" />
+      </button>
+    ];
   }
 
   render() {
     const { currentPage, currentChunk } = this.state;
-    const { maxRows, totalItems } = this.props;
+    const { maxRows, totalItems, getCurrentPage } = this.props;
 
-    const chunks = chunk(
+    this.chunks = chunk(
       [...Array.from(Array(Math.ceil(totalItems / maxRows)), (_, i) => i + 1)],
       4
     );
 
+    const pages = chunk(
+      [...Array.from(Array(totalItems), (_, i) => i + 1)],
+      maxRows
+    );
+
+    let current = currentChunk;
+    if (!pages[currentPage - 1]) {
+      current = 0;
+      this.setState({ currentChunk: 0, currentPage: 1 });
+      getCurrentPage(1);
+    }
+
     return (
       <div className="pagination">
         {this.renderLeftControls()}
-        {chunks[currentChunk].map(page => (
+        {this.chunks[current].map((page, index) => (
           <button
+            id={page}
             type="button"
-            className={classnames("pagination__page", {
+            style={{ gridColumn: `${index + 3}/${index + 4}` }}
+            className={classnames('pagination__page', {
               selected: page === currentPage
             })}
-            onClick={this.setCurrentPage.bind(this, page)}
+            onClick={this.setCurrentPage}
           >
             {page}
           </button>

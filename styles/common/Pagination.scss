@@ -45,4 +45,17 @@
   &__svg {
     fill: $neutral7;
   }
+
+  .arrow__left {
+    grid-column: 1 / 2;
+  }
+  .more__left {
+    grid-column: 2 / 3;
+  }
+  .more__right {
+    grid-column: -3 / -2;
+  }
+  .arrow__right {
+    grid-column: -2 / -1;
+  }
 }
