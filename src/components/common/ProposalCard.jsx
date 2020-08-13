@@ -1,6 +1,8 @@
 // @flow
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Folder, Clipboard, RightArrow } from '../svg';
+import { PROPOSAL } from '../../routes';
 
 type Props = {
   title: string,
@@ -15,6 +17,7 @@ type Props = {
 };
 
 // TODO: Replace data structure when we know how object is structured.
+const proposalId = localStorage.getItem('proposalId') || '';
 const ProposalCard = ({
   title,
   opportunityName,
@@ -52,13 +55,17 @@ const ProposalCard = ({
       <p>{verbatimIndication}</p>
     </div>
     <div className="buttons-section">
-      <Clipboard className="icon" />
+      <Link to={`${PROPOSAL}${proposalId}`} className="link-icon">
+        <Clipboard className="icon" />
+      </Link>
       <p className="questions">Questions</p>
-      <Folder className="icon" />
+      <Link to={PROPOSAL} className="link-icon">
+        <Folder className="icon" />
+      </Link>
       <p className="documents">Documents</p>
     </div>
     <div className="link-section">
-      <p>View Opportunity Hub</p>
+      <Link to={`${PROPOSAL}${proposalId}`}>View Opportunity Hub</Link>
       <RightArrow className="right-arrow" />
     </div>
   </div>

@@ -97,6 +97,13 @@
         grid-template-columns: repeat(2, 150px);
         grid-template-rows: repeat(2, 40px);
         justify-self: center;
+        .link-icon{
+            align-self: center;
+            justify-self: center;
+            outline: none;
+            margin-top: 14px;
+            cursor: pointer;
+        }
         .questions{
             grid-column: 1 / 2;
             grid-row: 2 / 3;
@@ -106,12 +113,6 @@
         .documents {
             justify-self: center;
             align-self: center;
-        }
-        .icon{
-            align-self: center;
-            justify-self: center;
-            margin-top: 14px;
-            cursor: pointer;
         }
         p{
             height: 19px;
@@ -128,7 +129,7 @@
         grid-template-columns: 251px 167px;
         border-top: 1px solid #E9E9E9;
         background-color: #F8F9FB;
-        p{
+        :first-child{
             color: #4986FF;
             font-family: $proximaNova;
             font-size: 14px;
@@ -138,10 +139,11 @@
             justify-self: end;
             align-self: center;
             cursor: pointer;
+            text-decoration: none;
+            outline: none;
         }
         .right-arrow{
             align-self: center;
-            cursor: pointer;
         }
     }
 }
