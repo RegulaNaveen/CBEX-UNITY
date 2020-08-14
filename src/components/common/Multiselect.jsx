@@ -1,6 +1,8 @@
 // @flow
 import React, { PureComponent } from 'react';
-import _ from 'lodash';
+import { isEmpty } from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
+import { arrayContaining } from 'expect';
 import MultiselectItem from './MultiselectItem';
 
 type Props = {
@@ -42,9 +44,10 @@ class Multiselect extends PureComponent<Props, State> {
 
     const { value } = this.props;
 
-    if (!_.isEmpty(value)) {
-      this.setState({ selectedValues: value });
-    }
+    if (!isEmpty(value))
+      this.setState({ selectedValues: value }, () =>
+        console.log(this.state.selectedValues)
+      );
   }
 
   componentWillUnmount() {
@@ -74,17 +77,30 @@ class Multiselect extends PureComponent<Props, State> {
     const { selectedValues } = this.state;
 
     let index = -1;
+    const newArray = selectedValues;
 
-    if (selectedValues.includes(`${value}, `)) {
-      index = selectedValues.indexOf(`${value}, `);
-      if (index > -1) selectedValues.splice(index, 1);
-    } else selectedValues.push(`${value}, `);
+    if (!selectedValues.includes(value)) newArray.push(value);
+    else {
+      index = newArray.indexOf(value);
+      if (index > -1) newArray.splice(index, 1);
+    }
 
-    this.setState({ selectedValues }, () => {
-      onClick(selectedValues);
-    });
+    this.setState({ selectedValues: newArray }, () => onClick(selectedValues));
 
     this.forceUpdate();
+  };
+
+  renderSelectedItems = () => {
+    const { selectedValues } = this.state;
+    return (
+      <div className="multiselect-header-selected">
+        {selectedValues.map((item, index) => (
+          <span key={uuidv4()}>
+            {index !== selectedValues.length - 1 ? `${item}, ` : `${item}`}
+          </span>
+        ))}
+      </div>
+    );
   };
 
   render() {
@@ -101,25 +117,23 @@ class Multiselect extends PureComponent<Props, State> {
             role="presentation"
             onClick={this.handleCollapse}
           >
-            {selectedValues.length !== 0 ? (
-              <div className="multiselect-header-selected">
-                {selectedValues}
-              </div>
+            {!isEmpty(selectedValues) ? (
+              this.renderSelectedItems()
             ) : (
-              <div className="multiselect-header-placeholder">
-                {placeholder}
-              </div>
-            )}
+                <div className="multiselect-header-placeholder">
+                  {placeholder}
+                </div>
+              )}
           </div>
           {isCollapsed && (
             <ul className="multiselect-list">
-              {items &&
+              {!isEmpty(items) &&
                 items.map(item => (
                   <MultiselectItem
                     onClick={this.onSelect}
                     item={item}
-                    key={item}
-                    isSelected={selectedValues.includes(`${item}, `)}
+                    key={uuidv4()}
+                    isSelected={selectedValues.includes(item)}
                   />
                 ))}
             </ul>

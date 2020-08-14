@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
+import { isObject } from 'lodash';
 import { Checkmark } from '../../svg';
 import Dropdown from '../../common/Dropdown';
 import TextArea from '../../common/TextArea';
@@ -81,9 +82,8 @@ export class TaskRow extends Component<Props, State> {
     let answerValueComplex;
 
     if (answer) {
-      if (typeof answer === 'string' || typeof answer === 'number') {
-        answerValue = answer.toString();
-      } else answerValueComplex = answer.toJS();
+      if (isObject(answer)) answerValueComplex = answer.toJS();
+      else answerValue = answer.toString();
     }
 
     if (sectionName === 'Proposal Team')
@@ -174,11 +174,11 @@ export class TaskRow extends Component<Props, State> {
         <div>
           {answerConfiguration
             ? this.renderAnswer(
-                answerConfiguration.get('type'),
-                answerConfiguration.get('options'),
-                answers,
-                lastAnswer
-              )
+              answerConfiguration.get('type'),
+              answerConfiguration.get('options'),
+              answers,
+              lastAnswer
+            )
             : this.renderAnswer('', [], [], undefined)}
         </div>
 
