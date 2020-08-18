@@ -1,5 +1,17 @@
 // @flow
+import { REDUX_TYPES } from '../constants';
+import type { Dispatch, ThunkAction } from './action-types';
 import {
+  getProposalInfo,
+  setProposalAnswer,
+  getQuestionSectionInfo,
+  getAnswerTypes,
+  getRoles,
+  setProposalQuestionData,
+  getProposalInfoUpdated
+} from '../api/proposal';
+
+const {
   PROPOSAL_INFO,
   PROPOSAL_INFO_LOADING,
   PROPOSAL_INFO_ERROR,
@@ -18,17 +30,7 @@ import {
   PROPOSAL_SET_QUESTION,
   PROPOSAL_SET_QUESTION_LOADING,
   PROPOSAL_SET_QUESTION_ERROR
-} from './proposal-types';
-import type { Dispatch, ThunkAction } from './action-types';
-import {
-  getProposalInfo,
-  setProposalAnswer,
-  getQuestionSectionInfo,
-  getAnswerTypes,
-  getRoles,
-  setProposalQuestionData,
-  getProposalInfoUpdated
-} from '../api/proposal';
+} = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
 

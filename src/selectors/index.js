@@ -1,5 +1,6 @@
 // @flow
 import { Map } from 'immutable';
+import * as proposalsSelectors from './proposals';
 import * as proposalSelectors from './proposal';
 import * as authSelectors from './auth';
 
@@ -91,3 +92,7 @@ export const isSetQuestionLoading = (state: Object): Boolean =>
 
 export const setQuestionError = (state: Object): string =>
   proposalSelectors.setQuestionError(state.proposal);
+
+// Tabbar Selectors
+export const getProposalTypeView = (state: Object): 0 | 1 =>
+  proposalsSelectors.getProposalTypeView(state.proposals);

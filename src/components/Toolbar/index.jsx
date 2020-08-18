@@ -1,15 +1,12 @@
 // @flow
 import React, { Component } from 'react';
-import { withRouter, Link } from 'react-router-dom';
 import classnames from 'classnames';
 import ToolbarMenu from './ToolbarMenu';
 import { DropMenu } from '../svg';
-import { DASHBOARD, PROPOSAL } from '../../routes';
 
 type State = { isCollapsed: boolean };
-type Props = { selected: string };
 
-class Toolbar extends Component<Props, State> {
+class Toolbar extends Component<{}, State> {
   constructor(props: Object) {
     super(props);
 
@@ -28,30 +25,12 @@ class Toolbar extends Component<Props, State> {
   };
 
   render() {
-    const proposalId = localStorage.getItem('proposalId') || '';
-
     const { isCollapsed } = this.state;
-    const { selected } = this.props;
 
     return (
       <div className="toolbar-wrapper">
         <p className="toolbar-title">IQVIA™</p>
         <p className="toolbar-title">Unity</p>
-        <div className="toolbar-navigation-wrapper">
-          <Link
-            to={DASHBOARD}
-            className={classnames({ 'is-selected': selected === 'dashboard' })}
-          >
-            Home
-          </Link>
-
-          <Link
-            to={`${PROPOSAL}${proposalId}`}
-            className={classnames({ 'is-selected': selected === 'proposal' })}
-          >
-            Proposals
-          </Link>
-        </div>
 
         <div className="toolbar-account-spacer">
           <div className="toolbar-account-wrapper">
@@ -78,4 +57,4 @@ class Toolbar extends Component<Props, State> {
   }
 }
 
-export default withRouter(Toolbar);
+export default Toolbar;

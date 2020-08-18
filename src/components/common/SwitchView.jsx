@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { ListView, CardView } from '../svg';
 
 type Props = {
-  getSelectedTab: (selectedTab: number) => void
+  getSelectedTab: (selectedTab: 0 | 1) => void
 };
 
 type State = {

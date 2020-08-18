@@ -1,8 +1,10 @@
 // @flow
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { Link } from 'react-router-dom';
 import { isEmpty, keysIn, head, valuesIn } from 'lodash';
 import objectToString from '../../utils/helpers';
+import { PROPOSAL } from '../../routes';
 
 type Props = {
   data: [Object]
@@ -27,6 +29,9 @@ const TableView = ({ data }: Props) => {
   };
 
   const renderRow = (rowContent: Object) => {
+    // TODO: Delete static proposalId const once we start using real data
+    const proposalId = 'e2a6c32a-d081-4f82-9d8b-07e4f7cdf8c8';
+
     return (
       <div
         key={uuidv4()}
@@ -36,7 +41,11 @@ const TableView = ({ data }: Props) => {
         {valuesIn(rowContent).map(cellContent => {
           return (
             <div key={uuidv4()} className="cell">
-              <p>{objectToString(cellContent)}</p>
+              {cellContent === rowContent.id ? (
+                <Link to={`${PROPOSAL}${proposalId}`}>{rowContent.id}</Link>
+              ) : (
+                <p>{objectToString(cellContent)}</p>
+              )}
             </div>
           );
         })}

@@ -1,6 +1,4 @@
 #table-view {
-  width: 95%;
-  margin: 0 auto;
   font-family: $proximaNova;
 
   .headers {
@@ -21,7 +19,6 @@
       padding: 20px;
       grid-gap: 20px;
       display: grid;
-      cursor: pointer;
       
       .cell {
         width: 100%;
@@ -32,14 +29,17 @@
         p {
           display: inline;
         }
-  
-        &:first-of-type {
-          p {
-            color: $neptune-primary;
-            cursor: pointer;
+
+        a {
+          color: $neptune-primary;
+          text-decoration: none;
+          cursor: pointer;  
+
+          &:hover {
+            text-decoration: underline;
           }
         }
-
+        
         &::-webkit-scrollbar {
           display: none;
         }
@@ -49,9 +49,5 @@
         background: rgba($color: $neptune-primary, $alpha: 0.05);
       }
     }
-  }
-
-  & > * {
-    box-sizing: border-box;
   }
 }

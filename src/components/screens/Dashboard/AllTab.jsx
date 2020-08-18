@@ -1,9 +1,14 @@
 // @flow
 import React, { Component } from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { getProposalTypeView } from '../../../selectors';
 import TableView from '../../common/TableView';
+import GridView from '../../common/GridView';
 
-type Props = {};
+type Props = {
+  selectedViewType: 0 | 1
+};
 
 type State = {
   users: [Object]
@@ -27,16 +32,25 @@ class AllTab extends Component<Props, State> {
     this.setState({ users: data });
   }
 
-  render() {
+  renderSelectedView = () => {
     const { users } = this.state;
+    const { selectedViewType } = this.props;
 
+    if (selectedViewType === 0) return <TableView data={users} />;
+    return <GridView data={users} />;
+  };
+
+  render() {
     return (
       <section id="all-tab" className="tab-content">
-        <h1>All Proposals</h1>
-        <TableView data={users} />
+        {this.renderSelectedView()}
       </section>
     );
   }
 }
 
-export default AllTab;
+const mapStateToProps = state => ({
+  selectedViewType: getProposalTypeView(state)
+});
+
+export default connect(mapStateToProps)(AllTab);

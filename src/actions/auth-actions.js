@@ -1,21 +1,5 @@
 // @flow
-import {
-  AUTH_SUCCESS,
-  AUTH_LOADING,
-  AUTH_ERROR,
-  LOGOUT_IN_PROGRESS,
-  LOGOUT_SUCCESS,
-  LOGOUT_ERROR,
-  PUT_ROLE_IN_PROGRESS,
-  PUT_ROLE_SUCCESS,
-  PUT_ROLE_ERROR,
-  FORGOT_PASSWORD_IN_PROGRESS,
-  FORGOT_PASSWORD_SUCCESS,
-  FORGOT_PASSWORD_ERROR,
-  RESET_PASSWORD_IN_PROGRESS,
-  RESET_PASSWORD_SUCCESS,
-  RESET_PASSWORD_ERROR
-} from './auth-types';
+import { REDUX_TYPES } from '../constants';
 import type { Dispatch, ThunkAction } from './action-types';
 import {
   setSession,
@@ -31,6 +15,24 @@ import {
   postRefreshToken,
   resetPassword
 } from '../api/auth';
+
+const {
+  AUTH_SUCCESS,
+  AUTH_LOADING,
+  AUTH_ERROR,
+  LOGOUT_IN_PROGRESS,
+  LOGOUT_SUCCESS,
+  LOGOUT_ERROR,
+  PUT_ROLE_IN_PROGRESS,
+  PUT_ROLE_SUCCESS,
+  PUT_ROLE_ERROR,
+  FORGOT_PASSWORD_IN_PROGRESS,
+  FORGOT_PASSWORD_SUCCESS,
+  FORGOT_PASSWORD_ERROR,
+  RESET_PASSWORD_IN_PROGRESS,
+  RESET_PASSWORD_SUCCESS,
+  RESET_PASSWORD_ERROR
+} = REDUX_TYPES.AUTH;
 
 export const login = (
   email: string,

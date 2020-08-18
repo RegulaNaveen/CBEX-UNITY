@@ -1,6 +1,9 @@
 // @flow
 import { Map, fromJS } from 'immutable';
-import {
+import { REDUX_TYPES } from '../constants';
+import type { ApiAction } from '../actions/action-types';
+
+const {
   AUTH_SUCCESS,
   AUTH_LOADING,
   AUTH_ERROR,
@@ -16,8 +19,7 @@ import {
   RESET_PASSWORD_IN_PROGRESS,
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_ERROR
-} from '../actions/auth-types';
-import type { ApiAction } from '../actions/action-types';
+} = REDUX_TYPES.AUTH;
 
 const INITIAL_STATE: Map = fromJS({
   authData: undefined,

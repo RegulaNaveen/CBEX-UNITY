@@ -1,6 +1,9 @@
 // @flow
 import { Map, fromJS } from 'immutable';
-import {
+import { REDUX_TYPES } from '../constants';
+import type { ApiAction } from '../actions/action-types';
+
+const {
   PROPOSAL_INFO,
   PROPOSAL_INFO_LOADING,
   PROPOSAL_INFO_ERROR,
@@ -19,8 +22,7 @@ import {
   PROPOSAL_SET_QUESTION,
   PROPOSAL_SET_QUESTION_LOADING,
   PROPOSAL_SET_QUESTION_ERROR
-} from '../actions/proposal-types';
-import type { ApiAction } from '../actions/action-types';
+} = REDUX_TYPES.PROPOSAL;
 
 const INITIAL_STATE: Map = fromJS({
   proposalDetails: Map({}),
