@@ -2,13 +2,13 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import { chunk, last } from 'lodash';
-
+import { v4 as uuidv4 } from 'uuid';
 import { ArrowLeft, ArrowRight, More } from '../svg';
 
 type Props = {
   maxRows: number,
   totalItems: number,
-  getCurrentPage: Function
+  getCurrentPage: (selectedPage: number) => void
 };
 
 type State = {
@@ -31,8 +31,8 @@ class Pagination extends PureComponent<Props, State> {
   setCurrentPage = (event: SyntheticInputEvent<EventTarget>) => {
     const value = Number(event.target.id);
     const { getCurrentPage } = this.props;
-    this.setState({ currentPage: value });
-    getCurrentPage(value);
+
+    this.setState({ currentPage: value }, () => getCurrentPage(value));
   };
 
   handlePreviousChunk = () => {
@@ -41,8 +41,11 @@ class Pagination extends PureComponent<Props, State> {
 
     if (currentChunk - 1 >= 0) {
       const lastItem = last(this.chunks[currentChunk - 1]);
-      this.setState({ currentChunk: currentChunk - 1, currentPage: lastItem });
-      getCurrentPage(lastItem);
+
+      this.setState(
+        { currentChunk: currentChunk - 1, currentPage: lastItem },
+        () => getCurrentPage(lastItem)
+      );
     }
   };
 
@@ -52,8 +55,11 @@ class Pagination extends PureComponent<Props, State> {
 
     if (currentChunk + 1 < this.chunks.length) {
       const [first] = this.chunks[currentChunk + 1];
-      this.setState({ currentChunk: currentChunk + 1, currentPage: first });
-      getCurrentPage(first);
+
+      this.setState(
+        { currentChunk: currentChunk + 1, currentPage: first },
+        () => getCurrentPage(first)
+      );
     }
   };
 
@@ -61,32 +67,36 @@ class Pagination extends PureComponent<Props, State> {
     const { currentChunk } = this.state;
     if (currentChunk === 0) return null;
 
-    return [
-      <button
-        type="button"
-        className="pagination__arrow arrow__left"
-        onClick={this.handlePreviousChunk}
-      >
-        <ArrowLeft className="pagination__svg" />
-      </button>,
-      <More className="pagination__svg more__left" />
-    ];
+    return (
+      <>
+        <button
+          type="button"
+          className="pagination__arrow arrow__left"
+          onClick={this.handlePreviousChunk}
+        >
+          <ArrowLeft className="pagination__svg" />
+        </button>
+        <More className="pagination__svg more__left" />
+      </>
+    );
   }
 
   renderRightControls() {
     const { currentChunk } = this.state;
     if (currentChunk === this.chunks.length - 1) return null;
 
-    return [
-      <More className="pagination__svg more__right" />,
-      <button
-        type="button"
-        className="pagination__arrow arrow__right"
-        onClick={this.handleNextChunk}
-      >
-        <ArrowRight className="pagination__svg" />
-      </button>
-    ];
+    return (
+      <>
+        <More className="pagination__svg more__right" />
+        <button
+          type="button"
+          className="pagination__arrow arrow__right"
+          onClick={this.handleNextChunk}
+        >
+          <ArrowRight className="pagination__svg" />
+        </button>
+      </>
+    );
   }
 
   render() {
@@ -104,10 +114,12 @@ class Pagination extends PureComponent<Props, State> {
     );
 
     let current = currentChunk;
+
     if (!pages[currentPage - 1]) {
       current = 0;
-      this.setState({ currentChunk: 0, currentPage: 1 });
-      getCurrentPage(1);
+      this.setState({ currentChunk: 0, currentPage: 1 }, () =>
+        getCurrentPage(1)
+      );
     }
 
     return (
@@ -116,6 +128,7 @@ class Pagination extends PureComponent<Props, State> {
         {this.chunks[current].map((page, index) => (
           <button
             id={page}
+            key={uuidv4()}
             type="button"
             style={{ gridColumn: `${index + 3}/${index + 4}` }}
             className={classnames('pagination__page', {

@@ -1,13 +1,13 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { chunk } from 'lodash';
 import Dropwdown from './Dropdown';
 import Pagination from './Pagination';
 
 type Props = {
   totalItems: number,
-  getCurrentPosition: Function,
-  getMaxRows: Function
+  getCurrentPosition: (selectedPosition: number) => void,
+  getMaxRows: (selectedRows: number) => void
 };
 
 type State = {
@@ -15,7 +15,7 @@ type State = {
   maxRows: number
 };
 
-class ComplexPagination extends PureComponent<Props, State> {
+class ComplexPagination extends Component<Props, State> {
   constructor(props: Object) {
     super(props);
 
@@ -27,14 +27,12 @@ class ComplexPagination extends PureComponent<Props, State> {
 
   setMaxRows = (maxRows: number) => {
     const { getMaxRows } = this.props;
-    this.setState({ maxRows });
-    getMaxRows(maxRows);
+    this.setState({ maxRows }, () => getMaxRows(maxRows));
   };
 
   getCurrentPage = (currentPage: number) => {
     const { getCurrentPosition } = this.props;
-    this.setState({ currentPage });
-    getCurrentPosition(currentPage);
+    this.setState({ currentPage }, () => getCurrentPosition(currentPage));
   };
 
   render() {
@@ -47,17 +45,13 @@ class ComplexPagination extends PureComponent<Props, State> {
     );
 
     const handleCountItems = () => {
-      console.log(currentPage);
-      console.log(chunks[currentPage - 1]);
-      if (!chunks[currentPage - 1]) {
+      if (!chunks[currentPage - 1])
         return `Showing 1-${maxRows} of ${totalItems}`;
-      }
 
       const firstOfList = chunks[currentPage - 1][0];
       const lastOfList =
         maxRows * (currentPage - 1) + chunks[currentPage - 1].length;
 
-      console.log(chunks);
       return `Showing ${firstOfList}-${lastOfList} of ${totalItems}`;
     };
 
@@ -65,9 +59,8 @@ class ComplexPagination extends PureComponent<Props, State> {
       <div className="cmplx">
         <div className="cmplx__rows">
           <p>Rows</p>
-          <div style={{ width: '52px' }}>
+          <div className="cmplx__dd__container">
             <Dropwdown
-              placeholder="Test"
               value={maxRows.toString()}
               onClick={this.setMaxRows}
               items={[10, 20, 50, 100]}

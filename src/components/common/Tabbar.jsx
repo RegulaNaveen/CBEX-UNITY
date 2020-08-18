@@ -1,5 +1,6 @@
 // @flow
 import React, { Component } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import TabItem from './TabItem';
 
 type Props = {
@@ -33,7 +34,7 @@ class Tabbar extends Component<Props, State> {
           {children &&
             children.map((item, index) => (
               <TabItem
-                key={item}
+                key={uuidv4()}
                 index={index}
                 item={item}
                 selected={selected}
