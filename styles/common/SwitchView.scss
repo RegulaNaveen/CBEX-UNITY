@@ -7,13 +7,22 @@
     background-color: $white;
     border: none;
     outline: none;
+    cursor: pointer;
 
-    &:hover {
-      cursor: pointer;
+    svg {
+      g {
+        fill: $neutral6;
+      }
+      
+      &.is-active {  
+        g {
+          fill: $neptune-secondary;
+        }
+      }
     }
-  }
 
-  button:nth-child(1) {
-    margin-right: 10px;
+    &:nth-child(1) {
+      margin-right: 10px;
+    }
   }
 }

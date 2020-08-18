@@ -1,43 +1,57 @@
 // @flow
-import React from 'react';
-
+import React, { Component } from 'react';
+import classNames from 'classnames';
 import { ListView, CardView } from '../svg';
 
 type Props = {
-  isTypeCard: boolean,
-  setTypeCard: Function
+  getSelectedTab: (selectedTab: number) => void
 };
 
-const SwitchView = (props: Props) => {
-  const { isTypeCard, setTypeCard } = props;
-
-  const activeColor = '#0256D2';
-  const inactiveColor = '#999999';
-
-  function handleListSelected() {
-    setTypeCard(false);
-  }
-
-  function handleCardSelected() {
-    setTypeCard(true);
-  }
-
-  return (
-    <div className="switch-view">
-      <button type="button" onClick={handleListSelected}>
-        <ListView
-          className="switch-view__icon"
-          fill={!isTypeCard ? activeColor : inactiveColor}
-        />
-      </button>
-      <button type="button" onClick={handleCardSelected}>
-        <CardView
-          className="switch-view__icon"
-          fill={isTypeCard ? activeColor : inactiveColor}
-        />
-      </button>
-    </div>
-  );
+type State = {
+  activeView: 0 | 1
 };
+
+class SwitchView extends Component<Props, State> {
+  constructor(props: Object) {
+    super(props);
+
+    this.state = {
+      activeView: 0
+    };
+  }
+
+  setViewToList = () => {
+    const { getSelectedTab } = this.props;
+    this.setState({ activeView: 0 }, () => getSelectedTab(0));
+  };
+
+  setViewToGrid = () => {
+    const { getSelectedTab } = this.props;
+    this.setState({ activeView: 1 }, () => getSelectedTab(1));
+  };
+
+  render() {
+    const { activeView } = this.state;
+
+    return (
+      <div className="switch-view">
+        <button type="button" onClick={this.setViewToList}>
+          <ListView
+            className={classNames('switch-view__icon', {
+              'is-active': activeView === 0
+            })}
+          />
+        </button>
+        <button type="button" onClick={this.setViewToGrid}>
+          <CardView
+            className={classNames('switch-view__icon', {
+              'is-active': activeView === 1
+            })}
+          />
+        </button>
+      </div>
+    );
+  }
+}
 
 export default SwitchView;
