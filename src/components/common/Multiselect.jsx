@@ -2,7 +2,6 @@
 import React, { PureComponent } from 'react';
 import { isEmpty } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
-import { arrayContaining } from 'expect';
 import MultiselectItem from './MultiselectItem';
 
 type Props = {
@@ -44,10 +43,7 @@ class Multiselect extends PureComponent<Props, State> {
 
     const { value } = this.props;
 
-    if (!isEmpty(value))
-      this.setState({ selectedValues: value }, () =>
-        console.log(this.state.selectedValues)
-      );
+    if (!isEmpty(value)) this.setState({ selectedValues: value });
   }
 
   componentWillUnmount() {
@@ -120,10 +116,10 @@ class Multiselect extends PureComponent<Props, State> {
             {!isEmpty(selectedValues) ? (
               this.renderSelectedItems()
             ) : (
-                <div className="multiselect-header-placeholder">
-                  {placeholder}
-                </div>
-              )}
+              <div className="multiselect-header-placeholder">
+                {placeholder}
+              </div>
+            )}
           </div>
           {isCollapsed && (
             <ul className="multiselect-list">

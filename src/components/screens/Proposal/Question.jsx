@@ -174,11 +174,11 @@ export class TaskRow extends Component<Props, State> {
         <div>
           {answerConfiguration
             ? this.renderAnswer(
-              answerConfiguration.get('type'),
-              answerConfiguration.get('options'),
-              answers,
-              lastAnswer
-            )
+                answerConfiguration.get('type'),
+                answerConfiguration.get('options'),
+                answers,
+                lastAnswer
+              )
             : this.renderAnswer('', [], [], undefined)}
         </div>
 
