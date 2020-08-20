@@ -13,8 +13,7 @@ type Props = {
 
 type State = {
   searchValue: string,
-  filteredData: Array<any>,
-  isValid: boolean
+  filteredData: Array<any>
 };
 
 class Lookup extends Component<Props, State> {
@@ -27,8 +26,7 @@ class Lookup extends Component<Props, State> {
 
     this.state = {
       searchValue: '',
-      filteredData: [],
-      isValid: true
+      filteredData: []
     };
   }
 
@@ -46,7 +44,6 @@ class Lookup extends Component<Props, State> {
 
     this.setState({
       searchValue: value,
-      isValid: true,
       filteredData: filteringData
     });
   };
@@ -62,7 +59,7 @@ class Lookup extends Component<Props, State> {
   };
 
   render() {
-    const { searchValue, filteredData, isValid } = this.state;
+    const { searchValue, filteredData } = this.state;
     const { title } = this.props;
 
     return (
@@ -80,9 +77,6 @@ class Lookup extends Component<Props, State> {
             required
             autoComplete="off"
           />
-          {!isValid && (
-            <span>Make sure the selected item is part of the list.</span>
-          )}
         </div>
 
         <div
