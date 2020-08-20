@@ -21,7 +21,7 @@ class ComplexPagination extends Component<Props, State> {
 
     this.state = {
       currentPage: 1,
-      maxRows: 10
+      maxRows: 15
     };
   }
 
@@ -63,7 +63,7 @@ class ComplexPagination extends Component<Props, State> {
             <Dropwdown
               value={maxRows.toString()}
               onClick={this.setMaxRows}
-              items={[10, 20, 50, 100]}
+              items={[15, 20, 50, 100]}
             />
           </div>
         </div>
