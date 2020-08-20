@@ -1,5 +1,5 @@
 // @flow
-import { isObject, valuesIn } from 'lodash';
+import { valuesIn, isObject, isEmpty } from 'lodash';
 
 const objectToString = (_object: Object): String => {
   if (!isObject(_object)) return _object.toString();
@@ -9,6 +9,29 @@ const objectToString = (_object: Object): String => {
   );
 
   return objectStringfied.join(', ');
+};
+
+export const objectContains = (
+  object: Object,
+  search: string,
+  deepSearch: boolean
+): boolean => {
+  if (isEmpty(search)) return false;
+
+  const arr = valuesIn(object);
+
+  const found = arr.filter(prop => {
+    if (isObject(prop)) return objectContains(prop, search, deepSearch);
+    return !deepSearch
+      ? prop
+          .toString()
+          .toLowerCase()
+          .includes(search.toLowerCase())
+      : prop.toString().toLowerCase() === search.toLocaleLowerCase();
+  });
+
+  if (!isEmpty(found)) return true;
+  return false;
 };
 
 export default objectToString;
