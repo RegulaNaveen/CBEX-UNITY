@@ -1,330 +1,423 @@
 //LOGIN
-@mixin base-login-wrapper {
-  display: flex;
-  height: 100%;
-  width: 100%;
-}
+// @mixin base-login-wrapper {
+//   display: flex;
+//   height: 100%;
+//   width: 100%;
+// }
 
-@mixin base-login-background-img {
-  display: none;
-}
+// @mixin base-login-background-img {
+//   display: none;
+// }
 
-@mixin base-gradient-background {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  background: radial-gradient(circle, #0076ae 0%, #250056 100%);
-  opacity: 0.66;
-}
+// @mixin base-gradient-background {
+//   position: absolute;
+//   height: 100%;
+//   width: 100%;
+//   background: radial-gradient(circle, #0076ae 0%, #250056 100%);
+//   opacity: 0.66;
+// }
 
-@mixin base-input-wrapper {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 28px;
-}
+// @mixin base-input-wrapper {
+//   display: flex;
+//   flex-direction: column;
+//   margin-bottom: 28px;
+// }
 
-@mixin base-form-title {
-  height: 48px;
-  color: $black;
-  font-family: $proximaNova;
-  font-size: 40px;
-  font-weight: 600;
-  letter-spacing: 0;
-  line-height: 48px;
-  margin-bottom: 48px;
-}
+// @mixin base-form-title {
+//   height: 48px;
+//   color: $black;
+//   font-family: $proximaNova;
+//   font-size: 40px;
+//   font-weight: 600;
+//   letter-spacing: 0;
+//   line-height: 48px;
+//   margin-bottom: 48px;
+// }
 
-@mixin base-checkbox {
-  margin-bottom: 48px;
-}
+// @mixin base-checkbox {
+//   margin-bottom: 48px;
+// }
 
-@mixin base-login-button {
-  margin-bottom: 28px;
-}
+// @mixin base-login-button {
+//   margin-bottom: 28px;
+// }
 
-@mixin base-copyright-text {
-  height: 16px;
-  width: 100%;
-  color: $neutral8;
-  font-family: $proximaNova;
-  font-size: 13px;
-  letter-spacing: 0;
-  line-height: 16px;
-  bottom: 16px;
-  position: absolute;
-}
+// @mixin base-copyright-text {
+//   height: 16px;
+//   width: 100%;
+//   color: $neutral8;
+//   font-family: $proximaNova;
+//   font-size: 13px;
+//   letter-spacing: 0;
+//   line-height: 16px;
+//   bottom: 16px;
+//   position: absolute;
+// }
 
-@mixin base-login-form {
-  background-color: $neutral1;
-  width: 100%;
-  height: 100%;
-}
+// @mixin base-login-form {
+//   background-color: $neutral1;
+//   width: 100%;
+//   height: 100%;
+// }
 
-.gradient-background-img {
-  display: none;
-}
+// .gradient-background-img {
+//   display: none;
+// }
 
-.input-wrapper {
-  @include base-input-wrapper;
-}
+// .input-wrapper {
+//   @include base-input-wrapper;
+// }
 
-.form-wrapper {
-  display: flex;
-  flex-direction: column;
-}
+// .form-wrapper {
+//   display: flex;
+//   flex-direction: column;
+// }
 
-.form-title {
-  @include base-form-title;
-}
+// .form-title {
+//   @include base-form-title;
+// }
 
-.login-form-error {
-  height: 24px;
-  color: $error;
-  font-family: $proximaNova;
-  font-size: 16px;
-  letter-spacing: 0;
-  line-height: 24px;
-  margin-bottom: 40px;
-  width: 303px;
-  text-align: center;
-}
+// .login-form-error {
+//   height: 24px;
+//   color: $error;
+//   font-family: $proximaNova;
+//   font-size: 16px;
+//   letter-spacing: 0;
+//   line-height: 24px;
+//   margin-bottom: 40px;
+//   width: 303px;
+//   text-align: center;
+// }
 
-.login-form-success {
-  height: 24px;
-  color: green;
-  font-family: $proximaNova;
-  font-size: 16px;
-  letter-spacing: 0;
-  line-height: 24px;
-  margin-bottom: 40px;
-  width: 303px;
-  text-align: center;
-}
+// .login-form-success {
+//   height: 24px;
+//   color: green;
+//   font-family: $proximaNova;
+//   font-size: 16px;
+//   letter-spacing: 0;
+//   line-height: 24px;
+//   margin-bottom: 40px;
+//   width: 303px;
+//   text-align: center;
+// }
 
-.login-button-wrapper {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
+// .login-button-wrapper {
+//   display: flex;
+//   flex-direction: column;
+//   width: 100%;
+// }
 
-.login-loader {
-  flex: 1;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+// .login-loader {
+//   flex: 1;
+//   height: 100%;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+// }
 
-.form-message-success {
-  height: 24px;
-  width: 303px;
-  color: $black;
-  font-family: $proximaNova;
-  font-size: 16px;
-  letter-spacing: 0;
-  margin-bottom: 48px;
-}
+// .form-message-success {
+//   height: 24px;
+//   width: 303px;
+//   color: $black;
+//   font-family: $proximaNova;
+//   font-size: 16px;
+//   letter-spacing: 0;
+//   margin-bottom: 48px;
+// }
 
-@media screen and (min-width: $viewport-3) {
-  .login-wrapper {
-    @include base-login-wrapper;
-  }
+// @media screen and (min-width: $viewport-3) {
+//   .login-wrapper {
+//     @include base-login-wrapper;
+//   }
 
-  .login-background-img {
-    display: none;
-  }
+//   .login-background-img {
+//     display: none;
+//   }
 
-  .login-form {
-    @include base-login-form;
-  }
+//   .login-form {
+//     @include base-login-form;
+//   }
 
-  .form-wrapper {
-    justify-content: center;
-    align-items: center;
-  }
+//   .form-wrapper {
+//     justify-content: center;
+//     align-items: center;
+//   }
 
-  .checkbox {
-    @include base-checkbox;
-  }
+//   .checkbox {
+//     @include base-checkbox;
+//   }
 
-  .login-button {
-    @include base-login-button;
-  }
+//   .login-button {
+//     @include base-login-button;
+//   }
 
-  .login-button-wrapper {
-    align-items: center;
-  }
+//   .login-button-wrapper {
+//     align-items: center;
+//   }
 
-  .copyright-text {
-    @include base-copyright-text;
-    text-align: center;
-  }
-}
+//   .copyright-text {
+//     @include base-copyright-text;
+//     text-align: center;
+//   }
+// }
 
-@media screen and (min-width: $viewport-4) {
-  .login-wrapper {
-    @include base-login-wrapper;
-  }
+// @media screen and (min-width: $viewport-4) {
+//   .login-wrapper {
+//     @include base-login-wrapper;
+//   }
 
-  .login-background-img {
-    display: none;
-  }
+//   .login-background-img {
+//     display: none;
+//   }
 
-  .login-form {
-    @include base-login-form;
-  }
+//   .login-form {
+//     @include base-login-form;
+//   }
 
-  .form-title {
-    margin-bottom: 0;
-  }
+//   .form-title {
+//     margin-bottom: 0;
+//   }
 
-  .input-wrapper {
-    margin-bottom: 0;
-  }
+//   .input-wrapper {
+//     margin-bottom: 0;
+//   }
 
-  .copyright-text {
-    @include base-copyright-text;
-    position: relative;
-  }
+//   .copyright-text {
+//     @include base-copyright-text;
+//     position: relative;
+//   }
 
-  .checkbox {
-    margin-bottom: 10px;
-  }
+//   .checkbox {
+//     margin-bottom: 10px;
+//   }
 
-  .login-button {
-    @include base-login-button;
-    margin-bottom: 10px;
-  }
+//   .login-button {
+//     @include base-login-button;
+//     margin-bottom: 10px;
+//   }
 
-  .forgot-password-link {
-    margin-bottom: 20px;
-  }
-}
+//   .forgot-password-link {
+//     margin-bottom: 20px;
+//   }
+// }
 
-@media screen and (min-width: $viewport-4) and (min-height: 375px) {
-  .form-wrapper {
-    height: 100%;
-  }
+// @media screen and (min-width: $viewport-4) and (min-height: 375px) {
+//   .form-wrapper {
+//     height: 100%;
+//   }
   
-  .form-title {
-    margin-bottom: 10px;
-  }
+//   .form-title {
+//     margin-bottom: 10px;
+//   }
 
-  .input-wrapper {
-    margin-bottom: 10px;
-  }
-}
+//   .input-wrapper {
+//     margin-bottom: 10px;
+//   }
+// }
 
-@media screen and (min-width: $viewport-4) and (min-height: $viewport-7) {
-  .form-wrapper {
-    height: 100%;
-  }
+// @media screen and (min-width: $viewport-4) and (min-height: $viewport-7) {
+//   .form-wrapper {
+//     height: 100%;
+//   }
 
-  .input-wrapper {
-    @include base-input-wrapper;
-  }
-}
+//   .input-wrapper {
+//     @include base-input-wrapper;
+//   }
+// }
 
-@media screen and (min-width: $viewport-7) {
-  .login-wrapper {
-    @include base-login-wrapper;
-    justify-content: center;
-    align-items: center;
-    margin-top: 0;
-    margin-left: 0;
-  }
+// @media screen and (min-width: $viewport-7) {
+//   .login-wrapper {
+//     @include base-login-wrapper;
+//     justify-content: center;
+//     align-items: center;
+//     margin-top: 0;
+//     margin-left: 0;
+//   }
 
-  .login-background-img {
-    @include base-login-background-img;
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
+//   .login-background-img {
+//     @include base-login-background-img;
+//     display: block;
+//     width: 100%;
+//     height: 100%;
+//   }
 
-  .login-form {
-    @include base-login-form;
-    width: 450px;
-    height: 700px;
-    position: absolute;
-    align-items: center;
-    border-radius: 10px;
-    justify-content: center;
-  }
+//   .login-form {
+//     @include base-login-form;
+//     width: 450px;
+//     height: 700px;
+//     position: absolute;
+//     align-items: center;
+//     border-radius: 10px;
+//     justify-content: center;
+//   }
 
-  .input-wrapper {
-    @include base-input-wrapper;
-  }
+//   .input-wrapper {
+//     @include base-input-wrapper;
+//   }
 
-  .checkbox {
-    @include base-checkbox;
-  }
+//   .checkbox {
+//     @include base-checkbox;
+//   }
 
-  .login-button {
-    @include base-login-button;
-  }
+//   .login-button {
+//     @include base-login-button;
+//   }
 
-  .gradient-background-img {
-    @include base-gradient-background;
-    display: block;
-  }
+//   .gradient-background-img {
+//     @include base-gradient-background;
+//     display: block;
+//   }
 
-  .form-title {
-    @include base-form-title;
-  }
+//   .form-title {
+//     @include base-form-title;
+//   }
 
-  .form-wrapper {
-    margin-left: 0;
-    margin-top: 0;
-    align-items: center;
-  }
+//   .form-wrapper {
+//     margin-left: 0;
+//     margin-top: 0;
+//     align-items: center;
+//   }
 
-  .copyright-text {
-    @include base-copyright-text;
-    text-align: center;
-  }
+//   .copyright-text {
+//     @include base-copyright-text;
+//     text-align: center;
+//   }
 
-  .gradient-background-img {
-    height: 100%;
-    width: 100%;
-  }
-}
+//   .gradient-background-img {
+//     height: 100%;
+//     width: 100%;
+//   }
+// }
 
-@media (min-width: $viewport-12) {
-  .login-wrapper {
-    @include base-login-wrapper;
-  }
+// @media (min-width: $viewport-12) {
+//   .login-wrapper {
+//     @include base-login-wrapper;
+//   }
 
-  .login-background-img {
-    @include base-login-background-img;
-    display: block;
-    width: 561px;
-  }
+//   .login-background-img {
+//     @include base-login-background-img;
+//     display: block;
+//     width: 561px;
+//   }
 
-  .gradient-background-img {
-    @include base-gradient-background;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 561px;
-    height: 100%;
-  }
+//   .gradient-background-img {
+//     @include base-gradient-background;
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     width: 561px;
+//     height: 100%;
+//   }
 
-  .copyright-text {
-    @include base-copyright-text;
-    width: 210px;
-    display: flex;
-  }
+//   .copyright-text {
+//     @include base-copyright-text;
+//     width: 210px;
+//     display: flex;
+//   }
 
-  .login-form {
-    @include base-login-form;
-    display: flex;
-    justify-content: flex-start;
+//   .login-form {
+//     @include base-login-form;
+//     display: flex;
+//     justify-content: flex-start;
+//     position: relative;
+//     padding-left: 194px;
+//   }
+
+//   .form-wrapper {
+//     align-items: flex-start;
+//     align-self: center;
+//   }
+// }
+
+
+.login-wrapper {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  height: 100%;
+  
+  .image-wrapper {
     position: relative;
-    padding-left: 194px;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+
+    .gradient-background-img {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      background: radial-gradient(circle, #0076ae 0%, #250056 100%);
+      opacity: 0.66;
+    }
+
+    .login-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
   }
 
-  .form-wrapper {
-    align-items: flex-start;
-    align-self: center;
+  .login-form {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    form {
+      .form-title {
+        color: $black;
+        font-size: 40px;
+        font-weight: 600;
+        margin-bottom: 48px;
+      }
+
+      input {
+        margin-bottom: 20px;
+        width: 100%;
+
+        &:last-child {
+          margin-bottom: 10px;
+        }
+      }
+
+      .login-loader-button-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50px;
+      }
+      
+      .form-message-success {
+        color: $success;
+        font-weight: bold;
+        font-size: 16px;
+        height: 15px;
+        margin-bottom: 40px;
+        visibility: hidden;
+        
+        &.is-displayed {
+          visibility: visible;
+        }
+      }
+
+      .login-form-error {
+        color: $error;
+        text-align: center;
+        font-size: 13px;
+        height: 15px;
+        margin-bottom: 10px;
+        visibility: hidden;
+
+        &.is-displayed {
+          visibility: visible;
+        }
+      }
+    }
+
+    .copyright-text {
+      position: absolute;
+      font-size: 12px;
+      bottom: 30px;
+    }
   }
 }

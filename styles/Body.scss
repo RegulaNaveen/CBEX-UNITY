@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'ProximaNova-Regular';
+  src: url('../fonts/ProximaNova-Regular.otf') format('opentype');
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -8,13 +13,6 @@ html,
 body {
   height: 100%;
   scroll-behavior: smooth;
-}
-
-:focus {
-  outline: 1px solid $blue;
-}
-
-@font-face {
-  font-family: 'ProximaNova-Regular';
-  src: url('../fonts/ProximaNova-Regular.otf') format('opentype');
+  box-sizing: border-box;
+  font-family: ProximaNova-Regular;
 }
