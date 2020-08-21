@@ -10,7 +10,7 @@ import {
   getForgotPasswordError
 } from '../../../selectors';
 import { sendForgotPassword } from '../../../actions/auth-actions';
-import { isEmailValid, isTextValid } from '../../../utils/ValidationUtils';
+import { isEmailValid } from '../../../utils/ValidationUtils';
 import { PrimaryButton } from '../../common/Buttons';
 import InputField from '../../common/InputField';
 import ChangePassword from './ChangePassword';

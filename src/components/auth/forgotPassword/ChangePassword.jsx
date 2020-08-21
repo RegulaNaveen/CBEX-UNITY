@@ -11,7 +11,6 @@ import {
   getResetPasswordError
 } from '../../../selectors';
 import { sendResetPassword } from '../../../actions/auth-actions';
-import { PrimaryButton } from '../../common/Buttons';
 import InputField from '../../common/InputField';
 
 type Props = {
@@ -166,8 +165,8 @@ class ChangePassword extends Component<Props, State> {
 const mapStateToProps = (state: Map) => ({
   isLoading: isResetPasswordLoading(state),
   resetPasswordSuccess: getResetPasswordData(state),
-  resetPasswordError: getForgotPasswordData(state),
-  forgotPasswordSuccess: getResetPasswordError(state)
+  resetPasswordError: getResetPasswordError(state),
+  forgotPasswordSuccess: getForgotPasswordData(state)
 });
 
 export default connect(mapStateToProps, {

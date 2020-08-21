@@ -72,7 +72,7 @@ class LoginForm extends Component<Props, State> {
     const { email, password, error, isForgotPassword } = this.state;
     const { isLoading, isAuthError } = this.props;
 
-    if (!isForgotPassword)
+    if (isForgotPassword)
       return <ForgotPassword handleCancel={this.onForgotPassword} />;
 
     const renderLoader = () => {

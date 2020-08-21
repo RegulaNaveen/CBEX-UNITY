@@ -16,8 +16,12 @@ const Login = () => {
         />
       </div>
       <div className="login-form">
-        <LoginForm />
-        <p className="copyright-text">Copyright @ 2020. All rights reserved</p>
+        <div className="form-wrapper">
+          <LoginForm />
+          <p className="copyright-text">
+            Copyright @ 2020. All rights reserved
+          </p>
+        </div>
       </div>
     </div>
   </div>
