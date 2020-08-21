@@ -65,7 +65,6 @@ class LoginForm extends Component<Props, State> {
 
     if (!error) {
       loginUser(email, password);
-      this.setState({ email: '', password: '' });
     } else this.setState({ error });
   };
 
