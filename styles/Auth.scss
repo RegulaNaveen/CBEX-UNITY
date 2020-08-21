@@ -3,6 +3,10 @@
   grid-template-columns: 0.8fr 1.2fr;
   height: 100%;
   position: relative;
+
+  // & > * {
+  //   box-sizing: border-box;
+  // }
   
   .image-wrapper {
     position: relative;

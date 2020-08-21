@@ -36,6 +36,12 @@ class LoginForm extends Component<Props, State> {
     };
   }
 
+  componentDidMount() {
+    const { error } = this.state;
+
+    if (error === 'Internal server error') this.setState({ error: '' });
+  }
+
   onInputChange = ({ target }: SyntheticInputEvent<EventTarget>) => {
     const { id, value } = target;
     this.setState({ [id]: value });
