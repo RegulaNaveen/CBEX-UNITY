@@ -2,11 +2,11 @@
 import React, { Component } from 'react';
 import { isEmpty } from 'lodash';
 import classNames from 'classnames';
+import { v4 as uuidv4 } from 'uuid';
 import { objectContains } from '../../utils/helpers';
 
 type Props = {
   data: Array<any>,
-  defaultValue: string,
   title?: string,
   getSelectedItem: (seletedItem: string) => void
 };
@@ -28,12 +28,6 @@ class Lookup extends Component<Props, State> {
       searchValue: '',
       filteredData: []
     };
-  }
-
-  componentDidMount() {
-    const { defaultValue } = this.props;
-
-    this.setState({ searchValue: defaultValue });
   }
 
   onSearching = ({ target: { value } }: SyntheticInputEvent<EventTarget>) => {
@@ -69,7 +63,7 @@ class Lookup extends Component<Props, State> {
       >
         <p>{title}</p>
 
-        <div className="input-wrapper">
+        <div className="lookup-wrapper">
           <input
             type="text"
             value={searchValue}
@@ -79,13 +73,13 @@ class Lookup extends Component<Props, State> {
           />
         </div>
 
-        <div
-          className={classNames('search-data-wrapper', {
-            'search-data-wrapper-with-data': !isEmpty(filteredData)
-          })}
-        >
-          {filteredData.map(({ id, name }) => (
-            <span role="presentation" onClick={this.setSelectedItem} key={id}>
+        <div className="search-data-wrapper">
+          {filteredData.map(({ name }) => (
+            <span
+              role="presentation"
+              onClick={this.setSelectedItem}
+              key={uuidv4()}
+            >
               {name}
             </span>
           ))}
