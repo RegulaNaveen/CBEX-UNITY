@@ -1,14 +1,19 @@
 #lookup {
   position: relative;
   margin-bottom: 15px;
+  font-family: $proximaNova;
+  background: #000;
+  width: 30%;
+  box-sizing: border-box;
 
   p {
     color: rgba($color: $black, $alpha: 0.8);
     font-weight: 500;
     margin-bottom: 8px;
+    display: none;
   }
 
-  .input-wrapper {
+  .lookup-wrapper {
     input {
       position: relative;
       display: block;
@@ -46,6 +51,7 @@
     overflow-x: hidden;
     overflow-y: scroll;
     border-radius: 0 0 4px 4px;
+    scrollbar-width: none;
 
     span {
       padding: 13px 20px;
@@ -63,7 +69,7 @@
   }
 
   &.is-searching {
-    .input-wrapper {
+    .lookup-wrapper {
       position: relative;
 
       input {
@@ -81,7 +87,7 @@
         z-index: 3;
         left: 50%;
         transform: translateX(-50%);
-        background: rgba($color: $black, $alpha: 0.05);
+        background: rgba($color: $purple, $alpha: 0.05);
       }
     }
 
