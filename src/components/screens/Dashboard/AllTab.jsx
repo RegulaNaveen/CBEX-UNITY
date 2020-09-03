@@ -1,8 +1,13 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { chunk } from 'lodash';
-import { getProposalTypeView, getProposals } from '../../../selectors';
+import { chunk, isEmpty } from 'lodash';
+import Loader from 'react-loader-spinner';
+import {
+  getProposalTypeView,
+  getProposals,
+  getProposalsLoading
+} from '../../../selectors';
 import { getAllProposals } from '../../../actions/proposals-actions';
 import TableView from '../../common/TableView';
 import GridView from '../../common/GridView';
@@ -11,7 +16,8 @@ import ComplexPagination from '../../common/ComplexPagination';
 type Props = {
   selectedViewType: 0 | 1,
   proposals: [Object],
-  fetchProposals: Function
+  fetchProposals: Function,
+  loading: boolean
 };
 
 type State = {
@@ -64,13 +70,21 @@ class AllTab extends Component<Props, State> {
     this.setState({ pageContent });
 
   render() {
-    const { proposals } = this.props;
-    return (
+    const { proposals, loading } = this.props;
+    return loading ? (
+      <Loader
+        type="TailSpin"
+        color="#297DFD"
+        height={100}
+        width={100}
+        className="loading"
+      />
+    ) : (
       <>
         <section id="all-tab" className="tab-content">
           {this.renderSelectedView()}
         </section>
-        {proposals && (
+        {!isEmpty(proposals) && (
           <ComplexPagination
             totalItems={proposals.length}
             getCurrentPosition={this.setPage}
@@ -84,7 +98,8 @@ class AllTab extends Component<Props, State> {
 
 const mapStateToProps = state => ({
   selectedViewType: getProposalTypeView(state),
-  proposals: getProposals(state)
+  proposals: getProposals(state),
+  loading: getProposalsLoading(state)
 });
 
 const mapDispatchToProps = { fetchProposals: getAllProposals };
