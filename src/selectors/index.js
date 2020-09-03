@@ -94,5 +94,8 @@ export const setQuestionError = (state: Object): string =>
   proposalSelectors.setQuestionError(state.proposal);
 
 // Tabbar Selectors
+export const getProposals = (state: Object): Array<Object> =>
+  proposalsSelectors.getProposals(state.proposals);
+
 export const getProposalTypeView = (state: Object): 0 | 1 =>
   proposalsSelectors.getProposalTypeView(state.proposals);
