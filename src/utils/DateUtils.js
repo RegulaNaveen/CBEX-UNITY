@@ -5,12 +5,8 @@ import dateFnsParse from 'date-fns/parse';
 
 export const parseDate = (date: string, format: string) => {
   const parsed = dateFnsParse(date, format, new Date(), {});
-  if (DateUtils.isDate(parsed)) {
-    return parsed;
-  }
-  return undefined;
+  return DateUtils.isDate(parsed) ? parsed : undefined;
 };
 
-export const formatDate = (date: Date, format: string) => {
-  return dateFnsFormat(date, format, {});
-};
+export const formatDate = (date: Date, format: string) =>
+  dateFnsFormat(date, format, {});
