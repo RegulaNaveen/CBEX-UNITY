@@ -99,3 +99,6 @@ export const getProposals = (state: Object): Array<Object> =>
 
 export const getProposalTypeView = (state: Object): 0 | 1 =>
   proposalsSelectors.getProposalTypeView(state.proposals);
+
+export const getProposalsLoading = (state: Object): boolean =>
+  proposalsSelectors.getProposalsLoading(state.proposals);

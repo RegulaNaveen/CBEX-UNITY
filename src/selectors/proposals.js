@@ -4,5 +4,8 @@ import { Map } from 'immutable';
 export const getProposals = (proposals: Map): Array<Object> =>
   proposals.get('proposals');
 
+export const getProposalsLoading = (proposals: Map): 0 | 1 =>
+  proposals.get('proposalsLoading');
+
 export const getProposalTypeView = (proposals: Map): 0 | 1 =>
   proposals.get('selectedViewType');
