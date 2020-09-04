@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { isEmpty } from 'lodash';
 import ProposalCard from './ProposalCard';
 import { formatDate, dateDiffInDays } from '../../utils/DateUtils';
 
@@ -28,38 +29,43 @@ const formatProposal = (proposal: Object) => {
   return formatted;
 };
 
-const GridView = ({ data }: Props) => (
-  <div id="grid-view">
-    {data.map(proposal => {
-      const {
-        title,
-        opportunityName,
-        daysRemain,
-        dueDate,
-        account,
-        protocolNumber,
-        phase,
-        therapeuticArea,
-        verbatimIndication,
-        proposalId
-      } = formatProposal(proposal);
-      return (
-        <ProposalCard
-          key={uuidv4()}
-          title={title}
-          opportunityName={opportunityName}
-          daysRemain={daysRemain}
-          dueDate={dueDate}
-          account={account}
-          protocolNumber={protocolNumber}
-          phase={phase}
-          therapeuticArea={therapeuticArea}
-          verbatimIndication={verbatimIndication}
-          proposalId={proposalId}
-        />
-      );
-    })}
-  </div>
-);
+const GridView = ({ data }: Props) =>
+  !isEmpty(data) ? (
+    <div id="grid-view">
+      {data.map(proposal => {
+        const {
+          title,
+          opportunityName,
+          daysRemain,
+          dueDate,
+          account,
+          protocolNumber,
+          phase,
+          therapeuticArea,
+          verbatimIndication,
+          proposalId
+        } = formatProposal(proposal);
+        return (
+          <ProposalCard
+            key={uuidv4()}
+            title={title}
+            opportunityName={opportunityName}
+            daysRemain={daysRemain}
+            dueDate={dueDate}
+            account={account}
+            protocolNumber={protocolNumber}
+            phase={phase}
+            therapeuticArea={therapeuticArea}
+            verbatimIndication={verbatimIndication}
+            proposalId={proposalId}
+          />
+        );
+      })}
+    </div>
+  ) : (
+    <div className="no-info">
+      <p>No data to show</p>
+    </div>
+  );
 
 export default GridView;

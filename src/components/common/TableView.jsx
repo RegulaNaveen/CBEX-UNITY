@@ -68,7 +68,12 @@ const TableView = ({ data }: Props) => {
   );
 
   const renderContent = () => {
-    if (isEmpty(data)) return 'No Data..';
+    if (isEmpty(data))
+      return (
+        <div className="no-info">
+          <p>No data to show</p>
+        </div>
+      );
 
     const tableColumns = renderTableHeaders(columns);
     const tableContent = renderTableContent(data);

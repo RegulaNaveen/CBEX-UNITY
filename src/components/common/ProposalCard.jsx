@@ -17,7 +17,6 @@ type Props = {
   proposalId: string
 };
 
-// TODO: Replace data structure when we know how object is structured.
 // TODO: Replace Link to prop in Documents.
 const ProposalCard = ({
   title,
