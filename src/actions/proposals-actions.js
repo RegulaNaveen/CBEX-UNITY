@@ -45,7 +45,7 @@ export const getAllProposals = (): ThunkAction<string, Object> => {
 };
 
 export const getProposalsByStatus = (status: string) => {
-  const userEmail = 'testing@gmail.com'; // localStorage.getItem('userEmail');
+  const userEmail = localStorage.getItem('userEmail');
   return async (dispatch: Dispatch<Object, string>) => {
     dispatch({ type: ON_PROPOSALS_LOADING });
     try {
