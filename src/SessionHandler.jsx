@@ -4,7 +4,7 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { getAuthData, authHasErrors, getChangeRoleError } from './selectors';
 import { refreshAuthData, changeRole } from './actions/auth-actions';
-import { DASHBOARD } from './routes';
+import { DASHBOARD, PROPOSAL } from './routes';
 
 export const setSession = (
   role: string,
@@ -73,10 +73,9 @@ const SessionHandler = ({ children }: Props) => {
   };
 
   const navigateFunc = () => {
-    // Changed to Redirect to dashboard
-    // const proposalId = localStorage.getItem('proposalId') || '';
-    // history.push(`/app/proposals/${proposalId}`);
-    history.push(DASHBOARD);
+    const proposalId = getProposalId();
+    if (proposalId) localStorage.removeItem('proposalId');
+    history.push(proposalId ? `${PROPOSAL}${proposalId}` : DASHBOARD);
   };
 
   const renewSession = async (error: string, role: string) => {
@@ -88,11 +87,8 @@ const SessionHandler = ({ children }: Props) => {
 
   useEffect(() => {
     function checkSession() {
-      const isLoggedin = localStorage.getItem('isLoggedin');
-      if (!isLoggedin) {
-        setProposalId();
-      } else {
-        setProposalId();
+      setProposalId();
+      if (getSession()) {
         navigateFunc();
       }
     }
