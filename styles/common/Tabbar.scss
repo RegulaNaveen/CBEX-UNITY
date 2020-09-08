@@ -9,7 +9,7 @@
       list-style: none;
       padding: 0;
       margin-bottom: 0;
-  
+
       li {
         font-family: $proximaNova;
         font-size: 16px;
@@ -19,31 +19,35 @@
         font-weight: 500;
         color: $neutral7;
         position: relative;
-  
+
         &.selected {
-         &::before {
-           content: '';
-           position: absolute;
-           left: 0;
-           bottom: -2px;
-           width: 100%;
-           height: 3px;
-           background-color: $neptune-primary;
-           border-radius: 5px;
-           box-shadow: 0 0 5px rgba($color: $neptune-primary, $alpha: 0.3);
-         }
+          &::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 100%;
+            height: 3px;
+            background-color: $neptune-primary;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba($color: $neptune-primary, $alpha: 0.3);
+          }
         }
       }
     }
 
     .tab-filters {
+      display: flex;
       padding: 10px;
     }
   }
 
   .tab-content-wrapper {
     width: 100%;
-    padding: 10px 0;  
+    padding: 10px 0;
+  }
+
+  .filter-toggle {
+    margin-right: 10px;
   }
 }
-
