@@ -3,8 +3,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { setProposalTypeView } from '../../actions/proposals-actions';
+import { SecondaryButton } from './Buttons';
 import TabItem from './TabItem';
 import SwitchView from './SwitchView';
+import DashboardFilters from './DashboardFilters';
 
 type Props = {
   children: any,
@@ -12,7 +14,8 @@ type Props = {
 };
 
 type State = {
-  selected: number
+  selected: number,
+  showFilters: boolean
 };
 
 class Tabbar extends Component<Props, State> {
@@ -20,7 +23,8 @@ class Tabbar extends Component<Props, State> {
     super(props);
 
     this.state = {
-      selected: 0
+      selected: 0,
+      showFilters: false
     };
   }
 
@@ -31,9 +35,14 @@ class Tabbar extends Component<Props, State> {
     setProposalView(selectedTab);
   };
 
+  toggleFilters = () => {
+    const { showFilters } = this.state;
+    this.setState({ showFilters: !showFilters });
+  };
+
   render() {
     const { children } = this.props;
-    const { selected } = this.state;
+    const { selected, showFilters } = this.state;
 
     return (
       <div className="tab-wrapper">
@@ -51,10 +60,19 @@ class Tabbar extends Component<Props, State> {
               ))}
           </ul>
           <div className="tab-filters">
+            <SecondaryButton
+              className="filter-toggle"
+              onClick={this.toggleFilters}
+            >
+              Filter
+            </SecondaryButton>
             <SwitchView getSelectedTab={this.handleTypeView} />
           </div>
         </div>
-        <div className="tab-content-wrapper">{children[selected]}</div>
+        <div className="tab-content-wrapper">
+          {showFilters && <DashboardFilters />}
+          {children[selected]}
+        </div>
       </div>
     );
   }
