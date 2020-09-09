@@ -1,5 +1,5 @@
 // @flow
-import { valuesIn, includes } from 'lodash';
+import { isEmpty } from 'lodash';
 import type { Dispatch, ThunkAction } from './action-types';
 import { REDUX_TYPES } from '../constants';
 import { onGetAllProposals, onGetByStatus } from '../api/proposals';
@@ -78,6 +78,11 @@ type FilteredData = {
   teamMember: string
 };
 
+const filterByKeyValue = (key, value, array) =>
+  array.filter(proposal =>
+    proposal[key].toLowerCase().includes(value.toLowerCase())
+  );
+
 export const onFilteringProposals = (
   newFilteredProposals: FilteredData,
   isFiltering: boolean
@@ -85,33 +90,24 @@ export const onFilteringProposals = (
   dispatch: Dispatch<string, Object>,
   getState: Function
 ) => {
-  const {
-    opportunityNumber,
-    opportunityName,
-    customer,
-    protocolNumber,
-    phase,
-    product,
-    therapeuticArea,
-    indication,
-    bidDueDate,
-    opportunityStatus,
-    teamMember
-  } = newFilteredProposals;
-
   const proposalsMap = getState().proposals;
   const proposals = proposalsMap.get('proposals');
-  const cleanFilters = Object.entries(newFilteredProposals).filter(
-    value => value !== ''
-  );
+
+  const cleanFilters = Object.entries(newFilteredProposals)
+    .filter(([key, value]) => value !== '')
+    .map(([key, value]) => [key, value]);
 
   console.log(cleanFilters);
 
-  const filteredProposals = proposals.filter(proposal =>
-    includes(proposal, cleanFilters)
-  );
+  let filteredProposals = [];
 
-  console.log(filteredProposals);
+  cleanFilters.forEach(([key, value]) => {
+    filteredProposals = filterByKeyValue(
+      key,
+      value,
+      !isEmpty(filteredProposals) ? filteredProposals : proposals
+    );
+  });
 
   dispatch({
     type: ON_FILTER_PROPOSALS,

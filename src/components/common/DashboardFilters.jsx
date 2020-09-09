@@ -8,7 +8,7 @@ const DashboardFilters = ({ onChange }) => (
     <div className="filter-wrapper">
       <InputField
         title="Opportunity #"
-        id="opportunityNumber"
+        id="opportunity #"
         onChange={onChange}
       />
     </div>
@@ -20,10 +20,10 @@ const DashboardFilters = ({ onChange }) => (
       />
     </div>
     <div className="filter-wrapper">
-      <InputField title="Customer" id="customer" onChange={onChange} />
+      <InputField title="Customer" id="account" onChange={onChange} />
     </div>
     <div className="filter-wrapper">
-      <InputField title="Protocol #" id="protocolNumber" onChange={onChange} />
+      <InputField title="Protocol #" id="protocol #" onChange={onChange} />
     </div>
     <div className="filter-wrapper">
       <Dropdown title="Phase" id="phase" onChange={onChange} />
@@ -42,7 +42,7 @@ const DashboardFilters = ({ onChange }) => (
       <Dropdown title="Indication" id="indication" onChange={onChange} />
     </div>
     <div className="filter-wrapper">
-      <DatePicker label="Bid due date" id="bidDueDate" onChange={onChange} />
+      <DatePicker label="Bid due date" id="bid due date" onChange={onChange} />
     </div>
     <div className="filter-wrapper">
       <Dropdown

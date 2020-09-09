@@ -14,7 +14,8 @@ import { Filter } from '../svg';
 
 type Props = {
   children: any,
-  setProposalView: (typeView: 0 | 1) => void
+  setProposalView: (typeView: 0 | 1) => void,
+  filterProposals: Function
 };
 
 type State = {
@@ -63,7 +64,7 @@ class Tabbar extends Component<Props, State> {
 
   toggleFilters = () => {
     const { filterProposals } = this.props;
-    const { showFilters, filters } = this.state;
+    const { showFilters } = this.state;
     this.setState({ showFilters: !showFilters }, () => {
       if (!this.state.showFilters) filterProposals({}, false);
     });
