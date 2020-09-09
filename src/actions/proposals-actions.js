@@ -97,8 +97,6 @@ export const onFilteringProposals = (
     .filter(([key, value]) => value !== '')
     .map(([key, value]) => [key, value]);
 
-  console.log(cleanFilters);
-
   let filteredProposals = [];
 
   cleanFilters.forEach(([key, value]) => {
