@@ -20,6 +20,7 @@ import RightArrow from './RightArrow';
 import ArrowLeft from './ArrowLeft';
 import ArrowRight from './ArrowRight';
 import More from './More';
+import Filter from './Filter';
 
 export {
   Checkmark,
@@ -42,5 +43,6 @@ export {
   RightArrow,
   ArrowLeft,
   ArrowRight,
-  More
+  More,
+  Filter
 };

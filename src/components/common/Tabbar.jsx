@@ -10,6 +10,7 @@ import { SecondaryButton } from './Buttons';
 import TabItem from './TabItem';
 import SwitchView from './SwitchView';
 import DashboardFilters from './DashboardFilters';
+import { Filter } from '../svg';
 
 type Props = {
   children: any,
@@ -92,6 +93,7 @@ class Tabbar extends Component<Props, State> {
               className="filter-toggle"
               onClick={this.toggleFilters}
             >
+              <Filter className="filter-icon" />
               Filter
             </SecondaryButton>
             <SwitchView getSelectedTab={this.handleTypeView} />
