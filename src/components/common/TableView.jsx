@@ -3,7 +3,7 @@ import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Link } from 'react-router-dom';
 import { isEmpty, keysIn, head, valuesIn } from 'lodash';
-import objectToString from '../../utils/helpers';
+import { objectToString } from '../../utils/helpers';
 import { formatDate } from '../../utils/DateUtils';
 import { PROPOSAL } from '../../routes';
 

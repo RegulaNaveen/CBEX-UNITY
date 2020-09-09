@@ -3,40 +3,56 @@ import InputField from './InputField';
 import Dropdown from './Dropdown';
 import DatePicker from './DatePicker';
 
-const DashboardFilters = ({}) => (
+const DashboardFilters = ({ onChange }) => (
   <div id="dashboard-filters">
     <div className="filter-wrapper">
-      <InputField title="Opportunity #" />
+      <InputField
+        title="Opportunity #"
+        id="opportunityNumber"
+        onChange={onChange}
+      />
     </div>
     <div className="filter-wrapper">
-      <InputField title="Opportunity name" />
+      <InputField
+        title="Opportunity name"
+        id="opportunityName"
+        onChange={onChange}
+      />
     </div>
     <div className="filter-wrapper">
-      <InputField title="Customer" />
+      <InputField title="Customer" id="customer" onChange={onChange} />
     </div>
     <div className="filter-wrapper">
-      <InputField title="Protocol #" />
+      <InputField title="Protocol #" id="protocolNumber" onChange={onChange} />
     </div>
     <div className="filter-wrapper">
-      <Dropdown title="Phase" />
+      <Dropdown title="Phase" id="phase" onChange={onChange} />
     </div>
     <div className="filter-wrapper">
-      <InputField title="Product" />
+      <InputField title="Product" id="product" onChange={onChange} />
     </div>
     <div className="filter-wrapper">
-      <Dropdown title="Therapeutic area" />
+      <Dropdown
+        title="Therapeutic area"
+        id="therapeuticArea"
+        onChange={onChange}
+      />
     </div>
     <div className="filter-wrapper">
-      <Dropdown title="Indication" />
+      <Dropdown title="Indication" id="indication" onChange={onChange} />
     </div>
     <div className="filter-wrapper">
-      <DatePicker label="Bid due date" />
+      <DatePicker label="Bid due date" id="bidDueDate" onChange={onChange} />
     </div>
     <div className="filter-wrapper">
-      <Dropdown title="Opportunity status" />
+      <Dropdown
+        title="Opportunity status"
+        id="opportunityStatus"
+        onChange={onChange}
+      />
     </div>
     <div className="filter-wrapper">
-      <InputField title="Team member" />
+      <InputField title="Team member" id="teamMember" onChange={onChange} />
     </div>
   </div>
 );

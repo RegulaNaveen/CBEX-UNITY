@@ -7,10 +7,13 @@ const {
   SET_PROPOSAL_VIEW_TYPE,
   ON_GET_PROPOSALS,
   ERROR_ON_GET_PROPOSALS,
-  ON_PROPOSALS_LOADING
+  ON_PROPOSALS_LOADING,
+  ON_FILTER_PROPOSALS
 } = REDUX_TYPES.PROPOSALS;
 
 const INITIAL_STATE: Map = fromJS({
+  filteredProposals: undefined,
+  isFiltering: false,
   proposals: undefined,
   proposalsError: undefined,
   proposalsLoading: false,
@@ -27,6 +30,13 @@ const setProposalsError = (state: Map, action: Object): Map => {
   return state.set('proposalsError', error).set('proposalsLoading', false);
 };
 
+const onSetFilteringProposals = (state: Map, action: Object): Map => {
+  const { filteredProposals, isFiltering } = action.payload;
+  return state
+    .set('filteredProposals', filteredProposals)
+    .set('isFiltering', isFiltering);
+};
+
 const setProposalViewType = (state: Map, action: Object): Map => {
   const { payload } = action;
   return state.set('selectedViewType', payload.typeView);
@@ -39,7 +49,8 @@ const actionMap = {
   [SET_PROPOSAL_VIEW_TYPE]: setProposalViewType,
   [ON_GET_PROPOSALS]: setProposals,
   [ERROR_ON_GET_PROPOSALS]: setProposalsError,
-  [ON_PROPOSALS_LOADING]: onProposalsLoading
+  [ON_PROPOSALS_LOADING]: onProposalsLoading,
+  [ON_FILTER_PROPOSALS]: onSetFilteringProposals
 };
 
 export default function(

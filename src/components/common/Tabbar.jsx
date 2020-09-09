@@ -2,7 +2,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
-import { setProposalTypeView } from '../../actions/proposals-actions';
+import {
+  setProposalTypeView,
+  onFilteringProposals
+} from '../../actions/proposals-actions';
 import { SecondaryButton } from './Buttons';
 import TabItem from './TabItem';
 import SwitchView from './SwitchView';
@@ -24,7 +27,20 @@ class Tabbar extends Component<Props, State> {
 
     this.state = {
       selected: 0,
-      showFilters: false
+      showFilters: false,
+      filters: {
+        opportunityNumber: '',
+        opportunityName: '',
+        customer: '',
+        protocolNumber: '',
+        phase: '',
+        product: '',
+        therapeuticArea: '',
+        indication: '',
+        bidDueDate: '',
+        opportunityStatus: '',
+        teamMember: ''
+      }
     };
   }
 
@@ -35,9 +51,21 @@ class Tabbar extends Component<Props, State> {
     setProposalView(selectedTab);
   };
 
+  onChangeValue = ({ target }: SyntheticEvent<EventTarget>) => {
+    const { filters } = this.state;
+    const { filterProposals } = this.props;
+    const { id, value } = target;
+    this.setState({ filters: { ...filters, [id]: value } }, () => {
+      filterProposals(this.state.filters, true);
+    });
+  };
+
   toggleFilters = () => {
-    const { showFilters } = this.state;
-    this.setState({ showFilters: !showFilters });
+    const { filterProposals } = this.props;
+    const { showFilters, filters } = this.state;
+    this.setState({ showFilters: !showFilters }, () => {
+      if (!this.state.showFilters) filterProposals({}, false);
+    });
   };
 
   render() {
@@ -70,7 +98,7 @@ class Tabbar extends Component<Props, State> {
           </div>
         </div>
         <div className="tab-content-wrapper">
-          {showFilters && <DashboardFilters />}
+          {showFilters && <DashboardFilters onChange={this.onChangeValue} />}
           {children[selected]}
         </div>
       </div>
@@ -78,4 +106,7 @@ class Tabbar extends Component<Props, State> {
   }
 }
 
-export default connect(null, { setProposalView: setProposalTypeView })(Tabbar);
+export default connect(null, {
+  setProposalView: setProposalTypeView,
+  filterProposals: onFilteringProposals
+})(Tabbar);

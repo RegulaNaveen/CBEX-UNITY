@@ -6,9 +6,14 @@ import Loader from 'react-loader-spinner';
 import {
   getProposalTypeView,
   getProposals,
-  getProposalsLoading
+  getProposalsLoading,
+  getFilteredProposals,
+  getIsFilteringProposals
 } from '../../../selectors';
-import { getAllProposals } from '../../../actions/proposals-actions';
+import {
+  getAllProposals,
+  onFilteringProposals
+} from '../../../actions/proposals-actions';
 import TableView from '../../common/TableView';
 import GridView from '../../common/GridView';
 import ComplexPagination from '../../common/ComplexPagination';
@@ -17,6 +22,8 @@ type Props = {
   selectedViewType: 0 | 1,
   proposals: [Object],
   fetchProposals: Function,
+  filteredProposals: [Object],
+  isFilteringProposals: boolean,
   loading: boolean
 };
 
@@ -55,11 +62,17 @@ class AllTab extends Component<Props, State> {
   }
 
   renderSelectedView = () => {
-    const { selectedViewType } = this.props;
+    const {
+      selectedViewType,
+      filteredProposals,
+      isFilteringProposals
+    } = this.props;
     const { pageContent } = this.state;
 
-    if (selectedViewType === 0) return <TableView data={pageContent} />;
-    return <GridView data={pageContent} />;
+    const data = isFilteringProposals ? filteredProposals : pageContent;
+
+    if (selectedViewType === 0) return <TableView data={data} />;
+    return <GridView data={data} />;
   };
 
   setPage = (page: number) => this.setState({ page });
@@ -71,6 +84,7 @@ class AllTab extends Component<Props, State> {
 
   render() {
     const { proposals, loading } = this.props;
+
     return loading ? (
       <Loader
         type="TailSpin"
@@ -99,9 +113,14 @@ class AllTab extends Component<Props, State> {
 const mapStateToProps = state => ({
   selectedViewType: getProposalTypeView(state),
   proposals: getProposals(state),
-  loading: getProposalsLoading(state)
+  loading: getProposalsLoading(state),
+  filteredProposals: getFilteredProposals(state),
+  isFilteringProposals: getIsFilteringProposals(state)
 });
 
-const mapDispatchToProps = { fetchProposals: getAllProposals };
+const mapDispatchToProps = {
+  fetchProposals: getAllProposals,
+  filterProposals: onFilteringProposals
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllTab);
