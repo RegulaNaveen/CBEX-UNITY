@@ -3,15 +3,15 @@
   width: 420px;
   grid-template-rows: 80px auto 81px 41px;
   box-sizing: border-box;
-  border: 1px solid #e9e9e9;
+  border: $border;
   border-radius: 4px;
-  background-color: #ffffff;
+  background-color: $white;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.04), 0 16px 24px 0 rgba(0, 0, 0, 0.08);
 
   .header-section {
     display: grid;
     grid-template-columns: 1fr 0.5fr;
-    border-bottom: 1px solid #e9e9e9;
+    border-bottom: $border;
 
     div:first-child {
       display: flex;
@@ -23,13 +23,13 @@
         font-family: $proximaNova;
 
         &:first-child {
-          color: #000000;
+          color: $black;
           font-size: 20px;
           font-weight: 600;
         }
 
         &:last-child {
-          color: #4d4d4d;
+          color: $neutral8;
           font-size: 14px;
           font-weight: 500;
         }
@@ -46,13 +46,13 @@
         font-family: $proximaNova;
 
         &:first-child {
-          color: #df216d;
+          color: $pink;
           font-size: 48px;
           font-weight: 600;
         }
 
         &:last-child {
-          color: #575757;
+          color: $neutral7;
           margin-top: -5px;
           font-size: 14px;
           font-weight: 500;
@@ -63,7 +63,7 @@
 
   .info-section {
     padding: 20px 0;
-    border-bottom: 1px solid #e9e9e9;
+    border-bottom: $border;
 
     .section-data {
       display: flex;
@@ -111,7 +111,7 @@
     justify-content: center;
     align-items: center;
     background-color: #f8f9fb;
-    border-top: 1px solid #e9e9e9;
+    border-top: $border;
 
     .link {
       display: flex;
