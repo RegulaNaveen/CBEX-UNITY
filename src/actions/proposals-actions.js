@@ -84,7 +84,7 @@ const filterByKeyValue = (key, value, array) =>
   );
 
 export const onFilteringProposals = (
-  newFilteredProposals: FilteredData,
+  filters: FilteredData,
   isFiltering: boolean
 ): ThunkAction<string, Object> => (
   dispatch: Dispatch<string, Object>,
@@ -93,24 +93,31 @@ export const onFilteringProposals = (
   const proposalsMap = getState().proposals;
   const proposals = proposalsMap.get('proposals');
 
-  const cleanFilters = Object.entries(newFilteredProposals)
+  const cleanFilters = Object.entries(filters)
     .filter(([key, value]) => value !== '')
     .map(([key, value]) => [key, value]);
 
-  let filteredProposals = [];
+  if (isEmpty(cleanFilters)) {
+    dispatch({
+      type: ON_FILTER_PROPOSALS,
+      payload: { filteredProposals: proposals, isFiltering }
+    });
+  } else {
+    let filteredProposals = [];
 
-  cleanFilters.forEach(([key, value]) => {
-    filteredProposals = filterByKeyValue(
-      key,
-      value,
-      !isEmpty(filteredProposals) ? filteredProposals : proposals
-    );
-  });
+    cleanFilters.forEach(([key, value]) => {
+      filteredProposals = filterByKeyValue(
+        key,
+        value,
+        !isEmpty(filteredProposals) ? filteredProposals : proposals
+      );
+    });
 
-  dispatch({
-    type: ON_FILTER_PROPOSALS,
-    payload: { filteredProposals, isFiltering }
-  });
+    dispatch({
+      type: ON_FILTER_PROPOSALS,
+      payload: { filteredProposals, isFiltering }
+    });
+  }
 };
 
 export const setProposalTypeView = (
