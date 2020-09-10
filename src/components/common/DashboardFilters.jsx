@@ -1,9 +1,14 @@
+// @flow
 import React from 'react';
 import InputField from './InputField';
 import Dropdown from './Dropdown';
 import DatePicker from './DatePicker';
 
-const DashboardFilters = ({ onChange }) => (
+type Props = {
+  onChange: Function
+};
+
+const DashboardFilters = ({ onChange }: Props) => (
   <div id="dashboard-filters">
     <div className="filter-wrapper">
       <InputField
