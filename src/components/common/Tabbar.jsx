@@ -58,7 +58,8 @@ class Tabbar extends Component<Props, State> {
     const { filterProposals } = this.props;
     const { id, value } = target;
     this.setState({ filters: { ...filters, [id]: value } }, () => {
-      filterProposals(this.state.filters, true);
+      const { filters: newFilters } = this.state;
+      filterProposals(newFilters, true);
     });
   };
 
@@ -66,7 +67,8 @@ class Tabbar extends Component<Props, State> {
     const { filterProposals } = this.props;
     const { showFilters } = this.state;
     this.setState({ showFilters: !showFilters }, () => {
-      if (!this.state.showFilters) filterProposals({}, false);
+      const { showFilters: newVisibility } = this.state;
+      if (newVisibility) filterProposals({}, false);
     });
   };
 
@@ -90,6 +92,7 @@ class Tabbar extends Component<Props, State> {
               ))}
           </ul>
           <div className="tab-filters">
+            <SwitchView getSelectedTab={this.handleTypeView} />
             <SecondaryButton
               className="filter-toggle"
               onClick={this.toggleFilters}
@@ -97,7 +100,6 @@ class Tabbar extends Component<Props, State> {
               <Filter className="filter-icon" />
               Filter
             </SecondaryButton>
-            <SwitchView getSelectedTab={this.handleTypeView} />
           </div>
         </div>
         <div className="tab-content-wrapper">
