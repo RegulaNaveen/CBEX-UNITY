@@ -14,7 +14,7 @@ const INITIAL_STATE: Map = fromJS({
   proposals: undefined,
   proposalsError: undefined,
   proposalsLoading: false,
-  selectedViewType: 1
+  selectedViewType: 0
 });
 
 const setProposals = (state: Map, action: Object): Map => {
