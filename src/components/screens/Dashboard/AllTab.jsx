@@ -10,10 +10,7 @@ import {
   getFilteredProposals,
   getIsFilteringProposals
 } from '../../../selectors';
-import {
-  getAllProposals,
-  onFilteringProposals
-} from '../../../actions/proposals-actions';
+import { getAllProposals } from '../../../actions/proposals-actions';
 import TableView from '../../common/TableView';
 import GridView from '../../common/GridView';
 import ComplexPagination from '../../common/ComplexPagination';
@@ -50,29 +47,29 @@ class AllTab extends Component<Props, State> {
 
   componentDidUpdate(prevProps, prevState) {
     const { page, numRows } = this.state;
-    const { proposals } = this.props;
-    if (
+    const { proposals, filteredProposals, isFilteringProposals } = this.props;
+
+    const contentChanged =
       prevState.page !== page ||
       prevState.numRows !== numRows ||
-      prevProps.proposals !== proposals
-    ) {
-      const pages = chunk(proposals, numRows);
+      prevProps.proposals !== proposals ||
+      prevProps.filteredProposals !== filteredProposals;
+
+    if (contentChanged) {
+      const pages = chunk(
+        isFilteringProposals ? filteredProposals : proposals,
+        numRows
+      );
       this.setPageContent(pages[page - 1]);
     }
   }
 
   renderSelectedView = () => {
-    const {
-      selectedViewType,
-      filteredProposals,
-      isFilteringProposals
-    } = this.props;
+    const { selectedViewType } = this.props;
     const { pageContent } = this.state;
 
-    const data = isFilteringProposals ? filteredProposals : pageContent;
-
-    if (selectedViewType === 0) return <TableView data={data} />;
-    return <GridView data={data} />;
+    if (selectedViewType === 0) return <TableView data={pageContent} />;
+    return <GridView data={pageContent} />;
   };
 
   setPage = (page: number) => this.setState({ page });
@@ -132,8 +129,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  fetchProposals: getAllProposals,
-  filterProposals: onFilteringProposals
+  fetchProposals: getAllProposals
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllTab);
