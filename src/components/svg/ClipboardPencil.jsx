@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 type Props = {
-  className: string
+  className?: string
 };
 
 const ClipboardPencil = ({ className }: Props) => {
@@ -25,6 +25,10 @@ const ClipboardPencil = ({ className }: Props) => {
       </g>
     </svg>
   );
+};
+
+ClipboardPencil.defaultProps = {
+  className: ''
 };
 
 export default ClipboardPencil;

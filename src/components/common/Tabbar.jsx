@@ -20,7 +20,7 @@ class Tabbar extends Component<Props, State> {
     super(props);
 
     this.state = {
-      selected: 0
+      selected: 2
     };
   }
 

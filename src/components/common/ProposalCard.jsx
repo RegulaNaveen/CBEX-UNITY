@@ -33,41 +33,63 @@ const ProposalCard = ({
   <div className="card">
     <div className="header-section">
       <div>
-        <p className="title">{title}</p>
-        <p className="proposal-name">{opportunityName}</p>
+        <p>{title}</p>
+        <p>{opportunityName}</p>
       </div>
       <div>
-        <p className="remain-days">{daysRemain}</p>
-        <p className="info-days">Days until Due</p>
+        <p>{daysRemain}</p>
+        <p>Days until Due</p>
       </div>
     </div>
+
     <div className="info-section">
-      <p>Due Date:</p>
-      <p>{dueDate}</p>
-      <p>Account: </p>
-      <p>{account}</p>
-      <p>Protocol Number:</p>
-      <p>{protocolNumber}</p>
-      <p>Phase:</p>
-      <p>{phase}</p>
-      <p>Therapeutic Area</p>
-      <p>{therapeuticArea}</p>
-      <p>Verbatim Indication</p>
-      <p>{verbatimIndication}</p>
+      <div className="section-data">
+        <span>Due Date:</span>
+        <span>{dueDate}</span>
+      </div>
+      <div className="section-data">
+        <span>Account: </span>
+        <span>{account}</span>
+      </div>
+      <div className="section-data">
+        <span>Protocol Number:</span>
+        <span>{protocolNumber}</span>
+      </div>
+      <div className="section-data">
+        <span>Phase:</span>
+        <span>{phase}</span>
+      </div>
+      <div className="section-data">
+        <span>Therapeutic Area</span>
+        <span>{therapeuticArea}</span>
+      </div>
+      <div className="section-data">
+        <span>Verbatim Indication</span>
+        <span>{verbatimIndication}</span>
+      </div>
     </div>
+
     <div className="buttons-section">
-      <Link to={`${PROPOSAL}${proposalId}`} className="link-icon">
-        <Clipboard className="icon" />
-      </Link>
-      <p className="questions">Questions</p>
-      <Link to={PROPOSAL} className="link-icon">
-        <Folder className="icon" />
-      </Link>
-      <p className="documents">Documents</p>
+      <div className="button">
+        <Link to={`${PROPOSAL}${proposalId}`}>
+          <Clipboard />
+        </Link>
+        <p>Questions</p>
+      </div>
+
+      <div className="button">
+        <Link to={PROPOSAL}>
+          <Folder />
+        </Link>
+        <p>Documents</p>
+      </div>
     </div>
+
     <div className="link-section">
-      <Link to={`${PROPOSAL}${proposalId}`}>View Opportunity Hub</Link>
-      <RightArrow className="right-arrow" />
+      <div className="link">
+        <Link to={`${PROPOSAL}${proposalId}`}>View Opportunity Hub</Link>
+        <RightArrow className="right-arrow" />
+      </div>
     </div>
   </div>
 );

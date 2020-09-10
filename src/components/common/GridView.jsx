@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { isEmpty } from 'lodash';
+import classNames from 'classnames';
 import ProposalCard from './ProposalCard';
 import { formatDate, dateDiffInDays } from '../../utils/DateUtils';
 
@@ -41,7 +42,9 @@ class GridView extends Component<Props> {
       );
 
     return (
-      <div id="grid-view">
+      <div
+        className={classNames('grid-view', { 'is-centered': data.length > 1 })}
+      >
         {data.map(proposal => {
           const formatted = formatProposal(proposal);
 
