@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { Component } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { isEmpty } from 'lodash';
 import ProposalCard from './ProposalCard';
@@ -29,43 +29,45 @@ const formatProposal = (proposal: Object) => {
   return formatted;
 };
 
-const GridView = ({ data }: Props) =>
-  !isEmpty(data) ? (
-    <div id="grid-view">
-      {data.map(proposal => {
-        const {
-          title,
-          opportunityName,
-          daysRemain,
-          dueDate,
-          account,
-          protocolNumber,
-          phase,
-          therapeuticArea,
-          verbatimIndication,
-          proposalId
-        } = formatProposal(proposal);
-        return (
-          <ProposalCard
-            key={uuidv4()}
-            title={title}
-            opportunityName={opportunityName}
-            daysRemain={daysRemain}
-            dueDate={dueDate}
-            account={account}
-            protocolNumber={protocolNumber}
-            phase={phase}
-            therapeuticArea={therapeuticArea}
-            verbatimIndication={verbatimIndication}
-            proposalId={proposalId}
-          />
-        );
-      })}
-    </div>
-  ) : (
-    <div className="no-info">
-      <p>No data to show</p>
-    </div>
-  );
+class GridView extends Component<Props> {
+  renderContent() {
+    const { data } = this.props;
+
+    if (isEmpty(data))
+      return (
+        <div className="no-info">
+          <p>No data to show</p>
+        </div>
+      );
+
+    return (
+      <div id="grid-view">
+        {data.map(proposal => {
+          const formatted = formatProposal(proposal);
+
+          return (
+            <ProposalCard
+              key={uuidv4()}
+              title={formatted.title}
+              opportunityName={formatted.opportunityName}
+              daysRemain={formatted.daysRemain}
+              dueDate={formatted.dueDate}
+              account={formatted.account}
+              protocolNumber={formatted.protocolNumber}
+              phase={formatted.phase}
+              therapeuticArea={formatted.therapeuticArea}
+              verbatimIndication={formatted.verbatimIndication}
+              proposalId={formatted.proposalId}
+            />
+          );
+        })}
+      </div>
+    );
+  }
+
+  render() {
+    return this.renderContent();
+  }
+}
 
 export default GridView;
