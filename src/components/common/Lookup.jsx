@@ -8,7 +8,8 @@ import { objectContains } from '../../utils/helpers';
 type Props = {
   data: Array<any>,
   title?: string,
-  getSelectedItem: (seletedItem: string) => void
+  text?: string,
+  getSelectedItem: (selectedItem: string) => void
 };
 
 type State = {
@@ -18,14 +19,15 @@ type State = {
 
 class Lookup extends Component<Props, State> {
   static defaultProps = {
-    title: ''
+    title: '',
+    text: ''
   };
 
   constructor(props: Object) {
     super(props);
-
+    const { text } = this.props;
     this.state = {
-      searchValue: '',
+      searchValue: text || '',
       filteredData: []
     };
   }
@@ -61,8 +63,7 @@ class Lookup extends Component<Props, State> {
         id="lookup"
         className={classNames({ 'is-searching': !isEmpty(filteredData) })}
       >
-        <p>{title}</p>
-
+        {title && <p>{title}</p>}
         <div className="lookup-wrapper">
           <input
             type="text"
