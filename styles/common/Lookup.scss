@@ -1,9 +1,6 @@
 #lookup {
   position: relative;
-  margin-bottom: 15px;
   font-family: $proximaNova;
-  background: #000;
-  width: 30%;
   box-sizing: border-box;
 
   p {
@@ -15,9 +12,9 @@
 
   .lookup-wrapper {
     input {
+      font-size: 16px;
+      font-family: $proximaNova;
       position: relative;
-      display: block;
-      width: 100%;
       padding: 10px;
       border-radius: 4px;
       outline: none;
@@ -28,16 +25,7 @@
         border: 1px solid $blue;
       }
 
-      &::before {
-        content: '';
-        position: absolute;
-        width: 95%;
-        height: 10px;
-        bottom: 5px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: $black;
-      }
+      
     }
   }
 
@@ -78,17 +66,7 @@
         border-radius: 4px 4px 0 0;
       }
 
-      &::before {
-        content: '';
-        position: absolute;
-        width: 95%;
-        height: 1px;
-        bottom: 0px;
-        z-index: 3;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba($color: $purple, $alpha: 0.05);
-      }
+      
     }
 
     .search-data-wrapper {
