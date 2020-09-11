@@ -20,7 +20,8 @@ type Props = {
 
 type State = {
   selected: number,
-  showFilters: boolean
+  showFilters: boolean,
+  filters: Object
 };
 
 class Tabbar extends Component<Props, State> {
@@ -53,10 +54,10 @@ class Tabbar extends Component<Props, State> {
     setProposalView(selectedTab);
   };
 
-  onChangeValue = ({ target }: SyntheticEvent<EventTarget>) => {
+  onChangeValue = (event: SyntheticEvent<EventTarget>) => {
     const { filters } = this.state;
     const { filterProposals } = this.props;
-    const { id, value } = target;
+    const { id, value } = event.target;
     this.setState({ filters: { ...filters, [id]: value } }, () => {
       const { filters: newFilters } = this.state;
       filterProposals(newFilters, true);

@@ -27,7 +27,7 @@ type Props = {
 type State = {
   numRows: number,
   page: number,
-  pageContent: [Object]
+  pageContent: Array<Object>
 };
 
 class RecentTab extends Component<Props, State> {

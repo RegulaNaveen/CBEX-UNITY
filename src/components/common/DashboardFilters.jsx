@@ -15,6 +15,8 @@ const DashboardFilters = ({ onChange }: Props) => (
         title="Opportunity #"
         id="opportunity #"
         onChange={onChange}
+        placeholder="Opportunity number"
+        type="text"
       />
     </div>
     <div className="filter-wrapper">
@@ -22,29 +24,49 @@ const DashboardFilters = ({ onChange }: Props) => (
         title="Opportunity name"
         id="opportunityName"
         onChange={onChange}
+        placeholder="Opportunity name"
+        type="text"
       />
     </div>
     <div className="filter-wrapper">
-      <InputField title="Customer" id="account" onChange={onChange} />
+      <InputField
+        title="Customer"
+        id="account"
+        onChange={onChange}
+        placeholder="Customer"
+        type="text"
+      />
     </div>
     <div className="filter-wrapper">
-      <InputField title="Protocol #" id="protocol #" onChange={onChange} />
+      <InputField
+        title="Protocol #"
+        id="protocol #"
+        onChange={onChange}
+        placeholder="Protocol number"
+        type="text"
+      />
     </div>
     <div className="filter-wrapper">
-      <Dropdown title="Phase" id="phase" onChange={onChange} />
+      <Dropdown title="Phase" id="phase" onClick={onChange} />
     </div>
     <div className="filter-wrapper">
-      <InputField title="Product" id="product" onChange={onChange} />
+      <InputField
+        title="Product"
+        id="product"
+        onChange={onChange}
+        placeholder="Product"
+        type="text"
+      />
     </div>
     <div className="filter-wrapper">
       <Dropdown
         title="Therapeutic area"
         id="therapeuticArea"
-        onChange={onChange}
+        onClick={onChange}
       />
     </div>
     <div className="filter-wrapper">
-      <Dropdown title="Indication" id="indication" onChange={onChange} />
+      <Dropdown title="Indication" id="indication" onClick={onChange} />
     </div>
     <div className="filter-wrapper">
       <DatePicker label="Bid due date" id="bid due date" onChange={onChange} />
@@ -53,7 +75,7 @@ const DashboardFilters = ({ onChange }: Props) => (
       <Dropdown
         title="Opportunity status"
         id="opportunityStatus"
-        onChange={onChange}
+        onClick={onChange}
       />
     </div>
     <div className="filter-wrapper">

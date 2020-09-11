@@ -4,7 +4,7 @@ import classnames from 'classnames';
 
 type Props = {
   id?: string,
-  children: string,
+  children: any,
   onClick: Function,
   className?: string
 };

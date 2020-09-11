@@ -31,7 +31,7 @@ const formatProposal = (proposal: Object): Object => {
 
 export const getAllProposals = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<Object, string>) => {
-    dispatch({ type: ON_PROPOSALS_LOADING });
+    dispatch({ type: ON_PROPOSALS_LOADING, payload: {} });
     try {
       const { data } = await onGetAllProposals();
 
@@ -47,7 +47,7 @@ export const getAllProposals = (): ThunkAction<string, Object> => {
 };
 
 export const getProposalsByStatus = (status: string) => {
-  const userEmail = localStorage.getItem('userEmail');
+  const userEmail = localStorage.getItem('userEmail') || '';
   return async (dispatch: Dispatch<Object, string>) => {
     dispatch({ type: ON_PROPOSALS_LOADING });
     try {
@@ -94,6 +94,7 @@ export const onFilteringProposals = (
   const proposals = proposalsMap.get('proposals');
 
   const cleanFilters = Object.entries(filters)
+    // eslint-disable-next-line no-unused-vars
     .filter(([key, value]) => value !== '')
     .map(([key, value]) => [key, value]);
 

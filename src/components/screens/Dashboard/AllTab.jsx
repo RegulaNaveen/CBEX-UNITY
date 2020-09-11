@@ -27,7 +27,7 @@ type Props = {
 type State = {
   numRows: number,
   page: number,
-  pageContent: [Object]
+  pageContent: Array<Object>
 };
 
 class AllTab extends Component<Props, State> {
