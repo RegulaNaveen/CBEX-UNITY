@@ -4,7 +4,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { Link } from 'react-router-dom';
 import { isEmpty, keysIn, head, valuesIn } from 'lodash';
 import objectToString from '../../utils/helpers';
+import { formatDate } from '../../utils/DateUtils';
 import { PROPOSAL } from '../../routes';
+
+const SKIP_COLUMNS = ['proposalId', 'opportunityName', 'therapeuticArea'];
+const DATE_COLUMN = 'bid due date';
+const LINK_COLUMN = 'opportunity #';
 
 type Props = {
   data: [Object]
@@ -12,59 +17,63 @@ type Props = {
 
 const TableView = ({ data }: Props) => {
   const columns = keysIn(head(data));
-  const columnsLenght = columns.length;
+  const columnsLength = columns.length - SKIP_COLUMNS.length;
 
-  const renderTableHeaders = (columnsNames: [string]) => {
-    return (
-      <div
-        key={uuidv4()}
-        className="headers"
-        style={{ gridTemplateColumns: `repeat(${columnsLenght}, 1fr)` }}
-      >
-        {columnsNames.map(column => (
-          <h3 key={uuidv4()}>{column}</h3>
-        ))}
-      </div>
-    );
-  };
+  const renderTableHeaders = (columnsNames: [string]) => (
+    <div
+      key={uuidv4()}
+      className="headers"
+      style={{ gridTemplateColumns: `repeat(${columnsLength}, 1fr)` }}
+    >
+      {columnsNames.map(
+        column =>
+          !SKIP_COLUMNS.includes(column) && <h3 key={uuidv4()}>{column}</h3>
+      )}
+    </div>
+  );
 
-  const renderRow = (rowContent: Object) => {
-    // TODO: Delete static proposalId const once we start using real data
-    const proposalId = 'e2a6c32a-d081-4f82-9d8b-07e4f7cdf8c8';
-
-    return (
-      <div
-        key={uuidv4()}
-        className="row"
-        style={{ gridTemplateColumns: `repeat(${columnsLenght}, 1fr)` }}
-      >
-        {valuesIn(rowContent).map(cellContent => {
-          return (
+  const renderRow = (rowContent: Object) => (
+    <div
+      key={uuidv4()}
+      className="row"
+      style={{ gridTemplateColumns: `repeat(${columnsLength}, 1fr)` }}
+    >
+      {valuesIn(rowContent).map(cellContent => {
+        const skipValues = SKIP_COLUMNS.map(column => rowContent[column]);
+        return (
+          !skipValues.includes(cellContent) && (
             <div key={uuidv4()} className="cell">
-              {cellContent === rowContent.id ? (
-                <Link to={`${PROPOSAL}${proposalId}`}>{rowContent.id}</Link>
+              {cellContent === rowContent[LINK_COLUMN] ? (
+                <Link to={`${PROPOSAL}${rowContent.proposalId}`}>
+                  {cellContent}
+                </Link>
               ) : (
-                <p>{objectToString(cellContent)}</p>
+                <p>
+                  {cellContent === rowContent[DATE_COLUMN]
+                    ? formatDate(new Date(cellContent), 'dd-MMM-yyyy')
+                    : objectToString(cellContent)}
+                </p>
               )}
             </div>
-          );
-        })}
-      </div>
-    );
-  };
+          )
+        );
+      })}
+    </div>
+  );
 
-  const renderTableContent = (_data: [Object]) => {
-    return (
-      <div key={uuidv4()} className="table-grid">
-        {_data.map(rowContent => {
-          return renderRow(rowContent);
-        })}
-      </div>
-    );
-  };
+  const renderTableContent = (_data: [Object]) => (
+    <div key={uuidv4()} className="table-grid">
+      {_data.map(rowContent => renderRow(rowContent))}
+    </div>
+  );
 
   const renderContent = () => {
-    if (isEmpty(data)) return 'No Data..';
+    if (isEmpty(data))
+      return (
+        <div className="no-info">
+          <p>No data to show</p>
+        </div>
+      );
 
     const tableColumns = renderTableHeaders(columns);
     const tableContent = renderTableContent(data);

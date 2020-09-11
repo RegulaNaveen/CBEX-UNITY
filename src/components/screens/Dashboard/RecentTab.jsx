@@ -8,7 +8,7 @@ import {
   getProposals,
   getProposalsLoading
 } from '../../../selectors';
-import { getAllProposals } from '../../../actions/proposals-actions';
+import { getProposalsByStatus } from '../../../actions/proposals-actions';
 import TableView from '../../common/TableView';
 import GridView from '../../common/GridView';
 import ComplexPagination from '../../common/ComplexPagination';
@@ -26,7 +26,7 @@ type State = {
   pageContent: [Object]
 };
 
-class AllTab extends Component<Props, State> {
+class RecentTab extends Component<Props, State> {
   constructor(props: Object) {
     super(props);
     this.state = {
@@ -38,7 +38,7 @@ class AllTab extends Component<Props, State> {
 
   componentDidMount() {
     const { fetchProposals } = this.props;
-    fetchProposals();
+    fetchProposals('non-active');
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -102,6 +102,6 @@ const mapStateToProps = state => ({
   loading: getProposalsLoading(state)
 });
 
-const mapDispatchToProps = { fetchProposals: getAllProposals };
+const mapDispatchToProps = { fetchProposals: getProposalsByStatus };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AllTab);
+export default connect(mapStateToProps, mapDispatchToProps)(RecentTab);

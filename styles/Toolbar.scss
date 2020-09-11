@@ -7,12 +7,18 @@
   padding-left: 24px;
   padding-right: 24px;
 
+  a {
+    text-decoration: none;
+    display: flex;
+  }
+
   .toolbar-title {
     color: $white;
     font-family: $proximaNova;
     font-size: 16px;
     letter-spacing: 0;
     line-height: 24px;
+    margin-right: 8px; 
     
     &:nth-of-type(2) {
       font-weight: bold;

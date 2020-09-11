@@ -1,6 +1,20 @@
-#grid-view {
+.grid-view {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 40px;
-  justify-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
+  align-items: center;
+  grid-row-gap: 40px;
+  padding: 20px 0 40px 0;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  &.is-centered {
+    justify-items: center;
+  }
+}
+
+.no-info {
+  font-family: $proximaNova;
+  margin: 20px auto;
+  text-align: center;
+  font-size: 20;
 }

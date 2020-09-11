@@ -1,8 +1,10 @@
 // @flow
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 import ToolbarMenu from './ToolbarMenu';
 import { DropMenu } from '../svg';
+import { DASHBOARD } from '../../routes';
 
 type State = { isCollapsed: boolean };
 
@@ -29,9 +31,10 @@ class Toolbar extends Component<{}, State> {
 
     return (
       <div className="toolbar-wrapper">
-        <p className="toolbar-title">IQVIA™</p>
-        <p className="toolbar-title">Unity</p>
-
+        <Link to={DASHBOARD}>
+          <p className="toolbar-title">IQVIA™</p>
+          <p className="toolbar-title">Unity</p>
+        </Link>
         <div className="toolbar-account-spacer">
           <div className="toolbar-account-wrapper">
             <div
