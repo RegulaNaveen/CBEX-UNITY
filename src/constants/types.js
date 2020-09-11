@@ -18,7 +18,9 @@ const AUTH = {
   FORGOT_PASSWORD_ERROR: 'forgot_password_error',
   RESET_PASSWORD_IN_PROGRESS: 'reset_password_in_progress',
   RESET_PASSWORD_SUCCESS: 'reset_password_success',
-  RESET_PASSWORD_ERROR: 'reset_password_error'
+  RESET_PASSWORD_ERROR: 'reset_password_error',
+  ON_GET_LOOKUP_USERS: 'on_get_lookup_users',
+  ERROR_ON_GET_LOOKUP_USERS: 'error_on_get_lookup_users'
 };
 
 const PROPOSAL = {

@@ -18,7 +18,9 @@ const {
   FORGOT_PASSWORD_ERROR,
   RESET_PASSWORD_IN_PROGRESS,
   RESET_PASSWORD_SUCCESS,
-  RESET_PASSWORD_ERROR
+  RESET_PASSWORD_ERROR,
+  ON_GET_LOOKUP_USERS,
+  ERROR_ON_GET_LOOKUP_USERS
 } = REDUX_TYPES.AUTH;
 
 const INITIAL_STATE: Map = fromJS({
@@ -36,7 +38,9 @@ const INITIAL_STATE: Map = fromJS({
   forgotPasswordError: undefined,
   resetPasswordLoading: false,
   resetPasswordSuccess: undefined,
-  resetPasswordError: undefined
+  resetPasswordError: undefined,
+  lookupUsers: undefined,
+  lookupUsersError: undefined
 });
 
 const onAuthSuccess = (state: Map, action: Object): Map => {
@@ -144,6 +148,16 @@ const onResetPasswordError = (state: Map, action: Object): Map => {
     .set('resetPasswordLoading', false);
 };
 
+const onGetLookupUsers = (state: Map, action: Object): Map => {
+  const { lookupUsers } = action.payload;
+  return state.set('lookupUsers', lookupUsers).set('lookupUsersError');
+};
+
+const onErrorGetLookupUsers = (state: Map, action: Object): Map => {
+  const { error } = action.payload;
+  return state.set('lookupUsersError', error);
+};
+
 const actionMap = {
   [AUTH_SUCCESS]: onAuthSuccess,
   [AUTH_LOADING]: onAuthLoading,
@@ -159,7 +173,9 @@ const actionMap = {
   [FORGOT_PASSWORD_ERROR]: onForgotPasswordError,
   [RESET_PASSWORD_IN_PROGRESS]: onResetPasswordInProgress,
   [RESET_PASSWORD_SUCCESS]: onResetPasswordSuccess,
-  [RESET_PASSWORD_ERROR]: onResetPasswordError
+  [RESET_PASSWORD_ERROR]: onResetPasswordError,
+  [ON_GET_LOOKUP_USERS]: onGetLookupUsers,
+  [ERROR_ON_GET_LOOKUP_USERS]: onErrorGetLookupUsers
 };
 
 export default function(
