@@ -8,8 +8,10 @@ import { Map } from 'immutable';
 // import { parseDate, formatDate } from '../../../utils/DateUtils';
 import Loader from 'react-loader-spinner';
 import { compose } from 'redux';
+import { isEmpty } from 'lodash';
 import Modal from '../../common/Modal';
 import { PrimaryButton } from '../../common/Buttons';
+import Multiselect from '../../common/Multiselect';
 import Dropdown from '../../common/Dropdown';
 import TextArea from '../../common/TextArea';
 // import DatePicker from '../../common/DatePicker';
@@ -55,7 +57,7 @@ type State = {
   questionText: string,
   section: Object,
   answerType: string,
-  roleName: string,
+  roleNames: Array<string>,
   showAnswerOptions: boolean
 };
 
@@ -68,7 +70,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       questionText: '',
       section: undefined,
       answerType: '',
-      roleName: '',
+      roleNames: [],
       showAnswerOptions: false
     };
   }
@@ -137,10 +139,9 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     this.renderAnswerOptions(value);
   };
 
-  onRoleChange = (value: string) => {
-    this.setState({
-      roleName: value
-    });
+  onRoleChange = (values: Array<string>) => {
+    const roleNames = values.map(value => value.replace(', ', ''));
+    this.setState({ roleNames });
   };
 
   renderAnswerOptions = (type: string) => {
@@ -149,13 +150,13 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   };
 
   onSave = () => {
-    const { questionText, section, answerType, roleName } = this.state;
+    const { questionText, section, answerType, roleNames } = this.state;
     const { setProposalQuestionF, match } = this.props;
     if (
       questionText !== '' &&
       section &&
       answerType !== '' &&
-      roleName !== ''
+      !isEmpty(roleNames)
     ) {
       const proposalId = match.params.id;
       const questionData = {
@@ -164,10 +165,9 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         section,
         answerType,
         options: [],
-        roleName
+        roleNames
       };
 
-      console.log(proposalId);
       setProposalQuestionF(proposalId, questionData);
     }
   };
@@ -249,7 +249,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
               />
             </div>
             <div className="modal-segment">
-              <Dropdown
+              <Multiselect
                 id="dd-team-member"
                 placeholder="Select"
                 items={rolesList}

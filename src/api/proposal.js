@@ -94,27 +94,10 @@ export const setProposalQuestionData = async (
   questionData: Object
 ): Promise<Object> => {
   return new Promise((resolve, reject) => {
-    const {
-      questionText,
-      section,
-      answerType,
-      options,
-      roleName
-    } = questionData;
     axios
-      .post(
-        `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}`,
-        {
-          questionText,
-          section,
-          answerType,
-          options,
-          roleName
-        },
-        {
-          headers: { 'x-api-key': `${API_KEY}` }
-        }
-      )
+      .post(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}`, questionData, {
+        headers: { 'x-api-key': `${API_KEY}` }
+      })
       .then(response => {
         resolve(response.data);
       })
