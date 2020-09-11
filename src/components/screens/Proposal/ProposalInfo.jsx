@@ -8,70 +8,71 @@ type Props = {
 function ProposalInfo({ data }: Props) {
   const {
     'Bid due date': bidDueDate,
-    'CRM #': crm,
-    Customer,
+    Customer: customer,
     'Is this IQVIA Biotech': iqviaBiotech,
     'Line of business': lineOfBusiness,
-    Phase,
+    Phase: phase,
     'Product name': productName,
     'Protocol number': protocolNumber,
     'Therapeutic area': therapeuticArea,
     'Verbatim indication': verbatimIndication
   } = data;
 
+  const placeholder = 'No data';
+
   return (
-    <div className="pi-wrapper">
-      <p className="pi-title">{crm || 'No data'}</p>
-      <p className="pi-subtitle">Details</p>
-      <div className="pi-details">
-        <div className="pi-details-row">
-          <div className="pi-details-column">
-            <p className="pi-details-title">Customer:</p>
-            <p className="pi-details-subtitle">{Customer || 'No data'}</p>
+    <div id="proposal-info">
+      <h2>Overview</h2>
+
+      <div className="proposal-info-details">
+        <div className="detail-column">
+          <div className="detail-column-item">
+            <p>Customer:</p>
+            <p>{customer || placeholder}</p>
           </div>
-          <div className="pi-details-column">
-            <p className="pi-details-title">Therapeutic Area:</p>
-            <p className="pi-details-subtitle">
-              {therapeuticArea || 'No data'}
-            </p>
+          <div className="detail-column-item">
+            <p>Therapeutic Area:</p>
+            <p>{therapeuticArea || placeholder}</p>
           </div>
         </div>
-        <div className="pi-details-row">
-          <div className="pi-details-column">
-            <p className="pi-details-title">Line of Business:</p>
-            <p className="pi-details-subtitle">{lineOfBusiness || 'No data'}</p>
+
+        <div className="detail-column">
+          <div className="detail-column-item">
+            <p>Line of Business:</p>
+            <p>{lineOfBusiness || placeholder}</p>
           </div>
-          <div className="pi-details-column">
-            <p className="pi-details-title">Verbatim Indication:</p>
-            <p className="pi-details-subtitle">
-              {verbatimIndication || 'No data'}
-            </p>
-          </div>
-        </div>
-        <div className="pi-details-row">
-          <div className="pi-details-column">
-            <p className="pi-details-title">Product Name:</p>
-            <p className="pi-details-subtitle">{productName || 'No data'}</p>
-          </div>
-          <div className="pi-details-column">
-            <p className="pi-details-title">Protocol Number:</p>
-            <p className="pi-details-subtitle">{protocolNumber || 'No data'}</p>
+          <div className="detail-column-item">
+            <p>Verbatim Indication:</p>
+            <p>{verbatimIndication || placeholder}</p>
           </div>
         </div>
-        <div className="pi-details-row">
-          <div className="pi-details-row-segment">
-            <p className="pi-details-title">IQVIA Biotech:</p>
-            <p className="pi-details-data">{iqviaBiotech || 'No data'}</p>
+
+        <div className="detail-column">
+          <div className="detail-column-item">
+            <p>Product Name:</p>
+            <p>{productName || placeholder}</p>
           </div>
-          <div className="pi-details-row-segment">
-            <p className="pi-details-title">Phase:</p>
-            <p className="pi-details-data">
-              {Phase ? Phase.split(' ')[1] : 'No data'}
+          <div className="detail-column-item">
+            <p>Protocol Number:</p>
+            <p>{protocolNumber || placeholder}</p>
+          </div>
+        </div>
+
+        <div className="detail-column">
+          <div className="detail-column-item">
+            <p>
+              IQVIA Biotech: <span>{iqviaBiotech || placeholder}</span>
             </p>
           </div>
-          <div className="pi-details-row-segment">
-            <p className="pi-details-title">Bid DueDate:</p>
-            <p className="pi-details-data">{bidDueDate || 'No data'}</p>
+          <div className="detail-column-item">
+            <p>
+              Phase: <span>{phase ? phase.split(' ')[1] : placeholder}</span>
+            </p>
+          </div>
+          <div className="detail-column-item">
+            <p>
+              Bid DueDate: <span>{bidDueDate || placeholder}</span>
+            </p>
           </div>
         </div>
       </div>

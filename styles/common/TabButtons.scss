@@ -1,0 +1,36 @@
+.tab-buttons {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid $neutral4;
+  border-radius: 4px;
+  box-shadow: 0 4px 4px 0 rgba($color: $black, $alpha: 0.04);
+  align-content: center;
+  overflow: hidden;
+  width: min-content;
+  margin: 15px 0;
+
+  .button {
+    height: 40px;
+    width: 109px;
+    outline: none;
+    border: none;
+    border-right: 1px solid $neutral4;
+    cursor: pointer;
+    font-family: $proximaNova;
+    font-size: 16px;
+    font-weight: 500;
+    background-color: $neutral1;
+    color: $neutral6;
+    text-transform: capitalize;
+
+    &.is-active {
+      background-color: $white;
+      color: $black;
+      font-weight: 600;
+    }
+
+    &:last-child {
+      border-right: none;
+    }
+  }
+}

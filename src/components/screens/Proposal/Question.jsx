@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
+import { isObject } from 'lodash';
 import { Checkmark } from '../../svg';
 // import { getRandomColor } from '../../../utils/colors';
 import Dropdown from '../../common/Dropdown';
@@ -45,14 +46,9 @@ export class TaskRow extends Component<Props, State> {
 
   handleDayChange = (selectedDay: string) => {
     const { setProposalAnswer, proposalId, questionId } = this.props;
-    this.setState(
-      {
-        selectedDay
-      },
-      () => {
-        setProposalAnswer(proposalId, questionId, selectedDay);
-      }
-    );
+    this.setState({ selectedDay }, () => {
+      setProposalAnswer(proposalId, questionId, selectedDay);
+    });
   };
 
   onSelectValues = (selectedValues: Array<string>) => {
@@ -72,10 +68,12 @@ export class TaskRow extends Component<Props, State> {
 
     let answerValue = '';
     let answerValueComplex;
+
     if (answer) {
-      if (typeof answer === 'string') answerValue = answer;
-      else answerValueComplex = answer.toJS();
+      if (isObject(answer)) answerValueComplex = answer.toJS();
+      else answerValue = answer.toString();
     }
+
     switch (type) {
       case 'text':
         return (

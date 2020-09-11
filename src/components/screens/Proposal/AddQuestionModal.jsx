@@ -2,9 +2,12 @@
 import React, { PureComponent } from 'react';
 import 'react-day-picker/lib/style.css';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import type { Match } from 'react-router-dom';
 import { Map } from 'immutable';
 // import { parseDate, formatDate } from '../../../utils/DateUtils';
 import Loader from 'react-loader-spinner';
+import { compose } from 'redux';
 import Modal from '../../common/Modal';
 import { PrimaryButton } from '../../common/Buttons';
 import Dropdown from '../../common/Dropdown';
@@ -29,9 +32,9 @@ import {
   getRolesInfo,
   setProposalQuestion
 } from '../../../actions/proposal-actions';
-import { getProposalId } from '../../../SessionHandler';
 
 type Props = {
+  match: Match,
   onClose: Function,
   questionSectionOrderInfo: Map,
   questionSectionList: Array<string>,
@@ -147,14 +150,14 @@ export class AddQuestionModal extends PureComponent<Props, State> {
 
   onSave = () => {
     const { questionText, section, answerType, roleName } = this.state;
-    const { setProposalQuestionF } = this.props;
+    const { setProposalQuestionF, match } = this.props;
     if (
       questionText !== '' &&
       section &&
       answerType !== '' &&
       roleName !== ''
     ) {
-      const proposalId = getProposalId() || '';
+      const proposalId = match.params.id;
       const questionData = {
         proposalId,
         questionText,
@@ -163,6 +166,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         options: [],
         roleName
       };
+
+      console.log(proposalId);
       setProposalQuestionF(proposalId, questionData);
     }
   };
@@ -373,9 +378,12 @@ const mapStateToProps = (state: Map) => {
   };
 };
 
-export default connect(mapStateToProps, {
-  getQuestionSectionF: getQuestionSection,
-  getAnswerTypesDataF: getAnswerTypesInfo,
-  getRolesInfoF: getRolesInfo,
-  setProposalQuestionF: setProposalQuestion
-})(AddQuestionModal);
+export default compose(
+  withRouter,
+  connect(mapStateToProps, {
+    getQuestionSectionF: getQuestionSection,
+    getAnswerTypesDataF: getAnswerTypesInfo,
+    getRolesInfoF: getRolesInfo,
+    setProposalQuestionF: setProposalQuestion
+  })
+)(AddQuestionModal);

@@ -1,9 +1,10 @@
 .proposal-wrapper {
+  background-color: #f7f8fc;
   flex: 1;
-  background-color: #F7F8FC;
-  height: 100%;
+  font-family: $proximaNova;
+  color: $black;
 
-  .proposal-loader{
+  .proposal-loader {
     flex: 1;
     height: 100%;
     display: flex;
@@ -11,64 +12,66 @@
     justify-content: center;
   }
 
-  .tasksList-title-wrapper {
-    display: flex;
-    justify-content: space-between;
-    padding-left: 32.5px;
-    padding-right: 30px;
+  .proposal-details {
+    padding: 25px 30px;
 
-    .taskList-icon-wrapper {
+    .tasksList-title-wrapper {
       display: flex;
-      flex-direction: row;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 35px 0;
 
-      .taskList-checkbox-wrapper {
-        margin-right: 10px;
-        margin-top: 5px;
+      .tasksList-title {
+        font-size: 18px;
+        font-weight: 600;
       }
 
-      .tasksList-refresh-icon-wrapper {
+      .taskList-icons-wrapper {
         display: flex;
-        height: 32px;
-        width: 32px;
-        border-radius: 50%;
-        background-color: #0557D5;
-        box-shadow: 0 4px 8px 0 rgba(41,125,253,0.16), 0 4px 4px 0 rgba(0,0,0,0.04), 0 8px 16px 0 rgba(41,125,253,0.32);
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        margin-right: 10px;
-  
-        .tasksList-add-icon {
-          padding: 10px;
+        flex-direction: row;
+
+        .taskList-checkbox-wrapper {
+          margin-right: 10px;
+          margin-top: 5px;
+        }
+
+        .tasksList-refresh-icon-wrapper {
+          display: flex;
+          height: 32px;
+          width: 32px;
+          border-radius: 50%;
+          background-color: #0557d5;
+          box-shadow: 0 4px 8px 0 rgba(41, 125, 253, 0.16),
+            0 4px 4px 0 rgba(0, 0, 0, 0.04),
+            0 8px 16px 0 rgba(41, 125, 253, 0.32);
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+          margin-right: 10px;
+
+          .tasksList-add-icon {
+            padding: 10px;
+          }
+        }
+
+        .tasksList-add-icon-wrapper {
+          display: flex;
+          height: 32px;
+          width: 32px;
+          border-radius: 50%;
+          background-color: #0557d5;
+          box-shadow: 0 4px 8px 0 rgba(41, 125, 253, 0.16),
+            0 4px 4px 0 rgba(0, 0, 0, 0.04),
+            0 8px 16px 0 rgba(41, 125, 253, 0.32);
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+
+          .tasksList-add-icon {
+            padding: 10px;
+          }
         }
       }
-
-      .tasksList-add-icon-wrapper {
-        display: flex;
-        height: 32px;
-        width: 32px;
-        border-radius: 50%;
-        background-color: #0557D5;
-        box-shadow: 0 4px 8px 0 rgba(41,125,253,0.16), 0 4px 4px 0 rgba(0,0,0,0.04), 0 8px 16px 0 rgba(41,125,253,0.32);
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-  
-        .tasksList-add-icon {
-          padding: 10px;
-        }
-      }
-  
-    }
-
-    .tasksList-title {
-      color: $black;
-      font-family: $proximaNova;
-      font-size: 18px;
-      font-weight: 600;
-      letter-spacing: 0;
-      line-height: 22px;
-      margin-bottom: 24px;
     }
   }
 }

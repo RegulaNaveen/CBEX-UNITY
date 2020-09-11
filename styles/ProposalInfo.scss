@@ -1,97 +1,35 @@
-.pi-wrapper {
-  flex: 1;
-  padding-top: 20px;
-  padding-left: 29px;
-  padding-right: 30px;
-  margin-bottom: 26px;
+#proposal-info {
+  font-family: $proximaNova;
 
-  .pi-title {
-    color: $black;
-    font-family: $proximaNova;
-    font-size: 24px;
-    font-weight: 600;
-    letter-spacing: 0;
-    line-height: 29px;
-    margin-bottom: 17px;
-  }
-
-  .pi-subtitle {
-    height: 30px;
-    width: 102px;
-    color: $black;
-    font-family: $proximaNova;
+  h2 {
     font-size: 20px;
     font-weight: 600;
-    letter-spacing: 0;
-    line-height: 30px;
-    margin-left: 3.5px;
     margin-bottom: 26px;
   }
 
-  .pi-details {
-    display: flex;
-    margin-left: 3.5px;
-    font-family: $proximaNova;
-    color: $neutral8;
-    font-size: 16px;
-    letter-spacing: 0;
-    line-height: 24px;
-    flex-wrap: wrap;
-    align-content: space-between;
+  .proposal-info-details {
+    display: grid;
+    height: 120px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 
-    &-title {
-      margin-bottom: 2px;
-      font-weight: 600;
-    }
-
-    &-subtitle {
-      margin-bottom: 20px;
-    }
-
-    .pi-details-row {
+    .detail-column {
       display: flex;
-      justify-content: space-around;
-      flex-grow: 1;
       flex-direction: column;
-      min-width: 165px;
-      padding-right: 20px;
+      justify-content: space-between;
 
-      &:last-child {
-        margin-right: 0;
-      }
+      &-item {
+        p:first-of-type {
+          color: $neutral8;
+          margin-bottom: 5px;
+          font-weight: 600;
 
-      .pi-details-column {
-        display: flex;
-        flex-direction: column;
-
-        .pi-details-data {
-          color: $black;
-          font-family: $proximaNova;
-          font-size: 16px;
-          letter-spacing: 0;
-          line-height: 24px;
+          span {
+            font-weight: 500;
+          }
         }
-      }
 
-      .pi-details-row-segment {
-        display: flex;
-
-        .pi-details {
-          color: $black;
-          font-family: $proximaNova;
-          font-size: 16px;
-          letter-spacing: 0;
-          line-height: 24px;
-          padding-left: 5px;
-
-          &-title {
-            margin-bottom: 20px;
-          }
-
-          &-data {
-            margin-bottom: 23px;
-            margin-left: 5px;
-          }
+        p:last-of-type {
+          text-transform: capitalize;
         }
       }
     }
