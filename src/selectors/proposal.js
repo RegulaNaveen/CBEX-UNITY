@@ -1,7 +1,6 @@
 // @flow
 import { Map, fromJS } from 'immutable';
 
-// Creates a order section map where questions are sorted too
 const generateSections = (
   proposalQuestions: Object,
   filter: boolean,
@@ -9,42 +8,36 @@ const generateSections = (
 ): Map => {
   let sections = Map();
   const userRole = role !== '' ? role : false;
+
   proposalQuestions.forEach(question => {
-    const { questionId, roleName } = question;
-    const { sectionName, sectionOrder } = question.section;
-    // Sections are unique so a map is created
-    let section = Map({});
-    // let questions = Map({});
-    if (filter && userRole) {
-      if (roleName === userRole) {
-        // Create new map if no questions map is found
-        let questions = sections.getIn([sectionName, 'questions']) || Map({});
-        // Add new question
-        questions = questions.set(questionId, fromJS(question));
-        // Sort questions
-        questions = questions.sortBy(item => item.get('questionOrder'));
-        section = section
-          .set('sectionOrder', sectionOrder)
-          .set('sectionName', sectionName)
-          .set('questions', questions);
-        sections = sections.set(sectionName, section);
-      }
-    } else {
-      // Create new map if no questions map is found
+    const {
+      questionId,
+      roleNames,
+      section: { sectionName, sectionOrder }
+    } = question;
+
+    const createSections = () => {
+      let section = Map({});
       let questions = sections.getIn([sectionName, 'questions']) || Map({});
-      // Add new question
+
       questions = questions.set(questionId, fromJS(question));
-      // Sort questions
       questions = questions.sortBy(item => item.get('questionOrder'));
+
       section = section
         .set('sectionOrder', sectionOrder)
         .set('sectionName', sectionName)
         .set('questions', questions);
+
       sections = sections.set(sectionName, section);
-    }
+    };
+
+    if (filter && userRole) {
+      if (roleNames.includes(userRole)) createSections();
+    } else createSections();
   });
-  // Sort sections
+
   sections = sections.sortBy(section => section.get('sectionOrder'));
+
   return sections;
 };
 
