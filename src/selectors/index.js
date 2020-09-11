@@ -44,6 +44,12 @@ export const logoutHasErrors = (state: Object): string =>
 export const getChangeRoleError = (state: Object): string =>
   authSelectors.getChangeRoleError(state.auth);
 
+export const getLookupUsers = (state: Object): Array<Object> =>
+  authSelectors.getLookupUsers(state.auth);
+
+export const getLookupUsersError = (state: Object): Array<Object> =>
+  authSelectors.getLookupUsersError(state.auth);
+
 // Proposal selectors
 export const getSections = (state: Object): Map =>
   proposalSelectors.getSections(state.proposal);
