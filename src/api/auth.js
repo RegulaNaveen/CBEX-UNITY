@@ -103,3 +103,8 @@ export const putRole = async (
       });
   });
 };
+
+export const getUsers = (jwt: string): Promise<Object> =>
+  axios.get(`${AUTH_API_URL}/users`, {
+    headers: { Authorization: `Bearer ${jwt}` }
+  });
