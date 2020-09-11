@@ -14,7 +14,12 @@ const {
 
 const formatProposal = (proposal: Object): Object => {
   const formattedProposal = {};
-  const { proposalDetails, proposalId, opportunityName } = proposal;
+  const {
+    proposalDetails,
+    proposalId,
+    opportunityName,
+    opportunityOverview
+  } = proposal;
   formattedProposal.proposalId = proposalId;
   formattedProposal.opportunityName = opportunityName;
   formattedProposal['opportunity #'] = proposalDetails['CRM #'];
@@ -25,7 +30,8 @@ const formatProposal = (proposal: Object): Object => {
   formattedProposal.indication = proposalDetails['Verbatim indication'];
   formattedProposal.therapeuticArea = proposalDetails['Therapeutic area'];
   formattedProposal['bid due date'] = proposalDetails['Bid due date'];
-  // TODO: Opportunity status
+  formattedProposal['opportunity status'] =
+    opportunityOverview.OpportunityStatus || '';
   return formattedProposal;
 };
 

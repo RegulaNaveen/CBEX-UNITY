@@ -68,7 +68,8 @@ class RecentTab extends Component<Props, State> {
     const { selectedViewType } = this.props;
     const { pageContent } = this.state;
 
-    if (selectedViewType === 0) return <TableView data={pageContent} />;
+    if (selectedViewType === 0)
+      return <TableView data={pageContent} hideStatus />;
     return <GridView data={pageContent} />;
   };
 
