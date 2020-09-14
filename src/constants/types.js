@@ -52,4 +52,8 @@ const PROPOSALS = {
   ON_FILTER_PROPOSALS: 'on_filter_proposals'
 };
 
-export { AUTH, PROPOSALS, PROPOSAL };
+const SIDEBAR = {
+  OPEN_SECTION: 'open_section'
+};
+
+export { AUTH, PROPOSALS, PROPOSAL, SIDEBAR };

@@ -19,6 +19,7 @@ import {
   isSetQuestionLoading,
   setQuestionError
 } from '../../../selectors';
+import Sidebar from '../../common/Sidebar';
 
 type Props = {
   match: Match,
@@ -96,12 +97,16 @@ class Questions extends Component<Props, State> {
   }
 
   render() {
-    const { details } = this.props;
+    const { details, sections, filteredSections } = this.props;
     const { showModal, isCheckedAll, isChecked } = this.state;
+
+    const allSections = isChecked ? filteredSections : sections;
 
     return (
       <>
         <ProposalInfo data={details} />
+
+        <Sidebar sections={allSections} />
 
         <div className="tasksList-title-wrapper">
           <div className="taskList-icons-wrapper">

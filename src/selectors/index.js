@@ -3,6 +3,7 @@ import { Map } from 'immutable';
 import * as proposalsSelectors from './proposals';
 import * as proposalSelectors from './proposal';
 import * as authSelectors from './auth';
+import * as siderbarSelectors from './sidebar';
 
 // Auth selectors
 export const getAuthData = (state: Object): Map =>
@@ -114,3 +115,7 @@ export const getFilteredProposals = (state: Map): Map =>
 
 export const getIsFilteringProposals = (state: Map): boolean =>
   proposalsSelectors.getIsFilteringProposals(state.proposals);
+
+// Sidebar Selectors
+export const getSelectedSection = (state: Object): string =>
+  siderbarSelectors.getSelectedSectionSelector(state.sidebar);

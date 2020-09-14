@@ -1,6 +1,8 @@
 // @flow
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import type { Map } from 'immutable';
+import { getSelectedSection } from '../../../selectors';
 import chevronRight from '../../../../img/chevron-right.svg';
 import chevronDown from '../../../../img/chevron-down.svg';
 import Question from './Question';
@@ -12,16 +14,33 @@ type State = {
 type Props = {
   questions: Map,
   title: string,
+  selectedSection: string,
   isCheckedAll: boolean
 };
 
 class CollapsibleList extends Component<Props, State> {
+  taskRef: any;
+
   constructor(props: Object) {
     super(props);
+
+    this.taskRef = React.createRef();
 
     this.state = {
       isCollapsed: false
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    const { selectedSection } = this.props;
+    const { id } = this.taskRef.current;
+
+    /* eslint-disable react/no-did-update-set-state */
+    if (prevProps.selectedSection !== selectedSection) {
+      if (id === selectedSection) this.setState({ isCollapsed: true });
+      else this.setState({ isCollapsed: false });
+    }
+    /* eslint-enable react/no-did-update-set-state  */
   }
 
   handleCollapse = () => {
@@ -36,11 +55,23 @@ class CollapsibleList extends Component<Props, State> {
     }
   };
 
+  createId = () => {
+    const { title } = this.props;
+
+    const id = title
+      .toLocaleLowerCase()
+      .split(' ')
+      .join('-');
+
+    return id;
+  };
+
   render() {
     const { isCollapsed } = this.state;
     const { questions, title, isCheckedAll } = this.props;
+
     return (
-      <div className="task-wrapper">
+      <div className="task-wrapper" ref={this.taskRef} id={this.createId()}>
         <button
           id="arrow-icon"
           className="task-icon-wrapper"
@@ -108,4 +139,10 @@ class CollapsibleList extends Component<Props, State> {
   }
 }
 
-export default CollapsibleList;
+const mapStateToProps = (state: Map) => {
+  const selectedSection = getSelectedSection(state);
+
+  return { selectedSection };
+};
+
+export default connect(mapStateToProps)(CollapsibleList);
