@@ -8,6 +8,7 @@ import { Checkmark } from '../../svg';
 import Dropdown from '../../common/Dropdown';
 import TextArea from '../../common/TextArea';
 import DatePicker from '../../common/DatePicker';
+import UserLookup from '../../common/UserLookup';
 import { parseDate, formatDate } from '../../../utils/DateUtils';
 import Multiselect from '../../common/Multiselect';
 import { setProposalAnswerData } from '../../../actions/proposal-actions';
@@ -22,7 +23,8 @@ type Props = {
   answers: Map,
   questionText: string,
   answerConfiguration: Object,
-  setProposalAnswer: Function
+  setProposalAnswer: Function,
+  sectionName: string
 };
 
 export class TaskRow extends Component<Props, State> {
@@ -46,9 +48,14 @@ export class TaskRow extends Component<Props, State> {
 
   handleDayChange = (selectedDay: string) => {
     const { setProposalAnswer, proposalId, questionId } = this.props;
-    this.setState({ selectedDay }, () => {
-      setProposalAnswer(proposalId, questionId, selectedDay);
-    });
+    this.setState(
+      {
+        selectedDay
+      },
+      () => {
+        setProposalAnswer(proposalId, questionId, selectedDay);
+      }
+    );
   };
 
   onSelectValues = (selectedValues: Array<string>) => {
@@ -62,6 +69,7 @@ export class TaskRow extends Component<Props, State> {
     answers: Map,
     lastAnswer: Map
   ) => {
+    const { sectionName } = this.props;
     const { selectedDay } = this.state;
     const optionsYN = ['Yes', 'No'];
     const answer = lastAnswer && lastAnswer.get('answer');
@@ -70,8 +78,12 @@ export class TaskRow extends Component<Props, State> {
     let answerValueComplex;
 
     if (answer) {
-      if (isObject(answer)) answerValueComplex = answer.toJS();
-      else answerValue = answer.toString();
+      if (typeof answer === 'string') answerValue = answer;
+      else answerValueComplex = answer.toJS();
+    }
+
+    if (sectionName === 'Proposal Team') {
+      return <UserLookup onChange={this.handleTextChange} text={answerValue} />;
     }
 
     switch (type) {

@@ -98,6 +98,7 @@ class CollapsibleList extends Component<Props, State> {
                 answers={questionConfig.get('answers')}
                 questionText={questionConfig.get('questionText')}
                 answerConfiguration={questionConfig.get('answerConfiguration')}
+                sectionName={title}
               />
             ))}
           </div>

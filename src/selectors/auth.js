@@ -35,3 +35,8 @@ export const logoutHasErrors = (auth: Map): string =>
 
 export const getChangeRoleError = (auth: Map): Map =>
   auth.get('changeRoleError');
+
+export const getLookupUsers = (auth: Map): Map => auth.get('lookupUsers');
+
+export const getLookupUsersError = (auth: Map): Map =>
+  auth.get('lookupUsersError');

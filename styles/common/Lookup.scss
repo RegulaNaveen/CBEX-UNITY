@@ -1,0 +1,78 @@
+#lookup {
+  position: relative;
+  font-family: $proximaNova;
+  box-sizing: border-box;
+
+  p {
+    color: rgba($color: $black, $alpha: 0.8);
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: none;
+  }
+
+  .lookup-wrapper {
+    input {
+      font-size: 16px;
+      font-family: $proximaNova;
+      position: relative;
+      padding: 10px;
+      border-radius: 4px;
+      outline: none;
+      border: 1px solid $neutral6;
+      transition: 0.1s all ease-in-out;
+
+      &:focus {
+        border: 1px solid $blue;
+      }
+
+      
+    }
+  }
+
+  .search-data-wrapper {
+    position: absolute;
+    background: $white;
+    width: 100%;
+    z-index: 2;
+    min-height: min-content;
+    max-height: 150px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    border-radius: 0 0 4px 4px;
+    scrollbar-width: none;
+
+    span {
+      padding: 13px 20px;
+      display: block;
+      cursor: pointer;
+
+      &:hover {
+        background-color: rgba($color: $blue, $alpha: 0.1);
+      }
+    }
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &.is-searching {
+    .lookup-wrapper {
+      position: relative;
+
+      input {
+        border: 1px solid $blue;
+        border-bottom-color: transparent;
+        border-radius: 4px 4px 0 0;
+      }
+
+      
+    }
+
+    .search-data-wrapper {
+      margin-top: -1px;
+      border: 1px solid $blue;
+      border-top: 0px;
+    }
+  }
+}

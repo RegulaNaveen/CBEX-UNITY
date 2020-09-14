@@ -13,7 +13,8 @@ import {
   forgotPassword,
   putRole,
   postRefreshToken,
-  resetPassword
+  resetPassword,
+  getUsers
 } from '../api/auth';
 
 const {
@@ -31,7 +32,9 @@ const {
   FORGOT_PASSWORD_ERROR,
   RESET_PASSWORD_IN_PROGRESS,
   RESET_PASSWORD_SUCCESS,
-  RESET_PASSWORD_ERROR
+  RESET_PASSWORD_ERROR,
+  ON_GET_LOOKUP_USERS,
+  ERROR_ON_GET_LOOKUP_USERS
 } = REDUX_TYPES.AUTH;
 
 export const login = (
@@ -187,6 +190,24 @@ export const logout = (): ThunkAction<string, string> => {
         type: LOGOUT_ERROR,
         payload: err
       });
+    }
+  };
+};
+
+export const getAllUsers = (): ThunkAction<string, Object> => {
+  const jwt = getJwt() || '';
+  return async (dispatch: Dispatch<Object, string>) => {
+    try {
+      const { data } = await getUsers(jwt);
+      if (data) {
+        const { authService } = data;
+        dispatch({
+          type: ON_GET_LOOKUP_USERS,
+          payload: { lookupUsers: authService }
+        });
+      }
+    } catch (error) {
+      dispatch({ type: ERROR_ON_GET_LOOKUP_USERS, payload: { error } });
     }
   };
 };
