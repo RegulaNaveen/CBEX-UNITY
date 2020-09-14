@@ -35,12 +35,9 @@ class CollapsibleList extends Component<Props, State> {
     const { selectedSection } = this.props;
     const { id } = this.taskRef.current;
 
-    /* eslint-disable react/no-did-update-set-state */
-    if (prevProps.selectedSection !== selectedSection) {
-      if (id === selectedSection) this.setState({ isCollapsed: true });
-      else this.setState({ isCollapsed: false });
-    }
-    /* eslint-enable react/no-did-update-set-state  */
+    if (prevProps.selectedSection !== selectedSection)
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ isCollapsed: id === selectedSection });
   }
 
   handleCollapse = () => {
