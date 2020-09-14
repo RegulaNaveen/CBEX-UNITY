@@ -1,0 +1,14 @@
+#dashboard-filters {
+  background-color: #f6f7fb;
+  padding: 12px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20;
+
+  .filter-wrapper {
+    margin-right: 10px;
+    padding: 0 10px;
+    margin-bottom: 10px;
+    width: 15%;
+  }
+}

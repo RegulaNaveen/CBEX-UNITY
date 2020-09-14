@@ -108,3 +108,9 @@ export const getProposalTypeView = (state: Object): 0 | 1 =>
 
 export const getProposalsLoading = (state: Object): boolean =>
   proposalsSelectors.getProposalsLoading(state.proposals);
+
+export const getFilteredProposals = (state: Map): Map =>
+  proposalsSelectors.getFilteredProposals(state.proposals);
+
+export const getIsFilteringProposals = (state: Map): boolean =>
+  proposalsSelectors.getIsFilteringProposals(state.proposals);

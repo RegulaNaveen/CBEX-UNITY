@@ -6,7 +6,9 @@ import Loader from 'react-loader-spinner';
 import {
   getProposalTypeView,
   getProposals,
-  getProposalsLoading
+  getProposalsLoading,
+  getFilteredProposals,
+  getIsFilteringProposals
 } from '../../../selectors';
 import { getProposalsByStatus } from '../../../actions/proposals-actions';
 import TableView from '../../common/TableView';
@@ -17,13 +19,15 @@ type Props = {
   selectedViewType: 0 | 1,
   proposals: [Object],
   fetchProposals: Function,
+  filteredProposals: [Object],
+  isFilteringProposals: boolean,
   loading: boolean
 };
 
 type State = {
   numRows: number,
   page: number,
-  pageContent: [Object]
+  pageContent: Array<Object>
 };
 
 class RecentTab extends Component<Props, State> {
@@ -43,13 +47,19 @@ class RecentTab extends Component<Props, State> {
 
   componentDidUpdate(prevProps, prevState) {
     const { page, numRows } = this.state;
-    const { proposals } = this.props;
-    if (
+    const { proposals, filteredProposals, isFilteringProposals } = this.props;
+
+    const contentChanged =
       prevState.page !== page ||
       prevState.numRows !== numRows ||
-      prevProps.proposals !== proposals
-    ) {
-      const pages = chunk(proposals, numRows);
+      prevProps.proposals !== proposals ||
+      prevProps.filteredProposals !== filteredProposals;
+
+    if (contentChanged) {
+      const pages = chunk(
+        isFilteringProposals ? filteredProposals : proposals,
+        numRows
+      );
       this.setPageContent(pages[page - 1]);
     }
   }
@@ -99,7 +109,9 @@ class RecentTab extends Component<Props, State> {
 const mapStateToProps = state => ({
   selectedViewType: getProposalTypeView(state),
   proposals: getProposals(state),
-  loading: getProposalsLoading(state)
+  loading: getProposalsLoading(state),
+  filteredProposals: getFilteredProposals(state),
+  isFilteringProposals: getIsFilteringProposals(state)
 });
 
 const mapDispatchToProps = { fetchProposals: getProposalsByStatus };

@@ -3,21 +3,24 @@ import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Link } from 'react-router-dom';
 import { isEmpty, keysIn, head, valuesIn } from 'lodash';
-import objectToString from '../../utils/helpers';
+import { objectToString } from '../../utils/helpers';
 import { formatDate } from '../../utils/DateUtils';
 import { PROPOSAL } from '../../routes';
 
 const SKIP_COLUMNS = ['proposalId', 'opportunityName', 'therapeuticArea'];
 const DATE_COLUMN = 'bid due date';
 const LINK_COLUMN = 'opportunity #';
+const STATUS_COLUMN = 'opportunity status';
 
 type Props = {
-  data: [Object]
+  data: [Object],
+  hideStatus: boolean
 };
 
-const TableView = ({ data }: Props) => {
+const TableView = ({ data, hideStatus }: Props) => {
   const columns = keysIn(head(data));
-  const columnsLength = columns.length - SKIP_COLUMNS.length;
+  const columnsLength =
+    columns.length - SKIP_COLUMNS.length - (hideStatus ? 1 : 0);
 
   const renderTableHeaders = (columnsNames: [string]) => (
     <div
@@ -25,10 +28,11 @@ const TableView = ({ data }: Props) => {
       className="headers"
       style={{ gridTemplateColumns: `repeat(${columnsLength}, 1fr)` }}
     >
-      {columnsNames.map(
-        column =>
-          !SKIP_COLUMNS.includes(column) && <h3 key={uuidv4()}>{column}</h3>
-      )}
+      {columnsNames.map(column => {
+        const skip = SKIP_COLUMNS;
+        if (hideStatus) skip.push(STATUS_COLUMN);
+        return !skip.includes(column) && <h3 key={uuidv4()}>{column}</h3>;
+      })}
     </div>
   );
 
@@ -40,6 +44,7 @@ const TableView = ({ data }: Props) => {
     >
       {valuesIn(rowContent).map(cellContent => {
         const skipValues = SKIP_COLUMNS.map(column => rowContent[column]);
+        if (hideStatus) skipValues.push(rowContent[STATUS_COLUMN]);
         return (
           !skipValues.includes(cellContent) && (
             <div key={uuidv4()} className="cell">

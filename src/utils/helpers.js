@@ -1,7 +1,7 @@
 // @flow
-import { valuesIn, isObject, isEmpty } from 'lodash';
+import { isObject, valuesIn, isEmpty } from 'lodash';
 
-const objectToString = (_object: Object): String => {
+export const objectToString = (_object: Object): String => {
   if (!isObject(_object)) return _object.toString();
 
   const objectStringfied = valuesIn(_object).map(value =>
@@ -33,5 +33,3 @@ export const objectContains = (
   if (!isEmpty(found)) return true;
   return false;
 };
-
-export default objectToString;

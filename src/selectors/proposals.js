@@ -9,3 +9,9 @@ export const getProposalsLoading = (proposals: Map): boolean =>
 
 export const getProposalTypeView = (proposals: Map): 0 | 1 =>
   proposals.get('selectedViewType');
+
+export const getFilteredProposals = (proposals: Map): Map =>
+  proposals.get('filteredProposals');
+
+export const getIsFilteringProposals = (proposals: Map): boolean =>
+  proposals.get('isFiltering');
