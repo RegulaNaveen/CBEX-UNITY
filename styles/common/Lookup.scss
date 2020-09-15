@@ -7,7 +7,6 @@
     color: rgba($color: $black, $alpha: 0.8);
     font-weight: 500;
     margin-bottom: 8px;
-    display: none;
   }
 
   .lookup-wrapper {
@@ -30,6 +29,7 @@
   }
 
   .search-data-wrapper {
+    box-sizing: border-box;
     position: absolute;
     background: $white;
     width: 100%;
@@ -42,7 +42,7 @@
     scrollbar-width: none;
 
     span {
-      padding: 13px 20px;
+      padding: 10px;
       display: block;
       cursor: pointer;
 
