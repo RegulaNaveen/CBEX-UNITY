@@ -9,19 +9,23 @@ type Props = {
   fetchUsers: Function,
   users: Array<Object>,
   onChange: Function,
-  text?: string
+  text?: string,
+  title?: string
 };
 
-const UserLookup = ({ fetchUsers, users, onChange, text }: Props) => {
+const UserLookup = ({ fetchUsers, users, onChange, text, title }: Props) => {
   useEffect(() => {
     fetchUsers();
   }, []);
 
-  return <Lookup data={users} getSelectedItem={onChange} text={text} />;
+  return (
+    <Lookup data={users} getSelectedItem={onChange} text={text} title={title} />
+  );
 };
 
 UserLookup.defaultProps = {
-  text: ''
+  text: '',
+  title: ''
 };
 
 const mapStateToProps = state => ({ users: getLookupUsers(state) });
