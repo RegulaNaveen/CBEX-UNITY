@@ -25,7 +25,7 @@ const UserLookup = ({ users, onChange, text, title, withReset }: Props) => (
 UserLookup.defaultProps = {
   text: '',
   title: '',
-  boolean: false
+  withReset: false
 };
 
 const mapStateToProps = state => ({
