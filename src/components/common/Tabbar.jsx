@@ -54,11 +54,29 @@ class Tabbar extends Component<Props, State> {
     setProposalView(selectedTab);
   };
 
-  onChangeValue = (event: SyntheticEvent<EventTarget>) => {
+  onTextFilterChange = ({ target }: SyntheticInputEvent<EventTarget>) => {
     const { filters } = this.state;
     const { filterProposals } = this.props;
-    const { id, value } = event.target;
+    const { id, value } = target;
     this.setState({ filters: { ...filters, [id]: value } }, () => {
+      const { filters: newFilters } = this.state;
+      filterProposals(newFilters, true);
+    });
+  };
+
+  onDropDownFilterChange = (id: string, value: string) => {
+    const { filters } = this.state;
+    const { filterProposals } = this.props;
+    this.setState({ filters: { ...filters, [id]: value } }, () => {
+      const { filters: newFilters } = this.state;
+      filterProposals(newFilters, true);
+    });
+  };
+
+  onDateRangeChange = (id: string, range: Object) => {
+    const { filters } = this.state;
+    const { filterProposals } = this.props;
+    this.setState({ filters: { ...filters, [id]: range } }, () => {
       const { filters: newFilters } = this.state;
       filterProposals(newFilters, true);
     });
@@ -104,7 +122,13 @@ class Tabbar extends Component<Props, State> {
           </div>
         </div>
         <div className="tab-content-wrapper">
-          {showFilters && <DashboardFilters onChange={this.onChangeValue} />}
+          {showFilters && (
+            <DashboardFilters
+              onTextFilterChange={this.onTextFilterChange}
+              onDropDownFilterChange={this.onDropDownFilterChange}
+              onDateRangeChange={this.onDateRangeChange}
+            />
+          )}
           {children[selected]}
         </div>
       </div>

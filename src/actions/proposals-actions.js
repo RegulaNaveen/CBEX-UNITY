@@ -3,6 +3,7 @@ import { isEmpty } from 'lodash';
 import type { Dispatch, ThunkAction } from './action-types';
 import { REDUX_TYPES } from '../constants';
 import { onGetAllProposals, onGetByStatus } from '../api/proposals';
+import { objectContains } from '../utils/helpers';
 
 const {
   SET_PROPOSAL_VIEW_TYPE,
@@ -18,7 +19,8 @@ const formatProposal = (proposal: Object): Object => {
     proposalDetails,
     proposalId,
     opportunityName,
-    opportunityOverview
+    opportunityOverview,
+    usersList
   } = proposal;
   formattedProposal.proposalId = proposalId;
   formattedProposal.opportunityName = opportunityName;
@@ -32,6 +34,8 @@ const formatProposal = (proposal: Object): Object => {
   formattedProposal['bid due date'] = proposalDetails['Bid due date'];
   formattedProposal['opportunity status'] =
     opportunityOverview.OpportunityStatus || '';
+  formattedProposal.usersList = usersList;
+
   return formattedProposal;
 };
 
@@ -84,10 +88,24 @@ type FilteredData = {
   teamMember: string
 };
 
-const filterByKeyValue = (key, value, array) =>
+const dateRangeFilter = (key: String, range: Object, array: Array<Object>) => {
+  const { from, to } = range;
+  return array.filter(proposal => {
+    const proposalDate = new Date(proposal[key]);
+    return proposalDate >= from && proposalDate <= to;
+  });
+};
+
+const textFilter = (key: string, value: string, array: Array<Object>) =>
   array.filter(proposal =>
     proposal[key].toLowerCase().includes(value.toLowerCase())
   );
+
+const optionFilter = (key: string, value: string, array: Array<Object>) =>
+  array.filter(proposal => proposal[key].toLowerCase() === value.toLowerCase());
+
+const userFilter = (value: string, array: Array<Object>) =>
+  array.filter(proposal => objectContains(proposal.usersList, value, false));
 
 export const onFilteringProposals = (
   filters: FilteredData,
@@ -113,11 +131,44 @@ export const onFilteringProposals = (
     let filteredProposals = [];
 
     cleanFilters.forEach(([key, value]) => {
-      filteredProposals = filterByKeyValue(
-        key,
-        value,
-        !isEmpty(filteredProposals) ? filteredProposals : proposals
-      );
+      switch (key) {
+        case 'opportunity #':
+        case 'opportunity name':
+        case 'account':
+        case 'protocol #':
+        case 'product':
+          filteredProposals = textFilter(
+            key,
+            value,
+            !isEmpty(filteredProposals) ? filteredProposals : proposals
+          );
+          break;
+        case 'phase':
+        case 'therapeuticArea':
+        case 'indication':
+        case 'opportunity status':
+          filteredProposals = optionFilter(
+            key,
+            value,
+            !isEmpty(filteredProposals) ? filteredProposals : proposals
+          );
+          break;
+        case 'bid due date':
+          filteredProposals = dateRangeFilter(
+            key,
+            value,
+            !isEmpty(filteredProposals) ? filteredProposals : proposals
+          );
+          break;
+        case 'teamMember':
+          filteredProposals = userFilter(
+            value,
+            !isEmpty(filteredProposals) ? filteredProposals : proposals
+          );
+          break;
+        default:
+          break;
+      }
     });
 
     dispatch({
