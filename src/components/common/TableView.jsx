@@ -7,7 +7,12 @@ import { objectToString } from '../../utils/helpers';
 import { formatDate } from '../../utils/DateUtils';
 import { PROPOSAL } from '../../routes';
 
-const SKIP_COLUMNS = ['proposalId', 'opportunityName', 'therapeuticArea'];
+const SKIP_COLUMNS = [
+  'proposalId',
+  'opportunityName',
+  'therapeuticArea',
+  'usersList'
+];
 const DATE_COLUMN = 'bid due date';
 const LINK_COLUMN = 'opportunity #';
 const STATUS_COLUMN = 'opportunity status';
