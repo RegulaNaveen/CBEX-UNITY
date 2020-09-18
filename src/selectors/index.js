@@ -9,6 +9,9 @@ import * as siderbarSelectors from './sidebar';
 export const getAuthData = (state: Object): Map =>
   authSelectors.getAuthData(state.auth);
 
+export const getUserData = (state: Map): Map =>
+  authSelectors.getUserData(state.auth);
+
 export const isAuthLoading = (state: Object): boolean =>
   authSelectors.isAuthLoading(state.auth);
 

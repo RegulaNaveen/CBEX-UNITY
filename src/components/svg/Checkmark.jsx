@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 type Props = {
-  className: string
+  className?: string
 };
 
 const Check = ({ className }: Props) => {
@@ -15,6 +15,10 @@ const Check = ({ className }: Props) => {
       />
     </svg>
   );
+};
+
+Check.defaultProps = {
+  className: ''
 };
 
 export default Check;

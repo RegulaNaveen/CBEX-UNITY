@@ -81,6 +81,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       getAnswerTypesDataF,
       getRolesInfoF
     } = this.props;
+
     getQuestionSectionF();
     getAnswerTypesDataF();
     getRolesInfoF();
