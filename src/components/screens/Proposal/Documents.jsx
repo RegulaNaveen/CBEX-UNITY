@@ -4,7 +4,11 @@ import Iframe from 'react-iframe';
 const Documents = () => {
   return (
     <div className="documents">
-      <Iframe url="https://account.box.com/login" width="100%" height="100%" />
+      <Iframe
+        url="https://quintiles.app.box.com/folder/119859004784"
+        width="100%"
+        height="100%"
+      />
     </div>
   );
 };
