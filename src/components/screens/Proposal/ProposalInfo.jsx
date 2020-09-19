@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import { parseMomentDate } from '../../../utils/DateUtils';
 
 type Props = {
   data: Object
