@@ -116,6 +116,9 @@ export const getFilteredProposals = (state: Map): Map =>
 export const getIsFilteringProposals = (state: Map): boolean =>
   proposalsSelectors.getIsFilteringProposals(state.proposals);
 
+export const getProposalsFilters = (state: Map): Object =>
+  proposalsSelectors.getProposalsFilters(state.proposals);
+
 // Sidebar Selectors
 export const getSelectedSection = (state: Object): string =>
   siderbarSelectors.getSelectedSectionSelector(state.sidebar);
