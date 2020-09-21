@@ -52,7 +52,8 @@ const PROPOSALS = {
   ON_GET_PROPOSALS: 'on_get_proposals',
   ERROR_ON_GET_PROPOSALS: 'error_on_get_proposals',
   ON_PROPOSALS_LOADING: 'on_proposals_loading',
-  ON_FILTER_PROPOSALS: 'on_filter_proposals'
+  ON_FILTER_PROPOSALS: 'on_filter_proposals',
+  ON_SET_PROPOSALS_FILTERS: 'on_set_proposals_filters'
 };
 
 const SIDEBAR = {

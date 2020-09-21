@@ -15,3 +15,6 @@ export const getFilteredProposals = (proposals: Map): Map =>
 
 export const getIsFilteringProposals = (proposals: Map): boolean =>
   proposals.get('isFiltering');
+
+export const getProposalsFilters = (proposals: Map): Object =>
+  proposals.get('proposalsFilters');
