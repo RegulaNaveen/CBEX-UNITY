@@ -5,7 +5,7 @@ const Documents = () => {
   return (
     <div className="documents">
       <Iframe
-        url="https://quintiles.app.box.com/folder/66838506693"
+        url="https://app.box.com/folder/119641406123"
         width="100%"
         height="100%"
       />
