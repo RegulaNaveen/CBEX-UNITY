@@ -1,5 +1,4 @@
 // @flow
-
 import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { getFilteringValues } from '../../actions/proposals-actions';
