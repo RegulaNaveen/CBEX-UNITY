@@ -1,5 +1,8 @@
 // @flow
-import React, { useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
+import { connect } from 'react-redux';
+import { getFilteringValues } from '../../actions/proposals-actions';
+import { getProposalsFilters } from '../../selectors';
 import InputField from './InputField';
 import FilterDropDown from './FilterDropDown';
 import DateRange from './DateRange';
@@ -8,14 +11,21 @@ import UserLookup from './UserLookup';
 type Props = {
   onTextFilterChange: Function,
   onDropDownFilterChange: Function,
-  onDateRangeChange: Function
+  onDateRangeChange: Function,
+  fetchFilterValues: Function,
+  filterValues: Object
 };
 
 const DashboardFilters = ({
   onTextFilterChange,
   onDropDownFilterChange,
-  onDateRangeChange
+  onDateRangeChange,
+  fetchFilterValues,
+  filterValues
 }: Props) => {
+  useEffect(() => {
+    fetchFilterValues();
+  }, []);
   const changeDate = useCallback(range => {
     onDateRangeChange('bid due date', range);
   });
@@ -67,7 +77,7 @@ const DashboardFilters = ({
           title="Phase"
           id="phase"
           onChange={onDropDownFilterChange}
-          items={['1', '2', '3']}
+          items={filterValues ? filterValues.phases : []}
         />
       </div>
       <div className="filter-wrapper">
@@ -84,7 +94,7 @@ const DashboardFilters = ({
           title="Therapeutic area"
           id="therapeuticArea"
           onChange={onDropDownFilterChange}
-          items={['1', '2', '3']}
+          items={filterValues ? filterValues.therapeuticAreas : []}
         />
       </div>
       <div className="filter-wrapper">
@@ -92,7 +102,7 @@ const DashboardFilters = ({
           title="Indication"
           id="indication"
           onChange={onDropDownFilterChange}
-          items={['1', '2', '3']}
+          items={filterValues ? filterValues.indications : []}
         />
       </div>
       <div className="filter-wrapper">
@@ -107,7 +117,7 @@ const DashboardFilters = ({
           title="Opportunity status"
           id="opportunityStatus"
           onChange={onDropDownFilterChange}
-          items={['a', 'b', 'c']}
+          items={filterValues ? filterValues.opportunityStatuses : []}
         />
       </div>
       <div className="filter-wrapper">
@@ -117,4 +127,11 @@ const DashboardFilters = ({
   );
 };
 
-export default DashboardFilters;
+const mapStateToProps = state => ({
+  filterValues: getProposalsFilters(state)
+});
+
+const mapDispatchToProps = {
+  fetchFilterValues: getFilteringValues
+};
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardFilters);
