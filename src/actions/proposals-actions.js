@@ -2,7 +2,11 @@
 import { isEmpty } from 'lodash';
 import type { Dispatch, ThunkAction } from './action-types';
 import { REDUX_TYPES } from '../constants';
-import { onGetAllProposals, onGetByStatus } from '../api/proposals';
+import {
+  onGetAllProposals,
+  onGetByStatus,
+  onGetFilterValues
+} from '../api/proposals';
 import { objectContains } from '../utils/helpers';
 
 const {
@@ -10,7 +14,8 @@ const {
   ON_GET_PROPOSALS,
   ERROR_ON_GET_PROPOSALS,
   ON_PROPOSALS_LOADING,
-  ON_FILTER_PROPOSALS
+  ON_FILTER_PROPOSALS,
+  ON_SET_PROPOSALS_FILTERS
 } = REDUX_TYPES.PROPOSALS;
 
 const formatProposal = (proposal: Object): Object => {
@@ -174,6 +179,24 @@ export const onFilteringProposals = (
       type: ON_FILTER_PROPOSALS,
       payload: { filteredProposals, isFiltering }
     });
+  }
+};
+
+export const getFilteringValues = (): ThunkAction<String, Object> => async (
+  dispatch: Dispatch<Object, string>
+) => {
+  try {
+    const { data } = await onGetFilterValues();
+
+    if (data) {
+      const { acceptanceCriteriaValues } = data;
+      dispatch({
+        type: ON_SET_PROPOSALS_FILTERS,
+        payload: { proposalsFilters: acceptanceCriteriaValues }
+      });
+    }
+  } catch (error) {
+    console.log(error);
   }
 };
 
