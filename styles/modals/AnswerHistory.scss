@@ -55,7 +55,7 @@
         display: flex;
         padding: 20px 0;
 
-        span {
+        .avatar {
           display: flex;
           justify-content: center;
           align-items: center;
@@ -76,11 +76,28 @@
           li {
             font-size: 14px;
             margin-top: 10px;
-            text-transform: capitalize;
+
+            span.removed {
+              text-decoration: line-through;
+              color: $error;
+            }
+
+            span.changed {
+              color: $neptune-secondary;
+            }
           }
 
           li {
             margin-left: 15px;
+
+            &.answer-added {
+              color: $neptune-secondary;
+            }
+
+            &.answer-deleted {
+              text-decoration: line-through;
+              color: $error;
+            }
           }
 
           p:first-of-type {

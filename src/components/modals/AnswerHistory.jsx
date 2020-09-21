@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
+import classNames from 'classnames';
+import _, { isEmpty, flatten, uniqWith } from 'lodash';
 import { getLookupUsers } from '../../selectors';
 import { Close } from '../svg';
 
@@ -26,22 +28,77 @@ class AnswerHistory extends Component<Props> {
   renderContent = () => {
     const { question } = this.props;
     const questionType = question.getIn(['answerConfiguration', 'type']);
-    const answers = question.get('answers');
+    const answers = question.get('answers').reverse();
 
-    return answers.reverse().map(_answer => {
-      const userEmail = _answer.get('user');
+    return answers.map((_answer, index) => {
+      const userName = _answer.get('userName') || 'Default User';
       const date = _answer.get('date');
       const answer = _answer.get('answer');
-      const userInitials = 'AS';
+      const nextAnswer = answers.get(index + 1)
+        ? answers.get(index + 1).get('answer')
+        : answer;
+      const userInitials =
+        userName.split(' ')[0].charAt(0) + userName.split(' ')[1].charAt(0);
       const parsedDate = moment(date).format('DD-MMM-YYYY');
       const avatarRandomColor = randomColor({ luminosity: 'dark' });
 
       const renderAnswers = () => {
-        if (questionType !== 'picklist') return <p>{answer}</p>;
+        if (questionType !== 'picklist') {
+          if (questionType === 'text') {
+            const answerArray = answer.split(' ');
+            const nextAnswerArray = nextAnswer.split(' ');
+
+            const historyAnswer = answerArray.map((answer_, index_) => {
+              if (answer_.includes(nextAnswerArray[index_]))
+                return { answer_, status: 'normal' };
+
+              return [
+                { answer_: nextAnswerArray[index_], status: 'removed' },
+                { answer_, status: 'changed' }
+              ];
+            });
+
+            return (
+              <p>
+                {flatten(historyAnswer).map(({ answer_, status }) => (
+                  <span key={uuidv4()} className={classNames(status)}>
+                    {answer_}{' '}
+                  </span>
+                ))}
+              </p>
+            );
+          }
+
+          return <p>{answer}</p>;
+        }
+
+        if (isEmpty(answer.toJS())) return <p>All answers deleted</p>;
+
         return (
           <ul>
             {answer.map(singleAnswer => {
-              return <li>{singleAnswer}</li>;
+              const deletedAnswers = nextAnswer.filter(
+                ans => !answer.includes(ans)
+              );
+
+              const deletedAnswersItems = deletedAnswers.map(ans => (
+                <li className="answer-deleted" key={uuidv4()}>
+                  {ans}
+                </li>
+              ));
+
+              const answerItem = (
+                <li
+                  key={uuidv4()}
+                  className={
+                    !nextAnswer.includes(singleAnswer) ? 'answer-added' : ''
+                  }
+                >
+                  {singleAnswer}
+                </li>
+              );
+
+              return [deletedAnswersItems, answerItem];
             })}
           </ul>
         );
@@ -50,11 +107,14 @@ class AnswerHistory extends Component<Props> {
       return (
         <div className="answer-container" key={uuidv4()}>
           <div className="main-container">
-            <span style={{ backgroundColor: avatarRandomColor }}>
+            <span
+              style={{ backgroundColor: avatarRandomColor }}
+              className="avatar"
+            >
               {userInitials}
             </span>
             <div>
-              <p>{userEmail}</p>
+              <p>{userName}</p>
               {renderAnswers()}
             </div>
           </div>
