@@ -6,13 +6,13 @@ import { Map } from 'immutable';
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
 import classNames from 'classnames';
-import _, { isEmpty, flatten, uniqWith } from 'lodash';
-import { getLookupUsers } from '../../selectors';
+import { isEmpty, flatten } from 'lodash';
+import { getProposalTeamAssignedRoles } from '../../selectors';
 import { Close } from '../svg';
 
 type Props = {
   question: Map,
-  users: Object,
+  proposalTeamAnswers: Object,
   closeModal: () => void
 };
 
@@ -25,10 +25,36 @@ class AnswerHistory extends Component<Props> {
     if (document.body) document.body.classList.remove('no-scroll');
   }
 
+  renderAnswerResponsables = () => {
+    const { question, proposalTeamAnswers } = this.props;
+    const questionRoleNames = question.get('roleNames');
+
+    const questionResponsables = proposalTeamAnswers.filter(({ role }) =>
+      questionRoleNames.includes(role)
+    );
+
+    if (isEmpty(questionResponsables)) {
+      return (
+        <p className="question-responsible not-assigned">Not assigned yet</p>
+      );
+    }
+
+    return questionResponsables.map(({ role, responsable }) => {
+      return (
+        <p className="question-responsible" key={uuidv4()}>
+          Pending: {role} - <span>@{responsable}</span>
+        </p>
+      );
+    });
+  };
+
   renderContent = () => {
     const { question } = this.props;
     const questionType = question.getIn(['answerConfiguration', 'type']);
+    const sectionName = question.getIn(['section', 'sectionName']);
     const answers = question.get('answers').reverse();
+
+    if (answers.isEmpty()) return this.renderAnswerResponsables();
 
     return answers.map((_answer, index) => {
       const userName = _answer.get('userName') || 'Default User';
@@ -44,7 +70,7 @@ class AnswerHistory extends Component<Props> {
 
       const renderAnswers = () => {
         if (questionType !== 'picklist') {
-          if (questionType === 'text') {
+          if (questionType === 'text' && sectionName !== 'Proposal Team') {
             const answerArray = answer.split(' ');
             const nextAnswerArray = nextAnswer.split(' ');
 
@@ -69,10 +95,14 @@ class AnswerHistory extends Component<Props> {
             );
           }
 
+          if (questionType === 'date') {
+            return <p>{moment(answer).format('DD-MMM-YYYY')}</p>;
+          }
+
           return <p>{answer}</p>;
         }
 
-        if (isEmpty(answer.toJS())) return <p>All answers deleted</p>;
+        if (answer.isEmpty()) return <p>All answers deleted</p>;
 
         return (
           <ul>
@@ -142,6 +172,7 @@ class AnswerHistory extends Component<Props> {
 
   render() {
     const { question, closeModal } = this.props;
+    const answers = question.get('answers');
     const questionTitle = question.get('questionText');
 
     return (
@@ -159,7 +190,7 @@ class AnswerHistory extends Component<Props> {
         >
           <div className="modal-header">
             <div className="header-titles">
-              <h1>History</h1>
+              <h1>{answers.isEmpty() ? 'Responsible' : 'History'}</h1>
               <p>{questionTitle}</p>
             </div>
             <button type="button" onClick={closeModal}>
@@ -181,7 +212,7 @@ class AnswerHistory extends Component<Props> {
 }
 
 const mapStateToProps = (state: Map) => ({
-  users: getLookupUsers(state)
+  proposalTeamAnswers: getProposalTeamAssignedRoles(state)
 });
 
 export default connect(mapStateToProps)(AnswerHistory);

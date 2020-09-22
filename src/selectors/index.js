@@ -58,6 +58,9 @@ export const getLookupUsersError = (state: Object): Array<Object> =>
 export const getSections = (state: Object): Map =>
   proposalSelectors.getSections(state.proposal);
 
+export const getProposalTeamAssignedRoles = (state: Object): Map =>
+  proposalSelectors.getProposalTeamAssignedRoles(state.proposal);
+
 export const getFilteredSections = (state: Object): Map =>
   proposalSelectors.getFilteredSections(state.proposal, state.auth);
 

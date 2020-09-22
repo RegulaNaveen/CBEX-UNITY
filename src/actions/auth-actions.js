@@ -192,11 +192,13 @@ export const logout = (): ThunkAction<string, string> => {
 
 export const getAllUsers = (): ThunkAction<string, Object> => {
   const jwt = getJwt() || '';
-  return async (dispatch: Dispatch<Object, string>) => {
+  return async (dispatch: Dispatch<Object, Object>) => {
     try {
       const { data } = await getUsers(jwt);
+
       if (data) {
         const { authService } = data;
+
         dispatch({
           type: ON_GET_LOOKUP_USERS,
           payload: { lookupUsers: authService }

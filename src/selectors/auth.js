@@ -6,7 +6,8 @@ export const getAuthData = (auth: Map): Map => auth.get('authData');
 export const getUserData = (auth: Map): Map => {
   const role = auth.getIn(['authData', 'data', 'authService', 'role']);
   const email = auth.getIn(['authData', 'data', 'authService', 'email']);
-  const name = 'Laura Gallardo';
+  const name = auth.getIn(['authData', 'data', 'authService', 'userName']);
+
   return { role, email, name };
 };
 

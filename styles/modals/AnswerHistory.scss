@@ -50,6 +50,18 @@
       scrollbar-width: none;
       margin-bottom: 50px;
 
+      .question-responsible {
+        font-style: italic;
+
+        span {
+          color: $neptune-secondary;
+        }
+
+        &.not-assigned {
+          color: $error;
+        }
+      }
+
       .answer-container {
         position: relative;
         display: flex;
