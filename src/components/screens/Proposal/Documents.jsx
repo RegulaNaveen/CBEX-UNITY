@@ -4,7 +4,7 @@ const Documents = () => {
   return (
     <div className="documents">
       <iframe
-        src="https://quintiles.app.box.com/folder/122413951982?sortColumn=date&view=list"
+        src="https://quintiles.app.box.com/embed/folder/122413951982?sortColumn=date&view=list"
         width="100%"
         height="100%"
         frameBorder="0"
