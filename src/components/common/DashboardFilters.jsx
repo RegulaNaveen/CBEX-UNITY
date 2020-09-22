@@ -12,8 +12,8 @@ const DashboardFilters = ({ onChange }: Props) => (
   <div id="dashboard-filters">
     <div className="filter-wrapper">
       <InputField
-        title="Opportunity #"
-        id="opportunity #"
+        title="Opportunity number"
+        id="opportunity number"
         onChange={onChange}
         placeholder="Opportunity number"
         type="text"
@@ -39,8 +39,8 @@ const DashboardFilters = ({ onChange }: Props) => (
     </div>
     <div className="filter-wrapper">
       <InputField
-        title="Protocol #"
-        id="protocol #"
+        title="Protocol number"
+        id="protocol number"
         onChange={onChange}
         placeholder="Protocol number"
         type="text"

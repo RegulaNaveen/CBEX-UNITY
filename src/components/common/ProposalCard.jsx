@@ -9,7 +9,7 @@ type Props = {
   opportunityName: string,
   daysRemain: number,
   dueDate: string,
-  account: string,
+  customer: string,
   protocolNumber: number,
   phase: number,
   therapeuticArea: string,
@@ -23,7 +23,7 @@ const ProposalCard = ({
   opportunityName,
   daysRemain,
   dueDate,
-  account,
+  customer,
   protocolNumber,
   phase,
   therapeuticArea,
@@ -48,8 +48,8 @@ const ProposalCard = ({
         <span>{dueDate}</span>
       </div>
       <div className="section-data">
-        <span>Account: </span>
-        <span>{account}</span>
+        <span>Customer: </span>
+        <span>{customer}</span>
       </div>
       <div className="section-data">
         <span>Protocol Number:</span>
