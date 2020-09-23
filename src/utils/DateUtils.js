@@ -2,6 +2,7 @@
 import { DateUtils } from 'react-day-picker';
 import dateFnsFormat from 'date-fns/format';
 import dateFnsParse from 'date-fns/parse';
+import moment from 'moment';
 
 export const parseDate = (date: string, format: string) => {
   const parsed = dateFnsParse(date, format, new Date(), {});
@@ -18,4 +19,9 @@ export const dateDiffInDays = (date: Object): number => {
   const utc2 = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
 
   return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+};
+
+export const parseMomentDate = (date: Date) => {
+  if (!date) return date;
+  return moment(date).format('DD-MM-YYYY');
 };

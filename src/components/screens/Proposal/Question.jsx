@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
+import { isObject } from 'lodash';
 import { Checkmark } from '../../svg';
 import Dropdown from '../../common/Dropdown';
 import TextArea from '../../common/TextArea';
@@ -81,8 +82,8 @@ export class TaskRow extends Component<Props, State> {
     let answerValueComplex;
 
     if (answer) {
-      if (typeof answer === 'string') answerValue = answer;
-      else answerValueComplex = answer.toJS();
+      if (isObject(answer)) answerValueComplex = answer.toJS();
+      else answerValue = answer.toString();
     }
 
     if (sectionName === 'Proposal Team')

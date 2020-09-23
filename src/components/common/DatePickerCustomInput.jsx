@@ -18,7 +18,7 @@ const DatePickerCustomInput = (props: Props) => {
       <Calendar className="datepicker-icon" />
       <input
         className={
-          value === 'MM/DD/YYYY'
+          value === 'DD/MM/YYYY'
             ? 'datepicker-input placeholder'
             : 'datepicker-input date'
         }

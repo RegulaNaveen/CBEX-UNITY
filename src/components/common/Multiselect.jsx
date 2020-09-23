@@ -1,6 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
-import _ from 'lodash';
+import { isEmpty } from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
 import MultiselectItem from './MultiselectItem';
 
 type Props = {
@@ -18,6 +19,8 @@ type State = {
 };
 
 class Multiselect extends PureComponent<Props, State> {
+  ref: any;
+
   static defaultProps = {
     id: undefined,
     title: undefined,
@@ -27,6 +30,8 @@ class Multiselect extends PureComponent<Props, State> {
   constructor(props: Object) {
     super(props);
 
+    this.ref = React.createRef();
+
     this.state = {
       isCollapsed: false,
       selectedValues: []
@@ -34,15 +39,20 @@ class Multiselect extends PureComponent<Props, State> {
   }
 
   componentDidMount() {
+    window.addEventListener('click', this.handleOutsideClick);
+
     const { value } = this.props;
-    if (!_.isEmpty(value)) {
-      this.setState({ selectedValues: value });
-    }
+
+    if (!isEmpty(value)) this.setState({ selectedValues: value });
   }
 
-  handleCollapse = () => {
-    const { isCollapsed } = this.state;
-    this.setState({ isCollapsed: !isCollapsed });
+  componentWillUnmount() {
+    window.removeEventListener('click', this.handleOutsideClick);
+  }
+
+  handleOutsideClick = (event: SyntheticEvent<EventTarget>) => {
+    if (this.ref.current !== event.target)
+      this.setState({ isCollapsed: false });
   };
 
   onRemove = (value: string) => {
@@ -51,20 +61,42 @@ class Multiselect extends PureComponent<Props, State> {
     }));
   };
 
-  onSelect = (value: string) => {
+  handleCollapse = () => {
+    const { isCollapsed } = this.state;
+    this.setState({ isCollapsed: !isCollapsed });
+  };
+
+  onSelect = (event: SyntheticEvent<EventTarget>, value: string) => {
+    event.stopPropagation();
+
     const { onClick } = this.props;
     const { selectedValues } = this.state;
+
     let index = -1;
-    if (selectedValues.includes(`${value}, `)) {
-      index = selectedValues.indexOf(`${value}, `);
-      if (index > -1) {
-        selectedValues.splice(index, 1);
-      }
-    } else {
-      selectedValues.push(`${value}, `);
+    const newArray = selectedValues;
+
+    if (!selectedValues.includes(value)) newArray.push(value);
+    else {
+      index = newArray.indexOf(value);
+      if (index > -1) newArray.splice(index, 1);
     }
-    onClick(selectedValues);
-    this.handleCollapse();
+
+    this.setState({ selectedValues: newArray }, () => onClick(selectedValues));
+
+    this.forceUpdate();
+  };
+
+  renderSelectedItems = () => {
+    const { selectedValues } = this.state;
+    return (
+      <div className="multiselect-header-selected">
+        {selectedValues.map((item, index) => (
+          <span key={uuidv4()}>
+            {index !== selectedValues.length - 1 ? `${item}, ` : `${item}`}
+          </span>
+        ))}
+      </div>
+    );
   };
 
   render() {
@@ -76,14 +108,13 @@ class Multiselect extends PureComponent<Props, State> {
         <div className="multiselect-wrapper">
           <div
             id={id}
+            ref={this.ref}
             className="multiselect-header"
             role="presentation"
             onClick={this.handleCollapse}
           >
-            {selectedValues.length !== 0 ? (
-              <div className="multiselect-header-selected">
-                {selectedValues}
-              </div>
+            {!isEmpty(selectedValues) ? (
+              this.renderSelectedItems()
             ) : (
               <div className="multiselect-header-placeholder">
                 {placeholder}
@@ -92,13 +123,13 @@ class Multiselect extends PureComponent<Props, State> {
           </div>
           {isCollapsed && (
             <ul className="multiselect-list">
-              {items &&
+              {!isEmpty(items) &&
                 items.map(item => (
                   <MultiselectItem
                     onClick={this.onSelect}
                     item={item}
-                    key={item}
-                    isSelected={selectedValues.includes(`${item}, `)}
+                    key={uuidv4()}
+                    isSelected={selectedValues.includes(item)}
                   />
                 ))}
             </ul>
