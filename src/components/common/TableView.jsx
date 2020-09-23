@@ -7,17 +7,21 @@ import { objectToString } from '../../utils/helpers';
 import { formatDate } from '../../utils/DateUtils';
 import { PROPOSAL } from '../../routes';
 
-const SKIP_COLUMNS = ['proposalId', 'opportunityName', 'therapeuticArea'];
-const DATE_COLUMN = 'bid due date';
-const LINK_COLUMN = 'opportunity number';
-const STATUS_COLUMN = 'opportunity status';
-
 type Props = {
   data: [Object],
   hideStatus: boolean
 };
 
 const TableView = ({ data, hideStatus }: Props) => {
+  const SKIP_COLUMNS = [
+    'proposalId',
+    'opportunityName',
+    'therapeuticArea',
+    'usersList'
+  ];
+  const DATE_COLUMN = 'bid due date';
+  const LINK_COLUMN = 'opportunity number';
+  const STATUS_COLUMN = 'opportunity status';
   const columns = keysIn(head(data));
   const columnsLength =
     columns.length - SKIP_COLUMNS.length - (hideStatus ? 1 : 0);
