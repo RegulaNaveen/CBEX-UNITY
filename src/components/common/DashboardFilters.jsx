@@ -7,12 +7,14 @@ import InputField from './InputField';
 import FilterDropDown from './FilterDropDown';
 import DateRange from './DateRange';
 import UserLookup from './UserLookup';
+import { getAllUsers } from '../../actions/auth-actions';
 
 type Props = {
   onTextFilterChange: Function,
   onDropDownFilterChange: Function,
   onDateRangeChange: Function,
   fetchFilterValues: Function,
+  fetchUsers: Function,
   filterValues: Object
 };
 
@@ -21,10 +23,12 @@ const DashboardFilters = ({
   onDropDownFilterChange,
   onDateRangeChange,
   fetchFilterValues,
+  fetchUsers,
   filterValues
 }: Props) => {
   useEffect(() => {
     fetchFilterValues();
+    fetchUsers();
   }, []);
   const changeDate = useCallback(range => {
     onDateRangeChange('bid due date', range);
@@ -132,6 +136,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  fetchFilterValues: getFilteringValues
+  fetchFilterValues: getFilteringValues,
+  fetchUsers: getAllUsers
 };
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardFilters);
