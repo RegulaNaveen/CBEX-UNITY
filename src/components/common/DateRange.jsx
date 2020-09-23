@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import DayPicker, { DateUtils } from 'react-day-picker';
+import { formatDate } from '../../utils/DateUtils';
 import DatePickerCustomInput from './DatePickerCustomInput';
 
 type Props = {
@@ -14,6 +15,7 @@ type State = {
   showPicker: boolean
 };
 
+const dateFormat = 'dd-MMM-yyyy';
 class DateRange extends Component<Props, State> {
   static defaultProps = {
     label: ''
@@ -52,7 +54,10 @@ class DateRange extends Component<Props, State> {
           placeholder="Select a date range"
           value={
             from && to
-              ? `${from.toLocaleDateString()} - ${to.toLocaleDateString()}`
+              ? `${formatDate(from, dateFormat)} - ${formatDate(
+                  to,
+                  dateFormat
+                )}`
               : ''
           }
           onFocus={this.showPicker}
