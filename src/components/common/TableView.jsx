@@ -9,7 +9,7 @@ import { PROPOSAL } from '../../routes';
 
 const SKIP_COLUMNS = ['proposalId', 'opportunityName', 'therapeuticArea'];
 const DATE_COLUMN = 'bid due date';
-const LINK_COLUMN = 'opportunity #';
+const LINK_COLUMN = 'opportunity number';
 const STATUS_COLUMN = 'opportunity status';
 
 type Props = {
