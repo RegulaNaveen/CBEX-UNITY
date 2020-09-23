@@ -64,7 +64,6 @@ class AnswerHistory extends Component<Props> {
         ? answers.get(index + 1).get('answer')
         : answer;
 
-      console.log(userName);
       const userInitials =
         userName !== 'AnswerPulledFromSalesforce'
           ? userName.split(' ')[0].charAt(0) + userName.split(' ')[1].charAt(0)
