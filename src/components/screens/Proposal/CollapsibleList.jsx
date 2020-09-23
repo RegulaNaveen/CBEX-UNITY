@@ -15,7 +15,8 @@ type Props = {
   questions: Map,
   title: string,
   selectedSection: string,
-  isCheckedAll: boolean
+  isCheckedAll: boolean,
+  setQuestionToDisplayHistory: (answer: string) => void
 };
 
 class CollapsibleList extends Component<Props, State> {
@@ -65,7 +66,12 @@ class CollapsibleList extends Component<Props, State> {
 
   render() {
     const { isCollapsed } = this.state;
-    const { questions, title, isCheckedAll } = this.props;
+    const {
+      questions,
+      title,
+      isCheckedAll,
+      setQuestionToDisplayHistory
+    } = this.props;
 
     return (
       <div className="task-wrapper" ref={this.taskRef} id={this.createId()}>
@@ -110,14 +116,11 @@ class CollapsibleList extends Component<Props, State> {
               <div className="task-subtitle task-subtitle-answer">
                 <p>Answer</p>
               </div>
-              {/* TODO: Add header when owners functionality are implemented */}
-              {/* <div className="task-subtitle task-subtitle-owner">
-                <p>Owner</p>
-              </div> */}
               <div className="task-subtitle task-subtitle-completion-date">
                 <p>Date Completed</p>
               </div>
             </div>
+
             {questions.valueSeq().map(questionConfig => (
               <Question
                 key={questionConfig.get('questionId')}
@@ -127,6 +130,7 @@ class CollapsibleList extends Component<Props, State> {
                 questionText={questionConfig.get('questionText')}
                 answerConfiguration={questionConfig.get('answerConfiguration')}
                 sectionName={title}
+                setQuestionToDisplayHistory={setQuestionToDisplayHistory}
               />
             ))}
           </div>

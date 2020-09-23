@@ -42,10 +42,8 @@ export const login = (
   password: string
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
-    dispatch({
-      type: AUTH_LOADING,
-      payload: {}
-    });
+    dispatch({ type: AUTH_LOADING, payload: {} });
+
     try {
       const data = await authentication(email, password);
       const {
@@ -56,10 +54,8 @@ export const login = (
           refresh: { token: refreshToken }
         }
       } = data;
-      dispatch({
-        type: AUTH_SUCCESS,
-        payload: { data }
-      });
+
+      dispatch({ type: AUTH_SUCCESS, payload: { data } });
       setSession(role, accessToken, token, refreshToken, email);
     } catch (error) {
       dispatch({
@@ -196,11 +192,13 @@ export const logout = (): ThunkAction<string, string> => {
 
 export const getAllUsers = (): ThunkAction<string, Object> => {
   const jwt = getJwt() || '';
-  return async (dispatch: Dispatch<Object, string>) => {
+  return async (dispatch: Dispatch<Object, Object>) => {
     try {
       const { data } = await getUsers(jwt);
+
       if (data) {
         const { authService } = data;
+
         dispatch({
           type: ON_GET_LOOKUP_USERS,
           payload: { lookupUsers: authService }

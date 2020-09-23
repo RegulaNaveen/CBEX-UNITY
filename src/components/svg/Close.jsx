@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 type Props = {
-  className: string
+  className?: string
 };
 
 const Close = ({ className }: Props) => {
@@ -15,6 +15,10 @@ const Close = ({ className }: Props) => {
       />
     </svg>
   );
+};
+
+Close.defaultProps = {
+  className: ''
 };
 
 export default Close;

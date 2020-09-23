@@ -10,6 +10,7 @@
   padding-right: 23px;
   min-width: 630px;
   margin-bottom: 16px;
+  outline: none;
 
   &:hover {
     cursor: pointer;
@@ -19,6 +20,7 @@
     display: flex;
     flex: 1;
     justify-content: space-between;
+    outline: none;
 
     .task-title {
       color: $black;
@@ -27,6 +29,7 @@
       font-weight: 600;
       letter-spacing: 0;
       line-height: 19px;
+      outline: none;
     }
 
     .task-status-wrapper {
@@ -65,9 +68,11 @@
     display: flex;
     flex: 1;
     flex-direction: column;
+    outline: none;
 
     .task-table-headers {
       display: flex;
+      outline: none;
       height: 60px;
 
       .task-title {

@@ -1,5 +1,6 @@
 // @flow
 import { Map, fromJS } from 'immutable';
+import { last } from 'lodash';
 
 const generateSections = (
   proposalQuestions: Object,
@@ -57,6 +58,20 @@ const getQuestionSections = (items: Array<Object>) => {
 
 export const getSections = (proposal: Map): Map =>
   generateSections(proposal.get('proposalQuestions'), false, '');
+
+export const getProposalTeamAssignedRoles = (proposal: Map): Map => {
+  const proposalTeamSectionAnswers = proposal
+    .get('proposalQuestions')
+    .filter(value => value.section.sectionName === 'Proposal Team')
+    .map(({ questionText, answers }) => {
+      return {
+        role: questionText,
+        responsable: last(answers) ? last(answers).answer : 'Not defined yet.'
+      };
+    });
+
+  return proposalTeamSectionAnswers;
+};
 
 export const getFilteredSections = (proposal: Map, auth: Map): Map =>
   generateSections(
