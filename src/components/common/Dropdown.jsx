@@ -79,6 +79,12 @@ class Dropdown extends PureComponent<Props, State> {
     this.setState({ selectedValue: '', isCollapsed: false });
   };
 
+  handleReset = () => {
+    const { onClick } = this.props;
+    onClick('');
+    this.setState({ selectedValue: '', isCollapsed: false });
+  };
+
   render() {
     const { isCollapsed, selectedValue } = this.state;
     const { placeholder, id, items, title, value, withReset } = this.props;
