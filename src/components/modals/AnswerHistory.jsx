@@ -63,8 +63,12 @@ class AnswerHistory extends Component<Props> {
       const nextAnswer = answers.get(index + 1)
         ? answers.get(index + 1).get('answer')
         : answer;
+
+      console.log(userName);
       const userInitials =
-        userName.split(' ')[0].charAt(0) + userName.split(' ')[1].charAt(0);
+        userName !== 'AnswerPulledFromSalesforce'
+          ? userName.split(' ')[0].charAt(0) + userName.split(' ')[1].charAt(0)
+          : 'SA';
       const parsedDate = moment(date).format('DD-MMM-YYYY');
       const avatarRandomColor = randomColor({ luminosity: 'dark' });
 
