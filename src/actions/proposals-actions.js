@@ -112,8 +112,12 @@ const textFilter = (key: string, value: string, array: Array<Object>) =>
 const optionFilter = (key: string, value: string, array: Array<Object>) =>
   array.filter(proposal => proposal[key].toLowerCase() === value.toLowerCase());
 
-const userFilter = (value: string, array: Array<Object>) =>
-  array.filter(proposal => objectContains(proposal.usersList, value, false));
+const userFilter = (value: string, array: Array<Object>) => {
+  const userEmail = value.match(/\((.*?)\)/)[1];
+  return array.filter(proposal =>
+    objectContains(proposal.usersList, userEmail, false)
+  );
+};
 
 export const onFilteringProposals = (
   filters: FilteredData,
@@ -140,10 +144,10 @@ export const onFilteringProposals = (
 
     cleanFilters.forEach(([key, value]) => {
       switch (key) {
-        case 'opportunity #':
-        case 'opportunity name':
-        case 'account':
-        case 'protocol #':
+        case 'opportunity number':
+        case 'opportunityName':
+        case 'customer':
+        case 'protocol number':
         case 'product':
           filteredProposals = textFilter(
             key,

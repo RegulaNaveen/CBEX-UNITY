@@ -42,8 +42,8 @@ const DashboardFilters = ({
     <div id="dashboard-filters">
       <div className="filter-wrapper">
         <InputField
-          title="Opportunity #"
-          id="opportunity #"
+          label="Opportunity number"
+          id="opportunity number"
           onChange={onTextFilterChange}
           placeholder="Opportunity number"
           type="text"
@@ -51,7 +51,7 @@ const DashboardFilters = ({
       </div>
       <div className="filter-wrapper">
         <InputField
-          title="Opportunity name"
+          label="Opportunity name"
           id="opportunityName"
           onChange={onTextFilterChange}
           placeholder="Opportunity name"
@@ -60,8 +60,8 @@ const DashboardFilters = ({
       </div>
       <div className="filter-wrapper">
         <InputField
-          title="Customer"
-          id="account"
+          label="Customer"
+          id="customer"
           onChange={onTextFilterChange}
           placeholder="Customer"
           type="text"
@@ -69,8 +69,8 @@ const DashboardFilters = ({
       </div>
       <div className="filter-wrapper">
         <InputField
-          title="Protocol #"
-          id="protocol #"
+          label="Protocol number"
+          id="protocol number"
           onChange={onTextFilterChange}
           placeholder="Protocol number"
           type="text"
@@ -86,7 +86,7 @@ const DashboardFilters = ({
       </div>
       <div className="filter-wrapper">
         <InputField
-          title="Product"
+          label="Product"
           id="product"
           onChange={onTextFilterChange}
           placeholder="Product"
