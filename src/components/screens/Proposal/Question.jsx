@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { Checkmark } from '../../svg';
-// import { getRandomColor } from '../../../utils/colors';
 import Dropdown from '../../common/Dropdown';
 import TextArea from '../../common/TextArea';
 import DatePicker from '../../common/DatePicker';
@@ -11,6 +10,7 @@ import UserLookup from '../../common/UserLookup';
 import { parseDate, formatDate } from '../../../utils/DateUtils';
 import Multiselect from '../../common/Multiselect';
 import { setProposalAnswerData } from '../../../actions/proposal-actions';
+import { getUserData } from '../../../selectors';
 
 type State = {
   selectedDay: string
@@ -22,8 +22,10 @@ type Props = {
   answers: Map,
   questionText: string,
   answerConfiguration: Object,
+  sectionName: string,
+  userData: Object,
   setProposalAnswer: Function,
-  sectionName: string
+  setQuestionToDisplayHistory: (answer: string) => void
 };
 
 export class TaskRow extends Component<Props, State> {
@@ -36,30 +38,31 @@ export class TaskRow extends Component<Props, State> {
   }
 
   handleTextChange = (textValue: string) => {
-    const { setProposalAnswer, proposalId, questionId } = this.props;
-    setProposalAnswer(proposalId, questionId, textValue);
+    const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+    setProposalAnswer(proposalId, questionId, textValue, userData);
   };
 
   onClickChange = (selectedValue: string) => {
-    const { setProposalAnswer, proposalId, questionId } = this.props;
-    setProposalAnswer(proposalId, questionId, selectedValue);
+    const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+    setProposalAnswer(proposalId, questionId, selectedValue, userData);
   };
 
   handleDayChange = (selectedDay: string) => {
-    const { setProposalAnswer, proposalId, questionId } = this.props;
-    this.setState(
-      {
-        selectedDay
-      },
-      () => {
-        setProposalAnswer(proposalId, questionId, selectedDay);
-      }
-    );
+    const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+
+    this.setState({ selectedDay }, () => {
+      setProposalAnswer(proposalId, questionId, selectedDay, userData);
+    });
   };
 
   onSelectValues = (selectedValues: Array<string>) => {
-    const { setProposalAnswer, proposalId, questionId } = this.props;
-    setProposalAnswer(proposalId, questionId, selectedValues);
+    const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+    setProposalAnswer(proposalId, questionId, selectedValues, userData);
+  };
+
+  displayAnswerOnHistory = () => {
+    const { setQuestionToDisplayHistory, questionId } = this.props;
+    setQuestionToDisplayHistory(questionId);
   };
 
   renderAnswer = (
@@ -70,6 +73,7 @@ export class TaskRow extends Component<Props, State> {
   ) => {
     const { sectionName } = this.props;
     const { selectedDay } = this.state;
+
     const optionsYN = ['Yes', 'No'];
     const answer = lastAnswer && lastAnswer.get('answer');
 
@@ -81,9 +85,8 @@ export class TaskRow extends Component<Props, State> {
       else answerValueComplex = answer.toJS();
     }
 
-    if (sectionName === 'Proposal Team') {
+    if (sectionName === 'Proposal Team')
       return <UserLookup onChange={this.handleTextChange} text={answerValue} />;
-    }
 
     switch (type) {
       case 'text':
@@ -152,32 +155,22 @@ export class TaskRow extends Component<Props, State> {
 
   render() {
     const { answers, questionText, answerConfiguration } = this.props;
-    // const hardCode = {
-    //   owner: ['Owner', 'Pedro']
-    // };
-    let answerDate = 'Not Answered';
     const lastAnswer = answers.last();
+    let answerDate = 'Not Answered';
+
     if (lastAnswer) {
       const format = 'dd-MMM-yyyy';
       answerDate = formatDate(new Date(lastAnswer.get('date')), format);
     }
+
     return (
       <div className="task-table-row">
-        {lastAnswer ? (
-          <div className="task-table-row-checkmark">
-            <div className="task-table-row-checkmark-wrapper icon-highlight">
-              <Checkmark className="task-table-row-checkmark-wrapper-icon" />
-            </div>
-          </div>
-        ) : (
-          <div className="task-table-row-checkmark">
-            <div className="task-table-row-checkmark-wrapper icon-highlight" />
-          </div>
-        )}
-        <div className="task-table-row-question-content">
-          <p className="task-table-row-question">{questionText}</p>
+        <div className="question-text">
+          {lastAnswer ? <Checkmark /> : <span />}
+          <p>{questionText}</p>
         </div>
-        <div className="task-table-row-answer">
+
+        <div>
           {answerConfiguration
             ? this.renderAnswer(
                 answerConfiguration.get('type'),
@@ -187,27 +180,19 @@ export class TaskRow extends Component<Props, State> {
               )
             : this.renderAnswer('', [], [], undefined)}
         </div>
-        {/* TODO:  Add owners when roles are implemented for this functionality */}
-        {/* <div className="task-table-row-owner">
-          {hardCode.owner.map(owner => (
-            <p
-              key={owner}
-              className="task-table-row-owner-icon"
-              style={{ backgroundColor: getRandomColor() }}
-            >
-              {owner.charAt(0).toUpperCase()}
-            </p>
-          ))}
-        </div> */}
-        <p className="task-table-row-completion-date">{answerDate}</p>
-        <div className="task-table-row-edit">
-          <div className="task-table-row-edit-wrapper icon-highlight" />
-        </div>
+
+        <button type="button" onClick={this.displayAnswerOnHistory}>
+          {answerDate}
+        </button>
       </div>
     );
   }
 }
 
-export default connect(undefined, {
+const mapStateToProps = (state: Object) => ({
+  userData: getUserData(state)
+});
+
+export default connect(mapStateToProps, {
   setProposalAnswer: setProposalAnswerData
 })(TaskRow);

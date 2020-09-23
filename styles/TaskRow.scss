@@ -1,157 +1,188 @@
+// .task-table-row {
+//   display: flex;
+//   position: relative;
+//   min-height: 55px;
+//   align-items: center;
+
+//   &:hover {
+//     background-color: $neutral2;
+//   }
+
+//   &:hover .icon-highlight {
+//     background-color: $neutral2;
+//   }
+
+//   &-checkmark {
+//     position: absolute;
+//     display: flex;
+//     flex-direction: column;
+//     height: 100%;
+//     width: 50px;
+//     margin-left: -50px;
+
+//     &-wrapper {
+//       display: flex;
+//       align-items: center;
+//       justify-content: center;
+//       flex: 1;
+//       width: 100%;
+
+//       &-icon {
+//         height: 14px;
+//         width: 14px;
+//       }
+//     }
+//   }
+
+//   &-check {
+//     display: flex;
+//     height: 14px;
+//     margin-left: -52px;
+//     padding-left: 24px;
+//     padding-right: 28px;
+//     padding-top: 20px;
+//     padding-bottom: 21px;
+//   }
+
+//   &-question-content {
+//     flex: 1;
+//     display: flex;
+//     height: 55px;
+//     width: 100px;
+//     padding-right: 10px;
+//     align-items: center;
+//   }
+
+//   &-question {
+//     display: block;
+//     align-items: center;
+//     color: $black;
+//     font-family: $proximaNova;
+//     font-size: 16px;
+//     letter-spacing: 0;
+//     line-height: 19px;
+//     overflow: hidden;
+//     text-overflow: ellipsis;
+//   }
+
+//   &-answer {
+//     flex: 1;
+//     display: flex;
+//     align-items: center;
+//     min-height: 55px;
+//     color: $black;
+//     font-family: $proximaNova;
+//     font-size: 16px;
+//     letter-spacing: 0;
+//     line-height: 19px;
+//     padding-right: 10px;
+//   }
+
+//   &-owner {
+//     width: 118px;
+//     display: flex;
+//     align-items: center;
+//     height: 55px;
+
+//     &-icon {
+//       display: flex;
+//       align-items: center;
+//       justify-content: center;
+//       box-sizing: border-box;
+//       height: 27px;
+//       width: 27px;
+//       padding-top: 1px;
+//       border: 2px solid $white;
+//       border-radius: 50%;
+//       color: $white;
+//       font-family: $proximaNova;
+//       font-size: 16px;
+//       letter-spacing: 0;
+//       line-height: 19px;
+//       margin-left: -10px;
+
+//       &:first-child {
+//         margin-left: 0;
+//       }
+//     }
+//   }
+
+//   &-due-date {
+//     width: 142px;
+//     display: flex;
+//     align-items: center;
+//     height: 55px;
+//     color: $black;
+//     font-family: $proximaNova;
+//     font-size: 16px;
+//     letter-spacing: 0;
+//     line-height: 19px;
+//   }
+
+//   &-completion-date {
+//     display: flex;
+//     outline: none;
+//     border: none;
+//     cursor: pointer;
+//     align-items: center;
+//     height: 55px;
+//     color: $black;
+//     font-family: $proximaNova;
+//     font-size: 16px;
+//     letter-spacing: 0;
+//     line-height: 19px;
+//     padding-right: 28px;
+//     background: none;
+//     color: $neptune-primary;
+//   }
+
+//   &-edit {
+//     position: absolute;
+//     display: flex;
+//     flex-direction: column;
+//     height: 100%;
+//     width: 43px;
+//     right: 0;
+//     margin-right: -23px;
+
+//     &-wrapper {
+//       display: flex;
+//       align-items: center;
+//       justify-content: center;
+//       flex: 1;
+//       width: 100%;
+
+//       &-icon {
+//         height: 14px;
+//         width: 14px;
+//       }
+//     }
+//   }
+// }
+
 .task-table-row {
-  display: flex;
-  position: relative;
-  min-height: 55px;
-  align-items: center;
+  grid-template-columns: 1.3fr 1.3fr 0.4fr;
+  margin-bottom: 15px;
+  display: grid;
+  width: 100%;
+  font-family: $proximaNova;
+  color: $black;
 
-  &:hover{
-    background-color: $neutral2;
-  }
+  .question-text {
+    display: grid;
+    grid-template-columns: 0.1fr 1.9fr;
 
-  &:hover .icon-highlight {
-    background-color: $neutral2;
-  }
-
-  &-checkmark {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 50px;
-    margin-left: -50px;
-
-    &-wrapper {
-      display: flex;  
-      align-items: center;
-      justify-content: center;
-      flex: 1;
-      width: 100%;
-
-      &-icon {
-        height: 14px;
-        width: 14px;
-      }
+    p {
+      margin-left: 5px;
     }
   }
 
-  &-check {
-    display: flex;
-    height: 14px;
-    margin-left: -52px;
-    padding-left: 24px;
-    padding-right: 28px;
-    padding-top: 20px;
-    padding-bottom: 21px;
-  }
-
-  &-question-content {
-    flex: 1;
-    display: flex;
-    height: 55px;
-    width: 100px;
-    padding-right: 10px;
-    align-items: center;
-  }
-
-  &-question {
-    display: block;
-    align-items: center;
-    color: $black;
-    font-family: $proximaNova;
+  button {
+    outline: none;
+    border: none;
+    background-color: transparent;
+    color: $neptune-secondary;
+    cursor: pointer;
     font-size: 16px;
-    letter-spacing: 0;
-    line-height: 19px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  &-answer {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    min-height: 55px;
-    color: $black;
-    font-family: $proximaNova;
-    font-size: 16px;
-    letter-spacing: 0;
-    line-height: 19px;
-    padding-right: 10px;
-  }
-
-  &-owner {
-    width: 118px;
-    display: flex;
-    align-items: center;
-    height: 55px;
-
-    &-icon{
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-sizing: border-box;
-      height: 27px;
-      width: 27px;
-      padding-top: 1px;
-      border: 2px solid $white;
-      border-radius: 50%;
-      color: $white;
-      font-family: $proximaNova;
-      font-size: 16px;
-      letter-spacing: 0;
-      line-height: 19px;
-      margin-left: -10px;
-
-      &:first-child {
-        margin-left: 0;
-      }
-    }
-  }
-
-  &-due-date {
-    width: 142px;
-    display: flex;
-    align-items: center;
-    height: 55px;
-    color: $black;      
-    font-family: $proximaNova;
-    font-size: 16px;
-    letter-spacing: 0;
-    line-height: 19px;
-  }
-
-  &-completion-date {
-    width: 110px;
-    display: flex;
-    align-items: center;
-    height: 55px;
-    color: $black;
-    font-family: $proximaNova;
-    font-size: 16px;
-    letter-spacing: 0;
-    line-height: 19px;
-    padding-right: 28px;
-  }
-
-  &-edit {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 43px;
-    right: 0;
-    margin-right: -23px;
-
-    &-wrapper {
-      display: flex;  
-      align-items: center;
-      justify-content: center;
-      flex: 1;
-      width: 100%;
-
-      &-icon {
-        height: 14px;
-        width: 14px;
-      }
-    }
   }
 }

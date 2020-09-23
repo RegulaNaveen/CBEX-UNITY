@@ -9,6 +9,9 @@ import * as siderbarSelectors from './sidebar';
 export const getAuthData = (state: Object): Map =>
   authSelectors.getAuthData(state.auth);
 
+export const getUserData = (state: Map): Map =>
+  authSelectors.getUserData(state.auth);
+
 export const isAuthLoading = (state: Object): boolean =>
   authSelectors.isAuthLoading(state.auth);
 
@@ -54,6 +57,9 @@ export const getLookupUsersError = (state: Object): Array<Object> =>
 // Proposal selectors
 export const getSections = (state: Object): Map =>
   proposalSelectors.getSections(state.proposal);
+
+export const getProposalTeamAssignedRoles = (state: Object): Map =>
+  proposalSelectors.getProposalTeamAssignedRoles(state.proposal);
 
 export const getFilteredSections = (state: Object): Map =>
   proposalSelectors.getFilteredSections(state.proposal, state.auth);

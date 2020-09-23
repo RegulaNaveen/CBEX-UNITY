@@ -22,26 +22,14 @@ export const getProposalInfo = async (id: string): Promise<Object> => {
 export const setProposalAnswer = async (
   proposalId: string,
   questionId: string,
-  answer: string
+  answer: string,
+  userData: Object
 ): Promise<Object> => {
-  return new Promise((resolve, reject) => {
-    axios
-      .put(
-        `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`,
-        {
-          answer
-        },
-        {
-          headers: { 'x-api-key': `${API_KEY}` }
-        }
-      )
-      .then(response => {
-        resolve(response.data);
-      })
-      .catch(err => {
-        reject(err);
-      });
-  });
+  return axios.put(
+    `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`,
+    { answer, userData },
+    { headers: { 'x-api-key': `${API_KEY}` } }
+  );
 };
 
 export const getQuestionSectionInfo = async (): Promise<Object> => {

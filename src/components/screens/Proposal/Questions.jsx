@@ -20,6 +20,8 @@ import {
   setQuestionError
 } from '../../../selectors';
 import Sidebar from '../../common/Sidebar';
+import AnswerHistory from '../../modals/AnswerHistory';
+import { getAllUsers } from '../../../actions/auth-actions';
 
 type Props = {
   match: Match,
@@ -29,13 +31,16 @@ type Props = {
   setQuestion: Map,
   hasQuestionError: boolean,
   isQuestionLoading: boolean,
-  getProposalInfoUpdated: Function
+  getProposalInfoUpdated: Function,
+  fetchUsers: () => {}
 };
 
 type State = {
   showModal: boolean,
   isChecked: boolean,
-  isCheckedAll: boolean
+  isCheckedAll: boolean,
+  selectedQuestionForHistory: string,
+  isHistoryModalShown: boolean
 };
 
 class Questions extends Component<Props, State> {
@@ -45,8 +50,15 @@ class Questions extends Component<Props, State> {
     this.state = {
       showModal: false,
       isChecked: false,
-      isCheckedAll: false
+      isCheckedAll: false,
+      selectedQuestionForHistory: '',
+      isHistoryModalShown: false
     };
+  }
+
+  componentDidMount() {
+    const { fetchUsers } = this.props;
+    fetchUsers();
   }
 
   componentDidUpdate(prevProps: Map) {
@@ -54,6 +66,27 @@ class Questions extends Component<Props, State> {
     if (prevProps.isQuestionLoading && setQuestion && !hasQuestionError)
       this.onClose();
   }
+
+  setQuestionToDisplayHistory = (selectedAnswer: string) => {
+    const { sections, filteredSections } = this.props;
+    const { isChecked } = this.state;
+
+    const allSections = isChecked ? filteredSections : sections;
+
+    const question = allSections
+      .valueSeq()
+      .find(section => section.getIn(['questions', selectedAnswer]))
+      .getIn(['questions', selectedAnswer]);
+
+    this.setState({
+      selectedQuestionForHistory: question,
+      isHistoryModalShown: true
+    });
+  };
+
+  closeAnswerHistoryModal = () => {
+    this.setState({ isHistoryModalShown: false });
+  };
 
   onClose = () => {
     const { showModal } = this.state;
@@ -91,6 +124,7 @@ class Questions extends Component<Props, State> {
           title={sectionName}
           key={sectionName}
           isCheckedAll={isCheckedAll}
+          setQuestionToDisplayHistory={this.setQuestionToDisplayHistory}
         />
       );
     });
@@ -98,7 +132,13 @@ class Questions extends Component<Props, State> {
 
   render() {
     const { details, sections, filteredSections } = this.props;
-    const { showModal, isCheckedAll, isChecked } = this.state;
+    const {
+      showModal,
+      isCheckedAll,
+      isChecked,
+      selectedQuestionForHistory,
+      isHistoryModalShown
+    } = this.state;
 
     const allSections = isChecked ? filteredSections : sections;
 
@@ -153,6 +193,13 @@ class Questions extends Component<Props, State> {
         <div className="tasksList-wrapper">{this.renderQuestions()}</div>
 
         {showModal && <AddQuestionModalComponent onClose={this.onClose} />}
+
+        {isHistoryModalShown && (
+          <AnswerHistory
+            question={selectedQuestionForHistory}
+            closeModal={this.closeAnswerHistoryModal}
+          />
+        )}
       </>
     );
   }
@@ -170,6 +217,7 @@ const mapStateToProps = (state: Map) => ({
 export default compose(
   withRouter,
   connect(mapStateToProps, {
-    getProposalInfoUpdated: getProposalUpdated
+    getProposalInfoUpdated: getProposalUpdated,
+    fetchUsers: getAllUsers
   })
 )(Questions);

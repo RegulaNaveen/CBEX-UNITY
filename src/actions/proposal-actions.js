@@ -36,21 +36,13 @@ export type ProposalInfo = {};
 
 export const getProposal = (id: string): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
-    dispatch({
-      type: PROPOSAL_INFO_LOADING,
-      payload: {}
-    });
+    dispatch({ type: PROPOSAL_INFO_LOADING, payload: {} });
+
     try {
       const data = await getProposalInfo(id);
-      dispatch({
-        type: PROPOSAL_INFO,
-        payload: data
-      });
+      dispatch({ type: PROPOSAL_INFO, payload: data });
     } catch (err) {
-      dispatch({
-        type: PROPOSAL_INFO_ERROR,
-        payload: err
-      });
+      dispatch({ type: PROPOSAL_INFO_ERROR, payload: err });
     }
   };
 };
@@ -58,24 +50,23 @@ export const getProposal = (id: string): ThunkAction<string, Object> => {
 export const setProposalAnswerData = (
   proposalId: string,
   questionId: string,
-  answer: string
+  answer: string,
+  userData: Object
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
-    dispatch({
-      type: PROPOSAL_ANSWER_LOADING,
-      payload: {}
-    });
+    dispatch({ type: PROPOSAL_ANSWER_LOADING, payload: {} });
+
     try {
-      const data = await setProposalAnswer(proposalId, questionId, answer);
-      dispatch({
-        type: PROPOSAL_ANSWER,
-        payload: { data, questionId }
-      });
+      const { data } = await setProposalAnswer(
+        proposalId,
+        questionId,
+        answer,
+        userData
+      );
+
+      dispatch({ type: PROPOSAL_ANSWER, payload: { data, questionId } });
     } catch (err) {
-      dispatch({
-        type: PROPOSAL_ANSWER_ERROR,
-        payload: err
-      });
+      dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: err });
     }
   };
 };
