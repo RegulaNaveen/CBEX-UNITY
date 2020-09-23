@@ -12,15 +12,16 @@ type Props = {
 
 const formatProposal = (proposal: Object) => {
   const dueDate = new Date(proposal['bid due date']);
-  const daysRemain = dateDiffInDays(dueDate);
+  const dateDiff = dateDiffInDays(dueDate);
+  const daysRemain = dateDiff < 0 ? 0 : dateDiff;
 
   const formatted = {
-    title: proposal['opportunity #'],
+    title: proposal['opportunity number'],
     opportunityName: proposal.opportunityName,
     daysRemain,
     dueDate: formatDate(dueDate, 'dd-MMM-yyyy'),
-    account: proposal.account,
-    protocolNumber: proposal['protocol #'],
+    customer: proposal.customer,
+    protocolNumber: proposal['protocol number'],
     phase: proposal.phase,
     therapeuticArea: proposal.therapeuticArea,
     verbatimIndication: proposal.indication,
@@ -55,7 +56,7 @@ class GridView extends Component<Props> {
               opportunityName={formatted.opportunityName}
               daysRemain={formatted.daysRemain}
               dueDate={formatted.dueDate}
-              account={formatted.account}
+              customer={formatted.customer}
               protocolNumber={formatted.protocolNumber}
               phase={formatted.phase}
               therapeuticArea={formatted.therapeuticArea}
