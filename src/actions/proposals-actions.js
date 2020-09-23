@@ -45,7 +45,7 @@ const formatProposal = (proposal: Object): Object => {
 };
 
 export const getAllProposals = (): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<Object, string>) => {
+  return async (dispatch: Dispatch<Object, Object>) => {
     dispatch({ type: ON_PROPOSALS_LOADING, payload: {} });
     try {
       const { data } = await onGetAllProposals();
@@ -63,8 +63,8 @@ export const getAllProposals = (): ThunkAction<string, Object> => {
 
 export const getProposalsByStatus = (status: string) => {
   const userEmail = localStorage.getItem('userEmail') || '';
-  return async (dispatch: Dispatch<Object, string>) => {
-    dispatch({ type: ON_PROPOSALS_LOADING });
+  return async (dispatch: Dispatch<Object, Object>) => {
+    dispatch({ type: ON_PROPOSALS_LOADING, payload: {} });
     try {
       const { data } = await onGetByStatus(status, userEmail);
 

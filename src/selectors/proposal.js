@@ -123,3 +123,11 @@ export const isSetQuestionLoading = (proposal: Map): Map =>
 
 export const setQuestionError = (proposal: Map): Map =>
   proposal.get('setQuestionError');
+
+export const getProposalBoxIdIsLoading = (proposal: Map): Map =>
+  proposal.get('isGettingBoxId');
+
+export const getProposalBoxIdError = (proposal: Map): Map =>
+  proposal.get('onGettingBoxIdError');
+
+export const getProposalBoxId = (proposal: Map): Map => proposal.get('boxId');
