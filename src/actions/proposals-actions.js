@@ -22,9 +22,9 @@ const formatProposal = (proposal: Object): Object => {
   } = proposal;
   formattedProposal.proposalId = proposalId;
   formattedProposal.opportunityName = opportunityName;
-  formattedProposal['opportunity #'] = proposalDetails['CRM #'];
-  formattedProposal.account = proposalDetails.Customer;
-  formattedProposal['protocol #'] = proposalDetails['Protocol number'];
+  formattedProposal['opportunity number'] = proposalDetails['CRM #'];
+  formattedProposal.customer = proposalDetails.Customer;
+  formattedProposal['protocol number'] = proposalDetails['Protocol number'];
   formattedProposal.phase = proposalDetails.Phase;
   formattedProposal.product = proposalDetails['Product name'];
   formattedProposal.indication = proposalDetails['Verbatim indication'];
