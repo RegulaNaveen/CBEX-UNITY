@@ -94,6 +94,7 @@ type FilteredData = {
 };
 
 const dateRangeFilter = (key: String, range: Object, array: Array<Object>) => {
+  if (!range) return array;
   const { from, to } = range;
   from.setHours(0, 0, 0, 0);
   to.setHours(0, 0, 0, 0);
