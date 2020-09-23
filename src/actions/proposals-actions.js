@@ -94,8 +94,11 @@ type FilteredData = {
 
 const dateRangeFilter = (key: String, range: Object, array: Array<Object>) => {
   const { from, to } = range;
+  from.setHours(0, 0, 0, 0);
+  to.setHours(0, 0, 0, 0);
   return array.filter(proposal => {
     const proposalDate = new Date(proposal[key]);
+    proposalDate.setHours(0, 0, 0, 0);
     return proposalDate >= from && proposalDate <= to;
   });
 };
