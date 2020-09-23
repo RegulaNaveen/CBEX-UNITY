@@ -9,6 +9,14 @@
   margin-bottom: 4px;
 }
 
+.resetButton {
+  border: none;
+  cursor: pointer;
+  background: none;
+  padding-left: 4px;
+  outline: none;
+}
+
 .dd-wrapper {
   position: relative;
   width: 100%;
@@ -32,6 +40,7 @@
     letter-spacing: 0;
     line-height: 24px;
     cursor: pointer;
+    scrollbar-width: none;
 
     .dd-list-item {
       padding: 8px 16px;
