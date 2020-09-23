@@ -113,3 +113,9 @@ export const getProposalInfoUpdated = async (id: string): Promise<Object> => {
       });
   });
 };
+
+export const getProposlBoxId = async (id: string): Promise<Object> => {
+  return axios.get(`${PROPOSAL_API_URL}/${id}/boxid`, {
+    headers: { 'x-api-key': `${API_KEY}` }
+  });
+};

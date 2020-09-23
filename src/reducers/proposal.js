@@ -21,7 +21,10 @@ const {
   ROLES_ERROR,
   PROPOSAL_SET_QUESTION,
   PROPOSAL_SET_QUESTION_LOADING,
-  PROPOSAL_SET_QUESTION_ERROR
+  PROPOSAL_SET_QUESTION_ERROR,
+  PROPOSAL_BOX_ID,
+  PROPOSAL_BOX_ID_LOADING,
+  PROPOSAL_BOX_ID_ERROR
 } = REDUX_TYPES.PROPOSAL;
 
 const INITIAL_STATE: Map = fromJS({
@@ -43,7 +46,10 @@ const INITIAL_STATE: Map = fromJS({
   rolesError: undefined,
   setQuestionData: Map({}),
   isSetQuestionLoading: false,
-  setQuestionError: undefined
+  setQuestionError: undefined,
+  isGettingBoxId: false,
+  onGettingBoxIdError: undefined,
+  boxId: ''
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -182,6 +188,29 @@ const onSetQuestionError = (state: Map, action: Object): Map => {
     .set('isSetQuestionLoading', false);
 };
 
+const onGettingProposalBoxId = (state: Map): Map => {
+  return state
+    .set('isGettingBoxId', true)
+    .set('boxId', '')
+    .set('onGettingBoxIdError', undefined);
+};
+
+const onGetProposalBoxId = (state: Map, action: Object): Map => {
+  const { boxId } = action.payload;
+  return state
+    .set('isGettingBoxId', false)
+    .set('boxId', boxId)
+    .set('onGettingBoxIdError', undefined);
+};
+
+const onGettingBoxIdError = (state: Map, action: Object): Map => {
+  const { error } = action.payload;
+  return state
+    .set('isGettingBoxId', false)
+    .set('boxId', '')
+    .set('onGettingBoxIdError', error);
+};
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
@@ -200,7 +229,10 @@ const actionMap = {
   [ROLES_ERROR]: onRolesError,
   [PROPOSAL_SET_QUESTION]: onSetQuestion,
   [PROPOSAL_SET_QUESTION_LOADING]: onSetQuestionLoading,
-  [PROPOSAL_SET_QUESTION_ERROR]: onSetQuestionError
+  [PROPOSAL_SET_QUESTION_ERROR]: onSetQuestionError,
+  [PROPOSAL_BOX_ID_LOADING]: onGettingProposalBoxId,
+  [PROPOSAL_BOX_ID]: onGetProposalBoxId,
+  [PROPOSAL_BOX_ID_ERROR]: onGettingBoxIdError
 };
 
 export default function(

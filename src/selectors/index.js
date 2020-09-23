@@ -106,6 +106,15 @@ export const isSetQuestionLoading = (state: Object): Boolean =>
 export const setQuestionError = (state: Object): string =>
   proposalSelectors.setQuestionError(state.proposal);
 
+export const getProposalBoxIdIsLoading = (state: Object): string =>
+  proposalSelectors.getProposalBoxIdIsLoading(state.proposal);
+
+export const getProposalBoxIdError = (state: Object): string =>
+  proposalSelectors.getProposalBoxIdError(state.proposal);
+
+export const getProposalBoxId = (state: Object): string =>
+  proposalSelectors.getProposalBoxId(state.proposal);
+
 // Tabbar Selectors
 export const getProposals = (state: Object): Array<Object> =>
   proposalsSelectors.getProposals(state.proposals);

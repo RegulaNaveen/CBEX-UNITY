@@ -41,7 +41,10 @@ const PROPOSAL = {
   ROLES_ERROR: 'roles_error',
   PROPOSAL_SET_QUESTION: 'proposal-set-question',
   PROPOSAL_SET_QUESTION_LOADING: 'proposal-set-question-loading',
-  PROPOSAL_SET_QUESTION_ERROR: 'proposal-set-question-error'
+  PROPOSAL_SET_QUESTION_ERROR: 'proposal-set-question-error',
+  PROPOSAL_BOX_ID: 'proposal_box_id',
+  PROPOSAL_BOX_ID_LOADING: 'proposal_box_id_loading',
+  PROPOSAL_BOX_ID_ERROR: 'proposal_box_id_error'
 };
 
 const PROPOSALS = {
