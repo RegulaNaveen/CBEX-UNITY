@@ -11,7 +11,7 @@
 
 .text-area-wrapper {
   box-sizing: border-box;
-  height: auto;
+  height: 40px;
   width: 100%;
   border: 1px solid $neutral4;
   border-radius: 4px;
@@ -75,5 +75,7 @@
 }
 
 .proposal-text-area {
-  height: 40px;
+  overflow: visible;
+  min-height: 40px;
+  max-height: 70px;
 }

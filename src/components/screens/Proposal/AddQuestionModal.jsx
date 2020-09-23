@@ -1,5 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
+import { isEmpty } from 'lodash';
 import 'react-day-picker/lib/style.css';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -8,7 +9,6 @@ import { Map } from 'immutable';
 // import { parseDate, formatDate } from '../../../utils/DateUtils';
 import Loader from 'react-loader-spinner';
 import { compose } from 'redux';
-import { isEmpty } from 'lodash';
 import Modal from '../../common/Modal';
 import { PrimaryButton } from '../../common/Buttons';
 import Multiselect from '../../common/Multiselect';
@@ -107,9 +107,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   // handleFormatDate = (date: Date, format: string) => formatDate(date, format);
 
   handleTextChange = (value: string) => {
-    this.setState({
-      questionText: value
-    });
+    this.setState({ questionText: value });
   };
 
   handleOptionsTextChange = () => {
@@ -121,10 +119,12 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   onQuestionSectionChange = (value: string) => {
     const { questionSectionOrderInfo } = this.props;
     let sectionOrder = -1;
+
     questionSectionOrderInfo.forEach((section: Object) => {
       const { sectionOrder: order, sectionName: name } = section;
       if (name === value) sectionOrder = order;
     });
+
     if (sectionOrder > -1 && value) {
       this.setState({
         section: { sectionOrder, sectionName: value }

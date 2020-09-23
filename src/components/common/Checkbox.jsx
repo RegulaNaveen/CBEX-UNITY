@@ -6,7 +6,7 @@ type Props = {
   id?: string,
   value: string,
   name: string,
-  isChecked?: boolean,
+  isChecked: boolean,
   children: string,
   onChange: Function
 };
@@ -26,15 +26,14 @@ const CheckBox = ({
       value={value}
       type="checkbox"
       onChange={onChange}
-      isChecked={isChecked}
+      ischecked={isChecked.toString()}
     />
     {children}
   </label>
 );
 
 CheckBox.defaultProps = {
-  id: undefined,
-  isChecked: false
+  id: undefined
 };
 
 export default CheckBox;

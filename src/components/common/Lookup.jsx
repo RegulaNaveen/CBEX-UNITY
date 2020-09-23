@@ -75,13 +75,14 @@ class Lookup extends Component<Props, State> {
         </div>
 
         <div className="search-data-wrapper">
-          {filteredData.map(({ name }) => (
+          {filteredData.map(({ name, email }) => (
             <span
               role="presentation"
               onClick={this.setSelectedItem}
               key={uuidv4()}
             >
               {name}
+              {email && ` (${email})`}
             </span>
           ))}
         </div>

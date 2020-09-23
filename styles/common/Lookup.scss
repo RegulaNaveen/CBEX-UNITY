@@ -20,6 +20,7 @@
       outline: none;
       border: 1px solid $neutral6;
       transition: 0.1s all ease-in-out;
+      width: 100%;
 
       &:focus {
         border: 1px solid $blue;
@@ -30,6 +31,7 @@
   }
 
   .search-data-wrapper {
+    box-sizing: border-box;
     position: absolute;
     background: $white;
     width: 100%;
@@ -42,7 +44,7 @@
     scrollbar-width: none;
 
     span {
-      padding: 13px 20px;
+      padding: 10px;
       display: block;
       cursor: pointer;
 

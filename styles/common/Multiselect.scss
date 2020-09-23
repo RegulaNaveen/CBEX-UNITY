@@ -12,16 +12,17 @@
 .multiselect-wrapper{
   position: relative;
   width: 100%;
-  flex: 1;
 
   .multiselect-list {
+    position: absolute;
     list-style-type: none;
     margin: 0;
     padding: 0;
     right: 0px;
+    max-height: 200px;
+    overflow-y: scroll;
     width: 100%;
-    background-color: $white;
-    position: absolute;
+    background: $white;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
     font-family: $proximaNova;
@@ -29,14 +30,26 @@
     letter-spacing: 0;
     line-height: 24px;
     cursor: pointer;
+    scrollbar-width: none;
       
     .multiselect-list-item {
+      display: flex;
       padding: 8px 16px;
       border-bottom: 1px solid $neutral3;
         
       &:hover {
         background-color: $neptune-hover;
       }
+
+    }
+    
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    .multiselect-icon {
+      margin-right: 5px;
+      width: 20px;
     }
   }
 
@@ -54,21 +67,22 @@
     border: 1px solid $neutral4;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);
     cursor: pointer;
-    // overflow-wrap: break-word;
 
     .multiselect-header-placeholder {
       min-height: 24px;
       width: 100%;
       color: $neutral6;
       font-family: $proximaNova;
+      pointer-events: none;
       font-size: 16px;
       letter-spacing: 0;
       line-height: 24px;
       margin-left: 8px;
     }
-
+    
     .multiselect-header-selected {
       min-height: 24px;
+      pointer-events: none;
       width: 90%;
       color: $black;
       font-family: $proximaNova;

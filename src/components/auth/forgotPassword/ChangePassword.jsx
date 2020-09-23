@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import Loader from 'react-loader-spinner';
+import classNames from 'classnames';
 import {
   getForgotPasswordData,
   getResetPasswordData,
@@ -10,8 +11,6 @@ import {
   getResetPasswordError
 } from '../../../selectors';
 import { sendResetPassword } from '../../../actions/auth-actions';
-import { isTextValid } from '../../../utils/ValidationUtils';
-import { PrimaryButton } from '../../common/Buttons';
 import InputField from '../../common/InputField';
 
 type Props = {
@@ -43,17 +42,11 @@ class ChangePassword extends Component<Props, State> {
     };
   }
 
-  componentDidMount() {
-    this.setState({ password: '', confirmPassword: '', error: '' });
-  }
-
   componentDidUpdate(prevProps) {
     const { isLoading, resetPasswordSuccess } = this.props;
-    if (
-      isLoading === false &&
-      prevProps.isLoading === true &&
-      resetPasswordSuccess
-    ) {
+    const { isLoading: prevIsLoading } = prevProps;
+
+    if (!isLoading && prevIsLoading && resetPasswordSuccess) {
       this.handleRedirection();
     }
   }
@@ -63,31 +56,31 @@ class ChangePassword extends Component<Props, State> {
     handleShowLogin();
   };
 
-  handleChangePassword = () => {
-    const { code, password, confirmPassword } = this.state;
-    const { userEmail, doResetPassword } = this.props;
+  onInputChange = ({ target }: SyntheticInputEvent<EventTarget>) => {
+    const { id, value } = target;
+    this.setState({ [id]: value });
+  };
+
+  onFormSubmit = (event: SyntheticEvent<EventTarget>) => {
+    event.preventDefault();
+
     this.setState({ error: '' });
-    if (isTextValid(password) && isTextValid(code)) {
-      if (password === confirmPassword) {
-        doResetPassword(userEmail, code, password);
-      } else {
-        this.setState({ error: 'Password do not match' });
-      }
-    } else {
-      this.setState({ error: 'Please enter your code and new password' });
-    }
-  };
 
-  onCodeChange = (event: SyntheticInputEvent<EventTarget>) => {
-    this.setState({ code: event.target.value });
-  };
+    const { userEmail, doResetPassword } = this.props;
+    const { code, password, confirmPassword } = this.state;
 
-  onPasswordChange = (event: SyntheticInputEvent<EventTarget>) => {
-    this.setState({ password: event.target.value });
-  };
+    const validateInputs = (): string => {
+      if (!code || !password) return 'Please enter your code and new password.';
+      if (password !== confirmPassword) return 'Password do not match.';
+      return '';
+    };
 
-  onConfirmPasswordChange = (event: SyntheticInputEvent<EventTarget>) => {
-    this.setState({ confirmPassword: event.target.value });
+    const error = validateInputs();
+
+    if (!error) {
+      doResetPassword(userEmail, code, password);
+      this.setState({ code: '', password: '', confirmPassword: '' });
+    } else this.setState({ error });
   };
 
   render() {
@@ -98,83 +91,83 @@ class ChangePassword extends Component<Props, State> {
       resetPasswordError,
       forgotPasswordSuccess
     } = this.props;
+
+    const renderLoader = () => {
+      if (isLoading)
+        return <Loader type="TailSpin" color="#297DFD" width={30} />;
+
+      return (
+        <input
+          type="submit"
+          className="primary-button"
+          value="Change password"
+        />
+      );
+    };
+
     return (
-      <div className="form-wrapper">
+      <form onSubmit={this.onFormSubmit}>
         <p className="form-title">Change Password</p>
-        <p className="form-message-success">{forgotPasswordSuccess}</p>
-        <div className="input-wrapper">
-          <InputField
-            id="login-input-email"
-            title="Code"
-            placeholder="Enter code"
-            type="Code"
-            onChange={this.onCodeChange}
-            value={code}
-          />
-        </div>
-        <div className="input-wrapper">
-          <InputField
-            id="login-input-password"
-            title="Password"
-            placeholder="Password"
-            type="password"
-            onChange={this.onPasswordChange}
-            value={password}
-          />
-        </div>
-        <div className="input-wrapper">
-          <InputField
-            id="login-input-password"
-            title="Confirm Password"
-            placeholder="Confirm Password"
-            type="Password"
-            onChange={this.onConfirmPasswordChange}
-            value={confirmPassword}
-          />
-        </div>
-        {error !== '' || resetPasswordError !== undefined ? (
-          <p className="login-form-error">{error || resetPasswordError}</p>
-        ) : null}
+        <p
+          className={classNames('form-message-success', {
+            'is-displayed': forgotPasswordSuccess
+          })}
+        >
+          {forgotPasswordSuccess}
+        </p>
+        <InputField
+          id="code"
+          label="Code"
+          placeholder="Enter code"
+          type="Code"
+          onChange={this.onInputChange}
+          value={code}
+        />
+        <InputField
+          id="password"
+          title="Password must have more than 8 characters"
+          label="Password"
+          placeholder="Password"
+          type="password"
+          onChange={this.onInputChange}
+          value={password}
+        />
+        <InputField
+          id="confirmPassword"
+          title="Confirm Password"
+          label="Confirm Password"
+          placeholder="Confirm Password"
+          type="Password"
+          onChange={this.onInputChange}
+          value={confirmPassword}
+        />
+
+        <div className="login-loader-button-wrapper">{renderLoader()}</div>
+
+        <p
+          className={classNames('login-form-error', {
+            'is-displayed': error || resetPasswordError
+          })}
+        >
+          {error || resetPasswordError}
+        </p>
+
         {resetPasswordSuccess !== undefined ? (
           <p className="login-form-success">
             {resetPasswordSuccess.data.authService}
           </p>
         ) : null}
-        <div className="login-button-wrapper">
-          {/* TODO: Add loader with endpoint response for validate email */}
-          {isLoading ? (
-            <div className="login-loader">
-              <Loader type="TailSpin" color="#297DFD" height={50} width={50} />
-            </div>
-          ) : (
-            <div className="login-button-wrapper">
-              <PrimaryButton
-                id="change-password-button"
-                onClick={this.handleChangePassword}
-              >
-                Change password
-              </PrimaryButton>
-            </div>
-          )}
-        </div>
-      </div>
+      </form>
     );
   }
 }
 
-const mapStateToProps = (state: Map) => {
-  const isLoading = isResetPasswordLoading(state);
-  const resetPasswordSuccess = getResetPasswordData(state);
-  const forgotPasswordSuccess = getForgotPasswordData(state);
-  const resetPasswordError = getResetPasswordError(state);
-
-  return {
-    isLoading,
-    resetPasswordSuccess,
-    resetPasswordError,
-    forgotPasswordSuccess
-  };
-};
+const mapStateToProps = (state: Map) => ({
+  isLoading: isResetPasswordLoading(state),
+  resetPasswordSuccess: getResetPasswordData(state),
+  resetPasswordError: getResetPasswordError(state),
+  forgotPasswordSuccess: getForgotPasswordData(state)
+});
 
 export default connect(mapStateToProps, {
   doResetPassword: sendResetPassword

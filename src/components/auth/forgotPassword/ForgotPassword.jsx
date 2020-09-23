@@ -3,13 +3,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import Loader from 'react-loader-spinner';
+import classNames from 'classnames';
 import {
   getForgotPasswordData,
   isForgotPasswordLoading,
   getForgotPasswordError
 } from '../../../selectors';
 import { sendForgotPassword } from '../../../actions/auth-actions';
-import { isEmailValid, isTextValid } from '../../../utils/ValidationUtils';
+import { isEmailValid } from '../../../utils/ValidationUtils';
 import { PrimaryButton } from '../../common/Buttons';
 import InputField from '../../common/InputField';
 import ChangePassword from './ChangePassword';
@@ -39,17 +40,11 @@ class ForgotPassword extends Component<Props, State> {
     };
   }
 
-  componentDidMount() {
-    this.setState({ email: '', error: '' });
-  }
-
   componentDidUpdate(prevProps) {
     const { isLoading, forgotPasswordSuccess } = this.props;
-    if (
-      isLoading === false &&
-      prevProps.isLoading === true &&
-      forgotPasswordSuccess
-    ) {
+    const { isLoading: prevIsLoading } = prevProps;
+
+    if (!isLoading && prevIsLoading && forgotPasswordSuccess) {
       this.updateForm();
     }
   }
@@ -59,92 +54,93 @@ class ForgotPassword extends Component<Props, State> {
     this.setState({ isChangePassword: !isChangePassword });
   };
 
-  handleForgotPassword = () => {
-    const { email } = this.state;
-    const { doForgotPassword } = this.props;
-    this.setState({ error: '' });
-    if (isTextValid(email)) {
-      if (isEmailValid(email)) {
-        doForgotPassword(email);
-      } else {
-        this.setState({ error: 'Invalid email' });
-      }
-    } else {
-      this.setState({ error: 'Please provide an email' });
-    }
+  onInputChange = ({ target }: SyntheticInputEvent<EventTarget>) => {
+    const { id, value } = target;
+    this.setState({ [id]: value });
   };
 
-  onEmailChange = (event: SyntheticInputEvent<EventTarget>) => {
-    this.setState({ email: event.target.value });
+  onFormSubmit = (event: SyntheticEvent<EventTarget>) => {
+    event.preventDefault();
+
+    this.setState({ error: '' });
+
+    const { doForgotPassword } = this.props;
+    const { email } = this.state;
+
+    const validateInputs = (): string => {
+      if (!email) return 'Please provide an email.';
+      if (!isEmailValid(email)) return 'Please provide a valid email.';
+      return '';
+    };
+
+    const error = validateInputs();
+
+    if (!error) {
+      doForgotPassword(email);
+    } else this.setState({ error });
+  };
+
+  renderContent = () => {
+    const { email, error, isChangePassword } = this.state;
+    const { handleCancel, isLoading, forgotPasswordError } = this.props;
+
+    if (isChangePassword)
+      return (
+        <ChangePassword userEmail={email} handleShowLogin={handleCancel} />
+      );
+
+    const renderLoader = () => {
+      if (isLoading)
+        return <Loader type="TailSpin" color="#297DFD" width={30} />;
+
+      return (
+        <input type="submit" className="primary-button" value="Send email" />
+      );
+    };
+
+    return (
+      <form onSubmit={this.onFormSubmit}>
+        <p className="form-title">Forgot Password</p>
+        <InputField
+          id="email"
+          label="Email"
+          placeholder="Email"
+          type="email"
+          onChange={this.onInputChange}
+          value={email}
+        />
+
+        <div className="login-loader-button-wrapper">{renderLoader()}</div>
+
+        <p
+          className={classNames('login-form-error', {
+            'is-displayed': error || forgotPasswordError
+          })}
+        >
+          {error || forgotPasswordError}
+        </p>
+
+        <PrimaryButton
+          id="cancel-button"
+          className="secundary-button"
+          onClick={handleCancel}
+        >
+          Cancel
+        </PrimaryButton>
+      </form>
+    );
   };
 
   render() {
-    const { email, error, isChangePassword } = this.state;
-    const { handleCancel, isLoading, forgotPasswordError } = this.props;
-    return (
-      <div className="form-wrapper">
-        {isChangePassword ? (
-          <ChangePassword userEmail={email} handleShowLogin={handleCancel} />
-        ) : (
-          <div>
-            <p className="form-title">Forgot Password</p>
-            <div className="input-wrapper">
-              <InputField
-                id="login-input-email"
-                title="Email"
-                placeholder="Email"
-                type="email"
-                onChange={this.onEmailChange}
-                value={email}
-              />
-            </div>
-            {error !== '' || forgotPasswordError !== undefined ? (
-              <p className="login-form-error">{error || forgotPasswordError}</p>
-            ) : null}
-            <div className="login-button-wrapper">
-              {isLoading ? (
-                <div className="login-loader">
-                  <Loader
-                    type="TailSpin"
-                    color="#297DFD"
-                    height={50}
-                    width={50}
-                  />
-                </div>
-              ) : (
-                <div className="login-button">
-                  <PrimaryButton
-                    id="send-email-button"
-                    onClick={this.handleForgotPassword}
-                  >
-                    Send email
-                  </PrimaryButton>
-                </div>
-              )}
-            </div>
-            <div className="login-button">
-              <PrimaryButton
-                id="cancel-button"
-                className="secundary-button"
-                onClick={handleCancel}
-              >
-                Cancel
-              </PrimaryButton>
-            </div>
-          </div>
-        )}
-      </div>
-    );
+    return <>{this.renderContent()}</>;
   }
 }
 
-const mapStateToProps = (state: Map) => {
-  const isLoading = isForgotPasswordLoading(state);
-  const forgotPasswordSuccess = getForgotPasswordData(state);
-  const forgotPasswordError = getForgotPasswordError(state);
-
-  return { isLoading, forgotPasswordSuccess, forgotPasswordError };
-};
+const mapStateToProps = (state: Map) => ({
+  isLoading: isForgotPasswordLoading(state),
+  forgotPasswordSuccess: getForgotPasswordData(state),
+  forgotPasswordError: getForgotPasswordError(state)
+});
 
 export default connect(mapStateToProps, {
   doForgotPassword: sendForgotPassword
