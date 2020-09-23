@@ -61,11 +61,11 @@ class DateRange extends Component<Props, State> {
     const { from, to, showPicker } = this.state;
     const modifiers = { start: from, end: to };
     return (
-      <div className='date-picker'>
-        {label && <p className='date-picker-title'>{label}</p>}
+      <div className="date-picker">
+        {label && <p className="date-picker-title">{label}</p>}
         <div className="date-range-wrapper">
           <DatePickerCustomInput
-            placeholder='Select a date range'
+            placeholder="Select a date range"
             value={
               from && to
                 ? `${formatDate(from, dateFormat)} - ${formatDate(
@@ -81,7 +81,7 @@ class DateRange extends Component<Props, State> {
               selectedDays={[from, { from, to }]}
               modifiers={modifiers}
               onDayClick={this.handleDayClick}
-              todayButton='Today'
+              todayButton="Today"
               classNames={{
                 container: 'datepicker-container',
                 wrapper: 'DayPicker-wrapper',
@@ -116,11 +116,11 @@ class DateRange extends Component<Props, State> {
           )}
           {from && to && (
             <button
-              type='button'
+              type="button"
               onClick={this.handleReset}
-              className='resetButton'
+              className="resetButton"
             >
-              <CloseCircle fill='#444' />
+              <CloseCircle fill="#444" />
             </button>
           )}
         </div>
