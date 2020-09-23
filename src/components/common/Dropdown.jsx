@@ -79,39 +79,36 @@ class Dropdown extends PureComponent<Props, State> {
     return (
       <>
         {title && <p className="dd-title">{title}</p>}
-        <div style={{ display: "flex" }}>
-          <div style={{ flex: 1 }}>
-            <div className="dd-wrapper">
-              <div
-                id={id}
-                className="dd-header"
-                ref={this.ref}
-                role="presentation"
-                onClick={this.handleCollapse}
-              >
-                {selectedValue || value ? (
-                  <div className="dd-header-selected">
-                    {selectedValue || value}
-                  </div>
-                ) : (
-                  <div className="dd-header-placeholder">{placeholder}</div>
-                )}
-              </div>
-              {isCollapsed && (
-                <ul className="dd-list">
-                  {items &&
-                    items.map(item => (
-                      <DropdownItem
-                        onClick={this.handleClick}
-                        item={item}
-                        key={item}
-                      />
-                    ))}
-                </ul>
+        <div className="dd-input-wrapper">
+          <div className="dd-wrapper">
+            <div
+              id={id}
+              className="dd-header"
+              ref={this.ref}
+              role="presentation"
+              onClick={this.handleCollapse}
+            >
+              {selectedValue || value ? (
+                <div className="dd-header-selected">
+                  {selectedValue || value}
+                </div>
+              ) : (
+                <div className="dd-header-placeholder">{placeholder}</div>
               )}
             </div>
+            {isCollapsed && (
+              <ul className="dd-list">
+                {items &&
+                  items.map(item => (
+                    <DropdownItem
+                      onClick={this.handleClick}
+                      item={item}
+                      key={item}
+                    />
+                  ))}
+              </ul>
+            )}
           </div>
-
           {(selectedValue || value) && withReset && (
             <button
               type="button"
