@@ -1,6 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 import DropdownItem from './DropdownItem';
+import { CloseCircle } from '../svg';
 
 type Props = {
   id?: string,
@@ -8,7 +9,8 @@ type Props = {
   items: Array<Object>,
   title?: string,
   onClick: Function,
-  value?: string
+  value?: string,
+  withReset: boolean
 };
 
 type State = {
@@ -64,38 +66,60 @@ class Dropdown extends PureComponent<Props, State> {
     this.setState({ selectedValue, isCollapsed: false });
   };
 
+  handleReset = () => {
+    const { onClick } = this.props;
+    onClick('');
+    this.setState({ selectedValue: '', isCollapsed: false });
+  };
+
   render() {
     const { isCollapsed, selectedValue } = this.state;
-    const { placeholder, id, items, title, value } = this.props;
+    const { placeholder, id, items, title, value, withReset } = this.props;
 
     return (
       <>
         {title && <p className="dd-title">{title}</p>}
-        <div className="dd-wrapper">
-          <div
-            id={id}
-            className="dd-header"
-            ref={this.ref}
-            role="presentation"
-            onClick={this.handleCollapse}
-          >
-            {selectedValue || value ? (
-              <div className="dd-header-selected">{selectedValue || value}</div>
-            ) : (
-              <div className="dd-header-placeholder">{placeholder}</div>
-            )}
+        <div style={{ display: "flex" }}>
+          <div style={{ flex: 1 }}>
+            <div className="dd-wrapper">
+              <div
+                id={id}
+                className="dd-header"
+                ref={this.ref}
+                role="presentation"
+                onClick={this.handleCollapse}
+              >
+                {selectedValue || value ? (
+                  <div className="dd-header-selected">
+                    {selectedValue || value}
+                  </div>
+                ) : (
+                  <div className="dd-header-placeholder">{placeholder}</div>
+                )}
+              </div>
+              {isCollapsed && (
+                <ul className="dd-list">
+                  {items &&
+                    items.map(item => (
+                      <DropdownItem
+                        onClick={this.handleClick}
+                        item={item}
+                        key={item}
+                      />
+                    ))}
+                </ul>
+              )}
+            </div>
           </div>
-          {isCollapsed && (
-            <ul className="dd-list">
-              {items &&
-                items.map(item => (
-                  <DropdownItem
-                    onClick={this.handleClick}
-                    item={item}
-                    key={item}
-                  />
-                ))}
-            </ul>
+
+          {(selectedValue || value) && withReset && (
+            <button
+              type="button"
+              onClick={this.handleReset}
+              className="resetButton"
+            >
+              <CloseCircle fill="#444" />
+            </button>
           )}
         </div>
       </>
