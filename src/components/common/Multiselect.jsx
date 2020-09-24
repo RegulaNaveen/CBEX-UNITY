@@ -83,8 +83,6 @@ class Multiselect extends PureComponent<Props, State> {
       if (index > -1) newArray.splice(index, 1);
     }
 
-    // console.log(newArray);
-
     this.setState({ selectedValues: newArray });
     this.forceUpdate();
   };
