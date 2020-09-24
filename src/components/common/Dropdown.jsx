@@ -10,7 +10,7 @@ type Props = {
   title?: string,
   onClick: Function,
   value?: string,
-  withReset: boolean
+  withReset?: boolean
 };
 
 type State = {
@@ -25,7 +25,8 @@ class Dropdown extends PureComponent<Props, State> {
     id: undefined,
     placeholder: '',
     title: undefined,
-    value: undefined
+    value: undefined,
+    withReset: false
   };
 
   constructor(props: Object) {

@@ -7,7 +7,7 @@ import ProposalCard from './ProposalCard';
 import { formatDate, dateDiffInDays } from '../../utils/DateUtils';
 
 type Props = {
-  data: [Object]
+  data: Array<Object>
 };
 
 const formatProposal = (proposal: Object) => {

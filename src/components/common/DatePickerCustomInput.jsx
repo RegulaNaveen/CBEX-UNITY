@@ -5,11 +5,11 @@ import { Calendar } from '../svg';
 type Props = {
   value: string,
   placeholder: string,
-  onFocus: Function,
-  onBlur: Function,
-  onChange: Function,
-  onKeyUp: Function,
-  onClick: Function
+  onFocus?: Function,
+  onBlur?: Function,
+  onChange?: Function,
+  onKeyUp?: Function,
+  onClick?: Function
 };
 
 const DatePickerCustomInput = ({
@@ -39,5 +39,13 @@ const DatePickerCustomInput = ({
     />
   </div>
 );
+
+DatePickerCustomInput.defaultProps = {
+  onFocus: undefined,
+  onBlur: undefined,
+  onChange: undefined,
+  onKeyUp: undefined,
+  onClick: undefined
+};
 
 export default DatePickerCustomInput;

@@ -11,8 +11,8 @@ type Props = {
 };
 
 type State = {
-  from: Date,
-  to: Date,
+  from: Object,
+  to: Object,
   showPicker: boolean
 };
 
@@ -22,7 +22,7 @@ class DateRange extends Component<Props, State> {
     label: ''
   };
 
-  constructor(props) {
+  constructor(props: Object) {
     super(props);
     this.state = {
       from: undefined,
@@ -31,7 +31,7 @@ class DateRange extends Component<Props, State> {
     };
   }
 
-  handleDayClick = day => {
+  handleDayClick = (day: Object) => {
     const { onSetRange } = this.props;
     const range = DateUtils.addDayToRange(day, this.state);
     this.setState(range, () => {

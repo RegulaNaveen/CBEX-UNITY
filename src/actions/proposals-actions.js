@@ -92,7 +92,7 @@ type FilteredData = {
   teamMember: string
 };
 
-const dateRangeFilter = (key: String, range: Object, array: Array<Object>) => {
+const dateRangeFilter = (key: string, range: Object, array: Array<Object>) => {
   if (!range) return array;
   const { from, to } = range;
   from.setHours(0, 0, 0, 0);
@@ -113,7 +113,10 @@ const optionFilter = (key: string, value: string, array: Array<Object>) =>
   array.filter(proposal => proposal[key].toLowerCase() === value.toLowerCase());
 
 const userFilter = (value: string, array: Array<Object>) => {
-  const userEmail = value.match(/\((.*?)\)/)[1];
+  const start = value.indexOf('(');
+  const end = value.indexOf(')');
+  const userEmail = value.substr(start + 1, end - start - 1);
+
   return array.filter(proposal =>
     objectContains(proposal.usersList, userEmail, false)
   );
@@ -142,7 +145,7 @@ export const onFilteringProposals = (
   } else {
     let filteredProposals = [];
 
-    cleanFilters.forEach(([key, value]) => {
+    cleanFilters.forEach(([key, value]: Array<string>) => {
       switch (key) {
         case 'opportunity number':
         case 'opportunityName':
@@ -191,7 +194,7 @@ export const onFilteringProposals = (
 };
 
 export const getFilteringValues = (): ThunkAction<String, Object> => async (
-  dispatch: Dispatch<Object, string>
+  dispatch: Dispatch<Object, Object>
 ) => {
   try {
     const { data } = await onGetFilterValues();
