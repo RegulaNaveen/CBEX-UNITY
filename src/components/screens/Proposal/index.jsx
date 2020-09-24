@@ -5,10 +5,15 @@ import type { Match } from 'react-router-dom';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import Loader from 'react-loader-spinner';
+import classNames from 'classnames';
 import { compose } from 'redux';
 import { getProposal } from '../../../actions/proposal-actions';
 import { refreshAuthData } from '../../../actions/auth-actions';
-import { getProposalDetails, isProposalLoading } from '../../../selectors';
+import {
+  getIsOpen,
+  getProposalDetails,
+  isProposalLoading
+} from '../../../selectors';
 import Questions from './Questions';
 import Toolbar from '../../Toolbar';
 import TabButtons from '../../common/TabButtons';
@@ -23,6 +28,7 @@ type Props = {
   details: Map,
   match: Match,
   isLoading: boolean,
+  isSidebarOpen: boolean,
   getRefreshAuthData: Function,
   getProposalInfo: Function
 };
@@ -78,8 +84,14 @@ export class Proposal extends Component<Props, State> {
   };
 
   render() {
+    const { isSidebarOpen } = this.props;
+
     return (
-      <div className="proposal-wrapper">
+      <div
+        className={classNames('proposal-wrapper', {
+          'is-collapsed': isSidebarOpen
+        })}
+      >
         <Toolbar />
         {this.renderContent()}
       </div>
@@ -89,7 +101,8 @@ export class Proposal extends Component<Props, State> {
 
 const mapStateToProps = (state: Map) => ({
   details: getProposalDetails(state),
-  isLoading: isProposalLoading(state)
+  isLoading: isProposalLoading(state),
+  isSidebarOpen: getIsOpen(state)
 });
 
 export default compose(

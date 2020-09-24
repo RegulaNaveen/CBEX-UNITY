@@ -3,20 +3,26 @@ import { Map, fromJS } from 'immutable';
 import type { ApiAction } from '../actions/action-types';
 import { REDUX_TYPES } from '../constants';
 
-const { OPEN_SECTION } = REDUX_TYPES.SIDEBAR;
+const { OPEN_SECTION, IS_OPEN } = REDUX_TYPES.SIDEBAR;
 
 const INITIAL_STATE: Map = fromJS({
-  selectedSection: undefined
+  selectedSection: undefined,
+  isOpen: false
 });
 
 const onSelectedSection = (state: Map, action: Object) => {
-  const data = action.payload;
+  const { selectedItem: section } = action.payload;
+  return state.set('selectedSection', section);
+};
 
-  return state.set('selectedSection', data);
+const onHandleOpenClose = (state: Map, action: Object) => {
+  const { isOpen } = action.payload;
+  return state.set('isOpen', isOpen);
 };
 
 const actionMap = {
-  [OPEN_SECTION]: onSelectedSection
+  [OPEN_SECTION]: onSelectedSection,
+  [IS_OPEN]: onHandleOpenClose
 };
 
 export default function(

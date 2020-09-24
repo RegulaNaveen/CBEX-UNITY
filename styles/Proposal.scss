@@ -4,6 +4,12 @@
   font-family: $proximaNova;
   color: $black;
   position: relative;
+  transition: 0.4s ease-in-out margin-right;
+  margin-right: 0%;
+
+  &.is-collapsed {
+    margin-right: 20%;
+  }
 
   .proposal-loader {
     flex: 1;

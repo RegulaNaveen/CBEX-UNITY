@@ -56,7 +56,8 @@ const PROPOSALS = {
 };
 
 const SIDEBAR = {
-  OPEN_SECTION: 'open_section'
+  OPEN_SECTION: 'open_section',
+  IS_OPEN: 'is_open'
 };
 
 export { AUTH, PROPOSALS, PROPOSAL, SIDEBAR };

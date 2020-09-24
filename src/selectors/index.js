@@ -134,3 +134,6 @@ export const getIsFilteringProposals = (state: Map): boolean =>
 // Sidebar Selectors
 export const getSelectedSection = (state: Object): string =>
   siderbarSelectors.getSelectedSectionSelector(state.sidebar);
+
+export const getIsOpen = (state: Object): string =>
+  siderbarSelectors.getIsOpen(state.sidebar);

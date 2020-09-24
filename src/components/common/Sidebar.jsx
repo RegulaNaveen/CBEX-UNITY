@@ -4,26 +4,20 @@ import classNames from 'classnames';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import chevronRight from '../../../img/chevron-right.svg';
-import handleSelectedSection from '../../actions/sidebar-actions';
+import {
+  handleSelectedSection,
+  onHandleOpenClose
+} from '../../actions/sidebar-actions';
+import { getIsOpen } from '../../selectors';
 
 type Props = {
   sections: Map,
-  setSelectedSection: Function
-};
-
-type State = {
+  setSelectedSection: (selectedItem: string) => void,
+  handleOpenClose: (isOpen: boolean) => void,
   isOpen: boolean
 };
 
-class Sidebar extends Component<Props, State> {
-  constructor(props: Object) {
-    super(props);
-
-    this.state = {
-      isOpen: false
-    };
-  }
-
+class Sidebar extends Component<Props> {
   componentDidMount() {
     window.addEventListener('click', this.handleClick);
   }
@@ -32,23 +26,27 @@ class Sidebar extends Component<Props, State> {
     window.removeEventListener('click', this.handleClick);
   }
 
-  handleClick = () => this.setState({ isOpen: false });
+  handleClick = () => {
+    const { handleOpenClose } = this.props;
+    handleOpenClose(false);
+  };
 
   handleItemsVisibility = (e: SyntheticEvent<EventTarget>) => {
     e.stopPropagation();
 
-    const { isOpen } = this.state;
-    this.setState({ isOpen: !isOpen });
+    const { isOpen, handleOpenClose } = this.props;
+
+    handleOpenClose(!isOpen);
   };
 
-  scrollToSelectedElement = (e: SyntheticInputEvent<EventTarget>) => {
-    e.stopPropagation();
+  scrollToSelectedElement = (event: SyntheticInputEvent<EventTarget>) => {
+    event.stopPropagation();
 
     const {
       target: { textContent }
-    } = e;
+    } = event;
 
-    const { setSelectedSection } = this.props;
+    const { setSelectedSection, handleOpenClose } = this.props;
 
     const itemToScroll = textContent
       .toLocaleLowerCase()
@@ -59,21 +57,17 @@ class Sidebar extends Component<Props, State> {
 
     if (item) setTimeout(() => window.scrollTo(0, item.offsetTop - 20), 100);
 
-    this.setState({ isOpen: false }, () => setSelectedSection(itemToScroll));
+    handleOpenClose(false);
+    setSelectedSection(itemToScroll);
   };
 
   render() {
-    const { sections } = this.props;
-    const { isOpen } = this.state;
+    const { sections, isOpen } = this.props;
 
     return (
       <div id="sidebar" className={classNames({ 'is-open': isOpen })}>
         <div className="sidebar-content">
-          <button
-            onClick={this.handleItemsVisibility}
-            onMouseEnter={this.handleItemsVisibility}
-            type="button"
-          >
+          <button onClick={this.handleItemsVisibility} type="button">
             <img
               className="task-icon"
               src={chevronRight}
@@ -100,6 +94,11 @@ class Sidebar extends Component<Props, State> {
   }
 }
 
-export default connect(null, {
-  setSelectedSection: handleSelectedSection
+const mapStateToProps = (state: Object) => ({
+  isOpen: getIsOpen(state)
+});
+
+export default connect(mapStateToProps, {
+  setSelectedSection: handleSelectedSection,
+  handleOpenClose: onHandleOpenClose
 })(Sidebar);

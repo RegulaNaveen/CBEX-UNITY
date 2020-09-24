@@ -4,5 +4,6 @@ import { Map } from 'immutable';
 const getSelectedSectionSelector = (sidebar: Map): string =>
   sidebar.get('selectedSection');
 
-// eslint-disable-next-line import/prefer-default-export
-export { getSelectedSectionSelector };
+const getIsOpen = (sidebar: Map): string => sidebar.get('isOpen');
+
+export { getSelectedSectionSelector, getIsOpen };
