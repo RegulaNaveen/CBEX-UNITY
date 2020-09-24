@@ -79,8 +79,6 @@ class Sidebar extends Component<Props, State> {
     const { sections, isOpen } = this.props;
     const { selectedSection } = this.state;
 
-    console.log(selectedSection);
-
     return (
       <div id="sidebar" className={classNames({ 'is-open': isOpen })}>
         <div className="sidebar-content">
