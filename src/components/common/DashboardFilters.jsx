@@ -125,7 +125,12 @@ const DashboardFilters = ({
         />
       </div>
       <div className="filter-wrapper">
-        <UserLookup title="Team member" id="teamMember" onChange={changeUser} />
+        <UserLookup
+          title="Team member"
+          id="teamMember"
+          onChange={changeUser}
+          withReset
+        />
       </div>
     </div>
   );
