@@ -4,6 +4,7 @@ import { Calendar } from '../svg';
 
 type Props = {
   value: string,
+  placeholder: string,
   onFocus: Function,
   onBlur: Function,
   onChange: Function,
@@ -11,26 +12,32 @@ type Props = {
   onClick: Function
 };
 
-const DatePickerCustomInput = (props: Props) => {
-  const { value, onFocus, onBlur, onChange, onKeyUp, onClick } = props;
-  return (
-    <div className="datepicker-wrapper">
-      <Calendar className="datepicker-icon" />
-      <input
-        className={
-          value === 'DD/MM/YYYY'
-            ? 'datepicker-input placeholder'
-            : 'datepicker-input date'
-        }
-        value={value}
-        onChange={onChange}
-        onFocus={onFocus}
-        onKeyUp={onKeyUp}
-        onClick={onClick}
-        onBlur={onBlur}
-      />
-    </div>
-  );
-};
+const DatePickerCustomInput = ({
+  value,
+  onFocus,
+  onBlur,
+  onChange,
+  onKeyUp,
+  onClick,
+  placeholder
+}: Props) => (
+  <div className="datepicker-wrapper">
+    <Calendar className="datepicker-icon" />
+    <input
+      className={
+        value === 'MM/DD/YYYY'
+          ? 'datepicker-input placeholder'
+          : 'datepicker-input date'
+      }
+      value={value}
+      placeholder={placeholder}
+      onChange={onChange}
+      onFocus={onFocus}
+      onKeyUp={onKeyUp}
+      onClick={onClick}
+      onBlur={onBlur}
+    />
+  </div>
+);
 
 export default DatePickerCustomInput;
