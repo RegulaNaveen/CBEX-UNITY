@@ -18,7 +18,8 @@ const formatProposal = (proposal: Object): Object => {
     proposalDetails,
     proposalId,
     opportunityName,
-    opportunityOverview
+    opportunityOverview,
+    usersList
   } = proposal;
   formattedProposal.proposalId = proposalId;
   formattedProposal.opportunityName = opportunityName;
@@ -32,6 +33,7 @@ const formatProposal = (proposal: Object): Object => {
   formattedProposal['bid due date'] = proposalDetails['Bid due date'];
   formattedProposal['opportunity status'] =
     opportunityOverview.OpportunityStatus || '';
+  formattedProposal.usersList = usersList;
   return formattedProposal;
 };
 
