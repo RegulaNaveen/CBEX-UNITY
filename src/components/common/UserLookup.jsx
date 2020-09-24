@@ -8,16 +8,24 @@ type Props = {
   users: Array<Object>,
   onChange: Function,
   text?: string,
-  title?: string
+  title?: string,
+  withReset?: boolean
 };
 
-const UserLookup = ({ users, onChange, text, title }: Props) => (
-  <Lookup data={users} getSelectedItem={onChange} text={text} title={title} />
+const UserLookup = ({ users, onChange, text, title, withReset }: Props) => (
+  <Lookup
+    data={users}
+    getSelectedItem={onChange}
+    text={text}
+    title={title}
+    withReset={withReset}
+  />
 );
 
 UserLookup.defaultProps = {
   text: '',
-  title: ''
+  title: '',
+  boolean: false
 };
 
 const mapStateToProps = state => ({
