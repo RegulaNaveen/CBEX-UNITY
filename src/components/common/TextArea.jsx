@@ -62,22 +62,20 @@ class TextArea extends PureComponent<Props, State> {
     }
   }
 
-  handleText = (event: SyntheticInputEvent<EventTarget>) => {
+  handleText = ({ target }: SyntheticInputEvent<EventTarget>) => {
     const { onChange } = this.props;
-    const textValue = event.target.value;
-    if (onChange && textValue) {
-      onChange(textValue);
-    }
+    const { value: textValue } = target;
 
-    this.setState({ textValue: event.target.value });
+    if (onChange && textValue) onChange(textValue);
+
+    this.setState({ textValue });
   };
 
-  handleOnBlur = (event: SyntheticInputEvent<EventTarget>) => {
-    const { onBlur } = this.props;
-    const textValue = event.target.value;
-    if (onBlur && textValue) {
-      onBlur(textValue);
-    }
+  handleOnBlur = ({ target }: SyntheticInputEvent<EventTarget>) => {
+    const { onBlur, value: lastAnswer } = this.props;
+    const { value: textValue } = target;
+
+    if (onBlur && textValue) onBlur(textValue, lastAnswer);
   };
 
   autoResize = (event: SyntheticInputEvent<EventTarget>) => {

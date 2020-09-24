@@ -1,6 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
-import { isEmpty } from 'lodash';
+import { isEmpty, cloneDeep } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import MultiselectItem from './MultiselectItem';
 
@@ -9,7 +9,7 @@ type Props = {
   placeholder: string,
   items: Array<Object>,
   title?: string,
-  onClick: (selectedValues: Array<string>) => void,
+  onClick: (selectedValues: Array<string>, lastAnswer: Array<string>) => void,
   value?: Array<string>
 };
 
@@ -41,17 +41,17 @@ class Multiselect extends PureComponent<Props, State> {
   componentDidMount() {
     window.addEventListener('click', this.handleOutsideClick);
 
-    const { value } = this.props;
+    const { value: lastAnswer } = this.props;
 
-    if (!isEmpty(value)) this.setState({ selectedValues: value });
+    if (!isEmpty(lastAnswer)) this.setState({ selectedValues: lastAnswer });
   }
 
   componentDidUpdate(prevProps: Object, prevState: Object) {
     const { isCollapsed, selectedValues } = this.state;
-    const { onClick } = this.props;
+    const { onClick, value: lastAnswer } = this.props;
 
     if (prevState.isCollapsed !== isCollapsed) {
-      if (!isCollapsed) onClick(selectedValues);
+      if (!isCollapsed && lastAnswer) onClick(selectedValues, lastAnswer);
     }
   }
 
@@ -60,15 +60,8 @@ class Multiselect extends PureComponent<Props, State> {
   }
 
   handleOutsideClick = (event: SyntheticEvent<EventTarget>) => {
-    if (this.ref.current !== event.target) {
+    if (this.ref.current !== event.target)
       this.setState({ isCollapsed: false });
-    }
-  };
-
-  onRemove = (value: string) => {
-    this.setState(prevState => ({
-      selectedValues: prevState.selectedValues.filter(item => item !== value)
-    }));
   };
 
   handleCollapse = () => {
@@ -82,7 +75,7 @@ class Multiselect extends PureComponent<Props, State> {
     const { selectedValues } = this.state;
 
     let index = -1;
-    const newArray = selectedValues;
+    const newArray = cloneDeep(selectedValues);
 
     if (!selectedValues.includes(value)) newArray.push(value);
     else {
@@ -90,13 +83,15 @@ class Multiselect extends PureComponent<Props, State> {
       if (index > -1) newArray.splice(index, 1);
     }
 
-    this.setState({ selectedValues: newArray });
+    // console.log(newArray);
 
+    this.setState({ selectedValues: newArray });
     this.forceUpdate();
   };
 
   renderSelectedItems = () => {
     const { selectedValues } = this.state;
+
     return (
       <div className="multiselect-header-selected">
         {selectedValues.map((item, index) => (
@@ -111,6 +106,7 @@ class Multiselect extends PureComponent<Props, State> {
   render() {
     const { isCollapsed, selectedValues } = this.state;
     const { id, placeholder, items, title } = this.props;
+
     return (
       <>
         {title && <p className="multiselect-title">{title}</p>}

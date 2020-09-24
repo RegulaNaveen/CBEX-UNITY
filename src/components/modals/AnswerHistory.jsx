@@ -1,6 +1,5 @@
 // @flow
 import React, { Component } from 'react';
-import moment from 'moment';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { v4 as uuidv4 } from 'uuid';
@@ -9,6 +8,7 @@ import classNames from 'classnames';
 import { isEmpty, flatten } from 'lodash';
 import { getProposalTeamAssignedRoles } from '../../selectors';
 import { Close } from '../svg';
+import { parseMomentDate } from '../../utils/DateUtils';
 
 type Props = {
   question: Map,
@@ -68,7 +68,7 @@ class AnswerHistory extends Component<Props> {
         userName !== 'AnswerPulledFromSalesforce'
           ? userName.split(' ')[0].charAt(0) + userName.split(' ')[1].charAt(0)
           : 'SA';
-      const parsedDate = moment(date).format('DD-MMM-YYYY');
+      const parsedDate = parseMomentDate(date);
       const avatarRandomColor = randomColor({ luminosity: 'dark' });
 
       const renderAnswers = () => {
@@ -99,7 +99,7 @@ class AnswerHistory extends Component<Props> {
           }
 
           if (questionType === 'date') {
-            return <p>{moment(answer).format('DD-MMM-YYYY')}</p>;
+            return <p>{parseMomentDate(answer)}</p>;
           }
 
           return <p>{answer}</p>;

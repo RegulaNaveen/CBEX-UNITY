@@ -2,13 +2,17 @@
 import React, { Component } from 'react';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
-import { isObject } from 'lodash';
+import { isObject, isEqual } from 'lodash';
 import { Checkmark } from '../../svg';
 import Dropdown from '../../common/Dropdown';
 import TextArea from '../../common/TextArea';
 import DatePicker from '../../common/DatePicker';
 import UserLookup from '../../common/UserLookup';
-import { parseDate, formatDate } from '../../../utils/DateUtils';
+import {
+  parseDate,
+  formatDate,
+  parseMomentDate
+} from '../../../utils/DateUtils';
 import Multiselect from '../../common/Multiselect';
 import { setProposalAnswerData } from '../../../actions/proposal-actions';
 import { getUserData } from '../../../selectors';
@@ -38,27 +42,37 @@ export class TaskRow extends Component<Props, State> {
     };
   }
 
-  handleTextChange = (textValue: string) => {
+  handleTextChange = (textValue: string, lastAnswer: string) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
-    setProposalAnswer(proposalId, questionId, textValue, userData);
+
+    if (lastAnswer !== textValue)
+      setProposalAnswer(proposalId, questionId, textValue, userData);
   };
 
-  onClickChange = (selectedValue: string) => {
+  onClickChange = (selectedValue: string, lastAnswer: string) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
-    setProposalAnswer(proposalId, questionId, selectedValue, userData);
+
+    if (lastAnswer !== selectedValue)
+      setProposalAnswer(proposalId, questionId, selectedValue, userData);
   };
 
-  handleDayChange = (selectedDay: string) => {
+  handleDayChange = (selectedDay: string, lastAnswer: Date) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
 
     this.setState({ selectedDay }, () => {
-      setProposalAnswer(proposalId, questionId, selectedDay, userData);
+      if (parseMomentDate(lastAnswer) !== parseMomentDate(selectedDay))
+        setProposalAnswer(proposalId, questionId, selectedDay, userData);
     });
   };
 
-  onSelectValues = (selectedValues: Array<string>) => {
+  onSelectValues = (
+    selectedValues: Array<string>,
+    lastAnswer: Array<string>
+  ) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
-    setProposalAnswer(proposalId, questionId, selectedValues, userData);
+
+    if (!isEqual(lastAnswer, selectedValues))
+      setProposalAnswer(proposalId, questionId, selectedValues, userData);
   };
 
   displayAnswerOnHistory = () => {

@@ -29,12 +29,16 @@ const DatePicker = ({
     dateFormat = String(formatDate(date, format));
   }
 
+  function handleChange(pickedDay: string) {
+    handleDayChange(pickedDay, value);
+  }
+
   return (
     <div className="date-picker">
       {label && <p className="date-picker-title">{label}</p>}
       <DayPickerInput
         value={dateFormat || selectedDay || 'DD/MM/YYYY'}
-        onDayChange={handleDayChange}
+        onDayChange={handleChange}
         component={DatePickerCustomInput}
         format="dd/MM/yyyy"
         formatDate={handleFormatDate}
