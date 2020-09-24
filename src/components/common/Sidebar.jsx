@@ -17,7 +17,19 @@ type Props = {
   isOpen: boolean
 };
 
-class Sidebar extends Component<Props> {
+type State = {
+  selectedSection: string
+};
+
+class Sidebar extends Component<Props, State> {
+  constructor(props: Object) {
+    super(props);
+
+    this.state = {
+      selectedSection: ''
+    };
+  }
+
   componentDidMount() {
     window.addEventListener('click', this.handleClick);
   }
@@ -43,7 +55,7 @@ class Sidebar extends Component<Props> {
     event.stopPropagation();
 
     const {
-      target: { textContent }
+      target: { textContent, id }
     } = event;
 
     const { setSelectedSection, handleOpenClose } = this.props;
@@ -59,10 +71,15 @@ class Sidebar extends Component<Props> {
 
     handleOpenClose(false);
     setSelectedSection(itemToScroll);
+
+    this.setState({ selectedSection: id });
   };
 
   render() {
     const { sections, isOpen } = this.props;
+    const { selectedSection } = this.state;
+
+    console.log(selectedSection);
 
     return (
       <div id="sidebar" className={classNames({ 'is-open': isOpen })}>
@@ -75,11 +92,17 @@ class Sidebar extends Component<Props> {
             />
           </button>
           <div className="sidebar-content-list">
+            <h1>Index</h1>
             {sections.valueSeq().map(section => {
               const sectionName = section.get('sectionName');
+
               return (
                 <p
                   key={sectionName}
+                  id={sectionName}
+                  className={classNames({
+                    'is-selected': selectedSection === sectionName
+                  })}
                   role="presentation"
                   onClick={this.scrollToSelectedElement}
                 >

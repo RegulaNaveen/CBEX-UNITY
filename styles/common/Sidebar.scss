@@ -41,12 +41,27 @@
       height: 100%;
       overflow-y: scroll;
       scrollbar-width: none;
-      padding-top: 12px;
+
+      h1 {
+        padding: 16px 20px;
+        font-size: 20px;
+        border-bottom: 1px solid $neutral4;
+      }
 
       p {
-        font-family: $proximaNova;
-        padding: 12px 20px;
+        padding: 12px 10px 12px 30px;
         cursor: pointer;
+        color: $neptune-secondary;
+        font-size: 15px;
+
+        &.is-selected {
+          background-color: rgba($color: $neptune-primary, $alpha: 1);
+          color: $white;
+
+          &:hover {
+            background-color: rgba($color: $neptune-primary, $alpha: 1);
+          }
+        }
 
         &:hover {
           background-color: rgba($color: $neptune-primary, $alpha: 0.05);
