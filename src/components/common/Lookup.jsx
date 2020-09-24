@@ -4,23 +4,27 @@ import { isEmpty } from 'lodash';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import { objectContains } from '../../utils/helpers';
+import { CloseCircle } from '../svg';
 
 type Props = {
   data: Array<any>,
   title?: string,
   text?: string,
-  getSelectedItem: (selectedItem: string) => void
+  getSelectedItem: (selectedItem: string) => void,
+  withReset?: boolean
 };
 
 type State = {
   searchValue: string,
-  filteredData: Array<any>
+  filteredData: Array<any>,
+  showResetButton: boolean
 };
 
 class Lookup extends Component<Props, State> {
   static defaultProps = {
     title: '',
-    text: ''
+    text: '',
+    withReset: false
   };
 
   constructor(props: Object) {
@@ -28,7 +32,8 @@ class Lookup extends Component<Props, State> {
     const { text } = this.props;
     this.state = {
       searchValue: text || '',
-      filteredData: []
+      filteredData: [],
+      showResetButton: false
     };
   }
 
@@ -47,16 +52,34 @@ class Lookup extends Component<Props, State> {
   setSelectedItem = ({
     target: { textContent }
   }: SyntheticInputEvent<EventTarget>) => {
+    const { getSelectedItem, withReset } = this.props;
+
+    this.setState(
+      {
+        searchValue: textContent,
+        filteredData: [],
+        showResetButton: withReset
+      },
+      () => getSelectedItem(textContent)
+    );
+  };
+
+  handleReset = () => {
     const { getSelectedItem } = this.props;
 
-    this.setState({ searchValue: textContent, filteredData: [] }, () =>
-      getSelectedItem(textContent)
+    this.setState(
+      {
+        searchValue: '',
+        filteredData: [],
+        showResetButton: false
+      },
+      () => getSelectedItem('')
     );
   };
 
   render() {
-    const { searchValue, filteredData } = this.state;
-    const { title } = this.props;
+    const { searchValue, filteredData, showResetButton } = this.state;
+    const { title, withReset } = this.props;
 
     return (
       <div
@@ -72,8 +95,16 @@ class Lookup extends Component<Props, State> {
             required
             autoComplete="off"
           />
+          {withReset && showResetButton && (
+            <button
+              type="button"
+              onClick={this.handleReset}
+              className="resetButton"
+            >
+              <CloseCircle fill="#444" />
+            </button>
+          )}
         </div>
-
         <div className="search-data-wrapper">
           {filteredData.map(({ name, email }) => (
             <span
