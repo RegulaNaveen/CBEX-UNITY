@@ -170,8 +170,12 @@ export class TaskRow extends Component<Props, State> {
 
   render() {
     const { answers, questionText, answerConfiguration } = this.props;
-    const lastAnswer = answers.last();
+    const questionId = answers.get('questionId');
+    let lastAnswer;
     let answerDate = 'Not Answered';
+
+    if (!questionId) lastAnswer = answers.last();
+    else lastAnswer = answers.get('answers').last();
 
     if (lastAnswer) {
       const format = 'dd-MMM-yyyy';
