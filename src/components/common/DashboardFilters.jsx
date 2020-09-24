@@ -119,7 +119,7 @@ const DashboardFilters = ({
       <div className="filter-wrapper">
         <FilterDropDown
           title="Opportunity status"
-          id="opportunityStatus"
+          id="opportunity status"
           onChange={onDropDownFilterChange}
           items={filterValues ? filterValues.opportunityStatuses : []}
         />
