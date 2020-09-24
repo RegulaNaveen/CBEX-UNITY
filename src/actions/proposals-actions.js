@@ -2,14 +2,20 @@
 import { isEmpty } from 'lodash';
 import type { Dispatch, ThunkAction } from './action-types';
 import { REDUX_TYPES } from '../constants';
-import { onGetAllProposals, onGetByStatus } from '../api/proposals';
+import {
+  onGetAllProposals,
+  onGetByStatus,
+  onGetFilterValues
+} from '../api/proposals';
+import { objectContains } from '../utils/helpers';
 
 const {
   SET_PROPOSAL_VIEW_TYPE,
   ON_GET_PROPOSALS,
   ERROR_ON_GET_PROPOSALS,
   ON_PROPOSALS_LOADING,
-  ON_FILTER_PROPOSALS
+  ON_FILTER_PROPOSALS,
+  ON_SET_PROPOSALS_FILTERS
 } = REDUX_TYPES.PROPOSALS;
 
 const formatProposal = (proposal: Object): Object => {
@@ -34,6 +40,7 @@ const formatProposal = (proposal: Object): Object => {
   formattedProposal['opportunity status'] =
     opportunityOverview.OpportunityStatus || '';
   formattedProposal.usersList = usersList;
+
   return formattedProposal;
 };
 
@@ -86,10 +93,35 @@ type FilteredData = {
   teamMember: string
 };
 
-const filterByKeyValue = (key, value, array) =>
+const dateRangeFilter = (key: string, range: Object, array: Array<Object>) => {
+  if (!range) return array;
+  const { from, to } = range;
+  from.setHours(0, 0, 0, 0);
+  to.setHours(0, 0, 0, 0);
+  return array.filter(proposal => {
+    const proposalDate = new Date(proposal[key]);
+    proposalDate.setHours(0, 0, 0, 0);
+    return proposalDate >= from && proposalDate <= to;
+  });
+};
+
+const textFilter = (key: string, value: string, array: Array<Object>) =>
   array.filter(proposal =>
     proposal[key].toLowerCase().includes(value.toLowerCase())
   );
+
+const optionFilter = (key: string, value: string, array: Array<Object>) =>
+  array.filter(proposal => proposal[key].toLowerCase() === value.toLowerCase());
+
+const userFilter = (value: string, array: Array<Object>) => {
+  const start = value.indexOf('(');
+  const end = value.indexOf(')');
+  const userEmail = value.substr(start + 1, end - start - 1);
+
+  return array.filter(proposal =>
+    objectContains(proposal.usersList, userEmail, false)
+  );
+};
 
 export const onFilteringProposals = (
   filters: FilteredData,
@@ -114,18 +146,69 @@ export const onFilteringProposals = (
   } else {
     let filteredProposals = [];
 
-    cleanFilters.forEach(([key, value]) => {
-      filteredProposals = filterByKeyValue(
-        key,
-        value,
-        !isEmpty(filteredProposals) ? filteredProposals : proposals
-      );
+    cleanFilters.forEach(([key, value]: Array<string>) => {
+      switch (key) {
+        case 'opportunity number':
+        case 'opportunityName':
+        case 'customer':
+        case 'protocol number':
+        case 'product':
+          filteredProposals = textFilter(
+            key,
+            value,
+            !isEmpty(filteredProposals) ? filteredProposals : proposals
+          );
+          break;
+        case 'phase':
+        case 'therapeuticArea':
+        case 'indication':
+        case 'opportunity status':
+          filteredProposals = optionFilter(
+            key,
+            value,
+            !isEmpty(filteredProposals) ? filteredProposals : proposals
+          );
+          break;
+        case 'bid due date':
+          filteredProposals = dateRangeFilter(
+            key,
+            value,
+            !isEmpty(filteredProposals) ? filteredProposals : proposals
+          );
+          break;
+        case 'teamMember':
+          filteredProposals = userFilter(
+            value,
+            !isEmpty(filteredProposals) ? filteredProposals : proposals
+          );
+          break;
+        default:
+          break;
+      }
     });
 
     dispatch({
       type: ON_FILTER_PROPOSALS,
       payload: { filteredProposals, isFiltering }
     });
+  }
+};
+
+export const getFilteringValues = (): ThunkAction<String, Object> => async (
+  dispatch: Dispatch<Object, Object>
+) => {
+  try {
+    const { data } = await onGetFilterValues();
+
+    if (data) {
+      const { acceptanceCriteriaValues } = data;
+      dispatch({
+        type: ON_SET_PROPOSALS_FILTERS,
+        payload: { proposalsFilters: acceptanceCriteriaValues }
+      });
+    }
+  } catch (error) {
+    console.log(error);
   }
 };
 
