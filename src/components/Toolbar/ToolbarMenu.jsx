@@ -6,17 +6,14 @@ import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import Loader from 'react-loader-spinner';
 import { LOGIN } from '../../routes';
-import { getRoles, isRolesInfoLoading } from '../../selectors';
+import { getRoles, getUserData, isRolesInfoLoading } from '../../selectors';
 import { getRolesInfo } from '../../actions/proposal-actions';
 import { logout, changeRole } from '../../actions/auth-actions';
 import Dropdown from '../common/Dropdown';
 import { getUserRole } from '../../SessionHandler';
-// TODO: Add icons when menu options are implemented
-// import { User, Help, Settings } from '../svg';
 
 type Props = {
-  name: string,
-  email: string,
+  authData: Object,
   rolesList: Array<string>,
   getRolesInfoF: Function,
   changeUserRole: Function,
@@ -48,26 +45,25 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
   handleLogout = () => {
     const { history, logoutUser } = this.props;
     logoutUser();
+
     history.push(LOGIN);
   };
 
   handleKeyPress = (event: KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      this.handleLogout();
-    }
+    if (event.key === 'Enter') this.handleLogout();
   };
 
   onRoleChange = (value: string) => {
     const { changeUserRole } = this.props;
     changeUserRole(value);
-    this.setState({
-      roleName: value
-    });
+
+    this.setState({ roleName: value });
   };
 
   render() {
     const { roleName } = this.state;
-    const { name, email, rolesList, isRolesLoading } = this.props;
+    const { rolesList, isRolesLoading, authData } = this.props;
+    const { name, email } = authData;
 
     return (
       <div className="toolbar-account-menu">
@@ -90,19 +86,6 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
             />
           )}
         </div>
-        {/* TODO: Add toodlbar menu options */}
-        {/* <div className="toolbar-account-menu-option">
-            <User className="toolbar-account-menu-option-icon" />
-            <p className="toolbar-account-menu-option-title">Profile</p>
-          </div>
-          <div className="toolbar-account-menu-option">
-            <Settings className="toolbar-account-menu-option-icon" />
-            <p className="toolbar-account-menu-option-title">Settings</p>
-          </div>
-          <div className="toolbar-account-menu-option">
-            <Help className="toolbar-account-menu-option-icon" />
-            <p className="toolbar-account-menu-option-title">Help</p>
-          </div> */}
         <div
           id="logout-button"
           className="toolbar-account-menu-button"
@@ -118,15 +101,11 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
   }
 }
 
-const mapStateToProps = (state: Map) => {
-  const rolesList = getRoles(state);
-  const isRolesLoading = isRolesInfoLoading(state);
-
-  return {
-    rolesList,
-    isRolesLoading
-  };
-};
+const mapStateToProps = (state: Map) => ({
+  authData: getUserData(state),
+  rolesList: getRoles(state),
+  isRolesLoading: isRolesInfoLoading(state)
+});
 
 export default withRouter(
   connect(mapStateToProps, {
