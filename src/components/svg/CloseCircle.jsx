@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 type Props = {
-  className: string,
+  className?: string,
   fill?: string
 };
 
@@ -18,6 +18,6 @@ const CloseCircle = ({ className, fill }: Props) => {
   );
 };
 
-CloseCircle.defaultProps = { fill: '#000' };
+CloseCircle.defaultProps = { className: '', fill: '#000' };
 
 export default CloseCircle;

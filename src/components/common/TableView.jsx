@@ -8,8 +8,8 @@ import { formatDate } from '../../utils/DateUtils';
 import { PROPOSAL } from '../../routes';
 
 type Props = {
-  data: [Object],
-  hideStatus: boolean
+  data: Array<Object>,
+  hideStatus?: boolean
 };
 
 const TableView = ({ data, hideStatus }: Props) => {
@@ -70,7 +70,7 @@ const TableView = ({ data, hideStatus }: Props) => {
     </div>
   );
 
-  const renderTableContent = (_data: [Object]) => (
+  const renderTableContent = (_data: Array<Object>) => (
     <div key={uuidv4()} className="table-grid">
       {_data.map(rowContent => renderRow(rowContent))}
     </div>
@@ -93,4 +93,5 @@ const TableView = ({ data, hideStatus }: Props) => {
   return <div id="table-view">{renderContent()}</div>;
 };
 
+TableView.defaultProps = { hideStatus: false };
 export default TableView;
