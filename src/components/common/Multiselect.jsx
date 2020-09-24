@@ -9,7 +9,7 @@ type Props = {
   placeholder: string,
   items: Array<Object>,
   title?: string,
-  onClick: Function,
+  onClick: (selectedValues: Array<string>) => void,
   value?: Array<string>
 };
 
@@ -46,13 +46,23 @@ class Multiselect extends PureComponent<Props, State> {
     if (!isEmpty(value)) this.setState({ selectedValues: value });
   }
 
+  componentDidUpdate(prevProps: Object, prevState: Object) {
+    const { isCollapsed, selectedValues } = this.state;
+    const { onClick } = this.props;
+
+    if (prevState.isCollapsed !== isCollapsed) {
+      if (!isCollapsed) onClick(selectedValues);
+    }
+  }
+
   componentWillUnmount() {
     window.removeEventListener('click', this.handleOutsideClick);
   }
 
   handleOutsideClick = (event: SyntheticEvent<EventTarget>) => {
-    if (this.ref.current !== event.target)
+    if (this.ref.current !== event.target) {
       this.setState({ isCollapsed: false });
+    }
   };
 
   onRemove = (value: string) => {
@@ -69,7 +79,6 @@ class Multiselect extends PureComponent<Props, State> {
   onSelect = (event: SyntheticEvent<EventTarget>, value: string) => {
     event.stopPropagation();
 
-    const { onClick } = this.props;
     const { selectedValues } = this.state;
 
     let index = -1;
@@ -81,7 +90,7 @@ class Multiselect extends PureComponent<Props, State> {
       if (index > -1) newArray.splice(index, 1);
     }
 
-    this.setState({ selectedValues: newArray }, () => onClick(selectedValues));
+    this.setState({ selectedValues: newArray });
 
     this.forceUpdate();
   };

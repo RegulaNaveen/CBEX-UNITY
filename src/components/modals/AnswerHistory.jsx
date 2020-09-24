@@ -6,7 +6,7 @@ import { Map } from 'immutable';
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
 import classNames from 'classnames';
-import { isEmpty, flatten } from 'lodash';
+import { isEmpty, flatten, uniq } from 'lodash';
 import { getProposalTeamAssignedRoles } from '../../selectors';
 import { Close } from '../svg';
 
@@ -107,32 +107,26 @@ class AnswerHistory extends Component<Props> {
 
         if (answer.isEmpty()) return <p>All answers deleted</p>;
 
+        const deletedAnswers = nextAnswer.filter(ans => !answer.includes(ans));
+        const deletedAnswersItems = deletedAnswers.map(ans => (
+          <li className="answer-deleted" key={uuidv4()}>
+            {ans}
+          </li>
+        ));
+
+        const answerItem = answer.map(singleAnswer => (
+          <li
+            key={uuidv4()}
+            className={!nextAnswer.includes(singleAnswer) ? 'answer-added' : ''}
+          >
+            {singleAnswer}
+          </li>
+        ));
+
         return (
           <ul>
-            {answer.map(singleAnswer => {
-              const deletedAnswers = nextAnswer.filter(
-                ans => !answer.includes(ans)
-              );
-
-              const deletedAnswersItems = deletedAnswers.map(ans => (
-                <li className="answer-deleted" key={uuidv4()}>
-                  {ans}
-                </li>
-              ));
-
-              const answerItem = (
-                <li
-                  key={uuidv4()}
-                  className={
-                    !nextAnswer.includes(singleAnswer) ? 'answer-added' : ''
-                  }
-                >
-                  {singleAnswer}
-                </li>
-              );
-
-              return [deletedAnswersItems, answerItem];
-            })}
+            {deletedAnswersItems}
+            {answerItem}
           </ul>
         );
       };
