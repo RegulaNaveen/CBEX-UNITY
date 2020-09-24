@@ -33,12 +33,16 @@ class CollapsibleList extends Component<Props, State> {
   }
 
   componentDidUpdate(prevProps) {
-    const { selectedSection } = this.props;
+    const { selectedSection, isCheckedAll } = this.props;
     const { id } = this.taskRef.current;
 
     if (prevProps.selectedSection !== selectedSection)
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ isCollapsed: id === selectedSection });
+
+    if (prevProps.isCheckedAll !== isCheckedAll)
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ isCollapsed: !!isCheckedAll });
   }
 
   handleCollapse = () => {
@@ -66,12 +70,7 @@ class CollapsibleList extends Component<Props, State> {
 
   render() {
     const { isCollapsed } = this.state;
-    const {
-      questions,
-      title,
-      isCheckedAll,
-      setQuestionToDisplayHistory
-    } = this.props;
+    const { questions, title, setQuestionToDisplayHistory } = this.props;
 
     return (
       <div className="task-wrapper" ref={this.taskRef} id={this.createId()}>
@@ -89,7 +88,8 @@ class CollapsibleList extends Component<Props, State> {
             alt="question arrow"
           />
         </button>
-        {!isCollapsed && !isCheckedAll ? (
+
+        {!isCollapsed ? (
           <div
             className="task-title-wrapper"
             role="button"

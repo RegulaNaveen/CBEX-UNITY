@@ -6,7 +6,7 @@ import { Map } from 'immutable';
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
 import classNames from 'classnames';
-import { isEmpty, flatten, uniq } from 'lodash';
+import { isEmpty, flatten } from 'lodash';
 import { getProposalTeamAssignedRoles } from '../../selectors';
 import { Close } from '../svg';
 
