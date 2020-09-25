@@ -52,8 +52,10 @@ class AnswerHistory extends Component<Props> {
     const { question } = this.props;
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const sectionName = question.getIn(['section', 'sectionName']);
-    const answers = question.get('answers').reverse();
+    let answers = question.get('answers').reverse();
+    const questionId = answers.get('questionId');
 
+    if (questionId) answers = question.getIn(['answers', 'answers']).reverse();
     if (answers.isEmpty()) return this.renderAnswerResponsables();
 
     return answers.map((_answer, index) => {
