@@ -1,4 +1,5 @@
 // @flow
+import { isEmpty } from 'lodash';
 import { REDUX_TYPES } from '../constants';
 import type { Dispatch, ThunkAction } from './action-types';
 import {
@@ -33,7 +34,8 @@ const {
   PROPOSAL_SET_QUESTION_ERROR,
   PROPOSAL_BOX_ID,
   PROPOSAL_BOX_ID_LOADING,
-  PROPOSAL_BOX_ID_ERROR
+  PROPOSAL_BOX_ID_ERROR,
+  UPDATE_MODIFIED_QUESTION
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -69,6 +71,13 @@ export const setProposalAnswerData = (
       );
 
       dispatch({ type: PROPOSAL_ANSWER, payload: { data, questionId } });
+
+      const { modifiedQuestions } = data;
+      if (!isEmpty(modifiedQuestions)) {
+        modifiedQuestions.forEach(question => {
+          dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
+        });
+      }
     } catch (err) {
       dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: err });
     }
