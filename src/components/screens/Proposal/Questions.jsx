@@ -169,7 +169,7 @@ class Questions extends Component<Props, State> {
                 onChange={this.handleIsCheckedAll}
                 isChecked={isCheckedAll}
               >
-                All
+                Expand All
               </Checkbox>
             </div>
             <div
