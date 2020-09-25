@@ -109,8 +109,6 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     const { questionText, section, answerType, roleNames } = this.state;
     const { setProposalQuestionF, match } = this.props;
 
-    console.log({ questionText, section, answerType, roleNames });
-
     if (
       questionText !== '' &&
       section &&
