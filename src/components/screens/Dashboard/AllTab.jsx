@@ -87,9 +87,9 @@ class AllTab extends Component<Props, State> {
       filteredProposals
     } = this.props;
 
-    const showPagination =
-      (isFilteringProposals && !isEmpty(filteredProposals)) ||
-      !isEmpty(proposals);
+    const showPagination = isFilteringProposals
+      ? !isEmpty(filteredProposals)
+      : !isEmpty(proposals);
 
     return loading ? (
       <Loader
@@ -107,9 +107,7 @@ class AllTab extends Component<Props, State> {
         {showPagination && (
           <ComplexPagination
             totalItems={
-              isFilteringProposals && !isEmpty(filteredProposals)
-                ? filteredProposals.length
-                : proposals.length
+              isFilteringProposals ? filteredProposals.length : proposals.length
             }
             getCurrentPosition={this.setPage}
             getMaxRows={this.setRows}

@@ -80,7 +80,17 @@ class RecentTab extends Component<Props, State> {
     this.setState({ pageContent });
 
   render() {
-    const { proposals, loading } = this.props;
+    const {
+      proposals,
+      loading,
+      isFilteringProposals,
+      filteredProposals
+    } = this.props;
+
+    const showPagination = isFilteringProposals
+      ? !isEmpty(filteredProposals)
+      : !isEmpty(proposals);
+
     return loading ? (
       <Loader
         type="TailSpin"
@@ -94,9 +104,11 @@ class RecentTab extends Component<Props, State> {
         <section id="all-tab" className="tab-content">
           {this.renderSelectedView()}
         </section>
-        {!isEmpty(proposals) && (
+        {showPagination && (
           <ComplexPagination
-            totalItems={proposals.length}
+            totalItems={
+              isFilteringProposals ? filteredProposals.length : proposals.length
+            }
             getCurrentPosition={this.setPage}
             getMaxRows={this.setRows}
           />
