@@ -52,7 +52,12 @@ class Toolbar extends Component<{}, State> {
               <p className="toolbar-account-info-title">Profile</p>
               <DropMenu className="toolbar-account-info-icon" />
             </div>
-            {isCollapsed ? <ToolbarMenu name="Profile" /> : null}
+            {isCollapsed ? (
+              <ToolbarMenu
+                name="Profile"
+                handleCollapse={this.handleCollapse}
+              />
+            ) : null}
           </div>
         </div>
       </div>

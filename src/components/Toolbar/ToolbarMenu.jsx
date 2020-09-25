@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React, { PureComponent, createRef } from 'react';
 import type { NavigationHistory } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -18,7 +18,8 @@ type Props = {
   changeUserRole: Function,
   isRolesLoading: boolean,
   history: NavigationHistory,
-  logoutUser: Function
+  logoutUser: Function,
+  handleCollapse: Function
 };
 
 type State = {
@@ -28,7 +29,7 @@ type State = {
 export class ToolbarMenuComponent extends PureComponent<Props, State> {
   constructor(props: Object) {
     super(props);
-
+    this.wrapperRef = createRef();
     this.state = {
       roleName: ''
     };
@@ -39,6 +40,11 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     const userRole = getUserRole();
     if (!rolesList) getRolesInfoF();
     if (userRole) this.setState({ roleName: userRole });
+    document.addEventListener('mousedown', this.handleClickOutside);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside);
   }
 
   handleLogout = () => {
@@ -59,6 +65,12 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     this.setState({ roleName: value });
   };
 
+  handleClickOutside = event => {
+    const { handleCollapse } = this.props;
+    if (this.wrapperRef && !this.wrapperRef.current.contains(event.target))
+      handleCollapse();
+  };
+
   render() {
     const { roleName } = this.state;
     const { rolesList, isRolesLoading } = this.props;
@@ -66,7 +78,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     const email = getUserEmail();
 
     return (
-      <div className="toolbar-account-menu">
+      <div ref={this.wrapperRef} className="toolbar-account-menu">
         <p className="toolbar-account-menu-name">{name}</p>
         <p className="toolbar-account-menu-email">{email}</p>
         <div className="toolbar-account-menu-separator" />
