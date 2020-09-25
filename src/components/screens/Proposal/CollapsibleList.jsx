@@ -121,18 +121,25 @@ class CollapsibleList extends Component<Props, State> {
               </div>
             </div>
 
-            {questions.valueSeq().map(questionConfig => (
-              <Question
-                key={questionConfig.get('questionId')}
-                questionId={questionConfig.get('questionId')}
-                proposalId={questionConfig.get('proposalId')}
-                answers={questionConfig.get('answers')}
-                questionText={questionConfig.get('questionText')}
-                answerConfiguration={questionConfig.get('answerConfiguration')}
-                sectionName={title}
-                setQuestionToDisplayHistory={setQuestionToDisplayHistory}
-              />
-            ))}
+            {questions.valueSeq().map(questionConfig => {
+              const visible = questionConfig.get('visible');
+              return (
+                (visible || typeof visible === 'undefined') && (
+                  <Question
+                    key={questionConfig.get('questionId')}
+                    questionId={questionConfig.get('questionId')}
+                    proposalId={questionConfig.get('proposalId')}
+                    answers={questionConfig.get('answers')}
+                    questionText={questionConfig.get('questionText')}
+                    answerConfiguration={questionConfig.get(
+                      'answerConfiguration'
+                    )}
+                    sectionName={title}
+                    setQuestionToDisplayHistory={setQuestionToDisplayHistory}
+                  />
+                )
+              );
+            })}
           </div>
         )}
       </div>
