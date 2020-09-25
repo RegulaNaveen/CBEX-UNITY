@@ -44,7 +44,8 @@ const PROPOSAL = {
   PROPOSAL_SET_QUESTION_ERROR: 'proposal-set-question-error',
   PROPOSAL_BOX_ID: 'proposal_box_id',
   PROPOSAL_BOX_ID_LOADING: 'proposal_box_id_loading',
-  PROPOSAL_BOX_ID_ERROR: 'proposal_box_id_error'
+  PROPOSAL_BOX_ID_ERROR: 'proposal_box_id_error',
+  UPDATE_MODIFIED_QUESTION: 'update_modified_question'
 };
 
 const PROPOSALS = {
