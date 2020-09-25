@@ -23,6 +23,15 @@ const AUTH = {
   ERROR_ON_GET_LOOKUP_USERS: 'error_on_get_lookup_users'
 };
 
+const SSO_AUTH = {
+  ON_USER_LOGIN: 'on_user_login',
+  ON_USER_LOGOUT: 'on_user_logout',
+  ERROR_ON_USER_LOGIN: 'error_on_user_login',
+  ON_CHANGE_ROLE: 'on_change_role',
+  ERROR_ON_CHANGE_ROLE: 'error_on_change_role',
+  ON_REFRESH_USER_DATA: 'on_refresh_user_data'
+};
+
 const PROPOSAL = {
   PROPOSAL_INFO: 'proposal_info',
   PROPOSAL_INFO_LOADING: 'proposal_info_loading',
@@ -65,4 +74,4 @@ const SIDEBAR = {
   IS_OPEN: 'is_open'
 };
 
-export { AUTH, PROPOSALS, PROPOSAL, SIDEBAR };
+export { AUTH, SSO_AUTH, PROPOSALS, PROPOSAL, SIDEBAR };

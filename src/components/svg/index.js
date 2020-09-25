@@ -22,6 +22,7 @@ import ArrowRight from './ArrowRight';
 import More from './More';
 import Filter from './Filter';
 import Check from './Check';
+import Microsoft from './Microsoft';
 import Warning from './Warning';
 import Dash from './Dash';
 import Info from './Info';
@@ -50,6 +51,7 @@ export {
   More,
   Filter,
   Check,
+  Microsoft,
   Warning,
   Dash,
   Info
