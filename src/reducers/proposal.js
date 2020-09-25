@@ -24,7 +24,8 @@ const {
   PROPOSAL_SET_QUESTION_ERROR,
   PROPOSAL_BOX_ID,
   PROPOSAL_BOX_ID_LOADING,
-  PROPOSAL_BOX_ID_ERROR
+  PROPOSAL_BOX_ID_ERROR,
+  UPDATE_MODIFIED_QUESTION
 } = REDUX_TYPES.PROPOSAL;
 
 const INITIAL_STATE: Map = fromJS({
@@ -211,6 +212,25 @@ const onGettingBoxIdError = (state: Map, action: Object): Map => {
     .set('onGettingBoxIdError', error);
 };
 
+const onUpdateModifiedQuestion = (state: Map, action: Object): Map => {
+  const { question } = action.payload;
+
+  let newState = fromJS({});
+
+  const indexOfQuestionToUpdate = state
+    .get('proposalQuestions')
+    .findIndex(listItem => listItem.questionId === question.questionId);
+
+  newState = state.setIn(
+    ['proposalQuestions', indexOfQuestionToUpdate],
+    question
+  );
+
+  const proposalQuestions = newState.get('proposalQuestions');
+
+  return state.set('proposalQuestions', proposalQuestions);
+};
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
@@ -232,7 +252,8 @@ const actionMap = {
   [PROPOSAL_SET_QUESTION_ERROR]: onSetQuestionError,
   [PROPOSAL_BOX_ID_LOADING]: onGettingProposalBoxId,
   [PROPOSAL_BOX_ID]: onGetProposalBoxId,
-  [PROPOSAL_BOX_ID_ERROR]: onGettingBoxIdError
+  [PROPOSAL_BOX_ID_ERROR]: onGettingBoxIdError,
+  [UPDATE_MODIFIED_QUESTION]: onUpdateModifiedQuestion
 };
 
 export default function(
