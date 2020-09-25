@@ -19,6 +19,7 @@
 
 .dd-input-wrapper {
   display: flex;
+  width: 100%;
 }
 
 .dd-wrapper {
@@ -31,14 +32,14 @@
     list-style-type: none;
     margin: 0;
     padding: 0;
-    top:45px;
-    right:0px;
+    top: 45px;
+    right: 0px;
     max-height: 200px;
     overflow-y: scroll;
     width: 100%;
     background-color: $white;
     position: absolute;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
     font-family: $proximaNova;
     font-size: 16px;
@@ -49,14 +50,14 @@
     .dd-list-item {
       padding: 8px 16px;
       border-bottom: 1px solid $neutral3;
-        
+
       &:hover {
         background-color: $neptune-hover;
       }
     }
   }
 
-  .dd-header{
+  .dd-header {
     display: flex;
     align-items: center;
     width: 100%;
@@ -91,9 +92,9 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-      
-    &:before{
-      content:"";
+
+    &:before {
+      content: '';
       position: absolute;
       width: 0px;
       height: 0px;

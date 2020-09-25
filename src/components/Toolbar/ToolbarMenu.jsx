@@ -6,14 +6,13 @@ import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import Loader from 'react-loader-spinner';
 import { LOGIN } from '../../routes';
-import { getRoles, getUserData, isRolesInfoLoading } from '../../selectors';
+import { getRoles, isRolesInfoLoading } from '../../selectors';
 import { getRolesInfo } from '../../actions/proposal-actions';
 import { logout, changeRole } from '../../actions/auth-actions';
 import Dropdown from '../common/Dropdown';
-import { getUserRole } from '../../SessionHandler';
+import { getUserEmail, getUserName, getUserRole } from '../../SessionHandler';
 
 type Props = {
-  authData: Object,
   rolesList: Array<string>,
   getRolesInfoF: Function,
   changeUserRole: Function,
@@ -62,8 +61,9 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
 
   render() {
     const { roleName } = this.state;
-    const { rolesList, isRolesLoading, authData } = this.props;
-    const { name, email } = authData;
+    const { rolesList, isRolesLoading } = this.props;
+    const name = getUserName();
+    const email = getUserEmail();
 
     return (
       <div className="toolbar-account-menu">
@@ -102,7 +102,6 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
 }
 
 const mapStateToProps = (state: Map) => ({
-  authData: getUserData(state),
   rolesList: getRoles(state),
   isRolesLoading: isRolesInfoLoading(state)
 });

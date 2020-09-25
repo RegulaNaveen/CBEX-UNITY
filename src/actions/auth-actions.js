@@ -6,7 +6,8 @@ import {
   getJwt,
   getAccessToken,
   getUserEmail,
-  getRefreshToken
+  getRefreshToken,
+  getUserName
 } from '../SessionHandler';
 import {
   authentication,
@@ -47,21 +48,17 @@ export const login = (
     try {
       const data = await authentication(email, password);
       const {
-        authService: {
-          role,
-          accessToken,
-          jwt: { token },
-          refresh: { token: refreshToken }
-        }
-      } = data;
+        role,
+        accessToken,
+        jwt: { token },
+        refresh: { token: refreshToken },
+        userName
+      } = data.authService;
 
       dispatch({ type: AUTH_SUCCESS, payload: { data } });
-      setSession(role, accessToken, token, refreshToken, email);
+      setSession(role, accessToken, token, refreshToken, email, userName);
     } catch (error) {
-      dispatch({
-        type: AUTH_ERROR,
-        payload: { error }
-      });
+      dispatch({ type: AUTH_ERROR, payload: { error } });
     }
   };
 };
@@ -70,21 +67,13 @@ export const sendForgotPassword = (
   email: string
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
-    dispatch({
-      type: FORGOT_PASSWORD_IN_PROGRESS,
-      payload: {}
-    });
+    dispatch({ type: FORGOT_PASSWORD_IN_PROGRESS, payload: {} });
+
     try {
-      const data = await forgotPassword(email);
-      dispatch({
-        type: FORGOT_PASSWORD_SUCCESS,
-        payload: data.authService
-      });
+      const { authService } = await forgotPassword(email);
+      dispatch({ type: FORGOT_PASSWORD_SUCCESS, payload: authService });
     } catch (error) {
-      dispatch({
-        type: FORGOT_PASSWORD_ERROR,
-        payload: { error }
-      });
+      dispatch({ type: FORGOT_PASSWORD_ERROR, payload: { error } });
     }
   };
 };
@@ -95,79 +84,58 @@ export const sendResetPassword = (
   newPassword: string
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
-    dispatch({
-      type: RESET_PASSWORD_IN_PROGRESS,
-      payload: {}
-    });
+    dispatch({ type: RESET_PASSWORD_IN_PROGRESS, payload: {} });
+
     try {
       const data = await resetPassword(email, code, newPassword);
-      dispatch({
-        type: RESET_PASSWORD_SUCCESS,
-        payload: { data }
-      });
+      dispatch({ type: RESET_PASSWORD_SUCCESS, payload: { data } });
     } catch (error) {
-      dispatch({
-        type: RESET_PASSWORD_ERROR,
-        payload: { error }
-      });
+      dispatch({ type: RESET_PASSWORD_ERROR, payload: { error } });
     }
   };
 };
 
 export const refreshAuthData = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
-    dispatch({
-      type: AUTH_LOADING,
-      payload: {}
-    });
+    dispatch({ type: AUTH_LOADING, payload: {} });
+
     try {
       const email = getUserEmail() || '';
       const refreshToken = getRefreshToken() || '';
+      const userName = getUserName() || '';
       const data = await postRefreshToken(email, refreshToken);
+
       const {
-        authService: {
-          role,
-          accessToken,
-          jwt: { token },
-          refresh: { token: newRefreshToken }
-        }
-      } = data;
-      dispatch({
-        type: AUTH_SUCCESS,
-        payload: { data }
-      });
-      setSession(role, accessToken, token, newRefreshToken, email);
+        role,
+        accessToken,
+        jwt: { token },
+        refresh: { token: newRefreshToken }
+      } = data.authService;
+
+      dispatch({ type: AUTH_SUCCESS, payload: { data } });
+      setSession(role, accessToken, token, newRefreshToken, email, userName);
     } catch (error) {
-      dispatch({
-        type: AUTH_ERROR,
-        payload: { error }
-      });
+      dispatch({ type: AUTH_ERROR, payload: { error } });
     }
   };
 };
 
 export const changeRole = (role: string): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
-    dispatch({
-      type: PUT_ROLE_IN_PROGRESS,
-      payload: {}
-    });
+    dispatch({ type: PUT_ROLE_IN_PROGRESS, payload: {} });
+
     try {
       const accessToken = getAccessToken() || '';
       const jwt = getJwt() || '';
       const email = getUserEmail() || '';
       const refreshToken = getRefreshToken() || '';
+      const userName = getUserName() || '';
       const data = await putRole(role, accessToken, jwt);
-      dispatch({
-        type: PUT_ROLE_SUCCESS,
-        payload: { data }
-      });
-      setSession(role, accessToken, jwt, refreshToken, email);
+
+      dispatch({ type: PUT_ROLE_SUCCESS, payload: { data } });
+      setSession(role, accessToken, jwt, refreshToken, email, userName);
     } catch (error) {
-      dispatch({
-        type: PUT_ROLE_ERROR,
-        payload: { error, role }
-      });
+      dispatch({ type: PUT_ROLE_ERROR, payload: { error, role } });
     }
   };
 };
@@ -175,23 +143,19 @@ export const changeRole = (role: string): ThunkAction<string, Object> => {
 export const logout = (): ThunkAction<string, string> => {
   return async (dispatch: Dispatch<string, string>) => {
     dispatch({ type: LOGOUT_IN_PROGRESS, payload: '' });
+
     try {
       await localStorage.clear();
-      dispatch({
-        type: LOGOUT_SUCCESS,
-        payload: ''
-      });
+      dispatch({ type: LOGOUT_SUCCESS, payload: '' });
     } catch (err) {
-      dispatch({
-        type: LOGOUT_ERROR,
-        payload: err
-      });
+      dispatch({ type: LOGOUT_ERROR, payload: err });
     }
   };
 };
 
 export const getAllUsers = (): ThunkAction<string, Object> => {
   const jwt = getJwt() || '';
+
   return async (dispatch: Dispatch<Object, Object>) => {
     try {
       const { data } = await getUsers(jwt);

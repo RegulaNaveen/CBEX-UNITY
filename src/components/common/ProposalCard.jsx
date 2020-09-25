@@ -17,7 +17,6 @@ type Props = {
   proposalId: string
 };
 
-// TODO: Replace Link to prop in Documents.
 const ProposalCard = ({
   title,
   opportunityName,
@@ -29,69 +28,88 @@ const ProposalCard = ({
   therapeuticArea,
   verbatimIndication,
   proposalId
-}: Props) => (
-  <div className="card">
-    <div className="header-section">
-      <div>
-        <p>{title}</p>
-        <p>{opportunityName}</p>
-      </div>
-      <div>
-        <p>{daysRemain}</p>
-        <p>Days until Due</p>
-      </div>
-    </div>
+}: Props) => {
+  function setProposalTypeView({
+    currentTarget
+  }: SyntheticEvent<HTMLButtonElement>) {
+    const { id } = currentTarget;
+    localStorage.setItem('proposalTypeView', id);
+  }
 
-    <div className="info-section">
-      <div className="section-data">
-        <span>Due Date:</span>
-        <span>{dueDate}</span>
-      </div>
-      <div className="section-data">
-        <span>Customer: </span>
-        <span>{customer}</span>
-      </div>
-      <div className="section-data">
-        <span>Protocol Number:</span>
-        <span>{protocolNumber}</span>
-      </div>
-      <div className="section-data">
-        <span>Phase:</span>
-        <span>{phase}</span>
-      </div>
-      <div className="section-data">
-        <span>Therapeutic Area</span>
-        <span>{therapeuticArea}</span>
-      </div>
-      <div className="section-data">
-        <span>Verbatim Indication</span>
-        <span>{verbatimIndication}</span>
-      </div>
-    </div>
-
-    <div className="buttons-section">
-      <div className="button">
-        <Link to={`${PROPOSAL}${proposalId}`}>
-          <Clipboard />
-        </Link>
-        <p>Questions</p>
+  return (
+    <div className="card">
+      <div className="header-section">
+        <div>
+          <p>{title}</p>
+          <p>{opportunityName}</p>
+        </div>
+        <div>
+          <p>{daysRemain}</p>
+          <p>Days until Due</p>
+        </div>
       </div>
 
-      <div className="button">
-        <Link to={PROPOSAL}>
-          <Folder />
-        </Link>
-        <p>Documents</p>
+      <div className="info-section">
+        <div className="section-data">
+          <span>Due Date:</span>
+          <span>{dueDate}</span>
+        </div>
+        <div className="section-data">
+          <span>Customer: </span>
+          <span>{customer}</span>
+        </div>
+        <div className="section-data">
+          <span>Protocol Number:</span>
+          <span>{protocolNumber}</span>
+        </div>
+        <div className="section-data">
+          <span>Phase:</span>
+          <span>{phase}</span>
+        </div>
+        <div className="section-data">
+          <span>Therapeutic Area</span>
+          <span>{therapeuticArea}</span>
+        </div>
+        <div className="section-data">
+          <span>Verbatim Indication</span>
+          <span>{verbatimIndication}</span>
+        </div>
       </div>
-    </div>
 
-    <div className="link-section">
-      <div className="link">
-        <Link to={`${PROPOSAL}${proposalId}`}>View Opportunity Hub</Link>
-        <RightArrow className="right-arrow" />
+      <div className="buttons-section">
+        <div
+          className="button"
+          id="questions"
+          role="presentation"
+          onClick={setProposalTypeView}
+        >
+          <Link to={`${PROPOSAL}${proposalId}`}>
+            <Clipboard />
+          </Link>
+          <p>Questions</p>
+        </div>
+
+        <div
+          className="button"
+          id="documents"
+          role="presentation"
+          onClick={setProposalTypeView}
+        >
+          <Link to={`${PROPOSAL}${proposalId}`}>
+            <Folder />
+          </Link>
+          <p>Documents</p>
+        </div>
+      </div>
+
+      <div className="link-section">
+        <div className="link">
+          <Link to={`${PROPOSAL}${proposalId}`}>View Opportunity Hub</Link>
+          <RightArrow className="right-arrow" />
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default ProposalCard;

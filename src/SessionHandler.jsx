@@ -11,7 +11,8 @@ export const setSession = (
   accessToken: string,
   token: string,
   refreshToken: string,
-  email: string
+  email: string,
+  userName: string
 ) => {
   localStorage.setItem('isLoggedin', 'true');
   localStorage.setItem('userRole', role);
@@ -19,6 +20,7 @@ export const setSession = (
   localStorage.setItem('jwt', token);
   localStorage.setItem('refreshToken', refreshToken);
   localStorage.setItem('userEmail', email);
+  localStorage.setItem('userName', userName);
 };
 
 export const getSession = () => {
@@ -27,6 +29,10 @@ export const getSession = () => {
 
 export const getUserRole = () => {
   return localStorage.getItem('userRole');
+};
+
+export const getUserName = () => {
+  return localStorage.getItem('userName');
 };
 
 export const getAccessToken = () => {

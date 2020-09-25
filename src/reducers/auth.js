@@ -24,7 +24,7 @@ const {
 } = REDUX_TYPES.AUTH;
 
 const INITIAL_STATE: Map = fromJS({
-  authData: undefined,
+  authData: [],
   isAuthLoading: false,
   authError: undefined,
   isLogout: undefined,

@@ -13,6 +13,7 @@ import DashboardComponent from './components/screens/Dashboard';
 
 const App = () => {
   const isAuthenticated = getSession();
+
   return (
     <Provider store={store}>
       <BrowserRouter>

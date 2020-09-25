@@ -149,15 +149,9 @@ export const setProposalQuestion = (
     });
     try {
       const data = await setProposalQuestionData(proposalId, questionData);
-      dispatch({
-        type: PROPOSAL_SET_QUESTION,
-        payload: data
-      });
+      dispatch({ type: PROPOSAL_SET_QUESTION, payload: data });
     } catch (err) {
-      dispatch({
-        type: PROPOSAL_SET_QUESTION_ERROR,
-        payload: err
-      });
+      dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
     }
   };
 };

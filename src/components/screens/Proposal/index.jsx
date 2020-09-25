@@ -45,9 +45,17 @@ export class Proposal extends Component<Props, State> {
   componentDidMount() {
     const { getProposalInfo, match, authData, getRefreshAuthData } = this.props;
 
+    const selectedView = localStorage.getItem('proposalTypeView');
+
+    if (selectedView) this.setState({ selectedView });
+
     if (!authData) getRefreshAuthData();
 
     getProposalInfo(match.params.id);
+  }
+
+  componentWillUnmount() {
+    localStorage.removeItem('proposalTypeView');
   }
 
   onChangeProposalView = (selectedView: string) => {

@@ -51,7 +51,7 @@ class Multiselect extends PureComponent<Props, State> {
     const { onClick, value: lastAnswer } = this.props;
 
     if (prevState.isCollapsed !== isCollapsed) {
-      if (!isCollapsed && lastAnswer) onClick(selectedValues, lastAnswer);
+      if (!isCollapsed) onClick(selectedValues, lastAnswer || []);
     }
   }
 

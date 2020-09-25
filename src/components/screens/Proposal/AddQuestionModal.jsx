@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import type { Match } from 'react-router-dom';
 import { Map } from 'immutable';
-// import { parseDate, formatDate } from '../../../utils/DateUtils';
 import Loader from 'react-loader-spinner';
 import { compose } from 'redux';
 import Modal from '../../common/Modal';
@@ -14,9 +13,6 @@ import { PrimaryButton } from '../../common/Buttons';
 import Multiselect from '../../common/Multiselect';
 import Dropdown from '../../common/Dropdown';
 import TextArea from '../../common/TextArea';
-// import DatePicker from '../../common/DatePicker';
-// import Checkbox from '../../common/Checkbox';
-// import SelectTeam from '../../common/SelectTeam';
 import { Close } from '../../svg';
 import {
   getQuestionSectionOrderInfo,
@@ -53,12 +49,10 @@ type Props = {
 };
 
 type State = {
-  // isChecked: boolean,
   questionText: string,
   section: Object,
   answerType: string,
-  roleNames: Array<string>,
-  showAnswerOptions: boolean
+  roleNames: Array<string>
 };
 
 export class AddQuestionModal extends PureComponent<Props, State> {
@@ -66,12 +60,10 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     super(props);
 
     this.state = {
-      // isChecked: false,
       questionText: '',
       section: undefined,
       answerType: '',
-      roleNames: [],
-      showAnswerOptions: false
+      roleNames: []
     };
   }
 
@@ -87,33 +79,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     getRolesInfoF();
   }
 
-  // handleIsChecked = () => {
-  //   const { isChecked } = this.state;
-  //   this.setState({ isChecked: !isChecked });
-  // };
-
-  // handleDeleteTeam = () => {
-  //   // TODO: Delete a team item
-  // };
-
-  // handleDayChange = (selectedDay: string) => {
-  //   this.setState({
-  //     selectedDay
-  //   });
-  // };
-
-  // handleDate = (date: string, format: string) => parseDate(date, format);
-
-  // handleFormatDate = (date: Date, format: string) => formatDate(date, format);
-
   handleTextChange = (value: string) => {
     this.setState({ questionText: value });
-  };
-
-  handleOptionsTextChange = () => {
-    // this.setState({
-    //   optionsText: value
-    // });
   };
 
   onQuestionSectionChange = (value: string) => {
@@ -125,19 +92,12 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       if (name === value) sectionOrder = order;
     });
 
-    if (sectionOrder > -1 && value) {
-      this.setState({
-        section: { sectionOrder, sectionName: value }
-      });
-    }
+    if (sectionOrder > -1 && value)
+      this.setState({ section: { sectionOrder, sectionName: value } });
   };
 
   onAnswerTypeChange = (value: string) => {
-    this.setState({
-      answerType: value,
-      showAnswerOptions: false
-    });
-    this.renderAnswerOptions(value);
+    this.setState({ answerType: value });
   };
 
   onRoleChange = (values: Array<string>) => {
@@ -145,14 +105,12 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     this.setState({ roleNames });
   };
 
-  renderAnswerOptions = (type: string) => {
-    if (type === 'select' || type === 'picklist' || type === 'multi-picklist')
-      this.setState({ showAnswerOptions: true });
-  };
-
   onSave = () => {
     const { questionText, section, answerType, roleNames } = this.state;
     const { setProposalQuestionF, match } = this.props;
+
+    console.log({ questionText, section, answerType, roleNames });
+
     if (
       questionText !== '' &&
       section &&
@@ -178,8 +136,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     questionSectionList: Array<string>,
     answerTypesList: Array<string>,
     rolesList: Array<string>,
-    isLoading: boolean,
-    showAnswerOptions: boolean
+    isLoading: boolean
   ) => {
     if (!isLoading) {
       return (
@@ -196,7 +153,6 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 <Close className="close-icon" />
               </div>
             </div>
-            {/* <div className="modal-subtitle">Optional Subtitle</div> */}
           </div>
           <div className="modal-wrapper-body">
             <div className="modal-segment">
@@ -219,27 +175,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                   onClick={this.onAnswerTypeChange}
                 />
               </div>
-              {/* TODO: Uncomment if will use datepicker feature */}
-              {/* <DatePicker
-                label="Date"
-                selectedDay={selectedDay}
-                handleDayChange={this.handleDayChange}
-                handleFormatDate={this.handleFormatDate}
-                handleDate={this.handleDate}
-              /> */}
             </div>
-            {showAnswerOptions ? (
-              <div className="modal-segment">
-                <TextArea
-                  id="question-text-area"
-                  className="modal-options-text-area"
-                  placeholder="Option 1, Option 2,..."
-                  title="Enter Answer Options"
-                  type="text"
-                  onChange={this.handleOptionsTextChange}
-                />
-              </div>
-            ) : null}
             <div className="modal-segment">
               <Dropdown
                 id="dd-team-member"
@@ -258,34 +194,6 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 onClick={this.onRoleChange}
               />
             </div>
-            {/* TODO: Uncomment if will use a select team feature */}
-            {/* <div className="modal-segment">
-              {teams &&
-                teams.map(team => {
-                  const { id, name } = team;
-                  return (
-                    <SelectTeam
-                      key={id}
-                      id="selected-team-item"
-                      onClick={this.handleDeleteTeam}
-                    >
-                      {name}
-                    </SelectTeam>
-                  );
-                })}
-            </div> */}
-            {/* TODO: Uncomment to add notification feature */}
-            {/* <div className="modal-segment">
-              <Checkbox
-                id="send-notification-checkbox"
-                value="notification"
-                name="notification"
-                onChange={this.handleIsChecked}
-                isChecked={isChecked}
-              >
-                Send notification now
-              </Checkbox>
-            </div> */}
           </div>
           <div className="modal-wrapper-footer">
             <div className="modal-button-cancel">
@@ -320,7 +228,6 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   };
 
   render() {
-    const { showAnswerOptions } = this.state;
     const {
       onClose,
       questionSectionList,
@@ -341,8 +248,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
             questionSectionList,
             answerTypesList,
             rolesList,
-            isLoading,
-            showAnswerOptions
+            isLoading
           )
         ) : (
           <div className="modal-loader">
