@@ -4,6 +4,20 @@ import * as proposalsSelectors from './proposals';
 import * as proposalSelectors from './proposal';
 import * as authSelectors from './auth';
 import * as siderbarSelectors from './sidebar';
+import * as ssoAuthSelectors from './sso-auth';
+
+// SSO Auth selectors
+export const getUserAuthStatus = (state: Object): boolean =>
+  ssoAuthSelectors.getUserAuthStatus(state.auth);
+
+export const getUserRole = (state: Object): string =>
+  ssoAuthSelectors.getUserRole(state.auth);
+
+export const getUserName = (state: Object): string =>
+  ssoAuthSelectors.getUserName(state.auth);
+
+export const getUserEmail = (state: Object): string =>
+  ssoAuthSelectors.getUserEmail(state.auth);
 
 // Auth selectors
 export const getAuthData = (state: Object): Map =>

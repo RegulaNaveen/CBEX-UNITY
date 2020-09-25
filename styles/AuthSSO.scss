@@ -1,0 +1,73 @@
+.sso-login-wrapper {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  height: 100%;
+
+  .left {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+
+    .gradient-background-img {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      background: radial-gradient(circle, #0076ae 0%, #250056 100%);
+      opacity: 0.66;
+    }
+
+    .login-background-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+  }
+
+  .right {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+
+      .form-title {
+        color: $black;
+        font-family: $proximaNova;
+        text-transform: uppercase;
+        font-size: 40px;
+        font-weight: 600;
+        margin-bottom: 30px;
+      }
+
+      .azure-login-button {
+        display: flex;
+        align-items: center;
+        background: rgba($color: $neptune-primary, $alpha: 0.8);
+        border-radius: 3px;
+        padding: 10px 20px;
+        outline: none;
+        font-size: 12px;
+        font-weight: 300;
+        border: none;
+        cursor: pointer;
+        color: $neutral1;
+
+        svg {
+          margin-right: 15px;
+        }
+      }
+    }
+
+    .copyright-text {
+      position: absolute;
+      bottom: 20px;
+      color: $neutral8;
+      font-size: 13px;
+    }
+  }
+}
