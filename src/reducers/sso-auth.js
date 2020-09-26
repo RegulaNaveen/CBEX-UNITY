@@ -11,16 +11,20 @@ const {
   ERROR_ON_USER_LOGIN,
   ON_CHANGE_ROLE,
   ERROR_ON_CHANGE_ROLE,
-  ON_REFRESH_USER_DATA
+  ON_REFRESH_USER_DATA,
+  ON_GET_LOOKUP_USERS,
+  ERROR_ON_GET_LOOKUP_USERS
 } = REDUX_TYPES.SSO_AUTH;
 
 const INITIAL_STATE: Map = fromJS({
-  isAuthenticated: undefined,
+  isAuthenticated: false,
   errorOnLogin: undefined,
   email: '',
   name: '',
   role: '',
-  errorOnSetNewRole: undefined
+  errorOnSetNewRole: undefined,
+  lookupUsers: [],
+  lookupUsersError: undefined
 });
 
 const loginUser = (state: Map, action: Object) => {
@@ -55,21 +59,22 @@ const errorOnUserLogin = (state: Map, action: Object) => {
 };
 
 const onRefreshUserData = (state: Map) => {
-  const idToken = localStorage.getItem('id_token');
-
-  const { name, email, family_name: lName } = jwt_decode(idToken);
-  const decoded = jwt_decode(idToken);
-  const role = decoded['custom:role'];
+  const role = localStorage.getItem('userRole');
+  const email = localStorage.getItem('userEmail');
+  const name = localStorage.getItem('userName');
 
   return state
     .set('isAuthenticated', true)
     .set('email', email)
-    .set('name', `${name} ${lName}`)
+    .set('name', name)
     .set('role', role);
 };
 
 const setNewUserRole = (state: Map, action: Object) => {
   const { role } = action.payload;
+
+  localStorage.setItem('userRole', role);
+
   return state.set('role', role);
 };
 
@@ -78,13 +83,25 @@ const errorOnSetNewUserRole = (state: Map, action: Object) => {
   return state.set('errorOnSetNewRole', error);
 };
 
+const onGetLookupUsers = (state: Map, action: Object): Map => {
+  const { lookupUsers } = action.payload;
+  return state.set('lookupUsers', lookupUsers).set('lookupUsersError');
+};
+
+const onErrorGetLookupUsers = (state: Map, action: Object): Map => {
+  const { error } = action.payload;
+  return state.set('lookupUsersError', error);
+};
+
 const actionMap = {
   [ON_USER_LOGIN]: loginUser,
   [ON_USER_LOGOUT]: logoutUser,
   [ON_CHANGE_ROLE]: setNewUserRole,
   [ON_REFRESH_USER_DATA]: onRefreshUserData,
   [ERROR_ON_USER_LOGIN]: errorOnUserLogin,
-  [ERROR_ON_CHANGE_ROLE]: errorOnSetNewUserRole
+  [ERROR_ON_CHANGE_ROLE]: errorOnSetNewUserRole,
+  [ON_GET_LOOKUP_USERS]: onGetLookupUsers,
+  [ERROR_ON_GET_LOOKUP_USERS]: onErrorGetLookupUsers
 };
 
 export default function(

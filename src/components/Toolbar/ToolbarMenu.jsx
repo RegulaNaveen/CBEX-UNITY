@@ -8,9 +8,9 @@ import Loader from 'react-loader-spinner';
 import { LOGIN } from '../../routes';
 import { getRoles, isRolesInfoLoading } from '../../selectors';
 import { getRolesInfo } from '../../actions/proposal-actions';
-import { logout, changeRole } from '../../actions/auth-actions';
+import { onUserLogout, onSetUserRole } from '../../actions/sso-auth-actions';
 import Dropdown from '../common/Dropdown';
-import { getUserEmail, getUserName, getUserRole } from '../../SessionHandler';
+import { getUserEmail, getUserName } from '../../SessionHandler';
 
 type Props = {
   rolesList: Array<string>,
@@ -35,7 +35,8 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
 
   componentDidMount() {
     const { getRolesInfoF, rolesList } = this.props;
-    const userRole = getUserRole();
+    const userRole = localStorage.getItem('userRole');
+
     if (!rolesList) getRolesInfoF();
     if (userRole) this.setState({ roleName: userRole });
   }
@@ -108,7 +109,7 @@ const mapStateToProps = (state: Map) => ({
 export default withRouter(
   connect(mapStateToProps, {
     getRolesInfoF: getRolesInfo,
-    logoutUser: logout,
-    changeUserRole: changeRole
+    logoutUser: onUserLogout,
+    changeUserRole: onSetUserRole
   })(ToolbarMenuComponent)
 );

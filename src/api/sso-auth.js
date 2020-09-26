@@ -8,7 +8,8 @@ const {
   AUTH_KEY,
   REDIRECTION_URL,
   CLIENT_ID,
-  ROLE_ENDPOINT
+  ROLE_ENDPOINT,
+  AUTH_API_URL
 } = API.AUTH;
 
 export const onLoginRequest = (code: string): Promise<Object> => {
@@ -36,4 +37,9 @@ export const onChangeUserRole = (
   const headers = { Authorization: `Bearer ${idToken}` };
 
   return axios.put(ROLE_ENDPOINT, data, { headers });
+};
+
+export const getUsers = (idToken: string): Promise<Object> => {
+  const headers = { Authorization: `Bearer ${idToken}` };
+  return axios.get(`${AUTH_API_URL}/users`, { headers });
 };

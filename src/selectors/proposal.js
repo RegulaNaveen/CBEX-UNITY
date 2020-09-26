@@ -79,11 +79,7 @@ export const getProposalTeamAssignedRoles = (proposal: Map): Map => {
 };
 
 export const getFilteredSections = (proposal: Map, auth: Map): Map =>
-  generateSections(
-    proposal.get('proposalQuestions'),
-    true,
-    auth.getIn(['authData', 'data', 'authService', 'role'])
-  );
+  generateSections(proposal.get('proposalQuestions'), true, auth.get('role'));
 
 export const isProposalLoading = (proposal: Map): Map =>
   proposal.get('isProposalLoading');

@@ -8,23 +8,32 @@ import * as ssoAuthSelectors from './sso-auth';
 
 // SSO Auth selectors
 export const getUserAuthStatus = (state: Object): boolean =>
-  ssoAuthSelectors.getUserAuthStatus(state.auth);
+  ssoAuthSelectors.getUserAuthStatus(state.ssoAuth);
 
 export const getUserRole = (state: Object): string =>
-  ssoAuthSelectors.getUserRole(state.auth);
+  ssoAuthSelectors.getUserRole(state.ssoAuth);
 
 export const getUserName = (state: Object): string =>
-  ssoAuthSelectors.getUserName(state.auth);
+  ssoAuthSelectors.getUserName(state.ssoAuth);
 
 export const getUserEmail = (state: Object): string =>
-  ssoAuthSelectors.getUserEmail(state.auth);
+  ssoAuthSelectors.getUserEmail(state.ssoAuth);
+
+export const getUserData = (state: Map): Map =>
+  ssoAuthSelectors.getUserData(state.ssoAuth);
+
+export const getFilteredSections = (state: Object): Map =>
+  proposalSelectors.getFilteredSections(state.proposal, state.ssoAuth);
+
+export const getLookupUsers = (state: Object): Array<Object> =>
+  ssoAuthSelectors.getLookupUsers(state.ssoAuth);
+
+export const getLookupUsersError = (state: Object): Array<Object> =>
+  ssoAuthSelectors.getLookupUsersError(state.ssoAuth);
 
 // Auth selectors
 export const getAuthData = (state: Object): Map =>
   authSelectors.getAuthData(state.auth);
-
-export const getUserData = (state: Map): Map =>
-  authSelectors.getUserData(state.auth);
 
 export const isAuthLoading = (state: Object): boolean =>
   authSelectors.isAuthLoading(state.auth);
@@ -62,21 +71,12 @@ export const logoutHasErrors = (state: Object): string =>
 export const getChangeRoleError = (state: Object): string =>
   authSelectors.getChangeRoleError(state.auth);
 
-export const getLookupUsers = (state: Object): Array<Object> =>
-  authSelectors.getLookupUsers(state.auth);
-
-export const getLookupUsersError = (state: Object): Array<Object> =>
-  authSelectors.getLookupUsersError(state.auth);
-
 // Proposal selectors
 export const getSections = (state: Object): Map =>
   proposalSelectors.getSections(state.proposal);
 
 export const getProposalTeamAssignedRoles = (state: Object): Map =>
   proposalSelectors.getProposalTeamAssignedRoles(state.proposal);
-
-export const getFilteredSections = (state: Object): Map =>
-  proposalSelectors.getFilteredSections(state.proposal, state.auth);
 
 export const isProposalLoading = (state: Object): Boolean =>
   proposalSelectors.isProposalLoading(state.proposal);

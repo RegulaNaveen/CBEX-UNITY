@@ -7,11 +7,8 @@ import { connect } from 'react-redux';
 import Loader from 'react-loader-spinner';
 import classNames from 'classnames';
 import { compose } from 'redux';
-import {
-  getProposal,
-  onGetValidatedProposalDetails
-} from '../../../actions/proposal-actions';
-import { refreshAuthData } from '../../../actions/auth-actions';
+import { getProposal, onGetValidatedProposalDetails } from '../../../actions/proposal-actions';
+import { onRefreshUserData } from '../../../actions/sso-auth-actions';
 import {
   getIsOpen,
   getPendingValidatedItems,
@@ -141,7 +138,7 @@ const mapStateToProps = (state: Map) => ({
 export default compose(
   withRouter,
   connect(mapStateToProps, {
-    getRefreshAuthData: refreshAuthData,
+    getRefreshAuthData: onRefreshUserData,
     getProposalInfo: getProposal,
     getValidatedData: onGetValidatedProposalDetails
   })

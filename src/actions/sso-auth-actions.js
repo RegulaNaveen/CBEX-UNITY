@@ -1,6 +1,6 @@
 // @flow
 import type { Dispatch, ThunkAction } from './action-types';
-import { onLoginRequest, onChangeUserRole } from '../api/sso-auth';
+import { onLoginRequest, onChangeUserRole, getUsers } from '../api/sso-auth';
 import { REDUX_TYPES } from '../constants';
 
 const {
@@ -9,7 +9,9 @@ const {
   ERROR_ON_USER_LOGIN,
   ON_CHANGE_ROLE,
   ERROR_ON_CHANGE_ROLE,
-  ON_REFRESH_USER_DATA
+  ON_REFRESH_USER_DATA,
+  ON_GET_LOOKUP_USERS,
+  ERROR_ON_GET_LOOKUP_USERS
 } = REDUX_TYPES.SSO_AUTH;
 
 export const loginUser = (code: string): ThunkAction<string, Object> => {
@@ -46,6 +48,27 @@ export const onSetUserRole = (role: string): ThunkAction<string, Object> => {
       }
     } catch (error) {
       dispatch({ type: ERROR_ON_CHANGE_ROLE, payload: { error } });
+    }
+  };
+};
+
+export const getAllUsers = (): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<Object, Object>) => {
+    const idToken = localStorage.getItem('id_token') || '';
+
+    try {
+      const { data } = await getUsers(idToken);
+
+      if (data) {
+        const { authService } = data;
+
+        dispatch({
+          type: ON_GET_LOOKUP_USERS,
+          payload: { lookupUsers: authService }
+        });
+      }
+    } catch (error) {
+      dispatch({ type: ERROR_ON_GET_LOOKUP_USERS, payload: { error } });
     }
   };
 };

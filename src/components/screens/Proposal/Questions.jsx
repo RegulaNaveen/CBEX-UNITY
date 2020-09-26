@@ -21,7 +21,7 @@ import {
 } from '../../../selectors';
 import Sidebar from '../../common/Sidebar';
 import AnswerHistory from '../../modals/AnswerHistory';
-import { getAllUsers } from '../../../actions/auth-actions';
+import { getAllUsers } from '../../../actions/sso-auth-actions';
 
 type Props = {
   match: Match,

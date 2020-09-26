@@ -30,7 +30,7 @@ class SessionHandler extends Component<Props, {}> {
     else this.startAuthentication();
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: Object) {
     const { isAuthenticated } = this.props;
 
     if (prevProps.isAuthenticated !== isAuthenticated) {
@@ -54,7 +54,6 @@ class SessionHandler extends Component<Props, {}> {
     refreshUserData();
 
     const proposalId = localStorage.getItem('proposalId');
-
     history.push(`${proposalId ? `${PROPOSAL}${proposalId}` : DASHBOARD}`);
   };
 
