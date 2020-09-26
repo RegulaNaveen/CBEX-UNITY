@@ -3,14 +3,6 @@ import { Map } from 'immutable';
 
 export const getAuthData = (auth: Map): Map => auth.get('authData');
 
-export const getUserData = (auth: Map): Map => {
-  const role = auth.getIn(['authData', 'data', 'authService', 'role']);
-  const email = auth.getIn(['authData', 'data', 'authService', 'email']);
-  const name = auth.getIn(['authData', 'data', 'authService', 'userName']);
-
-  return { role, email, name };
-};
-
 export const isAuthLoading = (auth: Map): boolean => auth.get('isAuthLoading');
 
 export const authHasErrors = (auth: Map): string => auth.get('authError');
@@ -43,8 +35,3 @@ export const logoutHasErrors = (auth: Map): string =>
 
 export const getChangeRoleError = (auth: Map): Map =>
   auth.get('changeRoleError');
-
-export const getLookupUsers = (auth: Map): Map => auth.get('lookupUsers');
-
-export const getLookupUsersError = (auth: Map): Map =>
-  auth.get('lookupUsersError');

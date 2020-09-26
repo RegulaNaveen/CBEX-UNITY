@@ -30,6 +30,7 @@ const DashboardFilters = ({
     fetchFilterValues();
     fetchUsers();
   }, []);
+
   const changeDate = useCallback(range => {
     onDateRangeChange('bid due date', range);
   });

@@ -9,3 +9,16 @@ export const getUserName = (auth: Map): string => auth.get('name');
 export const getUserEmail = (auth: Map): string => auth.get('email');
 
 export const getUserRole = (auth: Map): string => auth.get('role');
+
+export const getUserData = (auth: Map): Map => {
+  const role = auth.get('role');
+  const email = auth.get('email');
+  const name = auth.get('name');
+
+  return { role, email, name };
+};
+
+export const getLookupUsers = (auth: Map): Map => auth.get('lookupUsers');
+
+export const getLookupUsersError = (auth: Map): Map =>
+  auth.get('lookupUsersError');
