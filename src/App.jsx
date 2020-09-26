@@ -18,7 +18,7 @@ const App = () => (
     <BrowserRouter>
       <SessionHandler>
         <Switch>
-          <Route path='/' exact component={Login} />
+          <Route path="/" exact component={Login} />
           <Route path={LOGIN} component={Login} />
           <PrivateRoute path={DASHBOARD} component={DashboardComponent} />
           <PrivateRoute path={PROPOSALS} component={ProposalComponent} />
