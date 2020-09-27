@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 import ToolbarMenu from './ToolbarMenu';
@@ -11,10 +11,18 @@ type State = { isCollapsed: boolean };
 class Toolbar extends Component<{}, State> {
   constructor(props: Object) {
     super(props);
-
+    this.wrapperRef = createRef();
     this.state = {
       isCollapsed: false
     };
+  }
+
+  componentDidMount() {
+    document.addEventListener('mousedown', this.handleClickOutside);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside);
   }
 
   handleKeyPress = (event: KeyboardEvent) => {
@@ -24,6 +32,11 @@ class Toolbar extends Component<{}, State> {
   handleCollapse = () => {
     const { isCollapsed } = this.state;
     this.setState({ isCollapsed: !isCollapsed });
+  };
+
+  handleClickOutside = event => {
+    if (this.wrapperRef && !this.wrapperRef.current.contains(event.target))
+      this.setState({ isCollapsed: false });
   };
 
   render() {
@@ -36,7 +49,7 @@ class Toolbar extends Component<{}, State> {
           <p className="toolbar-title">Unity</p>
         </Link>
         <div className="toolbar-account-spacer">
-          <div className="toolbar-account-wrapper">
+          <div ref={this.wrapperRef} className="toolbar-account-wrapper">
             <div
               className={classnames(
                 'toolbar-account-info',
