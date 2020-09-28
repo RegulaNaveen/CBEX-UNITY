@@ -1,11 +1,11 @@
 // @flow
 import React from 'react';
 import { MatomoProvider } from '@datapunt/matomo-tracker-react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store';
 import PrivateRoute from './PrivateRoute';
-import { LOGIN, PROPOSALS, DASHBOARD } from './routes';
+import { LOGIN, PROPOSALS, DASHBOARD, ROUTE_NOT_FOUND } from './routes';
 import SessionHandler from './SSOSessionHandler';
 import Login from './components/screens/Auth/Login';
 import ProposalComponent from './components/screens/Proposal';
@@ -22,6 +22,7 @@ const App = () => (
           <Route path={LOGIN} component={Login} />
           <PrivateRoute path={DASHBOARD} component={DashboardComponent} />
           <PrivateRoute path={PROPOSALS} component={ProposalComponent} />
+          <Redirect to={Login} />
         </Switch>
       </SessionHandler>
     </BrowserRouter>
