@@ -5,7 +5,7 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store';
 import PrivateRoute from './PrivateRoute';
-import { LOGIN, PROPOSALS, DASHBOARD, ROUTE_NOT_FOUND } from './routes';
+import { LOGIN, PROPOSALS, DASHBOARD } from './routes';
 import SessionHandler from './SSOSessionHandler';
 import Login from './components/screens/Auth/Login';
 import ProposalComponent from './components/screens/Proposal';
