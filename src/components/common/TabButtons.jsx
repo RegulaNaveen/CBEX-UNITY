@@ -16,7 +16,7 @@ const TabButtons = ({ elements, selectedView, onChangeView }: Props) => {
   }
 
   return (
-    <div className="tab-buttons">
+    <div className="tab-buttons" style={{ width: elements.length * 150 }}>
       {elements.map(item => (
         <button
           key={uuidv4()}
