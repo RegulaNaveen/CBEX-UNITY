@@ -57,6 +57,15 @@
         cursor: pointer;
         color: $neutral1;
 
+        &.is-loading {
+          justify-content: center;
+        }
+
+        &:disabled {
+          cursor: not-allowed;
+          background: rgba($color: $neptune-primary, $alpha: 0.5);
+        }
+
         svg {
           margin-right: 15px;
         }
