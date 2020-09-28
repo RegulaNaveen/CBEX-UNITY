@@ -1,11 +1,10 @@
 #table-view {
-  font-family: $proximaNova;
-
   .headers {
     display: grid;
     grid-gap: 20px;
     padding: 20px;
     background-color: $neutral1;
+
     h3 {
       color: rgba($color: $neutral7, $alpha: 0.8);
       font-size: 14px;
@@ -26,6 +25,7 @@
         height: 40px;
         overflow: scroll;
         scrollbar-width: none;
+        -ms-overflow-style: none;
 
         p {
           display: inline;
