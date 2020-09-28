@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import { formatDate } from '../../../utils/DateUtils';
 
 type Props = {
   data: Object
@@ -19,6 +20,7 @@ function ProposalInfo({ data }: Props) {
   } = data;
 
   const placeholder = 'No data';
+  const date = bidDueDate && formatDate(new Date(bidDueDate), 'dd-MMM-yyyy');
 
   return (
     <div id="proposal-info">
@@ -71,7 +73,7 @@ function ProposalInfo({ data }: Props) {
           </div>
           <div className="detail-column-item">
             <p>
-              Bid DueDate: <span>{bidDueDate || placeholder}</span>
+              Bid Due Date: <span>{date || placeholder}</span>
             </p>
           </div>
         </div>
