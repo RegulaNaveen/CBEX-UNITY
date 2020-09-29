@@ -44,7 +44,7 @@ const Login = () => {
             ) : (
               <>
                 <Microsoft width={20} height={20} />
-                Login with Active Directory
+                Log in with SSO
               </>
             )}
           </button>
