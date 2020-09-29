@@ -7,7 +7,7 @@ import InputField from './InputField';
 import FilterDropDown from './FilterDropDown';
 import DateRange from './DateRange';
 import UserLookup from './UserLookup';
-import { getAllUsers } from '../../actions/auth-actions';
+import { getAllUsers } from '../../actions/sso-auth-actions';
 
 type Props = {
   onTextFilterChange: Function,
