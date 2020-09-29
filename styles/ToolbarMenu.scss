@@ -5,6 +5,7 @@
   height: 220px;
   width: 280px;
   box-sizing: border-box;
+  z-index: 99999;
   border: $border;
   border-radius: 0 0 4px 4px;
   background-color: $white;
