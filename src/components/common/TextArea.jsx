@@ -15,7 +15,8 @@ type Props = {
 };
 
 type State = {
-  textValue: string
+  textValue: string,
+  numberError: boolean
 };
 
 type ReactRefT = { current: any };
@@ -38,7 +39,8 @@ class TextArea extends PureComponent<Props, State> {
     this.textAreaInput = React.createRef();
 
     this.state = {
-      textValue: ''
+      textValue: '',
+      numberError: false
     };
   }
 
@@ -71,11 +73,23 @@ class TextArea extends PureComponent<Props, State> {
     this.setState({ textValue });
   };
 
+  handleNumber = ({ target }: SyntheticInputEvent<EventTarget>) => {
+    const numberRegex = /^(-?\d+\.\d+)$|^(-?\d+)$/;
+    const { onChange } = this.props;
+    const { value: textValue } = target;
+    const numberError = !numberRegex.test(textValue);
+
+    if (onChange && !numberError) onChange(textValue);
+
+    this.setState({ textValue, numberError });
+  };
+
   handleOnBlur = ({ target }: SyntheticInputEvent<EventTarget>) => {
     const { onBlur, value: lastAnswer } = this.props;
+    const { numberError } = this.state;
     const { value: textValue } = target;
 
-    if (onBlur) onBlur(textValue, lastAnswer);
+    if (onBlur && !numberError) onBlur(textValue, lastAnswer);
   };
 
   autoResize = (event: SyntheticInputEvent<EventTarget>) => {
@@ -89,21 +103,28 @@ class TextArea extends PureComponent<Props, State> {
 
   render() {
     const { id, className, placeholder, title, type } = this.props;
-    const { textValue } = this.state;
+    const { textValue, numberError } = this.state;
 
     return (
       <>
         {title && <p className="text-area-title">{title}</p>}
         {type === 'number' ? (
-          <input
-            id={id}
-            className={classnames('text-number-wrapper', className)}
-            value={textValue}
-            onChange={this.handleText}
-            onBlur={this.handleOnBlur}
-            placeholder={placeholder}
-            type={type}
-          />
+          <>
+            <input
+              id={id}
+              className={classnames('text-number-wrapper', className, {
+                numberError
+              })}
+              value={textValue}
+              onChange={this.handleNumber}
+              onBlur={this.handleOnBlur}
+              placeholder={placeholder}
+              type={type}
+            />
+            {numberError && (
+              <p className="number-error-text">Please enter a valid number</p>
+            )}
+          </>
         ) : (
           <textarea
             id={id}
