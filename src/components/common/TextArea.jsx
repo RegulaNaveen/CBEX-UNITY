@@ -75,7 +75,7 @@ class TextArea extends PureComponent<Props, State> {
     const { onBlur, value: lastAnswer } = this.props;
     const { value: textValue } = target;
 
-    if (onBlur && textValue) onBlur(textValue, lastAnswer);
+    if (onBlur) onBlur(textValue, lastAnswer);
   };
 
   autoResize = (event: SyntheticInputEvent<EventTarget>) => {
