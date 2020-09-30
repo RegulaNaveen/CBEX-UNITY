@@ -102,11 +102,12 @@ const DashboardFilters = ({
         />
       </div>
       <div className="filter-wrapper">
-        <FilterDropDown
-          title="Indication"
-          id="indication"
-          onChange={onDropDownFilterChange}
-          items={filterValues ? filterValues.indications : []}
+        <InputField
+          label="Verbatim indication"
+          id="verbatim indication"
+          onChange={onTextFilterChange}
+          placeholder="Verbatim indication"
+          type="text"
         />
       </div>
       <div className="filter-wrapper">

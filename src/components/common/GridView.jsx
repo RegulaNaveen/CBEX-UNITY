@@ -24,7 +24,7 @@ const formatProposal = (proposal: Object) => {
     protocolNumber: proposal['protocol number'],
     phase: proposal.phase,
     therapeuticArea: proposal.therapeuticArea,
-    verbatimIndication: proposal.indication,
+    verbatimIndication: proposal['verbatim indication'],
     proposalId: proposal.proposalId
   };
 
