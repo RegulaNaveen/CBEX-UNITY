@@ -1,9 +1,8 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import DayPicker, { DateUtils } from 'react-day-picker';
 import { formatDate } from '../../utils/DateUtils';
 import DatePickerCustomInput from './DatePickerCustomInput';
-import { CloseCircle } from '../svg';
 
 type Props = {
   onSetRange: Function,
@@ -18,18 +17,35 @@ type State = {
 
 const dateFormat = 'dd-MMM-yyyy';
 class DateRange extends Component<Props, State> {
+  wrapperRef: any;
+
   static defaultProps = {
     label: ''
   };
 
   constructor(props: Object) {
     super(props);
+    this.wrapperRef = createRef();
     this.state = {
       from: undefined,
       to: undefined,
       showPicker: false
     };
   }
+
+  componentDidMount() {
+    document.addEventListener('mousedown', this.handleClickOutside);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside);
+  }
+
+  handleClickOutside = ({ target }: SyntheticEvent<EventTarget>) => {
+    console.log(this.wrapperRef.current);
+    if (this.wrapperRef && !this.wrapperRef.current.contains(target))
+      this.setState({ showPicker: false });
+  };
 
   handleDayClick = (day: Object) => {
     const { onSetRange } = this.props;
@@ -63,7 +79,7 @@ class DateRange extends Component<Props, State> {
     return (
       <div className="date-picker">
         {label && <p className="date-picker-title">{label}</p>}
-        <div className="date-range-wrapper">
+        <div ref={this.wrapperRef}>
           <DatePickerCustomInput
             placeholder="Select a date range"
             value={
@@ -75,6 +91,8 @@ class DateRange extends Component<Props, State> {
                 : ''
             }
             onFocus={this.showPicker}
+            onReset={this.handleReset}
+            withReset
           />
           {showPicker && (
             <DayPicker
@@ -113,15 +131,6 @@ class DateRange extends Component<Props, State> {
                 outside: 'DayPicker-Day--outside'
               }}
             />
-          )}
-          {from && to && (
-            <button
-              type="button"
-              onClick={this.handleReset}
-              className="resetButton"
-            >
-              <CloseCircle fill="#444" />
-            </button>
           )}
         </div>
       </div>

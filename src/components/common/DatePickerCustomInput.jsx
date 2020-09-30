@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { Calendar } from '../svg';
+import { Calendar, CloseCircle } from '../svg';
 
 type Props = {
   value: string,
@@ -9,7 +9,9 @@ type Props = {
   onBlur?: Function,
   onChange?: Function,
   onKeyUp?: Function,
-  onClick?: Function
+  onClick?: Function,
+  withReset?: boolean,
+  onReset?: Function
 };
 
 const DatePickerCustomInput = ({
@@ -19,7 +21,9 @@ const DatePickerCustomInput = ({
   onChange,
   onKeyUp,
   onClick,
-  placeholder
+  placeholder,
+  withReset,
+  onReset
 }: Props) => (
   <div className="datepicker-wrapper">
     <Calendar className="datepicker-icon" />
@@ -37,6 +41,11 @@ const DatePickerCustomInput = ({
       onClick={onClick}
       onBlur={onBlur}
     />
+    {withReset && value && (
+      <button type="button" onClick={onReset} className="resetButton">
+        <CloseCircle fill="#444" />
+      </button>
+    )}
   </div>
 );
 
@@ -45,7 +54,9 @@ DatePickerCustomInput.defaultProps = {
   onBlur: undefined,
   onChange: undefined,
   onKeyUp: undefined,
-  onClick: undefined
+  onClick: undefined,
+  withReset: false,
+  onReset: undefined
 };
 
 export default DatePickerCustomInput;

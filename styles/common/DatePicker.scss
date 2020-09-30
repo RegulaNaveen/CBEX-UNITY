@@ -72,6 +72,11 @@
       letter-spacing: 0;
       line-height: 24px;
       border: none;
+      width: 100%;
+      
+      &:focus{
+        outline: none;
+      }
     }
 
     .placeholder {
