@@ -132,13 +132,3 @@
 .complete {
   background-color: $neutral2;
 }
-
-@media (max-width: $viewport-12) {
-  .task-wrapper {
-    .task-table-row {
-      &-question {
-        white-space: nowrap;
-      }
-    }
-  }
-}
