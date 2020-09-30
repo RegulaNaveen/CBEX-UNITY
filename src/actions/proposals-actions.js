@@ -34,7 +34,8 @@ const formatProposal = (proposal: Object): Object => {
   formattedProposal['protocol number'] = proposalDetails['Protocol number'];
   formattedProposal.phase = proposalDetails.Phase;
   formattedProposal.product = proposalDetails['Product name'];
-  formattedProposal.indication = proposalDetails['Verbatim indication'];
+  formattedProposal['verbatim indication'] =
+    proposalDetails['Verbatim indication'];
   formattedProposal.therapeuticArea = proposalDetails['Therapeutic area'];
   formattedProposal['bid due date'] = proposalDetails['Bid due date'];
   formattedProposal['opportunity status'] =
@@ -153,6 +154,7 @@ export const onFilteringProposals = (
         case 'customer':
         case 'protocol number':
         case 'product':
+        case 'verbatim indication':
           filteredProposals = textFilter(
             key,
             value,
@@ -161,7 +163,6 @@ export const onFilteringProposals = (
           break;
         case 'phase':
         case 'therapeuticArea':
-        case 'indication':
         case 'opportunity status':
           filteredProposals = optionFilter(
             key,
