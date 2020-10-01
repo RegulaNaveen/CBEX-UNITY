@@ -23,5 +23,5 @@ export const dateDiffInDays = (date: Object): number => {
 
 export const parseMomentDate = (date: Date | string) => {
   if (!date) return date;
-  return moment(date).format('DD-MM-YYYY');
+  return moment(date).format('D-MMM-yyyy');
 };
