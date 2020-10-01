@@ -42,7 +42,6 @@ class DateRange extends Component<Props, State> {
   }
 
   handleClickOutside = ({ target }: SyntheticEvent<EventTarget>) => {
-    console.log(this.wrapperRef.current);
     if (this.wrapperRef && !this.wrapperRef.current.contains(target))
       this.setState({ showPicker: false });
   };
