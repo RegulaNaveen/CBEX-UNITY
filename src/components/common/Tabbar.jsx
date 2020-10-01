@@ -85,10 +85,9 @@ class Tabbar extends Component<Props, State> {
   toggleFilters = () => {
     const { filterProposals } = this.props;
     const { showFilters } = this.state;
-    this.setState({ showFilters: !showFilters }, () => {
-      const { showFilters: newVisibility } = this.state;
-      if (newVisibility) filterProposals({}, false);
-    });
+    this.setState({ showFilters: !showFilters }, () =>
+      filterProposals({}, false)
+    );
   };
 
   render() {
