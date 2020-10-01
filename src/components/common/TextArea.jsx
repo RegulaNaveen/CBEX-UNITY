@@ -77,7 +77,7 @@ class TextArea extends PureComponent<Props, State> {
     const numberRegex = /^(-?\d+\.\d+)$|^(-?\d+)$/;
     const { onChange } = this.props;
     const { value: textValue } = target;
-    const numberError = !numberRegex.test(textValue);
+    const numberError = textValue && !numberRegex.test(textValue);
 
     if (onChange && !numberError) onChange(textValue);
 
@@ -119,7 +119,6 @@ class TextArea extends PureComponent<Props, State> {
               onChange={this.handleNumber}
               onBlur={this.handleOnBlur}
               placeholder={placeholder}
-              type={type}
             />
             {numberError && (
               <p className="number-error-text">Please enter a valid number</p>
