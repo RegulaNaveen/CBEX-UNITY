@@ -55,8 +55,9 @@
 
     .modal-body {
       overflow-y: scroll;
-      scrollbar-width: none;
       margin-bottom: 50px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
 
       .question-responsible {
         font-style: italic;
