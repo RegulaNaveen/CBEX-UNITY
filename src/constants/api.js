@@ -68,6 +68,8 @@ const AUTH_API_URL = `${NORMAL_AUTH_API_ENDPOINT}/api/auth`;
 const ROLE_ENDPOINT = `${AUTH_API_URL}/changerole`;
 const VALIDATE_TOKEN = `${AUTH_API_URL}/validate-token`;
 
+const VALIDATE_TOKEN = `${AUTH_API_URL}/validate-token`;
+
 const AUTH = {
   COGNITO_HOST,
   API_ENDPOINT: AUTH_API_ENDPOINT,

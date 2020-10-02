@@ -9,7 +9,8 @@ const {
   REDIRECTION_URL,
   CLIENT_ID,
   ROLE_ENDPOINT,
-  AUTH_API_URL
+  AUTH_API_URL,
+  VALIDATE_TOKEN
 } = API.AUTH;
 
 export const onLoginRequest = (code: string): Promise<Object> => {
@@ -42,4 +43,13 @@ export const onChangeUserRole = (
 export const getUsers = (idToken: string): Promise<Object> => {
   const headers = { Authorization: `Bearer ${idToken}` };
   return axios.get(`${AUTH_API_URL}/users`, { headers });
+};
+
+export const validateToken = async (token: string) => {
+  try {
+    const { validToken } = await axios.post(VALIDATE_TOKEN, { token });
+    return validToken;
+  } catch (error) {
+    return false;
+  }
 };
