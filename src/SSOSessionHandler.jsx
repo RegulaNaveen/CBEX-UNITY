@@ -2,14 +2,14 @@
 import { Component } from 'react';
 import type { Node } from 'react';
 import { withRouter } from 'react-router-dom';
-import type { History } from 'react-router-dom';
+import type { History, Match } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { loginUser, onRefreshUserData } from './actions/sso-auth-actions';
-import { PROPOSAL, DASHBOARD } from './routes';
+import { PROPOSAL, DASHBOARD, LOGIN } from './routes';
 import { getUserAuthStatus } from './selectors';
-
+import { validateToken } from './api/sso-auth';
 import { API } from './constants';
 
 const { COGNITO_HOST, REDIRECTION_URL, CLIENT_ID } = API.AUTH;
@@ -17,17 +17,27 @@ const { COGNITO_HOST, REDIRECTION_URL, CLIENT_ID } = API.AUTH;
 type Props = {
   children: Node,
   history: History,
+  match: Match,
   isAuthenticated: boolean,
   refreshUserData: () => {},
   onLoginUser: (code: string) => void
 };
 
 class SessionHandler extends Component<Props, {}> {
-  componentDidMount() {
-    const isAuthenticated = !!localStorage.getItem('access_token');
+  async componentDidMount() {
+    const idToken = localStorage.getItem('id_token');
+    const {
+      match: { path }
+    } = this.props;
 
-    if (isAuthenticated) this.userIsLoggedIn();
-    else this.startAuthentication();
+    if (idToken) {
+      const validToken = await validateToken(idToken);
+
+      if (validToken) this.userIsLoggedIn();
+      else if (path !== LOGIN && path !== '/') this.userIsNotLoggedIn();
+    }
+
+    this.startAuthentication();
   }
 
   componentDidUpdate(prevProps: Object) {
