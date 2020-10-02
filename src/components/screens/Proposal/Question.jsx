@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
-import { isObject, isEqual } from 'lodash';
+import { isObject, isEqual, isEmpty } from 'lodash';
 import { Checkmark } from '../../svg';
 import Dropdown from '../../common/Dropdown';
 import TextArea from '../../common/TextArea';
@@ -45,7 +45,7 @@ export class TaskRow extends Component<Props, State> {
   handleTextChange = (textValue: string, lastAnswer: string) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
 
-    if (textValue) {
+    if (!isEmpty(textValue.replace(/ /g, ''))) {
       if (lastAnswer !== textValue)
         setProposalAnswer(proposalId, questionId, textValue, userData);
     } else if (!textValue && lastAnswer) {
