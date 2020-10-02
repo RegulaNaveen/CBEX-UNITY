@@ -45,7 +45,7 @@ export class TaskRow extends Component<Props, State> {
   handleTextChange = (textValue: string, lastAnswer: string) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
 
-    if (!isEmpty(textValue.replace(/ /g, ''))) {
+    if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
       if (lastAnswer !== textValue)
         setProposalAnswer(proposalId, questionId, textValue, userData);
     } else if (!textValue && lastAnswer) {
