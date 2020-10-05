@@ -95,10 +95,9 @@ class AnswerHistory extends Component<Props> {
 
             if (nextAnswerArray.length > answerArray.length)
               historyAnswer.push({
-                answer_: nextAnswerArray.slice(
-                  lastIndex + 1,
-                  nextAnswerArray.length
-                ),
+                answer_: nextAnswerArray
+                  .slice(lastIndex + 1, nextAnswerArray.length)
+                  .join(' '),
                 status: 'removed'
               });
 
