@@ -143,7 +143,11 @@ class AnswerHistory extends Component<Props> {
               {userInitials}
             </span>
             <div>
-              <p>{userName}</p>
+              <p>
+                {userName === 'AnswerPulledFromSalesforce'
+                  ? 'Salesforce Answer'
+                  : userName}
+              </p>
               {renderAnswers()}
             </div>
           </div>
