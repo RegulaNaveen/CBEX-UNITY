@@ -79,7 +79,11 @@ class AnswerHistory extends Component<Props> {
             const answerArray = answer.split(' ');
             const nextAnswerArray = nextAnswer.split(' ');
 
+            let lastIndex;
+
             const historyAnswer = answerArray.map((answer_, index_) => {
+              lastIndex = index_;
+
               if (answer_.includes(nextAnswerArray[index_]))
                 return { answer_, status: 'normal' };
 
@@ -88,6 +92,15 @@ class AnswerHistory extends Component<Props> {
                 { answer_, status: 'changed' }
               ];
             });
+
+            if (nextAnswerArray.length > answerArray.length)
+              historyAnswer.push({
+                answer_: nextAnswerArray.slice(
+                  lastIndex + 1,
+                  nextAnswerArray.length
+                ),
+                status: 'removed'
+              });
 
             return (
               <p>
