@@ -20,6 +20,7 @@ const {
 
 const formatProposal = (proposal: Object): Object => {
   const formattedProposal = {};
+
   const {
     proposalDetails,
     proposalId,
@@ -27,22 +28,27 @@ const formatProposal = (proposal: Object): Object => {
     opportunityOverview,
     usersList
   } = proposal;
-  formattedProposal.proposalId = proposalId;
-  formattedProposal.opportunityName = opportunityName;
-  formattedProposal['opportunity number'] = proposalDetails['CRM #'];
-  formattedProposal.customer = proposalDetails.Customer;
-  formattedProposal['protocol number'] = proposalDetails['Protocol number'];
-  formattedProposal.phase = proposalDetails.Phase;
-  formattedProposal.product = proposalDetails['Product name'];
-  formattedProposal['verbatim indication'] =
-    proposalDetails['Verbatim indication'];
-  formattedProposal.therapeuticArea = proposalDetails['Therapeutic area'];
-  formattedProposal['bid due date'] = proposalDetails['Bid due date'];
-  formattedProposal['opportunity status'] =
-    opportunityOverview.OpportunityStatus || '';
-  formattedProposal.usersList = usersList;
 
-  return formattedProposal;
+  if (!isEmpty(opportunityOverview)) {
+    formattedProposal.proposalId = proposalId;
+    formattedProposal.opportunityName = opportunityName;
+    formattedProposal['opportunity number'] = proposalDetails['CRM #'];
+    formattedProposal.customer = proposalDetails.Customer;
+    formattedProposal['protocol number'] = proposalDetails['Protocol number'];
+    formattedProposal.phase = proposalDetails.Phase;
+    formattedProposal.product = proposalDetails['Product name'];
+    formattedProposal['verbatim indication'] =
+      proposalDetails['Verbatim indication'];
+    formattedProposal.therapeuticArea = proposalDetails['Therapeutic area'];
+    formattedProposal['bid due date'] = proposalDetails['Bid due date'];
+    formattedProposal['opportunity status'] =
+      opportunityOverview.OpportunityStatus || '';
+    formattedProposal.usersList = usersList;
+
+    return formattedProposal;
+  }
+
+  return {};
 };
 
 export const getAllProposals = (): ThunkAction<string, Object> => {
@@ -51,7 +57,7 @@ export const getAllProposals = (): ThunkAction<string, Object> => {
     try {
       const { data } = await onGetAllProposals();
 
-      if (data) {
+      if (!isEmpty(data)) {
         const { proposals } = data;
         const formatted = proposals.map(proposal => formatProposal(proposal));
         dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
