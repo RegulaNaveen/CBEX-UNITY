@@ -4,7 +4,7 @@
   "description": "GBO Efficiencies Frontend App",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --mode development --env.API_ENV=UAT",
+    "dev": "webpack-dev-server --mode development --env.API_ENV=DEV",
     "build:dev": "webpack --mode production --env.API_ENV=DEV",
     "build:crm": "webpack --mode production --env.API_ENV=CRM",
     "build:uat": "webpack --mode production --env.API_ENV=UAT",
