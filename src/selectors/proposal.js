@@ -17,6 +17,8 @@ const generateSections = (
       section: { sectionName, sectionOrder }
     } = question;
 
+    const roles = roleNames || [];
+
     const createSections = () => {
       let section = Map({});
       let questions = sections.getIn([sectionName, 'questions']) || Map({});
@@ -33,7 +35,7 @@ const generateSections = (
     };
 
     if (filter && userRole) {
-      if (roleNames.includes(userRole)) createSections();
+      if (roles.includes(userRole)) createSections();
     } else createSections();
   });
 
