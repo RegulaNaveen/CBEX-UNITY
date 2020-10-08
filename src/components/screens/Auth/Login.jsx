@@ -11,7 +11,7 @@ const { COGNITO_HOST, REDIRECTION_URL, CLIENT_ID } = API.AUTH;
 const Login = () => {
   function handleAmplifyLogin() {
     window.location.assign(
-      `${COGNITO_HOST}oauth2/authorize?identity_provider=AzureAD&redirect_uri=${REDIRECTION_URL}&response_type=CODE&client_id=${CLIENT_ID}&scope=aws.cognito.signin.user.admin email openid phone profile`
+      `${COGNITO_HOST}/oauth2/authorize?identity_provider=AzureAD&redirect_uri=${REDIRECTION_URL}&response_type=CODE&client_id=${CLIENT_ID}&scope=aws.cognito.signin.user.admin email openid phone profile`
     );
   }
 
