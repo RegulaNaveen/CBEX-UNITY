@@ -15,9 +15,11 @@ const {
 
 export const onLoginRequest = (code: string): Promise<Object> => {
   const headers = {
-    'Content-Type': 'application/x-www-form-urlencoded',
-    Authorization: `Basic ${AUTH_KEY}`
+    'Content-Type': 'application/x-www-form-urlencoded'
   };
+
+  if (process.env.API_ENV === 'DEV')
+    headers.Authorization = `Basic ${AUTH_KEY}`;
 
   const data = {
     grant_type: 'authorization_code',
