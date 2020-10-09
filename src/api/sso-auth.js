@@ -13,8 +13,13 @@ const {
   VALIDATE_TOKEN
 } = API.AUTH;
 
+type Headers = {
+  'Content-Type': string,
+  Authorization?: string
+};
+
 export const onLoginRequest = (code: string): Promise<Object> => {
-  const headers = {
+  const headers: Headers = {
     'Content-Type': 'application/x-www-form-urlencoded'
   };
 
