@@ -9,20 +9,23 @@ import { DASHBOARD } from '../../routes';
 type State = { isCollapsed: boolean };
 
 class Toolbar extends Component<{}, State> {
+  wrapperRef: { current: any | HTMLDivElement };
+
   constructor(props: Object) {
     super(props);
     this.wrapperRef = createRef();
+
     this.state = {
       isCollapsed: false
     };
   }
 
   componentDidMount() {
-    document.addEventListener('mousedown', this.handleClickOutside);
+    window.addEventListener('mousedown', this.handleClickOutside);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClickOutside);
+    window.removeEventListener('mousedown', this.handleClickOutside);
   }
 
   handleKeyPress = (event: KeyboardEvent) => {
@@ -34,7 +37,7 @@ class Toolbar extends Component<{}, State> {
     this.setState({ isCollapsed: !isCollapsed });
   };
 
-  handleClickOutside = event => {
+  handleClickOutside = (event: any) => {
     if (this.wrapperRef && !this.wrapperRef.current.contains(event.target))
       this.setState({ isCollapsed: false });
   };

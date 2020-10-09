@@ -153,7 +153,7 @@ export const onFilteringProposals = (
   } else {
     let filteredProposals = [];
 
-    cleanFilters.forEach(([key, value]: Array<string>) => {
+    cleanFilters.forEach(([key, value]: Array<any>) => {
       switch (key) {
         case 'opportunity number':
         case 'opportunityName':

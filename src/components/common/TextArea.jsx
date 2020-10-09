@@ -81,7 +81,7 @@ class TextArea extends PureComponent<Props, State> {
 
     if (onChange && !numberError) onChange(textValue);
 
-    this.setState({ textValue, numberError });
+    this.setState({ textValue, numberError: !!numberError });
   };
 
   handleOnBlur = ({ target }: SyntheticInputEvent<EventTarget>) => {

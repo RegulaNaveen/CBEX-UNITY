@@ -34,11 +34,11 @@ class DateRange extends Component<Props, State> {
   }
 
   componentDidMount() {
-    document.addEventListener('mousedown', this.handleClickOutside);
+    window.addEventListener('mousedown', this.handleClickOutside);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClickOutside);
+    window.removeEventListener('mousedown', this.handleClickOutside);
   }
 
   handleClickOutside = ({ target }: SyntheticEvent<EventTarget>) => {
