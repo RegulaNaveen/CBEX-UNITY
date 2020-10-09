@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
-import classNames from 'classnames';
-import { isEmpty, flatten } from 'lodash';
+import { isEmpty } from 'lodash';
+import { diffWords } from 'diff';
 import { getProposalTeamAssignedRoles } from '../../selectors';
 import { Close } from '../svg';
 import { parseMomentDate } from '../../utils/DateUtils';
@@ -76,40 +76,20 @@ class AnswerHistory extends Component<Props> {
       const renderAnswers = () => {
         if (questionType !== 'picklist') {
           if (questionType === 'text' && sectionName !== 'Proposal Team') {
-            const answerArray = answer.split(' ');
-            const nextAnswerArray = nextAnswer.split(' ');
-
-            let lastIndex;
-
-            const historyAnswer = answerArray.map((answer_, index_) => {
-              lastIndex = index_;
-
-              if (answer_.includes(nextAnswerArray[index_]))
-                return { answer_, status: 'normal' };
-
-              return [
-                { answer_: nextAnswerArray[index_], status: 'removed' },
-                { answer_, status: 'changed' }
-              ];
-            });
-
-            if (nextAnswerArray.length > answerArray.length)
-              historyAnswer.push({
-                answer_: nextAnswerArray
-                  .slice(lastIndex + 1, nextAnswerArray.length)
-                  .join(' '),
-                status: 'removed'
-              });
-
-            return (
-              <p>
-                {flatten(historyAnswer).map(({ answer_, status }) => (
-                  <span key={uuidv4()} className={classNames(status)}>
-                    {answer_}{' '}
-                  </span>
-                ))}
-              </p>
+            const renderWord = (word, status) => (
+              <span className={status} key={uuidv4()}>
+                {word}{' '}
+              </span>
             );
+
+            const diffAnswers = diffWords(nextAnswer, answer);
+
+            return diffAnswers.map(({ value, added, removed }) => {
+              if (removed) return renderWord(value, 'removed');
+              if (added) return renderWord(value, 'changed');
+
+              return <span key={uuidv4()}>{value} </span>;
+            });
           }
 
           if (questionType === 'date') {
@@ -123,7 +103,7 @@ class AnswerHistory extends Component<Props> {
 
         const deletedAnswers = nextAnswer.filter(ans => !answer.includes(ans));
         const deletedAnswersItems = deletedAnswers.map(ans => (
-          <li className="answer-deleted" key={uuidv4()}>
+          <li className="removed" key={uuidv4()}>
             {ans}
           </li>
         ));
@@ -131,7 +111,7 @@ class AnswerHistory extends Component<Props> {
         const answerItem = answer.map(singleAnswer => (
           <li
             key={uuidv4()}
-            className={!nextAnswer.includes(singleAnswer) ? 'answer-added' : ''}
+            className={!nextAnswer.includes(singleAnswer) ? 'changed' : ''}
           >
             {singleAnswer}
           </li>

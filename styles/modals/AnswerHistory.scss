@@ -92,31 +92,23 @@
         .main-container {
           display: flex;
 
-          p,
           li {
+            margin-left: 15px;
+          }
+
+          p,
+          li,
+          span {
             font-size: 14px;
             margin-top: 10px;
 
-            span.removed {
+            &.removed {
               text-decoration: line-through;
               color: $error;
             }
 
-            span.changed {
+            &.changed {
               color: $neptune-secondary;
-            }
-          }
-
-          li {
-            margin-left: 15px;
-
-            &.answer-added {
-              color: $neptune-secondary;
-            }
-
-            &.answer-deleted {
-              text-decoration: line-through;
-              color: $error;
             }
           }
 
