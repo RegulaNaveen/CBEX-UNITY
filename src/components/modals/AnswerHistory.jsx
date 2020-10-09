@@ -29,9 +29,9 @@ class AnswerHistory extends Component<Props> {
     const { question, proposalTeamAnswers } = this.props;
     const questionRoleNames = question.get('roleNames');
 
-    const questionResponsables = proposalTeamAnswers.filter(({ role }) =>
-      questionRoleNames.includes(role)
-    );
+    const questionResponsables = proposalTeamAnswers.filter(({ role }) => {
+      return !isEmpty(questionRoleNames) && questionRoleNames.includes(role);
+    });
 
     if (isEmpty(questionResponsables)) {
       return (
