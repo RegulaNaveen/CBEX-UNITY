@@ -17,7 +17,6 @@ const {
 export const loginUser = (code: string): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     try {
-      localStorage.setItem('isAuthInProgress', 'true');
       const { data } = await onLoginRequest(code);
       if (data) dispatch({ type: ON_USER_LOGIN, payload: { data } });
     } catch (error) {
