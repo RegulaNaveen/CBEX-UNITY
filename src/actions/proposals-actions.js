@@ -112,13 +112,20 @@ const dateRangeFilter = (key: string, range: Object, array: Array<Object>) => {
   });
 };
 
-const textFilter = (key: string, value: string, array: Array<Object>) =>
-  array.filter(proposal =>
-    proposal[key].toLowerCase().includes(value.toLowerCase())
+const textFilter = (key: string, value: string, array: Array<Object>) => {
+  return array.filter(
+    proposal =>
+      !isEmpty(proposal) &&
+      proposal[key].toLowerCase().includes(value.toLowerCase())
   );
+};
 
-const optionFilter = (key: string, value: string, array: Array<Object>) =>
-  array.filter(proposal => proposal[key].toLowerCase() === value.toLowerCase());
+const optionFilter = (key: string, value: string, array: Array<Object>) => {
+  return array.filter(
+    proposal =>
+      !isEmpty(proposal) && proposal[key].toLowerCase() === value.toLowerCase()
+  );
+};
 
 const userFilter = (value: string, array: Array<Object>) => {
   const start = value.indexOf('(');
