@@ -40,10 +40,16 @@ const ProposalCard = ({
     <div className="card">
       <div className="header-section">
         <div>
-          <p className={title === 'No data' && 'no-data-placeholder'}>
+          <p
+            className={title === 'No data' ? 'no-data-placeholder' : undefined}
+          >
             {title}
           </p>
-          <p className={opportunityName === 'No data' && 'no-data-placeholder'}>
+          <p
+            className={
+              opportunityName === 'No data' ? 'no-data-placeholder' : undefined
+            }
+          >
             {opportunityName}
           </p>
         </div>
@@ -56,34 +62,48 @@ const ProposalCard = ({
       <div className="info-section">
         <div className="section-data">
           <span>Due Date:</span>
-          <span className={dueDate === 'No data' && 'no-data-placeholder'}>
+          <span
+            className={
+              dueDate === 'No data' ? 'no-data-placeholder' : undefined
+            }
+          >
             {dueDate}
           </span>
         </div>
         <div className="section-data">
           <span>Customer: </span>
-          <span className={customer === 'No data' && 'no-data-placeholder'}>
+          <span
+            className={
+              customer === 'No data' ? 'no-data-placeholder' : undefined
+            }
+          >
             {customer}
           </span>
         </div>
         <div className="section-data">
           <span>Protocol Number:</span>
           <span
-            className={protocolNumber === 'No data' && 'no-data-placeholder'}
+            className={
+              protocolNumber === 'No data' ? 'no-data-placeholder' : undefined
+            }
           >
             {protocolNumber}
           </span>
         </div>
         <div className="section-data">
           <span>Phase:</span>
-          <span className={phase === 'No data' && 'no-data-placeholder'}>
+          <span
+            className={phase === 'No data' ? 'no-data-placeholder' : undefined}
+          >
             {phase}
           </span>
         </div>
         <div className="section-data">
           <span>Therapeutic Area</span>
           <span
-            className={therapeuticArea === 'No data' && 'no-data-placeholder'}
+            className={
+              therapeuticArea === 'No data' ? 'no-data-placeholder' : undefined
+            }
           >
             {therapeuticArea}
           </span>
@@ -92,7 +112,9 @@ const ProposalCard = ({
           <span>Verbatim Indication</span>
           <span
             className={
-              verbatimIndication === 'No data' && 'no-data-placeholder'
+              verbatimIndication === 'No data'
+                ? 'no-data-placeholder'
+                : undefined
             }
           >
             {verbatimIndication}
