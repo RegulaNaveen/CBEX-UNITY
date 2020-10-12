@@ -11,15 +11,19 @@ type Props = {
 };
 
 const formatProposal = (proposal: Object) => {
-  const dueDate = new Date(proposal['bid due date']);
-  const dateDiff = dateDiffInDays(dueDate);
-  const daysRemain = dateDiff < 0 ? 0 : dateDiff;
+  const dueDate = proposal['bid due date']
+    ? new Date(proposal['bid due date'])
+    : 'No data';
+
+  const dateDiff = dueDate instanceof Date ? dateDiffInDays(dueDate) : '';
+  const daysRemain = dateDiff && dateDiff < 0 ? 0 : dateDiff;
 
   const formatted = {
     title: proposal['opportunity number'],
     opportunityName: proposal.opportunityName,
-    daysRemain,
-    dueDate: formatDate(dueDate, 'dd-MMM-yyyy'),
+    daysRemain: daysRemain.toString() || '-',
+    dueDate:
+      dueDate instanceof Date ? formatDate(dueDate, 'dd-MMM-yyyy') : dueDate,
     customer: proposal.customer,
     protocolNumber: proposal['protocol number'],
     phase: proposal.phase,

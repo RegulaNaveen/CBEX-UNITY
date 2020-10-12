@@ -58,6 +58,7 @@ class Tabbar extends Component<Props, State> {
     const { filters } = this.state;
     const { filterProposals } = this.props;
     const { id, value } = target;
+
     this.setState({ filters: { ...filters, [id]: value } }, () => {
       const { filters: newFilters } = this.state;
       filterProposals(newFilters, true);
@@ -67,6 +68,7 @@ class Tabbar extends Component<Props, State> {
   onDropDownFilterChange = (id: string, value: string) => {
     const { filters } = this.state;
     const { filterProposals } = this.props;
+
     this.setState({ filters: { ...filters, [id]: value } }, () => {
       const { filters: newFilters } = this.state;
       filterProposals(newFilters, true);
@@ -76,6 +78,7 @@ class Tabbar extends Component<Props, State> {
   onDateRangeChange = (id: string, range: Object) => {
     const { filters } = this.state;
     const { filterProposals } = this.props;
+
     this.setState({ filters: { ...filters, [id]: range } }, () => {
       const { filters: newFilters } = this.state;
       filterProposals(newFilters, true);
@@ -85,6 +88,7 @@ class Tabbar extends Component<Props, State> {
   toggleFilters = () => {
     const { filterProposals } = this.props;
     const { showFilters } = this.state;
+
     this.setState({ showFilters: !showFilters }, () =>
       filterProposals({}, false)
     );
