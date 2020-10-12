@@ -10,8 +10,8 @@ type Props = {
   daysRemain: string,
   dueDate: string,
   customer: string,
-  protocolNumber: number,
-  phase: number,
+  protocolNumber: string,
+  phase: string,
   therapeuticArea: string,
   verbatimIndication: string,
   proposalId: string
@@ -40,8 +40,12 @@ const ProposalCard = ({
     <div className="card">
       <div className="header-section">
         <div>
-          <p>{title}</p>
-          <p>{opportunityName}</p>
+          <p className={title === 'No data' && 'no-data-placeholder'}>
+            {title}
+          </p>
+          <p className={opportunityName === 'No data' && 'no-data-placeholder'}>
+            {opportunityName}
+          </p>
         </div>
         <div>
           <p>{daysRemain}</p>
@@ -52,27 +56,47 @@ const ProposalCard = ({
       <div className="info-section">
         <div className="section-data">
           <span>Due Date:</span>
-          <span>{dueDate}</span>
+          <span className={dueDate === 'No data' && 'no-data-placeholder'}>
+            {dueDate}
+          </span>
         </div>
         <div className="section-data">
           <span>Customer: </span>
-          <span>{customer}</span>
+          <span className={customer === 'No data' && 'no-data-placeholder'}>
+            {customer}
+          </span>
         </div>
         <div className="section-data">
           <span>Protocol Number:</span>
-          <span>{protocolNumber}</span>
+          <span
+            className={protocolNumber === 'No data' && 'no-data-placeholder'}
+          >
+            {protocolNumber}
+          </span>
         </div>
         <div className="section-data">
           <span>Phase:</span>
-          <span>{phase}</span>
+          <span className={phase === 'No data' && 'no-data-placeholder'}>
+            {phase}
+          </span>
         </div>
         <div className="section-data">
           <span>Therapeutic Area</span>
-          <span>{therapeuticArea}</span>
+          <span
+            className={therapeuticArea === 'No data' && 'no-data-placeholder'}
+          >
+            {therapeuticArea}
+          </span>
         </div>
         <div className="section-data">
           <span>Verbatim Indication</span>
-          <span>{verbatimIndication}</span>
+          <span
+            className={
+              verbatimIndication === 'No data' && 'no-data-placeholder'
+            }
+          >
+            {verbatimIndication}
+          </span>
         </div>
       </div>
 

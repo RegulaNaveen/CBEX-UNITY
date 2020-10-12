@@ -11,25 +11,26 @@ type Props = {
 };
 
 const formatProposal = (proposal: Object) => {
+  const placeholder = 'No data';
   const dueDate = proposal['bid due date']
     ? new Date(proposal['bid due date'])
-    : 'No data';
+    : placeholder;
 
   const dateDiff = dueDate instanceof Date ? dateDiffInDays(dueDate) : '';
   const daysRemain = dateDiff && dateDiff < 0 ? 0 : dateDiff;
 
   const formatted = {
-    title: proposal['opportunity number'],
-    opportunityName: proposal.opportunityName,
+    title: proposal['opportunity number'] || placeholder,
+    opportunityName: proposal.opportunityName || placeholder,
     daysRemain: daysRemain.toString() || '-',
     dueDate:
       dueDate instanceof Date ? formatDate(dueDate, 'dd-MMM-yyyy') : dueDate,
-    customer: proposal.customer,
-    protocolNumber: proposal['protocol number'],
-    phase: proposal.phase,
-    therapeuticArea: proposal.therapeuticArea,
-    verbatimIndication: proposal['verbatim indication'],
-    proposalId: proposal.proposalId
+    customer: proposal.customer || placeholder,
+    protocolNumber: proposal['protocol number'] || placeholder,
+    phase: proposal.phase || placeholder,
+    therapeuticArea: proposal.therapeuticArea || placeholder,
+    verbatimIndication: proposal['verbatim indication'] || placeholder,
+    proposalId: proposal.proposalId || placeholder
   };
 
   return formatted;
