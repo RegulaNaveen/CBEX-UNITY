@@ -5,6 +5,7 @@ import type { Match } from 'react-router-dom';
 import { Map } from 'immutable';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { isEmpty } from 'lodash';
 import { Add, Refresh } from '../../svg';
 import CollapsibleList from './CollapsibleList';
 import Checkbox from '../../common/Checkbox';
@@ -118,15 +119,18 @@ class Questions extends Component<Props, State> {
       const sectionName = section.get('sectionName');
       const questions = section.get('questions');
 
-      return (
-        <CollapsibleList
-          questions={questions}
-          title={sectionName}
-          key={sectionName}
-          isCheckedAll={isCheckedAll}
-          setQuestionToDisplayHistory={this.setQuestionToDisplayHistory}
-        />
-      );
+      if (!isEmpty(questions))
+        return (
+          <CollapsibleList
+            questions={questions}
+            title={sectionName}
+            key={sectionName}
+            isCheckedAll={isCheckedAll}
+            setQuestionToDisplayHistory={this.setQuestionToDisplayHistory}
+          />
+        );
+
+      return null;
     });
   }
 
