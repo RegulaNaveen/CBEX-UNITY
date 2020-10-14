@@ -66,7 +66,8 @@ const TableView = ({ data, hideStatus }: Props) => {
                   })}
                 >
                   {cellContent === rowContent[DATE_COLUMN]
-                    ? formatDate(new Date(cellContent), 'dd-MMM-yyyy')
+                    ? cellContent &&
+                      formatDate(new Date(cellContent), 'dd-MMM-yyyy')
                     : objectToString(cellContent)}
                 </p>
               )}
