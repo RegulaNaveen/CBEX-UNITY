@@ -3,6 +3,7 @@ import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Link } from 'react-router-dom';
 import { isEmpty, keysIn, head, valuesIn } from 'lodash';
+import classNames from 'classnames';
 import { objectToString } from '../../utils/helpers';
 import { formatDate } from '../../utils/DateUtils';
 import { PROPOSAL } from '../../routes';
@@ -49,6 +50,7 @@ const TableView = ({ data, hideStatus }: Props) => {
       {valuesIn(rowContent).map(cellContent => {
         const skipValues = SKIP_COLUMNS.map(column => rowContent[column]);
         if (hideStatus) skipValues.push(rowContent[STATUS_COLUMN]);
+
         return (
           !skipValues.includes(cellContent) && (
             <div key={uuidv4()} className="cell">
@@ -57,7 +59,12 @@ const TableView = ({ data, hideStatus }: Props) => {
                   {cellContent}
                 </Link>
               ) : (
-                <p>
+                <p
+                  className={classNames({
+                    'no-data-placeholder':
+                      objectToString(cellContent) === 'No data'
+                  })}
+                >
                   {cellContent === rowContent[DATE_COLUMN]
                     ? formatDate(new Date(cellContent), 'dd-MMM-yyyy')
                     : objectToString(cellContent)}

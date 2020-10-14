@@ -1,8 +1,9 @@
 // @flow
 import { isObject, valuesIn, isEmpty } from 'lodash';
 
-export const objectToString = (_object: Object): String => {
-  if (!isObject(_object)) return _object.toString();
+export const objectToString = (_object: Object): string => {
+  if (!isObject(_object))
+    return !isEmpty(_object) ? _object.toString() : 'No data';
 
   const objectStringfied = valuesIn(_object).map(value =>
     isObject(value) ? objectToString(value) : value
