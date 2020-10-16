@@ -7,7 +7,7 @@ import { PROPOSAL } from '../../routes';
 type Props = {
   title: string,
   opportunityName: string,
-  daysRemain: string,
+  daysRemain: number | string,
   dueDate: string,
   customer: string,
   protocolNumber: string,
