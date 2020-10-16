@@ -21,7 +21,16 @@ export const dateDiffInDays = (date: Object): number => {
   return Math.floor((utc2 - utc1) / _MS_PER_DAY);
 };
 
+export const remainingDays = (date: string): number | string => {
+  if (!date) return '-';
+
+  const eventdate = moment(date, 'D-MMM-yyyy');
+  const todaysdate = moment();
+  const daysRemaing = eventdate.diff(todaysdate, 'days') + 1;
+
+  return daysRemaing < 0 ? 0 : daysRemaing;
+};
+
 export const parseMomentDate = (date: Date | string) => {
-  if (!date) return date;
-  return moment(date).format('D-MMM-yyyy');
+  return !date ? date : moment(date).format('D-MMM-yyyy');
 };

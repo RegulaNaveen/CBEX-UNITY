@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { isEmpty } from 'lodash';
 import classNames from 'classnames';
 import ProposalCard from './ProposalCard';
-import { formatDate, dateDiffInDays } from '../../utils/DateUtils';
+import { parseMomentDate, remainingDays } from '../../utils/DateUtils';
 
 type Props = {
   data: Array<Object>
@@ -12,19 +12,14 @@ type Props = {
 
 const formatProposal = (proposal: Object) => {
   const placeholder = 'No data';
-  const dueDate = proposal['bid due date']
-    ? new Date(proposal['bid due date'])
-    : placeholder;
-
-  const dateDiff = dueDate instanceof Date ? dateDiffInDays(dueDate) : '';
-  const daysRemain = dateDiff && dateDiff < 0 ? 0 : dateDiff;
+  const dueDate = parseMomentDate(proposal['bid due date']);
+  const daysRemain = remainingDays(dueDate);
 
   const formatted = {
     title: proposal['opportunity number'] || placeholder,
     opportunityName: proposal.opportunityName || placeholder,
-    daysRemain: daysRemain.toString() || '-',
-    dueDate:
-      dueDate instanceof Date ? formatDate(dueDate, 'dd-MMM-yyyy') : dueDate,
+    daysRemain,
+    dueDate: dueDate || placeholder,
     customer: proposal.customer || placeholder,
     protocolNumber: proposal['protocol number'] || placeholder,
     phase: proposal.phase || placeholder,

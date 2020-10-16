@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { isEmpty, keysIn, head, valuesIn } from 'lodash';
 import classNames from 'classnames';
 import { objectToString } from '../../utils/helpers';
-import { formatDate } from '../../utils/DateUtils';
+import { parseMomentDate } from '../../utils/DateUtils';
 import { PROPOSAL } from '../../routes';
 
 type Props = {
@@ -66,8 +66,7 @@ const TableView = ({ data, hideStatus }: Props) => {
                   })}
                 >
                   {cellContent === rowContent[DATE_COLUMN]
-                    ? cellContent &&
-                      formatDate(new Date(cellContent), 'dd-MMM-yyyy')
+                    ? cellContent && parseMomentDate(cellContent)
                     : objectToString(cellContent)}
                 </p>
               )}

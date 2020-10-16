@@ -1,5 +1,6 @@
 // @flow
 import { isEmpty } from 'lodash';
+import moment from 'moment';
 import type { Dispatch, ThunkAction } from './action-types';
 import { REDUX_TYPES } from '../constants';
 import {
@@ -103,11 +104,12 @@ type FilteredData = {
 const dateRangeFilter = (key: string, range: Object, array: Array<Object>) => {
   if (!range) return array;
   const { from, to } = range;
+
   from.setHours(0, 0, 0, 0);
   to.setHours(0, 0, 0, 0);
+
   return array.filter(proposal => {
-    const proposalDate = new Date(proposal[key]);
-    proposalDate.setHours(0, 0, 0, 0);
+    const proposalDate = moment(proposal[key]);
     return proposalDate >= from && proposalDate <= to;
   });
 };

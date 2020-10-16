@@ -181,10 +181,7 @@ export class TaskRow extends Component<Props, State> {
     if (!questionId) lastAnswer = answers.last();
     else lastAnswer = answers.get('answers').last();
 
-    if (lastAnswer) {
-      const format = 'dd-MMM-yyyy';
-      answerDate = formatDate(new Date(lastAnswer.get('date')), format);
-    }
+    if (lastAnswer) answerDate = parseMomentDate(lastAnswer.get('date'));
 
     return (
       <div className="task-table-row">
