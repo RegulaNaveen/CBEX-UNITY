@@ -27,39 +27,32 @@ type Props = {
 class SessionHandler extends Component<Props, {}> {
   async componentDidMount() {
     const idToken = localStorage.getItem('id_token');
-    const {
-      match: { path }
-    } = this.props;
 
-    if (idToken) {
-      const validToken = await validateToken(idToken);
-
-      if (validToken) this.userIsLoggedIn();
-      else if (path !== LOGIN && path !== '/') this.userIsNotLoggedIn();
-    }
-
-    this.startAuthentication();
+    if (idToken) validateToken(idToken);
+    else this.startAuthentication();
   }
 
   async componentDidUpdate(prevProps: Object) {
     const idToken = localStorage.getItem('id_token');
-    const {
-      isAuthenticated,
-      location,
-      match: { path }
-    } = this.props;
+    const { isAuthenticated, location } = this.props;
 
     if (prevProps.isAuthenticated !== isAuthenticated) {
       if (isAuthenticated) this.userIsLoggedIn();
       else this.userIsNotLoggedIn();
     }
 
-    if (prevProps.location !== location && idToken) {
-      const validToken = await validateToken(idToken);
-      if (validToken) this.userIsLoggedIn();
-      else if (path !== LOGIN && path !== '/') this.userIsNotLoggedIn();
-    }
+    if (prevProps.location !== location && idToken) validateToken(idToken);
   }
+
+  validateUserToken = async (idToken: string) => {
+    const { match } = this.props;
+
+    const validToken = await validateToken(idToken);
+
+    if (validToken) this.userIsLoggedIn();
+    else if (match.path !== LOGIN && match.path !== '/')
+      this.userIsNotLoggedIn();
+  };
 
   startAuthentication = () => {
     const { onLoginUser } = this.props;
