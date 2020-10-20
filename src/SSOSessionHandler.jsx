@@ -2,7 +2,7 @@
 import { Component } from 'react';
 import type { Node } from 'react';
 import { withRouter } from 'react-router-dom';
-import type { History, Match } from 'react-router-dom';
+import type { History, Match, Location } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
@@ -17,6 +17,7 @@ const { COGNITO_HOST, REDIRECTION_URL, CLIENT_ID } = API.AUTH;
 type Props = {
   children: Node,
   history: History,
+  location: Location,
   match: Match,
   isAuthenticated: boolean,
   refreshUserData: () => {},
@@ -40,12 +41,23 @@ class SessionHandler extends Component<Props, {}> {
     this.startAuthentication();
   }
 
-  componentDidUpdate(prevProps: Object) {
-    const { isAuthenticated } = this.props;
+  async componentDidUpdate(prevProps: Object) {
+    const idToken = localStorage.getItem('id_token');
+    const {
+      isAuthenticated,
+      location,
+      match: { path }
+    } = this.props;
 
     if (prevProps.isAuthenticated !== isAuthenticated) {
       if (isAuthenticated) this.userIsLoggedIn();
       else this.userIsNotLoggedIn();
+    }
+
+    if (prevProps.location !== location && idToken) {
+      const validToken = await validateToken(idToken);
+      if (validToken) this.userIsLoggedIn();
+      else if (path !== LOGIN && path !== '/') this.userIsNotLoggedIn();
     }
   }
 
