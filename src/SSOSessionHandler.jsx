@@ -25,14 +25,14 @@ type Props = {
 };
 
 class SessionHandler extends Component<Props, {}> {
-  async componentDidMount() {
+  componentDidMount() {
     const idToken = localStorage.getItem('id_token');
 
     if (idToken) validateToken(idToken);
     else this.startAuthentication();
   }
 
-  async componentDidUpdate(prevProps: Object) {
+  componentDidUpdate(prevProps: Object) {
     const idToken = localStorage.getItem('id_token');
     const { isAuthenticated, location } = this.props;
 
