@@ -28,8 +28,9 @@ class SessionHandler extends Component<Props, {}> {
   componentDidMount() {
     const idToken = localStorage.getItem('id_token');
 
-    if (idToken) validateToken(idToken);
-    else this.startAuthentication();
+    if (idToken) this.validateUserToken(idToken);
+
+    this.startAuthentication();
   }
 
   componentDidUpdate(prevProps: Object) {
@@ -41,7 +42,8 @@ class SessionHandler extends Component<Props, {}> {
       else this.userIsNotLoggedIn();
     }
 
-    if (prevProps.location !== location && idToken) validateToken(idToken);
+    if (prevProps.location !== location && idToken)
+      this.validateUserToken(idToken);
   }
 
   validateUserToken = async (idToken: string) => {
