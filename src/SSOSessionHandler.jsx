@@ -36,24 +36,27 @@ class SessionHandler extends Component<Props, {}> {
   componentDidUpdate(prevProps: Object) {
     const idToken = localStorage.getItem('id_token');
     const { isAuthenticated, location } = this.props;
+    const { location: prevLocation } = prevProps;
 
     if (prevProps.isAuthenticated !== isAuthenticated) {
       if (isAuthenticated) this.userIsLoggedIn();
       else this.userIsNotLoggedIn();
     }
 
-    if (prevProps.location !== location && idToken)
+    if (prevLocation.pathname !== location.pathname && idToken)
       this.validateUserToken(idToken);
   }
 
   validateUserToken = async (idToken: string) => {
-    const { match } = this.props;
+    const { location } = this.props;
 
     const validToken = await validateToken(idToken);
 
     if (validToken) this.userIsLoggedIn();
-    else if (match.path !== LOGIN && match.path !== '/')
+    else if (location.pathname !== LOGIN && location.pathname !== '/') {
+      localStorage.clear();
       this.userIsNotLoggedIn();
+    }
   };
 
   startAuthentication = () => {

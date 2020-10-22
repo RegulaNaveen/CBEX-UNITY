@@ -54,8 +54,8 @@ export const getUsers = (idToken: string): Promise<Object> => {
 
 export const validateToken = async (token: string) => {
   try {
-    const { validToken } = await axios.post(VALIDATE_TOKEN, { token });
-    return validToken;
+    const { data } = await axios.post(VALIDATE_TOKEN, { token });
+    return data.validToken;
   } catch (error) {
     return false;
   }
