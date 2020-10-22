@@ -18,7 +18,6 @@ type Props = {
   children: Node,
   history: History,
   location: Location,
-  match: Match,
   isAuthenticated: boolean,
   refreshUserData: () => {},
   onLoginUser: (code: string) => void
