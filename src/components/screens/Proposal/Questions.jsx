@@ -5,7 +5,6 @@ import type { Match } from 'react-router-dom';
 import { Map } from 'immutable';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { isEmpty } from 'lodash';
 import { Add, Refresh } from '../../svg';
 import CollapsibleList from './CollapsibleList';
 import Checkbox from '../../common/Checkbox';
@@ -118,8 +117,12 @@ class Questions extends Component<Props, State> {
     return allSections.valueSeq().map(section => {
       const sectionName = section.get('sectionName');
       const questions = section.get('questions');
+      const someQuestionsAreVisible = questions
+        .valueSeq()
+        .map(question => question.get('visible'))
+        .includes(true);
 
-      if (!isEmpty(questions))
+      if (someQuestionsAreVisible)
         return (
           <CollapsibleList
             questions={questions}
