@@ -91,22 +91,31 @@ class Sidebar extends Component<Props, State> {
           </button>
           <div className="sidebar-content-list">
             <h1>Index</h1>
+
             {sections.valueSeq().map(section => {
               const sectionName = section.get('sectionName');
+              const questions = section.get('questions');
+              const someQuestionsAreVisible = questions
+                .valueSeq()
+                .map(question => question.get('visible'))
+                .includes(true);
 
-              return (
-                <p
-                  key={sectionName}
-                  id={sectionName}
-                  className={classNames({
-                    'is-selected': selectedSection === sectionName
-                  })}
-                  role="presentation"
-                  onClick={this.scrollToSelectedElement}
-                >
-                  {sectionName}
-                </p>
-              );
+              if (someQuestionsAreVisible)
+                return (
+                  <p
+                    key={sectionName}
+                    id={sectionName}
+                    className={classNames({
+                      'is-selected': selectedSection === sectionName
+                    })}
+                    role="presentation"
+                    onClick={this.scrollToSelectedElement}
+                  >
+                    {sectionName}
+                  </p>
+                );
+
+              return null;
             })}
           </div>
         </div>

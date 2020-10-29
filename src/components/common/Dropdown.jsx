@@ -90,9 +90,7 @@ class Dropdown extends PureComponent<Props, State> {
               onClick={this.handleCollapse}
             >
               {selectedValue || value ? (
-                <div className="dd-header-selected">
-                  {selectedValue || value}
-                </div>
+                <p className="dd-header-selected">{selectedValue || value}</p>
               ) : (
                 <div className="dd-header-placeholder">{placeholder}</div>
               )}
