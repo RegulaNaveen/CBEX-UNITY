@@ -2,7 +2,7 @@
 import { Component } from 'react';
 import type { Node } from 'react';
 import { withRouter } from 'react-router-dom';
-import type { History, Match, Location } from 'react-router-dom';
+import type { History, Location } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
