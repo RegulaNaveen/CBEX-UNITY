@@ -122,7 +122,11 @@ class Questions extends Component<Props, State> {
         .map(question => question.get('visible'))
         .includes(true);
 
-      if (someQuestionsAreVisible)
+      const allQuestionsDontHaveLogin = questions.every(
+        question => question.get('visible') === undefined
+      );
+
+      if (someQuestionsAreVisible || allQuestionsDontHaveLogin)
         return (
           <CollapsibleList
             questions={questions}
