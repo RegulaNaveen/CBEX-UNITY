@@ -7,7 +7,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { loginUser, onRefreshUserData } from './actions/sso-auth-actions';
-import { PROPOSAL, DASHBOARD, LOGIN } from './routes';
+import { PROPOSAL, DASHBOARD, LOGIN, ROOT } from './routes';
 import { getUserAuthStatus } from './selectors';
 import { validateToken } from './api/sso-auth';
 import { API } from './constants';
@@ -52,7 +52,7 @@ class SessionHandler extends Component<Props, {}> {
     const validToken = await validateToken(idToken);
 
     if (validToken) this.userIsLoggedIn();
-    else if (location.pathname !== LOGIN && location.pathname !== '/') {
+    else if (location.pathname !== LOGIN && location.pathname !== ROOT) {
       localStorage.clear();
       this.userIsNotLoggedIn();
     }
@@ -68,12 +68,17 @@ class SessionHandler extends Component<Props, {}> {
   };
 
   userIsLoggedIn = () => {
-    const { history, refreshUserData } = this.props;
+    const { history, location, refreshUserData } = this.props;
 
     refreshUserData();
 
     const proposalId = localStorage.getItem('proposalId');
-    history.push(`${proposalId ? `${PROPOSAL}${proposalId}` : DASHBOARD}`);
+
+    if (
+      proposalId &&
+      (location.pathname === LOGIN || location.pathname === ROOT)
+    )
+      history.push(`${proposalId ? `${PROPOSAL}${proposalId}` : DASHBOARD}`);
   };
 
   userIsNotLoggedIn = () => {
