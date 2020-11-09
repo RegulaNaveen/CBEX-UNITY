@@ -1,5 +1,4 @@
 const APP = '/app';
-export const ROOT = '/';
 export const LOGIN = `${APP}/login`;
 export const PROPOSALS = `${APP}/proposals/:id?`;
 export const PROPOSAL = `${APP}/proposals/`;
