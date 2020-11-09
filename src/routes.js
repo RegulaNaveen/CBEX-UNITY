@@ -1,3 +1,4 @@
+export const ROOT = '/';
 export const LOGIN = '/login';
 export const PROPOSALS = '/proposals/:id?';
 export const PROPOSAL = '/proposals/';
