@@ -25,6 +25,15 @@ type Props = {
 
 class SessionHandler extends Component<Props, {}> {
   componentDidMount() {
+    const {
+      location: { pathname }
+    } = this.props;
+
+    if (pathname.includes('/app/proposal')) {
+      const proposalId = pathname.replace(/\/app\/proposal\//g, '');
+      localStorage.setItem('proposalId', proposalId);
+    }
+
     const idToken = localStorage.getItem('id_token');
 
     if (idToken) this.validateUserToken(idToken);
@@ -68,17 +77,13 @@ class SessionHandler extends Component<Props, {}> {
   };
 
   userIsLoggedIn = () => {
-    const { history, location, refreshUserData } = this.props;
+    const { history, refreshUserData } = this.props;
 
     refreshUserData();
 
     const proposalId = localStorage.getItem('proposalId');
 
-    if (
-      proposalId &&
-      (location.pathname === LOGIN || location.pathname === ROOT)
-    )
-      history.push(`${proposalId ? `${PROPOSAL}${proposalId}` : DASHBOARD}`);
+    history.push(`${proposalId ? `${PROPOSAL}${proposalId}` : DASHBOARD}`);
   };
 
   userIsNotLoggedIn = () => {
