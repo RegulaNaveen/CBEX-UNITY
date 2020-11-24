@@ -56,6 +56,7 @@ export class Proposal extends Component<Props, State> {
 
   componentWillUnmount() {
     localStorage.removeItem('proposalTypeView');
+    localStorage.removeItem('proposalId');
   }
 
   onChangeProposalView = (selectedView: string) => {
