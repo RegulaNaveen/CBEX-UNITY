@@ -22,6 +22,9 @@ import ArrowRight from './ArrowRight';
 import More from './More';
 import Filter from './Filter';
 import Check from './Check';
+import Warning from './Warning';
+import Dash from './Dash';
+import Info from './Info';
 
 export {
   Checkmark,
@@ -46,5 +49,8 @@ export {
   ArrowRight,
   More,
   Filter,
-  Check
+  Check,
+  Warning,
+  Dash,
+  Info
 };

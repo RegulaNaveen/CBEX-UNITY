@@ -119,3 +119,35 @@ export const getProposlBoxId = async (id: string): Promise<Object> => {
     headers: { 'x-api-key': `${API_KEY}` }
   });
 };
+
+export const getValidatedProposalData = (id: string): Promise<Object> => {
+  // $FlowFixMe
+  return [
+    {
+      title: 'Line Of Business',
+      intakeValue: 'Biotech',
+      unityValue: 'Biotech',
+      status: 'match'
+    },
+    {
+      title: 'Line Of Business',
+      intakeValue: 'Biotech',
+      unityValue: 'Biotech',
+      status: 'match'
+    },
+    {
+      title: 'IQVIA Biotech?',
+      intakeValue: 'Yes',
+      unityValue: 'No',
+      status: 'null'
+    },
+    {
+      title: 'IQVIA Biotech?',
+      intakeValue: 'Yes',
+      unityValue: 'No',
+      status: 'no match'
+    },
+    { title: 'Phase', intakeValue: '15', unityValue: 'null', status: 'match' },
+    { title: 'Phase', intakeValue: '15', unityValue: 'null', status: 'null' }
+  ];
+};

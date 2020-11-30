@@ -133,3 +133,18 @@ export const getProposalBoxIdError = (proposal: Map): Map =>
   proposal.get('onGettingBoxIdError');
 
 export const getProposalBoxId = (proposal: Map): Map => proposal.get('boxId');
+
+export const getValidatedProposalData = (proposal: Map): Object => ({
+  isLoading: proposal.get('fetchingValidatedProposalData'),
+  data: proposal.get('validatedProposalData'),
+  error: proposal.get('validatedProposalDataError')
+});
+
+export const getPendingValidatedItems = (propoal: Map): number => {
+  const pendingItems = propoal
+    .get('validatedProposalData')
+    .toJS()
+    .filter(({ status }) => status === 'no match' || status === 'null').length;
+
+  return pendingItems;
+};

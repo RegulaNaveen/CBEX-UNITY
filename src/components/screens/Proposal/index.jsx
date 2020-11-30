@@ -11,6 +11,7 @@ import { getProposal } from '../../../actions/proposal-actions';
 import { refreshAuthData } from '../../../actions/auth-actions';
 import {
   getIsOpen,
+  getPendingValidatedItems,
   getProposalDetails,
   isProposalLoading
 } from '../../../selectors';
@@ -18,6 +19,7 @@ import Questions from './Questions';
 import Toolbar from '../../Toolbar';
 import TabButtons from '../../common/TabButtons';
 import Documents from './Documents';
+import Validate from './Validate';
 
 type State = {
   selectedView: string
@@ -29,6 +31,7 @@ type Props = {
   match: Match,
   isLoading: boolean,
   isSidebarOpen: boolean,
+  notifications: number,
   getRefreshAuthData: Function,
   getProposalInfo: Function
 };
@@ -38,7 +41,7 @@ export class Proposal extends Component<Props, State> {
     super(props);
 
     this.state = {
-      selectedView: 'questions'
+      selectedView: 'validate'
     };
   }
 
@@ -65,7 +68,13 @@ export class Proposal extends Component<Props, State> {
 
   renderContent = () => {
     const { selectedView } = this.state;
-    const { isLoading, details } = this.props;
+    const { isLoading, details, notifications } = this.props;
+
+    const viewsMap = {
+      questions: <Questions />,
+      documents: <Documents />,
+      validate: <Validate />
+    };
 
     const { 'CRM #': crm } = details;
     const placeholder = 'No data';
@@ -82,12 +91,16 @@ export class Proposal extends Component<Props, State> {
         <h1>{crm || placeholder}</h1>
 
         <TabButtons
-          elements={['questions', 'documents']}
+          elements={[
+            { tabName: 'questions' },
+            { tabName: 'documents' },
+            { tabName: 'validate', notifications }
+          ]}
           selectedView={selectedView}
           onChangeView={this.onChangeProposalView}
         />
 
-        {selectedView === 'questions' ? <Questions /> : <Documents />}
+        {viewsMap[selectedView]}
       </div>
     );
   };
@@ -111,7 +124,8 @@ export class Proposal extends Component<Props, State> {
 const mapStateToProps = (state: Map) => ({
   details: getProposalDetails(state),
   isLoading: isProposalLoading(state),
-  isSidebarOpen: getIsOpen(state)
+  isSidebarOpen: getIsOpen(state),
+  notifications: getPendingValidatedItems(state)
 });
 
 export default compose(

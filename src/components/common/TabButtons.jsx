@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
 
 type Props = {
-  elements: Array<string>,
+  elements: Array<{| tabName: string, notifications?: number |}>,
   selectedView: string,
   onChangeView: (selectedView: string) => void
 };
@@ -16,18 +16,27 @@ const TabButtons = ({ elements, selectedView, onChangeView }: Props) => {
   }
 
   return (
-    <div className="tab-buttons" style={{ width: elements.length * 150 }}>
-      {elements.map(item => (
+    <div
+      className="tab-buttons"
+      style={{
+        width: elements.length * 150,
+        gridTemplateColumns: `repeat(${elements.length}, 1fr)`
+      }}
+    >
+      {elements.map(({ tabName, notifications }) => (
         <button
           key={uuidv4()}
-          id={item}
+          id={tabName}
           type="button"
           className={classNames('button', {
-            'is-active': selectedView === item
+            'is-active': selectedView === tabName
           })}
           onClick={handleActive}
         >
-          {item}
+          {tabName}
+          {notifications && notifications > 0 ? (
+            <span className="notification">{notifications}</span>
+          ) : null}
         </button>
       ))}
     </div>

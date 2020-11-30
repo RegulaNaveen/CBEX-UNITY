@@ -115,6 +115,12 @@ export const getProposalBoxIdError = (state: Object): string =>
 export const getProposalBoxId = (state: Object): string =>
   proposalSelectors.getProposalBoxId(state.proposal);
 
+export const getValidatedProposalData = (state: Object): Object =>
+  proposalSelectors.getValidatedProposalData(state.proposal);
+
+export const getPendingValidatedItems = (state: Object): Object =>
+  proposalSelectors.getPendingValidatedItems(state.proposal);
+
 // Tabbar Selectors
 export const getProposals = (state: Object): Array<Object> =>
   proposalsSelectors.getProposals(state.proposals);

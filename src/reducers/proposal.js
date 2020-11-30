@@ -25,7 +25,10 @@ const {
   PROPOSAL_BOX_ID,
   PROPOSAL_BOX_ID_LOADING,
   PROPOSAL_BOX_ID_ERROR,
-  UPDATE_MODIFIED_QUESTION
+  UPDATE_MODIFIED_QUESTION,
+  ON_FETCHING_VALIDATED_PROPOSAL_DATA,
+  VALIDATED_PROPOSAL_DATA,
+  VALIDATED_PROPOSAL_DATA_ERROR
 } = REDUX_TYPES.PROPOSAL;
 
 const INITIAL_STATE: Map = fromJS({
@@ -50,7 +53,10 @@ const INITIAL_STATE: Map = fromJS({
   setQuestionError: undefined,
   isGettingBoxId: false,
   onGettingBoxIdError: undefined,
-  boxId: ''
+  boxId: '',
+  fetchingValidatedProposalData: false,
+  validatedProposalData: [],
+  validatedProposalDataError: undefined
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -231,6 +237,28 @@ const onUpdateModifiedQuestion = (state: Map, action: Object): Map => {
   return state.set('proposalQuestions', proposalQuestions);
 };
 
+const onFetchingValidatedProposaData = (state: Map): Map => {
+  return state
+    .set('fetchingValidatedProposalData', true)
+    .set('validatedProposalDataError', undefined);
+};
+
+const onGetValidatedProposaData = (state: Map, action: Object): Map => {
+  const { data } = action.payload;
+
+  return state
+    .set('fetchingValidatedProposalData', false)
+    .set('validatedProposalData', fromJS(data));
+};
+
+const onValidatedProposaDataError = (state: Map, action: Object): Map => {
+  const { error } = action.payload;
+
+  return state
+    .set('fetchingValidatedProposalData', false)
+    .set('validatedProposalDataError', error);
+};
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
@@ -253,7 +281,10 @@ const actionMap = {
   [PROPOSAL_BOX_ID_LOADING]: onGettingProposalBoxId,
   [PROPOSAL_BOX_ID]: onGetProposalBoxId,
   [PROPOSAL_BOX_ID_ERROR]: onGettingBoxIdError,
-  [UPDATE_MODIFIED_QUESTION]: onUpdateModifiedQuestion
+  [UPDATE_MODIFIED_QUESTION]: onUpdateModifiedQuestion,
+  [ON_FETCHING_VALIDATED_PROPOSAL_DATA]: onFetchingValidatedProposaData,
+  [VALIDATED_PROPOSAL_DATA]: onGetValidatedProposaData,
+  [VALIDATED_PROPOSAL_DATA_ERROR]: onValidatedProposaDataError
 };
 
 export default function(

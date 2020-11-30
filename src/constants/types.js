@@ -45,7 +45,10 @@ const PROPOSAL = {
   PROPOSAL_BOX_ID: 'proposal_box_id',
   PROPOSAL_BOX_ID_LOADING: 'proposal_box_id_loading',
   PROPOSAL_BOX_ID_ERROR: 'proposal_box_id_error',
-  UPDATE_MODIFIED_QUESTION: 'update_modified_question'
+  UPDATE_MODIFIED_QUESTION: 'update_modified_question',
+  ON_FETCHING_VALIDATED_PROPOSAL_DATA: 'on_fetching_validated_proposal_data',
+  VALIDATED_PROPOSAL_DATA: 'validated_proposal_data',
+  VALIDATED_PROPOSAL_DATA_ERROR: 'validated_proposal_data_error'
 };
 
 const PROPOSALS = {

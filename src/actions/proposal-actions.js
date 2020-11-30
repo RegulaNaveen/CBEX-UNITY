@@ -10,7 +10,8 @@ import {
   getRoles,
   setProposalQuestionData,
   getProposalInfoUpdated,
-  getProposlBoxId
+  getProposlBoxId,
+  getValidatedProposalData
 } from '../api/proposal';
 
 const {
@@ -35,7 +36,10 @@ const {
   PROPOSAL_BOX_ID,
   PROPOSAL_BOX_ID_LOADING,
   PROPOSAL_BOX_ID_ERROR,
-  UPDATE_MODIFIED_QUESTION
+  UPDATE_MODIFIED_QUESTION,
+  ON_FETCHING_VALIDATED_PROPOSAL_DATA,
+  VALIDATED_PROPOSAL_DATA,
+  VALIDATED_PROPOSAL_DATA_ERROR
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -197,6 +201,24 @@ export const onGetProposalBoxId = (id: string): ThunkAction<string, Object> => {
       dispatch({
         type: PROPOSAL_BOX_ID_ERROR,
         payload: { error: error.error }
+      });
+    }
+  };
+};
+
+export const onGetValidatedProposalDetails = (
+  id: string
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({ type: ON_FETCHING_VALIDATED_PROPOSAL_DATA, payload: {} });
+
+    try {
+      const data = await getValidatedProposalData(id);
+      dispatch({ type: VALIDATED_PROPOSAL_DATA, payload: { data } });
+    } catch (error) {
+      dispatch({
+        type: VALIDATED_PROPOSAL_DATA_ERROR,
+        payload: { error }
       });
     }
   };

@@ -1,6 +1,5 @@
 .tab-buttons {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
   border: 1px solid $neutral4;
   border-radius: 4px;
   box-shadow: 0 4px 4px 0 rgba($color: $black, $alpha: 0.04);
@@ -21,10 +20,27 @@
     background-color: $neutral1;
     color: $neutral6;
     text-transform: capitalize;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+    .notification {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      transform: translate(10%, -40%);
+      background-color: $pink;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      pointer-events: none;
+      font-size: 10px;
+    }
 
     &.is-active {
-      background-color: $white;
-      color: $black;
+      background-color: $neptune-secondary;
+      color: $white;
       font-weight: 600;
     }
 
