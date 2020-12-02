@@ -20,6 +20,7 @@ import Toolbar from '../../Toolbar';
 import TabButtons from '../../common/TabButtons';
 import Documents from './Documents';
 import Validate from './Validate';
+import ComposedIcon from '../../common/ComposedIcon';
 
 type State = {
   selectedView: string
@@ -41,7 +42,7 @@ export class Proposal extends Component<Props, State> {
     super(props);
 
     this.state = {
-      selectedView: 'validate'
+      selectedView: 'questions'
     };
   }
 
@@ -88,17 +89,39 @@ export class Proposal extends Component<Props, State> {
 
     return (
       <div className="proposal-details">
-        <h1>{crm || placeholder}</h1>
+        <div className="proposal-detail">
+          <div className="proposal-info-view">
+            <h1>{crm || placeholder}</h1>
+            <TabButtons
+              elements={[
+                { tabName: 'questions' },
+                { tabName: 'documents' },
+                { tabName: 'validate', notifications }
+              ]}
+              selectedView={selectedView}
+              onChangeView={this.onChangeProposalView}
+            />
+          </div>
 
-        <TabButtons
-          elements={[
-            { tabName: 'questions' },
-            { tabName: 'documents' },
-            { tabName: 'validate', notifications }
-          ]}
-          selectedView={selectedView}
-          onChangeView={this.onChangeProposalView}
-        />
+          {selectedView === 'validate' ? (
+            <div className="proposal-legend">
+              <h2>Legend</h2>
+              <p>
+                <ComposedIcon iconType="match" width={20} height={20} /> Current
+                CRM Matches Intake Document Scan
+              </p>
+              <p>
+                <ComposedIcon iconType="no match" width={20} height={20} />
+                Current CRM does not match Intake Document Scan. Validate
+                information and update as required
+              </p>
+              <p>
+                <ComposedIcon iconType="null" width={20} height={20} /> Data not
+                found by Intake Document Scan
+              </p>
+            </div>
+          ) : null}
+        </div>
 
         {viewsMap[selectedView]}
       </div>

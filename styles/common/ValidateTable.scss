@@ -1,4 +1,5 @@
 .validate-table {
+  margin-top: 20px;
   .headers {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -32,41 +33,6 @@
       grid-template-columns: repeat(3, 1fr);
       grid-gap: 15px;
       padding: 15px;
-
-      .icon-wrapper {
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        width: 25px;
-        height: 25px;
-        fill: $white;
-        cursor: help;
-
-        &.match-icon {
-          background: $success;
-          border-radius: 50%;
-        }
-
-        &.no-match-icon {
-          border-radius: 3px;
-          background: $warning;
-          transform: rotate(45deg);
-
-          svg {
-            transform: rotate(-45deg);
-          }
-        }
-
-        &.null-icon {
-          border-radius: 50%;
-          background: $neutral6;
-        }
-      }
-
-      svg {
-        width: 18px;
-        height: 18px;
-      }
     }
   }
 }
