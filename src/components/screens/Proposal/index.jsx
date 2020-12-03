@@ -7,7 +7,10 @@ import { connect } from 'react-redux';
 import Loader from 'react-loader-spinner';
 import classNames from 'classnames';
 import { compose } from 'redux';
-import { getProposal } from '../../../actions/proposal-actions';
+import {
+  getProposal,
+  onGetValidatedProposalDetails
+} from '../../../actions/proposal-actions';
 import { refreshAuthData } from '../../../actions/auth-actions';
 import {
   getIsOpen,
@@ -20,7 +23,6 @@ import Toolbar from '../../Toolbar';
 import TabButtons from '../../common/TabButtons';
 import Documents from './Documents';
 import Validate from './Validate';
-import ComposedIcon from '../../common/ComposedIcon';
 
 type State = {
   selectedView: string
@@ -34,7 +36,8 @@ type Props = {
   isSidebarOpen: boolean,
   notifications: number,
   getRefreshAuthData: Function,
-  getProposalInfo: Function
+  getProposalInfo: Function,
+  getValidatedData: (proposalId: string) => void
 };
 
 export class Proposal extends Component<Props, State> {
@@ -47,7 +50,13 @@ export class Proposal extends Component<Props, State> {
   }
 
   componentDidMount() {
-    const { getProposalInfo, match, authData, getRefreshAuthData } = this.props;
+    const {
+      getProposalInfo,
+      authData,
+      getRefreshAuthData,
+      getValidatedData,
+      match: { params }
+    } = this.props;
 
     const selectedView = localStorage.getItem('proposalTypeView');
 
@@ -55,7 +64,8 @@ export class Proposal extends Component<Props, State> {
 
     if (!authData) getRefreshAuthData();
 
-    getProposalInfo(match.params.id);
+    getProposalInfo(params.id);
+    getValidatedData(params.id);
   }
 
   componentWillUnmount() {
@@ -89,39 +99,16 @@ export class Proposal extends Component<Props, State> {
 
     return (
       <div className="proposal-details">
-        <div className="proposal-detail">
-          <div className="proposal-info-view">
-            <h1>{crm || placeholder}</h1>
-            <TabButtons
-              elements={[
-                { tabName: 'questions' },
-                { tabName: 'documents' },
-                { tabName: 'validate', notifications }
-              ]}
-              selectedView={selectedView}
-              onChangeView={this.onChangeProposalView}
-            />
-          </div>
-
-          {selectedView === 'validate' ? (
-            <div className="proposal-legend">
-              <h2>Legend</h2>
-              <p>
-                <ComposedIcon iconType="match" width={20} height={20} /> Current
-                CRM Matches Intake Document Scan
-              </p>
-              <p>
-                <ComposedIcon iconType="no match" width={20} height={20} />
-                Current CRM does not match Intake Document Scan. Validate
-                information and update as required
-              </p>
-              <p>
-                <ComposedIcon iconType="null" width={20} height={20} /> Data not
-                found by Intake Document Scan
-              </p>
-            </div>
-          ) : null}
-        </div>
+        <h1>{crm || placeholder}</h1>
+        <TabButtons
+          elements={[
+            { tabName: 'questions' },
+            { tabName: 'documents' },
+            { tabName: 'validate', notifications }
+          ]}
+          selectedView={selectedView}
+          onChangeView={this.onChangeProposalView}
+        />
 
         {viewsMap[selectedView]}
       </div>
@@ -155,6 +142,7 @@ export default compose(
   withRouter,
   connect(mapStateToProps, {
     getRefreshAuthData: refreshAuthData,
-    getProposalInfo: getProposal
+    getProposalInfo: getProposal,
+    getValidatedData: onGetValidatedProposalDetails
   })
 )(Proposal);
