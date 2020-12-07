@@ -7,7 +7,10 @@ import { connect } from 'react-redux';
 import Loader from 'react-loader-spinner';
 import classNames from 'classnames';
 import { compose } from 'redux';
-import { getProposal, onGetValidatedProposalDetails } from '../../../actions/proposal-actions';
+import {
+  getProposal,
+  onGetValidatedProposalDetails
+} from '../../../actions/proposal-actions';
 import { onRefreshUserData } from '../../../actions/sso-auth-actions';
 import {
   getIsOpen,
