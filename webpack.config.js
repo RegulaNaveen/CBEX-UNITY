@@ -8,7 +8,7 @@ module.exports = env => {
     entry: ['@babel/polyfill', path.resolve(__dirname, 'src/index.jsx')],
     output: {
       path: path.resolve(__dirname, 'dist'),
-      filename: '[name].[contenthash].js',
+      filename: '[name].[hash].js',
       publicPath: '/'
     },
     module: {
@@ -57,7 +57,11 @@ module.exports = env => {
     devServer: {
       contentBase: path.resolve(__dirname, 'dist'),
       port: 8080,
-      historyApiFallback: true
+      host: '0.0.0.0',
+      historyApiFallback: true,
+      hot: true,
+      open: 'Google Chrome',
+      disableHostCheck: true
     },
     plugins: [
       new HtmlWebpackPlugin({

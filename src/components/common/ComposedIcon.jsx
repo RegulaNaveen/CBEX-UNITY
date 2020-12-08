@@ -12,30 +12,15 @@ const ComposedIcon = ({ iconType, width, height }: Props) => {
   const iconsMap = {
     match: {
       className: 'match',
-      icon: (
-        <Check
-          width={width ? width - 7 : 18}
-          height={height ? height - 7 : 18}
-        />
-      )
+      icon: <Check width={width} height={height ? height - 7 : 18} />
     },
     'no match': {
       className: 'no-match',
-      icon: (
-        <Warning
-          width={width ? width - 7 : 18}
-          height={height ? height - 7 : 18}
-        />
-      )
+      icon: <Warning width={width} height={height ? height - 5 : 18} />
     },
     null: {
       className: 'null',
-      icon: (
-        <Dash
-          width={width ? width - 7 : 18}
-          height={height ? height - 7 : 18}
-        />
-      )
+      icon: <Dash width={width} height={height ? height - 7 : 18} />
     }
   };
 
