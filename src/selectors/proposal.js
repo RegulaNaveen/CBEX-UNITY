@@ -144,7 +144,7 @@ export const getPendingValidatedItems = (propoal: Map): number => {
   const pendingItems = propoal
     .get('validatedProposalData')
     .toJS()
-    .filter(({ status }) => status === 'no match' || status === 'null').length;
+    .filter(({ status }) => status === 'no match' || status === null).length;
 
   return pendingItems;
 };

@@ -213,7 +213,7 @@ export const onGetValidatedProposalDetails = (
     dispatch({ type: ON_FETCHING_VALIDATED_PROPOSAL_DATA, payload: {} });
 
     try {
-      const data = await getValidatedProposalData(id);
+      const { data } = await getValidatedProposalData(id);
       dispatch({ type: VALIDATED_PROPOSAL_DATA, payload: { data } });
     } catch (error) {
       dispatch({
