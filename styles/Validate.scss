@@ -1,0 +1,8 @@
+.validate {
+  display: grid;
+  height: 100%;
+
+  &.is-centered {
+    place-items: center;
+  }
+}

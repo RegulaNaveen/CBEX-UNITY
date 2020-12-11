@@ -27,19 +27,19 @@ const ValidateTable = ({ data }: Props) => (
       </div>
       <div className="rows">
         {data.map(item => {
-          const label = item.get('label');
+          const title = item.get('title');
           const intakeData = item.get('intakeData');
           const unityData = item.get('unityData');
           const status = item.get('status');
 
           return (
             <div className="row" key={uuidv4()}>
-              <p>{label}</p>
+              <p>{title}</p>
               <p>{unityData}</p>
               <div>
                 <ToolTip
                   title="Intake"
-                  content={`${label}: ${intakeData}`}
+                  content={`${title}: ${intakeData || 'No Data'}`}
                   child={<ComposedIcon iconType={status} />}
                 />
               </div>
