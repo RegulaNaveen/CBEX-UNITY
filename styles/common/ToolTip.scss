@@ -3,9 +3,13 @@
   display: inline-block;
   align-items: center;
 
-  .child:hover {
-    + .tooltip {
-      opacity: 1;
+  .child {
+    cursor: help;
+
+    &:hover {
+      + .tooltip {
+        opacity: 1;
+      }
     }
   }
 
@@ -14,24 +18,19 @@
     right: 0;
     top: 50%;
     transform: translate(110%, -50%);
-    background: $neutral8;
     border-radius: 5px;
     padding: 10px;
     height: min-content;
-    width: 200px;
-    color: white;
     opacity: 0;
-    transition: 0.2s opacity ease-in-out;
+    transition: 0.2s display ease-in-out;
     z-index: 0;
     box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.08);
+    z-index: 99;
+    pointer-events: none;
 
     p {
       font-size: 14px;
       line-height: 24px;
-
-      &:first-of-type {
-        font-size: 16px;
-      }
     }
 
     &::before {
@@ -40,11 +39,30 @@
       width: 18px;
       height: 18px;
       border-radius: 4px;
-      background: $neutral8;
+      background: inherit;
       left: 0;
       top: 50%;
       transform: translate(-40%, -50%) rotate(45deg);
       z-index: -1;
+    }
+
+    &.bottom-position {
+      right: 50%;
+      top: 0;
+      transform: translate(50%, 15%);
+
+      &::before {
+        content: '';
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        border-radius: 4px;
+        background: inherit;
+        left: 50%;
+        top: 0%;
+        transform: translate(-50%, -50%) rotate(45deg);
+        z-index: -1;
+      }
     }
   }
 }

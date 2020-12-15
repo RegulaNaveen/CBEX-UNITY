@@ -10,6 +10,48 @@ type Props = {
   data: List
 };
 
+const Legend = () => (
+  <div className="legend">
+    <p>
+      Intake is a system operation that scans RFP documents for Opportunity
+      Details
+    </p>
+    <p>
+      <ComposedIcon iconType="match" width={20} height={20} /> Current CRM
+      Matches Intake Document Scan
+    </p>
+    <p>
+      <ComposedIcon iconType="no match" width={20} height={20} />
+      Current CRM does not match Intake Document Scan. Validate information and
+      update as required
+    </p>
+    <p>
+      <ComposedIcon iconType="null" width={20} height={20} /> Data not found by
+      Intake Document Scan
+    </p>
+  </div>
+);
+
+const UnityAndIntakeData = ({
+  intakeData,
+  unityData
+}: {
+  intakeData: string,
+  unityData: string
+}) => (
+  <div className="crm-intake-data">
+    <div className="crm">
+      <h5>CRM Data</h5>
+      <p>{unityData || 'No Data Found'}</p>
+    </div>
+
+    <div className="intake">
+      <h5>Intake Document Scan</h5>
+      <p>{intakeData || 'No Data Found'}</p>
+    </div>
+  </div>
+);
+
 const ValidateTable = ({ data }: Props) => (
   <div className="validate-table">
     <div className="table">
@@ -20,8 +62,11 @@ const ValidateTable = ({ data }: Props) => (
           <p>Intake Document Scan</p>
           <ToolTip
             title="Intake"
-            content="Intake is a system operation that scans RFP documents for Opportunity Details"
-            child={<Info />}
+            content={<Legend />}
+            width="380px"
+            child={<Info className="info-icon" />}
+            backgroundColor="#fff"
+            color="#444444"
           />
         </div>
       </div>
@@ -38,8 +83,13 @@ const ValidateTable = ({ data }: Props) => (
               <p>{unityData}</p>
               <div>
                 <ToolTip
-                  title="Intake"
-                  content={`${title}: ${intakeData || 'No Data'}`}
+                  title={title}
+                  content={
+                    <UnityAndIntakeData
+                      intakeData={intakeData}
+                      unityData={unityData}
+                    />
+                  }
                   child={<ComposedIcon iconType={status} />}
                 />
               </div>
@@ -47,23 +97,6 @@ const ValidateTable = ({ data }: Props) => (
           );
         })}
       </div>
-    </div>
-
-    <div className="legend">
-      <h2>Legend</h2>
-      <p>
-        <ComposedIcon iconType="match" width={20} height={20} /> Current CRM
-        Matches Intake Document Scan
-      </p>
-      <p>
-        <ComposedIcon iconType="no match" width={20} height={20} />
-        Current CRM does not match Intake Document Scan. Validate information
-        and update as required
-      </p>
-      <p>
-        <ComposedIcon iconType="null" width={20} height={20} /> Data not found
-        by Intake Document Scan
-      </p>
     </div>
   </div>
 );

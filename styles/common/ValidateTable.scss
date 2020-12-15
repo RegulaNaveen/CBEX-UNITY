@@ -1,8 +1,6 @@
 .validate-table {
-  margin-top: 20px;
-  display: grid;
-  grid-template-columns: 1.3fr 0.7fr;
-  grid-column-gap: 20px;
+  max-width: 100%;
+  height: min-content;
 
   .table {
     .headers {
@@ -19,7 +17,7 @@
         display: inline-flex;
         align-items: center;
 
-        svg {
+        .info-icon {
           fill: $neptune-secondary;
           margin-left: 3px;
           width: 20px;
@@ -42,22 +40,15 @@
     }
   }
 
+  .crm-intake-data {
+    h5 {
+      margin-top: 10px;
+    }
+  }
+
   .legend {
     box-sizing: border-box;
-    border: 1px solid #e9e9e9;
-    border-radius: 4px;
-    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.04);
-    padding: 0 15px 15px 15px;
     height: min-content;
-
-    h2 {
-      text-align: center;
-      color: $black;
-      font-size: 16px;
-      line-height: 24px;
-      border-bottom: 1px solid #f6f7fb;
-      padding: 10px 0;
-    }
 
     p {
       display: flex;
@@ -67,6 +58,11 @@
       font-style: italic;
       font-family: $proximaNovaThin;
 
+      &:first-of-type {
+        font-style: initial;
+        font-family: $proximaNova;
+      }
+
       .composed-icon {
         margin-right: 15px;
       }
@@ -75,5 +71,9 @@
         margin-bottom: 0;
       }
     }
+  }
+
+  @media (min-width: 1500px) {
+    max-width: 1500px;
   }
 }
