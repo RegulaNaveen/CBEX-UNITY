@@ -15,17 +15,19 @@ import matomoInstace from './utils/Matomo';
 
 const App = () => (
   <Provider store={store}>
-    <BrowserRouter>
-      <SessionHandler>
-        <Switch>
-          <Route path="/" exact component={Login} />
-          <Route path={LOGIN} component={Login} />
-          <PrivateRoute path={DASHBOARD} component={DashboardComponent} />
-          <PrivateRoute path={PROPOSALS} component={ProposalComponent} />
-          <Redirect to={Login} />
-        </Switch>
-      </SessionHandler>
-    </BrowserRouter>
+    <MatomoProvider value={matomoInstace}>
+      <BrowserRouter>
+        <SessionHandler>
+          <Switch>
+            <Route path="/" exact component={Login} />
+            <Route path={LOGIN} component={Login} />
+            <PrivateRoute path={DASHBOARD} component={DashboardComponent} />
+            <PrivateRoute path={PROPOSALS} component={ProposalComponent} />
+            <Redirect to={Login} />
+          </Switch>
+        </SessionHandler>
+      </BrowserRouter>
+    </MatomoProvider>
   </Provider>
 );
 
