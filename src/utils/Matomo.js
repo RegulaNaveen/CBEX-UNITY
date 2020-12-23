@@ -1,25 +1,20 @@
+// @flow
 import { createInstance } from '@datapunt/matomo-tracker-react';
+import { PROPOSAL } from '../constants/api';
+
+const env = process.env.API_ENV || 'DEV';
+const userEmail = localStorage.getItem('userEmail');
+
+const envSideId = {
+  DEV: 20,
+  UAT: 20,
+  PROD: 21
+};
 
 const matomoInstace = createInstance({
-  urlBase: 'https://LINK.TO.DOMAIN',
-  siteId: 3,
-  userId: 'UID76903202', // optional, default value: `undefined`.
-  trackerUrl: 'https://LINK.TO.DOMAIN/tracking.php', // optional, default value: `${urlBase}matomo.php`
-  srcUrl: 'https://LINK.TO.DOMAIN/tracking.js', // optional, default value: `${urlBase}matomo.js`
-  disabled: false, // optional, false by default. Makes all tracking calls no-ops if set to true.
-  heartBeat: {
-    // optional, enabled by default
-    active: true, // optional, default value: true
-    seconds: 10 // optional, default value: `15
-  },
-  linkTracking: false, // optional, default value: true
-  configurations: {
-    // optional, default value: {}
-    // any valid matomo configuration, all below are optional
-    disableCookies: true,
-    setSecureCookie: true,
-    setRequestMethod: 'POST'
-  }
+  urlBase: PROPOSAL.MAMOTO_IQVIA,
+  siteId: envSideId[env],
+  userId: userEmail
 });
 
 export default matomoInstace;
