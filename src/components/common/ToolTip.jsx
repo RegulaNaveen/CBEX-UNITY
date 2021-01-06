@@ -62,7 +62,7 @@ class ToolTip extends Component<Props, State> {
           ref={this.tooltip}
           style={{ backgroundColor, width, color }}
         >
-          <p>{title}</p>
+          <p className="title">{title}</p>
           {content}
         </div>
       </div>

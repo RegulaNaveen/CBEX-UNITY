@@ -13,8 +13,8 @@ type Props = {
 const Legend = () => (
   <div className="legend">
     <p>
-      Intake is a system operation that scans RFP documents for Opportunity
-      Details
+      Intake Document Scan is a system operation that extracts details from RFP
+      documents.
     </p>
     <p>
       <ComposedIcon iconType="match" width={20} height={20} /> Current CRM
@@ -61,7 +61,7 @@ const ValidateTable = ({ data }: Props) => (
         <div className="header">
           <p>Intake Document Scan</p>
           <ToolTip
-            title="Intake"
+            title=""
             content={<Legend />}
             width="380px"
             child={<Info className="info-icon" />}
@@ -79,8 +79,8 @@ const ValidateTable = ({ data }: Props) => (
 
           return (
             <div className="row" key={uuidv4()}>
-              <p>{title}</p>
-              <p>{unityData}</p>
+              <p className="row-content">{title}</p>
+              <p className="row-content">{unityData}</p>
               <div>
                 <ToolTip
                   title={title}
