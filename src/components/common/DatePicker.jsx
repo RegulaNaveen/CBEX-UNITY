@@ -23,10 +23,7 @@ const DatePicker = ({
   value
 }: Props) => {
   let dateFormat = '';
-  if (!_.isEmpty(value)) {
-    const date = new Date(value || '');
-    dateFormat = parseMomentDate(date);
-  }
+  if (!_.isEmpty(value)) dateFormat = value && parseMomentDate(value);
 
   function handleChange(pickedDay: string) {
     handleDayChange(pickedDay, value);
