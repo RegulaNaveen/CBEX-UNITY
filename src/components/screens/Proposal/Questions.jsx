@@ -7,10 +7,10 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Add, Refresh } from '../../svg';
 import CollapsibleList from './CollapsibleList';
-import Checkbox from '../../common/Checkbox';
+import Checkbox from '../../common/atoms/inputs/Checkbox';
 import ProposalInfo from './ProposalInfo';
 import AddQuestionModalComponent from './AddQuestionModal';
-import { getProposalUpdated } from '../../../actions/proposal-actions';
+import { getProposalUpdated } from '../../../redux/actions/proposal-actions';
 import {
   getProposalDetails,
   getSections,
@@ -18,10 +18,10 @@ import {
   setQuestionData,
   isSetQuestionLoading,
   setQuestionError
-} from '../../../selectors';
-import Sidebar from '../../common/Sidebar';
-import AnswerHistory from '../../modals/AnswerHistory';
-import { getAllUsers } from '../../../actions/auth-actions';
+} from '../../../redux/selectors';
+import Sidebar from '../../views/Sidebar';
+import AnswerHistory from '../../views/modals/AnswerHistory';
+import { getAllUsers } from '../../../redux/actions/auth-actions';
 
 type Props = {
   match: Match,

@@ -7,7 +7,7 @@ import store from './store';
 import PrivateRoute from './PrivateRoute';
 import { LOGIN, PROPOSALS, DASHBOARD } from './routes';
 import SessionHandler, { getSession } from './SessionHandler';
-import Login from './components/auth/Login';
+import Login from './components/screens/AuthDev/Login';
 import ProposalComponent from './components/screens/Proposal';
 import DashboardComponent from './components/screens/Dashboard';
 import matomoInstace from './utils/Matomo';

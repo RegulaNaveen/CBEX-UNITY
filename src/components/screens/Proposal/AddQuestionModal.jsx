@@ -8,11 +8,11 @@ import type { Match } from 'react-router-dom';
 import { Map } from 'immutable';
 import Loader from 'react-loader-spinner';
 import { compose } from 'redux';
-import Modal from '../../common/Modal';
-import { PrimaryButton } from '../../common/Buttons';
-import Multiselect from '../../common/Multiselect';
-import Dropdown from '../../common/Dropdown';
-import TextArea from '../../common/TextArea';
+import Modal from '../../views/modals/Modal';
+import { PrimaryButton } from '../../common/atoms/Buttons';
+import Multiselect from '../../common/atoms/inputs/Multiselect';
+import Dropdown from '../../common/atoms/inputs/Dropdown';
+import TextArea from '../../common/atoms/inputs/TextArea';
 import { Close } from '../../svg';
 import {
   getQuestionSectionOrderInfo,
@@ -23,13 +23,13 @@ import {
   isQuestionSectionInfoLoading,
   isAnswerTypesInfoLoading,
   isRolesInfoLoading
-} from '../../../selectors';
+} from '../../../redux/selectors';
 import {
   getQuestionSection,
   getAnswerTypesInfo,
   getRolesInfo,
   setProposalQuestion
-} from '../../../actions/proposal-actions';
+} from '../../../redux/actions/proposal-actions';
 
 type Props = {
   match: Match,

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { ListView, CardView } from '../svg';
-import { getProposalTypeView } from '../../selectors';
+import { getProposalTypeView } from '../../redux/selectors';
 
 type Props = {
   getSelectedTab: (selectedTab: 0 | 1) => void,

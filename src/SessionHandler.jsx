@@ -2,8 +2,12 @@
 import { useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
-import { getAuthData, authHasErrors, getChangeRoleError } from './selectors';
-import { refreshAuthData, changeRole } from './actions/auth-actions';
+import {
+  getAuthData,
+  authHasErrors,
+  getChangeRoleError
+} from './redux/selectors';
+import { refreshAuthData, changeRole } from './redux/actions/auth-actions';
 import { DASHBOARD, PROPOSAL } from './routes';
 
 export const setSession = (

@@ -6,9 +6,9 @@ import { compose } from 'redux';
 import Loader from 'react-loader-spinner';
 import type { Match } from 'react-router-dom';
 import classNames from 'classnames';
-import { onGetValidatedProposalDetails } from '../../../actions/proposal-actions';
-import { getValidatedProposalData } from '../../../selectors';
-import ValidateTable from '../../common/ValidateTable';
+import { onGetValidatedProposalDetails } from '../../../redux/actions/proposal-actions';
+import { getValidatedProposalData } from '../../../redux/selectors';
+import ValidateTable from '../../views/ValidateTable';
 
 type Props = {
   validatedData: {

@@ -57,7 +57,7 @@ module.exports = env => {
     devServer: {
       contentBase: path.resolve(__dirname, 'dist'),
       port: 8080,
-      host: '0.0.0.0',
+      host: 'localhost',
       historyApiFallback: true,
       hot: true,
       open: 'Google Chrome',

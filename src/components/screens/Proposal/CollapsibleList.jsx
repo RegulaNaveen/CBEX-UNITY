@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import type { Map } from 'immutable';
-import { getSelectedSection } from '../../../selectors';
+import { getSelectedSection } from '../../../redux/selectors';
 import chevronRight from '../../../../img/chevron-right.svg';
 import chevronDown from '../../../../img/chevron-down.svg';
 import Question from './Question';

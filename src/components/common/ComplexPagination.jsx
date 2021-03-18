@@ -1,8 +1,8 @@
 // @flow
 import React, { Component } from 'react';
 import { chunk } from 'lodash';
-import Dropwdown from './Dropdown';
-import Pagination from './Pagination';
+import Dropwdown from './atoms/inputs/Dropdown';
+import Pagination from './atoms/Pagination';
 
 type Props = {
   totalItems: number,
