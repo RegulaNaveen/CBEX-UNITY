@@ -3,19 +3,15 @@ import React, { Component } from 'react';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { isObject, isEqual, isEmpty } from 'lodash';
-import { Checkmark } from '../../svg';
-import Dropdown from '../../common/atoms/inputs/Dropdown';
-import TextArea from '../../common/atoms/inputs/TextArea';
-import DatePicker from '../../common/atoms/inputs/DatePicker';
-import UserLookup from '../../common/atoms/inputs/UserLookup';
-import {
-  parseDate,
-  formatDate,
-  parseMomentDate
-} from '../../../utils/DateUtils';
-import Multiselect from '../../common/atoms/inputs/Multiselect';
-import { setProposalAnswerData } from '../../../redux/actions/proposal-actions';
-import { getUserData } from '../../../redux/selectors';
+import { Checkmark } from '../svg';
+import Dropdown from './atoms/inputs/Dropdown';
+import TextArea from './atoms/inputs/TextArea';
+import DatePicker from './atoms/inputs/DatePicker';
+import UserLookup from './atoms/inputs/UserLookup';
+import { parseDate, formatDate, parseMomentDate } from '../../utils/DateUtils';
+import Multiselect from './atoms/inputs/Multiselect';
+import { setProposalAnswerData } from '../../redux/actions/proposal-actions';
+import { getUserData } from '../../redux/selectors';
 
 type State = {
   selectedDay: string

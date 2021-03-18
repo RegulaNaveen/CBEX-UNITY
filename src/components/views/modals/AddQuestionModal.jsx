@@ -8,7 +8,7 @@ import type { Match } from 'react-router-dom';
 import { Map } from 'immutable';
 import Loader from 'react-loader-spinner';
 import { compose } from 'redux';
-import Modal from '../../views/modals/Modal';
+import Modal from './Modal';
 import { PrimaryButton } from '../../common/atoms/Buttons';
 import Multiselect from '../../common/atoms/inputs/Multiselect';
 import Dropdown from '../../common/atoms/inputs/Dropdown';

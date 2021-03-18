@@ -42,7 +42,7 @@ class ToolTip extends Component<Props, State> {
     if (bounding) {
       if (
         bounding.right >
-        (window.innerWidth || document.documentElement.clientWidth)
+        (window.innerWidth || document.documentElement?.clientWidth)
       )
         this.setState({ position: 'bottom' });
     }

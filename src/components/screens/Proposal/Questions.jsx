@@ -6,10 +6,10 @@ import { Map } from 'immutable';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Add, Refresh } from '../../svg';
-import CollapsibleList from './CollapsibleList';
+import CollapsibleList from '../../common/CollapsibleList';
 import Checkbox from '../../common/atoms/inputs/Checkbox';
 import ProposalInfo from './ProposalInfo';
-import AddQuestionModalComponent from './AddQuestionModal';
+import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
 import { getProposalUpdated } from '../../../redux/actions/proposal-actions';
 import {
   getProposalDetails,
