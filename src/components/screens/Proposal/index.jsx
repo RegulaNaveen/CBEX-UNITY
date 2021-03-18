@@ -10,8 +10,8 @@ import { compose } from 'redux';
 import {
   getProposal,
   onGetValidatedProposalDetails
-} from '../../../actions/proposal-actions';
-import { onRefreshUserData } from '../../../actions/sso-auth-actions';
+} from '../../../redux/actions/proposal-actions';
+import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
 import {
   getIsOpen,
   getPendingValidatedItems,

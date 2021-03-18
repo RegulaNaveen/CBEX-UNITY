@@ -1,7 +1,7 @@
 // @flow
 import type { Dispatch, ThunkAction } from './action-types';
-import { onLoginRequest, onChangeUserRole, getUsers } from '../api/sso-auth';
-import { REDUX_TYPES } from '../constants';
+import { onLoginRequest, onChangeUserRole, getUsers } from '../../api/sso-auth';
+import { REDUX_TYPES } from '../../constants';
 
 const {
   ON_USER_LOGIN,

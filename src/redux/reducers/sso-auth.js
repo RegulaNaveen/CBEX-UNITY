@@ -3,7 +3,7 @@ import { Map, fromJS } from 'immutable';
 // eslint-disable-next-line
 import jwt_decode from 'jwt-decode';
 import type { ApiAction } from '../actions/action-types';
-import { REDUX_TYPES } from '../constants';
+import { REDUX_TYPES } from '../../constants';
 
 const {
   ON_USER_LOGIN,
