@@ -1,8 +1,8 @@
 // @flow
 import React, { useEffect } from 'react';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
-import Toolbar from '../../Toolbar';
-import Tabbar from '../../common/Tabbar';
+import Toolbar from '../../views/toolbar';
+import Tabbar from '../../views/Tabbar';
 import MyDocketTab from './MyDocketTab';
 import RecentTab from './RecentTab';
 import AllTab from './AllTab';

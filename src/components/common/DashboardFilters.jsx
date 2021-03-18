@@ -1,13 +1,13 @@
 // @flow
 import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
-import { getFilteringValues } from '../../actions/proposals-actions';
-import { getProposalsFilters } from '../../selectors';
-import InputField from './InputField';
-import FilterDropDown from './FilterDropDown';
-import DateRange from './DateRange';
-import UserLookup from './UserLookup';
-import { getAllUsers } from '../../actions/sso-auth-actions';
+import { getFilteringValues } from '../../redux/actions/proposals-actions';
+import { getProposalsFilters } from '../../redux/selectors';
+import InputField from './atoms/inputs/InputField';
+import FilterDropDown from './atoms/inputs/FilterDropDown';
+import DateRange from './atoms/inputs/DateRange';
+import UserLookup from './atoms/inputs/UserLookup';
+import { getAllUsers } from '../../redux/actions/auth-actions';
 
 type Props = {
   onTextFilterChange: Function,

@@ -10,16 +10,16 @@ import { compose } from 'redux';
 import {
   getProposal,
   onGetValidatedProposalDetails
-} from '../../../actions/proposal-actions';
-import { onRefreshUserData } from '../../../actions/sso-auth-actions';
+} from '../../../redux/actions/proposal-actions';
+import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
 import {
   getIsOpen,
   getPendingValidatedItems,
   getProposalDetails,
   isProposalLoading
-} from '../../../selectors';
+} from '../../../redux/selectors';
 import Questions from './Questions';
-import Toolbar from '../../Toolbar';
+import Toolbar from '../../views/toolbar';
 import TabButtons from '../../common/TabButtons';
 import Documents from './Documents';
 import Validate from './Validate';

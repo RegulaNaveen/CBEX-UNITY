@@ -9,10 +9,10 @@ import {
   getProposalsLoading,
   getFilteredProposals,
   getIsFilteringProposals
-} from '../../../selectors';
-import { getAllProposals } from '../../../actions/proposals-actions';
-import TableView from '../../common/TableView';
-import GridView from '../../common/GridView';
+} from '../../../redux/selectors';
+import { getAllProposals } from '../../../redux/actions/proposals-actions';
+import GridView from '../../views/GridView';
+import TableView from '../../views/TableView';
 import ComplexPagination from '../../common/ComplexPagination';
 
 type Props = {

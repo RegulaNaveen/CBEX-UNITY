@@ -5,12 +5,12 @@ import { withRouter } from 'react-router-dom';
 import Loader from 'react-loader-spinner';
 import { compose } from 'redux';
 import type { Match } from 'react-router-dom';
-import { onGetProposalBoxId } from '../../../actions/proposal-actions';
+import { onGetProposalBoxId } from '../../../redux/actions/proposal-actions';
 import {
   getProposalBoxId,
   getProposalBoxIdError,
   getProposalBoxIdIsLoading
-} from '../../../selectors';
+} from '../../../redux/selectors';
 
 type Props = {
   match: Match,

@@ -6,9 +6,9 @@ import type { History, Location } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
-import { loginUser, onRefreshUserData } from './actions/sso-auth-actions';
+import { loginUser, onRefreshUserData } from './redux/actions/sso-auth-actions';
 import { PROPOSAL, DASHBOARD, LOGIN, ROOT } from './routes';
-import { getUserAuthStatus } from './selectors';
+import { getUserAuthStatus } from './redux/selectors';
 import { validateToken } from './api/sso-auth';
 import { API } from './constants';
 
