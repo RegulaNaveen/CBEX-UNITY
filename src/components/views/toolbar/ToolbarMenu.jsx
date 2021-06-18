@@ -8,7 +8,8 @@ import Loader from 'react-loader-spinner';
 import { LOGIN } from '../../../routes';
 import { getRoles, isRolesInfoLoading } from '../../../redux/selectors';
 import { getRolesInfo } from '../../../redux/actions/proposal-actions';
-import { logout, changeRole } from '../../../redux/actions/auth-actions';
+import { logout } from '../../../redux/actions/auth-actions';
+import { onSetUserRole } from '../../../redux/actions/sso-auth-actions';
 import Dropdown from '../../common/atoms/inputs/Dropdown';
 import {
   getUserEmail,
@@ -113,6 +114,6 @@ export default withRouter(
   connect(mapStateToProps, {
     getRolesInfoF: getRolesInfo,
     logoutUser: logout,
-    changeUserRole: changeRole
+    changeUserRole: onSetUserRole
   })(ToolbarMenuComponent)
 );

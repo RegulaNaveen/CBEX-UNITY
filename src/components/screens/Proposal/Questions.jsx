@@ -21,7 +21,7 @@ import {
 } from '../../../redux/selectors';
 import Sidebar from '../../views/Sidebar';
 import AnswerHistory from '../../views/modals/AnswerHistory';
-import { getAllUsers } from '../../../redux/actions/auth-actions';
+import { getAllUsers } from '../../../redux/actions/sso-auth-actions';
 
 type Props = {
   match: Match,
