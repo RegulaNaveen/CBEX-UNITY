@@ -7,7 +7,7 @@ import InputField from './atoms/inputs/InputField';
 import FilterDropDown from './atoms/inputs/FilterDropDown';
 import DateRange from './atoms/inputs/DateRange';
 import UserLookup from './atoms/inputs/UserLookup';
-import { getAllUsers } from '../../redux/actions/auth-actions';
+import { getAllUsers } from '../../redux/actions/sso-auth-actions';
 
 type Props = {
   onTextFilterChange: Function,

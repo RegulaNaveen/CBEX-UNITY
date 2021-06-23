@@ -8,13 +8,13 @@ import Loader from 'react-loader-spinner';
 import classNames from 'classnames';
 import { compose } from 'redux';
 import {
-  getProposal
-  // onGetValidatedProposalDetails
+  getProposal,
+  onGetValidatedProposalDetails
 } from '../../../redux/actions/proposal-actions';
 import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
 import {
   getIsOpen,
-  // getPendingValidatedItems,
+  getPendingValidatedItems,
   getProposalDetails,
   isProposalLoading
 } from '../../../redux/selectors';
@@ -22,7 +22,7 @@ import Questions from './Questions';
 import Toolbar from '../../views/toolbar';
 import TabButtons from '../../common/TabButtons';
 import Documents from './Documents';
-// import Validate from './Validate';
+import Validate from './Validate';
 
 type State = {
   selectedView: string
@@ -34,10 +34,10 @@ type Props = {
   match: Match,
   isLoading: boolean,
   isSidebarOpen: boolean,
-  // notifications: number,
+  notifications: number,
   getRefreshAuthData: Function,
-  getProposalInfo: Function
-  // getValidatedData: (proposalId: string) => void
+  getProposalInfo: Function,
+  getValidatedData: (proposalId: string) => void
 };
 
 export class Proposal extends Component<Props, State> {
@@ -45,7 +45,8 @@ export class Proposal extends Component<Props, State> {
     super(props);
 
     this.state = {
-      selectedView: 'questions'
+      selectedView: 'questions',
+      enableValidateTab: false
     };
   }
 
@@ -54,7 +55,7 @@ export class Proposal extends Component<Props, State> {
       getProposalInfo,
       authData,
       getRefreshAuthData,
-      // getValidatedData,
+      getValidatedData,
       match: { params }
     } = this.props;
 
@@ -65,12 +66,39 @@ export class Proposal extends Component<Props, State> {
     if (!authData) getRefreshAuthData();
 
     getProposalInfo(params.id);
-    // getValidatedData(params.id);
+    getValidatedData(params.id);
+
+    window.addEventListener('storage', e => this.handleStorageChange(e));
+
+    const enableValidateTab = localStorage.getItem('enableValidateTab');
+    if (enableValidateTab === null) {
+      localStorage.setItem('enableValidateTab', false);
+    } else if (enableValidateTab === 'true') {
+      this.setState({
+        enableValidateTab: true
+      });
+    }
   }
 
   componentWillUnmount() {
     localStorage.removeItem('proposalTypeView');
     localStorage.removeItem('proposalId');
+
+    window.removeEventListener('storage', this.handleStorageChange);
+  }
+
+  handleStorageChange(e) {
+    if (e.key === 'enableValidateTab') {
+      const isEnabled = e.newValue === 'true';
+      const { selectedView: selectedViewState } = this.state;
+      this.setState({
+        enableValidateTab: isEnabled,
+        selectedView:
+          !isEnabled && selectedViewState === 'validate'
+            ? 'questions'
+            : selectedViewState
+      });
+    }
   }
 
   onChangeProposalView = (selectedView: string) => {
@@ -78,15 +106,18 @@ export class Proposal extends Component<Props, State> {
   };
 
   renderContent = () => {
-    const { selectedView } = this.state;
-    const { isLoading, details } = this.props;
-    // const { isLoading, details, notifications } = this.props;
+    const { selectedView, enableValidateTab } = this.state;
+    const { isLoading, details, notifications } = this.props;
 
     const viewsMap = {
       questions: <Questions />,
       documents: <Documents />
       // validate: <Validate />
     };
+
+    if (enableValidateTab) {
+      viewsMap.validate = <Validate />;
+    }
 
     const { 'CRM #': crm } = details;
     const placeholder = 'No data';
@@ -101,16 +132,27 @@ export class Proposal extends Component<Props, State> {
     return (
       <div className="proposal-details">
         <h1>{crm || placeholder}</h1>
-        <TabButtons
-          elements={[
-            { tabName: 'questions' },
-            { tabName: 'documents' }
-            // { tabName: 'validate', notifications }
-          ]}
-          selectedView={selectedView}
-          onChangeView={this.onChangeProposalView}
-        />
-
+        {enableValidateTab ? (
+          <TabButtons
+            elements={[
+              { tabName: 'questions' },
+              { tabName: 'documents' },
+              { tabName: 'validate', notifications }
+            ]}
+            selectedView={selectedView}
+            onChangeView={this.onChangeProposalView}
+          />
+        ) : (
+          <TabButtons
+            elements={[
+              { tabName: 'questions' },
+              { tabName: 'documents' }
+              // { tabName: 'validate', notifications }
+            ]}
+            selectedView={selectedView}
+            onChangeView={this.onChangeProposalView}
+          />
+        )}
         {viewsMap[selectedView]}
       </div>
     );
@@ -135,15 +177,15 @@ export class Proposal extends Component<Props, State> {
 const mapStateToProps = (state: Map) => ({
   details: getProposalDetails(state),
   isLoading: isProposalLoading(state),
-  isSidebarOpen: getIsOpen(state)
-  // notifications: getPendingValidatedItems(state)
+  isSidebarOpen: getIsOpen(state),
+  notifications: getPendingValidatedItems(state)
 });
 
 export default compose(
   withRouter,
   connect(mapStateToProps, {
     getRefreshAuthData: onRefreshUserData,
-    getProposalInfo: getProposal
-    // getValidatedData: onGetValidatedProposalDetails
+    getProposalInfo: getProposal,
+    getValidatedData: onGetValidatedProposalDetails
   })
 )(Proposal);
