@@ -3,15 +3,21 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
+import Tab from 'apollo-react/components/Tab';
+import Tabs from 'apollo-react/components/Tabs';
+import Badge from 'apollo-react/components/Badge';
+import Typography from 'apollo-react/components/Typography';
 import chevronRight from '../../../img/chevron-right.svg';
 import {
   handleSelectedSection,
   onHandleOpenClose
 } from '../../redux/actions/sidebar-actions';
-import { getIsOpen } from '../../redux/selectors';
+import { getIsOpen, selectNotes } from '../../redux/selectors';
+import Notepad from './Notepad';
 
 type Props = {
   sections: Map,
+  notes: [],
   setSelectedSection: (selectedItem: string) => void,
   handleOpenClose: (isOpen: boolean) => void,
   isOpen: boolean
@@ -26,8 +32,10 @@ class Sidebar extends Component<Props, State> {
     super(props);
 
     this.state = {
-      selectedSection: ''
+      selectedSection: '',
+      activeTabIndex: 0
     };
+    this.sidebarRef = React.createRef(null);
   }
 
   componentDidMount() {
@@ -38,9 +46,24 @@ class Sidebar extends Component<Props, State> {
     window.removeEventListener('click', this.handleClick);
   }
 
-  handleClick = () => {
-    const { handleOpenClose } = this.props;
-    handleOpenClose(false);
+  handleClick = e => {
+    const { isOpen } = this.props;
+    // prevent closing sidebar when click event happens inside sidebar
+    if (isOpen) {
+      if (this.sidebarRef && this.sidebarRef.current) {
+        const sidebarPos = this.sidebarRef.current.getBoundingClientRect();
+        if (
+          e.clientX >= sidebarPos.left &&
+          e.clientX <= sidebarPos.right &&
+          e.clientY >= sidebarPos.top &&
+          e.clientY <= sidebarPos.bottom
+        ) {
+          return;
+        }
+      }
+      const { handleOpenClose } = this.props;
+      handleOpenClose(false);
+    }
   };
 
   handleItemsVisibility = (e: SyntheticEvent<EventTarget>) => {
@@ -75,12 +98,29 @@ class Sidebar extends Component<Props, State> {
     this.setState({ selectedSection: id });
   };
 
+  handleChangeTab = (event, activeTabIndex) => {
+    this.setState({ activeTabIndex });
+  };
+
   render() {
-    const { sections, isOpen } = this.props;
-    const { selectedSection } = this.state;
+    const { sections, isOpen, notes } = this.props;
+    const { selectedSection, activeTabIndex } = this.state;
+
+    const NotepadTab = () =>
+      notes.size === 0 ? (
+        <Typography variant="body2">Notepad</Typography>
+      ) : (
+        <Badge variant="dot">
+          <Typography variant="body2">Notepad</Typography>
+        </Badge>
+      );
 
     return (
-      <div id="sidebar" className={classNames({ 'is-open': isOpen })}>
+      <div
+        id="sidebar"
+        ref={this.sidebarRef}
+        className={classNames({ 'is-open': isOpen })}
+      >
         <div className="sidebar-content">
           <button onClick={this.handleItemsVisibility} type="button">
             <img
@@ -89,34 +129,45 @@ class Sidebar extends Component<Props, State> {
               alt="question arrow"
             />
           </button>
-          <div className="sidebar-content-list">
-            <h1>Index</h1>
+          <div>
+            <Tabs
+              value={activeTabIndex}
+              onChange={this.handleChangeTab}
+              size="small"
+              truncate
+            >
+              <Tab label="Index" />
+              <Tab label={<NotepadTab />} style={{ paddingRight: '8px' }} />
+            </Tabs>
+            {activeTabIndex === 0 && (
+              <div className="sidebar-content-list">
+                {sections.valueSeq().map(section => {
+                  const sectionName = section.get('sectionName');
+                  const questions = section.get('questions');
+                  const someQuestionsAreVisible = questions
+                    .valueSeq()
+                    .map(question => question.get('visible'))
+                    .includes(true);
 
-            {sections.valueSeq().map(section => {
-              const sectionName = section.get('sectionName');
-              const questions = section.get('questions');
-              const someQuestionsAreVisible = questions
-                .valueSeq()
-                .map(question => question.get('visible'))
-                .includes(true);
-
-              if (someQuestionsAreVisible)
-                return (
-                  <p
-                    key={sectionName}
-                    id={sectionName}
-                    className={classNames({
-                      'is-selected': selectedSection === sectionName
-                    })}
-                    role="presentation"
-                    onClick={this.scrollToSelectedElement}
-                  >
-                    {sectionName}
-                  </p>
-                );
-
-              return null;
-            })}
+                  if (someQuestionsAreVisible)
+                    return (
+                      <p
+                        key={sectionName}
+                        id={sectionName}
+                        className={classNames({
+                          'is-selected': selectedSection === sectionName
+                        })}
+                        role="presentation"
+                        onClick={this.scrollToSelectedElement}
+                      >
+                        {sectionName}
+                      </p>
+                    );
+                  return null;
+                })}
+              </div>
+            )}
+            {activeTabIndex === 1 && <Notepad sections={sections} />}
           </div>
         </div>
       </div>
@@ -125,7 +176,8 @@ class Sidebar extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: Object) => ({
-  isOpen: getIsOpen(state)
+  isOpen: getIsOpen(state),
+  notes: selectNotes(state)
 });
 
 export default connect(mapStateToProps, {

@@ -1,0 +1,83 @@
+$note-line-height: 1.1rem;
+$note-no-of-lines: 3;
+
+.notepad {
+    padding: 16px;
+    height: calc(100% - 48px);
+    display: flex;
+    flex-direction: column;
+    font-family: Proxima Nova, Nunito Sans, sans-serif;
+    font-size: 12px;
+
+    .list {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        max-height: calc(100% - 174px);
+        overflow-y: scroll;
+        margin-bottom: 8px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        &::-webkit-scrollbar {
+            display: none;
+        }
+        &.justify-center {
+            justify-content: center;
+            font-size: 14px;
+        }
+        .note {
+            margin-bottom: 16px;
+            .header {
+                display: flex;
+                flex-wrap: nowrap;
+                justify-content: space-between;
+                .username {
+                    color: $neptune-primary;
+                    font-weight: 600;
+                    font-size: 12px;
+                }
+                .date {
+                    font-weight: bold;
+                    font-size: 10px;
+                }
+
+            }
+            .body {
+                padding: 0 8px;
+                .title {
+                    font-weight: bold;
+                    margin-bottom: 4px;
+                }
+                .content-wrapper {
+                    position: relative;                    
+                    .content {
+                        line-height: $note-line-height;
+                        max-height: $note-no-of-lines * $note-line-height;
+                        overflow: hidden;
+                        position: relative;
+                        word-break: break-all;
+                    }
+                    .expand-link {
+                        position: absolute;
+                        right: 0;
+                        bottom: 0;
+                        background-color: #FFFFFF;
+                        padding-left: 2px;
+                    }
+                }
+            }
+        }
+    }
+
+    .add-note {
+        * {
+            font-size: 12px;
+        }
+        .MuiFormLabel-root {
+            font-weight: 600;
+        }
+        .button {
+            background-color: $neptune-primary;
+        }
+    }
+}

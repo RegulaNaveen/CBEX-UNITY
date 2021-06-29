@@ -6,6 +6,8 @@ import * as authSelectors from './auth';
 import * as siderbarSelectors from './sidebar';
 import * as ssoAuthSelectors from './sso-auth';
 
+export * from './notepad';
+
 // SSO Auth selectors
 export const getUserAuthStatus = (state: Object): boolean =>
   ssoAuthSelectors.getUserAuthStatus(state.ssoAuth);

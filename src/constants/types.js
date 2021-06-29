@@ -76,4 +76,8 @@ const SIDEBAR = {
   IS_OPEN: 'is_open'
 };
 
-export { AUTH, SSO_AUTH, PROPOSALS, PROPOSAL, SIDEBAR };
+const NOTEPAD = {
+  ADD_NOTE: 'add_note'
+};
+
+export { AUTH, SSO_AUTH, PROPOSALS, PROPOSAL, SIDEBAR, NOTEPAD };
