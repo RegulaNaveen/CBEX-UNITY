@@ -174,7 +174,7 @@ class AnswerHistory extends Component<Props> {
       <section
         id="answer-history-modal"
         onClick={this.closeModal}
-        role="button"
+        role="button" // eslint-disable-line
         tabIndex={0}
         onKeyUp={this.onModalKeyPress}
       >
