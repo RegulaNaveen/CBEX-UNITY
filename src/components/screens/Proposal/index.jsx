@@ -91,6 +91,10 @@ export class Proposal extends Component<Props, State> {
     window.removeEventListener('storage', this.handleStorageChange);
   }
 
+  onChangeProposalView = (selectedView: string) => {
+    this.setState({ selectedView });
+  };
+
   handleStorageChange(e) {
     const {
       getValidatedData,
@@ -112,10 +116,6 @@ export class Proposal extends Component<Props, State> {
       }
     }
   }
-
-  onChangeProposalView = (selectedView: string) => {
-    this.setState({ selectedView });
-  };
 
   renderContent = () => {
     const { selectedView, enableValidateTab } = this.state;
