@@ -80,4 +80,60 @@ $note-no-of-lines: 3;
             background-color: $neptune-primary;
         }
     }
+
+    .read-note {
+        height: 100%;
+        padding-bottom: 24px;
+        .title {
+            font-weight: 600;
+        }
+
+        .note-view {
+            overflow-y: auto;
+            max-height: 100%;
+            background-color: $white;
+            margin-top: 8px;
+            padding: 16px;
+            border: .5px solid #9999994d;
+            .note {
+                line-height: $note-line-height;
+            }
+        }
+    }
+
+    .edit-note {
+        height: 100%;
+        form {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            .textarea-container {
+                flex-grow: 1;
+                .MuiFormControl-root {
+                    height: 100%;
+                    .MuiInputBase-multiline {
+                        height: 100%;
+                        margin-bottom: 8px;
+                        textarea {
+                            height: 100% !important;
+                        }
+                    }
+                }
+            }
+        }
+        * {
+            font-size: 12px;
+        }
+        .MuiFormLabel-root {
+            font-weight: 600;
+        }
+        .button {
+            background-color: $neptune-primary;
+        }
+    }
+
+    .loading-msg {
+        margin-top: 32px;
+        z-index: 3003;
+    }
 }

@@ -20,7 +20,8 @@ type Props = {
   notes: [],
   setSelectedSection: (selectedItem: string) => void,
   handleOpenClose: (isOpen: boolean) => void,
-  isOpen: boolean
+  isOpen: boolean,
+  id: string
 };
 
 type State = {
@@ -48,13 +49,16 @@ class Sidebar extends Component<Props, State> {
 
   handleClick = e => {
     const { isOpen } = this.props;
-    // prevent closing sidebar when click event happens inside sidebar
+    /**
+     * prevent closing sidebar when click event happens inside sidebar
+     * since sidebar is fixed positioned and rightmost of viewport
+     * we can check for x start positions alone to get workaround on clicking scrollbar area
+     */
     if (isOpen) {
       if (this.sidebarRef && this.sidebarRef.current) {
         const sidebarPos = this.sidebarRef.current.getBoundingClientRect();
         if (
           e.clientX >= sidebarPos.left &&
-          e.clientX <= sidebarPos.right &&
           e.clientY >= sidebarPos.top &&
           e.clientY <= sidebarPos.bottom
         ) {
@@ -103,7 +107,7 @@ class Sidebar extends Component<Props, State> {
   };
 
   render() {
-    const { sections, isOpen, notes } = this.props;
+    const { sections, isOpen, notes, id } = this.props;
     const { selectedSection, activeTabIndex } = this.state;
 
     const NotepadTab = () =>
@@ -167,7 +171,7 @@ class Sidebar extends Component<Props, State> {
                 })}
               </div>
             )}
-            {activeTabIndex === 1 && <Notepad sections={sections} />}
+            {activeTabIndex === 1 && <Notepad sections={sections} id={id} />}
           </div>
         </div>
       </div>

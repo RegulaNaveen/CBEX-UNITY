@@ -32,7 +32,8 @@ type Props = {
   hasQuestionError: boolean,
   isQuestionLoading: boolean,
   getProposalInfoUpdated: Function,
-  fetchUsers: () => {}
+  fetchUsers: () => {},
+  proposalID: string
 };
 
 type State = {
@@ -142,7 +143,7 @@ class Questions extends Component<Props, State> {
   }
 
   render() {
-    const { details, sections, filteredSections } = this.props;
+    const { details, sections, filteredSections, proposalID } = this.props;
     const {
       showModal,
       isCheckedAll,
@@ -157,7 +158,7 @@ class Questions extends Component<Props, State> {
       <>
         <ProposalInfo data={details} />
 
-        <Sidebar sections={allSections} />
+        <Sidebar sections={allSections} id={proposalID} />
 
         <div className="tasksList-title-wrapper">
           <div className="taskList-icons-wrapper">

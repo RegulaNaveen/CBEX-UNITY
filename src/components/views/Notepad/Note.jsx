@@ -4,8 +4,9 @@ import moment from 'moment';
 import Link from 'apollo-react/components/Link';
 import Typography from 'apollo-react/components/Typography';
 import Grid from 'apollo-react/components/Grid';
+import { getUserName } from '../../../SessionHandler';
 
-function Note({ userName, date, section, content }) {
+function Note({ userName, date, section, content, index, onShowAll, onEdit }) {
   const contentRef = useRef(null);
   const [showExpandLink, setShowExpandLink] = useState(false);
 
@@ -18,6 +19,12 @@ function Note({ userName, date, section, content }) {
       setShowExpandLink(true);
     }
   }, []);
+
+  function onShowAllClick() {
+    onShowAll(index);
+  }
+
+  const canEdit = userName === getUserName();
 
   return (
     <div className="note">
@@ -34,7 +41,7 @@ function Note({ userName, date, section, content }) {
             </Typography>
           </Grid>
           <Grid item xs={6} md={6} lg={4}>
-            <Typography variant="body2" gutterBottom noWrap className="date">
+            <Typography variant="body2" gutterBottom noWrap className="date" style={{textAlign: 'right'}}>
               {moment(date).format('DD-MMM-yyyy')}
             </Typography>
           </Grid>
@@ -49,10 +56,11 @@ function Note({ userName, date, section, content }) {
           {showExpandLink && (
             <div className="expand-link">
               {/* eslint-disable-next-line */}
-              ... <Link>Show All</Link>
+              ... <Link onClick={onShowAllClick}>Show All</Link>
             </div>
           )}
         </div>
+        { canEdit && <Link onClick={() => onEdit(index)}>Edit Note</Link> }
       </div>
     </div>
   );
@@ -60,9 +68,12 @@ function Note({ userName, date, section, content }) {
 
 Note.propTypes = {
   userName: PropTypes.string.isRequired,
-  date: PropTypes.object.isRequired,
-  section: PropTypes.arrayOf(PropTypes.object).isRequired,
-  content: PropTypes.string.isRequired
+  date: PropTypes.string.isRequired,
+  section: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
+  index: PropTypes.number.isRequired,
+  onShowAll: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired
 };
 
 export default Note;

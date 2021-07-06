@@ -4,7 +4,16 @@ import Typography from 'apollo-react/components/Typography';
 import classNames from 'classnames';
 import Note from './Note';
 
-function List({ notes }) {
+function List({ notes, onShowAll, onEdit }) {
+  
+  function handleShowAllClick(index) {
+    onShowAll(notes.get(index));
+  }
+
+  function handleOnEditClick(index) {
+    onEdit(notes.get(index));
+  }
+  
   return (
     <div
       className={classNames({ list: true, 'justify-center': notes.size === 0 })}
@@ -14,14 +23,18 @@ function List({ notes }) {
           No Data to show
         </Typography>
       )}
-      {notes.map(note => {
+      {notes.map((note, idx) => {
         return (
           <Note
-            userName={note.get('userName')}
-            date={note.get('date')}
-            section={note.get('section')}
-            userRole={note.get('userRole')}
-            content={note.get('content')}
+            key={`note-${idx}`}
+            index={idx}
+            userName={note.getIn(['createdBy', 'userName'], '')}
+            date={note.get('createdAt')}
+            section={note.getIn(['section', 'sectionName'], '')}
+            userRole={note.getIn(['createdBy', 'userRole'])}
+            content={note.get('noteText')}
+            onShowAll={handleShowAllClick}
+            onEdit={handleOnEditClick}
           />
         );
       })}
@@ -30,7 +43,9 @@ function List({ notes }) {
 }
 
 List.propTypes = {
-  notes: PropTypes.arrayOf(PropTypes.object).isRequired
+  notes: PropTypes.object.isRequired,
+  onShowAll: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired
 };
 
 export default List;

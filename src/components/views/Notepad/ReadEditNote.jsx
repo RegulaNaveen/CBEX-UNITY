@@ -2,19 +2,54 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import Grid from 'apollo-react/components/Grid';
+import IconButton from 'apollo-react/components/IconButton';
+import Close from 'apollo-react-icons/Close';
 import TextField from 'apollo-react/components/TextField';
 import MenuItem from 'apollo-react/components/MenuItem';
 import Select from 'apollo-react/components/Select';
 import Button from 'apollo-react/components/Button';
 import Box from 'apollo-react/components/Box';
+import { Map } from 'immutable';
 
-function AddNoteForm({
+function NoteLabel({ onClose }) {
+  return (
+    <Grid container spacing={2} alignItems="center">
+        <Grid item xs={10}>
+          <p className="label">Proposal Notes</p>
+        </Grid>
+        <Grid item xs={2} style={{ textAlign: 'end' }}>
+          <IconButton size="small" onClick={onClose}>
+            <Close fontSize="extraSmall" />
+          </IconButton>
+        </Grid>
+      </Grid>
+  )
+}
+
+function ReadNote({ note, onClose }) {
+  return (
+    <div className="read-note">
+      <NoteLabel onClose={onClose} />
+      <Grid container>
+        <Grid item xs={12} className="note-view">
+          <p className="note">
+            { note.get('noteText') }
+          </p>
+        </Grid>
+      </Grid>
+    </div>
+  )
+}
+
+function EditNoteForm({
   sections,
   values,
   handleSubmit,
   handleChange,
-  setFieldValue
+  setFieldValue,
+  onClose
 }) {
+
   function handleSectionChange(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -23,17 +58,15 @@ function AddNoteForm({
 
   return (
     <form noValidate onSubmit={handleSubmit}>
-      <Grid container spacing={1}>
+      <Grid container spacing={1} className="textarea-container">
         <Grid item xs={12}>
           <TextField
             name="note"
-            label="Proposal Notes"
+            label={<NoteLabel onClose={onClose} />}
             placeholder="Enter notes here..."
             value={values.note}
             onChange={handleChange}
-            multiline
             sizeAdjustable
-            minHeight={130}
             fullWidth
             margin="none"
           />
@@ -69,34 +102,49 @@ function AddNoteForm({
               type="submit"
               disabled={values.note.trim().length === 0}
             >
-              Submit
+              Save
             </Button>
-          </Box> 
+          </Box>
         </Grid>
       </Grid>
     </form>
   );
 }
 
-function AddNote({ sections, onAddNote }) {
-  const FormikedAddNoteForm = withFormik({
+function EditNote({
+  sections,
+  onEdit,
+  readOnly,
+  note,
+  onClose
+}) {
+  if (readOnly) {
+    return (
+      <ReadNote note={note} onClose={onClose} />
+    );
+  }
+
+  let sectionValue = note.get('section');
+  sectionValue = sectionValue ? sectionValue.get('sectionName')  : '';
+
+  const FormikedEditNoteForm = withFormik({
     mapPropsToValues: () => ({
-      note: '',
-      section: ''
+      note: note.get('noteText'),
+      section: sectionValue
     }),
     handleSubmit: values => {
-      onAddNote(values);
+      onEdit(note.merge(Map({ noteText: values.note, section: values.section })));
     },
-    displayName: 'AddNoteForm'
-  })(AddNoteForm);
+    displayName: 'EditNoteForm'
+  })(EditNoteForm);
   return (
-    <div className="add-note">
-      <FormikedAddNoteForm sections={sections} />
+    <div className="edit-note">
+      <FormikedEditNoteForm sections={sections} onClose={onClose} />
     </div>
   );
 }
 
-AddNoteForm.propTypes = {
+EditNoteForm.propTypes = {
   sections: PropTypes.object.isRequired,
   values: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
@@ -104,9 +152,16 @@ AddNoteForm.propTypes = {
   setFieldValue: PropTypes.func.isRequired
 };
 
-AddNote.propTypes = {
+EditNote.propTypes = {
+  readOnly: PropTypes.bool.isRequired,
   sections: PropTypes.object.isRequired,
-  onAddNote: PropTypes.func.isRequired
+  onEdit: PropTypes.func,
+  note: PropTypes.object.isRequired,
+  onClose: PropTypes.func.isRequired
 };
 
-export default AddNote;
+EditNote.defaultProps = {
+  onEdit: () => {}
+}
+
+export default EditNote;

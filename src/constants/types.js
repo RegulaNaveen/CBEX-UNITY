@@ -77,7 +77,19 @@ const SIDEBAR = {
 };
 
 const NOTEPAD = {
-  ADD_NOTE: 'add_note'
+  FETCH_NOTES: 'fetch_notes',
+  FETCH_NOTES_DONE: 'fetch_notes_done',
+  ERROR_FETCHING_NOTES: 'error_fetching_notes',
+  ADD_NOTE: 'add_note',
+  ADD_NOTE_DONE: 'add_note_done',
+  UPDATE_NOTE: 'update_note',
+  UPDATE_NOTE_DONE: 'update_note_done',
+  ERROR_UPDATING_NOTE: 'error_updating_note',
+  ERROR_ADDING_NOTE: 'error_adding_note',
+  MODE_DEFAULT: 'notepad_mode_default',
+  MODE_READ: 'notepad_mode_read',
+  MODE_EDIT: 'notepad_mode_edit',
+  CHANGE_MODE: 'notepad_change_mode',
 };
 
 export { AUTH, SSO_AUTH, PROPOSALS, PROPOSAL, SIDEBAR, NOTEPAD };
