@@ -26,6 +26,7 @@ import Microsoft from './Microsoft';
 import Warning from './Warning';
 import Dash from './Dash';
 import Info from './Info';
+import ReportIssue from './ReportIssue';
 
 export {
   Checkmark,
@@ -54,5 +55,6 @@ export {
   Microsoft,
   Warning,
   Dash,
-  Info
+  Info,
+  ReportIssue
 };

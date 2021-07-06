@@ -5,6 +5,9 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import Loader from 'react-loader-spinner';
+import Button from 'apollo-react/components/Button';
+import PencilIcon from 'apollo-react-icons/Pencil';
+import GlobeIcon from 'apollo-react-icons/Globe';
 import { LOGIN } from '../../../routes';
 import { getRoles, isRolesInfoLoading } from '../../../redux/selectors';
 import { getRolesInfo } from '../../../redux/actions/proposal-actions';
@@ -16,6 +19,7 @@ import {
   getUserName,
   getUserRole
 } from '../../../SessionHandler';
+import { ReportIssue } from '../../svg';
 
 type Props = {
   rolesList: Array<string>,
@@ -89,6 +93,35 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
               value={roleName}
             />
           )}
+        </div>
+        <div className="menu-links">
+          <Button
+            target="_blank"
+            variant="text"
+            icon={<PencilIcon />}
+            className="menu-link-btn"
+            href="https://suggestionboard.ideas.aha.io/ideas?project=CBEXU"
+          >
+            Suggestion Board
+          </Button>
+          <Button
+            target="_blank"
+            variant="text"
+            icon={<GlobeIcon />}
+            className="menu-link-btn"
+            href="https://quintiles.sharepoint.com/sites/ltc/CBEx/SitePages/Unity-Wiki.aspx"
+          >
+            Unity Wiki
+          </Button>
+          <Button
+            target="_blank"
+            variant="text"
+            icon={<ReportIssue className="MuiSvgIcon-root IconComponent-icon-5" />}
+            className="menu-link-btn"
+            href="https://quintiles.service-now.com/via?id=sc_cat_item&sys_id=dd5c819fdb8fdc107cf37e77f4961917"
+          >
+            Report an Issue
+          </Button>
         </div>
         <div
           id="logout-button"
