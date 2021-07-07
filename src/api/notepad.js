@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { API } from '../constants';
+import { getAccessToken } from '../SessionHandler';
 
 const { NOTEPAD_API_URL } = API.NOTEPAD;
 const { API_KEY } = API.PROPOSAL;
@@ -9,7 +10,7 @@ export function fetchNotesApi(proposalID) {
   const config = {
     headers: {
       'x-api-key': API_KEY,
-      Authorization: `Bearer ${localStorage.getItem('id_token')}`
+      'x-access-token': getAccessToken()
     }
   };
 
@@ -25,7 +26,7 @@ export function addNoteApi(proposalID, note) {
   const config = {
     headers: {
       'x-api-key': API_KEY,
-      Authorization: `Bearer ${localStorage.getItem('id_token')}`
+      'x-access-token': getAccessToken()
     }
   };
 
@@ -41,7 +42,7 @@ export function updateNoteApi(proposalID, note) {
   const config = {
     headers: {
       'x-api-key': API_KEY,
-      Authorization: `Bearer ${localStorage.getItem('id_token')}`
+      'x-access-token': getAccessToken()
     }
   };
 
