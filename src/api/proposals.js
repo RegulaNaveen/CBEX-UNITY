@@ -1,7 +1,7 @@
 // @flow
 import axios from 'axios';
 import { API } from '../constants';
-import { getAccessToken } from '../SessionHandler';
+import { getAccessTokenFromLocalStorage as getAccessToken } from '../SessionHandler';
 
 const {
   PROPOSAL_API_ALL,

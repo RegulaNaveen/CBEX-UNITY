@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { API } from '../constants';
-import { getAccessToken } from '../SessionHandler';
+import { getAccessTokenFromLocalStorage as getAccessToken } from '../SessionHandler';
 
 const { NOTEPAD_API_URL } = API.NOTEPAD;
 const { API_KEY } = API.PROPOSAL;
