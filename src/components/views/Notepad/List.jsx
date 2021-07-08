@@ -20,7 +20,7 @@ function List({ notes, onShowAll, onEdit }) {
     >
       {notes.size === 0 && (
         <Typography variant="body2" style={{ textAlign: 'center' }}>
-          No Data to show
+          No Notes Available
         </Typography>
       )}
       {notes.map((note, idx) => {
