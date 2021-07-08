@@ -2,7 +2,7 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Link } from 'react-router-dom';
-import { isEmpty, keysIn, head, valuesIn } from 'lodash';
+import { isEmpty, keysIn, head } from 'lodash';
 import classNames from 'classnames';
 import { objectToString } from '../../utils/helpers';
 import { parseMomentDate } from '../../utils/DateUtils';
@@ -41,42 +41,50 @@ const TableView = ({ data, hideStatus }: Props) => {
     </div>
   );
 
-  const renderRow = (rowContent: Object) => (
-    <div
-      key={uuidv4()}
-      className="row"
-      style={{ gridTemplateColumns: `repeat(${columnsLength}, 1fr)` }}
-    >
-      {valuesIn(rowContent).map(cellContent => {
-        const skipValues = SKIP_COLUMNS.map(column => rowContent[column]);
-        if (hideStatus) skipValues.push(rowContent[STATUS_COLUMN]);
-
-        return (
-          !skipValues.includes(cellContent) && (
-            <div key={uuidv4()} className="cell">
-              {cellContent === rowContent[LINK_COLUMN] ? (
-                <Link to={`${PROPOSAL}${rowContent.proposalId}`}>
-                  {cellContent}
-                </Link>
-              ) : (
-                <p
-                  className={classNames({
-                    'no-data-placeholder':
-                      objectToString(cellContent) === 'No data'
-                  })}
-                >
-                  {cellContent === rowContent[DATE_COLUMN]
-                    ? cellContent && parseMomentDate(cellContent)
-                    : objectToString(cellContent)}
-                </p>
-              )}
-            </div>
-          )
-        );
-      })}
-    </div>
-  );
-
+  const renderRow = (row) => {
+    const renderCols = columns.filter(col => hideStatus ? col !== STATUS_COLUMN && !SKIP_COLUMNS.includes(col) : !SKIP_COLUMNS.includes(col))
+    
+    return (
+      <div
+        key={uuidv4()}
+        className="row"
+        style={{ gridTemplateColumns: `repeat(${columnsLength}, 1fr)` }}>
+          {
+            renderCols.map(col => {
+              switch(col) {
+                case LINK_COLUMN:
+                  return <div key={uuidv4()} className="cell">
+                    <Link to={`${PROPOSAL}${row.proposalId}`}>
+                      {row[col]}
+                    </Link>
+                  </div>
+                case DATE_COLUMN:
+                  return <div key={uuidv4()} className="cell">
+                    <p className={classNames({
+                      'no-data-placeholder':
+                        objectToString(row[DATE_COLUMN]) === 'No data'
+                      })}
+                    >
+                      { row[DATE_COLUMN] && parseMomentDate(row[DATE_COLUMN]) }
+                    </p>
+                  </div>
+                default:
+                  return <div key={uuidv4()} className="cell">
+                    <p
+                      className={classNames({
+                        'no-data-placeholder':
+                          objectToString(row[col]) === 'No data'
+                      })}
+                    >
+                      { objectToString(row[col]) }
+                    </p>
+                  </div>
+            }})
+          }
+      </div>
+    );
+  };
+  
   const renderTableContent = (_data: Array<Object>) => (
     <div key={uuidv4()} className="table-grid">
       {_data.map(rowContent => renderRow(rowContent))}
