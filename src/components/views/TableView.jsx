@@ -41,50 +41,59 @@ const TableView = ({ data, hideStatus }: Props) => {
     </div>
   );
 
-  const renderRow = (row) => {
-    const renderCols = columns.filter(col => hideStatus ? col !== STATUS_COLUMN && !SKIP_COLUMNS.includes(col) : !SKIP_COLUMNS.includes(col))
-    
+  const renderRow = row => {
+    const renderCols = columns.filter(col =>
+      hideStatus
+        ? col !== STATUS_COLUMN && !SKIP_COLUMNS.includes(col)
+        : !SKIP_COLUMNS.includes(col)
+    );
+
     return (
       <div
         key={uuidv4()}
         className="row"
-        style={{ gridTemplateColumns: `repeat(${columnsLength}, 1fr)` }}>
-          {
-            renderCols.map(col => {
-              switch(col) {
-                case LINK_COLUMN:
-                  return <div key={uuidv4()} className="cell">
-                    <Link to={`${PROPOSAL}${row.proposalId}`}>
-                      {row[col]}
-                    </Link>
-                  </div>
-                case DATE_COLUMN:
-                  return <div key={uuidv4()} className="cell">
-                    <p className={classNames({
+        style={{ gridTemplateColumns: `repeat(${columnsLength}, 1fr)` }}
+      >
+        {renderCols.map(col => {
+          switch (col) {
+            case LINK_COLUMN:
+              return (
+                <div key={uuidv4()} className="cell">
+                  <Link to={`${PROPOSAL}${row.proposalId}`}>{row[col]}</Link>
+                </div>
+              );
+            case DATE_COLUMN:
+              return (
+                <div key={uuidv4()} className="cell">
+                  <p
+                    className={classNames({
                       'no-data-placeholder':
                         objectToString(row[DATE_COLUMN]) === 'No data'
-                      })}
-                    >
-                      { row[DATE_COLUMN] && parseMomentDate(row[DATE_COLUMN]) }
-                    </p>
-                  </div>
-                default:
-                  return <div key={uuidv4()} className="cell">
-                    <p
-                      className={classNames({
-                        'no-data-placeholder':
-                          objectToString(row[col]) === 'No data'
-                      })}
-                    >
-                      { objectToString(row[col]) }
-                    </p>
-                  </div>
-            }})
+                    })}
+                  >
+                    {row[DATE_COLUMN] && parseMomentDate(row[DATE_COLUMN])}
+                  </p>
+                </div>
+              );
+            default:
+              return (
+                <div key={uuidv4()} className="cell">
+                  <p
+                    className={classNames({
+                      'no-data-placeholder':
+                        objectToString(row[col]) === 'No data'
+                    })}
+                  >
+                    {objectToString(row[col])}
+                  </p>
+                </div>
+              );
           }
+        })}
       </div>
     );
   };
-  
+
   const renderTableContent = (_data: Array<Object>) => (
     <div key={uuidv4()} className="table-grid">
       {_data.map(rowContent => renderRow(rowContent))}
