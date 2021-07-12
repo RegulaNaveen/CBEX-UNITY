@@ -72,7 +72,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     const { rolesList, isRolesLoading } = this.props;
     const name = getUserName();
     const email = getUserEmail();
-
+    
     return (
       <div className="toolbar-account-menu">
         <p className="toolbar-account-menu-name">{name}</p>
@@ -88,7 +88,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
               id="dd-team-member"
               title="User Role"
               placeholder="Select"
-              items={rolesList}
+              items={rolesList ? rolesList.sort() : []}
               onClick={this.onRoleChange}
               value={roleName}
             />
