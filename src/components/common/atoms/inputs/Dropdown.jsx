@@ -67,7 +67,6 @@ class Dropdown extends PureComponent<Props, State> {
     event.stopPropagation();
 
     const { onClick } = this.props;
-    console.log('value :>> ', value);
     onClick(value);
 
     this.setState({ selectedValue: value, isCollapsed: false });

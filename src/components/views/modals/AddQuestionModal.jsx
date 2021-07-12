@@ -238,7 +238,6 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       isRolesLoading,
       currentsection
     } = this.props;
-    console.log('currentsection :>> ', currentsection);
     return (
       <Modal>
         {!isQuestionSectionLoading &&
