@@ -14,6 +14,8 @@ import {
 } from '../../redux/actions/sidebar-actions';
 import { getIsOpen, selectNotes } from '../../redux/selectors';
 import Notepad from './Notepad';
+import { changeMode } from '../../redux/actions/notepad-actions';
+import { REDUX_TYPES } from '../../constants';
 
 type Props = {
   sections: Map,
@@ -21,12 +23,15 @@ type Props = {
   setSelectedSection: (selectedItem: string) => void,
   handleOpenClose: (isOpen: boolean) => void,
   isOpen: boolean,
-  id: string
+  id: string,
+  change: Function
 };
 
 type State = {
   selectedSection: string
 };
+
+const { MODE_DEFAULT } = REDUX_TYPES.NOTEPAD;
 
 class Sidebar extends Component<Props, State> {
   constructor(props: Object) {
@@ -66,6 +71,7 @@ class Sidebar extends Component<Props, State> {
         }
       }
       const { handleOpenClose } = this.props;
+      this.setState({ activeTabIndex: 0 });
       handleOpenClose(false);
     }
   };
@@ -76,6 +82,7 @@ class Sidebar extends Component<Props, State> {
     const { isOpen, handleOpenClose } = this.props;
 
     handleOpenClose(!isOpen);
+    if (isOpen) this.setState({ activeTabIndex: 0 });
   };
 
   scrollToSelectedElement = (event: SyntheticInputEvent<EventTarget>) => {
@@ -99,10 +106,15 @@ class Sidebar extends Component<Props, State> {
     handleOpenClose(false);
     setSelectedSection(itemToScroll);
 
-    this.setState({ selectedSection: id });
+    this.setState({ selectedSection: id, activeTabIndex: 0 });
   };
 
   handleChangeTab = (event, activeTabIndex) => {
+    if (activeTabIndex === 1) {
+      const { change } = this.props;
+      // always open notepad tab in default mode
+      change(MODE_DEFAULT);
+    }
     this.setState({ activeTabIndex });
   };
 
@@ -186,5 +198,6 @@ const mapStateToProps = (state: Object) => ({
 
 export default connect(mapStateToProps, {
   setSelectedSection: handleSelectedSection,
-  handleOpenClose: onHandleOpenClose
+  handleOpenClose: onHandleOpenClose,
+  change: changeMode
 })(Sidebar);
