@@ -124,17 +124,17 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         options: [],
         roleNames
       };
-
       setProposalQuestionF(proposalId, questionData);
     }
   };
 
-  renderContent = (
+  renderContent  = (
     onClose: Function,
     questionSectionList: Array<string>,
     answerTypesList: Array<string>,
     rolesList: Array<string>,
-    isLoading: boolean
+    isLoading: boolean,
+    selectedValue : String
   ) => {
     if (!isLoading) {
       return (
@@ -179,6 +179,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 id="dd-team-member"
                 placeholder="Select"
                 items={questionSectionList}
+                selectedValue={selectedValue}
                 title="Section"
                 onClick={this.onQuestionSectionChange}
               />
@@ -234,8 +235,10 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       isLoading,
       isQuestionSectionLoading,
       isAnswerTypesLoading,
-      isRolesLoading
+      isRolesLoading,
+      currentsection
     } = this.props;
+    console.log('currentsection :>> ', currentsection);
     return (
       <Modal>
         {!isQuestionSectionLoading &&
@@ -246,7 +249,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
             questionSectionList,
             answerTypesList,
             rolesList,
-            isLoading
+            isLoading,
+            currentsection
           )
         ) : (
           <div className="modal-loader">

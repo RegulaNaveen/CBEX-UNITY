@@ -42,6 +42,11 @@ class Dropdown extends PureComponent<Props, State> {
 
   componentDidMount() {
     window.addEventListener('click', this.closeOnOutsideClick);
+    if(this.props && this.props.selectedValue){
+      const { onClick } = this.props;
+      onClick(this.props.selectedValue);
+      this.setState({selectedValue: this.props.selectedValue})
+    }
   }
 
   componentWillUnmount() {
@@ -62,6 +67,7 @@ class Dropdown extends PureComponent<Props, State> {
     event.stopPropagation();
 
     const { onClick } = this.props;
+    console.log('value :>> ', value);
     onClick(value);
 
     this.setState({ selectedValue: value, isCollapsed: false });

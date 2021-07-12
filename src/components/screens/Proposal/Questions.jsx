@@ -53,7 +53,8 @@ class Questions extends Component<Props, State> {
       isChecked: false,
       isCheckedAll: false,
       selectedQuestionForHistory: '',
-      isHistoryModalShown: false
+      isHistoryModalShown: false,
+      currentsection:''
     };
   }
 
@@ -133,6 +134,10 @@ class Questions extends Component<Props, State> {
             questions={questions}
             title={sectionName}
             key={sectionName}
+            onAddQuestion = {(value)=>{
+              this.setState({currentsection: value})
+              this.onClose()
+            }}
             isCheckedAll={isCheckedAll}
             setQuestionToDisplayHistory={this.setQuestionToDisplayHistory}
           />
@@ -196,7 +201,10 @@ class Questions extends Component<Props, State> {
               title="Add New Question"
               className="tasksList-add-icon-wrapper"
               role="presentation"
-              onClick={this.onClose}
+              onClick={()=>{
+                this.setState({currentsection: ''})
+                this.onClose()
+              }}
             >
               <Add className="tasksList-add-icon" />
             </div>
@@ -204,7 +212,7 @@ class Questions extends Component<Props, State> {
         </div>
         <div className="tasksList-wrapper">{this.renderQuestions()}</div>
 
-        {showModal && <AddQuestionModalComponent onClose={this.onClose} />}
+        {showModal && <AddQuestionModalComponent onClose={this.onClose} currentsection={this.state.currentsection || ''}/>}
 
         {isHistoryModalShown && (
           <AnswerHistory

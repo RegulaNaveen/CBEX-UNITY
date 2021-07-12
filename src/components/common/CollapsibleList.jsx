@@ -6,6 +6,8 @@ import { getSelectedSection } from '../../redux/selectors';
 import chevronRight from '../../../img/chevron-right.svg';
 import chevronDown from '../../../img/chevron-down.svg';
 import Question from './Question';
+import Link from 'apollo-react/components/Link';
+import Plus from 'apollo-react-icons/Plus';
 
 type State = {
   isCollapsed: boolean
@@ -71,7 +73,6 @@ class CollapsibleList extends Component<Props, State> {
   render() {
     const { isCollapsed } = this.state;
     const { questions, title, setQuestionToDisplayHistory } = this.props;
-
     return (
       <div className="task-wrapper" ref={this.taskRef} id={this.createId()}>
         <button
@@ -140,6 +141,11 @@ class CollapsibleList extends Component<Props, State> {
                 )
               );
             })}
+            <div className="task-table-row">
+            <Link onClick={() =>this.props.onAddQuestion(title)} size="small">
+              <Plus fontSize="extraSmall"/><span style={{verticalAlign: 'top'}}> Add New Question</span>
+            </Link>
+            </div>
           </div>
         )}
       </div>
