@@ -54,7 +54,10 @@ class Questions extends Component<Props, State> {
       isCheckedAll: false,
       selectedQuestionForHistory: '',
       isHistoryModalShown: false,
-      currentsection:''
+      currentsection:'',
+      currentTab:0,
+      selectedtitle:'',
+      heighlightcard:false
     };
   }
 
@@ -110,6 +113,10 @@ class Questions extends Component<Props, State> {
     getProposalInfoUpdated(match.params.id);
   };
 
+  setTabFromQuestionNotes = (tabid,title,flag) =>{
+    this.setState({currentTab: tabid,selectedtitle:title,heighlightcard:flag})
+  }
+
   renderQuestions() {
     const { isChecked, isCheckedAll } = this.state;
     const { sections, filteredSections } = this.props;
@@ -134,6 +141,7 @@ class Questions extends Component<Props, State> {
             questions={questions}
             title={sectionName}
             key={sectionName}
+            setTabFromQuestionNotes = {(val,title,flag)=> this.setTabFromQuestionNotes(val,title,flag)}
             onAddQuestion = {(value)=>{
               this.setState({currentsection: value})
               this.onClose()
@@ -158,12 +166,16 @@ class Questions extends Component<Props, State> {
     } = this.state;
 
     const allSections = isChecked ? filteredSections : sections;
-
+    
     return (
       <>
         <ProposalInfo data={details} />
 
-        <Sidebar sections={allSections} id={proposalID} />
+        <Sidebar sections={allSections} id={proposalID} 
+        currentTab={this.state.currentTab} 
+        selectedtitle={this.state.selectedtitle}
+        heighlightcard={this.state.heighlightcard}
+        setTabFromQuestionNotes = {(val,title,flag)=> this.setTabFromQuestionNotes(val,title,flag)} />
 
         <div className="tasksList-title-wrapper">
           <div className="taskList-icons-wrapper">

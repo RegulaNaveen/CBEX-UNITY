@@ -43,10 +43,16 @@ class Sidebar extends Component<Props, State> {
     window.addEventListener('click', this.handleClick);
   }
 
+  componentDidUpdate(prevProps) {
+    if(prevProps.currentTab != this.state.activeTabIndex){
+      this.setState({activeTabIndex: prevProps.currentTab})
+    }
+  }
+
   componentWillUnmount() {
     window.removeEventListener('click', this.handleClick);
   }
-
+  
   handleClick = e => {
     const { isOpen } = this.props;
     /**
@@ -73,8 +79,9 @@ class Sidebar extends Component<Props, State> {
   handleItemsVisibility = (e: SyntheticEvent<EventTarget>) => {
     e.stopPropagation();
 
-    const { isOpen, handleOpenClose } = this.props;
-
+    const { isOpen, handleOpenClose, setTabFromQuestionNotes, selectedtitle} = this.props;
+    this.setState({activeTabIndex: 0});
+    setTabFromQuestionNotes(this.state.activeTabIndex,selectedtitle ? selectedtitle : '',true)
     handleOpenClose(!isOpen);
   };
 
@@ -103,13 +110,15 @@ class Sidebar extends Component<Props, State> {
   };
 
   handleChangeTab = (event, activeTabIndex) => {
+    const {setTabFromQuestionNotes,selectedtitle} = this.props;
     this.setState({ activeTabIndex });
+    setTabFromQuestionNotes(activeTabIndex,selectedtitle ? selectedtitle : '',false)
   };
 
   render() {
-    const { sections, isOpen, notes, id } = this.props;
+    const { sections, isOpen, notes, id, selectedtitle } = this.props;
     const { selectedSection, activeTabIndex } = this.state;
-
+    
     const NotepadTab = () =>
       notes.size === 0 ? (
         <Typography variant="body2">Notepad</Typography>
@@ -171,7 +180,7 @@ class Sidebar extends Component<Props, State> {
                 })}
               </div>
             )}
-            {activeTabIndex === 1 && <Notepad sections={sections} id={id} />}
+            {activeTabIndex === 1 && <Notepad sections={sections} id={id} selectedtitle={selectedtitle || ''} />}
           </div>
         </div>
       </div>

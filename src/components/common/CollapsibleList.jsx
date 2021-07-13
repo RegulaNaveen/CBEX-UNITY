@@ -8,6 +8,11 @@ import chevronDown from '../../../img/chevron-down.svg';
 import Question from './Question';
 import Link from 'apollo-react/components/Link';
 import Plus from 'apollo-react-icons/Plus';
+import FolderOpen from 'apollo-react-icons/FolderOpen';
+import { selectNotes } from '../../redux/selectors';
+import {
+  onHandleOpenClose
+} from '../../redux/actions/sidebar-actions';
 
 type State = {
   isCollapsed: boolean
@@ -72,7 +77,7 @@ class CollapsibleList extends Component<Props, State> {
 
   render() {
     const { isCollapsed } = this.state;
-    const { questions, title, setQuestionToDisplayHistory } = this.props;
+    const { questions, title, setQuestionToDisplayHistory, handleOpenClose} = this.props;
     return (
       <div className="task-wrapper" ref={this.taskRef} id={this.createId()}>
         <button
@@ -112,7 +117,23 @@ class CollapsibleList extends Component<Props, State> {
               tabIndex={-1}
             >
               <div className="task-title">
-                <p>{title}</p>
+                <p>
+                  {title}
+                 {
+                   this.props && this.props.notes && this.props.notes.size && this.props.notes.size > 0 ? (
+                    <span style={{paddingLeft: 10,fontSize:12,verticalAlign:'top'}}>
+                    <Link onClick={(e) =>{
+                      e.stopPropagation()
+                      handleOpenClose(true);
+                      console.log(11111111);
+                      this.props.setTabFromQuestionNotes(1,title,true)
+                    }} size="small">
+                      <FolderOpen fontSize="extraSmall"/><span style={{verticalAlign: 'top'}}> Notes ({this.props.notes.size})</span>
+                    </Link>
+                   </span>
+                   ) : null
+                 } 
+                </p>
               </div>
               <div className="task-subtitle task-subtitle-answer">
                 <p>Answer</p>
@@ -155,8 +176,8 @@ class CollapsibleList extends Component<Props, State> {
 
 const mapStateToProps = (state: Map) => {
   const selectedSection = getSelectedSection(state);
-
-  return { selectedSection };
+  const notes = selectNotes(state)
+  return { selectedSection, notes };
 };
 
-export default connect(mapStateToProps)(CollapsibleList);
+export default connect(mapStateToProps,{handleOpenClose: onHandleOpenClose})(CollapsibleList);
