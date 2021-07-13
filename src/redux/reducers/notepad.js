@@ -26,11 +26,11 @@ const INITIAL_STATE = fromJS({
 });
 
 /**
-   * 3 modes
-   * 'default' - shows list and add note option
-   * 'read' - shows detailed view of a note
-   * 'edit' - shows detailed view with ability to modify a note added by user
-   */
+ * 3 modes
+ * 'default' - shows list and add note option
+ * 'read' - shows detailed view of a note
+ * 'edit' - shows detailed view with ability to modify a note added by user
+ */
 
 function onFetchNotes(state) {
   return state.set('fetchingNotes', true);

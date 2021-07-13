@@ -7,6 +7,7 @@ import MenuItem from 'apollo-react/components/MenuItem';
 import Select from 'apollo-react/components/Select';
 import Button from 'apollo-react/components/Button';
 import Box from 'apollo-react/components/Box';
+import { v4 as uuidv4 } from 'uuid';
 
 function AddNoteForm({
   sections,
@@ -51,11 +52,8 @@ function AddNoteForm({
             margin="dense"
             size="small"
           >
-            {sections.valueSeq().map((section, idx) => (
-              <MenuItem
-                key={`section-${idx}`}
-                value={section.get('sectionName')}
-              >
+            {sections.valueSeq().map(section => (
+              <MenuItem key={uuidv4()} value={section.get('sectionName')}>
                 {section.get('sectionName')}
               </MenuItem>
             ))}
@@ -71,7 +69,7 @@ function AddNoteForm({
             >
               Submit
             </Button>
-          </Box> 
+          </Box>
         </Grid>
       </Grid>
     </form>

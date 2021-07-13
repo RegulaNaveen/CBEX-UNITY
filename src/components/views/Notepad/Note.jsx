@@ -41,7 +41,13 @@ function Note({ userName, date, section, content, index, onShowAll, onEdit }) {
             </Typography>
           </Grid>
           <Grid item xs={6} md={6} lg={4}>
-            <Typography variant="body2" gutterBottom noWrap className="date" style={{textAlign: 'right'}}>
+            <Typography
+              variant="body2"
+              gutterBottom
+              noWrap
+              className="date"
+              style={{ textAlign: 'right' }}
+            >
               {moment(date).format('DD-MMM-yyyy')}
             </Typography>
           </Grid>
@@ -60,7 +66,14 @@ function Note({ userName, date, section, content, index, onShowAll, onEdit }) {
             </div>
           )}
         </div>
-        { canEdit && <Link onClick={() => onEdit(index)}>Edit Note</Link> }
+        {canEdit && (
+          <>
+            {/* eslint-disable-next-line */}
+            <Link onClick={() => onEdit(index)}>
+              Edit Note
+            </Link>
+          </>
+        )}
       </div>
     </div>
   );

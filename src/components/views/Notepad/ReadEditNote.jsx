@@ -10,35 +10,34 @@ import Select from 'apollo-react/components/Select';
 import Button from 'apollo-react/components/Button';
 import Box from 'apollo-react/components/Box';
 import { Map } from 'immutable';
+import { v4 as uuidv4 } from 'uuid';
 
 function NoteLabel({ onClose }) {
   return (
     <Grid container spacing={2} alignItems="center">
-        <Grid item xs={10}>
-          <p className="label">Proposal Notes</p>
-        </Grid>
-        <Grid item xs={2} style={{ textAlign: 'end' }}>
-          <IconButton size="small" onClick={onClose}>
-            <Close fontSize="extraSmall" />
-          </IconButton>
-        </Grid>
+      <Grid item xs={10}>
+        <p className="label">Proposal Notes</p>
       </Grid>
-  )
+      <Grid item xs={2} style={{ textAlign: 'end' }}>
+        <IconButton size="small" onClick={onClose}>
+          <Close fontSize="extraSmall" />
+        </IconButton>
+      </Grid>
+    </Grid>
+  );
 }
 
 function ReadNote({ note, onClose }) {
   return (
     <div className="read-note">
       <NoteLabel onClose={onClose} />
-      <Grid container>
+      <Grid container className="note-view-container">
         <Grid item xs={12} className="note-view">
-          <p className="note">
-            { note.get('noteText') }
-          </p>
+          <p className="note">{note.get('noteText')}</p>
         </Grid>
       </Grid>
     </div>
-  )
+  );
 }
 
 function EditNoteForm({
@@ -49,7 +48,6 @@ function EditNoteForm({
   setFieldValue,
   onClose
 }) {
-
   function handleSectionChange(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -84,11 +82,8 @@ function EditNoteForm({
             margin="dense"
             size="small"
           >
-            {sections.valueSeq().map((section, idx) => (
-              <MenuItem
-                key={`section-${idx}`}
-                value={section.get('sectionName')}
-              >
+            {sections.valueSeq().map(section => (
+              <MenuItem key={uuidv4()} value={section.get('sectionName')}>
                 {section.get('sectionName')}
               </MenuItem>
             ))}
@@ -111,29 +106,22 @@ function EditNoteForm({
   );
 }
 
-function EditNote({
-  sections,
-  onEdit,
-  readOnly,
-  note,
-  onClose
-}) {
+function EditNote({ sections, onEdit, readOnly, note, onClose }) {
   if (readOnly) {
-    return (
-      <ReadNote note={note} onClose={onClose} />
-    );
+    return <ReadNote note={note} onClose={onClose} />;
   }
 
   let sectionValue = note.get('section');
-  sectionValue = sectionValue ? sectionValue.get('sectionName')  : '';
-
+  sectionValue = sectionValue ? sectionValue.get('sectionName') : '';
   const FormikedEditNoteForm = withFormik({
     mapPropsToValues: () => ({
       note: note.get('noteText'),
       section: sectionValue
     }),
     handleSubmit: values => {
-      onEdit(note.merge(Map({ noteText: values.note, section: values.section })));
+      onEdit(
+        note.merge(Map({ noteText: values.note, section: values.section }))
+      );
     },
     displayName: 'EditNoteForm'
   })(EditNoteForm);
@@ -149,7 +137,8 @@ EditNoteForm.propTypes = {
   values: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,
-  setFieldValue: PropTypes.func.isRequired
+  setFieldValue: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired
 };
 
 EditNote.propTypes = {
@@ -162,6 +151,15 @@ EditNote.propTypes = {
 
 EditNote.defaultProps = {
   onEdit: () => {}
-}
+};
+
+NoteLabel.propTypes = {
+  onClose: PropTypes.func.isRequired
+};
+
+ReadNote.propTypes = {
+  note: PropTypes.object.isRequired,
+  onClose: PropTypes.func.isRequired
+};
 
 export default EditNote;
