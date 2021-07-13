@@ -73,7 +73,6 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     const name = getUserName();
     const email = getUserEmail();
     
-    
     return (
       <div className="toolbar-account-menu">
         <p className="toolbar-account-menu-name">{name}</p>
