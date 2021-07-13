@@ -42,11 +42,6 @@ class Dropdown extends PureComponent<Props, State> {
 
   componentDidMount() {
     window.addEventListener('click', this.closeOnOutsideClick);
-    if(this.props && this.props.selectedValue){
-      const { onClick } = this.props;
-      onClick(this.props.selectedValue);
-      this.setState({selectedValue: this.props.selectedValue})
-    }
   }
 
   componentWillUnmount() {
