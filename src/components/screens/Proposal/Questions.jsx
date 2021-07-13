@@ -112,9 +112,19 @@ class Questions extends Component<Props, State> {
     const { getProposalInfoUpdated, match } = this.props;
     getProposalInfoUpdated(match.params.id);
   };
+  scrollToSelectedElement = (title) => {
+    setTimeout(() => {
+      const item = document.getElementById(`notepad-${String(title).toLocaleLowerCase()}`);
+      if(item){
+        item.scrollIntoView();
+      }
+    }, 1000);
+  };
 
   setTabFromQuestionNotes = (tabid,title,flag) =>{
-    this.setState({currentTab: tabid,selectedtitle:title,heighlightcard:flag})
+    this.setState({currentTab: tabid,selectedtitle:title,heighlightcard:flag},()=>{
+      this.scrollToSelectedElement(title)
+    })
   }
 
   renderQuestions() {

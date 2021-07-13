@@ -59,7 +59,7 @@ export function updateNote(id, note) {
 }
 
 export function changeMode(mode) {
-  return dispatch => dispatch({ type: CHANGE_MODE, payload: { mode } })
+  return dispatch => dispatch({ type: CHANGE_MODE, payload: { mode } });
 }
 
 export default fetchNotes;

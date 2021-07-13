@@ -5,7 +5,6 @@ import { getAccessTokenFromLocalStorage as getAccessToken } from '../SessionHand
 const { NOTEPAD_API_URL } = API.NOTEPAD;
 const { API_KEY } = API.PROPOSAL;
 
-
 export function fetchNotesApi(proposalID) {
   const config = {
     headers: {

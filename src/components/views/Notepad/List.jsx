@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from 'apollo-react/components/Typography';
 import classNames from 'classnames';
+import { v4 as uuidv4 } from 'uuid';
 import Note from './Note';
 import Card from 'apollo-react/components/Card';
 
@@ -13,7 +14,7 @@ function List({ notes, onShowAll, onEdit,selectedtitle }) {
   function handleOnEditClick(index) {
     onEdit(notes.get(index));
   }
-  
+
   return (
     <div
       className={classNames({ list: true, 'justify-center': notes.size === 0 })}
@@ -26,34 +27,29 @@ function List({ notes, onShowAll, onEdit,selectedtitle }) {
       {notes.map((note, idx) => {
         if(selectedtitle && note.getIn(['section', 'sectionName'], '') == selectedtitle){
           return (
-            <Card key={`note-${idx}`} 
-              interactive style={{ 
-              display: 'block',
-              width: 'auto',
-              height: 'auto',
-              transitionDuration: 0.6,
-              marginBottom: 10,
-              boxShadow:"0 8px 20px 0 rgb(0 0 0 / 8%)",
-              borderColor:"#d9d9d9"
-              }} >
+            <div 
+             className="card"
+             id={`notepad-${String(note.getIn(['section', 'sectionName'], '')).toLocaleLowerCase()}`}
+             key={uuidv4()}
+             style={{width:'auto', gridTemplateRows: 'auto',marginBottom:16}}
+             >
             <Note
-              index={idx}
-              userName={note.getIn(['createdBy', 'userName'], '')}
-              date={note.get('createdAt')}
-              section={note.getIn(['section', 'sectionName'], '')}
-              userRole={note.getIn(['createdBy', 'userRole'])}
-              content={note.get('noteText')}
-              onShowAll={handleShowAllClick}
-              onEdit={handleOnEditClick}
-              textstyle={{paddinTop:5,paddingRight:0}}
-              notesBottomstyle={10}
-            />
-           </Card>
+            index={idx}
+            userName={note.getIn(['createdBy', 'userName'], '')}
+            date={note.get('createdAt')}
+            section={note.getIn(['section', 'sectionName'], '')}
+            userRole={note.getIn(['createdBy', 'userRole'])}
+            content={note.get('noteText')}
+            onShowAll={handleShowAllClick}
+            onEdit={handleOnEditClick}
+            textstyle={{paddinTop:5,paddingRight:5}}
+           />
+           </div>
           );
         }else{
           return (
             <Note
-              key={`note-${idx}`}
+              key={uuidv4()}
               index={idx}
               userName={note.getIn(['createdBy', 'userName'], '')}
               date={note.get('createdAt')}

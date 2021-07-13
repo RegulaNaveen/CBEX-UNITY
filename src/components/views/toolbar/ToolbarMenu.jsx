@@ -116,7 +116,9 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
           <Button
             target="_blank"
             variant="text"
-            icon={<ReportIssue className="MuiSvgIcon-root IconComponent-icon-5" />}
+            icon={
+              <ReportIssue className="MuiSvgIcon-root IconComponent-icon-5" />
+            }
             className="menu-link-btn"
             href="https://quintiles.service-now.com/via?id=sc_cat_item&sys_id=dd5c819fdb8fdc107cf37e77f4961917"
           >

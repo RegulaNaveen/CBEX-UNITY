@@ -125,8 +125,7 @@ class CollapsibleList extends Component<Props, State> {
                     <Link onClick={(e) =>{
                       e.stopPropagation()
                       handleOpenClose(true);
-                      console.log(11111111);
-                      this.props.setTabFromQuestionNotes(1,title,true)
+                      this.props.setTabFromQuestionNotes(1,title,true);
                     }} size="small">
                       <FolderOpen fontSize="extraSmall"/><span style={{verticalAlign: 'top'}}> Notes ({this.props.notes.size})</span>
                     </Link>

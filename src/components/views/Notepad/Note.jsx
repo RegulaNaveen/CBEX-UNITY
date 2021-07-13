@@ -6,7 +6,7 @@ import Typography from 'apollo-react/components/Typography';
 import Grid from 'apollo-react/components/Grid';
 import { getUserName } from '../../../SessionHandler';
 
-function Note({ userName, date, section, content, index, onShowAll, onEdit, textstyle, notesBottomstyle }) {
+function Note({ userName, date, section, content, index, onShowAll, onEdit, textstyle }) {
   const contentRef = useRef(null);
   const [showExpandLink, setShowExpandLink] = useState(false);
 
@@ -25,9 +25,9 @@ function Note({ userName, date, section, content, index, onShowAll, onEdit, text
   }
 
   const canEdit = userName === getUserName();
-
+  
   return (
-    <div className="note" style={notesBottomstyle ? {marginBottom: notesBottomstyle } : {}}>
+    <div className="note" id={`notepad-${String(section).toLocaleLowerCase()}`}>
       <div className="header">
         <Grid container spacing={2} alignContent="center">
           <Grid item xs={6} md={6} lg={8}>
@@ -61,7 +61,14 @@ function Note({ userName, date, section, content, index, onShowAll, onEdit, text
             </div>
           )}
         </div>
-        { canEdit && <Link onClick={() => onEdit(index)}>Edit Note</Link> }
+        {canEdit && (
+          <>
+            {/* eslint-disable-next-line */}
+            <Link onClick={() => onEdit(index)}>
+              Edit Note
+            </Link>
+          </>
+        )}
       </div>
     </div>
   );
