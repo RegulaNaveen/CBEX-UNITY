@@ -134,7 +134,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     questionSectionList: Array<string>,
     answerTypesList: Array<string>,
     rolesList: Array<string>,
-    isLoading: boolean
+    isLoading: boolean,
+    selectedValue: String
   ) => {
     if (!isLoading) {
       return (
@@ -179,6 +180,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 id="dd-team-member"
                 placeholder="Select"
                 items={questionSectionList}
+                selectedValue={selectedValue}
                 title="Section"
                 onClick={this.onQuestionSectionChange}
               />
@@ -234,7 +236,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       isLoading,
       isQuestionSectionLoading,
       isAnswerTypesLoading,
-      isRolesLoading
+      isRolesLoading,
+      currentsection
     } = this.props;
     return (
       <Modal>
@@ -246,7 +249,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
             questionSectionList,
             answerTypesList,
             rolesList,
-            isLoading
+            isLoading,
+            currentsection
           )
         ) : (
           <div className="modal-loader">
