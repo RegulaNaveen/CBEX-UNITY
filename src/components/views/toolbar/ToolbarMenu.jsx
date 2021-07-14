@@ -88,7 +88,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
               id="dd-team-member"
               title="User Role"
               placeholder="Select"
-              items={rolesList}
+              items={rolesList ? rolesList.sort() : []}
               onClick={this.onRoleChange}
               value={roleName}
             />
