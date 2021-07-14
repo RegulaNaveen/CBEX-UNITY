@@ -35,7 +35,8 @@ function Notepad({
   fetchingNotes,
   addingNote,
   mode,
-  change
+  change,
+  selectedtitle
 }) {
   const [selectedNote, setSelectedNote] = useState(Map());
 
@@ -120,11 +121,7 @@ function Notepad({
     <div className="notepad">
       {mode === MODE_DEFAULT && (
         <>
-          <List
-            notes={notes}
-            onShowAll={handleShowAll}
-            onEdit={handleEditNoteClick}
-          />
+          <List notes={notes} onShowAll={handleShowAll} onEdit={handleEditNoteClick} selectedtitle={selectedtitle} />
           <AddNote sections={sections} onAddNote={handleOnAddNote} />
         </>
       )}
