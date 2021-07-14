@@ -29,7 +29,7 @@ type Props = {
   setSelectedSection: (selectedItem: string) => void,
   handleOpenClose: (isOpen: boolean) => void,
   isOpen: boolean,
-  id: string,
+  id: string
 };
 
 type State = {
