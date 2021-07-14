@@ -6,7 +6,14 @@ import { connect } from 'react-redux';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
 import Badge from 'apollo-react/components/Badge';
+import FixedBar from 'apollo-react/components/FixedBar';
+import PlusIcon from 'apollo-react-icons/Plus';
+import CardIcon from 'apollo-react-icons/Card';
+import SyncIcon from 'apollo-react-icons/Sync';
+import Button from 'apollo-react/components/Button';
 import Typography from 'apollo-react/components/Typography';
+import { neptunePrimaryDark } from 'apollo-react/colors';
+
 import chevronRight from '../../../img/chevron-right.svg';
 import {
   handleSelectedSection,
@@ -15,13 +22,14 @@ import {
 import { getIsOpen, selectNotes } from '../../redux/selectors';
 import Notepad from './Notepad';
 
+
 type Props = {
   sections: Map,
   notes: [],
   setSelectedSection: (selectedItem: string) => void,
   handleOpenClose: (isOpen: boolean) => void,
   isOpen: boolean,
-  id: string
+  id: string,
 };
 
 type State = {
@@ -107,7 +115,7 @@ class Sidebar extends Component<Props, State> {
   };
 
   render() {
-    const { sections, isOpen, notes, id } = this.props;
+    const { sections, isOpen, notes, id, expandAll, AddNewQuestion, RefreshProposal } = this.props;
     const { selectedSection, activeTabIndex } = this.state;
 
     const NotepadTab = () =>
@@ -134,6 +142,27 @@ class Sidebar extends Component<Props, State> {
             />
           </button>
           <div>
+            <div style={{ background: 'none' }}>
+              <FixedBar title="Controls" size="small" onClose={this.handleItemsVisibility} />
+            </div>
+            <Button
+              icon={<PlusIcon style={{ backgroundColor: neptunePrimaryDark, width: 20, height: 20, borderRadius: '50%', color: '#fff', padding: 3 }} />}
+              fullWidth
+              style={{ justifyContent: 'left', paddingLeft: '50px' }}
+              onClick={(e)=>{ this.handleItemsVisibility(e); AddNewQuestion()}}
+            >Add New Questions</Button>
+            <Button
+              icon={<CardIcon />}
+              fullWidth
+              style={{ justifyContent: 'left', paddingLeft: '50px' }}
+              onClick={(e)=>{ this.handleItemsVisibility(e); expandAll()}}
+            >Expand All Sections</Button>
+            <Button
+              icon={<SyncIcon style={{ backgroundColor: neptunePrimaryDark, width: 20, height: 20, borderRadius: '50%', color: '#fff', padding: 3 }} />}
+              fullWidth
+              style={{ justifyContent: 'left', paddingLeft: '50px' }}
+              onClick={(e)=>{ this.handleItemsVisibility(e); RefreshProposal()}}
+            >Refresh Proposal Sources</Button>
             <Tabs
               value={activeTabIndex}
               onChange={this.handleChangeTab}
