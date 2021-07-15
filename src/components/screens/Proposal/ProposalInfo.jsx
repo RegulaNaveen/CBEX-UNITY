@@ -3,7 +3,7 @@ import React from 'react';
 import { parseMomentDate } from '../../../utils/DateUtils';
 
 type Props = {
-  data: Object
+  data: Object,
 };
 
 function ProposalInfo({ data }: Props) {
@@ -16,7 +16,7 @@ function ProposalInfo({ data }: Props) {
     'Product name': productName,
     'Protocol number': protocolNumber,
     'Therapeutic area': therapeuticArea,
-    'Verbatim indication': verbatimIndication
+    'Verbatim indication': verbatimIndication,
   } = data;
 
   const placeholder = 'No data';

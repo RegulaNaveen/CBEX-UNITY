@@ -11,7 +11,7 @@ type Props = {
   onKeyUp?: Function,
   onClick?: Function,
   withReset?: boolean,
-  onReset?: Function
+  onReset?: Function,
 };
 
 const DatePickerCustomInput = ({
@@ -23,7 +23,7 @@ const DatePickerCustomInput = ({
   onClick,
   placeholder,
   withReset,
-  onReset
+  onReset,
 }: Props) => (
   <div className="datepicker-wrapper">
     <Calendar className="datepicker-icon" />
@@ -56,7 +56,7 @@ DatePickerCustomInput.defaultProps = {
   onKeyUp: undefined,
   onClick: undefined,
   withReset: false,
-  onReset: undefined
+  onReset: undefined,
 };
 
 export default DatePickerCustomInput;

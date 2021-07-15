@@ -14,7 +14,7 @@ import { setProposalAnswerData } from '../../redux/actions/proposal-actions';
 import { getUserData } from '../../redux/selectors';
 
 type State = {
-  selectedDay: string
+  selectedDay: string,
 };
 
 type Props = {
@@ -26,7 +26,7 @@ type Props = {
   sectionName: string,
   userData: Object,
   setProposalAnswer: Function,
-  setQuestionToDisplayHistory: (answer: string) => void
+  setQuestionToDisplayHistory: (answer: string) => void,
 };
 
 export class TaskRow extends Component<Props, State> {
@@ -34,7 +34,7 @@ export class TaskRow extends Component<Props, State> {
     super(props);
 
     this.state = {
-      selectedDay: ''
+      selectedDay: '',
     };
   }
 
@@ -206,9 +206,9 @@ export class TaskRow extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: Object) => ({
-  userData: getUserData(state)
+  userData: getUserData(state),
 });
 
 export default connect(mapStateToProps, {
-  setProposalAnswer: setProposalAnswerData
+  setProposalAnswer: setProposalAnswerData,
 })(TaskRow);

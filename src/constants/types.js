@@ -20,7 +20,7 @@ const AUTH = {
   RESET_PASSWORD_SUCCESS: 'reset_password_success',
   RESET_PASSWORD_ERROR: 'reset_password_error',
   ON_GET_LOOKUP_USERS: 'on_get_lookup_users',
-  ERROR_ON_GET_LOOKUP_USERS: 'error_on_get_lookup_users'
+  ERROR_ON_GET_LOOKUP_USERS: 'error_on_get_lookup_users',
 };
 
 const SSO_AUTH = {
@@ -31,7 +31,7 @@ const SSO_AUTH = {
   ERROR_ON_CHANGE_ROLE: 'error_on_change_role',
   ON_REFRESH_USER_DATA: 'on_refresh_user_data',
   ON_GET_LOOKUP_USERS: 'on_get_lookup_users',
-  ERROR_ON_GET_LOOKUP_USERS: 'error_on_get_lookup_users'
+  ERROR_ON_GET_LOOKUP_USERS: 'error_on_get_lookup_users',
 };
 
 const PROPOSAL = {
@@ -59,7 +59,7 @@ const PROPOSAL = {
   UPDATE_MODIFIED_QUESTION: 'update_modified_question',
   ON_FETCHING_VALIDATED_PROPOSAL_DATA: 'on_fetching_validated_proposal_data',
   VALIDATED_PROPOSAL_DATA: 'validated_proposal_data',
-  VALIDATED_PROPOSAL_DATA_ERROR: 'validated_proposal_data_error'
+  VALIDATED_PROPOSAL_DATA_ERROR: 'validated_proposal_data_error',
 };
 
 const PROPOSALS = {
@@ -68,12 +68,12 @@ const PROPOSALS = {
   ERROR_ON_GET_PROPOSALS: 'error_on_get_proposals',
   ON_PROPOSALS_LOADING: 'on_proposals_loading',
   ON_FILTER_PROPOSALS: 'on_filter_proposals',
-  ON_SET_PROPOSALS_FILTERS: 'on_set_proposals_filters'
+  ON_SET_PROPOSALS_FILTERS: 'on_set_proposals_filters',
 };
 
 const SIDEBAR = {
   OPEN_SECTION: 'open_section',
-  IS_OPEN: 'is_open'
+  IS_OPEN: 'is_open',
 };
 
 export { AUTH, SSO_AUTH, PROPOSALS, PROPOSAL, SIDEBAR };

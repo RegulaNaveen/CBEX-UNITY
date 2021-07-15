@@ -8,7 +8,7 @@ import chevronDown from '../../../img/chevron-down.svg';
 import Question from './Question';
 
 type State = {
-  isCollapsed: boolean
+  isCollapsed: boolean,
 };
 
 type Props = {
@@ -16,7 +16,7 @@ type Props = {
   title: string,
   selectedSection: string,
   isCheckedAll: boolean,
-  setQuestionToDisplayHistory: (answer: string) => void
+  setQuestionToDisplayHistory: (answer: string) => void,
 };
 
 class CollapsibleList extends Component<Props, State> {
@@ -28,7 +28,7 @@ class CollapsibleList extends Component<Props, State> {
     this.taskRef = React.createRef();
 
     this.state = {
-      isCollapsed: false
+      isCollapsed: false,
     };
   }
 
@@ -60,10 +60,7 @@ class CollapsibleList extends Component<Props, State> {
   createId = () => {
     const { title } = this.props;
 
-    const id = title
-      .toLocaleLowerCase()
-      .split(' ')
-      .join('-');
+    const id = title.toLocaleLowerCase().split(' ').join('-');
 
     return id;
   };
@@ -121,7 +118,7 @@ class CollapsibleList extends Component<Props, State> {
               </div>
             </div>
 
-            {questions.valueSeq().map(questionConfig => {
+            {questions.valueSeq().map((questionConfig) => {
               const visible = questionConfig.get('visible');
               return (
                 (visible || typeof visible === 'undefined') && (

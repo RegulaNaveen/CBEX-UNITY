@@ -10,12 +10,12 @@ type Props = {
   title?: string,
   onClick: Function,
   value?: string,
-  withReset?: boolean
+  withReset?: boolean,
 };
 
 type State = {
   isCollapsed: boolean,
-  selectedValue: string
+  selectedValue: string,
 };
 
 class Dropdown extends PureComponent<Props, State> {
@@ -26,7 +26,7 @@ class Dropdown extends PureComponent<Props, State> {
     placeholder: '',
     title: undefined,
     value: undefined,
-    withReset: false
+    withReset: false,
   };
 
   constructor(props: Object) {
@@ -36,7 +36,7 @@ class Dropdown extends PureComponent<Props, State> {
 
     this.state = {
       isCollapsed: false,
-      selectedValue: ''
+      selectedValue: '',
     };
   }
 
@@ -98,7 +98,7 @@ class Dropdown extends PureComponent<Props, State> {
             {isCollapsed && (
               <ul className="dd-list">
                 {items &&
-                  items.map(item => (
+                  items.map((item) => (
                     <DropdownItem
                       onClick={this.handleClick}
                       item={item}

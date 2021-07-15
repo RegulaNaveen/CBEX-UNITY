@@ -5,7 +5,7 @@ import { Check } from '../../../svg';
 type Props = {
   onClick: Function,
   item: string,
-  isSelected: boolean
+  isSelected: boolean,
 };
 
 class MultiselectItem extends PureComponent<Props> {

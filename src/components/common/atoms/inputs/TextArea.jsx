@@ -11,12 +11,12 @@ type Props = {
   type?: string,
   value?: string,
   onBlur?: Function,
-  onChange?: Function
+  onChange?: Function,
 };
 
 type State = {
   textValue: string,
-  numberError: boolean
+  numberError: boolean,
 };
 
 type ReactRefT = { current: any };
@@ -30,7 +30,7 @@ class TextArea extends PureComponent<Props, State> {
     type: undefined,
     value: undefined,
     onBlur: undefined,
-    onChange: undefined
+    onChange: undefined,
   };
 
   constructor(props: Object) {
@@ -40,7 +40,7 @@ class TextArea extends PureComponent<Props, State> {
 
     this.state = {
       textValue: '',
-      numberError: false
+      numberError: false,
     };
   }
 
@@ -113,7 +113,7 @@ class TextArea extends PureComponent<Props, State> {
             <input
               id={id}
               className={classnames('text-number-wrapper', className, {
-                numberError
+                numberError,
               })}
               value={textValue}
               onChange={this.handleNumber}

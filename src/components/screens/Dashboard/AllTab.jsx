@@ -8,7 +8,7 @@ import {
   getProposals,
   getProposalsLoading,
   getFilteredProposals,
-  getIsFilteringProposals
+  getIsFilteringProposals,
 } from '../../../redux/selectors';
 import { getAllProposals } from '../../../redux/actions/proposals-actions';
 import GridView from '../../views/GridView';
@@ -21,13 +21,13 @@ type Props = {
   fetchProposals: Function,
   filteredProposals: [Object],
   isFilteringProposals: boolean,
-  loading: boolean
+  loading: boolean,
 };
 
 type State = {
   numRows: number,
   page: number,
-  pageContent: Array<Object>
+  pageContent: Array<Object>,
 };
 
 class AllTab extends Component<Props, State> {
@@ -36,7 +36,7 @@ class AllTab extends Component<Props, State> {
     this.state = {
       page: 1,
       numRows: 15,
-      pageContent: []
+      pageContent: [],
     };
   }
 
@@ -84,7 +84,7 @@ class AllTab extends Component<Props, State> {
       proposals,
       loading,
       isFilteringProposals,
-      filteredProposals
+      filteredProposals,
     } = this.props;
 
     const showPagination = isFilteringProposals
@@ -118,16 +118,16 @@ class AllTab extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   selectedViewType: getProposalTypeView(state),
   proposals: getProposals(state),
   loading: getProposalsLoading(state),
   filteredProposals: getFilteredProposals(state),
-  isFilteringProposals: getIsFilteringProposals(state)
+  isFilteringProposals: getIsFilteringProposals(state),
 });
 
 const mapDispatchToProps = {
-  fetchProposals: getAllProposals
+  fetchProposals: getAllProposals,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllTab);

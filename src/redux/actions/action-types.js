@@ -3,7 +3,7 @@ export type State = {};
 
 export type ApiAction<A, T> = {
   type: A,
-  payload: T
+  payload: T,
 };
 
 export type GetState = () => State;

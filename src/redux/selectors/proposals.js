@@ -4,7 +4,7 @@ import { isEmpty } from 'lodash';
 
 export const getProposals = (proposals: Map): Array<Object> => {
   const notEmptyProposals = !isEmpty(proposals.get('proposals'))
-    ? proposals.get('proposals').filter(proposal => !isEmpty(proposal))
+    ? proposals.get('proposals').filter((proposal) => !isEmpty(proposal))
     : [];
 
   return notEmptyProposals;
@@ -18,7 +18,9 @@ export const getProposalTypeView = (proposals: Map): 0 | 1 =>
 
 export const getFilteredProposals = (proposals: Map): Map => {
   const notEmptyProposals = !isEmpty(proposals.get('filteredProposals'))
-    ? proposals.get('filteredProposals').filter(proposal => !isEmpty(proposal))
+    ? proposals
+        .get('filteredProposals')
+        .filter((proposal) => !isEmpty(proposal))
     : [];
 
   return notEmptyProposals;

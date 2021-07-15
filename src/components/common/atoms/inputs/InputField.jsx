@@ -7,7 +7,7 @@ type Props = {
   placeholder: string,
   type: string,
   id?: string,
-  onChange: Function
+  onChange: Function,
 };
 
 const InputField = ({
@@ -16,7 +16,7 @@ const InputField = ({
   placeholder,
   type,
   id,
-  onChange
+  onChange,
 }: Props) => (
   <>
     <p className="input-title">{label}</p>
@@ -33,7 +33,7 @@ const InputField = ({
 
 InputField.defaultProps = {
   id: undefined,
-  title: undefined
+  title: undefined,
 };
 
 export default InputField;

@@ -6,7 +6,7 @@ import classNames from 'classnames';
 type Props = {
   elements: Array<{| tabName: string, notifications?: number |}>,
   selectedView: string,
-  onChangeView: (selectedView: string) => void
+  onChangeView: (selectedView: string) => void,
 };
 
 const TabButtons = ({ elements, selectedView, onChangeView }: Props) => {
@@ -20,7 +20,7 @@ const TabButtons = ({ elements, selectedView, onChangeView }: Props) => {
       className="tab-buttons"
       style={{
         width: elements.length * 150,
-        gridTemplateColumns: `repeat(${elements.length}, 1fr)`
+        gridTemplateColumns: `repeat(${elements.length}, 1fr)`,
       }}
     >
       {elements.map(({ tabName, notifications }) => (
@@ -29,7 +29,7 @@ const TabButtons = ({ elements, selectedView, onChangeView }: Props) => {
           id={tabName}
           type="button"
           className={classNames('button', {
-            'is-active': selectedView === tabName
+            'is-active': selectedView === tabName,
           })}
           onClick={handleActive}
         >

@@ -5,7 +5,7 @@ import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import {
   getAuthData,
   authHasErrors,
-  getChangeRoleError
+  getChangeRoleError,
 } from './redux/selectors';
 import { refreshAuthData, changeRole } from './redux/actions/auth-actions';
 import { DASHBOARD, PROPOSAL } from './routes';
@@ -60,7 +60,7 @@ export const getUserEmail = () => {
 };
 
 type Props = {
-  children: any
+  children: any,
 };
 
 const SessionHandler = ({ children }: Props) => {
@@ -69,10 +69,10 @@ const SessionHandler = ({ children }: Props) => {
   const dispatch = useDispatch();
 
   const { authData, serror, changeRoleError } = useSelector(
-    state => ({
+    (state) => ({
       authData: getAuthData(state),
       serror: authHasErrors(state),
-      changeRoleError: getChangeRoleError(state)
+      changeRoleError: getChangeRoleError(state),
     }),
     shallowEqual
   );

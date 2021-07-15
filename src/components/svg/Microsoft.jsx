@@ -3,7 +3,7 @@ import React from 'react';
 
 type Props = {
   width: number,
-  height: number
+  height: number,
 };
 
 const Microsoft = ({ width, height }: Props) => {

@@ -11,7 +11,7 @@ const {
   ERROR_ON_CHANGE_ROLE,
   ON_REFRESH_USER_DATA,
   ON_GET_LOOKUP_USERS,
-  ERROR_ON_GET_LOOKUP_USERS
+  ERROR_ON_GET_LOOKUP_USERS,
 } = REDUX_TYPES.SSO_AUTH;
 
 export const loginUser = (code: string): ThunkAction<string, Object> => {
@@ -64,7 +64,7 @@ export const getAllUsers = (): ThunkAction<string, Object> => {
 
         dispatch({
           type: ON_GET_LOOKUP_USERS,
-          payload: { lookupUsers: authService }
+          payload: { lookupUsers: authService },
         });
       }
     } catch (error) {

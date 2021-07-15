@@ -6,19 +6,19 @@ const {
   PROPOSAL_API_URL,
   PROPOSAL_QUESTIONS_API_URL,
   PROPOSAL_VALIDATED_DATA,
-  API_KEY
+  API_KEY,
 } = API.PROPOSAL;
 
 export const getProposalInfo = async (id: string): Promise<Object> => {
   return new Promise((resolve, reject) => {
     axios
       .get(`${PROPOSAL_API_URL}/${id}`, {
-        headers: { 'x-api-key': `${API_KEY}` }
+        headers: { 'x-api-key': `${API_KEY}` },
       })
-      .then(response => {
+      .then((response) => {
         resolve(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
@@ -41,12 +41,12 @@ export const getQuestionSectionInfo = async (): Promise<Object> => {
   return new Promise((resolve, reject) => {
     axios
       .get(`${PROPOSAL_API_URL}/sections`, {
-        headers: { 'x-api-key': `${API_KEY}` }
+        headers: { 'x-api-key': `${API_KEY}` },
       })
-      .then(response => {
+      .then((response) => {
         resolve(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
@@ -56,12 +56,12 @@ export const getAnswerTypes = async (): Promise<Object> => {
   return new Promise((resolve, reject) => {
     axios
       .get(`${PROPOSAL_API_URL}/answerTypes`, {
-        headers: { 'x-api-key': `${API_KEY}` }
+        headers: { 'x-api-key': `${API_KEY}` },
       })
-      .then(response => {
+      .then((response) => {
         resolve(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
@@ -71,12 +71,12 @@ export const getRoles = async (): Promise<Object> => {
   return new Promise((resolve, reject) => {
     axios
       .get(`${PROPOSAL_API_URL}/roles`, {
-        headers: { 'x-api-key': `${API_KEY}` }
+        headers: { 'x-api-key': `${API_KEY}` },
       })
-      .then(response => {
+      .then((response) => {
         resolve(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
@@ -89,12 +89,12 @@ export const setProposalQuestionData = async (
   return new Promise((resolve, reject) => {
     axios
       .post(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}`, questionData, {
-        headers: { 'x-api-key': `${API_KEY}` }
+        headers: { 'x-api-key': `${API_KEY}` },
       })
-      .then(response => {
+      .then((response) => {
         resolve(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
@@ -107,13 +107,13 @@ export const getProposalInfoUpdated = async (id: string): Promise<Object> => {
         `${PROPOSAL_API_URL}/${id}`,
         {},
         {
-          headers: { 'x-api-key': `${API_KEY}` }
+          headers: { 'x-api-key': `${API_KEY}` },
         }
       )
-      .then(response => {
+      .then((response) => {
         resolve(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
@@ -121,12 +121,12 @@ export const getProposalInfoUpdated = async (id: string): Promise<Object> => {
 
 export const getProposlBoxId = async (id: string): Promise<Object> => {
   return axios.get(`${PROPOSAL_API_URL}/${id}/boxid`, {
-    headers: { 'x-api-key': `${API_KEY}` }
+    headers: { 'x-api-key': `${API_KEY}` },
   });
 };
 
 export const getValidatedProposalData = (id: string): Promise<Object> => {
   return axios.get(`${PROPOSAL_VALIDATED_DATA}/${id}`, {
-    headers: { 'x-api-key': `${API_KEY}` }
+    headers: { 'x-api-key': `${API_KEY}` },
   });
 };

@@ -20,13 +20,13 @@ type Props = {
   location: Location,
   isAuthenticated: boolean,
   refreshUserData: () => {},
-  onLoginUser: (code: string) => void
+  onLoginUser: (code: string) => void,
 };
 
 class SessionHandler extends Component<Props, {}> {
   componentDidMount() {
     const {
-      location: { pathname }
+      location: { pathname },
     } = this.props;
 
     if (pathname.includes('/app/proposal')) {
@@ -99,13 +99,13 @@ class SessionHandler extends Component<Props, {}> {
 }
 
 const mapStateToProps = (state: Map) => ({
-  isAuthenticated: getUserAuthStatus(state)
+  isAuthenticated: getUserAuthStatus(state),
 });
 
 export default compose(
   withRouter,
   connect(mapStateToProps, {
     onLoginUser: loginUser,
-    refreshUserData: onRefreshUserData
+    refreshUserData: onRefreshUserData,
   })
 )(SessionHandler);

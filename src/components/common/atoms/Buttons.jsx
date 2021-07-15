@@ -6,12 +6,12 @@ type Props = {
   id?: string,
   children: any,
   onClick: Function,
-  className?: string
+  className?: string,
 };
 
 const defaultProps = {
   id: undefined,
-  className: undefined
+  className: undefined,
 };
 
 export const PrimaryButton = ({ id, onClick, children, className }: Props) => (
@@ -31,7 +31,7 @@ export const SecondaryButton = ({
   id,
   onClick,
   children,
-  className
+  className,
 }: Props) => (
   <button
     id={id}

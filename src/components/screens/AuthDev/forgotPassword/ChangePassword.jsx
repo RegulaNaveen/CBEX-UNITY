@@ -8,7 +8,7 @@ import {
   getForgotPasswordData,
   getResetPasswordData,
   isResetPasswordLoading,
-  getResetPasswordError
+  getResetPasswordError,
 } from '../../../../redux/selectors';
 import { sendResetPassword } from '../../../../redux/actions/auth-actions';
 import InputField from '../../../common/atoms/inputs/InputField';
@@ -20,14 +20,14 @@ type Props = {
   resetPasswordSuccess: Map,
   resetPasswordError: string,
   doResetPassword: Function,
-  handleShowLogin: Function
+  handleShowLogin: Function,
 };
 
 type State = {
   password: string,
   confirmPassword: string,
   error: string,
-  code: string
+  code: string,
 };
 
 class ChangePassword extends Component<Props, State> {
@@ -38,7 +38,7 @@ class ChangePassword extends Component<Props, State> {
       password: '',
       confirmPassword: '',
       error: '',
-      code: ''
+      code: '',
     };
   }
 
@@ -89,7 +89,7 @@ class ChangePassword extends Component<Props, State> {
       isLoading,
       resetPasswordSuccess,
       resetPasswordError,
-      forgotPasswordSuccess
+      forgotPasswordSuccess,
     } = this.props;
 
     const renderLoader = () => {
@@ -110,7 +110,7 @@ class ChangePassword extends Component<Props, State> {
         <p className="form-title">Change Password</p>
         <p
           className={classNames('form-message-success', {
-            'is-displayed': forgotPasswordSuccess
+            'is-displayed': forgotPasswordSuccess,
           })}
         >
           {forgotPasswordSuccess}
@@ -146,7 +146,7 @@ class ChangePassword extends Component<Props, State> {
 
         <p
           className={classNames('login-form-error', {
-            'is-displayed': error || resetPasswordError
+            'is-displayed': error || resetPasswordError,
           })}
         >
           {error || resetPasswordError}
@@ -166,9 +166,9 @@ const mapStateToProps = (state: Map) => ({
   isLoading: isResetPasswordLoading(state),
   resetPasswordSuccess: getResetPasswordData(state),
   resetPasswordError: getResetPasswordError(state),
-  forgotPasswordSuccess: getForgotPasswordData(state)
+  forgotPasswordSuccess: getForgotPasswordData(state),
 });
 
 export default connect(mapStateToProps, {
-  doResetPassword: sendResetPassword
+  doResetPassword: sendResetPassword,
 })(ChangePassword);

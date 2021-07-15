@@ -17,7 +17,7 @@ import {
   getFilteredSections,
   setQuestionData,
   isSetQuestionLoading,
-  setQuestionError
+  setQuestionError,
 } from '../../../redux/selectors';
 import Sidebar from '../../views/Sidebar';
 import AnswerHistory from '../../views/modals/AnswerHistory';
@@ -32,7 +32,7 @@ type Props = {
   hasQuestionError: boolean,
   isQuestionLoading: boolean,
   getProposalInfoUpdated: Function,
-  fetchUsers: () => {}
+  fetchUsers: () => {},
 };
 
 type State = {
@@ -40,7 +40,7 @@ type State = {
   isChecked: boolean,
   isCheckedAll: boolean,
   selectedQuestionForHistory: string,
-  isHistoryModalShown: boolean
+  isHistoryModalShown: boolean,
 };
 
 class Questions extends Component<Props, State> {
@@ -52,7 +52,7 @@ class Questions extends Component<Props, State> {
       isChecked: false,
       isCheckedAll: false,
       selectedQuestionForHistory: '',
-      isHistoryModalShown: false
+      isHistoryModalShown: false,
     };
   }
 
@@ -75,12 +75,12 @@ class Questions extends Component<Props, State> {
 
     const question = allSections
       .valueSeq()
-      .find(section => section.getIn(['questions', selectedAnswer]))
+      .find((section) => section.getIn(['questions', selectedAnswer]))
       .getIn(['questions', selectedAnswer]);
 
     this.setState({
       selectedQuestionForHistory: question,
-      isHistoryModalShown: true
+      isHistoryModalShown: true,
     });
   };
 
@@ -114,16 +114,16 @@ class Questions extends Component<Props, State> {
 
     const allSections = isChecked ? filteredSections : sections;
 
-    return allSections.valueSeq().map(section => {
+    return allSections.valueSeq().map((section) => {
       const sectionName = section.get('sectionName');
       const questions = section.get('questions');
       const someQuestionsAreVisible = questions
         .valueSeq()
-        .map(question => question.get('visible'))
+        .map((question) => question.get('visible'))
         .includes(true);
 
       const allQuestionsDontHaveLogin = questions.every(
-        question => question.get('visible') === undefined
+        (question) => question.get('visible') === undefined
       );
 
       if (someQuestionsAreVisible || allQuestionsDontHaveLogin)
@@ -148,7 +148,7 @@ class Questions extends Component<Props, State> {
       isCheckedAll,
       isChecked,
       selectedQuestionForHistory,
-      isHistoryModalShown
+      isHistoryModalShown,
     } = this.state;
 
     const allSections = isChecked ? filteredSections : sections;
@@ -222,13 +222,13 @@ const mapStateToProps = (state: Map) => ({
   filteredSections: getFilteredSections(state),
   setQuestion: setQuestionData(state),
   isQuestionLoading: isSetQuestionLoading(state),
-  hasQuestionError: setQuestionError(state)
+  hasQuestionError: setQuestionError(state),
 });
 
 export default compose(
   withRouter,
   connect(mapStateToProps, {
     getProposalInfoUpdated: getProposalUpdated,
-    fetchUsers: getAllUsers
+    fetchUsers: getAllUsers,
   })
 )(Questions);

@@ -7,7 +7,7 @@ import ToolTip from './ToolTip';
 import ComposedIcon from '../common/atoms/ComposedIcon';
 
 type Props = {
-  data: List
+  data: List,
 };
 
 const Legend = () => (
@@ -34,10 +34,10 @@ const Legend = () => (
 
 const UnityAndIntakeData = ({
   intakeData,
-  unityData
+  unityData,
 }: {
   intakeData: string,
-  unityData: string
+  unityData: string,
 }) => (
   <div className="crm-intake-data">
     <div className="crm">
@@ -71,7 +71,7 @@ const ValidateTable = ({ data }: Props) => (
         </div>
       </div>
       <div className="rows">
-        {data.map(item => {
+        {data.map((item) => {
           const title = item.get('title');
           const intakeData = item.get('intakeData');
           const unityData = item.get('unityData');

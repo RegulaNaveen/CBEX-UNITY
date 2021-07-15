@@ -11,7 +11,7 @@ import {
   setProposalQuestionData,
   getProposalInfoUpdated,
   getProposlBoxId,
-  getValidatedProposalData
+  getValidatedProposalData,
 } from '../../api/proposal';
 
 const {
@@ -39,7 +39,7 @@ const {
   UPDATE_MODIFIED_QUESTION,
   ON_FETCHING_VALIDATED_PROPOSAL_DATA,
   VALIDATED_PROPOSAL_DATA,
-  VALIDATED_PROPOSAL_DATA_ERROR
+  VALIDATED_PROPOSAL_DATA_ERROR,
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -78,7 +78,7 @@ export const setProposalAnswerData = (
 
       const { modifiedQuestions } = data;
       if (!isEmpty(modifiedQuestions)) {
-        modifiedQuestions.forEach(question => {
+        modifiedQuestions.forEach((question) => {
           dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
         });
       }
@@ -92,18 +92,18 @@ export const getQuestionSection = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: QUESTION_SECTION_LOADING,
-      payload: {}
+      payload: {},
     });
     try {
       const data = await getQuestionSectionInfo();
       dispatch({
         type: QUESTION_SECTION_INFO,
-        payload: data
+        payload: data,
       });
     } catch (err) {
       dispatch({
         type: QUESTION_SECTION_ERROR,
-        payload: err
+        payload: err,
       });
     }
   };
@@ -113,18 +113,18 @@ export const getAnswerTypesInfo = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: ANSWER_TYPES_LOADING,
-      payload: {}
+      payload: {},
     });
     try {
       const data = await getAnswerTypes();
       dispatch({
         type: ANSWER_TYPES_INFO,
-        payload: data
+        payload: data,
       });
     } catch (err) {
       dispatch({
         type: ANSWER_TYPES_ERROR,
-        payload: err
+        payload: err,
       });
     }
   };
@@ -134,18 +134,18 @@ export const getRolesInfo = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: ROLES_LOADING,
-      payload: {}
+      payload: {},
     });
     try {
       const data = await getRoles();
       dispatch({
         type: ROLES_INFO,
-        payload: data
+        payload: data,
       });
     } catch (err) {
       dispatch({
         type: ROLES_ERROR,
-        payload: err
+        payload: err,
       });
     }
   };
@@ -158,7 +158,7 @@ export const setProposalQuestion = (
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: PROPOSAL_SET_QUESTION_LOADING,
-      payload: {}
+      payload: {},
     });
     try {
       const data = await setProposalQuestionData(proposalId, questionData);
@@ -173,18 +173,18 @@ export const getProposalUpdated = (id: string): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: PROPOSAL_INFO_LOADING,
-      payload: {}
+      payload: {},
     });
     try {
       const data = await getProposalInfoUpdated(id);
       dispatch({
         type: PROPOSAL_INFO,
-        payload: data
+        payload: data,
       });
     } catch (err) {
       dispatch({
         type: PROPOSAL_INFO_ERROR,
-        payload: err
+        payload: err,
       });
     }
   };
@@ -200,7 +200,7 @@ export const onGetProposalBoxId = (id: string): ThunkAction<string, Object> => {
     } catch (error) {
       dispatch({
         type: PROPOSAL_BOX_ID_ERROR,
-        payload: { error: error.error }
+        payload: { error: error.error },
       });
     }
   };
@@ -218,7 +218,7 @@ export const onGetValidatedProposalDetails = (
     } catch (error) {
       dispatch({
         type: VALIDATED_PROPOSAL_DATA_ERROR,
-        payload: { error }
+        payload: { error },
       });
     }
   };

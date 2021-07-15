@@ -3,7 +3,7 @@ import * as React from 'react';
 
 type Props = {
   className: string,
-  fill?: string
+  fill?: string,
 };
 
 const ListView = ({ className, fill }: Props) => {
@@ -36,7 +36,7 @@ const ListView = ({ className, fill }: Props) => {
 };
 
 ListView.defaultProps = {
-  fill: '#000'
+  fill: '#000',
 };
 
 export default ListView;

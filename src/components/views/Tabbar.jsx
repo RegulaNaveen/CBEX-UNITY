@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import {
   setProposalTypeView,
-  onFilteringProposals
+  onFilteringProposals,
 } from '../../redux/actions/proposals-actions';
 import { SecondaryButton } from '../common/atoms/Buttons';
 import TabItem from '../common/atoms/TabItem';
@@ -15,13 +15,13 @@ import { Filter } from '../svg';
 type Props = {
   children: any,
   setProposalView: (typeView: 0 | 1) => void,
-  filterProposals: Function
+  filterProposals: Function,
 };
 
 type State = {
   selected: number,
   showFilters: boolean,
-  filters: Object
+  filters: Object,
 };
 
 class Tabbar extends Component<Props, State> {
@@ -42,8 +42,8 @@ class Tabbar extends Component<Props, State> {
         indication: '',
         bidDueDate: '',
         opportunityStatus: '',
-        teamMember: ''
-      }
+        teamMember: '',
+      },
     };
   }
 
@@ -141,5 +141,5 @@ class Tabbar extends Component<Props, State> {
 
 export default connect(null, {
   setProposalView: setProposalTypeView,
-  filterProposals: onFilteringProposals
+  filterProposals: onFilteringProposals,
 })(Tabbar);

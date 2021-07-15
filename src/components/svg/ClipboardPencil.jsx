@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 type Props = {
-  className?: string
+  className?: string,
 };
 
 const ClipboardPencil = ({ className }: Props) => {
@@ -28,7 +28,7 @@ const ClipboardPencil = ({ className }: Props) => {
 };
 
 ClipboardPencil.defaultProps = {
-  className: ''
+  className: '',
 };
 
 export default ClipboardPencil;

@@ -16,7 +16,7 @@ class Toolbar extends Component<{}, State> {
     this.wrapperRef = createRef();
 
     this.state = {
-      isCollapsed: false
+      isCollapsed: false,
     };
   }
 

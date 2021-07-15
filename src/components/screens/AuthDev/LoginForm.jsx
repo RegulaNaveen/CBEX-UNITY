@@ -15,13 +15,13 @@ type State = {
   email: string,
   password: string,
   error: string,
-  isForgotPassword: boolean
+  isForgotPassword: boolean,
 };
 
 type Props = {
   isLoading: boolean,
   isAuthError: string,
-  loginUser: Function
+  loginUser: Function,
 };
 
 class LoginForm extends Component<Props, State> {
@@ -32,7 +32,7 @@ class LoginForm extends Component<Props, State> {
       email: '',
       password: '',
       error: '',
-      isForgotPassword: false
+      isForgotPassword: false,
     };
   }
 
@@ -111,7 +111,7 @@ class LoginForm extends Component<Props, State> {
 
         <p
           className={classNames('login-form-error', {
-            'is-displayed': error || isAuthError
+            'is-displayed': error || isAuthError,
           })}
         >
           {error || isAuthError}
@@ -131,7 +131,7 @@ class LoginForm extends Component<Props, State> {
 
 const mapStateToProps = (state: Map) => ({
   isLoading: isAuthLoading(state),
-  isAuthError: authHasErrors(state)
+  isAuthError: authHasErrors(state),
 });
 
 export default connect(mapStateToProps, { loginUser: login })(LoginForm);

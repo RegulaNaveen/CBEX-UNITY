@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 type Props = {
-  className?: string
+  className?: string,
 };
 
 const Folder = ({ className }: Props) => {
@@ -18,7 +18,7 @@ const Folder = ({ className }: Props) => {
 };
 
 Folder.defaultProps = {
-  className: ''
+  className: '',
 };
 
 export default Folder;

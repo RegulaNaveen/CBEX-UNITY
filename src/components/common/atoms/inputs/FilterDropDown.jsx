@@ -6,11 +6,11 @@ type Props = {
   id: string,
   onChange: Function,
   title: string,
-  items: Array<Object>
+  items: Array<Object>,
 };
 
 const FilterDropDown = ({ id, onChange, title, items }: Props) => {
-  const filterChange = useCallback(value => onChange(id, value));
+  const filterChange = useCallback((value) => onChange(id, value));
   return (
     <Dropdown
       title={title}

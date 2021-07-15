@@ -7,12 +7,12 @@ import Pagination from './atoms/Pagination';
 type Props = {
   totalItems: number,
   getCurrentPosition: (selectedPosition: number) => void,
-  getMaxRows: (selectedRows: number) => void
+  getMaxRows: (selectedRows: number) => void,
 };
 
 type State = {
   currentPage: number,
-  maxRows: number
+  maxRows: number,
 };
 
 class ComplexPagination extends Component<Props, State> {
@@ -21,7 +21,7 @@ class ComplexPagination extends Component<Props, State> {
 
     this.state = {
       currentPage: 1,
-      maxRows: 15
+      maxRows: 15,
     };
   }
 

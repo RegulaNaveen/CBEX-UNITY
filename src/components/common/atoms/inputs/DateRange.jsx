@@ -6,20 +6,20 @@ import DatePickerCustomInput from './DatePickerCustomInput';
 
 type Props = {
   onSetRange: Function,
-  label?: string
+  label?: string,
 };
 
 type State = {
   from: Object,
   to: Object,
-  showPicker: boolean
+  showPicker: boolean,
 };
 
 class DateRange extends Component<Props, State> {
   wrapperRef: any;
 
   static defaultProps = {
-    label: ''
+    label: '',
   };
 
   constructor(props: Object) {
@@ -28,7 +28,7 @@ class DateRange extends Component<Props, State> {
     this.state = {
       from: undefined,
       to: undefined,
-      showPicker: false
+      showPicker: false,
     };
   }
 
@@ -62,7 +62,7 @@ class DateRange extends Component<Props, State> {
       {
         from: undefined,
         to: undefined,
-        showPicker: false
+        showPicker: false,
       },
       () => onSetRange(undefined)
     );
@@ -123,7 +123,7 @@ class DateRange extends Component<Props, State> {
                 today: 'DayPicker-Day--today',
                 selected: 'datepicker-selected',
                 disabled: 'DayPicker-Day--disabl',
-                outside: 'DayPicker-Day--outside'
+                outside: 'DayPicker-Day--outside',
               }}
             />
           )}

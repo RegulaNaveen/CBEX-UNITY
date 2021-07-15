@@ -8,13 +8,13 @@ const userEmail = localStorage.getItem('userEmail');
 const envSideId = {
   DEV: 20,
   UAT: 20,
-  PROD: 21
+  PROD: 21,
 };
 
 const matomoInstace = createInstance({
   urlBase: PROPOSAL.MAMOTO_IQVIA,
   siteId: envSideId[env],
-  userId: userEmail
+  userId: userEmail,
 });
 
 export default matomoInstace;

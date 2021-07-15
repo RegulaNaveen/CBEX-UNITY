@@ -6,7 +6,7 @@ type Props = {
   onClick: Function,
   item: any,
   index: number,
-  selected: number
+  selected: number,
 };
 
 const TabItem = ({ onClick, item, index, selected }: Props) => {

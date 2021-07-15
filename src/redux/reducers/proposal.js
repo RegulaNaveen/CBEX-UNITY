@@ -28,7 +28,7 @@ const {
   UPDATE_MODIFIED_QUESTION,
   ON_FETCHING_VALIDATED_PROPOSAL_DATA,
   VALIDATED_PROPOSAL_DATA,
-  VALIDATED_PROPOSAL_DATA_ERROR
+  VALIDATED_PROPOSAL_DATA_ERROR,
 } = REDUX_TYPES.PROPOSAL;
 
 const INITIAL_STATE: Map = fromJS({
@@ -56,13 +56,13 @@ const INITIAL_STATE: Map = fromJS({
   boxId: '',
   fetchingValidatedProposalData: false,
   validatedProposalData: [],
-  validatedProposalDataError: undefined
+  validatedProposalDataError: undefined,
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
   const {
     proposalQuestions,
-    proposal: { proposalDetails }
+    proposal: { proposalDetails },
   } = action.payload;
   return state
     .set('proposalDetails', proposalDetails)
@@ -81,14 +81,14 @@ const onProposalError = (state: Map, action: Object): Map => {
 
 const onProposalAnswer = (state: Map, action: Object): Map => {
   const {
-    payload: { data, questionId: referenceId }
+    payload: { data, questionId: referenceId },
   } = action;
 
   let newState = fromJS({});
 
   const indexOfListToUpdate = state
     .get('proposalQuestions')
-    .findIndex(listItem => {
+    .findIndex((listItem) => {
       return listItem.questionId === referenceId;
     });
 
@@ -225,7 +225,7 @@ const onUpdateModifiedQuestion = (state: Map, action: Object): Map => {
 
   const indexOfQuestionToUpdate = state
     .get('proposalQuestions')
-    .findIndex(listItem => listItem.questionId === question.questionId);
+    .findIndex((listItem) => listItem.questionId === question.questionId);
 
   newState = state.setIn(
     ['proposalQuestions', indexOfQuestionToUpdate],
@@ -284,10 +284,10 @@ const actionMap = {
   [UPDATE_MODIFIED_QUESTION]: onUpdateModifiedQuestion,
   [ON_FETCHING_VALIDATED_PROPOSAL_DATA]: onFetchingValidatedProposaData,
   [VALIDATED_PROPOSAL_DATA]: onGetValidatedProposaData,
-  [VALIDATED_PROPOSAL_DATA_ERROR]: onValidatedProposaDataError
+  [VALIDATED_PROPOSAL_DATA_ERROR]: onValidatedProposaDataError,
 };
 
-export default function(
+export default function (
   state: Map<string, any> = INITIAL_STATE,
   action: ApiAction<any, any>
 ): Map {

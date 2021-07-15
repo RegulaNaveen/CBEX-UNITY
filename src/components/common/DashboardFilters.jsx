@@ -15,7 +15,7 @@ type Props = {
   onDateRangeChange: Function,
   fetchFilterValues: Function,
   fetchUsers: Function,
-  filterValues: Object
+  filterValues: Object,
 };
 
 const DashboardFilters = ({
@@ -24,18 +24,18 @@ const DashboardFilters = ({
   onDateRangeChange,
   fetchFilterValues,
   fetchUsers,
-  filterValues
+  filterValues,
 }: Props) => {
   useEffect(() => {
     fetchFilterValues();
     fetchUsers();
   }, []);
 
-  const changeDate = useCallback(range => {
+  const changeDate = useCallback((range) => {
     onDateRangeChange('bid due date', range);
   });
 
-  const changeUser = useCallback(value => {
+  const changeUser = useCallback((value) => {
     onDropDownFilterChange('teamMember', value);
   });
 
@@ -138,12 +138,12 @@ const DashboardFilters = ({
   );
 };
 
-const mapStateToProps = state => ({
-  filterValues: getProposalsFilters(state)
+const mapStateToProps = (state) => ({
+  filterValues: getProposalsFilters(state),
 });
 
 const mapDispatchToProps = {
   fetchFilterValues: getFilteringValues,
-  fetchUsers: getAllUsers
+  fetchUsers: getAllUsers,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardFilters);

@@ -11,7 +11,7 @@ type Props = {
   handleDayChange: Function,
   handleFormatDate: Function,
   handleDate: Function,
-  value?: string
+  value?: string,
 };
 
 const DatePicker = ({
@@ -20,7 +20,7 @@ const DatePicker = ({
   handleDayChange,
   handleFormatDate,
   handleDate,
-  value
+  value,
 }: Props) => {
   let dateFormat = '';
   if (!_.isEmpty(value)) dateFormat = value && parseMomentDate(value);
@@ -70,8 +70,8 @@ const DatePicker = ({
             today: 'DayPicker-Day--today',
             selected: 'datepicker-selected',
             disabled: 'DayPicker-Day--disabl',
-            outside: 'DayPicker-Day--outside'
-          }
+            outside: 'DayPicker-Day--outside',
+          },
         }}
       />
     </div>
@@ -80,7 +80,7 @@ const DatePicker = ({
 
 DatePicker.defaultProps = {
   label: undefined,
-  value: undefined
+  value: undefined,
 };
 
 export default DatePicker;

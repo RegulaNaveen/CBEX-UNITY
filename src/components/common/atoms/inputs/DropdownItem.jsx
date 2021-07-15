@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 
 type Props = {
   onClick: Function,
-  item: string
+  item: string,
 };
 
 class DropdownItem extends PureComponent<Props> {

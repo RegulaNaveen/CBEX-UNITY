@@ -22,13 +22,13 @@ import {
   isSetQuestionLoading,
   isQuestionSectionInfoLoading,
   isAnswerTypesInfoLoading,
-  isRolesInfoLoading
+  isRolesInfoLoading,
 } from '../../../redux/selectors';
 import {
   getQuestionSection,
   getAnswerTypesInfo,
   getRolesInfo,
-  setProposalQuestion
+  setProposalQuestion,
 } from '../../../redux/actions/proposal-actions';
 
 type Props = {
@@ -45,14 +45,14 @@ type Props = {
   isLoading: boolean,
   isQuestionSectionLoading: boolean,
   isAnswerTypesLoading: boolean,
-  isRolesLoading: boolean
+  isRolesLoading: boolean,
 };
 
 type State = {
   questionText: string,
   section: Object,
   answerType: string,
-  roleNames: Array<string>
+  roleNames: Array<string>,
 };
 
 export class AddQuestionModal extends PureComponent<Props, State> {
@@ -63,7 +63,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       questionText: '',
       section: undefined,
       answerType: '',
-      roleNames: []
+      roleNames: [],
     };
   }
 
@@ -71,7 +71,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     const {
       getQuestionSectionF,
       getAnswerTypesDataF,
-      getRolesInfoF
+      getRolesInfoF,
     } = this.props;
 
     getQuestionSectionF();
@@ -101,7 +101,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   };
 
   onRoleChange = (values: Array<string>) => {
-    const roleNames = values.map(value => value.replace(', ', ''));
+    const roleNames = values.map((value) => value.replace(', ', ''));
     this.setState({ roleNames });
   };
 
@@ -122,7 +122,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         section,
         answerType,
         options: [],
-        roleNames
+        roleNames,
       };
 
       setProposalQuestionF(proposalId, questionData);
@@ -234,7 +234,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       isLoading,
       isQuestionSectionLoading,
       isAnswerTypesLoading,
-      isRolesLoading
+      isRolesLoading,
     } = this.props;
     return (
       <Modal>
@@ -279,7 +279,7 @@ const mapStateToProps = (state: Map) => {
     isLoading,
     isQuestionSectionLoading,
     isAnswerTypesLoading,
-    isRolesLoading
+    isRolesLoading,
   };
 };
 
@@ -289,6 +289,6 @@ export default compose(
     getQuestionSectionF: getQuestionSection,
     getAnswerTypesDataF: getAnswerTypesInfo,
     getRolesInfoF: getRolesInfo,
-    setProposalQuestionF: setProposalQuestion
+    setProposalQuestionF: setProposalQuestion,
   })
 )(AddQuestionModal);

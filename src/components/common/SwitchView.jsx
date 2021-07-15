@@ -7,7 +7,7 @@ import { getProposalTypeView } from '../../redux/selectors';
 
 type Props = {
   getSelectedTab: (selectedTab: 0 | 1) => void,
-  selectedViewType: 0 | 1
+  selectedViewType: 0 | 1,
 };
 
 class SwitchView extends Component<Props> {
@@ -29,14 +29,14 @@ class SwitchView extends Component<Props> {
         <button type="button" onClick={this.setViewToList}>
           <ListView
             className={classNames('switch-view__icon', {
-              'is-active': selectedViewType === 0
+              'is-active': selectedViewType === 0,
             })}
           />
         </button>
         <button type="button" onClick={this.setViewToGrid}>
           <CardView
             className={classNames('switch-view__icon', {
-              'is-active': selectedViewType === 1
+              'is-active': selectedViewType === 1,
             })}
           />
         </button>
@@ -45,8 +45,8 @@ class SwitchView extends Component<Props> {
   }
 }
 
-const mapStateToProps = state => ({
-  selectedViewType: getProposalTypeView(state)
+const mapStateToProps = (state) => ({
+  selectedViewType: getProposalTypeView(state),
 });
 
 export default connect(mapStateToProps)(SwitchView);

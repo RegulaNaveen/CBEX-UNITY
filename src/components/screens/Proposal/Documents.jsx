@@ -9,7 +9,7 @@ import { onGetProposalBoxId } from '../../../redux/actions/proposal-actions';
 import {
   getProposalBoxId,
   getProposalBoxIdError,
-  getProposalBoxIdIsLoading
+  getProposalBoxIdIsLoading,
 } from '../../../redux/selectors';
 
 type Props = {
@@ -17,7 +17,7 @@ type Props = {
   getBoxId: (proposalId: string) => void,
   isGettingBoxId: boolean,
   onGettingBoxIdError: Object,
-  boxId: string
+  boxId: string,
 };
 
 class Documents extends Component<Props> {
@@ -58,10 +58,10 @@ class Documents extends Component<Props> {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isGettingBoxId: getProposalBoxIdIsLoading(state),
   onGettingBoxIdError: getProposalBoxIdError(state),
-  boxId: getProposalBoxId(state)
+  boxId: getProposalBoxId(state),
 });
 
 export default compose(
