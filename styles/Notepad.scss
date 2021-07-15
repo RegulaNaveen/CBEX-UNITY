@@ -53,13 +53,19 @@ $note-no-of-lines: 3;
                 }
                 .content-wrapper {
                     position: relative;
-                    margin-bottom: 4px;                    
-                    .content {
-                        line-height: $note-line-height;
-                        max-height: $note-no-of-lines * $note-line-height;
-                        overflow: hidden;
-                        position: relative;
-                        word-break: break-all;
+                    margin-bottom: 4px;
+                    line-height: $note-line-height;
+                    max-height: $note-no-of-lines * $note-line-height;
+                    overflow: hidden;
+                    position: relative;
+                    .DraftEditor-root {
+                        resize: none;
+                        border: none;
+                        .DraftEditor-editorContainer {
+                            padding: 0;
+                            height: auto !important;
+                            word-break: break-all;
+                        }
                     }
                     .expand-link {
                         position: absolute;
@@ -67,6 +73,7 @@ $note-no-of-lines: 3;
                         bottom: 0;
                         background-color: #FFFFFF;
                         padding-left: 2px;
+                        z-index: 1;
                     }
                 }
             }
@@ -77,11 +84,16 @@ $note-no-of-lines: 3;
         * {
             font-size: 12px;
         }
-        .MuiFormLabel-root {
+        .MuiFormLabel-root, .label {
             font-weight: 600;
         }
         .button {
             background-color: $neptune-primary;
+        }
+        .DraftEditor-root {
+            height: 150px;
+            max-height: 300px;
+            min-height: 150px;
         }
     }
 
@@ -109,6 +121,10 @@ $note-no-of-lines: 3;
             }
         }
 
+        .DraftEditor-root {
+            height: calc(100% - 34px);
+        }
+
     }
 
     .edit-note {
@@ -119,6 +135,10 @@ $note-no-of-lines: 3;
             height: 100%;
             .textarea-container {
                 flex-grow: 1;
+                overflow-y: auto;
+                .MuiGrid-item {
+                    padding: 0;
+                }
                 .MuiFormControl-root {
                     height: 100%;
                     .MuiInputBase-multiline {
@@ -127,6 +147,7 @@ $note-no-of-lines: 3;
                         textarea {
                             height: 100% !important;
                             overflow: auto !important;
+                            resize: vertical !important;
                         }
                     }
                 }
@@ -141,10 +162,33 @@ $note-no-of-lines: 3;
         .button {
             background-color: $neptune-primary;
         }
+        .DraftEditor-root {
+            height: calc(100% - 34px);
+        }
     }
 
     .loading-msg {
         margin-top: 32px;
         z-index: 3003;
+    }
+}
+
+.DraftEditor-root {
+    overflow: auto;
+    resize: vertical;
+    border: 1px solid rgb(153, 153, 153);
+    line-height: 1.1rem;
+    .public-DraftEditorPlaceholder-root {
+        padding: 9px 11px;
+    }
+    .DraftEditor-editorContainer {
+        padding: 9px 11px;
+        height: calc(100% - 16px);
+        * {
+            font-size: 14px;
+        }
+    }
+    &:hover {
+        border-color: #0768fd;
     }
 }

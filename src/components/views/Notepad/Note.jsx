@@ -4,7 +4,20 @@ import moment from 'moment';
 import Link from 'apollo-react/components/Link';
 import Typography from 'apollo-react/components/Typography';
 import Grid from 'apollo-react/components/Grid';
+import {
+  ContentState,
+  Editor,
+  EditorState,
+  convertFromRaw,
+  convertFromHTML
+} from 'draft-js';
 import { getUserName } from '../../../SessionHandler';
+import {
+  cssStyles,
+  extendedBlockRenderMap,
+  getBlockStyle
+} from '../../common/RichTextEditor';
+import 'draft-js/dist/Draft.css';
 
 function Note({ userName, date, section, content, index, onShowAll, onEdit }) {
   const contentRef = useRef(null);
@@ -25,6 +38,20 @@ function Note({ userName, date, section, content, index, onShowAll, onEdit }) {
   }
 
   const canEdit = userName === getUserName();
+  let noteContent = content;
+  let noteContentState = EditorState.createEmpty();
+
+  try {
+    noteContent = convertFromRaw(JSON.parse(noteContent));
+  } catch (err) {
+    const blocksFromHTML = convertFromHTML(content);
+    noteContent = ContentState.createFromBlockArray(
+      blocksFromHTML.contentBlocks,
+      blocksFromHTML.entityMap
+    );
+  } finally {
+    noteContentState = EditorState.createWithContent(noteContent);
+  }
 
   return (
     <div className="note">
@@ -55,10 +82,16 @@ function Note({ userName, date, section, content, index, onShowAll, onEdit }) {
       </div>
       <div className="body">
         <p className="title">{section}</p>
-        <div className="content-wrapper">
-          <p className="content" ref={contentRef}>
-            {content}
-          </p>
+        <div className="content-wrapper" ref={contentRef}>
+          <Editor
+            className="content"
+            customStyleMap={cssStyles}
+            editorState={noteContentState}
+            blockRenderMap={extendedBlockRenderMap}
+            blockStyleFn={getBlockStyle}
+            readOnly
+            disabled
+          />
           {showExpandLink && (
             <div className="expand-link">
               {/* eslint-disable-next-line */}

@@ -4,13 +4,19 @@ import { withFormik } from 'formik';
 import Grid from 'apollo-react/components/Grid';
 import IconButton from 'apollo-react/components/IconButton';
 import Close from 'apollo-react-icons/Close';
-import TextField from 'apollo-react/components/TextField';
 import MenuItem from 'apollo-react/components/MenuItem';
 import Select from 'apollo-react/components/Select';
 import Button from 'apollo-react/components/Button';
 import Box from 'apollo-react/components/Box';
 import { Map } from 'immutable';
 import { v4 as uuidv4 } from 'uuid';
+import {
+  convertFromRaw,
+  convertFromHTML,
+  ContentState,
+  EditorState
+} from 'draft-js';
+import RichTextEditor from '../../common/RichTextEditor';
 
 function NoteLabel({ onClose }) {
   return (
@@ -28,26 +34,44 @@ function NoteLabel({ onClose }) {
 }
 
 function ReadNote({ note, onClose }) {
+  let noteText = note.get('noteText');
+  let noteContentState = EditorState.createEmpty();
+  try {
+    noteText = JSON.parse(noteText);
+    noteContentState = ContentState.createFromText(noteText);
+  } catch (err) {
+    const blocksFromHTML = convertFromHTML(noteText);
+    noteContentState = ContentState.createFromBlockArray(
+      blocksFromHTML.contentBlocks,
+      blocksFromHTML.entityMap
+    );
+  }
+
   return (
     <div className="read-note">
       <NoteLabel onClose={onClose} />
       <Grid container className="note-view-container">
-        <Grid item xs={12} className="note-view">
-          <p className="note">{note.get('noteText')}</p>
+        <Grid item xs={12}>
+          <RichTextEditor defaultValue={noteContentState} readOnly disabled />
         </Grid>
       </Grid>
     </div>
   );
 }
 
-function EditNoteForm({
-  sections,
-  values,
-  handleSubmit,
-  handleChange,
-  setFieldValue,
-  onClose
-}) {
+function EditNoteForm({ sections, values, handleSubmit, setFieldValue }) {
+  const noteText = values.note;
+  let noteContentState = null;
+  try {
+    noteContentState = convertFromRaw(JSON.parse(noteText));
+  } catch (err) {
+    const blocksFromHTML = convertFromHTML(noteText);
+    noteContentState = ContentState.createFromBlockArray(
+      blocksFromHTML.contentBlocks,
+      blocksFromHTML.entityMap
+    );
+  }
+
   function handleSectionChange(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -58,15 +82,12 @@ function EditNoteForm({
     <form noValidate onSubmit={handleSubmit}>
       <Grid container spacing={1} className="textarea-container">
         <Grid item xs={12}>
-          <TextField
+          <RichTextEditor
             name="note"
-            label={<NoteLabel onClose={onClose} />}
+            label="Proposal Notes"
             placeholder="Enter notes here..."
-            value={values.note}
-            onChange={handleChange}
-            sizeAdjustable
-            fullWidth
-            margin="none"
+            onChange={(value, html) => setFieldValue('note', html)}
+            defaultValue={noteContentState}
           />
         </Grid>
       </Grid>
@@ -90,7 +111,7 @@ function EditNoteForm({
           </Select>
         </Grid>
         <Grid item xs>
-          <Box mb={1}>
+          <Box mb={1} ml={1}>
             <Button
               variant="primary"
               size="small"
@@ -127,7 +148,7 @@ function EditNote({ sections, onEdit, readOnly, note, onClose }) {
   })(EditNoteForm);
   return (
     <div className="edit-note">
-      <FormikedEditNoteForm sections={sections} onClose={onClose} />
+      <FormikedEditNoteForm sections={sections} />
     </div>
   );
 }
@@ -136,9 +157,7 @@ EditNoteForm.propTypes = {
   sections: PropTypes.object.isRequired,
   values: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  handleChange: PropTypes.func.isRequired,
-  setFieldValue: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired
+  setFieldValue: PropTypes.func.isRequired
 };
 
 EditNote.propTypes = {
