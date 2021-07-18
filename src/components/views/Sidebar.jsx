@@ -8,14 +8,18 @@ import {
   handleSelectedSection,
   onHandleOpenClose,
 } from '../../redux/actions/sidebar-actions';
-import { getIsOpen, getProposalDetails} from '../../redux/selectors';
-import MatomoHOC from '../HOC/MatomoHOC'
+import { getIsOpen, getProposalDetails } from '../../redux/selectors';
+import MatomoHOC from '../HOC/MatomoHOC';
 
 type Props = {
   sections: Map,
   setSelectedSection: (selectedItem: string) => void,
   handleOpenClose: (isOpen: boolean) => void,
   isOpen: boolean,
+  eventCategories: any,
+  userActions: any,
+  trackEvent: any,
+  proposalDetail: any,
 };
 
 type State = {
@@ -72,37 +76,49 @@ class Sidebar extends Component<Props, State> {
     setSelectedSection(itemToScroll);
 
     this.setState({ selectedSection: id });
-    this.trackMatomoEventScroll(itemToScroll)
+    this.trackMatomoEventScroll(itemToScroll);
   };
 
-  trackMatomoEventScroll = (action)=>{
-    this.props.trackEvent({
-      category: this.props.eventCategories.pd(this.props),
-      action: `Blade: ${this.props.userActions.scroll} From Blade To ${action} Section`,
+  trackMatomoEventScroll = (action) => {
+    const {
+      userActions,
+      eventCategories,
+      proposalDetail,
+      trackEvent,
+    } = this.props;
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action: `Blade: ${userActions.scroll} From Blade To ${action} Section`,
       href: 'https://dev-unity.iqvia.app',
       customDimensions: [
         {
-          id : 1,
-          value: JSON.stringify(this.props.proposalDetail)
-        }
-      ]
-    })
-  }
+          id: 1,
+          value: JSON.stringify(proposalDetail),
+        },
+      ],
+    });
+  };
 
-  trackMatomoEventSidebarToggle = (action)=>{
-    const openOrclose = (action) ? 'Open' : 'Close';
-    this.props.trackEvent({
-      category: this.props.eventCategories.pd(this.props),
-      action: `Blade: ${this.props.userActions.click} On Blade To ${openOrclose} Sidebar`,
+  trackMatomoEventSidebarToggle = (action) => {
+    const openOrclose = action ? 'Open' : 'Close';
+    const {
+      userActions,
+      eventCategories,
+      proposalDetail,
+      trackEvent,
+    } = this.props;
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action: `Blade: ${userActions.click} On Blade To ${openOrclose} Sidebar`,
       href: 'https://dev-unity.iqvia.app',
       customDimensions: [
         {
-          id : 1,
-          value: JSON.stringify(this.props.proposalDetail)
-        }
-      ]
-    })
-  }
+          id: 1,
+          value: JSON.stringify(proposalDetail),
+        },
+      ],
+    });
+  };
 
   render() {
     const { sections, isOpen } = this.props;
@@ -155,8 +171,7 @@ class Sidebar extends Component<Props, State> {
 
 const mapStateToProps = (state: Object) => ({
   isOpen: getIsOpen(state),
-  proposalDetail: getProposalDetails(state)
-
+  proposalDetail: getProposalDetails(state),
 });
 
 export default connect(mapStateToProps, {

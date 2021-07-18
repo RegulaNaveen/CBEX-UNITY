@@ -12,7 +12,7 @@ import { parseDate, formatDate, parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
 import { setProposalAnswerData } from '../../redux/actions/proposal-actions';
 import { getUserData, getProposalDetails } from '../../redux/selectors';
-import MatomoHOC from '../HOC/MatomoHOC'
+import MatomoHOC from '../HOC/MatomoHOC';
 
 type State = {
   selectedDay: string,
@@ -28,6 +28,9 @@ type Props = {
   userData: Object,
   setProposalAnswer: Function,
   setQuestionToDisplayHistory: (answer: string) => void,
+  eventCategories: any,
+  trackEvent: any,
+  proposalDetail: any,
 };
 
 export class TaskRow extends Component<Props, State> {
@@ -79,8 +82,8 @@ export class TaskRow extends Component<Props, State> {
 
     if (!isEqual(lastAnswer, selectedValues))
       setProposalAnswer(proposalId, questionId, selectedValues, userData);
-    
-    this.trackMatomoEventSubmitAnswer(selectedValues);  
+
+    this.trackMatomoEventSubmitAnswer(selectedValues);
   };
 
   displayAnswerOnHistory = () => {
@@ -88,26 +91,34 @@ export class TaskRow extends Component<Props, State> {
     setQuestionToDisplayHistory(questionId);
   };
 
-  trackMatomoEventSubmitAnswer = (data)=>{
-    this.props.trackEvent({
-      category: this.props.eventCategories.pd(this.props),
-      action: `Question: ${this.props.questionText} (${this.props.sectionName})`,
+  trackMatomoEventSubmitAnswer = (data) => {
+    const {
+      eventCategories,
+      proposalDetail,
+      questionText,
+      sectionName,
+      trackEvent,
+      questionId,
+    } = this.props;
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action: `Question: ${questionText} (${sectionName})`,
       name: `Answer: ${data}`,
       customDimensions: [
         {
-          id : 1,
+          id: 1,
           value: JSON.stringify({
             answer: data,
-            sectionName: this.props.sectionName,
-            questionText: this.props.questionText,
-            questionId: this.props.questionId,
-            proposalDetail: this.props.proposalDetail
-          })
-        }
+            sectionName,
+            questionText,
+            questionId,
+            proposalDetail,
+          }),
+        },
       ],
-      href: 'https://dev-unity.iqvia.app'
-    })
-  }
+      href: 'https://dev-unity.iqvia.app',
+    });
+  };
 
   renderAnswer = (
     type: string,
@@ -236,7 +247,7 @@ export class TaskRow extends Component<Props, State> {
 
 const mapStateToProps = (state: Object) => ({
   userData: getUserData(state),
-  proposalDetail:getProposalDetails(state)
+  proposalDetail: getProposalDetails(state),
 });
 
 export default connect(mapStateToProps, {

@@ -11,12 +11,15 @@ import TabItem from '../common/atoms/TabItem';
 import SwitchView from '../common/SwitchView';
 import DashboardFilters from '../common/DashboardFilters';
 import { Filter } from '../svg';
-import MatomoHOC from '../HOC/MatomoHOC'
+import MatomoHOC from '../HOC/MatomoHOC';
 
 type Props = {
   children: any,
   setProposalView: (typeView: 0 | 1) => void,
   filterProposals: Function,
+  eventCategories: any,
+  userActions: any,
+  trackEvent: any,
 };
 
 type State = {
@@ -51,7 +54,7 @@ class Tabbar extends Component<Props, State> {
   handleChange = (index: number) => {
     this.trackMatomoEventTabs(index);
     this.setState({ selected: index });
-  }
+  };
 
   handleTypeView = (selectedTab: 0 | 1) => {
     const { setProposalView } = this.props;
@@ -99,23 +102,25 @@ class Tabbar extends Component<Props, State> {
     this.trackMatomoEventFilterToggle(!showFilters);
   };
 
-  trackMatomoEventTabs = (index)=>{
-    const tabs = ['My Docket', 'Recent', 'All']
-    this.props.trackEvent({
-      category: this.props.eventCategories.dp,
-      action: `Tab: ${this.props.userActions.click} On ${tabs[index]} Tab`,
-      href: 'https://dev-unity.iqvia.app'
-    })
-  }
+  trackMatomoEventTabs = (index) => {
+    const tabs = ['My Docket', 'Recent', 'All'];
+    const { userActions, eventCategories, trackEvent } = this.props;
+    trackEvent({
+      category: eventCategories.dp,
+      action: `Tab: ${userActions.click} On ${tabs[index]} Tab`,
+      href: 'https://dev-unity.iqvia.app',
+    });
+  };
 
-  trackMatomoEventFilterToggle = (action)=>{
-    const openOrclose = (action) ? 'Open' : 'Close';
-    this.props.trackEvent({
-      category: this.props.eventCategories.dp,
-      action: `Filters: ${this.props.userActions.click} to ${openOrclose} Filters`,
-      href: 'https://dev-unity.iqvia.app'
-    })
-  }
+  trackMatomoEventFilterToggle = (action) => {
+    const openOrclose = action ? 'Open' : 'Close';
+    const { userActions, eventCategories, trackEvent } = this.props;
+    trackEvent({
+      category: eventCategories.dp,
+      action: `Filters: ${userActions.click} to ${openOrclose} Filters`,
+      href: 'https://dev-unity.iqvia.app',
+    });
+  };
 
   render() {
     const { children } = this.props;

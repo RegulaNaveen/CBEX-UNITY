@@ -22,7 +22,7 @@ import {
 import Sidebar from '../../views/Sidebar';
 import AnswerHistory from '../../views/modals/AnswerHistory';
 import { getAllUsers } from '../../../redux/actions/sso-auth-actions';
-import MatomoHOC from '../../HOC/MatomoHOC'
+import MatomoHOC from '../../HOC/MatomoHOC';
 
 type Props = {
   match: Match,
@@ -34,6 +34,10 @@ type Props = {
   isQuestionLoading: boolean,
   getProposalInfoUpdated: Function,
   fetchUsers: () => {},
+  eventCategories: any,
+  userActions: any,
+  trackEvent: any,
+  proposalDetail: any,
 };
 
 type State = {
@@ -104,13 +108,74 @@ class Questions extends Component<Props, State> {
   handleIsCheckedAll = () => {
     const { isCheckedAll } = this.state;
     this.setState({ isCheckedAll: !isCheckedAll });
-    this.trackMatomoEventForCheckBoxes('Expand All')
+    this.trackMatomoEventForCheckBoxes('Expand All');
   };
 
   getProposalInfoUpdated = () => {
     const { getProposalInfoUpdated, match } = this.props;
     getProposalInfoUpdated(match.params.id);
     this.trackMatomoEventRefreshInfo();
+  };
+
+  trackMatomoEventRefreshInfo = () => {
+    const {
+      userActions,
+      eventCategories,
+      proposalDetail,
+      trackEvent,
+    } = this.props;
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action: `Round Buttons: ${userActions.click} On Refresh Button`,
+      href: 'https://dev-unity.iqvia.app',
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify(proposalDetail),
+        },
+      ],
+    });
+  };
+
+  trackMatomoEventToggleQModal = (action) => {
+    const openOrclose = action ? 'Open' : 'Close';
+    const {
+      userActions,
+      eventCategories,
+      proposalDetail,
+      trackEvent,
+    } = this.props;
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action: `Round Buttons: ${userActions.click} To ${openOrclose} Add New Question Modal`,
+      href: 'https://dev-unity.iqvia.app',
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify(proposalDetail),
+        },
+      ],
+    });
+  };
+
+  trackMatomoEventForCheckBoxes = (item) => {
+    const {
+      userActions,
+      eventCategories,
+      proposalDetail,
+      trackEvent,
+    } = this.props;
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action: `CheckBoxes: ${userActions.click} On ${item} Checkbox`,
+      href: 'https://dev-unity.iqvia.app',
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify(proposalDetail),
+        },
+      ],
+    });
   };
 
   renderQuestions() {
@@ -144,49 +209,6 @@ class Questions extends Component<Props, State> {
 
       return null;
     });
-  }
-
-  trackMatomoEventRefreshInfo = ()=>{
-    this.props.trackEvent({
-      category: this.props.eventCategories.pd(this.props),
-      action: `Round Buttons: ${this.props.userActions.click} On Refresh Button`,
-      href: 'https://dev-unity.iqvia.app',
-      customDimensions: [
-        {
-          id : 1,
-          value: JSON.stringify(this.props.proposalDetail)
-        }
-      ]
-    })
-  }
-
-  trackMatomoEventToggleQModal = (action)=>{
-    const openOrclose = (action) ? 'Open' : 'Close';
-    this.props.trackEvent({
-      category: this.props.eventCategories.pd(this.props),
-      action: `Round Buttons: ${this.props.userActions.click} To ${openOrclose} Add New Question Modal`,
-      href: 'https://dev-unity.iqvia.app',
-      customDimensions: [
-        {
-          id : 1,
-          value: JSON.stringify(this.props.proposalDetail)
-        }
-      ]
-    })
-  }
-
-  trackMatomoEventForCheckBoxes = (item)=>{
-    this.props.trackEvent({
-      category: this.props.eventCategories.pd(this.props),
-      action: `CheckBoxes: ${this.props.userActions.click} On ${item} Checkbox`,
-      href: 'https://dev-unity.iqvia.app',
-      customDimensions: [
-        {
-          id : 1,
-          value: JSON.stringify(this.props.proposalDetail)
-        }
-      ]
-    })
   }
 
   render() {
@@ -271,7 +293,7 @@ const mapStateToProps = (state: Map) => ({
   setQuestion: setQuestionData(state),
   isQuestionLoading: isSetQuestionLoading(state),
   hasQuestionError: setQuestionError(state),
-  proposalDetail:getProposalDetails(state)
+  proposalDetail: getProposalDetails(state),
 });
 
 export default compose(

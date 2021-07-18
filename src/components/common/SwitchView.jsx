@@ -4,11 +4,14 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { ListView, CardView } from '../svg';
 import { getProposalTypeView } from '../../redux/selectors';
-import MatomoHOC from '../HOC/MatomoHOC'
+import MatomoHOC from '../HOC/MatomoHOC';
 
 type Props = {
   getSelectedTab: (selectedTab: 0 | 1) => void,
   selectedViewType: 0 | 1,
+  eventCategories: any,
+  userActions: any,
+  trackEvent: any,
 };
 
 class SwitchView extends Component<Props> {
@@ -24,13 +27,14 @@ class SwitchView extends Component<Props> {
     this.trackMatomoEvent('Card');
   };
 
-  trackMatomoEvent = (view)=>{
-    this.props.trackEvent({
-      category: this.props.eventCategories.dp,
-      action: `View: ${this.props.userActions.click } On ${view} View`,
-      href: 'https://dev-unity.iqvia.app'
-    })
-  }
+  trackMatomoEvent = (view) => {
+    const { eventCategories, userActions, trackEvent } = this.props;
+    trackEvent({
+      category: eventCategories.dp,
+      action: `View: ${userActions.click} On ${view} View`,
+      href: 'https://dev-unity.iqvia.app',
+    });
+  };
 
   render() {
     const { selectedViewType } = this.props;

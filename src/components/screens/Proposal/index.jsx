@@ -23,7 +23,7 @@ import Toolbar from '../../views/toolbar';
 import TabButtons from '../../common/TabButtons';
 import Documents from './Documents';
 import Validate from './Validate';
-import MatomoHOC from '../../HOC/MatomoHOC'
+import MatomoHOC from '../../HOC/MatomoHOC';
 
 type State = {
   selectedView: string,
@@ -39,11 +39,16 @@ type Props = {
   getRefreshAuthData: Function,
   getProposalInfo: Function,
   getValidatedData: (proposalId: string) => void,
+  eventCategories: any,
+  userActions: any,
+  trackEvent: any,
+  trackPageView: any,
+  proposalDetail: any,
 };
 
 export class Proposal extends Component<Props, State> {
-
   toRef;
+
   constructor(props: Object) {
     super(props);
 
@@ -59,6 +64,8 @@ export class Proposal extends Component<Props, State> {
       authData,
       getRefreshAuthData,
       getValidatedData,
+      trackPageView,
+      eventCategories,
       match: { params },
     } = this.props;
 
@@ -83,8 +90,8 @@ export class Proposal extends Component<Props, State> {
     }
 
     // Track Page view
-    this.props.trackPageView({
-      documentTitle: `${this.props.eventCategories.plainPd}`,
+    trackPageView({
+      documentTitle: `${eventCategories.plainPd}`,
       href: 'https://dev-unity.iqvia.app',
     });
   }
@@ -98,8 +105,29 @@ export class Proposal extends Component<Props, State> {
 
   onChangeProposalView = (selectedView: string) => {
     this.setState({ selectedView });
-    this.trackMatomoEventTabs(selectedView)
+    this.trackMatomoEventTabs(selectedView);
   };
+
+  trackMatomoEventTabs = (tab) => {
+    const {
+      eventCategories,
+      userActions,
+      proposalDetail,
+      trackEvent,
+    } = this.props;
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action: `Tab: ${userActions.click} On ${tab}`,
+      href: 'https://dev-unity.iqvia.app',
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify(proposalDetail),
+        },
+      ],
+    });
+  };
+
   handleStorageChange(e) {
     if (e.key === 'enableValidateTab') {
       const isEnabled = e.newValue === 'true';
@@ -114,19 +142,6 @@ export class Proposal extends Component<Props, State> {
     }
   }
 
-  trackMatomoEventTabs = (tab)=>{
-    this.props.trackEvent({
-      category: this.props.eventCategories.pd(this.props),
-      action: `Tab: ${this.props.userActions.click} On ${tab}`,
-      href: 'https://dev-unity.iqvia.app',
-      customDimensions: [
-        {
-          id : 1,
-          value: JSON.stringify(this.props.proposalDetail)
-        }
-      ]
-    })
-  }
   renderContent = () => {
     const { selectedView, enableValidateTab } = this.state;
     const { isLoading, details, notifications } = this.props;
@@ -201,7 +216,7 @@ const mapStateToProps = (state: Map) => ({
   isLoading: isProposalLoading(state),
   isSidebarOpen: getIsOpen(state),
   notifications: getPendingValidatedItems(state),
-  proposalDetail:getProposalDetails(state)
+  proposalDetail: getProposalDetails(state),
 });
 
 export default compose(

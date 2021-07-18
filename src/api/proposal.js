@@ -2,14 +2,14 @@
 import axios from 'axios';
 import { API } from '../constants';
 
+import { getAccessTokenFromLocalStorage as getAccessToken } from '../SessionHandler';
+
 const {
   PROPOSAL_API_URL,
   PROPOSAL_QUESTIONS_API_URL,
   PROPOSAL_VALIDATED_DATA,
   API_KEY,
 } = API.PROPOSAL;
-
-import {getAccessTokenFromLocalStorage as getAccessToken} from '../SessionHandler'
 
 export const getProposalInfo = async (id: string): Promise<Object> => {
   return new Promise((resolve, reject) => {
@@ -35,10 +35,12 @@ export const setProposalAnswer = async (
   return axios.put(
     `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`,
     { answer, userData },
-    { headers: { 
-      'x-api-key': `${API_KEY}`,
-      'x-access-token': `${getAccessToken()}` 
-    }}
+    {
+      headers: {
+        'x-api-key': `${API_KEY}`,
+        'x-access-token': `${getAccessToken()}`,
+      },
+    }
   );
 };
 
