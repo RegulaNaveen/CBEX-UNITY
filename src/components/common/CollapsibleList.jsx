@@ -2,10 +2,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import type { Map } from 'immutable';
-import { getSelectedSection } from '../../redux/selectors';
+import { getSelectedSection, getProposalDetails} from '../../redux/selectors';
 import chevronRight from '../../../img/chevron-right.svg';
 import chevronDown from '../../../img/chevron-down.svg';
 import Question from './Question';
+import MatomoHOC from '../HOC/MatomoHOC';
 
 type State = {
   isCollapsed: boolean,
@@ -48,6 +49,7 @@ class CollapsibleList extends Component<Props, State> {
   handleCollapse = () => {
     const { isCollapsed } = this.state;
     this.setState({ isCollapsed: !isCollapsed });
+    this.trackMatomoEventBladeToggle(!isCollapsed);
   };
 
   handleKeyPress = (event: KeyboardEvent) => {
@@ -64,6 +66,22 @@ class CollapsibleList extends Component<Props, State> {
 
     return id;
   };
+
+  trackMatomoEventBladeToggle = (action)=>{
+    const openOrclose = (action) ? 'Open' : 'Close';
+    this.props.trackEvent({
+      category: this.props.eventCategories.pd(this.props),
+      action: `Question Section: ${this.props.userActions.click} To ${openOrclose} ${this.props.title}`,
+      href: 'https://dev-unity.iqvia.app',
+      customDimensions: [
+        {
+          id : 1,
+          value: JSON.stringify(this.props.proposalDetail)
+        }
+      ]
+    })
+  }
+
 
   render() {
     const { isCollapsed } = this.state;
@@ -146,8 +164,9 @@ class CollapsibleList extends Component<Props, State> {
 
 const mapStateToProps = (state: Map) => {
   const selectedSection = getSelectedSection(state);
+  const proposalDetail = getProposalDetails(state);
 
-  return { selectedSection };
+  return { selectedSection, proposalDetail};
 };
 
-export default connect(mapStateToProps)(CollapsibleList);
+export default connect(mapStateToProps)(MatomoHOC(CollapsibleList));

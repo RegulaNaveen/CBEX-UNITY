@@ -23,6 +23,7 @@ import {
   isQuestionSectionInfoLoading,
   isAnswerTypesInfoLoading,
   isRolesInfoLoading,
+  getProposalDetails
 } from '../../../redux/selectors';
 import {
   getQuestionSection,
@@ -30,6 +31,7 @@ import {
   getRolesInfo,
   setProposalQuestion,
 } from '../../../redux/actions/proposal-actions';
+import MatomoHOC from '../../HOC/MatomoHOC'
 
 type Props = {
   match: Match,
@@ -126,8 +128,24 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       };
 
       setProposalQuestionF(proposalId, questionData);
+      this.trackMatomoEventCreateQ(questionData);
+
     }
   };
+
+  trackMatomoEventCreateQ = (data)=>{
+    this.props.trackEvent({
+      category: this.props.eventCategories.pd(this.props),
+      action: `Question Added: ${data.questionText} (${data.section['sectionName']})`,
+      customDimensions: [
+        {
+          id : 1,
+          value: JSON.stringify({...data, ...this.props.proposalDetail})
+        }
+      ],
+      href: 'https://dev-unity.iqvia.app'
+    })
+  }
 
   renderContent = (
     onClose: Function,
@@ -270,6 +288,7 @@ const mapStateToProps = (state: Map) => {
   const isQuestionSectionLoading = isQuestionSectionInfoLoading(state);
   const isAnswerTypesLoading = isAnswerTypesInfoLoading(state);
   const isRolesLoading = isRolesInfoLoading(state);
+  const proposalDetail = getProposalDetails(state);
 
   return {
     questionSectionList,
@@ -280,6 +299,7 @@ const mapStateToProps = (state: Map) => {
     isQuestionSectionLoading,
     isAnswerTypesLoading,
     isRolesLoading,
+    proposalDetail
   };
 };
 
@@ -291,4 +311,4 @@ export default compose(
     getRolesInfoF: getRolesInfo,
     setProposalQuestionF: setProposalQuestion,
   })
-)(AddQuestionModal);
+)(MatomoHOC(AddQuestionModal));

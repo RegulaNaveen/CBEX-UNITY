@@ -11,6 +11,7 @@ import TabItem from '../common/atoms/TabItem';
 import SwitchView from '../common/SwitchView';
 import DashboardFilters from '../common/DashboardFilters';
 import { Filter } from '../svg';
+import MatomoHOC from '../HOC/MatomoHOC'
 
 type Props = {
   children: any,
@@ -47,7 +48,10 @@ class Tabbar extends Component<Props, State> {
     };
   }
 
-  handleChange = (index: number) => this.setState({ selected: index });
+  handleChange = (index: number) => {
+    this.trackMatomoEventTabs(index);
+    this.setState({ selected: index });
+  }
 
   handleTypeView = (selectedTab: 0 | 1) => {
     const { setProposalView } = this.props;
@@ -88,11 +92,30 @@ class Tabbar extends Component<Props, State> {
   toggleFilters = () => {
     const { filterProposals } = this.props;
     const { showFilters } = this.state;
-
     this.setState({ showFilters: !showFilters }, () =>
       filterProposals({}, false)
     );
+
+    this.trackMatomoEventFilterToggle(!showFilters);
   };
+
+  trackMatomoEventTabs = (index)=>{
+    const tabs = ['My Docket', 'Recent', 'All']
+    this.props.trackEvent({
+      category: this.props.eventCategories.dp,
+      action: `Tab: ${this.props.userActions.click} On ${tabs[index]} Tab`,
+      href: 'https://dev-unity.iqvia.app'
+    })
+  }
+
+  trackMatomoEventFilterToggle = (action)=>{
+    const openOrclose = (action) ? 'Open' : 'Close';
+    this.props.trackEvent({
+      category: this.props.eventCategories.dp,
+      action: `Filters: ${this.props.userActions.click} to ${openOrclose} Filters`,
+      href: 'https://dev-unity.iqvia.app'
+    })
+  }
 
   render() {
     const { children } = this.props;
@@ -142,4 +165,4 @@ class Tabbar extends Component<Props, State> {
 export default connect(null, {
   setProposalView: setProposalTypeView,
   filterProposals: onFilteringProposals,
-})(Tabbar);
+})(MatomoHOC(Tabbar));

@@ -23,6 +23,7 @@ import Toolbar from '../../views/toolbar';
 import TabButtons from '../../common/TabButtons';
 import Documents from './Documents';
 import Validate from './Validate';
+import MatomoHOC from '../../HOC/MatomoHOC'
 
 type State = {
   selectedView: string,
@@ -41,6 +42,8 @@ type Props = {
 };
 
 export class Proposal extends Component<Props, State> {
+
+  toRef;
   constructor(props: Object) {
     super(props);
 
@@ -78,6 +81,12 @@ export class Proposal extends Component<Props, State> {
         enableValidateTab: true,
       });
     }
+
+    // Track Page view
+    this.props.trackPageView({
+      documentTitle: `${this.props.eventCategories.plainPd}`,
+      href: 'https://dev-unity.iqvia.app',
+    });
   }
 
   componentWillUnmount() {
@@ -89,8 +98,8 @@ export class Proposal extends Component<Props, State> {
 
   onChangeProposalView = (selectedView: string) => {
     this.setState({ selectedView });
+    this.trackMatomoEventTabs(selectedView)
   };
-
   handleStorageChange(e) {
     if (e.key === 'enableValidateTab') {
       const isEnabled = e.newValue === 'true';
@@ -105,6 +114,19 @@ export class Proposal extends Component<Props, State> {
     }
   }
 
+  trackMatomoEventTabs = (tab)=>{
+    this.props.trackEvent({
+      category: this.props.eventCategories.pd(this.props),
+      action: `Tab: ${this.props.userActions.click} On ${tab}`,
+      href: 'https://dev-unity.iqvia.app',
+      customDimensions: [
+        {
+          id : 1,
+          value: JSON.stringify(this.props.proposalDetail)
+        }
+      ]
+    })
+  }
   renderContent = () => {
     const { selectedView, enableValidateTab } = this.state;
     const { isLoading, details, notifications } = this.props;
@@ -179,6 +201,7 @@ const mapStateToProps = (state: Map) => ({
   isLoading: isProposalLoading(state),
   isSidebarOpen: getIsOpen(state),
   notifications: getPendingValidatedItems(state),
+  proposalDetail:getProposalDetails(state)
 });
 
 export default compose(
@@ -188,4 +211,4 @@ export default compose(
     getProposalInfo: getProposal,
     getValidatedData: onGetValidatedProposalDetails,
   })
-)(Proposal);
+)(MatomoHOC(Proposal));

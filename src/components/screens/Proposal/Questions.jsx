@@ -22,6 +22,7 @@ import {
 import Sidebar from '../../views/Sidebar';
 import AnswerHistory from '../../views/modals/AnswerHistory';
 import { getAllUsers } from '../../../redux/actions/sso-auth-actions';
+import MatomoHOC from '../../HOC/MatomoHOC'
 
 type Props = {
   match: Match,
@@ -91,21 +92,25 @@ class Questions extends Component<Props, State> {
   onClose = () => {
     const { showModal } = this.state;
     this.setState({ showModal: !showModal });
+    this.trackMatomoEventToggleQModal(!showModal);
   };
 
   handleIsChecked = () => {
     const { isChecked } = this.state;
     this.setState({ isChecked: !isChecked });
+    this.trackMatomoEventForCheckBoxes('Filter By Role');
   };
 
   handleIsCheckedAll = () => {
     const { isCheckedAll } = this.state;
     this.setState({ isCheckedAll: !isCheckedAll });
+    this.trackMatomoEventForCheckBoxes('Expand All')
   };
 
   getProposalInfoUpdated = () => {
     const { getProposalInfoUpdated, match } = this.props;
     getProposalInfoUpdated(match.params.id);
+    this.trackMatomoEventRefreshInfo();
   };
 
   renderQuestions() {
@@ -139,6 +144,49 @@ class Questions extends Component<Props, State> {
 
       return null;
     });
+  }
+
+  trackMatomoEventRefreshInfo = ()=>{
+    this.props.trackEvent({
+      category: this.props.eventCategories.pd(this.props),
+      action: `Round Buttons: ${this.props.userActions.click} On Refresh Button`,
+      href: 'https://dev-unity.iqvia.app',
+      customDimensions: [
+        {
+          id : 1,
+          value: JSON.stringify(this.props.proposalDetail)
+        }
+      ]
+    })
+  }
+
+  trackMatomoEventToggleQModal = (action)=>{
+    const openOrclose = (action) ? 'Open' : 'Close';
+    this.props.trackEvent({
+      category: this.props.eventCategories.pd(this.props),
+      action: `Round Buttons: ${this.props.userActions.click} To ${openOrclose} Add New Question Modal`,
+      href: 'https://dev-unity.iqvia.app',
+      customDimensions: [
+        {
+          id : 1,
+          value: JSON.stringify(this.props.proposalDetail)
+        }
+      ]
+    })
+  }
+
+  trackMatomoEventForCheckBoxes = (item)=>{
+    this.props.trackEvent({
+      category: this.props.eventCategories.pd(this.props),
+      action: `CheckBoxes: ${this.props.userActions.click} On ${item} Checkbox`,
+      href: 'https://dev-unity.iqvia.app',
+      customDimensions: [
+        {
+          id : 1,
+          value: JSON.stringify(this.props.proposalDetail)
+        }
+      ]
+    })
   }
 
   render() {
@@ -223,6 +271,7 @@ const mapStateToProps = (state: Map) => ({
   setQuestion: setQuestionData(state),
   isQuestionLoading: isSetQuestionLoading(state),
   hasQuestionError: setQuestionError(state),
+  proposalDetail:getProposalDetails(state)
 });
 
 export default compose(
@@ -231,4 +280,4 @@ export default compose(
     getProposalInfoUpdated: getProposalUpdated,
     fetchUsers: getAllUsers,
   })
-)(Questions);
+)(MatomoHOC(Questions));
