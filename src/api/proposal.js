@@ -9,6 +9,8 @@ const {
   API_KEY,
 } = API.PROPOSAL;
 
+import {getAccessTokenFromLocalStorage as getAccessToken} from '../SessionHandler'
+
 export const getProposalInfo = async (id: string): Promise<Object> => {
   return new Promise((resolve, reject) => {
     axios
@@ -33,7 +35,10 @@ export const setProposalAnswer = async (
   return axios.put(
     `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`,
     { answer, userData },
-    { headers: { 'x-api-key': `${API_KEY}` } }
+    { headers: { 
+      'x-api-key': `${API_KEY}`,
+      'x-access-token': `${getAccessToken()}` 
+    }}
   );
 };
 
