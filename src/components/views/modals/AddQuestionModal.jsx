@@ -45,7 +45,8 @@ type Props = {
   isLoading: boolean,
   isQuestionSectionLoading: boolean,
   isAnswerTypesLoading: boolean,
-  isRolesLoading: boolean
+  isRolesLoading: boolean,
+  currentsection: mixed
 };
 
 type State = {
