@@ -6,7 +6,16 @@ import Typography from 'apollo-react/components/Typography';
 import Grid from 'apollo-react/components/Grid';
 import { getUserName } from '../../../SessionHandler';
 
-function Note({ userName, date, section, content, index, onShowAll, onEdit, textstyle }) {
+function Note({
+  userName,
+  date,
+  section,
+  content,
+  index,
+  onShowAll,
+  onEdit,
+  textstyle
+}) {
   const contentRef = useRef(null);
   const [showExpandLink, setShowExpandLink] = useState(false);
 
@@ -25,7 +34,7 @@ function Note({ userName, date, section, content, index, onShowAll, onEdit, text
   }
 
   const canEdit = userName === getUserName();
-  
+
   return (
     <div className="note" id={`notepad-${String(section).toLocaleLowerCase()}`}>
       <div className="header">
@@ -35,14 +44,24 @@ function Note({ userName, date, section, content, index, onShowAll, onEdit, text
               variant="body2"
               gutterBottom
               noWrap
-              style={{paddingLeft: 8}}
+              style={{ paddingLeft: 8 }}
               className="username"
             >
               {userName}
             </Typography>
           </Grid>
           <Grid item xs={6} md={6} lg={4}>
-            <Typography variant="body2" gutterBottom noWrap className="date" style={textstyle ? {...textstyle, ...{textAlign: 'right'} } :  {textAlign: 'right'}}>
+            <Typography
+              variant="body2"
+              gutterBottom
+              noWrap
+              className="date"
+              style={
+                textstyle
+                  ? { ...textstyle, ...{ textAlign: 'right' } }
+                  : { textAlign: 'right' }
+              }
+            >
               {moment(date).format('DD-MMM-yyyy')}
             </Typography>
           </Grid>
