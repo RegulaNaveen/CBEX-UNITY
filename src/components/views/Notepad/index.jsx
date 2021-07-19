@@ -121,7 +121,12 @@ function Notepad({
     <div className="notepad">
       {mode === MODE_DEFAULT && (
         <>
-          <List notes={notes} onShowAll={handleShowAll} onEdit={handleEditNoteClick} selectedtitle={selectedtitle} />
+          <List
+            notes={notes}
+            onShowAll={handleShowAll}
+            onEdit={handleEditNoteClick}
+            selectedtitle={selectedtitle}
+          />
           <AddNote sections={sections} onAddNote={handleOnAddNote} />
         </>
       )}

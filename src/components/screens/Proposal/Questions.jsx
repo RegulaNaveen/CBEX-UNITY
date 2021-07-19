@@ -54,10 +54,10 @@ class Questions extends Component<Props, State> {
       isCheckedAll: false,
       selectedQuestionForHistory: '',
       isHistoryModalShown: false,
-      currentsection:'',
-      currentTab:0,
-      selectedtitle:'',
-      heighlightcard:false
+      currentsection: '',
+      currentTab: 0,
+      selectedtitle: '',
+      heighlightcard: false
     };
   }
 
@@ -112,20 +112,26 @@ class Questions extends Component<Props, State> {
     const { getProposalInfoUpdated, match } = this.props;
     getProposalInfoUpdated(match.params.id);
   };
-  scrollToSelectedElement = (title) => {
+
+  scrollToSelectedElement = title => {
     setTimeout(() => {
-      const item = document.getElementById(`notepad-${String(title).toLocaleLowerCase()}`);
-      if(item){
+      const item = document.getElementById(
+        `notepad-${String(title).toLocaleLowerCase()}`
+      );
+      if (item) {
         item.scrollIntoView();
       }
     }, 1000);
   };
 
-  setTabFromQuestionNotes = (tabid,title,flag) =>{
-    this.setState({currentTab: tabid,selectedtitle:title,heighlightcard:flag},()=>{
-      this.scrollToSelectedElement(title)
-    })
-  }
+  setTabFromQuestionNotes = (tabid, title, flag) => {
+    this.setState(
+      { currentTab: tabid, selectedtitle: title, heighlightcard: flag },
+      () => {
+        this.scrollToSelectedElement(title);
+      }
+    );
+  };
 
   renderQuestions() {
     const { isChecked, isCheckedAll } = this.state;
@@ -151,10 +157,12 @@ class Questions extends Component<Props, State> {
             questions={questions}
             title={sectionName}
             key={sectionName}
-            setTabFromQuestionNotes = {(val,title,flag)=> this.setTabFromQuestionNotes(val,title,flag)}
-            onAddQuestion = {(value)=>{
-              this.setState({currentsection: value})
-              this.onClose()
+            setTabFromQuestionNotes={(val, title, flag) =>
+              this.setTabFromQuestionNotes(val, title, flag)
+            }
+            onAddQuestion={value => {
+              this.setState({ currentsection: value });
+              this.onClose();
             }}
             isCheckedAll={isCheckedAll}
             setQuestionToDisplayHistory={this.setQuestionToDisplayHistory}
@@ -176,16 +184,21 @@ class Questions extends Component<Props, State> {
     } = this.state;
 
     const allSections = isChecked ? filteredSections : sections;
-    
+
     return (
       <>
         <ProposalInfo data={details} />
 
-        <Sidebar sections={allSections} id={proposalID} 
-        currentTab={this.state.currentTab} 
-        selectedtitle={this.state.selectedtitle}
-        heighlightcard={this.state.heighlightcard}
-        setTabFromQuestionNotes = {(val,title,flag)=> this.setTabFromQuestionNotes(val,title,flag)} />
+        <Sidebar
+          sections={allSections}
+          id={proposalID}
+          currentTab={this.state.currentTab}
+          selectedtitle={this.state.selectedtitle}
+          heighlightcard={this.state.heighlightcard}
+          setTabFromQuestionNotes={(val, title, flag) =>
+            this.setTabFromQuestionNotes(val, title, flag)
+          }
+        />
 
         <div className="tasksList-title-wrapper">
           <div className="taskList-icons-wrapper">
@@ -223,9 +236,9 @@ class Questions extends Component<Props, State> {
               title="Add New Question"
               className="tasksList-add-icon-wrapper"
               role="presentation"
-              onClick={()=>{
-                this.setState({currentsection: ''})
-                this.onClose()
+              onClick={() => {
+                this.setState({ currentsection: '' });
+                this.onClose();
               }}
             >
               <Add className="tasksList-add-icon" />
@@ -234,7 +247,12 @@ class Questions extends Component<Props, State> {
         </div>
         <div className="tasksList-wrapper">{this.renderQuestions()}</div>
 
-        {showModal && <AddQuestionModalComponent onClose={this.onClose} currentsection={this.state.currentsection || ''}/>}
+        {showModal && (
+          <AddQuestionModalComponent
+            onClose={this.onClose}
+            currentsection={this.state.currentsection || ''}
+          />
+        )}
 
         {isHistoryModalShown && (
           <AnswerHistory
