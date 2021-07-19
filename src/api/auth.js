@@ -12,12 +12,12 @@ export const authentication = async (
     axios
       .post(`${AUTH_API_URL}/login`, {
         email,
-        password,
+        password
       })
-      .then((response) => {
+      .then(response => {
         resolve(response.data);
       })
-      .catch((err) => {
+      .catch(err => {
         reject(err.response.data.message);
       });
   });
@@ -27,12 +27,12 @@ export const forgotPassword = async (email: string): Promise<Object> => {
   return new Promise((resolve, reject) => {
     axios
       .post(`${AUTH_API_URL}/forgot-password`, {
-        email,
+        email
       })
-      .then((response) => {
+      .then(response => {
         resolve(response.data);
       })
-      .catch((err) => {
+      .catch(err => {
         reject(err.response.data.message);
       });
   });
@@ -48,12 +48,12 @@ export const resetPassword = async (
       .post(`${AUTH_API_URL}/reset-password`, {
         email,
         code,
-        newPassword,
+        newPassword
       })
-      .then((response) => {
+      .then(response => {
         resolve(response.data);
       })
-      .catch((err) => {
+      .catch(err => {
         reject(err.response.data.message);
       });
   });
@@ -67,12 +67,12 @@ export const postRefreshToken = async (
     axios
       .post(`${AUTH_API_URL}/refresh`, {
         email,
-        refreshToken,
+        refreshToken
       })
-      .then((response) => {
+      .then(response => {
         resolve(response.data);
       })
-      .catch((err) => {
+      .catch(err => {
         reject(err.response.data.message);
       });
   });
@@ -89,16 +89,16 @@ export const putRole = async (
         `${AUTH_API_URL}/changerole`,
         {
           role,
-          accessToken,
+          accessToken
         },
         {
-          headers: { Authorization: `Bearer ${jwt}` },
+          headers: { Authorization: `Bearer ${jwt}` }
         }
       )
-      .then((response) => {
+      .then(response => {
         resolve(response.data);
       })
-      .catch((err) => {
+      .catch(err => {
         reject(err.response.data.message);
       });
   });
@@ -106,5 +106,5 @@ export const putRole = async (
 
 export const getUsers = (jwt: string): Promise<Object> =>
   axios.get(`${AUTH_API_URL}/users`, {
-    headers: { Authorization: `Bearer ${jwt}` },
+    headers: { Authorization: `Bearer ${jwt}` }
   });

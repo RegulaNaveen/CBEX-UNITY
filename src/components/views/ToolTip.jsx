@@ -9,18 +9,18 @@ type Props = {
   content: Node,
   backgroundColor?: string,
   color?: string,
-  width?: string,
+  width?: string
 };
 
 type State = {
-  position: string,
+  position: string
 };
 
 class ToolTip extends Component<Props, State> {
   static defaultProps = {
     backgroundColor: '#444444',
     color: '#ffffff',
-    width: '200px',
+    width: '200px'
   };
 
   tooltip: any;
@@ -31,7 +31,7 @@ class ToolTip extends Component<Props, State> {
     this.tooltip = createRef();
 
     this.state = {
-      position: '',
+      position: ''
     };
   }
 
@@ -57,7 +57,7 @@ class ToolTip extends Component<Props, State> {
         <div className="child">{child}</div>
         <div
           className={classNames('tooltip', {
-            [`${position}-position`]: position,
+            [`${position}-position`]: position
           })}
           ref={this.tooltip}
           style={{ backgroundColor, width, color }}

@@ -20,7 +20,7 @@ const {
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_ERROR,
   ON_GET_LOOKUP_USERS,
-  ERROR_ON_GET_LOOKUP_USERS,
+  ERROR_ON_GET_LOOKUP_USERS
 } = REDUX_TYPES.AUTH;
 
 const INITIAL_STATE: Map = fromJS({
@@ -40,7 +40,7 @@ const INITIAL_STATE: Map = fromJS({
   resetPasswordSuccess: undefined,
   resetPasswordError: undefined,
   lookupUsers: undefined,
-  lookupUsersError: undefined,
+  lookupUsersError: undefined
 });
 
 const onAuthSuccess = (state: Map, action: Object): Map => {
@@ -76,7 +76,7 @@ const onLogoutError = (state: Map, action: Object): Map => {
 const onPutRoleSuccess = (state: Map, action: Object): Map => {
   const data = action.payload;
   const {
-    data: { role },
+    data: { role }
   } = data;
   let newState = fromJS({});
   newState = state.setIn(['authData', 'data', 'authService', 'role'], role);
@@ -175,10 +175,10 @@ const actionMap = {
   [RESET_PASSWORD_SUCCESS]: onResetPasswordSuccess,
   [RESET_PASSWORD_ERROR]: onResetPasswordError,
   [ON_GET_LOOKUP_USERS]: onGetLookupUsers,
-  [ERROR_ON_GET_LOOKUP_USERS]: onErrorGetLookupUsers,
+  [ERROR_ON_GET_LOOKUP_USERS]: onErrorGetLookupUsers
 };
 
-export default function (
+export default function(
   state: Map<string, any> = INITIAL_STATE,
   action: ApiAction<any, any>
 ): Map {

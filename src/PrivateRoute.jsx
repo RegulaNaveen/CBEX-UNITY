@@ -11,7 +11,7 @@ type Props = { component: ElementType, match?: Match };
 const PrivateRoute = ({ component: Component, ...rest }: Props) => {
   function renderRoute(props) {
     const {
-      match: { params },
+      match: { params }
     } = props;
 
     const proposalId = params.id || '';
@@ -25,7 +25,7 @@ const PrivateRoute = ({ component: Component, ...rest }: Props) => {
 };
 
 PrivateRoute.defaultProps = {
-  match: undefined,
+  match: undefined
 };
 
 export default PrivateRoute;

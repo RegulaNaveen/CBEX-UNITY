@@ -11,7 +11,7 @@ type Props = {
   selectedViewType: 0 | 1,
   eventCategories: any,
   userActions: any,
-  trackEvent: any,
+  trackEvent: any
 };
 
 class SwitchView extends Component<Props> {
@@ -27,11 +27,11 @@ class SwitchView extends Component<Props> {
     this.trackMatomoEvent('Card');
   };
 
-  trackMatomoEvent = (view) => {
+  trackMatomoEvent = view => {
     const { eventCategories, userActions, trackEvent } = this.props;
     trackEvent({
       category: eventCategories.dp,
-      action: `View: ${userActions.click} On ${view} View`,
+      action: `View: ${userActions.click} On ${view} View`
     });
   };
 
@@ -43,14 +43,14 @@ class SwitchView extends Component<Props> {
         <button type="button" onClick={this.setViewToList}>
           <ListView
             className={classNames('switch-view__icon', {
-              'is-active': selectedViewType === 0,
+              'is-active': selectedViewType === 0
             })}
           />
         </button>
         <button type="button" onClick={this.setViewToGrid}>
           <CardView
             className={classNames('switch-view__icon', {
-              'is-active': selectedViewType === 1,
+              'is-active': selectedViewType === 1
             })}
           />
         </button>
@@ -59,8 +59,8 @@ class SwitchView extends Component<Props> {
   }
 }
 
-const mapStateToProps = (state) => ({
-  selectedViewType: getProposalTypeView(state),
+const mapStateToProps = state => ({
+  selectedViewType: getProposalTypeView(state)
 });
 
 export default connect(mapStateToProps)(MatomoHOC(SwitchView));

@@ -9,7 +9,7 @@ type Props = {
   onChange: Function,
   text?: string,
   title?: string,
-  withReset?: boolean,
+  withReset?: boolean
 };
 
 const UserLookup = ({ users, onChange, text, title, withReset }: Props) => (
@@ -25,11 +25,11 @@ const UserLookup = ({ users, onChange, text, title, withReset }: Props) => (
 UserLookup.defaultProps = {
   text: '',
   title: '',
-  withReset: false,
+  withReset: false
 };
 
-const mapStateToProps = (state) => ({
-  users: getLookupUsers(state),
+const mapStateToProps = state => ({
+  users: getLookupUsers(state)
 });
 
 export default connect(mapStateToProps)(UserLookup);

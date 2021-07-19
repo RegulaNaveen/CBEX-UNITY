@@ -14,10 +14,10 @@ type Props = {
   validatedData: {
     isLoading: boolean,
     data: Object,
-    error: string,
+    error: string
   },
   match: Match,
-  getValidatedData: (proposalId: string) => void,
+  getValidatedData: (proposalId: string) => void
 };
 
 class Validate extends Component<Props> {
@@ -30,7 +30,7 @@ class Validate extends Component<Props> {
 
   renderContent = () => {
     const {
-      validatedData: { data, error, isLoading },
+      validatedData: { data, error, isLoading }
     } = this.props;
 
     if (isLoading)
@@ -43,13 +43,13 @@ class Validate extends Component<Props> {
 
   render() {
     const {
-      validatedData: { isLoading, error },
+      validatedData: { isLoading, error }
     } = this.props;
 
     return (
       <div
         className={classNames('validate', {
-          'is-centered': isLoading || error,
+          'is-centered': isLoading || error
         })}
       >
         {this.renderContent()}
@@ -59,7 +59,7 @@ class Validate extends Component<Props> {
 }
 
 const mapStateToProps = (state: Object) => ({
-  validatedData: getValidatedProposalData(state),
+  validatedData: getValidatedProposalData(state)
 });
 
 export default compose(

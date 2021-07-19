@@ -10,12 +10,12 @@ type Props = {
   items: Array<Object>,
   title?: string,
   onClick: (selectedValues: Array<string>, lastAnswer: Array<string>) => void,
-  value?: Array<string>,
+  value?: Array<string>
 };
 
 type State = {
   isCollapsed: boolean,
-  selectedValues: Array<string>,
+  selectedValues: Array<string>
 };
 
 class Multiselect extends PureComponent<Props, State> {
@@ -24,7 +24,7 @@ class Multiselect extends PureComponent<Props, State> {
   static defaultProps = {
     id: undefined,
     title: undefined,
-    value: undefined,
+    value: undefined
   };
 
   constructor(props: Object) {
@@ -34,7 +34,7 @@ class Multiselect extends PureComponent<Props, State> {
 
     this.state = {
       isCollapsed: false,
-      selectedValues: [],
+      selectedValues: []
     };
   }
 
@@ -127,7 +127,7 @@ class Multiselect extends PureComponent<Props, State> {
           {isCollapsed && (
             <ul className="multiselect-list">
               {!isEmpty(items) &&
-                items.map((item) => (
+                items.map(item => (
                   <MultiselectItem
                     onClick={this.onSelect}
                     item={item}

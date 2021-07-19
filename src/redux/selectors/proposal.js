@@ -10,11 +10,11 @@ const generateSections = (
   let sections = Map();
   const userRole = role !== '' ? role : false;
 
-  proposalQuestions.forEach((question) => {
+  proposalQuestions.forEach(question => {
     const {
       questionId,
       roleNames,
-      section: { sectionName, sectionOrder },
+      section: { sectionName, sectionOrder }
     } = question;
 
     const roles = roleNames || [];
@@ -24,7 +24,7 @@ const generateSections = (
       let questions = sections.getIn([sectionName, 'questions']) || Map({});
 
       questions = questions.set(questionId, fromJS(question));
-      questions = questions.sortBy((item) => item.get('questionOrder'));
+      questions = questions.sortBy(item => item.get('questionOrder'));
 
       section = section
         .set('sectionOrder', sectionOrder)
@@ -39,7 +39,7 @@ const generateSections = (
     } else createSections();
   });
 
-  sections = sections.sortBy((section) => section.get('sectionOrder'));
+  sections = sections.sortBy(section => section.get('sectionOrder'));
 
   return sections;
 };
@@ -67,11 +67,11 @@ export const getSections = (proposal: Map): Map =>
 export const getProposalTeamAssignedRoles = (proposal: Map): Map => {
   const proposalTeamSectionAnswers = proposal
     .get('proposalQuestions')
-    .filter((value) => value.section.sectionName === 'Proposal Team')
+    .filter(value => value.section.sectionName === 'Proposal Team')
     .map(({ questionText, answers }) => {
       return {
         role: questionText,
-        responsable: last(answers) ? last(answers).answer : 'Not defined yet.',
+        responsable: last(answers) ? last(answers).answer : 'Not defined yet.'
       };
     });
 
@@ -133,7 +133,7 @@ export const getProposalBoxId = (proposal: Map): Map => proposal.get('boxId');
 export const getValidatedProposalData = (proposal: Map): Object => ({
   isLoading: proposal.get('fetchingValidatedProposalData'),
   data: proposal.get('validatedProposalData'),
-  error: proposal.get('validatedProposalDataError'),
+  error: proposal.get('validatedProposalDataError')
 });
 
 export const getPendingValidatedItems = (propoal: Map): number => {

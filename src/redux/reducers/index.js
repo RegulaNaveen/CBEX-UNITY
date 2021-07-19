@@ -10,7 +10,7 @@ const rootReducer = combineReducers({
   ssoAuth: ssoAuthReducer,
   proposals: proposalsReducer,
   proposal: proposalReducer,
-  sidebar: sidebarReducer,
+  sidebar: sidebarReducer
 });
 
 export default rootReducer;

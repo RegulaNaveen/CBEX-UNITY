@@ -13,7 +13,7 @@ const {
   ERROR_ON_CHANGE_ROLE,
   ON_REFRESH_USER_DATA,
   ON_GET_LOOKUP_USERS,
-  ERROR_ON_GET_LOOKUP_USERS,
+  ERROR_ON_GET_LOOKUP_USERS
 } = REDUX_TYPES.SSO_AUTH;
 
 const INITIAL_STATE: Map = fromJS({
@@ -24,7 +24,7 @@ const INITIAL_STATE: Map = fromJS({
   role: '',
   errorOnSetNewRole: undefined,
   lookupUsers: [],
-  lookupUsersError: undefined,
+  lookupUsersError: undefined
 });
 
 const loginUser = (state: Map, action: Object) => {
@@ -101,10 +101,10 @@ const actionMap = {
   [ERROR_ON_USER_LOGIN]: errorOnUserLogin,
   [ERROR_ON_CHANGE_ROLE]: errorOnSetNewUserRole,
   [ON_GET_LOOKUP_USERS]: onGetLookupUsers,
-  [ERROR_ON_GET_LOOKUP_USERS]: onErrorGetLookupUsers,
+  [ERROR_ON_GET_LOOKUP_USERS]: onErrorGetLookupUsers
 };
 
-export default function (
+export default function(
   state: Map<string, any> = INITIAL_STATE,
   action: ApiAction<any, any>
 ): Map {

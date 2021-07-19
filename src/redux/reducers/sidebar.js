@@ -7,7 +7,7 @@ const { OPEN_SECTION, IS_OPEN } = REDUX_TYPES.SIDEBAR;
 
 const INITIAL_STATE: Map = fromJS({
   selectedSection: undefined,
-  isOpen: false,
+  isOpen: false
 });
 
 const onSelectedSection = (state: Map, action: Object) => {
@@ -22,10 +22,10 @@ const onHandleOpenClose = (state: Map, action: Object) => {
 
 const actionMap = {
   [OPEN_SECTION]: onSelectedSection,
-  [IS_OPEN]: onHandleOpenClose,
+  [IS_OPEN]: onHandleOpenClose
 };
 
-export default function (
+export default function(
   state: Map<string, any> = INITIAL_STATE,
   action: ApiAction<any, any>
 ): Map {

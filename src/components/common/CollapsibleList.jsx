@@ -9,7 +9,7 @@ import Question from './Question';
 import MatomoHOC from '../HOC/MatomoHOC';
 
 type State = {
-  isCollapsed: boolean,
+  isCollapsed: boolean
 };
 
 type Props = {
@@ -21,7 +21,7 @@ type Props = {
   eventCategories: any,
   userActions: any,
   trackEvent: any,
-  proposalDetail: any,
+  proposalDetail: any
 };
 
 class CollapsibleList extends Component<Props, State> {
@@ -33,7 +33,7 @@ class CollapsibleList extends Component<Props, State> {
     this.taskRef = React.createRef();
 
     this.state = {
-      isCollapsed: false,
+      isCollapsed: false
     };
   }
 
@@ -66,19 +66,22 @@ class CollapsibleList extends Component<Props, State> {
   createId = () => {
     const { title } = this.props;
 
-    const id = title.toLocaleLowerCase().split(' ').join('-');
+    const id = title
+      .toLocaleLowerCase()
+      .split(' ')
+      .join('-');
 
     return id;
   };
 
-  trackMatomoEventBladeToggle = (action) => {
+  trackMatomoEventBladeToggle = action => {
     const openOrclose = action ? 'Open' : 'Close';
     const {
       userActions,
       title,
       proposalDetail,
       eventCategories,
-      trackEvent,
+      trackEvent
     } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
@@ -86,9 +89,9 @@ class CollapsibleList extends Component<Props, State> {
       customDimensions: [
         {
           id: 1,
-          value: JSON.stringify(proposalDetail),
-        },
-      ],
+          value: JSON.stringify(proposalDetail)
+        }
+      ]
     });
   };
 
@@ -145,7 +148,7 @@ class CollapsibleList extends Component<Props, State> {
               </div>
             </div>
 
-            {questions.valueSeq().map((questionConfig) => {
+            {questions.valueSeq().map(questionConfig => {
               const visible = questionConfig.get('visible');
               return (
                 (visible || typeof visible === 'undefined') && (

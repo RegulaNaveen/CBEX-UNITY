@@ -9,7 +9,7 @@ const {
   ERROR_ON_GET_PROPOSALS,
   ON_PROPOSALS_LOADING,
   ON_FILTER_PROPOSALS,
-  ON_SET_PROPOSALS_FILTERS,
+  ON_SET_PROPOSALS_FILTERS
 } = REDUX_TYPES.PROPOSALS;
 
 const INITIAL_STATE: Map = fromJS({
@@ -19,7 +19,7 @@ const INITIAL_STATE: Map = fromJS({
   proposalsError: undefined,
   proposalsFilters: undefined,
   proposalsLoading: false,
-  selectedViewType: 1,
+  selectedViewType: 1
 });
 
 const setProposals = (state: Map, action: Object): Map => {
@@ -58,10 +58,10 @@ const actionMap = {
   [ERROR_ON_GET_PROPOSALS]: setProposalsError,
   [ON_PROPOSALS_LOADING]: onProposalsLoading,
   [ON_FILTER_PROPOSALS]: onSetFilteringProposals,
-  [ON_SET_PROPOSALS_FILTERS]: onSetProposalsFilters,
+  [ON_SET_PROPOSALS_FILTERS]: onSetProposalsFilters
 };
 
-export default function (
+export default function(
   state: Map<string, any> = INITIAL_STATE,
   action: ApiAction<any, any>
 ): Map {

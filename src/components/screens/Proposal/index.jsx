@@ -9,14 +9,14 @@ import classNames from 'classnames';
 import { compose } from 'redux';
 import {
   getProposal,
-  onGetValidatedProposalDetails,
+  onGetValidatedProposalDetails
 } from '../../../redux/actions/proposal-actions';
 import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
 import {
   getIsOpen,
   getPendingValidatedItems,
   getProposalDetails,
-  isProposalLoading,
+  isProposalLoading
 } from '../../../redux/selectors';
 import Questions from './Questions';
 import Toolbar from '../../views/toolbar';
@@ -26,7 +26,7 @@ import Validate from './Validate';
 import MatomoHOC from '../../HOC/MatomoHOC';
 
 type State = {
-  selectedView: string,
+  selectedView: string
 };
 
 type Props = {
@@ -43,7 +43,7 @@ type Props = {
   userActions: any,
   trackEvent: any,
   trackPageView: any,
-  proposalDetail: any,
+  proposalDetail: any
 };
 
 export class Proposal extends Component<Props, State> {
@@ -54,7 +54,7 @@ export class Proposal extends Component<Props, State> {
 
     this.state = {
       selectedView: 'questions',
-      enableValidateTab: false,
+      enableValidateTab: false
     };
   }
 
@@ -66,7 +66,7 @@ export class Proposal extends Component<Props, State> {
       getValidatedData,
       trackPageView,
       eventCategories,
-      match: { params },
+      match: { params }
     } = this.props;
 
     const selectedView = localStorage.getItem('proposalTypeView');
@@ -78,20 +78,20 @@ export class Proposal extends Component<Props, State> {
     getProposalInfo(params.id);
     getValidatedData(params.id);
 
-    window.addEventListener('storage', (e) => this.handleStorageChange(e));
+    window.addEventListener('storage', e => this.handleStorageChange(e));
 
     const enableValidateTab = localStorage.getItem('enableValidateTab');
     if (enableValidateTab === null) {
       localStorage.setItem('enableValidateTab', false);
     } else if (enableValidateTab === 'true') {
       this.setState({
-        enableValidateTab: true,
+        enableValidateTab: true
       });
     }
 
     // Track Page view
     trackPageView({
-      documentTitle: `${eventCategories.plainPd}`,
+      documentTitle: `${eventCategories.plainPd}`
     });
   }
 
@@ -102,30 +102,6 @@ export class Proposal extends Component<Props, State> {
     window.removeEventListener('storage', this.handleStorageChange);
   }
 
-  onChangeProposalView = (selectedView: string) => {
-    this.setState({ selectedView });
-    this.trackMatomoEventTabs(selectedView);
-  };
-
-  trackMatomoEventTabs = (tab) => {
-    const {
-      eventCategories,
-      userActions,
-      proposalDetail,
-      trackEvent,
-    } = this.props;
-    trackEvent({
-      category: eventCategories.pd(this.props),
-      action: `Tab: ${userActions.click} On ${tab}`,
-      customDimensions: [
-        {
-          id: 1,
-          value: JSON.stringify(proposalDetail),
-        },
-      ],
-    });
-  };
-
   handleStorageChange(e) {
     if (e.key === 'enableValidateTab') {
       const isEnabled = e.newValue === 'true';
@@ -135,10 +111,34 @@ export class Proposal extends Component<Props, State> {
         selectedView:
           !isEnabled && selectedViewState === 'validate'
             ? 'questions'
-            : selectedViewState,
+            : selectedViewState
       });
     }
   }
+
+  trackMatomoEventTabs = tab => {
+    const {
+      eventCategories,
+      userActions,
+      proposalDetail,
+      trackEvent
+    } = this.props;
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action: `Tab: ${userActions.click} On ${tab}`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify(proposalDetail)
+        }
+      ]
+    });
+  };
+
+  onChangeProposalView = (selectedView: string) => {
+    this.setState({ selectedView });
+    this.trackMatomoEventTabs(selectedView);
+  };
 
   renderContent = () => {
     const { selectedView, enableValidateTab } = this.state;
@@ -146,7 +146,7 @@ export class Proposal extends Component<Props, State> {
 
     const viewsMap = {
       questions: <Questions />,
-      documents: <Documents />,
+      documents: <Documents />
       // validate: <Validate />
     };
 
@@ -172,7 +172,7 @@ export class Proposal extends Component<Props, State> {
             elements={[
               { tabName: 'questions' },
               { tabName: 'documents' },
-              { tabName: 'validate', notifications },
+              { tabName: 'validate', notifications }
             ]}
             selectedView={selectedView}
             onChangeView={this.onChangeProposalView}
@@ -181,7 +181,7 @@ export class Proposal extends Component<Props, State> {
           <TabButtons
             elements={[
               { tabName: 'questions' },
-              { tabName: 'documents' },
+              { tabName: 'documents' }
               // { tabName: 'validate', notifications }
             ]}
             selectedView={selectedView}
@@ -199,7 +199,7 @@ export class Proposal extends Component<Props, State> {
     return (
       <div
         className={classNames('proposal-wrapper', {
-          'is-collapsed': isSidebarOpen,
+          'is-collapsed': isSidebarOpen
         })}
       >
         <Toolbar />
@@ -214,7 +214,7 @@ const mapStateToProps = (state: Map) => ({
   isLoading: isProposalLoading(state),
   isSidebarOpen: getIsOpen(state),
   notifications: getPendingValidatedItems(state),
-  proposalDetail: getProposalDetails(state),
+  proposalDetail: getProposalDetails(state)
 });
 
 export default compose(
@@ -222,6 +222,6 @@ export default compose(
   connect(mapStateToProps, {
     getRefreshAuthData: onRefreshUserData,
     getProposalInfo: getProposal,
-    getValidatedData: onGetValidatedProposalDetails,
+    getValidatedData: onGetValidatedProposalDetails
   })
 )(MatomoHOC(Proposal));

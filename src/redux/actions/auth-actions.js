@@ -7,7 +7,7 @@ import {
   getAccessToken,
   getUserEmail,
   getRefreshToken,
-  getUserName,
+  getUserName
 } from '../../SessionHandler';
 import {
   authentication,
@@ -15,7 +15,7 @@ import {
   putRole,
   postRefreshToken,
   resetPassword,
-  getUsers,
+  getUsers
 } from '../../api/auth';
 
 const {
@@ -35,7 +35,7 @@ const {
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_ERROR,
   ON_GET_LOOKUP_USERS,
-  ERROR_ON_GET_LOOKUP_USERS,
+  ERROR_ON_GET_LOOKUP_USERS
 } = REDUX_TYPES.AUTH;
 
 export const login = (
@@ -52,7 +52,7 @@ export const login = (
         accessToken,
         jwt: { token },
         refresh: { token: refreshToken },
-        userName,
+        userName
       } = data.authService;
 
       dispatch({ type: AUTH_SUCCESS, payload: { data } });
@@ -109,7 +109,7 @@ export const refreshAuthData = (): ThunkAction<string, Object> => {
         role,
         accessToken,
         jwt: { token },
-        refresh: { token: newRefreshToken },
+        refresh: { token: newRefreshToken }
       } = data.authService;
 
       dispatch({ type: AUTH_SUCCESS, payload: { data } });
@@ -165,7 +165,7 @@ export const getAllUsers = (): ThunkAction<string, Object> => {
 
         dispatch({
           type: ON_GET_LOOKUP_USERS,
-          payload: { lookupUsers: authService },
+          payload: { lookupUsers: authService }
         });
       }
     } catch (error) {

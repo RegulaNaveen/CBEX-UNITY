@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 type Props = {
-  className?: string,
+  className?: string
 };
 
 const Close = ({ className }: Props) => {
@@ -18,7 +18,7 @@ const Close = ({ className }: Props) => {
 };
 
 Close.defaultProps = {
-  className: '',
+  className: ''
 };
 
 export default Close;

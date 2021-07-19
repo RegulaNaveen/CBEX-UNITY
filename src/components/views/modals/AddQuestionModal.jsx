@@ -23,13 +23,13 @@ import {
   isQuestionSectionInfoLoading,
   isAnswerTypesInfoLoading,
   isRolesInfoLoading,
-  getProposalDetails,
+  getProposalDetails
 } from '../../../redux/selectors';
 import {
   getQuestionSection,
   getAnswerTypesInfo,
   getRolesInfo,
-  setProposalQuestion,
+  setProposalQuestion
 } from '../../../redux/actions/proposal-actions';
 import MatomoHOC from '../../HOC/MatomoHOC';
 
@@ -50,14 +50,14 @@ type Props = {
   isRolesLoading: boolean,
   eventCategories: any,
   trackEvent: any,
-  proposalDetail: any,
+  proposalDetail: any
 };
 
 type State = {
   questionText: string,
   section: Object,
   answerType: string,
-  roleNames: Array<string>,
+  roleNames: Array<string>
 };
 
 export class AddQuestionModal extends PureComponent<Props, State> {
@@ -68,7 +68,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       questionText: '',
       section: undefined,
       answerType: '',
-      roleNames: [],
+      roleNames: []
     };
   }
 
@@ -76,7 +76,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     const {
       getQuestionSectionF,
       getAnswerTypesDataF,
-      getRolesInfoF,
+      getRolesInfoF
     } = this.props;
 
     getQuestionSectionF();
@@ -106,7 +106,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   };
 
   onRoleChange = (values: Array<string>) => {
-    const roleNames = values.map((value) => value.replace(', ', ''));
+    const roleNames = values.map(value => value.replace(', ', ''));
     this.setState({ roleNames });
   };
 
@@ -127,7 +127,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         section,
         answerType,
         options: [],
-        roleNames,
+        roleNames
       };
 
       setProposalQuestionF(proposalId, questionData);
@@ -135,7 +135,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     }
   };
 
-  trackMatomoEventCreateQ = (data) => {
+  trackMatomoEventCreateQ = data => {
     const { eventCategories, proposalDetail, trackEvent } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
@@ -143,9 +143,9 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       customDimensions: [
         {
           id: 1,
-          value: JSON.stringify({ ...data, ...proposalDetail }),
-        },
-      ],
+          value: JSON.stringify({ ...data, ...proposalDetail })
+        }
+      ]
     });
   };
 
@@ -254,7 +254,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       isLoading,
       isQuestionSectionLoading,
       isAnswerTypesLoading,
-      isRolesLoading,
+      isRolesLoading
     } = this.props;
     return (
       <Modal>
@@ -301,7 +301,7 @@ const mapStateToProps = (state: Map) => {
     isQuestionSectionLoading,
     isAnswerTypesLoading,
     isRolesLoading,
-    proposalDetail,
+    proposalDetail
   };
 };
 
@@ -311,6 +311,6 @@ export default compose(
     getQuestionSectionF: getQuestionSection,
     getAnswerTypesDataF: getAnswerTypesInfo,
     getRolesInfoF: getRolesInfo,
-    setProposalQuestionF: setProposalQuestion,
+    setProposalQuestionF: setProposalQuestion
   })
 )(MatomoHOC(AddQuestionModal));

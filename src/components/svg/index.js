@@ -54,5 +54,5 @@ export {
   Microsoft,
   Warning,
   Dash,
-  Info,
+  Info
 };

@@ -11,20 +11,20 @@ type Props = {
   title?: string,
   text?: string,
   getSelectedItem: (selectedItem: string) => void,
-  withReset?: boolean,
+  withReset?: boolean
 };
 
 type State = {
   searchValue: string,
   filteredData: Array<any>,
-  showResetButton: boolean,
+  showResetButton: boolean
 };
 
 class Lookup extends Component<Props, State> {
   static defaultProps = {
     title: '',
     text: '',
-    withReset: false,
+    withReset: false
   };
 
   constructor(props: Object) {
@@ -33,24 +33,24 @@ class Lookup extends Component<Props, State> {
     this.state = {
       searchValue: text || '',
       filteredData: [],
-      showResetButton: false,
+      showResetButton: false
     };
   }
 
   onSearching = ({ target: { value } }: SyntheticInputEvent<EventTarget>) => {
     const { data } = this.props;
-    const filteringData = data.filter((item) =>
+    const filteringData = data.filter(item =>
       objectContains(item, value, false)
     );
 
     this.setState({
       searchValue: value,
-      filteredData: filteringData,
+      filteredData: filteringData
     });
   };
 
   setSelectedItem = ({
-    target: { textContent },
+    target: { textContent }
   }: SyntheticInputEvent<EventTarget>) => {
     const { getSelectedItem, withReset } = this.props;
 
@@ -58,7 +58,7 @@ class Lookup extends Component<Props, State> {
       {
         searchValue: textContent,
         filteredData: [],
-        showResetButton: withReset,
+        showResetButton: withReset
       },
       () => getSelectedItem(textContent)
     );
@@ -71,7 +71,7 @@ class Lookup extends Component<Props, State> {
       {
         searchValue: '',
         filteredData: [],
-        showResetButton: false,
+        showResetButton: false
       },
       () => getSelectedItem('')
     );

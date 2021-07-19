@@ -3,7 +3,7 @@ import * as React from 'react';
 
 type Props = {
   className?: string,
-  fill?: string,
+  fill?: string
 };
 
 const CloseCircle = ({ className, fill }: Props) => {

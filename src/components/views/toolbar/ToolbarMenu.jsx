@@ -14,7 +14,7 @@ import Dropdown from '../../common/atoms/inputs/Dropdown';
 import {
   getUserEmail,
   getUserName,
-  getUserRole,
+  getUserRole
 } from '../../../SessionHandler';
 
 type Props = {
@@ -23,18 +23,18 @@ type Props = {
   changeUserRole: Function,
   isRolesLoading: boolean,
   history: NavigationHistory,
-  logoutUser: Function,
+  logoutUser: Function
 };
 
 type State = {
-  roleName: string,
+  roleName: string
 };
 
 export class ToolbarMenuComponent extends PureComponent<Props, State> {
   constructor(props: Object) {
     super(props);
     this.state = {
-      roleName: '',
+      roleName: ''
     };
   }
 
@@ -107,13 +107,13 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
 
 const mapStateToProps = (state: Map) => ({
   rolesList: getRoles(state),
-  isRolesLoading: isRolesInfoLoading(state),
+  isRolesLoading: isRolesInfoLoading(state)
 });
 
 export default withRouter(
   connect(mapStateToProps, {
     getRolesInfoF: getRolesInfo,
     logoutUser: logout,
-    changeUserRole: onSetUserRole,
+    changeUserRole: onSetUserRole
   })(ToolbarMenuComponent)
 );

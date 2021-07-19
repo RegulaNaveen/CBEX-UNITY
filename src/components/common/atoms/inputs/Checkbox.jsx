@@ -7,7 +7,7 @@ type Props = {
   name: string,
   isChecked: boolean,
   children: string,
-  onChange: Function,
+  onChange: Function
 };
 
 const CheckBox = ({
@@ -16,7 +16,7 @@ const CheckBox = ({
   name,
   onChange,
   isChecked,
-  children,
+  children
 }: Props) => (
   <label htmlFor={id} className="checkbox" tabIndex={-1}>
     <input
@@ -32,7 +32,7 @@ const CheckBox = ({
 );
 
 CheckBox.defaultProps = {
-  id: undefined,
+  id: undefined
 };
 
 export default CheckBox;

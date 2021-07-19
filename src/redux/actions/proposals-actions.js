@@ -6,7 +6,7 @@ import { REDUX_TYPES } from '../../constants';
 import {
   onGetAllProposals,
   onGetByStatus,
-  onGetFilterValues,
+  onGetFilterValues
 } from '../../api/proposals';
 import { objectContains } from '../../utils/helpers';
 
@@ -16,7 +16,7 @@ const {
   ERROR_ON_GET_PROPOSALS,
   ON_PROPOSALS_LOADING,
   ON_FILTER_PROPOSALS,
-  ON_SET_PROPOSALS_FILTERS,
+  ON_SET_PROPOSALS_FILTERS
 } = REDUX_TYPES.PROPOSALS;
 
 const formatProposal = (proposal: Object): Object => {
@@ -27,7 +27,7 @@ const formatProposal = (proposal: Object): Object => {
     proposalId,
     opportunityName,
     opportunityOverview,
-    usersList,
+    usersList
   } = proposal;
 
   if (!isEmpty(opportunityOverview)) {
@@ -61,7 +61,7 @@ export const getAllProposals = (): ThunkAction<string, Object> => {
 
       if (!isEmpty(data)) {
         const { proposals } = data;
-        const formatted = proposals.map((proposal) => formatProposal(proposal));
+        const formatted = proposals.map(proposal => formatProposal(proposal));
         dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
       }
     } catch (error) {
@@ -79,7 +79,7 @@ export const getProposalsByStatus = (status: string) => {
 
       if (data) {
         const { proposals } = data;
-        const formatted = proposals.map((proposal) => formatProposal(proposal));
+        const formatted = proposals.map(proposal => formatProposal(proposal));
         dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
       }
     } catch (error) {
@@ -99,7 +99,7 @@ type FilteredData = {
   indication: string,
   bidDueDate: string,
   opportunityStatus: string,
-  teamMember: string,
+  teamMember: string
 };
 
 const dateRangeFilter = (key: string, range: Object, array: Array<Object>) => {
@@ -109,7 +109,7 @@ const dateRangeFilter = (key: string, range: Object, array: Array<Object>) => {
   from.setHours(0, 0, 0, 0);
   to.setHours(0, 0, 0, 0);
 
-  return array.filter((proposal) => {
+  return array.filter(proposal => {
     const proposalDate = moment(proposal[key]);
     return proposalDate >= from && proposalDate <= to;
   });
@@ -117,7 +117,7 @@ const dateRangeFilter = (key: string, range: Object, array: Array<Object>) => {
 
 const textFilter = (key: string, value: string, array: Array<Object>) => {
   return array.filter(
-    (proposal) =>
+    proposal =>
       !isEmpty(proposal) &&
       proposal[key].toLowerCase().includes(value.toLowerCase())
   );
@@ -125,7 +125,7 @@ const textFilter = (key: string, value: string, array: Array<Object>) => {
 
 const optionFilter = (key: string, value: string, array: Array<Object>) => {
   return array.filter(
-    (proposal) =>
+    proposal =>
       !isEmpty(proposal) && proposal[key].toLowerCase() === value.toLowerCase()
   );
 };
@@ -135,7 +135,7 @@ const userFilter = (value: string, array: Array<Object>) => {
   const end = value.indexOf(')');
   const userEmail = value.substr(start + 1, end - start - 1);
 
-  return array.filter((proposal) =>
+  return array.filter(proposal =>
     objectContains(proposal.usersList, userEmail, false)
   );
 };
@@ -158,7 +158,7 @@ export const onFilteringProposals = (
   if (isEmpty(cleanFilters)) {
     dispatch({
       type: ON_FILTER_PROPOSALS,
-      payload: { filteredProposals: proposals, isFiltering },
+      payload: { filteredProposals: proposals, isFiltering }
     });
   } else {
     let filteredProposals = [];
@@ -206,7 +206,7 @@ export const onFilteringProposals = (
 
     dispatch({
       type: ON_FILTER_PROPOSALS,
-      payload: { filteredProposals, isFiltering },
+      payload: { filteredProposals, isFiltering }
     });
   }
 };
@@ -221,7 +221,7 @@ export const getFilteringValues = (): ThunkAction<String, Object> => async (
       const { acceptanceCriteriaValues } = data;
       dispatch({
         type: ON_SET_PROPOSALS_FILTERS,
-        payload: { proposalsFilters: acceptanceCriteriaValues },
+        payload: { proposalsFilters: acceptanceCriteriaValues }
       });
     }
   } catch (error) {

@@ -10,7 +10,7 @@ import { PROPOSAL } from '../../routes';
 
 type Props = {
   data: Array<Object>,
-  hideStatus?: boolean,
+  hideStatus?: boolean
 };
 
 const TableView = ({ data, hideStatus }: Props) => {
@@ -18,7 +18,7 @@ const TableView = ({ data, hideStatus }: Props) => {
     'proposalId',
     'opportunityName',
     'therapeuticArea',
-    'usersList',
+    'usersList'
   ];
   const DATE_COLUMN = 'bid due date';
   const LINK_COLUMN = 'opportunity number';
@@ -33,7 +33,7 @@ const TableView = ({ data, hideStatus }: Props) => {
       className="headers"
       style={{ gridTemplateColumns: `repeat(${columnsLength}, 1fr)` }}
     >
-      {columnsNames.map((column) => {
+      {columnsNames.map(column => {
         const skip = SKIP_COLUMNS;
         if (hideStatus) skip.push(STATUS_COLUMN);
         return !skip.includes(column) && <h3 key={uuidv4()}>{column}</h3>;
@@ -47,8 +47,8 @@ const TableView = ({ data, hideStatus }: Props) => {
       className="row"
       style={{ gridTemplateColumns: `repeat(${columnsLength}, 1fr)` }}
     >
-      {valuesIn(rowContent).map((cellContent) => {
-        const skipValues = SKIP_COLUMNS.map((column) => rowContent[column]);
+      {valuesIn(rowContent).map(cellContent => {
+        const skipValues = SKIP_COLUMNS.map(column => rowContent[column]);
         if (hideStatus) skipValues.push(rowContent[STATUS_COLUMN]);
 
         return (
@@ -62,7 +62,7 @@ const TableView = ({ data, hideStatus }: Props) => {
                 <p
                   className={classNames({
                     'no-data-placeholder':
-                      objectToString(cellContent) === 'No data',
+                      objectToString(cellContent) === 'No data'
                   })}
                 >
                   {cellContent === rowContent[DATE_COLUMN]
@@ -79,7 +79,7 @@ const TableView = ({ data, hideStatus }: Props) => {
 
   const renderTableContent = (_data: Array<Object>) => (
     <div key={uuidv4()} className="table-grid">
-      {_data.map((rowContent) => renderRow(rowContent))}
+      {_data.map(rowContent => renderRow(rowContent))}
     </div>
   );
 

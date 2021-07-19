@@ -14,7 +14,7 @@ type Props = {
   phase: string,
   therapeuticArea: string,
   verbatimIndication: string,
-  proposalId: string,
+  proposalId: string
 };
 
 const ProposalCard = ({
@@ -27,10 +27,10 @@ const ProposalCard = ({
   phase,
   therapeuticArea,
   verbatimIndication,
-  proposalId,
+  proposalId
 }: Props) => {
   function setProposalTypeView({
-    currentTarget,
+    currentTarget
   }: SyntheticEvent<HTMLButtonElement>) {
     const { id } = currentTarget;
     localStorage.setItem('proposalTypeView', id);

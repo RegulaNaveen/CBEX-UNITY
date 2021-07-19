@@ -10,17 +10,17 @@ const {
   CLIENT_ID,
   ROLE_ENDPOINT,
   AUTH_API_URL,
-  VALIDATE_TOKEN,
+  VALIDATE_TOKEN
 } = API.AUTH;
 
 type Headers = {
   'Content-Type': string,
-  Authorization?: string,
+  Authorization?: string
 };
 
 export const onLoginRequest = (code: string): Promise<Object> => {
   const headers: Headers = {
-    'Content-Type': 'application/x-www-form-urlencoded',
+    'Content-Type': 'application/x-www-form-urlencoded'
   };
 
   if (process.env.API_ENV === 'DEV')
@@ -30,7 +30,7 @@ export const onLoginRequest = (code: string): Promise<Object> => {
     grant_type: 'authorization_code',
     client_id: CLIENT_ID,
     code,
-    redirect_uri: REDIRECTION_URL,
+    redirect_uri: REDIRECTION_URL
   };
 
   return axios.post(API_ENDPOINT, qs.stringify(data), { headers });

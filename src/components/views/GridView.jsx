@@ -7,7 +7,7 @@ import ProposalCard from './ProposalCard';
 import { parseMomentDate, remainingDays } from '../../utils/DateUtils';
 
 type Props = {
-  data: Array<Object>,
+  data: Array<Object>
 };
 
 const formatProposal = (proposal: Object) => {
@@ -25,7 +25,7 @@ const formatProposal = (proposal: Object) => {
     phase: proposal.phase || placeholder,
     therapeuticArea: proposal.therapeuticArea || placeholder,
     verbatimIndication: proposal['verbatim indication'] || placeholder,
-    proposalId: proposal.proposalId || placeholder,
+    proposalId: proposal.proposalId || placeholder
   };
 
   return formatted;
@@ -46,7 +46,7 @@ class GridView extends Component<Props> {
       <div
         className={classNames('grid-view', { 'is-centered': data.length > 1 })}
       >
-        {data.map((proposal) => {
+        {data.map(proposal => {
           const formatted = formatProposal(proposal);
 
           return (

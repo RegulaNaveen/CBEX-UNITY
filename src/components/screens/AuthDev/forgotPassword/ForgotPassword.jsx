@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import {
   getForgotPasswordData,
   isForgotPasswordLoading,
-  getForgotPasswordError,
+  getForgotPasswordError
 } from '../../../../redux/selectors';
 import { sendForgotPassword } from '../../../../redux/actions/auth-actions';
 import isEmailValid from '../../../../utils/ValidationUtils';
@@ -20,13 +20,13 @@ type Props = {
   isLoading: Boolean,
   forgotPasswordSuccess: Map,
   forgotPasswordError: string,
-  doForgotPassword: Function,
+  doForgotPassword: Function
 };
 
 type State = {
   email: string,
   error: string,
-  isChangePassword: boolean,
+  isChangePassword: boolean
 };
 
 class ForgotPassword extends Component<Props, State> {
@@ -36,7 +36,7 @@ class ForgotPassword extends Component<Props, State> {
     this.state = {
       email: '',
       error: '',
-      isChangePassword: false,
+      isChangePassword: false
     };
   }
 
@@ -114,7 +114,7 @@ class ForgotPassword extends Component<Props, State> {
 
         <p
           className={classNames('login-form-error', {
-            'is-displayed': error || forgotPasswordError,
+            'is-displayed': error || forgotPasswordError
           })}
         >
           {error || forgotPasswordError}
@@ -139,9 +139,9 @@ class ForgotPassword extends Component<Props, State> {
 const mapStateToProps = (state: Map) => ({
   isLoading: isForgotPasswordLoading(state),
   forgotPasswordSuccess: getForgotPasswordData(state),
-  forgotPasswordError: getForgotPasswordError(state),
+  forgotPasswordError: getForgotPasswordError(state)
 });
 
 export default connect(mapStateToProps, {
-  doForgotPassword: sendForgotPassword,
+  doForgotPassword: sendForgotPassword
 })(ForgotPassword);

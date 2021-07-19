@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import chevronRight from '../../../img/chevron-right.svg';
 import {
   handleSelectedSection,
-  onHandleOpenClose,
+  onHandleOpenClose
 } from '../../redux/actions/sidebar-actions';
 import { getIsOpen, getProposalDetails } from '../../redux/selectors';
 import MatomoHOC from '../HOC/MatomoHOC';
@@ -19,11 +19,11 @@ type Props = {
   eventCategories: any,
   userActions: any,
   trackEvent: any,
-  proposalDetail: any,
+  proposalDetail: any
 };
 
 type State = {
-  selectedSection: string,
+  selectedSection: string
 };
 
 class Sidebar extends Component<Props, State> {
@@ -31,7 +31,7 @@ class Sidebar extends Component<Props, State> {
     super(props);
 
     this.state = {
-      selectedSection: '',
+      selectedSection: ''
     };
   }
 
@@ -61,12 +61,15 @@ class Sidebar extends Component<Props, State> {
     event.stopPropagation();
 
     const {
-      target: { textContent, id },
+      target: { textContent, id }
     } = event;
 
     const { setSelectedSection, handleOpenClose } = this.props;
 
-    const itemToScroll = textContent.toLocaleLowerCase().split(' ').join('-');
+    const itemToScroll = textContent
+      .toLocaleLowerCase()
+      .split(' ')
+      .join('-');
 
     const item: ?HTMLElement = document.getElementById(itemToScroll);
 
@@ -79,12 +82,12 @@ class Sidebar extends Component<Props, State> {
     this.trackMatomoEventScroll(itemToScroll);
   };
 
-  trackMatomoEventScroll = (action) => {
+  trackMatomoEventScroll = action => {
     const {
       userActions,
       eventCategories,
       proposalDetail,
-      trackEvent,
+      trackEvent
     } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
@@ -92,19 +95,19 @@ class Sidebar extends Component<Props, State> {
       customDimensions: [
         {
           id: 1,
-          value: JSON.stringify(proposalDetail),
-        },
-      ],
+          value: JSON.stringify(proposalDetail)
+        }
+      ]
     });
   };
 
-  trackMatomoEventSidebarToggle = (action) => {
+  trackMatomoEventSidebarToggle = action => {
     const openOrclose = action ? 'Open' : 'Close';
     const {
       userActions,
       eventCategories,
       proposalDetail,
-      trackEvent,
+      trackEvent
     } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
@@ -112,9 +115,9 @@ class Sidebar extends Component<Props, State> {
       customDimensions: [
         {
           id: 1,
-          value: JSON.stringify(proposalDetail),
-        },
-      ],
+          value: JSON.stringify(proposalDetail)
+        }
+      ]
     });
   };
 
@@ -135,12 +138,12 @@ class Sidebar extends Component<Props, State> {
           <div className="sidebar-content-list">
             <h1>Index</h1>
 
-            {sections.valueSeq().map((section) => {
+            {sections.valueSeq().map(section => {
               const sectionName = section.get('sectionName');
               const questions = section.get('questions');
               const someQuestionsAreVisible = questions
                 .valueSeq()
-                .map((question) => question.get('visible'))
+                .map(question => question.get('visible'))
                 .includes(true);
 
               if (someQuestionsAreVisible)
@@ -149,7 +152,7 @@ class Sidebar extends Component<Props, State> {
                     key={sectionName}
                     id={sectionName}
                     className={classNames({
-                      'is-selected': selectedSection === sectionName,
+                      'is-selected': selectedSection === sectionName
                     })}
                     role="presentation"
                     onClick={this.scrollToSelectedElement}
@@ -169,10 +172,10 @@ class Sidebar extends Component<Props, State> {
 
 const mapStateToProps = (state: Object) => ({
   isOpen: getIsOpen(state),
-  proposalDetail: getProposalDetails(state),
+  proposalDetail: getProposalDetails(state)
 });
 
 export default connect(mapStateToProps, {
   setSelectedSection: handleSelectedSection,
-  handleOpenClose: onHandleOpenClose,
+  handleOpenClose: onHandleOpenClose
 })(MatomoHOC(Sidebar));

@@ -8,12 +8,12 @@ import { ArrowLeft, ArrowRight, More } from '../../svg';
 type Props = {
   maxRows: number,
   totalItems: number,
-  getCurrentPage: (selectedPage: number) => void,
+  getCurrentPage: (selectedPage: number) => void
 };
 
 type State = {
   currentPage: number,
-  currentChunk: number,
+  currentChunk: number
 };
 
 class Pagination extends PureComponent<Props, State> {
@@ -24,7 +24,7 @@ class Pagination extends PureComponent<Props, State> {
 
     this.state = {
       currentPage: 1,
-      currentChunk: 0,
+      currentChunk: 0
     };
   }
 
@@ -132,7 +132,7 @@ class Pagination extends PureComponent<Props, State> {
             type="button"
             style={{ gridColumn: `${index + 3}/${index + 4}` }}
             className={classnames('pagination__page', {
-              selected: page === currentPage,
+              selected: page === currentPage
             })}
             onClick={this.setCurrentPage}
           >

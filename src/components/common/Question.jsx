@@ -15,7 +15,7 @@ import { getUserData, getProposalDetails } from '../../redux/selectors';
 import MatomoHOC from '../HOC/MatomoHOC';
 
 type State = {
-  selectedDay: string,
+  selectedDay: string
 };
 
 type Props = {
@@ -30,7 +30,7 @@ type Props = {
   setQuestionToDisplayHistory: (answer: string) => void,
   eventCategories: any,
   trackEvent: any,
-  proposalDetail: any,
+  proposalDetail: any
 };
 
 export class TaskRow extends Component<Props, State> {
@@ -38,7 +38,7 @@ export class TaskRow extends Component<Props, State> {
     super(props);
 
     this.state = {
-      selectedDay: '',
+      selectedDay: ''
     };
   }
 
@@ -91,14 +91,14 @@ export class TaskRow extends Component<Props, State> {
     setQuestionToDisplayHistory(questionId);
   };
 
-  trackMatomoEventSubmitAnswer = (data) => {
+  trackMatomoEventSubmitAnswer = data => {
     const {
       eventCategories,
       proposalDetail,
       questionText,
       sectionName,
       trackEvent,
-      questionId,
+      questionId
     } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
@@ -112,10 +112,10 @@ export class TaskRow extends Component<Props, State> {
             sectionName,
             questionText,
             questionId,
-            proposalDetail,
-          }),
-        },
-      ],
+            proposalDetail
+          })
+        }
+      ]
     });
   };
 
@@ -246,9 +246,9 @@ export class TaskRow extends Component<Props, State> {
 
 const mapStateToProps = (state: Object) => ({
   userData: getUserData(state),
-  proposalDetail: getProposalDetails(state),
+  proposalDetail: getProposalDetails(state)
 });
 
 export default connect(mapStateToProps, {
-  setProposalAnswer: setProposalAnswerData,
+  setProposalAnswer: setProposalAnswerData
 })(MatomoHOC(TaskRow));

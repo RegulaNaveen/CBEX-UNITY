@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import {
   setProposalTypeView,
-  onFilteringProposals,
+  onFilteringProposals
 } from '../../redux/actions/proposals-actions';
 import { SecondaryButton } from '../common/atoms/Buttons';
 import TabItem from '../common/atoms/TabItem';
@@ -19,13 +19,13 @@ type Props = {
   filterProposals: Function,
   eventCategories: any,
   userActions: any,
-  trackEvent: any,
+  trackEvent: any
 };
 
 type State = {
   selected: number,
   showFilters: boolean,
-  filters: Object,
+  filters: Object
 };
 
 class Tabbar extends Component<Props, State> {
@@ -46,8 +46,8 @@ class Tabbar extends Component<Props, State> {
         indication: '',
         bidDueDate: '',
         opportunityStatus: '',
-        teamMember: '',
-      },
+        teamMember: ''
+      }
     };
   }
 
@@ -102,21 +102,21 @@ class Tabbar extends Component<Props, State> {
     this.trackMatomoEventFilterToggle(!showFilters);
   };
 
-  trackMatomoEventTabs = (index) => {
+  trackMatomoEventTabs = index => {
     const tabs = ['My Docket', 'Recent', 'All'];
     const { userActions, eventCategories, trackEvent } = this.props;
     trackEvent({
       category: eventCategories.dp,
-      action: `Tab: ${userActions.click} On ${tabs[index]} Tab`,
+      action: `Tab: ${userActions.click} On ${tabs[index]} Tab`
     });
   };
 
-  trackMatomoEventFilterToggle = (action) => {
+  trackMatomoEventFilterToggle = action => {
     const openOrclose = action ? 'Open' : 'Close';
     const { userActions, eventCategories, trackEvent } = this.props;
     trackEvent({
       category: eventCategories.dp,
-      action: `Filters: ${userActions.click} to ${openOrclose} Filters`,
+      action: `Filters: ${userActions.click} to ${openOrclose} Filters`
     });
   };
 
@@ -167,5 +167,5 @@ class Tabbar extends Component<Props, State> {
 
 export default connect(null, {
   setProposalView: setProposalTypeView,
-  filterProposals: onFilteringProposals,
+  filterProposals: onFilteringProposals
 })(MatomoHOC(Tabbar));
