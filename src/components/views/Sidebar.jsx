@@ -24,7 +24,10 @@ type Props = {
   handleOpenClose: (isOpen: boolean) => void,
   isOpen: boolean,
   id: string,
-  change: Function
+  change: Function,
+  currentTab: mixed,
+  setTabFromQuestionNotes: Function,
+  selectedtitle: string
 };
 
 type State = {
@@ -49,7 +52,7 @@ class Sidebar extends Component<Props, State> {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.currentTab != this.state.activeTabIndex) {
+    if (prevProps.currentTab !== this.state.activeTabIndex) {
       this.setState({ activeTabIndex: prevProps.currentTab });
     }
   }
