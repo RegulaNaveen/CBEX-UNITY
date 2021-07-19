@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Typography from 'apollo-react/components/Typography';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
-import Card from 'apollo-react/components/Card';
 import Note from './Note';
 
 function List({ notes, onShowAll, onEdit, selectedtitle }) {
@@ -27,7 +26,7 @@ function List({ notes, onShowAll, onEdit, selectedtitle }) {
       {notes.map((note, idx) => {
         if (
           selectedtitle &&
-          note.getIn(['section', 'sectionName'], '') == selectedtitle
+          note.getIn(['section', 'sectionName'], '') === selectedtitle
         ) {
           return (
             <div
@@ -77,7 +76,8 @@ function List({ notes, onShowAll, onEdit, selectedtitle }) {
 List.propTypes = {
   notes: PropTypes.object.isRequired,
   onShowAll: PropTypes.func.isRequired,
-  onEdit: PropTypes.func.isRequired
+  onEdit: PropTypes.func.isRequired,
+  selectedtitle: PropTypes.string.isRequired
 };
 
 export default List;

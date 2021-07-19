@@ -10,7 +10,8 @@ type Props = {
   title?: string,
   onClick: Function,
   value?: string,
-  withReset?: boolean
+  withReset?: boolean,
+  selectedValue: mixed
 };
 
 type State = {
@@ -42,6 +43,7 @@ class Dropdown extends PureComponent<Props, State> {
 
   componentDidMount() {
     window.addEventListener('click', this.closeOnOutsideClick);
+    // eslint-disable-next-line react/destructuring-assignment
     if (this.props && this.props.selectedValue) {
       const { onClick } = this.props;
       onClick(this.props.selectedValue);

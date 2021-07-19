@@ -100,7 +100,8 @@ Note.propTypes = {
   content: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
   onShowAll: PropTypes.func.isRequired,
-  onEdit: PropTypes.func.isRequired
+  onEdit: PropTypes.func.isRequired,
+  textstyle: PropTypes.object.isRequired
 };
 
 export default Note;

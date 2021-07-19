@@ -1,4 +1,5 @@
 // @flow
+// eslint-disable-next-line react/destructuring-assignment
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import type { Match } from 'react-router-dom';
@@ -192,8 +193,11 @@ class Questions extends Component<Props, State> {
         <Sidebar
           sections={allSections}
           id={proposalID}
+          // eslint-disable-next-line react/destructuring-assignment
           currentTab={this.state.currentTab}
+          // eslint-disable-next-line react/destructuring-assignment
           selectedtitle={this.state.selectedtitle}
+          // eslint-disable-next-line react/destructuring-assignment
           heighlightcard={this.state.heighlightcard}
           setTabFromQuestionNotes={(val, title, flag) =>
             this.setTabFromQuestionNotes(val, title, flag)
@@ -250,6 +254,7 @@ class Questions extends Component<Props, State> {
         {showModal && (
           <AddQuestionModalComponent
             onClose={this.onClose}
+            // eslint-disable-next-line react/destructuring-assignment
             currentsection={this.state.currentsection || ''}
           />
         )}

@@ -52,7 +52,9 @@ class Sidebar extends Component<Props, State> {
   }
 
   componentDidUpdate(prevProps) {
+    // eslint-disable-next-line react/destructuring-assignment
     if (prevProps.currentTab !== this.state.activeTabIndex) {
+      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ activeTabIndex: prevProps.currentTab });
     }
   }
