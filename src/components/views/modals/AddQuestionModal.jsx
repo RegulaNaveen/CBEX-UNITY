@@ -146,7 +146,6 @@ export class AddQuestionModal extends PureComponent<Props, State> {
           value: JSON.stringify({ ...data, ...proposalDetail }),
         },
       ],
-      href: 'https://dev-unity.iqvia.app',
     });
   };
 

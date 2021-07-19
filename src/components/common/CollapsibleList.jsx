@@ -83,7 +83,6 @@ class CollapsibleList extends Component<Props, State> {
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Question Section: ${userActions.click} To ${openOrclose} ${title}`,
-      href: 'https://dev-unity.iqvia.app',
       customDimensions: [
         {
           id: 1,

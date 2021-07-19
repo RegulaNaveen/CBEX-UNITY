@@ -89,7 +89,6 @@ class Sidebar extends Component<Props, State> {
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Blade: ${userActions.scroll} From Blade To ${action} Section`,
-      href: 'https://dev-unity.iqvia.app',
       customDimensions: [
         {
           id: 1,
@@ -110,7 +109,6 @@ class Sidebar extends Component<Props, State> {
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Blade: ${userActions.click} On Blade To ${openOrclose} Sidebar`,
-      href: 'https://dev-unity.iqvia.app',
       customDimensions: [
         {
           id: 1,

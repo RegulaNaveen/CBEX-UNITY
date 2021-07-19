@@ -127,7 +127,6 @@ class Questions extends Component<Props, State> {
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Round Buttons: ${userActions.click} On Refresh Button`,
-      href: 'https://dev-unity.iqvia.app',
       customDimensions: [
         {
           id: 1,
@@ -148,7 +147,6 @@ class Questions extends Component<Props, State> {
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Round Buttons: ${userActions.click} To ${openOrclose} Add New Question Modal`,
-      href: 'https://dev-unity.iqvia.app',
       customDimensions: [
         {
           id: 1,
@@ -168,7 +166,6 @@ class Questions extends Component<Props, State> {
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `CheckBoxes: ${userActions.click} On ${item} Checkbox`,
-      href: 'https://dev-unity.iqvia.app',
       customDimensions: [
         {
           id: 1,

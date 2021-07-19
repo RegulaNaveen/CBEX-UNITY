@@ -32,7 +32,6 @@ class SwitchView extends Component<Props> {
     trackEvent({
       category: eventCategories.dp,
       action: `View: ${userActions.click} On ${view} View`,
-      href: 'https://dev-unity.iqvia.app',
     });
   };
 

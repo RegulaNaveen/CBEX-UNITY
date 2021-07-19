@@ -92,7 +92,6 @@ export class Proposal extends Component<Props, State> {
     // Track Page view
     trackPageView({
       documentTitle: `${eventCategories.plainPd}`,
-      href: 'https://dev-unity.iqvia.app',
     });
   }
 
@@ -118,7 +117,6 @@ export class Proposal extends Component<Props, State> {
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Tab: ${userActions.click} On ${tab}`,
-      href: 'https://dev-unity.iqvia.app',
       customDimensions: [
         {
           id: 1,

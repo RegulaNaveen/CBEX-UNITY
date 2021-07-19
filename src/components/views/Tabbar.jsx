@@ -108,7 +108,6 @@ class Tabbar extends Component<Props, State> {
     trackEvent({
       category: eventCategories.dp,
       action: `Tab: ${userActions.click} On ${tabs[index]} Tab`,
-      href: 'https://dev-unity.iqvia.app',
     });
   };
 
@@ -118,7 +117,6 @@ class Tabbar extends Component<Props, State> {
     trackEvent({
       category: eventCategories.dp,
       action: `Filters: ${userActions.click} to ${openOrclose} Filters`,
-      href: 'https://dev-unity.iqvia.app',
     });
   };
 

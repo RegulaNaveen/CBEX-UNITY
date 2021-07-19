@@ -116,7 +116,6 @@ export class TaskRow extends Component<Props, State> {
           }),
         },
       ],
-      href: 'https://dev-unity.iqvia.app',
     });
   };
 
