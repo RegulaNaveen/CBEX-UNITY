@@ -43,6 +43,10 @@ export const getAccessToken = () => {
   return localStorage.getItem('accessToken');
 };
 
+export const getAccessTokenFromLocalStorage = () => {
+  return localStorage.getItem('access_token');
+};
+
 export const getJwt = () => {
   return localStorage.getItem('jwt');
 };

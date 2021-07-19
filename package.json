@@ -23,7 +23,7 @@
   "dependencies": {
     "@datapunt/matomo-tracker-react": "^0.3.1",
     "and": "^0.0.3",
-    "apollo-react": "https://imshealth.myget.org/F/apollo/auth/205e1b20-2c34-4d3e-8fac-72f572e55f71/npm/apollo-react/-/3.19.2",
+    "apollo-react": "https://imshealth.myget.org/F/apollo/auth/205e1b20-2c34-4d3e-8fac-72f572e55f71/npm/apollo-react-lite/-/3.19.2",
     "apollo-react-icons": "https://imshealth.myget.org/F/apollo/auth/205e1b20-2c34-4d3e-8fac-72f572e55f71/npm/apollo-react-icons/-/1.0.0-beta.7",
     "axios": "^0.19.2",
     "classnames": "^2.2.6",

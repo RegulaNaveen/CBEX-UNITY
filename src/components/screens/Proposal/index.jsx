@@ -23,6 +23,7 @@ import Toolbar from '../../views/toolbar';
 import TabButtons from '../../common/TabButtons';
 import Documents from './Documents';
 import Validate from './Validate';
+import MatomoHOC from '../../HOC/MatomoHOC';
 
 type State = {
   selectedView: string
@@ -37,10 +38,17 @@ type Props = {
   notifications: number,
   getRefreshAuthData: Function,
   getProposalInfo: Function,
-  getValidatedData: (proposalId: string) => void
+  getValidatedData: (proposalId: string) => void,
+  eventCategories: any,
+  userActions: any,
+  trackEvent: any,
+  trackPageView: any,
+  proposalDetail: any
 };
 
 export class Proposal extends Component<Props, State> {
+  toRef;
+
   constructor(props: Object) {
     super(props);
 
@@ -56,6 +64,8 @@ export class Proposal extends Component<Props, State> {
       authData,
       getRefreshAuthData,
       getValidatedData,
+      trackPageView,
+      eventCategories,
       match: { params }
     } = this.props;
 
@@ -78,6 +88,11 @@ export class Proposal extends Component<Props, State> {
         enableValidateTab: true
       });
     }
+
+    // Track Page view
+    trackPageView({
+      documentTitle: `${eventCategories.plainPd}`
+    });
   }
 
   componentWillUnmount() {
@@ -101,8 +116,28 @@ export class Proposal extends Component<Props, State> {
     }
   }
 
+  trackMatomoEventTabs = tab => {
+    const {
+      eventCategories,
+      userActions,
+      proposalDetail,
+      trackEvent
+    } = this.props;
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action: `Tab: ${userActions.click} On ${tab}`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify(proposalDetail)
+        }
+      ]
+    });
+  };
+
   onChangeProposalView = (selectedView: string) => {
     this.setState({ selectedView });
+    this.trackMatomoEventTabs(selectedView);
   };
 
   renderContent = () => {
@@ -178,7 +213,8 @@ const mapStateToProps = (state: Map) => ({
   details: getProposalDetails(state),
   isLoading: isProposalLoading(state),
   isSidebarOpen: getIsOpen(state),
-  notifications: getPendingValidatedItems(state)
+  notifications: getPendingValidatedItems(state),
+  proposalDetail: getProposalDetails(state)
 });
 
 export default compose(
@@ -188,4 +224,4 @@ export default compose(
     getProposalInfo: getProposal,
     getValidatedData: onGetValidatedProposalDetails
   })
-)(Proposal);
+)(MatomoHOC(Proposal));

@@ -22,7 +22,8 @@ import {
   isSetQuestionLoading,
   isQuestionSectionInfoLoading,
   isAnswerTypesInfoLoading,
-  isRolesInfoLoading
+  isRolesInfoLoading,
+  getProposalDetails
 } from '../../../redux/selectors';
 import {
   getQuestionSection,
@@ -30,6 +31,7 @@ import {
   getRolesInfo,
   setProposalQuestion
 } from '../../../redux/actions/proposal-actions';
+import MatomoHOC from '../../HOC/MatomoHOC';
 
 type Props = {
   match: Match,
@@ -45,7 +47,10 @@ type Props = {
   isLoading: boolean,
   isQuestionSectionLoading: boolean,
   isAnswerTypesLoading: boolean,
-  isRolesLoading: boolean
+  isRolesLoading: boolean,
+  eventCategories: any,
+  trackEvent: any,
+  proposalDetail: any
 };
 
 type State = {
@@ -126,7 +131,22 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       };
 
       setProposalQuestionF(proposalId, questionData);
+      this.trackMatomoEventCreateQ(questionData);
     }
+  };
+
+  trackMatomoEventCreateQ = data => {
+    const { eventCategories, proposalDetail, trackEvent } = this.props;
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action: `Question Added: ${data.questionText} (${data.section.sectionName})`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify({ ...data, ...proposalDetail })
+        }
+      ]
+    });
   };
 
   renderContent = (
@@ -270,6 +290,7 @@ const mapStateToProps = (state: Map) => {
   const isQuestionSectionLoading = isQuestionSectionInfoLoading(state);
   const isAnswerTypesLoading = isAnswerTypesInfoLoading(state);
   const isRolesLoading = isRolesInfoLoading(state);
+  const proposalDetail = getProposalDetails(state);
 
   return {
     questionSectionList,
@@ -279,7 +300,8 @@ const mapStateToProps = (state: Map) => {
     isLoading,
     isQuestionSectionLoading,
     isAnswerTypesLoading,
-    isRolesLoading
+    isRolesLoading,
+    proposalDetail
   };
 };
 
@@ -291,4 +313,4 @@ export default compose(
     getRolesInfoF: getRolesInfo,
     setProposalQuestionF: setProposalQuestion
   })
-)(AddQuestionModal);
+)(MatomoHOC(AddQuestionModal));
