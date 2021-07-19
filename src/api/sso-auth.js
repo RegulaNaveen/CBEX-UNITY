@@ -23,7 +23,7 @@ export const onLoginRequest = (code: string): Promise<Object> => {
     'Content-Type': 'application/x-www-form-urlencoded'
   };
 
-  if (process.env.API_ENV === 'DEV')
+  if (process.env.API_ENV === 'DEV' || process.env.API_ENV === 'SDEV')
     headers.Authorization = `Basic ${AUTH_KEY}`;
 
   const data = {
