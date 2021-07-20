@@ -21,7 +21,15 @@ type Props = {
   title: string,
   selectedSection: string,
   isCheckedAll: boolean,
-  setQuestionToDisplayHistory: (answer: string) => void
+  setQuestionToDisplayHistory: (answer: string) => void,
+  handleOpenClose: () => void,
+  notes: Map,
+  setTabFromQuestionNotes: (
+    tabIndex: number,
+    title: String,
+    isHighlighted: boolean
+  ) => void,
+  onAddQuestion: (title: string) => void
 };
 
 class CollapsibleList extends Component<Props, State> {
@@ -108,11 +116,13 @@ class CollapsibleList extends Component<Props, State> {
 
   render() {
     const { isCollapsed } = this.state;
+    const { notes, onAddQuestion } = this.props;
     const {
       questions,
       title,
       setQuestionToDisplayHistory,
-      handleOpenClose
+      handleOpenClose,
+      setTabFromQuestionNotes
     } = this.props;
     return (
       <div className="task-wrapper" ref={this.taskRef} id={this.createId()}>
@@ -186,10 +196,7 @@ class CollapsibleList extends Component<Props, State> {
               );
             })}
             <div className="task-table-row">
-              <Link
-                onClick={() => this.props.onAddQuestion(title)}
-                size="small"
-              >
+              <Link onClick={() => onAddQuestion(title)} size="small">
                 <Plus fontSize="extraSmall" />
                 <span style={{ verticalAlign: 'top' }}> Add New Question</span>
               </Link>

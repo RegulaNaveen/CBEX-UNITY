@@ -42,12 +42,12 @@ class Dropdown extends PureComponent<Props, State> {
   }
 
   componentDidMount() {
+    const { selectedValue } = this.props;
     window.addEventListener('click', this.closeOnOutsideClick);
-    // eslint-disable-next-line react/destructuring-assignment
-    if (this.props && this.props.selectedValue) {
+    if (selectedValue) {
       const { onClick } = this.props;
-      onClick(this.props.selectedValue);
-      this.setState({ selectedValue: this.props.selectedValue });
+      onClick(selectedValue);
+      this.setState({ selectedValue });
     }
   }
 
