@@ -2,10 +2,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import type { Map } from 'immutable';
-import { getSelectedSection } from '../../redux/selectors';
+import Link from 'apollo-react/components/Link';
+import Plus from 'apollo-react-icons/Plus';
+import FolderOpen from 'apollo-react-icons/FolderOpen';
+import { getSelectedSection, selectNotes } from '../../redux/selectors';
 import chevronRight from '../../../img/chevron-right.svg';
 import chevronDown from '../../../img/chevron-down.svg';
 import Question from './Question';
+
+import { onHandleOpenClose } from '../../redux/actions/sidebar-actions';
 
 type State = {
   isCollapsed: boolean
@@ -16,7 +21,15 @@ type Props = {
   title: string,
   selectedSection: string,
   isCheckedAll: boolean,
-  setQuestionToDisplayHistory: (answer: string) => void
+  setQuestionToDisplayHistory: (answer: string) => void,
+  handleOpenClose: () => void,
+  notes: Map,
+  setTabFromQuestionNotes: (
+    tabIndex: number,
+    title: String,
+    isHighlighted: boolean
+  ) => void,
+  onAddQuestion: (title: string) => void
 };
 
 class CollapsibleList extends Component<Props, State> {
@@ -70,8 +83,14 @@ class CollapsibleList extends Component<Props, State> {
 
   render() {
     const { isCollapsed } = this.state;
-    const { questions, title, setQuestionToDisplayHistory } = this.props;
-
+    const { notes, onAddQuestion } = this.props;
+    const {
+      questions,
+      title,
+      setQuestionToDisplayHistory,
+      handleOpenClose,
+      setTabFromQuestionNotes
+    } = this.props;
     return (
       <div className="task-wrapper" ref={this.taskRef} id={this.createId()}>
         <button
@@ -111,7 +130,33 @@ class CollapsibleList extends Component<Props, State> {
               tabIndex={-1}
             >
               <div className="task-title">
-                <p>{title}</p>
+                <p>
+                  {title}
+                  {notes && notes.size && notes.size > 0 ? (
+                    <span
+                      style={{
+                        paddingLeft: 10,
+                        fontSize: 12,
+                        verticalAlign: 'top'
+                      }}
+                    >
+                      <Link
+                        onClick={e => {
+                          e.stopPropagation();
+                          handleOpenClose(true);
+                          setTabFromQuestionNotes(1, title, true);
+                        }}
+                        size="small"
+                      >
+                        <FolderOpen fontSize="extraSmall" />
+                        <span style={{ verticalAlign: 'top' }}>
+                          {' '}
+                          Notes ({notes.size})
+                        </span>
+                      </Link>
+                    </span>
+                  ) : null}
+                </p>
               </div>
               <div className="task-subtitle task-subtitle-answer">
                 <p>Answer</p>
@@ -140,6 +185,12 @@ class CollapsibleList extends Component<Props, State> {
                 )
               );
             })}
+            <div className="task-table-row">
+              <Link onClick={() => onAddQuestion(title)} size="small">
+                <Plus fontSize="extraSmall" />
+                <span style={{ verticalAlign: 'top' }}> Add New Question</span>
+              </Link>
+            </div>
           </div>
         )}
       </div>
@@ -149,8 +200,10 @@ class CollapsibleList extends Component<Props, State> {
 
 const mapStateToProps = (state: Map) => {
   const selectedSection = getSelectedSection(state);
-
-  return { selectedSection };
+  const notes = selectNotes(state);
+  return { selectedSection, notes };
 };
 
-export default connect(mapStateToProps)(CollapsibleList);
+export default connect(mapStateToProps, { handleOpenClose: onHandleOpenClose })(
+  CollapsibleList
+);

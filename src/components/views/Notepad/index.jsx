@@ -6,21 +6,25 @@ import Loader from 'apollo-react/components/Loader';
 import AddNote from './AddNote';
 import ReadEditNote from './ReadEditNote';
 import List from './List';
-import { getUserName, getUserRole, getUserEmail } from '../../../SessionHandler';
+import {
+  getUserName,
+  getUserRole,
+  getUserEmail
+} from '../../../SessionHandler';
 import {
   selectNotes,
   selectIsFetchingNotes,
   selectIsAddingNote,
   selectNotepadMode
 } from '../../../redux/selectors';
-import { addNote, updateNote, changeMode } from '../../../redux/actions/notepad-actions';
+import {
+  addNote,
+  updateNote,
+  changeMode
+} from '../../../redux/actions/notepad-actions';
 import { REDUX_TYPES } from '../../../constants';
 
-const {
-  MODE_DEFAULT,
-  MODE_EDIT,
-  MODE_READ
-} = REDUX_TYPES.NOTEPAD;
+const { MODE_DEFAULT, MODE_EDIT, MODE_READ } = REDUX_TYPES.NOTEPAD;
 
 function Notepad({
   sections,
@@ -31,9 +35,9 @@ function Notepad({
   fetchingNotes,
   addingNote,
   mode,
-  change
+  change,
+  selectedtitle
 }) {
-  
   const [selectedNote, setSelectedNote] = useState(Map());
 
   function handleOnAddNote(note) {
@@ -45,7 +49,12 @@ function Notepad({
         userEmail: getUserEmail()
       });
     if (note.section.length > 0) {
-      newNote = newNote.set('section', sections.get(`${note.section}`).filter((s, skey) => ['sectionOrder', 'sectionName'].includes(skey)));
+      newNote = newNote.set(
+        'section',
+        sections
+          .get(`${note.section}`)
+          .filter((s, skey) => ['sectionOrder', 'sectionName'].includes(skey))
+      );
     }
     add(id, newNote);
   }
@@ -61,42 +70,67 @@ function Notepad({
   }
 
   function handleNoteEdit(editedNote) {
-    if (editedNote.get('section').length > 0) {
-      editedNote = editedNote.set('section', sections.get(editedNote.get('section')).filter((s, skey) => ['sectionOrder', 'sectionName'].includes(skey)));
-      editedNote = editedNote.filter((note, noteKey) => ['notesId', 'noteText', 'section', 'createdBy'].includes(noteKey)).toJS();
+    let newEditedNote = editedNote;
+    if (newEditedNote.get('section').length > 0) {
+      newEditedNote = newEditedNote.set(
+        'section',
+        sections
+          .get(newEditedNote.get('section'))
+          .filter((s, skey) => ['sectionOrder', 'sectionName'].includes(skey))
+      );
+      newEditedNote = newEditedNote
+        .filter((note, noteKey) =>
+          ['notesId', 'noteText', 'section', 'createdBy'].includes(noteKey)
+        )
+        .toJS();
     } else {
-      editedNote = editedNote.filter((note, noteKey) => ['notesId', 'noteText', 'createdBy'].includes(noteKey)).toJS();
+      newEditedNote = newEditedNote
+        .filter((note, noteKey) =>
+          ['notesId', 'noteText', 'createdBy'].includes(noteKey)
+        )
+        .toJS();
     }
-    update(id, editedNote);
+    update(id, newEditedNote);
   }
 
   if (fetchingNotes) {
     return (
-      <div className="notepad" style={{ justifyContent: 'center', alignItems: 'center' }}>
+      <div
+        className="notepad"
+        style={{ justifyContent: 'center', alignItems: 'center' }}
+      >
         <Loader isInner />
         <p className="loading-msg">Loading Notes</p>
       </div>
-    )
+    );
   }
 
   if (addingNote) {
     return (
-      <div className="notepad" style={{ justifyContent: 'center', alignItems: 'center' }}>
+      <div
+        className="notepad"
+        style={{ justifyContent: 'center', alignItems: 'center' }}
+      >
         <Loader isInner />
         <p className="loading-msg">Uploading Note</p>
       </div>
-    )
+    );
   }
 
   return (
     <div className="notepad">
-      { mode === MODE_DEFAULT && (
+      {mode === MODE_DEFAULT && (
         <>
-          <List notes={notes} onShowAll={handleShowAll} onEdit={handleEditNoteClick} />
+          <List
+            notes={notes}
+            onShowAll={handleShowAll}
+            onEdit={handleEditNoteClick}
+            selectedtitle={selectedtitle}
+          />
           <AddNote sections={sections} onAddNote={handleOnAddNote} />
         </>
       )}
-      { mode === MODE_READ && (
+      {mode === MODE_READ && (
         <>
           <ReadEditNote
             note={selectedNote}
@@ -106,7 +140,7 @@ function Notepad({
           />
         </>
       )}
-      { mode === MODE_EDIT && (
+      {mode === MODE_EDIT && (
         <>
           <ReadEditNote
             note={selectedNote}
@@ -125,7 +159,13 @@ Notepad.propTypes = {
   sections: PropTypes.object.isRequired,
   notes: PropTypes.object.isRequired,
   add: PropTypes.func.isRequired,
-  id: PropTypes.string.isRequired
+  id: PropTypes.string.isRequired,
+  update: PropTypes.func.isRequired,
+  change: PropTypes.func.isRequired,
+  fetchingNotes: PropTypes.bool.isRequired,
+  addingNote: PropTypes.bool.isRequired,
+  mode: PropTypes.string.isRequired,
+  selectedtitle: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -138,7 +178,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   add: addNote,
   update: updateNote,
-  change: changeMode 
-}
+  change: changeMode
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Notepad);

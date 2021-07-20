@@ -10,7 +10,8 @@ type Props = {
   title?: string,
   onClick: Function,
   value?: string,
-  withReset?: boolean
+  withReset?: boolean,
+  selectedValue: mixed
 };
 
 type State = {
@@ -41,7 +42,13 @@ class Dropdown extends PureComponent<Props, State> {
   }
 
   componentDidMount() {
+    const { selectedValue } = this.props;
     window.addEventListener('click', this.closeOnOutsideClick);
+    if (selectedValue) {
+      const { onClick } = this.props;
+      onClick(selectedValue);
+      this.setState({ selectedValue });
+    }
   }
 
   componentWillUnmount() {

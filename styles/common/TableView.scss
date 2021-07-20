@@ -35,6 +35,10 @@
         }
 
         a {
+          display: inline;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
           color: $neptune-primary;
           text-decoration: none;
           cursor: pointer;

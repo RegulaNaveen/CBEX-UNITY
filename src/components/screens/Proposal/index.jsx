@@ -38,7 +38,8 @@ type Props = {
   notifications: number,
   getRefreshAuthData: Function,
   getProposalInfo: Function,
-  getValidatedData: (proposalId: string) => void
+  getValidatedData: (proposalId: string) => void,
+  getNotes: (proposalId: string) => void
 };
 
 export class Proposal extends Component<Props, State> {
@@ -68,7 +69,7 @@ export class Proposal extends Component<Props, State> {
     if (!authData) getRefreshAuthData();
 
     getProposalInfo(params.id);
-    
+
     getNotes(params.id);
 
     window.addEventListener('storage', e => this.handleStorageChange(e));
@@ -91,10 +92,6 @@ export class Proposal extends Component<Props, State> {
     window.removeEventListener('storage', this.handleStorageChange);
   }
 
-  onChangeProposalView = (selectedView: string) => {
-    this.setState({ selectedView });
-  };
-
   handleStorageChange(e) {
     const {
       getValidatedData,
@@ -111,15 +108,24 @@ export class Proposal extends Component<Props, State> {
             ? 'questions'
             : selectedViewState
       });
-      if(isEnabled) {
+      if (isEnabled) {
         getValidatedData(params.id);
       }
     }
   }
 
+  onChangeProposalView = (selectedView: string) => {
+    this.setState({ selectedView });
+  };
+
   renderContent = () => {
     const { selectedView, enableValidateTab } = this.state;
-    const { isLoading, details, notifications, match: { params } } = this.props;
+    const {
+      isLoading,
+      details,
+      notifications,
+      match: { params }
+    } = this.props;
 
     const viewsMap = {
       questions: <Questions proposalID={params.id} />,

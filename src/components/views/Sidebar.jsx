@@ -21,6 +21,8 @@ import {
 } from '../../redux/actions/sidebar-actions';
 import { getIsOpen, selectNotes } from '../../redux/selectors';
 import Notepad from './Notepad';
+import { changeMode } from '../../redux/actions/notepad-actions';
+import { REDUX_TYPES } from '../../constants';
 
 
 type Props = {
@@ -29,12 +31,18 @@ type Props = {
   setSelectedSection: (selectedItem: string) => void,
   handleOpenClose: (isOpen: boolean) => void,
   isOpen: boolean,
-  id: string
+  id: string,
+  change: Function,
+  currentTab: mixed,
+  setTabFromQuestionNotes: Function,
+  selectedtitle: string
 };
 
 type State = {
   selectedSection: string
 };
+
+const { MODE_DEFAULT } = REDUX_TYPES.NOTEPAD;
 
 class Sidebar extends Component<Props, State> {
   constructor(props: Object) {
@@ -49,6 +57,14 @@ class Sidebar extends Component<Props, State> {
 
   componentDidMount() {
     window.addEventListener('click', this.handleClick);
+  }
+
+  componentDidUpdate(prevProps) {
+    // eslint-disable-next-line react/destructuring-assignment
+    if (prevProps.currentTab !== this.state.activeTabIndex) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ activeTabIndex: prevProps.currentTab });
+    }
   }
 
   componentWillUnmount() {
@@ -74,6 +90,7 @@ class Sidebar extends Component<Props, State> {
         }
       }
       const { handleOpenClose } = this.props;
+      this.setState({ activeTabIndex: 0 });
       handleOpenClose(false);
     }
   };
@@ -81,9 +98,11 @@ class Sidebar extends Component<Props, State> {
   handleItemsVisibility = (e: SyntheticEvent<EventTarget>) => {
     e.stopPropagation();
 
-    const { isOpen, handleOpenClose } = this.props;
-
+    const { isOpen, handleOpenClose, setTabFromQuestionNotes } = this.props;
+    this.setState({ activeTabIndex: 0 });
+    setTabFromQuestionNotes(0, '', true);
     handleOpenClose(!isOpen);
+    if (isOpen) this.setState({ activeTabIndex: 0 });
   };
 
   scrollToSelectedElement = (event: SyntheticInputEvent<EventTarget>) => {
@@ -107,15 +126,22 @@ class Sidebar extends Component<Props, State> {
     handleOpenClose(false);
     setSelectedSection(itemToScroll);
 
-    this.setState({ selectedSection: id });
+    this.setState({ selectedSection: id, activeTabIndex: 0 });
   };
 
   handleChangeTab = (event, activeTabIndex) => {
+    const { setTabFromQuestionNotes, selectedtitle } = this.props;
+    if (activeTabIndex === 1) {
+      const { change } = this.props;
+      // always open notepad tab in default mode
+      change(MODE_DEFAULT);
+    }
     this.setState({ activeTabIndex });
+    setTabFromQuestionNotes(activeTabIndex, selectedtitle || '', false);
   };
 
   render() {
-    const { sections, isOpen, notes, id, expandAll, AddNewQuestion, RefreshProposal } = this.props;
+    const { sections, isOpen, notes, id, selectedtitle, expandAll, AddNewQuestion, RefreshProposal } = this.props;
     const { selectedSection, activeTabIndex } = this.state;
 
     const NotepadTab = () =>
@@ -200,7 +226,13 @@ class Sidebar extends Component<Props, State> {
                 })}
               </div>
             )}
-            {activeTabIndex === 1 && <Notepad sections={sections} id={id} />}
+            {activeTabIndex === 1 && (
+              <Notepad
+                sections={sections}
+                id={id}
+                selectedtitle={selectedtitle || ''}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -215,5 +247,6 @@ const mapStateToProps = (state: Object) => ({
 
 export default connect(mapStateToProps, {
   setSelectedSection: handleSelectedSection,
-  handleOpenClose: onHandleOpenClose
+  handleOpenClose: onHandleOpenClose,
+  change: changeMode
 })(Sidebar);

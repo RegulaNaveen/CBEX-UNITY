@@ -2,19 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import Grid from 'apollo-react/components/Grid';
-import TextField from 'apollo-react/components/TextField';
 import MenuItem from 'apollo-react/components/MenuItem';
 import Select from 'apollo-react/components/Select';
 import Button from 'apollo-react/components/Button';
 import Box from 'apollo-react/components/Box';
+import { v4 as uuidv4 } from 'uuid';
+import RichTextEditor from '../../common/RichTextEditor';
 
-function AddNoteForm({
-  sections,
-  values,
-  handleSubmit,
-  handleChange,
-  setFieldValue
-}) {
+function AddNoteForm({ sections, values, handleSubmit, setFieldValue }) {
   function handleSectionChange(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -25,17 +20,11 @@ function AddNoteForm({
     <form noValidate onSubmit={handleSubmit}>
       <Grid container spacing={1}>
         <Grid item xs={12}>
-          <TextField
+          <RichTextEditor
             name="note"
             label="Proposal Notes"
             placeholder="Enter notes here..."
-            value={values.note}
-            onChange={handleChange}
-            multiline
-            sizeAdjustable
-            minHeight={130}
-            fullWidth
-            margin="none"
+            onChange={value => setFieldValue('note', JSON.stringify(value))}
           />
         </Grid>
       </Grid>
@@ -51,11 +40,8 @@ function AddNoteForm({
             margin="dense"
             size="small"
           >
-            {sections.valueSeq().map((section, idx) => (
-              <MenuItem
-                key={`section-${idx}`}
-                value={section.get('sectionName')}
-              >
+            {sections.valueSeq().map(section => (
+              <MenuItem key={uuidv4()} value={section.get('sectionName')}>
                 {section.get('sectionName')}
               </MenuItem>
             ))}
@@ -71,7 +57,7 @@ function AddNoteForm({
             >
               Submit
             </Button>
-          </Box> 
+          </Box>
         </Grid>
       </Grid>
     </form>
@@ -100,7 +86,6 @@ AddNoteForm.propTypes = {
   sections: PropTypes.object.isRequired,
   values: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  handleChange: PropTypes.func.isRequired,
   setFieldValue: PropTypes.func.isRequired
 };
 
