@@ -73,6 +73,39 @@ class CollapsibleList extends Component<Props, State> {
     return id;
   };
 
+  showNotesCount = (title) =>{
+    const {notes, handleOpenClose, setTabFromQuestionNotes} = this.props;
+    if(notes && notes && notes.size && notes.size > 0 ){
+    const count = notes.filter(note=> note.getIn(['section', 'sectionName'], '') == title);
+    if(count.size > 0){
+      return(
+        <span
+          style={{
+            paddingLeft: 10,
+            fontSize: 12,
+            verticalAlign: 'top'
+          }}
+        >
+          <Link
+            onClick={e => {
+              e.stopPropagation();
+              handleOpenClose(true);
+              setTabFromQuestionNotes(1, title, true);
+            }}
+            size="small"
+          >
+            <FolderOpen fontSize="extraSmall" />
+            <span style={{ verticalAlign: 'top' }}>
+              {' '}
+              Notes ({count.size})
+            </span>
+          </Link>
+        </span>
+      )
+    }else (null)
+    } else (null)
+  }
+
   render() {
     const { isCollapsed } = this.state;
     const {
@@ -122,33 +155,7 @@ class CollapsibleList extends Component<Props, State> {
               <div className="task-title">
                 <p>
                   {title}
-                  {this.props &&
-                  this.props.notes &&
-                  this.props.notes.size &&
-                  this.props.notes.size > 0 ? (
-                    <span
-                      style={{
-                        paddingLeft: 10,
-                        fontSize: 12,
-                        verticalAlign: 'top'
-                      }}
-                    >
-                      <Link
-                        onClick={e => {
-                          e.stopPropagation();
-                          handleOpenClose(true);
-                          this.props.setTabFromQuestionNotes(1, title, true);
-                        }}
-                        size="small"
-                      >
-                        <FolderOpen fontSize="extraSmall" />
-                        <span style={{ verticalAlign: 'top' }}>
-                          {' '}
-                          Notes ({this.props.notes.size})
-                        </span>
-                      </Link>
-                    </span>
-                  ) : null}
+                  {this.showNotesCount(title)}
                 </p>
               </div>
               <div className="task-subtitle task-subtitle-answer">
