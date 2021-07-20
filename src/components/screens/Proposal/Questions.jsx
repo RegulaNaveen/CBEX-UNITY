@@ -190,9 +190,9 @@ class Questions extends Component<Props, State> {
       <>
         <ProposalInfo data={details} />
 
-        <Sidebar 
-          sections={allSections} 
-          id={proposalID} 
+        <Sidebar
+          sections={allSections}
+          id={proposalID}
           expandAll={this.handleIsCheckedAll}
           AddNewQuestion={this.onClose}
           RefreshProposal={this.getProposalInfoUpdated}

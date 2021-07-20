@@ -81,38 +81,41 @@ class CollapsibleList extends Component<Props, State> {
     return id;
   };
 
-  showNotesCount = (title) =>{
-    const {notes, handleOpenClose, setTabFromQuestionNotes} = this.props;
-    if(notes && notes && notes.size && notes.size > 0 ){
-    const count = notes.filter(note=> note.getIn(['section', 'sectionName'], '') == title);
-    if(count.size > 0){
-      return(
-        <span
-          style={{
-            paddingLeft: 10,
-            fontSize: 12,
-            verticalAlign: 'top'
-          }}
-        >
-          <Link
-            onClick={e => {
-              e.stopPropagation();
-              handleOpenClose(true);
-              setTabFromQuestionNotes(1, title, true);
+  showNotesCount = title => {
+    const { notes, handleOpenClose, setTabFromQuestionNotes } = this.props;
+    if (notes && notes && notes.size && notes.size > 0) {
+      const count = notes.filter(
+        note => note.getIn(['section', 'sectionName'], '') === title
+      );
+      if (count.size > 0) {
+        return (
+          <span
+            style={{
+              paddingLeft: 10,
+              fontSize: 12,
+              verticalAlign: 'top'
             }}
-            size="small"
           >
-            <FolderOpen fontSize="extraSmall" />
-            <span style={{ verticalAlign: 'top' }}>
-              {' '}
-              Notes ({count.size})
-            </span>
-          </Link>
-        </span>
-      )
-    }else (null)
-    } else (null)
-  }
+            <Link
+              onClick={e => {
+                e.stopPropagation();
+                handleOpenClose(true);
+                setTabFromQuestionNotes(1, title, true);
+              }}
+              size="small"
+            >
+              <FolderOpen fontSize="extraSmall" />
+              <span style={{ verticalAlign: 'top' }}>
+                {' '}
+                Notes ({count.size})
+              </span>
+            </Link>
+          </span>
+        );
+      }
+      null;
+    } else null;
+  };
 
   render() {
     const { isCollapsed } = this.state;
