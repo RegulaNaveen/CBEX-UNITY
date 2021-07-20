@@ -34,7 +34,12 @@ export const setProposalAnswer = async (
   return axios.put(
     `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`,
     { answer, userData },
-    { headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() } }
+    {
+      headers: {
+        'x-api-key': `${API_KEY}`,
+        'x-access-token': `${getAccessToken()}`
+      }
+    }
   );
 };
 

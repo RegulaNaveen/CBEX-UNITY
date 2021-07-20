@@ -5,10 +5,15 @@ import type { Map } from 'immutable';
 import Link from 'apollo-react/components/Link';
 import Plus from 'apollo-react-icons/Plus';
 import FolderOpen from 'apollo-react-icons/FolderOpen';
-import { getSelectedSection, selectNotes } from '../../redux/selectors';
+import {
+  getSelectedSection,
+  selectNotes,
+  getProposalDetails
+} from '../../redux/selectors';
 import chevronRight from '../../../img/chevron-right.svg';
 import chevronDown from '../../../img/chevron-down.svg';
 import Question from './Question';
+import MatomoHOC from '../HOC/MatomoHOC';
 
 import { onHandleOpenClose } from '../../redux/actions/sidebar-actions';
 
@@ -29,7 +34,11 @@ type Props = {
     title: String,
     isHighlighted: boolean
   ) => void,
-  onAddQuestion: (title: string) => void
+  onAddQuestion: (title: string) => void,
+  eventCategories: any,
+  userActions: any,
+  trackEvent: any,
+  proposalDetail: any
 };
 
 class CollapsibleList extends Component<Props, State> {
@@ -61,6 +70,7 @@ class CollapsibleList extends Component<Props, State> {
   handleCollapse = () => {
     const { isCollapsed } = this.state;
     this.setState({ isCollapsed: !isCollapsed });
+    this.trackMatomoEventBladeToggle(!isCollapsed);
   };
 
   handleKeyPress = (event: KeyboardEvent) => {
@@ -116,6 +126,27 @@ class CollapsibleList extends Component<Props, State> {
       return null;
     }
     return null;
+  };
+
+  trackMatomoEventBladeToggle = action => {
+    const openOrclose = action ? 'Open' : 'Close';
+    const {
+      userActions,
+      title,
+      proposalDetail,
+      eventCategories,
+      trackEvent
+    } = this.props;
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action: `Question Section: ${userActions.click} To ${openOrclose} ${title}`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify(proposalDetail)
+        }
+      ]
+    });
   };
 
   render() {
@@ -209,9 +240,10 @@ class CollapsibleList extends Component<Props, State> {
 const mapStateToProps = (state: Map) => {
   const selectedSection = getSelectedSection(state);
   const notes = selectNotes(state);
-  return { selectedSection, notes };
+  const proposalDetail = getProposalDetails(state);
+  return { selectedSection, notes, proposalDetail };
 };
 
 export default connect(mapStateToProps, { handleOpenClose: onHandleOpenClose })(
-  CollapsibleList
+  MatomoHOC(CollapsibleList)
 );

@@ -14,15 +14,21 @@ import Button from 'apollo-react/components/Button';
 import Typography from 'apollo-react/components/Typography';
 import { neptunePrimaryDark } from 'apollo-react/colors';
 
+import Notepad from './Notepad';
 import chevronRight from '../../../img/chevron-right.svg';
 import {
   handleSelectedSection,
   onHandleOpenClose
 } from '../../redux/actions/sidebar-actions';
-import { getIsOpen, selectNotes } from '../../redux/selectors';
-import Notepad from './Notepad';
+import {
+  getIsOpen,
+  selectNotes,
+  getProposalDetails
+} from '../../redux/selectors';
 import { changeMode } from '../../redux/actions/notepad-actions';
 import { REDUX_TYPES } from '../../constants';
+
+import MatomoHOC from '../HOC/MatomoHOC';
 
 type Props = {
   sections: Map,
@@ -37,7 +43,11 @@ type Props = {
   selectedtitle: string,
   expandAll: () => void,
   AddNewQuestion: () => void,
-  RefreshProposal: () => void
+  RefreshProposal: () => void,
+  eventCategories: any,
+  userActions: any,
+  trackEvent: any,
+  proposalDetail: any
 };
 
 type State = {
@@ -105,6 +115,7 @@ class Sidebar extends Component<Props, State> {
     setTabFromQuestionNotes(0, '', true);
     handleOpenClose(!isOpen);
     if (isOpen) this.setState({ activeTabIndex: 0 });
+    this.trackMatomoEventSidebarToggle(!isOpen);
   };
 
   scrollToSelectedElement = (event: SyntheticInputEvent<EventTarget>) => {
@@ -127,6 +138,7 @@ class Sidebar extends Component<Props, State> {
 
     handleOpenClose(false);
     setSelectedSection(itemToScroll);
+    this.trackMatomoEventScroll(itemToScroll);
 
     this.setState({ selectedSection: id, activeTabIndex: 0 });
   };
@@ -140,6 +152,45 @@ class Sidebar extends Component<Props, State> {
     }
     this.setState({ activeTabIndex });
     setTabFromQuestionNotes(activeTabIndex, selectedtitle || '', false);
+  };
+
+  trackMatomoEventScroll = action => {
+    const {
+      userActions,
+      eventCategories,
+      proposalDetail,
+      trackEvent
+    } = this.props;
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action: `Blade: ${userActions.scroll} From Blade To ${action} Section`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify(proposalDetail)
+        }
+      ]
+    });
+  };
+
+  trackMatomoEventSidebarToggle = action => {
+    const openOrclose = action ? 'Open' : 'Close';
+    const {
+      userActions,
+      eventCategories,
+      proposalDetail,
+      trackEvent
+    } = this.props;
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action: `Blade: ${userActions.click} On Blade To ${openOrclose} Sidebar`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify(proposalDetail)
+        }
+      ]
+    });
   };
 
   render() {
@@ -307,11 +358,12 @@ class Sidebar extends Component<Props, State> {
 
 const mapStateToProps = (state: Object) => ({
   isOpen: getIsOpen(state),
-  notes: selectNotes(state)
+  notes: selectNotes(state),
+  proposalDetail: getProposalDetails(state)
 });
 
 export default connect(mapStateToProps, {
   setSelectedSection: handleSelectedSection,
   handleOpenClose: onHandleOpenClose,
   change: changeMode
-})(Sidebar);
+})(MatomoHOC(Sidebar));

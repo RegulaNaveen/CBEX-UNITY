@@ -11,7 +11,8 @@ import UserLookup from './atoms/inputs/UserLookup';
 import { parseDate, formatDate, parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
 import { setProposalAnswerData } from '../../redux/actions/proposal-actions';
-import { getUserData } from '../../redux/selectors';
+import { getUserData, getProposalDetails } from '../../redux/selectors';
+import MatomoHOC from '../HOC/MatomoHOC';
 
 type State = {
   selectedDay: string
@@ -26,7 +27,10 @@ type Props = {
   sectionName: string,
   userData: Object,
   setProposalAnswer: Function,
-  setQuestionToDisplayHistory: (answer: string) => void
+  setQuestionToDisplayHistory: (answer: string) => void,
+  eventCategories: any,
+  trackEvent: any,
+  proposalDetail: any
 };
 
 export class TaskRow extends Component<Props, State> {
@@ -47,6 +51,8 @@ export class TaskRow extends Component<Props, State> {
     } else if (!textValue && lastAnswer) {
       setProposalAnswer(proposalId, questionId, ' ', userData);
     }
+
+    this.trackMatomoEventSubmitAnswer(textValue);
   };
 
   onClickChange = (selectedValue: string, lastAnswer: string) => {
@@ -54,6 +60,8 @@ export class TaskRow extends Component<Props, State> {
 
     if (lastAnswer !== selectedValue)
       setProposalAnswer(proposalId, questionId, selectedValue, userData);
+
+    this.trackMatomoEventSubmitAnswer(selectedValue);
   };
 
   handleDayChange = (selectedDay: string, lastAnswer: Date) => {
@@ -63,6 +71,7 @@ export class TaskRow extends Component<Props, State> {
       if (parseMomentDate(lastAnswer) !== parseMomentDate(selectedDay))
         setProposalAnswer(proposalId, questionId, selectedDay, userData);
     });
+    this.trackMatomoEventSubmitAnswer(selectedDay);
   };
 
   onSelectValues = (
@@ -73,11 +82,41 @@ export class TaskRow extends Component<Props, State> {
 
     if (!isEqual(lastAnswer, selectedValues))
       setProposalAnswer(proposalId, questionId, selectedValues, userData);
+
+    this.trackMatomoEventSubmitAnswer(selectedValues);
   };
 
   displayAnswerOnHistory = () => {
     const { setQuestionToDisplayHistory, questionId } = this.props;
     setQuestionToDisplayHistory(questionId);
+  };
+
+  trackMatomoEventSubmitAnswer = data => {
+    const {
+      eventCategories,
+      proposalDetail,
+      questionText,
+      sectionName,
+      trackEvent,
+      questionId
+    } = this.props;
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action: `Question: ${questionText} (${sectionName})`,
+      name: `Answer: ${data}`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify({
+            answer: data,
+            sectionName,
+            questionText,
+            questionId,
+            proposalDetail
+          })
+        }
+      ]
+    });
   };
 
   renderAnswer = (
@@ -206,9 +245,10 @@ export class TaskRow extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: Object) => ({
-  userData: getUserData(state)
+  userData: getUserData(state),
+  proposalDetail: getProposalDetails(state)
 });
 
 export default connect(mapStateToProps, {
   setProposalAnswer: setProposalAnswerData
-})(TaskRow);
+})(MatomoHOC(TaskRow));
