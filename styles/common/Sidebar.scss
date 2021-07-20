@@ -13,6 +13,13 @@
     background: #fafafa;
     position: relative;
 
+    .controls-wrapper {
+      button {
+        color: $black;
+        font-size: 14px;
+      }
+    }
+
     & > button {
       outline: none;
       border: none;
@@ -50,10 +57,10 @@
       }
 
       p {
-        padding: 12px 10px 12px 30px;
+        padding: 10px 8px 10px 16px;
         cursor: pointer;
         color: $neptune-secondary;
-        font-size: 15px;
+        font-size: 14px;
 
         &.is-selected {
           background-color: rgba($color: $neptune-primary, $alpha: 1);

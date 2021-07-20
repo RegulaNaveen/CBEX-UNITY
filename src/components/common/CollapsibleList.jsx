@@ -113,20 +113,15 @@ class CollapsibleList extends Component<Props, State> {
           </span>
         );
       }
-      null;
-    } else null;
+      return null;
+    }
+    return null;
   };
 
   render() {
     const { isCollapsed } = this.state;
-    const { notes, onAddQuestion } = this.props;
-    const {
-      questions,
-      title,
-      setQuestionToDisplayHistory,
-      handleOpenClose,
-      setTabFromQuestionNotes
-    } = this.props;
+    const { onAddQuestion } = this.props;
+    const { questions, title, setQuestionToDisplayHistory } = this.props;
     return (
       <div className="task-wrapper" ref={this.taskRef} id={this.createId()}>
         <button

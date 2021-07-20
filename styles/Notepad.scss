@@ -3,7 +3,7 @@ $note-no-of-lines: 3;
 
 .notepad {
     padding: 16px;
-    height: calc(100% - 48px);
+    height: calc(100% - (48px + 96px + 65px));
     display: flex;
     flex-direction: column;
     font-size: 12px;
@@ -92,7 +92,7 @@ $note-no-of-lines: 3;
         }
         .DraftEditor-root {
             height: 150px;
-            max-height: 300px;
+            max-height: 238px;
             min-height: 150px;
         }
     }

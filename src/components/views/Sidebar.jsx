@@ -34,7 +34,10 @@ type Props = {
   change: Function,
   currentTab: mixed,
   setTabFromQuestionNotes: Function,
-  selectedtitle: string
+  selectedtitle: string,
+  expandAll: () => void,
+  AddNewQuestion: () => void,
+  RefreshProposal: () => void
 };
 
 type State = {
@@ -183,61 +186,74 @@ class Sidebar extends Component<Props, State> {
                 onClose={this.handleItemsVisibility}
               />
             </div>
-            <Button
-              icon={
-                <PlusIcon
-                  style={{
-                    backgroundColor: neptunePrimaryDark,
-                    width: 20,
-                    height: 20,
-                    borderRadius: '50%',
-                    color: '#fff',
-                    padding: 3
-                  }}
-                />
-              }
-              fullWidth
-              style={{ justifyContent: 'left', paddingLeft: '50px' }}
-              onClick={e => {
-                this.handleItemsVisibility(e);
-                AddNewQuestion();
-              }}
-            >
-              Add New Questions
-            </Button>
-            <Button
-              icon={<CardIcon />}
-              fullWidth
-              style={{ justifyContent: 'left', paddingLeft: '50px' }}
-              onClick={e => {
-                this.handleItemsVisibility(e);
-                expandAll();
-              }}
-            >
-              Expand All Sections
-            </Button>
-            <Button
-              icon={
-                <SyncIcon
-                  style={{
-                    backgroundColor: neptunePrimaryDark,
-                    width: 20,
-                    height: 20,
-                    borderRadius: '50%',
-                    color: '#fff',
-                    padding: 3
-                  }}
-                />
-              }
-              fullWidth
-              style={{ justifyContent: 'left', paddingLeft: '50px' }}
-              onClick={e => {
-                this.handleItemsVisibility(e);
-                RefreshProposal();
-              }}
-            >
-              Refresh Proposal Sources
-            </Button>
+            <div className="controls-wrapper">
+              <Button
+                icon={
+                  <PlusIcon
+                    style={{
+                      backgroundColor: neptunePrimaryDark,
+                      width: 20,
+                      height: 20,
+                      borderRadius: '50%',
+                      color: '#fff',
+                      padding: 3
+                    }}
+                  />
+                }
+                fullWidth
+                style={{ justifyContent: 'left', paddingLeft: '40px' }}
+                onClick={e => {
+                  this.handleItemsVisibility(e);
+                  AddNewQuestion();
+                }}
+                size="small"
+              >
+                Add New Questions
+              </Button>
+              <Button
+                icon={
+                  <CardIcon
+                    style={{
+                      color: neptunePrimaryDark,
+                      width: 20,
+                      height: 20
+                    }}
+                  />
+                }
+                fullWidth
+                style={{ justifyContent: 'left', paddingLeft: '40px' }}
+                onClick={e => {
+                  this.handleItemsVisibility(e);
+                  expandAll();
+                }}
+                size="small"
+              >
+                Expand All Sections
+              </Button>
+              <Button
+                icon={
+                  <SyncIcon
+                    style={{
+                      backgroundColor: neptunePrimaryDark,
+                      width: 20,
+                      height: 20,
+                      borderRadius: '50%',
+                      color: '#fff',
+                      padding: 3
+                    }}
+                  />
+                }
+                fullWidth
+                style={{ justifyContent: 'left', paddingLeft: '40px' }}
+                onClick={e => {
+                  this.handleItemsVisibility(e);
+                  RefreshProposal();
+                }}
+                size="small"
+              >
+                Refresh Proposal Sources
+              </Button>
+            </div>
             <Tabs
               value={activeTabIndex}
               onChange={this.handleChangeTab}
