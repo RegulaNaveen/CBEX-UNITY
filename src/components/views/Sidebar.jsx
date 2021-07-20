@@ -8,13 +8,18 @@ import {
   handleSelectedSection,
   onHandleOpenClose
 } from '../../redux/actions/sidebar-actions';
-import { getIsOpen } from '../../redux/selectors';
+import { getIsOpen, getProposalDetails } from '../../redux/selectors';
+import MatomoHOC from '../HOC/MatomoHOC';
 
 type Props = {
   sections: Map,
   setSelectedSection: (selectedItem: string) => void,
   handleOpenClose: (isOpen: boolean) => void,
-  isOpen: boolean
+  isOpen: boolean,
+  eventCategories: any,
+  userActions: any,
+  trackEvent: any,
+  proposalDetail: any
 };
 
 type State = {
@@ -49,6 +54,7 @@ class Sidebar extends Component<Props, State> {
     const { isOpen, handleOpenClose } = this.props;
 
     handleOpenClose(!isOpen);
+    this.trackMatomoEventSidebarToggle(!isOpen);
   };
 
   scrollToSelectedElement = (event: SyntheticInputEvent<EventTarget>) => {
@@ -73,6 +79,46 @@ class Sidebar extends Component<Props, State> {
     setSelectedSection(itemToScroll);
 
     this.setState({ selectedSection: id });
+    this.trackMatomoEventScroll(itemToScroll);
+  };
+
+  trackMatomoEventScroll = action => {
+    const {
+      userActions,
+      eventCategories,
+      proposalDetail,
+      trackEvent
+    } = this.props;
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action: `Blade: ${userActions.scroll} From Blade To ${action} Section`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify(proposalDetail)
+        }
+      ]
+    });
+  };
+
+  trackMatomoEventSidebarToggle = action => {
+    const openOrclose = action ? 'Open' : 'Close';
+    const {
+      userActions,
+      eventCategories,
+      proposalDetail,
+      trackEvent
+    } = this.props;
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action: `Blade: ${userActions.click} On Blade To ${openOrclose} Sidebar`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify(proposalDetail)
+        }
+      ]
+    });
   };
 
   render() {
@@ -98,9 +144,11 @@ class Sidebar extends Component<Props, State> {
               const someQuestionsAreVisible = questions
                 .valueSeq()
                 .map(question => question.get('visible'))
-                .includes(true);
+                // .includes(true);
 
-              if (someQuestionsAreVisible)
+              if (someQuestionsAreVisible.get('visible') == false){
+                return null;
+              }else{
                 return (
                   <p
                     key={sectionName}
@@ -114,8 +162,7 @@ class Sidebar extends Component<Props, State> {
                     {sectionName}
                   </p>
                 );
-
-              return null;
+              }
             })}
           </div>
         </div>
@@ -125,10 +172,11 @@ class Sidebar extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: Object) => ({
-  isOpen: getIsOpen(state)
+  isOpen: getIsOpen(state),
+  proposalDetail: getProposalDetails(state)
 });
 
 export default connect(mapStateToProps, {
   setSelectedSection: handleSelectedSection,
   handleOpenClose: onHandleOpenClose
-})(Sidebar);
+})(MatomoHOC(Sidebar));

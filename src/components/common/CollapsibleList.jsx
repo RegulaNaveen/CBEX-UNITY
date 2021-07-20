@@ -2,10 +2,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import type { Map } from 'immutable';
-import { getSelectedSection } from '../../redux/selectors';
+import { getSelectedSection, getProposalDetails } from '../../redux/selectors';
 import chevronRight from '../../../img/chevron-right.svg';
 import chevronDown from '../../../img/chevron-down.svg';
 import Question from './Question';
+import MatomoHOC from '../HOC/MatomoHOC';
 
 type State = {
   isCollapsed: boolean
@@ -16,7 +17,11 @@ type Props = {
   title: string,
   selectedSection: string,
   isCheckedAll: boolean,
-  setQuestionToDisplayHistory: (answer: string) => void
+  setQuestionToDisplayHistory: (answer: string) => void,
+  eventCategories: any,
+  userActions: any,
+  trackEvent: any,
+  proposalDetail: any
 };
 
 class CollapsibleList extends Component<Props, State> {
@@ -48,6 +53,7 @@ class CollapsibleList extends Component<Props, State> {
   handleCollapse = () => {
     const { isCollapsed } = this.state;
     this.setState({ isCollapsed: !isCollapsed });
+    this.trackMatomoEventBladeToggle(!isCollapsed);
   };
 
   handleKeyPress = (event: KeyboardEvent) => {
@@ -66,6 +72,27 @@ class CollapsibleList extends Component<Props, State> {
       .join('-');
 
     return id;
+  };
+
+  trackMatomoEventBladeToggle = action => {
+    const openOrclose = action ? 'Open' : 'Close';
+    const {
+      userActions,
+      title,
+      proposalDetail,
+      eventCategories,
+      trackEvent
+    } = this.props;
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action: `Question Section: ${userActions.click} To ${openOrclose} ${title}`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify(proposalDetail)
+        }
+      ]
+    });
   };
 
   render() {
@@ -149,8 +176,9 @@ class CollapsibleList extends Component<Props, State> {
 
 const mapStateToProps = (state: Map) => {
   const selectedSection = getSelectedSection(state);
+  const proposalDetail = getProposalDetails(state);
 
-  return { selectedSection };
+  return { selectedSection, proposalDetail };
 };
 
-export default connect(mapStateToProps)(CollapsibleList);
+export default connect(mapStateToProps)(MatomoHOC(CollapsibleList));
