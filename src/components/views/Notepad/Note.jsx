@@ -134,7 +134,11 @@ Note.propTypes = {
   index: PropTypes.number.isRequired,
   onShowAll: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
-  textstyle: PropTypes.object.isRequired
+  textstyle: PropTypes.object
+};
+
+Note.defaultProps = {
+  textstyle: {}
 };
 
 export default Note;

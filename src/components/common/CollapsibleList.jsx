@@ -21,7 +21,15 @@ type Props = {
   title: string,
   selectedSection: string,
   isCheckedAll: boolean,
-  setQuestionToDisplayHistory: (answer: string) => void
+  setQuestionToDisplayHistory: (answer: string) => void,
+  handleOpenClose: () => void,
+  notes: Map,
+  setTabFromQuestionNotes: (
+    tabIndex: number,
+    title: String,
+    isHighlighted: boolean
+  ) => void,
+  onAddQuestion: (title: string) => void
 };
 
 class CollapsibleList extends Component<Props, State> {
@@ -75,11 +83,13 @@ class CollapsibleList extends Component<Props, State> {
 
   render() {
     const { isCollapsed } = this.state;
+    const { notes, onAddQuestion } = this.props;
     const {
       questions,
       title,
       setQuestionToDisplayHistory,
-      handleOpenClose
+      handleOpenClose,
+      setTabFromQuestionNotes
     } = this.props;
     return (
       <div className="task-wrapper" ref={this.taskRef} id={this.createId()}>
@@ -122,10 +132,7 @@ class CollapsibleList extends Component<Props, State> {
               <div className="task-title">
                 <p>
                   {title}
-                  {this.props &&
-                  this.props.notes &&
-                  this.props.notes.size &&
-                  this.props.notes.size > 0 ? (
+                  {notes && notes.size && notes.size > 0 ? (
                     <span
                       style={{
                         paddingLeft: 10,
@@ -137,14 +144,14 @@ class CollapsibleList extends Component<Props, State> {
                         onClick={e => {
                           e.stopPropagation();
                           handleOpenClose(true);
-                          this.props.setTabFromQuestionNotes(1, title, true);
+                          setTabFromQuestionNotes(1, title, true);
                         }}
                         size="small"
                       >
                         <FolderOpen fontSize="extraSmall" />
                         <span style={{ verticalAlign: 'top' }}>
                           {' '}
-                          Notes ({this.props.notes.size})
+                          Notes ({notes.size})
                         </span>
                       </Link>
                     </span>
@@ -179,10 +186,7 @@ class CollapsibleList extends Component<Props, State> {
               );
             })}
             <div className="task-table-row">
-              <Link
-                onClick={() => this.props.onAddQuestion(title)}
-                size="small"
-              >
+              <Link onClick={() => onAddQuestion(title)} size="small">
                 <Plus fontSize="extraSmall" />
                 <span style={{ verticalAlign: 'top' }}> Add New Question</span>
               </Link>

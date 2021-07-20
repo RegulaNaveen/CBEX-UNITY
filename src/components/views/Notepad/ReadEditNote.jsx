@@ -34,11 +34,10 @@ function NoteLabel({ onClose }) {
 }
 
 function ReadNote({ note, onClose }) {
-  let noteText = note.get('noteText');
+  const noteText = note.get('noteText');
   let noteContentState = EditorState.createEmpty();
   try {
-    noteText = JSON.parse(noteText);
-    noteContentState = ContentState.createFromText(noteText);
+    noteContentState = convertFromRaw(JSON.parse(noteText));
   } catch (err) {
     const blocksFromHTML = convertFromHTML(noteText);
     noteContentState = ContentState.createFromBlockArray(
@@ -52,7 +51,12 @@ function ReadNote({ note, onClose }) {
       <NoteLabel onClose={onClose} />
       <Grid container className="note-view-container">
         <Grid item xs={12}>
-          <RichTextEditor defaultValue={noteContentState} readOnly disabled />
+          <RichTextEditor
+            defaultValue={noteContentState}
+            readOnly
+            disabled
+            placeholder=""
+          />
         </Grid>
       </Grid>
     </div>
@@ -86,7 +90,7 @@ function EditNoteForm({ sections, values, handleSubmit, setFieldValue }) {
             name="note"
             label="Proposal Notes"
             placeholder="Enter notes here..."
-            onChange={(value, html) => setFieldValue('note', html)}
+            onChange={value => setFieldValue('note', JSON.stringify(value))}
             defaultValue={noteContentState}
           />
         </Grid>
