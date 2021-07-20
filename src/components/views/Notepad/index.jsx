@@ -164,7 +164,7 @@ Notepad.propTypes = {
   change: PropTypes.func.isRequired,
   fetchingNotes: PropTypes.bool.isRequired,
   addingNote: PropTypes.bool.isRequired,
-  mode: PropTypes.oneOf(REDUX_TYPES.NOTEPAD).isRequired,
+  mode: PropTypes.string.isRequired,
   selectedtitle: PropTypes.string.isRequired
 };
 
