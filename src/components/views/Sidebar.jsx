@@ -144,9 +144,11 @@ class Sidebar extends Component<Props, State> {
               const someQuestionsAreVisible = questions
                 .valueSeq()
                 .map(question => question.get('visible'))
-                .includes(true);
+                // .includes(true);
 
-              if (someQuestionsAreVisible)
+              if (someQuestionsAreVisible.get('visible') == false){
+                return null;
+              }else{
                 return (
                   <p
                     key={sectionName}
@@ -160,8 +162,7 @@ class Sidebar extends Component<Props, State> {
                     {sectionName}
                   </p>
                 );
-
-              return null;
+              }
             })}
           </div>
         </div>
