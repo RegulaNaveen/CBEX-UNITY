@@ -47,10 +47,10 @@ switch (environment) {
     REDIRECTION_URL = 'https://unity.iqvia.app/';
     break;
   case 'SDEV':
-    // DEV Data
+    // SDEV Data
     PROPOSAL_API_ENDPOINT =
-      'https://wzzqn23vse.execute-api.us-east-1.amazonaws.com/sdev';
-    PROPOSAL_API_KEY = 'Wctbuly84485ruXf4Bilz1c8xdckxcfk4GA2NvVe';
+      'https://jyih0y4ifg.execute-api.us-east-1.amazonaws.com/sdev';
+    PROPOSAL_API_KEY = '70lO6fA4hZ7qTmOwwFQTC14TqyWgXpXu9EroqA66';
     NORMAL_AUTH_API_ENDPOINT =
       'https://aiz2k1qjjl.execute-api.us-east-1.amazonaws.com/dev';
     COGNITO_HOST = 'https://unity-dev.auth.us-east-1.amazoncognito.com';
@@ -59,6 +59,18 @@ switch (environment) {
     CLIENT_ID = '36e6ql6fnolv0ppsb9rfhpjqk5';
     REDIRECTION_URL = 'https://sdev-unity.iqvia.app/';
     break;
+  case 'UDEV':
+    // UDEV Data
+    PROPOSAL_API_ENDPOINT =
+      'https://l5vw6p22ud.execute-api.us-east-1.amazonaws.com/ubuilddev';
+    PROPOSAL_API_KEY = 'iBzVNrZKTepvlEyptBks4DbbtkLwnSY9tVR61qQf';
+    NORMAL_AUTH_API_ENDPOINT =
+      'https://aiz2k1qjjl.execute-api.us-east-1.amazonaws.com/dev';
+    COGNITO_HOST = 'https://unity-dev.auth.us-east-1.amazoncognito.com';
+    AUTH_KEY =
+      'MzZlNnFsNmZub2x2MHBwc2I5cmZocGpxazU6OW5tbXEzcDcwYnRycWZzcm44dThjMWZnajZqMGkxc24wcW5rOGxhaWl1N3I0ZTQzb2Fl';
+    CLIENT_ID = '36e6ql6fnolv0ppsb9rfhpjqk5';
+    REDIRECTION_URL = 'https://udev-unity.iqvia.app/';
   default:
     // DEV Data
     PROPOSAL_API_ENDPOINT =

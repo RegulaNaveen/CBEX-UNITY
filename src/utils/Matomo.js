@@ -10,6 +10,7 @@ localStorage.setItem('MatomoUserIdSet', '')
 const envSideId = {
   DEV: 20,
   SDEV: 20,
+  UDEV: 20,
   UAT: 20,
   PROD: 21
 };
