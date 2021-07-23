@@ -71,6 +71,7 @@ switch (environment) {
       'MzZlNnFsNmZub2x2MHBwc2I5cmZocGpxazU6OW5tbXEzcDcwYnRycWZzcm44dThjMWZnajZqMGkxc24wcW5rOGxhaWl1N3I0ZTQzb2Fl';
     CLIENT_ID = '36e6ql6fnolv0ppsb9rfhpjqk5';
     REDIRECTION_URL = 'https://udev-unity.iqvia.app/';
+    break;
   default:
     // DEV Data
     PROPOSAL_API_ENDPOINT =
