@@ -127,4 +127,10 @@ const PROPOSAL = {
   MAMOTO_IQVIA
 };
 
-export { AUTH, PROPOSAL };
+const NOTEPAD_API_URL = `${PROPOSAL_API_ENDPOINT}/api/notes`;
+
+const NOTEPAD = {
+  NOTEPAD_API_URL
+};
+
+export { AUTH, PROPOSAL, NOTEPAD };

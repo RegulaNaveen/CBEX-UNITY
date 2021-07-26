@@ -19,14 +19,17 @@ const MatomoHOC = (Component: any) => {
   };
   return (props: any) => {
     const { trackPageView, trackEvent, pushInstruction } = useMatomo();
-   
-    if(!localStorage.getItem('MatomoUserIdSet')){
+
+    if (!localStorage.getItem('MatomoUserIdSet')) {
       const userEmail = localStorage.getItem('userEmail');
       const userRole = localStorage.getItem('userRole');
       pushInstruction('setUserId', `${userEmail} (${userRole || ''})`);
-      localStorage.setItem('MatomoUserIdSet', `${userEmail} (${userRole || ''})`);
+      localStorage.setItem(
+        'MatomoUserIdSet',
+        `${userEmail} (${userRole || ''})`
+      );
     }
-   
+
     return (
       <Component
         trackPageView={trackPageView}

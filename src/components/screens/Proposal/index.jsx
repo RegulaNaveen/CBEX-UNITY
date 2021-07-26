@@ -11,6 +11,7 @@ import {
   getProposal,
   onGetValidatedProposalDetails
 } from '../../../redux/actions/proposal-actions';
+import { fetchNotes } from '../../../redux/actions/notepad-actions';
 import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
 import {
   getIsOpen,
@@ -39,6 +40,7 @@ type Props = {
   getRefreshAuthData: Function,
   getProposalInfo: Function,
   getValidatedData: (proposalId: string) => void,
+  getNotes: (proposalId: string) => void,
   eventCategories: any,
   userActions: any,
   trackEvent: any,
@@ -64,6 +66,7 @@ export class Proposal extends Component<Props, State> {
       authData,
       getRefreshAuthData,
       getValidatedData,
+      getNotes,
       trackPageView,
       eventCategories,
       match: { params }
@@ -76,7 +79,8 @@ export class Proposal extends Component<Props, State> {
     if (!authData) getRefreshAuthData();
 
     getProposalInfo(params.id);
-    getValidatedData(params.id);
+
+    getNotes(params.id);
 
     window.addEventListener('storage', e => this.handleStorageChange(e));
 
@@ -84,6 +88,7 @@ export class Proposal extends Component<Props, State> {
     if (enableValidateTab === null) {
       localStorage.setItem('enableValidateTab', false);
     } else if (enableValidateTab === 'true') {
+      getValidatedData(params.id);
       this.setState({
         enableValidateTab: true
       });
@@ -103,6 +108,11 @@ export class Proposal extends Component<Props, State> {
   }
 
   handleStorageChange(e) {
+    const {
+      getValidatedData,
+      match: { params }
+    } = this.props;
+
     if (e.key === 'enableValidateTab') {
       const isEnabled = e.newValue === 'true';
       const { selectedView: selectedViewState } = this.state;
@@ -113,6 +123,9 @@ export class Proposal extends Component<Props, State> {
             ? 'questions'
             : selectedViewState
       });
+      if (isEnabled) {
+        getValidatedData(params.id);
+      }
     }
   }
 
@@ -142,10 +155,15 @@ export class Proposal extends Component<Props, State> {
 
   renderContent = () => {
     const { selectedView, enableValidateTab } = this.state;
-    const { isLoading, details, notifications } = this.props;
+    const {
+      isLoading,
+      details,
+      notifications,
+      match: { params }
+    } = this.props;
 
     const viewsMap = {
-      questions: <Questions />,
+      questions: <Questions proposalID={params.id} />,
       documents: <Documents />
       // validate: <Validate />
     };
@@ -222,6 +240,7 @@ export default compose(
   connect(mapStateToProps, {
     getRefreshAuthData: onRefreshUserData,
     getProposalInfo: getProposal,
-    getValidatedData: onGetValidatedProposalDetails
+    getValidatedData: onGetValidatedProposalDetails,
+    getNotes: fetchNotes
   })
 )(MatomoHOC(Proposal));

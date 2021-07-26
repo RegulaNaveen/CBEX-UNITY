@@ -5,7 +5,9 @@ import { PROPOSAL } from '../constants/api';
 const env = process.env.API_ENV || 'DEV';
 
 // Set empty userId
-localStorage.setItem('MatomoUserIdSet', '')
+localStorage.setItem('MatomoUserIdSet', '');
+const userEmail = localStorage.getItem('userEmail');
+const userRole = localStorage.getItem('userRole');
 
 const envSideId = {
   DEV: 20,
@@ -17,7 +19,8 @@ const envSideId = {
 
 const matomoInstace = createInstance({
   urlBase: PROPOSAL.MAMOTO_IQVIA,
-  siteId: envSideId[env]
+  siteId: envSideId[env],
+  userId: `${userEmail} (${userRole || ''})`
 });
 
 export default matomoInstace;

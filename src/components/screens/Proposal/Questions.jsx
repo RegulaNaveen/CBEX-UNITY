@@ -1,4 +1,5 @@
 // @flow
+// eslint-disable-next-line react/destructuring-assignment
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import type { Match } from 'react-router-dom';
@@ -34,6 +35,7 @@ type Props = {
   isQuestionLoading: boolean,
   getProposalInfoUpdated: Function,
   fetchUsers: () => {},
+  proposalID: string,
   eventCategories: any,
   userActions: any,
   trackEvent: any,
@@ -57,7 +59,11 @@ class Questions extends Component<Props, State> {
       isChecked: false,
       isCheckedAll: false,
       selectedQuestionForHistory: '',
-      isHistoryModalShown: false
+      isHistoryModalShown: false,
+      currentsection: '',
+      currentTab: 0,
+      selectedtitle: '',
+      heighlightcard: false
     };
   }
 
@@ -175,6 +181,26 @@ class Questions extends Component<Props, State> {
     });
   };
 
+  scrollToSelectedElement = title => {
+    setTimeout(() => {
+      const item = document.getElementById(
+        `notepad-${String(title).toLocaleLowerCase()}`
+      );
+      if (item) {
+        item.scrollIntoView();
+      }
+    }, 1000);
+  };
+
+  setTabFromQuestionNotes = (tabid, title, flag) => {
+    this.setState(
+      { currentTab: tabid, selectedtitle: title, heighlightcard: flag },
+      () => {
+        this.scrollToSelectedElement(title);
+      }
+    );
+  };
+
   renderQuestions() {
     const { isChecked, isCheckedAll } = this.state;
     const { sections, filteredSections } = this.props;
@@ -199,6 +225,13 @@ class Questions extends Component<Props, State> {
             questions={questions}
             title={sectionName}
             key={sectionName}
+            setTabFromQuestionNotes={(val, title, flag) =>
+              this.setTabFromQuestionNotes(val, title, flag)
+            }
+            onAddQuestion={value => {
+              this.setState({ currentsection: value });
+              this.onClose();
+            }}
             isCheckedAll={isCheckedAll}
             setQuestionToDisplayHistory={this.setQuestionToDisplayHistory}
           />
@@ -209,7 +242,7 @@ class Questions extends Component<Props, State> {
   }
 
   render() {
-    const { details, sections, filteredSections } = this.props;
+    const { details, sections, filteredSections, proposalID } = this.props;
     const {
       showModal,
       isCheckedAll,
@@ -224,7 +257,22 @@ class Questions extends Component<Props, State> {
       <>
         <ProposalInfo data={details} />
 
-        <Sidebar sections={allSections} />
+        <Sidebar
+          sections={allSections}
+          id={proposalID}
+          expandAll={this.handleIsCheckedAll}
+          AddNewQuestion={this.onClose}
+          RefreshProposal={this.getProposalInfoUpdated}
+          // eslint-disable-next-line react/destructuring-assignment
+          currentTab={this.state.currentTab}
+          // eslint-disable-next-line react/destructuring-assignment
+          selectedtitle={this.state.selectedtitle}
+          // eslint-disable-next-line react/destructuring-assignment
+          heighlightcard={this.state.heighlightcard}
+          setTabFromQuestionNotes={(val, title, flag) =>
+            this.setTabFromQuestionNotes(val, title, flag)
+          }
+        />
 
         <div className="tasksList-title-wrapper">
           <div className="taskList-icons-wrapper">
@@ -262,7 +310,10 @@ class Questions extends Component<Props, State> {
               title="Add New Question"
               className="tasksList-add-icon-wrapper"
               role="presentation"
-              onClick={this.onClose}
+              onClick={() => {
+                this.setState({ currentsection: '' });
+                this.onClose();
+              }}
             >
               <Add className="tasksList-add-icon" />
             </div>
@@ -270,7 +321,13 @@ class Questions extends Component<Props, State> {
         </div>
         <div className="tasksList-wrapper">{this.renderQuestions()}</div>
 
-        {showModal && <AddQuestionModalComponent onClose={this.onClose} />}
+        {showModal && (
+          <AddQuestionModalComponent
+            onClose={this.onClose}
+            // eslint-disable-next-line react/destructuring-assignment
+            currentsection={this.state.currentsection || ''}
+          />
+        )}
 
         {isHistoryModalShown && (
           <AnswerHistory

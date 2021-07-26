@@ -2,7 +2,7 @@
   position: absolute;
   top: $toolbarHight;
   right: 24px;
-  height: 220px;
+  height: 360px;
   width: 280px;
   box-sizing: border-box;
   z-index: 99999;
@@ -103,6 +103,17 @@
 
     &:hover {
       background-color: $neutral4;
+    }
+  }
+
+  .menu-links {
+    margin: 8px 0;
+
+    .menu-link-btn {
+      font-size: 14px;
+      color: $black;
+      justify-content: flex-start;
+      margin-top: 4px auto;
     }
   }
 }
