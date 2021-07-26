@@ -18,7 +18,15 @@ const MatomoHOC = (Component: any) => {
     scroll: 'Scrolled'
   };
   return (props: any) => {
-    const { trackPageView, trackEvent } = useMatomo();
+    const { trackPageView, trackEvent, pushInstruction } = useMatomo();
+   
+    if(!localStorage.getItem('MatomoUserIdSet')){
+      const userEmail = localStorage.getItem('userEmail');
+      const userRole = localStorage.getItem('userRole');
+      pushInstruction('setUserId', `${userEmail} (${userRole || ''})`);
+      localStorage.setItem('MatomoUserIdSet', `${userEmail} (${userRole || ''})`);
+    }
+   
     return (
       <Component
         trackPageView={trackPageView}
