@@ -72,6 +72,19 @@ switch (environment) {
     CLIENT_ID = '36e6ql6fnolv0ppsb9rfhpjqk5';
     REDIRECTION_URL = 'https://udev-unity.iqvia.app/';
     break;
+  case 'QA':
+    // UDEV Data
+    PROPOSAL_API_ENDPOINT =
+      'https://l5vw6p22ud.execute-api.us-east-1.amazonaws.com/ubuilddev';
+    PROPOSAL_API_KEY = 'iBzVNrZKTepvlEyptBks4DbbtkLwnSY9tVR61qQf';
+    NORMAL_AUTH_API_ENDPOINT =
+      'https://aiz2k1qjjl.execute-api.us-east-1.amazonaws.com/dev';
+    COGNITO_HOST = 'https://unity-dev.auth.us-east-1.amazoncognito.com';
+    AUTH_KEY =
+      'MzZlNnFsNmZub2x2MHBwc2I5cmZocGpxazU6OW5tbXEzcDcwYnRycWZzcm44dThjMWZnajZqMGkxc24wcW5rOGxhaWl1N3I0ZTQzb2Fl';
+    CLIENT_ID = '36e6ql6fnolv0ppsb9rfhpjqk5';
+    REDIRECTION_URL = 'https://qa-unity.iqvia.app/';
+    break;
   default:
     // DEV Data
     PROPOSAL_API_ENDPOINT =

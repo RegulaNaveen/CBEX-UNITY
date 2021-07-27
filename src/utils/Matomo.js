@@ -14,6 +14,7 @@ const envSideId = {
   SDEV: 20,
   UDEV: 20,
   UAT: 20,
+  QA: 20,
   PROD: 21
 };
 
