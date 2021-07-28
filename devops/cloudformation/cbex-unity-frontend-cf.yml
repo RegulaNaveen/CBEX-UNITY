@@ -1,0 +1,136 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Cbex Unity FrontEnd Stack'
+Parameters:
+  Environment:
+    Description: 'Environment Name to deploy ex: dev, uat, preprod, prod ....'
+    Type: String
+    Default: ''
+  Region:
+    Description: 'AWS Region to deploy'
+    Type: String
+    Default: ''    
+  EnableVersioning:
+    Description: 'Enable versioning.'
+    Type: String
+    Default: Enabled
+    AllowedValues: [Enabled, Suspended]
+  BucketName:
+    Description: 'BucketName to push the artifacts'
+    Type: String
+    Default: ''
+  Route53Cname:
+    Description: 'Route53 Cname to set for'
+    Type: String
+    Default: ''        
+  AcmCertificateArn:
+    Description: '*.iqvia.app certificate ARN in ACM'
+    Type: String
+    Default: ''
+
+Resources:
+  UnityFrontEndBucket: # Creates Bucket for Unity Front End. #This needs environment as input eg. dev, uat etc.,
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Ref BucketName
+      AccessControl: Private
+      WebsiteConfiguration:
+        IndexDocument: index.html      
+      VersioningConfiguration:
+        Status: !Ref EnableVersioning
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+        - ServerSideEncryptionByDefault:
+            SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      Tags:
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Name
+        Value: "iqvia-unity-app"
+      - Key: Owner
+        Value: "SomeDL"
+  CloudFrontOriginAccessIdentity:
+    Type: 'AWS::CloudFront::CloudFrontOriginAccessIdentity'
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Ref UnityFrontEndBucket
+  BucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    Properties:
+      Bucket: !Ref UnityFrontEndBucket
+      PolicyDocument:
+        Statement:
+        - Action: 's3:GetObject'
+          Effect: Allow
+          Resource: !Sub 'arn:aws:s3:::${UnityFrontEndBucket}/*'
+          Principal:
+            CanonicalUser: !GetAtt CloudFrontOriginAccessIdentity.S3CanonicalUserId                
+  UnityFrontEndCloudFront: # Creates Cloudfront with the above bucket as Origin and maps the certificate in ACM
+    Type: AWS::CloudFront::Distribution
+    DependsOn:
+    - UnityFrontEndBucket
+    Properties:
+      DistributionConfig:
+        Origins:
+        - DomainName: !GetAtt 'UnityFrontEndBucket.DomainName'
+          Id: !Ref UnityFrontEndBucket
+          S3OriginConfig:
+            OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}'
+        Enabled: 'true'
+        IPV6Enabled: 'true'
+        DefaultRootObject: index.html
+        CustomErrorResponses:
+          - ErrorCode: 403 
+            ResponseCode: 200
+            ErrorCachingMinTTL: 300
+            ResponsePagePath: /index.html
+        DefaultCacheBehavior:
+          TargetOriginId:
+            Ref: UnityFrontEndBucket
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods:
+          - GET
+          - HEAD
+          CachedMethods:
+          - GET
+          - HEAD
+          Compress: false
+          ForwardedValues:
+            QueryString: 'false'
+            Cookies:
+              Forward: none
+          MaxTTL: 86400
+          MinTTL: 0
+          DefaultTTL: 3600
+        PriceClass: PriceClass_100
+        Aliases: 
+          - !Ref UnityFrontEndBucket
+        ViewerCertificate:
+          AcmCertificateArn: !Ref AcmCertificateArn
+          SslSupportMethod: sni-only
+        Restrictions:
+          GeoRestriction:
+            RestrictionType: None
+
+  SetCloudFrontCname: # Creates the CNAME for the above cloudfornt DNS prefixing the environment Eg: dev-unity.iqvia.app
+    Type: AWS::Route53::RecordSet
+    DependsOn: UnityFrontEndCloudFront    
+    Properties:
+      HostedZoneName: iqvia.app.
+      Name: !Ref Route53Cname
+      Type: CNAME
+      TTL: '60'
+      ResourceRecords:
+        - !GetAtt [UnityFrontEndCloudFront, DomainName]
+
+Outputs:
+  UnityFrontEndCloudFrontDns:
+    Description: The DNSName of the CloudFron
+    Value: !GetAtt [UnityFrontEndCloudFront, DomainName]
+  CloudFrontCname:
+    Description: CNAME for Cloudfront DNS name Set in Route53
+    Value: !Ref SetCloudFrontCname

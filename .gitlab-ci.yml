@@ -1,0 +1,95 @@
+include:
+  - local: devops/vars/global.yml
+
+stages:
+  - initialize  #To initialize with environment specific paramters/variables
+  - sonar #sonar report
+  - build  #builds the artifacts
+  - deploystack #deploys the CF stack (if DeployStack to true in global.yml file) which includes S3, cloudfornt, route53
+  - deployartifacts #deploys only the artifacts to s3 and invalidate the cloudfront
+  
+initialize:
+  stage: initialize
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest  
+  rules:
+    - if:  $CI_COMMIT_REF_NAME == "qa" || $CI_COMMIT_REF_NAME == "uat" || $CI_COMMIT_REF_NAME == "master"
+      when: manual
+    - when: always    
+  script:
+    - bash devops/scripts/set_env.sh #this script will be executed to set the environment deploying to as environment variable and make it available to other below jobs
+    - source build.env
+    - cat devops/vars/${Environment}.env >> build.env #set the environment specific variables/parameters
+    - cat build.env
+  artifacts:
+    paths:
+      - build.env
+  tags:
+    - docker
+
+sonar:
+  stage: sonar
+  image: sonarsource/sonar-scanner-cli:4.5
+  rules:
+    - if:  $CI_COMMIT_REF_NAME == "qa" || $CI_COMMIT_REF_NAME == "dev"
+    - when: never
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
+    GIT_DEPTH: 0
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script:
+    - export SONAR_SCANNER_OPTS="-Djavax.net.ssl.trustStore=cacerts/sonarca.jks -Djavax.net.ssl.trustStorePassword=changeit"
+    - sonar-scanner    
+
+build:
+  stage: build
+  image: node:12
+  dependencies:
+    - initialize    
+  script:
+    - source build.env
+    - df -h
+    - yarn cache clean
+    - yarn install
+    - yarn build:$Environment
+    - ls dist/
+  artifacts:
+    paths:
+      - dist/   
+  tags:
+    - docker
+
+deploystack:
+  stage: deploystack
+  rules:
+    - if:  $CI_COMMIT_REF_NAME =~ /^feature/
+      when: never 
+    - if: '$DeployStack == "True"' #this flag drives whether to deploy the infrastructure stack
+      when: always
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  dependencies:
+    - initialize
+    - build
+  script:
+    - source build.env
+    - aws cloudformation validate-template --template-body file://devops/cloudformation/cbex-unity-frontend-cf.yml --region $Region
+    - aws cloudformation deploy --stack-name $Project-$Product-$Module-$Environment --template-file devops/cloudformation/cbex-unity-frontend-cf.yml --parameter-overrides $(cat devops/vars/cfparameters.ini) $(cat build.env) --tags $(cat devops/vars/cftags.ini) Environment=$Environment Lifecycle=$Environment --region $Region
+
+deployartifacts:
+  stage: deployartifacts
+  rules:
+    - if:  $CI_COMMIT_REF_NAME =~ /^feature/
+      when: never  
+    - when: always
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  dependencies:
+    - initialize
+    - build
+  script:    
+    - source build.env  
+    - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
+    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[*].{id:Id, OriginDomainName:Origins.Items[0].DomainName}[?contains(OriginDomainName, '$BucketName.s3.amazonaws.com')].id" --output text) --paths "/*" --region $Region
+  tags:
+    - docker
