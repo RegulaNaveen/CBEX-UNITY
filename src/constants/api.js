@@ -75,8 +75,8 @@ switch (environment) {
   case 'QA':
     // UDEV Data
     PROPOSAL_API_ENDPOINT =
-      'https://l5vw6p22ud.execute-api.us-east-1.amazonaws.com/ubuilddev';
-    PROPOSAL_API_KEY = 'iBzVNrZKTepvlEyptBks4DbbtkLwnSY9tVR61qQf';
+      'https://cp51hofds5.execute-api.us-east-1.amazonaws.com/qa';
+    PROPOSAL_API_KEY = '0HT36HHLAi8nuQzWngadG8YkiW5kEP1V49Hus7Eh';
     NORMAL_AUTH_API_ENDPOINT =
       'https://aiz2k1qjjl.execute-api.us-east-1.amazonaws.com/dev';
     COGNITO_HOST = 'https://unity-dev.auth.us-east-1.amazoncognito.com';
