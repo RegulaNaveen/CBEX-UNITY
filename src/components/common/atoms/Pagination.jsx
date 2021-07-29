@@ -4,11 +4,15 @@ import classnames from 'classnames';
 import { chunk, last } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { ArrowLeft, ArrowRight, More } from '../../svg';
+import MatomoHOC from '../../HOC/MatomoHOC'
 
 type Props = {
   maxRows: number,
   totalItems: number,
-  getCurrentPage: (selectedPage: number) => void
+  getCurrentPage: (selectedPage: number) => void,
+  eventCategories: any,
+  userActions: any,
+  trackEvent: any
 };
 
 type State = {
@@ -33,6 +37,7 @@ class Pagination extends PureComponent<Props, State> {
     const { getCurrentPage } = this.props;
 
     this.setState({ currentPage: value }, () => getCurrentPage(value));
+    this.trackMatomoPaginationClicks('Page No. '+ value);
   };
 
   handlePreviousChunk = () => {
@@ -47,6 +52,7 @@ class Pagination extends PureComponent<Props, State> {
         () => getCurrentPage(lastItem)
       );
     }
+    this.trackMatomoPaginationClicks('Left Arrow');
   };
 
   handleNextChunk = () => {
@@ -61,8 +67,20 @@ class Pagination extends PureComponent<Props, State> {
         () => getCurrentPage(first)
       );
     }
+    this.trackMatomoPaginationClicks('Right Arrow');
   };
 
+  trackMatomoPaginationClicks = (type: string) => {
+    const {
+      userActions,
+      eventCategories,
+      trackEvent
+    } = this.props;
+    trackEvent({
+      category: eventCategories.pg,
+      action: `Pagination: ${userActions.click} On ${type}`
+    });
+  }
   renderLeftControls() {
     const { currentChunk } = this.state;
     if (currentChunk === 0) return null;
@@ -145,4 +163,4 @@ class Pagination extends PureComponent<Props, State> {
   }
 }
 
-export default Pagination;
+export default MatomoHOC(Pagination);

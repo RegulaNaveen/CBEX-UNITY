@@ -9,7 +9,9 @@ const MatomoHOC = (Component: any) => {
       `Proposal Detail (CRM#: ${
         props && props.proposalDetail ? props.proposalDetail['CRM #'] : ''
       })`,
-    plainPd: `Proposal Detail`
+    plainPd: `Proposal Detail`,
+    tb: `ToolBar Menu`,
+    pg: `Pagination`
   };
   const actions = {
     click: 'Clicked',
