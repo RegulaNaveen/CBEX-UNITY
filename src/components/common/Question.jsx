@@ -119,6 +119,7 @@ export class TaskRow extends Component<Props, State> {
       ]
     });
   };
+
   trackMatomoEventAnswerHistory = () => {
     const {
       eventCategories,
