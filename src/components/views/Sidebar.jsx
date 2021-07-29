@@ -83,7 +83,7 @@ class Sidebar extends Component<Props, State> {
     window.removeEventListener('click', this.handleClick);
   }
 
-  handleClick = e => {
+  handleClick = (e) => {
     const { isOpen } = this.props;
     /**
      * prevent closing sidebar when click event happens inside sidebar
@@ -127,10 +127,7 @@ class Sidebar extends Component<Props, State> {
 
     const { setSelectedSection, handleOpenClose } = this.props;
 
-    const itemToScroll = textContent
-      .toLocaleLowerCase()
-      .split(' ')
-      .join('-');
+    const itemToScroll = textContent.toLocaleLowerCase().split(' ').join('-');
 
     const item: ?HTMLElement = document.getElementById(itemToScroll);
 
@@ -154,13 +151,9 @@ class Sidebar extends Component<Props, State> {
     setTabFromQuestionNotes(activeTabIndex, selectedtitle || '', false);
   };
 
-  trackMatomoEventScroll = action => {
-    const {
-      userActions,
-      eventCategories,
-      proposalDetail,
-      trackEvent
-    } = this.props;
+  trackMatomoEventScroll = (action) => {
+    const { userActions, eventCategories, proposalDetail, trackEvent } =
+      this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Blade: ${userActions.scroll} From Blade To ${action} Section`,
@@ -173,14 +166,10 @@ class Sidebar extends Component<Props, State> {
     });
   };
 
-  trackMatomoEventSidebarToggle = action => {
+  trackMatomoEventSidebarToggle = (action) => {
     const openOrclose = action ? 'Open' : 'Close';
-    const {
-      userActions,
-      eventCategories,
-      proposalDetail,
-      trackEvent
-    } = this.props;
+    const { userActions, eventCategories, proposalDetail, trackEvent } =
+      this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Blade: ${userActions.click} On Blade To ${openOrclose} Sidebar`,
@@ -253,7 +242,7 @@ class Sidebar extends Component<Props, State> {
                 }
                 fullWidth
                 style={{ justifyContent: 'left', paddingLeft: '40px' }}
-                onClick={e => {
+                onClick={(e) => {
                   this.handleItemsVisibility(e);
                   AddNewQuestion();
                 }}
@@ -273,7 +262,7 @@ class Sidebar extends Component<Props, State> {
                 }
                 fullWidth
                 style={{ justifyContent: 'left', paddingLeft: '40px' }}
-                onClick={e => {
+                onClick={(e) => {
                   this.handleItemsVisibility(e);
                   expandAll();
                 }}
@@ -296,7 +285,7 @@ class Sidebar extends Component<Props, State> {
                 }
                 fullWidth
                 style={{ justifyContent: 'left', paddingLeft: '40px' }}
-                onClick={e => {
+                onClick={(e) => {
                   this.handleItemsVisibility(e);
                   RefreshProposal();
                 }}
@@ -316,12 +305,12 @@ class Sidebar extends Component<Props, State> {
             </Tabs>
             {activeTabIndex === 0 && (
               <div className="sidebar-content-list">
-                {sections.valueSeq().map(section => {
+                {sections.valueSeq().map((section) => {
                   const sectionName = section.get('sectionName');
                   const questions = section.get('questions');
                   const someQuestionsAreVisible = questions
                     .valueSeq()
-                    .map(question => question.get('visible'))
+                    .map((question) => question.get('visible'))
                     .includes(true);
 
                   if (someQuestionsAreVisible)

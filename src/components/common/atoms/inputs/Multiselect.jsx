@@ -127,7 +127,7 @@ class Multiselect extends PureComponent<Props, State> {
           {isCollapsed && (
             <ul className="multiselect-list">
               {!isEmpty(items) &&
-                items.map(item => (
+                items.map((item) => (
                   <MultiselectItem
                     onClick={this.onSelect}
                     item={item}

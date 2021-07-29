@@ -33,7 +33,7 @@ const TableView = ({ data, hideStatus }: Props) => {
       className="headers"
       style={{ gridTemplateColumns: `repeat(${columnsLength}, 1fr)` }}
     >
-      {columnsNames.map(column => {
+      {columnsNames.map((column) => {
         const skip = SKIP_COLUMNS;
         if (hideStatus) skip.push(STATUS_COLUMN);
         return !skip.includes(column) && <h3 key={uuidv4()}>{column}</h3>;
@@ -41,8 +41,8 @@ const TableView = ({ data, hideStatus }: Props) => {
     </div>
   );
 
-  const renderRow = row => {
-    const renderCols = columns.filter(col =>
+  const renderRow = (row) => {
+    const renderCols = columns.filter((col) =>
       hideStatus
         ? col !== STATUS_COLUMN && !SKIP_COLUMNS.includes(col)
         : !SKIP_COLUMNS.includes(col)
@@ -54,7 +54,7 @@ const TableView = ({ data, hideStatus }: Props) => {
         className="row"
         style={{ gridTemplateColumns: `repeat(${columnsLength}, 1fr)` }}
       >
-        {renderCols.map(col => {
+        {renderCols.map((col) => {
           switch (col) {
             case LINK_COLUMN:
               return (
@@ -96,7 +96,7 @@ const TableView = ({ data, hideStatus }: Props) => {
 
   const renderTableContent = (_data: Array<Object>) => (
     <div key={uuidv4()} className="table-grid">
-      {_data.map(rowContent => renderRow(rowContent))}
+      {_data.map((rowContent) => renderRow(rowContent))}
     </div>
   );
 

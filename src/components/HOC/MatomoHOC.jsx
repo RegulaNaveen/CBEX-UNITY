@@ -5,7 +5,7 @@ import { useMatomo } from '@datapunt/matomo-tracker-react';
 const MatomoHOC = (Component: any) => {
   const categories = {
     dp: 'Unity Dashboard',
-    pd: props =>
+    pd: (props) =>
       `Proposal Detail (CRM#: ${
         props && props.proposalDetail ? props.proposalDetail['CRM #'] : ''
       })`,

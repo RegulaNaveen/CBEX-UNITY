@@ -82,7 +82,7 @@ export class Proposal extends Component<Props, State> {
 
     getNotes(params.id);
 
-    window.addEventListener('storage', e => this.handleStorageChange(e));
+    window.addEventListener('storage', (e) => this.handleStorageChange(e));
 
     const enableValidateTab = localStorage.getItem('enableValidateTab');
     if (enableValidateTab === null) {
@@ -129,13 +129,9 @@ export class Proposal extends Component<Props, State> {
     }
   }
 
-  trackMatomoEventTabs = tab => {
-    const {
-      eventCategories,
-      userActions,
-      proposalDetail,
-      trackEvent
-    } = this.props;
+  trackMatomoEventTabs = (tab) => {
+    const { eventCategories, userActions, proposalDetail, trackEvent } =
+      this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Tab: ${userActions.click} On ${tab}`,

@@ -91,7 +91,7 @@ export class TaskRow extends Component<Props, State> {
     setQuestionToDisplayHistory(questionId);
   };
 
-  trackMatomoEventSubmitAnswer = data => {
+  trackMatomoEventSubmitAnswer = (data) => {
     const {
       eventCategories,
       proposalDetail,

@@ -16,8 +16,8 @@ export function fetchNotesApi(proposalID) {
   return new Promise((resolve, reject) => {
     axios
       .get(`${NOTEPAD_API_URL}/${proposalID}`, config)
-      .then(response => resolve(response.data))
-      .catch(err => reject(err));
+      .then((response) => resolve(response.data))
+      .catch((err) => reject(err));
   });
 }
 
@@ -32,8 +32,8 @@ export function addNoteApi(proposalID, note) {
   return new Promise((resolve, reject) => {
     axios
       .post(`${NOTEPAD_API_URL}/${proposalID}`, note, config)
-      .then(response => resolve(response.data))
-      .catch(err => reject(err));
+      .then((response) => resolve(response.data))
+      .catch((err) => reject(err));
   });
 }
 
@@ -48,7 +48,7 @@ export function updateNoteApi(proposalID, note) {
   return new Promise((resolve, reject) => {
     axios
       .post(`${NOTEPAD_API_URL}/${proposalID}`, note, config)
-      .then(response => resolve(response.data))
-      .catch(err => reject(err));
+      .then((response) => resolve(response.data))
+      .catch((err) => reject(err));
   });
 }

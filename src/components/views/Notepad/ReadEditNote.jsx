@@ -90,7 +90,7 @@ function EditNoteForm({ sections, values, handleSubmit, setFieldValue }) {
             name="note"
             label="Proposal Notes"
             placeholder="Enter notes here..."
-            onChange={value => setFieldValue('note', JSON.stringify(value))}
+            onChange={(value) => setFieldValue('note', JSON.stringify(value))}
             defaultValue={noteContentState}
           />
         </Grid>
@@ -107,7 +107,7 @@ function EditNoteForm({ sections, values, handleSubmit, setFieldValue }) {
             margin="dense"
             size="small"
           >
-            {sections.valueSeq().map(section => (
+            {sections.valueSeq().map((section) => (
               <MenuItem key={uuidv4()} value={section.get('sectionName')}>
                 {section.get('sectionName')}
               </MenuItem>
@@ -143,7 +143,7 @@ function EditNote({ sections, onEdit, readOnly, note, onClose }) {
       note: note.get('noteText'),
       section: sectionValue
     }),
-    handleSubmit: values => {
+    handleSubmit: (values) => {
       onEdit(
         note.merge(Map({ noteText: values.note, section: values.section }))
       );

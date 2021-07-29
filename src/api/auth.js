@@ -14,10 +14,10 @@ export const authentication = async (
         email,
         password
       })
-      .then(response => {
+      .then((response) => {
         resolve(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err.response.data.message);
       });
   });
@@ -29,10 +29,10 @@ export const forgotPassword = async (email: string): Promise<Object> => {
       .post(`${AUTH_API_URL}/forgot-password`, {
         email
       })
-      .then(response => {
+      .then((response) => {
         resolve(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err.response.data.message);
       });
   });
@@ -50,10 +50,10 @@ export const resetPassword = async (
         code,
         newPassword
       })
-      .then(response => {
+      .then((response) => {
         resolve(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err.response.data.message);
       });
   });
@@ -69,10 +69,10 @@ export const postRefreshToken = async (
         email,
         refreshToken
       })
-      .then(response => {
+      .then((response) => {
         resolve(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err.response.data.message);
       });
   });
@@ -95,10 +95,10 @@ export const putRole = async (
           headers: { Authorization: `Bearer ${jwt}` }
         }
       )
-      .then(response => {
+      .then((response) => {
         resolve(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err.response.data.message);
       });
   });

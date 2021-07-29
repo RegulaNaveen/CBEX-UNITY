@@ -58,7 +58,7 @@ class Documents extends Component<Props> {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isGettingBoxId: getProposalBoxIdIsLoading(state),
   onGettingBoxIdError: getProposalBoxIdError(state),
   boxId: getProposalBoxId(state)

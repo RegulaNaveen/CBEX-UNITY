@@ -24,7 +24,7 @@ function AddNoteForm({ sections, values, handleSubmit, setFieldValue }) {
             name="note"
             label="Proposal Notes"
             placeholder="Enter notes here..."
-            onChange={value => setFieldValue('note', JSON.stringify(value))}
+            onChange={(value) => setFieldValue('note', JSON.stringify(value))}
           />
         </Grid>
       </Grid>
@@ -40,7 +40,7 @@ function AddNoteForm({ sections, values, handleSubmit, setFieldValue }) {
             margin="dense"
             size="small"
           >
-            {sections.valueSeq().map(section => (
+            {sections.valueSeq().map((section) => (
               <MenuItem key={uuidv4()} value={section.get('sectionName')}>
                 {section.get('sectionName')}
               </MenuItem>
@@ -70,7 +70,7 @@ function AddNote({ sections, onAddNote }) {
       note: '',
       section: ''
     }),
-    handleSubmit: values => {
+    handleSubmit: (values) => {
       onAddNote(values);
     },
     displayName: 'AddNoteForm'

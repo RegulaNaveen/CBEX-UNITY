@@ -102,7 +102,7 @@ class Tabbar extends Component<Props, State> {
     this.trackMatomoEventFilterToggle(!showFilters);
   };
 
-  trackMatomoEventTabs = index => {
+  trackMatomoEventTabs = (index) => {
     const tabs = ['My Docket', 'Recent', 'All'];
     const { userActions, eventCategories, trackEvent } = this.props;
     trackEvent({
@@ -111,7 +111,7 @@ class Tabbar extends Component<Props, State> {
     });
   };
 
-  trackMatomoEventFilterToggle = action => {
+  trackMatomoEventFilterToggle = (action) => {
     const openOrclose = action ? 'Open' : 'Close';
     const { userActions, eventCategories, trackEvent } = this.props;
     trackEvent({

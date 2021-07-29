@@ -81,12 +81,8 @@ class RecentTab extends Component<Props, State> {
     this.setState({ pageContent });
 
   render() {
-    const {
-      proposals,
-      loading,
-      isFilteringProposals,
-      filteredProposals
-    } = this.props;
+    const { proposals, loading, isFilteringProposals, filteredProposals } =
+      this.props;
 
     const showPagination = isFilteringProposals
       ? !isEmpty(filteredProposals)
@@ -119,7 +115,7 @@ class RecentTab extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   selectedViewType: getProposalTypeView(state),
   proposals: getProposals(state),
   loading: getProposalsLoading(state),

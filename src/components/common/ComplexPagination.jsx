@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { chunk } from 'lodash';
 import Dropwdown from './atoms/inputs/Dropdown';
 import Pagination from './atoms/Pagination';
-import MatomoHoc from '../HOC/MatomoHOC'
+import MatomoHoc from '../HOC/MatomoHOC';
 
 type Props = {
   totalItems: number,
@@ -32,7 +32,7 @@ class ComplexPagination extends Component<Props, State> {
   setMaxRows = (maxRows: number) => {
     const { getMaxRows } = this.props;
     this.setState({ maxRows }, () => getMaxRows(maxRows));
-    this.trackMatomoPaginationClicks(maxRows)
+    this.trackMatomoPaginationClicks(maxRows);
   };
 
   getCurrentPage = (currentPage: number) => {
@@ -41,16 +41,12 @@ class ComplexPagination extends Component<Props, State> {
   };
 
   trackMatomoPaginationClicks = (size: number) => {
-    const {
-      userActions,
-      eventCategories,
-      trackEvent
-    } = this.props;
+    const { userActions, eventCategories, trackEvent } = this.props;
     trackEvent({
       category: eventCategories.pg,
       action: `Pagination: ${userActions.changed} Page Size To ${size}`
     });
-  }
+  };
 
   render() {
     const { currentPage, maxRows } = this.state;

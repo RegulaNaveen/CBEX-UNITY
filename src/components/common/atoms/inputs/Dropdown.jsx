@@ -105,7 +105,7 @@ class Dropdown extends PureComponent<Props, State> {
             {isCollapsed && (
               <ul className="dd-list">
                 {items &&
-                  items.map(item => (
+                  items.map((item) => (
                     <DropdownItem
                       onClick={this.handleClick}
                       item={item}

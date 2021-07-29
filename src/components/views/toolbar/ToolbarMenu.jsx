@@ -69,32 +69,24 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     changeUserRole(value);
 
     this.setState({ roleName: value });
-    this.trackMatomoRoleChange(value)
+    this.trackMatomoRoleChange(value);
   };
 
-  trackMatomoLinkClicks = (link: string) =>{
-    const {
-      userActions,
-      eventCategories,
-      trackEvent
-    } = this.props;
+  trackMatomoLinkClicks = (link: string) => {
+    const { userActions, eventCategories, trackEvent } = this.props;
     trackEvent({
       category: eventCategories.tb,
       action: `ToolBar: ${userActions.click} On ${link} Link`
     });
-  }
+  };
 
-  trackMatomoRoleChange = (role: string) =>{
-    const {
-      userActions,
-      eventCategories,
-      trackEvent
-    } = this.props;
+  trackMatomoRoleChange = (role: string) => {
+    const { userActions, eventCategories, trackEvent } = this.props;
     trackEvent({
       category: eventCategories.tb,
       action: `ToolBar: ${userActions.changed} User Role to ${role}`
     });
-  }
+  };
 
   render() {
     const { roleName } = this.state;
@@ -124,7 +116,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
           )}
         </div>
         <div className="menu-links">
-            <Button
+          <Button
             target="_blank"
             variant="text"
             icon={<PencilIcon />}

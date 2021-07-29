@@ -16,10 +16,10 @@ export const getProposalInfo = async (id: string): Promise<Object> => {
       .get(`${PROPOSAL_API_URL}/${id}`, {
         headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
       })
-      .then(response => {
+      .then((response) => {
         resolve(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
@@ -49,10 +49,10 @@ export const getQuestionSectionInfo = async (): Promise<Object> => {
       .get(`${PROPOSAL_API_URL}/sections`, {
         headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
       })
-      .then(response => {
+      .then((response) => {
         resolve(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
@@ -64,10 +64,10 @@ export const getAnswerTypes = async (): Promise<Object> => {
       .get(`${PROPOSAL_API_URL}/answerTypes`, {
         headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
       })
-      .then(response => {
+      .then((response) => {
         resolve(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
@@ -79,10 +79,10 @@ export const getRoles = async (): Promise<Object> => {
       .get(`${PROPOSAL_API_URL}/roles`, {
         headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
       })
-      .then(response => {
+      .then((response) => {
         resolve(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
@@ -97,10 +97,10 @@ export const setProposalQuestionData = async (
       .post(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}`, questionData, {
         headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
       })
-      .then(response => {
+      .then((response) => {
         resolve(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
@@ -116,10 +116,10 @@ export const getProposalInfoUpdated = async (id: string): Promise<Object> => {
           headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
         }
       )
-      .then(response => {
+      .then((response) => {
         resolve(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });

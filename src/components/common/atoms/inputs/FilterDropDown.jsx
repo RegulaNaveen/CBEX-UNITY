@@ -10,7 +10,7 @@ type Props = {
 };
 
 const FilterDropDown = ({ id, onChange, title, items }: Props) => {
-  const filterChange = useCallback(value => onChange(id, value));
+  const filterChange = useCallback((value) => onChange(id, value));
   return (
     <Dropdown
       title={title}

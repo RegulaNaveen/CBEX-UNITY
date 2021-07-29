@@ -28,7 +28,7 @@ UserLookup.defaultProps = {
   withReset: false
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   users: getLookupUsers(state)
 });
 

@@ -101,14 +101,16 @@ class AnswerHistory extends Component<Props> {
 
         if (answer.isEmpty()) return <p>All answers deleted</p>;
 
-        const deletedAnswers = nextAnswer.filter(ans => !answer.includes(ans));
-        const deletedAnswersItems = deletedAnswers.map(ans => (
+        const deletedAnswers = nextAnswer.filter(
+          (ans) => !answer.includes(ans)
+        );
+        const deletedAnswersItems = deletedAnswers.map((ans) => (
           <li className="removed" key={uuidv4()}>
             {ans}
           </li>
         ));
 
-        const answerItem = answer.map(singleAnswer => (
+        const answerItem = answer.map((singleAnswer) => (
           <li
             key={uuidv4()}
             className={!nextAnswer.includes(singleAnswer) ? 'changed' : ''}

@@ -83,19 +83,16 @@ class CollapsibleList extends Component<Props, State> {
   createId = () => {
     const { title } = this.props;
 
-    const id = title
-      .toLocaleLowerCase()
-      .split(' ')
-      .join('-');
+    const id = title.toLocaleLowerCase().split(' ').join('-');
 
     return id;
   };
 
-  showNotesCount = title => {
+  showNotesCount = (title) => {
     const { notes, handleOpenClose, setTabFromQuestionNotes } = this.props;
     if (notes && notes && notes.size && notes.size > 0) {
       const count = notes.filter(
-        note => note.getIn(['section', 'sectionName'], '') === title
+        (note) => note.getIn(['section', 'sectionName'], '') === title
       );
       if (count.size > 0) {
         return (
@@ -107,7 +104,7 @@ class CollapsibleList extends Component<Props, State> {
             }}
           >
             <Link
-              onClick={e => {
+              onClick={(e) => {
                 e.stopPropagation();
                 handleOpenClose(true);
                 setTabFromQuestionNotes(1, title, true);
@@ -128,15 +125,10 @@ class CollapsibleList extends Component<Props, State> {
     return null;
   };
 
-  trackMatomoEventBladeToggle = action => {
+  trackMatomoEventBladeToggle = (action) => {
     const openOrclose = action ? 'Open' : 'Close';
-    const {
-      userActions,
-      title,
-      proposalDetail,
-      eventCategories,
-      trackEvent
-    } = this.props;
+    const { userActions, title, proposalDetail, eventCategories, trackEvent } =
+      this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Question Section: ${userActions.click} To ${openOrclose} ${title}`,
@@ -205,7 +197,7 @@ class CollapsibleList extends Component<Props, State> {
               </div>
             </div>
 
-            {questions.valueSeq().map(questionConfig => {
+            {questions.valueSeq().map((questionConfig) => {
               const visible = questionConfig.get('visible');
               return (
                 (visible || typeof visible === 'undefined') && (

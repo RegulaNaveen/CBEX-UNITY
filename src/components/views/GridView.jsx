@@ -46,7 +46,7 @@ class GridView extends Component<Props> {
       <div
         className={classNames('grid-view', { 'is-centered': data.length > 1 })}
       >
-        {data.map(proposal => {
+        {data.map((proposal) => {
           const formatted = formatProposal(proposal);
 
           return (
