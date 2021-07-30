@@ -14,7 +14,7 @@ then
 elif [ $CI_COMMIT_REF_NAME == "dev" ]
 then
    echo "Environment=dev" > build.env
-elif [[ $branch == "feature/"* ]]
+elif [[ $CI_COMMIT_REF_NAME == "feature/"* ]]
 then
    echo "Environment=dev" > build.env  
 else

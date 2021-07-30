@@ -5,7 +5,7 @@ import { PROPOSAL } from '../constants/api';
 const env = process.env.API_ENV || 'DEV';
 
 // Set empty userId
-localStorage.setItem('MatomoUserIdSet', '')
+localStorage.setItem('MatomoUserIdSet', '');
 
 const envSideId = {
   DEV: 20,

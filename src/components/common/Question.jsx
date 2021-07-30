@@ -89,6 +89,7 @@ export class TaskRow extends Component<Props, State> {
   displayAnswerOnHistory = () => {
     const { setQuestionToDisplayHistory, questionId } = this.props;
     setQuestionToDisplayHistory(questionId);
+    this.trackMatomoEventAnswerHistory();
   };
 
   trackMatomoEventSubmitAnswer = data => {
@@ -109,6 +110,32 @@ export class TaskRow extends Component<Props, State> {
           id: 1,
           value: JSON.stringify({
             answer: data,
+            sectionName,
+            questionText,
+            questionId,
+            proposalDetail
+          })
+        }
+      ]
+    });
+  };
+
+  trackMatomoEventAnswerHistory = () => {
+    const {
+      eventCategories,
+      proposalDetail,
+      questionText,
+      sectionName,
+      trackEvent,
+      questionId
+    } = this.props;
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action: `Answer History: Clicked On ${questionText} (${sectionName})`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify({
             sectionName,
             questionText,
             questionId,
