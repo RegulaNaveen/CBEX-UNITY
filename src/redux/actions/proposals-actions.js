@@ -61,7 +61,7 @@ export const getAllProposals = (): ThunkAction<string, Object> => {
 
       if (!isEmpty(data)) {
         const { proposals } = data;
-        const formatted = proposals.map((proposal) => formatProposal(proposal));
+        const formatted = proposals.map(proposal => formatProposal(proposal));
         dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
       }
     } catch (error) {
@@ -79,7 +79,7 @@ export const getProposalsByStatus = (status: string) => {
 
       if (data) {
         const { proposals } = data;
-        const formatted = proposals.map((proposal) => formatProposal(proposal));
+        const formatted = proposals.map(proposal => formatProposal(proposal));
         dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
       }
     } catch (error) {
@@ -109,7 +109,7 @@ const dateRangeFilter = (key: string, range: Object, array: Array<Object>) => {
   from.setHours(0, 0, 0, 0);
   to.setHours(0, 0, 0, 0);
 
-  return array.filter((proposal) => {
+  return array.filter(proposal => {
     const proposalDate = moment(proposal[key]);
     return proposalDate >= from && proposalDate <= to;
   });
@@ -117,7 +117,7 @@ const dateRangeFilter = (key: string, range: Object, array: Array<Object>) => {
 
 const textFilter = (key: string, value: string, array: Array<Object>) => {
   return array.filter(
-    (proposal) =>
+    proposal =>
       !isEmpty(proposal) &&
       proposal[key].toLowerCase().includes(value.toLowerCase())
   );
@@ -125,7 +125,7 @@ const textFilter = (key: string, value: string, array: Array<Object>) => {
 
 const optionFilter = (key: string, value: string, array: Array<Object>) => {
   return array.filter(
-    (proposal) =>
+    proposal =>
       !isEmpty(proposal) && proposal[key].toLowerCase() === value.toLowerCase()
   );
 };
@@ -135,95 +135,99 @@ const userFilter = (value: string, array: Array<Object>) => {
   const end = value.indexOf(')');
   const userEmail = value.substr(start + 1, end - start - 1);
 
-  return array.filter((proposal) =>
+  return array.filter(proposal =>
     objectContains(proposal.usersList, userEmail, false)
   );
 };
 
-export const onFilteringProposals =
-  (filters: FilteredData, isFiltering: boolean): ThunkAction<string, Object> =>
-  (dispatch: Dispatch<string, Object>, getState: Function) => {
-    const proposalsMap = getState().proposals;
-    const proposals = proposalsMap.get('proposals');
+export const onFilteringProposals = (
+  filters: FilteredData,
+  isFiltering: boolean
+): ThunkAction<string, Object> => (
+  dispatch: Dispatch<string, Object>,
+  getState: Function
+) => {
+  const proposalsMap = getState().proposals;
+  const proposals = proposalsMap.get('proposals');
 
-    const cleanFilters = Object.entries(filters)
-      // eslint-disable-next-line no-unused-vars
-      .filter(([key, value]) => value !== '')
-      .map(([key, value]) => [key, value]);
+  const cleanFilters = Object.entries(filters)
+    // eslint-disable-next-line no-unused-vars
+    .filter(([key, value]) => value !== '')
+    .map(([key, value]) => [key, value]);
 
-    if (isEmpty(cleanFilters)) {
-      dispatch({
-        type: ON_FILTER_PROPOSALS,
-        payload: { filteredProposals: proposals, isFiltering }
-      });
-    } else {
-      let filteredProposals = [];
+  if (isEmpty(cleanFilters)) {
+    dispatch({
+      type: ON_FILTER_PROPOSALS,
+      payload: { filteredProposals: proposals, isFiltering }
+    });
+  } else {
+    let filteredProposals = [];
 
-      cleanFilters.forEach(([key, value]: Array<any>) => {
-        switch (key) {
-          case 'opportunity number':
-          case 'opportunityName':
-          case 'customer':
-          case 'protocol number':
-          case 'product':
-          case 'verbatim indication':
-            filteredProposals = textFilter(
-              key,
-              value,
-              !isEmpty(filteredProposals) ? filteredProposals : proposals
-            );
-            break;
-          case 'phase':
-          case 'therapeuticArea':
-          case 'opportunity status':
-            filteredProposals = optionFilter(
-              key,
-              value,
-              !isEmpty(filteredProposals) ? filteredProposals : proposals
-            );
-            break;
-          case 'bid due date':
-            filteredProposals = dateRangeFilter(
-              key,
-              value,
-              !isEmpty(filteredProposals) ? filteredProposals : proposals
-            );
-            break;
-          case 'teamMember':
-            filteredProposals = userFilter(
-              value,
-              !isEmpty(filteredProposals) ? filteredProposals : proposals
-            );
-            break;
-          default:
-            break;
-        }
-      });
-
-      dispatch({
-        type: ON_FILTER_PROPOSALS,
-        payload: { filteredProposals, isFiltering }
-      });
-    }
-  };
-
-export const getFilteringValues =
-  (): ThunkAction<String, Object> =>
-  async (dispatch: Dispatch<Object, Object>) => {
-    try {
-      const { data } = await onGetFilterValues();
-
-      if (data) {
-        const { acceptanceCriteriaValues } = data;
-        dispatch({
-          type: ON_SET_PROPOSALS_FILTERS,
-          payload: { proposalsFilters: acceptanceCriteriaValues }
-        });
+    cleanFilters.forEach(([key, value]: Array<any>) => {
+      switch (key) {
+        case 'opportunity number':
+        case 'opportunityName':
+        case 'customer':
+        case 'protocol number':
+        case 'product':
+        case 'verbatim indication':
+          filteredProposals = textFilter(
+            key,
+            value,
+            !isEmpty(filteredProposals) ? filteredProposals : proposals
+          );
+          break;
+        case 'phase':
+        case 'therapeuticArea':
+        case 'opportunity status':
+          filteredProposals = optionFilter(
+            key,
+            value,
+            !isEmpty(filteredProposals) ? filteredProposals : proposals
+          );
+          break;
+        case 'bid due date':
+          filteredProposals = dateRangeFilter(
+            key,
+            value,
+            !isEmpty(filteredProposals) ? filteredProposals : proposals
+          );
+          break;
+        case 'teamMember':
+          filteredProposals = userFilter(
+            value,
+            !isEmpty(filteredProposals) ? filteredProposals : proposals
+          );
+          break;
+        default:
+          break;
       }
-    } catch (error) {
-      console.log(error);
+    });
+
+    dispatch({
+      type: ON_FILTER_PROPOSALS,
+      payload: { filteredProposals, isFiltering }
+    });
+  }
+};
+
+export const getFilteringValues = (): ThunkAction<String, Object> => async (
+  dispatch: Dispatch<Object, Object>
+) => {
+  try {
+    const { data } = await onGetFilterValues();
+
+    if (data) {
+      const { acceptanceCriteriaValues } = data;
+      dispatch({
+        type: ON_SET_PROPOSALS_FILTERS,
+        payload: { proposalsFilters: acceptanceCriteriaValues }
+      });
     }
-  };
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const setProposalTypeView = (
   typeView: 0 | 1

@@ -10,7 +10,7 @@ const generateSections = (
   let sections = Map();
   const userRole = role !== '' ? role : false;
 
-  proposalQuestions.forEach((question) => {
+  proposalQuestions.forEach(question => {
     const {
       questionId,
       roleNames,
@@ -24,7 +24,7 @@ const generateSections = (
       let questions = sections.getIn([sectionName, 'questions']) || Map({});
 
       questions = questions.set(questionId, fromJS(question));
-      questions = questions.sortBy((item) => item.get('questionOrder'));
+      questions = questions.sortBy(item => item.get('questionOrder'));
 
       section = section
         .set('sectionOrder', sectionOrder)
@@ -39,7 +39,7 @@ const generateSections = (
     } else createSections();
   });
 
-  sections = sections.sortBy((section) => section.get('sectionOrder'));
+  sections = sections.sortBy(section => section.get('sectionOrder'));
 
   return sections;
 };
@@ -67,7 +67,7 @@ export const getSections = (proposal: Map): Map =>
 export const getProposalTeamAssignedRoles = (proposal: Map): Map => {
   const proposalTeamSectionAnswers = proposal
     .get('proposalQuestions')
-    .filter((value) => value.section.sectionName === 'Proposal Team')
+    .filter(value => value.section.sectionName === 'Proposal Team')
     .map(({ questionText, answers }) => {
       return {
         role: questionText,

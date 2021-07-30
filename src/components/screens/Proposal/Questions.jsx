@@ -86,7 +86,7 @@ class Questions extends Component<Props, State> {
 
     const question = allSections
       .valueSeq()
-      .find((section) => section.getIn(['questions', selectedAnswer]))
+      .find(section => section.getIn(['questions', selectedAnswer]))
       .getIn(['questions', selectedAnswer]);
 
     this.setState({
@@ -124,8 +124,12 @@ class Questions extends Component<Props, State> {
   };
 
   trackMatomoEventRefreshInfo = () => {
-    const { userActions, eventCategories, proposalDetail, trackEvent } =
-      this.props;
+    const {
+      userActions,
+      eventCategories,
+      proposalDetail,
+      trackEvent
+    } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Round Buttons: ${userActions.click} On Refresh Button`,
@@ -138,10 +142,14 @@ class Questions extends Component<Props, State> {
     });
   };
 
-  trackMatomoEventToggleQModal = (action) => {
+  trackMatomoEventToggleQModal = action => {
     const openOrclose = action ? 'Open' : 'Close';
-    const { userActions, eventCategories, proposalDetail, trackEvent } =
-      this.props;
+    const {
+      userActions,
+      eventCategories,
+      proposalDetail,
+      trackEvent
+    } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Round Buttons: ${userActions.click} To ${openOrclose} Add New Question Modal`,
@@ -154,9 +162,13 @@ class Questions extends Component<Props, State> {
     });
   };
 
-  trackMatomoEventForCheckBoxes = (item) => {
-    const { userActions, eventCategories, proposalDetail, trackEvent } =
-      this.props;
+  trackMatomoEventForCheckBoxes = item => {
+    const {
+      userActions,
+      eventCategories,
+      proposalDetail,
+      trackEvent
+    } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `CheckBoxes: ${userActions.click} On ${item} Checkbox`,
@@ -169,7 +181,7 @@ class Questions extends Component<Props, State> {
     });
   };
 
-  scrollToSelectedElement = (title) => {
+  scrollToSelectedElement = title => {
     setTimeout(() => {
       const item = document.getElementById(
         `notepad-${String(title).toLocaleLowerCase()}`
@@ -195,16 +207,16 @@ class Questions extends Component<Props, State> {
 
     const allSections = isChecked ? filteredSections : sections;
 
-    return allSections.valueSeq().map((section) => {
+    return allSections.valueSeq().map(section => {
       const sectionName = section.get('sectionName');
       const questions = section.get('questions');
       const someQuestionsAreVisible = questions
         .valueSeq()
-        .map((question) => question.get('visible'))
+        .map(question => question.get('visible'))
         .includes(true);
 
       const allQuestionsDontHaveLogin = questions.every(
-        (question) => question.get('visible') === undefined
+        question => question.get('visible') === undefined
       );
 
       if (someQuestionsAreVisible || allQuestionsDontHaveLogin)
@@ -216,7 +228,7 @@ class Questions extends Component<Props, State> {
             setTabFromQuestionNotes={(val, title, flag) =>
               this.setTabFromQuestionNotes(val, title, flag)
             }
-            onAddQuestion={(value) => {
+            onAddQuestion={value => {
               this.setState({ currentsection: value });
               this.onClose();
             }}

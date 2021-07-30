@@ -27,7 +27,7 @@ class SwitchView extends Component<Props> {
     this.trackMatomoEvent('Card');
   };
 
-  trackMatomoEvent = (view) => {
+  trackMatomoEvent = view => {
     const { eventCategories, userActions, trackEvent } = this.props;
     trackEvent({
       category: eventCategories.dp,
@@ -59,7 +59,7 @@ class SwitchView extends Component<Props> {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   selectedViewType: getProposalTypeView(state)
 });
 

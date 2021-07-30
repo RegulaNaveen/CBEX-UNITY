@@ -17,7 +17,7 @@ const {
 } = REDUX_TYPES.NOTEPAD;
 
 export function fetchNotes(proposalID) {
-  return async (dispatch) => {
+  return async dispatch => {
     try {
       dispatch({ type: FETCH_NOTES });
       const data = await fetchNotesApi(proposalID);
@@ -32,7 +32,7 @@ export function fetchNotes(proposalID) {
 }
 
 export function addNote(id, note) {
-  return async (dispatch) => {
+  return async dispatch => {
     try {
       dispatch({ type: ADD_NOTE });
       await addNoteApi(id, note);
@@ -45,7 +45,7 @@ export function addNote(id, note) {
 }
 
 export function updateNote(id, note) {
-  return async (dispatch) => {
+  return async dispatch => {
     try {
       dispatch({ type: UPDATE_NOTE });
       await updateNoteApi(id, note);
@@ -59,7 +59,7 @@ export function updateNote(id, note) {
 }
 
 export function changeMode(mode) {
-  return (dispatch) => dispatch({ type: CHANGE_MODE, payload: { mode } });
+  return dispatch => dispatch({ type: CHANGE_MODE, payload: { mode } });
 }
 
 export default fetchNotes;

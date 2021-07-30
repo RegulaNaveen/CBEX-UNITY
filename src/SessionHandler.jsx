@@ -73,7 +73,7 @@ const SessionHandler = ({ children }: Props) => {
   const dispatch = useDispatch();
 
   const { authData, serror, changeRoleError } = useSelector(
-    (state) => ({
+    state => ({
       authData: getAuthData(state),
       serror: authHasErrors(state),
       changeRoleError: getChangeRoleError(state)

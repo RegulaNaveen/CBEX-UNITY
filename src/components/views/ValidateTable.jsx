@@ -71,7 +71,7 @@ const ValidateTable = ({ data }: Props) => (
         </div>
       </div>
       <div className="rows">
-        {data.map((item) => {
+        {data.map(item => {
           const title = item.get('title');
           const intakeData = item.get('intakeData');
           const unityData = item.get('unityData');

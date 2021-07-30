@@ -82,7 +82,7 @@ export class Proposal extends Component<Props, State> {
 
     getNotes(params.id);
 
-    window.addEventListener('storage', (e) => this.handleStorageChange(e));
+    window.addEventListener('storage', e => this.handleStorageChange(e));
 
     const enableValidateTab = localStorage.getItem('enableValidateTab');
     if (enableValidateTab === null) {
@@ -107,26 +107,6 @@ export class Proposal extends Component<Props, State> {
     window.removeEventListener('storage', this.handleStorageChange);
   }
 
-  trackMatomoEventTabs = (tab) => {
-    const { eventCategories, userActions, proposalDetail, trackEvent } =
-      this.props;
-    trackEvent({
-      category: eventCategories.pd(this.props),
-      action: `Tab: ${userActions.click} On ${tab}`,
-      customDimensions: [
-        {
-          id: 1,
-          value: JSON.stringify(proposalDetail)
-        }
-      ]
-    });
-  };
-
-  onChangeProposalView = (selectedView: string) => {
-    this.setState({ selectedView });
-    this.trackMatomoEventTabs(selectedView);
-  };
-
   handleStorageChange(e) {
     const {
       getValidatedData,
@@ -148,6 +128,30 @@ export class Proposal extends Component<Props, State> {
       }
     }
   }
+
+  onChangeProposalView = (selectedView: string) => {
+    this.setState({ selectedView });
+    this.trackMatomoEventTabs(selectedView);
+  };
+
+  trackMatomoEventTabs = tab => {
+    const {
+      eventCategories,
+      userActions,
+      proposalDetail,
+      trackEvent
+    } = this.props;
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action: `Tab: ${userActions.click} On ${tab}`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify(proposalDetail)
+        }
+      ]
+    });
+  };
 
   renderContent = () => {
     const { selectedView, enableValidateTab } = this.state;

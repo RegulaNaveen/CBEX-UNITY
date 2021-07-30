@@ -5,7 +5,7 @@ export const objectToString = (_object: Object): string => {
   if (!isObject(_object))
     return !isEmpty(_object) ? _object.toString() : 'No data';
 
-  const objectStringfied = valuesIn(_object).map((value) =>
+  const objectStringfied = valuesIn(_object).map(value =>
     isObject(value) ? objectToString(value) : value
   );
 
@@ -21,10 +21,13 @@ export const objectContains = (
 
   const arr = valuesIn(object);
 
-  const found = arr.filter((prop) => {
+  const found = arr.filter(prop => {
     if (isObject(prop)) return objectContains(prop, search, deepSearch);
     return !deepSearch
-      ? prop.toString().toLowerCase().includes(search.toLowerCase())
+      ? prop
+          .toString()
+          .toLowerCase()
+          .includes(search.toLowerCase())
       : prop.toString().toLowerCase() === search.toLocaleLowerCase();
   });
 

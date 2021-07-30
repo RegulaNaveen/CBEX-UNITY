@@ -39,7 +39,7 @@ class Lookup extends Component<Props, State> {
 
   onSearching = ({ target: { value } }: SyntheticInputEvent<EventTarget>) => {
     const { data } = this.props;
-    const filteringData = data.filter((item) =>
+    const filteringData = data.filter(item =>
       objectContains(item, value, false)
     );
 

@@ -178,7 +178,7 @@ const actionMap = {
   [ERROR_ON_GET_LOOKUP_USERS]: onErrorGetLookupUsers
 };
 
-export default function (
+export default function(
   state: Map<string, any> = INITIAL_STATE,
   action: ApiAction<any, any>
 ): Map {

@@ -74,8 +74,11 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    const { getQuestionSectionF, getAnswerTypesDataF, getRolesInfoF } =
-      this.props;
+    const {
+      getQuestionSectionF,
+      getAnswerTypesDataF,
+      getRolesInfoF
+    } = this.props;
 
     getQuestionSectionF();
     getAnswerTypesDataF();
@@ -104,7 +107,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   };
 
   onRoleChange = (values: Array<string>) => {
-    const roleNames = values.map((value) => value.replace(', ', ''));
+    const roleNames = values.map(value => value.replace(', ', ''));
     this.setState({ roleNames });
   };
 
@@ -133,7 +136,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     }
   };
 
-  trackMatomoEventCreateQ = (data) => {
+  trackMatomoEventCreateQ = data => {
     const { eventCategories, proposalDetail, trackEvent } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),

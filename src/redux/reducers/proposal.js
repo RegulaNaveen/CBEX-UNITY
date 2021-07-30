@@ -88,7 +88,7 @@ const onProposalAnswer = (state: Map, action: Object): Map => {
 
   const indexOfListToUpdate = state
     .get('proposalQuestions')
-    .findIndex((listItem) => {
+    .findIndex(listItem => {
       return listItem.questionId === referenceId;
     });
 
@@ -225,7 +225,7 @@ const onUpdateModifiedQuestion = (state: Map, action: Object): Map => {
 
   const indexOfQuestionToUpdate = state
     .get('proposalQuestions')
-    .findIndex((listItem) => listItem.questionId === question.questionId);
+    .findIndex(listItem => listItem.questionId === question.questionId);
 
   newState = state.setIn(
     ['proposalQuestions', indexOfQuestionToUpdate],
@@ -287,7 +287,7 @@ const actionMap = {
   [VALIDATED_PROPOSAL_DATA_ERROR]: onValidatedProposaDataError
 };
 
-export default function (
+export default function(
   state: Map<string, any> = INITIAL_STATE,
   action: ApiAction<any, any>
 ): Map {

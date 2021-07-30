@@ -41,11 +41,13 @@ function Notepad({
   const [selectedNote, setSelectedNote] = useState(Map());
 
   function handleOnAddNote(note) {
-    let newNote = Map().set('noteText', note.note).set('createdBy', {
-      userName: getUserName(),
-      userRole: getUserRole(),
-      userEmail: getUserEmail()
-    });
+    let newNote = Map()
+      .set('noteText', note.note)
+      .set('createdBy', {
+        userName: getUserName(),
+        userRole: getUserRole(),
+        userEmail: getUserEmail()
+      });
     if (note.section.length > 0) {
       newNote = newNote.set(
         'section',
@@ -166,7 +168,7 @@ Notepad.propTypes = {
   selectedtitle: PropTypes.string.isRequired
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   notes: selectNotes(state),
   fetchingNotes: selectIsFetchingNotes(state),
   addingNote: selectIsAddingNote(state),

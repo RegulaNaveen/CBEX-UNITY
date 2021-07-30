@@ -78,7 +78,7 @@ export const setProposalAnswerData = (
 
       const { modifiedQuestions } = data;
       if (!isEmpty(modifiedQuestions)) {
-        modifiedQuestions.forEach((question) => {
+        modifiedQuestions.forEach(question => {
           dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
         });
       }
