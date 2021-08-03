@@ -140,7 +140,7 @@ function EditNote({ sections, onEdit, readOnly, note, onClose }) {
   sectionValue = sectionValue ? sectionValue.get('sectionName') : '';
   const FormikedEditNoteForm = withFormik({
     mapPropsToValues: () => ({
-      note: note.get('noteText'),
+      note: note.get('noteText') || '',
       section: sectionValue
     }),
     handleSubmit: values => {
