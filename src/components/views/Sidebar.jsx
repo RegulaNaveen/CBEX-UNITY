@@ -127,10 +127,7 @@ class Sidebar extends Component<Props, State> {
 
     const { setSelectedSection, handleOpenClose } = this.props;
 
-    const itemToScroll = textContent
-      .toLocaleLowerCase()
-      .split(' ')
-      .join('-');
+    const itemToScroll = textContent.toLocaleLowerCase().split(' ').join('-');
 
     const item: ?HTMLElement = document.getElementById(itemToScroll);
 
@@ -155,12 +152,8 @@ class Sidebar extends Component<Props, State> {
   };
 
   trackMatomoEventScroll = action => {
-    const {
-      userActions,
-      eventCategories,
-      proposalDetail,
-      trackEvent
-    } = this.props;
+    const { userActions, eventCategories, proposalDetail, trackEvent } =
+      this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Blade: ${userActions.scroll} From Blade To ${action} Section`,
@@ -175,12 +168,8 @@ class Sidebar extends Component<Props, State> {
 
   trackMatomoEventSidebarToggle = action => {
     const openOrclose = action ? 'Open' : 'Close';
-    const {
-      userActions,
-      eventCategories,
-      proposalDetail,
-      trackEvent
-    } = this.props;
+    const { userActions, eventCategories, proposalDetail, trackEvent } =
+      this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Blade: ${userActions.click} On Blade To ${openOrclose} Sidebar`,

@@ -35,7 +35,11 @@
     "prettier/prettier": [
       "error",
       {
+        "semi": true,
+        "trailingComma": "none",
         "singleQuote": true,
+        "arrowParens": "avoid",
+        "endOfLine": "auto",
         "parser": "babel"
       }
     ],

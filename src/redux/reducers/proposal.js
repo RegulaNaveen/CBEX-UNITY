@@ -287,7 +287,7 @@ const actionMap = {
   [VALIDATED_PROPOSAL_DATA_ERROR]: onValidatedProposaDataError
 };
 
-export default function(
+export default function (
   state: Map<string, any> = INITIAL_STATE,
   action: ApiAction<any, any>
 ): Map {

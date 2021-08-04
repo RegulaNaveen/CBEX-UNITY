@@ -25,7 +25,7 @@ const actionMap = {
   [IS_OPEN]: onHandleOpenClose
 };
 
-export default function(
+export default function (
   state: Map<string, any> = INITIAL_STATE,
   action: ApiAction<any, any>
 ): Map {
