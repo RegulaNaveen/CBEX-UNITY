@@ -34,7 +34,7 @@ function NoteLabel({ onClose }) {
 }
 
 function ReadNote({ note, onClose }) {
-  const noteText = note.get('noteText');
+  const noteText = note.get('noteText') || '';
   let noteContentState = EditorState.createEmpty();
   try {
     noteContentState = convertFromRaw(JSON.parse(noteText));
