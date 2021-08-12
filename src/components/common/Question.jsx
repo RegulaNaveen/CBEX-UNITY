@@ -179,7 +179,7 @@ export class TaskRow extends Component<Props, State> {
         sfObject === 'Apttus__APTS_Agreement__c') &&
       sfField === 'Targeted_Countries__c'
     ) {
-      answerValueComplex = getCountriesNameForCode(answerValueComplex);
+      answerValueComplex = getCountriesNameForCode(answerValueComplex || []);
       finalOptions = getCountryOptions();
     }
 
