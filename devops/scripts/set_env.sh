@@ -17,6 +17,9 @@ then
 elif [[ $CI_COMMIT_REF_NAME == "feature/"* ]]
 then
    echo "Environment=dev" > build.env  
+elif [[ $CI_COMMIT_REF_NAME == "bugfix/"* ]]
+then
+   echo "Environment=dev" > build.env 
 else
    exit
 fi
