@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { isEmpty } from 'lodash';
 import { loginUser, onRefreshUserData } from './redux/actions/sso-auth-actions';
-import { LOGIN, ROOT } from './routes';
+import { LOGIN, ROOT, DASHBOARD } from './routes';
 import { getUserAuthStatus } from './redux/selectors';
 import { validateToken } from './api/sso-auth';
 import { API } from './constants';
@@ -93,6 +93,8 @@ class SessionHandler extends Component<Props, {}> {
     if (!isEmpty(redirectURL)) {
       history.push(redirectURL);
       clearRedirectURL();
+    } else if (pathname === ROOT || pathname === LOGIN) {
+      history.push(DASHBOARD);
     } else {
       history.push(pathname + search);
     }
