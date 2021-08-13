@@ -90,22 +90,22 @@ class Questions extends Component<Props, State> {
       .find(section => section.getIn(['questions', selectedAnswer]))
       .getIn(['questions', selectedAnswer]);
 
-    const answerConfigType = question.get('answerConfiguration', Map({ type: '' }))
+    const answerConfigType = question
+      .get('answerConfiguration', Map({ type: '' }))
       .get('type', '');
     const sfObject = question.get('sfObject', '');
     const sfField = question.get('sfField', '');
-    
+
     if (
       answerConfigType === 'picklist' &&
       (sfObject === 'Bid_History__c' ||
         sfObject === 'Apttus__APTS_Agreement__c') &&
       sfField === 'Targeted_Countries__c'
     ) {
-      const newAnswers = question.get('answers', List())
-        .map(ans => {
-          let newAns = getCountriesNameForCode(ans.get('answer', List()));
-          return ans.set('answer', newAns);
-        });
+      const newAnswers = question.get('answers', List()).map(ans => {
+        const newAns = getCountriesNameForCode(ans.get('answer', List()));
+        return ans.set('answer', newAns);
+      });
       question = question.set('answers', newAnswers);
     }
 
