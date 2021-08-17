@@ -102,11 +102,17 @@ class Questions extends Component<Props, State> {
         sfObject === 'Apttus__APTS_Agreement__c') &&
       sfField === 'Targeted_Countries__c'
     ) {
-      const newAnswers = question.get('answers', List()).map(ans => {
-        const newAns = getCountriesNameForCode(ans.get('answer', List()));
-        return ans.set('answer', newAns);
-      });
-      question = question.set('answers', newAnswers);
+      let newAnswers = question.get('answers', List());
+      const questionId = newAnswers.get('questionId');
+
+      if (questionId) newAnswers = newAnswers.getIn(['answers', 'answers']);
+      if (newAnswers) {
+        newAnswers = newAnswers.map(ans => {
+          const newAns = getCountriesNameForCode(ans.get('answer', List()));
+          return ans.set('answer', newAns);
+        });
+        question = question.set('answers', newAnswers);
+      }
     }
 
     this.setState({
