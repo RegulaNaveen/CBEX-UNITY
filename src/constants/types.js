@@ -31,7 +31,8 @@ const SSO_AUTH = {
   ERROR_ON_CHANGE_ROLE: 'error_on_change_role',
   ON_REFRESH_USER_DATA: 'on_refresh_user_data',
   ON_GET_LOOKUP_USERS: 'on_get_lookup_users',
-  ERROR_ON_GET_LOOKUP_USERS: 'error_on_get_lookup_users'
+  ERROR_ON_GET_LOOKUP_USERS: 'error_on_get_lookup_users',
+  DEFAULT_ROLE: 'All'
 };
 
 const PROPOSAL = {
