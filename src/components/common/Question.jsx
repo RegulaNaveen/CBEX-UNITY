@@ -52,7 +52,7 @@ export class TaskRow extends Component<Props, State> {
     if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
       if (lastAnswer !== textValue)
         setProposalAnswer(proposalId, questionId, textValue, userData);
-    } else if (!textValue && lastAnswer) {
+    } else if (!textValue && lastAnswer.trim()) {
       setProposalAnswer(proposalId, questionId, ' ', userData);
     }
 
