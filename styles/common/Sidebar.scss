@@ -45,7 +45,7 @@
     }
 
     &-list {
-      height: 100%;
+      height: calc(100% - 65px - 96px - 48px);
       overflow-y: scroll;
       scrollbar-width: none;
       -ms-overflow-style: none;
