@@ -84,9 +84,10 @@
 }
 
 .proposal-text-area {
-  overflow: hidden;
-  min-width: 176px;
-  max-width: 100%;
-  resize: vertical;
-  min-height: 42px;
+  width: 100%;
+  textarea {
+    resize: vertical !important;
+    min-height: 42px !important;
+    height: auto;
+  }
 }

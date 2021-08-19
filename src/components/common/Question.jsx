@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { isObject, isEqual, isEmpty } from 'lodash';
+import TextField from 'apollo-react/components/TextField';
 import { Checkmark } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
 import TextArea from './atoms/inputs/TextArea';
@@ -186,12 +187,13 @@ export class TaskRow extends Component<Props, State> {
     switch (type) {
       case 'text':
         return (
-          <TextArea
+          <TextField
             className="proposal-text-area"
             placeholder="Click to answer"
-            type="text"
-            onBlur={this.handleTextChange}
-            value={answerValue}
+            onBlur={e => this.handleTextChange(e.target.value, answerValue)}
+            defaultValue={answerValue}
+            sizeAdjustable
+            minHeight={42}
           />
         );
       case 'number':
