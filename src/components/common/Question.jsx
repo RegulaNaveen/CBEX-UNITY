@@ -193,7 +193,7 @@ export class TaskRow extends Component<Props, State> {
             onBlur={e => this.handleTextChange(e.target.value, answerValue)}
             defaultValue={answerValue}
             sizeAdjustable
-            minHeight={42}
+            minHeight={40}
           />
         );
       case 'number':
