@@ -2,6 +2,21 @@
 import React, { Component } from 'react';
 import Toolbar from '../../views/toolbar';
 import {UBUILD_ARTIFACT} from '../../../constants/api'
+
+const loadUbuildScript = (url, callback) => {
+    const existingScript = document.getElementById('ubuild-script');
+    if (!existingScript) {
+      const script = document.createElement('script');
+      script.src = `${url}`;
+      script.id = 'ubuild-script';
+      document.body.appendChild(script);
+      script.onload = () => { 
+        if (callback) callback();
+      };
+    }
+    if (existingScript && callback) callback();
+};
+
 type State = {
 };
 
