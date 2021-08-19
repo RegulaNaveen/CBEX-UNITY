@@ -219,6 +219,8 @@ class CollapsibleList extends Component<Props, State> {
                     answerConfiguration={questionConfig.get(
                       'answerConfiguration'
                     )}
+                    sfObject={questionConfig.get('sfObject')}
+                    sfField={questionConfig.get('sfField')}
                     sectionName={title}
                     setQuestionToDisplayHistory={setQuestionToDisplayHistory}
                   />

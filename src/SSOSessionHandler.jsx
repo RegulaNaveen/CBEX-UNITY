@@ -6,11 +6,17 @@ import type { History, Location } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
+import { isEmpty } from 'lodash';
 import { loginUser, onRefreshUserData } from './redux/actions/sso-auth-actions';
-import { PROPOSAL, DASHBOARD, LOGIN, ROOT } from './routes';
+import { LOGIN, ROOT, DASHBOARD } from './routes';
 import { getUserAuthStatus } from './redux/selectors';
 import { validateToken } from './api/sso-auth';
 import { API } from './constants';
+import {
+  clearRedirectURL,
+  getRedirectURL,
+  saveRedirectURL
+} from './utils/StorageUtils';
 
 const { COGNITO_HOST, REDIRECTION_URL, CLIENT_ID } = API.AUTH;
 
@@ -25,17 +31,7 @@ type Props = {
 
 class SessionHandler extends Component<Props, {}> {
   componentDidMount() {
-    const {
-      location: { pathname }
-    } = this.props;
-
-    if (pathname.includes('/app/proposal')) {
-      const proposalId = pathname.replace(/\/app\/proposal\//g, '');
-      localStorage.setItem('proposalId', proposalId);
-    }
-
     const idToken = localStorage.getItem('id_token');
-
     if (idToken) this.validateUserToken(idToken);
 
     this.startAuthentication();
@@ -51,9 +47,16 @@ class SessionHandler extends Component<Props, {}> {
       else this.userIsNotLoggedIn();
     }
 
-    if (prevLocation.pathname !== location.pathname && idToken)
-      this.validateUserToken(idToken);
+    if (prevLocation.pathname !== location.pathname && idToken) {
+      if (!this.isUserTokenValid(idToken)) {
+        this.userIsNotLoggedIn();
+      }
+    }
   }
+
+  isUserTokenValid = async token => {
+    return validateToken(token);
+  };
 
   validateUserToken = async (idToken: string) => {
     const { location } = this.props;
@@ -62,7 +65,6 @@ class SessionHandler extends Component<Props, {}> {
 
     if (validToken) this.userIsLoggedIn();
     else if (location.pathname !== LOGIN && location.pathname !== ROOT) {
-      localStorage.clear();
       this.userIsNotLoggedIn();
     }
   };
@@ -77,16 +79,35 @@ class SessionHandler extends Component<Props, {}> {
   };
 
   userIsLoggedIn = () => {
-    const { history, refreshUserData } = this.props;
+    const {
+      history: {
+        location: { pathname, search }
+      },
+      history,
+      refreshUserData
+    } = this.props;
+    const redirectURL = getRedirectURL();
 
     refreshUserData();
 
-    const proposalId = localStorage.getItem('proposalId');
-
-    history.push(`${proposalId ? `${PROPOSAL}${proposalId}` : DASHBOARD}`);
+    if (!isEmpty(redirectURL)) {
+      history.push(redirectURL);
+      clearRedirectURL();
+    } else if (pathname === ROOT || pathname === LOGIN) {
+      history.push(DASHBOARD);
+    } else {
+      history.push(pathname + search);
+    }
   };
 
   userIsNotLoggedIn = () => {
+    const {
+      location: { pathname }
+    } = this.props;
+    localStorage.clear();
+    if (pathname !== LOGIN && pathname !== ROOT) {
+      saveRedirectURL(pathname);
+    }
     window.location.assign(
       `${COGNITO_HOST}/logout?client_id=${CLIENT_ID}&logout_uri=${REDIRECTION_URL}`
     );

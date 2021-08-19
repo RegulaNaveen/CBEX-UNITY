@@ -179,7 +179,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
               <TextArea
                 id="question-text-area"
                 className="modal-text-area"
-                placeholder="Hint text..."
+                placeholder="Question text"
                 title="Enter Question Text"
                 type="text"
                 onChange={this.handleTextChange}

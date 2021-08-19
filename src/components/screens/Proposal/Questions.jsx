@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import type { Match } from 'react-router-dom';
-import { Map } from 'immutable';
+import { List, Map } from 'immutable';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Add, Refresh } from '../../svg';
@@ -24,6 +24,7 @@ import Sidebar from '../../views/Sidebar';
 import AnswerHistory from '../../views/modals/AnswerHistory';
 import { getAllUsers } from '../../../redux/actions/sso-auth-actions';
 import MatomoHOC from '../../HOC/MatomoHOC';
+import { getCountriesNameForCode } from '../../../utils/utils';
 
 type Props = {
   match: Match,
@@ -84,10 +85,35 @@ class Questions extends Component<Props, State> {
 
     const allSections = isChecked ? filteredSections : sections;
 
-    const question = allSections
+    let question = allSections
       .valueSeq()
       .find(section => section.getIn(['questions', selectedAnswer]))
       .getIn(['questions', selectedAnswer]);
+
+    const answerConfigType = question
+      .get('answerConfiguration', Map({ type: '' }))
+      .get('type', '');
+    const sfObject = question.get('sfObject', '');
+    const sfField = question.get('sfField', '');
+
+    if (
+      answerConfigType === 'picklist' &&
+      (sfObject === 'Bid_History__c' ||
+        sfObject === 'Apttus__APTS_Agreement__c') &&
+      sfField === 'Targeted_Countries__c'
+    ) {
+      let newAnswers = question.get('answers', List());
+      const questionId = newAnswers.get('questionId');
+
+      if (questionId) newAnswers = newAnswers.getIn(['answers', 'answers']);
+      if (newAnswers) {
+        newAnswers = newAnswers.map(ans => {
+          const newAns = getCountriesNameForCode(ans.get('answer', List()));
+          return ans.set('answer', newAns);
+        });
+        question = question.set('answers', newAnswers);
+      }
+    }
 
     this.setState({
       selectedQuestionForHistory: question,
