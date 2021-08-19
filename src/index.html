@@ -16,11 +16,11 @@
   <script>
 
     // Call this as from React componentdidmount loadUbuildScript('dev', ()=>console.log('Ubuild script loaded'))
-    const loadUbuildScript = (env, callback) => {
+    const loadUbuildScript = (url, callback) => {
       const existingScript = document.getElementById('ubuild-script');
       if (!existingScript) {
         const script = document.createElement('script');
-        script.src = `https://${env}-ubuild.iqvia.app/main.js`;
+        script.src = `${url}`;
         script.id = 'ubuild-script';
         document.body.appendChild(script);
         script.onload = () => { 

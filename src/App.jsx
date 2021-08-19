@@ -10,6 +10,7 @@ import SessionHandler from './SSOSessionHandler';
 import Login from './components/screens/Auth/Login';
 import ProposalComponent from './components/screens/Proposal';
 import DashboardComponent from './components/screens/Dashboard';
+import UbuildShellComponent from './components/screens/Ubuild';
 import '../styles/App.scss';
 import matomoInstace from './utils/Matomo';
 
@@ -23,6 +24,7 @@ const App = () => (
             <Route path={LOGIN} component={Login} />
             <PrivateRoute path={DASHBOARD} component={DashboardComponent} />
             <PrivateRoute path={PROPOSALS} component={ProposalComponent} />
+            <PrivateRoute path={UBUILD} component={UbuildShellComponent} />
             <Redirect to={Login} />
           </Switch>
         </SessionHandler>
