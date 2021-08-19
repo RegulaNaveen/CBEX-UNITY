@@ -51,9 +51,22 @@ class Tabbar extends Component<Props, State> {
     };
   }
 
+  componentDidMount(){
+    const { filterProposals } = this.props;
+    // Reset filters on page load
+    this.setState({ showFilters: false }, () =>
+      filterProposals({}, false)
+    );
+  }
   handleChange = (index: number) => {
+    const { filterProposals } = this.props;
     this.trackMatomoEventTabs(index);
     this.setState({ selected: index });
+
+    // Reset filters on tab switch
+    this.setState({ showFilters: false }, () =>
+      filterProposals({}, false)
+    );
   };
 
   handleTypeView = (selectedTab: 0 | 1) => {
