@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import Grid from 'apollo-react/components/Grid';
@@ -7,9 +7,12 @@ import Select from 'apollo-react/components/Select';
 import Button from 'apollo-react/components/Button';
 import Box from 'apollo-react/components/Box';
 import { v4 as uuidv4 } from 'uuid';
+import { convertFromRaw, EditorState } from 'draft-js';
 import RichTextEditor from '../../common/RichTextEditor';
 
 function AddNoteForm({ sections, values, handleSubmit, setFieldValue }) {
+  const [isEmpty, toggleIsEmpty] = useState(false);
+
   function handleSectionChange(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -24,7 +27,14 @@ function AddNoteForm({ sections, values, handleSubmit, setFieldValue }) {
             name="note"
             label="Proposal Notes"
             placeholder="Enter notes here..."
-            onChange={value => setFieldValue('note', JSON.stringify(value))}
+            onChange={value => {
+              setFieldValue('note', JSON.stringify(value));
+              toggleIsEmpty(
+                !EditorState.createWithContent(convertFromRaw(value))
+                  .getCurrentContent()
+                  .hasText()
+              );
+            }}
           />
         </Grid>
       </Grid>
@@ -53,7 +63,7 @@ function AddNoteForm({ sections, values, handleSubmit, setFieldValue }) {
               variant="primary"
               size="small"
               type="submit"
-              disabled={values.note.trim().length === 0}
+              disabled={values.note.trim().length === 0 || isEmpty}
             >
               Submit
             </Button>
