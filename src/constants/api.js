@@ -11,6 +11,9 @@ let COGNITO_HOST = '';
 let AUTH_KEY = '';
 let CLIENT_ID = '';
 let REDIRECTION_URL = '';
+//* Ubuild feature flag
+let UBUILD_ENABLED = false;
+let UBUILD_ARTIFACT = '';
 
 switch (environment) {
   case 'UAT':
@@ -24,6 +27,7 @@ switch (environment) {
     CLIENT_ID = '1h21m7sdoq1jr4tb00mkljn1m';
     REDIRECTION_URL = 'https://uat-unity.iqvia.app/';
     UBUILD_ENABLED = false;
+    UBUILD_ARTIFACT = '';
     break;
   case 'PROD':
     PROPOSAL_API_ENDPOINT =
@@ -36,6 +40,7 @@ switch (environment) {
     CLIENT_ID = 'tc1tih0kcrifpoqrdsqo26467';
     REDIRECTION_URL = 'https://unity.iqvia.app/';
     UBUILD_ENABLED = false;
+    UBUILD_ARTIFACT = '';
     break;
   case 'QA':
     // UDEV Data
@@ -50,6 +55,7 @@ switch (environment) {
     CLIENT_ID = '36e6ql6fnolv0ppsb9rfhpjqk5';
     REDIRECTION_URL = 'https://qa-unity.iqvia.app/';
     UBUILD_ENABLED = false;
+    UBUILD_ARTIFACT = '';
     break;
   default:
     // DEV Data
@@ -64,6 +70,7 @@ switch (environment) {
     CLIENT_ID = '36e6ql6fnolv0ppsb9rfhpjqk5';
     REDIRECTION_URL = 'https://dev-unity.iqvia.app/';
     UBUILD_ENABLED = true;
+    UBUILD_ARTIFACT = 'https://udev-unity.iqvia.app/main.js';
     break;
 }
 
@@ -113,4 +120,4 @@ const NOTEPAD = {
   NOTEPAD_API_URL
 };
 
-export { AUTH, PROPOSAL, NOTEPAD, UBUILD_ENABLED };
+export { AUTH, PROPOSAL, NOTEPAD, UBUILD_ENABLED, UBUILD_ARTIFACT };
