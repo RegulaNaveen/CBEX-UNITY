@@ -212,14 +212,10 @@ class Questions extends Component<Props, State> {
       const questions = section.get('questions');
       const someQuestionsAreVisible = questions
         .valueSeq()
-        .map(question => question.get('visible'))
+        .map(question => question.get('visible', true))
         .includes(true);
 
-      const allQuestionsDontHaveLogin = questions.every(
-        question => question.get('visible') === undefined
-      );
-
-      if (someQuestionsAreVisible || allQuestionsDontHaveLogin)
+      if (someQuestionsAreVisible)
         return (
           <CollapsibleList
             questions={questions}
