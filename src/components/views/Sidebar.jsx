@@ -217,13 +217,13 @@ class Sidebar extends Component<Props, State> {
     });
   };
 
-  trackMatomoNoteSubmit = (section, note) => {
+  trackMatomoNoteSubmit = (section, note, mode='submit') => {
     const text = JSON.parse(note)['blocks'][0]['text'];
     const {
       userActions
     } = this.props;
 
-    const actionString = (section) ? `Blade: ${userActions.submit} A Note (${text}) Under Section ${section}` :  `Blade: ${userActions.submit} A Note (${text})`;
+    const actionString = (section) ? `Blade: ${userActions[mode]} A Note (${text}) Under Section ${section}` :  `Blade: ${userActions[mode]} A Note (${text})`;
 
     this.trackMatomoEvent({
       action: actionString

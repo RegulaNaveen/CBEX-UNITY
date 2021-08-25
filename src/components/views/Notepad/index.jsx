@@ -93,6 +93,8 @@ function Notepad({
         )
         .toJS();
     }
+    // Matomo event from Parent component
+    trackMatomoNoteSubmit((newEditedNote.section) ? newEditedNote.section.sectionName  : '', newEditedNote.noteText, 'edit')
     update(id, newEditedNote);
   }
 
@@ -169,7 +171,7 @@ Notepad.propTypes = {
   addingNote: PropTypes.bool.isRequired,
   mode: PropTypes.string.isRequired,
   selectedtitle: PropTypes.string.isRequired,
-  trackMatomoNoteSubmit: PropTypes.string.isRequired
+  trackMatomoNoteSubmit: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
