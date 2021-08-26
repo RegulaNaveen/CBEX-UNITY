@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import Toolbar from '../../views/toolbar';
-import {UBUILD_ARTIFACT} from '../../../constants/api'
+import {UBUILD_ARTIFACT, AUTH} from '../../../constants/api'
 
 const loadUbuildScript = (url, callback) => {
     const existingScript = document.getElementById('ubuild-script');
@@ -12,6 +12,10 @@ const loadUbuildScript = (url, callback) => {
       document.body.appendChild(script);
       script.onload = () => { 
         if (callback) callback();
+      };
+      script.onerror = () => { 
+        console.log('Could not load web component artifacts');
+        window.location.replace(AUTH.REDIRECTION_URL);
       };
     }
     if (existingScript && callback) callback();
