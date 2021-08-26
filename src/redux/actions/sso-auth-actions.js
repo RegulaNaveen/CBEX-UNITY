@@ -1,5 +1,4 @@
 // @flow
-import jwtDecode from 'jwt-decode';
 import type { Dispatch, ThunkAction } from './action-types';
 import { onLoginRequest, onChangeUserRole, getUsers } from '../../api/sso-auth';
 import { REDUX_TYPES } from '../../constants';
@@ -12,28 +11,14 @@ const {
   ERROR_ON_CHANGE_ROLE,
   ON_REFRESH_USER_DATA,
   ON_GET_LOOKUP_USERS,
-  ERROR_ON_GET_LOOKUP_USERS,
-  DEFAULT_ROLE
+  ERROR_ON_GET_LOOKUP_USERS
 } = REDUX_TYPES.SSO_AUTH;
 
 export const loginUser = (code: string): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     try {
       const { data } = await onLoginRequest(code);
-      if (data) {
-        const { access_token: accessToken, id_token: idToken } = data;
-        const userInfo = jwtDecode(idToken);
-        const role = userInfo['custom:role'];
-        if (role === undefined) {
-          try {
-            await onChangeUserRole(accessToken, idToken, DEFAULT_ROLE);
-            dispatch({ type: ON_CHANGE_ROLE, payload: { role: DEFAULT_ROLE } });
-          } catch (error) {
-            dispatch({ type: ERROR_ON_CHANGE_ROLE, payload: { error } });
-          }
-        }
-        dispatch({ type: ON_USER_LOGIN, payload: { data } });
-      }
+      if (data) dispatch({ type: ON_USER_LOGIN, payload: { data } });
     } catch (error) {
       dispatch({ type: ERROR_ON_USER_LOGIN, payload: { error } });
     }

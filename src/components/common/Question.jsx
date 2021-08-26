@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { isObject, isEqual, isEmpty } from 'lodash';
-import TextField from 'apollo-react/components/TextField';
 import { Checkmark } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
 import TextArea from './atoms/inputs/TextArea';
@@ -14,7 +13,6 @@ import Multiselect from './atoms/inputs/Multiselect';
 import { setProposalAnswerData } from '../../redux/actions/proposal-actions';
 import { getUserData, getProposalDetails } from '../../redux/selectors';
 import MatomoHOC from '../HOC/MatomoHOC';
-import { getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
 
 type State = {
   selectedDay: string
@@ -32,9 +30,7 @@ type Props = {
   setQuestionToDisplayHistory: (answer: string) => void,
   eventCategories: any,
   trackEvent: any,
-  proposalDetail: any,
-  sfObject: string,
-  sfField: string
+  proposalDetail: any
 };
 
 export class TaskRow extends Component<Props, State> {
@@ -52,7 +48,7 @@ export class TaskRow extends Component<Props, State> {
     if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
       if (lastAnswer !== textValue)
         setProposalAnswer(proposalId, questionId, textValue, userData);
-    } else if (!textValue && lastAnswer.trim()) {
+    } else if (!textValue && lastAnswer) {
       setProposalAnswer(proposalId, questionId, ' ', userData);
     }
 
@@ -156,7 +152,7 @@ export class TaskRow extends Component<Props, State> {
     answers: Map,
     lastAnswer: Map
   ) => {
-    const { sectionName, sfObject, sfField } = this.props;
+    const { sectionName } = this.props;
     const { selectedDay } = this.state;
 
     const optionsYN = ['Yes', 'No'];
@@ -164,7 +160,6 @@ export class TaskRow extends Component<Props, State> {
 
     let answerValue = '';
     let answerValueComplex;
-    let finalOptions = options;
 
     if (answer) {
       if (isObject(answer)) answerValueComplex = answer.toJS();
@@ -174,26 +169,15 @@ export class TaskRow extends Component<Props, State> {
     if (sectionName === 'Proposal Team')
       return <UserLookup onChange={this.handleTextChange} text={answerValue} />;
 
-    if (
-      type === 'picklist' &&
-      (sfObject === 'Bid_History__c' ||
-        sfObject === 'Apttus__APTS_Agreement__c') &&
-      sfField === 'Targeted_Countries__c'
-    ) {
-      answerValueComplex = getCountriesNameForCode(answerValueComplex || []);
-      finalOptions = getCountryOptions();
-    }
-
     switch (type) {
       case 'text':
         return (
-          <TextField
+          <TextArea
             className="proposal-text-area"
             placeholder="Click to answer"
-            onBlur={e => this.handleTextChange(e.target.value, answerValue)}
-            defaultValue={answerValue}
-            sizeAdjustable
-            minHeight={40}
+            type="text"
+            onBlur={this.handleTextChange}
+            value={answerValue}
           />
         );
       case 'number':
@@ -221,7 +205,7 @@ export class TaskRow extends Component<Props, State> {
           <Dropdown
             id="dd-proposal-answer"
             placeholder="Click to answer"
-            items={finalOptions}
+            items={options}
             onClick={this.onClickChange}
             value={answerValue}
           />
@@ -240,7 +224,7 @@ export class TaskRow extends Component<Props, State> {
         return (
           <Multiselect
             placeholder="Click to answer"
-            items={finalOptions}
+            items={options}
             onClick={this.onSelectValues}
             value={answerValueComplex}
           />
