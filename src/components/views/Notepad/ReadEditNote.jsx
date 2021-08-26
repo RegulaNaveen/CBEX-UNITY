@@ -7,6 +7,7 @@ import Close from 'apollo-react-icons/Close';
 import MenuItem from 'apollo-react/components/MenuItem';
 import Select from 'apollo-react/components/Select';
 import Button from 'apollo-react/components/Button';
+import Box from 'apollo-react/components/Box';
 import { Map } from 'immutable';
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -62,13 +63,7 @@ function ReadNote({ note, onClose }) {
   );
 }
 
-function EditNoteForm({
-  sections,
-  values,
-  handleSubmit,
-  setFieldValue,
-  onClose
-}) {
+function EditNoteForm({ sections, values, handleSubmit, setFieldValue }) {
   const noteText = values.note;
   let noteContentState = null;
   try {
@@ -101,7 +96,7 @@ function EditNoteForm({
         </Grid>
       </Grid>
       <Grid container spacing={1} alignItems="flex-end">
-        <Grid item xs={8}>
+        <Grid item xs={9}>
           <Select
             name="section"
             label="Section (Optional)"
@@ -119,31 +114,17 @@ function EditNoteForm({
             ))}
           </Select>
         </Grid>
-        <Grid item xs={2}>
-          <div style={{ marginBottom: '4px', textAlign: 'center' }}>
+        <Grid item xs>
+          <Box mb={1} ml={1}>
             <Button
               variant="primary"
               size="small"
               type="submit"
               disabled={values.note.trim().length === 0}
-              fullWidth
             >
               Save
             </Button>
-          </div>
-        </Grid>
-        <Grid item xs={2}>
-          <div style={{ marginBottom: '4px', textAlign: 'center' }}>
-            <Button
-              variant="secondary"
-              size="small"
-              type="reset"
-              onClick={onClose}
-              fullWidth
-            >
-              Cancel
-            </Button>
-          </div>
+          </Box>
         </Grid>
       </Grid>
     </form>
@@ -171,7 +152,7 @@ function EditNote({ sections, onEdit, readOnly, note, onClose }) {
   })(EditNoteForm);
   return (
     <div className="edit-note">
-      <FormikedEditNoteForm sections={sections} onClose={onClose} />
+      <FormikedEditNoteForm sections={sections} />
     </div>
   );
 }
@@ -180,8 +161,7 @@ EditNoteForm.propTypes = {
   sections: PropTypes.object.isRequired,
   values: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  setFieldValue: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired
+  setFieldValue: PropTypes.func.isRequired
 };
 
 EditNote.propTypes = {

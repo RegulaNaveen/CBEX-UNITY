@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
-import { isEmpty, unionBy } from 'lodash';
+import { isEmpty } from 'lodash';
 import { diffWords } from 'diff';
 import { getProposalTeamAssignedRoles } from '../../../redux/selectors';
 import { Close } from '../../svg';
@@ -28,25 +28,18 @@ class AnswerHistory extends Component<Props> {
   renderAnswerResponsables = () => {
     const { question, proposalTeamAnswers } = this.props;
     const questionRoleNames = question.get('roleNames');
-    const questionRoles = question.get('roleNames')
-      .map(role => ({
-        role,
-        responsable: 'Not defined yet.'
-      }))
-      .toArray();
+
     const questionResponsables = proposalTeamAnswers.filter(({ role }) => {
       return !isEmpty(questionRoleNames) && questionRoleNames.includes(role);
     });
 
-    const merged = unionBy(questionResponsables, questionRoles, 'role');
-    
-    if (isEmpty(merged)) {
+    if (isEmpty(questionResponsables)) {
       return (
         <p className="question-responsible not-assigned">Not assigned yet</p>
       );
     }
 
-    return merged.map(({ role, responsable }) => {
+    return questionResponsables.map(({ role, responsable }) => {
       return (
         <p className="question-responsible" key={uuidv4()}>
           Pending: {role} - <span>@{responsable}</span>

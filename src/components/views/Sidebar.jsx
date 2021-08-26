@@ -6,13 +6,12 @@ import { connect } from 'react-redux';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
 import Badge from 'apollo-react/components/Badge';
+import FixedBar from 'apollo-react/components/FixedBar';
 import PlusIcon from 'apollo-react-icons/Plus';
 import CardIcon from 'apollo-react-icons/Card';
 import SyncIcon from 'apollo-react-icons/Sync';
-import Close from 'apollo-react-icons/Close';
-import IconButton from 'apollo-react/components/IconButton';
+import Button from 'apollo-react/components/Button';
 import Typography from 'apollo-react/components/Typography';
-import Tooltip from 'apollo-react/components/Tooltip';
 import { neptunePrimaryDark } from 'apollo-react/colors';
 
 import Notepad from './Notepad';
@@ -86,17 +85,12 @@ class Sidebar extends Component<Props, State> {
 
   handleClick = e => {
     const { isOpen } = this.props;
-    const { activeTabIndex } = this.state;
     /**
      * prevent closing sidebar when click event happens inside sidebar
      * since sidebar is fixed positioned and rightmost of viewport
      * we can check for x start positions alone to get workaround on clicking scrollbar area
      */
     if (isOpen) {
-      // prevent sidebar from closing while in notepad tab
-      if (activeTabIndex === 1) {
-        return;
-      }
       if (this.sidebarRef && this.sidebarRef.current) {
         const sidebarPos = this.sidebarRef.current.getBoundingClientRect();
         if (
@@ -214,14 +208,10 @@ class Sidebar extends Component<Props, State> {
 
     const NotepadTab = () =>
       notes.size === 0 ? (
-        <Typography variant="body2" style={{ fontWeight: 'inherit' }}>
-          Notepad
-        </Typography>
+        <Typography variant="body2">Notepad</Typography>
       ) : (
         <Badge variant="dot">
-          <Typography variant="body2" style={{ fontWeight: 'inherit' }}>
-            Notepad
-          </Typography>
+          <Typography variant="body2">Notepad</Typography>
         </Badge>
       );
 
@@ -240,66 +230,80 @@ class Sidebar extends Component<Props, State> {
             />
           </button>
           <div>
-            <div className="titlebar">
-              <Typography variant="title1" gutterBottom>
-                Controls
-              </Typography>
-              <IconButton size="small" onClick={this.handleItemsVisibility}>
-                <Close fontSize="extraSmall" />
-              </IconButton>
+            <div style={{ background: 'none' }}>
+              <FixedBar
+                title="Controls"
+                size="small"
+                onClose={this.handleItemsVisibility}
+              />
             </div>
             <div className="controls-wrapper">
-              <Tooltip title="Add New Question" placement="left">
-                <PlusIcon
-                  style={{
-                    backgroundColor: neptunePrimaryDark,
-                    width: 20,
-                    height: 20,
-                    borderRadius: '50%',
-                    color: '#fff',
-                    padding: 3,
-                    margin: 3,
-                    cursor: 'pointer'
-                  }}
-                  onClick={e => {
-                    this.handleItemsVisibility(e);
-                    AddNewQuestion();
-                  }}
-                />
-              </Tooltip>
-              <Tooltip title="Expand All Sections" placement="top">
-                <CardIcon
-                  style={{
-                    color: neptunePrimaryDark,
-                    width: 20,
-                    height: 20,
-                    margin: 3,
-                    cursor: 'pointer'
-                  }}
-                  onClick={e => {
-                    this.handleItemsVisibility(e);
-                    expandAll();
-                  }}
-                />
-              </Tooltip>
-              <Tooltip title="Refresh Proposal Sources" placement="right">
-                <SyncIcon
-                  style={{
-                    backgroundColor: neptunePrimaryDark,
-                    width: 20,
-                    height: 20,
-                    borderRadius: '50%',
-                    color: '#fff',
-                    padding: 3,
-                    margin: 3,
-                    cursor: 'pointer'
-                  }}
-                  onClick={e => {
-                    this.handleItemsVisibility(e);
-                    RefreshProposal();
-                  }}
-                />
-              </Tooltip>
+              <Button
+                icon={
+                  <PlusIcon
+                    style={{
+                      backgroundColor: neptunePrimaryDark,
+                      width: 20,
+                      height: 20,
+                      borderRadius: '50%',
+                      color: '#fff',
+                      padding: 3
+                    }}
+                  />
+                }
+                fullWidth
+                style={{ justifyContent: 'left', paddingLeft: '40px' }}
+                onClick={e => {
+                  this.handleItemsVisibility(e);
+                  AddNewQuestion();
+                }}
+                size="small"
+              >
+                Add New Questions
+              </Button>
+              <Button
+                icon={
+                  <CardIcon
+                    style={{
+                      color: neptunePrimaryDark,
+                      width: 20,
+                      height: 20
+                    }}
+                  />
+                }
+                fullWidth
+                style={{ justifyContent: 'left', paddingLeft: '40px' }}
+                onClick={e => {
+                  this.handleItemsVisibility(e);
+                  expandAll();
+                }}
+                size="small"
+              >
+                Expand All Sections
+              </Button>
+              <Button
+                icon={
+                  <SyncIcon
+                    style={{
+                      backgroundColor: neptunePrimaryDark,
+                      width: 20,
+                      height: 20,
+                      borderRadius: '50%',
+                      color: '#fff',
+                      padding: 3
+                    }}
+                  />
+                }
+                fullWidth
+                style={{ justifyContent: 'left', paddingLeft: '40px' }}
+                onClick={e => {
+                  this.handleItemsVisibility(e);
+                  RefreshProposal();
+                }}
+                size="small"
+              >
+                Refresh Proposal Sources
+              </Button>
             </div>
             <Tabs
               value={activeTabIndex}
@@ -317,7 +321,7 @@ class Sidebar extends Component<Props, State> {
                   const questions = section.get('questions');
                   const someQuestionsAreVisible = questions
                     .valueSeq()
-                    .map(question => question.get('visible', true))
+                    .map(question => question.get('visible'))
                     .includes(true);
 
                   if (someQuestionsAreVisible)
