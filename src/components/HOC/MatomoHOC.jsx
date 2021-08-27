@@ -17,7 +17,8 @@ const MatomoHOC = (Component: any) => {
     click: 'Clicked',
     changed: 'Changed',
     submit: 'Submitted',
-    scroll: 'Scrolled'
+    scroll: 'Scrolled',
+    edit: 'Edited'
   };
   return (props: any) => {
     const { trackPageView, trackEvent, pushInstruction } = useMatomo();

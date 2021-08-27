@@ -71,7 +71,7 @@ export const getProposalTeamAssignedRoles = (proposal: Map): Map => {
     .map(({ questionText, answers }) => {
       return {
         role: questionText,
-        responsable: last(answers) ? last(answers).answer : 'Not defined yet.'
+        responsable: last(answers) ? last(answers).answer.trim().length > 0 ? last(answers).answer : 'Not defined yet.' : 'Not defined yet.'
       };
     });
 

@@ -84,7 +84,17 @@
 }
 
 .proposal-text-area {
-  overflow: visible;
-  min-height: 40px;
-  max-height: 70px;
+  width: 100%;
+  margin-top: 0 !important;
+  .MuiInputBase-formControl {
+    margin-top: 0 !important;
+  }
+  textarea {
+    resize: vertical !important;
+    min-height: 40px !important;
+    height: auto;
+    overflow: auto !important;
+    padding: 6px !important;
+    line-height: 26px !important;
+  }
 }
