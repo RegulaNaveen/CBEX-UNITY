@@ -7,10 +7,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased] - yyyy-mm-dd
  
 ### Added
-  - [JIRA-TICKET] Title of the ticket
 ### Changed
- 
 ### Fixed
+
+## [2.3.1] -  2021-08-27
+ 
+### Added
+  - IQVIACBEXU-598: Question template logic change for 17 fields.
+### Fixed
+  - IQVIACBEXU-524: Index is not visible in Production for some old proposals, that has been fixed
+  - IQVIACBEXU-603: All sections are not displayed in the index section (not scrollable till the end)
+
 
 ## [2.3] - 2021-08-14
 
@@ -26,3 +33,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 [2.3]: https://gitlabrnds.quintiles.com/cbex/unity/unity-app-frontend/-/tags/v2.3
+[2.3.1]: https://gitlabrnds.quintiles.com/cbex/unity/unity-app-frontend/-/tags/v2.3.1
