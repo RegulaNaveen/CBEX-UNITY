@@ -158,18 +158,18 @@ class Sidebar extends Component<Props, State> {
     }
     this.setState({ activeTabIndex });
     setTabFromQuestionNotes(activeTabIndex, selectedtitle || '', false);
+    this.trackMatomoEventTabSwitch(activeTabIndex);
   };
-
-  trackMatomoEventScroll = action => {
+  
+  trackMatomoEvent = ({action}) => {
     const {
-      userActions,
-      eventCategories,
       proposalDetail,
-      trackEvent
+      trackEvent,
+      eventCategories
     } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
-      action: `Blade: ${userActions.scroll} From Blade To ${action} Section`,
+      action,
       customDimensions: [
         {
           id: 1,
@@ -179,23 +179,54 @@ class Sidebar extends Component<Props, State> {
     });
   };
 
+  trackMatomoEventScroll = action => {
+    const {
+      userActions
+    } = this.props;
+    this.trackMatomoEvent({
+      action: `Blade: ${userActions.scroll} From Blade To ${action} Section`
+    });
+  };
+
   trackMatomoEventSidebarToggle = action => {
     const openOrclose = action ? 'Open' : 'Close';
     const {
-      userActions,
-      eventCategories,
-      proposalDetail,
-      trackEvent
+      userActions
     } = this.props;
-    trackEvent({
-      category: eventCategories.pd(this.props),
-      action: `Blade: ${userActions.click} On Blade To ${openOrclose} Sidebar`,
-      customDimensions: [
-        {
-          id: 1,
-          value: JSON.stringify(proposalDetail)
-        }
-      ]
+    this.trackMatomoEvent({
+      action: `Blade: ${userActions.click} On Blade To ${openOrclose} Sidebar`
+    });
+  };
+
+  trackMatomoEventTabSwitch = index => {
+    const screen = index ? 'Notepad' : 'Index';
+    const {
+      userActions
+    } = this.props;
+    this.trackMatomoEvent({
+      action: `Blade: ${userActions.click} On ${screen} Tab`
+    });
+  };
+
+  trackMatomoEventIconClick = icon => {
+    const {
+      userActions
+    } = this.props;
+    this.trackMatomoEvent({
+      action: `Blade: ${userActions.click} On ${icon} Icon`
+    });
+  };
+
+  trackMatomoNoteSubmit = (section, note, mode='submit') => {
+    const text = JSON.parse(note)['blocks'][0]['text'];
+    const {
+      userActions
+    } = this.props;
+
+    const actionString = (section) ? `Blade: ${userActions[mode]} A Note (${text}) Under Section ${section}` :  `Blade: ${userActions[mode]} A Note (${text})`;
+
+    this.trackMatomoEvent({
+      action: actionString
     });
   };
 
@@ -262,6 +293,7 @@ class Sidebar extends Component<Props, State> {
                     cursor: 'pointer'
                   }}
                   onClick={e => {
+                    this.trackMatomoEventIconClick('Add New Question');
                     this.handleItemsVisibility(e);
                     AddNewQuestion();
                   }}
@@ -277,6 +309,7 @@ class Sidebar extends Component<Props, State> {
                     cursor: 'pointer'
                   }}
                   onClick={e => {
+                    this.trackMatomoEventIconClick('Expand All');
                     this.handleItemsVisibility(e);
                     expandAll();
                   }}
@@ -295,6 +328,7 @@ class Sidebar extends Component<Props, State> {
                     cursor: 'pointer'
                   }}
                   onClick={e => {
+                    this.trackMatomoEventIconClick('Refresh');
                     this.handleItemsVisibility(e);
                     RefreshProposal();
                   }}
@@ -343,6 +377,7 @@ class Sidebar extends Component<Props, State> {
                 sections={sections}
                 id={id}
                 selectedtitle={selectedtitle || ''}
+                trackMatomoNoteSubmit={this.trackMatomoNoteSubmit}
               />
             )}
           </div>
