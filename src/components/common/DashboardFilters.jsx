@@ -43,7 +43,7 @@ const DashboardFilters = ({
     <div id="dashboard-filters">
       <div className="filter-wrapper">
         <InputField
-          label="Opportunity number"
+          label=""
           id="opportunity number"
           onChange={onTextFilterChange}
           placeholder="Opportunity number"
@@ -52,7 +52,7 @@ const DashboardFilters = ({
       </div>
       <div className="filter-wrapper">
         <InputField
-          label="Opportunity name"
+          label=""
           id="opportunityName"
           onChange={onTextFilterChange}
           placeholder="Opportunity name"
@@ -61,7 +61,7 @@ const DashboardFilters = ({
       </div>
       <div className="filter-wrapper">
         <InputField
-          label="Customer"
+          label=""
           id="customer"
           onChange={onTextFilterChange}
           placeholder="Customer"
@@ -70,7 +70,7 @@ const DashboardFilters = ({
       </div>
       <div className="filter-wrapper">
         <InputField
-          label="Protocol number"
+          label=""
           id="protocol number"
           onChange={onTextFilterChange}
           placeholder="Protocol number"
@@ -79,15 +79,16 @@ const DashboardFilters = ({
       </div>
       <div className="filter-wrapper">
         <FilterDropDown
-          title="Phase"
+          title=""
           id="phase"
+          placeholder='Phase'
           onChange={onDropDownFilterChange}
           items={filterValues ? filterValues.phases : []}
         />
       </div>
       <div className="filter-wrapper">
         <InputField
-          label="Product"
+          label=""
           id="product"
           onChange={onTextFilterChange}
           placeholder="Product"
@@ -96,15 +97,16 @@ const DashboardFilters = ({
       </div>
       <div className="filter-wrapper">
         <FilterDropDown
-          title="Therapeutic area"
+          title=""
           id="therapeuticArea"
+          placeholder='Therapeutic area'
           onChange={onDropDownFilterChange}
           items={filterValues ? filterValues.therapeuticAreas : []}
         />
       </div>
       <div className="filter-wrapper">
         <InputField
-          label="Verbatim indication"
+          label=""
           id="verbatim indication"
           onChange={onTextFilterChange}
           placeholder="Verbatim indication"
@@ -113,23 +115,26 @@ const DashboardFilters = ({
       </div>
       <div className="filter-wrapper">
         <DateRange
-          label="Bid due date"
+          label=""
           id="bid due date"
+          placeholder="Bid due date"
           onSetRange={changeDate}
         />
       </div>
       <div className="filter-wrapper">
         <FilterDropDown
-          title="Opportunity status"
+          title=""
           id="opportunity status"
+          placeholder="Opportunity status"
           onChange={onDropDownFilterChange}
           items={filterValues ? filterValues.opportunityStatuses : []}
         />
       </div>
       <div className="filter-wrapper">
         <UserLookup
-          title="Team member"
+          title=""
           id="teamMember"
+          placeholder="Team member"
           onChange={changeUser}
           withReset
         />

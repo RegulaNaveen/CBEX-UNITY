@@ -19,7 +19,7 @@ const InputField = ({
   onChange
 }: Props) => (
   <>
-    <p className="input-title">{label}</p>
+    {label ? <p className="input-title">{label}</p> : null}
     <input
       id={id}
       title={title}

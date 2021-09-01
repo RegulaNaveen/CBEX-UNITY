@@ -8,15 +8,17 @@ type Props = {
   users: Array<Object>,
   onChange: Function,
   text?: string,
+  placeholder?: string,
   title?: string,
   withReset?: boolean
 };
 
-const UserLookup = ({ users, onChange, text, title, withReset }: Props) => (
+const UserLookup = ({ users, onChange, text, title, withReset, placeholder }: Props) => (
   <Lookup
     data={users}
     getSelectedItem={onChange}
     text={text}
+    placeholder={placeholder}
     title={title}
     withReset={withReset}
   />
