@@ -81,7 +81,7 @@ const DashboardFilters = ({
         <FilterDropDown
           title=""
           id="phase"
-          placeholder='Phase'
+          placeholder="Phase"
           onChange={onDropDownFilterChange}
           items={filterValues ? filterValues.phases : []}
         />
@@ -99,7 +99,7 @@ const DashboardFilters = ({
         <FilterDropDown
           title=""
           id="therapeuticArea"
-          placeholder='Therapeutic area'
+          placeholder="Therapeutic area"
           onChange={onDropDownFilterChange}
           items={filterValues ? filterValues.therapeuticAreas : []}
         />
