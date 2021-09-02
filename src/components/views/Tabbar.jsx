@@ -51,9 +51,19 @@ class Tabbar extends Component<Props, State> {
     };
   }
 
+  componentDidMount() {
+    const { filterProposals } = this.props;
+    // Reset filters on page load
+    this.setState({ showFilters: false }, () => filterProposals({}, false));
+  }
+
   handleChange = (index: number) => {
+    const { filterProposals } = this.props;
     this.trackMatomoEventTabs(index);
     this.setState({ selected: index });
+
+    // Reset filters on tab switch
+    this.setState({ showFilters: false }, () => filterProposals({}, false));
   };
 
   handleTypeView = (selectedTab: 0 | 1) => {
@@ -70,6 +80,7 @@ class Tabbar extends Component<Props, State> {
       const { filters: newFilters } = this.state;
       filterProposals(newFilters, true);
     });
+    this.trackMatomoEventFilterChange({ ...filters, [id]: value });
   };
 
   onDropDownFilterChange = (id: string, value: string) => {
@@ -80,6 +91,7 @@ class Tabbar extends Component<Props, State> {
       const { filters: newFilters } = this.state;
       filterProposals(newFilters, true);
     });
+    this.trackMatomoEventFilterChange({ ...filters, [id]: value });
   };
 
   onDateRangeChange = (id: string, range: Object) => {
@@ -90,6 +102,7 @@ class Tabbar extends Component<Props, State> {
       const { filters: newFilters } = this.state;
       filterProposals(newFilters, true);
     });
+    this.trackMatomoEventFilterChange({ ...filters, [id]: range });
   };
 
   toggleFilters = () => {
@@ -118,6 +131,21 @@ class Tabbar extends Component<Props, State> {
       category: eventCategories.dp,
       action: `Filters: ${userActions.click} to ${openOrclose} Filters`
     });
+  };
+
+  trackMatomoEventFilterChange = filterValues => {
+    const filStrings = [];
+    const { eventCategories, trackEvent } = this.props;
+    for (const key in filterValues) {
+      if(filterValues[key])
+        filStrings.push(`${key.toUpperCase()} = ${JSON.stringify(filterValues[key])}`)
+    }
+    if(filStrings.length > 0){
+      trackEvent({
+        category: eventCategories.dp,
+        action: `Filters: Filtering With ${filStrings.join(' And ')}`
+      })
+    }  
   };
 
   render() {

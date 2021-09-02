@@ -7,7 +7,6 @@ import Close from 'apollo-react-icons/Close';
 import MenuItem from 'apollo-react/components/MenuItem';
 import Select from 'apollo-react/components/Select';
 import Button from 'apollo-react/components/Button';
-import Box from 'apollo-react/components/Box';
 import { Map } from 'immutable';
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -34,7 +33,7 @@ function NoteLabel({ onClose }) {
 }
 
 function ReadNote({ note, onClose }) {
-  const noteText = note.get('noteText');
+  const noteText = note.get('noteText') || '';
   let noteContentState = EditorState.createEmpty();
   try {
     noteContentState = convertFromRaw(JSON.parse(noteText));
@@ -63,7 +62,13 @@ function ReadNote({ note, onClose }) {
   );
 }
 
-function EditNoteForm({ sections, values, handleSubmit, setFieldValue }) {
+function EditNoteForm({
+  sections,
+  values,
+  handleSubmit,
+  setFieldValue,
+  onClose
+}) {
   const noteText = values.note;
   let noteContentState = null;
   try {
@@ -96,7 +101,7 @@ function EditNoteForm({ sections, values, handleSubmit, setFieldValue }) {
         </Grid>
       </Grid>
       <Grid container spacing={1} alignItems="flex-end">
-        <Grid item xs={9}>
+        <Grid item xs={8}>
           <Select
             name="section"
             label="Section (Optional)"
@@ -114,17 +119,31 @@ function EditNoteForm({ sections, values, handleSubmit, setFieldValue }) {
             ))}
           </Select>
         </Grid>
-        <Grid item xs>
-          <Box mb={1} ml={1}>
+        <Grid item xs={2}>
+          <div style={{ marginBottom: '4px', textAlign: 'center' }}>
             <Button
               variant="primary"
               size="small"
               type="submit"
               disabled={values.note.trim().length === 0}
+              fullWidth
             >
               Save
             </Button>
-          </Box>
+          </div>
+        </Grid>
+        <Grid item xs={2}>
+          <div style={{ marginBottom: '4px', textAlign: 'center' }}>
+            <Button
+              variant="secondary"
+              size="small"
+              type="reset"
+              onClick={onClose}
+              fullWidth
+            >
+              Cancel
+            </Button>
+          </div>
         </Grid>
       </Grid>
     </form>
@@ -140,7 +159,7 @@ function EditNote({ sections, onEdit, readOnly, note, onClose }) {
   sectionValue = sectionValue ? sectionValue.get('sectionName') : '';
   const FormikedEditNoteForm = withFormik({
     mapPropsToValues: () => ({
-      note: note.get('noteText'),
+      note: note.get('noteText') || '',
       section: sectionValue
     }),
     handleSubmit: values => {
@@ -152,7 +171,7 @@ function EditNote({ sections, onEdit, readOnly, note, onClose }) {
   })(EditNoteForm);
   return (
     <div className="edit-note">
-      <FormikedEditNoteForm sections={sections} />
+      <FormikedEditNoteForm sections={sections} onClose={onClose} />
     </div>
   );
 }
@@ -161,7 +180,8 @@ EditNoteForm.propTypes = {
   sections: PropTypes.object.isRequired,
   values: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  setFieldValue: PropTypes.func.isRequired
+  setFieldValue: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired
 };
 
 EditNote.propTypes = {

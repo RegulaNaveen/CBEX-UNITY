@@ -13,7 +13,24 @@
     background: #fafafa;
     position: relative;
 
+    .titlebar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 57px;
+      padding: 0 16px;
+      border-bottom: 1px solid #E9E9E9;
+      * {
+        font-weight: bold;
+        margin: 0;
+      }
+      background-color: #FFFFFF;
+    }
+
     .controls-wrapper {
+      display: flex;
+      justify-content: flex-start;
+      padding: 8px 16px 0 16px;
       button {
         color: $black;
         font-size: 14px;
@@ -45,7 +62,7 @@
     }
 
     &-list {
-      height: 100%;
+      height: calc(100% - 57px - 34px - 48px);
       overflow-y: scroll;
       scrollbar-width: none;
       -ms-overflow-style: none;

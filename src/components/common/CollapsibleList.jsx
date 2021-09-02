@@ -112,6 +112,7 @@ class CollapsibleList extends Component<Props, State> {
                 handleOpenClose(true);
                 setTabFromQuestionNotes(1, title, true);
               }}
+              style={{ borderBottom: 'none' }}
               size="small"
             >
               <FolderOpen fontSize="extraSmall" />
@@ -218,6 +219,8 @@ class CollapsibleList extends Component<Props, State> {
                     answerConfiguration={questionConfig.get(
                       'answerConfiguration'
                     )}
+                    sfObject={questionConfig.get('sfObject')}
+                    sfField={questionConfig.get('sfField')}
                     sectionName={title}
                     setQuestionToDisplayHistory={setQuestionToDisplayHistory}
                   />
@@ -225,7 +228,11 @@ class CollapsibleList extends Component<Props, State> {
               );
             })}
             <div className="task-table-row">
-              <Link onClick={() => onAddQuestion(title)} size="small">
+              <Link
+                style={{ borderBottom: 'none' }}
+                onClick={() => onAddQuestion(title)}
+                size="small"
+              >
                 <Plus fontSize="extraSmall" />
                 <span style={{ verticalAlign: 'top' }}> Add New Question</span>
               </Link>

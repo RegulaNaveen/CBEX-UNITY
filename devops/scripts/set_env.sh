@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ $CI_COMMIT_REF_NAME == "master" ]
 then
-   echo "Environment=Prod" > build.env
+   echo "Environment=prod" > build.env
 elif [ $CI_COMMIT_REF_NAME == "uat" ]
 then
    echo "Environment=uat" > build.env
@@ -14,9 +14,12 @@ then
 elif [ $CI_COMMIT_REF_NAME == "dev" ]
 then
    echo "Environment=dev" > build.env
-elif [[ $branch == "feature/"* ]]
+elif [[ $CI_COMMIT_REF_NAME == "feature/"* ]]
 then
    echo "Environment=dev" > build.env  
+elif [[ $CI_COMMIT_REF_NAME == "bugfix/"* ]]
+then
+   echo "Environment=dev" > build.env 
 else
    exit
 fi
