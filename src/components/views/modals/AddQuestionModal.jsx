@@ -74,8 +74,11 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    const { getQuestionSectionF, getAnswerTypesDataF, getRolesInfoF } =
-      this.props;
+    const {
+      getQuestionSectionF,
+      getAnswerTypesDataF,
+      getRolesInfoF
+    } = this.props;
 
     getQuestionSectionF();
     getAnswerTypesDataF();

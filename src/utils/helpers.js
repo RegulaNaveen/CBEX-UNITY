@@ -24,7 +24,10 @@ export const objectContains = (
   const found = arr.filter(prop => {
     if (isObject(prop)) return objectContains(prop, search, deepSearch);
     return !deepSearch
-      ? prop.toString().toLowerCase().includes(search.toLowerCase())
+      ? prop
+          .toString()
+          .toLowerCase()
+          .includes(search.toLowerCase())
       : prop.toString().toLowerCase() === search.toLocaleLowerCase();
   });
 

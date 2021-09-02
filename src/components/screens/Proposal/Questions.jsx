@@ -150,8 +150,12 @@ class Questions extends Component<Props, State> {
   };
 
   trackMatomoEventRefreshInfo = () => {
-    const { userActions, eventCategories, proposalDetail, trackEvent } =
-      this.props;
+    const {
+      userActions,
+      eventCategories,
+      proposalDetail,
+      trackEvent
+    } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Round Buttons: ${userActions.click} On Refresh Button`,
@@ -166,8 +170,12 @@ class Questions extends Component<Props, State> {
 
   trackMatomoEventToggleQModal = action => {
     const openOrclose = action ? 'Open' : 'Close';
-    const { userActions, eventCategories, proposalDetail, trackEvent } =
-      this.props;
+    const {
+      userActions,
+      eventCategories,
+      proposalDetail,
+      trackEvent
+    } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Round Buttons: ${userActions.click} To ${openOrclose} Add New Question Modal`,
@@ -181,8 +189,12 @@ class Questions extends Component<Props, State> {
   };
 
   trackMatomoEventForCheckBoxes = item => {
-    const { userActions, eventCategories, proposalDetail, trackEvent } =
-      this.props;
+    const {
+      userActions,
+      eventCategories,
+      proposalDetail,
+      trackEvent
+    } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `CheckBoxes: ${userActions.click} On ${item} Checkbox`,

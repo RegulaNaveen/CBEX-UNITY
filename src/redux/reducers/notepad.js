@@ -100,6 +100,6 @@ const actionMap = {
   [ERROR_UPDATING_NOTE]: onErrorUpdatingNote
 };
 
-export default function (state = INITIAL_STATE, action) {
+export default function(state = INITIAL_STATE, action) {
   return actionMap[action.type] ? actionMap[action.type](state, action) : state;
 }

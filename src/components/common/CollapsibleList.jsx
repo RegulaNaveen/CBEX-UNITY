@@ -83,7 +83,10 @@ class CollapsibleList extends Component<Props, State> {
   createId = () => {
     const { title } = this.props;
 
-    const id = title.toLocaleLowerCase().split(' ').join('-');
+    const id = title
+      .toLocaleLowerCase()
+      .split(' ')
+      .join('-');
 
     return id;
   };
@@ -128,8 +131,13 @@ class CollapsibleList extends Component<Props, State> {
 
   trackMatomoEventBladeToggle = action => {
     const openOrclose = action ? 'Open' : 'Close';
-    const { userActions, title, proposalDetail, eventCategories, trackEvent } =
-      this.props;
+    const {
+      userActions,
+      title,
+      proposalDetail,
+      eventCategories,
+      trackEvent
+    } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Question Section: ${userActions.click} To ${openOrclose} ${title}`,

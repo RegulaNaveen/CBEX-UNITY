@@ -28,7 +28,8 @@ class AnswerHistory extends Component<Props> {
   renderAnswerResponsables = () => {
     const { question, proposalTeamAnswers } = this.props;
     const questionRoleNames = question.get('roleNames');
-    const questionRoles = question.get('roleNames')
+    const questionRoles = question
+      .get('roleNames')
       .map(role => ({
         role,
         responsable: 'Not defined yet.'
@@ -39,7 +40,7 @@ class AnswerHistory extends Component<Props> {
     });
 
     const merged = unionBy(questionResponsables, questionRoles, 'role');
-    
+
     if (isEmpty(merged)) {
       return (
         <p className="question-responsible not-assigned">Not assigned yet</p>

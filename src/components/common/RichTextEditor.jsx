@@ -74,8 +74,9 @@ const blockRenderMap = Map({
   }
 });
 
-export const extendedBlockRenderMap =
-  DefaultDraftBlockRenderMap.merge(blockRenderMap);
+export const extendedBlockRenderMap = DefaultDraftBlockRenderMap.merge(
+  blockRenderMap
+);
 
 export const cssStyles = {
   UPPERCASE: {
@@ -407,7 +408,10 @@ function RichTextEditor({
         'MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth': true,
         'RichEditor-hidePlaceholder':
           !contentState.hasText() &&
-          contentState.getBlockMap().first().getType() !== 'unstyled'
+          contentState
+            .getBlockMap()
+            .first()
+            .getType() !== 'unstyled'
       })}
     >
       <LabelWithControls showControls={!(readOnly || disabled)} />

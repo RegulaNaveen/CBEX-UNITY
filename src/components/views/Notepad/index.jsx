@@ -42,11 +42,13 @@ function Notepad({
   const [selectedNote, setSelectedNote] = useState(Map());
 
   function handleOnAddNote(note) {
-    let newNote = Map().set('noteText', note.note).set('createdBy', {
-      userName: getUserName(),
-      userRole: getUserRole(),
-      userEmail: getUserEmail()
-    });
+    let newNote = Map()
+      .set('noteText', note.note)
+      .set('createdBy', {
+        userName: getUserName(),
+        userRole: getUserRole(),
+        userEmail: getUserEmail()
+      });
     if (note.section.length > 0) {
       newNote = newNote.set(
         'section',
@@ -56,7 +58,7 @@ function Notepad({
       );
     }
     // Matomo event from Parent component
-    trackMatomoNoteSubmit(note.section, note.note)
+    trackMatomoNoteSubmit(note.section, note.note);
     add(id, newNote);
   }
 
@@ -92,7 +94,11 @@ function Notepad({
         .toJS();
     }
     // Matomo event from Parent component
-    trackMatomoNoteSubmit((newEditedNote.section) ? newEditedNote.section.sectionName  : '', newEditedNote.noteText, 'edit')
+    trackMatomoNoteSubmit(
+      newEditedNote.section ? newEditedNote.section.sectionName : '',
+      newEditedNote.noteText,
+      'edit'
+    );
     update(id, newEditedNote);
   }
 

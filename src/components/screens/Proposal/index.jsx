@@ -108,8 +108,12 @@ export class Proposal extends Component<Props, State> {
   }
 
   trackMatomoEventTabs = tab => {
-    const { eventCategories, userActions, proposalDetail, trackEvent } =
-      this.props;
+    const {
+      eventCategories,
+      userActions,
+      proposalDetail,
+      trackEvent
+    } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Tab: ${userActions.click} On ${tab}`,

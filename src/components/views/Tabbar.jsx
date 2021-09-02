@@ -137,15 +137,17 @@ class Tabbar extends Component<Props, State> {
     const filStrings = [];
     const { eventCategories, trackEvent } = this.props;
     for (const key in filterValues) {
-      if(filterValues[key])
-        filStrings.push(`${key.toUpperCase()} = ${JSON.stringify(filterValues[key])}`)
+      if (filterValues[key])
+        filStrings.push(
+          `${key.toUpperCase()} = ${JSON.stringify(filterValues[key])}`
+        );
     }
-    if(filStrings.length > 0){
+    if (filStrings.length > 0) {
       trackEvent({
         category: eventCategories.dp,
         action: `Filters: Filtering With ${filStrings.join(' And ')}`
-      })
-    }  
+      });
+    }
   };
 
   render() {
