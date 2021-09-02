@@ -129,6 +129,11 @@ export class Proposal extends Component<Props, State> {
     }
   }
 
+  onChangeProposalView = (selectedView: string) => {
+    this.setState({ selectedView });
+    this.trackMatomoEventTabs(selectedView);
+  };
+
   trackMatomoEventTabs = tab => {
     const {
       eventCategories,
@@ -146,11 +151,6 @@ export class Proposal extends Component<Props, State> {
         }
       ]
     });
-  };
-
-  onChangeProposalView = (selectedView: string) => {
-    this.setState({ selectedView });
-    this.trackMatomoEventTabs(selectedView);
   };
 
   renderContent = () => {

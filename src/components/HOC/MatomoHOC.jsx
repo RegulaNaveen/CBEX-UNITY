@@ -9,13 +9,16 @@ const MatomoHOC = (Component: any) => {
       `Proposal Detail (CRM#: ${
         props && props.proposalDetail ? props.proposalDetail['CRM #'] : ''
       })`,
-    plainPd: `Proposal Detail`
+    plainPd: `Proposal Detail`,
+    tb: `ToolBar Menu`,
+    pg: `Pagination`
   };
   const actions = {
     click: 'Clicked',
     changed: 'Changed',
     submit: 'Submitted',
-    scroll: 'Scrolled'
+    scroll: 'Scrolled',
+    edit: 'Edited'
   };
   return (props: any) => {
     const { trackPageView, trackEvent, pushInstruction } = useMatomo();

@@ -20,6 +20,7 @@ import {
   getUserRole
 } from '../../../SessionHandler';
 import { ReportIssue } from '../../svg';
+import MatomoHOC from '../../HOC/MatomoHOC';
 
 type Props = {
   rolesList: Array<string>,
@@ -27,7 +28,10 @@ type Props = {
   changeUserRole: Function,
   isRolesLoading: boolean,
   history: NavigationHistory,
-  logoutUser: Function
+  logoutUser: Function,
+  eventCategories: any,
+  userActions: any,
+  trackEvent: any
 };
 
 type State = {
@@ -65,6 +69,23 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     changeUserRole(value);
 
     this.setState({ roleName: value });
+    this.trackMatomoRoleChange(value);
+  };
+
+  trackMatomoLinkClicks = (link: string) => {
+    const { userActions, eventCategories, trackEvent } = this.props;
+    trackEvent({
+      category: eventCategories.tb,
+      action: `ToolBar: ${userActions.click} On ${link} Link`
+    });
+  };
+
+  trackMatomoRoleChange = (role: string) => {
+    const { userActions, eventCategories, trackEvent } = this.props;
+    trackEvent({
+      category: eventCategories.tb,
+      action: `ToolBar: ${userActions.changed} User Role to ${role}`
+    });
   };
 
   render() {
@@ -101,6 +122,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
             icon={<PencilIcon />}
             className="menu-link-btn"
             href="https://suggestionboard.ideas.aha.io/ideas?project=CBEXU"
+            onClick={() => this.trackMatomoLinkClicks('Suggestion Board')}
           >
             Suggestion Board
           </Button>
@@ -110,6 +132,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
             icon={<GlobeIcon />}
             className="menu-link-btn"
             href="https://quintiles.sharepoint.com/sites/ltc/CBEx/SitePages/Unity-Wiki.aspx"
+            onClick={() => this.trackMatomoLinkClicks('Unity Wiki')}
           >
             Unity Wiki
           </Button>
@@ -121,6 +144,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
             }
             className="menu-link-btn"
             href="https://quintiles.service-now.com/via?id=sc_cat_item&sys_id=dd5c819fdb8fdc107cf37e77f4961917"
+            onClick={() => this.trackMatomoLinkClicks('Report an Issue')}
           >
             Report an Issue
           </Button>
@@ -150,5 +174,5 @@ export default withRouter(
     getRolesInfoF: getRolesInfo,
     logoutUser: logout,
     changeUserRole: onSetUserRole
-  })(ToolbarMenuComponent)
+  })(MatomoHOC(ToolbarMenuComponent))
 );
