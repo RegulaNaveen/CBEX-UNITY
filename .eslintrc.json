@@ -42,7 +42,7 @@
       "error",
       {
         "allowArrowFunctions": true,
-        "allowFunctions": false,
+        "allowFunctions": true,
         "allowBind": true
       }
     ],
