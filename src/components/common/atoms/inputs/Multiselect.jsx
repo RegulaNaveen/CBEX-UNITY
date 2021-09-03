@@ -107,7 +107,7 @@ class Multiselect extends PureComponent<Props, State> {
 
   render() {
     const { isCollapsed, selectedValues } = this.state;
-    const { id, placeholder, items, title } = this.props;
+    const { id, placeholder, items, title, error } = this.props;
 
     return (
       <>
@@ -142,6 +142,9 @@ class Multiselect extends PureComponent<Props, State> {
             </ul>
           )}
         </div>
+        {error && error.length > 0 && error.map(v=>{
+            if(v['roleNames'])return <p key={String(v['roleNames']?.message)} className="number-error-text">{v['roleNames']?.message}</p>
+        })}
       </>
     );
   }

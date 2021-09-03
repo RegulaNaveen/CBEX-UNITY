@@ -102,9 +102,8 @@ class TextArea extends PureComponent<Props, State> {
   };
 
   render() {
-    const { id, className, placeholder, title, type } = this.props;
+    const { id, className, placeholder, title, type, error } = this.props;
     const { textValue, numberError } = this.state;
-
     return (
       <>
         {title && <p className="text-area-title">{title}</p>}
@@ -125,17 +124,23 @@ class TextArea extends PureComponent<Props, State> {
             )}
           </>
         ) : (
-          <textarea
-            id={id}
-            ref={this.textAreaInput}
-            className={classnames('text-area-wrapper', className)}
-            value={textValue}
-            onInput={this.autoResize}
-            onChange={this.handleText}
-            onBlur={this.handleOnBlur}
-            placeholder={placeholder}
-            type={type}
-          />
+          <>
+            <textarea
+              id={id}
+              ref={this.textAreaInput}
+              className={classnames('text-area-wrapper', className)}
+              value={textValue}
+              onInput={this.autoResize}
+              onChange={this.handleText}
+              onBlur={this.handleOnBlur}
+              placeholder={placeholder}
+              required={true}
+              type={type}
+            />
+            {error && error.length > 0 && error.map(v=>{
+              if(v['questiontext'])return <p key={String(v['questiontext']?.message)} className="number-error-text">{v['questiontext']?.message}</p>
+            })}
+          </>
         )}
       </>
     );

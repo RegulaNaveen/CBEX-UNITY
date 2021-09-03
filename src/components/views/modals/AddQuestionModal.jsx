@@ -69,7 +69,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       questionText: '',
       section: undefined,
       answerType: '',
-      roleNames: []
+      roleNames: [],
+      error:[]
     };
   }
 
@@ -115,6 +116,26 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     const { questionText, section, answerType, roleNames } = this.state;
     const { setProposalQuestionF, match } = this.props;
 
+    if((questionText.length === 0 || questionText === '' || document.getElementById('question-text-area').value === '') && !this.state.error.some((v)=> v['questiontext'])){
+        this.setState(prevState => ({
+          error: [...prevState.error, {questiontext: {message: 'Question text is required'}}]
+        }))
+    }
+    if((!section || section.length === 0 || section === '') && !this.state.error.some((v)=> v['section'])){
+      this.setState(prevState => ({
+        error: [...prevState.error, {section: {message: 'Section is required'}}]
+      }))
+    }
+    if((!answerType || answerType.length === 0 || answerType === '') && !this.state.error.some((v)=> v['answerType'])){
+      this.setState(prevState => ({
+        error: [...prevState.error, {answerType: {message: 'Answer type is required'}}]
+      }))
+    }
+    if(isEmpty(roleNames) && !this.state.error.some((v)=> v['roleNames'])){
+      this.setState(prevState => ({
+        error: [...prevState.error, {roleNames: {message: 'Roles is required'}}]
+      }))
+    }
     if (
       questionText !== '' &&
       section &&
@@ -130,9 +151,11 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         options: [],
         roleNames
       };
-
-      setProposalQuestionF(proposalId, questionData);
-      this.trackMatomoEventCreateQ(questionData);
+      this.setState(prevState => ({
+        error: []
+      }))
+      // setProposalQuestionF(proposalId, questionData);
+      // this.trackMatomoEventCreateQ(questionData);
     }
   };
 
@@ -182,6 +205,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 placeholder="Question text"
                 title="Enter Question Text"
                 type="text"
+                error={this.state.error.filter(v=> v.questiontext)}
                 onChange={this.handleTextChange}
               />
             </div>
@@ -192,6 +216,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                   placeholder="Select"
                   items={answerTypesList}
                   title="Answer Type"
+                  error={this.state.error.filter(v=> v.answerType)}
                   onClick={this.onAnswerTypeChange}
                 />
               </div>
@@ -203,6 +228,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 items={questionSectionList}
                 selectedValue={selectedValue}
                 title="Section"
+                error={this.state.error.filter(v=> v.section)}
                 onClick={this.onQuestionSectionChange}
               />
             </div>
@@ -212,6 +238,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 placeholder="Select"
                 items={rolesList}
                 title="Which team member roles will answer"
+                error={this.state.error.filter(v=> v.roleNames)}
                 onClick={this.onRoleChange}
               />
             </div>
@@ -221,7 +248,10 @@ export class AddQuestionModal extends PureComponent<Props, State> {
               <PrimaryButton
                 className="close-button"
                 id="cancel-button"
-                onClick={onClose}
+                onClick={()=> {
+                  this.setState({error: []})
+                  onClose()
+                }}
               >
                 Cancel
               </PrimaryButton>
@@ -260,6 +290,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       isRolesLoading,
       currentsection
     } = this.props;
+    console.log(`this.state`, this.state);
     return (
       <Modal>
         {!isQuestionSectionLoading &&

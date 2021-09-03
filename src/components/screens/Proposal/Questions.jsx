@@ -56,7 +56,7 @@ class Questions extends Component<Props, State> {
     super(props);
 
     this.state = {
-      showModal: false,
+      showModal: true,
       isChecked: false,
       isCheckedAll: false,
       selectedQuestionForHistory: '',
