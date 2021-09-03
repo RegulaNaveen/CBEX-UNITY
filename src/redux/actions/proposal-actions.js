@@ -75,7 +75,10 @@ export const setProposalAnswerData = (
       );
 
       if (Array.isArray(data.answers)) {
-        dispatch({ type: PROPOSAL_ANSWER, payload: { data: data.answers, questionId } });
+        dispatch({
+          type: PROPOSAL_ANSWER,
+          payload: { data: data.answers, questionId }
+        });
       } else {
         dispatch({ type: PROPOSAL_ANSWER, payload: { data, questionId } });
       }

@@ -35,16 +35,15 @@
     "prettier/prettier": [
       "error",
       {
-        "singleQuote": true,
-        "parser": "babel"
+        "singleQuote": true
       }
     ],
     "react/jsx-no-bind": [
       "error",
       {
         "allowArrowFunctions": true,
-        "allowFunctions": false,
-        "allowBind": false
+        "allowFunctions": true,
+        "allowBind": true
       }
     ],
     "no-console": 0,
