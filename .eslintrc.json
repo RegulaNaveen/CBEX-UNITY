@@ -35,14 +35,19 @@
     "prettier/prettier": [
       "error",
       {
-        "singleQuote": true
+        "semi": true,
+        "trailingComma": "none",
+        "singleQuote": true,
+        "arrowParens": "avoid",
+        "endOfLine": "auto",
+        "parser": "babel"
       }
     ],
     "react/jsx-no-bind": [
       "error",
       {
         "allowArrowFunctions": true,
-        "allowFunctions": true,
+        "allowFunctions": false,
         "allowBind": false
       }
     ],
