@@ -118,10 +118,7 @@ class Multiselect extends PureComponent<Props, State> {
           <div
             id={id}
             ref={this.ref}
-            style={{
-              border: error && error.length > 0 ? '2px solid #e20000' : null
-            }}
-            className="multiselect-header"
+            className={error && error.length > 0 ? "multiselect-header-error" : "multiselect-header"}
             role="presentation"
             onClick={this.handleCollapse}
           >

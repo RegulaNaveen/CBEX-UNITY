@@ -29,7 +29,7 @@ class Dropdown extends PureComponent<Props, State> {
     title: undefined,
     value: undefined,
     withReset: false,
-    error: undefined
+    error: []
   };
 
   constructor(props: Object) {
@@ -101,10 +101,9 @@ class Dropdown extends PureComponent<Props, State> {
           <div className="dd-wrapper">
             <div
               id={id}
-              className="dd-header"
-              style={{
-                border: error && error.length > 0 ? '2px solid #e20000' : null
-              }}
+              className={
+                error && error.length > 0 ? "dd-header-error" : "dd-header"
+              }
               ref={this.ref}
               role="presentation"
               onClick={this.handleCollapse}
