@@ -92,6 +92,7 @@ class Dropdown extends PureComponent<Props, State> {
             <div
               id={id}
               className="dd-header"
+              style={{border: error && error.length > 0 ? '2px solid #e20000' : null}}
               ref={this.ref}
               role="presentation"
               onClick={this.handleCollapse}

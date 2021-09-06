@@ -115,7 +115,10 @@ class TextArea extends PureComponent<Props, State> {
                 numberError
               })}
               value={textValue}
-              onChange={this.handleNumber}
+              onChange={()=>{
+                this.handleNumber();
+                this.props.onChange();
+              }}
               onBlur={this.handleOnBlur}
               placeholder={placeholder}
             />
@@ -127,11 +130,15 @@ class TextArea extends PureComponent<Props, State> {
           <>
             <textarea
               id={id}
+              style={{border: error && error.length > 0 ? '2px solid #e20000' : null}}
               ref={this.textAreaInput}
               className={classnames('text-area-wrapper', className)}
               value={textValue}
               onInput={this.autoResize}
-              onChange={this.handleText}
+              onChange={(e)=>{
+                this.handleText(e);
+                this.props.onChange(e.target.value);
+              }}
               onBlur={this.handleOnBlur}
               placeholder={placeholder}
               required={true}
