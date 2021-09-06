@@ -160,13 +160,9 @@ class Sidebar extends Component<Props, State> {
     setTabFromQuestionNotes(activeTabIndex, selectedtitle || '', false);
     this.trackMatomoEventTabSwitch(activeTabIndex);
   };
-  
-  trackMatomoEvent = ({action}) => {
-    const {
-      proposalDetail,
-      trackEvent,
-      eventCategories
-    } = this.props;
+
+  trackMatomoEvent = ({ action }) => {
+    const { proposalDetail, trackEvent, eventCategories } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
       action,
@@ -180,9 +176,7 @@ class Sidebar extends Component<Props, State> {
   };
 
   trackMatomoEventScroll = action => {
-    const {
-      userActions
-    } = this.props;
+    const { userActions } = this.props;
     this.trackMatomoEvent({
       action: `Blade: ${userActions.scroll} From Blade To ${action} Section`
     });
@@ -190,9 +184,7 @@ class Sidebar extends Component<Props, State> {
 
   trackMatomoEventSidebarToggle = action => {
     const openOrclose = action ? 'Open' : 'Close';
-    const {
-      userActions
-    } = this.props;
+    const { userActions } = this.props;
     this.trackMatomoEvent({
       action: `Blade: ${userActions.click} On Blade To ${openOrclose} Sidebar`
     });
@@ -200,30 +192,26 @@ class Sidebar extends Component<Props, State> {
 
   trackMatomoEventTabSwitch = index => {
     const screen = index ? 'Notepad' : 'Index';
-    const {
-      userActions
-    } = this.props;
+    const { userActions } = this.props;
     this.trackMatomoEvent({
       action: `Blade: ${userActions.click} On ${screen} Tab`
     });
   };
 
   trackMatomoEventIconClick = icon => {
-    const {
-      userActions
-    } = this.props;
+    const { userActions } = this.props;
     this.trackMatomoEvent({
       action: `Blade: ${userActions.click} On ${icon} Icon`
     });
   };
 
-  trackMatomoNoteSubmit = (section, note, mode='submit') => {
-    const text = JSON.parse(note)['blocks'][0]['text'];
-    const {
-      userActions
-    } = this.props;
+  trackMatomoNoteSubmit = (section, note, mode = 'submit') => {
+    const { text } = JSON.parse(note).blocks[0];
+    const { userActions } = this.props;
 
-    const actionString = (section) ? `Blade: ${userActions[mode]} A Note (${text}) Under Section ${section}` :  `Blade: ${userActions[mode]} A Note (${text})`;
+    const actionString = section
+      ? `Blade: ${userActions[mode]} A Note (${text}) Under Section ${section}`
+      : `Blade: ${userActions[mode]} A Note (${text})`;
 
     this.trackMatomoEvent({
       action: actionString

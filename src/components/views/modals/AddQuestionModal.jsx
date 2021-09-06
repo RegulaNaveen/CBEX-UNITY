@@ -70,7 +70,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       section: undefined,
       answerType: '',
       roleNames: [],
-      error:[]
+      error: []
     };
   }
 
@@ -87,7 +87,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   }
 
   handleTextChange = (value: string) => {
-    this.setState({ questionText: value },()=>{
+    this.setState({ questionText: value }, () => {
       this.validateQuestionText();
     });
   };
@@ -102,71 +102,102 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     });
 
     if (sectionOrder > -1 && value)
-      this.setState({ section: { sectionOrder, sectionName: value } }, ()=>{
+      this.setState({ section: { sectionOrder, sectionName: value } }, () => {
         this.validateSection();
       });
   };
 
   onAnswerTypeChange = (value: string) => {
-    this.setState({ answerType: value },()=>{
+    this.setState({ answerType: value }, () => {
       this.validateAnswer();
     });
   };
 
   onRoleChange = (values: Array<string>) => {
     const roleNames = values.map(value => value.replace(', ', ''));
-    this.setState({ roleNames }, ()=>{
+    this.setState({ roleNames }, () => {
       this.validateRoles();
     });
   };
 
-  validateQuestionText = () =>{
+  validateQuestionText = () => {
     const { questionText } = this.state;
-    if(questionText.length === 0 && !this.state.error.some((v)=> v['questiontext'])){
+    if (
+      questionText.length === 0 &&
+      !this.state.error.some(v => v.questiontext)
+    ) {
       this.setState(prevState => ({
-        error: [...prevState.error, {questiontext: {message: 'This field is required.'}}]
-      }))
+        error: [
+          ...prevState.error,
+          { questiontext: { message: 'This field is required.' } }
+        ]
+      }));
     }
-    if(questionText.length > 0 && this.state.error.some((v)=> v['questiontext'])){
-      this.setState({error: [...this.state.error.filter(v=> !v['questiontext'])]})
+    if (questionText.length > 0 && this.state.error.some(v => v.questiontext)) {
+      this.setState({
+        error: [...this.state.error.filter(v => !v.questiontext)]
+      });
     }
-  }
+  };
 
-  validateSection = () =>{
+  validateSection = () => {
     const { section } = this.state;
-    if((!section || section.length === 0 || section === '') && !this.state.error.some((v)=> v['section'])){
+    if (
+      (!section || section.length === 0 || section === '') &&
+      !this.state.error.some(v => v.section)
+    ) {
       this.setState(prevState => ({
-        error: [...prevState.error, {section: {message: 'This field is required.'}}]
-      }))
+        error: [
+          ...prevState.error,
+          { section: { message: 'This field is required.' } }
+        ]
+      }));
     }
-    if(section && Object.keys(section).length > 0 && this.state.error.some((v)=> v['section'])){
-      this.setState({error: this.state.error.filter(v=> !v['section'])})
+    if (
+      section &&
+      Object.keys(section).length > 0 &&
+      this.state.error.some(v => v.section)
+    ) {
+      this.setState({ error: this.state.error.filter(v => !v.section) });
     }
-  }
+  };
 
   validateAnswer = () => {
     const { answerType } = this.state;
-    if((!answerType || answerType.length === 0 || answerType === '') && !this.state.error.some((v)=> v['answerType'])){
+    if (
+      (!answerType || answerType.length === 0 || answerType === '') &&
+      !this.state.error.some(v => v.answerType)
+    ) {
       this.setState(prevState => ({
-        error: [...prevState.error, {answerType: {message: 'This field is required.'}}]
-      }))
+        error: [
+          ...prevState.error,
+          { answerType: { message: 'This field is required.' } }
+        ]
+      }));
     }
-    if(answerType && answerType.length > 0 && this.state.error.some((v)=> v['answerType'])){
-      this.setState({error: this.state.error.filter(v=> !v['answerType'])})
+    if (
+      answerType &&
+      answerType.length > 0 &&
+      this.state.error.some(v => v.answerType)
+    ) {
+      this.setState({ error: this.state.error.filter(v => !v.answerType) });
     }
-  }
+  };
 
   validateRoles = () => {
     const { roleNames } = this.state;
-    if(isEmpty(roleNames) && !this.state.error.some((v)=> v['roleNames'])){
+    if (isEmpty(roleNames) && !this.state.error.some(v => v.roleNames)) {
       this.setState(prevState => ({
-        error: [...prevState.error, {roleNames: {message: 'This field is required.'}}]
-      }))
+        error: [
+          ...prevState.error,
+          { roleNames: { message: 'This field is required.' } }
+        ]
+      }));
     }
-    if(roleNames.length > 0 && this.state.error.some((v)=> v['roleNames'])){
-      this.setState({error: this.state.error.filter(v=> !v['roleNames'])})
+    if (roleNames.length > 0 && this.state.error.some(v => v.roleNames)) {
+      this.setState({ error: this.state.error.filter(v => !v.roleNames) });
     }
-  }
+  };
 
   onSave = () => {
     const { questionText, section, answerType, roleNames } = this.state;
@@ -194,7 +225,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       };
       this.setState(prevState => ({
         error: []
-      }))
+      }));
       setProposalQuestionF(proposalId, questionData);
       this.trackMatomoEventCreateQ(questionData);
     }
@@ -246,8 +277,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 placeholder="Question text"
                 title="Enter Question Text"
                 type="text"
-                error={this.state.error.filter(v=> v.questiontext)}
-                onChange={(e)=>this.handleTextChange(e)}
+                error={this.state.error.filter(v => v.questiontext)}
+                onChange={e => this.handleTextChange(e)}
               />
             </div>
             <div className="modal-segment">
@@ -257,7 +288,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                   placeholder="Select"
                   items={answerTypesList}
                   title="Answer Type"
-                  error={this.state.error.filter(v=> v.answerType)}
+                  error={this.state.error.filter(v => v.answerType)}
                   onClick={this.onAnswerTypeChange}
                 />
               </div>
@@ -269,7 +300,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 items={questionSectionList}
                 selectedValue={selectedValue}
                 title="Section"
-                error={this.state.error.filter(v=> v.section)}
+                error={this.state.error.filter(v => v.section)}
                 onClick={this.onQuestionSectionChange}
               />
             </div>
@@ -279,7 +310,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 placeholder="Select"
                 items={rolesList}
                 title="Which team member roles will answer"
-                error={this.state.error.filter(v=> v.roleNames)}
+                error={this.state.error.filter(v => v.roleNames)}
                 onClick={this.onRoleChange}
               />
             </div>
@@ -289,9 +320,9 @@ export class AddQuestionModal extends PureComponent<Props, State> {
               <PrimaryButton
                 className="close-button"
                 id="cancel-button"
-                onClick={()=> {
-                  this.setState({error: []})
-                  onClose()
+                onClick={() => {
+                  this.setState({ error: [] });
+                  onClose();
                 }}
               >
                 Cancel
@@ -331,10 +362,21 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       isRolesLoading,
       currentsection
     } = this.props;
-    if(this.state.error && this.state.error.length > 0 && document.getElementsByClassName('modal-wrapper-body')){
-      document.getElementsByClassName('modal-wrapper-body')[0].style['marginBottom']  = '5px';
-    }else if(document.getElementsByClassName('modal-wrapper-body') && document.getElementsByClassName('modal-wrapper-body').length){
-      document.getElementsByClassName('modal-wrapper-body')[0].style['marginBottom']  = '40px';
+    if (
+      this.state.error &&
+      this.state.error.length > 0 &&
+      document.getElementsByClassName('modal-wrapper-body')
+    ) {
+      document.getElementsByClassName(
+        'modal-wrapper-body'
+      )[0].style.marginBottom = '5px';
+    } else if (
+      document.getElementsByClassName('modal-wrapper-body') &&
+      document.getElementsByClassName('modal-wrapper-body').length
+    ) {
+      document.getElementsByClassName(
+        'modal-wrapper-body'
+      )[0].style.marginBottom = '40px';
     }
     return (
       <Modal>

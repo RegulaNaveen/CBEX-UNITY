@@ -11,7 +11,8 @@ type Props = {
   type?: string,
   value?: string,
   onBlur?: Function,
-  onChange?: Function
+  onChange?: Function,
+  error?: mixed
 };
 
 type State = {
@@ -30,7 +31,8 @@ class TextArea extends PureComponent<Props, State> {
     type: undefined,
     value: undefined,
     onBlur: undefined,
-    onChange: undefined
+    onChange: undefined,
+    error: undefined
   };
 
   constructor(props: Object) {
@@ -115,7 +117,7 @@ class TextArea extends PureComponent<Props, State> {
                 numberError
               })}
               value={textValue}
-              onChange={()=>{
+              onChange={() => {
                 this.handleNumber();
                 this.props.onChange();
               }}
@@ -130,23 +132,35 @@ class TextArea extends PureComponent<Props, State> {
           <>
             <textarea
               id={id}
-              style={{border: error && error.length > 0 ? '2px solid #e20000' : null}}
+              style={{
+                border: error && error.length > 0 ? '2px solid #e20000' : null
+              }}
               ref={this.textAreaInput}
               className={classnames('text-area-wrapper', className)}
               value={textValue}
               onInput={this.autoResize}
-              onChange={(e)=>{
+              onChange={e => {
                 this.handleText(e);
                 this.props.onChange(e.target.value);
               }}
               onBlur={this.handleOnBlur}
               placeholder={placeholder}
-              required={true}
+              required
               type={type}
             />
-            {error && error.length > 0 && error.map(v=>{
-              if(v['questiontext'])return <p key={String(v['questiontext']?.message)} className="number-error-text">{v['questiontext']?.message}</p>
-            })}
+            {error &&
+              error.length > 0 &&
+              error.map(v => {
+                if (v.questiontext)
+                  return (
+                    <p
+                      key={String(v.questiontext?.message)}
+                      className="number-error-text"
+                    >
+                      {v.questiontext?.message}
+                    </p>
+                  );
+              })}
           </>
         )}
       </>
