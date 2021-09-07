@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 ### Fixed
 
+## [2.3.2] -  2021-09-07
+ 
+### Added
+  - IQVIACBEXU-552: ER: Indicate required information on Custom Question module
+### Fixed
+
 ## [2.3.1] -  2021-08-27
  
 ### Added
