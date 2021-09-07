@@ -45,8 +45,8 @@ switch (environment) {
   case 'QA':
     // UDEV Data
     PROPOSAL_API_ENDPOINT =
-      'https://cp51hofds5.execute-api.us-east-1.amazonaws.com/qa';
-    PROPOSAL_API_KEY = '0HT36HHLAi8nuQzWngadG8YkiW5kEP1V49Hus7Eh';
+      'https://r1g9pjnmbb.execute-api.us-east-1.amazonaws.com/qa';
+    PROPOSAL_API_KEY = 'YXrOu45imb6d03erOkZB2PuBOsYQYZ93pnmQK6C0';
     NORMAL_AUTH_API_ENDPOINT =
       'https://aiz2k1qjjl.execute-api.us-east-1.amazonaws.com/dev';
     COGNITO_HOST = 'https://unity-dev.auth.us-east-1.amazoncognito.com';
@@ -68,7 +68,7 @@ switch (environment) {
     AUTH_KEY =
       'MzZlNnFsNmZub2x2MHBwc2I5cmZocGpxazU6OW5tbXEzcDcwYnRycWZzcm44dThjMWZnajZqMGkxc24wcW5rOGxhaWl1N3I0ZTQzb2Fl';
     CLIENT_ID = '36e6ql6fnolv0ppsb9rfhpjqk5';
-    REDIRECTION_URL = 'http://localhost:8080';
+    REDIRECTION_URL = 'https://dev-unity.iqvia.app/';
     UBUILD_ENABLED = true;
     UBUILD_ARTIFACT = 'https://udev-unity.iqvia.app/main.js';
     break;

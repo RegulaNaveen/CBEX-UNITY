@@ -9,6 +9,7 @@ import { CloseCircle } from '../../../svg';
 type Props = {
   data: Array<any>,
   title?: string,
+  placeholder?: string,
   text?: string,
   getSelectedItem: (selectedItem: string) => void,
   withReset?: boolean
@@ -24,7 +25,8 @@ class Lookup extends Component<Props, State> {
   static defaultProps = {
     title: '',
     text: '',
-    withReset: false
+    withReset: false,
+    placeholder: ''
   };
 
   constructor(props: Object) {
@@ -88,7 +90,7 @@ class Lookup extends Component<Props, State> {
 
   render() {
     const { searchValue, filteredData, showResetButton } = this.state;
-    const { title, withReset } = this.props;
+    const { title, withReset, placeholder } = this.props;
 
     return (
       <div
@@ -100,6 +102,7 @@ class Lookup extends Component<Props, State> {
           <input
             type="text"
             value={searchValue}
+            placeholder={placeholder}
             onChange={this.onSearching}
             required
             autoComplete="off"
