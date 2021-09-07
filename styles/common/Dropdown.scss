@@ -59,6 +59,22 @@
     }
   }
 
+  .dd-header-error {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 40px;
+    max-height: max-content;
+    background-color: $white;
+    border-radius: 5px;
+    border: 2px solid #e20000;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);
+    cursor: pointer;
+    position: relative;
+    padding: 8px;
+    padding-right: 20px;
+  }
+
   .dd-header {
     display: flex;
     align-items: center;

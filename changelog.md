@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased] - yyyy-mm-dd
  
 ### Added
+  - IQVIACBEXU-552: ER: Indicate required information on Custom Question module
 ### Changed
 ### Fixed
 

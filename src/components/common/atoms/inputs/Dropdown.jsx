@@ -11,7 +11,8 @@ type Props = {
   onClick: Function,
   value?: string,
   withReset?: boolean,
-  selectedValue: mixed
+  selectedValue: mixed,
+  error?: mixed
 };
 
 type State = {
@@ -27,7 +28,8 @@ class Dropdown extends PureComponent<Props, State> {
     placeholder: '',
     title: undefined,
     value: undefined,
-    withReset: false
+    withReset: false,
+    error: []
   };
 
   constructor(props: Object) {
@@ -82,7 +84,15 @@ class Dropdown extends PureComponent<Props, State> {
 
   render() {
     const { isCollapsed, selectedValue } = this.state;
-    const { placeholder, id, items, title, value, withReset } = this.props;
+    const {
+      placeholder,
+      id,
+      items,
+      title,
+      value,
+      withReset,
+      error
+    } = this.props;
 
     return (
       <>
@@ -91,7 +101,9 @@ class Dropdown extends PureComponent<Props, State> {
           <div className="dd-wrapper">
             <div
               id={id}
-              className="dd-header"
+              className={
+                error && error.length > 0 ? "dd-header-error" : "dd-header"
+              }
               ref={this.ref}
               role="presentation"
               onClick={this.handleCollapse}
@@ -125,6 +137,28 @@ class Dropdown extends PureComponent<Props, State> {
             </button>
           )}
         </div>
+        {error &&
+          error.length > 0 &&
+          error.map(v => {
+            if (v.section)
+              return (
+                <p
+                  key={String(v.section?.message)}
+                  className="number-error-text"
+                >
+                  {v.section?.message}
+                </p>
+              );
+            if (v.answerType)
+              return (
+                <p
+                  key={String(v.answerType?.message)}
+                  className="number-error-text"
+                >
+                  {v.answerType?.message}
+                </p>
+              );
+          })}
       </>
     );
   }

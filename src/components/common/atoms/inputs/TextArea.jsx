@@ -11,7 +11,8 @@ type Props = {
   type?: string,
   value?: string,
   onBlur?: Function,
-  onChange?: Function
+  onChange?: Function,
+  error?: mixed
 };
 
 type State = {
@@ -30,7 +31,8 @@ class TextArea extends PureComponent<Props, State> {
     type: undefined,
     value: undefined,
     onBlur: undefined,
-    onChange: undefined
+    onChange: undefined,
+    error: undefined
   };
 
   constructor(props: Object) {
@@ -102,9 +104,8 @@ class TextArea extends PureComponent<Props, State> {
   };
 
   render() {
-    const { id, className, placeholder, title, type } = this.props;
+    const { id, className, placeholder, title, type, error } = this.props;
     const { textValue, numberError } = this.state;
-
     return (
       <>
         {title && <p className="text-area-title">{title}</p>}
@@ -116,7 +117,10 @@ class TextArea extends PureComponent<Props, State> {
                 numberError
               })}
               value={textValue}
-              onChange={this.handleNumber}
+              onChange={() => {
+                this.handleNumber();
+                this.props.onChange();
+              }}
               onBlur={this.handleOnBlur}
               placeholder={placeholder}
             />
@@ -125,17 +129,39 @@ class TextArea extends PureComponent<Props, State> {
             )}
           </>
         ) : (
-          <textarea
-            id={id}
-            ref={this.textAreaInput}
-            className={classnames('text-area-wrapper', className)}
-            value={textValue}
-            onInput={this.autoResize}
-            onChange={this.handleText}
-            onBlur={this.handleOnBlur}
-            placeholder={placeholder}
-            type={type}
-          />
+          <>
+            <textarea
+              id={id}
+              style={{
+                border: error && error.length > 0 ? '2px solid #e20000' : null
+              }}
+              ref={this.textAreaInput}
+              className={classnames('text-area-wrapper', className)}
+              value={textValue}
+              onInput={this.autoResize}
+              onChange={e => {
+                this.handleText(e);
+                this.props.onChange(e.target.value);
+              }}
+              onBlur={this.handleOnBlur}
+              placeholder={placeholder}
+              required
+              type={type}
+            />
+            {error &&
+              error.length > 0 &&
+              error.map(v => {
+                if (v.questiontext)
+                  return (
+                    <p
+                      key={String(v.questiontext?.message)}
+                      className="number-error-text"
+                    >
+                      {v.questiontext?.message}
+                    </p>
+                  );
+              })}
+          </>
         )}
       </>
     );
