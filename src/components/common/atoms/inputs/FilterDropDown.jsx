@@ -6,10 +6,11 @@ type Props = {
   id: string,
   onChange: Function,
   title: string,
+  placeholder: String,
   items: Array<Object>
 };
 
-const FilterDropDown = ({ id, onChange, title, items }: Props) => {
+const FilterDropDown = ({ id, onChange, title, items, placeholder }: Props) => {
   const filterChange = useCallback(value => onChange(id, value));
   return (
     <Dropdown
@@ -17,7 +18,7 @@ const FilterDropDown = ({ id, onChange, title, items }: Props) => {
       id={id}
       onClick={filterChange}
       items={items}
-      placeholder={title}
+      placeholder={placeholder}
       withReset
     />
   );

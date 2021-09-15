@@ -18,7 +18,8 @@
     "lint:fix": "eslint --ext .js,.jsx src test --fix",
     "flow:chk": "yarn run flow",
     "lint:chk": "eslint src/**/*.js src/**/*.jsx",
-    "sanity": "yarn flow:chk && yarn lint:chk && yarn test"
+    "sanity": "yarn flow:chk && yarn lint:chk && yarn test",
+    "prepare": "husky install"
   },
   "author": "",
   "license": "ISC",
@@ -87,6 +88,7 @@
     "flow-bin": "^0.123.0",
     "flow-typed": "^2.2.3",
     "html-webpack-plugin": "^4.0.1",
+    "husky": "^7.0.1",
     "jsdom": "^16.2.1",
     "jsdom-global": "^3.0.2",
     "mocha": "^7.1.1",

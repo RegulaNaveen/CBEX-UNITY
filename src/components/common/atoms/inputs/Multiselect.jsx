@@ -10,7 +10,8 @@ type Props = {
   items: Array<Object>,
   title?: string,
   onClick: (selectedValues: Array<string>, lastAnswer: Array<string>) => void,
-  value?: Array<string>
+  value?: Array<string>,
+  error?: mixed
 };
 
 type State = {
@@ -24,7 +25,8 @@ class Multiselect extends PureComponent<Props, State> {
   static defaultProps = {
     id: undefined,
     title: undefined,
-    value: undefined
+    value: undefined,
+    error: undefined
   };
 
   constructor(props: Object) {
@@ -107,7 +109,7 @@ class Multiselect extends PureComponent<Props, State> {
 
   render() {
     const { isCollapsed, selectedValues } = this.state;
-    const { id, placeholder, items, title } = this.props;
+    const { id, placeholder, items, title, error } = this.props;
 
     return (
       <>
@@ -116,7 +118,7 @@ class Multiselect extends PureComponent<Props, State> {
           <div
             id={id}
             ref={this.ref}
-            className="multiselect-header"
+            className={error && error.length > 0 ? "multiselect-header-error" : "multiselect-header"}
             role="presentation"
             onClick={this.handleCollapse}
           >
@@ -142,6 +144,19 @@ class Multiselect extends PureComponent<Props, State> {
             </ul>
           )}
         </div>
+        {error &&
+          error.length > 0 &&
+          error.map(v => {
+            if (v.roleNames)
+              return (
+                <p
+                  key={String(v.roleNames?.message)}
+                  className="number-error-text"
+                >
+                  {v.roleNames?.message}
+                </p>
+              );
+          })}
       </>
     );
   }
