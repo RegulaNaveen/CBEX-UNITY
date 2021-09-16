@@ -13,7 +13,14 @@ type Props = {
   withReset?: boolean
 };
 
-const UserLookup = ({ users, onChange, text, title, withReset, placeholder }: Props) => (
+const UserLookup = ({
+  users,
+  onChange,
+  text,
+  title,
+  withReset,
+  placeholder
+}: Props) => (
   <Lookup
     data={users}
     getSelectedItem={onChange}
@@ -27,7 +34,8 @@ const UserLookup = ({ users, onChange, text, title, withReset, placeholder }: Pr
 UserLookup.defaultProps = {
   text: '',
   title: '',
-  withReset: false
+  withReset: false,
+  placeholder: ''
 };
 
 const mapStateToProps = state => ({

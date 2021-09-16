@@ -9,7 +9,7 @@ import { CloseCircle } from '../../../svg';
 type Props = {
   data: Array<any>,
   title?: string,
-  placeholder?: String,
+  placeholder?: string,
   text?: string,
   getSelectedItem: (selectedItem: string) => void,
   withReset?: boolean
@@ -25,7 +25,8 @@ class Lookup extends Component<Props, State> {
   static defaultProps = {
     title: '',
     text: '',
-    withReset: false
+    withReset: false,
+    placeholder: ''
   };
 
   constructor(props: Object) {

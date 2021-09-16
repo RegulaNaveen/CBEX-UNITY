@@ -58,7 +58,7 @@ function Notepad({
       );
     }
     // Matomo event from Parent component
-    trackMatomoNoteSubmit(note.section, note.note)
+    trackMatomoNoteSubmit(note.section, note.note);
     add(id, newNote);
   }
 
@@ -94,7 +94,11 @@ function Notepad({
         .toJS();
     }
     // Matomo event from Parent component
-    trackMatomoNoteSubmit((newEditedNote.section) ? newEditedNote.section.sectionName  : '', newEditedNote.noteText, 'edit')
+    trackMatomoNoteSubmit(
+      newEditedNote.section ? newEditedNote.section.sectionName : '',
+      newEditedNote.noteText,
+      'edit'
+    );
     update(id, newEditedNote);
   }
 
