@@ -4,10 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
  
-## [Unreleased] - yyyy-mm-dd
+## [2.4] - 2021-10-08
  
 ### Added
   - IQVIACBEXU-552: ER: Indicate required information on Custom Question module
+  - IQVIACBEXU-574: ER: Remove help text from the filter (causing unrequired redundancy)
 ### Changed
 ### Fixed
 
@@ -35,3 +36,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 [2.3]: https://gitlabrnds.quintiles.com/cbex/unity/unity-app-frontend/-/tags/v2.3
 [2.3.1]: https://gitlabrnds.quintiles.com/cbex/unity/unity-app-frontend/-/tags/v2.3.1
+[2.4]: https://gitlabrnds.quintiles.com/cbex/unity/unity-app-frontend/-/tags/v2.4
