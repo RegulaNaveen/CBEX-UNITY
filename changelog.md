@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
  
-## [2.4] - 2021-09-16
+## [2.4] - 2021-10-10
  
 ### Added
   - IQVIACBEXU-552: ER: Indicate required information on Custom Question module
@@ -36,3 +36,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 [2.3]: https://gitlabrnds.quintiles.com/cbex/unity/unity-app-frontend/-/tags/v2.3
 [2.3.1]: https://gitlabrnds.quintiles.com/cbex/unity/unity-app-frontend/-/tags/v2.3.1
+[2.4]: https://gitlabrnds.quintiles.com/cbex/unity/unity-app-frontend/-/tags/v2.4
