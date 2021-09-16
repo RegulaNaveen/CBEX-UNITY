@@ -43,43 +43,43 @@ const DashboardFilters = ({
     <div id="dashboard-filters">
       <div className="filter-wrapper">
         <InputField
-          label=""
+          label="Opportunity number"
           id="opportunity number"
           onChange={onTextFilterChange}
-          placeholder="Opportunity number"
+          placeholder=""
           type="text"
         />
       </div>
       <div className="filter-wrapper">
         <InputField
-          label=""
+          label="Opportunity name"
           id="opportunityName"
           onChange={onTextFilterChange}
-          placeholder="Opportunity name"
+          placeholder=""
           type="text"
         />
       </div>
       <div className="filter-wrapper">
         <InputField
-          label=""
+          label="Customer"
           id="customer"
           onChange={onTextFilterChange}
-          placeholder="Customer"
+          placeholder=""
           type="text"
         />
       </div>
       <div className="filter-wrapper">
         <InputField
-          label=""
+          label="Protocol number"
           id="protocol number"
           onChange={onTextFilterChange}
-          placeholder="Protocol number"
+          placeholder=""
           type="text"
         />
       </div>
       <div className="filter-wrapper">
         <FilterDropDown
-          title=""
+          title="Phase"
           id="phase"
           placeholder="Phase"
           onChange={onDropDownFilterChange}
@@ -88,16 +88,16 @@ const DashboardFilters = ({
       </div>
       <div className="filter-wrapper">
         <InputField
-          label=""
+          label="Product"
           id="product"
           onChange={onTextFilterChange}
-          placeholder="Product"
+          placeholder=""
           type="text"
         />
       </div>
       <div className="filter-wrapper">
         <FilterDropDown
-          title=""
+          title="Therapeutic area"
           id="therapeuticArea"
           placeholder="Therapeutic area"
           onChange={onDropDownFilterChange}
@@ -106,24 +106,23 @@ const DashboardFilters = ({
       </div>
       <div className="filter-wrapper">
         <InputField
-          label=""
+          label="Verbatim indication"
           id="verbatim indication"
           onChange={onTextFilterChange}
-          placeholder="Verbatim indication"
+          placeholder=""
           type="text"
         />
       </div>
       <div className="filter-wrapper">
         <DateRange
-          label=""
+          label="Bid due date"
           id="bid due date"
-          placeholder="Bid due date"
           onSetRange={changeDate}
         />
       </div>
       <div className="filter-wrapper">
         <FilterDropDown
-          title=""
+          title="Opportunity status"
           id="opportunity status"
           placeholder="Opportunity status"
           onChange={onDropDownFilterChange}
@@ -132,9 +131,8 @@ const DashboardFilters = ({
       </div>
       <div className="filter-wrapper">
         <UserLookup
-          title=""
+          title="Team member"
           id="teamMember"
-          placeholder="Team member"
           onChange={changeUser}
           withReset
         />
