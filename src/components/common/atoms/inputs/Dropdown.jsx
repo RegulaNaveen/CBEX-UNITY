@@ -102,7 +102,7 @@ class Dropdown extends PureComponent<Props, State> {
             <div
               id={id}
               className={
-                error && error.length > 0 ? "dd-header-error" : "dd-header"
+                error && error.length > 0 ? 'dd-header-error' : 'dd-header'
               }
               ref={this.ref}
               role="presentation"

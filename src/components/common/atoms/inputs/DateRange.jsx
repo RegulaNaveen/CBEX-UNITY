@@ -71,7 +71,7 @@ class DateRange extends Component<Props, State> {
   showPicker = () => this.setState({ showPicker: true });
 
   render() {
-    const { label } = this.props;
+    const { label, placeholder } = this.props;
     const { from, to, showPicker } = this.state;
     const modifiers = { start: from, end: to };
     return (
@@ -79,7 +79,9 @@ class DateRange extends Component<Props, State> {
         {label && <p className="date-picker-title">{label}</p>}
         <div ref={this.wrapperRef}>
           <DatePickerCustomInput
-            placeholder="Select a date range"
+            placeholder={
+              placeholder && placeholder == 'hide' ? '' : 'Select date range...'
+            }
             value={
               from && to
                 ? `${parseMomentDate(from)} - ${parseMomentDate(to)}`

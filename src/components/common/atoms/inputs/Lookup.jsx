@@ -90,18 +90,20 @@ class Lookup extends Component<Props, State> {
 
   render() {
     const { searchValue, filteredData, showResetButton } = this.state;
-    const { title, withReset, placeholder } = this.props;
+    const { title, withReset, placeholder, className } = this.props;
 
     return (
       <div
         id="lookup"
+        style={className ? { paddingTop: 3 } : {}}
         className={classNames({ 'is-searching': !isEmpty(filteredData) })}
       >
         {title && <p>{title}</p>}
-        <div className="lookup-wrapper">
+        <div className={className || 'lookup-wrapper'}>
           <input
             type="text"
             value={searchValue}
+            className={className ? 'inputsize' : ''}
             placeholder={placeholder}
             onChange={this.onSearching}
             required

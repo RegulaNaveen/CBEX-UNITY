@@ -16,14 +16,15 @@ const InputField = ({
   placeholder,
   type,
   id,
-  onChange
+  onChange,
+  className
 }: Props) => (
   <>
     {label ? <p className="input-title">{label}</p> : null}
     <input
       id={id}
       title={title}
-      className="input"
+      className={className || 'input'}
       placeholder={placeholder}
       type={type}
       onChange={onChange}
