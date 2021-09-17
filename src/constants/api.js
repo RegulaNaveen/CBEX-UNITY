@@ -27,7 +27,7 @@ switch (environment) {
     CLIENT_ID = '1h21m7sdoq1jr4tb00mkljn1m';
     REDIRECTION_URL = 'https://uat-unity.iqvia.app/';
     UBUILD_ENABLED = false;
-    UBUILD_ARTIFACT = '';
+    UBUILD_ARTIFACT = 'https://uat-ubuild.iqvia.app/main.js';
     break;
   case 'PROD':
     PROPOSAL_API_ENDPOINT =
@@ -40,7 +40,7 @@ switch (environment) {
     CLIENT_ID = 'tc1tih0kcrifpoqrdsqo26467';
     REDIRECTION_URL = 'https://unity.iqvia.app/';
     UBUILD_ENABLED = false;
-    UBUILD_ARTIFACT = '';
+    UBUILD_ARTIFACT = 'https://prod-ubuild.iqvia.app/main.js';
     break;
   case 'QA':
     // UDEV Data
@@ -55,7 +55,7 @@ switch (environment) {
     CLIENT_ID = '36e6ql6fnolv0ppsb9rfhpjqk5';
     REDIRECTION_URL = 'https://qa-unity.iqvia.app/';
     UBUILD_ENABLED = false;
-    UBUILD_ARTIFACT = '';
+    UBUILD_ARTIFACT = 'https://qa-ubuild.iqvia.app/main.js';
     break;
   default:
     // DEV Data
@@ -70,7 +70,7 @@ switch (environment) {
     CLIENT_ID = '36e6ql6fnolv0ppsb9rfhpjqk5';
     REDIRECTION_URL = 'https://dev-unity.iqvia.app/';
     UBUILD_ENABLED = true;
-    UBUILD_ARTIFACT = 'https://udev-unity.iqvia.app/main.js';
+    UBUILD_ARTIFACT = 'https://dev-ubuild.iqvia.app/main.js';
     break;
 }
 
