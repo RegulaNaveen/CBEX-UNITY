@@ -1,6 +1,7 @@
 // @flow
 import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
+import Link from 'apollo-react/components/Link';
 import { getFilteringValues } from '../../redux/actions/proposals-actions';
 import { getProposalsFilters } from '../../redux/selectors';
 import InputField from './atoms/inputs/InputField';
@@ -15,7 +16,8 @@ type Props = {
   onDateRangeChange: Function,
   fetchFilterValues: Function,
   fetchUsers: Function,
-  filterValues: Object
+  filterValues: Object,
+  clearFilter: Function
 };
 
 const DashboardFilters = ({
@@ -24,7 +26,8 @@ const DashboardFilters = ({
   onDateRangeChange,
   fetchFilterValues,
   fetchUsers,
-  filterValues
+  filterValues,
+  clearFilter
 }: Props) => {
   useEffect(() => {
     fetchFilterValues();
@@ -41,12 +44,22 @@ const DashboardFilters = ({
 
   return (
     <div id="dashboard-filters">
+      <div className="filter-clear">
+        <Link
+          style={{ borderBottom: 'none' }}
+          size="small"
+          onClick={() => clearFilter()}
+        >
+          <span style={{ verticalAlign: 'top' }}>Clear All</span>
+        </Link>
+      </div>
       <div className="filter-wrapper">
         <InputField
           label="Opportunity number"
           id="opportunity number"
+          className="inputsize"
           onChange={onTextFilterChange}
-          placeholder=""
+          placeholder="Type text..."
           type="text"
         />
       </div>
@@ -54,8 +67,9 @@ const DashboardFilters = ({
         <InputField
           label="Opportunity name"
           id="opportunityName"
+          className="inputsize"
           onChange={onTextFilterChange}
-          placeholder=""
+          placeholder="Type text..."
           type="text"
         />
       </div>
@@ -63,8 +77,9 @@ const DashboardFilters = ({
         <InputField
           label="Customer"
           id="customer"
+          className="inputsize"
           onChange={onTextFilterChange}
-          placeholder=""
+          placeholder="Type text..."
           type="text"
         />
       </div>
@@ -72,8 +87,9 @@ const DashboardFilters = ({
         <InputField
           label="Protocol number"
           id="protocol number"
+          className="inputsize"
           onChange={onTextFilterChange}
-          placeholder=""
+          placeholder="Type text..."
           type="text"
         />
       </div>
@@ -81,7 +97,7 @@ const DashboardFilters = ({
         <FilterDropDown
           title="Phase"
           id="phase"
-          placeholder="Phase"
+          placeholder="Select value..."
           onChange={onDropDownFilterChange}
           items={filterValues ? filterValues.phases : []}
         />
@@ -90,8 +106,9 @@ const DashboardFilters = ({
         <InputField
           label="Product"
           id="product"
+          className="inputsize"
           onChange={onTextFilterChange}
-          placeholder=""
+          placeholder="Type text..."
           type="text"
         />
       </div>
@@ -99,7 +116,7 @@ const DashboardFilters = ({
         <FilterDropDown
           title="Therapeutic area"
           id="therapeuticArea"
-          placeholder="Therapeutic area"
+          placeholder="Select value..."
           onChange={onDropDownFilterChange}
           items={filterValues ? filterValues.therapeuticAreas : []}
         />
@@ -108,8 +125,9 @@ const DashboardFilters = ({
         <InputField
           label="Verbatim indication"
           id="verbatim indication"
+          className="inputsize"
           onChange={onTextFilterChange}
-          placeholder=""
+          placeholder="Type text..."
           type="text"
         />
       </div>
@@ -124,7 +142,7 @@ const DashboardFilters = ({
         <FilterDropDown
           title="Opportunity status"
           id="opportunity status"
-          placeholder="Opportunity status"
+          placeholder="Select value..."
           onChange={onDropDownFilterChange}
           items={filterValues ? filterValues.opportunityStatuses : []}
         />
@@ -133,6 +151,8 @@ const DashboardFilters = ({
         <UserLookup
           title="Team member"
           id="teamMember"
+          className="lookup-wrapper-border"
+          placeholder="Type text..."
           onChange={changeUser}
           withReset
         />
