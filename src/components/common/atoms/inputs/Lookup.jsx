@@ -39,6 +39,14 @@ class Lookup extends Component<Props, State> {
     };
   }
 
+  componentDidMount(){
+    document.addEventListener("cleantemmmeberinput", (e)=> {
+      if(e && e.detail){
+        this.setState({searchValue : ''})
+      }
+    });
+  }
+
   onSearching = ({ target: { value } }: SyntheticInputEvent<EventTarget>) => {
     const { data } = this.props;
     const filteringData = data.filter(item =>
@@ -99,11 +107,11 @@ class Lookup extends Component<Props, State> {
         className={classNames({ 'is-searching': !isEmpty(filteredData) })}
       >
         {title && <p>{title}</p>}
-        <div className={className || 'lookup-wrapper'}>
+        <div className="lookup-wrapper">
           <input
             type="text"
+            className="teammember"
             value={searchValue}
-            className={className ? 'inputsize' : ''}
             placeholder={placeholder}
             onChange={this.onSearching}
             required

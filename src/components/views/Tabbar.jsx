@@ -154,8 +154,10 @@ class Tabbar extends Component<Props, State> {
         if (document.getElementById('verbatim indication')) {
           document.getElementById('verbatim indication').value = '';
         }
-        if (document.getElementById('lookup-wrapper-border>input')) {
-          document.querySelector('.lookup-wrapper-border>input').value = '';
+        if (document.getElementsByClassName('teammember') && document.getElementsByClassName('teammember').length) {
+          document.getElementsByClassName('teammember')[0].value = '';
+          let teamevent = new CustomEvent("cleantemmmeberinput", { "detail": true });
+          document.dispatchEvent(teamevent);
         }
         const htmlbtn = document.getElementsByClassName('filter-wrapper');
         if (htmlbtn && htmlbtn.length) {
