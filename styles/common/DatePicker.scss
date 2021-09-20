@@ -55,7 +55,7 @@
     display: flex;
     align-items: center;
     box-sizing: border-box;
-    height: 40px;
+    height: 42px;
     width: 100%;
     border: $border;
     border-radius: 4px;
@@ -88,7 +88,7 @@
     }
 
     .date {
-      color: $black;
+      color: #999999;
     }
   }
 }
