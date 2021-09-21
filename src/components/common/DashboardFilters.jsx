@@ -1,6 +1,7 @@
 // @flow
 import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
+import Link from 'apollo-react/components/Link';
 import { getFilteringValues } from '../../redux/actions/proposals-actions';
 import { getProposalsFilters } from '../../redux/selectors';
 import InputField from './atoms/inputs/InputField';
@@ -15,7 +16,8 @@ type Props = {
   onDateRangeChange: Function,
   fetchFilterValues: Function,
   fetchUsers: Function,
-  filterValues: Object
+  filterValues: Object,
+  clearFilter: Function
 };
 
 const DashboardFilters = ({
@@ -24,7 +26,8 @@ const DashboardFilters = ({
   onDateRangeChange,
   fetchFilterValues,
   fetchUsers,
-  filterValues
+  filterValues,
+  clearFilter
 }: Props) => {
   useEffect(() => {
     fetchFilterValues();
@@ -41,100 +44,115 @@ const DashboardFilters = ({
 
   return (
     <div id="dashboard-filters">
+      <div className="filter-clear">
+        <Link
+          style={{ borderBottom: 'none' }}
+          size="small"
+          onClick={() => clearFilter()}
+        >
+          <span style={{ verticalAlign: 'top' }}>Clear All</span>
+        </Link>
+      </div>
       <div className="filter-wrapper">
         <InputField
-          label=""
+          label="Opportunity number"
           id="opportunity number"
+          className="inputsize"
           onChange={onTextFilterChange}
-          placeholder="Opportunity number"
+          placeholder="Type text..."
           type="text"
         />
       </div>
       <div className="filter-wrapper">
         <InputField
-          label=""
+          label="Opportunity name"
           id="opportunityName"
+          className="inputsize"
           onChange={onTextFilterChange}
-          placeholder="Opportunity name"
+          placeholder="Type text..."
           type="text"
         />
       </div>
       <div className="filter-wrapper">
         <InputField
-          label=""
+          label="Customer"
           id="customer"
+          className="inputsize"
           onChange={onTextFilterChange}
-          placeholder="Customer"
+          placeholder="Type text..."
           type="text"
         />
       </div>
       <div className="filter-wrapper">
         <InputField
-          label=""
+          label="Protocol number"
           id="protocol number"
+          className="inputsize"
           onChange={onTextFilterChange}
-          placeholder="Protocol number"
+          placeholder="Type text..."
           type="text"
         />
       </div>
       <div className="filter-wrapper">
         <FilterDropDown
-          title=""
+          title="Phase"
           id="phase"
-          placeholder="Phase"
+          placeholder="Select value..."
           onChange={onDropDownFilterChange}
           items={filterValues ? filterValues.phases : []}
         />
       </div>
       <div className="filter-wrapper">
         <InputField
-          label=""
+          label="Product"
           id="product"
+          className="inputsize"
           onChange={onTextFilterChange}
-          placeholder="Product"
+          placeholder="Type text..."
           type="text"
         />
       </div>
       <div className="filter-wrapper">
         <FilterDropDown
-          title=""
+          title="Therapeutic area"
           id="therapeuticArea"
-          placeholder="Therapeutic area"
+          placeholder="Select value..."
           onChange={onDropDownFilterChange}
           items={filterValues ? filterValues.therapeuticAreas : []}
         />
       </div>
       <div className="filter-wrapper">
         <InputField
-          label=""
+          label="Verbatim indication"
           id="verbatim indication"
+          className="inputsize"
           onChange={onTextFilterChange}
-          placeholder="Verbatim indication"
+          placeholder="Type text..."
           type="text"
         />
       </div>
       <div className="filter-wrapper">
         <DateRange
-          label=""
+          label="Bid due date"
           id="bid due date"
-          placeholder="Bid due date"
           onSetRange={changeDate}
         />
       </div>
       <div className="filter-wrapper">
         <FilterDropDown
-          title=""
+          title="Opportunity status"
           id="opportunity status"
-          placeholder="Opportunity status"
+          placeholder="Select value..."
           onChange={onDropDownFilterChange}
           items={filterValues ? filterValues.opportunityStatuses : []}
         />
       </div>
       <div className="filter-wrapper">
         <UserLookup
-          title=""
+          title="Team member"
           id="teamMember"
-          placeholder="Team member"
+          className="lookup-wrapper-border"
+          placeholder="Type text..."
           onChange={changeUser}
           withReset
         />

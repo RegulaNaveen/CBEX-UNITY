@@ -31,7 +31,7 @@ const DatePickerCustomInput = ({
       className={
         value === 'MM/DD/YYYY'
           ? 'datepicker-input placeholder'
-          : 'datepicker-input date'
+          : 'datepicker-input date inputdatesize'
       }
       value={value}
       placeholder={placeholder}

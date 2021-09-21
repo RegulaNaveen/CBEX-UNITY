@@ -115,6 +115,64 @@ class Tabbar extends Component<Props, State> {
     this.trackMatomoEventFilterToggle(!showFilters);
   };
 
+  clearFilter = () => {
+    const { filterProposals } = this.props;
+    this.setState(
+      {
+        filters: {
+          ...{
+            opportunityNumber: '',
+            opportunityName: '',
+            customer: '',
+            protocolNumber: '',
+            phase: '',
+            product: '',
+            therapeuticArea: '',
+            indication: '',
+            bidDueDate: '',
+            opportunityStatus: '',
+            teamMember: ''
+          }
+        }
+      },
+      () => {
+        if (document.getElementById('opportunity number')) {
+          document.getElementById('opportunity number').value = '';
+        }
+        if (document.getElementById('opportunityName')) {
+          document.getElementById('opportunityName').value = '';
+        }
+        if (document.getElementById('customer')) {
+          document.getElementById('customer').value = '';
+        }
+        if (document.getElementById('protocol number')) {
+          document.getElementById('protocol number').value = '';
+        }
+        if (document.getElementById('product')) {
+          document.getElementById('product').value = '';
+        }
+        if (document.getElementById('verbatim indication')) {
+          document.getElementById('verbatim indication').value = '';
+        }
+        if (document.getElementsByClassName('teammember') && document.getElementsByClassName('teammember').length) {
+          document.getElementsByClassName('teammember')[0].value = '';
+          let teamevent = new CustomEvent("cleantemmmeberinput", { "detail": true });
+          document.dispatchEvent(teamevent);
+        }
+        const htmlbtn = document.getElementsByClassName('filter-wrapper');
+        if (htmlbtn && htmlbtn.length) {
+          for (let i = 0; i < htmlbtn.length; i++) {
+            const clearbtn = htmlbtn[i].getElementsByTagName('button');
+            if (clearbtn && clearbtn.length) {
+              clearbtn[0].click();
+            }
+          }
+        }
+        filterProposals(this.state.filters, true);
+      }
+    );
+  };
+
   trackMatomoEventTabs = index => {
     const tabs = ['My Docket', 'Recent', 'All'];
     const { userActions, eventCategories, trackEvent } = this.props;
@@ -186,6 +244,7 @@ class Tabbar extends Component<Props, State> {
               onTextFilterChange={this.onTextFilterChange}
               onDropDownFilterChange={this.onDropDownFilterChange}
               onDateRangeChange={this.onDateRangeChange}
+              clearFilter={() => this.clearFilter()}
             />
           )}
           {children[selected]}
