@@ -1,36 +1,25 @@
 import React from 'react';
-import Chip from 'apollo-react/components/Chip';
-import Check from 'apollo-react-icons/Check';
+import Tag from 'apollo-react/components/Tag';
 import PropTypes from 'prop-types';
+import Check from 'apollo-react-icons/Check';
 
-const ChipView = ({ bgcolor, label, size, answer }) => {
+const ChipView = ({ label, answer }) => {
   return (
     <div>
-      <Chip
-        icon={answer ? <Check /> : ''}
-        size={size || 'small'}
+      <Tag
+        Icon={answer ? Check : ''}
         label={label}
-        style={{
-          backgroundColor: bgcolor || '#0869fd',
-          borderColor: bgcolor || '#0869fd',
-          fontFamily: 'ProximaNova-Regular',
-          paddingLeft: 10,
-          paddingRight: 10
-        }}
+        variant={answer ? 'green' : 'blue'}
       />
     </div>
   );
 };
 ChipView.propTypes = {
-  bgcolor: PropTypes.string,
   label: PropTypes.string,
-  size: PropTypes.string,
   answer: PropTypes.string
 };
 ChipView.defaultProps = {
-  bgcolor: '',
   label: '',
-  size: '',
   answer: ''
 };
 export default ChipView;

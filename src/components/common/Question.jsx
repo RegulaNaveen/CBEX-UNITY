@@ -35,7 +35,8 @@ type Props = {
   trackEvent: any,
   proposalDetail: any,
   sfObject: string,
-  sfField: string
+  sfField: string,
+  ismilestoneavailable?: string
 };
 
 export class TaskRow extends Component<Props, State> {
@@ -251,17 +252,38 @@ export class TaskRow extends Component<Props, State> {
     }
   };
 
+  renderTags = (milestone, ismilestoneavailable, lastAnswer) => {
+    if (ismilestoneavailable) {
+      return (
+        <div className="chipview">
+          {milestone ? (
+            <ChipView
+              label={String(milestone).split(' ')[0]}
+              answer={lastAnswer}
+            />
+          ) : (
+            <Checkmark />
+          )}
+        </div>
+      );
+    }
+    if (lastAnswer) {
+      return <Checkmark />;
+    }
+    return <span />;
+  };
+
   render() {
     const {
       answers,
       questionText,
       answerConfiguration,
-      milestone
+      milestone,
+      ismilestoneavailable
     } = this.props;
     const questionId = answers.get('questionId');
     let lastAnswer;
     let answerDate = 'Not Answered';
-
     if (!questionId) lastAnswer = answers.last();
     else lastAnswer = answers.get('answers').last();
 
@@ -269,19 +291,7 @@ export class TaskRow extends Component<Props, State> {
     return (
       <div className="task-table-row">
         <div className="question-text">
-          {milestone ? (
-            <div style={{ width: 120 }}>
-              <ChipView
-                label={String(milestone).split(' ')[0]}
-                bgcolor={lastAnswer ? '#00c221' : '#0768fd'}
-                answer={lastAnswer}
-              />
-            </div>
-          ) : lastAnswer ? (
-            <Checkmark />
-          ) : (
-            <span />
-          )}
+          {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
           <p>{questionText}</p>
         </div>
 

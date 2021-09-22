@@ -2,6 +2,14 @@
 import { Map, fromJS } from 'immutable';
 import { last } from 'lodash';
 
+const generateMilestone = (proposalQuestions: Object) => {
+  const flag = proposalQuestions.filter(question => question?.milestone);
+  if (flag && flag.length) {
+    return true;
+  }
+  return false;
+};
+
 const generateSections = (
   proposalQuestions: Object,
   filter: boolean,
@@ -84,6 +92,9 @@ export const getProposalTeamAssignedRoles = (proposal: Map): Map => {
 
 export const getFilteredSections = (proposal: Map, auth: Map): Map =>
   generateSections(proposal.get('proposalQuestions'), true, auth.get('role'));
+
+export const getMilestoneSections = (proposal: Map, auth: Map): Map =>
+  generateMilestone(proposal.get('proposalQuestions'));
 
 export const isProposalLoading = (proposal: Map): Map =>
   proposal.get('isProposalLoading');

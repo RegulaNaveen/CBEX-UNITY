@@ -16,6 +16,7 @@ import {
   getProposalDetails,
   getSections,
   getFilteredSections,
+  getMilestoneSections,
   setQuestionData,
   isSetQuestionLoading,
   setQuestionError
@@ -229,7 +230,7 @@ class Questions extends Component<Props, State> {
 
   renderQuestions() {
     const { isChecked, isCheckedAll } = this.state;
-    const { sections, filteredSections } = this.props;
+    const { sections, filteredSections, filterMilestone } = this.props;
 
     const allSections = isChecked ? filteredSections : sections;
 
@@ -246,6 +247,7 @@ class Questions extends Component<Props, State> {
           <CollapsibleList
             questions={questions}
             title={sectionName}
+            milestone={filterMilestone}
             key={sectionName}
             setTabFromQuestionNotes={(val, title, flag) =>
               this.setTabFromQuestionNotes(val, title, flag)
@@ -365,6 +367,7 @@ class Questions extends Component<Props, State> {
 const mapStateToProps = (state: Map) => ({
   details: getProposalDetails(state),
   sections: getSections(state),
+  filterMilestone: getMilestoneSections(state),
   filteredSections: getFilteredSections(state),
   setQuestion: setQuestionData(state),
   isQuestionLoading: isSetQuestionLoading(state),
