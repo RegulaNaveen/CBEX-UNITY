@@ -212,6 +212,7 @@ class CollapsibleList extends Component<Props, State> {
                 (visible || typeof visible === 'undefined') && (
                   <Question
                     key={questionConfig.get('questionId')}
+                    milestone={questionConfig.get('milestone')}
                     questionId={questionConfig.get('questionId')}
                     proposalId={questionConfig.get('proposalId')}
                     answers={questionConfig.get('answers')}
