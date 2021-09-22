@@ -39,10 +39,10 @@ class Lookup extends Component<Props, State> {
     };
   }
 
-  componentDidMount(){
-    document.addEventListener("cleantemmmeberinput", (e)=> {
-      if(e && e.detail){
-        this.setState({searchValue : ''})
+  componentDidMount() {
+    document.addEventListener('cleantemmmeberinput', e => {
+      if (e && e.detail) {
+        this.setState({ searchValue: '' });
       }
     });
   }

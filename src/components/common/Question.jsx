@@ -15,7 +15,8 @@ import { setProposalAnswerData } from '../../redux/actions/proposal-actions';
 import { getUserData, getProposalDetails } from '../../redux/selectors';
 import MatomoHOC from '../HOC/MatomoHOC';
 import { getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
-import ChipView from '../common/Chip/ChipView'
+import ChipView from './Chip/ChipView';
+
 type State = {
   selectedDay: string
 };
@@ -251,7 +252,12 @@ export class TaskRow extends Component<Props, State> {
   };
 
   render() {
-    const { answers, questionText, answerConfiguration, milestone } = this.props;
+    const {
+      answers,
+      questionText,
+      answerConfiguration,
+      milestone
+    } = this.props;
     const questionId = answers.get('questionId');
     let lastAnswer;
     let answerDate = 'Not Answered';
@@ -263,10 +269,19 @@ export class TaskRow extends Component<Props, State> {
     return (
       <div className="task-table-row">
         <div className="question-text">
-          {milestone ?
-          <div style={{width: 120}}><ChipView label={String(milestone).split(' ')[0]} bgcolor={lastAnswer ? '#00c221' : '#0768fd'} answer={lastAnswer} /></div> :
-          lastAnswer ? <Checkmark /> : <span />
-          }
+          {milestone ? (
+            <div style={{ width: 120 }}>
+              <ChipView
+                label={String(milestone).split(' ')[0]}
+                bgcolor={lastAnswer ? '#00c221' : '#0768fd'}
+                answer={lastAnswer}
+              />
+            </div>
+          ) : lastAnswer ? (
+            <Checkmark />
+          ) : (
+            <span />
+          )}
           <p>{questionText}</p>
         </div>
 
