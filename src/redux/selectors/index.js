@@ -137,6 +137,23 @@ export const getValidatedProposalData = (state: Object): Object =>
 export const getPendingValidatedItems = (state: Object): Object =>
   proposalSelectors.getPendingValidatedItems(state.proposal);
 
+export const getQuestionsFilters = state =>
+  proposalSelectors.selectQuestionsFilters(state);
+
+export const selectIsQuestionsFilterEnabled = state =>
+  proposalSelectors.selectIsQuestionsFilterEnabled(state);
+
+export const selectProposalQuestions = state =>
+  proposalSelectors.selectProposalQuestions(state);
+
+export const selectSections = state => proposalSelectors.selectSections(state);
+
+export const selectFilteredSections = state =>
+  proposalSelectors.selectFilteredSections(state);
+
+export const selectActiveQuestionsFilterCount = state =>
+  proposalSelectors.selectActiveQuestionsFilterCount(state);
+
 // Tabbar Selectors
 export const getProposals = (state: Object): Array<Object> =>
   proposalsSelectors.getProposals(state.proposals);

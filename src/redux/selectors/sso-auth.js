@@ -1,5 +1,6 @@
 // @flow
 import { Map } from 'immutable';
+import { createSelector } from 'reselect';
 
 export const getUserAuthStatus = (auth: Map): boolean =>
   !!auth.get('isAuthenticated');
@@ -22,3 +23,9 @@ export const getLookupUsers = (auth: Map): Map => auth.get('lookupUsers');
 
 export const getLookupUsersError = (auth: Map): Map =>
   auth.get('lookupUsersError');
+
+const selectSSOAuth = state => state.ssoAuth;
+
+export const selectUserRole = createSelector(selectSSOAuth, auth =>
+  auth.get('role')
+);

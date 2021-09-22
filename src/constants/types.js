@@ -60,7 +60,11 @@ const PROPOSAL = {
   UPDATE_MODIFIED_QUESTION: 'update_modified_question',
   ON_FETCHING_VALIDATED_PROPOSAL_DATA: 'on_fetching_validated_proposal_data',
   VALIDATED_PROPOSAL_DATA: 'validated_proposal_data',
-  VALIDATED_PROPOSAL_DATA_ERROR: 'validated_proposal_data_error'
+  VALIDATED_PROPOSAL_DATA_ERROR: 'validated_proposal_data_error',
+  ON_APPLY_QUESTIONS_FILTER: 'on_apply_questions_filter',
+  ON_QUESTIONS_FILTERED: 'on_questions_filtered',
+  CLEAR_QUESTIONS_FILTER: 'clear_questions_filter',
+  RESET_QUESTIONS_FILTER: 'reset_questions_filter'
 };
 
 const PROPOSALS = {
