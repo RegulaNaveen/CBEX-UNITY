@@ -10,7 +10,7 @@ const ChipView = ({ label, answer }) => {
       <Tooltip title={ label } placement="top">
         <Tag
           Icon={ answer ? Check : '' }
-          label={ label }
+          label={ label.split(' ')[0].length <= 11 ? label.split(' ')[0] : `${label.split(' ')[0].substr(0,8)}...` }
           variant={ answer ? 'green' : 'blue' }
         />
       </Tooltip>

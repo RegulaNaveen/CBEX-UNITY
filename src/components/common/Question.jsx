@@ -258,8 +258,7 @@ export class TaskRow extends Component<Props, State> {
         <div className="chipview">
           {milestone ? (
             <ChipView
-              label={String(milestone).split(' ')[0].length <= 11 ? 
-              String(milestone).split(' ')[0] : `${String(milestone).split(' ')[0].substr(0,8)}...`}
+              label={String(milestone)}
               answer={lastAnswer}
             />
           ) : (
