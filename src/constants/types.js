@@ -93,4 +93,5 @@ const NOTEPAD = {
   CHANGE_MODE: 'notepad_change_mode'
 };
 
-export { AUTH, SSO_AUTH, PROPOSALS, PROPOSAL, SIDEBAR, NOTEPAD };
+const UBUILD_ADMIN = 'ubuildAdmin'
+export { AUTH, SSO_AUTH, PROPOSALS, PROPOSAL, SIDEBAR, NOTEPAD, UBUILD_ADMIN };

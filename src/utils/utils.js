@@ -1,4 +1,6 @@
+import jwt_decode from 'jwt-decode';
 import CountryMap from '../constants/country.json';
+import { UBUILD_ADMIN } from '../constants/types';
 
 /**
  *
@@ -25,4 +27,17 @@ function getCountryOptions() {
   return Object.values(CountryMap);
 }
 
-export { getCountriesNameForCode, getCountryOptions };
+function isUserUbuildAdmin() {
+  const idToken = localStorage.getItem('id_token');
+  const decoded = jwt_decode(idToken);
+  if (
+    decoded &&
+    Array.isArray(decoded['cognito:groups']) &&
+    decoded['cognito:groups'].includes(UBUILD_ADMIN)
+  ) {
+    return true;
+  }
+  return false;
+}
+
+export { getCountriesNameForCode, getCountryOptions, isUserUbuildAdmin };
