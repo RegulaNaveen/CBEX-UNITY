@@ -32,7 +32,8 @@ import {
   selectIsQuestionsFilterEnabled,
   selectSections,
   selectFilteredSections,
-  selectActiveQuestionsFilterCount
+  selectActiveQuestionsFilterCount,
+  getMilestoneSections
 } from '../../../redux/selectors';
 import { selectUniqueMilestones } from '../../../redux/selectors/proposal';
 import { selectUserRole } from '../../../redux/selectors/sso-auth';
@@ -278,7 +279,8 @@ class Questions extends Component<Props, State> {
     const {
       sections,
       filteredSections,
-      isQuestionsFiltersEnabled
+      isQuestionsFiltersEnabled,
+      filterMilestone
     } = this.props;
 
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
@@ -296,6 +298,7 @@ class Questions extends Component<Props, State> {
           <CollapsibleList
             questions={questions}
             title={sectionName}
+            milestone={filterMilestone}
             key={sectionName}
             setTabFromQuestionNotes={(val, title, flag) =>
               this.setTabFromQuestionNotes(val, title, flag)
@@ -464,6 +467,7 @@ class Questions extends Component<Props, State> {
 
 const mapStateToProps = (state: Map) => ({
   details: getProposalDetails(state),
+  filterMilestone: getMilestoneSections(state),
   sections: selectSections(state),
   filteredSections: selectFilteredSections(state),
   setQuestion: setQuestionData(state),

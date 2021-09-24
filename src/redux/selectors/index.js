@@ -27,6 +27,9 @@ export const getUserData = (state: Map): Map =>
 export const getFilteredSections = (state: Object): Map =>
   proposalSelectors.getFilteredSections(state.proposal, state.ssoAuth);
 
+export const getMilestoneSections = (state: Object): Map =>
+  proposalSelectors.getMilestoneSections(state.proposal);
+
 export const getLookupUsers = (state: Object): Array<Object> =>
   ssoAuthSelectors.getLookupUsers(state.ssoAuth);
 
