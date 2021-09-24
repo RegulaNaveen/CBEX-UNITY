@@ -1,10 +1,11 @@
 // @flow
 import React, { Component, createRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import classnames from 'classnames';
 import ToolbarMenu from './ToolbarMenu';
 import { DropMenu } from '../../svg';
-import { DASHBOARD } from '../../../routes';
+import { DASHBOARD, UBUILD } from '../../../routes';
+import { UBUILD_ENABLED } from '../../../constants/api';
 
 type State = { isCollapsed: boolean };
 
@@ -51,6 +52,21 @@ class Toolbar extends Component<{}, State> {
           <p className="toolbar-title">IQVIA™</p>
           <p className="toolbar-title">Unity</p>
         </Link>
+        {UBUILD_ENABLED && (
+          <div
+            className={
+              (this.props &&
+                this.props?.location &&
+                this.props.location?.pathname) == UBUILD
+                ? 'ubuild-linkactive'
+                : 'ubuild-link'
+            }
+          >
+            <Link to={UBUILD} className="toolbar-space">
+              <p className="ubuild-title">U-Build</p>
+            </Link>
+          </div>
+        )}
         <div className="toolbar-account-spacer">
           <div ref={this.wrapperRef} className="toolbar-account-wrapper">
             <div
@@ -81,4 +97,4 @@ class Toolbar extends Component<{}, State> {
   }
 }
 
-export default Toolbar;
+export default withRouter(Toolbar);
