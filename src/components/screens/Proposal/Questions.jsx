@@ -279,7 +279,8 @@ class Questions extends Component<Props, State> {
     const {
       sections,
       filteredSections,
-      isQuestionsFiltersEnabled
+      isQuestionsFiltersEnabled,
+      filterMilestone
     } = this.props;
 
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
