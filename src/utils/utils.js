@@ -28,6 +28,10 @@ function getCountryOptions() {
 }
 
 function isUserUbuildAdmin() {
+  
+  if(!localStorage.getItem('id_token'))
+  return false;
+  
   const idToken = localStorage.getItem('id_token');
   const decoded = jwt_decode(idToken);
   if (
