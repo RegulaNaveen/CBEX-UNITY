@@ -27,6 +27,8 @@ import Warning from './Warning';
 import Dash from './Dash';
 import Info from './Info';
 import ReportIssue from './ReportIssue';
+import Pencil from './Pencil';
+import Globe from './Globe';
 
 export {
   Checkmark,
@@ -56,5 +58,7 @@ export {
   Warning,
   Dash,
   Info,
-  ReportIssue
+  ReportIssue,
+  Pencil,
+  Globe
 };
