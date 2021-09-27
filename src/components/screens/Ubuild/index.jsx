@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import Toolbar from '../../views/toolbar';
+import Toolbar from '../../views/UbuildToolbar';
 import { UBUILD_ARTIFACT, AUTH } from '../../../constants/api';
 
 const loadUbuildScript = (url, callback) => {
