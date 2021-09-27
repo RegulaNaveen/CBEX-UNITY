@@ -67,7 +67,8 @@ switch (environment) {
     AUTH_KEY =
       'MzZlNnFsNmZub2x2MHBwc2I5cmZocGpxazU6OW5tbXEzcDcwYnRycWZzcm44dThjMWZnajZqMGkxc24wcW5rOGxhaWl1N3I0ZTQzb2Fl';
     CLIENT_ID = '36e6ql6fnolv0ppsb9rfhpjqk5';
-    REDIRECTION_URL = 'https://dev-unity.iqvia.app/';
+    REDIRECTION_URL = 'http://localhost:8080';
+    UBUILD_ENABLED = true;
     UBUILD_ARTIFACT = 'https://dev-ubuild.iqvia.app/main.js';
     break;
 }
