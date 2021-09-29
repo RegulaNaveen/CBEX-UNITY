@@ -119,9 +119,6 @@ class TextArea extends PureComponent<Props, State> {
               value={textValue}
               onChange={(e) => {
                 this.handleNumber(e);
-                if(this.props.onChange){
-                  this.props.onChange(e.target.value);
-                }
               }}
               onBlur={this.handleOnBlur}
               placeholder={placeholder}
