@@ -117,9 +117,11 @@ class TextArea extends PureComponent<Props, State> {
                 numberError
               })}
               value={textValue}
-              onChange={() => {
-                this.handleNumber();
-                this.props.onChange();
+              onChange={(e) => {
+                this.handleNumber(e);
+                if(this.props.onChange){
+                  this.props.onChange(e.target.value);
+                }
               }}
               onBlur={this.handleOnBlur}
               placeholder={placeholder}
@@ -141,7 +143,9 @@ class TextArea extends PureComponent<Props, State> {
               onInput={this.autoResize}
               onChange={e => {
                 this.handleText(e);
-                this.props.onChange(e.target.value);
+                if(this.props.onChange){
+                  this.props.onChange(e.target.value);
+                }
               }}
               onBlur={this.handleOnBlur}
               placeholder={placeholder}
