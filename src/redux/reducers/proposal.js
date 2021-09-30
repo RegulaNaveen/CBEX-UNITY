@@ -1,4 +1,5 @@
 // @flow
+import { cloneDeep } from 'lodash';
 import { Map, fromJS } from 'immutable';
 import { REDUX_TYPES } from '../../constants';
 import type { ApiAction } from '../actions/action-types';
@@ -209,8 +210,9 @@ const onSetQuestion = (state: Map, action: Object): Map => {
   const data = action.payload;
   const updatedProposalQuestions = state.get('proposalQuestions');
   updatedProposalQuestions.push(data);
+
   return state
-    .set('proposalQuestions', updatedProposalQuestions)
+    .set('proposalQuestions', cloneDeep(updatedProposalQuestions))
     .set('setQuestionData', data)
     .set('isSetQuestionLoading', false);
 };
