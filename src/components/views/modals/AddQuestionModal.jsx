@@ -21,8 +21,7 @@ import {
   isQuestionSectionInfoLoading,
   isAnswerTypesInfoLoading,
   isRolesInfoLoading,
-  getProposalDetails,
-  selectSections
+  getProposalDetails
 } from '../../../redux/selectors';
 import {
   selectSectionNames,
@@ -97,7 +96,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     });
 
     if (sectionOrder > -1 && value)
-      this.setState({ section: { sectionOrder, sectionName: sectionname[0] } }, () => {
+      this.setState({ section: { sectionOrder, sectionName: value } }, () => {
         this.validateSection();
       });
   };
@@ -248,8 +247,6 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     isLoading: boolean,
     selectedValue: String
   ) => {
-    let section = questionSectionList.valueSeq().map(section => section.get('sectionName'));
-    section = [ ...section ]
     if (!isLoading) {
       return (
         <div className="modal-content">
