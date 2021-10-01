@@ -218,6 +218,20 @@ export const selectSections = createSelector(
   proposalQuestions => createSectionsFromQuestions(proposalQuestions)
 );
 
+export const selectSectionNames = createSelector(selectSections, sections =>
+  sections
+    .valueSeq()
+    .map(section => section.get('sectionName'))
+    .toJS()
+);
+
+export const selectSectionOrderInfo = createSelector(selectSections, sections =>
+  sections.valueSeq().map(section => ({
+    sectionName: section.get('sectionName'),
+    sectionOrder: section.get('sectionOrder')
+  }))
+);
+
 export const selectFilteredSections = createSelector(
   selectFilteredProposalQuestions,
   proposalQuestions => createSectionsFromQuestions(proposalQuestions)
