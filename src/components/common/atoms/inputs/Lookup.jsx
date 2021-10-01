@@ -110,7 +110,7 @@ class Lookup extends Component<Props, State> {
         <div className="lookup-wrapper">
           <input
             type="text"
-            className="teammember"
+            className="input"
             value={searchValue}
             placeholder={placeholder}
             onChange={this.onSearching}
