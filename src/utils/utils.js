@@ -45,8 +45,8 @@ function isUserUbuildAdmin() {
 function getLineOfBusinessAsPerLogic(
   lobMapping,
   salesForceLob,
-  salesForceLobIsFSP,
-  salesForceIsIqviaBiotech
+  salesForceIsIqviaBiotech,
+  salesForceLobIsFSP
 ) {
   let finalLOB = '';
   lobMapping.forEach(function(data) {
