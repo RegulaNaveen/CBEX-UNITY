@@ -6,7 +6,7 @@ import Tooltip from 'apollo-react/components/Tooltip';
 
 const ChipView = ({ label, answer }) => {
   return (
-    <div>
+    <>
       <Tooltip title={ label } placement="top">
         <Tag
           Icon={ answer ? Check : '' }
@@ -14,7 +14,7 @@ const ChipView = ({ label, answer }) => {
           variant={ answer ? 'green' : 'blue' }
         />
       </Tooltip>
-    </div>
+    </>
   );
 };
 ChipView.propTypes = {
