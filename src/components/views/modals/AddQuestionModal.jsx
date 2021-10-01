@@ -23,10 +23,10 @@ import {
   isQuestionSectionInfoLoading,
   isAnswerTypesInfoLoading,
   isRolesInfoLoading,
-  getProposalDetails
+  getProposalDetails,
+  selectSections
 } from '../../../redux/selectors';
 import {
-  getQuestionSection,
   getAnswerTypesInfo,
   getRolesInfo,
   setProposalQuestion
@@ -40,7 +40,6 @@ type Props = {
   questionSectionList: Array<string>,
   answerTypesList: Array<string>,
   rolesList: Array<string>,
-  getQuestionSectionF: Function,
   getAnswerTypesDataF: Function,
   getRolesInfoF: Function,
   setProposalQuestionF: Function,
@@ -76,12 +75,9 @@ export class AddQuestionModal extends PureComponent<Props, State> {
 
   componentDidMount() {
     const {
-      getQuestionSectionF,
       getAnswerTypesDataF,
-      getRolesInfoF
+      getRolesInfoF,
     } = this.props;
-
-    getQuestionSectionF();
     getAnswerTypesDataF();
     getRolesInfoF();
   }
@@ -93,16 +89,20 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   };
 
   onQuestionSectionChange = (value: string) => {
-    const { questionSectionOrderInfo } = this.props;
+    const { sections } = this.props;
+    let questions = sections.valueSeq().filter(section => section.get('sectionName') == value);
+    let sectionname = questions.valueSeq().map(section => section.get('sectionName'));
+    let sectionorder = questions.valueSeq().map(section => section.get('sectionOrder'));
+    sectionorder =  [...sectionorder];
+    sectionname = [...sectionname]
+   
     let sectionOrder = -1;
-
-    questionSectionOrderInfo.forEach((section: Object) => {
-      const { sectionOrder: order, sectionName: name } = section;
-      if (name === value) sectionOrder = order;
-    });
+    if(sectionorder){
+      sectionOrder = sectionorder[0]
+    }
 
     if (sectionOrder > -1 && value)
-      this.setState({ section: { sectionOrder, sectionName: value } }, () => {
+      this.setState({ section: { sectionOrder, sectionName: sectionname[0] } }, () => {
         this.validateSection();
       });
   };
@@ -253,6 +253,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     isLoading: boolean,
     selectedValue: String
   ) => {
+    let section = questionSectionList.valueSeq().map(section => section.get('sectionName'));
+    section = [ ...section ]
     if (!isLoading) {
       return (
         <div className="modal-content">
@@ -297,7 +299,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
               <Dropdown
                 id="dd-team-member"
                 placeholder="Select"
-                items={questionSectionList}
+                items={section}
                 selectedValue={selectedValue}
                 title="Section"
                 error={this.state.error.filter(v => v.section)}
@@ -353,14 +355,14 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   render() {
     const {
       onClose,
-      questionSectionList,
       answerTypesList,
       rolesList,
       isLoading,
       isQuestionSectionLoading,
       isAnswerTypesLoading,
       isRolesLoading,
-      currentsection
+      currentsection,
+      sections
     } = this.props;
     if (
       this.state.error &&
@@ -385,7 +387,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         !isRolesLoading ? (
           this.renderContent(
             onClose,
-            questionSectionList,
+            sections,
             answerTypesList,
             rolesList,
             isLoading,
@@ -414,7 +416,7 @@ const mapStateToProps = (state: Map) => {
   const isAnswerTypesLoading = isAnswerTypesInfoLoading(state);
   const isRolesLoading = isRolesInfoLoading(state);
   const proposalDetail = getProposalDetails(state);
-
+  const sections =  selectSections(state);
   return {
     questionSectionList,
     answerTypesList,
@@ -424,14 +426,14 @@ const mapStateToProps = (state: Map) => {
     isQuestionSectionLoading,
     isAnswerTypesLoading,
     isRolesLoading,
-    proposalDetail
+    proposalDetail,
+    sections
   };
 };
 
 export default compose(
   withRouter,
   connect(mapStateToProps, {
-    getQuestionSectionF: getQuestionSection,
     getAnswerTypesDataF: getAnswerTypesInfo,
     getRolesInfoF: getRolesInfo,
     setProposalQuestionF: setProposalQuestion
