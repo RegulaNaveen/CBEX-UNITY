@@ -27,6 +27,9 @@ export const getUserData = (state: Map): Map =>
 export const getFilteredSections = (state: Object): Map =>
   proposalSelectors.getFilteredSections(state.proposal, state.ssoAuth);
 
+export const getMilestoneSections = (state: Object): Map =>
+  proposalSelectors.getMilestoneSections(state.proposal);
+
 export const getLookupUsers = (state: Object): Array<Object> =>
   ssoAuthSelectors.getLookupUsers(state.ssoAuth);
 
@@ -136,6 +139,23 @@ export const getValidatedProposalData = (state: Object): Object =>
 
 export const getPendingValidatedItems = (state: Object): Object =>
   proposalSelectors.getPendingValidatedItems(state.proposal);
+
+export const getQuestionsFilters = state =>
+  proposalSelectors.selectQuestionsFilters(state);
+
+export const selectIsQuestionsFilterEnabled = state =>
+  proposalSelectors.selectIsQuestionsFilterEnabled(state);
+
+export const selectProposalQuestions = state =>
+  proposalSelectors.selectProposalQuestions(state);
+
+export const selectSections = state => proposalSelectors.selectSections(state);
+
+export const selectFilteredSections = state =>
+  proposalSelectors.selectFilteredSections(state);
+
+export const selectActiveQuestionsFilterCount = state =>
+  proposalSelectors.selectActiveQuestionsFilterCount(state);
 
 // Tabbar Selectors
 export const getProposals = (state: Object): Array<Object> =>

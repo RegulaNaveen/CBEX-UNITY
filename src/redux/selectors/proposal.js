@@ -1,6 +1,15 @@
 // @flow
 import { Map, fromJS } from 'immutable';
-import { last } from 'lodash';
+import { last, uniq } from 'lodash';
+import { createSelector } from 'reselect';
+
+const generateMilestone = (proposalQuestions: Object) => {
+  const flag = proposalQuestions.filter(question => question?.milestone);
+  if (flag && flag.length) {
+    return true;
+  }
+  return false;
+};
 
 const generateSections = (
   proposalQuestions: Object,
@@ -61,6 +70,16 @@ const getQuestionSections = (items: Array<Object>) => {
   return sections;
 };
 
+function getRecentAnswer(answers) {
+  const recentAnswer = last(answers);
+  if (recentAnswer) {
+    return recentAnswer.answer.trim().length > 0
+      ? recentAnswer.answer
+      : 'Not defined yet.';
+  }
+  return 'Not defined yet.';
+}
+
 export const getSections = (proposal: Map): Map =>
   generateSections(proposal.get('proposalQuestions'), false, '');
 
@@ -71,11 +90,7 @@ export const getProposalTeamAssignedRoles = (proposal: Map): Map => {
     .map(({ questionText, answers }) => {
       return {
         role: questionText,
-        responsable: last(answers)
-          ? last(answers).answer.trim().length > 0
-            ? last(answers).answer
-            : 'Not defined yet.'
-          : 'Not defined yet.'
+        responsable: getRecentAnswer(answers)
       };
     });
 
@@ -84,6 +99,9 @@ export const getProposalTeamAssignedRoles = (proposal: Map): Map => {
 
 export const getFilteredSections = (proposal: Map, auth: Map): Map =>
   generateSections(proposal.get('proposalQuestions'), true, auth.get('role'));
+
+export const getMilestoneSections = (proposal: Map, auth: Map): Map =>
+  generateMilestone(proposal.get('proposalQuestions'));
 
 export const isProposalLoading = (proposal: Map): Map =>
   proposal.get('isProposalLoading');
@@ -148,3 +166,83 @@ export const getPendingValidatedItems = (propoal: Map): number => {
 
   return pendingItems;
 };
+
+function createSectionsFromQuestions(questions) {
+  return generateSections(questions, false, false);
+}
+
+export function getUniqueMilestones(questions) {
+  const milestones = [];
+  fromJS(questions)
+    .valueSeq()
+    .forEach(question => {
+      if (question.get('milestone')) {
+        milestones.push(question.get('milestone'));
+      }
+    });
+
+  return uniq(milestones);
+}
+
+export function selectProposal(state) {
+  return state.proposal;
+}
+
+export const selectProposalQuestions = createSelector(
+  selectProposal,
+  proposal => proposal.get('proposalQuestions', Map({}))
+);
+
+export const selectFilteredProposalQuestions = createSelector(
+  selectProposal,
+  proposal => proposal.get('filteredProposalQuestions', Map({}))
+);
+
+export const selectQuestionsFilters = createSelector(selectProposal, proposal =>
+  proposal.get('questionsFilter', Map({}))
+);
+
+export const selectActiveQuestionsFilters = createSelector(
+  selectQuestionsFilters,
+  questionsFilters => questionsFilters.filter(filter => filter.get('checked'))
+);
+
+export const selectIsQuestionsFilterEnabled = createSelector(
+  selectQuestionsFilters,
+  questionsFilters =>
+    questionsFilters.some(filter => filter.get('checked', false))
+);
+
+export const selectSections = createSelector(
+  selectProposalQuestions,
+  proposalQuestions => createSectionsFromQuestions(proposalQuestions)
+);
+
+export const selectSectionNames = createSelector(selectSections, sections =>
+  sections
+    .valueSeq()
+    .map(section => section.get('sectionName'))
+    .toJS()
+);
+
+export const selectSectionOrderInfo = createSelector(selectSections, sections =>
+  sections.valueSeq().map(section => ({
+    sectionName: section.get('sectionName'),
+    sectionOrder: section.get('sectionOrder')
+  }))
+);
+
+export const selectFilteredSections = createSelector(
+  selectFilteredProposalQuestions,
+  proposalQuestions => createSectionsFromQuestions(proposalQuestions)
+);
+
+export const selectActiveQuestionsFilterCount = createSelector(
+  selectActiveQuestionsFilters,
+  filters => filters.size
+);
+
+export const selectUniqueMilestones = createSelector(
+  selectProposalQuestions,
+  questions => getUniqueMilestones(questions)
+);

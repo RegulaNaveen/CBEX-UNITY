@@ -114,6 +114,12 @@
       color: $black;
       justify-content: flex-start;
       margin-top: 4px auto;
+
+      .menu-btn-link__icon {
+        font-size: 19.22px !important;
+        margin-left: -1px;
+        margin-right: 8px;
+      }
     }
   }
 }

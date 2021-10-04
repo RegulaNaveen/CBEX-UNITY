@@ -1,3 +1,5 @@
+import { isUserUbuildAdmin } from '../utils/utils';
+
 // @flow
 const environment = process.env.API_ENV;
 
@@ -26,7 +28,6 @@ switch (environment) {
     // AUTH_KEY = '';
     CLIENT_ID = '1h21m7sdoq1jr4tb00mkljn1m';
     REDIRECTION_URL = 'https://uat-unity.iqvia.app/';
-    UBUILD_ENABLED = false;
     UBUILD_ARTIFACT = 'https://uat-ubuild.iqvia.app/main.js';
     break;
   case 'PROD':
@@ -39,7 +40,6 @@ switch (environment) {
     // AUTH_KEY = '';
     CLIENT_ID = 'tc1tih0kcrifpoqrdsqo26467';
     REDIRECTION_URL = 'https://unity.iqvia.app/';
-    UBUILD_ENABLED = false;
     UBUILD_ARTIFACT = 'https://prod-ubuild.iqvia.app/main.js';
     break;
   case 'QA':
@@ -54,7 +54,6 @@ switch (environment) {
       'MzZlNnFsNmZub2x2MHBwc2I5cmZocGpxazU6OW5tbXEzcDcwYnRycWZzcm44dThjMWZnajZqMGkxc24wcW5rOGxhaWl1N3I0ZTQzb2Fl';
     CLIENT_ID = '36e6ql6fnolv0ppsb9rfhpjqk5';
     REDIRECTION_URL = 'https://qa-unity.iqvia.app/';
-    UBUILD_ENABLED = false;
     UBUILD_ARTIFACT = 'https://qa-ubuild.iqvia.app/main.js';
     break;
   default:
@@ -69,10 +68,11 @@ switch (environment) {
       'MzZlNnFsNmZub2x2MHBwc2I5cmZocGpxazU6OW5tbXEzcDcwYnRycWZzcm44dThjMWZnajZqMGkxc24wcW5rOGxhaWl1N3I0ZTQzb2Fl';
     CLIENT_ID = '36e6ql6fnolv0ppsb9rfhpjqk5';
     REDIRECTION_URL = 'https://dev-unity.iqvia.app/';
-    UBUILD_ENABLED = true;
     UBUILD_ARTIFACT = 'https://dev-ubuild.iqvia.app/main.js';
     break;
 }
+
+UBUILD_ENABLED = isUserUbuildAdmin();
 
 const AUTH_API_ENDPOINT = `${COGNITO_HOST}/oauth2/token`;
 

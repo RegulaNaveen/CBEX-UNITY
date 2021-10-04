@@ -39,10 +39,10 @@ class Lookup extends Component<Props, State> {
     };
   }
 
-  componentDidMount(){
-    document.addEventListener("cleantemmmeberinput", (e)=> {
-      if(e && e.detail){
-        this.setState({searchValue : ''})
+  componentDidMount() {
+    document.addEventListener('cleantemmmeberinput', e => {
+      if (e && e.detail) {
+        this.setState({ searchValue: '' });
       }
     });
   }
@@ -110,7 +110,7 @@ class Lookup extends Component<Props, State> {
         <div className="lookup-wrapper">
           <input
             type="text"
-            className="teammember"
+            className="input"
             value={searchValue}
             placeholder={placeholder}
             onChange={this.onSearching}

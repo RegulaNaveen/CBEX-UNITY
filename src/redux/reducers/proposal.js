@@ -1,4 +1,5 @@
 // @flow
+import { cloneDeep } from 'lodash';
 import { Map, fromJS } from 'immutable';
 import { REDUX_TYPES } from '../../constants';
 import type { ApiAction } from '../actions/action-types';
@@ -28,7 +29,11 @@ const {
   UPDATE_MODIFIED_QUESTION,
   ON_FETCHING_VALIDATED_PROPOSAL_DATA,
   VALIDATED_PROPOSAL_DATA,
-  VALIDATED_PROPOSAL_DATA_ERROR
+  VALIDATED_PROPOSAL_DATA_ERROR,
+  ON_APPLY_QUESTIONS_FILTER,
+  ON_QUESTIONS_FILTERED,
+  RESET_QUESTIONS_FILTER,
+  CLEAR_QUESTIONS_FILTER
 } = REDUX_TYPES.PROPOSAL;
 
 const INITIAL_STATE: Map = fromJS({
@@ -56,17 +61,46 @@ const INITIAL_STATE: Map = fromJS({
   boxId: '',
   fetchingValidatedProposalData: false,
   validatedProposalData: [],
-  validatedProposalDataError: undefined
+  validatedProposalDataError: undefined,
+  questionsFilter: fromJS({
+    myUserRole: {
+      checked: false,
+      label: 'My User Role',
+      className: 'questions-filter__row1-col1'
+    },
+    interestedParty: {
+      checked: false,
+      label: 'Interested Party',
+      className: 'questions-filter__row2-col1'
+    }
+  }),
+  filteredProposalQuestions: Map({})
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
   const {
     proposalQuestions,
-    proposal: { proposalDetails }
+    proposal: { proposalDetails },
+    milestones
   } = action.payload;
+
+  // Adding milestones to Questions Filter
+  let questionsFilter = state.get('questionsFilter');
+  milestones.forEach(milestone => {
+    questionsFilter = questionsFilter.set(
+      milestone,
+      Map({
+        checked: false,
+        label: milestone,
+        className: 'questions-filter__item'
+      })
+    );
+  });
+
   return state
     .set('proposalDetails', proposalDetails)
     .set('proposalQuestions', proposalQuestions)
+    .set('questionsFilter', questionsFilter)
     .set('isProposalLoading', false);
 };
 
@@ -176,8 +210,9 @@ const onSetQuestion = (state: Map, action: Object): Map => {
   const data = action.payload;
   const updatedProposalQuestions = state.get('proposalQuestions');
   updatedProposalQuestions.push(data);
+
   return state
-    .set('proposalQuestions', updatedProposalQuestions)
+    .set('proposalQuestions', cloneDeep(updatedProposalQuestions))
     .set('setQuestionData', data)
     .set('isSetQuestionLoading', false);
 };
@@ -259,6 +294,25 @@ const onValidatedProposaDataError = (state: Map, action: Object): Map => {
     .set('validatedProposalDataError', error);
 };
 
+const onApplyQuestionsFilter = (state, action) => {
+  const { questionsFilter } = action.payload;
+  return state.set('questionsFilter', questionsFilter);
+};
+
+const onQuestionsFiltered = (state, action) => {
+  const { filteredQuestions } = action.payload;
+  return state.set('filteredProposalQuestions', filteredQuestions);
+};
+
+const resetQuestionsFilter = state => {
+  return state.set('questionsFilter', INITIAL_STATE.get('questionsFilter'));
+};
+
+const clearQuestionsFilter = (state, action) => {
+  const { questionsFilter } = action.payload;
+  return state.set('questionsFilter', questionsFilter);
+};
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
@@ -284,7 +338,11 @@ const actionMap = {
   [UPDATE_MODIFIED_QUESTION]: onUpdateModifiedQuestion,
   [ON_FETCHING_VALIDATED_PROPOSAL_DATA]: onFetchingValidatedProposaData,
   [VALIDATED_PROPOSAL_DATA]: onGetValidatedProposaData,
-  [VALIDATED_PROPOSAL_DATA_ERROR]: onValidatedProposaDataError
+  [VALIDATED_PROPOSAL_DATA_ERROR]: onValidatedProposaDataError,
+  [ON_APPLY_QUESTIONS_FILTER]: onApplyQuestionsFilter,
+  [ON_QUESTIONS_FILTERED]: onQuestionsFiltered,
+  [RESET_QUESTIONS_FILTER]: resetQuestionsFilter,
+  [CLEAR_QUESTIONS_FILTER]: clearQuestionsFilter
 };
 
 export default function(
