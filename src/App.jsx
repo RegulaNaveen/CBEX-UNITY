@@ -13,7 +13,6 @@ import DashboardComponent from './components/screens/Dashboard';
 import UbuildShellComponent from './components/screens/Ubuild';
 import '../styles/App.scss';
 import matomoInstace from './utils/Matomo';
-import { UBUILD_ENABLED } from './constants/api';
 
 const App = () => (
   <Provider store={store}>
@@ -25,9 +24,7 @@ const App = () => (
             <Route path={LOGIN} component={Login} />
             <PrivateRoute path={DASHBOARD} component={DashboardComponent} />
             <PrivateRoute path={PROPOSALS} component={ProposalComponent} />
-            {UBUILD_ENABLED && (
-              <PrivateRoute path={UBUILD} component={UbuildShellComponent} />
-            )}
+            <PrivateRoute path={UBUILD} component={UbuildShellComponent} />
             <Redirect to={Login} />
           </Switch>
         </SessionHandler>
