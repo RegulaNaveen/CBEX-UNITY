@@ -58,6 +58,10 @@ class Multiselect extends PureComponent<Props, State> {
   }
 
   componentWillUnmount() {
+    const { isCollapsed, selectedValues } = this.state;
+    const { onClick, value: lastAnswer } = this.props;
+    // when multi-select is not collapsed, update changes on component destroy
+    if (isCollapsed) onClick(selectedValues, lastAnswer || []);
     window.removeEventListener('click', this.handleOutsideClick);
   }
 
