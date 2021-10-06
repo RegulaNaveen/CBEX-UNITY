@@ -45,14 +45,14 @@ class Toolbar extends Component<{}, State> {
 
   render() {
     const { isCollapsed } = this.state;
-
+    const { flag } = this.props;
     return (
       <div className="toolbar-wrapper">
         <Link to={DASHBOARD}>
           <p className="toolbar-title">IQVIA™</p>
           <p className="toolbar-title">Unity</p>
         </Link>
-        {UBUILD_ENABLED && (
+        {(UBUILD_ENABLED || flag) && (
           <div
             className={
               (this.props &&

@@ -46,9 +46,10 @@ export class UbuildShell extends Component<Props, State> {
   };
 
   render() {
+    const results = isUserUbuildAdmin();
     return (
       <div className="ubuild-wrapper">
-        <Toolbar />
+        <Toolbar flag={results}/>
         <u-build />
       </div>
     );
