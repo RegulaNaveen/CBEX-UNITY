@@ -274,7 +274,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
               <TextArea
                 id="question-text-area"
                 className="modal-text-area"
-                placeholder="Question text"
+                placeholder="Hint text..."
                 title="Enter Question Text"
                 type="text"
                 error={this.state.error.filter(v => v.questiontext)}

@@ -68,7 +68,7 @@ build:
 deploystack:
   stage: deploystack
   rules:
-    - if:  $CI_COMMIT_REF_NAME =~ /^feature/ || $CI_COMMIT_REF_NAME =~ /^bugfix/
+    - if:  $CI_COMMIT_REF_NAME =~ /^feature/
       when: never 
     - if: '$DeployStack == "True"' #this flag drives whether to deploy the infrastructure stack
       when: always
@@ -84,7 +84,7 @@ deploystack:
 deployartifacts:
   stage: deployartifacts
   rules:
-    - if:  $CI_COMMIT_REF_NAME =~ /^feature/ || $CI_COMMIT_REF_NAME =~ /^bugfix/
+    - if:  $CI_COMMIT_REF_NAME =~ /^feature/
       when: never  
     - when: always
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest

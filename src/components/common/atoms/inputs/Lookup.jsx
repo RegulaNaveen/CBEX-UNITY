@@ -87,15 +87,6 @@ class Lookup extends Component<Props, State> {
     );
   };
 
-  handleBlur = ({ target: { value } }) => {
-    const { getSelectedItem, text } = this.props;
-    // if value is empty send change update
-    // empty value enables ability to clear previously selected value
-    if (value.trim().length === 0 && text.length > 0) {
-      getSelectedItem('', text);
-    }
-  };
-
   render() {
     const { searchValue, filteredData, showResetButton } = this.state;
     const { title, withReset, placeholder, className } = this.props;
@@ -116,7 +107,6 @@ class Lookup extends Component<Props, State> {
             onChange={this.onSearching}
             required
             autoComplete="off"
-            onBlur={this.handleBlur}
           />
           {withReset && showResetButton && (
             <button
