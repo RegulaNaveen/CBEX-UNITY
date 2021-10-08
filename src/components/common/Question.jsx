@@ -262,13 +262,13 @@ export class TaskRow extends Component<Props, State> {
               answer={lastAnswer}
             />
           ) : (
-            <Checkmark />
+            <>{ lastAnswer ? <Checkmark /> : null }</>
           )}
         </div>
       );
     }
     if (lastAnswer) {
-      return <Checkmark />;
+      return( <Checkmark /> );
     }
     return <span />;
   };
