@@ -6,6 +6,7 @@ import ToolbarMenu from './ToolbarMenu';
 import { DropMenu } from '../../svg';
 import { DASHBOARD, UBUILD } from '../../../routes';
 import { UBUILD_ENABLED } from '../../../constants/api';
+import { isUserUbuildAdmin } from '../../../utils/utils';
 
 type State = { isCollapsed: boolean };
 
@@ -45,14 +46,14 @@ class Toolbar extends Component<{}, State> {
 
   render() {
     const { isCollapsed } = this.state;
-
+    const results = isUserUbuildAdmin();
     return (
       <div className="toolbar-wrapper">
         <Link to={DASHBOARD}>
           <p className="toolbar-title">IQVIA™</p>
           <p className="toolbar-title">Unity</p>
         </Link>
-        {UBUILD_ENABLED && (
+        {results && (
           <div
             className={
               (this.props &&
