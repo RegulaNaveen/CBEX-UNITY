@@ -38,7 +38,8 @@ type Props = {
   eventCategories: any,
   userActions: any,
   trackEvent: any,
-  proposalDetail: any
+  proposalDetail: any,
+  ismilestoneavailable?: any
 };
 
 class CollapsibleList extends Component<Props, State> {
@@ -153,7 +154,12 @@ class CollapsibleList extends Component<Props, State> {
   render() {
     const { isCollapsed } = this.state;
     const { onAddQuestion } = this.props;
-    const { questions, title, setQuestionToDisplayHistory } = this.props;
+    const {
+      questions,
+      title,
+      milestone,
+      setQuestionToDisplayHistory
+    } = this.props;
     return (
       <div className="task-wrapper" ref={this.taskRef} id={this.createId()}>
         <button
@@ -211,7 +217,9 @@ class CollapsibleList extends Component<Props, State> {
               return (
                 (visible || typeof visible === 'undefined') && (
                   <Question
+                    ismilestoneavailable={milestone}
                     key={questionConfig.get('questionId')}
+                    milestone={questionConfig.get('milestone')}
                     questionId={questionConfig.get('questionId')}
                     proposalId={questionConfig.get('proposalId')}
                     answers={questionConfig.get('answers')}

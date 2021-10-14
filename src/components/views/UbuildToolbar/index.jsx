@@ -5,7 +5,6 @@ import classnames from 'classnames';
 import ToolbarMenu from './ToolbarMenu';
 import { DropMenu } from '../../svg';
 import { DASHBOARD, UBUILD } from '../../../routes';
-import { UBUILD_ENABLED } from '../../../constants/api';
 import { isUserUbuildAdmin } from '../../../utils/utils';
 
 type State = { isCollapsed: boolean };

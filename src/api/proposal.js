@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { API } from '../constants';
 import { getAccessTokenFromLocalStorage as getAccessToken } from '../SessionHandler';
+import { logLobDetails } from '../utils/utils';
 
 const {
   PROPOSAL_API_URL,
@@ -17,6 +18,7 @@ export const getProposalInfo = async (id: string): Promise<Object> => {
         headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
       })
       .then(response => {
+        logLobDetails(response.data);
         resolve(response.data);
       })
       .catch(err => {

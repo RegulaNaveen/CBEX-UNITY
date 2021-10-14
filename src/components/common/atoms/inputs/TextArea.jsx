@@ -140,7 +140,7 @@ class TextArea extends PureComponent<Props, State> {
               onInput={this.autoResize}
               onChange={e => {
                 this.handleText(e);
-                if(this.props.onChange) {
+                if(this.props.onChange){
                   this.props.onChange(e.target.value);
                 }
               }}

@@ -1,5 +1,6 @@
 // @flow
-import { isEmpty } from 'lodash';
+import { isEmpty, cloneDeep, uniqBy } from 'lodash';
+import { fromJS } from 'immutable';
 import { REDUX_TYPES } from '../../constants';
 import type { Dispatch, ThunkAction } from './action-types';
 import {
@@ -13,6 +14,8 @@ import {
   getProposlBoxId,
   getValidatedProposalData
 } from '../../api/proposal';
+import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
+import { getUniqueMilestones } from '../selectors/proposal';
 
 const {
   PROPOSAL_INFO,
@@ -39,7 +42,11 @@ const {
   UPDATE_MODIFIED_QUESTION,
   ON_FETCHING_VALIDATED_PROPOSAL_DATA,
   VALIDATED_PROPOSAL_DATA,
-  VALIDATED_PROPOSAL_DATA_ERROR
+  VALIDATED_PROPOSAL_DATA_ERROR,
+  ON_APPLY_QUESTIONS_FILTER,
+  ON_QUESTIONS_FILTERED,
+  RESET_QUESTIONS_FILTER,
+  CLEAR_QUESTIONS_FILTER
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -50,7 +57,9 @@ export const getProposal = (id: string): ThunkAction<string, Object> => {
 
     try {
       const data = await getProposalInfo(id);
-      dispatch({ type: PROPOSAL_INFO, payload: data });
+      // Extracting unique milestone values from Proposal Questions
+      const milestones = getUniqueMilestones(data.proposalQuestions);
+      dispatch({ type: PROPOSAL_INFO, payload: { ...data, milestones } });
     } catch (err) {
       dispatch({ type: PROPOSAL_INFO_ERROR, payload: err });
     }
@@ -230,3 +239,119 @@ export const onGetValidatedProposalDetails = (
     }
   };
 };
+
+function applyMyUserRoleFilter(questions) {
+  const role = localStorage.getItem('userRole');
+  let filteredQuestions = cloneDeep(questions);
+  if (role) {
+    filteredQuestions = fromJS(filteredQuestions)
+      .filter(question => {
+        const assignedRoles = question.get('roleNames', []);
+        return assignedRoles.includes(role);
+      })
+      .toJS();
+  }
+  return filteredQuestions;
+}
+
+function applyInterestedPartyFilter(questions) {
+  const role = localStorage.getItem('userRole');
+  let filteredQuestions = cloneDeep(questions);
+  if (role) {
+    filteredQuestions = fromJS(filteredQuestions)
+      .filter(question => {
+        const interestedParties = question.get('interestedParties', []);
+        return interestedParties.includes(role);
+      })
+      .toJS();
+  }
+  return filteredQuestions;
+}
+
+function applyMilestoneFilter(questions, milestone) {
+  let filteredQuestions = cloneDeep(questions);
+  if (milestone) {
+    filteredQuestions = fromJS(filteredQuestions)
+      .filter(question => {
+        const questionMilestone = question.get('milestone');
+        return questionMilestone === milestone;
+      })
+      .toJS();
+  }
+  return filteredQuestions;
+}
+
+export function onQuestionsFilterApplied(questionsFilter) {
+  return async (dispatch, getState) => {
+    const state = getState();
+    dispatch({
+      type: ON_APPLY_QUESTIONS_FILTER,
+      payload: { questionsFilter }
+    });
+
+    /**
+     * get active filters and apply in sequence
+     */
+
+    const questions = selectProposalQuestions(state);
+    let filteredQuestions = [];
+    const activeQuestionsFilter = questionsFilter.filter(value =>
+      value.get('checked')
+    );
+    activeQuestionsFilter.keySeq().forEach(key => {
+      switch (key) {
+        case 'myUserRole':
+          filteredQuestions = uniqBy(
+            [...filteredQuestions, ...applyMyUserRoleFilter(questions)],
+            'questionId'
+          );
+          break;
+        case 'interestedParty':
+          filteredQuestions = uniqBy(
+            [...filteredQuestions, ...applyInterestedPartyFilter(questions)],
+            'questionId'
+          );
+          break;
+        default:
+          filteredQuestions = uniqBy(
+            [...filteredQuestions, ...applyMilestoneFilter(questions, key)],
+            'questionId'
+          );
+          break;
+      }
+    });
+
+    dispatch({
+      type: ON_QUESTIONS_FILTERED,
+      payload: { filteredQuestions }
+    });
+  };
+}
+
+export function onApplyQuestionsFilter(filterName = null, checked = false) {
+  return async (dispatch, getState) => {
+    const state = getState();
+    let questionsFilter = getQuestionsFilters(state);
+    if (filterName) {
+      questionsFilter = questionsFilter.setIn([filterName, 'checked'], checked);
+    }
+
+    dispatch(onQuestionsFilterApplied(questionsFilter));
+  };
+}
+
+export function resetQuestionsFilterAction() {
+  return async dispatch => {
+    dispatch({ type: RESET_QUESTIONS_FILTER });
+  };
+}
+
+export function clearQuestionsFilterAction() {
+  return async (dispatch, getState) => {
+    let questionsFilter = getQuestionsFilters(getState());
+    questionsFilter = questionsFilter.map(filter =>
+      filter.set('checked', false)
+    );
+    dispatch({ type: CLEAR_QUESTIONS_FILTER, payload: { questionsFilter } });
+  };
+}

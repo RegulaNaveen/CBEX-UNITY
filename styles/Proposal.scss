@@ -26,7 +26,7 @@
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      padding: 35px 0;
+      padding: 35px 0 16px 0;
 
       .tasksList-title {
         font-size: 18px;
@@ -73,6 +73,7 @@
           justify-content: center;
           align-items: center;
           cursor: pointer;
+          margin-right: 10px;
 
           .tasksList-add-icon {
             padding: 6px;
@@ -80,5 +81,44 @@
         }
       }
     }
+
+    .questions-filter__container {
+      position: relative;
+
+      .questions-filter__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        background-color: #f6f7fb;
+        padding: 12px 24px;
+        margin-bottom: 8px;
+  
+        .questions-filter__item {
+          margin-bottom: 4px;
+          .MuiFormControlLabel-label {
+            font-size: 12px;
+          }
+        }
+        
+        
+        .questions-filter__row1-col1 {
+          grid-row-start:1;
+          grid-column-start: 1;
+        }
+  
+        .questions-filter__row2-col1 {
+          grid-row-start:2;
+          grid-column-start: 1;
+        }
+      }
+
+      .clear-all {
+        border-bottom: none;
+        position: absolute;
+        right: 12px;
+        top: 8px;
+      }
+
+    }
+
   }
 }
