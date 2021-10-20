@@ -1,4 +1,5 @@
 // @flow
+/* eslint-disable no-plusplus */
 import React, { Component } from 'react';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
@@ -36,7 +37,8 @@ type Props = {
   proposalDetail: any,
   sfObject: string,
   sfField: string,
-  ismilestoneavailable?: string
+  milestone: any,
+  ismilestoneavailable: string
 };
 
 export class TaskRow extends Component<Props, State> {
@@ -48,11 +50,11 @@ export class TaskRow extends Component<Props, State> {
     };
   }
 
-  componentDidMount(){
-    let elem = document.querySelectorAll('textarea');
-    if(elem && elem.length){
+  componentDidMount() {
+    const elem = document.querySelectorAll('textarea');
+    if (elem && elem.length) {
       for (let index = 0; index < elem.length; index++) {
-        elem[index].style.height = (elem[index].scrollHeight)+"px"
+        elem[index].style.height = `${elem[index].scrollHeight}px`;
       }
     }
   }
@@ -266,18 +268,15 @@ export class TaskRow extends Component<Props, State> {
       return (
         <div className="chipview">
           {milestone ? (
-            <ChipView
-              label={String(milestone)}
-              answer={lastAnswer}
-            />
+            <ChipView label={String(milestone)} answer={lastAnswer} />
           ) : (
-            <>{ lastAnswer ? <Checkmark /> : null }</>
+            <>{lastAnswer ? <Checkmark /> : null}</>
           )}
         </div>
       );
     }
     if (lastAnswer) {
-      return( <Checkmark /> );
+      return <Checkmark />;
     }
     return <span />;
   };
