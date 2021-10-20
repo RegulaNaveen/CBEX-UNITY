@@ -48,6 +48,15 @@ export class TaskRow extends Component<Props, State> {
     };
   }
 
+  componentDidMount(){
+    let elem = document.querySelectorAll('textarea');
+    if(elem && elem.length){
+      for (let index = 0; index < elem.length; index++) {
+        elem[index].style.height = (elem[index].scrollHeight)+"px"
+      }
+    }
+  }
+
   handleTextChange = (textValue: string, lastAnswer: string) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
 
