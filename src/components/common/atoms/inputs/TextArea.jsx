@@ -79,8 +79,8 @@ class TextArea extends PureComponent<Props, State> {
     const numberRegex = /^(-?\d+\.\d+)$|^(-?\d+)$/;
     const { onChange } = this.props;
     const { value: textValue } = target;
-    const numberError = textValue && !numberRegex.test(textValue);
-
+    const numberError =
+      (textValue && !numberRegex.test(textValue)) || Number(textValue) < 0;
     if (onChange && !numberError) onChange(textValue);
 
     this.setState({ textValue, numberError: !!numberError });
@@ -117,7 +117,7 @@ class TextArea extends PureComponent<Props, State> {
                 numberError
               })}
               value={textValue}
-              onChange={(e) => {
+              onChange={e => {
                 this.handleNumber(e);
               }}
               onBlur={this.handleOnBlur}
@@ -140,7 +140,7 @@ class TextArea extends PureComponent<Props, State> {
               onInput={this.autoResize}
               onChange={e => {
                 this.handleText(e);
-                if(this.props.onChange){
+                if (this.props.onChange) {
                   this.props.onChange(e.target.value);
                 }
               }}
