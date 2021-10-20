@@ -10,7 +10,11 @@ import {
   getFilteredProposals,
   getIsFilteringProposals
 } from '../../../redux/selectors';
-import { getProposalsByStatus } from '../../../redux/actions/proposals-actions';
+import { getPage, getNumOfRows } from '../../../redux/selectors/proposals';
+import {
+  setPageAction,
+  setNumberOfRowsAction
+} from '../../../redux/actions/proposals-actions';
 import TableView from '../../views/TableView';
 import GridView from '../../views/GridView';
 import ComplexPagination from '../../common/ComplexPagination';
@@ -18,10 +22,13 @@ import ComplexPagination from '../../common/ComplexPagination';
 type Props = {
   selectedViewType: 0 | 1,
   proposals: [Object],
-  fetchProposals: Function,
   filteredProposals: [Object],
   isFilteringProposals: boolean,
-  loading: boolean
+  loading: boolean,
+  page: Number,
+  numRows: Number,
+  setPage: Function,
+  setRows: Function
 };
 
 type State = {
@@ -34,24 +41,22 @@ class RecentTab extends Component<Props, State> {
   constructor(props: Object) {
     super(props);
     this.state = {
-      page: 1,
-      numRows: 15,
       pageContent: []
     };
   }
 
-  componentDidMount() {
-    const { fetchProposals } = this.props;
-    fetchProposals('active');
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { page, numRows } = this.state;
-    const { proposals, filteredProposals, isFilteringProposals } = this.props;
+  componentDidUpdate(prevProps) {
+    const {
+      page,
+      numRows,
+      proposals,
+      filteredProposals,
+      isFilteringProposals
+    } = this.props;
 
     const contentChanged =
-      prevState.page !== page ||
-      prevState.numRows !== numRows ||
+      prevProps.page !== page ||
+      prevProps.numRows !== numRows ||
       prevProps.proposals !== proposals ||
       prevProps.filteredProposals !== filteredProposals;
 
@@ -73,10 +78,6 @@ class RecentTab extends Component<Props, State> {
     return <GridView data={pageContent} />;
   };
 
-  setPage = (page: number) => this.setState({ page });
-
-  setRows = (numRows: number) => this.setState({ numRows });
-
   setPageContent = (pageContent: Array<Object>) =>
     this.setState({ pageContent });
 
@@ -85,7 +86,9 @@ class RecentTab extends Component<Props, State> {
       proposals,
       loading,
       isFilteringProposals,
-      filteredProposals
+      filteredProposals,
+      setPage,
+      setRows
     } = this.props;
 
     const showPagination = isFilteringProposals
@@ -110,8 +113,8 @@ class RecentTab extends Component<Props, State> {
             totalItems={
               isFilteringProposals ? filteredProposals.length : proposals.length
             }
-            getCurrentPosition={this.setPage}
-            getMaxRows={this.setRows}
+            getCurrentPosition={setPage}
+            getMaxRows={setRows}
           />
         )}
       </>
@@ -124,9 +127,14 @@ const mapStateToProps = state => ({
   proposals: getProposals(state),
   loading: getProposalsLoading(state),
   filteredProposals: getFilteredProposals(state),
-  isFilteringProposals: getIsFilteringProposals(state)
+  isFilteringProposals: getIsFilteringProposals(state),
+  page: getPage(state.proposals),
+  numRows: getNumOfRows(state.proposals)
 });
 
-const mapDispatchToProps = { fetchProposals: getProposalsByStatus };
+const mapDispatchToProps = {
+  setPage: setPageAction,
+  setRows: setNumberOfRowsAction
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(RecentTab);
