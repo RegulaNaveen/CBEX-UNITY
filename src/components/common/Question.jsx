@@ -54,7 +54,14 @@ export class TaskRow extends Component<Props, State> {
     const elem = document.querySelectorAll('textarea');
     if (elem && elem.length) {
       for (let index = 0; index < elem.length; index++) {
-        elem[index].style.height = `${elem[index].scrollHeight}px`;
+        if (elem[index].scrollHeight < 40) {
+          elem[index].style.height = '5px';
+        } else if (elem[index].scrollHeight < 155) {
+          elem[index].style.height = '5px';
+          elem[index].style.height = `${5 + elem[index].scrollHeight}px`;
+        } else if (elem[index].value.length > 280) {
+          elem[index].style.height = '145px';
+        }
       }
     }
   }
