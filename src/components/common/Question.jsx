@@ -56,11 +56,16 @@ export class TaskRow extends Component<Props, State> {
       for (let index = 0; index < elem.length; index++) {
         if (elem[index].scrollHeight < 40) {
           elem[index].style.height = '5px';
-        } else if (elem[index].scrollHeight < 155) {
-          elem[index].style.height = '5px';
-          elem[index].style.height = `${5 + elem[index].scrollHeight}px`;
-        } else if (elem[index].value.length > 280) {
-          elem[index].style.height = '145px';
+        } else if (
+          elem[index].value.split('\n').length > 5 ||
+          elem[index].value.length > 275
+        ) {
+          elem[index].style.height = '140px';
+        } else if (
+          elem[index].value.split('\n').length < 5 ||
+          elem[index].value.length < 275
+        ) {
+          elem[index].style.height = `${elem[index].scrollHeight + 2}px`;
         }
       }
     }
@@ -174,7 +179,8 @@ export class TaskRow extends Component<Props, State> {
     type: string,
     options: Map,
     answers: Map,
-    lastAnswer: Map
+    lastAnswer: Map,
+    questionText: Map
   ) => {
     const { sectionName, sfObject, sfField } = this.props;
     const { selectedDay } = this.state;
@@ -208,9 +214,30 @@ export class TaskRow extends Component<Props, State> {
       case 'text':
         return (
           <TextField
+            id={String(questionText.substr(0, 20)).replaceAll(' ', '')}
             className="proposal-text-area"
             placeholder="Click to answer"
-            onBlur={e => this.handleTextChange(e.target.value, answerValue)}
+            onChange={() => {
+              const elem = document.getElementById(
+                String(questionText.substr(0, 20)).replaceAll(' ', '')
+              );
+              if (elem.scrollHeight < 40 || elem.value.length === 0) {
+                elem.style.height = '5px';
+              } else if (
+                elem.value.split('\n').length > 5 ||
+                elem.value.length > 275
+              ) {
+                elem.style.height = '140px';
+              } else if (
+                elem.value.split('\n').length < 5 ||
+                elem.value.length < 275
+              ) {
+                elem.style.height = `${elem.scrollHeight + 2}px`;
+              }
+            }}
+            onBlur={e => {
+              this.handleTextChange(e.target.value, answerValue);
+            }}
             defaultValue={answerValue}
             sizeAdjustable
             minHeight={40}
@@ -316,9 +343,10 @@ export class TaskRow extends Component<Props, State> {
                 answerConfiguration.get('type'),
                 answerConfiguration.get('options'),
                 answers,
-                lastAnswer
+                lastAnswer,
+                questionText
               )
-            : this.renderAnswer('', [], [], undefined)}
+            : this.renderAnswer('', [], [], undefined, questionText)}
         </div>
 
         <button type="button" onClick={this.displayAnswerOnHistory}>
