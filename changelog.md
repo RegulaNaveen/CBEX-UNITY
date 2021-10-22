@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-724: Disallow users to input negative number(s) in the number data type field
   - IQVIACBEXU-762: Custom question box is displaying if clicked away from "Add New Question" button.
   - IQVIACBEXU-763: Restructure the frontend in order to use elastic search effectively
+  - IQVIACBEXU-632: Strange characters are displayed when content is copied and pasted from an external document 
+  - IQVIACBEXU-557: Filter Proposals on All Tab does not filter if clicked away from
+  - IQVIACBEXU-639: Proposal team history section giving blank value after delete the name from text field.
+  
 ### Changed
 ### Fixed
 
