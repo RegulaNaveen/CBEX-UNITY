@@ -55,19 +55,10 @@ export class TaskRow extends Component<Props, State> {
     const elem = document.querySelectorAll('textarea');
     if (elem && elem.length) {
       for (let index = 0; index < elem.length; index++) {
-        if (elem[index].scrollHeight < 40) {
-          elem[index].style.height = '5px';
-        } else if (
-          elem[index].value.split('\n').length > 5 ||
-          elem[index].value.length > 275
-        ) {
-          elem[index].style.height = '140px';
-        } else if (
-          elem[index].value.split('\n').length < 5 ||
-          elem[index].value.length < 275
-        ) {
-          elem[index].style.height = `${elem[index].scrollHeight + 2}px`;
-        }
+        const txtareaheight =
+          elem[index].scrollHeight > 140 ? 140 : elem[index].scrollHeight;
+        elem[index].style.height = `auto`;
+        elem[index].style.height = `${txtareaheight + 2}px`;
       }
     }
   }
@@ -215,30 +206,24 @@ export class TaskRow extends Component<Props, State> {
       case 'text':
         return (
           <TextField
-            id={String(questionText.substr(0, 20)).replaceAll(' ', '')}
             className="proposal-text-area"
             placeholder="Click to answer"
-            onPaste={removeSpecialChars}
-            onChange={() => {
-              const elem = document.getElementById(
-                String(questionText.substr(0, 20)).replaceAll(' ', '')
-              );
-              if (
-                elem.value.split('\n').length === 1 ||
-                elem.value.length === 0
-              ) {
-                elem.style.height = '5px';
-              } else if (
-                elem.value.split('\n').length > 1 &&
-                elem.value.split('\n').length <= 5
-              ) {
-                elem.style.height = `${elem.scrollHeight + 2}px`;
-              } else if (
-                elem.value.split('\n').length > 5 ||
-                elem.value.length > 275
-              ) {
-                elem.style.height = '140px';
-              }
+            onPaste={event => {
+              removeSpecialChars(event);
+              const txtareaheight =
+                event.target.scrollHeight > 300
+                  ? 300
+                  : event.target.scrollHeight;
+              event.target.style.height = `auto`;
+              event.target.style.height = `${txtareaheight + 2}px`;
+            }}
+            onChange={event => {
+              const txtareaheight =
+                event.target.scrollHeight > 300
+                  ? 300
+                  : event.target.scrollHeight;
+              event.target.style.height = `auto`;
+              event.target.style.height = `${txtareaheight + 2}px`;
             }}
             onBlur={e => this.handleTextChange(e.target.value, answerValue)}
             defaultValue={answerValue}
