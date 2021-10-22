@@ -235,7 +235,7 @@ class CollapsibleList extends Component<Props, State> {
                 )
               );
             })}
-            <div className="task-table-row">
+            <div className="add-question">
               <Link
                 style={{ borderBottom: 'none' }}
                 onClick={() => onAddQuestion(title)}
