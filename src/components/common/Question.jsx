@@ -17,6 +17,7 @@ import { getUserData, getProposalDetails } from '../../redux/selectors';
 import MatomoHOC from '../HOC/MatomoHOC';
 import { getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
 import ChipView from './Chip/ChipView';
+import removeSpecialChars from '../../utils/pasteUtils';
 
 type State = {
   selectedDay: string
@@ -217,11 +218,12 @@ export class TaskRow extends Component<Props, State> {
             id={String(questionText.substr(0, 20)).replaceAll(' ', '')}
             className="proposal-text-area"
             placeholder="Click to answer"
+            onPaste={removeSpecialChars}
             onChange={() => {
               const elem = document.getElementById(
                 String(questionText.substr(0, 20)).replaceAll(' ', '')
               );
-              if (elem.scrollHeight < 40 || elem.value.length === 0) {
+              if (elem.scrollHeight < 40 || elem.value.length === 0 || elem.value.length < 55) {
                 elem.style.height = '5px';
               } else if (
                 elem.value.split('\n').length > 5 ||
@@ -235,9 +237,7 @@ export class TaskRow extends Component<Props, State> {
                 elem.style.height = `${elem.scrollHeight + 2}px`;
               }
             }}
-            onBlur={e => {
-              this.handleTextChange(e.target.value, answerValue);
-            }}
+            onBlur={e => this.handleTextChange(e.target.value, answerValue)}
             defaultValue={answerValue}
             sizeAdjustable
             minHeight={40}
