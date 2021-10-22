@@ -35,6 +35,7 @@ class Tabbar extends Component<Props, State> {
 
     this.state = {
       selected: 0,
+      filterCount: 0,
       showFilters: false,
       filters: {
         opportunityNumber: '',
@@ -57,6 +58,7 @@ class Tabbar extends Component<Props, State> {
       this.setState({ filters: { ...filters, [id]: value } }, () => {
         const { filters: newFilters, selected } = this.state;
         filterProposals(newFilters, selected);
+        this.fileterCount();
       });
       this.trackMatomoEventFilterChange({ ...filters, [id]: value });
     }, 600);
@@ -71,10 +73,22 @@ class Tabbar extends Component<Props, State> {
     });
   }
 
+  fileterCount = () => {
+    const filtersArr = [];
+    const { filters } = this.state;
+    for (const key in filters) {
+      if (filters[key])
+        filtersArr.push(
+          `${key.toUpperCase()} = ${JSON.stringify(filters[key])}`
+        );
+    }
+    this.setState({ filterCount: filtersArr.length });
+  };
+
   handleChange = (index: number) => {
     this.trackMatomoEventTabs(index);
     this.setState({ selected: index });
-
+    this.clearFilter();
     // Reset filters on tab switch
     this.setState({ showFilters: false }, () => this.clearFilter());
   };
@@ -96,6 +110,7 @@ class Tabbar extends Component<Props, State> {
     this.setState({ filters: { ...filters, [id]: value } }, () => {
       const { filters: newFilters, selected } = this.state;
       filterProposals(newFilters, selected);
+      this.fileterCount();
     });
     this.trackMatomoEventFilterChange({ ...filters, [id]: value });
   };
@@ -107,6 +122,7 @@ class Tabbar extends Component<Props, State> {
     this.setState({ filters: { ...filters, [id]: range } }, () => {
       const { filters: newFilters, selected } = this.state;
       filterProposals(newFilters, selected);
+      this.fileterCount();
     });
     this.trackMatomoEventFilterChange({ ...filters, [id]: range });
   };
@@ -192,6 +208,7 @@ class Tabbar extends Component<Props, State> {
             }
           }
         }
+        this.fileterCount();        
         filterProposals({}, selected);
       }
     );
@@ -232,9 +249,16 @@ class Tabbar extends Component<Props, State> {
     }
   };
 
+  // rendorFilterLabel() {
+  //   console.log(this.state.filters);
+  //   return Object.keys(this.state.filters).map((item,index) => {
+  //     console.log(item);
+  //     return <Chip color="white" size="small" label={item} />
+  //   })
+  // }
   render() {
     const { children } = this.props;
-    const { selected, showFilters } = this.state;
+    const { selected, showFilters, filterCount, filters } = this.state;
 
     return (
       <div className="tab-wrapper">
@@ -252,6 +276,7 @@ class Tabbar extends Component<Props, State> {
               ))}
           </ul>
           <div className="tab-filters">
+            {/* <div>{this.rendorFilterLabel()}</div> */}
             <SwitchView getSelectedTab={this.handleTypeView} />
             <SecondaryButton
               className="filter-toggle"
@@ -259,6 +284,7 @@ class Tabbar extends Component<Props, State> {
             >
               <Filter className="filter-icon" />
               Filter
+              {filterCount > 0 && ` (${filterCount})`}
             </SecondaryButton>
           </div>
         </div>
@@ -269,6 +295,7 @@ class Tabbar extends Component<Props, State> {
               onDropDownFilterChange={this.onDropDownFilterChange}
               onDateRangeChange={this.onDateRangeChange.bind(this)}
               clearFilter={() => this.clearFilter()}
+              filters={filters}
             />
           )}
           {children[selected]}

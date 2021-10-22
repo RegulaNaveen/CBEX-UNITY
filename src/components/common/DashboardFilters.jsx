@@ -17,7 +17,8 @@ type Props = {
   fetchFilterValues: Function,
   fetchUsers: Function,
   filterValues: Object,
-  clearFilter: Function
+  clearFilter: Function,
+  filters: any
 };
 
 const DashboardFilters = ({
@@ -27,7 +28,8 @@ const DashboardFilters = ({
   fetchFilterValues,
   fetchUsers,
   filterValues,
-  clearFilter
+  clearFilter,
+  filters
 }: Props) => {
   useEffect(() => {
     fetchFilterValues();
@@ -55,42 +57,46 @@ const DashboardFilters = ({
       </div>
       <div className="filter-wrapper">
         <InputField
-          label="Opportunity number"
           id="opportunity number"
-          className="inputsize"
-          onChange={onTextFilterChange}
-          placeholder="Type text..."
           type="text"
+          label="Opportunity number"
+          placeholder="Type text..."
+          className="inputsize"
+          defaultValue={filters['opportunity number']}
+          onChange={onTextFilterChange}
         />
       </div>
       <div className="filter-wrapper">
         <InputField
-          label="Opportunity name"
           id="opportunityName"
-          className="inputsize"
-          onChange={onTextFilterChange}
-          placeholder="Type text..."
           type="text"
+          label="Opportunity name"
+          placeholder="Type text..."
+          className="inputsize"
+          defaultValue={filters.opportunityName}
+          onChange={onTextFilterChange}
         />
       </div>
       <div className="filter-wrapper">
         <InputField
-          label="Customer"
           id="customer"
-          className="inputsize"
-          onChange={onTextFilterChange}
-          placeholder="Type text..."
           type="text"
+          label="Customer"
+          placeholder="Type text..."
+          className="inputsize"
+          defaultValue={filters.customer}
+          onChange={onTextFilterChange}
         />
       </div>
       <div className="filter-wrapper">
         <InputField
-          label="Protocol number"
           id="protocol number"
-          className="inputsize"
-          onChange={onTextFilterChange}
-          placeholder="Type text..."
           type="text"
+          label="Protocol number"
+          placeholder="Type text..."
+          className="inputsize"
+          defaultValue={filters['protocol number']}
+          onChange={onTextFilterChange}
         />
       </div>
       <div className="filter-wrapper">
@@ -100,16 +106,18 @@ const DashboardFilters = ({
           placeholder="Select value..."
           onChange={onDropDownFilterChange}
           items={filterValues ? filterValues.phases : []}
+          defaultValue={filters.phase}
         />
       </div>
       <div className="filter-wrapper">
         <InputField
-          label="Product"
-          id="product"
-          className="inputsize"
-          onChange={onTextFilterChange}
-          placeholder="Type text..."
           type="text"
+          id="product"
+          label="Product"
+          placeholder="Type text..."
+          className="inputsize"
+          defaultValue={filters.product}
+          onChange={onTextFilterChange}
         />
       </div>
       <div className="filter-wrapper">
@@ -119,16 +127,18 @@ const DashboardFilters = ({
           placeholder="Select value..."
           onChange={onDropDownFilterChange}
           items={filterValues ? filterValues.therapeuticAreas : []}
+          defaultValue={filters.therapeuticArea}
         />
       </div>
       <div className="filter-wrapper">
         <InputField
-          label="Verbatim indication"
-          id="verbatim indication"
-          className="inputsize"
-          onChange={onTextFilterChange}
-          placeholder="Type text..."
           type="text"
+          id="verbatim indication"
+          label="Verbatim indication"
+          placeholder="Type text..."
+          className="inputsize"
+          defaultValue={filters['verbatim indication']}
+          onChange={onTextFilterChange}
         />
       </div>
       <div className="filter-wrapper">
@@ -136,6 +146,7 @@ const DashboardFilters = ({
           label="Bid due date"
           id="bid due date"
           onSetRange={changeDate}
+          defaultValue={filters['bid due date']}
         />
       </div>
       <div className="filter-wrapper">
@@ -145,6 +156,7 @@ const DashboardFilters = ({
           placeholder="Select value..."
           onChange={onDropDownFilterChange}
           items={filterValues ? filterValues.opportunityStatuses : []}
+          defaultValue={filters['opportunity status']}
         />
       </div>
       <div className="filter-wrapper">
@@ -155,6 +167,7 @@ const DashboardFilters = ({
           placeholder="Type text..."
           onChange={changeUser}
           withReset
+          defaultValue={filters.teamMember}
         />
       </div>
     </div>
