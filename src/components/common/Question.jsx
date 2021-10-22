@@ -16,6 +16,7 @@ import { getUserData, getProposalDetails } from '../../redux/selectors';
 import MatomoHOC from '../HOC/MatomoHOC';
 import { getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
 import ChipView from './Chip/ChipView';
+import removeSpecialChars from '../../utils/pasteUtils';
 
 type State = {
   selectedDay: string
@@ -192,6 +193,7 @@ export class TaskRow extends Component<Props, State> {
           <TextField
             className="proposal-text-area"
             placeholder="Click to answer"
+            onPaste={removeSpecialChars}
             onBlur={e => this.handleTextChange(e.target.value, answerValue)}
             defaultValue={answerValue}
             sizeAdjustable
