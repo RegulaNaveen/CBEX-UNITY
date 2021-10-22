@@ -12,7 +12,9 @@ type Props = {
   placeholder?: string,
   text?: string,
   getSelectedItem: (selectedItem: string) => void,
-  withReset?: boolean
+  withReset?: boolean,
+  className?: string,
+  defaultValue?: string
 };
 
 type State = {
@@ -26,16 +28,18 @@ class Lookup extends Component<Props, State> {
     title: '',
     text: '',
     withReset: false,
-    placeholder: ''
+    placeholder: '',
+    className: '',
+    defaultValue: ''
   };
 
   constructor(props: Object) {
     super(props);
-    const { text } = this.props;
+    const { text, withReset } = this.props;
     this.state = {
       searchValue: text || '',
       filteredData: [],
-      showResetButton: false
+      showResetButton: withReset && text && text.length > 0
     };
   }
 
@@ -98,7 +102,13 @@ class Lookup extends Component<Props, State> {
 
   render() {
     const { searchValue, filteredData, showResetButton } = this.state;
-    const { title, withReset, placeholder, className } = this.props;
+    const {
+      title,
+      withReset,
+      placeholder,
+      className,
+      defaultValue
+    } = this.props;
 
     return (
       <div
@@ -117,6 +127,7 @@ class Lookup extends Component<Props, State> {
             required
             autoComplete="off"
             onBlur={this.handleBlur}
+            defaultValue={defaultValue}
           />
           {withReset && showResetButton && (
             <button
