@@ -7,14 +7,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [3.1] - YYYY-MM-DD
  
 ### Added
-  - QVIACBEXU-709: Check marks displaying for the questions "Not answered" Under sections in Questions record
+  - IQVIACBEXU-709: Check marks displaying for the questions "Not answered" Under sections in Questions record
+  - IQVIACBEXU-723: ER: The system should automatically expand free textbox to accommodate 
+  - IQVIACBEXU-724: Disallow users to input negative number(s) in the number data type field
+  - IQVIACBEXU-762: Custom question box is displaying if clicked away from "Add New Question" button.
+  - IQVIACBEXU-763: Restructure the frontend in order to use elastic search effectively
+  - IQVIACBEXU-632: Strange characters are displayed when content is copied and pasted from an external document 
+  - IQVIACBEXU-557: Filter Proposals on All Tab does not filter if clicked away from
+  - IQVIACBEXU-639: Proposal team history section giving blank value after delete the name from text field.
+  
 ### Changed
 ### Fixed
 
 ## [3.0] - YYYY-MM-DD
  
 ### Added
-  - QVIACBEXU-533: Add Chips associated to certain questions based off Milestone/ Call Due
+  - IQVIACBEXU-533: Add Chips associated to certain questions based off Milestone/ Call Due
   - IQVIACBEXU-414: Viewing Questions based off Required Roles vs. Interested Parties
   - IQVIACBEXU-534: Filter Questions based on certain tag criteria (from Milestone/ Call Due)
 ### Changed
