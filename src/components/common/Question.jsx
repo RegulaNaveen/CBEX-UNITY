@@ -1,4 +1,5 @@
 // @flow
+/* eslint-disable no-plusplus */
 import React, { Component } from 'react';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
@@ -37,7 +38,8 @@ type Props = {
   proposalDetail: any,
   sfObject: string,
   sfField: string,
-  ismilestoneavailable?: string
+  milestone: any,
+  ismilestoneavailable: string
 };
 
 export class TaskRow extends Component<Props, State> {
@@ -47,6 +49,27 @@ export class TaskRow extends Component<Props, State> {
     this.state = {
       selectedDay: ''
     };
+  }
+
+  componentDidMount() {
+    const elem = document.querySelectorAll('textarea');
+    if (elem && elem.length) {
+      for (let index = 0; index < elem.length; index++) {
+        if (elem[index].scrollHeight < 40) {
+          elem[index].style.height = '5px';
+        } else if (
+          elem[index].value.split('\n').length > 5 ||
+          elem[index].value.length > 275
+        ) {
+          elem[index].style.height = '140px';
+        } else if (
+          elem[index].value.split('\n').length < 5 ||
+          elem[index].value.length < 275
+        ) {
+          elem[index].style.height = `${elem[index].scrollHeight + 2}px`;
+        }
+      }
+    }
   }
 
   handleTextChange = (textValue: string, lastAnswer: string) => {
@@ -157,7 +180,8 @@ export class TaskRow extends Component<Props, State> {
     type: string,
     options: Map,
     answers: Map,
-    lastAnswer: Map
+    lastAnswer: Map,
+    questionText: Map
   ) => {
     const { sectionName, sfObject, sfField } = this.props;
     const { selectedDay } = this.state;
@@ -191,9 +215,28 @@ export class TaskRow extends Component<Props, State> {
       case 'text':
         return (
           <TextField
+            id={String(questionText.substr(0, 20)).replaceAll(' ', '')}
             className="proposal-text-area"
             placeholder="Click to answer"
             onPaste={removeSpecialChars}
+            onChange={() => {
+              const elem = document.getElementById(
+                String(questionText.substr(0, 20)).replaceAll(' ', '')
+              );
+              if (elem.scrollHeight < 40 || elem.value.length === 0 || elem.value.length < 55) {
+                elem.style.height = '5px';
+              } else if (
+                elem.value.split('\n').length > 5 ||
+                elem.value.length > 275
+              ) {
+                elem.style.height = '140px';
+              } else if (
+                elem.value.split('\n').length < 5 ||
+                elem.value.length < 275
+              ) {
+                elem.style.height = `${elem.scrollHeight + 2}px`;
+              }
+            }}
             onBlur={e => this.handleTextChange(e.target.value, answerValue)}
             defaultValue={answerValue}
             sizeAdjustable
@@ -259,18 +302,15 @@ export class TaskRow extends Component<Props, State> {
       return (
         <div className="chipview">
           {milestone ? (
-            <ChipView
-              label={String(milestone)}
-              answer={lastAnswer}
-            />
+            <ChipView label={String(milestone)} answer={lastAnswer} />
           ) : (
-            <>{ lastAnswer ? <Checkmark /> : null }</>
+            <>{lastAnswer ? <Checkmark /> : null}</>
           )}
         </div>
       );
     }
     if (lastAnswer) {
-      return( <Checkmark /> );
+      return <Checkmark />;
     }
     return <span />;
   };
@@ -303,9 +343,10 @@ export class TaskRow extends Component<Props, State> {
                 answerConfiguration.get('type'),
                 answerConfiguration.get('options'),
                 answers,
-                lastAnswer
+                lastAnswer,
+                questionText
               )
-            : this.renderAnswer('', [], [], undefined)}
+            : this.renderAnswer('', [], [], undefined, questionText)}
         </div>
 
         <button type="button" onClick={this.displayAnswerOnHistory}>
