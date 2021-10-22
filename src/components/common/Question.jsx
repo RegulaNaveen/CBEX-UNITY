@@ -223,18 +223,21 @@ export class TaskRow extends Component<Props, State> {
               const elem = document.getElementById(
                 String(questionText.substr(0, 20)).replaceAll(' ', '')
               );
-              if (elem.scrollHeight < 40 || elem.value.length === 0 || elem.value.length < 55) {
+              if (
+                elem.value.split('\n').length === 1 ||
+                elem.value.length === 0
+              ) {
                 elem.style.height = '5px';
+              } else if (
+                elem.value.split('\n').length > 1 &&
+                elem.value.split('\n').length <= 5
+              ) {
+                elem.style.height = `${elem.scrollHeight + 2}px`;
               } else if (
                 elem.value.split('\n').length > 5 ||
                 elem.value.length > 275
               ) {
                 elem.style.height = '140px';
-              } else if (
-                elem.value.split('\n').length < 5 ||
-                elem.value.length < 275
-              ) {
-                elem.style.height = `${elem.scrollHeight + 2}px`;
               }
             }}
             onBlur={e => this.handleTextChange(e.target.value, answerValue)}
