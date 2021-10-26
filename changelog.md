@@ -63,3 +63,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 [2.3]: https://gitlabrnds.quintiles.com/cbex/unity/unity-app-frontend/-/tags/v2.3
 [2.3.1]: https://gitlabrnds.quintiles.com/cbex/unity/unity-app-frontend/-/tags/v2.3.1
 [2.4]: https://gitlabrnds.quintiles.com/cbex/unity/unity-app-frontend/-/tags/v2.4
+[3.0]: https://gitlabrnds.quintiles.com/cbex/unity/unity-app-frontend/-/tags/v3.0
+[3.1]: https://gitlabrnds.quintiles.com/cbex/unity/unity-app-frontend/-/tags/v3.1
