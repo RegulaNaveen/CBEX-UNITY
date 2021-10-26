@@ -33,7 +33,6 @@ const InputField = ({
       placeholder={placeholder}
       type={type}
       onChange={onChange}
-      value={value}
       defaultValue={defaultValue}
     />
   </>
