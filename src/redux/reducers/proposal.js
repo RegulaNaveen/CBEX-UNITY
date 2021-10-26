@@ -33,7 +33,8 @@ const {
   ON_APPLY_QUESTIONS_FILTER,
   ON_QUESTIONS_FILTERED,
   RESET_QUESTIONS_FILTER,
-  CLEAR_QUESTIONS_FILTER
+  CLEAR_QUESTIONS_FILTER,
+  EXPAND_ALL_SECTIONS
 } = REDUX_TYPES.PROPOSAL;
 
 const INITIAL_STATE: Map = fromJS({
@@ -74,7 +75,8 @@ const INITIAL_STATE: Map = fromJS({
       className: 'questions-filter__row2-col1'
     }
   }),
-  filteredProposalQuestions: Map({})
+  filteredProposalQuestions: Map({}),
+  areAllSectionsExpanded: false
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -313,6 +315,10 @@ const clearQuestionsFilter = (state, action) => {
   return state.set('questionsFilter', questionsFilter);
 };
 
+const onExpandAllSections = (state, action) => {
+  return state.set('areAllSectionsExpanded', action.payload);
+}
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
@@ -342,7 +348,8 @@ const actionMap = {
   [ON_APPLY_QUESTIONS_FILTER]: onApplyQuestionsFilter,
   [ON_QUESTIONS_FILTERED]: onQuestionsFiltered,
   [RESET_QUESTIONS_FILTER]: resetQuestionsFilter,
-  [CLEAR_QUESTIONS_FILTER]: clearQuestionsFilter
+  [CLEAR_QUESTIONS_FILTER]: clearQuestionsFilter,
+  [EXPAND_ALL_SECTIONS]: onExpandAllSections
 };
 
 export default function(

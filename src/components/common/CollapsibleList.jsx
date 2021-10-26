@@ -55,6 +55,11 @@ class CollapsibleList extends Component<Props, State> {
     };
   }
 
+  componentDidMount() {
+    const { isCheckedAll } = this.props;
+    this.setState({ isCollapsed: !!isCheckedAll });
+  }
+
   componentDidUpdate(prevProps) {
     const { selectedSection, isCheckedAll } = this.props;
     const { id } = this.taskRef.current;
