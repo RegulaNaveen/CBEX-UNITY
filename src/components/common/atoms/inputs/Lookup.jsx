@@ -127,7 +127,6 @@ class Lookup extends Component<Props, State> {
             required
             autoComplete="off"
             onBlur={this.handleBlur}
-            defaultValue={defaultValue}
           />
           {withReset && showResetButton && (
             <button
