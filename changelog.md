@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   
 ### Changed
 ### Fixed
-
+  - IQVIACBEXU-683: Expand All Section Confusion
 ## [3.0] - YYYY-MM-DD
  
 ### Added

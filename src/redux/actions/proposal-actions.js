@@ -46,7 +46,8 @@ const {
   ON_APPLY_QUESTIONS_FILTER,
   ON_QUESTIONS_FILTERED,
   RESET_QUESTIONS_FILTER,
-  CLEAR_QUESTIONS_FILTER
+  CLEAR_QUESTIONS_FILTER,
+  EXPAND_ALL_SECTIONS
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -353,5 +354,11 @@ export function clearQuestionsFilterAction() {
       filter.set('checked', false)
     );
     dispatch({ type: CLEAR_QUESTIONS_FILTER, payload: { questionsFilter } });
+  };
+}
+
+export function expandAllSectionsAction(expand = false) {
+  return async (dispatch) => {
+    dispatch({ type: EXPAND_ALL_SECTIONS, payload: expand });
   };
 }
