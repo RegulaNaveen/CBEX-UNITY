@@ -43,7 +43,7 @@ const DatePickerCustomInput = ({
       onClick={onClick}
       onBlur={onBlur}
     />
-    {withReset && value && (
+    {withReset && (value || defaultValue) && (
       <button type="button" onClick={onReset} className="resetButton">
         <CloseCircle fill="#444" />
       </button>

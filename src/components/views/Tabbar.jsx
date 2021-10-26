@@ -88,7 +88,6 @@ class Tabbar extends Component<Props, State> {
   handleChange = (index: number) => {
     this.trackMatomoEventTabs(index);
     this.setState({ selected: index });
-    this.clearFilter();
     // Reset filters on tab switch
     this.setState({ showFilters: false }, () => this.clearFilter());
   };
@@ -140,12 +139,7 @@ class Tabbar extends Component<Props, State> {
 
   toggleFilters = () => {
     const { showFilters } = this.state;
-    this.setState({ showFilters: !showFilters }, () => {
-      const { showFilters: updatedShowFilters } = this.state;
-      if (!updatedShowFilters) {
-        this.clearFilter();
-      }
-    });
+    this.setState({ showFilters: !showFilters });
     this.trackMatomoEventFilterToggle(!showFilters);
   };
 
