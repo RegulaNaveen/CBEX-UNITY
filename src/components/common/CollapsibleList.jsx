@@ -55,6 +55,11 @@ class CollapsibleList extends Component<Props, State> {
     };
   }
 
+  componentDidMount() {
+    const { isCheckedAll } = this.props;
+    this.setState({ isCollapsed: !!isCheckedAll });
+  }
+
   componentDidUpdate(prevProps) {
     const { selectedSection, isCheckedAll } = this.props;
     const { id } = this.taskRef.current;
@@ -235,7 +240,7 @@ class CollapsibleList extends Component<Props, State> {
                 )
               );
             })}
-            <div className="task-table-row">
+            <div className="add-question">
               <Link
                 style={{ borderBottom: 'none' }}
                 onClick={() => onAddQuestion(title)}

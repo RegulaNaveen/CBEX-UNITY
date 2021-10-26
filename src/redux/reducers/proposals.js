@@ -9,7 +9,10 @@ const {
   ERROR_ON_GET_PROPOSALS,
   ON_PROPOSALS_LOADING,
   ON_FILTER_PROPOSALS,
-  ON_SET_PROPOSALS_FILTERS
+  ON_SET_PROPOSALS_FILTERS,
+  SET_PROPOSAL_FILTERING,
+  SET_PAGE,
+  SET_NUM_OF_ROWS
 } = REDUX_TYPES.PROPOSALS;
 
 const INITIAL_STATE: Map = fromJS({
@@ -19,7 +22,9 @@ const INITIAL_STATE: Map = fromJS({
   proposalsError: undefined,
   proposalsFilters: undefined,
   proposalsLoading: false,
-  selectedViewType: 1
+  selectedViewType: 1,
+  page: 1,
+  numRows: 15
 });
 
 const setProposals = (state: Map, action: Object): Map => {
@@ -52,13 +57,23 @@ const setProposalViewType = (state: Map, action: Object): Map => {
 const onProposalsLoading = (state: Map): Map =>
   state.set('proposalsLoading', true).set('proposalsError', undefined);
 
+const setProposalFiltering = (state, action) =>
+  state.set('proposalsLoading', action.payload);
+
+const setPage = (state, action) => state.set('page', action.payload);
+
+const setNumOfRows = (state, action) => state.set('numRows', action.payload);
+
 const actionMap = {
   [SET_PROPOSAL_VIEW_TYPE]: setProposalViewType,
   [ON_GET_PROPOSALS]: setProposals,
   [ERROR_ON_GET_PROPOSALS]: setProposalsError,
   [ON_PROPOSALS_LOADING]: onProposalsLoading,
   [ON_FILTER_PROPOSALS]: onSetFilteringProposals,
-  [ON_SET_PROPOSALS_FILTERS]: onSetProposalsFilters
+  [ON_SET_PROPOSALS_FILTERS]: onSetProposalsFilters,
+  [SET_PROPOSAL_FILTERING]: setProposalFiltering,
+  [SET_PAGE]: setPage,
+  [SET_NUM_OF_ROWS]: setNumOfRows
 };
 
 export default function(

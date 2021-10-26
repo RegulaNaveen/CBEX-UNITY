@@ -10,16 +10,17 @@ const {
   API_KEY
 } = API.PROPOSAL;
 
-export const onGetAllProposals = (): Promise<Object> =>
-  axios.get(PROPOSAL_API_ALL, {
+export const onGetAllProposals = (payload): Promise<Object> =>
+  axios.post(PROPOSAL_API_ALL, payload, {
     headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
   });
 
 export const onGetByStatus = (
+  payload,
   status: string,
   userEmail: string
 ): Promise<Object> =>
-  axios.get(PROPOSAL_API_ALL_BY_STATUS, {
+  axios.post(PROPOSAL_API_ALL_BY_STATUS, payload, {
     headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() },
     params: { userEmail, status }
   });
