@@ -384,6 +384,9 @@ class Questions extends Component<Props, State> {
         <Sidebar
           sections={allSections}
           id={proposalID}
+          onAddQuestion={value => {
+            this.setState({ currentsection: value });
+          }}
           expandAll={this.handleIsCheckedAll}
           AddNewQuestion={this.onClose}
           RefreshProposal={this.getProposalInfoUpdated}
