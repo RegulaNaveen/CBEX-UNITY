@@ -89,8 +89,12 @@ export class TaskRow extends Component<Props, State> {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
 
     this.setState({ selectedDay }, () => {
-      if (parseMomentDate(lastAnswer) !== parseMomentDate(selectedDay))
+      if (
+        parseMomentDate(lastAnswer) !== parseMomentDate(selectedDay) &&
+        selectedDay
+      )
         setProposalAnswer(proposalId, questionId, selectedDay, userData);
+      else setProposalAnswer(proposalId, questionId, { answer: '' }, userData);
     });
     this.trackMatomoEventSubmitAnswer(selectedDay);
   };
