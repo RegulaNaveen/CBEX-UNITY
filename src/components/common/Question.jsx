@@ -15,6 +15,7 @@ import { setProposalAnswerData } from '../../redux/actions/proposal-actions';
 import { getUserData, getProposalDetails } from '../../redux/selectors';
 import MatomoHOC from '../HOC/MatomoHOC';
 import { getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
+import ChipView from './Chip/ChipView';
 
 type State = {
   selectedDay: string
@@ -34,7 +35,8 @@ type Props = {
   trackEvent: any,
   proposalDetail: any,
   sfObject: string,
-  sfField: string
+  sfField: string,
+  ismilestoneavailable?: string
 };
 
 export class TaskRow extends Component<Props, State> {
@@ -250,21 +252,46 @@ export class TaskRow extends Component<Props, State> {
     }
   };
 
+  renderTags = (milestone, ismilestoneavailable, lastAnswer) => {
+    if (ismilestoneavailable) {
+      return (
+        <div className="chipview">
+          {milestone ? (
+            <ChipView
+              label={String(milestone)}
+              answer={lastAnswer}
+            />
+          ) : (
+            <>{ lastAnswer ? <Checkmark /> : null }</>
+          )}
+        </div>
+      );
+    }
+    if (lastAnswer) {
+      return( <Checkmark /> );
+    }
+    return <span />;
+  };
+
   render() {
-    const { answers, questionText, answerConfiguration } = this.props;
+    const {
+      answers,
+      questionText,
+      answerConfiguration,
+      milestone,
+      ismilestoneavailable
+    } = this.props;
     const questionId = answers.get('questionId');
     let lastAnswer;
     let answerDate = 'Not Answered';
-
     if (!questionId) lastAnswer = answers.last();
     else lastAnswer = answers.get('answers').last();
 
     if (lastAnswer) answerDate = parseMomentDate(lastAnswer.get('date'));
-
     return (
       <div className="task-table-row">
         <div className="question-text">
-          {lastAnswer ? <Checkmark /> : <span />}
+          {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
           <p>{questionText}</p>
         </div>
 

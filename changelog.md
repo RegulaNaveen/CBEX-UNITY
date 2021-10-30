@@ -3,12 +3,30 @@ All notable changes to this project will be documented in this file.
  
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
+
+## [3.1] - YYYY-MM-DD
  
+### Added
+  - QVIACBEXU-709: Check marks displaying for the questions "Not answered" Under sections in Questions record
+### Changed
+### Fixed
+
+## [3.0] - YYYY-MM-DD
+ 
+### Added
+  - QVIACBEXU-533: Add Chips associated to certain questions based off Milestone/ Call Due
+  - IQVIACBEXU-414: Viewing Questions based off Required Roles vs. Interested Parties
+  - IQVIACBEXU-534: Filter Questions based on certain tag criteria (from Milestone/ Call Due)
+### Changed
+### Fixed
+
+
 ## [2.4] - 2021-10-08
  
 ### Added
   - IQVIACBEXU-552: ER: Indicate required information on Custom Question module
   - IQVIACBEXU-574: ER: Remove help text from the filter (causing unrequired redundancy)
+  - IQVIACBEXU-672: ER: Filter functionality - The Clear All Button does not clear text within the Team member field
 ### Changed
 ### Fixed
 
