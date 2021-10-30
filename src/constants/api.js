@@ -40,7 +40,7 @@ switch (environment) {
     // AUTH_KEY = '';
     CLIENT_ID = 'tc1tih0kcrifpoqrdsqo26467';
     REDIRECTION_URL = 'https://unity.iqvia.app/';
-    UBUILD_ARTIFACT = 'https://prod-ubuild.iqvia.app/main.js';
+    UBUILD_ARTIFACT = 'https://ubuild.iqvia.app/main.js';
     break;
   case 'QA':
     // UDEV Data
