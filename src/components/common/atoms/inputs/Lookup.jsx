@@ -30,7 +30,8 @@ class Lookup extends Component<Props, State> {
     withReset: false,
     placeholder: '',
     className: '',
-    defaultValue: ''
+    defaultValue: '',
+    error: false
   };
 
   constructor(props: Object) {
@@ -39,6 +40,7 @@ class Lookup extends Component<Props, State> {
     this.state = {
       searchValue: text || '',
       filteredData: [],
+      error: false,
       showResetButton: withReset && text && text.length > 0
     };
   }
@@ -59,7 +61,8 @@ class Lookup extends Component<Props, State> {
 
     this.setState({
       searchValue: value,
-      filteredData: filteringData
+      filteredData: filteringData,
+      error: filteringData.length == 0 ? true : false
     });
   };
 
@@ -101,7 +104,7 @@ class Lookup extends Component<Props, State> {
   };
 
   render() {
-    const { searchValue, filteredData, showResetButton } = this.state;
+    const { searchValue, filteredData, showResetButton, error } = this.state;
     const {
       title,
       withReset,
@@ -150,6 +153,9 @@ class Lookup extends Component<Props, State> {
             </span>
           ))}
         </div>
+        {error &&
+          <p className="number-error-text">Please enter a valid answer</p>
+         }
       </div>
     );
   }
