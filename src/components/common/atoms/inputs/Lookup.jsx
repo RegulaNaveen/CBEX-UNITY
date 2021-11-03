@@ -62,7 +62,7 @@ class Lookup extends Component<Props, State> {
     this.setState({
       searchValue: value,
       filteredData: filteringData,
-      error: filteringData.length == 0 ? true : false
+      error: Boolean(filteringData.length) ? false : true
     });
   };
 
