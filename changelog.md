@@ -4,18 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.1.3] - YYYY-MM-DD
+## [3.1] - YYYY-MM-DD
  
 ### Added
+### Changed
+### Fixed
   - IQVIACBEXU-787: Team member role field issue on custom question box
   - IQVIACBEXU-558: Inline Error Validation Message when answer does not fit the answer type
   - IQVIACBEXU-750: Custom question: Section name cached when accessed through the Blade functionality.
   - IQVIACBEXU-798: In unity user is not able to delete date value in Proposal Timeline section section
-  - IQVIACBEXU-766: Apollo Template: Ability to add hyperlinks to Rich Text Editor
-
-### Changed
-### Fixed
-
 ## [3.1] - YYYY-MM-DD
  
 ### Added
