@@ -29,13 +29,18 @@ const INITIAL_STATE: Map = fromJS({
 
 const loginUser = (state: Map, action: Object) => {
   const { data } = action.payload;
-  const { id_token: idToken, access_token: accessToken } = data;
+  const {
+    id_token: idToken,
+    access_token: accessToken,
+    refresh_token: refreshToken
+  } = data;
 
   const { name, email, family_name: lName } = jwt_decode(idToken);
   const decoded = jwt_decode(idToken);
   const role = decoded['custom:role'];
 
   localStorage.setItem('access_token', accessToken);
+  localStorage.setItem('refresh_token', refreshToken);
   localStorage.setItem('id_token', idToken);
   localStorage.setItem('userRole', role);
   localStorage.setItem('userEmail', email);

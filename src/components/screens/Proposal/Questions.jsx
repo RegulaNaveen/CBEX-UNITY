@@ -36,7 +36,10 @@ import {
   selectActiveQuestionsFilterCount,
   getMilestoneSections
 } from '../../../redux/selectors';
-import { selectUniqueMilestones, selectAreAllSectionsExpanded } from '../../../redux/selectors/proposal';
+import {
+  selectUniqueMilestones,
+  selectAreAllSectionsExpanded
+} from '../../../redux/selectors/proposal';
 import { selectUserRole } from '../../../redux/selectors/sso-auth';
 import Sidebar from '../../views/Sidebar';
 import AnswerHistory from '../../views/modals/AnswerHistory';
