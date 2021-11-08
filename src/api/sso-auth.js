@@ -5,7 +5,6 @@ import { API } from '../constants';
 
 const {
   API_ENDPOINT,
-  AUTH_KEY,
   REDIRECTION_URL,
   CLIENT_ID,
   ROLE_ENDPOINT,
@@ -18,14 +17,14 @@ type Headers = {
   Authorization?: string
 };
 
+// Refresh token global variable
+let interval;
+const COGNITO_END_POINT = 'https://cognito-idp.us-east-1.amazonaws.com/';
+
 export const onLoginRequest = (code: string): Promise<Object> => {
   const headers: Headers = {
     'Content-Type': 'application/x-www-form-urlencoded'
   };
-
-  if (['DEV', 'SDEV', 'UDEV', 'QA'].includes(process.env.API_ENV))
-    headers.Authorization = `Basic ${AUTH_KEY}`;
-
   const data = {
     grant_type: 'authorization_code',
     client_id: CLIENT_ID,
@@ -55,8 +54,54 @@ export const getUsers = (idToken: string): Promise<Object> => {
 export const validateToken = async (token: string) => {
   try {
     const { data } = await axios.post(VALIDATE_TOKEN, { token });
+    InitRefreshToken();
     return data.validToken;
   } catch (error) {
     return false;
+  }
+};
+
+export const InitRefreshToken = () => {
+  console.log('Initiating the refreshToken loop');
+
+  if (!interval) {
+    interval = setInterval(() => {
+      const rToken = localStorage.getItem('refresh_token');
+      if (!rToken) {
+        clearInterval(interval);
+        console.log('Cleared the refreshToken loop');
+        return;
+      }
+      const config = {
+        method: 'post',
+        url: COGNITO_END_POINT,
+        headers: {
+          'Content-Type': 'application/x-amz-json-1.1',
+          'X-Amz-Target': 'AWSCognitoIdentityProviderService.InitiateAuth'
+        },
+        data: {
+          ClientId: CLIENT_ID,
+          AuthFlow: 'REFRESH_TOKEN_AUTH',
+          AuthParameters: {
+            REFRESH_TOKEN: rToken || ''
+          }
+        }
+      };
+      axios(config)
+        .then(response => {
+          console.log('Going to update the A/I token');
+          const result = response.data.AuthenticationResult || null;
+          if (result) {
+            if (result.IdToken)
+              localStorage.setItem('id_token', result.IdToken);
+            if (result.AccessToken)
+              localStorage.setItem('access_token', result.AccessToken);
+          }
+        })
+        .catch(error => {
+          console.error('Error: Cannot refresh the token.');
+          localStorage.setItem('refresh_token', '');
+        });
+    }, 900000);
   }
 };
