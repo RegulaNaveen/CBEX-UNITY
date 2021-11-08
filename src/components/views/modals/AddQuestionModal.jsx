@@ -70,7 +70,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       section: undefined,
       answerType: '',
       roleNames: [],
-      error: []
+      error: [],
+      submit: false
     };
   }
 
@@ -110,7 +111,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   onRoleChange = (values: Array<string>) => {
     const roleNames = values.map(value => value.replace(', ', ''));
     this.setState({ roleNames }, () => {
-      // this.validateRoles();
+      this.validateRoles();
     });
   };
 
@@ -180,7 +181,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
 
   validateRoles = () => {
     const { roleNames } = this.state;
-    if (isEmpty(roleNames) && !this.state.error.some(v => v.roleNames)) {
+    if (this.state.submit && isEmpty(roleNames) && !this.state.error.some(v => v.roleNames)) {
       this.setState(prevState => ({
         error: [
           ...prevState.error,
@@ -196,33 +197,35 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   onSave = () => {
     const { questionText, section, answerType, roleNames } = this.state;
     const { setProposalQuestionF, match } = this.props;
-    this.validateQuestionText();
-    this.validateSection();
-    this.validateAnswer();
-    this.validateRoles();
-
-    if (
-      questionText !== '' &&
-      questionText.length > 0 &&
-      section &&
-      answerType !== '' &&
-      !isEmpty(roleNames)
-    ) {
-      const proposalId = match.params.id;
-      const questionData = {
-        proposalId,
-        questionText,
-        section,
-        answerType,
-        options: [],
-        roleNames
-      };
-      this.setState(prevState => ({
-        error: []
-      }));
-      setProposalQuestionF(proposalId, questionData);
-      this.trackMatomoEventCreateQ(questionData);
-    }
+    this.setState( {submit: true }, () => {
+      this.validateQuestionText();
+      this.validateSection();
+      this.validateAnswer();
+      this.validateRoles();
+      
+      if (
+        questionText !== '' &&
+        questionText.length > 0 &&
+        section &&
+        answerType !== '' &&
+        !isEmpty(roleNames)
+      ) {
+        const proposalId = match.params.id;
+        const questionData = {
+          proposalId,
+          questionText,
+          section,
+          answerType,
+          options: [],
+          roleNames
+        };
+        this.setState(prevState => ({
+          error: []
+        }));
+        setProposalQuestionF(proposalId, questionData);
+        this.trackMatomoEventCreateQ(questionData);
+      }
+    })
   };
 
   trackMatomoEventCreateQ = data => {
