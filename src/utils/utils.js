@@ -52,7 +52,7 @@ function getLineOfBusinessAsPerLogic(
   lobMapping.forEach(function(data) {
     if (finalLOB !== '') return false;
     const { name } = data;
-    data.values.forEach((d) => {
+    data.values.forEach(d => {
       console.log('--------------------');
       console.log(
         `Logic from U-BUILD: Line Of Business = ${d.value} AND Is BioTech = ${d.isBiotech} AND FSP = ${d.isFSP}`

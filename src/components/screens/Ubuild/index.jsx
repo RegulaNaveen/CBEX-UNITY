@@ -1,9 +1,9 @@
 // @flow
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import Toolbar from '../../views/UbuildToolbar';
 import { UBUILD_ARTIFACT, AUTH } from '../../../constants/api';
 import { isUserUbuildAdmin } from '../../../utils/utils';
-import { withRouter } from 'react-router-dom';
 import { DASHBOARD } from '../../../routes';
 
 const loadUbuildScript = (url, callback) => {
@@ -35,12 +35,12 @@ export class UbuildShell extends Component<Props, State> {
 
   componentDidMount = () => {
     const results = isUserUbuildAdmin();
-    const { history } = this.props
-    if(!results){
-        history.push(DASHBOARD)
+    const { history } = this.props;
+    if (!results) {
+      history.push(DASHBOARD);
     }
     if (loadUbuildScript && UBUILD_ARTIFACT)
-      loadUbuildScript(UBUILD_ARTIFACT, () =>{
+      loadUbuildScript(UBUILD_ARTIFACT, () => {
         console.log('Ubuild web component loaded');
       });
   };

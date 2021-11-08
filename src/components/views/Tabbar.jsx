@@ -202,7 +202,7 @@ class Tabbar extends Component<Props, State> {
             }
           }
         }
-        this.fileterCount();        
+        this.fileterCount();
         filterProposals({}, selected);
       }
     );

@@ -282,7 +282,7 @@ class Sidebar extends Component<Props, State> {
                   }}
                   onClick={e => {
                     const { onAddQuestion } = this.props;
-                    onAddQuestion('')
+                    onAddQuestion('');
                     this.trackMatomoEventIconClick('Add New Question');
                     this.handleItemsVisibility(e);
                     AddNewQuestion();

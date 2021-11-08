@@ -317,7 +317,7 @@ const clearQuestionsFilter = (state, action) => {
 
 const onExpandAllSections = (state, action) => {
   return state.set('areAllSectionsExpanded', action.payload);
-}
+};
 
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
