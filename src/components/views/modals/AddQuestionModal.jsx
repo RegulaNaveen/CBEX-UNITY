@@ -110,7 +110,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   onRoleChange = (values: Array<string>) => {
     const roleNames = values.map(value => value.replace(', ', ''));
     this.setState({ roleNames }, () => {
-      this.validateRoles();
+      // this.validateRoles();
     });
   };
 
