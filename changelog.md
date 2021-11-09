@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-558: Inline Error Validation Message when answer does not fit the answer type
   - IQVIACBEXU-750: Custom question: Section name cached when accessed through the Blade functionality.
   - IQVIACBEXU-798: In unity user is not able to delete date value in Proposal Timeline section section
+  - IQVIACBEXU-732: Strange characters are displayed when content is copied and pasted from an external document 
 ## [3.0] - YYYY-MM-DD
  
 ### Added
