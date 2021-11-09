@@ -1,7 +1,6 @@
 #sidebar {
   position: fixed;
   height: 100%;
-  z-index: 999;
   transform: translateX(100%);
   top: 0;
   width: 500px;
@@ -116,5 +115,11 @@
         }
       }
     }
+  }
+}
+
+@media (min-width: 1200px) {
+  #sidebar {
+    z-index: 999;
   }
 }
