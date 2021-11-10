@@ -15,10 +15,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-632: Strange characters are displayed when content is copied and pasted from an external document 
   - IQVIACBEXU-557: Filter Proposals on All Tab does not filter if clicked away from
   - IQVIACBEXU-639: Proposal team history section giving blank value after delete the name from text field.
+  - IQVIACBEXU-788: Token refresh for timeout issues
   
 ### Changed
 ### Fixed
   - IQVIACBEXU-683: Expand All Section Confusion
+  - IQVIACBEXU-787: Team member role field issue on custom question box
+  - IQVIACBEXU-558: Inline Error Validation Message when answer does not fit the answer type
+  - IQVIACBEXU-750: Custom question: Section name cached when accessed through the Blade functionality.
+  - IQVIACBEXU-798: In unity user is not able to delete date value in Proposal Timeline section section
+  - IQVIACBEXU-751: Custom question and Blade functionality overlap
+  - IQVIACBEXU-632: Strange characters are displayed when content is copied and pasted from an external document 
 ## [3.0] - YYYY-MM-DD
  
 ### Added

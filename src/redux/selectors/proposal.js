@@ -250,4 +250,4 @@ export const selectUniqueMilestones = createSelector(
 export const selectAreAllSectionsExpanded = createSelector(
   selectProposal,
   proposal => proposal.get('areAllSectionsExpanded')
-)
+);

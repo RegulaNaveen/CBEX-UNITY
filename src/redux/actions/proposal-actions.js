@@ -358,7 +358,7 @@ export function clearQuestionsFilterAction() {
 }
 
 export function expandAllSectionsAction(expand = false) {
-  return async (dispatch) => {
+  return async dispatch => {
     dispatch({ type: EXPAND_ALL_SECTIONS, payload: expand });
   };
 }
