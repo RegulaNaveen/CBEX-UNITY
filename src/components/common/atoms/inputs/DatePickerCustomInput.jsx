@@ -21,6 +21,7 @@ const DatePickerCustomInput = ({
   onFocus,
   onBlur,
   onChange,
+  datestyle,
   onKeyUp,
   onClick,
   placeholder,
@@ -37,6 +38,7 @@ const DatePickerCustomInput = ({
       }
       value={value || defaultValue}
       placeholder={placeholder}
+      readOnly={datestyle ? true : false}
       onChange={onChange}
       onFocus={onFocus}
       onKeyUp={onKeyUp}
@@ -44,7 +46,7 @@ const DatePickerCustomInput = ({
       onBlur={onBlur}
     />
     {withReset && (value || defaultValue) && (
-      <button type="button" onClick={onReset} className="resetButton">
+      <button style={datestyle ? {alignSelf: 'auto', marginTop: 0} : null} type="button" onClick={onReset} className="resetButton">
         <CloseCircle fill="#444" />
       </button>
     )}
