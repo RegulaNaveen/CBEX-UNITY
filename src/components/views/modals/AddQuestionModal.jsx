@@ -8,7 +8,7 @@ import type { Match } from 'react-router-dom';
 import { Map } from 'immutable';
 import Loader from 'react-loader-spinner';
 import { compose } from 'redux';
-import Modal from './Modal';
+import classNames from 'classnames';
 import { PrimaryButton } from '../../common/atoms/Buttons';
 import Multiselect from '../../common/atoms/inputs/Multiselect';
 import Dropdown from '../../common/atoms/inputs/Dropdown';
@@ -21,7 +21,8 @@ import {
   isQuestionSectionInfoLoading,
   isAnswerTypesInfoLoading,
   isRolesInfoLoading,
-  getProposalDetails
+  getProposalDetails,
+  getIsOpen
 } from '../../../redux/selectors';
 import {
   selectSectionNames,
@@ -51,7 +52,8 @@ type Props = {
   trackEvent: any,
   proposalDetail: any,
   sectionsOrderInfo: Map,
-  sectionNames: Array<string>
+  sectionNames: Array<string>,
+  isSidebarOpen: boolean
 };
 
 type State = {
@@ -181,7 +183,11 @@ export class AddQuestionModal extends PureComponent<Props, State> {
 
   validateRoles = () => {
     const { roleNames } = this.state;
-    if (this.state.submit && isEmpty(roleNames) && !this.state.error.some(v => v.roleNames)) {
+    if (
+      this.state.submit &&
+      isEmpty(roleNames) &&
+      !this.state.error.some(v => v.roleNames)
+    ) {
       this.setState(prevState => ({
         error: [
           ...prevState.error,
@@ -197,12 +203,12 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   onSave = () => {
     const { questionText, section, answerType, roleNames } = this.state;
     const { setProposalQuestionF, match } = this.props;
-    this.setState( {submit: true }, () => {
+    this.setState({ submit: true }, () => {
       this.validateQuestionText();
       this.validateSection();
       this.validateAnswer();
       this.validateRoles();
-      
+
       if (
         questionText !== '' &&
         questionText.length > 0 &&
@@ -225,7 +231,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         setProposalQuestionF(proposalId, questionData);
         this.trackMatomoEventCreateQ(questionData);
       }
-    })
+    });
   };
 
   trackMatomoEventCreateQ = data => {
@@ -357,7 +363,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       isAnswerTypesLoading,
       isRolesLoading,
       currentsection,
-      sectionNames
+      sectionNames,
+      isSidebarOpen
     } = this.props;
     if (
       this.state.error &&
@@ -376,27 +383,39 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       )[0].style.marginBottom = '40px';
     }
     return (
-      <Modal>
-        {!isQuestionSectionLoading &&
-        !isAnswerTypesLoading &&
-        !isRolesLoading ? (
-          this.renderContent(
-            onClose,
-            sectionNames,
-            answerTypesList,
-            rolesList,
-            isLoading,
-            currentsection
-          )
-        ) : (
-          <div className="modal-loader">
-            <Loader type="TailSpin" color="#297DFD" height={100} width={100} />
-            <p className="modal-loader-title">
-              Loading custom question options
-            </p>
-          </div>
-        )}
-      </Modal>
+      <div
+        className={classNames('add-question-modal-wrapper', {
+          'sidebar-open': isSidebarOpen
+        })}
+      >
+        <div className="add-question-modal-dialog-blur" />
+        <div className="add-question-modal-dialog-wrapper">
+          {!isQuestionSectionLoading &&
+          !isAnswerTypesLoading &&
+          !isRolesLoading ? (
+            this.renderContent(
+              onClose,
+              sectionNames,
+              answerTypesList,
+              rolesList,
+              isLoading,
+              currentsection
+            )
+          ) : (
+            <div className="modal-loader">
+              <Loader
+                type="TailSpin"
+                color="#297DFD"
+                height={100}
+                width={100}
+              />
+              <p className="modal-loader-title">
+                Loading custom question options
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
     );
   }
 }
@@ -411,6 +430,7 @@ const mapStateToProps = (state: Map) => {
   const proposalDetail = getProposalDetails(state);
   const sectionNames = selectSectionNames(state);
   const sectionsOrderInfo = selectSectionOrderInfo(state);
+  const isSidebarOpen = getIsOpen(state);
   return {
     answerTypesList,
     rolesList,
@@ -420,7 +440,8 @@ const mapStateToProps = (state: Map) => {
     isRolesLoading,
     proposalDetail,
     sectionNames,
-    sectionsOrderInfo
+    sectionsOrderInfo,
+    isSidebarOpen
   };
 };
 
