@@ -39,6 +39,7 @@ class Lookup extends Component<Props, State> {
     const { text, withReset } = this.props;
     this.state = {
       searchValue: text || '',
+      previouslySelectedValue: '',
       filteredData: [],
       error: false,
       showResetButton: withReset && text && text.length > 0
@@ -62,6 +63,7 @@ class Lookup extends Component<Props, State> {
 
     this.setState({
       searchValue: value,
+      previouslySelectedValue: value.slice(0,value.lastIndexOf(",")).trim(),
       filteredData: filteringData,
       error: Boolean(filteringData.length) ? false : true
     });
@@ -73,14 +75,16 @@ class Lookup extends Component<Props, State> {
     const { getSelectedItem, withReset } = this.props;
 
     let searchValue = this.state.searchValue.slice(0,this.state.searchValue.lastIndexOf(","))
-
+    let previouslySelectedValue = this.state.previouslySelectedValue;
+    let newValue = (previouslySelectedValue == "" ? "" : previouslySelectedValue+", ")+textContent;
     this.setState(
       {
-        searchValue: (searchValue == "" ? "" : searchValue+", ")+textContent,
+        searchValue: newValue,
+        previouslySelectedValue: newValue,
         filteredData: [],
         showResetButton: withReset
       },
-      () => getSelectedItem((searchValue == "" ? "" : searchValue+", ")+textContent)
+      () => getSelectedItem(newValue)
     );
   };
 
@@ -90,6 +94,7 @@ class Lookup extends Component<Props, State> {
     this.setState(
       {
         searchValue: '',
+        previouslySelectedValue: '',
         filteredData: [],
         showResetButton: false
       },
