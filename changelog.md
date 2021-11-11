@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-557: Filter Proposals on All Tab does not filter if clicked away from
   - IQVIACBEXU-639: Proposal team history section giving blank value after delete the name from text field.
   - IQVIACBEXU-788: Token refresh for timeout issues
+  - IQVIACBEXU-412: Multiple Individuals assigned against the proposal team questions
   
 ### Changed
 ### Fixed
