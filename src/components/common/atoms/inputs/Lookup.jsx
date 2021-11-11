@@ -79,7 +79,7 @@ class Lookup extends Component<Props, State> {
     let newValue = (previouslySelectedValue == "" ? "" : previouslySelectedValue+", ")+textContent;
     this.setState(
       {
-        searchValue: searchValue,
+        searchValue: newValue,
         previouslySelectedValue: newValue,
         filteredData: [],
         showResetButton: withReset
