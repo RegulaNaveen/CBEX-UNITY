@@ -60,10 +60,10 @@ class Lookup extends Component<Props, State> {
     const filteringData = data.filter(item =>
       objectContains(item, searchValue, false)
     );
-
+    let selectedValue = (value.lastIndexOf(",") ==  -1 ? "" : value.slice(0,value.lastIndexOf(",")));
     this.setState({
       searchValue: value,
-      previouslySelectedValue: value.slice(0,value.lastIndexOf(",")).trim(),
+      previouslySelectedValue: selectedValue,
       filteredData: filteringData,
       error: Boolean(filteringData.length) ? false : true
     });
