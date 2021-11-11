@@ -15,7 +15,8 @@
   }
   .lookup-wrapper {
     display: flex;
-    input {
+    input,textarea {
+      resize: none !important;
       font-size: 16px;
       font-family: $proximaNova;
       position: relative;
@@ -32,11 +33,17 @@
 
       
     }
+    .resetButton{
+      position: absolute;
+      top:12px;
+      right:15px;
+      margin-top: 0 !important;
+    }
   }
   
   .lookup-border {
     display: flex;
-    input {
+    input,textarea {
       font-size: 16px;
       font-family: $proximaNova;
       position: relative;
@@ -85,7 +92,7 @@
     .lookup-wrapper {
       position: relative;
 
-      input {
+      input,textarea {
         border: 1px solid $blue;
         border-bottom-color: transparent;
         border-radius: 4px 4px 0 0;
@@ -95,7 +102,7 @@
     }
 
     .search-data-wrapper {
-      margin-top: -1px;
+      margin-top: -2px;
       border: 1px solid $blue;
       border-top: 0px;
     }

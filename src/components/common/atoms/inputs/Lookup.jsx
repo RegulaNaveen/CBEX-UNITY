@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import { objectContains } from '../../../../utils/helpers';
 import { CloseCircle } from '../../../svg';
+import TextField from 'apollo-react/components/TextField';
 
 type Props = {
   data: Array<any>,
@@ -37,6 +38,7 @@ class Lookup extends Component<Props, State> {
   constructor(props: Object) {
     super(props);
     const { text, withReset } = this.props;
+    this.textInput = null;
     this.state = {
       searchValue: text || '',
       previouslySelectedValue: '',
@@ -56,7 +58,7 @@ class Lookup extends Component<Props, State> {
 
   onSearching = ({ target: { value } }: SyntheticInputEvent<EventTarget>) => {
     const { data } = this.props;
-    const searchValue = value.slice(value.lastIndexOf(",")+1).trim();
+    const searchValue = value && value.slice(value.lastIndexOf(",")+1).trim();
     const filteringData = data.filter(item =>
       objectContains(item, searchValue, false)
     );
@@ -66,8 +68,22 @@ class Lookup extends Component<Props, State> {
       previouslySelectedValue: selectedValue,
       filteredData: filteringData,
       error: Boolean(filteringData.length) ? false : true
+    }, () => { 
+      this._resizeTextBox();
     });
   };
+  _resizeTextBox = () => {
+    setTimeout(() => {
+      let textareae = this.textInput.getElementsByTagName('textarea')[0];
+      const txtareaheight = textareae.scrollHeight > 300
+      ? 300
+      : textareae.scrollHeight;
+    console.log(txtareaheight, textareae.scrollHeight)
+      this.textInput.style.height = `auto`;
+      this.textInput.style.height = `${txtareaheight + 2}px`;
+      textareae.style.height = `${txtareaheight}px`;
+    }, 100);
+  }
 
   setSelectedItem = ({
     target: { textContent }
@@ -76,7 +92,8 @@ class Lookup extends Component<Props, State> {
 
     let searchValue = this.state.searchValue.slice(0,this.state.searchValue.lastIndexOf(","))
     let previouslySelectedValue = this.state.previouslySelectedValue;
-    let newValue = (previouslySelectedValue == "" ? "" : previouslySelectedValue+", ")+textContent;
+    let newValue = (previouslySelectedValue == "" ? "" : previouslySelectedValue+`, 
+`)+textContent;
     this.setState(
       {
         searchValue: newValue,
@@ -84,7 +101,10 @@ class Lookup extends Component<Props, State> {
         filteredData: [],
         showResetButton: withReset
       },
-      () => getSelectedItem(newValue)
+      () => {
+        getSelectedItem(newValue)
+        this._resizeTextBox();
+      }
     );
   };
 
@@ -129,7 +149,7 @@ class Lookup extends Component<Props, State> {
       >
         {title && <p>{title}</p>}
         <div className="lookup-wrapper">
-          <input
+          {/* <input
             type="text"
             className="input teammember"
             value={searchValue}
@@ -138,6 +158,21 @@ class Lookup extends Component<Props, State> {
             required
             autoComplete="off"
             onBlur={this.handleBlur}
+          /> */}
+          <TextField
+            ref={e => this.textInput = e}
+            style={{ marginBottom : 0 }}
+            // multiline={true}
+            // rows={1}
+            type="text"
+            className="teammember proposal-text-area"
+            value={searchValue}
+            placeholder={placeholder}
+            onChange={this.onSearching}
+            autoComplete="off"
+            onBlur={this.handleBlur}
+            sizeAdjustable
+            minHeight={40}
           />
           {withReset && showResetButton && (
             <button
