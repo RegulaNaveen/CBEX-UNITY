@@ -55,7 +55,7 @@ class Lookup extends Component<Props, State> {
 
   onSearching = ({ target: { value } }: SyntheticInputEvent<EventTarget>) => {
     const { data } = this.props;
-    const searchValue = value.slice(value.lastIndexOf(",")+1)
+    const searchValue = value.slice(value.lastIndexOf(",")+1).trim();
     const filteringData = data.filter(item =>
       objectContains(item, searchValue, false)
     );
