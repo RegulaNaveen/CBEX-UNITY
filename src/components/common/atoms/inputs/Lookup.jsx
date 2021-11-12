@@ -59,6 +59,7 @@ class Lookup extends Component<Props, State> {
   onSearching = ({ target: { value } }: SyntheticInputEvent<EventTarget>) => {
     const { data } = this.props;
     const searchValue = value && value.slice(value.lastIndexOf(",")+1).trim();
+    console.log("searching.."+searchValue);
     const filteringData = data.filter(item =>
       objectContains(item, searchValue, false)
     );
@@ -78,7 +79,6 @@ class Lookup extends Component<Props, State> {
       const txtareaheight = textareae.scrollHeight > 300
       ? 300
       : textareae.scrollHeight;
-    console.log(txtareaheight, textareae.scrollHeight)
       this.textInput.style.height = `auto`;
       this.textInput.style.height = `${txtareaheight + 2}px`;
       textareae.style.height = `${txtareaheight}px`;
@@ -90,7 +90,6 @@ class Lookup extends Component<Props, State> {
   }: SyntheticInputEvent<EventTarget>) => {
     const { getSelectedItem, withReset } = this.props;
 
-    let searchValue = this.state.searchValue.slice(0,this.state.searchValue.lastIndexOf(","))
     let previouslySelectedValue = this.state.previouslySelectedValue;
     let newValue = (previouslySelectedValue == "" ? "" : previouslySelectedValue+`, 
 `)+textContent;
@@ -149,21 +148,9 @@ class Lookup extends Component<Props, State> {
       >
         {title && <p>{title}</p>}
         <div className="lookup-wrapper">
-          {/* <input
-            type="text"
-            className="input teammember"
-            value={searchValue}
-            placeholder={placeholder}
-            onChange={this.onSearching}
-            required
-            autoComplete="off"
-            onBlur={this.handleBlur}
-          /> */}
           <TextField
             ref={e => this.textInput = e}
             style={{ marginBottom : 0 }}
-            // multiline={true}
-            // rows={1}
             type="text"
             className="teammember proposal-text-area"
             value={searchValue}
