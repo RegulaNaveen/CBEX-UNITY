@@ -11,6 +11,7 @@ type Props = {
   title?: string,
   placeholder?: string,
   text?: string,
+  sectionName?: string,
   getSelectedItem: (selectedItem: string) => void,
   withReset?: boolean,
   className?: string,
@@ -31,6 +32,7 @@ class Lookup extends Component<Props, State> {
     placeholder: '',
     className: '',
     defaultValue: '',
+    sectionName: '',
     error: false
   };
 
@@ -62,7 +64,13 @@ class Lookup extends Component<Props, State> {
     this.setState({
       searchValue: value,
       filteredData: filteringData,
-      error: Boolean(filteringData.length) ? false : true
+    },()=>{
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if(value && !emailRegex.test(value)){
+        this.setState({error: true})
+      }else{
+        this.setState({error: false})
+      }
     });
   };
 
@@ -75,7 +83,8 @@ class Lookup extends Component<Props, State> {
       {
         searchValue: textContent,
         filteredData: [],
-        showResetButton: withReset
+        showResetButton: withReset,
+        error: false
       },
       () => getSelectedItem(textContent)
     );
@@ -110,7 +119,8 @@ class Lookup extends Component<Props, State> {
       withReset,
       placeholder,
       className,
-      defaultValue
+      defaultValue,
+      sectionName
     } = this.props;
 
     return (
@@ -153,7 +163,7 @@ class Lookup extends Component<Props, State> {
             </span>
           ))}
         </div>
-        {error &&
+        {error && sectionName === 'Proposal Team' &&
           <p className="number-error-text">Please enter a valid answer</p>
          }
       </div>
