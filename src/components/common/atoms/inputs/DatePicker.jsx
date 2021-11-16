@@ -33,10 +33,9 @@ const DatePicker = ({
     <div className="date-picker">
       {label && <p className="date-picker-title">{label}</p>}
       <DayPickerInput
-        value={dateFormat || selectedDay}
+        value={dateFormat || selectedDay || 'DD/MM/YYYY'}
         onDayChange={handleChange}
-        component={props => <DatePickerCustomInput {...props} withReset={true} datestyle={true} onReset={()=> handleChange('')}/>}
-        placeholder="DD/MM/YYYY"
+        component={DatePickerCustomInput}
         format="dd/MM/yyyy"
         formatDate={handleFormatDate}
         parseDate={handleDate}
