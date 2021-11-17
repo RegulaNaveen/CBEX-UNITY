@@ -83,7 +83,7 @@ class AnswerHistory extends Component<Props> {
 
       const renderAnswers = () => {
         if (questionType !== 'picklist') {
-          if (questionType === 'text' && sectionName !== 'Proposal Team') {
+          if (questionType === 'text' || questionType === 'number') {
             const renderWord = (word, status) => (
               <span className={status} key={uuidv4()}>
                 {word}{' '}

@@ -55,17 +55,25 @@ class CollapsibleList extends Component<Props, State> {
     };
   }
 
+  componentDidMount() {
+    const { isCheckedAll } = this.props;
+    this.setState({ isCollapsed: !!isCheckedAll });
+  }
+
   componentDidUpdate(prevProps) {
     const { selectedSection, isCheckedAll } = this.props;
     const { id } = this.taskRef.current;
 
     if (prevProps.selectedSection !== selectedSection)
       // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ isCollapsed: id === selectedSection });
+      setTimeout(
+        () => this.setState({ isCollapsed: id === selectedSection }),
+        0
+      );
 
     if (prevProps.isCheckedAll !== isCheckedAll)
       // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ isCollapsed: !!isCheckedAll });
+      setTimeout(() => this.setState({ isCollapsed: !!isCheckedAll }), 0);
   }
 
   handleCollapse = () => {
@@ -235,7 +243,7 @@ class CollapsibleList extends Component<Props, State> {
                 )
               );
             })}
-            <div className="task-table-row">
+            <div className="add-question">
               <Link
                 style={{ borderBottom: 'none' }}
                 onClick={() => onAddQuestion(title)}

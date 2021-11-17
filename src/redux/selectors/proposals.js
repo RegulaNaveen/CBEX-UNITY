@@ -29,3 +29,8 @@ export const getIsFilteringProposals = (proposals: Map): boolean =>
 
 export const getProposalsFilters = (proposals: Map): Object =>
   proposals.get('proposalsFilters');
+
+export const getPage = (proposals: Map): Object => proposals.get('page');
+
+export const getNumOfRows = (proposals: Map): Object =>
+  proposals.get('numRows');

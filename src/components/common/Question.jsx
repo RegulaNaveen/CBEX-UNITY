@@ -1,4 +1,5 @@
 // @flow
+/* eslint-disable no-plusplus */
 import React, { Component } from 'react';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
@@ -16,6 +17,7 @@ import { getUserData, getProposalDetails } from '../../redux/selectors';
 import MatomoHOC from '../HOC/MatomoHOC';
 import { getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
 import ChipView from './Chip/ChipView';
+import removeSpecialChars from '../../utils/pasteUtils';
 
 type State = {
   selectedDay: string
@@ -36,7 +38,8 @@ type Props = {
   proposalDetail: any,
   sfObject: string,
   sfField: string,
-  ismilestoneavailable?: string
+  milestone: any,
+  ismilestoneavailable: string
 };
 
 export class TaskRow extends Component<Props, State> {
@@ -46,6 +49,18 @@ export class TaskRow extends Component<Props, State> {
     this.state = {
       selectedDay: ''
     };
+  }
+
+  componentDidMount() {
+    const elem = document.querySelectorAll('textarea');
+    if (elem && elem.length) {
+      for (let index = 0; index < elem.length; index++) {
+        const txtareaheight =
+          elem[index].scrollHeight > 140 ? 140 : elem[index].scrollHeight;
+        elem[index].style.height = `auto`;
+        elem[index].style.height = `${txtareaheight + 2}px`;
+      }
+    }
   }
 
   handleTextChange = (textValue: string, lastAnswer: string) => {
@@ -74,8 +89,12 @@ export class TaskRow extends Component<Props, State> {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
 
     this.setState({ selectedDay }, () => {
-      if (parseMomentDate(lastAnswer) !== parseMomentDate(selectedDay))
+      if (
+        parseMomentDate(lastAnswer) !== parseMomentDate(selectedDay) &&
+        selectedDay
+      )
         setProposalAnswer(proposalId, questionId, selectedDay, userData);
+      else setProposalAnswer(proposalId, questionId, { answer: '' }, userData);
     });
     this.trackMatomoEventSubmitAnswer(selectedDay);
   };
@@ -156,7 +175,8 @@ export class TaskRow extends Component<Props, State> {
     type: string,
     options: Map,
     answers: Map,
-    lastAnswer: Map
+    lastAnswer: Map,
+    questionText: Map
   ) => {
     const { sectionName, sfObject, sfField } = this.props;
     const { selectedDay } = this.state;
@@ -174,7 +194,7 @@ export class TaskRow extends Component<Props, State> {
     }
 
     if (sectionName === 'Proposal Team')
-      return <UserLookup onChange={this.handleTextChange} text={answerValue} />;
+      return <UserLookup sectionName={sectionName} onChange={this.handleTextChange} text={answerValue} />;
 
     if (
       type === 'picklist' &&
@@ -192,6 +212,23 @@ export class TaskRow extends Component<Props, State> {
           <TextField
             className="proposal-text-area"
             placeholder="Click to answer"
+            onPaste={event => {
+              removeSpecialChars(event);
+              const txtareaheight =
+                event.target.scrollHeight > 300
+                  ? 300
+                  : event.target.scrollHeight;
+              event.target.style.height = `auto`;
+              event.target.style.height = `${txtareaheight + 2}px`;
+            }}
+            onChange={event => {
+              const txtareaheight =
+                event.target.scrollHeight > 300
+                  ? 300
+                  : event.target.scrollHeight;
+              event.target.style.height = `auto`;
+              event.target.style.height = `${txtareaheight + 2}px`;
+            }}
             onBlur={e => this.handleTextChange(e.target.value, answerValue)}
             defaultValue={answerValue}
             sizeAdjustable
@@ -257,18 +294,15 @@ export class TaskRow extends Component<Props, State> {
       return (
         <div className="chipview">
           {milestone ? (
-            <ChipView
-              label={String(milestone)}
-              answer={lastAnswer}
-            />
+            <ChipView label={String(milestone)} answer={lastAnswer} />
           ) : (
-            <>{ lastAnswer ? <Checkmark /> : null }</>
+            <>{lastAnswer ? <Checkmark /> : null}</>
           )}
         </div>
       );
     }
     if (lastAnswer) {
-      return( <Checkmark /> );
+      return <Checkmark />;
     }
     return <span />;
   };
@@ -301,9 +335,10 @@ export class TaskRow extends Component<Props, State> {
                 answerConfiguration.get('type'),
                 answerConfiguration.get('options'),
                 answers,
-                lastAnswer
+                lastAnswer,
+                questionText
               )
-            : this.renderAnswer('', [], [], undefined)}
+            : this.renderAnswer('', [], [], undefined, questionText)}
         </div>
 
         <button type="button" onClick={this.displayAnswerOnHistory}>

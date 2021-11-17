@@ -7,7 +7,10 @@ type Props = {
   placeholder: string,
   type: string,
   id?: string,
-  onChange: Function
+  onChange: Function,
+  defaultValue?: string,
+  className?: string,
+  value?: string
 };
 
 const InputField = ({
@@ -17,7 +20,9 @@ const InputField = ({
   type,
   id,
   onChange,
-  className
+  className,
+  value,
+  defaultValue
 }: Props) => (
   <>
     {label ? <p className="input-title">{label}</p> : null}
@@ -28,13 +33,17 @@ const InputField = ({
       placeholder={placeholder}
       type={type}
       onChange={onChange}
+      defaultValue={defaultValue}
     />
   </>
 );
 
 InputField.defaultProps = {
   id: undefined,
-  title: undefined
+  title: undefined,
+  defaultValue: '',
+  className: '',
+  value: ''
 };
 
 export default InputField;

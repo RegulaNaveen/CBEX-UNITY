@@ -11,14 +11,17 @@ type Props = {
   onKeyUp?: Function,
   onClick?: Function,
   withReset?: boolean,
-  onReset?: Function
+  onReset?: Function,
+  defaultValue?: string
 };
 
 const DatePickerCustomInput = ({
+  defaultValue,
   value,
   onFocus,
   onBlur,
   onChange,
+  datestyle,
   onKeyUp,
   onClick,
   placeholder,
@@ -33,16 +36,17 @@ const DatePickerCustomInput = ({
           ? 'datepicker-input placeholder'
           : 'datepicker-input date inputdatesize'
       }
-      value={value}
+      value={value || defaultValue}
       placeholder={placeholder}
+      readOnly={datestyle ? true : false}
       onChange={onChange}
       onFocus={onFocus}
       onKeyUp={onKeyUp}
       onClick={onClick}
       onBlur={onBlur}
     />
-    {withReset && value && (
-      <button type="button" onClick={onReset} className="resetButton">
+    {withReset && (value || defaultValue) && (
+      <button style={datestyle ? {alignSelf: 'auto', marginTop: 0} : null} type="button" onClick={onReset} className="resetButton">
         <CloseCircle fill="#444" />
       </button>
     )}
@@ -56,7 +60,8 @@ DatePickerCustomInput.defaultProps = {
   onKeyUp: undefined,
   onClick: undefined,
   withReset: false,
-  onReset: undefined
+  onReset: undefined,
+  defaultValue: ''
 };
 
 export default DatePickerCustomInput;

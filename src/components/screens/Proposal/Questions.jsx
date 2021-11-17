@@ -21,7 +21,8 @@ import {
   getProposalUpdated,
   onApplyQuestionsFilter,
   resetQuestionsFilterAction,
-  clearQuestionsFilterAction
+  clearQuestionsFilterAction,
+  expandAllSectionsAction
 } from '../../../redux/actions/proposal-actions';
 import {
   getProposalDetails,
@@ -35,7 +36,10 @@ import {
   selectActiveQuestionsFilterCount,
   getMilestoneSections
 } from '../../../redux/selectors';
-import { selectUniqueMilestones } from '../../../redux/selectors/proposal';
+import {
+  selectUniqueMilestones,
+  selectAreAllSectionsExpanded
+} from '../../../redux/selectors/proposal';
 import { selectUserRole } from '../../../redux/selectors/sso-auth';
 import Sidebar from '../../views/Sidebar';
 import AnswerHistory from '../../views/modals/AnswerHistory';
@@ -64,12 +68,13 @@ type Props = {
   resetQuestionsFilter: Function,
   clearQuestionsFilter: Function,
   isQuestionsFiltersEnabled: boolean,
-  activeQuestionsFilterCount: Number
+  activeQuestionsFilterCount: Number,
+  allSectionsExpanded: boolean,
+  expandAllSections: Function
 };
 
 type State = {
   showModal: boolean,
-  isCheckedAll: boolean,
   selectedQuestionForHistory: string,
   isHistoryModalShown: boolean,
   showFilter: boolean
@@ -81,7 +86,6 @@ class Questions extends Component<Props, State> {
 
     this.state = {
       showModal: false,
-      isCheckedAll: false,
       selectedQuestionForHistory: '',
       isHistoryModalShown: false,
       currentsection: '',
@@ -119,8 +123,8 @@ class Questions extends Component<Props, State> {
   }
 
   handleIsCheckedAll = () => {
-    const { isCheckedAll } = this.state;
-    this.setState({ isCheckedAll: !isCheckedAll });
+    const { allSectionsExpanded, expandAllSections } = this.props;
+    expandAllSections(!allSectionsExpanded);
     this.trackMatomoEventForCheckBoxes('Expand All');
   };
 
@@ -275,12 +279,12 @@ class Questions extends Component<Props, State> {
   };
 
   renderQuestions() {
-    const { isCheckedAll } = this.state;
     const {
       sections,
       filteredSections,
       isQuestionsFiltersEnabled,
-      filterMilestone
+      filterMilestone,
+      allSectionsExpanded
     } = this.props;
 
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
@@ -307,7 +311,7 @@ class Questions extends Component<Props, State> {
               this.setState({ currentsection: value });
               this.onClose();
             }}
-            isCheckedAll={isCheckedAll}
+            isCheckedAll={allSectionsExpanded}
             setQuestionToDisplayHistory={this.setQuestionToDisplayHistory}
           />
         );
@@ -364,12 +368,12 @@ class Questions extends Component<Props, State> {
       filteredSections,
       proposalID,
       isQuestionsFiltersEnabled,
-      activeQuestionsFilterCount
+      activeQuestionsFilterCount,
+      allSectionsExpanded
     } = this.props;
 
     const {
       showModal,
-      isCheckedAll,
       selectedQuestionForHistory,
       isHistoryModalShown
     } = this.state;
@@ -383,6 +387,9 @@ class Questions extends Component<Props, State> {
         <Sidebar
           sections={allSections}
           id={proposalID}
+          onAddQuestion={value => {
+            this.setState({ currentsection: value });
+          }}
           expandAll={this.handleIsCheckedAll}
           AddNewQuestion={this.onClose}
           RefreshProposal={this.getProposalInfoUpdated}
@@ -399,17 +406,11 @@ class Questions extends Component<Props, State> {
 
         <div className="tasksList-title-wrapper">
           <div className="taskList-icons-wrapper">
-            <div className="taskList-checkbox-wrapper">
-              <Checkbox
-                id="collapsed-all-checkbox"
-                value="notification"
-                name="notification"
-                onChange={this.handleIsCheckedAll}
-                isChecked={isCheckedAll}
-              >
-                Expand All
-              </Checkbox>
-            </div>
+            <ApolloCheckbox
+              label="Expand All"
+              checked={allSectionsExpanded}
+              onChange={(e, checked) => this.handleIsCheckedAll(checked)}
+            />
             <div
               title="Refresh"
               className="tasksList-refresh-icon-wrapper"
@@ -478,7 +479,8 @@ const mapStateToProps = (state: Map) => ({
   isQuestionsFiltersEnabled: selectIsQuestionsFilterEnabled(state),
   activeQuestionsFilterCount: selectActiveQuestionsFilterCount(state),
   milestones: selectUniqueMilestones(state),
-  userRole: selectUserRole(state)
+  userRole: selectUserRole(state),
+  allSectionsExpanded: selectAreAllSectionsExpanded(state)
 });
 
 export default compose(
@@ -488,6 +490,7 @@ export default compose(
     fetchUsers: getAllUsers,
     applyQuestionsFilter: onApplyQuestionsFilter,
     resetQuestionsFilter: resetQuestionsFilterAction,
-    clearQuestionsFilter: clearQuestionsFilterAction
+    clearQuestionsFilter: clearQuestionsFilterAction,
+    expandAllSections: expandAllSectionsAction
   })
 )(MatomoHOC(Questions));

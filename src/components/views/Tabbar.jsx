@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
+import { debounce } from 'lodash';
 import {
   setProposalTypeView,
   onFilteringProposals
@@ -34,6 +35,7 @@ class Tabbar extends Component<Props, State> {
 
     this.state = {
       selected: 0,
+      filterCount: 0,
       showFilters: false,
       filters: {
         opportunityNumber: '',
@@ -49,21 +51,45 @@ class Tabbar extends Component<Props, State> {
         teamMember: ''
       }
     };
+
+    this.debounceFilterChange = debounce((id, value) => {
+      const { filters } = this.state;
+      const { filterProposals } = this.props;
+      this.setState({ filters: { ...filters, [id]: value } }, () => {
+        const { filters: newFilters, selected } = this.state;
+        filterProposals(newFilters, selected);
+        this.fileterCount();
+      });
+      this.trackMatomoEventFilterChange({ ...filters, [id]: value });
+    }, 600);
   }
 
   componentDidMount() {
     const { filterProposals } = this.props;
     // Reset filters on page load
-    this.setState({ showFilters: false }, () => filterProposals({}, false));
+    this.setState({ showFilters: false }, () => {
+      const { selected } = this.state;
+      filterProposals({}, selected);
+    });
   }
 
+  fileterCount = () => {
+    const filtersArr = [];
+    const { filters } = this.state;
+    for (const key in filters) {
+      if (filters[key])
+        filtersArr.push(
+          `${key.toUpperCase()} = ${JSON.stringify(filters[key])}`
+        );
+    }
+    this.setState({ filterCount: filtersArr.length });
+  };
+
   handleChange = (index: number) => {
-    const { filterProposals } = this.props;
     this.trackMatomoEventTabs(index);
     this.setState({ selected: index });
-
     // Reset filters on tab switch
-    this.setState({ showFilters: false }, () => filterProposals({}, false));
+    this.setState({ showFilters: false }, () => this.clearFilter());
   };
 
   handleTypeView = (selectedTab: 0 | 1) => {
@@ -72,15 +98,8 @@ class Tabbar extends Component<Props, State> {
   };
 
   onTextFilterChange = ({ target }: SyntheticInputEvent<EventTarget>) => {
-    const { filters } = this.state;
-    const { filterProposals } = this.props;
     const { id, value } = target;
-
-    this.setState({ filters: { ...filters, [id]: value } }, () => {
-      const { filters: newFilters } = this.state;
-      filterProposals(newFilters, true);
-    });
-    this.trackMatomoEventFilterChange({ ...filters, [id]: value });
+    this.debounceFilterChange(id, value);
   };
 
   onDropDownFilterChange = (id: string, value: string) => {
@@ -88,8 +107,9 @@ class Tabbar extends Component<Props, State> {
     const { filterProposals } = this.props;
 
     this.setState({ filters: { ...filters, [id]: value } }, () => {
-      const { filters: newFilters } = this.state;
-      filterProposals(newFilters, true);
+      const { filters: newFilters, selected } = this.state;
+      filterProposals(newFilters, selected);
+      this.fileterCount();
     });
     this.trackMatomoEventFilterChange({ ...filters, [id]: value });
   };
@@ -99,19 +119,27 @@ class Tabbar extends Component<Props, State> {
     const { filterProposals } = this.props;
 
     this.setState({ filters: { ...filters, [id]: range } }, () => {
-      const { filters: newFilters } = this.state;
-      filterProposals(newFilters, true);
+      const { filters: newFilters, selected } = this.state;
+      filterProposals(newFilters, selected);
+      this.fileterCount();
     });
     this.trackMatomoEventFilterChange({ ...filters, [id]: range });
   };
 
-  toggleFilters = () => {
+  onDateRangeChange(id, range) {
+    const { filters } = this.state;
     const { filterProposals } = this.props;
-    const { showFilters } = this.state;
-    this.setState({ showFilters: !showFilters }, () =>
-      filterProposals({}, false)
-    );
 
+    this.setState({ filters: { ...filters, [id]: range } }, () => {
+      const { filters: newFilters, selected } = this.state;
+      filterProposals(newFilters, selected);
+    });
+    this.trackMatomoEventFilterChange({ ...filters, [id]: range });
+  }
+
+  toggleFilters = () => {
+    const { showFilters } = this.state;
+    this.setState({ showFilters: !showFilters });
     this.trackMatomoEventFilterToggle(!showFilters);
   };
 
@@ -136,6 +164,7 @@ class Tabbar extends Component<Props, State> {
         }
       },
       () => {
+        const { selected } = this.state;
         if (document.getElementById('opportunity number')) {
           document.getElementById('opportunity number').value = '';
         }
@@ -173,7 +202,8 @@ class Tabbar extends Component<Props, State> {
             }
           }
         }
-        filterProposals(this.state.filters, true);
+        this.fileterCount();
+        filterProposals({}, selected);
       }
     );
   };
@@ -213,9 +243,16 @@ class Tabbar extends Component<Props, State> {
     }
   };
 
+  // rendorFilterLabel() {
+  //   console.log(this.state.filters);
+  //   return Object.keys(this.state.filters).map((item,index) => {
+  //     console.log(item);
+  //     return <Chip color="white" size="small" label={item} />
+  //   })
+  // }
   render() {
     const { children } = this.props;
-    const { selected, showFilters } = this.state;
+    const { selected, showFilters, filterCount, filters } = this.state;
 
     return (
       <div className="tab-wrapper">
@@ -233,6 +270,7 @@ class Tabbar extends Component<Props, State> {
               ))}
           </ul>
           <div className="tab-filters">
+            {/* <div>{this.rendorFilterLabel()}</div> */}
             <SwitchView getSelectedTab={this.handleTypeView} />
             <SecondaryButton
               className="filter-toggle"
@@ -240,6 +278,7 @@ class Tabbar extends Component<Props, State> {
             >
               <Filter className="filter-icon" />
               Filter
+              {filterCount > 0 && ` (${filterCount})`}
             </SecondaryButton>
           </div>
         </div>
@@ -248,8 +287,9 @@ class Tabbar extends Component<Props, State> {
             <DashboardFilters
               onTextFilterChange={this.onTextFilterChange}
               onDropDownFilterChange={this.onDropDownFilterChange}
-              onDateRangeChange={this.onDateRangeChange}
+              onDateRangeChange={this.onDateRangeChange.bind(this)}
               clearFilter={() => this.clearFilter()}
+              filters={filters}
             />
           )}
           {children[selected]}

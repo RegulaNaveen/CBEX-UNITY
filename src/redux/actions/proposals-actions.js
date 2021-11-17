@@ -8,15 +8,16 @@ import {
   onGetByStatus,
   onGetFilterValues
 } from '../../api/proposals';
-import { objectContains } from '../../utils/helpers';
 
 const {
   SET_PROPOSAL_VIEW_TYPE,
   ON_GET_PROPOSALS,
   ERROR_ON_GET_PROPOSALS,
   ON_PROPOSALS_LOADING,
-  ON_FILTER_PROPOSALS,
-  ON_SET_PROPOSALS_FILTERS
+  ON_SET_PROPOSALS_FILTERS,
+  SET_PROPOSAL_FILTERING,
+  SET_PAGE,
+  SET_NUM_OF_ROWS
 } = REDUX_TYPES.PROPOSALS;
 
 const formatProposal = (proposal: Object): Object => {
@@ -57,7 +58,7 @@ export const getAllProposals = (): ThunkAction<string, Object> => {
     dispatch({ type: ON_PROPOSALS_LOADING, payload: {} });
 
     try {
-      const { data } = await onGetAllProposals();
+      const { data } = await onGetAllProposals({ source: 'es' });
 
       if (!isEmpty(data)) {
         const { proposals } = data;
@@ -102,113 +103,136 @@ type FilteredData = {
   teamMember: string
 };
 
-const dateRangeFilter = (key: string, range: Object, array: Array<Object>) => {
-  if (!range) return array;
-  const { from, to } = range;
-
-  from.setHours(0, 0, 0, 0);
-  to.setHours(0, 0, 0, 0);
-
-  return array.filter(proposal => {
-    const proposalDate = moment(proposal[key]);
-    return proposalDate >= from && proposalDate <= to;
-  });
+const getUserMail = lookupValue => {
+  const results = /\((.*)\)/.exec(lookupValue);
+  if (results !== null) {
+    return results[1];
+  }
+  return null;
 };
 
-const textFilter = (key: string, value: string, array: Array<Object>) => {
-  return array.filter(
-    proposal =>
-      !isEmpty(proposal) &&
-      proposal[key].toLowerCase().includes(value.toLowerCase())
-  );
+const getDateRangeFormatted = range => {
+  if (range) {
+    return {
+      s: moment(range.from).format('yyyy-MM-DD'),
+      e: moment(range.to).format('yyyy-MM-DD')
+    };
+  }
+  return null;
 };
 
-const optionFilter = (key: string, value: string, array: Array<Object>) => {
-  return array.filter(
-    proposal =>
-      !isEmpty(proposal) && proposal[key].toLowerCase() === value.toLowerCase()
-  );
-};
-
-const userFilter = (value: string, array: Array<Object>) => {
-  const start = value.indexOf('(');
-  const end = value.indexOf(')');
-  const userEmail = value.substr(start + 1, end - start - 1);
-
-  return array.filter(proposal =>
-    objectContains(proposal.usersList, userEmail, false)
-  );
+export const setPageAction = (page: Number) => {
+  return dispatch => {
+    dispatch({
+      type: SET_PAGE,
+      payload: page
+    });
+  };
 };
 
 export const onFilteringProposals = (
   filters: FilteredData,
-  isFiltering: boolean
-): ThunkAction<string, Object> => (
-  dispatch: Dispatch<string, Object>,
-  getState: Function
-) => {
-  const proposalsMap = getState().proposals;
-  const proposals = proposalsMap.get('proposals');
+  tabIndex: Number
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    try {
+      const filterPayload = { source: 'es' };
+      dispatch({
+        type: SET_PROPOSAL_FILTERING,
+        payload: true
+      });
 
-  const cleanFilters = Object.entries(filters)
-    // eslint-disable-next-line no-unused-vars
-    .filter(([key, value]) => value !== '')
-    .map(([key, value]) => [key, value]);
+      const cleanFilters = Object.entries(filters)
+        // eslint-disable-next-line no-unused-vars
+        .filter(([key, value]) => value !== '')
+        .map(([key, value]) => [key, value]);
 
-  if (isEmpty(cleanFilters)) {
-    dispatch({
-      type: ON_FILTER_PROPOSALS,
-      payload: { filteredProposals: proposals, isFiltering }
-    });
-  } else {
-    let filteredProposals = [];
+      cleanFilters.forEach(([key, value]: Array<any>) => {
+        switch (key) {
+          case 'opportunity number':
+            filterPayload.opportunityNumber = value;
+            break;
+          case 'opportunityName':
+            filterPayload.opportunityName = value;
+            break;
+          case 'customer':
+            filterPayload.customer = value;
+            break;
+          case 'protocol number':
+            filterPayload.protocolNumber = value;
+            break;
+          case 'product':
+            filterPayload.product = value;
+            break;
+          case 'verbatim indication':
+            filterPayload.verbatimIndication = value;
+            break;
+          case 'phase':
+            filterPayload.phase = value;
+            break;
+          case 'therapeuticArea':
+            filterPayload.therapeuticArea = value;
+            break;
+          case 'opportunity status':
+            filterPayload.opportunityStatus = value;
+            break;
+          case 'bid due date': {
+            const bidDueDate = getDateRangeFormatted(value);
+            if (bidDueDate) {
+              filterPayload.bidDueDate = bidDueDate;
+            }
+            break;
+          }
+          case 'teamMember': {
+            const userMail = getUserMail(value);
+            if (userMail) {
+              filterPayload.teamMember = userMail;
+            }
+            break;
+          }
+          default:
+            break;
+        }
+      });
 
-    cleanFilters.forEach(([key, value]: Array<any>) => {
-      switch (key) {
-        case 'opportunity number':
-        case 'opportunityName':
-        case 'customer':
-        case 'protocol number':
-        case 'product':
-        case 'verbatim indication':
-          filteredProposals = textFilter(
-            key,
-            value,
-            !isEmpty(filteredProposals) ? filteredProposals : proposals
-          );
-          break;
-        case 'phase':
-        case 'therapeuticArea':
-        case 'opportunity status':
-          filteredProposals = optionFilter(
-            key,
-            value,
-            !isEmpty(filteredProposals) ? filteredProposals : proposals
-          );
-          break;
-        case 'bid due date':
-          filteredProposals = dateRangeFilter(
-            key,
-            value,
-            !isEmpty(filteredProposals) ? filteredProposals : proposals
-          );
-          break;
-        case 'teamMember':
-          filteredProposals = userFilter(
-            value,
-            !isEmpty(filteredProposals) ? filteredProposals : proposals
-          );
-          break;
-        default:
-          break;
+      let data = { proposals: [] };
+      if (tabIndex === 0) {
+        const userEmail = localStorage.getItem('userEmail') || '';
+        const response = await onGetByStatus(
+          filterPayload,
+          'active',
+          userEmail
+        );
+        data = response.data;
+      } else if (tabIndex === 1) {
+        const userEmail = localStorage.getItem('userEmail') || '';
+        const response = await onGetByStatus(
+          filterPayload,
+          'non-active',
+          userEmail
+        );
+        data = response.data;
+      } else {
+        const response = await onGetAllProposals(filterPayload);
+        data = response.data;
       }
-    });
 
-    dispatch({
-      type: ON_FILTER_PROPOSALS,
-      payload: { filteredProposals, isFiltering }
-    });
-  }
+      if (!isEmpty(data)) {
+        const { proposals } = data;
+        const formatted = proposals.map(proposal => formatProposal(proposal));
+        dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
+      }
+    } catch (error) {
+      console.log(error);
+      dispatch({ type: ERROR_ON_GET_PROPOSALS, payload: { error } });
+    } finally {
+      dispatch(setPageAction(1)); // resetting page to 1
+      dispatch({
+        type: SET_PROPOSAL_FILTERING,
+        payload: false
+      });
+    }
+  };
 };
 
 export const getFilteringValues = (): ThunkAction<String, Object> => async (
@@ -234,5 +258,14 @@ export const setProposalTypeView = (
 ): ThunkAction<string, Object> => {
   return (dispatch: Dispatch<string, Object>) => {
     dispatch({ type: SET_PROPOSAL_VIEW_TYPE, payload: { typeView } });
+  };
+};
+
+export const setNumberOfRowsAction = (rowsCount: Number) => {
+  return dispatch => {
+    dispatch({
+      type: SET_NUM_OF_ROWS,
+      payload: rowsCount
+    });
   };
 };

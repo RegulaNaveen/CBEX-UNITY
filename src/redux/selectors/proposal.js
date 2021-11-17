@@ -246,3 +246,8 @@ export const selectUniqueMilestones = createSelector(
   selectProposalQuestions,
   questions => getUniqueMilestones(questions)
 );
+
+export const selectAreAllSectionsExpanded = createSelector(
+  selectProposal,
+  proposal => proposal.get('areAllSectionsExpanded')
+);

@@ -10,7 +10,7 @@ let PROPOSAL_API_KEY = '';
 let NORMAL_AUTH_API_ENDPOINT = '';
 //* SSO AUTH
 let COGNITO_HOST = '';
-let AUTH_KEY = '';
+const AUTH_KEY = '';
 let CLIENT_ID = '';
 let REDIRECTION_URL = '';
 //* Ubuild feature flag
@@ -40,7 +40,7 @@ switch (environment) {
     // AUTH_KEY = '';
     CLIENT_ID = 'tc1tih0kcrifpoqrdsqo26467';
     REDIRECTION_URL = 'https://unity.iqvia.app/';
-    UBUILD_ARTIFACT = 'https://prod-ubuild.iqvia.app/main.js';
+    UBUILD_ARTIFACT = 'https://ubuild.iqvia.app/main.js';
     break;
   case 'QA':
     // UDEV Data
@@ -50,9 +50,7 @@ switch (environment) {
     NORMAL_AUTH_API_ENDPOINT =
       'https://aiz2k1qjjl.execute-api.us-east-1.amazonaws.com/dev';
     COGNITO_HOST = 'https://unity-dev.auth.us-east-1.amazoncognito.com';
-    AUTH_KEY =
-      'MzZlNnFsNmZub2x2MHBwc2I5cmZocGpxazU6OW5tbXEzcDcwYnRycWZzcm44dThjMWZnajZqMGkxc24wcW5rOGxhaWl1N3I0ZTQzb2Fl';
-    CLIENT_ID = '36e6ql6fnolv0ppsb9rfhpjqk5';
+    CLIENT_ID = '5qa83je2aga90r53kte3mori93';
     REDIRECTION_URL = 'https://qa-unity.iqvia.app/';
     UBUILD_ARTIFACT = 'https://qa-ubuild.iqvia.app/main.js';
     break;
@@ -64,9 +62,7 @@ switch (environment) {
     NORMAL_AUTH_API_ENDPOINT =
       'https://aiz2k1qjjl.execute-api.us-east-1.amazonaws.com/dev';
     COGNITO_HOST = 'https://unity-dev.auth.us-east-1.amazoncognito.com';
-    AUTH_KEY =
-      'MzZlNnFsNmZub2x2MHBwc2I5cmZocGpxazU6OW5tbXEzcDcwYnRycWZzcm44dThjMWZnajZqMGkxc24wcW5rOGxhaWl1N3I0ZTQzb2Fl';
-    CLIENT_ID = '36e6ql6fnolv0ppsb9rfhpjqk5';
+    CLIENT_ID = '5qa83je2aga90r53kte3mori93';
     REDIRECTION_URL = 'https://dev-unity.iqvia.app/';
     UBUILD_ARTIFACT = 'https://dev-ubuild.iqvia.app/main.js';
     break;
