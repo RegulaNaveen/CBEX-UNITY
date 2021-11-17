@@ -194,7 +194,7 @@ export class TaskRow extends Component<Props, State> {
     }
 
     if (sectionName === 'Proposal Team')
-      return <UserLookup onChange={this.handleTextChange} text={answerValue} />;
+      return <UserLookup sectionName={sectionName} onChange={this.handleTextChange} text={answerValue} />;
 
     if (
       type === 'picklist' &&

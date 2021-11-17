@@ -12,7 +12,8 @@ type Props = {
   title?: string,
   withReset?: boolean,
   className?: string,
-  defaultValue?: string
+  defaultValue?: string,
+  sectionName?: string
 };
 
 const UserLookup = ({
@@ -23,7 +24,8 @@ const UserLookup = ({
   withReset,
   placeholder,
   className,
-  defaultValue
+  defaultValue,
+  sectionName
 }: Props) => (
   <Lookup
     data={users}
@@ -32,6 +34,7 @@ const UserLookup = ({
     className={className || ''}
     placeholder={placeholder}
     title={title}
+    sectionName={sectionName}
     withReset={withReset}
   />
 );
@@ -42,7 +45,8 @@ UserLookup.defaultProps = {
   withReset: false,
   placeholder: '',
   className: '',
-  defaultValue: ''
+  defaultValue: '',
+  sectionName: ''
 };
 
 const mapStateToProps = state => ({
