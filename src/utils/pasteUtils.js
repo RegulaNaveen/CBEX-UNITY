@@ -1,10 +1,15 @@
 // @flow
 
+/**
+ * function that takes an paste event as input and returns string with valid characters
+ * @param {*} event 
+ * @returns string
+ */
 const removeSpecialChars = (event: SyntheticInputEvent<EventTarget>) => {
   const str = event.clipboardData.getData('Text');
   if (str.length === 0) {
     event.preventDefault();
-    return;
+    return '';
   }
   let sanitizedStr = '';
   const str2Array = str.split('\n');
@@ -25,6 +30,7 @@ const removeSpecialChars = (event: SyntheticInputEvent<EventTarget>) => {
     'end'
   );
   event.preventDefault();
+  return event.target.value;
 };
 
 export default removeSpecialChars;

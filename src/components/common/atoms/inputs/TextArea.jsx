@@ -140,7 +140,13 @@ class TextArea extends PureComponent<Props, State> {
               ref={this.textAreaInput}
               className={classnames('text-area-wrapper', className)}
               value={textValue}
-              onPaste={removeSpecialChars}
+              onPaste={e => { 
+                const sanitizedValue = removeSpecialChars(e)
+                if (this.props.onChange) {
+                  this.setState({ textValue: sanitizedValue });
+                  this.props.onChange(sanitizedValue);
+                }
+              }}
               onInput={this.autoResize}
               onChange={e => {
                 this.handleText(e);
