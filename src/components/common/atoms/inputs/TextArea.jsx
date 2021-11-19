@@ -147,8 +147,8 @@ class TextArea extends PureComponent<Props, State> {
                   this.props.onChange(sanitizedValue);
                 }
               }}
-              onInput={this.autoResize}
-              onChange={e => {
+              onInput={e => {
+                this.autoResize(e);
                 this.handleText(e);
                 if (this.props.onChange) {
                   this.props.onChange(e.target.value);
