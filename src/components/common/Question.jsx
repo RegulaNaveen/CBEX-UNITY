@@ -94,7 +94,7 @@ export class TaskRow extends Component<Props, State> {
         selectedDay
       )
         setProposalAnswer(proposalId, questionId, selectedDay, userData);
-      else setProposalAnswer(proposalId, questionId, { answer: '' }, userData);
+      else setProposalAnswer(proposalId, questionId, ' ' , userData);
     });
     this.trackMatomoEventSubmitAnswer(selectedDay);
   };
@@ -266,13 +266,14 @@ export class TaskRow extends Component<Props, State> {
           />
         );
       case 'date':
+        answerValue = String(answerValue).trimStart().trimEnd();
         return (
           <DatePicker
             selectedDay={selectedDay}
             handleDayChange={this.handleDayChange}
             handleFormatDate={formatDate}
             handleDate={parseDate}
-            value={answerValue}
+            value={new Date(answerValue) == 'Invalid Date' ? '' : answerValue}
           />
         );
       case 'picklist':

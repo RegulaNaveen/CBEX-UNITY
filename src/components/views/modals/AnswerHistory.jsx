@@ -69,7 +69,7 @@ class AnswerHistory extends Component<Props> {
     return answers.map((_answer, index) => {
       const userName = _answer.get('userName') || 'Default User';
       const date = _answer.get('date');
-      const answer = _answer.get('answer');
+      let answer = _answer.get('answer');
       const nextAnswer = answers.get(index + 1)
         ? answers.get(index + 1).get('answer')
         : answer;
@@ -101,7 +101,8 @@ class AnswerHistory extends Component<Props> {
           }
 
           if (questionType === 'date') {
-            return <p>{parseMomentDate(answer)}</p>;
+            answer = String(answer).trimStart().trimEnd();
+            return <p>{new Date(answer) == 'Invalid Date' ? '' : parseMomentDate(answer)}</p>;
           }
 
           return <p>{answer}</p>;

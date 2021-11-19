@@ -1,28 +1,36 @@
 // @flow
 
+/**
+ * function that takes an paste event as input and returns string with valid characters
+ * @param {*} event 
+ * @returns string
+ */
 const removeSpecialChars = (event: SyntheticInputEvent<EventTarget>) => {
   const str = event.clipboardData.getData('Text');
   if (str.length === 0) {
-    event.target.value = event.target.value + newStr;
     event.preventDefault();
-    return;
+    return '';
   }
   let sanitizedStr = '';
   const str2Array = str.split('\n');
-  console.log(str2Array)
-  str2Array.forEach(function(line) {
-    for (let i=0; i<line.length; i++) {
-      if (str.charCodeAt(i) >= 32 && str.charCodeAt(i) < 127) {
-        sanitizedStr = sanitizedStr + str[i];
+  str2Array.forEach((line, lineNumber) => {
+    if (lineNumber > 0) {
+      sanitizedStr += '\n';
+    }
+    for (let i = 0; i < line.length; i++) {
+      if (line.charCodeAt(i) >= 32 && line.charCodeAt(i) < 127) {
+        sanitizedStr += line[i];
       }
     }
-    sanitizedStr += '\n';
   });
-  if (str !== sanitizedStr) {
-    console.log('Filtered unsupported characters!!');
-    event.target.value = event.target.value + sanitizedStr;
-    event.preventDefault();
-  }
+  event.target.setRangeText(
+    sanitizedStr,
+    event.target.selectionStart,
+    event.target.selectionEnd,
+    'end'
+  );
+  event.preventDefault();
+  return event.target.value;
 };
 
 export default removeSpecialChars;
