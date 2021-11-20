@@ -11,8 +11,11 @@ type Props = {
   title?: string,
   placeholder?: string,
   text?: string,
+  sectionName?: string,
   getSelectedItem: (selectedItem: string) => void,
-  withReset?: boolean
+  withReset?: boolean,
+  className?: string,
+  defaultValue?: string
 };
 
 type State = {
@@ -26,16 +29,21 @@ class Lookup extends Component<Props, State> {
     title: '',
     text: '',
     withReset: false,
-    placeholder: ''
+    placeholder: '',
+    className: '',
+    defaultValue: '',
+    sectionName: '',
+    error: false
   };
 
   constructor(props: Object) {
     super(props);
-    const { text } = this.props;
+    const { text, withReset } = this.props;
     this.state = {
       searchValue: text || '',
       filteredData: [],
-      showResetButton: false
+      error: false,
+      showResetButton: withReset && text && text.length > 0
     };
   }
 
@@ -55,7 +63,14 @@ class Lookup extends Component<Props, State> {
 
     this.setState({
       searchValue: value,
-      filteredData: filteringData
+      filteredData: filteringData,
+    },()=>{
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if(value && !emailRegex.test(value)){
+        this.setState({error: true})
+      }else{
+        this.setState({error: false})
+      }
     });
   };
 
@@ -68,7 +83,8 @@ class Lookup extends Component<Props, State> {
       {
         searchValue: textContent,
         filteredData: [],
-        showResetButton: withReset
+        showResetButton: withReset,
+        error: false
       },
       () => getSelectedItem(textContent)
     );
@@ -97,8 +113,15 @@ class Lookup extends Component<Props, State> {
   };
 
   render() {
-    const { searchValue, filteredData, showResetButton } = this.state;
-    const { title, withReset, placeholder, className } = this.props;
+    const { searchValue, filteredData, showResetButton, error } = this.state;
+    const {
+      title,
+      withReset,
+      placeholder,
+      className,
+      defaultValue,
+      sectionName
+    } = this.props;
 
     return (
       <div
@@ -140,6 +163,9 @@ class Lookup extends Component<Props, State> {
             </span>
           ))}
         </div>
+        {error && sectionName === 'Proposal Team' &&
+          <p className="number-error-text">Please enter a valid answer</p>
+         }
       </div>
     );
   }

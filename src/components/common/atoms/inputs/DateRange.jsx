@@ -6,7 +6,9 @@ import DatePickerCustomInput from './DatePickerCustomInput';
 
 type Props = {
   onSetRange: Function,
-  label?: string
+  label?: string,
+  defaultValue?: any,
+  placeholder?: string
 };
 
 type State = {
@@ -19,7 +21,9 @@ class DateRange extends Component<Props, State> {
   wrapperRef: any;
 
   static defaultProps = {
-    label: ''
+    label: '',
+    defaultValue: '',
+    placeholder: ''
   };
 
   constructor(props: Object) {
@@ -71,7 +75,7 @@ class DateRange extends Component<Props, State> {
   showPicker = () => this.setState({ showPicker: true });
 
   render() {
-    const { label, placeholder } = this.props;
+    const { label, placeholder, defaultValue } = this.props;
     const { from, to, showPicker } = this.state;
     const modifiers = { start: from, end: to };
     return (
@@ -80,7 +84,16 @@ class DateRange extends Component<Props, State> {
         <div ref={this.wrapperRef}>
           <DatePickerCustomInput
             placeholder={
-              placeholder && placeholder == 'hide' ? '' : 'Select date range...'
+              placeholder && placeholder === 'hide'
+                ? ''
+                : 'Select date range...'
+            }
+            defaultValue={
+              defaultValue && defaultValue.from && defaultValue.to
+                ? `${parseMomentDate(defaultValue.from)} - ${parseMomentDate(
+                    defaultValue.to
+                  )}`
+                : ''
             }
             value={
               from && to

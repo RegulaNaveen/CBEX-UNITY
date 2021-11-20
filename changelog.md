@@ -7,14 +7,29 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [3.1] - YYYY-MM-DD
  
 ### Added
-  - QVIACBEXU-709: Check marks displaying for the questions "Not answered" Under sections in Questions record
+  - IQVIACBEXU-709: Check marks displaying for the questions "Not answered" Under sections in Questions record
+  - IQVIACBEXU-723: ER: The system should automatically expand free textbox to accommodate 
+  - IQVIACBEXU-724: Disallow users to input negative number(s) in the number data type field
+  - IQVIACBEXU-762: Custom question box is displaying if clicked away from "Add New Question" button.
+  - IQVIACBEXU-763: Restructure the frontend in order to use elastic search effectively
+  - IQVIACBEXU-632: Strange characters are displayed when content is copied and pasted from an external document 
+  - IQVIACBEXU-557: Filter Proposals on All Tab does not filter if clicked away from
+  - IQVIACBEXU-639: Proposal team history section giving blank value after delete the name from text field.
+  - IQVIACBEXU-788: Token refresh for timeout issues
+  
 ### Changed
 ### Fixed
-
+  - IQVIACBEXU-683: Expand All Section Confusion
+  - IQVIACBEXU-787: Team member role field issue on custom question box
+  - IQVIACBEXU-558: Inline Error Validation Message when answer does not fit the answer type
+  - IQVIACBEXU-750: Custom question: Section name cached when accessed through the Blade functionality.
+  - IQVIACBEXU-798: In unity user is not able to delete date value in Proposal Timeline section section
+  - IQVIACBEXU-751: Custom question and Blade functionality overlap
+  - IQVIACBEXU-632: Strange characters are displayed when content is copied and pasted from an external document 
 ## [3.0] - YYYY-MM-DD
  
 ### Added
-  - QVIACBEXU-533: Add Chips associated to certain questions based off Milestone/ Call Due
+  - IQVIACBEXU-533: Add Chips associated to certain questions based off Milestone/ Call Due
   - IQVIACBEXU-414: Viewing Questions based off Required Roles vs. Interested Parties
   - IQVIACBEXU-534: Filter Questions based on certain tag criteria (from Milestone/ Call Due)
 ### Changed
@@ -55,3 +70,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 [2.3]: https://gitlabrnds.quintiles.com/cbex/unity/unity-app-frontend/-/tags/v2.3
 [2.3.1]: https://gitlabrnds.quintiles.com/cbex/unity/unity-app-frontend/-/tags/v2.3.1
 [2.4]: https://gitlabrnds.quintiles.com/cbex/unity/unity-app-frontend/-/tags/v2.4
+[3.0]: https://gitlabrnds.quintiles.com/cbex/unity/unity-app-frontend/-/tags/v3.0
+[3.1]: https://gitlabrnds.quintiles.com/cbex/unity/unity-app-frontend/-/tags/v3.1

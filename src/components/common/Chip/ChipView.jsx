@@ -7,11 +7,15 @@ import Tooltip from 'apollo-react/components/Tooltip';
 const ChipView = ({ label, answer }) => {
   return (
     <>
-      <Tooltip title={ label } placement="top">
+      <Tooltip title={label} placement="top">
         <Tag
-          Icon={ answer ? Check : '' }
-          label={ label.split(' ')[0].length <= 11 ? label.split(' ')[0] : `${label.split(' ')[0].substr(0,8)}...` }
-          variant={ answer ? 'green' : 'blue' }
+          Icon={answer ? Check : ''}
+          label={
+            label.split(' ')[0].length <= 11
+              ? label.split(' ')[0]
+              : `${label.split(' ')[0].substr(0, 8)}...`
+          }
+          variant={answer ? 'green' : 'blue'}
         />
       </Tooltip>
     </>
