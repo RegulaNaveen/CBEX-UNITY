@@ -83,13 +83,12 @@ class AnswerHistory extends Component<Props> {
 
       const renderAnswers = () => {
         if (questionType !== 'picklist') {
+          const renderWord = (word, status) => (
+            <span className={status} key={uuidv4()}>
+              {word}{' '}
+            </span>
+          );
           if (questionType === 'text' || questionType === 'number') {
-            const renderWord = (word, status) => (
-              <span className={status} key={uuidv4()}>
-                {word}{' '}
-              </span>
-            );
-
             const diffAnswers = diffWords(nextAnswer, answer);
 
             return diffAnswers.map(({ value, added, removed }) => {
@@ -102,7 +101,11 @@ class AnswerHistory extends Component<Props> {
 
           if (questionType === 'date') {
             answer = String(answer).trimStart().trimEnd();
-            return <p>{new Date(answer) == 'Invalid Date' ? '' : parseMomentDate(answer)}</p>;
+            if(!Boolean(String(answer).length)){
+              return renderWord(parseMomentDate(nextAnswer), 'removed');
+            }else{
+              return <p>{new Date(answer) == 'Invalid Date' ? '' : parseMomentDate(answer)}</p>;
+            }
           }
 
           return <p>{answer}</p>;
