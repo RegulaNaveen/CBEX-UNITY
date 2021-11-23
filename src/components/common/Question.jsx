@@ -8,9 +8,8 @@ import TextField from 'apollo-react/components/TextField';
 import { Checkmark } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
 import TextArea from './atoms/inputs/TextArea';
-import DatePicker from './atoms/inputs/DatePicker';
 import UserLookup from './atoms/inputs/UserLookup';
-import { parseDate, formatDate, parseMomentDate } from '../../utils/DateUtils';
+import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
 import { setProposalAnswerData } from '../../redux/actions/proposal-actions';
 import { getUserData, getProposalDetails } from '../../redux/selectors';
@@ -18,6 +17,11 @@ import MatomoHOC from '../HOC/MatomoHOC';
 import { getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
 import ChipView from './Chip/ChipView';
 import removeSpecialChars from '../../utils/pasteUtils';
+
+import DatePicker from 'apollo-react/components/DatePickerV2';
+import moment from 'moment'
+import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
+// import DatePicker from './atoms/inputs/DatePicker';
 
 type State = {
   selectedDay: string
@@ -94,7 +98,6 @@ export class TaskRow extends Component<Props, State> {
         selectedDay
       )
         setProposalAnswer(proposalId, questionId, selectedDay, userData);
-      else setProposalAnswer(proposalId, questionId, ' ' , userData);
     });
     this.trackMatomoEventSubmitAnswer(selectedDay);
   };
@@ -170,6 +173,14 @@ export class TaskRow extends Component<Props, State> {
       ]
     });
   };
+
+  resetDate = () => {
+    const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+    this.setState({ selectedDay: ' ' }, () => {
+      setProposalAnswer(proposalId, questionId, this.state.selectedDay, userData);
+      this.trackMatomoEventSubmitAnswer(' ');
+    })
+   }
 
   renderAnswer = (
     type: string,
@@ -266,14 +277,11 @@ export class TaskRow extends Component<Props, State> {
           />
         );
       case 'date':
-        answerValue = String(answerValue).trimStart().trimEnd();
         return (
-          <DatePicker
-            selectedDay={selectedDay}
+          <QuestionDatePicker 
+            value={answerValue} 
+            resetDate={this.resetDate}
             handleDayChange={this.handleDayChange}
-            handleFormatDate={formatDate}
-            handleDate={parseDate}
-            value={new Date(answerValue) == 'Invalid Date' ? '' : answerValue}
           />
         );
       case 'picklist':
