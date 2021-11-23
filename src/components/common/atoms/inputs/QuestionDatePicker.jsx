@@ -5,11 +5,11 @@ import { CloseCircle } from '../../../svg';
 const date = moment();
 
 const QuestionDatePicker = ({value, resetDate, handleDayChange}) => {
-    const [inputValue, setInputValue] = useState(date.format('DD-MMM-YYYY'));
+    const [inputValue, setInputValue] = useState(date.format('DD/MM/YYYY'));
     const [resetsubmit, setresetsubmit] = useState(false);
     useEffect(() => {
         value = String(value).trimStart().trimEnd();
-        value = ((String(new Date(value)).includes('Invalid')) || !Boolean(String(value).length)) ? '' : moment(value).format('DD-MMM-YYYY');
+        value = ((String(new Date(value)).includes('Invalid')) || !Boolean(String(value).length)) ? '' : moment(value).format('DD/MM/YYYY');
         setInputValue(value);
         if(value) setresetsubmit(true)
         else setresetsubmit(false)
@@ -18,7 +18,7 @@ const QuestionDatePicker = ({value, resetDate, handleDayChange}) => {
         <div className="date-picker">
             <DatePicker
                 placeholder="DD/MM/YYYY"
-                dateFormat="DD-MMM-YYYY"
+                dateFormat="DD/MM/YYYY"
                 fullWidth 
                 inputValue={inputValue}
                 error={false}
@@ -27,7 +27,7 @@ const QuestionDatePicker = ({value, resetDate, handleDayChange}) => {
                 onInputChange={(dte) => {}}
                 onChange={(dte) => {
                     if(dte && !moment(dte).isSame(value)){
-                      setInputValue(moment(dte).format('DD-MMM-YYYY'));
+                      setInputValue(moment(dte).format('DD/MM/YYYY'));
                       handleDayChange(dte,value);
                     }
                 }}
