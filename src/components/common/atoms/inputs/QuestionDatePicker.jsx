@@ -6,10 +6,13 @@ const date = moment();
 
 const QuestionDatePicker = ({value, resetDate, handleDayChange}) => {
     const [inputValue, setInputValue] = useState(date.format('DD-MMM-YYYY'));
+    const [resetsubmit, setresetsubmit] = useState(false);
     useEffect(() => {
         value = String(value).trimStart().trimEnd();
         value = ((String(new Date(value)).includes('Invalid')) || !Boolean(String(value).length)) ? '' : moment(value).format('DD-MMM-YYYY');
-        setInputValue(value)
+        setInputValue(value);
+        if(value) setresetsubmit(true)
+        else setresetsubmit(false)
     }, [value])
     return (
         <div className="date-picker">
@@ -29,9 +32,13 @@ const QuestionDatePicker = ({value, resetDate, handleDayChange}) => {
                     }
                 }}
               />
-              {inputValue &&
+              {resetsubmit &&
                 <button 
-                 onClick={resetDate}
+                 onClick={()=>{
+                    setresetsubmit(false)
+                    setInputValue('');
+                    resetDate();
+                 }}
                  style={{alignSelf: 'auto', position: 'absolute', right: '17%', marginTop: 15}} 
                  type="button" className="resetButton">
                 <CloseCircle fill="#444" />
