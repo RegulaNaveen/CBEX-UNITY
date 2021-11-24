@@ -30,7 +30,8 @@ const QuestionDatePicker = ({value, resetDate, handleDayChange}) => {
                     dte = String(dte).split('/');
                     dte = `${dte[1]}/${dte[0]}/${dte[2]}`
                     handleDayChange(dte,value);
-                    }
+                  }
+                  if(!dte) handleDayChange(' ',value);
                 }}
               />
               {resetsubmit &&
