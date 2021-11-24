@@ -17,7 +17,7 @@ const QuestionDatePicker = ({value, resetDate, handleDayChange}) => {
     return (
         <div className="date-picker">
             <DatePicker
-                placeholder="DD-MMM-YYYY"
+                placeholder="DD-MM-YYYY"
                 dateFormat='DD-MMM-YYYY'
                 fullWidth 
                 style={{marginTop: 0}}
