@@ -5,7 +5,7 @@ import { CloseCircle } from '../../../svg';
 const date = moment();
 
 const QuestionDatePicker = ({value, resetDate, handleDayChange}) => {
-    const [inputValue, setInputValue] = useState(date.format('DD/MM/YYYY'));
+    const [inputValue, setInputValue] = useState('');
     const [resetsubmit, setresetsubmit] = useState(false);
     useEffect(() => {
         value = String(value).trimStart().trimEnd();
@@ -18,17 +18,18 @@ const QuestionDatePicker = ({value, resetDate, handleDayChange}) => {
         <div className="date-picker">
             <DatePicker
                 placeholder="DD/MM/YYYY"
-                dateFormat="DD/MM/YYYY"
+                dateFormat='DD/MM/YYYY'
                 fullWidth 
-                inputValue={inputValue}
-                error={false}
                 style={{marginTop: 0}}
-                value={inputValue}
-                onInputChange={(dte) => {}}
-                onChange={(dte) => {
-                    if(dte && !moment(dte).isSame(value)){
-                      setInputValue(moment(dte).format('DD/MM/YYYY'));
-                      handleDayChange(dte,value);
+                inputValue={inputValue}
+                onInputChange={(dte) => {
+                  let dateregx = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/
+                  setInputValue(dte);
+                  if(dte && dateregx.test(dte)){
+                    console.log(dte)
+                    dte = String(dte).split('/');
+                    dte = `${dte[1]}/${dte[0]}/${dte[2]}`
+                    handleDayChange(dte,value);
                     }
                 }}
               />
