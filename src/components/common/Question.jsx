@@ -64,6 +64,19 @@ export class TaskRow extends Component<Props, State> {
     }
   }
 
+  handlePropsalChange = (textValue: string, lastAnswer: string) => {
+    const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+    setProposalAnswer(proposalId, questionId, textValue, userData);
+    // if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
+    //   if (lastAnswer !== textValue)
+    //     setProposalAnswer(proposalId, questionId, textValue, userData);
+    // } else if (!textValue && lastAnswer.trim()) {
+    //   setProposalAnswer(proposalId, questionId, ' ', userData);
+    // }
+
+    this.trackMatomoEventSubmitAnswer(textValue);
+  };
+
   handleTextChange = (textValue: string, lastAnswer: string) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
 
@@ -195,7 +208,7 @@ export class TaskRow extends Component<Props, State> {
     }
 
     if (sectionName === 'Proposal Team') 
-       return <Autocomplete sectionName={sectionName} onChange={this.handleTextChange} text={answerValue}/>
+       return <Autocomplete sectionName={sectionName} onChange={this.handlePropsalChange} text={answerValue}/>
       // return <UserLookup sectionName={sectionName} onChange={this.handleTextChange} text={answerValue} />;
 
     if (
