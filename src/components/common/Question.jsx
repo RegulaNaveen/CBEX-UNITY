@@ -18,6 +18,7 @@ import MatomoHOC from '../HOC/MatomoHOC';
 import { getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
 import ChipView from './Chip/ChipView';
 import removeSpecialChars from '../../utils/pasteUtils';
+import Autocomplete from './atoms/inputs/AutoComplete';
 
 type State = {
   selectedDay: string
@@ -193,8 +194,9 @@ export class TaskRow extends Component<Props, State> {
       else answerValue = answer.toString();
     }
 
-    if (sectionName === 'Proposal Team')
-      return <UserLookup sectionName={sectionName} onChange={this.handleTextChange} text={answerValue} />;
+    if (sectionName === 'Proposal Team') 
+       return <Autocomplete sectionName={sectionName} onChange={this.handleTextChange} text={answerValue}/>
+      // return <UserLookup sectionName={sectionName} onChange={this.handleTextChange} text={answerValue} />;
 
     if (
       type === 'picklist' &&

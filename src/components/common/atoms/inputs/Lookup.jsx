@@ -113,6 +113,8 @@ class Lookup extends Component<Props, State> {
   };
 
   render() {
+    console.log('state :>> ', this.state);
+    console.log('props :>> ', this.props);
     const { searchValue, filteredData, showResetButton, error } = this.state;
     const {
       title,
