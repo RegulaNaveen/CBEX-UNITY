@@ -81,9 +81,9 @@ class TextArea extends PureComponent<Props, State> {
     const { onChange } = this.props;
     const { value: textValue } = target;
     const numberError =
-      (textValue && !numberRegex.test(textValue)) ||
-      Number(textValue) < 0 ||
-      String(textValue).match(/-/g);
+      (String(textValue).trim() && !numberRegex.test(String(textValue).trim())) ||
+      Number(String(textValue).trim()) < 0 ||
+      String(String(textValue).trim()).match(/-/g);
     if (onChange && !numberError) onChange(textValue);
 
     this.setState({ textValue, numberError: !!numberError });
