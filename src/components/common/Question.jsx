@@ -73,7 +73,7 @@ export class TaskRow extends Component<Props, State> {
     if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
       if (lastAnswer !== textValue)
         setProposalAnswer(proposalId, questionId, textValue, userData);
-    } else if (!textValue && lastAnswer.trim()) {
+    } else if (!textValue.trim() && lastAnswer.trim()) {
       setProposalAnswer(proposalId, questionId, ' ', userData);
     }
 
@@ -219,6 +219,7 @@ export class TaskRow extends Component<Props, State> {
 
     switch (type) {
       case 'text':
+        answerValue = !(String(answerValue).trim()) ? '' : String(answerValue).trim();
         return (
           <TextField
             className="proposal-text-area"
