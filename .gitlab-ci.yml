@@ -46,7 +46,7 @@ sonar:
   script:
     - export SONAR_SCANNER_OPTS="-Djavax.net.ssl.trustStore=cacerts/sonarca.jks -Djavax.net.ssl.trustStorePassword=changeit"
     - sonar-scanner
-  when:
+  only:
     - dev
     - sonarcicd
     - sonar    
