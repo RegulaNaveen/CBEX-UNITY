@@ -34,8 +34,8 @@ sonar:
   stage: sonar
   image: sonarsource/sonar-scanner-cli:4.5
   #rules:
-    #- if:  $CI_COMMIT_REF_NAME == "qa" || $CI_COMMIT_REF_NAME == "dev"
-    #- when: always
+    - if: $CI_COMMIT_REF_NAME == "dev" || $CI_COMMIT_REF_NAME =~ /^feature/ || $CI_COMMIT_REF_NAME =~ /^bugfix/
+    - when: always
   variables:
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
     GIT_DEPTH: 0
@@ -46,8 +46,6 @@ sonar:
   script:
     - export SONAR_SCANNER_OPTS="-Djavax.net.ssl.trustStore=cacerts/sonarca.jks -Djavax.net.ssl.trustStorePassword=changeit"
     - sonar-scanner
-  only:
-    - dev
 
 build:
   stage: build
@@ -70,7 +68,7 @@ build:
 deploystack:
   stage: deploystack
   rules:
-    - if:  $CI_COMMIT_REF_NAME =~ /^feature/ || $CI_COMMIT_REF_NAME =~ /^bugfix/ || $CI_COMMIT_REF_NAME == "sonar"
+    - if:  $CI_COMMIT_REF_NAME =~ /^feature/ || $CI_COMMIT_REF_NAME =~ /^bugfix/
       when: never 
     - if: '$DeployStack == "True"' #this flag drives whether to deploy the infrastructure stack
       when: always
@@ -86,9 +84,9 @@ deploystack:
 deployartifacts:
   stage: deployartifacts
   rules:
-    - if:  $CI_COMMIT_REF_NAME =~ /^feature/ || $CI_COMMIT_REF_NAME =~ /^bugfix/ || $CI_COMMIT_REF_NAME == "sonar"
-      when: never  
-    - when: always
+    - if:  $CI_COMMIT_REF_NAME == "dev" || $CI_COMMIT_REF_NAME == "qa" || $CI_COMMIT_REF_NAME == "uat" || $CI_COMMIT_REF_NAME == "master"
+      when: manual
+    - when: always    
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   dependencies:
     - initialize
