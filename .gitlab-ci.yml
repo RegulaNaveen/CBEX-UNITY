@@ -95,7 +95,7 @@ deployartifacts:
     - docker
   when: manual
   only:
-    -dev
-    -qa
-    -uat
-    -master
+    - dev
+    - qa
+    - uat
+    - master
