@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
   - IQVIACBEXU-805: Custom Questions: Roles need to be sorted by alphabetical order
   - IQVIACBEXU-887: Text box field value is not getting removed/saved after editing.
+  - IQVIACBEXU-889: In history replaced text in textbox is displaying in collapsed state.
 ## [3.1] - YYYY-MM-DD
  
 ### Added
