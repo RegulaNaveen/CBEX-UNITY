@@ -83,10 +83,6 @@ deploystack:
 
 deployartifacts:
   stage: deployartifacts
-  rules:
-    - if:  $CI_COMMIT_REF_NAME == "dev" || $CI_COMMIT_REF_NAME == "qa" || $CI_COMMIT_REF_NAME == "uat" || $CI_COMMIT_REF_NAME == "master"
-      when: manual
-    - when: always    
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   dependencies:
     - initialize
@@ -97,3 +93,9 @@ deployartifacts:
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[*].{id:Id, OriginDomainName:Origins.Items[0].DomainName}[?contains(OriginDomainName, '$BucketName.s3.amazonaws.com')].id" --output text) --paths "/*" --region $Region
   tags:
     - docker
+  when: manual
+  only:
+    -dev
+    -qa
+    -uat
+    -master
