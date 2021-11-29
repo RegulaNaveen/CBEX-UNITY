@@ -16,7 +16,7 @@ initialize:
   stage: initialize
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest  
   rules:
-    - if:  $CI_COMMIT_REF_NAME == "qa" || $CI_COMMIT_REF_NAME == "uat" || $CI_COMMIT_REF_NAME == "master" || $CI_COMMIT_REF_NAME == "sonar"
+    - if:  $CI_COMMIT_REF_NAME == "qa" || $CI_COMMIT_REF_NAME == "uat" || $CI_COMMIT_REF_NAME == "master"
       when: manual
     - when: always    
   script:
@@ -34,7 +34,7 @@ sonar:
   stage: sonar
   image: sonarsource/sonar-scanner-cli:4.5
   #rules:
-    #- if:  $CI_COMMIT_REF_NAME == "qa" || $CI_COMMIT_REF_NAME == "dev" || $CI_COMMIT_REF_NAME == "sonar"
+    #- if:  $CI_COMMIT_REF_NAME == "qa" || $CI_COMMIT_REF_NAME == "dev"
     #- when: always
   variables:
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
@@ -48,8 +48,6 @@ sonar:
     - sonar-scanner
   only:
     - dev
-    - sonarcicd
-    - sonar    
 
 build:
   stage: build
