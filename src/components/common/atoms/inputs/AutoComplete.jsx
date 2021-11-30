@@ -11,26 +11,34 @@ function extractEmails (str){
 const Autocomplete = (props) => {
     const [value, setValue] = useState([]);
     const text = String(props?.text).trimStart().trimEnd();
-    
-    
+
     const handleChange = (event, newValue) => {
          setValue(newValue);
          const proposaluser = newValue.map(v=>{
-             return v.email ? v.email : extractEmails(v.label)
+             return v.email ? v.label+"("+v.email+")" : v.label+"("+extractEmails(v.label)+")"
          })
-         props.onChange(proposaluser,text);
+         if(proposaluser.length == 0)
+            props.onChange(" ",text);
+         else
+            props.onChange(proposaluser.join(","),text);
     };
+    const UserNameByEmail = {};
     const proposalusers = props?.users?.map(v=>{
+        UserNameByEmail[v.email] = v.name;
         return { label: v.name, email: v.email}
     });
     useEffect(() => {
         if(Boolean(text.length)){
-            setValue([{ label: text }]);
+            let Val = text.split(",").map(v=>{
+                let email = extractEmails(v);
+                return { label: UserNameByEmail[email] || email, email: email }
+            });
+            setValue(Val);
         }
     }, [text]);
 
     return (
-        <div>
+        <div style={{ maxWidth: 500 }}>
             <AutocompleteV2
                 fullWidth
                 multiple
@@ -38,6 +46,8 @@ const Autocomplete = (props) => {
                 value={value}
                 chipColor="white"
                 size="small"
+                limitChips={5}
+                matchFrom="any"
                 onChange={handleChange}
             />
         </div>
