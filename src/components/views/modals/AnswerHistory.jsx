@@ -5,7 +5,7 @@ import { Map } from 'immutable';
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
 import { isEmpty, unionBy } from 'lodash';
-import { diffWords } from 'diff';
+import { diffLines } from 'diff';
 import { getProposalTeamAssignedRoles } from '../../../redux/selectors';
 import { Close } from '../../svg';
 import { parseMomentDate } from '../../../utils/DateUtils';
@@ -89,7 +89,7 @@ class AnswerHistory extends Component<Props> {
             </span>
           );
           if (questionType === 'text' || questionType === 'number') {
-            const diffAnswers = diffWords(nextAnswer, answer);
+            const diffAnswers = diffLines(nextAnswer, answer);
 
             return diffAnswers.map(({ value, added, removed }) => {
               if (removed) return renderWord(value, 'removed');
