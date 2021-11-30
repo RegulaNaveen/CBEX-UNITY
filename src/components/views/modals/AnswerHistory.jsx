@@ -5,7 +5,7 @@ import { Map } from 'immutable';
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
 import { isEmpty, unionBy } from 'lodash';
-import { diffWords } from 'diff';
+import { diffLines } from 'diff';
 import { getProposalTeamAssignedRoles } from '../../../redux/selectors';
 import { Close } from '../../svg';
 import { parseMomentDate } from '../../../utils/DateUtils';
@@ -83,14 +83,13 @@ class AnswerHistory extends Component<Props> {
 
       const renderAnswers = () => {
         if (questionType !== 'picklist') {
+          const renderWord = (word, status) => (
+            <span className={status} key={uuidv4()}>
+              {word}{' '}
+            </span>
+          );
           if (questionType === 'text' || questionType === 'number') {
-            const renderWord = (word, status) => (
-              <span className={status} key={uuidv4()}>
-                {word}{' '}
-              </span>
-            );
-
-            const diffAnswers = diffWords(nextAnswer, answer);
+            const diffAnswers = diffLines(nextAnswer, answer);
 
             return diffAnswers.map(({ value, added, removed }) => {
               if (removed) return renderWord(value, 'removed');
@@ -102,7 +101,11 @@ class AnswerHistory extends Component<Props> {
 
           if (questionType === 'date') {
             answer = String(answer).trimStart().trimEnd();
-            return <p>{new Date(answer) == 'Invalid Date' ? '' : parseMomentDate(answer)}</p>;
+            if(!Boolean(String(answer).length)){
+              return renderWord(parseMomentDate(nextAnswer), 'removed');
+            }else{
+              return <p>{new Date(answer) == 'Invalid Date' ? '' : parseMomentDate(answer)}</p>;
+            }
           }
 
           return <p>{answer}</p>;
