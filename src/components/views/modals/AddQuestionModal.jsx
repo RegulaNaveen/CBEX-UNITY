@@ -256,6 +256,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     isLoading: boolean,
     selectedValue: String
   ) => {
+    if(rolesList) rolesList = rolesList.sort();
     if (!isLoading) {
       return (
         <div className="modal-content">
