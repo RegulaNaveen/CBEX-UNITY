@@ -85,7 +85,7 @@ export class TaskRow extends Component<Props, State> {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
 
     if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
-      if (lastAnswer !== textValue)
+      if (lastAnswer.trim() !== textValue.trim())
         setProposalAnswer(proposalId, questionId, String(textValue).trim(), userData);
     } else if (!textValue.trim() && lastAnswer.trim()) {
       setProposalAnswer(proposalId, questionId, ' ', userData);
