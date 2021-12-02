@@ -84,22 +84,10 @@ export class TaskRow extends Component<Props, State> {
 
   handleTextChange = (textValue: string, lastAnswer: string) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
-    let diffAnswers = diffChars(textValue.trim(), lastAnswer.trim());
-    console.log(diffAnswers);
-    let str = ''
-    diffAnswers = diffAnswers.map(({ value, added, removed }) => {
-    return value;
-    })
-    diffAnswers = diffAnswers.map(v=>{
-      if(v.trim().length == 0 && v.length > 1) v = ' '
-      if(v.trim().length > 0 ) v = v.trim();
-      return v;
-    }).filter(v=> {
-      if(v) return v
-    })
-    diffAnswers = diffAnswers.join('');
+    let s1 = textValue.trim().split(' ').filter(v=>v.trim().length > 0);
+    let s2 = lastAnswer.trim().split(' ').filter(v=>v.trim().length > 0);
     if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
-      if (lastAnswer.trim() !== diffAnswers.trim())
+      if (s1.length !== s2.length)
         setProposalAnswer(proposalId, questionId, String(textValue).trim(), userData);
     } else if (!textValue.trim() && lastAnswer.trim()) {
       setProposalAnswer(proposalId, questionId, ' ', userData);
