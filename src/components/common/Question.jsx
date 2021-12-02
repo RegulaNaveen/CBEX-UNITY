@@ -18,7 +18,6 @@ import { getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
 import ChipView from './Chip/ChipView';
 import removeSpecialChars from '../../utils/pasteUtils';
 import Autocomplete from './atoms/inputs/AutoComplete';
-import { diffChars } from 'diff';
 
 import DatePicker from 'apollo-react/components/DatePickerV2';
 import moment from 'moment'
