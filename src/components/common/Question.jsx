@@ -18,6 +18,7 @@ import { getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
 import ChipView from './Chip/ChipView';
 import removeSpecialChars from '../../utils/pasteUtils';
 import Autocomplete from './atoms/inputs/AutoComplete';
+import { diffChars } from 'diff';
 
 import DatePicker from 'apollo-react/components/DatePickerV2';
 import moment from 'moment'
@@ -83,9 +84,22 @@ export class TaskRow extends Component<Props, State> {
 
   handleTextChange = (textValue: string, lastAnswer: string) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
-
+    let diffAnswers = diffChars(textValue.trim(), lastAnswer.trim());
+    console.log(diffAnswers);
+    let str = ''
+    diffAnswers = diffAnswers.map(({ value, added, removed }) => {
+    return value;
+    })
+    diffAnswers = diffAnswers.map(v=>{
+      if(v.trim().length == 0 && v.length > 1) v = ' '
+      if(v.trim().length > 0 ) v = v.trim();
+      return v;
+    }).filter(v=> {
+      if(v) return v
+    })
+    diffAnswers = diffAnswers.join('');
     if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
-      if (lastAnswer.trim() !== textValue.trim())
+      if (lastAnswer.trim() !== diffAnswers.trim())
         setProposalAnswer(proposalId, questionId, String(textValue).trim(), userData);
     } else if (!textValue.trim() && lastAnswer.trim()) {
       setProposalAnswer(proposalId, questionId, ' ', userData);
