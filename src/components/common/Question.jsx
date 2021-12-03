@@ -86,7 +86,7 @@ export class TaskRow extends Component<Props, State> {
     let s1 = textValue.trim().split(' ').filter(v=>v.trim().length > 0);
     let s2 = lastAnswer.trim().split(' ').filter(v=>v.trim().length > 0);
     if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
-      if (s1.length !== s2.length)
+      if (s1.length !== s2.length || s1.join(' ').trim() != s2.join(' ').trim())
         setProposalAnswer(proposalId, questionId, String(textValue).trim(), userData);
     } else if (!textValue.trim() && lastAnswer.trim()) {
       setProposalAnswer(proposalId, questionId, ' ', userData);
