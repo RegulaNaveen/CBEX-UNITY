@@ -5,10 +5,11 @@ import { Map } from 'immutable';
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
 import { isEmpty, unionBy } from 'lodash';
-import { diffChars } from 'diff';
+import { diffWordsWithSpace } from 'diff';
 import { getProposalTeamAssignedRoles } from '../../../redux/selectors';
 import { Close } from '../../svg';
 import { parseMomentDate } from '../../../utils/DateUtils';
+import { rearrangeDiff } from '../../../utils/utils';
 
 type Props = {
   question: Map,
@@ -89,9 +90,9 @@ class AnswerHistory extends Component<Props> {
             </span>
           );
           if (questionType === 'text' || questionType === 'number') {
-            const diffAnswers = diffChars(nextAnswer, answer);
+            const diffAnswers = diffWordsWithSpace(nextAnswer, answer);
 
-            return diffAnswers.map(({ value, added, removed }) => {
+            return rearrangeDiff(diffAnswers).map(({ value, added, removed }) => {
               if (removed) return renderWord(value, 'removed');
               if (added) return renderWord(value, 'changed');
 
