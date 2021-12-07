@@ -7,11 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [3.2] - YYYY-MM-DD
 ### Added
   - IQVIACBEXU-813: Date field type issues
+  - IQVIACBEXU-412: Multiple Individuals assigned against the proposal team questions
 ### Changed
 ### Fixed
   - IQVIACBEXU-805: Custom Questions: Roles need to be sorted by alphabetical order
   - IQVIACBEXU-887: Text box field value is not getting removed/saved after editing.
   - IQVIACBEXU-889: In history replaced text in textbox is displaying in collapsed state.
+  - IQVIACBEXU-933: Spacing and multiple API calls issue in textbox area
 ## [3.1] - YYYY-MM-DD
  
 ### Added
