@@ -13,13 +13,13 @@ const Autocomplete = (props) => {
     const text = String(props?.text).trimStart().trimEnd();
 
     const handleChange = (event, newValue) => {
-         setValue(newValue);
-         const proposaluser = newValue.map(v=>{
-             return v.email ? v.label+"("+v.email+")" : v.label+"("+extractEmails(v.label)+")"
-         })
-         if(proposaluser.length == 0)
+        setValue(newValue);
+        const proposaluser = newValue.map(v=>{
+            return v.email ? v.label+"("+v.email+")" : v.label+"("+extractEmails(v.label)+")"
+        })
+        if(proposaluser.length == 0)
             props.onChange(" ",text);
-         else
+        else
             props.onChange(proposaluser.join(","),text);
     };
     const UserNameByEmail = {};
@@ -49,6 +49,7 @@ const Autocomplete = (props) => {
                 limitChips={5}
                 matchFrom="any"
                 onChange={handleChange}
+                noOptionsText="No matches found"
             />
         </div>
     )
