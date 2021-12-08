@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-887: Text box field value is not getting removed/saved after editing.
   - IQVIACBEXU-889: In history replaced text in textbox is displaying in collapsed state.
   - IQVIACBEXU-933: Spacing and multiple API calls issue in textbox area
+  - IQVIACBEXU-935: Striking is not happening in date field history, once edited the date manually
+  - IQVIACBEXU-899: Text input Spacing issue in 'Add new question' 
 ## [3.1] - YYYY-MM-DD
  
 ### Added
