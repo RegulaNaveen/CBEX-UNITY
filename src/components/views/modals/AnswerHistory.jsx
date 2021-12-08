@@ -99,13 +99,25 @@ class AnswerHistory extends Component<Props> {
               return <span key={uuidv4()}>{value} </span>;
             });
           }
+          const showDate = (answer, nextAnswer) =>{
+            if(new Date(answer) == 'Invalid Date'){
+              return renderWord('Invalid Date', 'removed');
+            }else{
+              let newdate = renderWord(String(parseMomentDate(answer)), 'changed');
+              let nextdate = ''
+              if(nextAnswer && String(nextAnswer).trim().length){
+                 nextdate = renderWord(String(parseMomentDate(nextAnswer)), 'removed');
+              }
+              return <>{nextdate} {newdate}</>
+            }
+          }
 
           if (questionType === 'date') {
             answer = String(answer).trimStart().trimEnd();
             if(!Boolean(String(answer).length)){
               return renderWord(parseMomentDate(nextAnswer), 'removed');
             }else{
-              return <p>{new Date(answer) == 'Invalid Date' ? '' : parseMomentDate(answer)}</p>;
+              return <p>{showDate(answer, nextAnswer)}</p>;
             }
           }
 
