@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-933: Spacing and multiple API calls issue in textbox area
   - IQVIACBEXU-935: Striking is not happening in date field history, once edited the date manually
   - IQVIACBEXU-899: Text input Spacing issue in 'Add new question' 
+  - IQVIACBEXU-898: 'Click to answer' placeholder disappears after deleting the answer. 
 ## [3.1] - YYYY-MM-DD
  
 ### Added
