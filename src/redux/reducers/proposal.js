@@ -117,7 +117,7 @@ const onProposalError = (state: Map, action: Object): Map => {
 
 const onProposalAnswer = (state: Map, action: Object): Map => {
   const {
-    payload: { data, questionId: referenceId }
+    payload: { data, questionId: referenceId, hasDifferentSFanswer }
   } = action;
 
   let newState = fromJS({});
@@ -132,6 +132,10 @@ const onProposalAnswer = (state: Map, action: Object): Map => {
     ['proposalQuestions', indexOfListToUpdate, 'answers'],
     data
   );
+  newState = newState.setIn(
+    ['proposalQuestions', indexOfListToUpdate, 'hasDifferentSFanswer'],
+    hasDifferentSFanswer
+  )
 
   const proposalQuestions = newState.get('proposalQuestions');
 

@@ -27,7 +27,6 @@
 
 .text-number-wrapper {
   box-sizing: border-box;
-  height: 100%;
   width: 100%;
   border: 1px solid $neutral4;
   border-radius: 4px;
@@ -96,5 +95,24 @@
     overflow: auto !important;
     padding: 6px !important;
     line-height: 26px !important;
+  }
+}
+.hasDifferentSFanswer{
+  textarea, input, .dd-header, .multiselect-header {
+   border: 2px solid #e20000!important;
+  }
+  .alert-sf-diff{
+    padding-left: 30px;
+    font-size: 13px;
+    margin-top: 5px;
+    ul li:first-child{
+      color: #e20000;
+      cursor: auto;
+    }
+    ul li:last-child{
+      color: #297dfd;
+      list-style: none;
+      cursor: pointer;
+    }
   }
 }

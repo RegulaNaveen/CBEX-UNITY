@@ -8,7 +8,6 @@ import TextField from 'apollo-react/components/TextField';
 import { Checkmark } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
 import TextArea from './atoms/inputs/TextArea';
-import UserLookup from './atoms/inputs/UserLookup';
 import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
 import { setProposalAnswerData } from '../../redux/actions/proposal-actions';
@@ -18,10 +17,8 @@ import { getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
 import ChipView from './Chip/ChipView';
 import removeSpecialChars from '../../utils/pasteUtils';
 import Autocomplete from './atoms/inputs/AutoComplete';
-
-import DatePicker from 'apollo-react/components/DatePickerV2';
-import moment from 'moment'
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
+import { SFAnswerValidationWrapper } from './SFAnswerValidationWrapper';
 // import DatePicker from './atoms/inputs/DatePicker';
 
 type State = {
@@ -44,7 +41,8 @@ type Props = {
   sfObject: string,
   sfField: string,
   milestone: any,
-  ismilestoneavailable: string
+  ismilestoneavailable: string,
+  hasDifferentSFanswer: boolean
 };
 
 export class TaskRow extends Component<Props, State> {
@@ -237,79 +235,91 @@ export class TaskRow extends Component<Props, State> {
       case 'text':
         answerValue = !(String(answerValue).trim()) ? '' : String(answerValue).trim();
         return (
-          <TextField
-            className="proposal-text-area"
-            placeholder="Click to answer"
-            onPaste={event => {
-              removeSpecialChars(event);
-              const txtareaheight =
-                event.target.scrollHeight > 300
-                  ? 300
-                  : event.target.scrollHeight;
-              event.target.style.height = `auto`;
-              event.target.style.height = `${txtareaheight + 2}px`;
-            }}
-            onChange={event => {
-              const txtareaheight =
-                event.target.scrollHeight > 300
-                  ? 300
-                  : event.target.scrollHeight;
-              event.target.style.height = `auto`;
-              event.target.style.height = `${txtareaheight + 2}px`;
-            }}
-            onBlur={e => this.handleTextChange(e.target.value, answerValue)}
-            defaultValue={answerValue}
-            sizeAdjustable
-            minHeight={40}
-          />
+          <SFAnswerValidationWrapper hasDifferentSFanswer={this.props.hasDifferentSFanswer}>
+            <TextField
+              className="proposal-text-area"
+              placeholder="Click to answer"
+              onPaste={event => {
+                removeSpecialChars(event);
+                const txtareaheight =
+                  event.target.scrollHeight > 300
+                    ? 300
+                    : event.target.scrollHeight;
+                event.target.style.height = `auto`;
+                event.target.style.height = `${txtareaheight + 2}px`;
+              }}
+              onChange={event => {
+                const txtareaheight =
+                  event.target.scrollHeight > 300
+                    ? 300
+                    : event.target.scrollHeight;
+                event.target.style.height = `auto`;
+                event.target.style.height = `${txtareaheight + 2}px`;
+              }}
+              onBlur={e => this.handleTextChange(e.target.value, answerValue)}
+              defaultValue={answerValue}
+              sizeAdjustable
+              minHeight={40}
+            />
+          </SFAnswerValidationWrapper>  
         );
       case 'number':
         answerValue = !(String(answerValue).trim()) ? '' : String(answerValue).trim();
         return (
-          <TextArea
-            className="proposal-text-area"
-            placeholder="Click to answer"
-            type="number"
-            onBlur={this.handleTextChange}
-            value={answerValue}
-          />
+          <SFAnswerValidationWrapper hasDifferentSFanswer={this.props.hasDifferentSFanswer}>
+            <TextArea
+              className="proposal-text-area"
+              placeholder="Click to answer"
+              type="number"
+              onBlur={this.handleTextChange}
+              value={answerValue}
+            />
+          </SFAnswerValidationWrapper>
         );
       case 'y/n':
         return (
-          <Dropdown
-            id="dd-proposal-answer"
-            placeholder="Click to answer"
-            items={optionsYN}
-            onClick={this.onClickChange}
-            value={answerValue}
-          />
+          <SFAnswerValidationWrapper hasDifferentSFanswer={this.props.hasDifferentSFanswer}>
+            <Dropdown
+              id="dd-proposal-answer"
+              placeholder="Click to answer"
+              items={optionsYN}
+              onClick={this.onClickChange}
+              value={answerValue}
+            />
+          </SFAnswerValidationWrapper>
         );
       case 'select':
         return (
-          <Dropdown
-            id="dd-proposal-answer"
-            placeholder="Click to answer"
-            items={finalOptions}
-            onClick={this.onClickChange}
-            value={answerValue}
-          />
+          <SFAnswerValidationWrapper hasDifferentSFanswer={this.props.hasDifferentSFanswer}>
+            <Dropdown
+              id="dd-proposal-answer"
+              placeholder="Click to answer"
+              items={finalOptions}
+              onClick={this.onClickChange}
+              value={answerValue}
+            />
+          </SFAnswerValidationWrapper>  
         );
       case 'date':
         return (
-          <QuestionDatePicker 
-            value={answerValue} 
-            resetDate={this.resetDate}
-            handleDayChange={this.handleDayChange}
-          />
+          <SFAnswerValidationWrapper hasDifferentSFanswer={this.props.hasDifferentSFanswer}>
+            <QuestionDatePicker 
+              value={answerValue} 
+              resetDate={this.resetDate}
+              handleDayChange={this.handleDayChange}
+            />
+          </SFAnswerValidationWrapper>
         );
       case 'picklist':
         return (
-          <Multiselect
-            placeholder="Click to answer"
-            items={finalOptions}
-            onClick={this.onSelectValues}
-            value={answerValueComplex}
-          />
+          <SFAnswerValidationWrapper hasDifferentSFanswer={this.props.hasDifferentSFanswer}>
+            <Multiselect
+              placeholder="Click to answer"
+              items={finalOptions}
+              onClick={this.onSelectValues}
+              value={answerValueComplex}
+            />
+          </SFAnswerValidationWrapper>
         );
       default:
         return <div id="no-configuration">Click to answer</div>;
