@@ -47,7 +47,8 @@ const {
   ON_QUESTIONS_FILTERED,
   RESET_QUESTIONS_FILTER,
   CLEAR_QUESTIONS_FILTER,
-  EXPAND_ALL_SECTIONS
+  EXPAND_ALL_SECTIONS,
+  SET_EDIT_QUESTION_DATA
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -360,5 +361,11 @@ export function clearQuestionsFilterAction() {
 export function expandAllSectionsAction(expand = false) {
   return async dispatch => {
     dispatch({ type: EXPAND_ALL_SECTIONS, payload: expand });
+  };
+}
+
+export function setEditQuestionData(data = {}) {
+  return async dispatch => {
+    dispatch({ type: SET_EDIT_QUESTION_DATA, payload: data });
   };
 }
