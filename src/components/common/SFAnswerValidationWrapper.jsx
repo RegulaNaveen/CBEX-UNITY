@@ -1,11 +1,32 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { getProposalDetails } from '../../redux/selectors';
+import {SF_HOST_URL} from '../../constants/api'
 
-export class SFAnswerValidationWrapper extends Component {
+const primarySFobject = {
+    ResourceRequest : "pse__Resource_Request__c",
+    Opportunity : 'Opportunity',
+    BidHistory : 'Bid_History__c'
+  }
+
+class SFAnswerValidationWrapper extends Component {
     constructor(props) {
         super(props);
     }
+    getLink(){
+        const {sfObject, proposalDetail} = this.props;   
+        if(sfObject === primarySFobject.BidHistory)
+            return `${SF_HOST_URL}/lightning/r/Bid_History__c/${proposalDetail.agreementId}/view`;
+        else if ( sfObject === primarySFobject.Opportunity )
+            return `${SF_HOST_URL}/lightning/r/Opportunity/${proposalDetail.opportunityId}/view`;
+        else if ( sfObject === primarySFobject.ResourceRequest ) 
+            return `${SF_HOST_URL}/lightning/r/Bid_History__c/${proposalDetail.agreementId}/related/Bid_History_Resource_Requests__r/view`   
+        else
+            return `${SF_HOST_URL}`;
+    }
     render() {
         const {hasDifferentSFanswer} = this.props;
+        console.log(this.getLink());
         return(
             <div className={`wrap-with-validation ${hasDifferentSFanswer? 'hasDifferentSFanswer' : ''}`}>
                 {this.props.children}
@@ -13,7 +34,7 @@ export class SFAnswerValidationWrapper extends Component {
                  <div className="alert-sf-diff">
                     <ul>
                         <li>Does not match Salesforce value</li>
-                        <li>Click here to open on SF</li>
+                        <li><a className="take-me-to-SF" href={this.getLink()} target="_blank">Click here to open on SF</a></li>
                     </ul>
                 </div>
                 }
@@ -22,3 +43,10 @@ export class SFAnswerValidationWrapper extends Component {
         )
     }
 }
+
+const mapStateToProps = (state: Object) => ({
+    proposalDetail: getProposalDetails(state)
+});
+
+export default connect(mapStateToProps)(SFAnswerValidationWrapper);
+  

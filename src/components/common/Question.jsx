@@ -18,7 +18,7 @@ import ChipView from './Chip/ChipView';
 import removeSpecialChars from '../../utils/pasteUtils';
 import Autocomplete from './atoms/inputs/AutoComplete';
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
-import { SFAnswerValidationWrapper } from './SFAnswerValidationWrapper';
+import SFAnswerValidationWrapper from './SFAnswerValidationWrapper';
 // import DatePicker from './atoms/inputs/DatePicker';
 
 type State = {
@@ -218,7 +218,15 @@ export class TaskRow extends Component<Props, State> {
     }
 
     if (sectionName === 'Proposal Team') 
-       return <Autocomplete sectionName={sectionName} onChange={this.handlePropsalChange} text={answerValue}/>
+       return (
+        <SFAnswerValidationWrapper 
+        hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+        sfObject={sfObject}>
+           <Autocomplete sectionName={sectionName} onChange={this.handlePropsalChange} text={answerValue}/>
+        </SFAnswerValidationWrapper>   
+       )
+       
+      
       // return <UserLookup sectionName={sectionName} onChange={this.handleTextChange} text={answerValue} />;
 
     if (
@@ -235,7 +243,10 @@ export class TaskRow extends Component<Props, State> {
       case 'text':
         answerValue = !(String(answerValue).trim()) ? '' : String(answerValue).trim();
         return (
-          <SFAnswerValidationWrapper hasDifferentSFanswer={this.props.hasDifferentSFanswer}>
+          <SFAnswerValidationWrapper 
+            hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+            sfObject={sfObject}
+          >
             <TextField
               className="proposal-text-area"
               placeholder="Click to answer"
@@ -266,7 +277,10 @@ export class TaskRow extends Component<Props, State> {
       case 'number':
         answerValue = !(String(answerValue).trim()) ? '' : String(answerValue).trim();
         return (
-          <SFAnswerValidationWrapper hasDifferentSFanswer={this.props.hasDifferentSFanswer}>
+          <SFAnswerValidationWrapper 
+          hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+          sfObject={sfObject}
+          >
             <TextArea
               className="proposal-text-area"
               placeholder="Click to answer"
@@ -278,7 +292,10 @@ export class TaskRow extends Component<Props, State> {
         );
       case 'y/n':
         return (
-          <SFAnswerValidationWrapper hasDifferentSFanswer={this.props.hasDifferentSFanswer}>
+          <SFAnswerValidationWrapper 
+          hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+          sfObject={sfObject}
+          >
             <Dropdown
               id="dd-proposal-answer"
               placeholder="Click to answer"
@@ -290,7 +307,10 @@ export class TaskRow extends Component<Props, State> {
         );
       case 'select':
         return (
-          <SFAnswerValidationWrapper hasDifferentSFanswer={this.props.hasDifferentSFanswer}>
+          <SFAnswerValidationWrapper 
+          hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+          sfObject={sfObject}
+          >
             <Dropdown
               id="dd-proposal-answer"
               placeholder="Click to answer"
@@ -302,7 +322,10 @@ export class TaskRow extends Component<Props, State> {
         );
       case 'date':
         return (
-          <SFAnswerValidationWrapper hasDifferentSFanswer={this.props.hasDifferentSFanswer}>
+          <SFAnswerValidationWrapper 
+          hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+          sfObject={sfObject}
+          >
             <QuestionDatePicker 
               value={answerValue} 
               resetDate={this.resetDate}
@@ -312,7 +335,10 @@ export class TaskRow extends Component<Props, State> {
         );
       case 'picklist':
         return (
-          <SFAnswerValidationWrapper hasDifferentSFanswer={this.props.hasDifferentSFanswer}>
+          <SFAnswerValidationWrapper 
+          hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+          sfObject={sfObject}
+          >
             <Multiselect
               placeholder="Click to answer"
               items={finalOptions}
