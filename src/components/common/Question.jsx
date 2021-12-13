@@ -81,11 +81,22 @@ export class TaskRow extends Component<Props, State> {
 
   handleTextChange = (textValue: string, lastAnswer: string) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
-    let s1 = textValue.trim().split(' ').filter(v=>v.trim().length > 0);
-    let s2 = lastAnswer.trim().split(' ').filter(v=>v.trim().length > 0);
+    const s1 = textValue
+      .trim()
+      .split(' ')
+      .filter(v => v.trim().length > 0);
+    const s2 = lastAnswer
+      .trim()
+      .split(' ')
+      .filter(v => v.trim().length > 0);
     if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
       if (s1.length !== s2.length || s1.join(' ').trim() != s2.join(' ').trim())
-        setProposalAnswer(proposalId, questionId, String(textValue).trim(), userData);
+        setProposalAnswer(
+          proposalId,
+          questionId,
+          String(textValue).trim(),
+          userData
+        );
     } else if (!textValue.trim() && lastAnswer.trim()) {
       setProposalAnswer(proposalId, questionId, ' ', userData);
     }
@@ -190,10 +201,15 @@ export class TaskRow extends Component<Props, State> {
   resetDate = () => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
     this.setState({ selectedDay: ' ' }, () => {
-      setProposalAnswer(proposalId, questionId, this.state.selectedDay, userData);
+      setProposalAnswer(
+        proposalId,
+        questionId,
+        this.state.selectedDay,
+        userData
+      );
       this.trackMatomoEventSubmitAnswer(' ');
-    })
-   }
+    });
+  };
 
   renderAnswer = (
     type: string,
@@ -217,17 +233,21 @@ export class TaskRow extends Component<Props, State> {
       else answerValue = answer.toString();
     }
 
-    if (sectionName === 'Proposal Team') 
-       return (
-        <SFAnswerValidationWrapper 
-        hasDifferentSFanswer={this.props.hasDifferentSFanswer}
-        sfObject={sfObject}>
-           <Autocomplete sectionName={sectionName} onChange={this.handlePropsalChange} text={answerValue}/>
-        </SFAnswerValidationWrapper>   
-       )
-       
-      
-      // return <UserLookup sectionName={sectionName} onChange={this.handleTextChange} text={answerValue} />;
+    if (sectionName === 'Proposal Team')
+      return (
+        <SFAnswerValidationWrapper
+          hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+          sfObject={sfObject}
+        >
+          <Autocomplete
+            sectionName={sectionName}
+            onChange={this.handlePropsalChange}
+            text={answerValue}
+          />
+        </SFAnswerValidationWrapper>
+      );
+
+    // return <UserLookup sectionName={sectionName} onChange={this.handleTextChange} text={answerValue} />;
 
     if (
       type === 'picklist' &&
@@ -241,9 +261,11 @@ export class TaskRow extends Component<Props, State> {
 
     switch (type) {
       case 'text':
-        answerValue = !(String(answerValue).trim()) ? '' : String(answerValue).trim();
+        answerValue = !String(answerValue).trim()
+          ? ''
+          : String(answerValue).trim();
         return (
-          <SFAnswerValidationWrapper 
+          <SFAnswerValidationWrapper
             hasDifferentSFanswer={this.props.hasDifferentSFanswer}
             sfObject={sfObject}
           >
@@ -272,14 +294,16 @@ export class TaskRow extends Component<Props, State> {
               sizeAdjustable
               minHeight={40}
             />
-          </SFAnswerValidationWrapper>  
+          </SFAnswerValidationWrapper>
         );
       case 'number':
-        answerValue = !(String(answerValue).trim()) ? '' : String(answerValue).trim();
+        answerValue = !String(answerValue).trim()
+          ? ''
+          : String(answerValue).trim();
         return (
-          <SFAnswerValidationWrapper 
-          hasDifferentSFanswer={this.props.hasDifferentSFanswer}
-          sfObject={sfObject}
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+            sfObject={sfObject}
           >
             <TextArea
               className="proposal-text-area"
@@ -292,9 +316,9 @@ export class TaskRow extends Component<Props, State> {
         );
       case 'y/n':
         return (
-          <SFAnswerValidationWrapper 
-          hasDifferentSFanswer={this.props.hasDifferentSFanswer}
-          sfObject={sfObject}
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+            sfObject={sfObject}
           >
             <Dropdown
               id="dd-proposal-answer"
@@ -307,9 +331,9 @@ export class TaskRow extends Component<Props, State> {
         );
       case 'select':
         return (
-          <SFAnswerValidationWrapper 
-          hasDifferentSFanswer={this.props.hasDifferentSFanswer}
-          sfObject={sfObject}
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+            sfObject={sfObject}
           >
             <Dropdown
               id="dd-proposal-answer"
@@ -318,16 +342,16 @@ export class TaskRow extends Component<Props, State> {
               onClick={this.onClickChange}
               value={answerValue}
             />
-          </SFAnswerValidationWrapper>  
+          </SFAnswerValidationWrapper>
         );
       case 'date':
         return (
-          <SFAnswerValidationWrapper 
-          hasDifferentSFanswer={this.props.hasDifferentSFanswer}
-          sfObject={sfObject}
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+            sfObject={sfObject}
           >
-            <QuestionDatePicker 
-              value={answerValue} 
+            <QuestionDatePicker
+              value={answerValue}
               resetDate={this.resetDate}
               handleDayChange={this.handleDayChange}
             />
@@ -335,9 +359,9 @@ export class TaskRow extends Component<Props, State> {
         );
       case 'picklist':
         return (
-          <SFAnswerValidationWrapper 
-          hasDifferentSFanswer={this.props.hasDifferentSFanswer}
-          sfObject={sfObject}
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+            sfObject={sfObject}
           >
             <Multiselect
               placeholder="Click to answer"

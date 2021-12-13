@@ -60,14 +60,13 @@ switch (environment) {
     break;
   default:
     // DEV Data
-    PROPOSAL_API_ENDPOINT =
-      'https://puo6dvbged.execute-api.us-east-1.amazonaws.com/dev';
+    PROPOSAL_API_ENDPOINT = 'http://localhost:5000';
     PROPOSAL_API_KEY = 'Wctbuly84485ruXf4Bilz1c8xdckxcfk4GA2NvVe';
     NORMAL_AUTH_API_ENDPOINT =
       'https://aiz2k1qjjl.execute-api.us-east-1.amazonaws.com/dev';
     COGNITO_HOST = 'https://unity-dev.auth.us-east-1.amazoncognito.com';
     CLIENT_ID = '5qa83je2aga90r53kte3mori93';
-    REDIRECTION_URL = 'https://dev-unity.iqvia.app/';
+    REDIRECTION_URL = 'http://localhost:8080';
     UBUILD_ARTIFACT = 'https://dev-ubuild.iqvia.app/main.js';
     SF_HOST_URL = 'https://iqvia--crm.lightning.force.com/';
     break;
@@ -121,4 +120,11 @@ const NOTEPAD = {
   NOTEPAD_API_URL
 };
 
-export { AUTH, PROPOSAL, NOTEPAD, UBUILD_ENABLED, UBUILD_ARTIFACT, SF_HOST_URL };
+export {
+  AUTH,
+  PROPOSAL,
+  NOTEPAD,
+  UBUILD_ENABLED,
+  UBUILD_ARTIFACT,
+  SF_HOST_URL
+};

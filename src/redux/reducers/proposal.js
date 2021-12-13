@@ -138,7 +138,7 @@ const onProposalAnswer = (state: Map, action: Object): Map => {
   newState = newState.setIn(
     ['proposalQuestions', indexOfListToUpdate, 'hasDifferentSFanswer'],
     hasDifferentSFanswer
-  )
+  );
 
   const proposalQuestions = newState.get('proposalQuestions');
 
