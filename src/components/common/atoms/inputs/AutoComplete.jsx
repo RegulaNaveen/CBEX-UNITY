@@ -5,7 +5,7 @@ import { getLookupUsers } from '../../../../redux/selectors';
 
 function extractEmails (str){
     let result =  String(str).match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi);
-    return result.length ? result[0] : '' 
+    return result && result.length ? result[0] : '' 
 }
 
 const Autocomplete = (props) => {
