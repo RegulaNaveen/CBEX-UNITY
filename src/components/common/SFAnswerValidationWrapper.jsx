@@ -27,7 +27,6 @@ class SFAnswerValidationWrapper extends Component {
 
   render() {
     const { hasDifferentSFanswer } = this.props;
-    console.log(this.getLink());
     return (
       <div
         className={`wrap-with-validation ${
