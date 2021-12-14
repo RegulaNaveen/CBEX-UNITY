@@ -6,12 +6,16 @@ import { connect } from 'react-redux';
 import { isObject, isEqual, isEmpty } from 'lodash';
 import TextField from 'apollo-react/components/TextField';
 import { Checkmark } from '../svg';
+import { Edit } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
 import TextArea from './atoms/inputs/TextArea';
 import UserLookup from './atoms/inputs/UserLookup';
 import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
-import { setProposalAnswerData } from '../../redux/actions/proposal-actions';
+import {
+  setProposalAnswerData,
+  setEditQuestionData
+} from '../../redux/actions/proposal-actions';
 import { getUserData, getProposalDetails } from '../../redux/selectors';
 import MatomoHOC from '../HOC/MatomoHOC';
 import { getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
@@ -20,7 +24,7 @@ import removeSpecialChars from '../../utils/pasteUtils';
 import Autocomplete from './atoms/inputs/AutoComplete';
 
 import DatePicker from 'apollo-react/components/DatePickerV2';
-import moment from 'moment'
+import moment from 'moment';
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
 // import DatePicker from './atoms/inputs/DatePicker';
 
@@ -44,7 +48,9 @@ type Props = {
   sfObject: string,
   sfField: string,
   milestone: any,
-  ismilestoneavailable: string
+  ismilestoneavailable: string,
+  setEditQuestionData: (data: Object) => void,
+  roleNames: Array<string>
 };
 
 export class TaskRow extends Component<Props, State> {
@@ -83,11 +89,22 @@ export class TaskRow extends Component<Props, State> {
 
   handleTextChange = (textValue: string, lastAnswer: string) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
-    let s1 = textValue.trim().split(' ').filter(v=>v.trim().length > 0);
-    let s2 = lastAnswer.trim().split(' ').filter(v=>v.trim().length > 0);
+    let s1 = textValue
+      .trim()
+      .split(' ')
+      .filter(v => v.trim().length > 0);
+    let s2 = lastAnswer
+      .trim()
+      .split(' ')
+      .filter(v => v.trim().length > 0);
     if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
       if (s1.length !== s2.length || s1.join(' ').trim() != s2.join(' ').trim())
-        setProposalAnswer(proposalId, questionId, String(textValue).trim(), userData);
+        setProposalAnswer(
+          proposalId,
+          questionId,
+          String(textValue).trim(),
+          userData
+        );
     } else if (!textValue.trim() && lastAnswer.trim()) {
       setProposalAnswer(proposalId, questionId, ' ', userData);
     }
@@ -192,10 +209,15 @@ export class TaskRow extends Component<Props, State> {
   resetDate = () => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
     this.setState({ selectedDay: ' ' }, () => {
-      setProposalAnswer(proposalId, questionId, this.state.selectedDay, userData);
+      setProposalAnswer(
+        proposalId,
+        questionId,
+        this.state.selectedDay,
+        userData
+      );
       this.trackMatomoEventSubmitAnswer(' ');
-    })
-   }
+    });
+  };
 
   renderAnswer = (
     type: string,
@@ -219,9 +241,15 @@ export class TaskRow extends Component<Props, State> {
       else answerValue = answer.toString();
     }
 
-    if (sectionName === 'Proposal Team') 
-       return <Autocomplete sectionName={sectionName} onChange={this.handlePropsalChange} text={answerValue}/>
-      // return <UserLookup sectionName={sectionName} onChange={this.handleTextChange} text={answerValue} />;
+    if (sectionName === 'Proposal Team')
+      return (
+        <Autocomplete
+          sectionName={sectionName}
+          onChange={this.handlePropsalChange}
+          text={answerValue}
+        />
+      );
+    // return <UserLookup sectionName={sectionName} onChange={this.handleTextChange} text={answerValue} />;
 
     if (
       type === 'picklist' &&
@@ -235,7 +263,9 @@ export class TaskRow extends Component<Props, State> {
 
     switch (type) {
       case 'text':
-        answerValue = !(String(answerValue).trim()) ? '' : String(answerValue).trim();
+        answerValue = !String(answerValue).trim()
+          ? ''
+          : String(answerValue).trim();
         return (
           <TextField
             className="proposal-text-area"
@@ -264,7 +294,9 @@ export class TaskRow extends Component<Props, State> {
           />
         );
       case 'number':
-        answerValue = !(String(answerValue).trim()) ? '' : String(answerValue).trim();
+        answerValue = !String(answerValue).trim()
+          ? ''
+          : String(answerValue).trim();
         return (
           <TextArea
             className="proposal-text-area"
@@ -296,8 +328,8 @@ export class TaskRow extends Component<Props, State> {
         );
       case 'date':
         return (
-          <QuestionDatePicker 
-            value={answerValue} 
+          <QuestionDatePicker
+            value={answerValue}
             resetDate={this.resetDate}
             handleDayChange={this.handleDayChange}
           />
@@ -340,7 +372,10 @@ export class TaskRow extends Component<Props, State> {
       questionText,
       answerConfiguration,
       milestone,
-      ismilestoneavailable
+      ismilestoneavailable,
+      sectionName,
+      roleNames,
+      setEditQuestionData
     } = this.props;
     const questionId = answers.get('questionId');
     let lastAnswer;
@@ -353,7 +388,22 @@ export class TaskRow extends Component<Props, State> {
       <div className="task-table-row">
         <div className="question-text">
           {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
-          <p>{questionText}</p>
+          <p>
+            {questionText}
+            <span
+              onClick={() => {
+                setEditQuestionData({
+                  questionText,
+                  section: sectionName,
+                  answerType: answerConfiguration.get('type'),
+                  roleNames,
+                  questionAnswered: lastAnswer ? true : false
+                });
+              }}
+            >
+              <Edit className="edit-icon" />
+            </span>
+          </p>
         </div>
 
         <div>
@@ -382,5 +432,6 @@ const mapStateToProps = (state: Object) => ({
 });
 
 export default connect(mapStateToProps, {
-  setProposalAnswer: setProposalAnswerData
+  setProposalAnswer: setProposalAnswerData,
+  setEditQuestionData
 })(MatomoHOC(TaskRow));

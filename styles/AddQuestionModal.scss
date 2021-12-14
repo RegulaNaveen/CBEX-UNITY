@@ -30,6 +30,44 @@
   border-radius: 4px;
   background-color: $white;
   box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.16);
+
+  .modal-wrapper-footer {
+    display: flex;
+    flex-direction: row;
+
+    .modal-footer-content {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+
+      .modal-footer-left {
+        .delete-button {
+          padding-left: 10px;
+          padding-right: 10px;
+          background-color: #fff;
+          border: 1px solid#e3e3e3;
+          color: #297dfd;
+          font-family: 'ProximaNova-Regular';
+          font-size: 16px;
+          font-weight: 500;
+
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+
+          .trash-icon {
+            position: relative;
+            top: 2px;
+            color: #297dfd;
+          }
+        }
+      }
+      .modal-footer-right {
+        display: flex;
+      }
+    }
+  }
 }
 
 .add-question-modal-dialog-blur {
@@ -40,7 +78,6 @@
   opacity: 0.66;
   background-size: cover;
 }
-
 
 .modal-content {
   display: flex;
@@ -123,7 +160,7 @@
   border: 1px solid $neutral4;
   border-radius: 4px;
   background-color: $white;
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);
   outline: none;
   font-family: $proximaNova;
   padding: 8px;
@@ -140,7 +177,7 @@
   border: 1px solid $neutral4;
   border-radius: 4px;
   background-color: $white;
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);
   outline: none;
   font-family: $proximaNova;
   padding: 8px;
@@ -157,7 +194,7 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  
+
   &-title {
     font-family: $proximaNova;
     margin-top: 50px;

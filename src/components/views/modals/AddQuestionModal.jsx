@@ -22,7 +22,8 @@ import {
   isAnswerTypesInfoLoading,
   isRolesInfoLoading,
   getProposalDetails,
-  getIsOpen
+  getIsOpen,
+  getEditQuestionData
 } from '../../../redux/selectors';
 import {
   selectSectionNames,
@@ -31,9 +32,11 @@ import {
 import {
   getAnswerTypesInfo,
   getRolesInfo,
-  setProposalQuestion
+  setProposalQuestion,
+  setEditQuestionData
 } from '../../../redux/actions/proposal-actions';
 import MatomoHOC from '../../HOC/MatomoHOC';
+import Trash from 'apollo-react-icons/Trash';
 
 type Props = {
   match: Match,
@@ -53,7 +56,9 @@ type Props = {
   proposalDetail: any,
   sectionsOrderInfo: Map,
   sectionNames: Array<string>,
-  isSidebarOpen: boolean
+  isSidebarOpen: boolean,
+  setEditQuestionData: (data: Object) => void,
+  editQuestionsData: Map
 };
 
 type State = {
@@ -78,9 +83,29 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    const { getAnswerTypesDataF, getRolesInfoF } = this.props;
+    const {
+      getAnswerTypesDataF,
+      getRolesInfoF,
+      editQuestionsData
+    } = this.props;
     getAnswerTypesDataF();
     getRolesInfoF();
+    // on Edit Mode
+    if (editQuestionsData.size > 0) {
+      this.setState({
+        questionText: editQuestionsData.get('questionText'),
+        section: editQuestionsData.get('section'),
+        answerType: editQuestionsData.get('answerType'),
+        roleNames: editQuestionsData.get('roleNames').toJS()
+      });
+    }
+  }
+  componentWillUnmount() {
+    const { setEditQuestionData, editQuestionsData } = this.props;
+    // clear Data on Edit mode
+    if (editQuestionsData.size > 0) {
+      setEditQuestionData({});
+    }
   }
 
   handleTextChange = (value: string) => {
@@ -256,7 +281,10 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     isLoading: boolean,
     selectedValue: String
   ) => {
-    if(rolesList) rolesList = rolesList.sort();
+    if (rolesList) rolesList = rolesList.sort();
+    const { editQuestionsData } = this.props;
+    const { questionText, section, answerType, roleNames } = this.state;
+    const isEditMode = editQuestionsData.size > 0 || false;
     if (!isLoading) {
       return (
         <div className="modal-content">
@@ -280,6 +308,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 className="modal-text-area"
                 placeholder="Question text"
                 title="Enter Question Text"
+                value={isEditMode && questionText}
                 type="text"
                 error={this.state.error.filter(v => v.questiontext)}
                 onChange={e => this.handleTextChange(e)}
@@ -292,8 +321,10 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                   placeholder="Select"
                   items={answerTypesList}
                   title="Answer Type"
+                  selectedValue={isEditMode && answerType}
                   error={this.state.error.filter(v => v.answerType)}
                   onClick={this.onAnswerTypeChange}
+                  disabled={editQuestionsData.get('questionAnswered')}
                 />
               </div>
             </div>
@@ -302,7 +333,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 id="dd-team-member"
                 placeholder="Select"
                 items={sectionNames}
-                selectedValue={selectedValue}
+                selectedValue={isEditMode ? section : selectedValue}
                 title="Section"
                 error={this.state.error.filter(v => v.section)}
                 onClick={this.onQuestionSectionChange}
@@ -314,32 +345,52 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 placeholder="Select"
                 items={rolesList}
                 title="Which team member roles will answer"
+                value={isEditMode && roleNames}
                 error={this.state.error.filter(v => v.roleNames)}
                 onClick={this.onRoleChange}
               />
             </div>
           </div>
           <div className="modal-wrapper-footer">
-            <div className="modal-button-cancel">
-              <PrimaryButton
-                className="close-button"
-                id="cancel-button"
-                onClick={() => {
-                  this.setState({ error: [] });
-                  onClose();
-                }}
-              >
-                Cancel
-              </PrimaryButton>
-            </div>
-            <div className="modal-button-okay">
-              <PrimaryButton
-                className="okay-button"
-                id="okay-button"
-                onClick={this.onSave}
-              >
-                Okay
-              </PrimaryButton>
+            <div className="modal-footer-content">
+              <div className="modal-footer-left">
+                {isEditMode && (
+                  <div className="modal-button-delete">
+                    <PrimaryButton
+                      className="delete-button"
+                      id="delete-button"
+                      onClick={() => console.log('clicked')}
+                      disabled={editQuestionsData.get('questionAnswered')}
+                    >
+                      <Trash className="trash-icon" fontSize="extraSmall" />{' '}
+                      Delete
+                    </PrimaryButton>
+                  </div>
+                )}
+              </div>
+              <div className="modal-footer-right">
+                <div className="modal-button-cancel">
+                  <PrimaryButton
+                    className="close-button"
+                    id="cancel-button"
+                    onClick={() => {
+                      this.setState({ error: [] });
+                      onClose();
+                    }}
+                  >
+                    Cancel
+                  </PrimaryButton>
+                </div>
+                <div className="modal-button-okay">
+                  <PrimaryButton
+                    className="okay-button"
+                    id="okay-button"
+                    onClick={this.onSave}
+                  >
+                    Okay
+                  </PrimaryButton>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -442,7 +493,8 @@ const mapStateToProps = (state: Map) => {
     proposalDetail,
     sectionNames,
     sectionsOrderInfo,
-    isSidebarOpen
+    isSidebarOpen,
+    editQuestionsData: getEditQuestionData(state)
   };
 };
 
@@ -451,6 +503,7 @@ export default compose(
   connect(mapStateToProps, {
     getAnswerTypesDataF: getAnswerTypesInfo,
     getRolesInfoF: getRolesInfo,
-    setProposalQuestionF: setProposalQuestion
+    setProposalQuestionF: setProposalQuestion,
+    setEditQuestionData
   })
 )(MatomoHOC(AddQuestionModal));
