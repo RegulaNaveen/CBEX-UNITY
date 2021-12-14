@@ -24,7 +24,7 @@ const Autocomplete = (props) => {
     };
     const UserNameByEmail = {};
     const proposalusers = props?.users?.map(v=>{
-        UserNameByEmail[v.email] = v.name;
+        UserNameByEmail[v.email] = v.name.split(",").join(" ");
         return { label: v.name.split(",").join(" "), email: v.email}
     });
     useEffect(() => {
