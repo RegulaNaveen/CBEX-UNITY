@@ -5,6 +5,8 @@ import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { isObject, isEqual, isEmpty } from 'lodash';
 import TextField from 'apollo-react/components/TextField';
+import DatePicker from 'apollo-react/components/DatePickerV2';
+import moment from 'moment';
 import { Checkmark } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
 import TextArea from './atoms/inputs/TextArea';
@@ -19,8 +21,6 @@ import ChipView from './Chip/ChipView';
 import removeSpecialChars from '../../utils/pasteUtils';
 import Autocomplete from './atoms/inputs/AutoComplete';
 
-import DatePicker from 'apollo-react/components/DatePickerV2';
-import moment from 'moment'
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
 // import DatePicker from './atoms/inputs/DatePicker';
 
@@ -85,11 +85,22 @@ export class TaskRow extends Component<Props, State> {
 
   handleTextChange = (textValue: string, lastAnswer: string) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
-    let s1 = textValue.trim().split(' ').filter(v=>v.trim().length > 0);
-    let s2 = lastAnswer.trim().split(' ').filter(v=>v.trim().length > 0);
+    const s1 = textValue
+      .trim()
+      .split(' ')
+      .filter(v => v.trim().length > 0);
+    const s2 = lastAnswer
+      .trim()
+      .split(' ')
+      .filter(v => v.trim().length > 0);
     if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
       if (s1.length !== s2.length || s1.join(' ').trim() != s2.join(' ').trim())
-        setProposalAnswer(proposalId, questionId, String(textValue).trim(), userData);
+        setProposalAnswer(
+          proposalId,
+          questionId,
+          String(textValue).trim(),
+          userData
+        );
     } else if (!textValue.trim() && lastAnswer.trim()) {
       setProposalAnswer(proposalId, questionId, ' ', userData);
     }
@@ -139,12 +150,14 @@ export class TaskRow extends Component<Props, State> {
     this.trackMatomoEventAnswerHistory();
   };
 
-  onChildInputFocus = (event)=>{
+  onChildInputFocus = event => {
     this.setSelectRow(true);
-  }
-  setSelectRow = (value)=>{
+  };
+
+  setSelectRow = value => {
     this.setState({ selectedRow: value });
-  }
+  };
+
   trackMatomoEventSubmitAnswer = data => {
     const {
       eventCategories,
@@ -202,10 +215,15 @@ export class TaskRow extends Component<Props, State> {
   resetDate = () => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
     this.setState({ selectedDay: ' ' }, () => {
-      setProposalAnswer(proposalId, questionId, this.state.selectedDay, userData);
+      setProposalAnswer(
+        proposalId,
+        questionId,
+        this.state.selectedDay,
+        userData
+      );
       this.trackMatomoEventSubmitAnswer(' ');
-    })
-   }
+    });
+  };
 
   renderAnswer = (
     type: string,
@@ -229,10 +247,17 @@ export class TaskRow extends Component<Props, State> {
       else answerValue = answer.toString();
     }
 
-    if (sectionName === 'Proposal Team') 
-       return <Autocomplete sectionName={sectionName}  onFocus={e=> this.setSelectRow(true)}
-       onBlur={e=> this.setSelectRow(false)} onChange={this.handlePropsalChange} text={answerValue}/>
-      // return <UserLookup sectionName={sectionName} onChange={this.handleTextChange} text={answerValue} />;
+    if (sectionName === 'Proposal Team')
+      return (
+        <Autocomplete
+          sectionName={sectionName}
+          onFocus={e => this.setSelectRow(true)}
+          onBlur={e => this.setSelectRow(false)}
+          onChange={this.handlePropsalChange}
+          text={answerValue}
+        />
+      );
+    // return <UserLookup sectionName={sectionName} onChange={this.handleTextChange} text={answerValue} />;
 
     if (
       type === 'picklist' &&
@@ -246,7 +271,9 @@ export class TaskRow extends Component<Props, State> {
 
     switch (type) {
       case 'text':
-        answerValue = !(String(answerValue).trim()) ? '' : String(answerValue).trim();
+        answerValue = !String(answerValue).trim()
+          ? ''
+          : String(answerValue).trim();
         return (
           <TextField
             className="proposal-text-area"
@@ -272,18 +299,20 @@ export class TaskRow extends Component<Props, State> {
             defaultValue={answerValue}
             sizeAdjustable
             minHeight={40}
-            onFocus={e=> this.onChildInputFocus(e)}
+            onFocus={e => this.onChildInputFocus(e)}
           />
         );
       case 'number':
-        answerValue = !(String(answerValue).trim()) ? '' : String(answerValue).trim();
+        answerValue = !String(answerValue).trim()
+          ? ''
+          : String(answerValue).trim();
         return (
           <TextArea
             className="proposal-text-area"
             placeholder="Click to answer"
             type="number"
             onBlur={this.handleTextChange}
-            onFocus={e=> this.onChildInputFocus(e)}
+            onFocus={e => this.onChildInputFocus(e)}
             value={answerValue}
           />
         );
@@ -311,12 +340,12 @@ export class TaskRow extends Component<Props, State> {
         );
       case 'date':
         return (
-          <QuestionDatePicker 
-            value={answerValue} 
+          <QuestionDatePicker
+            value={answerValue}
             resetDate={this.resetDate}
             handleDayChange={this.handleDayChange}
-            onFocus={e=> this.setSelectRow(true)}
-            onBlur={e=> this.setSelectRow(false)}
+            onFocus={e => this.setSelectRow(true)}
+            onBlur={e => this.setSelectRow(false)}
           />
         );
       case 'picklist':
@@ -368,7 +397,11 @@ export class TaskRow extends Component<Props, State> {
 
     if (lastAnswer) answerDate = parseMomentDate(lastAnswer.get('date'));
     return (
-      <div className={`task-table-row${this.state.selectedRow ? ' selected-task-table-row' : ''}`}>
+      <div
+        className={`task-table-row${
+          this.state.selectedRow ? ' selected-task-table-row' : ''
+        }`}
+      >
         <div className="question-text">
           {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
           <p>{questionText}</p>

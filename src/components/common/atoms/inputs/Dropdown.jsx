@@ -58,21 +58,18 @@ class Dropdown extends PureComponent<Props, State> {
   }
 
   closeOnOutsideClick = (event: SyntheticEvent<EventTarget>) => {
-    
     const { setSelectRow } = this.props;
-    if (this.ref.current !== event.target){
+    if (this.ref.current !== event.target) {
       this.setState({ isCollapsed: false });
-      setSelectRow(false);  
+      setSelectRow(false);
     }
-      
   };
 
   handleCollapse = () => {
     const { isCollapsed } = this.state;
     const { setSelectRow } = this.props;
     this.setState({ isCollapsed: !isCollapsed });
-    if(setSelectRow)
-    setSelectRow(!isCollapsed);
+    if (setSelectRow) setSelectRow(!isCollapsed);
   };
 
   handleClick = (event: SyntheticEvent<EventTarget>, value: string) => {

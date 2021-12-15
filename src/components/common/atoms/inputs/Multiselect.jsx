@@ -67,10 +67,10 @@ class Multiselect extends PureComponent<Props, State> {
 
   handleOutsideClick = (event: SyntheticEvent<EventTarget>) => {
     const { setSelectRow } = this.props;
-    if (this.ref.current !== event.target){
+    if (this.ref.current !== event.target) {
       this.setState({ isCollapsed: false });
-      setSelectRow(false);  
-    } 
+      setSelectRow(false);
+    }
   };
 
   handleCollapse = () => {
@@ -79,8 +79,7 @@ class Multiselect extends PureComponent<Props, State> {
 
     this.setState({ isCollapsed: !isCollapsed });
 
-    if(setSelectRow)
-     setSelectRow(!isCollapsed);  
+    if (setSelectRow) setSelectRow(!isCollapsed);
   };
 
   onSelect = (event: SyntheticEvent<EventTarget>, value: string) => {
