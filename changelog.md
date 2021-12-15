@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+
+## [3.4] - YYYY-MM-DD
+### Added
+  - IQVIACBEXU-932: General focus for questions
+### Changed
+### Fixed
+
 ## [3.2] - YYYY-MM-DD
 ### Added
   - IQVIACBEXU-813: Date field type issues
@@ -17,6 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-935: Striking is not happening in date field history, once edited the date manually
   - IQVIACBEXU-899: Text input Spacing issue in 'Add new question' 
   - IQVIACBEXU-898: 'Click to answer' placeholder disappears after deleting the answer. 
+
 ## [3.1] - YYYY-MM-DD
  
 ### Added
