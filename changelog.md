@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.2] - YYYY-MM-DD
+### Added
+  - IQVIACBEXU-813: Date field type issues
+  - IQVIACBEXU-412: Multiple Individuals assigned against the proposal team questions
+### Changed
+### Fixed
+  - IQVIACBEXU-805: Custom Questions: Roles need to be sorted by alphabetical order
+  - IQVIACBEXU-887: Text box field value is not getting removed/saved after editing.
+  - IQVIACBEXU-889: In history replaced text in textbox is displaying in collapsed state.
+  - IQVIACBEXU-933: Spacing and multiple API calls issue in textbox area
+  - IQVIACBEXU-935: Striking is not happening in date field history, once edited the date manually
+  - IQVIACBEXU-899: Text input Spacing issue in 'Add new question' 
+  - IQVIACBEXU-898: 'Click to answer' placeholder disappears after deleting the answer. 
 ## [3.1] - YYYY-MM-DD
  
 ### Added
@@ -72,3 +85,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 [2.4]: https://gitlabrnds.quintiles.com/cbex/unity/unity-app-frontend/-/tags/v2.4
 [3.0]: https://gitlabrnds.quintiles.com/cbex/unity/unity-app-frontend/-/tags/v3.0
 [3.1]: https://gitlabrnds.quintiles.com/cbex/unity/unity-app-frontend/-/tags/v3.1
+[3.2]: https://gitlabrnds.quintiles.com/cbex/unity/unity-app-frontend/-/tags/v3.2
