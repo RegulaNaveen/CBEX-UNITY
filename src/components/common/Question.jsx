@@ -25,7 +25,8 @@ import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
 // import DatePicker from './atoms/inputs/DatePicker';
 
 type State = {
-  selectedDay: string
+  selectedDay: string,
+  selectedRow: Boolean
 };
 
 type Props = {
@@ -52,7 +53,8 @@ export class TaskRow extends Component<Props, State> {
     super(props);
 
     this.state = {
-      selectedDay: ''
+      selectedDay: '',
+      selectedRow: false
     };
   }
 
@@ -93,6 +95,7 @@ export class TaskRow extends Component<Props, State> {
     }
 
     this.trackMatomoEventSubmitAnswer(textValue);
+    this.setSelectRow(false);
   };
 
   onClickChange = (selectedValue: string, lastAnswer: string) => {
@@ -101,6 +104,7 @@ export class TaskRow extends Component<Props, State> {
     if (lastAnswer !== selectedValue)
       setProposalAnswer(proposalId, questionId, selectedValue, userData);
 
+    this.setSelectRow(false);
     this.trackMatomoEventSubmitAnswer(selectedValue);
   };
 
@@ -135,6 +139,12 @@ export class TaskRow extends Component<Props, State> {
     this.trackMatomoEventAnswerHistory();
   };
 
+  onChildInputFocus = (event)=>{
+    this.setSelectRow(true);
+  }
+  setSelectRow = (value)=>{
+    this.setState({ selectedRow: value });
+  }
   trackMatomoEventSubmitAnswer = data => {
     const {
       eventCategories,
@@ -220,7 +230,8 @@ export class TaskRow extends Component<Props, State> {
     }
 
     if (sectionName === 'Proposal Team') 
-       return <Autocomplete sectionName={sectionName} onChange={this.handlePropsalChange} text={answerValue}/>
+       return <Autocomplete sectionName={sectionName}  onFocus={e=> this.setSelectRow(true)}
+       onBlur={e=> this.setSelectRow(false)} onChange={this.handlePropsalChange} text={answerValue}/>
       // return <UserLookup sectionName={sectionName} onChange={this.handleTextChange} text={answerValue} />;
 
     if (
@@ -261,6 +272,7 @@ export class TaskRow extends Component<Props, State> {
             defaultValue={answerValue}
             sizeAdjustable
             minHeight={40}
+            onFocus={e=> this.onChildInputFocus(e)}
           />
         );
       case 'number':
@@ -271,6 +283,7 @@ export class TaskRow extends Component<Props, State> {
             placeholder="Click to answer"
             type="number"
             onBlur={this.handleTextChange}
+            onFocus={e=> this.onChildInputFocus(e)}
             value={answerValue}
           />
         );
@@ -282,6 +295,7 @@ export class TaskRow extends Component<Props, State> {
             items={optionsYN}
             onClick={this.onClickChange}
             value={answerValue}
+            setSelectRow={this.setSelectRow}
           />
         );
       case 'select':
@@ -292,6 +306,7 @@ export class TaskRow extends Component<Props, State> {
             items={finalOptions}
             onClick={this.onClickChange}
             value={answerValue}
+            setSelectRow={this.setSelectRow}
           />
         );
       case 'date':
@@ -300,6 +315,8 @@ export class TaskRow extends Component<Props, State> {
             value={answerValue} 
             resetDate={this.resetDate}
             handleDayChange={this.handleDayChange}
+            onFocus={e=> this.setSelectRow(true)}
+            onBlur={e=> this.setSelectRow(false)}
           />
         );
       case 'picklist':
@@ -309,6 +326,7 @@ export class TaskRow extends Component<Props, State> {
             items={finalOptions}
             onClick={this.onSelectValues}
             value={answerValueComplex}
+            setSelectRow={this.setSelectRow}
           />
         );
       default:
@@ -350,7 +368,7 @@ export class TaskRow extends Component<Props, State> {
 
     if (lastAnswer) answerDate = parseMomentDate(lastAnswer.get('date'));
     return (
-      <div className="task-table-row">
+      <div className={`task-table-row${this.state.selectedRow ? ' selected-task-table-row' : ''}`}>
         <div className="question-text">
           {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
           <p>{questionText}</p>

@@ -42,6 +42,8 @@ const Autocomplete = (props) => {
             <AutocompleteV2
                 fullWidth
                 multiple
+                onFocus={e=>{props.onFocus()}}
+                onBlur={e=>{props.onBlur()}}
                 source={proposalusers || []}
                 value={value}
                 chipColor="white"
