@@ -7,6 +7,9 @@
   overflow: auto;
   width: 100%;
   height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   @media (min-width: 1200px) {
     &.sidebar-open {
@@ -21,8 +24,8 @@
   left: 50%;
   width: 603px;
   max-width: 100%;
-  max-height: 100%;
-  transform: translate(-50%, -50%) !important;
+  // max-height: 100%;
+  transform: translate(-50%, -50%);
   z-index: 99;
   padding: 24px;
   box-sizing: border-box;

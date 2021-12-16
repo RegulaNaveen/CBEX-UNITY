@@ -96,6 +96,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     } = this.props;
     getAnswerTypesDataF();
     getRolesInfoF();
+
+    this.calculateHeight();
     // on Edit Mode
     if (editQuestionsData.size > 0) {
       this.setState({
@@ -106,6 +108,26 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       });
     }
   }
+
+  componentDidUpdate() {
+    this.calculateHeight();
+  }
+
+  // calculate modal window position
+  calculateHeight = () => {
+    const modalWrapperElem = document.getElementsByClassName(
+      'add-question-modal-dialog-wrapper'
+    )[0];
+
+    let wrapperTop = modalWrapperElem.getBoundingClientRect().top || null;
+
+    if (wrapperTop < 0) {
+      modalWrapperElem.style.transform = 'none';
+      modalWrapperElem.style.left = 'auto';
+      modalWrapperElem.style.top = 0;
+    }
+  };
+
   componentWillUnmount() {
     const { setEditQuestionData, editQuestionsData } = this.props;
     // clear Data on Edit mode
