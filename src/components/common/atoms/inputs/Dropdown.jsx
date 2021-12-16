@@ -115,7 +115,7 @@ class Dropdown extends PureComponent<Props, State> {
               }
               ref={this.ref}
               role="presentation"
-              onClick={!disabled && this.handleCollapse}
+              onClick={!disabled ? this.handleCollapse : undefined}
             >
               {selectedValue || value ? (
                 <p className="dd-header-selected">{selectedValue || value}</p>

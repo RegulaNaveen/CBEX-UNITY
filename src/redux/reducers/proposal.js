@@ -35,7 +35,9 @@ const {
   RESET_QUESTIONS_FILTER,
   CLEAR_QUESTIONS_FILTER,
   EXPAND_ALL_SECTIONS,
-  SET_EDIT_QUESTION_DATA
+  SET_EDIT_QUESTION_DATA,
+  PROPOSAL_EDIT_QUESTION,
+  PROPOSAL_DELETE_QUESTION
 } = REDUX_TYPES.PROPOSAL;
 
 const INITIAL_STATE: Map = fromJS({
@@ -325,6 +327,44 @@ const onSetEditQuestionData = (state, action) => {
   return state.set('editQuestionsData', fromJS(action.payload));
 };
 
+const onEditQuestion = (state, action) => {
+  const { payload: data } = action;
+  const questions = state.get('proposalQuestions');
+  const questionIndex = questions.findIndex(
+    item => item.questionId === data.questionId
+  );
+
+  const updatedQuestions = [
+    ...questions.slice(0, questionIndex),
+    data,
+    ...questions.slice(questionIndex + 1, questions.length)
+  ];
+
+  return state
+    .set('proposalQuestions', cloneDeep(updatedQuestions))
+    .set('setQuestionData', data)
+    .set('isSetQuestionLoading', false);
+};
+
+const onDeleteQuestion = (state, action) => {
+  const { payload: questionId } = action;
+  const questions = state.get('proposalQuestions');
+
+  const questionIndex = questions.findIndex(
+    item => item.questionId === questionId
+  );
+
+  const updatedQuestions = [
+    ...questions.slice(0, questionIndex),
+    ...questions.slice(questionIndex + 1, questions.length)
+  ];
+
+  return state
+    .set('proposalQuestions', cloneDeep(updatedQuestions))
+    .set('setQuestionData', questionId)
+    .set('isSetQuestionLoading', false);
+};
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
@@ -356,7 +396,9 @@ const actionMap = {
   [RESET_QUESTIONS_FILTER]: resetQuestionsFilter,
   [CLEAR_QUESTIONS_FILTER]: clearQuestionsFilter,
   [EXPAND_ALL_SECTIONS]: onExpandAllSections,
-  [SET_EDIT_QUESTION_DATA]: onSetEditQuestionData
+  [SET_EDIT_QUESTION_DATA]: onSetEditQuestionData,
+  [PROPOSAL_EDIT_QUESTION]: onEditQuestion,
+  [PROPOSAL_DELETE_QUESTION]: onDeleteQuestion
 };
 
 export default function(

@@ -50,7 +50,8 @@ type Props = {
   milestone: any,
   ismilestoneavailable: string,
   setEditQuestionData: (data: Object) => void,
-  roleNames: Array<string>
+  roleNames: Array<string>,
+  isCustomQuestion: boolean
 };
 
 export class TaskRow extends Component<Props, State> {
@@ -375,7 +376,9 @@ export class TaskRow extends Component<Props, State> {
       ismilestoneavailable,
       sectionName,
       roleNames,
-      setEditQuestionData
+      setEditQuestionData,
+      isCustomQuestion,
+      questionId: qId
     } = this.props;
     const questionId = answers.get('questionId');
     let lastAnswer;
@@ -390,19 +393,22 @@ export class TaskRow extends Component<Props, State> {
           {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
           <p>
             {questionText}
-            <span
-              onClick={() => {
-                setEditQuestionData({
-                  questionText,
-                  section: sectionName,
-                  answerType: answerConfiguration.get('type'),
-                  roleNames,
-                  questionAnswered: lastAnswer ? true : false
-                });
-              }}
-            >
-              <Edit className="edit-icon" />
-            </span>
+            {isCustomQuestion && (
+              <span
+                onClick={() => {
+                  setEditQuestionData({
+                    questionText,
+                    section: sectionName,
+                    answerType: answerConfiguration.get('type'),
+                    roleNames,
+                    questionAnswered: lastAnswer ? true : false,
+                    questionId: qId
+                  });
+                }}
+              >
+                <Edit className="edit-icon" />
+              </span>
+            )}
           </p>
         </div>
 

@@ -138,3 +138,44 @@ export const getValidatedProposalData = (id: string): Promise<Object> => {
     headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
   });
 };
+
+export const editProposalQuestionData = async (
+  proposalId: string,
+  questionId: string,
+  questionData: Object
+): Promise<Object> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .put(
+        `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}/update`,
+        questionData,
+        {
+          headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+        }
+      )
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};
+
+export const deleteProposalQuestionData = async (
+  proposalId: string,
+  questionId: string
+): Promise<Object> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .delete(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`, {
+        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};
