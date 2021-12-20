@@ -54,7 +54,7 @@ switch (environment) {
     NORMAL_AUTH_API_ENDPOINT =
      'https://cokteh9f4e.execute-api.us-east-1.amazonaws.com/qa';
     COGNITO_HOST = 'https://qa-unity.auth.us-east-1.amazoncognito.com';
-    CLIENT_ID = '320kror6f2kqgifio04mfiveat';
+    CLIENT_ID = '65ie0siehm65hisi4n1avlaa0r';
     REDIRECTION_URL = 'https://qa-unity.iqvia.app/';
     UBUILD_ARTIFACT = 'https://qa-ubuild.iqvia.app/main.js';
     break;
