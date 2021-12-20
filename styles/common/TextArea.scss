@@ -98,8 +98,13 @@
   }
 }
 .hasDifferentSFanswer{
-  textarea, input, .dd-header, .multiselect-header {
+  textarea, input, .dd-header, .multiselect-header, .a-MuiAutocomplete-root {
    border: 2px solid #e20000!important;
+  }
+  .a-MuiAutocomplete-root {
+    input{
+      border: none !important;
+    }
   }
   .alert-sf-diff{
     padding-left: 30px;
