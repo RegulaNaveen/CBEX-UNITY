@@ -12,7 +12,7 @@ const {
 } = API.PROPOSAL;
 
 let onGoingAnswer;
-const CancelToken = axios.CancelToken;
+const { CancelToken } = axios;
 
 export const getProposalInfo = async (id: string): Promise<Object> => {
   return new Promise((resolve, reject) => {
@@ -36,23 +36,26 @@ export const setProposalAnswer = async (
   answer: string,
   userData: Object
 ): Promise<Object> => {
-  
-  if(onGoingAnswer)
-    onGoingAnswer()
-    
-  return axios.put(
-    `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`,
-    { answer, userData },
-    {
-      headers: {
-        'x-api-key': `${API_KEY}`,
-        'x-access-token': `${getAccessToken()}`
-      },
-      cancelToken:  new CancelToken(function executor(c) {
-        onGoingAnswer = c;
-      })
-    }
-  ).then((res)=> {  onGoingAnswer = null; return res;});
+  if (onGoingAnswer) onGoingAnswer();
+
+  return axios
+    .put(
+      `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`,
+      { answer, userData },
+      {
+        headers: {
+          'x-api-key': `${API_KEY}`,
+          'x-access-token': `${getAccessToken()}`
+        },
+        cancelToken: new CancelToken(function executor(c) {
+          onGoingAnswer = c;
+        })
+      }
+    )
+    .then(res => {
+      onGoingAnswer = null;
+      return res;
+    });
 };
 
 export const getQuestionSectionInfo = async (): Promise<Object> => {
