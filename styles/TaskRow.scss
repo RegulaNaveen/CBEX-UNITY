@@ -2,6 +2,8 @@
   display: grid;
   grid-template-columns: 1.3fr 1.3fr 0.4fr;
   margin-bottom: 15px;
+  padding: 10px 0;
+  align-items: center;
 
   .question-text {
     display: grid;
@@ -36,4 +38,7 @@
   .date-picker > div > div {
     margin-top: 0px;
   }
+}
+.selected-task-table-row{
+  background-color: #ecf3ff;
 }

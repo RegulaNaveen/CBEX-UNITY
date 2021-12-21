@@ -98,6 +98,11 @@ class TextArea extends PureComponent<Props, State> {
     if (onBlur && !numberError) onBlur(textValue, lastAnswer);
   };
 
+  handleOnFocus = () => {
+    const { onFocus } = this.props;
+    if (onFocus) onFocus();
+  };
+
   autoResize = (event: SyntheticInputEvent<EventTarget>) => {
     /* eslint-disable no-param-reassign */
     if (event.target.id !== 'question-text-area') {
@@ -125,6 +130,7 @@ class TextArea extends PureComponent<Props, State> {
                 this.handleNumber(e);
               }}
               onBlur={this.handleOnBlur}
+              onFocus={this.handleOnFocus}
               placeholder={placeholder}
             />
             {numberError && (
@@ -156,6 +162,7 @@ class TextArea extends PureComponent<Props, State> {
                 }
               }}
               onBlur={this.handleOnBlur}
+              onFocus={this.handleOnFocus}
               placeholder={placeholder}
               required
               type={type}

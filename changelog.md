@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [3.4] - YYYY-MM-DD
 ### Added
   - IQVIACBEXU-886: Frontend changes: Show an alert when hasDifferentSFanswer is = to true
+  - IQVIACBEXU-932: General focus for questions
 ### Changed
 ### Fixed
 
@@ -23,6 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-935: Striking is not happening in date field history, once edited the date manually
   - IQVIACBEXU-899: Text input Spacing issue in 'Add new question' 
   - IQVIACBEXU-898: 'Click to answer' placeholder disappears after deleting the answer. 
+
 ## [3.1] - YYYY-MM-DD
  
 ### Added

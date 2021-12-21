@@ -5,7 +5,13 @@ import { CloseCircle } from '../../../svg';
 
 const date = moment();
 
-const QuestionDatePicker = ({ value, resetDate, handleDayChange }) => {
+const QuestionDatePicker = ({
+  value,
+  resetDate,
+  handleDayChange,
+  onFocus,
+  onBlur
+}) => {
   const [inputValue, setInputValue] = useState('');
   const [resetsubmit, setresetsubmit] = useState(false);
   useEffect(() => {
@@ -26,6 +32,14 @@ const QuestionDatePicker = ({ value, resetDate, handleDayChange }) => {
         placeholder="DD-MMM-YYYY"
         dateFormat="DD-MMM-YYYY"
         fullWidth
+        inputProps={{
+          onFocus: e => {
+            onFocus();
+          },
+          onBlur: e => {
+            onBlur();
+          }
+        }}
         style={{ marginTop: 0 }}
         inputValue={inputValue}
         onInputChange={dte => {
