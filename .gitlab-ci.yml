@@ -90,7 +90,9 @@ deployartifacts:
   script:    
     - source build.env  
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
-    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[*].{id:Id, OriginDomainName:Origins.Items[0].DomainName}[?contains(OriginDomainName, '$BucketName.s3.amazonaws.com')].id" --output text) --paths "/*" --region $Region
+    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
+
+
   tags:
     - docker
   when: manual
