@@ -22,7 +22,8 @@ import SFAnswerValidationWrapper from './SFAnswerValidationWrapper';
 // import DatePicker from './atoms/inputs/DatePicker';
 
 type State = {
-  selectedDay: string
+  selectedDay: string,
+  selectedRow: Boolean
 };
 
 type Props = {
@@ -50,7 +51,8 @@ export class TaskRow extends Component<Props, State> {
     super(props);
 
     this.state = {
-      selectedDay: ''
+      selectedDay: '',
+      selectedRow: false
     };
   }
 
@@ -102,6 +104,7 @@ export class TaskRow extends Component<Props, State> {
     }
 
     this.trackMatomoEventSubmitAnswer(textValue);
+    this.setSelectRow(false);
   };
 
   onClickChange = (selectedValue: string, lastAnswer: string) => {
@@ -111,6 +114,7 @@ export class TaskRow extends Component<Props, State> {
       setProposalAnswer(proposalId, questionId, selectedValue, userData);
 
     this.trackMatomoEventSubmitAnswer(selectedValue);
+    this.setSelectRow(false);
   };
 
   handleDayChange = (selectedDay: string, lastAnswer: Date) => {
@@ -142,6 +146,14 @@ export class TaskRow extends Component<Props, State> {
     const { setQuestionToDisplayHistory, questionId } = this.props;
     setQuestionToDisplayHistory(questionId);
     this.trackMatomoEventAnswerHistory();
+  };
+
+  onChildInputFocus = event => {
+    this.setSelectRow(true);
+  };
+
+  setSelectRow = value => {
+    this.setState({ selectedRow: value });
   };
 
   trackMatomoEventSubmitAnswer = data => {
@@ -240,10 +252,12 @@ export class TaskRow extends Component<Props, State> {
           sfObject={sfObject}
         >
           <Autocomplete
-            sectionName={sectionName}
-            onChange={this.handlePropsalChange}
-            text={answerValue}
-          />
+          sectionName={sectionName}
+          onFocus={e => this.setSelectRow(true)}
+          onBlur={e => this.setSelectRow(false)}
+          onChange={this.handlePropsalChange}
+          text={answerValue}
+        />
         </SFAnswerValidationWrapper>
       );
 
@@ -290,6 +304,7 @@ export class TaskRow extends Component<Props, State> {
                 event.target.style.height = `${txtareaheight + 2}px`;
               }}
               onBlur={e => this.handleTextChange(e.target.value, answerValue)}
+              onFocus={e => this.onChildInputFocus(e)}
               defaultValue={answerValue}
               sizeAdjustable
               minHeight={40}
@@ -310,6 +325,7 @@ export class TaskRow extends Component<Props, State> {
               placeholder="Click to answer"
               type="number"
               onBlur={this.handleTextChange}
+              onFocus={e => this.onChildInputFocus(e)}
               value={answerValue}
             />
           </SFAnswerValidationWrapper>
@@ -326,6 +342,7 @@ export class TaskRow extends Component<Props, State> {
               items={optionsYN}
               onClick={this.onClickChange}
               value={answerValue}
+              setSelectRow={this.setSelectRow}
             />
           </SFAnswerValidationWrapper>
         );
@@ -341,6 +358,7 @@ export class TaskRow extends Component<Props, State> {
               items={finalOptions}
               onClick={this.onClickChange}
               value={answerValue}
+              setSelectRow={this.setSelectRow}
             />
           </SFAnswerValidationWrapper>
         );
@@ -354,6 +372,8 @@ export class TaskRow extends Component<Props, State> {
               value={answerValue}
               resetDate={this.resetDate}
               handleDayChange={this.handleDayChange}
+              onFocus={e => this.setSelectRow(true)}
+              onBlur={e => this.setSelectRow(false)}
             />
           </SFAnswerValidationWrapper>
         );
@@ -368,6 +388,7 @@ export class TaskRow extends Component<Props, State> {
               items={finalOptions}
               onClick={this.onSelectValues}
               value={answerValueComplex}
+              setSelectRow={this.setSelectRow}
             />
           </SFAnswerValidationWrapper>
         );
@@ -410,7 +431,11 @@ export class TaskRow extends Component<Props, State> {
 
     if (lastAnswer) answerDate = parseMomentDate(lastAnswer.get('date'));
     return (
-      <div className="task-table-row">
+      <div
+      className={`task-table-row${
+        this.state.selectedRow ? ' selected-task-table-row' : ''
+      }`}
+    >
         <div className="question-text">
           {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
           <p>{questionText}</p>
