@@ -172,18 +172,21 @@ export class AddQuestionModal extends PureComponent<Props, State> {
 
   validateQuestionText = (...args) => {
     const { questionText } = this.state;
-    if(args && args.length && questionText.trim().length == 0){
-      this.setState({
-        error: [...this.state.error.filter(v => !v.questiontext)]
-      },()=>{
-        this.setState(prevState => ({
-          error: [
-            ...prevState.error,
-            { questiontext: { message: 'This field is required.' } }
-          ]
-        }));
-      })
-    }else{
+    if (args && args.length && questionText.trim().length == 0) {
+      this.setState(
+        {
+          error: [...this.state.error.filter(v => !v.questiontext)]
+        },
+        () => {
+          this.setState(prevState => ({
+            error: [
+              ...prevState.error,
+              { questiontext: { message: 'This field is required.' } }
+            ]
+          }));
+        }
+      );
+    } else {
       if (
         questionText.length === 0 &&
         !this.state.error.some(v => v.questiontext)
@@ -195,7 +198,10 @@ export class AddQuestionModal extends PureComponent<Props, State> {
           ]
         }));
       }
-      if (questionText.length > 0 && this.state.error.some(v => v.questiontext)) {
+      if (
+        questionText.length > 0 &&
+        this.state.error.some(v => v.questiontext)
+      ) {
         this.setState({
           error: [...this.state.error.filter(v => !v.questiontext)]
         });

@@ -241,6 +241,9 @@ class CollapsibleList extends Component<Props, State> {
                     setQuestionToDisplayHistory={setQuestionToDisplayHistory}
                     roleNames={questionConfig.get('roleNames')}
                     isCustomQuestion={questionConfig.get('isCustomQuestion')}
+                    hasDifferentSFanswer={questionConfig.get(
+                      'hasDifferentSFanswer'
+                    )}
                   />
                 )
               );

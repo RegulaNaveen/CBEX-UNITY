@@ -92,10 +92,21 @@ export const setProposalAnswerData = (
       if (Array.isArray(data.answers)) {
         dispatch({
           type: PROPOSAL_ANSWER,
-          payload: { data: data.answers, questionId }
+          payload: {
+            data: data.answers,
+            questionId,
+            hasDifferentSFanswer: data.hasDifferentSFanswer || false
+          }
         });
       } else {
-        dispatch({ type: PROPOSAL_ANSWER, payload: { data, questionId } });
+        dispatch({
+          type: PROPOSAL_ANSWER,
+          payload: {
+            data,
+            questionId,
+            hasDifferentSFanswer: data.hasDifferentSFanswer || false
+          }
+        });
       }
 
       const { modifiedQuestions } = data;

@@ -90,6 +90,9 @@ const onProsalInfoLoaded = (state: Map, action: Object): Map => {
     milestones
   } = action.payload;
 
+  // Add agreementId as well in proposal details
+  proposalDetails.agreementId = action.payload.proposal.agreementId || '';
+
   // Adding milestones to Questions Filter
   let questionsFilter = state.get('questionsFilter');
   milestones.forEach(milestone => {
@@ -121,7 +124,7 @@ const onProposalError = (state: Map, action: Object): Map => {
 
 const onProposalAnswer = (state: Map, action: Object): Map => {
   const {
-    payload: { data, questionId: referenceId }
+    payload: { data, questionId: referenceId, hasDifferentSFanswer }
   } = action;
 
   let newState = fromJS({});
@@ -135,6 +138,10 @@ const onProposalAnswer = (state: Map, action: Object): Map => {
   newState = state.setIn(
     ['proposalQuestions', indexOfListToUpdate, 'answers'],
     data
+  );
+  newState = newState.setIn(
+    ['proposalQuestions', indexOfListToUpdate, 'hasDifferentSFanswer'],
+    hasDifferentSFanswer
   );
 
   const proposalQuestions = newState.get('proposalQuestions');

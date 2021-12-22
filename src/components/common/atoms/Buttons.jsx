@@ -7,7 +7,7 @@ type Props = {
   children: any,
   onClick: Function,
   className?: string,
-  disabled?: boolean
+  disabled?: any,
 };
 
 const defaultProps = {
@@ -25,6 +25,7 @@ export const PrimaryButton = ({
 }: Props) => (
   <button
     id={id}
+    disabled={disabled || false}
     type="button"
     className={classnames('primary-button', className)}
     onClick={onClick}
