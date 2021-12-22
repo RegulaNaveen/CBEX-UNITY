@@ -115,6 +115,14 @@ class AnswerHistory extends Component<Props> {
             }
           }
 
+          if (questionType === 'select') {
+            if(index == 0){
+              return renderWord(answer, 'changed');
+            }else{
+              return renderWord(answer, 'removed');
+            }
+          }
+
           if (questionType === 'date') {
             answer = String(answer).trimStart().trimEnd();
             if(!Boolean(String(answer).length)){

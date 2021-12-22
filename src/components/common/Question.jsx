@@ -280,7 +280,7 @@ export class TaskRow extends Component<Props, State> {
             id="dd-proposal-answer"
             placeholder="Click to answer"
             items={optionsYN}
-            onClick={this.onClickChange}
+            onClick={(val)=> this.onClickChange(val, answerValue)}
             value={answerValue}
           />
         );
@@ -290,7 +290,7 @@ export class TaskRow extends Component<Props, State> {
             id="dd-proposal-answer"
             placeholder="Click to answer"
             items={finalOptions}
-            onClick={this.onClickChange}
+            onClick={(val)=> this.onClickChange(val, answerValue)}
             value={answerValue}
           />
         );
