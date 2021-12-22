@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.4] - YYYY-MM-DD
+### Added
+  - IQVIACBEXU-954: extractName function added to get name for Salesforce answers
+### Changed
+### Fixed
 ## [3.2] - YYYY-MM-DD
 ### Added
   - IQVIACBEXU-813: Date field type issues
