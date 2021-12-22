@@ -170,23 +170,36 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     });
   };
 
-  validateQuestionText = () => {
+  validateQuestionText = (...args) => {
     const { questionText } = this.state;
-    if (
-      questionText.length === 0 &&
-      !this.state.error.some(v => v.questiontext)
-    ) {
-      this.setState(prevState => ({
-        error: [
-          ...prevState.error,
-          { questiontext: { message: 'This field is required.' } }
-        ]
-      }));
-    }
-    if (questionText.length > 0 && this.state.error.some(v => v.questiontext)) {
+    if(args && args.length && questionText.trim().length == 0){
       this.setState({
         error: [...this.state.error.filter(v => !v.questiontext)]
-      });
+      },()=>{
+        this.setState(prevState => ({
+          error: [
+            ...prevState.error,
+            { questiontext: { message: 'This field is required.' } }
+          ]
+        }));
+      })
+    }else{
+      if (
+        questionText.length === 0 &&
+        !this.state.error.some(v => v.questiontext)
+      ) {
+        this.setState(prevState => ({
+          error: [
+            ...prevState.error,
+            { questiontext: { message: 'This field is required.' } }
+          ]
+        }));
+      }
+      if (questionText.length > 0 && this.state.error.some(v => v.questiontext)) {
+        this.setState({
+          error: [...this.state.error.filter(v => !v.questiontext)]
+        });
+      }
     }
   };
 
@@ -263,14 +276,14 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     } = this.props;
     const isEditMode = editQuestionsData.size > 0 || false;
     this.setState({ submit: true }, () => {
-      this.validateQuestionText();
+      this.validateQuestionText(true);
       this.validateSection();
       this.validateAnswer();
       this.validateRoles();
 
       if (
-        questionText !== '' &&
-        questionText.length > 0 &&
+        questionText.trim() !== '' &&
+        questionText.trim().length > 0 &&
         section &&
         answerType !== '' &&
         !isEmpty(roleNames)
