@@ -68,7 +68,6 @@ const QuestionDatePicker = ({
           if (!dte) handleDayChange(' ', value);
         }}
       />
-
       {resetsubmit && (
         <button
           onClick={() => {
