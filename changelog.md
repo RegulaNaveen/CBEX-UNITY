@@ -4,7 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.2] - YYYY-MM-DD
+## [3.4] - YYYY-MM-DD
+### Added
+  - IQVIACBEXU-886: Frontend changes: Show an alert when hasDifferentSFanswer is = to true
+  - IQVIACBEXU-932: General focus for questions
+### Changed
+### Fixed
+
+## [3.2] - 2021-12-19
 ### Added
   - IQVIACBEXU-813: Date field type issues
   - IQVIACBEXU-412: Multiple Individuals assigned against the proposal team questions
@@ -17,6 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-935: Striking is not happening in date field history, once edited the date manually
   - IQVIACBEXU-899: Text input Spacing issue in 'Add new question' 
   - IQVIACBEXU-898: 'Click to answer' placeholder disappears after deleting the answer. 
+
 ## [3.1] - YYYY-MM-DD
  
 ### Added
