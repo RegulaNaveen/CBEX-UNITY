@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-932: General focus for questions
 ### Changed
 ### Fixed
+  - IQVIACBEXU-958: showing as invalid date in history for date field once enter and delete the invalid date for Not Answered
 
 ## [3.2] - 2021-12-19
 ### Added
