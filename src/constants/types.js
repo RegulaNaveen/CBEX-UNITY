@@ -65,7 +65,10 @@ const PROPOSAL = {
   ON_QUESTIONS_FILTERED: 'on_questions_filtered',
   CLEAR_QUESTIONS_FILTER: 'clear_questions_filter',
   RESET_QUESTIONS_FILTER: 'reset_questions_filter',
-  EXPAND_ALL_SECTIONS: 'expand_all_sections'
+  EXPAND_ALL_SECTIONS: 'expand_all_sections',
+  SET_EDIT_QUESTION_DATA: 'set_edit_question_data',
+  PROPOSAL_EDIT_QUESTION: 'proposal_edit_question',
+  PROPOSAL_DELETE_QUESTION: 'proposal_delete_question'
 };
 
 const PROPOSALS = {
