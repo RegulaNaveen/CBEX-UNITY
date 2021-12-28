@@ -122,7 +122,8 @@ export class TaskRow extends Component<Props, State> {
 
     this.setState({ selectedDay }, () => {
       if (
-        parseMomentDate(lastAnswer) !== parseMomentDate(selectedDay) &&
+        parseMomentDate(lastAnswer.trim()) !==
+          parseMomentDate(selectedDay.trim()) &&
         selectedDay
       )
         setProposalAnswer(proposalId, questionId, selectedDay, userData);
@@ -252,12 +253,12 @@ export class TaskRow extends Component<Props, State> {
           sfObject={sfObject}
         >
           <Autocomplete
-          sectionName={sectionName}
-          onFocus={e => this.setSelectRow(true)}
-          onBlur={e => this.setSelectRow(false)}
-          onChange={this.handlePropsalChange}
-          text={answerValue}
-        />
+            sectionName={sectionName}
+            onFocus={e => this.setSelectRow(true)}
+            onBlur={e => this.setSelectRow(false)}
+            onChange={this.handlePropsalChange}
+            text={answerValue}
+          />
         </SFAnswerValidationWrapper>
       );
 
@@ -432,10 +433,10 @@ export class TaskRow extends Component<Props, State> {
     if (lastAnswer) answerDate = parseMomentDate(lastAnswer.get('date'));
     return (
       <div
-      className={`task-table-row${
-        this.state.selectedRow ? ' selected-task-table-row' : ''
-      }`}
-    >
+        className={`task-table-row${
+          this.state.selectedRow ? ' selected-task-table-row' : ''
+        }`}
+      >
         <div className="question-text">
           {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
           <p>{questionText}</p>
