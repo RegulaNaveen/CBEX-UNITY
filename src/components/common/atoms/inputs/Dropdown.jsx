@@ -12,7 +12,8 @@ type Props = {
   value?: string,
   withReset?: boolean,
   selectedValue: mixed,
-  error?: mixed
+  error?: mixed,
+  disabled?: boolean
 };
 
 type State = {
@@ -29,7 +30,8 @@ class Dropdown extends PureComponent<Props, State> {
     title: undefined,
     value: undefined,
     withReset: false,
-    error: []
+    error: [],
+    disabled: false
   };
 
   constructor(props: Object) {
@@ -96,7 +98,8 @@ class Dropdown extends PureComponent<Props, State> {
       title,
       value,
       withReset,
-      error
+      error,
+      disabled
     } = this.props;
 
     return (
@@ -107,11 +110,20 @@ class Dropdown extends PureComponent<Props, State> {
             <div
               id={id}
               className={
-                error && error.length > 0 ? 'dd-header-error' : 'dd-header'
+                error && error.length > 0
+                  ? disabled
+                    ? 'dd-header-error dd-header-error-disabled'
+                    : 'dd-header-error'
+                  : disabled
+                  ? 'dd-header dd-header-disabled'
+                  : 'dd-header'
               }
               ref={this.ref}
               role="presentation"
-              onClick={this.handleCollapse}
+              onClick={() => {
+                if (!disabled) this.handleCollapse();
+                return;
+              }}
             >
               {selectedValue || value ? (
                 <p className="dd-header-selected">{selectedValue || value}</p>

@@ -6,17 +6,24 @@ import { connect } from 'react-redux';
 import { isObject, isEqual, isEmpty } from 'lodash';
 import TextField from 'apollo-react/components/TextField';
 import { Checkmark } from '../svg';
+import { Edit } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
 import TextArea from './atoms/inputs/TextArea';
 import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
-import { setProposalAnswerData } from '../../redux/actions/proposal-actions';
+import {
+  setProposalAnswerData,
+  setEditQuestionData
+} from '../../redux/actions/proposal-actions';
 import { getUserData, getProposalDetails } from '../../redux/selectors';
 import MatomoHOC from '../HOC/MatomoHOC';
 import { getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
 import ChipView from './Chip/ChipView';
 import removeSpecialChars from '../../utils/pasteUtils';
 import Autocomplete from './atoms/inputs/AutoComplete';
+
+import DatePicker from 'apollo-react/components/DatePickerV2';
+import moment from 'moment';
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
 import SFAnswerValidationWrapper from './SFAnswerValidationWrapper';
 // import DatePicker from './atoms/inputs/DatePicker';
@@ -43,6 +50,9 @@ type Props = {
   sfField: string,
   milestone: any,
   ismilestoneavailable: string,
+  setEditQuestionData: (data: Object) => void,
+  roleNames: Array<string>,
+  isCustomQuestion: boolean,
   hasDifferentSFanswer: boolean
 };
 
@@ -122,7 +132,8 @@ export class TaskRow extends Component<Props, State> {
 
     this.setState({ selectedDay }, () => {
       if (
-        parseMomentDate(lastAnswer) !== parseMomentDate(selectedDay) &&
+        parseMomentDate(lastAnswer.trim()) !==
+          parseMomentDate(selectedDay.trim()) &&
         selectedDay
       )
         setProposalAnswer(proposalId, questionId, selectedDay, userData);
@@ -252,12 +263,12 @@ export class TaskRow extends Component<Props, State> {
           sfObject={sfObject}
         >
           <Autocomplete
-          sectionName={sectionName}
-          onFocus={e => this.setSelectRow(true)}
-          onBlur={e => this.setSelectRow(false)}
-          onChange={this.handlePropsalChange}
-          text={answerValue}
-        />
+            sectionName={sectionName}
+            onFocus={e => this.setSelectRow(true)}
+            onBlur={e => this.setSelectRow(false)}
+            onChange={this.handlePropsalChange}
+            text={answerValue}
+          />
         </SFAnswerValidationWrapper>
       );
 
@@ -421,7 +432,12 @@ export class TaskRow extends Component<Props, State> {
       questionText,
       answerConfiguration,
       milestone,
-      ismilestoneavailable
+      ismilestoneavailable,
+      sectionName,
+      roleNames,
+      setEditQuestionData,
+      isCustomQuestion,
+      questionId: qId
     } = this.props;
     const questionId = answers.get('questionId');
     let lastAnswer;
@@ -432,13 +448,31 @@ export class TaskRow extends Component<Props, State> {
     if (lastAnswer) answerDate = parseMomentDate(lastAnswer.get('date'));
     return (
       <div
-      className={`task-table-row${
-        this.state.selectedRow ? ' selected-task-table-row' : ''
-      }`}
-    >
+        className={`task-table-row${
+          this.state.selectedRow ? ' selected-task-table-row' : ''
+        }`}
+      >
         <div className="question-text">
           {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
-          <p>{questionText}</p>
+          <p>
+            {questionText}
+            {isCustomQuestion && (
+              <span
+                onClick={() => {
+                  setEditQuestionData({
+                    questionText,
+                    section: sectionName,
+                    answerType: answerConfiguration.get('type'),
+                    roleNames,
+                    questionAnswered: lastAnswer ? true : false,
+                    questionId: qId
+                  });
+                }}
+              >
+                <Edit className="edit-icon" />
+              </span>
+            )}
+          </p>
         </div>
 
         <div>
@@ -467,5 +501,6 @@ const mapStateToProps = (state: Object) => ({
 });
 
 export default connect(mapStateToProps, {
-  setProposalAnswer: setProposalAnswerData
+  setProposalAnswer: setProposalAnswerData,
+  setEditQuestionData
 })(MatomoHOC(TaskRow));

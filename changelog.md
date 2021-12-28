@@ -8,8 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
   - IQVIACBEXU-886: Frontend changes: Show an alert when hasDifferentSFanswer is = to true
   - IQVIACBEXU-932: General focus for questions
+  - IQVIACBEXU-931: Edit/Delete custom questions
+  
 ### Changed
 ### Fixed
+  - IQVIACBEXU-958: showing as invalid date in history for date field once enter and delete the invalid date for Not Answered
 
 ## [3.2] - 2021-12-19
 ### Added

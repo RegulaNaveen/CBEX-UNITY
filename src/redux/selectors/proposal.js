@@ -255,3 +255,7 @@ export const selectAreAllSectionsExpanded = createSelector(
   selectProposal,
   proposal => proposal.get('areAllSectionsExpanded')
 );
+
+export const getEditQuestionData = createSelector(selectProposal, proposal =>
+  proposal.get('editQuestionsData', Map({}))
+);
