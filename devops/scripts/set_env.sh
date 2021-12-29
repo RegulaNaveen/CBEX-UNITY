@@ -8,7 +8,7 @@ then
 elif [ $CI_COMMIT_REF_NAME == "qa" ]
 then
    echo "Environment=qa" > build.env
-elif [ $CI_COMMIT_REF_NAME == "sprintdev" ]
+elif [ $CI_COMMIT_REF_NAME == "sdev" ]
 then
    echo "Environment=sdev" > build.env
 elif [ $CI_COMMIT_REF_NAME == "dev" ]

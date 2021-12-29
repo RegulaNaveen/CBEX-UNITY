@@ -102,13 +102,13 @@ function logLobDetails(record) {
  */
 
 function rearrangeDiff(diffAnswers) {
-  let rearrangedDiffAnswers = [],
-    subAdditionDiffAnswers = [],
-    subRemovedDiffAnswers = [];
+  let rearrangedDiffAnswers = [];
+  let subAdditionDiffAnswers = [];
+  let subRemovedDiffAnswers = [];
 
-  diffAnswers.forEach((answer) => {
-    let newAnswer = cloneDeep(answer);
-    newAnswer.value = newAnswer.value.trim() + ' ';
+  diffAnswers.forEach(answer => {
+    const newAnswer = cloneDeep(answer);
+    newAnswer.value = `${newAnswer.value.trim()} `;
     if (answer.added) {
       subAdditionDiffAnswers.push(newAnswer);
       return;
@@ -120,13 +120,20 @@ function rearrangeDiff(diffAnswers) {
     if (answer.value.trim().length == 0) {
       return;
     }
-    rearrangedDiffAnswers = rearrangedDiffAnswers.concat(subRemovedDiffAnswers, subAdditionDiffAnswers, [cloneDeep(answer)]);
+    rearrangedDiffAnswers = rearrangedDiffAnswers.concat(
+      subRemovedDiffAnswers,
+      subAdditionDiffAnswers,
+      [cloneDeep(answer)]
+    );
     subRemovedDiffAnswers = [];
     subAdditionDiffAnswers = [];
   });
 
   if (subRemovedDiffAnswers.length > 0 || subAdditionDiffAnswers.length > 0) {
-    rearrangedDiffAnswers = rearrangedDiffAnswers.concat(subRemovedDiffAnswers, subAdditionDiffAnswers);
+    rearrangedDiffAnswers = rearrangedDiffAnswers.concat(
+      subRemovedDiffAnswers,
+      subAdditionDiffAnswers
+    );
     subRemovedDiffAnswers = [];
     subAdditionDiffAnswers = [];
   }

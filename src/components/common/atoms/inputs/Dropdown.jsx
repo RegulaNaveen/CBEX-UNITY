@@ -12,7 +12,8 @@ type Props = {
   value?: string,
   withReset?: boolean,
   selectedValue: mixed,
-  error?: mixed
+  error?: mixed,
+  disabled?: boolean
 };
 
 type State = {
@@ -29,7 +30,8 @@ class Dropdown extends PureComponent<Props, State> {
     title: undefined,
     value: undefined,
     withReset: false,
-    error: []
+    error: [],
+    disabled: false
   };
 
   constructor(props: Object) {
@@ -58,13 +60,18 @@ class Dropdown extends PureComponent<Props, State> {
   }
 
   closeOnOutsideClick = (event: SyntheticEvent<EventTarget>) => {
-    if (this.ref.current !== event.target)
+    const { setSelectRow } = this.props;
+    if (this.ref.current !== event.target) {
       this.setState({ isCollapsed: false });
+      setSelectRow(false);
+    }
   };
 
   handleCollapse = () => {
     const { isCollapsed } = this.state;
+    const { setSelectRow } = this.props;
     this.setState({ isCollapsed: !isCollapsed });
+    if (setSelectRow) setSelectRow(!isCollapsed);
   };
 
   handleClick = (event: SyntheticEvent<EventTarget>, value: string) => {
@@ -91,7 +98,8 @@ class Dropdown extends PureComponent<Props, State> {
       title,
       value,
       withReset,
-      error
+      error,
+      disabled
     } = this.props;
 
     return (
@@ -102,11 +110,20 @@ class Dropdown extends PureComponent<Props, State> {
             <div
               id={id}
               className={
-                error && error.length > 0 ? 'dd-header-error' : 'dd-header'
+                error && error.length > 0
+                  ? disabled
+                    ? 'dd-header-error dd-header-error-disabled'
+                    : 'dd-header-error'
+                  : disabled
+                  ? 'dd-header dd-header-disabled'
+                  : 'dd-header'
               }
               ref={this.ref}
               role="presentation"
-              onClick={this.handleCollapse}
+              onClick={() => {
+                if (!disabled) this.handleCollapse();
+                return;
+              }}
             >
               {selectedValue || value ? (
                 <p className="dd-header-selected">{selectedValue || value}</p>
