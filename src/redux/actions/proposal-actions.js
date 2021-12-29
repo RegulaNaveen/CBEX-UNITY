@@ -12,7 +12,9 @@ import {
   setProposalQuestionData,
   getProposalInfoUpdated,
   getProposlBoxId,
-  getValidatedProposalData
+  getValidatedProposalData,
+  editProposalQuestionData,
+  deleteProposalQuestionData
 } from '../../api/proposal';
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getUniqueMilestones } from '../selectors/proposal';
@@ -47,7 +49,10 @@ const {
   ON_QUESTIONS_FILTERED,
   RESET_QUESTIONS_FILTER,
   CLEAR_QUESTIONS_FILTER,
-  EXPAND_ALL_SECTIONS
+  EXPAND_ALL_SECTIONS,
+  SET_EDIT_QUESTION_DATA,
+  PROPOSAL_EDIT_QUESTION,
+  PROPOSAL_DELETE_QUESTION
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -87,10 +92,21 @@ export const setProposalAnswerData = (
       if (Array.isArray(data.answers)) {
         dispatch({
           type: PROPOSAL_ANSWER,
-          payload: { data: data.answers, questionId }
+          payload: {
+            data: data.answers,
+            questionId,
+            hasDifferentSFanswer: data.hasDifferentSFanswer || false
+          }
         });
       } else {
-        dispatch({ type: PROPOSAL_ANSWER, payload: { data, questionId } });
+        dispatch({
+          type: PROPOSAL_ANSWER,
+          payload: {
+            data,
+            questionId,
+            hasDifferentSFanswer: data.hasDifferentSFanswer || false
+          }
+        });
       }
 
       const { modifiedQuestions } = data;
@@ -362,3 +378,51 @@ export function expandAllSectionsAction(expand = false) {
     dispatch({ type: EXPAND_ALL_SECTIONS, payload: expand });
   };
 }
+
+export function setEditQuestionData(data = {}) {
+  return async dispatch => {
+    dispatch({ type: SET_EDIT_QUESTION_DATA, payload: data });
+  };
+}
+
+export const editProposalQuestion = (
+  proposalId: string,
+  questionId: string,
+  questionData: Object
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: PROPOSAL_SET_QUESTION_LOADING,
+      payload: {}
+    });
+    try {
+      const data = await editProposalQuestionData(
+        proposalId,
+        questionId,
+        questionData
+      );
+      dispatch({ type: PROPOSAL_EDIT_QUESTION, payload: data });
+    } catch (err) {
+      dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
+    }
+  };
+};
+
+export const deleteProposalQuestion = (
+  proposalId: string,
+  questionId: string
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: PROPOSAL_SET_QUESTION_LOADING,
+      payload: {}
+    });
+    try {
+      const data = await deleteProposalQuestionData(proposalId, questionId);
+
+      dispatch({ type: PROPOSAL_DELETE_QUESTION, payload: questionId });
+    } catch (err) {
+      dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
+    }
+  };
+};

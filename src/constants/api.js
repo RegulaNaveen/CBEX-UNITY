@@ -16,6 +16,7 @@ let REDIRECTION_URL = '';
 //* Ubuild feature flag
 let UBUILD_ENABLED = false;
 let UBUILD_ARTIFACT = '';
+let SF_HOST_URL = '';
 
 switch (environment) {
   case 'UAT':
@@ -29,6 +30,7 @@ switch (environment) {
     CLIENT_ID = '1h21m7sdoq1jr4tb00mkljn1m';
     REDIRECTION_URL = 'https://uat-unity.iqvia.app/';
     UBUILD_ARTIFACT = 'https://uat-ubuild.iqvia.app/main.js';
+    SF_HOST_URL = 'https://iqvia--uat.lightning.force.com/';
     break;
   case 'PROD':
     PROPOSAL_API_ENDPOINT =
@@ -41,6 +43,7 @@ switch (environment) {
     CLIENT_ID = 'tc1tih0kcrifpoqrdsqo26467';
     REDIRECTION_URL = 'https://unity.iqvia.app/';
     UBUILD_ARTIFACT = 'https://ubuild.iqvia.app/main.js';
+    SF_HOST_URL = 'https://iqvia.my.salesforce.com/';
     break;
   case 'QA':
     // UDEV Data
@@ -57,18 +60,19 @@ switch (environment) {
     CLIENT_ID = '65ie0siehm65hisi4n1avlaa0r';
     REDIRECTION_URL = 'https://qa-unity.iqvia.app/';
     UBUILD_ARTIFACT = 'https://qa-ubuild.iqvia.app/main.js';
+    SF_HOST_URL = 'https://iqvia--staging.lightning.force.com/';
     break;
   default:
     // DEV Data
-    PROPOSAL_API_ENDPOINT =
-      'https://puo6dvbged.execute-api.us-east-1.amazonaws.com/dev';
+    PROPOSAL_API_ENDPOINT = 'https://puo6dvbged.execute-api.us-east-1.amazonaws.com/dev';
     PROPOSAL_API_KEY = 'Wctbuly84485ruXf4Bilz1c8xdckxcfk4GA2NvVe';
     NORMAL_AUTH_API_ENDPOINT =
-      'https://aiz2k1qjjl.execute-api.us-east-1.amazonaws.com/dev';
+      'https://x73ryaox77.execute-api.us-east-1.amazonaws.com/dev';
     COGNITO_HOST = 'https://unity-dev.auth.us-east-1.amazoncognito.com';
     CLIENT_ID = '5qa83je2aga90r53kte3mori93';
     REDIRECTION_URL = 'https://dev-unity.iqvia.app/';
     UBUILD_ARTIFACT = 'https://dev-ubuild.iqvia.app/main.js';
+    SF_HOST_URL = 'https://iqvia--crm.lightning.force.com/';
     break;
 }
 
@@ -120,4 +124,11 @@ const NOTEPAD = {
   NOTEPAD_API_URL
 };
 
-export { AUTH, PROPOSAL, NOTEPAD, UBUILD_ENABLED, UBUILD_ARTIFACT };
+export {
+  AUTH,
+  PROPOSAL,
+  NOTEPAD,
+  UBUILD_ENABLED,
+  UBUILD_ARTIFACT,
+  SF_HOST_URL
+};

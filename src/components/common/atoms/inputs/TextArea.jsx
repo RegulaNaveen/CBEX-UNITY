@@ -81,7 +81,8 @@ class TextArea extends PureComponent<Props, State> {
     const { onChange } = this.props;
     const { value: textValue } = target;
     const numberError =
-      (String(textValue).trim() && !numberRegex.test(String(textValue).trim())) ||
+      (String(textValue).trim() &&
+        !numberRegex.test(String(textValue).trim())) ||
       Number(String(textValue).trim()) < 0 ||
       String(String(textValue).trim()).match(/-/g);
     if (onChange && !numberError) onChange(textValue);
@@ -95,6 +96,11 @@ class TextArea extends PureComponent<Props, State> {
     const { value: textValue } = target;
 
     if (onBlur && !numberError) onBlur(textValue, lastAnswer);
+  };
+
+  handleOnFocus = () => {
+    const { onFocus } = this.props;
+    if (onFocus) onFocus();
   };
 
   autoResize = (event: SyntheticInputEvent<EventTarget>) => {
@@ -124,6 +130,7 @@ class TextArea extends PureComponent<Props, State> {
                 this.handleNumber(e);
               }}
               onBlur={this.handleOnBlur}
+              onFocus={this.handleOnFocus}
               placeholder={placeholder}
             />
             {numberError && (
@@ -140,8 +147,8 @@ class TextArea extends PureComponent<Props, State> {
               ref={this.textAreaInput}
               className={classnames('text-area-wrapper', className)}
               value={textValue}
-              onPaste={e => { 
-                const sanitizedValue = removeSpecialChars(e)
+              onPaste={e => {
+                const sanitizedValue = removeSpecialChars(e);
                 if (this.props.onChange) {
                   this.setState({ textValue: sanitizedValue });
                   this.props.onChange(sanitizedValue);
@@ -155,6 +162,7 @@ class TextArea extends PureComponent<Props, State> {
                 }
               }}
               onBlur={this.handleOnBlur}
+              onFocus={this.handleOnFocus}
               placeholder={placeholder}
               required
               type={type}
