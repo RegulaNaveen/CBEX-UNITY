@@ -5,6 +5,11 @@ import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { isObject, isEqual, isEmpty } from 'lodash';
 import TextField from 'apollo-react/components/TextField';
+import Button from 'apollo-react/components/Button';
+import IconButton from 'apollo-react/components/IconButton';
+import Grid from 'apollo-react/components/Grid';
+import Box from 'apollo-react/components/Box';
+import Typography from 'apollo-react/components/Typography';
 import { Checkmark } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
 import TextArea from './atoms/inputs/TextArea';
@@ -23,6 +28,7 @@ import DatePicker from 'apollo-react/components/DatePickerV2';
 import moment from 'moment'
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
 // import DatePicker from './atoms/inputs/DatePicker';
+import StatusCheck from 'apollo-react-icons/StatusCheck';
 
 type State = {
   selectedDay: string
@@ -317,22 +323,20 @@ export class TaskRow extends Component<Props, State> {
   };
 
   renderTags = (milestone, ismilestoneavailable, lastAnswer) => {
-    if (ismilestoneavailable) {
-      return (
-        <div className="chipview">
-          {milestone ? (
-            <ChipView label={String(milestone)} answer={lastAnswer} />
-          ) : (
-            <>{lastAnswer ? <Checkmark /> : null}</>
-          )}
-        </div>
-      );
-    }
-    if (lastAnswer) {
-      return <Checkmark />;
-    }
-    return <span />;
+    return (
+      <div className="chipview">
+        { milestone ? 
+          <ChipView label={String(milestone)} answer={lastAnswer} /> :
+          null
+        }
+      </div>
+    );
   };
+
+  handleVerifyPredictedAnsClick(predictedAnswer) {
+    const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+    setProposalAnswer(proposalId, questionId, String(predictedAnswer.get('answer')).trim(), userData);
+  }
 
   render() {
     const {
@@ -345,33 +349,111 @@ export class TaskRow extends Component<Props, State> {
     const questionId = answers.get('questionId');
     let lastAnswer;
     let answerDate = 'Not Answered';
+    let isAnswerPredicted = false;
     if (!questionId) lastAnswer = answers.last();
     else lastAnswer = answers.get('answers').last();
 
-    if (lastAnswer) answerDate = parseMomentDate(lastAnswer.get('date'));
+    if (lastAnswer) {
+      answerDate = parseMomentDate(lastAnswer.get('date'));
+      if (lastAnswer.get('userName') === 'UnityPredictedAnswer') {
+        isAnswerPredicted = true;
+        answerDate = 'Not Answered';
+      }
+    }
+
     return (
-      <div className="task-table-row">
-        <div className="question-text">
-          {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
-          <p>{questionText}</p>
-        </div>
-
-        <div>
-          {answerConfiguration
-            ? this.renderAnswer(
-                answerConfiguration.get('type'),
-                answerConfiguration.get('options'),
-                answers,
-                lastAnswer,
-                questionText
-              )
-            : this.renderAnswer('', [], [], undefined, questionText)}
-        </div>
-
-        <button type="button" onClick={this.displayAnswerOnHistory}>
-          {answerDate}
-        </button>
-      </div>
+      <Box marginBottom={{ xs: '24px', md: '8px' }}>
+        <Grid
+          container
+          spacing={2}
+          className="question-row"
+        >
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={5}
+            lg={5}
+            style={{ display: 'flex', alignItems: 'center'}}
+          >
+            <Grid container spacing={2} className="question-text-container">
+              <Grid component={Box} item xs={4} sm={3} display={{ md: 'none' }}>
+                <p style={{fontWeight: 'bold', marginRight: '8px'}}>Question </p>
+              </Grid>
+              <Grid item xs={8} sm={9} md={12}>
+                <div className="question-text">
+                  { this.renderTags(milestone, ismilestoneavailable, lastAnswer) }
+                  <p>{questionText}</p>
+                </div>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={4}
+            lg={5}
+            className="answer-col"
+          >
+            <Grid container spacing={2} className="question-text-container">
+              <Grid component={Box} item xs={4} sm={3} display={{ md: 'none' }}>
+                <p style={{fontWeight: 'bold', marginRight: '8px'}}>Answer </p>
+              </Grid>
+              <Grid item xs={8} sm={9} md={12}>
+                <div className="test">
+                  { answerConfiguration ? this.renderAnswer(
+                      answerConfiguration.get('type'),
+                      answerConfiguration.get('options'),
+                      answers,
+                      lastAnswer,
+                      questionText
+                    ) : this.renderAnswer('', [], [], undefined, questionText)
+                  }
+                </div>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={3}
+            lg={2}
+            xl={1}
+            className="date-answered-col"
+          >
+            <Grid container spacing={2} className="question-text-container">
+              <Grid component={Box} item xs={4} sm={3} display={{ md: 'none' }}>
+                <p style={{fontWeight: 'bold', marginRight: '8px'}}>Date Completed </p>
+              </Grid>
+              <Grid item xs={8} sm={9} md={12} style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+                <Button
+                  variant="text"
+                  onClick={this.displayAnswerOnHistory}
+                  style={{ padding: '0 4px', width: '120px', justifyContent: 'flex-start' }} // based on current date format
+                >
+                  {answerDate}
+                </Button>
+                {
+                  (isAnswerPredicted) ? (
+                    <IconButton onClick={() => this.handleVerifyPredictedAnsClick(lastAnswer)}>
+                      <StatusCheck fontSize={'22px'} style={{ color: '#D9D9D9' }} />
+                    </IconButton>
+                  ) : null
+                }
+                {
+                  (lastAnswer && !isAnswerPredicted) ? (
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '32px', height: '32px' }}>
+                      <Checkmark />
+                    </div>
+                  ) : null
+                }
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Box>
     );
   }
 }

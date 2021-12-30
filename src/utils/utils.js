@@ -134,10 +134,28 @@ function rearrangeDiff(diffAnswers) {
   return rearrangedDiffAnswers;
 }
 
+function getUserInitials(userName) {
+  if (userName === 'AnswerPulledFromSalesforce')
+    return 'SA';
+  if (userName === 'UnityPredictedAnswer')
+    return 'UA';
+  return userName.split(' ')[0].charAt(0) + userName.split(' ')[1].charAt(0);
+}
+
+function getUserName(userName) {
+  if (userName === 'AnswerPulledFromSalesforce')
+    return 'Salesforce Answer';
+  if (userName === 'UnityPredictedAnswer')
+    return 'Unity Predicted Answer';
+  return userName;
+}
+
 export {
   getCountriesNameForCode,
   getCountryOptions,
   isUserUbuildAdmin,
   logLobDetails,
-  rearrangeDiff
+  rearrangeDiff,
+  getUserInitials,
+  getUserName
 };
