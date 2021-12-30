@@ -1,24 +1,24 @@
-.MuiPaper-root.MuiDialog-paper.MuiDialog-paperScrollPaper.MuiDialog-paperWidthSm.MuiPaper-rounded > div > div {
-    height: 90px;
-}
-.MuiDialog-paperWidthSm{
-    max-width: 590px !important;
-}
+#welcomemodal{
+    .MuiPaper-root.MuiDialog-paper.MuiDialog-paperScrollPaper.MuiDialog-paperWidthSm.MuiPaper-rounded > div > div {
+        height: 90px;
+    }
+    .MuiDialog-paperWidthSm{
+        max-width: 590px !important;
+    }
 
-.role-modal{
-    padding-top: 10px;
-    display: inline-flex;
-}
+    .role-modal{
+        padding-top: 10px;
+        display: inline-flex;
+    }
 
-.MuiDialogActions-root.MuiDialogActions-spacing >div > button:nth-child(1) {
-    display: none;
-}
-.MuiPaper-root.MuiDialog-paper.MuiDialog-paperScrollPaper.MuiDialog-paperWidthSm.MuiPaper-rounded > div > div:nth-child(2) > h3 > button{
-    // display: none;
-}
-.role-modal p.para{
-    font-family: 'ProximaNova-Regular';
-    font-size: 16px;
-    color: #747474;
-    font-size: 16px;
+    .MuiDialogActions-root.MuiDialogActions-spacing >div > button:nth-child(1) {
+        display: none;
+    }
+
+    .role-modal p.para{
+        font-family: 'ProximaNova-Regular';
+        font-size: 16px;
+        color: #747474;
+        font-size: 16px;
+    }
 }
