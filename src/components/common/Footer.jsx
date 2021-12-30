@@ -2,10 +2,10 @@ import React from 'react'
 import Footer from 'apollo-react/components/Footer';
 
 const UnityFooter = ({data}) => {
-    const { QuestionTemplateVersionNumber, opportunityType } = data;
+    const { questionTemplateVersionNumber, opportunityType } = data;
     let templateversion =  null;
-    if(QuestionTemplateVersionNumber){
-        templateversion = `Question Template Verison: ${QuestionTemplateVersionNumber}`
+    if(questionTemplateVersionNumber){
+        templateversion = `Question Template Verison: ${questionTemplateVersionNumber}`
     }
     if(templateversion && opportunityType){
         templateversion = `${templateversion} - ${opportunityType}`
