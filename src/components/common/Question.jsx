@@ -443,7 +443,7 @@ export class TaskRow extends Component<Props, State> {
                   ) : null
                 }
                 {
-                  (lastAnswer && !isAnswerPredicted) ? (
+                  (lastAnswer && lastAnswer.get('answer').trim() && !isAnswerPredicted) ? (
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '32px', height: '32px' }}>
                       <Checkmark />
                     </div>

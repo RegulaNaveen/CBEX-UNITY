@@ -97,7 +97,6 @@ class AnswerHistory extends Component<Props> {
             </span>
           );
           if (questionType === 'text' || questionType === 'number') {
-            console.log('nextAnswer', nextAnswer)
             const diffAnswers = diffWordsWithSpace(nextAnswer, answer);
 
             return rearrangeDiff(diffAnswers).map(({ value, added, removed }) => {
