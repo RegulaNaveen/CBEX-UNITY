@@ -7,7 +7,6 @@ import '@testing-library/jest-dom/extend-expect';
 import Login from './Login';
 import { API } from '../../../constants';
 const { COGNITO_HOST, REDIRECTION_URL, CLIENT_ID } = API.AUTH;
-import sinon from 'sinon';
 
 describe('Login component', () => {
   beforeAll(() => {
