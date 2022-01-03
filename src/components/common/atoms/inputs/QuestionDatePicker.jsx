@@ -42,7 +42,7 @@ const QuestionDatePicker = ({value, resetDate, handleDayChange}) => {
                     setInputValue('');
                     resetDate();
                  }}
-                 style={{alignSelf: 'auto', position: 'absolute', right: '17%', marginTop: 15}} 
+                 style={{alignSelf: 'auto', position: 'absolute', right: '6px', marginTop: 15}} 
                  type="button" className="resetButton">
                 <CloseCircle fill="#444" />
               </button>

@@ -6,7 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.3] - YYYY-MM-DD
 ### Added
+  - IQVIACBEXU-754: Tool Tip functionality 
   - IQVIACBEXU-784: Display the current version number at the bottom of the page
+  - IQVIACBEXU-936: Validation functionality for Unity predicted answers
+
 ## [3.2] - YYYY-MM-DD
 ### Added
   - IQVIACBEXU-813: Date field type issues

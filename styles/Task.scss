@@ -72,8 +72,10 @@
     outline: none;
 
     .task-table-headers {
-      display: grid;
-      grid-template-columns: 1.3fr 1.3fr 0.4fr;
+      // display: grid;
+      // grid-template-columns: 1.3fr 1.3fr 0.4fr;
+      display: flex;
+      align-items: center;
       outline: none;
       height: 60px;
 
