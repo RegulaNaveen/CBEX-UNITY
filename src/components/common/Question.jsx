@@ -28,6 +28,8 @@ import Autocomplete from './atoms/inputs/AutoComplete';
 import DatePicker from 'apollo-react/components/DatePickerV2';
 import moment from 'moment'
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
+import InfoIcon from 'apollo-react-icons/Info';
+import Tooltip from 'apollo-react/components/Tooltip';
 // import DatePicker from './atoms/inputs/DatePicker';
 import StatusCheck from 'apollo-react-icons/StatusCheck';
 
@@ -356,7 +358,8 @@ export class TaskRow extends Component<Props, State> {
       answerConfiguration,
       milestone,
       ismilestoneavailable,
-      loading
+      loading,
+      questionHint
     } = this.props;
     const questionId = answers.get('questionId');
     let lastAnswer;
@@ -395,7 +398,22 @@ export class TaskRow extends Component<Props, State> {
               <Grid item xs={8} sm={9} md={12}>
                 <div className="question-text">
                   { this.renderTags(milestone, ismilestoneavailable, lastAnswer) }
-                  <p>{questionText}</p>
+                  <p>
+                    {questionText}
+                    {
+                      questionHint.length > 0 ? (
+                          <Tooltip
+                          variant="light"
+                          title={questionHint}
+                          placement="top"
+                        >
+                          <IconButton color="primary" style={{margin:0}} size="small">
+                            <InfoIcon style={{ fontSize: '16px' }} />
+                          </IconButton>
+                        </Tooltip>
+                      ) : <></>
+                    }
+                  </p>
                 </div>
               </Grid>
             </Grid>
@@ -443,7 +461,12 @@ export class TaskRow extends Component<Props, State> {
                 <Button
                   variant="text"
                   onClick={this.displayAnswerOnHistory}
-                  style={{ padding: '0 4px', width: '120px', justifyContent: 'flex-start' }} // based on current date format
+                  className="date-answered-btn"
+                  style={{
+                    padding: '0 4px', width: '120px',
+                    justifyContent: 'flex-start',
+                    fontWeight: 400
+                  }} // based on current date format
                 >
                   {answerDate}
                 </Button>

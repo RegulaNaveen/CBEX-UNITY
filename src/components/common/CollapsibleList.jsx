@@ -250,6 +250,7 @@ class CollapsibleList extends Component<Props, State> {
                     sectionName={title}
                     setQuestionToDisplayHistory={setQuestionToDisplayHistory}
                     loading={questionConfig.get('loading', false)}
+                    questionHint={questionConfig.get('questionHint', '')}
                   />
                 )
               );
