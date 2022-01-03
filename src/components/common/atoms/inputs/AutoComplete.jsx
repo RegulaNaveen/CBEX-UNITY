@@ -5,7 +5,7 @@ import { getLookupUsers } from '../../../../redux/selectors';
 
 function extractEmails (str){
     let result =  String(str).match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi);
-    return result.length ? result[0] : '' 
+    return result && result.length ? result[0] : '' 
 }
 
 const Autocomplete = (props) => {
@@ -13,24 +13,24 @@ const Autocomplete = (props) => {
     const text = String(props?.text).trimStart().trimEnd();
 
     const handleChange = (event, newValue) => {
-         setValue(newValue);
-         const proposaluser = newValue.map(v=>{
-             return v.email ? v.label+"("+v.email+")" : v.label+"("+extractEmails(v.label)+")"
-         })
-         if(proposaluser.length == 0)
+        setValue(newValue);
+        const proposaluser = newValue.map(v=>{
+            return v.email ? v.label+"("+v.email+")" : v.label+"("+extractEmails(v.label)+")"
+        })
+        if(proposaluser.length == 0)
             props.onChange(" ",text);
-         else
+        else
             props.onChange(proposaluser.join(","),text);
     };
     const UserNameByEmail = {};
     const proposalusers = props?.users?.map(v=>{
-        UserNameByEmail[v.email] = v.name;
-        return { label: v.name, email: v.email}
+        UserNameByEmail[v.email] = v.name.split(",").join(" ");
+        return { label: v.name.split(",").join(" "), email: v.email}
     });
     useEffect(() => {
         if(Boolean(text.length)){
             let Val = text.split(",").map(v=>{
-                let email = extractEmails(v);
+                let email = extractEmails(v) || v;
                 return { label: UserNameByEmail[email] || email, email: email }
             });
             setValue(Val);
@@ -49,6 +49,7 @@ const Autocomplete = (props) => {
                 limitChips={5}
                 matchFrom="any"
                 onChange={handleChange}
+                noOptionsText="No matches found"
             />
         </div>
     )
