@@ -10,6 +10,7 @@ import IconButton from 'apollo-react/components/IconButton';
 import Grid from 'apollo-react/components/Grid';
 import Box from 'apollo-react/components/Box';
 import Typography from 'apollo-react/components/Typography';
+import Loader from 'apollo-react/components/Loader';
 import { Checkmark } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
 import TextArea from './atoms/inputs/TextArea';
@@ -50,7 +51,8 @@ type Props = {
   sfObject: string,
   sfField: string,
   milestone: any,
-  ismilestoneavailable: string
+  ismilestoneavailable: string,
+  loading: Boolean
 };
 
 export class TaskRow extends Component<Props, State> {
@@ -338,13 +340,23 @@ export class TaskRow extends Component<Props, State> {
     setProposalAnswer(proposalId, questionId, String(predictedAnswer.get('answer')).trim(), userData);
   }
 
+  isAnswered(answer, isAnswerPredicted) {
+    if (isAnswerPredicted)
+      return false;
+    if (answer && answer.get('answer')) {
+      return answer.get('answer').toString().trim() && true
+    }
+    return false;
+  }
+
   render() {
     const {
       answers,
       questionText,
       answerConfiguration,
       milestone,
-      ismilestoneavailable
+      ismilestoneavailable,
+      loading
     } = this.props;
     const questionId = answers.get('questionId');
     let lastAnswer;
@@ -437,16 +449,32 @@ export class TaskRow extends Component<Props, State> {
                 </Button>
                 {
                   (isAnswerPredicted) ? (
-                    <IconButton onClick={() => this.handleVerifyPredictedAnsClick(lastAnswer)}>
-                      <StatusCheck fontSize={'22px'} style={{ color: '#D9D9D9' }} />
-                    </IconButton>
+                    <>
+                      <IconButton onClick={() => this.handleVerifyPredictedAnsClick(lastAnswer)}>
+                        <StatusCheck fontSize={'22px'} style={{ color: '#D9D9D9' }} />
+                      </IconButton>
+                    </>
                   ) : null
                 }
                 {
-                  (lastAnswer && lastAnswer.get('answer').trim() && !isAnswerPredicted) ? (
+                  (this.isAnswered(lastAnswer, isAnswerPredicted)) ? (
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '32px', height: '32px' }}>
                       <Checkmark />
                     </div>
+                  ) : null
+                }
+                {
+                  loading ? (
+                    <span style={{ position: 'relative', top: '15px' }}>
+                      <Loader
+                        isInner
+                        size={20}
+                        style={{
+                          width: '20px',
+                          height: '20px'
+                        }}
+                      />
+                    </span>
                   ) : null
                 }
               </Grid>
