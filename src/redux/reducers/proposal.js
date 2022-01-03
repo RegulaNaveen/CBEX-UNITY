@@ -67,6 +67,16 @@ const INITIAL_STATE: Map = fromJS({
   validatedProposalData: [],
   validatedProposalDataError: undefined,
   questionsFilter: fromJS({
+    answered: {
+      checked: false,
+      label: 'Answered',
+      className: 'questions-filter__row1-col1'
+    },
+    unanswered: {
+      checked: false,
+      label: 'Unanswered',
+      className: 'questions-filter__row1-col1'
+    },
     myUserRole: {
       checked: false,
       label: 'My User Role',

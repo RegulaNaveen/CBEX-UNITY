@@ -1,6 +1,6 @@
 // @flow
 import { isEmpty, cloneDeep, uniqBy } from 'lodash';
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import { REDUX_TYPES } from '../../constants';
 import type { Dispatch, ThunkAction } from './action-types';
 import {
@@ -271,6 +271,36 @@ function applyMyUserRoleFilter(questions) {
   return filteredQuestions;
 }
 
+function applyUnAnsweredFilter(questions) {
+  const role = localStorage.getItem('userRole');
+  let filteredQuestions = cloneDeep(questions);
+  if (role) {
+    filteredQuestions = fromJS(filteredQuestions)
+      .filter(val=>{
+        let Answer = val.get('answers', []);
+        Answer = Answer.toJS();
+        return Answer && Answer.length && !Boolean(String(Answer[Answer.length-1].answer).trim().length) || !Boolean(Answer.length)
+      })
+      .toJS();
+  }
+  return filteredQuestions;
+}
+
+function applyAnsweredFilter(questions) {
+  const role = localStorage.getItem('userRole');
+  let filteredQuestions = cloneDeep(questions);
+  if (role) {
+    filteredQuestions = fromJS(filteredQuestions)
+      .filter(question=>{
+        let Answer = question.get('answers', []);
+        Answer = Answer.toJS();
+        return Answer && Answer.length && String(Answer[Answer.length-1].answer).trim().length > 0
+      })
+      .toJS();
+  }
+  return filteredQuestions;
+}
+
 function applyInterestedPartyFilter(questions) {
   const role = localStorage.getItem('userRole');
   let filteredQuestions = cloneDeep(questions);
@@ -323,6 +353,18 @@ export function onQuestionsFilterApplied(questionsFilter) {
             'questionId'
           );
           break;
+        case 'answered':
+          filteredQuestions = uniqBy(
+            [...filteredQuestions, ...applyAnsweredFilter(questions)],
+            'questionId'
+          );
+          break;
+        case 'unanswered':
+          filteredQuestions = uniqBy(
+            [...filteredQuestions, ...applyUnAnsweredFilter(questions)],
+            'questionId'
+          );
+          break;
         case 'interestedParty':
           filteredQuestions = uniqBy(
             [...filteredQuestions, ...applyInterestedPartyFilter(questions)],
@@ -352,7 +394,6 @@ export function onApplyQuestionsFilter(filterName = null, checked = false) {
     if (filterName) {
       questionsFilter = questionsFilter.setIn([filterName, 'checked'], checked);
     }
-
     dispatch(onQuestionsFilterApplied(questionsFilter));
   };
 }

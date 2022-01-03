@@ -47,6 +47,7 @@ import AnswerHistory from '../../views/modals/AnswerHistory';
 import { getAllUsers } from '../../../redux/actions/sso-auth-actions';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import { getCountriesNameForCode } from '../../../utils/utils';
+import Grid from 'apollo-react/components/Grid';
 
 type Props = {
   match: Match,
@@ -331,13 +332,74 @@ class Questions extends Component<Props, State> {
   renderFilter() {
     const { showFilter } = this.state;
     const { questionsFilters, clearQuestionsFilter } = this.props;
-
+    const answerfilter = questionsFilters.filter(
+      (v, k) => (k.includes('answered') || k.includes('unanswered'))
+    );
+    const roleparty = questionsFilters.filter(
+      (v, k) => (k.includes('myUserRole') || k.includes('interestedParty'))
+    )
+    const filter = questionsFilters.filterNot(
+      (v, k) =>  (k.includes('answered') || k.includes('unanswered')) || (k.includes('myUserRole') || k.includes('interestedParty'))
+    )
     if (showFilter) {
       return (
-        <div className="questions-filter__container">
-          <div className="questions-filter__grid">
-            {questionsFilters.entrySeq().map(([key, filter]) => (
-              <div
+        <div className="questions-filter__container" >
+          <div className="questions-filter__grid column_style">
+            <div className="filtertitle">Filters</div>
+            <div> 
+              <Link
+              className="clear-all"
+              size="small"
+              onClick={() => clearQuestionsFilter()}
+              >
+              Clear All
+              </Link>
+            </div>
+              <Grid container spacing={2}>
+                  {answerfilter.entrySeq().map(([key, filter]) => (
+                    <Grid item xs={3}
+                      key={uuidv4()}
+                      className={classNames(
+                        'questions-filter__item',
+                        filter.get('className'),
+                        { 'questions-filter__auto': !filter.get('className') }
+                      )}
+                    >
+                      <ApolloCheckbox
+                        size="small"
+                        label={filter.get('label')}
+                        checked={filter.get('checked')}
+                        onChange={(e, checked) =>
+                          this.handleFilterChange(key, checked)
+                        }
+                      />
+                    </Grid>
+                  ))}
+              </Grid>
+              <Grid container spacing={2}>
+                {roleparty.entrySeq().map(([key, filter]) => (
+                <Grid item xs={3}
+                  key={uuidv4()}
+                  className={classNames(
+                    'questions-filter__item',
+                    filter.get('className'),
+                    { 'questions-filter__auto': !filter.get('className') }
+                  )}
+                >
+                  <ApolloCheckbox
+                    size="small"
+                    label={filter.get('label')}
+                    checked={filter.get('checked')}
+                    onChange={(e, checked) =>
+                      this.handleFilterChange(key, checked)
+                    }
+                  />
+                </Grid>
+                ))}
+              </Grid>
+              <Grid container spacing={2}>
+              {filter.entrySeq().map(([key, filter]) => (
+              <Grid item xs={3}
                 key={uuidv4()}
                 className={classNames(
                   'questions-filter__item',
@@ -345,24 +407,18 @@ class Questions extends Component<Props, State> {
                   { 'questions-filter__auto': !filter.get('className') }
                 )}
               >
-                <ApolloCheckbox
-                  size="small"
-                  label={filter.get('label')}
-                  checked={filter.get('checked')}
-                  onChange={(e, checked) =>
-                    this.handleFilterChange(key, checked)
-                  }
-                />
-              </div>
+              <ApolloCheckbox
+                size="small"
+                label={filter.get('label')}
+                checked={filter.get('checked')}
+                onChange={(e, checked) =>
+                  this.handleFilterChange(key, checked)
+                }
+              />
+              </Grid>
             ))}
+           </Grid>
           </div>
-          <Link
-            className="clear-all"
-            size="small"
-            onClick={() => clearQuestionsFilter()}
-          >
-            Clear All
-          </Link>
         </div>
       );
     }
