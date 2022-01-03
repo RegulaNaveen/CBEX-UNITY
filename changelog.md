@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-886: Frontend changes: Show an alert when hasDifferentSFanswer is = to true
   - IQVIACBEXU-932: General focus for questions
   - IQVIACBEXU-931: Edit/Delete custom questions
+  - IQVIACBEXU-942: Striking is not happening in history for single select dropdown, once editing/updating the dropdown option
+  - IQVIACBEXU-944: Profile : User role selection
   
 ### Changed
 ### Fixed
