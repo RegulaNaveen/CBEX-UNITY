@@ -22,6 +22,9 @@ import Autocomplete from './atoms/inputs/AutoComplete';
 import DatePicker from 'apollo-react/components/DatePickerV2';
 import moment from 'moment'
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
+import InfoIcon from 'apollo-react-icons/Info';
+import IconButton from 'apollo-react/components/IconButton';
+import Tooltip from 'apollo-react/components/Tooltip';
 // import DatePicker from './atoms/inputs/DatePicker';
 
 type State = {
@@ -340,7 +343,8 @@ export class TaskRow extends Component<Props, State> {
       questionText,
       answerConfiguration,
       milestone,
-      ismilestoneavailable
+      ismilestoneavailable,
+      questionHint
     } = this.props;
     const questionId = answers.get('questionId');
     let lastAnswer;
@@ -353,7 +357,22 @@ export class TaskRow extends Component<Props, State> {
       <div className="task-table-row">
         <div className="question-text">
           {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
-          <p>{questionText}</p>
+          <p>
+            {questionText}
+            {
+              questionHint.length > 0 ? (
+                  <Tooltip
+                  variant="light"
+                  title={questionHint}
+                  placement="top"
+                >
+                  <IconButton color="primary" style={{margin:0}} size="small">
+                    <InfoIcon style={{ fontSize: '16px' }} />
+                  </IconButton>
+                </Tooltip>
+              ) : <></>
+            }
+          </p>
         </div>
 
         <div>

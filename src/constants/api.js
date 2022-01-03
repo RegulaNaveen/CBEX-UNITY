@@ -47,10 +47,14 @@ switch (environment) {
     PROPOSAL_API_ENDPOINT =
       'https://r1g9pjnmbb.execute-api.us-east-1.amazonaws.com/qa';
     PROPOSAL_API_KEY = 'YXrOu45imb6d03erOkZB2PuBOsYQYZ93pnmQK6C0';
+    //NORMAL_AUTH_API_ENDPOINT =
+    // 'https://aiz2k1qjjl.execute-api.us-east-1.amazonaws.com/dev';
+    //COGNITO_HOST = 'https://unity-dev.auth.us-east-1.amazoncognito.com';
+    //CLIENT_ID = '5qa83je2aga90r53kte3mori93';
     NORMAL_AUTH_API_ENDPOINT =
-      'https://aiz2k1qjjl.execute-api.us-east-1.amazonaws.com/dev';
-    COGNITO_HOST = 'https://unity-dev.auth.us-east-1.amazoncognito.com';
-    CLIENT_ID = '5qa83je2aga90r53kte3mori93';
+     'https://cokteh9f4e.execute-api.us-east-1.amazonaws.com/qa';
+    COGNITO_HOST = 'https://qa-unity.auth.us-east-1.amazoncognito.com';
+    CLIENT_ID = '320kror6f2kqgifio04mfiveat';
     REDIRECTION_URL = 'https://qa-unity.iqvia.app/';
     UBUILD_ARTIFACT = 'https://qa-ubuild.iqvia.app/main.js';
     break;
@@ -60,7 +64,7 @@ switch (environment) {
       'https://puo6dvbged.execute-api.us-east-1.amazonaws.com/dev';
     PROPOSAL_API_KEY = 'Wctbuly84485ruXf4Bilz1c8xdckxcfk4GA2NvVe';
     NORMAL_AUTH_API_ENDPOINT =
-      'https://aiz2k1qjjl.execute-api.us-east-1.amazonaws.com/dev';
+      'https://x73ryaox77.execute-api.us-east-1.amazonaws.com/dev';
     COGNITO_HOST = 'https://unity-dev.auth.us-east-1.amazoncognito.com';
     CLIENT_ID = '5qa83je2aga90r53kte3mori93';
     REDIRECTION_URL = 'https://dev-unity.iqvia.app/';
