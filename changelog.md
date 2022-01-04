@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 ### Fixed
   - IQVIACBEXU-958: showing as invalid date in history for date field once enter and delete the invalid date for Not Answered
+  - IQVIACBEXU-943: Team member filter alignment issue in unity homepage
 
 ## [3.2] - 2021-12-19
 ### Added
