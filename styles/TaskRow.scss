@@ -2,6 +2,8 @@
   display: grid;
   grid-template-columns: 1.3fr 1.3fr 0.4fr;
   margin-bottom: 15px;
+  padding: 10px 0;
+  align-items: center;
 
   .question-text {
     display: grid;
@@ -17,6 +19,13 @@
       hyphens: auto;
       margin-left: 5px;
       padding-right: 10px;
+
+      .edit-icon {
+        margin-left: 10px;
+        position: relative;
+        top: 3px;
+        color: #5d5d5d;
+      }
     }
   }
 
@@ -103,4 +112,7 @@
     }
   }
 
+}
+.selected-task-table-row{
+  background-color: #ecf3ff;
 }

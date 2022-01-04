@@ -157,6 +157,9 @@ export const selectFilteredSections = state =>
 export const selectActiveQuestionsFilterCount = state =>
   proposalSelectors.selectActiveQuestionsFilterCount(state);
 
+export const getEditQuestionData = state =>
+  proposalSelectors.getEditQuestionData(state);
+
 // Tabbar Selectors
 export const getProposals = (state: Object): Array<Object> =>
   proposalsSelectors.getProposals(state.proposals);
