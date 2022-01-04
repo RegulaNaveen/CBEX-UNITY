@@ -9,7 +9,7 @@ import { diffWordsWithSpace } from 'diff';
 import { getProposalTeamAssignedRoles } from '../../../redux/selectors';
 import { Close } from '../../svg';
 import { parseMomentDate } from '../../../utils/DateUtils';
-import { rearrangeDiff } from '../../../utils/utils';
+import { rearrangeDiff, getUserInitials, getUserName } from '../../../utils/utils';
 
 type Props = {
   question: Map,
@@ -74,15 +74,22 @@ class AnswerHistory extends Component<Props> {
       const nextAnswer = answers.get(index + 1)
         ? answers.get(index + 1).get('answer')
         : answer;
+      
+      const isValidatedUnityPredictedAnswer = (
+        answers.get(index + 1) &&
+        answers.get(index + 1).get('userName') === 'UnityPredictedAnswer' &&
+        answer === nextAnswer
+      );
 
-      const userInitials =
-        userName !== 'AnswerPulledFromSalesforce'
-          ? userName.split(' ')[0].charAt(0) + userName.split(' ')[1].charAt(0)
-          : 'SA';
+      const userInitials = getUserInitials(userName);
       const parsedDate = parseMomentDate(date);
       const avatarRandomColor = randomColor({ luminosity: 'dark' });
 
       const renderAnswers = () => {
+        if (isValidatedUnityPredictedAnswer) {
+          return <span key={uuidv4()}>Validated Unity Predicted Answer</span>;
+        }
+
         if (questionType !== 'picklist') {
           const renderWord = (word, status) => (
             <span className={status} key={uuidv4()}>
@@ -129,6 +136,14 @@ class AnswerHistory extends Component<Props> {
               </>
             );
           };
+
+          if (questionType === 'select') {
+            if(index == 0){
+              return renderWord(answer, 'changed');
+            }else{
+              return renderWord(answer, 'removed');
+            }
+          }
 
           if (questionType === 'date') {
             answer = String(answer)
@@ -180,9 +195,7 @@ class AnswerHistory extends Component<Props> {
             </span>
             <div>
               <p>
-                {userName === 'AnswerPulledFromSalesforce'
-                  ? 'Salesforce Answer'
-                  : userName}
+                {getUserName(userName)}
               </p>
               {renderAnswers()}
             </div>

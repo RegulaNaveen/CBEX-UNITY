@@ -9,11 +9,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-886: Frontend changes: Show an alert when hasDifferentSFanswer is = to true
   - IQVIACBEXU-932: General focus for questions
   - IQVIACBEXU-931: Edit/Delete custom questions
+  - IQVIACBEXU-942: Striking is not happening in history for single select dropdown, once editing/updating the dropdown option
+  - IQVIACBEXU-944: Profile : User role selection
   
 ### Changed
 ### Fixed
   - IQVIACBEXU-958: showing as invalid date in history for date field once enter and delete the invalid date for Not Answered
 
+
+## [3.3] - YYYY-MM-DD
+### Added
+  - IQVIACBEXU-754: Tool Tip functionality 
+  - IQVIACBEXU-784: Display the current version number at the bottom of the page
+  - IQVIACBEXU-936: Validation functionality for Unity predicted answers
+  
 ## [3.2] - 2021-12-19
 ### Added
   - IQVIACBEXU-813: Date field type issues

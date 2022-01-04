@@ -78,7 +78,7 @@ const QuestionDatePicker = ({
           style={{
             alignSelf: 'auto',
             position: 'absolute',
-            right: '17%',
+            right: '6px',
             marginTop: 15
           }}
           type="button"

@@ -63,6 +63,7 @@ class Dropdown extends PureComponent<Props, State> {
     const { setSelectRow } = this.props;
     if (this.ref.current !== event.target) {
       this.setState({ isCollapsed: false });
+      if(setSelectRow)
       setSelectRow(false);
     }
   };
