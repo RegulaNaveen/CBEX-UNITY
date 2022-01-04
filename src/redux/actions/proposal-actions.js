@@ -79,7 +79,7 @@ export const setProposalAnswerData = (
   userData: Object
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
-    dispatch({ type: PROPOSAL_ANSWER_LOADING, payload: {} });
+    dispatch({ type: PROPOSAL_ANSWER_LOADING, payload: { questionId, loading: true } });
 
     try {
       const { data } = await setProposalAnswer(
@@ -115,8 +115,9 @@ export const setProposalAnswerData = (
           dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
         });
       }
+      dispatch({ type: PROPOSAL_ANSWER_LOADING, payload: { questionId, loading: false } });
     } catch (err) {
-      dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: err });
+      dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err }});
     }
   };
 };

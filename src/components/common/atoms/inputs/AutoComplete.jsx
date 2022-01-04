@@ -38,7 +38,7 @@ const Autocomplete = (props) => {
     }, [text]);
 
     return (
-        <div style={{ maxWidth: 500 }}>
+        <div>
             <AutocompleteV2
                 fullWidth
                 multiple

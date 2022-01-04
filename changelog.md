@@ -16,6 +16,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
   - IQVIACBEXU-958: showing as invalid date in history for date field once enter and delete the invalid date for Not Answered
 
+
+## [3.3] - YYYY-MM-DD
+### Added
+  - IQVIACBEXU-754: Tool Tip functionality 
+  - IQVIACBEXU-784: Display the current version number at the bottom of the page
+  - IQVIACBEXU-936: Validation functionality for Unity predicted answers
+  
 ## [3.2] - 2021-12-19
 ### Added
   - IQVIACBEXU-813: Date field type issues
