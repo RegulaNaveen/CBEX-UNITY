@@ -24,7 +24,8 @@ import {
 import {
   getIsOpen,
   selectNotes,
-  getProposalDetails
+  getProposalDetails,
+  getSelectedSection
 } from '../../redux/selectors';
 import { changeMode } from '../../redux/actions/notepad-actions';
 import { REDUX_TYPES } from '../../constants';
@@ -48,7 +49,8 @@ type Props = {
   eventCategories: any,
   userActions: any,
   trackEvent: any,
-  proposalDetail: any
+  proposalDetail: any,
+  storeSelectedSection: string
 };
 
 type State = {
@@ -338,6 +340,7 @@ class Sidebar extends Component<Props, State> {
               <div className="sidebar-content-list">
                 {sections.valueSeq().map(section => {
                   const sectionName = section.get('sectionName');
+                  const sectionNameId = sectionName.toLocaleLowerCase().split(' ').join('-');
                   const questions = section.get('questions');
                   const someQuestionsAreVisible = questions
                     .valueSeq()
@@ -350,7 +353,9 @@ class Sidebar extends Component<Props, State> {
                         key={sectionName}
                         id={sectionName}
                         className={classNames({
-                          'is-selected': selectedSection === sectionName
+                          'is-selected':
+                            selectedSection === sectionName &&
+                            sectionNameId === this.props.storeSelectedSection
                         })}
                         role="presentation"
                         onClick={this.scrollToSelectedElement}
@@ -380,7 +385,8 @@ class Sidebar extends Component<Props, State> {
 const mapStateToProps = (state: Object) => ({
   isOpen: getIsOpen(state),
   notes: selectNotes(state),
-  proposalDetail: getProposalDetails(state)
+  proposalDetail: getProposalDetails(state),
+  storeSelectedSection: getSelectedSection(state)
 });
 
 export default connect(mapStateToProps, {
