@@ -497,7 +497,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                     id="okay-button"
                     onClick={this.onSave}
                   >
-                    Okay
+                    {isEditMode ? 'Save' : 'Okay'}
                   </PrimaryButton>
                 </div>
               </div>
