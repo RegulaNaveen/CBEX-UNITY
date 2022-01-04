@@ -59,7 +59,7 @@ type Props = {
   sfField: string,
   milestone: any,
   ismilestoneavailable: string,
-  loading: Boolean
+  loading: Boolean,
   setEditQuestionData: (data: Object) => void,
   roleNames: Array<string>,
   isCustomQuestion: boolean,
