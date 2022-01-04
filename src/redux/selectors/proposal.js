@@ -72,7 +72,11 @@ const getQuestionSections = (items: Array<Object>) => {
 
 function getRecentAnswer(answers) {
   const recentAnswer = last(answers);
-  if (recentAnswer && recentAnswer.answer && String(recentAnswer.answer).trim().length) {
+  if (
+    recentAnswer &&
+    recentAnswer.answer &&
+    String(recentAnswer.answer).trim().length
+  ) {
     return String(recentAnswer.answer).trim().length > 0
       ? recentAnswer.answer
       : 'Not defined yet.';
@@ -250,4 +254,8 @@ export const selectUniqueMilestones = createSelector(
 export const selectAreAllSectionsExpanded = createSelector(
   selectProposal,
   proposal => proposal.get('areAllSectionsExpanded')
+);
+
+export const getEditQuestionData = createSelector(selectProposal, proposal =>
+  proposal.get('editQuestionsData', Map({}))
 );

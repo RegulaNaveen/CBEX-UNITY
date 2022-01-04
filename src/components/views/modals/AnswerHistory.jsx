@@ -92,36 +92,60 @@ class AnswerHistory extends Component<Props> {
           if (questionType === 'text' || questionType === 'number') {
             const diffAnswers = diffWordsWithSpace(nextAnswer, answer);
 
-            return rearrangeDiff(diffAnswers).map(({ value, added, removed }) => {
-              if (removed) return renderWord(value, 'removed');
-              if (added) return renderWord(value, 'changed');
+            return rearrangeDiff(diffAnswers).map(
+              ({ value, added, removed }) => {
+                if (removed) return renderWord(value, 'removed');
+                if (added) return renderWord(value, 'changed');
 
-              return <span key={uuidv4()}>{value} </span>;
-            });
+                return <span key={uuidv4()}>{value} </span>;
+              }
+            );
           }
-          const showDate = (answer, nextAnswer, indx) =>{
-            let tmp = answers.toJS();
-            if(new Date(answer) == 'Invalid Date'){
+          const showDate = (answer, nextAnswer, indx) => {
+            const tmp = answers.toJS();
+            if (new Date(answer) == 'Invalid Date') {
               return renderWord('Invalid Date', 'removed');
+            }
+            const newdate = renderWord(
+              String(parseMomentDate(answer)),
+              'changed'
+            );
+            let nextdate = '';
+            if (indx + 1 == tmp.length) {
+              nextdate = '';
+            } else if (
+              nextAnswer &&
+              String(nextAnswer).trim().length &&
+              tmp.length > 1
+            ) {
+              nextdate = renderWord(
+                String(parseMomentDate(nextAnswer)),
+                'removed'
+              );
+            }
+            return (
+              <>
+                {nextdate} {newdate}
+              </>
+            );
+          };
+
+          if (questionType === 'select') {
+            if(index == 0){
+              return renderWord(answer, 'changed');
             }else{
-              let newdate = renderWord(String(parseMomentDate(answer)), 'changed');
-              let nextdate = ''
-              if(indx+1 == tmp.length){
-                  nextdate = ''
-              }else if(nextAnswer && String(nextAnswer).trim().length && tmp.length > 1){
-                  nextdate = renderWord(String(parseMomentDate(nextAnswer)), 'removed');
-               }
-              return <>{nextdate} {newdate}</>
+              return renderWord(answer, 'removed');
             }
           }
 
           if (questionType === 'date') {
-            answer = String(answer).trimStart().trimEnd();
-            if(!Boolean(String(answer).length)){
+            answer = String(answer)
+              .trimStart()
+              .trimEnd();
+            if (!String(answer).length) {
               return renderWord(parseMomentDate(nextAnswer), 'removed');
-            }else{
-              return <p>{showDate(answer, nextAnswer, index)}</p>;
             }
+            return <p>{showDate(answer, nextAnswer, index)}</p>;
           }
 
           return <p>{answer}</p>;

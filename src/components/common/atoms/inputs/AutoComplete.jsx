@@ -50,6 +50,12 @@ const Autocomplete = (props) => {
                 matchFrom="any"
                 onChange={handleChange}
                 noOptionsText="No matches found"
+                onFocus={e => {
+                    props.onFocus();
+                }}
+                onBlur={e => {
+                    props.onBlur();
+                }}
             />
         </div>
     )

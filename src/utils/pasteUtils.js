@@ -2,7 +2,7 @@
 
 /**
  * function that takes an paste event as input and returns string with valid characters
- * @param {*} event 
+ * @param {*} event
  * @returns string
  */
 const removeSpecialChars = (event: SyntheticInputEvent<EventTarget>) => {
