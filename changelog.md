@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-958: showing as invalid date in history for date field once enter and delete the invalid date for Not Answered
   - IQVIACBEXU-945: Notepad functionality: Words broken apart
   - IQVIACBEXU-1050: "Okay" button is displaying instead of "save" button for custom questions
+  - IQVIACBEXU-946: Index sections should match the form sections.
 
 ## [3.2] - 2021-12-19
 ### Added
