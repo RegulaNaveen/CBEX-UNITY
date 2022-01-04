@@ -288,6 +288,7 @@ class Questions extends Component<Props, State> {
   };
 
   renderQuestions() {
+   try {
     const {
       sections,
       filteredSections,
@@ -297,7 +298,6 @@ class Questions extends Component<Props, State> {
     } = this.props;
 
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
-
     return allSections.valueSeq().map(section => {
       const sectionName = section.get('sectionName');
       const questions = section.get('questions');
@@ -326,7 +326,10 @@ class Questions extends Component<Props, State> {
         );
 
       return null;
-    });
+    }); 
+   } catch (error) {
+     console.log(error);
+   }
   }
 
   renderFilter() {
