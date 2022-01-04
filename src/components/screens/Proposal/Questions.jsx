@@ -34,7 +34,8 @@ import {
   selectSections,
   selectFilteredSections,
   selectActiveQuestionsFilterCount,
-  getMilestoneSections
+  getMilestoneSections,
+  getEditQuestionData
 } from '../../../redux/selectors';
 import {
   selectUniqueMilestones,
@@ -70,7 +71,8 @@ type Props = {
   isQuestionsFiltersEnabled: boolean,
   activeQuestionsFilterCount: Number,
   allSectionsExpanded: boolean,
-  expandAllSections: Function
+  expandAllSections: Function,
+  editQuestionsData: Map
 };
 
 type State = {
@@ -106,7 +108,8 @@ class Questions extends Component<Props, State> {
       setQuestion,
       hasQuestionError,
       userRole,
-      applyQuestionsFilter
+      applyQuestionsFilter,
+      editQuestionsData
     } = this.props;
     if (prevProps.isQuestionLoading && setQuestion && !hasQuestionError)
       this.onClose();
@@ -114,6 +117,11 @@ class Questions extends Component<Props, State> {
     // check for user role change
     if (prevProps.userRole !== userRole) {
       applyQuestionsFilter();
+    }
+
+    // on Edit question
+    if (prevProps.editQuestionsData.size === 0 && editQuestionsData.size > 0) {
+      this.onClose();
     }
   }
 
@@ -369,7 +377,8 @@ class Questions extends Component<Props, State> {
       proposalID,
       isQuestionsFiltersEnabled,
       activeQuestionsFilterCount,
-      allSectionsExpanded
+      allSectionsExpanded,
+      editQuestionsData
     } = this.props;
 
     const {
@@ -480,7 +489,8 @@ const mapStateToProps = (state: Map) => ({
   activeQuestionsFilterCount: selectActiveQuestionsFilterCount(state),
   milestones: selectUniqueMilestones(state),
   userRole: selectUserRole(state),
-  allSectionsExpanded: selectAreAllSectionsExpanded(state)
+  allSectionsExpanded: selectAreAllSectionsExpanded(state),
+  editQuestionsData: getEditQuestionData(state)
 });
 
 export default compose(

@@ -19,6 +19,9 @@
     "flow:chk": "yarn run flow",
     "lint:chk": "eslint src/**/*.js src/**/*.jsx",
     "sanity": "yarn flow:chk && yarn lint:chk && yarn test",
+    "dev:test": "jest",
+    "dev:test:clearcache": "jest --clearCache",
+    "dev:cvr": "npm run dev:test -- --env=jsdom --coverage --watchAll=false",
     "prepare": "husky install"
   },
   "author": "",
@@ -66,10 +69,16 @@
     "@babel/plugin-proposal-export-default-from": "^7.8.3",
     "@babel/polyfill": "^7.8.7",
     "@babel/preset-env": "^7.9.0",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^12.0.0",
     "@babel/preset-flow": "^7.9.0",
+    "@babel/plugin-transform-runtime": "^7.14.5",
+    "identity-obj-proxy": "^3.0.0",
     "@babel/preset-react": "^7.9.4",
     "@babel/register": "^7.9.0",
     "axios-mock-adapter": "^1.18.1",
+    "jest": "^27.0.6",
+    "jest-runner-eslint": "^0.10.1",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
     "enzyme": "^3.11.0",
@@ -93,12 +102,19 @@
     "jsdom": "^16.2.1",
     "jsdom-global": "^3.0.2",
     "mocha": "^7.1.1",
+    "redux-mock-store": "1.5.3",
     "nyc": "^15.0.0",
     "react-hot-loader": "^4.12.20",
     "sinon": "^9.0.1",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3"
+  },
+  "jest": {
+    "projects": [
+      "<rootDir>/jest.config.js",
+      "<rootDir>/jest-eslint.config.js"
+    ]
   },
   "nyc": {
     "check-coverage": true,

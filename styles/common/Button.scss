@@ -123,6 +123,32 @@
     background-color: $darkerBlue;
   }
 }
+.saverole-button:disabled,
+.saverole-button[disabled]{
+ opacity: 0.5;
+}
+
+.saverole-button {
+  height: 40px;
+  float: right;
+  width: 81px;
+  background-color: $blue;
+  color: white;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  font-family: $proximaNova;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 24px;
+  outline: none;
+
+  &:hover {
+    background-color: $darkerBlue;
+  }
+}
 
 @media (max-width: $loginResponsiveWidth) {
   .link-button {

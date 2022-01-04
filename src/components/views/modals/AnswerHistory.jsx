@@ -5,10 +5,11 @@ import { Map } from 'immutable';
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
 import { isEmpty, unionBy } from 'lodash';
-import { diffChars } from 'diff';
+import { diffWordsWithSpace } from 'diff';
 import { getProposalTeamAssignedRoles } from '../../../redux/selectors';
 import { Close } from '../../svg';
 import { parseMomentDate } from '../../../utils/DateUtils';
+import { rearrangeDiff } from '../../../utils/utils';
 
 type Props = {
   question: Map,
@@ -89,23 +90,62 @@ class AnswerHistory extends Component<Props> {
             </span>
           );
           if (questionType === 'text' || questionType === 'number') {
-            const diffAnswers = diffChars(nextAnswer, answer);
+            const diffAnswers = diffWordsWithSpace(nextAnswer, answer);
 
-            return diffAnswers.map(({ value, added, removed }) => {
-              if (removed) return renderWord(value, 'removed');
-              if (added) return renderWord(value, 'changed');
+            return rearrangeDiff(diffAnswers).map(
+              ({ value, added, removed }) => {
+                if (removed) return renderWord(value, 'removed');
+                if (added) return renderWord(value, 'changed');
 
-              return <span key={uuidv4()}>{value} </span>;
-            });
+                return <span key={uuidv4()}>{value} </span>;
+              }
+            );
+          }
+          const showDate = (answer, nextAnswer, indx) => {
+            const tmp = answers.toJS();
+            if (new Date(answer) == 'Invalid Date') {
+              return renderWord('Invalid Date', 'removed');
+            }
+            const newdate = renderWord(
+              String(parseMomentDate(answer)),
+              'changed'
+            );
+            let nextdate = '';
+            if (indx + 1 == tmp.length) {
+              nextdate = '';
+            } else if (
+              nextAnswer &&
+              String(nextAnswer).trim().length &&
+              tmp.length > 1
+            ) {
+              nextdate = renderWord(
+                String(parseMomentDate(nextAnswer)),
+                'removed'
+              );
+            }
+            return (
+              <>
+                {nextdate} {newdate}
+              </>
+            );
+          };
+
+          if (questionType === 'select') {
+            if(index == 0){
+              return renderWord(answer, 'changed');
+            }else{
+              return renderWord(answer, 'removed');
+            }
           }
 
           if (questionType === 'date') {
-            answer = String(answer).trimStart().trimEnd();
-            if(!Boolean(String(answer).length)){
+            answer = String(answer)
+              .trimStart()
+              .trimEnd();
+            if (!String(answer).length) {
               return renderWord(parseMomentDate(nextAnswer), 'removed');
-            }else{
-              return <p>{new Date(answer) == 'Invalid Date' ? '' : parseMomentDate(answer)}</p>;
             }
+            return <p>{showDate(answer, nextAnswer, index)}</p>;
           }
 
           return <p>{answer}</p>;

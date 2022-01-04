@@ -1,4 +1,5 @@
 import jwt_decode from 'jwt-decode';
+import { cloneDeep } from 'lodash';
 import CountryMap from '../constants/country.json';
 import { UBUILD_ADMIN } from '../constants/types';
 
@@ -96,9 +97,54 @@ function logLobDetails(record) {
   }
 }
 
+/**
+ * function to rearrange diff'ed answers from diff js library
+ */
+
+function rearrangeDiff(diffAnswers) {
+  let rearrangedDiffAnswers = [];
+  let subAdditionDiffAnswers = [];
+  let subRemovedDiffAnswers = [];
+
+  diffAnswers.forEach(answer => {
+    const newAnswer = cloneDeep(answer);
+    newAnswer.value = `${newAnswer.value.trim()} `;
+    if (answer.added) {
+      subAdditionDiffAnswers.push(newAnswer);
+      return;
+    }
+    if (answer.removed) {
+      subRemovedDiffAnswers.push(newAnswer);
+      return;
+    }
+    if (answer.value.trim().length == 0) {
+      return;
+    }
+    rearrangedDiffAnswers = rearrangedDiffAnswers.concat(
+      subRemovedDiffAnswers,
+      subAdditionDiffAnswers,
+      [cloneDeep(answer)]
+    );
+    subRemovedDiffAnswers = [];
+    subAdditionDiffAnswers = [];
+  });
+
+  if (subRemovedDiffAnswers.length > 0 || subAdditionDiffAnswers.length > 0) {
+    rearrangedDiffAnswers = rearrangedDiffAnswers.concat(
+      subRemovedDiffAnswers,
+      subAdditionDiffAnswers
+    );
+    subRemovedDiffAnswers = [];
+    subAdditionDiffAnswers = [];
+  }
+
+  return rearrangedDiffAnswers;
+}
+
 export {
   getCountriesNameForCode,
   getCountryOptions,
   isUserUbuildAdmin,
-  logLobDetails
+  logLobDetails,
+  rearrangeDiff
 };
