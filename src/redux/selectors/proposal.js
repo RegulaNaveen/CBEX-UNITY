@@ -216,7 +216,7 @@ export const selectQuestionsFilters = createSelector(selectProposal, proposal =>
 
 export const selectActiveQuestionsFilters = createSelector(
   selectQuestionsFilters,
-  questionsFilters => questionsFilters.filter(filter => filter.get('checked'))
+  questionsFilters => questionsFilters
 );
 
 export const selectIsQuestionsFilterEnabled = createSelector(
@@ -261,7 +261,14 @@ export const selectFilteredSections = createSelector(
 
 export const selectActiveQuestionsFilterCount = createSelector(
   selectActiveQuestionsFilters,
-  filters => filters.size
+  filters => {
+    let size = 0;
+    filters.forEach(group=>group.forEach(filter=>{
+      if(typeof filter !== 'string' && filter.get('checked'))
+        size++;
+    }))
+    return size;
+  }
 );
 
 export const selectUniqueMilestones = createSelector(
