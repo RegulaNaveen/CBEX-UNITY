@@ -16,6 +16,7 @@ const generateSections = (
   filter: boolean,
   role: string
 ): Map => {
+ try {
   let sections = Map();
   const userRole = role !== '' ? role : false;
 
@@ -51,6 +52,9 @@ const generateSections = (
   sections = sections.sortBy(section => section.get('sectionOrder'));
 
   return sections;
+ } catch (error) {
+   console.log(error)
+ }
 };
 
 const getQuestionSections = (items: Array<Object>) => {
@@ -172,7 +176,11 @@ export const getPendingValidatedItems = (propoal: Map): number => {
 };
 
 function createSectionsFromQuestions(questions) {
-  return generateSections(questions, false, false);
+  try {
+    return generateSections(questions, false, false);
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 export function getUniqueMilestones(questions) {

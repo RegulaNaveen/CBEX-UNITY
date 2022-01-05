@@ -46,6 +46,7 @@ import AnswerHistory from '../../views/modals/AnswerHistory';
 import { getAllUsers } from '../../../redux/actions/sso-auth-actions';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import { getCountriesNameForCode } from '../../../utils/utils';
+import Grid from 'apollo-react/components/Grid';
 
 type Props = {
   match: Match,
@@ -286,6 +287,7 @@ class Questions extends Component<Props, State> {
   };
 
   renderQuestions() {
+   try {
     const {
       sections,
       filteredSections,
@@ -295,7 +297,6 @@ class Questions extends Component<Props, State> {
     } = this.props;
 
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
-
     return allSections.valueSeq().map(section => {
       const sectionName = section.get('sectionName');
       const questions = section.get('questions');
@@ -324,7 +325,10 @@ class Questions extends Component<Props, State> {
         );
 
       return null;
-    });
+    }); 
+   } catch (error) {
+     console.log(error);
+   }
   }
 
   renderFilter() {
@@ -368,13 +372,6 @@ class Questions extends Component<Props, State> {
                 </Grid>
               ))}
           </div>
-          <Link
-            className="clear-all"
-            size="small"
-            onClick={() => clearQuestionsFilter()}
-          >
-            Clear All
-          </Link>
         </div>
       );
     }
