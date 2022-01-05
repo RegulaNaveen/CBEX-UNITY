@@ -67,16 +67,33 @@ const INITIAL_STATE: Map = fromJS({
   validatedProposalData: [],
   validatedProposalDataError: undefined,
   questionsFilter: fromJS({
-    myUserRole: {
-      checked: false,
-      label: 'My User Role',
-      className: 'questions-filter__row1-col1'
+    answerGroup : {
+      answered: {
+        checked: false,
+        label: 'Answered',
+        className: 'questions-filter__row1-col1'
+      },
+      unanswered: {
+        checked: false,
+        label: 'Unanswered',
+        className: 'questions-filter__row1-col1'
+      },
+      logic : 'OR'
     },
-    interestedParty: {
-      checked: false,
-      label: 'Interested Party',
-      className: 'questions-filter__row2-col1'
-    }
+    rolegroup : {
+      myUserRole: {
+        checked: false,
+        label: 'My User Role',
+        className: 'questions-filter__row1-col1'
+      },
+      interestedParty: {
+        checked: false,
+        label: 'Interested Party',
+        className: 'questions-filter__row2-col1'
+      },
+      logic : 'AND'
+    },
+    milestoneGroup : {}
   }),
   filteredProposalQuestions: Map({}),
   areAllSectionsExpanded: false,
@@ -95,8 +112,9 @@ const onProsalInfoLoaded = (state: Map, action: Object): Map => {
 
   // Adding milestones to Questions Filter
   let questionsFilter = state.get('questionsFilter');
+  let milestoneGroup = fromJS({});
   milestones.forEach(milestone => {
-    questionsFilter = questionsFilter.set(
+    milestoneGroup = milestoneGroup.set(
       milestone,
       Map({
         checked: false,
@@ -105,7 +123,8 @@ const onProsalInfoLoaded = (state: Map, action: Object): Map => {
       })
     );
   });
-
+  milestoneGroup = milestoneGroup.set('logic', 'OR')
+  questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
   return state
     .set('proposalDetails', proposalDetails)
     .set('proposalQuestions', proposalQuestions)

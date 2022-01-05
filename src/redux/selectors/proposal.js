@@ -213,8 +213,18 @@ export const selectActiveQuestionsFilters = createSelector(
 
 export const selectIsQuestionsFilterEnabled = createSelector(
   selectQuestionsFilters,
-  questionsFilters =>
-    questionsFilters.some(filter => filter.get('checked', false))
+  questionsFilters => {
+    let considerFilter = false;
+    questionsFilters.entrySeq().forEach(([groupName, group]) => {
+      group.entrySeq().forEach(([filterName, filter])=>{
+        if(filterName === 'logic' || !filter.get('checked'))
+          return;
+
+        considerFilter = true;          
+      })
+    });      
+    return considerFilter;
+  }
 );
 
 export const selectSections = createSelector(

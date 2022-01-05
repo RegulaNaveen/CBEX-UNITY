@@ -14,7 +14,6 @@ import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import { Add, Refresh } from '../../svg';
 import CollapsibleList from '../../common/CollapsibleList';
-import Checkbox from '../../common/atoms/inputs/Checkbox';
 import ProposalInfo from './ProposalInfo';
 import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
 import {
@@ -142,9 +141,9 @@ class Questions extends Component<Props, State> {
     }));
   }
 
-  handleFilterChange(filterName, checked) {
+  handleFilterChange(filterName, checked, groupName='') {
     const { applyQuestionsFilter } = this.props;
-    applyQuestionsFilter(filterName, checked);
+    applyQuestionsFilter(filterName, checked, groupName);
   }
 
   scrollToSelectedElement = title => {
@@ -331,30 +330,43 @@ class Questions extends Component<Props, State> {
   renderFilter() {
     const { showFilter } = this.state;
     const { questionsFilters, clearQuestionsFilter } = this.props;
-
     if (showFilter) {
       return (
-        <div className="questions-filter__container">
-          <div className="questions-filter__grid">
-            {questionsFilters.entrySeq().map(([key, filter]) => (
-              <div
-                key={uuidv4()}
-                className={classNames(
-                  'questions-filter__item',
-                  filter.get('className'),
-                  { 'questions-filter__auto': !filter.get('className') }
-                )}
+        <div className="questions-filter__container" >
+          <div className="questions-filter__grid column_style">
+            <div className="filtertitle">Filters</div>
+            <div> 
+              <Link
+              className="clear-all"
+              size="small"
+              onClick={() => clearQuestionsFilter()}
               >
-                <ApolloCheckbox
-                  size="small"
-                  label={filter.get('label')}
-                  checked={filter.get('checked')}
-                  onChange={(e, checked) =>
-                    this.handleFilterChange(key, checked)
-                  }
-                />
-              </div>
-            ))}
+              Clear All
+              </Link>
+            </div>
+            {questionsFilters.entrySeq().map(([groupName, group]) => (
+               <Grid container spacing={2} className={groupName}>
+                  {group.entrySeq().filter(value=>value[0] != 'logic').map(([key, filter]) => (
+                    <Grid item xs={3}
+                      key={uuidv4()}
+                      className={classNames(
+                        'questions-filter__item',
+                        filter.get('className'),
+                        { 'questions-filter__auto': !filter.get('className') }
+                      )}
+                    >
+                      <ApolloCheckbox
+                        size="small"
+                        label={filter.get('label')}
+                        checked={filter.get('checked')}
+                        onChange={(e, checked) =>
+                          this.handleFilterChange(key, checked, groupName)
+                        }
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
+              ))}
           </div>
           <Link
             className="clear-all"

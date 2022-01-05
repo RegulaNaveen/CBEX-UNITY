@@ -298,6 +298,15 @@ function applyMilestoneFilter(questions, milestone) {
   return filteredQuestions;
 }
 
+function filterGroup(filteredQuestions, allQuestions, logic, filterCallback, filterName=''){
+  if(logic === 'AND'){
+    return uniqBy( filterCallback(allQuestions),'questionId');
+  }else{
+    return uniqBy([...filteredQuestions, ...filterCallback(allQuestions, filterName)],'questionId');
+  }
+}
+
+
 export function onQuestionsFilterApplied(questionsFilter) {
   return async (dispatch, getState) => {
     const state = getState();
@@ -306,38 +315,48 @@ export function onQuestionsFilterApplied(questionsFilter) {
       payload: { questionsFilter }
     });
 
-    /**
-     * get active filters and apply in sequence
-     */
+    let filteredQuestions = cloneDeep(selectProposalQuestions(state));
 
-    const questions = selectProposalQuestions(state);
-    let filteredQuestions = [];
-    const activeQuestionsFilter = questionsFilter.filter(value =>
-      value.get('checked')
-    );
-    activeQuestionsFilter.keySeq().forEach(key => {
-      switch (key) {
-        case 'myUserRole':
-          filteredQuestions = uniqBy(
-            [...filteredQuestions, ...applyMyUserRoleFilter(questions)],
-            'questionId'
-          );
-          break;
-        case 'interestedParty':
-          filteredQuestions = uniqBy(
-            [...filteredQuestions, ...applyInterestedPartyFilter(questions)],
-            'questionId'
-          );
-          break;
-        default:
-          filteredQuestions = uniqBy(
-            [...filteredQuestions, ...applyMilestoneFilter(questions, key)],
-            'questionId'
-          );
-          break;
-      }
-    });
+    questionsFilter.entrySeq().forEach(([groupName, group]) => {
 
+      let withinGroupFilteredQuestions = [];
+      // Set the logic for current filter Group
+      let logic = group.get('logic');
+      let considerGroup = false;
+
+      group.entrySeq().forEach(([filterName, filter])=>{
+        
+        // Do not process for logic key or the filter is not checked
+        if(filterName === 'logic' || !filter.get('checked'))
+          return;
+
+        considerGroup = true;
+
+        switch (filterName) {
+          case 'myUserRole':
+            withinGroupFilteredQuestions = filterGroup(withinGroupFilteredQuestions, filteredQuestions, logic, applyMyUserRoleFilter)
+            break;
+          case 'answered':
+            withinGroupFilteredQuestions = filterGroup(withinGroupFilteredQuestions, filteredQuestions, logic, applyAnsweredFilter)
+            break;
+          case 'unanswered':
+            withinGroupFilteredQuestions = filterGroup(withinGroupFilteredQuestions, filteredQuestions, logic, applyUnAnsweredFilter)
+            break;
+          case 'interestedParty':
+            withinGroupFilteredQuestions = filterGroup(withinGroupFilteredQuestions, filteredQuestions, logic, applyInterestedPartyFilter)
+            break;
+          default:
+            withinGroupFilteredQuestions = filterGroup(withinGroupFilteredQuestions, filteredQuestions, logic, applyMilestoneFilter, filterName)
+            break;
+        }
+       });
+      
+       if(considerGroup)
+          filteredQuestions = withinGroupFilteredQuestions
+  
+       considerGroup = false;
+      });
+      
     dispatch({
       type: ON_QUESTIONS_FILTERED,
       payload: { filteredQuestions }
@@ -345,12 +364,12 @@ export function onQuestionsFilterApplied(questionsFilter) {
   };
 }
 
-export function onApplyQuestionsFilter(filterName = null, checked = false) {
+export function onApplyQuestionsFilter(filterName = null, checked = false, groupName) {
   return async (dispatch, getState) => {
     const state = getState();
     let questionsFilter = getQuestionsFilters(state);
-    if (filterName) {
-      questionsFilter = questionsFilter.setIn([filterName, 'checked'], checked);
+    if (filterName && groupName) {
+      questionsFilter = questionsFilter.setIn([groupName, filterName, 'checked'], checked);
     }
 
     dispatch(onQuestionsFilterApplied(questionsFilter));
@@ -366,9 +385,14 @@ export function resetQuestionsFilterAction() {
 export function clearQuestionsFilterAction() {
   return async (dispatch, getState) => {
     let questionsFilter = getQuestionsFilters(getState());
-    questionsFilter = questionsFilter.map(filter =>
-      filter.set('checked', false)
-    );
+    questionsFilter = questionsFilter.map(group =>{
+        return group.map(filter=>{
+          if(typeof filter === 'string')
+           return filter;
+
+          return filter.set('checked', false)
+        })
+      });
     dispatch({ type: CLEAR_QUESTIONS_FILTER, payload: { questionsFilter } });
   };
 }
