@@ -1,28 +1,29 @@
 import React from 'react'
 import Footer from 'apollo-react/components/Footer';
 
-const UnityFooter = ({data}) => {
-    const { questionTemplateVersionNumber, opportunityType } = data;
-    let templateversion =  null;
-    if(questionTemplateVersionNumber){
+const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
+    let templateversion = null;
+    if (questionTemplateVersionNumber) {
         templateversion = `Question Template Verison: ${questionTemplateVersionNumber}`
     }
-    if(templateversion && opportunityType){
+    if (templateversion && opportunityType) {
         templateversion = `${templateversion} - ${opportunityType}`
     }
     return (
         <>
-            { templateversion &&
-                <Footer
-                    id="unityfooter"
-                    maxWidth={1600}
-                    buttonProps={[
-                        {
-                            label: `${templateversion}`
-                        }
-                    ]}
-                />
-            }
+            <Footer
+                id="unityfooter"
+                maxWidth={1600}
+                buttonProps={templateversion ? [
+                    {
+                        label: `${templateversion}`
+                    }
+                ] : [{
+                      label: '',
+                      href: '',
+                      target: '',
+                    }]}
+            /> :
         </>
     )
 }
