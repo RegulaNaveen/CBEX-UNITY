@@ -525,7 +525,7 @@ export class TaskRow extends Component<Props, State> {
                         <Edit className="edit-icon" />
                       </span>
                     )}
-                    {questionHint.length > 0 ? (
+                    {questionHint.trim().length > 0 ? (
                       <Tooltip
                         variant="light"
                         title={questionHint}
