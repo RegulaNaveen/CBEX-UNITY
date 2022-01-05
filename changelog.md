@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 ### Fixed
   - IQVIACBEXU-1051: Milestone alignment issue
+  - IQVIACBEXU-1052: Buttons text color fixed
   
 ## [3.2] - 2021-12-19
 ### Added
