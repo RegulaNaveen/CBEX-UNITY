@@ -14,22 +14,10 @@ const WelcomeModal = ({roles,onRoleChange,id}) => {
         image: true
     });
     const [role, setrole] = React.useState('')
-    function handleClose(variant){
-        setState({ ...state, [variant]: false });
-    };
- 
+
     React.useEffect(() => {
         if(selector){
-            selector.addEventListener('click', ()=>{
-                handleClose('image');
-            })
-        }
-        return () => {
-            if(selector){
-                selector.removeEventListener('click', ()=>{
-                    handleClose('image');
-                })
-            } 
+          selector.remove()
         }
     },[selector])
     return (
@@ -41,7 +29,6 @@ const WelcomeModal = ({roles,onRoleChange,id}) => {
             subtitle=""
             hideButtons={true}
             message={``}
-            // onClose={() => handleClose('image')}
             id={id}
             variant="default"
         >
