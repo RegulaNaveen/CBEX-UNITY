@@ -92,6 +92,7 @@ const onProsalInfoLoaded = (state: Map, action: Object): Map => {
 
   // Add agreementId as well in proposal details
   proposalDetails.agreementId = action.payload.proposal.agreementId || '';
+  proposalDetails.questionTemplateVersionNumber = action.payload.proposal.questionTemplateVersionNumber || '';
 
   // Adding milestones to Questions Filter
   let questionsFilter = state.get('questionsFilter');
