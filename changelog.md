@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-754: Tool Tip functionality 
   - IQVIACBEXU-784: Display the current version number at the bottom of the page
   - IQVIACBEXU-936: Validation functionality for Unity predicted answers
+### Fixed
+  - IQVIACBEXU-1052: Buttons text color fixed
   
 ## [3.2] - 2021-12-19
 ### Added
