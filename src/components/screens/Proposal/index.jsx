@@ -214,6 +214,7 @@ export class Proposal extends Component<Props, State> {
 
   render() {
     const { isSidebarOpen, proposalDetail } = this.props;
+    const { questionTemplateVersionNumber } = proposalDetail;
     return (
       <div
         className={classNames('proposal-wrapper', {
@@ -222,7 +223,7 @@ export class Proposal extends Component<Props, State> {
       >
         <Toolbar />
         {this.renderContent()}
-        <UnityFooter data={proposalDetail} />
+        <UnityFooter questionTemplateVersionNumber={questionTemplateVersionNumber || ''} />
       </div>
     );
   }
