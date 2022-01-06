@@ -59,6 +59,19 @@
       display: flex;
       flex-wrap: nowrap;
 
+      .question-text-para {
+        .edit-icon {
+          position: relative;
+          margin-left: 10px;
+          top: 4px;
+        }
+        .question-tooltip-icon {
+          width: auto;
+          height: auto;
+          left: 8px;
+        }
+      }
+
       p {
         -ms-word-break: break-all;
         word-break: break-all;
@@ -111,8 +124,7 @@
       }
     }
   }
-
 }
-.selected-task-table-row{
+.selected-task-table-row {
   background-color: #ecf3ff;
 }
