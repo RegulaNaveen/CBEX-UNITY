@@ -9,7 +9,7 @@ import { diffWordsWithSpace } from 'diff';
 import { getProposalTeamAssignedRoles } from '../../../redux/selectors';
 import { Close } from '../../svg';
 import { parseMomentDate } from '../../../utils/DateUtils';
-import { rearrangeDiff } from '../../../utils/utils';
+import { rearrangeDiff, getUserInitials, getUserName } from '../../../utils/utils';
 
 type Props = {
   question: Map,
@@ -74,15 +74,22 @@ class AnswerHistory extends Component<Props> {
       const nextAnswer = answers.get(index + 1)
         ? answers.get(index + 1).get('answer')
         : answer;
+      
+      const isValidatedUnityPredictedAnswer = (
+        answers.get(index + 1) &&
+        answers.get(index + 1).get('userName') === 'UnityPredictedAnswer' &&
+        answer === nextAnswer
+      );
 
-      const userInitials =
-        userName !== 'AnswerPulledFromSalesforce'
-          ? userName.split(' ')[0].charAt(0) + userName.split(' ')[1].charAt(0)
-          : 'SA';
+      const userInitials = getUserInitials(userName);
       const parsedDate = parseMomentDate(date);
       const avatarRandomColor = randomColor({ luminosity: 'dark' });
 
       const renderAnswers = () => {
+        if (isValidatedUnityPredictedAnswer) {
+          return <span key={uuidv4()}>Validated Unity Predicted Answer</span>;
+        }
+
         if (questionType !== 'picklist') {
           const renderWord = (word, status) => (
             <span className={status} key={uuidv4()}>
@@ -92,36 +99,60 @@ class AnswerHistory extends Component<Props> {
           if (questionType === 'text' || questionType === 'number') {
             const diffAnswers = diffWordsWithSpace(nextAnswer, answer);
 
-            return rearrangeDiff(diffAnswers).map(({ value, added, removed }) => {
-              if (removed) return renderWord(value, 'removed');
-              if (added) return renderWord(value, 'changed');
+            return rearrangeDiff(diffAnswers).map(
+              ({ value, added, removed }) => {
+                if (removed) return renderWord(value, 'removed');
+                if (added) return renderWord(value, 'changed');
 
-              return <span key={uuidv4()}>{value} </span>;
-            });
+                return <span key={uuidv4()}>{value} </span>;
+              }
+            );
           }
-          const showDate = (answer, nextAnswer, indx) =>{
-            let tmp = answers.toJS();
-            if(new Date(answer) == 'Invalid Date'){
+          const showDate = (answer, nextAnswer, indx) => {
+            const tmp = answers.toJS();
+            if (new Date(answer) == 'Invalid Date') {
               return renderWord('Invalid Date', 'removed');
+            }
+            const newdate = renderWord(
+              String(parseMomentDate(answer)),
+              'changed'
+            );
+            let nextdate = '';
+            if (indx + 1 == tmp.length) {
+              nextdate = '';
+            } else if (
+              nextAnswer &&
+              String(nextAnswer).trim().length &&
+              tmp.length > 1
+            ) {
+              nextdate = renderWord(
+                String(parseMomentDate(nextAnswer)),
+                'removed'
+              );
+            }
+            return (
+              <>
+                {nextdate} {newdate}
+              </>
+            );
+          };
+
+          if (questionType === 'select') {
+            if(index == 0){
+              return renderWord(answer, 'changed');
             }else{
-              let newdate = renderWord(String(parseMomentDate(answer)), 'changed');
-              let nextdate = ''
-              if(indx+1 == tmp.length){
-                  nextdate = ''
-              }else if(nextAnswer && String(nextAnswer).trim().length && tmp.length > 1){
-                  nextdate = renderWord(String(parseMomentDate(nextAnswer)), 'removed');
-               }
-              return <>{nextdate} {newdate}</>
+              return renderWord(answer, 'removed');
             }
           }
 
           if (questionType === 'date') {
-            answer = String(answer).trimStart().trimEnd();
-            if(!Boolean(String(answer).length)){
+            answer = String(answer)
+              .trimStart()
+              .trimEnd();
+            if (!String(answer).length) {
               return renderWord(parseMomentDate(nextAnswer), 'removed');
-            }else{
-              return <p>{showDate(answer, nextAnswer, index)}</p>;
             }
+            return <p>{showDate(answer, nextAnswer, index)}</p>;
           }
 
           return <p>{answer}</p>;
@@ -164,9 +195,7 @@ class AnswerHistory extends Component<Props> {
             </span>
             <div>
               <p>
-                {userName === 'AnswerPulledFromSalesforce'
-                  ? 'Salesforce Answer'
-                  : userName}
+                {getUserName(userName)}
               </p>
               {renderAnswers()}
             </div>

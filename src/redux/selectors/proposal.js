@@ -16,6 +16,7 @@ const generateSections = (
   filter: boolean,
   role: string
 ): Map => {
+ try {
   let sections = Map();
   const userRole = role !== '' ? role : false;
 
@@ -51,6 +52,9 @@ const generateSections = (
   sections = sections.sortBy(section => section.get('sectionOrder'));
 
   return sections;
+ } catch (error) {
+   console.log(error)
+ }
 };
 
 const getQuestionSections = (items: Array<Object>) => {
@@ -72,7 +76,11 @@ const getQuestionSections = (items: Array<Object>) => {
 
 function getRecentAnswer(answers) {
   const recentAnswer = last(answers);
-  if (recentAnswer && recentAnswer.answer && String(recentAnswer.answer).trim().length) {
+  if (
+    recentAnswer &&
+    recentAnswer.answer &&
+    String(recentAnswer.answer).trim().length
+  ) {
     return String(recentAnswer.answer).trim().length > 0
       ? recentAnswer.answer
       : 'Not defined yet.';
@@ -168,7 +176,11 @@ export const getPendingValidatedItems = (propoal: Map): number => {
 };
 
 function createSectionsFromQuestions(questions) {
-  return generateSections(questions, false, false);
+  try {
+    return generateSections(questions, false, false);
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 export function getUniqueMilestones(questions) {
@@ -204,13 +216,23 @@ export const selectQuestionsFilters = createSelector(selectProposal, proposal =>
 
 export const selectActiveQuestionsFilters = createSelector(
   selectQuestionsFilters,
-  questionsFilters => questionsFilters.filter(filter => filter.get('checked'))
+  questionsFilters => questionsFilters
 );
 
 export const selectIsQuestionsFilterEnabled = createSelector(
   selectQuestionsFilters,
-  questionsFilters =>
-    questionsFilters.some(filter => filter.get('checked', false))
+  questionsFilters => {
+    let considerFilter = false;
+    questionsFilters.entrySeq().forEach(([groupName, group]) => {
+      group.entrySeq().forEach(([filterName, filter])=>{
+        if(filterName === 'logic' || !filter.get('checked'))
+          return;
+
+        considerFilter = true;          
+      })
+    });      
+    return considerFilter;
+  }
 );
 
 export const selectSections = createSelector(
@@ -239,7 +261,14 @@ export const selectFilteredSections = createSelector(
 
 export const selectActiveQuestionsFilterCount = createSelector(
   selectActiveQuestionsFilters,
-  filters => filters.size
+  filters => {
+    let size = 0;
+    filters.forEach(group=>group.forEach(filter=>{
+      if(typeof filter !== 'string' && filter.get('checked'))
+        size++;
+    }))
+    return size;
+  }
 );
 
 export const selectUniqueMilestones = createSelector(
@@ -250,4 +279,8 @@ export const selectUniqueMilestones = createSelector(
 export const selectAreAllSectionsExpanded = createSelector(
   selectProposal,
   proposal => proposal.get('areAllSectionsExpanded')
+);
+
+export const getEditQuestionData = createSelector(selectProposal, proposal =>
+  proposal.get('editQuestionsData', Map({}))
 );

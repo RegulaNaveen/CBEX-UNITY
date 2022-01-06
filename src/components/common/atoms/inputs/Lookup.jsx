@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import { isEmpty } from 'lodash';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
+import TextField from 'apollo-react/components/TextField';
 import { objectContains } from '../../../../utils/helpers';
 import { CloseCircle } from '../../../svg';
-import TextField from 'apollo-react/components/TextField';
 
 type Props = {
   data: Array<any>,
@@ -52,47 +52,53 @@ class Lookup extends Component<Props, State> {
   componentDidMount() {
     document.addEventListener('cleantemmmeberinput', e => {
       if (e && e.detail) {
-        this.setState({ searchValue: '' });
+        this.setState({ searchValue: '', filteredData: [] });
       }
     });
   }
 
   onSearching = ({ target: { value } }: SyntheticInputEvent<EventTarget>) => {
     const { data } = this.props;
-    const searchValue = value && value.slice(value.lastIndexOf(",")+1).trim();
-    console.log("searching.."+searchValue);
+    const searchValue = value && value.slice(value.lastIndexOf(',') + 1).trim();
+    console.log(`searching..${searchValue}`);
     const filteringData = data.filter(item =>
       objectContains(item, value, false)
     );
 
-    this.setState({
-      searchValue: value,
-      filteredData: filteringData,
-      error: Boolean(filteringData.length) ? false : true
-    }, () => { 
-      this._resizeTextBox();
-    });
+    this.setState(
+      {
+        searchValue: value,
+        filteredData: filteringData,
+        error: !filteringData.length
+      },
+      () => {
+        this._resizeTextBox();
+      }
+    );
   };
+
   _resizeTextBox = () => {
     setTimeout(() => {
-      let textareae = this.textInput.getElementsByTagName('textarea')[0];
-      const txtareaheight = textareae.scrollHeight > 300
-      ? 300
-      : textareae.scrollHeight;
+      const textareae = this.textInput.getElementsByTagName('textarea')[0];
+      const txtareaheight =
+        textareae.scrollHeight > 300 ? 300 : textareae.scrollHeight;
       this.textInput.style.height = `auto`;
       this.textInput.style.height = `${txtareaheight + 2}px`;
       textareae.style.height = `${txtareaheight}px`;
     }, 100);
-  }
+  };
 
   setSelectedItem = ({
     target: { textContent }
   }: SyntheticInputEvent<EventTarget>) => {
     const { getSelectedItem, withReset } = this.props;
 
-    let previouslySelectedValue = this.state.previouslySelectedValue;
-    let newValue = (previouslySelectedValue == "" ? "" : previouslySelectedValue+`, 
-`)+textContent;
+    const { previouslySelectedValue } = this.state;
+    const newValue =
+      (previouslySelectedValue == ''
+        ? ''
+        : `${previouslySelectedValue}, 
+`) + textContent;
     this.setState(
       {
         searchValue: textContent,
@@ -101,7 +107,7 @@ class Lookup extends Component<Props, State> {
         error: false
       },
       () => {
-        getSelectedItem(newValue)
+        getSelectedItem(newValue);
         this._resizeTextBox();
       }
     );
@@ -151,8 +157,8 @@ class Lookup extends Component<Props, State> {
         {title && <p>{title}</p>}
         <div className="lookup-wrapper">
           <TextField
-            ref={e => this.textInput = e}
-            style={{ marginBottom : 0 }}
+            ref={e => (this.textInput = e)}
+            style={{ marginBottom: 0 }}
             type="text"
             className="teammember proposal-text-area"
             value={searchValue}
@@ -185,9 +191,9 @@ class Lookup extends Component<Props, State> {
             </span>
           ))}
         </div>
-        {error && sectionName === 'Proposal Team' &&
+        {error && sectionName === 'Proposal Team' && (
           <p className="number-error-text">Please enter a valid answer</p>
-         }
+        )}
       </div>
     );
   }

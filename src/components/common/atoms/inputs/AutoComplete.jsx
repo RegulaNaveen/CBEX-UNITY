@@ -5,7 +5,19 @@ import { getLookupUsers } from '../../../../redux/selectors';
 
 function extractEmails (str){
     let result =  String(str).match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi);
-    return result && result.length ? result[0] : '' 
+    return result ? (result.length ? result[0] : '') : '';
+}
+
+/**
+ * Extracts name from the string format: `Firstname Lastname(name@example.com)`
+ */
+function extractName(str) {
+    const splirt_array = str.split('(');
+    return splirt_array // check null
+      ? splirt_array.length > 0
+        ? splirt_array[0].trim()
+        : ''
+      : '';
 }
 
 const Autocomplete = (props) => {
@@ -30,15 +42,16 @@ const Autocomplete = (props) => {
     useEffect(() => {
         if(Boolean(text.length)){
             let Val = text.split(",").map(v=>{
-                let email = extractEmails(v) || v;
-                return { label: UserNameByEmail[email] || email, email: email }
+                let email = extractEmails(v)|| v;
+                let label = UserNameByEmail[email] || extractName(v) || email; 
+                return { label, email}
             });
             setValue(Val);
         }
     }, [text]);
 
     return (
-        <div style={{ maxWidth: 500 }}>
+        <div>
             <AutocompleteV2
                 fullWidth
                 multiple
@@ -50,6 +63,12 @@ const Autocomplete = (props) => {
                 matchFrom="any"
                 onChange={handleChange}
                 noOptionsText="No matches found"
+                onFocus={e => {
+                    props.onFocus();
+                }}
+                onBlur={e => {
+                    props.onBlur();
+                }}
             />
         </div>
     )

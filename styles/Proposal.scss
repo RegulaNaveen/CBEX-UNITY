@@ -85,6 +85,10 @@
 
     .questions-filter__container {
       position: relative;
+      .questions-filter__grid.column_style {
+        display: flex;
+        flex-direction: column;
+      }
 
       .questions-filter__grid {
         display: grid;
@@ -110,6 +114,12 @@
           grid-row-start:2;
           grid-column-start: 1;
         }
+      }
+
+      .filtertitle {
+        font-weight: bold;
+        font-size: 14px;
+        padding-bottom: 10px;
       }
 
       .clear-all {

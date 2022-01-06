@@ -2,6 +2,8 @@
   display: grid;
   grid-template-columns: 1.3fr 1.3fr 0.4fr;
   margin-bottom: 15px;
+  padding: 10px 0;
+  align-items: center;
 
   .question-text {
     display: grid;
@@ -17,6 +19,13 @@
       hyphens: auto;
       margin-left: 5px;
       padding-right: 10px;
+
+      .edit-icon {
+        margin-left: 10px;
+        position: relative;
+        top: 3px;
+        color: #5d5d5d;
+      }
     }
   }
 
@@ -36,4 +45,86 @@
   .date-picker > div > div {
     margin-top: 0px;
   }
+}
+
+.question-row-header {
+  font-weight: bold;
+}
+
+.question-row {
+  .question-text-container {
+    display: flex;
+    align-items: center;
+    .question-text {
+      display: flex;
+      flex-wrap: nowrap;
+
+      .question-text-para {
+        .edit-icon {
+          position: relative;
+          margin-left: 10px;
+          top: 4px;
+        }
+        .question-tooltip-icon {
+          width: auto;
+          height: auto;
+          left: 8px;
+        }
+      }
+
+      p {
+        -ms-word-break: break-all;
+        word-break: break-all;
+        word-break: break-word;
+        -webkit-hyphens: auto;
+        -moz-hyphens: auto;
+        -ms-hyphens: auto;
+        hyphens: auto;
+        margin-left: 5px;
+        padding-right: 10px;
+      }
+    }
+  }
+  .answer-col-container {
+    display: flex;
+    align-items: flex-start;
+  }
+  .datecompleted-col-container {
+    display: flex;
+    align-items: center;
+  }
+  .answer-col {
+    .date-picker {
+      position: relative;
+      & > div {
+        margin-top: 0px;
+        & > div {
+          margin-top: 0px;
+        }
+      }
+    }
+  }
+  .date-answered-col {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    .date-answered-btn {
+      .MuiButton-label {
+        color: $neptune-secondary;
+        font-weight: 400;
+      }
+    }
+  }
+
+  @media (min-width: 960px) {
+    .question-row {
+      .question-col {
+        display: flex !important;
+        align-items: center !important;
+      }
+    }
+  }
+}
+.selected-task-table-row {
+  background-color: #ecf3ff;
 }

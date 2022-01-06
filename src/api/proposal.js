@@ -12,7 +12,7 @@ const {
 } = API.PROPOSAL;
 
 let onGoingAnswer;
-const CancelToken = axios.CancelToken;
+const { CancelToken } = axios;
 
 export const getProposalInfo = async (id: string): Promise<Object> => {
   return new Promise((resolve, reject) => {
@@ -36,23 +36,26 @@ export const setProposalAnswer = async (
   answer: string,
   userData: Object
 ): Promise<Object> => {
-  
-  if(onGoingAnswer)
-    onGoingAnswer()
-    
-  return axios.put(
-    `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`,
-    { answer, userData },
-    {
-      headers: {
-        'x-api-key': `${API_KEY}`,
-        'x-access-token': `${getAccessToken()}`
-      },
-      cancelToken:  new CancelToken(function executor(c) {
-        onGoingAnswer = c;
-      })
-    }
-  ).then((res)=> {  onGoingAnswer = null; return res;});
+  if (onGoingAnswer) onGoingAnswer();
+
+  return axios
+    .put(
+      `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`,
+      { answer, userData },
+      {
+        headers: {
+          'x-api-key': `${API_KEY}`,
+          'x-access-token': `${getAccessToken()}`
+        },
+        cancelToken: new CancelToken(function executor(c) {
+          onGoingAnswer = c;
+        })
+      }
+    )
+    .then(res => {
+      onGoingAnswer = null;
+      return res;
+    });
 };
 
 export const getQuestionSectionInfo = async (): Promise<Object> => {
@@ -146,5 +149,46 @@ export const getProposlBoxId = async (id: string): Promise<Object> => {
 export const getValidatedProposalData = (id: string): Promise<Object> => {
   return axios.get(`${PROPOSAL_VALIDATED_DATA}/${id}`, {
     headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+  });
+};
+
+export const editProposalQuestionData = async (
+  proposalId: string,
+  questionId: string,
+  questionData: Object
+): Promise<Object> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .put(
+        `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}/update`,
+        questionData,
+        {
+          headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+        }
+      )
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};
+
+export const deleteProposalQuestionData = async (
+  proposalId: string,
+  questionId: string
+): Promise<Object> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .delete(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`, {
+        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        reject(err);
+      });
   });
 };
