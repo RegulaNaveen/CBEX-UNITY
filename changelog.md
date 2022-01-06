@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-947: Enhancement request: Filter functionality
   - IQVIACBEXU-942: Striking is not happening in history for single select dropdown, once editing/updating the dropdown option
   - IQVIACBEXU-944: Profile : User role selection
+  - IQVIACBEXU-948: New Filters: Answered and Unanswered questions
   
 ### Changed
 ### Fixed
