@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-932: General focus for questions
   - IQVIACBEXU-931: Edit/Delete custom questions
   - IQVIACBEXU-947: Enhancement request: Filter functionality
+  - IQVIACBEXU-942: Striking is not happening in history for single select dropdown, once editing/updating the dropdown option
+  - IQVIACBEXU-944: Profile : User role selection
   
 ### Changed
 ### Fixed
@@ -19,6 +21,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-946: Index sections should match the form sections.
   - IQVIACBEXU-954: extractName function added to get name for Salesforce answers
 
+
+## [3.3] - YYYY-MM-DD
+### Added
+  - IQVIACBEXU-754: Tool Tip functionality 
+  - IQVIACBEXU-784: Display the current version number at the bottom of the page
+  - IQVIACBEXU-936: Validation functionality for Unity predicted answers
+  
 ## [3.2] - 2021-12-19
 ### Added
   - IQVIACBEXU-813: Date field type issues

@@ -3,7 +3,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import type { Map } from 'immutable';
 import Link from 'apollo-react/components/Link';
+import Grid from 'apollo-react/components/Grid';
 import Plus from 'apollo-react-icons/Plus';
+import Box from 'apollo-react/components/Box';
 import FolderOpen from 'apollo-react-icons/FolderOpen';
 import {
   getSelectedSection,
@@ -217,13 +219,21 @@ class CollapsibleList extends Component<Props, State> {
                   {this.showNotesCount(title)}
                 </p>
               </div>
-              <div className="task-subtitle task-subtitle-answer">
-                <p>Answer</p>
-              </div>
-              <div className="task-subtitle task-subtitle-completion-date">
-                <p>Date Completed</p>
-              </div>
             </div>
+
+            <Box sx={{ mb: 2 }} display={{ xs: 'none', md: 'block' }}>
+              <Grid container spacing={2} className="question-row-header">
+                <Grid item xs={5}>
+                  <p>Questions</p>
+                </Grid>
+                <Grid item xs={5} md={4} lg={5} className="answer-col">
+                  <p>Answers</p>
+                </Grid>
+                <Grid item xs={2} md={3} lg={2}>
+                  <p>Date Completed</p>
+                </Grid>
+              </Grid>
+            </Box>
 
             {questions.valueSeq().map(questionConfig => {
               const visible = questionConfig.get('visible');
@@ -244,6 +254,8 @@ class CollapsibleList extends Component<Props, State> {
                     sfField={questionConfig.get('sfField')}
                     sectionName={title}
                     setQuestionToDisplayHistory={setQuestionToDisplayHistory}
+                    loading={questionConfig.get('loading', false)}
+                    questionHint={questionConfig.get('questionHint', '')}
                     roleNames={questionConfig.get('roleNames')}
                     isCustomQuestion={questionConfig.get('isCustomQuestion')}
                     hasDifferentSFanswer={questionConfig.get(
