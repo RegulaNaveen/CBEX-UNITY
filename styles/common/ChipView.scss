@@ -1,10 +1,19 @@
 .chipview {
     display : flex;
-    justify-content: flex-end;
-    margin-right: 20;
-    width: 110px;
+    justify-content: flex-start;
+    margin-right: 8px;
+    max-width: 110px;
+    flex-shrink: 0;
 }
 
-.chipview>p {
+@media (min-width: 960px) {
+    .chipView {
+        justify-content: flex-end;
+        margin-right: 16px;
+        width: 110px;
+    }
+}
+
+.chipview > p {
     word-break: unset !important;
 }

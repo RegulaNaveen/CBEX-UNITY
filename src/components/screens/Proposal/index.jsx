@@ -25,6 +25,7 @@ import TabButtons from '../../common/TabButtons';
 import Documents from './Documents';
 import Validate from './Validate';
 import MatomoHOC from '../../HOC/MatomoHOC';
+import UnityFooter from '../../common/Footer';
 
 type State = {
   selectedView: string
@@ -212,8 +213,8 @@ export class Proposal extends Component<Props, State> {
   };
 
   render() {
-    const { isSidebarOpen } = this.props;
-
+    const { isSidebarOpen, proposalDetail } = this.props;
+    const { questionTemplateVersionNumber } = proposalDetail;
     return (
       <div
         className={classNames('proposal-wrapper', {
@@ -222,6 +223,7 @@ export class Proposal extends Component<Props, State> {
       >
         <Toolbar />
         {this.renderContent()}
+        <UnityFooter questionTemplateVersionNumber={questionTemplateVersionNumber || ''} />
       </div>
     );
   }
