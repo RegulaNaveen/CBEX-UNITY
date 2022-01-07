@@ -156,7 +156,13 @@ function getUserName(userName) {
     return 'Unity Predicted Answer';
   return userName;
 }
-
+function handleLocationChange (event){
+  if(localStorage.getItem('unsaved-change') === 'true'){
+    let response = confirm('You have some unsaved changes do you still want to redirect?');
+    if(!response)
+      event.preventDefault();
+  }
+};
 export {
   getCountriesNameForCode,
   getCountryOptions,
@@ -164,5 +170,6 @@ export {
   logLobDetails,
   rearrangeDiff,
   getUserInitials,
-  getUserName
+  getUserName,
+  handleLocationChange
 };
