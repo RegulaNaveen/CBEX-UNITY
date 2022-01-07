@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import ToolbarMenu from './ToolbarMenu';
 import { DropMenu } from '../../svg';
 import { DASHBOARD, UBUILD } from '../../../routes';
-import { isUserUbuildAdmin } from '../../../utils/utils';
+import { handleLocationChange, isUserUbuildAdmin } from '../../../utils/utils';
 
 type State = { isCollapsed: boolean };
 
@@ -48,7 +48,7 @@ class Toolbar extends Component<{}, State> {
     const results = isUserUbuildAdmin();
     return (
       <div className="toolbar-wrapper">
-        <Link to={DASHBOARD}>
+        <Link onClick={(e)=>handleLocationChange(e)} to={DASHBOARD}>
           <p className="toolbar-title">IQVIA™</p>
           <p className="toolbar-title">Unity</p>
         </Link>
@@ -62,7 +62,7 @@ class Toolbar extends Component<{}, State> {
                 : 'ubuild-link'
             }
           >
-            <Link to={UBUILD} className="toolbar-space">
+            <Link onClick={(e)=>handleLocationChange(e)} to={UBUILD} className="toolbar-space">
               <p className="ubuild-title">U-Build</p>
             </Link>
           </div>
