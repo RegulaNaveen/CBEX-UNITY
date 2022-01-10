@@ -1,7 +1,7 @@
 import React from 'react';
 import Tag from 'apollo-react/components/Tag';
 import PropTypes from 'prop-types';
-import Check from 'apollo-react-icons/Check';
+// import Check from 'apollo-react-icons/Check';
 import Tooltip from 'apollo-react/components/Tooltip';
 
 const ChipView = ({ label, answer }) => {
@@ -9,7 +9,7 @@ const ChipView = ({ label, answer }) => {
     <>
       <Tooltip title={label} placement="top">
         <Tag
-          Icon={answer ? Check : ''}
+          Icon={''}
           label={
             label.split(' ')[0].length <= 11
               ? label.split(' ')[0]

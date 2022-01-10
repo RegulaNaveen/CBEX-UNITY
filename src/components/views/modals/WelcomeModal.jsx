@@ -15,11 +15,25 @@ const WelcomeModal = ({roles,onRoleChange,id}) => {
     });
     const [role, setrole] = React.useState('')
 
+    function handleClose(variant){
+        setState({ ...state, [variant]: false });
+    };
+ 
     React.useEffect(() => {
         if(selector){
-          selector.remove()
+            selector.addEventListener('click', ()=>{
+                handleClose('image');
+            })
+        }
+        return () => {
+            if(selector){
+                selector.removeEventListener('click', ()=>{
+                    handleClose('image');
+                })
+            } 
         }
     },[selector])
+
     return (
         <Modal
             open={state.image}
