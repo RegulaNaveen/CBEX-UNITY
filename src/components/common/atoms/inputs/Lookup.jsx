@@ -94,11 +94,7 @@ class Lookup extends Component<Props, State> {
     const { getSelectedItem, withReset } = this.props;
 
     const { previouslySelectedValue } = this.state;
-    const newValue =
-      (previouslySelectedValue == ''
-        ? ''
-        : `${previouslySelectedValue}, 
-`) + textContent;
+    const newValue = ( previouslySelectedValue && previouslySelectedValue.length  ? `${previouslySelectedValue}, ` : '') + textContent;
     this.setState(
       {
         searchValue: textContent,
