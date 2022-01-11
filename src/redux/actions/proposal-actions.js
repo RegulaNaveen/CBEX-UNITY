@@ -78,9 +78,10 @@ export const setProposalAnswerData = (
   answer: string,
   userData: Object
 ): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<string, Object>) => {
+  return async (dispatch: Dispatch<string, Object>, getState) => {
     dispatch({ type: PROPOSAL_ANSWER_LOADING, payload: { questionId, loading: true } });
-
+    let questionsFilter = getQuestionsFilters(getState());
+  
     try {
       const { data } = await setProposalAnswer(
         proposalId,
@@ -115,6 +116,7 @@ export const setProposalAnswerData = (
           dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
         });
       }
+      dispatch(onQuestionsFilterApplied(questionsFilter));
       dispatch({ type: PROPOSAL_ANSWER_LOADING, payload: { questionId, loading: false } });
     } catch (err) {
       dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err }});
