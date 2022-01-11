@@ -610,7 +610,7 @@ export class TaskRow extends Component<Props, State> {
                   {answerDate}
                 </Button>
                 {isAnswerPredicted ? (
-                  <>
+                  <Tooltip variant="light" title="Unity Predicted Answer" placement="top">
                     <IconButton
                       onClick={() =>
                         this.handleVerifyPredictedAnsClick(lastAnswer)
@@ -621,7 +621,7 @@ export class TaskRow extends Component<Props, State> {
                         style={{ color: '#D9D9D9' }}
                       />
                     </IconButton>
-                  </>
+                  </Tooltip>
                 ) : null}
                 {this.isAnswered(lastAnswer, isAnswerPredicted) ? (
                   <div
