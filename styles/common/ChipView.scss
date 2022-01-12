@@ -2,17 +2,16 @@
     display : flex;
     justify-content: flex-start;
     margin-right: 8px;
-    max-width: 110px;
-    flex-shrink: 0;
+    width: 110px;
 }
 
-@media (min-width: 960px) {
-    .chipView {
-        justify-content: flex-end;
-        margin-right: 16px;
-        width: 110px;
-    }
-}
+// @media (min-width: 960px) {
+//     .chipView {
+//         justify-content: flex-end;
+//         margin-right: 16px;
+//         width: 110px;
+//     }
+// }
 
 .chipview > p {
     word-break: unset !important;
