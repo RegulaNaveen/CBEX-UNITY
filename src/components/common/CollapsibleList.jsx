@@ -223,13 +223,13 @@ class CollapsibleList extends Component<Props, State> {
             </div>
 
             <div className="task-table-row">
-              <div className="task-subtitle">
-                <p>Question</p>
+              <div className="task-subtitle subtitlebold">
+                <p>Questions</p>
               </div>
-              <div className="task-subtitle task-subtitle-answer">
-                <p>Answer</p>
+              <div className="task-subtitle task-subtitle-answer subtitlebold">
+                <p>Answers</p>
               </div>
-              <div className="task-subtitle task-subtitle-completion-date">
+              <div className="task-subtitle task-subtitle-completion-date subtitlebold">
                 <p>Date Completed</p>
               </div>
             </div>
