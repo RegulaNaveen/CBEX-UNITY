@@ -1,6 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
-import { isEmpty, cloneDeep } from 'lodash';
+import { isEmpty, cloneDeep, isEqual } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import MultiselectItem from './MultiselectItem';
 
@@ -51,6 +51,11 @@ class Multiselect extends PureComponent<Props, State> {
   componentDidUpdate(prevProps: Object, prevState: Object) {
     const { isCollapsed, selectedValues } = this.state;
     const { onClick, value: lastAnswer } = this.props;
+    const { value: prevlastAnswer } = prevProps;
+
+    if (!isEqual(prevlastAnswer, lastAnswer)) {
+      this.setState({ selectedValues: lastAnswer });
+    }
 
     if (prevState.isCollapsed !== isCollapsed) {
       if (!isCollapsed) onClick(selectedValues, lastAnswer || []);

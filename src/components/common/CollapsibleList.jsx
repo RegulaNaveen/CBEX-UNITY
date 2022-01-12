@@ -67,10 +67,11 @@ class CollapsibleList extends Component<Props, State> {
     const { selectedSection, isCheckedAll } = this.props;
     const { id } = this.taskRef.current;
 
-    if (prevProps.selectedSection !== selectedSection)
+    // expand a section only if it's selected from sidebar
+    if (prevProps.selectedSection !== selectedSection && id === selectedSection)
       // eslint-disable-next-line react/no-did-update-set-state
       setTimeout(
-        () => this.setState({ isCollapsed: id === selectedSection }),
+        () => this.setState({ isCollapsed: true }),
         0
       );
 
@@ -221,19 +222,17 @@ class CollapsibleList extends Component<Props, State> {
               </div>
             </div>
 
-            <Box sx={{ mb: 2 }} display={{ xs: 'none', md: 'block' }}>
-              <Grid container spacing={2} className="question-row-header">
-                <Grid item xs={5}>
-                  <p>Questions</p>
-                </Grid>
-                <Grid item xs={5} md={4} lg={5} className="answer-col">
-                  <p>Answers</p>
-                </Grid>
-                <Grid item xs={2} md={3} lg={2}>
-                  <p>Date Completed</p>
-                </Grid>
-              </Grid>
-            </Box>
+            <div className="task-table-row">
+              <div className="task-subtitle">
+                <p>Question</p>
+              </div>
+              <div className="task-subtitle task-subtitle-answer">
+                <p>Answer</p>
+              </div>
+              <div className="task-subtitle task-subtitle-completion-date">
+                <p>Date Completed</p>
+              </div>
+            </div>
 
             {questions.valueSeq().map(questionConfig => {
               const visible = questionConfig.get('visible');
