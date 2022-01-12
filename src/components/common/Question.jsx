@@ -567,6 +567,7 @@ export class TaskRow extends Component<Props, State> {
             {answerDate}
           </button>
           {(isAnswerPredicted && !loading)? (
+            <Tooltip variant="light" title="Unity Predicted Answer" placement="top">
             <IconButton>
               <StatusCheck
                 fontSize={'22px'}
@@ -576,6 +577,7 @@ export class TaskRow extends Component<Props, State> {
                 }
               />
             </IconButton>
+            </Tooltip>
           ) : null}
           {(this.isAnswered(lastAnswer, isAnswerPredicted) && !loading) ? (
             <div style={{ display: 'flex', flexShrink: 0, width: '40px', height: '24px', justifyContent: 'center', alignItems: 'center' }}>
