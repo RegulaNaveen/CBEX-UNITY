@@ -142,7 +142,9 @@ class Sidebar extends Component<Props, State> {
 
     const item: ?HTMLElement = document.getElementById(itemToScroll);
 
-    if (item) setTimeout(() => window.scrollTo(0, item.offsetTop - 20), 100);
+    // delayed 1s so that sidebar will close and height of question section wpn't change
+    // while fetching offsetTop of the element 
+    if (item) setTimeout(() => window.scrollTo(0, item.offsetTop - 20), 1000);
 
     handleOpenClose(false);
     setSelectedSection(itemToScroll);
