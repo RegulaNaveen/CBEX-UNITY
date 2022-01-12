@@ -17,7 +17,7 @@ import chevronDown from '../../../img/chevron-down.svg';
 import Question from './Question';
 import MatomoHOC from '../HOC/MatomoHOC';
 
-import { onHandleOpenClose } from '../../redux/actions/sidebar-actions';
+import { onHandleOpenClose, handleSelectedSection } from '../../redux/actions/sidebar-actions';
 
 type State = {
   isCollapsed: boolean
@@ -30,6 +30,7 @@ type Props = {
   isCheckedAll: boolean,
   setQuestionToDisplayHistory: (answer: string) => void,
   handleOpenClose: () => void,
+  changeSelectedSection:() => void,
   notes: Map,
   setTabFromQuestionNotes: (
     tabIndex: number,
@@ -83,6 +84,10 @@ class CollapsibleList extends Component<Props, State> {
     const { isCollapsed } = this.state;
     this.setState({ isCollapsed: !isCollapsed });
     this.trackMatomoEventBladeToggle(!isCollapsed);
+    const titleId = this.props.title.toLocaleLowerCase().split(' ').join('-');
+    if(titleId === this.props.selectedSection){
+      this.props.changeSelectedSection(null)
+    }
   };
 
   handleKeyPress = (event: KeyboardEvent) => {
@@ -283,6 +288,9 @@ const mapStateToProps = (state: Map) => {
   return { selectedSection, notes, proposalDetail };
 };
 
-export default connect(mapStateToProps, { handleOpenClose: onHandleOpenClose })(
-  MatomoHOC(CollapsibleList)
-);
+const mapDispatchToProps = {
+  handleOpenClose: onHandleOpenClose,
+  changeSelectedSection: handleSelectedSection
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MatomoHOC(CollapsibleList));

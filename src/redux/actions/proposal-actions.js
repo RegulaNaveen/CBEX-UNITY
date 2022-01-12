@@ -1,6 +1,6 @@
 // @flow
 import { isEmpty, cloneDeep, uniqBy } from 'lodash';
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import { REDUX_TYPES } from '../../constants';
 import type { Dispatch, ThunkAction } from './action-types';
 import {
@@ -78,9 +78,10 @@ export const setProposalAnswerData = (
   answer: string,
   userData: Object
 ): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<string, Object>) => {
+  return async (dispatch: Dispatch<string, Object>, getState) => {
     dispatch({ type: PROPOSAL_ANSWER_LOADING, payload: { questionId, loading: true } });
-
+    let questionsFilter = getQuestionsFilters(getState());
+  
     try {
       const { data } = await setProposalAnswer(
         proposalId,
@@ -115,6 +116,7 @@ export const setProposalAnswerData = (
           dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
         });
       }
+      dispatch(onQuestionsFilterApplied(questionsFilter));
       dispatch({ type: PROPOSAL_ANSWER_LOADING, payload: { questionId, loading: false } });
     } catch (err) {
       dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err }});
@@ -272,6 +274,36 @@ function applyMyUserRoleFilter(questions) {
   return filteredQuestions;
 }
 
+function applyUnAnsweredFilter(questions) {
+  const role = localStorage.getItem('userRole');
+  let filteredQuestions = cloneDeep(questions);
+  if (role) {
+    filteredQuestions = fromJS(filteredQuestions)
+      .filter(val=>{
+        let Answer = val.get('answers', []);
+        Answer = Answer.toJS();
+        return Answer && Answer.length && !Boolean(String(Answer[Answer.length-1].answer).trim().length) || !Boolean(Answer.length)
+      })
+      .toJS();
+  }
+  return filteredQuestions;
+}
+
+function applyAnsweredFilter(questions) {
+  const role = localStorage.getItem('userRole');
+  let filteredQuestions = cloneDeep(questions);
+  if (role) {
+    filteredQuestions = fromJS(filteredQuestions)
+      .filter(question=>{
+        let Answer = question.get('answers', []);
+        Answer = Answer.toJS();
+        return Answer && Answer.length && String(Answer[Answer.length-1].answer).trim().length > 0
+      })
+      .toJS();
+  }
+  return filteredQuestions;
+}
+
 function applyInterestedPartyFilter(questions) {
   const role = localStorage.getItem('userRole');
   let filteredQuestions = cloneDeep(questions);
@@ -299,6 +331,15 @@ function applyMilestoneFilter(questions, milestone) {
   return filteredQuestions;
 }
 
+function filterGroup(filteredQuestions, allQuestions, logic, filterCallback, filterName=''){
+  if(logic === 'AND'){
+    return uniqBy( filterCallback(allQuestions),'questionId');
+  }else{
+    return uniqBy([...filteredQuestions, ...filterCallback(allQuestions, filterName)],'questionId');
+  }
+}
+
+
 export function onQuestionsFilterApplied(questionsFilter) {
   return async (dispatch, getState) => {
     const state = getState();
@@ -307,38 +348,48 @@ export function onQuestionsFilterApplied(questionsFilter) {
       payload: { questionsFilter }
     });
 
-    /**
-     * get active filters and apply in sequence
-     */
+    let filteredQuestions = cloneDeep(selectProposalQuestions(state));
 
-    const questions = selectProposalQuestions(state);
-    let filteredQuestions = [];
-    const activeQuestionsFilter = questionsFilter.filter(value =>
-      value.get('checked')
-    );
-    activeQuestionsFilter.keySeq().forEach(key => {
-      switch (key) {
-        case 'myUserRole':
-          filteredQuestions = uniqBy(
-            [...filteredQuestions, ...applyMyUserRoleFilter(questions)],
-            'questionId'
-          );
-          break;
-        case 'interestedParty':
-          filteredQuestions = uniqBy(
-            [...filteredQuestions, ...applyInterestedPartyFilter(questions)],
-            'questionId'
-          );
-          break;
-        default:
-          filteredQuestions = uniqBy(
-            [...filteredQuestions, ...applyMilestoneFilter(questions, key)],
-            'questionId'
-          );
-          break;
-      }
-    });
+    questionsFilter.entrySeq().forEach(([groupName, group]) => {
 
+      let withinGroupFilteredQuestions = [];
+      // Set the logic for current filter Group
+      let logic = group.get('logic');
+      let considerGroup = false;
+
+      group.entrySeq().forEach(([filterName, filter])=>{
+        
+        // Do not process for logic key or the filter is not checked
+        if(filterName === 'logic' || !filter.get('checked'))
+          return;
+
+        considerGroup = true;
+
+        switch (filterName) {
+          case 'myUserRole':
+            withinGroupFilteredQuestions = filterGroup(withinGroupFilteredQuestions, filteredQuestions, logic, applyMyUserRoleFilter)
+            break;
+          case 'answered':
+            withinGroupFilteredQuestions = filterGroup(withinGroupFilteredQuestions, filteredQuestions, logic, applyAnsweredFilter)
+            break;
+          case 'unanswered':
+            withinGroupFilteredQuestions = filterGroup(withinGroupFilteredQuestions, filteredQuestions, logic, applyUnAnsweredFilter)
+            break;
+          case 'interestedParty':
+            withinGroupFilteredQuestions = filterGroup(withinGroupFilteredQuestions, filteredQuestions, logic, applyInterestedPartyFilter)
+            break;
+          default:
+            withinGroupFilteredQuestions = filterGroup(withinGroupFilteredQuestions, filteredQuestions, logic, applyMilestoneFilter, filterName)
+            break;
+        }
+       });
+      
+       if(considerGroup)
+          filteredQuestions = withinGroupFilteredQuestions
+  
+       considerGroup = false;
+      });
+      
     dispatch({
       type: ON_QUESTIONS_FILTERED,
       payload: { filteredQuestions }
@@ -346,14 +397,13 @@ export function onQuestionsFilterApplied(questionsFilter) {
   };
 }
 
-export function onApplyQuestionsFilter(filterName = null, checked = false) {
+export function onApplyQuestionsFilter(filterName = null, checked = false, groupName) {
   return async (dispatch, getState) => {
     const state = getState();
     let questionsFilter = getQuestionsFilters(state);
-    if (filterName) {
-      questionsFilter = questionsFilter.setIn([filterName, 'checked'], checked);
+    if (filterName && groupName) {
+      questionsFilter = questionsFilter.setIn([groupName, filterName, 'checked'], checked);
     }
-
     dispatch(onQuestionsFilterApplied(questionsFilter));
   };
 }
@@ -367,9 +417,14 @@ export function resetQuestionsFilterAction() {
 export function clearQuestionsFilterAction() {
   return async (dispatch, getState) => {
     let questionsFilter = getQuestionsFilters(getState());
-    questionsFilter = questionsFilter.map(filter =>
-      filter.set('checked', false)
-    );
+    questionsFilter = questionsFilter.map(group =>{
+        return group.map(filter=>{
+          if(typeof filter === 'string')
+           return filter;
+
+          return filter.set('checked', false)
+        })
+      });
     dispatch({ type: CLEAR_QUESTIONS_FILTER, payload: { questionsFilter } });
   };
 }

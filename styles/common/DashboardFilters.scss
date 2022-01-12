@@ -9,6 +9,41 @@
     margin-right: 10px;
     padding: 0 10px;
     margin-bottom: 10px;
+
+    .dd-input-wrapper {
+      position: relative;
+
+      .dd-header {
+        height: 42px;
+
+        .dd-header-selected {
+          white-space: nowrap;
+          overflow: hidden;
+          // text-overflow: ellipsis;
+        }
+      }
+
+      .resetButton {
+        position: absolute;
+        right: -20px;
+        top: 12px;
+      }
+    }
+
+    .lookup-wrapper {
+      position: relative;
+
+      textarea {
+        height: 42px !important;
+        white-space: nowrap;
+        overflow: hidden !important;
+        // text-overflow: ellipsis;
+      }
+      .resetButton {
+        top: 12px;
+        right: -20px;
+      }
+    }
   }
   .filter-clear {
     position: absolute;

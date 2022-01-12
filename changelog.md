@@ -5,16 +5,22 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.4] - YYYY-MM-DD
-### Added
   - IQVIACBEXU-886: Frontend changes: Show an alert when hasDifferentSFanswer is = to true
   - IQVIACBEXU-932: General focus for questions
   - IQVIACBEXU-931: Edit/Delete custom questions
+  - IQVIACBEXU-947: Enhancement request: Filter functionality
   - IQVIACBEXU-942: Striking is not happening in history for single select dropdown, once editing/updating the dropdown option
   - IQVIACBEXU-944: Profile : User role selection
+  - IQVIACBEXU-948: New Filters: Answered and Unanswered questions
   
 ### Changed
 ### Fixed
   - IQVIACBEXU-958: showing as invalid date in history for date field once enter and delete the invalid date for Not Answered
+  - IQVIACBEXU-943: Team member filter alignment issue in unity homepage
+  - IQVIACBEXU-945: Notepad functionality: Words broken apart
+  - IQVIACBEXU-1050: "Okay" button is displaying instead of "save" button for custom questions
+  - IQVIACBEXU-946: Index sections should match the form sections.
+  - IQVIACBEXU-954: extractName function added to get name for Salesforce answers
 
 
 ## [3.3] - YYYY-MM-DD

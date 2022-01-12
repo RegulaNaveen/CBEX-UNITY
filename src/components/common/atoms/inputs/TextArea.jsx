@@ -48,12 +48,16 @@ class TextArea extends PureComponent<Props, State> {
   }
 
   componentDidMount() {
+    this.updateValueFromProps();
+  }
+  updateValueFromProps() {
     const { value } = this.props;
     if (!_.isEmpty(value)) this.setState({ textValue: value });
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     const { textValue: value } = this.state;
+    if(prevProps.value != this.props.value) this.updateValueFromProps();
 
     if (
       this.textAreaInput.current !== null &&

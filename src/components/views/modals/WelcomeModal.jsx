@@ -14,6 +14,7 @@ const WelcomeModal = ({roles,onRoleChange,id}) => {
         image: true
     });
     const [role, setrole] = React.useState('')
+
     function handleClose(variant){
         setState({ ...state, [variant]: false });
     };
@@ -32,6 +33,7 @@ const WelcomeModal = ({roles,onRoleChange,id}) => {
             } 
         }
     },[selector])
+
     return (
         <Modal
             open={state.image}
@@ -41,7 +43,6 @@ const WelcomeModal = ({roles,onRoleChange,id}) => {
             subtitle=""
             hideButtons={true}
             message={``}
-            // onClose={() => handleClose('image')}
             id={id}
             variant="default"
         >
