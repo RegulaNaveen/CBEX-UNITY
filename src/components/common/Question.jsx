@@ -341,15 +341,13 @@ export class TaskRow extends Component<Props, State> {
             hasDifferentSFanswer={this.props.hasDifferentSFanswer}
             sfObject={sfObject}
           >
-            <textarea
+            <TextArea
               className="proposal-text-area"
               placeholder="Click to answer"
               type="number"
               onBlur={this.handleTextChange}
               onFocus={e => this.onChildInputFocus(e)}
-              defaultValue={answerValue}
-              rows="1"
-              style={{ resize: 'none' }}
+              value={answerValue}
             />
           </SFAnswerValidationWrapper>
         );
