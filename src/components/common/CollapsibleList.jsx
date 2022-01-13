@@ -69,10 +69,7 @@ class CollapsibleList extends Component<Props, State> {
 
     if (prevProps.selectedSection !== selectedSection)
       // eslint-disable-next-line react/no-did-update-set-state
-      setTimeout(
-        () => this.setState({ isCollapsed: id === selectedSection }),
-        0
-      );
+      setTimeout(() => this.setState({ isCollapsed: id === selectedSection }),0);
 
     if (prevProps.isCheckedAll !== isCheckedAll)
       // eslint-disable-next-line react/no-did-update-set-state
@@ -221,19 +218,17 @@ class CollapsibleList extends Component<Props, State> {
               </div>
             </div>
 
-            <Box sx={{ mb: 2 }} display={{ xs: 'none', md: 'block' }}>
-              <Grid container spacing={2} className="question-row-header">
-                <Grid item xs={5}>
-                  <p>Questions</p>
-                </Grid>
-                <Grid item xs={5} md={4} lg={5} className="answer-col">
-                  <p>Answers</p>
-                </Grid>
-                <Grid item xs={2} md={3} lg={2}>
-                  <p>Date Completed</p>
-                </Grid>
-              </Grid>
-            </Box>
+            <div className="task-table-row">
+              <div className="task-subtitle subtitlebold">
+                <p>Questions</p>
+              </div>
+              <div className="task-subtitle task-subtitle-answer subtitlebold">
+                <p>Answers</p>
+              </div>
+              <div className="task-subtitle task-subtitle-completion-date subtitlebold">
+                <p>Date Completed</p>
+              </div>
+            </div>
 
             {questions.valueSeq().map(questionConfig => {
               const visible = questionConfig.get('visible');

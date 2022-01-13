@@ -304,7 +304,7 @@ export class TaskRow extends Component<Props, State> {
             hasDifferentSFanswer={this.props.hasDifferentSFanswer}
             sfObject={sfObject}
           >
-            <TextField
+            <textarea
               className="proposal-text-area"
               placeholder="Click to answer"
               onPaste={event => {
@@ -327,8 +327,8 @@ export class TaskRow extends Component<Props, State> {
               onBlur={e => this.handleTextChange(e.target.value, answerValue)}
               onFocus={e => this.onChildInputFocus(e)}
               defaultValue={answerValue}
-              sizeAdjustable
-              minHeight={40}
+              rows="1"
+              style={{ resize: 'vertical'}}
             />
           </SFAnswerValidationWrapper>
         );
@@ -429,13 +429,25 @@ export class TaskRow extends Component<Props, State> {
   };
 
   handleVerifyPredictedAnsClick(predictedAnswer) {
-    const { setProposalAnswer, proposalId, questionId, userData } = this.props;
-    setProposalAnswer(
-      proposalId,
-      questionId,
-      String(predictedAnswer.get('answer')).trim(),
-      userData
-    );
+    const { setProposalAnswer, proposalId, questionId, userData, answerConfiguration } = this.props;
+    const answerType = answerConfiguration.get('type');
+
+    // picklist value should not be converted to string while saving
+    if (answerType === "picklist")  {
+      setProposalAnswer(
+        proposalId,
+        questionId,
+        predictedAnswer.get('answer'),
+        userData
+      );
+    } else {
+      setProposalAnswer(
+        proposalId,
+        questionId,
+        String(predictedAnswer.get('answer')).trim(),
+        userData
+      );
+    }
   }
 
   isAnswered(answer, isAnswerPredicted) {
@@ -482,177 +494,108 @@ export class TaskRow extends Component<Props, State> {
     }
 
     return (
-      <Box marginBottom={{ xs: '24px', md: '8px' }}>
-        <Grid
-          container
-          spacing={2}
-          className={`question-row${
-            this.state.selectedRow ? ' selected-task-table-row' : ''
-          }`}
-        >
-          <Grid
-            item
-            xs={12}
-            sm={12}
-            md={5}
-            lg={5}
-            style={{ display: 'flex', alignItems: 'center' }}
-          >
-            <Grid container spacing={2} className="question-text-container">
-              <Grid component={Box} item xs={4} sm={3} display={{ md: 'none' }}>
-                <p style={{ fontWeight: 'bold', marginRight: '8px' }}>
-                  Question{' '}
-                </p>
-              </Grid>
-              <Grid item xs={8} sm={9} md={12}>
-                <div className="question-text">
-                  {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
-                  <p className="question-text-para">
-                    {questionText}
-                    {isCustomQuestion && (
-                      <span
-                        onClick={() => {
-                          setEditQuestionData({
-                            questionText,
-                            section: sectionName,
-                            answerType: answerConfiguration.get('type'),
-                            roleNames,
-                            questionAnswered: lastAnswer ? true : false,
-                            questionId: qId
-                          });
-                        }}
-                      >
-                        <Edit className="edit-icon" />
-                      </span>
-                    )}
-                    {questionHint.trim().length > 0 ? (
-                      <Tooltip
-                        variant="light"
-                        title={questionHint}
-                        placement="top"
-                      >
-                        <IconButton
-                          color="primary"
-                          style={{ margin: 0 }}
-                          size="small"
-                          className="question-tooltip-icon"
-                        >
-                          <InfoIcon style={{ fontSize: '16px' }} />
-                        </IconButton>
-                      </Tooltip>
-                    ) : (
-                      <></>
-                    )}
-                  </p>
-                </div>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item xs={12} sm={12} md={4} lg={5} className="answer-col">
-            <Grid container spacing={2} className="question-text-container">
-              <Grid component={Box} item xs={4} sm={3} display={{ md: 'none' }}>
-                <p style={{ fontWeight: 'bold', marginRight: '8px' }}>
-                  Answer{' '}
-                </p>
-              </Grid>
-              <Grid item xs={8} sm={9} md={12}>
-                <div className="test">
-                  {answerConfiguration
-                    ? this.renderAnswer(
-                        answerConfiguration.get('type'),
-                        answerConfiguration.get('options'),
-                        answers,
-                        lastAnswer,
-                        questionText
-                      )
-                    : this.renderAnswer('', [], [], undefined, questionText)}
-                </div>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            sm={12}
-            md={3}
-            lg={2}
-            xl={1}
-            className="date-answered-col"
-          >
-            <Grid container spacing={2} className="question-text-container">
-              <Grid component={Box} item xs={4} sm={3} display={{ md: 'none' }}>
-                <p style={{ fontWeight: 'bold', marginRight: '8px' }}>
-                  Date Completed{' '}
-                </p>
-              </Grid>
-              <Grid
-                item
-                xs={8}
-                sm={9}
-                md={12}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'flex-start'
+      <div
+        className={`task-table-row${
+          this.state.selectedRow ? ' selected-task-table-row' : ''
+        }`}
+      >
+        <div className="question-text">
+          {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
+          <p>
+            {questionText}
+            {isCustomQuestion && (
+              <span
+                onClick={() => {
+                  setEditQuestionData({
+                    questionText,
+                    section: sectionName,
+                    answerType: answerConfiguration.get('type'),
+                    roleNames,
+                    questionAnswered: lastAnswer ? true : false,
+                    questionId: qId
+                  });
                 }}
               >
-                <Button
-                  variant="text"
-                  onClick={this.displayAnswerOnHistory}
-                  className="date-answered-btn"
-                  style={{
-                    padding: '0 4px',
-                    width: '120px',
-                    justifyContent: 'flex-start',
-                    fontWeight: 400
-                  }} // based on current date format
+                <Edit className="edit-icon" />
+              </span>
+            )}
+            {questionHint.trim().length > 0 ? (
+              <Tooltip
+                variant="light"
+                title={questionHint}
+                placement="top"
+              >
+                <IconButton
+                  color="primary"
+                  style={{ margin: 0 }}
+                  size="small"
+                  className="question-tooltip-icon"
                 >
-                  {answerDate}
-                </Button>
-                {isAnswerPredicted ? (
-                  <>
-                    <IconButton
-                      onClick={() =>
-                        this.handleVerifyPredictedAnsClick(lastAnswer)
-                      }
-                    >
-                      <StatusCheck
-                        fontSize={'22px'}
-                        style={{ color: '#D9D9D9' }}
-                      />
-                    </IconButton>
-                  </>
-                ) : null}
-                {this.isAnswered(lastAnswer, isAnswerPredicted) ? (
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '32px',
-                      height: '32px'
-                    }}
-                  >
-                    <Checkmark />
-                  </div>
-                ) : null}
-                {loading ? (
-                  <span style={{ position: 'relative', top: '15px' }}>
-                    <Loader
-                      isInner
-                      size={20}
-                      style={{
-                        width: '20px',
-                        height: '20px'
-                      }}
-                    />
-                  </span>
-                ) : null}
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Box>
+                  <InfoIcon style={{ fontSize: '16px' }} />
+                </IconButton>
+              </Tooltip>
+            ) : (
+              <></>
+            )}
+          </p>
+        </div>
+
+        <div>
+          {answerConfiguration
+            ? this.renderAnswer(
+                answerConfiguration.get('type'),
+                answerConfiguration.get('options'),
+                answers,
+                lastAnswer,
+                questionText
+              )
+            : this.renderAnswer('', [], [], undefined, questionText)}
+        </div>
+
+        <div
+          style={{
+            alignSelf: 'start',
+            display: 'flex',
+            minHeight: '40px',
+            alignItems: 'center',
+            paddingLeft: '16px'
+          }}
+        >
+          <button style={{ width: '100px', textAlign: 'left', flexShrink: 0 }} type="button" onClick={this.displayAnswerOnHistory}>
+            {answerDate}
+          </button>
+          {(isAnswerPredicted && !loading)? (
+            <Tooltip variant="light" title="Unity Predicted Answer" placement="top">
+            <IconButton>
+              <StatusCheck
+                fontSize={'22px'}
+                style={{ color: '#D9D9D9' }}
+                onClick={() =>
+                  this.handleVerifyPredictedAnsClick(lastAnswer)
+                }
+              />
+            </IconButton>
+            </Tooltip>
+          ) : null}
+          {(this.isAnswered(lastAnswer, isAnswerPredicted) && !loading) ? (
+            <div style={{ display: 'flex', flexShrink: 0, width: '40px', height: '24px', justifyContent: 'center', alignItems: 'center' }}>
+              <Checkmark className="answered" style={{ marginLeft: '6px' }} />
+            </div>
+          ) : null}
+          {loading ? (
+            <span style={{ marginLeft: '6px', position: 'relative', top: '15px' }}>
+              <Loader
+                isInner
+                size={20}
+                style={{
+                  width: '20px',
+                  height: '20px'
+                }}
+              />
+            </span>
+          ) : null}
+        </div>
+      </div>
     );
   }
 }

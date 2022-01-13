@@ -99,10 +99,13 @@
         color: $black;
         font-family: $proximaNova;
         font-size: 14px;
-        font-weight: 600;
         letter-spacing: 0;
         line-height: 17px;
+        p {
+          font-weight: 600;
+        }
       }
+      
 
       .task-subtitle-answer {
         flex: 1;
@@ -138,4 +141,7 @@
 
 .complete {
   background-color: $neutral2;
+}
+.subtitlebold {
+  font-weight: bold;
 }
