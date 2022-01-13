@@ -94,7 +94,8 @@ class Questions extends Component<Props, State> {
       currentTab: 0,
       selectedtitle: '',
       heighlightcard: false,
-      showFilter: false
+      showFilter: false,
+      sidebarscroll: ''
     };
   }
 
@@ -295,6 +296,7 @@ class Questions extends Component<Props, State> {
       filterMilestone,
       allSectionsExpanded
     } = this.props;
+    const { sidebarscroll } = this.state;
 
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
     return allSections.valueSeq().map(section => {
@@ -319,7 +321,7 @@ class Questions extends Component<Props, State> {
               this.setState({ currentsection: value });
               this.onClose();
             }}
-            isCheckedAll={allSectionsExpanded}
+            isCheckedAll={sidebarscroll && sidebarscroll.length &&  sidebarscroll == sectionName ? true : allSectionsExpanded}
             setQuestionToDisplayHistory={this.setQuestionToDisplayHistory}
           />
         );
@@ -378,6 +380,12 @@ class Questions extends Component<Props, State> {
     return null;
   }
 
+  expandsection = (e) => {
+    const { expandAllSections } = this.props;
+    expandAllSections(false);
+    this.setState({sidebarscroll :  e})
+  }
+
   render() {
     const {
       details,
@@ -408,6 +416,7 @@ class Questions extends Component<Props, State> {
           onAddQuestion={value => {
             this.setState({ currentsection: value });
           }}
+          onscrollelement = {(e)=> this.expandsection(e)}
           expandAll={this.handleIsCheckedAll}
           AddNewQuestion={this.onClose}
           RefreshProposal={this.getProposalInfoUpdated}
@@ -427,7 +436,11 @@ class Questions extends Component<Props, State> {
             <ApolloCheckbox
               label="Expand All"
               checked={allSectionsExpanded}
-              onChange={(e, checked) => this.handleIsCheckedAll(checked)}
+              onChange={(e, checked) => {
+                this.setState({sidebarscroll: ''},()=>{
+                  this.handleIsCheckedAll(checked)
+                })
+              }}
             />
             <div
               title="Refresh"

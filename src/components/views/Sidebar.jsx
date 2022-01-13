@@ -132,8 +132,8 @@ class Sidebar extends Component<Props, State> {
     const {
       target: { textContent, id }
     } = event;
-
-    const { setSelectedSection, handleOpenClose } = this.props;
+    const { setSelectedSection, handleOpenClose, onscrollelement } = this.props;
+    onscrollelement(textContent)
 
     const itemToScroll = textContent
       .toLocaleLowerCase()

@@ -117,6 +117,10 @@
     line-height: 26px !important;
   }
 }
+.align-lookup{
+  padding: 0px !important;
+  resize: none;
+}
 .hasDifferentSFanswer{
   textarea, input, .dd-header, .multiselect-header, .a-MuiAutocomplete-root {
    border: 2px solid #e20000!important;

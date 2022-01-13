@@ -67,13 +67,9 @@ class CollapsibleList extends Component<Props, State> {
     const { selectedSection, isCheckedAll } = this.props;
     const { id } = this.taskRef.current;
 
-    // expand a section only if it's selected from sidebar
-    if (prevProps.selectedSection !== selectedSection && id === selectedSection)
+    if (prevProps.selectedSection !== selectedSection)
       // eslint-disable-next-line react/no-did-update-set-state
-      setTimeout(
-        () => this.setState({ isCollapsed: true }),
-        0
-      );
+      setTimeout(() => this.setState({ isCollapsed: id === selectedSection }),0);
 
     if (prevProps.isCheckedAll !== isCheckedAll)
       // eslint-disable-next-line react/no-did-update-set-state
@@ -223,13 +219,13 @@ class CollapsibleList extends Component<Props, State> {
             </div>
 
             <div className="task-table-row">
-              <div className="task-subtitle">
-                <p>Question</p>
+              <div className="task-subtitle subtitlebold">
+                <p>Questions</p>
               </div>
-              <div className="task-subtitle task-subtitle-answer">
-                <p>Answer</p>
+              <div className="task-subtitle task-subtitle-answer subtitlebold">
+                <p>Answers</p>
               </div>
-              <div className="task-subtitle task-subtitle-completion-date">
+              <div className="task-subtitle task-subtitle-completion-date subtitlebold">
                 <p>Date Completed</p>
               </div>
             </div>

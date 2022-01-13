@@ -341,15 +341,13 @@ export class TaskRow extends Component<Props, State> {
             hasDifferentSFanswer={this.props.hasDifferentSFanswer}
             sfObject={sfObject}
           >
-            <textarea
+            <TextArea
               className="proposal-text-area"
               placeholder="Click to answer"
               type="number"
               onBlur={this.handleTextChange}
               onFocus={e => this.onChildInputFocus(e)}
-              defaultValue={answerValue}
-              rows="1"
-              style={{ resize: 'none' }}
+              value={answerValue}
             />
           </SFAnswerValidationWrapper>
         );
@@ -567,6 +565,7 @@ export class TaskRow extends Component<Props, State> {
             {answerDate}
           </button>
           {(isAnswerPredicted && !loading)? (
+            <Tooltip variant="light" title="Unity Predicted Answer" placement="top">
             <IconButton>
               <StatusCheck
                 fontSize={'22px'}
@@ -576,6 +575,7 @@ export class TaskRow extends Component<Props, State> {
                 }
               />
             </IconButton>
+            </Tooltip>
           ) : null}
           {(this.isAnswered(lastAnswer, isAnswerPredicted) && !loading) ? (
             <div style={{ display: 'flex', flexShrink: 0, width: '40px', height: '24px', justifyContent: 'center', alignItems: 'center' }}>

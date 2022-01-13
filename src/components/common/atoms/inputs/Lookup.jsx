@@ -60,7 +60,6 @@ class Lookup extends Component<Props, State> {
   onSearching = ({ target: { value } }: SyntheticInputEvent<EventTarget>) => {
     const { data } = this.props;
     const searchValue = value && value.slice(value.lastIndexOf(',') + 1).trim();
-    console.log(`searching..${searchValue}`);
     const filteringData = data.filter(item =>
       objectContains(item, value, false)
     );
@@ -132,8 +131,6 @@ class Lookup extends Component<Props, State> {
   };
 
   render() {
-    console.log('state :>> ', this.state);
-    console.log('props :>> ', this.props);
     const { searchValue, filteredData, showResetButton, error } = this.state;
     const {
       title,
@@ -156,7 +153,7 @@ class Lookup extends Component<Props, State> {
             ref={e => (this.textInput = e)}
             style={{ marginBottom: 0 }}
             type="text"
-            className="teammember proposal-text-area"
+            className="teammember align-lookup proposal-text-area"
             value={searchValue}
             placeholder={placeholder}
             onChange={this.onSearching}
