@@ -87,7 +87,7 @@ class AnswerHistory extends Component<Props> {
 
       const renderAnswers = () => {
         if (isValidatedUnityPredictedAnswer) {
-          return <span key={uuidv4()}>Validated Unity Predicted Answer</span>;
+          return <span key={uuidv4()}><b>Validated Unity Predicted Answer</b></span>;
         }
 
         if (questionType !== 'picklist') {
