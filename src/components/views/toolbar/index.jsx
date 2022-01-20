@@ -7,6 +7,14 @@ import { DropMenu } from '../../svg';
 import { DASHBOARD, UBUILD } from '../../../routes';
 import { UBUILD_ENABLED } from '../../../constants/api';
 import { isUserUbuildAdmin } from '../../../utils/utils';
+import { getUserRole } from '../../../SessionHandler';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { getRolesInfo } from '../../../redux/actions/proposal-actions';
+import { onSetUserRole } from '../../../redux/actions/sso-auth-actions';
+import { getRoles } from '../../../redux/selectors';
+import WelcomeModal from '../modals/WelcomeModal';
+import MatomoHOC from '../../HOC/MatomoHOC';
 
 type State = { isCollapsed: boolean };
 
@@ -18,12 +26,20 @@ class Toolbar extends Component<{}, State> {
     this.wrapperRef = createRef();
 
     this.state = {
-      isCollapsed: false
+      isCollapsed: false,
+      roleName: ''
     };
   }
 
   componentDidMount() {
+    const {
+      rolesList,
+      getRolesInfoF,
+    } = this.props;
     window.addEventListener('mousedown', this.handleClickOutside);
+    const userRole = getUserRole();
+    if (!rolesList) getRolesInfoF();
+    if (userRole) this.setState({ roleName: userRole });
   }
 
   componentWillUnmount() {
@@ -44,8 +60,25 @@ class Toolbar extends Component<{}, State> {
       this.setState({ isCollapsed: false });
   };
 
+  onRoleChange = (value: string) => {
+    const { changeUserRole } = this.props;
+    changeUserRole(value);
+    this.setState({ roleName: value });
+    this.trackMatomoRoleChange(value);
+  };
+
+  trackMatomoRoleChange = (role: string) => {
+    const { userActions, eventCategories, trackEvent } = this.props;
+    trackEvent({
+      category: eventCategories.tb,
+      action: `ToolBar: ${userActions.changed} User Role to ${role}`
+    });
+  };
+
+
   render() {
-    const { isCollapsed } = this.state;
+    const { isCollapsed , roleName} = this.state;
+    const { rolesList } = this.props;
     const results = isUserUbuildAdmin();
     return (
       <div className="toolbar-wrapper">
@@ -93,9 +126,24 @@ class Toolbar extends Component<{}, State> {
             ) : null}
           </div>
         </div>
+        {
+          (!roleName || roleName === 'undefined') && <WelcomeModal id="welcomemodal" roles={rolesList || []} onRoleChange={(e)=>this.onRoleChange(e)}/>
+        }
       </div>
     );
   }
 }
 
-export default withRouter(Toolbar);
+
+const mapStateToProps = (state: Map) => ({
+  rolesList: getRoles(state)
+});
+
+
+export default compose(
+  withRouter,
+  connect(mapStateToProps, {
+    getRolesInfoF: getRolesInfo,
+    changeUserRole: onSetUserRole
+  })
+)(MatomoHOC(Toolbar));

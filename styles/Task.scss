@@ -72,8 +72,10 @@
     outline: none;
 
     .task-table-headers {
-      display: grid;
-      grid-template-columns: 1.3fr 1.3fr 0.4fr;
+      // display: grid;
+      // grid-template-columns: 1.3fr 1.3fr 0.4fr;
+      display: flex;
+      align-items: center;
       outline: none;
       height: 60px;
 
@@ -97,10 +99,13 @@
         color: $black;
         font-family: $proximaNova;
         font-size: 14px;
-        font-weight: 600;
         letter-spacing: 0;
         line-height: 17px;
+        p {
+          font-weight: 600;
+        }
       }
+      
 
       .task-subtitle-answer {
         flex: 1;
@@ -136,4 +141,7 @@
 
 .complete {
   background-color: $neutral2;
+}
+.subtitlebold {
+  font-weight: bold;
 }

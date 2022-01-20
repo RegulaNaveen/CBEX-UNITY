@@ -14,7 +14,6 @@ import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import { Add, Refresh } from '../../svg';
 import CollapsibleList from '../../common/CollapsibleList';
-import Checkbox from '../../common/atoms/inputs/Checkbox';
 import ProposalInfo from './ProposalInfo';
 import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
 import {
@@ -34,7 +33,8 @@ import {
   selectSections,
   selectFilteredSections,
   selectActiveQuestionsFilterCount,
-  getMilestoneSections
+  getMilestoneSections,
+  getEditQuestionData
 } from '../../../redux/selectors';
 import {
   selectUniqueMilestones,
@@ -46,6 +46,7 @@ import AnswerHistory from '../../views/modals/AnswerHistory';
 import { getAllUsers } from '../../../redux/actions/sso-auth-actions';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import { getCountriesNameForCode } from '../../../utils/utils';
+import Grid from 'apollo-react/components/Grid';
 
 type Props = {
   match: Match,
@@ -70,7 +71,8 @@ type Props = {
   isQuestionsFiltersEnabled: boolean,
   activeQuestionsFilterCount: Number,
   allSectionsExpanded: boolean,
-  expandAllSections: Function
+  expandAllSections: Function,
+  editQuestionsData: Map
 };
 
 type State = {
@@ -92,7 +94,8 @@ class Questions extends Component<Props, State> {
       currentTab: 0,
       selectedtitle: '',
       heighlightcard: false,
-      showFilter: false
+      showFilter: false,
+      sidebarscroll: ''
     };
   }
 
@@ -106,7 +109,8 @@ class Questions extends Component<Props, State> {
       setQuestion,
       hasQuestionError,
       userRole,
-      applyQuestionsFilter
+      applyQuestionsFilter,
+      editQuestionsData
     } = this.props;
     if (prevProps.isQuestionLoading && setQuestion && !hasQuestionError)
       this.onClose();
@@ -114,6 +118,11 @@ class Questions extends Component<Props, State> {
     // check for user role change
     if (prevProps.userRole !== userRole) {
       applyQuestionsFilter();
+    }
+
+    // on Edit question
+    if (prevProps.editQuestionsData.size === 0 && editQuestionsData.size > 0) {
+      this.onClose();
     }
   }
 
@@ -134,9 +143,9 @@ class Questions extends Component<Props, State> {
     }));
   }
 
-  handleFilterChange(filterName, checked) {
+  handleFilterChange(filterName, checked, groupName='') {
     const { applyQuestionsFilter } = this.props;
-    applyQuestionsFilter(filterName, checked);
+    applyQuestionsFilter(filterName, checked, groupName);
   }
 
   scrollToSelectedElement = title => {
@@ -279,6 +288,7 @@ class Questions extends Component<Props, State> {
   };
 
   renderQuestions() {
+   try {
     const {
       sections,
       filteredSections,
@@ -286,9 +296,9 @@ class Questions extends Component<Props, State> {
       filterMilestone,
       allSectionsExpanded
     } = this.props;
+    const { sidebarscroll } = this.state;
 
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
-
     return allSections.valueSeq().map(section => {
       const sectionName = section.get('sectionName');
       const questions = section.get('questions');
@@ -311,54 +321,69 @@ class Questions extends Component<Props, State> {
               this.setState({ currentsection: value });
               this.onClose();
             }}
-            isCheckedAll={allSectionsExpanded}
+            isCheckedAll={sidebarscroll && sidebarscroll.length &&  sidebarscroll == sectionName ? true : allSectionsExpanded}
             setQuestionToDisplayHistory={this.setQuestionToDisplayHistory}
           />
         );
 
       return null;
-    });
+    }); 
+   } catch (error) {
+     console.log(error);
+   }
   }
 
   renderFilter() {
     const { showFilter } = this.state;
     const { questionsFilters, clearQuestionsFilter } = this.props;
-
     if (showFilter) {
       return (
-        <div className="questions-filter__container">
-          <div className="questions-filter__grid">
-            {questionsFilters.entrySeq().map(([key, filter]) => (
-              <div
-                key={uuidv4()}
-                className={classNames(
-                  'questions-filter__item',
-                  filter.get('className'),
-                  { 'questions-filter__auto': !filter.get('className') }
-                )}
+        <div className="questions-filter__container" >
+          <div className="questions-filter__grid column_style">
+            <div className="filtertitle">Filters</div>
+            <div> 
+              <Link
+              className="clear-all"
+              size="small"
+              onClick={() => clearQuestionsFilter()}
               >
-                <ApolloCheckbox
-                  size="small"
-                  label={filter.get('label')}
-                  checked={filter.get('checked')}
-                  onChange={(e, checked) =>
-                    this.handleFilterChange(key, checked)
-                  }
-                />
-              </div>
-            ))}
+              Clear All
+              </Link>
+            </div>
+            {questionsFilters.entrySeq().map(([groupName, group]) => (
+               <Grid container spacing={2} className={groupName}>
+                  {group.entrySeq().filter(value=>value[0] != 'logic').map(([key, filter]) => (
+                    <Grid item xs={3}
+                      key={uuidv4()}
+                      className={classNames(
+                        'questions-filter__item',
+                        filter.get('className'),
+                        { 'questions-filter__auto': !filter.get('className') }
+                      )}
+                    >
+                      <ApolloCheckbox
+                        size="small"
+                        label={filter.get('label')}
+                        checked={filter.get('checked')}
+                        onChange={(e, checked) =>
+                          this.handleFilterChange(key, checked, groupName)
+                        }
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
+              ))}
           </div>
-          <Link
-            className="clear-all"
-            size="small"
-            onClick={() => clearQuestionsFilter()}
-          >
-            Clear All
-          </Link>
         </div>
       );
     }
     return null;
+  }
+
+  expandsection = (e) => {
+    const { expandAllSections } = this.props;
+    expandAllSections(false);
+    this.setState({sidebarscroll :  e})
   }
 
   render() {
@@ -369,7 +394,8 @@ class Questions extends Component<Props, State> {
       proposalID,
       isQuestionsFiltersEnabled,
       activeQuestionsFilterCount,
-      allSectionsExpanded
+      allSectionsExpanded,
+      editQuestionsData
     } = this.props;
 
     const {
@@ -390,6 +416,7 @@ class Questions extends Component<Props, State> {
           onAddQuestion={value => {
             this.setState({ currentsection: value });
           }}
+          onscrollelement = {(e)=> this.expandsection(e)}
           expandAll={this.handleIsCheckedAll}
           AddNewQuestion={this.onClose}
           RefreshProposal={this.getProposalInfoUpdated}
@@ -409,7 +436,11 @@ class Questions extends Component<Props, State> {
             <ApolloCheckbox
               label="Expand All"
               checked={allSectionsExpanded}
-              onChange={(e, checked) => this.handleIsCheckedAll(checked)}
+              onChange={(e, checked) => {
+                this.setState({sidebarscroll: ''},()=>{
+                  this.handleIsCheckedAll(checked)
+                })
+              }}
             />
             <div
               title="Refresh"
@@ -480,7 +511,8 @@ const mapStateToProps = (state: Map) => ({
   activeQuestionsFilterCount: selectActiveQuestionsFilterCount(state),
   milestones: selectUniqueMilestones(state),
   userRole: selectUserRole(state),
-  allSectionsExpanded: selectAreAllSectionsExpanded(state)
+  allSectionsExpanded: selectAreAllSectionsExpanded(state),
+  editQuestionsData: getEditQuestionData(state)
 });
 
 export default compose(

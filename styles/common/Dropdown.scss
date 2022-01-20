@@ -90,6 +90,15 @@
     padding: 8px;
     padding-right: 20px;
 
+    &.dd-header-disabled {
+      background-color: #f2f2f2;
+      cursor: not-allowed;
+
+      &:before {
+        border-color: #b5b5b5 transparent transparent transparent;
+      }
+    }
+
     .dd-header-placeholder {
       height: 24px;
       width: 100%;

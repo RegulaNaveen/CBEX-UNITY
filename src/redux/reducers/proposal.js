@@ -34,7 +34,10 @@ const {
   ON_QUESTIONS_FILTERED,
   RESET_QUESTIONS_FILTER,
   CLEAR_QUESTIONS_FILTER,
-  EXPAND_ALL_SECTIONS
+  EXPAND_ALL_SECTIONS,
+  SET_EDIT_QUESTION_DATA,
+  PROPOSAL_EDIT_QUESTION,
+  PROPOSAL_DELETE_QUESTION
 } = REDUX_TYPES.PROPOSAL;
 
 const INITIAL_STATE: Map = fromJS({
@@ -64,19 +67,37 @@ const INITIAL_STATE: Map = fromJS({
   validatedProposalData: [],
   validatedProposalDataError: undefined,
   questionsFilter: fromJS({
-    myUserRole: {
-      checked: false,
-      label: 'My User Role',
-      className: 'questions-filter__row1-col1'
+    answerGroup : {
+      answered: {
+        checked: false,
+        label: 'Answered',
+        className: 'questions-filter__row1-col1'
+      },
+      unanswered: {
+        checked: false,
+        label: 'Unanswered',
+        className: 'questions-filter__row1-col1'
+      },
+      logic : 'OR'
     },
-    interestedParty: {
-      checked: false,
-      label: 'Interested Party',
-      className: 'questions-filter__row2-col1'
-    }
+    rolegroup : {
+      myUserRole: {
+        checked: false,
+        label: 'My User Role',
+        className: 'questions-filter__row1-col1'
+      },
+      interestedParty: {
+        checked: false,
+        label: 'Interested Party',
+        className: 'questions-filter__row2-col1'
+      },
+      logic : 'AND'
+    },
+    milestoneGroup : {}
   }),
   filteredProposalQuestions: Map({}),
-  areAllSectionsExpanded: false
+  areAllSectionsExpanded: false,
+  editQuestionsData: Map({})
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -86,10 +107,15 @@ const onProsalInfoLoaded = (state: Map, action: Object): Map => {
     milestones
   } = action.payload;
 
+  // Add agreementId as well in proposal details
+  proposalDetails.agreementId = action.payload.proposal.agreementId || '';
+  proposalDetails.questionTemplateVersionNumber = action.payload.proposal.questionTemplateVersionNumber || '';
+
   // Adding milestones to Questions Filter
   let questionsFilter = state.get('questionsFilter');
+  let milestoneGroup = fromJS({});
   milestones.forEach(milestone => {
-    questionsFilter = questionsFilter.set(
+    milestoneGroup = milestoneGroup.set(
       milestone,
       Map({
         checked: false,
@@ -98,7 +124,8 @@ const onProsalInfoLoaded = (state: Map, action: Object): Map => {
       })
     );
   });
-
+  milestoneGroup = milestoneGroup.set('logic', 'OR')
+  questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
   return state
     .set('proposalDetails', proposalDetails)
     .set('proposalQuestions', proposalQuestions)
@@ -117,7 +144,7 @@ const onProposalError = (state: Map, action: Object): Map => {
 
 const onProposalAnswer = (state: Map, action: Object): Map => {
   const {
-    payload: { data, questionId: referenceId }
+    payload: { data, questionId: referenceId, hasDifferentSFanswer }
   } = action;
 
   let newState = fromJS({});
@@ -132,6 +159,10 @@ const onProposalAnswer = (state: Map, action: Object): Map => {
     ['proposalQuestions', indexOfListToUpdate, 'answers'],
     data
   );
+  newState = newState.setIn(
+    ['proposalQuestions', indexOfListToUpdate, 'hasDifferentSFanswer'],
+    hasDifferentSFanswer
+  );
 
   const proposalQuestions = newState.get('proposalQuestions');
 
@@ -141,16 +172,52 @@ const onProposalAnswer = (state: Map, action: Object): Map => {
     .set('isProposalAnswerLoading', false);
 };
 
-const onProposalAnswerLoading = (state: Map): Map => {
+const onProposalAnswerLoading = (state: Map, action: Object): Map => {
+  const {
+    payload: { questionId: referenceId, loading = false }
+  } = action;
+
+  let newState = fromJS({});
+
+  const indexOfListToUpdate = state
+    .get('proposalQuestions')
+    .findIndex(listItem => {
+      return listItem.questionId === referenceId;
+    });
+
+  newState = state.setIn(
+    ['proposalQuestions', indexOfListToUpdate, 'loading'],
+    loading
+  );
+
+  const proposalQuestions = newState.get('proposalQuestions');
+
   return state
-    .set('isProposalAnswerLoading', true)
-    .set('proposalAnswerError', undefined);
+    .set('proposalQuestions', proposalQuestions)
+    .set('isProposalAnswerLoading', loading)
 };
 
 const onProposalAnswerError = (state: Map, action: Object): Map => {
-  const { payload } = action;
+  const { payload: { err, questionId } } = action;
+
+  let newState = fromJS({});
+
+  const indexOfListToUpdate = state
+    .get('proposalQuestions')
+    .findIndex(listItem => {
+      return listItem.questionId === questionId;
+    });
+
+  newState = state.setIn(
+    ['proposalQuestions', indexOfListToUpdate, 'loading'],
+    false
+  );
+
+  const proposalQuestions = newState.get('proposalQuestions');
+
   return state
-    .set('proposalAnswerError', payload)
+    .set('proposalAnswerError', err)
+    .set('proposalQuestions', proposalQuestions)
     .set('isProposalAnswerLoading', false);
 };
 
@@ -319,6 +386,48 @@ const onExpandAllSections = (state, action) => {
   return state.set('areAllSectionsExpanded', action.payload);
 };
 
+const onSetEditQuestionData = (state, action) => {
+  return state.set('editQuestionsData', fromJS(action.payload));
+};
+
+const onEditQuestion = (state, action) => {
+  const { payload: data } = action;
+  const questions = state.get('proposalQuestions');
+  const questionIndex = questions.findIndex(
+    item => item.questionId === data.questionId
+  );
+
+  const updatedQuestions = [
+    ...questions.slice(0, questionIndex),
+    data,
+    ...questions.slice(questionIndex + 1, questions.length)
+  ];
+
+  return state
+    .set('proposalQuestions', cloneDeep(updatedQuestions))
+    .set('setQuestionData', data)
+    .set('isSetQuestionLoading', false);
+};
+
+const onDeleteQuestion = (state, action) => {
+  const { payload: questionId } = action;
+  const questions = state.get('proposalQuestions');
+
+  const questionIndex = questions.findIndex(
+    item => item.questionId === questionId
+  );
+
+  const updatedQuestions = [
+    ...questions.slice(0, questionIndex),
+    ...questions.slice(questionIndex + 1, questions.length)
+  ];
+
+  return state
+    .set('proposalQuestions', cloneDeep(updatedQuestions))
+    .set('setQuestionData', questionId)
+    .set('isSetQuestionLoading', false);
+};
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
@@ -349,7 +458,10 @@ const actionMap = {
   [ON_QUESTIONS_FILTERED]: onQuestionsFiltered,
   [RESET_QUESTIONS_FILTER]: resetQuestionsFilter,
   [CLEAR_QUESTIONS_FILTER]: clearQuestionsFilter,
-  [EXPAND_ALL_SECTIONS]: onExpandAllSections
+  [EXPAND_ALL_SECTIONS]: onExpandAllSections,
+  [SET_EDIT_QUESTION_DATA]: onSetEditQuestionData,
+  [PROPOSAL_EDIT_QUESTION]: onEditQuestion,
+  [PROPOSAL_DELETE_QUESTION]: onDeleteQuestion
 };
 
 export default function(

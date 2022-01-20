@@ -102,13 +102,13 @@ function logLobDetails(record) {
  */
 
 function rearrangeDiff(diffAnswers) {
-  let rearrangedDiffAnswers = [],
-    subAdditionDiffAnswers = [],
-    subRemovedDiffAnswers = [];
+  let rearrangedDiffAnswers = [];
+  let subAdditionDiffAnswers = [];
+  let subRemovedDiffAnswers = [];
 
-  diffAnswers.forEach((answer) => {
-    let newAnswer = cloneDeep(answer);
-    newAnswer.value = newAnswer.value.trim() + ' ';
+  diffAnswers.forEach(answer => {
+    const newAnswer = cloneDeep(answer);
+    newAnswer.value = `${newAnswer.value.trim()} `;
     if (answer.added) {
       subAdditionDiffAnswers.push(newAnswer);
       return;
@@ -120,13 +120,20 @@ function rearrangeDiff(diffAnswers) {
     if (answer.value.trim().length == 0) {
       return;
     }
-    rearrangedDiffAnswers = rearrangedDiffAnswers.concat(subRemovedDiffAnswers, subAdditionDiffAnswers, [cloneDeep(answer)]);
+    rearrangedDiffAnswers = rearrangedDiffAnswers.concat(
+      subRemovedDiffAnswers,
+      subAdditionDiffAnswers,
+      [cloneDeep(answer)]
+    );
     subRemovedDiffAnswers = [];
     subAdditionDiffAnswers = [];
   });
 
   if (subRemovedDiffAnswers.length > 0 || subAdditionDiffAnswers.length > 0) {
-    rearrangedDiffAnswers = rearrangedDiffAnswers.concat(subRemovedDiffAnswers, subAdditionDiffAnswers);
+    rearrangedDiffAnswers = rearrangedDiffAnswers.concat(
+      subRemovedDiffAnswers,
+      subAdditionDiffAnswers
+    );
     subRemovedDiffAnswers = [];
     subAdditionDiffAnswers = [];
   }
@@ -134,10 +141,35 @@ function rearrangeDiff(diffAnswers) {
   return rearrangedDiffAnswers;
 }
 
+function getUserInitials(userName) {
+  if (userName === 'AnswerPulledFromSalesforce')
+    return 'SA';
+  if (userName === 'UnityPredictedAnswer')
+    return 'UA';
+  return userName.split(' ')[0].charAt(0) + userName.split(' ')[1].charAt(0);
+}
+
+function getUserName(userName) {
+  if (userName === 'AnswerPulledFromSalesforce')
+    return 'Salesforce Answer';
+  if (userName === 'UnityPredictedAnswer')
+    return 'Unity Predicted Answer';
+  return userName;
+}
+function handleLocationChange (event){
+  if(localStorage.getItem('unsaved-change') === 'true'){
+    let response = confirm('You have some unsaved changes do you still want to redirect?');
+    if(!response)
+      event.preventDefault();
+  }
+};
 export {
   getCountriesNameForCode,
   getCountryOptions,
   isUserUbuildAdmin,
   logLobDetails,
-  rearrangeDiff
+  rearrangeDiff,
+  getUserInitials,
+  getUserName,
+  handleLocationChange
 };

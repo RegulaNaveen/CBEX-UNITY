@@ -1,5 +1,6 @@
 @import './Constants';
 @import './Body';
+@import './common/Footer.scss';
 @import './Auth';
 @import './Proposal';
 @import './ProposalInfo';
@@ -15,6 +16,7 @@
 @import './Dashboard';
 @import './AuthSSO';
 @import './AddQuestionModal';
+@import './WelcomeModal';
 @import './modals/AnswerHistory';
 @import './common/DashboardFilters';
 @import './common/InputField';

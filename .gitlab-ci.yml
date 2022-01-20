@@ -44,8 +44,11 @@ sonar:
     paths:
       - .sonar/cache
   script:
-    - export SONAR_SCANNER_OPTS="-Djavax.net.ssl.trustStore=cacerts/sonarca.jks -Djavax.net.ssl.trustStorePassword=changeit"
-    - sonar-scanner
+    #- export SONAR_SCANNER_OPTS="-Djavax.net.ssl.trustStore=cacerts/sonarca.jks -Djavax.net.ssl.trustStorePassword=changeit"
+    #- sonar-scanner
+    - apk upgrade --update-cache --available && apk add openssl && rm -rf /var/cache/apk/*
+    - openssl s_client -connect  sonarqube:443 | keytool -import -noprompt -alias sonarqbue_test -keystore $JAVA_HOME/lib/security/cacerts -storepass changeit
+    - sonar-scanner -X -Dsonar.branch.name=$CI_COMMIT_REF_NAME -Dsonar.projectKey=$CI_PROJECT_NAME
 
 build:
   stage: build
@@ -90,11 +93,12 @@ deployartifacts:
   script:    
     - source build.env  
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
-    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[*].{id:Id, OriginDomainName:Origins.Items[0].DomainName}[?contains(OriginDomainName, '$BucketName.s3.amazonaws.com')].id" --output text) --paths "/*" --region $Region
+    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
   tags:
     - docker
   when: manual
   only:
+    - sdev
     - dev
     - qa
     - uat

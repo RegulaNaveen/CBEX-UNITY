@@ -3,7 +3,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import type { Map } from 'immutable';
 import Link from 'apollo-react/components/Link';
+import Grid from 'apollo-react/components/Grid';
 import Plus from 'apollo-react-icons/Plus';
+import Box from 'apollo-react/components/Box';
 import FolderOpen from 'apollo-react-icons/FolderOpen';
 import {
   getSelectedSection,
@@ -15,7 +17,7 @@ import chevronDown from '../../../img/chevron-down.svg';
 import Question from './Question';
 import MatomoHOC from '../HOC/MatomoHOC';
 
-import { onHandleOpenClose } from '../../redux/actions/sidebar-actions';
+import { onHandleOpenClose, handleSelectedSection } from '../../redux/actions/sidebar-actions';
 
 type State = {
   isCollapsed: boolean
@@ -28,6 +30,7 @@ type Props = {
   isCheckedAll: boolean,
   setQuestionToDisplayHistory: (answer: string) => void,
   handleOpenClose: () => void,
+  changeSelectedSection:() => void,
   notes: Map,
   setTabFromQuestionNotes: (
     tabIndex: number,
@@ -66,10 +69,7 @@ class CollapsibleList extends Component<Props, State> {
 
     if (prevProps.selectedSection !== selectedSection)
       // eslint-disable-next-line react/no-did-update-set-state
-      setTimeout(
-        () => this.setState({ isCollapsed: id === selectedSection }),
-        0
-      );
+      setTimeout(() => this.setState({ isCollapsed: id === selectedSection }),0);
 
     if (prevProps.isCheckedAll !== isCheckedAll)
       // eslint-disable-next-line react/no-did-update-set-state
@@ -80,6 +80,10 @@ class CollapsibleList extends Component<Props, State> {
     const { isCollapsed } = this.state;
     this.setState({ isCollapsed: !isCollapsed });
     this.trackMatomoEventBladeToggle(!isCollapsed);
+    const titleId = this.props.title.toLocaleLowerCase().split(' ').join('-');
+    if(titleId === this.props.selectedSection){
+      this.props.changeSelectedSection(null)
+    }
   };
 
   handleKeyPress = (event: KeyboardEvent) => {
@@ -212,10 +216,16 @@ class CollapsibleList extends Component<Props, State> {
                   {this.showNotesCount(title)}
                 </p>
               </div>
-              <div className="task-subtitle task-subtitle-answer">
-                <p>Answer</p>
+            </div>
+
+            <div className="task-table-row">
+              <div className="task-subtitle subtitlebold">
+                <p>Questions</p>
               </div>
-              <div className="task-subtitle task-subtitle-completion-date">
+              <div className="task-subtitle task-subtitle-answer subtitlebold">
+                <p>Answers</p>
+              </div>
+              <div className="task-subtitle task-subtitle-completion-date subtitlebold">
                 <p>Date Completed</p>
               </div>
             </div>
@@ -239,6 +249,13 @@ class CollapsibleList extends Component<Props, State> {
                     sfField={questionConfig.get('sfField')}
                     sectionName={title}
                     setQuestionToDisplayHistory={setQuestionToDisplayHistory}
+                    loading={questionConfig.get('loading', false)}
+                    questionHint={questionConfig.get('questionHint', '')}
+                    roleNames={questionConfig.get('roleNames')}
+                    isCustomQuestion={questionConfig.get('isCustomQuestion')}
+                    hasDifferentSFanswer={questionConfig.get(
+                      'hasDifferentSFanswer'
+                    )}
                   />
                 )
               );
@@ -267,6 +284,9 @@ const mapStateToProps = (state: Map) => {
   return { selectedSection, notes, proposalDetail };
 };
 
-export default connect(mapStateToProps, { handleOpenClose: onHandleOpenClose })(
-  MatomoHOC(CollapsibleList)
-);
+const mapDispatchToProps = {
+  handleOpenClose: onHandleOpenClose,
+  changeSelectedSection: handleSelectedSection
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MatomoHOC(CollapsibleList));
