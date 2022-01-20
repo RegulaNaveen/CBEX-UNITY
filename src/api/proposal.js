@@ -3,6 +3,7 @@ import axios from 'axios';
 import { API } from '../constants';
 import { getAccessTokenFromLocalStorage as getAccessToken } from '../SessionHandler';
 import { logLobDetails } from '../utils/utils';
+import omit from 'lodash/omit';
 
 const {
   PROPOSAL_API_URL,
@@ -11,7 +12,7 @@ const {
   API_KEY
 } = API.PROPOSAL;
 
-let onGoingAnswer;
+let onGoingAnswer = {};
 const { CancelToken } = axios;
 
 export const getProposalInfo = async (id: string): Promise<Object> => {
@@ -36,8 +37,9 @@ export const setProposalAnswer = async (
   answer: string,
   userData: Object
 ): Promise<Object> => {
-  if (onGoingAnswer) onGoingAnswer();
-
+  if (onGoingAnswer[questionId]) {
+    onGoingAnswer[questionId]();
+  }
   return axios
     .put(
       `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`,
@@ -48,12 +50,14 @@ export const setProposalAnswer = async (
           'x-access-token': `${getAccessToken()}`
         },
         cancelToken: new CancelToken(function executor(c) {
-          onGoingAnswer = c;
+          onGoingAnswer[questionId] = c;
         })
       }
     )
     .then(res => {
-      onGoingAnswer = null;
+      if (onGoingAnswer[questionId]) {
+        onGoingAnswer = omit(onGoingAnswer, [questionId]);
+      }
       return res;
     });
 };
