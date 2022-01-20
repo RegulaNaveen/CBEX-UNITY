@@ -140,7 +140,7 @@ class AnswerHistory extends Component<Props> {
           if (questionType === 'select') {
             if(index == 0){
               return renderWord(answer, 'changed');
-            }else if(answers && answers.get(index).get('userName') === 'UnityPredictedAnswer'){
+            }else if(answers && answers.toJS().length == 2 &&  answers.get(index).get('userName') === 'UnityPredictedAnswer'){
               return <span key={uuidv4()}>{answers.get(index).get('answer')} </span>
             }else{
               return renderWord(answer, 'removed');
