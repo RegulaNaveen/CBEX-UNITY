@@ -89,7 +89,10 @@ class AnswerHistory extends Component<Props> {
         if (isValidatedUnityPredictedAnswer) {
           return <span key={uuidv4()}><b>Validated Unity Predicted Answer</b></span>;
         }
-
+        if (questionType == 'picklist' && answers && answers.get(index + 1) &&
+           answers.get(index + 1).get('userName') === 'UnityPredictedAnswer') {
+          return <span key={uuidv4()}><b>Validated Unity Predicted Answer</b></span>;
+        }
         if (questionType !== 'picklist') {
           const renderWord = (word, status) => (
             <span className={status} key={uuidv4()}>
