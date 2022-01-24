@@ -5,7 +5,7 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store';
 import PrivateRoute from './PrivateRoute';
-import { LOGIN, PROPOSALS, DASHBOARD, UBUILD } from './routes';
+import { LOGIN, PROPOSALS, DASHBOARD, UBUILD, OPPORTUNITYS } from './routes';
 import SessionHandler from './SSOSessionHandler';
 import Login from './components/screens/Auth/Login';
 import ProposalComponent from './components/screens/Proposal';
@@ -24,6 +24,7 @@ const App = () => (
             <Route path={LOGIN} component={Login} />
             <PrivateRoute path={DASHBOARD} component={DashboardComponent} />
             <PrivateRoute path={PROPOSALS} component={ProposalComponent} />
+            <PrivateRoute path={OPPORTUNITYS} component={ProposalComponent} />
             <PrivateRoute path={UBUILD} component={UbuildShellComponent} />
             <Redirect to={Login} />
           </Switch>

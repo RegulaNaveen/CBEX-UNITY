@@ -4,7 +4,7 @@ import { API } from '../constants';
 import { getAccessTokenFromLocalStorage as getAccessToken } from '../SessionHandler';
 import { logLobDetails } from '../utils/utils';
 import omit from 'lodash/omit';
-
+import path from 'path';
 const {
   PROPOSAL_API_URL,
   PROPOSAL_QUESTIONS_API_URL,
@@ -22,10 +22,16 @@ export const getProposalInfo = async (id: string): Promise<Object> => {
         headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
       })
       .then(response => {
-        logLobDetails(response.data);
-        resolve(response.data);
+        if(window && response && response.data && location.pathname.includes('proposals') && String(path.basename(location.pathname)) === id){
+          let url = `${window.location.origin}/opportunity/${ response.data.proposal.proposalDetails['CRM #']}`;
+          location.replace(url);
+        }else{
+          logLobDetails(response.data);
+          resolve(response.data);
+        }
       })
       .catch(err => {
+        console.log(`err`, err)
         reject(err);
       });
   });
