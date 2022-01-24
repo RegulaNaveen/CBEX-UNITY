@@ -22,7 +22,9 @@ export const getProposalInfo = async (id: string): Promise<Object> => {
         headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
       })
       .then(response => {
-        if(window && response && response.data && location.pathname.includes('proposals') && String(path.basename(location.pathname)) === id){
+        if(window && response && response.status == 200 && 
+          response.data && location.pathname.includes('proposals') && 
+          String(path.basename(location.pathname)) === id){
           let url = `${window.location.origin}/opportunity/${ response.data.proposal.proposalDetails['CRM #']}`;
           location.replace(url);
         }else{
@@ -31,8 +33,12 @@ export const getProposalInfo = async (id: string): Promise<Object> => {
         }
       })
       .catch(err => {
-        console.log(`err`, err)
-        reject(err);
+        if(window  && location.pathname.includes('proposals') && String(path.basename(location.pathname)) === id){
+          let url = `${window.location.origin}/dashboard`;
+          location.replace(url);
+        }else{
+          reject(err);
+        }
       });
   });
 };
