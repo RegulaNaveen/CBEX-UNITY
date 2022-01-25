@@ -52,7 +52,8 @@ const {
   EXPAND_ALL_SECTIONS,
   SET_EDIT_QUESTION_DATA,
   PROPOSAL_EDIT_QUESTION,
-  PROPOSAL_DELETE_QUESTION
+  PROPOSAL_DELETE_QUESTION,
+  UPDATE_BOX_BIDS
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -66,6 +67,19 @@ export const getProposal = (id: string): ThunkAction<string, Object> => {
       // Extracting unique milestone values from Proposal Questions
       const milestones = getUniqueMilestones(data.proposalQuestions);
       dispatch({ type: PROPOSAL_INFO, payload: { ...data, milestones } });
+      dispatch({
+        type: UPDATE_BOX_BIDS,
+        payload: [
+          {
+            proposalId: '61682ae3-b186-4200-8bc5-68c1770d7e6b',
+            boxId: ''
+          },
+          {
+            proposalId: '799e4fb5-d970-464b-b841-a5cabbadfea6',
+            boxId: ''
+          }
+        ]
+      })
     } catch (err) {
       dispatch({ type: PROPOSAL_INFO_ERROR, payload: err });
     }
@@ -482,3 +496,4 @@ export const deleteProposalQuestion = (
     }
   };
 };
+
