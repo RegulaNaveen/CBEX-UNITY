@@ -3,9 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import type { Map } from 'immutable';
 import Link from 'apollo-react/components/Link';
-import Grid from 'apollo-react/components/Grid';
 import Plus from 'apollo-react-icons/Plus';
-import Box from 'apollo-react/components/Box';
 import FolderOpen from 'apollo-react-icons/FolderOpen';
 import {
   getSelectedSection,
