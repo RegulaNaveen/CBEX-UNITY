@@ -87,9 +87,12 @@ class AnswerHistory extends Component<Props> {
 
       const renderAnswers = () => {
         if (isValidatedUnityPredictedAnswer) {
-          return <span key={uuidv4()}>Validated Unity Predicted Answer</span>;
+          return <span key={uuidv4()}><b>Validated Unity Predicted Answer</b></span>;
         }
-
+        if (questionType == 'picklist' && answers && answers.get(index + 1) &&
+           answers.get(index + 1).get('userName') === 'UnityPredictedAnswer') {
+          return <span key={uuidv4()}><b>Validated Unity Predicted Answer</b></span>;
+        }
         if (questionType !== 'picklist') {
           const renderWord = (word, status) => (
             <span className={status} key={uuidv4()}>
@@ -140,6 +143,8 @@ class AnswerHistory extends Component<Props> {
           if (questionType === 'select') {
             if(index == 0){
               return renderWord(answer, 'changed');
+            }else if(answers && answers.toJS().length == 2 &&  answers.get(index).get('userName') === 'UnityPredictedAnswer'){
+              return <span key={uuidv4()}>{answers.get(index).get('answer')} </span>
             }else{
               return renderWord(answer, 'removed');
             }
