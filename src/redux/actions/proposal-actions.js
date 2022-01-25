@@ -66,8 +66,22 @@ export const getProposal = (id: string): ThunkAction<string, Object> => {
       // Extracting unique milestone values from Proposal Questions
       const milestones = getUniqueMilestones(data.proposalQuestions);
       dispatch({ type: PROPOSAL_INFO, payload: { ...data, milestones } });
+      return data;
     } catch (err) {
       dispatch({ type: PROPOSAL_INFO_ERROR, payload: err });
+    }
+  };
+};
+
+export const getProposalByID = (id: string): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({ type: PROPOSAL_INFO_LOADING, payload: {} });
+    try {
+      const data = await getProposalInfo(id);
+      return data;
+    } catch (err) {
+      dispatch({ type: PROPOSAL_INFO_ERROR, payload: err });
+      throw err;
     }
   };
 };

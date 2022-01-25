@@ -8,7 +8,7 @@ import Loader from 'react-loader-spinner';
 import classNames from 'classnames';
 import { compose } from 'redux';
 import {
-  getProposalByID,
+  getProposal,
   onGetValidatedProposalDetails
 } from '../../../redux/actions/proposal-actions';
 import { fetchNotes } from '../../../redux/actions/notepad-actions';
@@ -26,7 +26,6 @@ import Documents from './Documents';
 import Validate from './Validate';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import UnityFooter from '../../common/Footer';
-import { OPPORTUNITY, DASHBOARD } from '../../../routes';
 
 type State = {
   selectedView: string
@@ -50,7 +49,7 @@ type Props = {
   proposalDetail: any
 };
 
-export class Proposal extends Component<Props, State> {
+export class Opportunity extends Component<Props, State> {
   toRef;
 
   constructor(props: Object) {
@@ -62,7 +61,7 @@ export class Proposal extends Component<Props, State> {
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const {
       getProposalInfo,
       authData,
@@ -80,14 +79,8 @@ export class Proposal extends Component<Props, State> {
 
     if (!authData) getRefreshAuthData();
 
-    const results = await getProposalInfo(params.id);
-    if(results &&  results.proposal){
-      let url = `${window.location.origin}${OPPORTUNITY}${ results.proposal.proposalDetails['CRM #']}`;
-      location.replace(url);
-    }else{
-      let url = `${window.location.origin}${DASHBOARD}`;
-      location.replace(url);
-    }
+    getProposalInfo(params.id);
+
     getNotes(params.id);
 
     window.addEventListener('storage', e => this.handleStorageChange(e));
@@ -248,8 +241,8 @@ export default compose(
   withRouter,
   connect(mapStateToProps, {
     getRefreshAuthData: onRefreshUserData,
-    getProposalInfo: getProposalByID,
+    getProposalInfo: getProposal,
     getValidatedData: onGetValidatedProposalDetails,
     getNotes: fetchNotes
   })
-)(MatomoHOC(Proposal));
+)(MatomoHOC(Opportunity));
