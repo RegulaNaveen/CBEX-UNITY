@@ -38,15 +38,17 @@ class Documents extends Component<Props, State> {
   componentDidMount(){
     const {bids, match} = this.props;
     // latest Bid
-    const currentBid =  bids[bids.length-1];
-    // Opportunity number from the link
-    this.oppNo = match.params.id;
-    //Setting up the default tab
-    if(currentBid)
-      this.swtichTabs(currentBid.proposalId);
+    if(bids.length){
+      const currentBid =  bids[bids.length-1];
+      // Opportunity number from the link
+      this.oppNo = match.params.id;
+      //Setting up the default tab
+      if(currentBid)
+        this.swtichTabs(currentBid.proposalId);
+    }
   }
   swtichTabs(proposalId){
-    const { getBoxId} = this.props;
+    const {getBoxId} = this.props;
     // Setting the selected proposal
     this.setState(() => ({
       selectedBid : proposalId
@@ -92,7 +94,7 @@ class Documents extends Component<Props, State> {
                 className={(selectedBid===v.proposalId? 'selectedBid' : '')} 
                 key={v.proposalId} 
                 onClick={()=>{this.swtichTabs(v.proposalId)}}>
-                {oppNo} - Bid {i+1}
+                {this.oppNo} - Bid {i+1}
               </li>
               )
             } 

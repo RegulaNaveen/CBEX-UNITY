@@ -18,6 +18,7 @@ import {
 } from '../../api/proposal';
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getUniqueMilestones } from '../selectors/proposal';
+import { getProposalIdlist } from '../../utils/utils';
 
 const {
   PROPOSAL_INFO,
@@ -69,16 +70,7 @@ export const getProposal = (id: string): ThunkAction<string, Object> => {
       dispatch({ type: PROPOSAL_INFO, payload: { ...data, milestones } });
       dispatch({
         type: UPDATE_BOX_BIDS,
-        payload: [
-          {
-            proposalId: '61682ae3-b186-4200-8bc5-68c1770d7e6b',
-            boxId: ''
-          },
-          {
-            proposalId: '799e4fb5-d970-464b-b841-a5cabbadfea6',
-            boxId: ''
-          }
-        ]
+        payload: getProposalIdlist(data)
       })
     } catch (err) {
       dispatch({ type: PROPOSAL_INFO_ERROR, payload: err });
