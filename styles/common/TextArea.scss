@@ -120,6 +120,7 @@
 .align-lookup{
   padding: 0px !important;
   resize: none;
+  overflow: hidden!important;
 }
 .hasDifferentSFanswer{
   textarea, input, .dd-header, .multiselect-header, .a-MuiAutocomplete-root {
