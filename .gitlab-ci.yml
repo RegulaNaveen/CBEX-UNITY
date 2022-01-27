@@ -14,6 +14,10 @@ stages:
   
 initialize:
   stage: initialize
+  only:
+    - qa
+    - uat
+    - master
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest  
   rules:
     - if:  $CI_COMMIT_REF_NAME == "qa" || $CI_COMMIT_REF_NAME == "uat" || $CI_COMMIT_REF_NAME == "master"
