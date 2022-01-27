@@ -23,7 +23,6 @@ initialize:
     - bash devops/scripts/set_env.sh #this script will be executed to set the environment deploying to as environment variable and make it available to other below jobs
     - source build.env
     - cat devops/vars/${Environment}.env >> build.env #set the environment specific variables/parameters
-    - cat build.env
   artifacts:
     paths:
       - build.env
@@ -42,7 +41,6 @@ dev_initialize:
     - cat $frontendacmdev >> build.env
     - source build.env
     - cat devops/vars/${Environment}.env >> build.env #set the environment specific variables/parameters
-    - cat build.env
   artifacts:
     paths:
       - build.env
@@ -96,6 +94,7 @@ deploystack:
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   dependencies:
     - initialize
+    - dev_initialize
     - build
   script:
     - source build.env
