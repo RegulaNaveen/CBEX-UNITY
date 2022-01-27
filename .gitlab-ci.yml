@@ -30,6 +30,25 @@ initialize:
   tags:
     - docker
 
+dev_initialize:
+  stage: initialize
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest  
+  only:
+    - dev
+    - migration
+  script:
+    - bash devops/scripts/set_env.sh #this script will be executed to set the environment deploying to as environment variable and make it available to other below jobs
+    - cat $devaccount >> build.env
+    - cat $frontendacmdev >> build.env
+    - source build.env
+    - cat devops/vars/${Environment}.env >> build.env #set the environment specific variables/parameters
+    - cat build.env
+  artifacts:
+    paths:
+      - build.env
+  tags:
+    - docker
+
 sonar:
   stage: sonar
   image: sonarsource/sonar-scanner-cli:4.5
@@ -54,14 +73,13 @@ build:
   stage: build
   image: node:12
   dependencies:
-    - initialize    
+    - initialize
+    - dev_initialize
   script:
     - source build.env
-    - df -h
     - yarn cache clean
     - yarn install
     - yarn build:$Environment
-    - ls dist/
   artifacts:
     paths:
       - dist/   
@@ -89,6 +107,7 @@ deployartifacts:
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   dependencies:
     - initialize
+    - dev_initialize
     - build
   script:    
     - source build.env  
@@ -98,7 +117,7 @@ deployartifacts:
     - docker
   when: manual
   only:
-    - sdev
+    - migration
     - dev
     - qa
     - uat
