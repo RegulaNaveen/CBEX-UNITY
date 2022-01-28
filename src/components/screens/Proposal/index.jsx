@@ -9,7 +9,8 @@ import classNames from 'classnames';
 import { compose } from 'redux';
 import {
   getProposal,
-  onGetValidatedProposalDetails
+  onGetValidatedProposalDetails,
+  getOpportunity
 } from '../../../redux/actions/proposal-actions';
 import { fetchNotes } from '../../../redux/actions/notepad-actions';
 import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
@@ -26,6 +27,7 @@ import Documents from './Documents';
 import Validate from './Validate';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import UnityFooter from '../../common/Footer';
+import resData from '../../../constants/sample_response.json';
 
 type State = {
   selectedView: string
@@ -46,7 +48,8 @@ type Props = {
   userActions: any,
   trackEvent: any,
   trackPageView: any,
-  proposalDetail: any
+  proposalDetail: any,
+  getOpportunityInfo: (proposalId: string) => void
 };
 
 export class Proposal extends Component<Props, State> {
@@ -70,7 +73,8 @@ export class Proposal extends Component<Props, State> {
       getNotes,
       trackPageView,
       eventCategories,
-      match: { params }
+      match: { params },
+      getOpportunityInfo
     } = this.props;
 
     const selectedView = localStorage.getItem('proposalTypeView');
@@ -79,7 +83,9 @@ export class Proposal extends Component<Props, State> {
 
     if (!authData) getRefreshAuthData();
 
-    getProposalInfo(params.id);
+    // getProposalInfo(params.id);
+
+    getOpportunityInfo(resData);
 
     getNotes(params.id);
 
@@ -223,7 +229,9 @@ export class Proposal extends Component<Props, State> {
       >
         <Toolbar />
         {this.renderContent()}
-        <UnityFooter questionTemplateVersionNumber={questionTemplateVersionNumber || ''} />
+        <UnityFooter
+          questionTemplateVersionNumber={questionTemplateVersionNumber || ''}
+        />
       </div>
     );
   }
@@ -243,6 +251,7 @@ export default compose(
     getRefreshAuthData: onRefreshUserData,
     getProposalInfo: getProposal,
     getValidatedData: onGetValidatedProposalDetails,
-    getNotes: fetchNotes
+    getNotes: fetchNotes,
+    getOpportunityInfo: getOpportunity
   })
 )(MatomoHOC(Proposal));
