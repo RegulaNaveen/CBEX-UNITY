@@ -163,6 +163,15 @@ function handleLocationChange (event){
       event.preventDefault();
   }
 };
+function getProposalIdlist(data=[]){
+    return data.map((d)=>{
+      return {
+        proposalId: d.proposal.proposalId,
+        boxId: d.proposal.proposalDetails.boxId
+      }
+    }); 
+}
+
 export {
   getCountriesNameForCode,
   getCountryOptions,
@@ -171,5 +180,6 @@ export {
   rearrangeDiff,
   getUserInitials,
   getUserName,
-  handleLocationChange
+  handleLocationChange,
+  getProposalIdlist
 };

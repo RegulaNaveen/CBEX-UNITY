@@ -39,7 +39,8 @@ const {
   SET_EDIT_QUESTION_DATA,
   PROPOSAL_EDIT_QUESTION,
   PROPOSAL_DELETE_QUESTION,
-  OPPORTUNITY_INFO
+  OPPORTUNITY_INFO,
+  UPDATE_BOX_BIDS
 } = REDUX_TYPES.PROPOSAL;
 
 const INITIAL_STATE: Map = fromJS({
@@ -101,7 +102,8 @@ const INITIAL_STATE: Map = fromJS({
   areAllSectionsExpanded: false,
   editQuestionsData: Map({}),
   opportunityData: Map({}),
-  selectedBid: ''
+  selectedBid: '',
+  boxBids: []
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -524,7 +526,8 @@ const actionMap = {
   [SET_EDIT_QUESTION_DATA]: onSetEditQuestionData,
   [PROPOSAL_EDIT_QUESTION]: onEditQuestion,
   [PROPOSAL_DELETE_QUESTION]: onDeleteQuestion,
-  [OPPORTUNITY_INFO]: setOpportunityInfo
+  [OPPORTUNITY_INFO]: setOpportunityInfo,
+  [UPDATE_BOX_BIDS]: (state, { payload }) => state.set('boxBids', payload)
 };
 
 export default function(
