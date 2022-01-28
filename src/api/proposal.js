@@ -196,3 +196,20 @@ export const deleteProposalQuestionData = async (
       });
   });
 };
+
+export const getOpportunityInfo = async (id: string): Promise<Object> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`${PROPOSAL_API_URL}/opportunity/${id}`, {
+        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+      })
+      .then(response => {
+        // logLobDetails(response.data);
+        console.log(data);
+        resolve(response.data);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};

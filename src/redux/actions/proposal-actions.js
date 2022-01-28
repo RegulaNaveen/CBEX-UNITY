@@ -14,7 +14,8 @@ import {
   getProposlBoxId,
   getValidatedProposalData,
   editProposalQuestionData,
-  deleteProposalQuestionData
+  deleteProposalQuestionData,
+  getOpportunityInfo
 } from '../../api/proposal';
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getUniqueMilestones } from '../selectors/proposal';
@@ -546,11 +547,15 @@ export const getOpportunity = (id: string): ThunkAction<string, Object> => {
     dispatch({ type: PROPOSAL_INFO_LOADING, payload: {} });
 
     try {
-      // const data = await getProposalInfo(id);
+      const data = await getOpportunityInfo(id);
       // console.log('api data', id);
       // Extracting unique milestone values from Proposal Questions
       // const milestones = getUniqueMilestones(data.proposalQuestions);
-      dispatch({ type: OPPORTUNITY_INFO, payload: id });
+      dispatch({ type: OPPORTUNITY_INFO, payload: data });
+      dispatch({
+        type: UPDATE_BOX_BIDS,
+        payload: getProposalIdlist(data)
+      });
     } catch (err) {
       dispatch({ type: PROPOSAL_INFO_ERROR, payload: err });
     }

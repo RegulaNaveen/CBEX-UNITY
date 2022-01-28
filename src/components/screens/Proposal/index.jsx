@@ -85,7 +85,7 @@ export class Proposal extends Component<Props, State> {
 
     // getProposalInfo(params.id);
 
-    getOpportunityInfo(resData);
+    getOpportunityInfo('UZA80784');
 
     getNotes(params.id);
 
