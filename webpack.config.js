@@ -65,7 +65,8 @@ module.exports = env => {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: 'src/index.html'
+        template: 'src/index.html',
+        favicon: `./img/fav/favicon-${apiEnv.replace(/['"]+/g, '')}.ico`,
       }),
       new webpack.DefinePlugin({ 'process.env.API_ENV': apiEnv })
     ]
