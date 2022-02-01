@@ -16,7 +16,11 @@ import {
   setProposalAnswerData,
   setEditQuestionData
 } from '../../redux/actions/proposal-actions';
-import { getUserData, getProposalDetails } from '../../redux/selectors';
+import {
+  getUserData,
+  getProposalDetails,
+  getSelectedBid
+} from '../../redux/selectors';
 import MatomoHOC from '../HOC/MatomoHOC';
 import { getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
 import ChipView from './Chip/ChipView';
@@ -235,7 +239,7 @@ export class TaskRow extends Component<Props, State> {
     lastAnswer: Map,
     questionText: Map
   ) => {
-    const { sectionName, sfObject, sfField } = this.props;
+    const { sectionName, sfObject, sfField, selectedBid } = this.props;
     const { selectedDay } = this.state;
 
     const optionsYN = ['Yes', 'No'];
@@ -262,6 +266,7 @@ export class TaskRow extends Component<Props, State> {
             onBlur={e => this.setSelectRow(false)}
             onChange={this.handlePropsalChange}
             text={answerValue}
+            disabled={!selectedBid.get('isCurrent')}
           />
         </SFAnswerValidationWrapper>
       );
@@ -312,7 +317,8 @@ export class TaskRow extends Component<Props, State> {
               onFocus={e => this.onChildInputFocus(e)}
               defaultValue={answerValue}
               rows="1"
-              style={{ resize: 'vertical'}}
+              style={{ resize: 'vertical' }}
+              disabled={!selectedBid.get('isCurrent')}
             />
           </SFAnswerValidationWrapper>
         );
@@ -331,7 +337,8 @@ export class TaskRow extends Component<Props, State> {
               type="number"
               onBlur={this.handleTextChange}
               onFocus={e => this.onChildInputFocus(e)}
-              value={answerValue}
+              value={answerValue || ''}
+              disabled={!selectedBid.get('isCurrent')}
             />
           </SFAnswerValidationWrapper>
         );
@@ -348,6 +355,7 @@ export class TaskRow extends Component<Props, State> {
               onClick={val => this.onClickChange(val, answerValue)}
               value={answerValue}
               setSelectRow={this.setSelectRow}
+              disabled={!selectedBid.get('isCurrent')}
             />
           </SFAnswerValidationWrapper>
         );
@@ -364,6 +372,7 @@ export class TaskRow extends Component<Props, State> {
               onClick={val => this.onClickChange(val, answerValue)}
               value={answerValue}
               setSelectRow={this.setSelectRow}
+              disabled={!selectedBid.get('isCurrent')}
             />
           </SFAnswerValidationWrapper>
         );
@@ -379,6 +388,7 @@ export class TaskRow extends Component<Props, State> {
               handleDayChange={this.handleDayChange}
               onFocus={e => this.setSelectRow(true)}
               onBlur={e => this.setSelectRow(false)}
+              disabled={!selectedBid.get('isCurrent')}
             />
           </SFAnswerValidationWrapper>
         );
@@ -394,6 +404,7 @@ export class TaskRow extends Component<Props, State> {
               onClick={this.onSelectValues}
               value={answerValueComplex}
               setSelectRow={this.setSelectRow}
+              disabled={!selectedBid.get('isCurrent')}
             />
           </SFAnswerValidationWrapper>
         );
@@ -413,11 +424,17 @@ export class TaskRow extends Component<Props, State> {
   };
 
   handleVerifyPredictedAnsClick(predictedAnswer) {
-    const { setProposalAnswer, proposalId, questionId, userData, answerConfiguration } = this.props;
+    const {
+      setProposalAnswer,
+      proposalId,
+      questionId,
+      userData,
+      answerConfiguration
+    } = this.props;
     const answerType = answerConfiguration.get('type');
 
     // picklist value should not be converted to string while saving
-    if (answerType === "picklist")  {
+    if (answerType === 'picklist') {
       setProposalAnswer(
         proposalId,
         questionId,
@@ -504,11 +521,7 @@ export class TaskRow extends Component<Props, State> {
               </span>
             )}
             {questionHint.trim().length > 0 ? (
-              <Tooltip
-                variant="light"
-                title={questionHint}
-                placement="top"
-              >
+              <Tooltip variant="light" title={questionHint} placement="top">
                 <IconButton
                   color="primary"
                   style={{ margin: 0 }}
@@ -545,29 +558,46 @@ export class TaskRow extends Component<Props, State> {
             paddingLeft: '16px'
           }}
         >
-          <button style={{ width: '100px', textAlign: 'left', flexShrink: 0 }} type="button" onClick={this.displayAnswerOnHistory}>
+          <button
+            style={{ width: '100px', textAlign: 'left', flexShrink: 0 }}
+            type="button"
+            onClick={this.displayAnswerOnHistory}
+          >
             {answerDate}
           </button>
-          {(isAnswerPredicted && !loading)? (
-            <Tooltip variant="light" title="Unity Predicted Answer" placement="top">
-            <IconButton>
-              <StatusCheck
-                fontSize={'22px'}
-                style={{ color: '#D9D9D9' }}
-                onClick={() =>
-                  this.handleVerifyPredictedAnsClick(lastAnswer)
-                }
-              />
-            </IconButton>
+          {isAnswerPredicted && !loading ? (
+            <Tooltip
+              variant="light"
+              title="Unity Predicted Answer"
+              placement="top"
+            >
+              <IconButton>
+                <StatusCheck
+                  fontSize={'22px'}
+                  style={{ color: '#D9D9D9' }}
+                  onClick={() => this.handleVerifyPredictedAnsClick(lastAnswer)}
+                />
+              </IconButton>
             </Tooltip>
           ) : null}
-          {(this.isAnswered(lastAnswer, isAnswerPredicted) && !loading) ? (
-            <div style={{ display: 'flex', flexShrink: 0, width: '40px', height: '24px', justifyContent: 'center', alignItems: 'center' }}>
+          {this.isAnswered(lastAnswer, isAnswerPredicted) && !loading ? (
+            <div
+              style={{
+                display: 'flex',
+                flexShrink: 0,
+                width: '40px',
+                height: '24px',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
               <Checkmark className="answered" style={{ marginLeft: '6px' }} />
             </div>
           ) : null}
           {loading ? (
-            <span style={{ marginLeft: '6px', position: 'relative', top: '15px' }}>
+            <span
+              style={{ marginLeft: '6px', position: 'relative', top: '15px' }}
+            >
               <Loader
                 isInner
                 size={20}
@@ -586,7 +616,8 @@ export class TaskRow extends Component<Props, State> {
 
 const mapStateToProps = (state: Object) => ({
   userData: getUserData(state),
-  proposalDetail: getProposalDetails(state)
+  proposalDetail: getProposalDetails(state),
+  selectedBid: getSelectedBid(state)
 });
 
 export default connect(mapStateToProps, {
