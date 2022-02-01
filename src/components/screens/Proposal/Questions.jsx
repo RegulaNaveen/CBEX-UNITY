@@ -14,7 +14,7 @@ import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import { Add, Refresh } from '../../svg';
 import CollapsibleList from '../../common/CollapsibleList';
-import BidHistory from '../../common/BidHistory';
+import BidHistory from '../../common/Bidhistory';
 import ProposalInfo from './ProposalInfo';
 import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
 import {
