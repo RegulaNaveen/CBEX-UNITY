@@ -10,7 +10,8 @@ const QuestionDatePicker = ({
   resetDate,
   handleDayChange,
   onFocus,
-  onBlur
+  onBlur,
+  disabled = false
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [resetsubmit, setresetsubmit] = useState(false);
@@ -32,6 +33,7 @@ const QuestionDatePicker = ({
         placeholder="DD-MMM-YYYY"
         dateFormat="DD-MMM-YYYY"
         fullWidth
+        disabled={disabled}
         inputProps={{
           onFocus: e => {
             onFocus();

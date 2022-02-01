@@ -69,6 +69,7 @@ const Autocomplete = (props) => {
                 onBlur={e => {
                     props.onBlur();
                 }}
+                disabled={props.disabled || false}
             />
         </div>
     )
