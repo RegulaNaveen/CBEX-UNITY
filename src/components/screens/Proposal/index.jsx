@@ -27,7 +27,6 @@ import Documents from './Documents';
 import Validate from './Validate';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import UnityFooter from '../../common/Footer';
-import resData from '../../../constants/sample_response.json';
 
 type State = {
   selectedView: string
@@ -86,8 +85,9 @@ export class Proposal extends Component<Props, State> {
     // getProposalInfo(params.id);
 
     getOpportunityInfo('UZA80784');
+    // getOpportunityInfo('UZA82669');
 
-    getNotes(params.id);
+    // getNotes(params.id);
 
     window.addEventListener('storage', e => this.handleStorageChange(e));
 
@@ -170,7 +170,7 @@ export class Proposal extends Component<Props, State> {
     } = this.props;
 
     const viewsMap = {
-      questions: <Questions proposalID={params.id} />,
+      questions: <Questions />,
       documents: <Documents />
       // validate: <Validate />
     };

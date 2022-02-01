@@ -20,6 +20,7 @@ import {
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getUniqueMilestones } from '../selectors/proposal';
 import { getProposalIdlist } from '../../utils/utils';
+import { fetchNotes } from './notepad-actions';
 
 const {
   PROPOSAL_INFO,
@@ -56,7 +57,8 @@ const {
   PROPOSAL_EDIT_QUESTION,
   PROPOSAL_DELETE_QUESTION,
   OPPORTUNITY_INFO,
-  UPDATE_BOX_BIDS
+  UPDATE_BOX_BIDS,
+  CHANGE_BID
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -548,9 +550,14 @@ export const getOpportunity = (id: string): ThunkAction<string, Object> => {
 
     try {
       const data = await getOpportunityInfo(id);
-      // console.log('api data', id);
-      // Extracting unique milestone values from Proposal Questions
-      // const milestones = getUniqueMilestones(data.proposalQuestions);
+      // fetch notes for current bid
+      for (let proposal of data) {
+        if (proposal.isCurrent) {
+          dispatch(fetchNotes(proposal.proposal.proposalId));
+          break;
+        }
+      }
+
       dispatch({ type: OPPORTUNITY_INFO, payload: data });
       dispatch({
         type: UPDATE_BOX_BIDS,
@@ -559,5 +566,15 @@ export const getOpportunity = (id: string): ThunkAction<string, Object> => {
     } catch (err) {
       dispatch({ type: PROPOSAL_INFO_ERROR, payload: err });
     }
+  };
+};
+
+export const changeBid = bid => {
+  return dispatch => {
+    dispatch({
+      type: CHANGE_BID,
+      payload: bid
+    });
+    dispatch(fetchNotes(bid.bidId));
   };
 };

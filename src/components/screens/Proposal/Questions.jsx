@@ -35,7 +35,8 @@ import {
   selectFilteredSections,
   selectActiveQuestionsFilterCount,
   getMilestoneSections,
-  getEditQuestionData
+  getEditQuestionData,
+  getSelectedBid
 } from '../../../redux/selectors';
 import {
   selectUniqueMilestones,
@@ -527,7 +528,8 @@ const mapStateToProps = (state: Map) => ({
   milestones: selectUniqueMilestones(state),
   userRole: selectUserRole(state),
   allSectionsExpanded: selectAreAllSectionsExpanded(state),
-  editQuestionsData: getEditQuestionData(state)
+  editQuestionsData: getEditQuestionData(state),
+  proposalID: getSelectedBid(state).get('id')
 });
 
 export default compose(

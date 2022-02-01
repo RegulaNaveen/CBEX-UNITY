@@ -302,14 +302,19 @@ export const getBidList = createSelector(getOpportunityData, opportunity => {
       bidList.push({
         bidDate: item.getIn(['proposal', 'proposalDate']),
         bidId: item.getIn(['proposal', 'proposalId']),
-        isCurrent: item.get('isCurrent')
+        isCurrent: item.get('isCurrent'),
+        pertinentDetails: item.getIn([
+          'proposal',
+          'proposalDetails',
+          'pertinentDetails'
+        ])
       });
     });
 
     bidList = orderBy(bidList, ['bidDate'], ['desc']);
     bidList = bidList.map((item, ind) => ({
       ...item,
-      bidName: `Bid ${ind + 1}`
+      bidName: `Bid ${bidList.length - ind}`
     }));
 
     return bidList;

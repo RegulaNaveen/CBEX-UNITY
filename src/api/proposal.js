@@ -204,8 +204,6 @@ export const getOpportunityInfo = async (id: string): Promise<Object> => {
         headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
       })
       .then(response => {
-        // logLobDetails(response.data);
-        console.log(data);
         resolve(response.data);
       })
       .catch(err => {

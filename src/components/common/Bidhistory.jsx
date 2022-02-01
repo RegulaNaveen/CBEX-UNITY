@@ -12,7 +12,6 @@ const BidHistory = ({ changeBid }) => {
 
   const bidList = useSelector(getBidList);
   const selectedBid = useSelector(getSelectedBid);
-  console.log('history comp', bidList);
   const handleKeyPress = event => {
     if (event.key === 'Enter') {
       event.preventDefault();
@@ -107,7 +106,7 @@ const BidHistory = ({ changeBid }) => {
                 Pertinent Details / Specific Rebid Request
               </p>
               <div className="pertinent-details-section">
-                <p>Customer Requested we evaluate the site/country</p>
+                <p>{selectedBid.get('pertinentDetails')}</p>
               </div>
               <p className="helper-text">
                 This text was provided by Salesforce user when latest bid was

@@ -15,7 +15,8 @@ import {
   selectNotes,
   selectIsFetchingNotes,
   selectIsAddingNote,
-  selectNotepadMode
+  selectNotepadMode,
+  getSelectedBid
 } from '../../../redux/selectors';
 import {
   addNote,
@@ -37,7 +38,8 @@ function Notepad({
   mode,
   change,
   selectedtitle,
-  trackMatomoNoteSubmit
+  trackMatomoNoteSubmit,
+  selectedBid
 }) {
   const [selectedNote, setSelectedNote] = useState(Map());
 
@@ -103,13 +105,16 @@ function Notepad({
   }
 
   if (fetchingNotes) {
+    console.log('notes selected', selectedBid, selectedBid.toJS());
     return (
       <div
         className="notepad"
         style={{ justifyContent: 'center', alignItems: 'center' }}
       >
         <Loader isInner />
-        <p className="loading-msg">Loading Notes</p>
+        <p className="loading-msg">
+          {selectedBid.get('bidName')} Notes Loading
+        </p>
       </div>
     );
   }
@@ -182,7 +187,8 @@ const mapStateToProps = state => ({
   notes: selectNotes(state),
   fetchingNotes: selectIsFetchingNotes(state),
   addingNote: selectIsAddingNote(state),
-  mode: selectNotepadMode(state)
+  mode: selectNotepadMode(state),
+  selectedBid: getSelectedBid(state)
 });
 
 const mapDispatchToProps = {

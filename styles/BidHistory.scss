@@ -1,4 +1,12 @@
 .bid-history {
+  &:hover {
+    cursor: default;
+  }
+  .task-title-wrapper {
+    &:hover {
+      cursor: pointer;
+    }
+  }
   .bid-history-content-wrapper {
     display: flex;
     padding-top: 20px;
@@ -10,6 +18,10 @@
 
       .bid-history-title {
         height: auto !important;
+
+        &:hover {
+          cursor: pointer;
+        }
 
         .bid-title {
           height: auto !important;
@@ -46,6 +58,10 @@
           justify-content: space-between;
           position: relative;
           border-bottom: 1px solid #f6f7fb;
+
+          &:hover {
+            cursor: pointer;
+          }
 
           &:last-child {
             border-bottom: none;
