@@ -27,6 +27,7 @@ const ProposalCard = ({
   phase,
   therapeuticArea,
   verbatimIndication,
+  bidNo,
   proposalId
 }: Props) => {
   function setProposalTypeView({
@@ -52,10 +53,6 @@ const ProposalCard = ({
           >
             {opportunityName}
           </p>
-        </div>
-        <div>
-          <p>{daysRemain}</p>
-          <p>Days until Due</p>
         </div>
       </div>
 
@@ -120,6 +117,18 @@ const ProposalCard = ({
             {verbatimIndication}
           </span>
         </div>
+        <div className="section-data">
+          <span>Current Bid</span>
+          <span
+            className={
+              bidNo === 'No data'
+                ? 'no-data-placeholder'
+                : undefined
+            }
+          >
+            {bidNo}
+          </span>
+        </div>
       </div>
 
       <div className="buttons-section">
@@ -146,13 +155,20 @@ const ProposalCard = ({
           </Link>
           <p>Documents</p>
         </div>
-      </div>
 
-      <div className="link-section">
-        <div className="link">
-          <Link to={`${PROPOSAL}${proposalId}`}>View Opportunity Hub</Link>
-          <RightArrow className="right-arrow" />
+        <div
+          className="button"
+          id="documents"
+          role="presentation"
+          onClick={setProposalTypeView}
+        >
+         <div>
+            <p>{daysRemain}</p>
+            <p>Days until Due</p>
+          </div>
         </div>
+
+        
       </div>
     </div>
   );
