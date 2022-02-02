@@ -51,7 +51,9 @@
   }
 
   .date-picker {
-    cursor: not-allowed;
+    &.disabled {
+      cursor: not-allowed;
+    }
     .Mui-disabled {
       background-color: #f2f2f2;
 
