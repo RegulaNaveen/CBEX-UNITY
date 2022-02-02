@@ -320,3 +320,20 @@ export const getBidList = createSelector(getOpportunityData, opportunity => {
     return bidList;
   } else return [];
 });
+
+export const getProposalQuestions = createSelector(selectProposal, proposal =>
+  proposal.get('proposalQuestions')
+);
+
+export const getIsQuestionAnswered = createSelector(
+  getProposalQuestions,
+  questions => {
+    const isQuestionAnswered =
+      questions.length > 0
+        ? questions.findIndex(listItem => {
+            return listItem.loading;
+          })
+        : -1;
+    return isQuestionAnswered > -1 ? true : false;
+  }
+);

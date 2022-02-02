@@ -1,17 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, connect } from 'react-redux';
 import chevronRight from '../../../img/chevron-right.svg';
 import chevronDown from '../../../img/chevron-down.svg';
-import { getBidList, getSelectedBid } from '../../redux/selectors/proposal';
+import {
+  getBidList,
+  getSelectedBid,
+  getIsQuestionAnswered
+} from '../../redux/selectors/proposal';
 import { parseMomentDate } from '../../utils/DateUtils';
 import { Checkmark } from '../svg';
 import { changeBid } from '../../redux/actions/proposal-actions';
 
 const BidHistory = ({ changeBid }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [showHoverText, setShowHoverText] = useState(false);
 
   const bidList = useSelector(getBidList);
   const selectedBid = useSelector(getSelectedBid);
+  const isQuestionAnswered = useSelector(getIsQuestionAnswered);
+
   const handleKeyPress = event => {
     if (event.key === 'Enter') {
       event.preventDefault();
@@ -21,6 +28,12 @@ const BidHistory = ({ changeBid }) => {
   const handleCollapse = () => {
     setIsCollapsed(!isCollapsed);
   };
+
+  useEffect(() => {
+    if (!isQuestionAnswered && showHoverText) {
+      setShowHoverText(false);
+    }
+  }, [isQuestionAnswered]);
 
   return (
     <div className="bid-history task-wrapper">
@@ -74,30 +87,54 @@ const BidHistory = ({ changeBid }) => {
                   <div>Bid Number</div>
                   <div>Bid Created</div>
                 </div>
-                {bidList.length > 0 &&
-                  bidList.map(item => (
-                    <div
-                      onClick={() => changeBid(item)}
-                      className={`bid-list-row ${
-                        selectedBid.get('id') === item.bidId
-                          ? 'selected-bid'
-                          : ''
-                      }`}
-                      key={item.bidId}
-                    >
-                      <div>
-                        {item.bidName} {item.isCurrent && '(Current)'}
+                <div
+                  style={{ width: '100%' }}
+                  onMouseEnter={() => {
+                    if (isQuestionAnswered && !showHoverText)
+                      setShowHoverText(true);
+                  }}
+                  onMouseLeave={() => {
+                    if (showHoverText) setShowHoverText(false);
+                  }}
+                >
+                  {bidList.length > 0 &&
+                    bidList.map(item => (
+                      <div
+                        title={
+                          isQuestionAnswered
+                            ? 'Please wait for the question to be answered'
+                            : ''
+                        }
+                        onClick={() => {
+                          if (!isQuestionAnswered) changeBid(item);
+                        }}
+                        className={`bid-list-row ${
+                          selectedBid.get('id') === item.bidId
+                            ? 'selected-bid'
+                            : ''
+                        } 
+                      ${isQuestionAnswered ? 'bid-switching-not-allowed' : ''}`}
+                        key={item.bidId}
+                      >
+                        <div>
+                          {item.bidName} {item.isCurrent && '(Current)'}
+                        </div>
+                        <div>{parseMomentDate(item.bidDate)}</div>
+                        {item.bidId === selectedBid.get('id') && (
+                          <Checkmark
+                            className="selected-bid-check"
+                            style={{ marginLeft: '6px' }}
+                          />
+                        )}
                       </div>
-                      <div>{parseMomentDate(item.bidDate)}</div>
-                      {item.bidId === selectedBid.get('id') && (
-                        <Checkmark
-                          className="selected-bid-check"
-                          style={{ marginLeft: '6px' }}
-                        />
-                      )}
-                    </div>
-                  ))}
+                    ))}
+                </div>
               </div>
+              {showHoverText && (
+                <div className="hover-text">
+                  <p>Please wait for the question to be answered</p>
+                </div>
+              )}
             </div>
             <div className="bid-history-right-content">
               <p className="review-title">For Review</p>
