@@ -255,7 +255,8 @@ class Sidebar extends Component<Props, State> {
         className={classNames({ 'is-open': isOpen })}
       >
         <div className="sidebar-content">
-          <button onClick={this.handleItemsVisibility} type="button">
+          <button onClick={this.handleItemsVisibility} type="button" 
+           className={classNames({ 'is-btnopen': isOpen })}>
             <img
               className="task-icon"
               src={chevronRight}
