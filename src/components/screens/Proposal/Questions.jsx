@@ -60,7 +60,7 @@ type Props = {
   isQuestionLoading: boolean,
   getProposalInfoUpdated: Function,
   fetchUsers: () => {},
-  proposalID: string,
+  selectedBid: Map,
   eventCategories: any,
   userActions: any,
   trackEvent: any,
@@ -406,7 +406,7 @@ class Questions extends Component<Props, State> {
       details,
       sections,
       filteredSections,
-      proposalID,
+      selectedBid,
       isQuestionsFiltersEnabled,
       activeQuestionsFilterCount,
       allSectionsExpanded,
@@ -428,7 +428,7 @@ class Questions extends Component<Props, State> {
 
         <Sidebar
           sections={allSections}
-          id={proposalID}
+          id={selectedBid.get('id')}
           onAddQuestion={value => {
             this.setState({ currentsection: value });
           }}
@@ -466,17 +466,19 @@ class Questions extends Component<Props, State> {
             >
               <Refresh className="tasksList-add-icon" />
             </div>
-            <div
-              title="Add New Question"
-              className="tasksList-add-icon-wrapper"
-              role="presentation"
-              onClick={() => {
-                this.setState({ currentsection: '' });
-                this.onClose();
-              }}
-            >
-              <Add className="tasksList-add-icon" />
-            </div>
+            {selectedBid.get('isCurrent') && (
+              <div
+                title="Add New Question"
+                className="tasksList-add-icon-wrapper"
+                role="presentation"
+                onClick={() => {
+                  this.setState({ currentsection: '' });
+                  this.onClose();
+                }}
+              >
+                <Add className="tasksList-add-icon" />
+              </div>
+            )}
             <Button
               variant="secondary"
               size="small"
@@ -529,7 +531,7 @@ const mapStateToProps = (state: Map) => ({
   userRole: selectUserRole(state),
   allSectionsExpanded: selectAreAllSectionsExpanded(state),
   editQuestionsData: getEditQuestionData(state),
-  proposalID: getSelectedBid(state).get('id')
+  selectedBid: getSelectedBid(state)
 });
 
 export default compose(

@@ -477,7 +477,8 @@ export class TaskRow extends Component<Props, State> {
       roleNames,
       setEditQuestionData,
       isCustomQuestion,
-      questionId: qId
+      questionId: qId,
+      selectedBid
     } = this.props;
     const questionId = answers.get('questionId');
     let lastAnswer;
@@ -504,7 +505,7 @@ export class TaskRow extends Component<Props, State> {
           {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
           <p>
             {questionText}
-            {isCustomQuestion && (
+            {isCustomQuestion && selectedBid.get('isCurrent') && (
               <span
                 onClick={() => {
                   setEditQuestionData({
