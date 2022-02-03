@@ -28,7 +28,7 @@ const QuestionDatePicker = ({
     else setresetsubmit(false);
   }, [value]);
   return (
-    <div className="date-picker">
+    <div className={`date-picker ${disabled ? 'disabled' : ''}`}>
       <DatePicker
         placeholder="DD-MMM-YYYY"
         dateFormat="DD-MMM-YYYY"

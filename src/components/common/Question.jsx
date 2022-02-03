@@ -10,6 +10,7 @@ import { Checkmark } from '../svg';
 import { Edit } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
 import TextArea from './atoms/inputs/TextArea';
+import TextAreaV2 from './atoms/inputs/TextAreaV2';
 import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
 import {
@@ -293,31 +294,12 @@ export class TaskRow extends Component<Props, State> {
             hasDifferentSFanswer={this.props.hasDifferentSFanswer}
             sfObject={sfObject}
           >
-            <textarea
+            <TextAreaV2
               className="proposal-text-area"
               placeholder="Click to answer"
-              onPaste={event => {
-                removeSpecialChars(event);
-                const txtareaheight =
-                  event.target.scrollHeight > 300
-                    ? 300
-                    : event.target.scrollHeight;
-                event.target.style.height = `auto`;
-                event.target.style.height = `${txtareaheight + 2}px`;
-              }}
-              onChange={event => {
-                const txtareaheight =
-                  event.target.scrollHeight > 300
-                    ? 300
-                    : event.target.scrollHeight;
-                event.target.style.height = `auto`;
-                event.target.style.height = `${txtareaheight + 2}px`;
-              }}
+              value={answerValue}
               onBlur={e => this.handleTextChange(e.target.value, answerValue)}
               onFocus={e => this.onChildInputFocus(e)}
-              defaultValue={answerValue}
-              rows="1"
-              style={{ resize: 'vertical' }}
               disabled={!selectedBid.get('isCurrent')}
             />
           </SFAnswerValidationWrapper>
