@@ -18,6 +18,7 @@ import {
 } from '../../api/proposal';
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getUniqueMilestones } from '../selectors/proposal';
+import { getProposalIdlist } from '../../utils/utils';
 
 const {
   PROPOSAL_INFO,
@@ -52,7 +53,8 @@ const {
   EXPAND_ALL_SECTIONS,
   SET_EDIT_QUESTION_DATA,
   PROPOSAL_EDIT_QUESTION,
-  PROPOSAL_DELETE_QUESTION
+  PROPOSAL_DELETE_QUESTION,
+  UPDATE_BOX_BIDS
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -66,6 +68,10 @@ export const getProposal = (id: string): ThunkAction<string, Object> => {
       // Extracting unique milestone values from Proposal Questions
       const milestones = getUniqueMilestones(data.proposalQuestions);
       dispatch({ type: PROPOSAL_INFO, payload: { ...data, milestones } });
+      dispatch({
+        type: UPDATE_BOX_BIDS,
+        payload: getProposalIdlist(data)
+      })
     } catch (err) {
       dispatch({ type: PROPOSAL_INFO_ERROR, payload: err });
     }
@@ -482,3 +488,4 @@ export const deleteProposalQuestion = (
     }
   };
 };
+

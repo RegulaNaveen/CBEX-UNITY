@@ -4,12 +4,7 @@ import React, { Component } from 'react';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { isObject, isEqual, isEmpty } from 'lodash';
-import TextField from 'apollo-react/components/TextField';
-import Button from 'apollo-react/components/Button';
 import IconButton from 'apollo-react/components/IconButton';
-import Grid from 'apollo-react/components/Grid';
-import Box from 'apollo-react/components/Box';
-import Typography from 'apollo-react/components/Typography';
 import Loader from 'apollo-react/components/Loader';
 import { Checkmark } from '../svg';
 import { Edit } from '../svg';
@@ -27,14 +22,10 @@ import { getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
 import ChipView from './Chip/ChipView';
 import removeSpecialChars from '../../utils/pasteUtils';
 import Autocomplete from './atoms/inputs/AutoComplete';
-
-import DatePicker from 'apollo-react/components/DatePickerV2';
-import moment from 'moment';
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
 import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
 import SFAnswerValidationWrapper from './SFAnswerValidationWrapper';
-// import DatePicker from './atoms/inputs/DatePicker';
 import StatusCheck from 'apollo-react-icons/StatusCheck';
 
 type State = {
@@ -91,13 +82,6 @@ export class TaskRow extends Component<Props, State> {
   handlePropsalChange = (textValue: string, lastAnswer: string) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
     setProposalAnswer(proposalId, questionId, textValue, userData);
-    // if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
-    //   if (lastAnswer !== textValue)
-    //     setProposalAnswer(proposalId, questionId, textValue, userData);
-    // } else if (!textValue && lastAnswer.trim()) {
-    //   setProposalAnswer(proposalId, questionId, ' ', userData);
-    // }
-
     this.trackMatomoEventSubmitAnswer(textValue);
   };
 

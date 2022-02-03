@@ -134,6 +134,8 @@ export const getProposalBoxIdError = (state: Object): string =>
 export const getProposalBoxId = (state: Object): string =>
   proposalSelectors.getProposalBoxId(state.proposal);
 
+export const getAllBidsForIndex = (state: Object): string => state.proposal.get('boxBids');
+
 export const getValidatedProposalData = (state: Object): Object =>
   proposalSelectors.getValidatedProposalData(state.proposal);
 
