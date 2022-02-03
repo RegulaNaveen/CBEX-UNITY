@@ -105,7 +105,6 @@ function Notepad({
   }
 
   if (fetchingNotes) {
-    console.log('notes selected', selectedBid, selectedBid.toJS());
     return (
       <div
         className="notepad"

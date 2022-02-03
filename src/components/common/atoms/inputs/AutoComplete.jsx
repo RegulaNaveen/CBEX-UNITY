@@ -44,7 +44,6 @@ const Autocomplete = props => {
     return { label: v.name.split(',').join(' '), email: v.email };
   });
   useEffect(() => {
-    console.log(text);
     if (Boolean(text.length)) {
       let Val = text.split(',').map(v => {
         let email = extractEmails(v) || v;

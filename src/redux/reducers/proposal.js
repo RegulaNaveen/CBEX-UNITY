@@ -206,7 +206,6 @@ const setOpportunityInfo = (state, action) => {
 
 const onChangeBid = (state: Map, action: Object): Map => {
   const { payload } = action;
-  console.log(payload);
   let selectedBid = Map({
     id: payload.bidId,
     isCurrent: payload.isCurrent,

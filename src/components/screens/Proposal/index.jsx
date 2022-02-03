@@ -39,7 +39,6 @@ export class Proposal extends Component<Props, State> {
 
     const results = await getProposalInfo(params.id);
     if (results && results.proposal) {
-      console.log(results);
       let url = `${window.location.origin}${OPPORTUNITY}${results.proposal.proposalDetails['CRM #']}`;
       location.replace(url);
     } else {
