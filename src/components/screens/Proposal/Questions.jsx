@@ -306,7 +306,6 @@ class Questions extends Component<Props, State> {
         .valueSeq()
         .map(question => question.get('visible', true))
         .includes(true);
-
       if (someQuestionsAreVisible)
         return (
           <CollapsibleList
@@ -417,7 +416,11 @@ class Questions extends Component<Props, State> {
             this.setState({ currentsection: value });
           }}
           onscrollelement = {(e)=> this.expandsection(e)}
-          expandAll={this.handleIsCheckedAll}
+          expandAll={() => {
+            this.setState({sidebarscroll: ''},()=>{
+              this.handleIsCheckedAll()
+            })
+          }}
           AddNewQuestion={this.onClose}
           RefreshProposal={this.getProposalInfoUpdated}
           // eslint-disable-next-line react/destructuring-assignment
