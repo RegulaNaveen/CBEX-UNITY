@@ -70,7 +70,7 @@ const QuestionDatePicker = ({
           if (!dte) handleDayChange(' ', value);
         }}
       />
-      {resetsubmit && (
+      {resetsubmit && !disabled && (
         <button
           onClick={() => {
             setresetsubmit(false);

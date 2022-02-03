@@ -56,7 +56,9 @@ const Autocomplete = props => {
   }, [text]);
 
   return (
-    <div>
+    <div
+      className={`${props.disabled ? 'autocomplete-disabled' : 'autocomplete'}`}
+    >
       <AutocompleteV2
         fullWidth
         multiple
