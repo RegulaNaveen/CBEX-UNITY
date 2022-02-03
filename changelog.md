@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [4.0] - YYYY-MM-DD
 ### Added
   - IQVIACBEXU-1081: Navigate between Bid Box folders
+  - IQVIACBEXU-1080: Navigate from One Bid to the next
 ### Changed
 ### Fixed
 
