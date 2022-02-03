@@ -8,7 +8,7 @@ import Loader from 'react-loader-spinner';
 import classNames from 'classnames';
 import { compose } from 'redux';
 import {
-  getProposal,
+  getOpportunity,
   onGetValidatedProposalDetails
 } from '../../../redux/actions/proposal-actions';
 import { fetchNotes } from '../../../redux/actions/notepad-actions';
@@ -39,14 +39,13 @@ type Props = {
   isSidebarOpen: boolean,
   notifications: number,
   getRefreshAuthData: Function,
-  getProposalInfo: Function,
   getValidatedData: (proposalId: string) => void,
-  getNotes: (proposalId: string) => void,
   eventCategories: any,
   userActions: any,
   trackEvent: any,
   trackPageView: any,
-  proposalDetail: any
+  proposalDetail: any,
+  getOpportunityInfo: (oppId: string) => void
 };
 
 export class Opportunity extends Component<Props, State> {
@@ -63,11 +62,11 @@ export class Opportunity extends Component<Props, State> {
 
   componentDidMount() {
     const {
-      getProposalInfo,
+      getOpportunityInfo,
       authData,
       getRefreshAuthData,
       getValidatedData,
-      getNotes,
+
       trackPageView,
       eventCategories,
       match: { params }
@@ -79,9 +78,7 @@ export class Opportunity extends Component<Props, State> {
 
     if (!authData) getRefreshAuthData();
 
-    getProposalInfo(params.id);
-
-    getNotes(params.id);
+    getOpportunityInfo(params.id);
 
     window.addEventListener('storage', e => this.handleStorageChange(e));
 
@@ -223,7 +220,9 @@ export class Opportunity extends Component<Props, State> {
       >
         <Toolbar />
         {this.renderContent()}
-        <UnityFooter questionTemplateVersionNumber={questionTemplateVersionNumber || ''} />
+        <UnityFooter
+          questionTemplateVersionNumber={questionTemplateVersionNumber || ''}
+        />
       </div>
     );
   }
@@ -241,8 +240,7 @@ export default compose(
   withRouter,
   connect(mapStateToProps, {
     getRefreshAuthData: onRefreshUserData,
-    getProposalInfo: getProposal,
-    getValidatedData: onGetValidatedProposalDetails,
-    getNotes: fetchNotes
+    getOpportunityInfo: getOpportunity,
+    getValidatedData: onGetValidatedProposalDetails
   })
 )(MatomoHOC(Opportunity));
