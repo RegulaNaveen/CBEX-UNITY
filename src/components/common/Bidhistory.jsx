@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import chevronRight from '../../../img/chevron-right.svg';
 import chevronDown from '../../../img/chevron-down.svg';
 import {
@@ -11,9 +11,10 @@ import { parseMomentDate } from '../../utils/DateUtils';
 import { Checkmark } from '../svg';
 import { changeBid } from '../../redux/actions/proposal-actions';
 
-const BidHistory = ({ changeBid }) => {
+const BidHistory = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [showHoverText, setShowHoverText] = useState(false);
+  const dispatch = useDispatch();
 
   const bidList = useSelector(getBidList);
   const selectedBid = useSelector(getSelectedBid);
@@ -101,7 +102,7 @@ const BidHistory = ({ changeBid }) => {
                     bidList.map(item => (
                       <div
                         onClick={() => {
-                          if (!isQuestionAnswered) changeBid(item);
+                          if (!isQuestionAnswered) dispatch(changeBid(item));
                         }}
                         className={`bid-list-row ${
                           selectedBid.get('id') === item.bidId
@@ -151,4 +152,4 @@ const BidHistory = ({ changeBid }) => {
     </div>
   );
 };
-export default connect(null, { changeBid })(BidHistory);
+export default BidHistory;
