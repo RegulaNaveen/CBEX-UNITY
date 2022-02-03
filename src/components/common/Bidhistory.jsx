@@ -100,11 +100,6 @@ const BidHistory = ({ changeBid }) => {
                   {bidList.length > 0 &&
                     bidList.map(item => (
                       <div
-                        title={
-                          isQuestionAnswered
-                            ? 'Please wait for the question to be answered'
-                            : ''
-                        }
                         onClick={() => {
                           if (!isQuestionAnswered) changeBid(item);
                         }}
