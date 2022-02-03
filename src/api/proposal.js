@@ -4,7 +4,6 @@ import { API } from '../constants';
 import { getAccessTokenFromLocalStorage as getAccessToken } from '../SessionHandler';
 import { logLobDetails } from '../utils/utils';
 import omit from 'lodash/omit';
-
 const {
   PROPOSAL_API_URL,
   PROPOSAL_QUESTIONS_API_URL,
