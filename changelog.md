@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
   - IQVIACBEXU-1081: Navigate between Bid Box folders
   - IQVIACBEXU-1080: Navigate from One Bid to the next
+  - IQVIACBEXU-1087: Display Opportunity Cards instead of Bid Cards in Dashboard (My Docket, Recent, All)
 ### Changed
 ### Fixed
 

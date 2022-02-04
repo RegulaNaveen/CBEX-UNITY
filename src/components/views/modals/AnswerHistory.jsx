@@ -245,7 +245,8 @@ class AnswerHistory extends Component<Props> {
           role="presentation"
           onClick={this.stopPropagation}
         >
-          <div className="modal-header">
+          <div className="bluegrid" />
+          <div className="modal-header" >
             <div className="header-titles">
               <h1>{answers.isEmpty() ? 'Responsible' : 'History'}</h1>
               <p>{questionTitle}</p>

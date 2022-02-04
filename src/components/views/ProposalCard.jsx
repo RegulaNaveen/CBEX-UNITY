@@ -53,10 +53,6 @@ const ProposalCard = ({
             {opportunityName}
           </p>
         </div>
-        <div>
-          <p>{daysRemain}</p>
-          <p>Days until Due</p>
-        </div>
       </div>
 
       <div className="info-section">
@@ -146,12 +142,17 @@ const ProposalCard = ({
           </Link>
           <p>Documents</p>
         </div>
-      </div>
 
-      <div className="link-section">
-        <div className="link">
-          <Link to={`${OPPORTUNITY}${title}`}>View Opportunity Hub</Link>
-          <RightArrow className="right-arrow" />
+        <div
+          className="button"
+          id="documents"
+          role="presentation"
+          onClick={setProposalTypeView}
+        >
+         <div>
+            <p>{daysRemain}</p>
+            <p>Days until Due</p>
+          </div>
         </div>
       </div>
     </div>
