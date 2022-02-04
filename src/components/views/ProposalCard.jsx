@@ -27,7 +27,6 @@ const ProposalCard = ({
   phase,
   therapeuticArea,
   verbatimIndication,
-  bidNo,
   proposalId
 }: Props) => {
   function setProposalTypeView({
