@@ -117,18 +117,6 @@ const ProposalCard = ({
             {verbatimIndication}
           </span>
         </div>
-        <div className="section-data">
-          <span>Current Bid</span>
-          <span
-            className={
-              bidNo === 'No data'
-                ? 'no-data-placeholder'
-                : undefined
-            }
-          >
-            {bidNo}
-          </span>
-        </div>
       </div>
 
       <div className="buttons-section">
