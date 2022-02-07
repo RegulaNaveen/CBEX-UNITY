@@ -134,7 +134,8 @@ export const getProposalBoxIdError = (state: Object): string =>
 export const getProposalBoxId = (state: Object): string =>
   proposalSelectors.getProposalBoxId(state.proposal);
 
-export const getAllBidsForIndex = (state: Object): string => state.proposal.get('boxBids');
+export const getAllBidsForIndex = (state: Object): string =>
+  state.proposal.get('boxBids');
 
 export const getValidatedProposalData = (state: Object): Object =>
   proposalSelectors.getValidatedProposalData(state.proposal);
@@ -161,6 +162,8 @@ export const selectActiveQuestionsFilterCount = state =>
 
 export const getEditQuestionData = state =>
   proposalSelectors.getEditQuestionData(state);
+
+export const getSelectedBid = state => proposalSelectors.getSelectedBid(state);
 
 // Tabbar Selectors
 export const getProposals = (state: Object): Array<Object> =>

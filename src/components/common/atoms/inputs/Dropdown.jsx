@@ -55,6 +55,12 @@ class Dropdown extends PureComponent<Props, State> {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.value != this.props.value) {
+      this.setState({ selectedValue: this.props.value });
+    }
+  }
+
   componentWillUnmount() {
     window.removeEventListener('click', this.closeOnOutsideClick);
   }
@@ -63,8 +69,7 @@ class Dropdown extends PureComponent<Props, State> {
     const { setSelectRow } = this.props;
     if (this.ref.current !== event.target) {
       this.setState({ isCollapsed: false });
-      if(setSelectRow)
-      setSelectRow(false);
+      if (setSelectRow) setSelectRow(false);
     }
   };
 
