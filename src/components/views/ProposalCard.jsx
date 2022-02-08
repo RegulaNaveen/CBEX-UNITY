@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Folder, Clipboard, RightArrow } from '../svg';
-import { PROPOSAL } from '../../routes';
+import { OPPORTUNITY } from '../../routes';
 
 type Props = {
   title: string,
@@ -52,10 +52,6 @@ const ProposalCard = ({
           >
             {opportunityName}
           </p>
-        </div>
-        <div>
-          <p>{daysRemain}</p>
-          <p>Days until Due</p>
         </div>
       </div>
 
@@ -129,7 +125,7 @@ const ProposalCard = ({
           role="presentation"
           onClick={setProposalTypeView}
         >
-          <Link to={`${PROPOSAL}${proposalId}`}>
+          <Link to={`${OPPORTUNITY}${title}`}>
             <Clipboard />
           </Link>
           <p>Questions</p>
@@ -141,17 +137,22 @@ const ProposalCard = ({
           role="presentation"
           onClick={setProposalTypeView}
         >
-          <Link to={`${PROPOSAL}${proposalId}`}>
+          <Link to={`${OPPORTUNITY}${title}`}>
             <Folder />
           </Link>
           <p>Documents</p>
         </div>
-      </div>
 
-      <div className="link-section">
-        <div className="link">
-          <Link to={`${PROPOSAL}${proposalId}`}>View Opportunity Hub</Link>
-          <RightArrow className="right-arrow" />
+        <div
+          className="button"
+          id="documents"
+          role="presentation"
+          onClick={setProposalTypeView}
+        >
+         <div>
+            <p>{daysRemain}</p>
+            <p>Days until Due</p>
+          </div>
         </div>
       </div>
     </div>

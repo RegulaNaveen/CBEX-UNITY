@@ -49,6 +49,32 @@
   .date-picker > div > div {
     margin-top: 0px;
   }
+
+  .date-picker {
+    &.disabled {
+      cursor: not-allowed;
+
+      .Mui-disabled {
+        background-color: #f2f2f2;
+
+        opacity: 1;
+
+        input {
+          &:disabled {
+            &::placeholder {
+              color: #999999;
+            }
+          }
+        }
+      }
+    }
+  }
+  .autocomplete-disabled {
+    cursor: not-allowed;
+    .Mui-disabled {
+      background-color: #f2f2f2 !important;
+    }
+  }
 }
 
 .question-row-header {

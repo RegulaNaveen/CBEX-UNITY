@@ -4,7 +4,6 @@ import { API } from '../constants';
 import { getAccessTokenFromLocalStorage as getAccessToken } from '../SessionHandler';
 import { logLobDetails } from '../utils/utils';
 import omit from 'lodash/omit';
-
 const {
   PROPOSAL_API_URL,
   PROPOSAL_QUESTIONS_API_URL,
@@ -186,6 +185,21 @@ export const deleteProposalQuestionData = async (
   return new Promise((resolve, reject) => {
     axios
       .delete(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`, {
+        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};
+
+export const getOpportunityInfo = async (id: string): Promise<Object> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`${PROPOSAL_API_URL}/opportunity/${id}`, {
         headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
       })
       .then(response => {

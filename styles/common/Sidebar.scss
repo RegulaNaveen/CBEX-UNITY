@@ -116,8 +116,11 @@
       }
     }
   }
+  
 }
-
+button.is-btnopen {
+  top: 120 !important;
+}
 @media (min-width: 1200px) {
   #sidebar {
     z-index: 999;

@@ -39,7 +39,7 @@ class Documents extends Component<Props, State> {
     const {bids, match} = this.props;
     // latest Bid
     if(bids.length){
-      const currentBid =  bids[bids.length-1];
+      const currentBid =  bids[0];
       // Opportunity number from the link
       this.oppNo = match.params.id;
       //Setting up the default tab
@@ -89,12 +89,12 @@ class Documents extends Component<Props, State> {
         <div className="doc-tab-index">
           <ul>
             {
-              bids.map((v, i)=>
+              bids.map((v)=>
               <li 
                 className={(selectedBid===v.proposalId? 'selectedBid' : '')} 
                 key={v.proposalId} 
                 onClick={()=>{this.swtichTabs(v.proposalId)}}>
-                {this.oppNo} - Bid {i+1}
+                {this.oppNo} - Bid {v.bidNo}
               </li>
               )
             } 

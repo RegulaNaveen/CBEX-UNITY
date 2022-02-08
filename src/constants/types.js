@@ -69,7 +69,9 @@ const PROPOSAL = {
   SET_EDIT_QUESTION_DATA: 'set_edit_question_data',
   PROPOSAL_EDIT_QUESTION: 'proposal_edit_question',
   PROPOSAL_DELETE_QUESTION: 'proposal_delete_question',
-  UPDATE_BOX_BIDS: 'update-box-bids'
+  OPPORTUNITY_INFO: 'opportunity_info',
+  UPDATE_BOX_BIDS: 'update-box-bids',
+  CHANGE_BID: 'CHANGE_BID'
 };
 
 const PROPOSALS = {
