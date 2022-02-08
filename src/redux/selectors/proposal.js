@@ -303,7 +303,7 @@ export const getBidList = createSelector(getOpportunityData, opportunity => {
         bidDate: item.getIn(['proposal', 'proposalDate']),
         bidId: item.getIn(['proposal', 'proposalId']),
         isCurrent: item.get('isCurrent'),
-        bidName: `Bid ${item.getIn(['proposal', 'proposalDetails', 'bidNo'])}`,
+        bidName: `Bid ${item.getIn(['proposal', 'proposalDetails', 'bidNo']) || ''}`,
         pertinentDetails: item.getIn([
           'proposal',
           'proposalDetails',
