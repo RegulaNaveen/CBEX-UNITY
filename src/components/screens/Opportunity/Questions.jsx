@@ -15,7 +15,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { Add, Refresh } from '../../svg';
 import CollapsibleList from '../../common/CollapsibleList';
 import BidHistory from '../../common/Bidhistory';
-import ProposalInfo from './ProposalInfo';
 import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
 import {
   getProposalUpdated,
@@ -36,6 +35,7 @@ import {
   selectActiveQuestionsFilterCount,
   getMilestoneSections,
   getEditQuestionData,
+  getIsOpen,
   getSelectedBid
 } from '../../../redux/selectors';
 import {
@@ -49,6 +49,9 @@ import { getAllUsers } from '../../../redux/actions/sso-auth-actions';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import { getCountriesNameForCode } from '../../../utils/utils';
 import Grid from 'apollo-react/components/Grid';
+import Blade from 'apollo-react/components/Blade';
+import chevronRight from '../../../../img/chevron-right.svg';
+import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
 
 type Props = {
   match: Match,
@@ -97,7 +100,8 @@ class Questions extends Component<Props, State> {
       selectedtitle: '',
       heighlightcard: false,
       showFilter: false,
-      sidebarscroll: ''
+      sidebarscroll: '',
+      open: false
     };
   }
 
@@ -187,6 +191,35 @@ class Questions extends Component<Props, State> {
         }
       ]
     });
+  };
+  trackMatomoEvent = ({ action }) => {
+    const { proposalDetail, trackEvent, eventCategories } = this.props;
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify(proposalDetail)
+        }
+      ]
+    });
+  };
+  trackMatomoEventSidebarToggle = action => {
+    const openOrclose = action ? 'Open' : 'Close';
+    const { userActions } = this.props;
+    this.trackMatomoEvent({
+      action: `Blade: ${userActions.click} On Blade To ${openOrclose} Sidebar`
+    });
+  };
+  handleItemsVisibility = (e: SyntheticEvent<EventTarget>) => {
+    e.stopPropagation();
+    const { isOpen, handleOpenClose } = this.props;
+    this.setState({ activeTabIndex: 0 });
+    this.setTabFromQuestionNotes(0, '', true);
+    handleOpenClose(!isOpen);
+    if (isOpen) this.setState({ activeTabIndex: 0 });
+    this.trackMatomoEventSidebarToggle(!isOpen);
   };
 
   trackMatomoEventToggleQModal = action => {
@@ -410,13 +443,15 @@ class Questions extends Component<Props, State> {
       isQuestionsFiltersEnabled,
       activeQuestionsFilterCount,
       allSectionsExpanded,
-      editQuestionsData
+      editQuestionsData,
+      isOpen
     } = this.props;
 
     const {
       showModal,
       selectedQuestionForHistory,
-      isHistoryModalShown
+      isHistoryModalShown,
+      open
     } = this.state;
 
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
@@ -424,8 +459,6 @@ class Questions extends Component<Props, State> {
     return (
       <>
         <BidHistory />
-        <ProposalInfo data={details} />
-
         <Sidebar
           sections={allSections}
           id={selectedBid.get('id')}
@@ -516,6 +549,7 @@ class Questions extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: Map) => ({
+  isOpen: getIsOpen(state),
   details: getProposalDetails(state),
   filterMilestone: getMilestoneSections(state),
   sections: selectSections(state),
@@ -542,6 +576,7 @@ export default compose(
     applyQuestionsFilter: onApplyQuestionsFilter,
     resetQuestionsFilter: resetQuestionsFilterAction,
     clearQuestionsFilter: clearQuestionsFilterAction,
-    expandAllSections: expandAllSectionsAction
+    expandAllSections: expandAllSectionsAction,
+    handleOpenClose: onHandleOpenClose
   })
 )(MatomoHOC(Questions));

@@ -18,15 +18,69 @@
     align-items: center;
     justify-content: center;
   }
+  .MuiGrid-spacing-xs-2 > .MuiGrid-item{
+    padding: 0px;
+    padding-left: 0px;
+    padding-top: 8px;
+  }
 
+  ._question-tab{
+    padding-left: 20px;
+  }
+
+  .proposal-details .MuiPaper-rounded {
+    border-radius: unset;
+    padding: 5px;
+    text-align: center;
+  }
+  p.boldtext {
+    font-weight: 600;
+    color: #000;
+    font-family: 'ProximaNova-Regular';
+  }
+  .sidebarduedatedsg {
+    text-align: left !important;
+    padding-left: 30px !important;
+  }
+  .sidebaropenfont {
+    font-size: 12px;
+  }
+  .duedatedsg {
+    text-align: left !important;
+    padding-left: 30px !important;
+    height: 100%;
+  }
+  .phasedsg {
+    height: 100%;
+  }
+  .duedatedsg.open { 
+    padding-left: 15px!important;
+  }
+  p.greencolor{
+    color: #2acb42;
+    font-size: 30px;
+  }
+  p.greencolorsidebaropenfont{
+    color: #2acb42;
+    font-size: 12px;
+  }
+  p.greytext{
+    color: #7f7f7f;
+  }
+  button.MuiTab-textColorInherit{
+    color: #7f7f7f;
+    font-weight: 500;
+  }
+  button.Mui-selected{
+    color: #000;
+    font-weight: 500;
+  }
   .proposal-details {
-    padding: 25px 30px;
-
     .tasksList-title-wrapper {
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      padding: 35px 0 16px 0;
+      padding: 0px 0 16px 0;
 
       .tasksList-title {
         font-size: 18px;

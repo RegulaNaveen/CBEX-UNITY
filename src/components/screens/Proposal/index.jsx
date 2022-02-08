@@ -59,7 +59,7 @@ export class Proposal extends Component<Props, State> {
   };
 
   render() {
-    const { isSidebarOpen, proposalDetail } = this.props;
+    const { isSidebarOpen, proposalDetail} = this.props;
     const { questionTemplateVersionNumber } = proposalDetail;
     return (
       <div

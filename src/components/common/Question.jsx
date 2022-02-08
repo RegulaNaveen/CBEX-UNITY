@@ -244,7 +244,7 @@ export class TaskRow extends Component<Props, State> {
     const { selectedDay } = this.state;
 
     const optionsYN = ['Yes', 'No'];
-    const answer = lastAnswer && lastAnswer.get('answer');
+    const answer = lastAnswer && lastAnswer.get && lastAnswer.get('answer');
 
     let answerValue = '';
     let answerValueComplex;
@@ -435,7 +435,7 @@ export class TaskRow extends Component<Props, State> {
 
   isAnswered(answer, isAnswerPredicted) {
     if (isAnswerPredicted) return false;
-    if (answer && answer.get('answer')) {
+    if (answer && answer.get && answer.get('answer')) {
       return (
         answer
           .get('answer')
@@ -466,12 +466,15 @@ export class TaskRow extends Component<Props, State> {
     let lastAnswer;
     let answerDate = 'Not Answered';
     let isAnswerPredicted = false;
-    if (!questionId) lastAnswer = answers.last();
-    else lastAnswer = answers.get('answers').last();
-
+    if(answers){
+      if (!questionId) lastAnswer = answers.last();
+      else lastAnswer = answers.get('answers').last();
+    }
     if (lastAnswer) {
-      answerDate = parseMomentDate(lastAnswer.get('date'));
-      if (lastAnswer.get('userName') === 'UnityPredictedAnswer') {
+       if(lastAnswer.get && lastAnswer.get('date') && lastAnswer.get('date').length){
+         answerDate = parseMomentDate(lastAnswer.get('date'));
+       } 
+      if (lastAnswer.get  && lastAnswer.get('userName') && lastAnswer.get('userName').length && lastAnswer.get('userName') && lastAnswer.get('userName') === 'UnityPredictedAnswer') {
         isAnswerPredicted = true;
         answerDate = 'Not Answered';
       }

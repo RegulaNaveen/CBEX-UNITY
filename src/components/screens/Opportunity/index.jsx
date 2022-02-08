@@ -26,6 +26,8 @@ import Documents from './Documents';
 import Validate from './Validate';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import UnityFooter from '../../common/Footer';
+import UnityGrid from '../../common/atoms/inputs/Grid';
+import UnityTab from '../../common/atoms/inputs/Tab';
 
 type State = {
   selectedView: string
@@ -152,26 +154,13 @@ export class Opportunity extends Component<Props, State> {
   }
 
   renderContent = () => {
-    const { selectedView, enableValidateTab } = this.state;
+    const { enableValidateTab } = this.state;
     const {
       isLoading,
       details,
-      notifications,
+      isOpen,
       match: { params }
     } = this.props;
-
-    const viewsMap = {
-      questions: <Questions proposalID={params.id} />,
-      documents: <Documents />
-      // validate: <Validate />
-    };
-
-    if (enableValidateTab) {
-      viewsMap.validate = <Validate />;
-    }
-
-    const { 'CRM #': crm } = details;
-    const placeholder = 'No data';
 
     if (isLoading)
       return (
@@ -182,29 +171,8 @@ export class Opportunity extends Component<Props, State> {
 
     return (
       <div className="proposal-details">
-        <h1>{crm || placeholder}</h1>
-        {enableValidateTab ? (
-          <TabButtons
-            elements={[
-              { tabName: 'questions' },
-              { tabName: 'documents' },
-              { tabName: 'validate', notifications }
-            ]}
-            selectedView={selectedView}
-            onChangeView={this.onChangeProposalView}
-          />
-        ) : (
-          <TabButtons
-            elements={[
-              { tabName: 'questions' },
-              { tabName: 'documents' }
-              // { tabName: 'validate', notifications }
-            ]}
-            selectedView={selectedView}
-            onChangeView={this.onChangeProposalView}
-          />
-        )}
-        {viewsMap[selectedView]}
+        <UnityGrid data={details} isOpen={isOpen} />
+        <UnityTab id={params.id} enableValidateTab={enableValidateTab} />
       </div>
     );
   };
@@ -233,7 +201,9 @@ const mapStateToProps = (state: Map) => ({
   isLoading: isProposalLoading(state),
   isSidebarOpen: getIsOpen(state),
   notifications: getPendingValidatedItems(state),
-  proposalDetail: getProposalDetails(state)
+  proposalDetail: getProposalDetails(state),
+  isOpen: getIsOpen(state),
+  details: getProposalDetails(state),
 });
 
 export default compose(
