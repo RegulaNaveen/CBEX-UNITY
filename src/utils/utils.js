@@ -164,10 +164,12 @@ function handleLocationChange (event){
   }
 };
 function getProposalIdlist(data=[]){
-    return data.map((d)=>{
+    const sortedData = data.sort((a,b)=>b.proposal.proposalDate - a.proposal.proposalDate);
+    return sortedData.map((d)=>{
       return {
         proposalId: d.proposal.proposalId,
-        boxId: d.proposal.proposalDetails.boxId
+        boxId: d.proposal.proposalDetails.boxId,
+        bidNo: d.proposal.proposalDetails['bidNo'] || ''
       }
     }); 
 }

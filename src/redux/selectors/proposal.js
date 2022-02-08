@@ -298,12 +298,12 @@ export const getBidList = createSelector(getOpportunityData, opportunity => {
     let bidList = [];
     // console.log(opportunity.valueSeq().toJS());
     opportunity.valueSeq().forEach((item, ind) => {
-      console.log('valuSeq', ind, item.toJS());
       bidList.push({
         bidDueDate: item.getIn(['proposal', 'proposalDetails', 'Bid due date']),
         bidDate: item.getIn(['proposal', 'proposalDate']),
         bidId: item.getIn(['proposal', 'proposalId']),
         isCurrent: item.get('isCurrent'),
+        bidName: `Bid ${item.getIn(['proposal', 'proposalDetails', 'bidNo'])}`,
         pertinentDetails: item.getIn([
           'proposal',
           'proposalDetails',
@@ -313,11 +313,6 @@ export const getBidList = createSelector(getOpportunityData, opportunity => {
     });
 
     bidList = orderBy(bidList, ['bidDate'], ['desc']);
-    bidList = bidList.map((item, ind) => ({
-      ...item,
-      bidName: `Bid ${bidList.length - ind}`
-    }));
-
     return bidList;
   } else return [];
 });
