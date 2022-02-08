@@ -12,7 +12,7 @@ import { Checkmark } from '../svg';
 import { changeBid } from '../../redux/actions/proposal-actions';
 
 const BidHistory = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const [showHoverText, setShowHoverText] = useState(false);
   const dispatch = useDispatch();
 
