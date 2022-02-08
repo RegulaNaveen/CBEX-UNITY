@@ -154,7 +154,7 @@ const setOpportunityInfo = (state, action) => {
       selectedBid = selectedBid
         .set('id', proposal.proposal.proposalId)
         // .set('bidDate', proposal.proposal.proposalDate)
-        .set('bidName', `Bid ${payload.length}`)
+        .set('bidName', `Bid ${proposal.proposal.proposalDetails['bidNo'] || ''}`)
         .set('isCurrent', true)
         .set(
           'pertinentDetails',

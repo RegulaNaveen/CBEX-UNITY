@@ -300,6 +300,7 @@ export const getBidList = createSelector(getOpportunityData, opportunity => {
     opportunity.valueSeq().forEach((item, ind) => {
       console.log('valuSeq', ind, item.toJS());
       bidList.push({
+        bidDueDate: item.getIn(['proposal', 'proposalDetails', 'Bid due date']),
         bidDate: item.getIn(['proposal', 'proposalDate']),
         bidId: item.getIn(['proposal', 'proposalId']),
         isCurrent: item.get('isCurrent'),

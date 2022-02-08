@@ -37,6 +37,8 @@ const BidHistory = () => {
   }, [isQuestionAnswered]);
 
   return (
+    <>
+    { (bidList.length) ?
     <div className="bid-history task-wrapper">
       <button
         id="arrow-icon"
@@ -86,7 +88,7 @@ const BidHistory = () => {
               <div className="task-table-row bid-list-wrapper">
                 <div className="bid-list-header-row">
                   <div>Bid Number</div>
-                  <div>Bid Created</div>
+                  <div>Bid Due Date</div>
                 </div>
                 <div
                   style={{ width: '100%' }}
@@ -115,7 +117,7 @@ const BidHistory = () => {
                         <div>
                           {item.bidName} {item.isCurrent && '(Current)'}
                         </div>
-                        <div>{parseMomentDate(item.bidDate)}</div>
+                        <div>{parseMomentDate(item.bidDueDate)}</div>
                         {item.bidId === selectedBid.get('id') && (
                           <Checkmark
                             className="selected-bid-check"
@@ -150,6 +152,8 @@ const BidHistory = () => {
         </div>
       )}
     </div>
+    : null } 
+    </>
   );
 };
 export default BidHistory;
