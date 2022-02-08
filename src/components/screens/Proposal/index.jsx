@@ -7,172 +7,55 @@ import { connect } from 'react-redux';
 import Loader from 'react-loader-spinner';
 import classNames from 'classnames';
 import { compose } from 'redux';
+import { getProposalByID } from '../../../redux/actions/proposal-actions';
 import {
-  getProposal,
-  onGetValidatedProposalDetails
-} from '../../../redux/actions/proposal-actions';
-import { fetchNotes } from '../../../redux/actions/notepad-actions';
-import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
-import {
-  getIsOpen,
-  getPendingValidatedItems,
   getProposalDetails,
   isProposalLoading
 } from '../../../redux/selectors';
 import Toolbar from '../../views/toolbar';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import UnityFooter from '../../common/Footer';
-import UnityGrid from '../../common/atoms/inputs/Grid';
-import UnityTab from '../../common/atoms/inputs/Tab';
+import { OPPORTUNITY, DASHBOARD } from '../../../routes';
 
 type State = {
   selectedView: string
 };
 
 type Props = {
-  authData: Map,
-  details: Map,
   match: Match,
   isLoading: boolean,
-  isSidebarOpen: boolean,
-  notifications: number,
-  getRefreshAuthData: Function,
   getProposalInfo: Function,
-  getValidatedData: (proposalId: string) => void,
-  getNotes: (proposalId: string) => void,
-  eventCategories: any,
-  userActions: any,
-  trackEvent: any,
-  trackPageView: any,
   proposalDetail: any
 };
 
 export class Proposal extends Component<Props, State> {
   toRef;
-
-  constructor(props: Object) {
-    super(props);
-
-    this.state = {
-      selectedView: 'questions',
-      enableValidateTab: false
-    };
-  }
-
-  componentDidMount() {
+  async componentDidMount() {
     const {
       getProposalInfo,
-      authData,
-      getRefreshAuthData,
-      getValidatedData,
-      getNotes,
-      trackPageView,
-      eventCategories,
+
       match: { params }
     } = this.props;
 
-    const selectedView = localStorage.getItem('proposalTypeView');
-
-    if (selectedView) this.setState({ selectedView });
-
-    if (!authData) getRefreshAuthData();
-
-    getProposalInfo(params.id);
-
-    getNotes(params.id);
-
-    window.addEventListener('storage', e => this.handleStorageChange(e));
-
-    const enableValidateTab = localStorage.getItem('enableValidateTab');
-    if (enableValidateTab === null) {
-      localStorage.setItem('enableValidateTab', false);
-    } else if (enableValidateTab === 'true') {
-      getValidatedData(params.id);
-      this.setState({
-        enableValidateTab: true
-      });
-    }
-
-    // Track Page view
-    trackPageView({
-      documentTitle: `${eventCategories.plainPd}`
-    });
-  }
-
-  componentWillUnmount() {
-    localStorage.removeItem('proposalTypeView');
-    localStorage.removeItem('proposalId');
-
-    window.removeEventListener('storage', this.handleStorageChange);
-  }
-
-  trackMatomoEventTabs = tab => {
-    const {
-      eventCategories,
-      userActions,
-      proposalDetail,
-      trackEvent
-    } = this.props;
-    trackEvent({
-      category: eventCategories.pd(this.props),
-      action: `Tab: ${userActions.click} On ${tab}`,
-      customDimensions: [
-        {
-          id: 1,
-          value: JSON.stringify(proposalDetail)
-        }
-      ]
-    });
-  };
-
-  onChangeProposalView = (selectedView: string) => {
-    this.setState({ selectedView });
-    this.trackMatomoEventTabs(selectedView);
-  };
-
-  handleStorageChange(e) {
-    const {
-      getValidatedData,
-      match: { params }
-    } = this.props;
-
-    if (e.key === 'enableValidateTab') {
-      const isEnabled = e.newValue === 'true';
-      const { selectedView: selectedViewState } = this.state;
-      this.setState({
-        enableValidateTab: isEnabled,
-        selectedView:
-          !isEnabled && selectedViewState === 'validate'
-            ? 'questions'
-            : selectedViewState
-      });
-      if (isEnabled) {
-        getValidatedData(params.id);
-      }
+    const results = await getProposalInfo(params.id);
+    if (results && results.proposal) {
+      let url = `${window.location.origin}${OPPORTUNITY}${results.proposal.proposalDetails['CRM #']}`;
+      location.replace(url);
+    } else {
+      let url = `${window.location.origin}${DASHBOARD}`;
+      location.replace(url);
     }
   }
 
   renderContent = () => {
-    const { enableValidateTab } = this.state;
-    const {
-      isLoading,
-      details,
-      isOpen,
-      match: { params }
-    } = this.props;
+    const { isLoading } = this.props;
+
     if (isLoading)
       return (
         <div className="proposal-loader">
           <Loader type="TailSpin" color="#297DFD" height={100} width={100} />
         </div>
       );
-
-    return (
-      <div className="proposal-details">
-        <UnityGrid data={details} isOpen={isOpen} />
-        <UnityTab id={params.id} enableValidateTab={enableValidateTab} />
-      </div>
-    );
   };
 
   render() {
@@ -186,27 +69,22 @@ export class Proposal extends Component<Props, State> {
       >
         <Toolbar />
         {this.renderContent()}
-        <UnityFooter questionTemplateVersionNumber={questionTemplateVersionNumber || ''} />
+        <UnityFooter
+          questionTemplateVersionNumber={questionTemplateVersionNumber || ''}
+        />
       </div>
     );
   }
 }
 
 const mapStateToProps = (state: Map) => ({
-  isOpen: getIsOpen(state),
-  details: getProposalDetails(state),
   isLoading: isProposalLoading(state),
-  isSidebarOpen: getIsOpen(state),
-  notifications: getPendingValidatedItems(state),
   proposalDetail: getProposalDetails(state)
 });
 
 export default compose(
   withRouter,
   connect(mapStateToProps, {
-    getRefreshAuthData: onRefreshUserData,
-    getProposalInfo: getProposal,
-    getValidatedData: onGetValidatedProposalDetails,
-    getNotes: fetchNotes
+    getProposalInfo: getProposalByID
   })
 )(MatomoHOC(Proposal));

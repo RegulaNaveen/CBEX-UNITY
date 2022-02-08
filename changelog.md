@@ -4,7 +4,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.0] - YYYY-MM-DD
+### Added
+  - IQVIACBEXU-1081: Navigate between Bid Box folders
+  - IQVIACBEXU-1080: Navigate from One Bid to the next
+  - IQVIACBEXU-1087: Display Opportunity Cards instead of Bid Cards in Dashboard (My Docket, Recent, All)
+### Changed
+### Fixed
+
+## [3.4.1] - YYYY-MM-DD
+### Fixed
+  - IQVIACBEXU-1086: Answer history should display the message "Validated Unity predicted answer" msg is not displaying for multi select dropdowns in history window. 
+  - IQVIACBEXU-1078: Validated unity predicted answer Should be in bold in answer history.
+  - IQVIACBEXU-1089: Answer strikes by redline in history for single select dropdowns if user validates unity predicted answer.
+  - IQVIACBEXU-1077: Team member filter "text box UI" is inconsistent
+  - IQVIACBEXU-1090: Answer history issue - Answer is saving multiple times.
+  - IQVIACBEXU-806: Performance issue: Filters for milestones and roles when all sections are expanded
+  - IQVIACBEXU-1099: Giving wrong prediction once we applied multiple business rule for existing questions set. Its working as inconsistency
+
 ## [3.4] - YYYY-MM-DD
+### Added
   - IQVIACBEXU-886: Frontend changes: Show an alert when hasDifferentSFanswer is = to true
   - IQVIACBEXU-932: General focus for questions
   - IQVIACBEXU-931: Edit/Delete custom questions

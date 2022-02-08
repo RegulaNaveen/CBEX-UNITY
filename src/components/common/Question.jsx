@@ -4,37 +4,33 @@ import React, { Component } from 'react';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { isObject, isEqual, isEmpty } from 'lodash';
-import TextField from 'apollo-react/components/TextField';
-import Button from 'apollo-react/components/Button';
 import IconButton from 'apollo-react/components/IconButton';
-import Grid from 'apollo-react/components/Grid';
-import Box from 'apollo-react/components/Box';
-import Typography from 'apollo-react/components/Typography';
 import Loader from 'apollo-react/components/Loader';
 import { Checkmark } from '../svg';
 import { Edit } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
 import TextArea from './atoms/inputs/TextArea';
+import TextAreaV2 from './atoms/inputs/TextAreaV2';
 import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
 import {
   setProposalAnswerData,
   setEditQuestionData
 } from '../../redux/actions/proposal-actions';
-import { getUserData, getProposalDetails } from '../../redux/selectors';
+import {
+  getUserData,
+  getProposalDetails,
+  getSelectedBid
+} from '../../redux/selectors';
 import MatomoHOC from '../HOC/MatomoHOC';
 import { getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
 import ChipView from './Chip/ChipView';
 import removeSpecialChars from '../../utils/pasteUtils';
 import Autocomplete from './atoms/inputs/AutoComplete';
-
-import DatePicker from 'apollo-react/components/DatePickerV2';
-import moment from 'moment';
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
 import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
 import SFAnswerValidationWrapper from './SFAnswerValidationWrapper';
-// import DatePicker from './atoms/inputs/DatePicker';
 import StatusCheck from 'apollo-react-icons/StatusCheck';
 
 type State = {
@@ -91,13 +87,6 @@ export class TaskRow extends Component<Props, State> {
   handlePropsalChange = (textValue: string, lastAnswer: string) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
     setProposalAnswer(proposalId, questionId, textValue, userData);
-    // if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
-    //   if (lastAnswer !== textValue)
-    //     setProposalAnswer(proposalId, questionId, textValue, userData);
-    // } else if (!textValue && lastAnswer.trim()) {
-    //   setProposalAnswer(proposalId, questionId, ' ', userData);
-    // }
-
     this.trackMatomoEventSubmitAnswer(textValue);
   };
 
@@ -251,11 +240,11 @@ export class TaskRow extends Component<Props, State> {
     lastAnswer: Map,
     questionText: Map
   ) => {
-    const { sectionName, sfObject, sfField } = this.props;
+    const { sectionName, sfObject, sfField, selectedBid } = this.props;
     const { selectedDay } = this.state;
 
     const optionsYN = ['Yes', 'No'];
-    const answer = lastAnswer && lastAnswer.get('answer');
+    const answer = lastAnswer && lastAnswer.get && lastAnswer.get('answer');
 
     let answerValue = '';
     let answerValueComplex;
@@ -278,6 +267,7 @@ export class TaskRow extends Component<Props, State> {
             onBlur={e => this.setSelectRow(false)}
             onChange={this.handlePropsalChange}
             text={answerValue}
+            disabled={!selectedBid.get('isCurrent')}
           />
         </SFAnswerValidationWrapper>
       );
@@ -304,31 +294,13 @@ export class TaskRow extends Component<Props, State> {
             hasDifferentSFanswer={this.props.hasDifferentSFanswer}
             sfObject={sfObject}
           >
-            <textarea
+            <TextAreaV2
               className="proposal-text-area"
               placeholder="Click to answer"
-              onPaste={event => {
-                removeSpecialChars(event);
-                const txtareaheight =
-                  event.target.scrollHeight > 300
-                    ? 300
-                    : event.target.scrollHeight;
-                event.target.style.height = `auto`;
-                event.target.style.height = `${txtareaheight + 2}px`;
-              }}
-              onChange={event => {
-                const txtareaheight =
-                  event.target.scrollHeight > 300
-                    ? 300
-                    : event.target.scrollHeight;
-                event.target.style.height = `auto`;
-                event.target.style.height = `${txtareaheight + 2}px`;
-              }}
+              value={answerValue}
               onBlur={e => this.handleTextChange(e.target.value, answerValue)}
               onFocus={e => this.onChildInputFocus(e)}
-              defaultValue={answerValue}
-              rows="1"
-              style={{ resize: 'vertical'}}
+              disabled={!selectedBid.get('isCurrent')}
             />
           </SFAnswerValidationWrapper>
         );
@@ -347,7 +319,8 @@ export class TaskRow extends Component<Props, State> {
               type="number"
               onBlur={this.handleTextChange}
               onFocus={e => this.onChildInputFocus(e)}
-              value={answerValue}
+              value={answerValue || ''}
+              disabled={!selectedBid.get('isCurrent')}
             />
           </SFAnswerValidationWrapper>
         );
@@ -364,6 +337,7 @@ export class TaskRow extends Component<Props, State> {
               onClick={val => this.onClickChange(val, answerValue)}
               value={answerValue}
               setSelectRow={this.setSelectRow}
+              disabled={!selectedBid.get('isCurrent')}
             />
           </SFAnswerValidationWrapper>
         );
@@ -380,6 +354,7 @@ export class TaskRow extends Component<Props, State> {
               onClick={val => this.onClickChange(val, answerValue)}
               value={answerValue}
               setSelectRow={this.setSelectRow}
+              disabled={!selectedBid.get('isCurrent')}
             />
           </SFAnswerValidationWrapper>
         );
@@ -395,6 +370,7 @@ export class TaskRow extends Component<Props, State> {
               handleDayChange={this.handleDayChange}
               onFocus={e => this.setSelectRow(true)}
               onBlur={e => this.setSelectRow(false)}
+              disabled={!selectedBid.get('isCurrent')}
             />
           </SFAnswerValidationWrapper>
         );
@@ -410,6 +386,7 @@ export class TaskRow extends Component<Props, State> {
               onClick={this.onSelectValues}
               value={answerValueComplex}
               setSelectRow={this.setSelectRow}
+              disabled={!selectedBid.get('isCurrent')}
             />
           </SFAnswerValidationWrapper>
         );
@@ -429,11 +406,17 @@ export class TaskRow extends Component<Props, State> {
   };
 
   handleVerifyPredictedAnsClick(predictedAnswer) {
-    const { setProposalAnswer, proposalId, questionId, userData, answerConfiguration } = this.props;
+    const {
+      setProposalAnswer,
+      proposalId,
+      questionId,
+      userData,
+      answerConfiguration
+    } = this.props;
     const answerType = answerConfiguration.get('type');
 
     // picklist value should not be converted to string while saving
-    if (answerType === "picklist")  {
+    if (answerType === 'picklist') {
       setProposalAnswer(
         proposalId,
         questionId,
@@ -452,7 +435,7 @@ export class TaskRow extends Component<Props, State> {
 
   isAnswered(answer, isAnswerPredicted) {
     if (isAnswerPredicted) return false;
-    if (answer && answer.get('answer')) {
+    if (answer && answer.get && answer.get('answer')) {
       return (
         answer
           .get('answer')
@@ -476,18 +459,22 @@ export class TaskRow extends Component<Props, State> {
       roleNames,
       setEditQuestionData,
       isCustomQuestion,
-      questionId: qId
+      questionId: qId,
+      selectedBid
     } = this.props;
     const questionId = answers.get('questionId');
     let lastAnswer;
     let answerDate = 'Not Answered';
     let isAnswerPredicted = false;
-    if (!questionId) lastAnswer = answers.last();
-    else lastAnswer = answers.get('answers').last();
-
+    if(answers){
+      if (!questionId) lastAnswer = answers.last();
+      else lastAnswer = answers.get('answers').last();
+    }
     if (lastAnswer) {
-      answerDate = parseMomentDate(lastAnswer.get('date'));
-      if (lastAnswer.get('userName') === 'UnityPredictedAnswer') {
+       if(lastAnswer.get && lastAnswer.get('date') && lastAnswer.get('date').length){
+         answerDate = parseMomentDate(lastAnswer.get('date'));
+       } 
+      if (lastAnswer.get  && lastAnswer.get('userName') && lastAnswer.get('userName').length && lastAnswer.get('userName') && lastAnswer.get('userName') === 'UnityPredictedAnswer') {
         isAnswerPredicted = true;
         answerDate = 'Not Answered';
       }
@@ -503,7 +490,7 @@ export class TaskRow extends Component<Props, State> {
           {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
           <p>
             {questionText}
-            {isCustomQuestion && (
+            {isCustomQuestion && selectedBid.get('isCurrent') && (
               <span
                 onClick={() => {
                   setEditQuestionData({
@@ -520,11 +507,7 @@ export class TaskRow extends Component<Props, State> {
               </span>
             )}
             {questionHint.trim().length > 0 ? (
-              <Tooltip
-                variant="light"
-                title={questionHint}
-                placement="top"
-              >
+              <Tooltip variant="light" title={questionHint} placement="top">
                 <IconButton
                   color="primary"
                   style={{ margin: 0 }}
@@ -561,29 +544,46 @@ export class TaskRow extends Component<Props, State> {
             paddingLeft: '16px'
           }}
         >
-          <button style={{ width: '100px', textAlign: 'left', flexShrink: 0 }} type="button" onClick={this.displayAnswerOnHistory}>
+          <button
+            style={{ width: '100px', textAlign: 'left', flexShrink: 0 }}
+            type="button"
+            onClick={this.displayAnswerOnHistory}
+          >
             {answerDate}
           </button>
-          {(isAnswerPredicted && !loading)? (
-            <Tooltip variant="light" title="Unity Predicted Answer" placement="top">
-            <IconButton>
-              <StatusCheck
-                fontSize={'22px'}
-                style={{ color: '#D9D9D9' }}
-                onClick={() =>
-                  this.handleVerifyPredictedAnsClick(lastAnswer)
-                }
-              />
-            </IconButton>
+          {isAnswerPredicted && !loading ? (
+            <Tooltip
+              variant="light"
+              title="Unity Predicted Answer"
+              placement="top"
+            >
+              <IconButton>
+                <StatusCheck
+                  fontSize={'22px'}
+                  style={{ color: '#D9D9D9' }}
+                  onClick={() => this.handleVerifyPredictedAnsClick(lastAnswer)}
+                />
+              </IconButton>
             </Tooltip>
           ) : null}
-          {(this.isAnswered(lastAnswer, isAnswerPredicted) && !loading) ? (
-            <div style={{ display: 'flex', flexShrink: 0, width: '40px', height: '24px', justifyContent: 'center', alignItems: 'center' }}>
+          {this.isAnswered(lastAnswer, isAnswerPredicted) && !loading ? (
+            <div
+              style={{
+                display: 'flex',
+                flexShrink: 0,
+                width: '40px',
+                height: '24px',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
               <Checkmark className="answered" style={{ marginLeft: '6px' }} />
             </div>
           ) : null}
           {loading ? (
-            <span style={{ marginLeft: '6px', position: 'relative', top: '15px' }}>
+            <span
+              style={{ marginLeft: '6px', position: 'relative', top: '15px' }}
+            >
               <Loader
                 isInner
                 size={20}
@@ -602,7 +602,8 @@ export class TaskRow extends Component<Props, State> {
 
 const mapStateToProps = (state: Object) => ({
   userData: getUserData(state),
-  proposalDetail: getProposalDetails(state)
+  proposalDetail: getProposalDetails(state),
+  selectedBid: getSelectedBid(state)
 });
 
 export default connect(mapStateToProps, {

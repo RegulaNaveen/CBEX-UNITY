@@ -14,10 +14,13 @@ import {
   getProposlBoxId,
   getValidatedProposalData,
   editProposalQuestionData,
-  deleteProposalQuestionData
+  deleteProposalQuestionData,
+  getOpportunityInfo
 } from '../../api/proposal';
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getUniqueMilestones } from '../selectors/proposal';
+import { getProposalIdlist } from '../../utils/utils';
+import { fetchNotes } from './notepad-actions';
 
 const {
   PROPOSAL_INFO,
@@ -52,7 +55,10 @@ const {
   EXPAND_ALL_SECTIONS,
   SET_EDIT_QUESTION_DATA,
   PROPOSAL_EDIT_QUESTION,
-  PROPOSAL_DELETE_QUESTION
+  PROPOSAL_DELETE_QUESTION,
+  OPPORTUNITY_INFO,
+  UPDATE_BOX_BIDS,
+  CHANGE_BID
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -66,8 +72,23 @@ export const getProposal = (id: string): ThunkAction<string, Object> => {
       // Extracting unique milestone values from Proposal Questions
       const milestones = getUniqueMilestones(data.proposalQuestions);
       dispatch({ type: PROPOSAL_INFO, payload: { ...data, milestones } });
+
+      return data;
     } catch (err) {
       dispatch({ type: PROPOSAL_INFO_ERROR, payload: err });
+    }
+  };
+};
+
+export const getProposalByID = (id: string): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({ type: PROPOSAL_INFO_LOADING, payload: {} });
+    try {
+      const data = await getProposalInfo(id);
+      return data;
+    } catch (err) {
+      dispatch({ type: PROPOSAL_INFO_ERROR, payload: err });
+      throw err;
     }
   };
 };
@@ -79,9 +100,12 @@ export const setProposalAnswerData = (
   userData: Object
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
-    dispatch({ type: PROPOSAL_ANSWER_LOADING, payload: { questionId, loading: true } });
+    dispatch({
+      type: PROPOSAL_ANSWER_LOADING,
+      payload: { questionId, loading: true }
+    });
     let questionsFilter = getQuestionsFilters(getState());
-  
+
     try {
       const { data } = await setProposalAnswer(
         proposalId,
@@ -117,9 +141,12 @@ export const setProposalAnswerData = (
         });
       }
       dispatch(onQuestionsFilterApplied(questionsFilter));
-      dispatch({ type: PROPOSAL_ANSWER_LOADING, payload: { questionId, loading: false } });
+      dispatch({
+        type: PROPOSAL_ANSWER_LOADING,
+        payload: { questionId, loading: false }
+      });
     } catch (err) {
-      dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err }});
+      dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err } });
     }
   };
 };
@@ -279,10 +306,15 @@ function applyUnAnsweredFilter(questions) {
   let filteredQuestions = cloneDeep(questions);
   if (role) {
     filteredQuestions = fromJS(filteredQuestions)
-      .filter(val=>{
+      .filter(val => {
         let Answer = val.get('answers', []);
         Answer = Answer.toJS();
-        return Answer && Answer.length && !Boolean(String(Answer[Answer.length-1].answer).trim().length) || !Boolean(Answer.length)
+        return (
+          (Answer &&
+            Answer.length &&
+            !Boolean(String(Answer[Answer.length - 1].answer).trim().length)) ||
+          !Boolean(Answer.length)
+        );
       })
       .toJS();
   }
@@ -294,10 +326,14 @@ function applyAnsweredFilter(questions) {
   let filteredQuestions = cloneDeep(questions);
   if (role) {
     filteredQuestions = fromJS(filteredQuestions)
-      .filter(question=>{
+      .filter(question => {
         let Answer = question.get('answers', []);
         Answer = Answer.toJS();
-        return Answer && Answer.length && String(Answer[Answer.length-1].answer).trim().length > 0
+        return (
+          Answer &&
+          Answer.length &&
+          String(Answer[Answer.length - 1].answer).trim().length > 0
+        );
       })
       .toJS();
   }
@@ -331,14 +367,22 @@ function applyMilestoneFilter(questions, milestone) {
   return filteredQuestions;
 }
 
-function filterGroup(filteredQuestions, allQuestions, logic, filterCallback, filterName=''){
-  if(logic === 'AND'){
-    return uniqBy( filterCallback(allQuestions),'questionId');
-  }else{
-    return uniqBy([...filteredQuestions, ...filterCallback(allQuestions, filterName)],'questionId');
+function filterGroup(
+  filteredQuestions,
+  allQuestions,
+  logic,
+  filterCallback,
+  filterName = ''
+) {
+  if (logic === 'AND') {
+    return uniqBy(filterCallback(allQuestions), 'questionId');
+  } else {
+    return uniqBy(
+      [...filteredQuestions, ...filterCallback(allQuestions, filterName)],
+      'questionId'
+    );
   }
 }
-
 
 export function onQuestionsFilterApplied(questionsFilter) {
   return async (dispatch, getState) => {
@@ -351,45 +395,67 @@ export function onQuestionsFilterApplied(questionsFilter) {
     let filteredQuestions = cloneDeep(selectProposalQuestions(state));
 
     questionsFilter.entrySeq().forEach(([groupName, group]) => {
-
       let withinGroupFilteredQuestions = [];
       // Set the logic for current filter Group
       let logic = group.get('logic');
       let considerGroup = false;
 
-      group.entrySeq().forEach(([filterName, filter])=>{
-        
+      group.entrySeq().forEach(([filterName, filter]) => {
         // Do not process for logic key or the filter is not checked
-        if(filterName === 'logic' || !filter.get('checked'))
-          return;
+        if (filterName === 'logic' || !filter.get('checked')) return;
 
         considerGroup = true;
 
         switch (filterName) {
           case 'myUserRole':
-            withinGroupFilteredQuestions = filterGroup(withinGroupFilteredQuestions, filteredQuestions, logic, applyMyUserRoleFilter)
+            withinGroupFilteredQuestions = filterGroup(
+              withinGroupFilteredQuestions,
+              filteredQuestions,
+              logic,
+              applyMyUserRoleFilter
+            );
             break;
           case 'answered':
-            withinGroupFilteredQuestions = filterGroup(withinGroupFilteredQuestions, filteredQuestions, logic, applyAnsweredFilter)
+            withinGroupFilteredQuestions = filterGroup(
+              withinGroupFilteredQuestions,
+              filteredQuestions,
+              logic,
+              applyAnsweredFilter
+            );
             break;
           case 'unanswered':
-            withinGroupFilteredQuestions = filterGroup(withinGroupFilteredQuestions, filteredQuestions, logic, applyUnAnsweredFilter)
+            withinGroupFilteredQuestions = filterGroup(
+              withinGroupFilteredQuestions,
+              filteredQuestions,
+              logic,
+              applyUnAnsweredFilter
+            );
             break;
           case 'interestedParty':
-            withinGroupFilteredQuestions = filterGroup(withinGroupFilteredQuestions, filteredQuestions, logic, applyInterestedPartyFilter)
+            withinGroupFilteredQuestions = filterGroup(
+              withinGroupFilteredQuestions,
+              filteredQuestions,
+              logic,
+              applyInterestedPartyFilter
+            );
             break;
           default:
-            withinGroupFilteredQuestions = filterGroup(withinGroupFilteredQuestions, filteredQuestions, logic, applyMilestoneFilter, filterName)
+            withinGroupFilteredQuestions = filterGroup(
+              withinGroupFilteredQuestions,
+              filteredQuestions,
+              logic,
+              applyMilestoneFilter,
+              filterName
+            );
             break;
         }
-       });
-      
-       if(considerGroup)
-          filteredQuestions = withinGroupFilteredQuestions
-  
-       considerGroup = false;
       });
-      
+
+      if (considerGroup) filteredQuestions = withinGroupFilteredQuestions;
+
+      considerGroup = false;
+    });
+
     dispatch({
       type: ON_QUESTIONS_FILTERED,
       payload: { filteredQuestions }
@@ -397,12 +463,19 @@ export function onQuestionsFilterApplied(questionsFilter) {
   };
 }
 
-export function onApplyQuestionsFilter(filterName = null, checked = false, groupName) {
+export function onApplyQuestionsFilter(
+  filterName = null,
+  checked = false,
+  groupName
+) {
   return async (dispatch, getState) => {
     const state = getState();
     let questionsFilter = getQuestionsFilters(state);
     if (filterName && groupName) {
-      questionsFilter = questionsFilter.setIn([groupName, filterName, 'checked'], checked);
+      questionsFilter = questionsFilter.setIn(
+        [groupName, filterName, 'checked'],
+        checked
+      );
     }
     dispatch(onQuestionsFilterApplied(questionsFilter));
   };
@@ -417,14 +490,13 @@ export function resetQuestionsFilterAction() {
 export function clearQuestionsFilterAction() {
   return async (dispatch, getState) => {
     let questionsFilter = getQuestionsFilters(getState());
-    questionsFilter = questionsFilter.map(group =>{
-        return group.map(filter=>{
-          if(typeof filter === 'string')
-           return filter;
+    questionsFilter = questionsFilter.map(group => {
+      return group.map(filter => {
+        if (typeof filter === 'string') return filter;
 
-          return filter.set('checked', false)
-        })
+        return filter.set('checked', false);
       });
+    });
     dispatch({ type: CLEAR_QUESTIONS_FILTER, payload: { questionsFilter } });
   };
 }
@@ -480,5 +552,40 @@ export const deleteProposalQuestion = (
     } catch (err) {
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
     }
+  };
+};
+
+export const getOpportunity = (id: string): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({ type: PROPOSAL_INFO_LOADING, payload: {} });
+
+    try {
+      const data = await getOpportunityInfo(id);
+      // fetch notes for current bid
+      for (let proposal of data) {
+        if (proposal.isCurrent) {
+          dispatch(fetchNotes(proposal.proposal.proposalId));
+          break;
+        }
+      }
+
+      dispatch({ type: OPPORTUNITY_INFO, payload: data });
+      dispatch({
+        type: UPDATE_BOX_BIDS,
+        payload: getProposalIdlist(data)
+      });
+    } catch (err) {
+      dispatch({ type: PROPOSAL_INFO_ERROR, payload: err });
+    }
+  };
+};
+
+export const changeBid = bid => {
+  return dispatch => {
+    dispatch({
+      type: CHANGE_BID,
+      payload: bid
+    });
+    dispatch(fetchNotes(bid.bidId));
   };
 };

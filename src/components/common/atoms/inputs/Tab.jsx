@@ -1,9 +1,9 @@
 import React from 'react';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
-import Questions from '../../../screens/Proposal/Questions';
-import Documents from '../../../screens/Proposal/Documents';
-import Validate from '../../../screens/Proposal/Validate';
+import Questions from '../../../screens/Opportunity/Questions';
+import Documents from '../../../screens/Opportunity/Documents';
+import Validate from '../../../screens/Opportunity/Validate';
 
 const UnityTab = ({id, enableValidateTab}) => {
     const [value, setValue] = React.useState(0);
@@ -15,7 +15,7 @@ const UnityTab = ({id, enableValidateTab}) => {
         if(v){
             return(
                 <>
-                    <Tabs value={value} onChange={handleChangeTab} truncate>
+                    <Tabs value={value} onChange={handleChangeTab} truncate className="_question-tab">
                         <Tab label="Questions" />
                         <Tab label="Documents" />
                         <Tab label="Validate" />
@@ -30,7 +30,7 @@ const UnityTab = ({id, enableValidateTab}) => {
         }else{
             return(
                 <>
-                    <Tabs value={value} onChange={handleChangeTab} truncate>
+                    <Tabs value={value} onChange={handleChangeTab} truncate className="_question-tab">
                         <Tab label="Questions" />
                         <Tab label="Documents" />
                     </Tabs>

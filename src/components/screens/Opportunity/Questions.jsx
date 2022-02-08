@@ -14,6 +14,7 @@ import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import { Add, Refresh } from '../../svg';
 import CollapsibleList from '../../common/CollapsibleList';
+import BidHistory from '../../common/Bidhistory';
 import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
 import {
   getProposalUpdated,
@@ -34,7 +35,8 @@ import {
   selectActiveQuestionsFilterCount,
   getMilestoneSections,
   getEditQuestionData,
-  getIsOpen
+  getIsOpen,
+  getSelectedBid
 } from '../../../redux/selectors';
 import {
   selectUniqueMilestones,
@@ -61,7 +63,7 @@ type Props = {
   isQuestionLoading: boolean,
   getProposalInfoUpdated: Function,
   fetchUsers: () => {},
-  proposalID: string,
+  selectedBid: Map,
   eventCategories: any,
   userActions: any,
   trackEvent: any,
@@ -147,7 +149,7 @@ class Questions extends Component<Props, State> {
     }));
   }
 
-  handleFilterChange(filterName, checked, groupName='') {
+  handleFilterChange(filterName, checked, groupName = '') {
     const { applyQuestionsFilter } = this.props;
     applyQuestionsFilter(filterName, checked, groupName);
   }
@@ -321,49 +323,57 @@ class Questions extends Component<Props, State> {
   };
 
   renderQuestions() {
-   try {
-    const {
-      sections,
-      filteredSections,
-      isQuestionsFiltersEnabled,
-      filterMilestone,
-      allSectionsExpanded
-    } = this.props;
-    const { sidebarscroll } = this.state;
+    try {
+      const {
+        sections,
+        filteredSections,
+        isQuestionsFiltersEnabled,
+        filterMilestone,
+        allSectionsExpanded
+      } = this.props;
+      const { sidebarscroll } = this.state;
 
-    const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
-    return allSections.valueSeq().map(section => {
-      const sectionName = section.get('sectionName');
-      const questions = section.get('questions');
-      const someQuestionsAreVisible = questions
-        .valueSeq()
-        .map(question => question.get('visible', true))
-        .includes(true);
+      const allSections = isQuestionsFiltersEnabled
+        ? filteredSections
+        : sections;
+      return allSections.valueSeq().map(section => {
+        const sectionName = section.get('sectionName');
+        const questions = section.get('questions');
+        const someQuestionsAreVisible = questions
+          .valueSeq()
+          .map(question => question.get('visible', true))
+          .includes(true);
 
-      if (someQuestionsAreVisible)
-        return (
-          <CollapsibleList
-            questions={questions}
-            title={sectionName}
-            milestone={filterMilestone}
-            key={sectionName}
-            setTabFromQuestionNotes={(val, title, flag) =>
-              this.setTabFromQuestionNotes(val, title, flag)
-            }
-            onAddQuestion={value => {
-              this.setState({ currentsection: value });
-              this.onClose();
-            }}
-            isCheckedAll={sidebarscroll && sidebarscroll.length &&  sidebarscroll == sectionName ? true : allSectionsExpanded}
-            setQuestionToDisplayHistory={this.setQuestionToDisplayHistory}
-          />
-        );
+        if (someQuestionsAreVisible)
+          return (
+            <CollapsibleList
+              questions={questions}
+              title={sectionName}
+              milestone={filterMilestone}
+              key={sectionName}
+              setTabFromQuestionNotes={(val, title, flag) =>
+                this.setTabFromQuestionNotes(val, title, flag)
+              }
+              onAddQuestion={value => {
+                this.setState({ currentsection: value });
+                this.onClose();
+              }}
+              isCheckedAll={
+                sidebarscroll &&
+                sidebarscroll.length &&
+                sidebarscroll == sectionName
+                  ? true
+                  : allSectionsExpanded
+              }
+              setQuestionToDisplayHistory={this.setQuestionToDisplayHistory}
+            />
+          );
 
-      return null;
-    }); 
-   } catch (error) {
-     console.log(error);
-   }
+        return null;
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   renderFilter() {
@@ -371,22 +381,27 @@ class Questions extends Component<Props, State> {
     const { questionsFilters, clearQuestionsFilter } = this.props;
     if (showFilter) {
       return (
-        <div className="questions-filter__container" >
+        <div className="questions-filter__container">
           <div className="questions-filter__grid column_style">
             <div className="filtertitle">Filters</div>
-            <div> 
+            <div>
               <Link
-              className="clear-all"
-              size="small"
-              onClick={() => clearQuestionsFilter()}
+                className="clear-all"
+                size="small"
+                onClick={() => clearQuestionsFilter()}
               >
-              Clear All
+                Clear All
               </Link>
             </div>
             {questionsFilters.entrySeq().map(([groupName, group]) => (
-               <Grid container spacing={2} className={groupName}>
-                  {group.entrySeq().filter(value=>value[0] != 'logic').map(([key, filter]) => (
-                    <Grid item xs={3}
+              <Grid container spacing={2} className={groupName}>
+                {group
+                  .entrySeq()
+                  .filter(value => value[0] != 'logic')
+                  .map(([key, filter]) => (
+                    <Grid
+                      item
+                      xs={3}
                       key={uuidv4()}
                       className={classNames(
                         'questions-filter__item',
@@ -404,27 +419,27 @@ class Questions extends Component<Props, State> {
                       />
                     </Grid>
                   ))}
-                </Grid>
-              ))}
+              </Grid>
+            ))}
           </div>
         </div>
       );
     }
     return null;
   }
-  
-  expandsection = (e) => {
+
+  expandsection = e => {
     const { expandAllSections } = this.props;
     expandAllSections(false);
-    this.setState({sidebarscroll :  e})
-  }
+    this.setState({ sidebarscroll: e });
+  };
 
   render() {
     const {
       details,
       sections,
       filteredSections,
-      proposalID,
+      selectedBid,
       isQuestionsFiltersEnabled,
       activeQuestionsFilterCount,
       allSectionsExpanded,
@@ -443,26 +458,27 @@ class Questions extends Component<Props, State> {
 
     return (
       <>
-            <Sidebar
-              sections={allSections}
-              id={proposalID}
-              onAddQuestion={value => {
-                this.setState({ currentsection: value });
-              }}
-              onscrollelement = {(e)=> this.expandsection(e)}
-              expandAll={this.handleIsCheckedAll}
-              AddNewQuestion={this.onClose}
-              RefreshProposal={this.getProposalInfoUpdated}
-              // eslint-disable-next-line react/destructuring-assignment
-              currentTab={this.state.currentTab}
-              // eslint-disable-next-line react/destructuring-assignment
-              selectedtitle={this.state.selectedtitle}
-              // eslint-disable-next-line react/destructuring-assignment
-              heighlightcard={this.state.heighlightcard}
-              setTabFromQuestionNotes={(val, title, flag) =>
-                this.setTabFromQuestionNotes(val, title, flag)
-              }
-            />
+        <BidHistory />
+        <Sidebar
+          sections={allSections}
+          id={selectedBid.get('id')}
+          onAddQuestion={value => {
+            this.setState({ currentsection: value });
+          }}
+          onscrollelement={e => this.expandsection(e)}
+          expandAll={this.handleIsCheckedAll}
+          AddNewQuestion={this.onClose}
+          RefreshProposal={this.getProposalInfoUpdated}
+          // eslint-disable-next-line react/destructuring-assignment
+          currentTab={this.state.currentTab}
+          // eslint-disable-next-line react/destructuring-assignment
+          selectedtitle={this.state.selectedtitle}
+          // eslint-disable-next-line react/destructuring-assignment
+          heighlightcard={this.state.heighlightcard}
+          setTabFromQuestionNotes={(val, title, flag) =>
+            this.setTabFromQuestionNotes(val, title, flag)
+          }
+        />
 
         <div className="tasksList-title-wrapper">
           <div className="taskList-icons-wrapper">
@@ -470,9 +486,9 @@ class Questions extends Component<Props, State> {
               label="Expand All"
               checked={allSectionsExpanded}
               onChange={(e, checked) => {
-                this.setState({sidebarscroll: ''},()=>{
-                  this.handleIsCheckedAll(checked)
-                })
+                this.setState({ sidebarscroll: '' }, () => {
+                  this.handleIsCheckedAll(checked);
+                });
               }}
             />
             <div
@@ -483,17 +499,19 @@ class Questions extends Component<Props, State> {
             >
               <Refresh className="tasksList-add-icon" />
             </div>
-            <div
-              title="Add New Question"
-              className="tasksList-add-icon-wrapper"
-              role="presentation"
-              onClick={() => {
-                this.setState({ currentsection: '' });
-                this.onClose();
-              }}
-            >
-              <Add className="tasksList-add-icon" />
-            </div>
+            {selectedBid.get('isCurrent') && (
+              <div
+                title="Add New Question"
+                className="tasksList-add-icon-wrapper"
+                role="presentation"
+                onClick={() => {
+                  this.setState({ currentsection: '' });
+                  this.onClose();
+                }}
+              >
+                <Add className="tasksList-add-icon" />
+              </div>
+            )}
             <Button
               variant="secondary"
               size="small"
@@ -546,7 +564,8 @@ const mapStateToProps = (state: Map) => ({
   milestones: selectUniqueMilestones(state),
   userRole: selectUserRole(state),
   allSectionsExpanded: selectAreAllSectionsExpanded(state),
-  editQuestionsData: getEditQuestionData(state)
+  editQuestionsData: getEditQuestionData(state),
+  selectedBid: getSelectedBid(state)
 });
 
 export default compose(

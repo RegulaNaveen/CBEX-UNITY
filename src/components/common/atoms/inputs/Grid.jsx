@@ -26,33 +26,33 @@ const loadSidebar = (props) => {
         return (
             <Grid container >
                 <Grid container xs={12}>
-                    <Paper style={styles} className="duedatedsg open">
-                        <Typography variant="body2" className="greytext">Protocol Name</Typography>
-                        <Typography variant="body2" className="boldtext">{crm || placeholder}</Typography>
+                    <Paper style={styles} className="sidebarduedatedsg open">
+                        <Typography variant="body2" className="greytext sidebaropenfont">Protocol Name</Typography>
+                        <Typography variant="body2" className="boldtext sidebaropenfont">{crm || placeholder}</Typography>
                     </Paper>
-                    <Paper style={styles} className="duedatedsg open">
-                        <Typography variant="body2" className="greytext">Account</Typography>
-                        <Typography variant="body2" className="boldtext">{Customer || placeholder}</Typography>
+                    <Paper style={styles} className="sidebarduedatedsg open">
+                        <Typography variant="body2" className="greytext sidebaropenfont">Account</Typography>
+                        <Typography variant="body2" className="boldtext sidebaropenfont">{Customer || placeholder}</Typography>
                     </Paper>
                     <Paper style={styles} className="open">
-                        <Typography variant="body2" className="greytext">Phase</Typography>
-                        <Typography variant="body2" className="boldtext">{phase ? phase.split(' ')[1] : placeholder}</Typography>
+                        <Typography variant="body2" className="greytext sidebaropenfont">Phase</Typography>
+                        <Typography variant="body2" className="boldtext sidebaropenfont">{phase ? phase.split(' ')[1] : placeholder}</Typography>
                     </Paper>
-                    <Paper style={styles} className="duedatedsg open">
-                        <Typography variant="body2" className="greytext">Therapeutic Area</Typography>
-                        <Typography variant="body2" className="boldtext">{therapeuticArea || placeholder}</Typography>
+                    <Paper style={styles} className="sidebarduedatedsg open">
+                        <Typography variant="body2" className="greytext sidebaropenfont">Therapeutic Area</Typography>
+                        <Typography variant="body2" className="boldtext sidebaropenfont">{therapeuticArea || placeholder}</Typography>
                     </Paper>
-                    <Paper style={styles} className="duedatedsg open">
-                        <Typography variant="body2" className="greytext">Product Name</Typography>
-                        <Typography variant="body2" className="boldtext">{productName || placeholder}</Typography>
+                    <Paper style={styles} className="sidebarduedatedsg open">
+                        <Typography variant="body2" className="greytext sidebaropenfont">Product Name</Typography>
+                        <Typography variant="body2" className="boldtext sidebaropenfont">{productName || placeholder}</Typography>
                     </Paper>
-                    <Paper style={styles} className="duedatedsg open">
-                        <Typography variant="body2" className="greytext">Due Date</Typography>
-                        <Typography variant="body2" className="boldtext">{date || placeholder}</Typography>
+                    <Paper style={styles} className="sidebarduedatedsg open">
+                        <Typography variant="body2" className="greytext sidebaropenfont">Due Date</Typography>
+                        <Typography variant="body2" className="boldtext sidebaropenfont">{date || placeholder}</Typography>
                     </Paper>
-                    <Paper className="duedatedsg open" style={styles}>
-                        <Typography variant="body2" className="greytext lesslineheight">Days until Due</Typography>
-                        <p className="boldtext greencolor lesslineheight" >{daysRemain || placeholder}</p>
+                    <Paper className="sidebarduedatedsg open" style={styles}>
+                        <Typography variant="body2" className="greytext lesslineheight sidebaropenfont">Days until Due</Typography>
+                        <p className="boldtext greencolorsidebaropenfont lesslineheight" >{daysRemain || placeholder}</p>
                     </Paper>
                 </Grid>
                 
@@ -75,7 +75,7 @@ const loadSidebar = (props) => {
                         </Paper>
                     </Grid>
                     <Grid item xs={2}>
-                        <Paper style={styles} >
+                        <Paper style={styles} className="phasedsg">
                             <Typography variant="body2" className="greytext">Phase</Typography>
                             <Typography variant="body2" className="boldtext">{phase ? phase.split(' ')[1] : placeholder}</Typography>
                         </Paper>
