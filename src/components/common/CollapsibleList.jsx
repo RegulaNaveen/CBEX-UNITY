@@ -3,21 +3,23 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import type { Map } from 'immutable';
 import Link from 'apollo-react/components/Link';
-import Grid from 'apollo-react/components/Grid';
 import Plus from 'apollo-react-icons/Plus';
-import Box from 'apollo-react/components/Box';
 import FolderOpen from 'apollo-react-icons/FolderOpen';
 import {
   getSelectedSection,
   selectNotes,
-  getProposalDetails
+  getProposalDetails,
+  getSelectedBid
 } from '../../redux/selectors';
 import chevronRight from '../../../img/chevron-right.svg';
 import chevronDown from '../../../img/chevron-down.svg';
 import Question from './Question';
 import MatomoHOC from '../HOC/MatomoHOC';
 
-import { onHandleOpenClose, handleSelectedSection } from '../../redux/actions/sidebar-actions';
+import {
+  onHandleOpenClose,
+  handleSelectedSection
+} from '../../redux/actions/sidebar-actions';
 
 type State = {
   isCollapsed: boolean
@@ -30,7 +32,7 @@ type Props = {
   isCheckedAll: boolean,
   setQuestionToDisplayHistory: (answer: string) => void,
   handleOpenClose: () => void,
-  changeSelectedSection:() => void,
+  changeSelectedSection: () => void,
   notes: Map,
   setTabFromQuestionNotes: (
     tabIndex: number,
@@ -42,7 +44,8 @@ type Props = {
   userActions: any,
   trackEvent: any,
   proposalDetail: any,
-  ismilestoneavailable?: any
+  ismilestoneavailable?: any,
+  selectedBid: Map
 };
 
 class CollapsibleList extends Component<Props, State> {
@@ -60,7 +63,7 @@ class CollapsibleList extends Component<Props, State> {
 
   componentDidMount() {
     const { isCheckedAll } = this.props;
-    setTimeout(() => this.setState({ isCollapsed: !!isCheckedAll }),0);
+    setTimeout(() => this.setState({ isCollapsed: !!isCheckedAll }), 0);
   }
 
   componentDidUpdate(prevProps) {
@@ -69,7 +72,10 @@ class CollapsibleList extends Component<Props, State> {
 
     if (prevProps.selectedSection !== selectedSection)
       // eslint-disable-next-line react/no-did-update-set-state
-      setTimeout(() => this.setState({ isCollapsed: id === selectedSection }),0);
+      setTimeout(
+        () => this.setState({ isCollapsed: id === selectedSection }),
+        0
+      );
 
     if (prevProps.isCheckedAll !== isCheckedAll)
       // eslint-disable-next-line react/no-did-update-set-state
@@ -80,9 +86,12 @@ class CollapsibleList extends Component<Props, State> {
     const { isCollapsed } = this.state;
     this.setState({ isCollapsed: !isCollapsed });
     this.trackMatomoEventBladeToggle(!isCollapsed);
-    const titleId = this.props.title.toLocaleLowerCase().split(' ').join('-');
-    if(titleId === this.props.selectedSection){
-      this.props.changeSelectedSection(null)
+    const titleId = this.props.title
+      .toLocaleLowerCase()
+      .split(' ')
+      .join('-');
+    if (titleId === this.props.selectedSection) {
+      this.props.changeSelectedSection(null);
     }
   };
 
@@ -170,7 +179,8 @@ class CollapsibleList extends Component<Props, State> {
       questions,
       title,
       milestone,
-      setQuestionToDisplayHistory
+      setQuestionToDisplayHistory,
+      selectedBid
     } = this.props;
     return (
       <div className="task-wrapper" ref={this.taskRef} id={this.createId()}>
@@ -260,16 +270,21 @@ class CollapsibleList extends Component<Props, State> {
                 )
               );
             })}
-            <div className="add-question">
-              <Link
-                style={{ borderBottom: 'none' }}
-                onClick={() => onAddQuestion(title)}
-                size="small"
-              >
-                <Plus fontSize="extraSmall" />
-                <span style={{ verticalAlign: 'top' }}> Add New Question</span>
-              </Link>
-            </div>
+            {selectedBid.get('isCurrent') && (
+              <div className="add-question">
+                <Link
+                  style={{ borderBottom: 'none' }}
+                  onClick={() => onAddQuestion(title)}
+                  size="small"
+                >
+                  <Plus fontSize="extraSmall" />
+                  <span style={{ verticalAlign: 'top' }}>
+                    {' '}
+                    Add New Question
+                  </span>
+                </Link>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -281,7 +296,12 @@ const mapStateToProps = (state: Map) => {
   const selectedSection = getSelectedSection(state);
   const notes = selectNotes(state);
   const proposalDetail = getProposalDetails(state);
-  return { selectedSection, notes, proposalDetail };
+  return {
+    selectedSection,
+    notes,
+    proposalDetail,
+    selectedBid: getSelectedBid(state)
+  };
 };
 
 const mapDispatchToProps = {
@@ -289,4 +309,7 @@ const mapDispatchToProps = {
   changeSelectedSection: handleSelectedSection
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MatomoHOC(CollapsibleList));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MatomoHOC(CollapsibleList));

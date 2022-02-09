@@ -163,6 +163,17 @@ function handleLocationChange (event){
       event.preventDefault();
   }
 };
+function getProposalIdlist(data=[]){
+    const sortedData = data.sort((a,b)=>b.proposal.proposalDate - a.proposal.proposalDate);
+    return sortedData.map((d)=>{
+      return {
+        proposalId: d.proposal.proposalId,
+        boxId: d.proposal.proposalDetails.boxId,
+        bidNo: d.proposal.proposalDetails['bidNo'] || ''
+      }
+    }); 
+}
+
 export {
   getCountriesNameForCode,
   getCountryOptions,
@@ -171,5 +182,6 @@ export {
   rearrangeDiff,
   getUserInitials,
   getUserName,
-  handleLocationChange
+  handleLocationChange,
+  getProposalIdlist
 };

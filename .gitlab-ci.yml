@@ -61,10 +61,7 @@ sonar:
     paths:
       - .sonar/cache
   script:
-    #- export SONAR_SCANNER_OPTS="-Djavax.net.ssl.trustStore=cacerts/sonarca.jks -Djavax.net.ssl.trustStorePassword=changeit"
-    #- sonar-scanner
     - apk upgrade --update-cache --available && apk add openssl && rm -rf /var/cache/apk/*
-    - openssl s_client -connect  sonarqube:443 | keytool -import -noprompt -alias sonarqbue_test -keystore $JAVA_HOME/lib/security/cacerts -storepass changeit
     - sonar-scanner -X -Dsonar.branch.name=$CI_COMMIT_REF_NAME -Dsonar.projectKey=$CI_PROJECT_NAME
 
 build:

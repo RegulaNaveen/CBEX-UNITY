@@ -13,7 +13,8 @@ type Props = {
   value?: string,
   onBlur?: Function,
   onChange?: Function,
-  error?: mixed
+  error?: mixed,
+  disabled?: boolean
 };
 
 type State = {
@@ -33,7 +34,8 @@ class TextArea extends PureComponent<Props, State> {
     value: undefined,
     onBlur: undefined,
     onChange: undefined,
-    error: undefined
+    error: undefined,
+    disabled: false
   };
 
   constructor(props: Object) {
@@ -52,12 +54,13 @@ class TextArea extends PureComponent<Props, State> {
   }
   updateValueFromProps() {
     const { value } = this.props;
-    if (!_.isEmpty(value)) this.setState({ textValue: value });
+    // if (!_.isEmpty(value))
+    this.setState({ textValue: value });
   }
 
   componentDidUpdate(prevProps) {
     const { textValue: value } = this.state;
-    if(prevProps.value != this.props.value) this.updateValueFromProps();
+    if (prevProps.value != this.props.value) this.updateValueFromProps();
 
     if (
       this.textAreaInput.current !== null &&
@@ -117,7 +120,15 @@ class TextArea extends PureComponent<Props, State> {
   };
 
   render() {
-    const { id, className, placeholder, title, type, error } = this.props;
+    const {
+      id,
+      className,
+      placeholder,
+      title,
+      type,
+      error,
+      disabled
+    } = this.props;
     const { textValue, numberError } = this.state;
     return (
       <>
@@ -136,6 +147,7 @@ class TextArea extends PureComponent<Props, State> {
               onBlur={this.handleOnBlur}
               onFocus={this.handleOnFocus}
               placeholder={placeholder}
+              disabled={disabled}
             />
             {numberError && (
               <p className="number-error-text">Please enter a valid number</p>
@@ -170,6 +182,7 @@ class TextArea extends PureComponent<Props, State> {
               placeholder={placeholder}
               required
               type={type}
+              disabled={disabled}
             />
             {error &&
               error.length > 0 &&
