@@ -7,13 +7,14 @@ import randomColor from 'randomcolor';
 import { isEmpty, unionBy } from 'lodash';
 import { diffWordsWithSpace } from 'diff';
 import { getProposalTeamAssignedRoles } from '../../../redux/selectors';
+import { getOpportunityData} from '../../../redux/selectors/proposal';
 import { Close } from '../../svg';
 import { parseMomentDate } from '../../../utils/DateUtils';
 import { rearrangeDiff, getUserInitials, getUserName } from '../../../utils/utils';
-
 type Props = {
   question: Map,
   proposalTeamAnswers: Object,
+  opportunityData: Object,
   closeModal: () => void
 };
 
@@ -71,6 +72,11 @@ class AnswerHistory extends Component<Props> {
       const userName = _answer.get('userName') || 'Default User';
       const date = _answer.get('date');
       let answer = _answer.get('answer');
+      let proposalId = _answer.get('proposalId');
+      const bidNo = proposalId
+        ? this.props.opportunityData.get(proposalId).toJS().proposal
+            .proposalDetails.bidNo
+        : '';
       const nextAnswer = answers.get(index + 1)
         ? answers.get(index + 1).get('answer')
         : answer;
@@ -205,7 +211,10 @@ class AnswerHistory extends Component<Props> {
               {renderAnswers()}
             </div>
           </div>
-          <p className="date">{parsedDate}</p>
+          <div className="answer-meta-data">
+            <p>{parsedDate}</p>
+            {bidNo? <p>Bid {bidNo}</p> : null}
+          </div>
         </div>
       );
     });
@@ -270,7 +279,8 @@ class AnswerHistory extends Component<Props> {
 }
 
 const mapStateToProps = (state: Map) => ({
-  proposalTeamAnswers: getProposalTeamAssignedRoles(state)
+  proposalTeamAnswers: getProposalTeamAssignedRoles(state),
+  opportunityData: getOpportunityData(state)
 });
 
 export default connect(mapStateToProps)(AnswerHistory);
