@@ -59,7 +59,7 @@ class AnswerHistory extends Component<Props> {
   };
 
   renderContent = () => {
-    const { question } = this.props;
+    const { question, opportunityData } = this.props;
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const sectionName = question.getIn(['section', 'sectionName']);
     let answers = question.get('answers').reverse();
@@ -73,10 +73,16 @@ class AnswerHistory extends Component<Props> {
       const date = _answer.get('date');
       let answer = _answer.get('answer');
       let proposalId = _answer.get('proposalId');
-      const bidNo = proposalId
-        ? this.props.opportunityData.get(proposalId).toJS().proposal
-            .proposalDetails.bidNo
-        : '';
+      let bidNo = '';
+      if (
+        proposalId &&
+        opportunityData.get(proposalId)?.toJS()?.proposal?.proposalDetails
+          ?.bidNo
+      ) {
+        bidNo = this.props.opportunityData.get(proposalId).toJS().proposal
+          .proposalDetails.bidNo;
+      }
+      
       const nextAnswer = answers.get(index + 1)
         ? answers.get(index + 1).get('answer')
         : answer;
