@@ -63,6 +63,15 @@
     cursor: pointer;
     padding: 8px;
     padding-right: 20px;
+
+    &.multiselect-error-disabled {
+      background-color: #f2f2f2;
+      cursor: not-allowed;
+
+      &:before {
+        border-color: #b5b5b5 transparent transparent transparent;
+      }
+    }
   }
 
   .multiselect-header {
@@ -75,6 +84,15 @@
     border: 1px solid $neutral4;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);
     cursor: pointer;
+
+    &.multiselect-disabled {
+      background-color: #f2f2f2;
+      cursor: not-allowed;
+
+      &:before {
+        border-color: #b5b5b5 transparent transparent transparent;
+      }
+    }
 
     .multiselect-header-placeholder {
       min-height: 24px;
