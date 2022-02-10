@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 ### Fixed
 
+
+  - IQVIACBEXU-1122: Expand all issue in Blade section
+  
 ## [3.4.1] - YYYY-MM-DD
 ### Fixed
   - IQVIACBEXU-1086: Answer history should display the message "Validated Unity predicted answer" msg is not displaying for multi select dropdowns in history window. 
