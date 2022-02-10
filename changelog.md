@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1147: Added BidNo to answer history
 ### Changed
 ### Fixed
+  - IQVIACBEXU-1120: Fixed Milestone alignment issue for questions with tool tip
 
 ## [3.4.1] - YYYY-MM-DD
 ### Fixed
