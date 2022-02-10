@@ -3,11 +3,12 @@
   grid-template-columns: 1.3fr 1.3fr 160px;
   // margin-bottom: 8px;
   padding: 8px 0;
-  align-items: start;
+  align-items: center;
 
   .question-text {
     display: grid;
     grid-template-columns: 0.1fr 1.9fr;
+    align-items: center;
 
     p {
       -ms-word-break: break-all;
