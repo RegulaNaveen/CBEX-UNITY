@@ -465,8 +465,12 @@ class Questions extends Component<Props, State> {
           onAddQuestion={value => {
             this.setState({ currentsection: value });
           }}
-          onscrollelement={e => this.expandsection(e)}
-          expandAll={this.handleIsCheckedAll}
+          onscrollelement = {(e)=> this.expandsection(e)}
+          expandAll={() => {
+            this.setState({sidebarscroll: ''},()=>{
+              this.handleIsCheckedAll()
+            })
+          }}
           AddNewQuestion={this.onClose}
           RefreshProposal={this.getProposalInfoUpdated}
           // eslint-disable-next-line react/destructuring-assignment
