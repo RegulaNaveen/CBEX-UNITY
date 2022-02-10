@@ -9,9 +9,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1081: Navigate between Bid Box folders
   - IQVIACBEXU-1080: Navigate from One Bid to the next
   - IQVIACBEXU-1087: Display Opportunity Cards instead of Bid Cards in Dashboard (My Docket, Recent, All)
+  - IQVIACBEXU-1147: Added BidNo to answer history
 ### Changed
 ### Fixed
+  - IQVIACBEXU-1120: Fixed Milestone alignment issue for questions with tool tip
 
+
+  - IQVIACBEXU-1122: Expand all issue in Blade section
+  
 ## [3.4.1] - YYYY-MM-DD
 ### Fixed
   - IQVIACBEXU-1086: Answer history should display the message "Validated Unity predicted answer" msg is not displaying for multi select dropdowns in history window. 
