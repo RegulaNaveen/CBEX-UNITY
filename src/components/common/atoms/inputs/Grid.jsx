@@ -21,7 +21,8 @@ const loadSidebar = (props) => {
     } = data;
     const placeholder = 'No data';
     const date = bidDueDate && parseMomentDate(bidDueDate);
-    const daysRemain = remainingDays(date);
+    const daysRemain = remainingDays(date)
+   
     if (isOpen) {
         return (
             <Grid container >
@@ -52,7 +53,7 @@ const loadSidebar = (props) => {
                     </Paper>
                     <Paper className="sidebarduedatedsg open" style={styles}>
                         <Typography variant="body2" className="greytext lesslineheight sidebaropenfont">Days until Due</Typography>
-                        <p className="boldtext greencolorsidebaropenfont lesslineheight" >{daysRemain || placeholder}</p>
+                        <p className="boldtext greencolorsidebaropenfont lesslineheight" >{daysRemain}</p>
                     </Paper>
                 </Grid>
                 
@@ -105,7 +106,7 @@ const loadSidebar = (props) => {
                     <Grid item xs={9}>
                         <Paper className="duedatedsg" style={styles}>
                             <Typography variant="body2" className="greytext lesslineheight">Days until Due</Typography>
-                            <p className="boldtext greencolor lesslineheight" >{daysRemain || placeholder}</p>
+                            <p className="boldtext greencolor lesslineheight" >{daysRemain}</p>
                         </Paper>
                     </Grid>
                 </Grid>
