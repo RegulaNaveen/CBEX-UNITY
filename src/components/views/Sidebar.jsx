@@ -31,6 +31,7 @@ import { changeMode } from '../../redux/actions/notepad-actions';
 import { REDUX_TYPES } from '../../constants';
 
 import MatomoHOC from '../HOC/MatomoHOC';
+import { selectAreAllSectionsExpanded } from '../../redux/selectors/proposal';
 
 type Props = {
   sections: Map,
@@ -72,6 +73,11 @@ class Sidebar extends Component<Props, State> {
 
   componentDidMount() {
     window.addEventListener('click', this.handleClick);
+    document.addEventListener('clearsidebarselectsection', e => {
+      if (e && e.detail) {
+        this.setState({ selectedSection: '' });
+      }
+    });
   }
 
   componentDidUpdate(prevProps) {
@@ -231,7 +237,8 @@ class Sidebar extends Component<Props, State> {
       selectedtitle,
       expandAll,
       AddNewQuestion,
-      RefreshProposal
+      RefreshProposal,
+      allSectionsExpanded
     } = this.props;
     const { selectedSection, activeTabIndex } = this.state;
 
@@ -306,7 +313,7 @@ class Sidebar extends Component<Props, State> {
                   onClick={e => {
                     this.trackMatomoEventIconClick('Expand All');
                     this.handleItemsVisibility(e);
-                    expandAll();
+                    expandAll(!allSectionsExpanded);
                   }}
                 />
               </Tooltip>
@@ -389,7 +396,8 @@ const mapStateToProps = (state: Object) => ({
   isOpen: getIsOpen(state),
   notes: selectNotes(state),
   proposalDetail: getProposalDetails(state),
-  storeSelectedSection: getSelectedSection(state)
+  storeSelectedSection: getSelectedSection(state),
+  allSectionsExpanded: selectAreAllSectionsExpanded(state)
 });
 
 export default connect(mapStateToProps, {
