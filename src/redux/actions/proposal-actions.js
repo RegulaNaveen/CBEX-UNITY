@@ -313,7 +313,10 @@ function applyUnAnsweredFilter(questions) {
           (Answer &&
             Answer.length &&
             !Boolean(String(Answer[Answer.length - 1].answer).trim().length)) ||
-          !Boolean(Answer.length)
+          !Boolean(Answer.length) ||
+          (Answer &&
+            Answer.length &&
+            Answer[Answer.length - 1].userName === 'UnityPredictedAnswer')
         );
       })
       .toJS();
