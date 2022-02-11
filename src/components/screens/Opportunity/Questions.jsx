@@ -550,6 +550,11 @@ class Questions extends Component<Props, State> {
       </>
     );
   }
+  componentWillUnmount(){
+    const { handleOpenClose} = this.props;
+    if(handleOpenClose)
+     handleOpenClose(false);
+  }
 }
 
 const mapStateToProps = (state: Map) => ({

@@ -28,6 +28,7 @@ import MatomoHOC from '../../HOC/MatomoHOC';
 import UnityFooter from '../../common/Footer';
 import UnityGrid from '../../common/atoms/inputs/Grid';
 import UnityTab from '../../common/atoms/inputs/Tab';
+import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
 
 type State = {
   selectedView: string
@@ -177,6 +178,12 @@ export class Opportunity extends Component<Props, State> {
     );
   };
 
+  componentWillUnmount(){
+    const { handleOpenClose} = this.props;
+    if(handleOpenClose)
+     handleOpenClose(false);
+  }
+
   render() {
     const { isSidebarOpen, proposalDetail } = this.props;
     const { questionTemplateVersionNumber } = proposalDetail;
@@ -211,6 +218,7 @@ export default compose(
   connect(mapStateToProps, {
     getRefreshAuthData: onRefreshUserData,
     getOpportunityInfo: getOpportunity,
-    getValidatedData: onGetValidatedProposalDetails
+    getValidatedData: onGetValidatedProposalDetails,
+    handleOpenClose: onHandleOpenClose,
   })
 )(MatomoHOC(Opportunity));
