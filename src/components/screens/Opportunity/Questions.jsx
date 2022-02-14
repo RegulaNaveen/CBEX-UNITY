@@ -466,10 +466,16 @@ class Questions extends Component<Props, State> {
             this.setState({ currentsection: value });
           }}
           onscrollelement = {(e)=> this.expandsection(e)}
-          expandAll={() => {
+          expandAll={(e) => {
             this.setState({sidebarscroll: ''},()=>{
               this.handleIsCheckedAll()
             })
+           if(!e){
+            const clearsidebarselectsection = new CustomEvent('clearsidebarselectsection', {
+              detail: true
+            });
+            document.dispatchEvent(clearsidebarselectsection);
+           }
           }}
           AddNewQuestion={this.onClose}
           RefreshProposal={this.getProposalInfoUpdated}
@@ -493,6 +499,12 @@ class Questions extends Component<Props, State> {
                 this.setState({ sidebarscroll: '' }, () => {
                   this.handleIsCheckedAll(checked);
                 });
+                if(!checked){
+                  const clearsidebarselectsection = new CustomEvent('clearsidebarselectsection', {
+                    detail: true
+                  });
+                  document.dispatchEvent(clearsidebarselectsection);
+                }
               }}
             />
             <div
