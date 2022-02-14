@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 ### Fixed
   - IQVIACBEXU-1120: Fixed Milestone alignment issue for questions with tool tip
+  - IQVIACBEXU-1100: Fixed Unity Predicted Answers to show on unanswered filter if they are not verified
 
 
   - IQVIACBEXU-1122: Expand all issue in Blade section
