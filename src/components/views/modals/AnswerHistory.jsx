@@ -98,6 +98,8 @@ class AnswerHistory extends Component<Props> {
       const avatarRandomColor = randomColor({ luminosity: 'dark' });
 
       const renderAnswers = () => {
+        const isFirstItem = index === 0;
+        const isOnlyOneAnswer = answers.toJS().length === 1
         if (isValidatedUnityPredictedAnswer) {
           return <span key={uuidv4()}><b>Validated Unity Predicted Answer</b></span>;
         }
@@ -113,7 +115,7 @@ class AnswerHistory extends Component<Props> {
           );
           if (questionType === 'text' || questionType === 'number') {
             const diffAnswers = diffWordsWithSpace(nextAnswer, answer);
-
+            
             return rearrangeDiff(diffAnswers).map(
               ({ value, added, removed }) => {
                 if (removed) return renderWord(value, 'removed');
@@ -128,9 +130,10 @@ class AnswerHistory extends Component<Props> {
             if (new Date(answer) == 'Invalid Date') {
               return renderWord('Invalid Date', 'removed');
             }
+            const styleClass = isFirstItem && !isOnlyOneAnswer ? 'changed' : undefined;
             const newdate = renderWord(
               String(parseMomentDate(answer)),
-              'changed'
+              styleClass
             );
             let nextdate = '';
             if (indx + 1 == tmp.length) {
@@ -154,7 +157,8 @@ class AnswerHistory extends Component<Props> {
 
           if (questionType === 'select') {
             if(index == 0){
-              return renderWord(answer, 'changed');
+              const styleClass = isFirstItem && !isOnlyOneAnswer ? 'changed' : undefined;
+              return renderWord(answer, styleClass);
             }else if(answers && answers.toJS().length == 2 &&  answers.get(index).get('userName') === 'UnityPredictedAnswer'){
               return <span key={uuidv4()}>{answers.get(index).get('answer')} </span>
             }else{
