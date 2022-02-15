@@ -4,10 +4,14 @@ import Tabs from 'apollo-react/components/Tabs';
 import Questions from '../../../screens/Opportunity/Questions';
 import Documents from '../../../screens/Opportunity/Documents';
 import Validate from '../../../screens/Opportunity/Validate';
+import { useEffect } from 'react';
 
-const UnityTab = ({id, enableValidateTab}) => {
+const UnityTab = ({id, enableValidateTab, selectedView}) => {
     const [value, setValue] = React.useState(0);
-
+    useEffect(()=>{
+        if(selectedView && selectedView === 'documents')
+            setValue(1);
+    }, [selectedView])
     const handleChangeTab = (event, value) => {
         setValue(value);
     };
