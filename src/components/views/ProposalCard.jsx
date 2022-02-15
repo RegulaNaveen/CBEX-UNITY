@@ -128,7 +128,7 @@ const ProposalCard = ({
           onClick={setProposalTypeView}
         >
           <Link to={`${OPPORTUNITY}${title}`}>
-            <House fontSize="large" htmlColor="#0768fd"></House>
+            <House fontSize="large" htmlColor="#b350bf"></House>
           </Link>
           <p>Questions</p>
         </div>
@@ -153,7 +153,7 @@ const ProposalCard = ({
         >
          <div>
             <p>{daysRemain}</p>
-            <p>Days until Due</p>
+            <p>Days until Bid Due</p>
           </div>
         </div>
       </div>
