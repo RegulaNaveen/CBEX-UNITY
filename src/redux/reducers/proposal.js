@@ -117,8 +117,6 @@ const onProsalInfoLoaded = (state: Map, action: Object): Map => {
   // Add agreementId as well in proposal details
 
   proposalDetails.agreementId = action.payload.proposal.agreementId || '';
-  proposalDetails.questionTemplateVersionNumber =
-    action.payload.proposal.questionTemplateVersionNumber || '';
 
   // Adding milestones to Questions Filter
 
@@ -155,6 +153,7 @@ const setOpportunityInfo = (state, action) => {
         .set('id', proposal.proposal.proposalId)
         // .set('bidDate', proposal.proposal.proposalDate)
         .set('bidName', `Bid ${proposal.proposal.proposalDetails['bidNo'] || ''}`)
+        .set('questionTemplateVersionNumber', proposal.proposal['questionTemplateVersionNumber'] || '')
         .set('isCurrent', true)
         .set(
           'pertinentDetails',
@@ -206,20 +205,26 @@ const setOpportunityInfo = (state, action) => {
 
 const onChangeBid = (state: Map, action: Object): Map => {
   const { payload } = action;
+  let opportunityData = state.get('opportunityData');
+
+  const templateversion = opportunityData.getIn([
+    payload.bidId,
+    'proposal',
+    'questionTemplateVersionNumber'
+  ]);
   let selectedBid = Map({
     id: payload.bidId,
     isCurrent: payload.isCurrent,
     pertinentDetails: payload.pertinentDetails,
-    bidName: payload.bidName
+    bidName: payload.bidName,
+    questionTemplateVersionNumber: templateversion || ''
   });
 
-  let opportunityData = state.get('opportunityData');
   const proposalDetails = opportunityData.getIn([
     selectedBid.get('id'),
     'proposal',
     'proposalDetails'
   ]);
-
   const proposalQuestions = opportunityData.getIn([
     selectedBid.get('id'),
     'proposalQuestions'
