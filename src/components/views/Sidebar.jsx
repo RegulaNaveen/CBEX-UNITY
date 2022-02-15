@@ -304,7 +304,7 @@ class Sidebar extends Component<Props, State> {
                   }}
                 />
               </Tooltip>
-              <Tooltip title="Expand All Sections" placement="top">
+              <Tooltip title={isOpen && "Expand All Sections"} placement="top">
                 <CardIcon
                   style={{
                     color: neptunePrimaryDark,
