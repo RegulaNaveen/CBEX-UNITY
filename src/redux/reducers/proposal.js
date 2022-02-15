@@ -544,6 +544,8 @@ const onEditQuestion = (state, action) => {
   const questionIndex = questions.findIndex(
     item => item.questionId === data.questionId
   );
+  let selectedBidId = state.getIn(['selectedBidId', 'id']);
+
 
   const updatedQuestions = [
     ...questions.slice(0, questionIndex),
