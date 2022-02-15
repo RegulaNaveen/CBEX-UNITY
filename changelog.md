@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
   - IQVIACBEXU-1122: Expand all issue in Blade section
+  - IQVIACBEXU-1139: Fixed Color inconsistency in answer history for date and select question types.
   
 ## [3.4.1] - YYYY-MM-DD
 ### Fixed
