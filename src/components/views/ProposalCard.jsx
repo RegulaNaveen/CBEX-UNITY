@@ -87,7 +87,7 @@ const ProposalCard = ({
           </span>
         </div>
         <div className="section-data">
-          <span><b>Therapeutic Area</b></span>
+          <span><b>Therapeutic Area:</b></span>
           <span
             className={
               therapeuticArea === 'No data' ? 'no-data-placeholder' : undefined
@@ -97,7 +97,7 @@ const ProposalCard = ({
           </span>
         </div>
         <div className="section-data">
-          <span><b>Verbatim Indication</b></span>
+          <span><b>Verbatim Indication:</b></span>
           <span
             className={
               verbatimIndication === 'No data'
