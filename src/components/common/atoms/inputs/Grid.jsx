@@ -37,7 +37,7 @@ const loadSidebar = (props) => {
                         <Typography variant="body2" className="greytext sidebaropenfont">Customer</Typography>
                         <Typography variant="body2" className="boldtext sidebaropenfont">{Customer || placeholder}</Typography>
                     </Paper>
-                    <Paper style={styles} className="open">
+                    <Paper style={styles} className="sidebarduedatedsg open">
                         <Typography variant="body2" className="greytext sidebaropenfont">Line of Business</Typography>
                         <Typography variant="body2" className="boldtext sidebaropenfont">{lineOfBusiness || placeholder}</Typography>
                     </Paper>
@@ -87,8 +87,8 @@ const loadSidebar = (props) => {
                     </Grid>
                     <Grid item xs={3}>
                         <Paper style={styles} className="phasedsg">
-                            <Typography variant="body2" className="greytext">Line of Business</Typography>
-                            <Typography variant="body2" className="boldtext">{lineOfBusiness || placeholder}</Typography>
+                            <Typography variant="body2" className="greytext leftalign">Line of Business</Typography>
+                            <Typography variant="body2" className="boldtext leftalign">{lineOfBusiness || placeholder}</Typography>
                         </Paper>
                     </Grid>
                     <Grid item xs={3}>

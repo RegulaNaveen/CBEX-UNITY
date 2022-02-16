@@ -11,19 +11,15 @@ import {
   getOpportunity,
   onGetValidatedProposalDetails
 } from '../../../redux/actions/proposal-actions';
-import { fetchNotes } from '../../../redux/actions/notepad-actions';
 import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
 import {
   getIsOpen,
   getPendingValidatedItems,
   getProposalDetails,
+  getSelectedBid,
   isProposalLoading
 } from '../../../redux/selectors';
-import Questions from './Questions';
 import Toolbar from '../../views/toolbar';
-import TabButtons from '../../common/TabButtons';
-import Documents from './Documents';
-import Validate from './Validate';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import UnityFooter from '../../common/Footer';
 import UnityGrid from '../../common/atoms/inputs/Grid';
@@ -155,7 +151,7 @@ export class Opportunity extends Component<Props, State> {
   }
 
   renderContent = () => {
-    const { enableValidateTab } = this.state;
+    const { enableValidateTab, selectedView } = this.state;
     const {
       isLoading,
       details,
@@ -173,7 +169,7 @@ export class Opportunity extends Component<Props, State> {
     return (
       <div className="proposal-details">
         <UnityGrid data={details} isOpen={isOpen} />
-        <UnityTab id={params.id} enableValidateTab={enableValidateTab} />
+        <UnityTab id={params.id} enableValidateTab={enableValidateTab} selectedView={selectedView}/>
       </div>
     );
   };
@@ -185,8 +181,8 @@ export class Opportunity extends Component<Props, State> {
   }
 
   render() {
-    const { isSidebarOpen, proposalDetail } = this.props;
-    const { questionTemplateVersionNumber } = proposalDetail;
+    const { isSidebarOpen, selectedBid } = this.props;
+    const { questionTemplateVersionNumber } = selectedBid.toJS();
     return (
       <div
         className={classNames('proposal-wrapper', {
@@ -210,7 +206,7 @@ const mapStateToProps = (state: Map) => ({
   notifications: getPendingValidatedItems(state),
   proposalDetail: getProposalDetails(state),
   isOpen: getIsOpen(state),
-  details: getProposalDetails(state),
+  selectedBid: getSelectedBid(state)
 });
 
 export default compose(

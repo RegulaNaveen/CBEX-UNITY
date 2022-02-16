@@ -13,7 +13,7 @@ import Close from 'apollo-react-icons/Close';
 import IconButton from 'apollo-react/components/IconButton';
 import Typography from 'apollo-react/components/Typography';
 import Tooltip from 'apollo-react/components/Tooltip';
-import { neptunePrimaryDark } from 'apollo-react/colors';
+import { neptunePrimaryDark, neutral7 } from 'apollo-react/colors';
 
 import Notepad from './Notepad';
 import chevronRight from '../../../img/chevron-right.svg';
@@ -25,7 +25,8 @@ import {
   getIsOpen,
   selectNotes,
   getProposalDetails,
-  getSelectedSection
+  getSelectedSection,
+  getSelectedBid
 } from '../../redux/selectors';
 import { changeMode } from '../../redux/actions/notepad-actions';
 import { REDUX_TYPES } from '../../constants';
@@ -238,7 +239,8 @@ class Sidebar extends Component<Props, State> {
       expandAll,
       AddNewQuestion,
       RefreshProposal,
-      allSectionsExpanded
+      allSectionsExpanded,
+      selectedBid
     } = this.props;
     const { selectedSection, activeTabIndex } = this.state;
 
@@ -283,14 +285,15 @@ class Sidebar extends Component<Props, State> {
               <Tooltip title="Add New Question" placement="left">
                 <PlusIcon
                   style={{
-                    backgroundColor: neptunePrimaryDark,
+                    backgroundColor: selectedBid.get('isCurrent')? neptunePrimaryDark : neutral7,
                     width: 20,
                     height: 20,
                     borderRadius: '50%',
                     color: '#fff',
                     padding: 3,
                     margin: 3,
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    pointerEvents : selectedBid.get('isCurrent')? '' : 'none'
                   }}
                   onClick={e => {
                     const { onAddQuestion } = this.props;
@@ -301,7 +304,7 @@ class Sidebar extends Component<Props, State> {
                   }}
                 />
               </Tooltip>
-              <Tooltip title="Expand All Sections" placement="top">
+              <Tooltip title={isOpen && "Expand All Sections"} placement="top">
                 <CardIcon
                   style={{
                     color: neptunePrimaryDark,
@@ -397,7 +400,8 @@ const mapStateToProps = (state: Object) => ({
   notes: selectNotes(state),
   proposalDetail: getProposalDetails(state),
   storeSelectedSection: getSelectedSection(state),
-  allSectionsExpanded: selectAreAllSectionsExpanded(state)
+  allSectionsExpanded: selectAreAllSectionsExpanded(state),
+  selectedBid: getSelectedBid(state)
 });
 
 export default connect(mapStateToProps, {
