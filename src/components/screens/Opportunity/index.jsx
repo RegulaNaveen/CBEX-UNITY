@@ -16,6 +16,7 @@ import {
   getIsOpen,
   getPendingValidatedItems,
   getProposalDetails,
+  getSelectedBid,
   isProposalLoading
 } from '../../../redux/selectors';
 import Toolbar from '../../views/toolbar';
@@ -180,8 +181,8 @@ export class Opportunity extends Component<Props, State> {
   }
 
   render() {
-    const { isSidebarOpen, proposalDetail } = this.props;
-    const { questionTemplateVersionNumber } = proposalDetail;
+    const { isSidebarOpen, selectedBid } = this.props;
+    const { questionTemplateVersionNumber } = selectedBid.toJS();
     return (
       <div
         className={classNames('proposal-wrapper', {
@@ -205,7 +206,7 @@ const mapStateToProps = (state: Map) => ({
   notifications: getPendingValidatedItems(state),
   proposalDetail: getProposalDetails(state),
   isOpen: getIsOpen(state),
-  details: getProposalDetails(state),
+  selectedBid: getSelectedBid(state)
 });
 
 export default compose(
