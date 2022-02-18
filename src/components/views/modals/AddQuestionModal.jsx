@@ -326,7 +326,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   };
 
   onDelete = () => {
-    const { deleteProposalQuestion, editQuestionsData, match } = this.props;
+    const { deleteProposalQuestion, editQuestionsData, match, selectedBid } = this.props;
     const proposalId = selectedBid.get('id');
     this.setState({ loaderText: 'Deleting Question' });
     const res = deleteProposalQuestion(
@@ -393,7 +393,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 className="modal-text-area"
                 placeholder="Question text"
                 title="Enter Question Text"
-                value={isEditMode && questionText}
+                value={isEditMode ? questionText : questionText || ''}
                 type="text"
                 error={this.state.error.filter(v => v.questiontext)}
                 onChange={e => this.handleTextChange(e)}

@@ -12,7 +12,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1147: Added BidNo to answer history
 ### Changed
 ### Fixed
+  - IQVIACBEXU-1120: Fixed Milestone alignment issue for questions with tool tip
+  - IQVIACBEXU-1100: Fixed Unity Predicted Answers to show on unanswered filter if they are not verified
 
+
+  - IQVIACBEXU-1122: Expand all issue in Blade section
+  - IQVIACBEXU-1161: Disabled adding custom questions in Sidebar for disabled bids
+  - IQVIACBEXU-1164: Fixed Sidebar Expand all tooltip displays after closing sidebar
+  
 ## [3.4.1] - YYYY-MM-DD
 ### Fixed
   - IQVIACBEXU-1086: Answer history should display the message "Validated Unity predicted answer" msg is not displaying for multi select dropdowns in history window. 

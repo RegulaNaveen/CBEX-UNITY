@@ -40,18 +40,22 @@
   }
   .sidebarduedatedsg {
     text-align: left !important;
-    padding-left: 30px !important;
+    padding-left: 20px !important;
   }
   .sidebaropenfont {
     font-size: 12px;
   }
   .duedatedsg {
     text-align: left !important;
-    padding-left: 30px !important;
+    padding-left: 20px !important;
     height: 100%;
   }
   .phasedsg {
     height: 100%;
+  }
+  .leftalign {
+    text-align: left;
+    padding-left: 5px;
   }
   .duedatedsg.open { 
     padding-left: 15px!important;
@@ -66,6 +70,8 @@
   }
   p.greytext{
     color: #7f7f7f;
+    font-weight: 530;
+    font-family: 'ProximaNova-Regular';
   }
   button.MuiTab-textColorInherit{
     color: #7f7f7f;

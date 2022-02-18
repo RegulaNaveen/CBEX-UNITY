@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Folder, Clipboard, RightArrow } from '../svg';
 import { OPPORTUNITY } from '../../routes';
+import House from 'apollo-react-icons/House';
 
 type Props = {
   title: string,
@@ -56,18 +57,9 @@ const ProposalCard = ({
       </div>
 
       <div className="info-section">
+        
         <div className="section-data">
-          <span>Due Date:</span>
-          <span
-            className={
-              dueDate === 'No data' ? 'no-data-placeholder' : undefined
-            }
-          >
-            {dueDate}
-          </span>
-        </div>
-        <div className="section-data">
-          <span>Customer: </span>
+          <span><b>Customer:</b> </span>
           <span
             className={
               customer === 'No data' ? 'no-data-placeholder' : undefined
@@ -77,7 +69,7 @@ const ProposalCard = ({
           </span>
         </div>
         <div className="section-data">
-          <span>Protocol Number:</span>
+          <span><b>Protocol Number:</b></span>
           <span
             className={
               protocolNumber === 'No data' ? 'no-data-placeholder' : undefined
@@ -87,7 +79,7 @@ const ProposalCard = ({
           </span>
         </div>
         <div className="section-data">
-          <span>Phase:</span>
+          <span><b>Phase:</b></span>
           <span
             className={phase === 'No data' ? 'no-data-placeholder' : undefined}
           >
@@ -95,7 +87,7 @@ const ProposalCard = ({
           </span>
         </div>
         <div className="section-data">
-          <span>Therapeutic Area</span>
+          <span><b>Therapeutic Area:</b></span>
           <span
             className={
               therapeuticArea === 'No data' ? 'no-data-placeholder' : undefined
@@ -105,7 +97,7 @@ const ProposalCard = ({
           </span>
         </div>
         <div className="section-data">
-          <span>Verbatim Indication</span>
+          <span><b>Verbatim Indication:</b></span>
           <span
             className={
               verbatimIndication === 'No data'
@@ -114,6 +106,16 @@ const ProposalCard = ({
             }
           >
             {verbatimIndication}
+          </span>
+        </div>
+        <div className="section-data">
+          <span><b>Bid Due Date:</b></span>
+          <span
+            className={
+              dueDate === 'No data' ? 'no-data-placeholder' : undefined
+            }
+          >
+            {dueDate}
           </span>
         </div>
       </div>
@@ -126,7 +128,7 @@ const ProposalCard = ({
           onClick={setProposalTypeView}
         >
           <Link to={`${OPPORTUNITY}${title}`}>
-            <Clipboard />
+            <House fontSize="large" htmlColor="#b350bf"></House>
           </Link>
           <p>Questions</p>
         </div>
@@ -151,7 +153,7 @@ const ProposalCard = ({
         >
          <div>
             <p>{daysRemain}</p>
-            <p>Days until Due</p>
+            <p>Days until Bid Due</p>
           </div>
         </div>
       </div>

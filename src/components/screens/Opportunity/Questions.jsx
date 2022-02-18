@@ -465,8 +465,18 @@ class Questions extends Component<Props, State> {
           onAddQuestion={value => {
             this.setState({ currentsection: value });
           }}
-          onscrollelement={e => this.expandsection(e)}
-          expandAll={this.handleIsCheckedAll}
+          onscrollelement = {(e)=> this.expandsection(e)}
+          expandAll={(e) => {
+            this.setState({sidebarscroll: ''},()=>{
+              this.handleIsCheckedAll()
+            })
+           if(!e){
+            const clearsidebarselectsection = new CustomEvent('clearsidebarselectsection', {
+              detail: true
+            });
+            document.dispatchEvent(clearsidebarselectsection);
+           }
+          }}
           AddNewQuestion={this.onClose}
           RefreshProposal={this.getProposalInfoUpdated}
           // eslint-disable-next-line react/destructuring-assignment
@@ -489,6 +499,12 @@ class Questions extends Component<Props, State> {
                 this.setState({ sidebarscroll: '' }, () => {
                   this.handleIsCheckedAll(checked);
                 });
+                if(!checked){
+                  const clearsidebarselectsection = new CustomEvent('clearsidebarselectsection', {
+                    detail: true
+                  });
+                  document.dispatchEvent(clearsidebarselectsection);
+                }
               }}
             />
             <div
@@ -545,6 +561,11 @@ class Questions extends Component<Props, State> {
         )}
       </>
     );
+  }
+  componentWillUnmount(){
+    const { handleOpenClose} = this.props;
+    if(handleOpenClose)
+     handleOpenClose(false);
   }
 }
 
