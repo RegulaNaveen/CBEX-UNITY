@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1122: Expand all issue in Blade section
   - IQVIACBEXU-1161: Disabled adding custom questions in Sidebar for disabled bids
   - IQVIACBEXU-1164: Fixed Sidebar Expand all tooltip displays after closing sidebar
+  - IQVIACBEXU-1179: Fixed unverified answers showing under answered filter
   
 ## [3.4.1] - YYYY-MM-DD
 ### Fixed
