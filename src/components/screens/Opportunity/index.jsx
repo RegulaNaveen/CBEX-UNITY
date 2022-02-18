@@ -8,6 +8,7 @@ import Loader from 'react-loader-spinner';
 import classNames from 'classnames';
 import { compose } from 'redux';
 import {
+  expandAllSectionsAction,
   getOpportunity,
   onGetValidatedProposalDetails
 } from '../../../redux/actions/proposal-actions';
@@ -65,12 +66,12 @@ export class Opportunity extends Component<Props, State> {
       authData,
       getRefreshAuthData,
       getValidatedData,
-
+      expandAllSections,
       trackPageView,
       eventCategories,
       match: { params }
     } = this.props;
-
+    expandAllSections(false);
     const selectedView = localStorage.getItem('proposalTypeView');
 
     if (selectedView) this.setState({ selectedView });
@@ -216,5 +217,6 @@ export default compose(
     getOpportunityInfo: getOpportunity,
     getValidatedData: onGetValidatedProposalDetails,
     handleOpenClose: onHandleOpenClose,
+    expandAllSections: expandAllSectionsAction,
   })
 )(MatomoHOC(Opportunity));
