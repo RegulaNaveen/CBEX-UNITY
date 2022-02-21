@@ -37,11 +37,12 @@ class Documents extends Component<Props, State> {
 
   componentDidMount(){
     const {bids, match} = this.props;
-    // latest Bid
+     // Opportunity number from the link
+     this.oppNo = match.params.id;
+
+    // latest Bid logic
     if(bids.length){
       const currentBid =  bids[0];
-      // Opportunity number from the link
-      this.oppNo = match.params.id;
       //Setting up the default tab
       if(currentBid)
         this.swtichTabs(currentBid.proposalId);
