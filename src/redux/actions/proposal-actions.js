@@ -335,7 +335,8 @@ function applyAnsweredFilter(questions) {
         return (
           Answer &&
           Answer.length &&
-          String(Answer[Answer.length - 1].answer).trim().length > 0
+          String(Answer[Answer.length - 1].answer).trim().length > 0 &&
+          Answer[Answer.length - 1].userName !== 'UnityPredictedAnswer'
         );
       })
       .toJS();
