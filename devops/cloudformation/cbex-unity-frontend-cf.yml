@@ -26,6 +26,10 @@ Parameters:
     Description: '*.iqvia.app certificate ARN in ACM'
     Type: String
     Default: ''
+  HostedZoneName:
+    Description: 'dev/*.iqvia.app'
+    Type: String
+    Default: '' 
 
 Resources:
   UnityFrontEndBucket: # Creates Bucket for Unity Front End. #This needs environment as input eg. dev, uat etc.,
@@ -120,7 +124,7 @@ Resources:
     Type: AWS::Route53::RecordSet
     DependsOn: UnityFrontEndCloudFront    
     Properties:
-      HostedZoneName: iqvia.app.
+      HostedZoneName: !Ref HostedZoneName
       Name: !Ref Route53Cname
       Type: CNAME
       TTL: '60'
