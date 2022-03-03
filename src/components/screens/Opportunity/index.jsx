@@ -183,7 +183,7 @@ export class Opportunity extends Component<Props, State> {
 
   render() {
     const { isSidebarOpen, selectedBid } = this.props;
-    const { questionTemplateVersionNumber } = selectedBid.toJS();
+    const { questionTemplateVersionNumber, opportunityType  } = selectedBid.toJS();
     return (
       <div
         className={classNames('proposal-wrapper', {
@@ -194,6 +194,7 @@ export class Opportunity extends Component<Props, State> {
         {this.renderContent()}
         <UnityFooter
           questionTemplateVersionNumber={questionTemplateVersionNumber || ''}
+          opportunityType={opportunityType || ''}
         />
       </div>
     );
