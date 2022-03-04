@@ -154,7 +154,7 @@ const setOpportunityInfo = (state, action) => {
         // .set('bidDate', proposal.proposal.proposalDate)
         .set('bidName', `Bid ${proposal.proposal.proposalDetails['bidNo'] || ''}`)
         .set('questionTemplateVersionNumber', proposal.proposal['questionTemplateVersionNumber'] || '')
-        .set('opportunityType', proposal.proposal.proposalDetails['opportunityType'] || '')
+        .set('opportunityType', proposal.proposal['opportunityType'] || '')
         .set('isCurrent', true)
         .set(
           'pertinentDetails',
@@ -216,7 +216,6 @@ const onChangeBid = (state: Map, action: Object): Map => {
   const opportunitytype = opportunityData.getIn([
     payload.bidId,
     'proposal',
-    'proposalDetails',
     'opportunityType'
   ]);
   let selectedBid = Map({
