@@ -18,7 +18,7 @@ const TextAreaV2 = ({
   useEffect(() => {
     taref.current.style.height = '5px';
     const txtareaheight =
-    taref.current.scrollHeight > 300 ? 140 : taref.current.scrollHeight;
+    taref.current.scrollHeight > 145 ? 140 : taref.current.scrollHeight;
     taref.current.style.height = txtareaheight + "px";
   }, [value,inputValue]);
 
