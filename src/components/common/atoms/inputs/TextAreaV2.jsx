@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import removeSpecialChars from '../../../../utils/pasteUtils';
 
 const TextAreaV2 = ({
@@ -10,14 +10,22 @@ const TextAreaV2 = ({
   disabled
 }) => {
   const [inputValue, setInputValue] = useState('');
-
+  const taref = useRef(null); 
   useEffect(() => {
     setInputValue(value);
   }, [value]);
 
+  useEffect(() => {
+    taref.current.style.height = '5px';
+    const txtareaheight =
+    taref.current.scrollHeight > 145 ? 140 : taref.current.scrollHeight;
+    taref.current.style.height = txtareaheight + "px";
+  }, [value,inputValue]);
+
   return (
     <textarea
       className={className}
+      ref={taref}
       placeholder={placeholder}
       onPaste={event => {
         setInputValue(event.target.value);

@@ -14,7 +14,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
   - IQVIACBEXU-1120: Fixed Milestone alignment issue for questions with tool tip
   - IQVIACBEXU-1100: Fixed Unity Predicted Answers to show on unanswered filter if they are not verified
-
+  - IQVIACBEXU-1227: Date is squeezed in answer history
+  - IQVIACBEXU-1228: Textbox should display up to five lines of text.
 
   - IQVIACBEXU-1122: Expand all issue in Blade section
   - IQVIACBEXU-1139: Fixed Color inconsistency in answer history for date and select question types.

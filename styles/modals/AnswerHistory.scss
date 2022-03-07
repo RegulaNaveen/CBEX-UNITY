@@ -91,6 +91,7 @@
 
         .main-container {
           display: flex;
+          max-width: 85%;
 
           li {
             margin-left: 15px;
@@ -121,7 +122,7 @@
         .answer-meta-data {
           display: flex;
           flex-direction: column;
-          justify-content: space-evenly;
+          justify-content: start;
           p {
             font-size: 13px;
             font-weight: bold;
