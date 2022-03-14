@@ -69,8 +69,14 @@ export class Opportunity extends Component<Props, State> {
       expandAllSections,
       trackPageView,
       eventCategories,
+      location: { search },
       match: { params }
     } = this.props;
+    let sfflag = new URLSearchParams(search).get('sf');
+    if(sfflag){
+      localStorage.removeItem('proposalTypeView')
+    }
+
     expandAllSections(false);
     const selectedView = localStorage.getItem('proposalTypeView');
 
