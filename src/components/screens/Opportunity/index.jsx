@@ -69,12 +69,13 @@ export class Opportunity extends Component<Props, State> {
       expandAllSections,
       trackPageView,
       eventCategories,
+      location: { search },
       match: { params }
     } = this.props;
-    expandAllSections(false);
-    const selectedView = localStorage.getItem('proposalTypeView');
 
-    if (selectedView) this.setState({ selectedView });
+    expandAllSections(false);
+    let selectedView = new URLSearchParams(search).get('viewType');
+    if (selectedView && selectedView == "documents") this.setState({ selectedView });
 
     if (!authData) getRefreshAuthData();
 

@@ -139,7 +139,7 @@ const ProposalCard = ({
           role="presentation"
           onClick={setProposalTypeView}
         >
-          <Link to={`${OPPORTUNITY}${title}`}>
+          <Link to={`${OPPORTUNITY}${title}?viewType=documents`}>
             <Folder />
           </Link>
           <p>Documents</p>
