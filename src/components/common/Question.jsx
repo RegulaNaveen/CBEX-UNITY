@@ -25,14 +25,13 @@ import {
 import MatomoHOC from '../HOC/MatomoHOC';
 import { getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
 import ChipView from './Chip/ChipView';
-import removeSpecialChars from '../../utils/pasteUtils';
 import Autocomplete from './atoms/inputs/AutoComplete';
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
 import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
 import SFAnswerValidationWrapper from './SFAnswerValidationWrapper';
 import StatusCheck from 'apollo-react-icons/StatusCheck';
-import {List} from 'immutable'
+import {List} from 'immutable';
 
 type State = {
   selectedDay: string,
