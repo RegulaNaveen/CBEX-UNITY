@@ -173,6 +173,14 @@ class AnswerHistory extends Component<Props> {
               && answers.get(index - 1).get('answer') === answers.get(index).get('answer')){
               // checks is this a unity answer which was validated if yes then dont add any styles
               return <span key={uuidv4()}>{answers.get(index).get('answer')} </span>
+            } else if (
+              answers &&
+              !isFirstItem &&
+              answers.get(index - 1) &&
+              answers.get(index - 1).get('answer') === answers.get(index).get('answer')
+            ) {
+              // if answers are same, don't add any style. This scenario occurs when new bids SF answer is the same as the older
+              return renderWord(answer, undefined);
             }else{
               return renderWord(answer, 'removed');
             }
