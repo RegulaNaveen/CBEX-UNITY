@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1061: Opportunity Type version is displayed in footer of Unity record
 ### Changed
 ### Fixed
+  - IQVIACBEXU-1229: Unity - question with green check appearing under "unanswered questions" filter
 
 ## [4.0] - YYYY-MM-DD
 ### Added
