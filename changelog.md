@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1061: Opportunity Type version is displayed in footer of Unity record
 ### Changed
 ### Fixed
+  - IQVIACBEXU-1244: Made red strike in Answer history consistent
+  - IQVIACBEXU-1242: Added Red line strike for UnityPredictedAnswers in "Select Type Questions"
+  - IQVIACBEXU-1241: Fixed Answers are not changing to green tick mark when filters are applied. 
+  - IQVIACBEXU-1169: Fixed Clicking on unity link in intake redirecting to documents page
 
 ## [4.0] - YYYY-MM-DD
 ### Added
