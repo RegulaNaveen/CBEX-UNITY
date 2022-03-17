@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1242: Added Red line strike for UnityPredictedAnswers in "Select Type Questions"
   - IQVIACBEXU-1241: Fixed Answers are not changing to green tick mark when filters are applied. 
   - IQVIACBEXU-1169: Fixed Clicking on unity link in intake redirecting to documents page
+  - IQVIACBEXU-1229: Unity - question with green check appearing under "unanswered questions" filter
 
 ## [4.0] - YYYY-MM-DD
 ### Added

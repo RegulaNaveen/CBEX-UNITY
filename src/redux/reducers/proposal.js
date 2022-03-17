@@ -343,10 +343,26 @@ const onProposalAnswerLoading = (state: Map, action: Object): Map => {
   );
 
   const proposalQuestions = newState.get('proposalQuestions');
-
-  return state
+  let filterQuestionsLen = state.get('filteredProposalQuestions');
+  if(Array.isArray(filterQuestionsLen)){
+    const filterindexOfListToUpdate = filterQuestionsLen
+    .findIndex(listItem => {
+      return listItem.questionId === referenceId;
+    });
+    newState = state.setIn(
+      ['filteredProposalQuestions', filterindexOfListToUpdate, 'loading'],
+      loading
+    );
+    let filterQuestions = newState.get('filteredProposalQuestions');
+    return state
+    .set('proposalQuestions', proposalQuestions)
+    .set('filteredProposalQuestions', filterQuestions)
+    .set('isProposalAnswerLoading', loading);
+  }else{
+    return state
     .set('proposalQuestions', proposalQuestions)
     .set('isProposalAnswerLoading', loading);
+  }
 };
 
 const onProposalAnswerError = (state: Map, action: Object): Map => {
