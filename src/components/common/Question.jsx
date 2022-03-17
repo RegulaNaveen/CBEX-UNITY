@@ -25,13 +25,13 @@ import {
 import MatomoHOC from '../HOC/MatomoHOC';
 import { getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
 import ChipView from './Chip/ChipView';
-import removeSpecialChars from '../../utils/pasteUtils';
 import Autocomplete from './atoms/inputs/AutoComplete';
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
 import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
 import SFAnswerValidationWrapper from './SFAnswerValidationWrapper';
 import StatusCheck from 'apollo-react-icons/StatusCheck';
+import {List} from 'immutable';
 
 type State = {
   selectedDay: string,
@@ -436,12 +436,15 @@ export class TaskRow extends Component<Props, State> {
   isAnswered(answer, isAnswerPredicted) {
     if (isAnswerPredicted) return false;
     if (answer && answer.get && answer.get('answer')) {
-      return (
-        answer
+
+      if(List.isList(answer.get('answer')))
+        return Boolean(answer.get('answer').size)
+      else
+        return Boolean(answer
           .get('answer')
           .toString()
-          .trim() && true
-      );
+          .trim()
+        )
     }
     return false;
   }
@@ -474,12 +477,11 @@ export class TaskRow extends Component<Props, State> {
        if(lastAnswer.get && lastAnswer.get('date') && lastAnswer.get('date').length){
          answerDate = parseMomentDate(lastAnswer.get('date'));
        } 
-      if (lastAnswer.get  && lastAnswer.get('userName') && lastAnswer.get('userName').length && lastAnswer.get('userName') && lastAnswer.get('userName') === 'UnityPredictedAnswer') {
+      if (lastAnswer.get  && lastAnswer.get('userName') && lastAnswer.get('userName').length && lastAnswer.get('userName') === 'UnityPredictedAnswer') {
         isAnswerPredicted = true;
         answerDate = 'Not Answered';
       }
     }
-
     return (
       <div
         className={`task-table-row${
