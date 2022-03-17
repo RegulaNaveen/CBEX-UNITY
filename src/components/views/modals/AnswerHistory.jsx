@@ -88,11 +88,20 @@ class AnswerHistory extends Component<Props> {
         : answer;
       
       const isValidatedUnityPredictedAnswer = (
+        questionType !== 'picklist' &&
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'UnityPredictedAnswer' &&
         answer === nextAnswer
       );
 
+      // picklist answers are array so they require different check than other question types
+      const isPicklistValidUnityPredAns = (
+        questionType === 'picklist' &&
+        answers &&
+        answers.get(index + 1) &&
+        answers.get(index + 1).get('userName') === 'UnityPredictedAnswer' &&
+        answers.get(index + 1).get('answer').toJS().join(",") === answers.get(index).get('answer').toJS().join(",")
+      );
       const userInitials = getUserInitials(userName);
       const parsedDate = parseMomentDate(date);
       const avatarRandomColor = randomColor({ luminosity: 'dark' });
@@ -103,8 +112,7 @@ class AnswerHistory extends Component<Props> {
         if (isValidatedUnityPredictedAnswer) {
           return <span key={uuidv4()}><b>Validated Unity Predicted Answer</b></span>;
         }
-        if (questionType == 'picklist' && answers && answers.get(index + 1) &&
-           answers.get(index + 1).get('userName') === 'UnityPredictedAnswer') {
+        if (isPicklistValidUnityPredAns) {
           return <span key={uuidv4()}><b>Validated Unity Predicted Answer</b></span>;
         }
         if (questionType !== 'picklist') {
@@ -159,8 +167,20 @@ class AnswerHistory extends Component<Props> {
             if(index == 0){
               const styleClass = isFirstItem && !isOnlyOneAnswer ? 'changed' : undefined;
               return renderWord(answer, styleClass);
-            }else if(answers && answers.toJS().length == 2 &&  answers.get(index).get('userName') === 'UnityPredictedAnswer'){
+            }else if(answers 
+              && answers.get(index - 1)
+              && answers.get(index).get('userName') === 'UnityPredictedAnswer'
+              && answers.get(index - 1).get('answer') === answers.get(index).get('answer')){
+              // checks is this a unity answer which was validated if yes then dont add any styles
               return <span key={uuidv4()}>{answers.get(index).get('answer')} </span>
+            } else if (
+              answers &&
+              !isFirstItem &&
+              answers.get(index - 1) &&
+              answers.get(index - 1).get('answer') === answers.get(index).get('answer')
+            ) {
+              // if answers are same, don't add any style. This scenario occurs when new bids SF answer is the same as the older
+              return renderWord(answer, undefined);
             }else{
               return renderWord(answer, 'removed');
             }
