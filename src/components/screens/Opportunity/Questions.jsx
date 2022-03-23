@@ -52,6 +52,7 @@ import Grid from 'apollo-react/components/Grid';
 import Blade from 'apollo-react/components/Blade';
 import chevronRight from '../../../../img/chevron-right.svg';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
+import ProcessingCRM from '../../../components/views/modals/ProcessingCRM';
 
 type Props = {
   match: Match,
@@ -458,6 +459,7 @@ class Questions extends Component<Props, State> {
 
     return (
       <>
+        <ProcessingCRM isOpen={false}/>
         <BidHistory />
         <Sidebar
           sections={allSections}
