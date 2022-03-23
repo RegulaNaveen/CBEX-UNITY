@@ -99,7 +99,7 @@ demo:
   tags:
     - docker
 
-deploydemo:
+.deploydemo:
   stage: deploydemo
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
