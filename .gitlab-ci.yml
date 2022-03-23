@@ -83,7 +83,7 @@ demo:
   variables:
     Environment: $CI_JOB_NAME
   only:
-    - demo
+    - demonew
   script:
     - cat $devaccount >> build.env
     - cat $frontendacmdev >> build.env
@@ -105,7 +105,7 @@ deploydemo:
   needs:
     - demo
   only:
-    - demo
+    - demonew
   script:    
     - source build.env  
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
@@ -232,7 +232,7 @@ deploystack:
   rules:
     #- if:  $CI_COMMIT_REF_NAME =~ /^feature/ || $CI_COMMIT_REF_NAME =~ /^bugfix/
       #when: never
-    - if:  $CI_COMMIT_REF_NAME =~ /demo/
+    - if:  $CI_COMMIT_REF_NAME =~ /demonew/
       when: never
     - if: '$DeployStack == "True"' #this flag drives whether to deploy the infrastructure stack
       when: always
