@@ -86,7 +86,7 @@ demo:
     - demonew
   script:
     - cat $devaccount >> build.env
-    - cat $frontendacmdev >> build.env
+    #- cat $frontendacmdev >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
     - yarn cache clean
