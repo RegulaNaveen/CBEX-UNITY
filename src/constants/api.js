@@ -32,6 +32,18 @@ switch (environment) {
     UBUILD_ARTIFACT = 'https://uat-ubuild.iqvia.app/main.js';
     SF_HOST_URL = 'https://iqvia--uat.lightning.force.com/';
     break;
+  case 'DEMO':
+    PROPOSAL_API_ENDPOINT = 
+    'https://olyxc9cn1m.execute-api.us-east-1.amazonaws.com/dev';
+    PROPOSAL_API_KEY = 'SmXooYpNRX4u0dlRrebjt3PUnJJma5cm5ipK3nSV';
+    NORMAL_AUTH_API_ENDPOINT =
+    'https://byp6zagvkb.execute-api.us-east-1.amazonaws.com/unity-dev';
+    COGNITO_HOST = 'https://dev-unity.auth.us-east-1.amazoncognito.com';
+    CLIENT_ID = 'uf2jbhv4jcprcdiqc5rupg665';
+    REDIRECTION_URL = 'https://demo-unity.dev.iqvia.app/';
+    UBUILD_ARTIFACT = 'https://demo-ubuild.dev.iqvia.app/main.js';
+    SF_HOST_URL = 'https://iqvia--hbfx.lightning.force.com/';
+    break;
   case 'PROD':
     PROPOSAL_API_ENDPOINT =
       'https://m7ci1wtmgf.execute-api.us-east-1.amazonaws.com/prod';
