@@ -41,7 +41,8 @@ const {
   PROPOSAL_DELETE_QUESTION,
   OPPORTUNITY_INFO,
   UPDATE_BOX_BIDS,
-  CHANGE_BID
+  CHANGE_BID,
+  ADD_NEW_BID
 } = REDUX_TYPES.PROPOSAL;
 
 const INITIAL_STATE: Map = fromJS({
@@ -146,7 +147,7 @@ const setOpportunityInfo = (state, action) => {
   let opportunityData = new OrderedMap({});
 
   let selectedBid = Map({});
-
+  // console.log(`payload`, payload);
   payload.forEach(proposal => {
     if (proposal.isCurrent) {
       selectedBid = selectedBid
@@ -172,11 +173,11 @@ const setOpportunityInfo = (state, action) => {
     'proposal',
     'proposalDetails'
   ]);
-
   const proposalQuestions = opportunityData.getIn([
     selectedBid.get('id'),
     'proposalQuestions'
   ]);
+  // console.log(`proposalQuestions`, proposalQuestions)
 
   const milestones = getUniqueMilestones(proposalQuestions);
 
@@ -194,7 +195,6 @@ const setOpportunityInfo = (state, action) => {
   });
   milestoneGroup = milestoneGroup.set('logic', 'OR');
   questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
-
   return state
     .set('proposalDetails', proposalDetails)
     .set('proposalQuestions', proposalQuestions)
@@ -207,7 +207,7 @@ const setOpportunityInfo = (state, action) => {
 const onChangeBid = (state: Map, action: Object): Map => {
   const { payload } = action;
   let opportunityData = state.get('opportunityData');
-
+  console.log(`after state`, state.toJS())
   const templateversion = opportunityData.getIn([
     payload.bidId,
     'proposal',
@@ -261,6 +261,95 @@ const onChangeBid = (state: Map, action: Object): Map => {
     .set('isProposalLoading', false)
     .set('selectedBid', selectedBid);
 };
+
+const addNewBid = (state: Map, action: Object): Map => {
+  const { payload } = action;
+  let newopportunityData = new OrderedMap({});
+  console.log(`payload`, payload)
+  let data = payload
+  let selectedBid = Map({});
+  let newstate = state.update('opportunityData', item => item.map( 
+    keyValue => keyValue.set('isCurrent', false)
+  ))
+  
+  let opportunityData = newstate.get('opportunityData');
+  let boxBids = newstate.get('boxBids');
+
+  let obj = {
+    proposal : data.proposal,
+    proposalQuestions : data.proposalQuestions,
+    proposalUsers : data.proposalUsers,
+    isCurrent : data.isCurrent,
+    inProgress : data.proposal['inProgress']
+  }
+
+  let boxobj = {
+    proposalId : data.proposal.proposalId,
+    boxId : undefined,
+    bidNo : data.proposal.proposalDetails['bidNo']
+  }
+  if(Array.isArray(boxBids)){
+    let isavailable = boxBids.filter(v => v['proposalId'] === boxobj.proposalId);
+    if(!isavailable.length){
+      boxBids.unshift(boxobj)
+    }
+  }
+
+  newopportunityData = newopportunityData.set(
+    data.proposal.proposalId,
+    OrderedMap(obj)
+  );
+ 
+  opportunityData = opportunityData.merge(newopportunityData);
+  console.log(`opportunityData`, opportunityData.toJS())
+  selectedBid = selectedBid.set('id', data.proposal.proposalId)
+  .set('bidName', `Bid ${data.proposal.proposalDetails['bidNo'] || ''}`)
+  .set('questionTemplateVersionNumber', data.proposal['questionTemplateVersionNumber'] || '')
+  .set('opportunityType', data.proposal['opportunityType'] || '')
+  .set('isCurrent', true)
+  .set('bidStatus',  data.proposal['inProgress'] || false)
+  .set(
+    'pertinentDetails',
+    data.proposal.proposalDetails.pertinentDetails
+  );
+
+  const proposalDetails = newopportunityData.getIn([
+    selectedBid.get('id'),
+    'proposal',
+    'proposalDetails'
+  ]);
+
+  const proposalQuestions = newopportunityData.getIn([
+    selectedBid.get('id'),
+    'proposalQuestions'
+  ]);
+
+  const milestones = getUniqueMilestones(proposalQuestions);
+  let questionsFilter = state.get('questionsFilter');
+  let milestoneGroup = fromJS({});
+  milestones.forEach(milestone => {
+    milestoneGroup = milestoneGroup.set(
+      milestone,
+      Map({
+        checked: false,
+        label: milestone,
+        className: 'questions-filter__item'
+      })
+    );
+  });
+
+  milestoneGroup = milestoneGroup.set('logic', 'OR');
+  questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
+
+  return state
+      .set('proposalDetails', proposalDetails)
+      .set('proposalQuestions', proposalQuestions)
+      .set('questionsFilter', questionsFilter)
+      .set('isProposalLoading', false)
+      .set('opportunityData', opportunityData)
+      .set('boxBids', boxBids)
+      .set('selectedBid', selectedBid);
+}
 
 const onProposalLoading = (state: Map): Map => {
   return state.set('isProposalLoading', true).set('proposalError', undefined);
@@ -652,7 +741,8 @@ const actionMap = {
   [PROPOSAL_DELETE_QUESTION]: onDeleteQuestion,
   [OPPORTUNITY_INFO]: setOpportunityInfo,
   [UPDATE_BOX_BIDS]: (state, { payload }) => state.set('boxBids', payload),
-  [CHANGE_BID]: onChangeBid
+  [CHANGE_BID]: onChangeBid,
+  [ADD_NEW_BID]: addNewBid
 };
 
 export default function(

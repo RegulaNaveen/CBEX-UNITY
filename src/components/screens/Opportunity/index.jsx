@@ -8,6 +8,7 @@ import Loader from 'react-loader-spinner';
 import classNames from 'classnames';
 import { compose } from 'redux';
 import {
+  UpdateNewBid,
   expandAllSectionsAction,
   getOpportunity,
   onGetValidatedProposalDetails
@@ -26,6 +27,10 @@ import UnityFooter from '../../common/Footer';
 import UnityGrid from '../../common/atoms/inputs/Grid';
 import UnityTab from '../../common/atoms/inputs/Tab';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
+import * as NewBid from './dummy.json';
+import * as UpdateBid from './dummy2.json';
+import { SOCKET_URL } from '../../../constants/api'
+import Modal from 'apollo-react/components/Modal';
 
 type State = {
   selectedView: string
@@ -50,14 +55,43 @@ type Props = {
 
 export class Opportunity extends Component<Props, State> {
   toRef;
-
   constructor(props: Object) {
     super(props);
-
     this.state = {
       selectedView: 'questions',
       enableValidateTab: false
     };
+  }
+  connectsocket(){
+    const {
+      match: { params },
+      AddNewBid
+    } = this.props;
+    this.socketconnection = null;
+    this.socketconnection = new WebSocket(SOCKET_URL);
+    this.socketconnection.onopen =  (event) => {
+      if(params.id){
+        this.socketconnection.send(JSON.stringify({
+          action: 'ADD_OPPORTUNITY',
+          body: {oppId : params.id}
+        }));
+      }
+    };
+
+    this.socketconnection.addEventListener('message',  (event) =>{
+       AddNewBid(event.data);
+    });
+
+    // this.socketconnection.onclose = ()=>{
+    //   setTimeout(()=>{
+    //      this.connectsocket();
+    //   }, 3000);
+    // };
+
+    // this.socketconnection.onerror = function(err) {
+    //   console.error('Socket encountered error: ', err.message, 'Closing socket');
+    //   this.socketconnection.close();
+    // };
   }
 
   componentDidMount() {
@@ -69,10 +103,20 @@ export class Opportunity extends Component<Props, State> {
       expandAllSections,
       trackPageView,
       eventCategories,
+      AddNewBid,
       location: { search },
       match: { params }
     } = this.props;
-
+    // this.connectsocket();
+    setTimeout(() => {
+      AddNewBid(NewBid.data);
+      setTimeout(() => {
+        AddNewBid(UpdateBid.data);
+        setTimeout(() => {
+          getOpportunityInfo(params.id);
+        }, 3000);
+      }, 10000);
+    }, 10000);
     expandAllSections(false);
     let selectedView = new URLSearchParams(search).get('viewType');
     if (selectedView && selectedView == "documents") this.setState({ selectedView });
@@ -100,6 +144,15 @@ export class Opportunity extends Component<Props, State> {
   }
 
   componentWillUnmount() {
+    const { handleOpenClose} = this.props;
+    this.socketconnection.send(JSON.stringify({
+      action: '$disconnect',
+      body: {}
+    }));
+    this.socketconnection.close();
+    if(handleOpenClose)
+     handleOpenClose(false);
+
     localStorage.removeItem('proposalTypeView');
     localStorage.removeItem('proposalId');
 
@@ -176,15 +229,11 @@ export class Opportunity extends Component<Props, State> {
     );
   };
 
-  componentWillUnmount(){
-    const { handleOpenClose} = this.props;
-    if(handleOpenClose)
-     handleOpenClose(false);
-  }
-
   render() {
     const { isSidebarOpen, selectedBid } = this.props;
-    const { questionTemplateVersionNumber, opportunityType  } = selectedBid.toJS();
+    const { questionTemplateVersionNumber, opportunityType, bidStatus } = selectedBid.toJS();
+    console.log('this.props :>> ', bidStatus);
+
     return (
       <div
         className={classNames('proposal-wrapper', {
@@ -193,6 +242,17 @@ export class Opportunity extends Component<Props, State> {
       >
         <Toolbar />
         {this.renderContent()}
+        {
+          bidStatus &&  <Modal
+          open={bidStatus}
+          variant="warning"
+          onClose={() => handleClose('warning')}
+          title="Processing CRM Data"
+          message="A new bid is being created based on CRM data."
+          hideButtons={true}
+          id="warning"
+        />
+        }
         <UnityFooter
           questionTemplateVersionNumber={questionTemplateVersionNumber || ''}
           opportunityType={opportunityType || ''}
@@ -220,5 +280,6 @@ export default compose(
     getValidatedData: onGetValidatedProposalDetails,
     handleOpenClose: onHandleOpenClose,
     expandAllSections: expandAllSectionsAction,
+    AddNewBid: UpdateNewBid
   })
 )(MatomoHOC(Opportunity));

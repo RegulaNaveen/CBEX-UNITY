@@ -1,6 +1,6 @@
 // @flow
 import { isEmpty, cloneDeep, uniqBy } from 'lodash';
-import { fromJS, Map } from 'immutable';
+import { fromJS } from 'immutable';
 import { REDUX_TYPES } from '../../constants';
 import type { Dispatch, ThunkAction } from './action-types';
 import {
@@ -58,7 +58,8 @@ const {
   PROPOSAL_DELETE_QUESTION,
   OPPORTUNITY_INFO,
   UPDATE_BOX_BIDS,
-  CHANGE_BID
+  CHANGE_BID,
+  ADD_NEW_BID
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -591,5 +592,16 @@ export const changeBid = bid => {
       payload: bid
     });
     dispatch(fetchNotes(bid.bidId));
+  };
+};
+
+export const UpdateNewBid = bid => {
+  console.log(`bid`, bid)
+  return dispatch => {
+    dispatch({
+      type: ADD_NEW_BID,
+      payload: bid
+    });
+    dispatch(fetchNotes(bid.proposal.proposalId));
   };
 };

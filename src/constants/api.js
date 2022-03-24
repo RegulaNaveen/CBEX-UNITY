@@ -17,6 +17,7 @@ let REDIRECTION_URL = '';
 let UBUILD_ENABLED = false;
 let UBUILD_ARTIFACT = '';
 let SF_HOST_URL = '';
+let SOCKET_URL = '';
 
 switch (environment) {
   case 'UAT':
@@ -73,6 +74,7 @@ switch (environment) {
     REDIRECTION_URL = 'https://dev-unity.dev.iqvia.app/';
     UBUILD_ARTIFACT = 'https://dev-ubuild.dev.iqvia.app/main.js';
     SF_HOST_URL = 'https://iqvia--hbfx.lightning.force.com/';
+    SOCKET_URL = 'wss://sgag59jkn1.execute-api.us-east-1.amazonaws.com/production';
     break;
 }
 
@@ -130,5 +132,6 @@ export {
   NOTEPAD,
   UBUILD_ENABLED,
   UBUILD_ARTIFACT,
-  SF_HOST_URL
+  SF_HOST_URL,
+  SOCKET_URL
 };

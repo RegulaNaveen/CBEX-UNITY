@@ -242,6 +242,7 @@ class Sidebar extends Component<Props, State> {
       allSectionsExpanded,
       selectedBid
     } = this.props;
+    console.log('notes :>> ', notes);
     const { selectedSection, activeTabIndex } = this.state;
 
     const NotepadTab = () =>
