@@ -52,6 +52,8 @@ import Grid from 'apollo-react/components/Grid';
 import Blade from 'apollo-react/components/Blade';
 import chevronRight from '../../../../img/chevron-right.svg';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
+import ProcessingCRM from '../../../components/views/modals/ProcessingCRM';
+import BidDoneBanner from '../../../components/views/BidDoneBanner';
 
 type Props = {
   match: Match,
@@ -101,7 +103,9 @@ class Questions extends Component<Props, State> {
       heighlightcard: false,
       showFilter: false,
       sidebarscroll: '',
-      open: false
+      open: false,
+      isBidDone: false,
+      isProcessingCRM: false
     };
   }
 
@@ -434,6 +438,17 @@ class Questions extends Component<Props, State> {
     this.setState({ sidebarscroll: e });
   };
 
+  setIsBidDone(value) {
+    this.setState(({ isBidDone }) => ({
+      isBidDone: value
+    }));
+  }
+  setIsProcessingCRM(value) {
+    this.setState(({ isProcessingCRM }) => ({
+      isProcessingCRM: value
+    }));
+  }
+
   render() {
     const {
       details,
@@ -451,13 +466,20 @@ class Questions extends Component<Props, State> {
       showModal,
       selectedQuestionForHistory,
       isHistoryModalShown,
-      open
+      open,
+      isBidDone,
+      isProcessingCRM
     } = this.state;
 
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
 
     return (
       <>
+        <ProcessingCRM isOpen={isProcessingCRM} />
+        <BidDoneBanner
+          isOpen={isBidDone}
+          onCloseHandler={() => this.setIsBidDone(false)}
+        />
         <BidHistory />
         <Sidebar
           sections={allSections}
