@@ -29,8 +29,6 @@ import UnityFooter from '../../common/Footer';
 import UnityGrid from '../../common/atoms/inputs/Grid';
 import UnityTab from '../../common/atoms/inputs/Tab';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
-import * as NewBid from './dummy.json';
-import * as UpdateBid from './dummy2.json';
 import { SOCKET_URL } from '../../../constants/api'
 import Modal from 'apollo-react/components/Modal';
 import ProcessingCRM from '../../views/modals/ProcessingCRM';
@@ -111,12 +109,6 @@ export class Opportunity extends Component<Props, State> {
       match: { params }
     } = this.props;
     this.connectsocket();
-    // setTimeout(() => {
-    //   AddNewBid(NewBid.data);
-    //   setTimeout(() => {
-    //     getOpportunityInfo(params.id, true);
-    //   }, 10000);
-    // }, 10000);
     expandAllSections(false);
     let selectedView = new URLSearchParams(search).get('viewType');
     if (selectedView && selectedView == "documents") this.setState({ selectedView });

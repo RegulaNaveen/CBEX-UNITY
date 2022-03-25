@@ -156,6 +156,7 @@ const setOpportunityInfo = (state, action) => {
         .set('questionTemplateVersionNumber', proposal.proposal['questionTemplateVersionNumber'] || '')
         .set('opportunityType', proposal.proposal['opportunityType'] || '')
         .set('isCurrent', true)
+        .set('bidStatus',  proposal.proposal['inProgress'] || false)
         .set(
           'pertinentDetails',
           proposal.proposal.proposalDetails.pertinentDetails
