@@ -11,7 +11,8 @@ import {
   UpdateNewBid,
   expandAllSectionsAction,
   getOpportunity,
-  onGetValidatedProposalDetails
+  onGetValidatedProposalDetails,
+  closeNewbidflags
 } from '../../../redux/actions/proposal-actions';
 import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
 import {
@@ -19,7 +20,8 @@ import {
   getPendingValidatedItems,
   getProposalDetails,
   getSelectedBid,
-  isProposalLoading
+  isProposalLoading,
+  getStatusOfNewBid
 } from '../../../redux/selectors';
 import Toolbar from '../../views/toolbar';
 import MatomoHOC from '../../HOC/MatomoHOC';
@@ -31,6 +33,8 @@ import * as NewBid from './dummy.json';
 import * as UpdateBid from './dummy2.json';
 import { SOCKET_URL } from '../../../constants/api'
 import Modal from 'apollo-react/components/Modal';
+import ProcessingCRM from '../../views/modals/ProcessingCRM';
+import BidDoneBanner from '../../views/BidDoneBanner';
 
 type State = {
   selectedView: string
@@ -50,7 +54,7 @@ type Props = {
   trackEvent: any,
   trackPageView: any,
   proposalDetail: any,
-  getOpportunityInfo: (oppId: string) => void
+  getOpportunityInfo: (oppId: string, flag?: boolean) => void
 };
 
 export class Opportunity extends Component<Props, State> {
@@ -59,17 +63,20 @@ export class Opportunity extends Component<Props, State> {
     super(props);
     this.state = {
       selectedView: 'questions',
-      enableValidateTab: false
+      enableValidateTab: false,
+      newbidstatus: false
     };
   }
   connectsocket(){
     const {
       match: { params },
-      AddNewBid
+      AddNewBid,
+      getOpportunityInfo
     } = this.props;
     this.socketconnection = null;
     this.socketconnection = new WebSocket(SOCKET_URL);
     this.socketconnection.onopen =  (event) => {
+      console.log('socket connected',event)
       if(params.id){
         this.socketconnection.send(JSON.stringify({
           action: 'ADD_OPPORTUNITY',
@@ -78,20 +85,16 @@ export class Opportunity extends Component<Props, State> {
       }
     };
 
-    this.socketconnection.addEventListener('message',  (event) =>{
-       AddNewBid(event.data);
+    this.socketconnection.addEventListener('message',  async (response) =>{
+      let data = JSON.parse(response.data);
+      console.log('data.event :>> ', data.event);
+       if(data.event == 'IN_PROGRESS'){
+         AddNewBid(data.data);
+       }
+       if(data.event == 'COMPLETED'){
+        getOpportunityInfo(params.id, true);
+       }
     });
-
-    // this.socketconnection.onclose = ()=>{
-    //   setTimeout(()=>{
-    //      this.connectsocket();
-    //   }, 3000);
-    // };
-
-    // this.socketconnection.onerror = function(err) {
-    //   console.error('Socket encountered error: ', err.message, 'Closing socket');
-    //   this.socketconnection.close();
-    // };
   }
 
   componentDidMount() {
@@ -107,16 +110,13 @@ export class Opportunity extends Component<Props, State> {
       location: { search },
       match: { params }
     } = this.props;
-    // this.connectsocket();
-    setTimeout(() => {
-      AddNewBid(NewBid.data);
-      setTimeout(() => {
-        AddNewBid(UpdateBid.data);
-        setTimeout(() => {
-          getOpportunityInfo(params.id);
-        }, 3000);
-      }, 10000);
-    }, 10000);
+    this.connectsocket();
+    // setTimeout(() => {
+    //   AddNewBid(NewBid.data);
+    //   setTimeout(() => {
+    //     getOpportunityInfo(params.id, true);
+    //   }, 10000);
+    // }, 10000);
     expandAllSections(false);
     let selectedView = new URLSearchParams(search).get('viewType');
     if (selectedView && selectedView == "documents") this.setState({ selectedView });
@@ -211,9 +211,10 @@ export class Opportunity extends Component<Props, State> {
       isLoading,
       details,
       isOpen,
+      selectedBid,
       match: { params }
     } = this.props;
-
+    const { bidStatus } = selectedBid.toJS();
     if (isLoading)
       return (
         <div className="proposal-loader">
@@ -223,17 +224,15 @@ export class Opportunity extends Component<Props, State> {
 
     return (
       <div className="proposal-details">
-        <UnityGrid data={details} isOpen={isOpen} />
+        <UnityGrid data={details} isOpen={isOpen} bidStatus={bidStatus} />
         <UnityTab id={params.id} enableValidateTab={enableValidateTab} selectedView={selectedView}/>
       </div>
     );
   };
 
   render() {
-    const { isSidebarOpen, selectedBid } = this.props;
+    const { isSidebarOpen, selectedBid, newbidflag, closeNewbidflag } = this.props;
     const { questionTemplateVersionNumber, opportunityType, bidStatus } = selectedBid.toJS();
-    console.log('this.props :>> ', bidStatus);
-
     return (
       <div
         className={classNames('proposal-wrapper', {
@@ -241,17 +240,13 @@ export class Opportunity extends Component<Props, State> {
         })}
       >
         <Toolbar />
+        <BidDoneBanner
+          isOpen={newbidflag}
+          onCloseHandler = {()=> closeNewbidflag()}
+        />
         {this.renderContent()}
         {
-          bidStatus &&  <Modal
-          open={bidStatus}
-          variant="warning"
-          onClose={() => handleClose('warning')}
-          title="Processing CRM Data"
-          message="A new bid is being created based on CRM data."
-          hideButtons={true}
-          id="warning"
-        />
+          bidStatus && <ProcessingCRM isOpen={bidStatus} />
         }
         <UnityFooter
           questionTemplateVersionNumber={questionTemplateVersionNumber || ''}
@@ -269,7 +264,8 @@ const mapStateToProps = (state: Map) => ({
   notifications: getPendingValidatedItems(state),
   proposalDetail: getProposalDetails(state),
   isOpen: getIsOpen(state),
-  selectedBid: getSelectedBid(state)
+  selectedBid: getSelectedBid(state),
+  newbidflag: getStatusOfNewBid(state)
 });
 
 export default compose(
@@ -280,6 +276,7 @@ export default compose(
     getValidatedData: onGetValidatedProposalDetails,
     handleOpenClose: onHandleOpenClose,
     expandAllSections: expandAllSectionsAction,
-    AddNewBid: UpdateNewBid
+    AddNewBid: UpdateNewBid,
+    closeNewbidflag: closeNewbidflags
   })
 )(MatomoHOC(Opportunity));

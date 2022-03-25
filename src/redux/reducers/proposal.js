@@ -42,7 +42,8 @@ const {
   OPPORTUNITY_INFO,
   UPDATE_BOX_BIDS,
   CHANGE_BID,
-  ADD_NEW_BID
+  ADD_NEW_BID,
+  NEW_BID_CREATED
 } = REDUX_TYPES.PROPOSAL;
 
 const INITIAL_STATE: Map = fromJS({
@@ -143,9 +144,7 @@ const onProsalInfoLoaded = (state: Map, action: Object): Map => {
 };
 const setOpportunityInfo = (state, action) => {
   const { payload } = action;
-
   let opportunityData = new OrderedMap({});
-
   let selectedBid = Map({});
   // console.log(`payload`, payload);
   payload.forEach(proposal => {
@@ -207,7 +206,6 @@ const setOpportunityInfo = (state, action) => {
 const onChangeBid = (state: Map, action: Object): Map => {
   const { payload } = action;
   let opportunityData = state.get('opportunityData');
-  console.log(`after state`, state.toJS())
   const templateversion = opportunityData.getIn([
     payload.bidId,
     'proposal',
@@ -262,10 +260,14 @@ const onChangeBid = (state: Map, action: Object): Map => {
     .set('selectedBid', selectedBid);
 };
 
+const newBidCreated = (state: Map, action: Object): Map => {
+  const { payload } = action;
+  return state.set('newbidflag', payload['flag'] ||  false)
+}
+
 const addNewBid = (state: Map, action: Object): Map => {
   const { payload } = action;
   let newopportunityData = new OrderedMap({});
-  console.log(`payload`, payload)
   let data = payload
   let selectedBid = Map({});
   let newstate = state.update('opportunityData', item => item.map( 
@@ -301,7 +303,6 @@ const addNewBid = (state: Map, action: Object): Map => {
   );
  
   opportunityData = opportunityData.merge(newopportunityData);
-  console.log(`opportunityData`, opportunityData.toJS())
   selectedBid = selectedBid.set('id', data.proposal.proposalId)
   .set('bidName', `Bid ${data.proposal.proposalDetails['bidNo'] || ''}`)
   .set('questionTemplateVersionNumber', data.proposal['questionTemplateVersionNumber'] || '')
@@ -742,7 +743,8 @@ const actionMap = {
   [OPPORTUNITY_INFO]: setOpportunityInfo,
   [UPDATE_BOX_BIDS]: (state, { payload }) => state.set('boxBids', payload),
   [CHANGE_BID]: onChangeBid,
-  [ADD_NEW_BID]: addNewBid
+  [ADD_NEW_BID]: addNewBid,
+  [NEW_BID_CREATED]: newBidCreated
 };
 
 export default function(

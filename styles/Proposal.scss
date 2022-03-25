@@ -10,7 +10,9 @@
   &.is-collapsed {
     margin-right: 500px;
   }
-
+  .MuiSnackbarContent-root {
+    min-height: 57px;
+   }
   .proposal-loader {
     flex: 1;
     height: 100%;

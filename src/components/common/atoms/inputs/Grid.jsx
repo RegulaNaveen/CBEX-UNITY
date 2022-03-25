@@ -9,7 +9,7 @@ const styles = {
 };
 
 const loadSidebar = (props) => {
-    const { data, isOpen } = props;
+    const { data, isOpen, bidStatus } = props;
     const {
         'Bid due date': bidDueDate,
         Phase: phase,
@@ -63,7 +63,7 @@ const loadSidebar = (props) => {
                     </Paper>
                     <Paper className="sidebarduedatedsg open" style={styles}>
                         <Typography variant="body2" className="greytext lesslineheight sidebaropenfont">Days Until Due</Typography>
-                        <p className="boldtext greencolorsidebaropenfont lesslineheight" >{daysRemain}</p>
+                        <p className="boldtext greencolorsidebaropenfont lesslineheight" >{bidStatus ? 'Processing' : daysRemain}</p>
                     </Paper>
                 </Grid>
                 
@@ -128,7 +128,7 @@ const loadSidebar = (props) => {
                     <Grid item xs={12}>
                         <Paper className="duedatedsg" style={styles}>
                             <Typography variant="body2" className="greytext lesslineheight">Days Until Due</Typography>
-                            <p className="boldtext greencolor lesslineheight" >{daysRemain}</p>
+                            <p className="boldtext greencolor lesslineheight" >{bidStatus ? 'Processing' : daysRemain}</p>
                         </Paper>
                     </Grid>
                 </Grid>

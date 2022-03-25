@@ -71,7 +71,7 @@ switch (environment) {
       'https://byp6zagvkb.execute-api.us-east-1.amazonaws.com/unity-dev';
     COGNITO_HOST = 'https://dev-unity.auth.us-east-1.amazoncognito.com';
     CLIENT_ID = 'uf2jbhv4jcprcdiqc5rupg665';
-    REDIRECTION_URL = 'https://dev-unity.dev.iqvia.app/';
+    REDIRECTION_URL = 'http://localhost:8080';
     UBUILD_ARTIFACT = 'https://dev-ubuild.dev.iqvia.app/main.js';
     SF_HOST_URL = 'https://iqvia--hbfx.lightning.force.com/';
     SOCKET_URL = 'wss://sgag59jkn1.execute-api.us-east-1.amazonaws.com/production';

@@ -288,6 +288,9 @@ export const getEditQuestionData = createSelector(selectProposal, proposal =>
 export const getSelectedBid = createSelector(selectProposal, proposal =>
   proposal.get('selectedBid')
 );
+export const getStatusOfNewBid = createSelector(selectProposal, proposal =>
+  proposal.get('newbidflag') || false
+);
 
 export const getOpportunityData = createSelector(selectProposal, proposal =>
   proposal.get('opportunityData')
