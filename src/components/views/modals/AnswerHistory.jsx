@@ -164,9 +164,37 @@ class AnswerHistory extends Component<Props> {
           };
 
           if (questionType === 'select') {
+            const prevAnswer = () => {
+              const answersArr = answers.toJS();
+              return answersArr[index + 1] ? answersArr[index + 1].answer : '';
+            };
+            const isPrevProposalIdSame = () => {
+              const answersArr = answers.toJS();
+              const currentAnswerProposalId = answersArr[index].proposalId;
+
+              return answersArr[index + 1]
+                ? answersArr[index + 1].proposalId === currentAnswerProposalId
+                : false;
+            };
+            const combinedAnswer = () => {
+              if (!isOnlyOneAnswer && prevAnswer() !== '' && prevAnswer() !== answer) {
+                return (
+                  <>
+                    <span className={'removed'}>
+                      {prevAnswer()}{' '}
+                    </span>
+                    <span className={'changed'}>
+                      {answer}
+                    </span>
+                  </>
+                );
+              } else {
+                return '';
+              }
+            };
             if(index == 0){
-              const styleClass = isFirstItem && !isOnlyOneAnswer ? 'changed' : undefined;
-              return renderWord(answer, styleClass);
+              const styleClass = isFirstItem && !isOnlyOneAnswer && prevAnswer() !== answer ? 'changed' : undefined;
+              return combinedAnswer() || renderWord(answer, styleClass);
             }else if(answers 
               && answers.get(index - 1)
               && answers.get(index).get('userName') === 'UnityPredictedAnswer'
@@ -181,8 +209,14 @@ class AnswerHistory extends Component<Props> {
             ) {
               // if answers are same, don't add any style. This scenario occurs when new bids SF answer is the same as the older
               return renderWord(answer, undefined);
-            }else{
-              return renderWord(answer, 'removed');
+            } else if (
+              index === answers.toJS().length - 1 ||
+              !isPrevProposalIdSame()
+            ) {
+              // last answer item under a proposal should not have styles
+              return renderWord(answer, undefined);
+            } else {
+              return combinedAnswer() || renderWord(answer, 'removed');
             }
           }
 
@@ -198,9 +232,6 @@ class AnswerHistory extends Component<Props> {
 
           return <p>{answer}</p>;
         }
-
-        if (answer.isEmpty()) return <p>All answers deleted</p>;
-
         const deletedAnswers = nextAnswer.filter(ans => !answer.includes(ans));
         const deletedAnswersItems = deletedAnswers.map(ans => (
           <li className="removed" key={uuidv4()}>
