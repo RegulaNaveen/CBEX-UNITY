@@ -605,7 +605,6 @@ export const changeBid = bid => {
 };
 
 export const UpdateNewBid = bid => {
-  console.log(`bid`, bid)
   return dispatch => {
     dispatch({
       type: ADD_NEW_BID,
