@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1241: Fixed Answers are not changing to green tick mark when filters are applied. 
   - IQVIACBEXU-1169: Fixed Clicking on unity link in intake redirecting to documents page
   - IQVIACBEXU-1229: Unity - question with green check appearing under "unanswered questions" filter
+  - IQVIACBEXU-1244*: Additional changes were made to select answer types in AnswerHistory
 
 ## [4.0] - YYYY-MM-DD
 ### Added
