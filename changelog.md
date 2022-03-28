@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1080: Navigate from One Bid to the next
   - IQVIACBEXU-1087: Display Opportunity Cards instead of Bid Cards in Dashboard (My Docket, Recent, All)
   - IQVIACBEXU-1147: Added BidNo to answer history
+  - IQVIACBEXU-1262: Unity - Lock User Out when New Bid is being created
 ### Changed
 ### Fixed
   - IQVIACBEXU-1120: Fixed Milestone alignment issue for questions with tool tip

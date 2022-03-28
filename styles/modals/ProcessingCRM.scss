@@ -1,0 +1,12 @@
+#processingcrm {
+  [class^='MuiButtonBase-root-'] {
+    display: none;
+  }
+  .apollo-progress-flexed {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+}

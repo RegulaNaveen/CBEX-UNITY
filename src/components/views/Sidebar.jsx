@@ -243,7 +243,6 @@ class Sidebar extends Component<Props, State> {
       selectedBid
     } = this.props;
     const { selectedSection, activeTabIndex } = this.state;
-
     const NotepadTab = () =>
       notes.size === 0 ? (
         <Typography variant="body2" style={{ fontWeight: 'inherit' }}>

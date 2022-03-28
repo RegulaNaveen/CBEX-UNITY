@@ -101,7 +101,7 @@ class Questions extends Component<Props, State> {
       heighlightcard: false,
       showFilter: false,
       sidebarscroll: '',
-      open: false
+      open: false,
     };
   }
 
@@ -451,7 +451,7 @@ class Questions extends Component<Props, State> {
       showModal,
       selectedQuestionForHistory,
       isHistoryModalShown,
-      open
+      open,
     } = this.state;
 
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;

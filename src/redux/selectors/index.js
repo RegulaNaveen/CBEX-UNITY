@@ -164,6 +164,7 @@ export const getEditQuestionData = state =>
   proposalSelectors.getEditQuestionData(state);
 
 export const getSelectedBid = state => proposalSelectors.getSelectedBid(state);
+export const getStatusOfNewBid = state => proposalSelectors.getStatusOfNewBid(state);
 
 // Tabbar Selectors
 export const getProposals = (state: Object): Array<Object> =>

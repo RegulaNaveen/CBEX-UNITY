@@ -288,6 +288,9 @@ export const getEditQuestionData = createSelector(selectProposal, proposal =>
 export const getSelectedBid = createSelector(selectProposal, proposal =>
   proposal.get('selectedBid')
 );
+export const getStatusOfNewBid = createSelector(selectProposal, proposal =>
+  proposal.get('newbidflag') || false
+);
 
 export const getOpportunityData = createSelector(selectProposal, proposal =>
   proposal.get('opportunityData')
@@ -304,6 +307,7 @@ export const getBidList = createSelector(getOpportunityData, opportunity => {
         bidId: item.getIn(['proposal', 'proposalId']),
         isCurrent: item.get('isCurrent'),
         bidName: `Bid ${item.getIn(['proposal', 'proposalDetails', 'bidNo']) || ''}`,
+        bidStatus: item.get('inProgress') || '',
         pertinentDetails: item.getIn([
           'proposal',
           'proposalDetails',

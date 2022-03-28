@@ -115,7 +115,9 @@ const BidHistory = () => {
                         key={item.bidId}
                       >
                         <div>
-                          {item.bidName} {item.isCurrent && '(Current)'}
+                          {item.bidName}  {( selectedBid.get('id') === item.bidId &&  selectedBid.get('bidStatus') ) ? 
+                          '(processing)' : 
+                          item.isCurrent && '(Current)'}
                         </div>
                         <div>{parseMomentDate(item.bidDueDate)}</div>
                         {item.bidId === selectedBid.get('id') && (

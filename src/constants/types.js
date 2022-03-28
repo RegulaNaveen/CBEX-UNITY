@@ -71,7 +71,9 @@ const PROPOSAL = {
   PROPOSAL_DELETE_QUESTION: 'proposal_delete_question',
   OPPORTUNITY_INFO: 'opportunity_info',
   UPDATE_BOX_BIDS: 'update-box-bids',
-  CHANGE_BID: 'CHANGE_BID'
+  CHANGE_BID: 'CHANGE_BID',
+  ADD_NEW_BID: 'ADD_NEW_BID',
+  NEW_BID_CREATED: 'NEW_BID_CREATED'
 };
 
 const PROPOSALS = {

@@ -1,6 +1,6 @@
 // @flow
 import { isEmpty, cloneDeep, uniqBy } from 'lodash';
-import { fromJS, Map } from 'immutable';
+import { fromJS } from 'immutable';
 import { REDUX_TYPES } from '../../constants';
 import type { Dispatch, ThunkAction } from './action-types';
 import {
@@ -58,7 +58,9 @@ const {
   PROPOSAL_DELETE_QUESTION,
   OPPORTUNITY_INFO,
   UPDATE_BOX_BIDS,
-  CHANGE_BID
+  CHANGE_BID,
+  ADD_NEW_BID,
+  NEW_BID_CREATED
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -558,8 +560,13 @@ export const deleteProposalQuestion = (
     }
   };
 };
+export const closeNewbidflags = (): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({ type: NEW_BID_CREATED, payload: {flag : false} });
+  }
+}
 
-export const getOpportunity = (id: string): ThunkAction<string, Object> => {
+export const getOpportunity = (id: string, flag = false ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({ type: PROPOSAL_INFO_LOADING, payload: {} });
 
@@ -572,14 +579,17 @@ export const getOpportunity = (id: string): ThunkAction<string, Object> => {
           break;
         }
       }
-
       dispatch({ type: OPPORTUNITY_INFO, payload: data });
       dispatch({
         type: UPDATE_BOX_BIDS,
         payload: getProposalIdlist(data)
       });
+      if(flag){
+        dispatch({ type: NEW_BID_CREATED, payload: {flag} });
+      }
     } catch (err) {
       dispatch({ type: PROPOSAL_INFO_ERROR, payload: err });
+      dispatch({ type: NEW_BID_CREATED, payload: {flag : false} });
     }
   };
 };
@@ -591,5 +601,15 @@ export const changeBid = bid => {
       payload: bid
     });
     dispatch(fetchNotes(bid.bidId));
+  };
+};
+
+export const UpdateNewBid = bid => {
+  return dispatch => {
+    dispatch({
+      type: ADD_NEW_BID,
+      payload: bid
+    });
+    dispatch(fetchNotes(bid.proposal.proposalId));
   };
 };
