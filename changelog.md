@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [4.1] - YYYY-MM-DD
 ### Added
   - IQVIACBEXU-1061: Opportunity Type version is displayed in footer of Unity record
+  - IQVIACBEXU-1096: Removed refresh button from Question and Sidebar
 ### Changed
 ### Fixed
   - IQVIACBEXU-1244: Made red strike in Answer history consistent
