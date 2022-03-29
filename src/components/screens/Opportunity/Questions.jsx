@@ -478,7 +478,6 @@ class Questions extends Component<Props, State> {
            }
           }}
           AddNewQuestion={this.onClose}
-          RefreshProposal={this.getProposalInfoUpdated}
           // eslint-disable-next-line react/destructuring-assignment
           currentTab={this.state.currentTab}
           // eslint-disable-next-line react/destructuring-assignment
@@ -507,14 +506,6 @@ class Questions extends Component<Props, State> {
                 }
               }}
             />
-            <div
-              title="Refresh"
-              className="tasksList-refresh-icon-wrapper"
-              role="presentation"
-              onClick={this.getProposalInfoUpdated}
-            >
-              <Refresh className="tasksList-add-icon" />
-            </div>
             {selectedBid.get('isCurrent') && (
               <div
                 title="Add New Question"
