@@ -539,12 +539,17 @@ const onRolesError = (state: Map, action: Object): Map => {
 const onSetQuestion = (state: Map, action: Object): Map => {
   const data = action.payload;
   const updatedProposalQuestions = state.get('proposalQuestions');
+  const updatedProposalQuestionsFilter = state.get('filteredProposalQuestions');
   updatedProposalQuestions.push(data);
+  if(updatedProposalQuestionsFilter && Array.isArray(updatedProposalQuestionsFilter)){
+    updatedProposalQuestionsFilter.push(data);
+  }
 
   let selectedBidId = state.getIn(['selectedBid', 'id']);
 
   return state
     .set('proposalQuestions', cloneDeep(updatedProposalQuestions))
+    .set('filteredProposalQuestions', cloneDeep(updatedProposalQuestionsFilter))
     .setIn(
       ['opportunityData', selectedBidId, 'proposalQuestions'],
       cloneDeep(updatedProposalQuestions)
@@ -660,19 +665,34 @@ const onSetEditQuestionData = (state, action) => {
 const onEditQuestion = (state, action) => {
   const { payload: data } = action;
   const questions = state.get('proposalQuestions');
+  const ProposalQuestionsFilter = state.get('filteredProposalQuestions');
+  let selectedBidId = state.getIn(['selectedBidId', 'id']);
+
   const questionIndex = questions.findIndex(
     item => item.questionId === data.questionId
   );
-  let selectedBidId = state.getIn(['selectedBidId', 'id']);
-
 
   const updatedQuestions = [
     ...questions.slice(0, questionIndex),
     data,
     ...questions.slice(questionIndex + 1, questions.length)
   ];
-
-  return state
+  if(ProposalQuestionsFilter && Array.isArray(ProposalQuestionsFilter)){
+    const filterquestionIndex = ProposalQuestionsFilter.findIndex(
+      item => item.questionId === data.questionId
+    );
+    ProposalQuestionsFilter[filterquestionIndex] = data;
+    return state
+    .set('proposalQuestions', cloneDeep(updatedQuestions))
+    .set('filteredProposalQuestions', cloneDeep(ProposalQuestionsFilter))
+    .setIn(
+      ['opportunityData', selectedBidId, 'proposalQuestions'],
+      cloneDeep(updatedQuestions)
+    )
+    .set('setQuestionData', data)
+    .set('isSetQuestionLoading', false);
+  }else{
+    return state
     .set('proposalQuestions', cloneDeep(updatedQuestions))
     .setIn(
       ['opportunityData', selectedBidId, 'proposalQuestions'],
@@ -680,31 +700,52 @@ const onEditQuestion = (state, action) => {
     )
     .set('setQuestionData', data)
     .set('isSetQuestionLoading', false);
+  }
 };
 
 const onDeleteQuestion = (state, action) => {
   const { payload: questionId } = action;
   const questions = state.get('proposalQuestions');
-
+  const filterquestions = state.get('filteredProposalQuestions');
+  
   const questionIndex = questions.findIndex(
     item => item.questionId === questionId
   );
-
+ 
   const updatedQuestions = [
     ...questions.slice(0, questionIndex),
     ...questions.slice(questionIndex + 1, questions.length)
   ];
-
   let selectedBidId = state.getIn(['selectedBidId', 'id']);
 
-  return state
+  if(filterquestions && Array.isArray(filterquestions)){
+    const filterquestionIndex = filterquestions.findIndex(
+      item => item.questionId === questionId
+    );
+    const updatedFilterQuestions = [
+      ...filterquestions.slice(0, filterquestionIndex),
+      ...filterquestions.slice(filterquestionIndex + 1, filterquestions.length)
+    ];
+
+   return state
     .set('proposalQuestions', cloneDeep(updatedQuestions))
+    .set('filteredProposalQuestions', cloneDeep(updatedFilterQuestions))
     .setIn(
       ['opportunityData', selectedBidId, 'proposalQuestions'],
       cloneDeep(updatedQuestions)
     )
     .set('setQuestionData', questionId)
     .set('isSetQuestionLoading', false);
+  }else{
+    return state
+      .set('proposalQuestions', cloneDeep(updatedQuestions))
+      .setIn(
+        ['opportunityData', selectedBidId, 'proposalQuestions'],
+        cloneDeep(updatedQuestions)
+      )
+      .set('setQuestionData', questionId)
+      .set('isSetQuestionLoading', false);
+  }
 };
 
 const actionMap = {
