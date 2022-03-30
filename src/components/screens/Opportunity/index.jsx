@@ -29,8 +29,7 @@ import UnityFooter from '../../common/Footer';
 import UnityGrid from '../../common/atoms/inputs/Grid';
 import UnityTab from '../../common/atoms/inputs/Tab';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
-import { SOCKET_URL } from '../../../constants/api'
-import Modal from 'apollo-react/components/Modal';
+import { SOCKET_URL } from '../../../constants/api';
 import ProcessingCRM from '../../views/modals/ProcessingCRM';
 import BidDoneBanner from '../../views/BidDoneBanner';
 
@@ -71,8 +70,12 @@ export class Opportunity extends Component<Props, State> {
       AddNewBid,
       getOpportunityInfo
     } = this.props;
+
+    console.log('Starting the WS connection');
     this.socketconnection = null;
     this.socketconnection = new WebSocket(SOCKET_URL);
+
+    // On Connection Open
     this.socketconnection.onopen =  (event) => {
       console.log('socket connected',event)
       if(params.id){
@@ -83,6 +86,7 @@ export class Opportunity extends Component<Props, State> {
       }
     };
 
+    // On Message Recieve
     this.socketconnection.addEventListener('message',  async (response) =>{
       let data = JSON.parse(response.data);
       console.log('data.event :>> ', data.event);
@@ -93,6 +97,12 @@ export class Opportunity extends Component<Props, State> {
         getOpportunityInfo(params.id, true);
        }
     });
+
+    // On Close
+    this.socketconnection.onclose =  (event) => {
+      if(event.reason === 'Going away')
+        this.connectsocket();
+    };
   }
 
   componentDidMount() {
