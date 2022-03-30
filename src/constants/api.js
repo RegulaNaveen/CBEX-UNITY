@@ -32,7 +32,7 @@ switch (environment) {
     REDIRECTION_URL = 'https://uat-unity.iqvia.app/';
     UBUILD_ARTIFACT = 'https://uat-ubuild.iqvia.app/main.js';
     SF_HOST_URL = 'https://iqvia--uat.lightning.force.com/';
-    SOCKET_URL = '';
+    SOCKET_URL = 'wss://l3p8o0zg48.execute-api.us-east-1.amazonaws.com/production';
     break;
   case 'PROD':
     PROPOSAL_API_ENDPOINT =
@@ -64,7 +64,7 @@ switch (environment) {
     REDIRECTION_URL = 'https://qa-unity.iqvia.app/';
     UBUILD_ARTIFACT = 'https://qa-ubuild.iqvia.app/main.js';
     SF_HOST_URL = 'https://iqvia--staging.lightning.force.com/';
-    SOCKET_URL = ' wss://nthe94se04.execute-api.us-east-1.amazonaws.com/production';
+    SOCKET_URL = 'wss://nthe94se04.execute-api.us-east-1.amazonaws.com/production';
     break;
   default:
     // DEV Data
