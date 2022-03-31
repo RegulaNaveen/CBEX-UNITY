@@ -3,6 +3,8 @@ import { isEmpty, cloneDeep, uniqBy } from 'lodash';
 import { fromJS } from 'immutable';
 import { REDUX_TYPES } from '../../constants';
 import type { Dispatch, ThunkAction } from './action-types';
+import { API } from '../../constants';
+import axios from 'axios';
 import {
   getProposalInfo,
   setProposalAnswer,
@@ -15,8 +17,13 @@ import {
   getValidatedProposalData,
   editProposalQuestionData,
   deleteProposalQuestionData,
-  getOpportunityInfo
+  getOpportunityInfo,
+  getProposalCount, getPaginateProposal
 } from '../../api/proposal';
+const {
+  PROPOSAL_API_URL
+} = API.PROPOSAL;
+
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getUniqueMilestones } from '../selectors/proposal';
 import { getProposalIdlist } from '../../utils/utils';
@@ -569,9 +576,22 @@ export const closeNewbidflags = (): ThunkAction<string, Object> => {
 export const getOpportunity = (id: string, flag = false ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({ type: PROPOSAL_INFO_LOADING, payload: {} });
-
     try {
-      const data = await getOpportunityInfo(id);
+      const getproposolcount = await getProposalCount(id);
+      const { count, maxLimit } = getproposolcount;
+      let callstomake = parseInt(count / maxLimit);
+      let additionalcallstomake = count % maxLimit;
+      if(additionalcallstomake){
+        callstomake = callstomake + 1;
+      }
+      let from = 0;
+      let urls = [];
+      for (let index = 0; index < callstomake; index++) {
+          urls.push(axios.get(`${PROPOSAL_API_URL}/opportunity/${id}?from=${from}`))
+          from = from + 5;       
+      }
+      let data = await getPaginateProposal(urls);
+      data = data.map(v => v['data']).flat();
       // fetch notes for current bid
       for (let proposal of data) {
         if (proposal.isCurrent) {
