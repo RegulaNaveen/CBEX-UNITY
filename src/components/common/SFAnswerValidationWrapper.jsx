@@ -15,13 +15,13 @@ class SFAnswerValidationWrapper extends Component {
   }
 
   getLink() {
-    const { sfObject, proposalDetail } = this.props;
+    const { sfObject, proposalDetail, agreementId } = this.props;
     if (sfObject === primarySFobject.BidHistory)
-      return `${SF_HOST_URL}lightning/r/Bid_History__c/${proposalDetail.agreementId}/view`;
+      return `${SF_HOST_URL}lightning/r/Bid_History__c/${agreementId}/view`;
     if (sfObject === primarySFobject.Opportunity)
       return `${SF_HOST_URL}lightning/r/Opportunity/${proposalDetail.opportunityId}/view`;
     if (sfObject === primarySFobject.ResourceRequest)
-      return `${SF_HOST_URL}lightning/r/Bid_History__c/${proposalDetail.agreementId}/related/Bid_History_Resource_Requests__r/view`;
+      return `${SF_HOST_URL}lightning/r/Bid_History__c/${agreementId}/related/Bid_History_Resource_Requests__r/view`;
     return `${SF_HOST_URL}`;
   }
 
