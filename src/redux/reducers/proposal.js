@@ -157,6 +157,9 @@ const setOpportunityInfo = (state, action) => {
         .set('opportunityType', proposal.proposal['opportunityType'] || '')
         .set('isCurrent', true)
         .set('bidStatus',  proposal.proposal['inProgress'] || false)
+        .set('agreementId',  proposal.proposal['agreementId'] || '')
+        .set('accountId',  proposal.proposal['accountId'] || '')
+        .set('opportunityId',  proposal.proposal.proposalDetails['opportunityId'] || '')
         .set(
           'pertinentDetails',
           proposal.proposal.proposalDetails.pertinentDetails
@@ -207,30 +210,28 @@ const setOpportunityInfo = (state, action) => {
 const onChangeBid = (state: Map, action: Object): Map => {
   const { payload } = action;
   let opportunityData = state.get('opportunityData');
-  const templateversion = opportunityData.getIn([
+  const {
+    agreementId,
+    accountId,
+    proposalDetails,
+    opportunitytype,
+    templateversion} = opportunityData.getIn([
     payload.bidId,
-    'proposal',
-    'questionTemplateVersionNumber'
+    'proposal'
   ]);
-  const opportunitytype = opportunityData.getIn([
-    payload.bidId,
-    'proposal',
-    'opportunityType'
-  ]);
+  
   let selectedBid = Map({
     id: payload.bidId,
     isCurrent: payload.isCurrent,
     pertinentDetails: payload.pertinentDetails,
     bidName: payload.bidName,
     questionTemplateVersionNumber: templateversion || '',
-    opportunityType: opportunitytype || ''
+    opportunityType: opportunitytype || '',
+    agreementId: agreementId || '',
+    accountId: accountId || '',
+    opportunityId: proposalDetails['opportunityId']
   });
 
-  const proposalDetails = opportunityData.getIn([
-    selectedBid.get('id'),
-    'proposal',
-    'proposalDetails'
-  ]);
   const proposalQuestions = opportunityData.getIn([
     selectedBid.get('id'),
     'proposalQuestions'
