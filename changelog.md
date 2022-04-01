@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1169: Fixed Clicking on unity link in intake redirecting to documents page
   - IQVIACBEXU-1229: Unity - question with green check appearing under "unanswered questions" filter
   - IQVIACBEXU-1244*: Additional changes were made to select answer types in AnswerHistory
+  - IQVIACBEXU-1286: Not redirecting to bid history page in SF from unity.
+  - IQVIACBEXU-1280: Pop-up message banner is not displaying on unity record if unity page is inactive for few minutes
+
 
 ## [4.0] - YYYY-MM-DD
 ### Added
