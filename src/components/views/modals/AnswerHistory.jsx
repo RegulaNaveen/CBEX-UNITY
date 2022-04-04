@@ -168,14 +168,6 @@ class AnswerHistory extends Component<Props> {
               const answersArr = answers.toJS();
               return answersArr[index + 1] ? answersArr[index + 1].answer : '';
             };
-            const isPrevProposalIdSame = () => {
-              const answersArr = answers.toJS();
-              const currentAnswerProposalId = answersArr[index].proposalId;
-
-              return answersArr[index + 1]
-                ? answersArr[index + 1].proposalId === currentAnswerProposalId
-                : false;
-            };
             const combinedAnswer = () => {
               if (!isOnlyOneAnswer && prevAnswer() !== '' && prevAnswer() !== answer) {
                 return (
@@ -204,19 +196,13 @@ class AnswerHistory extends Component<Props> {
             } else if (
               answers &&
               !isFirstItem &&
-              answers.get(index - 1) &&
-              answers.get(index - 1).get('answer') === answers.get(index).get('answer')
+              answers.get(index + 1) &&
+              answers.get(index + 1).get('answer') === answers.get(index).get('answer')
             ) {
               // if answers are same, don't add any style. This scenario occurs when new bids SF answer is the same as the older
               return renderWord(answer, undefined);
-            } else if (
-              index === answers.toJS().length - 1 ||
-              !isPrevProposalIdSame()
-            ) {
-              // last answer item under a proposal should not have styles
-              return renderWord(answer, undefined);
             } else {
-              return combinedAnswer() || renderWord(answer, 'removed');
+              return combinedAnswer() || renderWord(answer, '');
             }
           }
 
