@@ -663,7 +663,7 @@ const onEditQuestion = (state, action) => {
   const questionIndex = questions.findIndex(
     item => item.questionId === data.questionId
   );
-  let selectedBidId = state.getIn(['selectedBidId', 'id']);
+  let selectedBidId = state.getIn(['selectedBid', 'id']);
 
 
   const updatedQuestions = [
@@ -695,7 +695,7 @@ const onDeleteQuestion = (state, action) => {
     ...questions.slice(questionIndex + 1, questions.length)
   ];
 
-  let selectedBidId = state.getIn(['selectedBidId', 'id']);
+  let selectedBidId = state.getIn(['selectedBid', 'id']);
 
   return state
     .set('proposalQuestions', cloneDeep(updatedQuestions))
