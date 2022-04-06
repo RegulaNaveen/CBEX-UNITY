@@ -214,19 +214,18 @@ const onChangeBid = (state: Map, action: Object): Map => {
     agreementId,
     accountId,
     proposalDetails,
-    opportunitytype,
-    templateversion} = opportunityData.getIn([
+    opportunityType,
+    questionTemplateVersionNumber: templateversion } = opportunityData.getIn([
     payload.bidId,
     'proposal'
   ]);
-  
   let selectedBid = Map({
     id: payload.bidId,
     isCurrent: payload.isCurrent,
     pertinentDetails: payload.pertinentDetails,
     bidName: payload.bidName,
     questionTemplateVersionNumber: templateversion || '',
-    opportunityType: opportunitytype || '',
+    opportunityType: opportunityType || '',
     agreementId: agreementId || '',
     accountId: accountId || '',
     opportunityId: proposalDetails['opportunityId']
