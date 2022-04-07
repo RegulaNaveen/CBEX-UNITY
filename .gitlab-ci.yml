@@ -82,8 +82,11 @@ demo:
   image: node:12
   variables:
     Environment: $CI_JOB_NAME
+  when: manual
   only:
     - demonew
+    - dev
+    - tags
   script:
     - cat $devaccount >> build.env
     - cat $frontendacmdev >> build.env
@@ -104,8 +107,11 @@ deploydemo:
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
     - demo
+  when: manual
   only:
     - demonew
+    - dev
+    - tags
   script:    
     - source build.env  
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
