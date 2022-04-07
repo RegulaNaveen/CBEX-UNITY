@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1244*: Additional changes were made to select answer types in AnswerHistory
   - IQVIACBEXU-1286: Not redirecting to bid history page in SF from unity.
   - IQVIACBEXU-1280: Pop-up message banner is not displaying on unity record if unity page is inactive for few minutes
+  - IQVIACBEXU-1290: Regression: Question Set: version is not displaying in Unity
+  - IQVIACBEXU-1292: Regression: 'Bid' text is adding up in bid history if user deletes any custom question.
+  - IQVIACBEXU-1295: Regression: Bid History is spilling over to footer section in Documents tab When user create more than 20 Bids
+  - IQVIACBEXU-0000: 4.0 Demo feedbacks
 
 
 ## [4.0] - YYYY-MM-DD
