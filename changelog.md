@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [4.2] - YYYY-MM-DD
+### Added
+### Changed
+### Fixed
+  - IQVIACBEXU-1295: Regression: Bid History is spilling over to footer section in Documents tab When user create more than 20 Bids
+
 ## [4.1] - YYYY-MM-DD
 ### Added
   - IQVIACBEXU-1061: Opportunity Type version is displayed in footer of Unity record
