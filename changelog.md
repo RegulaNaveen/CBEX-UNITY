@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [4.2] - YYYY-MM-DD
+### Added
+### Fixed
+  - IQVIACBEXU-1293: Answer History for Date types. After unity predicted answer is validated, the original answer should be in blue and should not turn black
 ## [4.1] - YYYY-MM-DD
 ### Added
   - IQVIACBEXU-1061: Opportunity Type version is displayed in footer of Unity record
