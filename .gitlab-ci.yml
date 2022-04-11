@@ -9,10 +9,10 @@ stages:
   - sonar #sonar report
   - builddev
   - deploydev
-  - builddemo
-  - deploydemo
   - buildqa
   - deployqa
+  - builddemo
+  - deploydemo
   - builduat
   - deployuat
   - buildprod
