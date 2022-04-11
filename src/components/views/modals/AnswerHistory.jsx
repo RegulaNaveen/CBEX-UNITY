@@ -108,6 +108,7 @@ class AnswerHistory extends Component<Props> {
 
       const renderAnswers = () => {
         const isFirstItem = index === 0;
+        const isLastItem = index === answers.toJS().length -1
         const isOnlyOneAnswer = answers.toJS().length === 1
         if (isValidatedUnityPredictedAnswer) {
           return <span key={uuidv4()}><b>Validated Unity Predicted Answer</b></span>;
@@ -138,7 +139,7 @@ class AnswerHistory extends Component<Props> {
             if (new Date(answer) == 'Invalid Date') {
               return renderWord('Invalid Date', 'removed');
             }
-            const styleClass = isFirstItem && !isOnlyOneAnswer ? 'changed' : undefined;
+            let styleClass = !isOnlyOneAnswer && !isLastItem ? 'changed' : undefined;
             const newdate = renderWord(
               String(parseMomentDate(answer)),
               styleClass
