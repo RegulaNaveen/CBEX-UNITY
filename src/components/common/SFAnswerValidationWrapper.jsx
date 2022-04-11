@@ -43,7 +43,7 @@ class SFAnswerValidationWrapper extends Component {
         {hasDifferentSFanswer && (
           <div className="alert-sf-diff">
             <ul>
-              <li>Does not match Salesforce value, please update Salesforce and refresh.</li>
+              <li>Does not match Salesforce value. Please update Salesforce and refresh.</li>
               <li>
                 <a
                   className="take-me-to-SF"
