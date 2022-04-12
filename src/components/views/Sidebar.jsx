@@ -319,25 +319,6 @@ class Sidebar extends Component<Props, State> {
                   }}
                 />
               </Tooltip>
-              <Tooltip title="Refresh Proposal Sources" placement="right">
-                <SyncIcon
-                  style={{
-                    backgroundColor: neptunePrimaryDark,
-                    width: 20,
-                    height: 20,
-                    borderRadius: '50%',
-                    color: '#fff',
-                    padding: 3,
-                    margin: 3,
-                    cursor: 'pointer'
-                  }}
-                  onClick={e => {
-                    this.trackMatomoEventIconClick('Refresh');
-                    this.handleItemsVisibility(e);
-                    RefreshProposal();
-                  }}
-                />
-              </Tooltip>
             </div>
             <Tabs
               value={activeTabIndex}

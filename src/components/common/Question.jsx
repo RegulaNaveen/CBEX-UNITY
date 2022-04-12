@@ -258,7 +258,7 @@ export class TaskRow extends Component<Props, State> {
     if (sectionName === 'Proposal Team')
       return (
         <SFAnswerValidationWrapper
-          hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+          hasDifferentSFanswer={(this.props.hasDifferentSFanswer && selectedBid.get('isCurrent'))}
           sfObject={sfObject}
         >
           <Autocomplete
@@ -291,7 +291,7 @@ export class TaskRow extends Component<Props, State> {
           : String(answerValue).trim();
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+            hasDifferentSFanswer={(this.props.hasDifferentSFanswer && selectedBid.get('isCurrent'))}
             sfObject={sfObject}
           >
             <TextAreaV2
@@ -310,7 +310,7 @@ export class TaskRow extends Component<Props, State> {
           : String(answerValue).trim();
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+            hasDifferentSFanswer={(this.props.hasDifferentSFanswer && selectedBid.get('isCurrent'))}
             sfObject={sfObject}
           >
             <TextArea
@@ -327,7 +327,7 @@ export class TaskRow extends Component<Props, State> {
       case 'y/n':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+            hasDifferentSFanswer={(this.props.hasDifferentSFanswer && selectedBid.get('isCurrent'))}
             sfObject={sfObject}
           >
             <Dropdown
@@ -344,7 +344,7 @@ export class TaskRow extends Component<Props, State> {
       case 'select':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+            hasDifferentSFanswer={(this.props.hasDifferentSFanswer && selectedBid.get('isCurrent'))}
             sfObject={sfObject}
           >
             <Dropdown
@@ -361,7 +361,7 @@ export class TaskRow extends Component<Props, State> {
       case 'date':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+            hasDifferentSFanswer={(this.props.hasDifferentSFanswer && selectedBid.get('isCurrent'))}
             sfObject={sfObject}
           >
             <QuestionDatePicker
@@ -377,7 +377,7 @@ export class TaskRow extends Component<Props, State> {
       case 'picklist':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+            hasDifferentSFanswer={(this.props.hasDifferentSFanswer && selectedBid.get('isCurrent'))}
             sfObject={sfObject}
           >
             <Multiselect

@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [4.1] - YYYY-MM-DD
 ### Added
   - IQVIACBEXU-1061: Opportunity Type version is displayed in footer of Unity record
+  - IQVIACBEXU-1096: Removed refresh button from Question and Sidebar
 ### Changed
 ### Fixed
   - IQVIACBEXU-1244: Made red strike in Answer history consistent
@@ -16,6 +17,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1169: Fixed Clicking on unity link in intake redirecting to documents page
   - IQVIACBEXU-1229: Unity - question with green check appearing under "unanswered questions" filter
   - IQVIACBEXU-1244*: Additional changes were made to select answer types in AnswerHistory
+  - IQVIACBEXU-1286: Not redirecting to bid history page in SF from unity.
+  - IQVIACBEXU-1280: Pop-up message banner is not displaying on unity record if unity page is inactive for few minutes
+  - IQVIACBEXU-1290: Regression: Question Set: version is not displaying in Unity
+  - IQVIACBEXU-1292: Regression: 'Bid' text is adding up in bid history if user deletes any custom question.
+  - IQVIACBEXU-0000: 4.0 Demo feedbacks
+
 
 ## [4.0] - YYYY-MM-DD
 ### Added
@@ -36,6 +43,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1161: Disabled adding custom questions in Sidebar for disabled bids
   - IQVIACBEXU-1164: Fixed Sidebar Expand all tooltip displays after closing sidebar
   - IQVIACBEXU-1179: Fixed unverified answers showing under answered filter
+  - IQVIACBEXU-1280: Pop-up message banner is not displaying on unity record if unity page is inactive for few minutes
+  - IQVIACBEXU-1281: Bid history is displaying latest 7 bids only
   
 ## [3.4.1] - YYYY-MM-DD
 ### Fixed

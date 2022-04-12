@@ -11,6 +11,8 @@ stages:
   - deploydev
   - buildqa
   - deployqa
+  - builddemo
+  - deploydemo
   - builduat
   - deployuat
   - buildprod
@@ -67,6 +69,48 @@ deploydev:
   only:
     - dev
     - migration
+    - tags
+  script:    
+    - source build.env  
+    - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
+    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
+  tags:
+    - docker
+
+demo:
+  stage: builddemo
+  image: node:12
+  variables:
+    Environment: $CI_JOB_NAME
+  when: manual
+  only:
+    - demonew
+    - dev
+    - tags
+  script:
+    - cat $devaccount >> build.env
+    - cat $frontendacmdev >> build.env
+    - cat devops/vars/${Environment}.env >> build.env
+    - source build.env
+    - yarn cache clean
+    - yarn install
+    - yarn build:$Environment
+  artifacts:
+    paths:
+      - dist/
+      - build.env
+  tags:
+    - docker
+
+deploydemo:
+  stage: deploydemo
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  needs:
+    - demo
+  when: manual
+  only:
+    - demonew
+    - dev
     - tags
   script:    
     - source build.env  
@@ -192,15 +236,15 @@ deployprod:
 .deploystack:
   stage: deploystack
   rules:
-    - if:  $CI_COMMIT_REF_NAME =~ /^feature/ || $CI_COMMIT_REF_NAME =~ /^bugfix/
-      when: never 
+    #- if:  $CI_COMMIT_REF_NAME =~ /^feature/ || $CI_COMMIT_REF_NAME =~ /^bugfix/
+      #when: never
+    #- if:  $CI_COMMIT_REF_NAME =~ /demonew/
+      #when: never
     - if: '$DeployStack == "True"' #this flag drives whether to deploy the infrastructure stack
       when: always
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   dependencies:
-    - initialize
-    - dev_initialize
-    - build
+    - demo
   script:
     - source build.env
     - aws cloudformation validate-template --template-body file://devops/cloudformation/cbex-unity-frontend-cf.yml --region $Region

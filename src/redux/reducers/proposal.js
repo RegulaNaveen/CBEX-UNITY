@@ -4,6 +4,7 @@ import { Map, fromJS, OrderedMap } from 'immutable';
 import { REDUX_TYPES } from '../../constants';
 import type { ApiAction } from '../actions/action-types';
 import { getUniqueMilestones } from '../selectors/proposal';
+import { getQuestionsFilterApplied } from '../actions/proposal-actions';
 
 const {
   PROPOSAL_INFO,
@@ -157,6 +158,9 @@ const setOpportunityInfo = (state, action) => {
         .set('opportunityType', proposal.proposal['opportunityType'] || '')
         .set('isCurrent', true)
         .set('bidStatus',  proposal.proposal['inProgress'] || false)
+        .set('agreementId',  proposal.proposal['agreementId'] || '')
+        .set('accountId',  proposal.proposal['accountId'] || '')
+        .set('opportunityId',  proposal.proposal.proposalDetails['opportunityId'] || '')
         .set(
           'pertinentDetails',
           proposal.proposal.proposalDetails.pertinentDetails
@@ -207,15 +211,14 @@ const setOpportunityInfo = (state, action) => {
 const onChangeBid = (state: Map, action: Object): Map => {
   const { payload } = action;
   let opportunityData = state.get('opportunityData');
-  const templateversion = opportunityData.getIn([
+  const {
+    agreementId,
+    accountId,
+    proposalDetails,
+    opportunityType,
+    questionTemplateVersionNumber: templateversion } = opportunityData.getIn([
     payload.bidId,
-    'proposal',
-    'questionTemplateVersionNumber'
-  ]);
-  const opportunitytype = opportunityData.getIn([
-    payload.bidId,
-    'proposal',
-    'opportunityType'
+    'proposal'
   ]);
   let selectedBid = Map({
     id: payload.bidId,
@@ -223,14 +226,12 @@ const onChangeBid = (state: Map, action: Object): Map => {
     pertinentDetails: payload.pertinentDetails,
     bidName: payload.bidName,
     questionTemplateVersionNumber: templateversion || '',
-    opportunityType: opportunitytype || ''
+    opportunityType: opportunityType || '',
+    agreementId: agreementId || '',
+    accountId: accountId || '',
+    opportunityId: proposalDetails['opportunityId']
   });
 
-  const proposalDetails = opportunityData.getIn([
-    selectedBid.get('id'),
-    'proposal',
-    'proposalDetails'
-  ]);
   const proposalQuestions = opportunityData.getIn([
     selectedBid.get('id'),
     'proposalQuestions'
@@ -539,17 +540,15 @@ const onRolesError = (state: Map, action: Object): Map => {
 const onSetQuestion = (state: Map, action: Object): Map => {
   const data = action.payload;
   const updatedProposalQuestions = state.get('proposalQuestions');
-  const updatedProposalQuestionsFilter = state.get('filteredProposalQuestions');
-  updatedProposalQuestions.push(data);
-  if(updatedProposalQuestionsFilter && Array.isArray(updatedProposalQuestionsFilter)){
-    updatedProposalQuestionsFilter.push(data);
-  }
+  updatedProposalQuestions.push(data);  
 
+  let questionsFilter = state.get('questionsFilter');
+  const filterQuestionsVal = getQuestionsFilterApplied(updatedProposalQuestions, questionsFilter);
   let selectedBidId = state.getIn(['selectedBid', 'id']);
 
   return state
     .set('proposalQuestions', cloneDeep(updatedProposalQuestions))
-    .set('filteredProposalQuestions', cloneDeep(updatedProposalQuestionsFilter))
+    .set('filteredProposalQuestions', cloneDeep(filterQuestionsVal))
     .setIn(
       ['opportunityData', selectedBidId, 'proposalQuestions'],
       cloneDeep(updatedProposalQuestions)
@@ -665,42 +664,29 @@ const onSetEditQuestionData = (state, action) => {
 const onEditQuestion = (state, action) => {
   const { payload: data } = action;
   const questions = state.get('proposalQuestions');
-  const ProposalQuestionsFilter = state.get('filteredProposalQuestions');
   let selectedBidId = state.getIn(['selectedBidId', 'id']);
+  let questionsFilter = state.get('questionsFilter');
 
   const questionIndex = questions.findIndex(
     item => item.questionId === data.questionId
   );
-
+  
   const updatedQuestions = [
     ...questions.slice(0, questionIndex),
     data,
     ...questions.slice(questionIndex + 1, questions.length)
   ];
-  if(ProposalQuestionsFilter && Array.isArray(ProposalQuestionsFilter)){
-    const filterquestionIndex = ProposalQuestionsFilter.findIndex(
-      item => item.questionId === data.questionId
-    );
-    ProposalQuestionsFilter[filterquestionIndex] = data;
-    return state
+  const filterQuestionsVal = getQuestionsFilterApplied(updatedQuestions, questionsFilter);
+
+  return state
     .set('proposalQuestions', cloneDeep(updatedQuestions))
-    .set('filteredProposalQuestions', cloneDeep(ProposalQuestionsFilter))
+    .set('filteredProposalQuestions', cloneDeep(filterQuestionsVal))
     .setIn(
       ['opportunityData', selectedBidId, 'proposalQuestions'],
       cloneDeep(updatedQuestions)
     )
     .set('setQuestionData', data)
     .set('isSetQuestionLoading', false);
-  }else{
-    return state
-    .set('proposalQuestions', cloneDeep(updatedQuestions))
-    .setIn(
-      ['opportunityData', selectedBidId, 'proposalQuestions'],
-      cloneDeep(updatedQuestions)
-    )
-    .set('setQuestionData', data)
-    .set('isSetQuestionLoading', false);
-  }
 };
 
 const onDeleteQuestion = (state, action) => {
@@ -716,7 +702,8 @@ const onDeleteQuestion = (state, action) => {
     ...questions.slice(0, questionIndex),
     ...questions.slice(questionIndex + 1, questions.length)
   ];
-  let selectedBidId = state.getIn(['selectedBidId', 'id']);
+
+  let selectedBidId = state.getIn(['selectedBid', 'id']);
 
   if(filterquestions && Array.isArray(filterquestions)){
     const filterquestionIndex = filterquestions.findIndex(
