@@ -40,7 +40,8 @@ import {
 } from '../../../redux/selectors';
 import {
   selectUniqueMilestones,
-  selectAreAllSectionsExpanded
+  selectAreAllSectionsExpanded,
+  getBidList
 } from '../../../redux/selectors/proposal';
 import { selectUserRole } from '../../../redux/selectors/sso-auth';
 import Sidebar from '../../views/Sidebar';
@@ -262,8 +263,9 @@ class Questions extends Component<Props, State> {
   };
 
   getProposalInfoUpdated = () => {
-    const { getProposalInfoUpdated, match } = this.props;
-    getProposalInfoUpdated(match.params.id);
+    const { getProposalInfoUpdated, getBidList } = this.props;
+    const currentbid = getBidList.filter(v => v.isCurrent == true)
+    getProposalInfoUpdated(currentbid[0].bidId);
     this.trackMatomoEventRefreshInfo();
   };
 
@@ -478,6 +480,7 @@ class Questions extends Component<Props, State> {
            }
           }}
           AddNewQuestion={this.onClose}
+          RefreshProposal={this.getProposalInfoUpdated}
           // eslint-disable-next-line react/destructuring-assignment
           currentTab={this.state.currentTab}
           // eslint-disable-next-line react/destructuring-assignment
@@ -506,6 +509,14 @@ class Questions extends Component<Props, State> {
                 }
               }}
             />
+            <div
+              title="Refresh"
+              className="tasksList-refresh-icon-wrapper"
+              role="presentation"
+              onClick={this.getProposalInfoUpdated}
+            >
+              <Refresh className="tasksList-add-icon" />
+            </div>
             {selectedBid.get('isCurrent') && (
               <div
                 title="Add New Question"
@@ -577,7 +588,8 @@ const mapStateToProps = (state: Map) => ({
   userRole: selectUserRole(state),
   allSectionsExpanded: selectAreAllSectionsExpanded(state),
   editQuestionsData: getEditQuestionData(state),
-  selectedBid: getSelectedBid(state)
+  selectedBid: getSelectedBid(state),
+  getBidList: getBidList(state)
 });
 
 export default compose(
