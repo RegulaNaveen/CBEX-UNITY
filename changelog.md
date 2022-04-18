@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.2] - YYYY-MM-DD
+####Fixed
+  - IQVIACBEXU-1230: Made text fit the question div, when the zoom level is above 100%.
+  - IQVIACBEXU-1251: Fixed the smooshed text at the top of unity page.
+  - IQVIACBEXU-1256: Fixed "Not answered" text not appearing in front of the question. 
+  - IQVIACBEXU-1257: Fixed the header getting split in 2 rows when blade is opened. Fixed the propotion. 
 
 ## [4.1] - YYYY-MM-DD
 ### Added
