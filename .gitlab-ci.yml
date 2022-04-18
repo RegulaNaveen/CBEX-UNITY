@@ -162,8 +162,8 @@ uat:
   image: node:12
   variables:
     Environment: $CI_JOB_NAME
-  needs:
-    - deployqa
+  #needs:
+    #- deployqa
   when: manual
   only:
     - tags
