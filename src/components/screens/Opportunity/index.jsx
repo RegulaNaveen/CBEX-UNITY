@@ -145,7 +145,10 @@ export class Opportunity extends Component<Props, State> {
     });
 
     // Scroll
-    try{window.scrollTo(0,0)}catch(error){console.log(error)}
+    try{
+      console.log('Back to top#');
+      window.scrollTo(0,0)
+    }catch(error){console.log(error)}
     
   }
 
