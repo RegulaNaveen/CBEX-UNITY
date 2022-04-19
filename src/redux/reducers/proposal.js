@@ -117,6 +117,7 @@ const onProsalInfoLoaded = (state: Map, action: Object): Map => {
   let NewopportunityData = new OrderedMap({});
   let opportunityData = state.get('opportunityData');
   let questionsFilter = state.get('questionsFilter');
+  let selectedBid = state.get('selectedBid');
   const items = opportunityData.filter(v=> v.get('isCurrent') === false);
   let obj = {
     proposal: proposal,
@@ -149,12 +150,20 @@ const onProsalInfoLoaded = (state: Map, action: Object): Map => {
     milestoneGroup = milestoneGroup.set('logic', 'OR');
     questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
   }
-  return state
+  
+  if(selectedBid.get('id') == proposal.proposalId){
+    return state
     .set('proposalDetails', proposal)
     .set('proposalQuestions', proposalQuestions)
     .set('questionsFilter', questionsFilter)
-    .set('isProposalLoading', false)
     .set('opportunityData', NewopportunityData)
+    .set('isProposalLoading', false)
+  }else{
+    return state
+    .set('opportunityData', NewopportunityData)
+    .set('questionsFilter', questionsFilter)
+    .set('isProposalLoading', false)
+  }
 };
 const setOpportunityInfo = (state, action) => {
   const { payload } = action;
