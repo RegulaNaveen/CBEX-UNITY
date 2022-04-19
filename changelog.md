@@ -22,6 +22,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1290: Regression: Question Set: version is not displaying in Unity
   - IQVIACBEXU-1292: Regression: 'Bid' text is adding up in bid history if user deletes any custom question.
   - IQVIACBEXU-0000: 4.0 Demo feedbacks
+  - IQVIACBEXU-1330: Dashboard page taking me to wrong Opportunity
+  - IQVIACBEXU-1331: Unity URL displaying old URL format
+  - IQVIACBEXU-1315: Starting view of opportunity page does not start at the top of the page
 
 
 ## [4.0] - YYYY-MM-DD
