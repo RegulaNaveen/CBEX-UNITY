@@ -112,35 +112,49 @@ const INITIAL_STATE: Map = fromJS({
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
   const {
     proposalQuestions,
-    proposal: { proposalDetails },
-    milestones
+    proposal,
   } = action.payload;
-
+  let NewopportunityData = new OrderedMap({});
+  let opportunityData = state.get('opportunityData');
+  let questionsFilter = state.get('questionsFilter');
+  const items = opportunityData.filter(v=> v.get('isCurrent') === false);
+  let obj = {
+    proposal: proposal,
+    proposalQuestions: proposalQuestions,
+    proposalUsers: [],
+    isCurrent: true,
+  }
+  NewopportunityData = NewopportunityData.set(
+      proposal.proposalId,
+      OrderedMap(obj)
+  );
+  NewopportunityData = NewopportunityData.merge(items);  
   // Add agreementId as well in proposal details
-
-  proposalDetails.agreementId = action.payload.proposal.agreementId || '';
+  // proposalDetails.agreementId = action.payload.proposal.agreementId || '';
 
   // Adding milestones to Questions Filter
-
-  let questionsFilter = state.get('questionsFilter');
-  let milestoneGroup = fromJS({});
-  milestones.forEach(milestone => {
-    milestoneGroup = milestoneGroup.set(
-      milestone,
-      Map({
-        checked: false,
-        label: milestone,
-        className: 'questions-filter__item'
-      })
-    );
-  });
-  milestoneGroup = milestoneGroup.set('logic', 'OR');
-  questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
+  const milestones = getUniqueMilestones(proposalQuestions);
+  if(Array.isArray(milestones) && milestones.length){
+    let milestoneGroup = fromJS({});
+    milestones.forEach(milestone => {
+      milestoneGroup = milestoneGroup.set(
+        milestone,
+        Map({
+          checked: false,
+          label: milestone,
+          className: 'questions-filter__item'
+        })
+      );
+    });
+    milestoneGroup = milestoneGroup.set('logic', 'OR');
+    questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
+  }
   return state
-    .set('proposalDetails', proposalDetails)
+    .set('proposalDetails', proposal)
     .set('proposalQuestions', proposalQuestions)
     .set('questionsFilter', questionsFilter)
-    .set('isProposalLoading', false);
+    .set('isProposalLoading', false)
+    .set('opportunityData', NewopportunityData)
 };
 const setOpportunityInfo = (state, action) => {
   const { payload } = action;
