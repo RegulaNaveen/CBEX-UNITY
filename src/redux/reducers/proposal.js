@@ -112,7 +112,8 @@ const INITIAL_STATE: Map = fromJS({
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
   const {
     proposalQuestions,
-    proposal,
+    proposal: { proposalDetails },
+    proposal
   } = action.payload;
   let NewopportunityData = new OrderedMap({});
   let opportunityData = state.get('opportunityData');
@@ -130,37 +131,46 @@ const onProsalInfoLoaded = (state: Map, action: Object): Map => {
       OrderedMap(obj)
   );
   NewopportunityData = NewopportunityData.merge(items);  
+  questionsFilter = questionsFilter.map(group => {
+    return group.map(filter => {
+      if (typeof filter === 'string') return filter;
+
+      return filter.set('checked', false);
+    });
+  });
   // Add agreementId as well in proposal details
   // proposalDetails.agreementId = action.payload.proposal.agreementId || '';
 
   // Adding milestones to Questions Filter
-  const milestones = getUniqueMilestones(proposalQuestions);
-  if(Array.isArray(milestones) && milestones.length){
-    let milestoneGroup = fromJS({});
-    milestones.forEach(milestone => {
-      milestoneGroup = milestoneGroup.set(
-        milestone,
-        Map({
-          checked: false,
-          label: milestone,
-          className: 'questions-filter__item'
-        })
-      );
-    });
-    milestoneGroup = milestoneGroup.set('logic', 'OR');
-    questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
-  }
+  // const milestones = getUniqueMilestones(proposalQuestions);
+  // if(Array.isArray(milestones) && milestones.length){
+  //   let milestoneGroup = fromJS({});
+  //   milestones.forEach(milestone => {
+  //     milestoneGroup = milestoneGroup.set(
+  //       milestone,
+  //       Map({
+  //         checked: false,
+  //         label: milestone,
+  //         className: 'questions-filter__item'
+  //       })
+  //     );
+  //   });
+  //   milestoneGroup = milestoneGroup.set('logic', 'OR');
+  //   questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
+  // }
   
   if(selectedBid.get('id') == proposal.proposalId){
     return state
-    .set('proposalDetails', proposal)
+    .set('proposalDetails', proposalDetails)
     .set('proposalQuestions', proposalQuestions)
+    .set('filteredProposalQuestions', [])
     .set('questionsFilter', questionsFilter)
     .set('opportunityData', NewopportunityData)
     .set('isProposalLoading', false)
   }else{
     return state
     .set('opportunityData', NewopportunityData)
+    .set('filteredProposalQuestions', [])
     .set('questionsFilter', questionsFilter)
     .set('isProposalLoading', false)
   }
