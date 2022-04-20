@@ -437,6 +437,73 @@ function filterGroup(
   }
 }
 
+export function getQuestionsFilterApplied(questionsArr, questionsFilter) {
+    let filteredQuestions = questionsArr;
+    questionsFilter.entrySeq().forEach(([groupName, group]) => {
+      let withinGroupFilteredQuestions = [];
+      // Set the logic for current filter Group
+      let logic = group.get('logic');
+      let considerGroup = false;
+
+      group.entrySeq().forEach(([filterName, filter]) => {
+        // Do not process for logic key or the filter is not checked
+        if (filterName === 'logic' || !filter.get('checked')) return;
+
+        considerGroup = true;
+
+        switch (filterName) {
+          case 'myUserRole':
+            withinGroupFilteredQuestions = filterGroup(
+              withinGroupFilteredQuestions,
+              filteredQuestions,
+              logic,
+              applyMyUserRoleFilter
+            );
+            break;
+          case 'answered':
+            withinGroupFilteredQuestions = filterGroup(
+              withinGroupFilteredQuestions,
+              filteredQuestions,
+              logic,
+              applyAnsweredFilter
+            );
+            break;
+          case 'unanswered':
+            withinGroupFilteredQuestions = filterGroup(
+              withinGroupFilteredQuestions,
+              filteredQuestions,
+              logic,
+              applyUnAnsweredFilter
+            );
+            break;
+          case 'interestedParty':
+            withinGroupFilteredQuestions = filterGroup(
+              withinGroupFilteredQuestions,
+              filteredQuestions,
+              logic,
+              applyInterestedPartyFilter
+            );
+            break;
+          default:
+            withinGroupFilteredQuestions = filterGroup(
+              withinGroupFilteredQuestions,
+              filteredQuestions,
+              logic,
+              applyMilestoneFilter,
+              filterName
+            );
+            break;
+        }
+      });
+
+      if (considerGroup) filteredQuestions = withinGroupFilteredQuestions;
+
+      considerGroup = false;
+    });
+
+   return filteredQuestions
+}
+
 export function onQuestionsFilterApplied(questionsFilter) {
   return async (dispatch, getState) => {
     const state = getState();
@@ -446,7 +513,6 @@ export function onQuestionsFilterApplied(questionsFilter) {
     });
 
     let filteredQuestions = cloneDeep(selectProposalQuestions(state));
-
     questionsFilter.entrySeq().forEach(([groupName, group]) => {
       let withinGroupFilteredQuestions = [];
       // Set the logic for current filter Group

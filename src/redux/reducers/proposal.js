@@ -4,6 +4,7 @@ import { Map, fromJS, OrderedMap } from 'immutable';
 import { REDUX_TYPES } from '../../constants';
 import type { ApiAction } from '../actions/action-types';
 import { getUniqueMilestones } from '../selectors/proposal';
+import { getQuestionsFilterApplied } from '../actions/proposal-actions';
 
 const {
   PROPOSAL_INFO,
@@ -539,12 +540,15 @@ const onRolesError = (state: Map, action: Object): Map => {
 const onSetQuestion = (state: Map, action: Object): Map => {
   const data = action.payload;
   const updatedProposalQuestions = state.get('proposalQuestions');
-  updatedProposalQuestions.push(data);
+  updatedProposalQuestions.push(data);  
 
+  let questionsFilter = state.get('questionsFilter');
+  const filterQuestionsVal = getQuestionsFilterApplied(updatedProposalQuestions, questionsFilter);
   let selectedBidId = state.getIn(['selectedBid', 'id']);
 
   return state
     .set('proposalQuestions', cloneDeep(updatedProposalQuestions))
+    .set('filteredProposalQuestions', cloneDeep(filterQuestionsVal))
     .setIn(
       ['opportunityData', selectedBidId, 'proposalQuestions'],
       cloneDeep(updatedProposalQuestions)
@@ -660,20 +664,23 @@ const onSetEditQuestionData = (state, action) => {
 const onEditQuestion = (state, action) => {
   const { payload: data } = action;
   const questions = state.get('proposalQuestions');
+  let selectedBidId = state.getIn(['selectedBidId', 'id']);
+  let questionsFilter = state.get('questionsFilter');
+
   const questionIndex = questions.findIndex(
     item => item.questionId === data.questionId
   );
-  let selectedBidId = state.getIn(['selectedBid', 'id']);
-
-
+  
   const updatedQuestions = [
     ...questions.slice(0, questionIndex),
     data,
     ...questions.slice(questionIndex + 1, questions.length)
   ];
+  const filterQuestionsVal = getQuestionsFilterApplied(updatedQuestions, questionsFilter);
 
   return state
     .set('proposalQuestions', cloneDeep(updatedQuestions))
+    .set('filteredProposalQuestions', cloneDeep(filterQuestionsVal))
     .setIn(
       ['opportunityData', selectedBidId, 'proposalQuestions'],
       cloneDeep(updatedQuestions)
@@ -685,11 +692,12 @@ const onEditQuestion = (state, action) => {
 const onDeleteQuestion = (state, action) => {
   const { payload: questionId } = action;
   const questions = state.get('proposalQuestions');
-
+  const filterquestions = state.get('filteredProposalQuestions');
+  
   const questionIndex = questions.findIndex(
     item => item.questionId === questionId
   );
-
+ 
   const updatedQuestions = [
     ...questions.slice(0, questionIndex),
     ...questions.slice(questionIndex + 1, questions.length)
@@ -697,14 +705,34 @@ const onDeleteQuestion = (state, action) => {
 
   let selectedBidId = state.getIn(['selectedBid', 'id']);
 
-  return state
+  if(filterquestions && Array.isArray(filterquestions)){
+    const filterquestionIndex = filterquestions.findIndex(
+      item => item.questionId === questionId
+    );
+    const updatedFilterQuestions = [
+      ...filterquestions.slice(0, filterquestionIndex),
+      ...filterquestions.slice(filterquestionIndex + 1, filterquestions.length)
+    ];
+
+   return state
     .set('proposalQuestions', cloneDeep(updatedQuestions))
+    .set('filteredProposalQuestions', cloneDeep(updatedFilterQuestions))
     .setIn(
       ['opportunityData', selectedBidId, 'proposalQuestions'],
       cloneDeep(updatedQuestions)
     )
     .set('setQuestionData', questionId)
     .set('isSetQuestionLoading', false);
+  }else{
+    return state
+      .set('proposalQuestions', cloneDeep(updatedQuestions))
+      .setIn(
+        ['opportunityData', selectedBidId, 'proposalQuestions'],
+        cloneDeep(updatedQuestions)
+      )
+      .set('setQuestionData', questionId)
+      .set('isSetQuestionLoading', false);
+  }
 };
 
 const actionMap = {
