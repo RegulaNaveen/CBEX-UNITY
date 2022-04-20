@@ -5,11 +5,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [4.2] - YYYY-MM-DD
-####Fixed
+### Added
+### Changed
+### Fixed
+  - IQVIACBEXU-1249: Legacy : Custom question issue when filters applied
   - IQVIACBEXU-1230: Made text fit the question div, when the zoom level is above 100%.
   - IQVIACBEXU-1251: Fixed the smooshed text at the top of unity page.
   - IQVIACBEXU-1256: Fixed "Not answered" text not appearing in front of the question. 
   - IQVIACBEXU-1257: Fixed the header getting split in 2 rows when blade is opened. Fixed the propotion. 
+  
 
 ## [4.1] - YYYY-MM-DD
 ### Added
@@ -23,6 +27,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1169: Fixed Clicking on unity link in intake redirecting to documents page
   - IQVIACBEXU-1229: Unity - question with green check appearing under "unanswered questions" filter
   - IQVIACBEXU-1244*: Additional changes were made to select answer types in AnswerHistory
+  - IQVIACBEXU-1286: Not redirecting to bid history page in SF from unity.
+  - IQVIACBEXU-1280: Pop-up message banner is not displaying on unity record if unity page is inactive for few minutes
+  - IQVIACBEXU-1290: Regression: Question Set: version is not displaying in Unity
+  - IQVIACBEXU-1292: Regression: 'Bid' text is adding up in bid history if user deletes any custom question.
+  - IQVIACBEXU-0000: 4.0 Demo feedbacks
+  - IQVIACBEXU-1330: Dashboard page taking me to wrong Opportunity
+  - IQVIACBEXU-1331: Unity URL displaying old URL format
+  - IQVIACBEXU-1315: Starting view of opportunity page does not start at the top of the page
+
 
 ## [4.0] - YYYY-MM-DD
 ### Added
@@ -37,12 +50,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1100: Fixed Unity Predicted Answers to show on unanswered filter if they are not verified
   - IQVIACBEXU-1227: Date is squeezed in answer history
   - IQVIACBEXU-1228: Textbox should display up to five lines of text.
-
+  - IQVIACBEXU-1327: Refresh button has not been added back to UI
   - IQVIACBEXU-1122: Expand all issue in Blade section
   - IQVIACBEXU-1139: Fixed Color inconsistency in answer history for date and select question types.
   - IQVIACBEXU-1161: Disabled adding custom questions in Sidebar for disabled bids
   - IQVIACBEXU-1164: Fixed Sidebar Expand all tooltip displays after closing sidebar
   - IQVIACBEXU-1179: Fixed unverified answers showing under answered filter
+  - IQVIACBEXU-1280: Pop-up message banner is not displaying on unity record if unity page is inactive for few minutes
+  - IQVIACBEXU-1281: Bid history is displaying latest 7 bids only
   
 ## [3.4.1] - YYYY-MM-DD
 ### Fixed

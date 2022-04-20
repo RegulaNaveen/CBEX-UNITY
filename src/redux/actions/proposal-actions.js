@@ -3,6 +3,8 @@ import { isEmpty, cloneDeep, uniqBy } from 'lodash';
 import { fromJS } from 'immutable';
 import { REDUX_TYPES } from '../../constants';
 import type { Dispatch, ThunkAction } from './action-types';
+import { API } from '../../constants';
+import axios from 'axios';
 import {
   getProposalInfo,
   setProposalAnswer,
@@ -15,8 +17,13 @@ import {
   getValidatedProposalData,
   editProposalQuestionData,
   deleteProposalQuestionData,
-  getOpportunityInfo
+  getOpportunityInfo,
+  getProposalCount, getPaginateProposal
 } from '../../api/proposal';
+const {
+  PROPOSAL_API_URL
+} = API.PROPOSAL;
+
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getUniqueMilestones } from '../selectors/proposal';
 import { getProposalIdlist } from '../../utils/utils';
@@ -390,6 +397,73 @@ function filterGroup(
   }
 }
 
+export function getQuestionsFilterApplied(questionsArr, questionsFilter) {
+    let filteredQuestions = questionsArr;
+    questionsFilter.entrySeq().forEach(([groupName, group]) => {
+      let withinGroupFilteredQuestions = [];
+      // Set the logic for current filter Group
+      let logic = group.get('logic');
+      let considerGroup = false;
+
+      group.entrySeq().forEach(([filterName, filter]) => {
+        // Do not process for logic key or the filter is not checked
+        if (filterName === 'logic' || !filter.get('checked')) return;
+
+        considerGroup = true;
+
+        switch (filterName) {
+          case 'myUserRole':
+            withinGroupFilteredQuestions = filterGroup(
+              withinGroupFilteredQuestions,
+              filteredQuestions,
+              logic,
+              applyMyUserRoleFilter
+            );
+            break;
+          case 'answered':
+            withinGroupFilteredQuestions = filterGroup(
+              withinGroupFilteredQuestions,
+              filteredQuestions,
+              logic,
+              applyAnsweredFilter
+            );
+            break;
+          case 'unanswered':
+            withinGroupFilteredQuestions = filterGroup(
+              withinGroupFilteredQuestions,
+              filteredQuestions,
+              logic,
+              applyUnAnsweredFilter
+            );
+            break;
+          case 'interestedParty':
+            withinGroupFilteredQuestions = filterGroup(
+              withinGroupFilteredQuestions,
+              filteredQuestions,
+              logic,
+              applyInterestedPartyFilter
+            );
+            break;
+          default:
+            withinGroupFilteredQuestions = filterGroup(
+              withinGroupFilteredQuestions,
+              filteredQuestions,
+              logic,
+              applyMilestoneFilter,
+              filterName
+            );
+            break;
+        }
+      });
+
+      if (considerGroup) filteredQuestions = withinGroupFilteredQuestions;
+
+      considerGroup = false;
+    });
+
+   return filteredQuestions
+}
+
 export function onQuestionsFilterApplied(questionsFilter) {
   return async (dispatch, getState) => {
     const state = getState();
@@ -399,7 +473,6 @@ export function onQuestionsFilterApplied(questionsFilter) {
     });
 
     let filteredQuestions = cloneDeep(selectProposalQuestions(state));
-
     questionsFilter.entrySeq().forEach(([groupName, group]) => {
       let withinGroupFilteredQuestions = [];
       // Set the logic for current filter Group
@@ -569,9 +642,22 @@ export const closeNewbidflags = (): ThunkAction<string, Object> => {
 export const getOpportunity = (id: string, flag = false ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({ type: PROPOSAL_INFO_LOADING, payload: {} });
-
     try {
-      const data = await getOpportunityInfo(id);
+      const getproposolcount = await getProposalCount(id);
+      const { count, maxLimit } = getproposolcount;
+      let callstomake = parseInt(count / maxLimit);
+      let additionalcallstomake = count % maxLimit;
+      if(additionalcallstomake){
+        callstomake = callstomake + 1;
+      }
+      let from = 0;
+      let urls = [];
+      for (let index = 0; index < callstomake; index++) {
+          urls.push(axios.get(`${PROPOSAL_API_URL}/opportunity/${id}?from=${from}`))
+          from = from + 5;       
+      }
+      let data = await getPaginateProposal(urls);
+      data = data.map(v => v['data']).flat();
       // fetch notes for current bid
       for (let proposal of data) {
         if (proposal.isCurrent) {

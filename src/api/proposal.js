@@ -210,3 +210,28 @@ export const getOpportunityInfo = async (id: string): Promise<Object> => {
       });
   });
 };
+
+export const getProposalCount = async (id: string): Promise<Object> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`${PROPOSAL_API_URL}/opportunity/${id}/count`, {
+        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};
+export const getPaginateProposal = async (urls): Promise<Object> => {
+  return new Promise((resolve, reject) => {
+    Promise.all(urls)
+    .then((responses) => {
+      resolve(responses);
+    }).catch(err => {
+      reject(err);
+    });
+  });
+};
