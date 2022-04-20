@@ -160,6 +160,46 @@ export const setProposalAnswerData = (
   };
 };
 
+
+export const updateAnswerFromWebSocket = (data = {}): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>, getState) => {
+    const {questionId} = data;
+    let questionsFilter = getQuestionsFilters(getState());
+
+    try {
+      console.log('Updating answer for:', questionId);
+      if (Array.isArray(data.answers)) {
+        dispatch({
+          type: PROPOSAL_ANSWER,
+          payload: {
+            data: data.answers,
+            questionId,
+            hasDifferentSFanswer: data.hasDifferentSFanswer || false
+          }
+        });
+      } else {
+        dispatch({
+          type: PROPOSAL_ANSWER,
+          payload: {
+            data,
+            questionId,
+            hasDifferentSFanswer: data.hasDifferentSFanswer || false
+          }
+        });
+      }
+      const { modifiedQuestions } = data;
+      if (!isEmpty(modifiedQuestions)) {
+        modifiedQuestions.forEach(question => {
+          dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
+        });
+      }
+      dispatch(onQuestionsFilterApplied(questionsFilter));
+    } catch (err) {
+      console.log('Error in updating answer from WS', error);
+    }
+  };
+};
+
 export const getQuestionSection = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
