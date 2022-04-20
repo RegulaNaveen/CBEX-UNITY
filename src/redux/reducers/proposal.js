@@ -114,34 +114,67 @@ const onProsalInfoLoaded = (state: Map, action: Object): Map => {
   const {
     proposalQuestions,
     proposal: { proposalDetails },
-    milestones
+    proposal
   } = action.payload;
+  let NewopportunityData = new OrderedMap({});
+  let opportunityData = state.get('opportunityData');
+  let questionsFilter = state.get('questionsFilter');
+  let selectedBid = state.get('selectedBid');
+  const items = opportunityData.filter(v=> v.get('isCurrent') === false);
+  let obj = {
+    proposal: proposal,
+    proposalQuestions: proposalQuestions,
+    proposalUsers: [],
+    isCurrent: true,
+  }
+  NewopportunityData = NewopportunityData.set(
+      proposal.proposalId,
+      OrderedMap(obj)
+  );
+  NewopportunityData = NewopportunityData.merge(items);  
+  questionsFilter = questionsFilter.map(group => {
+    return group.map(filter => {
+      if (typeof filter === 'string') return filter;
 
+      return filter.set('checked', false);
+    });
+  });
   // Add agreementId as well in proposal details
-
-  proposalDetails.agreementId = action.payload.proposal.agreementId || '';
+  // proposalDetails.agreementId = action.payload.proposal.agreementId || '';
 
   // Adding milestones to Questions Filter
-
-  let questionsFilter = state.get('questionsFilter');
-  let milestoneGroup = fromJS({});
-  milestones.forEach(milestone => {
-    milestoneGroup = milestoneGroup.set(
-      milestone,
-      Map({
-        checked: false,
-        label: milestone,
-        className: 'questions-filter__item'
-      })
-    );
-  });
-  milestoneGroup = milestoneGroup.set('logic', 'OR');
-  questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
-  return state
+  // const milestones = getUniqueMilestones(proposalQuestions);
+  // if(Array.isArray(milestones) && milestones.length){
+  //   let milestoneGroup = fromJS({});
+  //   milestones.forEach(milestone => {
+  //     milestoneGroup = milestoneGroup.set(
+  //       milestone,
+  //       Map({
+  //         checked: false,
+  //         label: milestone,
+  //         className: 'questions-filter__item'
+  //       })
+  //     );
+  //   });
+  //   milestoneGroup = milestoneGroup.set('logic', 'OR');
+  //   questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
+  // }
+  
+  if(selectedBid.get('id') == proposal.proposalId){
+    return state
     .set('proposalDetails', proposalDetails)
     .set('proposalQuestions', proposalQuestions)
+    .set('filteredProposalQuestions', [])
     .set('questionsFilter', questionsFilter)
-    .set('isProposalLoading', false);
+    .set('opportunityData', NewopportunityData)
+    .set('isProposalLoading', false)
+  }else{
+    return state
+    .set('opportunityData', NewopportunityData)
+    .set('filteredProposalQuestions', [])
+    .set('questionsFilter', questionsFilter)
+    .set('isProposalLoading', false)
+  }
 };
 const setOpportunityInfo = (state, action) => {
   const { payload } = action;
