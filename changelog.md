@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [4.2] - YYYY-MM-DD
 ### Added
+  - IQVIACBEXU-1311: Flag end users when an auto-populated response has been manually edited
 ### Changed
 ### Fixed
   - IQVIACBEXU-1249: Legacy : Custom question issue when filters applied 
