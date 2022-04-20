@@ -112,7 +112,8 @@ const INITIAL_STATE: Map = fromJS({
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
   const {
     proposalQuestions,
-    proposal,
+    proposal: { proposalDetails },
+    proposal
   } = action.payload;
   let NewopportunityData = new OrderedMap({});
   let opportunityData = state.get('opportunityData');
@@ -160,7 +161,7 @@ const onProsalInfoLoaded = (state: Map, action: Object): Map => {
   
   if(selectedBid.get('id') == proposal.proposalId){
     return state
-    .set('proposalDetails', proposal)
+    .set('proposalDetails', proposalDetails)
     .set('proposalQuestions', proposalQuestions)
     .set('filteredProposalQuestions', [])
     .set('questionsFilter', questionsFilter)
