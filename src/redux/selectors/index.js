@@ -191,3 +191,6 @@ export const getSelectedSection = (state: Object): string =>
 
 export const getIsOpen = (state: Object): string =>
   siderbarSelectors.getIsOpen(state.sidebar);
+
+  export const getnoneditableField = (state: Map): Object =>
+  proposalsSelectors.getnoneditableField(state.proposals);

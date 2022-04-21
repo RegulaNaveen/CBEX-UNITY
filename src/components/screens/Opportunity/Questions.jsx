@@ -53,6 +53,7 @@ import Grid from 'apollo-react/components/Grid';
 import Blade from 'apollo-react/components/Blade';
 import chevronRight from '../../../../img/chevron-right.svg';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
+import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions';
 
 type Props = {
   match: Match,
@@ -107,8 +108,9 @@ class Questions extends Component<Props, State> {
   }
 
   componentDidMount() {
-    const { fetchUsers } = this.props;
+    const { fetchUsers, getSFNonEditabelInfoField } = this.props;
     fetchUsers();
+    getSFNonEditabelInfoField();
   }
 
   componentDidUpdate(prevProps: Map) {
@@ -446,9 +448,9 @@ class Questions extends Component<Props, State> {
       activeQuestionsFilterCount,
       allSectionsExpanded,
       editQuestionsData,
-      isOpen
+      isOpen,
+      noneditableField
     } = this.props;
-
     const {
       showModal,
       selectedQuestionForHistory,
@@ -601,6 +603,7 @@ export default compose(
     resetQuestionsFilter: resetQuestionsFilterAction,
     clearQuestionsFilter: clearQuestionsFilterAction,
     expandAllSections: expandAllSectionsAction,
-    handleOpenClose: onHandleOpenClose
+    handleOpenClose: onHandleOpenClose,
+    getSFNonEditabelInfoField: getSFNonEditabelField
   })
 )(MatomoHOC(Questions));
