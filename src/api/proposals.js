@@ -7,7 +7,8 @@ const {
   PROPOSAL_API_ALL,
   PROPOSAL_API_ALL_BY_STATUS,
   PROPOSAL_FILTER_VALUES,
-  API_KEY
+  API_KEY,
+  NON_EDITABLE_SF_FIELD_URL
 } = API.PROPOSAL;
 
 export const onGetAllProposals = (payload): Promise<Object> =>
@@ -27,5 +28,10 @@ export const onGetByStatus = (
 
 export const onGetFilterValues = (): Promise<Object> =>
   axios.get(PROPOSAL_FILTER_VALUES, {
+    headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+  });
+
+  export const onGetSFNonEditabelField = (): Promise<Object> =>
+  axios.get(NON_EDITABLE_SF_FIELD_URL, {
     headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
   });

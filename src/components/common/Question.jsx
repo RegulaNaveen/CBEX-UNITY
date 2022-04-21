@@ -20,7 +20,8 @@ import {
 import {
   getUserData,
   getProposalDetails,
-  getSelectedBid
+  getSelectedBid,
+  getnoneditableField
 } from '../../redux/selectors';
 import MatomoHOC from '../HOC/MatomoHOC';
 import { checkNonEditableFields, getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
@@ -240,7 +241,7 @@ export class TaskRow extends Component<Props, State> {
     lastAnswer: Map,
     questionText: Map
   ) => {
-    const { sectionName, sfObject, sfField, selectedBid } = this.props;
+    const { sectionName, sfObject, sfField, selectedBid, noneditableField } = this.props;
     const { selectedDay } = this.state;
 
     const optionsYN = ['Yes', 'No'];
@@ -249,7 +250,7 @@ export class TaskRow extends Component<Props, State> {
     let answerValue = '';
     let answerValueComplex;
     let finalOptions = options;
-    const checkDisableFlag = () => checkNonEditableFields(sfField) || !selectedBid.get('isCurrent');
+    const checkDisableFlag = () => checkNonEditableFields(noneditableField, sfField, sfObject) || !selectedBid.get('isCurrent');
 
     if (answer) {
       if (isObject(answer)) answerValueComplex = answer.toJS();
@@ -608,7 +609,8 @@ export class TaskRow extends Component<Props, State> {
 const mapStateToProps = (state: Object) => ({
   userData: getUserData(state),
   proposalDetail: getProposalDetails(state),
-  selectedBid: getSelectedBid(state)
+  selectedBid: getSelectedBid(state),
+  noneditableField : getnoneditableField(state)
 });
 
 export default connect(mapStateToProps, {

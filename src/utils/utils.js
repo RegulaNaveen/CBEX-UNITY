@@ -174,45 +174,8 @@ function getProposalIdlist(data=[]){
     }); 
 }
 
-function checkNonEditableFields(sfField){
-  const PreField = [
-    {
-        "questionText": "Business Developer",
-        "sfField": "Owner_Email__c",
-        "sfObject": "Opportunity"
-    },
-    {
-        "questionText": "Date risk assessed?",
-        "sfField": "Date_Risk_Assessed__c",
-        "sfObject": "Account"
-    },
-    {   
-        "questionText": "Bid Number",
-        "sfField": "Bid_Number__c",
-        "sfObject": "Bid_History__c"
-    },
-    {
-        "questionText": "Opportunity Type",
-        "sfField": "Opportunity_Type__c",
-        "sfObject": "Bid_History__c"
-    },
-    {
-        "questionText": "Executive Sponsor",
-        "sfField": "Opportunity",
-        "sfObject": "Executive_Sponsor__c"
-    },
-    {
-        "questionText": "What are the CRM numbers of related studies?",
-        "sfField": "Associated_CRM_Numbers__c",
-        "sfObject": "Bid_History__c"
-    },
-    {
-        "questionText": "Credit assessment score",
-        "sfField": "Risk_Rating__c",
-        "sfObject": "Account"
-    }
-]
-    return PreField.some((el) => el.sfField === sfField);
+function checkNonEditableFields(PreField, sfField, sfObject){
+    return PreField.some((el) => (el.sfField === sfField && el.sfObject === sfObject));
 }
 
 export {
