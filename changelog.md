@@ -6,15 +6,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [4.2] - YYYY-MM-DD
 ### Added
+  - IQVIACBEXU-1311: Flag end users when an auto-populated response has been manually edited
 ### Changed
 ### Fixed
+  - IQVIACBEXU-1293: Regression/Legacy For date type - if user validates the unity predicted answer , the blue font is changed to black.
+  - IQVIACBEXU-1295: Regression: Bid History is spilling over to footer section in Documents tab When user create more than 20 Bids
   - IQVIACBEXU-1249: Legacy : Custom question issue when filters applied
   - IQVIACBEXU-1230: Made text fit the question div, when the zoom level is above 100%.
   - IQVIACBEXU-1251: Fixed the smooshed text at the top of unity page.
   - IQVIACBEXU-1256: Fixed "Not answered" text not appearing in front of the question. 
   - IQVIACBEXU-1257: Fixed the header getting split in 2 rows when blade is opened. Fixed the propotion. 
   
-
 ## [4.1] - YYYY-MM-DD
 ### Added
   - IQVIACBEXU-1061: Opportunity Type version is displayed in footer of Unity record
