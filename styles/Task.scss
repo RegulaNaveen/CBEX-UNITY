@@ -1,3 +1,193 @@
+@media screen 
+ and (max-width: 1200px) 
+ and (min-width: 853px) 
+{ 
+  
+.task-wrapper {
+  flex: 1;
+  display: flex;
+  min-height: 60px;
+  background-color: $white;
+  align-items: center;
+  border: $border;
+  border-radius: 4px;
+  //padding-left: 20px;
+  padding-right: 23px;
+  // min-width: 630px;
+  margin-bottom: 16px;
+  outline: none;
+
+  .dd-wrapper .dd-header .dd-header-placeholder {
+    height: 24px;
+    width: 100%;
+    color: #999999;
+    font-family: "ProximaNova-Regular";
+    pointer-events: none;
+    font-size: 12px;
+    letter-spacing: 0;
+    line-height: 24px;
+    pointer-events: none;
+  }
+  .proposal-text-area {
+    resize: vertical;
+    min-height: 40px !important;
+    height: auto;
+    overflow: auto !important;
+    padding: 6px !important;
+    line-height: 26px !important;
+    width: 100%;
+    margin-top: 0 !important;
+    font-family: 'ProximaNova-Regular';
+    font-size: 16px;
+    min-width: 176px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.multiselect-wrapper .multiselect-header .multiselect-header-placeholder {
+  min-height: 24px;
+  width: 100%;
+  color: #999999;
+  font-family: "ProximaNova-Regular";
+  pointer-events: none;
+  font-size: 12px;
+  letter-spacing: 0;
+  line-height: 24px;
+  margin-left: 8px;
+}
+  &:hover {
+    cursor: pointer;
+  }
+
+  .task-title-wrapper {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    outline: none;
+
+    .task-title {
+      color: $black;
+      font-family: $proximaNova;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0;
+      line-height: 19px;
+      outline: none;
+      text-transform: capitalize;
+    }
+
+    .task-status-wrapper {
+      display: flex;
+
+      .task-status-description {
+        color: $black;
+        font-family: $proximaNova;
+        font-size: 16px;
+        letter-spacing: 0;
+        line-height: 19px;
+      }
+
+      .task-status-checkmark {
+        margin-right: 9px;
+        margin-top: 1px;
+      }
+    }
+  }
+
+  .task-icon-wrapper {
+    display: flex;
+    align-self: flex-start;
+    margin-right: 12px;
+    margin-top: 20px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+
+    .task-icon {
+      width: 18px;
+    }
+  }
+
+  .task-table-wrapper {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    outline: none;
+    width: 100%;
+
+    .task-table-headers {
+      // display: grid;
+      // grid-template-columns: 1.3fr 1.3fr 0.4fr;
+      display: flex;
+      align-items: center;
+      outline: none;
+      height: 60px;
+
+      .task-title {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        height: 60px;
+        color: $black;
+        font-family: $proximaNova;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: 19px;
+      }
+
+      .task-subtitle {
+        display: flex;
+        align-items: center;
+        height: 60px;
+        color: $black;
+        font-family: $proximaNova;
+        font-size: 14px;
+        letter-spacing: 0;
+        line-height: 17px;
+        p {
+          font-weight: 600;
+        }
+      }
+      
+
+      .task-subtitle-answer {
+        flex: 1;
+      }
+
+      .task-subtitle-owner {
+        width: 118px;
+      }
+
+      .task-subtitle-due-date {
+        width: 142px;
+      }
+
+      .task-subtitle-completion-date {
+        justify-self: center;
+      }
+
+      .filter-icon {
+        display: flex;
+        margin-left: 6px;
+        height: 60px;
+        width: 22px;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    .add-question {
+      margin-bottom: 15px;
+    }
+  }
+}
+ }
+ @media only screen   
+and (min-width : 1201px)   
+and (max-width : 1600px)  
+{  
 .task-wrapper {
   flex: 1;
   display: flex;
@@ -138,7 +328,7 @@
     }
   }
 }
-
+}
 .complete {
   background-color: $neutral2;
 }

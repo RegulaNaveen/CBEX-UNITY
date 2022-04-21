@@ -539,7 +539,6 @@ export class TaskRow extends Component<Props, State> {
 
         <div
           style={{
-            alignSelf: 'start',
             display: 'flex',
             minHeight: '40px',
             alignItems: 'center',
