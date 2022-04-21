@@ -147,6 +147,13 @@ export class Opportunity extends Component<Props, State> {
     trackPageView({
       documentTitle: `${eventCategories.plainPd}`
     });
+
+    // Scroll
+    try{
+      console.log('Back to top#');
+      window.scrollTo(0,0)
+    }catch(error){console.log(error)}
+    
   }
 
   componentWillUnmount() {
