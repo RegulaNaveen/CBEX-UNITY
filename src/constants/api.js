@@ -44,7 +44,8 @@ switch (environment) {
     CLIENT_ID = 'uf2jbhv4jcprcdiqc5rupg665';
     REDIRECTION_URL = 'https://demo-unity.dev.iqvia.app/';
     UBUILD_ARTIFACT = 'https://demo-ubuild.dev.iqvia.app/main.js';
-    SF_HOST_URL = 'https://iqvia--hbfx.lightning.force.com/';
+    SF_HOST_URL = 'https://iqvia--hotfix.lightning.force.com/';
+    SOCKET_URL = 'wss://ld700ndvyb.execute-api.us-east-1.amazonaws.com/production';
     break;
   case 'PROD':
     PROPOSAL_API_ENDPOINT =

@@ -162,12 +162,13 @@ uat:
   image: node:12
   variables:
     Environment: $CI_JOB_NAME
-  needs:
-    - deployqa
+  #needs:
+    #- deployqa
   when: manual
   only:
     - tags
   script:
+    - cat $prod_build >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
     - yarn cache clean
@@ -185,7 +186,7 @@ deployuat:
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
     - uat
-  when: manual
+  #when: manual
   only:
     - tags
   script:    
