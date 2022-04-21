@@ -279,7 +279,7 @@ export const getSFNonEditabelField = (): ThunkAction<String, Object> => async (
     if (data) {
       dispatch({
         type: NON_EDITABLE_SF_FIELD,
-        payload: JSON.parse(data)
+        payload: data
       });
     }
   } catch (error) {
