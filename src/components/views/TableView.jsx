@@ -59,7 +59,7 @@ const TableView = ({ data, hideStatus }: Props) => {
             case LINK_COLUMN:
               return (
                 <div key={uuidv4()} className="cell">
-                  <Link to={`${OPPORTUNITY}${row.proposalId}`}>{row[col]}</Link>
+                  <Link to={`${OPPORTUNITY}${row[col]}`}>{row[col]}</Link>
                 </div>
               );
             case DATE_COLUMN:

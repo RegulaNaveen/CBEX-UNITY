@@ -160,6 +160,46 @@ export const setProposalAnswerData = (
   };
 };
 
+
+export const updateAnswerFromWebSocket = (data = {}): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>, getState) => {
+    const {questionId} = data;
+    let questionsFilter = getQuestionsFilters(getState());
+
+    try {
+      console.log('Updating answer for:', questionId);
+      if (Array.isArray(data.answers)) {
+        dispatch({
+          type: PROPOSAL_ANSWER,
+          payload: {
+            data: data.answers,
+            questionId,
+            hasDifferentSFanswer: data.hasDifferentSFanswer || false
+          }
+        });
+      } else {
+        dispatch({
+          type: PROPOSAL_ANSWER,
+          payload: {
+            data,
+            questionId,
+            hasDifferentSFanswer: data.hasDifferentSFanswer || false
+          }
+        });
+      }
+      const { modifiedQuestions } = data;
+      if (!isEmpty(modifiedQuestions)) {
+        modifiedQuestions.forEach(question => {
+          dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
+        });
+      }
+      dispatch(onQuestionsFilterApplied(questionsFilter));
+    } catch (err) {
+      console.log('Error in updating answer from WS', error);
+    }
+  };
+};
+
 export const getQuestionSection = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
@@ -397,6 +437,73 @@ function filterGroup(
   }
 }
 
+export function getQuestionsFilterApplied(questionsArr, questionsFilter) {
+    let filteredQuestions = questionsArr;
+    questionsFilter.entrySeq().forEach(([groupName, group]) => {
+      let withinGroupFilteredQuestions = [];
+      // Set the logic for current filter Group
+      let logic = group.get('logic');
+      let considerGroup = false;
+
+      group.entrySeq().forEach(([filterName, filter]) => {
+        // Do not process for logic key or the filter is not checked
+        if (filterName === 'logic' || !filter.get('checked')) return;
+
+        considerGroup = true;
+
+        switch (filterName) {
+          case 'myUserRole':
+            withinGroupFilteredQuestions = filterGroup(
+              withinGroupFilteredQuestions,
+              filteredQuestions,
+              logic,
+              applyMyUserRoleFilter
+            );
+            break;
+          case 'answered':
+            withinGroupFilteredQuestions = filterGroup(
+              withinGroupFilteredQuestions,
+              filteredQuestions,
+              logic,
+              applyAnsweredFilter
+            );
+            break;
+          case 'unanswered':
+            withinGroupFilteredQuestions = filterGroup(
+              withinGroupFilteredQuestions,
+              filteredQuestions,
+              logic,
+              applyUnAnsweredFilter
+            );
+            break;
+          case 'interestedParty':
+            withinGroupFilteredQuestions = filterGroup(
+              withinGroupFilteredQuestions,
+              filteredQuestions,
+              logic,
+              applyInterestedPartyFilter
+            );
+            break;
+          default:
+            withinGroupFilteredQuestions = filterGroup(
+              withinGroupFilteredQuestions,
+              filteredQuestions,
+              logic,
+              applyMilestoneFilter,
+              filterName
+            );
+            break;
+        }
+      });
+
+      if (considerGroup) filteredQuestions = withinGroupFilteredQuestions;
+
+      considerGroup = false;
+    });
+
+   return filteredQuestions
+}
+
 export function onQuestionsFilterApplied(questionsFilter) {
   return async (dispatch, getState) => {
     const state = getState();
@@ -406,7 +513,6 @@ export function onQuestionsFilterApplied(questionsFilter) {
     });
 
     let filteredQuestions = cloneDeep(selectProposalQuestions(state));
-
     questionsFilter.entrySeq().forEach(([groupName, group]) => {
       let withinGroupFilteredQuestions = [];
       // Set the logic for current filter Group

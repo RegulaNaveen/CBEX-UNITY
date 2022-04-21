@@ -1,3 +1,92 @@
+@media screen 
+ and (max-width: 1200px) 
+ and (min-width: 853px) 
+{ 
+
+.task-table-row {
+  display: grid;
+  grid-template-columns: 1.3fr 1.3fr 160px;
+  // margin-bottom: 8px;
+  padding: 8px 0;
+  align-items: center;
+
+  .question-text {
+    display: grid;
+    align-items: center;
+
+    p {
+      -ms-word-break: break-all;
+      word-break: break-all;
+      word-break: break-word;
+      -webkit-hyphens: auto;
+      -moz-hyphens: auto;
+      -ms-hyphens: auto;
+      hyphens: auto;
+      margin-left: 5px;
+      padding-right: 10px;
+      font-size: 12px;
+
+      .edit-icon {
+        margin-left: 10px;
+        position: relative;
+        top: 3px;
+        color: #5d5d5d;
+      }
+    }
+
+    .answered {
+      margin-left: 4px;
+    }
+  }
+
+  button {
+    outline: none;
+    border: none;
+    background-color: transparent;
+    color: $neptune-secondary;
+    cursor: pointer;
+    font-size: 14px;
+    // align-self: flex-start;
+    // margin-top: 7%;
+  }
+  .date-picker > div {
+    margin-top: 0px;
+  }
+  .date-picker > div > div {
+    margin-top: 0px;
+  }
+
+  .date-picker {
+    &.disabled {
+      cursor: not-allowed;
+
+      .Mui-disabled {
+        background-color: #f2f2f2;
+
+        opacity: 1;
+
+        input {
+          &:disabled {
+            &::placeholder {
+              color: #999999;
+            }
+          }
+        }
+      }
+    }
+  }
+  .autocomplete-disabled {
+    cursor: not-allowed;
+    .Mui-disabled {
+      background-color: #f2f2f2 !important;
+    }
+  }
+}
+ }
+ @media only screen   
+and (min-width : 1201px)   
+and (max-width : 3000px)  
+{  
 .task-table-row {
   display: grid;
   grid-template-columns: 1.3fr 1.3fr 160px;
@@ -76,6 +165,7 @@
       background-color: #f2f2f2 !important;
     }
   }
+}
 }
 
 .question-row-header {
