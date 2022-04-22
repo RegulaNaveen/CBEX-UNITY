@@ -1,11 +1,11 @@
 // @flow
 import React, { Component, createRef } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import classnames from 'classnames';
 import ToolbarMenu from './ToolbarMenu';
 import { DropMenu } from '../../svg';
 import { DASHBOARD, UBUILD } from '../../../routes';
-import { handleLocationChange, isUserUbuildAdmin } from '../../../utils/utils';
+import { isUserUbuildAdmin } from '../../../utils/utils';
 
 type State = { isCollapsed: boolean };
 
