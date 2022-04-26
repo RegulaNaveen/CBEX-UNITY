@@ -44,7 +44,8 @@ const {
   UPDATE_BOX_BIDS,
   CHANGE_BID,
   ADD_NEW_BID,
-  NEW_BID_CREATED
+  NEW_BID_CREATED,
+  PROPOSAL_DETAIL_UPDATE
 } = REDUX_TYPES.PROPOSAL;
 
 const INITIAL_STATE: Map = fromJS({
@@ -176,6 +177,28 @@ const onProsalInfoLoaded = (state: Map, action: Object): Map => {
     .set('isProposalLoading', false)
   }
 };
+
+
+const updateProposalDetail = (state, action) => {
+  try{
+    const {proposalDetails, proposalId} = action.payload;
+    if(proposalId){
+      let opportunityData = state.get('opportunityData');
+      let selectedBid = state.getIn(['selectedBid', 'id'])
+      
+      // Updating the state for opportunityData with latest proposalDetails
+      opportunityData = opportunityData.setIn([proposalId, 'proposal', 'proposalDetails'], proposalDetails);
+      state = state.set('opportunityData', new OrderedMap(opportunityData));
+      // Update the current proposalDetails if the selected Bid is equal to processed Bid
+      if(selectedBid === proposalId)
+        state = state.set('proposalDetails', proposalDetails)
+    }
+  }catch(error){
+    console.log('Cannot update proposal details', error.message)
+  }
+  return state;
+}
+
 const setOpportunityInfo = (state, action) => {
   const { payload } = action;
   let opportunityData = new OrderedMap({});
@@ -806,7 +829,8 @@ const actionMap = {
   [UPDATE_BOX_BIDS]: (state, { payload }) => state.set('boxBids', payload),
   [CHANGE_BID]: onChangeBid,
   [ADD_NEW_BID]: addNewBid,
-  [NEW_BID_CREATED]: newBidCreated
+  [NEW_BID_CREATED]: newBidCreated,
+  [PROPOSAL_DETAIL_UPDATE] : updateProposalDetail
 };
 
 export default function(

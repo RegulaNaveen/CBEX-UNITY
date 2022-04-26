@@ -67,7 +67,8 @@ const {
   UPDATE_BOX_BIDS,
   CHANGE_BID,
   ADD_NEW_BID,
-  NEW_BID_CREATED
+  NEW_BID_CREATED,
+  PROPOSAL_DETAIL_UPDATE
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -299,6 +300,16 @@ export const getProposalUpdated = (id: string): ThunkAction<string, Object> => {
         payload: err
       });
     }
+  };
+};
+
+
+export const updateProposalDetailFromWebSocket = (data): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: PROPOSAL_DETAIL_UPDATE,
+      payload: data
+    });
   };
 };
 

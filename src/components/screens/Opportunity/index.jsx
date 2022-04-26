@@ -13,7 +13,8 @@ import {
   getOpportunity,
   onGetValidatedProposalDetails,
   closeNewbidflags,
-  updateAnswerFromWebSocket
+  updateAnswerFromWebSocket,
+  updateProposalDetailFromWebSocket
 } from '../../../redux/actions/proposal-actions';
 import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
 import {
@@ -70,7 +71,8 @@ export class Opportunity extends Component<Props, State> {
       match: { params },
       AddNewBid,
       getOpportunityInfo,
-      updateAnswerAction
+      updateAnswerAction,
+      updateProposalDetail
     } = this.props;
 
     console.log('Starting the WS connection');
@@ -99,6 +101,9 @@ export class Opportunity extends Component<Props, State> {
        }else if(data.event == 'ANSWER_UPDATE'){
         if(updateAnswerAction)
          updateAnswerAction(data.data)
+       }else if(data.event == 'PROPOSAL_DETAIL_UPDATE'){
+        if(updateProposalDetail)
+        updateProposalDetail(data.data)
        }
     });
 
@@ -291,6 +296,7 @@ export default compose(
     expandAllSections: expandAllSectionsAction,
     AddNewBid: UpdateNewBid,
     closeNewbidflag: closeNewbidflags,
-    updateAnswerAction: updateAnswerFromWebSocket
+    updateAnswerAction: updateAnswerFromWebSocket,
+    updateProposalDetail: updateProposalDetailFromWebSocket
   })
 )(MatomoHOC(Opportunity));
