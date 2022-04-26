@@ -12,7 +12,8 @@ const {
   ON_SET_PROPOSALS_FILTERS,
   SET_PROPOSAL_FILTERING,
   SET_PAGE,
-  SET_NUM_OF_ROWS
+  SET_NUM_OF_ROWS,
+  NON_EDITABLE_SF_FIELD
 } = REDUX_TYPES.PROPOSALS;
 
 const INITIAL_STATE: Map = fromJS({
@@ -24,7 +25,8 @@ const INITIAL_STATE: Map = fromJS({
   proposalsLoading: false,
   selectedViewType: 1,
   page: 1,
-  numRows: 15
+  numRows: 15,
+  nonEditableSF: []
 });
 
 const setProposals = (state: Map, action: Object): Map => {
@@ -64,6 +66,9 @@ const setPage = (state, action) => state.set('page', action.payload);
 
 const setNumOfRows = (state, action) => state.set('numRows', action.payload);
 
+const setNonEditableField = (state, action) => state.set('nonEditableSF', action.payload);
+
+
 const actionMap = {
   [SET_PROPOSAL_VIEW_TYPE]: setProposalViewType,
   [ON_GET_PROPOSALS]: setProposals,
@@ -73,7 +78,8 @@ const actionMap = {
   [ON_SET_PROPOSALS_FILTERS]: onSetProposalsFilters,
   [SET_PROPOSAL_FILTERING]: setProposalFiltering,
   [SET_PAGE]: setPage,
-  [SET_NUM_OF_ROWS]: setNumOfRows
+  [SET_NUM_OF_ROWS]: setNumOfRows,
+  [NON_EDITABLE_SF_FIELD]: setNonEditableField
 };
 
 export default function(

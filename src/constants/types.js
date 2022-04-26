@@ -86,7 +86,8 @@ const PROPOSALS = {
   ON_SET_PROPOSALS_FILTERS: 'on_set_proposals_filters',
   SET_PROPOSAL_FILTERING: 'set_proposal_filtering',
   SET_PAGE: 'set_page',
-  SET_NUM_OF_ROWS: 'set_num_of_rows'
+  SET_NUM_OF_ROWS: 'set_num_of_rows',
+  NON_EDITABLE_SF_FIELD: 'NON_EDITABLE_SF_FIELD'
 };
 
 const SIDEBAR = {

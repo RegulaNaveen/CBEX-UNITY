@@ -186,7 +186,7 @@
  }
  @media only screen   
 and (min-width : 1201px)   
-and (max-width : 1600px)  
+and (max-width : 3000px)  
 {  
 .task-wrapper {
   flex: 1;
@@ -334,4 +334,9 @@ and (max-width : 1600px)
 }
 .subtitlebold {
   font-weight: bold;
+}
+
+.a-MuiOutlinedInput-root.Mui-disabled .a-MuiChip-root{
+  border-color: black !important;
+  background-color: #fff !important;
 }

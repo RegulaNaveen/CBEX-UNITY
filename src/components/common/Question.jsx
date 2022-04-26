@@ -20,10 +20,11 @@ import {
 import {
   getUserData,
   getProposalDetails,
-  getSelectedBid
+  getSelectedBid,
+  getnoneditableField
 } from '../../redux/selectors';
 import MatomoHOC from '../HOC/MatomoHOC';
-import { getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
+import { checkNonEditableFields, getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
 import ChipView from './Chip/ChipView';
 import Autocomplete from './atoms/inputs/AutoComplete';
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
@@ -240,7 +241,7 @@ export class TaskRow extends Component<Props, State> {
     lastAnswer: Map,
     questionText: Map
   ) => {
-    const { sectionName, sfObject, sfField, selectedBid } = this.props;
+    const { sectionName, sfObject, sfField, selectedBid, noneditableField } = this.props;
     const { selectedDay } = this.state;
 
     const optionsYN = ['Yes', 'No'];
@@ -249,13 +250,15 @@ export class TaskRow extends Component<Props, State> {
     let answerValue = '';
     let answerValueComplex;
     let finalOptions = options;
+    const checkDisableFlag = () => checkNonEditableFields(noneditableField, sfField, sfObject) || !selectedBid.get('isCurrent');
 
     if (answer) {
       if (isObject(answer)) answerValueComplex = answer.toJS();
       else answerValue = answer.toString();
     }
-
-    if (sectionName === 'Proposal Team')
+    
+    if (sectionName === 'Proposal Team'){
+      
       return (
         <SFAnswerValidationWrapper
           hasDifferentSFanswer={(this.props.hasDifferentSFanswer && selectedBid.get('isCurrent'))}
@@ -267,10 +270,11 @@ export class TaskRow extends Component<Props, State> {
             onBlur={e => this.setSelectRow(false)}
             onChange={this.handlePropsalChange}
             text={answerValue}
-            disabled={!selectedBid.get('isCurrent')}
+            disabled={checkDisableFlag()}
           />
         </SFAnswerValidationWrapper>
       );
+    }
 
     // return <UserLookup sectionName={sectionName} onChange={this.handleTextChange} text={answerValue} />;
 
@@ -300,7 +304,7 @@ export class TaskRow extends Component<Props, State> {
               value={answerValue}
               onBlur={e => this.handleTextChange(e.target.value, answerValue)}
               onFocus={e => this.onChildInputFocus(e)}
-              disabled={!selectedBid.get('isCurrent')}
+              disabled={checkDisableFlag()}
             />
           </SFAnswerValidationWrapper>
         );
@@ -320,7 +324,7 @@ export class TaskRow extends Component<Props, State> {
               onBlur={this.handleTextChange}
               onFocus={e => this.onChildInputFocus(e)}
               value={answerValue || ''}
-              disabled={!selectedBid.get('isCurrent')}
+              disabled={checkDisableFlag()}
             />
           </SFAnswerValidationWrapper>
         );
@@ -337,7 +341,7 @@ export class TaskRow extends Component<Props, State> {
               onClick={val => this.onClickChange(val, answerValue)}
               value={answerValue}
               setSelectRow={this.setSelectRow}
-              disabled={!selectedBid.get('isCurrent')}
+              disabled={checkDisableFlag()}
             />
           </SFAnswerValidationWrapper>
         );
@@ -354,7 +358,7 @@ export class TaskRow extends Component<Props, State> {
               onClick={val => this.onClickChange(val, answerValue)}
               value={answerValue}
               setSelectRow={this.setSelectRow}
-              disabled={!selectedBid.get('isCurrent')}
+              disabled={checkDisableFlag()}
             />
           </SFAnswerValidationWrapper>
         );
@@ -370,7 +374,7 @@ export class TaskRow extends Component<Props, State> {
               handleDayChange={this.handleDayChange}
               onFocus={e => this.setSelectRow(true)}
               onBlur={e => this.setSelectRow(false)}
-              disabled={!selectedBid.get('isCurrent')}
+              disabled={checkDisableFlag()}
             />
           </SFAnswerValidationWrapper>
         );
@@ -386,7 +390,7 @@ export class TaskRow extends Component<Props, State> {
               onClick={this.onSelectValues}
               value={answerValueComplex}
               setSelectRow={this.setSelectRow}
-              disabled={!selectedBid.get('isCurrent')}
+              disabled={checkDisableFlag()}
             />
           </SFAnswerValidationWrapper>
         );
@@ -604,7 +608,8 @@ export class TaskRow extends Component<Props, State> {
 const mapStateToProps = (state: Object) => ({
   userData: getUserData(state),
   proposalDetail: getProposalDetails(state),
-  selectedBid: getSelectedBid(state)
+  selectedBid: getSelectedBid(state),
+  noneditableField : getnoneditableField(state)
 });
 
 export default connect(mapStateToProps, {

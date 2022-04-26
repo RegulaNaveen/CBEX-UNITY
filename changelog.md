@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1256: Fixed "Not answered" text not appearing in front of the question. 
   - IQVIACBEXU-1257: Fixed the header getting split in 2 rows when blade is opened. Fixed the propotion. 
   - IQVIACBEXU-1347-internal: Unity header fields are not updating as per SF value.
+  - IQVIACBEXU-1348-internal: Business developer field is not updating once we update the field from SF.
   
 ## [4.1] - YYYY-MM-DD
 ### Added

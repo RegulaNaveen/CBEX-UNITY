@@ -174,6 +174,10 @@ function getProposalIdlist(data=[]){
     }); 
 }
 
+function checkNonEditableFields(PreField, sfField, sfObject){
+    return PreField.some((el) => (el.sfField === sfField && el.sfObject === sfObject));
+}
+
 export {
   getCountriesNameForCode,
   getCountryOptions,
@@ -183,5 +187,6 @@ export {
   getUserInitials,
   getUserName,
   handleLocationChange,
-  getProposalIdlist
+  getProposalIdlist,
+  checkNonEditableFields
 };
