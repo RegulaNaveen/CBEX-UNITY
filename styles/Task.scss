@@ -335,3 +335,8 @@ and (max-width : 3000px)
 .subtitlebold {
   font-weight: bold;
 }
+
+.a-MuiOutlinedInput-root.Mui-disabled .a-MuiChip-root{
+  border-color: black !important;
+  background-color: #fff !important;
+}
