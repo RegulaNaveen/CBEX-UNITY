@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1251: Fixed the smooshed text at the top of unity page.
   - IQVIACBEXU-1256: Fixed "Not answered" text not appearing in front of the question. 
   - IQVIACBEXU-1257: Fixed the header getting split in 2 rows when blade is opened. Fixed the propotion. 
+  - IQVIACBEXU-1347-internal: Unity header fields are not updating as per SF value.
   
 ## [4.1] - YYYY-MM-DD
 ### Added
