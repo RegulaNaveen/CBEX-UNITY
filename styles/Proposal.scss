@@ -45,6 +45,13 @@
     font-weight: 600;
     color: #000;
     font-family: 'ProximaNova-Regular';
+    -ms-word-break: break-all;
+    word-break: break-all;
+    /* Non standard for WebKit */
+    word-break: break-word;
+-webkit-hyphens: auto;
+  -moz-hyphens: auto;
+       hyphens: auto;
   }
   .sidebarduedatedsg {
     text-align: center !important;
@@ -248,6 +255,15 @@ and (max-width : 3000px)
     font-weight: 600;
     color: #000;
     font-family: 'ProximaNova-Regular';
+    -ms-word-break: break-all;
+    word-break: break-all;
+
+    /* Non standard for WebKit */
+    word-break: break-word;
+
+-webkit-hyphens: auto;
+  -moz-hyphens: auto;
+       hyphens: auto;
   }
   .sidebarduedatedsg {
     text-align: center !important;
