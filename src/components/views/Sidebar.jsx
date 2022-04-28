@@ -33,6 +33,7 @@ import { REDUX_TYPES } from '../../constants';
 
 import MatomoHOC from '../HOC/MatomoHOC';
 import { selectAreAllSectionsExpanded } from '../../redux/selectors/proposal';
+const MANUAL_REFRESH = false;
 
 type Props = {
   sections: Map,
@@ -319,6 +320,7 @@ class Sidebar extends Component<Props, State> {
                   }}
                 />
               </Tooltip>
+              { MANUAL_REFRESH &&  
               <Tooltip title="Refresh Proposal Sources" placement="right">
                 <SyncIcon
                   style={{
@@ -338,6 +340,7 @@ class Sidebar extends Component<Props, State> {
                   }}
                 />
               </Tooltip>
+              }
             </div>
             <Tabs
               value={activeTabIndex}
