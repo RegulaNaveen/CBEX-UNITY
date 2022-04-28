@@ -511,14 +511,6 @@ class Questions extends Component<Props, State> {
                 }
               }}
             />
-            <div
-              title="Refresh"
-              className="tasksList-refresh-icon-wrapper"
-              role="presentation"
-              onClick={this.getProposalInfoUpdated}
-            >
-              <Refresh className="tasksList-add-icon" />
-            </div>
             {selectedBid.get('isCurrent') && (
               <div
                 title="Add New Question"
