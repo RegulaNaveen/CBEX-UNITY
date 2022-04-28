@@ -300,7 +300,7 @@ export class TaskRow extends Component<Props, State> {
           >
             <TextAreaV2
               className="proposal-text-area"
-              placeholder="Click to answer"
+              placeholder={(checkDisableFlag()) ? '' : "Click to answer"}
               value={answerValue}
               onBlur={e => this.handleTextChange(e.target.value, answerValue)}
               onFocus={e => this.onChildInputFocus(e)}
@@ -319,7 +319,7 @@ export class TaskRow extends Component<Props, State> {
           >
             <TextArea
               className="proposal-text-area"
-              placeholder="Click to answer"
+              placeholder={(checkDisableFlag()) ? '' : "Click to answer"}
               type="number"
               onBlur={this.handleTextChange}
               onFocus={e => this.onChildInputFocus(e)}
@@ -336,7 +336,7 @@ export class TaskRow extends Component<Props, State> {
           >
             <Dropdown
               id="dd-proposal-answer"
-              placeholder="Click to answer"
+              placeholder={(checkDisableFlag()) ? '' : "Click to answer"}
               items={optionsYN}
               onClick={val => this.onClickChange(val, answerValue)}
               value={answerValue}
@@ -353,7 +353,7 @@ export class TaskRow extends Component<Props, State> {
           >
             <Dropdown
               id="dd-proposal-answer"
-              placeholder="Click to answer"
+              placeholder={(checkDisableFlag()) ? '' : "Click to answer"}
               items={finalOptions}
               onClick={val => this.onClickChange(val, answerValue)}
               value={answerValue}
@@ -385,7 +385,7 @@ export class TaskRow extends Component<Props, State> {
             sfObject={sfObject}
           >
             <Multiselect
-              placeholder="Click to answer"
+              placeholder={(checkDisableFlag()) ? '' : "Click to answer"}
               items={finalOptions}
               onClick={this.onSelectValues}
               value={answerValueComplex}

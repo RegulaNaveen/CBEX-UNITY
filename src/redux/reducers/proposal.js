@@ -720,7 +720,7 @@ const onSetEditQuestionData = (state, action) => {
 const onEditQuestion = (state, action) => {
   const { payload: data } = action;
   const questions = state.get('proposalQuestions');
-  let selectedBidId = state.getIn(['selectedBidId', 'id']);
+  let selectedBidId = state.getIn(['selectedBid', 'id']);
   let questionsFilter = state.get('questionsFilter');
 
   const questionIndex = questions.findIndex(
