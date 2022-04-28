@@ -89,6 +89,8 @@ type State = {
   showFilter: boolean
 };
 
+const MANUAL_REFRESH = false;
+
 class Questions extends Component<Props, State> {
   constructor(props: Object) {
     super(props);
@@ -511,6 +513,16 @@ class Questions extends Component<Props, State> {
                 }
               }}
             />
+            { MANUAL_REFRESH && (
+              <div
+                title="Refresh"
+                className="tasksList-refresh-icon-wrapper"
+                role="presentation"
+                onClick={this.getProposalInfoUpdated}
+              >
+                <Refresh className="tasksList-add-icon" />
+              </div>
+            )}
             {selectedBid.get('isCurrent') && (
               <div
                 title="Add New Question"
