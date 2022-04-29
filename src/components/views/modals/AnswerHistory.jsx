@@ -140,6 +140,12 @@ class AnswerHistory extends Component<Props> {
               return renderWord('Invalid Date', 'removed');
             }
             let styleClass = !isOnlyOneAnswer && !isLastItem ? 'changed' : undefined;
+            // Dont add styles if answers are same
+            // We use .substring(0, 10) to get only the yyyy-mm-dd out of a String like '2022-04-30T00:00:00+05:30'
+            if(String(answer).substring(0, 10) === String(nextAnswer).substring(0, 10)){
+              nextAnswer = '';
+              styleClass = undefined
+            }
             const newdate = renderWord(
               String(parseMomentDate(answer)),
               styleClass
