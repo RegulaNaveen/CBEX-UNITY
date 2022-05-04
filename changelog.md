@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1347-internal: Unity header fields are not updating as per SF value.
   - IQVIACBEXU-1348-internal: Business developer field is not updating once we update the field from SF.
   - IQVIACBEXU-1282: Bid due date field is striking Answer History even if answer from SF are same
+  - IQVIACBEXU-1232: Unity - Unable to Identify Bid when Bid History is collapsed
   
 ## [4.1] - YYYY-MM-DD
 ### Added
