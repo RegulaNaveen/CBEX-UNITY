@@ -137,11 +137,6 @@ class Questions extends Component<Props, State> {
     }
   }
 
-  componentWillUnmount() {
-    const { resetQuestionsFilter } = this.props;
-    resetQuestionsFilter();
-  }
-
   handleIsCheckedAll = () => {
     const { allSectionsExpanded, expandAllSections } = this.props;
     expandAllSections(!allSectionsExpanded);
@@ -571,9 +566,12 @@ class Questions extends Component<Props, State> {
     );
   }
   componentWillUnmount(){
-    const { handleOpenClose} = this.props;
+    const { handleOpenClose, resetQuestionsFilter} = this.props;
     if(handleOpenClose)
      handleOpenClose(false);
+
+    if(resetQuestionsFilter)
+      resetQuestionsFilter();
   }
 }
 
