@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [4.2] - YYYY-MM-DD
 ### Added
   - IQVIACBEXU-1311: Flag end users when an auto-populated response has been manually edited
+  - IQVIACBEXU-1284: Auto close Unity Banner
 ### Changed
 ### Fixed
   - IQVIACBEXU-1293: Regression/Legacy For date type - if user validates the unity predicted answer , the blue font is changed to black.
