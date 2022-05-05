@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
   - IQVIACBEXU-1311: Flag end users when an auto-populated response has been manually edited
   - IQVIACBEXU-1284: Auto close Unity Banner
+  - IQVIACBEXU-1245: Unity - Box will not allow user to to log-in unless language is selected
 ### Changed
 ### Fixed
   - IQVIACBEXU-1293: Regression/Legacy For date type - if user validates the unity predicted answer , the blue font is changed to black.
