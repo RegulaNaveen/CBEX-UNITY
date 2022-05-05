@@ -21,6 +21,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1348-internal: Business developer field is not updating once we update the field from SF.
   - IQVIACBEXU-1282: Bid due date field is striking Answer History even if answer from SF are same
   - IQVIACBEXU-1232: Unity - Unable to Identify Bid when Bid History is collapsed
+  - IQVIACBEXU-1341: Edge case:Filters applied in one opportunity card are mapping over to other opportunities
+  - IQVIACBEXU-1118: Loading issues if user switch among My Docket, Recent and All tabs in quick pace.
+  - IQVIACBEXU-1247: Textbox not expanding to maximum length while inputting the data
+  - IQVIACBEXU-1248: Textbox should be in expanded state if user expands the textbox manually
+  - IQVIACBEXU-1340: Legacy: Rows filtered and opportunity cards displaying are not matching
   
 ## [4.1] - YYYY-MM-DD
 ### Added

@@ -36,7 +36,10 @@ const setProposals = (state: Map, action: Object): Map => {
 
 const setProposalsError = (state: Map, action: Object): Map => {
   const { error } = action.payload;
-  return state.set('proposalsError', error).set('proposalsLoading', false);
+  if(error && error.message && error.message === 'SwitchError')
+    return state.set('proposalsError', error)
+  else
+    return state.set('proposalsError', error).set('proposalsLoading', false);
 };
 
 const onSetFilteringProposals = (state: Map, action: Object): Map => {

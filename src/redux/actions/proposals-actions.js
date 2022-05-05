@@ -228,10 +228,6 @@ export const onFilteringProposals = (
       dispatch({ type: ERROR_ON_GET_PROPOSALS, payload: { error } });
     } finally {
       dispatch(setPageAction(1)); // resetting page to 1
-      dispatch({
-        type: SET_PROPOSAL_FILTERING,
-        payload: false
-      });
     }
   };
 };
