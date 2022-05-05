@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1247: Textbox not expanding to maximum length while inputting the data
   - IQVIACBEXU-1248: Textbox should be in expanded state if user expands the textbox manually
   - IQVIACBEXU-1340: Legacy: Rows filtered and opportunity cards displaying are not matching
+  - IQVIACBEXU-1365: Date completed filed is not centered for questions which has flags.
   
 ## [4.1] - YYYY-MM-DD
 ### Added
