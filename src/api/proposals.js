@@ -11,20 +11,37 @@ const {
   NON_EDITABLE_SF_FIELD_URL
 } = API.PROPOSAL;
 
-export const onGetAllProposals = (payload): Promise<Object> =>
-  axios.post(PROPOSAL_API_ALL, payload, {
-    headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
-  });
+let onGoingDashboardCall;
+const { CancelToken } = axios;
 
+export const onGetAllProposals = (payload): Promise<Object> => {
+  if (onGoingDashboardCall)
+    onGoingDashboardCall('SwitchError');
+
+  return axios.post(PROPOSAL_API_ALL, payload, {
+    headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() },
+    cancelToken: new CancelToken(function executor(c) {
+      onGoingDashboardCall = c;
+    })
+  });
+}
 export const onGetByStatus = (
   payload,
   status: string,
   userEmail: string
-): Promise<Object> =>
-  axios.post(PROPOSAL_API_ALL_BY_STATUS, payload, {
+): Promise<Object> => {
+  if (onGoingDashboardCall)
+    onGoingDashboardCall('SwitchError');
+
+  return axios.post(PROPOSAL_API_ALL_BY_STATUS, payload, {
     headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() },
+    cancelToken: new CancelToken(function executor(c) {
+      onGoingDashboardCall = c;
+    }),
     params: { userEmail, status }
   });
+}
+  
 
 export const onGetFilterValues = (): Promise<Object> =>
   axios.get(PROPOSAL_FILTER_VALUES, {
