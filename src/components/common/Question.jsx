@@ -545,12 +545,13 @@ export class TaskRow extends Component<Props, State> {
           style={{
             display: 'flex',
             minHeight: '40px',
-            alignItems: 'center',
-            paddingLeft: '16px'
+            alignItems: 'flex-start',
+            paddingLeft: '16px',
+            height:'100%'
           }}
         >
           <button
-            style={{ width: '100px', textAlign: 'left', flexShrink: 0 }}
+            style={{ width: '100px', textAlign: 'left', flexShrink: 0, marginTop: '11px'}}
             type="button"
             onClick={this.displayAnswerOnHistory}
           >
@@ -579,7 +580,8 @@ export class TaskRow extends Component<Props, State> {
                 width: '40px',
                 height: '24px',
                 justifyContent: 'center',
-                alignItems: 'center'
+                alignItems: 'center',
+                marginTop: '6px'
               }}
             >
               <Checkmark className="answered" style={{ marginLeft: '6px' }} />
@@ -587,7 +589,7 @@ export class TaskRow extends Component<Props, State> {
           ) : null}
           {loading ? (
             <span
-              style={{ marginLeft: '6px', position: 'relative', top: '15px' }}
+              style={{ marginLeft: '6px', marginTop: '18px', position: 'relative', top: '15px' }}
             >
               <Loader
                 isInner
