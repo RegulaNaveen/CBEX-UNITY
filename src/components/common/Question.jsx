@@ -27,6 +27,7 @@ import MatomoHOC from '../HOC/MatomoHOC';
 import { checkNonEditableFields, getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
 import ChipView from './Chip/ChipView';
 import Autocomplete from './atoms/inputs/AutoComplete';
+import AutocompleteText from './atoms/inputs/AutocompleteText';
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
 import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
@@ -394,6 +395,22 @@ export class TaskRow extends Component<Props, State> {
             />
           </SFAnswerValidationWrapper>
         );
+      case 'picklist-lookup':
+        return (
+          <SFAnswerValidationWrapper
+          hasDifferentSFanswer={(this.props.hasDifferentSFanswer && selectedBid.get('isCurrent'))}
+          sfObject={sfObject}
+        >
+          <AutocompleteText
+            sectionName={sectionName}
+            onFocus={e => this.setSelectRow(true)}
+            onBlur={e => this.setSelectRow(false)}
+            onChange={this.handlePropsalChange}
+            text={answerValue || ''}
+            disabled={checkDisableFlag()}
+          />
+        </SFAnswerValidationWrapper>
+      );
       default:
         return <div id="no-configuration">Click to answer</div>;
     }
