@@ -403,10 +403,32 @@ export class TaskRow extends Component<Props, State> {
         >
           <AutocompleteText
             sectionName={sectionName}
+            sfObject={sfObject}
+            sfField={sfField}
+            multiple={true}
             onFocus={e => this.setSelectRow(true)}
             onBlur={e => this.setSelectRow(false)}
             onChange={this.handlePropsalChange}
             text={answerValue || ''}
+            disabled={checkDisableFlag()}
+          />
+        </SFAnswerValidationWrapper>
+      );
+      case 'select-lookup':
+        return (
+          <SFAnswerValidationWrapper
+          hasDifferentSFanswer={(this.props.hasDifferentSFanswer && selectedBid.get('isCurrent'))}
+          sfObject={sfObject}
+        >
+          <AutocompleteText
+            sectionName={sectionName}
+            sfObject={sfObject}
+            sfField={sfField}
+            onFocus={e => this.setSelectRow(true)}
+            onBlur={e => this.setSelectRow(false)}
+            onChange={this.handlePropsalChange}
+            text={answerValue || ''}
+            multiple={false}
             disabled={checkDisableFlag()}
           />
         </SFAnswerValidationWrapper>
