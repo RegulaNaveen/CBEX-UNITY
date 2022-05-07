@@ -68,7 +68,8 @@ const {
   CHANGE_BID,
   ADD_NEW_BID,
   NEW_BID_CREATED,
-  PROPOSAL_DETAIL_UPDATE
+  PROPOSAL_DETAIL_UPDATE,
+  UPDATE_LOOKUP_OPTIONS
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -748,5 +749,16 @@ export const UpdateNewBid = bid => {
       payload: bid
     });
     dispatch(fetchNotes(bid.proposal.proposalId));
+  };
+};
+
+export const callPickListLookupSfData = (): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    try {
+      const data = await getPickListLookupSfData();
+      dispatch({ type: UPDATE_LOOKUP_OPTIONS, payload: data });
+    } catch (err) {
+      console.log('Lookup API failed');
+    }
   };
 };

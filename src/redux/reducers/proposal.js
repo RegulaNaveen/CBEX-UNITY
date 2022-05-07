@@ -45,7 +45,8 @@ const {
   CHANGE_BID,
   ADD_NEW_BID,
   NEW_BID_CREATED,
-  PROPOSAL_DETAIL_UPDATE
+  PROPOSAL_DETAIL_UPDATE,
+  UPDATE_LOOKUP_OPTIONS
 } = REDUX_TYPES.PROPOSAL;
 
 const INITIAL_STATE: Map = fromJS({
@@ -108,7 +109,8 @@ const INITIAL_STATE: Map = fromJS({
   editQuestionsData: Map({}),
   opportunityData: Map({}),
   selectedBid: Map({}),
-  boxBids: []
+  boxBids: [],
+  lookUpOptions: Map({}),
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -830,7 +832,8 @@ const actionMap = {
   [CHANGE_BID]: onChangeBid,
   [ADD_NEW_BID]: addNewBid,
   [NEW_BID_CREATED]: newBidCreated,
-  [PROPOSAL_DETAIL_UPDATE] : updateProposalDetail
+  [PROPOSAL_DETAIL_UPDATE] : updateProposalDetail,
+  [UPDATE_LOOKUP_OPTIONS] : (state, { payload }) => state.set('lookUpOptions', Map(payload)),
 };
 
 export default function(

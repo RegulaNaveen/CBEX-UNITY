@@ -8,7 +8,8 @@ const {
   PROPOSAL_API_URL,
   PROPOSAL_QUESTIONS_API_URL,
   PROPOSAL_VALIDATED_DATA,
-  API_KEY
+  API_KEY,
+  LOOKUP_OPTIONS_API
 } = API.PROPOSAL;
 
 let onGoingAnswer = {};
@@ -235,3 +236,9 @@ export const getPaginateProposal = async (urls): Promise<Object> => {
     });
   });
 };
+
+export const getPickListLookupSfData = async (): Promise<Object> => {
+  return axios.get(`${LOOKUP_OPTIONS_API}`, {
+        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+      })
+}
