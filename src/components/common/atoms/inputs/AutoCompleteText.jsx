@@ -39,7 +39,7 @@ const AutocompleteText = props => {
 
   return (
     <div
-      className={`${props.disabled ? 'autocomplete-disabled' : 'autocomplete'}`}
+      className={`${props.disabled ? 'autocomplete-disabled' : 'autocomplete autocomplete-text'}`}
     >
       <AutocompleteV2
         fullWidth
