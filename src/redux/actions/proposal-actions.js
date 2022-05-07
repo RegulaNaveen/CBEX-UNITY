@@ -765,7 +765,7 @@ export const callPickListLookupSfData = (): ThunkAction<string, Object> => {
       })
       dispatch({ type: UPDATE_LOOKUP_OPTIONS, payload: lookupMap });
     } catch (error) {
-      console.log('Lookup API failed', error);
+      console.log('Lookup API failed');
     }
   };
 };
