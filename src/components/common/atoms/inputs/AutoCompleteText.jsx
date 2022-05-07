@@ -18,8 +18,6 @@ const AutocompleteText = props => {
       let val = (multiple) ? 
         text.map(v =>  ({ label: v })) :
         {label: text}
-
-      console.log(multiple, sfField, sfObject, val, text)
       setValue(val);
     } else setValue( (multiple) ? [] : '' );
   }, []);
@@ -36,7 +34,6 @@ const AutocompleteText = props => {
     catch(error){
         console.log(error)
     }
-    console.log(newValue, answerStringify);
     props.onChange(answerStringify);
   }, 50);
 
