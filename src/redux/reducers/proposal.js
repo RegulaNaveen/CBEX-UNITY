@@ -833,7 +833,7 @@ const actionMap = {
   [ADD_NEW_BID]: addNewBid,
   [NEW_BID_CREATED]: newBidCreated,
   [PROPOSAL_DETAIL_UPDATE] : updateProposalDetail,
-  [UPDATE_LOOKUP_OPTIONS] : (state, { payload }) => state.set('lookUpOptions', Map(payload)),
+  [UPDATE_LOOKUP_OPTIONS] : (state, { payload }) => state.set('lookUpOptions', payload),
 };
 
 export default function(
