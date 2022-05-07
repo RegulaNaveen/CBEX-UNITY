@@ -110,7 +110,7 @@ const INITIAL_STATE: Map = fromJS({
   opportunityData: Map({}),
   selectedBid: Map({}),
   boxBids: [],
-  lookUpOptions: Map({}),
+  lookUpOptions: {},
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
