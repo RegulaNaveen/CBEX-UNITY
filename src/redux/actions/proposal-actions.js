@@ -18,7 +18,8 @@ import {
   editProposalQuestionData,
   deleteProposalQuestionData,
   getOpportunityInfo,
-  getProposalCount, getPaginateProposal
+  getProposalCount, getPaginateProposal,
+  getPickListLookupSfData
 } from '../../api/proposal';
 const {
   PROPOSAL_API_URL
@@ -755,10 +756,16 @@ export const UpdateNewBid = bid => {
 export const callPickListLookupSfData = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     try {
-      const data = await getPickListLookupSfData();
-      dispatch({ type: UPDATE_LOOKUP_OPTIONS, payload: data });
-    } catch (err) {
-      console.log('Lookup API failed');
+      let lookupMap = {}
+      const response = await getPickListLookupSfData();
+      const {data}  = response.data;
+      data.forEach((row)=>{
+        const options = row.PicklistValues.map((label)=>({label}));
+        lookupMap[`${row.PK}_${row.SK}`] = options;
+      })
+      dispatch({ type: UPDATE_LOOKUP_OPTIONS, payload: lookupMap });
+    } catch (error) {
+      console.log('Lookup API failed', error);
     }
   };
 };
