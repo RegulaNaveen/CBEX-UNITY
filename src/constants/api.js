@@ -59,7 +59,7 @@ switch (environment) {
     REDIRECTION_URL = 'https://unity.iqvia.app/';
     UBUILD_ARTIFACT = 'https://ubuild.iqvia.app/main.js';
     SF_HOST_URL = 'https://iqvia.my.salesforce.com/';
-    SOCKET_URL = '';
+    SOCKET_URL = 'wss://29nghekakl.execute-api.us-east-1.amazonaws.com/production';
     break;
   case 'QA':
     // UDEV Data

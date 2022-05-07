@@ -1,11 +1,11 @@
 // @flow
 import React, { Component, createRef } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import classnames from 'classnames';
 import ToolbarMenu from './ToolbarMenu';
 import { DropMenu } from '../../svg';
 import { DASHBOARD, UBUILD } from '../../../routes';
-import { handleLocationChange, isUserUbuildAdmin } from '../../../utils/utils';
+import { isUserUbuildAdmin } from '../../../utils/utils';
 
 type State = { isCollapsed: boolean };
 
@@ -48,10 +48,10 @@ class Toolbar extends Component<{}, State> {
     const results = isUserUbuildAdmin();
     return (
       <div className="toolbar-wrapper">
-        <Link onClick={(e)=>handleLocationChange(e)} to={DASHBOARD}>
+        <a href={DASHBOARD}>
           <p className="toolbar-title">IQVIA™</p>
           <p className="toolbar-title">Unity</p>
-        </Link>
+        </a>
         {results && (
           <div
             className={
@@ -62,9 +62,9 @@ class Toolbar extends Component<{}, State> {
                 : 'ubuild-link'
             }
           >
-            <Link onClick={(e)=>handleLocationChange(e)} to={UBUILD} className="toolbar-space">
+            <a className="toolbar-space" href={UBUILD}>
               <p className="ubuild-title">U-Build</p>
-            </Link>
+            </a>
           </div>
         )}
         <div className="toolbar-account-spacer">
