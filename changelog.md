@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
   - IQVIACBEXU-1311: Flag end users when an auto-populated response has been manually edited
   - IQVIACBEXU-1284: Auto close Unity Banner
+  - IQVIACBEXU-1361: If user replacing with existing email then the history part not completely red striked out.
   - IQVIACBEXU-1245: Unity - Box will not allow user to to log-in unless language is selected
 ### Changed
 ### Fixed

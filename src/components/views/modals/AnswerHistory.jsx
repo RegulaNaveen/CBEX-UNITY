@@ -123,6 +123,34 @@ class AnswerHistory extends Component<Props> {
             </span>
           );
           if (questionType === 'text' || questionType === 'number') {
+            if (sectionName === 'Proposal Team') {
+              /**
+               * Proposal Team section answers which are "text" types are emails separated with commas.
+               * diffWordsWithSpace from diff package is used for highlighting changes in text type answers, but it's hard to read changes in email answers with this algo.
+               * The business requested custom change highlight for emails. The below implementation doesn't use 'diff' package.
+               */
+              const answerTrimArr = answer.split(',').map(i => i.trim()); // Convert String answer to Array
+              const nextAnswerTrimArr = nextAnswer
+                .split(',')
+                .map(i => i.trim()); // Convert String answer to Array
+              const intersection = nextAnswerTrimArr.filter(x =>
+                answerTrimArr.includes(x)
+              ); // Common emails (i.e Not removed)
+              const removed = nextAnswerTrimArr.filter(
+                x => !answerTrimArr.includes(x)
+              ); // removed emails
+              const added = answerTrimArr.filter(
+                x => !nextAnswerTrimArr.includes(x)
+              ); // updated emails
+              const allAnswers = [
+                ...new Set([...nextAnswerTrimArr, ...answerTrimArr])
+              ];
+              return allAnswers.map(ans => {
+                if (intersection.includes(ans)) return renderWord(ans, '');
+                if (removed.includes(ans)) return renderWord(ans, 'removed');
+                if (added.includes(ans)) return renderWord(ans, 'changed');
+              });
+            }
             const diffAnswers = diffWordsWithSpace(nextAnswer, answer);
             
             return rearrangeDiff(diffAnswers).map(
