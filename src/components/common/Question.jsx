@@ -253,6 +253,7 @@ export class TaskRow extends Component<Props, State> {
     let finalOptions = options;
     const checkDisableFlag = () => checkNonEditableFields(noneditableField, sfField, sfObject) || !selectedBid.get('isCurrent');
 
+    
     if (answer) {
       if (isObject(answer)) answerValueComplex = answer.toJS();
       else answerValue = answer.toString();
@@ -409,7 +410,7 @@ export class TaskRow extends Component<Props, State> {
             onFocus={e => this.setSelectRow(true)}
             onBlur={e => this.setSelectRow(false)}
             onChange={this.handlePropsalChange}
-            text={answerValue || ''}
+            text={answerValueComplex}
             disabled={checkDisableFlag()}
           />
         </SFAnswerValidationWrapper>
