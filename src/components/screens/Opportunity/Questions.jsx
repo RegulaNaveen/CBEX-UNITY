@@ -21,7 +21,8 @@ import {
   onApplyQuestionsFilter,
   resetQuestionsFilterAction,
   clearQuestionsFilterAction,
-  expandAllSectionsAction
+  expandAllSectionsAction,
+  callPickListLookupSfData
 } from '../../../redux/actions/proposal-actions';
 import {
   getProposalDetails,
@@ -110,9 +111,10 @@ class Questions extends Component<Props, State> {
   }
 
   componentDidMount() {
-    const { fetchUsers, getSFNonEditabelInfoField } = this.props;
+    const { fetchUsers, getSFNonEditabelInfoField, callPickListLookupSfData } = this.props;
     fetchUsers();
     getSFNonEditabelInfoField();
+    callPickListLookupSfData();
   }
 
   componentDidUpdate(prevProps: Map) {
@@ -606,6 +608,7 @@ export default compose(
     clearQuestionsFilter: clearQuestionsFilterAction,
     expandAllSections: expandAllSectionsAction,
     handleOpenClose: onHandleOpenClose,
-    getSFNonEditabelInfoField: getSFNonEditabelField
+    getSFNonEditabelInfoField: getSFNonEditabelField,
+    callPickListLookupSfData
   })
 )(MatomoHOC(Questions));
