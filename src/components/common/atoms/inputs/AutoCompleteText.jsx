@@ -22,20 +22,22 @@ const AutocompleteText = props => {
     } else setValue( (multiple) ? [] : '' );
   }, []);
 
-  const handleChange = _.debounce((event, newValue) => {
-    let answerStringify = ' ';
-    setValue(newValue);
-    try{ 
+  const handleChange = (event, newValue, action) => {
+    if(action === 'select-option' || action === 'remove-option' || action === 'input'){
+      let answerStringify = ' ';
+      setValue(newValue);
+      try{ 
         if(multiple)
-            answerStringify = newValue.map((val)=>val.label) || []
+            answerStringify = (newValue) ? newValue.map((val)=>val.label) :  []
         else
-            answerStringify = newValue.label || ' ';
+            answerStringify = (newValue) ? newValue.label : ' ';
+      }
+      catch(error){
+          console.log(error)
+      }
+      props.onChange(answerStringify);
     }
-    catch(error){
-        console.log(error)
-    }
-    props.onChange(answerStringify);
-  }, 50);
+  }
 
   return (
     <div
