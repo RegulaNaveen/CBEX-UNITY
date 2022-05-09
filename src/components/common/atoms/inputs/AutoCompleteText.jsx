@@ -40,7 +40,7 @@ const AutocompleteText = props => {
 
   return (
     <div
-      className={`${props.disabled ? 'autocomplete-disabled' : 'autocomplete autocomplete-text'}`}
+      className={`${props.disabled ? 'autocomplete-disabled autocomplete-text' : 'autocomplete autocomplete-text'}`}
     >
       <AutocompleteV2
         fullWidth
@@ -53,6 +53,7 @@ const AutocompleteText = props => {
         matchFrom="any"
         onChange={handleChange}
         noOptionsText="No matches found"
+        placeholder="Click to answer"
         onFocus={e => {
           props.onFocus();
         }}
