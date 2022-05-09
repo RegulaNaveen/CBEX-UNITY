@@ -27,7 +27,7 @@ import MatomoHOC from '../HOC/MatomoHOC';
 import { checkNonEditableFields, getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
 import ChipView from './Chip/ChipView';
 import Autocomplete from './atoms/inputs/AutoComplete';
-import AutocompleteText from './atoms/inputs/AutocompleteText';
+import AutocompleteText from './atoms/inputs/AutoCompleteText';
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
 import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
