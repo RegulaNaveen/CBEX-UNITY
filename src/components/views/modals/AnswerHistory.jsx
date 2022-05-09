@@ -89,6 +89,7 @@ class AnswerHistory extends Component<Props> {
       
       const isValidatedUnityPredictedAnswer = (
         questionType !== 'picklist' &&
+        questionType !== 'picklist-lookup' &&
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'UnityPredictedAnswer' &&
         answer === nextAnswer
@@ -97,6 +98,7 @@ class AnswerHistory extends Component<Props> {
       // picklist answers are array so they require different check than other question types
       const isPicklistValidUnityPredAns = (
         questionType === 'picklist' &&
+        questionType === 'picklist-lookup' &&
         answers &&
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'UnityPredictedAnswer' &&
@@ -116,7 +118,7 @@ class AnswerHistory extends Component<Props> {
         if (isPicklistValidUnityPredAns) {
           return <span key={uuidv4()}><b>Validated Unity Predicted Answer</b></span>;
         }
-        if (questionType !== 'picklist') {
+        if (questionType !== 'picklist' && questionType !== 'picklist-lookup') {
           const renderWord = (word, status) => (
             <span className={status} key={uuidv4()}>
               {word}{' '}
@@ -198,7 +200,7 @@ class AnswerHistory extends Component<Props> {
             );
           };
 
-          if (questionType === 'select') {
+          if (questionType === 'select' || questionType === 'select-lookup') {
             const prevAnswer = () => {
               const answersArr = answers.toJS();
               return answersArr[index + 1] ? answersArr[index + 1].answer : '';

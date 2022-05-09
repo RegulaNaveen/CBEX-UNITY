@@ -59,7 +59,7 @@ switch (environment) {
     REDIRECTION_URL = 'https://unity.iqvia.app/';
     UBUILD_ARTIFACT = 'https://ubuild.iqvia.app/main.js';
     SF_HOST_URL = 'https://iqvia.my.salesforce.com/';
-    SOCKET_URL = '';
+    SOCKET_URL = 'wss://29nghekakl.execute-api.us-east-1.amazonaws.com/production';
     break;
   case 'QA':
     // UDEV Data
@@ -122,6 +122,7 @@ const PROPOSAL_API_ALL_BY_STATUS = `${PROPOSAL_API_URL}/all-by-status`;
 const PROPOSAL_QUESTIONS_API_URL = `${PROPOSAL_API_ENDPOINT}/api/questions`;
 const PROPOSAL_FILTER_VALUES = `${PROPOSAL_API_URL}/acceptanceCriteriaValues`;
 const PROPOSAL_VALIDATED_DATA = `${PROPOSAL_API_URL}/validations`;
+const LOOKUP_OPTIONS_API = `${PROPOSAL_API_ENDPOINT}/api/questions/lookup-options`;
 
 const MAMOTO_IQVIA = 'https://useranalytics.solutions.iqvia.com/';
 
@@ -135,7 +136,8 @@ const PROPOSAL = {
   PROPOSAL_VALIDATED_DATA,
   API_KEY: PROPOSAL_API_KEY,
   MAMOTO_IQVIA,
-  NON_EDITABLE_SF_FIELD_URL
+  NON_EDITABLE_SF_FIELD_URL,
+  LOOKUP_OPTIONS_API
 };
 
 const NOTEPAD_API_URL = `${PROPOSAL_API_ENDPOINT}/api/notes`;

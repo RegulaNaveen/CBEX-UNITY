@@ -337,3 +337,6 @@ export const getIsQuestionAnswered = createSelector(
     return isQuestionAnswered > -1 ? true : false;
   }
 );
+ 
+export const getLookUpOptionsSelector = (proposals: Map): Object =>
+  proposals.get('lookUpOptions')

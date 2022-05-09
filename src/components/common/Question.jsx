@@ -27,6 +27,7 @@ import MatomoHOC from '../HOC/MatomoHOC';
 import { checkNonEditableFields, getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
 import ChipView from './Chip/ChipView';
 import Autocomplete from './atoms/inputs/AutoComplete';
+import AutocompleteText from './atoms/inputs/AutocompleteText';
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
 import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
@@ -252,6 +253,7 @@ export class TaskRow extends Component<Props, State> {
     let finalOptions = options;
     const checkDisableFlag = () => checkNonEditableFields(noneditableField, sfField, sfObject) || !selectedBid.get('isCurrent');
 
+    
     if (answer) {
       if (isObject(answer)) answerValueComplex = answer.toJS();
       else answerValue = answer.toString();
@@ -394,6 +396,44 @@ export class TaskRow extends Component<Props, State> {
             />
           </SFAnswerValidationWrapper>
         );
+      case 'picklist-lookup':
+        return (
+          <SFAnswerValidationWrapper
+          hasDifferentSFanswer={(this.props.hasDifferentSFanswer && selectedBid.get('isCurrent'))}
+          sfObject={sfObject}
+        >
+          <AutocompleteText
+            sectionName={sectionName}
+            sfObject={sfObject}
+            sfField={sfField}
+            multiple={true}
+            onFocus={e => this.setSelectRow(true)}
+            onBlur={e => this.setSelectRow(false)}
+            onChange={this.handlePropsalChange}
+            text={answerValueComplex}
+            disabled={checkDisableFlag()}
+          />
+        </SFAnswerValidationWrapper>
+      );
+      case 'select-lookup':
+        return (
+          <SFAnswerValidationWrapper
+          hasDifferentSFanswer={(this.props.hasDifferentSFanswer && selectedBid.get('isCurrent'))}
+          sfObject={sfObject}
+        >
+          <AutocompleteText
+            sectionName={sectionName}
+            sfObject={sfObject}
+            sfField={sfField}
+            onFocus={e => this.setSelectRow(true)}
+            onBlur={e => this.setSelectRow(false)}
+            onChange={this.handlePropsalChange}
+            text={answerValue || ''}
+            multiple={false}
+            disabled={checkDisableFlag()}
+          />
+        </SFAnswerValidationWrapper>
+      );
       default:
         return <div id="no-configuration">Click to answer</div>;
     }
