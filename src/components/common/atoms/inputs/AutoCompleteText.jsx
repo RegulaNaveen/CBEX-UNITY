@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import AutocompleteV2 from 'apollo-react/components/AutocompleteV2';
 import { connect } from 'react-redux';
 import { getLookUpOptionsSelector } from '../../../../redux/selectors';
-import _ from 'lodash';
 
 const AutocompleteText = props => {
   const {options, sfField, sfObject, multiple} = props;
