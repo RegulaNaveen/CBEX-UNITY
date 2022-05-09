@@ -124,7 +124,7 @@
   
 }
 button.is-btnopen {
-  top: 120 !important;
+  top: 110 !important;
 }
 @media (min-width: 1200px) {
   #sidebar {
@@ -257,12 +257,34 @@ and (max-width : 3000px)
   }
   
 }
-button.is-btnopen {
-  top: 120 !important;
-}
 @media (min-width: 1200px) {
   #sidebar {
     z-index: 999;
   }
 }
 }
+@media only screen   
+and (min-width : 1201px)   
+and (max-width : 3000px)  
+{  
+button.is-btnopen {
+  top: 95px !important;
+}
+}
+@media screen 
+ and (max-width: 1200px) 
+ and (min-width: 1163px) 
+{  
+    button.is-btnopen {
+      top: 114px !important;
+    }
+  }
+
+  @media screen 
+ and (max-width: 1199px) 
+ and (min-width: 1024px) 
+{  
+    button.is-btnopen {
+      top: 112px !important;
+    }
+  }
