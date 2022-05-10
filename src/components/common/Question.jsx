@@ -405,6 +405,7 @@ export class TaskRow extends Component<Props, State> {
           <AutocompleteText
             sectionName={sectionName}
             sfObject={sfObject}
+            lov={finalOptions}
             sfField={sfField}
             multiple={true}
             onFocus={e => this.setSelectRow(true)}
@@ -424,6 +425,7 @@ export class TaskRow extends Component<Props, State> {
           <AutocompleteText
             sectionName={sectionName}
             sfObject={sfObject}
+            lov={finalOptions}
             sfField={sfField}
             onFocus={e => this.setSelectRow(true)}
             onBlur={e => this.setSelectRow(false)}

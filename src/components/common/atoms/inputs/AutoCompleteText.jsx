@@ -4,8 +4,17 @@ import { connect } from 'react-redux';
 import { getLookUpOptionsSelector } from '../../../../redux/selectors';
 
 const AutocompleteText = props => {
-  const {options, sfField, sfObject, multiple} = props;
+  const {options, sfField, sfObject, multiple, lov} = props;
   const text = (multiple) ? props.text : props.text.trim();
+
+  let listOptions = [];
+  try{
+    let finalLov = (lov) ? lov.valueSeq().toArray().map((v)=>({label:v})) : [];
+    listOptions =(finalLov.length) ? finalLov : options[`SF#${sfObject}_SF#${sfField}`];
+  }catch(error){
+
+  }
+  
 
   const [value, setValue] = useState(()=>{
     return (multiple) ? [] : '';
@@ -45,7 +54,7 @@ const AutocompleteText = props => {
       <AutocompleteV2
         fullWidth
         multiple={multiple}
-        source={options[`SF#${sfObject}_SF#${sfField}`] || []}
+        source={listOptions || []}
         value={value}
         chipColor="white"
         size="small"
