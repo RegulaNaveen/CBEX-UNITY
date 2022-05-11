@@ -14,13 +14,9 @@ const AutocompleteText = props => {
   }catch(error){
 
   }
-  
-
   const [value, setValue] = useState(()=>{
     return (multiple) ? [] : '';
   });
-  
-
   useEffect(() => {
     if (text) {
       let val = (multiple) ? 
@@ -28,7 +24,7 @@ const AutocompleteText = props => {
         {label: text}
       setValue(val);
     } else setValue( (multiple) ? [] : '' );
-  }, []);
+  }, [text.toString()]);
 
   const handleChange = (event, newValue, action) => {
     if(action === 'select-option' || action === 'remove-option' || action === 'input'){
@@ -62,7 +58,6 @@ const AutocompleteText = props => {
         matchFrom="any"
         onChange={handleChange}
         noOptionsText="No matches found"
-        placeholder="Click to answer"
         onFocus={e => {
           props.onFocus();
         }}

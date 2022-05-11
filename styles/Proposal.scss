@@ -422,7 +422,13 @@ and (max-width : 3000px)
 }
 
 .autocomplete-text {
+  color: #000000!important;
+  font-family: "ProximaNova-Regular"!important;
+  font-size: 16px!important;
    input {
-     height: 36px!important
+    height: 36px!important;
+    color: #000000!important;
+    font-family: "ProximaNova-Regular"!important;
+    font-size: 16px!important;
    }
 }

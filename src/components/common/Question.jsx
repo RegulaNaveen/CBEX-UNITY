@@ -281,9 +281,8 @@ export class TaskRow extends Component<Props, State> {
     // return <UserLookup sectionName={sectionName} onChange={this.handleTextChange} text={answerValue} />;
 
     if (
-      type === 'picklist' &&
-      (sfObject === 'Bid_History__c' ||
-        sfObject === 'Apttus__APTS_Agreement__c') &&
+      (type === 'picklist' ||  type === 'picklist-lookup') &&
+      (sfObject === 'Bid_History__c' || sfObject === 'Apttus__APTS_Agreement__c') &&
       sfField === 'Targeted_Countries__c'
     ) {
       answerValueComplex = getCountriesNameForCode(answerValueComplex || []);
@@ -462,7 +461,7 @@ export class TaskRow extends Component<Props, State> {
     const answerType = answerConfiguration.get('type');
 
     // picklist value should not be converted to string while saving
-    if (answerType === 'picklist') {
+    if (answerType === 'picklist' || answerType === 'picklist-lookup') {
       setProposalAnswer(
         proposalId,
         questionId,
