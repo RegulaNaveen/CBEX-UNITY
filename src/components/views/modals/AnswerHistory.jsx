@@ -97,8 +97,7 @@ class AnswerHistory extends Component<Props> {
 
       // picklist answers are array so they require different check than other question types
       const isPicklistValidUnityPredAns = (
-        questionType === 'picklist' &&
-        questionType === 'picklist-lookup' &&
+        (questionType === 'picklist' || questionType === 'picklist-lookup') &&
         answers &&
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'UnityPredictedAnswer' &&
