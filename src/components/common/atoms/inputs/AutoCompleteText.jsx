@@ -13,10 +13,15 @@ const AutocompleteText = props => {
   else
     text = (multiple) ? [] : '';
 
-  try{
-    let finalLov = (lov) ? lov.valueSeq().toArray().map((v)=>({label:v})) : [];
-    listOptions =(finalLov.length) ? finalLov : options[`SF#${sfObject}_SF#${sfField}`];
-  }catch(error){}
+  let currentAnswerString = (text) ? text.toString() : '';
+
+  let finalLov = [];
+  try{ 
+    finalLov = (lov) ? lov.valueSeq().toArray().map((v)=>({label:v})) : [];
+  }
+  catch(error){}
+    
+  listOptions =(finalLov.length) ? finalLov : options[`SF#${sfObject}_SF#${sfField}`];
   
   const [value, setValue] = useState(()=>{
     return (multiple) ? [] : '';
@@ -28,10 +33,11 @@ const AutocompleteText = props => {
         {label: text}
       setValue(val);
     } else setValue( (multiple) ? [] : '' );
-  }, [(text) ? text.toString() : '']);
+  }, [currentAnswerString]);
 
-  const handleChange = (event, newValue, action) => {
+  const handleChange = (event, nV, action) => {
     if(action === 'select-option' || action === 'remove-option' || action === 'input'){
+      let newValue = (nV === null) ? '' : nV;
       let answerStringify = ' ';
       setValue(newValue);
       try{ 
@@ -43,7 +49,8 @@ const AutocompleteText = props => {
       catch(error){
           console.log('Error in handle change')
       }
-      props.onChange(answerStringify);
+      if(newValue != currentAnswerString)
+        props.onChange(answerStringify);
     }
   }
 
