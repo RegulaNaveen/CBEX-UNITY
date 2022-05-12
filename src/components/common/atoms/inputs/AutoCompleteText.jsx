@@ -5,15 +5,19 @@ import { getLookUpOptionsSelector } from '../../../../redux/selectors';
 
 const AutocompleteText = props => {
   const {options, sfField, sfObject, multiple, lov} = props;
-  const text = (multiple) ? props.text : props.text.trim();
-
+  let text;
   let listOptions = [];
+
+  if(props.text)
+    text = (multiple) ? props.text : props.text.trim();
+  else
+    text = (multiple) ? [] : '';
+
   try{
     let finalLov = (lov) ? lov.valueSeq().toArray().map((v)=>({label:v})) : [];
     listOptions =(finalLov.length) ? finalLov : options[`SF#${sfObject}_SF#${sfField}`];
-  }catch(error){
-
-  }
+  }catch(error){}
+  
   const [value, setValue] = useState(()=>{
     return (multiple) ? [] : '';
   });
@@ -24,7 +28,7 @@ const AutocompleteText = props => {
         {label: text}
       setValue(val);
     } else setValue( (multiple) ? [] : '' );
-  }, [text.toString()]);
+  }, [(text) ? text.toString() : '']);
 
   const handleChange = (event, newValue, action) => {
     if(action === 'select-option' || action === 'remove-option' || action === 'input'){
@@ -37,11 +41,20 @@ const AutocompleteText = props => {
             answerStringify = (newValue) ? newValue.label : ' ';
       }
       catch(error){
-          console.log(error)
+          console.log('Error in handle change')
       }
       props.onChange(answerStringify);
     }
   }
+
+  const placeHolder = () => {
+    const placeholder = "Click to answer";
+    if(multiple)
+      return (value && value.length) ? "" : placeholder;
+    else
+      return (value) ? "" : placeholder  
+  }
+  let placeholder = placeHolder();
 
   return (
     <div
@@ -57,6 +70,7 @@ const AutocompleteText = props => {
         limitChips={5}
         matchFrom="any"
         onChange={handleChange}
+        placeholder={placeholder}
         noOptionsText="No matches found"
         onFocus={e => {
           props.onFocus();
