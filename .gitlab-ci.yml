@@ -104,6 +104,10 @@ dev2:
 deploystack:
   stage: deploystack
   rules:
+    #- if:  $CI_COMMIT_REF_NAME =~ /^feature/ || $CI_COMMIT_REF_NAME =~ /^bugfix/
+      #when: never
+    #- if:  $CI_COMMIT_REF_NAME =~ /demonew/
+      #when: never
     - if: '$DeployStack == "True"' #this flag drives whether to deploy the infrastructure stack
       when: always
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
@@ -111,7 +115,6 @@ deploystack:
     - dev2
   script:
     - source build.env
-    - Set
     - aws cloudformation validate-template --template-body file://devops/cloudformation/cbex-unity-frontend-cf.yml --region $Region
     - aws cloudformation deploy --stack-name $Project-$Product-$Module-$Environment --template-file devops/cloudformation/cbex-unity-frontend-cf.yml --parameter-overrides $(cat devops/vars/cfparameters.ini) $(cat build.env) --tags $(cat devops/vars/cftags.ini) Environment=$Environment Lifecycle=$Environment --region $Region
 
