@@ -7,17 +7,20 @@ include:
 
 stages:
   - sonar #sonar report
-  - builddev
-  - deploydev
-  - buildqa
-  - deployqa
-  - builddemo
-  - deploydemo
-  - builduat
-  - deployuat
-  - buildprod
-  - deployprod
+  #- builddev
+  #- deploydev
+  - builddev2
   - deploystack
+  - deploydev2
+  #- buildqa
+  #- deployqa
+  #- builddemo
+  #- deploydemo
+  #- builduat
+  #- deployuat
+  #- buildprod
+  #- deployprod
+  #- deploystack
   
 
 sonar:
@@ -37,7 +40,7 @@ sonar:
     - apk upgrade --update-cache --available && apk add openssl && rm -rf /var/cache/apk/*
     - sonar-scanner -X -Dsonar.branch.name=$CI_COMMIT_REF_NAME -Dsonar.projectKey=$CI_PROJECT_NAME
 
-dev:
+.dev:
   stage: builddev
   image: node:12
   variables:
@@ -61,7 +64,7 @@ dev:
   tags:
     - docker
 
-deploydev:
+.deploydev:
   stage: deploydev
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
@@ -77,7 +80,59 @@ deploydev:
   tags:
     - docker
 
-demo:
+dev2:
+  stage: builddev2
+  image: node:12
+  variables:
+    Environment: $CI_JOB_NAME
+  only:
+    - dev2
+  script:
+    - cat $devaccount > build.env #(Skip if creating env in production account)
+    - cat devops/vars/${Environment}.env >> build.env
+    - source build.env
+    - yarn cache clean
+    - yarn install
+    - yarn build:$Environment
+  artifacts:
+    paths:
+      - dist/
+      - build.env
+  tags:
+    - docker
+ 
+deploystack:
+  stage: deploystack
+  rules:
+    - if: '$DeployStack == "True"' #this flag drives whether to deploy the infrastructure stack
+      when: always
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  dependencies:
+    - dev2
+  script:
+    - source build.env
+    - Set
+    - aws cloudformation validate-template --template-body file://devops/cloudformation/cbex-unity-frontend-cf.yml --region $Region
+    - aws cloudformation deploy --stack-name $Project-$Product-$Module-$Environment --template-file devops/cloudformation/cbex-unity-frontend-cf.yml --parameter-overrides $(cat devops/vars/cfparameters.ini) $(cat build.env) --tags $(cat devops/vars/cftags.ini) Environment=$Environment Lifecycle=$Environment --region $Region
+
+deploydev2:
+  stage: deploydev2
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  needs:
+    - dev2
+  when: manual
+  only:
+    - dev2
+    #- dev
+    #- tags
+  script:    
+    - source build.env  
+    - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
+    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
+  tags:
+    - docker
+
+.demo:
   stage: builddemo
   image: node:12
   variables:
@@ -102,7 +157,7 @@ demo:
   tags:
     - docker
 
-deploydemo:
+.deploydemo:
   stage: deploydemo
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
@@ -119,7 +174,7 @@ deploydemo:
   tags:
     - docker
 
-qa:
+.qa:
   stage: buildqa
   image: node:12
   needs:
@@ -142,7 +197,7 @@ qa:
   tags:
     - docker
 
-deployqa:
+.deployqa:
   stage: deployqa
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
@@ -157,7 +212,7 @@ deployqa:
   tags:
     - docker
 
-uat:
+.uat:
   stage: builduat
   image: node:12
   variables:
@@ -181,7 +236,7 @@ uat:
   tags:
     - docker
 
-deployuat:
+.deployuat:
   stage: deployuat
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
@@ -196,7 +251,7 @@ deployuat:
   tags:
     - docker
 
-prod:
+.prod:
   stage: buildprod
   image: node:12
   variables:
@@ -219,7 +274,7 @@ prod:
   tags:
     - docker
 
-deployprod:
+.deployprod:
   stage: deployprod
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
