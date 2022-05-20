@@ -55,6 +55,7 @@ import Blade from 'apollo-react/components/Blade';
 import chevronRight from '../../../../img/chevron-right.svg';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
 import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions';
+import ApolloNotepad from '../../views/ApolloNotepad';
 
 type Props = {
   match: Match,
@@ -492,8 +493,12 @@ class Questions extends Component<Props, State> {
             this.setTabFromQuestionNotes(val, title, flag)
           }
         />
-
-        <div className="tasksList-title-wrapper">
+        <div style={{display:"flex",justifyContent: "space-around"}}>
+          <div style={{flexBasis:"30%"}}>
+            <ApolloNotepad />
+          </div>
+          <div style={{flexBasis:"65%"}}>
+            <div className="tasksList-title-wrapper">
           <div className="taskList-icons-wrapper">
             <ApolloCheckbox
               label="Expand All"
@@ -544,7 +549,7 @@ class Questions extends Component<Props, State> {
                 : 'Filter'}
             </Button>
           </div>
-        </div>
+          </div>
 
         {this.renderFilter()}
 
@@ -564,6 +569,8 @@ class Questions extends Component<Props, State> {
             closeModal={this.closeAnswerHistoryModal}
           />
         )}
+        </div>
+        </div>
       </>
     );
   }
