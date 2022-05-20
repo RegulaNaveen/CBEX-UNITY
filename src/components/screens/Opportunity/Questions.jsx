@@ -56,6 +56,8 @@ import chevronRight from '../../../../img/chevron-right.svg';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
 import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions';
 import ApolloNotepad from '../../views/ApolloNotepad';
+import Panel from 'apollo-react/components/Panel';
+import PanelGroup from 'apollo-react/components/PanelGroup';
 
 type Props = {
   match: Match,
@@ -493,68 +495,70 @@ class Questions extends Component<Props, State> {
             this.setTabFromQuestionNotes(val, title, flag)
           }
         />
-        <div style={{display:"flex",justifyContent: "space-around"}}>
-          <div style={{flexBasis:"30%"}}>
+        <PanelGroup style={{ display: 'flex' }}>
+          <Panel width="30%" maxWidth={500} minWidth={200} resizable>
             <ApolloNotepad />
-          </div>
-          <div style={{flexBasis:"65%"}}>
+          </Panel>
+          <Panel width="100%" minWidth={400} hideButton>
             <div className="tasksList-title-wrapper">
-          <div className="taskList-icons-wrapper">
-            <ApolloCheckbox
-              label="Expand All"
-              checked={allSectionsExpanded}
-              onChange={(e, checked) => {
-                this.setState({ sidebarscroll: '' }, () => {
-                  this.handleIsCheckedAll(checked);
-                });
-                if(!checked){
-                  const clearsidebarselectsection = new CustomEvent('clearsidebarselectsection', {
-                    detail: true
-                  });
-                  document.dispatchEvent(clearsidebarselectsection);
-                }
-              }}
-            />
-            { MANUAL_REFRESH && (
-              <div
-                title="Refresh"
-                className="tasksList-refresh-icon-wrapper"
-                role="presentation"
-                onClick={this.getProposalInfoUpdated}
-              >
-                <Refresh className="tasksList-add-icon" />
+              <div className="taskList-icons-wrapper">
+                <ApolloCheckbox
+                  label="Expand All"
+                  checked={allSectionsExpanded}
+                  onChange={(e, checked) => {
+                    this.setState({ sidebarscroll: '' }, () => {
+                      this.handleIsCheckedAll(checked);
+                    });
+                    if (!checked) {
+                      const clearsidebarselectsection = new CustomEvent(
+                        'clearsidebarselectsection',
+                        {
+                          detail: true
+                        }
+                      );
+                      document.dispatchEvent(clearsidebarselectsection);
+                    }
+                  }}
+                />
+                {MANUAL_REFRESH && (
+                  <div
+                    title="Refresh"
+                    className="tasksList-refresh-icon-wrapper"
+                    role="presentation"
+                    onClick={this.getProposalInfoUpdated}
+                  >
+                    <Refresh className="tasksList-add-icon" />
+                  </div>
+                )}
+                {selectedBid.get('isCurrent') && (
+                  <div
+                    title="Add New Question"
+                    className="tasksList-add-icon-wrapper"
+                    role="presentation"
+                    onClick={() => {
+                      this.setState({ currentsection: '' });
+                      this.onClose();
+                    }}
+                  >
+                    <Add className="tasksList-add-icon" />
+                  </div>
+                )}
+                <Button
+                  variant="secondary"
+                  size="small"
+                  icon={<Filter fontSize="extraSmall" />}
+                  onClick={() => this.handleFilterClick()}
+                >
+                  {activeQuestionsFilterCount
+                    ? `Filter (${activeQuestionsFilterCount})`
+                    : 'Filter'}
+                </Button>
               </div>
-            )}
-            {selectedBid.get('isCurrent') && (
-              <div
-                title="Add New Question"
-                className="tasksList-add-icon-wrapper"
-                role="presentation"
-                onClick={() => {
-                  this.setState({ currentsection: '' });
-                  this.onClose();
-                }}
-              >
-                <Add className="tasksList-add-icon" />
-              </div>
-            )}
-            <Button
-              variant="secondary"
-              size="small"
-              icon={<Filter fontSize="extraSmall" />}
-              onClick={() => this.handleFilterClick()}
-            >
-              {activeQuestionsFilterCount
-                ? `Filter (${activeQuestionsFilterCount})`
-                : 'Filter'}
-            </Button>
-          </div>
-          </div>
-
-        {this.renderFilter()}
-
-        <div className="tasksList-wrapper">{this.renderQuestions()}</div>
-
+            </div>
+            {this.renderFilter()}
+            <div className="tasksList-wrapper">{this.renderQuestions()}</div>
+          </Panel>
+        </PanelGroup>
         {showModal && (
           <AddQuestionModalComponent
             onClose={this.onClose}
@@ -569,8 +573,6 @@ class Questions extends Component<Props, State> {
             closeModal={this.closeAnswerHistoryModal}
           />
         )}
-        </div>
-        </div>
       </>
     );
   }
