@@ -4,7 +4,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-
+## [4.2] - YYYY-MM-DD
+### Added
+  - IQVIACBEXU-1311: Flag end users when an auto-populated response has been manually edited
+  - IQVIACBEXU-1284: Auto close Unity Banner
+  - IQVIACBEXU-1361: If user replacing with existing email then the history part not completely red striked out.
+  - IQVIACBEXU-1245: Unity - Box will not allow user to to log-in unless language is selected
+  - IQVIACBEXU-939: Develop "Look Up" answer type functionality
+### Changed
+### Fixed
+  - IQVIACBEXU-1293: Regression/Legacy For date type - if user validates the unity predicted answer , the blue font is changed to black.
+  - IQVIACBEXU-1295: Regression: Bid History is spilling over to footer section in Documents tab When user create more than 20 Bids
+  - IQVIACBEXU-1249: Legacy : Custom question issue when filters applied
+  - IQVIACBEXU-1230: Made text fit the question div, when the zoom level is above 100%.
+  - IQVIACBEXU-1251: Fixed the smooshed text at the top of unity page.
+  - IQVIACBEXU-1256: Fixed "Not answered" text not appearing in front of the question. 
+  - IQVIACBEXU-1257: Fixed the header getting split in 2 rows when blade is opened. Fixed the propotion. 
+  - IQVIACBEXU-1347-internal: Unity header fields are not updating as per SF value.
+  - IQVIACBEXU-1348-internal: Business developer field is not updating once we update the field from SF.
+  - IQVIACBEXU-1282: Bid due date field is striking Answer History even if answer from SF are same
+  - IQVIACBEXU-1232: Unity - Unable to Identify Bid when Bid History is collapsed
+  - IQVIACBEXU-1341: Edge case:Filters applied in one opportunity card are mapping over to other opportunities
+  - IQVIACBEXU-1118: Loading issues if user switch among My Docket, Recent and All tabs in quick pace.
+  - IQVIACBEXU-1247: Textbox not expanding to maximum length while inputting the data
+  - IQVIACBEXU-1248: Textbox should be in expanded state if user expands the textbox manually
+  - IQVIACBEXU-1340: Legacy: Rows filtered and opportunity cards displaying are not matching
+  - IQVIACBEXU-1365: Date completed filed is not centered for questions which has flags.
+  
 ## [4.1] - YYYY-MM-DD
 ### Added
   - IQVIACBEXU-1061: Opportunity Type version is displayed in footer of Unity record

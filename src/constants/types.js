@@ -73,7 +73,9 @@ const PROPOSAL = {
   UPDATE_BOX_BIDS: 'update-box-bids',
   CHANGE_BID: 'CHANGE_BID',
   ADD_NEW_BID: 'ADD_NEW_BID',
-  NEW_BID_CREATED: 'NEW_BID_CREATED'
+  NEW_BID_CREATED: 'NEW_BID_CREATED',
+  PROPOSAL_DETAIL_UPDATE: 'PROPOSAL_DETAIL_UPDATE',
+  UPDATE_LOOKUP_OPTIONS: 'UPDATE_LOOKUP_OPTIONS'
 };
 
 const PROPOSALS = {
@@ -85,7 +87,8 @@ const PROPOSALS = {
   ON_SET_PROPOSALS_FILTERS: 'on_set_proposals_filters',
   SET_PROPOSAL_FILTERING: 'set_proposal_filtering',
   SET_PAGE: 'set_page',
-  SET_NUM_OF_ROWS: 'set_num_of_rows'
+  SET_NUM_OF_ROWS: 'set_num_of_rows',
+  NON_EDITABLE_SF_FIELD: 'NON_EDITABLE_SF_FIELD'
 };
 
 const SIDEBAR = {

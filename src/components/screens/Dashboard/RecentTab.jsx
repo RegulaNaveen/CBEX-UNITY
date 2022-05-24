@@ -44,7 +44,12 @@ class RecentTab extends Component<Props, State> {
       pageContent: []
     };
   }
-
+  componentDidMount(){
+    const {
+      setRows
+    } = this.props;
+    setRows(15)
+  }
   componentDidUpdate(prevProps) {
     const {
       page,

@@ -89,6 +89,7 @@ class AnswerHistory extends Component<Props> {
       
       const isValidatedUnityPredictedAnswer = (
         questionType !== 'picklist' &&
+        questionType !== 'picklist-lookup' &&
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'UnityPredictedAnswer' &&
         answer === nextAnswer
@@ -96,7 +97,7 @@ class AnswerHistory extends Component<Props> {
 
       // picklist answers are array so they require different check than other question types
       const isPicklistValidUnityPredAns = (
-        questionType === 'picklist' &&
+        (questionType === 'picklist' || questionType === 'picklist-lookup') &&
         answers &&
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'UnityPredictedAnswer' &&
@@ -108,6 +109,7 @@ class AnswerHistory extends Component<Props> {
 
       const renderAnswers = () => {
         const isFirstItem = index === 0;
+        const isLastItem = index === answers.toJS().length -1
         const isOnlyOneAnswer = answers.toJS().length === 1
         if (isValidatedUnityPredictedAnswer) {
           return <span key={uuidv4()}><b>Validated Unity Predicted Answer</b></span>;
@@ -115,13 +117,41 @@ class AnswerHistory extends Component<Props> {
         if (isPicklistValidUnityPredAns) {
           return <span key={uuidv4()}><b>Validated Unity Predicted Answer</b></span>;
         }
-        if (questionType !== 'picklist') {
+        if (questionType !== 'picklist' && questionType !== 'picklist-lookup') {
           const renderWord = (word, status) => (
             <span className={status} key={uuidv4()}>
               {word}{' '}
             </span>
           );
           if (questionType === 'text' || questionType === 'number') {
+            if (sectionName === 'Proposal Team') {
+              /**
+               * Proposal Team section answers which are "text" types are emails separated with commas.
+               * diffWordsWithSpace from diff package is used for highlighting changes in text type answers, but it's hard to read changes in email answers with this algo.
+               * The business requested custom change highlight for emails. The below implementation doesn't use 'diff' package.
+               */
+              const answerTrimArr = answer.split(',').map(i => i.trim()); // Convert String answer to Array
+              const nextAnswerTrimArr = nextAnswer
+                .split(',')
+                .map(i => i.trim()); // Convert String answer to Array
+              const intersection = nextAnswerTrimArr.filter(x =>
+                answerTrimArr.includes(x)
+              ); // Common emails (i.e Not removed)
+              const removed = nextAnswerTrimArr.filter(
+                x => !answerTrimArr.includes(x)
+              ); // removed emails
+              const added = answerTrimArr.filter(
+                x => !nextAnswerTrimArr.includes(x)
+              ); // updated emails
+              const allAnswers = [
+                ...new Set([...nextAnswerTrimArr, ...answerTrimArr])
+              ];
+              return allAnswers.map(ans => {
+                if (intersection.includes(ans)) return renderWord(ans, '');
+                if (removed.includes(ans)) return renderWord(ans, 'removed');
+                if (added.includes(ans)) return renderWord(ans, 'changed');
+              });
+            }
             const diffAnswers = diffWordsWithSpace(nextAnswer, answer);
             
             return rearrangeDiff(diffAnswers).map(
@@ -138,7 +168,13 @@ class AnswerHistory extends Component<Props> {
             if (new Date(answer) == 'Invalid Date') {
               return renderWord('Invalid Date', 'removed');
             }
-            const styleClass = isFirstItem && !isOnlyOneAnswer ? 'changed' : undefined;
+            let styleClass = !isOnlyOneAnswer && !isLastItem ? 'changed' : undefined;
+            // Dont add styles if answers are same
+            // We use .substring(0, 10) to get only the yyyy-mm-dd out of a String like '2022-04-30T00:00:00+05:30'
+            if(String(answer).substring(0, 10) === String(nextAnswer).substring(0, 10)){
+              nextAnswer = '';
+              styleClass = undefined
+            }
             const newdate = renderWord(
               String(parseMomentDate(answer)),
               styleClass
@@ -163,7 +199,7 @@ class AnswerHistory extends Component<Props> {
             );
           };
 
-          if (questionType === 'select') {
+          if (questionType === 'select' || questionType === 'select-lookup') {
             const prevAnswer = () => {
               const answersArr = answers.toJS();
               return answersArr[index + 1] ? answersArr[index + 1].answer : '';

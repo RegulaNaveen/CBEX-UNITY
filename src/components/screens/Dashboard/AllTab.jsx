@@ -45,6 +45,13 @@ class AllTab extends Component<Props, State> {
     };
   }
 
+  componentDidMount(){
+    const {
+      setRows
+    } = this.props;
+    setRows(15)
+  }
+
   componentDidUpdate(prevProps) {
     const {
       page,

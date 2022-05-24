@@ -19,7 +19,8 @@ const loadSidebar = (props) => {
         'Protocol number': protocolNumber,
         'Therapeutic area': therapeuticArea,
         'CRM #': crm,
-        'Customer': Customer
+        'Customer': Customer,
+        bidNo
     } = data;
     const placeholder = 'No data';
     const date = bidDueDate && parseMomentDate(bidDueDate);
@@ -62,6 +63,10 @@ const loadSidebar = (props) => {
                         <p className="boldtext sidebaropenfont" >{protocolNumber || placeholder}</p>
                     </Paper>
                     <Paper className="sidebarduedatedsg open" style={styles}>
+                        <Typography variant="body2" className="greytext lesslineheight sidebaropenfont">Bid #</Typography>
+                        <p className="boldtext sidebaropenfont" >{bidNo || placeholder}</p>
+                    </Paper>
+                    <Paper className="sidebarduedatedsg open" style={styles}>
                         <Typography variant="body2" className="greytext lesslineheight sidebaropenfont">Days Until Due</Typography>
                         <p className="boldtext greencolorsidebaropenfont lesslineheight" >{bidStatus ? 'Processing' : daysRemain}</p>
                     </Paper>
@@ -72,7 +77,7 @@ const loadSidebar = (props) => {
     }else{
         return (
             <Grid container >
-                <Grid container xs={5}>
+                <Grid container xs={4}>
                     <Grid item xs={3}>
                         <Paper style={styles} className="duedatedsg">
                             <Typography variant="body2" className="greytext">Opportunity Number</Typography>
@@ -98,14 +103,14 @@ const loadSidebar = (props) => {
                         </Paper>
                     </Grid>
                 </Grid>
-                <Grid container xs={5}>
+                <Grid container xs={6}>
                     <Grid item xs={2}>
                         <Paper style={styles} className="duedatedsg" >
                             <Typography variant="body2" className="greytext">Phase</Typography>
                             <Typography variant="body2" className="boldtext">{phase ? phase.split(' ')[1] : placeholder}</Typography>
                         </Paper>
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={2}>
                         <Paper style={styles} className="duedatedsg">
                             <Typography variant="body2" className="greytext">Therapeutic Area</Typography>
                             <Typography variant="body2" className="boldtext">{therapeuticArea || placeholder}</Typography>
@@ -117,10 +122,16 @@ const loadSidebar = (props) => {
                             <Typography variant="body2" className="boldtext">{productName || placeholder}</Typography>
                         </Paper>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={3}>
                         <Paper style={styles} className="duedatedsg">
                             <Typography variant="body2" className="greytext">Protocol Number</Typography>
                             <Typography variant="body2" className="boldtext">{protocolNumber || placeholder}</Typography>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={2}>
+                        <Paper style={styles} className="duedatedsg">
+                            <Typography variant="body2" className="greytext">Bid #</Typography>
+                            <Typography variant="body2" className="boldtext">{bidNo || placeholder}</Typography>
                         </Paper>
                     </Grid>
                 </Grid>

@@ -21,7 +21,8 @@ import {
   onApplyQuestionsFilter,
   resetQuestionsFilterAction,
   clearQuestionsFilterAction,
-  expandAllSectionsAction
+  expandAllSectionsAction,
+  callPickListLookupSfData
 } from '../../../redux/actions/proposal-actions';
 import {
   getProposalDetails,
@@ -53,6 +54,7 @@ import Grid from 'apollo-react/components/Grid';
 import Blade from 'apollo-react/components/Blade';
 import chevronRight from '../../../../img/chevron-right.svg';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
+import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions';
 
 type Props = {
   match: Match,
@@ -88,6 +90,8 @@ type State = {
   showFilter: boolean
 };
 
+const MANUAL_REFRESH = false;
+
 class Questions extends Component<Props, State> {
   constructor(props: Object) {
     super(props);
@@ -107,8 +111,10 @@ class Questions extends Component<Props, State> {
   }
 
   componentDidMount() {
-    const { fetchUsers } = this.props;
+    const { fetchUsers, getSFNonEditabelInfoField, callPickListLookupSfData } = this.props;
     fetchUsers();
+    getSFNonEditabelInfoField();
+    callPickListLookupSfData();
   }
 
   componentDidUpdate(prevProps: Map) {
@@ -131,11 +137,6 @@ class Questions extends Component<Props, State> {
     if (prevProps.editQuestionsData.size === 0 && editQuestionsData.size > 0) {
       this.onClose();
     }
-  }
-
-  componentWillUnmount() {
-    const { resetQuestionsFilter } = this.props;
-    resetQuestionsFilter();
   }
 
   handleIsCheckedAll = () => {
@@ -446,9 +447,9 @@ class Questions extends Component<Props, State> {
       activeQuestionsFilterCount,
       allSectionsExpanded,
       editQuestionsData,
-      isOpen
+      isOpen,
+      noneditableField
     } = this.props;
-
     const {
       showModal,
       selectedQuestionForHistory,
@@ -509,14 +510,16 @@ class Questions extends Component<Props, State> {
                 }
               }}
             />
-            <div
-              title="Refresh"
-              className="tasksList-refresh-icon-wrapper"
-              role="presentation"
-              onClick={this.getProposalInfoUpdated}
-            >
-              <Refresh className="tasksList-add-icon" />
-            </div>
+            { MANUAL_REFRESH && (
+              <div
+                title="Refresh"
+                className="tasksList-refresh-icon-wrapper"
+                role="presentation"
+                onClick={this.getProposalInfoUpdated}
+              >
+                <Refresh className="tasksList-add-icon" />
+              </div>
+            )}
             {selectedBid.get('isCurrent') && (
               <div
                 title="Add New Question"
@@ -565,9 +568,12 @@ class Questions extends Component<Props, State> {
     );
   }
   componentWillUnmount(){
-    const { handleOpenClose} = this.props;
+    const { handleOpenClose, resetQuestionsFilter} = this.props;
     if(handleOpenClose)
      handleOpenClose(false);
+
+    if(resetQuestionsFilter)
+      resetQuestionsFilter();
   }
 }
 
@@ -601,6 +607,8 @@ export default compose(
     resetQuestionsFilter: resetQuestionsFilterAction,
     clearQuestionsFilter: clearQuestionsFilterAction,
     expandAllSections: expandAllSectionsAction,
-    handleOpenClose: onHandleOpenClose
+    handleOpenClose: onHandleOpenClose,
+    getSFNonEditabelInfoField: getSFNonEditabelField,
+    callPickListLookupSfData
   })
 )(MatomoHOC(Questions));

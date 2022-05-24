@@ -117,10 +117,12 @@ const AUTH = {
 
 const PROPOSAL_API_URL = `${PROPOSAL_API_ENDPOINT}/api/proposals`;
 const PROPOSAL_API_ALL = `${PROPOSAL_API_URL}/all`;
+const NON_EDITABLE_SF_FIELD_URL = `${PROPOSAL_API_ENDPOINT}/api/questions/noneditablesffield`;
 const PROPOSAL_API_ALL_BY_STATUS = `${PROPOSAL_API_URL}/all-by-status`;
 const PROPOSAL_QUESTIONS_API_URL = `${PROPOSAL_API_ENDPOINT}/api/questions`;
 const PROPOSAL_FILTER_VALUES = `${PROPOSAL_API_URL}/acceptanceCriteriaValues`;
 const PROPOSAL_VALIDATED_DATA = `${PROPOSAL_API_URL}/validations`;
+const LOOKUP_OPTIONS_API = `${PROPOSAL_API_ENDPOINT}/api/questions/lookup-options`;
 
 const MAMOTO_IQVIA = 'https://useranalytics.solutions.iqvia.com/';
 
@@ -133,7 +135,9 @@ const PROPOSAL = {
   PROPOSAL_FILTER_VALUES,
   PROPOSAL_VALIDATED_DATA,
   API_KEY: PROPOSAL_API_KEY,
-  MAMOTO_IQVIA
+  MAMOTO_IQVIA,
+  NON_EDITABLE_SF_FIELD_URL,
+  LOOKUP_OPTIONS_API
 };
 
 const NOTEPAD_API_URL = `${PROPOSAL_API_ENDPOINT}/api/notes`;

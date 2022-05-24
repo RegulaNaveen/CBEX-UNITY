@@ -13,14 +13,13 @@ const TextAreaV2 = ({
   const taref = useRef(null); 
   useEffect(() => {
     setInputValue(value);
+    setTimeout(() => {
+      taref.current.style.height = '5px';
+      const txtareaheight =
+      taref.current.scrollHeight > 145 ? 140 : taref.current.scrollHeight;
+      taref.current.style.height = txtareaheight + "px";
+    }, 100);
   }, [value]);
-
-  useEffect(() => {
-    taref.current.style.height = '5px';
-    const txtareaheight =
-    taref.current.scrollHeight > 145 ? 140 : taref.current.scrollHeight;
-    taref.current.style.height = txtareaheight + "px";
-  }, [value,inputValue]);
 
   return (
     <textarea

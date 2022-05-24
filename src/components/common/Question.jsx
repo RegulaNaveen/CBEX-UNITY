@@ -20,12 +20,14 @@ import {
 import {
   getUserData,
   getProposalDetails,
-  getSelectedBid
+  getSelectedBid,
+  getnoneditableField
 } from '../../redux/selectors';
 import MatomoHOC from '../HOC/MatomoHOC';
-import { getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
+import { checkNonEditableFields, getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
 import ChipView from './Chip/ChipView';
 import Autocomplete from './atoms/inputs/AutoComplete';
+import AutocompleteText from './atoms/inputs/AutoCompleteText';
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
 import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
@@ -240,7 +242,7 @@ export class TaskRow extends Component<Props, State> {
     lastAnswer: Map,
     questionText: Map
   ) => {
-    const { sectionName, sfObject, sfField, selectedBid } = this.props;
+    const { sectionName, sfObject, sfField, selectedBid, noneditableField } = this.props;
     const { selectedDay } = this.state;
 
     const optionsYN = ['Yes', 'No'];
@@ -249,13 +251,16 @@ export class TaskRow extends Component<Props, State> {
     let answerValue = '';
     let answerValueComplex;
     let finalOptions = options;
+    const checkDisableFlag = () => checkNonEditableFields(noneditableField, sfField, sfObject) || !selectedBid.get('isCurrent');
 
+    
     if (answer) {
       if (isObject(answer)) answerValueComplex = answer.toJS();
       else answerValue = answer.toString();
     }
-
-    if (sectionName === 'Proposal Team')
+    
+    if (sectionName === 'Proposal Team'){
+      
       return (
         <SFAnswerValidationWrapper
           hasDifferentSFanswer={(this.props.hasDifferentSFanswer && selectedBid.get('isCurrent'))}
@@ -267,17 +272,17 @@ export class TaskRow extends Component<Props, State> {
             onBlur={e => this.setSelectRow(false)}
             onChange={this.handlePropsalChange}
             text={answerValue}
-            disabled={!selectedBid.get('isCurrent')}
+            disabled={checkDisableFlag()}
           />
         </SFAnswerValidationWrapper>
       );
+    }
 
     // return <UserLookup sectionName={sectionName} onChange={this.handleTextChange} text={answerValue} />;
 
     if (
-      type === 'picklist' &&
-      (sfObject === 'Bid_History__c' ||
-        sfObject === 'Apttus__APTS_Agreement__c') &&
+      (type === 'picklist' ||  type === 'picklist-lookup') &&
+      (sfObject === 'Bid_History__c' || sfObject === 'Apttus__APTS_Agreement__c') &&
       sfField === 'Targeted_Countries__c'
     ) {
       answerValueComplex = getCountriesNameForCode(answerValueComplex || []);
@@ -296,11 +301,11 @@ export class TaskRow extends Component<Props, State> {
           >
             <TextAreaV2
               className="proposal-text-area"
-              placeholder="Click to answer"
+              placeholder={(checkDisableFlag()) ? '' : "Click to answer"}
               value={answerValue}
               onBlur={e => this.handleTextChange(e.target.value, answerValue)}
               onFocus={e => this.onChildInputFocus(e)}
-              disabled={!selectedBid.get('isCurrent')}
+              disabled={checkDisableFlag()}
             />
           </SFAnswerValidationWrapper>
         );
@@ -315,12 +320,12 @@ export class TaskRow extends Component<Props, State> {
           >
             <TextArea
               className="proposal-text-area"
-              placeholder="Click to answer"
+              placeholder={(checkDisableFlag()) ? '' : "Click to answer"}
               type="number"
               onBlur={this.handleTextChange}
               onFocus={e => this.onChildInputFocus(e)}
               value={answerValue || ''}
-              disabled={!selectedBid.get('isCurrent')}
+              disabled={checkDisableFlag()}
             />
           </SFAnswerValidationWrapper>
         );
@@ -332,12 +337,12 @@ export class TaskRow extends Component<Props, State> {
           >
             <Dropdown
               id="dd-proposal-answer"
-              placeholder="Click to answer"
+              placeholder={(checkDisableFlag()) ? '' : "Click to answer"}
               items={optionsYN}
               onClick={val => this.onClickChange(val, answerValue)}
               value={answerValue}
               setSelectRow={this.setSelectRow}
-              disabled={!selectedBid.get('isCurrent')}
+              disabled={checkDisableFlag()}
             />
           </SFAnswerValidationWrapper>
         );
@@ -349,12 +354,12 @@ export class TaskRow extends Component<Props, State> {
           >
             <Dropdown
               id="dd-proposal-answer"
-              placeholder="Click to answer"
+              placeholder={(checkDisableFlag()) ? '' : "Click to answer"}
               items={finalOptions}
               onClick={val => this.onClickChange(val, answerValue)}
               value={answerValue}
               setSelectRow={this.setSelectRow}
-              disabled={!selectedBid.get('isCurrent')}
+              disabled={checkDisableFlag()}
             />
           </SFAnswerValidationWrapper>
         );
@@ -370,7 +375,7 @@ export class TaskRow extends Component<Props, State> {
               handleDayChange={this.handleDayChange}
               onFocus={e => this.setSelectRow(true)}
               onBlur={e => this.setSelectRow(false)}
-              disabled={!selectedBid.get('isCurrent')}
+              disabled={checkDisableFlag()}
             />
           </SFAnswerValidationWrapper>
         );
@@ -381,15 +386,55 @@ export class TaskRow extends Component<Props, State> {
             sfObject={sfObject}
           >
             <Multiselect
-              placeholder="Click to answer"
+              placeholder={(checkDisableFlag()) ? '' : "Click to answer"}
               items={finalOptions}
               onClick={this.onSelectValues}
               value={answerValueComplex}
               setSelectRow={this.setSelectRow}
-              disabled={!selectedBid.get('isCurrent')}
+              disabled={checkDisableFlag()}
             />
           </SFAnswerValidationWrapper>
         );
+      case 'picklist-lookup':
+        return (
+          <SFAnswerValidationWrapper
+          hasDifferentSFanswer={(this.props.hasDifferentSFanswer && selectedBid.get('isCurrent'))}
+          sfObject={sfObject}
+        >
+          <AutocompleteText
+            sectionName={sectionName}
+            sfObject={sfObject}
+            lov={finalOptions}
+            sfField={sfField}
+            multiple={true}
+            onFocus={e => this.setSelectRow(true)}
+            onBlur={e => this.setSelectRow(false)}
+            onChange={this.handlePropsalChange}
+            text={answerValueComplex}
+            disabled={checkDisableFlag()}
+          />
+        </SFAnswerValidationWrapper>
+      );
+      case 'select-lookup':
+        return (
+          <SFAnswerValidationWrapper
+          hasDifferentSFanswer={(this.props.hasDifferentSFanswer && selectedBid.get('isCurrent'))}
+          sfObject={sfObject}
+        >
+          <AutocompleteText
+            sectionName={sectionName}
+            sfObject={sfObject}
+            lov={finalOptions}
+            sfField={sfField}
+            onFocus={e => this.setSelectRow(true)}
+            onBlur={e => this.setSelectRow(false)}
+            onChange={this.handlePropsalChange}
+            text={answerValue || ''}
+            multiple={false}
+            disabled={checkDisableFlag()}
+          />
+        </SFAnswerValidationWrapper>
+      );
       default:
         return <div id="no-configuration">Click to answer</div>;
     }
@@ -416,7 +461,7 @@ export class TaskRow extends Component<Props, State> {
     const answerType = answerConfiguration.get('type');
 
     // picklist value should not be converted to string while saving
-    if (answerType === 'picklist') {
+    if (answerType === 'picklist' || answerType === 'picklist-lookup') {
       setProposalAnswer(
         proposalId,
         questionId,
@@ -539,15 +584,15 @@ export class TaskRow extends Component<Props, State> {
 
         <div
           style={{
-            alignSelf: 'start',
             display: 'flex',
             minHeight: '40px',
-            alignItems: 'center',
-            paddingLeft: '16px'
+            alignItems: 'flex-start',
+            paddingLeft: '16px',
+            height:'100%'
           }}
         >
           <button
-            style={{ width: '100px', textAlign: 'left', flexShrink: 0 }}
+            style={{ width: '100px', textAlign: 'left', flexShrink: 0, marginTop: '11px'}}
             type="button"
             onClick={this.displayAnswerOnHistory}
           >
@@ -576,7 +621,8 @@ export class TaskRow extends Component<Props, State> {
                 width: '40px',
                 height: '24px',
                 justifyContent: 'center',
-                alignItems: 'center'
+                alignItems: 'center',
+                marginTop: '6px'
               }}
             >
               <Checkmark className="answered" style={{ marginLeft: '6px' }} />
@@ -584,7 +630,7 @@ export class TaskRow extends Component<Props, State> {
           ) : null}
           {loading ? (
             <span
-              style={{ marginLeft: '6px', position: 'relative', top: '15px' }}
+              style={{ marginLeft: '6px', marginTop: '18px', position: 'relative', top: '15px' }}
             >
               <Loader
                 isInner
@@ -605,7 +651,8 @@ export class TaskRow extends Component<Props, State> {
 const mapStateToProps = (state: Object) => ({
   userData: getUserData(state),
   proposalDetail: getProposalDetails(state),
-  selectedBid: getSelectedBid(state)
+  selectedBid: getSelectedBid(state),
+  noneditableField : getnoneditableField(state)
 });
 
 export default connect(mapStateToProps, {

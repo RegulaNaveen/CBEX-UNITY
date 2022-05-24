@@ -12,6 +12,7 @@ import {
   getProposalBoxIdError,
   getProposalBoxIdIsLoading
 } from '../../../redux/selectors';
+import DocumentModal from '../../views/modals/documentModal';
 
 type Props = {
   match: Match,
@@ -34,25 +35,38 @@ class Documents extends Component<Props, State> {
       selectedBid: ''
     }
   }
+  getBrowser = () => {
+    const userAgent = navigator.userAgent;
+    let browser = "";
+    browser = (/edg/i).test(userAgent) ? 'Edge' : browser;
+    switch (browser) {
+      case 'Edge': return `${browser}/${this.browserVersion(userAgent, /(edge|edga|edgios|edg)\/([\d\.]+)/i)}`;
+      default: return ''
+    }
+  }
 
-  componentDidMount(){
-    const {bids, match} = this.props;
-     // Opportunity number from the link
-     this.oppNo = match.params.id;
+  browserVersion = (userAgent, regex) => {
+    return userAgent.match(regex) ? userAgent.match(regex)[2] : null;
+  }
+  componentDidMount() {
+
+    const { bids, match } = this.props;
+    // Opportunity number from the link
+    this.oppNo = match.params.id;
 
     // latest Bid logic
-    if(bids.length){
-      const currentBid =  bids[0];
+    if (bids.length) {
+      const currentBid = bids[0];
       //Setting up the default tab
-      if(currentBid)
+      if (currentBid)
         this.swtichTabs(currentBid.proposalId);
     }
   }
-  swtichTabs(proposalId){
-    const {getBoxId} = this.props;
+  swtichTabs(proposalId) {
+    const { getBoxId } = this.props;
     // Setting the selected proposal
     this.setState(() => ({
-      selectedBid : proposalId
+      selectedBid: proposalId
     }));
     // Calling API to get boxFolderId;
     getBoxId(proposalId);
@@ -83,22 +97,23 @@ class Documents extends Component<Props, State> {
   };
 
   render() {
-    const {bids} = this.props;
-    const {selectedBid} = this.state;
+    const { bids } = this.props;
+    const { selectedBid } = this.state;
+    const consentPropertyName = localStorage.getItem('unity_document_consent')
     return (
       <div className="documents">
         <div className="doc-tab-index">
           <ul>
             {
-              bids.map((v)=>
-              <li 
-                className={(selectedBid===v.proposalId? 'selectedBid' : '')} 
-                key={v.proposalId} 
-                onClick={()=>{this.swtichTabs(v.proposalId)}}>
-                {this.oppNo} - Bid {v.bidNo}
-              </li>
+              bids.map((v) =>
+                <li
+                  className={(selectedBid === v.proposalId ? 'selectedBid' : '')}
+                  key={v.proposalId}
+                  onClick={() => { this.swtichTabs(v.proposalId) }}>
+                  {this.oppNo} - Bid {v.bidNo}
+                </li>
               )
-            } 
+            }
           </ul>
         </div>
         <div className="doc-tab-content">
@@ -106,8 +121,11 @@ class Documents extends Component<Props, State> {
             {this.renderContent()}
           </div>
         </div>
+        {
+          !consentPropertyName && this.getBrowser().includes('Edge') && <DocumentModal />
+        }
       </div>
-    )  
+    )
   }
 }
 
