@@ -28,6 +28,15 @@
     line-height: 24px;
     pointer-events: none;
   }
+  
+.dd-wrapper .dd-header .dd-header-selected,
+.a-MuiChip-labelSmall,
+.date-picker input,
+.multiselect-wrapper .multiselect-header .multiselect-header-selected
+{
+  font-size: 12px;
+}
+
   .proposal-text-area {
     resize: vertical;
     min-height: 40px !important;
