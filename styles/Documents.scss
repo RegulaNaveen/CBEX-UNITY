@@ -1,26 +1,34 @@
 .main-doc{
-    .para-document{
-      font-size: 12px;
-      font-family: "ProximaNova-Regular";
-      font-weight: 650;
-    }
+  .para-document{
+    font-size: 12px;
+    font-family: "ProximaNova-Regular";
+    font-weight: 650;
+  }
 .documents {
   display: flex;
   justify-content: space-between;
   height: 100%;
   margin-top: 5px;
+  ul.opportunity-link {
+    padding-left: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
   ul.bidlist-document {
-    padding-left: 25px;
-    padding-bottom: 25px;
+    padding-bottom: 10px;
+    padding-top: 0px;
   }
   .doc-tab-index {
     flex: 1;
     // border-top: 66px solid #0061D5;
     background-color: #f6f7fb;
-    // overflow: auto;
+    overflow: auto;
+    .MuiAccordion-root{
+      background-color: transparent !important;
+      border: none;
+    }
     ul {
       list-style: none;
-      padding-top: 25px;
       li {
         color:  #0061D5;
         // font-weight: bold;
@@ -68,3 +76,11 @@
   text-align: left;
   margin-left: 10%;
 }
+
+.additionalink-document{
+  padding-right:0px;
+}
+.MuiAccordionDetails-root.additionalbidlinkdetail {
+  padding-right: 0px;
+}
+

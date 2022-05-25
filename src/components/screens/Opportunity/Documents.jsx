@@ -11,7 +11,8 @@ import {
   getProposalBoxId,
   getProposalBoxIdError,
   getProposalBoxIdIsLoading,
-  getAdditionalLinks
+  getAdditionalLinks,
+  getProposalDetails
 } from '../../../redux/selectors';
 import DocumentModal from '../../views/modals/documentModal';
 import Grid from 'apollo-react/components/Grid';
@@ -61,10 +62,10 @@ class Documents extends Component<Props, State> {
   }
   componentDidMount() {
 
-    const { bids, match, getAdditionalLink } = this.props;
+    const { bids, match, getAdditionalLink, proposalDetail } = this.props;
     // Opportunity number from the link
     this.oppNo = match.params.id;
-    getAdditionalLink(match.params.id)
+    if(proposalDetail.opportunityId)getAdditionalLink(proposalDetail.opportunityId)
     // latest Bid logic
     if (bids.length) {
       const currentBid = bids[0];
@@ -83,7 +84,6 @@ class Documents extends Component<Props, State> {
     getBoxId(proposalId);
   }
   openAdditonalUrl(url) {
-    console.log('url :>> ', url);
     const { updateBoxId } = this.props;
     updateBoxId(url);
   }
@@ -102,7 +102,7 @@ class Documents extends Component<Props, State> {
       return <p>No documents available for this proposal</p>;
     let url = ''
     if(this.isValidURL(boxId)){
-      url = boxId
+      url = String(boxId).trim()+"&output=embed";
     }else{
       url = `https://app.box.com/embed/folder/${boxId}?sortColumn=date&view=list`;
     }
@@ -111,7 +111,7 @@ class Documents extends Component<Props, State> {
     console.log('url :>> ', url);
     return (
       <iframe
-        src={'https://quintiles.app.box.com/folder/2184390931?s=kp3fdefe5cy1jecit3pm	'}
+        src={url}
         width="100%"
         height="100%"
         frameBorder="0"
@@ -125,7 +125,7 @@ class Documents extends Component<Props, State> {
 
   render() {
     const { bids, boxLinks} = this.props;
-    const { data } = boxLinks;
+    const { data, oppfolderID } = boxLinks;
     const { selectedBid } = this.state;
     const consentPropertyName = localStorage.getItem('unity_document_consent');
     return (
@@ -138,6 +138,7 @@ class Documents extends Component<Props, State> {
         </div>
       <div className="documents">
         <div className="doc-tab-index">
+        <div className="sidebar-sopportunitylinks">
         <Grid container spacing={2}>
           <Grid item xs>
             <Paper style={styles}>
@@ -145,19 +146,20 @@ class Documents extends Component<Props, State> {
             </Paper>
           </Grid>
         </Grid>
-        <ul className="bidlist-document">
+        <ul className="opportunity-link">
           <li
+           onClick={()=> this.openAdditonalUrl(oppfolderID)}
             className={'selectedBid spacebetween'}
            >
             Opportunity {this.oppNo}
           </li>
-          </ul>
-          <Accordion defaultExpanded={false}>
+        </ul>
+          <Accordion defaultExpanded={true}>
             <AccordionSummary>
               <Typography>Bids</Typography>
             </AccordionSummary>
-            <AccordionDetails>
-              <ul>
+            <AccordionDetails className="bidlistdetail">
+              <ul className="bidlist-document">
               {
                 bids.map((v) =>
                   <li
@@ -171,20 +173,21 @@ class Documents extends Component<Props, State> {
             </ul>
             </AccordionDetails>
         </Accordion>
-        <Accordion defaultExpanded={false}>
+        <Accordion defaultExpanded={true} >
             <AccordionSummary>
               <Typography>Additional Links</Typography>
             </AccordionSummary>
-            <AccordionDetails>
-              <ul className="bidlist-document">
+            <AccordionDetails className="additionalbidlinkdetail">
+              <ul className="additionalink-document">
                 {
                   data && Array.isArray(data) && data.length && data.map((_v)=>
-                    <li onClick={()=> this.openAdditonalUrl(_v.link)}  key={String(_v.link)} className={'selectedBid'}>{_v.linkdesc}</li>  
+                    <li onClick={()=> this.openAdditonalUrl(_v.link)} className={'selectedBid'}>{_v.linkdesc}</li>  
                   )
                 }
             </ul>
             </AccordionDetails>
         </Accordion>
+        </div>
         </div>
         <div className="doc-tab-content">
           <div className="doc-tab-content-inner">
@@ -205,7 +208,8 @@ const mapStateToProps = state => ({
   onGettingBoxIdError: getProposalBoxIdError(state),
   boxId: getProposalBoxId(state),
   bids: getAllBidsForIndex(state),
-  boxLinks: getAdditionalLinks(state)
+  boxLinks: getAdditionalLinks(state),
+  proposalDetail: getProposalDetails(state),
 });
 
 export default compose(
