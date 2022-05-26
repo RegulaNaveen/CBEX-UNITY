@@ -83,9 +83,11 @@ class Documents extends Component<Props, State> {
     // Calling API to get boxFolderId;
     getBoxId(proposalId);
   }
-  openAdditonalUrl(url) {
+  openAdditonalUrl(url,activelink) {
     const { updateBoxId } = this.props;
-    updateBoxId(url);
+    this.setState({selectedBid: activelink},()=>{
+      updateBoxId(url);
+    })
   }
   isValidURL(str) {
     var res = str.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
@@ -146,8 +148,8 @@ class Documents extends Component<Props, State> {
         </Grid>
         <ul className="opportunity-link">
           <li
-           onClick={()=> this.openAdditonalUrl(oppfolderID)}
-            className={'selectedBid spacebetween'}
+           onClick={()=> this.openAdditonalUrl(oppfolderID, 'oppactive')}
+            className={`${selectedBid == 'oppactive' ? 'selectedBid' : ''} spacebetween`}
            >
             Opportunity {this.oppNo}
           </li>
@@ -179,7 +181,9 @@ class Documents extends Component<Props, State> {
               <ul className="additionalink-document">
                 {
                   data && Array.isArray(data) && data.length && data.map((_v)=>
-                    <li onClick={()=> this.openAdditonalUrl(_v.link)} className={'selectedBid'}>{_v.linkdesc}</li>  
+                    <li onClick={()=> this.openAdditonalUrl(_v.link, _v.linkdesc)} 
+                    className={(selectedBid === _v.linkdesc ? 'selectedBid' : '')}
+                    >{_v.linkdesc}</li>  
                   )
                 }
             </ul>
