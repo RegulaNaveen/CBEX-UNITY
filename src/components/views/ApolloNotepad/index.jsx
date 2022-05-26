@@ -2,8 +2,10 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import debounce from 'lodash/debounce';
-import { Editor, EditorState, convertFromRaw } from 'draft-js';
+import { EditorState, convertFromRaw } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
 import { selectNotes } from '../../../redux/selectors';
+import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 /**
  * @defaultNote should be in RichText JSON type i.e {block:[],entityMap:{}}
@@ -55,7 +57,8 @@ const ApolloNotepad = ({ notes = null }) => {
         onChange={setNoteText}
         defaultValue={noteText}
       />
-      <Editor editorState={editorState} onChange={setEditorState} />
+      {/* <Editor editorState={editorState} onChange={setEditorState} /> */}
+      <Editor editorState={editorState} onEditorStateChange={setEditorState} />
     </div>
   );
 };
