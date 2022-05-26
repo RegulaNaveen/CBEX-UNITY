@@ -50,9 +50,11 @@ function Note({
   let noteContent = content;
   let noteContentState = EditorState.createEmpty();
 
+  console.log(noteContent)
   try {
     noteContent = convertFromRaw(JSON.parse(noteContent));
   } catch (err) {
+    console.log(content)
     const blocksFromHTML = convertFromHTML(content);
     noteContent = ContentState.createFromBlockArray(
       blocksFromHTML.contentBlocks,
