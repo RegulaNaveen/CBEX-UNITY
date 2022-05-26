@@ -107,8 +107,6 @@ class Documents extends Component<Props, State> {
       url = `https://app.box.com/embed/folder/${boxId}?sortColumn=date&view=list`;
     }
     
-    console.log('boxId :>> ', boxId);
-    console.log('url :>> ', url);
     return (
       <iframe
         src={url}
