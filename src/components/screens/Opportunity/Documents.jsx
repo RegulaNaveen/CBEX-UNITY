@@ -65,7 +65,7 @@ class Documents extends Component<Props, State> {
     const { bids, match, getAdditionalLink, proposalDetail } = this.props;
     // Opportunity number from the link
     this.oppNo = match.params.id;
-    if(proposalDetail.opportunityId)getAdditionalLink(proposalDetail.opportunityId)
+    if(proposalDetail.opportunityId) getAdditionalLink(proposalDetail.opportunityId, this.oppNo, proposalDetail.Customer)
     // latest Bid logic
     if (bids.length) {
       const currentBid = bids[0];

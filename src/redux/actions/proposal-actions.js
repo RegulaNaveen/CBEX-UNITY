@@ -333,10 +333,10 @@ export const onGetProposalBoxId = (id: string): ThunkAction<string, Object> => {
     }
   };
 };
-export const getAdditionalBoxLink = (oppID: string): ThunkAction<string, Object> => {
+export const getAdditionalBoxLink = (oppID: string, crmNo: string, customer: string): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     try {
-      const { data } = await fetchAdditionalBoxLink(oppID);
+      const { data } = await fetchAdditionalBoxLink(oppID, crmNo, customer);
       dispatch({ type: BOX_ADDITIONAL_LINK, payload: { boxlink: data } });
     } catch (error) {
       dispatch({

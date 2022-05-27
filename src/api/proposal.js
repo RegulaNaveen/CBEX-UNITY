@@ -150,8 +150,8 @@ export const getProposlBoxId = async (id: string): Promise<Object> => {
   });
 };
 
-export const fetchAdditionalBoxLink = async (oppId: string): Promise<Object> => {
-  return axios.get(`${PROPOSAL_QUESTIONS_API_URL}/additionallinks/${oppId}`, {
+export const fetchAdditionalBoxLink = async (oppID: string, crmNo: string, customer: string): Promise<Object> => {
+  return axios.get(`${PROPOSAL_QUESTIONS_API_URL}/additionallinks/${oppID}/${customer}/${crmNo}`, {
     headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
   });
 };
