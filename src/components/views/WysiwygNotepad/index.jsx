@@ -94,7 +94,27 @@ const WysiwygNotepad = ({
 
   return (
     <div>
-      <Editor editorState={editorState} onEditorStateChange={onEditorsChange} />
+      <Editor
+        editorState={editorState}
+        onEditorStateChange={onEditorsChange}
+        toolbar={{
+          options: [
+            'inline',
+            'blockType',
+            'fontSize',
+            'fontFamily',
+            'list',
+            'textAlign',
+            'colorPicker',
+            'link',
+            'embedded',
+            'emoji',
+            'image',
+            'remove',
+            'history'
+          ]
+        }}
+      />
     </div>
   );
 };
