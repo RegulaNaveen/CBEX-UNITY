@@ -19,7 +19,8 @@ import {
   deleteProposalQuestionData,
   getOpportunityInfo,
   getProposalCount, getPaginateProposal,
-  getPickListLookupSfData
+  getPickListLookupSfData,
+  fetchAdditionalBoxLink
 } from '../../api/proposal';
 const {
   PROPOSAL_API_URL
@@ -70,7 +71,9 @@ const {
   ADD_NEW_BID,
   NEW_BID_CREATED,
   PROPOSAL_DETAIL_UPDATE,
-  UPDATE_LOOKUP_OPTIONS
+  UPDATE_LOOKUP_OPTIONS,
+  BOX_ADDITIONAL_LINK,
+  BOX_ADDITIONAL_LINK_ERROR 
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -322,6 +325,33 @@ export const onGetProposalBoxId = (id: string): ThunkAction<string, Object> => {
       const { data } = await getProposlBoxId(id);
       const { BoxId: boxId } = data.proposal.proposalDetails;
       dispatch({ type: PROPOSAL_BOX_ID, payload: { boxId } });
+    } catch (error) {
+      dispatch({
+        type: PROPOSAL_BOX_ID_ERROR,
+        payload: { error: error.error }
+      });
+    }
+  };
+};
+export const getAdditionalBoxLink = (oppID: string, crmNo: string, customer: string): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    try {
+      const { data } = await fetchAdditionalBoxLink(oppID, crmNo, customer);
+      dispatch({ type: BOX_ADDITIONAL_LINK, payload: { boxlink: data } });
+    } catch (error) {
+      dispatch({
+        type: BOX_ADDITIONAL_LINK_ERROR,
+        payload: { error: error }
+      });
+    }
+  };
+};
+
+export const setupdateBoxId = (url: string): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({ type: PROPOSAL_BOX_ID_LOADING, payload: {} });
+    try {
+      dispatch({ type: PROPOSAL_BOX_ID, payload: { boxId: url } });
     } catch (error) {
       dispatch({
         type: PROPOSAL_BOX_ID_ERROR,
