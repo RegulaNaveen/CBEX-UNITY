@@ -55,7 +55,7 @@ import Blade from 'apollo-react/components/Blade';
 import chevronRight from '../../../../img/chevron-right.svg';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
 import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions';
-import ApolloNotepad from '../../views/ApolloNotepad';
+import WysiwygNotepad from '../../views/WysiwygNotepad';
 import Panel from 'apollo-react/components/Panel';
 import PanelGroup from 'apollo-react/components/PanelGroup';
 
@@ -497,7 +497,7 @@ class Questions extends Component<Props, State> {
         />
         <PanelGroup style={{ display: 'flex' }}>
           <Panel width="30%" maxWidth={500} minWidth={200} resizable>
-            <ApolloNotepad />
+            <WysiwygNotepad />
           </Panel>
           <Panel width="100%" minWidth={400} hideButton>
             <div className="tasksList-title-wrapper">
