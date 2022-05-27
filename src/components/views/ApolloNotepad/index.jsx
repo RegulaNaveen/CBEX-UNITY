@@ -12,13 +12,15 @@ import {
   getUserRole
 } from '../../../redux/selectors';
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { updateNote } from '../../../redux/actions/notepad-actions';
 
 const WysiwygNotepad = ({
   notes = null,
   selectedBid,
   userName,
   userEmail,
-  userRole
+  userRole,
+  updateNote
 }) => {
   const emptyTextBlock = {
     blocks: [
@@ -43,7 +45,7 @@ const WysiwygNotepad = ({
   ) => {
     return {
       proposalId,
-      notesId: notesId || 'uuidv4()',
+      notesId: notesId || uuidv4(),
       noteText: JSON.stringify(noteText),
       createdBy: { userEmail, userName, userRole },
       section: null,
@@ -65,7 +67,6 @@ const WysiwygNotepad = ({
 
   const memoizedSaveDB = useCallback(
     debounce(noteText => {
-      // TODO Save data to db
       const proposalId = selectedBid.get('id');
       const noteSaveReqBody = constructNoteV2(
         proposalId,
@@ -75,14 +76,13 @@ const WysiwygNotepad = ({
         userName,
         userRole
       );
-      console.log({ noteSaveReqBody });
-    }, 2000),
+      updateNote(proposalId, noteSaveReqBody);
+    }, 1000),
     [notes, selectedBid, notesId, userEmail, userName, userRole]
   );
 
   const onEditorsChange = useCallback(
     updatedEditorState => {
-      console.log('onEditorsChange rerendered');
       setEditorState(updatedEditorState);
       const updatedNoteText = convertToRaw(
         updatedEditorState.getCurrentContent()
@@ -106,4 +106,9 @@ const mapStateToProps = state => ({
   userEmail: getUserEmail(state),
   userRole: getUserRole(state)
 });
-export default connect(mapStateToProps)(WysiwygNotepad);
+
+const mapDispatchToProps = {
+  updateNote: updateNote
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(WysiwygNotepad);
