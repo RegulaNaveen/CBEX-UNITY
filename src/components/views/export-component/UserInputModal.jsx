@@ -1,10 +1,17 @@
 import React, { useEffect } from 'react';
 import Modal from 'apollo-react/components/Modal';
+import Checkbox from 'apollo-react/components/Checkbox';
 import {actionChannel, UI_ACTION} from '../../../uiActions/ui-actions';
+import MenuItem from 'apollo-react/components/MenuItem';
+import Select from 'apollo-react/components/Select';
+import _ from 'lodash'
 
-const UserInputModal = ({initExport}) => {
+const UserInputModal = ({initExport, filterState, filterStateUpdate}) => {
+
+    console.log('UserInputModal');
+    const  {answered, unanswered, myRole, includesNotes, fileName} = filterState;
     const [state, setState] = React.useState({
-      open: true,
+      open: true
     });
   
     useEffect(()=>{
@@ -18,8 +25,24 @@ const UserInputModal = ({initExport}) => {
   
     const handleClose = ()=> setState({...state, ...{open:false}});
     const handleOpen = ()=> setState({...state, ...{open:true}});
-    const handleToggle = ()=> setState({...state, ...{open:!state.open}});
-  
+    
+    const handleBooleanChange = (e) => {
+      console.log(e.target.name, e.target.value)
+      
+      filterStateUpdate({
+        ...filterState,
+        ...{[e.target.name] : !filterState[e.target.name]}
+      });
+    };
+    
+    const handleTextChange = (e) => {
+      console.log(e.target.name, e.target.value)
+      filterStateUpdate({
+        ...filterState,
+        ...{[e.target.name] : e.target.value}
+      });
+    }
+
     return(
     <Modal
       open={state.open}
@@ -27,10 +50,64 @@ const UserInputModal = ({initExport}) => {
       title="Export Opportunity"
       subtitle="For internal communication only"
       message="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
-      buttonProps={[{}, { label: 'Next' }]}
+      buttonProps={[{}, { label: 'Export', onClick: initExport }]}
       id="neutral"
     >
-      <button onClick={initExport}> Export </button>
+      <div className='exportOptionsWrapper'>
+
+        <div className='exportOptionsRow exportOptionsRow-first flex-dir-col'>
+          <label> File Name</label>
+          <input className="exportFileName" name="fileName" value={fileName} onChange={handleTextChange} required></input>
+          <span className='fileNameAlert'>File Name is required.</span>
+        </div>
+
+        <div className='exportOptionsRow exportOptionsRow-second flex-dir-col'>
+          <div className='exportOptionsCell'>
+            <Select
+              label="File Type"
+              value={'PDF'}
+              onChange={handleTextChange}
+              fullWidth
+            >
+              <MenuItem value="PDF">{'PDF (Default)'}</MenuItem>
+              <MenuItem value="DOCX">{'DOCX'}</MenuItem>
+            </Select>
+          </div>
+        </div>
+
+        <h4> Select any required filters</h4>
+        <div className='exportOptionsRow exportOptionsRow-third'>
+          <div className='exportOptionsCell'>
+            <Checkbox  value={answered} checked={answered} name="answered" label="Answered" onChange={handleBooleanChange} />
+          </div>
+          <div className='exportOptionsCell'>
+            <Checkbox  value={myRole} checked={myRole} name="myRole" label="My user role" onChange={handleBooleanChange}/>
+          </div>
+        </div>
+
+        <div className='exportOptionsRow'>
+        <div className='exportOptionsCell'>
+            <Checkbox value={unanswered} checked={unanswered}  name="unanswered" label="Unanswered" onChange={handleBooleanChange}/>
+          </div>
+          <div className='exportOptionsCell'>
+            <Checkbox value={includesNotes} checked={includesNotes} name="includesNotes" label="Include Notes Section" onChange={handleBooleanChange}/>
+          </div>
+        </div>
+
+        <div className='exportOptionsRow exportOptionsRow-last'>
+          <div className='exportOptionsCell'>
+            <Select
+              label="Select by interested parties"
+              value={'PDF'}
+              onChange={handleTextChange}
+              fullWidth
+            >
+              <MenuItem value="PDF">{'PDF (Default)'}</MenuItem>
+              <MenuItem value="DOCX">{'DOCX'}</MenuItem>
+            </Select>
+          </div>
+        </div>
+      </div>  
     </Modal>
     )
   }

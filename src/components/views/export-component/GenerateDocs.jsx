@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import UserInputModal from './UserInputModal';
 import {create} from './word-template';
 import { Packer } from "docx";
 import { saveAs } from "file-saver";
-
+import Logo from '../../../../img/iqvia-main-logo.png';
 import {
   getSelectedBid,
   getOpportunityData
@@ -20,6 +20,36 @@ const GenerateDocs = () => {
   let opportunityData = useSelector(getOpportunityData);
   let selectedBid = useSelector(getSelectedBid);
   let notesMap =  useSelector(selectNotes);
+  let logo = useRef(null);
+
+  let [filterState, filterStateUpdate] = useState({
+    answered: true,
+    unanswered: false,
+    myRole: false,
+    includesNotes: true,
+    milestones: 'All',
+    interestedParties: 'All',
+    fileName: 'Unity Export'
+  });
+  
+  useEffect(()=>{
+    try{
+      fetch(Logo).then((res)=>{
+        return res.blob()
+      }).then((blob)=>{
+        logo.current = blob
+      })
+      const selectedBid = getSelectedBidData();
+      const {proposal : {proposalDetails}} = selectedBid
+      let fileName = `Unity Export__Bid ${proposalDetails['bidNo']}_${proposalDetails['Customer']}`;
+      filterStateUpdate({
+        ...filterState,
+        ...{fileName}
+      })
+    }catch(error){
+    }
+  }, [selectedBid])
+
 
   const getSelectedBidData = () => {
     try{
@@ -41,19 +71,24 @@ const GenerateDocs = () => {
   }
 
   const initExport = ()=> {
-    console.log('start the export');
+    let {fileName} = filterState;
     const doc = create({
       data : getSelectedBidData(),
-      notes : getSelectedBidNotes()
+      notes : getSelectedBidNotes(),
+      filterState,
+      image: logo.current
     });
     Packer.toBlob(doc).then(blob => {
-      console.log(blob);
-      saveAs(blob, "example-section-wise-new.docx");
-      console.log("Document created successfully");
+      saveAs(blob, `${fileName}.docx`);
     });
   }
+
   return (
-    <UserInputModal initExport={initExport}></UserInputModal>
+    <UserInputModal 
+    filterState={filterState} 
+    initExport={initExport} 
+    filterStateUpdate={filterStateUpdate}
+    ></UserInputModal>
   );
 };
 

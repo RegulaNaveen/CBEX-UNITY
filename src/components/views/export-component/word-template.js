@@ -11,13 +11,34 @@ import {
     BorderStyle,
     SectionType,
     TableLayoutType,
-    UnderlineType
+    Header,
+    Footer,
+    AlignmentType,
+    ImageRun,
+    ExternalHyperlink
   } from "docx";  
+import { cloneDeep } from "lodash";
+import moment from "moment";
+import { API } from "../../../constants";
+import { applyAnsweredFilter, applyMyUserRoleFilter, applyUnAnsweredFilter } from "./filter-util";
+
 
 const themeBlue = '00A3E0';
 const themeGrey = 'EEEEEE';
+const DEFAULT_FONT = 'Arial';
 const PT_SECTION = 'Proposal Team';
 const QC_SECTION = 'Questions for the Customer';
+const questionCellWidth50 = { size: convertInchesToTwip(3.1) , type: WidthType.DXA};
+const questionCellWidth100 = { size: convertInchesToTwip(6.2) , type: WidthType.DXA};
+const questionCellWidth25 = { size: convertInchesToTwip(1.55) , type: WidthType.DXA};
+const questionCellWidth75 = { size: convertInchesToTwip(4.65) , type: WidthType.DXA};
+const questionCellWidth40 = { size: convertInchesToTwip(2.48) , type: WidthType.DXA};
+const questionCellWidth60 = { size: convertInchesToTwip(3.72) , type: WidthType.DXA};
+const userName = (localStorage) ? localStorage.getItem('userName') : '';
+const dateNow =  moment().format('DD-MMM-YYYY');
+const yearNow =  moment().format('YYYY');
+
+
 const headFields = {
     'Customer' : 'Customer',
     'Protocol number' : 'Protocol Title',
@@ -31,11 +52,10 @@ const CORE_TEAM = {
     'Business Developer' : 'BD',
     'TSL' : 'TSL',
     'Medical Advisor' : 'Medical Advisor',
-    'Project Leadership' : 'Project Leadership',
-    'Clinical DS&B' : 'Clinical DS&B',
+    'Project Lead' : 'Project Leadership',
+    'Clinical' : 'Clinical DS&B',
     'Analytics Strategy Lead' : 'Analytics Strategy Lead'
 }
-
 const cellMargin5P = {
     left: convertInchesToTwip(0.1),
     right: convertInchesToTwip(0.05),
@@ -43,21 +63,23 @@ const cellMargin5P = {
     bottom : convertInchesToTwip(0.05)
 }
 
-const questionCellWidth50 = { size: convertInchesToTwip(3.1) , type: WidthType.DXA};
-const questionCellWidth100 = { size: convertInchesToTwip(6.2) , type: WidthType.DXA};
-const questionCellWidth30 = { size: convertInchesToTwip(1.86) , type: WidthType.DXA};
-const questionCellWidth70 = { size: convertInchesToTwip(4.34) , type: WidthType.DXA};
-const questionCellWidth40 = { size: convertInchesToTwip(2.48) , type: WidthType.DXA};
-const questionCellWidth60 = { size: convertInchesToTwip(3.72) , type: WidthType.DXA};
-
-function topHeading(){
+function topHeading(details){
     return [new Paragraph({
         children : [
             new TextRun({
-                text: '[XYZ12345] Opportunity Overview',
+                text: details['CRM #'],
                 color: themeBlue,
                 size: 28,
-                bold: true
+                bold: true,
+                italics: true,
+                font: DEFAULT_FONT
+            }),
+            new TextRun({
+                text: ' Opportunity Overview',
+                color: themeBlue,
+                size: 28,
+                bold: true,
+                font: DEFAULT_FONT
             })
         ],
         spacing: { after : 500 }
@@ -71,10 +93,25 @@ function getLastAnswer(answers){
         return '';
     }
 }
-
+function getUnityPredicatedText(answers){
+    try{
+       return (answers[answers.length-1].userName === 'UnityPredictedAnswer')
+       ? '†'
+       : ''
+    }catch(error){
+        return '';
+    }
+}
 function getQuestionTextCell(questionText){
     return new TableCell({
-            children: [new Paragraph(questionText)],
+            children: [new Paragraph({
+                children : [
+                    new TextRun({
+                        text : questionText,
+                        font: DEFAULT_FONT
+                    })
+                ]
+            })],
             width : questionCellWidth50,
             shading: {
                 fill: themeGrey,
@@ -84,15 +121,27 @@ function getQuestionTextCell(questionText){
             margins: cellMargin5P
         }) 
 }
-
-function getAnswerCell(answer, width=null){
+function getAnswerCell(answer, unityPredicted='', width=null){
+    let upText = (unityPredicted) ? ` (${unityPredicted})` : '';
     return  new TableCell({
-        children: [new Paragraph(answer)],
+        children: [new Paragraph({
+            children : [
+                new TextRun({
+                    text : answer,
+                    font: DEFAULT_FONT
+                }),
+                new TextRun({
+                    text : upText,
+                    font: DEFAULT_FONT,
+                    color: themeBlue,
+                    size: 15
+                })
+            ]
+        })],
         width : width || questionCellWidth50,
         margins: cellMargin5P
     })
 }
-
 function getSectionNameCell(section, width=null){
     return new TableCell({
         children: [new Paragraph({
@@ -100,7 +149,8 @@ function getSectionNameCell(section, width=null){
                 new TextRun({
                     text: section,
                     bold: true,
-                    color: 'FFFFFF'
+                    color: 'FFFFFF',
+                    font: DEFAULT_FONT
                 })
             ]
         })],
@@ -131,16 +181,14 @@ function emptyCell(){
         }
     }) 
 }
-
 function questionTables(proposalQuestions){
-
     // Array<Table of each section>
     const tables = [];
     // Remove not visible questions
     let questions = proposalQuestions
     .filter((question)=>{
        return question.visible === true && question.section.sectionName !== PT_SECTION && question.section.sectionName !== QC_SECTION
-    });
+    }).sort((a,b)=>{ return a.section.sectionOrder - b.section.sectionOrder });
     // Section map
     const sections = {}
 
@@ -152,7 +200,9 @@ function questionTables(proposalQuestions){
                 sections[section].push(question)
             else
                 sections[section] = [question];
-        }catch(error){}
+        }catch(error){
+            console.log('Error while mapping Sections')
+        }
     });
 
     Object.keys(sections).forEach((section)=>{
@@ -166,13 +216,13 @@ function questionTables(proposalQuestions){
             })
         );
         
-        sections[section].forEach((question)=>{
+        sections[section].sort((a,b)=>a.questionOrder - b.questionOrder).forEach((question)=>{
             const questionText = question.questionText || '';
             rows.push(
                 new TableRow({
                     children: [
                         getQuestionTextCell(questionText),
-                        getAnswerCell(getLastAnswer(question.answers))
+                        getAnswerCell(getLastAnswer(question.answers), getUnityPredicatedText(question.answers))
                     ]
                 })
             )        
@@ -193,40 +243,53 @@ function questionTables(proposalQuestions){
     });
     return tables;
 }
-
 function getStyle(styleMap, index){
-    let underlineStyle = {
-        type: UnderlineType.SINGLE,
-        color: "990011",
-    };
+ 
     let styleId = '';
-
     let styles = {
         bold: false,
         italics: false,
-        strike: false
+        strike: false,
+        font: DEFAULT_FONT
     }
-    for(let key in styleMap){
-        let {start, end} = styleMap[key];
-        if(start <= index && index <= end){
-            if(key === 'BOLD'){
-                styles.bold = true;
-                styleId += 'b'
-            }else if (key === 'ITALIC'){
-                styles.italics = true;
-                styleId += 'i'
-            }else if (key === 'STRIKETHROUGH'){
-                styles.strike = true;
-                styleId += 's'
-            }else if (key === 'UNDERLINE'){
-                styles.underline = {};
-                styleId += 'u'
-            }        
+    try{
+        for(let key in styleMap){
+            let {start, end} = styleMap[key];
+            if(start <= index && index <= end){
+                if(key === 'BOLD'){
+                    styles.bold = true;
+                    styleId += '(b)'
+                }else if (key === 'ITALIC'){
+                    styles.italics = true;
+                    styleId += '(i)'
+                }else if (key === 'STRIKETHROUGH'){
+                    styles.strike = true;
+                    styleId += '(s)'
+                }else if (key === 'UNDERLINE'){
+                    styles.underline = {};
+                    styleId += '(u)'
+                }else if ( key.includes('color')){
+                    styles.color = key.slice(key.length-6, key.length);
+                    styleId += '(fc)'
+                }else if ( key.includes('backgroundColor')){
+                    styles.shading = {
+                        fill: key.slice(key.length-6, key.length),
+                        type: ShadingType.CLEAR,
+                        color: "auto",
+                    }
+                    styleId += '(bc)'
+                }else if ( key.includes('fontSize')){
+                    styles.size = key.slice(s.length-4, s.length-2)
+                    styleId += '(fs)'
+                }
+            }
         }
+    }catch(errror){
+        console.log('Error while Setting style object')
     }
+   
     return {styles, styleId}
 }
-
 function getNotesCell(paras){
     return  new TableCell({
         children: [...paras],
@@ -234,8 +297,8 @@ function getNotesCell(paras){
         margins: cellMargin5P
     })
 }
-
 function getNoteRows(notes){
+    let paras = [];
     let rows = [new TableRow({
         children: [
             getSectionNameCell('General Notes', questionCellWidth100)
@@ -243,25 +306,21 @@ function getNoteRows(notes){
     })];
     try{
         notes.forEach((note)=>{
-            let paras = [];
             let {noteText} = note;
             noteText = JSON.parse(noteText);
             let {blocks} = noteText;
+
+            console.log(blocks);
             
             blocks.forEach((block)=>{
                 let texts = [];
-                let {text, inlineStyleRanges, type} = block;
-                let listType = (type.includes('list-item')) ? '- ' : '';
+                let {text, inlineStyleRanges, type, depth} = block;
+                let listType = (type.includes('list-item')) ? { bullet: { level: depth}} : {};
                 let styleMap = {}
-
                 inlineStyleRanges.forEach((range)=>{
                     let {style, offset, length} = range;
                     styleMap[style] = {start : offset, end: offset + length}
                 });
-
-                texts.push(new TextRun({
-                    text: listType
-                }))
                 
                 let lastStyle = '';
                 let lastText = ''
@@ -285,25 +344,26 @@ function getNoteRows(notes){
                         }))
                 }    
                 
-                paras.push(new Paragraph({
+                paras.push(new Paragraph({...{
                     children: texts
-                }))
+                }, ...listType}))
             })
 
-            rows.push(
-                new TableRow({
-                children: [
-                    getNotesCell(paras)
-                ]
-            }))
         })
+
+        rows.push(
+            new TableRow({
+            children: [
+                getNotesCell(paras)
+            ]
+        }))
+
      return rows;
     }catch(error){
-        console.log(error);
+        console.log('Error while formatting the notes');
         return rows;
     }
 }
-
 function getNotesTable(notes){
     return new Table({
          rows : getNoteRows(notes),
@@ -311,15 +371,14 @@ function getNotesTable(notes){
         }
     )
 }
-
 function getHeaderInfoRows(details){
     const rows = [];
     try{
         for (let key in headFields){
             rows.push(new TableRow({
                 children: [
-                    getSectionNameCell(headFields[key], questionCellWidth30),
-                    getAnswerCell((details[key] || '').toString(), questionCellWidth70)
+                    getSectionNameCell(headFields[key], questionCellWidth25),
+                    getAnswerCell((details[key] || '').toString(), '', questionCellWidth75)
                 ]
             }))
         }
@@ -335,10 +394,9 @@ function getHeaderInfoTable(details){
         }
     )
 }
-
 function getProposalTeamsRows(questions){
-    const coreTeamQuestions = questions.filter((question) => question.visible === true && question.section.sectionName === PT_SECTION && CORE_TEAM[question.questionText]);
-    const otherTeamQuestions = questions.filter((question) => question.visible === true && question.section.sectionName === PT_SECTION && !CORE_TEAM[question.questionText]);
+    const coreTeamQuestions = questions.filter((question) => question.visible === true && question.section.sectionName === PT_SECTION && CORE_TEAM[question.questionText]).sort((a,b)=>a.questionOrder-b.questionOrder);
+    const otherTeamQuestions = questions.filter((question) => question.visible === true && question.section.sectionName === PT_SECTION && !CORE_TEAM[question.questionText]).sort((a,b)=>a.questionOrder-b.questionOrder);
 
     const coreTeamRows = [new TableRow({
         children: [
@@ -358,8 +416,8 @@ function getProposalTeamsRows(questions){
             let {questionText, answers} = question;
             coreTeamRows.push(new TableRow({
                 children: [
-                    getAnswerCell(questionText, questionCellWidth40),
-                    getAnswerCell(getLastAnswer(answers), questionCellWidth60)
+                    getAnswerCell(questionText, '', questionCellWidth40),
+                    getAnswerCell(getLastAnswer(answers), '', questionCellWidth60)
                 ]
             }))
         });
@@ -368,8 +426,8 @@ function getProposalTeamsRows(questions){
             let {questionText, answers} = question;
             otherTeamRows.push(new TableRow({
                 children: [
-                    getAnswerCell(questionText, questionCellWidth40),
-                    getAnswerCell(getLastAnswer(answers), questionCellWidth60)
+                    getAnswerCell(questionText, '', questionCellWidth40),
+                    getAnswerCell(getLastAnswer(answers), '', questionCellWidth60)
                 ]
             }))
         });
@@ -381,7 +439,6 @@ function getProposalTeamsRows(questions){
         ...otherTeamRows
     ];
 }
-
 function getProposalTeamTable(questions){
     return new Table({
          rows : getProposalTeamsRows(questions),
@@ -389,48 +446,287 @@ function getProposalTeamTable(questions){
         }
     )
 }
+function getQuestionToCustomerRows(questions){
+    let questionsToCustomer = questions.filter((question) => question.visible === true && question.section.sectionName === QC_SECTION).sort((a,b)=>a.questionOrder-b.questionOrder);
+    
+    if(!questionsToCustomer.length)
+        questionsToCustomer = [
+            { questionText : 'Question 1'},
+            { questionText : 'Question 2'},
+            { questionText : 'Question 3'},
+            { questionText : 'Question 4'}
+        ]
+
+    const qTcRows = [new TableRow({
+        children: [
+            getSectionNameCell(QC_SECTION,  questionCellWidth100),
+        ]
+    })];
+    const qTcParas = [];
+    try{
+        questionsToCustomer.forEach((question, index)=>{
+            let {questionText} = question;
+            qTcParas.push(new Paragraph({
+                text : questionText,
+                bullet: {
+                    level: 0,
+                },
+                spacing : {
+                    after : 50,
+                    before : 50
+                }
+            }))
+        });
+    }catch(error){
+        console.log('Error in getQuestionToCustomerRows', error);
+    }
+
+    qTcRows.push(new TableRow({
+        children: [new TableCell({
+            children : qTcParas,
+            width : questionCellWidth100,
+            
+        })]
+    }))
+    return qTcRows;
+}
+function getQuestionToCustomerTable(questions){
+    return new Table({
+         rows : getQuestionToCustomerRows(questions),
+         layout: TableLayoutType.FIXED
+        }
+    )
+}
+function getUnityMessage(){
+    return new Paragraph({  
+            children: [
+                new TextRun({
+                    text : '† Unity has provided this answer but not validated by user on proposal team. ',
+                    font: DEFAULT_FONT,
+                    size: 20,
+                    color: themeBlue
+                })
+            ],
+            spacing : {
+                before : 200
+            },
+            border: {
+                bottom : {
+                    color: 'EEEEEE',
+                    size: 10,
+                    style: BorderStyle.SINGLE
+                }
+            }
+    })   
+}
+function getFooter(details){
+    return new Table({
+        rows : [
+            new TableRow({
+                children: [
+                    new TableCell({
+                        children : [
+                            new Paragraph({  
+                                children: [new TextRun({
+                                    text : `Exported from Unity on ${dateNow}`,
+                                    font: DEFAULT_FONT,
+                                    size: 15,
+                                    color: '999999'
+                                })],
+                                spacing : {
+                                    before : 200
+                                }
+                            }),
+                            new Paragraph({
+                                children: [new TextRun({
+                                    text : `by ${userName}`,
+                                    font: DEFAULT_FONT,
+                                    size: 15,
+                                    color: '999999'
+                                })]
+                            })
+                        ],
+                        borders:{
+                            top : {color : 'FFFFFF'},
+                            left : {color : 'FFFFFF'},
+                            right : {color : 'FFFFFF'},
+                            bottom : {color : 'FFFFFF'}
+                        },
+                        width: questionCellWidth50
+                    }),
+                    new TableCell({
+                        children : [
+                            new Paragraph({
+                                children: [new TextRun({
+                                    text : 'View up-to-date Unity record here:',
+                                    font: DEFAULT_FONT,
+                                    size: 15,
+                                    color: '999999'
+                                })],
+                                spacing : {
+                                    before : 200
+                                },
+                                alignment :AlignmentType.RIGHT
+                            }),
+                            new Paragraph({
+                                children: [
+                                    new ExternalHyperlink({
+                                        children :[
+                                            new TextRun({
+                                                text: `${getUnityLink(details)}`,
+                                                font: DEFAULT_FONT,
+                                                size: 15,
+                                                color: themeBlue,
+                                                style: "Hyperlink",
+                                            })
+                                        ],
+                                        link: `${getUnityLink(details)}`,
+                                    })
+                               ],
+                                alignment :AlignmentType.RIGHT
+                            }),
+                            new Paragraph({
+                                children: [new TextRun({
+                                    text: `Copyright © ${yearNow} IQVIA. All Rights Reserved. Confidential and Proprietary.`,
+                                    font: DEFAULT_FONT,
+                                    size: 15,
+                                    color: '999999'
+                                })],
+                                alignment :AlignmentType.RIGHT
+                            })
+                        ],
+                        borders:{
+                            top : {color : 'FFFFFF'},
+                            left : {color : 'FFFFFF'},
+                            right : {color : 'FFFFFF'},
+                            bottom : {color : 'FFFFFF'}
+                        },
+                        width: questionCellWidth50
+                    }),
+                ]
+            })
+        ]
+    })
+}
+function getFilteredQuestion(proposalQuestions, filterState){
+    const  {answered, unanswered, myRole} = filterState;
+    let questions = cloneDeep(proposalQuestions);
+
+    // Answered and Unanswered filter block
+    if(answered && unanswered){
+        // Do nothing
+    }else if(answered){
+        questions = applyAnsweredFilter(questions);
+    }else if(unanswered){
+        questions = applyUnAnsweredFilter(questions);
+    }
+
+    // My user role questions
+    if(myRole)
+     questions = applyMyUserRoleFilter(questions);
+ 
+
+    return questions;
+}
+function getUnityLink(details){
+    return `${API.AUTH.REDIRECTION_URL}/opportunities/${details['CRM #']}`
+}
 export function create(content) {
-    let {data : {proposalQuestions, proposal : {proposalDetails}}, notes } = content;
-    const document = new Document({
-      sections: [
-        {
-            children: [
-                ...topHeading()
-            ]
-        },
-        {
-            properties: {
-                type: SectionType.CONTINUOUS,
-            },
-            children: [
-                getHeaderInfoTable(proposalDetails)
-            ]
-        },
-        {
-            properties: {
-                type: SectionType.CONTINUOUS,
-            },
-            children: [
-                getProposalTeamTable(proposalQuestions)
-            ]
-        },
-        {
-            properties: {
-                type: SectionType.CONTINUOUS,
-            },
-            children: [
-                ...questionTables(proposalQuestions)
-            ]
-        },
-        {
+    let {data : {proposalQuestions, proposal : {proposalDetails}}, notes, filterState, image } = content;
+
+    console.log(filterState);
+    
+    const filteredQuestions = getFilteredQuestion(proposalQuestions, filterState);
+
+    const SectionList = {
+        sections: [
+          {
+              headers: {
+                default: new Header({
+                    children: [ new Paragraph({
+                        children : [
+                            new ImageRun({
+                                data : image,
+                                transformation : {
+                                    width : 143,
+                                    height: 60
+                                }
+                            })
+                        ],
+                        alignment: AlignmentType.RIGHT,
+                        spacing : {
+                            after: 500
+                        },
+                        border: {
+                            bottom : {
+                                color: themeBlue,
+                                size: 10,
+                                style: BorderStyle.THICK
+                            }
+                        }
+                        
+                    }
+                    )],
+                }),
+              },   
+              children: [
+                  ...topHeading(proposalDetails)
+              ],
+              footers: {
+                default: new Footer({
+                    children: [
+                        getUnityMessage(),
+                        getFooter(proposalDetails)
+                    ],
+                }),
+              }
+          },
+          {
+              properties: {
+                  type: SectionType.CONTINUOUS,
+              },
+              children: [
+                  getHeaderInfoTable(proposalDetails)
+              ]
+          },
+          {
+              properties: {
+                  type: SectionType.CONTINUOUS,
+              },
+              children: [
+                  getProposalTeamTable(proposalQuestions)
+              ]
+          },
+          {
+              properties: {
+                  type: SectionType.CONTINUOUS,
+              },
+              children: [
+                  getQuestionToCustomerTable(proposalQuestions)
+              ]
+          },
+          {
+              properties: {
+                  type: SectionType.CONTINUOUS,
+              },
+              children: [
+                  ...questionTables(filteredQuestions)
+              ]
+          },  
+        ]
+      };
+
+    // Adding Note Section in Document
+    if(filterState.includesNotes)
+        SectionList.sections.push({
             properties: {
                 type: SectionType.CONTINUOUS,
             },
             children: [
                 getNotesTable(notes)
             ]
-        },  
-      ]
-    });
+        })
+
+    const document = new Document(SectionList);
     return document;
 }
