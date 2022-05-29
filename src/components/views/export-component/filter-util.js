@@ -40,10 +40,23 @@ export const applyMyUserRoleFilter = (questions) => {
       filteredQuestions = questions
         .filter(question => {
           let assignedRoles = '';
-          try{ assignedRoles = question.roleNames }catch(error){ }
+          try{ assignedRoles = question.roleNames || ''}catch(error){ }
           return assignedRoles.includes(role);
         })
     }
     return filteredQuestions || questions;
 }
   
+export const applyinterestedPartiesFilter = (questions, selectedParty) => {
+  const role = selectedParty
+  let filteredQuestions;
+  if (role) {
+    filteredQuestions = questions
+      .filter(question => {
+        let assignedRoles = '';
+        try{ assignedRoles = question.interestedParties || '' }catch(error){ }
+        return assignedRoles.includes(role);
+      })
+  }
+  return filteredQuestions || questions;
+}

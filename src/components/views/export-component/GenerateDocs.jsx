@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import UserInputModal from './UserInputModal';
-import {create} from './word-template';
+import {createWord} from './word-template';
 import { Packer } from "docx";
 import { saveAs } from "file-saver";
 import Logo from '../../../../img/iqvia-main-logo.png';
@@ -11,15 +11,20 @@ import {
 } from '../../../redux/selectors/proposal';
 
 import {
-  selectNotes
+  selectNotes,
+  getRoles
 } from '../../../redux/selectors';
 
+export let docType = {
+  pdf : 'PDF',
+  doc : 'DOCX'
+}
 
 const GenerateDocs = () => {
-  console.log('rendering')
   let opportunityData = useSelector(getOpportunityData);
   let selectedBid = useSelector(getSelectedBid);
   let notesMap =  useSelector(selectNotes);
+  let roleList = useSelector(getRoles) || []
   let logo = useRef(null);
 
   let [filterState, filterStateUpdate] = useState({
@@ -29,7 +34,8 @@ const GenerateDocs = () => {
     includesNotes: true,
     milestones: 'All',
     interestedParties: 'All',
-    fileName: 'Unity Export'
+    fileName: 'Unity Export',
+    fileType: docType.pdf
   });
   
   useEffect(()=>{
@@ -71,16 +77,25 @@ const GenerateDocs = () => {
   }
 
   const initExport = ()=> {
-    let {fileName} = filterState;
-    const doc = create({
-      data : getSelectedBidData(),
-      notes : getSelectedBidNotes(),
-      filterState,
-      image: logo.current
-    });
-    Packer.toBlob(doc).then(blob => {
-      saveAs(blob, `${fileName}.docx`);
-    });
+    try{
+      let {fileName, fileType} = filterState;
+      let exportBlob;
+        if(fileType === docType.pdf){ 
+          console.log('PDF is not supported yet')
+        }else if(fileType === docType.doc){
+          exportBlob = createWord({
+            data : getSelectedBidData(),
+            notes : getSelectedBidNotes(),
+            filterState,
+            image: logo.current
+          });
+          Packer.toBlob(exportBlob).then(blob => {
+            saveAs(blob, `${fileName}.docx`);
+          });
+        }
+      }catch(error){
+        console.log('Cannot export! something went wrong.', error)
+      } 
   }
 
   return (
@@ -88,6 +103,7 @@ const GenerateDocs = () => {
     filterState={filterState} 
     initExport={initExport} 
     filterStateUpdate={filterStateUpdate}
+    roleList={roleList}
     ></UserInputModal>
   );
 };

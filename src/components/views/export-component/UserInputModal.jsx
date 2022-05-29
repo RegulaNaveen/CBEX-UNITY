@@ -5,11 +5,19 @@ import {actionChannel, UI_ACTION} from '../../../uiActions/ui-actions';
 import MenuItem from 'apollo-react/components/MenuItem';
 import Select from 'apollo-react/components/Select';
 import _ from 'lodash'
+import { docType } from './GenerateDocs';
 
-const UserInputModal = ({initExport, filterState, filterStateUpdate}) => {
+const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList}) => {
+    const  {
+      answered, 
+      unanswered,
+      myRole, 
+      includesNotes, 
+      fileName, 
+      fileType, 
+      interestedParties
+    } = filterState;
 
-    console.log('UserInputModal');
-    const  {answered, unanswered, myRole, includesNotes, fileName} = filterState;
     const [state, setState] = React.useState({
       open: true
     });
@@ -28,7 +36,6 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate}) => {
     
     const handleBooleanChange = (e) => {
       console.log(e.target.name, e.target.value)
-      
       filterStateUpdate({
         ...filterState,
         ...{[e.target.name] : !filterState[e.target.name]}
@@ -36,7 +43,6 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate}) => {
     };
     
     const handleTextChange = (e) => {
-      console.log(e.target.name, e.target.value)
       filterStateUpdate({
         ...filterState,
         ...{[e.target.name] : e.target.value}
@@ -49,32 +55,29 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate}) => {
       onClose={() => handleClose()}
       title="Export Opportunity"
       subtitle="For internal communication only"
-      message="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
       buttonProps={[{}, { label: 'Export', onClick: initExport }]}
       id="neutral"
     >
       <div className='exportOptionsWrapper'>
-
         <div className='exportOptionsRow exportOptionsRow-first flex-dir-col'>
           <label> File Name</label>
           <input className="exportFileName" name="fileName" value={fileName} onChange={handleTextChange} required></input>
           <span className='fileNameAlert'>File Name is required.</span>
         </div>
-
         <div className='exportOptionsRow exportOptionsRow-second flex-dir-col'>
           <div className='exportOptionsCell'>
             <Select
               label="File Type"
-              value={'PDF'}
+              value={fileType}
               onChange={handleTextChange}
               fullWidth
+              name="fileType"
             >
-              <MenuItem value="PDF">{'PDF (Default)'}</MenuItem>
-              <MenuItem value="DOCX">{'DOCX'}</MenuItem>
+              <MenuItem value={docType.pdf}>{`${docType.pdf} (Default)`}</MenuItem>
+              <MenuItem value={docType.doc}>{docType.doc}</MenuItem>
             </Select>
           </div>
         </div>
-
         <h4> Select any required filters</h4>
         <div className='exportOptionsRow exportOptionsRow-third'>
           <div className='exportOptionsCell'>
@@ -84,8 +87,7 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate}) => {
             <Checkbox  value={myRole} checked={myRole} name="myRole" label="My user role" onChange={handleBooleanChange}/>
           </div>
         </div>
-
-        <div className='exportOptionsRow'>
+        <div className='exportOptionsRow exportOptionsRow-fourth'>
         <div className='exportOptionsCell'>
             <Checkbox value={unanswered} checked={unanswered}  name="unanswered" label="Unanswered" onChange={handleBooleanChange}/>
           </div>
@@ -93,17 +95,16 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate}) => {
             <Checkbox value={includesNotes} checked={includesNotes} name="includesNotes" label="Include Notes Section" onChange={handleBooleanChange}/>
           </div>
         </div>
-
         <div className='exportOptionsRow exportOptionsRow-last'>
           <div className='exportOptionsCell'>
             <Select
               label="Select by interested parties"
-              value={'PDF'}
+              value={interestedParties}
               onChange={handleTextChange}
               fullWidth
+              name="interestedParties"
             >
-              <MenuItem value="PDF">{'PDF (Default)'}</MenuItem>
-              <MenuItem value="DOCX">{'DOCX'}</MenuItem>
+              {roleList.map((role)=>  <MenuItem key={role} value={role}>{role}</MenuItem>)}
             </Select>
           </div>
         </div>

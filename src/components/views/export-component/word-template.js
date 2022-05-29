@@ -20,7 +20,7 @@ import {
 import { cloneDeep } from "lodash";
 import moment from "moment";
 import { API } from "../../../constants";
-import { applyAnsweredFilter, applyMyUserRoleFilter, applyUnAnsweredFilter } from "./filter-util";
+import { applyAnsweredFilter, applyinterestedPartiesFilter, applyMyUserRoleFilter, applyUnAnsweredFilter } from "./filter-util";
 
 
 const themeBlue = '00A3E0';
@@ -67,7 +67,7 @@ function topHeading(details){
     return [new Paragraph({
         children : [
             new TextRun({
-                text: details['CRM #'],
+                text: details['CRM #'] || '',
                 color: themeBlue,
                 size: 28,
                 bold: true,
@@ -309,9 +309,6 @@ function getNoteRows(notes){
             let {noteText} = note;
             noteText = JSON.parse(noteText);
             let {blocks} = noteText;
-
-            console.log(blocks);
-            
             blocks.forEach((block)=>{
                 let texts = [];
                 let {text, inlineStyleRanges, type, depth} = block;
@@ -355,7 +352,8 @@ function getNoteRows(notes){
             new TableRow({
             children: [
                 getNotesCell(paras)
-            ]
+            ],
+            cantSplit: false
         }))
 
      return rows;
@@ -432,7 +430,7 @@ function getProposalTeamsRows(questions){
             }))
         });
     }catch(error){
-        console.log('Error in getProposalTeamsRows', error);
+        console.log('Error in getProposalTeamsRows');
     }
     return [
         ...coreTeamRows,
@@ -478,7 +476,7 @@ function getQuestionToCustomerRows(questions){
             }))
         });
     }catch(error){
-        console.log('Error in getQuestionToCustomerRows', error);
+        console.log('Error in getQuestionToCustomerRows');
     }
 
     qTcRows.push(new TableRow({
@@ -520,96 +518,101 @@ function getUnityMessage(){
     })   
 }
 function getFooter(details){
-    return new Table({
-        rows : [
-            new TableRow({
-                children: [
-                    new TableCell({
-                        children : [
-                            new Paragraph({  
-                                children: [new TextRun({
-                                    text : `Exported from Unity on ${dateNow}`,
-                                    font: DEFAULT_FONT,
-                                    size: 15,
-                                    color: '999999'
-                                })],
-                                spacing : {
-                                    before : 200
-                                }
-                            }),
-                            new Paragraph({
-                                children: [new TextRun({
-                                    text : `by ${userName}`,
-                                    font: DEFAULT_FONT,
-                                    size: 15,
-                                    color: '999999'
-                                })]
-                            })
-                        ],
-                        borders:{
-                            top : {color : 'FFFFFF'},
-                            left : {color : 'FFFFFF'},
-                            right : {color : 'FFFFFF'},
-                            bottom : {color : 'FFFFFF'}
-                        },
-                        width: questionCellWidth50
-                    }),
-                    new TableCell({
-                        children : [
-                            new Paragraph({
-                                children: [new TextRun({
-                                    text : 'View up-to-date Unity record here:',
-                                    font: DEFAULT_FONT,
-                                    size: 15,
-                                    color: '999999'
-                                })],
-                                spacing : {
-                                    before : 200
-                                },
-                                alignment :AlignmentType.RIGHT
-                            }),
-                            new Paragraph({
-                                children: [
-                                    new ExternalHyperlink({
-                                        children :[
-                                            new TextRun({
-                                                text: `${getUnityLink(details)}`,
-                                                font: DEFAULT_FONT,
-                                                size: 15,
-                                                color: themeBlue,
-                                                style: "Hyperlink",
-                                            })
-                                        ],
-                                        link: `${getUnityLink(details)}`,
-                                    })
-                               ],
-                                alignment :AlignmentType.RIGHT
-                            }),
-                            new Paragraph({
-                                children: [new TextRun({
-                                    text: `Copyright © ${yearNow} IQVIA. All Rights Reserved. Confidential and Proprietary.`,
-                                    font: DEFAULT_FONT,
-                                    size: 15,
-                                    color: '999999'
-                                })],
-                                alignment :AlignmentType.RIGHT
-                            })
-                        ],
-                        borders:{
-                            top : {color : 'FFFFFF'},
-                            left : {color : 'FFFFFF'},
-                            right : {color : 'FFFFFF'},
-                            bottom : {color : 'FFFFFF'}
-                        },
-                        width: questionCellWidth50
-                    }),
-                ]
-            })
-        ]
-    })
+    try{
+        return new Table({
+            rows : [
+                new TableRow({
+                    children: [
+                        new TableCell({
+                            children : [
+                                new Paragraph({  
+                                    children: [new TextRun({
+                                        text : `Exported from Unity on ${dateNow}`,
+                                        font: DEFAULT_FONT,
+                                        size: 15,
+                                        color: '999999'
+                                    })],
+                                    spacing : {
+                                        before : 200
+                                    }
+                                }),
+                                new Paragraph({
+                                    children: [new TextRun({
+                                        text : `by ${userName}`,
+                                        font: DEFAULT_FONT,
+                                        size: 15,
+                                        color: '999999'
+                                    })]
+                                })
+                            ],
+                            borders:{
+                                top : {color : 'FFFFFF'},
+                                left : {color : 'FFFFFF'},
+                                right : {color : 'FFFFFF'},
+                                bottom : {color : 'FFFFFF'}
+                            },
+                            width: questionCellWidth50
+                        }),
+                        new TableCell({
+                            children : [
+                                new Paragraph({
+                                    children: [new TextRun({
+                                        text : 'View up-to-date Unity record here:',
+                                        font: DEFAULT_FONT,
+                                        size: 15,
+                                        color: '999999'
+                                    })],
+                                    spacing : {
+                                        before : 200
+                                    },
+                                    alignment :AlignmentType.RIGHT
+                                }),
+                                new Paragraph({
+                                    children: [
+                                        new ExternalHyperlink({
+                                            children :[
+                                                new TextRun({
+                                                    text: `${getUnityLink(details)}`,
+                                                    font: DEFAULT_FONT,
+                                                    size: 15,
+                                                    color: themeBlue,
+                                                    style: "Hyperlink",
+                                                })
+                                            ],
+                                            link: `${getUnityLink(details)}`,
+                                        })
+                                   ],
+                                    alignment :AlignmentType.RIGHT
+                                }),
+                                new Paragraph({
+                                    children: [new TextRun({
+                                        text: `Copyright © ${yearNow} IQVIA. All Rights Reserved. Confidential and Proprietary.`,
+                                        font: DEFAULT_FONT,
+                                        size: 15,
+                                        color: '999999'
+                                    })],
+                                    alignment :AlignmentType.RIGHT
+                                })
+                            ],
+                            borders:{
+                                top : {color : 'FFFFFF'},
+                                left : {color : 'FFFFFF'},
+                                right : {color : 'FFFFFF'},
+                                bottom : {color : 'FFFFFF'}
+                            },
+                            width: questionCellWidth50
+                        }),
+                    ]
+                })
+            ]
+        })
+    }catch(error){
+        console.log('Error in getFooter');
+    }
+   
 }
 function getFilteredQuestion(proposalQuestions, filterState){
-    const  {answered, unanswered, myRole} = filterState;
+    const  {answered, unanswered, myRole, interestedParties} = filterState;
     let questions = cloneDeep(proposalQuestions);
 
     // Answered and Unanswered filter block
@@ -625,49 +628,51 @@ function getFilteredQuestion(proposalQuestions, filterState){
     if(myRole)
      questions = applyMyUserRoleFilter(questions);
  
+    if(interestedParties && interestedParties !== 'All')
+     questions = applyinterestedPartiesFilter(questions, interestedParties);   
 
     return questions;
 }
 function getUnityLink(details){
     return `${API.AUTH.REDIRECTION_URL}/opportunities/${details['CRM #']}`
 }
-export function create(content) {
+function getHeader(image){
+    return new Header({
+        children: [ new Paragraph({
+            children : [
+                new ImageRun({
+                    data : image,
+                    transformation : {
+                        width : 143,
+                        height: 60
+                    }
+                })
+            ],
+            alignment: AlignmentType.RIGHT,
+            spacing : {
+                after: 500
+            },
+            border: {
+                bottom : {
+                    color: themeBlue,
+                    size: 10,
+                    style: BorderStyle.THICK
+                }
+            }
+            
+        }
+        )],
+    })
+}
+export function createWord(content) {
     let {data : {proposalQuestions, proposal : {proposalDetails}}, notes, filterState, image } = content;
-
-    console.log(filterState);
-    
     const filteredQuestions = getFilteredQuestion(proposalQuestions, filterState);
 
     const SectionList = {
         sections: [
           {
               headers: {
-                default: new Header({
-                    children: [ new Paragraph({
-                        children : [
-                            new ImageRun({
-                                data : image,
-                                transformation : {
-                                    width : 143,
-                                    height: 60
-                                }
-                            })
-                        ],
-                        alignment: AlignmentType.RIGHT,
-                        spacing : {
-                            after: 500
-                        },
-                        border: {
-                            bottom : {
-                                color: themeBlue,
-                                size: 10,
-                                style: BorderStyle.THICK
-                            }
-                        }
-                        
-                    }
-                    )],
-                }),
+                default: getHeader(image),
               },   
               children: [
                   ...topHeading(proposalDetails)
