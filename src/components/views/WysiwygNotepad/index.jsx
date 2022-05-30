@@ -62,8 +62,19 @@ const WysiwygNotepad = ({
       const newNotes = JSON.parse(notes.get(0).toJS().noteText);
       setNotesId(notes.get(0).toJS().notesId);
       setEditorState(EditorState.createWithContent(convertFromRaw(newNotes)));
+    } else {
+      setEditorState(initialEditorState);
     }
   }, [notes]);
+
+  // unmount
+  useEffect(
+    () => () => {
+      console.log('WYSIWYG Unmount');
+      setEditorState(initialEditorState);
+    },
+    []
+  );
 
   const memoizedSaveDB = useCallback(
     debounce(noteText => {
