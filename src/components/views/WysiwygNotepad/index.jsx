@@ -56,8 +56,11 @@ const WysiwygNotepad = ({
   const initialEditorState = EditorState.createEmpty();
   const [editorState, setEditorState] = useState(initialEditorState);
   const [notesId, setNotesId] = useState('');
+  const [isReadOnly, setIsReadOnly] = useState(false);
 
   useEffect(() => {
+    console.log('notes changed< Rerendered');
+    console.log({ selectedBid: selectedBid.get('id') });
     if (notes.size > 0) {
       const newNotes = JSON.parse(notes.get(0).toJS().noteText);
       setNotesId(notes.get(0).toJS().notesId);
@@ -65,7 +68,8 @@ const WysiwygNotepad = ({
     } else {
       setEditorState(initialEditorState);
     }
-  }, [notes]);
+    setIsReadOnly(!selectedBid.get('isCurrent'));
+  }, [notes, selectedBid]);
 
   // unmount
   useEffect(
@@ -108,6 +112,7 @@ const WysiwygNotepad = ({
       <Editor
         editorState={editorState}
         onEditorStateChange={onEditorsChange}
+        readOnly={isReadOnly}
         toolbar={{
           options: [
             'inline',
