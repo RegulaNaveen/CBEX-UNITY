@@ -118,15 +118,15 @@ const WysiwygNotepad = ({
             'inline',
             'blockType',
             'fontSize',
-            'fontFamily',
+            // 'fontFamily',
             'list',
             'textAlign',
-            'colorPicker',
-            'link',
-            'embedded',
-            'emoji',
-            'image',
-            'remove',
+            // 'colorPicker',
+            // 'link',
+            // 'embedded',
+            // 'emoji',
+            // 'image',
+            // 'remove',
             'history'
           ]
         }}
