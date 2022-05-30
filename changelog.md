@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [4.3] - YYYY-MM-DD
 ### Added
   - IQVIACBEXU-1358: Additional Links to Box
+  - IQVIACBEXU-1421: Create SalesForce Link
 ### Changed
 ### Fixed
 
