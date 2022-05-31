@@ -496,10 +496,12 @@ class Questions extends Component<Props, State> {
           }
         />
         <PanelGroup style={{ display: 'flex' }}>
-          <Panel width="30%" maxWidth={500} minWidth={200} resizable>
-            <WysiwygNotepad />
+          <Panel width="30%" maxWidth={500} minWidth={100} resizable>
+            <div style={{ paddingLeft: '22px' }}>
+              <WysiwygNotepad />
+            </div>
           </Panel>
-          <Panel width="100%" minWidth={400} hideButton>
+          <Panel width="100%" minWidth={400} hideButton style={{ paddingLeft: '10px', paddingRight: '10px'}}>
             <div className="tasksList-title-wrapper">
               <div className="taskList-icons-wrapper">
                 <ApolloCheckbox
