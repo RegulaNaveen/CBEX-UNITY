@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     },
     body: {
         width: "100%",
-        minHeight: "70vh",
+        minHeight: "75vh",
     },
     footer: {
         width: "83%",
@@ -276,7 +276,7 @@ function getNotesRows(notes){
     let html = ``;
     html += `<table class="notesTable table marginTop20">`
     html += `<tr>`
-    html += `<th>General Notes </th>`
+    html += `<th>General Notes <br><br></th>`
     html += `</tr>`
     try{
         html += `<tr>`
@@ -331,40 +331,41 @@ function getHtml(proposalDetails, questions, filteredQuestions, notes, filterSta
         </body>
         </html>    
     `;
+    console.log(html)
     return html;
 }
 const MyDoc = (proposalDetails, questions, filteredQuestions, notes, filterState)=>{
     return (
         <Document>
          <Page wrap>
-         <View fixed style={styles.header}>
-             <Image src={Logo} style={styles.imgLogo}></Image>
-         </View>
-         <View style={styles.body} wrap>
-             <View style={styles.heading}>
-                <Text style={styles.headingText}>
-                    <Text style={{fontStyle : "italic"}}>{proposalDetails['CRM #'] || ''} </Text>Opportunity Overview
-                </Text>
+            <View fixed style={styles.header}>
+                <Image src={Logo} style={styles.imgLogo}></Image>
             </View>
-            <Html>
-                {getHtml(proposalDetails, questions, filteredQuestions, notes, filterState)}
-            </Html>
-         </View>
-          <View fixed style={styles.footer}>
-            <Text style={{fontSize: "10px", fontweight: "bold", color: `#${themeBlue}`, marginBottom: 5, borderBottom: "1px solid #CCC"}}>† Unity has provided this answer but not validated by user on proposal team. </Text>  
-            <View style={{display: "flex", flexDirection: "row", marginBottom: 5}}>
-                <Text style={{flex: 1, fontSize: "8px", color:"#999"}}>Exported from Unity on {dateNow}</Text>
-                <Text style={{flex: 1, fontSize: "8px", textAlign: "right", color:"#999"}}>View up-to-date Unity record here:</Text>
+            <View style={styles.body}>
+                <View style={styles.heading}>
+                    <Text style={styles.headingText}>
+                        <Text style={{fontStyle : "italic"}}>{proposalDetails['CRM #'] || ''} </Text>Opportunity Overview
+                    </Text>
+                </View>
+                <Html>
+                    {getHtml(proposalDetails, questions, filteredQuestions, notes, filterState)}
+                </Html>
             </View>
-            <View style={{display: "flex", flexDirection: "row", marginBottom: 5}}>
-                <Text style={{flex: 1, fontSize: "8px", color:"#999"}}>by {userName}</Text>
-                <Text style={{flex: 1, fontSize: "8px",  textAlign: "right", color:"#999"}}>{getUnityLink(proposalDetails)}</Text>
+            <View fixed style={styles.footer}>
+                <Text style={{fontSize: "10px", fontweight: "bold", color: `#${themeBlue}`, marginBottom: 5, borderBottom: "1px solid #CCC"}}>† Unity has provided this answer but not validated by user on proposal team. </Text>  
+                <View style={{display: "flex", flexDirection: "row", marginBottom: 5}}>
+                    <Text style={{flex: 1, fontSize: "8px", color:"#999"}}>Exported from Unity on {dateNow}</Text>
+                    <Text style={{flex: 1, fontSize: "8px", textAlign: "right", color:"#999"}}>View up-to-date Unity record here:</Text>
+                </View>
+                <View style={{display: "flex", flexDirection: "row", marginBottom: 5}}>
+                    <Text style={{flex: 1, fontSize: "8px", color:"#999"}}>by {userName}</Text>
+                    <Text style={{flex: 1, fontSize: "8px",  textAlign: "right", color:"#999"}}>{getUnityLink(proposalDetails)}</Text>
+                </View>
+                <View style={{display: "flex", flexDirection: "row", marginBottom: 0}}>
+                    <Text style={{flex: 1, fontSize: "8px", color:"#999"}}></Text>
+                    <Text style={{flex: 1, fontSize: "8px",  textAlign: "right", color:"#999"}}>Copyright © {yearNow} IQVIA. All Rights Reserved. Confidential and Proprietary.</Text>
+                </View> 
             </View>
-            <View style={{display: "flex", flexDirection: "row", marginBottom: 0}}>
-                <Text style={{flex: 1, fontSize: "8px", color:"#999"}}></Text>
-                <Text style={{flex: 1, fontSize: "8px",  textAlign: "right", color:"#999"}}>Copyright © {yearNow} IQVIA. All Rights Reserved. Confidential and Proprietary.</Text>
-            </View> 
-         </View>
          </Page>
         </Document>
     )
