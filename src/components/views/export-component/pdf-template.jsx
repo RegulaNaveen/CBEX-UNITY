@@ -99,10 +99,6 @@ function getStyle(){
         background: #${themeBlue};
         color:#fff;
     }
-    .headerInfo{
-        marging-top: "-30px";
-        table-layout:fixed;
-    }
     .headerInfo tr td:first-child{
         background: #${themeBlue};
         color:#fff;
@@ -344,12 +340,12 @@ const MyDoc = (proposalDetails, questions, filteredQuestions, notes, filterState
          <View fixed style={styles.header}>
              <Image src={Logo} style={styles.imgLogo}></Image>
          </View>
-         <View style={styles.heading} wrap>
-            <Text style={styles.headingText}>
-                <Text style={{fontStyle : "italic"}}>{proposalDetails['CRM #'] || ''} </Text>Opportunity Overview
-            </Text>
-         </View>
          <View style={styles.body} wrap>
+             <View style={styles.heading}>
+                <Text style={styles.headingText}>
+                    <Text style={{fontStyle : "italic"}}>{proposalDetails['CRM #'] || ''} </Text>Opportunity Overview
+                </Text>
+            </View>
             <Html>
                 {getHtml(proposalDetails, questions, filteredQuestions, notes, filterState)}
             </Html>
