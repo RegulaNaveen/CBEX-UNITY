@@ -439,3 +439,56 @@ and (max-width : 3000px)
     font-size: 16px!important;
    }
 }
+
+.exportOptionsWrapper {
+  width: 550px;
+
+  .flex-dir-col{
+    flex-direction: column;
+  }
+  .exportOptionsRow-first{
+    margin-bottom: 10px;
+    border-bottom: 1px solid #dfdada;
+    padding-bottom: 10px;
+  }
+  .exportOptionsRow-second{
+    margin-bottom: 20px;
+  }
+  .button-group{
+    justify-content: flex-end;
+  }
+  .exportOptionsRow{
+    display: flex;
+    label{
+      font-size: 14px;
+      font-family: "ProximaNova-Regular"!important;
+      color: #000;
+    }
+    .exportOptionsCell {
+      width: 48%;
+    } 
+    .exportFileName {
+      border: 1px solid #dfdada;
+      padding: 8px;
+      border-radius: 3px;
+      width: 90%;
+      margin-bottom: 5px;
+      margin-top: 7px;
+      color: #000000!important;
+      font-family: "ProximaNova-Regular"!important;
+      font-size: 16px!important;
+    }  
+    .exportFileName:hover, .exportFileName:focus-visible {
+      border-color: #0768fd!important;
+      outline: none;
+    }  
+    span.fileNameAlert{
+      display: none;
+      color: #d8000c;
+      font-size: 12px;
+    }
+    .exportFileName:required:invalid + span.fileNameAlert{
+      display: block;
+    }
+  } 
+}  

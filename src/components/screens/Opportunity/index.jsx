@@ -34,6 +34,7 @@ import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
 import { SOCKET_URL } from '../../../constants/api';
 import ProcessingCRM from '../../views/modals/ProcessingCRM';
 import BidDoneBanner from '../../views/BidDoneBanner';
+import GenerateDocs from '../../views/export-component/GenerateDocs'
 
 type State = {
   selectedView: string
@@ -242,6 +243,7 @@ export class Opportunity extends Component<Props, State> {
 
     return (
       <div className="proposal-details">
+        <GenerateDocs></GenerateDocs>
         <UnityGrid data={details} isOpen={isOpen} bidStatus={bidStatus} />
         <UnityTab id={params.id} enableValidateTab={enableValidateTab} selectedView={selectedView}/>
       </div>
