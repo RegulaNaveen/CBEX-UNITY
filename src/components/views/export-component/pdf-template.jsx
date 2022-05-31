@@ -351,7 +351,7 @@ const MyDoc = (proposalDetails, questions, filteredQuestions, notes, filterState
             </View>
             <View style={{display: "flex", flexDirection: "row", marginBottom: 0}}>
                 <Text style={{flex: 1, fontSize: "8px", color:"#999"}}></Text>
-                <Text style={{flex: 1, fontSize: "8px",  textAlign: "right", color:"#999"}}>Copyright © ${yearNow} IQVIA. All Rights Reserved. Confidential and Proprietary.</Text>
+                <Text style={{flex: 1, fontSize: "8px",  textAlign: "right", color:"#999"}}>Copyright © {yearNow} IQVIA. All Rights Reserved. Confidential and Proprietary.</Text>
             </View> 
          </View>
          </Page>
