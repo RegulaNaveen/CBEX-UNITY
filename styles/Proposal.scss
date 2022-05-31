@@ -452,6 +452,9 @@ and (max-width : 3000px)
   .exportOptionsRow-second{
     margin-bottom: 20px;
   }
+  .button-group{
+    justify-content: flex-end;
+  }
   .exportOptionsRow{
     display: flex;
     label{

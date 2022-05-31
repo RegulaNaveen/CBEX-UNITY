@@ -14,6 +14,7 @@ import {
   selectNotes,
   getRoles
 } from '../../../redux/selectors';
+import { createPdf } from './pdf-template';
 
 export let docType = {
   pdf : 'PDF',
@@ -79,11 +80,18 @@ const GenerateDocs = () => {
   const initExport = ()=> {
     try{
       let {fileName, fileType} = filterState;
-      let exportBlob;
         if(fileType === docType.pdf){ 
-          console.log('PDF is not supported yet')
+          let exportBlob = createPdf({
+            data : getSelectedBidData(),
+            notes : getSelectedBidNotes(),
+            filterState,
+            image: logo.current
+          })
+          exportBlob.then((blob)=>{
+            saveAs(blob, `${fileName}.pdf`);
+          })
         }else if(fileType === docType.doc){
-          exportBlob = createWord({
+          let exportBlob = createWord({
             data : getSelectedBidData(),
             notes : getSelectedBidNotes(),
             filterState,

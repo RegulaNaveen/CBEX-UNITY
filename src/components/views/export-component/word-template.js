@@ -23,23 +23,23 @@ import { API } from "../../../constants";
 import { applyAnsweredFilter, applyinterestedPartiesFilter, applyMyUserRoleFilter, applyUnAnsweredFilter } from "./filter-util";
 
 
-const themeBlue = '00A3E0';
-const themeGrey = 'EEEEEE';
-const DEFAULT_FONT = 'Arial';
-const PT_SECTION = 'Proposal Team';
-const QC_SECTION = 'Questions for the Customer';
+export const themeBlue = '00A3E0';
+export const themeGrey = 'EEEEEE';
+export const DEFAULT_FONT = 'Arial';
+export const PT_SECTION = 'Proposal Team';
+export const QC_SECTION = 'Questions for the Customer';
 const questionCellWidth50 = { size: convertInchesToTwip(3.1) , type: WidthType.DXA};
 const questionCellWidth100 = { size: convertInchesToTwip(6.2) , type: WidthType.DXA};
 const questionCellWidth25 = { size: convertInchesToTwip(1.55) , type: WidthType.DXA};
 const questionCellWidth75 = { size: convertInchesToTwip(4.65) , type: WidthType.DXA};
 const questionCellWidth40 = { size: convertInchesToTwip(2.48) , type: WidthType.DXA};
 const questionCellWidth60 = { size: convertInchesToTwip(3.72) , type: WidthType.DXA};
-const userName = (localStorage) ? localStorage.getItem('userName') : '';
-const dateNow =  moment().format('DD-MMM-YYYY');
-const yearNow =  moment().format('YYYY');
+export const userName = (localStorage) ? localStorage.getItem('userName') : '';
+export const dateNow =  moment().format('DD-MMM-YYYY');
+export const yearNow =  moment().format('YYYY');
 
 
-const headFields = {
+export const headFields = {
     'Customer' : 'Customer',
     'Protocol number' : 'Protocol Title',
     'Verbatim indication' : 'Indication',
@@ -47,7 +47,7 @@ const headFields = {
     'bidNo' : 'Bid Number',
     'Bid due date': 'Due Date',
 }
-const CORE_TEAM = {
+export const CORE_TEAM = {
     'Proposal Developer' : 'PD',
     'Business Developer' : 'BD',
     'TSL' : 'TSL',
@@ -85,7 +85,7 @@ function topHeading(details){
         spacing: { after : 500 }
     })];
 }
-function getLastAnswer(answers){
+export function getLastAnswer(answers){
     try{
        const lastAnswer =  answers[answers.length-1];
        return lastAnswer.answer.toString();
@@ -93,7 +93,7 @@ function getLastAnswer(answers){
         return '';
     }
 }
-function getUnityPredicatedText(answers){
+export function getUnityPredicatedText(answers){
     try{
        return (answers[answers.length-1].userName === 'UnityPredictedAnswer')
        ? '†'
@@ -398,14 +398,14 @@ function getProposalTeamsRows(questions){
 
     const coreTeamRows = [new TableRow({
         children: [
-            getSectionNameCell('Core Team Members',  questionCellWidth40),
-            getSectionNameCell('Name', questionCellWidth60)
+            getSectionNameCell('Core Team Members',  questionCellWidth50),
+            getSectionNameCell('Name', questionCellWidth50)
         ]
     })];
     const otherTeamRows = [new TableRow({
         children: [
-            getSectionNameCell('Specialty Team Members', questionCellWidth40),
-            getSectionNameCell('Name', questionCellWidth60)
+            getSectionNameCell('Specialty Team Members', questionCellWidth50),
+            getSectionNameCell('Name', questionCellWidth50)
         ]
     })];
 
@@ -414,8 +414,8 @@ function getProposalTeamsRows(questions){
             let {questionText, answers} = question;
             coreTeamRows.push(new TableRow({
                 children: [
-                    getAnswerCell(questionText, '', questionCellWidth40),
-                    getAnswerCell(getLastAnswer(answers), '', questionCellWidth60)
+                    getAnswerCell(questionText, '', questionCellWidth50),
+                    getAnswerCell(getLastAnswer(answers), '', questionCellWidth50)
                 ]
             }))
         });
@@ -424,8 +424,8 @@ function getProposalTeamsRows(questions){
             let {questionText, answers} = question;
             otherTeamRows.push(new TableRow({
                 children: [
-                    getAnswerCell(questionText, '', questionCellWidth40),
-                    getAnswerCell(getLastAnswer(answers), '', questionCellWidth60)
+                    getAnswerCell(questionText, '', questionCellWidth50),
+                    getAnswerCell(getLastAnswer(answers), '', questionCellWidth50)
                 ]
             }))
         });
@@ -611,7 +611,7 @@ function getFooter(details){
     }
    
 }
-function getFilteredQuestion(proposalQuestions, filterState){
+export function getFilteredQuestion(proposalQuestions, filterState){
     const  {answered, unanswered, myRole, interestedParties} = filterState;
     let questions = cloneDeep(proposalQuestions);
 
@@ -633,7 +633,7 @@ function getFilteredQuestion(proposalQuestions, filterState){
 
     return questions;
 }
-function getUnityLink(details){
+export function getUnityLink(details){
     return `${API.AUTH.REDIRECTION_URL}/opportunities/${details['CRM #']}`
 }
 function getHeader(image){

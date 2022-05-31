@@ -4,6 +4,7 @@ import Checkbox from 'apollo-react/components/Checkbox';
 import {actionChannel, UI_ACTION} from '../../../uiActions/ui-actions';
 import MenuItem from 'apollo-react/components/MenuItem';
 import Select from 'apollo-react/components/Select';
+import Button from 'apollo-react/components/Button';
 import _ from 'lodash'
 import { docType } from './GenerateDocs';
 
@@ -35,7 +36,6 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList}) 
     const handleOpen = ()=> setState({...state, ...{open:true}});
     
     const handleBooleanChange = (e) => {
-      console.log(e.target.name, e.target.value)
       filterStateUpdate({
         ...filterState,
         ...{[e.target.name] : !filterState[e.target.name]}
@@ -49,13 +49,16 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList}) 
       });
     }
 
+    const disable = ()=>{
+      return  answered || unanswered || myRole || includesNotes
+    }
     return(
     <Modal
       open={state.open}
       onClose={() => handleClose()}
       title="Export Opportunity"
       subtitle="For internal communication only"
-      buttonProps={[{}, { label: 'Export', onClick: initExport }]}
+      hideButtons={true}
       id="neutral"
     >
       <div className='exportOptionsWrapper'>
@@ -107,6 +110,14 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList}) 
               {roleList.map((role)=>  <MenuItem key={role} value={role}>{role}</MenuItem>)}
             </Select>
           </div>
+        </div>
+        <div className='exportOptionsRow button-group'>
+          <Button variant="text" style={{ marginRight: 10 }} onClick={()=>handleClose()}>
+            Cancel
+          </Button>
+          <Button variant="primary" disabled={!disable()} style={{ marginRight: 10 }} onClick={()=>initExport()}>
+            Export
+          </Button>
         </div>
       </div>  
     </Modal>
