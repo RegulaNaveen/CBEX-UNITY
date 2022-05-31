@@ -3,6 +3,14 @@
     font-size: 12px;
     font-family: "ProximaNova-Regular";
     font-weight: 650;
+    padding-top: 10px;
+  }
+  .sidebar-sopportunitylinks > div  {
+    width: auto;
+    margin: 0px;
+  }
+  .sidebar-sopportunitylinks > div > div {
+    padding-top: 0px !important;
   }
 .documents {
   display: flex;

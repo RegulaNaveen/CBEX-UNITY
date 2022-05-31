@@ -132,8 +132,8 @@ class Documents extends Component<Props, State> {
       <div className="main-doc">
          <div className="title-document">
            <h3>Documents</h3>
-           <p className="para-document">Welcome to the Opportunity Documents section. you can check here any documents associated to this particular opportunity.
-             for that you need to access with your enterprise email account to access Box.com
+           <p className="para-document">Welcome to the Opportunity Documents section. You can check here any documents associated to this particular opportunity.
+             For that you need to access with your enterprise email account to access Box.com
            </p>
         </div>
       <div className="documents">
