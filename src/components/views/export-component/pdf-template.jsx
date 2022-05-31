@@ -39,11 +39,11 @@ const styles = StyleSheet.create({
     },
     body: {
         width: "100%",
-        minHeight: "75vh",
+        minHeight: "70vh",
     },
     footer: {
         width: "83%",
-        height: "15vh", //As per your page layout
+        height: "20vh", //As per your page layout
         marginTop: "20px",
         marginLeft: "50px",
         marginRight: "50px",
