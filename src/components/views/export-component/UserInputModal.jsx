@@ -20,7 +20,7 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList}) 
     } = filterState;
 
     const [state, setState] = React.useState({
-      open: true
+      open: false
     });
   
     useEffect(()=>{
