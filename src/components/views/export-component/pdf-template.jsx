@@ -39,11 +39,11 @@ const styles = StyleSheet.create({
     },
     body: {
         width: "100%",
-        minHeight: "70vh",
+        minHeight: "75vh",
     },
     footer: {
         width: "83%",
-        height: "20vh", //As per your page layout
+        height: "15vh", //As per your page layout
         marginTop: "20px",
         marginLeft: "50px",
         marginRight: "50px",
@@ -86,8 +86,11 @@ function getStyle(){
     .table tr:first-child{
         border-top: 1px solid #000;
     }
-    .notesTable tr:nth-child(2){
-        border-top: 1px solid #000;
+    .notesTable tr{
+        border-bottom: none;
+    }
+    .notesTable tr:last-child{
+        border-bottom: 1px solid #000;
     }
     .table td, .table th{
         padding: 5px;
@@ -279,11 +282,11 @@ function getNotesRows(notes){
     html += `<th>General Notes <br><br></th>`
     html += `</tr>`
     try{
-        html += `<tr>`
-        html += `<td>`
         notes.forEach((note)=>{
             let {noteText} = note;
             let noteContentState = EditorState.createEmpty();
+            html += `<tr>`
+            html += `<td>`
             try {
                 noteContentState = convertFromRaw(JSON.parse(noteText));
             } catch (err) {
@@ -307,9 +310,9 @@ function getNotesRows(notes){
             }catch(error){
                 console.log('Cannot convert rich text content')
             }
+            html += `</td>`
+            html += `</tr>`
         })
-        html += `</td>`
-        html += `</tr>`
     }catch(error){
         console.log('Error in getNotesRows');
     }
@@ -331,7 +334,6 @@ function getHtml(proposalDetails, questions, filteredQuestions, notes, filterSta
         </body>
         </html>    
     `;
-    console.log(html)
     return html;
 }
 const MyDoc = (proposalDetails, questions, filteredQuestions, notes, filterState)=>{

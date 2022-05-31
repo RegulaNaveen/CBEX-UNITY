@@ -368,7 +368,7 @@ function getNoteRows(notes){
 
      return rows;
     }catch(error){
-        console.log('Error while formatting the notes', error);
+        console.log('Error while formatting the notes');
         return rows;
     }
 }
