@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
   - IQVIACBEXU-1358: Additional Links to Box
   - IQVIACBEXU-1421: Create SalesForce Link
+  - IQVIACBEXU-1344: Pull Notes out of the blade. The new note section uses react-draft-wysiwyg.
 ### Changed
 ### Fixed
 
