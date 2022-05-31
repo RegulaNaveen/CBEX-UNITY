@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     },
     body: {
         width: "100%",
-        minHeight: "75vh",
+        minHeight: "70vh",
     },
     footer: {
         width: "83%",
