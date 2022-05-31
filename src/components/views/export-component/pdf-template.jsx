@@ -122,6 +122,21 @@ function getStyle(){
         color: #${themeGrey},
         font-size:7px,
     }
+    .public-DraftStyleDefault-depth0.public-DraftStyleDefault-listLTR {
+        margin-left: 5px;
+    }
+    .public-DraftStyleDefault-depth1.public-DraftStyleDefault-listLTR {
+        margin-left: 10px;
+    }
+    .public-DraftStyleDefault-depth2.public-DraftStyleDefault-listLTR {
+        margin-left: 15px;
+    } 
+    .public-DraftStyleDefault-depth3.public-DraftStyleDefault-listLTR {
+        margin-left: 20px;
+    } 
+    .public-DraftStyleDefault-depth4.public-DraftStyleDefault-listLTR {
+        margin-left: 25px;
+    }    
  </style>`
 }
 function topHeading(details){

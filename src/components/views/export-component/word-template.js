@@ -259,29 +259,39 @@ function getStyle(styleMap, index){
                 if(key === 'BOLD'){
                     styles.bold = true;
                     styleId += '(b)'
-                }else if (key === 'ITALIC'){
+                }
+                if (key === 'ITALIC'){
                     styles.italics = true;
                     styleId += '(i)'
-                }else if (key === 'STRIKETHROUGH'){
+                }
+                if (key === 'STRIKETHROUGH'){
                     styles.strike = true;
                     styleId += '(s)'
-                }else if (key === 'UNDERLINE'){
+                }
+                if (key === 'UNDERLINE'){
                     styles.underline = {};
                     styleId += '(u)'
-                }else if ( key.includes('color')){
+                }
+                if ( key.includes('fontsize')){
+                    styles.size = parseInt(key.slice(key.length-2, key.length))
+                    console.log(styles);
+                    styleId += '(fs)'
+                }
+
+                 /*
+                if ( key.includes('color')){
                     styles.color = key.slice(key.length-6, key.length);
                     styleId += '(fc)'
-                }else if ( key.includes('backgroundColor')){
+                }
+                if ( key.includes('backgroundColor')){
                     styles.shading = {
                         fill: key.slice(key.length-6, key.length),
                         type: ShadingType.CLEAR,
                         color: "auto",
                     }
                     styleId += '(bc)'
-                }else if ( key.includes('fontSize')){
-                    styles.size = key.slice(s.length-4, s.length-2)
-                    styleId += '(fs)'
                 }
+                */
             }
         }
     }catch(errror){
@@ -310,6 +320,7 @@ function getNoteRows(notes){
             noteText = JSON.parse(noteText);
             let {blocks} = noteText;
             blocks.forEach((block)=>{
+                console.log(block)
                 let texts = [];
                 let {text, inlineStyleRanges, type, depth} = block;
                 let listType = (type.includes('list-item')) ? { bullet: { level: depth}} : {};
@@ -358,7 +369,7 @@ function getNoteRows(notes){
 
      return rows;
     }catch(error){
-        console.log('Error while formatting the notes');
+        console.log('Error while formatting the notes', error);
         return rows;
     }
 }
