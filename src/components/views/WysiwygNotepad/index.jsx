@@ -13,6 +13,7 @@ import {
 } from '../../../redux/selectors';
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { updateNote } from '../../../redux/actions/notepad-actions';
+import 'draft-js/dist/Draft.css';
 
 const WysiwygNotepad = ({
   notes = null,
@@ -116,11 +117,11 @@ const WysiwygNotepad = ({
         toolbar={{
           options: [
             'inline',
-            'blockType',
-            'fontSize',
+            // 'blockType',
+            // 'fontSize',
             // 'fontFamily',
             'list',
-            'textAlign',
+            // 'textAlign',
             // 'colorPicker',
             // 'link',
             // 'embedded',
