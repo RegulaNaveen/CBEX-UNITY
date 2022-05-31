@@ -24,7 +24,7 @@ const UnityTab = ({id, enableValidateTab, selectedView}) => {
                         <Tab label="Documents" />
                         <Tab label="Validate" />
                     </Tabs>
-                    <div style={{ padding: 20 }}>
+                    <div style={{ padding: 20, paddingTop: 5 }}>
                         {value === 0 &&  <Questions proposalID={id} />}
                         {value === 1 && <Documents />}
                         {value === 2 && <Validate />}
@@ -38,7 +38,7 @@ const UnityTab = ({id, enableValidateTab, selectedView}) => {
                         <Tab label="Questions" />
                         <Tab label="Documents" />
                     </Tabs>
-                    <div style={{ padding: 20 }}>
+                    <div style={{ padding: 20, paddingTop: 5 }}>
                         {value === 0 &&  <Questions proposalID={id} />}
                         {value === 1 && <Documents />}
                     </div>
