@@ -320,7 +320,6 @@ function getNoteRows(notes){
             noteText = JSON.parse(noteText);
             let {blocks} = noteText;
             blocks.forEach((block)=>{
-                console.log(block)
                 let texts = [];
                 let {text, inlineStyleRanges, type, depth} = block;
                 let listType = (type.includes('list-item')) ? { bullet: { level: depth}} : {};
