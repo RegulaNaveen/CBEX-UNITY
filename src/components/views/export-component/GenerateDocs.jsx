@@ -48,7 +48,7 @@ const GenerateDocs = () => {
       })
       const selectedBid = getSelectedBidData();
       const {proposal : {proposalDetails}} = selectedBid
-      let fileName = `Unity Export__Bid ${proposalDetails['bidNo']}_${proposalDetails['Customer']}`;
+      let fileName = `Unity Export_${proposalDetails['CRM #']}_Bid ${proposalDetails['bidNo']}_${proposalDetails['Customer']}`;
       filterStateUpdate({
         ...filterState,
         ...{fileName}

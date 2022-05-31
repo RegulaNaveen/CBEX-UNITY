@@ -35,7 +35,7 @@ const questionCellWidth75 = { size: convertInchesToTwip(4.65) , type: WidthType.
 const questionCellWidth40 = { size: convertInchesToTwip(2.48) , type: WidthType.DXA};
 const questionCellWidth60 = { size: convertInchesToTwip(3.72) , type: WidthType.DXA};
 export const userName = (localStorage) ? localStorage.getItem('userName') : '';
-export const dateNow =  moment().format('DD-MMM-YYYY');
+export const dateNow =  moment().format('DD-MMM-YYYY HH:mm:ss');
 export const yearNow =  moment().format('YYYY');
 
 
