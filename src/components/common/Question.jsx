@@ -47,7 +47,7 @@ type Props = {
   proposalId: string,
   answers: Map,
   questionText: string,
-  questionHtml: string,
+  questionHTML: string,
   answerConfiguration: Object,
   sectionName: string,
   userData: Object,
@@ -66,6 +66,7 @@ type Props = {
   isCustomQuestion: boolean,
   hasDifferentSFanswer: boolean
 };
+let questionHTML = 'HTML'
 
 export class TaskRow extends Component<Props, State> {
   constructor(props: Object) {
@@ -176,7 +177,7 @@ export class TaskRow extends Component<Props, State> {
       eventCategories,
       proposalDetail,
       questionText,
-      questionHtml,
+      questionHTML,
       sectionName,
       trackEvent,
       questionId
@@ -192,7 +193,7 @@ export class TaskRow extends Component<Props, State> {
             answer: data,
             sectionName,
             questionText,
-            questionHtml,
+            questionHTML,
             questionId,
             proposalDetail
           })
@@ -206,7 +207,7 @@ export class TaskRow extends Component<Props, State> {
       eventCategories,
       proposalDetail,
       questionText,
-      questionHtml,
+      questionHTML,
       sectionName,
       trackEvent,
       questionId
@@ -220,7 +221,7 @@ export class TaskRow extends Component<Props, State> {
           value: JSON.stringify({
             sectionName,
             questionText,
-            questionHtml,
+            questionHTML,
             questionId,
             proposalDetail
           })
@@ -248,7 +249,7 @@ export class TaskRow extends Component<Props, State> {
     answers: Map,
     lastAnswer: Map,
     questionText: Map,
-    questionHtml: Map
+    questionHTML: Map
   ) => {
     const { sectionName, sfObject, sfField, selectedBid, noneditableField } = this.props;
     const { selectedDay } = this.state;
@@ -511,7 +512,7 @@ export class TaskRow extends Component<Props, State> {
       ismilestoneavailable,
       loading,
       questionHint,
-      questionHtml,
+      questionHTML,
       sectionName,
       roleNames,
       setEditQuestionData,
@@ -536,7 +537,10 @@ export class TaskRow extends Component<Props, State> {
         answerDate = 'Not Answered';
       }
     }
-    return (
+
+if(questionHTML)
+              {
+return(
       <div
         className={`task-table-row${
           this.state.selectedRow ? ' selected-task-table-row' : ''
@@ -544,14 +548,15 @@ export class TaskRow extends Component<Props, State> {
       >
         <div className="question-text">
           {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
-          <Typography component={'span'} variant={'body2'}>
-          <div dangerouslySetInnerHTML={ { __html: questionText } }></div>
+
+          <Typography component={'span'} variant={'body2'}>            
+            {<div dangerouslySetInnerHTML={ { __html: questionHTML } }></div>}
             {isCustomQuestion && selectedBid.get('isCurrent') && (
               <span
                 onClick={() => {
                   setEditQuestionData({
                     questionText,
-                    questionHtml,
+                    questionHTML,
                     section: sectionName,
                     answerType: answerConfiguration.get('type'),
                     roleNames,
@@ -589,7 +594,7 @@ export class TaskRow extends Component<Props, State> {
                 lastAnswer,
                 questionText
               )
-            : this.renderAnswer('', [], [], undefined, questionText, questionHtml)}
+            : this.renderAnswer('', [], [], undefined, questionText, questionHTML)}
         </div>
 
         <div
@@ -654,10 +659,131 @@ export class TaskRow extends Component<Props, State> {
           ) : null}
         </div>
       </div>
-    );
+    );}
+    else {
+      return(
+        <div
+          className={`task-table-row${
+            this.state.selectedRow ? ' selected-task-table-row' : ''
+          }`}
+        >
+          <div className="question-text">
+            {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
+  
+            <p>        
+              {questionText}
+              {isCustomQuestion && selectedBid.get('isCurrent') && (
+                <span
+                  onClick={() => {
+                    setEditQuestionData({
+                      questionText,
+                      questionHTML,
+                      section: sectionName,
+                      answerType: answerConfiguration.get('type'),
+                      roleNames,
+                      questionAnswered: lastAnswer ? true : false,
+                      questionId: qId
+                    });
+                  }}
+                >
+                  <Edit className="edit-icon" />
+                </span>
+              )}
+              {questionHint.trim().length > 0 ? (
+                <Tooltip variant="light" title={<div dangerouslySetInnerHTML={ { __html: questionHint } }></div>} placement="top">
+                  <IconButton
+                    color="primary"
+                    style={{ margin: 0 }}
+                    size="small"
+                    className="question-tooltip-icon"
+                  >
+                    <InfoIcon style={{ fontSize: '16px' }} />
+                  </IconButton>
+                </Tooltip>
+              ) : (
+                <></>
+              )}
+            </p>
+          </div>
+  
+          <div>
+            {answerConfiguration
+              ? this.renderAnswer(
+                  answerConfiguration.get('type'),
+                  answerConfiguration.get('options'),
+                  answers,
+                  lastAnswer,
+                  questionText
+                )
+              : this.renderAnswer('', [], [], undefined, questionText, questionHTML)}
+          </div>
+  
+          <div
+            style={{
+              display: 'flex',
+              minHeight: '40px',
+              alignItems: 'flex-start',
+              paddingLeft: '16px',
+              height:'100%'
+            }}
+          >
+            <button
+              style={{ width: '100px', textAlign: 'left', flexShrink: 0, marginTop: '11px'}}
+              type="button"
+              onClick={this.displayAnswerOnHistory}
+            >
+              {answerDate}
+            </button>
+            {isAnswerPredicted && !loading ? (
+              <Tooltip
+                variant="light"
+                title="Unity Predicted Answer"
+                placement="top"
+              >
+                <IconButton disabled={!selectedBid.get('isCurrent')}>
+                  <StatusCheck
+                    fontSize={'22px'}
+                    style={{ color: '#D9D9D9' }}
+                    onClick={() => this.handleVerifyPredictedAnsClick(lastAnswer)}
+                  />
+                </IconButton>
+              </Tooltip>
+            ) : null}
+            {this.isAnswered(lastAnswer, isAnswerPredicted) && !loading ? (
+              <div
+                style={{
+                  display: 'flex',
+                  flexShrink: 0,
+                  width: '40px',
+                  height: '24px',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginTop: '6px'
+                }}
+              >
+                <Checkmark className="answered" style={{ marginLeft: '6px' }} />
+              </div>
+            ) : null}
+            {loading ? (
+              <span
+                style={{ marginLeft: '6px', marginTop: '18px', position: 'relative', top: '15px' }}
+              >
+                <Loader
+                  isInner
+                  size={20}
+                  style={{
+                    width: '20px',
+                    height: '20px'
+                  }}
+                />
+              </span>
+            ) : null}
+          </div>
+        </div>
+      );
+    }
   }
 }
-
 const mapStateToProps = (state: Object) => ({
   userData: getUserData(state),
   proposalDetail: getProposalDetails(state),
