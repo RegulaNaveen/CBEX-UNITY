@@ -17,10 +17,21 @@ import { pdf, Document, Page, View, StyleSheet, Text, Font, Image} from '@react-
 import React from "react";
 import Html from 'react-pdf-html';
 import Logo from '../../../../img/iqvia-main-logo.png';
-import FontProximaNova from '../../../../fonts/ProximaNova-Regular.otf';
+import ProximaNova from '../../../../fonts/ProximaNova-Regular.otf';
+import ProximaNovaBold from '../../../../fonts/Proxima Nova Alt Bold.otf';
+import ProximaNovaBoldItalic from '../../../../fonts/Proxima-Nova-Bold-It.otf';
+import ProximaNovaItalic from '../../../../fonts/Proxima-Nova-Reg-It.otf';
+
 import { convertFromHTML, convertFromRaw, EditorState } from "draft-js";
 import ReactDOMServer from 'react-dom/server';
 import RichTextEditor from "../../common/RichTextEditor";
+
+Font.register({ family: 'ProximaNova', fonts: [
+    { src: ProximaNovaBoldItalic, fontStyle: 'italic', fontWeight: 700},
+    { src: ProximaNovaItalic, fontStyle: 'italic'},
+    { src: ProximaNovaBold, fontWeight: 700 },
+    { src: ProximaNova, fontStyle: 'normal'}
+]});
 
 const styles = StyleSheet.create({
     header: {
@@ -59,7 +70,8 @@ const styles = StyleSheet.create({
     headingText: {
         fontSize: "14px",
         color: `#${themeBlue}`,
-        fontFamily: "Helvetica-Bold"
+        fontFamily: "ProximaNova",
+        fontWeight: 700
     }
 })
 
@@ -94,7 +106,7 @@ function getStyle(){
     }
     .table td, .table th{
         padding: 5px;
-        font-family: Helvetica
+        font-family: ProximaNova
     }
     .table tr td:nth-child(2){
         border-left: 1px solid #000;
@@ -109,6 +121,7 @@ function getStyle(){
     .headerInfo tr td:first-child{
         background: #${themeBlue};
         color:#fff;
+        font-weight: bold
     }
     .questionTable tr td:first-child{
         background: #${themeGrey};
@@ -349,7 +362,7 @@ const MyDoc = (proposalDetails, questions, filteredQuestions, notes, filterState
             <View style={styles.body}>
                 <View style={styles.heading}>
                     <Text style={styles.headingText}>
-                        <Text>{proposalDetails['CRM #'] || ''} </Text>Opportunity Overview
+                        <Text style={{fontStyle:"italic"}}>{proposalDetails['CRM #'] || ''} </Text>Opportunity Overview
                     </Text>
                 </View>
                 <Html>
