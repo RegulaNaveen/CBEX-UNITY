@@ -252,6 +252,7 @@ class CollapsibleList extends Component<Props, State> {
                     proposalId={questionConfig.get('proposalId')}
                     answers={questionConfig.get('answers')}
                     questionText={questionConfig.get('questionText')}
+                    questionHTML={questionConfig.get('questionHTML')}
                     answerConfiguration={questionConfig.get(
                       'answerConfiguration'
                     )}
