@@ -16,7 +16,7 @@ import Typography from 'apollo-react/components/Typography';
 import Tooltip from 'apollo-react/components/Tooltip';
 import { neptunePrimaryDark, neutral7 } from 'apollo-react/colors';
 
-import Notepad from './Notepad';
+// import Notepad from './Notepad';
 import chevronRight from '../../../img/chevron-right.svg';
 import {
   handleSelectedSection,
@@ -246,18 +246,6 @@ class Sidebar extends Component<Props, State> {
       selectedBid
     } = this.props;
     const { selectedSection, activeTabIndex } = this.state;
-    const NotepadTab = () =>
-      notes.size === 0 ? (
-        <Typography variant="body2" style={{ fontWeight: 'inherit' }}>
-          Notepad
-        </Typography>
-      ) : (
-        <Badge variant="dot">
-          <Typography variant="body2" style={{ fontWeight: 'inherit' }}>
-            Notepad
-          </Typography>
-        </Badge>
-      );
 
     return (
       <div
@@ -366,7 +354,6 @@ class Sidebar extends Component<Props, State> {
               truncate
             >
               <Tab label="Index" />
-              <Tab label={<NotepadTab />} style={{ paddingRight: '8px' }} />
             </Tabs>
             {activeTabIndex === 0 && (
               <div className="sidebar-content-list">
@@ -398,14 +385,6 @@ class Sidebar extends Component<Props, State> {
                   return null;
                 })}
               </div>
-            )}
-            {activeTabIndex === 1 && (
-              <Notepad
-                sections={sections}
-                id={id}
-                selectedtitle={selectedtitle || ''}
-                trackMatomoNoteSubmit={this.trackMatomoNoteSubmit}
-              />
             )}
           </div>
         </div>
