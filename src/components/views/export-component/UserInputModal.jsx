@@ -116,7 +116,7 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList}) 
             Cancel
           </Button>
           <Button variant="primary" disabled={!disable()} style={{ marginRight: 10 }} onClick={()=>initExport()}>
-            Export
+            OK
           </Button>
         </div>
       </div>  
