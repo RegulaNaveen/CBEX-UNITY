@@ -180,7 +180,7 @@ class Documents extends Component<Props, State> {
             <AccordionDetails className="additionalbidlinkdetail">
               <ul className="additionalink-document">
                 {
-                  data && Array.isArray(data) && data.length && data.map((_v)=>
+                  data && Array.isArray(data) && data.length > 0 && data.map((_v)=>
                     <li onClick={()=> this.openAdditonalUrl(_v.link, _v.linkdesc)} 
                     className={(selectedBid === _v.linkdesc ? 'selectedBid' : '')}
                     >{_v.linkdesc}</li>  
