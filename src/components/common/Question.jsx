@@ -13,6 +13,8 @@ import TextArea from './atoms/inputs/TextArea';
 import TextAreaV2 from './atoms/inputs/TextAreaV2';
 import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
+
+import { Typography } from 'apollo-react/components/Typography/Typography';
 import {
   setProposalAnswerData,
   setEditQuestionData
@@ -45,6 +47,7 @@ type Props = {
   proposalId: string,
   answers: Map,
   questionText: string,
+  questionHtml: string,
   answerConfiguration: Object,
   sectionName: string,
   userData: Object,
@@ -173,6 +176,7 @@ export class TaskRow extends Component<Props, State> {
       eventCategories,
       proposalDetail,
       questionText,
+      questionHtml,
       sectionName,
       trackEvent,
       questionId
@@ -188,6 +192,7 @@ export class TaskRow extends Component<Props, State> {
             answer: data,
             sectionName,
             questionText,
+            questionHtml,
             questionId,
             proposalDetail
           })
@@ -201,6 +206,7 @@ export class TaskRow extends Component<Props, State> {
       eventCategories,
       proposalDetail,
       questionText,
+      questionHtml,
       sectionName,
       trackEvent,
       questionId
@@ -214,6 +220,7 @@ export class TaskRow extends Component<Props, State> {
           value: JSON.stringify({
             sectionName,
             questionText,
+            questionHtml,
             questionId,
             proposalDetail
           })
@@ -240,7 +247,8 @@ export class TaskRow extends Component<Props, State> {
     options: Map,
     answers: Map,
     lastAnswer: Map,
-    questionText: Map
+    questionText: Map,
+    questionHtml: Map
   ) => {
     const { sectionName, sfObject, sfField, selectedBid, noneditableField } = this.props;
     const { selectedDay } = this.state;
@@ -503,6 +511,7 @@ export class TaskRow extends Component<Props, State> {
       ismilestoneavailable,
       loading,
       questionHint,
+      questionHtml,
       sectionName,
       roleNames,
       setEditQuestionData,
@@ -535,13 +544,14 @@ export class TaskRow extends Component<Props, State> {
       >
         <div className="question-text">
           {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
-          <p>
-            {questionText}
+          <Typography component={'span'} variant={'body2'}>
+          <div dangerouslySetInnerHTML={ { __html: questionText } }></div>
             {isCustomQuestion && selectedBid.get('isCurrent') && (
               <span
                 onClick={() => {
                   setEditQuestionData({
                     questionText,
+                    questionHtml,
                     section: sectionName,
                     answerType: answerConfiguration.get('type'),
                     roleNames,
@@ -554,7 +564,7 @@ export class TaskRow extends Component<Props, State> {
               </span>
             )}
             {questionHint.trim().length > 0 ? (
-              <Tooltip variant="light" title={questionHint} placement="top">
+              <Tooltip variant="light" title={<div dangerouslySetInnerHTML={ { __html: questionHint } }></div>} placement="top">
                 <IconButton
                   color="primary"
                   style={{ margin: 0 }}
@@ -567,7 +577,7 @@ export class TaskRow extends Component<Props, State> {
             ) : (
               <></>
             )}
-          </p>
+          </Typography>
         </div>
 
         <div>
@@ -579,7 +589,7 @@ export class TaskRow extends Component<Props, State> {
                 lastAnswer,
                 questionText
               )
-            : this.renderAnswer('', [], [], undefined, questionText)}
+            : this.renderAnswer('', [], [], undefined, questionText, questionHtml)}
         </div>
 
         <div
