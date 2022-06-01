@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     headingText: {
         fontSize: "14px",
         color: `#${themeBlue}`,
-        fontWeight: "bold"
+        fontFamily: "Helvetica-Bold"
     }
 })
 
@@ -94,6 +94,7 @@ function getStyle(){
     }
     .table td, .table th{
         padding: 5px;
+        font-family: Helvetica
     }
     .table tr td:nth-child(2){
         border-left: 1px solid #000;
@@ -102,10 +103,12 @@ function getStyle(){
         background: #${themeBlue};
         color:#fff;
     }
+    .questionToCustomerTable li {
+        padding-bottom: 5px
+    }
     .headerInfo tr td:first-child{
         background: #${themeBlue};
         color:#fff;
-        width: 150px
     }
     .questionTable tr td:first-child{
         background: #${themeGrey};
@@ -346,7 +349,7 @@ const MyDoc = (proposalDetails, questions, filteredQuestions, notes, filterState
             <View style={styles.body}>
                 <View style={styles.heading}>
                     <Text style={styles.headingText}>
-                        <Text style={{fontStyle : "italic"}}>{proposalDetails['CRM #'] || ''} </Text>Opportunity Overview
+                        <Text>{proposalDetails['CRM #'] || ''} </Text>Opportunity Overview
                     </Text>
                 </View>
                 <Html>
