@@ -38,7 +38,7 @@ const loadSidebar = (props) => {
                 <Grid container xs={12}>
                     <Paper style={styles} className="sidebarduedatedsg open">
                         <Typography variant="body2" className="greytext sidebaropenfont">Opportunity Number</Typography>
-                        <Typography variant="body2" className="boldtext sidebaropenfont">{crm || placeholder}</Typography>
+                        <Typography variant="body2" className="boldtext sidebaropenfont" style={{cursor : 'pointer', color : 'Blue'}} onClick={redirect}>{crm || placeholder}</Typography>
                     </Paper>
                     <Paper style={styles} className="sidebarduedatedsg open">
                         <Typography variant="body2" className="greytext sidebaropenfont">Customer</Typography>
