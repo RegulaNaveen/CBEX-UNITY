@@ -93,6 +93,16 @@ export function getLastAnswer(answers){
         return '';
     }
 }
+
+export function formatDate(answer, config){
+    try{
+        if(config && config.type === 'date')
+            return moment(answer).format('DD-MMM-YYYY')
+    }catch(error){
+        console.log('Error in formatDate')
+    }
+    return answer
+}
 export function getUnityPredicatedText(answers){
     try{
        return (answers[answers.length-1].userName === 'UnityPredictedAnswer')
@@ -225,7 +235,7 @@ function questionTables(proposalQuestions){
                 new TableRow({
                     children: [
                         getQuestionTextCell(questionText),
-                        getAnswerCell(getLastAnswer(question.answers), getUnityPredicatedText(question.answers))
+                        getAnswerCell(formatDate(getLastAnswer(question.answers), question.answerConfiguration), getUnityPredicatedText(question.answers))
                     ]
                 })
             )        
