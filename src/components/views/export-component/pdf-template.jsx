@@ -152,6 +152,9 @@ function getStyle(){
     } 
     .public-DraftStyleDefault-depth4.public-DraftStyleDefault-listLTR {
         margin-left: 25px;
+    }
+    [data-block="true"] {
+        padding-bottom:5px;
     }    
  </style>`
 }
