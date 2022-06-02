@@ -11,7 +11,8 @@ import {
     dateNow,
     userName,
     yearNow,
-    getUnityLink
+    getUnityLink,
+    formatDate
 } from "./word-template";
 import { pdf, Document, Page, View, StyleSheet, Text, Font, Image} from '@react-pdf/renderer';
 import React from "react";
@@ -250,7 +251,7 @@ function questionTables(proposalQuestions){
             const questionText = question.questionText || '';
             html += `<tr>`
             html += `<td> ${questionText} <br><br></td>`
-            html += `<td> ${getLastAnswer(question.answers)} <span class="blueColorText">${(getUnityPredicatedText(question.answers)) ? '('+getUnityPredicatedText(question.answers)+')' : ''}</span><br><br></td>`
+            html += `<td> ${formatDate(getLastAnswer(question.answers), question.answerConfiguration)} <span class="blueColorText">${(getUnityPredicatedText(question.answers)) ? '('+getUnityPredicatedText(question.answers)+')' : ''}</span><br><br></td>`
             html += `</tr>`      
         });
         html += `</table>`
