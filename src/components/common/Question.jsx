@@ -66,7 +66,6 @@ type Props = {
   isCustomQuestion: boolean,
   hasDifferentSFanswer: boolean
 };
-let questionHTML = 'HTML'
 
 export class TaskRow extends Component<Props, State> {
   constructor(props: Object) {
