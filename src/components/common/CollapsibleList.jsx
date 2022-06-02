@@ -252,15 +252,19 @@ class CollapsibleList extends Component<Props, State> {
                     proposalId={questionConfig.get('proposalId')}
                     answers={questionConfig.get('answers')}
                     questionText={questionConfig.get('questionText')}
+                    questionHTML={questionConfig.get('questionHTML')}
                     answerConfiguration={questionConfig.get(
                       'answerConfiguration'
                     )}
+
+                    
                     sfObject={questionConfig.get('sfObject')}
                     sfField={questionConfig.get('sfField')}
                     sectionName={title}
                     setQuestionToDisplayHistory={setQuestionToDisplayHistory}
                     loading={questionConfig.get('loading', false)}
                     questionHint={questionConfig.get('questionHint', '')}
+                    questionHintHtml={questionConfig.get('questionHintHtml', '')}
                     roleNames={questionConfig.get('roleNames')}
                     isCustomQuestion={questionConfig.get('isCustomQuestion')}
                     hasDifferentSFanswer={questionConfig.get(
