@@ -50,7 +50,7 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList}) 
     }
 
     const disable = ()=>{
-      return  answered || unanswered || myRole || includesNotes
+      return  (answered || unanswered || myRole || includesNotes) && fileName
     }
     return(
     <Modal

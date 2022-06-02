@@ -191,21 +191,24 @@ function questionTables(proposalQuestions){
     }).sort((a,b)=>{ return a.section.sectionOrder - b.section.sectionOrder });
     // Section map
     const sections = {}
+    let ordereredSections = [];
 
     // Populate the section map
     questions.forEach(question => {
         try{
             let section = question.section.sectionName || '';
-            if(sections[section])
+            if(sections[section]){
                 sections[section].push(question)
-            else
+            }else{
                 sections[section] = [question];
+                ordereredSections.push(section)
+            } 
         }catch(error){
             console.log('Error while mapping Sections')
         }
     });
 
-    Object.keys(sections).forEach((section)=>{
+    ordereredSections.forEach((section)=>{
         const rows = [];
         rows.push(
             new TableRow({
@@ -243,7 +246,7 @@ function questionTables(proposalQuestions){
     });
     return tables;
 }
-function getStyle(styleMap, index){
+export function getStyle(styleMap, index){
  
     let styleId = '';
     let styles = {
