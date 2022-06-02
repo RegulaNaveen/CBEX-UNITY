@@ -23,6 +23,14 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList}) 
       open: false
     });
   
+    let roles = roleList
+    try{
+      roles = (roleList.includes('All')) ? roleList : [...['All'], ...roleList]
+    }catch(error){
+
+    }
+    
+
     useEffect(()=>{
       actionChannel.subscribe({
         next: (event) => {
@@ -107,7 +115,7 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList}) 
               fullWidth
               name="interestedParties"
             >
-              {roleList.map((role)=>  <MenuItem key={role} value={role}>{role}</MenuItem>)}
+              {roles.map((role)=>  <MenuItem key={role} value={role}>{role}</MenuItem>)}
             </Select>
           </div>
         </div>
