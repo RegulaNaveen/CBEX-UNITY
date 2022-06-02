@@ -35,7 +35,7 @@ const questionCellWidth75 = { size: convertInchesToTwip(4.65) , type: WidthType.
 const questionCellWidth40 = { size: convertInchesToTwip(2.48) , type: WidthType.DXA};
 const questionCellWidth60 = { size: convertInchesToTwip(3.72) , type: WidthType.DXA};
 export const userName = (localStorage) ? localStorage.getItem('userName') : '';
-export const dateNow =  moment().format('DD-MMM-YYYY HH:mm:ss');
+export const dateNow =  () => moment().format('DD-MMM-YYYY HH:mm:ss');
 export const yearNow =  moment().format('YYYY');
 
 
@@ -132,7 +132,7 @@ function getQuestionTextCell(questionText){
         }) 
 }
 function getAnswerCell(answer, unityPredicted='', width=null){
-    let upText = (unityPredicted) ? ` (${unityPredicted})` : '';
+    let upText = (unityPredicted) ? `${unityPredicted}` : '';
     return  new TableCell({
         children: [new Paragraph({
             children : [
@@ -550,7 +550,7 @@ function getFooter(details){
                             children : [
                                 new Paragraph({  
                                     children: [new TextRun({
-                                        text : `Exported from Unity on ${dateNow}`,
+                                        text : `Exported from Unity on ${dateNow()}`,
                                         font: DEFAULT_FONT,
                                         size: 15,
                                         color: '999999'
@@ -657,7 +657,7 @@ export function getFilteredQuestion(proposalQuestions, filterState){
     return questions;
 }
 export function getUnityLink(details){
-    return `${API.AUTH.REDIRECTION_URL}/opportunities/${details['CRM #']}`
+    return `${API.AUTH.REDIRECTION_URL}opportunities/${details['CRM #']}`
 }
 function getHeader(image){
     return new Header({

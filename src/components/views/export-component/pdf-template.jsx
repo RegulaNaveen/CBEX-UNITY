@@ -254,7 +254,7 @@ function questionTables(proposalQuestions){
             const questionText = question.questionText || '';
             html += `<tr>`
             html += `<td> ${questionText} <br><br></td>`
-            html += `<td> ${formatDate(getLastAnswer(question.answers), question.answerConfiguration)} <span class="blueColorText">${(getUnityPredicatedText(question.answers)) ? '('+getUnityPredicatedText(question.answers)+')' : ''}</span><br><br></td>`
+            html += `<td> ${formatDate(getLastAnswer(question.answers), question.answerConfiguration)} <span class="blueColorText">${(getUnityPredicatedText(question.answers)) ? getUnityPredicatedText(question.answers) : ''}</span><br><br></td>`
             html += `</tr>`      
         });
         html += `</table>`
@@ -379,7 +379,7 @@ const MyDoc = (proposalDetails, questions, filteredQuestions, notes, filterState
             <View fixed style={styles.footer}>
                 <Text style={{fontSize: "10px", fontweight: "bold", color: `#${themeBlue}`, marginBottom: 5, borderBottom: "1px solid #CCC"}}>† Unity has provided this answer but not validated by user on proposal team. </Text>  
                 <View style={{display: "flex", flexDirection: "row", marginBottom: 5}}>
-                    <Text style={{flex: 1, fontSize: "8px", color:"#999"}}>Exported from Unity on {dateNow}</Text>
+                    <Text style={{flex: 1, fontSize: "8px", color:"#999"}}>Exported from Unity on {dateNow()}</Text>
                     <Text style={{flex: 1, fontSize: "8px", textAlign: "right", color:"#999"}}>View up-to-date Unity record here:</Text>
                 </View>
                 <View style={{display: "flex", flexDirection: "row", marginBottom: 5}}>
