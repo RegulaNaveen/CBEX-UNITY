@@ -37,7 +37,9 @@ import SFAnswerValidationWrapper from './SFAnswerValidationWrapper';
 import StatusCheck from 'apollo-react-icons/StatusCheck';
 import {List} from 'immutable';
 
+//Regex Fix for HTML and plain text showing /span> at the end of question
 let r = /[^<]\/span>/g
+//
 type State = {
   selectedDay: string,
   selectedRow: Boolean
@@ -547,7 +549,8 @@ export class TaskRow extends Component<Props, State> {
         >
           <div className="question-text">
             {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
-  
+            
+            
             <Typography component={'span'} variant={'body2'}>{questionHTML.match(r)  ? (        
               <p>{questionText}</p>): (<div dangerouslySetInnerHTML={ { __html: questionHTML } }></div>)}
               {console.log(questionHTML.length)}
