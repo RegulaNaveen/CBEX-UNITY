@@ -566,7 +566,7 @@ export class TaskRow extends Component<Props, State> {
                   <Edit className="edit-icon" />
                 </span>
               )}
-              {questionHint.trim().length > 0 ? (
+                            {questionHint.trim().length > 0 ? (
                 <Tooltip variant="light" title={questionHintHtml.trim().length > 0 ? (        
                   <div dangerouslySetInnerHTML={ { __html: questionHintHtml } }></div>):(<p>{questionHint}</p>)} placement="top">
                   <IconButton
