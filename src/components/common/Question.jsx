@@ -37,6 +37,7 @@ import SFAnswerValidationWrapper from './SFAnswerValidationWrapper';
 import StatusCheck from 'apollo-react-icons/StatusCheck';
 import {List} from 'immutable';
 
+let r = /[^<]\/span>/g
 type State = {
   selectedDay: string,
   selectedRow: Boolean
@@ -547,8 +548,13 @@ export class TaskRow extends Component<Props, State> {
           <div className="question-text">
             {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
   
-            <Typography component={'span'} variant={'body2'}>{questionHTML.trim().length > 0 ? (        
-              <div dangerouslySetInnerHTML={ { __html: questionHTML } }></div>):(<p>{questionText}</p>)}
+            <Typography component={'span'} variant={'body2'}>{questionHTML.match(r)  ? (        
+              <p>{questionText}</p>): (<div dangerouslySetInnerHTML={ { __html: questionHTML } }></div>)}
+              {console.log(questionHTML.length)}
+              {console.log(questionHTML)}
+              {console.log(questionHTML.match(r))}
+              {console.log(questionText)}
+              {console.log('Type:', typeof(questionHTML))}
               {isCustomQuestion && selectedBid.get('isCurrent') && (
                 <span
                   onClick={() => {
@@ -568,8 +574,8 @@ export class TaskRow extends Component<Props, State> {
               )}
               
               {questionHint.trim().length > 0 ? (
-                <Tooltip variant="light" title={questionHintHtml.trim().length > 0 ? (
-                  <div dangerouslySetInnerHTML={{ __html: questionHintHtml }}></div>) : (<p>{questionHint}</p>)} placement="top">
+                <Tooltip variant="light" title={questionHintHtml.match(r) ? (<p>{questionHint}</p>) : (
+                  <div dangerouslySetInnerHTML={{ __html: questionHintHtml }}></div>)} placement="top">
                   <IconButton
                     color="primary"
                     style={{ margin: 0 }}
