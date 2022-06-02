@@ -396,10 +396,14 @@ function getHeaderInfoRows(details){
     const rows = [];
     try{
         for (let key in headFields){
+            let value = details[key] || '';
+            if(key==='Bid due date')
+             value = moment(value).format('DD-MMM-YYYY');
+
             rows.push(new TableRow({
                 children: [
                     getSectionNameCell(headFields[key], questionCellWidth25),
-                    getAnswerCell((details[key] || '').toString(), '', questionCellWidth75)
+                    getAnswerCell((value).toString(), '', questionCellWidth75)
                 ]
             }))
         }
@@ -645,6 +649,8 @@ export function getFilteredQuestion(proposalQuestions, filterState){
         questions = applyAnsweredFilter(questions);
     }else if(unanswered){
         questions = applyUnAnsweredFilter(questions);
+    }else if(!answered && !unanswered){
+        questions = [];
     }
 
     // My user role questions

@@ -22,7 +22,7 @@ import ProximaNova from '../../../../fonts/ProximaNova-Regular.otf';
 import ProximaNovaBold from '../../../../fonts/Proxima Nova Alt Bold.otf';
 import ProximaNovaBoldItalic from '../../../../fonts/Proxima-Nova-Bold-It.otf';
 import ProximaNovaItalic from '../../../../fonts/Proxima-Nova-Reg-It.otf';
-
+import moment from "moment";
 import { convertFromHTML, convertFromRaw, EditorState } from "draft-js";
 import ReactDOMServer from 'react-dom/server';
 import RichTextEditor from "../../common/RichTextEditor";
@@ -165,9 +165,14 @@ function getHeaderInfoRows(details){
     let html = `<table class="table headerInfo">`
     try{
         for (let key in headFields ){
+
+            let value = details[key] || '';
+            if(key==='Bid due date')
+             value = moment(value).format('DD-MMM-YYYY');
+
             html += `<tr>`
             html += `<td>${headFields[key]}</td>`
-            html += `<td>${(details[key] || '').toString()}</td>`
+            html += `<td>${(value).toString()}</td>`
             html += `<td></td>`
             html += `</tr>`
         }
