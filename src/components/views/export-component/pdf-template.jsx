@@ -259,7 +259,7 @@ function questionTables(proposalQuestions){
             const questionText = question.questionText || '';
             html += `<tr>`
             html += `<td> ${questionText} <br><br></td>`
-            html += `<td> ${formatDate(getLastAnswer(question.answers), question.answerConfiguration)} <span class="blueColorText"> ${(getUnityPredicatedText(question.answers)) ? getUnityPredicatedText(question.answers) : ''}</span><br><br></td>`
+            html += `<td> ${formatDate(getLastAnswer(question.answers), question.answerConfiguration)} <span class="blueColorText" style="font-size:20px"> ${(getUnityPredicatedText(question.answers)) ? getUnityPredicatedText(question.answers) : ''}</span><br><br></td>`
             html += `</tr>`      
         });
         html += `</table>`
