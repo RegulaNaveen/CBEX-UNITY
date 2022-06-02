@@ -259,7 +259,7 @@ function questionTables(proposalQuestions){
             const questionText = question.questionText || '';
             html += `<tr>`
             html += `<td> ${questionText} <br><br></td>`
-            html += `<td> ${formatDate(getLastAnswer(question.answers), question.answerConfiguration)} <span class="blueColorText">${(getUnityPredicatedText(question.answers)) ? getUnityPredicatedText(question.answers) : ''}</span><br><br></td>`
+            html += `<td> ${formatDate(getLastAnswer(question.answers), question.answerConfiguration)} <span class="blueColorText"> ${(getUnityPredicatedText(question.answers)) ? getUnityPredicatedText(question.answers) : ''}</span><br><br></td>`
             html += `</tr>`      
         });
         html += `</table>`
@@ -392,7 +392,7 @@ const MyDoc = (proposalDetails, questions, filteredQuestions, notes, filterState
                     <Text style={{flex: 1, fontSize: "8px",  textAlign: "right", color:"#999"}}>{getUnityLink(proposalDetails)}</Text>
                 </View>
                 <View style={{display: "flex", flexDirection: "row", marginBottom: 0}}>
-                    <Text style={{flex: 1, fontSize: "8px", color:"#999"}}></Text>
+                    <Text style={{flex: 0, fontSize: "8px", color:"#999"}}></Text>
                     <Text style={{flex: 1, fontSize: "8px",  textAlign: "right", color:"#999"}}>Copyright © {yearNow} IQVIA. All Rights Reserved. Confidential and Proprietary.</Text>
                 </View> 
             </View>

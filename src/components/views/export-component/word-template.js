@@ -132,7 +132,7 @@ function getQuestionTextCell(questionText){
         }) 
 }
 function getAnswerCell(answer, unityPredicted='', width=null){
-    let upText = (unityPredicted) ? `${unityPredicted}` : '';
+    let upText = (unityPredicted) ? ` ${unityPredicted}` : '';
     return  new TableCell({
         children: [new Paragraph({
             children : [
@@ -287,7 +287,6 @@ export function getStyle(styleMap, index){
                 }
                 if ( key.includes('fontsize')){
                     styles.size = parseInt(key.slice(key.length-2, key.length))
-                    console.log(styles);
                     styleId += '(fs)'
                 }
 
@@ -578,7 +577,7 @@ function getFooter(details){
                                 right : {color : 'FFFFFF'},
                                 bottom : {color : 'FFFFFF'}
                             },
-                            width: questionCellWidth50
+                            width: questionCellWidth40
                         }),
                         new TableCell({
                             children : [
@@ -627,7 +626,7 @@ function getFooter(details){
                                 right : {color : 'FFFFFF'},
                                 bottom : {color : 'FFFFFF'}
                             },
-                            width: questionCellWidth50
+                            width: questionCellWidth60
                         }),
                     ]
                 })
