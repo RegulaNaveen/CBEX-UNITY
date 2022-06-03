@@ -46,7 +46,9 @@ const {
   ADD_NEW_BID,
   NEW_BID_CREATED,
   PROPOSAL_DETAIL_UPDATE,
-  UPDATE_LOOKUP_OPTIONS
+  UPDATE_LOOKUP_OPTIONS,
+  BOX_ADDITIONAL_LINK,
+  BOX_ADDITIONAL_LINK_ERROR 
 } = REDUX_TYPES.PROPOSAL;
 
 const INITIAL_STATE: Map = fromJS({
@@ -111,6 +113,7 @@ const INITIAL_STATE: Map = fromJS({
   selectedBid: Map({}),
   boxBids: [],
   lookUpOptions: {},
+  boxAdditionalLink: {}
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -642,6 +645,11 @@ const onGetProposalBoxId = (state: Map, action: Object): Map => {
     .set('boxId', boxId)
     .set('onGettingBoxIdError', undefined);
 };
+const fetchBoxAdditionalLink = (state: Map, action: Object): Map => {
+  const { boxlink } = action.payload;
+  return state
+    .set('boxAdditionalLink', boxlink)
+};
 
 const onGettingBoxIdError = (state: Map, action: Object): Map => {
   const { error } = action.payload;
@@ -649,6 +657,11 @@ const onGettingBoxIdError = (state: Map, action: Object): Map => {
     .set('isGettingBoxId', false)
     .set('boxId', '')
     .set('onGettingBoxIdError', error);
+};
+const onGettingfetchBoxAdditionalLinkError = (state: Map, action: Object): Map => {
+  const { error } = action.payload;
+  return state
+    .set('boxAdditionalLink', error);
 };
 
 const onUpdateModifiedQuestion = (state: Map, action: Object): Map => {
@@ -834,6 +847,8 @@ const actionMap = {
   [NEW_BID_CREATED]: newBidCreated,
   [PROPOSAL_DETAIL_UPDATE] : updateProposalDetail,
   [UPDATE_LOOKUP_OPTIONS] : (state, { payload }) => state.set('lookUpOptions', payload),
+  [BOX_ADDITIONAL_LINK]: fetchBoxAdditionalLink,
+  [BOX_ADDITIONAL_LINK_ERROR]: onGettingfetchBoxAdditionalLinkError
 };
 
 export default function(

@@ -50,8 +50,9 @@ export function updateNote(id, note) {
       dispatch({ type: UPDATE_NOTE });
       await updateNoteApi(id, note);
       dispatch({ type: UPDATE_NOTE_DONE });
-      dispatch({ type: CHANGE_MODE, payload: { mode: MODE_DEFAULT } });
-      dispatch(fetchNotes(id));
+      // With NoteV2 we dont need to refetch the notes list
+      // dispatch({ type: CHANGE_MODE, payload: { mode: MODE_DEFAULT } });
+      // dispatch(fetchNotes(id));
     } catch (err) {
       dispatch({ type: ERROR_UPDATING_NOTE, payload: { data: err } });
     }

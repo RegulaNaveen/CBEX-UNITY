@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.3] - YYYY-MM-DD
+### Added
+  - IQVIACBEXU-1358: Additional Links to Box
+  - IQVIACBEXU-1421: Create SalesForce Link
+  - IQVIACBEXU-1344: Pull Notes out of the blade. The new note section uses react-draft-wysiwyg.
+  - IQVIACBEXU-1400: Create the ability to export Unity data
+### Changed
+### Fixed
+
 ## [4.2] - YYYY-MM-DD
 ### Added
   - IQVIACBEXU-1311: Flag end users when an auto-populated response has been manually edited
