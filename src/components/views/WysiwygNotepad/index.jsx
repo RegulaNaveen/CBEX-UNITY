@@ -12,7 +12,7 @@ import {
   getUserRole
 } from '../../../redux/selectors';
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { updateNote } from '../../../redux/actions/notepad-actions';
+import { updateNote, fetchNotes} from '../../../redux/actions/notepad-actions';
 import 'draft-js/dist/Draft.css';
 
 const WysiwygNotepad = ({
@@ -21,7 +21,8 @@ const WysiwygNotepad = ({
   userName,
   userEmail,
   userRole,
-  updateNote
+  updateNote,
+  fetchNotes
 }) => {
   const emptyTextBlock = {
     blocks: [
@@ -81,6 +82,11 @@ const WysiwygNotepad = ({
     []
   );
 
+  const fetchLatestNotes = ()=>{
+    let proposalId = selectedBid.get('id', '');
+    if(proposalId)
+      fetchNotes(proposalId)
+  }
   const memoizedSaveDB = useCallback(
     debounce(noteText => {
       const proposalId = selectedBid.get('id');
@@ -114,6 +120,7 @@ const WysiwygNotepad = ({
         editorState={editorState}
         onEditorStateChange={onEditorsChange}
         readOnly={isReadOnly}
+        onBlur={(e)=>fetchLatestNotes()}
         toolbar={{
           options: [
             'inline',
@@ -145,7 +152,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  updateNote: updateNote
+  updateNote: updateNote,
+  fetchNotes: fetchNotes
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WysiwygNotepad);
