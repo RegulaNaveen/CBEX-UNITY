@@ -13,7 +13,6 @@ import TextArea from './atoms/inputs/TextArea';
 import TextAreaV2 from './atoms/inputs/TextAreaV2';
 import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
-
 import { Typography } from 'apollo-react/components/Typography/Typography';
 import {
   setProposalAnswerData,
@@ -37,6 +36,8 @@ import SFAnswerValidationWrapper from './SFAnswerValidationWrapper';
 import StatusCheck from 'apollo-react-icons/StatusCheck';
 import {List} from 'immutable';
 
+//Regex Fix for HTML and plain text showing /span> at the end of question
+let Spanexp = /[^<]\/span>/g
 type State = {
   selectedDay: string,
   selectedRow: Boolean
@@ -511,7 +512,7 @@ export class TaskRow extends Component<Props, State> {
       ismilestoneavailable,
       loading,
       questionHint,
-      questionHintHtml,
+      questionHintHTML,
       questionHTML,
       sectionName,
       roleNames,
@@ -545,9 +546,8 @@ export class TaskRow extends Component<Props, State> {
         >
           <div className="question-text">
             {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
-  
-            <Typography component={'span'} variant={'body2'}>{questionHTML.trim().length > 0 ? (        
-              <div dangerouslySetInnerHTML={ { __html: questionHTML } }></div>):(<p>{questionText}</p>)}
+            <Typography component={'span'} variant={'body2'}>{questionHTML.match(Spanexp) ? (<p>{questionText}</p>):(        
+              <div dangerouslySetInnerHTML={ { __html: questionHTML } }></div>)}
               {isCustomQuestion && selectedBid.get('isCurrent') && (
                 <span
                   onClick={() => {
@@ -565,10 +565,10 @@ export class TaskRow extends Component<Props, State> {
                   <Edit className="edit-icon" />
                 </span>
               )}
-              
               {questionHint.trim().length > 0 ? (
-                <Tooltip variant="light" title={questionHintHtml.trim().length > 0 ? (
-                  <div dangerouslySetInnerHTML={{ __html: questionHintHtml }}></div>) : (<p>{questionHint}</p>)} placement="top">
+               <Tooltip variant="light" title={questionHintHTML.match(Spanexp) ? (<p>{questionHint}</p>): (
+                <div dangerouslySetInnerHTML={{ __html: questionHintHTML }}></div>)} placement="top">
+
                   <IconButton
                     color="primary"
                     style={{ margin: 0 }}
@@ -578,6 +578,7 @@ export class TaskRow extends Component<Props, State> {
                     <InfoIcon style={{ fontSize: '16px' }} />
                   </IconButton>
                 </Tooltip>
+
               ) : (
                 <></>
               )}
