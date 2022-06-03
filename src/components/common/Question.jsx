@@ -13,7 +13,7 @@ import TextArea from './atoms/inputs/TextArea';
 import TextAreaV2 from './atoms/inputs/TextAreaV2';
 import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
-
+import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import { Typography } from 'apollo-react/components/Typography/Typography';
 import {
   setProposalAnswerData,
@@ -50,6 +50,7 @@ type Props = {
   answers: Map,
   questionText: string,
   questionHTML: string,
+  questionJSON: string,
   answerConfiguration: Object,
   sectionName: string,
   userData: Object,
@@ -179,6 +180,7 @@ export class TaskRow extends Component<Props, State> {
       proposalDetail,
       questionText,
       questionHTML,
+      questionJSON,
       sectionName,
       trackEvent,
       questionId
@@ -195,6 +197,7 @@ export class TaskRow extends Component<Props, State> {
             sectionName,
             questionText,
             questionHTML,
+            questionJSON,
             questionId,
             proposalDetail
           })
@@ -209,6 +212,7 @@ export class TaskRow extends Component<Props, State> {
       proposalDetail,
       questionText,
       questionHTML,
+      questionJSON,
       sectionName,
       trackEvent,
       questionId
@@ -223,6 +227,7 @@ export class TaskRow extends Component<Props, State> {
             sectionName,
             questionText,
             questionHTML,
+            questionJSON,
             questionId,
             proposalDetail
           })
@@ -250,7 +255,8 @@ export class TaskRow extends Component<Props, State> {
     answers: Map,
     lastAnswer: Map,
     questionText: Map,
-    questionHTML: Map
+    questionHTML: Map,
+    questionJSON: Map
   ) => {
     const { sectionName, sfObject, sfField, selectedBid, noneditableField } = this.props;
     const { selectedDay } = this.state;
@@ -513,8 +519,9 @@ export class TaskRow extends Component<Props, State> {
       ismilestoneavailable,
       loading,
       questionHint,
-      questionHintHtml,
+      questionHintHTML,
       questionHTML,
+      questionJSON,
       sectionName,
       roleNames,
       setEditQuestionData,
@@ -547,7 +554,6 @@ export class TaskRow extends Component<Props, State> {
         >
           <div className="question-text">
             {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
-  
             <Typography component={'span'} variant={'body2'}>{questionHTML.match(Spanexp) ? (<p>{questionText}</p>):(        
               <div dangerouslySetInnerHTML={ { __html: questionHTML } }></div>)}
               {isCustomQuestion && selectedBid.get('isCurrent') && (
@@ -556,6 +562,7 @@ export class TaskRow extends Component<Props, State> {
                     setEditQuestionData({
                       questionText,
                       questionHTML,
+                      questionJSON,
                       section: sectionName,
                       answerType: answerConfiguration.get('type'),
                       roleNames,
@@ -569,9 +576,9 @@ export class TaskRow extends Component<Props, State> {
               )}
               
               {questionHint.trim().length > 0 ? (
-                <Tooltip variant="light" title={questionHintHtml.trim().length > 0 ? (
-                  <div dangerouslySetInnerHTML={{ __html: questionHintHtml }}></div>) : (<p>{questionHint}</p>)} placement="top">
-                  
+               <Tooltip variant="light" title={questionHintHTML.match(Spanexp) ? (<p>{questionHint}</p>): (
+                <div dangerouslySetInnerHTML={{ __html: questionHintHTML }}></div>)} placement="top">
+
                   <IconButton
                     color="primary"
                     style={{ margin: 0 }}
@@ -581,6 +588,7 @@ export class TaskRow extends Component<Props, State> {
                     <InfoIcon style={{ fontSize: '16px' }} />
                   </IconButton>
                 </Tooltip>
+
               ) : (
                 <></>
               )}
@@ -596,7 +604,7 @@ export class TaskRow extends Component<Props, State> {
                   lastAnswer,
                   questionText
                 )
-              : this.renderAnswer('', [], [], undefined, questionText, questionHTML)}
+              : this.renderAnswer('', [], [], undefined, questionText, questionHTML, questionJSON)}
           </div>
   
           <div
