@@ -13,7 +13,6 @@ import TextArea from './atoms/inputs/TextArea';
 import TextAreaV2 from './atoms/inputs/TextAreaV2';
 import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
-import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import { Typography } from 'apollo-react/components/Typography/Typography';
 import {
   setProposalAnswerData,
@@ -50,7 +49,6 @@ type Props = {
   answers: Map,
   questionText: string,
   questionHTML: string,
-  questionJSON: string,
   answerConfiguration: Object,
   sectionName: string,
   userData: Object,
@@ -180,7 +178,6 @@ export class TaskRow extends Component<Props, State> {
       proposalDetail,
       questionText,
       questionHTML,
-      questionJSON,
       sectionName,
       trackEvent,
       questionId
@@ -197,7 +194,6 @@ export class TaskRow extends Component<Props, State> {
             sectionName,
             questionText,
             questionHTML,
-            questionJSON,
             questionId,
             proposalDetail
           })
@@ -212,7 +208,6 @@ export class TaskRow extends Component<Props, State> {
       proposalDetail,
       questionText,
       questionHTML,
-      questionJSON,
       sectionName,
       trackEvent,
       questionId
@@ -227,7 +222,6 @@ export class TaskRow extends Component<Props, State> {
             sectionName,
             questionText,
             questionHTML,
-            questionJSON,
             questionId,
             proposalDetail
           })
@@ -255,8 +249,7 @@ export class TaskRow extends Component<Props, State> {
     answers: Map,
     lastAnswer: Map,
     questionText: Map,
-    questionHTML: Map,
-    questionJSON: Map
+    questionHTML: Map
   ) => {
     const { sectionName, sfObject, sfField, selectedBid, noneditableField } = this.props;
     const { selectedDay } = this.state;
@@ -521,7 +514,6 @@ export class TaskRow extends Component<Props, State> {
       questionHint,
       questionHintHTML,
       questionHTML,
-      questionJSON,
       sectionName,
       roleNames,
       setEditQuestionData,
@@ -562,7 +554,6 @@ export class TaskRow extends Component<Props, State> {
                     setEditQuestionData({
                       questionText,
                       questionHTML,
-                      questionJSON,
                       section: sectionName,
                       answerType: answerConfiguration.get('type'),
                       roleNames,
@@ -604,7 +595,7 @@ export class TaskRow extends Component<Props, State> {
                   lastAnswer,
                   questionText
                 )
-              : this.renderAnswer('', [], [], undefined, questionText, questionHTML, questionJSON)}
+              : this.renderAnswer('', [], [], undefined, questionText, questionHTML)}
           </div>
   
           <div
