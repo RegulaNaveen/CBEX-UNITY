@@ -461,47 +461,19 @@ class Questions extends Component<Props, State> {
     } = this.state;
 
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
+    const minNotepadWidth = "30%";
+    const maxNotepadWidth = isOpen ? minNotepadWidth : '50%';
 
     return (
       <>
         <BidHistory />
-        <Sidebar
-          sections={allSections}
-          id={selectedBid.get('id')}
-          onAddQuestion={value => {
-            this.setState({ currentsection: value });
-          }}
-          onscrollelement = {(e)=> this.expandsection(e)}
-          expandAll={(e) => {
-            this.setState({sidebarscroll: ''},()=>{
-              this.handleIsCheckedAll()
-            })
-           if(!e){
-            const clearsidebarselectsection = new CustomEvent('clearsidebarselectsection', {
-              detail: true
-            });
-            document.dispatchEvent(clearsidebarselectsection);
-           }
-          }}
-          AddNewQuestion={this.onClose}
-          RefreshProposal={this.getProposalInfoUpdated}
-          // eslint-disable-next-line react/destructuring-assignment
-          currentTab={this.state.currentTab}
-          // eslint-disable-next-line react/destructuring-assignment
-          selectedtitle={this.state.selectedtitle}
-          // eslint-disable-next-line react/destructuring-assignment
-          heighlightcard={this.state.heighlightcard}
-          setTabFromQuestionNotes={(val, title, flag) =>
-            this.setTabFromQuestionNotes(val, title, flag)
-          }
-        />
         <PanelGroup style={{ display: 'flex' }}>
-          <Panel width="30%" maxWidth={500} minWidth={100} resizable>
-            <div style={{ paddingLeft: '22px' }}>
+          <Panel width={maxNotepadWidth} maxWidth={maxNotepadWidth} minWidth={minNotepadWidth} resizable>
+            <div style={{ paddingLeft: '15px' }}>
               <WysiwygNotepad />
             </div>
           </Panel>
-          <Panel width="100%" minWidth={400} hideButton style={{ paddingLeft: '10px', paddingRight: '10px'}}>
+          <Panel width="100%" hideButton style={{ paddingLeft: '20px', paddingRight: '10px'}}>
             <div className="tasksList-title-wrapper">
               <div className="taskList-icons-wrapper">
                 <ApolloCheckbox
@@ -561,6 +533,36 @@ class Questions extends Component<Props, State> {
             <div className="tasksList-wrapper">{this.renderQuestions()}</div>
           </Panel>
         </PanelGroup>
+        <Sidebar
+          sections={allSections}
+          id={selectedBid.get('id')}
+          onAddQuestion={value => {
+            this.setState({ currentsection: value });
+          }}
+          onscrollelement = {(e)=> this.expandsection(e)}
+          expandAll={(e) => {
+            this.setState({sidebarscroll: ''},()=>{
+              this.handleIsCheckedAll()
+            })
+           if(!e){
+            const clearsidebarselectsection = new CustomEvent('clearsidebarselectsection', {
+              detail: true
+            });
+            document.dispatchEvent(clearsidebarselectsection);
+           }
+          }}
+          AddNewQuestion={this.onClose}
+          RefreshProposal={this.getProposalInfoUpdated}
+          // eslint-disable-next-line react/destructuring-assignment
+          currentTab={this.state.currentTab}
+          // eslint-disable-next-line react/destructuring-assignment
+          selectedtitle={this.state.selectedtitle}
+          // eslint-disable-next-line react/destructuring-assignment
+          heighlightcard={this.state.heighlightcard}
+          setTabFromQuestionNotes={(val, title, flag) =>
+            this.setTabFromQuestionNotes(val, title, flag)
+          }
+        />
         {showModal && (
           <AddQuestionModalComponent
             onClose={this.onClose}
