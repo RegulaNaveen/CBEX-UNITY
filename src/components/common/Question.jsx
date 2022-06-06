@@ -546,7 +546,7 @@ export class TaskRow extends Component<Props, State> {
         >
           <div className="question-text">
             {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
-            <Typography component={'span'} variant={'body2'}>{questionHTML.match(Spanexp) ? (<p>{questionText}</p>):(        
+            <Typography component={'span'} variant={'body2'}>{questionHTML.match(Spanexp) || questionHTML.trim().length === 0 ? (<p>{questionText}</p>):(        
               <div dangerouslySetInnerHTML={ { __html: questionHTML } }></div>)}
               {isCustomQuestion && selectedBid.get('isCurrent') && (
                 <span
