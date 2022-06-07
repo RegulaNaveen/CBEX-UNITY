@@ -58,6 +58,7 @@ import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions'
 import WysiwygNotepad from '../../views/WysiwygNotepad';
 import Panel from 'apollo-react/components/Panel';
 import PanelGroup from 'apollo-react/components/PanelGroup';
+import './Questions.css';
 
 type Props = {
   match: Match,
@@ -461,19 +462,25 @@ class Questions extends Component<Props, State> {
     } = this.state;
 
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
-    const minNotepadWidth = "30%";
-    const maxNotepadWidth = isOpen ? minNotepadWidth : '50%';
+
+    const minPixelToExclude = 80;
+    const notepadMinWidthPx =
+      (window.innerWidth - minPixelToExclude) * (30 / 100); // 30% of the total screen size
+    const notepadMaxWidthPx = isOpen
+      ? notepadMinWidthPx
+      : (window.innerWidth - minPixelToExclude) * (50 / 100); // 50% of the total screen size
 
     return (
       <>
         <BidHistory />
-        <PanelGroup style={{ display: 'flex' }}>
-          <Panel width={maxNotepadWidth} maxWidth={maxNotepadWidth} minWidth={minNotepadWidth} resizable>
-            <div style={{ paddingLeft: '15px' }}>
+        <div id="panelwrapper">
+          <div id="panel-notepad">
+            <Panel minWidth={notepadMinWidthPx} maxWidth={notepadMaxWidthPx} resizable>
               <WysiwygNotepad />
-            </div>
-          </Panel>
-          <Panel width="100%" hideButton style={{ paddingLeft: '20px', paddingRight: '10px'}}>
+            </Panel>
+          </div>
+          <div id="panel-questions-list">
+            <div>
             <div className="tasksList-title-wrapper">
               <div className="taskList-icons-wrapper">
                 <ApolloCheckbox
@@ -531,8 +538,9 @@ class Questions extends Component<Props, State> {
             </div>
             {this.renderFilter()}
             <div className="tasksList-wrapper">{this.renderQuestions()}</div>
-          </Panel>
-        </PanelGroup>
+            </div>
+          </div>
+        </div>
         <Sidebar
           sections={allSections}
           id={selectedBid.get('id')}

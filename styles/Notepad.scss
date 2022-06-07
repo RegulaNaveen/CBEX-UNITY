@@ -185,7 +185,7 @@ $note-no-of-lines: 2;
 
 .DraftEditor-root {
   overflow: auto;
-  resize: vertical;
+  // resize: vertical;
   border: 1px solid rgb(153, 153, 153);
   line-height: 1.1rem;
   .public-DraftEditorPlaceholder-root {
