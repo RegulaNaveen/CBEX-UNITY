@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import Modal from 'apollo-react/components/Modal';
 import MenuItem from 'apollo-react/components/MenuItem';
 import Select from 'apollo-react/components/Select';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import Grid from 'apollo-react/components/Grid';
 
-import { DEFAULT, PROPOSAL as CONSTANTS } from '../../../constants/app';
+import { DEFAULT, PROPOSAL } from '../../../constants/app';
+import CustomModal from '../../common/CustomModal';
 
 const opportunityList = [
   'Core EMEA NA Ballpark',
@@ -19,11 +18,7 @@ const opportunityList = [
   'Default Type'
 ];
 
-const SwitchTemplate = ({ opportunityType, className, ...props }) => {
-  const styles = { modal: { maxWidth: 558 } };
-  const useStyles = makeStyles(styles);
-  const classes = useStyles();
-
+const SwitchTemplate = ({ opportunityType, ...props }) => {
   // States
   const [selectValue, setSelectValue] = useState(opportunityType);
   const [prevSelectValue, setPrevSelectValue] = useState(opportunityType); // Prev OT
@@ -32,24 +27,25 @@ const SwitchTemplate = ({ opportunityType, className, ...props }) => {
     isEmpty(selectValue) || isEqual(selectValue, prevSelectValue);
 
   return (
-    <Modal
+    <CustomModal
       variant="warning"
-      title={CONSTANTS.SWITCH_TEMP_MODAL_TITLE}
-      className={`${classes.modal} ${className}`}
+      title={PROPOSAL.SWITCH_TEMP_MODAL_TITLE}
+      className="switch-temp-modal"
       buttonProps={[{}, { label: DEFAULT.CHANGE, disabled: isBtnDisabled }]}
+      modalStyle={{ maxWidth: 558 }}
       {...props}
     >
       <Grid container>
         <Grid item xs={12}>
-          {CONSTANTS.SWITCH_TEMP_MODAL_DESCRIPTION}
+          {PROPOSAL.SWITCH_TEMP_MODAL_DESCRIPTION}
         </Grid>
         <Grid item xs={12} sm={9}>
           <Select
-            label={CONSTANTS.OPPORTUNITY_TYPE}
-            helperText="You can select one option"
+            label={PROPOSAL.OPPORTUNITY_TYPE}
+            helperText={DEFAULT.SELECT_OPTION_MSG}
             value={selectValue}
             onChange={e => setSelectValue(e.target.value)}
-            placeholder="Select item..."
+            placeholder={DEFAULT.SELECT_ITEM}
             fullWidth
           >
             {!isEmpty(opportunityList)
@@ -62,18 +58,16 @@ const SwitchTemplate = ({ opportunityType, className, ...props }) => {
           </Select>
         </Grid>
       </Grid>
-    </Modal>
+    </CustomModal>
   );
 };
 
 SwitchTemplate.defaultProps = {
-  opportunityType: '',
-  className: 'popup-modal'
+  opportunityType: ''
 };
 
 SwitchTemplate.propTypes = {
-  opportunityType: PropTypes.string,
-  className: PropTypes.string
+  opportunityType: PropTypes.string
 };
 
 export default SwitchTemplate;

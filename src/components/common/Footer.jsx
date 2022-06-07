@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Sync from 'apollo-react-icons/Sync';
 import isEmpty from 'lodash/isEmpty';
 
-import { PROPOSAL as CONSTANT } from '../../constants/app';
+import { PROPOSAL } from '../../constants/app';
 import SwitchTemplate from '../views/modals/SwitchTemplate';
 
 const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
@@ -14,7 +14,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
   if (!isEmpty(questionTemplateVersionNumber)) {
     templateVersion = (
       <>
-        {CONSTANT.QUESTION_TEMP_VERSION}: {questionTemplateVersionNumber}{' '}
+        {PROPOSAL.QUESTION_TEMP_VERSION}: {questionTemplateVersionNumber}{' '}
         {!isEmpty(opportunityType) && `- ${opportunityType}`}
       </>
     );
@@ -29,7 +29,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
           templateVersion
             ? [
                 {
-                  label: CONSTANT.SWITCH_TEMP,
+                  label: PROPOSAL.SWITCH_TEMP,
                   icon: <Sync fontSize="extraSmall" />,
                   size: 'small',
                   className: 'switch-temp-btn',
@@ -55,7 +55,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
 
 UnityFooter.defaultProps = {
   questionTemplateVersionNumber: 'v0.01',
-  opportunityType: CONSTANT.OPPORTUNITY_TYPE
+  opportunityType: PROPOSAL.OPPORTUNITY_TYPE
 };
 
 UnityFooter.propTypes = {

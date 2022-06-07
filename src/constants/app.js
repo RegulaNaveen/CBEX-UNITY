@@ -1,6 +1,8 @@
 const DEFAULT = {
   CANCEL: 'Cancel',
-  CHANGE: 'Change'
+  CHANGE: 'Change',
+  SELECT_ITEM: 'Select item...',
+  SELECT_OPTION_MSG: 'You can select one option'
 };
 
 const PROPOSAL = {
