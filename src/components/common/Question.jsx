@@ -14,6 +14,7 @@ import TextAreaV2 from './atoms/inputs/TextAreaV2';
 import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
 import { Typography } from 'apollo-react/components/Typography/Typography';
+import Grid from 'apollo-react/components/Grid';
 import {
   setProposalAnswerData,
   setEditQuestionData
@@ -538,16 +539,27 @@ export class TaskRow extends Component<Props, State> {
         answerDate = 'Not Answered';
       }
     }
-      return(
-        <div
-          className={`task-table-row${
-            this.state.selectedRow ? ' selected-task-table-row' : ''
-          }`}
-        >
-          <div className="question-text">
-            {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
-            <Typography component={'span'} variant={'body2'}>{questionHTML.match(Spanexp) || questionHTML.trim().length === 0 ? (<p>{questionText}</p>):(        
-              <div dangerouslySetInnerHTML={ { __html: questionHTML } }></div>)}
+    return(
+      <Grid container style={{margin:"15px 0px"}}>
+        <Grid item xs={10}>
+          {/* Question Text and Milestone */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingBottom: '8px'
+            }}
+          >
+            {/* questionText */}
+            <div>
+            <Typography component={'p'} variant={'body2'}>
+              {questionHTML?.match(Spanexp) ||
+              questionHTML?.trim().length === 0 ? (
+                <p>{questionText}</p>
+              ) : (
+                <div dangerouslySetInnerHTML={{ __html: questionHTML }}></div>
+              )}
               {isCustomQuestion && selectedBid.get('isCurrent') && (
                 <span
                   onClick={() => {
@@ -566,9 +578,19 @@ export class TaskRow extends Component<Props, State> {
                 </span>
               )}
               {questionHint.trim().length > 0 ? (
-               <Tooltip variant="light" title={questionHintHTML.match(Spanexp) ? (<p>{questionHint}</p>): (
-                <div dangerouslySetInnerHTML={{ __html: questionHintHTML }}></div>)} placement="top">
-
+                <Tooltip
+                  variant="light"
+                  title={
+                    questionHintHTML?.match(Spanexp) ? (
+                      <p>{questionHint}</p>
+                    ) : (
+                      <div
+                        dangerouslySetInnerHTML={{ __html: questionHintHTML }}
+                      ></div>
+                    )
+                  }
+                  placement="top"
+                >
                   <IconButton
                     color="primary"
                     style={{ margin: 0 }}
@@ -578,13 +600,17 @@ export class TaskRow extends Component<Props, State> {
                     <InfoIcon style={{ fontSize: '16px' }} />
                   </IconButton>
                 </Tooltip>
-
               ) : (
                 <></>
               )}
             </Typography>
+            </div>
+            {/* Milestone */}
+            <div>
+            {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
+            </div>
           </div>
-  
+          {/* Answer */}
           <div>
             {answerConfiguration
               ? this.renderAnswer(
@@ -594,26 +620,37 @@ export class TaskRow extends Component<Props, State> {
                   lastAnswer,
                   questionText
                 )
-              : this.renderAnswer('', [], [], undefined, questionText, questionHTML)}
+              : this.renderAnswer(
+                  '',
+                  [],
+                  [],
+                  undefined,
+                  questionText,
+                  questionHTML
+                )}
           </div>
-  
-          <div
-            style={{
-              display: 'flex',
-              minHeight: '40px',
-              alignItems: 'flex-start',
-              paddingLeft: '16px',
-              height:'100%'
-            }}
-          >
-            <button
-              style={{ width: '100px', textAlign: 'left', flexShrink: 0, marginTop: '11px'}}
+        </Grid>
+        {/* Answer History Button*/}
+        <Grid item xs={2}  style={{display:"flex", alignItems: "center", justifyContent: "flex-start", paddingLeft:"22px"}}>
+          <div style={{display:"flex", justifyContent: "center", alignItems: "center"}}>
+            <div>
+              <button
+              style={{
+                textAlign: 'center',
+                outline: "none",
+                border: "none",
+                backgroundColor: "transparent",
+                color: "#297dfd",
+                cursor: "pointer"
+              }}
               type="button"
               onClick={this.displayAnswerOnHistory}
             >
               {answerDate}
             </button>
-            {isAnswerPredicted && !loading ? (
+            </div>
+            <div>
+              {isAnswerPredicted && !loading ? (
               <Tooltip
                 variant="light"
                 title="Unity Predicted Answer"
@@ -628,25 +665,17 @@ export class TaskRow extends Component<Props, State> {
                 </IconButton>
               </Tooltip>
             ) : null}
-            {this.isAnswered(lastAnswer, isAnswerPredicted) && !loading ? (
-              <div
-                style={{
-                  display: 'flex',
-                  flexShrink: 0,
-                  width: '40px',
-                  height: '24px',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginTop: '6px'
-                }}
-              >
+            </div>
+            <div>
+              {this.isAnswered(lastAnswer, isAnswerPredicted) && !loading ? (
+              <div>
                 <Checkmark className="answered" style={{ marginLeft: '6px' }} />
               </div>
-            ) : null}
-            {loading ? (
-              <span
-                style={{ marginLeft: '6px', marginTop: '18px', position: 'relative', top: '15px' }}
-              >
+              ) : null}
+            </div>
+            <div>
+              {loading ? (
+              <span style={{ marginLeft: '6px', marginTop: '6px', position: 'relative', top: '15px' }}>
                 <Loader
                   isInner
                   size={20}
@@ -657,9 +686,11 @@ export class TaskRow extends Component<Props, State> {
                 />
               </span>
             ) : null}
+            </div>
           </div>
-        </div>
-      );
+        </Grid>
+      </Grid>
+    );
     }
   }
 
