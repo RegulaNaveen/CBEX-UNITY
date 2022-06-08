@@ -1,13 +1,26 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import Footer from 'apollo-react/components/Footer';
 import PropTypes from 'prop-types';
 import Sync from 'apollo-react-icons/Sync';
 import isEmpty from 'lodash/isEmpty';
+import classNames from 'classnames';
 
 import { PROPOSAL } from '../../constants/app';
 import SwitchTemplate from '../views/modals/SwitchTemplate';
+import { getSelectedBid } from '../../redux/selectors/proposal';
 
 const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
+  const selectedBidState = useSelector(getSelectedBid);
+  const selectedBidId = selectedBidState.get('id');
+  const selectedBidIsCurrent = !!selectedBidState.get('isCurrent');
+
+  // console.log('Footer Component...', {
+  //   id: selectedBidId,
+  //   isCurrent: selectedBidIsCurrent
+  // });
+
+  // Component States
   const [openSwitchTempModal, setOpenSwitchTempModal] = useState(false);
 
   let templateVersion = null;
@@ -24,7 +37,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
     <>
       <Footer
         className="unity-footer"
-        maxWidth={1600}
+        maxWidth="100%"
         buttonProps={
           templateVersion
             ? [
@@ -32,7 +45,9 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
                   label: PROPOSAL.SWITCH_TEMP,
                   icon: <Sync fontSize="extraSmall" />,
                   size: 'small',
-                  className: 'switch-temp-btn',
+                  className: classNames('switch-temp-btn', 'no-animation', {
+                    'display-none': !selectedBidIsCurrent
+                  }),
                   onClick: () => setOpenSwitchTempModal(prev => !prev)
                 },
                 { label: templateVersion, className: 'ques-temp-info' }
@@ -47,6 +62,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
           open={openSwitchTempModal}
           onClose={() => setOpenSwitchTempModal(prev => !prev)}
           opportunityType={opportunityType || ''}
+          selectedBidId={selectedBidId}
         />
       )}
     </>

@@ -6,12 +6,9 @@
       width: 100%;
       justify-content: space-between;
       align-items: center;
-      & > a {
-        margin-left: 70px;
+      & > div {
+        margin-top: 0;
       }
-    }
-    & > p {
-      margin-right: 50px;
     }
   }
 
@@ -34,12 +31,26 @@
       }
     }
   }
+
+  [href="https://www.iqvia.com/"] {
+    pointer-events: none;
+  }
+
+  .MuiButton-textPrimary:hover {
+    background-color: none;
+  }
 }
 
-.MuiButton-textPrimary:hover {
-  background-color: none;
+.display-none {
+  display: none !important;
 }
 
-[href="https://www.iqvia.com/"] {
-  pointer-events: none;
+button.no-animation {
+  &:hover {
+    background-color: transparent !important;
+    opacity: 0.8;
+  }
+  [class*='MuiTouchRipple-root'] {
+    display: none !important;
+  }
 }

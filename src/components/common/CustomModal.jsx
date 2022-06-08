@@ -8,7 +8,6 @@ import classNames from 'classnames';
  * Custom Modal: To create a modal with extra properties
  */
 const CustomModal = ({ className, modalStyle, ...props }) => {
-  console.log('Custom Modal Rendered....');
   const styles = { modal: modalStyle };
   const useStyles = makeStyles(styles);
   const classes = useStyles();

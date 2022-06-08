@@ -1,4 +1,7 @@
 const DEFAULT = {
+  ALERT: 'Alert',
+  CLOSE: 'Close',
+  SUCCESS: 'Success',
   CANCEL: 'Cancel',
   CHANGE: 'Change',
   SELECT_ITEM: 'Select item...',
