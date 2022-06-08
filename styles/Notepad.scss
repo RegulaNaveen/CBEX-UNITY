@@ -1,204 +1,42 @@
-$note-line-height: 1.1rem;
-$note-no-of-lines: 2;
-
-.notepad {
-  padding: 8px;
-  height: calc(100% - (48px + 34px + 57px));
+#panelwrapper {
   display: flex;
-  flex-direction: column;
-  font-size: 12px;
+  height: max-content;
+}
 
-  * {
-    font-family: inherit !important;
-  }
+#panel-notepad {
+  min-height: 100vh;
+  max-height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+  padding: 25;
+}
 
-  .list {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    max-height: calc(100% - 174px);
-    overflow-y: scroll;
-    margin-bottom: 8px;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    &::-webkit-scrollbar {
-      display: none;
-    }
-    &.justify-center {
-      justify-content: center;
-      font-size: 14px;
-    }
-    .note {
-      padding: 4px;
-      .header {
-        display: flex;
-        flex-wrap: nowrap;
-        justify-content: space-between;
-        .username {
-          color: $neptune-primary;
-          font-weight: 600;
-          font-size: 13px;
-        }
-        .date {
-          font-weight: bold;
-          font-size: 11px;
-        }
-        .MuiGrid-spacing-xs-2 {
-          max-width: 100%;
-        }
-      }
-      .body {
-        padding: 0 8px;
-        .title {
-          font-weight: bold;
-          margin-bottom: 4px;
-        }
-        .content-wrapper {
-          position: relative;
-          margin-bottom: 4px;
-          line-height: $note-line-height;
-          max-height: $note-no-of-lines * $note-line-height;
-          overflow: hidden;
-          position: relative;
-          .DraftEditor-root {
-            resize: none;
-            border: none;
-            .DraftEditor-editorContainer {
-              padding: 0;
-              height: auto !important;
-              word-break: keep-all;
-            }
-          }
-          .expand-link {
-            position: absolute;
-            right: 0;
-            bottom: 0;
-            background-color: #ffffff;
-            padding-left: 2px;
-            z-index: 1;
-          }
-        }
-      }
-    }
-    .card {
-      margin: 0 !important;
-    }
-  }
+#panel-questions-list {
+  flex-grow: 1;
+  flex-shrink: 100;
+}
 
-  .add-note {
-    * {
-      font-size: 12px;
-    }
-    .MuiFormLabel-root,
-    .label {
-      font-weight: 600;
-    }
-    .MuiTextField-root {
-      margin: 0;
-    }
-    .button {
-      background-color: $neptune-primary;
-    }
-    .DraftEditor-root {
-      height: 68px;
-      max-height: 238px;
-      min-height: 68px;
-    }
-  }
-
-  .read-note {
-    height: 100%;
-    padding-bottom: 24px;
-    margin: 4px;
-    .title {
-      font-weight: 600;
-    }
-
-    .note-view-container {
-      height: 100%;
-      padding-bottom: 8px;
-
-      .note-view {
-        overflow-y: auto;
-        max-height: 100%;
-        background-color: $white;
-        margin-top: 8px;
-        padding: 16px;
-        border: 0.5px solid #9999994d;
-        .note {
-          line-height: $note-line-height;
-        }
-      }
-    }
-
-    .DraftEditor-root {
-      height: calc(100% - 34px);
-    }
-  }
-
-  .edit-note {
-    height: 100%;
-    margin: 4px;
-    form {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      .textarea-container {
-        flex-grow: 1;
-        overflow-y: auto;
-        .MuiGrid-item {
-          padding: 0;
-        }
-        .MuiFormControl-root {
-          height: 100%;
-          .MuiInputBase-multiline {
-            height: 100%;
-            margin-bottom: 8px;
-            textarea {
-              height: 100% !important;
-              overflow: auto !important;
-              resize: vertical !important;
-            }
-          }
-        }
-      }
-    }
-    * {
-      font-size: 12px;
-    }
-    .MuiFormLabel-root {
-      font-weight: 600;
-    }
-    .button {
-      background-color: $neptune-primary;
-    }
-    .DraftEditor-root {
-      height: calc(100% - 34px);
-    }
-  }
-
-  .loading-msg {
-    margin-top: 32px;
-    z-index: 3003;
+/* Hide the Toolbar in notesection when Panel is collapsed */
+div[class*='Panel-closedPanel-'] {
+  .rdw-editor-toolbar {
+    visibility: hidden !important;
   }
 }
 
 .DraftEditor-root {
   overflow: auto;
   // resize: vertical;
-  border: 1px solid rgb(153, 153, 153);
+  border: 1px #1f1f1f;
   line-height: 1.1rem;
   .public-DraftEditorPlaceholder-root {
-    padding: 9px 11px;
+    // padding: 9px 11px;
   }
   .DraftEditor-editorContainer {
-    padding: 9px 11px;
+    padding: 5px 10px;
     height: calc(100% - 16px);
     * {
       font-size: 12px;
     }
-  }
-  &:hover {
-    border-color: #0768fd;
   }
 }
