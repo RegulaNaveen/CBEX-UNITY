@@ -22,7 +22,8 @@ import {
   getPaginateProposal,
   getPickListLookupSfData,
   fetchAdditionalBoxLink,
-  getOTListData
+  getOTListData,
+  changeProposalOT
 } from '../../api/proposal';
 const { PROPOSAL_API_URL } = API.PROPOSAL;
 
@@ -74,7 +75,8 @@ const {
   PROPOSAL_DETAIL_UPDATE,
   UPDATE_LOOKUP_OPTIONS,
   BOX_ADDITIONAL_LINK,
-  BOX_ADDITIONAL_LINK_ERROR
+  BOX_ADDITIONAL_LINK_ERROR,
+  SWITCH_TEMP_STATUS
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -813,6 +815,20 @@ export const callPickListLookupSfData = (): ThunkAction<string, Object> => {
 };
 
 /**
+ * Get Error Message from response
+ */
+export function getErrorMessage(error) {
+  console.log('Error Response --> ', error.response);
+  const isErr400 = error.response.status === 400;
+  const isErr404 = error.response.status === 404;
+  let msg = error.response.data.message;
+  if (isErr400 && isEmpty(msg)) msg = DEFAULT.ERROR_400;
+  if (isErr404 && isEmpty(msg)) msg = DEFAULT.ERROR_404;
+  if (!isErr400 && !isErr404 && isEmpty(msg)) msg = DEFAULT.REQUEST_FAILED;
+  return msg;
+}
+
+/**
  * Fetch All Opportunity Type
  */
 export const fetchOTListData = () => async () => {
@@ -823,7 +839,60 @@ export const fetchOTListData = () => async () => {
   } catch (error) {
     // Error
     console.log('Error! occurred..', error);
-    const { message } = error.response.data;
-    return { status: false, title: DEFAULT.ALERT, msg: message };
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
   }
 };
+
+/**
+ * Switch Temp Status Update - Action
+ */
+export const updateSwitchTempStatusFromWebSocket = data => {
+  return async dispatch => {
+    dispatch({
+      type: SWITCH_TEMP_STATUS,
+      payload: data
+    });
+  };
+};
+
+/**
+ * Activate Proposal Loading - Action
+ */
+export const activateProposalLoading = () => {
+  return async dispatch => {
+    dispatch({
+      type: PROPOSAL_INFO_LOADING,
+      payload: {}
+    });
+  };
+};
+
+/**
+ * Deactivate Proposal Loading - Action
+ */
+export const deactivateProposalLoading = () => {
+  return async dispatch => {
+    dispatch({
+      type: PROPOSAL_INFO_ERROR,
+      payload: undefined
+    });
+  };
+};
+
+/**
+ * Fetch All Opportunity Type
+ */
+export const changeOpportunityType = switchTempData => async () => {
+  try {
+    // Api Response
+    const response = await changeProposalOT(switchTempData);
+    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
+  } catch (error) {
+    // Error
+    console.log('Error! occurred..', error.response);
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
+  }
+};
+

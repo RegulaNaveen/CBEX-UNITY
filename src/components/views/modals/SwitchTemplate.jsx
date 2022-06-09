@@ -10,18 +10,17 @@ import { useDispatch } from 'react-redux';
 
 import { DEFAULT, PROPOSAL } from '../../../constants/app';
 import CustomModal from '../../common/CustomModal';
-import { fetchOTListData } from '../../../redux/actions/proposal-actions';
+import {
+  changeOpportunityType,
+  fetchOTListData
+} from '../../../redux/actions/proposal-actions';
 
-const dummyOtList = [
-  'Core EMEA NA Ballpark',
-  'Core EMEA NA Full RFP',
-  'Core APAC Ballpark',
-  'Core APAC Full RFP',
-  'Core Clinical',
-  'Default Type'
-];
-
-const SwitchTemplate = ({ selectedBidId, opportunityType, ...props }) => {
+const SwitchTemplate = ({
+  selectedBidId,
+  opportunityType,
+  setOpenModal,
+  ...props
+}) => {
   // console.log('Switch Temp Modal Render...', { selectedBidId });
 
   // States
@@ -44,7 +43,7 @@ const SwitchTemplate = ({ selectedBidId, opportunityType, ...props }) => {
     dispatch(fetchOTListData()).then(res => {
       setLoading(false);
       if (res.status) {
-        setOtList(dummyOtList);
+        setOtList(res.data);
       } else {
         setError(true);
         setErrorMsg(res.msg);
@@ -59,13 +58,42 @@ const SwitchTemplate = ({ selectedBidId, opportunityType, ...props }) => {
     fetchOtList();
   }, []);
 
+  /**
+   * Switch Template Button Handler
+   */
+  const switchTempBtnClickHandler = () => {
+    setLoading(true);
+    dispatch(
+      changeOpportunityType({
+        proposalId: selectedBidId,
+        opportunityType: selectValue
+      })
+    ).then(res => {
+      setLoading(false);
+      if (res.status) {
+        setOpenModal(false);
+      } else {
+        setError(true);
+        setErrorMsg(res.msg);
+      }
+    });
+  };
+
   return (
     <>
       <CustomModal
         variant="warning"
         title={PROPOSAL.SWITCH_TEMP_MODAL_TITLE}
         className="switch-temp-modal"
-        buttonProps={[{}, { label: DEFAULT.CHANGE, disabled: isBtnDisabled }]}
+        onClose={() => setOpenModal(prev => !prev)}
+        buttonProps={[
+          {},
+          {
+            label: DEFAULT.CHANGE,
+            disabled: isBtnDisabled,
+            onClick: switchTempBtnClickHandler
+          }
+        ]}
         modalStyle={{ maxWidth: 558 }}
         {...props}
       >
@@ -105,7 +133,10 @@ const SwitchTemplate = ({ selectedBidId, opportunityType, ...props }) => {
           message={errorMsg}
           variant="error"
           onClose={() => setError(false)}
-          buttonProps={[{ className: 'hidden' }, { label: DEFAULT.CLOSE }]}
+          buttonProps={[
+            { className: 'display-none' },
+            { label: DEFAULT.CLOSE }
+          ]}
           modalStyle={{ maxWidth: 342 }}
         />
       )}
@@ -115,12 +146,14 @@ const SwitchTemplate = ({ selectedBidId, opportunityType, ...props }) => {
 
 SwitchTemplate.defaultProps = {
   selectedBidId: '',
-  opportunityType: ''
+  opportunityType: '',
+  setOpenModal: () => {}
 };
 
 SwitchTemplate.propTypes = {
   selectedBidId: PropTypes.any,
-  opportunityType: PropTypes.string
+  opportunityType: PropTypes.string,
+  setOpenModal: PropTypes.func
 };
 
 export default SwitchTemplate;

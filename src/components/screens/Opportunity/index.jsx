@@ -14,7 +14,10 @@ import {
   onGetValidatedProposalDetails,
   closeNewbidflags,
   updateAnswerFromWebSocket,
-  updateProposalDetailFromWebSocket
+  updateProposalDetailFromWebSocket,
+  updateSwitchTempStatusFromWebSocket,
+  activateProposalLoading,
+  deactivateProposalLoading
 } from '../../../redux/actions/proposal-actions';
 import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
 import {
@@ -73,7 +76,10 @@ export class Opportunity extends Component<Props, State> {
       AddNewBid,
       getOpportunityInfo,
       updateAnswerAction,
-      updateProposalDetail
+      updateProposalDetail,
+      updateSwitchTempStatus,
+      activateLoading,
+      deactivateLoading
     } = this.props;
 
     console.log('Starting the WS connection');
@@ -105,6 +111,15 @@ export class Opportunity extends Component<Props, State> {
        }else if(data.event == 'PROPOSAL_DETAIL_UPDATE'){
         if(updateProposalDetail)
         updateProposalDetail(data.data)
+       }else if(data.event == 'SWITCH_TEMPLATE_IN_PROGRESS'){
+        if(activateLoading) activateLoading()
+        if(updateSwitchTempStatus) updateSwitchTempStatus('progress')
+       }else if(data.event == 'SWITCH_TEMPLATE_COMPLETED'){
+        if(deactivateLoading) deactivateLoading()
+        if(updateSwitchTempStatus) updateSwitchTempStatus('success')
+       }else if(data.event == 'SWITCH_TEMPLATE_ERROR'){
+        if(deactivateLoading) deactivateLoading()
+        if(updateSwitchTempStatus) updateSwitchTempStatus('error')
        }
     });
 
@@ -299,6 +314,9 @@ export default compose(
     AddNewBid: UpdateNewBid,
     closeNewbidflag: closeNewbidflags,
     updateAnswerAction: updateAnswerFromWebSocket,
-    updateProposalDetail: updateProposalDetailFromWebSocket
+    updateProposalDetail: updateProposalDetailFromWebSocket,
+    updateSwitchTempStatus: updateSwitchTempStatusFromWebSocket,
+    activateLoading: activateProposalLoading,
+    deactivateLoading: deactivateProposalLoading
   })
 )(MatomoHOC(Opportunity));

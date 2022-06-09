@@ -10,7 +10,8 @@ const {
   PROPOSAL_VALIDATED_DATA,
   API_KEY,
   LOOKUP_OPTIONS_API,
-  PROPOSAL_OT_LIST
+  PROPOSAL_OT_LIST,
+  PROPOSAL_SWITCH_OT
 } = API.PROPOSAL;
 
 let onGoingAnswer = {};
@@ -263,6 +264,15 @@ export const getPickListLookupSfData = async (): Promise<Object> => {
  */
 export const getOTListData = () => {
   return axios.get(`${PROPOSAL_OT_LIST}`, {
+    headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+  });
+};
+
+/**
+ * Get Opportunity Type List
+ */
+export const changeProposalOT = payload => {
+  return axios.post(`${PROPOSAL_SWITCH_OT}`, payload, {
     headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
   });
 };

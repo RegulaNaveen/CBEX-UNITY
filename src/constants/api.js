@@ -131,6 +131,7 @@ const PROPOSAL_FILTER_VALUES = `${PROPOSAL_API_URL}/acceptanceCriteriaValues`;
 const PROPOSAL_VALIDATED_DATA = `${PROPOSAL_API_URL}/validations`;
 const LOOKUP_OPTIONS_API = `${PROPOSAL_API_ENDPOINT}/api/questions/lookup-options`;
 const PROPOSAL_OT_LIST = `${PROPOSAL_API_URL}/opportunityTypes`;
+const PROPOSAL_SWITCH_OT = `${PROPOSAL_API_URL}/switch/opportunityType`;
 
 const MAMOTO_IQVIA = 'https://useranalytics.solutions.iqvia.com/';
 
@@ -146,7 +147,8 @@ const PROPOSAL = {
   MAMOTO_IQVIA,
   NON_EDITABLE_SF_FIELD_URL,
   LOOKUP_OPTIONS_API,
-  PROPOSAL_OT_LIST
+  PROPOSAL_OT_LIST,
+  PROPOSAL_SWITCH_OT
 };
 
 const NOTEPAD_API_URL = `${PROPOSAL_API_ENDPOINT}/api/notes`;
