@@ -228,18 +228,6 @@ class CollapsibleList extends Component<Props, State> {
               </div>
             </div>
 
-            <div className="task-table-row">
-              <div className="task-subtitle subtitlebold">
-                <p>Questions</p>
-              </div>
-              <div className="task-subtitle task-subtitle-answer subtitlebold">
-                <p>Answers</p>
-              </div>
-              <div className="task-subtitle task-subtitle-completion-date subtitlebold">
-                <p>Date Completed</p>
-              </div>
-            </div>
-
             {questions.valueSeq().map(questionConfig => {
               const visible = questionConfig.get('visible');
               return (
