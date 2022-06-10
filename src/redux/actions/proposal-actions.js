@@ -748,10 +748,8 @@ export const getOpportunity = (
       let from = 0;
       let urls = [];
       for (let index = 0; index < callstomake; index++) {
-        urls.push(
-          axios.get(`${PROPOSAL_API_URL}/opportunity/${id}?from=${from}`)
-        );
-        from = from + 5;
+          urls.push(axios.get(`${PROPOSAL_API_URL}/opportunity/${id}?from=${from}`))
+          from = from + maxLimit;       
       }
       let data = await getPaginateProposal(urls);
       data = data.map(v => v['data']).flat();
