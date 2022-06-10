@@ -362,9 +362,12 @@ class Sidebar extends Component<Props, State> {
                   const sectionNameId = sectionName.toLocaleLowerCase().split(' ').join('-');
                   const questions = section.get('questions');
                   const someQuestionsAreVisible = questions
-                    .valueSeq()
-                    .map(question => question.get('visible', true))
-                    .includes(true);
+                  .valueSeq()
+                  .map(
+                      question =>
+                      question.get('visible', true) && question.get('active', true)
+                  )
+                .includes(true);
 
                   if (someQuestionsAreVisible)
                     return (
