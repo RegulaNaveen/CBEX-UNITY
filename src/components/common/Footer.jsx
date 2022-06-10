@@ -20,6 +20,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
   const selectedBidState = useSelector(getSelectedBid);
   const selectedBidId = selectedBidState.get('id');
   const selectedBidIsCurrent = !!selectedBidState.get('isCurrent');
+  const { id: opportunityId } = useParams(); // Get Opportunity id from Url
 
   // Component States
   const [openSwitchTempModal, setOpenSwitchTempModal] = useState(false);
@@ -41,10 +42,6 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
   const switchTempStatus = useSelector(
     state => state.proposal.toJSON().switchTempCallStatus
   );
-
-  // Get OT Id from Url
-  const { id: opportunityId } = useParams();
-  console.log('OT ID from Prams: ', opportunityId);
 
   /**
    * Trigger Modal onUpdate switchTempStatus state
