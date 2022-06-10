@@ -115,7 +115,6 @@ export class Opportunity extends Component<Props, State> {
         if(activateLoading) activateLoading()
         if(updateSwitchTempStatus) updateSwitchTempStatus('progress')
        }else if(data.event == 'SWITCH_TEMPLATE_COMPLETED'){
-        if(deactivateLoading) deactivateLoading()
         if(updateSwitchTempStatus) updateSwitchTempStatus('success')
        }else if(data.event == 'SWITCH_TEMPLATE_ERROR'){
         if(deactivateLoading) deactivateLoading()

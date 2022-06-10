@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import Footer from 'apollo-react/components/Footer';
 import PropTypes from 'prop-types';
 import Sync from 'apollo-react-icons/Sync';
@@ -10,7 +11,10 @@ import { DEFAULT, PROPOSAL } from '../../constants/app';
 import SwitchTemplate from '../views/modals/SwitchTemplate';
 import { getSelectedBid } from '../../redux/selectors/proposal';
 import CustomModal from './CustomModal';
-import { updateSwitchTempStatusFromWebSocket } from '../../redux/actions/proposal-actions';
+import {
+  getOpportunity,
+  updateSwitchTempStatusFromWebSocket
+} from '../../redux/actions/proposal-actions';
 
 const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
   const selectedBidState = useSelector(getSelectedBid);
@@ -22,6 +26,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
   const [alertModal, setAlertModal] = useState(false);
   const dispatch = useDispatch();
 
+  // Footer text with template information
   let templateVersion = null;
   if (!isEmpty(questionTemplateVersionNumber)) {
     templateVersion = (
@@ -32,17 +37,35 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
     );
   }
 
+  // Get switchTempStatus from Redux Store
   const switchTempStatus = useSelector(
     state => state.proposal.toJSON().switchTempCallStatus
   );
+
+  // Get OT Id from Url
+  const { id: opportunityId } = useParams();
+  console.log('OT ID from Prams: ', opportunityId);
 
   /**
    * Trigger Modal onUpdate switchTempStatus state
    */
   useEffect(() => {
-    if (switchTempStatus === 'success' || switchTempStatus === 'error')
-      setAlertModal(true);
+    if (switchTempStatus === 'success') {
+      dispatch(getOpportunity(opportunityId)).then(() => {
+        setAlertModal(true);
+      });
+    }
+    if (switchTempStatus === 'error') setAlertModal(true);
   }, [switchTempStatus]);
+
+  /**
+   * onClose Alert Modal func
+   */
+  const onCloseAlertModal = e => {
+    setAlertModal(false);
+    dispatch(updateSwitchTempStatusFromWebSocket(false));
+    e.preventDefault();
+  };
 
   /**
    * Render Switch Temp Error/Success Modal
@@ -74,10 +97,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
         title={modalTitle}
         message={modalMsg}
         variant={variant}
-        onClose={() => {
-          setAlertModal(false);
-          dispatch(updateSwitchTempStatusFromWebSocket(false));
-        }}
+        onClose={onCloseAlertModal}
         buttonProps={[{ className: 'display-none' }, { label: DEFAULT.CLOSE }]}
         modalStyle={{ maxWidth: 342 }}
       />
@@ -96,6 +116,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
                   label: PROPOSAL.SWITCH_TEMP,
                   icon: <Sync fontSize="extraSmall" />,
                   size: 'small',
+                  disabled: !!switchTempStatus,
                   className: classNames('switch-temp-btn', 'no-animation', {
                     'display-none': !selectedBidIsCurrent
                   }),

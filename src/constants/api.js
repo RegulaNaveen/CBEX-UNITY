@@ -69,10 +69,6 @@ switch (environment) {
     PROPOSAL_API_ENDPOINT =
       'https://r1g9pjnmbb.execute-api.us-east-1.amazonaws.com/qa';
     PROPOSAL_API_KEY = 'YXrOu45imb6d03erOkZB2PuBOsYQYZ93pnmQK6C0';
-    // NORMAL_AUTH_API_ENDPOINT =
-    // 'https://aiz2k1qjjl.execute-api.us-east-1.amazonaws.com/dev';
-    // COGNITO_HOST = 'https://unity-dev.auth.us-east-1.amazoncognito.com';
-    // CLIENT_ID = '5qa83je2aga90r53kte3mori93';
     NORMAL_AUTH_API_ENDPOINT =
       'https://cokteh9f4e.execute-api.us-east-1.amazonaws.com/qa';
     COGNITO_HOST = 'https://qa-unity.auth.us-east-1.amazoncognito.com';
@@ -92,8 +88,7 @@ switch (environment) {
       'https://byp6zagvkb.execute-api.us-east-1.amazonaws.com/unity-dev';
     COGNITO_HOST = 'https://dev-unity.auth.us-east-1.amazoncognito.com';
     CLIENT_ID = 'uf2jbhv4jcprcdiqc5rupg665';
-    // REDIRECTION_URL = 'https://dev-unity.dev.iqvia.app/';
-    REDIRECTION_URL = 'http://localhost:8080';
+    REDIRECTION_URL = 'https://dev-unity.dev.iqvia.app/';
     UBUILD_ARTIFACT = 'https://dev-ubuild.dev.iqvia.app/main.js';
     SF_HOST_URL = 'https://iqvia--crm.lightning.force.com/';
     SOCKET_URL =
