@@ -21,8 +21,6 @@ const SwitchTemplate = ({
   setOpenModal,
   ...props
 }) => {
-  // console.log('Switch Temp Modal Render...', { selectedBidId });
-
   // States
   const [selectValue, setSelectValue] = useState(opportunityType);
   const [loading, setLoading] = useState(false);

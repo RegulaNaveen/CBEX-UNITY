@@ -748,8 +748,10 @@ export const getOpportunity = (
       let from = 0;
       let urls = [];
       for (let index = 0; index < callstomake; index++) {
-          urls.push(axios.get(`${PROPOSAL_API_URL}/opportunity/${id}?from=${from}`))
-          from = from + maxLimit;       
+        urls.push(
+          axios.get(`${PROPOSAL_API_URL}/opportunity/${id}?from=${from}`)
+        );
+        from = from + maxLimit;
       }
       let data = await getPaginateProposal(urls);
       data = data.map(v => v['data']).flat();
@@ -816,7 +818,6 @@ export const callPickListLookupSfData = (): ThunkAction<string, Object> => {
  * Get Error Message from response
  */
 export function getErrorMessage(error) {
-  console.log('Error Response --> ', error.response);
   const isErr400 = error.response.status === 400;
   const isErr404 = error.response.status === 404;
   let msg = error.response.data.message;
@@ -893,4 +894,3 @@ export const changeOpportunityType = switchTempData => async () => {
     return { status: false, title: DEFAULT.ALERT, msg };
   }
 };
-
