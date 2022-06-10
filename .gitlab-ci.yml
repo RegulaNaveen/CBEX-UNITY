@@ -9,6 +9,8 @@ stages:
   - sonar #sonar report
   - builddev
   - deploydev
+  - builddev2
+  - deploydev2
   - buildqa
   - deployqa
   - builddemo
@@ -70,6 +72,43 @@ deploydev:
     - dev
     - migration
     - tags
+  script:    
+    - source build.env  
+    - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
+    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
+  tags:
+    - docker
+dev2:
+  stage: builddev2
+  image: node:12
+  variables:
+    Environment: $CI_JOB_NAME
+  only:
+    - dev2
+  script:
+    - cat $devaccount > build.env #(Skip if creating env in production account)
+    - cat devops/vars/${Environment}.env >> build.env
+    - source build.env
+    - yarn cache clean
+    - yarn install
+    - yarn build:$Environment
+  artifacts:
+    paths:
+      - dist/
+      - build.env
+  tags:
+    - docker
+
+deploydev2:
+  stage: deploydev2
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  needs:
+    - dev2
+  when: manual
+  only:
+    - dev2
+    #- dev
+    #- tags
   script:    
     - source build.env  
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
