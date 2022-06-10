@@ -737,7 +737,7 @@ export const getOpportunity = (id: string, flag = false ): ThunkAction<string, O
       let urls = [];
       for (let index = 0; index < callstomake; index++) {
           urls.push(axios.get(`${PROPOSAL_API_URL}/opportunity/${id}?from=${from}`))
-          from = from + 5;       
+          from = from + maxLimit;       
       }
       let data = await getPaginateProposal(urls);
       data = data.map(v => v['data']).flat();
