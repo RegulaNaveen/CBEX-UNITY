@@ -48,7 +48,8 @@ const {
   PROPOSAL_DETAIL_UPDATE,
   UPDATE_LOOKUP_OPTIONS,
   BOX_ADDITIONAL_LINK,
-  BOX_ADDITIONAL_LINK_ERROR 
+  BOX_ADDITIONAL_LINK_ERROR,
+  SWITCH_TEMP_STATUS
 } = REDUX_TYPES.PROPOSAL;
 
 const INITIAL_STATE: Map = fromJS({
@@ -113,7 +114,8 @@ const INITIAL_STATE: Map = fromJS({
   selectedBid: Map({}),
   boxBids: [],
   lookUpOptions: {},
-  boxAdditionalLink: {}
+  boxAdditionalLink: {},
+  switchTempCallStatus: false
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -848,7 +850,8 @@ const actionMap = {
   [PROPOSAL_DETAIL_UPDATE] : updateProposalDetail,
   [UPDATE_LOOKUP_OPTIONS] : (state, { payload }) => state.set('lookUpOptions', payload),
   [BOX_ADDITIONAL_LINK]: fetchBoxAdditionalLink,
-  [BOX_ADDITIONAL_LINK_ERROR]: onGettingfetchBoxAdditionalLinkError
+  [BOX_ADDITIONAL_LINK_ERROR]: onGettingfetchBoxAdditionalLinkError,
+  [SWITCH_TEMP_STATUS]: (state, { payload }) => state.set('switchTempCallStatus', payload)
 };
 
 export default function(
