@@ -14,7 +14,10 @@ import {
   onGetValidatedProposalDetails,
   closeNewbidflags,
   updateAnswerFromWebSocket,
-  updateProposalDetailFromWebSocket
+  updateProposalDetailFromWebSocket,
+  updateSwitchTempStatusFromWebSocket,
+  activateProposalLoading,
+  deactivateProposalLoading
 } from '../../../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../../../redux/actions/notepad-actions';
 import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
@@ -75,7 +78,13 @@ export class Opportunity extends Component<Props, State> {
       getOpportunityInfo,
       updateAnswerAction,
       updateProposalDetail,
+<<<<<<< HEAD
       updateProposalNotes
+=======
+      updateSwitchTempStatus,
+      activateLoading,
+      deactivateLoading
+>>>>>>> e831393c8f609e9290c9e4b061c37effce750234
     } = this.props;
 
     console.log('Starting the WS connection');
@@ -103,6 +112,7 @@ export class Opportunity extends Component<Props, State> {
         AddNewBid(data.data);
       } else if (data.event == 'COMPLETED') {
         getOpportunityInfo(params.id, true);
+<<<<<<< HEAD
       } else if (data.event == 'ANSWER_UPDATE') {
         if (updateAnswerAction) updateAnswerAction(data.data);
       } else if (data.event == 'PROPOSAL_DETAIL_UPDATE') {
@@ -110,6 +120,23 @@ export class Opportunity extends Component<Props, State> {
       } else if (data.event == 'PROPOSAL_NOTE_UPDATE') {
         if (updateProposalNotes) updateProposalNotes(data.data);
       }
+=======
+       }else if(data.event == 'ANSWER_UPDATE'){
+        if(updateAnswerAction)
+         updateAnswerAction(data.data)
+       }else if(data.event == 'PROPOSAL_DETAIL_UPDATE'){
+        if(updateProposalDetail)
+        updateProposalDetail(data.data)
+       }else if(data.event == 'SWITCH_TEMPLATE_IN_PROGRESS'){
+        if(activateLoading) activateLoading()
+        if(updateSwitchTempStatus) updateSwitchTempStatus('progress')
+       }else if(data.event == 'SWITCH_TEMPLATE_COMPLETED'){
+        if(updateSwitchTempStatus) updateSwitchTempStatus('success')
+       }else if(data.event == 'SWITCH_TEMPLATE_ERROR'){
+        if(deactivateLoading) deactivateLoading()
+        if(updateSwitchTempStatus) updateSwitchTempStatus('error')
+       }
+>>>>>>> e831393c8f609e9290c9e4b061c37effce750234
     });
 
     // On Close
@@ -317,6 +344,12 @@ export default compose(
     closeNewbidflag: closeNewbidflags,
     updateAnswerAction: updateAnswerFromWebSocket,
     updateProposalDetail: updateProposalDetailFromWebSocket,
+<<<<<<< HEAD
     updateProposalNotes: updateProposalNotesFromWebSocket
+=======
+    updateSwitchTempStatus: updateSwitchTempStatusFromWebSocket,
+    activateLoading: activateProposalLoading,
+    deactivateLoading: deactivateProposalLoading
+>>>>>>> e831393c8f609e9290c9e4b061c37effce750234
   })
 )(MatomoHOC(Opportunity));
