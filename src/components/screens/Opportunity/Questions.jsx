@@ -348,14 +348,12 @@ class Questions extends Component<Props, State> {
         const someQuestionsAreVisible = questions
         .valueSeq()
         .map(
-          (question) =>
+            question =>
               question.get('visible', true) &&
               (question.get('active', true) ||
                 question.get('isCustomQuestion', true))
         )
         .includes(true);
-
-        
 
         if (someQuestionsAreVisible)
           return (
