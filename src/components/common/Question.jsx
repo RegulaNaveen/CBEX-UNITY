@@ -61,6 +61,7 @@ type Props = {
   sfObject: string,
   sfField: string,
   milestone: any,
+  milestoneNew: any,
   ismilestoneavailable: string,
   loading: Boolean,
   setEditQuestionData: (data: Object) => void,
@@ -450,10 +451,12 @@ export class TaskRow extends Component<Props, State> {
     }
   };
 
-  renderTags = (milestone, ismilestoneavailable, lastAnswer) => {
+  renderTags = (milestone, milestoneNew, ismilestoneavailable, lastAnswer) => {
     return (
       <div className="chipview">
-        {milestone ? (
+        {milestoneNew ? (
+          <ChipView label={String(milestoneNew)} answer={lastAnswer} />
+        ) : null}{milestone ? (
           <ChipView label={String(milestone)} answer={lastAnswer} />
         ) : null}
       </div>
@@ -510,6 +513,7 @@ export class TaskRow extends Component<Props, State> {
       questionText,
       answerConfiguration,
       milestone,
+      milestoneNew,
       ismilestoneavailable,
       loading,
       questionHint,
@@ -607,7 +611,7 @@ export class TaskRow extends Component<Props, State> {
             </div>
             {/* Milestone */}
             <div>
-            {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
+            {this.renderTags(milestone,milestoneNew, ismilestoneavailable, lastAnswer)}
             </div>
           </div>
           {/* Answer */}
