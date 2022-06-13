@@ -83,6 +83,7 @@ dev2:
   image: node:12
   variables:
     Environment: $CI_JOB_NAME
+  when: manual
   only:
     - dev2
   script:
