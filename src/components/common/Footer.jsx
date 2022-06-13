@@ -104,6 +104,14 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
     );
   }
 
+  useEffect(() => {
+    let timeout;
+    if (alertModal) timeout = setTimeout(() => setAlertModal(false), 10000);
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [alertModal]);
+
   return (
     <>
       <Footer
