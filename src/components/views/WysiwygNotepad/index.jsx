@@ -12,8 +12,10 @@ import {
   getUserRole
 } from '../../../redux/selectors';
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { updateNote, fetchNotes} from '../../../redux/actions/notepad-actions';
+import { updateNote, fetchNotes } from '../../../redux/actions/notepad-actions';
 import 'draft-js/dist/Draft.css';
+
+const jsonDP = require('jsondiffpatch');
 
 const WysiwygNotepad = ({
   notes = null,
@@ -61,16 +63,37 @@ const WysiwygNotepad = ({
   const [isReadOnly, setIsReadOnly] = useState(false);
 
   useEffect(() => {
-    console.log('notes changed< Rerendered');
+    console.log('notes changed< Rerendered', notes);
     console.log({ selectedBid: selectedBid.get('id') });
-    if (notes.size > 0) {
-      const newNotes = JSON.parse(notes.get(0).toJS().noteText);
-      setNotesId(notes.get(0).toJS().notesId);
-      setEditorState(EditorState.createWithContent(convertFromRaw(newNotes)));
+    if (!notes.isFromSocket) {
+      if (notes.size > 0) {
+        console.log('type is', typeof notes.get(0).toJS().noteText);
+        const newNotes =
+          typeof notes.get(0).toJS().noteText !== 'object'
+            ? JSON.parse(notes.get(0).toJS().noteText)
+            : notes.get(0).toJS().noteText;
+        setNotesId(notes.get(0).toJS().notesId);
+        setEditorState(EditorState.createWithContent(convertFromRaw(newNotes)));
+      } else {
+        setEditorState(initialEditorState);
+      }
+      setIsReadOnly(!selectedBid.get('isCurrent'));
     } else {
-      setEditorState(initialEditorState);
+      // latest notes content received from server
+      // console.log(
+      //   notes.get(0).toJS().noteText,
+      //   'latest notes content received from server',
+      //   editorState.getCurrentContent()
+      // );
+      const raw = convertToRaw(editorState.getCurrentContent());
+      const delta = jsonDP.diff(raw, JSON.parse(notes.get(0).toJS().noteText));
+      if (!delta) {
+        console.log('no change found so returned');
+        return;
+      }
+      const nextContentState = convertFromRaw(jsonDP.patch(raw, delta));
+      setEditorState(EditorState.push(editorState, nextContentState));
     }
-    setIsReadOnly(!selectedBid.get('isCurrent'));
   }, [notes, selectedBid]);
 
   // unmount
@@ -82,11 +105,11 @@ const WysiwygNotepad = ({
     []
   );
 
-  const fetchLatestNotes = ()=>{
-    let proposalId = selectedBid.get('id', '');
-    if(proposalId)
-      fetchNotes(proposalId)
-  }
+  const fetchLatestNotes = () => {
+    const proposalId = selectedBid.get('id', '');
+    if (proposalId) fetchNotes(proposalId);
+  };
+
   const memoizedSaveDB = useCallback(
     debounce(noteText => {
       const proposalId = selectedBid.get('id');
@@ -98,18 +121,26 @@ const WysiwygNotepad = ({
         userName,
         userRole
       );
+
       updateNote(proposalId, noteSaveReqBody);
-    }, 500),
+    }, 2000),
     [notes, selectedBid, notesId, userEmail, userName, userRole]
   );
 
   const onEditorsChange = useCallback(
     updatedEditorState => {
-      setEditorState(updatedEditorState);
-      const updatedNoteText = convertToRaw(
-        updatedEditorState.getCurrentContent()
-      );
-      memoizedSaveDB(updatedNoteText);
+      if (
+        updatedEditorState.getCurrentContent() ===
+        editorState.getCurrentContent()
+      ) {
+        console.log('No changes found in content');
+      } else {
+        setEditorState(updatedEditorState);
+        const updatedNoteText = convertToRaw(
+          updatedEditorState.getCurrentContent()
+        );
+        memoizedSaveDB(updatedNoteText);
+      }
     },
     [memoizedSaveDB]
   );
@@ -120,7 +151,7 @@ const WysiwygNotepad = ({
         editorState={editorState}
         onEditorStateChange={onEditorsChange}
         readOnly={isReadOnly}
-        onBlur={(e)=>fetchLatestNotes()}
+        // onBlur={e => fetchLatestNotes()}
         toolbar={{
           options: [
             'inline',
@@ -152,8 +183,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  updateNote: updateNote,
-  fetchNotes: fetchNotes
+  updateNote,
+  fetchNotes
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WysiwygNotepad);

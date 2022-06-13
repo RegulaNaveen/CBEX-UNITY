@@ -17,6 +17,7 @@ import {
   updateSwitchTempStatusFromWebSocket,
   updateSwitchInProgress
 } from '../../../redux/actions/proposal-actions';
+import { updateProposalNotesFromWebSocket } from '../../../redux/actions/notepad-actions';
 import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
 import {
   getIsOpen,
@@ -60,6 +61,7 @@ type Props = {
   updateProposalDetail: Function,
   updateSwitchTempStatus: Function,
   setSwitchInProgress: Function,
+  updateProposalNotes: Function,
   getValidatedData: (proposalId: string) => void,
   eventCategories: any,
   userActions: any,
@@ -198,6 +200,7 @@ export class Opportunity extends Component<Props, State> {
       getOpportunityInfo,
       updateAnswerAction,
       updateProposalDetail,
+      updateProposalNotes,
       updateSwitchTempStatus,
       setSwitchInProgress
     } = this.props;
@@ -230,6 +233,9 @@ export class Opportunity extends Component<Props, State> {
           break;
         case 'COMPLETED':
           getOpportunityInfo(params.id, true);
+          break;
+        case 'PROPOSAL_NOTE_UPDATE':
+          if (updateProposalNotes) updateProposalNotes(data.data);
           break;
         case 'ANSWER_UPDATE':
           if (updateAnswerAction) updateAnswerAction(data.data);
@@ -296,13 +302,11 @@ export class Opportunity extends Component<Props, State> {
       newbidflag,
       closeNewbidflag
     } = this.props;
-
     const {
       questionTemplateVersionNumber,
       opportunityType,
       bidStatus
     } = selectedBid.toJS();
-
     return (
       <div
         className={classNames('proposal-wrapper', {
@@ -357,6 +361,7 @@ export default compose(
     closeNewbidflag: closeNewbidflags,
     updateAnswerAction: updateAnswerFromWebSocket,
     updateProposalDetail: updateProposalDetailFromWebSocket,
+    updateProposalNotes: updateProposalNotesFromWebSocket,
     updateSwitchTempStatus: updateSwitchTempStatusFromWebSocket,
     setSwitchInProgress: updateSwitchInProgress
   })

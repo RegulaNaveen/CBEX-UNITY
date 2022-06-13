@@ -20,7 +20,9 @@ const PROPOSAL = {
   SWITCH_TEMP_MODAL_DESCRIPTION:
     'Choose from available types if you wish. Changing template types may take a few moments',
   SWITCH_TEMP_SUCCESS: 'Opportunity type has been changed successfully',
-  SWITCH_TEMP_FAILED: 'Operation failed due to error'
+  SWITCH_TEMP_FAILED: 'Operation failed due to error',
+  SWITCH_TEMP_PROGRESS_TITLE: 'Opportunity Type Change',
+  SWITCH_TEMP_PROGRESS_MSG: 'Switching template is in progress..'
 };
 
 export { DEFAULT, PROPOSAL };

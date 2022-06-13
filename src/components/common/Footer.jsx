@@ -8,7 +8,6 @@ import isEmpty from 'lodash/isEmpty';
 import classNames from 'classnames';
 import Banner from 'apollo-react/components/Banner';
 import Lock from 'apollo-react-icons/Lock';
-import { red } from 'apollo-react/colors';
 
 import { PROPOSAL } from '../../constants/app';
 import SwitchTemplate from '../views/modals/SwitchTemplate';
@@ -126,7 +125,10 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
                     'display-none': !selectedBidIsCurrent,
                     'red-btn': !!switchTempStatus
                   }),
-                  onClick: () => setOpenSwitchTempModal(prev => !prev)
+                  onClick: () => {
+                    setAlertModal(false);
+                    setOpenSwitchTempModal(prev => !prev);
+                  }
                 },
                 { label: templateVersion, className: 'ques-temp-info' }
               ]
@@ -137,8 +139,8 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
       {otProcessing && (
         <ProcessingCRM
           isOpen={otProcessing}
-          title="Opportunity Type Change"
-          message="Switching template is in progress"
+          title={PROPOSAL.SWITCH_TEMP_PROGRESS_TITLE}
+          message={PROPOSAL.SWITCH_TEMP_PROGRESS_MSG}
         />
       )}
 
