@@ -123,7 +123,7 @@ const WysiwygNotepad = ({
       );
 
       updateNote(proposalId, noteSaveReqBody);
-    }, 1000),
+    }, 2000),
     [notes, selectedBid, notesId, userEmail, userName, userRole]
   );
 
