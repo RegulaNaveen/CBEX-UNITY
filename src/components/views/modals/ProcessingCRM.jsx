@@ -3,17 +3,14 @@ import Modal from 'apollo-react/components/Modal';
 import ApolloProgress from 'apollo-react/components/ApolloProgress';
 import PropTypes from 'prop-types';
 
-const ProcessingCRM = ({ isOpen }) => {
-  const title = 'Processing CRM data';
-  const message = `A new Bid is being created based on CRM data`;
+const ProcessingCRM = ({ isOpen, title, message }) => {
   return (
     <Modal
-      id={'processingcrm'}
+      id="processingcrm"
       open={isOpen}
       alt={title}
       title={title}
-      subtitle=""
-      hideButtons={true}
+      hideButtons
       variant="warning"
     >
       <p>{message}</p>
@@ -25,9 +22,13 @@ const ProcessingCRM = ({ isOpen }) => {
 };
 
 ProcessingCRM.propTypes = {
-  isOpen: PropTypes.bool
+  isOpen: PropTypes.bool,
+  title: PropTypes.string,
+  message: PropTypes.string
 };
 ProcessingCRM.defaultProps = {
-  isOpen: false
+  isOpen: false,
+  title: 'Title',
+  message: 'Message Text'
 };
 export default ProcessingCRM;

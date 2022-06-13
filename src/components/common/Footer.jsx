@@ -6,15 +6,19 @@ import PropTypes from 'prop-types';
 import Sync from 'apollo-react-icons/Sync';
 import isEmpty from 'lodash/isEmpty';
 import classNames from 'classnames';
+import Banner from 'apollo-react/components/Banner';
+import Lock from 'apollo-react-icons/Lock';
 
-import { DEFAULT, PROPOSAL } from '../../constants/app';
+import { PROPOSAL } from '../../constants/app';
 import SwitchTemplate from '../views/modals/SwitchTemplate';
 import { getSelectedBid } from '../../redux/selectors/proposal';
-import CustomModal from './CustomModal';
+// import CustomModal from './CustomModal';
 import {
   getOpportunity,
+  updateSwitchInProgress,
   updateSwitchTempStatusFromWebSocket
 } from '../../redux/actions/proposal-actions';
+import ProcessingCRM from '../views/modals/ProcessingCRM';
 
 const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
   const selectedBidState = useSelector(getSelectedBid);
@@ -25,6 +29,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
   // Component States
   const [openSwitchTempModal, setOpenSwitchTempModal] = useState(false);
   const [alertModal, setAlertModal] = useState(false);
+  const [otProcessing, setOtProcessing] = useState(false);
   const dispatch = useDispatch();
 
   // Footer text with template information
@@ -43,44 +48,45 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
     state => state.proposal.toJSON().switchTempCallStatus
   );
 
+  // Get switchTempInProgress from Redux Store
+  const switchTempInProgress = useSelector(
+    state => state.proposal.toJSON().switchTempInProgress
+  );
+
+  /**
+   * Trigger Modal onUpdate switchTempInProgress state
+   */
+  useEffect(() => {
+    setOtProcessing(switchTempInProgress);
+  }, [switchTempInProgress]);
+
   /**
    * Trigger Modal onUpdate switchTempStatus state
    */
   useEffect(() => {
     if (switchTempStatus === 'success') {
       dispatch(getOpportunity(opportunityId)).then(() => {
+        dispatch(updateSwitchInProgress(false));
         setAlertModal(true);
+        dispatch(updateSwitchTempStatusFromWebSocket(false));
       });
     }
-    if (switchTempStatus === 'error') setAlertModal(true);
+    if (switchTempStatus === 'error') {
+      setAlertModal(true);
+      dispatch(updateSwitchTempStatusFromWebSocket(false));
+    }
   }, [switchTempStatus]);
-
-  /**
-   * onClose Alert Modal func
-   */
-  const onCloseAlertModal = e => {
-    setAlertModal(false);
-    dispatch(updateSwitchTempStatusFromWebSocket(false));
-    e.preventDefault();
-  };
 
   /**
    * Render Switch Temp Error/Success Modal
    */
   let renderAlertModal;
   if (alertModal) {
-    let modalTitle;
-    let modalMsg;
-    let variant;
+    let modalMsg = PROPOSAL.SWITCH_TEMP_SUCCESS;
+    let variant = 'success';
 
     switch (switchTempStatus) {
-      case 'success':
-        modalTitle = DEFAULT.SUCCESS;
-        modalMsg = PROPOSAL.SWITCH_TEMP_SUCCESS;
-        variant = 'success';
-        break;
       case 'error':
-        modalTitle = DEFAULT.ALERT;
         modalMsg = PROPOSAL.SWITCH_TEMP_FAILED;
         variant = 'error';
         break;
@@ -89,14 +95,11 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
     }
 
     renderAlertModal = (
-      <CustomModal
+      <Banner
         open={alertModal}
-        title={modalTitle}
         message={modalMsg}
+        onClose={() => setAlertModal(false)}
         variant={variant}
-        onClose={onCloseAlertModal}
-        buttonProps={[{ className: 'display-none' }, { label: DEFAULT.CLOSE }]}
-        modalStyle={{ maxWidth: 342 }}
       />
     );
   }
@@ -110,20 +113,36 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
           templateVersion
             ? [
                 {
-                  label: PROPOSAL.SWITCH_TEMP,
-                  icon: <Sync fontSize="extraSmall" />,
+                  label: !switchTempStatus ? PROPOSAL.SWITCH_TEMP : '',
+                  icon: switchTempStatus ? (
+                    <Lock fontSize="extraSmall" />
+                  ) : (
+                    <Sync fontSize="extraSmall" />
+                  ),
                   size: 'small',
                   disabled: !!switchTempStatus,
                   className: classNames('switch-temp-btn', 'no-animation', {
-                    'display-none': !selectedBidIsCurrent
+                    'display-none': !selectedBidIsCurrent,
+                    'red-btn': !!switchTempStatus
                   }),
-                  onClick: () => setOpenSwitchTempModal(prev => !prev)
+                  onClick: () => {
+                    setAlertModal(false);
+                    setOpenSwitchTempModal(prev => !prev);
+                  }
                 },
                 { label: templateVersion, className: 'ques-temp-info' }
               ]
             : [{ label: '', style: { display: 'none' } }]
         }
       />
+
+      {otProcessing && (
+        <ProcessingCRM
+          isOpen={otProcessing}
+          title={PROPOSAL.SWITCH_TEMP_PROGRESS_TITLE}
+          message={PROPOSAL.SWITCH_TEMP_PROGRESS_MSG}
+        />
+      )}
 
       {/* Switch Template Modal */}
       {openSwitchTempModal && (
