@@ -18,18 +18,20 @@ import {
   editProposalQuestionData,
   deleteProposalQuestionData,
   getOpportunityInfo,
-  getProposalCount, getPaginateProposal,
+  getProposalCount,
+  getPaginateProposal,
   getPickListLookupSfData,
-  fetchAdditionalBoxLink
+  fetchAdditionalBoxLink,
+  getOTListData,
+  changeProposalOT
 } from '../../api/proposal';
-const {
-  PROPOSAL_API_URL
-} = API.PROPOSAL;
+const { PROPOSAL_API_URL } = API.PROPOSAL;
 
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getUniqueMilestones } from '../selectors/proposal';
 import { getProposalIdlist } from '../../utils/utils';
 import { fetchNotes } from './notepad-actions';
+import { DEFAULT } from '../../constants/app';
 
 const {
   PROPOSAL_INFO,
@@ -73,7 +75,8 @@ const {
   PROPOSAL_DETAIL_UPDATE,
   UPDATE_LOOKUP_OPTIONS,
   BOX_ADDITIONAL_LINK,
-  BOX_ADDITIONAL_LINK_ERROR 
+  BOX_ADDITIONAL_LINK_ERROR,
+  SWITCH_TEMP_STATUS
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -166,10 +169,11 @@ export const setProposalAnswerData = (
   };
 };
 
-
-export const updateAnswerFromWebSocket = (data = {}): ThunkAction<string, Object> => {
+export const updateAnswerFromWebSocket = (
+  data = {}
+): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
-    const {questionId} = data;
+    const { questionId } = data;
     let questionsFilter = getQuestionsFilters(getState());
 
     try {
@@ -308,8 +312,9 @@ export const getProposalUpdated = (id: string): ThunkAction<string, Object> => {
   };
 };
 
-
-export const updateProposalDetailFromWebSocket = (data): ThunkAction<string, Object> => {
+export const updateProposalDetailFromWebSocket = (
+  data
+): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: PROPOSAL_DETAIL_UPDATE,
@@ -333,7 +338,11 @@ export const onGetProposalBoxId = (id: string): ThunkAction<string, Object> => {
     }
   };
 };
-export const getAdditionalBoxLink = (oppID: string, crmNo: string, customer: string): ThunkAction<string, Object> => {
+export const getAdditionalBoxLink = (
+  oppID: string,
+  crmNo: string,
+  customer: string
+): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     try {
       const { data } = await fetchAdditionalBoxLink(oppID, crmNo, customer);
@@ -481,70 +490,70 @@ function filterGroup(
 }
 
 export function getQuestionsFilterApplied(questionsArr, questionsFilter) {
-    let filteredQuestions = questionsArr;
-    questionsFilter.entrySeq().forEach(([groupName, group]) => {
-      let withinGroupFilteredQuestions = [];
-      // Set the logic for current filter Group
-      let logic = group.get('logic');
-      let considerGroup = false;
+  let filteredQuestions = questionsArr;
+  questionsFilter.entrySeq().forEach(([groupName, group]) => {
+    let withinGroupFilteredQuestions = [];
+    // Set the logic for current filter Group
+    let logic = group.get('logic');
+    let considerGroup = false;
 
-      group.entrySeq().forEach(([filterName, filter]) => {
-        // Do not process for logic key or the filter is not checked
-        if (filterName === 'logic' || !filter.get('checked')) return;
+    group.entrySeq().forEach(([filterName, filter]) => {
+      // Do not process for logic key or the filter is not checked
+      if (filterName === 'logic' || !filter.get('checked')) return;
 
-        considerGroup = true;
+      considerGroup = true;
 
-        switch (filterName) {
-          case 'myUserRole':
-            withinGroupFilteredQuestions = filterGroup(
-              withinGroupFilteredQuestions,
-              filteredQuestions,
-              logic,
-              applyMyUserRoleFilter
-            );
-            break;
-          case 'answered':
-            withinGroupFilteredQuestions = filterGroup(
-              withinGroupFilteredQuestions,
-              filteredQuestions,
-              logic,
-              applyAnsweredFilter
-            );
-            break;
-          case 'unanswered':
-            withinGroupFilteredQuestions = filterGroup(
-              withinGroupFilteredQuestions,
-              filteredQuestions,
-              logic,
-              applyUnAnsweredFilter
-            );
-            break;
-          case 'interestedParty':
-            withinGroupFilteredQuestions = filterGroup(
-              withinGroupFilteredQuestions,
-              filteredQuestions,
-              logic,
-              applyInterestedPartyFilter
-            );
-            break;
-          default:
-            withinGroupFilteredQuestions = filterGroup(
-              withinGroupFilteredQuestions,
-              filteredQuestions,
-              logic,
-              applyMilestoneFilter,
-              filterName
-            );
-            break;
-        }
-      });
-
-      if (considerGroup) filteredQuestions = withinGroupFilteredQuestions;
-
-      considerGroup = false;
+      switch (filterName) {
+        case 'myUserRole':
+          withinGroupFilteredQuestions = filterGroup(
+            withinGroupFilteredQuestions,
+            filteredQuestions,
+            logic,
+            applyMyUserRoleFilter
+          );
+          break;
+        case 'answered':
+          withinGroupFilteredQuestions = filterGroup(
+            withinGroupFilteredQuestions,
+            filteredQuestions,
+            logic,
+            applyAnsweredFilter
+          );
+          break;
+        case 'unanswered':
+          withinGroupFilteredQuestions = filterGroup(
+            withinGroupFilteredQuestions,
+            filteredQuestions,
+            logic,
+            applyUnAnsweredFilter
+          );
+          break;
+        case 'interestedParty':
+          withinGroupFilteredQuestions = filterGroup(
+            withinGroupFilteredQuestions,
+            filteredQuestions,
+            logic,
+            applyInterestedPartyFilter
+          );
+          break;
+        default:
+          withinGroupFilteredQuestions = filterGroup(
+            withinGroupFilteredQuestions,
+            filteredQuestions,
+            logic,
+            applyMilestoneFilter,
+            filterName
+          );
+          break;
+      }
     });
 
-   return filteredQuestions
+    if (considerGroup) filteredQuestions = withinGroupFilteredQuestions;
+
+    considerGroup = false;
+  });
+
+  return filteredQuestions;
 }
 
 export function onQuestionsFilterApplied(questionsFilter) {
@@ -718,11 +727,14 @@ export const deleteProposalQuestion = (
 };
 export const closeNewbidflags = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
-    dispatch({ type: NEW_BID_CREATED, payload: {flag : false} });
-  }
-}
+    dispatch({ type: NEW_BID_CREATED, payload: { flag: false } });
+  };
+};
 
-export const getOpportunity = (id: string, flag = false ): ThunkAction<string, Object> => {
+export const getOpportunity = (
+  id: string,
+  flag = false
+): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({ type: PROPOSAL_INFO_LOADING, payload: {} });
     try {
@@ -730,14 +742,16 @@ export const getOpportunity = (id: string, flag = false ): ThunkAction<string, O
       const { count, maxLimit } = getproposolcount;
       let callstomake = parseInt(count / maxLimit);
       let additionalcallstomake = count % maxLimit;
-      if(additionalcallstomake){
+      if (additionalcallstomake) {
         callstomake = callstomake + 1;
       }
       let from = 0;
       let urls = [];
       for (let index = 0; index < callstomake; index++) {
-          urls.push(axios.get(`${PROPOSAL_API_URL}/opportunity/${id}?from=${from}`))
-          from = from + 5;       
+        urls.push(
+          axios.get(`${PROPOSAL_API_URL}/opportunity/${id}?from=${from}`)
+        );
+        from = from + maxLimit;
       }
       let data = await getPaginateProposal(urls);
       data = data.map(v => v['data']).flat();
@@ -753,12 +767,12 @@ export const getOpportunity = (id: string, flag = false ): ThunkAction<string, O
         type: UPDATE_BOX_BIDS,
         payload: getProposalIdlist(data)
       });
-      if(flag){
-        dispatch({ type: NEW_BID_CREATED, payload: {flag} });
+      if (flag) {
+        dispatch({ type: NEW_BID_CREATED, payload: { flag } });
       }
     } catch (err) {
       dispatch({ type: PROPOSAL_INFO_ERROR, payload: err });
-      dispatch({ type: NEW_BID_CREATED, payload: {flag : false} });
+      dispatch({ type: NEW_BID_CREATED, payload: { flag: false } });
     }
   };
 };
@@ -786,16 +800,97 @@ export const UpdateNewBid = bid => {
 export const callPickListLookupSfData = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     try {
-      let lookupMap = {}
+      let lookupMap = {};
       const response = await getPickListLookupSfData();
-      const {data}  = response.data;
-      data.forEach((row)=>{
-        const options = row.PicklistValues.map((label)=>({label}));
+      const { data } = response.data;
+      data.forEach(row => {
+        const options = row.PicklistValues.map(label => ({ label }));
         lookupMap[`${row.PK}_${row.SK}`] = options;
-      })
+      });
       dispatch({ type: UPDATE_LOOKUP_OPTIONS, payload: lookupMap });
     } catch (error) {
       console.log('Lookup API failed');
     }
   };
+};
+
+/**
+ * Get Error Message from response
+ */
+export function getErrorMessage(error) {
+  const isErr400 = error.response.status === 400;
+  const isErr404 = error.response.status === 404;
+  let msg = error.response.data.message;
+  if (isErr400 && isEmpty(msg)) msg = DEFAULT.ERROR_400;
+  if (isErr404 && isEmpty(msg)) msg = DEFAULT.ERROR_404;
+  if (!isErr400 && !isErr404 && isEmpty(msg)) msg = DEFAULT.REQUEST_FAILED;
+  return msg;
+}
+
+/**
+ * Fetch All Opportunity Type
+ */
+export const fetchOTListData = () => async () => {
+  try {
+    // Api Response
+    const response = await getOTListData();
+    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
+  } catch (error) {
+    // Error
+    console.log('Error! occurred..', error);
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
+  }
+};
+
+/**
+ * Switch Temp Status Update - Action
+ */
+export const updateSwitchTempStatusFromWebSocket = data => {
+  return async dispatch => {
+    dispatch({
+      type: SWITCH_TEMP_STATUS,
+      payload: data
+    });
+  };
+};
+
+/**
+ * Activate Proposal Loading - Action
+ */
+export const activateProposalLoading = () => {
+  return async dispatch => {
+    dispatch({
+      type: PROPOSAL_INFO_LOADING,
+      payload: {}
+    });
+  };
+};
+
+/**
+ * Deactivate Proposal Loading - Action
+ */
+export const deactivateProposalLoading = () => {
+  return async dispatch => {
+    dispatch({
+      type: PROPOSAL_INFO_ERROR,
+      payload: undefined
+    });
+  };
+};
+
+/**
+ * Fetch All Opportunity Type
+ */
+export const changeOpportunityType = switchTempData => async () => {
+  try {
+    // Api Response
+    const response = await changeProposalOT(switchTempData);
+    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
+  } catch (error) {
+    // Error
+    console.log('Error! occurred..', error.response);
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
+  }
 };
