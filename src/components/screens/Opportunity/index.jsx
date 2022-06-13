@@ -19,6 +19,7 @@ import {
   activateProposalLoading,
   deactivateProposalLoading
 } from '../../../redux/actions/proposal-actions';
+import { updateProposalNotesFromWebSocket } from '../../../redux/actions/notepad-actions';
 import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
 import {
   getIsOpen,
@@ -37,7 +38,7 @@ import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
 import { SOCKET_URL } from '../../../constants/api';
 import ProcessingCRM from '../../views/modals/ProcessingCRM';
 import BidDoneBanner from '../../views/BidDoneBanner';
-import GenerateDocs from '../../views/export-component/GenerateDocs'
+import GenerateDocs from '../../views/export-component/GenerateDocs';
 
 type State = {
   selectedView: string
@@ -70,16 +71,20 @@ export class Opportunity extends Component<Props, State> {
       newbidstatus: false
     };
   }
-  connectsocket(){
+  connectsocket() {
     const {
       match: { params },
       AddNewBid,
       getOpportunityInfo,
       updateAnswerAction,
       updateProposalDetail,
+<<<<<<< HEAD
+      updateProposalNotes
+=======
       updateSwitchTempStatus,
       activateLoading,
       deactivateLoading
+>>>>>>> e831393c8f609e9290c9e4b061c37effce750234
     } = this.props;
 
     console.log('Starting the WS connection');
@@ -87,24 +92,35 @@ export class Opportunity extends Component<Props, State> {
     this.socketconnection = new WebSocket(SOCKET_URL);
 
     // On Connection Open
-    this.socketconnection.onopen =  (event) => {
-      console.log('socket connected',event)
-      if(params.id){
-        this.socketconnection.send(JSON.stringify({
-          action: 'ADD_OPPORTUNITY',
-          body: {oppId : params.id}
-        }));
+    this.socketconnection.onopen = event => {
+      console.log('socket connected', event);
+      if (params.id) {
+        this.socketconnection.send(
+          JSON.stringify({
+            action: 'ADD_OPPORTUNITY',
+            body: { oppId: params.id }
+          })
+        );
       }
     };
 
     // On Message Recieve
-    this.socketconnection.addEventListener('message',  async (response) =>{
+    this.socketconnection.addEventListener('message', async response => {
       let data = JSON.parse(response.data);
       console.log('data.event :>> ', data.event);
-       if(data.event == 'IN_PROGRESS'){
-         AddNewBid(data.data);
-       }else if(data.event == 'COMPLETED'){
+      if (data.event == 'IN_PROGRESS') {
+        AddNewBid(data.data);
+      } else if (data.event == 'COMPLETED') {
         getOpportunityInfo(params.id, true);
+<<<<<<< HEAD
+      } else if (data.event == 'ANSWER_UPDATE') {
+        if (updateAnswerAction) updateAnswerAction(data.data);
+      } else if (data.event == 'PROPOSAL_DETAIL_UPDATE') {
+        if (updateProposalDetail) updateProposalDetail(data.data);
+      } else if (data.event == 'PROPOSAL_NOTE_UPDATE') {
+        if (updateProposalNotes) updateProposalNotes(data.data);
+      }
+=======
        }else if(data.event == 'ANSWER_UPDATE'){
         if(updateAnswerAction)
          updateAnswerAction(data.data)
@@ -120,12 +136,12 @@ export class Opportunity extends Component<Props, State> {
         if(deactivateLoading) deactivateLoading()
         if(updateSwitchTempStatus) updateSwitchTempStatus('error')
        }
+>>>>>>> e831393c8f609e9290c9e4b061c37effce750234
     });
 
     // On Close
-    this.socketconnection.onclose =  (event) => {
-      if(event.reason === 'Going away')
-        this.connectsocket();
+    this.socketconnection.onclose = event => {
+      if (event.reason === 'Going away') this.connectsocket();
     };
   }
 
@@ -145,7 +161,8 @@ export class Opportunity extends Component<Props, State> {
     this.connectsocket();
     expandAllSections(false);
     let selectedView = new URLSearchParams(search).get('viewType');
-    if (selectedView && selectedView == "documents") this.setState({ selectedView });
+    if (selectedView && selectedView == 'documents')
+      this.setState({ selectedView });
 
     if (!authData) getRefreshAuthData();
 
@@ -169,22 +186,24 @@ export class Opportunity extends Component<Props, State> {
     });
 
     // Scroll
-    try{
+    try {
       console.log('Back to top#');
-      window.scrollTo(0,0)
-    }catch(error){console.log(error)}
-    
+      window.scrollTo(0, 0);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   componentWillUnmount() {
-    const { handleOpenClose} = this.props;
-    this.socketconnection.send(JSON.stringify({
-      action: '$disconnect',
-      body: {}
-    }));
+    const { handleOpenClose } = this.props;
+    this.socketconnection.send(
+      JSON.stringify({
+        action: '$disconnect',
+        body: {}
+      })
+    );
     this.socketconnection.close();
-    if(handleOpenClose)
-     handleOpenClose(false);
+    if (handleOpenClose) handleOpenClose(false);
 
     localStorage.removeItem('proposalTypeView');
     localStorage.removeItem('proposalId');
@@ -259,14 +278,27 @@ export class Opportunity extends Component<Props, State> {
       <div className="proposal-details">
         <GenerateDocs></GenerateDocs>
         <UnityGrid data={details} isOpen={isOpen} bidStatus={bidStatus} />
-        <UnityTab id={params.id} enableValidateTab={enableValidateTab} selectedView={selectedView}/>
+        <UnityTab
+          id={params.id}
+          enableValidateTab={enableValidateTab}
+          selectedView={selectedView}
+        />
       </div>
     );
   };
 
   render() {
-    const { isSidebarOpen, selectedBid, newbidflag, closeNewbidflag } = this.props;
-    const { questionTemplateVersionNumber, opportunityType, bidStatus } = selectedBid.toJS();
+    const {
+      isSidebarOpen,
+      selectedBid,
+      newbidflag,
+      closeNewbidflag
+    } = this.props;
+    const {
+      questionTemplateVersionNumber,
+      opportunityType,
+      bidStatus
+    } = selectedBid.toJS();
     return (
       <div
         className={classNames('proposal-wrapper', {
@@ -276,12 +308,10 @@ export class Opportunity extends Component<Props, State> {
         <Toolbar />
         <BidDoneBanner
           isOpen={newbidflag}
-          onCloseHandler = {()=> closeNewbidflag()}
+          onCloseHandler={() => closeNewbidflag()}
         />
         {this.renderContent()}
-        {
-          bidStatus && <ProcessingCRM isOpen={bidStatus} />
-        }
+        {bidStatus && <ProcessingCRM isOpen={bidStatus} />}
         <UnityFooter
           questionTemplateVersionNumber={questionTemplateVersionNumber || ''}
           opportunityType={opportunityType || ''}
@@ -314,8 +344,12 @@ export default compose(
     closeNewbidflag: closeNewbidflags,
     updateAnswerAction: updateAnswerFromWebSocket,
     updateProposalDetail: updateProposalDetailFromWebSocket,
+<<<<<<< HEAD
+    updateProposalNotes: updateProposalNotesFromWebSocket
+=======
     updateSwitchTempStatus: updateSwitchTempStatusFromWebSocket,
     activateLoading: activateProposalLoading,
     deactivateLoading: deactivateProposalLoading
+>>>>>>> e831393c8f609e9290c9e4b061c37effce750234
   })
 )(MatomoHOC(Opportunity));

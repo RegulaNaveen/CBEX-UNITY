@@ -31,6 +31,17 @@ export function fetchNotes(proposalID) {
   };
 }
 
+export const updateProposalNotesFromWebSocket = (
+  data
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: FETCH_NOTES_DONE,
+      payload: { data: fromJS(data.notes), isFromSocket: true }
+    });
+  };
+};
+
 export function addNote(id, note) {
   return async dispatch => {
     try {
