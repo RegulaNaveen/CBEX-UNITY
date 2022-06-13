@@ -349,9 +349,13 @@ class Questions extends Component<Props, State> {
         .valueSeq()
         .map(
           (question) =>
-            question.get('visible', true) && question.get('active', true)
+              question.get('visible', true) &&
+              (question.get('active', true) ||
+                question.get('isCustomQuestion', true))
         )
         .includes(true);
+
+        
 
         if (someQuestionsAreVisible)
           return (
