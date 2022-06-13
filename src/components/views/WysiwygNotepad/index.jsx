@@ -14,7 +14,7 @@ import {
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { updateNote, fetchNotes } from '../../../redux/actions/notepad-actions';
 import 'draft-js/dist/Draft.css';
-
+import { getProposalDetails } from '../../../redux/selectors';
 const jsonDP = require('jsondiffpatch');
 
 const WysiwygNotepad = ({
@@ -24,7 +24,8 @@ const WysiwygNotepad = ({
   userEmail,
   userRole,
   updateNote,
-  fetchNotes
+  fetchNotes,
+  proposalDetails
 }) => {
   const emptyTextBlock = {
     blocks: [
@@ -53,7 +54,8 @@ const WysiwygNotepad = ({
       noteText: JSON.stringify(noteText),
       createdBy: { userEmail, userName, userRole },
       section: null,
-      isNoteV2: true
+      isNoteV2: true,
+      oppNo: proposalDetails['CRM #']
     };
   };
 
@@ -85,6 +87,8 @@ const WysiwygNotepad = ({
       //   'latest notes content received from server',
       //   editorState.getCurrentContent()
       // );
+      // const stateWithContent = EditorState.createWithContent(c)
+
       const raw = convertToRaw(editorState.getCurrentContent());
       const delta = jsonDP.diff(raw, JSON.parse(notes.get(0).toJS().noteText));
       if (!delta) {
@@ -92,6 +96,10 @@ const WysiwygNotepad = ({
         return;
       }
       const nextContentState = convertFromRaw(jsonDP.patch(raw, delta));
+      const stateWithContent = EditorState.createWithContent(nextContentState);
+      const currentSelection = editorState.getSelection();
+
+      EditorState.forceSelection(stateWithContent, currentSelection);
       setEditorState(EditorState.push(editorState, nextContentState));
     }
   }, [notes, selectedBid]);
@@ -123,7 +131,7 @@ const WysiwygNotepad = ({
       );
 
       updateNote(proposalId, noteSaveReqBody);
-    }, 2000),
+    }, 100),
     [notes, selectedBid, notesId, userEmail, userName, userRole]
   );
 
@@ -179,7 +187,8 @@ const mapStateToProps = state => ({
   selectedBid: getSelectedBid(state),
   userName: getUserName(state),
   userEmail: getUserEmail(state),
-  userRole: getUserRole(state)
+  userRole: getUserRole(state),
+  proposalDetails: getProposalDetails(state)
 });
 
 const mapDispatchToProps = {

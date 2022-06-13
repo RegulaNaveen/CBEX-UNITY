@@ -1,6 +1,7 @@
 import { fromJS } from 'immutable';
 import { REDUX_TYPES } from '../../constants';
 import { fetchNotesApi, addNoteApi, updateNoteApi } from '../../api/notepad';
+import { getUserEmail } from '../../SessionHandler';
 
 const {
   FETCH_NOTES,
@@ -35,10 +36,15 @@ export const updateProposalNotesFromWebSocket = (
   data
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
-    dispatch({
-      type: FETCH_NOTES_DONE,
-      payload: { data: fromJS(data.notes), isFromSocket: true }
-    });
+    if (data.notes[0].createdBy.userEmail === getUserEmail()) {
+      console.log('message from same user');
+    } else {
+      console.log('message from diff users');
+      dispatch({
+        type: FETCH_NOTES_DONE,
+        payload: { data: fromJS(data.notes), isFromSocket: true }
+      });
+    }
   };
 };
 

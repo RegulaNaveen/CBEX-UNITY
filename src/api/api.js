@@ -55,7 +55,7 @@ switch (environment) {
     //COGNITO_HOST = 'https://unity-dev.auth.us-east-1.amazoncognito.com';
     //CLIENT_ID = '5qa83je2aga90r53kte3mori93';
     NORMAL_AUTH_API_ENDPOINT =
-     'https://cokteh9f4e.execute-api.us-east-1.amazonaws.com/qa';
+      'https://cokteh9f4e.execute-api.us-east-1.amazonaws.com/qa';
     COGNITO_HOST = 'https://qa-unity.auth.us-east-1.amazoncognito.com';
     CLIENT_ID = '65ie0siehm65hisi4n1avlaa0r';
     REDIRECTION_URL = 'https://qa-unity.iqvia.app/';
@@ -64,7 +64,8 @@ switch (environment) {
     break;
   default:
     // DEV Data
-    PROPOSAL_API_ENDPOINT = 'https://olyxc9cn1m.execute-api.us-east-1.amazonaws.com/dev';
+    PROPOSAL_API_ENDPOINT =
+      'https://olyxc9cn1m.execute-api.us-east-1.amazonaws.com/dev';
     PROPOSAL_API_KEY = 'SmXooYpNRX4u0dlRrebjt3PUnJJma5cm5ipK3nSV';
     NORMAL_AUTH_API_ENDPOINT =
       'https://byp6zagvkb.execute-api.us-east-1.amazonaws.com/unity-dev';
