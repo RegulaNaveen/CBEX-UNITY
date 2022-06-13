@@ -1,4 +1,5 @@
 const DEFAULT = {
+  OK: 'Ok',
   ALERT: 'Alert',
   CLOSE: 'Close',
   SUCCESS: 'Success',

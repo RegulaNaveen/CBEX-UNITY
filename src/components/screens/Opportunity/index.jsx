@@ -1,7 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import type { Match } from 'react-router-dom';
+import { withRouter, Match } from 'react-router-dom';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import Loader from 'react-loader-spinner';
@@ -16,13 +15,11 @@ import {
   updateAnswerFromWebSocket,
   updateProposalDetailFromWebSocket,
   updateSwitchTempStatusFromWebSocket,
-  activateProposalLoading,
-  deactivateProposalLoading
+  updateSwitchInProgress
 } from '../../../redux/actions/proposal-actions';
 import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
 import {
   getIsOpen,
-  getPendingValidatedItems,
   getProposalDetails,
   getSelectedBid,
   isProposalLoading,
@@ -37,7 +34,7 @@ import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
 import { SOCKET_URL } from '../../../constants/api';
 import ProcessingCRM from '../../views/modals/ProcessingCRM';
 import BidDoneBanner from '../../views/BidDoneBanner';
-import GenerateDocs from '../../views/export-component/GenerateDocs'
+import GenerateDocs from '../../views/export-component/GenerateDocs';
 
 type State = {
   selectedView: string
@@ -49,8 +46,20 @@ type Props = {
   match: Match,
   isLoading: boolean,
   isSidebarOpen: boolean,
-  notifications: number,
+  isOpen: boolean,
+  selectedBid: any,
+  search: any,
+  location: any,
+  newbidflag: boolean,
+  closeNewbidflag: Function,
+  addNewBid: Function,
   getRefreshAuthData: Function,
+  expandAllSections: Function,
+  handleOpenClose: Function,
+  updateAnswerAction: Function,
+  updateProposalDetail: Function,
+  updateSwitchTempStatus: Function,
+  setSwitchInProgress: Function,
   getValidatedData: (proposalId: string) => void,
   eventCategories: any,
   userActions: any,
@@ -62,70 +71,12 @@ type Props = {
 
 export class Opportunity extends Component<Props, State> {
   toRef;
+
   constructor(props: Object) {
     super(props);
     this.state = {
       selectedView: 'questions',
-      enableValidateTab: false,
-      newbidstatus: false
-    };
-  }
-  connectsocket(){
-    const {
-      match: { params },
-      AddNewBid,
-      getOpportunityInfo,
-      updateAnswerAction,
-      updateProposalDetail,
-      updateSwitchTempStatus,
-      activateLoading,
-      deactivateLoading
-    } = this.props;
-
-    console.log('Starting the WS connection');
-    this.socketconnection = null;
-    this.socketconnection = new WebSocket(SOCKET_URL);
-
-    // On Connection Open
-    this.socketconnection.onopen =  (event) => {
-      console.log('socket connected',event)
-      if(params.id){
-        this.socketconnection.send(JSON.stringify({
-          action: 'ADD_OPPORTUNITY',
-          body: {oppId : params.id}
-        }));
-      }
-    };
-
-    // On Message Recieve
-    this.socketconnection.addEventListener('message',  async (response) =>{
-      let data = JSON.parse(response.data);
-      console.log('data.event :>> ', data.event);
-       if(data.event == 'IN_PROGRESS'){
-         AddNewBid(data.data);
-       }else if(data.event == 'COMPLETED'){
-        getOpportunityInfo(params.id, true);
-       }else if(data.event == 'ANSWER_UPDATE'){
-        if(updateAnswerAction)
-         updateAnswerAction(data.data)
-       }else if(data.event == 'PROPOSAL_DETAIL_UPDATE'){
-        if(updateProposalDetail)
-        updateProposalDetail(data.data)
-       }else if(data.event == 'SWITCH_TEMPLATE_IN_PROGRESS'){
-        if(activateLoading) activateLoading()
-        if(updateSwitchTempStatus) updateSwitchTempStatus('progress')
-       }else if(data.event == 'SWITCH_TEMPLATE_COMPLETED'){
-        if(updateSwitchTempStatus) updateSwitchTempStatus('success')
-       }else if(data.event == 'SWITCH_TEMPLATE_ERROR'){
-        if(deactivateLoading) deactivateLoading()
-        if(updateSwitchTempStatus) updateSwitchTempStatus('error')
-       }
-    });
-
-    // On Close
-    this.socketconnection.onclose =  (event) => {
-      if(event.reason === 'Going away')
-        this.connectsocket();
+      enableValidateTab: false
     };
   }
 
@@ -138,14 +89,14 @@ export class Opportunity extends Component<Props, State> {
       expandAllSections,
       trackPageView,
       eventCategories,
-      AddNewBid,
       location: { search },
       match: { params }
     } = this.props;
     this.connectsocket();
     expandAllSections(false);
-    let selectedView = new URLSearchParams(search).get('viewType');
-    if (selectedView && selectedView == "documents") this.setState({ selectedView });
+    const selectedView = new URLSearchParams(search).get('viewType');
+    if (selectedView && selectedView === 'documents')
+      this.setState({ selectedView });
 
     if (!authData) getRefreshAuthData();
 
@@ -169,27 +120,51 @@ export class Opportunity extends Component<Props, State> {
     });
 
     // Scroll
-    try{
+    try {
       console.log('Back to top#');
-      window.scrollTo(0,0)
-    }catch(error){console.log(error)}
-    
+      window.scrollTo(0, 0);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   componentWillUnmount() {
-    const { handleOpenClose} = this.props;
-    this.socketconnection.send(JSON.stringify({
-      action: '$disconnect',
-      body: {}
-    }));
+    const { handleOpenClose } = this.props;
+    this.socketconnection.send(
+      JSON.stringify({
+        action: '$disconnect',
+        body: {}
+      })
+    );
     this.socketconnection.close();
-    if(handleOpenClose)
-     handleOpenClose(false);
+    if (handleOpenClose) handleOpenClose(false);
 
     localStorage.removeItem('proposalTypeView');
     localStorage.removeItem('proposalId');
 
     window.removeEventListener('storage', this.handleStorageChange);
+  }
+
+  handleStorageChange(e) {
+    const {
+      getValidatedData,
+      match: { params }
+    } = this.props;
+
+    if (e.key === 'enableValidateTab') {
+      const isEnabled = e.newValue === 'true';
+      const { selectedView: selectedViewState } = this.state;
+      this.setState({
+        enableValidateTab: isEnabled,
+        selectedView:
+          !isEnabled && selectedViewState === 'validate'
+            ? 'questions'
+            : selectedViewState
+      });
+      if (isEnabled) {
+        getValidatedData(params.id);
+      }
+    }
   }
 
   trackMatomoEventTabs = tab => {
@@ -216,26 +191,72 @@ export class Opportunity extends Component<Props, State> {
     this.trackMatomoEventTabs(selectedView);
   };
 
-  handleStorageChange(e) {
+  connectsocket() {
     const {
-      getValidatedData,
-      match: { params }
+      match: { params },
+      addNewBid,
+      getOpportunityInfo,
+      updateAnswerAction,
+      updateProposalDetail,
+      updateSwitchTempStatus,
+      setSwitchInProgress
     } = this.props;
 
-    if (e.key === 'enableValidateTab') {
-      const isEnabled = e.newValue === 'true';
-      const { selectedView: selectedViewState } = this.state;
-      this.setState({
-        enableValidateTab: isEnabled,
-        selectedView:
-          !isEnabled && selectedViewState === 'validate'
-            ? 'questions'
-            : selectedViewState
-      });
-      if (isEnabled) {
-        getValidatedData(params.id);
+    console.log('Starting the WS connection');
+    this.socketconnection = null;
+    this.socketconnection = new WebSocket(SOCKET_URL);
+
+    // On Connection Open
+    this.socketconnection.onopen = event => {
+      console.log('socket connected', event);
+      if (params.id) {
+        this.socketconnection.send(
+          JSON.stringify({
+            action: 'ADD_OPPORTUNITY',
+            body: { oppId: params.id }
+          })
+        );
       }
-    }
+    };
+
+    // On Message Recieve
+    this.socketconnection.addEventListener('message', async response => {
+      const data = JSON.parse(response.data);
+      console.log('data.event :>> ', data.event);
+
+      switch (data.event) {
+        case 'IN_PROGRESS':
+          addNewBid(data.data);
+          break;
+        case 'COMPLETED':
+          getOpportunityInfo(params.id, true);
+          break;
+        case 'ANSWER_UPDATE':
+          if (updateAnswerAction) updateAnswerAction(data.data);
+          break;
+        case 'PROPOSAL_DETAIL_UPDATE':
+          if (updateProposalDetail) updateProposalDetail(data.data);
+          break;
+        case 'SWITCH_TEMPLATE_IN_PROGRESS':
+          if (setSwitchInProgress) setSwitchInProgress(true);
+          if (updateSwitchTempStatus) updateSwitchTempStatus('progress');
+          break;
+        case 'SWITCH_TEMPLATE_COMPLETED':
+          if (updateSwitchTempStatus) updateSwitchTempStatus('success');
+          break;
+        case 'SWITCH_TEMPLATE_ERROR':
+          if (setSwitchInProgress) setSwitchInProgress(false);
+          if (updateSwitchTempStatus) updateSwitchTempStatus('error');
+          break;
+        default:
+          break;
+      }
+    });
+
+    // On Close
+    this.socketconnection.onclose = event => {
+      if (event.reason === 'Going away') this.connectsocket();
+    };
   }
 
   renderContent = () => {
@@ -257,16 +278,31 @@ export class Opportunity extends Component<Props, State> {
 
     return (
       <div className="proposal-details">
-        <GenerateDocs></GenerateDocs>
+        <GenerateDocs />
         <UnityGrid data={details} isOpen={isOpen} bidStatus={bidStatus} />
-        <UnityTab id={params.id} enableValidateTab={enableValidateTab} selectedView={selectedView}/>
+        <UnityTab
+          id={params.id}
+          enableValidateTab={enableValidateTab}
+          selectedView={selectedView}
+        />
       </div>
     );
   };
 
   render() {
-    const { isSidebarOpen, selectedBid, newbidflag, closeNewbidflag } = this.props;
-    const { questionTemplateVersionNumber, opportunityType, bidStatus } = selectedBid.toJS();
+    const {
+      isSidebarOpen,
+      selectedBid,
+      newbidflag,
+      closeNewbidflag
+    } = this.props;
+
+    const {
+      questionTemplateVersionNumber,
+      opportunityType,
+      bidStatus
+    } = selectedBid.toJS();
+
     return (
       <div
         className={classNames('proposal-wrapper', {
@@ -274,14 +310,22 @@ export class Opportunity extends Component<Props, State> {
         })}
       >
         <Toolbar />
+
         <BidDoneBanner
           isOpen={newbidflag}
-          onCloseHandler = {()=> closeNewbidflag()}
+          onCloseHandler={() => closeNewbidflag()}
         />
+
         {this.renderContent()}
-        {
-          bidStatus && <ProcessingCRM isOpen={bidStatus} />
-        }
+
+        {bidStatus && (
+          <ProcessingCRM
+            isOpen={bidStatus}
+            title="Processing CRM data"
+            message="A new Bid is being created based on CRM data"
+          />
+        )}
+
         <UnityFooter
           questionTemplateVersionNumber={questionTemplateVersionNumber || ''}
           opportunityType={opportunityType || ''}
@@ -295,7 +339,6 @@ const mapStateToProps = (state: Map) => ({
   details: getProposalDetails(state),
   isLoading: isProposalLoading(state),
   isSidebarOpen: getIsOpen(state),
-  notifications: getPendingValidatedItems(state),
   proposalDetail: getProposalDetails(state),
   isOpen: getIsOpen(state),
   selectedBid: getSelectedBid(state),
@@ -310,12 +353,11 @@ export default compose(
     getValidatedData: onGetValidatedProposalDetails,
     handleOpenClose: onHandleOpenClose,
     expandAllSections: expandAllSectionsAction,
-    AddNewBid: UpdateNewBid,
+    addNewBid: UpdateNewBid,
     closeNewbidflag: closeNewbidflags,
     updateAnswerAction: updateAnswerFromWebSocket,
     updateProposalDetail: updateProposalDetailFromWebSocket,
     updateSwitchTempStatus: updateSwitchTempStatusFromWebSocket,
-    activateLoading: activateProposalLoading,
-    deactivateLoading: deactivateProposalLoading
+    setSwitchInProgress: updateSwitchInProgress
   })
 )(MatomoHOC(Opportunity));

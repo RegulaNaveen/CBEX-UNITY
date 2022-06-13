@@ -76,7 +76,8 @@ const {
   UPDATE_LOOKUP_OPTIONS,
   BOX_ADDITIONAL_LINK,
   BOX_ADDITIONAL_LINK_ERROR,
-  SWITCH_TEMP_STATUS
+  SWITCH_TEMP_STATUS,
+  SWITCH_TEMP_IN_PROGRESS
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -893,4 +894,16 @@ export const changeOpportunityType = switchTempData => async () => {
     const msg = getErrorMessage(error);
     return { status: false, title: DEFAULT.ALERT, msg };
   }
+};
+
+/**
+ * Switch Temp In Progress - Action
+ */
+export const updateSwitchInProgress = data => {
+  return async dispatch => {
+    dispatch({
+      type: SWITCH_TEMP_IN_PROGRESS,
+      payload: data
+    });
+  };
 };
