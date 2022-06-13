@@ -229,7 +229,11 @@ class CollapsibleList extends Component<Props, State> {
             </div>
 
             {questions.valueSeq().map(questionConfig => {
-              const visible = questionConfig.get('visible');
+              const visible = questionConfig.get('visible', true) &&
+              ( questionConfig.get('active', true) ||
+              questionConfig.get('isCustomQuestion', true))
+        
+        
               return (
                 (visible || typeof visible === 'undefined') && (
                   <Question
