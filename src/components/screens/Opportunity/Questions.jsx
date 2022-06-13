@@ -110,6 +110,7 @@ class Questions extends Component<Props, State> {
       showFilter: false,
       sidebarscroll: '',
       open: false,
+      isNotepadOpen: true
     };
   }
 
@@ -328,6 +329,11 @@ class Questions extends Component<Props, State> {
     });
   };
 
+  setIsNotepadOpen = (value:boolean) => {
+    console.log("setIsNotepadOpen fired");
+    this.setState({isNotepadOpen:value})
+  }
+
   renderQuestions() {
     try {
       const {
@@ -458,13 +464,100 @@ class Questions extends Component<Props, State> {
       selectedQuestionForHistory,
       isHistoryModalShown,
       open,
+      isNotepadOpen
     } = this.state;
 
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
 
+    const minPixelToExclude = 80;
+    const notepadMinWidthPx =
+      (window.innerWidth - minPixelToExclude) * (30 / 100); // 30% of the total screen size
+    const notepadMaxWidthPx = isOpen
+      ? notepadMinWidthPx
+      : (window.innerWidth - minPixelToExclude) * (50 / 100); // 50% of the total screen size
+
     return (
       <>
         <BidHistory />
+        {/* Expand and Filter */}
+        <div>
+          <div className="tasksList-title-wrapper">
+            <div className="taskList-icons-wrapper">
+              <ApolloCheckbox
+                label="Expand All"
+                checked={allSectionsExpanded}
+                onChange={(e, checked) => {
+                  this.setState({ sidebarscroll: '' }, () => {
+                    this.handleIsCheckedAll(checked);
+                  });
+                  if (!checked) {
+                    const clearsidebarselectsection = new CustomEvent(
+                      'clearsidebarselectsection',
+                      {
+                        detail: true
+                      }
+                    );
+                    document.dispatchEvent(clearsidebarselectsection);
+                  }
+                }}
+              />
+              {MANUAL_REFRESH && (
+                <div
+                  title="Refresh"
+                  className="tasksList-refresh-icon-wrapper"
+                  role="presentation"
+                  onClick={this.getProposalInfoUpdated}
+                >
+                  <Refresh className="tasksList-add-icon" />
+                </div>
+              )}
+              {selectedBid.get('isCurrent') && (
+                <div
+                  title="Add New Question"
+                  className="tasksList-add-icon-wrapper"
+                  role="presentation"
+                  onClick={() => {
+                    this.setState({ currentsection: '' });
+                    this.onClose();
+                  }}
+                >
+                  <Add className="tasksList-add-icon" />
+                </div>
+              )}
+              <Button
+                variant="secondary"
+                size="small"
+                icon={<Filter fontSize="extraSmall" />}
+                onClick={() => this.handleFilterClick()}
+              >
+                {activeQuestionsFilterCount
+                  ? `Filter (${activeQuestionsFilterCount})`
+                  : 'Filter'}
+              </Button>
+            </div>
+          </div>
+          {this.renderFilter()}
+        </div>
+        <div id="panelwrapper">
+          {/* Notepad */}
+          <div id="panel-notepad">
+            <Panel
+              minWidth={notepadMinWidthPx}
+              maxWidth={notepadMaxWidthPx}
+              resizable
+              onClose={()=>{this.setIsNotepadOpen(false)}}
+              onOpen={()=>{this.setIsNotepadOpen(true)}}
+            >
+              <div style={{ display: isNotepadOpen ? 'block' : 'none' }}>
+              <WysiwygNotepad />
+              </div>
+            </Panel>
+          </div>
+          {/* Question list */}
+          <div id="panel-questions-list">
+            <div className="tasksList-wrapper">{this.renderQuestions()}</div>
+          </div>
+        </div>
         <Sidebar
           sections={allSections}
           id={selectedBid.get('id')}
@@ -495,72 +588,6 @@ class Questions extends Component<Props, State> {
             this.setTabFromQuestionNotes(val, title, flag)
           }
         />
-        <PanelGroup style={{ display: 'flex' }}>
-          <Panel width="30%" maxWidth={500} minWidth={100} resizable>
-            <div style={{ paddingLeft: '22px' }}>
-              <WysiwygNotepad />
-            </div>
-          </Panel>
-          <Panel width="100%" minWidth={400} hideButton style={{ paddingLeft: '10px', paddingRight: '10px'}}>
-            <div className="tasksList-title-wrapper">
-              <div className="taskList-icons-wrapper">
-                <ApolloCheckbox
-                  label="Expand All"
-                  checked={allSectionsExpanded}
-                  onChange={(e, checked) => {
-                    this.setState({ sidebarscroll: '' }, () => {
-                      this.handleIsCheckedAll(checked);
-                    });
-                    if (!checked) {
-                      const clearsidebarselectsection = new CustomEvent(
-                        'clearsidebarselectsection',
-                        {
-                          detail: true
-                        }
-                      );
-                      document.dispatchEvent(clearsidebarselectsection);
-                    }
-                  }}
-                />
-                {MANUAL_REFRESH && (
-                  <div
-                    title="Refresh"
-                    className="tasksList-refresh-icon-wrapper"
-                    role="presentation"
-                    onClick={this.getProposalInfoUpdated}
-                  >
-                    <Refresh className="tasksList-add-icon" />
-                  </div>
-                )}
-                {selectedBid.get('isCurrent') && (
-                  <div
-                    title="Add New Question"
-                    className="tasksList-add-icon-wrapper"
-                    role="presentation"
-                    onClick={() => {
-                      this.setState({ currentsection: '' });
-                      this.onClose();
-                    }}
-                  >
-                    <Add className="tasksList-add-icon" />
-                  </div>
-                )}
-                <Button
-                  variant="secondary"
-                  size="small"
-                  icon={<Filter fontSize="extraSmall" />}
-                  onClick={() => this.handleFilterClick()}
-                >
-                  {activeQuestionsFilterCount
-                    ? `Filter (${activeQuestionsFilterCount})`
-                    : 'Filter'}
-                </Button>
-              </div>
-            </div>
-            {this.renderFilter()}
-            <div className="tasksList-wrapper">{this.renderQuestions()}</div>
-          </Panel>
-        </PanelGroup>
         {showModal && (
           <AddQuestionModalComponent
             onClose={this.onClose}
