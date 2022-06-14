@@ -521,7 +521,7 @@ export class TaskRow extends Component<Props, State> {
       answerConfiguration,
       milestone,
       milestoneNew,
-      ismilestoneavailable,
+      ismilestoneavailable, 
       loading,
       questionHint,
       questionHintHTML,
@@ -596,7 +596,7 @@ export class TaskRow extends Component<Props, State> {
                       <p>{questionHint}</p>
                     ) : (
                       <div
-                        dangerouslySetInnerHTML={{ __html: questionHTML }}
+                        dangerouslySetInnerHTML={{ __html: questionHintHTML }}
                       ></div>
                     )
                   }

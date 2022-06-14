@@ -11,16 +11,14 @@ const ChipView = ({ label, answer }) => {
   let milestonetojs = null;
   console.log(label)
   if(typeof label === 'object' || label.length > 0){
-    milestonetojs = label.toJS() || ' '
+    milestonetojs = label.toJS() || ' ' 
     if(milestonetojs.length > 0){
 dynamiclabel = milestonetojs[0].Name || ' '
 color = milestonetojs[0].Color || ' '
     }
-console.log(color)
 {selectColors.map((item) => {
   if(_.isEqual(color, item.color)){ 
     color= item.label.toLowerCase() }
-    
 }
 )}
   }
