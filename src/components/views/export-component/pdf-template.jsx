@@ -12,7 +12,8 @@ import {
     userName,
     yearNow,
     getUnityLink,
-    formatDate
+    formatDate,
+    shouldInclude
 } from "./word-template";
 import { pdf, Document, Page, View, StyleSheet, Text, Font, Image} from '@react-pdf/renderer';
 import React from "react";
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
     },
     body: {
         width: "100%",
-        minHeight: "75vh",
+        minHeight: "75vh"
     },
     footer: {
         width: "83%",
@@ -156,6 +157,9 @@ function getStyle(){
     [data-block="true"] {
         padding-bottom:5px;
     }    
+    .MuiGrid-root{
+        display:none;
+    }
  </style>`
 }
 function topHeading(details){
@@ -183,8 +187,8 @@ function getHeaderInfoRows(details){
     return html;
 }
 function getProposalTeamsRows(questions){
-    const coreTeamQuestions = questions.filter((question) => question.visible === true && question.section.sectionName === PT_SECTION && CORE_TEAM[question.questionText]).sort((a,b)=>a.questionOrder-b.questionOrder);
-    const otherTeamQuestions = questions.filter((question) => question.visible === true && question.section.sectionName === PT_SECTION && !CORE_TEAM[question.questionText]).sort((a,b)=>a.questionOrder-b.questionOrder);
+    const coreTeamQuestions = questions.filter((question) => shouldInclude(question) && question.section.sectionName === PT_SECTION && CORE_TEAM[question.questionText]).sort((a,b)=>a.questionOrder-b.questionOrder);
+    const otherTeamQuestions = questions.filter((question) => shouldInclude(question) && question.section.sectionName === PT_SECTION && !CORE_TEAM[question.questionText]).sort((a,b)=>a.questionOrder-b.questionOrder);
     let html = ``;
     try{
         html += `<table class="proposalTeam table marginTop20">`
@@ -227,7 +231,7 @@ function questionTables(proposalQuestions){
     // Remove not visible questions
     let questions = proposalQuestions
     .filter((question)=>{
-       return question.visible === true && question.section.sectionName !== PT_SECTION && question.section.sectionName !== QC_SECTION
+       return shouldInclude(question) && question.section.sectionName !== PT_SECTION && question.section.sectionName !== QC_SECTION
     }).sort((a,b)=>{ return a.section.sectionOrder - b.section.sectionOrder });
     // Section map
     const sections = {}
@@ -270,7 +274,7 @@ function questionTables(proposalQuestions){
 
 function getQuestionToCustomerRows(questions){
     let html = ``;
-    let questionsToCustomer = questions.filter((question) => question.visible === true && question.section.sectionName === QC_SECTION).sort((a,b)=>a.questionOrder-b.questionOrder);
+    let questionsToCustomer = questions.filter((question) => shouldInclude(question) && question.section.sectionName === QC_SECTION).sort((a,b)=>a.questionOrder-b.questionOrder);
     
     if(!questionsToCustomer.length)
         questionsToCustomer = [
@@ -402,8 +406,7 @@ const MyDoc = (proposalDetails, questions, filteredQuestions, notes, filterState
 }
 
 export function createPdf(content) {
-    
-    let {data : {proposalQuestions, proposal : {proposalDetails}}, notes, filterState } = content;
+    let {data : {proposalQuestions, proposalDetails}, notes, filterState } = content;
     const filteredQuestions = getFilteredQuestion(proposalQuestions, filterState);
     return pdf(MyDoc(proposalDetails, proposalQuestions, filteredQuestions, notes, filterState)).toBlob();
 }
