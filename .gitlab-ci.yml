@@ -168,8 +168,7 @@ uat:
   only:
     - tags
   script:
-    - cat $prod_uat_build >> build.env
-    - cat $frontendacmdev >> build.env
+    - cat $prod_build >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
     - yarn cache clean
@@ -208,8 +207,6 @@ prod:
     - deployuat
   when: manual
   script:
-    - cat $prod_build >> build.env
-    - cat $frontendacmprod >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
     - yarn cache clean
