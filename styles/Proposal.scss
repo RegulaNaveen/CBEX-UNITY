@@ -442,6 +442,7 @@ and (max-width : 3000px)
   }
   .exportOptionsRow{
     display: flex;
+    justify-content: space-between;
     label{
       font-size: 14px;
       font-family: "ProximaNova-Regular"!important;
@@ -474,4 +475,10 @@ and (max-width : 3000px)
       display: block;
     }
   } 
+  .exportOptionsRow-last{
+    justify-content: end;
+    .export-okay{
+      margin-right: 0;
+    }
+  }
 }  

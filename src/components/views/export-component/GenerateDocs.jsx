@@ -6,13 +6,13 @@ import { Packer } from "docx";
 import { saveAs } from "file-saver";
 import Logo from '../../../../img/iqvia-main-logo.png';
 import {
-  getSelectedBid,
-  getOpportunityData
+  selectProposalQuestions
 } from '../../../redux/selectors/proposal';
 
 import {
   selectNotes,
-  getRoles
+  getRoles,
+  getProposalDetails
 } from '../../../redux/selectors';
 import { createPdf } from './pdf-template';
 
@@ -22,9 +22,9 @@ export let docType = {
 }
 
 const GenerateDocs = () => {
-  let opportunityData = useSelector(getOpportunityData);
-  let selectedBid = useSelector(getSelectedBid);
   let notesMap =  useSelector(selectNotes);
+  let proposalQuestions = useSelector(selectProposalQuestions);
+  let proposalDetails = useSelector(getProposalDetails);
   let roleList = useSelector(getRoles) || []
   let logo = useRef(null);
 
@@ -33,12 +33,13 @@ const GenerateDocs = () => {
     unanswered: false,
     myRole: false,
     includesNotes: true,
-    milestones: 'All',
+    milestones: ['All'],
     interestedParties: 'All',
     fileName: 'Unity Export',
-    fileType: docType.pdf
+    fileType: docType.pdf,
+    milestoneOptions: []
   });
-  
+
   useEffect(()=>{
     try{
       fetch(Logo).then((res)=>{
@@ -46,23 +47,40 @@ const GenerateDocs = () => {
       }).then((blob)=>{
         logo.current = blob
       })
-      const selectedBid = getSelectedBidData();
-      const {proposal : {proposalDetails}} = selectedBid
       let fileName = `Unity Export_${proposalDetails['CRM #']}_Bid ${proposalDetails['bidNo']}_${proposalDetails['Customer']}`;
+      let derivedMileStones = setMileStonesAsPerCurrentQues(proposalQuestions || []);
       filterStateUpdate({
         ...filterState,
-        ...{fileName}
+        ...{fileName},
+        ...{milestoneOptions: derivedMileStones}
       })
     }catch(error){
     }
-  }, [selectedBid])
+  }, [proposalDetails, proposalQuestions])
 
+  const setMileStonesAsPerCurrentQues = (questions)=>{
+    const isNewMileStone = questions.some((question)=>
+    question.milestoneNew &&
+      Array.isArray(question.milestoneNew) &&
+      question.milestoneNew.length
+    );
+    const tempMileStones = [];
+    questions.forEach(question => {
+      try{
+        const currentMileStone = (isNewMileStone)? question.milestoneNew[0].Name : question.milestone;
+        if(currentMileStone)
+          tempMileStones.push(currentMileStone)
+      }catch(error){}
+    });
+    return [...new Set(tempMileStones)];  
+  }
 
   const getSelectedBidData = () => {
     try{
-      const proposalId = selectedBid.get('id') || '';
-      const opportunityDataJs = opportunityData.toJS();
-      return opportunityDataJs[proposalId] || {};
+      return {
+        proposalDetails,
+        proposalQuestions
+      }
     }catch(error){
       return {}
     }

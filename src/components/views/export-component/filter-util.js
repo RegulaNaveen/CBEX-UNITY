@@ -60,3 +60,31 @@ export const applyinterestedPartiesFilter = (questions, selectedParty) => {
   }
   return filteredQuestions || questions;
 }
+
+export const applyMileStonesFilter = (questions, milestones) => {
+  let filteredQuestions;
+  let map = {};
+  const isNewMileStone = questions.some((question)=>
+    question.milestoneNew &&
+    Array.isArray(question.milestoneNew) &&
+    question.milestoneNew.length
+  );
+  milestones.forEach((milestone)=>{ map[milestone] = milestone });
+
+  if (milestones) {
+    filteredQuestions = questions
+      .filter(question => {
+        let {milestoneNew, milestone} = question;
+        if(isNewMileStone && milestoneNew){
+          return question.milestoneNew.some((milestoneObject)=>{
+            let {Name} = milestoneObject;
+            return Boolean(map[Name])
+          });    
+        }else if(milestone){
+          return Boolean(map[milestone])
+        }
+        return false;
+      })
+  }
+  return filteredQuestions || questions;
+}

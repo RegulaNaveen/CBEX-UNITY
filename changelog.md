@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1344: Pull Notes out of the blade. The new note section uses react-draft-wysiwyg.
   - IQVIACBEXU-1400: Create the ability to export Unity data
   - IQVIACBEXU-1423: Made sticky notepad and UI fixes for 1344
+  - IQVIACBEXU-1576: Add ability to select multiple milestones for export options
 ### Changed
 ### Fixed
 
