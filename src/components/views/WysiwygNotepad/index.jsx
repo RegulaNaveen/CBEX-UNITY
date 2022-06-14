@@ -69,13 +69,23 @@ const WysiwygNotepad = ({
     console.log({ selectedBid: selectedBid.get('id') });
     if (!notes.isFromSocket) {
       if (notes.size > 0) {
-        console.log('type is', typeof notes.get(0).toJS().noteText);
         const newNotes =
           typeof notes.get(0).toJS().noteText !== 'object'
             ? JSON.parse(notes.get(0).toJS().noteText)
             : notes.get(0).toJS().noteText;
+
         setNotesId(notes.get(0).toJS().notesId);
         setEditorState(EditorState.createWithContent(convertFromRaw(newNotes)));
+
+        // const stateWithContent = EditorState.createWithContent(
+        //   convertFromRaw(newNotes)
+        // );
+        // const currentSelection = editorState.getSelection();
+        // const stateWithContentAndSelection = EditorState.forceSelection(
+        //   stateWithContent,
+        //   currentSelection
+        // );
+        // setEditorState(stateWithContentAndSelection);
       } else {
         setEditorState(initialEditorState);
       }
@@ -98,9 +108,12 @@ const WysiwygNotepad = ({
       const nextContentState = convertFromRaw(jsonDP.patch(raw, delta));
       const stateWithContent = EditorState.createWithContent(nextContentState);
       const currentSelection = editorState.getSelection();
-
-      EditorState.forceSelection(stateWithContent, currentSelection);
-      setEditorState(EditorState.push(editorState, nextContentState));
+      const stateWithContentAndSelection = EditorState.forceSelection(
+        stateWithContent,
+        currentSelection
+      );
+      setEditorState(stateWithContentAndSelection);
+      // setEditorState(EditorState.push(editorState, stateWithContent));
     }
   }, [notes, selectedBid]);
 
@@ -137,20 +150,21 @@ const WysiwygNotepad = ({
 
   const onEditorsChange = useCallback(
     updatedEditorState => {
-      if (
-        updatedEditorState.getCurrentContent() ===
-        editorState.getCurrentContent()
-      ) {
-        console.log('No changes found in content');
-      } else {
-        setEditorState(updatedEditorState);
-        const updatedNoteText = convertToRaw(
-          updatedEditorState.getCurrentContent()
-        );
-        memoizedSaveDB(updatedNoteText);
-      }
+      // if (
+      //   updatedEditorState.getCurrentContent() ===
+      //   editorState.getCurrentContent()
+      // ) {
+      //   console.log('No changes found in content');
+      // } else {
+      setEditorState(updatedEditorState);
+      const updatedNoteText = convertToRaw(
+        updatedEditorState.getCurrentContent()
+      );
+      memoizedSaveDB(updatedNoteText);
+      // }
     },
-    [memoizedSaveDB]
+
+    [editorState, memoizedSaveDB]
   );
 
   return (
