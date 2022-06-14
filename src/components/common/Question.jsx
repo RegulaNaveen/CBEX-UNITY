@@ -15,6 +15,7 @@ import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
 import { Typography } from 'apollo-react/components/Typography/Typography';
 import Grid from 'apollo-react/components/Grid';
+import CustomRichText from './CustomRichText/CustomRichText';
 import {
   setProposalAnswerData,
   setEditQuestionData
@@ -50,6 +51,7 @@ type Props = {
   answers: Map,
   questionText: string,
   questionHTML: string,
+  questionJSON: string,
   answerConfiguration: Object,
   sectionName: string,
   userData: Object,
@@ -180,6 +182,7 @@ export class TaskRow extends Component<Props, State> {
       proposalDetail,
       questionText,
       questionHTML,
+      questionJSON,
       sectionName,
       trackEvent,
       questionId
@@ -196,6 +199,7 @@ export class TaskRow extends Component<Props, State> {
             sectionName,
             questionText,
             questionHTML,
+            questionJSON,
             questionId,
             proposalDetail
           })
@@ -210,6 +214,7 @@ export class TaskRow extends Component<Props, State> {
       proposalDetail,
       questionText,
       questionHTML,
+      questionJSON,
       sectionName,
       trackEvent,
       questionId
@@ -224,6 +229,7 @@ export class TaskRow extends Component<Props, State> {
             sectionName,
             questionText,
             questionHTML,
+            questionJSON,
             questionId,
             proposalDetail
           })
@@ -251,7 +257,8 @@ export class TaskRow extends Component<Props, State> {
     answers: Map,
     lastAnswer: Map,
     questionText: Map,
-    questionHTML: Map
+    questionHTML: Map,
+    questionJSON: Map
   ) => {
     const { sectionName, sfObject, sfField, selectedBid, noneditableField } = this.props;
     const { selectedDay } = this.state;
@@ -452,21 +459,22 @@ export class TaskRow extends Component<Props, State> {
   };
 
   renderTags = (milestone, milestoneNew, ismilestoneavailable, lastAnswer) => {
-    {if(milestoneNew){return (
+    {if(milestoneNew || milestoneNew != undefined){return (
       <div className="chipview">
 {milestoneNew ? (
-          <ChipView label={String(milestoneNew)} answer={lastAnswer} />
+          <ChipView label={milestoneNew} answer={lastAnswer} />
+        ) : null} 
+      </div>
+    )}
+    else
+    return (
+      <div className="chipview">
+    {milestone ? (
+          <ChipView label={String(milestone)} answer={lastAnswer} />
         ) : null} 
       </div>
     )};
 }
-return (
-  <div className="chipview">
-{milestone ? (
-      <ChipView label={String(milestone)} answer={lastAnswer} />
-    ) : null} 
-  </div>
-)};
 
   handleVerifyPredictedAnsClick(predictedAnswer) {
     const {
@@ -524,6 +532,7 @@ return (
       questionHint,
       questionHintHTML,
       questionHTML,
+      questionJSON,
       sectionName,
       roleNames,
       setEditQuestionData,
@@ -594,7 +603,7 @@ return (
                       <p>{questionHint}</p>
                     ) : (
                       <div
-                        dangerouslySetInnerHTML={{ __html: questionHintHTML }}
+                        dangerouslySetInnerHTML={{ __html: questionJSON }}
                       ></div>
                     )
                   }
