@@ -240,6 +240,7 @@ class CollapsibleList extends Component<Props, State> {
                     ismilestoneavailable={milestone}
                     key={questionConfig.get('questionId')}
                     milestone={questionConfig.get('milestone')}
+                    milestoneNew={questionConfig.get('milestoneNew')}
                     questionId={questionConfig.get('questionId')}
                     proposalId={questionConfig.get('proposalId')}
                     answers={questionConfig.get('answers')}

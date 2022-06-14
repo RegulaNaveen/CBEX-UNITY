@@ -452,16 +452,21 @@ export class TaskRow extends Component<Props, State> {
   };
 
   renderTags = (milestone, milestoneNew, ismilestoneavailable, lastAnswer) => {
-    return (
+    {if(milestoneNew){return (
       <div className="chipview">
-        {milestoneNew ? (
+{milestoneNew ? (
           <ChipView label={String(milestoneNew)} answer={lastAnswer} />
-        ) : null}{milestone ? (
-          <ChipView label={String(milestone)} answer={lastAnswer} />
-        ) : null}
+        ) : null} 
       </div>
-    );
-  };
+    )};
+}
+return (
+  <div className="chipview">
+{milestone ? (
+      <ChipView label={String(milestone)} answer={lastAnswer} />
+    ) : null} 
+  </div>
+)};
 
   handleVerifyPredictedAnsClick(predictedAnswer) {
     const {
