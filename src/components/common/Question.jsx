@@ -51,7 +51,6 @@ type Props = {
   answers: Map,
   questionText: string,
   questionHTML: string,
-  questionJSON: string,
   answerConfiguration: Object,
   sectionName: string,
   userData: Object,
@@ -182,7 +181,6 @@ export class TaskRow extends Component<Props, State> {
       proposalDetail,
       questionText,
       questionHTML,
-      questionJSON,
       sectionName,
       trackEvent,
       questionId
@@ -199,7 +197,6 @@ export class TaskRow extends Component<Props, State> {
             sectionName,
             questionText,
             questionHTML,
-            questionJSON,
             questionId,
             proposalDetail
           })
@@ -214,7 +211,6 @@ export class TaskRow extends Component<Props, State> {
       proposalDetail,
       questionText,
       questionHTML,
-      questionJSON,
       sectionName,
       trackEvent,
       questionId
@@ -229,7 +225,6 @@ export class TaskRow extends Component<Props, State> {
             sectionName,
             questionText,
             questionHTML,
-            questionJSON,
             questionId,
             proposalDetail
           })
@@ -257,8 +252,7 @@ export class TaskRow extends Component<Props, State> {
     answers: Map,
     lastAnswer: Map,
     questionText: Map,
-    questionHTML: Map,
-    questionJSON: Map
+    questionHTML: Map
   ) => {
     const { sectionName, sfObject, sfField, selectedBid, noneditableField } = this.props;
     const { selectedDay } = this.state;
@@ -532,7 +526,6 @@ export class TaskRow extends Component<Props, State> {
       questionHint,
       questionHintHTML,
       questionHTML,
-      questionJSON,
       sectionName,
       roleNames,
       setEditQuestionData,
@@ -603,7 +596,7 @@ export class TaskRow extends Component<Props, State> {
                       <p>{questionHint}</p>
                     ) : (
                       <div
-                        dangerouslySetInnerHTML={{ __html: questionJSON }}
+                        dangerouslySetInnerHTML={{ __html: questionHTML }}
                       ></div>
                     )
                   }
