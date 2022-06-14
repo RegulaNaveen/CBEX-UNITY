@@ -34,6 +34,20 @@ switch (environment) {
     SF_HOST_URL = 'https://iqvia--uat.lightning.force.com/';
     SOCKET_URL = 'wss://l3p8o0zg48.execute-api.us-east-1.amazonaws.com/production';
     break;
+  case 'DEV2':
+    PROPOSAL_API_ENDPOINT =
+      'https://new4hoe11j.execute-api.us-east-1.amazonaws.com/dev2';
+    PROPOSAL_API_KEY = 'L8In0zYYjBuWm2Fae4KU4FOacxstdku293lJ30S3';
+    NORMAL_AUTH_API_ENDPOINT =
+      'https://byp6zagvkb.execute-api.us-east-1.amazonaws.com/unity-dev';
+    COGNITO_HOST = 'https://dev-unity.auth.us-east-1.amazoncognito.com';
+    // AUTH_KEY = '';
+    CLIENT_ID = 'uf2jbhv4jcprcdiqc5rupg665';
+    REDIRECTION_URL = 'https://dev2-unity.dev.iqvia.app/';
+    UBUILD_ARTIFACT = 'https://dev2-ubuild.dev.iqvia.app/main.js';
+    SF_HOST_URL = 'https://iqvia--hotfix.lightning.force.com/';
+    SOCKET_URL = 'wss://07hl4u2wt5.execute-api.us-east-1.amazonaws.com/production';
+    break;
   case 'DEMO':
     PROPOSAL_API_ENDPOINT = 
     'https://yfpduar618.execute-api.us-east-1.amazonaws.com/demo';
