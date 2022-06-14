@@ -108,11 +108,19 @@ const WysiwygNotepad = ({
       const nextContentState = convertFromRaw(jsonDP.patch(raw, delta));
       const stateWithContent = EditorState.createWithContent(nextContentState);
       const currentSelection = editorState.getSelection();
-      const stateWithContentAndSelection = EditorState.forceSelection(
-        stateWithContent,
-        currentSelection
-      );
-      setEditorState(stateWithContentAndSelection);
+      try {
+        const stateWithContentAndSelection = EditorState.forceSelection(
+          stateWithContent,
+          currentSelection
+        );
+
+        setEditorState(stateWithContentAndSelection);
+      } catch (e) {
+        console.log('error occured in force selection', e);
+
+        setEditorState(stateWithContent);
+      }
+
       // setEditorState(EditorState.push(editorState, stateWithContent));
     }
   }, [notes, selectedBid]);
