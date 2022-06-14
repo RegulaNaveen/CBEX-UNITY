@@ -105,7 +105,6 @@ deploydev2:
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
     - dev2
-  when: manual
   only:
     - dev2
     #- dev
