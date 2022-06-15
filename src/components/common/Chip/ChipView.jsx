@@ -6,42 +6,56 @@ import Tooltip from 'apollo-react/components/Tooltip';
 import {selectColors} from './Color';
 
 const ChipView = ({ label, answer }) => {
-  let dynamiclabel = null;
-  let color =null;
-  let milestonetojs = null;
+  let color;
+  let milestonetojs;
   if(typeof label === 'object'){
-console.log(typeof label)
+//console.log(typeof label)
 milestonetojs = label.toJS()
-console.log(milestonetojs)
-dynamiclabel = milestonetojs[0].Name
-color = milestonetojs[0].Color
-console.log(color)
-{selectColors.map((item) => {
+//console.log(milestonetojs)
+if(milestonetojs.length > 0 ){
+  label = milestonetojs[0].Name
+color = milestonetojs[0].Color}
+console.log(typeof label)
+selectColors.map((item) => {
   if(_.isEqual(color, item.color)){ 
     color= item.label.toLowerCase() }
     
 }
-)}
+)
+return (
+  <>
+    <Tooltip title={typeof label === 'string' ? label : null} placement="top">
+      <Tag
+        Icon={''}
+        label={label}
+
+        variant={color}
+
+
+      />
+    </Tooltip>
+  </>
+);
   }
-  else if(typeof label === "string"){
-    dynamiclabel = label;
-    console.log(dynamiclabel)
+  else if(typeof label === "string" && label.length > 0){
+    label = label;
+    console.log(label)
+    return (
+      <>
+        <Tooltip title={label} placement="top">
+          <Tag
+            Icon={''}
+            label={label}
+  
+            variant={answer ? 'green' :'blue'}
+  
+  
+          />
+        </Tooltip>
+      </>
+    );
   }
-
-  return (
-    <>
-      <Tooltip title={dynamiclabel} placement="top">
-        <Tag
-          Icon={''}
-          label={dynamiclabel}
-
-          variant={color ? color : answer ? 'green' :'blue'}
-
-
-        />
-      </Tooltip>
-    </>
-  );
+  
 };
 ChipView.propTypes = {
   label: PropTypes.string,
