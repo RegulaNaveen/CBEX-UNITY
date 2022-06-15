@@ -264,7 +264,9 @@ class Sidebar extends Component<Props, State> {
           </button>
           <div>
             <div className="titlebar">
-              <Typography variant="title1" gutterBottom>
+              <Typography variant="title1"  style={{
+                    fontSize: 20
+                  }} gutterBottom>
                 Controls
               </Typography>
               <IconButton size="small" onClick={this.handleItemsVisibility}>
