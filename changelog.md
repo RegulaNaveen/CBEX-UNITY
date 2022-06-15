@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1400: Create the ability to export Unity data
   - IQVIACBEXU-1423: Made sticky notepad and UI fixes for 1344
   - IQVIACBEXU-1576: Add ability to select multiple milestones for export options
+  - IQVIACBEXU-1636: Notepad toolbar hides when user scrolls down
+  - IQVIACBEXU-1637: Increased scrollbar width in notepad
 ### Changed
 ### Fixed
 

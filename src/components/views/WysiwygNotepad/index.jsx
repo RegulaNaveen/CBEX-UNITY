@@ -147,31 +147,29 @@ const WysiwygNotepad = ({
   );
 
   return (
-    <div>
-      <Editor
-        editorState={editorState}
-        onEditorStateChange={onEditorsChange}
-        readOnly={isReadOnly}
-        // onBlur={e => fetchLatestNotes()}
-        toolbar={{
-          options: [
-            'inline',
-            // 'blockType',
-            // 'fontSize',
-            // 'fontFamily',
-            'list',
-            // 'textAlign',
-            // 'colorPicker',
-            // 'link',
-            // 'embedded',
-            // 'emoji',
-            // 'image',
-            // 'remove',
-            'history'
-          ]
-        }}
-      />
-    </div>
+    <Editor
+      editorState={editorState}
+      onEditorStateChange={onEditorsChange}
+      readOnly={isReadOnly}
+      // onBlur={e => fetchLatestNotes()}
+      toolbar={{
+        options: [
+          'inline',
+          // 'blockType',
+          // 'fontSize',
+          // 'fontFamily',
+          'list',
+          // 'textAlign',
+          // 'colorPicker',
+          // 'link',
+          // 'embedded',
+          // 'emoji',
+          // 'image',
+          // 'remove',
+          'history'
+        ]
+      }}
+    />
   );
 };
 

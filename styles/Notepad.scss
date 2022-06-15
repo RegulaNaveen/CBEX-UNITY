@@ -13,14 +13,38 @@
   padding-right: 25;
   padding-bottom: 10;
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-    overflow-x: auto;
+    width: 8px;
   }
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  /* Handle */
   ::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    overflow-x: auto;
+    background: #c1c1c1;
+    border-radius: 5px;
+  }
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #c1a9a9;
+  }
+
+  & > div {
+    border-bottom: 1px solid #e9e9e9;
+    & > div:first-child {
+      height: inherit;
+      & > div {
+        height: inherit;
+        .rdw-editor-wrapper {
+          display: flex;
+          flex-direction: column;
+          height: inherit;
+        }
+        .public-DraftEditor-content {
+          height: calc(100% - 8px);
+        }
+      }
+    }
   }
 }
 
@@ -30,16 +54,9 @@
 }
 
 .DraftEditor-root {
-  // overflow: auto;
-  // resize: vertical;
-  // border: 1px #1f1f1f;
   line-height: 1.1rem;
-  .public-DraftEditorPlaceholder-root {
-    // padding: 9px 11px;
-  }
   .DraftEditor-editorContainer {
     padding: 5px 10px;
-    height: calc(100% - 16px);
     * {
       font-size: 12px;
     }
