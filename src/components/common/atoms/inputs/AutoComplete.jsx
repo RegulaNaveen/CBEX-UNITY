@@ -1,73 +1,64 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import AutocompleteV2 from 'apollo-react/components/AutocompleteV2';
-import { connect } from 'react-redux';
-import { getLookupUsers } from '../../../../redux/selectors';
+import Loader from 'apollo-react/components/Loader';
+import { API } from '../../../../constants';
+import { getAccessTokenFromLocalStorage as getAccessToken } from '../../../../SessionHandler';
 
-function extractEmails(str) {
-  let result = String(str).match(
-    /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
-  );
-  return result ? (result.length ? result[0] : '') : '';
-}
-
-/**
- * Extracts name from the string format: `Firstname Lastname(name@example.com)`
- */
-function extractName(str) {
-  const splirt_array = str.split('(');
-  return splirt_array // check null
-    ? splirt_array.length > 0
-      ? splirt_array[0].trim()
-      : ''
-    : '';
-}
-
+const { USER_API_URL, API_KEY } = API.PROPOSAL;
 const Autocomplete = props => {
-  const [value, setValue] = useState([]);
-  const text = String(props?.text)
-    .trimStart()
-    .trimEnd();
+  const [options, setOptions] = useState([]);
+  const previousController = useRef();
+  const { disabled } = props;
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-    const proposaluser = newValue.map(v => {
-      return v.email
-        ? v.label + '(' + v.email + ')'
-        : v.label + '(' + extractEmails(v.label) + ')';
-    });
-    if (proposaluser.length == 0) props.onChange(' ', text);
-    else props.onChange(proposaluser.join(','), text);
+  const getData = searchTerm => {
+    if (previousController.current) {
+      previousController.current.abort();
+    }
+    const controller = new AbortController();
+    const { signal } = controller;
+    previousController.current = controller;
+    try {
+      fetch(`${USER_API_URL}/${searchTerm}`, {
+        signal,
+        headers: {
+          'x-api-key': API_KEY,
+          'x-access-token': getAccessToken()
+        }
+      } )
+        .then(response => response.json())
+        .then(myJson => {
+          console.log(`search term: ${searchTerm}, results: `, myJson);
+          console.log(myJson);
+          const updatedOptions = myJson.data.map(p => {
+            return { label: `${p.first_name} ${p.last_name} (${p.email})` };
+          });
+          setOptions(updatedOptions);
+        });
+    } catch (error) {
+      console.error(error);
+    }
   };
-  const UserNameByEmail = {};
-  const proposalusers = props?.users?.map(v => {
-    UserNameByEmail[v.email] = v.name.split(',').join(' ');
-    return { label: v.name.split(',').join(' '), email: v.email };
-  });
-  useEffect(() => {
-    if (Boolean(text.length)) {
-      let Val = text.split(',').map(v => {
-        let email = extractEmails(v) || v;
-        let label = UserNameByEmail[email] || extractName(v) || email;
-        return { label, email };
-      });
-      setValue(Val);
-    } else setValue([]);
-  }, [text]);
+
+  const onInputChange = (event, value) => {
+    if (value) {
+      getData(value)
+    } else {
+      setOptions([]);
+    }
+  };
 
   return (
-    <div
-      className={`${props.disabled ? 'autocomplete-disabled' : 'autocomplete'}`}
-    >
+    <div className={`${disabled ? 'autocomplete-disabled' : 'autocomplete'}`}>
       <AutocompleteV2
         fullWidth
         multiple
-        source={proposalusers || []}
-        value={value}
+        options={options || []}
         chipColor="white"
         size="small"
-        limitChips={5}
+        limitChips={50}
         matchFrom="any"
-        onChange={handleChange}
+        onInputChange={onInputChange}
         noOptionsText="No matches found"
         onFocus={e => {
           props.onFocus();
@@ -75,13 +66,16 @@ const Autocomplete = props => {
         onBlur={e => {
           props.onBlur();
         }}
-        disabled={props.disabled || false}
+        disabled={disabled || false}
       />
     </div>
   );
 };
-const mapStateToProps = state => ({
-  users: getLookupUsers(state)
-});
 
-export default connect(mapStateToProps)(Autocomplete);
+Autocomplete.propTypes = {
+  disabled: PropTypes.bool.isRequired,
+  onFocus: PropTypes.func.isRequired,
+  onBlur: PropTypes.func.isRequired
+};
+
+export default Autocomplete;
