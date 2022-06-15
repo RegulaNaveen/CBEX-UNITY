@@ -1,46 +1,61 @@
 import React from 'react';
 import Tag from 'apollo-react/components/Tag';
-import PropTypes, { string } from 'prop-types';
+import PropTypes from 'prop-types';
 // import Check from 'apollo-react-icons/Check';
 import Tooltip from 'apollo-react/components/Tooltip';
 import {selectColors} from './Color';
-import {List, Map} from 'immutable'
+
 const ChipView = ({ label, answer }) => {
-  let dynamiclabel = null;
-  let color =null;
-  let milestonetojs = null;
-  console.log(label)
-  if(typeof label === 'object' || label.length > 0){
-    milestonetojs = label.toJS() || ' ' 
-    if(milestonetojs.length > 0){
-dynamiclabel = milestonetojs[0].Name || ' '
-color = milestonetojs[0].Color || ' '
-    }
-{selectColors.map((item) => {
+  let color;
+  let milestonetojs;
+  if(typeof label === 'object'){
+//console.log(typeof label)
+milestonetojs = label.toJS()
+//console.log(milestonetojs)
+if(milestonetojs.length > 0 ){
+  label = milestonetojs[0].Name
+color = milestonetojs[0].Color}
+console.log(typeof label)
+selectColors.map((item) => {
   if(_.isEqual(color, item.color)){ 
     color= item.label.toLowerCase() }
+    
 }
-)}
+)
+return (
+  <>
+    <Tooltip title={typeof label === 'string' ? label : null} placement="top">
+      <Tag
+        Icon={''}
+        label={label}
+
+        variant={color}
+
+
+      />
+    </Tooltip>
+  </>
+);
   }
-  else {
-    dynamiclabel = label;
-    color = ''
+  else if(typeof label === "string" && label.length > 0){
+    label = label;
+    console.log(label)
+    return (
+      <>
+        <Tooltip title={label} placement="top">
+          <Tag
+            Icon={''}
+            label={label}
+  
+            variant={answer ? 'green' :'blue'}
+  
+  
+          />
+        </Tooltip>
+      </>
+    );
   }
-  return (
-    <>
-      <Tooltip title={dynamiclabel} placement="top">
-        <Tag
-          Icon={''}
-          label={dynamiclabel
-          }
-
-          variant={color ? color : answer ? 'green' : 'blue' }
-
-
-        />
-      </Tooltip>
-    </>
-  );
+  
 };
 ChipView.propTypes = {
   label: PropTypes.string,
