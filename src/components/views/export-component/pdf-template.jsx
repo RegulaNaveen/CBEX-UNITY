@@ -82,6 +82,7 @@ function getStyle(){
     body{
         padding: 50px;
         font-size: 10px;
+        font-family: ProximaNova
     }
     .marginTop50 {
         margin-top:50px
@@ -108,7 +109,6 @@ function getStyle(){
     }
     .table td, .table th{
         padding: 5px;
-        font-family: ProximaNova
     }
     .table tr td:nth-child(2){
         border-left: 1px solid #000;
@@ -153,13 +153,17 @@ function getStyle(){
     } 
     .public-DraftStyleDefault-depth4.public-DraftStyleDefault-listLTR {
         margin-left: 25px;
-    }
-    [data-block="true"] {
-        padding-bottom:5px;
-    }    
+    }  
     .MuiGrid-root{
         display:none;
     }
+    .MuiFormControl-root{
+        padding:5px;
+        border: 1px solid #000
+    }
+    [data-block="true"] {
+        padding-bottom:10px;
+    }  
  </style>`
 }
 function topHeading(details){
@@ -313,12 +317,11 @@ function getNotesRows(notes){
     html += `<tr>`
     html += `<th>General Notes</th>`
     html += `</tr>`
+    html += `</table>`
     try{
         notes.forEach((note)=>{
             let {noteText} = note;
             let noteContentState = EditorState.createEmpty();
-            html += `<tr>`
-            html += `<td>`
             try {
                 noteContentState = convertFromRaw(JSON.parse(noteText));
             } catch (err) {
@@ -342,14 +345,10 @@ function getNotesRows(notes){
             }catch(error){
                 console.log('Cannot convert rich text content')
             }
-            html += `</td>`
-            html += `</tr>`
         })
     }catch(error){
         console.log('Error in getNotesRows');
     }
-
-    html += `</table>`
     return html;
 }
 

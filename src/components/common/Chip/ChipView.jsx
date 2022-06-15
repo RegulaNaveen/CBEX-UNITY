@@ -7,55 +7,51 @@ import {selectColors} from './Color';
 
 const ChipView = ({ label, answer }) => {
   let color;
-  let milestonetojs;
+  let milestonetojs = [];
+  
   if(typeof label === 'object'){
-//console.log(typeof label)
-milestonetojs = label.toJS()
-//console.log(milestonetojs)
-if(milestonetojs.length > 0 ){
-  label = milestonetojs[0].Name
-color = milestonetojs[0].Color}
-console.log(typeof label)
-selectColors.map((item) => {
-  if(_.isEqual(color, item.color)){ 
-    color= item.label.toLowerCase() }
-    
-}
-)
-return (
-  <>
-    <Tooltip title={typeof label === 'string' ? label : null} placement="top">
-      <Tag
-        Icon={''}
-        label={label}
+    try{
+      milestonetojs = label.toJS()
+    }catch(error){
+    }
+    console.log(milestonetojs)
+    if(milestonetojs.length){
+      label = milestonetojs[0].Name || ''
+      color = milestonetojs[0].Color || ''
+      console.log(typeof label)
+      selectColors.map((item) => {
+        if(_.isEqual(color, item.color)){ 
+          color= item.label.toLowerCase() }
+      })
 
-        variant={color}
-
-
-      />
-    </Tooltip>
-  </>
-);
-  }
-  else if(typeof label === "string" && label.length > 0){
-    label = label;
-    console.log(label)
+      return (
+          <>
+            <Tooltip title={label} placement="top">
+              <Tag
+                Icon={''}
+                label={label}
+                variant={color}
+              />
+            </Tooltip>
+          </>
+      );
+    }
+    return null;
+      
+  }else if(typeof label === "string" && label){
     return (
       <>
         <Tooltip title={label} placement="top">
           <Tag
             Icon={''}
             label={label}
-  
             variant={answer ? 'green' :'blue'}
-  
-  
           />
         </Tooltip>
       </>
     );
   }
-  
+  return null;
 };
 ChipView.propTypes = {
   label: PropTypes.string,
