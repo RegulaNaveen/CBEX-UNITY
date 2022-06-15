@@ -20,7 +20,7 @@ import {
 import { cloneDeep } from "lodash";
 import moment from "moment";
 import { API } from "../../../constants";
-import { applyAnsweredFilter, applyinterestedPartiesFilter, applyMyUserRoleFilter, applyUnAnsweredFilter } from "./filter-util";
+import { applyAnsweredFilter, applyinterestedPartiesFilter, applyMileStonesFilter, applyMyUserRoleFilter, applyUnAnsweredFilter } from "./filter-util";
 
 
 export const themeBlue = '00A3E0';
@@ -197,7 +197,7 @@ function questionTables(proposalQuestions){
     // Remove not visible questions
     let questions = proposalQuestions
     .filter((question)=>{
-       return question.visible === true && question.section.sectionName !== PT_SECTION && question.section.sectionName !== QC_SECTION
+       return shouldInclude(question) && question.section.sectionName !== PT_SECTION && question.section.sectionName !== QC_SECTION
     }).sort((a,b)=>{ return a.section.sectionOrder - b.section.sectionOrder });
     // Section map
     const sections = {}
@@ -418,9 +418,13 @@ function getHeaderInfoTable(details){
         }
     )
 }
+
+export function shouldInclude(question){
+    return question.visible === true && (question.active || question.isCustomQuestion)
+}
 function getProposalTeamsRows(questions){
-    const coreTeamQuestions = questions.filter((question) => question.visible === true && question.section.sectionName === PT_SECTION && CORE_TEAM[question.questionText]).sort((a,b)=>a.questionOrder-b.questionOrder);
-    const otherTeamQuestions = questions.filter((question) => question.visible === true && question.section.sectionName === PT_SECTION && !CORE_TEAM[question.questionText]).sort((a,b)=>a.questionOrder-b.questionOrder);
+    const coreTeamQuestions = questions.filter((question) => shouldInclude(question) && question.section.sectionName === PT_SECTION && CORE_TEAM[question.questionText]).sort((a,b)=>a.questionOrder-b.questionOrder);
+    const otherTeamQuestions = questions.filter((question) => shouldInclude(question) && question.section.sectionName === PT_SECTION && !CORE_TEAM[question.questionText]).sort((a,b)=>a.questionOrder-b.questionOrder);
 
     const coreTeamRows = [new TableRow({
         children: [
@@ -471,7 +475,7 @@ function getProposalTeamTable(questions){
     )
 }
 function getQuestionToCustomerRows(questions){
-    let questionsToCustomer = questions.filter((question) => question.visible === true && question.section.sectionName === QC_SECTION).sort((a,b)=>a.questionOrder-b.questionOrder);
+    let questionsToCustomer = questions.filter((question) => shouldInclude(question) && question.section.sectionName === QC_SECTION).sort((a,b)=>a.questionOrder-b.questionOrder);
     
     if(!questionsToCustomer.length)
         questionsToCustomer = [
@@ -638,7 +642,7 @@ function getFooter(details){
    
 }
 export function getFilteredQuestion(proposalQuestions, filterState){
-    const  {answered, unanswered, myRole, interestedParties} = filterState;
+    const  {answered, unanswered, myRole, interestedParties, milestones} = filterState;
     let questions = cloneDeep(proposalQuestions);
 
     // Answered and Unanswered filter block
@@ -657,7 +661,11 @@ export function getFilteredQuestion(proposalQuestions, filterState){
      questions = applyMyUserRoleFilter(questions);
  
     if(interestedParties && interestedParties !== 'All')
-     questions = applyinterestedPartiesFilter(questions, interestedParties);   
+     questions = applyinterestedPartiesFilter(questions, interestedParties);  
+     
+    if(milestones && milestones.length && !milestones.includes('All'))
+     questions = applyMileStonesFilter(questions, milestones)
+     
 
     return questions;
 }
@@ -693,7 +701,7 @@ function getHeader(image){
     })
 }
 export function createWord(content) {
-    let {data : {proposalQuestions, proposal : {proposalDetails}}, notes, filterState, image } = content;
+    let {data : {proposalQuestions, proposalDetails}, notes, filterState, image } = content;
     const filteredQuestions = getFilteredQuestion(proposalQuestions, filterState);
 
     const SectionList = {

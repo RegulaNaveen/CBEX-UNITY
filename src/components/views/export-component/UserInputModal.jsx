@@ -16,7 +16,9 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList}) 
       includesNotes, 
       fileName, 
       fileType, 
-      interestedParties
+      interestedParties,
+      milestoneOptions,
+      milestones
     } = filterState;
 
     const [state, setState] = React.useState({
@@ -24,12 +26,13 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList}) 
     });
   
     let roles = roleList
+    let milestoneOptionsWithDefault = milestoneOptions
     try{
       roles = (roleList.includes('All')) ? roleList : [...['All'], ...roleList]
+      milestoneOptionsWithDefault = (milestoneOptions.includes('All')) ? milestoneOptions : [...['All'], ...milestoneOptions]
     }catch(error){
 
     }
-    
 
     useEffect(()=>{
       actionChannel.subscribe({
@@ -106,7 +109,7 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList}) 
             <Checkbox value={includesNotes} checked={includesNotes} name="includesNotes" label="Include Notes Section" onChange={handleBooleanChange}/>
           </div>
         </div>
-        <div className='exportOptionsRow exportOptionsRow-last'>
+        <div className='exportOptionsRow exportOptionsRow-second-last'>
           <div className='exportOptionsCell'>
             <Select
               label="Select by interested parties"
@@ -118,13 +121,26 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList}) 
               {roles.map((role)=>  <MenuItem key={role} value={role}>{role}</MenuItem>)}
             </Select>
           </div>
+          <div className='exportOptionsCell'>
+            <Select
+              label="Select by Milestones"
+              value={milestones}
+              onChange={handleTextChange}
+              fullWidth
+              name="milestones"
+              canDeselect={false}
+              multiple
+            >
+              {milestoneOptionsWithDefault.map((milestone)=> <MenuItem key={milestone} value={milestone}>{milestone}</MenuItem>)}
+            </Select>
+          </div>
         </div>
-        <div className='exportOptionsRow button-group'>
+        <div className='exportOptionsRow exportOptionsRow-last button-group'>
           <Button variant="text" style={{ marginRight: 10 }} onClick={()=>handleClose()}>
             Cancel
           </Button>
-          <Button variant="primary" disabled={!disable()} style={{ marginRight: 10 }} onClick={()=>initExport()}>
-            OK
+          <Button variant="primary" disabled={!disable()} style={{ marginRight: 0 }} onClick={()=>initExport()}>
+            Ok
           </Button>
         </div>
       </div>  

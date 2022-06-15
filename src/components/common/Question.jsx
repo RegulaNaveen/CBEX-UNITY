@@ -15,6 +15,7 @@ import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
 import { Typography } from 'apollo-react/components/Typography/Typography';
 import Grid from 'apollo-react/components/Grid';
+import CustomRichText from './CustomRichText/CustomRichText';
 import {
   setProposalAnswerData,
   setEditQuestionData
@@ -452,21 +453,22 @@ export class TaskRow extends Component<Props, State> {
   };
 
   renderTags = (milestone, milestoneNew, ismilestoneavailable, lastAnswer) => {
-    {if(milestoneNew){return (
+    {if(milestoneNew || milestoneNew != undefined){return (
       <div className="chipview">
 {milestoneNew ? (
-          <ChipView label={String(milestoneNew)} answer={lastAnswer} />
+          <ChipView label={milestoneNew} answer={lastAnswer} />
+        ) : null} 
+      </div>
+    )}
+    else
+    return (
+      <div className="chipview">
+    {milestone ? (
+          <ChipView label={String(milestone)} answer={lastAnswer} />
         ) : null} 
       </div>
     )};
 }
-return (
-  <div className="chipview">
-{milestone ? (
-      <ChipView label={String(milestone)} answer={lastAnswer} />
-    ) : null} 
-  </div>
-)};
 
   handleVerifyPredictedAnsClick(predictedAnswer) {
     const {
@@ -519,7 +521,7 @@ return (
       answerConfiguration,
       milestone,
       milestoneNew,
-      ismilestoneavailable,
+      ismilestoneavailable, 
       loading,
       questionHint,
       questionHintHTML,
