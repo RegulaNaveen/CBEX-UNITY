@@ -73,7 +73,6 @@ type Props = {
   isCustomQuestion: boolean,
   hasDifferentSFanswer: boolean
 };
-
 export class TaskRow extends Component<Props, State> {
   constructor(props: Object) {
     super(props);
@@ -482,7 +481,7 @@ export class TaskRow extends Component<Props, State> {
 
   renderTags = (milestone, milestoneNew, ismilestoneavailable, lastAnswer) => {
     {
-      if (milestoneNew || milestoneNew != undefined) {
+      if (milestoneNew) {
         return (
           <div className="chipview">
             {milestoneNew ? (
