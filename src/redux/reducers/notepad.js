@@ -42,7 +42,6 @@ function onFetchNotesDone(state, action) {
   } = action;
   data.isFromSocket = !!isFromSocket;
   return state.set('notes', data).set('fetchingNotes', false);
-  // .set('isFromSocket', !!isFromSocket);
 }
 
 function onErrorFetchingNotes(state, action) {

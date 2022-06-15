@@ -76,33 +76,15 @@ const WysiwygNotepad = ({
 
         setNotesId(notes.get(0).toJS().notesId);
         setEditorState(EditorState.createWithContent(convertFromRaw(newNotes)));
-
-        // const stateWithContent = EditorState.createWithContent(
-        //   convertFromRaw(newNotes)
-        // );
-        // const currentSelection = editorState.getSelection();
-        // const stateWithContentAndSelection = EditorState.forceSelection(
-        //   stateWithContent,
-        //   currentSelection
-        // );
-        // setEditorState(stateWithContentAndSelection);
       } else {
         setEditorState(initialEditorState);
       }
       setIsReadOnly(!selectedBid.get('isCurrent'));
     } else {
-      // latest notes content received from server
-      // console.log(
-      //   notes.get(0).toJS().noteText,
-      //   'latest notes content received from server',
-      //   editorState.getCurrentContent()
-      // );
-      // const stateWithContent = EditorState.createWithContent(c)
-
       const raw = convertToRaw(editorState.getCurrentContent());
       const delta = jsonDP.diff(raw, JSON.parse(notes.get(0).toJS().noteText));
       if (!delta) {
-        console.log('no change found so returned');
+        console.log('no change found in notes from socket so returned');
         return;
       }
       const nextContentState = convertFromRaw(jsonDP.patch(raw, delta));
@@ -113,15 +95,11 @@ const WysiwygNotepad = ({
           stateWithContent,
           currentSelection
         );
-
         setEditorState(stateWithContentAndSelection);
       } catch (e) {
         console.log('error occured in force selection', e);
-
         setEditorState(stateWithContent);
       }
-
-      // setEditorState(EditorState.push(editorState, stateWithContent));
     }
   }, [notes, selectedBid]);
 
@@ -158,18 +136,11 @@ const WysiwygNotepad = ({
 
   const onEditorsChange = useCallback(
     updatedEditorState => {
-      // if (
-      //   updatedEditorState.getCurrentContent() ===
-      //   editorState.getCurrentContent()
-      // ) {
-      //   console.log('No changes found in content');
-      // } else {
       setEditorState(updatedEditorState);
       const updatedNoteText = convertToRaw(
         updatedEditorState.getCurrentContent()
       );
       memoizedSaveDB(updatedNoteText);
-      // }
     },
 
     [editorState, memoizedSaveDB]
