@@ -8,6 +8,7 @@ import IconButton from 'apollo-react/components/IconButton';
 import Loader from 'apollo-react/components/Loader';
 import { Checkmark } from '../svg';
 import { Edit } from '../svg';
+import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import Dropdown from './atoms/inputs/Dropdown';
 import TextArea from './atoms/inputs/TextArea';
 import TextAreaV2 from './atoms/inputs/TextAreaV2';
@@ -54,6 +55,7 @@ type Props = {
   answers: Map,
   questionText: string,
   questionHTML: string,
+  questionJSON: string,
   answerConfiguration: Object,
   sectionName: string,
   userData: Object,
@@ -183,6 +185,8 @@ export class TaskRow extends Component<Props, State> {
       proposalDetail,
       questionText,
       questionHTML,
+      questionJSON,
+      questionHintJSON,
       sectionName,
       trackEvent,
       questionId
@@ -199,6 +203,8 @@ export class TaskRow extends Component<Props, State> {
             sectionName,
             questionText,
             questionHTML,
+            questionJSON,
+            questionHintJSON,
             questionId,
             proposalDetail
           })
@@ -213,6 +219,8 @@ export class TaskRow extends Component<Props, State> {
       proposalDetail,
       questionText,
       questionHTML,
+      questionJSON,
+      questionHintJSON,
       sectionName,
       trackEvent,
       questionId
@@ -227,6 +235,8 @@ export class TaskRow extends Component<Props, State> {
             sectionName,
             questionText,
             questionHTML,
+            questionJSON,
+            questionHintJSON,
             questionId,
             proposalDetail
           })
@@ -254,7 +264,9 @@ export class TaskRow extends Component<Props, State> {
     answers: Map,
     lastAnswer: Map,
     questionText: Map,
-    questionHTML: Map
+    questionHTML: Map,
+    questionJSON: Map,
+    questionHintJSON: Map
   ) => {
     const {
       sectionName,
@@ -556,6 +568,8 @@ export class TaskRow extends Component<Props, State> {
       questionHint,
       questionHintHTML,
       questionHTML,
+      questionJSON,
+      questionHintJSON,
       sectionName,
       roleNames,
       setEditQuestionData,
@@ -601,25 +615,31 @@ export class TaskRow extends Component<Props, State> {
               paddingBottom: '8px'
             }}
           >
-            {/* questionText */}
-            <div>
-              <Typography component={'p'} variant={'body2'}>
+             {/* questionText */}
+             <div>
+              <Typography component="p" variant="body2">
                 {questionHTML?.match(Spanexp) ||
                 questionHTML?.trim().length === 0 ? (
                   <p>{questionText}</p>
                 ) : (
-                  <div dangerouslySetInnerHTML={{ __html: questionHTML }}></div>
+                  <RichTextEditor
+                    variant="view"
+                    defaultValue={JSON.parse(questionJSON)}
+                  />
                 )}
-                {isCustomQuestion && selectedBid.get('isCurrent') && (
+                {isCustomQuestion && isSelectedBid && (
                   <span
+                    aria-hidden="true"
                     onClick={() => {
                       setEditQuestionData({
                         questionText,
                         questionHTML,
+                        questionJSON,
+                        questionHintJSON,
                         section: sectionName,
                         answerType: answerConfiguration.get('type'),
                         roleNames,
-                        questionAnswered: lastAnswer ? true : false,
+                        questionAnswered: !!lastAnswer,
                         questionId: qId
                       });
                     }}
@@ -634,9 +654,10 @@ export class TaskRow extends Component<Props, State> {
                       questionHintHTML?.match(Spanexp) ? (
                         <p>{questionHint}</p>
                       ) : (
-                        <div
-                          dangerouslySetInnerHTML={{ __html: questionHintHTML }}
-                        ></div>
+                        <RichTextEditor
+                          variant="view"
+                          defaultValue={JSON.parse(questionHintJSON)}
+                        />
                       )
                     }
                     placement="top"
@@ -655,6 +676,7 @@ export class TaskRow extends Component<Props, State> {
                 )}
               </Typography>
             </div>
+
             {/* Milestone */}
             <div>
               {this.renderTags(
@@ -681,7 +703,9 @@ export class TaskRow extends Component<Props, State> {
                   [],
                   undefined,
                   questionText,
-                  questionHTML
+                  questionHTML,
+                  questionJSON,
+                  questionHintJSON
                 )}
           </div>
         </Grid>

@@ -246,6 +246,7 @@ class CollapsibleList extends Component<Props, State> {
                     answers={questionConfig.get('answers')}
                     questionText={questionConfig.get('questionText')}
                     questionHTML={questionConfig.get('questionHTML')}
+                    questionJSON={questionConfig.get('questionJSON')}
                     answerConfiguration={questionConfig.get(
                       'answerConfiguration'
                     )}
@@ -258,6 +259,7 @@ class CollapsibleList extends Component<Props, State> {
                     loading={questionConfig.get('loading', false)}
                     questionHint={questionConfig.get('questionHint', '')}
                     questionHintHTML={questionConfig.get('questionHintHTML', '')}
+                    questionHintJSON={questionConfig.get('questionHintJSON')}
                     roleNames={questionConfig.get('roleNames')}
                     isCustomQuestion={questionConfig.get('isCustomQuestion')}
                     hasDifferentSFanswer={questionConfig.get(
