@@ -15,7 +15,6 @@ import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
 import { Typography } from 'apollo-react/components/Typography/Typography';
 import Grid from 'apollo-react/components/Grid';
-
 import {
   setProposalAnswerData,
   setEditQuestionData
@@ -27,7 +26,11 @@ import {
   getnoneditableField
 } from '../../redux/selectors';
 import MatomoHOC from '../HOC/MatomoHOC';
-import { checkNonEditableFields, getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
+import {
+  checkNonEditableFields,
+  getCountriesNameForCode,
+  getCountryOptions
+} from '../../utils/utils';
 import ChipView from './Chip/ChipView';
 import Autocomplete from './atoms/inputs/AutoComplete';
 import AutocompleteText from './atoms/inputs/AutoCompleteText';
@@ -36,10 +39,10 @@ import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
 import SFAnswerValidationWrapper from './SFAnswerValidationWrapper';
 import StatusCheck from 'apollo-react-icons/StatusCheck';
-import {List} from 'immutable';
+import { List } from 'immutable';
 
 //Regex Fix for HTML and plain text showing /span> at the end of question
-let Spanexp = /[^<]\/span>/g
+let Spanexp = /[^<]\/span>/g;
 type State = {
   selectedDay: string,
   selectedRow: Boolean
@@ -253,7 +256,13 @@ export class TaskRow extends Component<Props, State> {
     questionText: Map,
     questionHTML: Map
   ) => {
-    const { sectionName, sfObject, sfField, selectedBid, noneditableField } = this.props;
+    const {
+      sectionName,
+      sfObject,
+      sfField,
+      selectedBid,
+      noneditableField
+    } = this.props;
     const { selectedDay } = this.state;
 
     const optionsYN = ['Yes', 'No'];
@@ -262,19 +271,21 @@ export class TaskRow extends Component<Props, State> {
     let answerValue = '';
     let answerValueComplex;
     let finalOptions = options;
-    const checkDisableFlag = () => checkNonEditableFields(noneditableField, sfField, sfObject) || !selectedBid.get('isCurrent');
+    const checkDisableFlag = () =>
+      checkNonEditableFields(noneditableField, sfField, sfObject) ||
+      !selectedBid.get('isCurrent');
 
-    
     if (answer) {
       if (isObject(answer)) answerValueComplex = answer.toJS();
       else answerValue = answer.toString();
     }
-    
-    if (sectionName === 'Proposal Team'){
-      
+
+    if (sectionName === 'Proposal Team') {
       return (
         <SFAnswerValidationWrapper
-          hasDifferentSFanswer={(this.props.hasDifferentSFanswer && selectedBid.get('isCurrent'))}
+          hasDifferentSFanswer={
+            this.props.hasDifferentSFanswer && selectedBid.get('isCurrent')
+          }
           sfObject={sfObject}
         >
           <Autocomplete
@@ -292,8 +303,9 @@ export class TaskRow extends Component<Props, State> {
     // return <UserLookup sectionName={sectionName} onChange={this.handleTextChange} text={answerValue} />;
 
     if (
-      (type === 'picklist' ||  type === 'picklist-lookup') &&
-      (sfObject === 'Bid_History__c' || sfObject === 'Apttus__APTS_Agreement__c') &&
+      (type === 'picklist' || type === 'picklist-lookup') &&
+      (sfObject === 'Bid_History__c' ||
+        sfObject === 'Apttus__APTS_Agreement__c') &&
       sfField === 'Targeted_Countries__c'
     ) {
       answerValueComplex = getCountriesNameForCode(answerValueComplex || []);
@@ -307,12 +319,14 @@ export class TaskRow extends Component<Props, State> {
           : String(answerValue).trim();
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={(this.props.hasDifferentSFanswer && selectedBid.get('isCurrent'))}
+            hasDifferentSFanswer={
+              this.props.hasDifferentSFanswer && selectedBid.get('isCurrent')
+            }
             sfObject={sfObject}
           >
             <TextAreaV2
               className="proposal-text-area"
-              placeholder={(checkDisableFlag()) ? '' : "Click to answer"}
+              placeholder={checkDisableFlag() ? '' : 'Click to answer'}
               value={answerValue}
               onBlur={e => this.handleTextChange(e.target.value, answerValue)}
               onFocus={e => this.onChildInputFocus(e)}
@@ -326,12 +340,14 @@ export class TaskRow extends Component<Props, State> {
           : String(answerValue).trim();
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={(this.props.hasDifferentSFanswer && selectedBid.get('isCurrent'))}
+            hasDifferentSFanswer={
+              this.props.hasDifferentSFanswer && selectedBid.get('isCurrent')
+            }
             sfObject={sfObject}
           >
             <TextArea
               className="proposal-text-area"
-              placeholder={(checkDisableFlag()) ? '' : "Click to answer"}
+              placeholder={checkDisableFlag() ? '' : 'Click to answer'}
               type="number"
               onBlur={this.handleTextChange}
               onFocus={e => this.onChildInputFocus(e)}
@@ -343,12 +359,14 @@ export class TaskRow extends Component<Props, State> {
       case 'y/n':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={(this.props.hasDifferentSFanswer && selectedBid.get('isCurrent'))}
+            hasDifferentSFanswer={
+              this.props.hasDifferentSFanswer && selectedBid.get('isCurrent')
+            }
             sfObject={sfObject}
           >
             <Dropdown
               id="dd-proposal-answer"
-              placeholder={(checkDisableFlag()) ? '' : "Click to answer"}
+              placeholder={checkDisableFlag() ? '' : 'Click to answer'}
               items={optionsYN}
               onClick={val => this.onClickChange(val, answerValue)}
               value={answerValue}
@@ -360,12 +378,14 @@ export class TaskRow extends Component<Props, State> {
       case 'select':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={(this.props.hasDifferentSFanswer && selectedBid.get('isCurrent'))}
+            hasDifferentSFanswer={
+              this.props.hasDifferentSFanswer && selectedBid.get('isCurrent')
+            }
             sfObject={sfObject}
           >
             <Dropdown
               id="dd-proposal-answer"
-              placeholder={(checkDisableFlag()) ? '' : "Click to answer"}
+              placeholder={checkDisableFlag() ? '' : 'Click to answer'}
               items={finalOptions}
               onClick={val => this.onClickChange(val, answerValue)}
               value={answerValue}
@@ -377,7 +397,9 @@ export class TaskRow extends Component<Props, State> {
       case 'date':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={(this.props.hasDifferentSFanswer && selectedBid.get('isCurrent'))}
+            hasDifferentSFanswer={
+              this.props.hasDifferentSFanswer && selectedBid.get('isCurrent')
+            }
             sfObject={sfObject}
           >
             <QuestionDatePicker
@@ -393,11 +415,13 @@ export class TaskRow extends Component<Props, State> {
       case 'picklist':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={(this.props.hasDifferentSFanswer && selectedBid.get('isCurrent'))}
+            hasDifferentSFanswer={
+              this.props.hasDifferentSFanswer && selectedBid.get('isCurrent')
+            }
             sfObject={sfObject}
           >
             <Multiselect
-              placeholder={(checkDisableFlag()) ? '' : "Click to answer"}
+              placeholder={checkDisableFlag() ? '' : 'Click to answer'}
               items={finalOptions}
               onClick={this.onSelectValues}
               value={answerValueComplex}
@@ -409,66 +433,72 @@ export class TaskRow extends Component<Props, State> {
       case 'picklist-lookup':
         return (
           <SFAnswerValidationWrapper
-          hasDifferentSFanswer={(this.props.hasDifferentSFanswer && selectedBid.get('isCurrent'))}
-          sfObject={sfObject}
-        >
-          <AutocompleteText
-            sectionName={sectionName}
+            hasDifferentSFanswer={
+              this.props.hasDifferentSFanswer && selectedBid.get('isCurrent')
+            }
             sfObject={sfObject}
-            lov={finalOptions}
-            sfField={sfField}
-            multiple={true}
-            onFocus={e => this.setSelectRow(true)}
-            onBlur={e => this.setSelectRow(false)}
-            onChange={this.handlePropsalChange}
-            text={answerValueComplex}
-            disabled={checkDisableFlag()}
-          />
-        </SFAnswerValidationWrapper>
-      );
+          >
+            <AutocompleteText
+              sectionName={sectionName}
+              sfObject={sfObject}
+              lov={finalOptions}
+              sfField={sfField}
+              multiple={true}
+              onFocus={e => this.setSelectRow(true)}
+              onBlur={e => this.setSelectRow(false)}
+              onChange={this.handlePropsalChange}
+              text={answerValueComplex}
+              disabled={checkDisableFlag()}
+            />
+          </SFAnswerValidationWrapper>
+        );
       case 'select-lookup':
         return (
           <SFAnswerValidationWrapper
-          hasDifferentSFanswer={(this.props.hasDifferentSFanswer && selectedBid.get('isCurrent'))}
-          sfObject={sfObject}
-        >
-          <AutocompleteText
-            sectionName={sectionName}
+            hasDifferentSFanswer={
+              this.props.hasDifferentSFanswer && selectedBid.get('isCurrent')
+            }
             sfObject={sfObject}
-            lov={finalOptions}
-            sfField={sfField}
-            onFocus={e => this.setSelectRow(true)}
-            onBlur={e => this.setSelectRow(false)}
-            onChange={this.handlePropsalChange}
-            text={answerValue || ''}
-            multiple={false}
-            disabled={checkDisableFlag()}
-          />
-        </SFAnswerValidationWrapper>
-      );
+          >
+            <AutocompleteText
+              sectionName={sectionName}
+              sfObject={sfObject}
+              lov={finalOptions}
+              sfField={sfField}
+              onFocus={e => this.setSelectRow(true)}
+              onBlur={e => this.setSelectRow(false)}
+              onChange={this.handlePropsalChange}
+              text={answerValue || ''}
+              multiple={false}
+              disabled={checkDisableFlag()}
+            />
+          </SFAnswerValidationWrapper>
+        );
       default:
         return <div id="no-configuration">Click to answer</div>;
     }
   };
 
   renderTags = (milestone, milestoneNew, ismilestoneavailable, lastAnswer) => {
-    {if(milestoneNew){return (
-      <div className="chipview">
-{milestoneNew ? (
-          <ChipView label={milestoneNew} answer={lastAnswer} />
-        ) : null} 
-      </div>
-    )}else
-    return (
-      <div className="chipview">
-    {milestone ? (
-          <ChipView label={String(milestone)} answer={lastAnswer} />
-        ) : null} 
-      </div>
-    )};
-}
-
-
+    {
+      if (milestoneNew) {
+        return (
+          <div className="chipview">
+            {milestoneNew ? (
+              <ChipView label={milestoneNew} answer={lastAnswer} />
+            ) : null}
+          </div>
+        );
+      } else
+        return (
+          <div className="chipview">
+            {milestone ? (
+              <ChipView label={String(milestone)} answer={lastAnswer} />
+            ) : null}
+          </div>
+        );
+    }
+  };
 
   handleVerifyPredictedAnsClick(predictedAnswer) {
     const {
@@ -501,15 +531,15 @@ export class TaskRow extends Component<Props, State> {
   isAnswered(answer, isAnswerPredicted) {
     if (isAnswerPredicted) return false;
     if (answer && answer.get && answer.get('answer')) {
-
-      if(List.isList(answer.get('answer')))
-        return Boolean(answer.get('answer').size)
+      if (List.isList(answer.get('answer')))
+        return Boolean(answer.get('answer').size);
       else
-        return Boolean(answer
-          .get('answer')
-          .toString()
-          .trim()
-        )
+        return Boolean(
+          answer
+            .get('answer')
+            .toString()
+            .trim()
+        );
     }
     return false;
   }
@@ -521,7 +551,7 @@ export class TaskRow extends Component<Props, State> {
       answerConfiguration,
       milestone,
       milestoneNew,
-      ismilestoneavailable, 
+      ismilestoneavailable,
       loading,
       questionHint,
       questionHintHTML,
@@ -537,21 +567,30 @@ export class TaskRow extends Component<Props, State> {
     let lastAnswer;
     let answerDate = 'Not Answered';
     let isAnswerPredicted = false;
-    if(answers){
+    if (answers) {
       if (!questionId) lastAnswer = answers.last();
       else lastAnswer = answers.get('answers').last();
     }
     if (lastAnswer) {
-       if(lastAnswer.get && lastAnswer.get('date') && lastAnswer.get('date').length){
-         answerDate = parseMomentDate(lastAnswer.get('date'));
-       } 
-      if (lastAnswer.get  && lastAnswer.get('userName') && lastAnswer.get('userName').length && lastAnswer.get('userName') === 'UnityPredictedAnswer') {
+      if (
+        lastAnswer.get &&
+        lastAnswer.get('date') &&
+        lastAnswer.get('date').length
+      ) {
+        answerDate = parseMomentDate(lastAnswer.get('date'));
+      }
+      if (
+        lastAnswer.get &&
+        lastAnswer.get('userName') &&
+        lastAnswer.get('userName').length &&
+        lastAnswer.get('userName') === 'UnityPredictedAnswer'
+      ) {
         isAnswerPredicted = true;
         answerDate = 'Not Answered';
       }
     }
-    return(
-      <Grid container style={{margin:"15px 0px"}}>
+    return (
+      <Grid container style={{ margin: '15px 0px' }}>
         <Grid item xs={10}>
           {/* Question Text and Milestone */}
           <div
@@ -564,61 +603,66 @@ export class TaskRow extends Component<Props, State> {
           >
             {/* questionText */}
             <div>
-            <Typography component={'p'} variant={'body2'}>
-              {questionHTML?.match(Spanexp) ||
-              questionHTML?.trim().length === 0 ? (
-                <p>{questionText}</p>
-              ) : (
-                <div dangerouslySetInnerHTML={{ __html: questionHTML }}></div>
-              )}
-              {isCustomQuestion && selectedBid.get('isCurrent') && (
-                <span
-                  onClick={() => {
-                    setEditQuestionData({
-                      questionText,
-                      questionHTML,
-                      section: sectionName,
-                      answerType: answerConfiguration.get('type'),
-                      roleNames,
-                      questionAnswered: lastAnswer ? true : false,
-                      questionId: qId
-                    });
-                  }}
-                >
-                  <Edit className="edit-icon" />
-                </span>
-              )}
-              {questionHint.trim().length > 0 ? (
-                <Tooltip
-                  variant="light"
-                  title={
-                    questionHintHTML?.match(Spanexp) ? (
-                      <p>{questionHint}</p>
-                    ) : (
-                      <div
-                        dangerouslySetInnerHTML={{ __html: questionHintHTML }}
-                      ></div>
-                    )
-                  }
-                  placement="top"
-                >
-                  <IconButton
-                    color="primary"
-                    style={{ margin: 0 }}
-                    size="small"
-                    className="question-tooltip-icon"
+              <Typography component={'p'} variant={'body2'}>
+                {questionHTML?.match(Spanexp) ||
+                questionHTML?.trim().length === 0 ? (
+                  <p>{questionText}</p>
+                ) : (
+                  <div dangerouslySetInnerHTML={{ __html: questionHTML }}></div>
+                )}
+                {isCustomQuestion && selectedBid.get('isCurrent') && (
+                  <span
+                    onClick={() => {
+                      setEditQuestionData({
+                        questionText,
+                        questionHTML,
+                        section: sectionName,
+                        answerType: answerConfiguration.get('type'),
+                        roleNames,
+                        questionAnswered: lastAnswer ? true : false,
+                        questionId: qId
+                      });
+                    }}
                   >
-                    <InfoIcon style={{ fontSize: '16px' }} />
-                  </IconButton>
-                </Tooltip>
-              ) : (
-                <></>
-              )}
-            </Typography>
+                    <Edit className="edit-icon" />
+                  </span>
+                )}
+                {questionHint.trim().length > 0 ? (
+                  <Tooltip
+                    variant="light"
+                    title={
+                      questionHintHTML?.match(Spanexp) ? (
+                        <p>{questionHint}</p>
+                      ) : (
+                        <div
+                          dangerouslySetInnerHTML={{ __html: questionHintHTML }}
+                        ></div>
+                      )
+                    }
+                    placement="top"
+                  >
+                    <IconButton
+                      color="primary"
+                      style={{ margin: 0 }}
+                      size="small"
+                      className="question-tooltip-icon"
+                    >
+                      <InfoIcon style={{ fontSize: '16px' }} />
+                    </IconButton>
+                  </Tooltip>
+                ) : (
+                  <></>
+                )}
+              </Typography>
             </div>
             {/* Milestone */}
             <div>
-            {this.renderTags(milestone,milestoneNew, ismilestoneavailable, lastAnswer)}
+              {this.renderTags(
+                milestone,
+                milestoneNew,
+                ismilestoneavailable,
+                lastAnswer
+              )}
             </div>
           </div>
           {/* Answer */}
@@ -642,74 +686,101 @@ export class TaskRow extends Component<Props, State> {
           </div>
         </Grid>
         {/* Answer History Button*/}
-        <Grid item xs={2}  style={{display:"flex", alignItems: "center", justifyContent: "flex-start", paddingLeft:"22px"}}>
-          <div style={{display:"flex", justifyContent: "center", alignItems: "center"}}>
+        <Grid
+          item
+          xs={2}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            paddingLeft: '22px'
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
             <div>
               <button
-              style={{
-                textAlign: 'center',
-                outline: "none",
-                border: "none",
-                backgroundColor: "transparent",
-                color: "#297dfd",
-                cursor: "pointer"
-              }}
-              type="button"
-              onClick={this.displayAnswerOnHistory}
-            >
-              {answerDate}
-            </button>
+                style={{
+                  textAlign: 'center',
+                  outline: 'none',
+                  border: 'none',
+                  backgroundColor: 'transparent',
+                  color: '#297dfd',
+                  cursor: 'pointer'
+                }}
+                type="button"
+                onClick={this.displayAnswerOnHistory}
+              >
+                {answerDate}
+              </button>
             </div>
             <div>
               {isAnswerPredicted && !loading ? (
-              <Tooltip
-                variant="light"
-                title="Unity Predicted Answer"
-                placement="top"
-              >
-                <IconButton disabled={!selectedBid.get('isCurrent')}>
-                  <StatusCheck
-                    fontSize={'22px'}
-                    style={{ color: '#D9D9D9' }}
-                    onClick={() => this.handleVerifyPredictedAnsClick(lastAnswer)}
-                  />
-                </IconButton>
-              </Tooltip>
-            ) : null}
+                <Tooltip
+                  variant="light"
+                  title="Unity Predicted Answer"
+                  placement="top"
+                >
+                  <IconButton disabled={!selectedBid.get('isCurrent')}>
+                    <StatusCheck
+                      fontSize={'22px'}
+                      style={{ color: '#D9D9D9' }}
+                      onClick={() =>
+                        this.handleVerifyPredictedAnsClick(lastAnswer)
+                      }
+                    />
+                  </IconButton>
+                </Tooltip>
+              ) : null}
             </div>
             <div>
               {this.isAnswered(lastAnswer, isAnswerPredicted) && !loading ? (
-              <div>
-                <Checkmark className="answered" style={{ marginLeft: '6px' }} />
-              </div>
+                <div>
+                  <Checkmark
+                    className="answered"
+                    style={{ marginLeft: '6px' }}
+                  />
+                </div>
               ) : null}
             </div>
             <div>
               {loading ? (
-              <span style={{ marginLeft: '6px', marginTop: '6px', position: 'relative', top: '15px' }}>
-                <Loader
-                  isInner
-                  size={20}
+                <span
                   style={{
-                    width: '20px',
-                    height: '20px'
+                    marginLeft: '6px',
+                    marginTop: '6px',
+                    position: 'relative',
+                    top: '15px'
                   }}
-                />
-              </span>
-            ) : null}
+                >
+                  <Loader
+                    isInner
+                    size={20}
+                    style={{
+                      width: '20px',
+                      height: '20px'
+                    }}
+                  />
+                </span>
+              ) : null}
             </div>
           </div>
         </Grid>
       </Grid>
     );
-    }
   }
+}
 
 const mapStateToProps = (state: Object) => ({
   userData: getUserData(state),
   proposalDetail: getProposalDetails(state),
   selectedBid: getSelectedBid(state),
-  noneditableField : getnoneditableField(state)
+  noneditableField: getnoneditableField(state)
 });
 
 export default connect(mapStateToProps, {

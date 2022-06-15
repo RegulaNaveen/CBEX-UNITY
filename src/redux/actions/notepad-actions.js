@@ -37,7 +37,7 @@ export const updateProposalNotesFromWebSocket = (
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     if (data.notes[0].createdBy.userEmail === getUserEmail()) {
-      console.log('message from same user');
+      console.log('skipping update because message from same user');
     } else {
       console.log('message from diff users');
       dispatch({
