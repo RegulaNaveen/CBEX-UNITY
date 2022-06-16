@@ -8,7 +8,7 @@ import Button from 'apollo-react/components/Button';
 import _ from 'lodash'
 import { docType } from './GenerateDocs';
 
-const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList}) => {
+const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList, fetchLatestNotes}) => {
     const  {
       answered, 
       unanswered,
@@ -37,8 +37,11 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList}) 
     useEffect(()=>{
       actionChannel.subscribe({
         next: (event) => {
-          if(event.name === UI_ACTION.openGenerateModal)
+          if(event.name === UI_ACTION.openGenerateModal){
             handleOpen();
+            fetchLatestNotes();
+          }
+            
         }
       });
     }, [])

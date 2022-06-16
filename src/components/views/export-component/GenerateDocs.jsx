@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import UserInputModal from './UserInputModal';
 import {createWord} from './word-template';
 import { Packer } from "docx";
 import { saveAs } from "file-saver";
 import Logo from '../../../../img/iqvia-main-logo.png';
 import {
-  selectProposalQuestions
+  selectProposalQuestions,
+  getSelectedBid
 } from '../../../redux/selectors/proposal';
 
 import {
@@ -15,6 +16,7 @@ import {
   getProposalDetails
 } from '../../../redux/selectors';
 import { createPdf } from './pdf-template';
+import fetchNotes from '../../../redux/actions/notepad-actions';
 
 export let docType = {
   pdf : 'PDF',
@@ -22,12 +24,13 @@ export let docType = {
 }
 
 const GenerateDocs = () => {
-  let notesMap =  useSelector(selectNotes);
-  let proposalQuestions = useSelector(selectProposalQuestions);
-  let proposalDetails = useSelector(getProposalDetails);
-  let roleList = useSelector(getRoles) || []
+  const notesMap =  useSelector(selectNotes);
+  const proposalQuestions = useSelector(selectProposalQuestions);
+  const proposalDetails = useSelector(getProposalDetails);
+  const roleList = useSelector(getRoles) || []
+  const selectedBid = useSelector(getSelectedBid);
+  const dispatch = useDispatch();
   let logo = useRef(null);
-
   let [filterState, filterStateUpdate] = useState({
     answered: true,
     unanswered: false,
@@ -57,6 +60,12 @@ const GenerateDocs = () => {
     }catch(error){
     }
   }, [proposalDetails, proposalQuestions])
+
+  
+  const fetchLatestNotes = () => {
+    const proposalId = selectedBid.get('id', '');
+    if (proposalId) dispatch(fetchNotes(proposalId));
+  };
 
   const setMileStonesAsPerCurrentQues = (questions)=>{
     const isNewMileStone = questions.some((question)=>
@@ -130,6 +139,7 @@ const GenerateDocs = () => {
     initExport={initExport} 
     filterStateUpdate={filterStateUpdate}
     roleList={roleList}
+    fetchLatestNotes={fetchLatestNotes}
     ></UserInputModal>
   );
 };
