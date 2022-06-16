@@ -42,7 +42,6 @@ const QuestionDatePicker = ({
             onBlur();
           }
         }}
-        style={{ marginTop: 0 }}
         inputValue={inputValue}
         onInputChange={dte => {
           const dateregx = /^(([0-9])|([0-2][0-9])|([3][0-1]))\-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\-\d{4}$/;
@@ -81,8 +80,7 @@ const QuestionDatePicker = ({
             alignSelf: 'auto',
             position: 'absolute',
             right: '6px',
-            marginTop: 15,
-            paddingTop: 18
+            marginTop: 15
           }}
           type="button"
           className="resetButton"
