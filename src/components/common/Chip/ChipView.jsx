@@ -14,11 +14,9 @@ const ChipView = ({ label, answer }) => {
       milestonetojs = label.toJS()
     }catch(error){
     }
-    console.log(milestonetojs)
     if(milestonetojs.length){
       label = milestonetojs[0].Name || ''
       color = milestonetojs[0].Color || ''
-      console.log(typeof label)
       selectColors.map((item) => {
         if(_.isEqual(color, item.color)){ 
           color= item.label.toLowerCase() }

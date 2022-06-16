@@ -618,16 +618,15 @@ export class TaskRow extends Component<Props, State> {
              {/* questionText */}
              <div>
               <Typography component="p" variant="body2">
-                {questionHTML?.match(Spanexp) ||
-                questionHTML?.trim().length === 0 ? (
-                  <p>{questionText}</p>
-                ) : (
+                {questionJSON ? (
                   <RichTextEditor
                     variant="view"
-                    defaultValue={JSON.parse(questionJSON)}
+                    defaultValue={JSON.parse(questionJSON) || questionText}
                   />
-                )}
-                {isCustomQuestion && isSelectedBid && (
+                ): (
+                  <p>{questionText}</p>
+                ) }
+                {isCustomQuestion && selectedBid.get('isCurrent') && (
                   <span
                     aria-hidden="true"
                     onClick={() => {
@@ -647,18 +646,18 @@ export class TaskRow extends Component<Props, State> {
                     <Edit className="edit-icon" />
                   </span>
                 )}
-                {questionHint.trim().length > 0 ? (
+                {questionHintJSON ? (
                   <Tooltip
                     variant="light"
                     title={
-                      questionHintHTML?.match(Spanexp) ? (
-                        <p>{questionHint}</p>
-                      ) : (
+                      questionHintJSON ? (
                         <RichTextEditor
                           variant="view"
-                          defaultValue={JSON.parse(questionHintJSON)}
+                          defaultValue={JSON.parse(questionHintJSON) || questionHint}
                         />
-                      )
+                      ) : (
+                        <p>{questionHint}</p>
+                      ) 
                     }
                     placement="top"
                   >
