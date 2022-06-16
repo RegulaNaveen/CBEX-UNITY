@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1576: Add ability to select multiple milestones for export options
   - IQVIACBEXU-1636: Notepad toolbar hides when user scrolls down
   - IQVIACBEXU-1637: Increased scrollbar width in notepad
+  - IQVIACBEXU-1644: Fixed close button in date field
 ### Changed
 ### Fixed
 
