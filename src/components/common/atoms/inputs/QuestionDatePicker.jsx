@@ -81,7 +81,8 @@ const QuestionDatePicker = ({
             alignSelf: 'auto',
             position: 'absolute',
             right: '6px',
-            marginTop: 15
+            marginTop: 15,
+            paddingTop: 18
           }}
           type="button"
           className="resetButton"
