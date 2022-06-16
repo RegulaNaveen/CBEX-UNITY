@@ -646,7 +646,7 @@ export class TaskRow extends Component<Props, State> {
                     <Edit className="edit-icon" />
                   </span>
                 )}
-                {questionHintJSON ? (
+                {questionHint ? (
                   <Tooltip
                     variant="light"
                     title={
