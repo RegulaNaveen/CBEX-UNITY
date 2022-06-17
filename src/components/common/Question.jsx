@@ -616,16 +616,21 @@ export class TaskRow extends Component<Props, State> {
             }}
           >
             {/* questionText */}
-            <div>
+            <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+              <div>
               <Typography component="p" variant="body2">
                 {questionJSON ? (
                   <RichTextEditor
                     variant="view"
                     defaultValue={JSON.parse(questionJSON) || questionText}
                   />
-                ): (
+                ) : (
                   <p>{questionText}</p>
-                ) }
+                )}
+              </Typography>
+              </div>
+              {/* Edit Question Icon */}
+              <div style={{ paddingLeft: '5px' }}>
                 {isCustomQuestion && selectedBid.get('isCurrent') && (
                   <span
                     aria-hidden="true"
@@ -646,6 +651,9 @@ export class TaskRow extends Component<Props, State> {
                     <Edit className="edit-icon" />
                   </span>
                 )}
+              </div>
+              {/* Question Hint */}
+              <div style={{ paddingLeft: '5px' }}>
                 {questionHint ? (
                   <Tooltip
                     variant="light"
@@ -673,7 +681,7 @@ export class TaskRow extends Component<Props, State> {
                 ) : (
                   <></>
                 )}
-              </Typography>
+              </div>
             </div>
 
             {/* Milestone */}

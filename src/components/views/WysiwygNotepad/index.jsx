@@ -103,19 +103,18 @@ const WysiwygNotepad = ({
     }
   }, [notes, selectedBid]);
 
-  // unmount
-  useEffect(
-    () => () => {
-      console.log('WYSIWYG Unmount');
-      setEditorState(initialEditorState);
-    },
-    []
-  );
-
   const fetchLatestNotes = () => {
     const proposalId = selectedBid.get('id', '');
     if (proposalId) fetchNotes(proposalId);
   };
+
+  useEffect(() => {
+    fetchLatestNotes();
+    return () => {
+      console.log('WYSIWYG Unmount');
+      setEditorState(initialEditorState);
+    };
+  }, []);
 
   const memoizedSaveDB = useCallback(
     debounce(noteText => {
