@@ -30,6 +30,9 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList}) 
     try{
       roles = (roleList.includes('All')) ? roleList : [...['All'], ...roleList]
       milestoneOptionsWithDefault = (milestoneOptions.includes('All')) ? milestoneOptions : [...['All'], ...milestoneOptions]
+      milestoneOptionsWithDefault = milestoneOptionsWithDefault.sort((a,b)=>{
+        return a.toLowerCase().localeCompare(b.toLowerCase());
+      });
     }catch(error){
 
     }
