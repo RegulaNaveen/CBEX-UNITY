@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1644: Fixed close button in date field
 ### Changed
 ### Fixed
+  - IQVIACBEXU-1668: Fixed Notes are not getting save on collapse. Added fetch notes on notes mount
+  - IQVIACBEXU-1630: Fixed tooltip and edit question icon Alignment
 
 ## [4.2] - YYYY-MM-DD
 ### Added
