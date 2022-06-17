@@ -81,6 +81,9 @@
       background-color: #f2f2f2 !important;
     }
   }
+  .public-DraftStyleDefault-block{
+    margin-top: 2px;
+  }
 }
  }
  @media only screen   
@@ -164,6 +167,9 @@ and (max-width : 3000px)
     .Mui-disabled {
       background-color: #f2f2f2 !important;
     }
+  }
+  .public-DraftStyleDefault-block{
+    margin-top: 2px;
   }
 }
 }

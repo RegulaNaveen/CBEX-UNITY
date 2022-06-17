@@ -604,7 +604,13 @@ export class TaskRow extends Component<Props, State> {
       }
     }
     return (
-      <Grid container style={{ margin: '15px 0px' }}>
+      <Grid
+      container
+      className={`task-table-row${
+        this.state.selectedRow ? ' selected-task-table-row' : ''
+      }`}
+      style={{ margin: '2px 0px', padding: '4 8' }}
+      >
         <Grid item xs={10}>
           {/* Question Text and Milestone */}
           <div
