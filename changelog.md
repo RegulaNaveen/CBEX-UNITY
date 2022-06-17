@@ -19,7 +19,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
   - IQVIACBEXU-1668: Fixed Notes are not getting save on collapse. Added fetch notes on notes mount
   - IQVIACBEXU-1630: Fixed tooltip and edit question icon Alignment
-
+  - IQVIACBEXU-1529: "Control" Text format is bigger in Blade section.
+  - IQVIACBEXU-1669: Dropdown value not showing correctly for Answer in Unity
+  - IQVIACBEXU-1667: Space need to be corrected between the questions
+  - IQVIACBEXU-1557: Question & Tool tip formatting is not working in unity as per the ubuild
+  - IQVIACBEXU-1659: In unity system not showing correctly for long milestone name
+  - IQVIACBEXU-1670: Questions are displaying over custom question pop up
+  - IQVIACBEXU-1670: Other questions are displaying over the single select and multi select dropdown options
+  - IQVIACBEXU-1670: White gap is coming for blade when both blade and custom question pop up are opened
 ## [4.2] - YYYY-MM-DD
 ### Added
   - IQVIACBEXU-1311: Flag end users when an auto-populated response has been manually edited
