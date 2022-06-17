@@ -392,7 +392,7 @@ class Questions extends Component<Props, State> {
     }
   }
 
-  renderFilter() {
+  renderFilter() {  
     const { showFilter } = this.state;
     const { questionsFilters, clearQuestionsFilter } = this.props;
     if (showFilter) {

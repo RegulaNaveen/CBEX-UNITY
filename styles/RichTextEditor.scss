@@ -32,7 +32,7 @@
   }
   
   .RichEditor-editor .public-DraftEditor-content {
-    min-height: 100px;
+    min-height: 0px !important;
   }
   
   .RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
