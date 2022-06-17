@@ -1,5 +1,8 @@
 .date-picker {
   position: relative;
+  & > div {
+    margin: 0;
+  }
   .DayPickerInput {
     width: 100%;
   }
@@ -88,7 +91,7 @@
     }
 
     .date {
-      color: $black;;
+      color: $black;
     }
   }
 }
