@@ -2,6 +2,7 @@ import { fromJS } from 'immutable';
 import { REDUX_TYPES } from '../../constants';
 import { fetchNotesApi, addNoteApi, updateNoteApi } from '../../api/notepad';
 import { getUserEmail } from '../../SessionHandler';
+import { getSelectedBid } from '../../redux/selectors';
 
 const {
   FETCH_NOTES,
@@ -35,15 +36,11 @@ export function fetchNotes(proposalID) {
 export const updateProposalNotesFromWebSocket = (
   data
 ): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<string, Object>) => {
-    if (data.notes[0].createdBy.userEmail === getUserEmail()) {
+  return async (dispatch: Dispatch<string, Object>, getState) => {
+    if (data.updatedBy === getUserEmail()) {
       console.log('skipping update because message from same user');
     } else {
-      console.log('message from diff users');
-      dispatch({
-        type: FETCH_NOTES_DONE,
-        payload: { data: fromJS(data.notes), isFromSocket: true }
-      });
+      dispatch(fetchNotes(getSelectedBid(getState()).get('id', '')));
     }
   };
 };

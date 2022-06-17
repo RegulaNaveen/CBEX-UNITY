@@ -103,19 +103,18 @@ const WysiwygNotepad = ({
     }
   }, [notes, selectedBid]);
 
-  // unmount
-  useEffect(
-    () => () => {
-      console.log('WYSIWYG Unmount');
-      setEditorState(initialEditorState);
-    },
-    []
-  );
-
   const fetchLatestNotes = () => {
     const proposalId = selectedBid.get('id', '');
     if (proposalId) fetchNotes(proposalId);
   };
+
+  useEffect(() => {
+    fetchLatestNotes();
+    return () => {
+      console.log('WYSIWYG Unmount');
+      setEditorState(initialEditorState);
+    };
+  }, []);
 
   const memoizedSaveDB = useCallback(
     debounce(noteText => {
@@ -136,11 +135,15 @@ const WysiwygNotepad = ({
 
   const onEditorsChange = useCallback(
     updatedEditorState => {
+      const raw = convertToRaw(editorState.getCurrentContent());
+      const updatedRaw = convertToRaw(updatedEditorState.getCurrentContent());
+      const delta = jsonDP.diff(raw, updatedRaw);
       setEditorState(updatedEditorState);
-      const updatedNoteText = convertToRaw(
-        updatedEditorState.getCurrentContent()
-      );
-      memoizedSaveDB(updatedNoteText);
+      if (!delta) {
+        console.log('no change found in notes after key event');
+        return;
+      }
+      memoizedSaveDB(updatedRaw);
     },
 
     [editorState, memoizedSaveDB]
@@ -148,6 +151,7 @@ const WysiwygNotepad = ({
 
   return (
     <Editor
+      key="draft_editor"
       editorState={editorState}
       onEditorStateChange={onEditorsChange}
       readOnly={isReadOnly}

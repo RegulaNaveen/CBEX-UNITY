@@ -616,16 +616,21 @@ export class TaskRow extends Component<Props, State> {
             }}
           >
              {/* questionText */}
-             <div style={{zIndex:0}}>
+             <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+             <div style={{zIndex: 0, alignSelf: 'center' }}>
               <Typography variant="body2">
                 {questionJSON ? (
                   <RichTextEditor style={{ minHeight: '0px' }}
                     variant="view"
                     defaultValue={JSON.parse(questionJSON)}
                   />
-                ): (
+                ) : (
                   <p>{questionText}</p>
-                ) }
+                )}
+              </Typography>
+              </div>
+              {/* Edit Question Icon */}
+              <div style={{ paddingLeft: '5px' }}>
                 {isCustomQuestion && selectedBid.get('isCurrent') && (
                   <span
                     aria-hidden="true"
@@ -646,6 +651,9 @@ export class TaskRow extends Component<Props, State> {
                     <Edit className="edit-icon" />
                   </span>
                 )}
+              </div>
+              {/* Question Hint */}
+              <div style={{ paddingLeft: '5px', paddingTop: '3px' }}>
                 {questionHint ? (
                   <Tooltip
                     variant="light"
@@ -657,7 +665,7 @@ export class TaskRow extends Component<Props, State> {
                         />
                       ) : (
                         <p>{questionHint}</p>
-                      ) 
+                      )
                     }
                     placement="top"
                   >
@@ -673,7 +681,7 @@ export class TaskRow extends Component<Props, State> {
                 ) : (
                   <></>
                 )}
-              </Typography>
+              </div>
             </div>
 
             {/* Milestone */}
@@ -686,113 +694,118 @@ export class TaskRow extends Component<Props, State> {
               )}
             </div>
           </div>
-          {/* Answer */}
-          <div>
-            {answerConfiguration
-              ? this.renderAnswer(
-                  answerConfiguration.get('type'),
-                  answerConfiguration.get('options'),
-                  answers,
-                  lastAnswer,
-                  questionText
-                )
-              : this.renderAnswer(
-                  '',
-                  [],
-                  [],
-                  undefined,
-                  questionText,
-                  questionHTML,
-                  questionJSON,
-                  questionHintJSON
-                )}
-          </div>
         </Grid>
-        {/* Answer History Button*/}
-        <Grid
-          item
-          xs={2}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            paddingLeft: '22px'
-          }}
-        >
-          <div
+        <Grid item xs={2}></Grid>
+        <Grid container>
+          {/* Answer */}
+          <Grid item xs={10}>
+            <div>
+              {answerConfiguration
+                ? this.renderAnswer(
+                    answerConfiguration.get('type'),
+                    answerConfiguration.get('options'),
+                    answers,
+                    lastAnswer,
+                    questionText
+                  )
+                : this.renderAnswer(
+                    '',
+                    [],
+                    [],
+                    undefined,
+                    questionText,
+                    questionHTML,
+                    questionJSON,
+                    questionHintJSON
+                  )}
+            </div>
+          </Grid>
+          {/* Answer History Button*/}
+          <Grid
+            item
+            xs={2}
             style={{
               display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              paddingLeft: '22px'
             }}
           >
-            <div>
-              <button
-                style={{
-                  textAlign: 'center',
-                  outline: 'none',
-                  border: 'none',
-                  backgroundColor: 'transparent',
-                  color: '#297dfd',
-                  cursor: 'pointer'
-                }}
-                type="button"
-                onClick={this.displayAnswerOnHistory}
-              >
-                {answerDate}
-              </button>
-            </div>
-            <div>
-              {isAnswerPredicted && !loading ? (
-                <Tooltip
-                  variant="light"
-                  title="Unity Predicted Answer"
-                  placement="top"
-                >
-                  <IconButton disabled={!selectedBid.get('isCurrent')}>
-                    <StatusCheck
-                      fontSize={'22px'}
-                      style={{ color: '#D9D9D9' }}
-                      onClick={() =>
-                        this.handleVerifyPredictedAnsClick(lastAnswer)
-                      }
-                    />
-                  </IconButton>
-                </Tooltip>
-              ) : null}
-            </div>
-            <div>
-              {this.isAnswered(lastAnswer, isAnswerPredicted) && !loading ? (
-                <div>
-                  <Checkmark
-                    className="answered"
-                    style={{ marginLeft: '6px' }}
-                  />
-                </div>
-              ) : null}
-            </div>
-            <div>
-              {loading ? (
-                <span
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <div>
+                <button
                   style={{
-                    marginLeft: '6px',
-                    marginTop: '6px',
-                    position: 'relative',
-                    top: '15px'
+                    textAlign: 'center',
+                    outline: 'none',
+                    border: 'none',
+                    backgroundColor: 'transparent',
+                    color: '#297dfd',
+                    cursor: 'pointer'
                   }}
+                  type="button"
+                  onClick={this.displayAnswerOnHistory}
                 >
-                  <Loader
-                    isInner
-                    size={20}
+                  {answerDate}
+                </button>
+              </div>
+              <div>
+                {isAnswerPredicted && !loading ? (
+                  <Tooltip
+                    variant="light"
+                    title="Unity Predicted Answer"
+                    placement="top"
+                  >
+                    <IconButton disabled={!selectedBid.get('isCurrent')}>
+                      <StatusCheck
+                        fontSize={'22px'}
+                        style={{ color: '#D9D9D9' }}
+                        onClick={() =>
+                          this.handleVerifyPredictedAnsClick(lastAnswer)
+                        }
+                      />
+                    </IconButton>
+                  </Tooltip>
+                ) : null}
+              </div>
+              <div>
+                {this.isAnswered(lastAnswer, isAnswerPredicted) && !loading ? (
+                  <div>
+                    <Checkmark
+                      className="answered"
+                      style={{ marginLeft: '6px' }}
+                    />
+                  </div>
+                ) : null}
+              </div>
+              <div>
+                {loading ? (
+                  <span
                     style={{
-                      width: '20px',
-                      height: '20px'
+                      marginLeft: '6px',
+                      marginTop: '6px',
+                      position: 'relative',
+                      top: '15px'
                     }}
-                  />
-                </span>
-              ) : null}
+                  >
+                    <Loader
+                      isInner
+                      size={20}
+                      style={{
+                        width: '20px',
+                        height: '20px'
+                      }}
+                    />
+                  </span>
+                ) : null}
+              </div>
             </div>
-          </div>
+          </Grid>
         </Grid>
       </Grid>
     );

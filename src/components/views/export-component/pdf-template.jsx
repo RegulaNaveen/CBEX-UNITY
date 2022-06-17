@@ -79,6 +79,18 @@ const styles = StyleSheet.create({
 
 function getStyle(){
  return `<style>
+    h1{
+        font-size: 20px;
+        margin: 5px;
+    }
+    h2{
+        font-size: 17px;
+        margin: 3px;
+    }
+    h3{
+        font-size: 15px;
+        margin: 2px;
+    }
     body{
         padding: 50px;
         font-size: 10px;
@@ -130,6 +142,8 @@ function getStyle(){
     }
     .blueColorText{
         color: #${themeBlue};
+        font-family:Helvetica;
+        font-size: 8px;
     }
     .footerWrapper{
         display:flex;
@@ -159,7 +173,8 @@ function getStyle(){
     }
     .MuiFormControl-root{
         padding:5px;
-        border: 1px solid #000
+        border: 1px solid #000;
+        border-top: none;
     }
     [data-block="true"] {
         padding-bottom:10px;
@@ -267,7 +282,7 @@ function questionTables(proposalQuestions){
             const questionText = question.questionText || '';
             html += `<tr>`
             html += `<td> ${questionText} <br><br></td>`
-            html += `<td> ${formatDate(getLastAnswer(question.answers), question.answerConfiguration)} <span class="blueColorText" style="font-size:20px"> ${(getUnityPredicatedText(question.answers)) ? getUnityPredicatedText(question.answers) : ''}</span><br><br></td>`
+            html += `<td> ${formatDate(getLastAnswer(question.answers), question.answerConfiguration)} <span class="blueColorText">${(getUnityPredicatedText(question.answers)) ? getUnityPredicatedText(question.answers) : ''}</span><br><br></td>`
             html += `</tr>`      
         });
         html += `</table>`

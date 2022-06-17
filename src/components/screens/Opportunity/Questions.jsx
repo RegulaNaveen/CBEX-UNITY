@@ -330,7 +330,6 @@ class Questions extends Component<Props, State> {
   };
 
   setIsNotepadOpen = (value:boolean) => {
-    console.log("setIsNotepadOpen fired");
     this.setState({isNotepadOpen:value})
   }
 
@@ -474,12 +473,12 @@ class Questions extends Component<Props, State> {
 
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
 
-    const minPixelToExclude = 80;
+    const minPixelToExclude = 20;
     const notepadMinWidthPx =
       (window.innerWidth - minPixelToExclude) * (30 / 100); // 30% of the total screen size
     const notepadMaxWidthPx = isOpen
       ? notepadMinWidthPx
-      : (window.innerWidth - minPixelToExclude) * (50 / 100); // 50% of the total screen size
+      : (window.innerWidth - minPixelToExclude) * (47 / 100); // 50% of the total screen size
 
     return (
       <>
@@ -549,6 +548,7 @@ class Questions extends Component<Props, State> {
             <Panel
               minWidth={notepadMinWidthPx}
               maxWidth={notepadMaxWidthPx}
+              width={notepadMaxWidthPx}
               resizable
               onClose={()=>{this.setIsNotepadOpen(false)}}
               onOpen={()=>{this.setIsNotepadOpen(true)}}
