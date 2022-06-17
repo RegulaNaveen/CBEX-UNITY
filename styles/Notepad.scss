@@ -46,6 +46,15 @@
       }
     }
   }
+  .DraftEditor-root {
+    line-height: 1.1rem;
+    .DraftEditor-editorContainer {
+      padding: 5px 10px;
+      * {
+        font-size: 12px;
+      }
+    }
+  }
 }
 
 #panel-questions-list {
@@ -53,12 +62,4 @@
   flex-shrink: 100;
 }
 
-.DraftEditor-root {
-  line-height: 1.1rem;
-  .DraftEditor-editorContainer {
-    padding: 5px 10px;
-    * {
-      font-size: 12px;
-    }
-  }
-}
+

@@ -13,4 +13,9 @@
 
 .chipview > p {
     word-break: unset !important;
+    overflow: hidden;
+    height: 1%;
+    text-align: center;
+    min-width: 50px;
+    max-width: 150px;
 }

@@ -616,12 +616,12 @@ export class TaskRow extends Component<Props, State> {
             }}
           >
              {/* questionText */}
-             <div>
-              <Typography component="p" variant="body2">
+             <div style={{zIndex:0}}>
+              <Typography variant="body2">
                 {questionJSON ? (
-                  <RichTextEditor
+                  <RichTextEditor style={{ minHeight: '0px' }}
                     variant="view"
-                    defaultValue={JSON.parse(questionJSON) || questionText}
+                    defaultValue={JSON.parse(questionJSON)}
                   />
                 ): (
                   <p>{questionText}</p>
@@ -653,7 +653,7 @@ export class TaskRow extends Component<Props, State> {
                       questionHintJSON ? (
                         <RichTextEditor
                           variant="view"
-                          defaultValue={JSON.parse(questionHintJSON) || questionHint}
+                          defaultValue={JSON.parse(questionHintJSON)}
                         />
                       ) : (
                         <p>{questionHint}</p>
