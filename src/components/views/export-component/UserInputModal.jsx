@@ -6,7 +6,7 @@ import MenuItem from 'apollo-react/components/MenuItem';
 import Select from 'apollo-react/components/Select';
 import Button from 'apollo-react/components/Button';
 import _ from 'lodash'
-import { docType } from './GenerateDocs';
+import { defaultOption, docType } from './GenerateDocs';
 
 const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList, fetchLatestNotes}) => {
     const  {
@@ -28,10 +28,16 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList, f
     let roles = roleList
     let milestoneOptionsWithDefault = milestoneOptions
     try{
-      roles = (roleList.includes('All')) ? roleList : [...['All'], ...roleList]
-      milestoneOptionsWithDefault = (milestoneOptions.includes('All')) ? milestoneOptions : [...['All'], ...milestoneOptions]
+      roles = (roleList.includes(defaultOption)) ? roleList : [...[defaultOption], ...roleList]
+      milestoneOptionsWithDefault = (milestoneOptions.includes(defaultOption)) ? milestoneOptions : [...[defaultOption], ...milestoneOptions];
+      roles = roles.sort((a,b)=>{
+        return a.toLowerCase().localeCompare(b.toLowerCase());
+      });
+      milestoneOptionsWithDefault = milestoneOptionsWithDefault.sort((a,b)=>{
+        return a.toLowerCase().localeCompare(b.toLowerCase());
+      });
     }catch(error){
-
+      console.log(error);
     }
 
     useEffect(()=>{
@@ -63,6 +69,22 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList, f
       });
     }
 
+    const handleMileStoneChange = (e) => {
+      let newValue = e.target.value;
+      if(milestones.includes(defaultOption) && newValue.includes(defaultOption) && newValue.length != milestoneOptionsWithDefault.length){
+        newValue = newValue.filter((selected)=>selected!=defaultOption)
+      }else if(!milestones.includes(defaultOption) && newValue.includes(defaultOption)){
+        newValue = milestoneOptionsWithDefault
+      }else if(!milestones.includes(defaultOption) && !newValue.includes(defaultOption) && (newValue.length == milestoneOptionsWithDefault.length-1)){
+        newValue = milestoneOptionsWithDefault
+      }else if(milestones.includes(defaultOption) && !newValue.includes(defaultOption)){
+        newValue = []
+      }
+      filterStateUpdate({
+        ...filterState,
+        ...{[e.target.name] : newValue}
+      });
+    }
     const disable = ()=>{
       return  (answered || unanswered || myRole || includesNotes) && fileName
     }
@@ -128,10 +150,9 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList, f
             <Select
               label="Select by Milestones"
               value={milestones}
-              onChange={handleTextChange}
+              onChange={handleMileStoneChange}
               fullWidth
               name="milestones"
-              canDeselect={false}
               multiple
             >
               {milestoneOptionsWithDefault.map((milestone)=> <MenuItem key={milestone} value={milestone}>{milestone}</MenuItem>)}

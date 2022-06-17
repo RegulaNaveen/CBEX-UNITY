@@ -22,7 +22,7 @@ export let docType = {
   pdf : 'PDF',
   doc : 'DOCX'
 }
-
+export const defaultOption = 'All';
 const GenerateDocs = () => {
   const notesMap =  useSelector(selectNotes);
   const proposalQuestions = useSelector(selectProposalQuestions);
@@ -36,8 +36,8 @@ const GenerateDocs = () => {
     unanswered: false,
     myRole: false,
     includesNotes: true,
-    milestones: ['All'],
-    interestedParties: 'All',
+    milestones: [defaultOption],
+    interestedParties: defaultOption,
     fileName: 'Unity Export',
     fileType: docType.pdf,
     milestoneOptions: []
@@ -55,7 +55,8 @@ const GenerateDocs = () => {
       filterStateUpdate({
         ...filterState,
         ...{fileName},
-        ...{milestoneOptions: derivedMileStones}
+        ...{milestoneOptions: derivedMileStones},
+        ...{milestones: [...[defaultOption], ...derivedMileStones]}
       })
     }catch(error){
     }
