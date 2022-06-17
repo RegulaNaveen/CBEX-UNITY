@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import AutocompleteV2 from 'apollo-react/components/AutocompleteV2';
-import Loader from 'apollo-react/components/Loader';
 import { API } from '../../../../constants';
 import { getAccessTokenFromLocalStorage as getAccessToken } from '../../../../SessionHandler';
 
@@ -10,29 +9,11 @@ const Autocomplete = props => {
   const [options, setOptions] = useState([]);
   const [value, setValue] = useState([]);
   const text = String(props?.text)
-  .trimStart()
-  .trimEnd();
+    .trimStart()
+    .trimEnd();
   const previousController = useRef();
   const { disabled } = props;
 
-  function extractEmails(str) {
-    let result = String(str).match(
-      /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
-    );
-    return result ? (result.length ? result[0] : '') : '';
-  }
-  
-  /**
-   * Extracts name from the string format: `Firstname Lastname(name@example.com)`
-   */
-  function extractName(str) {
-    const splirt_array = str.split('(');
-    return splirt_array // check null
-      ? splirt_array.length > 0
-        ? splirt_array[0].trim()
-        : ''
-      : '';
-  }
   const getData = searchTerm => {
     if (previousController.current) {
       previousController.current.abort();
@@ -47,16 +28,19 @@ const Autocomplete = props => {
           'x-api-key': API_KEY,
           'x-access-token': getAccessToken()
         }
-      } )
+      })
         .then(response => response.json())
         .then(myJson => {
-          console.log(`search term: ${searchTerm}, results: `, myJson);
-          console.log(myJson);
           const updatedOptions = myJson.data.map(p => {
-            return { label: `${p.first_name} ${p.last_name} (${p.email})`,
-          full_name: `${p.first_name} ${p.last_name}`};
+            return {
+              label: `${p.first_name} ${p.last_name} (${p.email})` || '',
+              full_name: `${p.first_name} ${p.last_name}` || ''
+            };
           });
           setOptions(updatedOptions);
+        })
+        .catch(error => {
+          console.log(error);
         });
     } catch (error) {
       console.error(error);
@@ -65,16 +49,14 @@ const Autocomplete = props => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
     const proposaluser = newValue.map(v => {
-      return v.email
-        ? v.label + '(' + v.email + ')'
-        : v.label + '(' + extractEmails(v.label) + ')';
+      return v.label;
     });
     if (proposaluser.length == 0) props.onChange(' ', text);
     else props.onChange(proposaluser.join(','), text);
   };
   const onInputChange = (event, value) => {
     if (value) {
-      getData(value)
+      getData(value);
     } else {
       setOptions([]);
     }
@@ -85,7 +67,7 @@ const Autocomplete = props => {
       <AutocompleteV2
         fullWidth
         multiple
-        options={options || []}
+        options={options.length > 0 ? options : []}
         chipColor="white"
         size="small"
         limitChips={50}
@@ -94,6 +76,7 @@ const Autocomplete = props => {
         onChange={handleChange}
         onInputChange={onInputChange}
         noOptionsText="No matches found"
+        open={options.length > 0}
         onFocus={e => {
           props.onFocus();
         }}

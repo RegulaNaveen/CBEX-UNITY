@@ -1,19 +1,17 @@
-export const selectColors = [
+export default [
+  { label: 'blue', color: '#015ff1' },
 
-    { label: 'Blue', color: '#015ff1' },
-  
-    { label: 'Green', color: '#00c221' },
-  
-    { label: 'Dark Blue', color: '#10558a' },
-  
-    { label: 'Fuchsia', color: '#df216d' },
-  
-    { label: 'Purple', color: '#9e54b0' },
-  
-    { label: 'Orange', color: '#ff9300' },
-  
-    { label: 'Gray', color: '#595959' },
-  
-    { label: 'Black', color: '#000000' },
-  
-  ];
+  { label: 'green', color: '#00c221' },
+
+  { label: 'blueDark', color: '#10558a' },
+
+  { label: 'fuchsia', color: '#df216d' },
+
+  { label: 'purple', color: '#9e54b0' },
+
+  { label: 'orange', color: '#ff9300' },
+
+  { label: 'grey', color: '#595959' },
+
+  { label: 'black', color: '#000000' }
+];
