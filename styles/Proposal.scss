@@ -482,3 +482,25 @@ and (max-width : 3000px)
     }
   }
 }  
+
+//custom determinate button for export milestone filter
+.all-not-selected {
+   position: relative;
+   label{
+    > span:first-child::before{
+      background-color: #0768fd;
+      content: '-';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 2px;
+      color: #fff;
+      font-size: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: inherit;
+      z-index: 1;
+     }
+   }
+}
