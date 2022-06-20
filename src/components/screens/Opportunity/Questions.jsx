@@ -553,7 +553,9 @@ class Questions extends Component<Props, State> {
               onClose={()=>{this.setIsNotepadOpen(false)}}
               onOpen={()=>{this.setIsNotepadOpen(true)}}
             >
-              {isNotepadOpen && <WysiwygNotepad />}
+              <div style={{ display: isNotepadOpen ? 'block' : 'none' }}>
+                <WysiwygNotepad />
+              </div>
             </Panel>
           </div>
           {/* Question list */}

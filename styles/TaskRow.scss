@@ -10,6 +10,12 @@
   padding: 8px 0;
   align-items: center;
 
+  p {
+    p {
+      font-size: 16px;
+    }
+  }
+
   .question-text {
     display: grid;
     align-items: center;
@@ -82,7 +88,7 @@
     }
   }
   .public-DraftStyleDefault-block{
-    margin-top: 2px;
+    margin: 2px 0px;
   }
 }
  }
@@ -96,6 +102,12 @@ and (max-width : 3000px)
   // margin-bottom: 8px;
   padding: 10px 0;
   align-items: flex-start;
+
+  p {
+    p {
+      font-size: 16px;
+    }
+  }
 
   .question-text {
     display: grid;
@@ -169,7 +181,7 @@ and (max-width : 3000px)
     }
   }
   .public-DraftStyleDefault-block{
-    margin-top: 2px;
+    margin: 2px 0px;
   }
 }
 }
