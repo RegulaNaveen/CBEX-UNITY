@@ -152,7 +152,15 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList}) 
               name="milestones"
               multiple
             >
-              {milestoneOptionsWithDefault.map((milestone)=> <MenuItem key={milestone} value={milestone}>{milestone}</MenuItem>)}
+              {milestoneOptionsWithDefault.map((milestone)=> 
+                <MenuItem 
+                  key={milestone}
+                  value={milestone}
+                  className={milestone === defaultOption && !milestones.includes(defaultOption)? 'all-not-selected' : ''}
+                >
+                  {milestone}
+                </MenuItem>
+              )}
             </Select>
           </div>
         </div>
