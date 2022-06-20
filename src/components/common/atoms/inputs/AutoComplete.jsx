@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import AutocompleteV2 from 'apollo-react/components/AutocompleteV2';
-import Loader from 'apollo-react/components/Loader';
 import { API } from '../../../../constants';
 import { getAccessTokenFromLocalStorage as getAccessToken } from '../../../../SessionHandler';
 
@@ -82,7 +81,9 @@ const Autocomplete = props => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
     const proposaluser = newValue.map(v => {
-      return v.label
+      return v.email
+        ? v.label + '(' + v.email + ')'
+        : v.label;
     });
     if (proposaluser.length == 0) props.onChange(' ', text);
     else props.onChange(proposaluser.join(','), text);
