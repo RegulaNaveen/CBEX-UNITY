@@ -28,14 +28,14 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList, f
     let roles = roleList
     let milestoneOptionsWithDefault = milestoneOptions
     try{
-      roles = (roleList.includes(defaultOption)) ? roleList : [...[defaultOption], ...roleList]
-      milestoneOptionsWithDefault = (milestoneOptions.includes(defaultOption)) ? milestoneOptions : [...[defaultOption], ...milestoneOptions];
       roles = roles.sort((a,b)=>{
         return a.toLowerCase().localeCompare(b.toLowerCase());
       });
       milestoneOptionsWithDefault = milestoneOptionsWithDefault.sort((a,b)=>{
         return a.toLowerCase().localeCompare(b.toLowerCase());
       });
+      roles = (roleList.includes(defaultOption)) ? roleList : [...[defaultOption], ...roleList]
+      milestoneOptionsWithDefault = (milestoneOptions.includes(defaultOption)) ? milestoneOptions : [...[defaultOption], ...milestoneOptions];
     }catch(error){
       console.log(error);
     }
