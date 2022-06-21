@@ -1,10 +1,10 @@
 // @flow
 import { isEmpty, cloneDeep, uniqBy } from 'lodash';
 import { fromJS } from 'immutable';
-import { REDUX_TYPES } from '../../constants';
-import type { Dispatch, ThunkAction } from './action-types';
-import { API } from '../../constants';
 import axios from 'axios';
+
+import { REDUX_TYPES, API } from '../../constants';
+import type { Dispatch, ThunkAction } from './action-types';
 import {
   getProposalInfo,
   setProposalAnswer,
@@ -23,16 +23,16 @@ import {
   getPickListLookupSfData,
   fetchAdditionalBoxLink,
   getOTListData,
-  changeProposalOT
+  changeProposalOT,
+  deleteProposalUser
 } from '../../api/proposal';
-const { PROPOSAL_API_URL } = API.PROPOSAL;
-
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getUniqueMilestones } from '../selectors/proposal';
 import { getProposalIdlist } from '../../utils/utils';
 import { fetchNotes } from './notepad-actions';
 import { DEFAULT } from '../../constants/app';
 
+const { PROPOSAL_API_URL } = API.PROPOSAL;
 const {
   PROPOSAL_INFO,
   PROPOSAL_INFO_LOADING,
@@ -906,4 +906,40 @@ export const updateSwitchInProgress = data => {
       payload: data
     });
   };
+};
+
+/**
+ * Set Proposal Answer Loading - Action
+ */
+export const setProposalAnswerLoading = (questionId, loading) => {
+  return async dispatch => {
+    dispatch({
+      type: PROPOSAL_ANSWER_LOADING,
+      payload: { questionId, loading }
+    });
+  };
+};
+
+/**
+ * Delete Proposal User from Selected Answer
+ */
+export const deleteProposalUserFromDB = (
+  proposalId,
+  email,
+  sectionOrder,
+  sectionName
+) => async () => {
+  try {
+    // Api Response
+    const response = await deleteProposalUser(proposalId, {
+      email,
+      section: { sectionOrder, sectionName }
+    });
+    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
+  } catch (error) {
+    // Error
+    console.log('Error! occurred..', error.response);
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
+  }
 };

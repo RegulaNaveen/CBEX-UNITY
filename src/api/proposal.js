@@ -276,3 +276,16 @@ export const changeProposalOT = payload => {
     headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
   });
 };
+
+/**
+ * Delete Proposal User from Selected Answer
+ */
+export const deleteProposalUser = (proposalId, data) => {
+  return axios.delete(
+    `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/proposalUser`,
+    {
+      headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() },
+      data
+    }
+  );
+};
