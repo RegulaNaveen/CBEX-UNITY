@@ -1,24 +1,29 @@
 // @flow
 /* eslint-disable no-plusplus */
 import React, { Component } from 'react';
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
 import { connect } from 'react-redux';
-import { isObject, isEqual, isEmpty } from 'lodash';
+import { isObject, isEqual, isEmpty, xor } from 'lodash';
 import IconButton from 'apollo-react/components/IconButton';
 import Loader from 'apollo-react/components/Loader';
-import { Checkmark } from '../svg';
-import { Edit } from '../svg';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
+import { Typography } from 'apollo-react/components/Typography/Typography';
+import Grid from 'apollo-react/components/Grid';
+import InfoIcon from 'apollo-react-icons/Info';
+import Tooltip from 'apollo-react/components/Tooltip';
+import StatusCheck from 'apollo-react-icons/StatusCheck';
+
+import { Checkmark, Edit } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
 import TextArea from './atoms/inputs/TextArea';
 import TextAreaV2 from './atoms/inputs/TextAreaV2';
 import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
-import { Typography } from 'apollo-react/components/Typography/Typography';
-import Grid from 'apollo-react/components/Grid';
 import {
   setProposalAnswerData,
-  setEditQuestionData
+  setEditQuestionData,
+  setProposalAnswerLoading,
+  deleteProposalUserFromDB
 } from '../../redux/actions/proposal-actions';
 import {
   getUserData,
@@ -36,14 +41,10 @@ import ChipView from './Chip/ChipView';
 import Autocomplete from './atoms/inputs/AutoComplete';
 import AutocompleteText from './atoms/inputs/AutoCompleteText';
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
-import InfoIcon from 'apollo-react-icons/Info';
-import Tooltip from 'apollo-react/components/Tooltip';
 import SFAnswerValidationWrapper from './SFAnswerValidationWrapper';
-import StatusCheck from 'apollo-react-icons/StatusCheck';
-import { List } from 'immutable';
 
-//Regex Fix for HTML and plain text showing /span> at the end of question
-let Spanexp = /[^<]\/span>/g;
+// Regex Fix for HTML and plain text showing /span> at the end of question
+// const Spanexp = /[^<]\/span>/g;
 type State = {
   selectedDay: string,
   selectedRow: Boolean
@@ -58,8 +59,11 @@ type Props = {
   questionJSON: string,
   answerConfiguration: Object,
   sectionName: string,
+  section: Map,
   userData: Object,
   setProposalAnswer: Function,
+  setAnswerLoading: Function,
+  deleteProposalUser: Function,
   setQuestionToDisplayHistory: (answer: string) => void,
   eventCategories: any,
   trackEvent: any,
@@ -97,9 +101,36 @@ export class TaskRow extends Component<Props, State> {
     }
   }
 
-  handlePropsalChange = (textValue: string, lastAnswer: string) => {
-    const { setProposalAnswer, proposalId, questionId, userData } = this.props;
-    setProposalAnswer(proposalId, questionId, textValue, userData);
+  handlePropsalChange = (textValue, lastValue, reason) => {
+    const {
+      setProposalAnswer,
+      proposalId,
+      questionId,
+      userData,
+      section,
+      setAnswerLoading,
+      deleteProposalUser
+    } = this.props;
+    console.log({ textValue, lastValue, reason });
+    setProposalAnswer(proposalId, questionId, textValue, userData).then(() => {
+      const [deletedVal] = xor(textValue.split(','), lastValue.split(','));
+      const [deletedEmail] = String(deletedVal).match(
+        /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+      );
+      if (reason === 'remove-option' && deletedEmail) {
+        setAnswerLoading(questionId, true);
+        console.log({ deletedEmail });
+        const { sectionName, sectionOrder } = section.toJS();
+        deleteProposalUser(
+          proposalId,
+          deletedEmail,
+          sectionOrder,
+          sectionName
+        ).then(() => {
+          setAnswerLoading(questionId, false);
+        });
+      }
+    });
     this.trackMatomoEventSubmitAnswer(textValue);
   };
 
@@ -114,7 +145,10 @@ export class TaskRow extends Component<Props, State> {
       .split(' ')
       .filter(v => v.trim().length > 0);
     if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
-      if (s1.length !== s2.length || s1.join(' ').trim() != s2.join(' ').trim())
+      if (
+        s1.length !== s2.length ||
+        s1.join(' ').trim() !== s2.join(' ').trim()
+      )
         setProposalAnswer(
           proposalId,
           questionId,
@@ -128,6 +162,34 @@ export class TaskRow extends Component<Props, State> {
     this.trackMatomoEventSubmitAnswer(textValue);
     this.setSelectRow(false);
   };
+
+  handleVerifyPredictedAnsClick(predictedAnswer) {
+    const {
+      setProposalAnswer,
+      proposalId,
+      questionId,
+      userData,
+      answerConfiguration
+    } = this.props;
+    const answerType = answerConfiguration.get('type');
+
+    // picklist value should not be converted to string while saving
+    if (answerType === 'picklist' || answerType === 'picklist-lookup') {
+      setProposalAnswer(
+        proposalId,
+        questionId,
+        predictedAnswer.get('answer'),
+        userData
+      );
+    } else {
+      setProposalAnswer(
+        proposalId,
+        questionId,
+        String(predictedAnswer.get('answer')).trim(),
+        userData
+      );
+    }
+  }
 
   onClickChange = (selectedValue: string, lastAnswer: string) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
@@ -171,7 +233,7 @@ export class TaskRow extends Component<Props, State> {
     this.trackMatomoEventAnswerHistory();
   };
 
-  onChildInputFocus = event => {
+  onChildInputFocus = () => {
     this.setSelectRow(true);
   };
 
@@ -247,13 +309,9 @@ export class TaskRow extends Component<Props, State> {
 
   resetDate = () => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+    const { selectedDay } = this.state;
     this.setState({ selectedDay: ' ' }, () => {
-      setProposalAnswer(
-        proposalId,
-        questionId,
-        this.state.selectedDay,
-        userData
-      );
+      setProposalAnswer(proposalId, questionId, selectedDay, userData);
       this.trackMatomoEventSubmitAnswer(' ');
     });
   };
@@ -262,20 +320,18 @@ export class TaskRow extends Component<Props, State> {
     type: string,
     options: Map,
     answers: Map,
-    lastAnswer: Map,
-    questionText: Map,
-    questionHTML: Map,
-    questionJSON: Map,
-    questionHintJSON: Map
+    lastAnswer: Map
   ) => {
     const {
       sectionName,
       sfObject,
       sfField,
       selectedBid,
-      noneditableField
+      noneditableField,
+      hasDifferentSFanswer
     } = this.props;
-    const { selectedDay } = this.state;
+    // const { selectedDay } = this.state;
+    const isCurrentBid = selectedBid.get('isCurrent');
 
     const optionsYN = ['Yes', 'No'];
     const answer = lastAnswer && lastAnswer.get && lastAnswer.get('answer');
@@ -285,7 +341,7 @@ export class TaskRow extends Component<Props, State> {
     let finalOptions = options;
     const checkDisableFlag = () =>
       checkNonEditableFields(noneditableField, sfField, sfObject) ||
-      !selectedBid.get('isCurrent');
+      !isCurrentBid;
 
     if (answer) {
       if (isObject(answer)) answerValueComplex = answer.toJS();
@@ -295,15 +351,13 @@ export class TaskRow extends Component<Props, State> {
     if (sectionName === 'Proposal Team') {
       return (
         <SFAnswerValidationWrapper
-          hasDifferentSFanswer={
-            this.props.hasDifferentSFanswer && selectedBid.get('isCurrent')
-          }
+          hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
           sfObject={sfObject}
         >
           <Autocomplete
             sectionName={sectionName}
-            onFocus={e => this.setSelectRow(true)}
-            onBlur={e => this.setSelectRow(false)}
+            onFocus={() => this.setSelectRow(true)}
+            onBlur={() => this.setSelectRow(false)}
             onChange={this.handlePropsalChange}
             text={answerValue}
             disabled={checkDisableFlag()}
@@ -311,8 +365,6 @@ export class TaskRow extends Component<Props, State> {
         </SFAnswerValidationWrapper>
       );
     }
-
-    // return <UserLookup sectionName={sectionName} onChange={this.handleTextChange} text={answerValue} />;
 
     if (
       (type === 'picklist' || type === 'picklist-lookup') &&
@@ -331,9 +383,7 @@ export class TaskRow extends Component<Props, State> {
           : String(answerValue).trim();
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={
-              this.props.hasDifferentSFanswer && selectedBid.get('isCurrent')
-            }
+            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
             <TextAreaV2
@@ -352,9 +402,7 @@ export class TaskRow extends Component<Props, State> {
           : String(answerValue).trim();
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={
-              this.props.hasDifferentSFanswer && selectedBid.get('isCurrent')
-            }
+            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
             <TextArea
@@ -371,9 +419,7 @@ export class TaskRow extends Component<Props, State> {
       case 'y/n':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={
-              this.props.hasDifferentSFanswer && selectedBid.get('isCurrent')
-            }
+            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
             <Dropdown
@@ -390,9 +436,7 @@ export class TaskRow extends Component<Props, State> {
       case 'select':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={
-              this.props.hasDifferentSFanswer && selectedBid.get('isCurrent')
-            }
+            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
             <Dropdown
@@ -409,17 +453,15 @@ export class TaskRow extends Component<Props, State> {
       case 'date':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={
-              this.props.hasDifferentSFanswer && selectedBid.get('isCurrent')
-            }
+            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
             <QuestionDatePicker
               value={answerValue}
               resetDate={this.resetDate}
               handleDayChange={this.handleDayChange}
-              onFocus={e => this.setSelectRow(true)}
-              onBlur={e => this.setSelectRow(false)}
+              onFocus={() => this.setSelectRow(true)}
+              onBlur={() => this.setSelectRow(false)}
               disabled={checkDisableFlag()}
             />
           </SFAnswerValidationWrapper>
@@ -427,9 +469,7 @@ export class TaskRow extends Component<Props, State> {
       case 'picklist':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={
-              this.props.hasDifferentSFanswer && selectedBid.get('isCurrent')
-            }
+            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
             <Multiselect
@@ -445,9 +485,7 @@ export class TaskRow extends Component<Props, State> {
       case 'picklist-lookup':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={
-              this.props.hasDifferentSFanswer && selectedBid.get('isCurrent')
-            }
+            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
             <AutocompleteText
@@ -455,9 +493,9 @@ export class TaskRow extends Component<Props, State> {
               sfObject={sfObject}
               lov={finalOptions}
               sfField={sfField}
-              multiple={true}
-              onFocus={e => this.setSelectRow(true)}
-              onBlur={e => this.setSelectRow(false)}
+              multiple
+              onFocus={() => this.setSelectRow(true)}
+              onBlur={() => this.setSelectRow(false)}
               onChange={this.handlePropsalChange}
               text={answerValueComplex}
               disabled={checkDisableFlag()}
@@ -467,9 +505,7 @@ export class TaskRow extends Component<Props, State> {
       case 'select-lookup':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={
-              this.props.hasDifferentSFanswer && selectedBid.get('isCurrent')
-            }
+            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
             <AutocompleteText
@@ -477,8 +513,8 @@ export class TaskRow extends Component<Props, State> {
               sfObject={sfObject}
               lov={finalOptions}
               sfField={sfField}
-              onFocus={e => this.setSelectRow(true)}
-              onBlur={e => this.setSelectRow(false)}
+              onFocus={() => this.setSelectRow(true)}
+              onBlur={() => this.setSelectRow(false)}
               onChange={this.handlePropsalChange}
               text={answerValue || ''}
               multiple={false}
@@ -492,69 +528,39 @@ export class TaskRow extends Component<Props, State> {
   };
 
   renderTags = (milestone, milestoneNew, ismilestoneavailable, lastAnswer) => {
-    {
-      if (milestoneNew) {
-        return (
-          <div className="chipview">
-            {milestoneNew ? (
-              <ChipView label={milestoneNew} answer={lastAnswer} />
-            ) : null}
-          </div>
-        );
-      } else
-        return (
-          <div className="chipview">
-            {milestone ? (
-              <ChipView label={String(milestone)} answer={lastAnswer} />
-            ) : null}
-          </div>
-        );
+    if (milestoneNew) {
+      return (
+        <div className="chipview">
+          {milestoneNew ? (
+            <ChipView label={milestoneNew} answer={lastAnswer} />
+          ) : null}
+        </div>
+      );
     }
+    return (
+      <div className="chipview">
+        {milestone ? (
+          <ChipView label={String(milestone)} answer={lastAnswer} />
+        ) : null}
+      </div>
+    );
   };
 
-  handleVerifyPredictedAnsClick(predictedAnswer) {
-    const {
-      setProposalAnswer,
-      proposalId,
-      questionId,
-      userData,
-      answerConfiguration
-    } = this.props;
-    const answerType = answerConfiguration.get('type');
-
-    // picklist value should not be converted to string while saving
-    if (answerType === 'picklist' || answerType === 'picklist-lookup') {
-      setProposalAnswer(
-        proposalId,
-        questionId,
-        predictedAnswer.get('answer'),
-        userData
-      );
-    } else {
-      setProposalAnswer(
-        proposalId,
-        questionId,
-        String(predictedAnswer.get('answer')).trim(),
-        userData
-      );
-    }
-  }
-
-  isAnswered(answer, isAnswerPredicted) {
+  isAnswered = (answer, isAnswerPredicted) => {
     if (isAnswerPredicted) return false;
     if (answer && answer.get && answer.get('answer')) {
-      if (List.isList(answer.get('answer')))
+      if (List.isList(answer.get('answer'))) {
         return Boolean(answer.get('answer').size);
-      else
-        return Boolean(
-          answer
-            .get('answer')
-            .toString()
-            .trim()
-        );
+      }
+      return Boolean(
+        answer
+          .get('answer')
+          .toString()
+          .trim()
+      );
     }
     return false;
-  }
+  };
 
   render() {
     const {
@@ -577,6 +583,7 @@ export class TaskRow extends Component<Props, State> {
       questionId: qId,
       selectedBid
     } = this.props;
+
     const questionId = answers.get('questionId');
     let lastAnswer;
     let answerDate = 'Not Answered';
@@ -603,13 +610,16 @@ export class TaskRow extends Component<Props, State> {
         answerDate = 'Not Answered';
       }
     }
+    const isCurrentBid = selectedBid.get('isCurrent');
+    const { selectedRow } = this.state;
+
     return (
       <Grid
-      container
-      className={`task-table-row${
-        this.state.selectedRow ? ' selected-task-table-row' : ''
-      }`}
-      style={{ margin: '2px 0px', padding: '4 8' }}
+        container
+        className={`task-table-row${
+          selectedRow ? ' selected-task-table-row' : ''
+        }`}
+        style={{ margin: '2px 0px', padding: '4 8' }}
       >
         <Grid item xs={10}>
           {/* Question Text and Milestone */}
@@ -621,23 +631,24 @@ export class TaskRow extends Component<Props, State> {
               paddingBottom: '8px'
             }}
           >
-             {/* questionText */}
-             <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-             <div style={{zIndex: 0, alignSelf: 'center' }}>
-              <Typography variant="body2">
-                {questionJSON ? (
-                  <RichTextEditor style={{ minHeight: '0px' }}
-                    variant="view"
-                    defaultValue={JSON.parse(questionJSON)}
-                  />
-                ) : (
-                  <p>{questionText}</p>
-                )}
-              </Typography>
+            {/* questionText */}
+            <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+              <div style={{ zIndex: 0, alignSelf: 'center' }}>
+                <Typography variant="body2">
+                  {questionJSON ? (
+                    <RichTextEditor
+                      style={{ minHeight: '0px' }}
+                      variant="view"
+                      defaultValue={JSON.parse(questionJSON)}
+                    />
+                  ) : (
+                    <p>{questionText}</p>
+                  )}
+                </Typography>
               </div>
               {/* Edit Question Icon */}
               <div style={{ paddingLeft: '5px' }}>
-                {isCustomQuestion && selectedBid.get('isCurrent') && (
+                {isCustomQuestion && isCurrentBid && (
                   <span
                     aria-hidden="true"
                     onClick={() => {
@@ -701,7 +712,9 @@ export class TaskRow extends Component<Props, State> {
             </div>
           </div>
         </Grid>
-        <Grid item xs={2}></Grid>
+        <Grid item xs={2}>
+          <></>
+        </Grid>
         <Grid container>
           {/* Answer */}
           <Grid item xs={10}>
@@ -711,22 +724,13 @@ export class TaskRow extends Component<Props, State> {
                     answerConfiguration.get('type'),
                     answerConfiguration.get('options'),
                     answers,
-                    lastAnswer,
-                    questionText
+                    lastAnswer
                   )
-                : this.renderAnswer(
-                    '',
-                    [],
-                    [],
-                    undefined,
-                    questionText,
-                    questionHTML,
-                    questionJSON,
-                    questionHintJSON
-                  )}
+                : this.renderAnswer('', [], [], undefined)}
             </div>
           </Grid>
-          {/* Answer History Button*/}
+
+          {/* Answer History Button */}
           <Grid
             item
             xs={2}
@@ -767,9 +771,9 @@ export class TaskRow extends Component<Props, State> {
                     title="Unity Predicted Answer"
                     placement="top"
                   >
-                    <IconButton disabled={!selectedBid.get('isCurrent')}>
+                    <IconButton disabled={!isCurrentBid}>
                       <StatusCheck
-                        fontSize={'22px'}
+                        fontSize="22px"
                         style={{ color: '#D9D9D9' }}
                         onClick={() =>
                           this.handleVerifyPredictedAnsClick(lastAnswer)
@@ -827,5 +831,7 @@ const mapStateToProps = (state: Object) => ({
 
 export default connect(mapStateToProps, {
   setProposalAnswer: setProposalAnswerData,
+  setAnswerLoading: setProposalAnswerLoading,
+  deleteProposalUser: deleteProposalUserFromDB,
   setEditQuestionData
 })(MatomoHOC(TaskRow));
