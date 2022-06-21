@@ -58,6 +58,7 @@ import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions'
 import WysiwygNotepad from '../../views/WysiwygNotepad';
 import Panel from 'apollo-react/components/Panel';
 import PanelGroup from 'apollo-react/components/PanelGroup';
+import Typography from 'apollo-react/components/Typography/Typography';
 
 type Props = {
   match: Match,
@@ -554,6 +555,14 @@ class Questions extends Component<Props, State> {
               onOpen={()=>{this.setIsNotepadOpen(true)}}
             >
               <div style={{ display: isNotepadOpen ? 'block' : 'none' }}>
+              {/* <div id="panel-notepad-header"> 
+                <Typography variant="h3">
+                  Notepad
+                </Typography>
+                <Typography variant="body2" gutterBottom>
+                  Currently, the notepad best supports one user entering information at a time
+                </Typography>
+              </div> */}
                 <WysiwygNotepad />
               </div>
             </Panel>
