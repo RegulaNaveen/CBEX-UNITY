@@ -111,15 +111,16 @@ export class TaskRow extends Component<Props, State> {
       setAnswerLoading,
       deleteProposalUser
     } = this.props;
-    console.log({ textValue, lastValue, reason });
     setProposalAnswer(proposalId, questionId, textValue, userData).then(() => {
-      const [deletedVal] = xor(textValue.split(','), lastValue.split(','));
+      const [deletedVal] = xor(
+        textValue.trim() ? textValue.trim().split(',') : [],
+        lastValue.trim() ? lastValue.trim().split(',') : []
+      );
       const [deletedEmail] = String(deletedVal).match(
         /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
       );
       if (reason === 'remove-option' && deletedEmail) {
         setAnswerLoading(questionId, true);
-        console.log({ deletedEmail });
         const { sectionName, sectionOrder } = section.toJS();
         deleteProposalUser(
           proposalId,
