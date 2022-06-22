@@ -51,7 +51,9 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList, f
         }
       });
       return ()=>{
-        subscription.unsubscribe();
+        if(subscription)
+          subscription.unsubscribe();
+          
         handleClose();
       }
     }, [])
