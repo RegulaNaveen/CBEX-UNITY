@@ -45,7 +45,8 @@ type Props = {
   trackEvent: any,
   proposalDetail: any,
   ismilestoneavailable?: any,
-  selectedBid: Map
+  selectedBid: Map,
+  isNotepadOpen:boolean
 };
 
 class CollapsibleList extends Component<Props, State> {
@@ -180,7 +181,8 @@ class CollapsibleList extends Component<Props, State> {
       title,
       milestone,
       setQuestionToDisplayHistory,
-      selectedBid
+      selectedBid,
+      isNotepadOpen
     } = this.props;
     return (
       <div className="task-wrapper" ref={this.taskRef} id={this.createId()}>
@@ -264,6 +266,7 @@ class CollapsibleList extends Component<Props, State> {
                     hasDifferentSFanswer={questionConfig.get(
                       'hasDifferentSFanswer'
                     )}
+                    isNotepadOpen = {isNotepadOpen}
                   />
                 )
               );

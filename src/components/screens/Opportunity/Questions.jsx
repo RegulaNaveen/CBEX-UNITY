@@ -361,7 +361,7 @@ class Questions extends Component<Props, State> {
         filterMilestone,
         allSectionsExpanded
       } = this.props;
-      const { sidebarscroll } = this.state;
+      const { sidebarscroll, isNotepadOpen } = this.state;
 
       const allSections = isQuestionsFiltersEnabled
         ? filteredSections
@@ -401,6 +401,7 @@ class Questions extends Component<Props, State> {
                   : allSectionsExpanded
               }
               setQuestionToDisplayHistory={this.setQuestionToDisplayHistory}
+              isNotepadOpen = {isNotepadOpen}
             />
           );
 
