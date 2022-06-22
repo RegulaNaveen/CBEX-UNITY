@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1670: White gap is coming for blade when both blade and custom question pop up are opened
   - IQVIACBEXU-1662: Background highlight for questions is not displaying
   - IQVIACBEXU-1677: Font size issue for custom questions
+  - IQVIACBEXU-1695: Date should be aligned to the Top of the text box when flag appears
 ## [4.2] - YYYY-MM-DD
 ### Added
   - IQVIACBEXU-1311: Flag end users when an auto-populated response has been manually edited
