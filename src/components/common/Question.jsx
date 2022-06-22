@@ -737,9 +737,10 @@ export class TaskRow extends Component<Props, State> {
             xs={2}
             style={{
               display: 'flex',
-              alignItems: 'center',
+              alignItems: 'flex-start',
               justifyContent: 'flex-start',
-              paddingLeft: '22px'
+              paddingLeft: '20px',
+              paddingTop: '8px'
             }}
           >
             <div
