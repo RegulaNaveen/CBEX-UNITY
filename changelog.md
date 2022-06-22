@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1677: Font size issue for custom questions
   - IQVIACBEXU-1695: Date should be aligned to the Top of the text box when flag appears
   - IQVIACBEXU-1679: Unity predicted answer grey icon alignment issue. Implemented different grid column ratio for question and answer on note collapse and open
+  - IQVIACBEXU-1691: At the end of the notes section, if user press enter key than cursor doesn't come down and scroll bar is going up.
 ## [4.2] - YYYY-MM-DD
 ### Added
   - IQVIACBEXU-1311: Flag end users when an auto-populated response has been manually edited
