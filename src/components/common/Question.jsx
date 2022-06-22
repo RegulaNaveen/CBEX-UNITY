@@ -77,7 +77,8 @@ type Props = {
   setEditQuestionData: (data: Object) => void,
   roleNames: Array<string>,
   isCustomQuestion: boolean,
-  hasDifferentSFanswer: boolean
+  hasDifferentSFanswer: boolean,
+  isNotepadOpen: boolean
 };
 export class TaskRow extends Component<Props, State> {
   constructor(props: Object) {
@@ -582,7 +583,8 @@ export class TaskRow extends Component<Props, State> {
       setEditQuestionData,
       isCustomQuestion,
       questionId: qId,
-      selectedBid
+      selectedBid,
+      isNotepadOpen
     } = this.props;
 
     const questionId = answers.get('questionId');
@@ -614,6 +616,7 @@ export class TaskRow extends Component<Props, State> {
     const isCurrentBid = selectedBid.get('isCurrent');
     const { selectedRow } = this.state;
 
+    const gridColRatio = isNotepadOpen ? [8, 4] : [10, 2];
     return (
       <Grid
         container
@@ -622,7 +625,7 @@ export class TaskRow extends Component<Props, State> {
         }`}
         style={{ margin: '2px 0px', padding: '4 8' }}
       >
-        <Grid item xs={10}>
+        <Grid item xs={gridColRatio[0]}>
           {/* Question Text and Milestone */}
           <div
             style={{
@@ -713,12 +716,12 @@ export class TaskRow extends Component<Props, State> {
             </div>
           </div>
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={gridColRatio[1]}>
           <></>
         </Grid>
         <Grid container>
           {/* Answer */}
-          <Grid item xs={10}>
+          <Grid item xs={gridColRatio[0]}>
             <div>
               {answerConfiguration
                 ? this.renderAnswer(
@@ -734,7 +737,7 @@ export class TaskRow extends Component<Props, State> {
           {/* Answer History Button */}
           <Grid
             item
-            xs={2}
+            xs={gridColRatio[1]}
             style={{
               display: 'flex',
               alignItems: 'flex-start',
