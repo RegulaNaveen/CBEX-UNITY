@@ -285,12 +285,11 @@ export function getStyle(styleMap, index){
                     styles.underline = {};
                     styleId += '(u)'
                 }
+                /*
                 if ( key.includes('fontsize')){
                     styles.size = parseInt(key.slice(key.length-2, key.length))
                     styleId += '(fs)'
-                }
-
-                 /*
+                } 
                 if ( key.includes('color')){
                     styles.color = key.slice(key.length-6, key.length);
                     styleId += '(fc)'
