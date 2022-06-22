@@ -188,7 +188,10 @@
     }
 
     .add-question {
-      margin-bottom: 15px;
+      margin: 20px 0;
+      * {
+        color: #0768fd;
+      }
     }
   }
 }
@@ -333,7 +336,10 @@ and (max-width : 3000px)
     }
 
     .add-question {
-      margin-bottom: 15px;
+      margin: 20px 0;
+      * {
+        color: #0768fd;
+      }
     }
   }
 }
