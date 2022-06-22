@@ -41,7 +41,7 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList, f
     }
 
     useEffect(()=>{
-      actionChannel.subscribe({
+      const subscription = actionChannel.subscribe({
         next: (event) => {
           if(event.name === UI_ACTION.openGenerateModal){
             handleOpen();
@@ -50,6 +50,12 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList, f
             
         }
       });
+      return ()=>{
+        if(subscription)
+          subscription.unsubscribe();
+          
+        handleClose();
+      }
     }, [])
   
     const handleClose = ()=> setState({...state, ...{open:false}});
