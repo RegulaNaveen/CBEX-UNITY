@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [4.3] - YYYY-MM-DD
 ### Added
+  - IQVIACBEXU-1693: Number should be shown when add more than 5 users
+  - IQVIACBEXU-1696: Tool tip is not aligned to first line for a questions with bullets and numbering
+  - IQVIACBEXU-1692: Able to add same User name multiple times for a role in proposal team section
   - IQVIACBEXU-1358: Additional Links to Box
   - IQVIACBEXU-1421: Create SalesForce Link
   - IQVIACBEXU-1344: Pull Notes out of the blade. The new note section uses react-draft-wysiwyg.
