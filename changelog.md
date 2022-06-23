@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1685:Notes section shows previous opportunity notes text after clicking on export opportunity icon
   - IQVIACBEXU-1525: 1400 fixes
   - IQVIACBEXU-1694: "Add new Question" Text is not correctly aligned.
+  - IQVIACBEXU-1699: Additional Links not appearing in Box
 ## [4.2] - YYYY-MM-DD
 ### Added
   - IQVIACBEXU-1311: Flag end users when an auto-populated response has been manually edited
