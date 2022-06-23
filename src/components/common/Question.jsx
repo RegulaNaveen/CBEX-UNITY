@@ -313,7 +313,7 @@ export class TaskRow extends Component<Props, State> {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
     const { selectedDay } = this.state;
     this.setState({ selectedDay: ' ' }, () => {
-      setProposalAnswer(proposalId, questionId, selectedDay, userData);
+      setProposalAnswer(proposalId, questionId, this.state.selectedDay, userData);
       this.trackMatomoEventSubmitAnswer(' ');
     });
   };
