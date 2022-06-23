@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - IQVIACBEXU-1699: Additional Links not appearing in Box
   - IQVIACBEXU-1697: Date not removing if user clears it
   - IQVIACBEXU-1698: Date not removing if user clears it
+  - IQVIACBEXU-1704: Not answered" text is not center aligned to textbox for unity predicted answers
   - IQVIACBEXU-1700: Milestone Filters Showing on Non-Applicable Template
 ## [4.2] - YYYY-MM-DD
 ### Added
