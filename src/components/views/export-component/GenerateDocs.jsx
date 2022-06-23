@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import UserInputModal from './UserInputModal';
-import {createWord} from './word-template';
+import {createWord, shouldInclude} from './word-template';
 import { Packer } from "docx";
 import { saveAs } from "file-saver";
 import Logo from '../../../../img/iqvia-main-logo.png';
@@ -69,13 +69,14 @@ const GenerateDocs = () => {
   };
 
   const setMileStonesAsPerCurrentQues = (questions)=>{
-    const isNewMileStone = questions.some((question)=>
+    const filteredQuestions = questions.filter((q)=>shouldInclude(q))
+    const isNewMileStone = filteredQuestions.some((question)=>
     question.milestoneNew &&
       Array.isArray(question.milestoneNew) &&
       question.milestoneNew.length
     );
     const tempMileStones = [];
-    questions.forEach(question => {
+    filteredQuestions.forEach(question => {
       try{
         const currentMileStone = (isNewMileStone)? question.milestoneNew[0].Name : question.milestone;
         if(currentMileStone)
