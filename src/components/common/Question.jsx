@@ -776,7 +776,7 @@ export class TaskRow extends Component<Props, State> {
                     title="Unity Predicted Answer"
                     placement="top"
                   >
-                    <IconButton disabled={!isCurrentBid}>
+                    <IconButton disabled={!isCurrentBid} style={{height:"0"}}>
                       <StatusCheck
                         fontSize="22px"
                         style={{ color: '#D9D9D9' }}
