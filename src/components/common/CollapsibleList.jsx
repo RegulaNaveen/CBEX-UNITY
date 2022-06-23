@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import type { Map } from 'immutable';
+import { Map } from 'immutable';
 import Link from 'apollo-react/components/Link';
 import Plus from 'apollo-react-icons/Plus';
 import FolderOpen from 'apollo-react-icons/FolderOpen';
@@ -44,9 +44,9 @@ type Props = {
   userActions: any,
   trackEvent: any,
   proposalDetail: any,
-  ismilestoneavailable?: any,
+  milestone: any,
   selectedBid: Map,
-  isNotepadOpen:boolean
+  isNotepadOpen: boolean
 };
 
 class CollapsibleList extends Component<Props, State> {
@@ -85,14 +85,15 @@ class CollapsibleList extends Component<Props, State> {
 
   handleCollapse = () => {
     const { isCollapsed } = this.state;
+    const { title, selectedSection, changeSelectedSection } = this.props;
     this.setState({ isCollapsed: !isCollapsed });
     this.trackMatomoEventBladeToggle(!isCollapsed);
-    const titleId = this.props.title
+    const titleId = title
       .toLocaleLowerCase()
       .split(' ')
       .join('-');
-    if (titleId === this.props.selectedSection) {
-      this.props.changeSelectedSection(null);
+    if (titleId === selectedSection) {
+      changeSelectedSection(null);
     }
   };
 
@@ -203,15 +204,13 @@ class CollapsibleList extends Component<Props, State> {
 
         {!isCollapsed ? (
           <div
-            className="task-title-wrapper"
+            className="task-title-wrapper collapsed"
             role="button"
             onClick={this.handleCollapse}
             onKeyPress={this.handleKeyPress}
             tabIndex={-1}
           >
-            <p id="task-title" className="task-title">
-              {title}
-            </p>
+            <p className="task-title">{title}</p>
           </div>
         ) : (
           <div className="task-table-wrapper">
@@ -231,11 +230,11 @@ class CollapsibleList extends Component<Props, State> {
             </div>
 
             {questions.valueSeq().map(questionConfig => {
-              const visible = questionConfig.get('visible', true) &&
-              ( questionConfig.get('active', true) ||
-              questionConfig.get('isCustomQuestion', true))
-        
-        
+              const visible =
+                questionConfig.get('visible', true) &&
+                (questionConfig.get('active', true) ||
+                  questionConfig.get('isCustomQuestion', true));
+
               return (
                 (visible || typeof visible === 'undefined') && (
                   <Question
@@ -259,14 +258,17 @@ class CollapsibleList extends Component<Props, State> {
                     setQuestionToDisplayHistory={setQuestionToDisplayHistory}
                     loading={questionConfig.get('loading', false)}
                     questionHint={questionConfig.get('questionHint', '')}
-                    questionHintHTML={questionConfig.get('questionHintHTML', '')}
+                    questionHintHTML={questionConfig.get(
+                      'questionHintHTML',
+                      ''
+                    )}
                     questionHintJSON={questionConfig.get('questionHintJSON')}
                     roleNames={questionConfig.get('roleNames')}
                     isCustomQuestion={questionConfig.get('isCustomQuestion')}
                     hasDifferentSFanswer={questionConfig.get(
                       'hasDifferentSFanswer'
                     )}
-                    isNotepadOpen = {isNotepadOpen}
+                    isNotepadOpen={isNotepadOpen}
                   />
                 )
               );

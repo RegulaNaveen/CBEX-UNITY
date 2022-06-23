@@ -2,6 +2,7 @@
 import { Map, fromJS } from 'immutable';
 import { last, uniq, orderBy } from 'lodash';
 import { createSelector } from 'reselect';
+import { shouldInclude } from '../../components/views/export-component/word-template';
 
 const generateMilestone = (proposalQuestions: Object) => {
   const flag = proposalQuestions.filter(question => question?.milestone);
@@ -184,8 +185,9 @@ function createSectionsFromQuestions(questions) {
 }
 
 export function getUniqueMilestones(questions) {
+  const filteredQuestions = questions.filter((q)=>shouldInclude(q))
   const milestones = [];
-  fromJS(questions)
+  fromJS(filteredQuestions)
     .valueSeq()
     .forEach(question => {
       if (question.get('milestone')) {
