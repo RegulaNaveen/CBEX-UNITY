@@ -7,7 +7,7 @@ import { isObject, isEqual, isEmpty, xor } from 'lodash';
 import IconButton from 'apollo-react/components/IconButton';
 import Loader from 'apollo-react/components/Loader';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
-import  Typography from 'apollo-react/components/Typography';
+import { Typography } from 'apollo-react/components/Typography/Typography';
 import Grid from 'apollo-react/components/Grid';
 import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
@@ -313,7 +313,12 @@ export class TaskRow extends Component<Props, State> {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
     const { selectedDay } = this.state;
     this.setState({ selectedDay: ' ' }, () => {
-      setProposalAnswer(proposalId, questionId, selectedDay, userData);
+      setProposalAnswer(
+        proposalId,
+        questionId,
+        this.state.selectedDay,
+        userData
+      );
       this.trackMatomoEventSubmitAnswer(' ');
     });
   };
