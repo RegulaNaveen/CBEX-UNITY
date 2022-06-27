@@ -28,6 +28,9 @@ function getInitialEditorState(defaultValue) {
     : EditorState.createEmpty();
 }
 
+const LEFT_INDENT = 'left-indent';
+const RIGHT_INDENT = 'right-indent';
+
 export const CONTROL_COMMANDS = {
   bold: 'BOLD',
   italics: 'ITALIC',
@@ -37,8 +40,8 @@ export const CONTROL_COMMANDS = {
   lowercase: 'LOWERCASE',
   orderedList: 'ordered-list-item',
   unorderedList: 'unordered-list-item',
-  indentDecrease: 'left-indent',
-  indentIncrease: 'right-indent'
+  indentDecrease: LEFT_INDENT,
+  indentIncrease: RIGHT_INDENT
 };
 
 const blockRenderMap = Map({
@@ -112,9 +115,9 @@ function changeBlockDepth(block, editorstate, indentation) {
   const depth = block.getDepth();
   let newDepth = 0;
 
-  if (indentation === 'left-indent' && depth > 0) {
+  if (indentation === LEFT_INDENT && depth > 0) {
     newDepth = depth - 1;
-  } else if (indentation === 'right-indent' && depth < 4) {
+  } else if (indentation === RIGHT_INDENT && depth < 4) {
     newDepth = depth + 1;
   } else {
     newDepth = depth;
@@ -210,9 +213,9 @@ function RichTextEditor({
     ) {
       const indentIndex = parseInt(blockType.replace('IndentBlock', ''), 10);
 
-      if (indentation === 'right-indent' && indentIndex < 10) {
+      if (indentation === RIGHT_INDENT && indentIndex < 10) {
         indentStyle = `IndentBlock${indentIndex + 1}`;
-      } else if (indentation === 'left-indent' && indentIndex > 1) {
+      } else if (indentation === LEFT_INDENT && indentIndex > 1) {
         indentStyle = `IndentBlock${indentIndex - 1}`;
       }
     } else {
@@ -243,12 +246,12 @@ function RichTextEditor({
     } else if (
       !(
         (blockType === 'unstyled' || blockType === null) &&
-        indentation === 'left-indent'
+        indentation === LEFT_INDENT
       )
     ) {
       const indentStyle = getNextIndentation(indentation, blockType);
 
-      if (indentStyle === null && indentation === 'right-indent') {
+      if (indentStyle === null && indentation === RIGHT_INDENT) {
         return;
       }
 
@@ -342,15 +345,15 @@ function RichTextEditor({
     );
 
     return (
-      <Grid container alignItems="center">
+      <Grid container alignItems='center'>
         <Grid item xs={3}>
-          <p className="label">{label}</p>
+          <p className='label'>{label}</p>
         </Grid>
         <Grid item xs={9} style={{ textAlign: 'end' }}>
           {showControls ? (
-            <div className="controls-container">
+            <div className='controls-container'>
               {BLOCK_CONTROLS_TO_RENDER.size > 0 ? (
-                <div className="style-button-group">
+                <div className='style-button-group'>
                   {BLOCK_CONTROLS_TO_RENDER.entrySeq().map(([key, value]) => {
                     const { Icon } = value;
                     const isActive =
@@ -370,7 +373,7 @@ function RichTextEditor({
                 </div>
               ) : null}
               {INLINE_CONTROLS_TO_RENDER.size > 0 ? (
-                <div className="style-button-group">
+                <div className='style-button-group'>
                   {INLINE_CONTROLS_TO_RENDER.entrySeq().map(([key, value]) => {
                     const { Icon } = value;
                     const isActive =
