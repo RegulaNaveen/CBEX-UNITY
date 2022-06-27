@@ -70,8 +70,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
         setAlertModal(true);
         dispatch(updateSwitchTempStatusFromWebSocket(false));
       });
-    }
-    if (switchTempStatus === 'error') {
+    }else if (switchTempStatus === 'error') {
       setAlertModal(true);
       dispatch(updateSwitchTempStatusFromWebSocket(false));
     }
