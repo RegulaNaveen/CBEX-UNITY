@@ -34,14 +34,22 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
  // Footer text with template information
  let templateVersion = null;
 const getTemplateversion = () =>  {
-  return(
-  <>
-    {PROPOSAL.QUESTION_TEMP_VERSION}: {questionTemplateVersionNumber}{' '}
-    {!isEmpty(opportunityType) && `- ${opportunityType}`}
-  </>
-  )
+  if(!isEmpty(opportunityType)){
+    return(
+      <>
+        {PROPOSAL.QUESTION_TEMP_VERSION}: {questionTemplateVersionNumber}{' '}
+        {`- ${opportunityType}`}
+      </>
+      )
+  }else{
+    return(
+      <>
+        {PROPOSAL.QUESTION_TEMP_VERSION}: {questionTemplateVersionNumber}{' '}
+      </>
+      )
+  }
 }
- if (!isEmpty(questionTemplateVersionNumber)) {
+ if (!(isEmpty(questionTemplateVersionNumber))) {
   templateVersion = getTemplateversion()
  }
 
