@@ -31,17 +31,19 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
   const [alertModal, setAlertModal] = useState(false);
   const [otProcessing, setOtProcessing] = useState(false);
   const dispatch = useDispatch();
-
  // Footer text with template information
  let templateVersion = null;
+const getTemplateversion = () =>  {
+  return(
+  <>
+    {PROPOSAL.QUESTION_TEMP_VERSION}: {questionTemplateVersionNumber}{' '}
+    {!isEmpty(opportunityType) && `- ${opportunityType}`}
+  </>
+  )
+}
  if (!isEmpty(questionTemplateVersionNumber)) {
-   templateVersion = (
-     <>
-       {PROPOSAL.QUESTION_TEMP_VERSION}: {questionTemplateVersionNumber}{' '}
-       {!isEmpty(opportunityType) && `- ${opportunityType}`}
-     </>
-   );
-  }
+  templateVersion = getTemplateversion()
+ }
 
   // Get switchTempStatus from Redux Store
   const switchTempStatus = useSelector(
