@@ -32,19 +32,17 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
   const [otProcessing, setOtProcessing] = useState(false);
   const dispatch = useDispatch();
 
-  const checktemplateversion = () =>{
-  // Footer text with template information
-  let templateVersion = null;
-  if (!isEmpty(questionTemplateVersionNumber)) {
-    templateVersion = (
-      <>
-        {PROPOSAL.QUESTION_TEMP_VERSION}: {questionTemplateVersionNumber}{' '}
-        {!isEmpty(opportunityType) && `- ${opportunityType}`}
-      </>
-    );
-   }
-   return templateVersion;
+ // Footer text with template information
+ let templateVersion = null;
+ if (!isEmpty(questionTemplateVersionNumber)) {
+   templateVersion = (
+     <>
+       {PROPOSAL.QUESTION_TEMP_VERSION}: {questionTemplateVersionNumber}{' '}
+       {!isEmpty(opportunityType) && `- ${opportunityType}`}
+     </>
+   );
   }
+
   // Get switchTempStatus from Redux Store
   const switchTempStatus = useSelector(
     state => state.proposal.toJSON().switchTempCallStatus
@@ -120,7 +118,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
         className="unity-footer"
         maxWidth="100%"
         buttonProps={
-          checktemplateversion()
+          templateVersion
             ? [
                 {
                   label: !switchTempStatus ? PROPOSAL.SWITCH_TEMP : '',
@@ -140,7 +138,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
                     setOpenSwitchTempModal(prev => !prev);
                   }
                 },
-                { label: checktemplateversion(), className: 'ques-temp-info' }
+                { label: templateVersion, className: 'ques-temp-info' }
               ]
             : [{ label: '', style: { display: 'none' } }]
         }
