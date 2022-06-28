@@ -33,16 +33,13 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
   const dispatch = useDispatch();
  // Footer text with template information
  let templateVersion = null;
- const checktemplateversion = () =>{
+ if (!isEmpty(questionTemplateVersionNumber)) {
   templateVersion = (
     <>
       {PROPOSAL.QUESTION_TEMP_VERSION}: {questionTemplateVersionNumber}{' '}
       {!isEmpty(opportunityType) && `- ${opportunityType}`}
     </>
   );
- }
- if (!isEmpty(questionTemplateVersionNumber)) {
-    checktemplateversion();
   }
 
   // Get switchTempStatus from Redux Store
@@ -66,17 +63,22 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
    * Trigger Modal onUpdate switchTempStatus state
    */
   useEffect(() => {
-    const updateswitch = () =>{
+    const successSwitch = () =>{
       dispatch(getOpportunity(opportunityId)).then(() => {
         dispatch(updateSwitchInProgress(false));
         setAlertModal(true);
         dispatch(updateSwitchTempStatusFromWebSocket(false));
       });
     }
-    if(switchTempStatus === 'success') {
-      updateswitch();
+    const errorSwitch = () =>{
+      setAlertModal(true);
+      dispatch(updateSwitchTempStatusFromWebSocket(false));
     }
-   
+    if (switchTempStatus === 'success') {
+      successSwitch()
+    }else if (switchTempStatus === 'error') {
+      errorSwitch()
+    }
   }, [switchTempStatus]);
 
   /**
