@@ -73,13 +73,10 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
         dispatch(updateSwitchTempStatusFromWebSocket(false));
       });
     }
-    if (switchTempStatus === 'success') {
+    if(switchTempStatus === 'success') {
       updateswitch();
     }
-    if (switchTempStatus === 'error') {
-      setAlertModal(true);
-      dispatch(updateSwitchTempStatusFromWebSocket(false));
-    }
+   
   }, [switchTempStatus]);
 
   /**
