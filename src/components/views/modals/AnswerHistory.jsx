@@ -11,6 +11,7 @@ import { getOpportunityData} from '../../../redux/selectors/proposal';
 import { Close } from '../../svg';
 import { parseMomentDate } from '../../../utils/DateUtils';
 import { rearrangeDiff, getUserInitials, getUserName } from '../../../utils/utils';
+import ANSWER_TYPES from '../../../constants/answerTypes';
 type Props = {
   question: Map,
   proposalTeamAnswers: Object,

@@ -53,6 +53,9 @@ const {
   SWITCH_TEMP_IN_PROGRESS
 } = REDUX_TYPES.PROPOSAL;
 
+const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
+const CLASS_QUES_FIL_ITEM = 'questions-filter__item';
+
 const INITIAL_STATE: Map = fromJS({
   proposalDetails: Map({}),
   proposalQuestions: Map({}),
@@ -84,12 +87,12 @@ const INITIAL_STATE: Map = fromJS({
       answered: {
         checked: false,
         label: 'Answered',
-        className: 'questions-filter__row1-col1'
+        className: CLASS_QUES_FIL_R1_C1
       },
       unanswered: {
         checked: false,
         label: 'Unanswered',
-        className: 'questions-filter__row1-col1'
+        className: CLASS_QUES_FIL_R1_C1
       },
       logic: 'OR'
     },
@@ -97,7 +100,7 @@ const INITIAL_STATE: Map = fromJS({
       myUserRole: {
         checked: false,
         label: 'My User Role',
-        className: 'questions-filter__row1-col1'
+        className: CLASS_QUES_FIL_R1_C1
       },
       interestedParty: {
         checked: false,
@@ -162,7 +165,7 @@ const onProsalInfoLoaded = (state: Map, action: Object): Map => {
   //       Map({
   //         checked: false,
   //         label: milestone,
-  //         className: 'questions-filter__item'
+  //         className: CLASS_QUES_FIL_ITEM
   //       })
   //     );
   //   });
@@ -269,7 +272,7 @@ const setOpportunityInfo = (state, action) => {
       Map({
         checked: false,
         label: milestone,
-        className: 'questions-filter__item'
+        className: CLASS_QUES_FIL_ITEM
       })
     );
   });
@@ -321,7 +324,7 @@ const onChangeBid = (state: Map, action: Object): Map => {
       Map({
         checked: false,
         label: milestone,
-        className: 'questions-filter__item'
+        className: CLASS_QUES_FIL_ITEM
       })
     );
   });
@@ -413,7 +416,7 @@ const addNewBid = (state: Map, action: Object): Map => {
       Map({
         checked: false,
         label: milestone,
-        className: 'questions-filter__item'
+        className: CLASS_QUES_FIL_ITEM
       })
     );
   });

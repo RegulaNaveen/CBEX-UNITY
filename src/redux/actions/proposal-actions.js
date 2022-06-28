@@ -838,7 +838,7 @@ export const fetchOTListData = () => async () => {
     return { status: true, title: DEFAULT.SUCCESS, data: response.data };
   } catch (error) {
     // Error
-    console.log('Error! occurred..', error);
+    console.log(error);
     const msg = getErrorMessage(error);
     return { status: false, title: DEFAULT.ALERT, msg };
   }
@@ -890,7 +890,7 @@ export const changeOpportunityType = switchTempData => async () => {
     return { status: true, title: DEFAULT.SUCCESS, data: response.data };
   } catch (error) {
     // Error
-    console.log('Error! occurred..', error.response);
+    console.log(error.response);
     const msg = getErrorMessage(error);
     return { status: false, title: DEFAULT.ALERT, msg };
   }
@@ -938,7 +938,7 @@ export const deleteProposalUserFromDB = (
     return { status: true, title: DEFAULT.SUCCESS, data: response.data };
   } catch (error) {
     // Error
-    console.log('Error! occurred..', error.response);
+    console.log(error.response);
     const msg = getErrorMessage(error);
     return { status: false, title: DEFAULT.ALERT, msg };
   }
