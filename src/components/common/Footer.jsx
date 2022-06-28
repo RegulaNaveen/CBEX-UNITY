@@ -71,11 +71,15 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
         dispatch(updateSwitchInProgress(false));
         setAlertModal(true);
         dispatch(updateSwitchTempStatusFromWebSocket(false));
+        return () => {
+        }
       });
     }
     if (switchTempStatus === 'error') {
       setAlertModal(true);
       dispatch(updateSwitchTempStatusFromWebSocket(false));
+      return () => {
+      }
     }
   }, [switchTempStatus]);
 
