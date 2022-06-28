@@ -66,20 +66,19 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
    * Trigger Modal onUpdate switchTempStatus state
    */
   useEffect(() => {
-    if (switchTempStatus === 'success') {
+    const updateswitch = () =>{
       dispatch(getOpportunity(opportunityId)).then(() => {
         dispatch(updateSwitchInProgress(false));
         setAlertModal(true);
         dispatch(updateSwitchTempStatusFromWebSocket(false));
-        return () => {
-        }
       });
+    }
+    if (switchTempStatus === 'success') {
+      updateswitch();
     }
     if (switchTempStatus === 'error') {
       setAlertModal(true);
       dispatch(updateSwitchTempStatusFromWebSocket(false));
-      return () => {
-      }
     }
   }, [switchTempStatus]);
 
