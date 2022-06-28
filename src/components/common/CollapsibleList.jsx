@@ -46,7 +46,7 @@ type Props = {
   proposalDetail: any,
   ismilestoneavailable?: any,
   selectedBid: Map,
-  isNotepadOpen:boolean
+  isNotepadOpen: boolean
 };
 
 class CollapsibleList extends Component<Props, State> {
@@ -116,7 +116,7 @@ class CollapsibleList extends Component<Props, State> {
 
   showNotesCount = title => {
     const { notes, handleOpenClose, setTabFromQuestionNotes } = this.props;
-    if (notes && notes && notes.size && notes.size > 0) {
+    if (notes && notes.size && notes.size > 0) {
       const count = notes.filter(
         note => note.getIn(['section', 'sectionName'], '') === title
       );
@@ -136,9 +136,9 @@ class CollapsibleList extends Component<Props, State> {
                 setTabFromQuestionNotes(1, title, true);
               }}
               style={{ borderBottom: 'none' }}
-              size="small"
+              size='small'
             >
-              <FolderOpen fontSize="extraSmall" />
+              <FolderOpen fontSize='extraSmall' />
               <span style={{ verticalAlign: 'top' }}>
                 {' '}
                 Notes ({count.size})
@@ -185,44 +185,44 @@ class CollapsibleList extends Component<Props, State> {
       isNotepadOpen
     } = this.props;
     return (
-      <div className="task-wrapper" ref={this.taskRef} id={this.createId()}>
+      <div className='task-wrapper' ref={this.taskRef} id={this.createId()}>
         <button
-          id="arrow-icon"
-          className="task-icon-wrapper"
+          id='arrow-icon'
+          className='task-icon-wrapper'
           onClick={this.handleCollapse}
           onKeyPress={this.handleKeyPress}
-          type="button"
+          type='button'
           tabIndex={0}
         >
           <img
-            className="task-icon"
+            className='task-icon'
             src={isCollapsed ? chevronDown : chevronRight}
-            alt="question arrow"
+            alt='question arrow'
           />
         </button>
 
         {!isCollapsed ? (
           <div
-            className="task-title-wrapper"
-            role="button"
+            className='task-title-wrapper'
+            role='button'
             onClick={this.handleCollapse}
             onKeyPress={this.handleKeyPress}
             tabIndex={-1}
           >
-            <p id="task-title" className="task-title">
+            <p id='task-title' className='task-title'>
               {title}
             </p>
           </div>
         ) : (
-          <div className="task-table-wrapper">
+          <div className='task-table-wrapper'>
             <div
-              className="task-table-headers"
-              role="button"
+              className='task-table-headers'
+              role='button'
               onClick={this.handleCollapse}
               onKeyPress={this.handleKeyPress}
               tabIndex={-1}
             >
-              <div className="task-title">
+              <div className='task-title'>
                 <p>
                   {title}
                   {this.showNotesCount(title)}
@@ -231,11 +231,11 @@ class CollapsibleList extends Component<Props, State> {
             </div>
 
             {questions.valueSeq().map(questionConfig => {
-              const visible = questionConfig.get('visible', true) &&
-              ( questionConfig.get('active', true) ||
-              questionConfig.get('isCustomQuestion', true))
-        
-        
+              const visible =
+                questionConfig.get('visible', true) &&
+                (questionConfig.get('active', true) ||
+                  questionConfig.get('isCustomQuestion', true));
+
               return (
                 (visible || typeof visible === 'undefined') && (
                   <Question
@@ -259,26 +259,29 @@ class CollapsibleList extends Component<Props, State> {
                     setQuestionToDisplayHistory={setQuestionToDisplayHistory}
                     loading={questionConfig.get('loading', false)}
                     questionHint={questionConfig.get('questionHint', '')}
-                    questionHintHTML={questionConfig.get('questionHintHTML', '')}
+                    questionHintHTML={questionConfig.get(
+                      'questionHintHTML',
+                      ''
+                    )}
                     questionHintJSON={questionConfig.get('questionHintJSON')}
                     roleNames={questionConfig.get('roleNames')}
                     isCustomQuestion={questionConfig.get('isCustomQuestion')}
                     hasDifferentSFanswer={questionConfig.get(
                       'hasDifferentSFanswer'
                     )}
-                    isNotepadOpen = {isNotepadOpen}
+                    isNotepadOpen={isNotepadOpen}
                   />
                 )
               );
             })}
             {selectedBid.get('isCurrent') && (
-              <div className="add-question">
+              <div className='add-question'>
                 <Link
                   style={{ borderBottom: 'none' }}
                   onClick={() => onAddQuestion(title)}
-                  size="small"
+                  size='small'
                 >
-                  <Plus fontSize="extraSmall" />
+                  <Plus fontSize='extraSmall' />
                   <span style={{ verticalAlign: 'top' }}>
                     {' '}
                     Add New Question
