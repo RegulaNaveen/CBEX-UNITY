@@ -33,10 +33,12 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
   const dispatch = useDispatch();
  // Footer text with template information
  let templateVersion = null;
+ //NOSONAR
  if (!isEmpty(questionTemplateVersionNumber)) {
   templateVersion = (
     <>
       {PROPOSAL.QUESTION_TEMP_VERSION}: {questionTemplateVersionNumber}{' '}
+      {/* //NOSONAR */}
       {!isEmpty(opportunityType) && `- ${opportunityType}`}
     </>
   );
@@ -63,21 +65,18 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
    * Trigger Modal onUpdate switchTempStatus state
    */
   useEffect(() => {
-    const successSwitch = () =>{
+    //NOSONAR
+    if (switchTempStatus === 'success') {
       dispatch(getOpportunity(opportunityId)).then(() => {
         dispatch(updateSwitchInProgress(false));
         setAlertModal(true);
         dispatch(updateSwitchTempStatusFromWebSocket(false));
       });
     }
-    const errorSwitch = () =>{
+    //NOSONAR
+    if (switchTempStatus === 'error') {
       setAlertModal(true);
       dispatch(updateSwitchTempStatusFromWebSocket(false));
-    }
-    if (switchTempStatus === 'success') {
-      successSwitch()
-    }else if (switchTempStatus === 'error') {
-      errorSwitch()
     }
   }, [switchTempStatus]);
 
@@ -85,10 +84,11 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
    * Render Switch Temp Error/Success Modal
    */
   let renderAlertModal;
+  //NOSONAR
   if (alertModal) {
     let modalMsg = PROPOSAL.SWITCH_TEMP_SUCCESS;
     let variant = 'success';
-
+    //NOSONAR
     switch (switchTempStatus) {
       case 'error':
         modalMsg = PROPOSAL.SWITCH_TEMP_FAILED;
@@ -110,8 +110,10 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
 
   useEffect(() => {
     let timeout;
+    //NOSONAR
     if (alertModal) timeout = setTimeout(() => setAlertModal(false), 10000);
     return () => {
+      //NOSONAR
       if (timeout) clearTimeout(timeout);
     };
   }, [alertModal]);
