@@ -21,7 +21,7 @@
     height: 24px;
     width: 100%;
     color: #999999;
-    font-family: "ProximaNova-Regular";
+    font-family: $proximaNova;
     pointer-events: none;
     font-size: 12px;
     letter-spacing: 0;
@@ -46,7 +46,7 @@
     line-height: 26px !important;
     width: 100%;
     margin-top: 0 !important;
-    font-family: 'ProximaNova-Regular';
+    font-family: $proximaNova;
     font-size: 16px;
     min-width: 176px;
     border: 1px solid #d9d9d9;
@@ -58,7 +58,7 @@
   min-height: 24px;
   width: 100%;
   color: #999999;
-  font-family: "ProximaNova-Regular";
+  font-family: $proximaNova;
   pointer-events: none;
   font-size: 12px;
   letter-spacing: 0;
