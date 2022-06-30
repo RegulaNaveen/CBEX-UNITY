@@ -149,13 +149,19 @@ const WysiwygNotepad = ({
     [editorState, memoizedSaveDB]
   );
 
+  const onhandlePastedText = (
+    text: string,
+    html?: string,
+    editorState: EditorState
+  ) => {};
+
   return (
     <Editor
-      key="draft_editor"
+      key='draft_editor'
       editorState={editorState}
       onEditorStateChange={onEditorsChange}
       readOnly={isReadOnly}
-      // onBlur={e => fetchLatestNotes()}
+      handlePastedText={onhandlePastedText}
       toolbar={{
         options: [
           'inline',

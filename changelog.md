@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.3.1] - YYYY-MM-DD
+### Fixed
+- IQVIACBEXU-1727: Formatting issues when pasting into the Notepad
 ## [4.3] - YYYY-MM-DD
 ### Added
   - IQVIACBEXU-1693: Number should be shown when add more than 5 users
