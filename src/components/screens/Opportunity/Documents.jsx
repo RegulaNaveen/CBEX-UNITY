@@ -72,7 +72,6 @@ class Documents extends Component<Props, State> {
 
   componentDidMount() {
     const { bids, match, getAdditionalLink, proposalDetail, selectedBid, location: { search } } = this.props;
-    console.log('this.props :>> ',selectedBid.toJS(), search);
     const { id } = selectedBid.toJS();
     const selectedView = new URLSearchParams(search).get('viewType');
     // Opportunity number from the link
@@ -170,14 +169,14 @@ class Documents extends Component<Props, State> {
             </Paper>
           </Grid>
         </Grid>
-        <ul className="opportunity-link">
+        {/* <ul className="opportunity-link">
           <li
            onClick={()=> this.openAdditonalUrl(oppfolderID, 'oppactive')}
             className={`${selectedBid == 'oppactive' ? 'selectedBid' : ''} spacebetween`}
            >
             Opportunity {this.oppNo}
           </li>
-        </ul>
+        </ul> */}
           <Accordion defaultExpanded={true}>
             <AccordionSummary>
               <Typography>Bids</Typography>
