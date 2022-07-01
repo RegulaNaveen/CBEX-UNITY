@@ -5,22 +5,27 @@ import { withRouter } from 'react-router-dom';
 import Loader from 'react-loader-spinner';
 import { compose } from 'redux';
 import type { Match } from 'react-router-dom';
-import { onGetProposalBoxId, getAdditionalBoxLink, setupdateBoxId } from '../../../redux/actions/proposal-actions';
-import {
-  getAllBidsForIndex,
-  getProposalBoxId,
-  getProposalBoxIdError,
-  getProposalBoxIdIsLoading,
-  getAdditionalLinks,
-  getProposalDetails
-} from '../../../redux/selectors';
-import DocumentModal from '../../views/modals/documentModal';
 import Grid from 'apollo-react/components/Grid';
 import Paper from 'apollo-react/components/Paper';
 import Typography from 'apollo-react/components/Typography';
 import Accordion from 'apollo-react/components/Accordion';
 import AccordionDetails from 'apollo-react/components/AccordionDetails';
 import AccordionSummary from 'apollo-react/components/AccordionSummary';
+import DocumentModal from '../../views/modals/documentModal';
+import {
+  getAllBidsForIndex,
+  getProposalBoxId,
+  getProposalBoxIdError,
+  getProposalBoxIdIsLoading,
+  getAdditionalLinks,
+  getProposalDetails,
+  getSelectedBid
+} from '../../../redux/selectors';
+import {
+  onGetProposalBoxId,
+  getAdditionalBoxLink,
+  setupdateBoxId
+} from '../../../redux/actions/proposal-actions';
 
 const styles = {
   padding: 16,
@@ -39,7 +44,6 @@ type State = {
 }
 
 class Documents extends Component<Props, State> {
-
   oppNo = '';
   constructor(props: Object) {
     super(props);
@@ -48,30 +52,46 @@ class Documents extends Component<Props, State> {
     }
   }
   getBrowser = () => {
-    const userAgent = navigator.userAgent;
-    let browser = "";
-    browser = (/edg/i).test(userAgent) ? 'Edge' : browser;
+    const { userAgent } = navigator;
+    let browser = '';
+    browser = /edg/i.test(userAgent) ? 'Edge' : browser;
     switch (browser) {
-      case 'Edge': return `${browser}/${this.browserVersion(userAgent, /(edge|edga|edgios|edg)\/([\d\.]+)/i)}`;
-      default: return ''
+      case 'Edge':
+        return `${browser}/${this.browserVersion(
+          userAgent,
+          /(edge|edga|edgios|edg)\/([\d\.]+)/i
+        )}`;
+      default:
+        return '';
     }
-  }
+  };
 
   browserVersion = (userAgent, regex) => {
     return userAgent.match(regex) ? userAgent.match(regex)[2] : null;
-  }
-  componentDidMount() {
+  };
 
-    const { bids, match, getAdditionalLink, proposalDetail } = this.props;
+  componentDidMount() {
+    const { bids, match, getAdditionalLink, proposalDetail, selectedBid, location: { search } } = this.props;
+    console.log('this.props :>> ',selectedBid.toJS(), search);
+    const { id } = selectedBid.toJS();
+    const selectedView = new URLSearchParams(search).get('viewType');
     // Opportunity number from the link
     this.oppNo = match.params.id;
-    if(proposalDetail.opportunityId) getAdditionalLink(proposalDetail.opportunityId, this.oppNo, proposalDetail.Customer)
+    if (proposalDetail.opportunityId)
+      getAdditionalLink(
+        proposalDetail.opportunityId,
+        this.oppNo,
+        proposalDetail.Customer
+      );
     // latest Bid logic
-    if (bids.length) {
+    if (bids && bids.length) {
       const currentBid = bids[0];
-      //Setting up the default tab
-      if (currentBid)
-        this.swtichTabs(currentBid.proposalId);
+      // Setting up the default tab
+      if (currentBid) this.swtichTabs(currentBid.proposalId);
+    }
+
+    if(selectedView && selectedView === 'documents' && id){
+      this.swtichTabs(id);
     }
   }
   swtichTabs(proposalId) {
@@ -93,22 +113,26 @@ class Documents extends Component<Props, State> {
     var res = str.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
     return (res !== null)
   };
-  renderContent = () => {
-    const { isGettingBoxId, onGettingBoxIdError, boxId } = this.props;
+
+  renderContent = (boxId) => {
+    const { isGettingBoxId, onGettingBoxIdError } = this.props;
+    let url = '';
     if (isGettingBoxId)
       return (
         <Loader type="TailSpin" color="#297DFD" height={100} width={100} />
       );
 
-    if (!boxId || onGettingBoxIdError)
+    if (!boxId || onGettingBoxIdError){
+      url = ''
       return <p>No documents available for this proposal</p>;
-    let url = ''
-    if(this.isValidURL(boxId)){
-      url = String(boxId).trim()+"&output=embed";
-    }else{
+    }
+    console.log('url1 :>> ', url);
+    if (this.isValidURL(boxId)) {
+      url = `${String(boxId).trim()}&output=embed`;
+    } else {
       url = `https://app.box.com/embed/folder/${boxId}?sortColumn=date&view=list`;
     }
-    
+    console.log('url2 :>> ', url);
     return (
       <iframe
         src={url}
@@ -124,7 +148,7 @@ class Documents extends Component<Props, State> {
   };
 
   render() {
-    const { bids, boxLinks} = this.props;
+    const { bids, boxLinks, boxId } = this.props;
     const { data, oppfolderID } = boxLinks;
     const { selectedBid } = this.state;
     const consentPropertyName = localStorage.getItem('unity_document_consent');
@@ -193,7 +217,7 @@ class Documents extends Component<Props, State> {
         </div>
         <div className="doc-tab-content">
           <div className="doc-tab-content-inner">
-            {this.renderContent()}
+            {this.renderContent(boxId)}
           </div>
         </div>
         {
@@ -210,6 +234,7 @@ const mapStateToProps = state => ({
   onGettingBoxIdError: getProposalBoxIdError(state),
   boxId: getProposalBoxId(state),
   bids: getAllBidsForIndex(state),
+  selectedBid: getSelectedBid(state),
   boxLinks: getAdditionalLinks(state),
   proposalDetail: getProposalDetails(state),
 });
