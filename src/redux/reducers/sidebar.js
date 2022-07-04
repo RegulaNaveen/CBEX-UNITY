@@ -1,5 +1,5 @@
 // @flow
-import { Map, fromJS } from 'immutable';
+import { Map, fromJS } from 'immutable'; // NOSONAR
 import type { ApiAction } from '../actions/action-types';
 import { REDUX_TYPES } from '../../constants';
 
