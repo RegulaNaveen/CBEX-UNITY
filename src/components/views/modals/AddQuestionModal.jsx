@@ -5,7 +5,7 @@ import 'react-day-picker/lib/style.css';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import type { Match } from 'react-router-dom';
-import { Map } from 'immutable';
+import { Map } from 'immutable'; // NOSONAR
 import Loader from 'react-loader-spinner';
 import { compose } from 'redux';
 import classNames from 'classnames';

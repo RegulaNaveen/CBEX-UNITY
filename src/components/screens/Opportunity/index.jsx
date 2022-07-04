@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { withRouter, Match } from 'react-router-dom';
-import { Map } from 'immutable';
+import { Map } from 'immutable'; // NOSONAR
 import { connect } from 'react-redux';
 import Loader from 'react-loader-spinner';
 import classNames from 'classnames';

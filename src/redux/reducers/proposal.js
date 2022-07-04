@@ -1,6 +1,6 @@
 // @flow
 import { cloneDeep } from 'lodash';
-import { Map, fromJS, OrderedMap } from 'immutable';
+import { Map, fromJS, OrderedMap } from 'immutable'; // NOSONAR
 import { REDUX_TYPES } from '../../constants';
 import type { ApiAction } from '../actions/action-types';
 import { getUniqueMilestones } from '../selectors/proposal';

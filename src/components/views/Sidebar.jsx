@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import { Map } from 'immutable';
+import { Map } from 'immutable'; // NOSONAR
 import { connect } from 'react-redux';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';

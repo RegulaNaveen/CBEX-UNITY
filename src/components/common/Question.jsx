@@ -1,7 +1,7 @@
 // @flow
 /* eslint-disable no-plusplus */
 import React, { Component } from 'react';
-import { Map, List } from 'immutable';
+import { Map, List } from 'immutable'; // NOSONAR
 import { connect } from 'react-redux';
 import { isObject, isEqual, isEmpty, xor } from 'lodash';
 import IconButton from 'apollo-react/components/IconButton';

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Map, OrderedMap } from 'immutable';
+import { Map, OrderedMap } from 'immutable'; // NOSONAR
 import { v4 as uuidv4 } from 'uuid';
 import Grid from 'apollo-react/components/Grid';
 import ListNumber from 'apollo-react-icons/ListNumber';

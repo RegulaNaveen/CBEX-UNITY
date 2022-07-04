@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import type { NavigationHistory } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Map } from 'immutable';
+import { Map } from 'immutable'; // NOSONAR
 import Loader from 'react-loader-spinner';
 import Button from 'apollo-react/components/Button';
 import PencilIcon from 'apollo-react-icons/Pencil';

@@ -2,7 +2,7 @@
 // eslint-disable-next-line react/destructuring-assignment
 import React, { Component } from 'react';
 import { withRouter, Match } from 'react-router-dom';
-import { List, Map } from 'immutable';
+import { List, Map } from 'immutable'; // NOSONAR
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import Button from 'apollo-react/components/Button';
