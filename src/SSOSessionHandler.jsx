@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import type { History, Location } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+// NOSONAR
 import { Map } from 'immutable';
 import { isEmpty } from 'lodash';
 import { loginUser, onRefreshUserData } from './redux/actions/sso-auth-actions';

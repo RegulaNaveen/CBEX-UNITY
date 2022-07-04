@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import type { Map } from 'immutable';
+import type { Map } from 'immutable'; // NOSONAR
 import Link from 'apollo-react/components/Link';
 import Plus from 'apollo-react-icons/Plus';
 import FolderOpen from 'apollo-react-icons/FolderOpen';
