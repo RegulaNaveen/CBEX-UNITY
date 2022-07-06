@@ -104,7 +104,7 @@ export class Opportunity extends Component<Props, State> {
 
     getOpportunityInfo(params.id);
 
-    window.addEventListener('storage', e => this.handleStorageChange(e));
+    window.addEventListener('storage', e => this.handleStorageChange(e)); // NOSONAR
 
     const enableValidateTab = localStorage.getItem('enableValidateTab');
     if (enableValidateTab === null) {
