@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [4.3.1] - YYYY-MM-DD
 ### Fixed
 - IQVIACBEXU-1727: Formatting issues when pasting into the Notepad
+- IQVIACBEXU-1735: Fixed: Notepad not editable for historic bids
 ## [4.3] - YYYY-MM-DD
 ### Added
   - IQVIACBEXU-1693: Number should be shown when add more than 5 users
