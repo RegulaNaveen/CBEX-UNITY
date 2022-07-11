@@ -3,6 +3,7 @@ import Grid from 'apollo-react/components/Grid';
 import Paper from 'apollo-react/components/Paper';
 import { Typography } from 'apollo-react/components/Typography/Typography';
 import { parseMomentDate, remainingDays } from '../../../../utils/DateUtils';
+import { SF_HOST_URL } from '../../../../constants/api';
 
 const styles = {
     padding: 10,
@@ -20,11 +21,16 @@ const loadSidebar = (props) => {
         'Therapeutic area': therapeuticArea,
         'CRM #': crm,
         'Customer': Customer,
-        bidNo
+        bidNo,
+        'opportunityId': Opportunity_Id
     } = data;
     const placeholder = 'No data';
     const date = bidDueDate && parseMomentDate(bidDueDate);
     const daysRemain = remainingDays(date)
+
+    const redirect = () =>{
+        window.open (`${SF_HOST_URL}lightning/r/Opportunity/${Opportunity_Id}/view`);
+    }
    
     if (isOpen) {
         return (
@@ -32,7 +38,7 @@ const loadSidebar = (props) => {
                 <Grid container xs={12}>
                     <Paper style={styles} className="sidebarduedatedsg open">
                         <Typography variant="body2" className="greytext sidebaropenfont">Opportunity Number</Typography>
-                        <Typography variant="body2" className="boldtext sidebaropenfont">{crm || placeholder}</Typography>
+                        <Typography variant="body2" className="boldtext sidebaropenfont" style={{cursor : 'pointer', color : 'Blue'}} onClick={redirect}>{crm || placeholder}</Typography>
                     </Paper>
                     <Paper style={styles} className="sidebarduedatedsg open">
                         <Typography variant="body2" className="greytext sidebaropenfont">Customer</Typography>
@@ -81,7 +87,7 @@ const loadSidebar = (props) => {
                     <Grid item xs={3}>
                         <Paper style={styles} className="duedatedsg">
                             <Typography variant="body2" className="greytext">Opportunity Number</Typography>
-                            <Typography variant="body2" className="boldtext">{crm || placeholder}</Typography>
+                            <Typography variant="body2" className="boldtext" style={{cursor : 'pointer', color : 'Blue'}} onClick={redirect}>{crm || placeholder}</Typography>
                         </Paper>
                     </Grid>
                     <Grid item xs={3}>

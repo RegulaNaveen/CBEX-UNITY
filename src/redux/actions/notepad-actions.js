@@ -1,6 +1,8 @@
 import { fromJS } from 'immutable';
 import { REDUX_TYPES } from '../../constants';
 import { fetchNotesApi, addNoteApi, updateNoteApi } from '../../api/notepad';
+import { getUserEmail } from '../../SessionHandler';
+import { getSelectedBid } from '../../redux/selectors';
 
 const {
   FETCH_NOTES,
@@ -31,6 +33,18 @@ export function fetchNotes(proposalID) {
   };
 }
 
+export const updateProposalNotesFromWebSocket = (
+  data
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>, getState) => {
+    if (data.updatedBy === getUserEmail()) {
+      console.log('skipping update because message from same user');
+    } else {
+      dispatch(fetchNotes(getSelectedBid(getState()).get('id', '')));
+    }
+  };
+};
+
 export function addNote(id, note) {
   return async dispatch => {
     try {
@@ -50,8 +64,9 @@ export function updateNote(id, note) {
       dispatch({ type: UPDATE_NOTE });
       await updateNoteApi(id, note);
       dispatch({ type: UPDATE_NOTE_DONE });
-      dispatch({ type: CHANGE_MODE, payload: { mode: MODE_DEFAULT } });
-      dispatch(fetchNotes(id));
+      // With NoteV2 we dont need to refetch the notes list
+      // dispatch({ type: CHANGE_MODE, payload: { mode: MODE_DEFAULT } });
+      // dispatch(fetchNotes(id));
     } catch (err) {
       dispatch({ type: ERROR_UPDATING_NOTE, payload: { data: err } });
     }

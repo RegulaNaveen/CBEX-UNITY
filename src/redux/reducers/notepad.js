@@ -38,8 +38,9 @@ function onFetchNotes(state) {
 
 function onFetchNotesDone(state, action) {
   const {
-    payload: { data }
+    payload: { data, isFromSocket }
   } = action;
+  data.isFromSocket = !!isFromSocket;
   return state.set('notes', data).set('fetchingNotes', false);
 }
 

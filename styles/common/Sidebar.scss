@@ -8,7 +8,7 @@
   height: 100%;
   transform: translateX(100%);
   top: 0;
-  width: 39%;
+  width: 15%;
   right: 0;
   border-left: 1px solid rgba($color: $neutral7, $alpha: 0.1);
   transition: 0.4s ease-in-out transform;
@@ -142,7 +142,7 @@ and (max-width : 3000px)
   height: 100%;
   transform: translateX(100%);
   top: 0;
-  width: 39%;
+  width: 15%;
   right: 0;
   border-left: 1px solid rgba($color: $neutral7, $alpha: 0.1);
   transition: 0.4s ease-in-out transform;
@@ -256,11 +256,6 @@ and (max-width : 3000px)
     }
   }
   
-}
-@media (min-width: 1200px) {
-  #sidebar {
-    z-index: 999;
-  }
 }
 }
 @media only screen   

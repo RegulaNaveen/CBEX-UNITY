@@ -13,7 +13,7 @@
 
   &.is-collapsed {
     margin-right: 0px;
-    width: 61%;
+    width: 85%;
   }
   .MuiSnackbarContent-root {
     min-height: 57px;
@@ -216,7 +216,7 @@ and (max-width : 3000px)
 
   &.is-collapsed {
     margin-right: 0px;
-    width: 61%;
+    width: 85%;
   }
   .MuiSnackbarContent-root {
     min-height: 57px;
@@ -420,5 +420,87 @@ and (max-width : 3000px)
     color: #000000!important;
     font-family: "ProximaNova-Regular"!important;
     font-size: 16px!important;
+   }
+}
+
+.exportOptionsWrapper {
+  width: 550px;
+
+  .flex-dir-col{
+    flex-direction: column;
+  }
+  .exportOptionsRow-first{
+    margin-bottom: 10px;
+    border-bottom: 1px solid #dfdada;
+    padding-bottom: 10px;
+  }
+  .exportOptionsRow-second{
+    margin-bottom: 20px;
+  }
+  .button-group{
+    justify-content: flex-end;
+  }
+  .exportOptionsRow{
+    display: flex;
+    justify-content: space-between;
+    label{
+      font-size: 14px;
+      font-family: "ProximaNova-Regular"!important;
+      color: #000;
+    }
+    .exportOptionsCell {
+      width: 48%;
+    } 
+    .exportFileName {
+      border: 1px solid #dfdada;
+      padding: 8px;
+      border-radius: 3px;
+      width: 90%;
+      margin-bottom: 5px;
+      margin-top: 7px;
+      color: #000000!important;
+      font-family: "ProximaNova-Regular"!important;
+      font-size: 16px!important;
+    }  
+    .exportFileName:hover, .exportFileName:focus-visible {
+      border-color: #0768fd!important;
+      outline: none;
+    }  
+    span.fileNameAlert{
+      display: none;
+      color: #d8000c;
+      font-size: 12px;
+    }
+    .exportFileName:required:invalid + span.fileNameAlert{
+      display: block;
+    }
+  } 
+  .exportOptionsRow-last{
+    justify-content: end;
+    .export-okay{
+      margin-right: 0;
+    }
+  }
+}  
+
+//custom determinate button for export milestone filter
+.all-not-selected {
+   position: relative;
+   label{
+    > span:first-child::before{
+      background-color: #0768fd;
+      content: '-';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 2px;
+      color: #fff;
+      font-size: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: inherit;
+      z-index: 1;
+     }
    }
 }

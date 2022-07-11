@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import type { Map } from 'immutable';
+import { Map } from 'immutable';
 import Link from 'apollo-react/components/Link';
 import Plus from 'apollo-react-icons/Plus';
 import FolderOpen from 'apollo-react-icons/FolderOpen';
@@ -44,8 +44,9 @@ type Props = {
   userActions: any,
   trackEvent: any,
   proposalDetail: any,
-  ismilestoneavailable?: any,
-  selectedBid: Map
+  milestone: any,
+  selectedBid: Map,
+  isNotepadOpen: boolean
 };
 
 class CollapsibleList extends Component<Props, State> {
@@ -84,14 +85,15 @@ class CollapsibleList extends Component<Props, State> {
 
   handleCollapse = () => {
     const { isCollapsed } = this.state;
+    const { title, selectedSection, changeSelectedSection } = this.props;
     this.setState({ isCollapsed: !isCollapsed });
     this.trackMatomoEventBladeToggle(!isCollapsed);
-    const titleId = this.props.title
+    const titleId = title
       .toLocaleLowerCase()
       .split(' ')
       .join('-');
-    if (titleId === this.props.selectedSection) {
-      this.props.changeSelectedSection(null);
+    if (titleId === selectedSection) {
+      changeSelectedSection(null);
     }
   };
 
@@ -180,7 +182,8 @@ class CollapsibleList extends Component<Props, State> {
       title,
       milestone,
       setQuestionToDisplayHistory,
-      selectedBid
+      selectedBid,
+      isNotepadOpen
     } = this.props;
     return (
       <div className="task-wrapper" ref={this.taskRef} id={this.createId()}>
@@ -201,15 +204,13 @@ class CollapsibleList extends Component<Props, State> {
 
         {!isCollapsed ? (
           <div
-            className="task-title-wrapper"
+            className="task-title-wrapper collapsed"
             role="button"
             onClick={this.handleCollapse}
             onKeyPress={this.handleKeyPress}
             tabIndex={-1}
           >
-            <p id="task-title" className="task-title">
-              {title}
-            </p>
+            <p className="task-title">{title}</p>
           </div>
         ) : (
           <div className="task-table-wrapper">
@@ -228,44 +229,46 @@ class CollapsibleList extends Component<Props, State> {
               </div>
             </div>
 
-            <div className="task-table-row">
-              <div className="task-subtitle subtitlebold">
-                <p>Questions</p>
-              </div>
-              <div className="task-subtitle task-subtitle-answer subtitlebold">
-                <p>Answers</p>
-              </div>
-              <div className="task-subtitle task-subtitle-completion-date subtitlebold">
-                <p>Date Completed</p>
-              </div>
-            </div>
-
             {questions.valueSeq().map(questionConfig => {
-              const visible = questionConfig.get('visible');
+              const visible =
+                questionConfig.get('visible', true) &&
+                (questionConfig.get('active', true) ||
+                  questionConfig.get('isCustomQuestion', true));
+
               return (
                 (visible || typeof visible === 'undefined') && (
                   <Question
                     ismilestoneavailable={milestone}
                     key={questionConfig.get('questionId')}
                     milestone={questionConfig.get('milestone')}
+                    milestoneNew={questionConfig.get('milestoneNew')}
                     questionId={questionConfig.get('questionId')}
                     proposalId={questionConfig.get('proposalId')}
                     answers={questionConfig.get('answers')}
                     questionText={questionConfig.get('questionText')}
+                    questionHTML={questionConfig.get('questionHTML')}
+                    questionJSON={questionConfig.get('questionJSON')}
                     answerConfiguration={questionConfig.get(
                       'answerConfiguration'
                     )}
+                    section={questionConfig.get('section')}
                     sfObject={questionConfig.get('sfObject')}
                     sfField={questionConfig.get('sfField')}
                     sectionName={title}
                     setQuestionToDisplayHistory={setQuestionToDisplayHistory}
                     loading={questionConfig.get('loading', false)}
                     questionHint={questionConfig.get('questionHint', '')}
+                    questionHintHTML={questionConfig.get(
+                      'questionHintHTML',
+                      ''
+                    )}
+                    questionHintJSON={questionConfig.get('questionHintJSON')}
                     roleNames={questionConfig.get('roleNames')}
                     isCustomQuestion={questionConfig.get('isCustomQuestion')}
                     hasDifferentSFanswer={questionConfig.get(
                       'hasDifferentSFanswer'
                     )}
+                    isNotepadOpen={isNotepadOpen}
                   />
                 )
               );
