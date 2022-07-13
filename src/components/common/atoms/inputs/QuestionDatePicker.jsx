@@ -10,7 +10,8 @@ const QuestionDatePicker = ({
   resetDate,
   handleDayChange,
   onFocus,
-  onBlur
+  onBlur,
+  disabled = false
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [resetsubmit, setresetsubmit] = useState(false);
@@ -27,11 +28,12 @@ const QuestionDatePicker = ({
     else setresetsubmit(false);
   }, [value]);
   return (
-    <div className="date-picker">
+    <div className={`date-picker ${disabled ? 'disabled' : ''}`}>
       <DatePicker
         placeholder="DD-MMM-YYYY"
         dateFormat="DD-MMM-YYYY"
         fullWidth
+        disabled={disabled}
         inputProps={{
           onFocus: e => {
             onFocus();
@@ -40,7 +42,6 @@ const QuestionDatePicker = ({
             onBlur();
           }
         }}
-        style={{ marginTop: 0 }}
         inputValue={inputValue}
         onInputChange={dte => {
           const dateregx = /^(([0-9])|([0-2][0-9])|([3][0-1]))\-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\-\d{4}$/;
@@ -68,7 +69,7 @@ const QuestionDatePicker = ({
           if (!dte) handleDayChange(' ', value);
         }}
       />
-      {resetsubmit && (
+      {resetsubmit && !disabled && (
         <button
           onClick={() => {
             setresetsubmit(false);

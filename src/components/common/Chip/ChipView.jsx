@@ -1,25 +1,48 @@
 import React from 'react';
 import Tag from 'apollo-react/components/Tag';
 import PropTypes from 'prop-types';
-// import Check from 'apollo-react-icons/Check';
 import Tooltip from 'apollo-react/components/Tooltip';
+import selectColors from './Color';
 
 const ChipView = ({ label, answer }) => {
-  return (
-    <>
-      <Tooltip title={label} placement="top">
-        <Tag
-          Icon={''}
-          label={
-            label.split(' ')[0].length <= 11
-              ? label.split(' ')[0]
-              : `${label.split(' ')[0].substr(0, 8)}...`
-          }
-          variant={answer ? 'green' : 'blue'}
-        />
-      </Tooltip>
-    </>
-  );
+  let color;
+  let milestonetojs = [];
+
+  if (typeof label === 'object') {
+    try {
+      milestonetojs = label.toJS();
+    } catch (error) {
+      console.log(error);
+    }
+    if (milestonetojs.length) {
+      label = milestonetojs[0].Name || '';
+      color = milestonetojs[0].Color || '';
+      selectColors.map(item => {
+        if (_.isEqual(color, item.color)) {
+          color = item.label;
+        }
+      });
+
+      return (
+        <>
+          <Tooltip title={label} placement="top">
+            <Tag Icon="" label={label} variant={color} />
+          </Tooltip>
+        </>
+      );
+    }
+    return null;
+  }
+  if (typeof label === 'string' && label) {
+    return (
+      <>
+        <Tooltip title={label} placement="top">
+          <Tag Icon="" label={label} variant={answer ? 'green' : 'blue'} />
+        </Tooltip>
+      </>
+    );
+  }
+  return null;
 };
 ChipView.propTypes = {
   label: PropTypes.string,

@@ -6,7 +6,8 @@ import { REDUX_TYPES } from '../../constants';
 import {
   onGetAllProposals,
   onGetByStatus,
-  onGetFilterValues
+  onGetFilterValues,
+  onGetSFNonEditabelField
 } from '../../api/proposals';
 
 const {
@@ -17,7 +18,8 @@ const {
   ON_SET_PROPOSALS_FILTERS,
   SET_PROPOSAL_FILTERING,
   SET_PAGE,
-  SET_NUM_OF_ROWS
+  SET_NUM_OF_ROWS,
+  NON_EDITABLE_SF_FIELD
 } = REDUX_TYPES.PROPOSALS;
 
 const formatProposal = (proposal: Object): Object => {
@@ -46,7 +48,6 @@ const formatProposal = (proposal: Object): Object => {
     formattedProposal['opportunity status'] =
       opportunityOverview.OpportunityStatus || '';
     formattedProposal.usersList = usersList;
-
     return formattedProposal;
   }
 
@@ -227,10 +228,6 @@ export const onFilteringProposals = (
       dispatch({ type: ERROR_ON_GET_PROPOSALS, payload: { error } });
     } finally {
       dispatch(setPageAction(1)); // resetting page to 1
-      dispatch({
-        type: SET_PROPOSAL_FILTERING,
-        payload: false
-      });
     }
   };
 };
@@ -269,3 +266,20 @@ export const setNumberOfRowsAction = (rowsCount: Number) => {
     });
   };
 };
+
+export const getSFNonEditabelField = (): ThunkAction<String, Object> => async (
+  dispatch: Dispatch<Object, Object>
+) => {
+  try {
+    const { data } = await onGetSFNonEditabelField();
+    if (data) {
+      dispatch({
+        type: NON_EDITABLE_SF_FIELD,
+        payload: data
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+

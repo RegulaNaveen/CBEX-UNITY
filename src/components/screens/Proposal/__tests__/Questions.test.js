@@ -5,7 +5,7 @@ import React from 'react';
 import { cleanup, render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 // import Proposal from '../index';
-import Questions from '../Questions';
+import Questions from '../../../common/Question';
 import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
 import * as data from './data.json'

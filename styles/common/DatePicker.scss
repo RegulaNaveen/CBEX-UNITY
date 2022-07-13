@@ -1,9 +1,11 @@
 .date-picker {
   position: relative;
+  & > div {
+    margin: 0;
+  }
   .DayPickerInput {
     width: 100%;
   }
-
   .date-range-wrapper {
     display: flex;
   }
@@ -89,7 +91,7 @@
     }
 
     .date {
-      color: $black;;
+      color: $black;
     }
   }
 }

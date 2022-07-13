@@ -17,6 +17,7 @@
 @import './AuthSSO';
 @import './AddQuestionModal';
 @import './WelcomeModal';
+@import './BidHistory';
 @import './modals/AnswerHistory';
 @import './common/DashboardFilters';
 @import './common/InputField';
@@ -42,3 +43,5 @@
 @import './common/ToolTip';
 @import './common/ComposedIcon';
 @import './common/ChipView';
+@import './modals/ProcessingCRM';
+@import './modals/documentModal.scss'

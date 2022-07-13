@@ -7,13 +7,14 @@ import randomColor from 'randomcolor';
 import { isEmpty, unionBy } from 'lodash';
 import { diffWordsWithSpace } from 'diff';
 import { getProposalTeamAssignedRoles } from '../../../redux/selectors';
+import { getOpportunityData} from '../../../redux/selectors/proposal';
 import { Close } from '../../svg';
 import { parseMomentDate } from '../../../utils/DateUtils';
 import { rearrangeDiff, getUserInitials, getUserName } from '../../../utils/utils';
-
 type Props = {
   question: Map,
   proposalTeamAnswers: Object,
+  opportunityData: Object,
   closeModal: () => void
 };
 
@@ -58,7 +59,7 @@ class AnswerHistory extends Component<Props> {
   };
 
   renderContent = () => {
-    const { question } = this.props;
+    const { question, opportunityData } = this.props;
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const sectionName = question.getIn(['section', 'sectionName']);
     let answers = question.get('answers').reverse();
@@ -71,37 +72,88 @@ class AnswerHistory extends Component<Props> {
       const userName = _answer.get('userName') || 'Default User';
       const date = _answer.get('date');
       let answer = _answer.get('answer');
+      let proposalId = _answer.get('proposalId');
+      let bidNo = '';
+      if (
+        proposalId &&
+        opportunityData.get(proposalId)?.toJS()?.proposal?.proposalDetails
+          ?.bidNo
+      ) {
+        bidNo = this.props.opportunityData.get(proposalId).toJS().proposal
+          .proposalDetails.bidNo;
+      }
+      
       const nextAnswer = answers.get(index + 1)
         ? answers.get(index + 1).get('answer')
         : answer;
       
       const isValidatedUnityPredictedAnswer = (
+        questionType !== 'picklist' &&
+        questionType !== 'picklist-lookup' &&
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'UnityPredictedAnswer' &&
         answer === nextAnswer
       );
 
+      // picklist answers are array so they require different check than other question types
+      const isPicklistValidUnityPredAns = (
+        (questionType === 'picklist' || questionType === 'picklist-lookup') &&
+        answers &&
+        answers.get(index + 1) &&
+        answers.get(index + 1).get('userName') === 'UnityPredictedAnswer' &&
+        answers.get(index + 1).get('answer').toJS().join(",") === answers.get(index).get('answer').toJS().join(",")
+      );
       const userInitials = getUserInitials(userName);
       const parsedDate = parseMomentDate(date);
       const avatarRandomColor = randomColor({ luminosity: 'dark' });
 
       const renderAnswers = () => {
+        const isFirstItem = index === 0;
+        const isLastItem = index === answers.toJS().length -1
+        const isOnlyOneAnswer = answers.toJS().length === 1
         if (isValidatedUnityPredictedAnswer) {
           return <span key={uuidv4()}><b>Validated Unity Predicted Answer</b></span>;
         }
-        if (questionType == 'picklist' && answers && answers.get(index + 1) &&
-           answers.get(index + 1).get('userName') === 'UnityPredictedAnswer') {
+        if (isPicklistValidUnityPredAns) {
           return <span key={uuidv4()}><b>Validated Unity Predicted Answer</b></span>;
         }
-        if (questionType !== 'picklist') {
+        if (questionType !== 'picklist' && questionType !== 'picklist-lookup') {
           const renderWord = (word, status) => (
             <span className={status} key={uuidv4()}>
               {word}{' '}
             </span>
           );
           if (questionType === 'text' || questionType === 'number') {
+            if (sectionName === 'Proposal Team') {
+              /**
+               * Proposal Team section answers which are "text" types are emails separated with commas.
+               * diffWordsWithSpace from diff package is used for highlighting changes in text type answers, but it's hard to read changes in email answers with this algo.
+               * The business requested custom change highlight for emails. The below implementation doesn't use 'diff' package.
+               */
+              const answerTrimArr = answer.split(',').map(i => i.trim()); // Convert String answer to Array
+              const nextAnswerTrimArr = nextAnswer
+                .split(',')
+                .map(i => i.trim()); // Convert String answer to Array
+              const intersection = nextAnswerTrimArr.filter(x =>
+                answerTrimArr.includes(x)
+              ); // Common emails (i.e Not removed)
+              const removed = nextAnswerTrimArr.filter(
+                x => !answerTrimArr.includes(x)
+              ); // removed emails
+              const added = answerTrimArr.filter(
+                x => !nextAnswerTrimArr.includes(x)
+              ); // updated emails
+              const allAnswers = [
+                ...new Set([...nextAnswerTrimArr, ...answerTrimArr])
+              ];
+              return allAnswers.map(ans => {
+                if (intersection.includes(ans)) return renderWord(ans, '');
+                if (removed.includes(ans)) return renderWord(ans, 'removed');
+                if (added.includes(ans)) return renderWord(ans, 'changed');
+              });
+            }
             const diffAnswers = diffWordsWithSpace(nextAnswer, answer);
-
+            
             return rearrangeDiff(diffAnswers).map(
               ({ value, added, removed }) => {
                 if (removed) return renderWord(value, 'removed');
@@ -116,9 +168,16 @@ class AnswerHistory extends Component<Props> {
             if (new Date(answer) == 'Invalid Date') {
               return renderWord('Invalid Date', 'removed');
             }
+            let styleClass = !isOnlyOneAnswer && !isLastItem ? 'changed' : undefined;
+            // Dont add styles if answers are same
+            // We use .substring(0, 10) to get only the yyyy-mm-dd out of a String like '2022-04-30T00:00:00+05:30'
+            if(String(answer).substring(0, 10) === String(nextAnswer).substring(0, 10)){
+              nextAnswer = '';
+              styleClass = undefined
+            }
             const newdate = renderWord(
               String(parseMomentDate(answer)),
-              'changed'
+              styleClass
             );
             let nextdate = '';
             if (indx + 1 == tmp.length) {
@@ -140,13 +199,46 @@ class AnswerHistory extends Component<Props> {
             );
           };
 
-          if (questionType === 'select') {
+          if (questionType === 'select' || questionType === 'select-lookup') {
+            const prevAnswer = () => {
+              const answersArr = answers.toJS();
+              return answersArr[index + 1] ? answersArr[index + 1].answer : '';
+            };
+            const combinedAnswer = () => {
+              if (!isOnlyOneAnswer && prevAnswer() !== '' && prevAnswer() !== answer) {
+                return (
+                  <>
+                    <span className={'removed'}>
+                      {prevAnswer()}{' '}
+                    </span>
+                    <span className={'changed'}>
+                      {answer}
+                    </span>
+                  </>
+                );
+              } else {
+                return '';
+              }
+            };
             if(index == 0){
-              return renderWord(answer, 'changed');
-            }else if(answers && answers.toJS().length == 2 &&  answers.get(index).get('userName') === 'UnityPredictedAnswer'){
+              const styleClass = isFirstItem && !isOnlyOneAnswer && prevAnswer() !== answer ? 'changed' : undefined;
+              return combinedAnswer() || renderWord(answer, styleClass);
+            }else if(answers 
+              && answers.get(index - 1)
+              && answers.get(index).get('userName') === 'UnityPredictedAnswer'
+              && answers.get(index - 1).get('answer') === answers.get(index).get('answer')){
+              // checks is this a unity answer which was validated if yes then dont add any styles
               return <span key={uuidv4()}>{answers.get(index).get('answer')} </span>
-            }else{
-              return renderWord(answer, 'removed');
+            } else if (
+              answers &&
+              !isFirstItem &&
+              answers.get(index + 1) &&
+              answers.get(index + 1).get('answer') === answers.get(index).get('answer')
+            ) {
+              // if answers are same, don't add any style. This scenario occurs when new bids SF answer is the same as the older
+              return renderWord(answer, undefined);
+            } else {
+              return combinedAnswer() || renderWord(answer, '');
             }
           }
 
@@ -162,9 +254,6 @@ class AnswerHistory extends Component<Props> {
 
           return <p>{answer}</p>;
         }
-
-        if (answer.isEmpty()) return <p>All answers deleted</p>;
-
         const deletedAnswers = nextAnswer.filter(ans => !answer.includes(ans));
         const deletedAnswersItems = deletedAnswers.map(ans => (
           <li className="removed" key={uuidv4()}>
@@ -205,7 +294,10 @@ class AnswerHistory extends Component<Props> {
               {renderAnswers()}
             </div>
           </div>
-          <p className="date">{parsedDate}</p>
+          <div className="answer-meta-data">
+            <p>{parsedDate}</p>
+            {bidNo? <p>Bid {bidNo}</p> : null}
+          </div>
         </div>
       );
     });
@@ -245,7 +337,8 @@ class AnswerHistory extends Component<Props> {
           role="presentation"
           onClick={this.stopPropagation}
         >
-          <div className="modal-header">
+          <div className="bluegrid" />
+          <div className="modal-header" >
             <div className="header-titles">
               <h1>{answers.isEmpty() ? 'Responsible' : 'History'}</h1>
               <p>{questionTitle}</p>
@@ -269,7 +362,8 @@ class AnswerHistory extends Component<Props> {
 }
 
 const mapStateToProps = (state: Map) => ({
-  proposalTeamAnswers: getProposalTeamAssignedRoles(state)
+  proposalTeamAnswers: getProposalTeamAssignedRoles(state),
+  opportunityData: getOpportunityData(state)
 });
 
 export default connect(mapStateToProps)(AnswerHistory);

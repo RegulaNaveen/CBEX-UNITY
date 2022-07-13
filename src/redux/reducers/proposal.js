@@ -1,8 +1,10 @@
 // @flow
 import { cloneDeep } from 'lodash';
-import { Map, fromJS } from 'immutable';
+import { Map, fromJS, OrderedMap } from 'immutable';
 import { REDUX_TYPES } from '../../constants';
 import type { ApiAction } from '../actions/action-types';
+import { getUniqueMilestones } from '../selectors/proposal';
+import { getQuestionsFilterApplied } from '../actions/proposal-actions';
 
 const {
   PROPOSAL_INFO,
@@ -37,7 +39,18 @@ const {
   EXPAND_ALL_SECTIONS,
   SET_EDIT_QUESTION_DATA,
   PROPOSAL_EDIT_QUESTION,
-  PROPOSAL_DELETE_QUESTION
+  PROPOSAL_DELETE_QUESTION,
+  OPPORTUNITY_INFO,
+  UPDATE_BOX_BIDS,
+  CHANGE_BID,
+  ADD_NEW_BID,
+  NEW_BID_CREATED,
+  PROPOSAL_DETAIL_UPDATE,
+  UPDATE_LOOKUP_OPTIONS,
+  BOX_ADDITIONAL_LINK,
+  BOX_ADDITIONAL_LINK_ERROR,
+  SWITCH_TEMP_STATUS,
+  SWITCH_TEMP_IN_PROGRESS
 } = REDUX_TYPES.PROPOSAL;
 
 const INITIAL_STATE: Map = fromJS({
@@ -67,7 +80,7 @@ const INITIAL_STATE: Map = fromJS({
   validatedProposalData: [],
   validatedProposalDataError: undefined,
   questionsFilter: fromJS({
-    answerGroup : {
+    answerGroup: {
       answered: {
         checked: false,
         label: 'Answered',
@@ -78,9 +91,9 @@ const INITIAL_STATE: Map = fromJS({
         label: 'Unanswered',
         className: 'questions-filter__row1-col1'
       },
-      logic : 'OR'
+      logic: 'OR'
     },
-    rolegroup : {
+    rolegroup: {
       myUserRole: {
         checked: false,
         label: 'My User Role',
@@ -91,27 +104,163 @@ const INITIAL_STATE: Map = fromJS({
         label: 'Interested Party',
         className: 'questions-filter__row2-col1'
       },
-      logic : 'AND'
+      logic: 'AND'
     },
-    milestoneGroup : {}
+    milestoneGroup: {}
   }),
   filteredProposalQuestions: Map({}),
   areAllSectionsExpanded: false,
-  editQuestionsData: Map({})
+  editQuestionsData: Map({}),
+  opportunityData: Map({}),
+  selectedBid: Map({}),
+  boxBids: [],
+  lookUpOptions: {},
+  boxAdditionalLink: {},
+  switchTempCallStatus: false,
+  switchTempInProgress: false
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
   const {
     proposalQuestions,
     proposal: { proposalDetails },
-    milestones
+    proposal
   } = action.payload;
+  let NewopportunityData = new OrderedMap({});
+  let opportunityData = state.get('opportunityData');
+  let questionsFilter = state.get('questionsFilter');
+  let selectedBid = state.get('selectedBid');
+  const items = opportunityData.filter(v => v.get('isCurrent') === false);
+  let obj = {
+    proposal: proposal,
+    proposalQuestions: proposalQuestions,
+    proposalUsers: [],
+    isCurrent: true
+  };
+  NewopportunityData = NewopportunityData.set(
+    proposal.proposalId,
+    OrderedMap(obj)
+  );
+  NewopportunityData = NewopportunityData.merge(items);
+  questionsFilter = questionsFilter.map(group => {
+    return group.map(filter => {
+      if (typeof filter === 'string') return filter;
 
+      return filter.set('checked', false);
+    });
+  });
   // Add agreementId as well in proposal details
-  proposalDetails.agreementId = action.payload.proposal.agreementId || '';
-  proposalDetails.questionTemplateVersionNumber = action.payload.proposal.questionTemplateVersionNumber || '';
+  // proposalDetails.agreementId = action.payload.proposal.agreementId || '';
 
   // Adding milestones to Questions Filter
+  // const milestones = getUniqueMilestones(proposalQuestions);
+  // if(Array.isArray(milestones) && milestones.length){
+  //   let milestoneGroup = fromJS({});
+  //   milestones.forEach(milestone => {
+  //     milestoneGroup = milestoneGroup.set(
+  //       milestone,
+  //       Map({
+  //         checked: false,
+  //         label: milestone,
+  //         className: 'questions-filter__item'
+  //       })
+  //     );
+  //   });
+  //   milestoneGroup = milestoneGroup.set('logic', 'OR');
+  //   questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
+  // }
+
+  if (selectedBid.get('id') == proposal.proposalId) {
+    return state
+      .set('proposalDetails', proposalDetails)
+      .set('proposalQuestions', proposalQuestions)
+      .set('filteredProposalQuestions', [])
+      .set('questionsFilter', questionsFilter)
+      .set('opportunityData', NewopportunityData)
+      .set('isProposalLoading', false);
+  } else {
+    return state
+      .set('opportunityData', NewopportunityData)
+      .set('filteredProposalQuestions', [])
+      .set('questionsFilter', questionsFilter)
+      .set('isProposalLoading', false);
+  }
+};
+
+const updateProposalDetail = (state, action) => {
+  try {
+    const { proposalDetails, proposalId } = action.payload;
+    if (proposalId) {
+      let opportunityData = state.get('opportunityData');
+      let selectedBid = state.getIn(['selectedBid', 'id']);
+
+      // Updating the state for opportunityData with latest proposalDetails
+      opportunityData = opportunityData.setIn(
+        [proposalId, 'proposal', 'proposalDetails'],
+        proposalDetails
+      );
+      state = state.set('opportunityData', new OrderedMap(opportunityData));
+      // Update the current proposalDetails if the selected Bid is equal to processed Bid
+      if (selectedBid === proposalId)
+        state = state.set('proposalDetails', proposalDetails);
+    }
+  } catch (error) {
+    console.log('Cannot update proposal details', error.message);
+  }
+  return state;
+};
+
+const setOpportunityInfo = (state, action) => {
+  const { payload } = action;
+  let opportunityData = new OrderedMap({});
+  let selectedBid = Map({});
+  // console.log(`payload`, payload);
+  payload.forEach(proposal => {
+    if (proposal.isCurrent) {
+      selectedBid = selectedBid
+        .set('id', proposal.proposal.proposalId)
+        // .set('bidDate', proposal.proposal.proposalDate)
+        .set(
+          'bidName',
+          `Bid ${proposal.proposal.proposalDetails['bidNo'] || ''}`
+        )
+        .set(
+          'questionTemplateVersionNumber',
+          proposal.proposal['questionTemplateVersionNumber'] || ''
+        )
+        .set('opportunityType', proposal.proposal['opportunityType'] || '')
+        .set('isCurrent', true)
+        .set('bidStatus', proposal.proposal['inProgress'] || false)
+        .set('agreementId', proposal.proposal['agreementId'] || '')
+        .set('accountId', proposal.proposal['accountId'] || '')
+        .set(
+          'opportunityId',
+          proposal.proposal.proposalDetails['opportunityId'] || ''
+        )
+        .set(
+          'pertinentDetails',
+          proposal.proposal.proposalDetails.pertinentDetails
+        );
+    }
+    opportunityData = opportunityData.set(
+      proposal.proposal.proposalId,
+      OrderedMap(proposal)
+    );
+  });
+
+  const proposalDetails = opportunityData.getIn([
+    selectedBid.get('id'),
+    'proposal',
+    'proposalDetails'
+  ]);
+  const proposalQuestions = opportunityData.getIn([
+    selectedBid.get('id'),
+    'proposalQuestions'
+  ]);
+  // console.log(`proposalQuestions`, proposalQuestions)
+
+  const milestones = getUniqueMilestones(proposalQuestions);
+
   let questionsFilter = state.get('questionsFilter');
   let milestoneGroup = fromJS({});
   milestones.forEach(milestone => {
@@ -124,13 +273,162 @@ const onProsalInfoLoaded = (state: Map, action: Object): Map => {
       })
     );
   });
-  milestoneGroup = milestoneGroup.set('logic', 'OR')
+  milestoneGroup = milestoneGroup.set('logic', 'OR');
   questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
   return state
     .set('proposalDetails', proposalDetails)
     .set('proposalQuestions', proposalQuestions)
     .set('questionsFilter', questionsFilter)
-    .set('isProposalLoading', false);
+    .set('isProposalLoading', false)
+    .set('opportunityData', opportunityData)
+    .set('selectedBid', selectedBid);
+};
+
+const onChangeBid = (state: Map, action: Object): Map => {
+  const { payload } = action;
+  let opportunityData = state.get('opportunityData');
+  const {
+    agreementId,
+    accountId,
+    proposalDetails,
+    opportunityType,
+    questionTemplateVersionNumber: templateversion
+  } = opportunityData.getIn([payload.bidId, 'proposal']);
+  let selectedBid = Map({
+    id: payload.bidId,
+    isCurrent: payload.isCurrent,
+    pertinentDetails: payload.pertinentDetails,
+    bidName: payload.bidName,
+    questionTemplateVersionNumber: templateversion || '',
+    opportunityType: opportunityType || '',
+    agreementId: agreementId || '',
+    accountId: accountId || '',
+    opportunityId: proposalDetails['opportunityId']
+  });
+
+  const proposalQuestions = opportunityData.getIn([
+    selectedBid.get('id'),
+    'proposalQuestions'
+  ]);
+
+  const milestones = getUniqueMilestones(proposalQuestions);
+
+  let questionsFilter = state.get('questionsFilter');
+  let milestoneGroup = fromJS({});
+  milestones.forEach(milestone => {
+    milestoneGroup = milestoneGroup.set(
+      milestone,
+      Map({
+        checked: false,
+        label: milestone,
+        className: 'questions-filter__item'
+      })
+    );
+  });
+  milestoneGroup = milestoneGroup.set('logic', 'OR');
+  questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
+
+  return state
+    .set('proposalDetails', proposalDetails)
+    .set('proposalQuestions', proposalQuestions)
+    .set('questionsFilter', questionsFilter)
+    .set('isProposalLoading', false)
+    .set('selectedBid', selectedBid);
+};
+
+const newBidCreated = (state: Map, action: Object): Map => {
+  const { payload } = action;
+  return state.set('newbidflag', payload['flag'] || false);
+};
+
+const addNewBid = (state: Map, action: Object): Map => {
+  const { payload } = action;
+  let newopportunityData = new OrderedMap({});
+  let data = payload;
+  let selectedBid = Map({});
+  let newstate = state.update('opportunityData', item =>
+    item.map(keyValue => keyValue.set('isCurrent', false))
+  );
+
+  let opportunityData = newstate.get('opportunityData');
+  let boxBids = newstate.get('boxBids');
+
+  let obj = {
+    proposal: data.proposal,
+    proposalQuestions: data.proposalQuestions,
+    proposalUsers: data.proposalUsers,
+    isCurrent: data.isCurrent,
+    inProgress: data.proposal['inProgress']
+  };
+
+  let boxobj = {
+    proposalId: data.proposal.proposalId,
+    boxId: undefined,
+    bidNo: data.proposal.proposalDetails['bidNo']
+  };
+  if (Array.isArray(boxBids)) {
+    let isavailable = boxBids.filter(
+      v => v['proposalId'] === boxobj.proposalId
+    );
+    if (!isavailable.length) {
+      boxBids.unshift(boxobj);
+    }
+  }
+
+  newopportunityData = newopportunityData.set(
+    data.proposal.proposalId,
+    OrderedMap(obj)
+  );
+
+  opportunityData = opportunityData.merge(newopportunityData);
+  selectedBid = selectedBid
+    .set('id', data.proposal.proposalId)
+    .set('bidName', `Bid ${data.proposal.proposalDetails['bidNo'] || ''}`)
+    .set(
+      'questionTemplateVersionNumber',
+      data.proposal['questionTemplateVersionNumber'] || ''
+    )
+    .set('opportunityType', data.proposal['opportunityType'] || '')
+    .set('isCurrent', true)
+    .set('bidStatus', data.proposal['inProgress'] || false)
+    .set('pertinentDetails', data.proposal.proposalDetails.pertinentDetails);
+
+  const proposalDetails = newopportunityData.getIn([
+    selectedBid.get('id'),
+    'proposal',
+    'proposalDetails'
+  ]);
+
+  const proposalQuestions = newopportunityData.getIn([
+    selectedBid.get('id'),
+    'proposalQuestions'
+  ]);
+
+  const milestones = getUniqueMilestones(proposalQuestions);
+  let questionsFilter = state.get('questionsFilter');
+  let milestoneGroup = fromJS({});
+  milestones.forEach(milestone => {
+    milestoneGroup = milestoneGroup.set(
+      milestone,
+      Map({
+        checked: false,
+        label: milestone,
+        className: 'questions-filter__item'
+      })
+    );
+  });
+
+  milestoneGroup = milestoneGroup.set('logic', 'OR');
+  questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
+
+  return state
+    .set('proposalDetails', proposalDetails)
+    .set('proposalQuestions', proposalQuestions)
+    .set('questionsFilter', questionsFilter)
+    .set('isProposalLoading', false)
+    .set('opportunityData', opportunityData)
+    .set('boxBids', boxBids)
+    .set('selectedBid', selectedBid);
 };
 
 const onProposalLoading = (state: Map): Map => {
@@ -155,21 +453,44 @@ const onProposalAnswer = (state: Map, action: Object): Map => {
       return listItem.questionId === referenceId;
     });
 
-  newState = state.setIn(
-    ['proposalQuestions', indexOfListToUpdate, 'answers'],
-    data
-  );
-  newState = newState.setIn(
-    ['proposalQuestions', indexOfListToUpdate, 'hasDifferentSFanswer'],
-    hasDifferentSFanswer
-  );
+  let selectedBidId = state.getIn(['selectedBid', 'id']);
+
+  newState = state
+    .setIn(['proposalQuestions', indexOfListToUpdate, 'answers'], data)
+    .setIn(
+      [
+        'opportunityData',
+        selectedBidId,
+        'proposalQuestions',
+        indexOfListToUpdate,
+        'answers'
+      ],
+      data
+    );
+  newState = newState
+    .setIn(
+      ['proposalQuestions', indexOfListToUpdate, 'hasDifferentSFanswer'],
+      hasDifferentSFanswer
+    )
+    .setIn(
+      [
+        'opportunityData',
+        selectedBidId,
+        'proposalQuestions',
+        indexOfListToUpdate,
+        'hasDifferentSFanswer'
+      ],
+      hasDifferentSFanswer
+    );
 
   const proposalQuestions = newState.get('proposalQuestions');
+  const opportunityData = newState.get('opportunityData');
 
   return state
     .set('proposalQuestions', proposalQuestions)
     .set('proposalAnswer', INITIAL_STATE.proposalAnswer)
-    .set('isProposalAnswerLoading', false);
+    .set('isProposalAnswerLoading', false)
+    .set('opportunityData', opportunityData);
 };
 
 const onProposalAnswerLoading = (state: Map, action: Object): Map => {
@@ -191,14 +512,31 @@ const onProposalAnswerLoading = (state: Map, action: Object): Map => {
   );
 
   const proposalQuestions = newState.get('proposalQuestions');
-
-  return state
-    .set('proposalQuestions', proposalQuestions)
-    .set('isProposalAnswerLoading', loading)
+  let filterQuestionsLen = state.get('filteredProposalQuestions');
+  if (Array.isArray(filterQuestionsLen)) {
+    const filterindexOfListToUpdate = filterQuestionsLen.findIndex(listItem => {
+      return listItem.questionId === referenceId;
+    });
+    newState = state.setIn(
+      ['filteredProposalQuestions', filterindexOfListToUpdate, 'loading'],
+      loading
+    );
+    let filterQuestions = newState.get('filteredProposalQuestions');
+    return state
+      .set('proposalQuestions', proposalQuestions)
+      .set('filteredProposalQuestions', filterQuestions)
+      .set('isProposalAnswerLoading', loading);
+  } else {
+    return state
+      .set('proposalQuestions', proposalQuestions)
+      .set('isProposalAnswerLoading', loading);
+  }
 };
 
 const onProposalAnswerError = (state: Map, action: Object): Map => {
-  const { payload: { err, questionId } } = action;
+  const {
+    payload: { err, questionId }
+  } = action;
 
   let newState = fromJS({});
 
@@ -280,8 +618,20 @@ const onSetQuestion = (state: Map, action: Object): Map => {
   const updatedProposalQuestions = state.get('proposalQuestions');
   updatedProposalQuestions.push(data);
 
+  let questionsFilter = state.get('questionsFilter');
+  const filterQuestionsVal = getQuestionsFilterApplied(
+    updatedProposalQuestions,
+    questionsFilter
+  );
+  let selectedBidId = state.getIn(['selectedBid', 'id']);
+
   return state
     .set('proposalQuestions', cloneDeep(updatedProposalQuestions))
+    .set('filteredProposalQuestions', cloneDeep(filterQuestionsVal))
+    .setIn(
+      ['opportunityData', selectedBidId, 'proposalQuestions'],
+      cloneDeep(updatedProposalQuestions)
+    )
     .set('setQuestionData', data)
     .set('isSetQuestionLoading', false);
 };
@@ -313,6 +663,10 @@ const onGetProposalBoxId = (state: Map, action: Object): Map => {
     .set('boxId', boxId)
     .set('onGettingBoxIdError', undefined);
 };
+const fetchBoxAdditionalLink = (state: Map, action: Object): Map => {
+  const { boxlink } = action.payload;
+  return state.set('boxAdditionalLink', boxlink);
+};
 
 const onGettingBoxIdError = (state: Map, action: Object): Map => {
   const { error } = action.payload;
@@ -320,6 +674,13 @@ const onGettingBoxIdError = (state: Map, action: Object): Map => {
     .set('isGettingBoxId', false)
     .set('boxId', '')
     .set('onGettingBoxIdError', error);
+};
+const onGettingfetchBoxAdditionalLinkError = (
+  state: Map,
+  action: Object
+): Map => {
+  const { error } = action.payload;
+  return state.set('boxAdditionalLink', error);
 };
 
 const onUpdateModifiedQuestion = (state: Map, action: Object): Map => {
@@ -393,6 +754,9 @@ const onSetEditQuestionData = (state, action) => {
 const onEditQuestion = (state, action) => {
   const { payload: data } = action;
   const questions = state.get('proposalQuestions');
+  let selectedBidId = state.getIn(['selectedBid', 'id']);
+  let questionsFilter = state.get('questionsFilter');
+
   const questionIndex = questions.findIndex(
     item => item.questionId === data.questionId
   );
@@ -402,9 +766,18 @@ const onEditQuestion = (state, action) => {
     data,
     ...questions.slice(questionIndex + 1, questions.length)
   ];
+  const filterQuestionsVal = getQuestionsFilterApplied(
+    updatedQuestions,
+    questionsFilter
+  );
 
   return state
     .set('proposalQuestions', cloneDeep(updatedQuestions))
+    .set('filteredProposalQuestions', cloneDeep(filterQuestionsVal))
+    .setIn(
+      ['opportunityData', selectedBidId, 'proposalQuestions'],
+      cloneDeep(updatedQuestions)
+    )
     .set('setQuestionData', data)
     .set('isSetQuestionLoading', false);
 };
@@ -412,6 +785,7 @@ const onEditQuestion = (state, action) => {
 const onDeleteQuestion = (state, action) => {
   const { payload: questionId } = action;
   const questions = state.get('proposalQuestions');
+  const filterquestions = state.get('filteredProposalQuestions');
 
   const questionIndex = questions.findIndex(
     item => item.questionId === questionId
@@ -422,10 +796,36 @@ const onDeleteQuestion = (state, action) => {
     ...questions.slice(questionIndex + 1, questions.length)
   ];
 
-  return state
-    .set('proposalQuestions', cloneDeep(updatedQuestions))
-    .set('setQuestionData', questionId)
-    .set('isSetQuestionLoading', false);
+  let selectedBidId = state.getIn(['selectedBid', 'id']);
+
+  if (filterquestions && Array.isArray(filterquestions)) {
+    const filterquestionIndex = filterquestions.findIndex(
+      item => item.questionId === questionId
+    );
+    const updatedFilterQuestions = [
+      ...filterquestions.slice(0, filterquestionIndex),
+      ...filterquestions.slice(filterquestionIndex + 1, filterquestions.length)
+    ];
+
+    return state
+      .set('proposalQuestions', cloneDeep(updatedQuestions))
+      .set('filteredProposalQuestions', cloneDeep(updatedFilterQuestions))
+      .setIn(
+        ['opportunityData', selectedBidId, 'proposalQuestions'],
+        cloneDeep(updatedQuestions)
+      )
+      .set('setQuestionData', questionId)
+      .set('isSetQuestionLoading', false);
+  } else {
+    return state
+      .set('proposalQuestions', cloneDeep(updatedQuestions))
+      .setIn(
+        ['opportunityData', selectedBidId, 'proposalQuestions'],
+        cloneDeep(updatedQuestions)
+      )
+      .set('setQuestionData', questionId)
+      .set('isSetQuestionLoading', false);
+  }
 };
 
 const actionMap = {
@@ -461,7 +861,21 @@ const actionMap = {
   [EXPAND_ALL_SECTIONS]: onExpandAllSections,
   [SET_EDIT_QUESTION_DATA]: onSetEditQuestionData,
   [PROPOSAL_EDIT_QUESTION]: onEditQuestion,
-  [PROPOSAL_DELETE_QUESTION]: onDeleteQuestion
+  [PROPOSAL_DELETE_QUESTION]: onDeleteQuestion,
+  [OPPORTUNITY_INFO]: setOpportunityInfo,
+  [UPDATE_BOX_BIDS]: (state, { payload }) => state.set('boxBids', payload),
+  [CHANGE_BID]: onChangeBid,
+  [ADD_NEW_BID]: addNewBid,
+  [NEW_BID_CREATED]: newBidCreated,
+  [PROPOSAL_DETAIL_UPDATE]: updateProposalDetail,
+  [UPDATE_LOOKUP_OPTIONS]: (state, { payload }) =>
+    state.set('lookUpOptions', payload),
+  [BOX_ADDITIONAL_LINK]: fetchBoxAdditionalLink,
+  [BOX_ADDITIONAL_LINK_ERROR]: onGettingfetchBoxAdditionalLinkError,
+  [SWITCH_TEMP_STATUS]: (state, { payload }) =>
+    state.set('switchTempCallStatus', payload),
+  [SWITCH_TEMP_IN_PROGRESS]: (state, { payload }) =>
+    state.set('switchTempInProgress', payload)
 };
 
 export default function(

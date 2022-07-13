@@ -13,6 +13,9 @@ then
    echo "Environment=sdev" > build.env
 elif [ $CI_COMMIT_REF_NAME == "dev" ]
 then
+	echo "Environment=demo" > build.env
+elif [ $CI_COMMIT_REF_NAME == "demonew" ]
+then	
    echo "Environment=dev" > build.env
 elif [[ $CI_COMMIT_REF_NAME == "feature/"* ]]
 then

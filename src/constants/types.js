@@ -68,7 +68,18 @@ const PROPOSAL = {
   EXPAND_ALL_SECTIONS: 'expand_all_sections',
   SET_EDIT_QUESTION_DATA: 'set_edit_question_data',
   PROPOSAL_EDIT_QUESTION: 'proposal_edit_question',
-  PROPOSAL_DELETE_QUESTION: 'proposal_delete_question'
+  PROPOSAL_DELETE_QUESTION: 'proposal_delete_question',
+  OPPORTUNITY_INFO: 'opportunity_info',
+  UPDATE_BOX_BIDS: 'update-box-bids',
+  CHANGE_BID: 'CHANGE_BID',
+  ADD_NEW_BID: 'ADD_NEW_BID',
+  NEW_BID_CREATED: 'NEW_BID_CREATED',
+  PROPOSAL_DETAIL_UPDATE: 'PROPOSAL_DETAIL_UPDATE',
+  UPDATE_LOOKUP_OPTIONS: 'UPDATE_LOOKUP_OPTIONS',
+  BOX_ADDITIONAL_LINK: 'BOX_ADDITIONAL_LINK',
+  BOX_ADDITIONAL_LINK_ERROR: 'BOX_ADDITIONAL_LINK_ERROR',
+  SWITCH_TEMP_STATUS: 'switch_temp_status',
+  SWITCH_TEMP_IN_PROGRESS: 'switch_temp_in_progress'
 };
 
 const PROPOSALS = {
@@ -80,7 +91,8 @@ const PROPOSALS = {
   ON_SET_PROPOSALS_FILTERS: 'on_set_proposals_filters',
   SET_PROPOSAL_FILTERING: 'set_proposal_filtering',
   SET_PAGE: 'set_page',
-  SET_NUM_OF_ROWS: 'set_num_of_rows'
+  SET_NUM_OF_ROWS: 'set_num_of_rows',
+  NON_EDITABLE_SF_FIELD: 'NON_EDITABLE_SF_FIELD'
 };
 
 const SIDEBAR = {

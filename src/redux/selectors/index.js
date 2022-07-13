@@ -134,6 +134,11 @@ export const getProposalBoxIdError = (state: Object): string =>
 export const getProposalBoxId = (state: Object): string =>
   proposalSelectors.getProposalBoxId(state.proposal);
 
+export const getAllBidsForIndex = (state: Object): string =>
+  state.proposal.get('boxBids');
+export const getAdditionalLinks = (state: Object): string =>
+  state.proposal.get('boxAdditionalLink');
+  
 export const getValidatedProposalData = (state: Object): Object =>
   proposalSelectors.getValidatedProposalData(state.proposal);
 
@@ -160,6 +165,9 @@ export const selectActiveQuestionsFilterCount = state =>
 export const getEditQuestionData = state =>
   proposalSelectors.getEditQuestionData(state);
 
+export const getSelectedBid = state => proposalSelectors.getSelectedBid(state);
+export const getStatusOfNewBid = state => proposalSelectors.getStatusOfNewBid(state);
+
 // Tabbar Selectors
 export const getProposals = (state: Object): Array<Object> =>
   proposalsSelectors.getProposals(state.proposals);
@@ -185,3 +193,10 @@ export const getSelectedSection = (state: Object): string =>
 
 export const getIsOpen = (state: Object): string =>
   siderbarSelectors.getIsOpen(state.sidebar);
+
+export const getnoneditableField = (state: Map): Object =>
+  proposalsSelectors.getnoneditableField(state.proposals);
+
+export const getLookUpOptionsSelector = (state: Map): Object =>
+  proposalSelectors.getLookUpOptionsSelector(state.proposal)
+  

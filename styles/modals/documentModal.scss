@@ -1,0 +1,65 @@
+.enablecookie-topspace{
+    margin-top: 10px;
+}
+.enablecookie-fontstyle.grey{
+    color: #626262;
+    font-family: 'ProximaNova-Regular';
+}
+.enablecookie-fontstyle{
+    font-size: 14px;
+    color: #000;
+    font-family: 'ProximaNova-Regular';
+}
+
+.enablecookie-topspace.extra{
+    margin-top: 20px;
+}
+
+.enablecookie-button{
+  height: 40px;
+  float: right;
+  width: 81px;
+  background-color: $blue;
+  color: white;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  font-family: $proximaNova;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 24px;
+  outline: none;
+
+  &:hover {
+    background-color: $darkerBlue;
+  }
+}
+
+button.primary-button.enablecookie-button.space {
+    margin-right: 10px;
+}
+
+.enablecookietop-space{
+    margin-top: 20px;
+}
+
+.enablecookietop-minspace{
+    padding: 10px;
+}
+
+.Settingsimg{
+    max-width: 300px;
+}
+
+.SitePermissionsimg{
+    max-width: 210px;
+}
+
+.Allowimg{
+    max-width: 350px;
+}
+.Addasiteimg{
+    max-width: 210px;
+}

@@ -1,42 +1,50 @@
 // @flow
 /* eslint-disable no-plusplus */
 import React, { Component } from 'react';
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
 import { connect } from 'react-redux';
-import { isObject, isEqual, isEmpty } from 'lodash';
-import TextField from 'apollo-react/components/TextField';
-import Button from 'apollo-react/components/Button';
+import { isObject, isEqual, isEmpty, xor } from 'lodash';
 import IconButton from 'apollo-react/components/IconButton';
-import Grid from 'apollo-react/components/Grid';
-import Box from 'apollo-react/components/Box';
-import Typography from 'apollo-react/components/Typography';
 import Loader from 'apollo-react/components/Loader';
-import { Checkmark } from '../svg';
-import { Edit } from '../svg';
+import RichTextEditor from 'apollo-react/components/RichTextEditor';
+import { Typography } from 'apollo-react/components/Typography/Typography';
+import Grid from 'apollo-react/components/Grid';
+import InfoIcon from 'apollo-react-icons/Info';
+import Tooltip from 'apollo-react/components/Tooltip';
+import StatusCheck from 'apollo-react-icons/StatusCheck';
+
+import { Checkmark, Edit } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
 import TextArea from './atoms/inputs/TextArea';
+import TextAreaV2 from './atoms/inputs/TextAreaV2';
 import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
 import {
   setProposalAnswerData,
-  setEditQuestionData
+  setEditQuestionData,
+  setProposalAnswerLoading,
+  deleteProposalUserFromDB
 } from '../../redux/actions/proposal-actions';
-import { getUserData, getProposalDetails } from '../../redux/selectors';
+import {
+  getUserData,
+  getProposalDetails,
+  getSelectedBid,
+  getnoneditableField
+} from '../../redux/selectors';
 import MatomoHOC from '../HOC/MatomoHOC';
-import { getCountriesNameForCode, getCountryOptions } from '../../utils/utils';
+import {
+  checkNonEditableFields,
+  getCountriesNameForCode,
+  getCountryOptions
+} from '../../utils/utils';
 import ChipView from './Chip/ChipView';
-import removeSpecialChars from '../../utils/pasteUtils';
 import Autocomplete from './atoms/inputs/AutoComplete';
-
-import DatePicker from 'apollo-react/components/DatePickerV2';
-import moment from 'moment';
+import AutocompleteText from './atoms/inputs/AutoCompleteText';
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
-import InfoIcon from 'apollo-react-icons/Info';
-import Tooltip from 'apollo-react/components/Tooltip';
 import SFAnswerValidationWrapper from './SFAnswerValidationWrapper';
-// import DatePicker from './atoms/inputs/DatePicker';
-import StatusCheck from 'apollo-react-icons/StatusCheck';
 
+// Regex Fix for HTML and plain text showing /span> at the end of question
+// const Spanexp = /[^<]\/span>/g;
 type State = {
   selectedDay: string,
   selectedRow: Boolean
@@ -47,10 +55,15 @@ type Props = {
   proposalId: string,
   answers: Map,
   questionText: string,
+  questionHTML: string,
+  questionJSON: string,
   answerConfiguration: Object,
   sectionName: string,
+  section: Map,
   userData: Object,
   setProposalAnswer: Function,
+  setAnswerLoading: Function,
+  deleteProposalUser: Function,
   setQuestionToDisplayHistory: (answer: string) => void,
   eventCategories: any,
   trackEvent: any,
@@ -58,14 +71,15 @@ type Props = {
   sfObject: string,
   sfField: string,
   milestone: any,
+  milestoneNew: any,
   ismilestoneavailable: string,
   loading: Boolean,
   setEditQuestionData: (data: Object) => void,
   roleNames: Array<string>,
   isCustomQuestion: boolean,
-  hasDifferentSFanswer: boolean
+  hasDifferentSFanswer: boolean,
+  isNotepadOpen: boolean
 };
-
 export class TaskRow extends Component<Props, State> {
   constructor(props: Object) {
     super(props);
@@ -88,16 +102,37 @@ export class TaskRow extends Component<Props, State> {
     }
   }
 
-  handlePropsalChange = (textValue: string, lastAnswer: string) => {
-    const { setProposalAnswer, proposalId, questionId, userData } = this.props;
-    setProposalAnswer(proposalId, questionId, textValue, userData);
-    // if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
-    //   if (lastAnswer !== textValue)
-    //     setProposalAnswer(proposalId, questionId, textValue, userData);
-    // } else if (!textValue && lastAnswer.trim()) {
-    //   setProposalAnswer(proposalId, questionId, ' ', userData);
-    // }
-
+  handlePropsalChange = (textValue, lastValue, reason) => {
+    const {
+      setProposalAnswer,
+      proposalId,
+      questionId,
+      userData,
+      section,
+      setAnswerLoading,
+      deleteProposalUser
+    } = this.props;
+    setProposalAnswer(proposalId, questionId, textValue, userData).then(() => {
+      const [deletedVal] = xor(
+        textValue.trim() ? textValue.trim().split(',') : [],
+        lastValue.trim() ? lastValue.trim().split(',') : []
+      );
+      const [deletedEmail] = String(deletedVal).match(
+        /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+      );
+      if (reason === 'remove-option' && deletedEmail) {
+        setAnswerLoading(questionId, true);
+        const { sectionName, sectionOrder } = section.toJS();
+        deleteProposalUser(
+          proposalId,
+          deletedEmail,
+          sectionOrder,
+          sectionName
+        ).then(() => {
+          setAnswerLoading(questionId, false);
+        });
+      }
+    });
     this.trackMatomoEventSubmitAnswer(textValue);
   };
 
@@ -112,7 +147,10 @@ export class TaskRow extends Component<Props, State> {
       .split(' ')
       .filter(v => v.trim().length > 0);
     if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
-      if (s1.length !== s2.length || s1.join(' ').trim() != s2.join(' ').trim())
+      if (
+        s1.length !== s2.length ||
+        s1.join(' ').trim() !== s2.join(' ').trim()
+      )
         setProposalAnswer(
           proposalId,
           questionId,
@@ -126,6 +164,34 @@ export class TaskRow extends Component<Props, State> {
     this.trackMatomoEventSubmitAnswer(textValue);
     this.setSelectRow(false);
   };
+
+  handleVerifyPredictedAnsClick(predictedAnswer) {
+    const {
+      setProposalAnswer,
+      proposalId,
+      questionId,
+      userData,
+      answerConfiguration
+    } = this.props;
+    const answerType = answerConfiguration.get('type');
+
+    // picklist value should not be converted to string while saving
+    if (answerType === 'picklist' || answerType === 'picklist-lookup') {
+      setProposalAnswer(
+        proposalId,
+        questionId,
+        predictedAnswer.get('answer'),
+        userData
+      );
+    } else {
+      setProposalAnswer(
+        proposalId,
+        questionId,
+        String(predictedAnswer.get('answer')).trim(),
+        userData
+      );
+    }
+  }
 
   onClickChange = (selectedValue: string, lastAnswer: string) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
@@ -169,7 +235,7 @@ export class TaskRow extends Component<Props, State> {
     this.trackMatomoEventAnswerHistory();
   };
 
-  onChildInputFocus = event => {
+  onChildInputFocus = () => {
     this.setSelectRow(true);
   };
 
@@ -182,6 +248,9 @@ export class TaskRow extends Component<Props, State> {
       eventCategories,
       proposalDetail,
       questionText,
+      questionHTML,
+      questionJSON,
+      questionHintJSON,
       sectionName,
       trackEvent,
       questionId
@@ -197,6 +266,9 @@ export class TaskRow extends Component<Props, State> {
             answer: data,
             sectionName,
             questionText,
+            questionHTML,
+            questionJSON,
+            questionHintJSON,
             questionId,
             proposalDetail
           })
@@ -210,6 +282,9 @@ export class TaskRow extends Component<Props, State> {
       eventCategories,
       proposalDetail,
       questionText,
+      questionHTML,
+      questionJSON,
+      questionHintJSON,
       sectionName,
       trackEvent,
       questionId
@@ -223,6 +298,9 @@ export class TaskRow extends Component<Props, State> {
           value: JSON.stringify({
             sectionName,
             questionText,
+            questionHTML,
+            questionJSON,
+            questionHintJSON,
             questionId,
             proposalDetail
           })
@@ -233,6 +311,7 @@ export class TaskRow extends Component<Props, State> {
 
   resetDate = () => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+    const { selectedDay } = this.state;
     this.setState({ selectedDay: ' ' }, () => {
       setProposalAnswer(
         proposalId,
@@ -248,44 +327,54 @@ export class TaskRow extends Component<Props, State> {
     type: string,
     options: Map,
     answers: Map,
-    lastAnswer: Map,
-    questionText: Map
+    lastAnswer: Map
   ) => {
-    const { sectionName, sfObject, sfField } = this.props;
-    const { selectedDay } = this.state;
+    const {
+      sectionName,
+      sfObject,
+      sfField,
+      selectedBid,
+      noneditableField,
+      hasDifferentSFanswer
+    } = this.props;
+    // const { selectedDay } = this.state;
+    const isCurrentBid = selectedBid.get('isCurrent');
 
     const optionsYN = ['Yes', 'No'];
-    const answer = lastAnswer && lastAnswer.get('answer');
+    const answer = lastAnswer && lastAnswer.get && lastAnswer.get('answer');
 
     let answerValue = '';
     let answerValueComplex;
     let finalOptions = options;
+    const checkDisableFlag = () =>
+      checkNonEditableFields(noneditableField, sfField, sfObject) ||
+      !isCurrentBid;
 
     if (answer) {
       if (isObject(answer)) answerValueComplex = answer.toJS();
       else answerValue = answer.toString();
     }
 
-    if (sectionName === 'Proposal Team')
+    if (sectionName === 'Proposal Team') {
       return (
         <SFAnswerValidationWrapper
-          hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+          hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
           sfObject={sfObject}
         >
           <Autocomplete
             sectionName={sectionName}
-            onFocus={e => this.setSelectRow(true)}
-            onBlur={e => this.setSelectRow(false)}
+            onFocus={() => this.setSelectRow(true)}
+            onBlur={() => this.setSelectRow(false)}
             onChange={this.handlePropsalChange}
             text={answerValue}
+            disabled={checkDisableFlag()}
           />
         </SFAnswerValidationWrapper>
       );
-
-    // return <UserLookup sectionName={sectionName} onChange={this.handleTextChange} text={answerValue} />;
+    }
 
     if (
-      type === 'picklist' &&
+      (type === 'picklist' || type === 'picklist-lookup') &&
       (sfObject === 'Bid_History__c' ||
         sfObject === 'Apttus__APTS_Agreement__c') &&
       sfField === 'Targeted_Countries__c'
@@ -301,34 +390,16 @@ export class TaskRow extends Component<Props, State> {
           : String(answerValue).trim();
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <textarea
+            <TextAreaV2
               className="proposal-text-area"
-              placeholder="Click to answer"
-              onPaste={event => {
-                removeSpecialChars(event);
-                const txtareaheight =
-                  event.target.scrollHeight > 300
-                    ? 300
-                    : event.target.scrollHeight;
-                event.target.style.height = `auto`;
-                event.target.style.height = `${txtareaheight + 2}px`;
-              }}
-              onChange={event => {
-                const txtareaheight =
-                  event.target.scrollHeight > 300
-                    ? 300
-                    : event.target.scrollHeight;
-                event.target.style.height = `auto`;
-                event.target.style.height = `${txtareaheight + 2}px`;
-              }}
+              placeholder={checkDisableFlag() ? '' : 'Click to answer'}
+              value={answerValue}
               onBlur={e => this.handleTextChange(e.target.value, answerValue)}
               onFocus={e => this.onChildInputFocus(e)}
-              defaultValue={answerValue}
-              rows="1"
-              style={{ resize: 'vertical'}}
+              disabled={checkDisableFlag()}
             />
           </SFAnswerValidationWrapper>
         );
@@ -338,78 +409,123 @@ export class TaskRow extends Component<Props, State> {
           : String(answerValue).trim();
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
             <TextArea
               className="proposal-text-area"
-              placeholder="Click to answer"
+              placeholder={checkDisableFlag() ? '' : 'Click to answer'}
               type="number"
               onBlur={this.handleTextChange}
               onFocus={e => this.onChildInputFocus(e)}
-              value={answerValue}
+              value={answerValue || ''}
+              disabled={checkDisableFlag()}
             />
           </SFAnswerValidationWrapper>
         );
       case 'y/n':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
             <Dropdown
               id="dd-proposal-answer"
-              placeholder="Click to answer"
+              placeholder={checkDisableFlag() ? '' : 'Click to answer'}
               items={optionsYN}
               onClick={val => this.onClickChange(val, answerValue)}
               value={answerValue}
               setSelectRow={this.setSelectRow}
+              disabled={checkDisableFlag()}
             />
           </SFAnswerValidationWrapper>
         );
       case 'select':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
             <Dropdown
               id="dd-proposal-answer"
-              placeholder="Click to answer"
+              placeholder={checkDisableFlag() ? '' : 'Click to answer'}
               items={finalOptions}
               onClick={val => this.onClickChange(val, answerValue)}
               value={answerValue}
               setSelectRow={this.setSelectRow}
+              disabled={checkDisableFlag()}
             />
           </SFAnswerValidationWrapper>
         );
       case 'date':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
             <QuestionDatePicker
               value={answerValue}
               resetDate={this.resetDate}
               handleDayChange={this.handleDayChange}
-              onFocus={e => this.setSelectRow(true)}
-              onBlur={e => this.setSelectRow(false)}
+              onFocus={() => this.setSelectRow(true)}
+              onBlur={() => this.setSelectRow(false)}
+              disabled={checkDisableFlag()}
             />
           </SFAnswerValidationWrapper>
         );
       case 'picklist':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={this.props.hasDifferentSFanswer}
+            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
             <Multiselect
-              placeholder="Click to answer"
+              placeholder={checkDisableFlag() ? '' : 'Click to answer'}
               items={finalOptions}
               onClick={this.onSelectValues}
               value={answerValueComplex}
               setSelectRow={this.setSelectRow}
+              disabled={checkDisableFlag()}
+            />
+          </SFAnswerValidationWrapper>
+        );
+      case 'picklist-lookup':
+        return (
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            sfObject={sfObject}
+          >
+            <AutocompleteText
+              sectionName={sectionName}
+              sfObject={sfObject}
+              lov={finalOptions}
+              sfField={sfField}
+              multiple
+              onFocus={() => this.setSelectRow(true)}
+              onBlur={() => this.setSelectRow(false)}
+              onChange={this.handlePropsalChange}
+              text={answerValueComplex}
+              disabled={checkDisableFlag()}
+            />
+          </SFAnswerValidationWrapper>
+        );
+      case 'select-lookup':
+        return (
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            sfObject={sfObject}
+          >
+            <AutocompleteText
+              sectionName={sectionName}
+              sfObject={sfObject}
+              lov={finalOptions}
+              sfField={sfField}
+              onFocus={() => this.setSelectRow(true)}
+              onBlur={() => this.setSelectRow(false)}
+              onChange={this.handlePropsalChange}
+              text={answerValue || ''}
+              multiple={false}
+              disabled={checkDisableFlag()}
             />
           </SFAnswerValidationWrapper>
         );
@@ -418,7 +534,16 @@ export class TaskRow extends Component<Props, State> {
     }
   };
 
-  renderTags = (milestone, ismilestoneavailable, lastAnswer) => {
+  renderTags = (milestone, milestoneNew, ismilestoneavailable, lastAnswer) => {
+    if (milestoneNew) {
+      return (
+        <div className="chipview">
+          {milestoneNew ? (
+            <ChipView label={milestoneNew} answer={lastAnswer} />
+          ) : null}
+        </div>
+      );
+    }
     return (
       <div className="chipview">
         {milestone ? (
@@ -428,40 +553,21 @@ export class TaskRow extends Component<Props, State> {
     );
   };
 
-  handleVerifyPredictedAnsClick(predictedAnswer) {
-    const { setProposalAnswer, proposalId, questionId, userData, answerConfiguration } = this.props;
-    const answerType = answerConfiguration.get('type');
-
-    // picklist value should not be converted to string while saving
-    if (answerType === "picklist")  {
-      setProposalAnswer(
-        proposalId,
-        questionId,
-        predictedAnswer.get('answer'),
-        userData
-      );
-    } else {
-      setProposalAnswer(
-        proposalId,
-        questionId,
-        String(predictedAnswer.get('answer')).trim(),
-        userData
-      );
-    }
-  }
-
-  isAnswered(answer, isAnswerPredicted) {
+  isAnswered = (answer, isAnswerPredicted) => {
     if (isAnswerPredicted) return false;
-    if (answer && answer.get('answer')) {
-      return (
+    if (answer && answer.get && answer.get('answer')) {
+      if (List.isList(answer.get('answer'))) {
+        return Boolean(answer.get('answer').size);
+      }
+      return Boolean(
         answer
           .get('answer')
           .toString()
-          .trim() && true
+          .trim()
       );
     }
     return false;
-  }
+  };
 
   render() {
     const {
@@ -469,143 +575,276 @@ export class TaskRow extends Component<Props, State> {
       questionText,
       answerConfiguration,
       milestone,
+      milestoneNew,
       ismilestoneavailable,
       loading,
       questionHint,
+      questionHintHTML,
+      questionHTML,
+      questionJSON,
+      questionHintJSON,
       sectionName,
       roleNames,
       setEditQuestionData,
       isCustomQuestion,
-      questionId: qId
+      questionId: qId,
+      selectedBid,
+      isNotepadOpen
     } = this.props;
+
     const questionId = answers.get('questionId');
     let lastAnswer;
     let answerDate = 'Not Answered';
     let isAnswerPredicted = false;
-    if (!questionId) lastAnswer = answers.last();
-    else lastAnswer = answers.get('answers').last();
-
+    if (answers) {
+      if (!questionId) lastAnswer = answers.last();
+      else lastAnswer = answers.get('answers').last();
+    }
     if (lastAnswer) {
-      answerDate = parseMomentDate(lastAnswer.get('date'));
-      if (lastAnswer.get('userName') === 'UnityPredictedAnswer') {
+      if (
+        lastAnswer.get &&
+        lastAnswer.get('date') &&
+        lastAnswer.get('date').length
+      ) {
+        answerDate = parseMomentDate(lastAnswer.get('date'));
+      }
+      if (
+        lastAnswer.get &&
+        lastAnswer.get('userName') &&
+        lastAnswer.get('userName').length &&
+        lastAnswer.get('userName') === 'UnityPredictedAnswer'
+      ) {
         isAnswerPredicted = true;
         answerDate = 'Not Answered';
       }
     }
+    const isCurrentBid = selectedBid.get('isCurrent');
+    const { selectedRow } = this.state;
 
+    const gridColRatio = isNotepadOpen ? [8, 4] : [10, 2];
     return (
-      <div
+      <Grid
+        container
         className={`task-table-row${
-          this.state.selectedRow ? ' selected-task-table-row' : ''
+          selectedRow ? ' selected-task-table-row' : ''
         }`}
+        style={{ margin: '2px 0px', padding: '4 8' }}
       >
-        <div className="question-text">
-          {this.renderTags(milestone, ismilestoneavailable, lastAnswer)}
-          <p>
-            {questionText}
-            {isCustomQuestion && (
-              <span
-                onClick={() => {
-                  setEditQuestionData({
-                    questionText,
-                    section: sectionName,
-                    answerType: answerConfiguration.get('type'),
-                    roleNames,
-                    questionAnswered: lastAnswer ? true : false,
-                    questionId: qId
-                  });
-                }}
+        <Grid item xs={gridColRatio[0]}>
+          {/* Question Text and Milestone */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingBottom: '8px'
+            }}
+          >
+            {/* questionText */}
+            <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+              <div
+                style={{ zIndex: 0, alignSelf: 'center' }}
+                className="questiontext-richtext"
               >
-                <Edit className="edit-icon" />
-              </span>
-            )}
-            {questionHint.trim().length > 0 ? (
-              <Tooltip
-                variant="light"
-                title={questionHint}
-                placement="top"
-              >
-                <IconButton
-                  color="primary"
-                  style={{ margin: 0 }}
-                  size="small"
-                  className="question-tooltip-icon"
-                >
-                  <InfoIcon style={{ fontSize: '16px' }} />
-                </IconButton>
-              </Tooltip>
-            ) : (
-              <></>
-            )}
-          </p>
-        </div>
-
-        <div>
-          {answerConfiguration
-            ? this.renderAnswer(
-                answerConfiguration.get('type'),
-                answerConfiguration.get('options'),
-                answers,
-                lastAnswer,
-                questionText
-              )
-            : this.renderAnswer('', [], [], undefined, questionText)}
-        </div>
-
-        <div
-          style={{
-            alignSelf: 'start',
-            display: 'flex',
-            minHeight: '40px',
-            alignItems: 'center',
-            paddingLeft: '16px'
-          }}
-        >
-          <button style={{ width: '100px', textAlign: 'left', flexShrink: 0 }} type="button" onClick={this.displayAnswerOnHistory}>
-            {answerDate}
-          </button>
-          {(isAnswerPredicted && !loading)? (
-            <Tooltip variant="light" title="Unity Predicted Answer" placement="top">
-            <IconButton>
-              <StatusCheck
-                fontSize={'22px'}
-                style={{ color: '#D9D9D9' }}
-                onClick={() =>
-                  this.handleVerifyPredictedAnsClick(lastAnswer)
-                }
-              />
-            </IconButton>
-            </Tooltip>
-          ) : null}
-          {(this.isAnswered(lastAnswer, isAnswerPredicted) && !loading) ? (
-            <div style={{ display: 'flex', flexShrink: 0, width: '40px', height: '24px', justifyContent: 'center', alignItems: 'center' }}>
-              <Checkmark className="answered" style={{ marginLeft: '6px' }} />
+                <Typography variant="body2">
+                  {questionJSON ? (
+                    <RichTextEditor
+                      style={{ minHeight: '0px' }}
+                      variant="view"
+                      defaultValue={JSON.parse(questionJSON)}
+                    />
+                  ) : (
+                    <p>{questionText}</p>
+                  )}
+                </Typography>
+              </div>
+              {/* Edit Question Icon */}
+              <div style={{ paddingLeft: '5px' }}>
+                {isCustomQuestion && isCurrentBid && (
+                  <span
+                    aria-hidden="true"
+                    onClick={() => {
+                      setEditQuestionData({
+                        questionText,
+                        questionHTML,
+                        questionJSON,
+                        questionHintJSON,
+                        section: sectionName,
+                        answerType: answerConfiguration.get('type'),
+                        roleNames,
+                        questionAnswered: !!lastAnswer,
+                        questionId: qId
+                      });
+                    }}
+                  >
+                    <Edit className="edit-icon" />
+                  </span>
+                )}
+              </div>
+              {/* Question Hint */}
+              <div style={{ paddingLeft: '5px', paddingTop: '3px' }}>
+                {questionHint ? (
+                  <Tooltip
+                    variant="light"
+                    title={
+                      questionHintJSON ? (
+                        <RichTextEditor
+                          variant="view"
+                          defaultValue={JSON.parse(questionHintJSON)}
+                        />
+                      ) : (
+                        <p>{questionHint}</p>
+                      )
+                    }
+                    placement="top"
+                  >
+                    <IconButton
+                      color="primary"
+                      style={{ margin: 0 }}
+                      size="small"
+                      className="question-tooltip-icon"
+                    >
+                      <InfoIcon style={{ fontSize: '16px' }} />
+                    </IconButton>
+                  </Tooltip>
+                ) : (
+                  <></>
+                )}
+              </div>
             </div>
-          ) : null}
-          {loading ? (
-            <span style={{ marginLeft: '6px', position: 'relative', top: '15px' }}>
-              <Loader
-                isInner
-                size={20}
-                style={{
-                  width: '20px',
-                  height: '20px'
-                }}
-              />
-            </span>
-          ) : null}
-        </div>
-      </div>
+
+            {/* Milestone */}
+            <div>
+              {this.renderTags(
+                milestone,
+                milestoneNew,
+                ismilestoneavailable,
+                lastAnswer
+              )}
+            </div>
+          </div>
+        </Grid>
+        <Grid item xs={gridColRatio[1]}>
+          <></>
+        </Grid>
+        <Grid container>
+          {/* Answer */}
+          <Grid item xs={gridColRatio[0]}>
+            <div>
+              {answerConfiguration
+                ? this.renderAnswer(
+                    answerConfiguration.get('type'),
+                    answerConfiguration.get('options'),
+                    answers,
+                    lastAnswer
+                  )
+                : this.renderAnswer('', [], [], undefined)}
+            </div>
+          </Grid>
+
+          {/* Answer History Button */}
+          <Grid
+            item
+            xs={gridColRatio[1]}
+            style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              justifyContent: 'flex-start',
+              paddingLeft: '20px',
+              paddingTop: '8px'
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <div>
+                <button
+                  style={{
+                    textAlign: 'center',
+                    outline: 'none',
+                    border: 'none',
+                    backgroundColor: 'transparent',
+                    color: '#297dfd',
+                    cursor: 'pointer'
+                  }}
+                  type="button"
+                  onClick={this.displayAnswerOnHistory}
+                >
+                  {answerDate}
+                </button>
+              </div>
+              <div>
+                {isAnswerPredicted && !loading ? (
+                  <Tooltip
+                    variant="light"
+                    title="Unity Predicted Answer"
+                    placement="top"
+                  >
+                    <IconButton disabled={!isCurrentBid} style={{height:"0"}}>
+                      <StatusCheck
+                        fontSize="22px"
+                        style={{ color: '#D9D9D9' }}
+                        onClick={() =>
+                          this.handleVerifyPredictedAnsClick(lastAnswer)
+                        }
+                      />
+                    </IconButton>
+                  </Tooltip>
+                ) : null}
+              </div>
+              <div>
+                {this.isAnswered(lastAnswer, isAnswerPredicted) && !loading ? (
+                  <div>
+                    <Checkmark
+                      className="answered"
+                      style={{ marginLeft: '6px' }}
+                    />
+                  </div>
+                ) : null}
+              </div>
+              <div>
+                {loading ? (
+                  <span
+                    style={{
+                      marginLeft: '6px',
+                      marginTop: '6px',
+                      position: 'relative',
+                      top: '15px'
+                    }}
+                  >
+                    <Loader
+                      isInner
+                      size={20}
+                      style={{
+                        width: '20px',
+                        height: '20px'
+                      }}
+                    />
+                  </span>
+                ) : null}
+              </div>
+            </div>
+          </Grid>
+        </Grid>
+      </Grid>
     );
   }
 }
 
 const mapStateToProps = (state: Object) => ({
   userData: getUserData(state),
-  proposalDetail: getProposalDetails(state)
+  proposalDetail: getProposalDetails(state),
+  selectedBid: getSelectedBid(state),
+  noneditableField: getnoneditableField(state)
 });
 
 export default connect(mapStateToProps, {
   setProposalAnswer: setProposalAnswerData,
+  setAnswerLoading: setProposalAnswerLoading,
+  deleteProposalUser: deleteProposalUserFromDB,
   setEditQuestionData
 })(MatomoHOC(TaskRow));

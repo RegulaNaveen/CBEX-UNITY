@@ -6,29 +6,19 @@ include:
   - local: devops/vars/global.yml
 
 stages:
-  - initialize  #To initialize with environment specific paramters/variables
   - sonar #sonar report
-  - build  #builds the artifacts
-  - deploystack #deploys the CF stack (if DeployStack to true in global.yml file) which includes S3, cloudfornt, route53
-  - deployartifacts #deploys only the artifacts to s3 and invalidate the cloudfront
+  - builddev
+  - deploydev
+  - buildqa
+  - deployqa
+  - builddemo
+  - deploydemo
+  - builduat
+  - deployuat
+  - buildprod
+  - deployprod
+  - deploystack
   
-initialize:
-  stage: initialize
-  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest  
-  rules:
-    - if:  $CI_COMMIT_REF_NAME == "qa" || $CI_COMMIT_REF_NAME == "uat" || $CI_COMMIT_REF_NAME == "master"
-      when: manual
-    - when: always    
-  script:
-    - bash devops/scripts/set_env.sh #this script will be executed to set the environment deploying to as environment variable and make it available to other below jobs
-    - source build.env
-    - cat devops/vars/${Environment}.env >> build.env #set the environment specific variables/parameters
-    - cat build.env
-  artifacts:
-    paths:
-      - build.env
-  tags:
-    - docker
 
 .sonar:
   stage: sonar
@@ -44,62 +34,219 @@ initialize:
     paths:
       - .sonar/cache
   script:
-    #- export SONAR_SCANNER_OPTS="-Djavax.net.ssl.trustStore=cacerts/sonarca.jks -Djavax.net.ssl.trustStorePassword=changeit"
-    #- sonar-scanner
     - apk upgrade --update-cache --available && apk add openssl && rm -rf /var/cache/apk/*
-    - openssl s_client -connect  sonarqube:443 | keytool -import -noprompt -alias sonarqbue_test -keystore $JAVA_HOME/lib/security/cacerts -storepass changeit
     - sonar-scanner -X -Dsonar.branch.name=$CI_COMMIT_REF_NAME -Dsonar.projectKey=$CI_PROJECT_NAME
 
-build:
-  stage: build
+dev:
+  stage: builddev
   image: node:12
-  dependencies:
-    - initialize    
+  variables:
+    Environment: $CI_JOB_NAME
+  only:
+    - dev
+    - migration
+    - tags
   script:
+    - cat $devaccount >> build.env
+    - cat $frontendacmdev >> build.env
+    - cat devops/vars/${Environment}.env >> build.env
     - source build.env
-    - df -h
     - yarn cache clean
     - yarn install
     - yarn build:$Environment
-    - ls dist/
   artifacts:
     paths:
-      - dist/   
+      - dist/
+      - build.env
   tags:
     - docker
 
-deploystack:
-  stage: deploystack
-  rules:
-    - if:  $CI_COMMIT_REF_NAME =~ /^feature/ || $CI_COMMIT_REF_NAME =~ /^bugfix/
-      when: never 
-    - if: '$DeployStack == "True"' #this flag drives whether to deploy the infrastructure stack
-      when: always
+deploydev:
+  stage: deploydev
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-  dependencies:
-    - initialize
-    - build
-  script:
-    - source build.env
-    - aws cloudformation validate-template --template-body file://devops/cloudformation/cbex-unity-frontend-cf.yml --region $Region
-    - aws cloudformation deploy --stack-name $Project-$Product-$Module-$Environment --template-file devops/cloudformation/cbex-unity-frontend-cf.yml --parameter-overrides $(cat devops/vars/cfparameters.ini) $(cat build.env) --tags $(cat devops/vars/cftags.ini) Environment=$Environment Lifecycle=$Environment --region $Region
-
-deployartifacts:
-  stage: deployartifacts
-  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-  dependencies:
-    - initialize
-    - build
+  needs:
+    - dev
+  only:
+    - dev
+    - migration
+    - tags
   script:    
     - source build.env  
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
   tags:
     - docker
+
+demo:
+  stage: builddemo
+  image: node:12
+  variables:
+    Environment: $CI_JOB_NAME
   when: manual
   only:
-    - sdev
+    - demonew
     - dev
+    - tags
+  script:
+    - cat $devaccount >> build.env
+    - cat $frontendacmdev >> build.env
+    - cat devops/vars/${Environment}.env >> build.env
+    - source build.env
+    - yarn cache clean
+    - yarn install
+    - yarn build:$Environment
+  artifacts:
+    paths:
+      - dist/
+      - build.env
+  tags:
+    - docker
+
+deploydemo:
+  stage: deploydemo
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  needs:
+    - demo
+  when: manual
+  only:
+    - demonew
+    - dev
+    - tags
+  script:    
+    - source build.env  
+    - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
+    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
+  tags:
+    - docker
+
+qa:
+  stage: buildqa
+  image: node:12
+  needs:
+    - deploydev
+  when: manual
+  variables:
+    Environment: $CI_JOB_NAME
+  only:
+    - tags
+  script:
+    - cat devops/vars/${Environment}.env >> build.env
+    - source build.env
+    - yarn cache clean
+    - yarn install
+    - yarn build:$Environment
+  artifacts:
+    paths:
+      - dist/
+      - build.env
+  tags:
+    - docker
+
+deployqa:
+  stage: deployqa
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  needs:
     - qa
+  when: manual
+  only:
+    - tags
+  script:    
+    - source build.env
+    - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
+    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
+  tags:
+    - docker
+
+uat:
+  stage: builduat
+  image: node:12
+  variables:
+    Environment: $CI_JOB_NAME
+  #needs:
+    #- deployqa
+  when: manual
+  only:
+    - tags
+  script:
+    - cat $prod_build >> build.env
+    - cat devops/vars/${Environment}.env >> build.env
+    - source build.env
+    - yarn cache clean
+    - yarn install
+    - yarn build:$Environment
+  artifacts:
+    paths:
+      - dist/
+      - build.env
+  tags:
+    - docker
+
+deployuat:
+  stage: deployuat
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  needs:
     - uat
-    - master
+  #when: manual
+  only:
+    - tags
+  script:    
+    - source build.env  
+    - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
+    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
+  tags:
+    - docker
+
+prod:
+  stage: buildprod
+  image: node:12
+  variables:
+    Environment: $CI_JOB_NAME
+  only:
+    - tags
+  needs:
+    - deployuat
+  when: manual
+  script:
+    - cat devops/vars/${Environment}.env >> build.env
+    - source build.env
+    - yarn cache clean
+    - yarn install
+    - yarn build:$Environment
+  artifacts:
+    paths:
+      - dist/
+      - build.env
+  tags:
+    - docker
+
+deployprod:
+  stage: deployprod
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  needs:
+    - prod
+  only:
+    - tags
+  when: manual
+  script:    
+    - source build.env  
+    - aws s3 sync dist/ s3://$BucketName/ --delete --region "us-east-1"
+    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
+  tags:
+    - docker
+
+.deploystack:
+  stage: deploystack
+  rules:
+    #- if:  $CI_COMMIT_REF_NAME =~ /^feature/ || $CI_COMMIT_REF_NAME =~ /^bugfix/
+      #when: never
+    #- if:  $CI_COMMIT_REF_NAME =~ /demonew/
+      #when: never
+    - if: '$DeployStack == "True"' #this flag drives whether to deploy the infrastructure stack
+      when: always
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  dependencies:
+    - demo
+  script:
+    - source build.env
+    - aws cloudformation validate-template --template-body file://devops/cloudformation/cbex-unity-frontend-cf.yml --region $Region
+    - aws cloudformation deploy --stack-name $Project-$Product-$Module-$Environment --template-file devops/cloudformation/cbex-unity-frontend-cf.yml --parameter-overrides $(cat devops/vars/cfparameters.ini) $(cat build.env) --tags $(cat devops/vars/cftags.ini) Environment=$Environment Lifecycle=$Environment --region $Region

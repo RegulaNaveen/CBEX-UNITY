@@ -23,7 +23,8 @@ import {
   isRolesInfoLoading,
   getProposalDetails,
   getIsOpen,
-  getEditQuestionData
+  getEditQuestionData,
+  getSelectedBid
 } from '../../../redux/selectors';
 import {
   selectSectionNames,
@@ -63,7 +64,8 @@ type Props = {
   setEditQuestionData: (data: Object) => void,
   editQuestionsData: Map,
   editProposalQuestion: (data: Object) => void,
-  deleteProposalQuestion: (data: Object) => void
+  deleteProposalQuestion: (data: Object) => void,
+  selectedBid: Map
 };
 
 type State = {
@@ -278,7 +280,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       setProposalQuestionF,
       match,
       editQuestionsData,
-      editProposalQuestion
+      editProposalQuestion,
+      selectedBid
     } = this.props;
     const isEditMode = editQuestionsData.size > 0 || false;
     this.setState({ submit: true }, () => {
@@ -294,7 +297,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         answerType !== '' &&
         !isEmpty(roleNames)
       ) {
-        const proposalId = match.params.id;
+        const proposalId = selectedBid.get('id');
         const questionData = {
           proposalId,
           questionText,
@@ -323,8 +326,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   };
 
   onDelete = () => {
-    const { deleteProposalQuestion, editQuestionsData, match } = this.props;
-    const proposalId = match.params.id;
+    const { deleteProposalQuestion, editQuestionsData, match, selectedBid } = this.props;
+    const proposalId = selectedBid.get('id');
     this.setState({ loaderText: 'Deleting Question' });
     const res = deleteProposalQuestion(
       proposalId,
@@ -390,7 +393,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 className="modal-text-area"
                 placeholder="Question text"
                 title="Enter Question Text"
-                value={isEditMode && questionText}
+                value={isEditMode ? questionText : questionText || ''}
                 type="text"
                 error={this.state.error.filter(v => v.questiontext)}
                 onChange={e => this.handleTextChange(e)}
@@ -604,7 +607,8 @@ const mapStateToProps = (state: Map) => {
     sectionNames,
     sectionsOrderInfo,
     isSidebarOpen,
-    editQuestionsData: getEditQuestionData(state)
+    editQuestionsData: getEditQuestionData(state),
+    selectedBid: getSelectedBid(state)
   };
 };
 

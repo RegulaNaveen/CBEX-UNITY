@@ -11,7 +11,8 @@ type Props = {
   title?: string,
   onClick: (selectedValues: Array<string>, lastAnswer: Array<string>) => void,
   value?: Array<string>,
-  error?: mixed
+  error?: mixed,
+  disabled: boolean
 };
 
 type State = {
@@ -26,7 +27,8 @@ class Multiselect extends PureComponent<Props, State> {
     id: undefined,
     title: undefined,
     value: undefined,
-    error: undefined
+    error: undefined,
+    disabled: false
   };
 
   constructor(props: Object) {
@@ -74,8 +76,7 @@ class Multiselect extends PureComponent<Props, State> {
     const { setSelectRow } = this.props;
     if (this.ref.current !== event.target) {
       this.setState({ isCollapsed: false });
-      if(setSelectRow)
-      setSelectRow(false);
+      if (setSelectRow) setSelectRow(false);
     }
   };
 
@@ -122,7 +123,7 @@ class Multiselect extends PureComponent<Props, State> {
 
   render() {
     const { isCollapsed, selectedValues } = this.state;
-    const { id, placeholder, items, title, error } = this.props;
+    const { id, placeholder, items, title, error, disabled } = this.props;
 
     return (
       <>
@@ -133,11 +134,17 @@ class Multiselect extends PureComponent<Props, State> {
             ref={this.ref}
             className={
               error && error.length > 0
-                ? 'multiselect-header-error'
+                ? disabled
+                  ? 'multiselect-header-error multiselect-error-disabled'
+                  : 'multiselect-header-error'
+                : disabled
+                ? 'multiselect-header multiselect-disabled'
                 : 'multiselect-header'
             }
             role="presentation"
-            onClick={this.handleCollapse}
+            onClick={() => {
+              if (!disabled) this.handleCollapse();
+            }}
           >
             {!isEmpty(selectedValues) ? (
               this.renderSelectedItems()

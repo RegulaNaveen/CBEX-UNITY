@@ -1,7 +1,8 @@
 // @flow
 import { Map, fromJS } from 'immutable';
-import { last, uniq } from 'lodash';
+import { last, uniq, orderBy } from 'lodash';
 import { createSelector } from 'reselect';
+import { shouldInclude } from '../../components/views/export-component/word-template';
 
 const generateMilestone = (proposalQuestions: Object) => {
   const flag = proposalQuestions.filter(question => question?.milestone);
@@ -16,45 +17,45 @@ const generateSections = (
   filter: boolean,
   role: string
 ): Map => {
- try {
-  let sections = Map();
-  const userRole = role !== '' ? role : false;
+  try {
+    let sections = Map();
+    const userRole = role !== '' ? role : false;
 
-  proposalQuestions.forEach(question => {
-    const {
-      questionId,
-      roleNames,
-      section: { sectionName, sectionOrder }
-    } = question;
+    proposalQuestions.forEach(question => {
+      const {
+        questionId,
+        roleNames,
+        section: { sectionName, sectionOrder }
+      } = question;
 
-    const roles = roleNames || [];
+      const roles = roleNames || [];
 
-    const createSections = () => {
-      let section = Map({});
-      let questions = sections.getIn([sectionName, 'questions']) || Map({});
+      const createSections = () => {
+        let section = Map({});
+        let questions = sections.getIn([sectionName, 'questions']) || Map({});
 
-      questions = questions.set(questionId, fromJS(question));
-      questions = questions.sortBy(item => item.get('questionOrder'));
+        questions = questions.set(questionId, fromJS(question));
+        questions = questions.sortBy(item => item.get('questionOrder'));
 
-      section = section
-        .set('sectionOrder', sectionOrder)
-        .set('sectionName', sectionName)
-        .set('questions', questions);
+        section = section
+          .set('sectionOrder', sectionOrder)
+          .set('sectionName', sectionName)
+          .set('questions', questions);
 
-      sections = sections.set(sectionName, section);
-    };
+        sections = sections.set(sectionName, section);
+      };
 
-    if (filter && userRole) {
-      if (roles.includes(userRole)) createSections();
-    } else createSections();
-  });
+      if (filter && userRole) {
+        if (roles.includes(userRole)) createSections();
+      } else createSections();
+    });
 
-  sections = sections.sortBy(section => section.get('sectionOrder'));
+    sections = sections.sortBy(section => section.get('sectionOrder'));
 
-  return sections;
- } catch (error) {
-   console.log(error)
- }
+    return sections;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const getQuestionSections = (items: Array<Object>) => {
@@ -179,13 +180,14 @@ function createSectionsFromQuestions(questions) {
   try {
     return generateSections(questions, false, false);
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 }
 
 export function getUniqueMilestones(questions) {
+  const filteredQuestions = questions.filter((q)=>shouldInclude(q))
   const milestones = [];
-  fromJS(questions)
+  fromJS(filteredQuestions)
     .valueSeq()
     .forEach(question => {
       if (question.get('milestone')) {
@@ -224,13 +226,12 @@ export const selectIsQuestionsFilterEnabled = createSelector(
   questionsFilters => {
     let considerFilter = false;
     questionsFilters.entrySeq().forEach(([groupName, group]) => {
-      group.entrySeq().forEach(([filterName, filter])=>{
-        if(filterName === 'logic' || !filter.get('checked'))
-          return;
+      group.entrySeq().forEach(([filterName, filter]) => {
+        if (filterName === 'logic' || !filter.get('checked')) return;
 
-        considerFilter = true;          
-      })
-    });      
+        considerFilter = true;
+      });
+    });
     return considerFilter;
   }
 );
@@ -263,10 +264,11 @@ export const selectActiveQuestionsFilterCount = createSelector(
   selectActiveQuestionsFilters,
   filters => {
     let size = 0;
-    filters.forEach(group=>group.forEach(filter=>{
-      if(typeof filter !== 'string' && filter.get('checked'))
-        size++;
-    }))
+    filters.forEach(group =>
+      group.forEach(filter => {
+        if (typeof filter !== 'string' && filter.get('checked')) size++;
+      })
+    );
     return size;
   }
 );
@@ -284,3 +286,59 @@ export const selectAreAllSectionsExpanded = createSelector(
 export const getEditQuestionData = createSelector(selectProposal, proposal =>
   proposal.get('editQuestionsData', Map({}))
 );
+
+export const getSelectedBid = createSelector(selectProposal, proposal =>
+  proposal.get('selectedBid')
+);
+export const getStatusOfNewBid = createSelector(selectProposal, proposal =>
+  proposal.get('newbidflag') || false
+);
+
+export const getOpportunityData = createSelector(selectProposal, proposal =>
+  proposal.get('opportunityData')
+);
+
+export const getBidList = createSelector(getOpportunityData, opportunity => {
+  if (opportunity.size > 0) {
+    let bidList = [];
+    // console.log(opportunity.valueSeq().toJS());
+    opportunity.valueSeq().forEach((item, ind) => {
+      bidList.push({
+        bidDueDate: item.getIn(['proposal', 'proposalDetails', 'Bid due date']),
+        bidDate: item.getIn(['proposal', 'proposalDate']),
+        bidId: item.getIn(['proposal', 'proposalId']),
+        isCurrent: item.get('isCurrent'),
+        bidName: `Bid ${item.getIn(['proposal', 'proposalDetails', 'bidNo']) || ''}`,
+        bidStatus: item.get('inProgress') || '',
+        pertinentDetails: item.getIn([
+          'proposal',
+          'proposalDetails',
+          'pertinentDetails'
+        ])
+      });
+    });
+
+    bidList = orderBy(bidList, ['bidDate'], ['desc']);
+    return bidList;
+  } else return [];
+});
+
+export const getProposalQuestions = createSelector(selectProposal, proposal =>
+  proposal.get('proposalQuestions')
+);
+
+export const getIsQuestionAnswered = createSelector(
+  getProposalQuestions,
+  questions => {
+    const isQuestionAnswered =
+      questions.length > 0
+        ? questions.findIndex(listItem => {
+            return listItem.loading;
+          })
+        : -1;
+    return isQuestionAnswered > -1 ? true : false;
+  }
+);
+ 
+export const getLookUpOptionsSelector = (proposals: Map): Object =>
+  proposals.get('lookUpOptions')
