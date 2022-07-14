@@ -313,7 +313,12 @@ export class TaskRow extends Component<Props, State> {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
     const { selectedDay } = this.state;
     this.setState({ selectedDay: ' ' }, () => {
-      setProposalAnswer(proposalId, questionId, selectedDay, userData);
+      setProposalAnswer(
+        proposalId,
+        questionId,
+        this.state.selectedDay,
+        userData
+      );
       this.trackMatomoEventSubmitAnswer(' ');
     });
   };
@@ -637,7 +642,10 @@ export class TaskRow extends Component<Props, State> {
           >
             {/* questionText */}
             <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-              <div style={{ zIndex: 0, alignSelf: 'center' }}>
+              <div
+                style={{ zIndex: 0, alignSelf: 'center' }}
+                className="questiontext-richtext"
+              >
                 <Typography variant="body2">
                   {questionJSON ? (
                     <RichTextEditor
@@ -776,7 +784,7 @@ export class TaskRow extends Component<Props, State> {
                     title="Unity Predicted Answer"
                     placement="top"
                   >
-                    <IconButton disabled={!isCurrentBid}>
+                    <IconButton disabled={!isCurrentBid} style={{height:"0"}}>
                       <StatusCheck
                         fontSize="22px"
                         style={{ color: '#D9D9D9' }}

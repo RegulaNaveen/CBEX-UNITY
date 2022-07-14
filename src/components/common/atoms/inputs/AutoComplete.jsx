@@ -15,6 +15,23 @@ const Autocomplete = props => {
   const { disabled } = props;
   let callAccept = false;
 
+  function filter() {
+    value.map(row => {
+    let matched = row.email
+      options.map(row2 => {
+        let matcharray = row2.mail;
+        if (matcharray == matched) {
+          const index = options.findIndex(x => x.mail === matched);
+          if (index > -1) {
+            options.splice(index, 1);
+          }
+          return options;
+        }
+      });
+    });
+  }
+  filter();
+
   function extractEmails(str) {
     let result = String(str).match(
       /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
@@ -66,7 +83,7 @@ const Autocomplete = props => {
           const updatedOptions = myJson.data.map(p => {
             return {
               label: `${p.first_name} ${p.last_name}(${p.email.toLowerCase()})`,
-              full_name: `${p.first_name} ${p.last_name}`
+              mail: `${p.email.toLowerCase()}`
             };
           });
           setOptions(updatedOptions);
@@ -103,7 +120,7 @@ const Autocomplete = props => {
         options={options || []}
         chipColor="white"
         size="small"
-        limitChips={50}
+        limitChips={5}
         matchFrom="any"
         value={value}
         onChange={handleChange}

@@ -106,12 +106,12 @@ function getStyle(){
         margin-top:30px
     }
     .table tr{
-        border-bottom: 1px solid #000;
+        border-top: 1px solid #000;
         border-left: 1px solid #000;
         border-right: 1px solid #000;
     }
-    .table tr:first-child{
-        border-top: 1px solid #000;
+    .table tr:last-child{
+        border-bottom: 1px solid #000;
     }
     .notesTable tr{
         border-bottom: none;
@@ -178,8 +178,14 @@ function getStyle(){
     }
     [data-block="true"] {
         padding-bottom:10px;
-    }  
+    }
  </style>`
+}
+
+function getExtraLines(t1, t2){
+    const contentLength = Math.max(t1.length, t2.length)
+    const paddingAnswerCell = parseInt(contentLength/230)
+    return new Array(paddingAnswerCell + 2 || 2).fill('<br>').join('');
 }
 function topHeading(details){
     return `<h1 class="mainTitle"><em>${details['CRM #'] || ''}</em> Opportunity Overview</h1>`
@@ -217,9 +223,10 @@ function getProposalTeamsRows(questions){
         html += `</tr>`
         coreTeamQuestions.forEach((question)=>{
             let {questionText, answers} = question;
+            const extraNewLines = getExtraLines(questionText, getLastAnswer(answers))
             html += `<tr>`
-            html += `<td>${questionText}</td>`
-            html += `<td>${getLastAnswer(answers)} <br><br></td>`
+            html += `<td>${questionText} ${extraNewLines}</td>`
+            html += `<td>${getLastAnswer(answers)} ${extraNewLines}</td>`
             html += `</tr>`
         });
 
@@ -231,9 +238,10 @@ function getProposalTeamsRows(questions){
         html += `</tr>`
         otherTeamQuestions.forEach((question)=>{
             let {questionText, answers} = question;
+            const extraNewLines = getExtraLines(questionText, getLastAnswer(answers))
             html += `<tr>`
-            html += `<td>${questionText}</td>`
-            html += `<td>${getLastAnswer(answers)} <br><br></td>`
+            html += `<td>${questionText} ${extraNewLines}</td>`
+            html += `<td>${getLastAnswer(answers)} ${extraNewLines}</td>`
             html += `</tr>`
         });
         html += `</table>`
@@ -280,9 +288,10 @@ function questionTables(proposalQuestions){
         
         sections[section].sort((a,b)=>a.questionOrder - b.questionOrder).forEach((question)=>{
             const questionText = question.questionText || '';
+            const extraNewLines = getExtraLines(getLastAnswer(question.answers), questionText);
             html += `<tr>`
-            html += `<td> ${questionText} <br><br></td>`
-            html += `<td> ${formatDate(getLastAnswer(question.answers), question.answerConfiguration)} <span class="blueColorText">${(getUnityPredicatedText(question.answers)) ? getUnityPredicatedText(question.answers) : ''}</span><br><br></td>`
+            html += `<td> ${questionText} ${extraNewLines}</td>`
+            html += `<td> ${formatDate(getLastAnswer(question.answers), question.answerConfiguration)} <span class="blueColorText">${(getUnityPredicatedText(question.answers)) ? getUnityPredicatedText(question.answers) : ''}</span>${extraNewLines}</td>`
             html += `</tr>`      
         });
         html += `</table>`

@@ -62,7 +62,6 @@ const WysiwygNotepad = ({
   const initialEditorState = EditorState.createEmpty();
   const [editorState, setEditorState] = useState(initialEditorState);
   const [notesId, setNotesId] = useState('');
-  const [isReadOnly, setIsReadOnly] = useState(false);
 
   useEffect(() => {
     console.log('notes changed< Rerendered', notes);
@@ -79,7 +78,6 @@ const WysiwygNotepad = ({
       } else {
         setEditorState(initialEditorState);
       }
-      setIsReadOnly(!selectedBid.get('isCurrent'));
     } else {
       const raw = convertToRaw(editorState.getCurrentContent());
       const delta = jsonDP.diff(raw, JSON.parse(notes.get(0).toJS().noteText));
@@ -149,13 +147,18 @@ const WysiwygNotepad = ({
     [editorState, memoizedSaveDB]
   );
 
+  const onhandlePastedText = (
+    text: string,
+    html?: string,
+    editorState: EditorState
+  ) => {};
+
   return (
     <Editor
-      key="draft_editor"
+      key='draft_editor'
       editorState={editorState}
       onEditorStateChange={onEditorsChange}
-      readOnly={isReadOnly}
-      // onBlur={e => fetchLatestNotes()}
+      handlePastedText={onhandlePastedText}
       toolbar={{
         options: [
           'inline',

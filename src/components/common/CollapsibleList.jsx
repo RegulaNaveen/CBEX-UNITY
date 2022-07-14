@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import type { Map } from 'immutable'; // NOSONAR
+import { Map } from 'immutable'; // NOSONAR
 import Link from 'apollo-react/components/Link';
 import Plus from 'apollo-react-icons/Plus';
 import FolderOpen from 'apollo-react-icons/FolderOpen';
@@ -44,7 +44,7 @@ type Props = {
   userActions: any,
   trackEvent: any,
   proposalDetail: any,
-  ismilestoneavailable?: any,
+  milestone: any,
   selectedBid: Map,
   isNotepadOpen: boolean
 };
@@ -85,14 +85,15 @@ class CollapsibleList extends Component<Props, State> {
 
   handleCollapse = () => {
     const { isCollapsed } = this.state;
+    const { title, selectedSection, changeSelectedSection } = this.props;
     this.setState({ isCollapsed: !isCollapsed });
     this.trackMatomoEventBladeToggle(!isCollapsed);
-    const titleId = this.props.title
+    const titleId = title
       .toLocaleLowerCase()
       .split(' ')
       .join('-');
-    if (titleId === this.props.selectedSection) {
-      this.props.changeSelectedSection(null);
+    if (titleId === selectedSection) {
+      changeSelectedSection(null);
     }
   };
 
@@ -203,15 +204,13 @@ class CollapsibleList extends Component<Props, State> {
 
         {!isCollapsed ? (
           <div
-            className='task-title-wrapper'
-            role='button'
+            className="task-title-wrapper collapsed"
+            role="button"
             onClick={this.handleCollapse}
             onKeyPress={this.handleKeyPress}
             tabIndex={-1}
           >
-            <p id='task-title' className='task-title'>
-              {title}
-            </p>
+            <p className="task-title">{title}</p>
           </div>
         ) : (
           <div className='task-table-wrapper'>

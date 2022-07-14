@@ -158,7 +158,7 @@ export const fetchAdditionalBoxLink = async (
   customer: string
 ): Promise<Object> => {
   return axios.get(
-    `${PROPOSAL_QUESTIONS_API_URL}/additionallinks/${oppID}/${customer}/${crmNo}`,
+    `${PROPOSAL_QUESTIONS_API_URL}/additionallinks/${oppID}/${encodeURI(customer)}/${crmNo}`,
     {
       headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
     }

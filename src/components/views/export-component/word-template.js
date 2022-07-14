@@ -18,7 +18,7 @@ import {
     ExternalHyperlink
   } from "docx";  
 import { cloneDeep } from "lodash";
-import moment from "moment";
+import moment from "moment-timezone";
 import { API } from "../../../constants";
 import { applyAnsweredFilter, applyinterestedPartiesFilter, applyMileStonesFilter, applyMyUserRoleFilter, applyUnAnsweredFilter } from "./filter-util";
 
@@ -34,8 +34,9 @@ const questionCellWidth25 = { size: convertInchesToTwip(1.55) , type: WidthType.
 const questionCellWidth75 = { size: convertInchesToTwip(4.65) , type: WidthType.DXA};
 const questionCellWidth40 = { size: convertInchesToTwip(2.48) , type: WidthType.DXA};
 const questionCellWidth60 = { size: convertInchesToTwip(3.72) , type: WidthType.DXA};
+const zone = moment.tz.guess();
 export const userName = (localStorage) ? localStorage.getItem('userName') : '';
-export const dateNow =  () => moment().format('DD-MMM-YYYY HH:mm:ss');
+export const dateNow =  () => `${moment().format('DD-MMM-YYYY HH:mm:ss')} ${moment().tz(zone).zoneAbbr()}`;
 export const yearNow =  moment().format('YYYY');
 
 
@@ -256,7 +257,7 @@ function questionTables(proposalQuestions){
     });
     return tables;
 }
-export function getStyle(styleMap, index){
+export function getStyle(styleMaps, index){
  
     let styleId = '';
     let styles = {
@@ -266,8 +267,8 @@ export function getStyle(styleMap, index){
         font: DEFAULT_FONT
     }
     try{
-        for(let key in styleMap){
-            let {start, end} = styleMap[key];
+        for(let styleMap of styleMaps){
+            let {start, end, style:key} = styleMap;
             if(start <= index && index <= end){
                 if(key === 'BOLD'){
                     styles.bold = true;
@@ -308,7 +309,6 @@ export function getStyle(styleMap, index){
     }catch(errror){
         console.log('Error while Setting style object')
     }
-   
     return {styles, styleId}
 }
 function getNotesCell(paras){
@@ -334,26 +334,28 @@ function getNoteRows(notes){
                 let texts = [];
                 let {text, inlineStyleRanges, type, depth} = block;
                 let listType = (type.includes('list-item')) ? { bullet: { level: depth}} : {};
-                let styleMap = {}
+                let styleMap = []
                 inlineStyleRanges.forEach((range)=>{
                     let {style, offset, length} = range;
-                    styleMap[style] = {start : offset, end: offset + length}
+                    styleMap.push({start : offset, end: offset + length-1, style})
                 });
                 
-                let lastStyle = '';
-                let lastText = ''
+                let lastStyleId = '';
+                let lastText = '';
+                let lastStyle = {};
                 for(let i=0; i<text.length; i++){
                     let {styles, styleId} = getStyle(styleMap, i);
-                    if(styleId === lastStyle){
+                    if(styleId === lastStyleId){
                         lastText += text[i]
                     }else{
                         texts.push(new TextRun({
                             ... { text: lastText},
-                            ... styles
+                            ... lastStyle
                         }))
                         lastText = text[i] 
                     }
-                    lastStyle = styleId;
+                    lastStyleId = styleId;
+                    lastStyle = styles;
 
                     if(text.length-1 === i)
                         texts.push(new TextRun({
@@ -494,7 +496,12 @@ function getQuestionToCustomerRows(questions){
         questionsToCustomer.forEach((question, index)=>{
             let {questionText} = question;
             qTcParas.push(new Paragraph({
-                text : questionText,
+                children: [
+                    new TextRun({
+                        text : questionText,
+                        font: DEFAULT_FONT
+                    })
+                ],
                 bullet: {
                     level: 0,
                 },
