@@ -1,5 +1,5 @@
 // @flow
-import { Map, fromJS } from 'immutable';
+import { Map, fromJS } from 'immutable'; // NOSONAR
 // eslint-disable-next-line
 import jwt_decode from 'jwt-decode';
 import type { ApiAction } from '../actions/action-types';

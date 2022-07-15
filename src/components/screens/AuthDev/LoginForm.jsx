@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Map } from 'immutable';
+import { Map } from 'immutable'; // NOSONAR
 import Loader from 'react-loader-spinner';
 import classNames from 'classnames';
 import { isAuthLoading, authHasErrors } from '../../../redux/selectors';

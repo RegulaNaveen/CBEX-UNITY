@@ -44,7 +44,7 @@
   p.boldtext {
     font-weight: 600;
     color: #000;
-    font-family: 'ProximaNova-Regular';
+    font-family: $proximaNova;
   }
   .sidebarduedatedsg {
     text-align: center !important;
@@ -76,7 +76,7 @@
   p.greytext{
     color: #7f7f7f;
     font-weight: 530;
-    font-family: 'ProximaNova-Regular';
+    font-family: $proximaNova;
   }
   button.MuiTab-textColorInherit{
     color: #7f7f7f;
@@ -248,7 +248,7 @@ and (max-width : 3000px)
   p.boldtext {
     font-weight: 600;
     color: #000;
-    font-family: 'ProximaNova-Regular';
+    font-family: $proximaNova;
   }
   .sidebarduedatedsg {
     text-align: center !important;
@@ -282,7 +282,7 @@ and (max-width : 3000px)
   p.greytext{
     color: #7f7f7f;
     font-weight: 530;
-    font-family: 'ProximaNova-Regular';
+    font-family: $proximaNova;
   }
   button.MuiTab-textColorInherit{
     color: #7f7f7f;
@@ -408,17 +408,17 @@ and (max-width : 3000px)
 
 .autocomplete-text {
   color: #000000!important;
-  font-family: "ProximaNova-Regular"!important;
+  font-family: $proximaNova!important;
   font-size: 16px!important;
    input {
     height: 36px!important;
     color: #000000!important;
-    font-family: "ProximaNova-Regular"!important;
+    font-family: $proximaNova!important;
     font-size: 16px!important;
    }
    .a-MuiChip-label{
     color: #000000!important;
-    font-family: "ProximaNova-Regular"!important;
+    font-family: $proximaNova!important;
     font-size: 16px!important;
    }
 }
@@ -445,7 +445,7 @@ and (max-width : 3000px)
     justify-content: space-between;
     label{
       font-size: 14px;
-      font-family: "ProximaNova-Regular"!important;
+      font-family: $proximaNova!important;
       color: #000;
     }
     .exportOptionsCell {
@@ -459,7 +459,7 @@ and (max-width : 3000px)
       margin-bottom: 5px;
       margin-top: 7px;
       color: #000000!important;
-      font-family: "ProximaNova-Regular"!important;
+      font-family: $proximaNova!important;
       font-size: 16px!important;
     }  
     .exportFileName:hover, .exportFileName:focus-visible {

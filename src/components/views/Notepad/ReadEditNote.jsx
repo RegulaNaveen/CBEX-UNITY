@@ -7,7 +7,7 @@ import Close from 'apollo-react-icons/Close';
 import MenuItem from 'apollo-react/components/MenuItem';
 import Select from 'apollo-react/components/Select';
 import Button from 'apollo-react/components/Button';
-import { Map } from 'immutable';
+import { Map } from 'immutable'; // NOSONAR
 import { v4 as uuidv4 } from 'uuid';
 import {
   convertFromRaw,

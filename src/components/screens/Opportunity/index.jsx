@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { withRouter, Match } from 'react-router-dom';
-import { Map } from 'immutable';
+import { Map } from 'immutable'; // NOSONAR
 import { connect } from 'react-redux';
 import Loader from 'react-loader-spinner';
 import classNames from 'classnames';
@@ -104,7 +104,7 @@ export class Opportunity extends Component<Props, State> {
 
     getOpportunityInfo(params.id);
 
-    window.addEventListener('storage', e => this.handleStorageChange(e));
+    window.addEventListener('storage', e => this.handleStorageChange(e)); // NOSONAR
 
     const enableValidateTab = localStorage.getItem('enableValidateTab');
     if (enableValidateTab === null) {

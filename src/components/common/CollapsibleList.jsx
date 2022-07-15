@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Map } from 'immutable';
+import { Map } from 'immutable'; // NOSONAR
 import Link from 'apollo-react/components/Link';
 import Plus from 'apollo-react-icons/Plus';
 import FolderOpen from 'apollo-react-icons/FolderOpen';
@@ -117,7 +117,7 @@ class CollapsibleList extends Component<Props, State> {
 
   showNotesCount = title => {
     const { notes, handleOpenClose, setTabFromQuestionNotes } = this.props;
-    if (notes && notes && notes.size && notes.size > 0) {
+    if (notes && notes.size && notes.size > 0) {
       const count = notes.filter(
         note => note.getIn(['section', 'sectionName'], '') === title
       );
@@ -137,9 +137,9 @@ class CollapsibleList extends Component<Props, State> {
                 setTabFromQuestionNotes(1, title, true);
               }}
               style={{ borderBottom: 'none' }}
-              size="small"
+              size='small'
             >
-              <FolderOpen fontSize="extraSmall" />
+              <FolderOpen fontSize='extraSmall' />
               <span style={{ verticalAlign: 'top' }}>
                 {' '}
                 Notes ({count.size})
@@ -186,19 +186,19 @@ class CollapsibleList extends Component<Props, State> {
       isNotepadOpen
     } = this.props;
     return (
-      <div className="task-wrapper" ref={this.taskRef} id={this.createId()}>
+      <div className='task-wrapper' ref={this.taskRef} id={this.createId()}>
         <button
-          id="arrow-icon"
-          className="task-icon-wrapper"
+          id='arrow-icon'
+          className='task-icon-wrapper'
           onClick={this.handleCollapse}
           onKeyPress={this.handleKeyPress}
-          type="button"
+          type='button'
           tabIndex={0}
         >
           <img
-            className="task-icon"
+            className='task-icon'
             src={isCollapsed ? chevronDown : chevronRight}
-            alt="question arrow"
+            alt='question arrow'
           />
         </button>
 
@@ -213,15 +213,15 @@ class CollapsibleList extends Component<Props, State> {
             <p className="task-title">{title}</p>
           </div>
         ) : (
-          <div className="task-table-wrapper">
+          <div className='task-table-wrapper'>
             <div
-              className="task-table-headers"
-              role="button"
+              className='task-table-headers'
+              role='button'
               onClick={this.handleCollapse}
               onKeyPress={this.handleKeyPress}
               tabIndex={-1}
             >
-              <div className="task-title">
+              <div className='task-title'>
                 <p>
                   {title}
                   {this.showNotesCount(title)}
@@ -274,13 +274,13 @@ class CollapsibleList extends Component<Props, State> {
               );
             })}
             {selectedBid.get('isCurrent') && (
-              <div className="add-question">
+              <div className='add-question'>
                 <Link
                   style={{ borderBottom: 'none' }}
                   onClick={() => onAddQuestion(title)}
-                  size="small"
+                  size='small'
                 >
-                  <Plus fontSize="extraSmall" />
+                  <Plus fontSize='extraSmall' />
                   <span style={{ verticalAlign: 'top' }}>
                     {' '}
                     Add New Question

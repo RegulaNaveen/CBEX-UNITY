@@ -1,5 +1,5 @@
 // @flow
-import { Map, fromJS } from 'immutable';
+import { Map, fromJS } from 'immutable'; // NOSONAR
 import { last, uniq, orderBy } from 'lodash';
 import { createSelector } from 'reselect';
 import { shouldInclude } from '../../components/views/export-component/word-template';
