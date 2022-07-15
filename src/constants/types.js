@@ -116,5 +116,24 @@ const NOTEPAD = {
   CHANGE_MODE: 'notepad_change_mode'
 };
 
+const NOTIFICATION = {
+  GET_NOTIFICATIONS: 'get_notifications',
+  GET_FILTERED_NOTIFICATIONS: 'get_filtered_notifications',
+  SET_NOTIFICATIONS: 'set_notifications',
+  UPDATE_SEEN: 'update_seen',
+  UPDATE_SEEN_BATCH: 'update_seen_batch',
+  SET_IS_LOADING: 'set_is_loading',
+  GET_IS_LOADING: 'get_is_loading',
+};
+
 const UBUILD_ADMIN = 'ubuildAdmin';
-export { AUTH, SSO_AUTH, PROPOSALS, PROPOSAL, SIDEBAR, NOTEPAD, UBUILD_ADMIN };
+export {
+  AUTH,
+  SSO_AUTH,
+  PROPOSALS,
+  PROPOSAL,
+  SIDEBAR,
+  NOTEPAD,
+  UBUILD_ADMIN,
+  NOTIFICATION
+};

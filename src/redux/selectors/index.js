@@ -5,6 +5,7 @@ import * as proposalSelectors from './proposal';
 import * as authSelectors from './auth';
 import * as siderbarSelectors from './sidebar';
 import * as ssoAuthSelectors from './sso-auth';
+import * as notificationSelectors from './notification';
 
 export * from './notepad';
 
@@ -138,7 +139,7 @@ export const getAllBidsForIndex = (state: Object): string =>
   state.proposal.get('boxBids');
 export const getAdditionalLinks = (state: Object): string =>
   state.proposal.get('boxAdditionalLink');
-  
+
 export const getValidatedProposalData = (state: Object): Object =>
   proposalSelectors.getValidatedProposalData(state.proposal);
 
@@ -198,5 +199,8 @@ export const getnoneditableField = (state: Map): Object =>
   proposalsSelectors.getnoneditableField(state.proposals);
 
 export const getLookUpOptionsSelector = (state: Map): Object =>
-  proposalSelectors.getLookUpOptionsSelector(state.proposal)
-  
+  proposalSelectors.getLookUpOptionsSelector(state.proposal);
+
+// Notification selectors
+export const getNotification = state =>
+  notificationSelectors.getNotification(state.notification);
