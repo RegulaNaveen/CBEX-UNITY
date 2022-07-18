@@ -1,4 +1,5 @@
-import React, {  useRef, useEffect, useState, createRef } from 'react';
+import React, { useRef, useEffect, useState, createRef } from 'react';
+import { connect } from 'react-redux';
 import Bell from 'apollo-react-icons/Bell';
 import './Notification/style.css';
 import StatusDotSolid from 'apollo-react-icons/StatusDotSolid';
@@ -9,6 +10,9 @@ import classnames from 'classnames';
 import EmailRead from 'apollo-react-icons/EmailRead';
 import Tooltip from 'apollo-react/components/Tooltip';
 import { tempDummyData } from '../../../api/notification';
+import MatomoHOC from '../../HOC/MatomoHOC';
+import { getUnreadNotifications } from '../../../redux/selectors';
+import * as notificationActions from '../../../redux/actions/notification-actions';
 
 type State = { toggleNotification: boolean };
 
@@ -24,38 +28,38 @@ class Notification extends React.Component<{}, State> {
       toggleNotification: false,
       notificationOptions: false,
       switchenvelope: false,
-      hoverEnvelope: false,
-      listItems: []
+      hoverEnvelope: false
     };
   }
 
   componentDidMount() {
-    this.setState({ listItems: this.props.listItems });
+    this.props.setNotifications();
+    // this.setState({ unreadNotifications: this.props.unreadNotifications });
   }
 
   componentDidUpdate(previousProps) {
-    if (previousProps.listItems !== this.props.listItems) {
-      this.setState({ listItems: this.props.listItems });
-    }
+    // if (previousProps.unreadNotifications !== this.props.unreadNotifications) {
+    // this.setState({ unreadNotifications: this.props.unreadNotifications });
+    // }
   }
 
   toggleNotification = () => {
     const { toggleNotification } = this.state;
     this.setState({ toggleNotification: !toggleNotification });
     this.focusByID('notificationBar');
-    console.log(tempDummyData);
+    // console.log(tempDummyData);
   };
 
   notificationOptions = () => {
     const { notificationOptions } = this.state;
     this.setState({ notificationOptions: !notificationOptions });
     this.focusByID('notificationOptions');
-    console.log(this.state, 'opened');
+    // console.log(this.state, 'opened');
   };
 
   handleOutsideClick = () => {
     this.setState({ toggleNotification: false });
-    console.log(this.state, 'state');
+    // console.log(this.state, 'state');
   };
 
   handleClickAwayEvent = () => {
@@ -64,7 +68,7 @@ class Notification extends React.Component<{}, State> {
 
   switchenvelope = () => {
     this.setState({ switchenvelope: true });
-    console.log(this.state);
+    // console.log(this.state);
   };
 
   hoverEnvelope = () => {
@@ -73,7 +77,7 @@ class Notification extends React.Component<{}, State> {
 
   closeNotificationOptions = () => {
     this.setState({ notificationOptions: false });
-    console.log(this.state, 'state');
+    // console.log(this.state, 'state');
   };
 
   clearAllMessage = () => {
@@ -85,17 +89,17 @@ class Notification extends React.Component<{}, State> {
     const n = d.getDate();
     const m = d.getMonth();
     const monthNames = [
-      "JAN",
-      "FEB",
-      "MAR",
-      "APR",
-      "MAY",
-      "JUN",
-      "JUL",
-      "AUG",
-      "SEP",
-      "OCT",
-      "NOV",
+      'JAN',
+      'FEB',
+      'MAR',
+      'APR',
+      'MAY',
+      'JUN',
+      'JUL',
+      'AUG',
+      'SEP',
+      'OCT',
+      'NOV',
       'DEC'
     ];
     return { date: `${n} ${monthNames[m]}`, time: timeStamp };
@@ -110,17 +114,19 @@ class Notification extends React.Component<{}, State> {
   }
 
   render() {
-    const { listItems, toggleNotification, switchenvelope } = this.state;
+    const { toggleNotification, switchenvelope } = this.state;
+    const { unreadNotifications } = this.props;
+    console.log({ unreadNotifications });
     let totalCount = 0;
     const current = new Date();
     const systemdate = `${current.getFullYear()}/${current.getMonth() +
       1}/${current.getDate()}`;
-    console.log(systemdate);
+    // console.log(systemdate);
     const loggedinuser = 'ashiq_sultan@iqvia.com';
     let newconst = [];
     let count = -1;
-    listItems.map(item => {
-      if (loggedinuser === item.user_email && item.isSeen !== true) {
+    unreadNotifications.map(item => {
+      if (true) {
         count += 1;
         newconst[count] = {
           data: item.data,
@@ -136,16 +142,19 @@ class Notification extends React.Component<{}, State> {
     });
     totalCount += newconst.length;
     return (
-      <div className="toolbar-account-notification">
+      <div className='toolbar-account-notification'>
         <div
-          className={classnames('notification', toggleNotification && 'expanded')}
+          className={classnames(
+            'notification',
+            toggleNotification && 'expanded'
+          )}
           style={{ position: 'relative', cursor: 'pointer' }}
           onClick={() => this.toggleNotification()}
         >
-          <div className="iconSection">
-            <div ref={this.wrapperRef} className="toolbar-account-wrapper">
-              <div className="toolbar-account-info" style={{ flex: '0' }}>
-                <span className="iconBadge">{totalCount}</span>
+          <div className='iconSection'>
+            <div ref={this.wrapperRef} className='toolbar-account-wrapper'>
+              <div className='toolbar-account-info' style={{ flex: '0' }}>
+                <span className='iconBadge'>{totalCount}</span>
                 <Bell style={{ color: 'white', cursor: 'pointer' }} />
               </div>
             </div>
@@ -163,8 +172,8 @@ class Notification extends React.Component<{}, State> {
                 top: '57px'
               }}
               tabIndex={-1}
-              id="notificationBar"
-              className="notificationBar"
+              id='notificationBar'
+              className='notificationBar'
             >
               <div style={{ display: 'flex' }}>
                 <p
@@ -202,12 +211,12 @@ class Notification extends React.Component<{}, State> {
                         backgroundColor: 'white',
                         right: '0px'
                       }}
-                      id="notificationOptions"
-                      className="notification-settings"
+                      id='notificationOptions'
+                      className='notification-settings'
                     >
                       <div style={{ display: 'grid', paddingTop: '10px' }}>
                         <div
-                          className="notificationsettingtext"
+                          className='notificationsettingtext'
                           style={{ height: '30px', cursor: 'pointer' }}
                         >
                           <p
@@ -227,7 +236,7 @@ class Notification extends React.Component<{}, State> {
                           </p>
                         </div>
                         <div
-                          className="notificationsettingtext"
+                          className='notificationsettingtext'
                           style={{ height: '30px', cursor: 'pointer' }}
                         >
                           <p
@@ -251,7 +260,7 @@ class Notification extends React.Component<{}, State> {
                   </ClickAwayListener>
                 )}
               </div>
-              {newconst.slice(0, 5).map((i, k) => {
+              {newconst.map((i, k) => {
                 return (
                   <div>
                     <p
@@ -276,10 +285,10 @@ class Notification extends React.Component<{}, State> {
                         background: '#fff',
                         padding: '5px'
                       }}
-                      className="lineItmes"
+                      className='lineItmes'
                     >
                       {' '}
-                      <div className="notificitems" style={{ display: 'flex' }}>
+                      <div className='notificitems' style={{ display: 'flex' }}>
                         <StatusDotSolid
                           style={{
                             color: 'red',
@@ -297,7 +306,7 @@ class Notification extends React.Component<{}, State> {
                               onClick={() =>
                                 (window.location.href = `${i.url}`)
                               }
-                              className="oppnum"
+                              className='oppnum'
                             >
                               {totalCount > 0 ? `${i.oppnum}` : null}
                             </span>
@@ -314,7 +323,7 @@ class Notification extends React.Component<{}, State> {
                           >
                             {i.date === systemdate ? `${i.time}` : `${i.date}`}
                           </span>
-                          <div className="notificcontent">{i.data}</div>
+                          <div className='notificcontent'>{i.data}</div>
                         </div>
                         {switchenvelope === true ? (
                           <EmailRead
@@ -326,9 +335,9 @@ class Notification extends React.Component<{}, State> {
                           />
                         ) : (
                           <Tooltip
-                            variant="light"
-                            title="Mark as read"
-                            placement="top"
+                            variant='light'
+                            title='Mark as read'
+                            placement='top'
                             style={{ marginRight: 48 }}
                           >
                             <Email
@@ -350,7 +359,7 @@ class Notification extends React.Component<{}, State> {
               })}
               <div>
                 <p
-                  className="viewallnotific"
+                  className='viewallnotific'
                   style={{
                     textAlign: 'center',
                     margin: 0,
@@ -370,4 +379,14 @@ class Notification extends React.Component<{}, State> {
   }
 }
 
-export default Notification;
+const mapStateToProps = (state: Map) => ({
+  unreadNotifications: getUnreadNotifications(state)
+});
+
+const mapDispatchToProps = {
+  setNotifications: notificationActions.setNotification
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MatomoHOC(Notification));
