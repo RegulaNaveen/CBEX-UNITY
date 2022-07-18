@@ -167,7 +167,8 @@ export const getEditQuestionData = state =>
   proposalSelectors.getEditQuestionData(state);
 
 export const getSelectedBid = state => proposalSelectors.getSelectedBid(state);
-export const getStatusOfNewBid = state => proposalSelectors.getStatusOfNewBid(state);
+export const getStatusOfNewBid = state =>
+  proposalSelectors.getStatusOfNewBid(state);
 
 // Tabbar Selectors
 export const getProposals = (state: Object): Array<Object> =>
@@ -202,5 +203,9 @@ export const getLookUpOptionsSelector = (state: Map): Object =>
   proposalSelectors.getLookUpOptionsSelector(state.proposal);
 
 // Notification selectors
-export const getNotification = state =>
-  notificationSelectors.getNotification(state.notification);
+export const getAllNotifications = state =>
+  notificationSelectors.getAllNotifications(state.notification);
+export const getNotificationLoading = state =>
+  notificationSelectors.getNotificationLoading(state.notification);
+export const getUnreadNotifications = state =>
+  notificationSelectors.getUnreadNotifications(state.notification);
