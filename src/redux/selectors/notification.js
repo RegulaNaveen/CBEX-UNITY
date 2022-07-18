@@ -1,4 +1,4 @@
-export const getNotification = notification => {
-  const data = notification.notifications;
-  return data;
-};
+export const getAllNotifications = notification => notification.notifications;
+export const getNotificationLoading = notification => notification.isLoading;
+export const getUnreadNotifications = notification =>
+  notification.notifications.filter(item => !item.isSeen);
