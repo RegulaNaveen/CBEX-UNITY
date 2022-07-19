@@ -7,3 +7,4 @@ export const OPPORTUNITY = '/opportunities/';
 export const DASHBOARD = '/dashboard';
 export const UBUILD = '/ubuild';
 export const ROUTE_NOT_FOUND = '*';
+export const PROFILE = '/profile/';
