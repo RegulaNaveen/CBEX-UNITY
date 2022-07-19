@@ -36,7 +36,7 @@ const NotificationPreference = () => {
     <div>
       <Card
         interactive
-        style={{ maxWidth: 500, height: 450, margin: '10px 10px 0 10px' }}
+        style={{ maxWidth: 500, height: 470, margin: '10px 10px 0 10px' }}
       >
         <Typography
           className={`${classes.boldtext} ${classes.title}`}
@@ -50,7 +50,9 @@ const NotificationPreference = () => {
             display: 'flex',
             justifyContent: 'space-between',
             alignSelf: 'flex-start',
-            flexGrow:'1'
+            // flexGrow: '1',
+            marginRight: '1.5rem',
+            paddingBottom: '0.5rem',
           }}
         >
           <th>
@@ -81,12 +83,13 @@ const NotificationPreference = () => {
             </Typography>
           </th>
         </tr>
-        <table style={{ height: 250, overflowY: 'scroll', display: 'block' }}>
+        <table style={{ height: 250, overflowY: 'scroll', display: 'block', }}>
           <tr
             style={{
               display: 'flex',
               justifyContent: 'space-between',
               alignSelf: 'flex-start',
+              // flexGrow: '1'
             }}
           >
             <td>
@@ -127,6 +130,7 @@ const NotificationPreference = () => {
                 // }
                 checked={value}
                 onChange={handleChange}
+                size='small'
               />
             </td>
           </tr>
@@ -175,10 +179,11 @@ const NotificationPreference = () => {
                 // }
                 checked={value}
                 onChange={handleChange}
+                size='small'
               />
             </td>
           </tr>
-         
+
           <tr
             style={{
               display: 'flex',
@@ -224,10 +229,11 @@ const NotificationPreference = () => {
                 // }
                 checked={value}
                 onChange={handleChange}
+                size='small'
               />
             </td>
           </tr>
-         
+
         </table>
         <div>
           <Typography
@@ -258,7 +264,7 @@ const NotificationPreference = () => {
         </div>
         <div
           className={`${classes.boldtext} `}
-          style={{ margin: '0px 10px 10px 10px' }}
+          style={{ margin: '0px 10px 0px 10px' }}
         >
           <Checkbox
             label={
@@ -276,7 +282,7 @@ const NotificationPreference = () => {
         </div>
         <div
           className={`${classes.boldtext} `}
-          style={{ margin: '0px 10px 10px 10px' }}
+          style={{ margin: '0px 10px 0px 10px' }}
         >
           <Checkbox
             label={
