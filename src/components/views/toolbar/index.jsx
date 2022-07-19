@@ -19,8 +19,7 @@ import { onSetUserRole } from '../../../redux/actions/sso-auth-actions';
 import { getRoles } from '../../../redux/selectors';
 import WelcomeModal from '../modals/WelcomeModal';
 import MatomoHOC from '../../HOC/MatomoHOC';
-import Notification from './Notifications';
-import { fetchNotifications } from '../../../api/notification';
+import Notification from './Notification/index';
 
 type State = { isCollapsed: boolean };
 class Toolbar extends Component<{}, State> {
