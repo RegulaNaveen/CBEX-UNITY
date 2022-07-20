@@ -8,16 +8,17 @@ import Loader from 'react-loader-spinner';
 import Button from 'apollo-react/components/Button';
 import PencilIcon from 'apollo-react-icons/Pencil';
 import GlobeIcon from 'apollo-react-icons/Globe';
-import { LOGIN } from '../../../routes';
+import { LOGIN, PROFILE } from '../../../routes';
 import { getRoles, isRolesInfoLoading } from '../../../redux/selectors';
 import { getRolesInfo } from '../../../redux/actions/proposal-actions';
 import { logout } from '../../../redux/actions/auth-actions';
 import { onSetUserRole } from '../../../redux/actions/sso-auth-actions';
 import Dropdown from '../../common/atoms/inputs/Dropdown';
+import User from 'apollo-react-icons/User';
 import {
   getUserEmail,
   getUserName,
-  getUserRole
+  getUserRole,
 } from '../../../SessionHandler';
 import { ReportIssue } from '../../svg';
 import MatomoHOC from '../../HOC/MatomoHOC';
@@ -31,18 +32,18 @@ type Props = {
   logoutUser: Function,
   eventCategories: any,
   userActions: any,
-  trackEvent: any
+  trackEvent: any,
 };
 
 type State = {
-  roleName: string
+  roleName: string,
 };
 
 export class ToolbarMenuComponent extends PureComponent<Props, State> {
   constructor(props: Object) {
     super(props);
     this.state = {
-      roleName: ''
+      roleName: '',
     };
   }
 
@@ -76,7 +77,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     const { userActions, eventCategories, trackEvent } = this.props;
     trackEvent({
       category: eventCategories.tb,
-      action: `ToolBar: ${userActions.click} On ${link} Link`
+      action: `ToolBar: ${userActions.click} On ${link} Link`,
     });
   };
 
@@ -84,7 +85,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     const { userActions, eventCategories, trackEvent } = this.props;
     trackEvent({
       category: eventCategories.tb,
-      action: `ToolBar: ${userActions.changed} User Role to ${role}`
+      action: `ToolBar: ${userActions.changed} User Role to ${role}`,
     });
   };
 
@@ -95,66 +96,77 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     const email = getUserEmail();
 
     return (
-      <div className="toolbar-account-menu">
-        <p className="toolbar-account-menu-name">{name}</p>
-        <p className="toolbar-account-menu-email">{email}</p>
-        <div className="toolbar-account-menu-separator" />
-        <div className="toolbar-account-menu-option">
+      <div className='toolbar-account-menu'>
+        <p className='toolbar-account-menu-name'>{name}</p>
+        <p className='toolbar-account-menu-email'>{email}</p>
+        <div className='toolbar-account-menu-separator' />
+        <div className='toolbar-account-menu-option'>
           {isRolesLoading ? (
-            <div className="toolbar-account-menu-option-loader">
-              <Loader type="TailSpin" color="#297DFD" height={35} width={35} />
+            <div className='toolbar-account-menu-option-loader'>
+              <Loader type='TailSpin' color='#297DFD' height={35} width={35} />
             </div>
           ) : (
             <Dropdown
-              id="dd-team-member"
-              title="User Role"
-              placeholder="Select"
+              id='dd-team-member'
+              title='User Role'
+              placeholder='Select'
               items={rolesList ? rolesList.sort() : []}
               onClick={this.onRoleChange}
               value={roleName}
             />
           )}
         </div>
-        <div className="menu-links">
+        <div className='menu-links'>
           <Button
-            target="_blank"
-            variant="text"
+            // target='_blank'
+            variant='text'
+            icon={<User />}
+            className='menu-link-btn'
+            fullwidth
+            onClick={() => this.props.history.push(PROFILE)}
+            style={{width:'100%'}}
+          >
+            Go to Profile
+          </Button>
+          <Button
+            target='_blank'
+            variant='text'
             icon={<PencilIcon />}
-            className="menu-link-btn"
-            href="https://suggestionboard.ideas.aha.io/ideas?project=CBEXU"
+            className='menu-link-btn'
+            href='https://suggestionboard.ideas.aha.io/ideas?project=CBEXU'
             onClick={() => this.trackMatomoLinkClicks('Suggestion Board')}
           >
             Suggestion Board
           </Button>
           <Button
-            target="_blank"
-            variant="text"
+            target='_blank'
+            variant='text'
             icon={<GlobeIcon />}
-            className="menu-link-btn"
-            href="https://quintiles.sharepoint.com/sites/ltc/CBEx/SitePages/Unity-Wiki.aspx"
+            className='menu-link-btn'
+            href='https://quintiles.sharepoint.com/sites/ltc/CBEx/SitePages/Unity-Wiki.aspx'
             onClick={() => this.trackMatomoLinkClicks('Unity Wiki')}
           >
             Unity Wiki
           </Button>
           <Button
-            target="_blank"
-            variant="text"
+            target='_blank'
+            variant='text'
             icon={
-              <ReportIssue className="MuiSvgIcon-root IconComponent-icon-5" />
+              <ReportIssue className='MuiSvgIcon-root IconComponent-icon-5' />
             }
-            className="menu-link-btn"
-            href="https://quintiles.service-now.com/via?id=sc_cat_item&sys_id=dd5c819fdb8fdc107cf37e77f4961917"
+            className='menu-link-btn'
+            href='https://quintiles.service-now.com/via?id=sc_cat_item&sys_id=dd5c819fdb8fdc107cf37e77f4961917'
             onClick={() => this.trackMatomoLinkClicks('Report an Issue')}
           >
             Report an Issue
           </Button>
         </div>
         <div
-          id="logout-button"
-          className="toolbar-account-menu-button"
+          id='logout-button'
+          className='toolbar-account-menu-button'
           onClick={this.handleLogout}
           onKeyPress={this.handleKeyPress}
-          role="button"
+          role='button'
           tabIndex={-1}
         >
           Log out
@@ -166,13 +178,13 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
 
 const mapStateToProps = (state: Map) => ({
   rolesList: getRoles(state),
-  isRolesLoading: isRolesInfoLoading(state)
+  isRolesLoading: isRolesInfoLoading(state),
 });
 
 export default withRouter(
   connect(mapStateToProps, {
     getRolesInfoF: getRolesInfo,
     logoutUser: logout,
-    changeUserRole: onSetUserRole
+    changeUserRole: onSetUserRole,
   })(MatomoHOC(ToolbarMenuComponent))
 );

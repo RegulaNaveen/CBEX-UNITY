@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Card from 'apollo-react/components/Card';
 import Typography from 'apollo-react/components/Typography';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Button from 'apollo-react/components/Button';
 import TextField from 'apollo-react/components/TextField';
 import Checkbox from 'apollo-react/components/Checkbox';
+import {
+  NOTIFICATION_PREFERENCE,
+  EMAIL_PREFERENCE,
+  OPPORTUNITY_PREFERENCE,
+} from './Dummy';
 
 const useStyles = makeStyles((theme) => ({
   item: {
@@ -33,16 +38,13 @@ const useStyles = makeStyles((theme) => ({
     margin: '10px',
   },
 }));
-const AccountPreference = () => {
+const AccountPreference = ({ name, email, role }) => {
   const classes = useStyles();
-  const [value, setValue] = React.useState(true);
 
-  const handleChange = (e, checked) => {
-    setValue(checked);
-  };
+
   return (
     <div>
-      <Card interactive style={{ maxWidth: 450, height: 380 ,margin:'10px'}}>
+      <Card interactive style={{ height: 380, margin: '10px' }}>
         <Typography
           className={`${classes.boldtext} ${classes.title}`}
           variant='title2'
@@ -63,7 +65,7 @@ const AccountPreference = () => {
             variant='caption'
             gutterBottom
           >
-            luke.skywalker@iqvia.com
+            {email}
           </Typography>
         </div>
         <div>
@@ -98,6 +100,7 @@ const AccountPreference = () => {
             }
             size='small'
             fullWidth
+            value={role}
           />
         </div>
         <div>
@@ -109,44 +112,30 @@ const AccountPreference = () => {
             Opportunity Preference
           </Typography>
         </div>
-        <div
-          className={`${classes.boldtext} `}
-          style={{ margin: '0px 10px 0px 10px' }}
-        >
-          <Checkbox
-            label={
-              <Typography
-                className={`${classes.boldtext} `}
-                variant='caption'
-                gutterBottom
-              >
-                By default, filter opportunity questions by MY User Role
-              </Typography>
-            }
-            checked={value}
-            onChange={handleChange}
-            size="small"
-          />
-        </div>
-        <div
-          className={`${classes.boldtext} `}
-          style={{ margin: '0px 10px 10px 10px' }}
-        >
-          <Checkbox
-            label={
-              <Typography
-                className={`${classes.boldtext} `}
-                variant='caption'
-                gutterBottom
-              >
-                By default, filter opportunity by Interested party Questions
-              </Typography>
-            }
-            checked={value}
-            onChange={handleChange}
-            size="small"
-          />
-        </div>
+
+        {OPPORTUNITY_PREFERENCE.map(({ label, checked, disabled }) => {
+          return (
+            <div
+              className={`${classes.boldtext} `}
+              style={{ margin: '0px 10px 0px 1.0em' }}
+            >
+              <Checkbox
+                label={
+                  <Typography
+                    className={`${classes.boldtext} `}
+                    variant='caption'
+                    gutterBottom
+                  >
+                    {label}
+                  </Typography>
+                }
+                checked={checked}
+                // onChange={}
+                disabled={disabled}
+              />
+            </div>
+          );
+        })}
       </Card>
     </div>
   );

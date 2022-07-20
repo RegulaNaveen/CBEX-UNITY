@@ -1,9 +1,13 @@
 import React from 'react';
 import Card from 'apollo-react/components/Card';
-
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Typography from 'apollo-react/components/Typography';
 import Checkbox from 'apollo-react/components/Checkbox';
+import {
+  NOTIFICATION_PREFERENCE,
+  EMAIL_PREFERENCE,
+  OPPORTUNITY_PREFERENCE,
+} from './Dummy';
 
 const useStyles = makeStyles((theme) => ({
   item: {
@@ -27,17 +31,10 @@ const useStyles = makeStyles((theme) => ({
 
 const NotificationPreference = () => {
   const classes = useStyles();
-  const [value, setValue] = React.useState(true);
 
-  const handleChange = (e, checked) => {
-    setValue(checked);
-  };
   return (
     <div>
-      <Card
-        interactive
-        style={{ maxWidth: 500, height: 470, margin: '10px 10px 0 10px' }}
-      >
+      <Card interactive style={{ height: 470, margin: '10px 10px 0 10px' }}>
         <Typography
           className={`${classes.boldtext} ${classes.title}`}
           variant='title2'
@@ -51,7 +48,7 @@ const NotificationPreference = () => {
             justifyContent: 'space-between',
             alignSelf: 'flex-start',
             // flexGrow: '1',
-            marginRight: '1.5rem',
+            marginRight: '0.5rem',
             paddingBottom: '0.5rem',
           }}
         >
@@ -83,157 +80,47 @@ const NotificationPreference = () => {
             </Typography>
           </th>
         </tr>
-        <table style={{ height: 250, overflowY: 'scroll', display: 'block', }}>
-          <tr
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignSelf: 'flex-start',
-              // flexGrow: '1'
-            }}
-          >
-            <td>
-              <Typography
-                className={`${classes.greytext} ${classes.title}`}
-                variant='caption'
-                gutterBottom
-              >
-                Assigned to an opportunity
-              </Typography>
-            </td>
-            <td>
-              <Checkbox
-                // label={
-                //   <Typography
-                //     className={`${classes.boldtext} `}
-                //     variant='caption'
-                //     gutterBottom
-                //   >
-                //     By default, filter opportunity by Interested party Questions
-                //   </Typography>
-                // }
-                checked={value}
-                onChange={handleChange}
-                size='small'
-              />
-            </td>
-            <td>
-              <Checkbox
-                // label={
-                //   <Typography
-                //     className={`${classes.boldtext} `}
-                //     variant='caption'
-                //     gutterBottom
-                //   >
-                //     By default, filter opportunity by Interested party Questions
-                //   </Typography>
-                // }
-                checked={value}
-                onChange={handleChange}
-                size='small'
-              />
-            </td>
-          </tr>
-          <tr
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignSelf: 'flex-start',
-            }}
-          >
-            <td>
-              <Typography
-                className={`${classes.greytext} ${classes.title}`}
-                variant='caption'
-                gutterBottom
-              >
-                Assigned to an opportunity
-              </Typography>
-            </td>
-            <td>
-              <Checkbox
-                // label={
-                //   <Typography
-                //     className={`${classes.boldtext} `}
-                //     variant='caption'
-                //     gutterBottom
-                //   >
-                //     By default, filter opportunity by Interested party Questions
-                //   </Typography>
-                // }
-                checked={value}
-                onChange={handleChange}
-                size='small'
-              />
-            </td>
-            <td>
-              <Checkbox
-                // label={
-                //   <Typography
-                //     className={`${classes.boldtext} `}
-                //     variant='caption'
-                //     gutterBottom
-                //   >
-                //     By default, filter opportunity by Interested party Questions
-                //   </Typography>
-                // }
-                checked={value}
-                onChange={handleChange}
-                size='small'
-              />
-            </td>
-          </tr>
 
-          <tr
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignSelf: 'flex-start',
-            }}
-          >
-            <td>
-              <Typography
-                className={`${classes.greytext} ${classes.title}`}
-                variant='caption'
-                gutterBottom
+        <table style={{ height: 250, overflowY: 'auto', display: 'block' }}>
+          {NOTIFICATION_PREFERENCE.map(({ label, inApp, email }) => {
+            return (
+              <tr
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignSelf: 'flex-start',
+                  // flexGrow: '1'
+                }}
               >
-                Assigned to an opportunity
-              </Typography>
-            </td>
-            <td>
-              <Checkbox
-                // label={
-                //   <Typography
-                //     className={`${classes.boldtext} `}
-                //     variant='caption'
-                //     gutterBottom
-                //   >
-                //     By default, filter opportunity by Interested party Questions
-                //   </Typography>
-                // }
-                checked={value}
-                onChange={handleChange}
-                size='small'
-              />
-            </td>
-            <td>
-              <Checkbox
-                // label={
-                //   <Typography
-                //     className={`${classes.boldtext} `}
-                //     variant='caption'
-                //     gutterBottom
-                //   >
-                //     By default, filter opportunity by Interested party Questions
-                //   </Typography>
-                // }
-                checked={value}
-                onChange={handleChange}
-                size='small'
-              />
-            </td>
-          </tr>
-
+                <td>
+                  <Typography
+                    className={`${classes.greytext} ${classes.title}`}
+                    variant='caption'
+                    gutterBottom
+                  >
+                    {label}
+                  </Typography>
+                </td>
+                <td>
+                  <Checkbox
+                    disabled={inApp.disabled}
+                    checked={inApp.checked}
+                    // onChange={}
+                    size='small'
+                  />
+                </td>
+                <td>
+                  <Checkbox
+                    disabled={email.disabled}
+                    checked={email.checked}
+                    
+                    // onChange={}
+                    size='small'
+                  />
+                </td>
+              </tr>
+            );
+          })}
         </table>
         <div>
           <Typography
@@ -244,60 +131,30 @@ const NotificationPreference = () => {
             Email Preference
           </Typography>
         </div>
-        <div
-          className={`${classes.boldtext} `}
-          style={{ margin: '0px 10px 0px 10px' }}
-        >
-          <Checkbox
-            label={
-              <Typography
-                className={`${classes.boldtext} `}
-                variant='caption'
-                gutterBottom
-              >
-                Real time email updates
-              </Typography>
-            }
-            checked={value}
-            onChange={handleChange}
-          />
-        </div>
-        <div
-          className={`${classes.boldtext} `}
-          style={{ margin: '0px 10px 0px 10px' }}
-        >
-          <Checkbox
-            label={
-              <Typography
-                className={`${classes.boldtext} `}
-                variant='caption'
-                gutterBottom
-              >
-                Hourly email digest
-              </Typography>
-            }
-            checked={value}
-            onChange={handleChange}
-          />
-        </div>
-        <div
-          className={`${classes.boldtext} `}
-          style={{ margin: '0px 10px 0px 10px' }}
-        >
-          <Checkbox
-            label={
-              <Typography
-                className={`${classes.boldtext} `}
-                variant='caption'
-                gutterBottom
-              >
-                once daily email digest
-              </Typography>
-            }
-            checked={value}
-            onChange={handleChange}
-          />
-        </div>
+
+        {EMAIL_PREFERENCE.map(({ label, checked, disabled }) => {
+          return (
+            <div
+              className={`${classes.boldtext} `}
+              style={{ margin: '0px 10px 0px 1.0em' }}
+            >
+              <Checkbox
+                label={
+                  <Typography
+                    className={`${classes.boldtext} `}
+                    variant='caption'
+                    gutterBottom
+                  >
+                    {label}
+                  </Typography>
+                }
+                checked={checked}
+                // onChange={}
+                disabled={disabled}
+              />
+            </div>
+          );
+        })}
       </Card>
     </div>
   );
