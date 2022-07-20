@@ -100,7 +100,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
         <p className='toolbar-account-menu-name'>{name}</p>
         <p className='toolbar-account-menu-email'>{email}</p>
         <div className='toolbar-account-menu-separator' />
-        <div className='toolbar-account-menu-option'>
+        {/* <div className='toolbar-account-menu-option'>
           {isRolesLoading ? (
             <div className='toolbar-account-menu-option-loader'>
               <Loader type='TailSpin' color='#297DFD' height={35} width={35} />
@@ -115,7 +115,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
               value={roleName}
             />
           )}
-        </div>
+        </div> */}
         <div className='menu-links'>
           <Button
             // target='_blank'

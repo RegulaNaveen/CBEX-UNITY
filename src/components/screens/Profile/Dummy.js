@@ -14,51 +14,95 @@ const NOTIFICATION_PREFERENCE = [
     label: 'Rebid from salesforce CRM',
     inApp: {
       checked: true,
-      disabled: true,
+      disabled: false,
     },
     email: {
-      checked: true,
+      checked: false,
       disabled: false,
     },
   },
   {
-    label: 'Assigned to an opportunity',
+    label: 'Answer Changes',
+    inApp: {
+      checked: true,
+      disabled: false,
+    },
+    email: {
+      checked: false,
+      disabled: false,
+    },
+  },
+  {
+    label: 'New Document Added',
+    inApp: {
+      checked: false,
+      disabled: true,
+    },
+    email: {
+      checked: false,
+      disabled: false,
+    },
+  },
+  {
+    label: 'Question assigned to my role',
+    inApp: {
+      checked: true,
+      disabled: false,
+    },
+    email: {
+      checked: false,
+      disabled: false,
+    },
+  },
+  {
+    label: 'Notes updated',
     inApp: {
       checked: false,
       disabled: false,
     },
     email: {
       checked: true,
-      disabled: true,
-    },
-  },
-  {
-    label: 'Rebid from salesforce CRM',
-    inApp: {
-      checked: true,
-      disabled: true,
-    },
-    email: {
-      checked: true,
       disabled: false,
     },
   },
   {
-    label: 'Assigned to an opportunity',
+    label: 'Section complete',
     inApp: {
       checked: false,
       disabled: false,
     },
     email: {
       checked: true,
-      disabled: true,
+      disabled: false,
     },
   },
   {
-    label: 'Rebid from salesforce CRM',
+    label: 'Rebid from Salesforce CRM',
     inApp: {
       checked: true,
-      disabled: true,
+      disabled: false,
+    },
+    email: {
+      checked: true,
+      disabled: false,
+    },
+  },
+  {
+    label: 'Discrepancy with salesforce',
+    inApp: {
+      checked: false,
+      disabled: false,
+    },
+    email: {
+      checked: false,
+      disabled: false,
+    },
+  },
+  {
+    label: 'System-pushed notification',
+    inApp: {
+      checked: true,
+      disabled: false,
     },
     email: {
       checked: true,
