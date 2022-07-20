@@ -1,7 +1,11 @@
 import React from 'react';
+import StatusDotSolid from 'apollo-react-icons/StatusDotSolid';
+import EmailRead from 'apollo-react-icons/EmailRead';
+import Tooltip from 'apollo-react/components/Tooltip';
 import './style.css';
 
-const ListItem = ({ item }) => {
+const ListItem = ({ url, oppnum, data, id }) => {
+  console.log({ url, oppnum, data, id });
   return (
     <div>
       <p
@@ -44,11 +48,9 @@ const ListItem = ({ item }) => {
                   fontWeight: 700,
                   color: '#2b7efd'
                 }}
-                onClick={() => (window.location.href = `${item.url}`)}
+                onClick={() => (window.location.href = `${url}`)}
                 className='oppnum'
-              >
-                {totalCount > 0 ? `${item.oppnum}` : null}
-              </span>
+              ></span>
             </div>
             <span
               style={{
@@ -59,12 +61,10 @@ const ListItem = ({ item }) => {
                 paddingTop: '5px',
                 paddingBottom: '5px'
               }}
-            >
-              {item.date === systemdate ? `${item.time}` : `${item.date}`}
-            </span>
-            <div className='notificcontent'>{item.data}</div>
+            ></span>
+            <div className='notificcontent'>{data}</div>
           </div>
-          {switchenvelope === true ? (
+          {true ? (
             <EmailRead
               style={{
                 color: 'gray',
@@ -86,7 +86,7 @@ const ListItem = ({ item }) => {
                   marginLeft: 'auto',
                   cursor: 'pointer'
                 }}
-                key={item.id}
+                key={id}
                 onClick={() => this.switchenvelope()}
               />
             </Tooltip>

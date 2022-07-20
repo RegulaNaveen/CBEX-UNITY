@@ -1,20 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import Bell from 'apollo-react-icons/Bell';
-import StatusDotSolid from 'apollo-react-icons/StatusDotSolid';
 import Email from 'apollo-react-icons/Email';
 import Cog from 'apollo-react-icons/Cog';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import classnames from 'classnames';
-import EmailRead from 'apollo-react-icons/EmailRead';
-import Tooltip from 'apollo-react/components/Tooltip';
-
 import MatomoHOC from '../../../HOC/MatomoHOC';
 import { getUnreadNotifications } from '../../../../redux/selectors';
 import * as notificationActions from '../../../../redux/actions/notification-actions';
+import ListItem from './ListItem';
 import './style.css';
 
-const Drawer = ({ unreadNotifications }) => {
+const Drawer = ({ unreadNotifications, setNotifications }) => {
   const [isDrawer, setIsDrawer] = useState(false);
   const [isDrawerOptions, setIsDrawerOptions] = useState(false);
 
@@ -31,7 +28,10 @@ const Drawer = ({ unreadNotifications }) => {
     setIsDrawerOptions(!isDrawerOptions);
   };
 
-  // const wrapperRef = useRef();
+  useEffect(() => {
+    setNotifications();
+  }, []);
+
   return (
     <>
       <div className='toolbar-account-notification'>
@@ -152,6 +152,14 @@ const Drawer = ({ unreadNotifications }) => {
               {unreadNotifications.map(item => {
                 // TODO
                 // Render the actual List item
+                return (
+                  <ListItem
+                    url={item.action_url}
+                    oppnum={item.opportunity_no}
+                    data={item.data}
+                    id={item.id}
+                  />
+                );
                 console.log({ unreadNotificationItem: item });
               })}
               {/* View All Notifications Button*/}
