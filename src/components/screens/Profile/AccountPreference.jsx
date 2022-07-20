@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Loader from 'react-loader-spinner';
 import Card from 'apollo-react/components/Card';
+import PropTypes from 'prop-types';
 import Typography from 'apollo-react/components/Typography';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Checkbox from 'apollo-react/components/Checkbox';
 import { useSelector, useDispatch } from 'react-redux';
@@ -165,6 +167,20 @@ const AccountPreference = ({ email, role, roleName, setRoleName }) => {
       </Card>
     </div>
   );
+};
+
+AccountPreference.defaultProps = {
+  email: '',
+  role: '',
+  roleName: '',
+  setRoleName: ''
+};
+
+AccountPreference.propTypes = {
+  email: PropTypes.string,
+  role: PropTypes.string,
+  roleName: PropTypes.string,
+  setRoleName: PropTypes.string
 };
 
 export default AccountPreference;

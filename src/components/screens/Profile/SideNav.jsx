@@ -1,19 +1,27 @@
 import React, { useEffect, useState } from 'react';
+import Axios from 'axios';
 import { useHistory } from 'react-router-dom';
-import { Container } from '@material-ui/core';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import { useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 import Avatar from 'apollo-react/components/Avatar';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import CloseCircle from 'apollo-react-icons/CloseCircle';
 import Button from 'apollo-react/components/Button';
 import Typography from 'apollo-react/components/Typography';
-import { useDispatch } from 'react-redux';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Container } from '@material-ui/core';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import makeStyles from '@material-ui/core/styles/makeStyles';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import List from '@material-ui/core/List';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import Divider from '@material-ui/core/Divider';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import ListItem from '@material-ui/core/ListItem';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import ListItemText from '@material-ui/core/ListItemText';
+
 import { logout } from '../../../redux/actions/auth-actions';
 import { LOGIN } from '../../../routes';
-import Axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   layout: {
@@ -111,11 +119,7 @@ const SideNav = ({ name, roleName }) => {
       <div className={classes.layout}>
         <div className={classes.upperPart}>
           <div className={classes.profilepic}>
-            <Avatar
-              alt="avatar"
-              src={imageUrl} //'https://s3-ap-southeast-1.amazonaws.com/tv-prod/member/photo/2567699-large.jpg'
-              size="extraLarge"
-            >
+            <Avatar alt="avatar" src={imageUrl} size="extraLarge">
               {name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0)}
             </Avatar>
           </div>
@@ -137,7 +141,8 @@ const SideNav = ({ name, roleName }) => {
           <div className={classes.item}>
             <List disablePadding>
               <ListItem
-                selected={true}
+                // selected={true}
+                selected
                 button
                 key="Account Preference"
                 classes={{ root: classes.root, selected: classes.selected }}
@@ -183,6 +188,16 @@ const SideNav = ({ name, roleName }) => {
       </div>
     </Container>
   );
+};
+
+SideNav.defaultProps = {
+  name: '',
+  roleName: ''
+};
+
+SideNav.propTypes = {
+  name: PropTypes.string,
+  roleName: PropTypes.string
 };
 
 export default SideNav;

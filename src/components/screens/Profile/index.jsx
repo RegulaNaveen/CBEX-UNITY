@@ -1,10 +1,12 @@
 import Grid from 'apollo-react/components/Grid';
 import React, { useState } from 'react';
+import Footer from 'apollo-react/components/Footer';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import Toolbar from '../../views/toolbar';
 import AccountPreference from './AccountPreference';
 import NotificationPreference from './NotificationPreference';
-import Footer from 'apollo-react/components/Footer';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+
 import SideNav from './SideNav';
 import {
   getUserEmail,
@@ -13,7 +15,7 @@ import {
   getAccessToken
 } from '../../../SessionHandler';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   item: {
     // padding: '10px',
   },
@@ -36,7 +38,7 @@ const Profile = () => {
   const token = getAccessToken();
   const [roleName, setRoleName] = useState('');
   return (
-    <>
+    <div className="profile-wrapper">
       <Toolbar selected="dashboard" />
       <Grid container disablePadding style={styles}>
         <Grid container item xs={3} sm={4} md={3} lg={3}>
@@ -70,16 +72,16 @@ const Profile = () => {
                 {
                   label: '',
                   href: '',
-                  target: ''
+                  target: '',
+                  disabled: true
                 }
               ]}
-              // maxWidth={1600}
               className={` ${classes.footer}`}
             />
           </Grid>
         </Grid>
       </Grid>
-    </>
+    </div>
   );
 };
 

@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Card from 'apollo-react/components/Card';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Typography from 'apollo-react/components/Typography';
 import Checkbox from 'apollo-react/components/Checkbox';
 import { NOTIFICATION_PREFERENCE, EMAIL_PREFERENCE } from './Dummy';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   item: {
     // padding: '10px',
   },
@@ -44,10 +45,7 @@ const NotificationPreference = () => {
 
   return (
     <div>
-      <Card
-        interactive
-        style={{ height: 490, marginTop: '0.6em', marginLeft: '0.5em' }}
-      >
+      <Card interactive style={{ marginTop: '0.6em', marginLeft: '0.5em' }}>
         <Typography
           className={`${classes.boldtext} ${classes.title}`}
           variant="title2"
@@ -175,8 +173,8 @@ const NotificationPreference = () => {
                   </Typography>
                 }
                 checked={checked}
-                onChange={(e, checked) =>
-                  handleEmailPreferenceChange(e, checked, index)
+                onChange={(e, check) =>
+                  handleEmailPreferenceChange(e, check, index)
                 }
                 disabled={disabled}
               />
