@@ -1,14 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { connect } from 'react-redux';
 import Bell from 'apollo-react-icons/Bell';
 import Email from 'apollo-react-icons/Email';
 import Cog from 'apollo-react-icons/Cog';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Typography from 'apollo-react/components/Typography';
 import classnames from 'classnames';
 import MatomoHOC from '../../../HOC/MatomoHOC';
 import { getUnreadNotifications } from '../../../../redux/selectors';
 import * as notificationActions from '../../../../redux/actions/notification-actions';
 import ListItem from './ListItem';
+import DrawerOptions from './DrawerOptions';
 import './style.css';
 
 const Drawer = ({ unreadNotifications, setNotifications }) => {
@@ -32,6 +34,11 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
     setNotifications();
   }, []);
 
+  const notificationCount = useMemo(
+    () => (unreadNotifications ? unreadNotifications.length : 0),
+    [unreadNotifications]
+  );
+
   return (
     <>
       <div className='toolbar-account-notification'>
@@ -43,7 +50,7 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
           <div className='iconSection'>
             <div className='toolbar-account-wrapper'>
               <div className='toolbar-account-info' style={{ flex: '0' }}>
-                <span className='iconBadge'>{1}</span>
+                <span className='iconBadge'>{notificationCount}</span>
                 <Bell style={{ color: 'white', cursor: 'pointer' }} />
               </div>
             </div>
@@ -51,131 +58,38 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
         </div>
         {isDrawer && (
           <ClickAwayListener onClickAway={closeDrawer}>
-            <div
-              style={{
-                position: 'absolute',
-                width: '410px',
-                border: '0.5px solid #8080803d',
-                minHeight: '100px',
-                overflowY: 'auto',
-                top: '57px'
-              }}
-              tabIndex={-1}
-              id='notificationBar'
-              className='notificationBar'
-            >
-              <div style={{ display: 'flex' }}>
-                <p
-                  style={{
-                    fontSize: '14px',
-                    textAlign: 'left',
-                    width: '93%',
-                    padding: '14px'
-                  }}
-                >
-                  <b>Notifications</b>
-                </p>
+            <div tabIndex={-1} id='notificationBar' className='notificationBar'>
+              <div className='drawer-header'>
+                <Typography variant='h3' gutterBottom>
+                  Notifications
+                </Typography>
                 <Cog
-                  style={{
-                    color: 'gray',
-                    marginLeft: 'auto',
-                    alignSelf: 'center',
-                    height: '15px',
-                    cursor: 'pointer'
-                  }}
+                  className='notification-gear-icon'
                   onClick={toggleIsDrawerOptions}
                 />
                 {/* Drawer Gear Icon options */}
                 {isDrawerOptions && (
-                  <ClickAwayListener onClickAway={closeIsDrawerOptions}>
-                    <div
-                      tabIndex={-1}
-                      style={{
-                        position: 'absolute',
-                        width: '150px',
-                        border: '0.5px solid #8080803d',
-                        minHeight: '100px',
-                        overflowY: 'auto',
-                        backgroundColor: 'white',
-                        right: '0px'
-                      }}
-                      id='notificationOptions'
-                      className='notification-settings'
-                    >
-                      <div style={{ display: 'grid', paddingTop: '10px' }}>
-                        <div
-                          className='notificationsettingtext'
-                          style={{ height: '30px', cursor: 'pointer' }}
-                        >
-                          <p
-                            style={{
-                              fontSize: '14px',
-                              textAlign: 'left',
-                              width: '93%',
-                              paddingLeft: '20px',
-                              position: 'relative',
-                              top: '50%',
-                              transform: 'translateY(-50%)',
-                              role: 'button',
-                              type: 'button'
-                            }}
-                          >
-                            View all
-                          </p>
-                        </div>
-                        <div
-                          className='notificationsettingtext'
-                          style={{ height: '30px', cursor: 'pointer' }}
-                        >
-                          <p
-                            style={{
-                              textAlign: 'left',
-                              margin: 0,
-                              fontSize: '14px',
-                              paddingLeft: '20px',
-                              position: 'relative',
-                              top: '50%',
-                              transform: 'translateY(-50%)',
-                              role: 'button',
-                              type: 'button'
-                            }}
-                          >
-                            Mark all as read
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </ClickAwayListener>
+                  <DrawerOptions closeIsDrawerOptions={closeIsDrawerOptions} />
                 )}
               </div>
               {/* Notification List items */}
               {unreadNotifications.map(item => {
-                // TODO
-                // Render the actual List item
                 return (
                   <ListItem
-                    url={item.action_url}
-                    oppnum={item.opportunity_no}
-                    data={item.data}
+                    key={item.id}
                     id={item.id}
+                    url={item.action_url}
+                    oppNo={item.opportunity_no}
+                    data={item.data}
+                    isSeen={item.isSeen}
                   />
                 );
-                console.log({ unreadNotificationItem: item });
               })}
               {/* View All Notifications Button*/}
               <div>
-                <p
-                  className='viewallnotific'
-                  style={{
-                    textAlign: 'center',
-                    margin: 0,
-                    color: '#2b7efd',
-                    fontSize: '14px',
-                    cursor: 'pointer'
-                  }}
-                >
+                <Typography variant='body2' className='view-all-notifications'>
                   View All Notifications
-                </p>
+                </Typography>
               </div>
             </div>
           </ClickAwayListener>

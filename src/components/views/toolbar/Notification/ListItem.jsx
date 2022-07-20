@@ -1,100 +1,40 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import Typography from 'apollo-react/components/Typography';
 import StatusDotSolid from 'apollo-react-icons/StatusDotSolid';
-import EmailRead from 'apollo-react-icons/EmailRead';
-import Tooltip from 'apollo-react/components/Tooltip';
+import * as notificationActions from '../../../../redux/actions/notification-actions';
+import EnvelopeButton from './EnvelopeButton';
 import './style.css';
 
-const ListItem = ({ url, oppnum, data, id }) => {
-  console.log({ url, oppnum, data, id });
+const ListItem = ({ id, url, oppNo, data, isSeen, setSeenOne }) => {
   return (
-    <div>
-      <p
-        style={{
-          fontSize: '10px',
-          margin: '5px 0',
-          textAlign: 'left',
-          color: '#747474',
-          display: 'initial'
-        }}
-      >
-        <span
-          style={{
-            display: 'inline-block',
-            width: '50%',
-            textAlign: 'right'
-          }}
-        />
-      </p>
-      <div
-        style={{
-          background: '#fff',
-          padding: '5px'
-        }}
-        className='lineItmes'
-      >
-        {' '}
-        <div className='notificitems' style={{ display: 'flex' }}>
-          <StatusDotSolid
-            style={{
-              color: 'red',
-              height: '15px'
-            }}
-          />
-          <div>
-            <div>
-              <span
-                style={{
-                  fontSize: '14px',
-                  fontWeight: 700,
-                  color: '#2b7efd'
-                }}
-                onClick={() => (window.location.href = `${url}`)}
-                className='oppnum'
-              ></span>
-            </div>
-            <span
-              style={{
-                display: 'grid',
-                fontSize: '10px',
-                fontWeight: 700,
-                color: '#747474',
-                paddingTop: '5px',
-                paddingBottom: '5px'
-              }}
-            ></span>
-            <div className='notificcontent'>{data}</div>
-          </div>
-          {true ? (
-            <EmailRead
-              style={{
-                color: 'gray',
-                height: '15px',
-                marginLeft: 'auto'
-              }}
-            />
-          ) : (
-            <Tooltip
-              variant='light'
-              title='Mark as read'
-              placement='top'
-              style={{ marginRight: 48 }}
-            >
-              <Email
-                style={{
-                  color: 'gray',
-                  height: '15px',
-                  marginLeft: 'auto',
-                  cursor: 'pointer'
-                }}
-                key={id}
-                onClick={() => this.switchenvelope()}
-              />
-            </Tooltip>
-          )}
+    <div className='notification-item'>
+      {/* Dot Icon */}
+      <StatusDotSolid fontSize='small' className='notification-item-dot' />
+      {/* Content */}
+      <div className='notification-item-content'>
+        {/* Header */}
+        <div className='notification-item-header'>
+          <Typography
+            variant='body2'
+            className='notification-item-header-title'
+          >
+            {oppNo}
+          </Typography>
+          {/* Envelope Button */}
+          <EnvelopeButton isSeen={isSeen} onClick={() => setSeenOne(id)} />
+        </div>
+        {/* Notification content */}
+        <div>
+          <div className='notification-content-data'>{data}</div>
         </div>
       </div>
     </div>
   );
 };
 
-export default ListItem;
+const mapStateToProps = (state: Map) => ({});
+const mapDispatchToProps = {
+  setSeenOne: notificationActions.setSeenOne
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ListItem);

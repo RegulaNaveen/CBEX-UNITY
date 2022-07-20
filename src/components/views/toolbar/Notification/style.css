@@ -1,45 +1,51 @@
 .notification {
-    position: "relative";
-    width: fit-content;
-    display: inline-flex;
-    margin-left: 25%;
-    align-self: center;
+  position: 'relative';
+  width: fit-content;
+  display: inline-flex;
+  margin-left: 25%;
+  align-self: center;
 }
 .iconSection {
-    position: relative;
-    width: fit-content;
-    display: inline-flex;
+  position: relative;
+  width: fit-content;
+  display: inline-flex;
 }
 .notificationBar {
-    display: block;
-    padding: 5px;
-    right: 0px;
-    z-index: 1;
-    background: white;
-    color: initial;
+  display: block;
+  padding: 5px;
+  right: 0px;
+  z-index: 1;
+  background: white;
+  color: initial;
+  position: absolute;
+  width: 410px;
+  border: 0.5px solid #8080803d;
+  min-height: 100px;
+  overflow-y: auto;
+  top: 57px;
 }
 .notification:hover .notificationBar {
-    display: block;
+  display: block;
 }
-.lineItmes {
-    padding: 5px;
-    margin-bottom: 10px;
-    border-bottom: 1px solid #d9d9d9;
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 6px 12px 14px;
 }
 .iconBadge {
-    background: red;
-    width: 15px;
-    display: block;
-    text-align: center;
-    height: 15px;
-    border-radius: 50%;
-    color: #fff;
-    font-size: 9px;
-    line-height: 15px;
-    position: relative;
-    right: 10px;
-    bottom: 13px;
-    left: 30px;
+  background: red;
+  width: 15px;
+  display: block;
+  text-align: center;
+  height: 15px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 9px;
+  line-height: 15px;
+  position: relative;
+  right: 10px;
+  bottom: 13px;
+  left: 30px;
 }
 
 .notificationsettingtext:hover {
@@ -49,22 +55,54 @@
   background: #ecf3ff;
 }
 
-.viewallnotific:hover {
-  background: #ecf3ff;
+.notification-content-data {
+  padding-top: 4px;
+  font-size: 14px;
 }
 
-.notificcontent {
-    height: 40px;
-    overflow: hidden;
-    font-size: 14px;
-    line-height: 20px
+.notification-gear-icon {
+  color: #595959;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
 }
-.notificcontent:hover{
-    overflow: visible; 
-    white-space: normal;
-    height:auto;
-    min-height: 40px;
+
+.notification-item {
+  display: flex;
+  padding: 10px;
 }
-.oppnum {
-    cursor: pointer;
+.notification-item:hover {
+  background: #ecf3ff;
+}
+.notification-item-dot {
+  color: #df216d;
+}
+.notification-item-content {
+  flex-grow: 1;
+  padding-left: 2px;
+}
+.notification-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+.notification-item-header-title {
+  color: #0768fd !important;
+  font-weight: 600 !important;
+}
+.envelope-icon {
+  color: #595959;
+  height: 14px;
+  cursor: pointer;
+}
+.view-all-notifications {
+  color: #0768fd !important;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  cursor: pointer;
+}
+.view-all-notifications:hover {
+  background: #ecf3ff;
 }
