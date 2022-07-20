@@ -1,11 +1,15 @@
 workflow:
   rules:
     - if: '$CI_PIPELINE_SOURCE != "merge_request_event"' # Disable pipeline for Merge requests 
-
+include:
+  - project: 'CBEx/devops'
+    ref: test
+    file: /gitlab_balckduck_scan.yml
 include:
   - local: devops/vars/global.yml
 
 stages:
+  - blackduckscan
   - sonar #sonar report
   - builddev
   - deploydev
