@@ -67,7 +67,7 @@ const AccountPreference = ({ email, role, roleName, setRoleName }) => {
     <div>
       <Card
         interactive
-        style={{ height: 300, marginTop: '0.6em', marginLeft: '0.5em' }}
+        style={{ height: 320, marginTop: '0.6em', marginLeft: '0.5em' }}
       >
         <Typography
           className={`${classes.boldtext} ${classes.title}`}
@@ -110,14 +110,24 @@ const AccountPreference = ({ email, role, roleName, setRoleName }) => {
               <Loader type="TailSpin" color="#297DFD" height={35} width={35} />
             </div>
           ) : (
-            <Dropdown
-              id="dd-team-member"
-              title="User Role"
-              placeholder="Select"
-              items={rolesList ? rolesList.sort() : []}
-              onClick={onRoleChange}
-              value={roleName}
-            />
+            <>
+              <Dropdown
+                id="dd-team-member"
+                title="User Role"
+                placeholder="Select"
+                items={rolesList ? rolesList.sort() : []}
+                onClick={onRoleChange}
+                value={roleName}
+              />
+              <Typography
+                className={classes.greytext}
+                variant="caption"
+                gutterBottom
+                style={{ fontSize: '12px' }}
+              >
+                Your role will determine the visible questions in an opportunity
+              </Typography>
+            </>
           )}
         </div>
         <div style={{ margin: '0.5em 0px 0px 0.4em' }}>
