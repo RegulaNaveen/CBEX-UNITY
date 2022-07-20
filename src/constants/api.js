@@ -47,7 +47,8 @@ switch (environment) {
     REDIRECTION_URL = 'https://dev2-unity.dev.iqvia.app/';
     UBUILD_ARTIFACT = 'https://dev2-ubuild.dev.iqvia.app/main.js';
     SF_HOST_URL = 'https://iqvia--hotfix.lightning.force.com/';
-    SOCKET_URL = 'wss://07hl4u2wt5.execute-api.us-east-1.amazonaws.com/production';
+    SOCKET_URL =
+      'wss://07hl4u2wt5.execute-api.us-east-1.amazonaws.com/production';
     break;
   case 'DEMO':
     PROPOSAL_API_ENDPOINT =
