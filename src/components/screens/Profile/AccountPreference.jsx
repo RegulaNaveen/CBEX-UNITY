@@ -65,10 +65,7 @@ const AccountPreference = ({ email, role, roleName, setRoleName }) => {
 
   return (
     <div>
-      <Card
-        interactive
-        style={{ height: 320, marginTop: '0.6em', marginLeft: '0.5em' }}
-      >
+      <Card interactive style={{ marginTop: '0.6em', marginLeft: '0.5em' }}>
         <Typography
           className={`${classes.boldtext} ${classes.title}`}
           variant="title2"
