@@ -48,7 +48,7 @@ const NotificationPreference = () => {
 
   return (
     <div>
-      <Card interactive style={{ height: 470, margin: '10px 10px 0 10px' }}>
+      <Card interactive style={{ height: 480, margin: '10px 10px 0 10px' }}>
         <Typography
           className={`${classes.boldtext} ${classes.title}`}
           variant='title2'
@@ -151,7 +151,7 @@ const NotificationPreference = () => {
             );
           })}
         </table>
-        <div>
+        <div style={{ margin: '.5em 0 0 0' }}>
           <Typography
             className={`${classes.greytext} ${classes.title}`}
             variant='caption'

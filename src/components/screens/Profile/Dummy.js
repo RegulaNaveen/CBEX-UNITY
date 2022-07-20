@@ -36,7 +36,7 @@ const NOTIFICATION_PREFERENCE = [
     label: 'New Document Added',
     inApp: {
       checked: false,
-      disabled: true,
+      disabled: false,
     },
     email: {
       checked: false,

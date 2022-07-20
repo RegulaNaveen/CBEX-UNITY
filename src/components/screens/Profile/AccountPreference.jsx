@@ -88,7 +88,7 @@ const AccountPreference = ({ name, email, role, roleName, setRoleName }) => {
 
   return (
     <div>
-      <Card interactive style={{ height: 380, margin: '1.0em' }}>
+      <Card interactive style={{ height: 370, margin: '1.0em' }}>
         <Typography
           className={`${classes.boldtext} ${classes.title}`}
           variant='title2'
@@ -115,7 +115,7 @@ const AccountPreference = ({ name, email, role, roleName, setRoleName }) => {
             {email}
           </Typography>
         </div>
-        <div style={{ margin: '0px 0px 0px 0.3em' }} >
+        {/* <div style={{ margin: '0px 0px 0px 0.3em' }} >
           <Button
             className={`${classes.button}`}
             variant='secondary'
@@ -123,8 +123,8 @@ const AccountPreference = ({ name, email, role, roleName, setRoleName }) => {
           >
             Edit Profile Picture
           </Button>
-        </div>
-        <div style={{ maxWidth: 300, margin: '0px 1.0em 1.0em 1.0em' }}>
+        </div> */}
+        <div style={{ maxWidth: 370, margin: '0.3em 1.0em 1.0em 1.0em' }}>
           {isRolesLoading ? (
             <div className='toolbar-account-menu-option-loader'>
               <Loader type='TailSpin' color='#297DFD' height={35} width={35} />
@@ -137,32 +137,10 @@ const AccountPreference = ({ name, email, role, roleName, setRoleName }) => {
               items={rolesList ? rolesList.sort() : []}
               onClick={onRoleChange}
               value={roleName}
+              
             />
           )}
-          {/* <Typography
-            className={`${classes.greytext} ${classes.title}`}
-            variant='caption'
-            gutterBottom
-          >
-            
-          </Typography> */}
-          {/* <TextField
-            label='User Role'
-            placeholder='Placeholder'
-            helperText={
-              <Typography
-                className={classes.greytext}
-                variant='caption'
-                gutterBottom
-                style={{ fontSize: '10px' }}
-              >
-                Your role will determine the visible questions in an opportunity
-              </Typography>
-            }
-            size='small'
-            fullWidth
-            value={role}
-          /> */}
+          
         </div>
         <div style={{ margin: '0px 0px 0px 0.4em' }}>
           <Typography
