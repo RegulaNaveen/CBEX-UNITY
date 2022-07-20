@@ -15,38 +15,38 @@ import { logout } from '../../../redux/actions/auth-actions';
 import { LOGIN } from '../../../routes';
 import Axios from 'axios';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   layout: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    alignItem: 'center',
+    alignItem: 'center'
   },
   container: {
     backgroundColor: '#fff',
-    height: '100%',
+    height: '100vh',
     marginTop: theme.spacing(0),
-    padding: '0 !important',
+    padding: '0 !important'
   },
   item: {
     paddingLeft: '0 !important',
     paddingRight: '0 !important',
-    paddingTop: '20px !important',
+    paddingTop: '20px !important'
   },
   profilepic: {
     paddingTop: theme.spacing(5),
     display: 'flex',
     justifyContent: 'space-around',
-    paddingBottom: theme.spacing(1),
+    paddingBottom: theme.spacing(1)
   },
   list: {
-    width: 250,
+    width: 250
   },
   fullList: {
-    width: 'auto',
+    width: 'auto'
   },
   active: {
-    backgroundColor: '#0768fd',
+    backgroundColor: '#0768fd'
   },
   root: {
     '&$selected': {
@@ -55,32 +55,32 @@ const useStyles = makeStyles((theme) => ({
 
       '&:hover': {
         backgroundColor: '#0768fd',
-        color: '#000 !important',
-      },
-    },
+        color: '#000 !important'
+      }
+    }
   },
   selected: {},
   logout: {
     padding: theme.spacing(3),
-    paddingTop: theme.spacing(20),
+    paddingTop: theme.spacing(20)
   },
   userDetails: {
     textAlign: 'center',
-    margin: '0',
+    margin: '0'
   },
   greytext: {
     color: '#7f7f7f',
     fontweight: '530',
-    fontFamily: 'ProximaNova-Regular',
+    fontFamily: 'ProximaNova-Regular'
   },
   boldtext: {
     fontWeight: '700',
     color: '#000',
-    fontFamily: 'ProximaNova-Regular',
-  },
+    fontFamily: 'ProximaNova-Regular'
+  }
 }));
 
-const SideNav = ({ name,  roleName }) => {
+const SideNav = ({ name, roleName }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -95,10 +95,10 @@ const SideNav = ({ name,  roleName }) => {
   useEffect(() => {
     Axios.get('https://graph.microsoft.com/v1.0/me/photo/$value', {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`
       },
-      responseType: 'blob',
-    }).then((o) => {
+      responseType: 'blob'
+    }).then(o => {
       const url = window.URL || window.webkitURL;
       const blobUrl = url.createObjectURL(o.data);
       setImageUrl(blobUrl);
@@ -112,22 +112,22 @@ const SideNav = ({ name,  roleName }) => {
         <div className={classes.upperPart}>
           <div className={classes.profilepic}>
             <Avatar
-              alt='avatar'
+              alt="avatar"
               src={imageUrl} //'https://s3-ap-southeast-1.amazonaws.com/tv-prod/member/photo/2567699-large.jpg'
-              size='extraLarge'
+              size="extraLarge"
             >
               {name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0)}
             </Avatar>
           </div>
           <div className={classes.userDetails}>
-            <Typography classname={classes.boldtext} variant='p' gutterBottom>
+            <Typography classname={classes.boldtext} variant="p" gutterBottom>
               {name}
             </Typography>
           </div>
           <div className={classes.userDetails}>
             <Typography
               className={classes.greytext}
-              variant='caption'
+              variant="caption"
               gutterBottom
             >
               {roleName}
@@ -139,7 +139,7 @@ const SideNav = ({ name,  roleName }) => {
               <ListItem
                 selected={true}
                 button
-                key='Account Preference'
+                key="Account Preference"
                 classes={{ root: classes.root, selected: classes.selected }}
               >
                 <ListItemText
@@ -153,7 +153,7 @@ const SideNav = ({ name,  roleName }) => {
               <Divider />
               <ListItem
                 button
-                key='Recent Activity'
+                key="Recent Activity"
                 classes={{ root: classes.root, selected: classes.selected }}
               >
                 {/* <ListItemText
@@ -168,10 +168,10 @@ const SideNav = ({ name,  roleName }) => {
         <div className={classes.lowerPart}>
           <div className={classes.logout}>
             <Button
-              variant='secondary'
+              variant="secondary"
               icon={CloseCircle}
               fullWidth
-              size='small'
+              size="small"
               onClick={() => {
                 handleLogout();
               }}

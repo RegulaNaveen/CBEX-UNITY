@@ -5,7 +5,7 @@ import Typography from 'apollo-react/components/Typography';
 import Checkbox from 'apollo-react/components/Checkbox';
 import { NOTIFICATION_PREFERENCE, EMAIL_PREFERENCE } from './Dummy';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   item: {
     // padding: '10px',
   },
@@ -13,16 +13,16 @@ const useStyles = makeStyles((theme) => ({
   greytext: {
     color: '#7f7f7f',
     fontweight: '530',
-    fontFamily: 'ProximaNova-Regular',
+    fontFamily: 'ProximaNova-Regular'
   },
   boldtext: {
     fontWeight: '600',
     color: '#000',
-    fontFamily: 'ProximaNova-Regular',
+    fontFamily: 'ProximaNova-Regular'
   },
   title: {
-    padding: '15px',
-  },
+    padding: '15px'
+  }
 }));
 
 const NotificationPreference = () => {
@@ -44,11 +44,15 @@ const NotificationPreference = () => {
 
   return (
     <div>
-      <Card interactive style={{ height: 480, margin: '10px 10px 0 10px' }}>
+      <Card
+        interactive
+        style={{ height: 480, marginTop: '0.6em', marginLeft: '0.5em' }}
+      >
         <Typography
           className={`${classes.boldtext} ${classes.title}`}
-          variant='title2'
+          variant="title2"
           gutterBottom
+          style={{ margin: '5px 0px 0px 0' }}
         >
           Notification Preference
         </Typography>
@@ -60,30 +64,31 @@ const NotificationPreference = () => {
             // flexGrow: '1',
             marginRight: '0.5rem',
             paddingBottom: '0.5rem',
+            textAlign: 'left'
           }}
         >
-          <th style={{}}>
+          <th style={{ flexGrow: '2', alignSelf: 'flex-start' }}>
             <Typography
               className={`${classes.greytext} ${classes.title}`}
-              variant='caption'
+              variant="caption"
               gutterBottom
             >
               Notification Preference
             </Typography>
           </th>
-          <th style={{ marginLeft: '6.5em' }}>
+          <th style={{ flexGrow: '0', marginRight: '1.5em' }}>
             <Typography
               className={`${classes.greytext} ${classes.title}`}
-              variant='caption'
+              variant="caption"
               gutterBottom
             >
               In-App
             </Typography>
           </th>
-          <th style={{}}>
+          <th style={{ flexGrow: '0' }}>
             <Typography
               className={`${classes.greytext} ${classes.title}`}
-              variant='caption'
+              variant="caption"
               gutterBottom
             >
               Email
@@ -97,13 +102,13 @@ const NotificationPreference = () => {
               <tr
                 style={{
                   display: 'flex',
-                  justifyContent: 'space-between',
+                  justifyContent: 'space-between'
                 }}
               >
                 <td style={{ flexGrow: '3' }}>
                   <Typography
                     className={`${classes.greytext} ${classes.title}`}
-                    variant='caption'
+                    variant="caption"
                     gutterBottom
                   >
                     {label}
@@ -121,7 +126,7 @@ const NotificationPreference = () => {
                         'inApp'
                       )
                     }
-                    size='small'
+                    size="small"
                   />
                 </td>
                 <td style={{ flexGrow: '0' }}>
@@ -136,7 +141,7 @@ const NotificationPreference = () => {
                         'email'
                       )
                     }
-                    size='small'
+                    size="small"
                   />
                 </td>
               </tr>
@@ -146,7 +151,7 @@ const NotificationPreference = () => {
         <div style={{ margin: '.5em 0 0 0' }}>
           <Typography
             className={`${classes.greytext} ${classes.title}`}
-            variant='caption'
+            variant="caption"
             gutterBottom
           >
             Email Preference
@@ -163,7 +168,7 @@ const NotificationPreference = () => {
                 label={
                   <Typography
                     className={`${classes.boldtext} `}
-                    variant='caption'
+                    variant="caption"
                     gutterBottom
                   >
                     {label}

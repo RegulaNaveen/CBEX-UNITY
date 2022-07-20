@@ -1,43 +1,44 @@
 import React, { useState, useEffect } from 'react';
+import Loader from 'react-loader-spinner';
 import Card from 'apollo-react/components/Card';
 import Typography from 'apollo-react/components/Typography';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Checkbox from 'apollo-react/components/Checkbox';
 import { useSelector, useDispatch } from 'react-redux';
+
 import { getRoles, isRolesInfoLoading } from '../../../redux/selectors';
 import { onSetUserRole } from '../../../redux/actions/sso-auth-actions';
 import Dropdown from '../../common/atoms/inputs/Dropdown';
-import Loader from 'react-loader-spinner';
 import { OPPORTUNITY_PREFERENCE } from './Dummy';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   item: {
     // padding: '10px',
   },
   blacktext: {
     color: '#000',
     fontweight: '530',
-    fontFamily: 'ProximaNova-Regular',
+    fontFamily: 'ProximaNova-Regular'
   },
 
   greytext: {
     color: '#7f7f7f',
     fontweight: '530',
-    fontFamily: 'ProximaNova-Regular',
+    fontFamily: 'ProximaNova-Regular'
   },
   boldtext: {
     fontWeight: '600',
     color: '#000',
-    fontFamily: 'ProximaNova-Regular',
+    fontFamily: 'ProximaNova-Regular'
   },
   title: {
-    padding: '10px',
+    padding: '10px'
   },
   button: {
-    margin: '10px',
-  },
+    margin: '10px'
+  }
 }));
-const AccountPreference = ({ name, email, role, roleName, setRoleName }) => {
+const AccountPreference = ({ email, role, roleName, setRoleName }) => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
@@ -57,25 +58,28 @@ const AccountPreference = ({ name, email, role, roleName, setRoleName }) => {
     if (role) setRoleName(role);
   }, []);
 
-  const onRoleChange = (value) => {
+  const onRoleChange = value => {
     dispatch(onSetUserRole(value));
     setRoleName(value);
   };
 
   return (
     <div>
-      <Card interactive style={{ height: 320, margin: '1.0em' }}>
+      <Card
+        interactive
+        style={{ height: 300, marginTop: '0.6em', marginLeft: '0.5em' }}
+      >
         <Typography
           className={`${classes.boldtext} ${classes.title}`}
-          variant='title2'
+          variant="title2"
           gutterBottom
-          style={{ margin: '0px 0px 0px 0.3em' }}
+          style={{ margin: '10px 0px 0px 0.4em' }}
         >
           Account Preference
         </Typography>
         <Typography
           className={`${classes.greytext} ${classes.title}`}
-          variant='caption'
+          variant="caption"
           gutterBottom
           style={{ margin: '0px 0px 0px 0.4em' }}
         >
@@ -84,7 +88,7 @@ const AccountPreference = ({ name, email, role, roleName, setRoleName }) => {
         <div>
           <Typography
             className={`${classes.boldtext} ${classes.title}`}
-            variant='caption'
+            variant="caption"
             gutterBottom
             style={{ margin: '0px 0px 0px 0.4em' }}
           >
@@ -102,14 +106,14 @@ const AccountPreference = ({ name, email, role, roleName, setRoleName }) => {
         </div> */}
         <div style={{ margin: '0.3em 1.0em 1.0em 1.0em' }}>
           {isRolesLoading ? (
-            <div className='toolbar-account-menu-option-loader'>
-              <Loader type='TailSpin' color='#297DFD' height={35} width={35} />
+            <div className="toolbar-account-menu-option-loader">
+              <Loader type="TailSpin" color="#297DFD" height={35} width={35} />
             </div>
           ) : (
             <Dropdown
-              id='dd-team-member'
-              title='User Role'
-              placeholder='Select'
+              id="dd-team-member"
+              title="User Role"
+              placeholder="Select"
               items={rolesList ? rolesList.sort() : []}
               onClick={onRoleChange}
               value={roleName}
@@ -119,7 +123,7 @@ const AccountPreference = ({ name, email, role, roleName, setRoleName }) => {
         <div style={{ margin: '0.5em 0px 0px 0.4em' }}>
           <Typography
             className={`${classes.greytext} ${classes.title}`}
-            variant='caption'
+            variant="caption"
             gutterBottom
           >
             Opportunity Preference
@@ -130,21 +134,21 @@ const AccountPreference = ({ name, email, role, roleName, setRoleName }) => {
           return (
             <div
               className={`${classes.boldtext} `}
-              style={{ margin: '0px 10px 0px 1.0em' }}
+              style={{ margin: '0px 10px 0px 1.1em' }}
             >
               <Checkbox
                 label={
                   <Typography
                     className={`${classes.boldtext} `}
-                    variant='caption'
+                    variant="caption"
                     gutterBottom
                   >
                     {label}
                   </Typography>
                 }
                 checked={checked}
-                onChange={(e, checked) =>
-                  handleOpportunityPreferenceChange(e, checked, index)
+                onChange={(e, check) =>
+                  handleOpportunityPreferenceChange(e, check, index)
                 }
                 disabled={disabled}
               />

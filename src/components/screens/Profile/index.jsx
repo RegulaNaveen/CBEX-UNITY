@@ -10,25 +10,23 @@ import {
   getUserEmail,
   getUserName,
   getUserRole,
-  getAccessToken,
+  getAccessToken
 } from '../../../SessionHandler';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   item: {
     // padding: '10px',
   },
   footer: {
     margin: '0 !important',
-    padding: '0 24px 0 24px !important',
+    padding: '0 24px 0 24px !important'
     // height: '2em',
-  },
+  }
 }));
 
 const Profile = () => {
   const styles = {
-    // padding: 16,
-    // textAlign: 'center',
-    backgroundColor: '#f6f7fb',
+    backgroundColor: '#f6f7fb'
   };
 
   const classes = useStyles();
@@ -39,9 +37,9 @@ const Profile = () => {
   const [roleName, setRoleName] = useState('');
   return (
     <>
-      <Toolbar selected='dashboard' />
+      <Toolbar selected="dashboard" />
       <Grid container disablePadding style={styles}>
-        <Grid container item xs={3} sm={3} md={3} lg={3}>
+        <Grid container item xs={3} sm={4} md={3} lg={3}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <SideNav
               name={name}
@@ -53,7 +51,7 @@ const Profile = () => {
             />
           </Grid>
         </Grid>
-        <Grid container item sm={9} xs={9} md={9} lg={9} spacing={1}>
+        <Grid container item sm={8} xs={9} md={9} lg={9} spacing={2}>
           <Grid item md={6} sm={12} xs={12} className={classes.item}>
             <AccountPreference
               name={name}
@@ -72,8 +70,8 @@ const Profile = () => {
                 {
                   label: '',
                   href: '',
-                  target: '',
-                },
+                  target: ''
+                }
               ]}
               // maxWidth={1600}
               className={` ${classes.footer}`}
