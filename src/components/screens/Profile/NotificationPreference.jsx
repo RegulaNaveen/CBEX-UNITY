@@ -3,11 +3,7 @@ import Card from 'apollo-react/components/Card';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Typography from 'apollo-react/components/Typography';
 import Checkbox from 'apollo-react/components/Checkbox';
-import {
-  NOTIFICATION_PREFERENCE,
-  EMAIL_PREFERENCE,
-  OPPORTUNITY_PREFERENCE,
-} from './Dummy';
+import { NOTIFICATION_PREFERENCE, EMAIL_PREFERENCE } from './Dummy';
 
 const useStyles = makeStyles((theme) => ({
   item: {
@@ -102,8 +98,6 @@ const NotificationPreference = () => {
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
-                  // alignSelf: 'flex-start',
-                  // flexGrow: '1'
                 }}
               >
                 <td style={{ flexGrow: '3' }}>
@@ -128,8 +122,6 @@ const NotificationPreference = () => {
                       )
                     }
                     size='small'
-                    // noteType='inApp'
-                    // noteIndex={index}
                   />
                 </td>
                 <td style={{ flexGrow: '0' }}>

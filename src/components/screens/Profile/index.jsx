@@ -1,6 +1,4 @@
 import Grid from 'apollo-react/components/Grid';
-import Paper from 'apollo-react/components/Paper';
-import Typography from 'apollo-react/components/Typography';
 import React, { useState } from 'react';
 import Toolbar from '../../views/toolbar';
 import AccountPreference from './AccountPreference';

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Container } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Avatar from 'apollo-react/components/Avatar';
@@ -10,14 +10,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import CloseCircle from 'apollo-react-icons/CloseCircle';
 import Button from 'apollo-react/components/Button';
 import Typography from 'apollo-react/components/Typography';
-import { useSelector, useDispatch } from 'react-redux';
-import { getRoles, isRolesInfoLoading } from '../../../redux/selectors';
-import { getRolesInfo } from '../../../redux/actions/proposal-actions';
+import { useDispatch } from 'react-redux';
 import { logout } from '../../../redux/actions/auth-actions';
-import { onSetUserRole } from '../../../redux/actions/sso-auth-actions';
-import Dropdown from '../../common/atoms/inputs/Dropdown';
-import { LOGIN, PROFILE } from '../../../routes';
-import Loader from 'react-loader-spinner';
+import { LOGIN } from '../../../routes';
 import Axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
@@ -85,16 +80,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SideNav = ({ name, email, role, token ,roleName}) => {
+const SideNav = ({ name,  roleName }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
-
-  // const bidList = useSelector(getBidList);
-  // const selectedBid = useSelector(getSelectedBid);
-  // const isQuestionAnswered = useSelector(getIsQuestionAnswered);
-  // const logoutUser = useSelector(logout);
-  
 
   const handleLogout = () => {
     dispatch(logout());
@@ -102,6 +91,7 @@ const SideNav = ({ name, email, role, token ,roleName}) => {
   };
 
   const [imageUrl, setImageUrl] = useState(null);
+
   useEffect(() => {
     Axios.get('https://graph.microsoft.com/v1.0/me/photo/$value', {
       headers: {
@@ -123,7 +113,7 @@ const SideNav = ({ name, email, role, token ,roleName}) => {
           <div className={classes.profilepic}>
             <Avatar
               alt='avatar'
-              src='' //'https://s3-ap-southeast-1.amazonaws.com/tv-prod/member/photo/2567699-large.jpg'
+              src={imageUrl} //'https://s3-ap-southeast-1.amazonaws.com/tv-prod/member/photo/2567699-large.jpg'
               size='extraLarge'
             >
               {name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0)}

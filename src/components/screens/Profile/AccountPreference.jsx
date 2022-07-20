@@ -2,22 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Card from 'apollo-react/components/Card';
 import Typography from 'apollo-react/components/Typography';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import Button from 'apollo-react/components/Button';
-import TextField from 'apollo-react/components/TextField';
 import Checkbox from 'apollo-react/components/Checkbox';
 import { useSelector, useDispatch } from 'react-redux';
 import { getRoles, isRolesInfoLoading } from '../../../redux/selectors';
-import { getRolesInfo } from '../../../redux/actions/proposal-actions';
-import { logout } from '../../../redux/actions/auth-actions';
 import { onSetUserRole } from '../../../redux/actions/sso-auth-actions';
 import Dropdown from '../../common/atoms/inputs/Dropdown';
-import { LOGIN, PROFILE } from '../../../routes';
 import Loader from 'react-loader-spinner';
-import {
-  NOTIFICATION_PREFERENCE,
-  EMAIL_PREFERENCE,
-  OPPORTUNITY_PREFERENCE,
-} from './Dummy';
+import { OPPORTUNITY_PREFERENCE } from './Dummy';
 
 const useStyles = makeStyles((theme) => ({
   item: {
@@ -50,9 +41,10 @@ const AccountPreference = ({ name, email, role, roleName, setRoleName }) => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
-  const [opportunityPrefList, setOpportunityPrefList] = useState(OPPORTUNITY_PREFERENCE);
-  // const history = useHistory();
-  // const [roleName, setRoleName] = useState('');
+  const [opportunityPrefList, setOpportunityPrefList] = useState(
+    OPPORTUNITY_PREFERENCE
+  );
+
   const isRolesLoading = useSelector(isRolesInfoLoading);
   const rolesList = useSelector(getRoles);
 
@@ -62,33 +54,17 @@ const AccountPreference = ({ name, email, role, roleName, setRoleName }) => {
   };
 
   useEffect(() => {
-    // if (!rolesList) useSelector(getRoles);
     if (role) setRoleName(role);
-    // return () => {
-    //   second
-    // }
   }, []);
 
   const onRoleChange = (value) => {
-    // const { changeUserRole } = this.props;
-    // changeUserRole(value);
     dispatch(onSetUserRole(value));
     setRoleName(value);
-    // this.setState({ roleName: value });
-    // this.trackMatomoRoleChange(value);
-  };
-
-  const trackMatomoRoleChange = (role) => {
-    const { userActions, eventCategories, trackEvent } = this.props;
-    trackEvent({
-      category: eventCategories.tb,
-      action: `ToolBar: ${userActions.changed} User Role to ${role}`,
-    });
   };
 
   return (
     <div>
-      <Card interactive style={{ height: 370, margin: '1.0em' }}>
+      <Card interactive style={{ height: 320, margin: '1.0em' }}>
         <Typography
           className={`${classes.boldtext} ${classes.title}`}
           variant='title2'
@@ -124,7 +100,7 @@ const AccountPreference = ({ name, email, role, roleName, setRoleName }) => {
             Edit Profile Picture
           </Button>
         </div> */}
-        <div style={{ maxWidth: 370, margin: '0.3em 1.0em 1.0em 1.0em' }}>
+        <div style={{ margin: '0.3em 1.0em 1.0em 1.0em' }}>
           {isRolesLoading ? (
             <div className='toolbar-account-menu-option-loader'>
               <Loader type='TailSpin' color='#297DFD' height={35} width={35} />
@@ -137,12 +113,10 @@ const AccountPreference = ({ name, email, role, roleName, setRoleName }) => {
               items={rolesList ? rolesList.sort() : []}
               onClick={onRoleChange}
               value={roleName}
-              
             />
           )}
-          
         </div>
-        <div style={{ margin: '0px 0px 0px 0.4em' }}>
+        <div style={{ margin: '0.5em 0px 0px 0.4em' }}>
           <Typography
             className={`${classes.greytext} ${classes.title}`}
             variant='caption'
@@ -152,7 +126,7 @@ const AccountPreference = ({ name, email, role, roleName, setRoleName }) => {
           </Typography>
         </div>
 
-        {opportunityPrefList.map(({ label, checked, disabled },index) => {
+        {opportunityPrefList.map(({ label, checked, disabled }, index) => {
           return (
             <div
               className={`${classes.boldtext} `}
