@@ -2,7 +2,7 @@ const NOTIFICATION_PREFERENCE = [
   {
     label: 'Assigned to an opportunity',
     inApp: {
-      checked: false,
+      checked: true,
       disabled: false,
     },
     email: {
