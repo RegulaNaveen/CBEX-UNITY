@@ -20,6 +20,7 @@ import { getRoles } from '../../../redux/selectors';
 import WelcomeModal from '../modals/WelcomeModal';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import Notification from './Notification/index';
+import defaultDP from '../../../../img/default-dp.png';
 
 type State = { isCollapsed: boolean };
 class Toolbar extends Component<{}, State> {
@@ -119,7 +120,8 @@ class Toolbar extends Component<{}, State> {
             >
               {' '}
               <Avatar
-                src='https://i.pinimg.com/originals/17/f3/9c/17f39c6f7a4a5457f39dba2368f0d077.jpg'
+                // src='https://i.pinimg.com/originals/17/f3/9c/17f39c6f7a4a5457f39dba2368f0d077.jpg'
+                src='defaultDP'
                 style={{
                   marginLeft: '10px'
                 }}
