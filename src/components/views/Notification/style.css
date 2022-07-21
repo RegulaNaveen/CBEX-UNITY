@@ -26,6 +26,15 @@
   min-height: 100px;
   overflow-y: auto;
   top: 57px;
+  max-height: 60%;
+}
+.notificationBar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.notificationBar::-webkit-scrollbar-thumb {
+  background: #e1e1e1;
+  border-radius: 5px;
 }
 .notification:hover .notificationBar {
   display: block;
