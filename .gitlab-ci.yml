@@ -4,8 +4,6 @@ workflow:
 
 include:
   - local: devops/vars/global.yml
-
-include:
   - project: 'CBEx/devops'
     ref: test
     file: /gitlab_balckduck_scan.yml
