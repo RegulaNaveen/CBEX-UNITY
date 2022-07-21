@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import * as notificationActions from '../../../../redux/actions/notification-actions';
+import * as notificationActions from '../../../redux/actions/notification-actions';
 
 import './style.css';
 

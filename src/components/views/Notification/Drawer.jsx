@@ -6,11 +6,12 @@ import Cog from 'apollo-react-icons/Cog';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Typography from 'apollo-react/components/Typography';
 import classnames from 'classnames';
-import MatomoHOC from '../../../HOC/MatomoHOC';
-import { getUnreadNotifications } from '../../../../redux/selectors';
-import * as notificationActions from '../../../../redux/actions/notification-actions';
+import MatomoHOC from '../../HOC/MatomoHOC';
+import { getUnreadNotifications } from '../../../redux/selectors';
+import * as notificationActions from '../../../redux/actions/notification-actions';
 import ListItem from './ListItem';
 import DrawerOptions from './DrawerOptions';
+import NoNotification from './NoNotification';
 import './style.css';
 
 const Drawer = ({ unreadNotifications, setNotifications }) => {
@@ -73,18 +74,22 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
                 )}
               </div>
               {/* Notification List items */}
-              {unreadNotifications.map(item => {
-                return (
-                  <ListItem
-                    key={item.id}
-                    id={item.id}
-                    url={item.action_url}
-                    oppNo={item.opportunity_no}
-                    data={item.data}
-                    isSeen={item.isSeen}
-                  />
-                );
-              })}
+              {notificationCount > 0 ? (
+                unreadNotifications.map(item => {
+                  return (
+                    <ListItem
+                      key={item.id}
+                      id={item.id}
+                      url={item.action_url}
+                      oppNo={item.opportunity_no}
+                      data={item.data}
+                      isSeen={item.isSeen}
+                    />
+                  );
+                })
+              ) : (
+                <NoNotification />
+              )}
               {/* View All Notifications Button*/}
               <div>
                 <Typography variant='body2' className='view-all-notifications'>

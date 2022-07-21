@@ -19,7 +19,7 @@ import { onSetUserRole } from '../../../redux/actions/sso-auth-actions';
 import { getRoles } from '../../../redux/selectors';
 import WelcomeModal from '../modals/WelcomeModal';
 import MatomoHOC from '../../HOC/MatomoHOC';
-import Notification from './Notification/index';
+import Notification from '../Notification/index';
 import defaultDP from '../../../../img/default-dp.png';
 
 type State = { isCollapsed: boolean };

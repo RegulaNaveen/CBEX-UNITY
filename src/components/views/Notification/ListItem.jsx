@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Typography from 'apollo-react/components/Typography';
 import StatusDotSolid from 'apollo-react-icons/StatusDotSolid';
-import * as notificationActions from '../../../../redux/actions/notification-actions';
+import * as notificationActions from '../../../redux/actions/notification-actions';
 import EnvelopeButton from './EnvelopeButton';
 import './style.css';
 
