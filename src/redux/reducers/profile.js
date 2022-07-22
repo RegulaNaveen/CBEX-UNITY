@@ -53,7 +53,7 @@ function onUpdateUserPreferenceDone(state, action) {
 
   const updatedUserPreference = [...state.get('userPreference')];
 
-  for (let index = 0; index < updatedUserPreference.length; index + 1) {
+  for (let index = 0; index < updatedUserPreference.length; index++) {
     if (updatedUserPreference[index].preference_id === data.preference_id) {
       updatedUserPreference[index].preference_selected =
         data.preference_selected;
