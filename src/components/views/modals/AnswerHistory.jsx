@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Map } from 'immutable';
+import { Map } from 'immutable'; // NOSONAR
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
 import { isEmpty, unionBy } from 'lodash';
@@ -11,6 +11,7 @@ import { getOpportunityData} from '../../../redux/selectors/proposal';
 import { Close } from '../../svg';
 import { parseMomentDate } from '../../../utils/DateUtils';
 import { rearrangeDiff, getUserInitials, getUserName } from '../../../utils/utils';
+import ANSWER_TYPES from '../../../constants/answerTypes';
 type Props = {
   question: Map,
   proposalTeamAnswers: Object,
@@ -88,8 +89,8 @@ class AnswerHistory extends Component<Props> {
         : answer;
       
       const isValidatedUnityPredictedAnswer = (
-        questionType !== 'picklist' &&
-        questionType !== 'picklist-lookup' &&
+        questionType !== ANSWER_TYPES.PICKLIST &&
+        questionType !== ANSWER_TYPES.PICKLIST_LOOKUP &&
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'UnityPredictedAnswer' &&
         answer === nextAnswer
@@ -97,7 +98,7 @@ class AnswerHistory extends Component<Props> {
 
       // picklist answers are array so they require different check than other question types
       const isPicklistValidUnityPredAns = (
-        (questionType === 'picklist' || questionType === 'picklist-lookup') &&
+        (questionType === ANSWER_TYPES.PICKLIST || questionType === ANSWER_TYPES.PICKLIST_LOOKUP) &&
         answers &&
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'UnityPredictedAnswer' &&
@@ -117,7 +118,7 @@ class AnswerHistory extends Component<Props> {
         if (isPicklistValidUnityPredAns) {
           return <span key={uuidv4()}><b>Validated Unity Predicted Answer</b></span>;
         }
-        if (questionType !== 'picklist' && questionType !== 'picklist-lookup') {
+        if (questionType !== ANSWER_TYPES.PICKLIST && questionType !== ANSWER_TYPES.PICKLIST_LOOKUP) {
           const renderWord = (word, status) => (
             <span className={status} key={uuidv4()}>
               {word}{' '}

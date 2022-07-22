@@ -2,7 +2,7 @@
 // eslint-disable-next-line react/destructuring-assignment
 import React, { Component } from 'react';
 import { withRouter, Match } from 'react-router-dom';
-import { List, Map } from 'immutable';
+import { List, Map } from 'immutable'; // NOSONAR
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import Button from 'apollo-react/components/Button';
@@ -57,6 +57,7 @@ import chevronRight from '../../../../img/chevron-right.svg';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
 import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions';
 import WysiwygNotepad from '../../views/WysiwygNotepad';
+import ANSWER_TYPES from '../../../constants/answerTypes';
 
 type Props = {
   match: Match,
@@ -318,7 +319,7 @@ class Questions extends Component<Props, State> {
     const sfField = question.get('sfField', '');
 
     if (
-      answerConfigType === 'picklist' &&
+      answerConfigType === ANSWER_TYPES.PICKLIST &&
       (sfObject === 'Bid_History__c' ||
         sfObject === 'Apttus__APTS_Agreement__c') &&
       sfField === 'Targeted_Countries__c'

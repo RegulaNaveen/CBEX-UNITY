@@ -156,13 +156,7 @@ function getUserName(userName) {
     return 'Unity Predicted Answer';
   return userName;
 }
-function handleLocationChange (event){
-  if(localStorage.getItem('unsaved-change') === 'true'){
-    let response = confirm('You have some unsaved changes do you still want to redirect?');
-    if(!response)
-      event.preventDefault();
-  }
-};
+
 function getProposalIdlist(data=[]){
     const sortedData = data.sort((a,b)=>b.proposal.proposalDate - a.proposal.proposalDate);
     return sortedData.map((d)=>{
@@ -186,7 +180,6 @@ export {
   rearrangeDiff,
   getUserInitials,
   getUserName,
-  handleLocationChange,
   getProposalIdlist,
   checkNonEditableFields
 };

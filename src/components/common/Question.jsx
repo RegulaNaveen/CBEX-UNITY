@@ -1,7 +1,7 @@
 // @flow
 /* eslint-disable no-plusplus */
 import React, { Component } from 'react';
-import { Map, List } from 'immutable';
+import { Map, List } from 'immutable'; // NOSONAR
 import { connect } from 'react-redux';
 import { isObject, isEqual, isEmpty, xor } from 'lodash';
 import IconButton from 'apollo-react/components/IconButton';
@@ -12,7 +12,6 @@ import Grid from 'apollo-react/components/Grid';
 import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
 import StatusCheck from 'apollo-react-icons/StatusCheck';
-
 import { Checkmark, Edit } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
 import TextArea from './atoms/inputs/TextArea';
@@ -42,6 +41,7 @@ import Autocomplete from './atoms/inputs/AutoComplete';
 import AutocompleteText from './atoms/inputs/AutoCompleteText';
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
 import SFAnswerValidationWrapper from './SFAnswerValidationWrapper';
+import ANSWER_TYPES from '../../constants/answerTypes';
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
 // const Spanexp = /[^<]\/span>/g;
@@ -176,7 +176,7 @@ export class TaskRow extends Component<Props, State> {
     const answerType = answerConfiguration.get('type');
 
     // picklist value should not be converted to string while saving
-    if (answerType === 'picklist' || answerType === 'picklist-lookup') {
+    if (answerType === ANSWER_TYPES.PICKLIST || answerType === ANSWER_TYPES.PICKLIST_LOOKUP) {
       setProposalAnswer(
         proposalId,
         questionId,
@@ -374,7 +374,7 @@ export class TaskRow extends Component<Props, State> {
     }
 
     if (
-      (type === 'picklist' || type === 'picklist-lookup') &&
+      (type === ANSWER_TYPES.PICKLIST || type === ANSWER_TYPES.PICKLIST_LOOKUP) &&
       (sfObject === 'Bid_History__c' ||
         sfObject === 'Apttus__APTS_Agreement__c') &&
       sfField === 'Targeted_Countries__c'
@@ -473,7 +473,7 @@ export class TaskRow extends Component<Props, State> {
             />
           </SFAnswerValidationWrapper>
         );
-      case 'picklist':
+      case ANSWER_TYPES.PICKLIST:
         return (
           <SFAnswerValidationWrapper
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
@@ -489,7 +489,7 @@ export class TaskRow extends Component<Props, State> {
             />
           </SFAnswerValidationWrapper>
         );
-      case 'picklist-lookup':
+      case ANSWER_TYPES.PICKLIST_LOOKUP:
         return (
           <SFAnswerValidationWrapper
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}

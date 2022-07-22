@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Map } from 'immutable';
+import { Map } from 'immutable'; // NOSONAR
 import Loader from 'apollo-react/components/Loader';
 import AddNote from './AddNote';
 import ReadEditNote from './ReadEditNote';

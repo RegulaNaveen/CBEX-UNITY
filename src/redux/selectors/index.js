@@ -1,5 +1,5 @@
 // @flow
-import { Map } from 'immutable';
+import { Map } from 'immutable'; // NOSONAR
 import * as proposalsSelectors from './proposals';
 import * as proposalSelectors from './proposal';
 import * as authSelectors from './auth';

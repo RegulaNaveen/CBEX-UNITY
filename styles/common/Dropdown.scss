@@ -19,7 +19,7 @@
 
 .dd-input-wrapper {
   display: flex;
-  width: 100%;
+  width: 80%;
 }
 
 .dd-wrapper {
@@ -36,7 +36,7 @@
     right: 0px;
     bottom: 0px;
     transform: translateY(100%);
-    max-height: 200px;
+    max-height: 100px;
     overflow-y: scroll;
     width: 100%;
     background-color: $white;
@@ -52,7 +52,6 @@
     .dd-list-item {
       padding: 8px 16px;
       border-bottom: 1px solid $neutral3;
-
       &:hover {
         background-color: $neptune-hover;
       }
@@ -108,7 +107,6 @@
       font-size: 16px;
       letter-spacing: 0;
       line-height: 24px;
-      pointer-events: none;
     }
 
     .dd-header-selected {

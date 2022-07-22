@@ -1,5 +1,5 @@
 // @flow
-import { Map } from 'immutable';
+import { Map } from 'immutable'; // NOSONAR
 import { createSelector } from 'reselect';
 
 export const getUserAuthStatus = (auth: Map): boolean =>

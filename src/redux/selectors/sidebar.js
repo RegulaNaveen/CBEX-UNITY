@@ -1,5 +1,5 @@
 // @flow
-import { Map } from 'immutable';
+import { Map } from 'immutable'; // NOSONAR
 
 const getSelectedSectionSelector = (sidebar: Map): string =>
   sidebar.get('selectedSection');

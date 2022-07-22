@@ -1,5 +1,5 @@
 // @flow
-import { Map } from 'immutable';
+import { Map } from 'immutable'; // NOSONAR
 import { isEmpty } from 'lodash';
 
 export const getProposals = (proposals: Map): Array<Object> => {

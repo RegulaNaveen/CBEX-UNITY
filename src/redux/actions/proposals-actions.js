@@ -197,7 +197,7 @@ export const onFilteringProposals = (
       });
 
       let data = { proposals: [] };
-      if (tabIndex === 0) {
+      if (Number(tabIndex) === 0) {
         const userEmail = localStorage.getItem('userEmail') || '';
         const response = await onGetByStatus(
           filterPayload,
@@ -205,7 +205,7 @@ export const onFilteringProposals = (
           userEmail
         );
         data = response.data;
-      } else if (tabIndex === 1) {
+      } else if (Number(tabIndex) === 1) {
         const userEmail = localStorage.getItem('userEmail') || '';
         const response = await onGetByStatus(
           filterPayload,
