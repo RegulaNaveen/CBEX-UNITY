@@ -38,8 +38,8 @@ const useStyles = makeStyles(() => ({
   },
   footer: {
     margin: '0 !important',
-    padding: '0 24px 0 24px !important',
-    height: 0
+    padding: '0 24px 0px 24px !important',
+    height: '0'
   }
 }));
 

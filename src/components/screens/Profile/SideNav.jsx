@@ -31,9 +31,9 @@ const useStyles = makeStyles(theme => ({
   },
   container: {
     backgroundColor: '#fff',
-    height: '100vh',
+    // height: '95vh',
     marginTop: theme.spacing(0),
-    padding: '0 !important'
+    padding: '0 0 1em 0 !important'
   },
   item: {
     paddingLeft: '0 !important',
