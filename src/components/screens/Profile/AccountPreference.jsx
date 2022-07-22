@@ -3,8 +3,6 @@ import Loader from 'react-loader-spinner';
 import Card from 'apollo-react/components/Card';
 import PropTypes from 'prop-types';
 import Typography from 'apollo-react/components/Typography';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import makeStyles from '@material-ui/core/styles/makeStyles';
 import Checkbox from 'apollo-react/components/Checkbox';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -13,36 +11,7 @@ import { onSetUserRole } from '../../../redux/actions/sso-auth-actions';
 import Dropdown from '../../common/atoms/inputs/Dropdown';
 import { OPPORTUNITY_PREFERENCE } from './Dummy';
 
-const useStyles = makeStyles(() => ({
-  item: {
-    // padding: '10px',
-  },
-  blacktext: {
-    color: '#000',
-    fontweight: '530',
-    fontFamily: 'ProximaNova-Regular'
-  },
-
-  greytext: {
-    color: '#7f7f7f',
-    fontweight: '530',
-    fontFamily: 'ProximaNova-Regular'
-  },
-  boldtext: {
-    fontWeight: '600',
-    color: '#000',
-    fontFamily: 'ProximaNova-Regular'
-  },
-  title: {
-    padding: '10px'
-  },
-  button: {
-    margin: '10px'
-  }
-}));
 const AccountPreference = ({ email, role, roleName, setRoleName }) => {
-  const classes = useStyles();
-
   const dispatch = useDispatch();
   const [opportunityPrefList, setOpportunityPrefList] = useState(
     OPPORTUNITY_PREFERENCE
@@ -67,33 +36,21 @@ const AccountPreference = ({ email, role, roleName, setRoleName }) => {
 
   return (
     <div>
-      <Card interactive style={{ marginTop: '0.6em', marginLeft: '0.5em' }}>
-        <Typography
-          className={`${classes.boldtext} ${classes.title}`}
-          variant="title2"
-          gutterBottom
-          style={{ margin: '10px 0px 0px 0.4em' }}
-        >
+      <Card interactive className="card-wrapper">
+        <Typography className="bold-text" variant="title2" gutterBottom>
           Account Preference
         </Typography>
-        <Typography
-          className={`${classes.greytext} ${classes.title}`}
-          variant="caption"
-          gutterBottom
-          style={{ margin: '0px 0px 0px 0.4em' }}
-        >
-          Email
-        </Typography>
+        <div className="top-space">
+          <Typography className="grey-text" variant="caption" gutterBottom>
+            Email
+          </Typography>
+        </div>
         <div>
-          <Typography
-            className={`${classes.boldtext} ${classes.title}`}
-            variant="caption"
-            gutterBottom
-            style={{ margin: '0px 0px 0px 0.4em' }}
-          >
+          <Typography className="bold-text" variant="caption" gutterBottom>
             {email}
           </Typography>
         </div>
+
         {/* <div style={{ margin: '0px 0px 0px 0.3em' }} >
           <Button
             className={`${classes.button}`}
@@ -103,7 +60,8 @@ const AccountPreference = ({ email, role, roleName, setRoleName }) => {
             Edit Profile Picture
           </Button>
         </div> */}
-        <div style={{ margin: '0.3em 1.0em 1.0em 1.0em' }}>
+
+        <div className="top-space">
           {isRolesLoading ? (
             <div className="toolbar-account-menu-option-loader">
               <Loader type="TailSpin" color="#297DFD" height={35} width={35} />
@@ -119,7 +77,7 @@ const AccountPreference = ({ email, role, roleName, setRoleName }) => {
                 value={roleName}
               />
               <Typography
-                className={classes.greytext}
+                className="grey-text"
                 variant="caption"
                 gutterBottom
                 style={{ fontSize: '12px' }}
@@ -129,26 +87,19 @@ const AccountPreference = ({ email, role, roleName, setRoleName }) => {
             </>
           )}
         </div>
-        <div style={{ margin: '0.5em 0px 0px 0.4em' }}>
-          <Typography
-            className={`${classes.greytext} ${classes.title}`}
-            variant="caption"
-            gutterBottom
-          >
+        <div className="top-space">
+          <Typography className="grey-text" variant="caption" gutterBottom>
             Opportunity Preference
           </Typography>
         </div>
 
         {opportunityPrefList.map(({ label, checked, disabled }, index) => {
           return (
-            <div
-              className={`${classes.boldtext} `}
-              style={{ margin: '0px 10px 0px 1.1em' }}
-            >
+            <div className="bold-text">
               <Checkbox
                 label={
                   <Typography
-                    className={`${classes.boldtext} `}
+                    className="bold-text"
                     variant="caption"
                     gutterBottom
                   >

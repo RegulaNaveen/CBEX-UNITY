@@ -42,7 +42,14 @@ const Profile = () => {
       <Toolbar selected="dashboard" />
       <Grid container disablePadding style={styles}>
         <Grid container item xs={3} sm={4} md={3} lg={3}>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={12}
+            lg={12}
+            style={{ marginRight: '0.5em' }}
+          >
             <SideNav
               name={name}
               email={email}
@@ -53,7 +60,16 @@ const Profile = () => {
             />
           </Grid>
         </Grid>
-        <Grid container item sm={8} xs={9} md={9} lg={9} spacing={2}>
+        <Grid
+          container
+          item
+          sm={8}
+          xs={9}
+          md={9}
+          lg={9}
+          style={{ paddingTop: '1.2em' }}
+          spacing={2}
+        >
           <Grid item md={6} sm={12} xs={12} className={classes.item}>
             <AccountPreference
               name={name}

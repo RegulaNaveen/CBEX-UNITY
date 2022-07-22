@@ -1,33 +1,10 @@
 import React, { useState } from 'react';
 import Card from 'apollo-react/components/Card';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import makeStyles from '@material-ui/core/styles/makeStyles';
 import Typography from 'apollo-react/components/Typography';
 import Checkbox from 'apollo-react/components/Checkbox';
 import { NOTIFICATION_PREFERENCE, EMAIL_PREFERENCE } from './Dummy';
 
-const useStyles = makeStyles(() => ({
-  item: {
-    // padding: '10px',
-  },
-
-  greytext: {
-    color: '#7f7f7f',
-    fontweight: '530',
-    fontFamily: 'ProximaNova-Regular'
-  },
-  boldtext: {
-    fontWeight: '600',
-    color: '#000',
-    fontFamily: 'ProximaNova-Regular'
-  },
-  title: {
-    padding: '15px'
-  }
-}));
-
 const NotificationPreference = () => {
-  const classes = useStyles();
   const [notificationPrefList, setNotificationPrefList] = useState(
     NOTIFICATION_PREFERENCE
   );
@@ -45,50 +22,30 @@ const NotificationPreference = () => {
 
   return (
     <div>
-      <Card interactive style={{ marginTop: '0.6em', marginLeft: '0.5em' }}>
-        <Typography
-          className={`${classes.boldtext} ${classes.title}`}
-          variant="title2"
-          gutterBottom
-          style={{ margin: '5px 0px 0px 0' }}
-        >
+      <Card interactive className="card-wrapper">
+        <Typography className="bold-text" variant="title2" gutterBottom>
           Notification Preference
         </Typography>
         <tr
           style={{
             display: 'flex',
             justifyContent: 'space-between',
-            alignSelf: 'flex-start',
-            // flexGrow: '1',
-            marginRight: '0.5rem',
-            paddingBottom: '0.5rem',
+            marginTop: '1em',
             textAlign: 'left'
           }}
         >
-          <th style={{ flexGrow: '2', alignSelf: 'flex-start' }}>
-            <Typography
-              className={`${classes.greytext} ${classes.title}`}
-              variant="caption"
-              gutterBottom
-            >
+          <th style={{ flexGrow: '3', alignSelf: 'flex-start' }}>
+            <Typography className="grey-text" variant="caption" gutterBottom>
               Notification Preference
             </Typography>
           </th>
-          <th style={{ flexGrow: '0', marginRight: '1.5em' }}>
-            <Typography
-              className={`${classes.greytext} ${classes.title}`}
-              variant="caption"
-              gutterBottom
-            >
+          <th style={{ flexGrow: '0', marginRight: '2.9em' }}>
+            <Typography className="grey-text" variant="caption" gutterBottom>
               In-App
             </Typography>
           </th>
-          <th style={{ flexGrow: '0' }}>
-            <Typography
-              className={`${classes.greytext} ${classes.title}`}
-              variant="caption"
-              gutterBottom
-            >
+          <th style={{ flexGrow: '0', marginRight: '1.5em' }}>
+            <Typography className="grey-text" variant="caption" gutterBottom>
               Email
             </Typography>
           </th>
@@ -105,7 +62,7 @@ const NotificationPreference = () => {
               >
                 <td style={{ flexGrow: '3' }}>
                   <Typography
-                    className={`${classes.greytext} ${classes.title}`}
+                    className="grey-text"
                     variant="caption"
                     gutterBottom
                   >
@@ -146,26 +103,20 @@ const NotificationPreference = () => {
             );
           })}
         </table>
-        <div style={{ margin: '.5em 0 0 0' }}>
-          <Typography
-            className={`${classes.greytext} ${classes.title}`}
-            variant="caption"
-            gutterBottom
-          >
+
+        <div className="top-space">
+          <Typography className="grey-text" variant="caption" gutterBottom>
             Email Preference
           </Typography>
         </div>
 
         {emailPrefList.map(({ label, checked, disabled }, index) => {
           return (
-            <div
-              className={`${classes.boldtext} `}
-              style={{ margin: '0px 10px 0px 1.0em' }}
-            >
+            <div className="bold-text">
               <Checkbox
                 label={
                   <Typography
-                    className={`${classes.boldtext} `}
+                    className="bold-text"
                     variant="caption"
                     gutterBottom
                   >
