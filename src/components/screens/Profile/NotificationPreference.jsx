@@ -1,191 +1,222 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Card from 'apollo-react/components/Card';
-import makeStyles from '@material-ui/core/styles/makeStyles';
 import Typography from 'apollo-react/components/Typography';
 import Checkbox from 'apollo-react/components/Checkbox';
-import { NOTIFICATION_PREFERENCE, EMAIL_PREFERENCE } from './Dummy';
+import PropTypes from 'prop-types';
 
-const useStyles = makeStyles(theme => ({
-  item: {
-    // padding: '10px',
-  },
-
-  greytext: {
-    color: '#7f7f7f',
-    fontweight: '530',
-    fontFamily: 'ProximaNova-Regular'
-  },
-  boldtext: {
-    fontWeight: '600',
-    color: '#000',
-    fontFamily: 'ProximaNova-Regular'
-  },
-  title: {
-    padding: '15px'
-  }
-}));
-
-const NotificationPreference = () => {
-  const classes = useStyles();
-  const [notificationPrefList, setNotificationPrefList] = useState(
-    NOTIFICATION_PREFERENCE
-  );
-  const [emailPrefList, setEmailPrefList] = useState(EMAIL_PREFERENCE);
-
-  const handleNotificationPreferenceChange = (e, checked, index, type) => {
-    NOTIFICATION_PREFERENCE[index][`${type}`].checked = checked;
-    setNotificationPrefList([...NOTIFICATION_PREFERENCE]);
-  };
-
-  const handleEmailPreferenceChange = (e, checked, index) => {
-    EMAIL_PREFERENCE[index].checked = checked;
-    setEmailPrefList([...EMAIL_PREFERENCE]);
-  };
-
+const NotificationPreference = ({
+  userPreference,
+  handleUserPreferenceChange
+}) => {
   return (
     <div>
-      <Card
-        interactive
-        style={{ height: 490, marginTop: '0.6em', marginLeft: '0.5em' }}
-      >
-        <Typography
-          className={`${classes.boldtext} ${classes.title}`}
-          variant="title2"
-          gutterBottom
-          style={{ margin: '5px 0px 0px 0' }}
-        >
+      <Card interactive className="card-wrapper">
+        <Typography className="bold-text" variant="title2" gutterBottom>
           Notification Preference
         </Typography>
         <tr
           style={{
             display: 'flex',
             justifyContent: 'space-between',
-            alignSelf: 'flex-start',
-            // flexGrow: '1',
-            marginRight: '0.5rem',
-            paddingBottom: '0.5rem',
+            marginTop: '1em',
             textAlign: 'left'
           }}
         >
-          <th style={{ flexGrow: '2', alignSelf: 'flex-start' }}>
-            <Typography
-              className={`${classes.greytext} ${classes.title}`}
-              variant="caption"
-              gutterBottom
-            >
+          <th style={{ flexGrow: '3', alignSelf: 'flex-start' }}>
+            <Typography className="grey-text" variant="caption" gutterBottom>
               Notification Preference
             </Typography>
           </th>
-          <th style={{ flexGrow: '0', marginRight: '1.5em' }}>
-            <Typography
-              className={`${classes.greytext} ${classes.title}`}
-              variant="caption"
-              gutterBottom
-            >
+          <th style={{ flexGrow: '0', marginRight: '2.9em' }}>
+            <Typography className="grey-text" variant="caption" gutterBottom>
               In-App
             </Typography>
           </th>
-          <th style={{ flexGrow: '0' }}>
-            <Typography
-              className={`${classes.greytext} ${classes.title}`}
-              variant="caption"
-              gutterBottom
-            >
+          <th style={{ flexGrow: '0', marginRight: '1.5em' }}>
+            <Typography className="grey-text" variant="caption" gutterBottom>
               Email
             </Typography>
           </th>
         </tr>
 
         <table style={{ height: 250, overflowY: 'auto', display: 'block' }}>
-          {notificationPrefList?.map(({ label, inApp, email }, index) => {
-            return (
-              <tr
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between'
-                }}
-              >
-                <td style={{ flexGrow: '3' }}>
-                  <Typography
-                    className={`${classes.greytext} ${classes.title}`}
-                    variant="caption"
-                    gutterBottom
+          {!userPreference?.length && (
+            <div
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                display: 'flex',
+                height: '100%'
+              }}
+            >
+              <Typography className="grey-text" variant="caption" gutterBottom>
+                Not found!
+              </Typography>
+            </div>
+          )}
+          {userPreference?.map(
+            (
+              {
+                preference_id,
+                title,
+                preference_type,
+                default_type,
+                mandatory,
+                preference_selected
+              },
+              index
+            ) => {
+              return (
+                // eslint-disable-next-line camelcase
+                preference_type === 'NOTIFICATION' && (
+                  <tr
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between'
+                    }}
+                    key={preference_id}
                   >
-                    {label}
-                  </Typography>
-                </td>
-                <td style={{ flexGrow: '0', marginRight: '2em' }}>
-                  <Checkbox
-                    disabled={inApp.disabled}
-                    checked={inApp.checked}
-                    onChange={(e, checked) =>
-                      handleNotificationPreferenceChange(
-                        e,
-                        checked,
-                        index,
-                        'inApp'
-                      )
-                    }
-                    size="small"
-                  />
-                </td>
-                <td style={{ flexGrow: '0' }}>
-                  <Checkbox
-                    disabled={email.disabled}
-                    checked={email.checked}
-                    onChange={(e, checked) =>
-                      handleNotificationPreferenceChange(
-                        e,
-                        checked,
-                        index,
-                        'email'
-                      )
-                    }
-                    size="small"
-                  />
-                </td>
-              </tr>
-            );
-          })}
+                    <td style={{ flexGrow: '3' }}>
+                      <Typography
+                        className="grey-text"
+                        variant="caption"
+                        gutterBottom
+                      >
+                        {title}
+                      </Typography>
+                    </td>
+                    <td style={{ flexGrow: '0', marginRight: '2em' }}>
+                      <Checkbox
+                        disabled={
+                          !!(mandatory === 'BOTH' || mandatory === 'IN_APP')
+                        }
+                        checked={
+                          preference_selected
+                            ? !!(
+                                preference_selected == 'BOTH' ||
+                                preference_selected == 'IN-APP'
+                              )
+                            : !!(
+                                default_type == 'BOTH' ||
+                                default_type == 'IN-APP'
+                              )
+                        }
+                        onChange={(e, checked) =>
+                          handleUserPreferenceChange(
+                            e,
+                            checked,
+                            preference_id,
+                            'IN-APP'
+                          )
+                        }
+                        size="small"
+                      />
+                    </td>
+                    <td style={{ flexGrow: '0' }}>
+                      <Checkbox
+                        // disabled={email.disabled}
+                        // checked={email.checked}
+                        disabled={
+                          !!(mandatory === 'BOTH' || mandatory === 'EMAIL')
+                        }
+                        checked={
+                          preference_selected
+                            ? !!(
+                                preference_selected == 'BOTH' ||
+                                preference_selected == 'EMAIL'
+                              )
+                            : !!(
+                                default_type == 'BOTH' ||
+                                default_type == 'EMAIL'
+                              )
+                        }
+                        onChange={(e, checked) =>
+                          handleUserPreferenceChange(
+                            e,
+                            checked,
+                            preference_id,
+                            'EMAIL'
+                          )
+                        }
+                        size="small"
+                      />
+                    </td>
+                  </tr>
+                )
+              );
+            }
+          )}
         </table>
-        <div style={{ margin: '.5em 0 0 0' }}>
-          <Typography
-            className={`${classes.greytext} ${classes.title}`}
-            variant="caption"
-            gutterBottom
-          >
+
+        <div className="top-space">
+          <Typography className="grey-text" variant="caption" gutterBottom>
             Email Preference
           </Typography>
         </div>
 
-        {emailPrefList.map(({ label, checked, disabled }, index) => {
-          return (
-            <div
-              className={`${classes.boldtext} `}
-              style={{ margin: '0px 10px 0px 1.0em' }}
-            >
-              <Checkbox
-                label={
-                  <Typography
-                    className={`${classes.boldtext} `}
-                    variant="caption"
-                    gutterBottom
-                  >
-                    {label}
-                  </Typography>
-                }
-                checked={checked}
-                onChange={(e, checked) =>
-                  handleEmailPreferenceChange(e, checked, index)
-                }
-                disabled={disabled}
-              />
-            </div>
-          );
-        })}
+        {!userPreference?.length && (
+          <div>
+            <Typography className="grey-text" variant="caption" gutterBottom>
+              Not found!
+            </Typography>
+          </div>
+        )}
+
+        {userPreference?.map(
+          ({
+            preference_id,
+            title,
+            preference_type,
+            default_type,
+            mandatory,
+            preference_selected
+          }) => {
+            return (
+              preference_type === 'EMAIL' && (
+                <div className="bold-text" key={preference_id}>
+                  <Checkbox
+                    label={
+                      <Typography
+                        className="bold-text"
+                        variant="caption"
+                        gutterBottom
+                      >
+                        {title}
+                      </Typography>
+                    }
+                    disabled={!!(mandatory === 'TRUE')}
+                    checked={
+                      preference_selected
+                        ? !!(preference_selected == 'CHECKED')
+                        : !!(default_type == 'CHECKED')
+                    }
+                    onChange={(e, checked) =>
+                      handleUserPreferenceChange(
+                        e,
+                        checked,
+                        preference_id,
+                        'EMAIL_PREFERENCE'
+                      )
+                    }
+                  />
+                </div>
+              )
+            );
+          }
+        )}
       </Card>
     </div>
   );
+};
+
+NotificationPreference.defaultProps = {
+  userPreference: [],
+  handleUserPreferenceChange: () => {}
+};
+
+NotificationPreference.propTypes = {
+  userPreference: PropTypes.array,
+  handleUserPreferenceChange: PropTypes.func
 };
 
 export default NotificationPreference;

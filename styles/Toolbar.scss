@@ -83,7 +83,60 @@
     }
 
   }
+  .toolbar-account-notification {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
 
+    .toolbar-account-wrapper {
+      display: flex;
+      width: 57px;
+      height: $toolbarHight;
+
+      &:hover { 
+        background-color: rgba(255,255,255,0.16);
+      }
+    
+      .toolbar-account-search {
+        height: 20px;
+        width: 20px;
+        padding: 18px;
+      }
+    
+      .toolbar-account-notifications {
+        height: 20px;
+        width: 20px;
+        padding: 18px;
+      }
+
+      .toolbar-account-info {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        outline: none;
+        cursor: pointer;
+
+        &-title {
+          color: $white;
+          font-family: $proximaNova;
+          font-size: 16px;
+          letter-spacing: 0;
+          line-height: 24px;
+        }
+
+        &-icon {
+          margin-left: 8px;
+          height: 18px;
+          width: 18px;
+        }
+      }
+
+      .expanded {
+        background-color: #593D7E;
+      }
+    }
+  }
   .toolbar-account-spacer {
     flex: 1;
     display: flex;
@@ -91,7 +144,7 @@
 
     .toolbar-account-wrapper {
       display: flex;
-      width: 146px;
+      width: 57px;
       height: $toolbarHight;
 
       &:hover { 
@@ -139,3 +192,7 @@
     }
   }
 }
+.notification.expanded 
+ {
+        background-color: #593D7E;
+      }

@@ -5,8 +5,10 @@ import * as proposalSelectors from './proposal';
 import * as authSelectors from './auth';
 import * as siderbarSelectors from './sidebar';
 import * as ssoAuthSelectors from './sso-auth';
+import * as notificationSelectors from './notification';
 
 export * from './notepad';
+export * from './profile';
 
 // SSO Auth selectors
 export const getUserAuthStatus = (state: Object): boolean =>
@@ -138,7 +140,7 @@ export const getAllBidsForIndex = (state: Object): string =>
   state.proposal.get('boxBids');
 export const getAdditionalLinks = (state: Object): string =>
   state.proposal.get('boxAdditionalLink');
-  
+
 export const getValidatedProposalData = (state: Object): Object =>
   proposalSelectors.getValidatedProposalData(state.proposal);
 
@@ -166,7 +168,8 @@ export const getEditQuestionData = state =>
   proposalSelectors.getEditQuestionData(state);
 
 export const getSelectedBid = state => proposalSelectors.getSelectedBid(state);
-export const getStatusOfNewBid = state => proposalSelectors.getStatusOfNewBid(state);
+export const getStatusOfNewBid = state =>
+  proposalSelectors.getStatusOfNewBid(state);
 
 // Tabbar Selectors
 export const getProposals = (state: Object): Array<Object> =>
@@ -198,5 +201,12 @@ export const getnoneditableField = (state: Map): Object =>
   proposalsSelectors.getnoneditableField(state.proposals);
 
 export const getLookUpOptionsSelector = (state: Map): Object =>
-  proposalSelectors.getLookUpOptionsSelector(state.proposal)
-  
+  proposalSelectors.getLookUpOptionsSelector(state.proposal);
+
+// Notification selectors
+export const getAllNotifications = state =>
+  notificationSelectors.getAllNotifications(state.notification);
+export const getNotificationLoading = state =>
+  notificationSelectors.getNotificationLoading(state.notification);
+export const getUnreadNotifications = state =>
+  notificationSelectors.getUnreadNotifications(state.notification);
