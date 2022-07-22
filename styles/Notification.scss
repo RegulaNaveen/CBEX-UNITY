@@ -113,6 +113,15 @@
   background: $neptune-hover;
 }
 
+.notification-drawer-option-container {
+  position: absolute;
+  width: 150px;
+  border: 0.5px solid #8080803d;
+  max-height: 100px;
+  overflow-y: auto;
+  background-color: $white;
+  right: 0px;
+}
 .notification-option-item {
   height: 30px;
   cursor: pointer;

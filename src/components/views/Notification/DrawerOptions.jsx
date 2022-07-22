@@ -6,18 +6,7 @@ import * as notificationActions from '../../../redux/actions/notification-action
 const DrawerOptions = ({ closeIsDrawerOptions, setSeenBatch }) => {
   return (
     <ClickAwayListener onClickAway={closeIsDrawerOptions}>
-      <div
-        tabIndex={-1}
-        style={{
-          position: 'absolute',
-          width: '150px',
-          border: '0.5px solid #8080803d',
-          maxHeight: '100px',
-          overflowY: 'auto',
-          backgroundColor: 'white',
-          right: '0px'
-        }}
-      >
+      <div tabIndex={-1} className='notification-drawer-option-container'>
         <div className='notification-option-item'>
           <p>View all</p>
         </div>
