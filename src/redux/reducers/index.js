@@ -6,6 +6,7 @@ import sidebarReducer from './sidebar';
 import ssoAuthReducer from './sso-auth';
 import NotepadReducer from './notepad';
 import profileReducer from './profile';
+import notificationReducer from './notification';
 
 const rootReducer = combineReducers({
   // auth: authReducer,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
   proposal: proposalReducer,
   sidebar: sidebarReducer,
   notepad: NotepadReducer,
-  profile: profileReducer
+  profile: profileReducer,
+  notification: notificationReducer
 });
 
 export default rootReducer;

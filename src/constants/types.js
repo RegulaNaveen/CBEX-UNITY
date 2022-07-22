@@ -124,6 +124,15 @@ const PROFILE = {
   ERROR_FETCHING_USER_PREFERENCE: 'error_fetching_user_preference',
   ERROR_UPDATING_USER_PREFERENCE: 'error_updating_user_preference'
 };
+const NOTIFICATION = {
+  GET_NOTIFICATIONS: 'get_notifications',
+  GET_FILTERED_NOTIFICATIONS: 'get_filtered_notifications',
+  SET_NOTIFICATIONS: 'set_notifications',
+  UPDATE_SEEN: 'update_seen',
+  UPDATE_SEEN_BATCH: 'update_seen_batch',
+  SET_IS_LOADING: 'set_is_loading',
+  GET_IS_LOADING: 'get_is_loading'
+};
 
 const UBUILD_ADMIN = 'ubuildAdmin';
 export {
@@ -134,5 +143,6 @@ export {
   SIDEBAR,
   NOTEPAD,
   UBUILD_ADMIN,
-  PROFILE
+  PROFILE,
+  NOTIFICATION
 };

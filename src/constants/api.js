@@ -166,6 +166,7 @@ const PROPOSAL = {
 
 const NOTEPAD_API_URL = `${PROPOSAL_API_ENDPOINT}/api/notes`;
 const PROFILE_API_URL = `${PROPOSAL_API_ENDPOINT}/api/user/preference`;
+const NOTIFICATION_API_URL = `${PROPOSAL_API_ENDPOINT}/api/notification`;
 
 const NOTEPAD = {
   NOTEPAD_API_URL
@@ -173,6 +174,9 @@ const NOTEPAD = {
 
 const PROFILE = {
   PROFILE_API_URL
+};
+const NOTIFICATION = {
+  NOTIFICATION_API_URL
 };
 
 export {
@@ -183,5 +187,6 @@ export {
   UBUILD_ARTIFACT,
   SF_HOST_URL,
   SOCKET_URL,
-  PROFILE
+  PROFILE,
+  NOTIFICATION
 };

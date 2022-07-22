@@ -5,6 +5,7 @@ import * as proposalSelectors from './proposal';
 import * as authSelectors from './auth';
 import * as siderbarSelectors from './sidebar';
 import * as ssoAuthSelectors from './sso-auth';
+import * as notificationSelectors from './notification';
 
 export * from './notepad';
 export * from './profile';
@@ -201,3 +202,11 @@ export const getnoneditableField = (state: Map): Object =>
 
 export const getLookUpOptionsSelector = (state: Map): Object =>
   proposalSelectors.getLookUpOptionsSelector(state.proposal);
+
+// Notification selectors
+export const getAllNotifications = state =>
+  notificationSelectors.getAllNotifications(state.notification);
+export const getNotificationLoading = state =>
+  notificationSelectors.getNotificationLoading(state.notification);
+export const getUnreadNotifications = state =>
+  notificationSelectors.getUnreadNotifications(state.notification);
