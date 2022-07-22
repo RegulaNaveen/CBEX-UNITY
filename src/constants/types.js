@@ -116,6 +116,14 @@ const NOTEPAD = {
   CHANGE_MODE: 'notepad_change_mode'
 };
 
+const PROFILE = {
+  FETCH_USER_PREFERENCE: 'fetch_user_preference',
+  FETCH_USER_PREFERENCE_DONE: 'fetch_user_preference_done',
+  UPDATE_USER_PREFERENCE: 'update_user_preference',
+  UPDATE_USER_PREFERENCE_DONE: 'update_user_preference_done',
+  ERROR_FETCHING_USER_PREFERENCE: 'error_fetching_user_preference',
+  ERROR_UPDATING_USER_PREFERENCE: 'error_updating_user_preference'
+};
 const NOTIFICATION = {
   GET_NOTIFICATIONS: 'get_notifications',
   GET_FILTERED_NOTIFICATIONS: 'get_filtered_notifications',
@@ -123,7 +131,7 @@ const NOTIFICATION = {
   UPDATE_SEEN: 'update_seen',
   UPDATE_SEEN_BATCH: 'update_seen_batch',
   SET_IS_LOADING: 'set_is_loading',
-  GET_IS_LOADING: 'get_is_loading',
+  GET_IS_LOADING: 'get_is_loading'
 };
 
 const UBUILD_ADMIN = 'ubuildAdmin';
@@ -135,5 +143,6 @@ export {
   SIDEBAR,
   NOTEPAD,
   UBUILD_ADMIN,
+  PROFILE,
   NOTIFICATION
 };
