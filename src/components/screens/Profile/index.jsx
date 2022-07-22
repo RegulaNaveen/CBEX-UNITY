@@ -1,11 +1,26 @@
 import Grid from 'apollo-react/components/Grid';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Footer from 'apollo-react/components/Footer';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import Loader from 'apollo-react/components/Loader';
+import { useSelector, useDispatch } from 'react-redux';
 import Toolbar from '../../views/toolbar';
 import AccountPreference from './AccountPreference';
 import NotificationPreference from './NotificationPreference';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import {
+  fetchUserPreference,
+  updateUserPreference
+} from '../../../redux/actions/profile-actions';
+import {
+  selectUserPreference,
+  selectIsUpdatingUserPreference,
+  selectIsFetchingUserPreference,
+  selectFetchUserPreferenceErrorMsg,
+  selectUpdateUserPreferenceErrorMsg
+} from '../../../redux/selectors';
 
 import SideNav from './SideNav';
 import {
@@ -21,25 +36,153 @@ const useStyles = makeStyles(() => ({
   },
   footer: {
     margin: '0 !important',
-    padding: '0 24px 0 24px !important'
-    // height: '2em',
+    padding: '0 24px 0 24px !important',
+    height: 0
   }
 }));
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 const Profile = () => {
+  const dispatch = useDispatch();
   const styles = {
     backgroundColor: '#f6f7fb'
   };
-
+  const [open, setOpen] = useState(false);
+  const isFetchingUserPreference = useSelector(selectIsFetchingUserPreference);
+  const isUpdatingUserPreference = useSelector(selectIsUpdatingUserPreference);
+  const errorFetchingUserPreference = useSelector(
+    selectFetchUserPreferenceErrorMsg
+  );
+  const errorUpdatingUserPreference = useSelector(
+    selectUpdateUserPreferenceErrorMsg
+  );
+  const userPreference = useSelector(selectUserPreference);
   const classes = useStyles();
   const name = getUserName();
   const email = getUserEmail();
   const role = getUserRole();
   const token = getAccessToken();
   const [roleName, setRoleName] = useState('');
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    dispatch(fetchUserPreference());
+  }, []);
+
+  useEffect(() => {
+    console.log('tapasssssss', userPreference);
+  }, [userPreference]);
+
+  useEffect(() => {
+    if (errorUpdatingUserPreference || errorFetchingUserPreference)
+      setOpen(true);
+  }, [errorUpdatingUserPreference, errorFetchingUserPreference]);
+
+  const handleUserPreferenceChange = (e, checked, preference_id, type) => {
+    const selectedPreference = userPreference.filter(preference => {
+      return preference.preference_id === preference_id;
+    });
+    const preferenceSelected = {};
+    const previousPreference =
+      selectedPreference[0].preference_selected ||
+      selectedPreference[0].default_type;
+    console.log('previousPreference ', previousPreference);
+
+    if (type === 'EMAIL_PREFERENCE') {
+      preferenceSelected.preference_selected = checked
+        ? 'CHECKED'
+        : 'UN-CHECKED';
+    } else if (type === 'OPP') {
+      preferenceSelected.preference_selected = checked
+        ? 'CHECKED'
+        : 'UN-CHECKED';
+    } else {
+      switch (previousPreference) {
+        case 'BOTH':
+          console.log('type hit in-app 1');
+          if (type === 'IN-APP' && !checked) {
+            console.log('type hit in-app 2');
+            preferenceSelected.preference_selected = 'EMAIL';
+          } else {
+            preferenceSelected.preference_selected = 'IN-APP';
+          }
+          break;
+        case 'IN-APP':
+          if (type === 'IN-APP' && !checked) {
+            preferenceSelected.preference_selected = 'UN-CHECKED';
+          } else {
+            preferenceSelected.preference_selected = 'BOTH';
+          }
+          break;
+        case 'EMAIL':
+          if (type === 'EMAIL' && !checked) {
+            preferenceSelected.preference_selected = 'UN-CHECKED';
+          } else {
+            preferenceSelected.preference_selected = 'BOTH';
+          }
+          break;
+        case 'UN-CHECKED':
+          if (type === 'EMAIL' && checked)
+            preferenceSelected.preference_selected = 'EMAIL';
+          if (type === 'IN-APP' && checked)
+            preferenceSelected.preference_selected = 'IN-APP';
+          break;
+        case 'EMAIL_PREFERENCE':
+          preferenceSelected.preference_selected = checked
+            ? 'CHECKED'
+            : 'UN-CHECKED';
+          break;
+        case 'OPP':
+          preferenceSelected.preference_selected = checked
+            ? 'CHECKED'
+            : 'UN-CHECKED';
+          break;
+        default:
+      }
+    }
+    console.log('preference selected  ', preferenceSelected);
+    dispatch(updateUserPreference(preference_id, preferenceSelected));
+  };
+
+  if (isFetchingUserPreference) {
+    return (
+      <div
+        className="profile-wrapper"
+        style={{ justifyContent: 'center', alignItems: 'center' }}
+      >
+        <Loader />
+        {/* <p className="loading-msg">User Preference Loading</p> */}
+      </div>
+    );
+  }
+
+  // if (isUpdatingUserPreference) {
+  //   return (
+  //     <div
+  //       className="profile-wrapper"
+  //       style={{ justifyContent: 'center', alignItems: 'center' }}
+  //     >
+  //       <Loader />
+  //       {/* <p className="loading-msg">Updating user preference</p> */}
+  //     </div>
+  //   );
+  // }
+
   return (
     <div className="profile-wrapper">
+      {isUpdatingUserPreference && <Loader />}
       <Toolbar selected="dashboard" />
+
       <Grid container disablePadding style={styles}>
         <Grid container item xs={3} sm={4} md={3} lg={3}>
           <Grid
@@ -77,10 +220,15 @@ const Profile = () => {
               role={role}
               roleName={roleName}
               setRoleName={setRoleName}
+              userPreference={userPreference}
+              handleUserPreferenceChange={handleUserPreferenceChange}
             />
           </Grid>
           <Grid item md={6} sm={12} xs={12} className={classes.item}>
-            <NotificationPreference />
+            <NotificationPreference
+              userPreference={userPreference}
+              handleUserPreferenceChange={handleUserPreferenceChange}
+            />
           </Grid>
           <Grid item md={12} sm={12} xs={12} className={`${classes.item} `}>
             <Footer
@@ -95,6 +243,11 @@ const Profile = () => {
               className={` ${classes.footer}`}
             />
           </Grid>
+          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity="error">
+              Something went wrong, Please try after sometime.
+            </Alert>
+          </Snackbar>
         </Grid>
       </Grid>
     </div>

@@ -100,18 +100,18 @@ const SideNav = ({ name, roleName }) => {
 
   const [imageUrl, setImageUrl] = useState(null);
 
-  useEffect(() => {
-    Axios.get('https://graph.microsoft.com/v1.0/me/photo/$value', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('access_token')}`
-      },
-      responseType: 'blob'
-    }).then(o => {
-      const url = window.URL || window.webkitURL;
-      const blobUrl = url.createObjectURL(o.data);
-      setImageUrl(blobUrl);
-    });
-  }, []);
+  // useEffect(() => {
+  //   Axios.get('https://graph.microsoft.com/v1.0/me/photo/$value', {
+  //     headers: {
+  //       Authorization: `Bearer ${localStorage.getItem('access_token')}`
+  //     },
+  //     responseType: 'blob'
+  //   }).then(o => {
+  //     const url = window.URL || window.webkitURL;
+  //     const blobUrl = url.createObjectURL(o.data);
+  //     setImageUrl(blobUrl);
+  //   });
+  // }, []);
 
   return (
     <Container className={classes.container} disablePadding>

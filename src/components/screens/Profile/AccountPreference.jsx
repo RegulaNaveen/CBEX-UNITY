@@ -11,7 +11,14 @@ import { onSetUserRole } from '../../../redux/actions/sso-auth-actions';
 import Dropdown from '../../common/atoms/inputs/Dropdown';
 import { OPPORTUNITY_PREFERENCE } from './Dummy';
 
-const AccountPreference = ({ email, role, roleName, setRoleName }) => {
+const AccountPreference = ({
+  email,
+  role,
+  roleName,
+  setRoleName,
+  userPreference,
+  handleUserPreferenceChange
+}) => {
   const dispatch = useDispatch();
   const [opportunityPrefList, setOpportunityPrefList] = useState(
     OPPORTUNITY_PREFERENCE
@@ -93,7 +100,63 @@ const AccountPreference = ({ email, role, roleName, setRoleName }) => {
           </Typography>
         </div>
 
-        {opportunityPrefList.map(({ label, checked, disabled }, index) => {
+        {!userPreference?.length && (
+          <div>
+            <Typography className="grey-text" variant="caption" gutterBottom>
+              Not found!
+            </Typography>
+          </div>
+        )}
+
+        {userPreference.map(
+          (
+            {
+              preference_id,
+              title,
+              preference_type,
+              default_type,
+              mandatory,
+              preference_selected
+            },
+            index
+          ) => {
+            return (
+              preference_type === 'OPP' && (
+                <div className="bold-text" key={preference_id}>
+                  <Checkbox
+                    label={
+                      <Typography
+                        className="bold-text"
+                        variant="caption"
+                        gutterBottom
+                      >
+                        {title}
+                      </Typography>
+                    }
+                    disabled={!!(mandatory === 'TRUE')}
+                    checked={
+                      preference_selected
+                        ? !!(preference_selected == 'CHECKED')
+                        : !!(default_type == 'CHECKED')
+                    }
+                    // checked={checked}
+                    onChange={(e, checked) =>
+                      handleUserPreferenceChange(
+                        e,
+                        checked,
+                        preference_id,
+                        'OPP'
+                      )
+                    }
+                    // disabled={disabled}
+                  />
+                </div>
+              )
+            );
+          }
+        )}
+
+        {/* {opportunityPrefList.map(({ label, checked, disabled }, index) => {
           return (
             <div className="bold-text">
               <Checkbox
@@ -114,7 +177,7 @@ const AccountPreference = ({ email, role, roleName, setRoleName }) => {
               />
             </div>
           );
-        })}
+        })} */}
       </Card>
     </div>
   );
