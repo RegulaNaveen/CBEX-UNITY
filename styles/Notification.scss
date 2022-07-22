@@ -1,6 +1,3 @@
-:root {
-  --hover-color: #ecf3ff;
-}
 .notification {
   position: 'relative';
   width: fit-content;
@@ -61,7 +58,7 @@
 }
 
 .notificitems:hover {
-  background: var(--hover-color);
+  background: $neptune-hover;
 }
 
 .notification-content-data {
@@ -81,7 +78,7 @@
   padding: 10px;
 }
 .notification-item:hover {
-  background: var(--hover-color);
+  background: $neptune-hover;
 }
 .notification-item-dot {
   color: #df216d;
@@ -97,7 +94,7 @@
   cursor: pointer;
 }
 .notification-item-header-title {
-  color: #0768fd !important;
+  color: $neptune-primary !important;
   font-weight: 600 !important;
 }
 .envelope-icon {
@@ -106,14 +103,14 @@
   cursor: pointer;
 }
 .view-all-notifications {
-  color: #0768fd !important;
+  color: $neptune-primary !important;
   display: flex;
   justify-content: center;
   padding: 10px;
   cursor: pointer;
 }
 .view-all-notifications:hover {
-  background: var(--hover-color);
+  background: $neptune-hover;
 }
 
 .notification-option-item {
@@ -122,7 +119,7 @@
   padding: 6px 1px;
 }
 .notification-option-item:hover {
-  background: var(--hover-color);
+  background: $neptune-hover;
 }
 .notification-option-item p {
   font-size: 14px;

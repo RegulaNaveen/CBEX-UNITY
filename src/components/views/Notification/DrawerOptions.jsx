@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import * as notificationActions from '../../../redux/actions/notification-actions';
 
-import './style.css';
-
 const DrawerOptions = ({ closeIsDrawerOptions, setSeenBatch }) => {
   return (
     <ClickAwayListener onClickAway={closeIsDrawerOptions}>

@@ -1,6 +1,5 @@
 import React from 'react';
 import Bell from 'apollo-react-icons/Bell';
-import './style.css';
 
 const NoNotification = () => {
   return (

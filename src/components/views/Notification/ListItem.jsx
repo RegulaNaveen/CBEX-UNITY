@@ -4,7 +4,6 @@ import Typography from 'apollo-react/components/Typography';
 import StatusDotSolid from 'apollo-react-icons/StatusDotSolid';
 import * as notificationActions from '../../../redux/actions/notification-actions';
 import EnvelopeButton from './EnvelopeButton';
-import './style.css';
 
 const ListItem = ({ id, url, oppNo, data, isSeen, setSeenOne }) => {
   return (

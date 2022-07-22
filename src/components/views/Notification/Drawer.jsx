@@ -12,7 +12,6 @@ import * as notificationActions from '../../../redux/actions/notification-action
 import ListItem from './ListItem';
 import DrawerOptions from './DrawerOptions';
 import NoNotification from './NoNotification';
-import './style.css';
 
 const Drawer = ({ unreadNotifications, setNotifications }) => {
   const [isDrawer, setIsDrawer] = useState(false);
