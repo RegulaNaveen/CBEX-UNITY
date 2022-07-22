@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Loader from 'react-loader-spinner';
 import Card from 'apollo-react/components/Card';
 import PropTypes from 'prop-types';
@@ -9,7 +9,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getRoles, isRolesInfoLoading } from '../../../redux/selectors';
 import { onSetUserRole } from '../../../redux/actions/sso-auth-actions';
 import Dropdown from '../../common/atoms/inputs/Dropdown';
-import { OPPORTUNITY_PREFERENCE } from './Dummy';
 
 const AccountPreference = ({
   email,
@@ -20,17 +19,9 @@ const AccountPreference = ({
   handleUserPreferenceChange
 }) => {
   const dispatch = useDispatch();
-  const [opportunityPrefList, setOpportunityPrefList] = useState(
-    OPPORTUNITY_PREFERENCE
-  );
 
   const isRolesLoading = useSelector(isRolesInfoLoading);
   const rolesList = useSelector(getRoles);
-
-  const handleOpportunityPreferenceChange = (e, checked, index) => {
-    OPPORTUNITY_PREFERENCE[index].checked = checked;
-    setOpportunityPrefList([...OPPORTUNITY_PREFERENCE]);
-  };
 
   useEffect(() => {
     if (role) setRoleName(role);
@@ -139,7 +130,6 @@ const AccountPreference = ({
                         ? !!(preference_selected == 'CHECKED')
                         : !!(default_type == 'CHECKED')
                     }
-                    // checked={checked}
                     onChange={(e, checked) =>
                       handleUserPreferenceChange(
                         e,
@@ -148,36 +138,12 @@ const AccountPreference = ({
                         'OPP'
                       )
                     }
-                    // disabled={disabled}
                   />
                 </div>
               )
             );
           }
         )}
-
-        {/* {opportunityPrefList.map(({ label, checked, disabled }, index) => {
-          return (
-            <div className="bold-text">
-              <Checkbox
-                label={
-                  <Typography
-                    className="bold-text"
-                    variant="caption"
-                    gutterBottom
-                  >
-                    {label}
-                  </Typography>
-                }
-                checked={checked}
-                onChange={(e, check) =>
-                  handleOpportunityPreferenceChange(e, check, index)
-                }
-                disabled={disabled}
-              />
-            </div>
-          );
-        })} */}
       </Card>
     </div>
   );
@@ -187,14 +153,18 @@ AccountPreference.defaultProps = {
   email: '',
   role: '',
   roleName: '',
-  setRoleName: ''
+  setRoleName: '',
+  userPreference: [],
+  handleUserPreferenceChange: () => {}
 };
 
 AccountPreference.propTypes = {
   email: PropTypes.string,
   role: PropTypes.string,
   roleName: PropTypes.string,
-  setRoleName: PropTypes.string
+  setRoleName: PropTypes.string,
+  userPreference: PropTypes.array,
+  handleUserPreferenceChange: PropTypes.func
 };
 
 export default AccountPreference;

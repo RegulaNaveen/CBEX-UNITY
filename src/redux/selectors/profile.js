@@ -2,14 +2,6 @@ const selectProfile = state => {
   return state.profile;
 };
 
-// preferenceID: '',
-// preferenceSelected: {},
-// userPreference: [],
-// fetchingUserPreference: false,
-// fetchUserPreferenceErrorMsg: '',
-// updateUserPreference: false,
-// updateUserPreferenceErrorMsg: ''
-
 export const selectIsFetchingUserPreference = state => {
   return selectProfile(state).get('fetchingUserPreference');
 };
@@ -29,8 +21,5 @@ export const selectUpdateUserPreferenceErrorMsg = state => {
 export const selectFetchUserPreferenceErrorMsg = state => {
   return selectProfile(state).get('fetchUserPreferenceErrorMsg');
 };
-//   export const selectIsAddingNote = state => {
-//     return selectNotepad(state).get('uploadingNote');
-//   };
 
 export default selectProfile;

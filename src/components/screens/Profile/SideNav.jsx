@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import Axios from 'axios';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -98,28 +97,13 @@ const SideNav = ({ name, roleName }) => {
     history.push(LOGIN);
   };
 
-  const [imageUrl, setImageUrl] = useState(null);
-
-  // useEffect(() => {
-  //   Axios.get('https://graph.microsoft.com/v1.0/me/photo/$value', {
-  //     headers: {
-  //       Authorization: `Bearer ${localStorage.getItem('access_token')}`
-  //     },
-  //     responseType: 'blob'
-  //   }).then(o => {
-  //     const url = window.URL || window.webkitURL;
-  //     const blobUrl = url.createObjectURL(o.data);
-  //     setImageUrl(blobUrl);
-  //   });
-  // }, []);
-
   return (
     <Container className={classes.container} disablePadding>
       {/* <div cla></div> */}
       <div className={classes.layout}>
         <div className={classes.upperPart}>
           <div className={classes.profilepic}>
-            <Avatar alt="avatar" src={imageUrl} size="extraLarge">
+            <Avatar alt="avatar" src="" size="extraLarge">
               {name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0)}
             </Avatar>
           </div>

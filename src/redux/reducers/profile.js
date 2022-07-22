@@ -28,7 +28,7 @@ function onFetchUserPreferenceDone(state, action) {
   const {
     payload: { data }
   } = action;
-  //   data.isFromSocket = !!isFromSocket;
+
   data.sort((a, b) => a.display_order - b.display_order);
   return state.set('userPreference', data).set('fetchingUserPreference', false);
 }
@@ -50,17 +50,10 @@ function onUpdateUserPreferenceDone(state, action) {
   const {
     payload: { data }
   } = action;
-  console.log('founddddd 11', data);
-  // const index = state.userPreference.findIndex(
-  //   preference => preference.preference_id === data.preference_id
-  // );
-  // console.log('founddddd ', index);
-  console.log('updatedUserPreference ', state.get('userPreference'));
+
   const updatedUserPreference = [...state.get('userPreference')];
-  // updatedUserPreference[index] = data;
-  console.log('updatedUserPreference ', state.userPreference);
-  for (let index = 0; index < updatedUserPreference.length; index++) {
-    console.log('inside if clause', updatedUserPreference[index]);
+
+  for (let index = 0; index < updatedUserPreference.length; index + 1) {
     if (updatedUserPreference[index].preference_id === data.preference_id) {
       updatedUserPreference[index].preference_selected =
         data.preference_selected;
@@ -70,7 +63,6 @@ function onUpdateUserPreferenceDone(state, action) {
   return state
     .set('userPreference', updatedUserPreference)
     .set('updateUserPreference', false);
-  // return state.set('updateUserPreference', false);
 }
 
 function onErrorUpdatingUserPreference(state, action) {

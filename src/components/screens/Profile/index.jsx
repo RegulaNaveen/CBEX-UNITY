@@ -5,11 +5,13 @@ import Footer from 'apollo-react/components/Footer';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Loader from 'apollo-react/components/Loader';
 import { useSelector, useDispatch } from 'react-redux';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import Snackbar from '@material-ui/core/Snackbar';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import MuiAlert from '@material-ui/lab/Alert';
 import Toolbar from '../../views/toolbar';
 import AccountPreference from './AccountPreference';
 import NotificationPreference from './NotificationPreference';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
 import {
   fetchUserPreference,
   updateUserPreference
@@ -50,7 +52,7 @@ const Profile = () => {
   const styles = {
     backgroundColor: '#f6f7fb'
   };
-  const [open, setOpen] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const isFetchingUserPreference = useSelector(selectIsFetchingUserPreference);
   const isUpdatingUserPreference = useSelector(selectIsUpdatingUserPreference);
   const errorFetchingUserPreference = useSelector(
@@ -72,7 +74,7 @@ const Profile = () => {
       return;
     }
 
-    setOpen(false);
+    setOpenSnackbar(false);
   };
 
   useEffect(() => {
@@ -80,23 +82,26 @@ const Profile = () => {
   }, []);
 
   useEffect(() => {
-    console.log('tapasssssss', userPreference);
-  }, [userPreference]);
-
-  useEffect(() => {
     if (errorUpdatingUserPreference || errorFetchingUserPreference)
-      setOpen(true);
+      setOpenSnackbar(true);
   }, [errorUpdatingUserPreference, errorFetchingUserPreference]);
 
-  const handleUserPreferenceChange = (e, checked, preference_id, type) => {
+  /**
+   *
+   * @param {*} e
+   * @param {*} checked : current state of selection
+   * @param {*} preferenceId : selected preference ID
+   * @param {*} type : type of preference
+   */
+
+  const handleUserPreferenceChange = (e, checked, preferenceId, type) => {
     const selectedPreference = userPreference.filter(preference => {
-      return preference.preference_id === preference_id;
+      return preference.preference_id === preferenceId;
     });
     const preferenceSelected = {};
     const previousPreference =
       selectedPreference[0].preference_selected ||
       selectedPreference[0].default_type;
-    console.log('previousPreference ', previousPreference);
 
     if (type === 'EMAIL_PREFERENCE') {
       preferenceSelected.preference_selected = checked
@@ -109,9 +114,7 @@ const Profile = () => {
     } else {
       switch (previousPreference) {
         case 'BOTH':
-          console.log('type hit in-app 1');
           if (type === 'IN-APP' && !checked) {
-            console.log('type hit in-app 2');
             preferenceSelected.preference_selected = 'EMAIL';
           } else {
             preferenceSelected.preference_selected = 'IN-APP';
@@ -150,8 +153,8 @@ const Profile = () => {
         default:
       }
     }
-    console.log('preference selected  ', preferenceSelected);
-    dispatch(updateUserPreference(preference_id, preferenceSelected));
+
+    dispatch(updateUserPreference(preferenceId, preferenceSelected));
   };
 
   if (isFetchingUserPreference) {
@@ -161,22 +164,9 @@ const Profile = () => {
         style={{ justifyContent: 'center', alignItems: 'center' }}
       >
         <Loader />
-        {/* <p className="loading-msg">User Preference Loading</p> */}
       </div>
     );
   }
-
-  // if (isUpdatingUserPreference) {
-  //   return (
-  //     <div
-  //       className="profile-wrapper"
-  //       style={{ justifyContent: 'center', alignItems: 'center' }}
-  //     >
-  //       <Loader />
-  //       {/* <p className="loading-msg">Updating user preference</p> */}
-  //     </div>
-  //   );
-  // }
 
   return (
     <div className="profile-wrapper">
@@ -243,7 +233,11 @@ const Profile = () => {
               className={` ${classes.footer}`}
             />
           </Grid>
-          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Snackbar
+            open={openSnackbar}
+            autoHideDuration={6000}
+            onClose={handleClose}
+          >
             <Alert onClose={handleClose} severity="error">
               Something went wrong, Please try after sometime.
             </Alert>

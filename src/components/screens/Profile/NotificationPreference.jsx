@@ -1,23 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Card from 'apollo-react/components/Card';
 import Typography from 'apollo-react/components/Typography';
 import Checkbox from 'apollo-react/components/Checkbox';
-import { NOTIFICATION_PREFERENCE, EMAIL_PREFERENCE } from './Dummy';
+import PropTypes from 'prop-types';
 
 const NotificationPreference = ({
   userPreference,
   handleUserPreferenceChange
 }) => {
-  const [notificationPrefList, setNotificationPrefList] = useState(
-    userPreference
-  );
-  const [emailPrefList, setEmailPrefList] = useState(EMAIL_PREFERENCE);
-
-  const handleEmailPreferenceChange = (e, checked, index) => {
-    EMAIL_PREFERENCE[index].checked = checked;
-    setEmailPrefList([...EMAIL_PREFERENCE]);
-  };
-
   return (
     <div>
       <Card interactive className="card-wrapper">
@@ -173,17 +163,14 @@ const NotificationPreference = ({
         )}
 
         {userPreference?.map(
-          (
-            {
-              preference_id,
-              title,
-              preference_type,
-              default_type,
-              mandatory,
-              preference_selected
-            },
-            index
-          ) => {
+          ({
+            preference_id,
+            title,
+            preference_type,
+            default_type,
+            mandatory,
+            preference_selected
+          }) => {
             return (
               preference_type === 'EMAIL' && (
                 <div className="bold-text" key={preference_id}>
@@ -203,7 +190,6 @@ const NotificationPreference = ({
                         ? !!(preference_selected == 'CHECKED')
                         : !!(default_type == 'CHECKED')
                     }
-                    // checked={checked}
                     onChange={(e, checked) =>
                       handleUserPreferenceChange(
                         e,
@@ -212,7 +198,6 @@ const NotificationPreference = ({
                         'EMAIL_PREFERENCE'
                       )
                     }
-                    // disabled={disabled}
                   />
                 </div>
               )
@@ -222,6 +207,16 @@ const NotificationPreference = ({
       </Card>
     </div>
   );
+};
+
+NotificationPreference.defaultProps = {
+  userPreference: [],
+  handleUserPreferenceChange: () => {}
+};
+
+NotificationPreference.propTypes = {
+  userPreference: PropTypes.array,
+  handleUserPreferenceChange: PropTypes.func
 };
 
 export default NotificationPreference;

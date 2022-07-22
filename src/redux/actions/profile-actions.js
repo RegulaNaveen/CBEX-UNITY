@@ -1,12 +1,8 @@
-import { fromJS } from 'immutable';
 import { REDUX_TYPES } from '../../constants';
 import {
   fetchUserPreferenceApi,
   updateUserPreferenceApi
 } from '../../api/profile';
-
-// import { getUserEmail } from '../../SessionHandler';
-// import { getSelectedBid } from '../../redux/selectors';
 
 const {
   FETCH_USER_PREFERENCE,
@@ -36,7 +32,6 @@ export function fetchUserPreference() {
 }
 
 export function updateUserPreference(preferenceID, preferenceSelected) {
-  console.log('tapassssssss', preferenceID, preferenceSelected);
   return async dispatch => {
     try {
       dispatch({ type: UPDATE_USER_PREFERENCE });
@@ -56,5 +51,3 @@ export function updateUserPreference(preferenceID, preferenceSelected) {
     }
   };
 }
-
-// export default fetchNotes;
