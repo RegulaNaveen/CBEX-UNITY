@@ -8,6 +8,7 @@ import * as ssoAuthSelectors from './sso-auth';
 import * as notificationSelectors from './notification';
 
 export * from './notepad';
+export * from './profile';
 
 // SSO Auth selectors
 export const getUserAuthStatus = (state: Object): boolean =>
