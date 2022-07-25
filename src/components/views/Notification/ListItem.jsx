@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import Typography from 'apollo-react/components/Typography';
 import StatusDotSolid from 'apollo-react-icons/StatusDotSolid';
 import * as notificationActions from '../../../redux/actions/notification-actions';
@@ -25,7 +26,7 @@ const ListItem = ({ id, url, oppNo, data, isSeen, setSeenOne, createdAt }) => {
         </div>
         {/* Date */}
         <Typography variant='body2' style={{ fontSize: '10px' }}>
-          {createdAt}
+          {moment(createdAt).format("MMM DD")}
         </Typography>
         {/* Notification content */}
         <div>
