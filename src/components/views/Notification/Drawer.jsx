@@ -19,6 +19,7 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
 
   const closeDrawer = () => {
     setIsDrawer(false);
+    setIsDrawerOptions(false);
   };
   const toggleIsDrawer = () => {
     setIsDrawer(!isDrawer);
@@ -68,9 +69,10 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
                   onClick={toggleIsDrawerOptions}
                 />
                 {/* Drawer Gear Icon options */}
-                {isDrawerOptions && (
-                  <DrawerOptions closeIsDrawerOptions={closeIsDrawerOptions} />
-                )}
+                <DrawerOptions
+                  isShow={isDrawerOptions}
+                  closeIsDrawerOptions={closeIsDrawerOptions}
+                />
               </div>
               {/* Notification List items */}
               {notificationCount > 0 ? (
@@ -90,11 +92,11 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
                 <NoNotification />
               )}
               {/* View All Notifications Button*/}
-              <div>
+              {/* <div>
                 <Typography variant='body2' className='view-all-notifications'>
                   View All Notifications
                 </Typography>
-              </div>
+              </div> */}
             </div>
           </ClickAwayListener>
         )}
