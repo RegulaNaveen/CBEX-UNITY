@@ -6,7 +6,7 @@ include:
   - local: devops/vars/global.yml
 
 stages:
-  - sonar #sonar report
+  #- sonar #sonar report
   - builddev
   - deploydev
   - buildL4
@@ -82,11 +82,11 @@ deploydev:
 buildL4:
   stage: buildL4
   image: node:12
+  when: manual
   variables:
     Environment: $CI_JOB_NAME
   only:
-    - master
-    - tags
+    - L4
   script:
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
@@ -106,8 +106,6 @@ deployL4:
   needs:
     - buildL4
   when: manual
-  only:
-    - tags
   script:    
     - source build.env
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
