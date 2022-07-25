@@ -134,7 +134,7 @@ const SideNav = ({ name, roleName }) => {
                 <ListItemText
                   primary={
                     <Typography style={{ color: '#fff' }} gutterBottom>
-                      Account Preference
+                      Account Preferences
                     </Typography>
                   }
                 />

@@ -12,7 +12,7 @@ const NotificationPreference = ({
     <div>
       <Card interactive className="card-wrapper">
         <Typography className="bold-text" variant="title2" gutterBottom>
-          Notification Preference
+          Notification Preferences
         </Typography>
         <tr
           style={{
@@ -24,7 +24,7 @@ const NotificationPreference = ({
         >
           <th style={{ flexGrow: '3', alignSelf: 'flex-start' }}>
             <Typography className="grey-text" variant="caption" gutterBottom>
-              Notification Preference
+              Notifications Preferences
             </Typography>
           </th>
           <th style={{ flexGrow: '0', marginRight: '2.9em' }}>
@@ -39,7 +39,14 @@ const NotificationPreference = ({
           </th>
         </tr>
 
-        <table style={{ height: 250, overflowY: 'auto', display: 'block' }}>
+        <table
+          style={{
+            height: 250,
+            overflowY: 'auto',
+            display: 'block',
+            marginTop: '0.5em'
+          }}
+        >
           {!userPreference?.length && (
             <div
               style={{
@@ -150,7 +157,7 @@ const NotificationPreference = ({
 
         <div className="top-space">
           <Typography className="grey-text" variant="caption" gutterBottom>
-            Email Preference
+            Email Preferences
           </Typography>
         </div>
 
