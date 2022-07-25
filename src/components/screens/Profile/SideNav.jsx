@@ -27,11 +27,12 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    alignItem: 'center'
+    alignItem: 'center',
+    height: '88vh'
   },
   container: {
     backgroundColor: '#fff',
-    // height: '95vh',
+    minHeight: 'calc(100vh - 57px)',
     marginTop: theme.spacing(0),
     padding: '0 0 1em 0 !important'
   },
@@ -68,8 +69,8 @@ const useStyles = makeStyles(theme => ({
   },
   selected: {},
   logout: {
-    padding: theme.spacing(3),
-    paddingTop: theme.spacing(20)
+    padding: theme.spacing(3)
+    // paddingTop: theme.spacing(20)
   },
   userDetails: {
     textAlign: 'center',
