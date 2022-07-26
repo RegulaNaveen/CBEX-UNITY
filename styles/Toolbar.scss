@@ -2,7 +2,7 @@
   flex: 1;
   display: flex;
   height: $toolbarHight;
-  background: linear-gradient(270deg, #0076AE 0%, #250056 100%);
+  background: linear-gradient(270deg, #0076ae 0%, #250056 100%);
   align-items: center;
   padding-left: 24px;
   padding-right: 24px;
@@ -18,8 +18,8 @@
     font-size: 16px;
     letter-spacing: 0;
     line-height: 24px;
-    margin-right: 8px; 
-    
+    margin-right: 8px;
+
     &:nth-of-type(2) {
       font-weight: bold;
     }
@@ -31,9 +31,9 @@
     font-size: 16px;
     letter-spacing: 0;
     line-height: 24px;
-    margin-right: 8px; 
+    margin-right: 8px;
     margin-left: 8px;
-    
+
     &:nth-of-type(2) {
       font-weight: bold;
     }
@@ -45,8 +45,8 @@
     justify-content: center;
     align-items: center;
     margin-left: 25px;
-    &:hover { 
-      background-color:rgba(255, 255, 255, 0.16)
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.16);
     }
   }
 
@@ -56,7 +56,7 @@
     justify-content: center;
     align-items: center;
     margin-left: 25px;
-    background-color:rgba(255, 255, 255, 0.16)
+    background-color: rgba(255, 255, 255, 0.16);
   }
 
   .toolbar-navigation-wrapper {
@@ -76,12 +76,11 @@
       justify-content: center;
       cursor: pointer;
       text-decoration: none;
-   
+
       &.is-selected {
-        background-color: rgba(255,255,255,0.16);
+        background-color: rgba(255, 255, 255, 0.16);
       }
     }
-
   }
   .toolbar-account-notification {
     flex: 1;
@@ -93,16 +92,16 @@
       width: 57px;
       height: $toolbarHight;
 
-      &:hover { 
-        background-color: rgba(255,255,255,0.16);
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.16);
       }
-    
+
       .toolbar-account-search {
         height: 20px;
         width: 20px;
         padding: 18px;
       }
-    
+
       .toolbar-account-notifications {
         height: 20px;
         width: 20px;
@@ -133,7 +132,7 @@
       }
 
       .expanded {
-        background-color: #593D7E;
+        background-color: #593d7e;
       }
     }
   }
@@ -144,19 +143,19 @@
 
     .toolbar-account-wrapper {
       display: flex;
-      width: 57px;
+      // width: 57px;
       height: $toolbarHight;
 
-      &:hover { 
-        background-color: rgba(255,255,255,0.16);
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.16);
       }
-    
+
       .toolbar-account-search {
         height: 20px;
         width: 20px;
         padding: 18px;
       }
-    
+
       .toolbar-account-notifications {
         height: 20px;
         width: 20px;
@@ -187,12 +186,11 @@
       }
 
       .expanded {
-        background-color: #593D7E;
+        background-color: #593d7e;
       }
     }
   }
 }
-.notification.expanded 
- {
-        background-color: #593D7E;
-      }
+.notification.expanded {
+  background-color: #593d7e;
+}
