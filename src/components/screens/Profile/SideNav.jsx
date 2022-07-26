@@ -69,7 +69,8 @@ const useStyles = makeStyles(theme => ({
   },
   selected: {},
   logout: {
-    padding: theme.spacing(3)
+    padding: '0 24px',
+    marginBottom: '-5px'
     // paddingTop: theme.spacing(20)
   },
   userDetails: {
@@ -132,26 +133,22 @@ const SideNav = ({ name, roleName }) => {
                 key="Account Preference"
                 classes={{ root: classes.root, selected: classes.selected }}
               >
-                <ListItemText
-                  primary={
-                    <Typography style={{ color: '#fff' }} gutterBottom>
-                      Account Preferences
-                    </Typography>
-                  }
-                />
+                <Typography style={{ color: '#fff' }} gutterBottom>
+                  Account Preferences
+                </Typography>
               </ListItem>
-              <Divider />
+              {/* <Divider />
               <ListItem
                 button
                 key="Recent Activity"
                 classes={{ root: classes.root, selected: classes.selected }}
               >
-                {/* <ListItemText
-                  primary='Recent Activity'
+                <ListItemText
+                  primary="Recent Activity"
                   classes={{ root: classes.root, selected: classes.selected }}
-                /> */}
+                />
               </ListItem>
-              {/* <Divider /> */}
+              <Divider /> */}
             </List>
           </div>
         </div>
