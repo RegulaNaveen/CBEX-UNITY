@@ -93,7 +93,7 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
                       oppNo={item.opportunity_no}
                       data={item.data}
                       isSeen={item.isSeen}
-                      createdAt={item.createdAt}
+                      createdAt={item.created_at}
                     />
                   );
                 })
