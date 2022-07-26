@@ -39,7 +39,7 @@ const useStyles = makeStyles(() => ({
   footer: {
     margin: '0 !important',
     padding: '0 24px 0px 24px !important',
-    height: '0'
+    height: '15px'
   }
 }));
 
@@ -50,7 +50,8 @@ function Alert(props) {
 const Profile = () => {
   const dispatch = useDispatch();
   const styles = {
-    backgroundColor: '#f6f7fb'
+    backgroundColor: '#f6f7fb',
+    minHeight: 'calc(100vh - 57px)'
   };
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const isFetchingUserPreference = useSelector(selectIsFetchingUserPreference);
@@ -200,7 +201,7 @@ const Profile = () => {
           xs={9}
           md={9}
           lg={9}
-          style={{ paddingTop: '1.2em' }}
+          style={{ paddingTop: '1.2em', margin: '0' }}
           spacing={2}
         >
           <Grid item md={6} sm={12} xs={12} className={classes.item}>
