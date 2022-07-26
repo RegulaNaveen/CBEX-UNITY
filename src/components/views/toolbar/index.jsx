@@ -107,10 +107,7 @@ class Toolbar extends Component<{}, State> {
         )}
         <Notification />
 
-        <div
-          className="toolbar-account-spacer"
-          style={{ flex: 0, marginRight: '14px' }}
-        >
+        <div className="toolbar-account-spacer" style={{ flex: 0 }}>
           <div ref={this.wrapperRef} className="toolbar-account-wrapper">
             <div
               className={classnames(
