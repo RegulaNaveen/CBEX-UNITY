@@ -56,7 +56,7 @@ const tempDummyData = [
     id: '04',
     preference_id: '05',
     user_email: 'ashiq_sultan@iqvia.com',
-    created_at: '2022-07-25T08:10:30',
+    created_at: '2022-07-24T08:10:30',
     data:
       "You've been assigned to Opportunity UZA85857 Bid 03. View the opportunity overview and prepare for upcoming calls in Unity.",
     isSeen: false,
