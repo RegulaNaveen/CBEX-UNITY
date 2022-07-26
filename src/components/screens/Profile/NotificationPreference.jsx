@@ -41,7 +41,7 @@ const NotificationPreference = ({
 
         <table
           style={{
-            height: 250,
+            height: 240,
             overflowY: 'auto',
             display: 'block',
             marginTop: '0.5em'
@@ -155,7 +155,7 @@ const NotificationPreference = ({
           )}
         </table>
 
-        <div className="top-space">
+        <div className="">
           <Typography className="grey-text" variant="caption" gutterBottom>
             Email Preferences
           </Typography>
