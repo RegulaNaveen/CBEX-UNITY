@@ -13,7 +13,7 @@ import { DropMenu } from '../../svg';
 import { DASHBOARD, UBUILD } from '../../../routes';
 import { UBUILD_ENABLED } from '../../../constants/api';
 import { isUserUbuildAdmin } from '../../../utils/utils';
-import { getUserRole } from '../../../SessionHandler';
+import { getUserName, getUserRole } from '../../../SessionHandler';
 import { getRolesInfo } from '../../../redux/actions/proposal-actions';
 import { onSetUserRole } from '../../../redux/actions/sso-auth-actions';
 import { getRoles } from '../../../redux/selectors';
@@ -21,6 +21,8 @@ import WelcomeModal from '../modals/WelcomeModal';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import Notification from '../Notification/index';
 import defaultDP from '../../../../img/default-dp.png';
+import ArrowDown from 'apollo-react-icons/ArrowDown';
+import ArrowUp from 'apollo-react-icons/ArrowUp';
 
 type State = { isCollapsed: boolean };
 class Toolbar extends Component<{}, State> {
@@ -81,11 +83,12 @@ class Toolbar extends Component<{}, State> {
     const { isCollapsed, roleName } = this.state;
     const { rolesList } = this.props;
     const results = isUserUbuildAdmin();
+    const name = getUserName();
     return (
-      <div className='toolbar-wrapper'>
+      <div className="toolbar-wrapper">
         <Link to={DASHBOARD}>
-          <p className='toolbar-title'>IQVIA™</p>
-          <p className='toolbar-title'>Unity</p>
+          <p className="toolbar-title">IQVIA™</p>
+          <p className="toolbar-title">Unity</p>
         </Link>
         {results && (
           <div
@@ -97,40 +100,47 @@ class Toolbar extends Component<{}, State> {
                 : 'ubuild-link'
             }
           >
-            <Link to={UBUILD} className='toolbar-space'>
-              <p className='ubuild-title'>U-Build</p>
+            <Link to={UBUILD} className="toolbar-space">
+              <p className="ubuild-title">U-Build</p>
             </Link>
           </div>
         )}
         <Notification />
 
-        <div className='toolbar-account-spacer' style={{ flex: 0 }}>
-          <div ref={this.wrapperRef} className='toolbar-account-wrapper'>
+        <div className="toolbar-account-spacer" style={{ flex: 0 }}>
+          <div ref={this.wrapperRef} className="toolbar-account-wrapper">
             <div
               className={classnames(
                 'toolbar-account-info',
                 isCollapsed && 'expanded'
               )}
-              id='menu-title'
-              role='button'
+              id="menu-title"
+              role="button"
               onClick={this.handleCollapse}
               onKeyPress={this.handleKeyPress}
-              type='button'
+              type="button"
               tabIndex={-1}
             >
               {' '}
               <Avatar
                 // src='https://i.pinimg.com/originals/17/f3/9c/17f39c6f7a4a5457f39dba2368f0d077.jpg'
-                src='defaultDP'
+                src=""
                 style={{
                   marginLeft: '10px'
                 }}
-              />
-              <DropMenu className='toolbar-account-info-icon' />
+              >
+                {name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0)}
+              </Avatar>
+              {isCollapsed ? (
+                <ArrowUp style={{ color: '#fff', fontSize: 20 }} />
+              ) : (
+                <ArrowDown style={{ color: '#fff', fontSize: 20 }} />
+              )}
+              {/* <DropMenu className="toolbar-account-info-icon" /> */}
             </div>
             {isCollapsed ? (
               <ToolbarMenu
-                name='Profile'
+                name="Profile"
                 handleCollapse={this.handleCollapse}
               />
             ) : null}
@@ -138,7 +148,7 @@ class Toolbar extends Component<{}, State> {
         </div>
         {(!roleName || roleName === 'undefined') && (
           <WelcomeModal
-            id='welcomemodal'
+            id="welcomemodal"
             roles={rolesList || []}
             onRoleChange={e => this.onRoleChange(e)}
           />

@@ -36,7 +36,7 @@ const AccountPreference = ({
     <div>
       <Card interactive className="card-wrapper">
         <Typography className="bold-text" variant="title2" gutterBottom>
-          Account Preference
+          Account Preferences
         </Typography>
         <div className="top-space">
           <Typography className="grey-text" variant="caption" gutterBottom>
@@ -85,9 +85,9 @@ const AccountPreference = ({
             </>
           )}
         </div>
-        <div className="top-space">
+        {/* <div className="top-space">
           <Typography className="grey-text" variant="caption" gutterBottom>
-            Opportunity Preference
+            Opportunity Preferences
           </Typography>
         </div>
 
@@ -143,7 +143,7 @@ const AccountPreference = ({
               )
             );
           }
-        )}
+        )} */}
       </Card>
     </div>
   );
