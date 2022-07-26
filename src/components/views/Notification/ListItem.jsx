@@ -7,14 +7,26 @@ import * as notificationActions from '../../../redux/actions/notification-action
 import EnvelopeButton from './EnvelopeButton';
 
 const ListItem = ({ id, url, oppNo, data, isSeen, setSeenOne, createdAt }) => {
+  const getYesterday = () => {
+    let d = new Date();
+    d.setDate(d.getDate() - 1);
+    return d;
+  };
   const determineDate = createdAt => {
     const timeFormat = 'hh:mm A';
     const dateFormat = 'MMM DD';
     const today = new Date().toISOString().slice(0, 10);
+    const yesterday = getYesterday()
+      .toISOString()
+      .slice(0, 10);
     const toCompare = moment(createdAt).format('YYYY-MM-DD');
-    return today === toCompare
-      ? moment(createdAt).format(timeFormat)
-      : moment(createdAt).format(dateFormat);
+    if (toCompare === today) {
+      return moment(createdAt).format(timeFormat);
+    } else if (toCompare === yesterday) {
+      return 'Yesterday';
+    } else {
+      return moment(createdAt).format(dateFormat);
+    }
   };
   return (
     <div className='notification-item'>
