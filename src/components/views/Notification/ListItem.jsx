@@ -7,6 +7,15 @@ import * as notificationActions from '../../../redux/actions/notification-action
 import EnvelopeButton from './EnvelopeButton';
 
 const ListItem = ({ id, url, oppNo, data, isSeen, setSeenOne, createdAt }) => {
+  const determineDate = createdAt => {
+    const timeFormat = 'hh:mm A';
+    const dateFormat = 'MMM DD';
+    const today = new Date().toISOString().slice(0, 10);
+    const toCompare = moment(createdAt).format('YYYY-MM-DD');
+    return today === toCompare
+      ? moment(createdAt).format(timeFormat)
+      : moment(createdAt).format(dateFormat);
+  };
   return (
     <div className='notification-item'>
       {/* Dot Icon */}
@@ -26,7 +35,7 @@ const ListItem = ({ id, url, oppNo, data, isSeen, setSeenOne, createdAt }) => {
         </div>
         {/* Date */}
         <Typography variant='body2' style={{ fontSize: '10px' }}>
-          {moment(createdAt).format("MMM DD")}
+          {determineDate(createdAt)}
         </Typography>
         {/* Notification content */}
         <div>
