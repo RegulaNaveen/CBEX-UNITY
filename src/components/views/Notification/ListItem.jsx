@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Typography from 'apollo-react/components/Typography';
@@ -36,12 +37,15 @@ const ListItem = ({ id, url, oppNo, data, isSeen, setSeenOne, createdAt }) => {
       <div className='notification-item-content'>
         {/* Header */}
         <div className='notification-item-header'>
-          <Typography
-            variant='body2'
-            className='notification-item-header-title'
-          >
-            {oppNo}
-          </Typography>
+          <Link to={`${url}`}>
+            <Typography
+              variant='body2'
+              className='notification-item-header-title'
+            >
+              {oppNo}
+            </Typography>
+          </Link>
+
           {/* Envelope Button */}
           <EnvelopeButton isSeen={isSeen} onClick={() => setSeenOne(id)} />
         </div>
