@@ -7,6 +7,7 @@
     "dev": "webpack-dev-server --mode development --env.API_ENV=DEV",
     "dev:uat": "webpack-dev-server --mode development --env.API_ENV=UAT",
     "build:dev": "webpack --mode production --env.API_ENV=DEV",
+    "build:dev3": "webpack --mode production --env.API_ENV=DEV3",
     "build:demo": "webpack --mode production --env.API_ENV=DEMO",
     "build:sdev": "webpack --mode production --env.API_ENV=SDEV",
     "build:udev": "webpack --mode production --env.API_ENV=UDEV",
