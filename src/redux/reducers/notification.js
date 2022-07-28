@@ -28,18 +28,17 @@ const updateSeen = (state, actions) => {
   const notificationId = actions.payload.notificationId;
   const allNotification = cloneDeep(state.notifications);
   allNotification.forEach(item => {
-    if (item.id === notificationId) {
-      item.isSeen = true;
+    if (item.notification_id === notificationId) {
+      item.read = true;
     }
   });
   return { ...state, notifications: allNotification };
 };
 
 const updateSeenBatch = (state, actions) => {
-  // const notificationIds = actions.payload.notificationIds;
   const allNotification = cloneDeep(state.notifications);
   allNotification.forEach(item => {
-    item.isSeen = true;
+    item.read = true;
   });
   return { ...state, notifications: allNotification };
 };
