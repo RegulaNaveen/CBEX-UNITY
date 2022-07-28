@@ -9,8 +9,8 @@ stages:
   #- sonar #sonar report
   - builddev
   - deploydev
-  - builddev2
-  - deploydev2
+  - builddev3
+  - deploydev3
   - buildL4
   - deployL4
   - buildqa
@@ -81,8 +81,8 @@ deploydev:
   tags:
     - docker
 
-dev2:
-  stage: builddev2
+dev3:
+  stage: builddev3
   image: node:12
   when: manual
   variables:
@@ -104,12 +104,12 @@ dev2:
   tags:
     - docker
 
-deploydev2:
-  stage: deploydev2
+deploydev3:
+  stage: deploydev3
   when: manual
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
-    - dev2
+    - dev3
   only:
     - L4
   script:    
