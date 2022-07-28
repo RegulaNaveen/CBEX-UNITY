@@ -41,21 +41,13 @@ const NotificationPreference = ({
 
         <table
           style={{
-            minHeight: 225,
             overflowY: 'auto',
             display: 'block',
             marginTop: '0.5em'
           }}
         >
           {!userPreference?.length && (
-            <div
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                display: 'flex',
-                height: '100%'
-              }}
-            >
+            <div>
               <Typography className="grey-text" variant="caption" gutterBottom>
                 Not found!
               </Typography>
