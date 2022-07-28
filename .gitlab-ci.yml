@@ -21,7 +21,7 @@ stages:
   # - deployuat
   # - buildprod
   # - deployprod
-  # - deploystack
+  - deploystack
   
 
 .sonar:
@@ -309,7 +309,7 @@ deployL4:
   tags:
     - docker
 
-.deploystack:
+deploystack:
   stage: deploystack
   rules:
     #- if:  $CI_COMMIT_REF_NAME =~ /^feature/ || $CI_COMMIT_REF_NAME =~ /^bugfix/
@@ -320,7 +320,7 @@ deployL4:
       when: always
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   dependencies:
-    - demo
+    - dev3
   script:
     - source build.env
     - aws cloudformation validate-template --template-body file://devops/cloudformation/cbex-unity-frontend-cf.yml --region $Region
