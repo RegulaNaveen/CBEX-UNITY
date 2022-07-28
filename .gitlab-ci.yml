@@ -7,21 +7,21 @@ include:
 
 stages:
   #- sonar #sonar report
-  - builddev
-  - deploydev
+  # - builddev
+  # - deploydev
   - builddev3
   - deploydev3
   - buildL4
   - deployL4
-  - buildqa
-  - deployqa
-  - builddemo
-  - deploydemo
-  - builduat
-  - deployuat
-  - buildprod
-  - deployprod
-  - deploystack
+  # - buildqa
+  # - deployqa
+  # - builddemo
+  # - deploydemo
+  # - builduat
+  # - deployuat
+  # - buildprod
+  # - deployprod
+  # - deploystack
   
 
 .sonar:
@@ -41,7 +41,7 @@ stages:
     - apk upgrade --update-cache --available && apk add openssl && rm -rf /var/cache/apk/*
     - sonar-scanner -X -Dsonar.branch.name=$CI_COMMIT_REF_NAME -Dsonar.projectKey=$CI_PROJECT_NAME
 
-dev:
+.dev:
   stage: builddev
   image: node:12
   variables:
@@ -65,7 +65,7 @@ dev:
   tags:
     - docker
 
-deploydev:
+.deploydev:
   stage: deploydev
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
@@ -152,7 +152,7 @@ deployL4:
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
   tags:
     - docker
-demo:
+.demo:
   stage: builddemo
   image: node:12
   variables:
@@ -177,7 +177,7 @@ demo:
   tags:
     - docker
 
-deploydemo:
+.deploydemo:
   stage: deploydemo
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
@@ -194,7 +194,7 @@ deploydemo:
   tags:
     - docker
 
-qa:
+.qa:
   stage: buildqa
   image: node:12
   needs:
@@ -217,7 +217,7 @@ qa:
   tags:
     - docker
 
-deployqa:
+.deployqa:
   stage: deployqa
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
@@ -232,7 +232,7 @@ deployqa:
   tags:
     - docker
 
-uat:
+.uat:
   stage: builduat
   image: node:12
   variables:
@@ -256,7 +256,7 @@ uat:
   tags:
     - docker
 
-deployuat:
+.deployuat:
   stage: deployuat
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
@@ -271,7 +271,7 @@ deployuat:
   tags:
     - docker
 
-prod:
+.prod:
   stage: buildprod
   image: node:12
   variables:
@@ -294,7 +294,7 @@ prod:
   tags:
     - docker
 
-deployprod:
+.deployprod:
   stage: deployprod
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
