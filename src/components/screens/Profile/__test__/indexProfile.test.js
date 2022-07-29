@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import '@testing-library/jest-dom';
 import { configure, mount, render, screen, shallow } from 'enzyme';
 import expect from 'expect';
@@ -21,6 +22,13 @@ configure({ adapter: new Adapter() });
 afterEach(() => {
   cleanup();
 });
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useHistory: () => ({
+    push: jest.fn(),
+  }),
+}));
 
 jest.mock('react-redux', () => {
   const { Provider, useSelector } = jest.requireActual('react-redux');

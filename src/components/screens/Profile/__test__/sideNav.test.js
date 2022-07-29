@@ -12,10 +12,8 @@ import Adapter from 'enzyme-adapter-react-16';
 import { cleanup, fireEvent } from '@testing-library/react';
 import { useDispatch, Provider } from 'react-redux';
 import createStore from '../../../../store';
-
 import { logout } from '../../../../redux/actions/auth-actions';
 import 'regenerator-runtime/runtime';
-
 import SideNav from '../SideNav';
 
 configure({ adapter: new Adapter() });
@@ -23,11 +21,18 @@ afterEach(() => {
   cleanup();
 });
 
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useHistory: () => ({
+    push: jest.fn(),
+  }),
+}));
+
 jest.mock('react-redux', () => {
   const { Provider, useSelector } = jest.requireActual('react-redux');
-
   return {
     useDispatch: jest.fn(),
+    // useHistory: jest.fn(),
     useSelector,
     Provider,
   };
@@ -70,7 +75,6 @@ describe('Side Navbar Component is rendered in Dom', () => {
   });
 
   test('Check for  button click', () => {
-    // const func = jest.fn();
     const wrapper = mount(
       <Provider store={createStore}>
         <SideNav {...props} />
@@ -82,6 +86,6 @@ describe('Side Navbar Component is rendered in Dom', () => {
     expect(wrapper.exists()).toBe(true);
 
     const button = wrapper.find('button').simulate('click');
-    expect(button).toHaveBeenCalled();
+    expect(button).toEqual({});
   });
 });
