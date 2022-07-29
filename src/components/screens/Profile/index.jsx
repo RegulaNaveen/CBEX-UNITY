@@ -38,7 +38,7 @@ const useStyles = makeStyles(() => ({
   },
   footer: {
     margin: '0 !important',
-    padding: '0 24px 0px 24px !important',
+    padding: '10px 24px 15px 24px !important',
     height: '15px'
   }
 }));
@@ -201,39 +201,60 @@ const Profile = () => {
           xs={9}
           md={9}
           lg={9}
-          style={{ paddingTop: '1.2em', margin: '0' }}
-          spacing={2}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            alignItem: 'center',
+            // height: '88vh',
+            flexWrap: 'nowrap'
+          }}
+          // spacing={2}
         >
-          <Grid item md={6} sm={12} xs={12} className={classes.item}>
-            <AccountPreference
-              name={name}
-              email={email}
-              role={role}
-              roleName={roleName}
-              setRoleName={setRoleName}
-              userPreference={userPreference}
-              handleUserPreferenceChange={handleUserPreferenceChange}
-            />
-          </Grid>
-          <Grid item md={6} sm={12} xs={12} className={classes.item}>
-            <NotificationPreference
-              userPreference={userPreference}
-              handleUserPreferenceChange={handleUserPreferenceChange}
-            />
-          </Grid>
-          <Grid item md={12} sm={12} xs={12} className={`${classes.item} `}>
-            <Footer
-              buttonProps={[
-                {
-                  label: '',
-                  href: '',
-                  target: '',
-                  disabled: true
-                }
-              ]}
-              className={` ${classes.footer}`}
-            />
-          </Grid>
+          <div>
+            <Grid
+              container
+              item
+              md={12}
+              sm={12}
+              xs={12}
+              style={{ paddingTop: '1.2em', margin: '0' }}
+              spacing={2}
+            >
+              <Grid item md={6} sm={12} xs={12}>
+                <AccountPreference
+                  name={name}
+                  email={email}
+                  role={role}
+                  roleName={roleName}
+                  setRoleName={setRoleName}
+                  userPreference={userPreference}
+                  handleUserPreferenceChange={handleUserPreferenceChange}
+                />
+              </Grid>
+              <Grid item md={6} sm={12} xs={12}>
+                <NotificationPreference
+                  userPreference={userPreference}
+                  handleUserPreferenceChange={handleUserPreferenceChange}
+                />
+              </Grid>
+            </Grid>
+          </div>
+          <div>
+            <Grid item md={12} sm={12} xs={12}>
+              <Footer
+                buttonProps={[
+                  {
+                    label: '',
+                    href: '',
+                    target: '',
+                    disabled: true
+                  }
+                ]}
+                className={` ${classes.footer}`}
+              />
+            </Grid>
+          </div>
           <Snackbar
             open={openSnackbar}
             autoHideDuration={6000}

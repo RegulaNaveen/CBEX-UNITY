@@ -20,6 +20,8 @@ import { Pencil, Globe, ReportIssue } from '../../svg';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import Button from 'apollo-react/components/Button';
 import User from 'apollo-react-icons/User';
+import Grid from 'apollo-react/components/Grid';
+import Avatar from 'apollo-react/components/Avatar';
 
 type Props = {
   rolesList: Array<string>,
@@ -95,8 +97,18 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
 
     return (
       <div className="toolbar-account-menu">
-        <p className="toolbar-account-menu-name">{name}</p>
-        <p className="toolbar-account-menu-email">{email}</p>
+        <Grid container style={{ padding: '10px' }}>
+          <Grid item>
+            <Avatar alt="avatar" src="">
+              {name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0)}
+            </Avatar>
+          </Grid>
+          <Grid item>
+            <p className="toolbar-account-menu-name">{name}</p>
+            <p className="toolbar-account-menu-email">{email}</p>
+          </Grid>
+        </Grid>
+
         <div className="toolbar-account-menu-separator" />
         {/* <div className="toolbar-account-menu-option">
           {isRolesLoading ? (

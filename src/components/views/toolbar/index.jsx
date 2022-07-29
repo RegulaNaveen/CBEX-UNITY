@@ -121,14 +121,7 @@ class Toolbar extends Component<{}, State> {
               type="button"
               tabIndex={-1}
             >
-              {' '}
-              <Avatar
-                // src='https://i.pinimg.com/originals/17/f3/9c/17f39c6f7a4a5457f39dba2368f0d077.jpg'
-                src=""
-                style={{
-                  marginLeft: '10px'
-                }}
-              >
+              <Avatar src="" className="tb-profile-avatar">
                 {name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0)}
               </Avatar>
               {isCollapsed ? (

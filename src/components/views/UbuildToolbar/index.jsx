@@ -6,6 +6,10 @@ import ToolbarMenu from './ToolbarMenu';
 import { DropMenu } from '../../svg';
 import { DASHBOARD, UBUILD } from '../../../routes';
 import { isUserUbuildAdmin } from '../../../utils/utils';
+import Avatar from 'apollo-react/components/Avatar';
+import ArrowUp from 'apollo-react-icons/ArrowUp';
+import ArrowDown from 'apollo-react-icons/ArrowDown';
+import { getUserName } from '../../../SessionHandler';
 
 type State = { isCollapsed: boolean };
 
@@ -46,6 +50,7 @@ class Toolbar extends Component<{}, State> {
   render() {
     const { isCollapsed } = this.state;
     const results = isUserUbuildAdmin();
+    const name = getUserName();
     return (
       <div className="toolbar-wrapper">
         <a href={DASHBOARD}>
@@ -81,8 +86,14 @@ class Toolbar extends Component<{}, State> {
               type="button"
               tabIndex={-1}
             >
-              <p className="toolbar-account-info-title">Profile</p>
-              <DropMenu className="toolbar-account-info-icon" />
+              <Avatar src="" className="tb-profile-avatar">
+                {name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0)}
+              </Avatar>
+              {isCollapsed ? (
+                <ArrowUp style={{ color: '#fff', fontSize: 20 }} />
+              ) : (
+                <ArrowDown style={{ color: '#fff', fontSize: 20 }} />
+              )}
             </div>
             {isCollapsed ? (
               <ToolbarMenu
