@@ -13,7 +13,7 @@ import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import Grid from 'apollo-react/components/Grid';
 import Panel from 'apollo-react/components/Panel';
-import Typography from 'apollo-react/components/Typography/Typography';
+import Typography from 'apollo-react/components/Typography';
 
 import { Add, Refresh } from '../../svg';
 import CollapsibleList from '../../common/CollapsibleList';

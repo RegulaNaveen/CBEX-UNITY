@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.4] - YYYY-MM-DD
+### Added
+- IQVIACBEXU-1194:Add Bell Icon for User In-App Notifications
+  - The UI part for the story is Completed 
+  - TODO: Implement API integration
+### Fixed
+- IQVIACBEXU-1852: Gear icon options should not appear when click on the bell icon
 ## [4.3.1] - YYYY-MM-DD
 ### Fixed
 - IQVIACBEXU-1727: Formatting issues when pasting into the Notepad

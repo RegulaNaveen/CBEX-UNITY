@@ -1,0 +1,45 @@
+.profile-wrapper {
+  .container-wrapper {
+    background-color: #f6f7fb;
+  }
+
+  .card-wrapper {
+    padding: 1em;
+    // margin: 0.5em;
+    overflow: visible;
+  }
+
+  .account-preference-wrapper {
+    margin: 1em;
+  }
+
+  .black-text {
+    color: #000;
+    font-weight: 530;
+    font-family: $proximaNova;
+  }
+
+  .grey-text {
+    color: #7f7f7f;
+    font-weight: 530;
+    font-family: $proximaNova;
+  }
+
+  .bold-text {
+    font-weight: 600;
+    color: #000;
+    font-family: $proximaNova;
+  }
+
+  .top-space {
+    margin-top: 1em;
+  }
+
+  .ep-section {
+    margin-top: 0.5em;
+  }
+
+  .button {
+    margin: 10px;
+  }
+}

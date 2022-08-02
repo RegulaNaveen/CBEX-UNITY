@@ -4,8 +4,12 @@ workflow:
 
 include:
   - local: devops/vars/global.yml
+  - project: 'CBEx/devops'
+    ref: test
+    file: /gitlab_balckduck_scan.yml
 
 stages:
+  - blackduckscan
   - sonar #sonar report
   - builddev
   - deploydev

@@ -1,7 +1,7 @@
 import React from 'react';
 import Grid from 'apollo-react/components/Grid';
 import Paper from 'apollo-react/components/Paper';
-import { Typography } from 'apollo-react/components/Typography/Typography';
+import Typography from 'apollo-react/components/Typography';
 import { parseMomentDate, remainingDays } from '../../../../utils/DateUtils';
 import { SF_HOST_URL } from '../../../../constants/api';
 
