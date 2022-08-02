@@ -144,6 +144,7 @@ export class Opportunity extends Component<Props, State> {
     localStorage.removeItem('proposalId');
 
     window.removeEventListener('storage', this.handleStorageChange);
+    this.context.updateSocketOppId(null);
   }
 
   handleStorageChange(e) {
@@ -204,13 +205,13 @@ export class Opportunity extends Component<Props, State> {
     const { bidStatus } = selectedBid.toJS();
     if (isLoading)
       return (
-        <div className='proposal-loader'>
-          <Loader type='TailSpin' color='#297DFD' height={100} width={100} />
+        <div className="proposal-loader">
+          <Loader type="TailSpin" color="#297DFD" height={100} width={100} />
         </div>
       );
 
     return (
-      <div className='proposal-details'>
+      <div className="proposal-details">
         <GenerateDocs />
         <UnityGrid data={details} isOpen={isOpen} bidStatus={bidStatus} />
         <UnityTab
@@ -252,8 +253,8 @@ export class Opportunity extends Component<Props, State> {
         {bidStatus && (
           <ProcessingCRM
             isOpen={bidStatus}
-            title='Processing CRM data'
-            message='A new Bid is being created based on CRM data'
+            title="Processing CRM data"
+            message="A new Bid is being created based on CRM data"
           />
         )}
 

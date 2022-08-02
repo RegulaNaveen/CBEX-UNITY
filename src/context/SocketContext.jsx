@@ -11,6 +11,10 @@ import {
   updateSwitchInProgress
 } from '../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
+import { getUserName, getUserEmail, getUserId } from '../SessionHandler';
+const userName = getUserName();
+const userEmail = getUserEmail();
+const userId = getUserId();
 
 // Exporting Context
 export const SocketContext = createContext();
@@ -27,6 +31,14 @@ const SocketContextProvider = props => {
 
       newSocket.onopen = event => {
         console.log('Socket Connected', event);
+        if (newSocket) {
+          newSocket.send(
+            JSON.stringify({
+              action: 'CONNECT',
+              body: { data: { userId, userEmail, userName } }
+            })
+          );
+        }
       };
       console.log('Adding listeners to socket');
       const {
@@ -90,7 +102,7 @@ const SocketContextProvider = props => {
     if (socket) {
       socket.send(
         JSON.stringify({
-          action: 'ADD_OPPORTUNITY',
+          action: 'UPDATE_CONNECTION',
           body: { oppId }
         })
       );
