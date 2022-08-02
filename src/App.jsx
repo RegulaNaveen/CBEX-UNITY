@@ -26,13 +26,12 @@ import SocketContextProvider from './context/SocketContext';
 
 const App = () => (
   <Provider store={store}>
-<<<<<<< HEAD
     <SocketContextProvider>
       <MatomoProvider value={matomoInstace}>
         <BrowserRouter>
           <SessionHandler>
             <Switch>
-              <Route path='/' exact component={Login} />
+              <Route path="/" exact component={Login} />
               <Route path={LOGIN} component={Login} />
               <PrivateRoute path={DASHBOARD} component={DashboardComponent} />
               <PrivateRoute path={PROPOSALS} component={ProposalComponent} />
@@ -47,27 +46,6 @@ const App = () => (
         </BrowserRouter>
       </MatomoProvider>
     </SocketContextProvider>
-=======
-    <MatomoProvider value={matomoInstace}>
-      <BrowserRouter>
-        <SessionHandler>
-          <Switch>
-            <Route path="/" exact component={Login} />
-            <Route path={LOGIN} component={Login} />
-            <PrivateRoute path={DASHBOARD} component={DashboardComponent} />
-            <PrivateRoute path={PROFILE} component={ProfileComponent} />
-            <PrivateRoute path={PROPOSALS} component={ProposalComponent} />
-            <PrivateRoute
-              path={OPPORTUNITYS}
-              component={OpportunityComponent}
-            />
-            <PrivateRoute path={UBUILD} component={UbuildShellComponent} />
-            <Redirect to={Login} />
-          </Switch>
-        </SessionHandler>
-      </BrowserRouter>
-    </MatomoProvider>
->>>>>>> 2180df417f15663c8a604f14145b8bcbf1de6af0
   </Provider>
 );
 
