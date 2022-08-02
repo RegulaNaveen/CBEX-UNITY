@@ -1,5 +1,5 @@
 // @flow
-import { Component } from 'react';
+import React, { Component } from 'react';
 import type { Node } from 'react';
 import { withRouter } from 'react-router-dom';
 import type { History, Location } from 'react-router-dom';
@@ -17,6 +17,7 @@ import {
   getRedirectURL,
   saveRedirectURL
 } from './utils/StorageUtils';
+import { SocketContext } from './context/SocketContext';
 
 const { COGNITO_HOST, REDIRECTION_URL, CLIENT_ID } = API.AUTH;
 
@@ -30,6 +31,8 @@ type Props = {
 };
 
 class SessionHandler extends Component<Props, {}> {
+  static contextType = SocketContext;
+
   componentDidMount() {
     const idToken = localStorage.getItem('id_token');
     if (idToken) this.validateUserToken(idToken);
@@ -86,6 +89,7 @@ class SessionHandler extends Component<Props, {}> {
       history,
       refreshUserData
     } = this.props;
+    this.context.initiateConnection();
     const redirectURL = getRedirectURL();
 
     refreshUserData();
@@ -108,6 +112,7 @@ class SessionHandler extends Component<Props, {}> {
     if (pathname !== LOGIN && pathname !== ROOT) {
       saveRedirectURL(pathname);
     }
+    this.context.disconnectSocket();
     window.location.assign(
       `${COGNITO_HOST}/logout?client_id=${CLIENT_ID}&logout_uri=${REDIRECTION_URL}`
     );

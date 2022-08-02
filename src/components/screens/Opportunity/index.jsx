@@ -32,10 +32,10 @@ import UnityFooter from '../../common/Footer';
 import UnityGrid from '../../common/atoms/inputs/Grid';
 import UnityTab from '../../common/atoms/inputs/Tab';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
-import { SOCKET_URL } from '../../../constants/api';
 import ProcessingCRM from '../../views/modals/ProcessingCRM';
 import BidDoneBanner from '../../views/BidDoneBanner';
 import GenerateDocs from '../../views/export-component/GenerateDocs';
+import { SocketContext } from '../../../context/SocketContext';
 
 type State = {
   selectedView: string
@@ -72,7 +72,7 @@ type Props = {
 };
 
 export class Opportunity extends Component<Props, State> {
-  toRef;
+  static contextType = SocketContext;
 
   constructor(props: Object) {
     super(props);
@@ -94,7 +94,6 @@ export class Opportunity extends Component<Props, State> {
       location: { search },
       match: { params }
     } = this.props;
-    this.connectsocket();
     expandAllSections(false);
     const selectedView = new URLSearchParams(search).get('viewType');
     if (selectedView && selectedView === 'documents')
@@ -130,15 +129,15 @@ export class Opportunity extends Component<Props, State> {
     }
   }
 
+  componentDidUpdate() {
+    const {
+      match: { params }
+    } = this.props;
+    this.context.updateSocketOppId(params.id);
+  }
+
   componentWillUnmount() {
     const { handleOpenClose } = this.props;
-    this.socketconnection.send(
-      JSON.stringify({
-        action: '$disconnect',
-        body: {}
-      })
-    );
-    this.socketconnection.close();
     if (handleOpenClose) handleOpenClose(false);
 
     localStorage.removeItem('proposalTypeView');
@@ -193,78 +192,6 @@ export class Opportunity extends Component<Props, State> {
     this.trackMatomoEventTabs(selectedView);
   };
 
-  connectsocket() {
-    const {
-      match: { params },
-      addNewBid,
-      getOpportunityInfo,
-      updateAnswerAction,
-      updateProposalDetail,
-      updateProposalNotes,
-      updateSwitchTempStatus,
-      setSwitchInProgress
-    } = this.props;
-
-    console.log('Starting the WS connection');
-    this.socketconnection = null;
-    this.socketconnection = new WebSocket(SOCKET_URL);
-
-    // On Connection Open
-    this.socketconnection.onopen = event => {
-      console.log('socket connected', event);
-      if (params.id) {
-        this.socketconnection.send(
-          JSON.stringify({
-            action: 'ADD_OPPORTUNITY',
-            body: { oppId: params.id }
-          })
-        );
-      }
-    };
-
-    // On Message Recieve
-    this.socketconnection.addEventListener('message', async response => {
-      const data = JSON.parse(response.data);
-      console.log('data.event :>> ', data.event);
-
-      switch (data.event) {
-        case 'IN_PROGRESS':
-          addNewBid(data.data);
-          break;
-        case 'COMPLETED':
-          getOpportunityInfo(params.id, true);
-          break;
-        case 'PROPOSAL_NOTE_UPDATE':
-          if (updateProposalNotes) updateProposalNotes(data.data);
-          break;
-        case 'ANSWER_UPDATE':
-          if (updateAnswerAction) updateAnswerAction(data.data);
-          break;
-        case 'PROPOSAL_DETAIL_UPDATE':
-          if (updateProposalDetail) updateProposalDetail(data.data);
-          break;
-        case 'SWITCH_TEMPLATE_IN_PROGRESS':
-          if (setSwitchInProgress) setSwitchInProgress(true);
-          if (updateSwitchTempStatus) updateSwitchTempStatus('progress');
-          break;
-        case 'SWITCH_TEMPLATE_COMPLETED':
-          if (updateSwitchTempStatus) updateSwitchTempStatus('success');
-          break;
-        case 'SWITCH_TEMPLATE_ERROR':
-          if (setSwitchInProgress) setSwitchInProgress(false);
-          if (updateSwitchTempStatus) updateSwitchTempStatus('error');
-          break;
-        default:
-          break;
-      }
-    });
-
-    // On Close
-    this.socketconnection.onclose = event => {
-      if (event.reason === 'Going away') this.connectsocket();
-    };
-  }
-
   renderContent = () => {
     const { enableValidateTab, selectedView } = this.state;
     const {
@@ -277,13 +204,13 @@ export class Opportunity extends Component<Props, State> {
     const { bidStatus } = selectedBid.toJS();
     if (isLoading)
       return (
-        <div className="proposal-loader">
-          <Loader type="TailSpin" color="#297DFD" height={100} width={100} />
+        <div className='proposal-loader'>
+          <Loader type='TailSpin' color='#297DFD' height={100} width={100} />
         </div>
       );
 
     return (
-      <div className="proposal-details">
+      <div className='proposal-details'>
         <GenerateDocs />
         <UnityGrid data={details} isOpen={isOpen} bidStatus={bidStatus} />
         <UnityTab
@@ -325,8 +252,8 @@ export class Opportunity extends Component<Props, State> {
         {bidStatus && (
           <ProcessingCRM
             isOpen={bidStatus}
-            title="Processing CRM data"
-            message="A new Bid is being created based on CRM data"
+            title='Processing CRM data'
+            message='A new Bid is being created based on CRM data'
           />
         )}
 
