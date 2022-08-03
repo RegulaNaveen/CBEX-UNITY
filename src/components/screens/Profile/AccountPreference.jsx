@@ -199,9 +199,17 @@ AccountPreference.defaultProps = {
   email: '',
   role: '',
   roleName: '',
-  setRoleName: '',
+  setRoleName: () => {},
   userPreference: [],
-  handleUserPreferenceChange: () => {}
+  handleUserPreferenceChange: () => {},
+  handleUpdateTimezone: () => {},
+  isFetchingTimezone: false,
+  isUpdatingTimezone: false,
+  timezoneList: [],
+  timezoneID: '',
+  currentTimezoneID: '',
+  setCurrentTimezoneID: () => {},
+  errorUpdatingTimezone: ''
 };
 
 AccountPreference.propTypes = {
@@ -210,7 +218,15 @@ AccountPreference.propTypes = {
   roleName: PropTypes.string,
   setRoleName: PropTypes.string,
   userPreference: PropTypes.array,
-  handleUserPreferenceChange: PropTypes.func
+  handleUserPreferenceChange: PropTypes.func,
+  handleUpdateTimezone: PropTypes.func,
+  isFetchingTimezone: PropTypes.bool,
+  isUpdatingTimezone: PropTypes.bool,
+  timezoneList: PropTypes.array,
+  timezoneID: PropTypes.string,
+  currentTimezoneID: PropTypes.string,
+  setCurrentTimezoneID: PropTypes.func,
+  errorUpdatingTimezone: PropTypes.string
 };
 
 export default AccountPreference;
