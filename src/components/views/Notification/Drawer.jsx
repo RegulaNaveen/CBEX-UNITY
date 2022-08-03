@@ -87,8 +87,8 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
                 unreadNotifications.map(item => {
                   return (
                     <ListItem
-                      key={item.notification_id}
-                      id={item.notification_id}
+                      key={item.id}
+                      id={item.id}
                       url={item.url}
                       oppNo={item.opportunity_no}
                       data={item.body}
