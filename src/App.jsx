@@ -22,28 +22,30 @@ import DashboardComponent from './components/screens/Dashboard';
 import UbuildShellComponent from './components/screens/Ubuild';
 import '../styles/App.scss';
 import matomoInstace from './utils/Matomo';
+import SocketContextProvider from './context/SocketContext';
 
 const App = () => (
   <Provider store={store}>
-    <MatomoProvider value={matomoInstace}>
-      <BrowserRouter>
-        <SessionHandler>
-          <Switch>
-            <Route path="/" exact component={Login} />
-            <Route path={LOGIN} component={Login} />
-            <PrivateRoute path={DASHBOARD} component={DashboardComponent} />
-            <PrivateRoute path={PROFILE} component={ProfileComponent} />
-            <PrivateRoute path={PROPOSALS} component={ProposalComponent} />
-            <PrivateRoute
-              path={OPPORTUNITYS}
-              component={OpportunityComponent}
-            />
-            <PrivateRoute path={UBUILD} component={UbuildShellComponent} />
-            <Redirect to={Login} />
-          </Switch>
-        </SessionHandler>
-      </BrowserRouter>
-    </MatomoProvider>
+    <SocketContextProvider>
+      <MatomoProvider value={matomoInstace}>
+        <BrowserRouter>
+          <SessionHandler>
+            <Switch>
+              <Route path="/" exact component={Login} />
+              <Route path={LOGIN} component={Login} />
+              <PrivateRoute path={DASHBOARD} component={DashboardComponent} />
+              <PrivateRoute path={PROPOSALS} component={ProposalComponent} />
+              <PrivateRoute
+                path={OPPORTUNITYS}
+                component={OpportunityComponent}
+              />
+              <PrivateRoute path={UBUILD} component={UbuildShellComponent} />
+              <Redirect to={Login} />
+            </Switch>
+          </SessionHandler>
+        </BrowserRouter>
+      </MatomoProvider>
+    </SocketContextProvider>
   </Provider>
 );
 

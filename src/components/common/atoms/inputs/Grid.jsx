@@ -5,8 +5,12 @@ import Typography from 'apollo-react/components/Typography';
 import { parseMomentDate, remainingDays } from '../../../../utils/DateUtils';
 import { SF_HOST_URL } from '../../../../constants/api';
 
-const styles = {
-  padding: 10,
+const styles = { padding: 10 };
+const containerStyle = {
+  width: '100%',
+  display: 'flex',
+  flexWrap: 'wrap',
+  boxSizing: 'border-box',
 };
 
 const loadSidebar = (props) => {
@@ -20,17 +24,17 @@ const loadSidebar = (props) => {
     'Protocol number': protocolNumber,
     'Therapeutic area': therapeuticArea,
     'CRM #': crm,
-    Customer: Customer,
+    Customer,
     bidNo,
-    opportunityId: Opportunity_Id,
+    opportunityId,
   } = data;
   const placeholder = 'No data';
   const date = bidDueDate && parseMomentDate(bidDueDate);
   const daysRemain = remainingDays(date);
-  const redirect = () => {
-    window.open(`${SF_HOST_URL}lightning/r/Opportunity/${Opportunity_Id}/view`);
-  };
 
+  const redirect = () => {
+    window.open(`${SF_HOST_URL}lightning/r/Opportunity/${opportunityId}/view`);
+  };
   let isBladeOpen = isOpen;
   if (windowSize <= 1400) {
     isBladeOpen = true;
@@ -39,7 +43,7 @@ const loadSidebar = (props) => {
   if (isBladeOpen) {
     return (
       <Grid container>
-        <Grid container xs={12}>
+        <Grid item xs={12} style={containerStyle}>
           <Paper style={styles} className="sidebarduedatedsg open">
             <Typography variant="body2" className="greytext sidebaropenfont">
               Opportunity Number
@@ -138,131 +142,127 @@ const loadSidebar = (props) => {
         </Grid>
       </Grid>
     );
-  } else {
-    return (
-      <Grid container>
-        <Grid container xs={4}>
-          <Grid item xs={3}>
-            <Paper style={styles} className="duedatedsg">
-              <Typography variant="body2" className="greytext">
-                Opportunity Number
-              </Typography>
-              <Typography
-                variant="body2"
-                className="boldtext"
-                style={{ cursor: 'pointer', color: 'Blue' }}
-                onClick={redirect}
-              >
-                {crm || placeholder}
-              </Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={3}>
-            <Paper style={styles} className="duedatedsg">
-              <Typography variant="body2" className="greytext">
-                Customer
-              </Typography>
-              <Typography variant="body2" className="boldtext">
-                {Customer || placeholder}
-              </Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={3}>
-            <Paper style={styles} className="phasedsg">
-              <Typography variant="body2" className="greytext leftalign">
-                Line of Business
-              </Typography>
-              <Typography variant="body2" className="boldtext leftalign">
-                {lineOfBusiness || placeholder}
-              </Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={3}>
-            <Paper style={styles} className="duedatedsg">
-              <Typography variant="body2" className="greytext">
-                IQVIA Biotech
-              </Typography>
-              <Typography variant="body2" className="boldtext">
-                {iqviaBiotech || placeholder}
-              </Typography>
-            </Paper>
-          </Grid>
+  }
+
+  return (
+    <Grid container>
+      <Grid item xs={4} style={containerStyle}>
+        <Grid item xs={3}>
+          <Paper style={styles} className="duedatedsg">
+            <Typography variant="body2" className="greytext">
+              Opportunity Number
+            </Typography>
+            <Typography
+              variant="body2"
+              className="boldtext"
+              style={{ cursor: 'pointer', color: 'Blue' }}
+              onClick={redirect}
+            >
+              {crm || placeholder}
+            </Typography>
+          </Paper>
         </Grid>
-        <Grid container xs={6}>
-          <Grid item xs={2}>
-            <Paper style={styles} className="duedatedsg">
-              <Typography variant="body2" className="greytext">
-                Phase
-              </Typography>
-              <Typography variant="body2" className="boldtext">
-                {phase ? phase.split(' ')[1] : placeholder}
-              </Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={2}>
-            <Paper style={styles} className="duedatedsg">
-              <Typography variant="body2" className="greytext">
-                Therapeutic Area
-              </Typography>
-              <Typography variant="body2" className="boldtext">
-                {therapeuticArea || placeholder}
-              </Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={3}>
-            <Paper style={styles} className="duedatedsg">
-              <Typography variant="body2" className="greytext">
-                Product Name
-              </Typography>
-              <Typography variant="body2" className="boldtext">
-                {productName || placeholder}
-              </Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={3}>
-            <Paper style={styles} className="duedatedsg">
-              <Typography variant="body2" className="greytext">
-                Protocol Number
-              </Typography>
-              <Typography variant="body2" className="boldtext">
-                {protocolNumber || placeholder}
-              </Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={2}>
-            <Paper style={styles} className="duedatedsg">
-              <Typography variant="body2" className="greytext">
-                Bid #
-              </Typography>
-              <Typography variant="body2" className="boldtext">
-                {bidNo || placeholder}
-              </Typography>
-            </Paper>
-          </Grid>
+        <Grid item xs={3}>
+          <Paper style={styles} className="duedatedsg">
+            <Typography variant="body2" className="greytext">
+              Customer
+            </Typography>
+            <Typography variant="body2" className="boldtext">
+              {Customer || placeholder}
+            </Typography>
+          </Paper>
         </Grid>
-        <Grid container xs={2}>
-          <Grid item xs={12}>
-            <Paper className="duedatedsg" style={styles}>
-              <Typography variant="body2" className="greytext lesslineheight">
-                Days Until Due
-              </Typography>
-              <p className="boldtext greencolor lesslineheight">
-                {bidStatus ? 'Processing' : daysRemain}
-              </p>
-            </Paper>
-          </Grid>
+        <Grid item xs={3}>
+          <Paper style={styles} className="phasedsg">
+            <Typography variant="body2" className="greytext leftalign">
+              Line of Business
+            </Typography>
+            <Typography variant="body2" className="boldtext leftalign">
+              {lineOfBusiness || placeholder}
+            </Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={3}>
+          <Paper style={styles} className="duedatedsg">
+            <Typography variant="body2" className="greytext">
+              IQVIA Biotech
+            </Typography>
+            <Typography variant="body2" className="boldtext">
+              {iqviaBiotech || placeholder}
+            </Typography>
+          </Paper>
         </Grid>
       </Grid>
-    );
-  }
+      <Grid item xs={6} style={containerStyle}>
+        <Grid item xs={2}>
+          <Paper style={styles} className="duedatedsg">
+            <Typography variant="body2" className="greytext">
+              Phase
+            </Typography>
+            <Typography variant="body2" className="boldtext">
+              {phase ? phase.split(' ')[1] : placeholder}
+            </Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={2}>
+          <Paper style={styles} className="duedatedsg">
+            <Typography variant="body2" className="greytext">
+              Therapeutic Area
+            </Typography>
+            <Typography variant="body2" className="boldtext">
+              {therapeuticArea || placeholder}
+            </Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={3}>
+          <Paper style={styles} className="duedatedsg">
+            <Typography variant="body2" className="greytext">
+              Product Name
+            </Typography>
+            <Typography variant="body2" className="boldtext">
+              {productName || placeholder}
+            </Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={3}>
+          <Paper style={styles} className="duedatedsg">
+            <Typography variant="body2" className="greytext">
+              Protocol Number
+            </Typography>
+            <Typography variant="body2" className="boldtext">
+              {protocolNumber || placeholder}
+            </Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={2}>
+          <Paper style={styles} className="duedatedsg">
+            <Typography variant="body2" className="greytext">
+              Bid #
+            </Typography>
+            <Typography variant="body2" className="boldtext">
+              {bidNo || placeholder}
+            </Typography>
+          </Paper>
+        </Grid>
+      </Grid>
+      <Grid item xs={2} style={containerStyle}>
+        <Grid item xs={12}>
+          <Paper className="duedatedsg" style={styles}>
+            <Typography variant="body2" className="greytext lesslineheight">
+              Days Until Due
+            </Typography>
+            <p className="boldtext greencolor lesslineheight">
+              {bidStatus ? 'Processing' : daysRemain}
+            </p>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Grid>
+  );
 };
 
 const UnityGrid = (props) => {
-  return (
-    <>
-      <>{loadSidebar(props)}</>
-    </>
-  );
+  return loadSidebar(props);
 };
 
 export default UnityGrid;

@@ -166,7 +166,7 @@ const PROPOSAL = {
 
 const NOTEPAD_API_URL = `${PROPOSAL_API_ENDPOINT}/api/notes`;
 const PROFILE_API_URL = `${PROPOSAL_API_ENDPOINT}/api/user/preference`;
-const NOTIFICATION_API_URL = `${PROPOSAL_API_ENDPOINT}/api/notification`;
+const NOTIFICATION_API_URL = `${PROPOSAL_API_ENDPOINT}/api/app-notification`;
 
 const NOTEPAD = {
   NOTEPAD_API_URL
