@@ -19,6 +19,7 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
 
   const closeDrawer = () => {
     setIsDrawer(false);
+    setIsDrawerOptions(false);
   };
   const toggleIsDrawer = () => {
     setIsDrawer(!isDrawer);
@@ -49,8 +50,16 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
         >
           <div className='iconSection'>
             <div className='toolbar-account-wrapper'>
-              <div className='toolbar-account-info' style={{ flex: '0' }}>
-                <span className='iconBadge'>{notificationCount}</span>
+              <div
+                className='toolbar-account-info'
+                style={{
+                  display: 'flex',
+                  justifyContent: notificationCount ? 'start' : 'center'
+                }}
+              >
+                {notificationCount != 0 && (
+                  <span className='iconBadge'>{notificationCount}</span>
+                )}
                 <Bell style={{ color: 'white', cursor: 'pointer' }} />
               </div>
             </div>
@@ -68,21 +77,23 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
                   onClick={toggleIsDrawerOptions}
                 />
                 {/* Drawer Gear Icon options */}
-                {isDrawerOptions && (
-                  <DrawerOptions closeIsDrawerOptions={closeIsDrawerOptions} />
-                )}
+                <DrawerOptions
+                  isShow={isDrawerOptions}
+                  closeIsDrawerOptions={closeIsDrawerOptions}
+                />
               </div>
               {/* Notification List items */}
               {notificationCount > 0 ? (
                 unreadNotifications.map(item => {
                   return (
                     <ListItem
-                      key={item.id}
-                      id={item.id}
-                      url={item.action_url}
+                      key={item.notification_id}
+                      id={item.notification_id}
+                      url={item.url}
                       oppNo={item.opportunity_no}
-                      data={item.data}
-                      isSeen={item.isSeen}
+                      data={item.body}
+                      isSeen={item.read}
+                      createdAt={item.created_date}
                     />
                   );
                 })
@@ -90,11 +101,11 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
                 <NoNotification />
               )}
               {/* View All Notifications Button*/}
-              <div>
+              {/* <div>
                 <Typography variant='body2' className='view-all-notifications'>
                   View All Notifications
                 </Typography>
-              </div>
+              </div> */}
             </div>
           </ClickAwayListener>
         )}

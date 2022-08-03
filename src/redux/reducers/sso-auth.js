@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 // @flow
 import { Map, fromJS } from 'immutable'; // NOSONAR
 // eslint-disable-next-line
@@ -35,7 +36,9 @@ const loginUser = (state: Map, action: Object) => {
     refresh_token: refreshToken
   } = data;
 
-  const { name, email, family_name: lName } = jwt_decode(idToken);
+  const { name, email, family_name: lName, preferred_username } = jwt_decode(
+    idToken
+  );
   const decoded = jwt_decode(idToken);
   const role = decoded['custom:role'];
 
@@ -45,6 +48,7 @@ const loginUser = (state: Map, action: Object) => {
   localStorage.setItem('userRole', role);
   localStorage.setItem('userEmail', email);
   localStorage.setItem('userName', `${name} ${lName}`);
+  localStorage.setItem('userId', preferred_username);
 
   return state
     .set('isAuthenticated', true)

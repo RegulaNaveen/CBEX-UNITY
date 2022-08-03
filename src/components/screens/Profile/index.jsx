@@ -256,8 +256,6 @@ const Profile = () => {
                   isUpdatingTimezone={isUpdatingTimezone}
                   timezoneList={timezoneList}
                   timezoneID={timezoneID}
-                  // errorUpdatingTimezone
-                  // errorFetchingTimezone
                   handleUserPreferenceChange={handleUserPreferenceChange}
                   handleUpdateTimezone={handleUpdateTimezone}
                 />
