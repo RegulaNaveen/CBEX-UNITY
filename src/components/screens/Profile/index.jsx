@@ -83,6 +83,7 @@ const Profile = () => {
   const role = getUserRole();
   const token = getAccessToken();
   const [roleName, setRoleName] = useState('');
+  const [currentTimezoneID, setCurrentTimezoneID] = useState('');
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -107,6 +108,7 @@ const Profile = () => {
   }, [errorUpdatingUserPreference, errorFetchingUserPreference]);
 
   const handleUpdateTimezone = e => {
+    setCurrentTimezoneID(e.target.value);
     dispatch(updateUserTimezone(e.target.value));
   };
 
@@ -258,6 +260,9 @@ const Profile = () => {
                   timezoneID={timezoneID}
                   handleUserPreferenceChange={handleUserPreferenceChange}
                   handleUpdateTimezone={handleUpdateTimezone}
+                  currentTimezoneID={currentTimezoneID}
+                  setCurrentTimezoneID={setCurrentTimezoneID}
+                  errorUpdatingTimezone={errorUpdatingTimezone}
                 />
               </Grid>
               <Grid item md={6} sm={12} xs={12}>
