@@ -11,6 +11,7 @@ import {
   updateSwitchInProgress
 } from '../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
+import { setNotification } from '../redux/actions/notification-actions';
 import { getUserName, getUserEmail, getUserId } from '../SessionHandler';
 const userName = getUserName();
 const userEmail = getUserEmail();
@@ -48,7 +49,8 @@ const SocketContextProvider = props => {
         updateProposalDetail,
         updateProposalNotes,
         updateSwitchTempStatus,
-        setSwitchInProgress
+        setSwitchInProgress,
+        updateNotification
       } = props;
 
       // On Message Recieve
@@ -81,6 +83,9 @@ const SocketContextProvider = props => {
           case 'SWITCH_TEMPLATE_ERROR':
             if (setSwitchInProgress) setSwitchInProgress(false);
             if (updateSwitchTempStatus) updateSwitchTempStatus('error');
+            break;
+          case 'IN_APP_NOTIFICATION_RECEIVED':
+            updateNotification();
             break;
           default:
             break;
@@ -144,7 +149,8 @@ const mapDispatchToProps = {
   updateProposalDetail: updateProposalDetailFromWebSocket,
   updateProposalNotes: updateProposalNotesFromWebSocket,
   updateSwitchTempStatus: updateSwitchTempStatusFromWebSocket,
-  setSwitchInProgress: updateSwitchInProgress
+  setSwitchInProgress: updateSwitchInProgress,
+  updateNotification: setNotification
 };
 
 export default connect(
