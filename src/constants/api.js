@@ -94,6 +94,21 @@ switch (environment) {
     SOCKET_URL =
       'wss://nthe94se04.execute-api.us-east-1.amazonaws.com/production';
     break;
+  case 'L4':
+    // UDEV Data
+    PROPOSAL_API_ENDPOINT =
+      'https://v51h8rf355.execute-api.us-east-1.amazonaws.com/l4';
+    PROPOSAL_API_KEY = 'PZdKkDgB2p3BZXbm9QnTX2aJtdxJkkz37hgYksJ7';
+    NORMAL_AUTH_API_ENDPOINT =
+      'https://cokteh9f4e.execute-api.us-east-1.amazonaws.com/qa';
+    COGNITO_HOST = 'https://qa-unity.auth.us-east-1.amazoncognito.com';
+    CLIENT_ID = '65ie0siehm65hisi4n1avlaa0r';
+    REDIRECTION_URL = 'https://l4-unity.iqvia.app/';
+    UBUILD_ARTIFACT = 'https://l4-ubuild.iqvia.app/main.js';
+    SF_HOST_URL = 'https://iqvia--staging.lightning.force.com/';
+    SOCKET_URL =
+      'wss://nthe94se04.execute-api.us-east-1.amazonaws.com/production';
+    break;
   default:
     // DEV Data
     PROPOSAL_API_ENDPOINT =

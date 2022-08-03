@@ -11,8 +11,8 @@ stages:
   # - deploydev
   - builddev3
   - deploydev3
-  - buildL4
-  - deployL4
+  - buildl4
+  - deployl4
   # - buildqa
   # - deployqa
   # - builddemo
@@ -119,8 +119,8 @@ deploydev3:
   tags:
     - docker
 
-buildL4:
-  stage: buildL4
+l4:
+  stage: buildl4
   image: node:12
   when: manual
   variables:
@@ -140,11 +140,11 @@ buildL4:
   tags:
     - docker
 
-deployL4:
-  stage: deployL4
+deployl4:
+  stage: deployl4
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
-    - buildL4
+    - l4
   when: manual
   script:    
     - source build.env
@@ -320,7 +320,7 @@ deploystack:
       when: always
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   dependencies:
-    - dev3
+    - l4
   script:
     - source build.env
     - aws cloudformation validate-template --template-body file://devops/cloudformation/cbex-unity-frontend-cf.yml --region $Region
