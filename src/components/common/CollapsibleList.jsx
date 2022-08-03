@@ -1,7 +1,7 @@
 // @flow
-import React, { Component, Suspense } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Map } from 'immutable';
+import { Map } from 'immutable'; // NOSONAR
 import Link from 'apollo-react/components/Link';
 import Plus from 'apollo-react-icons/Plus';
 import FolderOpen from 'apollo-react-icons/FolderOpen';
@@ -13,15 +13,13 @@ import {
 } from '../../redux/selectors';
 import chevronRight from '../../../img/chevron-right.svg';
 import chevronDown from '../../../img/chevron-down.svg';
+import Question from './Question';
 import MatomoHOC from '../HOC/MatomoHOC';
+
 import {
   onHandleOpenClose,
   handleSelectedSection
 } from '../../redux/actions/sidebar-actions';
-
-const CollapsibleQuestionMapping = React.lazy(() =>
-  import('./CollapsibleQuestionMapping')
-);
 
 type State = {
   isCollapsed: boolean
@@ -56,8 +54,12 @@ class CollapsibleList extends Component<Props, State> {
 
   constructor(props: Object) {
     super(props);
+
     this.taskRef = React.createRef();
-    this.state = { isCollapsed: false };
+
+    this.state = {
+      isCollapsed: false
+    };
   }
 
   componentDidMount() {
@@ -104,10 +106,13 @@ class CollapsibleList extends Component<Props, State> {
 
   createId = () => {
     const { title } = this.props;
-    return title
+
+    const id = title
       .toLocaleLowerCase()
       .split(' ')
       .join('-');
+
+    return id;
   };
 
   showNotesCount = title => {
@@ -132,9 +137,9 @@ class CollapsibleList extends Component<Props, State> {
                 setTabFromQuestionNotes(1, title, true);
               }}
               style={{ borderBottom: 'none' }}
-              size="small"
+              size='small'
             >
-              <FolderOpen fontSize="extraSmall" />
+              <FolderOpen fontSize='extraSmall' />
               <span style={{ verticalAlign: 'top' }}>
                 {' '}
                 Notes ({count.size})
@@ -181,20 +186,19 @@ class CollapsibleList extends Component<Props, State> {
       isNotepadOpen
     } = this.props;
     return (
-      <div className="task-wrapper" ref={this.taskRef} id={this.createId()}>
-        {/* Expand Arrow Icon */}
+      <div className='task-wrapper' ref={this.taskRef} id={this.createId()}>
         <button
-          id="arrow-icon"
-          className="task-icon-wrapper"
+          id='arrow-icon'
+          className='task-icon-wrapper'
           onClick={this.handleCollapse}
           onKeyPress={this.handleKeyPress}
-          type="button"
+          type='button'
           tabIndex={0}
         >
           <img
-            className="task-icon"
+            className='task-icon'
             src={isCollapsed ? chevronDown : chevronRight}
-            alt="question arrow"
+            alt='question arrow'
           />
         </button>
 
@@ -209,16 +213,15 @@ class CollapsibleList extends Component<Props, State> {
             <p className="task-title">{title}</p>
           </div>
         ) : (
-          <div className="task-table-wrapper">
-            {/* Section Header */}
+          <div className='task-table-wrapper'>
             <div
-              className="task-table-headers"
-              role="button"
+              className='task-table-headers'
+              role='button'
               onClick={this.handleCollapse}
               onKeyPress={this.handleKeyPress}
               tabIndex={-1}
             >
-              <div className="task-title">
+              <div className='task-title'>
                 <p>
                   {title}
                   {this.showNotesCount(title)}
@@ -226,26 +229,58 @@ class CollapsibleList extends Component<Props, State> {
               </div>
             </div>
 
-            {/* Question List */}
-            <Suspense fallback={<div>Loading...</div>}>
-              <CollapsibleQuestionMapping
-                questions={questions}
-                milestone={milestone}
-                title={title}
-                setQuestionToDisplayHistory={setQuestionToDisplayHistory}
-                isNotepadOpen={isNotepadOpen}
-              />
-            </Suspense>
+            {questions.valueSeq().map(questionConfig => {
+              const visible =
+                questionConfig.get('visible', true) &&
+                (questionConfig.get('active', true) ||
+                  questionConfig.get('isCustomQuestion', true));
 
-            {/* Add New Question Button */}
+              return (
+                (visible || typeof visible === 'undefined') && (
+                  <Question
+                    ismilestoneavailable={milestone}
+                    key={questionConfig.get('questionId')}
+                    milestone={questionConfig.get('milestone')}
+                    milestoneNew={questionConfig.get('milestoneNew')}
+                    questionId={questionConfig.get('questionId')}
+                    proposalId={questionConfig.get('proposalId')}
+                    answers={questionConfig.get('answers')}
+                    questionText={questionConfig.get('questionText')}
+                    questionHTML={questionConfig.get('questionHTML')}
+                    questionJSON={questionConfig.get('questionJSON')}
+                    answerConfiguration={questionConfig.get(
+                      'answerConfiguration'
+                    )}
+                    section={questionConfig.get('section')}
+                    sfObject={questionConfig.get('sfObject')}
+                    sfField={questionConfig.get('sfField')}
+                    sectionName={title}
+                    setQuestionToDisplayHistory={setQuestionToDisplayHistory}
+                    loading={questionConfig.get('loading', false)}
+                    questionHint={questionConfig.get('questionHint', '')}
+                    questionHintHTML={questionConfig.get(
+                      'questionHintHTML',
+                      ''
+                    )}
+                    questionHintJSON={questionConfig.get('questionHintJSON')}
+                    roleNames={questionConfig.get('roleNames')}
+                    isCustomQuestion={questionConfig.get('isCustomQuestion')}
+                    hasDifferentSFanswer={questionConfig.get(
+                      'hasDifferentSFanswer'
+                    )}
+                    isNotepadOpen={isNotepadOpen}
+                  />
+                )
+              );
+            })}
             {selectedBid.get('isCurrent') && (
-              <div className="add-question">
+              <div className='add-question'>
                 <Link
                   style={{ borderBottom: 'none' }}
                   onClick={() => onAddQuestion(title)}
-                  size="small"
+                  size='small'
                 >
-                  <Plus fontSize="extraSmall" />
+                  <Plus fontSize='extraSmall' />
                   <span style={{ verticalAlign: 'top' }}>
                     {' '}
                     Add New Question
