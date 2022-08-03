@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useRef } from 'react';
 import { Map } from 'immutable'; // NOSONAR
 import { connect } from 'react-redux';
 import { SOCKET_URL } from '../constants/api';
@@ -22,7 +22,7 @@ const userId = getUserId();
 export const SocketContext = createContext();
 
 const SocketContextProvider = props => {
-  const [socket, setSocket] = useState(null);
+  const socket = useRef(null);
   const [OppId, setOppId] = useState(null);
 
   /**
@@ -30,9 +30,9 @@ const SocketContextProvider = props => {
    */
   const isSocketConnected = () => {
     if (
-      socket?.readyState !== WebSocket.OPEN &&
-      socket?.readyState !== WebSocket.CONNECTING &&
-      socket?.readyState !== 1
+      socket?.current?.readyState !== WebSocket.OPEN &&
+      socket?.current?.readyState !== WebSocket.CONNECTING &&
+      socket?.current?.readyState !== 1
     ) {
       return false;
     }
@@ -113,7 +113,7 @@ const SocketContextProvider = props => {
           initiateConnection();
         }
       };
-      setSocket(newSocket);
+      socket.current = newSocket;
     }
   };
 
@@ -134,7 +134,7 @@ const SocketContextProvider = props => {
   };
 
   const sendUpdateConnection = oppId => {
-    socket.send(
+    socket?.current?.send(
       JSON.stringify({
         action: 'UPDATE_CONNECTION',
         body: { oppId }
@@ -149,7 +149,7 @@ const SocketContextProvider = props => {
 
   const disconnectSocket = () => {
     if (isSocketConnected()) {
-      socket.send(
+      socket?.current?.send(
         JSON.stringify({
           action: '$disconnect',
           body: {}
@@ -162,7 +162,6 @@ const SocketContextProvider = props => {
     <SocketContext.Provider
       value={{
         socket,
-        setSocket,
         initiateConnection,
         updateSocketOppId,
         disconnectSocket,
