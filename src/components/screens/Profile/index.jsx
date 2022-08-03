@@ -14,14 +14,22 @@ import AccountPreference from './AccountPreference';
 import NotificationPreference from './NotificationPreference';
 import {
   fetchUserPreference,
-  updateUserPreference
+  updateUserPreference,
+  fetchTimezone,
+  updateUserTimezone
 } from '../../../redux/actions/profile-actions';
 import {
   selectUserPreference,
   selectIsUpdatingUserPreference,
   selectIsFetchingUserPreference,
   selectFetchUserPreferenceErrorMsg,
-  selectUpdateUserPreferenceErrorMsg
+  selectUpdateUserPreferenceErrorMsg,
+  selectIsFetchingTimezone,
+  selectIsUpdatingTimezone,
+  selectTimezoneList,
+  selectTimezoneID,
+  selectUpdateTimezoneErrorMsg,
+  selectFetchTimezoneErrorMsg
 } from '../../../redux/selectors';
 
 import SideNav from './SideNav';
@@ -62,6 +70,12 @@ const Profile = () => {
   const errorUpdatingUserPreference = useSelector(
     selectUpdateUserPreferenceErrorMsg
   );
+  const isFetchingTimezone = useSelector(selectIsFetchingTimezone);
+  const isUpdatingTimezone = useSelector(selectIsUpdatingTimezone);
+  const timezoneList = useSelector(selectTimezoneList);
+  const timezoneID = useSelector(selectTimezoneID);
+  const errorUpdatingTimezone = useSelector(selectUpdateTimezoneErrorMsg);
+  const errorFetchingTimezone = useSelector(selectFetchTimezoneErrorMsg);
   const userPreference = useSelector(selectUserPreference);
   const classes = useStyles();
   const name = getUserName();
@@ -80,12 +94,21 @@ const Profile = () => {
 
   useEffect(() => {
     dispatch(fetchUserPreference());
+    dispatch(fetchTimezone());
   }, []);
 
   useEffect(() => {
-    if (errorUpdatingUserPreference || errorFetchingUserPreference)
+    if (
+      errorUpdatingUserPreference ||
+      errorFetchingUserPreference ||
+      errorFetchingTimezone
+    )
       setOpenSnackbar(true);
   }, [errorUpdatingUserPreference, errorFetchingUserPreference]);
+
+  const handleUpdateTimezone = e => {
+    dispatch(updateUserTimezone(e.target.value));
+  };
 
   /**
    *
@@ -229,7 +252,14 @@ const Profile = () => {
                   roleName={roleName}
                   setRoleName={setRoleName}
                   userPreference={userPreference}
+                  isFetchingTimezone={isFetchingTimezone}
+                  isUpdatingTimezone={isUpdatingTimezone}
+                  timezoneList={timezoneList}
+                  timezoneID={timezoneID}
+                  // errorUpdatingTimezone
+                  // errorFetchingTimezone
                   handleUserPreferenceChange={handleUserPreferenceChange}
+                  handleUpdateTimezone={handleUpdateTimezone}
                 />
               </Grid>
               <Grid item md={6} sm={12} xs={12}>

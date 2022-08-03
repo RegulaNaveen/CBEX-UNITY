@@ -4,6 +4,8 @@ import Card from 'apollo-react/components/Card';
 import PropTypes from 'prop-types';
 import Typography from 'apollo-react/components/Typography';
 import Checkbox from 'apollo-react/components/Checkbox';
+import MenuItem from 'apollo-react/components/MenuItem';
+import Select from 'apollo-react/components/Select';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { getRoles, isRolesInfoLoading } from '../../../redux/selectors';
@@ -16,7 +18,12 @@ const AccountPreference = ({
   roleName,
   setRoleName,
   userPreference,
-  handleUserPreferenceChange
+  handleUserPreferenceChange,
+  handleUpdateTimezone,
+  isFetchingTimezone,
+  isUpdatingTimezone,
+  timezoneList,
+  timezoneID
 }) => {
   const dispatch = useDispatch();
 
@@ -82,6 +89,37 @@ const AccountPreference = ({
               >
                 Your role will determine the visible questions in an opportunity
               </Typography>
+            </>
+          )}
+        </div>
+        <div className="top-space" style={{ maxWidth: '80%' }}>
+          {isFetchingTimezone || isUpdatingTimezone ? (
+            <div className="toolbar-account-menu-option-loader">
+              <Loader type="TailSpin" color="#297DFD" height={35} width={35} />
+            </div>
+          ) : (
+            <>
+              <Select
+                label="Preferred Timezone"
+                helperText={
+                  <Typography
+                    className="grey-text"
+                    variant="caption"
+                    gutterBottom
+                    style={{ fontSize: '12px' }}
+                  >
+                    Your timezone will affect when Unity updates you
+                  </Typography>
+                }
+                value={timezoneID}
+                onChange={handleUpdateTimezone}
+                placeholder="Select Timezone"
+                fullWidth
+              >
+                {timezoneList.map(({ time_zone_id, time_zone }) => {
+                  return <MenuItem value={time_zone_id}>{time_zone}</MenuItem>;
+                })}
+              </Select>
             </>
           )}
         </div>
