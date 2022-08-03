@@ -42,7 +42,7 @@ import AutocompleteText from './atoms/inputs/AutoCompleteText';
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
 import SFAnswerValidationWrapper from './SFAnswerValidationWrapper';
 import ANSWER_TYPES from '../../constants/answerTypes';
-import CustomApolloRichText from './CustomApolloRichText';
+// import CustomApolloRichText from './CustomApolloRichText';
 import dummyRichTextJson from '../../dummyRichText.json';
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
@@ -413,15 +413,15 @@ export class TaskRow extends Component<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            {/* <TextAreaV2
+            <TextAreaV2
               className="proposal-text-area"
               placeholder={checkDisableFlag() ? '' : 'Click to answer'}
               value={answerValue}
               onBlur={e => this.handleTextChange(e.target.value, answerValue)}
               onFocus={e => this.onChildInputFocus(e)}
               disabled={checkDisableFlag()}
-            /> */}
-            <CustomApolloRichText {...richTextAnswerField} />
+            />
+            {/* <CustomApolloRichText {...richTextAnswerField} /> */}
           </SFAnswerValidationWrapper>
         );
       }
