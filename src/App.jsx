@@ -35,6 +35,7 @@ const App = () => (
               <Route path={LOGIN} component={Login} />
               <PrivateRoute path={DASHBOARD} component={DashboardComponent} />
               <PrivateRoute path={PROPOSALS} component={ProposalComponent} />
+              <PrivateRoute path={PROFILE} component={ProfileComponent} />
               <PrivateRoute
                 path={OPPORTUNITYS}
                 component={OpportunityComponent}
