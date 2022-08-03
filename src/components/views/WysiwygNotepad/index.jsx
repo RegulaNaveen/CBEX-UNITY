@@ -9,13 +9,12 @@ import {
   getSelectedBid,
   getUserName,
   getUserEmail,
-  getUserRole,
-  getProposalDetails
+  getUserRole
 } from '../../../redux/selectors';
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { updateNote, fetchNotes } from '../../../redux/actions/notepad-actions';
 import 'draft-js/dist/Draft.css';
-
+import { getProposalDetails } from '../../../redux/selectors';
 const jsonDP = require('jsondiffpatch');
 
 const WysiwygNotepad = ({
@@ -65,6 +64,8 @@ const WysiwygNotepad = ({
   const [notesId, setNotesId] = useState('');
 
   useEffect(() => {
+    console.log('notes changed< Rerendered', notes);
+    console.log({ selectedBid: selectedBid.get('id') });
     if (!notes.isFromSocket) {
       if (notes.size > 0) {
         const newNotes =
@@ -154,7 +155,7 @@ const WysiwygNotepad = ({
 
   return (
     <Editor
-      key="draft_editor"
+      key='draft_editor'
       editorState={editorState}
       onEditorStateChange={onEditorsChange}
       handlePastedText={onhandlePastedText}

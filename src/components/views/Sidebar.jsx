@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import { Map } from 'immutable';
+import { Map } from 'immutable'; // NOSONAR
 import { connect } from 'react-redux';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
@@ -136,25 +136,20 @@ class Sidebar extends Component<Props, State> {
     this.trackMatomoEventSidebarToggle(!isOpen);
   };
 
-  timeout = ms => {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  };
-
-  scrollToSelectedElement = async (event: SyntheticInputEvent<EventTarget>) => {
+  scrollToSelectedElement = (event: SyntheticInputEvent<EventTarget>) => {
     event.stopPropagation();
 
     const {
       target: { textContent, id }
     } = event;
     const { setSelectedSection, handleOpenClose, onscrollelement } = this.props;
-    onscrollelement(textContent);
+    onscrollelement(textContent)
 
     const itemToScroll = textContent
       .toLocaleLowerCase()
       .split(' ')
       .join('-');
 
-    await this.timeout(100);
     const item: ?HTMLElement = document.getElementById(itemToScroll);
 
     // delayed 1s so that sidebar will close and height of question section wpn't change
