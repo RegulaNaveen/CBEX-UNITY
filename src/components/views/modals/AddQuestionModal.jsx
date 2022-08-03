@@ -445,7 +445,6 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 value={isEditMode && roleNames}
                 error={this.state.error.filter(v => v.roleNames)}
                 onClick={this.onRoleChange}
-                onChange={() => {}}
               />
             </div>
           </div>

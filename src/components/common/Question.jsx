@@ -1,17 +1,17 @@
 // @flow
 /* eslint-disable no-plusplus */
 import React, { Component } from 'react';
-import { Map, List } from 'immutable';
+import { Map, List } from 'immutable'; // NOSONAR
 import { connect } from 'react-redux';
-import { isObject, isEqual, isEmpty, xor, isString } from 'lodash';
+import { isObject, isEqual, isEmpty, xor } from 'lodash';
 import IconButton from 'apollo-react/components/IconButton';
 import Loader from 'apollo-react/components/Loader';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
+import Typography from 'apollo-react/components/Typography';
 import Grid from 'apollo-react/components/Grid';
 import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
 import StatusCheck from 'apollo-react-icons/StatusCheck';
-
 import { Checkmark, Edit } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
 import TextArea from './atoms/inputs/TextArea';
@@ -42,14 +42,12 @@ import AutocompleteText from './atoms/inputs/AutoCompleteText';
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
 import SFAnswerValidationWrapper from './SFAnswerValidationWrapper';
 import ANSWER_TYPES from '../../constants/answerTypes';
-// import CustomApolloRichText from './CustomApolloRichText';
-import dummyRichTextJson from '../../dummyRichText.json';
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
+// const Spanexp = /[^<]\/span>/g;
 type State = {
   selectedDay: string,
-  selectedRow: Boolean,
-  isEditableRichText: Boolean
+  selectedRow: Boolean
 };
 
 type Props = {
@@ -88,8 +86,7 @@ export class TaskRow extends Component<Props, State> {
 
     this.state = {
       selectedDay: '',
-      selectedRow: false,
-      isEditableRichText: false
+      selectedRow: false
     };
   }
 
@@ -179,10 +176,7 @@ export class TaskRow extends Component<Props, State> {
     const answerType = answerConfiguration.get('type');
 
     // picklist value should not be converted to string while saving
-    if (
-      answerType === ANSWER_TYPES.PICKLIST ||
-      answerType === ANSWER_TYPES.PICKLIST_LOOKUP
-    ) {
+    if (answerType === ANSWER_TYPES.PICKLIST || answerType === ANSWER_TYPES.PICKLIST_LOOKUP) {
       setProposalAnswer(
         proposalId,
         questionId,
@@ -317,20 +311,16 @@ export class TaskRow extends Component<Props, State> {
 
   resetDate = () => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+    const { selectedDay } = this.state;
     this.setState({ selectedDay: ' ' }, () => {
-      const { selectedDay } = this.state;
-      setProposalAnswer(proposalId, questionId, selectedDay, userData);
+      setProposalAnswer(
+        proposalId,
+        questionId,
+        this.state.selectedDay,
+        userData
+      );
       this.trackMatomoEventSubmitAnswer(' ');
     });
-  };
-
-  onBlurRichText = data => {
-    console.log({ data });
-    this.setState({ isEditableRichText: false });
-  };
-
-  onClickRichTextHTML = () => {
-    this.setState({ isEditableRichText: true });
   };
 
   renderAnswer = (
@@ -339,7 +329,6 @@ export class TaskRow extends Component<Props, State> {
     answers: Map,
     lastAnswer: Map
   ) => {
-    const { isEditableRichText } = this.state;
     const {
       sectionName,
       sfObject,
@@ -348,6 +337,7 @@ export class TaskRow extends Component<Props, State> {
       noneditableField,
       hasDifferentSFanswer
     } = this.props;
+    // const { selectedDay } = this.state;
     const isCurrentBid = selectedBid.get('isCurrent');
 
     const optionsYN = ['Yes', 'No'];
@@ -384,8 +374,7 @@ export class TaskRow extends Component<Props, State> {
     }
 
     if (
-      (type === ANSWER_TYPES.PICKLIST ||
-        type === ANSWER_TYPES.PICKLIST_LOOKUP) &&
+      (type === ANSWER_TYPES.PICKLIST || type === ANSWER_TYPES.PICKLIST_LOOKUP) &&
       (sfObject === 'Bid_History__c' ||
         sfObject === 'Apttus__APTS_Agreement__c') &&
       sfField === 'Targeted_Countries__c'
@@ -394,20 +383,11 @@ export class TaskRow extends Component<Props, State> {
       finalOptions = getCountryOptions();
     }
 
-    const richTextAnswerField = {
-      richTextVal: dummyRichTextJson,
-      enableFocus: true,
-      isEditable: isEditableRichText,
-      onBlur: data => this.onBlurRichText(data),
-      onClickHTML: this.onClickRichTextHTML
-    };
-
     switch (type) {
-      case 'text': {
+      case 'text':
         answerValue = !String(answerValue).trim()
           ? ''
           : String(answerValue).trim();
-
         return (
           <SFAnswerValidationWrapper
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
@@ -421,10 +401,8 @@ export class TaskRow extends Component<Props, State> {
               onFocus={e => this.onChildInputFocus(e)}
               disabled={checkDisableFlag()}
             />
-            {/* <CustomApolloRichText {...richTextAnswerField} /> */}
           </SFAnswerValidationWrapper>
         );
-      }
       case 'number':
         answerValue = !String(answerValue).trim()
           ? ''
@@ -560,7 +538,7 @@ export class TaskRow extends Component<Props, State> {
     if (milestoneNew) {
       return (
         <div className="chipview">
-          {milestoneNew && isString(milestoneNew) ? (
+          {milestoneNew ? (
             <ChipView label={milestoneNew} answer={lastAnswer} />
           ) : null}
         </div>
@@ -568,7 +546,7 @@ export class TaskRow extends Component<Props, State> {
     }
     return (
       <div className="chipview">
-        {milestone && isString(milestone) ? (
+        {milestone ? (
           <ChipView label={String(milestone)} answer={lastAnswer} />
         ) : null}
       </div>
@@ -668,7 +646,7 @@ export class TaskRow extends Component<Props, State> {
                 style={{ zIndex: 0, alignSelf: 'center' }}
                 className="questiontext-richtext"
               >
-                <div className="question-title-txt">
+                <Typography variant="body2">
                   {questionJSON ? (
                     <RichTextEditor
                       style={{ minHeight: '0px' }}
@@ -678,7 +656,7 @@ export class TaskRow extends Component<Props, State> {
                   ) : (
                     <p>{questionText}</p>
                   )}
-                </div>
+                </Typography>
               </div>
               {/* Edit Question Icon */}
               <div style={{ paddingLeft: '5px' }}>
@@ -715,7 +693,7 @@ export class TaskRow extends Component<Props, State> {
                           defaultValue={JSON.parse(questionHintJSON)}
                         />
                       ) : (
-                        <div>{questionHint}</div>
+                        <p>{questionHint}</p>
                       )
                     }
                     placement="top"
@@ -806,20 +784,15 @@ export class TaskRow extends Component<Props, State> {
                     title="Unity Predicted Answer"
                     placement="top"
                   >
-                    <span>
-                      <IconButton
-                        disabled={!isCurrentBid}
-                        style={{ height: '0' }}
-                      >
-                        <StatusCheck
-                          fontSize="22px"
-                          style={{ color: '#D9D9D9' }}
-                          onClick={() =>
-                            this.handleVerifyPredictedAnsClick(lastAnswer)
-                          }
-                        />
-                      </IconButton>
-                    </span>
+                    <IconButton disabled={!isCurrentBid} style={{height:"0"}}>
+                      <StatusCheck
+                        fontSize="22px"
+                        style={{ color: '#D9D9D9' }}
+                        onClick={() =>
+                          this.handleVerifyPredictedAnsClick(lastAnswer)
+                        }
+                      />
+                    </IconButton>
                   </Tooltip>
                 ) : null}
               </div>
