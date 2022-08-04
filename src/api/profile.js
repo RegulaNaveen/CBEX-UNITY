@@ -2,7 +2,7 @@ import axios from 'axios';
 import { API } from '../constants';
 import { getAccessTokenFromLocalStorage as getAccessToken } from '../SessionHandler';
 
-const { PROFILE_API_URL } = API.PROFILE;
+const { PROFILE_API_URL, PROPOSAL_API_ENDPOINT } = API.PROFILE;
 const { API_KEY } = API.PROPOSAL;
 
 export function fetchUserPreferenceApi() {
@@ -15,8 +15,26 @@ export function fetchUserPreferenceApi() {
 
   return new Promise((resolve, reject) => {
     axios
-      .get(`${PROFILE_API_URL}`, config)
+      .get(`${PROFILE_API_URL}/preference`, config)
       .then(response => resolve(response.data))
+      .catch(err => reject(err));
+  });
+}
+
+export function fetchTimezoneApi() {
+  const config = {
+    headers: {
+      'x-api-key': API_KEY,
+      'x-access-token': getAccessToken()
+    }
+  };
+
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`${PROPOSAL_API_ENDPOINT}/api/timezone`, config)
+      .then(response => {
+        resolve(response.data);
+      })
       .catch(err => reject(err));
   });
 }
@@ -31,9 +49,33 @@ export function updateUserPreferenceApi(preferenceID, preferenceSelected) {
 
   return new Promise((resolve, reject) => {
     axios
-      .put(`${PROFILE_API_URL}/${preferenceID}`, preferenceSelected, config)
+      .put(
+        `${PROFILE_API_URL}/preference/${preferenceID}`,
+        preferenceSelected,
+        config
+      )
       .then(response => {
-        console.log('after update API', response.data);
+        resolve(response.data);
+      })
+      .catch(err => reject(err));
+  });
+}
+
+export function updateUserTimezoneApi(timezoneID) {
+  const data = {
+    time_zone_id: timezoneID
+  };
+  const config = {
+    headers: {
+      'x-api-key': API_KEY,
+      'x-access-token': getAccessToken()
+    }
+  };
+
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${PROFILE_API_URL}/updateusertimezone`, data, config)
+      .then(response => {
         resolve(response.data);
       })
       .catch(err => reject(err));

@@ -4,16 +4,16 @@ import Autocomplete, {
   createFilterOptions,
 } from "@material-ui/lab/Autocomplete";
 const filter = createFilterOptions();
-import './testmodal.scss';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import "./testmodal.scss";
+import makeStyles from "@material-ui/core/styles/makeStyles";
 import { element } from "prop-types";
-const useStyles = makeStyles(theme => ({
-  input:{
+const useStyles = makeStyles((theme) => ({
+  input: {
     height: 40,
-    alignItems: 'center',
-    display: 'flex',
-  }
-}))
+    alignItems: "center",
+    display: "flex",
+  },
+}));
 const TestModal = ({
   sectionName,
   sfObject,
@@ -23,9 +23,8 @@ const TestModal = ({
   disabled,
   onChange,
   onFocus,
-  onBlur
+  onBlur,
 }) => {
-  
   const classes = useStyles();
   console.log({
     sectionName,
@@ -34,7 +33,6 @@ const TestModal = ({
     sfField,
     answer,
     disabled,
-    
   });
 
   // Our sample dropdown options
@@ -44,18 +42,18 @@ const TestModal = ({
   const handleChange = (event, newValue) => {
     console.log({ event, newValue });
     const modifiedAnswer = newValue.map((item) =>
-    item.includes("add ")
-      ? item.replace('add "', "").replace(/\"/g, "")
-      : item
-  )
+      item.includes("add ")
+        ? item.replace('add "', "").replace(/\"/g, "")
+        : item
+    );
     setSelectedVal(modifiedAnswer);
-    onChange(modifiedAnswer)
+    onChange(modifiedAnswer);
   };
 
   React.useEffect(() => {
-    setSelectedVal(answer)
-  }, [answer])
-  
+    setSelectedVal(answer);
+  }, [answer]);
+
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       console.log(event.target.value);
@@ -72,17 +70,11 @@ const TestModal = ({
         // className={classes.input}
         filterOptions={(options, params) => {
           const filtered = filter(options, params);
-          // const lovUpper = [];
-          // for(let element in lov){
-            
-          //   lovUpper.push(element.toUpperCase());
 
-          // }
-          // console.log(lovUpper)
-          // Suggest the creation of a new value
           if (params.inputValue !== "" && !lov.includes(params.inputValue)) {
             filtered.push(`add "${params.inputValue}"`);
           }
+
           return filtered;
         }}
         // className={className}
@@ -101,7 +93,7 @@ const TestModal = ({
           // console.log({params})
           return (
             <TextField
-            // className={classes.input}
+              // className={classes.input}
               {...params}
               label=""
               onKeyDown={handleKeyPress}

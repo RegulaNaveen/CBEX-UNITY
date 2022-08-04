@@ -28,7 +28,7 @@ const updateSeen = (state, actions) => {
   const notificationId = actions.payload.notificationId;
   const allNotification = cloneDeep(state.notifications);
   allNotification.forEach(item => {
-    if (item.notification_id === notificationId) {
+    if (item.id === notificationId) {
       item.read = true;
     }
   });
