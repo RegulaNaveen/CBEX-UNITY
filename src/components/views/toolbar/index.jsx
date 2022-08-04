@@ -75,7 +75,6 @@ class Toolbar extends Component<{}, State> {
     currentUserRole: string
   ): boolean => {
     if (uBuildRoles.length === 0) return true;
-    console.log({ uBuildRoles, currentUserRole });
     return uBuildRoles.includes(currentUserRole);
   };
 
