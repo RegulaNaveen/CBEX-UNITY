@@ -23,7 +23,10 @@ const AccountPreference = ({
   isFetchingTimezone,
   isUpdatingTimezone,
   timezoneList,
-  timezoneID
+  timezoneID,
+  currentTimezoneID,
+  setCurrentTimezoneID,
+  errorUpdatingTimezone
 }) => {
   const dispatch = useDispatch();
 
@@ -33,6 +36,10 @@ const AccountPreference = ({
   useEffect(() => {
     if (role) setRoleName(role);
   }, []);
+
+  useEffect(() => {
+    if (timezoneID) setCurrentTimezoneID(timezoneID);
+  }, [timezoneID]);
 
   const onRoleChange = value => {
     dispatch(onSetUserRole(value));
@@ -93,7 +100,7 @@ const AccountPreference = ({
           )}
         </div>
         <div className="top-space" style={{ maxWidth: '80%' }}>
-          {isFetchingTimezone || isUpdatingTimezone ? (
+          {isFetchingTimezone ? (
             <div className="toolbar-account-menu-option-loader">
               <Loader type="TailSpin" color="#297DFD" height={35} width={35} />
             </div>
@@ -111,10 +118,11 @@ const AccountPreference = ({
                     Your timezone will affect when Unity updates you
                   </Typography>
                 }
-                value={timezoneID}
+                value={currentTimezoneID}
                 onChange={handleUpdateTimezone}
                 placeholder="Select Timezone"
                 fullWidth
+                error={!!errorUpdatingTimezone}
               >
                 {timezoneList.map(({ time_zone_id, time_zone }) => {
                   return <MenuItem value={time_zone_id}>{time_zone}</MenuItem>;
@@ -191,9 +199,17 @@ AccountPreference.defaultProps = {
   email: '',
   role: '',
   roleName: '',
-  setRoleName: '',
+  setRoleName: () => {},
   userPreference: [],
-  handleUserPreferenceChange: () => {}
+  handleUserPreferenceChange: () => {},
+  handleUpdateTimezone: () => {},
+  isFetchingTimezone: false,
+  isUpdatingTimezone: false,
+  timezoneList: [],
+  timezoneID: '',
+  currentTimezoneID: '',
+  setCurrentTimezoneID: () => {},
+  errorUpdatingTimezone: ''
 };
 
 AccountPreference.propTypes = {
@@ -202,7 +218,15 @@ AccountPreference.propTypes = {
   roleName: PropTypes.string,
   setRoleName: PropTypes.string,
   userPreference: PropTypes.array,
-  handleUserPreferenceChange: PropTypes.func
+  handleUserPreferenceChange: PropTypes.func,
+  handleUpdateTimezone: PropTypes.func,
+  isFetchingTimezone: PropTypes.bool,
+  isUpdatingTimezone: PropTypes.bool,
+  timezoneList: PropTypes.array,
+  timezoneID: PropTypes.string,
+  currentTimezoneID: PropTypes.string,
+  setCurrentTimezoneID: PropTypes.func,
+  errorUpdatingTimezone: PropTypes.string
 };
 
 export default AccountPreference;
