@@ -133,7 +133,7 @@ export class Opportunity extends Component<Props, State> {
     const {
       match: { params }
     } = this.props;
-    this.context.updateSocketOppId(params.id);
+    // this.context.updateSocketOppId(params.id);
   }
 
   componentWillUnmount() {
@@ -144,7 +144,7 @@ export class Opportunity extends Component<Props, State> {
     localStorage.removeItem('proposalId');
 
     window.removeEventListener('storage', this.handleStorageChange);
-    this.context.updateSocketOppId(null);
+    // this.context.updateSocketOppId(null);
   }
 
   handleStorageChange(e) {

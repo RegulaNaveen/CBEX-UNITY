@@ -44,6 +44,7 @@ import SFAnswerValidationWrapper from './SFAnswerValidationWrapper';
 import ANSWER_TYPES from '../../constants/answerTypes';
 // import CustomApolloRichText from './CustomApolloRichText';
 import dummyRichTextJson from '../../dummyRichText.json';
+import TestModal from '../views/modals/TestModal';
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
 type State = {
@@ -517,7 +518,19 @@ export class TaskRow extends Component<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <AutocompleteText
+            {/* Picklist */}
+            <TestModal
+              // sectionName={sectionName}
+              sfObject={sfObject}
+              lov={finalOptions}
+              sfField={sfField}
+              answer={answerValueComplex}
+              onFocus={() => this.setSelectRow(true)}
+              onBlur={() => this.setSelectRow(false)}
+              disabled={checkDisableFlag()}
+              onChange={this.handlePropsalChange}
+            />
+            {/* <AutocompleteText
               sectionName={sectionName}
               sfObject={sfObject}
               lov={finalOptions}
@@ -528,15 +541,26 @@ export class TaskRow extends Component<Props, State> {
               onChange={this.handlePropsalChange}
               text={answerValueComplex}
               disabled={checkDisableFlag()}
-            />
+            /> */}
           </SFAnswerValidationWrapper>
         );
+        
       case 'select-lookup':
         return (
           <SFAnswerValidationWrapper
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
+            {/* Lookup
+            <TestModal
+              sectionName={sectionName}
+              sfObject={sfObject}
+              lov={finalOptions}
+              sfField={sfField}
+              text={answerValueComplex}
+              // onBlur={e => this.handleTextChange(e.target.value)}
+              disabled={checkDisableFlag()}
+            /> */}
             <AutocompleteText
               sectionName={sectionName}
               sfObject={sfObject}
