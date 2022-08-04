@@ -55,8 +55,8 @@ function onFetchTimezoneDone(state, action) {
   } = action;
 
   return state
-    .set('timezoneList', data.timezonelist)
-    .set('timezoneID', data.usertimezone.time_zone_id || '')
+    .set('timezoneList', data?.timezonelist)
+    .set('timezoneID', data?.usertimezone?.time_zone_id)
     .set('fetchingTimezone', false);
 }
 
@@ -111,7 +111,7 @@ function onUpdateUserTimezoneDone(state, action) {
   } = action;
 
   return state
-    .set('timezoneID', data.time_zone_id)
+    .set('timezoneID', data?.time_zone_id)
     .set('updateTimezone', false);
 }
 

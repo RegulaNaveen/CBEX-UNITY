@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItem: 'center',
-    height: '88vh'
+    height: '87vh'
   },
   container: {
     backgroundColor: '#fff',
