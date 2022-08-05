@@ -36,7 +36,7 @@ const loadSidebar = (props) => {
     window.open(`${SF_HOST_URL}lightning/r/Opportunity/${opportunityId}/view`);
   };
   let isBladeOpen = isOpen;
-  if (windowSize <= 1400) {
+  if (windowSize <= 1200) {
     isBladeOpen = true;
   }
 
