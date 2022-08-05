@@ -1,6 +1,8 @@
 // @flow
 import Checkmark from './Checkmark';
 import Edit from './Edit';
+import Outgoing from './Outgoing';
+import Incoming from './Incoming';
 import Add from './Add';
 import DropMenu from './DropMenu';
 import Bell from './Bell';
@@ -33,6 +35,8 @@ import Globe from './Globe';
 export {
   Checkmark,
   Edit,
+  Outgoing,
+  Incoming,
   Add,
   DropMenu,
   Bell,
