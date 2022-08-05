@@ -37,7 +37,9 @@ function onFetchUserPreference(state) {
 }
 
 function onFetchTimezone(state) {
-  return state.set('fetchingTimezone', true);
+  return state
+    .set('fetchingTimezone', true)
+    .set('fetchingTimezoneErrorMsg', '');
 }
 
 function onFetchUserPreferenceDone(state, action) {
@@ -53,6 +55,10 @@ function onFetchTimezoneDone(state, action) {
   const {
     payload: { data }
   } = action;
+
+  data.timezonelist.sort((a, b) =>
+    a.time_zone.toUpperCase() < b.time_zone.toUpperCase() ? -1 : 1
+  );
 
   return state
     .set('timezoneList', data?.timezonelist)
@@ -83,7 +89,7 @@ function onUpdateUserPreference(state) {
 }
 
 function onUpdateUserTimezone(state) {
-  return state.set('updateTimezone', true);
+  return state.set('updateTimezone', true).set('updateTimezoneErrorMsg', '');
 }
 
 function onUpdateUserPreferenceDone(state, action) {
