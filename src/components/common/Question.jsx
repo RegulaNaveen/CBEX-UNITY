@@ -43,7 +43,7 @@ import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
 import SFAnswerValidationWrapper from './SFAnswerValidationWrapper';
 import ANSWER_TYPES from '../../constants/answerTypes';
 // import CustomApolloRichText from './CustomApolloRichText';
-import TestModal from '../views/modals/TestModal';
+import AutoCompleteWithAddOption from '../views/modals/AutoCompleteWithAddOption';
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
 // const Spanexp = /[^<]\/span>/g;
@@ -498,30 +498,18 @@ export class TaskRow extends Component<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            {/* Picklist */}
-            <TestModal
+            <AutoCompleteWithAddOption
               // sectionName={sectionName}
               sfObject={sfObject}
               lov={finalOptions}
               sfField={sfField}
+              multiple
               answer={answerValueComplex}
               onFocus={() => this.setSelectRow(true)}
               onBlur={() => this.setSelectRow(false)}
               disabled={checkDisableFlag()}
               onChange={this.handlePropsalChange}
             />
-            {/* <AutocompleteText
-              sectionName={sectionName}
-              sfObject={sfObject}
-              lov={finalOptions}
-              sfField={sfField}
-              multiple
-              onFocus={() => this.setSelectRow(true)}
-              onBlur={() => this.setSelectRow(false)}
-              onChange={this.handlePropsalChange}
-              text={answerValueComplex}
-              disabled={checkDisableFlag()}
-            /> */}
           </SFAnswerValidationWrapper>
         );
         
@@ -531,27 +519,16 @@ export class TaskRow extends Component<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            {/* Lookup
-            <TestModal
-              sectionName={sectionName}
+            <AutoCompleteWithAddOption
               sfObject={sfObject}
               lov={finalOptions}
               sfField={sfField}
-              text={answerValueComplex}
-              // onBlur={e => this.handleTextChange(e.target.value)}
-              disabled={checkDisableFlag()}
-            /> */}
-            <AutocompleteText
-              sectionName={sectionName}
-              sfObject={sfObject}
-              lov={finalOptions}
-              sfField={sfField}
+              multiple
+              answer={answerValueComplex}
               onFocus={() => this.setSelectRow(true)}
               onBlur={() => this.setSelectRow(false)}
-              onChange={this.handlePropsalChange}
-              text={answerValue || ''}
-              multiple={false}
               disabled={checkDisableFlag()}
+              onChange={this.handlePropsalChange}
             />
           </SFAnswerValidationWrapper>
         );
