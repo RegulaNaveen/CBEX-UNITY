@@ -523,12 +523,12 @@ export class TaskRow extends Component<Props, State> {
               sfObject={sfObject}
               lov={finalOptions}
               sfField={sfField}
-              multiple
-              answer={answerValueComplex}
               onFocus={() => this.setSelectRow(true)}
               onBlur={() => this.setSelectRow(false)}
-              disabled={checkDisableFlag()}
               onChange={this.handlePropsalChange}
+              answer={answerValue || ''}
+              multiple={false}
+              disabled={checkDisableFlag()}
             />
           </SFAnswerValidationWrapper>
         );
