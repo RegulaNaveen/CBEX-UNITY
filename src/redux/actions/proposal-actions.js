@@ -805,7 +805,7 @@ export const callPickListLookupSfData = (): ThunkAction<string, Object> => {
       const response = await getPickListLookupSfData();
       const { data } = response.data;
       data.forEach(row => {
-        const options = row.PicklistValues.map(label => ({ label }));
+        const options = row.PicklistValues;
         lookupMap[`${row.PK}_${row.SK}`] = options;
       });
       dispatch({ type: UPDATE_LOOKUP_OPTIONS, payload: lookupMap });
