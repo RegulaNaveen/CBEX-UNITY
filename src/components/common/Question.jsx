@@ -11,13 +11,17 @@ import Typography from 'apollo-react/components/Typography';
 import Grid from 'apollo-react/components/Grid';
 import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
-import StatusCheck from 'apollo-react-icons/StatusCheck';
-import { Checkmark, Edit } from '../svg';
+import { useSelector } from 'react-redux';
+import Calendar from 'apollo-react-icons/Calendar';
+import CalendarCheck from 'apollo-react-icons/CalendarCheck';
+import moment from 'moment';
+import { Edit, Outgoing, Incoming } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
 import TextArea from './atoms/inputs/TextArea';
 import TextAreaV2 from './atoms/inputs/TextAreaV2';
 import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
+import Qvidianquestions from './qvidian';
 import {
   setProposalAnswerData,
   setEditQuestionData,
@@ -30,6 +34,7 @@ import {
   getSelectedBid,
   getnoneditableField
 } from '../../redux/selectors';
+import { getOpportunityData } from '../../redux/selectors/proposal';
 import MatomoHOC from '../HOC/MatomoHOC';
 import {
   checkNonEditableFields,
@@ -47,7 +52,8 @@ import ANSWER_TYPES from '../../constants/answerTypes';
 // const Spanexp = /[^<]\/span>/g;
 type State = {
   selectedDay: string,
-  selectedRow: Boolean
+  selectedRow: Boolean,
+  changeIcon: false
 };
 
 type Props = {
@@ -57,10 +63,13 @@ type Props = {
   questionText: string,
   questionHTML: string,
   questionJSON: string,
+  currentSFanswer: Object,
+  qvidianIntegration: string,
   answerConfiguration: Object,
   sectionName: string,
   section: Map,
   userData: Object,
+  oppdata: Object,
   setProposalAnswer: Function,
   setAnswerLoading: Function,
   deleteProposalUser: Function,
@@ -86,7 +95,8 @@ export class TaskRow extends Component<Props, State> {
 
     this.state = {
       selectedDay: '',
-      selectedRow: false
+      selectedRow: false,
+      iconColor: '#00c221'
     };
   }
 
@@ -138,6 +148,7 @@ export class TaskRow extends Component<Props, State> {
 
   handleTextChange = (textValue: string, lastAnswer: string) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+    this.setState({ changeIcon: true });
     const s1 = textValue
       .trim()
       .split(' ')
@@ -174,9 +185,13 @@ export class TaskRow extends Component<Props, State> {
       answerConfiguration
     } = this.props;
     const answerType = answerConfiguration.get('type');
+    this.setState({ iconColor: '#015ff1' });
 
     // picklist value should not be converted to string while saving
-    if (answerType === ANSWER_TYPES.PICKLIST || answerType === ANSWER_TYPES.PICKLIST_LOOKUP) {
+    if (
+      answerType === ANSWER_TYPES.PICKLIST ||
+      answerType === ANSWER_TYPES.PICKLIST_LOOKUP
+    ) {
       setProposalAnswer(
         proposalId,
         questionId,
@@ -334,6 +349,7 @@ export class TaskRow extends Component<Props, State> {
       sfObject,
       sfField,
       selectedBid,
+      proposalInfo,
       noneditableField,
       hasDifferentSFanswer
     } = this.props;
@@ -374,7 +390,8 @@ export class TaskRow extends Component<Props, State> {
     }
 
     if (
-      (type === ANSWER_TYPES.PICKLIST || type === ANSWER_TYPES.PICKLIST_LOOKUP) &&
+      (type === ANSWER_TYPES.PICKLIST ||
+        type === ANSWER_TYPES.PICKLIST_LOOKUP) &&
       (sfObject === 'Bid_History__c' ||
         sfObject === 'Apttus__APTS_Agreement__c') &&
       sfField === 'Targeted_Countries__c'
@@ -578,6 +595,10 @@ export class TaskRow extends Component<Props, State> {
       milestoneNew,
       ismilestoneavailable,
       loading,
+      sfField,
+      oppdata,
+      currentSFanswer,
+      qvidianIntegration,
       questionHint,
       questionHintHTML,
       questionHTML,
@@ -589,15 +610,45 @@ export class TaskRow extends Component<Props, State> {
       isCustomQuestion,
       questionId: qId,
       selectedBid,
-      isNotepadOpen
+      proposalInfo,
+      isNotepadOpen,
+      questionId
     } = this.props;
 
-    const questionId = answers.get('questionId');
+    const questionID = answers.get('questionId');
+    const qvicon = questionId;
     let lastAnswer;
     let answerDate = 'Not Answered';
     let isAnswerPredicted = false;
+    let integrationmatch;
+    let checkSfAnswer;
+    let integrationvalidation;
+    const sficon = sfField;
+    const currentBidID = selectedBid.toJS().id;
+    const oppordata = oppdata.toJS();
+    const deploymentDate = '2022-05-08';
+    const proposalTimeStamp = oppordata[currentBidID]?.proposal?.proposalDate;
+    const proposalCreationDate = proposalTimeStamp.substring(
+      0,
+      proposalTimeStamp.indexOf('T')
+    );
+    const dateIsAfter = moment(proposalCreationDate).isAfter(
+      moment(deploymentDate)
+    );
+
+    const dateIsBefore = moment(proposalCreationDate).isBefore(
+      moment(deploymentDate)
+    );
+
+    if (_.isEmpty(currentSFanswer) !== true)
+      checkSfAnswer = currentSFanswer.toJS().value;
+    if (dateIsAfter) {
+      integrationvalidation = true;
+    }
+    integrationvalidation = Qvidianquestions[0].hasOwnProperty(qvicon);
+    dateIsAfter ? integrationmatch === qvidianIntegration : (Qvidianquestions[0].hasOwnProperty(qvicon) ? integrationmatch = Qvidianquestions[0][qvicon] : null)
     if (answers) {
-      if (!questionId) lastAnswer = answers.last();
+      if (!questionID) lastAnswer = answers.last();
       else lastAnswer = answers.get('answers').last();
     }
     if (lastAnswer) {
@@ -620,7 +671,7 @@ export class TaskRow extends Component<Props, State> {
     }
     const isCurrentBid = selectedBid.get('isCurrent');
     const { selectedRow } = this.state;
-
+    const { iconColor } = this.state;
     const gridColRatio = isNotepadOpen ? [8, 4] : [10, 2];
     return (
       <Grid
@@ -748,10 +799,11 @@ export class TaskRow extends Component<Props, State> {
             xs={gridColRatio[1]}
             style={{
               display: 'flex',
-              alignItems: 'flex-start',
-              justifyContent: 'flex-start',
-              paddingLeft: '20px',
-              paddingTop: '8px'
+              alignItems: 'center',
+              paddingLeft: '5px'
+              // justifyContent: 'center',
+              // paddingLeft: '20px'
+              // paddingTop: '8px'
             }}
           >
             <div
@@ -761,8 +813,66 @@ export class TaskRow extends Component<Props, State> {
                 alignItems: 'center'
               }}
             >
-              <div>
-                <button
+              <div style={{ display: 'flex' }}>
+                  <div
+                    style={{
+                      textAlign: 'center',
+                      outline: 'none',
+                      border: 'none',
+                      backgroundColor: 'transparent',
+                      cursor: 'pointer'
+                    }}
+                    className="integration-buttons"
+                  >
+                    {sficon !== 'n/a' && _.isEmpty(checkSfAnswer) !== true ? (
+                                      <Tooltip
+                                      variant="light"
+                                      title={
+                                        sficon !== 'n/a' ? (
+                                          <div
+                                            dangerouslySetInnerHTML={{
+                                              __html: `<p><b>Source</b><br>${sficon}<br>Salesforce</p>`
+                                            }}
+                                          />
+                                        ) : null
+                                      }
+                                      placement="top"
+                                    ><div><Incoming style={{ fill: '#9E54B0' }} /></div>
+                                    </Tooltip>
+                    ) : sficon !== 'n/a' &&
+                      _.isEmpty(checkSfAnswer) !== true ? (
+                      <Incoming style={{ fill: '#b7b7b7' }} />
+                    ) : null}
+                  </div>
+                
+                  <div
+                    style={{
+                      textAlign: 'center',
+                      outline: 'none',
+                      border: 'none',
+                      backgroundColor: 'transparent',
+                      cursor: 'pointer'
+                    }}
+                    className="integration-buttons"
+                  >
+                    {integrationvalidation === true && this.state.changeIcon === true ? (
+                      <Tooltip
+                      variant="light"
+                      title={
+                        integrationmatch ? (
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: `<p><b>Destination</b><br>${integrationmatch}<br>Qvidian</p>`
+                            }}
+                          />
+                        ) : null
+                      }
+                      placement="top"
+                    ><div><Outgoing style={{ fill: '#00c221' }} /></div></Tooltip>
+                    ) : (integrationvalidation === true ? <Outgoing style={{ fill: '#b7b7b7' }} /> : null   
+                    )}
+                  </div>
+                <div
                   style={{
                     textAlign: 'center',
                     outline: 'none',
@@ -773,38 +883,38 @@ export class TaskRow extends Component<Props, State> {
                   }}
                   type="button"
                   onClick={this.displayAnswerOnHistory}
+                  className="integration-buttons"
                 >
-                  {answerDate}
-                </button>
-              </div>
-              <div>
-                {isAnswerPredicted && !loading ? (
-                  <Tooltip
-                    variant="light"
-                    title="Unity Predicted Answer"
-                    placement="top"
-                  >
-                    <IconButton disabled={!isCurrentBid} style={{height:"0"}}>
-                      <StatusCheck
-                        fontSize="22px"
-                        style={{ color: '#D9D9D9' }}
-                        onClick={() =>
-                          this.handleVerifyPredictedAnsClick(lastAnswer)
-                        }
-                      />
-                    </IconButton>
-                  </Tooltip>
-                ) : null}
-              </div>
-              <div>
-                {this.isAnswered(lastAnswer, isAnswerPredicted) && !loading ? (
-                  <div>
-                    <Checkmark
+                  {answerDate === 'Not Answered' && !isAnswerPredicted ? (
+                    <Calendar style={{ color: '#b7b7b7' }} />
+                  ) : isAnswerPredicted && !loading && !this.isAnswered(lastAnswer, isAnswerPredicted) && !loading ? (
+                    <Tooltip
+                      variant="light"
+                      title="Unity Predicted Answer"
+                      placement="top"
+                    >
+                      <IconButton
+                        disabled={!isCurrentBid}
+                        style={{ height: '0' }}
+                      >
+                        <CalendarCheck
+                          fontSize="22px"
+                          style={{ color: "#015ff1" }}
+                          onClick={() =>
+                            this.handleVerifyPredictedAnsClick(lastAnswer)
+                          }
+                        />
+                      </IconButton>
+                    </Tooltip>
+                  ) : ( this.isAnswered(lastAnswer, isAnswerPredicted) && !loading ? (<div>
+                    <CalendarCheck
                       className="answered"
-                      style={{ marginLeft: '6px' }}
+                      style={{ marginLeft: '6px', color: '#00c221' }}
                     />
-                  </div>
-                ) : null}
+                  </div>) :
+                    <CalendarCheck style={{ color: this.state.iconColor }} />
+                  )}
+                </div>{' '}
               </div>
               <div>
                 {loading ? (
@@ -839,6 +949,7 @@ const mapStateToProps = (state: Object) => ({
   userData: getUserData(state),
   proposalDetail: getProposalDetails(state),
   selectedBid: getSelectedBid(state),
+  oppdata: getOpportunityData(state),
   noneditableField: getnoneditableField(state)
 });
 
