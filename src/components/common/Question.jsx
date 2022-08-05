@@ -47,6 +47,8 @@ import AutocompleteText from './atoms/inputs/AutoCompleteText';
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
 import SFAnswerValidationWrapper from './SFAnswerValidationWrapper';
 import ANSWER_TYPES from '../../constants/answerTypes';
+// import CustomApolloRichText from './CustomApolloRichText';
+import AutoCompleteWithAddOption from '../views/modals/AutoCompleteWithAddOption';
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
 // const Spanexp = /[^<]\/span>/g;
@@ -377,6 +379,7 @@ export class TaskRow extends Component<Props, State> {
           hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
           sfObject={sfObject}
         >
+        
           <Autocomplete
             sectionName={sectionName}
             onFocus={() => this.setSelectRow(true)}
@@ -512,35 +515,35 @@ export class TaskRow extends Component<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <AutocompleteText
-              sectionName={sectionName}
+            <AutoCompleteWithAddOption
+              // sectionName={sectionName}
               sfObject={sfObject}
               lov={finalOptions}
               sfField={sfField}
               multiple
+              answer={answerValueComplex}
               onFocus={() => this.setSelectRow(true)}
               onBlur={() => this.setSelectRow(false)}
-              onChange={this.handlePropsalChange}
-              text={answerValueComplex}
               disabled={checkDisableFlag()}
+              onChange={this.handlePropsalChange}
             />
           </SFAnswerValidationWrapper>
         );
+        
       case 'select-lookup':
         return (
           <SFAnswerValidationWrapper
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <AutocompleteText
-              sectionName={sectionName}
+            <AutoCompleteWithAddOption
               sfObject={sfObject}
               lov={finalOptions}
               sfField={sfField}
               onFocus={() => this.setSelectRow(true)}
               onBlur={() => this.setSelectRow(false)}
               onChange={this.handlePropsalChange}
-              text={answerValue || ''}
+              answer={answerValue || ''}
               multiple={false}
               disabled={checkDisableFlag()}
             />
