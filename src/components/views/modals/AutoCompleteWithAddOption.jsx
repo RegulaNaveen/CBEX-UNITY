@@ -1,14 +1,17 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import isEmpty from 'lodash-es/isEmpty';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete, {
   createFilterOptions
 } from '@material-ui/lab/Autocomplete';
-const filter = createFilterOptions();
 import './testmodal.scss';
-import isEmpty from 'lodash-es/isEmpty';
+import { getLookUpOptionsSelector } from '../../../redux/selectors';
+
+const filter = createFilterOptions();
 
 const AutoCompleteWithAddOption = ({
-  sectionName,
+  options,
   sfObject,
   lov,
   sfField,
@@ -19,7 +22,10 @@ const AutoCompleteWithAddOption = ({
   onBlur,
   multiple
 }) => {
-  const options = lov?.toJS() || [];
+  const getOptions = () => {
+    const lovToJs = lov?.toJS();
+    return lovToJs.length ? lovToJs : options[`SF#${sfObject}_SF#${sfField}`];
+  };
 
   const getAnswer = () => {
     if (isEmpty(answer)) {
@@ -29,7 +35,7 @@ const AutoCompleteWithAddOption = ({
   };
 
   const [selectedVal, setSelectedVal] = React.useState(getAnswer());
-  const [currentLov, setCurrentLov] = React.useState(options);
+  const [currentLov, setCurrentLov] = React.useState(getOptions());
 
   const addAnswerPicklist = arr => {
     return arr.map(item =>
@@ -58,7 +64,7 @@ const AutoCompleteWithAddOption = ({
 
   React.useEffect(() => {
     setSelectedVal(answer);
-    let currentOptions = [...options];
+    let currentOptions = [...getOptions()];
     let xyz = currentOptions.filter(el => selectedVal.indexOf(el) === -1);
     setCurrentLov(xyz);
   }, [answer]);
@@ -89,4 +95,8 @@ const AutoCompleteWithAddOption = ({
   );
 };
 
-export default AutoCompleteWithAddOption;
+const mapStateToProps = state => ({
+  options: getLookUpOptionsSelector(state)
+});
+
+export default connect(mapStateToProps)(AutoCompleteWithAddOption);
