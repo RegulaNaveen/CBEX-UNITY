@@ -251,6 +251,8 @@ class CollapsibleList extends Component<Props, State> {
                     answerConfiguration={questionConfig.get(
                       'answerConfiguration'
                     )}
+                    qvidianIntegration={questionConfig.get('integration')}
+                    currentSFanswer={questionConfig.get('currentSFanswer')}
                     section={questionConfig.get('section')}
                     sfObject={questionConfig.get('sfObject')}
                     sfField={questionConfig.get('sfField')}

@@ -123,6 +123,8 @@ class Questions extends Component<Props, State> {
     fetchUsers();
     getSFNonEditabelInfoField();
     callPickListLookupSfData();
+    window.addEventListener('resize', this.resize.bind(this));
+    this.resize();
   }
 
   componentDidUpdate(prevProps: Map) {
@@ -353,6 +355,10 @@ class Questions extends Component<Props, State> {
     this.setState({ sidebarscroll: e });
   };
 
+  resize() {
+    this.setState({ innerWidth: window.innerWidth });
+  }
+
   renderQuestions() {
     try {
       const {
@@ -488,14 +494,16 @@ class Questions extends Component<Props, State> {
     } = this.state;
 
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
-
+    let dynamicwidth;
     const minPixelToExclude = 20;
     const notepadMinWidthPx =
-      (window.innerWidth - minPixelToExclude) * (30 / 100); // 30% of the total screen size
+      (this.state.innerWidth - minPixelToExclude) * (30 / 100); // 30% of the total screen size
     const notepadMaxWidthPx = isOpen
       ? notepadMinWidthPx
       : (window.innerWidth - minPixelToExclude) * (47 / 100); // 50% of the total screen size
-
+      this.state.innerWidth < 640
+        ? (dynamicwidth = this.state.innerWidth * (37 / 100))
+        : (dynamicwidth = this.state.innerWidth / 2);
     return (
       <>
         <BidHistory />
@@ -560,11 +568,11 @@ class Questions extends Component<Props, State> {
         </div>
         <div id="panelwrapper">
           {/* Notepad */}
-          <div id="panel-notepad">
+          <div id="panel-notepad" style={{ width: dynamicwidth }}>
             <Panel
               minWidth={notepadMinWidthPx}
               maxWidth={notepadMaxWidthPx}
-              width={notepadMaxWidthPx}
+              width={dynamicwidth}
               resizable
               onClose={() => {
                 this.setIsNotepadOpen(false);
@@ -590,7 +598,7 @@ class Questions extends Component<Props, State> {
             </Panel>
           </div>
           {/* Question list */}
-          <div id="panel-questions-list">
+          <div id="panel-questions-list" width={this.state.innerWidth/2}>
             <div className="tasksList-wrapper">{this.renderQuestions()}</div>
           </div>
         </div>
