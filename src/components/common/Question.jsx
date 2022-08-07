@@ -95,7 +95,7 @@ export class TaskRow extends Component<Props, State> {
     this.state = {
       selectedDay: '',
       selectedRow: false,
-      iconColor: '#00c21'
+      iconColor: '#00c221'
     };
   }
 
