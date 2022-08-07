@@ -5,23 +5,20 @@ import { Map, List } from 'immutable'; // NOSONAR
 import { connect } from 'react-redux';
 import { isObject, isEqual, isEmpty, xor } from 'lodash';
 import IconButton from 'apollo-react/components/IconButton';
-import Loader from 'apollo-react/components/Loader';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import Typography from 'apollo-react/components/Typography';
 import Grid from 'apollo-react/components/Grid';
 import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
-import { useSelector } from 'react-redux';
-import Calendar from 'apollo-react-icons/Calendar';
-import CalendarCheck from 'apollo-react-icons/CalendarCheck';
 import moment from 'moment';
-import { Edit, Outgoing, Incoming } from '../svg';
+import { Edit } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
 import TextArea from './atoms/inputs/TextArea';
 import TextAreaV2 from './atoms/inputs/TextAreaV2';
 import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
 import Qvidianquestions from './qvidian';
+import SystemIntegrations from './SystemIntegrations/SystemIntegrations';
 import {
   setProposalAnswerData,
   setEditQuestionData,
@@ -55,7 +52,7 @@ import AutoCompleteWithAddOption from '../views/modals/AutoCompleteWithAddOption
 type State = {
   selectedDay: string,
   selectedRow: Boolean,
-  changeIcon: false
+  changeIcon: ''
 };
 
 type Props = {
@@ -98,7 +95,7 @@ export class TaskRow extends Component<Props, State> {
     this.state = {
       selectedDay: '',
       selectedRow: false,
-      iconColor: '#00c221'
+      iconColor: '#00c21'
     };
   }
 
@@ -126,8 +123,8 @@ export class TaskRow extends Component<Props, State> {
     } = this.props;
     setProposalAnswer(proposalId, questionId, textValue, userData).then(() => {
       const [deletedVal] = xor(
-        textValue.trim() ? textValue.trim().split(',') : [],
-        lastValue.trim() ? lastValue.trim().split(',') : []
+        textValue?.trim() ? textValue?.trim().split(',') : [],
+        lastValue?.trim() ? lastValue?.trim().split(',') : []
       );
       const [deletedEmail] = String(deletedVal).match(
         /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
@@ -150,7 +147,7 @@ export class TaskRow extends Component<Props, State> {
 
   handleTextChange = (textValue: string, lastAnswer: string) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
-    this.setState({ changeIcon: true });
+    // this.setState({ changeIcon: true });
     const s1 = textValue
       .trim()
       .split(' ')
@@ -159,6 +156,9 @@ export class TaskRow extends Component<Props, State> {
       .trim()
       .split(' ')
       .filter(v => v.trim().length > 0);
+      _.isEmpty(s1)
+       ? (this.setState({ changeIcon: '#b7b7b7' }))
+       : (this.setState({ changeIcon: '#00c221' }));
     if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
       if (
         s1.length !== s2.length ||
@@ -379,7 +379,6 @@ export class TaskRow extends Component<Props, State> {
           hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
           sfObject={sfObject}
         >
-        
           <Autocomplete
             sectionName={sectionName}
             onFocus={() => this.setSelectRow(true)}
@@ -529,7 +528,6 @@ export class TaskRow extends Component<Props, State> {
             />
           </SFAnswerValidationWrapper>
         );
-        
       case 'select-lookup':
         return (
           <SFAnswerValidationWrapper
@@ -599,9 +597,12 @@ export class TaskRow extends Component<Props, State> {
       ismilestoneavailable,
       loading,
       sfField,
+      answerValue,
+      sfObject,
       oppdata,
       currentSFanswer,
       qvidianIntegration,
+      hasDifferentSFanswer,
       questionHint,
       questionHintHTML,
       questionHTML,
@@ -629,7 +630,7 @@ export class TaskRow extends Component<Props, State> {
     const sficon = sfField;
     const currentBidID = selectedBid.toJS().id;
     const oppordata = oppdata.toJS();
-    const deploymentDate = '2022-05-08';
+    const deploymentDate = '2022-08-05';
     const proposalTimeStamp = oppordata[currentBidID]?.proposal?.proposalDate;
     const proposalCreationDate = proposalTimeStamp.substring(
       0,
@@ -638,13 +639,17 @@ export class TaskRow extends Component<Props, State> {
     const dateIsAfter = moment(proposalCreationDate).isAfter(
       moment(deploymentDate)
     );
+    const answerText = answers?.toJS()[0]?.answer;
 
     const dateIsBefore = moment(proposalCreationDate).isBefore(
       moment(deploymentDate)
     );
-
-    if (_.isEmpty(currentSFanswer) !== true)
+    if (
+      typeof currentSFanswer !== 'undefined' &&
+      _.isEmpty(currentSFanswer) !== true
+    ) {
       checkSfAnswer = currentSFanswer.toJS().value;
+    }
     if (dateIsAfter) {
       integrationvalidation = true;
     }
@@ -700,7 +705,7 @@ export class TaskRow extends Component<Props, State> {
                 style={{ zIndex: 0, alignSelf: 'center' }}
                 className="questiontext-richtext"
               >
-                <Typography variant="body2">
+                <Typography component="span" variant="body2">
                   {questionJSON ? (
                     <RichTextEditor
                       style={{ minHeight: '0px' }}
@@ -796,7 +801,7 @@ export class TaskRow extends Component<Props, State> {
             </div>
           </Grid>
 
-          {/* Answer History Button */}
+          {/* System Integrations */}
           <Grid
             item
             xs={gridColRatio[1]}
@@ -809,138 +814,25 @@ export class TaskRow extends Component<Props, State> {
               // paddingTop: '8px'
             }}
           >
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
-              <div style={{ display: 'flex' }}>
-                  <div
-                    style={{
-                      textAlign: 'center',
-                      outline: 'none',
-                      border: 'none',
-                      backgroundColor: 'transparent',
-                      cursor: 'pointer'
-                    }}
-                    className="integration-buttons"
-                  >
-                    {sficon !== 'n/a' && _.isEmpty(checkSfAnswer) !== true ? (
-                                      <Tooltip
-                                      variant="light"
-                                      title={
-                                        sficon !== 'n/a' ? (
-                                          <div
-                                            dangerouslySetInnerHTML={{
-                                              __html: `<p><b>Source</b><br>${sficon}<br>Salesforce</p>`
-                                            }}
-                                          />
-                                        ) : null
-                                      }
-                                      placement="top"
-                                    ><div><Incoming style={{ fill: '#9E54B0' }} /></div>
-                                    </Tooltip>
-                    ) : sficon !== 'n/a' &&
-                      _.isEmpty(checkSfAnswer) !== true ? (
-                      <Incoming style={{ fill: '#b7b7b7' }} />
-                    ) : null}
-                  </div>
-                
-                  <div
-                    style={{
-                      textAlign: 'center',
-                      outline: 'none',
-                      border: 'none',
-                      backgroundColor: 'transparent',
-                      cursor: 'pointer'
-                    }}
-                    className="integration-buttons"
-                  >
-                    {integrationvalidation === true && this.state.changeIcon === true ? (
-                      <Tooltip
-                      variant="light"
-                      title={
-                        integrationmatch ? (
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html: `<p><b>Destination</b><br>${integrationmatch}<br>Qvidian</p>`
-                            }}
-                          />
-                        ) : null
-                      }
-                      placement="top"
-                    ><div><Outgoing style={{ fill: '#00c221' }} /></div></Tooltip>
-                    ) : (integrationvalidation === true ? <Outgoing style={{ fill: '#b7b7b7' }} /> : null   
-                    )}
-                  </div>
-                <div
-                  style={{
-                    textAlign: 'center',
-                    outline: 'none',
-                    border: 'none',
-                    backgroundColor: 'transparent',
-                    color: '#297dfd',
-                    cursor: 'pointer'
-                  }}
-                  type="button"
-                  onClick={this.displayAnswerOnHistory}
-                  className="integration-buttons"
-                >
-                  {answerDate === 'Not Answered' && !isAnswerPredicted ? (
-                    <Calendar style={{ color: '#b7b7b7' }} />
-                  ) : isAnswerPredicted && !loading && !this.isAnswered(lastAnswer, isAnswerPredicted) && !loading ? (
-                    <Tooltip
-                      variant="light"
-                      title="Unity Predicted Answer"
-                      placement="top"
-                    >
-                      <IconButton
-                        disabled={!isCurrentBid}
-                        style={{ height: '0' }}
-                      >
-                        <CalendarCheck
-                          fontSize="22px"
-                          style={{ color: "#015ff1" }}
-                          onClick={() =>
-                            this.handleVerifyPredictedAnsClick(lastAnswer)
-                          }
-                        />
-                      </IconButton>
-                    </Tooltip>
-                  ) : ( this.isAnswered(lastAnswer, isAnswerPredicted) && !loading ? (<div>
-                    <CalendarCheck
-                      className="answered"
-                      style={{ marginLeft: '6px', color: '#00c221' }}
-                    />
-                  </div>) :
-                    <CalendarCheck style={{ color: this.state.iconColor }} />
-                  )}
-                </div>{' '}
-              </div>
-              <div>
-                {loading ? (
-                  <span
-                    style={{
-                      marginLeft: '6px',
-                      marginTop: '6px',
-                      position: 'relative',
-                      top: '15px'
-                    }}
-                  >
-                    <Loader
-                      isInner
-                      size={20}
-                      style={{
-                        width: '20px',
-                        height: '20px'
-                      }}
-                    />
-                  </span>
-                ) : null}
-              </div>
-            </div>
+            <SystemIntegrations
+              checkSfAnswer={checkSfAnswer}
+              sficon={sficon}
+              integrationmatch={integrationmatch}
+              integrationvalidation={integrationvalidation}
+              answeronhistory={this.displayAnswerOnHistory}
+              answerdate={answerDate}
+              isAnswerPredicted={isAnswerPredicted}
+              isAnswered={this.isAnswered}
+              lastAnswer={this.state.lastAnswer}
+              iconColor={this.state.iconColor}
+              loading={loading}
+              changeIcon={this.state.changeIcon}
+              isCurrentBid={isCurrentBid}
+              sfObject={sfObject}
+              answer={answerValue}
+              answerText={answerText}
+              hasDifferentSFanswer={hasDifferentSFanswer}
+            />
           </Grid>
         </Grid>
       </Grid>

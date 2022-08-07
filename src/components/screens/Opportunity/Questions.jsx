@@ -494,7 +494,7 @@ class Questions extends Component<Props, State> {
     } = this.state;
 
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
-    let dynamicwidth;
+    let dynamicwidth = 0;
     const minPixelToExclude = 20;
     const notepadMinWidthPx =
       (this.state.innerWidth - minPixelToExclude) * (30 / 100); // 30% of the total screen size
@@ -568,11 +568,11 @@ class Questions extends Component<Props, State> {
         </div>
         <div id="panelwrapper">
           {/* Notepad */}
-          <div id="panel-notepad" style={{ width: dynamicwidth }}>
+          <div id="panel-notepad" style={{ width: `${dynamicwidth}px` }}>
             <Panel
-              minWidth={notepadMinWidthPx}
-              maxWidth={notepadMaxWidthPx}
-              width={dynamicwidth}
+              minWidth={`${notepadMinWidthPx}px`}
+              maxWidth={`${notepadMaxWidthPx}px`}
+              width={`${dynamicwidth}px`}
               resizable
               onClose={() => {
                 this.setIsNotepadOpen(false);
@@ -598,7 +598,7 @@ class Questions extends Component<Props, State> {
             </Panel>
           </div>
           {/* Question list */}
-          <div id="panel-questions-list" width={this.state.innerWidth/2}>
+          <div id="panel-questions-list" style={{width:`${this.state.innerWidth/2}px`}}>
             <div className="tasksList-wrapper">{this.renderQuestions()}</div>
           </div>
         </div>
