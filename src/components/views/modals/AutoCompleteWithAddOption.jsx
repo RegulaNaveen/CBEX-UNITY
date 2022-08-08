@@ -85,7 +85,7 @@ const AutoCompleteWithAddOption = ({
   }, [answer]);
 
   return (
-    <div>
+    <div className='auto-complete-with-add-option'>
       <Autocomplete
         filterOptions={(currentLov, params) => {
           const filtered = filter(currentLov, params);
