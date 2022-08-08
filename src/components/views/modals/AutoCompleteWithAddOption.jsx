@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { List } from 'immutable';
 import isEmpty from 'lodash-es/isEmpty';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete, {
   createFilterOptions
 } from '@material-ui/lab/Autocomplete';
-import './testmodal.scss';
 import { getLookUpOptionsSelector } from '../../../redux/selectors';
 
 const filter = createFilterOptions();
@@ -22,9 +22,22 @@ const AutoCompleteWithAddOption = ({
   onBlur,
   multiple
 }) => {
+  const getSFOptions = (sfObject, sfField) =>
+    options[`SF#${sfObject}_SF#${sfField}`]
+      ? options[`SF#${sfObject}_SF#${sfField}`]
+      : [];
+
   const getOptions = () => {
-    const lovToJs = lov?.toJS();
-    return lovToJs.length ? lovToJs : options[`SF#${sfObject}_SF#${sfField}`];
+    let lovOptions;
+    // Check if its immutable List
+    if (List.isList(lov)) {
+      lovOptions = lov?.toJS();
+    } else if (Array.isArray(lov)) {
+      lovOptions = lov;
+    } else {
+      lovOptions = [];
+    }
+    return isEmpty(lovOptions) ? getSFOptions(sfObject, sfField) : lovOptions;
   };
 
   const getAnswer = () => {
@@ -63,10 +76,12 @@ const AutoCompleteWithAddOption = ({
   };
 
   React.useEffect(() => {
-    setSelectedVal(answer);
+    setSelectedVal(getAnswer());
     let currentOptions = [...getOptions()];
-    let xyz = currentOptions.filter(el => selectedVal.indexOf(el) === -1);
-    setCurrentLov(xyz);
+    let newOptions = currentOptions.filter(
+      el => selectedVal.indexOf(el) === -1
+    );
+    setCurrentLov(newOptions);
   }, [answer]);
 
   return (
