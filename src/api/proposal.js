@@ -1,7 +1,9 @@
 // @flow
-import axios from 'axios';
+// import axios from 'axios';
+import axios from './axios-config';
+
 import { API } from '../constants';
-import { getAccessTokenFromLocalStorage as getAccessToken } from '../SessionHandler';
+// import { getAccessTokenFromLocalStorage as getAccessToken } from '../SessionHandler';
 import { logLobDetails } from '../utils/utils';
 import omit from 'lodash/omit';
 const {
@@ -20,9 +22,7 @@ const { CancelToken } = axios;
 export const getProposalInfo = async (id: string): Promise<Object> => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${PROPOSAL_API_URL}/${id}`, {
-        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
-      })
+      .get(`${PROPOSAL_API_URL}/${id}`)
       .then(response => {
         logLobDetails(response.data);
         resolve(response.data);
@@ -47,10 +47,6 @@ export const setProposalAnswer = async (
       `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`,
       { answer, userData },
       {
-        headers: {
-          'x-api-key': `${API_KEY}`,
-          'x-access-token': `${getAccessToken()}`
-        },
         cancelToken: new CancelToken(function executor(c) {
           onGoingAnswer[questionId] = c;
         })
@@ -67,9 +63,7 @@ export const setProposalAnswer = async (
 export const getQuestionSectionInfo = async (): Promise<Object> => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${PROPOSAL_API_URL}/sections`, {
-        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
-      })
+      .get(`${PROPOSAL_API_URL}/sections`)
       .then(response => {
         resolve(response.data);
       })
@@ -82,9 +76,7 @@ export const getQuestionSectionInfo = async (): Promise<Object> => {
 export const getAnswerTypes = async (): Promise<Object> => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${PROPOSAL_API_URL}/answerTypes`, {
-        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
-      })
+      .get(`${PROPOSAL_API_URL}/answerTypes`)
       .then(response => {
         resolve(response.data);
       })
@@ -97,9 +89,7 @@ export const getAnswerTypes = async (): Promise<Object> => {
 export const getRoles = async (): Promise<Object> => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${PROPOSAL_API_URL}/roles`, {
-        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
-      })
+      .get(`${PROPOSAL_API_URL}/roles`)
       .then(response => {
         resolve(response.data);
       })
@@ -115,9 +105,7 @@ export const setProposalQuestionData = async (
 ): Promise<Object> => {
   return new Promise((resolve, reject) => {
     axios
-      .post(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}`, questionData, {
-        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
-      })
+      .post(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}`, questionData)
       .then(response => {
         resolve(response.data);
       })
@@ -130,13 +118,7 @@ export const setProposalQuestionData = async (
 export const getProposalInfoUpdated = async (id: string): Promise<Object> => {
   return new Promise((resolve, reject) => {
     axios
-      .put(
-        `${PROPOSAL_API_URL}/${id}`,
-        {},
-        {
-          headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
-        }
-      )
+      .put(`${PROPOSAL_API_URL}/${id}`, {})
       .then(response => {
         resolve(response.data);
       })
@@ -147,9 +129,7 @@ export const getProposalInfoUpdated = async (id: string): Promise<Object> => {
 };
 
 export const getProposlBoxId = async (id: string): Promise<Object> => {
-  return axios.get(`${PROPOSAL_API_URL}/${id}/boxid`, {
-    headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
-  });
+  return axios.get(`${PROPOSAL_API_URL}/${id}/boxid`);
 };
 
 export const fetchAdditionalBoxLink = async (
@@ -158,17 +138,14 @@ export const fetchAdditionalBoxLink = async (
   customer: string
 ): Promise<Object> => {
   return axios.get(
-    `${PROPOSAL_QUESTIONS_API_URL}/additionallinks/${oppID}/${encodeURI(customer)}/${crmNo}`,
-    {
-      headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
-    }
+    `${PROPOSAL_QUESTIONS_API_URL}/additionallinks/${oppID}/${encodeURI(
+      customer
+    )}/${crmNo}`
   );
 };
 
 export const getValidatedProposalData = (id: string): Promise<Object> => {
-  return axios.get(`${PROPOSAL_VALIDATED_DATA}/${id}`, {
-    headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
-  });
+  return axios.get(`${PROPOSAL_VALIDATED_DATA}/${id}`);
 };
 
 export const editProposalQuestionData = async (
@@ -180,10 +157,7 @@ export const editProposalQuestionData = async (
     axios
       .put(
         `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}/update`,
-        questionData,
-        {
-          headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
-        }
+        questionData
       )
       .then(response => {
         resolve(response.data);
@@ -200,9 +174,7 @@ export const deleteProposalQuestionData = async (
 ): Promise<Object> => {
   return new Promise((resolve, reject) => {
     axios
-      .delete(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`, {
-        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
-      })
+      .delete(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`)
       .then(response => {
         resolve(response.data);
       })
@@ -215,9 +187,7 @@ export const deleteProposalQuestionData = async (
 export const getOpportunityInfo = async (id: string): Promise<Object> => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${PROPOSAL_API_URL}/opportunity/${id}`, {
-        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
-      })
+      .get(`${PROPOSAL_API_URL}/opportunity/${id}`)
       .then(response => {
         resolve(response.data);
       })
@@ -230,9 +200,7 @@ export const getOpportunityInfo = async (id: string): Promise<Object> => {
 export const getProposalCount = async (id: string): Promise<Object> => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${PROPOSAL_API_URL}/opportunity/${id}/count`, {
-        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
-      })
+      .get(`${PROPOSAL_API_URL}/opportunity/${id}/count`)
       .then(response => {
         resolve(response.data);
       })
@@ -254,27 +222,21 @@ export const getPaginateProposal = async (urls): Promise<Object> => {
 };
 
 export const getPickListLookupSfData = async (): Promise<Object> => {
-  return axios.get(`${LOOKUP_OPTIONS_API}`, {
-    headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
-  });
+  return axios.get(`${LOOKUP_OPTIONS_API}`);
 };
 
 /**
  * Get Opportunity Type List
  */
 export const getOTListData = () => {
-  return axios.get(`${PROPOSAL_OT_LIST}`, {
-    headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
-  });
+  return axios.get(`${PROPOSAL_OT_LIST}`);
 };
 
 /**
  * Get Opportunity Type List
  */
 export const changeProposalOT = payload => {
-  return axios.post(`${PROPOSAL_SWITCH_OT}`, payload, {
-    headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
-  });
+  return axios.post(`${PROPOSAL_SWITCH_OT}`, payload);
 };
 
 /**
@@ -284,7 +246,7 @@ export const deleteProposalUser = (proposalId, data) => {
   return axios.delete(
     `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/proposalUser`,
     {
-      headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() },
+      // headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() },
       data
     }
   );
