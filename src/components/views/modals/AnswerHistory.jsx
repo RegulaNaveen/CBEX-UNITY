@@ -1,11 +1,13 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Map } from 'immutable'; // NOSONAR
+import { Map, fromJS } from 'immutable'; // NOSONAR
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
 import { isEmpty, unionBy } from 'lodash';
 import { diffWordsWithSpace } from 'diff';
+import Loader from 'apollo-react/components/Loader';
+
 import { getProposalTeamAssignedRoles } from '../../../redux/selectors';
 import { getOpportunityData } from '../../../redux/selectors/proposal';
 import { Close } from '../../svg';
@@ -17,27 +19,61 @@ import {
 } from '../../../utils/utils';
 import ANSWER_TYPES from '../../../constants/answerTypes';
 import { getProposalAnswer } from '../../../api/proposal';
+import { getProposalAnswerHistory } from '../../../redux/actions/proposal-actions';
 
 type Props = {
   question: Map,
   proposalTeamAnswers: Object,
   opportunityData: Object,
-  closeModal: () => void
+  closeModal: () => void,
+  getAnsHistory: Function
 };
 
 class AnswerHistory extends Component<Props> {
+  constructor(props: Object) {
+    super(props);
+
+    this.state = {
+      question: this.props.question.set('answers', fromJS([])),
+      loading: false
+    };
+  }
+
   componentDidMount() {
-    const { question, opportunityData } = this.props;
+    const { question, opportunityData, getAnsHistory } = this.props;
+    console.log({
+      questionMap: question,
+      question: question?.toJS(),
+      Answers: question?.toJS().answers
+    });
     const questionID = question?.toJS()?.questionId;
     const proposalID = Object.values(opportunityData?.toJS())?.find(
       ({ isCurrent }) => isCurrent
     )?.proposal?.proposalId;
+
+    // Set History List form Api
     if (questionID && proposalID) {
       (async () => {
-        const xyz = await getProposalAnswer(proposalID, questionID);
-        console.log('Response for getting Ans History', xyz);
+        let modifiedAns = question.get('answers');
+        this.setState({ loading: true });
+        const res = await getAnsHistory(proposalID, questionID);
+        this.setState({ loading: false });
+        if (res.status) {
+          const availableAns = question?.toJS().answers;
+          if (!isEmpty(availableAns) && Array.isArray(availableAns)) {
+            const cloneAnswers = [...availableAns];
+            cloneAnswers.pop();
+            modifiedAns = fromJS([...cloneAnswers, ...res.data]);
+          } else {
+            modifiedAns = fromJS(res.data);
+          }
+        }
+        this.setState(prevState => ({
+          question: prevState.question.set('answers', modifiedAns)
+        }));
       })();
     }
+
     if (document.body) document.body.classList.add('no-scroll');
   }
 
@@ -46,7 +82,8 @@ class AnswerHistory extends Component<Props> {
   }
 
   renderAnswerResponsables = () => {
-    const { question, proposalTeamAnswers } = this.props;
+    const { proposalTeamAnswers } = this.props;
+    const { question } = this.state;
     const questionRoleNames = question.get('roleNames');
     const questionRoles = question
       .get('roleNames')
@@ -77,7 +114,8 @@ class AnswerHistory extends Component<Props> {
   };
 
   renderContent = () => {
-    const { question, opportunityData } = this.props;
+    const { opportunityData } = this.props;
+    const { question } = this.state;
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const sectionName = question.getIn(['section', 'sectionName']);
     let answers = question.get('answers').reverse();
@@ -90,7 +128,7 @@ class AnswerHistory extends Component<Props> {
       const userName = _answer.get('userName') || 'Default User';
       const date = _answer.get('date');
       let answer = _answer.get('answer');
-      let proposalId = _answer.get('proposalId');
+      const proposalId = _answer.get('proposalId');
       let bidNo = '';
       if (
         proposalId &&
@@ -201,44 +239,40 @@ class AnswerHistory extends Component<Props> {
               }
             );
           }
-          const showDate = (answer, nextAnswer, indx) => {
+          const showDate = (dateAns, nxtDateAns, indx) => {
             const tmp = answers.toJS();
-            if (new Date(answer) === 'Invalid Date') {
+            if (new Date(dateAns) === 'Invalid Date') {
               return renderWord('Invalid Date', 'removed');
             }
             let styleClass =
               !isOnlyOneAnswer && !isLastItem ? 'changed' : undefined;
-            // Dont add styles if answers are same
+            // Don't add styles if answers are same
             // We use .substring(0, 10) to get only the yyyy-mm-dd out of a String like '2022-04-30T00:00:00+05:30'
             if (
-              String(answer).substring(0, 10) ===
-              String(nextAnswer).substring(0, 10)
+              String(dateAns).substring(0, 10) ===
+              String(nxtDateAns).substring(0, 10)
             ) {
-              nextAnswer = '';
+              nxtDateAns = '';
               styleClass = undefined;
             }
-            const newdate = renderWord(
-              String(parseMomentDate(answer)),
+            const newDate = renderWord(
+              String(parseMomentDate(dateAns)),
               styleClass
             );
-            let nextdate = '';
+            let nextDate = '';
             if (indx + 1 === tmp.length) {
-              nextdate = '';
+              nextDate = '';
             } else if (
-              nextAnswer &&
-              String(nextAnswer).trim().length &&
+              nxtDateAns &&
+              String(nxtDateAns).trim().length &&
               tmp.length > 1
             ) {
-              nextdate = renderWord(
-                String(parseMomentDate(nextAnswer)),
+              nextDate = renderWord(
+                String(parseMomentDate(nxtDateAns)),
                 'removed'
               );
             }
-            return (
-              <>
-                {nextdate} {newdate}
-              </>
-            );
+            return `${nextDate} ${newDate}`;
           };
 
           if (questionType === 'select' || questionType === 'select-lookup') {
@@ -305,17 +339,25 @@ class AnswerHistory extends Component<Props> {
 
           return <p>{answer}</p>;
         }
-        const deletedAnswers = nextAnswer.filter(ans => !answer.includes(ans));
+
+        const modifiedAns = Array.isArray(answer) ? answer : [answer];
+        const modifiedNxtAns = Array.isArray(nextAnswer)
+          ? nextAnswer
+          : [nextAnswer];
+        const deletedAnswers = modifiedNxtAns?.filter(
+          ans => !modifiedAns.includes(ans)
+        );
+
         const deletedAnswersItems = deletedAnswers.map(ans => (
           <li className="removed" key={uuidv4()}>
             {ans}
           </li>
         ));
 
-        const answerItem = answer.map(singleAnswer => (
+        const answerItem = modifiedAns.map(singleAnswer => (
           <li
             key={uuidv4()}
-            className={!nextAnswer.includes(singleAnswer) ? 'changed' : ''}
+            className={!modifiedNxtAns.includes(singleAnswer) ? 'changed' : ''}
           >
             {singleAnswer}
           </li>
@@ -369,7 +411,9 @@ class AnswerHistory extends Component<Props> {
   };
 
   render() {
-    const { question, closeModal } = this.props;
+    // console.log({ xyz1111222: this.state.question?.toJS() });
+    const { closeModal } = this.props;
+    const { question, loading } = this.state;
     const answers = question.get('answers');
     const questionTitle = question.get('questionText');
 
@@ -386,6 +430,8 @@ class AnswerHistory extends Component<Props> {
           role="presentation"
           onClick={this.stopPropagation}
         >
+          {loading && <Loader isInner />}
+
           <div className="bluegrid" />
           <div className="modal-header">
             <div className="header-titles">
@@ -415,4 +461,8 @@ const mapStateToProps = (state: Map) => ({
   opportunityData: getOpportunityData(state)
 });
 
-export default connect(mapStateToProps)(AnswerHistory);
+const mapDispatchToProps = {
+  getAnsHistory: getProposalAnswerHistory
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AnswerHistory);

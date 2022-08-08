@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { Map, List } from 'immutable';
 import { connect } from 'react-redux';
-import { isObject, isEqual, isEmpty, xor, isString } from 'lodash';
+import { isObject, isEqual, isEmpty, xor, isString, has } from 'lodash';
 import IconButton from 'apollo-react/components/IconButton';
 import Loader from 'apollo-react/components/Loader';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
@@ -390,8 +390,9 @@ export class TaskRow extends Component<Props, State> {
     const getConvertedAnsString = str =>
       !String(str).trim() ? '' : String(str).trim();
 
+    const hasFormattedAns = has(lastAnswer?.toJS(), 'formattedAnswer');
     const formattedAnswer =
-      lastAnswer && lastAnswer?.get('formattedAnswer')?.toJS();
+      hasFormattedAns && lastAnswer?.toJS().formattedAnswer;
 
     // Richtext Props
     const richTextAnswerField = {
