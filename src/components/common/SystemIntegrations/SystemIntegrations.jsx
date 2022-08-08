@@ -28,6 +28,14 @@ const SystemIntegrations = ({
   hasDifferentSFanswer,
   answerText
 }) => {
+  let calendarlogic1 = false;
+  let calendarlogic2 = false;
+  calendarlogic1 =
+    isAnswerPredicted &&
+    !loading &&
+    !isAnswered(lastAnswer, isAnswerPredicted) &&
+    !loading;
+  calendarlogic2 = answerdate === 'Not Answered' && !isAnswerPredicted;
   const SalesForceCondition = () => {
     if (
       sficon !== 'n/a' &&
@@ -74,8 +82,11 @@ const SystemIntegrations = ({
           }
           placement="top"
         >
-          <div>
-            <Outgoing style={{ fill: '#00c221' }} />
+          <div className="outgoing-integration">
+            <Outgoing
+              className="outgoing-integration"
+              style={{ fill: '#00c221' }}
+            />
           </div>
         </Tooltip>
       );
@@ -97,7 +108,7 @@ const SystemIntegrations = ({
           }
           placement="top"
         >
-          <div>
+          <div className="outgoing-integration">
             <Outgoing style={{ fill: '#00c221' }} />
           </div>
         </Tooltip>
@@ -107,23 +118,24 @@ const SystemIntegrations = ({
 
   const CalendarCondition = () => {
     if (answerdate === 'Not Answered' && !isAnswerPredicted) {
-      return <Calendar style={{ color: '#b7b7b7' }} />;
+      return (
+        <Calendar style={{ color: '#b7b7b7' }} onClick={answeronhistory} />
+      );
     }
     if (
-      isAnswerPredicted &&
-      !loading &&
-      !isAnswered(lastAnswer, isAnswerPredicted) &&
-      !loading
+      calendarlogic1 &&
+      calendarlogic2 === false &&
+      answerText?.toString().trim().length < 1
     ) {
       return (
         <Tooltip variant="light" title="Unity Predicted Answer" placement="top">
-          <IconButton disabled={!isCurrentBid} style={{ height: '0' }}>
+          <div disabled={!isCurrentBid} style={{ height: '0px', width: '0px' }}>
             <CalendarCheck
               fontSize="22px"
               style={{ color: '#015ff1' }}
               onClick={() => this.handleVerifyPredictedAnsClick(lastAnswer)}
             />
-          </IconButton>
+          </div>
         </Tooltip>
       );
     }
@@ -137,6 +149,7 @@ const SystemIntegrations = ({
           <CalendarCheck
             className="answered"
             style={{ marginLeft: '6px', color: '00c221' }}
+            onClick={answeronhistory}
           />
         </div>
       );
@@ -146,7 +159,9 @@ const SystemIntegrations = ({
       !loading &&
       changeIcon === '#b7b7b7'
     ) {
-      return <CalendarCheck style={{ color: '#b7b7b7' }} />;
+      return (
+        <CalendarCheck style={{ color: '#b7b7b7' }} onClick={answeronhistory} />
+      );
     }
     if (answerText?.toString().trim().length < 1) {
       return (
@@ -154,6 +169,7 @@ const SystemIntegrations = ({
           <CalendarCheck
             className="answered"
             style={{ marginLeft: '6px', color: '#b7b7b7' }}
+            onClick={answeronhistory}
           />
         </div>
       );
@@ -163,6 +179,7 @@ const SystemIntegrations = ({
         <CalendarCheck
           className="answered"
           style={{ marginLeft: '6px', color: '00c221' }}
+          onClick={answeronhistory}
         />
       </div>
     );
@@ -176,7 +193,7 @@ const SystemIntegrations = ({
         alignItems: 'center'
       }}
     >
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
         <div
           style={{
             textAlign: 'center',
@@ -209,10 +226,11 @@ const SystemIntegrations = ({
             border: 'none',
             backgroundColor: 'transparent',
             color: '#297dfd',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            height: '24px',
+            width: '24px'
           }}
           type="button"
-          onClick={answeronhistory}
           className="integration-buttons"
         >
           {CalendarCondition()}
