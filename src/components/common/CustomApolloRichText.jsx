@@ -4,12 +4,11 @@ import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import { v4 as uuid } from 'uuid';
-// import IconButton from 'apollo-react/components/IconButton';
-// import Pencil from 'apollo-react-icons/Pencil';
 import classNames from 'classnames';
 import { useUpdateEffect } from '../../hooks';
 
 const CustomApolloRichText = ({
+  richTextString,
   richTextVal,
   richTextHtml,
   placeholder,
@@ -17,21 +16,39 @@ const CustomApolloRichText = ({
   onChange,
   isEditable,
   enableFocus,
-  onClickHTML,
-  // showEditButton,
-  // iconProps,
   className,
-  error
+  error,
+  disabled
 }) => {
+  // Set initial blocks structure if only string available
+  let richtextObject = richTextVal;
+  if (richTextString && isEmpty(richTextVal?.blocks)) {
+    richtextObject = {
+      blocks: [
+        {
+          text: richTextString,
+          type: 'unstyled',
+          depth: 0,
+          inlineStyleRanges: [],
+          entityRanges: [],
+          data: {}
+        }
+      ],
+      entityMap: {}
+    };
+  }
+
+  // Initial Richtext Data
   const INITIAL_DATA = {
-    value: richTextVal,
+    text: richTextString,
+    value: richtextObject,
     html: richTextHtml
   };
 
   // Component State
   const [richTextData, setRichTextData] = useState(INITIAL_DATA);
-  // const [clickedOutside, setClickedOutside] = useState(true);
   const [isRichTextEditable, setIsRichTextEditable] = useState(isEditable);
+  // const [clickedOutside, setClickedOutside] = useState(true);
   const richTextRef = useRef(null);
   const richTextEditorRef = useRef(null);
   // let isFirstRender = true;
@@ -43,39 +60,37 @@ const CustomApolloRichText = ({
     setRichTextData(INITIAL_DATA);
   }, [richTextHtml, richTextVal]);
 
+  /**
+   * Function to Add Delay for Specific Seconds
+   */
   const timeout = ms => {
     return new Promise(resolve => setTimeout(resolve, ms));
+  };
+
+  /**
+   * Set Focus on RichText Editor
+   */
+  const setFocusOnEditor = async () => {
+    await timeout(100);
+    if (richTextEditorRef.current && enableFocus)
+      richTextEditorRef.current.focus();
   };
 
   /**
    * Set focus on load
    */
   useEffect(() => {
-    // console.log({
-    //   isEditable,
-    //   refHtml: richTextEditorRef.current,
-    //   enableFocus
-    // });
     setIsRichTextEditable(isEditable);
-
-    (async () => {
-      await timeout(100);
-      if (richTextEditorRef.current && enableFocus)
-        richTextEditorRef.current.focus();
-    })();
+    setFocusOnEditor();
   }, [isEditable]);
 
-  // /**
-  //  * onClick Edit button handler
-  //  */
-  // const onClickEditHandler = () => {
-  //   setIsRichTextEditable(prev => {
-  //     if (onClickHTML) onClickHTML(!prev, richTextData);
-  //     if (richTextEditorRef.current && enableFocus)
-  //       richTextEditorRef.current.focus();
-  //     return !prev;
-  //   });
-  // };
+  /**
+   * onClick Edit button handler
+   */
+  const onClickHTML = () => {
+    setIsRichTextEditable(true);
+    setFocusOnEditor();
+  };
 
   /**
    * OnChange RichText Editor
@@ -83,11 +98,11 @@ const CustomApolloRichText = ({
   const onChangeHandler = (value, html) => {
     if (isEqual(richTextData.value, value)) return; // break func
 
-    // const text = value.blocks
-    //   .map(item => item.text)
-    //   .filter(item => !isEmpty(item.trim()))
-    //   .join(' ');
-    const resultObj = { value, html };
+    const text = value.blocks
+      .map(item => item.text)
+      .filter(item => !isEmpty(item.trim()))
+      .join(' ');
+    const resultObj = { text, value, html };
     setRichTextData(resultObj);
     if (onChange) onChange(resultObj); // onChange callback func
 
@@ -102,10 +117,10 @@ const CustomApolloRichText = ({
     if (
       richTextRef.current &&
       !richTextRef.current.contains(e.target) &&
-      isEmpty(e.target.closest('.ubuild-MuiPopover-root')) &&
-      isEmpty(e.target.closest('.ubuild-MuiDialog-root'))
+      isEmpty(e.target.closest('.MuiPopover-root')) &&
+      isEmpty(e.target.closest('.MuiDialog-root'))
     ) {
-      // setClickedOutside(true);
+      setIsRichTextEditable(false);
       if (onBlur) onBlur(richTextData);
     }
   };
@@ -125,28 +140,26 @@ const CustomApolloRichText = ({
   //   if (clickedOutside && onBlur) onBlur(richTextData); // onBlur callback func
   // }, [clickedOutside]);
 
-  // const renderEditIcon = showEditButton && (
-  //   <IconButton {...iconProps} onClick={onClickEditHandler}>
-  //     <Pencil />
-  //   </IconButton>
-  // );
+  // console.log({ richTextData, isRichTextEditable });
 
   // Render Html View
   if (!isRichTextEditable) {
     return (
       <div
         className={classNames('custom-rich-text', 'readonly', {
-          [className]: !!className
+          [className]: !!className,
+          disabled
         })}
         aria-hidden="true"
         onClick={onClickHTML}
       >
         <RichTextEditor
+          placeholder={placeholder || ''}
           variant="view"
           defaultValue={richTextData.value}
           key={uuid().toString()}
+          disabled
         />
-        {/* {renderEditIcon} */}
       </div>
     );
   }
@@ -171,12 +184,12 @@ const CustomApolloRichText = ({
           ref={richTextEditorRef}
         />
       </div>
-      {/* {renderEditIcon} */}
     </div>
   );
 };
 
 CustomApolloRichText.defaultProps = {
+  richTextString: '',
   richTextVal: { blocks: [] },
   richTextHtml: '',
   placeholder: '',
@@ -184,14 +197,13 @@ CustomApolloRichText.defaultProps = {
   onChange: () => {},
   isEditable: false,
   enableFocus: false,
-  onClickHTML: () => {},
-  // showEditButton: false,
-  // iconProps: {},
   className: '',
-  error: false
+  error: false,
+  disabled: false
 };
 
 CustomApolloRichText.propTypes = {
+  richTextString: PropTypes.string,
   richTextVal: PropTypes.object,
   richTextHtml: PropTypes.string,
   placeholder: PropTypes.string,
@@ -199,21 +211,16 @@ CustomApolloRichText.propTypes = {
   onChange: PropTypes.func,
   isEditable: PropTypes.bool,
   enableFocus: PropTypes.bool,
-  onClickHTML: PropTypes.func,
-  // showEditButton: PropTypes.bool,
-  // iconProps: PropTypes.object,
   className: PropTypes.string,
-  error: PropTypes.bool
+  error: PropTypes.bool,
+  disabled: PropTypes.bool
 };
 
 /**
  * Memo func to compare prev next props
  */
 const propsAreEqual = (prevProp, nextProp) => {
-  return (
-    isEqual(prevProp.richTextVal, nextProp.richTextVal) &&
-    isEqual(prevProp.isEditable, nextProp.isEditable)
-  );
+  return isEqual(prevProp.richTextString, nextProp.richTextString);
 };
 
 export default React.memo(CustomApolloRichText, propsAreEqual);

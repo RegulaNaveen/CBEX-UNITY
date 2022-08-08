@@ -103,11 +103,11 @@ const QuestionsSectionMapping = ({
   // Reset LazyData state onUpdate LazyData
   useUpdateEffect(() => setResetData(false), [data]);
 
-  console.log({
-    lazyData: data,
-    filteredSections: [...allSections.values()]
-    // sections: [...sections.values()]
-  });
+  // console.log({
+  //   lazyData: data,
+  //   filteredSections: [...allSections.values()]
+  //   // sections: [...sections.values()]
+  // });
 
   // Func to render CollapsibleList Component
   const renderAllSection = section => {

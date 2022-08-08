@@ -24,7 +24,8 @@ import {
   fetchAdditionalBoxLink,
   getOTListData,
   changeProposalOT,
-  deleteProposalUser
+  deleteProposalUser,
+  getProposalAnswer
 } from '../../api/proposal';
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getUniqueMilestones } from '../selectors/proposal';
@@ -116,22 +117,27 @@ export const setProposalAnswerData = (
   proposalId: string,
   questionId: string,
   answer: string,
-  userData: Object
+  userData: Object,
+  editorData: any
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
     dispatch({
       type: PROPOSAL_ANSWER_LOADING,
       payload: { questionId, loading: true }
     });
-    let questionsFilter = getQuestionsFilters(getState());
+    const questionsFilter = getQuestionsFilters(getState());
 
     try {
       const { data } = await setProposalAnswer(
         proposalId,
         questionId,
         answer,
-        userData
+        userData,
+        editorData
       );
+
+      // const xyz = await getProposalAnswer(proposalId, questionId);
+      // console.log('Response for getting Ans History', xyz);
 
       if (Array.isArray(data.answers)) {
         dispatch({
@@ -178,7 +184,6 @@ export const updateAnswerFromWebSocket = (
     let questionsFilter = getQuestionsFilters(getState());
 
     try {
-      console.log('Updating answer for:', questionId);
       if (Array.isArray(data.answers)) {
         dispatch({
           type: PROPOSAL_ANSWER,
@@ -838,7 +843,7 @@ export const fetchOTListData = () => async () => {
     return { status: true, title: DEFAULT.SUCCESS, data: response.data };
   } catch (error) {
     // Error
-    console.log(error);
+    console.log(error.response);
     const msg = getErrorMessage(error);
     return { status: false, title: DEFAULT.ALERT, msg };
   }

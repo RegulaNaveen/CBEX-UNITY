@@ -7,11 +7,17 @@ import randomColor from 'randomcolor';
 import { isEmpty, unionBy } from 'lodash';
 import { diffWordsWithSpace } from 'diff';
 import { getProposalTeamAssignedRoles } from '../../../redux/selectors';
-import { getOpportunityData} from '../../../redux/selectors/proposal';
+import { getOpportunityData } from '../../../redux/selectors/proposal';
 import { Close } from '../../svg';
 import { parseMomentDate } from '../../../utils/DateUtils';
-import { rearrangeDiff, getUserInitials, getUserName } from '../../../utils/utils';
+import {
+  rearrangeDiff,
+  getUserInitials,
+  getUserName
+} from '../../../utils/utils';
 import ANSWER_TYPES from '../../../constants/answerTypes';
+import { getProposalAnswer } from '../../../api/proposal';
+
 type Props = {
   question: Map,
   proposalTeamAnswers: Object,
@@ -21,6 +27,17 @@ type Props = {
 
 class AnswerHistory extends Component<Props> {
   componentDidMount() {
+    const { question, opportunityData } = this.props;
+    const questionID = question?.toJS()?.questionId;
+    const proposalID = Object.values(opportunityData?.toJS())?.find(
+      ({ isCurrent }) => isCurrent
+    )?.proposal?.proposalId;
+    if (questionID && proposalID) {
+      (async () => {
+        const xyz = await getProposalAnswer(proposalID, questionID);
+        console.log('Response for getting Ans History', xyz);
+      })();
+    }
     if (document.body) document.body.classList.add('no-scroll');
   }
 
@@ -83,42 +100,61 @@ class AnswerHistory extends Component<Props> {
         bidNo = this.props.opportunityData.get(proposalId).toJS().proposal
           .proposalDetails.bidNo;
       }
-      
+
       const nextAnswer = answers.get(index + 1)
         ? answers.get(index + 1).get('answer')
         : answer;
-      
-      const isValidatedUnityPredictedAnswer = (
+
+      const isValidatedUnityPredictedAnswer =
         questionType !== ANSWER_TYPES.PICKLIST &&
         questionType !== ANSWER_TYPES.PICKLIST_LOOKUP &&
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'UnityPredictedAnswer' &&
-        answer === nextAnswer
-      );
+        answer === nextAnswer;
 
       // picklist answers are array so they require different check than other question types
-      const isPicklistValidUnityPredAns = (
-        (questionType === ANSWER_TYPES.PICKLIST || questionType === ANSWER_TYPES.PICKLIST_LOOKUP) &&
+      const isPicklistValidUnityPredAns =
+        (questionType === ANSWER_TYPES.PICKLIST ||
+          questionType === ANSWER_TYPES.PICKLIST_LOOKUP) &&
         answers &&
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'UnityPredictedAnswer' &&
-        answers.get(index + 1).get('answer').toJS().join(",") === answers.get(index).get('answer').toJS().join(",")
-      );
+        answers
+          .get(index + 1)
+          .get('answer')
+          .toJS()
+          .join(',') ===
+          answers
+            .get(index)
+            .get('answer')
+            .toJS()
+            .join(',');
       const userInitials = getUserInitials(userName);
       const parsedDate = parseMomentDate(date);
       const avatarRandomColor = randomColor({ luminosity: 'dark' });
 
       const renderAnswers = () => {
         const isFirstItem = index === 0;
-        const isLastItem = index === answers.toJS().length -1
-        const isOnlyOneAnswer = answers.toJS().length === 1
+        const isLastItem = index === answers.toJS().length - 1;
+        const isOnlyOneAnswer = answers.toJS().length === 1;
         if (isValidatedUnityPredictedAnswer) {
-          return <span key={uuidv4()}><b>Validated Unity Predicted Answer</b></span>;
+          return (
+            <span key={uuidv4()}>
+              <b>Validated Unity Predicted Answer</b>
+            </span>
+          );
         }
         if (isPicklistValidUnityPredAns) {
-          return <span key={uuidv4()}><b>Validated Unity Predicted Answer</b></span>;
+          return (
+            <span key={uuidv4()}>
+              <b>Validated Unity Predicted Answer</b>
+            </span>
+          );
         }
-        if (questionType !== ANSWER_TYPES.PICKLIST && questionType !== ANSWER_TYPES.PICKLIST_LOOKUP) {
+        if (
+          questionType !== ANSWER_TYPES.PICKLIST &&
+          questionType !== ANSWER_TYPES.PICKLIST_LOOKUP
+        ) {
           const renderWord = (word, status) => (
             <span className={status} key={uuidv4()}>
               {word}{' '}
@@ -151,10 +187,11 @@ class AnswerHistory extends Component<Props> {
                 if (intersection.includes(ans)) return renderWord(ans, '');
                 if (removed.includes(ans)) return renderWord(ans, 'removed');
                 if (added.includes(ans)) return renderWord(ans, 'changed');
+                return null;
               });
             }
             const diffAnswers = diffWordsWithSpace(nextAnswer, answer);
-            
+
             return rearrangeDiff(diffAnswers).map(
               ({ value, added, removed }) => {
                 if (removed) return renderWord(value, 'removed');
@@ -166,22 +203,26 @@ class AnswerHistory extends Component<Props> {
           }
           const showDate = (answer, nextAnswer, indx) => {
             const tmp = answers.toJS();
-            if (new Date(answer) == 'Invalid Date') {
+            if (new Date(answer) === 'Invalid Date') {
               return renderWord('Invalid Date', 'removed');
             }
-            let styleClass = !isOnlyOneAnswer && !isLastItem ? 'changed' : undefined;
+            let styleClass =
+              !isOnlyOneAnswer && !isLastItem ? 'changed' : undefined;
             // Dont add styles if answers are same
             // We use .substring(0, 10) to get only the yyyy-mm-dd out of a String like '2022-04-30T00:00:00+05:30'
-            if(String(answer).substring(0, 10) === String(nextAnswer).substring(0, 10)){
+            if (
+              String(answer).substring(0, 10) ===
+              String(nextAnswer).substring(0, 10)
+            ) {
               nextAnswer = '';
-              styleClass = undefined
+              styleClass = undefined;
             }
             const newdate = renderWord(
               String(parseMomentDate(answer)),
               styleClass
             );
             let nextdate = '';
-            if (indx + 1 == tmp.length) {
+            if (indx + 1 === tmp.length) {
               nextdate = '';
             } else if (
               nextAnswer &&
@@ -206,41 +247,50 @@ class AnswerHistory extends Component<Props> {
               return answersArr[index + 1] ? answersArr[index + 1].answer : '';
             };
             const combinedAnswer = () => {
-              if (!isOnlyOneAnswer && prevAnswer() !== '' && prevAnswer() !== answer) {
+              if (
+                !isOnlyOneAnswer &&
+                prevAnswer() !== '' &&
+                prevAnswer() !== answer
+              ) {
                 return (
                   <>
-                    <span className={'removed'}>
-                      {prevAnswer()}{' '}
-                    </span>
-                    <span className={'changed'}>
-                      {answer}
-                    </span>
+                    <span className="removed">{prevAnswer()} </span>
+                    <span className="changed">{answer}</span>
                   </>
                 );
-              } else {
-                return '';
               }
+              return '';
             };
-            if(index == 0){
-              const styleClass = isFirstItem && !isOnlyOneAnswer && prevAnswer() !== answer ? 'changed' : undefined;
+            if (index === 0) {
+              const styleClass =
+                isFirstItem && !isOnlyOneAnswer && prevAnswer() !== answer
+                  ? 'changed'
+                  : undefined;
               return combinedAnswer() || renderWord(answer, styleClass);
-            }else if(answers 
-              && answers.get(index - 1)
-              && answers.get(index).get('userName') === 'UnityPredictedAnswer'
-              && answers.get(index - 1).get('answer') === answers.get(index).get('answer')){
+            }
+            if (
+              answers &&
+              answers.get(index - 1) &&
+              answers.get(index).get('userName') === 'UnityPredictedAnswer' &&
+              answers.get(index - 1).get('answer') ===
+                answers.get(index).get('answer')
+            ) {
               // checks is this a unity answer which was validated if yes then dont add any styles
-              return <span key={uuidv4()}>{answers.get(index).get('answer')} </span>
-            } else if (
+              return (
+                <span key={uuidv4()}>{answers.get(index).get('answer')} </span>
+              );
+            }
+            if (
               answers &&
               !isFirstItem &&
               answers.get(index + 1) &&
-              answers.get(index + 1).get('answer') === answers.get(index).get('answer')
+              answers.get(index + 1).get('answer') ===
+                answers.get(index).get('answer')
             ) {
               // if answers are same, don't add any style. This scenario occurs when new bids SF answer is the same as the older
               return renderWord(answer, undefined);
-            } else {
-              return combinedAnswer() || renderWord(answer, '');
             }
+            return combinedAnswer() || renderWord(answer, '');
           }
 
           if (questionType === 'date') {
@@ -289,15 +339,13 @@ class AnswerHistory extends Component<Props> {
               {userInitials}
             </span>
             <div>
-              <p>
-                {getUserName(userName)}
-              </p>
+              <p>{getUserName(userName)}</p>
               {renderAnswers()}
             </div>
           </div>
           <div className="answer-meta-data">
             <p>{parsedDate}</p>
-            {bidNo? <p>Bid {bidNo}</p> : null}
+            {bidNo ? <p>Bid {bidNo}</p> : null}
           </div>
         </div>
       );
@@ -339,7 +387,7 @@ class AnswerHistory extends Component<Props> {
           onClick={this.stopPropagation}
         >
           <div className="bluegrid" />
-          <div className="modal-header" >
+          <div className="modal-header">
             <div className="header-titles">
               <h1>{answers.isEmpty() ? 'Responsible' : 'History'}</h1>
               <p>{questionTitle}</p>

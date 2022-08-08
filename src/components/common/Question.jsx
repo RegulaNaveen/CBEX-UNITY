@@ -42,14 +42,14 @@ import AutocompleteText from './atoms/inputs/AutoCompleteText';
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
 import SFAnswerValidationWrapper from './SFAnswerValidationWrapper';
 import ANSWER_TYPES from '../../constants/answerTypes';
-// import CustomApolloRichText from './CustomApolloRichText';
-import dummyRichTextJson from '../../dummyRichText.json';
+import CustomApolloRichText from './CustomApolloRichText';
+// import dummyRichTextJson from '../../dummyRichText.json';
+import { DEFAULT } from '../../constants/app';
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
 type State = {
   selectedDay: string,
-  selectedRow: Boolean,
-  isEditableRichText: Boolean
+  selectedRow: Boolean
 };
 
 type Props = {
@@ -88,8 +88,7 @@ export class TaskRow extends Component<Props, State> {
 
     this.state = {
       selectedDay: '',
-      selectedRow: false,
-      isEditableRichText: false
+      selectedRow: false
     };
   }
 
@@ -139,7 +138,7 @@ export class TaskRow extends Component<Props, State> {
     this.trackMatomoEventSubmitAnswer(textValue);
   };
 
-  handleTextChange = (textValue: string, lastAnswer: string) => {
+  handleTextChange = (textValue, lastAnswer, editorData) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
     const s1 = textValue
       .trim()
@@ -158,10 +157,11 @@ export class TaskRow extends Component<Props, State> {
           proposalId,
           questionId,
           String(textValue).trim(),
-          userData
+          userData,
+          editorData
         );
     } else if (!textValue.trim() && lastAnswer.trim()) {
-      setProposalAnswer(proposalId, questionId, ' ', userData);
+      setProposalAnswer(proposalId, questionId, ' ', userData, editorData);
     }
 
     this.trackMatomoEventSubmitAnswer(textValue);
@@ -324,22 +324,12 @@ export class TaskRow extends Component<Props, State> {
     });
   };
 
-  onBlurRichText = data => {
-    console.log({ data });
-    this.setState({ isEditableRichText: false });
-  };
-
-  onClickRichTextHTML = () => {
-    this.setState({ isEditableRichText: true });
-  };
-
   renderAnswer = (
     type: string,
     options: Map,
     answers: Map,
     lastAnswer: Map
   ) => {
-    const { isEditableRichText } = this.state;
     const {
       sectionName,
       sfObject,
@@ -351,7 +341,7 @@ export class TaskRow extends Component<Props, State> {
     const isCurrentBid = selectedBid.get('isCurrent');
 
     const optionsYN = ['Yes', 'No'];
-    const answer = lastAnswer && lastAnswer.get && lastAnswer.get('answer');
+    const answer = lastAnswer && lastAnswer?.get('answer');
 
     let answerValue = '';
     let answerValueComplex;
@@ -394,41 +384,56 @@ export class TaskRow extends Component<Props, State> {
       finalOptions = getCountryOptions();
     }
 
+    /**
+     * Get Converted Answer String
+     */
+    const getConvertedAnsString = str =>
+      !String(str).trim() ? '' : String(str).trim();
+
+    const formattedAnswer =
+      lastAnswer && lastAnswer?.get('formattedAnswer')?.toJS();
+
+    // Richtext Props
     const richTextAnswerField = {
-      richTextVal: dummyRichTextJson,
+      richTextString: getConvertedAnsString(answerValue),
+      richTextVal: formattedAnswer ? formattedAnswer.value : { blocks: [] },
       enableFocus: true,
-      isEditable: isEditableRichText,
-      onBlur: data => this.onBlurRichText(data),
-      onClickHTML: this.onClickRichTextHTML
+      isEditable: false,
+      placeholder: checkDisableFlag() ? '' : DEFAULT.CLICK_TO_ANS,
+      disabled: checkDisableFlag(),
+      onBlur: data => {
+        if (!isEqual(getConvertedAnsString(answerValue), data.text.trim())) {
+          const { value, html } = data;
+          this.handleTextChange(data.text, getConvertedAnsString(answerValue), {
+            value,
+            html
+          });
+        }
+      }
     };
 
     switch (type) {
       case 'text': {
-        answerValue = !String(answerValue).trim()
-          ? ''
-          : String(answerValue).trim();
-
+        answerValue = getConvertedAnsString(answerValue);
         return (
           <SFAnswerValidationWrapper
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <TextAreaV2
+            {/* <TextAreaV2
               className="proposal-text-area"
               placeholder={checkDisableFlag() ? '' : 'Click to answer'}
               value={answerValue}
               onBlur={e => this.handleTextChange(e.target.value, answerValue)}
               onFocus={e => this.onChildInputFocus(e)}
               disabled={checkDisableFlag()}
-            />
-            {/* <CustomApolloRichText {...richTextAnswerField} /> */}
+            /> */}
+            <CustomApolloRichText {...richTextAnswerField} />
           </SFAnswerValidationWrapper>
         );
       }
       case 'number':
-        answerValue = !String(answerValue).trim()
-          ? ''
-          : String(answerValue).trim();
+        answerValue = getConvertedAnsString(answerValue);
         return (
           <SFAnswerValidationWrapper
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
