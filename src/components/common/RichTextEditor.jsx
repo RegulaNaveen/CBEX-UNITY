@@ -21,6 +21,7 @@ import {
   DefaultDraftBlockRenderMap
 } from 'draft-js';
 import 'draft-js/dist/Draft.css';
+import { Typography } from '@material-ui/core';
 
 function getInitialEditorState(defaultValue) {
   return defaultValue
@@ -345,15 +346,17 @@ function RichTextEditor({
     );
 
     return (
-      <Grid container alignItems='center'>
+      <Grid container alignItems="center">
         <Grid item xs={3}>
-          <p className='label'>{label}</p>
+          <Typography component="span" className="label">
+            {label}
+          </Typography>
         </Grid>
         <Grid item xs={9} style={{ textAlign: 'end' }}>
           {showControls ? (
-            <div className='controls-container'>
+            <div className="controls-container">
               {BLOCK_CONTROLS_TO_RENDER.size > 0 ? (
-                <div className='style-button-group'>
+                <div className="style-button-group">
                   {BLOCK_CONTROLS_TO_RENDER.entrySeq().map(([key, value]) => {
                     const { Icon } = value;
                     const isActive =
@@ -373,7 +376,7 @@ function RichTextEditor({
                 </div>
               ) : null}
               {INLINE_CONTROLS_TO_RENDER.size > 0 ? (
-                <div className='style-button-group'>
+                <div className="style-button-group">
                   {INLINE_CONTROLS_TO_RENDER.entrySeq().map(([key, value]) => {
                     const { Icon } = value;
                     const isActive =
