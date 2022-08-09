@@ -24,28 +24,31 @@ import UbuildShellComponent from './components/screens/Ubuild';
 import '../styles/App.scss';
 import matomoInstace from './utils/Matomo';
 import SocketContextProvider from './context/SocketContext';
+import ErrorBoundaryComponent from './components/HOC/ErrorBoundary';
 
 const App = () => (
   <Provider store={store}>
     <SocketContextProvider>
       <MatomoProvider value={matomoInstace}>
-        <BrowserRouter>
-          <SessionHandler>
-            <Switch>
-              <Route path="/" exact component={Login} />
-              <Route path={LOGIN} component={Login} />
-              <PrivateRoute path={DASHBOARD} component={DashboardComponent} />
-              <PrivateRoute path={PROPOSALS} component={ProposalComponent} />
-              <PrivateRoute path={PROFILE} component={ProfileComponent} />
-              <PrivateRoute
-                path={OPPORTUNITYS}
-                component={OpportunityComponent}
-              />
-              <PrivateRoute path={UBUILD} component={UbuildShellComponent} />
-              <Redirect to={Login} />
-            </Switch>
-          </SessionHandler>
-        </BrowserRouter>
+        <ErrorBoundaryComponent>
+          <BrowserRouter>
+            <SessionHandler>
+              <Switch>
+                <Route path="/" exact component={Login} />
+                <Route path={LOGIN} component={Login} />
+                <PrivateRoute path={DASHBOARD} component={DashboardComponent} />
+                <PrivateRoute path={PROPOSALS} component={ProposalComponent} />
+                <PrivateRoute path={PROFILE} component={ProfileComponent} />
+                <PrivateRoute
+                  path={OPPORTUNITYS}
+                  component={OpportunityComponent}
+                />
+                <PrivateRoute path={UBUILD} component={UbuildShellComponent} />
+                <Redirect to={Login} />
+              </Switch>
+            </SessionHandler>
+          </BrowserRouter>
+        </ErrorBoundaryComponent>
       </MatomoProvider>
     </SocketContextProvider>
   </Provider>
