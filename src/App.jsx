@@ -1,9 +1,10 @@
 // @flow
 import React from 'react';
-import { MatomoProvider } from '@datapunt/matomo-tracker-react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import store from './store';
+import { MatomoProvider } from '@datapunt/matomo-tracker-react';
+import { store } from './store';
+
 import PrivateRoute from './PrivateRoute';
 import {
   LOGIN,
