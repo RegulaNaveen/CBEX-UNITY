@@ -1,11 +1,11 @@
 // @flow
-// import axios from 'axios';
-import axios from './axios-config';
-
-import { API } from '../constants';
-// import { getAccessTokenFromLocalStorage as getAccessToken } from '../SessionHandler';
-import { logLobDetails } from '../utils/utils';
+import newAxios from 'axios';
 import omit from 'lodash/omit';
+import { axiosInstance } from '../store';
+import { API } from '../constants';
+import { getAccessTokenFromLocalStorage as getAccessToken } from '../SessionHandler';
+import { logLobDetails } from '../utils/utils';
+
 const {
   PROPOSAL_API_URL,
   PROPOSAL_QUESTIONS_API_URL,
@@ -17,12 +17,14 @@ const {
 } = API.PROPOSAL;
 
 let onGoingAnswer = {};
-const { CancelToken } = axios;
+const { CancelToken } = newAxios;
 
 export const getProposalInfo = async (id: string): Promise<Object> => {
   return new Promise((resolve, reject) => {
-    axios
-      .get(`${PROPOSAL_API_URL}/${id}`)
+    axiosInstance
+      .get(`${PROPOSAL_API_URL}/${id}`, {
+        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+      })
       .then(response => {
         logLobDetails(response.data);
         resolve(response.data);
@@ -42,11 +44,15 @@ export const setProposalAnswer = async (
   if (onGoingAnswer[questionId]) {
     onGoingAnswer[questionId]();
   }
-  return axios
+  return axiosInstance
     .put(
       `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`,
       { answer, userData },
       {
+        headers: {
+          'x-api-key': `${API_KEY}`,
+          'x-access-token': `${getAccessToken()}`
+        },
         cancelToken: new CancelToken(function executor(c) {
           onGoingAnswer[questionId] = c;
         })
@@ -62,8 +68,10 @@ export const setProposalAnswer = async (
 
 export const getQuestionSectionInfo = async (): Promise<Object> => {
   return new Promise((resolve, reject) => {
-    axios
-      .get(`${PROPOSAL_API_URL}/sections`)
+    axiosInstance
+      .get(`${PROPOSAL_API_URL}/sections`, {
+        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+      })
       .then(response => {
         resolve(response.data);
       })
@@ -75,8 +83,10 @@ export const getQuestionSectionInfo = async (): Promise<Object> => {
 
 export const getAnswerTypes = async (): Promise<Object> => {
   return new Promise((resolve, reject) => {
-    axios
-      .get(`${PROPOSAL_API_URL}/answerTypes`)
+    axiosInstance
+      .get(`${PROPOSAL_API_URL}/answerTypes`, {
+        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+      })
       .then(response => {
         resolve(response.data);
       })
@@ -88,8 +98,10 @@ export const getAnswerTypes = async (): Promise<Object> => {
 
 export const getRoles = async (): Promise<Object> => {
   return new Promise((resolve, reject) => {
-    axios
-      .get(`${PROPOSAL_API_URL}/roles`)
+    axiosInstance
+      .get(`${PROPOSAL_API_URL}/roles`, {
+        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+      })
       .then(response => {
         resolve(response.data);
       })
@@ -104,8 +116,10 @@ export const setProposalQuestionData = async (
   questionData: Object
 ): Promise<Object> => {
   return new Promise((resolve, reject) => {
-    axios
-      .post(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}`, questionData)
+    axiosInstance
+      .post(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}`, questionData, {
+        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+      })
       .then(response => {
         resolve(response.data);
       })
@@ -117,8 +131,14 @@ export const setProposalQuestionData = async (
 
 export const getProposalInfoUpdated = async (id: string): Promise<Object> => {
   return new Promise((resolve, reject) => {
-    axios
-      .put(`${PROPOSAL_API_URL}/${id}`, {})
+    axiosInstance
+      .put(
+        `${PROPOSAL_API_URL}/${id}`,
+        {},
+        {
+          headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+        }
+      )
       .then(response => {
         resolve(response.data);
       })
@@ -129,7 +149,9 @@ export const getProposalInfoUpdated = async (id: string): Promise<Object> => {
 };
 
 export const getProposlBoxId = async (id: string): Promise<Object> => {
-  return axios.get(`${PROPOSAL_API_URL}/${id}/boxid`);
+  return axiosInstance.get(`${PROPOSAL_API_URL}/${id}/boxid`, {
+    headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+  });
 };
 
 export const fetchAdditionalBoxLink = async (
@@ -137,15 +159,20 @@ export const fetchAdditionalBoxLink = async (
   crmNo: string,
   customer: string
 ): Promise<Object> => {
-  return axios.get(
+  return axiosInstance.get(
     `${PROPOSAL_QUESTIONS_API_URL}/additionallinks/${oppID}/${encodeURI(
       customer
-    )}/${crmNo}`
+    )}/${crmNo}`,
+    {
+      headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+    }
   );
 };
 
 export const getValidatedProposalData = (id: string): Promise<Object> => {
-  return axios.get(`${PROPOSAL_VALIDATED_DATA}/${id}`);
+  return axiosInstance.get(`${PROPOSAL_VALIDATED_DATA}/${id}`, {
+    headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+  });
 };
 
 export const editProposalQuestionData = async (
@@ -154,10 +181,13 @@ export const editProposalQuestionData = async (
   questionData: Object
 ): Promise<Object> => {
   return new Promise((resolve, reject) => {
-    axios
+    axiosInstance
       .put(
         `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}/update`,
-        questionData
+        questionData,
+        {
+          headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+        }
       )
       .then(response => {
         resolve(response.data);
@@ -173,8 +203,10 @@ export const deleteProposalQuestionData = async (
   questionId: string
 ): Promise<Object> => {
   return new Promise((resolve, reject) => {
-    axios
-      .delete(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`)
+    axiosInstance
+      .delete(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`, {
+        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+      })
       .then(response => {
         resolve(response.data);
       })
@@ -186,8 +218,10 @@ export const deleteProposalQuestionData = async (
 
 export const getOpportunityInfo = async (id: string): Promise<Object> => {
   return new Promise((resolve, reject) => {
-    axios
-      .get(`${PROPOSAL_API_URL}/opportunity/${id}`)
+    axiosInstance
+      .get(`${PROPOSAL_API_URL}/opportunity/${id}`, {
+        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+      })
       .then(response => {
         resolve(response.data);
       })
@@ -199,8 +233,10 @@ export const getOpportunityInfo = async (id: string): Promise<Object> => {
 
 export const getProposalCount = async (id: string): Promise<Object> => {
   return new Promise((resolve, reject) => {
-    axios
-      .get(`${PROPOSAL_API_URL}/opportunity/${id}/count`)
+    axiosInstance
+      .get(`${PROPOSAL_API_URL}/opportunity/${id}/count`, {
+        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+      })
       .then(response => {
         resolve(response.data);
       })
@@ -222,31 +258,37 @@ export const getPaginateProposal = async (urls): Promise<Object> => {
 };
 
 export const getPickListLookupSfData = async (): Promise<Object> => {
-  return axios.get(`${LOOKUP_OPTIONS_API}`);
+  return axiosInstance.get(`${LOOKUP_OPTIONS_API}`, {
+    headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+  });
 };
 
 /**
  * Get Opportunity Type List
  */
 export const getOTListData = () => {
-  return axios.get(`${PROPOSAL_OT_LIST}`);
+  return axiosInstance.get(`${PROPOSAL_OT_LIST}`, {
+    headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+  });
 };
 
 /**
  * Get Opportunity Type List
  */
 export const changeProposalOT = payload => {
-  return axios.post(`${PROPOSAL_SWITCH_OT}`, payload);
+  return axiosInstance.post(`${PROPOSAL_SWITCH_OT}`, payload, {
+    headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+  });
 };
 
 /**
  * Delete Proposal User from Selected Answer
  */
 export const deleteProposalUser = (proposalId, data) => {
-  return axios.delete(
+  return axiosInstance.delete(
     `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/proposalUser`,
     {
-      // headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() },
+      headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() },
       data
     }
   );

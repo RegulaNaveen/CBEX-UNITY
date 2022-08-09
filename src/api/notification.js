@@ -1,41 +1,41 @@
-// import axios from 'axios';
-import axios from './axios-config';
+import { axiosInstance } from '../store';
 import { API } from '../constants';
-// import {
-//   getAccessTokenFromLocalStorage as getAccessToken,
-//   getUserEmail
-// } from '../SessionHandler';
+import {
+  getAccessTokenFromLocalStorage as getAccessToken,
+  getUserEmail
+} from '../SessionHandler';
 
 const { API_KEY } = API.PROPOSAL;
 const { NOTIFICATION_API_URL } = API.NOTIFICATION;
 const ENDPOINT_MARK_READ = 'read';
 const ENDPOINT_MARK_ALL_READ = 'mark-all-read';
 
-// const getAxiosConfig = () => ({
-//   headers: {
-//     'x-api-key': API_KEY,
-//     'x-access-token': getAccessToken()
-//   }
-// });
+const getAxiosConfig = () => ({
+  headers: {
+    'x-api-key': API_KEY,
+    'x-access-token': getAccessToken()
+  }
+});
 
 function fetchNotifications() {
   const email = getUserEmail();
-  // const config = getAxiosConfig();
+  const config = getAxiosConfig();
   return new Promise((resolve, reject) => {
-    axios
-      .get(`${NOTIFICATION_API_URL}`)
+    axiosInstance
+      .get(`${NOTIFICATION_API_URL}`, config)
       .then(response => resolve(response.data?.data))
       .catch(err => reject(err));
   });
 }
 
 function updateSeenOne(notificationId) {
-  // const config = getAxiosConfig();
+  const config = getAxiosConfig();
   return new Promise((resolve, reject) => {
-    axios
+    axiosInstance
       .patch(
         `${NOTIFICATION_API_URL}/${notificationId}/${ENDPOINT_MARK_READ}`,
-        {}
+        {},
+        config
       )
       .then(response => resolve(response.data?.data))
       .catch(err => reject(err));
@@ -43,10 +43,10 @@ function updateSeenOne(notificationId) {
 }
 
 function updateSeenBatch() {
-  // const config = getAxiosConfig();
+  const config = getAxiosConfig();
   return new Promise((resolve, reject) => {
-    axios
-      .patch(`${NOTIFICATION_API_URL}/${ENDPOINT_MARK_ALL_READ}`, {})
+    axiosInstance
+      .patch(`${NOTIFICATION_API_URL}/${ENDPOINT_MARK_ALL_READ}`, {}, config)
       .then(response => resolve(response.data?.data))
       .catch(err => reject(err));
   });
