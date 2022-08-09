@@ -41,11 +41,6 @@ class AnswerHistory extends Component<Props> {
 
   componentDidMount() {
     const { question, opportunityData, getAnsHistory } = this.props;
-    console.log({
-      questionMap: question,
-      question: question?.toJS(),
-      Answers: question?.toJS().answers
-    });
     const questionID = question?.toJS()?.questionId;
     const proposalID = Object.values(opportunityData?.toJS())?.find(
       ({ isCurrent }) => isCurrent
@@ -411,7 +406,6 @@ class AnswerHistory extends Component<Props> {
   };
 
   render() {
-    // console.log({ xyz1111222: this.state.question?.toJS() });
     const { closeModal } = this.props;
     const { question, loading } = this.state;
     const answers = question.get('answers');
@@ -430,12 +424,15 @@ class AnswerHistory extends Component<Props> {
           role="presentation"
           onClick={this.stopPropagation}
         >
+          <div className="bluegrid" />
+
           {loading && <Loader isInner />}
 
-          <div className="bluegrid" />
           <div className="modal-header">
             <div className="header-titles">
-              <h1>{answers.isEmpty() ? 'Responsible' : 'History'}</h1>
+              <h1>
+                {answers.isEmpty() && !loading ? 'Responsible' : 'History'}
+              </h1>
               <p>{questionTitle}</p>
             </div>
             <button type="button" onClick={closeModal}>

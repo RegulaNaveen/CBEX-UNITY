@@ -15,7 +15,6 @@ import StatusCheck from 'apollo-react-icons/StatusCheck';
 import { Checkmark, Edit } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
 import TextArea from './atoms/inputs/TextArea';
-import TextAreaV2 from './atoms/inputs/TextAreaV2';
 import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
 import {
@@ -43,7 +42,6 @@ import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
 import SFAnswerValidationWrapper from './SFAnswerValidationWrapper';
 import ANSWER_TYPES from '../../constants/answerTypes';
 import CustomApolloRichText from './CustomApolloRichText';
-// import dummyRichTextJson from '../../dummyRichText.json';
 import { DEFAULT } from '../../constants/app';
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
@@ -165,6 +163,26 @@ export class TaskRow extends Component<Props, State> {
     }
 
     this.trackMatomoEventSubmitAnswer(textValue);
+    this.setSelectRow(false);
+  };
+
+  /**
+   * Func to save data onBlur RichText Editor
+   */
+  handleRichTextChange = (editorData, lastEditorData) => {
+    const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+
+    console.log({ newData: editorData.value, oldData: lastEditorData.value });
+
+    if (!isEqual(editorData.value, lastEditorData.value)) {
+      const { value, html, text } = editorData;
+      const editorText = text.trim() || ' ';
+      setProposalAnswer(proposalId, questionId, String(editorText), userData, {
+        value,
+        html
+      });
+    }
+    this.trackMatomoEventSubmitAnswer(editorData.text);
     this.setSelectRow(false);
   };
 
@@ -393,15 +411,31 @@ export class TaskRow extends Component<Props, State> {
     const hasFormattedAns = has(lastAnswer?.toJS(), 'formattedAnswer');
     const formattedAnswer =
       hasFormattedAns && lastAnswer?.toJS().formattedAnswer;
+    const richTextJSON = formattedAnswer
+      ? formattedAnswer.value
+      : { blocks: [] };
+    // const oldFormattedData = formattedAnswer || {
+    //   html: '',
+    //   value: { blocks: [] },
+    //   text: ''
+    // };
 
     // Richtext Props
     const richTextAnswerField = {
       richTextString: getConvertedAnsString(answerValue),
-      richTextVal: formattedAnswer ? formattedAnswer.value : { blocks: [] },
+      richTextVal: richTextJSON,
       enableFocus: true,
       isEditable: false,
       placeholder: checkDisableFlag() ? '' : DEFAULT.CLICK_TO_ANS,
       disabled: checkDisableFlag(),
+      // onBlur: data => {
+      //   if (
+      //     !isEqual(JSON.stringify(richTextJSON), JSON.stringify(data.value))
+      //   ) {
+      //     console.log({ lastAns: lastAnswer?.toJS() });
+      //     this.handleRichTextChange(data, oldFormattedData); // Call func to save data
+      //   }
+      // }
       onBlur: data => {
         if (!isEqual(getConvertedAnsString(answerValue), data.text.trim())) {
           const { value, html } = data;
@@ -421,14 +455,6 @@ export class TaskRow extends Component<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            {/* <TextAreaV2
-              className="proposal-text-area"
-              placeholder={checkDisableFlag() ? '' : 'Click to answer'}
-              value={answerValue}
-              onBlur={e => this.handleTextChange(e.target.value, answerValue)}
-              onFocus={e => this.onChildInputFocus(e)}
-              disabled={checkDisableFlag()}
-            /> */}
             <CustomApolloRichText {...richTextAnswerField} />
           </SFAnswerValidationWrapper>
         );
