@@ -1,0 +1,83 @@
+.custom-rich-text {
+  border: 1px solid #d9d9d9;
+  padding: 0.25rem;
+  position: relative;
+  box-sizing: content-box;
+  border-radius: 0.25rem;
+  transition-duration: 0.2s;
+  transition-property: border-color;
+  transition-timing-function: linear;
+  transition-delay: 0.5s;
+
+  &.disabled {
+    pointer-events: none;
+    background-color: #f2f2f2;
+  }
+
+  &.readonly {
+    display: block;
+    padding-top: 19px;
+
+    [class*='public-DraftEditorPlaceholder-root'] {
+      padding-top: 7px;
+    }
+
+    [class*='DraftEditor-editorContainer'] {
+      cursor: pointer;
+    }
+
+    &.disabled {
+      [class*='DraftEditor-editorContainer'] {
+        cursor: not-allowed !important;
+      }
+    }
+  }
+  &.popover {
+    display: block;
+
+    &:hover {
+      border-color: #0768fd;
+    }
+
+    .popover-inner {
+      & > div {
+        & > div:nth-child(1) {
+          & > div:nth-child(2) {
+            width: 17rem;
+          }
+        }
+      }
+    }
+
+    .style-button-group {
+      .icon-button {
+        height: 2.375rem;
+        width: 2.375rem;
+      }
+    }
+
+    [class*='RichEditor-editor'] {
+      padding: 0;
+      border: none;
+      font-family: $proximaNova;
+
+      [class*='public-DraftEditorPlaceholder-root'] {
+        padding-top: 0;
+      }
+
+      [class*='DraftEditor-root'] {
+        border: none;
+        line-height: inherit;
+        resize: none;
+
+        [class*='DraftEditor-editorContainer'] {
+          padding: 0;
+
+          & > div {
+            padding-top: 0;
+          }
+        }
+      }
+    }
+  }
+}

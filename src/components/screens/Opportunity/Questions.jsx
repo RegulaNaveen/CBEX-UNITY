@@ -1,8 +1,8 @@
 // @flow
 // eslint-disable-next-line react/destructuring-assignment
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import { withRouter, Match } from 'react-router-dom';
-import { List, Map } from 'immutable'; // NOSONAR
+import { List, Map } from 'immutable';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import Button from 'apollo-react/components/Button';
@@ -10,13 +10,11 @@ import Link from 'apollo-react/components/Link';
 import Filter from 'apollo-react-icons/Filter';
 import ApolloCheckbox from 'apollo-react/components/Checkbox';
 import classNames from 'classnames';
-import { v4 as uuidv4 } from 'uuid';
 import Grid from 'apollo-react/components/Grid';
 import Panel from 'apollo-react/components/Panel';
 import Typography from 'apollo-react/components/Typography';
 
 import { Add, Refresh } from '../../svg';
-import CollapsibleList from '../../common/CollapsibleList';
 import BidHistory from '../../common/Bidhistory';
 import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
 import {
@@ -53,11 +51,14 @@ import AnswerHistory from '../../views/modals/AnswerHistory';
 import { getAllUsers } from '../../../redux/actions/sso-auth-actions';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import { getCountriesNameForCode } from '../../../utils/utils';
-import chevronRight from '../../../../img/chevron-right.svg';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
 import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions';
 import WysiwygNotepad from '../../views/WysiwygNotepad';
 import ANSWER_TYPES from '../../../constants/answerTypes';
+
+const QuestionsSectionMapping = React.lazy(() =>
+  import('./QuestionsSectionMapping')
+);
 
 type Props = {
   match: Match,
@@ -123,8 +124,6 @@ class Questions extends Component<Props, State> {
     fetchUsers();
     getSFNonEditabelInfoField();
     callPickListLookupSfData();
-    window.addEventListener('resize', this.resize.bind(this));
-    this.resize();
   }
 
   componentDidUpdate(prevProps: Map) {
@@ -191,6 +190,11 @@ class Questions extends Component<Props, State> {
         this.scrollToSelectedElement(title);
       }
     );
+  };
+
+  onAddQuestion = value => {
+    this.setState({ currentsection: value });
+    this.onClose();
   };
 
   trackMatomoEventForCheckBoxes = item => {
@@ -355,71 +359,6 @@ class Questions extends Component<Props, State> {
     this.setState({ sidebarscroll: e });
   };
 
-  resize() {
-    this.setState({ innerWidth: window.innerWidth });
-  }
-
-  renderQuestions() {
-    try {
-      const {
-        sections,
-        filteredSections,
-        isQuestionsFiltersEnabled,
-        filterMilestone,
-        allSectionsExpanded
-      } = this.props;
-      const { sidebarscroll, isNotepadOpen } = this.state;
-
-      const allSections = isQuestionsFiltersEnabled
-        ? filteredSections
-        : sections;
-      return allSections.valueSeq().map(section => {
-        const sectionName = section.get('sectionName');
-        const questions = section.get('questions');
-        const someQuestionsAreVisible = questions
-          .valueSeq()
-          .map(
-            question =>
-              question.get('visible', true) &&
-              (question.get('active', true) ||
-                question.get('isCustomQuestion', true))
-          )
-          .includes(true);
-
-        if (someQuestionsAreVisible)
-          return (
-            <CollapsibleList
-              questions={questions}
-              title={sectionName}
-              milestone={filterMilestone}
-              key={sectionName}
-              setTabFromQuestionNotes={(val, title, flag) =>
-                this.setTabFromQuestionNotes(val, title, flag)
-              }
-              onAddQuestion={value => {
-                this.setState({ currentsection: value });
-                this.onClose();
-              }}
-              isCheckedAll={
-                sidebarscroll &&
-                sidebarscroll.length &&
-                sidebarscroll === sectionName
-                  ? true
-                  : allSectionsExpanded
-              }
-              setQuestionToDisplayHistory={this.setQuestionToDisplayHistory}
-              isNotepadOpen = {isNotepadOpen}
-            />
-          );
-
-        return null;
-      });
-    } catch (error) {
-      console.log(error);
-      return false;
-    }
-  }
-
   renderFilter() {
     const { showFilter } = this.state;
     const { questionsFilters, clearQuestionsFilter } = this.props;
@@ -438,7 +377,7 @@ class Questions extends Component<Props, State> {
               </Link>
             </div>
             {questionsFilters.entrySeq().map(([groupName, group]) => (
-              <Grid container spacing={2} className={groupName}>
+              <Grid container spacing={2} key={groupName} className={groupName}>
                 {group
                   .entrySeq()
                   .filter(value => value[0] !== 'logic')
@@ -446,7 +385,7 @@ class Questions extends Component<Props, State> {
                     <Grid
                       item
                       xs={3}
-                      key={uuidv4()}
+                      key={key}
                       className={classNames(
                         'questions-filter__item',
                         filter.get('className'),
@@ -494,16 +433,14 @@ class Questions extends Component<Props, State> {
     } = this.state;
 
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
-    let dynamicwidth = 0;
+
     const minPixelToExclude = 20;
     const notepadMinWidthPx =
-      (this.state.innerWidth - minPixelToExclude) * (30 / 100); // 30% of the total screen size
+      (window.innerWidth - minPixelToExclude) * (30 / 100); // 30% of the total screen size
     const notepadMaxWidthPx = isOpen
       ? notepadMinWidthPx
       : (window.innerWidth - minPixelToExclude) * (47 / 100); // 50% of the total screen size
-      this.state.innerWidth < 640
-        ? (dynamicwidth = this.state.innerWidth * (37 / 100))
-        : (dynamicwidth = this.state.innerWidth / 2);
+
     return (
       <>
         <BidHistory />
@@ -568,11 +505,11 @@ class Questions extends Component<Props, State> {
         </div>
         <div id="panelwrapper">
           {/* Notepad */}
-          <div id="panel-notepad" style={{ width: `${dynamicwidth}px` }}>
+          <div id="panel-notepad">
             <Panel
-              minWidth={`${notepadMinWidthPx}px`}
-              maxWidth={`${notepadMaxWidthPx}px`}
-              width={`${dynamicwidth}px`}
+              minWidth={notepadMinWidthPx}
+              maxWidth={notepadMaxWidthPx}
+              width={notepadMaxWidthPx}
               resizable
               onClose={() => {
                 this.setIsNotepadOpen(false);
@@ -598,8 +535,18 @@ class Questions extends Component<Props, State> {
             </Panel>
           </div>
           {/* Question list */}
-          <div id="panel-questions-list" style={{width:`${this.state.innerWidth/2}px`}}>
-            <div className="tasksList-wrapper">{this.renderQuestions()}</div>
+          <div id="panel-questions-list">
+            <div className="tasksList-wrapper">
+              <Suspense fallback={<div>Loading...</div>}>
+                <QuestionsSectionMapping
+                  {...this.props}
+                  {...this.state}
+                  setQuestionToDisplayHistory={this.setQuestionToDisplayHistory}
+                  setTabFromQuestionNotes={this.setTabFromQuestionNotes}
+                  onAddQuestion={this.onAddQuestion}
+                />
+              </Suspense>
+            </div>
           </div>
         </div>
         <Sidebar

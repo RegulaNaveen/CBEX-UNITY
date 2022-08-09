@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { axiosInstance } from '../store';
 import { API } from '../constants';
 import { getAccessTokenFromLocalStorage as getAccessToken } from '../SessionHandler';
 
@@ -14,7 +14,7 @@ export function fetchUserPreferenceApi() {
   };
 
   return new Promise((resolve, reject) => {
-    axios
+    axiosInstance
       .get(`${PROFILE_API_URL}/preference`, config)
       .then(response => resolve(response.data))
       .catch(err => reject(err));
@@ -30,7 +30,7 @@ export function fetchTimezoneApi() {
   };
 
   return new Promise((resolve, reject) => {
-    axios
+    axiosInstance
       .get(`${PROPOSAL_API_ENDPOINT}/api/timezone`, config)
       .then(response => {
         resolve(response.data);
@@ -48,7 +48,7 @@ export function updateUserPreferenceApi(preferenceID, preferenceSelected) {
   };
 
   return new Promise((resolve, reject) => {
-    axios
+    axiosInstance
       .put(
         `${PROFILE_API_URL}/preference/${preferenceID}`,
         preferenceSelected,
@@ -73,7 +73,7 @@ export function updateUserTimezoneApi(timezoneID) {
   };
 
   return new Promise((resolve, reject) => {
-    axios
+    axiosInstance
       .post(`${PROFILE_API_URL}/updateusertimezone`, data, config)
       .then(response => {
         resolve(response.data);

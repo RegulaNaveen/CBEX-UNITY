@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { axiosInstance } from '../store';
 import { API } from '../constants';
 import { getAccessTokenFromLocalStorage as getAccessToken } from '../SessionHandler';
 
@@ -14,7 +14,7 @@ export function fetchNotesApi(proposalID) {
   };
 
   return new Promise((resolve, reject) => {
-    axios
+    axiosInstance
       .get(`${NOTEPAD_API_URL}/${proposalID}`, config)
       .then(response => resolve(response.data))
       .catch(err => reject(err));
@@ -30,7 +30,7 @@ export function addNoteApi(proposalID, note) {
   };
 
   return new Promise((resolve, reject) => {
-    axios
+    axiosInstance
       .post(`${NOTEPAD_API_URL}/${proposalID}`, note, config)
       .then(response => resolve(response.data))
       .catch(err => reject(err));
@@ -46,7 +46,7 @@ export function updateNoteApi(proposalID, note) {
   };
 
   return new Promise((resolve, reject) => {
-    axios
+    axiosInstance
       .post(`${NOTEPAD_API_URL}/${proposalID}`, note, config)
       .then(response => resolve(response.data))
       .catch(err => reject(err));
