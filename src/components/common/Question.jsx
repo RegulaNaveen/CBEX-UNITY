@@ -1,12 +1,11 @@
 // @flow
 /* eslint-disable no-plusplus */
 import React, { Component } from 'react';
-import { Map, List } from 'immutable'; // NOSONAR
+import { Map, List } from 'immutable';
 import { connect } from 'react-redux';
-import { isObject, isEqual, isEmpty, xor } from 'lodash';
+import { isObject, isEqual, isEmpty, xor, isString, has } from 'lodash';
 import IconButton from 'apollo-react/components/IconButton';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
-import Typography from 'apollo-react/components/Typography';
 import Grid from 'apollo-react/components/Grid';
 import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
@@ -14,7 +13,6 @@ import moment from 'moment';
 import { Edit } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
 import TextArea from './atoms/inputs/TextArea';
-import TextAreaV2 from './atoms/inputs/TextAreaV2';
 import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
 import Qvidianquestions from './qvidian';
@@ -40,15 +38,14 @@ import {
 } from '../../utils/utils';
 import ChipView from './Chip/ChipView';
 import Autocomplete from './atoms/inputs/AutoComplete';
-import AutocompleteText from './atoms/inputs/AutoCompleteText';
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
 import SFAnswerValidationWrapper from './SFAnswerValidationWrapper';
 import ANSWER_TYPES from '../../constants/answerTypes';
-// import CustomApolloRichText from './CustomApolloRichText';
+import CustomApolloRichText from './CustomApolloRichText';
+import { DEFAULT } from '../../constants/app';
 import AutoCompleteWithAddOption from '../views/modals/AutoCompleteWithAddOption';
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
-// const Spanexp = /[^<]\/span>/g;
 type State = {
   selectedDay: string,
   selectedRow: Boolean,
@@ -145,9 +142,8 @@ export class TaskRow extends Component<Props, State> {
     this.trackMatomoEventSubmitAnswer(textValue);
   };
 
-  handleTextChange = (textValue: string, lastAnswer: string) => {
+  handleTextChange = (textValue, lastAnswer, editorData) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
-    // this.setState({ changeIcon: true });
     const s1 = textValue
       .trim()
       .split(' ')
@@ -156,9 +152,11 @@ export class TaskRow extends Component<Props, State> {
       .trim()
       .split(' ')
       .filter(v => v.trim().length > 0);
-      _.isEmpty(s1)
-       ? (this.setState({ changeIcon: '#b7b7b7' }))
-       : (this.setState({ changeIcon: '#00c221' }));
+
+    isEmpty(s1)
+      ? this.setState({ changeIcon: '#b7b7b7' })
+      : this.setState({ changeIcon: '#00c221' });
+
     if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
       if (
         s1.length !== s2.length ||
@@ -168,13 +166,39 @@ export class TaskRow extends Component<Props, State> {
           proposalId,
           questionId,
           String(textValue).trim(),
-          userData
+          userData,
+          editorData
         );
     } else if (!textValue.trim() && lastAnswer.trim()) {
-      setProposalAnswer(proposalId, questionId, ' ', userData);
+      setProposalAnswer(proposalId, questionId, ' ', userData, editorData);
     }
 
     this.trackMatomoEventSubmitAnswer(textValue);
+    this.setSelectRow(false);
+  };
+
+  /**
+   * Func to save data onBlur RichText Editor
+   */
+  handleRichTextChange = (editorData, lastEditorData) => {
+    const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+
+    console.log({ newData: editorData.value, oldData: lastEditorData.value });
+
+    if (!isEqual(editorData.value, lastEditorData.value)) {
+      const { value, html, text } = editorData;
+
+      isEmpty(text)
+        ? this.setState({ changeIcon: '#b7b7b7' })
+        : this.setState({ changeIcon: '#00c221' });
+
+      const editorText = text.trim() || ' ';
+      setProposalAnswer(proposalId, questionId, String(editorText), userData, {
+        value,
+        html
+      });
+    }
+    this.trackMatomoEventSubmitAnswer(editorData.text);
     this.setSelectRow(false);
   };
 
@@ -328,7 +352,6 @@ export class TaskRow extends Component<Props, State> {
 
   resetDate = () => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
-    const { selectedDay } = this.state;
     this.setState({ selectedDay: ' ' }, () => {
       setProposalAnswer(
         proposalId,
@@ -351,15 +374,13 @@ export class TaskRow extends Component<Props, State> {
       sfObject,
       sfField,
       selectedBid,
-      proposalInfo,
       noneditableField,
       hasDifferentSFanswer
     } = this.props;
-    // const { selectedDay } = this.state;
     const isCurrentBid = selectedBid.get('isCurrent');
 
     const optionsYN = ['Yes', 'No'];
-    const answer = lastAnswer && lastAnswer.get && lastAnswer.get('answer');
+    const answer = lastAnswer && lastAnswer?.get('answer');
 
     let answerValue = '';
     let answerValueComplex;
@@ -402,30 +423,65 @@ export class TaskRow extends Component<Props, State> {
       finalOptions = getCountryOptions();
     }
 
+    /**
+     * Get Converted Answer String
+     */
+    const getConvertedAnsString = str =>
+      !String(str).trim() ? '' : String(str).trim();
+
+    const hasFormattedAns = has(lastAnswer?.toJS(), 'formattedAnswer');
+    const formattedAnswer =
+      hasFormattedAns && lastAnswer?.toJS().formattedAnswer;
+    const richTextJSON = formattedAnswer
+      ? formattedAnswer.value
+      : { blocks: [] };
+    // const oldFormattedData = formattedAnswer || {
+    //   html: '',
+    //   value: { blocks: [] },
+    //   text: ''
+    // };
+
+    // Richtext Props
+    const richTextAnswerField = {
+      richTextString: getConvertedAnsString(answerValue),
+      richTextVal: richTextJSON,
+      enableFocus: true,
+      isEditable: false,
+      placeholder: checkDisableFlag() ? '' : DEFAULT.CLICK_TO_ANS,
+      disabled: checkDisableFlag(),
+      // onBlur: data => {
+      //   if (
+      //     !isEqual(JSON.stringify(richTextJSON), JSON.stringify(data.value))
+      //   ) {
+      //     console.log({ lastAns: lastAnswer?.toJS() });
+      //     this.handleRichTextChange(data, oldFormattedData); // Call func to save data
+      //   }
+      // }
+      onBlur: data => {
+        if (!isEqual(getConvertedAnsString(answerValue), data.text.trim())) {
+          const { value, html } = data;
+          this.handleTextChange(data.text, getConvertedAnsString(answerValue), {
+            value,
+            html
+          });
+        }
+      }
+    };
+
     switch (type) {
-      case 'text':
-        answerValue = !String(answerValue).trim()
-          ? ''
-          : String(answerValue).trim();
+      case 'text': {
+        answerValue = getConvertedAnsString(answerValue);
         return (
           <SFAnswerValidationWrapper
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <TextAreaV2
-              className="proposal-text-area"
-              placeholder={checkDisableFlag() ? '' : 'Click to answer'}
-              value={answerValue}
-              onBlur={e => this.handleTextChange(e.target.value, answerValue)}
-              onFocus={e => this.onChildInputFocus(e)}
-              disabled={checkDisableFlag()}
-            />
+            <CustomApolloRichText {...richTextAnswerField} />
           </SFAnswerValidationWrapper>
         );
+      }
       case 'number':
-        answerValue = !String(answerValue).trim()
-          ? ''
-          : String(answerValue).trim();
+        answerValue = getConvertedAnsString(answerValue);
         return (
           <SFAnswerValidationWrapper
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
@@ -556,7 +612,7 @@ export class TaskRow extends Component<Props, State> {
     if (milestoneNew) {
       return (
         <div className="chipview">
-          {milestoneNew ? (
+          {milestoneNew && isString(milestoneNew) ? (
             <ChipView label={milestoneNew} answer={lastAnswer} />
           ) : null}
         </div>
@@ -564,7 +620,7 @@ export class TaskRow extends Component<Props, State> {
     }
     return (
       <div className="chipview">
-        {milestone ? (
+        {milestone && isString(milestone) ? (
           <ChipView label={String(milestone)} answer={lastAnswer} />
         ) : null}
       </div>
@@ -653,8 +709,12 @@ export class TaskRow extends Component<Props, State> {
     if (dateIsAfter) {
       integrationvalidation = true;
     }
-    integrationvalidation = Qvidianquestions[0].hasOwnProperty(qvicon);
-    dateIsAfter ? integrationmatch === qvidianIntegration : (Qvidianquestions[0].hasOwnProperty(qvicon) ? integrationmatch = Qvidianquestions[0][qvicon] : null)
+    integrationvalidation = has(Qvidianquestions[0], qvicon);
+    dateIsAfter
+      ? integrationmatch === qvidianIntegration
+      : has(Qvidianquestions[0], qvicon)
+      ? (integrationmatch = Qvidianquestions[0][qvicon])
+      : null;
     if (answers) {
       if (!questionID) lastAnswer = answers.last();
       else lastAnswer = answers.get('answers').last();
@@ -678,8 +738,7 @@ export class TaskRow extends Component<Props, State> {
       }
     }
     const isCurrentBid = selectedBid.get('isCurrent');
-    const { selectedRow } = this.state;
-    const { iconColor } = this.state;
+    const { selectedRow, iconColor, changeIcon } = this.state;
     const gridColRatio = isNotepadOpen ? [8, 4] : [10, 2];
     return (
       <Grid
@@ -705,7 +764,7 @@ export class TaskRow extends Component<Props, State> {
                 style={{ zIndex: 0, alignSelf: 'center' }}
                 className="questiontext-richtext"
               >
-                <Typography component="span" variant="body2">
+                <div className="question-title-txt">
                   {questionJSON ? (
                     <RichTextEditor
                       style={{ minHeight: '0px' }}
@@ -715,7 +774,7 @@ export class TaskRow extends Component<Props, State> {
                   ) : (
                     <p>{questionText}</p>
                   )}
-                </Typography>
+                </div>
               </div>
               {/* Edit Question Icon */}
               <div style={{ paddingLeft: '5px' }}>
@@ -752,7 +811,7 @@ export class TaskRow extends Component<Props, State> {
                           defaultValue={JSON.parse(questionHintJSON)}
                         />
                       ) : (
-                        <p>{questionHint}</p>
+                        <div>{questionHint}</div>
                       )
                     }
                     placement="top"
@@ -809,9 +868,6 @@ export class TaskRow extends Component<Props, State> {
               display: 'flex',
               alignItems: 'center',
               paddingLeft: '5px'
-              // justifyContent: 'center',
-              // paddingLeft: '20px'
-              // paddingTop: '8px'
             }}
           >
             <SystemIntegrations
@@ -824,9 +880,9 @@ export class TaskRow extends Component<Props, State> {
               isAnswerPredicted={isAnswerPredicted}
               isAnswered={this.isAnswered}
               lastAnswer={this.state.lastAnswer}
-              iconColor={this.state.iconColor}
+              iconColor={iconColor}
               loading={loading}
-              changeIcon={this.state.changeIcon}
+              changeIcon={changeIcon}
               isCurrentBid={isCurrentBid}
               sfObject={sfObject}
               answer={answerValue}

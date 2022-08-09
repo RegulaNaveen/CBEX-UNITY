@@ -9,7 +9,8 @@ const DEFAULT = {
   SELECT_OPTION_MSG: 'You can select one option',
   ERROR_400: 'Error 400 bad request !!',
   ERROR_404: 'Error 404 not found !!',
-  REQUEST_FAILED: 'Request failed due to an error !!'
+  REQUEST_FAILED: 'Request failed due to an error !!',
+  CLICK_TO_ANS: 'Click to answer'
 };
 
 const PROPOSAL = {
