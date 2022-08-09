@@ -33,29 +33,45 @@ export const getProposalInfo = async (id: string): Promise<Object> => {
   });
 };
 
+export const getProposalAnswer = async (
+  proposalId: string,
+  questionId: string
+): Promise<Object> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`, {
+        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};
+
 export const setProposalAnswer = async (
   proposalId: string,
   questionId: string,
   answer: string,
-  userData: Object
+  userData: Object,
+  editorData: any
 ): Promise<Object> => {
-  if (onGoingAnswer[questionId]) {
-    onGoingAnswer[questionId]();
-  }
+  if (onGoingAnswer[questionId]) onGoingAnswer[questionId]();
+  const payload = { answer, userData };
+  if (editorData) payload.formattedAnswer = editorData;
+
   return axios
-    .put(
-      `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`,
-      { answer, userData },
-      {
-        headers: {
-          'x-api-key': `${API_KEY}`,
-          'x-access-token': `${getAccessToken()}`
-        },
-        cancelToken: new CancelToken(function executor(c) {
-          onGoingAnswer[questionId] = c;
-        })
-      }
-    )
+    .put(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`, payload, {
+      headers: {
+        'x-api-key': `${API_KEY}`,
+        'x-access-token': `${getAccessToken()}`
+      },
+      cancelToken: new CancelToken(function executor(c) {
+        onGoingAnswer[questionId] = c;
+      })
+    })
     .then(res => {
       if (onGoingAnswer[questionId]) {
         onGoingAnswer = omit(onGoingAnswer, [questionId]);
@@ -158,7 +174,9 @@ export const fetchAdditionalBoxLink = async (
   customer: string
 ): Promise<Object> => {
   return axios.get(
-    `${PROPOSAL_QUESTIONS_API_URL}/additionallinks/${oppID}/${encodeURI(customer)}/${crmNo}`,
+    `${PROPOSAL_QUESTIONS_API_URL}/additionallinks/${oppID}/${encodeURI(
+      customer
+    )}/${crmNo}`,
     {
       headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
     }

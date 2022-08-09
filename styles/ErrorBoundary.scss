@@ -1,0 +1,27 @@
+.error-boundary {
+  color: #d9d1cf;
+  padding: 4rem;
+  background: #403836;
+  height: 100vh;
+  overflow: auto;
+
+  & > * {
+    margin-bottom: 0.8rem;
+  }
+
+  .try-again-btn {
+    margin-top: 0.75rem;
+    background-color: #d9d1cf;
+    &:hover {
+      background-color: #e2dfdf;
+    }
+  }
+
+  pre {
+    background: #322926;
+    padding: 24px 16px;
+    color: #ff6161;
+    line-height: 1.5;
+    border-radius: 0.375rem;
+  }
+}

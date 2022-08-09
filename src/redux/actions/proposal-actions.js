@@ -5,6 +5,7 @@ import axios from 'axios';
 
 import { REDUX_TYPES, API } from '../../constants';
 import type { Dispatch, ThunkAction } from './action-types';
+
 import {
   getProposalInfo,
   setProposalAnswer,
@@ -17,14 +18,14 @@ import {
   getValidatedProposalData,
   editProposalQuestionData,
   deleteProposalQuestionData,
-  getOpportunityInfo,
   getProposalCount,
   getPaginateProposal,
   getPickListLookupSfData,
   fetchAdditionalBoxLink,
   getOTListData,
   changeProposalOT,
-  deleteProposalUser
+  deleteProposalUser,
+  getProposalAnswer
 } from '../../api/proposal';
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getUniqueMilestones } from '../selectors/proposal';
@@ -116,42 +117,33 @@ export const setProposalAnswerData = (
   proposalId: string,
   questionId: string,
   answer: string,
-  userData: Object
+  userData: Object,
+  editorData: any
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
     dispatch({
       type: PROPOSAL_ANSWER_LOADING,
       payload: { questionId, loading: true }
     });
-    let questionsFilter = getQuestionsFilters(getState());
+    const questionsFilter = getQuestionsFilters(getState());
 
     try {
       const { data } = await setProposalAnswer(
         proposalId,
         questionId,
         answer,
-        userData
+        userData,
+        editorData
       );
 
-      if (Array.isArray(data.answers)) {
-        dispatch({
-          type: PROPOSAL_ANSWER,
-          payload: {
-            data: data.answers,
-            questionId,
-            hasDifferentSFanswer: data.hasDifferentSFanswer || false
-          }
-        });
-      } else {
-        dispatch({
-          type: PROPOSAL_ANSWER,
-          payload: {
-            data,
-            questionId,
-            hasDifferentSFanswer: data.hasDifferentSFanswer || false
-          }
-        });
-      }
+      dispatch({
+        type: PROPOSAL_ANSWER,
+        payload: {
+          data: Array.isArray(data.answers) ? data.answers : data,
+          questionId,
+          hasDifferentSFanswer: data.hasDifferentSFanswer || false
+        }
+      });
 
       const { modifiedQuestions } = data;
       if (!isEmpty(modifiedQuestions)) {
@@ -178,7 +170,6 @@ export const updateAnswerFromWebSocket = (
     let questionsFilter = getQuestionsFilters(getState());
 
     try {
-      console.log('Updating answer for:', questionId);
       if (Array.isArray(data.answers)) {
         dispatch({
           type: PROPOSAL_ANSWER,
@@ -838,7 +829,7 @@ export const fetchOTListData = () => async () => {
     return { status: true, title: DEFAULT.SUCCESS, data: response.data };
   } catch (error) {
     // Error
-    console.log(error);
+    console.log(error.response);
     const msg = getErrorMessage(error);
     return { status: false, title: DEFAULT.ALERT, msg };
   }
@@ -936,6 +927,25 @@ export const deleteProposalUserFromDB = (
       section: { sectionOrder, sectionName }
     });
     return { status: true, title: DEFAULT.SUCCESS, data: response.data };
+  } catch (error) {
+    // Error
+    console.log(error.response);
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
+  }
+};
+
+/**
+ * Get Proposal Answers History
+ */
+export const getProposalAnswerHistory = (
+  proposalId: string,
+  questionId: string
+) => async () => {
+  try {
+    // Api Response
+    const response = await getProposalAnswer(proposalId, questionId);
+    return { status: true, title: DEFAULT.SUCCESS, data: response };
   } catch (error) {
     // Error
     console.log(error.response);
