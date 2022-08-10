@@ -8,7 +8,10 @@
     // margin: 0.5em;
     overflow: visible;
   }
-
+.top-space .dd-input-wrapper {
+  display: flex;
+  width: 80%;
+}
   .account-preference-wrapper {
     margin: 1em;
   }
@@ -33,6 +36,10 @@
 
   .top-space {
     margin-top: 1em;
+  }
+  .profile-dropdown{
+    display: flex;
+    width: 80%;
   }
 
   .ep-section {
