@@ -92,7 +92,8 @@ export class TaskRow extends Component<Props, State> {
     this.state = {
       selectedDay: '',
       selectedRow: false,
-      iconColor: '#00c221'
+      iconColor: '#00c221',
+      screenWidth: ''
     };
   }
 
@@ -106,6 +107,8 @@ export class TaskRow extends Component<Props, State> {
         elem[index].style.height = `${txtareaheight + 2}px`;
       }
     }
+    window.addEventListener('resize', this.resize.bind(this));
+    this.resize();
   }
 
   handlePropsalChange = (textValue, lastValue, reason) => {
@@ -202,12 +205,13 @@ export class TaskRow extends Component<Props, State> {
     this.setSelectRow(false);
   };
 
-  handleVerifyPredictedAnsClick(predictedAnswer) {
+  handleVerifyPredictedAnsClick = predictedAnswer => {
     const {
       setProposalAnswer,
       proposalId,
       questionId,
       userData,
+      lastAnswer,
       answerConfiguration
     } = this.props;
     const answerType = answerConfiguration.get('type');
@@ -643,6 +647,10 @@ export class TaskRow extends Component<Props, State> {
     return false;
   };
 
+  resize() {
+    this.setState({ screenWidth: window.innerWidth });
+  }
+
   render() {
     const {
       answers,
@@ -674,7 +682,6 @@ export class TaskRow extends Component<Props, State> {
       isNotepadOpen,
       questionId
     } = this.props;
-
     const questionID = answers.get('questionId');
     const qvicon = questionId;
     let lastAnswer;
@@ -739,7 +746,11 @@ export class TaskRow extends Component<Props, State> {
     }
     const isCurrentBid = selectedBid.get('isCurrent');
     const { selectedRow, iconColor, changeIcon } = this.state;
-    const gridColRatio = isNotepadOpen ? [8, 4] : [10, 2];
+    const gridColRatio = isNotepadOpen
+      ? (this.state.screenWidth < 641)
+        ? [8, 4]
+        : [10, 2]
+      : [10, 2];
     return (
       <Grid
         container
@@ -861,35 +872,28 @@ export class TaskRow extends Component<Props, State> {
           </Grid>
 
           {/* System Integrations */}
-          <Grid
-            item
-            xs={gridColRatio[1]}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              paddingLeft: '5px'
-            }}
-          >
-            <SystemIntegrations
-              checkSfAnswer={checkSfAnswer}
-              sficon={sficon}
-              integrationmatch={integrationmatch}
-              integrationvalidation={integrationvalidation}
-              answeronhistory={this.displayAnswerOnHistory}
-              answerdate={answerDate}
-              isAnswerPredicted={isAnswerPredicted}
-              isAnswered={this.isAnswered}
-              lastAnswer={this.state.lastAnswer}
-              iconColor={iconColor}
-              loading={loading}
-              changeIcon={changeIcon}
-              isCurrentBid={isCurrentBid}
-              sfObject={sfObject}
-              answer={answerValue}
-              answerText={answerText}
-              hasDifferentSFanswer={hasDifferentSFanswer}
-            />
-          </Grid>
+          <SystemIntegrations
+            checkSfAnswer={checkSfAnswer}
+            sficon={sficon}
+            gridColRatio={gridColRatio}
+            integrationmatch={integrationmatch}
+            integrationvalidation={integrationvalidation}
+            answeronhistory={this.displayAnswerOnHistory}
+            answerdate={answerDate}
+            isAnswerPredicted={isAnswerPredicted}
+            isAnswered={this.isAnswered}
+            lastAnswer={lastAnswer}
+            iconColor={iconColor}
+            loading={loading}
+            isNotepadOpen={isNotepadOpen}
+            changeIcon={changeIcon}
+            isCurrentBid={isCurrentBid}
+            sfObject={sfObject}
+            answer={answerValue}
+            answerText={answerText}
+            handleVerifyPredictedAnsClick={this.handleVerifyPredictedAnsClick}
+            hasDifferentSFanswer={hasDifferentSFanswer}
+          />
         </Grid>
       </Grid>
     );
