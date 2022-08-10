@@ -202,12 +202,13 @@ export class TaskRow extends Component<Props, State> {
     this.setSelectRow(false);
   };
 
-  handleVerifyPredictedAnsClick(predictedAnswer) {
+  handleVerifyPredictedAnsClick = predictedAnswer => {
     const {
       setProposalAnswer,
       proposalId,
       questionId,
       userData,
+      lastAnswer,
       answerConfiguration
     } = this.props;
     const answerType = answerConfiguration.get('type');

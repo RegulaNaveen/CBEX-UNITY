@@ -65,9 +65,9 @@ const SystemIntegrations = ({
     if (
       sficon !== 'n/a' &&
       isEmpty(sficon) === false &&
-      isEmpty(checkSfAnswer) === true
+      isEmpty(checkSfAnswer) === false
     ) {
-      return hasDifferentSFanswer ? (
+      return hasDifferentSFanswer === true ? (
         <Incoming
           className="integration-icon"
           style={{ fill: '#9e54b0', height: '28px', opacity: '50%' }}
@@ -79,7 +79,6 @@ const SystemIntegrations = ({
         />
       );
     }
-    if (isEmpty(sficon)) return null;
   };
   const QvidianValidation = () => {
     if (integrationvalidation === true && changeIcon === '#00c221') {
@@ -130,18 +129,35 @@ const SystemIntegrations = ({
   const CalendarCondition = () => {
     if (answerdate === 'Not Answered' && !isAnswerPredicted) {
       return (
-        <Calendar style={{ color: '#b7b7b7' }} className="integration-icon" />
+      <IconButton
+        style={{
+          textAlign: 'center',
+          outline: 'none',
+          border: 'none',
+          backgroundColor: 'transparent',
+          color: '#297dfd',
+          cursor: 'pointer',
+          width: '24px',
+          height: '24px'
+        }}
+        type="button"
+        onClick={answeronhistory}
+        className="integration-buttons"
+      >
+        <Calendar style={{ color: '#b7b7b7' }} className="integration-icon" /></IconButton>
       );
     }
     if (
       isAnswerPredicted &&
       !loading &&
-      !isAnswered(lastAnswer, isAnswerPredicted) &&
-      !loading
+      !isAnswered(lastAnswer, isAnswerPredicted)
     ) {
       return (
         <Tooltip variant="light" title="Unity Predicted Answer" placement="top">
-          <IconButton disabled={!isCurrentBid} style={{ height: '0' }}>
+          <IconButton
+            disabled={!isCurrentBid}
+            style={{ justifyContent: 'start', height: '0' }}
+          >
             <CalendarCheck
               fontSize="22px"
               style={{ color: '#015ff1' }}
@@ -158,10 +174,25 @@ const SystemIntegrations = ({
       changeIcon === '#00c221'
     ) {
       return (
+        <IconButton
+            style={{
+              textAlign: 'center',
+              outline: 'none',
+              border: 'none',
+              backgroundColor: 'transparent',
+              color: '#297dfd',
+              cursor: 'pointer',
+              width: '24px',
+              height: '24px'
+            }}
+            type="button"
+            onClick={answeronhistory}
+            className="integration-buttons"
+          >
         <CalendarCheck
-          className="answered integration-icon"
+          className="answered2 integration-icon"
           style={{ marginLeft: '0px', color: '#00c221' }}
-        />
+        /></IconButton>
       );
     }
     if (
@@ -170,25 +201,69 @@ const SystemIntegrations = ({
       changeIcon === '#b7b7b7'
     ) {
       return (
+        <IconButton
+            style={{
+              textAlign: 'center',
+              outline: 'none',
+              border: 'none',
+              backgroundColor: 'transparent',
+              color: '#297dfd',
+              cursor: 'pointer',
+              width: '24px',
+              height: '24px'
+            }}
+            type="button"
+            onClick={answeronhistory}
+            className="integration-buttons"
+          >
         <CalendarCheck
           style={{ color: '#b7b7b7' }}
           className="integration-icon"
-        />
+        /></IconButton>
       );
     }
-    if (answerText?.toString().trim().length < 1) {
+    if (lastAnswer?.toJS().answer?.toString().trim().length > 0 < 1) {
       return (
+        <IconButton
+            style={{
+              textAlign: 'center',
+              outline: 'none',
+              border: 'none',
+              backgroundColor: 'transparent',
+              color: '#297dfd',
+              cursor: 'pointer',
+              width: '24px',
+              height: '24px'
+            }}
+            type="button"
+            onClick={answeronhistory}
+            className="integration-buttons"
+          >
         <CalendarCheck
           className="answered"
           style={{ marginLeft: '0px', color: '#b7b7b7' }}
-        />
+        /></IconButton>
       );
     }
-    return (
-      <CalendarCheck
-        className="answered integration-icon"
+    return (<IconButton
+      style={{
+        textAlign: 'center',
+        outline: 'none',
+        border: 'none',
+        backgroundColor: 'transparent',
+        color: '#297dfd',
+        cursor: 'pointer',
+        width: '24px',
+        height: '24px'
+      }}
+      type="button"
+      onClick={answeronhistory}
+      className="integration-buttons"
+    >
+     <CalendarCheck
+         className="answered1 integration-icon"
         style={{ marginLeft: '0px', color: '#00c221' }}
-      />
+      /></IconButton>
     );
   };
 
@@ -225,23 +300,7 @@ const SystemIntegrations = ({
         <div style={{ display: 'flex' }}>
           {SalesForceCondition()}
           {QvidianValidation()}
-          <IconButton
-            style={{
-              textAlign: 'center',
-              outline: 'none',
-              border: 'none',
-              backgroundColor: 'transparent',
-              color: '#297dfd',
-              cursor: 'pointer',
-              width: '24px',
-              height: '24px'
-            }}
-            type="button"
-            onClick={answeronhistory}
-            className="integration-buttons"
-          >
-            {CalendarCondition()}
-          </IconButton>{' '}
+          {CalendarCondition()}
         </div>
         <div>
           {loading ? (
