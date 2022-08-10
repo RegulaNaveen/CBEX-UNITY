@@ -32,6 +32,7 @@ const SystemIntegrations = ({
   isNotepadOpen,
   handleVerifyPredictedAnsClick
 }) => {
+  const gridColRatio = isNotepadOpen ? [10, 2] : [10, 2];
   const SalesForceCondition = () => {
     if (
       sficon !== 'n/a' &&
@@ -268,15 +269,8 @@ const SystemIntegrations = ({
 
   return (
     <Grid
-      item 
-      // style={{
-      //   display: 'flex',
-      //   alignItems: 'center',
-      //   paddingLeft: '5px'
-      //   // justifyContent: 'center',
-      //   // paddingLeft: '20px'
-      //   // paddingTop: '8px'
-      // }}
+      item
+      xs={gridColRatio[1]}
       className={
         hasDifferentSFanswer && isCurrentBid
           ? 'validation-wrapper-integration'
@@ -289,11 +283,6 @@ const SystemIntegrations = ({
           justifyContent: 'center',
           alignItems: 'center'
         }}
-        // className={
-        //   hasDifferentSFanswer && isCurrentBid
-        //     ? 'validation-wrapper-integration'
-        //     : 'no-integration'
-        // }
       >
         <div style={{ display: 'flex' }}>
           {SalesForceCondition()}

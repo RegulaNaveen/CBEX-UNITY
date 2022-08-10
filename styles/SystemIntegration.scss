@@ -18,10 +18,29 @@
   
   }
 
-  
+  .integration-iconbuttons
+  {
+    
+    text-align: 'center';
+    outline: 'none';
+    border: 'none';
+    background-Color: 'transparent';
+    color: '#297dfd';
+    cursor: 'pointer';
+    width: '24px';
+    height: '24px';
+  }
 .integration-buttons {
     padding-right: 10px;
     display: flex;
+    text-align: 'center';
+    outline: 'none';
+    border: 'none';
+    background-color: 'transparent';
+    color: '#297dfd';
+    cursor: 'pointer';
+    width: '24px';
+    height: '24px';
   }
   .outgoing-integration {
     height: 24px;
