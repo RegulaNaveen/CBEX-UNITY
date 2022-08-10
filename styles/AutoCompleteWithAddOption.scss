@@ -28,6 +28,13 @@
     }
   }
 
+  .MuiAutocomplete-inputFocused {
+    opacity: 0;
+  }
+  .MuiInputBase-Input:hover {
+    border-color: none;
+  }
+
   .MuiChip-deleteIcon {
     width: 16px;
     height: 16px;
