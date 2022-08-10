@@ -40,7 +40,7 @@ export const getProposalAnswer = async (
   questionId: string
 ): Promise<Object> => {
   return new Promise((resolve, reject) => {
-    axios
+    axiosInstance
       .get(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`, {
         headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
       })

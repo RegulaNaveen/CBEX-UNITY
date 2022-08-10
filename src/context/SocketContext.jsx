@@ -1,4 +1,4 @@
-import React, { createContext, useState, useRef } from 'react';
+import React, { createContext, useRef, useEffect } from 'react';
 import { Map } from 'immutable'; // NOSONAR
 import { connect } from 'react-redux';
 import { SOCKET_URL } from '../constants/api';
@@ -17,13 +17,16 @@ import { getUserName, getUserEmail, getUserId } from '../SessionHandler';
 const userName = getUserName();
 const userEmail = getUserEmail();
 const userId = getUserId();
+const currentOppNo = {
+  get: localStorage.getItem('oppNo') || null,
+  set: value => localStorage.setItem('oppNo', value)
+};
 
 // Exporting Context
 export const SocketContext = createContext();
 
 const SocketContextProvider = props => {
   const socket = useRef(null);
-  const [OppId, setOppId] = useState(null);
 
   /**
    * Checks for socket connection
@@ -40,10 +43,37 @@ const SocketContextProvider = props => {
   };
 
   /**
+   * Update socket's oppId when user switches Opportunity in the tool
+   */
+  const sendUpdateConnection = (oppId, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'UPDATE_CONNECTION',
+          body: { oppId }
+        })
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  /**
+   * Function called after bid creation completed
+   */
+  const refreshOpportunity = () => {
+    props.getOpportunityInfo(currentOppNo.get, true);
+  };
+
+  /**
    * Initiates connection only if socket is not connected
    */
   const initiateConnection = () => {
     if (!isSocketConnected()) {
+      console.log('Initiating new socket connection');
       const newSocket = new WebSocket(SOCKET_URL);
 
       newSocket.onopen = event => {
@@ -55,11 +85,13 @@ const SocketContextProvider = props => {
             })
           );
         }
+        if (currentOppNo.get) {
+          sendUpdateConnection(currentOppNo.get, newSocket);
+        }
       };
 
       const {
         addNewBid,
-        getOpportunityInfo,
         updateAnswerAction,
         updateProposalDetail,
         updateProposalNotes,
@@ -77,7 +109,7 @@ const SocketContextProvider = props => {
             addNewBid(data.data);
             break;
           case 'COMPLETED':
-            getOpportunityInfo(OppId, true);
+            refreshOpportunity();
             break;
           case 'PROPOSAL_NOTE_UPDATE':
             if (updateProposalNotes) updateProposalNotes(data.data);
@@ -109,9 +141,11 @@ const SocketContextProvider = props => {
 
       // On Close
       newSocket.onclose = event => {
-        if (event.reason === 'Going away') {
-          initiateConnection();
-        }
+        console.log('Socket onClose');
+      };
+      // On Error
+      newSocket.onerror = event => {
+        console.log('Socket onerror');
       };
       socket.current = newSocket;
     }
@@ -133,18 +167,9 @@ const SocketContextProvider = props => {
     }, 2000);
   };
 
-  const sendUpdateConnection = oppId => {
-    socket?.current?.send(
-      JSON.stringify({
-        action: 'UPDATE_CONNECTION',
-        body: { oppId }
-      })
-    );
-  };
-
   const updateSocketOppId = oppId => {
-    setOppId(oppId);
-    waitForSocketConnection(() => sendUpdateConnection(oppId));
+    currentOppNo.set(oppId);
+    waitForSocketConnection(() => sendUpdateConnection(oppId, null));
   };
 
   const disconnectSocket = () => {
@@ -157,6 +182,19 @@ const SocketContextProvider = props => {
       );
     }
   };
+
+  /**
+   * Tries to initiate the websocket conection every 3 sec
+   */
+  const keepSocketAlive = () => {
+    setInterval(() => {
+      initiateConnection();
+    }, 3000);
+  };
+
+  useEffect(() => {
+    keepSocketAlive();
+  });
 
   return (
     <SocketContext.Provider
