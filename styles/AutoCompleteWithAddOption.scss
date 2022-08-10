@@ -1,41 +1,73 @@
-.auto-complete-with-add-option{
-    .MuiChip-root{
-        background-color: #ffffff;
-        border: 1px solid #ddd;
-        height: 24px;
-        font-size: 16px;
-    }
-    .MuiChip-deleteIcon {
-        width: 16px;
-        height: 16px;
-    }
-    .task-table-row button{
-        color: #000000;
-    }
-    .a-MuiChip-label{
-        color: #000000 !important;
-        font-family: "ProximaNova-Regular" !important;
-        font-size: 16px !important;
-        font-weight:bold;
-        .MuiChip-labelSmall{
-            padding-left: 7px;
-            padding-right: 4px;
-        }
+.auto-complete-with-add-option {
+  .MuiChip-root {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+  }
 
-    }
-    .MuiInputBase-root{
-        font-weight: 500;
-    ;
-    }
-    
-    .MuiIconButton-root{
-        width: 25px;
-        height: 25px;
-
-        .MuiSvgIcon-root {
-            width: 18px;
-            height: 18px;
-            color: #000000;
+  .MuiOutlinedInput-root {
+    &:hover {
+      fieldset {
+        &.MuiOutlinedInput-notchedOutline {
+          border-color: #0768fd;
         }
+      }
     }
+    .MuiOutlinedInput-notchedOutline {
+      border-color: #d9d9d9;
+    }
+    &.Mui-focused {
+      .MuiOutlinedInput-notchedOutline {
+        border-width: 1px;
+      }
+      fieldset {
+        border-color: #0768fd;
+      }
+    }
+  }
+
+  .MuiChip-deleteIcon {
+    width: 16px;
+    height: 16px;
+  }
+
+  // .task-table-row button {
+  //     color: #000000;
+  // }
+
+  .a-MuiChip-label {
+    color: #000000 !important;
+    font-family: 'ProximaNova-Regular' !important;
+    font-size: 16px !important;
+    font-weight: bold;
+
+    .MuiChip-labelSmall {
+      padding-left: 7px;
+      padding-right: 4px;
+    }
+  }
+
+  .MuiInputBase-root {
+    font-weight: 500;
+  }
+
+  .MuiIconButton-root {
+    width: 25px;
+    height: 25px;
+
+    .MuiSvgIcon-root {
+      width: 18px;
+      height: 18px;
+      color: #000000;
+      margin-bottom: 40%;
+      margin-top: 60%;
+    }
+  }
+
+  .MuiChip-deleteIcon {
+    width: 14px;
+    height: 14px;
+  }
 }

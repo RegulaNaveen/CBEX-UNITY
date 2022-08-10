@@ -4,7 +4,7 @@ import { List } from 'immutable';
 import isEmpty from 'lodash-es/isEmpty';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete, {
-  createFilterOptions
+  createFilterOptions,
 } from '@material-ui/lab/Autocomplete';
 import { getLookUpOptionsSelector } from '../../../redux/selectors';
 
@@ -20,7 +20,7 @@ const AutoCompleteWithAddOption = ({
   onChange,
   onFocus,
   onBlur,
-  multiple
+  multiple,
 }) => {
   const getSFOptions = (sfObject, sfField) =>
     options[`SF#${sfObject}_SF#${sfField}`]
@@ -50,15 +50,15 @@ const AutoCompleteWithAddOption = ({
   const [selectedVal, setSelectedVal] = React.useState(getAnswer());
   const [currentLov, setCurrentLov] = React.useState(getOptions());
 
-  const addAnswerPicklist = arr => {
-    return arr.map(item =>
+  const addAnswerPicklist = (arr) => {
+    return arr.map((item) =>
       item.includes('add ')
         ? item.replace('add "', '').replace(/\"/g, '')
         : item
     );
   };
 
-  const addAnswerSingle = str => {
+  const addAnswerSingle = (str) => {
     if (str === null) {
       return ' ';
     }
@@ -79,13 +79,20 @@ const AutoCompleteWithAddOption = ({
     setSelectedVal(getAnswer());
     let currentOptions = [...getOptions()];
     let newOptions = currentOptions.filter(
-      el => selectedVal.indexOf(el) === -1
+      (el) => selectedVal.indexOf(el) === -1
     );
     setCurrentLov(newOptions);
   }, [answer]);
 
+  const placeHolder = () => {
+    const placeholder = 'Click to answer';
+    if (multiple) return selectedVal && selectedVal.length ? '' : placeholder;
+    else return selectedVal ? '' : placeholder;
+  };
+  let placeholder = placeHolder();
+
   return (
-    <div className='auto-complete-with-add-option'>
+    <div className="auto-complete-with-add-option">
       <Autocomplete
         filterOptions={(currentLov, params) => {
           const filtered = filter(currentLov, params);
@@ -94,24 +101,34 @@ const AutoCompleteWithAddOption = ({
           }
           return filtered;
         }}
+        size="small"
         onBlur={onBlur}
         onFocus={onFocus}
         disabled={disabled}
         style={{ resize: 'vertical' }}
         options={currentLov}
         multiple={multiple}
+        freeSolo
         onChange={handleChange}
         value={selectedVal}
-        renderInput={params => {
-          return <TextField {...params} variant='outlined' />;
+        renderInput={(params) => {
+          return (
+            <TextField
+              className="text-field"
+              placeholder={placeholder}
+              {...params}
+              variant="outlined"
+              style={{ borderinlinecolor: '#297dfd' }}
+            />
+          );
         }}
       />
     </div>
   );
 };
 
-const mapStateToProps = state => ({
-  options: getLookUpOptionsSelector(state)
+const mapStateToProps = (state) => ({
+  options: getLookUpOptionsSelector(state),
 });
 
 export default connect(mapStateToProps)(AutoCompleteWithAddOption);
