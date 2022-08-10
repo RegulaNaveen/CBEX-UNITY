@@ -672,9 +672,9 @@ export class TaskRow extends Component<Props, State> {
       selectedBid,
       proposalInfo,
       isNotepadOpen,
-      questionId
+      questionId,
+      screenWidth
     } = this.props;
-
     const questionID = answers.get('questionId');
     const qvicon = questionId;
     let lastAnswer;
@@ -739,7 +739,7 @@ export class TaskRow extends Component<Props, State> {
     }
     const isCurrentBid = selectedBid.get('isCurrent');
     const { selectedRow, iconColor, changeIcon } = this.state;
-    const gridColRatio = isNotepadOpen ? [8, 4] : [10, 2];
+    const gridColRatio = isNotepadOpen ? (screenWidth < 641 ? [8, 4] : [10, 2]) : [10, 2];
     return (
       <Grid
         container
@@ -861,35 +861,28 @@ export class TaskRow extends Component<Props, State> {
           </Grid>
 
           {/* System Integrations */}
-          <Grid
-            item
-            xs={gridColRatio[1]}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              paddingLeft: '5px'
-            }}
-          >
-            <SystemIntegrations
-              checkSfAnswer={checkSfAnswer}
-              sficon={sficon}
-              integrationmatch={integrationmatch}
-              integrationvalidation={integrationvalidation}
-              answeronhistory={this.displayAnswerOnHistory}
-              answerdate={answerDate}
-              isAnswerPredicted={isAnswerPredicted}
-              isAnswered={this.isAnswered}
-              lastAnswer={this.state.lastAnswer}
-              iconColor={iconColor}
-              loading={loading}
-              changeIcon={changeIcon}
-              isCurrentBid={isCurrentBid}
-              sfObject={sfObject}
-              answer={answerValue}
-              answerText={answerText}
-              hasDifferentSFanswer={hasDifferentSFanswer}
-            />
-          </Grid>
+          <SystemIntegrations
+            checkSfAnswer={checkSfAnswer}
+            sficon={sficon}
+            gridColRatio={gridColRatio}
+            integrationmatch={integrationmatch}
+            integrationvalidation={integrationvalidation}
+            answeronhistory={this.displayAnswerOnHistory}
+            answerdate={answerDate}
+            isAnswerPredicted={isAnswerPredicted}
+            isAnswered={this.isAnswered}
+            lastAnswer={lastAnswer}
+            iconColor={iconColor}
+            loading={loading}
+            isNotepadOpen={isNotepadOpen}
+            changeIcon={changeIcon}
+            isCurrentBid={isCurrentBid}
+            sfObject={sfObject}
+            answer={answerValue}
+            answerText={answerText}
+            handleVerifyPredictedAnsClick={this.handleVerifyPredictedAnsClick}
+            hasDifferentSFanswer={hasDifferentSFanswer}
+          />
         </Grid>
       </Grid>
     );

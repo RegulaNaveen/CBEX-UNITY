@@ -9,6 +9,8 @@ import IconButton from 'apollo-react/components/IconButton';
 import React from 'react';
 import Loader from 'apollo-react/components/Loader';
 import Tooltip from 'apollo-react/components/Tooltip';
+import isEmpty from 'lodash-es/isEmpty';
+import Grid from 'apollo-react/components/Grid';
 import { Outgoing, Incoming } from '../../svg';
 
 const SystemIntegrations = ({
@@ -26,20 +28,15 @@ const SystemIntegrations = ({
   isCurrentBid,
   sfObject,
   hasDifferentSFanswer,
-  answerText
+  answerText,
+  isNotepadOpen,
+  handleVerifyPredictedAnsClick
 }) => {
-  let calendarlogic1 = false;
-  let calendarlogic2 = false;
-  calendarlogic1 =
-    isAnswerPredicted &&
-    !loading &&
-    !isAnswered(lastAnswer, isAnswerPredicted) &&
-    !loading;
-  calendarlogic2 = answerdate === 'Not Answered' && !isAnswerPredicted;
+  const gridColRatio = isNotepadOpen ? [10, 2] : [10, 2];
   const SalesForceCondition = () => {
     if (
       sficon !== 'n/a' &&
-      _.isEmpty(checkSfAnswer) !== true &&
+      isEmpty(checkSfAnswer) === false &&
       hasDifferentSFanswer === false
     ) {
       return (
@@ -49,7 +46,7 @@ const SystemIntegrations = ({
             sficon !== 'n/a' ? (
               <div
                 dangerouslySetInnerHTML={{
-                  __html: `<p><b>Source</b><br>${sfObject}<br>Salesforce</p>`
+                  __html: `<p><b>Source</b><br>CRM</p>`
                 }}
               />
             ) : null
@@ -57,14 +54,32 @@ const SystemIntegrations = ({
           placement="top"
         >
           <div>
-            <Incoming style={{ fill: '#9E54B0' }} />
+            <Incoming
+              style={{ fill: '#9E54B0', height: '28px' }}
+              className="integration-icon"
+            />
           </div>
         </Tooltip>
       );
     }
-    if (sficon !== 'n/a' && _.isEmpty(checkSfAnswer) === true) {
-      return <Incoming style={{ fill: '#b7b7b7' }} />;
+    if (
+      sficon !== 'n/a' &&
+      isEmpty(sficon) === false &&
+      isEmpty(checkSfAnswer) === true
+    ) {
+      return hasDifferentSFanswer ? (
+        <Incoming
+          className="integration-icon"
+          style={{ fill: '#9e54b0', height: '28px', opacity: '50%' }}
+        />
+      ) : (
+        <Incoming
+          className="integration-icon"
+          style={{ fill: '#b7b7b7', height: '28px' }}
+        />
+      );
     }
+    if (isEmpty(sficon)) return null;
   };
   const QvidianValidation = () => {
     if (integrationvalidation === true && changeIcon === '#00c221') {
@@ -75,43 +90,39 @@ const SystemIntegrations = ({
             integrationmatch ? (
               <div
                 dangerouslySetInnerHTML={{
-                  __html: `<p><b>Destination</b><br>${integrationmatch}<br>Qvidian</p>`
+                  __html: `<p><b>Destination</b><br>Qvidian</p>`
                 }}
               />
             ) : null
           }
           placement="top"
         >
-          <div className="outgoing-integration">
-            <Outgoing
-              className="outgoing-integration"
-              style={{ fill: '#00c221' }}
-            />
-          </div>
+          <Outgoing style={{ fill: '#00c221', height: '28px' }} className="integration-icon" />
         </Tooltip>
       );
     }
     if (integrationvalidation === true) {
-      return answerText?.toString().trim().length < 1 ? (
-        <Outgoing style={{ fill: '#b7b7b7' }} />
-      ) : (
+      return lastAnswer?.toJS().answer?.toString().trim().length > 0 ? (
         <Tooltip
           variant="light"
           title={
-            integrationmatch ? (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: `<p><b>Destination</b><br>${integrationmatch}<br>Qvidian</p>`
-                }}
-              />
-            ) : null
+            <div
+              dangerouslySetInnerHTML={{
+                __html: `<p><b>Destination</b><br>Qvidian</p>`
+              }}
+            />
           }
           placement="top"
         >
-          <div className="outgoing-integration">
-            <Outgoing style={{ fill: '#00c221' }} />
+          <div>
+            <Outgoing
+              style={{ fill: '#00c221', height: '28px' }}
+              className="integration-icon"
+            />
           </div>
         </Tooltip>
+      ) : (
+        <Outgoing style={{ fill: '#b7b7b7', height: '28px' }} className="integration-icon" />
       );
     }
   };
@@ -119,23 +130,25 @@ const SystemIntegrations = ({
   const CalendarCondition = () => {
     if (answerdate === 'Not Answered' && !isAnswerPredicted) {
       return (
-        <Calendar style={{ color: '#b7b7b7' }} onClick={answeronhistory} />
+        <Calendar style={{ color: '#b7b7b7' }} className="integration-icon" />
       );
     }
     if (
-      calendarlogic1 &&
-      calendarlogic2 === false &&
-      answerText?.toString().trim().length < 1
+      isAnswerPredicted &&
+      !loading &&
+      !isAnswered(lastAnswer, isAnswerPredicted) &&
+      !loading
     ) {
       return (
         <Tooltip variant="light" title="Unity Predicted Answer" placement="top">
-          <div disabled={!isCurrentBid} style={{ height: '0px', width: '0px' }}>
+          <IconButton disabled={!isCurrentBid} style={{ height: '0' }}>
             <CalendarCheck
               fontSize="22px"
               style={{ color: '#015ff1' }}
-              onClick={() => this.handleVerifyPredictedAnsClick(lastAnswer)}
+              className="integration-icon"
+              onClick={() => handleVerifyPredictedAnsClick(lastAnswer)}
             />
-          </div>
+          </IconButton>
         </Tooltip>
       );
     }
@@ -145,13 +158,10 @@ const SystemIntegrations = ({
       changeIcon === '#00c221'
     ) {
       return (
-        <div>
-          <CalendarCheck
-            className="answered"
-            style={{ marginLeft: '6px', color: '00c221' }}
-            onClick={answeronhistory}
-          />
-        </div>
+        <CalendarCheck
+          className="answered integration-icon"
+          style={{ marginLeft: '0px', color: '#00c221' }}
+        />
       );
     }
     if (
@@ -160,104 +170,102 @@ const SystemIntegrations = ({
       changeIcon === '#b7b7b7'
     ) {
       return (
-        <CalendarCheck style={{ color: '#b7b7b7' }} onClick={answeronhistory} />
+        <CalendarCheck
+          style={{ color: '#b7b7b7' }}
+          className="integration-icon"
+        />
       );
     }
     if (answerText?.toString().trim().length < 1) {
       return (
-        <div>
-          <CalendarCheck
-            className="answered"
-            style={{ marginLeft: '6px', color: '#b7b7b7' }}
-            onClick={answeronhistory}
-          />
-        </div>
+        <CalendarCheck
+          className="answered"
+          style={{ marginLeft: '0px', color: '#b7b7b7' }}
+        />
       );
     }
     return (
-      <div>
-        <CalendarCheck
-          className="answered"
-          style={{ marginLeft: '6px', color: '00c221' }}
-          onClick={answeronhistory}
-        />
-      </div>
+      <CalendarCheck
+        className="answered integration-icon"
+        style={{ marginLeft: '0px', color: '#00c221' }}
+      />
     );
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}
+    <Grid
+      item
+      xs={gridColRatio[1]}
+      // style={{
+      //   display: 'flex',
+      //   alignItems: 'center',
+      //   paddingLeft: '5px'
+      //   // justifyContent: 'center',
+      //   // paddingLeft: '20px'
+      //   // paddingTop: '8px'
+      // }}
+      className={
+        hasDifferentSFanswer && isCurrentBid
+          ? 'validation-wrapper-integration'
+          : 'no-integration'
+      }
     >
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <div
-          style={{
-            textAlign: 'center',
-            outline: 'none',
-            border: 'none',
-            backgroundColor: 'transparent',
-            cursor: 'pointer'
-          }}
-          className="integration-buttons"
-        >
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+        // className={
+        //   hasDifferentSFanswer && isCurrentBid
+        //     ? 'validation-wrapper-integration'
+        //     : 'no-integration'
+        // }
+      >
+        <div style={{ display: 'flex' }}>
           {SalesForceCondition()}
-        </div>
-        <div
-          style={{
-            textAlign: 'center',
-            outline: 'none',
-            border: 'none',
-            backgroundColor: 'transparent',
-            cursor: 'pointer'
-          }}
-          className="integration-buttons"
-        >
-          {' '}
           {QvidianValidation()}
-        </div>
-        <IconButton
-          style={{
-            textAlign: 'center',
-            outline: 'none',
-            border: 'none',
-            backgroundColor: 'transparent',
-            color: '#297dfd',
-            cursor: 'pointer',
-            height: '24px',
-            width: '24px'
-          }}
-          type="button"
-          className="integration-buttons"
-        >
-          {CalendarCondition()}
-        </IconButton>{' '}
-      </div>
-      <div>
-        {loading ? (
-          <span
+          <IconButton
             style={{
-              marginLeft: '6px',
-              marginTop: '6px',
-              position: 'relative',
-              top: '15px'
+              textAlign: 'center',
+              outline: 'none',
+              border: 'none',
+              backgroundColor: 'transparent',
+              color: '#297dfd',
+              cursor: 'pointer',
+              width: '24px',
+              height: '24px'
             }}
+            type="button"
+            onClick={answeronhistory}
+            className="integration-buttons"
           >
-            <Loader
-              isInner
-              size={20}
+            {CalendarCondition()}
+          </IconButton>{' '}
+        </div>
+        <div>
+          {loading ? (
+            <span
               style={{
-                width: '20px',
-                height: '20px'
+                marginLeft: '0px',
+                marginTop: '6px',
+                position: 'relative',
+                top: '15px'
               }}
-            />
-          </span>
-        ) : null}
+            >
+              <Loader
+                isInner
+                size={20}
+                style={{
+                  width: '20px',
+                  height: '20px'
+                }}
+              />
+            </span>
+          ) : null}
+        </div>
       </div>
-    </div>
+    </Grid>
   );
 };
 

@@ -95,7 +95,6 @@ type State = {
 };
 
 const MANUAL_REFRESH = false;
-
 class Questions extends Component<Props, State> {
   constructor(props: Object) {
     super(props);
@@ -124,6 +123,8 @@ class Questions extends Component<Props, State> {
     fetchUsers();
     getSFNonEditabelInfoField();
     callPickListLookupSfData();
+    window.addEventListener('resize', this.resize.bind(this));
+    this.resize();
   }
 
   componentDidUpdate(prevProps: Map) {
@@ -359,6 +360,10 @@ class Questions extends Component<Props, State> {
     this.setState({ sidebarscroll: e });
   };
 
+  resize() {
+    this.setState({ innerWidth: window.innerWidth });
+  }
+
   renderFilter() {
     const { showFilter } = this.state;
     const { questionsFilters, clearQuestionsFilter } = this.props;
@@ -431,9 +436,7 @@ class Questions extends Component<Props, State> {
       open,
       isNotepadOpen
     } = this.state;
-
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
-
     const minPixelToExclude = 20;
     const notepadMinWidthPx =
       (window.innerWidth - minPixelToExclude) * (30 / 100); // 30% of the total screen size
