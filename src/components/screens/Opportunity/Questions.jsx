@@ -123,8 +123,6 @@ class Questions extends Component<Props, State> {
     fetchUsers();
     getSFNonEditabelInfoField();
     callPickListLookupSfData();
-    window.addEventListener('resize', this.resize.bind(this));
-    this.resize();
   }
 
   componentDidUpdate(prevProps: Map) {
@@ -359,10 +357,6 @@ class Questions extends Component<Props, State> {
     expandAllSections(false);
     this.setState({ sidebarscroll: e });
   };
-
-  resize() {
-    this.setState({ innerWidth: window.innerWidth });
-  }
 
   renderFilter() {
     const { showFilter } = this.state;

@@ -32,7 +32,6 @@ const SystemIntegrations = ({
   isNotepadOpen,
   handleVerifyPredictedAnsClick
 }) => {
-  const gridColRatio = isNotepadOpen ? [10, 2] : [10, 2];
   const SalesForceCondition = () => {
     if (
       sficon !== 'n/a' &&
@@ -269,8 +268,7 @@ const SystemIntegrations = ({
 
   return (
     <Grid
-      item
-      xs={gridColRatio[1]}
+      item 
       // style={{
       //   display: 'flex',
       //   alignItems: 'center',

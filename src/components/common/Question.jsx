@@ -92,7 +92,8 @@ export class TaskRow extends Component<Props, State> {
     this.state = {
       selectedDay: '',
       selectedRow: false,
-      iconColor: '#00c221'
+      iconColor: '#00c221',
+      screenWidth: ''
     };
   }
 
@@ -106,6 +107,8 @@ export class TaskRow extends Component<Props, State> {
         elem[index].style.height = `${txtareaheight + 2}px`;
       }
     }
+    window.addEventListener('resize', this.resize.bind(this));
+    this.resize();
   }
 
   handlePropsalChange = (textValue, lastValue, reason) => {
@@ -644,6 +647,10 @@ export class TaskRow extends Component<Props, State> {
     return false;
   };
 
+  resize() {
+    this.setState({ screenWidth: window.innerWidth });
+  }
+
   render() {
     const {
       answers,
@@ -673,8 +680,7 @@ export class TaskRow extends Component<Props, State> {
       selectedBid,
       proposalInfo,
       isNotepadOpen,
-      questionId,
-      screenWidth
+      questionId
     } = this.props;
     const questionID = answers.get('questionId');
     const qvicon = questionId;
@@ -740,7 +746,11 @@ export class TaskRow extends Component<Props, State> {
     }
     const isCurrentBid = selectedBid.get('isCurrent');
     const { selectedRow, iconColor, changeIcon } = this.state;
-    const gridColRatio = isNotepadOpen ? (screenWidth < 641 ? [8, 4] : [10, 2]) : [10, 2];
+    const gridColRatio = isNotepadOpen
+      ? (this.state.screenWidth < 641)
+        ? [8, 4]
+        : [10, 2]
+      : [10, 2];
     return (
       <Grid
         container
