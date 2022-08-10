@@ -33,7 +33,7 @@ class AnswerHistory extends Component<Props> {
     super(props);
 
     this.state = {
-      question: this.props.question.set('answers', fromJS([])),
+      question: this.props.question,
       loading: false
     };
   }
@@ -233,40 +233,44 @@ class AnswerHistory extends Component<Props> {
               }
             );
           }
-          const showDate = (dateAns, nxtDateAns, indx) => {
+          const showDate = (answer, nextAnswer, indx) => {
             const tmp = answers.toJS();
-            if (new Date(dateAns) === 'Invalid Date') {
+            if (new Date(answer) == 'Invalid Date') {
               return renderWord('Invalid Date', 'removed');
             }
             let styleClass =
               !isOnlyOneAnswer && !isLastItem ? 'changed' : undefined;
-            // Don't add styles if answers are same
+            // Dont add styles if answers are same
             // We use .substring(0, 10) to get only the yyyy-mm-dd out of a String like '2022-04-30T00:00:00+05:30'
             if (
-              String(dateAns).substring(0, 10) ===
-              String(nxtDateAns).substring(0, 10)
+              String(answer).substring(0, 10) ===
+              String(nextAnswer).substring(0, 10)
             ) {
-              nxtDateAns = '';
+              nextAnswer = '';
               styleClass = undefined;
             }
-            const newDate = renderWord(
-              String(parseMomentDate(dateAns)),
+            const newdate = renderWord(
+              String(parseMomentDate(answer)),
               styleClass
             );
-            let nextDate = '';
-            if (indx + 1 === tmp.length) {
-              nextDate = '';
+            let nextdate = '';
+            if (indx + 1 == tmp.length) {
+              nextdate = '';
             } else if (
-              nxtDateAns &&
-              String(nxtDateAns).trim().length &&
+              nextAnswer &&
+              String(nextAnswer).trim().length &&
               tmp.length > 1
             ) {
-              nextDate = renderWord(
-                String(parseMomentDate(nxtDateAns)),
+              nextdate = renderWord(
+                String(parseMomentDate(nextAnswer)),
                 'removed'
               );
             }
-            return `${nextDate} ${newDate}`;
+            return (
+              <>
+                {nextdate} {newdate}
+              </>
+            );
           };
 
           if (questionType === 'select' || questionType === 'select-lookup') {
