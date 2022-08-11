@@ -48,10 +48,8 @@ const CustomApolloRichText = ({
   // Component State
   const [richTextData, setRichTextData] = useState(INITIAL_DATA);
   const [isRichTextEditable, setIsRichTextEditable] = useState(isEditable);
-  // const [clickedOutside, setClickedOutside] = useState(true);
   const richTextRef = useRef(null);
   const richTextEditorRef = useRef(null);
-  // let isFirstRender = true;
 
   /**
    * Update on external changes
@@ -105,9 +103,6 @@ const CustomApolloRichText = ({
     const resultObj = { text, value, html };
     setRichTextData(resultObj);
     if (onChange) onChange(resultObj); // onChange callback func
-
-    // if (!isFirstRender || !isEmpty(text)) setClickedOutside(false);
-    // isFirstRender = false;
   };
 
   /**
@@ -132,15 +127,6 @@ const CustomApolloRichText = ({
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   });
-
-  /**
-   * OnBlur RichText Editor
-   */
-  // useUpdateEffect(() => {
-  //   if (clickedOutside && onBlur) onBlur(richTextData); // onBlur callback func
-  // }, [clickedOutside]);
-
-  // console.log({ richTextData, isRichTextEditable });
 
   // Render Html View
   if (!isRichTextEditable) {

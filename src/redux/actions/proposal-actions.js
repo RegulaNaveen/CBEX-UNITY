@@ -136,25 +136,14 @@ export const setProposalAnswerData = (
         editorData
       );
 
-      if (Array.isArray(data.answers)) {
-        dispatch({
-          type: PROPOSAL_ANSWER,
-          payload: {
-            data: data.answers,
-            questionId,
-            hasDifferentSFanswer: data.hasDifferentSFanswer || false
-          }
-        });
-      } else {
-        dispatch({
-          type: PROPOSAL_ANSWER,
-          payload: {
-            data,
-            questionId,
-            hasDifferentSFanswer: data.hasDifferentSFanswer || false
-          }
-        });
-      }
+      dispatch({
+        type: PROPOSAL_ANSWER,
+        payload: {
+          data: Array.isArray(data.answers) ? data.answers : data,
+          questionId,
+          hasDifferentSFanswer: data.hasDifferentSFanswer || false
+        }
+      });
 
       const { modifiedQuestions } = data;
       if (!isEmpty(modifiedQuestions)) {
