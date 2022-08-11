@@ -1,12 +1,12 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { List } from 'immutable';
-import isEmpty from 'lodash-es/isEmpty';
-import TextField from '@material-ui/core/TextField';
+import React from "react";
+import { connect } from "react-redux";
+import { List } from "immutable";
+import isEmpty from "lodash-es/isEmpty";
+import TextField from "@material-ui/core/TextField";
 import Autocomplete, {
   createFilterOptions,
-} from '@material-ui/lab/Autocomplete';
-import { getLookUpOptionsSelector } from '../../../redux/selectors';
+} from "@material-ui/lab/Autocomplete";
+import { getLookUpOptionsSelector } from "../../../redux/selectors";
 
 const filter = createFilterOptions();
 
@@ -42,7 +42,7 @@ const AutoCompleteWithAddOption = ({
 
   const getAnswer = () => {
     if (isEmpty(answer)) {
-      return multiple ? [] : '';
+      return multiple ? [] : "";
     }
     return multiple ? answer : answer?.trim();
   };
@@ -52,18 +52,18 @@ const AutoCompleteWithAddOption = ({
 
   const addAnswerPicklist = (arr) => {
     return arr.map((item) =>
-      item.includes('add ')
-        ? item.replace('add "', '').replace(/\"/g, '')
+      item.includes("add ")
+        ? item.replace('add "', "").replace(/\"/g, "")
         : item
     );
   };
 
   const addAnswerSingle = (str) => {
     if (str === null) {
-      return ' ';
+      return " ";
     }
-    return str.substring(0, 4) === 'add '
-      ? str.replace('add "', '').replace(/\"/g, '')
+    return str.substring(0, 4) === "add "
+      ? str.replace('add "', "").replace(/\"/g, "")
       : str;
   };
 
@@ -84,9 +84,9 @@ const AutoCompleteWithAddOption = ({
     setCurrentLov(newOptions);
   }, [answer]);
   const placeHolder = () => {
-    const placeholder = 'Click to answer';
-    if (multiple) return selectedVal && selectedVal.length ? '' : placeholder;
-    else return selectedVal ? '' : placeholder;
+    const placeholder = "Click to answer";
+    if (multiple) return selectedVal && selectedVal.length ? "" : placeholder;
+    else return selectedVal ? "" : placeholder;
   };
   let placeholder = placeHolder();
 
@@ -95,16 +95,17 @@ const AutoCompleteWithAddOption = ({
       <Autocomplete
         filterOptions={(currentLov, params) => {
           const filtered = filter(currentLov, params);
-          if (params.inputValue !== '' && !lov.includes(params.inputValue)) {
+          if (params.inputValue !== "" && !lov.includes(params.inputValue)) {
             filtered.push(`add "${params.inputValue}"`);
           }
           return filtered;
         }}
         size="small"
+        disableClearable={!!isEmpty(selectedVal)}
         onBlur={onBlur}
         onFocus={onFocus}
         disabled={disabled}
-        style={{ resize: 'vertical' }}
+        style={{ resize: "vertical" }}
         options={currentLov}
         multiple={multiple}
         freeSolo
