@@ -9,7 +9,7 @@ import { OrderedMap } from 'immutable';
 import { useLazyLoad, useUpdateEffect } from '../../../hooks';
 import CollapsibleList from '../../common/CollapsibleList';
 
-const NUM_PER_PAGE = 10;
+const NUM_PER_PAGE = 4;
 
 const QuestionsSectionMapping = ({
   sections,
@@ -102,12 +102,6 @@ const QuestionsSectionMapping = ({
 
   // Reset LazyData state onUpdate LazyData
   useUpdateEffect(() => setResetData(false), [data]);
-
-  // console.log({
-  //   lazyData: data,
-  //   filteredSections: [...allSections.values()]
-  //   // sections: [...sections.values()]
-  // });
 
   // Func to render CollapsibleList Component
   const renderAllSection = section => {

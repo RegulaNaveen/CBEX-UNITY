@@ -20,7 +20,6 @@ import { getRoles } from '../../../redux/selectors';
 import WelcomeModal from '../modals/WelcomeModal';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import Notification from '../Notification/index';
-import defaultDP from '../../../../img/default-dp.png';
 import ArrowDown from 'apollo-react-icons/ArrowDown';
 import ArrowUp from 'apollo-react-icons/ArrowUp';
 
@@ -71,6 +70,14 @@ class Toolbar extends Component<{}, State> {
     this.trackMatomoRoleChange(value);
   };
 
+  isRoleInUbuild = (
+    uBuildRoles: Array<string> = [],
+    currentUserRole: string
+  ): boolean => {
+    if (uBuildRoles.length === 0) return true;
+    return uBuildRoles.includes(currentUserRole);
+  };
+
   trackMatomoRoleChange = (role: string) => {
     const { userActions, eventCategories, trackEvent } = this.props;
     trackEvent({
@@ -85,10 +92,10 @@ class Toolbar extends Component<{}, State> {
     const results = isUserUbuildAdmin();
     const name = getUserName();
     return (
-      <div className="toolbar-wrapper">
+      <div className='toolbar-wrapper'>
         <Link to={DASHBOARD}>
-          <p className="toolbar-title">IQVIA™</p>
-          <p className="toolbar-title">Unity</p>
+          <p className='toolbar-title'>IQVIA™</p>
+          <p className='toolbar-title'>Unity</p>
         </Link>
         {results && (
           <div
@@ -100,28 +107,28 @@ class Toolbar extends Component<{}, State> {
                 : 'ubuild-link'
             }
           >
-            <Link to={UBUILD} className="toolbar-space">
-              <p className="ubuild-title">U-Build</p>
+            <Link to={UBUILD} className='toolbar-space'>
+              <p className='ubuild-title'>U-Build</p>
             </Link>
           </div>
         )}
         <Notification />
 
-        <div className="toolbar-account-spacer" style={{ flex: 0 }}>
-          <div ref={this.wrapperRef} className="toolbar-account-wrapper">
+        <div className='toolbar-account-spacer' style={{ flex: 0 }}>
+          <div ref={this.wrapperRef} className='toolbar-account-wrapper'>
             <div
               className={classnames(
                 'toolbar-account-info',
                 isCollapsed && 'expanded'
               )}
-              id="menu-title"
-              role="button"
+              id='menu-title'
+              role='button'
               onClick={this.handleCollapse}
               onKeyPress={this.handleKeyPress}
-              type="button"
+              type='button'
               tabIndex={-1}
             >
-              <Avatar src="" className="tb-profile-avatar">
+              <Avatar src='' className='tb-profile-avatar'>
                 {name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0)}
               </Avatar>
               {isCollapsed ? (
@@ -133,15 +140,17 @@ class Toolbar extends Component<{}, State> {
             </div>
             {isCollapsed ? (
               <ToolbarMenu
-                name="Profile"
+                name='Profile'
                 handleCollapse={this.handleCollapse}
               />
             ) : null}
           </div>
         </div>
-        {(!roleName || roleName === 'undefined') && (
+        {(!roleName ||
+          roleName === 'undefined' ||
+          !this.isRoleInUbuild(rolesList || [], roleName)) && (
           <WelcomeModal
-            id="welcomemodal"
+            id='welcomemodal'
             roles={rolesList || []}
             onRoleChange={e => this.onRoleChange(e)}
           />

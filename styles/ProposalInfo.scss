@@ -40,3 +40,504 @@
     }
   }
 }
+@media screen and (max-width: 1200px) and (min-width: 300px) {
+  .proposal-wrapper {
+    height: 100%;
+    flex: 1;
+    font-family: $proximaNova;
+    color: $black;
+    position: relative;
+    transition: 0.4s ease-in-out margin-right;
+    margin-right: 0%;
+
+    &.is-collapsed {
+      margin-right: 0px;
+      width: 85%;
+    }
+    .MuiSnackbarContent-root {
+      min-height: 57px;
+    }
+    .proposal-loader {
+      flex: 1;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .MuiGrid-spacing-xs-2 > .MuiGrid-item {
+      padding: 0px;
+      padding-left: 0px;
+      padding-top: 8px;
+    }
+
+    ._question-tab {
+      padding-left: 20px;
+    }
+
+    .proposal-details .MuiPaper-rounded {
+      border-radius: unset;
+      padding: 5px;
+      text-align: center;
+      flex: 1 1 17%;
+    }
+    p.boldtext {
+      font-weight: 600;
+      color: #000;
+      font-family: $proximaNova;
+    }
+    .sidebarduedatedsg {
+      text-align: center !important;
+    }
+    .sidebaropenfont {
+      font-size: 14px;
+    }
+    .duedatedsg {
+      height: 100%;
+    }
+    .phasedsg {
+      height: 100%;
+    }
+    .leftalign {
+      text-align: left;
+      padding-left: 5px;
+    }
+    .duedatedsg.open {
+      padding-left: 15px !important;
+    }
+    p.greencolor {
+      color: #2acb42;
+      font-size: 30px;
+    }
+    p.greencolorsidebaropenfont {
+      color: #2acb42;
+      font-size: 12px;
+    }
+    p.greytext {
+      color: #7f7f7f;
+      font-weight: 530;
+      font-family: $proximaNova;
+    }
+    button.MuiTab-textColorInherit {
+      color: #7f7f7f;
+      font-weight: 500;
+    }
+    button.Mui-selected {
+      color: #000;
+      font-weight: 500;
+    }
+    .proposal-details {
+      .tasksList-title-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 0px 0 16px 0;
+
+        .tasksList-title {
+          font-size: 18px;
+          font-weight: 600;
+        }
+
+        .taskList-icons-wrapper {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+
+          .taskList-checkbox-wrapper {
+            margin-right: 10px;
+            margin-top: 5px;
+          }
+
+          .tasksList-refresh-icon-wrapper {
+            display: flex;
+            height: 32px;
+            width: 32px;
+            border-radius: 50%;
+            background-color: #0557d5;
+            box-shadow: 0 4px 8px 0 rgba(41, 125, 253, 0.16),
+              0 4px 4px 0 rgba(0, 0, 0, 0.04),
+              0 8px 16px 0 rgba(41, 125, 253, 0.32);
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin-right: 10px;
+
+            .tasksList-add-icon {
+              padding: 6px;
+            }
+          }
+
+          .tasksList-add-icon-wrapper {
+            display: flex;
+            height: 32px;
+            width: 32px;
+            border-radius: 50%;
+            background-color: #0557d5;
+            box-shadow: 0 4px 8px 0 rgba(41, 125, 253, 0.16),
+              0 4px 4px 0 rgba(0, 0, 0, 0.04),
+              0 8px 16px 0 rgba(41, 125, 253, 0.32);
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin-right: 10px;
+
+            .tasksList-add-icon {
+              padding: 6px;
+            }
+          }
+        }
+      }
+
+      .questions-filter__container {
+        position: relative;
+        .questions-filter__grid.column_style {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .questions-filter__grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          background-color: #f6f7fb;
+          padding: 12px 24px;
+          margin-bottom: 8px;
+
+          .questions-filter__item {
+            margin-bottom: 4px;
+            .MuiFormControlLabel-label {
+              font-size: 12px;
+            }
+          }
+
+          .questions-filter__row1-col1 {
+            grid-row-start: 1;
+            grid-column-start: 1;
+          }
+
+          .questions-filter__row2-col1 {
+            grid-row-start: 2;
+            grid-column-start: 1;
+          }
+        }
+
+        .filtertitle {
+          font-weight: bold;
+          font-size: 14px;
+          padding-bottom: 10px;
+        }
+
+        .clear-all {
+          border-bottom: none;
+          position: absolute;
+          right: 12px;
+          top: 8px;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: 1201px) and (max-width: 3000px) {
+  .proposal-wrapper {
+    height: 100%;
+    flex: 1;
+    font-family: $proximaNova;
+    color: $black;
+    position: relative;
+    transition: 0.4s ease-in-out margin-right;
+    margin-right: 0%;
+
+    &.is-collapsed {
+      margin-right: 0px;
+      width: 85%;
+    }
+    .MuiSnackbarContent-root {
+      min-height: 57px;
+    }
+    .proposal-loader {
+      flex: 1;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .MuiGrid-spacing-xs-2 > .MuiGrid-item {
+      padding: 0px;
+      padding-left: 0px;
+      padding-top: 8px;
+    }
+
+    ._question-tab {
+      padding-left: 20px;
+    }
+
+    .proposal-details .MuiPaper-rounded {
+      border-radius: unset;
+      padding: 5px;
+      text-align: center;
+      flex: 1 1 17%;
+    }
+    p.boldtext {
+      font-weight: 600;
+      color: #000;
+      font-family: $proximaNova;
+    }
+    .sidebarduedatedsg {
+      text-align: center !important;
+    }
+    .sidebaropenfont {
+      font-size: 14px;
+    }
+    .duedatedsg {
+      text-align: left !important;
+      padding-left: 20px !important;
+      height: 100%;
+    }
+    .phasedsg {
+      height: 100%;
+    }
+    .leftalign {
+      text-align: left;
+      padding-left: 5px;
+    }
+    .duedatedsg.open {
+      padding-left: 15px !important;
+    }
+    p.greencolor {
+      color: #2acb42;
+      font-size: 30px;
+    }
+    p.greencolorsidebaropenfont {
+      color: #2acb42;
+      font-size: 12px;
+    }
+    p.greytext {
+      color: #7f7f7f;
+      font-weight: 530;
+      font-family: $proximaNova;
+    }
+    button.MuiTab-textColorInherit {
+      color: #7f7f7f;
+      font-weight: 500;
+    }
+    button.Mui-selected {
+      color: #000;
+      font-weight: 500;
+    }
+    .proposal-details {
+      .tasksList-title-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 0px 0 16px 0;
+
+        .tasksList-title {
+          font-size: 18px;
+          font-weight: 600;
+        }
+
+        .taskList-icons-wrapper {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+
+          .taskList-checkbox-wrapper {
+            margin-right: 10px;
+            margin-top: 5px;
+          }
+
+          .tasksList-refresh-icon-wrapper {
+            display: flex;
+            height: 32px;
+            width: 32px;
+            border-radius: 50%;
+            background-color: #0557d5;
+            box-shadow: 0 4px 8px 0 rgba(41, 125, 253, 0.16),
+              0 4px 4px 0 rgba(0, 0, 0, 0.04),
+              0 8px 16px 0 rgba(41, 125, 253, 0.32);
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin-right: 10px;
+
+            .tasksList-add-icon {
+              padding: 6px;
+            }
+          }
+
+          .tasksList-add-icon-wrapper {
+            display: flex;
+            height: 32px;
+            width: 32px;
+            border-radius: 50%;
+            background-color: #0557d5;
+            box-shadow: 0 4px 8px 0 rgba(41, 125, 253, 0.16),
+              0 4px 4px 0 rgba(0, 0, 0, 0.04),
+              0 8px 16px 0 rgba(41, 125, 253, 0.32);
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin-right: 10px;
+
+            .tasksList-add-icon {
+              padding: 6px;
+            }
+          }
+        }
+      }
+
+      .questions-filter__container {
+        position: relative;
+        .questions-filter__grid.column_style {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .questions-filter__grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          background-color: #f6f7fb;
+          padding: 12px 24px;
+          margin-bottom: 8px;
+
+          .questions-filter__item {
+            margin-bottom: 4px;
+            .MuiFormControlLabel-label {
+              font-size: 12px;
+            }
+          }
+
+          .questions-filter__row1-col1 {
+            grid-row-start: 1;
+            grid-column-start: 1;
+          }
+
+          .questions-filter__row2-col1 {
+            grid-row-start: 2;
+            grid-column-start: 1;
+          }
+        }
+
+        .filtertitle {
+          font-weight: bold;
+          font-size: 14px;
+          padding-bottom: 10px;
+        }
+
+        .clear-all {
+          border-bottom: none;
+          position: absolute;
+          right: 12px;
+          top: 8px;
+        }
+      }
+    }
+  }
+}
+
+.autocomplete-text {
+  color: #000000 !important;
+  font-family: $proximaNova !important;
+  font-size: 16px !important;
+  input {
+    height: 36px !important;
+    color: #000000 !important;
+    font-family: $proximaNova !important;
+    font-size: 16px !important;
+  }
+  .a-MuiChip-label {
+    color: #000000 !important;
+    font-family: $proximaNova !important;
+    font-size: 16px !important;
+  }
+}
+
+.exportOptionsWrapper {
+  width: 550px;
+
+  .flex-dir-col {
+    flex-direction: column;
+  }
+  .exportOptionsRow-first {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #dfdada;
+    padding-bottom: 10px;
+  }
+  .exportOptionsRow-second {
+    margin-bottom: 20px;
+  }
+  .button-group {
+    justify-content: flex-end;
+  }
+  .exportOptionsRow {
+    display: flex;
+    justify-content: space-between;
+    label {
+      font-size: 14px;
+      font-family: $proximaNova !important;
+      color: #000;
+    }
+    .exportOptionsCell {
+      width: 48%;
+    }
+    .exportFileName {
+      border: 1px solid #dfdada;
+      padding: 8px;
+      border-radius: 3px;
+      width: 90%;
+      margin-bottom: 5px;
+      margin-top: 7px;
+      color: #000000 !important;
+      font-family: $proximaNova !important;
+      font-size: 16px !important;
+    }
+    .exportFileName:hover,
+    .exportFileName:focus-visible {
+      border-color: #0768fd !important;
+      outline: none;
+    }
+    span.fileNameAlert {
+      display: none;
+      color: #d8000c;
+      font-size: 12px;
+    }
+    .exportFileName:required:invalid + span.fileNameAlert {
+      display: block;
+    }
+  }
+  .exportOptionsRow-last {
+    justify-content: end;
+    .export-okay {
+      margin-right: 0;
+    }
+  }
+}
+
+//custom determinate button for export milestone filter
+.all-not-selected {
+  position: relative;
+  label {
+    > span:first-child::before {
+      background-color: #0768fd;
+      content: '-';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 2px;
+      color: #fff;
+      font-size: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: inherit;
+      z-index: 1;
+    }
+  }
+}
+.integration-buttons {
+  padding-right: 10px;
+  display: flex;
+}
+.outgoing-integration {
+  height: 24px;
+  width:24px;
+}

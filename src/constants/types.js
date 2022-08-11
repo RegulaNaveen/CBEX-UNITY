@@ -122,8 +122,15 @@ const PROFILE = {
   UPDATE_USER_PREFERENCE: 'update_user_preference',
   UPDATE_USER_PREFERENCE_DONE: 'update_user_preference_done',
   ERROR_FETCHING_USER_PREFERENCE: 'error_fetching_user_preference',
-  ERROR_UPDATING_USER_PREFERENCE: 'error_updating_user_preference'
+  ERROR_UPDATING_USER_PREFERENCE: 'error_updating_user_preference',
+  FETCH_TIMEZONE: 'fetch_timezone',
+  FETCH_TIMEZONE_DONE: 'fetch_timezone_done',
+  UPDATE_USER_TIMEZONE: 'update_user_timezone',
+  UPDATE_USER_TIMEZONE_DONE: 'update_user_timezone_done',
+  ERROR_FETCHING_TIMEZONE: 'error_fetching_timezone',
+  ERROR_UPDATING_USER_TIMEZONE: 'error_updating_user_timezone'
 };
+
 const NOTIFICATION = {
   GET_NOTIFICATIONS: 'get_notifications',
   GET_FILTERED_NOTIFICATIONS: 'get_filtered_notifications',

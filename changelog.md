@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - TODO: Implement API integration
 ### Fixed
 - IQVIACBEXU-1852: Gear icon options should not appear when click on the bell icon
+- IQVIACBEXU-1718: "All" role is still being used on Production. Implemented function to check current user role in Ubuild roles list.
+- IQVIACBEXU-1359: Create ability to add alternate answer for defined list.
+- IQVIACBEXU-1953: Fixed Socket for New Bid loading issues
+
 ## [4.3.1] - YYYY-MM-DD
 ### Fixed
 - IQVIACBEXU-1727: Formatting issues when pasting into the Notepad

@@ -4,6 +4,8 @@ import Card from 'apollo-react/components/Card';
 import PropTypes from 'prop-types';
 import Typography from 'apollo-react/components/Typography';
 import Checkbox from 'apollo-react/components/Checkbox';
+import MenuItem from 'apollo-react/components/MenuItem';
+import Select from 'apollo-react/components/Select';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { getRoles, isRolesInfoLoading } from '../../../redux/selectors';
@@ -16,7 +18,15 @@ const AccountPreference = ({
   roleName,
   setRoleName,
   userPreference,
-  handleUserPreferenceChange
+  handleUserPreferenceChange,
+  handleUpdateTimezone,
+  isFetchingTimezone,
+  isUpdatingTimezone,
+  timezoneList,
+  timezoneID,
+  currentTimezoneID,
+  setCurrentTimezoneID,
+  errorUpdatingTimezone
 }) => {
   const dispatch = useDispatch();
 
@@ -26,6 +36,10 @@ const AccountPreference = ({
   useEffect(() => {
     if (role) setRoleName(role);
   }, []);
+
+  useEffect(() => {
+    if (timezoneID) setCurrentTimezoneID(timezoneID);
+  }, [timezoneID]);
 
   const onRoleChange = value => {
     dispatch(onSetUserRole(value));
@@ -82,6 +96,38 @@ const AccountPreference = ({
               >
                 Your role will determine the visible questions in an opportunity
               </Typography>
+            </>
+          )}
+        </div>
+        <div className="top-space" style={{ maxWidth: '80%' }}>
+          {isFetchingTimezone ? (
+            <div className="toolbar-account-menu-option-loader">
+              <Loader type="TailSpin" color="#297DFD" height={35} width={35} />
+            </div>
+          ) : (
+            <>
+              <Select
+                label="Preferred Timezone"
+                helperText={
+                  <Typography
+                    className="grey-text"
+                    variant="caption"
+                    gutterBottom
+                    style={{ fontSize: '12px' }}
+                  >
+                    Your timezone will affect when Unity updates you
+                  </Typography>
+                }
+                value={currentTimezoneID}
+                onChange={handleUpdateTimezone}
+                placeholder="Select Timezone"
+                fullWidth
+                error={!!errorUpdatingTimezone}
+              >
+                {timezoneList.map(({ time_zone_id, time_zone }) => {
+                  return <MenuItem value={time_zone_id}>{time_zone}</MenuItem>;
+                })}
+              </Select>
             </>
           )}
         </div>
@@ -153,9 +199,17 @@ AccountPreference.defaultProps = {
   email: '',
   role: '',
   roleName: '',
-  setRoleName: '',
+  setRoleName: () => {},
   userPreference: [],
-  handleUserPreferenceChange: () => {}
+  handleUserPreferenceChange: () => {},
+  handleUpdateTimezone: () => {},
+  isFetchingTimezone: false,
+  isUpdatingTimezone: false,
+  timezoneList: [],
+  timezoneID: '',
+  currentTimezoneID: '',
+  setCurrentTimezoneID: () => {},
+  errorUpdatingTimezone: ''
 };
 
 AccountPreference.propTypes = {
@@ -164,7 +218,15 @@ AccountPreference.propTypes = {
   roleName: PropTypes.string,
   setRoleName: PropTypes.string,
   userPreference: PropTypes.array,
-  handleUserPreferenceChange: PropTypes.func
+  handleUserPreferenceChange: PropTypes.func,
+  handleUpdateTimezone: PropTypes.func,
+  isFetchingTimezone: PropTypes.bool,
+  isUpdatingTimezone: PropTypes.bool,
+  timezoneList: PropTypes.array,
+  timezoneID: PropTypes.string,
+  currentTimezoneID: PropTypes.string,
+  setCurrentTimezoneID: PropTypes.func,
+  errorUpdatingTimezone: PropTypes.string
 };
 
 export default AccountPreference;

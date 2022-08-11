@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useRef, useEffect } from 'react';
 import { Map } from 'immutable'; // NOSONAR
 import { connect } from 'react-redux';
 import { SOCKET_URL } from '../constants/api';
@@ -11,26 +11,72 @@ import {
   updateSwitchInProgress
 } from '../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
+import { setNotification } from '../redux/actions/notification-actions';
 import { getUserName, getUserEmail, getUserId } from '../SessionHandler';
+
 const userName = getUserName();
 const userEmail = getUserEmail();
 const userId = getUserId();
+const currentOppNo = {
+  get: localStorage.getItem('oppNo') || null,
+  set: value => localStorage.setItem('oppNo', value)
+};
 
 // Exporting Context
 export const SocketContext = createContext();
 
 const SocketContextProvider = props => {
-  const [socket, setSocket] = useState(null);
-  const [OppId, setOppId] = useState(null);
+  const socket = useRef(null);
 
+  /**
+   * Checks for socket connection
+   */
+  const isSocketConnected = () => {
+    if (
+      socket?.current?.readyState !== WebSocket.OPEN &&
+      socket?.current?.readyState !== WebSocket.CONNECTING &&
+      socket?.current?.readyState !== 1
+    ) {
+      return false;
+    }
+    return true;
+  };
+
+  /**
+   * Update socket's oppId when user switches Opportunity in the tool
+   */
+  const sendUpdateConnection = (oppId, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'UPDATE_CONNECTION',
+          body: { oppId }
+        })
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  /**
+   * Function called after bid creation completed
+   */
+  const refreshOpportunity = () => {
+    props.getOpportunityInfo(currentOppNo.get, true);
+  };
+
+  /**
+   * Initiates connection only if socket is not connected
+   */
   const initiateConnection = () => {
-    console.log('initiateSocketConnection');
-    if (!socket) {
-      console.log('createSocket');
+    if (!isSocketConnected()) {
+      console.log('Initiating new socket connection');
       const newSocket = new WebSocket(SOCKET_URL);
 
       newSocket.onopen = event => {
-        console.log('Socket Connected', event);
         if (newSocket) {
           newSocket.send(
             JSON.stringify({
@@ -39,28 +85,31 @@ const SocketContextProvider = props => {
             })
           );
         }
+        if (currentOppNo.get) {
+          sendUpdateConnection(currentOppNo.get, newSocket);
+        }
       };
-      console.log('Adding listeners to socket');
+
       const {
         addNewBid,
-        getOpportunityInfo,
         updateAnswerAction,
         updateProposalDetail,
         updateProposalNotes,
         updateSwitchTempStatus,
-        setSwitchInProgress
+        setSwitchInProgress,
+        updateNotification
       } = props;
 
       // On Message Recieve
       newSocket.addEventListener('message', async response => {
         const data = JSON.parse(response.data);
-        console.log('data.event:', data.event);
+
         switch (data.event) {
           case 'IN_PROGRESS':
             addNewBid(data.data);
             break;
           case 'COMPLETED':
-            getOpportunityInfo(OppId, true);
+            refreshOpportunity();
             break;
           case 'PROPOSAL_NOTE_UPDATE':
             if (updateProposalNotes) updateProposalNotes(data.data);
@@ -82,6 +131,9 @@ const SocketContextProvider = props => {
             if (setSwitchInProgress) setSwitchInProgress(false);
             if (updateSwitchTempStatus) updateSwitchTempStatus('error');
             break;
+          case 'IN_APP_NOTIFICATION_RECEIVED':
+            updateNotification();
+            break;
           default:
             break;
         }
@@ -89,29 +141,40 @@ const SocketContextProvider = props => {
 
       // On Close
       newSocket.onclose = event => {
-        if (event.reason === 'Going away') {
-          initiateConnection();
-        }
+        console.log('Socket onClose');
       };
-      setSocket(newSocket);
+      // On Error
+      newSocket.onerror = event => {
+        console.log('Socket onerror');
+      };
+      socket.current = newSocket;
     }
+  };
+
+  /**
+   * Waits for Socket connection to establish before executing the callback
+   * Retries connection every two second
+   */
+  const waitForSocketConnection = callback => {
+    setTimeout(() => {
+      if (isSocketConnected()) {
+        if (callback instanceof Function) {
+          callback();
+        }
+      } else {
+        waitForSocketConnection(callback);
+      }
+    }, 2000);
   };
 
   const updateSocketOppId = oppId => {
-    setOppId(oppId);
-    if (socket) {
-      socket.send(
-        JSON.stringify({
-          action: 'UPDATE_CONNECTION',
-          body: { oppId }
-        })
-      );
-    }
+    currentOppNo.set(oppId);
+    waitForSocketConnection(() => sendUpdateConnection(oppId, null));
   };
 
   const disconnectSocket = () => {
-    if (socket) {
-      socket.send(
+    if (isSocketConnected()) {
+      socket?.current?.send(
         JSON.stringify({
           action: '$disconnect',
           body: {}
@@ -120,14 +183,27 @@ const SocketContextProvider = props => {
     }
   };
 
+  /**
+   * Tries to initiate the websocket conection every 3 sec
+   */
+  const keepSocketAlive = () => {
+    setInterval(() => {
+      initiateConnection();
+    }, 3000);
+  };
+
+  useEffect(() => {
+    keepSocketAlive();
+  });
+
   return (
     <SocketContext.Provider
       value={{
         socket,
-        setSocket,
         initiateConnection,
         updateSocketOppId,
-        disconnectSocket
+        disconnectSocket,
+        isSocketConnected
       }}
     >
       {props.children}
@@ -144,7 +220,8 @@ const mapDispatchToProps = {
   updateProposalDetail: updateProposalDetailFromWebSocket,
   updateProposalNotes: updateProposalNotesFromWebSocket,
   updateSwitchTempStatus: updateSwitchTempStatusFromWebSocket,
-  setSwitchInProgress: updateSwitchInProgress
+  setSwitchInProgress: updateSwitchInProgress,
+  updateNotification: setNotification
 };
 
 export default connect(

@@ -5,18 +5,18 @@ import { Map, List } from 'immutable';
 import { connect } from 'react-redux';
 import { isObject, isEqual, isEmpty, xor, isString, has } from 'lodash';
 import IconButton from 'apollo-react/components/IconButton';
-import Loader from 'apollo-react/components/Loader';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import Grid from 'apollo-react/components/Grid';
 import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
-import StatusCheck from 'apollo-react-icons/StatusCheck';
-
-import { Checkmark, Edit } from '../svg';
+import moment from 'moment';
+import { Edit } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
 import TextArea from './atoms/inputs/TextArea';
 import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
+import Qvidianquestions from './qvidian';
+import SystemIntegrations from './SystemIntegrations/SystemIntegrations';
 import {
   setProposalAnswerData,
   setEditQuestionData,
@@ -29,6 +29,7 @@ import {
   getSelectedBid,
   getnoneditableField
 } from '../../redux/selectors';
+import { getOpportunityData } from '../../redux/selectors/proposal';
 import MatomoHOC from '../HOC/MatomoHOC';
 import {
   checkNonEditableFields,
@@ -37,17 +38,18 @@ import {
 } from '../../utils/utils';
 import ChipView from './Chip/ChipView';
 import Autocomplete from './atoms/inputs/AutoComplete';
-import AutocompleteText from './atoms/inputs/AutoCompleteText';
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
 import SFAnswerValidationWrapper from './SFAnswerValidationWrapper';
 import ANSWER_TYPES from '../../constants/answerTypes';
 import CustomApolloRichText from './CustomApolloRichText';
 import { DEFAULT } from '../../constants/app';
+import AutoCompleteWithAddOption from '../views/modals/AutoCompleteWithAddOption';
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
 type State = {
   selectedDay: string,
-  selectedRow: Boolean
+  selectedRow: Boolean,
+  changeIcon: ''
 };
 
 type Props = {
@@ -57,10 +59,13 @@ type Props = {
   questionText: string,
   questionHTML: string,
   questionJSON: string,
+  currentSFanswer: Object,
+  qvidianIntegration: string,
   answerConfiguration: Object,
   sectionName: string,
   section: Map,
   userData: Object,
+  oppdata: Object,
   setProposalAnswer: Function,
   setAnswerLoading: Function,
   deleteProposalUser: Function,
@@ -86,7 +91,9 @@ export class TaskRow extends Component<Props, State> {
 
     this.state = {
       selectedDay: '',
-      selectedRow: false
+      selectedRow: false,
+      iconColor: '#00c221',
+      screenWidth: ''
     };
   }
 
@@ -100,6 +107,8 @@ export class TaskRow extends Component<Props, State> {
         elem[index].style.height = `${txtareaheight + 2}px`;
       }
     }
+    window.addEventListener('resize', this.resize.bind(this));
+    this.resize();
   }
 
   handlePropsalChange = (textValue, lastValue, reason) => {
@@ -114,8 +123,8 @@ export class TaskRow extends Component<Props, State> {
     } = this.props;
     setProposalAnswer(proposalId, questionId, textValue, userData).then(() => {
       const [deletedVal] = xor(
-        textValue.trim() ? textValue.trim().split(',') : [],
-        lastValue.trim() ? lastValue.trim().split(',') : []
+        textValue?.trim() ? textValue?.trim().split(',') : [],
+        lastValue?.trim() ? lastValue?.trim().split(',') : []
       );
       const [deletedEmail] = String(deletedVal).match(
         /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
@@ -146,6 +155,11 @@ export class TaskRow extends Component<Props, State> {
       .trim()
       .split(' ')
       .filter(v => v.trim().length > 0);
+
+    isEmpty(s1)
+      ? this.setState({ changeIcon: '#b7b7b7' })
+      : this.setState({ changeIcon: '#00c221' });
+
     if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
       if (
         s1.length !== s2.length ||
@@ -176,6 +190,11 @@ export class TaskRow extends Component<Props, State> {
 
     if (!isEqual(editorData.value, lastEditorData.value)) {
       const { value, html, text } = editorData;
+
+      isEmpty(text)
+        ? this.setState({ changeIcon: '#b7b7b7' })
+        : this.setState({ changeIcon: '#00c221' });
+
       const editorText = text.trim() || ' ';
       setProposalAnswer(proposalId, questionId, String(editorText), userData, {
         value,
@@ -186,15 +205,17 @@ export class TaskRow extends Component<Props, State> {
     this.setSelectRow(false);
   };
 
-  handleVerifyPredictedAnsClick(predictedAnswer) {
+  handleVerifyPredictedAnsClick = predictedAnswer => {
     const {
       setProposalAnswer,
       proposalId,
       questionId,
       userData,
+      lastAnswer,
       answerConfiguration
     } = this.props;
     const answerType = answerConfiguration.get('type');
+    this.setState({ iconColor: '#015ff1' });
 
     // picklist value should not be converted to string while saving
     if (
@@ -215,7 +236,7 @@ export class TaskRow extends Component<Props, State> {
         userData
       );
     }
-  }
+  };
 
   onClickChange = (selectedValue: string, lastAnswer: string) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
@@ -336,8 +357,12 @@ export class TaskRow extends Component<Props, State> {
   resetDate = () => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
     this.setState({ selectedDay: ' ' }, () => {
-      const { selectedDay } = this.state;
-      setProposalAnswer(proposalId, questionId, selectedDay, userData);
+      setProposalAnswer(
+        proposalId,
+        questionId,
+        this.state.selectedDay,
+        userData
+      );
       this.trackMatomoEventSubmitAnswer(' ');
     });
   };
@@ -549,17 +574,17 @@ export class TaskRow extends Component<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <AutocompleteText
-              sectionName={sectionName}
+            <AutoCompleteWithAddOption
+              // sectionName={sectionName}
               sfObject={sfObject}
               lov={finalOptions}
               sfField={sfField}
               multiple
+              answer={answerValueComplex}
               onFocus={() => this.setSelectRow(true)}
               onBlur={() => this.setSelectRow(false)}
-              onChange={this.handlePropsalChange}
-              text={answerValueComplex}
               disabled={checkDisableFlag()}
+              onChange={this.handlePropsalChange}
             />
           </SFAnswerValidationWrapper>
         );
@@ -569,15 +594,14 @@ export class TaskRow extends Component<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <AutocompleteText
-              sectionName={sectionName}
+            <AutoCompleteWithAddOption
               sfObject={sfObject}
               lov={finalOptions}
               sfField={sfField}
               onFocus={() => this.setSelectRow(true)}
               onBlur={() => this.setSelectRow(false)}
               onChange={this.handlePropsalChange}
-              text={answerValue || ''}
+              answer={answerValue || ''}
               multiple={false}
               disabled={checkDisableFlag()}
             />
@@ -623,6 +647,10 @@ export class TaskRow extends Component<Props, State> {
     return false;
   };
 
+  resize() {
+    this.setState({ screenWidth: window.innerWidth });
+  }
+
   render() {
     const {
       answers,
@@ -632,6 +660,13 @@ export class TaskRow extends Component<Props, State> {
       milestoneNew,
       ismilestoneavailable,
       loading,
+      sfField,
+      answerValue,
+      sfObject,
+      oppdata,
+      currentSFanswer,
+      qvidianIntegration,
+      hasDifferentSFanswer,
       questionHint,
       questionHintHTML,
       questionHTML,
@@ -643,15 +678,52 @@ export class TaskRow extends Component<Props, State> {
       isCustomQuestion,
       questionId: qId,
       selectedBid,
-      isNotepadOpen
+      proposalInfo,
+      isNotepadOpen,
+      questionId
     } = this.props;
-
-    const questionId = answers.get('questionId');
+    const questionID = answers.get('questionId');
+    const qvicon = questionId;
     let lastAnswer;
     let answerDate = 'Not Answered';
     let isAnswerPredicted = false;
+    let integrationmatch;
+    let checkSfAnswer;
+    let integrationvalidation;
+    const sficon = sfField;
+    const currentBidID = selectedBid.toJS().id;
+    const oppordata = oppdata.toJS();
+    const deploymentDate = '2022-08-05';
+    const proposalTimeStamp = oppordata[currentBidID]?.proposal?.proposalDate;
+    const proposalCreationDate = proposalTimeStamp.substring(
+      0,
+      proposalTimeStamp.indexOf('T')
+    );
+    const dateIsAfter = moment(proposalCreationDate).isAfter(
+      moment(deploymentDate)
+    );
+    const answerText = answers?.toJS()[0]?.answer;
+
+    const dateIsBefore = moment(proposalCreationDate).isBefore(
+      moment(deploymentDate)
+    );
+    if (
+      typeof currentSFanswer !== 'undefined' &&
+      _.isEmpty(currentSFanswer) !== true
+    ) {
+      checkSfAnswer = currentSFanswer.toJS().value;
+    }
+    if (dateIsAfter) {
+      integrationvalidation = true;
+    }
+    integrationvalidation = has(Qvidianquestions[0], qvicon);
+    dateIsAfter
+      ? integrationmatch === qvidianIntegration
+      : has(Qvidianquestions[0], qvicon)
+      ? (integrationmatch = Qvidianquestions[0][qvicon])
+      : null;
     if (answers) {
-      if (!questionId) lastAnswer = answers.last();
+      if (!questionID) lastAnswer = answers.last();
       else lastAnswer = answers.get('answers').last();
     }
     if (lastAnswer) {
@@ -673,9 +745,12 @@ export class TaskRow extends Component<Props, State> {
       }
     }
     const isCurrentBid = selectedBid.get('isCurrent');
-    const { selectedRow } = this.state;
-
-    const gridColRatio = isNotepadOpen ? [8, 4] : [10, 2];
+    const { selectedRow, iconColor, changeIcon } = this.state;
+    const gridColRatio = isNotepadOpen
+      ? this.state.screenWidth < 641
+        ? [8, 4]
+        : [10, 2]
+      : [10, 2];
     return (
       <Grid
         container
@@ -796,98 +871,29 @@ export class TaskRow extends Component<Props, State> {
             </div>
           </Grid>
 
-          {/* Answer History Button */}
-          <Grid
-            item
-            xs={gridColRatio[1]}
-            style={{
-              display: 'flex',
-              alignItems: 'flex-start',
-              justifyContent: 'flex-start',
-              paddingLeft: '20px',
-              paddingTop: '8px'
-            }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
-              <div>
-                <button
-                  style={{
-                    textAlign: 'center',
-                    outline: 'none',
-                    border: 'none',
-                    backgroundColor: 'transparent',
-                    color: '#297dfd',
-                    cursor: 'pointer'
-                  }}
-                  type="button"
-                  onClick={this.displayAnswerOnHistory}
-                >
-                  {answerDate}
-                </button>
-              </div>
-              <div>
-                {isAnswerPredicted && !loading ? (
-                  <Tooltip
-                    variant="light"
-                    title="Unity Predicted Answer"
-                    placement="top"
-                  >
-                    <span>
-                      <IconButton
-                        disabled={!isCurrentBid}
-                        style={{ height: '0' }}
-                      >
-                        <StatusCheck
-                          fontSize="22px"
-                          style={{ color: '#D9D9D9' }}
-                          onClick={() =>
-                            this.handleVerifyPredictedAnsClick(lastAnswer)
-                          }
-                        />
-                      </IconButton>
-                    </span>
-                  </Tooltip>
-                ) : null}
-              </div>
-              <div>
-                {this.isAnswered(lastAnswer, isAnswerPredicted) && !loading ? (
-                  <div>
-                    <Checkmark
-                      className="answered"
-                      style={{ marginLeft: '6px' }}
-                    />
-                  </div>
-                ) : null}
-              </div>
-              <div>
-                {loading ? (
-                  <span
-                    style={{
-                      marginLeft: '6px',
-                      marginTop: '6px',
-                      position: 'relative',
-                      top: '15px'
-                    }}
-                  >
-                    <Loader
-                      isInner
-                      size={20}
-                      style={{
-                        width: '20px',
-                        height: '20px'
-                      }}
-                    />
-                  </span>
-                ) : null}
-              </div>
-            </div>
-          </Grid>
+          {/* System Integrations */}
+          <SystemIntegrations
+            checkSfAnswer={checkSfAnswer}
+            sficon={sficon}
+            gridColRatio={gridColRatio}
+            integrationmatch={integrationmatch}
+            integrationvalidation={integrationvalidation}
+            answeronhistory={this.displayAnswerOnHistory}
+            answerdate={answerDate}
+            isAnswerPredicted={isAnswerPredicted}
+            isAnswered={this.isAnswered}
+            lastAnswer={lastAnswer}
+            iconColor={iconColor}
+            loading={loading}
+            isNotepadOpen={isNotepadOpen}
+            changeIcon={changeIcon}
+            isCurrentBid={isCurrentBid}
+            sfObject={sfObject}
+            answer={answerValue}
+            answerText={answerText}
+            handleVerifyPredictedAnsClick={this.handleVerifyPredictedAnsClick}
+            hasDifferentSFanswer={hasDifferentSFanswer}
+          />
         </Grid>
       </Grid>
     );
@@ -898,6 +904,7 @@ const mapStateToProps = (state: Object) => ({
   userData: getUserData(state),
   proposalDetail: getProposalDetails(state),
   selectedBid: getSelectedBid(state),
+  oppdata: getOpportunityData(state),
   noneditableField: getnoneditableField(state)
 });
 

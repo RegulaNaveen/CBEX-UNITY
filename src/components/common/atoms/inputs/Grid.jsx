@@ -10,11 +10,11 @@ const containerStyle = {
   width: '100%',
   display: 'flex',
   flexWrap: 'wrap',
-  boxSizing: 'border-box'
+  boxSizing: 'border-box',
 };
 
-const loadSidebar = props => {
-  const { data, isOpen, bidStatus } = props;
+const loadSidebar = (props) => {
+  const { data, isOpen, windowSize, bidStatus } = props;
   const {
     'Bid due date': bidDueDate,
     Phase: phase,
@@ -26,7 +26,7 @@ const loadSidebar = props => {
     'CRM #': crm,
     Customer,
     bidNo,
-    opportunityId
+    opportunityId,
   } = data;
   const placeholder = 'No data';
   const date = bidDueDate && parseMomentDate(bidDueDate);
@@ -35,8 +35,12 @@ const loadSidebar = props => {
   const redirect = () => {
     window.open(`${SF_HOST_URL}lightning/r/Opportunity/${opportunityId}/view`);
   };
+  let isBladeOpen = isOpen;
+  if (windowSize <= 1200) {
+    isBladeOpen = true;
+  }
 
-  if (isOpen) {
+  if (isBladeOpen) {
     return (
       <Grid container>
         <Grid item xs={12} style={containerStyle}>
@@ -257,7 +261,7 @@ const loadSidebar = props => {
   );
 };
 
-const UnityGrid = props => {
+const UnityGrid = (props) => {
   return loadSidebar(props);
 };
 

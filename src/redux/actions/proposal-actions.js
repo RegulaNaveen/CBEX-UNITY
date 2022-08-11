@@ -5,6 +5,7 @@ import axios from 'axios';
 
 import { REDUX_TYPES, API } from '../../constants';
 import type { Dispatch, ThunkAction } from './action-types';
+
 import {
   getProposalInfo,
   setProposalAnswer,
@@ -17,7 +18,6 @@ import {
   getValidatedProposalData,
   editProposalQuestionData,
   deleteProposalQuestionData,
-  getOpportunityInfo,
   getProposalCount,
   getPaginateProposal,
   getPickListLookupSfData,
@@ -796,7 +796,7 @@ export const callPickListLookupSfData = (): ThunkAction<string, Object> => {
       const response = await getPickListLookupSfData();
       const { data } = response.data;
       data.forEach(row => {
-        const options = row.PicklistValues.map(label => ({ label }));
+        const options = row.PicklistValues;
         lookupMap[`${row.PK}_${row.SK}`] = options;
       });
       dispatch({ type: UPDATE_LOOKUP_OPTIONS, payload: lookupMap });
@@ -810,13 +810,16 @@ export const callPickListLookupSfData = (): ThunkAction<string, Object> => {
  * Get Error Message from response
  */
 export function getErrorMessage(error) {
-  const isErr400 = error.response.status === 400;
-  const isErr404 = error.response.status === 404;
-  let msg = error.response.data.message;
-  if (isErr400 && isEmpty(msg)) msg = DEFAULT.ERROR_400;
-  if (isErr404 && isEmpty(msg)) msg = DEFAULT.ERROR_404;
-  if (!isErr400 && !isErr404 && isEmpty(msg)) msg = DEFAULT.REQUEST_FAILED;
-  return msg;
+  if (error.response) {
+    let msg = error.response.data.message;
+    const isErr400 = error.response.status === 400;
+    const isErr404 = error.response.status === 404;
+    if (isErr400 && isEmpty(msg)) msg = DEFAULT.ERROR_400;
+    if (isErr404 && isEmpty(msg)) msg = DEFAULT.ERROR_404;
+    if (!isErr400 && !isErr404 && isEmpty(msg)) msg = DEFAULT.REQUEST_FAILED;
+    return msg;
+  }
+  return 'Unexpected error occurred';
 }
 
 /**
@@ -948,7 +951,7 @@ export const getProposalAnswerHistory = (
     return { status: true, title: DEFAULT.SUCCESS, data: response };
   } catch (error) {
     // Error
-    console.log(error.response);
+    console.log(error?.response);
     const msg = getErrorMessage(error);
     return { status: false, title: DEFAULT.ALERT, msg };
   }

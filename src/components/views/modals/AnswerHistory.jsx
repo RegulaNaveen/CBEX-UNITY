@@ -18,7 +18,6 @@ import {
   getUserName
 } from '../../../utils/utils';
 import ANSWER_TYPES from '../../../constants/answerTypes';
-import { getProposalAnswer } from '../../../api/proposal';
 import { getProposalAnswerHistory } from '../../../redux/actions/proposal-actions';
 
 type Props = {
@@ -34,7 +33,7 @@ class AnswerHistory extends Component<Props> {
     super(props);
 
     this.state = {
-      question: this.props.question.set('answers', fromJS([])),
+      question: this.props.question,
       loading: false
     };
   }
@@ -241,13 +240,13 @@ class AnswerHistory extends Component<Props> {
             }
             let styleClass =
               !isOnlyOneAnswer && !isLastItem ? 'changed' : undefined;
-            // Don't add styles if answers are same
+            // Dont add styles if answers are same
             // We use .substring(0, 10) to get only the yyyy-mm-dd out of a String like '2022-04-30T00:00:00+05:30'
             if (
-              String(dateAns).substring(0, 10) ===
-              String(nxtDateAns).substring(0, 10)
+              String(answer).substring(0, 10) ===
+              String(nextAnswer).substring(0, 10)
             ) {
-              nxtDateAns = '';
+              nextAnswer = '';
               styleClass = undefined;
             }
             const newDate = renderWord(
