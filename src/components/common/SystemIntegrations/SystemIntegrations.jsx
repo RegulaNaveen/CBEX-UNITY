@@ -34,12 +34,8 @@ const SystemIntegrations = ({
 }) => {
   const gridColRatio = isNotepadOpen ? [10, 2] : [10, 2];
   const SalesForceCondition = () => {
-    if (
-      sficon !== 'n/a' &&
-      isEmpty(checkSfAnswer) === false &&
-      hasDifferentSFanswer === false
-    ) {
-      return (
+    if (sficon !== 'n/a' && isEmpty(checkSfAnswer) === false) {
+      return hasDifferentSFanswer === false ? (
         <Tooltip
           variant="light"
           title={
@@ -60,12 +56,17 @@ const SystemIntegrations = ({
             />
           </div>
         </Tooltip>
+      ) : (
+        <Incoming
+          className="integration-icon"
+          style={{ fill: '#9e54b0', height: '28px', opacity: '50%' }}
+        />
       );
     }
     if (
       sficon !== 'n/a' &&
       isEmpty(sficon) === false &&
-      isEmpty(checkSfAnswer) === false
+      isEmpty(checkSfAnswer) === true
     ) {
       return hasDifferentSFanswer === true ? (
         <Incoming
@@ -74,11 +75,20 @@ const SystemIntegrations = ({
         />
       ) : (
         <Incoming
-          className="integration-icon"
+          className="integration-icon1"
           style={{ fill: '#b7b7b7', height: '28px' }}
         />
       );
     }
+    // if (sficon !== 'n/a' && isEmpty(checkSfAnswer)) {
+    //   return (
+    //     <Incoming
+    //       className="integration-icon1"
+    //       style={{ fill: '#b7b7b7', height: '28px' }}
+    //     />
+    //   );
+    // }
+    if (isEmpty(sficon)) return null;
   };
   const QvidianValidation = () => {
     if (integrationvalidation === true && changeIcon === '#00c221') {
