@@ -80,14 +80,6 @@ const SystemIntegrations = ({
         />
       );
     }
-    // if (sficon !== 'n/a' && isEmpty(checkSfAnswer)) {
-    //   return (
-    //     <Incoming
-    //       className="integration-icon1"
-    //       style={{ fill: '#b7b7b7', height: '28px' }}
-    //     />
-    //   );
-    // }
     if (isEmpty(sficon)) return null;
   };
   const QvidianValidation = () => {
