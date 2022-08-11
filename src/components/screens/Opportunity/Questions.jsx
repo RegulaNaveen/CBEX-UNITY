@@ -512,11 +512,7 @@ class Questions extends Component<Props, State> {
             <Panel
               minWidth={notepadMinWidthPx}
               maxWidth={notepadMaxWidthPx}
-              width={
-                this.state.totalWidth < 641
-                  ? notepadMaxWidthPx / 2
-                  : notepadMaxWidthPx
-              }
+              width={notepadMaxWidthPx}
               resizable
               onClose={() => {
                 this.setIsNotepadOpen(false);
