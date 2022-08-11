@@ -83,7 +83,6 @@ const AutoCompleteWithAddOption = ({
     );
     setCurrentLov(newOptions);
   }, [answer]);
-
   const placeHolder = () => {
     const placeholder = 'Click to answer';
     if (multiple) return selectedVal && selectedVal.length ? '' : placeholder;
@@ -114,11 +113,9 @@ const AutoCompleteWithAddOption = ({
         renderInput={(params) => {
           return (
             <TextField
-              className="text-field"
               placeholder={placeholder}
               {...params}
               variant="outlined"
-              style={{ borderinlinecolor: '#297dfd' }}
             />
           );
         }}
