@@ -158,7 +158,13 @@ const SystemIntegrations = ({
         <Tooltip variant="light" title="Unity Predicted Answer" placement="top">
           <IconButton
             disabled={!isCurrentBid}
-            style={{ justifyContent: 'start', height: '0' }}
+            style={{
+              justifyContent: 'start',
+              height: '0',
+              width: '24px',
+              paddingLeft: '0px',
+              paddingRight: '0px'
+            }}
           >
             <CalendarCheck
               fontSize="22px"
