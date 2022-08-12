@@ -104,11 +104,12 @@ const AutoCompleteWithAddOption = ({
         onBlur={onBlur}
         onFocus={onFocus}
         disabled={disabled}
+        disableClearable={isEmpty(selectedVal)}
         style={{ resize: 'vertical' }}
         options={currentLov}
         multiple={multiple}
-        freeSolo
         onChange={handleChange}
+        freeSolo
         value={selectedVal}
         renderInput={(params) => {
           return (
