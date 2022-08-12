@@ -7,12 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [4.4] - YYYY-MM-DD
 ### Added
 - IQVIACBEXU-1194:Add Bell Icon for User In-App Notifications
-  - The UI part for the story is Completed 
-  - TODO: Implement API integration
 ### Fixed
 - IQVIACBEXU-1852: Gear icon options should not appear when click on the bell icon
 - IQVIACBEXU-1718: "All" role is still being used on Production. Implemented function to check current user role in Ubuild roles list.
 - IQVIACBEXU-1359: Create ability to add alternate answer for defined list.
+- IQVIACBEXU-1961: CLONE - Gear icon options should not appear when click on the bell icon
+- IQVIACBEXU-1953: Fixed Socket for New Bid loading issues
 
 ## [4.3.1] - YYYY-MM-DD
 ### Fixed
