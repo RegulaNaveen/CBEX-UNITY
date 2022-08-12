@@ -25,7 +25,7 @@ axiosInstance.interceptors.response.use(
     if (
       (err.response.status === 500 &&
         err.response.data.message === 'Invalid Access Token') ||
-      err.response.data.message.includes('accessToken')
+      err.response.data.message.includes('accessToken') || err.response.data.message === 'Access Token has expired')
     ) {
       console.log('logging out of system because of token expiry...Bye bye');
       dispatch(logout());
