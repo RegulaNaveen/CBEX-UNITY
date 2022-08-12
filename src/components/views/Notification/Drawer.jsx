@@ -23,6 +23,9 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
   };
   const toggleIsDrawer = () => {
     setIsDrawer(!isDrawer);
+    if (isDrawerOptions) {
+      setIsDrawerOptions(false);
+    }
   };
   const closeIsDrawerOptions = () => {
     setIsDrawerOptions(false);
