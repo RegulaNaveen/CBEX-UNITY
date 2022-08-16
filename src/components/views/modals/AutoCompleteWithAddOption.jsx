@@ -83,7 +83,6 @@ const AutoCompleteWithAddOption = ({
     );
     setCurrentLov(newOptions);
   }, [answer]);
-
   const placeHolder = () => {
     const placeholder = 'Click to answer';
     if (multiple) return selectedVal && selectedVal.length ? '' : placeholder;
@@ -105,20 +104,19 @@ const AutoCompleteWithAddOption = ({
         onBlur={onBlur}
         onFocus={onFocus}
         disabled={disabled}
+        disableClearable={isEmpty(selectedVal)}
         style={{ resize: 'vertical' }}
         options={currentLov}
         multiple={multiple}
-        freeSolo
         onChange={handleChange}
+        freeSolo
         value={selectedVal}
         renderInput={(params) => {
           return (
             <TextField
-              className="text-field"
               placeholder={placeholder}
               {...params}
               variant="outlined"
-              style={{ borderinlinecolor: '#297dfd' }}
             />
           );
         }}

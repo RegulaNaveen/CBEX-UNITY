@@ -27,22 +27,21 @@
       }
     }
   }
-
-  .MuiAutocomplete-inputFocused {
-    opacity: 0;
+  .MuiAutocomplete-root:hover .MuiAutocomplete-clearIndicatorDirty {
+    visibility: hidden;
   }
-  .MuiInputBase-Input:hover {
+  .MuiAutocomplete-root.Mui-focused .MuiAutocomplete-clearIndicatorDirty {
+    visibility: visible;
+  }
+  .MuiInputBase-input {
     border-color: none;
+    border: none;
   }
 
   .MuiChip-deleteIcon {
     width: 16px;
     height: 16px;
   }
-
-  // .task-table-row button {
-  //     color: #000000;
-  // }
 
   .a-MuiChip-label {
     color: #000000 !important;
