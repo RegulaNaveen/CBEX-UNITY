@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - IQVIACBEXU-1359: Create ability to add alternate answer for defined list.
 - IQVIACBEXU-1961: CLONE - Gear icon options should not appear when click on the bell icon
 - IQVIACBEXU-1953: Fixed Socket for New Bid loading issues
+- IQVIACBEXU-1990: Fixed Gear icon issue in notification drawer.
 
 ## [4.3.1] - YYYY-MM-DD
 ### Fixed
