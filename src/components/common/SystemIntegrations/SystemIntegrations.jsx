@@ -3,15 +3,16 @@
 /* eslint-disable no-undef */
 /* eslint-disable react/no-danger */
 /* eslint-disable react/no-this-in-sfc */
-import Calendar from 'apollo-react-icons/Calendar';
-import CalendarCheck from 'apollo-react-icons/CalendarCheck';
-import IconButton from 'apollo-react/components/IconButton';
-import React from 'react';
-import Loader from 'apollo-react/components/Loader';
-import Tooltip from 'apollo-react/components/Tooltip';
-import isEmpty from 'lodash-es/isEmpty';
-import Grid from 'apollo-react/components/Grid';
-import { Intermediate, Outgoing, Incoming } from '../../svg';
+import Calendar from "apollo-react-icons/Calendar";
+import CalendarCheck from "apollo-react-icons/CalendarCheck";
+import IconButton from "apollo-react/components/IconButton";
+import React from "react";
+import Loader from "apollo-react/components/Loader";
+import Tooltip from "apollo-react/components/Tooltip";
+import isEmpty from "lodash-es/isEmpty";
+import Grid from "apollo-react/components/Grid";
+import indeterminate from "../../../../img/Indeterminate.svg";
+import { Outgoing, Incoming } from "../../svg";
 
 const SystemIntegrations = ({
   checkSfAnswer,
@@ -30,19 +31,19 @@ const SystemIntegrations = ({
   hasDifferentSFanswer,
   answerText,
   isNotepadOpen,
-  handleVerifyPredictedAnsClick
+  handleVerifyPredictedAnsClick,
 }) => {
   const gridColRatio = isNotepadOpen ? [10, 2] : [10, 2];
   const SalesForceCondition = () => {
-    if (sficon !== 'n/a' && isEmpty(checkSfAnswer) === false) {
+    if (sficon !== "n/a" && isEmpty(checkSfAnswer) === false) {
       return hasDifferentSFanswer === false ? (
         <Tooltip
           variant="light"
           title={
-            sficon !== 'n/a' ? (
+            sficon !== "n/a" ? (
               <div
                 dangerouslySetInnerHTML={{
-                  __html: `<p><b>Source</b><br>CRM</p>`
+                  __html: `<p><b>Source</b><br>CRM</p>`,
                 }}
               />
             ) : null
@@ -51,7 +52,7 @@ const SystemIntegrations = ({
         >
           <div>
             <Incoming
-              style={{ fill: '#9E54B0', height: '28px' }}
+              style={{ fill: "#9E54B0", height: "28px" }}
               className="integration-icon"
             />
           </div>
@@ -59,31 +60,31 @@ const SystemIntegrations = ({
       ) : (
         <Incoming
           className="integration-icon"
-          style={{ fill: '#9e54b0', height: '28px', opacity: '50%' }}
+          style={{ fill: "#9e54b0", height: "28px", opacity: "50%" }}
         />
       );
     }
     if (
-      sficon !== 'n/a' &&
+      sficon !== "n/a" &&
       isEmpty(sficon) === false &&
       isEmpty(checkSfAnswer) === true
     ) {
       return hasDifferentSFanswer === true ? (
         <Incoming
           className="integration-icon"
-          style={{ fill: '#9e54b0', height: '28px', opacity: '50%' }}
+          style={{ fill: "#9e54b0", height: "28px", opacity: "50%" }}
         />
       ) : (
         <Incoming
           className="integration-icon1"
-          style={{ fill: '#b7b7b7', height: '28px' }}
+          style={{ fill: "#b7b7b7", height: "28px" }}
         />
       );
     }
     if (isEmpty(sficon)) return null;
   };
   const QvidianValidation = () => {
-    if (integrationvalidation === true && changeIcon === '#00c221') {
+    if (integrationvalidation === true && changeIcon === "#00c221") {
       return (
         <Tooltip
           variant="light"
@@ -91,7 +92,7 @@ const SystemIntegrations = ({
             integrationmatch ? (
               <div
                 dangerouslySetInnerHTML={{
-                  __html: `<p><b>Destination</b><br>Qvidian</p>`
+                  __html: `<p><b>Destination</b><br>Qvidian</p>`,
                 }}
               />
             ) : null
@@ -99,7 +100,7 @@ const SystemIntegrations = ({
           placement="top"
         >
           <Outgoing
-            style={{ fill: '#00c221', height: '28px' }}
+            style={{ fill: "#00c221", height: "28px" }}
             className="integration-icon"
           />
         </Tooltip>
@@ -115,7 +116,7 @@ const SystemIntegrations = ({
           title={
             <div
               dangerouslySetInnerHTML={{
-                __html: `<p><b>Destination</b><br>Qvidian</p>`
+                __html: `<p><b>Destination</b><br>Qvidian</p>`,
               }}
             />
           }
@@ -123,14 +124,14 @@ const SystemIntegrations = ({
         >
           <div>
             <Outgoing
-              style={{ fill: '#00c221', height: '28px' }}
+              style={{ fill: "#00c221", height: "28px" }}
               className="integration-icon"
             />
           </div>
         </Tooltip>
       ) : (
         <Outgoing
-          style={{ fill: '#b7b7b7', height: '28px' }}
+          style={{ fill: "#b7b7b7", height: "28px" }}
           className="integration-icon"
         />
       );
@@ -138,24 +139,25 @@ const SystemIntegrations = ({
   };
 
   const CalendarCondition = () => {
-    if (answerdate === 'Not Answered' && !isAnswerPredicted) {
+    if (answerdate === "Not Answered" && !isAnswerPredicted) {
+      console.log("1");
       return (
         <IconButton
           style={{
-            textAlign: 'center',
-            outline: 'none',
-            border: 'none',
-            backgroundColor: 'transparent',
-            color: '#297dfd',
-            cursor: 'pointer',
-            width: '24px',
-            height: '24px'
+            textAlign: "center",
+            outline: "none",
+            border: "none",
+            backgroundColor: "transparent",
+            color: "#297dfd",
+            cursor: "pointer",
+            width: "24px",
+            height: "24px",
           }}
           type="button"
           onClick={answeronhistory}
           className="integration-buttons"
         >
-          <Calendar style={{ color: '#b7b7b7' }} className="integration-icon" />
+          <Calendar style={{ color: "#b7b7b7" }} className="integration-icon" />
         </IconButton>
       );
     }
@@ -164,21 +166,22 @@ const SystemIntegrations = ({
       !loading &&
       !isAnswered(lastAnswer, isAnswerPredicted)
     ) {
+      console.log("2");
       return (
         <Tooltip variant="light" title="Unity Predicted Answer" placement="top">
           <IconButton
             disabled={!isCurrentBid}
             style={{
-              height: '0',
-              width: '24px',
-              paddingLeft: '0px',
-              paddingRight: '0px'
+              height: "0",
+              width: "24px",
+              paddingLeft: "0px",
+              paddingRight: "0px",
             }}
             className="bluecalendar"
           >
             <CalendarCheck
               fontSize="22px"
-              style={{ color: '#015ff1' }}
+              style={{ color: "#015ff1" }}
               className="integration-icon"
               onClick={() => handleVerifyPredictedAnsClick(lastAnswer)}
             />
@@ -189,19 +192,20 @@ const SystemIntegrations = ({
     if (
       isAnswered(lastAnswer, isAnswerPredicted) &&
       !loading &&
-      changeIcon === '#00c221'
+      changeIcon === "#00c221"
     ) {
+      console.log("3");
       return (
         <IconButton
           style={{
-            textAlign: 'center',
-            outline: 'none',
-            border: 'none',
-            backgroundColor: 'transparent',
-            color: '#297dfd',
-            cursor: 'pointer',
-            width: '24px',
-            height: '24px'
+            textAlign: "center",
+            outline: "none",
+            border: "none",
+            backgroundColor: "transparent",
+            color: "#297dfd",
+            cursor: "pointer",
+            width: "24px",
+            height: "24px",
           }}
           type="button"
           onClick={answeronhistory}
@@ -209,7 +213,7 @@ const SystemIntegrations = ({
         >
           <CalendarCheck
             className="answered2 integration-icon"
-            style={{ marginLeft: '0px', color: '#00c221' }}
+            style={{ marginLeft: "0px", color: "#00c221" }}
           />
         </IconButton>
       );
@@ -217,26 +221,28 @@ const SystemIntegrations = ({
     if (
       !isAnswered(lastAnswer, isAnswerPredicted) &&
       !loading &&
-      changeIcon === '#b7b7b7'
+      changeIcon === "#b7b7b7"
     ) {
+      console.log("4");
       return (
         <IconButton
           style={{
-            textAlign: 'center',
-            outline: 'none',
-            border: 'none',
-            backgroundColor: 'transparent',
-            color: '#297dfd',
-            cursor: 'pointer',
-            width: '24px',
-            height: '24px'
+            textAlign: "center",
+            outline: "none",
+            border: "none",
+            backgroundColor: "transparent",
+            color: "#297dfd",
+            cursor: "pointer",
+            width: "24px",
+            height: "24px",
           }}
           type="button"
           onClick={answeronhistory}
           className="integration-buttons"
         >
-          <Intermediate
-            style={{ fill: '#b7b7b7' }}
+          <img
+            src={indeterminate}
+            alt="indeterminate"
             className="integration-icon"
           />
         </IconButton>
@@ -246,44 +252,41 @@ const SystemIntegrations = ({
       lastAnswer
         ?.toJS()
         .answer?.toString()
-        .trim().length >
-      0 <
-      1
+        .trim().length < 1
     ) {
+      console.log("5", lastAnswer.toJS());
       return (
         <IconButton
           style={{
-            textAlign: 'center',
-            outline: 'none',
-            border: 'none',
-            backgroundColor: 'transparent',
-            color: '#297dfd',
-            cursor: 'pointer',
-            width: '24px',
-            height: '24px'
+            textAlign: "center",
+            outline: "none",
+            border: "none",
+            backgroundColor: "transparent",
+            color: "#297dfd",
+            cursor: "pointer",
+            width: "24px",
+            height: "24px",
           }}
           type="button"
           onClick={answeronhistory}
           className="integration-buttons"
         >
-          <Intermediate
-            className="answered"
-            style={{ marginLeft: '0px', fill: '#b7b7b7' }}
-          />
+          <img src={indeterminate} alt="indeterminate" className="answered" />
         </IconButton>
       );
     }
+    console.log("out");
     return (
       <IconButton
         style={{
-          textAlign: 'center',
-          outline: 'none',
-          border: 'none',
-          backgroundColor: 'transparent',
-          color: '#297dfd',
-          cursor: 'pointer',
-          width: '24px',
-          height: '24px'
+          textAlign: "center",
+          outline: "none",
+          border: "none",
+          backgroundColor: "transparent",
+          color: "#297dfd",
+          cursor: "pointer",
+          width: "24px",
+          height: "24px",
         }}
         type="button"
         onClick={answeronhistory}
@@ -291,7 +294,7 @@ const SystemIntegrations = ({
       >
         <CalendarCheck
           className="answered1 integration-icon"
-          style={{ marginLeft: '0px', color: '#00c221' }}
+          style={{ marginLeft: "0px", color: "#00c221" }}
         />
       </IconButton>
     );
@@ -303,18 +306,18 @@ const SystemIntegrations = ({
       xs={gridColRatio[1]}
       className={
         hasDifferentSFanswer && isCurrentBid
-          ? 'validation-wrapper-integration'
-          : 'no-integration'
+          ? "validation-wrapper-integration"
+          : "no-integration"
       }
     >
       <div
         style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center'
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: "flex" }}>
           {SalesForceCondition()}
           {QvidianValidation()}
           {CalendarCondition()}
@@ -323,18 +326,18 @@ const SystemIntegrations = ({
           {loading ? (
             <span
               style={{
-                marginLeft: '0px',
-                marginTop: '6px',
-                position: 'relative',
-                top: '15px'
+                marginLeft: "0px",
+                marginTop: "6px",
+                position: "relative",
+                top: "15px",
               }}
             >
               <Loader
                 isInner
                 size={20}
                 style={{
-                  width: '20px',
-                  height: '20px'
+                  width: "20px",
+                  height: "20px",
                 }}
               />
             </span>
