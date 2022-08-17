@@ -9,7 +9,7 @@ const { USER_API_URL, API_KEY } = API.PROPOSAL;
 const Autocomplete = (props) => {
   const [options, setOptions] = useState([]);
   const [value, setValue] = useState([]);
-  const [freeSolo, setFreeSolo] = useState(true);
+  const [callAccept, setCallAccept] = useState(false);
   const [count, setCount] = useState(1);
 
   const text = String(props?.text)
@@ -17,7 +17,6 @@ const Autocomplete = (props) => {
     .trimEnd();
   const previousController = useRef();
   const { disabled } = props;
-  let callAccept = false;
 
   function filter() {
     value.map((row) => {
@@ -109,13 +108,11 @@ const Autocomplete = (props) => {
 
   const onInputChange = _.debounce((event, value) => {
     if (value) {
-      callAccept = true;
-      setFreeSolo(false);
+      setCallAccept(true);
       setCount(1);
       getData(value);
     } else {
-      callAccept = false;
-      setFreeSolo(true);
+      setCallAccept(false);
       setCount(1);
       setOptions([]);
     }
@@ -126,7 +123,7 @@ const Autocomplete = (props) => {
       <AutocompleteV2
         fullWidth
         multiple
-        freeSolo={freeSolo}
+        freeSolo={!callAccept}
         options={options || []}
         chipColor="white"
         size="small"
