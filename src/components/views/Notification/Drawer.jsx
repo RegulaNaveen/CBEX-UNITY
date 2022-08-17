@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { connect } from 'react-redux';
 import Bell from 'apollo-react-icons/Bell';
-import Email from 'apollo-react-icons/Email';
 import Cog from 'apollo-react-icons/Cog';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Typography from 'apollo-react/components/Typography';
@@ -75,15 +74,17 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
                 <Typography variant='h3' gutterBottom>
                   Notifications
                 </Typography>
-                <Cog
-                  className='notification-gear-icon'
-                  onClick={toggleIsDrawerOptions}
-                />
-                {/* Drawer Gear Icon options */}
-                <DrawerOptions
-                  isShow={isDrawerOptions}
-                  closeIsDrawerOptions={closeIsDrawerOptions}
-                />
+                <div>
+                  <Cog
+                    className='notification-gear-icon'
+                    onClick={toggleIsDrawerOptions}
+                  />
+                  {/* Drawer Gear Icon options */}
+                  <DrawerOptions
+                    isShow={isDrawerOptions}
+                    closeIsDrawerOptions={closeIsDrawerOptions}
+                  />
+                </div>
               </div>
               {/* Notification List items */}
               {notificationCount > 0 ? (
