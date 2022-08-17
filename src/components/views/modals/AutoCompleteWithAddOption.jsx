@@ -108,8 +108,8 @@ const AutoCompleteWithAddOption = ({
         style={{ resize: "vertical" }}
         options={currentLov}
         multiple={multiple}
-        freeSolo
         onChange={handleChange}
+        freeSolo
         value={selectedVal}
         renderInput={(params) => {
           return (
