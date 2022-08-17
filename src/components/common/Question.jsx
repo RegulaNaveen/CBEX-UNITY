@@ -236,7 +236,7 @@ export class TaskRow extends Component<Props, State> {
         userData
       );
     }
-  }
+  };
 
   onClickChange = (selectedValue: string, lastAnswer: string) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
@@ -747,7 +747,7 @@ export class TaskRow extends Component<Props, State> {
     const isCurrentBid = selectedBid.get('isCurrent');
     const { selectedRow, iconColor, changeIcon } = this.state;
     const gridColRatio = isNotepadOpen
-      ? (this.state.screenWidth < 641)
+      ? this.state.screenWidth < 641
         ? [8, 4]
         : [10, 2]
       : [10, 2];
