@@ -233,9 +233,9 @@ class AnswerHistory extends Component<Props> {
               }
             );
           }
-          const showDate = (answer, nextAnswer, indx) => {
+          const showDate = (dateAns, nxtDateAns, indx) => {
             const tmp = answers.toJS();
-            if (new Date(answer) == 'Invalid Date') {
+            if (new Date(dateAns) === 'Invalid Date') {
               return renderWord('Invalid Date', 'removed');
             }
             let styleClass =
@@ -249,28 +249,24 @@ class AnswerHistory extends Component<Props> {
               nextAnswer = '';
               styleClass = undefined;
             }
-            const newdate = renderWord(
-              String(parseMomentDate(answer)),
+            const newDate = renderWord(
+              String(parseMomentDate(dateAns)),
               styleClass
             );
-            let nextdate = '';
-            if (indx + 1 == tmp.length) {
-              nextdate = '';
+            let nextDate = '';
+            if (indx + 1 === tmp.length) {
+              nextDate = '';
             } else if (
-              nextAnswer &&
-              String(nextAnswer).trim().length &&
+              nxtDateAns &&
+              String(nxtDateAns).trim().length &&
               tmp.length > 1
             ) {
-              nextdate = renderWord(
-                String(parseMomentDate(nextAnswer)),
+              nextDate = renderWord(
+                String(parseMomentDate(nxtDateAns)),
                 'removed'
               );
             }
-            return (
-              <>
-                {nextdate} {newdate}
-              </>
-            );
+            return `${nextDate} ${newDate}`;
           };
 
           if (questionType === 'select' || questionType === 'select-lookup') {
