@@ -3,7 +3,6 @@ import Checkmark from './Checkmark';
 import Edit from './Edit';
 import Outgoing from './Outgoing';
 import Incoming from './Incoming';
-import Intermediate from './Intermediate';
 import Add from './Add';
 import DropMenu from './DropMenu';
 import Bell from './Bell';
@@ -38,7 +37,6 @@ export {
   Edit,
   Outgoing,
   Incoming,
-  Intermediate,
   Add,
   DropMenu,
   Bell,

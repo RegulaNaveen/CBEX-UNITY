@@ -1,12 +1,12 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { List } from 'immutable';
-import isEmpty from 'lodash-es/isEmpty';
-import TextField from '@material-ui/core/TextField';
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { List } from "immutable";
+import isEmpty from "lodash-es/isEmpty";
+import TextField from "@material-ui/core/TextField";
 import Autocomplete, {
   createFilterOptions,
-} from '@material-ui/lab/Autocomplete';
-import { getLookUpOptionsSelector } from '../../../redux/selectors';
+} from "@material-ui/lab/Autocomplete";
+import { getLookUpOptionsSelector } from "../../../redux/selectors";
 
 const filter = createFilterOptions();
 
@@ -21,6 +21,7 @@ const AutoCompleteWithAddOption = ({
   onFocus,
   onBlur,
   multiple,
+  loading,
 }) => {
   const getSFOptions = (sfObject, sfField) =>
     options[`SF#${sfObject}_SF#${sfField}`]
@@ -42,28 +43,29 @@ const AutoCompleteWithAddOption = ({
 
   const getAnswer = () => {
     if (isEmpty(answer)) {
-      return multiple ? [] : '';
+      return multiple ? [] : "";
     }
     return multiple ? answer : answer?.trim();
   };
 
-  const [selectedVal, setSelectedVal] = React.useState(getAnswer());
-  const [currentLov, setCurrentLov] = React.useState(getOptions());
+  const [selectedVal, setSelectedVal] = useState(getAnswer());
+  const [currentLov, setCurrentLov] = useState(getOptions());
+  const [clearable, setClearable] = useState(true);
 
   const addAnswerPicklist = (arr) => {
     return arr.map((item) =>
-      item.includes('add ')
-        ? item.replace('add "', '').replace(/\"/g, '')
+      item.includes("add ")
+        ? item.replace('add "', "").replace(/\"/g, "")
         : item
     );
   };
 
   const addAnswerSingle = (str) => {
     if (str === null) {
-      return ' ';
+      return " ";
     }
-    return str.substring(0, 4) === 'add '
-      ? str.replace('add "', '').replace(/\"/g, '')
+    return str.substring(0, 4) === "add "
+      ? str.replace('add "', "").replace(/\"/g, "")
       : str;
   };
 
@@ -75,37 +77,59 @@ const AutoCompleteWithAddOption = ({
     onChange(modifiedAnswer);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     setSelectedVal(getAnswer());
+    if (isEmpty(selectedVal)) {
+      setClearable(true);
+    }
     let currentOptions = [...getOptions()];
     let newOptions = currentOptions.filter(
       (el) => selectedVal.indexOf(el) === -1
     );
     setCurrentLov(newOptions);
   }, [answer]);
+
+  useEffect(() => {
+    setClearable(true);
+    if (selectedVal && !loading) setClearable(false);
+  }, [loading]);
+
   const placeHolder = () => {
-    const placeholder = 'Click to answer';
-    if (multiple) return selectedVal && selectedVal.length ? '' : placeholder;
-    else return selectedVal ? '' : placeholder;
+    const placeholder = "Click to answer";
+    if (multiple) return selectedVal && selectedVal.length ? "" : placeholder;
+    else return selectedVal ? "" : placeholder;
   };
   let placeholder = placeHolder();
+
+  const onTextChange = (event) => {
+    disableClearable(event.currentTarget.value);
+  };
+
+  const disableClearable = (value) => {
+    if (value) {
+      setClearable(false);
+      return;
+    }
+    setClearable(true);
+    return;
+  };
 
   return (
     <div className="auto-complete-with-add-option">
       <Autocomplete
         filterOptions={(currentLov, params) => {
           const filtered = filter(currentLov, params);
-          if (params.inputValue !== '' && !lov.includes(params.inputValue)) {
+          if (params.inputValue !== "" && !lov.includes(params.inputValue)) {
             filtered.push(`add "${params.inputValue}"`);
           }
           return filtered;
         }}
         size="small"
+        disableClearable={clearable}
         onBlur={onBlur}
         onFocus={onFocus}
         disabled={disabled}
-        disableClearable={isEmpty(selectedVal)}
-        style={{ resize: 'vertical' }}
+        style={{ resize: "vertical" }}
         options={currentLov}
         multiple={multiple}
         onChange={handleChange}
@@ -114,6 +138,7 @@ const AutoCompleteWithAddOption = ({
         renderInput={(params) => {
           return (
             <TextField
+              onChange={onTextChange}
               placeholder={placeholder}
               {...params}
               variant="outlined"
