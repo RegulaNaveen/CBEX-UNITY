@@ -217,6 +217,7 @@ const setOpportunityInfo = (state, action) => {
   const { payload } = action;
   let opportunityData = new OrderedMap({});
   let selectedBid = Map({});
+  // console.log(`payload`, payload);
   payload.forEach(proposal => {
     if (proposal.isCurrent) {
       selectedBid = selectedBid
@@ -259,6 +260,7 @@ const setOpportunityInfo = (state, action) => {
     selectedBid.get('id'),
     'proposalQuestions'
   ]);
+  // console.log(`proposalQuestions`, proposalQuestions)
 
   const milestones = getUniqueMilestones(proposalQuestions);
 
@@ -735,8 +737,9 @@ const onQuestionsFiltered = (state, action) => {
   return state.set('filteredProposalQuestions', filteredQuestions);
 };
 
-const resetQuestionsFilter = state => {
-  return state.set('questionsFilter', INITIAL_STATE.get('questionsFilter'));
+const resetQuestionsFilter = (state, action) => {
+  const { payload } = action;
+  return state.set('questionsFilter', payload);
 };
 
 const clearQuestionsFilter = (state, action) => {
