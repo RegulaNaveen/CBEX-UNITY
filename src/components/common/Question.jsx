@@ -613,7 +613,7 @@ export class TaskRow extends Component<Props, State> {
   };
 
   renderTags = (milestone, milestoneNew, ismilestoneavailable, lastAnswer) => {
-    if (milestoneNew) {
+    if (milestoneNew && Array.isArray(milestoneNew)) {
       return (
         <div className="chipview">
           {milestoneNew && isString(milestoneNew) ? (
