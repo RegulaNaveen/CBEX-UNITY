@@ -1,12 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Typography from 'apollo-react/components/Typography';
 import StatusDotSolid from 'apollo-react-icons/StatusDotSolid';
 import * as notificationActions from '../../../redux/actions/notification-actions';
 import EnvelopeButton from './EnvelopeButton';
-import { useHistory } from 'react-router-dom';
 
 const ListItem = ({ id, url, oppNo, data, isSeen, setSeenOne, createdAt }) => {
   const history = useHistory();
@@ -31,6 +30,18 @@ const ListItem = ({ id, url, oppNo, data, isSeen, setSeenOne, createdAt }) => {
       return moment(createdAt).format(dateFormat);
     }
   };
+  const oppNoAsHyperlink = () =>
+    `<a style="display: inline-block" href='${window.location.origin}/opportunities/${oppNo}'>${oppNo}</a>`;
+
+  const dataToHtml = () => {
+    const dataArr = data
+      .split(' ')
+      .map(word => (word === oppNo ? oppNoAsHyperlink(word) : word));
+    dataArr.unshift('<div>');
+    dataArr.push('</div>');
+    return dataArr.join(' ');
+  };
+
   return (
     <div className='notification-item'>
       {/* Dot Icon */}
@@ -58,9 +69,10 @@ const ListItem = ({ id, url, oppNo, data, isSeen, setSeenOne, createdAt }) => {
           {determineDate(createdAt)}
         </Typography>
         {/* Notification content */}
-        <div>
-          <div className='notification-content-data'>{data}</div>
-        </div>
+        <div
+          className='notification-content-data'
+          dangerouslySetInnerHTML={{ __html: dataToHtml() }}
+        ></div>
       </div>
     </div>
   );
