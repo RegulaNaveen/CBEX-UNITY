@@ -140,7 +140,6 @@ const SystemIntegrations = ({
 
   const CalendarCondition = () => {
     if (answerdate === "Not Answered" && !isAnswerPredicted) {
-      console.log("1");
       return (
         <IconButton
           style={{
@@ -166,7 +165,6 @@ const SystemIntegrations = ({
       !loading &&
       !isAnswered(lastAnswer, isAnswerPredicted)
     ) {
-      console.log("2");
       return (
         <Tooltip variant="light" title="Unity Predicted Answer" placement="top">
           <IconButton
@@ -194,7 +192,6 @@ const SystemIntegrations = ({
       !loading &&
       changeIcon === "#00c221"
     ) {
-      console.log("3");
       return (
         <IconButton
           style={{
@@ -223,7 +220,6 @@ const SystemIntegrations = ({
       !loading &&
       changeIcon === "#b7b7b7"
     ) {
-      console.log("4");
       return (
         <IconButton
           style={{
@@ -254,7 +250,6 @@ const SystemIntegrations = ({
         .answer?.toString()
         .trim().length < 1
     ) {
-      console.log("5", lastAnswer.toJS());
       return (
         <IconButton
           style={{
@@ -275,7 +270,6 @@ const SystemIntegrations = ({
         </IconButton>
       );
     }
-    console.log("out");
     return (
       <IconButton
         style={{

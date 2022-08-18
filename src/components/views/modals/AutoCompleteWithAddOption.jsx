@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { List } from "immutable";
 import isEmpty from "lodash-es/isEmpty";
@@ -21,6 +21,7 @@ const AutoCompleteWithAddOption = ({
   onFocus,
   onBlur,
   multiple,
+  loading,
 }) => {
   const getSFOptions = (sfObject, sfField) =>
     options[`SF#${sfObject}_SF#${sfField}`]
@@ -47,8 +48,9 @@ const AutoCompleteWithAddOption = ({
     return multiple ? answer : answer?.trim();
   };
 
-  const [selectedVal, setSelectedVal] = React.useState(getAnswer());
-  const [currentLov, setCurrentLov] = React.useState(getOptions());
+  const [selectedVal, setSelectedVal] = useState(getAnswer());
+  const [currentLov, setCurrentLov] = useState(getOptions());
+  const [clearable, setClearable] = useState(true);
 
   const addAnswerPicklist = (arr) => {
     return arr.map((item) =>
@@ -75,20 +77,42 @@ const AutoCompleteWithAddOption = ({
     onChange(modifiedAnswer);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     setSelectedVal(getAnswer());
+    if (isEmpty(selectedVal)) {
+      setClearable(true);
+    }
     let currentOptions = [...getOptions()];
     let newOptions = currentOptions.filter(
       (el) => selectedVal.indexOf(el) === -1
     );
     setCurrentLov(newOptions);
   }, [answer]);
+
+  useEffect(() => {
+    setClearable(true);
+    if (selectedVal && !loading) setClearable(false);
+  }, [loading]);
+
   const placeHolder = () => {
     const placeholder = "Click to answer";
     if (multiple) return selectedVal && selectedVal.length ? "" : placeholder;
     else return selectedVal ? "" : placeholder;
   };
   let placeholder = placeHolder();
+
+  const onTextChange = (event) => {
+    disableClearable(event.currentTarget.value);
+  };
+
+  const disableClearable = (value) => {
+    if (value) {
+      setClearable(false);
+      return;
+    }
+    setClearable(true);
+    return;
+  };
 
   return (
     <div className="auto-complete-with-add-option">
@@ -101,7 +125,7 @@ const AutoCompleteWithAddOption = ({
           return filtered;
         }}
         size="small"
-        disableClearable={!!isEmpty(selectedVal)}
+        disableClearable={clearable}
         onBlur={onBlur}
         onFocus={onFocus}
         disabled={disabled}
@@ -114,6 +138,7 @@ const AutoCompleteWithAddOption = ({
         renderInput={(params) => {
           return (
             <TextField
+              onChange={onTextChange}
               placeholder={placeholder}
               {...params}
               variant="outlined"
