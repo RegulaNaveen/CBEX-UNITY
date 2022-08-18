@@ -21,7 +21,6 @@ import {
   DefaultDraftBlockRenderMap,
 } from "draft-js";
 import "draft-js/dist/Draft.css";
-// import { Typography } from '@material-ui/core';
 import Typography from "apollo-react/components/Typography";
 
 function getInitialEditorState(defaultValue) {
