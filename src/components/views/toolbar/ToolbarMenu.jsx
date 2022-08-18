@@ -1,29 +1,30 @@
 // @flow
-import React, { PureComponent } from 'react';
-import type { NavigationHistory } from 'react-router-dom';
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { Map } from 'immutable'; // NOSONAR
-import Loader from 'react-loader-spinner';
-import Button from 'apollo-react/components/Button';
-import PencilIcon from 'apollo-react-icons/Pencil';
-import GlobeIcon from 'apollo-react-icons/Globe';
-import { LOGIN, PROFILE } from '../../../routes';
-import { getRoles, isRolesInfoLoading } from '../../../redux/selectors';
-import { getRolesInfo } from '../../../redux/actions/proposal-actions';
-import { logout } from '../../../redux/actions/auth-actions';
-import { onSetUserRole } from '../../../redux/actions/sso-auth-actions';
-import Dropdown from '../../common/atoms/inputs/Dropdown';
-import Grid from 'apollo-react/components/Grid';
-import User from 'apollo-react-icons/User';
+import React, { PureComponent } from "react";
+import type { NavigationHistory } from "react-router-dom";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { Map } from "immutable"; // NOSONAR
+import Loader from "react-loader-spinner";
+import Button from "apollo-react/components/Button";
+import PencilIcon from "apollo-react-icons/Pencil";
+import GlobeIcon from "apollo-react-icons/Globe";
+import { LOGIN, PROFILE } from "../../../routes";
+import { getRoles, isRolesInfoLoading } from "../../../redux/selectors";
+import { getRolesInfo } from "../../../redux/actions/proposal-actions";
+import { logout } from "../../../redux/actions/auth-actions";
+import { onSetUserRole } from "../../../redux/actions/sso-auth-actions";
+import Dropdown from "../../common/atoms/inputs/Dropdown";
+import Grid from "apollo-react/components/Grid";
+import User from "apollo-react-icons/User";
 import {
   getUserEmail,
   getUserName,
-  getUserRole
-} from '../../../SessionHandler';
-import { ReportIssue } from '../../svg';
-import MatomoHOC from '../../HOC/MatomoHOC';
-import Avatar from 'apollo-react/components/Avatar';
+  getUserRole,
+} from "../../../SessionHandler";
+import { ReportIssue } from "../../svg";
+import MatomoHOC from "../../HOC/MatomoHOC";
+import Avatar from "apollo-react/components/Avatar";
+import Tooltip from "apollo-react/components/Tooltip";
 
 type Props = {
   rolesList: Array<string>,
@@ -34,19 +35,23 @@ type Props = {
   logoutUser: Function,
   eventCategories: any,
   userActions: any,
-  trackEvent: any
+  trackEvent: any,
 };
 
 type State = {
-  roleName: string
+  roleName: string,
 };
 
 export class ToolbarMenuComponent extends PureComponent<Props, State> {
   constructor(props: Object) {
     super(props);
     this.state = {
-      roleName: ''
+      roleName: "",
+      isNameTooltip: false,
+      isEmailTooltip: false,
     };
+    this.nameRef = React.createRef();
+    this.emailRef = React.createRef();
   }
 
   componentDidMount() {
@@ -54,6 +59,25 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     const userRole = getUserRole();
     if (!rolesList) getRolesInfoF();
     if (userRole) this.setState({ roleName: userRole });
+  }
+
+  componentDidUpdate() {
+    if (
+      this.nameRef["current"]["clientWidth"] <
+      this.nameRef["current"]["scrollWidth"]
+    ) {
+      this.setState({
+        isNameTooltip: true,
+      });
+    }
+    if (
+      this.emailRef["current"]["clientWidth"] <
+      this.emailRef["current"]["scrollWidth"]
+    ) {
+      this.setState({
+        isEmailTooltip: true,
+      });
+    }
   }
 
   handleLogout = () => {
@@ -64,7 +88,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
   };
 
   handleKeyPress = (event: KeyboardEvent) => {
-    if (event.key === 'Enter') this.handleLogout();
+    if (event.key === "Enter") this.handleLogout();
   };
 
   onRoleChange = (value: string) => {
@@ -79,7 +103,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     const { userActions, eventCategories, trackEvent } = this.props;
     trackEvent({
       category: eventCategories.tb,
-      action: `ToolBar: ${userActions.click} On ${link} Link`
+      action: `ToolBar: ${userActions.click} On ${link} Link`,
     });
   };
 
@@ -87,27 +111,47 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     const { userActions, eventCategories, trackEvent } = this.props;
     trackEvent({
       category: eventCategories.tb,
-      action: `ToolBar: ${userActions.changed} User Role to ${role}`
+      action: `ToolBar: ${userActions.changed} User Role to ${role}`,
     });
   };
 
   render() {
-    const { roleName } = this.state;
+    const { roleName, isNameTooltip, isEmailTooltip } = this.state;
     const { rolesList, isRolesLoading } = this.props;
     const name = getUserName();
     const email = getUserEmail();
 
     return (
-      <div className="toolbar-account-menu">
-        <Grid container style={{ padding: '10px' }}>
-          <Grid item>
+      <div className="toolbar-account-menu" style={{ zIndex: "1" }}>
+        <Grid container style={{ padding: "10px" }}>
+          {/* <Grid item>
             <Avatar alt="avatar" src="">
               {name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0)}
             </Avatar>
-          </Grid>
+          </Grid> */}
           <Grid item>
-            <p className="toolbar-account-menu-name">{name}</p>
-            <p className="toolbar-account-menu-email">{email}</p>
+            <Tooltip
+              title={isNameTooltip ? name : null}
+              variant="dark"
+              position="bottom"
+            >
+              <div>
+                <p className="toolbar-account-menu-name" ref={this.nameRef}>
+                  {name}
+                </p>
+              </div>
+            </Tooltip>
+            <Tooltip
+              title={isEmailTooltip ? email : null}
+              variant="dark"
+              position="bottom"
+            >
+              <div>
+                <p className="toolbar-account-menu-email" ref={this.emailRef}>
+                  {email}
+                </p>
+              </div>
+            </Tooltip>
           </Grid>
         </Grid>
 
@@ -136,7 +180,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
             className="menu-link-btn"
             fullwidth
             onClick={() => this.props.history.push(PROFILE)}
-            style={{ width: '100%' }}
+            style={{ width: "100%" }}
           >
             Go to Profile
           </Button>
@@ -146,7 +190,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
             icon={<PencilIcon />}
             className="menu-link-btn"
             href="https://suggestionboard.ideas.aha.io/ideas?project=CBEXU"
-            onClick={() => this.trackMatomoLinkClicks('Suggestion Board')}
+            onClick={() => this.trackMatomoLinkClicks("Suggestion Board")}
           >
             Suggestion Board
           </Button>
@@ -156,7 +200,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
             icon={<GlobeIcon />}
             className="menu-link-btn"
             href="https://quintiles.sharepoint.com/sites/ltc/CBEx/SitePages/Unity-Wiki.aspx"
-            onClick={() => this.trackMatomoLinkClicks('Unity Wiki')}
+            onClick={() => this.trackMatomoLinkClicks("Unity Wiki")}
           >
             Unity Wiki
           </Button>
@@ -168,7 +212,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
             }
             className="menu-link-btn"
             href="https://quintiles.service-now.com/via?id=sc_cat_item&sys_id=dd5c819fdb8fdc107cf37e77f4961917"
-            onClick={() => this.trackMatomoLinkClicks('Report an Issue')}
+            onClick={() => this.trackMatomoLinkClicks("Report an Issue")}
           >
             Report an Issue
           </Button>
@@ -190,13 +234,13 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
 
 const mapStateToProps = (state: Map) => ({
   rolesList: getRoles(state),
-  isRolesLoading: isRolesInfoLoading(state)
+  isRolesLoading: isRolesInfoLoading(state),
 });
 
 export default withRouter(
   connect(mapStateToProps, {
     getRolesInfoF: getRolesInfo,
     logoutUser: logout,
-    changeUserRole: onSetUserRole
+    changeUserRole: onSetUserRole,
   })(MatomoHOC(ToolbarMenuComponent))
 );
