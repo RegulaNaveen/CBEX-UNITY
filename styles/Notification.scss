@@ -64,6 +64,9 @@
 .notification-content-data {
   padding-top: 4px;
   font-size: 14px;
+  a {
+    color: $neptune-primary !important;
+  }
 }
 
 .notification-gear-icon {
