@@ -136,7 +136,11 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
               position="bottom"
             >
               <div>
-                <p className="toolbar-account-menu-name" ref={this.nameRef}>
+                <p
+                  className="toolbar-account-menu-name"
+                  style={{ overflow: "hidden", textOverflow: "ellipsis" }}
+                  ref={this.nameRef}
+                >
                   {name}
                 </p>
               </div>
@@ -147,7 +151,11 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
               position="bottom"
             >
               <div>
-                <p className="toolbar-account-menu-email" ref={this.emailRef}>
+                <p
+                  className="toolbar-account-menu-email"
+                  style={{ overflow: "hidden", textOverflow: "ellipsis" }}
+                  ref={this.emailRef}
+                >
                   {email}
                 </p>
               </div>
