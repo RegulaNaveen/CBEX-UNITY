@@ -645,8 +645,15 @@ export function onApplyQuestionsFilter(
 }
 
 export function resetQuestionsFilterAction() {
-  return async dispatch => {
-    dispatch({ type: RESET_QUESTIONS_FILTER });
+  return async (dispatch, getState) => {
+    let questionsFilter = getQuestionsFilters(getState());
+    questionsFilter = questionsFilter.map(group => {
+      return group.map(filter => {
+        if (typeof filter === 'string') return filter;
+        return filter.set('checked', false);
+      });
+    });
+    dispatch({ type: RESET_QUESTIONS_FILTER, payload: questionsFilter });
   };
 }
 
