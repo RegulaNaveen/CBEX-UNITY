@@ -123,8 +123,12 @@ const WysiwygNotepad = ({
     setContent(data);
   }, [json, notes]);
 
-  const styleMarks = (blk) => {
+  const styleMarks = (blk, map) => {
+    console.log("calling styleeeeeeee", blk.entityRanges);
+    // console.log("map", map)
     let tempMarks = [];
+    // let obj = { type: "text", marks: [style], text: text };
+    // return obj;let tempMarks = [];
     blk.inlineStyleRanges.forEach((bstyle) => {
       if (
         bstyle.style.toLowerCase() == "bold" ||
@@ -133,17 +137,34 @@ const WysiwygNotepad = ({
         bstyle.style.toLowerCase() == "code"
       )
         tempMarks.push({ type: bstyle.style.toLowerCase() });
-      else if (bstyle.style.toLowerCase().includes("strike")) {
+      if (bstyle.style.toLowerCase().includes("strike")) {
         tempMarks.push({ type: "strike" });
-      } else {
-        console.log("undefined");
-        tempMarks.push({ type: undefined });
       }
     });
+    if (blk.entityRanges.length !== 0) {
+      console.log("call style marks", blk.entityRanges, map, blk.text);
+      blk.entityRanges.forEach((entity) => {
+        console.log("call en", entity.key, map[entity.key]);
+        tempMarks.push({
+          type: "link",
+          attrs: {
+            class: null,
+            href: map[entity.key].data.href,
+            target: "_blank",
+          },
+        });
+      });
+    }
     return tempMarks;
   };
 
-  const simpleData = (block, jdata) => {
+  const simpleData = (block, jdata, map) => {
+    let marks = [];
+    // console.log("map", map);
+    if (block.entityRanges.length !== 0) {
+      console.log("call simple style marks", block.entityRanges);
+      marks = styleMarks(block, map);
+    }
     console.log("we have nothing");
     if (_.isEmpty(block.text)) {
       console.log("if nothing");
@@ -154,6 +175,7 @@ const WysiwygNotepad = ({
         content: [
           {
             type: "text",
+            marks: _.isEmpty(marks) ? undefined : marks,
             text: block.text,
           },
         ],
@@ -162,23 +184,66 @@ const WysiwygNotepad = ({
     return jdata;
   };
 
-  const styleData = (block, jdata) => {
-    console.log("only style", block);
-    let marks = styleMarks(block);
+  // const linkData = (blk, map) => {
+  //   console.log("linkData", blk, map, blk.text);
+  // };
+
+  const styleData = (block, jdata, map) => {
+    console.log("only style", block, block.entityRanges);
+    let marks = styleMarks(block, map);
+    // let content = [];
+    // // let marks;
+    // console.log("text", block.text);
+    // block.inlineStyleRanges.forEach((blk, index) => {
+    //   console.log("attr", blk, blk.offset, index);
+    //   if (index == 0) {
+    //     let start = block.text.substr(0, blk.offset);
+    //     console.log("start", start);
+    //   } else {
+    //     let other = block.text.substr(
+    //       block.inlineStyleRanges[index - 1].offset +
+    //         block.inlineStyleRanges[index - 1].length,
+    //       blk.offset
+    //     );
+    //     console.log(
+    //       "start others",
+    //       other,
+    //       block.inlineStyleRanges[index - 1].offset +
+    //         block.inlineStyleRanges[index - 1].length,
+    //       blk.offset
+    //     );
+    //   }
+    //   // console.log("new", block.text[blk.offset+ blk.length]);
+    //   let text1 = block.text.substr(blk.offset, blk.length);
+    //   console.log("text1", text1);
+    //   let marks = styleMarks(text1, blk.style);
+    //   console.log("mks", marks);
+    //   content.push(marks);
+    // });
+    // let marks = styleMarks(text, style);
+    // console.log("mks", marks);
+
     jdata.content.push({
       type: "paragraph",
       content: [
         {
           type: "text",
-          marks: marks,
+          marks: _.isEmpty(marks) ? undefined : marks,
           text: block.text,
         },
       ],
+      // content: content,
     });
     return jdata;
   };
 
-  const typeData = (block, jdata) => {
+  const typeData = (block, jdata, map) => {
+    // console.log("map", map);
+    let marks = [];
+    if (block.entityRanges.length !== 0) {
+      console.log("call type style marks", block.entityRanges);
+      marks = styleMarks(block, map);
+    }
     console.log("only type", block.type);
     if (block.type.includes("header")) {
       console.log("heading", block.type);
@@ -186,19 +251,37 @@ const WysiwygNotepad = ({
         jdata.content.push({
           type: "heading",
           attrs: { level: 1 },
-          content: [{ type: "text", text: block.text }],
+          content: [
+            {
+              type: "text",
+              marks: _.isEmpty(marks) ? undefined : marks,
+              text: block.text,
+            },
+          ],
         });
       } else if (block.type == "header-two") {
         jdata.content.push({
           type: "heading",
           attrs: { level: 2 },
-          content: [{ type: "text", text: block.text }],
+          content: [
+            {
+              type: "text",
+              marks: _.isEmpty(marks) ? undefined : marks,
+              text: block.text,
+            },
+          ],
         });
       } else {
         jdata.content.push({
           type: "heading",
           attrs: { level: 3 },
-          content: [{ type: "text", text: block.text }],
+          content: [
+            {
+              type: "text",
+              marks: _.isEmpty(marks) ? undefined : marks,
+              text: block.text,
+            },
+          ],
         });
       }
     } else if (block.type.includes("list-item")) {
@@ -211,7 +294,13 @@ const WysiwygNotepad = ({
               content: [
                 {
                   type: "paragraph",
-                  content: [{ type: "text", text: block.text }],
+                  content: [
+                    {
+                      type: "text",
+                      marks: _.isEmpty(marks) ? undefined : marks,
+                      text: block.text,
+                    },
+                  ],
                 },
               ],
             },
@@ -227,7 +316,13 @@ const WysiwygNotepad = ({
               content: [
                 {
                   type: "paragraph",
-                  content: [{ type: "text", text: block.text }],
+                  content: [
+                    {
+                      type: "text",
+                      marks: _.isEmpty(marks) ? undefined : marks,
+                      text: block.text,
+                    },
+                  ],
                 },
               ],
             },
@@ -251,10 +346,14 @@ const WysiwygNotepad = ({
         block.type !== "unstyled" &&
         block.inlineStyleRanges.length !== 0
       ) {
+        if (block.entityRanges.length !== 0) {
+          console.log("inside link", block);
+        }
         console.log("both type and style", block.type, block.inlineStyleRanges);
         if (block.type.includes("header")) {
           console.log("heading", block.type);
-          let marks = styleMarks(block);
+          let marks = styleMarks(block, data.entityMap);
+
           if (block.type == "header-one") {
             jdata.content.push({
               type: "heading",
@@ -262,7 +361,7 @@ const WysiwygNotepad = ({
               content: [
                 {
                   type: "text",
-                  marks: marks,
+                  marks: _.isEmpty(marks) ? undefined : marks,
                   text: block.text,
                 },
               ],
@@ -274,7 +373,7 @@ const WysiwygNotepad = ({
               content: [
                 {
                   type: "text",
-                  marks: marks,
+                  marks: _.isEmpty(marks) ? undefined : marks,
                   text: block.text,
                 },
               ],
@@ -286,14 +385,14 @@ const WysiwygNotepad = ({
               content: [
                 {
                   type: "text",
-                  marks: marks,
+                  marks: _.isEmpty(marks) ? undefined : marks,
                   text: block.text,
                 },
               ],
             });
           }
         } else if (block.type.includes("list-item")) {
-          let marks = styleMarks(block);
+          let marks = styleMarks(block, data.entityMap);
           console.log("list", block.type);
           if (block.type.includes("unordered")) {
             jdata.content.push({
@@ -307,7 +406,7 @@ const WysiwygNotepad = ({
                       content: [
                         {
                           type: "text",
-                          marks: marks,
+                          marks: _.isEmpty(marks) ? undefined : marks,
                           text: block.text,
                         },
                       ],
@@ -329,7 +428,7 @@ const WysiwygNotepad = ({
                       content: [
                         {
                           type: "text",
-                          marks: marks,
+                          marks: _.isEmpty(marks) ? undefined : marks,
                           text: block.text,
                         },
                       ],
@@ -344,11 +443,21 @@ const WysiwygNotepad = ({
         !!block.inlineStyleRanges &&
         block.inlineStyleRanges.length !== 0
       ) {
-        jdata = styleData(block, jdata);
+        // if (block.entityRanges.length !== 0) {
+        //   console.log("linkData style", block);
+        //   // linkData(block, data.entityMap);
+        // }
+        jdata = styleData(block, jdata, data.entityMap);
       } else if (!!block.type && block.type !== "unstyled") {
-        jdata = typeData(block, jdata);
+        // if (block.entityRanges.length !== 0) {
+        //   console.log("linkData type", block);
+        // }
+        jdata = typeData(block, jdata, data.entityMap);
       } else {
-        jdata = simpleData(block, jdata);
+        // if (block.entityRanges.length !== 0) {
+        //   console.log("linkData simple", block);
+        // }
+        jdata = simpleData(block, jdata, data.entityMap);
       }
     });
     // console.log("jdata", jdata);
@@ -367,7 +476,6 @@ const WysiwygNotepad = ({
             [
               StarterKit,
               Underline,
-              Link,
               Code,
               HighLight,
               Collaboration.configure({
@@ -378,6 +486,15 @@ const WysiwygNotepad = ({
                 user: {
                   name: userName + " " + "is typing....",
                   color: usercolor,
+                },
+              }),
+              Link.configure({
+                autolink: true,
+                linkOnPaste: false,
+                validate: (href) => /^https?:\/\//.test(href),
+                protocols: ["ftp", "mailto"],
+                HTMLAttributes: {
+                  class: "my-custom-class",
                 },
               }),
             ]
