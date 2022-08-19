@@ -121,6 +121,14 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     const name = getUserName();
     const email = getUserEmail();
 
+    const TooltipStyle = {
+      width: "100%",
+      cursor: "pointer",
+    };
+    const style = {
+      width: "100%",
+    };
+
     return (
       <div className="toolbar-account-menu" style={{ zIndex: "1" }}>
         <Grid container style={{ padding: "10px" }}>
@@ -129,13 +137,13 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
               {name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0)}
             </Avatar>
           </Grid> */}
-          <Grid item>
+          <Grid item style={{ width: "100%" }}>
             <Tooltip
               title={isNameTooltip ? name : null}
               variant="dark"
               position="bottom"
             >
-              <div>
+              <div style={isNameTooltip ? TooltipStyle : style}>
                 <p
                   className="toolbar-account-menu-name"
                   style={{ overflow: "hidden", textOverflow: "ellipsis" }}
@@ -150,7 +158,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
               variant="dark"
               position="bottom"
             >
-              <div>
+              <div style={isEmailTooltip ? TooltipStyle : style}>
                 <p
                   className="toolbar-account-menu-email"
                   style={{ overflow: "hidden", textOverflow: "ellipsis" }}
