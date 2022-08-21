@@ -123,7 +123,7 @@ export function getLastAnswer(answers) {
   }
 }
 
-export function getStyles(styleMaps, index) {
+export function getFormattedTextStyles(styleMaps, index) {
   let styleId = '';
   let styles = {
     bold: false,
@@ -132,8 +132,9 @@ export function getStyles(styleMaps, index) {
     font: DEFAULT_FONT
   };
   try {
-    for (let styleMap of styleMaps) {
-      let { start, end, style: key } = styleMap;
+    // eslint-disable-next-line no-restricted-syntax
+    for (const styleMap of styleMaps) {
+      const { start, end, style: key } = styleMap;
       if (start <= index && index <= end) {
         if (key === 'BOLD') {
           styles.bold = true;
@@ -152,7 +153,9 @@ export function getStyles(styleMaps, index) {
           styleId += '(u)';
         }
         if (key.includes('fontSize')) {
+          // eslint-disable-next-line radix
           styles.size = parseInt(key.slice(key.length - 4, key.length - 2));
+          console.log('tapas size', styles.size);
           styleId += '(fs)';
         }
         if (key.includes('color')) {
@@ -169,13 +172,13 @@ export function getStyles(styleMaps, index) {
         }
       }
     }
-  } catch (errror) {
+  } catch (error) {
     console.log('Error while Setting style object');
   }
   return { styles, styleId };
 }
 
-function getNotesCellss(paras) {
+function getFormattedTextCells(paras) {
   return new TableCell({
     children: [...paras],
     // width: questionCellWidth100,
@@ -189,35 +192,11 @@ function getNotesCellss(paras) {
     }
   });
 }
-function getSectionNameCells(section, width = null) {
-  return new TableCell({
-    children: [
-      new Paragraph({
-        children: [
-          new TextRun({
-            text: section,
-            bold: true,
-            color: 'FF0000',
-            font: DEFAULT_FONT
-          })
-        ]
-      })
-    ],
 
-    width: width || questionCellWidth50,
-    margins: cellMargin5P,
-    borders: {
-      top: { color: 'FFFFFF' },
-      left: { color: 'FFFFFF' },
-      right: { color: 'FFFFFF' },
-      bottom: { color: 'FFFFFF' }
-    }
-  });
-}
-function getFormatedTextRows(formatedTextBlocks) {
+function getFormattedTextRows(formatedTextBlocks) {
   console.log('tapas sss ', formatedTextBlocks);
-  let paras = [];
-  let rows = [
+  const paras = [];
+  const rows = [
     new TableRow({
       children: [
         new TableCell({
@@ -239,14 +218,14 @@ function getFormatedTextRows(formatedTextBlocks) {
   ];
   try {
     formatedTextBlocks.value.blocks.forEach(block => {
-      let texts = [];
-      let { text, inlineStyleRanges, type, depth } = block;
-      let listType = type.includes('list-item')
+      const texts = [];
+      const { text, inlineStyleRanges, type, depth } = block;
+      const listType = type.includes('list-item')
         ? { bullet: { level: depth } }
         : {};
-      let styleMap = [];
+      const styleMap = [];
       inlineStyleRanges.forEach(range => {
-        let { style, offset, length } = range;
+        const { style, offset, length } = range;
         styleMap.push({ start: offset, end: offset + length - 1, style });
       });
 
@@ -254,7 +233,7 @@ function getFormatedTextRows(formatedTextBlocks) {
       let lastText = '';
       let lastStyle = {};
       for (let i = 0; i < text.length; i++) {
-        let { styles, styleId } = getStyles(styleMap, i);
+        const { styles, styleId } = getFormattedTextStyles(styleMap, i);
         if (styleId === lastStyleId) {
           lastText += text[i];
         } else {
@@ -290,7 +269,7 @@ function getFormatedTextRows(formatedTextBlocks) {
 
     rows.push(
       new TableRow({
-        children: [getNotesCellss(paras)],
+        children: [getFormattedTextCells(paras)],
         cantSplit: false
       })
     );
@@ -302,29 +281,11 @@ function getFormatedTextRows(formatedTextBlocks) {
   }
 }
 
-function getFormatedTextTable(formatedTextBlocks) {
-  //   return new Table({
-  //     rows: getFormatedTextRows(formatedTextBlocks),
-  //     layout: TableLayoutType.AUTOFIT
-  //   });
+function getFormattedTextTable(formatedTextBlocks) {
   return new TableCell({
     children: [
-      //   new Paragraph({
-      //     children: [
-      //       new TextRun({
-      //         text: answer,
-      //         font: DEFAULT_FONT
-      //       }),
-      //       new TextRun({
-      //         text: upText,
-      //         font: DEFAULT_FONT,
-      //         color: themeBlue,
-      //         size: 15
-      //       })
-      //     ]
-      //   })
       new Table({
-        rows: getFormatedTextRows(formatedTextBlocks),
+        rows: getFormattedTextRows(formatedTextBlocks),
         layout: TableLayoutType.AUTOFIT
       })
     ],
@@ -482,23 +443,15 @@ function questionTables(proposalQuestions) {
       .sort((a, b) => a.questionOrder - b.questionOrder)
       .forEach(question => {
         const questionText = question.questionText || '';
-        // if (question.formattedAnswer)
-        console.log('333', question);
         rows.push(
-          question?.answers[0].formattedAnswer
+          question?.answers[question?.answers.length - 1].formattedAnswer
             ? new TableRow({
                 children: [
                   getQuestionTextCell(questionText),
-                  //   getAnswerCell(
-                  //     formatDate(
-                  //       getLastAnswer(question.answers),
-                  //       question.answerConfiguration
-                  //     ),
-
-                  getFormatedTextTable(question?.answers[0].formattedAnswer)
-
-                  // getUnityPredicatedText(question.answers)
-                  //   )
+                  getFormattedTextTable(
+                    question?.answers[question?.answers.length - 1]
+                      .formattedAnswer
+                  )
                 ]
               })
             : new TableRow({
@@ -540,8 +493,9 @@ export function getStyle(styleMaps, index) {
     font: DEFAULT_FONT
   };
   try {
-    for (let styleMap of styleMaps) {
-      let { start, end, style: key } = styleMap;
+    // eslint-disable-next-line no-restricted-syntax
+    for (const styleMap of styleMaps) {
+      const { start, end, style: key } = styleMap;
       if (start <= index && index <= end) {
         if (key === 'BOLD') {
           styles.bold = true;
@@ -579,7 +533,7 @@ export function getStyle(styleMaps, index) {
                 */
       }
     }
-  } catch (errror) {
+  } catch (error) {
     console.log('Error while Setting style object');
   }
   return { styles, styleId };
@@ -744,15 +698,15 @@ function getProposalTeamsRows(questions) {
 
   try {
     coreTeamQuestions.forEach(question => {
-      let { questionText, answers, formattedAnswer } = question;
+      let { questionText, answers } = question;
       console.log('111', question);
       coreTeamRows.push(
-        formattedAnswer
+        answers.formattedAnswer
           ? new TableRow({
               children: [
                 getAnswerCell(questionText, '', questionCellWidth50),
                 // getAnswerCell(getLastAnswer(answers), '', questionCellWidth50)
-                getFormatedTextRows(formattedAnswer)
+                getFormatedTextTable(answers.formattedAnswer)
               ]
             })
           : new TableRow({
@@ -765,15 +719,14 @@ function getProposalTeamsRows(questions) {
     });
 
     otherTeamQuestions.forEach(question => {
-      let { questionText, answers, formattedAnswer } = question;
-      console.log('222', question);
+      const { questionText, answers } = question;
       coreTeamRows.push(
-        formattedAnswer
+        answers.formattedAnswer
           ? new TableRow({
               children: [
                 getAnswerCell(questionText, '', questionCellWidth50),
                 // getAnswerCell(getLastAnswer(answers), '', questionCellWidth50)
-                getFormatedTextRows(formattedAnswer)
+                getFormattedTextTable(answers.formattedAnswer)
               ]
             })
           : new TableRow({
@@ -819,7 +772,7 @@ function getQuestionToCustomerRows(questions) {
   const qTcParas = [];
   try {
     questionsToCustomer.forEach((question, index) => {
-      let { questionText } = question;
+      const { questionText } = question;
       qTcParas.push(
         new Paragraph({
           children: [
