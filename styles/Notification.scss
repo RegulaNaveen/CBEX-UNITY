@@ -1,5 +1,5 @@
 .notification {
-  position: 'relative';
+  position: "relative";
   width: fit-content;
   display: inline-flex;
   margin-left: 25%;
@@ -24,6 +24,7 @@
   overflow-y: auto;
   top: 57px;
   max-height: calc(100vh - 200px);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.08), 0 16px 24px 0 rgba(0, 0, 0, 0.16);
 }
 .notificationBar::-webkit-scrollbar {
   width: 7px;
