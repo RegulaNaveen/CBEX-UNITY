@@ -110,7 +110,7 @@ const loadSidebar = props => {
             >
               <Typography
                 variant="body2"
-                className='boldtext halfscreen-header-ellipses'
+                className="boldtext halfscreen-header-ellipses"
                 ref={linebusiness}
               >
                 {lineOfBusiness || placeholder}
@@ -144,7 +144,7 @@ const loadSidebar = props => {
             >
               <Typography
                 variant="body2"
-                className='boldtext halfscreen-header-ellipses'
+                className="boldtext halfscreen-header-ellipses"
                 ref={therapeutic}
               >
                 {therapeuticArea || placeholder}
@@ -186,7 +186,7 @@ const loadSidebar = props => {
             >
               <Typography
                 variant="body2"
-                className='boldtext halfscreen-header-ellipses'
+                className="boldtext halfscreen-header-ellipses"
                 ref={protocol}
               >
                 {protocolNumber || placeholder}
