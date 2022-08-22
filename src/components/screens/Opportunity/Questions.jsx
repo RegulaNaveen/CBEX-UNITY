@@ -55,6 +55,8 @@ import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
 import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions';
 import WysiwygNotepad from '../../views/WysiwygNotepad';
 import ANSWER_TYPES from '../../../constants/answerTypes';
+import { WebsocketProvider } from '../../../context/y-websocket';
+import * as Y from 'yjs';
 
 const QuestionsSectionMapping = React.lazy(() =>
   import('./QuestionsSectionMapping')
@@ -111,7 +113,9 @@ class Questions extends Component<Props, State> {
       sidebarscroll: '',
       open: false,
       isNotepadOpen: true,
-      totalWidth: ''
+      totalWidth: '',
+      ydoc: new Y.Doc(),
+      wsInstance: undefined
     };
   }
 
@@ -126,6 +130,25 @@ class Questions extends Component<Props, State> {
     callPickListLookupSfData();
     window.addEventListener('resize', this.resize.bind(this));
     this.resize();
+    if (!this.state.wsInstance) {
+      const { selectedBid } = this.props;
+      const { ydoc } = this.state;
+      const proposalId = selectedBid.get('id');
+      console.log('pID', proposalId);
+      const clientName = Math.random()
+        .toString(36)
+        .substr(2, 20);
+      const storedValue = `doc-${proposalId}`;
+      if (proposalId) {
+        const wsProvider = new WebsocketProvider(
+          'wss://662wdhv4y1.execute-api.us-east-1.amazonaws.com/production',
+          `?=${storedValue}&`,
+          ydoc,
+          { params: { name: clientName } }
+        );
+        this.setState({ wsInstance: wsProvider });
+      }
+    }
   }
 
   componentDidUpdate(prevProps: Map) {
@@ -365,6 +388,34 @@ class Questions extends Component<Props, State> {
     this.setState({ totalWidth: window.innerWidth });
   }
 
+  wsProvider = () => {
+    const { selectedBid } = this.props;
+    const { ydoc } = this.state;
+    const proposalId = selectedBid.get('id');
+    console.log('pID', proposalId);
+    const clientName = Math.random()
+      .toString(36)
+      .substr(2, 20);
+    const storedValue = `doc-${proposalId}`;
+    if (proposalId) {
+      const wsProvider = new WebsocketProvider(
+        // 'ws://localhost:5000',
+        'wss://662wdhv4y1.execute-api.us-east-1.amazonaws.com/production',
+        // proposalId,
+        // ydoc
+        `?=${storedValue}&`,
+        ydoc,
+        { params: { name: clientName } }
+      );
+      // const wsProvider = new WebsocketProvider(
+      //   'ws://localhost:1234',
+      //   proposalId,
+      //   ydoc
+      // );
+      return wsProvider;
+    }
+  };
+
   renderFilter() {
     const { showFilter } = this.state;
     const { questionsFilters, clearQuestionsFilter } = this.props;
@@ -533,7 +584,10 @@ class Questions extends Component<Props, State> {
                     information at a time
                   </Typography>
                 </div>
-                <WysiwygNotepad />
+                <WysiwygNotepad
+                  wsProvider={this.state.wsInstance}
+                  ydoc={this.state.ydoc}
+                />
               </div>
             </Panel>
           </div>

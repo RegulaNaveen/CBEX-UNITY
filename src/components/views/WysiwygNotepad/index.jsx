@@ -1,42 +1,42 @@
-import "./styles.scss";
-import Collaboration from "@tiptap/extension-collaboration";
-import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
-import { connect } from "react-redux";
-import React, { useEffect, useState, useContext, useCallback } from "react";
-import randomColor from "randomcolor";
-import { EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import { generateHTML } from "@tiptap/core";
+import './styles.scss';
+import Collaboration from '@tiptap/extension-collaboration';
+import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
+import { connect } from 'react-redux';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
+import randomColor from 'randomcolor';
+import { EditorContent, useEditor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import { generateHTML } from '@tiptap/core';
 
-import Bold from "@tiptap/extension-bold";
-import Document from "@tiptap/extension-document";
-import Paragraph from "@tiptap/extension-paragraph";
-import Text from "@tiptap/extension-text";
-import Italic from "@tiptap/extension-italic";
-import Strike from "@tiptap/extension-strike";
-import Underline from "@tiptap/extension-underline";
-import BulletList from "@tiptap/extension-bullet-list";
-import ListItem from "@tiptap/extension-list-item";
-import OrderedList from "@tiptap/extension-ordered-list";
-import Heading from "@tiptap/extension-heading";
-import Link from "@tiptap/extension-link";
-import Code from "@tiptap/extension-code";
-import HighLight from "@tiptap/extension-highlight";
+import Bold from '@tiptap/extension-bold';
+import Document from '@tiptap/extension-document';
+import Paragraph from '@tiptap/extension-paragraph';
+import Text from '@tiptap/extension-text';
+import Italic from '@tiptap/extension-italic';
+import Strike from '@tiptap/extension-strike';
+import Underline from '@tiptap/extension-underline';
+import BulletList from '@tiptap/extension-bullet-list';
+import ListItem from '@tiptap/extension-list-item';
+import OrderedList from '@tiptap/extension-ordered-list';
+import Heading from '@tiptap/extension-heading';
+import Link from '@tiptap/extension-link';
+import Code from '@tiptap/extension-code';
+import HighLight from '@tiptap/extension-highlight';
 
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from 'uuid';
 import {
   getProposalDetails,
   selectNotes,
   getSelectedBid,
   getUserName,
   getUserEmail,
-  getUserRole,
-} from "../../../redux/selectors";
-import MenuBar from "./Menu/MenuBar";
-import { updateNote, fetchNotes } from "../../../redux/actions/notepad-actions";
-import { SocketContext } from "../../../context/SocketContext";
+  getUserRole
+} from '../../../redux/selectors';
+import MenuBar from './Menu/MenuBar';
+import { updateNote, fetchNotes } from '../../../redux/actions/notepad-actions';
+// import { SocketContext } from '../../../context/SocketContext';
 // import * as Y from "yjs";
-import { debounce } from "lodash";
+import { debounce } from 'lodash';
 
 const WysiwygNotepad = ({
   notes = null,
@@ -47,22 +47,24 @@ const WysiwygNotepad = ({
   updateNote,
   fetchNotes,
   proposalDetails,
+  ydoc,
+  wsProvider
 }) => {
-  const { socket } = useContext(SocketContext);
+  // const { socket } = useContext(SocketContext);
 
   const emptyTextBlock = {
-    type: "doc",
+    type: 'doc',
     content: [
       {
-        type: "paragraph",
-      },
-    ],
+        type: 'paragraph'
+      }
+    ]
   };
   // const [status, setStatus] = useState("connecting");
   const [json, setJSON] = useState(emptyTextBlock);
-  const [content, setContent] = useState("<p></p>");
+  const [content, setContent] = useState('<p></p>');
   // const [editor, setEditor] = useState(null);
-  const [notesId, setNotesId] = useState("");
+  const [notesId, setNotesId] = useState('');
   const usercolor = randomColor();
 
   useEffect(() => {
@@ -70,7 +72,7 @@ const WysiwygNotepad = ({
   }, []);
 
   const fetchLatestNotes = () => {
-    const proposalId = selectedBid.get("id", "");
+    const proposalId = selectedBid.get('id', '');
     if (proposalId) fetchNotes(proposalId);
   };
   // const ydoc = new Y.Doc();
@@ -80,30 +82,30 @@ const WysiwygNotepad = ({
     let validNotes, noteId;
     if (_.isEmpty(notes)) {
       validNotes = emptyTextBlock;
-      console.log("notes empty");
+      console.log('notes empty');
     } else {
       if (notes.toJS()[0]?.noteText == undefined) {
         validNotes = emptyTextBlock;
-        console.log("notes are undefined");
-      } else if (typeof notes.toJS()[0].noteText !== "object") {
-        console.log("notes type is not an object");
+        console.log('notes are undefined');
+      } else if (typeof notes.toJS()[0].noteText !== 'object') {
+        console.log('notes type is not an object');
         validNotes = JSON.parse(notes.toJS()[0].noteText);
         noteId = notes.toJS()[0].notesId;
         !!validNotes.blocks ? (validNotes = dataConversion(validNotes)) : null;
       } else {
-        console.log("notes type is object");
+        console.log('notes type is object');
         validNotes = notes.toJS()[0].noteText;
         noteId = notes.toJS()[0].notesId;
         !!validNotes.blocks ? (validNotes = dataConversion(validNotes)) : null;
       }
-      console.log("validNotes", typeof validNotes, validNotes);
+      console.log('validNotes', typeof validNotes, validNotes);
     }
     setNotesId(noteId);
     setJSON(validNotes);
   }, [notes]);
 
   useEffect(() => {
-    console.log("json", json);
+    console.log('json', json);
     const data = generateHTML(json, [
       Document,
       Paragraph,
@@ -118,40 +120,40 @@ const WysiwygNotepad = ({
       Heading,
       Link,
       Code,
-      HighLight,
+      HighLight
     ]);
     setContent(data);
   }, [json, notes]);
 
   const styleMarks = (blk, map) => {
-    console.log("calling styleeeeeeee", blk.entityRanges);
+    console.log('calling styleeeeeeee', blk.entityRanges);
     // console.log("map", map)
     let tempMarks = [];
     // let obj = { type: "text", marks: [style], text: text };
     // return obj;let tempMarks = [];
-    blk.inlineStyleRanges.forEach((bstyle) => {
+    blk.inlineStyleRanges.forEach(bstyle => {
       if (
-        bstyle.style.toLowerCase() == "bold" ||
-        bstyle.style.toLowerCase() == "italic" ||
-        bstyle.style.toLowerCase() == "underline" ||
-        bstyle.style.toLowerCase() == "code"
+        bstyle.style.toLowerCase() == 'bold' ||
+        bstyle.style.toLowerCase() == 'italic' ||
+        bstyle.style.toLowerCase() == 'underline' ||
+        bstyle.style.toLowerCase() == 'code'
       )
         tempMarks.push({ type: bstyle.style.toLowerCase() });
-      if (bstyle.style.toLowerCase().includes("strike")) {
-        tempMarks.push({ type: "strike" });
+      if (bstyle.style.toLowerCase().includes('strike')) {
+        tempMarks.push({ type: 'strike' });
       }
     });
     if (blk.entityRanges.length !== 0) {
-      console.log("call style marks", blk.entityRanges, map, blk.text);
-      blk.entityRanges.forEach((entity) => {
-        console.log("call en", entity.key, map[entity.key]);
+      console.log('call style marks', blk.entityRanges, map, blk.text);
+      blk.entityRanges.forEach(entity => {
+        console.log('call en', entity.key, map[entity.key]);
         tempMarks.push({
-          type: "link",
+          type: 'link',
           attrs: {
             class: null,
             href: map[entity.key].data.href,
-            target: "_blank",
-          },
+            target: '_blank'
+          }
         });
       });
     }
@@ -162,23 +164,23 @@ const WysiwygNotepad = ({
     let marks = [];
     // console.log("map", map);
     if (block.entityRanges.length !== 0) {
-      console.log("call simple style marks", block.entityRanges);
+      console.log('call simple style marks', block.entityRanges);
       marks = styleMarks(block, map);
     }
-    console.log("we have nothing");
+    console.log('we have nothing');
     if (_.isEmpty(block.text)) {
-      console.log("if nothing");
-      jdata.content.push({ type: "paragraph" });
+      console.log('if nothing');
+      jdata.content.push({ type: 'paragraph' });
     } else {
       jdata.content.push({
-        type: "paragraph",
+        type: 'paragraph',
         content: [
           {
-            type: "text",
+            type: 'text',
             marks: _.isEmpty(marks) ? undefined : marks,
-            text: block.text,
-          },
-        ],
+            text: block.text
+          }
+        ]
       });
     }
     return jdata;
@@ -189,7 +191,7 @@ const WysiwygNotepad = ({
   // };
 
   const styleData = (block, jdata, map) => {
-    console.log("only style", block, block.entityRanges);
+    console.log('only style', block, block.entityRanges);
     let marks = styleMarks(block, map);
     // let content = [];
     // // let marks;
@@ -224,14 +226,14 @@ const WysiwygNotepad = ({
     // console.log("mks", marks);
 
     jdata.content.push({
-      type: "paragraph",
+      type: 'paragraph',
       content: [
         {
-          type: "text",
+          type: 'text',
           marks: _.isEmpty(marks) ? undefined : marks,
-          text: block.text,
-        },
-      ],
+          text: block.text
+        }
+      ]
       // content: content,
     });
     return jdata;
@@ -241,201 +243,201 @@ const WysiwygNotepad = ({
     // console.log("map", map);
     let marks = [];
     if (block.entityRanges.length !== 0) {
-      console.log("call type style marks", block.entityRanges);
+      console.log('call type style marks', block.entityRanges);
       marks = styleMarks(block, map);
     }
-    console.log("only type", block.type);
-    if (block.type.includes("header")) {
-      console.log("heading", block.type);
-      if (block.type == "header-one") {
+    console.log('only type', block.type);
+    if (block.type.includes('header')) {
+      console.log('heading', block.type);
+      if (block.type == 'header-one') {
         jdata.content.push({
-          type: "heading",
+          type: 'heading',
           attrs: { level: 1 },
           content: [
             {
-              type: "text",
+              type: 'text',
               marks: _.isEmpty(marks) ? undefined : marks,
-              text: block.text,
-            },
-          ],
+              text: block.text
+            }
+          ]
         });
-      } else if (block.type == "header-two") {
+      } else if (block.type == 'header-two') {
         jdata.content.push({
-          type: "heading",
+          type: 'heading',
           attrs: { level: 2 },
           content: [
             {
-              type: "text",
+              type: 'text',
               marks: _.isEmpty(marks) ? undefined : marks,
-              text: block.text,
-            },
-          ],
+              text: block.text
+            }
+          ]
         });
       } else {
         jdata.content.push({
-          type: "heading",
+          type: 'heading',
           attrs: { level: 3 },
           content: [
             {
-              type: "text",
+              type: 'text',
               marks: _.isEmpty(marks) ? undefined : marks,
-              text: block.text,
-            },
-          ],
+              text: block.text
+            }
+          ]
         });
       }
-    } else if (block.type.includes("list-item")) {
-      if (block.type.includes("unordered")) {
+    } else if (block.type.includes('list-item')) {
+      if (block.type.includes('unordered')) {
         jdata.content.push({
-          type: "bulletList",
+          type: 'bulletList',
           content: [
             {
-              type: "listItem",
+              type: 'listItem',
               content: [
                 {
-                  type: "paragraph",
+                  type: 'paragraph',
                   content: [
                     {
-                      type: "text",
+                      type: 'text',
                       marks: _.isEmpty(marks) ? undefined : marks,
-                      text: block.text,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+                      text: block.text
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         });
       } else {
         jdata.content.push({
-          type: "orderedList",
+          type: 'orderedList',
           attrs: { start: 1 },
           content: [
             {
-              type: "listItem",
+              type: 'listItem',
               content: [
                 {
-                  type: "paragraph",
+                  type: 'paragraph',
                   content: [
                     {
-                      type: "text",
+                      type: 'text',
                       marks: _.isEmpty(marks) ? undefined : marks,
-                      text: block.text,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+                      text: block.text
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         });
       }
     }
     return jdata;
   };
 
-  const dataConversion = (data) => {
-    console.log("conversion called data", data);
+  const dataConversion = data => {
+    console.log('conversion called data', data);
     let jdata = {
-      type: "doc",
-      content: [],
+      type: 'doc',
+      content: []
     };
-    data.blocks.forEach((block) => {
+    data.blocks.forEach(block => {
       if (
         !!block.type &&
         !!block.inlineStyleRanges &&
-        block.type !== "unstyled" &&
+        block.type !== 'unstyled' &&
         block.inlineStyleRanges.length !== 0
       ) {
         if (block.entityRanges.length !== 0) {
-          console.log("inside link", block);
+          console.log('inside link', block);
         }
-        console.log("both type and style", block.type, block.inlineStyleRanges);
-        if (block.type.includes("header")) {
-          console.log("heading", block.type);
+        console.log('both type and style', block.type, block.inlineStyleRanges);
+        if (block.type.includes('header')) {
+          console.log('heading', block.type);
           let marks = styleMarks(block, data.entityMap);
 
-          if (block.type == "header-one") {
+          if (block.type == 'header-one') {
             jdata.content.push({
-              type: "heading",
+              type: 'heading',
               attrs: { level: 1 },
               content: [
                 {
-                  type: "text",
+                  type: 'text',
                   marks: _.isEmpty(marks) ? undefined : marks,
-                  text: block.text,
-                },
-              ],
+                  text: block.text
+                }
+              ]
             });
-          } else if (block.type == "header-two") {
+          } else if (block.type == 'header-two') {
             jdata.content.push({
-              type: "heading",
+              type: 'heading',
               attrs: { level: 2 },
               content: [
                 {
-                  type: "text",
+                  type: 'text',
                   marks: _.isEmpty(marks) ? undefined : marks,
-                  text: block.text,
-                },
-              ],
+                  text: block.text
+                }
+              ]
             });
           } else {
             jdata.content.push({
-              type: "heading",
+              type: 'heading',
               attrs: { level: 3 },
               content: [
                 {
-                  type: "text",
+                  type: 'text',
                   marks: _.isEmpty(marks) ? undefined : marks,
-                  text: block.text,
-                },
-              ],
+                  text: block.text
+                }
+              ]
             });
           }
-        } else if (block.type.includes("list-item")) {
+        } else if (block.type.includes('list-item')) {
           let marks = styleMarks(block, data.entityMap);
-          console.log("list", block.type);
-          if (block.type.includes("unordered")) {
+          console.log('list', block.type);
+          if (block.type.includes('unordered')) {
             jdata.content.push({
-              type: "bulletList",
+              type: 'bulletList',
               content: [
                 {
-                  type: "listItem",
+                  type: 'listItem',
                   content: [
                     {
-                      type: "paragraph",
+                      type: 'paragraph',
                       content: [
                         {
-                          type: "text",
+                          type: 'text',
                           marks: _.isEmpty(marks) ? undefined : marks,
-                          text: block.text,
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
+                          text: block.text
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
             });
           } else {
             jdata.content.push({
-              type: "orderedList",
+              type: 'orderedList',
               attrs: { start: 1 },
               content: [
                 {
-                  type: "listItem",
+                  type: 'listItem',
                   content: [
                     {
-                      type: "paragraph",
+                      type: 'paragraph',
                       content: [
                         {
-                          type: "text",
+                          type: 'text',
                           marks: _.isEmpty(marks) ? undefined : marks,
-                          text: block.text,
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
+                          text: block.text
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
             });
           }
         }
@@ -448,7 +450,7 @@ const WysiwygNotepad = ({
         //   // linkData(block, data.entityMap);
         // }
         jdata = styleData(block, jdata, data.entityMap);
-      } else if (!!block.type && block.type !== "unstyled") {
+      } else if (!!block.type && block.type !== 'unstyled') {
         // if (block.entityRanges.length !== 0) {
         //   console.log("linkData type", block);
         // }
@@ -462,7 +464,7 @@ const WysiwygNotepad = ({
     });
     // console.log("jdata", jdata);
     let finalJSON = JSON.parse(JSON.stringify(jdata));
-    console.log("final", finalJSON);
+    console.log('final', finalJSON);
     return finalJSON;
   };
 
@@ -471,7 +473,7 @@ const WysiwygNotepad = ({
       extensions:
         // [StarterKit, Underline, Link],
         // socket
-        false
+        wsProvider
           ? // false
             [
               StarterKit,
@@ -479,32 +481,32 @@ const WysiwygNotepad = ({
               Code,
               HighLight,
               Collaboration.configure({
-                document: ydoc,
+                document: ydoc
               }),
               CollaborationCursor.configure({
-                provider: socket,
+                provider: wsProvider,
                 user: {
-                  name: userName + " " + "is typing....",
-                  color: usercolor,
-                },
+                  name: userName + ' ' + 'is typing....',
+                  color: usercolor
+                }
               }),
               Link.configure({
                 autolink: true,
                 linkOnPaste: false,
-                validate: (href) => /^https?:\/\//.test(href),
-                protocols: ["ftp", "mailto"],
+                validate: href => /^https?:\/\//.test(href),
+                protocols: ['ftp', 'mailto'],
                 HTMLAttributes: {
-                  class: "my-custom-class",
-                },
-              }),
+                  class: 'my-custom-class'
+                }
+              })
             ]
           : [StarterKit, Underline, Link, Code, HighLight],
-      content: content || "<p></p>",
+      content: content || '<p></p>',
       onUpdate: ({ editor }) => {
         const Ejson = editor.getJSON();
         // send the content to an API here
         memoizedSaveDB(Ejson);
-      },
+      }
     },
     [content]
   );
@@ -513,9 +515,9 @@ const WysiwygNotepad = ({
     proposalId,
     notesId,
     noteText = emptyTextBlock, // non stringified block data i.e as returned from Editor {block:[], entityMap:{}}
-    userEmail = "",
-    userName = "",
-    userRole = ""
+    userEmail = '',
+    userName = '',
+    userRole = ''
   ) => {
     return {
       proposalId,
@@ -524,14 +526,14 @@ const WysiwygNotepad = ({
       createdBy: { userEmail, userName, userRole },
       section: null,
       isNoteV2: true,
-      oppNo: proposalDetails["CRM #"],
+      oppNo: proposalDetails['CRM #']
     };
   };
 
   const memoizedSaveDB = useCallback(
-    debounce((noteText) => {
-      console.log("noteText", noteText);
-      const proposalId = selectedBid.get("id");
+    debounce(noteText => {
+      console.log('noteText', noteText);
+      const proposalId = selectedBid.get('id');
       const noteSaveReqBody = constructNoteV2(
         proposalId,
         notesId,
@@ -547,7 +549,7 @@ const WysiwygNotepad = ({
 
   return (
     <>
-      {socket && (
+      {wsProvider && (
         <div>
           <div>
             <MenuBar editor={editor} />
@@ -559,17 +561,17 @@ const WysiwygNotepad = ({
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   notes: selectNotes(state),
   selectedBid: getSelectedBid(state),
   userName: getUserName(state),
   userEmail: getUserEmail(state),
   userRole: getUserRole(state),
-  proposalDetails: getProposalDetails(state),
+  proposalDetails: getProposalDetails(state)
 });
 
 const mapDispatchToProps = {
   updateNote,
-  fetchNotes,
+  fetchNotes
 };
 export default connect(mapStateToProps, mapDispatchToProps)(WysiwygNotepad);
