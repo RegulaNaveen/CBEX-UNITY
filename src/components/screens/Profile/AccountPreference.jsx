@@ -124,8 +124,10 @@ const AccountPreference = ({
                 fullWidth
                 error={!!errorUpdatingTimezone}
               >
-                {timezoneList.map(({ time_zone_id, time_zone }) => {
-                  return <MenuItem value={time_zone_id}>{time_zone}</MenuItem>;
+                {timezoneList.map(({ time_zone_id, description }) => {
+                  return (
+                    <MenuItem value={time_zone_id}>{description}</MenuItem>
+                  );
                 })}
               </Select>
             </>

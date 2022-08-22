@@ -45,3 +45,11 @@
     height: 24px;
     width:24px;
   }
+
+  .bluecalendar .MuiIconButton-label {
+    width: 100%;
+    display: flex;
+    position: relative;
+    align-items: inherit;
+    align-self: flex-start;
+}

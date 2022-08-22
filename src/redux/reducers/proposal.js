@@ -737,8 +737,9 @@ const onQuestionsFiltered = (state, action) => {
   return state.set('filteredProposalQuestions', filteredQuestions);
 };
 
-const resetQuestionsFilter = state => {
-  return state.set('questionsFilter', INITIAL_STATE.get('questionsFilter'));
+const resetQuestionsFilter = (state, action) => {
+  const { payload } = action;
+  return state.set('questionsFilter', payload);
 };
 
 const clearQuestionsFilter = (state, action) => {
