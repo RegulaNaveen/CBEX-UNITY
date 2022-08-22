@@ -539,7 +539,7 @@
 }
 .outgoing-integration {
   height: 24px;
-  width:24px;
+  width: 24px;
 }
 .header-ellipses {
   width: 100%;
@@ -552,5 +552,12 @@
   overflow: hidden;
   width: auto;
   max-width: 100px;
+  white-space: nowrap;
+}
+.halfscreen-header-ellipses-blade {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: auto;
+  max-width: 80px;
   white-space: nowrap;
 }

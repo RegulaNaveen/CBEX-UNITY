@@ -44,7 +44,6 @@ const loadSidebar = props => {
   const placeholder = 'No data';
   const date = bidDueDate && parseMomentDate(bidDueDate);
   const daysRemain = remainingDays(date);
-
   const redirect = () => {
     window.open(`${SF_HOST_URL}lightning/r/Opportunity/${opportunityId}/view`);
   };
@@ -63,7 +62,13 @@ const loadSidebar = props => {
       setisLinebusinessTooltip(true);
     if (therapeutic?.current?.clientWidth < therapeutic?.current?.scrollWidth)
       setisTherapeuticTooltip(true);
-  }, [therapeutic, customer, protocol, product, linebusiness]);
+  }, [
+    therapeutic?.current,
+    customer?.current,
+    protocol?.current,
+    product?.current,
+    linebusiness?.current
+  ]);
   if (isBladeOpen) {
     return (
       <Grid container>
@@ -92,7 +97,13 @@ const loadSidebar = props => {
             >
               <Typography
                 variant="body2"
-                className="boldtext halfscreen-header-ellipses"
+                className={
+                  isOpen
+                    ? windowSize < 641
+                      ? 'boldtext halfscreen-header-ellipses-blade'
+                      : 'boldtext sidebaropenfont'
+                    : 'boldtext halfscreen-header-ellipses'
+                }
                 ref={customer}
               >
                 {Customer || placeholder}
@@ -110,7 +121,13 @@ const loadSidebar = props => {
             >
               <Typography
                 variant="body2"
-                className="boldtext halfscreen-header-ellipses"
+                className={
+                  isOpen
+                    ? windowSize < 641
+                      ? 'boldtext halfscreen-header-ellipses-blade'
+                      : 'boldtext sidebaropenfont'
+                    : 'boldtext halfscreen-header-ellipses'
+                }
                 ref={linebusiness}
               >
                 {lineOfBusiness || placeholder}
@@ -144,7 +161,13 @@ const loadSidebar = props => {
             >
               <Typography
                 variant="body2"
-                className="boldtext halfscreen-header-ellipses"
+                className={
+                  isOpen
+                    ? windowSize < 641
+                      ? 'boldtext halfscreen-header-ellipses-blade'
+                      : 'boldtext sidebaropenfont'
+                    : 'boldtext halfscreen-header-ellipses'
+                }
                 ref={therapeutic}
               >
                 {therapeuticArea || placeholder}
@@ -165,7 +188,13 @@ const loadSidebar = props => {
             >
               <Typography
                 variant="body2"
-                className="boldtext halfscreen-header-ellipses"
+                className={
+                  isOpen
+                    ? windowSize < 641
+                      ? 'boldtext halfscreen-header-ellipses-blade'
+                      : 'boldtext sidebaropenfont'
+                    : 'boldtext halfscreen-header-ellipses'
+                }
                 ref={product}
               >
                 {productName || placeholder}
@@ -186,7 +215,13 @@ const loadSidebar = props => {
             >
               <Typography
                 variant="body2"
-                className="boldtext halfscreen-header-ellipses"
+                className={
+                  isOpen
+                    ? windowSize < 641
+                      ? 'boldtext halfscreen-header-ellipses-blade'
+                      : 'boldtext sidebaropenfont'
+                    : 'boldtext halfscreen-header-ellipses'
+                }
                 ref={protocol}
               >
                 {protocolNumber || placeholder}
