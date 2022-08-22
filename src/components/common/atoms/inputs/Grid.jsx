@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Grid from 'apollo-react/components/Grid';
 import Paper from 'apollo-react/components/Paper';
 import Typography from 'apollo-react/components/Typography';
+import Tooltip from 'apollo-react/components/Tooltip';
 import { parseMomentDate, remainingDays } from '../../../../utils/DateUtils';
 import { SF_HOST_URL } from '../../../../constants/api';
 
@@ -10,11 +11,23 @@ const containerStyle = {
   width: '100%',
   display: 'flex',
   flexWrap: 'wrap',
-  boxSizing: 'border-box',
+  boxSizing: 'border-box'
 };
 
-const loadSidebar = (props) => {
+const loadSidebar = props => {
   const { data, isOpen, windowSize, bidStatus } = props;
+  // Setup a ref
+  const protocol = useRef();
+  const product = useRef();
+  const therapeutic = useRef();
+  const linebusiness = useRef();
+  const customer = useRef();
+  // State for tracking if ellipsis is active
+  const [isProductTooltip, setisProductTooltip] = useState(false);
+  const [isCustomerTooltip, setisCustomerTooltip] = useState(false);
+  const [isProtocolTooltip, setisProtocolTooltip] = useState(false);
+  const [isTherapeuticTooltip, setisTherapeuticTooltip] = useState(false);
+  const [isLinebusinessTooltip, setisLinebusinessTooltip] = useState(false);
   const {
     'Bid due date': bidDueDate,
     Phase: phase,
@@ -26,12 +39,11 @@ const loadSidebar = (props) => {
     'CRM #': crm,
     Customer,
     bidNo,
-    opportunityId,
+    opportunityId
   } = data;
   const placeholder = 'No data';
   const date = bidDueDate && parseMomentDate(bidDueDate);
   const daysRemain = remainingDays(date);
-
   const redirect = () => {
     window.open(`${SF_HOST_URL}lightning/r/Opportunity/${opportunityId}/view`);
   };
@@ -39,7 +51,24 @@ const loadSidebar = (props) => {
   if (windowSize <= 1200) {
     isBladeOpen = true;
   }
-
+  useEffect(() => {
+    if (product?.current?.clientWidth < product?.current?.scrollWidth)
+      setisProductTooltip(true);
+    if (protocol?.current?.clientWidth < protocol?.current?.scrollWidth)
+      setisProtocolTooltip(true);
+    if (customer?.current?.clientWidth < customer?.current?.scrollWidth)
+      setisCustomerTooltip(true);
+    if (linebusiness?.current?.clientWidth < linebusiness?.current?.scrollWidth)
+      setisLinebusinessTooltip(true);
+    if (therapeutic?.current?.clientWidth < therapeutic?.current?.scrollWidth)
+      setisTherapeuticTooltip(true);
+  }, [
+    therapeutic?.current,
+    customer?.current,
+    protocol?.current,
+    product?.current,
+    linebusiness?.current
+  ]);
   if (isBladeOpen) {
     return (
       <Grid container>
@@ -61,17 +90,49 @@ const loadSidebar = (props) => {
             <Typography variant="body2" className="greytext sidebaropenfont">
               Customer
             </Typography>
-            <Typography variant="body2" className="boldtext sidebaropenfont">
-              {Customer || placeholder}
-            </Typography>
+            <Tooltip
+              variant="dark"
+              body={isCustomerTooltip ? Customer : null}
+              placement="bottom"
+            >
+              <Typography
+                variant="body2"
+                className={
+                  isOpen
+                    ? windowSize < 641
+                      ? 'boldtext halfscreen-header-ellipses-blade'
+                      : 'boldtext sidebaropenfont'
+                    : 'boldtext halfscreen-header-ellipses'
+                }
+                ref={customer}
+              >
+                {Customer || placeholder}
+              </Typography>
+            </Tooltip>
           </Paper>
           <Paper style={styles} className="sidebarduedatedsg open">
             <Typography variant="body2" className="greytext sidebaropenfont">
               Line of Business
             </Typography>
-            <Typography variant="body2" className="boldtext sidebaropenfont">
-              {lineOfBusiness || placeholder}
-            </Typography>
+            <Tooltip
+              variant="dark"
+              body={isLinebusinessTooltip ? lineOfBusiness : null}
+              placement="bottom"
+            >
+              <Typography
+                variant="body2"
+                className={
+                  isOpen
+                    ? windowSize < 641
+                      ? 'boldtext halfscreen-header-ellipses-blade'
+                      : 'boldtext sidebaropenfont'
+                    : 'boldtext halfscreen-header-ellipses'
+                }
+                ref={linebusiness}
+              >
+                {lineOfBusiness || placeholder}
+              </Typography>
+            </Tooltip>
           </Paper>
           <Paper style={styles} className="sidebarduedatedsg open">
             <Typography variant="body2" className="greytext sidebaropenfont">
@@ -93,9 +154,25 @@ const loadSidebar = (props) => {
             <Typography variant="body2" className="greytext sidebaropenfont">
               Therapeutic Area
             </Typography>
-            <Typography variant="body2" className="boldtext sidebaropenfont">
-              {therapeuticArea || placeholder}
-            </Typography>
+            <Tooltip
+              variant="dark"
+              body={isTherapeuticTooltip ? therapeuticArea : null}
+              placement="bottom"
+            >
+              <Typography
+                variant="body2"
+                className={
+                  isOpen
+                    ? windowSize < 641
+                      ? 'boldtext halfscreen-header-ellipses-blade'
+                      : 'boldtext sidebaropenfont'
+                    : 'boldtext halfscreen-header-ellipses'
+                }
+                ref={therapeutic}
+              >
+                {therapeuticArea || placeholder}
+              </Typography>
+            </Tooltip>
           </Paper>
           <Paper className="sidebarduedatedsg open" style={styles}>
             <Typography
@@ -104,9 +181,25 @@ const loadSidebar = (props) => {
             >
               Product Name
             </Typography>
-            <p className="boldtext sidebaropenfont">
-              {productName || placeholder}
-            </p>
+            <Tooltip
+              variant="dark"
+              body={isProductTooltip ? productName : null}
+              placement="bottom"
+            >
+              <Typography
+                variant="body2"
+                className={
+                  isOpen
+                    ? windowSize < 641
+                      ? 'boldtext halfscreen-header-ellipses-blade'
+                      : 'boldtext sidebaropenfont'
+                    : 'boldtext halfscreen-header-ellipses'
+                }
+                ref={product}
+              >
+                {productName || placeholder}
+              </Typography>
+            </Tooltip>
           </Paper>
           <Paper className="sidebarduedatedsg open" style={styles}>
             <Typography
@@ -115,9 +208,25 @@ const loadSidebar = (props) => {
             >
               Protocol Number
             </Typography>
-            <p className="boldtext sidebaropenfont">
-              {protocolNumber || placeholder}
-            </p>
+            <Tooltip
+              variant="dark"
+              body={isProtocolTooltip ? protocolNumber : null}
+              placement="bottom"
+            >
+              <Typography
+                variant="body2"
+                className={
+                  isOpen
+                    ? windowSize < 641
+                      ? 'boldtext halfscreen-header-ellipses-blade'
+                      : 'boldtext sidebaropenfont'
+                    : 'boldtext halfscreen-header-ellipses'
+                }
+                ref={protocol}
+              >
+                {protocolNumber || placeholder}
+              </Typography>
+            </Tooltip>
           </Paper>
           <Paper className="sidebarduedatedsg open" style={styles}>
             <Typography
@@ -167,9 +276,19 @@ const loadSidebar = (props) => {
             <Typography variant="body2" className="greytext">
               Customer
             </Typography>
-            <Typography variant="body2" className="boldtext">
-              {Customer || placeholder}
-            </Typography>
+            <Tooltip
+              variant="dark"
+              body={isCustomerTooltip ? Customer : null}
+              placement="bottom"
+            >
+              <Typography
+                variant="body2"
+                className="boldtext header-ellipses"
+                ref={customer}
+              >
+                {Customer || placeholder}
+              </Typography>
+            </Tooltip>
           </Paper>
         </Grid>
         <Grid item xs={3}>
@@ -177,9 +296,19 @@ const loadSidebar = (props) => {
             <Typography variant="body2" className="greytext leftalign">
               Line of Business
             </Typography>
-            <Typography variant="body2" className="boldtext leftalign">
-              {lineOfBusiness || placeholder}
-            </Typography>
+            <Tooltip
+              variant="dark"
+              body={isLinebusinessTooltip ? lineOfBusiness : null}
+              placement="bottom"
+            >
+              <Typography
+                variant="body2"
+                className="boldtext header-ellipses"
+                ref={linebusiness}
+              >
+                {lineOfBusiness || placeholder}
+              </Typography>
+            </Tooltip>
           </Paper>
         </Grid>
         <Grid item xs={3}>
@@ -209,9 +338,19 @@ const loadSidebar = (props) => {
             <Typography variant="body2" className="greytext">
               Therapeutic Area
             </Typography>
-            <Typography variant="body2" className="boldtext">
-              {therapeuticArea || placeholder}
-            </Typography>
+            <Tooltip
+              variant="dark"
+              body={isTherapeuticTooltip ? therapeuticArea : null}
+              placement="bottom"
+            >
+              <Typography
+                variant="body2"
+                className="boldtext header-ellipses"
+                ref={therapeutic}
+              >
+                {therapeuticArea || placeholder}
+              </Typography>
+            </Tooltip>
           </Paper>
         </Grid>
         <Grid item xs={3}>
@@ -219,9 +358,19 @@ const loadSidebar = (props) => {
             <Typography variant="body2" className="greytext">
               Product Name
             </Typography>
-            <Typography variant="body2" className="boldtext">
-              {productName || placeholder}
-            </Typography>
+            <Tooltip
+              variant="dark"
+              body={isProductTooltip ? productName : null}
+              placement="bottom"
+            >
+              <Typography
+                variant="body2"
+                className="boldtext header-ellipses"
+                ref={product}
+              >
+                {productName || placeholder}
+              </Typography>
+            </Tooltip>
           </Paper>
         </Grid>
         <Grid item xs={3}>
@@ -229,9 +378,19 @@ const loadSidebar = (props) => {
             <Typography variant="body2" className="greytext">
               Protocol Number
             </Typography>
-            <Typography variant="body2" className="boldtext">
-              {protocolNumber || placeholder}
-            </Typography>
+            <Tooltip
+              variant="dark"
+              body={isProtocolTooltip ? protocolNumber : null}
+              placement="bottom"
+            >
+              <Typography
+                variant="body2"
+                className="boldtext header-ellipses"
+                ref={protocol}
+              >
+                {protocolNumber || placeholder}
+              </Typography>
+            </Tooltip>
           </Paper>
         </Grid>
         <Grid item xs={2}>
@@ -261,7 +420,7 @@ const loadSidebar = (props) => {
   );
 };
 
-const UnityGrid = (props) => {
+const UnityGrid = props => {
   return loadSidebar(props);
 };
 
