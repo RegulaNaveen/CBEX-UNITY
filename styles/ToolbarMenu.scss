@@ -24,6 +24,9 @@
     line-height: 24px;
     padding-left: 16px;
     padding-right: 16px;
+    max-width: 100%;
+    width: auto;
+    white-space: nowrap;
   }
 
   &-email {
@@ -36,8 +39,9 @@
     padding-left: 16px;
     padding-right: 16px;
     display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    max-width: 100%;
+    width: auto;
+    white-space: nowrap;
   }
 
   &-separator {
