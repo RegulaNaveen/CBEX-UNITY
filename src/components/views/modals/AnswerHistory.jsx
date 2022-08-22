@@ -56,7 +56,7 @@ class AnswerHistory extends Component<Props> {
           const availableAns = question?.toJS().answers;
           if (!isEmpty(availableAns) && Array.isArray(availableAns)) {
             const cloneAnswers = [...availableAns];
-            cloneAnswers.pop();
+            if(res.data.length > 0) cloneAnswers.pop();
             modifiedAns = fromJS([...cloneAnswers, ...res.data]);
           } else {
             modifiedAns = fromJS(res.data);
