@@ -8,14 +8,16 @@ import Loader from 'react-loader-spinner';
 import Button from 'apollo-react/components/Button';
 import PencilIcon from 'apollo-react-icons/Pencil';
 import GlobeIcon from 'apollo-react-icons/Globe';
+import Grid from 'apollo-react/components/Grid';
+import User from 'apollo-react-icons/User';
+import Avatar from 'apollo-react/components/Avatar';
+import Tooltip from 'apollo-react/components/Tooltip';
 import { LOGIN, PROFILE } from '../../../routes';
 import { getRoles, isRolesInfoLoading } from '../../../redux/selectors';
 import { getRolesInfo } from '../../../redux/actions/proposal-actions';
 import { logout } from '../../../redux/actions/auth-actions';
 import { onSetUserRole } from '../../../redux/actions/sso-auth-actions';
 import Dropdown from '../../common/atoms/inputs/Dropdown';
-import Grid from 'apollo-react/components/Grid';
-import User from 'apollo-react-icons/User';
 import {
   getUserEmail,
   getUserName,
@@ -23,7 +25,6 @@ import {
 } from '../../../SessionHandler';
 import { ReportIssue } from '../../svg';
 import MatomoHOC from '../../HOC/MatomoHOC';
-import Avatar from 'apollo-react/components/Avatar';
 
 type Props = {
   rolesList: Array<string>,
@@ -45,8 +46,12 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
   constructor(props: Object) {
     super(props);
     this.state = {
-      roleName: ''
+      roleName: '',
+      isNameTooltip: false,
+      isEmailTooltip: false
     };
+    this.nameRef = React.createRef();
+    this.emailRef = React.createRef();
   }
 
   componentDidMount() {
@@ -54,6 +59,19 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     const userRole = getUserRole();
     if (!rolesList) getRolesInfoF();
     if (userRole) this.setState({ roleName: userRole });
+  }
+
+  componentDidUpdate() {
+    if (this.nameRef.current.clientWidth < this.nameRef.current.scrollWidth) {
+      this.setState({
+        isNameTooltip: true
+      });
+    }
+    if (this.emailRef.current.clientWidth < this.emailRef.current.scrollWidth) {
+      this.setState({
+        isEmailTooltip: true
+      });
+    }
   }
 
   handleLogout = () => {
@@ -92,22 +110,58 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
   };
 
   render() {
-    const { roleName } = this.state;
+    const { roleName, isNameTooltip, isEmailTooltip } = this.state;
     const { rolesList, isRolesLoading } = this.props;
     const name = getUserName();
     const email = getUserEmail();
 
+    const TooltipStyle = {
+      width: '100%',
+      cursor: 'pointer'
+    };
+    const style = {
+      width: '100%'
+    };
+
     return (
-      <div className="toolbar-account-menu">
+      <div className="toolbar-account-menu" style={{ zIndex: '1' }}>
         <Grid container style={{ padding: '10px' }}>
-          <Grid item>
+          {/* <Grid item>
             <Avatar alt="avatar" src="">
               {name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0)}
             </Avatar>
-          </Grid>
-          <Grid item>
-            <p className="toolbar-account-menu-name">{name}</p>
-            <p className="toolbar-account-menu-email">{email}</p>
+          </Grid> */}
+          <Grid item style={{ width: '100%' }}>
+            <Tooltip
+              title={isNameTooltip ? name : null}
+              variant="dark"
+              position="bottom"
+            >
+              <div style={isNameTooltip ? TooltipStyle : style}>
+                <p
+                  className="toolbar-account-menu-name"
+                  style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+                  ref={this.nameRef}
+                >
+                  {name}
+                </p>
+              </div>
+            </Tooltip>
+            <Tooltip
+              title={isEmailTooltip ? email : null}
+              variant="dark"
+              position="bottom"
+            >
+              <div style={isEmailTooltip ? TooltipStyle : style}>
+                <p
+                  className="toolbar-account-menu-email"
+                  style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+                  ref={this.emailRef}
+                >
+                  {email}
+                </p>
+              </div>
+            </Tooltip>
           </Grid>
         </Grid>
 
