@@ -541,3 +541,16 @@
   height: 24px;
   width:24px;
 }
+.header-ellipses {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.halfscreen-header-ellipses {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: auto;
+  max-width: 100px;
+  white-space: nowrap;
+}
