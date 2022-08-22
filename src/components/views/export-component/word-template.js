@@ -155,7 +155,6 @@ export function getFormattedTextStyles(styleMaps, index) {
         if (key.includes('fontSize')) {
           // eslint-disable-next-line radix
           styles.size = parseInt(key.slice(key.length - 4, key.length - 2));
-          console.log('tapas size', styles.size);
           styleId += '(fs)';
         }
         if (key.includes('color')) {
@@ -194,7 +193,6 @@ function getFormattedTextCells(paras) {
 }
 
 function getFormattedTextRows(formatedTextBlocks) {
-  console.log('tapas sss ', formatedTextBlocks);
   const paras = [];
   const rows = [
     new TableRow({
@@ -699,7 +697,6 @@ function getProposalTeamsRows(questions) {
   try {
     coreTeamQuestions.forEach(question => {
       let { questionText, answers } = question;
-      console.log('111', question);
       coreTeamRows.push(
         answers.formattedAnswer
           ? new TableRow({
