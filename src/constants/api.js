@@ -18,7 +18,6 @@ let UBUILD_ENABLED = false;
 let UBUILD_ARTIFACT = '';
 let SF_HOST_URL = '';
 let SOCKET_URL = '';
-let NOTES_SOCKET_URL = '';
 
 switch (environment) {
   case 'UAT':
@@ -110,8 +109,6 @@ switch (environment) {
     SF_HOST_URL = 'https://iqvia--crm.lightning.force.com/';
     SOCKET_URL =
       'wss://sgag59jkn1.execute-api.us-east-1.amazonaws.com/production';
-    NOTES_SOCKET_URL =
-      'wss://662wdhv4y1.execute-api.us-east-1.amazonaws.com/production';
     break;
 }
 
@@ -192,6 +189,5 @@ export {
   SF_HOST_URL,
   SOCKET_URL,
   PROFILE,
-  NOTIFICATION,
-  NOTES_SOCKET_URL
+  NOTIFICATION
 };
