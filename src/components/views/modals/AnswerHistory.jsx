@@ -133,7 +133,7 @@ class AnswerHistory extends Component<Props> {
           .proposalDetails.bidNo;
       }
 
-      const nextAnswer = answers.get(index + 1)
+      let nextAnswer = answers.get(index + 1)
         ? answers.get(index + 1).get('answer')
         : answer;
 
@@ -266,7 +266,7 @@ class AnswerHistory extends Component<Props> {
                 'removed'
               );
             }
-            return `${nextDate} ${newDate}`;
+          return(<>{nextDate} {newDate}</>);
           };
 
           if (questionType === 'select' || questionType === 'select-lookup') {
