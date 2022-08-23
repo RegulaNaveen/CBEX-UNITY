@@ -18,7 +18,6 @@ import {
   ExternalHyperlink
 } from 'docx';
 import { cloneDeep } from 'lodash';
-import { asBlob } from 'html-docx-js-typescript';
 import moment from 'moment-timezone';
 import { API } from '../../../constants';
 import {
