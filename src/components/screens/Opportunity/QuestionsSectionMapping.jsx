@@ -9,7 +9,7 @@ import { OrderedMap } from 'immutable';
 import { useLazyLoad, useUpdateEffect } from '../../../hooks';
 import CollapsibleList from '../../common/CollapsibleList';
 
-const NUM_PER_PAGE = 4;
+const NUM_PER_PAGE = 2;
 
 const QuestionsSectionMapping = ({
   sections,
