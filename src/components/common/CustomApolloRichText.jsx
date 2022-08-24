@@ -81,7 +81,6 @@ const CustomApolloRichText = ({
    */
   useEffect(() => {
     setRichTextData(INITIAL_DATA);
-
     // Restrict Richtext height upto 5 lines
     setRefElementStyle(richTextContainerRef, 125, 120, '5px');
   }, [richTextString, richTextHtml, richTextVal]);
@@ -115,7 +114,12 @@ const CustomApolloRichText = ({
     setRichTextData(resultObj);
 
     // Restrict Richtext height upto 10 lines
-    const { clientHeight } = richTextContainerRef.current;
+    const {
+      clientHeight,
+      scrollHeight,
+      style: refStyle
+    } = richTextContainerRef.current;
+    if (scrollHeight < 230) refStyle.height = 'auto';
     if (clientHeight <= 230) setRefElementStyle(richTextContainerRef, 230, 230);
 
     if (onChange) onChange(resultObj); // onChange callback func
