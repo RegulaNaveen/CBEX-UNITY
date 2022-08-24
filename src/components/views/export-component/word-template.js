@@ -702,7 +702,7 @@ function getProposalTeamsRows(questions) {
               children: [
                 getAnswerCell(questionText, '', questionCellWidth50),
                 // getAnswerCell(getLastAnswer(answers), '', questionCellWidth50)
-                getFormatedTextTable(answers.formattedAnswer)
+                getFormattedTextTable(answers.formattedAnswer)
               ]
             })
           : new TableRow({
