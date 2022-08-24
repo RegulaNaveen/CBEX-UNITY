@@ -442,7 +442,14 @@ export class TaskRow extends Component<Props, State> {
     const hasFormattedAns = has(lastAnswer?.toJS(), 'formattedAnswer');
     const formattedAnswer =
       hasFormattedAns && lastAnswer?.toJS().formattedAnswer;
-    const richTextData = formattedAnswer || { html: '', value: { blocks: [] } };
+    const parseFormattedData =
+      isObject(formattedAnswer) || !formattedAnswer
+        ? formattedAnswer
+        : JSON.parse(formattedAnswer);
+    const richTextData = parseFormattedData || {
+      html: '',
+      value: { blocks: [] }
+    };
 
     // Richtext Props
     const richTextAnswerField = {
