@@ -1,6 +1,6 @@
 @mixin commonStyle {
   .question-title-txt {
-    color: #000000;
+    color: $black;
     font-size: 14px;
     font-family: Proxima Nova, Nunito Sans, sans-serif;
     font-weight: 400;
@@ -16,14 +16,14 @@
     background-color: $white;
     border: $border;
     border-radius: 4px;
-    padding-right: 23px;
+    padding-right: 16px;
     margin-bottom: 16px;
     outline: none;
 
     .dd-wrapper .dd-header .dd-header-placeholder {
       height: 24px;
       width: 100%;
-      color: #999999;
+      color: $neutral6;
       font-family: 'ProximaNova-Regular';
       pointer-events: none;
       font-size: 12px;
@@ -59,7 +59,7 @@
     .multiselect-wrapper .multiselect-header .multiselect-header-placeholder {
       min-height: 24px;
       width: 100%;
-      color: #999999;
+      color: $neutral6;
       font-family: 'ProximaNova-Regular';
       pointer-events: none;
       font-size: 12px;
@@ -196,7 +196,7 @@
       .add-question {
         margin: 20px 0 0;
         * {
-          color: #0768fd;
+          color: $neptune-primary;
         }
       }
 
@@ -212,8 +212,8 @@
     background-color: $white;
     border: $border;
     border-radius: 4px;
-    padding-left: 20px;
-    padding-right: 23px;
+    padding-left: 16px;
+    padding-right: 16px;
     margin-bottom: 16px;
     outline: none;
 
@@ -339,7 +339,7 @@
       .add-question {
         margin: 20px 0 0;
         * {
-          color: #0768fd;
+          color: $neptune-primary;
         }
       }
 
@@ -355,7 +355,7 @@
 }
 
 .a-MuiOutlinedInput-root.Mui-disabled .a-MuiChip-root {
-  border-color: black !important;
-  background-color: #fff !important;
+  border-color: $black !important;
+  background-color: $white !important;
   opacity: 1;
 }

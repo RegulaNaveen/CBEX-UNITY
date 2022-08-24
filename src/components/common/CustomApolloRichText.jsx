@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
-import { v4 as uuid } from 'uuid';
+// import { v4 as uuid } from 'uuid';
 import classNames from 'classnames';
-import { useUpdateEffect } from '../../hooks';
 
 const CustomApolloRichText = ({
   richTextString,
@@ -14,6 +13,7 @@ const CustomApolloRichText = ({
   placeholder,
   onBlur,
   onChange,
+  onFocus,
   isEditable,
   enableFocus,
   className,
@@ -48,15 +48,8 @@ const CustomApolloRichText = ({
   // Component State
   const [richTextData, setRichTextData] = useState(INITIAL_DATA);
   const [isRichTextEditable, setIsRichTextEditable] = useState(isEditable);
-  const richTextRef = useRef(null);
+  const richTextContainerRef = useRef(null);
   const richTextEditorRef = useRef(null);
-
-  /**
-   * Update on external changes
-   */
-  useUpdateEffect(() => {
-    setRichTextData(INITIAL_DATA);
-  }, [richTextHtml, richTextVal]);
 
   /**
    * Function to Add Delay for Specific Seconds
@@ -66,20 +59,38 @@ const CustomApolloRichText = ({
   };
 
   /**
-   * Set Focus on RichText Editor
+   * Set Reference Element Height
    */
-  const setFocusOnEditor = async () => {
-    await timeout(100);
-    if (richTextEditorRef.current && enableFocus)
-      richTextEditorRef.current.focus();
+  const setRefElementStyle = async (
+    elementRef,
+    elementH,
+    scrollH,
+    initialElementH = 'auto'
+  ) => {
+    await timeout(0);
+    const { scrollHeight, style: refStyle } = elementRef.current;
+
+    refStyle.height = initialElementH;
+    const refHeight = scrollHeight > elementH ? scrollH : scrollHeight;
+    refStyle.height = `${refHeight}px`;
+    return true;
   };
+
+  /**
+   * Update on external changes
+   */
+  useEffect(() => {
+    setRichTextData(INITIAL_DATA);
+
+    // Restrict Richtext height upto 5 lines
+    setRefElementStyle(richTextContainerRef, 125, 120, '5px');
+  }, [richTextString, richTextHtml, richTextVal]);
 
   /**
    * Set focus on load
    */
   useEffect(() => {
     setIsRichTextEditable(isEditable);
-    setFocusOnEditor();
   }, [isEditable]);
 
   /**
@@ -87,7 +98,7 @@ const CustomApolloRichText = ({
    */
   const onClickHTML = () => {
     setIsRichTextEditable(true);
-    setFocusOnEditor();
+    if (enableFocus) onFocus();
   };
 
   /**
@@ -102,6 +113,11 @@ const CustomApolloRichText = ({
       .join(' ');
     const resultObj = { text, value, html };
     setRichTextData(resultObj);
+
+    // Restrict Richtext height upto 10 lines
+    const { clientHeight } = richTextContainerRef.current;
+    if (clientHeight <= 230) setRefElementStyle(richTextContainerRef, 230, 230);
+
     if (onChange) onChange(resultObj); // onChange callback func
   };
 
@@ -110,8 +126,8 @@ const CustomApolloRichText = ({
    */
   const handleClickOutside = e => {
     if (
-      richTextRef.current &&
-      !richTextRef.current.contains(e.target) &&
+      richTextContainerRef.current &&
+      !richTextContainerRef.current.contains(e.target) &&
       isEmpty(e.target.closest('.MuiPopover-root')) &&
       isEmpty(e.target.closest('.MuiDialog-root'))
     ) {
@@ -128,46 +144,34 @@ const CustomApolloRichText = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   });
 
-  // Render Html View
-  if (!isRichTextEditable) {
-    return (
-      <div
-        className={classNames('custom-rich-text', 'readonly', {
-          [className]: !!className,
-          disabled
-        })}
-        aria-hidden="true"
-        onClick={onClickHTML}
-      >
-        <RichTextEditor
-          placeholder={placeholder || ''}
-          variant="view"
-          defaultValue={richTextData.value}
-          key={uuid().toString()}
-          disabled
-        />
-      </div>
-    );
-  }
-
   // Render Popover RichText Editor
   return (
     <div
-      className={classNames('custom-rich-text', 'popover', {
+      className={classNames('custom-rich-text', {
+        readonly: !isRichTextEditable,
+        popover: isRichTextEditable,
         [className]: !!className
       })}
     >
       <div
-        className={classNames('popover-inner', { error: !!error })}
-        ref={richTextRef}
+        className={classNames('custom-rich-text-inner', {
+          'popover-inner': isRichTextEditable,
+          error: !!error
+        })}
+        ref={richTextContainerRef}
+        aria-hidden="true"
+        onClick={() => {
+          if (!isRichTextEditable) onClickHTML();
+        }}
       >
         <RichTextEditor
           placeholder={placeholder || ''}
           spellCheck={false}
-          variant="popover"
+          variant={isRichTextEditable ? 'popover' : 'view'}
           defaultValue={richTextData.value}
           onChange={onChangeHandler}
           ref={richTextEditorRef}
+          disabled={!!disabled}
         />
       </div>
     </div>
@@ -181,6 +185,7 @@ CustomApolloRichText.defaultProps = {
   placeholder: '',
   onBlur: () => {},
   onChange: () => {},
+  onFocus: () => {},
   isEditable: false,
   enableFocus: false,
   className: '',
@@ -195,6 +200,7 @@ CustomApolloRichText.propTypes = {
   placeholder: PropTypes.string,
   onBlur: PropTypes.func,
   onChange: PropTypes.func,
+  onFocus: PropTypes.func,
   isEditable: PropTypes.bool,
   enableFocus: PropTypes.bool,
   className: PropTypes.string,
