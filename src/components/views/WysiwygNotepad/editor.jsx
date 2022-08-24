@@ -1,22 +1,22 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { connect } from "react-redux";
-import debounce from "lodash/debounce";
-import { EditorState, convertFromRaw, convertToRaw } from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
-import { v4 as uuidv4 } from "uuid";
+import React, { useEffect, useState, useCallback } from 'react';
+import { connect } from 'react-redux';
+import debounce from 'lodash/debounce';
+import { EditorState, convertFromRaw, convertToRaw } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import { v4 as uuidv4 } from 'uuid';
 import {
   selectNotes,
   getSelectedBid,
   getUserName,
   getUserEmail,
   getUserRole,
-  getProposalDetails,
-} from "../../../redux/selectors";
-import "../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { updateNote, fetchNotes } from "../../../redux/actions/notepad-actions";
-import "draft-js/dist/Draft.css";
+  getProposalDetails
+} from '../../../redux/selectors';
+import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { updateNote, fetchNotes } from '../../../redux/actions/notepad-actions';
+import 'draft-js/dist/Draft.css';
 
-const jsonDP = require("jsondiffpatch");
+const jsonDP = require('jsondiffpatch');
 
 const WysiwygNotepad = ({
   notes = null,
@@ -26,28 +26,28 @@ const WysiwygNotepad = ({
   userRole,
   updateNote,
   fetchNotes,
-  proposalDetails,
+  proposalDetails
 }) => {
   const emptyTextBlock = {
     blocks: [
       {
         key: uuidv4(),
-        text: "...",
-        type: "unstyled",
+        text: '...',
+        type: 'unstyled',
         depth: 0,
         entityRanges: [],
-        data: {},
-      },
+        data: {}
+      }
     ],
-    entityMap: {},
+    entityMap: {}
   };
   const constructNoteV2 = (
     proposalId,
     notesId,
     noteText = emptyTextBlock, // non stringified block data i.e as returned from Editor {block:[], entityMap:{}}
-    userEmail = "",
-    userName = "",
-    userRole = ""
+    userEmail = '',
+    userName = '',
+    userRole = ''
   ) => {
     return {
       proposalId,
@@ -56,19 +56,19 @@ const WysiwygNotepad = ({
       createdBy: { userEmail, userName, userRole },
       section: null,
       isNoteV2: true,
-      oppNo: proposalDetails["CRM #"],
+      oppNo: proposalDetails['CRM #']
     };
   };
 
   const initialEditorState = EditorState.createEmpty();
   const [editorState, setEditorState] = useState(initialEditorState);
-  const [notesId, setNotesId] = useState("");
+  const [notesId, setNotesId] = useState('');
 
   useEffect(() => {
     if (!notes.isFromSocket) {
       if (notes.size > 0) {
         const newNotes =
-          typeof notes.get(0).toJS().noteText !== "object"
+          typeof notes.get(0).toJS().noteText !== 'object'
             ? JSON.parse(notes.get(0).toJS().noteText)
             : notes.get(0).toJS().noteText;
 
@@ -81,7 +81,7 @@ const WysiwygNotepad = ({
       const raw = convertToRaw(editorState.getCurrentContent());
       const delta = jsonDP.diff(raw, JSON.parse(notes.get(0).toJS().noteText));
       if (!delta) {
-        console.log("no change found in notes from socket so returned");
+        console.log('no change found in notes from socket so returned');
         return;
       }
       const nextContentState = convertFromRaw(jsonDP.patch(raw, delta));
@@ -94,28 +94,28 @@ const WysiwygNotepad = ({
         );
         setEditorState(stateWithContentAndSelection);
       } catch (e) {
-        console.log("error occured in force selection", e);
+        console.log('error occured in force selection', e);
         setEditorState(stateWithContent);
       }
     }
   }, [notes, selectedBid]);
 
   const fetchLatestNotes = () => {
-    const proposalId = selectedBid.get("id", "");
+    const proposalId = selectedBid.get('id', '');
     if (proposalId) fetchNotes(proposalId);
   };
 
   useEffect(() => {
-    fetchLatestNotes();
+    // fetchLatestNotes();
     return () => {
-      console.log("WYSIWYG Unmount");
+      console.log('WYSIWYG Unmount');
       setEditorState(initialEditorState);
     };
   }, []);
 
   const memoizedSaveDB = useCallback(
-    debounce((noteText) => {
-      const proposalId = selectedBid.get("id");
+    debounce(noteText => {
+      const proposalId = selectedBid.get('id');
       const noteSaveReqBody = constructNoteV2(
         proposalId,
         notesId,
@@ -131,13 +131,13 @@ const WysiwygNotepad = ({
   );
 
   const onEditorsChange = useCallback(
-    (updatedEditorState) => {
+    updatedEditorState => {
       const raw = convertToRaw(editorState.getCurrentContent());
       const updatedRaw = convertToRaw(updatedEditorState.getCurrentContent());
       const delta = jsonDP.diff(raw, updatedRaw);
       setEditorState(updatedEditorState);
       if (!delta) {
-        console.log("no change found in notes after key event");
+        console.log('no change found in notes after key event');
         return;
       }
       memoizedSaveDB(updatedRaw);
@@ -160,11 +160,11 @@ const WysiwygNotepad = ({
       handlePastedText={onhandlePastedText}
       toolbar={{
         options: [
-          "inline",
+          'inline',
           // 'blockType',
           // 'fontSize',
           // 'fontFamily',
-          "list",
+          'list',
           // 'textAlign',
           // 'colorPicker',
           // 'link',
@@ -172,25 +172,25 @@ const WysiwygNotepad = ({
           // 'emoji',
           // 'image',
           // 'remove',
-          "history",
-        ],
+          'history'
+        ]
       }}
     />
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   notes: selectNotes(state),
   selectedBid: getSelectedBid(state),
   userName: getUserName(state),
   userEmail: getUserEmail(state),
   userRole: getUserRole(state),
-  proposalDetails: getProposalDetails(state),
+  proposalDetails: getProposalDetails(state)
 });
 
 const mapDispatchToProps = {
   updateNote,
-  fetchNotes,
+  fetchNotes
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WysiwygNotepad);
