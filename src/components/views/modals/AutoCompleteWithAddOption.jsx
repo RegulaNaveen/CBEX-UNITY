@@ -119,7 +119,7 @@ const AutoCompleteWithAddOption = ({
       <Autocomplete
         filterOptions={(currentLov, params) => {
           const filtered = filter(currentLov, params);
-          if (params.inputValue !== "" && !lov.includes(params.inputValue)) {
+          if (params.inputValue !== "" && !lov.includes(params.inputValue ) && !selectedVal.includes(params.inputValue)) {
             filtered.push(`add "${params.inputValue}"`);
           }
           return filtered;
