@@ -17,7 +17,7 @@ import {
   ImageRun,
   ExternalHyperlink
 } from 'docx';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isString } from 'lodash';
 import moment from 'moment-timezone';
 import { API } from '../../../constants';
 import {
@@ -192,6 +192,9 @@ function getFormattedTextCells(paras) {
 }
 
 function getFormattedTextRows(formatedTextBlocks) {
+  let textBlocks;
+  if (isString(formatedTextBlocks)) textBlocks = JSON.parse(formatedTextBlocks);
+  else textBlocks = formatedTextBlocks;
   const paras = [];
   const rows = [
     new TableRow({
@@ -214,7 +217,7 @@ function getFormattedTextRows(formatedTextBlocks) {
     })
   ];
   try {
-    formatedTextBlocks.value.blocks.forEach(block => {
+    textBlocks.value.blocks.forEach(block => {
       const texts = [];
       const { text, inlineStyleRanges, type, depth } = block;
       const listType = type.includes('list-item')
