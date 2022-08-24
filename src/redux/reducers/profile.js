@@ -56,9 +56,9 @@ function onFetchTimezoneDone(state, action) {
     payload: { data }
   } = action;
 
-  data.timezonelist.sort((a, b) =>
-    a.description.toUpperCase() < b.description.toUpperCase() ? -1 : 1
-  );
+  // data.timezonelist.sort((a, b) =>
+  //   a.description.toUpperCase() < b.description.toUpperCase() ? -1 : 1
+  // );
 
   return state
     .set('timezoneList', data?.timezonelist)
