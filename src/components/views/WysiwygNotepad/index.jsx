@@ -1,8 +1,8 @@
-import './styles.scss';
 import Collaboration from '@tiptap/extension-collaboration';
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
 import { connect } from 'react-redux';
 import React, { useEffect, useState, useContext, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 import randomColor from 'randomcolor';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -21,7 +21,12 @@ import OrderedList from '@tiptap/extension-ordered-list';
 import Heading from '@tiptap/extension-heading';
 import Link from '@tiptap/extension-link';
 import Code from '@tiptap/extension-code';
+import CodeBlock from '@tiptap/extension-code-block';
+import HardBreak from '@tiptap/extension-hard-break';
 import HighLight from '@tiptap/extension-highlight';
+import TextAlign from '@tiptap/extension-text-align';
+import Subscript from '@tiptap/extension-subscript';
+import Superscript from '@tiptap/extension-superscript';
 
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -30,9 +35,10 @@ import {
   getSelectedBid,
   getUserName,
   getUserEmail,
-  getUserRole
+  getUserRole,
+  selectIsNotesFetched
 } from '../../../redux/selectors';
-import MenuBar from './Menu/MenuBar';
+import MenuBar from './MenuBar';
 import { updateNote, fetchNotes } from '../../../redux/actions/notepad-actions';
 // import { SocketContext } from '../../../context/SocketContext';
 // import * as Y from "yjs";
@@ -58,12 +64,11 @@ const WysiwygNotepad = ({
       }
     ]
   };
-  // const [status, setStatus] = useState("connecting");
   const [json, setJSON] = useState(emptyTextBlock);
   const [content, setContent] = useState('<p></p>');
-  // const [editor, setEditor] = useState(null);
   const [notesId, setNotesId] = useState('');
-  const usercolor = randomColor();
+  const isNotesFetched = useSelector(selectIsNotesFetched);
+  const usercolor = randomColor({ luminosity: 'light' });
 
   useEffect(() => {
     fetchLatestNotes();
@@ -118,17 +123,18 @@ const WysiwygNotepad = ({
       Heading,
       Link,
       Code,
-      HighLight
+      CodeBlock,
+      HighLight,
+      HardBreak,
+      Subscript,
+      Superscript
     ]);
     setContent(data);
   }, [json, notes]);
 
   const styleMarks = (blk, map) => {
     console.log('calling styleeeeeeee', blk.entityRanges);
-    // console.log("map", map)
     let tempMarks = [];
-    // let obj = { type: "text", marks: [style], text: text };
-    // return obj;let tempMarks = [];
     blk.inlineStyleRanges.forEach(bstyle => {
       if (
         bstyle.style.toLowerCase() == 'bold' ||
@@ -160,7 +166,6 @@ const WysiwygNotepad = ({
 
   const simpleData = (block, jdata, map) => {
     let marks = [];
-    // console.log("map", map);
     if (block.entityRanges.length !== 0) {
       console.log('call simple style marks', block.entityRanges);
       marks = styleMarks(block, map);
@@ -184,44 +189,9 @@ const WysiwygNotepad = ({
     return jdata;
   };
 
-  // const linkData = (blk, map) => {
-  //   console.log("linkData", blk, map, blk.text);
-  // };
-
   const styleData = (block, jdata, map) => {
     console.log('only style', block, block.entityRanges);
     let marks = styleMarks(block, map);
-    // let content = [];
-    // // let marks;
-    // console.log("text", block.text);
-    // block.inlineStyleRanges.forEach((blk, index) => {
-    //   console.log("attr", blk, blk.offset, index);
-    //   if (index == 0) {
-    //     let start = block.text.substr(0, blk.offset);
-    //     console.log("start", start);
-    //   } else {
-    //     let other = block.text.substr(
-    //       block.inlineStyleRanges[index - 1].offset +
-    //         block.inlineStyleRanges[index - 1].length,
-    //       blk.offset
-    //     );
-    //     console.log(
-    //       "start others",
-    //       other,
-    //       block.inlineStyleRanges[index - 1].offset +
-    //         block.inlineStyleRanges[index - 1].length,
-    //       blk.offset
-    //     );
-    //   }
-    //   // console.log("new", block.text[blk.offset+ blk.length]);
-    //   let text1 = block.text.substr(blk.offset, blk.length);
-    //   console.log("text1", text1);
-    //   let marks = styleMarks(text1, blk.style);
-    //   console.log("mks", marks);
-    //   content.push(marks);
-    // });
-    // let marks = styleMarks(text, style);
-    // console.log("mks", marks);
 
     jdata.content.push({
       type: 'paragraph',
@@ -232,13 +202,11 @@ const WysiwygNotepad = ({
           text: block.text
         }
       ]
-      // content: content,
     });
     return jdata;
   };
 
   const typeData = (block, jdata, map) => {
-    // console.log("map", map);
     let marks = [];
     if (block.entityRanges.length !== 0) {
       console.log('call type style marks', block.entityRanges);
@@ -443,24 +411,13 @@ const WysiwygNotepad = ({
         !!block.inlineStyleRanges &&
         block.inlineStyleRanges.length !== 0
       ) {
-        // if (block.entityRanges.length !== 0) {
-        //   console.log("linkData style", block);
-        //   // linkData(block, data.entityMap);
-        // }
         jdata = styleData(block, jdata, data.entityMap);
       } else if (!!block.type && block.type !== 'unstyled') {
-        // if (block.entityRanges.length !== 0) {
-        //   console.log("linkData type", block);
-        // }
         jdata = typeData(block, jdata, data.entityMap);
       } else {
-        // if (block.entityRanges.length !== 0) {
-        //   console.log("linkData simple", block);
-        // }
         jdata = simpleData(block, jdata, data.entityMap);
       }
     });
-    // console.log("jdata", jdata);
     let finalJSON = JSON.parse(JSON.stringify(jdata));
     console.log('final', finalJSON);
     return finalJSON;
@@ -468,37 +425,39 @@ const WysiwygNotepad = ({
 
   const editor = useEditor(
     {
-      extensions:
-        // [StarterKit, Underline, Link],
-        // socket
-        notesSocket.wsInstance
-          ? // false
-            [
-              StarterKit,
-              Underline,
-              Code,
-              HighLight,
-              Collaboration.configure({
-                document: notesSocket.ydoc
-              }),
-              CollaborationCursor.configure({
-                provider: notesSocket.wsInstance,
-                user: {
-                  name: userName + ' ' + 'is typing....',
-                  color: usercolor
-                }
-              }),
-              Link.configure({
-                autolink: true,
-                linkOnPaste: false,
-                validate: href => /^https?:\/\//.test(href),
-                protocols: ['ftp', 'mailto'],
-                HTMLAttributes: {
-                  class: 'my-custom-class'
-                }
-              })
-            ]
-          : [StarterKit, Underline, Link, Code, HighLight],
+      extensions: notesSocket.wsInstance
+        ? [
+            StarterKit,
+            Underline,
+            Code,
+            CodeBlock,
+            HighLight,
+            Subscript,
+            Superscript,
+            TextAlign.configure({
+              types: ['heading', 'paragraph']
+            }),
+            Collaboration.configure({
+              document: notesSocket.ydoc
+            }),
+            CollaborationCursor.configure({
+              provider: notesSocket.wsInstance,
+              user: {
+                name: userName + ' ' + 'is typing....',
+                color: usercolor
+              }
+            }),
+            Link.configure({
+              autolink: true,
+              linkOnPaste: false,
+              validate: href => /^https?:\/\// || /^www?:\/\//.test(href),
+              protocols: ['ftp', 'mailto'],
+              HTMLAttributes: {
+                class: 'my-custom-class'
+              }
+            })
+          ]
+        : [StarterKit, Underline, Link, Code, HighLight, HardBreak, CodeBlock],
       content: content || '<p></p>',
       onUpdate: ({ editor }) => {
         const Ejson = editor.getJSON();
@@ -547,8 +506,8 @@ const WysiwygNotepad = ({
 
   return (
     <>
-      {notesSocket.wsInstance && (
-        <div>
+      {notesSocket.wsInstance && isNotesFetched && (
+        <div className="editor-notepad">
           <div>
             <MenuBar editor={editor} />
           </div>

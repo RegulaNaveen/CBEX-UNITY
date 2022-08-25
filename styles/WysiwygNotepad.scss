@@ -1,7 +1,8 @@
 /* Basic editor styles */
 .ProseMirror {
-  padding: 5px;
+  padding: 0px 10px;
   min-height: 78vh;
+  outline-color: $white;
 
   > * + * {
     margin-top: 0.75em;
@@ -26,15 +27,15 @@
   }
 
   code {
-    background-color: rgba(#616161, 0.1);
-    color: #616161;
+    background-color: rgba($neutral7, 0.1);
+    color: $neutral7;
   }
 
   pre {
-    background: #0d0d0d;
+    background: $black;
     border-radius: 0.5rem;
-    color: #fff;
-    font-family: "JetBrainsMono", monospace;
+    color: $white;
+    font-family: 'JetBrainsMono', monospace;
     padding: 0.75rem 1rem;
 
     code {
@@ -59,17 +60,17 @@
   }
 
   blockquote {
-    border-left: 2px solid rgba(#0d0d0d, 0.1);
+    border-left: 2px solid rgba($black, 0.1);
     padding-left: 1rem;
   }
 
   hr {
     border: none;
-    border-top: 2px solid rgba(#0d0d0d, 0.1);
+    border-top: 2px solid rgba($black, 0.1);
     margin: 2rem 0;
   }
 
-  ul[data-type="taskList"] {
+  ul[data-type='taskList'] {
     list-style: none;
     padding: 0;
 
@@ -91,17 +92,16 @@
 }
 
 .editor {
-  background-color: #fff;
-  border: 3px solid #0d0d0d;
+  background-color: $white;
   border-radius: 0.75rem;
-  color: #0d0d0d;
+  color: $black;
   display: flex;
   flex-direction: column;
   max-height: 26rem;
 
   &__header {
     align-items: center;
-    border-bottom: 3px solid #0d0d0d;
+    border-bottom: 1px solid $neutral3;
     display: flex;
     flex: 0 0 auto;
     flex-wrap: wrap;
@@ -118,8 +118,8 @@
 
   &__footer {
     align-items: center;
-    border-top: 3px solid #0d0d0d;
-    color: #0d0d0d;
+    // border-top: 3px solid #0d0d0d;
+    color: $black;
     display: flex;
     flex: 0 0 auto;
     font-size: 12px;
@@ -137,9 +137,9 @@
     display: flex;
 
     &::before {
-      background: rgba(#0d0d0d, 0.5);
+      background: rgba($black, 0.5);
       border-radius: 50%;
-      content: " ";
+      content: ' ';
       display: inline-block;
       flex: 0 0 auto;
       height: 0.5rem;
@@ -148,7 +148,7 @@
     }
 
     &--connecting::before {
-      background: #616161;
+      background: $neutral7;
     }
 
     &--connected::before {
@@ -161,35 +161,35 @@
       background: none;
       border: none;
       border-radius: 0.4rem;
-      color: #0d0d0d;
+      color: $black;
       font: inherit;
       font-size: 12px;
       font-weight: 600;
       padding: 0.25rem 0.5rem;
 
       &:hover {
-        background-color: #0d0d0d;
-        color: #fff;
+        background-color: $black;
+        color: $white;
       }
     }
   }
 
   &-scroll {
-    height: 600px;
     overflow-y: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none;
+  }
 
-    &::-webkit-scrollbar {
-      display: none;
-    }
+  &-notepad {
+    display: flex;
+    flex-direction: column;
   }
 }
 
 /* Give a remote user a caret */
 .collaboration-cursor__caret {
-  border-left: 1px solid #0d0d0d;
-  border-right: 1px solid #0d0d0d;
+  border-left: 1px solid $black;
+  border-right: 1px solid $black;
   margin-left: -1px;
   margin-right: -1px;
   pointer-events: none;
@@ -200,7 +200,7 @@
 /* Render the username above the caret */
 .collaboration-cursor__label {
   border-radius: 3px 3px 3px 0;
-  color: #0d0d0d;
+  color: $black;
   font-size: 12px;
   font-style: normal;
   font-weight: 600;
@@ -208,7 +208,7 @@
   line-height: normal;
   padding: 0.1rem 0.3rem;
   position: absolute;
-  top: -1.4em;
+  top: 20px;
   user-select: none;
   white-space: nowrap;
 }
