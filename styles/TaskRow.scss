@@ -2,9 +2,9 @@
   .task-table-row {
     display: grid;
     grid-template-columns: 1.3fr 1.3fr 160px;
-    // margin-bottom: 8px;
-    padding: 8px 0;
+    padding: 8px;
     align-items: center;
+    border-radius: 2px;
 
     p {
       p {
@@ -48,29 +48,31 @@
       color: $neptune-secondary;
       cursor: pointer;
       font-size: 14px;
-      // align-self: flex-start;
-      // margin-top: 7%;
-    }
-    .date-picker > div {
-      margin-top: 0px;
-    }
-    .date-picker > div > div {
-      margin-top: 0px;
     }
 
     .date-picker {
+      & > div {
+        margin-top: 0;
+        & > div {
+          margin-top: 0;
+        }
+      }
+
+      .resetButton {
+        margin-top: 0.75rem !important;
+      }
+
       &.disabled {
         cursor: not-allowed;
 
         .Mui-disabled {
-          background-color: #f2f2f2;
-
+          background-color: $neutral2;
           opacity: 1;
 
           input {
             &:disabled {
               &::placeholder {
-                color: #999999;
+                color: $neutral6;
               }
             }
           }
@@ -80,7 +82,7 @@
     .autocomplete-disabled {
       cursor: not-allowed;
       .Mui-disabled {
-        background-color: #f2f2f2 !important;
+        background-color: $neutral2 !important;
       }
     }
     .public-DraftStyleDefault-block {
@@ -88,13 +90,14 @@
     }
   }
 }
+
 @media only screen and (min-width: 1201px) and (max-width: 3000px) {
   .task-table-row {
     display: grid;
     grid-template-columns: 1.3fr 1.3fr 160px;
-    // margin-bottom: 8px;
-    padding: 10px 0;
+    padding: 10px 8px;
     align-items: flex-start;
+    border-radius: 2px;
 
     p {
       p {
@@ -138,29 +141,32 @@
       color: $neptune-secondary;
       cursor: pointer;
       font-size: 16px;
-      // align-self: flex-start;
-      // margin-top: 7%;
-    }
-    .date-picker > div {
-      margin-top: 0px;
-    }
-    .date-picker > div > div {
-      margin-top: 0px;
     }
 
     .date-picker {
+      & > div {
+        margin-top: 0;
+        & > div {
+          margin-top: 0;
+        }
+      }
+
+      .resetButton {
+        margin-top: 0.75rem !important;
+      }
+
       &.disabled {
         cursor: not-allowed;
 
         .Mui-disabled {
-          background-color: #f2f2f2;
+          background-color: $neutral2;
 
           opacity: 1;
 
           input {
             &:disabled {
               &::placeholder {
-                color: #999999;
+                color: $neutral6;
               }
             }
           }
@@ -170,7 +176,7 @@
     .autocomplete-disabled {
       cursor: not-allowed;
       .Mui-disabled {
-        background-color: #f2f2f2 !important;
+        background-color: $neutral2 !important;
       }
     }
     .public-DraftStyleDefault-block {
@@ -257,6 +263,7 @@
     }
   }
 }
+
 .selected-task-table-row {
   background-color: $neptune-hover;
 }
