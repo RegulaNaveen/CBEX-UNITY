@@ -1,6 +1,6 @@
 // @flow
 /* eslint-disable no-plusplus */
-import React, { Component } from 'react';
+import React from 'react';
 import { Map, List } from 'immutable';
 import { connect } from 'react-redux';
 import { isObject, isEqual, isEmpty, xor, isString, has } from 'lodash';
@@ -87,7 +87,7 @@ type Props = {
   hasDifferentSFanswer: boolean,
   isNotepadOpen: boolean
 };
-export class TaskRow extends Component<Props, State> {
+export class TaskRow extends React.PureComponent<Props, State> {
   constructor(props: Object) {
     super(props);
 
@@ -387,6 +387,8 @@ export class TaskRow extends Component<Props, State> {
       hasDifferentSFanswer,
       loading
     } = this.props;
+
+    const { selectedRow } = this.state;
     const isCurrentBid = selectedBid.get('isCurrent');
 
     const optionsYN = ['Yes', 'No'];
@@ -433,16 +435,32 @@ export class TaskRow extends Component<Props, State> {
       finalOptions = getCountryOptions();
     }
 
-    /**
-     * Get Converted Answer String
-     */
+    // Function to converted Answer String
     const getConvertedAnsString = str =>
       !String(str).trim() ? '' : String(str).trim();
 
-    const hasFormattedAns = has(lastAnswer?.toJS(), 'formattedAnswer');
+    // Function to parse stringify Json
+    function parseJson(str) {
+      try {
+        return JSON.parse(str);
+      } catch (e) {
+        return false;
+      }
+    }
+
+    const lastAnswerJS = lastAnswer?.toJS();
     const formattedAnswer =
-      hasFormattedAns && lastAnswer?.toJS().formattedAnswer;
-    const richTextData = formattedAnswer || { html: '', value: { blocks: [] } };
+      has(lastAnswerJS, 'formattedAnswer') && lastAnswerJS.formattedAnswer;
+
+    const parseFormattedData =
+      !formattedAnswer || isObject(formattedAnswer)
+        ? formattedAnswer
+        : parseJson(formattedAnswer);
+
+    const richTextData = parseFormattedData || {
+      html: '',
+      value: { blocks: [] }
+    };
 
     // Richtext Props
     const richTextAnswerField = {
@@ -474,7 +492,7 @@ export class TaskRow extends Component<Props, State> {
           firstChild.style.maxWidth = 'calc(100% - 28px)';
         }
 
-        this.setSelectRow(true);
+        if (!selectedRow) this.setSelectRow(true);
       },
       onBlur: data => {
         if (!isEqual(getConvertedAnsString(answerValue), data.text.trim())) {

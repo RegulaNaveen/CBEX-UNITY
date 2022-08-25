@@ -88,6 +88,7 @@ const Autocomplete = props => {
               mail: `${p.email.toLowerCase()}`
             };
           });
+          console.log(updatedOptions, 'UO');
           setOptions(updatedOptions);
         });
     } catch (error) {
@@ -104,7 +105,6 @@ const Autocomplete = props => {
     if (proposaluser.length === 0) props.onChange(' ', text, reason);
     else props.onChange(proposaluser.join(','), text, reason);
   };
-
   const onInputChange = _.debounce((event, value) => {
     if (value) {
       setCallAccept(true);
