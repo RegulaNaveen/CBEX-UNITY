@@ -18,6 +18,7 @@ let UBUILD_ENABLED = false;
 let UBUILD_ARTIFACT = '';
 let SF_HOST_URL = '';
 let SOCKET_URL = '';
+let NOTES_SOCKET_URL = '';
 
 switch (environment) {
   case 'UAT':
@@ -34,6 +35,8 @@ switch (environment) {
     SF_HOST_URL = 'https://iqvia--uat.lightning.force.com/';
     SOCKET_URL =
       'wss://l3p8o0zg48.execute-api.us-east-1.amazonaws.com/production';
+    NOTES_SOCKET_URL =
+      'wss://662wdhv4y1.execute-api.us-east-1.amazonaws.com/production';
     break;
   case 'DEV2':
     PROPOSAL_API_ENDPOINT =
@@ -78,6 +81,7 @@ switch (environment) {
     SF_HOST_URL = 'https://iqvia.my.salesforce.com/';
     SOCKET_URL =
       'wss://29nghekakl.execute-api.us-east-1.amazonaws.com/production';
+
     break;
   case 'QA':
     // UDEV Data
@@ -93,6 +97,8 @@ switch (environment) {
     SF_HOST_URL = 'https://iqvia--staging.lightning.force.com/';
     SOCKET_URL =
       'wss://nthe94se04.execute-api.us-east-1.amazonaws.com/production';
+    NOTES_SOCKET_URL =
+      'wss://662wdhv4y1.execute-api.us-east-1.amazonaws.com/production';
     break;
   default:
     // DEV Data
@@ -109,6 +115,8 @@ switch (environment) {
     SF_HOST_URL = 'https://iqvia--crm.lightning.force.com/';
     SOCKET_URL =
       'wss://sgag59jkn1.execute-api.us-east-1.amazonaws.com/production';
+    NOTES_SOCKET_URL =
+      'wss://662wdhv4y1.execute-api.us-east-1.amazonaws.com/production';
     break;
 }
 
@@ -189,5 +197,6 @@ export {
   SF_HOST_URL,
   SOCKET_URL,
   PROFILE,
-  NOTIFICATION
+  NOTIFICATION,
+  NOTES_SOCKET_URL
 };

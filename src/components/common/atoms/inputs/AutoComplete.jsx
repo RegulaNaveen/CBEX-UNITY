@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import AutocompleteV2 from 'apollo-react/components/AutocompleteV2';
-import Loader from 'react-loader-spinner';
 import { API } from '../../../../constants';
 import { getAccessTokenFromLocalStorage as getAccessToken } from '../../../../SessionHandler';
 
@@ -10,12 +9,12 @@ const Autocomplete = props => {
   const [options, setOptions] = useState([]);
   const [value, setValue] = useState([]);
   const [callAccept, setCallAccept] = useState(false);
-  const [count, setCount] = useState(1);
   const text = String(props?.text)
     .trimStart()
     .trimEnd();
   const previousController = useRef();
   const { disabled } = props;
+  // let callAccept = false;
 
   function filter() {
     value.map(row => {
@@ -71,6 +70,7 @@ const Autocomplete = props => {
     var controller = new AbortController();
     var signal = controller.signal;
     previousController.current = controller;
+
     try {
       fetch(`${USER_API_URL}/${searchTerm}`, {
         signal,
@@ -81,8 +81,7 @@ const Autocomplete = props => {
       })
         .then(response => response.json())
         .then(myJson => {
-          setCount(myJson.data.length);
-          // if (callAccept === false) return;
+          if (callAccept === false) return;
           const updatedOptions = myJson.data.map(p => {
             return {
               label: `${p.first_name} ${p.last_name}(${p.email.toLowerCase()})`,
@@ -98,6 +97,7 @@ const Autocomplete = props => {
   };
 
   const handleChange = (event, newValue, reason) => {
+    console.log('newValue', newValue);
     setValue(newValue);
     const proposaluser = newValue.map(v => {
       return v.email ? v.label + '(' + v.email + ')' : v.label;
@@ -108,38 +108,41 @@ const Autocomplete = props => {
   const onInputChange = _.debounce((event, value) => {
     if (value) {
       setCallAccept(true);
-      setCount(1);
+      // setCount(1);
       getData(value);
     } else {
       setCallAccept(false);
-      setCount(1);
+      // setCount(1);
       setOptions([]);
     }
   }, 100);
+  const handleBackspace = e => {
+    console.log(e.key);
+    if (e.keyCode === 8) {
+      setCallAccept(false);
+      console.log('1');
+    }
+  };
+
   return (
     <div className={`${disabled ? 'autocomplete-disabled' : 'autocomplete'}`}>
       <AutocompleteV2
         fullWidth
         multiple
-        freeSolo={!callAccept}
         options={options || []}
-        chipColor="white"
-        size="small"
+        chipColor='white'
+        size='small'
         limitChips={5}
-        matchFrom="any"
+        disableCloseOnSelect={false}
         value={value}
         onChange={handleChange}
         onInputChange={onInputChange}
-        noOptionsText={
-          options.length === 0 && !count ? (
-            'No matches found'
-          ) : (
-            <Loader type="TailSpin" color="#297DFD" height={40} width={40} />
-          )
-        }
+        noOptionsText='No matches found'
+        open={options.length > 0}
         onFocus={e => props.onFocus()}
         onBlur={e => props.onBlur()}
         disabled={disabled || false}
+        onKeyDown={handleBackspace}
       />
     </div>
   );

@@ -3,15 +3,19 @@ const selectNotepad = state => {
 };
 
 export const selectNotes = state => {
- try {
-  return selectNotepad(state).get('notes');
- } catch (error) {
-  console.log(error)
- }
+  try {
+    return selectNotepad(state).get('notes');
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const selectIsFetchingNotes = state => {
   return selectNotepad(state).get('fetchingNotes');
+};
+
+export const selectIsNotesFetched = state => {
+  return selectNotepad(state).get('isNotesFetched');
 };
 
 export const selectIsAddingNote = state => {
