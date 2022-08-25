@@ -116,6 +116,11 @@ const setupWS = provider => {
       if (typeof event.data !== 'string') return;
 
       try {
+        const firstChar = event.data.charAt(0);
+
+        const lastChar = event.data.charAt(event.data.length - 1);
+
+        if (firstChar === '{' && lastChar === '}') return;
         const encoder = readMessage(
           provider,
           new Uint8Array(fromBase64(event.data)),

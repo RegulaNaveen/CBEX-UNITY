@@ -37,6 +37,7 @@ import { updateNote, fetchNotes } from '../../../redux/actions/notepad-actions';
 // import { SocketContext } from '../../../context/SocketContext';
 // import * as Y from "yjs";
 import { debounce } from 'lodash';
+import NotesSocketContext from '../../../context/notesSocketContext';
 
 const WysiwygNotepad = ({
   notes = null,
@@ -46,12 +47,9 @@ const WysiwygNotepad = ({
   userRole,
   updateNote,
   fetchNotes,
-  proposalDetails,
-  ydoc,
-  wsProvider
+  proposalDetails
 }) => {
-  // const { socket } = useContext(SocketContext);
-
+  const notesSocket = useContext(NotesSocketContext);
   const emptyTextBlock = {
     type: 'doc',
     content: [
@@ -473,7 +471,7 @@ const WysiwygNotepad = ({
       extensions:
         // [StarterKit, Underline, Link],
         // socket
-        wsProvider
+        notesSocket.wsInstance
           ? // false
             [
               StarterKit,
@@ -481,10 +479,10 @@ const WysiwygNotepad = ({
               Code,
               HighLight,
               Collaboration.configure({
-                document: ydoc
+                document: notesSocket.ydoc
               }),
               CollaborationCursor.configure({
-                provider: wsProvider,
+                provider: notesSocket.wsInstance,
                 user: {
                   name: userName + ' ' + 'is typing....',
                   color: usercolor
@@ -549,7 +547,7 @@ const WysiwygNotepad = ({
 
   return (
     <>
-      {wsProvider && (
+      {notesSocket.wsInstance && (
         <div>
           <div>
             <MenuBar editor={editor} />
