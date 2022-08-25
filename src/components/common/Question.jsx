@@ -91,11 +91,16 @@ export class TaskRow extends React.PureComponent<Props, State> {
   constructor(props: Object) {
     super(props);
 
+    this.quesTextContainerRef = React.createRef();
+    this.quesTextInnerLeftRef = React.createRef();
+    this.quesTextInnerRightRef = React.createRef();
+
     this.state = {
       selectedDay: '',
       selectedRow: false,
       iconColor: '#00c221',
-      screenWidth: ''
+      screenWidth: '',
+      enableRichtext: false
     };
   }
 
@@ -187,8 +192,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
    */
   handleRichTextChange = (editorData, lastEditorData) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
-
-    console.log({ newData: editorData.value, oldData: lastEditorData.value });
 
     if (!isEqual(editorData.value, lastEditorData.value)) {
       const { value, html, text } = editorData;
@@ -462,7 +465,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
     // Richtext Props
     const richTextAnswerField = {
       richTextString: getConvertedAnsString(answerValue),
-      richTextVal: richTextJSON,
+      richTextVal: richTextData.value,
+      richTextHtml: richTextData.html,
       enableFocus: true,
       isEditable: false,
       placeholder: checkDisableFlag() ? '' : DEFAULT.CLICK_TO_ANS,
@@ -498,6 +502,17 @@ export class TaskRow extends React.PureComponent<Props, State> {
             html
           });
         }
+        this.setState({ enableRichtext: false });
+
+        // Change title style for richEdit icon
+        const {
+          style: quesTitleLStyle,
+          firstChild
+        } = this.quesTextInnerLeftRef.current;
+        quesTitleLStyle.minHeight = 'auto';
+        firstChild.style.maxWidth = 'none';
+
+        this.setSelectRow(false);
       }
     };
 
@@ -776,36 +791,39 @@ export class TaskRow extends React.PureComponent<Props, State> {
       }
     }
     const isCurrentBid = selectedBid.get('isCurrent');
-    const { selectedRow, iconColor, changeIcon } = this.state;
-    const gridColRatio = isNotepadOpen
-      ? this.state.screenWidth < 641
-        ? [8, 4]
-        : [10, 2]
-      : [10, 2];
+    const {
+      selectedRow,
+      iconColor,
+      changeIcon,
+      screenWidth,
+      enableRichtext
+    } = this.state;
+    const smallScreenWidth = screenWidth < 641 ? [8, 4] : [10, 2];
+    const gridColRatio = isNotepadOpen ? smallScreenWidth : [10, 2];
+
     return (
       <Grid
         container
         className={`task-table-row${
           selectedRow ? ' selected-task-table-row' : ''
         }`}
-        style={{ margin: '2px 0px', padding: '4 8' }}
+        style={{ margin: '2px 0px' }}
       >
         <Grid item xs={gridColRatio[0]}>
           {/* Question Text and Milestone */}
           <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              paddingBottom: '8px'
-            }}
+            className={classNames('question-label-container', {
+              'has-richtext-icon': enableRichtext
+            })}
+            ref={this.quesTextContainerRef}
           >
-            {/* questionText */}
-            <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-              <div
-                style={{ zIndex: 0, alignSelf: 'center' }}
-                className="questiontext-richtext"
-              >
+            <div
+              className="question-label-inner"
+              ref={this.quesTextInnerLeftRef}
+              style={{ minHeight: 'auto' }}
+            >
+              {/* Question Text */}
+              <div className="questiontext-richtext">
                 <div className="question-title-txt">
                   {questionJSON ? (
                     <RichTextEditor
@@ -818,8 +836,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
                   )}
                 </div>
               </div>
+
               {/* Edit Question Icon */}
-              <div style={{ paddingLeft: '5px' }}>
+              <div className="question-edit">
                 {isCustomQuestion && isCurrentBid && (
                   <span
                     aria-hidden="true"
@@ -841,8 +860,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
                   </span>
                 )}
               </div>
+
               {/* Question Hint */}
-              <div style={{ paddingLeft: '5px', paddingTop: '3px' }}>
+              <div className="question-hint">
                 {questionHint ? (
                   <Tooltip
                     variant="light"
@@ -873,8 +893,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
               </div>
             </div>
 
-            {/* Milestone */}
-            <div>
+            {/* Milestone Chip */}
+            <div className="milestone-chip" ref={this.quesTextInnerRightRef}>
               {this.renderTags(
                 milestone,
                 milestoneNew,
