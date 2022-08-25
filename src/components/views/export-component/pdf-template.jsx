@@ -27,6 +27,7 @@ import {
 } from '@react-pdf/renderer';
 import React from 'react';
 import Html from 'react-pdf-html';
+import { isString } from 'lodash';
 import Logo from '../../../../img/iqvia-main-logo.png';
 import ProximaNova from '../../../../fonts/ProximaNova-Regular.otf';
 import ProximaNovaBold from '../../../../fonts/Proxima Nova Alt Bold.otf';
@@ -197,9 +198,12 @@ function getStyle() {
 function checkFormattedAnswer(answers) {
   try {
     const lastAnswer = answers[answers.length - 1];
-    const formattedAnswer = lastAnswer?.formattedAnswer?.value?.blocks;
-    if (formattedAnswer) {
-      return lastAnswer?.formattedAnswer?.html;
+    let formattedAnswer;
+    if (lastAnswer?.formattedAnswer) {
+      if (isString(lastAnswer?.formattedAnswer))
+        formattedAnswer = JSON.parse(lastAnswer?.formattedAnswer);
+      else formattedAnswer = lastAnswer?.formattedAnswer;
+      return formattedAnswer?.html;
     }
     return lastAnswer.answer.toString();
   } catch (error) {
@@ -335,7 +339,7 @@ function questionTables(proposalQuestions) {
       .forEach(question => {
         const questionText = question.questionText || '';
         const extraNewLines = getExtraLines(
-          checkFormattedAnswer(question.answers),
+          getLastAnswer(question.answers),
           questionText
         );
         html += `<tr>`;
