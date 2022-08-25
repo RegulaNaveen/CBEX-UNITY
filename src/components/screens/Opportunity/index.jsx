@@ -146,21 +146,13 @@ export class Opportunity extends Component<Props, State> {
       } = this.props;
 
       console.log('creating new connection');
-      // const { selectedBid } = this.props;
       const { ydoc } = this.state;
-      // const proposalId = selectedBid.get('id');
-
-      console.log('params.id', params.id);
-      const clientName = Math.random()
-        .toString(36)
-        .substr(2, 20);
       const storedValue = `doc-${params.id}`;
       if (params.id) {
         const wsProvider = new WebsocketProvider(
           NOTES_SOCKET_URL,
           `?=${storedValue}&`,
-          ydoc,
-          { params: { name: clientName } }
+          ydoc
         );
         this.setState({ wsInstance: wsProvider });
       }
