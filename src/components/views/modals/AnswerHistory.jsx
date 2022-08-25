@@ -33,7 +33,7 @@ class AnswerHistory extends Component<Props> {
     super(props);
 
     this.state = {
-      question: this.props.question,
+      question: this.props.question.set('answers', fromJS([])),
       loading: false
     };
   }
@@ -56,7 +56,7 @@ class AnswerHistory extends Component<Props> {
           const availableAns = question?.toJS().answers;
           if (!isEmpty(availableAns) && Array.isArray(availableAns)) {
             const cloneAnswers = [...availableAns];
-            if(res.data.length > 0) cloneAnswers.pop();
+            if (res.data.length > 0) cloneAnswers.pop();
             modifiedAns = fromJS([...cloneAnswers, ...res.data]);
           } else {
             modifiedAns = fromJS(res.data);
@@ -133,7 +133,7 @@ class AnswerHistory extends Component<Props> {
           .proposalDetails.bidNo;
       }
 
-      const nextAnswer = answers.get(index + 1)
+      let nextAnswer = answers.get(index + 1)
         ? answers.get(index + 1).get('answer')
         : answer;
 
@@ -233,9 +233,9 @@ class AnswerHistory extends Component<Props> {
               }
             );
           }
-          const showDate = (dateAns, nxtDateAns, indx) => {
+          const showDate = (answer, nextAnswer, indx) => {
             const tmp = answers.toJS();
-            if (new Date(dateAns) === 'Invalid Date') {
+            if (new Date(answer) == 'Invalid Date') {
               return renderWord('Invalid Date', 'removed');
             }
             let styleClass =
@@ -249,24 +249,28 @@ class AnswerHistory extends Component<Props> {
               nextAnswer = '';
               styleClass = undefined;
             }
-            const newDate = renderWord(
-              String(parseMomentDate(dateAns)),
+            const newdate = renderWord(
+              String(parseMomentDate(answer)),
               styleClass
             );
-            let nextDate = '';
-            if (indx + 1 === tmp.length) {
-              nextDate = '';
+            let nextdate = '';
+            if (indx + 1 == tmp.length) {
+              nextdate = '';
             } else if (
-              nxtDateAns &&
-              String(nxtDateAns).trim().length &&
+              nextAnswer &&
+              String(nextAnswer).trim().length &&
               tmp.length > 1
             ) {
-              nextDate = renderWord(
-                String(parseMomentDate(nxtDateAns)),
+              nextdate = renderWord(
+                String(parseMomentDate(nextAnswer)),
                 'removed'
               );
             }
-            return `${nextDate} ${newDate}`;
+            return (
+              <>
+                {nextdate} {newdate}
+              </>
+            );
           };
 
           if (questionType === 'select' || questionType === 'select-lookup') {
@@ -444,7 +448,7 @@ class AnswerHistory extends Component<Props> {
             </button>
           </div>
 
-          <div className="modal-body">{this.renderContent()}</div>
+          <div className="modal-body">{!loading && this.renderContent()}</div>
 
           <div className="modal-actions">
             <button type="button" onClick={closeModal}>
