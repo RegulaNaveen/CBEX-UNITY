@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import isEmpty from 'lodash/isEmpty';
@@ -39,11 +39,14 @@ const CustomApolloRichText = ({
   }
 
   // Initial Richtext Data
-  const INITIAL_DATA = {
-    text: richTextString,
-    value: richtextObject,
-    html: richTextHtml
-  };
+  const INITIAL_DATA = useMemo(
+    () => ({
+      text: richTextString,
+      value: richtextObject,
+      html: richTextHtml
+    }),
+    [richTextString, richTextHtml]
+  );
 
   // Component State
   const [richTextData, setRichTextData] = useState(INITIAL_DATA);
@@ -83,7 +86,16 @@ const CustomApolloRichText = ({
     setRichTextData(INITIAL_DATA);
     // Restrict Richtext height upto 5 lines
     setRefElementStyle(richTextContainerRef, 125, 120, '5px');
-  }, [richTextString, richTextHtml, richTextVal]);
+  }, [INITIAL_DATA]);
+
+  /**
+   * Set Focus on RichText Editor
+   */
+  const setFocusOnEditor = async () => {
+    await timeout(0);
+    if (richTextEditorRef.current && enableFocus)
+      richTextEditorRef.current.focus();
+  };
 
   /**
    * Set focus on load
@@ -97,7 +109,10 @@ const CustomApolloRichText = ({
    */
   const onClickHTML = () => {
     setIsRichTextEditable(true);
-    if (enableFocus) onFocus();
+    if (enableFocus) {
+      setFocusOnEditor();
+      onFocus();
+    }
   };
 
   /**
@@ -215,8 +230,8 @@ CustomApolloRichText.propTypes = {
 /**
  * Memo func to compare prev next props
  */
-const propsAreEqual = (prevProp, nextProp) => {
-  return isEqual(prevProp.richTextString, nextProp.richTextString);
-};
+// const propsAreEqual = (prevProp, nextProp) => {
+//   return isEqual(prevProp.richTextString, nextProp.richTextString);
+// };
 
-export default React.memo(CustomApolloRichText, propsAreEqual);
+export default CustomApolloRichText;
