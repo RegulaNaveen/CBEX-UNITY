@@ -30,13 +30,26 @@ const ListItem = ({ id, url, oppNo, data, isSeen, setSeenOne, createdAt }) => {
       return moment(createdAt).format(dateFormat);
     }
   };
-  const oppNoAsHyperlink = () =>
-    `<a style="display: inline-block" href='${window.location.origin}/opportunities/${oppNo}'>${oppNo}</a>`;
+  const oppNoAsHyperlink = (word: string) =>
+    `<a style="display: inline-block" href='${window.location.origin}/opportunities/${oppNo}'>${word}</a>`;
 
   const dataToHtml = () => {
-    const dataArr = data
-      .split(' ')
-      .map(word => (word === oppNo ? oppNoAsHyperlink(word) : word));
+    const dataArr = data.split(' ').map((word, index, arr) => {
+      // Converting the sentence "Opportunity <OPP_NO> Bid <BID_NO>" to hyperlink
+      if (word === 'Opportunity' && arr[index + 1] === oppNo) {
+        return oppNoAsHyperlink(word);
+      }
+      if (word === oppNo) {
+        return oppNoAsHyperlink(word);
+      }
+      if (word === 'Bid' && arr[index - 1] === oppNo) {
+        return oppNoAsHyperlink(word);
+      }
+      if (arr[index - 1] === 'Bid' && arr[index - 2] === oppNo) {
+        return oppNoAsHyperlink(word);
+      }
+      return word;
+    });
     dataArr.unshift('<div>');
     dataArr.push('</div>');
     return dataArr.join(' ');
