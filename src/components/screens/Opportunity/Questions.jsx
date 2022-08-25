@@ -537,10 +537,10 @@ class Questions extends Component {
                     information at a time
                   </Typography>
                 </div>
-                <WysiwygNotepad
+                {/* <WysiwygNotepad
                   wsProvider={this.props.wsInstance}
                   ydoc={this.props.ydoc}
-                />
+                /> */}
               </div>
             </Panel>
           </div>

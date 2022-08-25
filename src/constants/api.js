@@ -35,6 +35,8 @@ switch (environment) {
     SF_HOST_URL = 'https://iqvia--uat.lightning.force.com/';
     SOCKET_URL =
       'wss://l3p8o0zg48.execute-api.us-east-1.amazonaws.com/production';
+    NOTES_SOCKET_URL =
+      'wss://662wdhv4y1.execute-api.us-east-1.amazonaws.com/production';
     break;
   case 'DEV2':
     PROPOSAL_API_ENDPOINT =
@@ -79,6 +81,7 @@ switch (environment) {
     SF_HOST_URL = 'https://iqvia.my.salesforce.com/';
     SOCKET_URL =
       'wss://29nghekakl.execute-api.us-east-1.amazonaws.com/production';
+
     break;
   case 'QA':
     // UDEV Data
@@ -94,6 +97,8 @@ switch (environment) {
     SF_HOST_URL = 'https://iqvia--staging.lightning.force.com/';
     SOCKET_URL =
       'wss://nthe94se04.execute-api.us-east-1.amazonaws.com/production';
+    NOTES_SOCKET_URL =
+      'wss://662wdhv4y1.execute-api.us-east-1.amazonaws.com/production';
     break;
   default:
     // DEV Data
@@ -104,8 +109,8 @@ switch (environment) {
       'https://byp6zagvkb.execute-api.us-east-1.amazonaws.com/unity-dev';
     COGNITO_HOST = 'https://dev-unity.auth.us-east-1.amazoncognito.com';
     CLIENT_ID = 'uf2jbhv4jcprcdiqc5rupg665';
-    // REDIRECTION_URL = 'https://dev-unity.dev.iqvia.app/';
-    REDIRECTION_URL = 'http://localhost:8080';
+    REDIRECTION_URL = 'https://dev-unity.dev.iqvia.app/';
+    // REDIRECTION_URL = 'http://localhost:8080';
     UBUILD_ARTIFACT = 'https://dev-ubuild.dev.iqvia.app/main.js';
     SF_HOST_URL = 'https://iqvia--crm.lightning.force.com/';
     SOCKET_URL =

@@ -83,7 +83,7 @@ deploydev:
     - docker
 dev2:
   stage: builddev2
-  image: node:12
+  image: node:14
   variables:
     Environment: $CI_JOB_NAME
   when: manual
@@ -121,7 +121,7 @@ deploydev2:
 
 demo:
   stage: builddemo
-  image: node:12
+  image: node:14
   variables:
     Environment: $CI_JOB_NAME
   when: manual
@@ -163,7 +163,7 @@ deploydemo:
 
 qa:
   stage: buildqa
-  image: node:12
+  image: node:14
   needs:
     - deploydev
   when: manual
@@ -201,7 +201,7 @@ deployqa:
 
 uat:
   stage: builduat
-  image: node:12
+  image: node:14
   variables:
     Environment: $CI_JOB_NAME
   #needs:
@@ -240,7 +240,7 @@ deployuat:
 
 prod:
   stage: buildprod
-  image: node:12
+  image: node:14
   variables:
     Environment: $CI_JOB_NAME
   only:

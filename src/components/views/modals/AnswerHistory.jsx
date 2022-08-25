@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Map, fromJS } from 'immutable'; // NOSONAR
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
-import { isEmpty, unionBy } from 'lodash';
+import { isEmpty, isString, unionBy } from 'lodash';
 import { diffWordsWithSpace } from 'diff';
 import Loader from 'apollo-react/components/Loader';
 
@@ -334,10 +334,15 @@ class AnswerHistory extends Component<Props> {
           return <p>{answer}</p>;
         }
 
-        const modifiedAns = Array.isArray(answer) ? answer : [answer];
-        const modifiedNxtAns = Array.isArray(nextAnswer)
-          ? nextAnswer
-          : [nextAnswer];
+        // function to convert Answer to normal JSON
+        const convertAnsToJSON = ansData => {
+          if (isEmpty(ansData)) return [];
+          if (!isString(ansData)) return ansData?.toJS();
+          return [ansData];
+        };
+
+        const modifiedAns = convertAnsToJSON(answer);
+        const modifiedNxtAns = convertAnsToJSON(nextAnswer);
         const deletedAnswers = modifiedNxtAns?.filter(
           ans => !modifiedAns.includes(ans)
         );
