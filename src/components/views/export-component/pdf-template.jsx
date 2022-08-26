@@ -37,6 +37,28 @@ import moment from 'moment';
 import { convertFromHTML, convertFromRaw, EditorState } from 'draft-js';
 import ReactDOMServer from 'react-dom/server';
 import RichTextEditor from '../../common/RichTextEditor';
+import { generateHTML } from '@tiptap/core';
+
+import Bold from '@tiptap/extension-bold';
+import TipTapDocument from '@tiptap/extension-document';
+import Paragraph from '@tiptap/extension-paragraph';
+import TipTapText from '@tiptap/extension-text';
+import Italic from '@tiptap/extension-italic';
+import Strike from '@tiptap/extension-strike';
+import Underline from '@tiptap/extension-underline';
+import BulletList from '@tiptap/extension-bullet-list';
+import ListItem from '@tiptap/extension-list-item';
+import OrderedList from '@tiptap/extension-ordered-list';
+import Heading from '@tiptap/extension-heading';
+import Link from '@tiptap/extension-link';
+import Code from '@tiptap/extension-code';
+import HardBreak from '@tiptap/extension-hard-break';
+import HorizontalRule from '@tiptap/extension-horizontal-rule';
+import CodeBlock from '@tiptap/extension-code-block';
+import HighLight from '@tiptap/extension-highlight';
+import TextAlign from '@tiptap/extension-text-align';
+import Subscript from '@tiptap/extension-subscript';
+import Superscript from '@tiptap/extension-superscript';
 
 Font.register({
   family: 'ProximaNova',
@@ -405,32 +427,42 @@ function getNotesRows(notes) {
   html += `<th>General Notes</th>`;
   html += `</tr>`;
   html += `</table>`;
+  let data = ``;
+  data += `<table><tr><td style="border:1px solid black;padding:10px">`;
   try {
     notes.forEach(note => {
       let { noteText } = note;
-      let noteContentState = EditorState.createEmpty();
+      // let noteContentState = EditorState.createEmpty();
       try {
-        noteContentState = convertFromRaw(JSON.parse(noteText));
+        console.log('noteText pdf', noteText);
+        let json = JSON.parse(noteText);
+        data += generateHTML(json, [
+          TipTapDocument,
+          Paragraph,
+          TipTapText,
+          Bold,
+          Italic,
+          Strike,
+          Underline,
+          BulletList,
+          OrderedList,
+          ListItem,
+          Heading,
+          Link,
+          Code,
+          CodeBlock,
+          HighLight,
+          HorizontalRule,
+          HardBreak,
+          Subscript,
+          Superscript
+        ]);
+        console.log('ddata', data);
+        data += `</td></tr></table>`;
+        html += data;
+        return html;
       } catch (err) {
-        const blocksFromHTML = convertFromHTML(noteText);
-        noteContentState = ContentState.createFromBlockArray(
-          blocksFromHTML.contentBlocks,
-          blocksFromHTML.entityMap
-        );
-      }
-      try {
-        let rawHtml = ReactDOMServer.renderToStaticMarkup(
-          <RichTextEditor
-            defaultValue={noteContentState}
-            readOnly
-            disabled
-            placeholder=""
-          />
-        );
-        rawHtml = rawHtml.replaceAll('font-family', 'content');
-        html += rawHtml;
-      } catch (error) {
-        console.log('Cannot convert rich text content');
+        console.log('pdf notes error', err);
       }
     });
   } catch (error) {
