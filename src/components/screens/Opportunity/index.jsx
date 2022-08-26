@@ -148,32 +148,50 @@ export class Opportunity extends Component<Props, State> {
     } catch (error) {
       console.log(error);
     }
+  }
 
-    if (!this.state.wsInstance) {
-      const {
-        match: { params }
-      } = this.props;
+  componentDidUpdate(prevProps, prevState) {
+    const {
+      match: { params },
+      selectedBid
+    } = this.props;
+    this.context.updateSocketOppId(params.id);
 
-      console.log('creating new connection');
-      const { ydoc } = this.state;
-      const storedValue = `doc-${params.id}`;
-      if (params.id) {
-        const wsProvider = new WebsocketProvider(
-          NOTES_SOCKET_URL,
-          `?=${storedValue}&`,
-          ydoc
-        );
-        this.setState({ wsInstance: wsProvider });
+    const thisProposalId = selectedBid.get('id', '');
+    const prevProposalId = prevProps.selectedBid.get('id', '');
+
+    // Bid changed
+    if (prevProposalId !== thisProposalId) {
+      console.log(prevProposalId, 'selected bid changed to', thisProposalId);
+
+      //intial load case
+      if (!prevProposalId && thisProposalId) {
+        if (!this.state.wsInstance) {
+          this.createNewNotesSocketConnection(thisProposalId);
+        }
+      } else {
+        this.state.wsInstance?.destroy();
+        this.setState({ ydoc: new Y.Doc() }, () => {
+          this.createNewNotesSocketConnection(thisProposalId);
+        });
       }
     }
   }
 
-  componentDidUpdate() {
-    const {
-      match: { params }
-    } = this.props;
-    this.context.updateSocketOppId(params.id);
-  }
+  createNewNotesSocketConnection = proposalId => {
+    console.log('proposal details are', proposalId);
+    console.log('creating new connection');
+    const { ydoc } = this.state;
+    const storedValue = `doc-${proposalId}`;
+    if (proposalId) {
+      const wsProvider = new WebsocketProvider(
+        NOTES_SOCKET_URL,
+        `?=${storedValue}&`,
+        ydoc
+      );
+      this.setState({ wsInstance: wsProvider });
+    }
+  };
 
   componentWillUnmount() {
     const { handleOpenClose } = this.props;
@@ -278,7 +296,6 @@ export class Opportunity extends Component<Props, State> {
       </div>
     );
   };
-
   render() {
     const {
       isSidebarOpen,
