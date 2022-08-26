@@ -19,6 +19,7 @@ import BulletList from '@tiptap/extension-bullet-list';
 import ListItem from '@tiptap/extension-list-item';
 import OrderedList from '@tiptap/extension-ordered-list';
 import Heading from '@tiptap/extension-heading';
+import HorizontalRule from '@tiptap/extension-horizontal-rule';
 import Link from '@tiptap/extension-link';
 import Code from '@tiptap/extension-code';
 import CodeBlock from '@tiptap/extension-code-block';
@@ -72,6 +73,10 @@ const WysiwygNotepad = ({
 
   useEffect(() => {
     fetchLatestNotes();
+    return () => {
+      console.log('WYSIWYG Unmount');
+      setContent('<p></p>');
+    };
   }, []);
 
   const fetchLatestNotes = () => {
@@ -121,6 +126,7 @@ const WysiwygNotepad = ({
       OrderedList,
       ListItem,
       Heading,
+      HorizontalRule,
       Link,
       Code,
       CodeBlock,
@@ -431,7 +437,9 @@ const WysiwygNotepad = ({
             Underline,
             Code,
             CodeBlock,
+            HardBreak,
             HighLight,
+            HorizontalRule,
             Subscript,
             Superscript,
             TextAlign.configure({
@@ -457,7 +465,16 @@ const WysiwygNotepad = ({
               }
             })
           ]
-        : [StarterKit, Underline, Link, Code, HighLight, HardBreak, CodeBlock],
+        : [
+            StarterKit,
+            Underline,
+            Link,
+            Code,
+            HighLight,
+            HardBreak,
+            HorizontalRule,
+            CodeBlock
+          ],
       content: content || '<p></p>',
       onUpdate: ({ editor }) => {
         const Ejson = editor.getJSON();
