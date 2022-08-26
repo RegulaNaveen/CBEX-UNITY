@@ -36,6 +36,7 @@ import ProcessingCRM from '../../views/modals/ProcessingCRM';
 import BidDoneBanner from '../../views/BidDoneBanner';
 import GenerateDocs from '../../views/export-component/GenerateDocs';
 import { SocketContext } from '../../../context/SocketContext';
+import * as notificationActions from '../../../redux/actions/notification-actions';
 import { WebsocketProvider } from '../../../context/y-websocket';
 import { NOTES_SOCKET_URL } from '../../../constants/api';
 import NotesSocketContext from '../../../context/notesSocketContext';
@@ -73,7 +74,8 @@ type Props = {
   trackEvent: any,
   trackPageView: any,
   proposalDetail: any,
-  getOpportunityInfo: (oppId: string, flag?: boolean) => void
+  getOpportunityInfo: (oppId: string, flag?: boolean) => void,
+  setSeenOne: Function
 };
 
 export class Opportunity extends Component<Props, State> {
@@ -101,8 +103,14 @@ export class Opportunity extends Component<Props, State> {
       eventCategories,
       location: { search },
       match: { params },
-      selectedBid
+      setSeenOne
     } = this.props;
+    const winLocationSearch = window.location.search;
+    const queryparams = new URLSearchParams(winLocationSearch);
+    const notificationId = queryparams.get('notification_id');
+    if (notificationId) {
+      setSeenOne(notificationId);
+    }
     expandAllSections(false);
     const selectedView = new URLSearchParams(search).get('viewType');
     if (selectedView && selectedView === 'documents')
@@ -357,6 +365,7 @@ export default compose(
     updateProposalDetail: updateProposalDetailFromWebSocket,
     updateProposalNotes: updateProposalNotesFromWebSocket,
     updateSwitchTempStatus: updateSwitchTempStatusFromWebSocket,
-    setSwitchInProgress: updateSwitchInProgress
+    setSwitchInProgress: updateSwitchInProgress,
+    setSeenOne: notificationActions.setSeenOne
   })
 )(MatomoHOC(Opportunity));
