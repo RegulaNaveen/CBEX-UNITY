@@ -554,7 +554,7 @@ function getNotesCell(paras) {
     margins: cellMargin5P
   });
 }
-async function getNoteRows(notes, editor) {
+function getNoteRows(notes, editor) {
   const nodeSerializer = {
     ...defaultNodes,
     hardBreak: defaultNodes.hard_break,
@@ -569,17 +569,33 @@ async function getNoteRows(notes, editor) {
   const wordDocument = myDocxSerializer.serialize(editor?.view?.state?.doc);
   console.log('word doc', wordDocument);
   console.log('edit', editor);
-  let word = await writeDocx(wordDocument, buffer => {
-    writeFileSync('HelloWorld.docx', buffer);
-  });
-  console.log('WORD', word);
-  return word;
-  let paras = [];
-  let rows = [
+  // let word = await writeDocx(wordDocument);
+  const rows = [
     new TableRow({
       children: [getSectionNameCell('General Notes', questionCellWidth100)]
     })
   ];
+  // rows.push(
+  //   new TableRow({
+  //     children: [
+  //       new TableCell({
+  //         children: [wordDocument?.documentWrapper?.document],
+  //         width: questionCellWidth100,
+  //         margins: cellMargin5P
+  //       })
+  //     ],
+  //     cantSplit: false
+  //   })
+  // );
+  // console.log('WORD', word);
+  console.log('worddddd', wordDocument?.documentWrapper?.document);
+  return wordDocument?.documentWrapper?.document?.body;
+  let paras = [];
+  // let rows = [
+  //   new TableRow({
+  //     children: [getSectionNameCell('General Notes', questionCellWidth100)]
+  //   })
+  // ];
   try {
     notes.forEach(note => {
       let { noteText } = note;
@@ -650,10 +666,17 @@ async function getNoteRows(notes, editor) {
   }
 }
 function getNotesTable(notes, editor) {
-  return getNoteRows(notes, editor);
+  // [
+  //   new TableRow({
+  //     children: [getSectionNameCell('General Notes', questionCellWidth100)]
+  //   })
+  // ];
+  const wrd = getNoteRows(notes, editor);
+  console.log('getnotestab', wrd);
+  return wrd;
   // return new Table({
-  //   // rows: getNoteRows(notes, editor),
-  //   // layout: TableLayoutType.FIXED
+  //   rows: getNoteRows(notes, editor),
+  //   layout: TableLayoutType.FIXED
   // });
 }
 
@@ -1082,7 +1105,19 @@ export function createWord(content) {
   // Adding Note Section in Document
   if (filterState.includesNotes)
     SectionList.sections.push({
-      children: [getNotesTable(notes, editor)]
+      children: [
+        new Table({
+          rows: [
+            new TableRow({
+              children: [
+                getSectionNameCell('General Notes', questionCellWidth100)
+              ]
+            })
+          ],
+          layout: TableLayoutType.FIXED
+        }),
+        getNotesTable(notes, editor)
+      ]
     });
 
   const document = new Document(SectionList);
