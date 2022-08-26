@@ -36,6 +36,7 @@ import ProcessingCRM from '../../views/modals/ProcessingCRM';
 import BidDoneBanner from '../../views/BidDoneBanner';
 import GenerateDocs from '../../views/export-component/GenerateDocs';
 import { SocketContext } from '../../../context/SocketContext';
+import * as notificationActions from '../../../redux/actions/notification-actions';
 
 type State = {
   selectedView: string,
@@ -69,6 +70,7 @@ type Props = {
   trackPageView: any,
   proposalDetail: any,
   getOpportunityInfo: (oppId: string, flag?: boolean) => void,
+  setSeenOne: Function
 };
 
 export class Opportunity extends Component<Props, State> {
@@ -94,7 +96,14 @@ export class Opportunity extends Component<Props, State> {
       eventCategories,
       location: { search },
       match: { params },
+      setSeenOne
     } = this.props;
+    const winLocationSearch = window.location.search;
+    const queryparams = new URLSearchParams(winLocationSearch);
+    const notificationId = queryparams.get('notification_id');
+    if (notificationId) {
+      setSeenOne(notificationId);
+    }
     expandAllSections(false);
     const selectedView = new URLSearchParams(search).get('viewType');
     if (selectedView && selectedView === 'documents')
@@ -309,5 +318,6 @@ export default compose(
     updateProposalNotes: updateProposalNotesFromWebSocket,
     updateSwitchTempStatus: updateSwitchTempStatusFromWebSocket,
     setSwitchInProgress: updateSwitchInProgress,
+    setSeenOne: notificationActions.setSeenOne
   })
 )(MatomoHOC(Opportunity));

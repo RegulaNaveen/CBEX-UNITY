@@ -31,7 +31,7 @@ const ListItem = ({ id, url, oppNo, data, isSeen, setSeenOne, createdAt }) => {
     }
   };
   const oppNoAsHyperlink = (word: string) =>
-    `<a style="display: inline-block" href='${window.location.origin}/opportunities/${oppNo}'>${word}</a>`;
+    `<a style="display: inline-block" href='${window.location.origin}/opportunities/${oppNo}?notification_id=${id}'>${word}</a>`;
 
   const dataToHtml = () => {
     const dataArr = data.split(' ').map((word, index, arr) => {
