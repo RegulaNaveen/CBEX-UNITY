@@ -9,6 +9,8 @@ const Autocomplete = props => {
   const [options, setOptions] = useState([]);
   const [value, setValue] = useState([]);
   const [callAccept, setCallAccept] = useState(false);
+  const [inputVal, setInputVal] = useState('');
+
   const text = String(props?.text)
     .trimStart()
     .trimEnd();
@@ -32,7 +34,7 @@ const Autocomplete = props => {
     });
   }
   filter();
-
+  console.log('options', options);
   function extractEmails(str) {
     let result = String(str).match(
       /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
@@ -63,16 +65,16 @@ const Autocomplete = props => {
     } else setValue([]);
   }, [text]);
 
-  const getData = searchTerm => {
+  const getData = async searchTerm => {
     if (previousController.current) {
       previousController.current.abort();
     }
     var controller = new AbortController();
     var signal = controller.signal;
     previousController.current = controller;
-
+    let updatedOptions = [];
     try {
-      fetch(`${USER_API_URL}/${searchTerm}`, {
+      await fetch(`${USER_API_URL}/${searchTerm}`, {
         signal,
         headers: {
           'x-api-key': API_KEY,
@@ -81,23 +83,23 @@ const Autocomplete = props => {
       })
         .then(response => response.json())
         .then(myJson => {
-          if (callAccept === false) return;
-          const updatedOptions = myJson.data.map(p => {
+          // if (callAccept === false) return;
+          updatedOptions = myJson.data.map(p => {
             return {
               label: `${p.first_name} ${p.last_name}(${p.email.toLowerCase()})`,
               mail: `${p.email.toLowerCase()}`
             };
           });
-          console.log(updatedOptions, 'UO');
+          // console.log(updatedOptions, 'UO');
           setOptions(updatedOptions);
         });
     } catch (error) {
       console.error(error);
     }
+    console.log({ updatedOptions });
   };
 
   const handleChange = (event, newValue, reason) => {
-    console.log('newValue', newValue);
     setValue(newValue);
     const proposaluser = newValue.map(v => {
       return v.email ? v.label + '(' + v.email + ')' : v.label;
@@ -105,23 +107,34 @@ const Autocomplete = props => {
     if (proposaluser.length === 0) props.onChange(' ', text, reason);
     else props.onChange(proposaluser.join(','), text, reason);
   };
+
   const onInputChange = _.debounce((event, value) => {
+    setInputVal(value);
+    const elem = document.querySelectorAll('.a-MuiAutocomplete-popper').item(0);
+
     if (value) {
       setCallAccept(true);
       // setCount(1);
       getData(value);
+      elem.classList.remove('disable');
     } else {
       setCallAccept(false);
       // setCount(1);
       setOptions([]);
+      elem.className += ' disable';
     }
   }, 100);
-  const handleBackspace = e => {
-    console.log(e.key);
-    if (e.keyCode === 8) {
-      setCallAccept(false);
-      console.log('1');
-    }
+
+  const timeout = ms => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  };
+
+  const onInputFocus = async () => {
+    props.onFocus();
+    // await timeout(500);
+    const elem = document.querySelectorAll('.a-MuiAutocomplete-popper').item(0);
+    elem.className += ' disable';
+    // elem.classList.add('disable');
   };
 
   return (
@@ -129,6 +142,7 @@ const Autocomplete = props => {
       <AutocompleteV2
         fullWidth
         multiple
+        loading={options.length == 0}
         options={options || []}
         chipColor='white'
         size='small'
@@ -136,13 +150,12 @@ const Autocomplete = props => {
         disableCloseOnSelect={false}
         value={value}
         onChange={handleChange}
+        inputValue={inputVal}
         onInputChange={onInputChange}
         noOptionsText='No matches found'
-        open={options.length > 0}
-        onFocus={e => props.onFocus()}
+        onFocus={onInputFocus}
         onBlur={e => props.onBlur()}
         disabled={disabled || false}
-        onKeyDown={handleBackspace}
       />
     </div>
   );

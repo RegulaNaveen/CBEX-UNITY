@@ -20,3 +20,9 @@ body {
   scroll-behavior: smooth;
   font-family: $proximaNova;
 }
+
+.a-MuiAutocomplete-popper {
+  &.disable {
+    display: none !important;
+  }
+}
