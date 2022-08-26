@@ -67,7 +67,7 @@ const ListItem = ({ id, url, oppNo, data, isSeen, setSeenOne, createdAt }) => {
             variant='body2'
             className='notification-item-header-title'
             onClick={() => {
-              history.push(url);
+              history.push(`${url}?notification_id=${id}`);
               history.go();
             }}
           >
