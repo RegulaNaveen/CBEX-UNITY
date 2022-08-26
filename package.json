@@ -56,7 +56,6 @@
     "apollo-react-icons": "https://imshealth.myget.org/F/apollo/auth/205e1b20-2c34-4d3e-8fac-72f572e55f71/npm/apollo-react-icons/-/1.0.0-beta.7",
     "axios": "^0.19.2",
     "classnames": "^2.2.6",
-    "color-picker-menu": "^2.0.0",
     "core-js": "2",
     "css-loader": "^3.4.2",
     "date-fns": "^2.12.0",

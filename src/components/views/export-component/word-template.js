@@ -18,13 +18,8 @@ import {
   ExternalHyperlink
 } from 'docx';
 
-import {
-  writeDocx,
-  DocxSerializer,
-  defaultNodes,
-  defaultMarks
-} from 'prosemirror-docx';
-// import { writeFileSync } from 'fs';
+import { DocxSerializer, defaultNodes, defaultMarks } from 'prosemirror-docx';
+
 import { cloneDeep, isString } from 'lodash';
 import moment from 'moment-timezone';
 import { API } from '../../../constants';
@@ -547,137 +542,34 @@ export function getStyle(styleMaps, index) {
   return { styles, styleId };
 }
 
-function getNotesCell(paras) {
-  return new TableCell({
-    children: [...paras],
-    width: questionCellWidth100,
-    margins: cellMargin5P
-  });
-}
-function getNoteRows(notes, editor) {
+function getNoteRows(editor) {
   const nodeSerializer = {
     ...defaultNodes,
     hardBreak: defaultNodes.hard_break,
     codeBlock: defaultNodes.code_block,
-    orderedList: defaultNodes.ordered_list,
-    listItem: defaultNodes.list_item,
+    orderedList: defaultNodes.bullet_list,
+    listItem: defaultNodes.bullet_list,
     bulletList: defaultNodes.bullet_list,
     horizontalRule: defaultNodes.horizontal_rule
   };
 
-  const myDocxSerializer = new DocxSerializer(nodeSerializer, defaultMarks);
-  const wordDocument = myDocxSerializer.serialize(editor?.view?.state?.doc);
-  console.log('word doc', wordDocument);
-  console.log('edit', editor);
-  // let word = await writeDocx(wordDocument);
-  const rows = [
-    new TableRow({
-      children: [getSectionNameCell('General Notes', questionCellWidth100)]
-    })
-  ];
-  // rows.push(
-  //   new TableRow({
-  //     children: [
-  //       new TableCell({
-  //         children: [wordDocument?.documentWrapper?.document],
-  //         width: questionCellWidth100,
-  //         margins: cellMargin5P
-  //       })
-  //     ],
-  //     cantSplit: false
-  //   })
-  // );
-  // console.log('WORD', word);
-  console.log('worddddd', wordDocument?.documentWrapper?.document);
+  const markSerializer = {
+    ...defaultMarks,
+    strike: defaultMarks.strikethrough,
+    bold: defaultMarks.strong,
+    subscript: defaultMarks.subscript,
+    superscript: defaultMarks.superscript,
+    underline: defaultMarks.underline,
+    smallcaps: defaultMarks.smallcaps,
+    allcaps: defaultMarks.allcaps,
+    italic: defaultMarks.em,
+    highlight: defaultMarks.highlight
+  };
+
+  const docxSerializer = new DocxSerializer(nodeSerializer, markSerializer);
+  const wordDocument = docxSerializer.serialize(editor?.view?.state?.doc);
+
   return wordDocument?.documentWrapper?.document?.body;
-  let paras = [];
-  // let rows = [
-  //   new TableRow({
-  //     children: [getSectionNameCell('General Notes', questionCellWidth100)]
-  //   })
-  // ];
-  try {
-    notes.forEach(note => {
-      let { noteText } = note;
-      noteText = JSON.parse(noteText);
-      let { blocks } = noteText;
-      blocks.forEach(block => {
-        let texts = [];
-        let { text, inlineStyleRanges, type, depth } = block;
-        let listType = type.includes('list-item')
-          ? { bullet: { level: depth } }
-          : {};
-        let styleMap = [];
-        inlineStyleRanges.forEach(range => {
-          let { style, offset, length } = range;
-          styleMap.push({ start: offset, end: offset + length - 1, style });
-        });
-
-        let lastStyleId = '';
-        let lastText = '';
-        let lastStyle = {};
-        for (let i = 0; i < text.length; i++) {
-          let { styles, styleId } = getStyle(styleMap, i);
-          if (styleId === lastStyleId) {
-            lastText += text[i];
-          } else {
-            texts.push(
-              new TextRun({
-                ...{ text: lastText },
-                ...lastStyle
-              })
-            );
-            lastText = text[i];
-          }
-          lastStyleId = styleId;
-          lastStyle = styles;
-
-          if (text.length - 1 === i)
-            texts.push(
-              new TextRun({
-                ...{ text: lastText },
-                ...styles
-              })
-            );
-        }
-
-        paras.push(
-          new Paragraph({
-            ...{
-              children: texts
-            },
-            ...listType
-          })
-        );
-      });
-    });
-
-    rows.push(
-      new TableRow({
-        children: [getNotesCell(paras)],
-        cantSplit: false
-      })
-    );
-
-    return rows;
-  } catch (error) {
-    console.log('Error while formatting the notes');
-    return rows;
-  }
-}
-function getNotesTable(notes, editor) {
-  // [
-  //   new TableRow({
-  //     children: [getSectionNameCell('General Notes', questionCellWidth100)]
-  //   })
-  // ];
-  const wrd = getNoteRows(notes, editor);
-  console.log('getnotestab', wrd);
-  return wrd;
-  // return new Table({
-  //   rows: getNoteRows(notes, editor),
-  //   layout: TableLayoutType.FIXED
-  // });
 }
 
 function getHeaderInfoRows(details) {
@@ -1116,7 +1008,19 @@ export function createWord(content) {
           ],
           layout: TableLayoutType.FIXED
         }),
-        getNotesTable(notes, editor)
+        new Table({
+          rows: [
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [getNoteRows(editor)],
+                  margins: cellMargin5P
+                })
+              ]
+            })
+          ],
+          layout: TableLayoutType.FIXED
+        })
       ]
     });
 

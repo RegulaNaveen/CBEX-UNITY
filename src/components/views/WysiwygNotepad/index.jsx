@@ -1,13 +1,7 @@
 import Collaboration from '@tiptap/extension-collaboration';
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
 import { connect } from 'react-redux';
-import React, {
-  createContext,
-  useEffect,
-  useState,
-  useContext,
-  useCallback
-} from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import randomColor from 'randomcolor';
 import { EditorContent, useEditor } from '@tiptap/react';
@@ -55,8 +49,6 @@ import {
 // import * as Y from "yjs";
 import { debounce } from 'lodash';
 import NotesSocketContext from '../../../context/notesSocketContext';
-
-// const EditorContext = createContext();
 
 const WysiwygNotepad = ({
   notes = null,
@@ -539,11 +531,9 @@ const WysiwygNotepad = ({
     [notes, selectedBid, notesId, userEmail, userName, userRole]
   );
 
-  // console.log('editor.........', editor?.view?.state);
-
   return (
     <>
-      {notesSocket.wsInstance && (
+      {notesSocket.wsInstance && isNotesFetched && (
         <div className="editor-notepad">
           <div>
             <MenuBar editor={editor} />
@@ -554,16 +544,6 @@ const WysiwygNotepad = ({
     </>
   );
 };
-
-// const EditorContextProvider = props => {
-//   return (
-//     <EditorContext.Provider
-//       value={{
-//         editor
-//       }}
-//     />
-//   );
-// };
 
 const mapStateToProps = state => ({
   notes: selectNotes(state),
