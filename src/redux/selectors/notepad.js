@@ -26,4 +26,8 @@ export const selectNotepadMode = state => {
   return selectNotepad(state).get('notepadMode');
 };
 
+export const selectEditor = state => {
+  return selectNotepad(state).get('editor');
+};
+
 export default selectNotepad;

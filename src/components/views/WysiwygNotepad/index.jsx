@@ -1,8 +1,14 @@
 import Collaboration from '@tiptap/extension-collaboration';
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
 import { connect } from 'react-redux';
-import React, { useEffect, useState, useContext, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import React, {
+  createContext,
+  useEffect,
+  useState,
+  useContext,
+  useCallback
+} from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import randomColor from 'randomcolor';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -40,11 +46,17 @@ import {
   selectIsNotesFetched
 } from '../../../redux/selectors';
 import MenuBar from './MenuBar';
-import { updateNote, fetchNotes } from '../../../redux/actions/notepad-actions';
+import {
+  updateNote,
+  fetchNotes,
+  setEditor
+} from '../../../redux/actions/notepad-actions';
 // import { SocketContext } from '../../../context/SocketContext';
 // import * as Y from "yjs";
 import { debounce } from 'lodash';
 import NotesSocketContext from '../../../context/notesSocketContext';
+
+// const EditorContext = createContext();
 
 const WysiwygNotepad = ({
   notes = null,
@@ -57,6 +69,9 @@ const WysiwygNotepad = ({
   proposalDetails
 }) => {
   const notesSocket = useContext(NotesSocketContext);
+
+  const dispatch = useDispatch();
+
   const emptyTextBlock = {
     type: 'doc',
     content: [
@@ -83,6 +98,7 @@ const WysiwygNotepad = ({
     const proposalId = selectedBid.get('id', '');
     if (proposalId) fetchNotes(proposalId);
   };
+
   // const ydoc = new Y.Doc();
   // console.log("YDOC", ydoc);
 
@@ -485,6 +501,8 @@ const WysiwygNotepad = ({
     [content]
   );
 
+  dispatch(setEditor(editor));
+
   const constructNoteV2 = (
     proposalId,
     notesId,
@@ -521,9 +539,11 @@ const WysiwygNotepad = ({
     [notes, selectedBid, notesId, userEmail, userName, userRole]
   );
 
+  // console.log('editor.........', editor?.view?.state);
+
   return (
     <>
-      {notesSocket.wsInstance && isNotesFetched && (
+      {notesSocket.wsInstance && (
         <div className="editor-notepad">
           <div>
             <MenuBar editor={editor} />
@@ -534,6 +554,16 @@ const WysiwygNotepad = ({
     </>
   );
 };
+
+// const EditorContextProvider = props => {
+//   return (
+//     <EditorContext.Provider
+//       value={{
+//         editor
+//       }}
+//     />
+//   );
+// };
 
 const mapStateToProps = state => ({
   notes: selectNotes(state),

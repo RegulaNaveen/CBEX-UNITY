@@ -17,6 +17,14 @@ import {
   ImageRun,
   ExternalHyperlink
 } from 'docx';
+
+import {
+  writeDocx,
+  DocxSerializer,
+  defaultNodes,
+  defaultMarks
+} from 'prosemirror-docx';
+// import { writeFileSync } from 'fs';
 import { cloneDeep, isString } from 'lodash';
 import moment from 'moment-timezone';
 import { API } from '../../../constants';
@@ -538,6 +546,7 @@ export function getStyle(styleMaps, index) {
   }
   return { styles, styleId };
 }
+
 function getNotesCell(paras) {
   return new TableCell({
     children: [...paras],
@@ -545,7 +554,26 @@ function getNotesCell(paras) {
     margins: cellMargin5P
   });
 }
-function getNoteRows(notes) {
+async function getNoteRows(notes, editor) {
+  const nodeSerializer = {
+    ...defaultNodes,
+    hardBreak: defaultNodes.hard_break,
+    codeBlock: defaultNodes.code_block,
+    orderedList: defaultNodes.ordered_list,
+    listItem: defaultNodes.list_item,
+    bulletList: defaultNodes.bullet_list,
+    horizontalRule: defaultNodes.horizontal_rule
+  };
+
+  const myDocxSerializer = new DocxSerializer(nodeSerializer, defaultMarks);
+  const wordDocument = myDocxSerializer.serialize(editor?.view?.state?.doc);
+  console.log('word doc', wordDocument);
+  console.log('edit', editor);
+  let word = await writeDocx(wordDocument, buffer => {
+    writeFileSync('HelloWorld.docx', buffer);
+  });
+  console.log('WORD', word);
+  return word;
   let paras = [];
   let rows = [
     new TableRow({
@@ -621,11 +649,12 @@ function getNoteRows(notes) {
     return rows;
   }
 }
-function getNotesTable(notes) {
-  return new Table({
-    rows: getNoteRows(notes),
-    layout: TableLayoutType.FIXED
-  });
+function getNotesTable(notes, editor) {
+  return getNoteRows(notes, editor);
+  // return new Table({
+  //   // rows: getNoteRows(notes, editor),
+  //   // layout: TableLayoutType.FIXED
+  // });
 }
 
 function getHeaderInfoRows(details) {
@@ -1004,8 +1033,10 @@ export function createWord(content) {
     data: { proposalQuestions, proposalDetails },
     notes,
     filterState,
-    image
+    image,
+    editor
   } = content;
+  console.log(' rdx editor', editor);
   const filteredQuestions = getFilteredQuestion(proposalQuestions, filterState);
 
   const SectionList = {
@@ -1051,10 +1082,7 @@ export function createWord(content) {
   // Adding Note Section in Document
   if (filterState.includesNotes)
     SectionList.sections.push({
-      properties: {
-        type: SectionType.CONTINUOUS
-      },
-      children: [getNotesTable(notes)]
+      children: [getNotesTable(notes, editor)]
     });
 
   const document = new Document(SectionList);
