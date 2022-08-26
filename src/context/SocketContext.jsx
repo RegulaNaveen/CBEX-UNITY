@@ -111,9 +111,6 @@ const SocketContextProvider = props => {
           case 'COMPLETED':
             refreshOpportunity(data.oppId);
             break;
-          case 'PROPOSAL_NOTE_UPDATE':
-            if (updateProposalNotes) updateProposalNotes(data.data);
-            break;
           case 'ANSWER_UPDATE':
             if (updateAnswerAction) updateAnswerAction(data.data);
             break;

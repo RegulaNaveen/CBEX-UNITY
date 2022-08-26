@@ -284,6 +284,17 @@
 
       .questiontext-richtext {
         z-index: 0;
+        .question-title-txt {
+          .RichEditor-editor {
+            line-height: 1.2;
+            .public-DraftEditor-content {
+              padding: 0;
+              .public-DraftStyleDefault-block {
+                margin: 0;
+              }
+            }
+          }
+        }
       }
       .question-edit {
         padding-left: 5px;
