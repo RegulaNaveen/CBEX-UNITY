@@ -277,7 +277,6 @@ export class Opportunity extends Component<Props, State> {
 
     return (
       <div className="proposal-details">
-        {console.log('selectid bid is', this.props.selectedBid)}
         <GenerateDocs />
         <UnityGrid
           data={details}
