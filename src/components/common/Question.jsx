@@ -659,10 +659,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
   };
 
   renderTags = (milestone, milestoneNew, ismilestoneavailable, lastAnswer) => {
-    if (milestoneNew && Array.isArray(milestoneNew)) {
+    if (milestoneNew && !isEmpty(milestoneNew)) {
       return (
         <div className="chipview">
-          {milestoneNew && isString(milestoneNew) ? (
+          {milestoneNew ? (
             <ChipView label={milestoneNew} answer={lastAnswer} />
           ) : null}
         </div>
@@ -670,7 +670,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     }
     return (
       <div className="chipview">
-        {milestone && isString(milestone) ? (
+        {milestone ? (
           <ChipView label={String(milestone)} answer={lastAnswer} />
         ) : null}
       </div>
