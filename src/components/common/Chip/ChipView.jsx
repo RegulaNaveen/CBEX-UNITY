@@ -7,8 +7,6 @@ import selectColors from './Color';
 const ChipView = ({ label, answer }) => {
   let color;
   let milestonetojs = [];
-  console.log('test');
-  console.log(label, 'label');
 
   if (typeof label === 'object') {
     try {
