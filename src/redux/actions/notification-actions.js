@@ -37,6 +37,7 @@ export const setSeenOne = (notificationId: string) => {
         payload: { notificationId }
       });
       dispatch({ type: SET_IS_LOADING, payload: false });
+      await setNotification();
     } catch (error) {
       dispatch({ type: SET_IS_LOADING, payload: false });
       console.error('Error updating notification seen status', error);

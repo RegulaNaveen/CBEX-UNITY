@@ -22,12 +22,36 @@ const loadSidebar = props => {
   const therapeutic = useRef();
   const linebusiness = useRef();
   const customer = useRef();
+  const protocolhalfscreen = useRef();
+  const producthalfscreen = useRef();
+  const therapeutichalfscreen = useRef();
+  const linebusinesshalfscreen = useRef();
+  const customerhalfscreen = useRef();
   // State for tracking if ellipsis is active
   const [isProductTooltip, setisProductTooltip] = useState(false);
   const [isCustomerTooltip, setisCustomerTooltip] = useState(false);
   const [isProtocolTooltip, setisProtocolTooltip] = useState(false);
   const [isTherapeuticTooltip, setisTherapeuticTooltip] = useState(false);
   const [isLinebusinessTooltip, setisLinebusinessTooltip] = useState(false);
+  const [isProductTooltipHalfscreen, setisProductTooltipHalfscreen] = useState(
+    false
+  );
+  const [
+    isCustomerTooltipHalfscreen,
+    setisCustomerTooltipHalfscreen
+  ] = useState(false);
+  const [
+    isProtocolTooltipHalfscreen,
+    setisProtocolTooltipHalfscreen
+  ] = useState(false);
+  const [
+    isTherapeuticTooltipHalfscreen,
+    setisTherapeuticTooltipHalfscreen
+  ] = useState(false);
+  const [
+    isLinebusinessTooltipHalfscreen,
+    setisLinebusinessTooltipHalfscreen
+  ] = useState(false);
   const {
     'Bid due date': bidDueDate,
     Phase: phase,
@@ -62,12 +86,42 @@ const loadSidebar = props => {
       setisLinebusinessTooltip(true);
     if (therapeutic?.current?.clientWidth < therapeutic?.current?.scrollWidth)
       setisTherapeuticTooltip(true);
+    if (
+      producthalfscreen?.current?.clientWidth <
+      producthalfscreen?.current?.scrollWidth
+    )
+      setisProductTooltipHalfscreen(true);
+    if (
+      protocolhalfscreen?.current?.clientWidth <
+      protocolhalfscreen?.current?.scrollWidth
+    )
+      setisProtocolTooltipHalfscreen(true);
+    if (
+      customerhalfscreen?.current?.clientWidth <
+      customerhalfscreen?.current?.scrollWidth
+    )
+      setisCustomerTooltipHalfscreen(true);
+    if (
+      linebusinesshalfscreen?.current?.clientWidth <
+      linebusinesshalfscreen?.current?.scrollWidth
+    )
+      setisLinebusinessTooltipHalfscreen(true);
+    if (
+      therapeutichalfscreen?.current?.clientWidth <
+      therapeutichalfscreen?.current?.scrollWidth
+    )
+      setisTherapeuticTooltipHalfscreen(true);
   }, [
     therapeutic?.current,
     customer?.current,
     protocol?.current,
     product?.current,
-    linebusiness?.current
+    linebusiness?.current,
+    therapeutichalfscreen?.current,
+    customerhalfscreen?.current,
+    protocolhalfscreen?.current,
+    producthalfscreen?.current,
+    linebusinesshalfscreen?.current
   ]);
   if (isBladeOpen) {
     return (
@@ -92,7 +146,7 @@ const loadSidebar = props => {
             </Typography>
             <Tooltip
               variant="dark"
-              body={isCustomerTooltip ? Customer : null}
+              body={isCustomerTooltipHalfscreen ? Customer : null}
               placement="bottom"
             >
               <Typography
@@ -104,7 +158,7 @@ const loadSidebar = props => {
                       : 'boldtext sidebaropenfont'
                     : 'boldtext halfscreen-header-ellipses'
                 }
-                ref={customer}
+                ref={customerhalfscreen}
               >
                 {Customer || placeholder}
               </Typography>
@@ -116,7 +170,7 @@ const loadSidebar = props => {
             </Typography>
             <Tooltip
               variant="dark"
-              body={isLinebusinessTooltip ? lineOfBusiness : null}
+              body={isLinebusinessTooltipHalfscreen ? lineOfBusiness : null}
               placement="bottom"
             >
               <Typography
@@ -128,7 +182,7 @@ const loadSidebar = props => {
                       : 'boldtext sidebaropenfont'
                     : 'boldtext halfscreen-header-ellipses'
                 }
-                ref={linebusiness}
+                ref={linebusinesshalfscreen}
               >
                 {lineOfBusiness || placeholder}
               </Typography>
@@ -156,7 +210,7 @@ const loadSidebar = props => {
             </Typography>
             <Tooltip
               variant="dark"
-              body={isTherapeuticTooltip ? therapeuticArea : null}
+              body={isTherapeuticTooltipHalfscreen ? therapeuticArea : null}
               placement="bottom"
             >
               <Typography
@@ -168,7 +222,7 @@ const loadSidebar = props => {
                       : 'boldtext sidebaropenfont'
                     : 'boldtext halfscreen-header-ellipses'
                 }
-                ref={therapeutic}
+                ref={therapeutichalfscreen}
               >
                 {therapeuticArea || placeholder}
               </Typography>
@@ -183,7 +237,7 @@ const loadSidebar = props => {
             </Typography>
             <Tooltip
               variant="dark"
-              body={isProductTooltip ? productName : null}
+              body={isProductTooltipHalfscreen ? productName : null}
               placement="bottom"
             >
               <Typography
@@ -195,7 +249,7 @@ const loadSidebar = props => {
                       : 'boldtext sidebaropenfont'
                     : 'boldtext halfscreen-header-ellipses'
                 }
-                ref={product}
+                ref={producthalfscreen}
               >
                 {productName || placeholder}
               </Typography>
@@ -210,7 +264,7 @@ const loadSidebar = props => {
             </Typography>
             <Tooltip
               variant="dark"
-              body={isProtocolTooltip ? protocolNumber : null}
+              body={isProtocolTooltipHalfscreen ? protocolNumber : null}
               placement="bottom"
             >
               <Typography
@@ -222,7 +276,7 @@ const loadSidebar = props => {
                       : 'boldtext sidebaropenfont'
                     : 'boldtext halfscreen-header-ellipses'
                 }
-                ref={protocol}
+                ref={protocolhalfscreen}
               >
                 {protocolNumber || placeholder}
               </Typography>
@@ -255,8 +309,8 @@ const loadSidebar = props => {
 
   return (
     <Grid container>
-      <Grid item xs={4} style={containerStyle}>
-        <Grid item xs={3}>
+      <Grid item xs={12} style={containerStyle}>
+        <Grid item xs={1}>
           <Paper style={styles} className="duedatedsg">
             <Typography variant="body2" className="greytext">
               Opportunity Number
@@ -271,149 +325,154 @@ const loadSidebar = props => {
             </Typography>
           </Paper>
         </Grid>
-        <Grid item xs={3}>
-          <Paper style={styles} className="duedatedsg">
-            <Typography variant="body2" className="greytext">
-              Customer
-            </Typography>
-            <Tooltip
-              variant="dark"
-              body={isCustomerTooltip ? Customer : null}
-              placement="bottom"
-            >
-              <Typography
-                variant="body2"
-                className="boldtext header-ellipses"
-                ref={customer}
-              >
-                {Customer || placeholder}
+        <Grid item xs={3} style={containerStyle}>
+          <Grid item xs={5}>
+            <Paper style={styles} className="duedatedsg">
+              <Typography variant="body2" className="greytext">
+                Customer
               </Typography>
-            </Tooltip>
-          </Paper>
-        </Grid>
-        <Grid item xs={3}>
-          <Paper style={styles} className="phasedsg">
-            <Typography variant="body2" className="greytext leftalign">
-              Line of Business
-            </Typography>
-            <Tooltip
-              variant="dark"
-              body={isLinebusinessTooltip ? lineOfBusiness : null}
-              placement="bottom"
-            >
-              <Typography
-                variant="body2"
-                className="boldtext header-ellipses"
-                ref={linebusiness}
+              <Tooltip
+                variant="dark"
+                body={isCustomerTooltip ? Customer : null}
+                placement="bottom"
               >
-                {lineOfBusiness || placeholder}
+                <Typography
+                  variant="body2"
+                  className="boldtext header-ellipses"
+                  ref={customer}
+                >
+                  {Customer || placeholder}
+                </Typography>
+              </Tooltip>
+            </Paper>
+          </Grid>
+          <Grid item xs={7}>
+            <Paper style={styles} className="phasedsg duedatedsg">
+              <Typography variant="body2" className="greytext">
+                Line of Business
               </Typography>
-            </Tooltip>
-          </Paper>
-        </Grid>
-        <Grid item xs={3}>
-          <Paper style={styles} className="duedatedsg">
-            <Typography variant="body2" className="greytext">
-              IQVIA Biotech
-            </Typography>
-            <Typography variant="body2" className="boldtext">
-              {iqviaBiotech || placeholder}
-            </Typography>
-          </Paper>
-        </Grid>
-      </Grid>
-      <Grid item xs={6} style={containerStyle}>
-        <Grid item xs={2}>
-          <Paper style={styles} className="duedatedsg">
-            <Typography variant="body2" className="greytext">
-              Phase
-            </Typography>
-            <Typography variant="body2" className="boldtext">
-              {phase ? phase.split(' ')[1] : placeholder}
-            </Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={2}>
-          <Paper style={styles} className="duedatedsg">
-            <Typography variant="body2" className="greytext">
-              Therapeutic Area
-            </Typography>
-            <Tooltip
-              variant="dark"
-              body={isTherapeuticTooltip ? therapeuticArea : null}
-              placement="bottom"
-            >
-              <Typography
-                variant="body2"
-                className="boldtext header-ellipses"
-                ref={therapeutic}
+              <Tooltip
+                variant="dark"
+                body={isLinebusinessTooltip ? lineOfBusiness : null}
+                placement="bottom"
               >
-                {therapeuticArea || placeholder}
-              </Typography>
-            </Tooltip>
-          </Paper>
+                <Typography
+                  variant="body2"
+                  className="boldtext header-ellipses"
+                  ref={linebusiness}
+                  sty
+                >
+                  {lineOfBusiness || placeholder}
+                </Typography>
+              </Tooltip>
+            </Paper>
+          </Grid>
         </Grid>
-        <Grid item xs={3}>
-          <Paper style={styles} className="duedatedsg">
-            <Typography variant="body2" className="greytext">
-              Product Name
-            </Typography>
-            <Tooltip
-              variant="dark"
-              body={isProductTooltip ? productName : null}
-              placement="bottom"
-            >
-              <Typography
-                variant="body2"
-                className="boldtext header-ellipses"
-                ref={product}
+        <Grid item xs={3} style={containerStyle}>
+          <Grid item xs={3}>
+            <Paper style={styles} className="duedatedsg">
+              <Typography variant="body2" className="greytext">
+                IQVIA Biotech
+              </Typography>
+              <Typography variant="body2" className="boldtext">
+                {iqviaBiotech || placeholder}
+              </Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={3}>
+            <Paper style={styles} className="duedatedsg">
+              <Typography variant="body2" className="greytext">
+                Phase
+              </Typography>
+              <Typography variant="body2" className="boldtext">
+                {phase ? phase.split(' ')[1] : placeholder}
+              </Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={6}>
+            <Paper style={styles} className="duedatedsg">
+              <Typography variant="body2" className="greytext">
+                Therapeutic Area
+              </Typography>
+              <Tooltip
+                variant="dark"
+                body={isTherapeuticTooltip ? therapeuticArea : null}
+                placement="bottom"
               >
-                {productName || placeholder}
-              </Typography>
-            </Tooltip>
-          </Paper>
+                <Typography
+                  variant="body2"
+                  className="boldtext header-ellipses"
+                  ref={therapeutic}
+                >
+                  {therapeuticArea || placeholder}
+                </Typography>
+              </Tooltip>
+            </Paper>
+          </Grid>
         </Grid>
-        <Grid item xs={3}>
-          <Paper style={styles} className="duedatedsg">
-            <Typography variant="body2" className="greytext">
-              Protocol Number
-            </Typography>
-            <Tooltip
-              variant="dark"
-              body={isProtocolTooltip ? protocolNumber : null}
-              placement="bottom"
-            >
-              <Typography
-                variant="body2"
-                className="boldtext header-ellipses"
-                ref={protocol}
+        <Grid item xs={3} style={containerStyle}>
+          <Grid item xs={5}>
+            <Paper style={styles} className="duedatedsg">
+              <Typography variant="body2" className="greytext">
+                Product Name
+              </Typography>
+              <Tooltip
+                variant="dark"
+                body={isProductTooltip ? productName : null}
+                placement="bottom"
               >
-                {protocolNumber || placeholder}
+                <Typography
+                  variant="body2"
+                  className="boldtext header-ellipses"
+                  ref={product}
+                >
+                  {productName || placeholder}
+                </Typography>
+              </Tooltip>
+            </Paper>
+          </Grid>
+          <Grid item xs={7}>
+            <Paper style={styles} className="duedatedsg">
+              <Typography variant="body2" className="greytext">
+                Protocol Number
               </Typography>
-            </Tooltip>
-          </Paper>
+              <Tooltip
+                variant="dark"
+                body={isProtocolTooltip ? protocolNumber : null}
+                placement="bottom"
+              >
+                <Typography
+                  variant="body2"
+                  className="boldtext header-ellipses"
+                  ref={protocol}
+                >
+                  {protocolNumber || placeholder}
+                </Typography>
+              </Tooltip>
+            </Paper>
+          </Grid>
         </Grid>
-        <Grid item xs={2}>
-          <Paper style={styles} className="duedatedsg">
-            <Typography variant="body2" className="greytext">
-              Bid #
-            </Typography>
-            <Typography variant="body2" className="boldtext">
-              {bidNo || placeholder}
-            </Typography>
-          </Paper>
-        </Grid>
-      </Grid>
-      <Grid item xs={2} style={containerStyle}>
-        <Grid item xs={12}>
-          <Paper className="duedatedsg" style={styles}>
-            <Typography variant="body2" className="greytext lesslineheight">
-              Days Until Due
-            </Typography>
-            <p className="boldtext greencolor lesslineheight">
-              {bidStatus ? 'Processing' : daysRemain}
-            </p>
-          </Paper>
+        <Grid item xs={2} style={containerStyle}>
+          <Grid item xs={4}>
+            <Paper style={styles} className="duedatedsg">
+              <Typography variant="body2" className="greytext">
+                Bid #
+              </Typography>
+              <Typography variant="body2" className="boldtext">
+                {bidNo || placeholder}
+              </Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={8}>
+            <Paper className="duedatedsg" style={styles}>
+              <Typography variant="body2" className="greytext lesslineheight">
+                Days Until Due
+              </Typography>
+              <p className="boldtext greencolor lesslineheight">
+                {bidStatus ? 'Processing' : daysRemain}
+              </p>
+            </Paper>
+          </Grid>
         </Grid>
       </Grid>
     </Grid>

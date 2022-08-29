@@ -95,7 +95,7 @@ type State = {
 };
 
 const MANUAL_REFRESH = false;
-class Questions extends Component<Props, State> {
+class Questions extends Component {
   constructor(props: Object) {
     super(props);
 
@@ -155,6 +155,7 @@ class Questions extends Component<Props, State> {
     if (handleOpenClose) handleOpenClose(false);
 
     if (resetQuestionsFilter) resetQuestionsFilter();
+    // this.state.wsInstance?.destroy();
   }
 
   handleIsCheckedAll = () => {
