@@ -113,7 +113,8 @@ const NOTEPAD = {
   MODE_DEFAULT: 'notepad_mode_default',
   MODE_READ: 'notepad_mode_read',
   MODE_EDIT: 'notepad_mode_edit',
-  CHANGE_MODE: 'notepad_change_mode'
+  CHANGE_MODE: 'notepad_change_mode',
+  SET_EDITOR: 'set_editor'
 };
 
 const PROFILE = {

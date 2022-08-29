@@ -2,7 +2,7 @@ import Collaboration from '@tiptap/extension-collaboration';
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
 import { connect } from 'react-redux';
 import React, { useEffect, useState, useContext, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import randomColor from 'randomcolor';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -19,6 +19,7 @@ import BulletList from '@tiptap/extension-bullet-list';
 import ListItem from '@tiptap/extension-list-item';
 import OrderedList from '@tiptap/extension-ordered-list';
 import Heading from '@tiptap/extension-heading';
+import HorizontalRule from '@tiptap/extension-horizontal-rule';
 import Link from '@tiptap/extension-link';
 import Code from '@tiptap/extension-code';
 import CodeBlock from '@tiptap/extension-code-block';
@@ -39,7 +40,11 @@ import {
   selectIsNotesFetched
 } from '../../../redux/selectors';
 import MenuBar from './MenuBar';
-import { updateNote, fetchNotes } from '../../../redux/actions/notepad-actions';
+import {
+  updateNote,
+  fetchNotes,
+  setEditor
+} from '../../../redux/actions/notepad-actions';
 // import { SocketContext } from '../../../context/SocketContext';
 // import * as Y from "yjs";
 import { debounce } from 'lodash';
@@ -56,6 +61,9 @@ const WysiwygNotepad = ({
   proposalDetails
 }) => {
   const notesSocket = useContext(NotesSocketContext);
+
+  const dispatch = useDispatch();
+
   const emptyTextBlock = {
     type: 'doc',
     content: [
@@ -72,12 +80,17 @@ const WysiwygNotepad = ({
 
   useEffect(() => {
     fetchLatestNotes();
+    return () => {
+      console.log('WYSIWYG Unmount');
+      setContent('<p></p>');
+    };
   }, []);
 
   const fetchLatestNotes = () => {
     const proposalId = selectedBid.get('id', '');
     if (proposalId) fetchNotes(proposalId);
   };
+
   // const ydoc = new Y.Doc();
   // console.log("YDOC", ydoc);
 
@@ -121,6 +134,7 @@ const WysiwygNotepad = ({
       OrderedList,
       ListItem,
       Heading,
+      HorizontalRule,
       Link,
       Code,
       CodeBlock,
@@ -431,7 +445,9 @@ const WysiwygNotepad = ({
             Underline,
             Code,
             CodeBlock,
+            HardBreak,
             HighLight,
+            HorizontalRule,
             Subscript,
             Superscript,
             TextAlign.configure({
@@ -457,7 +473,16 @@ const WysiwygNotepad = ({
               }
             })
           ]
-        : [StarterKit, Underline, Link, Code, HighLight, HardBreak, CodeBlock],
+        : [
+            StarterKit,
+            Underline,
+            Link,
+            Code,
+            HighLight,
+            HardBreak,
+            HorizontalRule,
+            CodeBlock
+          ],
       content: content || '<p></p>',
       onUpdate: ({ editor }) => {
         const Ejson = editor.getJSON();
@@ -467,6 +492,8 @@ const WysiwygNotepad = ({
     },
     [content]
   );
+
+  dispatch(setEditor(editor));
 
   const constructNoteV2 = (
     proposalId,
