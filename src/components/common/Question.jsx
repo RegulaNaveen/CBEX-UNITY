@@ -163,9 +163,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
       .split(' ')
       .filter(v => v.trim().length > 0);
 
-    isEmpty(s1)
-      ? this.setState({ changeIcon: '#b7b7b7' })
-      : this.setState({ changeIcon: '#00c221' });
+    if (isEmpty(s1)) this.setState({ changeIcon: '#b7b7b7' });
+    else this.setState({ changeIcon: '#00c221' });
 
     if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
       if (
@@ -190,22 +189,18 @@ export class TaskRow extends React.PureComponent<Props, State> {
   /**
    * Func to save data onBlur RichText Editor
    */
-  handleRichTextChange = (editorData, lastEditorData) => {
+  handleRichTextChange = editorData => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+    const { value, html, text } = editorData;
 
-    if (!isEqual(editorData.value, lastEditorData.value)) {
-      const { value, html, text } = editorData;
+    if (isEmpty(text)) this.setState({ changeIcon: '#b7b7b7' });
+    else this.setState({ changeIcon: '#00c221' });
 
-      isEmpty(text)
-        ? this.setState({ changeIcon: '#b7b7b7' })
-        : this.setState({ changeIcon: '#00c221' });
-
-      const editorText = text.trim() || ' ';
-      setProposalAnswer(proposalId, questionId, String(editorText), userData, {
-        value,
-        html
-      });
-    }
+    const editorText = text.trim() || ' ';
+    setProposalAnswer(proposalId, questionId, String(editorText), userData, {
+      value,
+      html
+    });
     this.trackMatomoEventSubmitAnswer(editorData.text);
     this.setSelectRow(false);
   };
@@ -495,13 +490,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
         if (!selectedRow) this.setSelectRow(true);
       },
       onBlur: data => {
-        if (!isEqual(getConvertedAnsString(answerValue), data.text.trim())) {
-          const { value, html } = data;
-          this.handleTextChange(data.text, getConvertedAnsString(answerValue), {
-            value,
-            html
-          });
-        }
+        if (!isEqual(richTextData.value, data.value))
+          this.handleRichTextChange(data);
+
         this.setState({ enableRichtext: false });
 
         // Change title style for richEdit icon
