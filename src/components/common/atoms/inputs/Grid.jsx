@@ -22,12 +22,36 @@ const loadSidebar = props => {
   const therapeutic = useRef();
   const linebusiness = useRef();
   const customer = useRef();
+  const protocolhalfscreen = useRef();
+  const producthalfscreen = useRef();
+  const therapeutichalfscreen = useRef();
+  const linebusinesshalfscreen = useRef();
+  const customerhalfscreen = useRef();
   // State for tracking if ellipsis is active
   const [isProductTooltip, setisProductTooltip] = useState(false);
   const [isCustomerTooltip, setisCustomerTooltip] = useState(false);
   const [isProtocolTooltip, setisProtocolTooltip] = useState(false);
   const [isTherapeuticTooltip, setisTherapeuticTooltip] = useState(false);
   const [isLinebusinessTooltip, setisLinebusinessTooltip] = useState(false);
+  const [isProductTooltipHalfscreen, setisProductTooltipHalfscreen] = useState(
+    false
+  );
+  const [
+    isCustomerTooltipHalfscreen,
+    setisCustomerTooltipHalfscreen
+  ] = useState(false);
+  const [
+    isProtocolTooltipHalfscreen,
+    setisProtocolTooltipHalfscreen
+  ] = useState(false);
+  const [
+    isTherapeuticTooltipHalfscreen,
+    setisTherapeuticTooltipHalfscreen
+  ] = useState(false);
+  const [
+    isLinebusinessTooltipHalfscreen,
+    setisLinebusinessTooltipHalfscreen
+  ] = useState(false);
   const {
     'Bid due date': bidDueDate,
     Phase: phase,
@@ -62,12 +86,42 @@ const loadSidebar = props => {
       setisLinebusinessTooltip(true);
     if (therapeutic?.current?.clientWidth < therapeutic?.current?.scrollWidth)
       setisTherapeuticTooltip(true);
+    if (
+      producthalfscreen?.current?.clientWidth <
+      producthalfscreen?.current?.scrollWidth
+    )
+      setisProductTooltipHalfscreen(true);
+    if (
+      protocolhalfscreen?.current?.clientWidth <
+      protocolhalfscreen?.current?.scrollWidth
+    )
+      setisProtocolTooltipHalfscreen(true);
+    if (
+      customerhalfscreen?.current?.clientWidth <
+      customerhalfscreen?.current?.scrollWidth
+    )
+      setisCustomerTooltipHalfscreen(true);
+    if (
+      linebusinesshalfscreen?.current?.clientWidth <
+      linebusinesshalfscreen?.current?.scrollWidth
+    )
+      setisLinebusinessTooltipHalfscreen(true);
+    if (
+      therapeutichalfscreen?.current?.clientWidth <
+      therapeutichalfscreen?.current?.scrollWidth
+    )
+      setisTherapeuticTooltipHalfscreen(true);
   }, [
     therapeutic?.current,
     customer?.current,
     protocol?.current,
     product?.current,
-    linebusiness?.current
+    linebusiness?.current,
+    therapeutichalfscreen?.current,
+    customerhalfscreen?.current,
+    protocolhalfscreen?.current,
+    producthalfscreen?.current,
+    linebusinesshalfscreen?.current
   ]);
   if (isBladeOpen) {
     return (
@@ -92,7 +146,7 @@ const loadSidebar = props => {
             </Typography>
             <Tooltip
               variant="dark"
-              body={isCustomerTooltip ? Customer : null}
+              body={isCustomerTooltipHalfscreen ? Customer : null}
               placement="bottom"
             >
               <Typography
@@ -104,7 +158,7 @@ const loadSidebar = props => {
                       : 'boldtext sidebaropenfont'
                     : 'boldtext halfscreen-header-ellipses'
                 }
-                ref={customer}
+                ref={customerhalfscreen}
               >
                 {Customer || placeholder}
               </Typography>
@@ -116,7 +170,7 @@ const loadSidebar = props => {
             </Typography>
             <Tooltip
               variant="dark"
-              body={isLinebusinessTooltip ? lineOfBusiness : null}
+              body={isLinebusinessTooltipHalfscreen ? lineOfBusiness : null}
               placement="bottom"
             >
               <Typography
@@ -128,7 +182,7 @@ const loadSidebar = props => {
                       : 'boldtext sidebaropenfont'
                     : 'boldtext halfscreen-header-ellipses'
                 }
-                ref={linebusiness}
+                ref={linebusinesshalfscreen}
               >
                 {lineOfBusiness || placeholder}
               </Typography>
@@ -156,7 +210,7 @@ const loadSidebar = props => {
             </Typography>
             <Tooltip
               variant="dark"
-              body={isTherapeuticTooltip ? therapeuticArea : null}
+              body={isTherapeuticTooltipHalfscreen ? therapeuticArea : null}
               placement="bottom"
             >
               <Typography
@@ -168,7 +222,7 @@ const loadSidebar = props => {
                       : 'boldtext sidebaropenfont'
                     : 'boldtext halfscreen-header-ellipses'
                 }
-                ref={therapeutic}
+                ref={therapeutichalfscreen}
               >
                 {therapeuticArea || placeholder}
               </Typography>
@@ -183,7 +237,7 @@ const loadSidebar = props => {
             </Typography>
             <Tooltip
               variant="dark"
-              body={isProductTooltip ? productName : null}
+              body={isProductTooltipHalfscreen ? productName : null}
               placement="bottom"
             >
               <Typography
@@ -195,7 +249,7 @@ const loadSidebar = props => {
                       : 'boldtext sidebaropenfont'
                     : 'boldtext halfscreen-header-ellipses'
                 }
-                ref={product}
+                ref={producthalfscreen}
               >
                 {productName || placeholder}
               </Typography>
@@ -210,7 +264,7 @@ const loadSidebar = props => {
             </Typography>
             <Tooltip
               variant="dark"
-              body={isProtocolTooltip ? protocolNumber : null}
+              body={isProtocolTooltipHalfscreen ? protocolNumber : null}
               placement="bottom"
             >
               <Typography
@@ -222,7 +276,7 @@ const loadSidebar = props => {
                       : 'boldtext sidebaropenfont'
                     : 'boldtext halfscreen-header-ellipses'
                 }
-                ref={protocol}
+                ref={protocolhalfscreen}
               >
                 {protocolNumber || placeholder}
               </Typography>
@@ -293,8 +347,8 @@ const loadSidebar = props => {
             </Paper>
           </Grid>
           <Grid item xs={7}>
-            <Paper style={styles} className="phasedsg">
-              <Typography variant="body2" className="greytext leftalign">
+            <Paper style={styles} className="phasedsg duedatedsg">
+              <Typography variant="body2" className="greytext">
                 Line of Business
               </Typography>
               <Tooltip
@@ -306,6 +360,7 @@ const loadSidebar = props => {
                   variant="body2"
                   className="boldtext header-ellipses"
                   ref={linebusiness}
+                  sty
                 >
                   {lineOfBusiness || placeholder}
                 </Typography>
