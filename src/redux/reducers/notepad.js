@@ -19,6 +19,7 @@ const INITIAL_STATE = fromJS({
   proposalID: '',
   notes: [],
   isNotesFetched: false,
+  isNotesWebSocketExists: false,
   fetchingNotes: false,
   fetchNotesErrorMsg: '',
   uploadingNote: false,
@@ -39,13 +40,14 @@ function onFetchNotes(state) {
 
 function onFetchNotesDone(state, action) {
   const {
-    payload: { data, isFromSocket }
+    payload: { data, isFromSocket, socketExists }
   } = action;
   data.isFromSocket = !!isFromSocket;
   return state
     .set('notes', data)
     .set('fetchingNotes', false)
-    .set('isNotesFetched', true);
+    .set('isNotesFetched', true)
+    .set('isNotesWebSocketExists', socketExists);
 }
 
 function onErrorFetchingNotes(state, action) {

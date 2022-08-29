@@ -25,7 +25,10 @@ export function fetchNotes(proposalID) {
       const data = await fetchNotesApi(proposalID);
       dispatch({
         type: FETCH_NOTES_DONE,
-        payload: { data: fromJS(data.notes) }
+        payload: {
+          data: fromJS(data.notes),
+          socketExists: fromJS(data.notesWebsocketExists)
+        }
       });
     } catch (err) {
       dispatch({ type: ERROR_FETCHING_NOTES, payload: { data: err } });

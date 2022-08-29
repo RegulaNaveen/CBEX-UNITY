@@ -36,7 +36,8 @@ import {
   getUserName,
   getUserEmail,
   getUserRole,
-  selectIsNotesFetched
+  selectIsNotesFetched,
+  selectIsNotesWebSocketExists
 } from '../../../redux/selectors';
 import MenuBar from './MenuBar';
 import { updateNote, fetchNotes } from '../../../redux/actions/notepad-actions';
@@ -68,10 +69,15 @@ const WysiwygNotepad = ({
   const [content, setContent] = useState('<p></p>');
   const [notesId, setNotesId] = useState('');
   const isNotesFetched = useSelector(selectIsNotesFetched);
+  const isNotesWebSocketExists = useSelector(selectIsNotesWebSocketExists);
   const usercolor = randomColor({ luminosity: 'light' });
 
   useEffect(() => {
-    fetchLatestNotes();
+    if (!isNotesWebSocketExists) fetchLatestNotes();
+    return () => {
+      console.log('WYSIWYG Unmount');
+      setContent('<p></p>');
+    };
   }, []);
 
   const fetchLatestNotes = () => {
