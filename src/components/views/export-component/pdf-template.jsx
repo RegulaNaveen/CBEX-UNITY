@@ -71,6 +71,9 @@ Font.register({
 });
 
 const styles = StyleSheet.create({
+  page: {
+    paddingBottom: '18vh'
+  },
   header: {
     width: '83%',
     height: '10vh', //As per your page layout
@@ -87,9 +90,11 @@ const styles = StyleSheet.create({
   },
   body: {
     width: '100%',
-    minHeight: '75vh'
+    minHeight: '60vh'
   },
   footer: {
+    position: 'absolute',
+    bottom: 0,
     width: '83%',
     height: '15vh', //As per your page layout
     marginTop: '20px',
@@ -501,7 +506,7 @@ const MyDoc = (
 ) => {
   return (
     <Document>
-      <Page wrap>
+      <Page wrap style={styles.page}>
         <View fixed style={styles.header}>
           <Image src={Logo} style={styles.imgLogo}></Image>
         </View>
@@ -514,7 +519,15 @@ const MyDoc = (
               Opportunity Overview
             </Text>
           </View>
-          <Html>
+          <Html
+            renderers={{
+              tr: ({ style, children }) => (
+                <View style={style}>
+                  {children}
+                </View>
+              )
+            }}
+          >
             {getHtml(
               proposalDetails,
               questions,
