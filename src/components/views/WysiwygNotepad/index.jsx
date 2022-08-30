@@ -37,7 +37,8 @@ import {
   getUserEmail,
   getUserRole,
   selectIsNotesFetched,
-  selectIsNotesWebSocketExists
+  selectIsNotesWebSocketExists,
+  isProposalLoading
 } from '../../../redux/selectors';
 import MenuBar from './MenuBar';
 import { updateNote, fetchNotes } from '../../../redux/actions/notepad-actions';
@@ -56,6 +57,7 @@ const WysiwygNotepad = ({
   proposalDetails
 }) => {
   const notesSocket = useContext(NotesSocketContext);
+  const isLoadingProposal = useSelector(isProposalLoading);
   console.log('inside note socket', notesSocket);
   const emptyTextBlock = {
     type: 'doc',
@@ -78,22 +80,22 @@ const WysiwygNotepad = ({
   // console.log('fetch socket', isNotesWebSocketExists);
 
   const fetchLatestNotes = () => {
-    console.log('inside fetch latest notes');
     const proposalId = selectedBid.get('id', '');
+    console.log('inside fetch latest notes proposalId', proposalId);
     if (proposalId) dispatch(fetchNotes(proposalId));
   };
 
-  useEffect(() => {
-    // if (_.isEmpty(notes)) {
-    console.log('inside notes', isNotesWebSocketExists);
-    if (!isNotesWebSocketExists) fetchLatestNotes();
-    // }
-    // fetchLatestNotes();
-    // return () => {
-    //   console.log('WYSIWYG Unmount');
-    //   setContent('<p></p>');
-    // };
-  }, [isNotesWebSocketExists]);
+  // useEffect(() => {
+  //   // if (_.isEmpty(notes)) {
+  //   console.log('inside notes', isNotesWebSocketExists);
+  //   if (!isNotesWebSocketExists) fetchLatestNotes();
+  //   // }
+  //   // fetchLatestNotes();
+  //   // return () => {
+  //   //   console.log('WYSIWYG Unmount');
+  //   //   setContent('<p></p>');
+  //   // };
+  // }, []);
   // const ydoc = new Y.Doc();
   // console.log("YDOC", ydoc);
 
@@ -515,7 +517,7 @@ const WysiwygNotepad = ({
         userName,
         userRole
       );
-      updateNote(proposalId, noteSaveReqBody);
+      if (!isLoadingProposal) updateNote(proposalId, noteSaveReqBody);
     }, 100),
     [notes, selectedBid, notesId, userEmail, userName, userRole]
   );
