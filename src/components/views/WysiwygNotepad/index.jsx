@@ -53,10 +53,10 @@ const WysiwygNotepad = ({
   userEmail,
   userRole,
   updateNote,
-  fetchNotes,
   proposalDetails
 }) => {
   const notesSocket = useContext(NotesSocketContext);
+  console.log('inside note socket', notesSocket);
   const emptyTextBlock = {
     type: 'doc',
     content: [
@@ -68,19 +68,27 @@ const WysiwygNotepad = ({
   const [json, setJSON] = useState(emptyTextBlock);
   const [content, setContent] = useState('<p></p>');
   const [notesId, setNotesId] = useState('');
-  const isNotesFetched = useSelector(selectIsNotesFetched);
+  // const isNotesFetched = useSelector(selectIsNotesFetched);
   const isNotesWebSocketExists = useSelector(selectIsNotesWebSocketExists);
   const usercolor = randomColor({ luminosity: 'light' });
-
+  // console.log('inside content', content, notes);
+  console.log('inside notes', isNotesWebSocketExists);
   useEffect(() => {
+    // if (_.isEmpty(notes)) {
+    console.log('inside notes', isNotesWebSocketExists);
     if (!isNotesWebSocketExists) fetchLatestNotes();
-    return () => {
-      console.log('WYSIWYG Unmount');
-      setContent('<p></p>');
-    };
-  }, []);
+    // }
+    // fetchLatestNotes();
+    // return () => {
+    //   console.log('WYSIWYG Unmount');
+    //   setContent('<p></p>');
+    // };
+  }, [isNotesWebSocketExists]);
+
+  // console.log('fetch socket', isNotesWebSocketExists);
 
   const fetchLatestNotes = () => {
+    console.log('inside fetch latest notes');
     const proposalId = selectedBid.get('id', '');
     if (proposalId) fetchNotes(proposalId);
   };
@@ -464,7 +472,7 @@ const WysiwygNotepad = ({
             })
           ]
         : [StarterKit, Underline, Link, Code, HighLight, HardBreak, CodeBlock],
-      content: content || '<p></p>',
+      content: content,
       onUpdate: ({ editor }) => {
         const Ejson = editor.getJSON();
         // send the content to an API here
@@ -512,7 +520,7 @@ const WysiwygNotepad = ({
 
   return (
     <>
-      {notesSocket.wsInstance && isNotesFetched && (
+      {notesSocket.wsInstance && (
         <div className="editor-notepad">
           <div>
             <MenuBar editor={editor} />

@@ -42,12 +42,16 @@ function onFetchNotesDone(state, action) {
   const {
     payload: { data, isFromSocket, socketExists }
   } = action;
+  console.log('inside exists', socketExists);
   data.isFromSocket = !!isFromSocket;
-  return state
-    .set('notes', data)
-    .set('fetchingNotes', false)
-    .set('isNotesFetched', true)
-    .set('isNotesWebSocketExists', socketExists);
+  return (
+    state
+      .set('notes', data)
+      // .set('notes', socketExists ? [] : data)
+      .set('fetchingNotes', false)
+      .set('isNotesFetched', true)
+      .set('isNotesWebSocketExists', socketExists)
+  );
 }
 
 function onErrorFetchingNotes(state, action) {

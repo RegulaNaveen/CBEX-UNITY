@@ -38,7 +38,9 @@ import {
   getMilestoneSections,
   getEditQuestionData,
   getIsOpen,
-  getSelectedBid
+  getSelectedBid,
+  selectIsNotesFetched,
+  selectIsNotesWebSocketExists
 } from '../../../redux/selectors';
 import {
   selectUniqueMilestones,
@@ -52,9 +54,11 @@ import { getAllUsers } from '../../../redux/actions/sso-auth-actions';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import { getCountriesNameForCode } from '../../../utils/utils';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
+import { fetchNotes } from '../../../redux/actions/notepad-actions';
 import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions';
 import WysiwygNotepad from '../../views/WysiwygNotepad';
 import ANSWER_TYPES from '../../../constants/answerTypes';
+import NotesSocketContext from '../../../context/notesSocketContext';
 
 const QuestionsSectionMapping = React.lazy(() =>
   import('./QuestionsSectionMapping')
@@ -84,7 +88,9 @@ type Props = {
   activeQuestionsFilterCount: Number,
   allSectionsExpanded: boolean,
   expandAllSections: Function,
-  editQuestionsData: Map
+  editQuestionsData: Map,
+  isNotesFetched: boolean,
+  isNotesWebSocketExists: boolean
 };
 
 type State = {
@@ -119,16 +125,24 @@ class Questions extends Component {
     const {
       fetchUsers,
       getSFNonEditabelInfoField,
-      callPickListLookupSfData
+      callPickListLookupSfData,
+      isNotesWebSocketExists
     } = this.props;
     fetchUsers();
+    // if (!isNotesWebSocketExists) this.handleFetchNotes();
     getSFNonEditabelInfoField();
     callPickListLookupSfData();
     window.addEventListener('resize', this.resize.bind(this));
     this.resize();
   }
 
+  // handleFetchNotes = () => {
+  //   console.log('handleFetchNotes', this.props.isNotesWebSocketExists);
+  //   const proposalId = this.props.selectedBid.get('id', '');
+  //   if (proposalId) fetchNotes(proposalId);
+  // };
   componentDidUpdate(prevProps: Map) {
+    console.log('inside update question');
     const {
       setQuestion,
       hasQuestionError,
@@ -529,12 +543,19 @@ class Questions extends Component {
               >
                 <div id="panel-notepad-header">
                   <Typography variant="h3">Notepad</Typography>
-                  <Typography variant="body2" gutterBottom>
-                    Currently, the notepad best supports one user entering
-                    information at a time
-                  </Typography>
                 </div>
-                <WysiwygNotepad />
+                {console.log(
+                  'notes socket render',
+                  this.props.isNotesFetched,
+                  this.props.isNotesWebSocketExists
+                )}
+                {
+                  <NotesSocketContext.Consumer>
+                    {value => value.wsInstance && <WysiwygNotepad />
+                    // <WysiwygNotepad />
+                    }
+                  </NotesSocketContext.Consumer>
+                }
               </div>
             </Panel>
           </div>
@@ -623,7 +644,9 @@ const mapStateToProps = (state: Map) => ({
   allSectionsExpanded: selectAreAllSectionsExpanded(state),
   editQuestionsData: getEditQuestionData(state),
   selectedBid: getSelectedBid(state),
-  getBidList: getBidList(state)
+  getBidList: getBidList(state),
+  isNotesFetched: selectIsNotesFetched(state),
+  isNotesWebSocketExists: selectIsNotesWebSocketExists(state)
 });
 
 export default compose(
