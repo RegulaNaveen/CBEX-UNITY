@@ -174,6 +174,7 @@ const CustomApolloRichText = ({
       className={classNames('custom-rich-text', {
         readonly: !isRichTextEditable,
         popover: isRichTextEditable,
+        disabled,
         [className]: !!className
       })}
     >
@@ -185,7 +186,7 @@ const CustomApolloRichText = ({
         ref={richTextContainerRef}
         aria-hidden="true"
         onClick={() => {
-          if (!isRichTextEditable) onClickHTML();
+          if (!isRichTextEditable && !disabled) onClickHTML();
         }}
       >
         <RichTextEditor
@@ -195,7 +196,6 @@ const CustomApolloRichText = ({
           defaultValue={richTextData.value}
           onChange={onChangeHandler}
           ref={richTextEditorRef}
-          disabled={!!disabled}
         />
       </div>
     </div>

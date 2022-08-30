@@ -240,7 +240,7 @@ export class Opportunity extends Component<Props, State> {
   };
 
   renderContent = () => {
-    const { enableValidateTab, selectedView, windowSize } = this.state;
+    const { enableValidateTab, selectedView, windowSize, wsInstance, ydoc } = this.state;
     const {
       isLoading,
       details,
@@ -266,8 +266,9 @@ export class Opportunity extends Component<Props, State> {
           windowSize={windowSize}
           bidStatus={bidStatus}
         />
-        <NotesSocketContext.Provider
-          value={{ wsInstance: this.state.wsInstance, ydoc: this.state.ydoc }}
+       {
+        wsInstance && ydoc &&  <NotesSocketContext.Provider
+          value={{ wsInstance: wsInstance, ydoc: ydoc }}
         >
           <UnityTab
             id={params.id}
@@ -275,6 +276,7 @@ export class Opportunity extends Component<Props, State> {
             selectedView={selectedView}
           />
         </NotesSocketContext.Provider>
+       }
       </div>
     );
   };
