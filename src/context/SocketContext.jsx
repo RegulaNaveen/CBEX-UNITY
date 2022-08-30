@@ -57,7 +57,7 @@ const SocketContextProvider = props => {
         })
       );
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
 
