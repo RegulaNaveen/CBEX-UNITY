@@ -2,7 +2,7 @@ import Collaboration from '@tiptap/extension-collaboration';
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
 import { connect } from 'react-redux';
 import React, { useEffect, useState, useContext, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import randomColor from 'randomcolor';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -65,6 +65,7 @@ const WysiwygNotepad = ({
       }
     ]
   };
+  const dispatch = useDispatch();
   const [json, setJSON] = useState(emptyTextBlock);
   const [content, setContent] = useState('<p></p>');
   const [notesId, setNotesId] = useState('');
@@ -73,6 +74,15 @@ const WysiwygNotepad = ({
   const usercolor = randomColor({ luminosity: 'light' });
   // console.log('inside content', content, notes);
   console.log('inside notes', isNotesWebSocketExists);
+
+  // console.log('fetch socket', isNotesWebSocketExists);
+
+  const fetchLatestNotes = () => {
+    console.log('inside fetch latest notes');
+    const proposalId = selectedBid.get('id', '');
+    if (proposalId) dispatch(fetchNotes(proposalId));
+  };
+
   useEffect(() => {
     // if (_.isEmpty(notes)) {
     console.log('inside notes', isNotesWebSocketExists);
@@ -84,14 +94,6 @@ const WysiwygNotepad = ({
     //   setContent('<p></p>');
     // };
   }, [isNotesWebSocketExists]);
-
-  // console.log('fetch socket', isNotesWebSocketExists);
-
-  const fetchLatestNotes = () => {
-    console.log('inside fetch latest notes');
-    const proposalId = selectedBid.get('id', '');
-    if (proposalId) fetchNotes(proposalId);
-  };
   // const ydoc = new Y.Doc();
   // console.log("YDOC", ydoc);
 
