@@ -756,13 +756,13 @@ export const getOpportunity = (
       let data = await getPaginateProposal(urls);
       data = data.map(v => v['data']).flat();
       // fetch notes for current bid
-      for (let proposal of data) {
-        if (proposal.isCurrent) {
-          // fetchNotes(proposal.proposal.proposalId);
-          dispatch(fetchNotes(proposal.proposal.proposalId));
-          break;
-        }
-      }
+      // for (let proposal of data) {
+      //   if (proposal.isCurrent) {
+      //     // fetchNotes(proposal.proposal.proposalId);
+      //     dispatch(fetchNotes(proposal.proposal.proposalId));
+      //     break;
+      //   }
+      // }
       dispatch({ type: OPPORTUNITY_INFO, payload: data });
       dispatch({
         type: UPDATE_BOX_BIDS,

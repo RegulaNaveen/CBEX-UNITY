@@ -12,7 +12,8 @@ const {
   UPDATE_NOTE_DONE,
   ERROR_UPDATING_NOTE,
   MODE_DEFAULT,
-  CHANGE_MODE
+  CHANGE_MODE,
+  RESET_NOTES
 } = REDUX_TYPES.NOTEPAD;
 
 const INITIAL_STATE = fromJS({
@@ -91,6 +92,10 @@ function onUpdateNoteDone(state) {
   return state.set('uploadingNote', false);
 }
 
+function onResetNotes(state) {
+  return state.set('notes', []);
+}
+
 function onErrorUpdatingNote(state, action) {
   const {
     payload: { data }
@@ -108,7 +113,8 @@ const actionMap = {
   [CHANGE_MODE]: onChangeMode,
   [UPDATE_NOTE]: onUpdateNote,
   [UPDATE_NOTE_DONE]: onUpdateNoteDone,
-  [ERROR_UPDATING_NOTE]: onErrorUpdatingNote
+  [ERROR_UPDATING_NOTE]: onErrorUpdatingNote,
+  [RESET_NOTES]: onResetNotes
 };
 
 export default function(state = INITIAL_STATE, action) {

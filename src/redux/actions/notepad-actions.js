@@ -15,7 +15,8 @@ const {
   ERROR_FETCHING_NOTES,
   ERROR_ADDING_NOTE,
   CHANGE_MODE,
-  MODE_DEFAULT
+  MODE_DEFAULT,
+  RESET_NOTES
 } = REDUX_TYPES.NOTEPAD;
 
 export function fetchNotes(proposalID) {
@@ -78,6 +79,10 @@ export function updateNote(id, note) {
 
 export function changeMode(mode) {
   return dispatch => dispatch({ type: CHANGE_MODE, payload: { mode } });
+}
+
+export function resetNotes() {
+  return dispatch => dispatch({ type: RESET_NOTES, payload: {} });
 }
 
 export default fetchNotes;

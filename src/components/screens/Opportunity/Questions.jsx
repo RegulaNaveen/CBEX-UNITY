@@ -142,7 +142,6 @@ class Questions extends Component {
   //   if (proposalId) fetchNotes(proposalId);
   // };
   componentDidUpdate(prevProps: Map) {
-    console.log('inside update question');
     const {
       setQuestion,
       hasQuestionError,
@@ -544,11 +543,6 @@ class Questions extends Component {
                 <div id="panel-notepad-header">
                   <Typography variant="h3">Notepad</Typography>
                 </div>
-                {console.log(
-                  'notes socket render',
-                  this.props.isNotesFetched,
-                  this.props.isNotesWebSocketExists
-                )}
                 {
                   <NotesSocketContext.Consumer>
                     {value => value.wsInstance && <WysiwygNotepad />

@@ -41,11 +41,16 @@ import {
   isProposalLoading
 } from '../../../redux/selectors';
 import MenuBar from './MenuBar';
-import { updateNote, fetchNotes } from '../../../redux/actions/notepad-actions';
+import {
+  updateNote,
+  fetchNotes,
+  resetNotes
+} from '../../../redux/actions/notepad-actions';
 // import { SocketContext } from '../../../context/SocketContext';
 // import * as Y from "yjs";
-import { debounce } from 'lodash';
+import { debounce, has } from 'lodash';
 import NotesSocketContext from '../../../context/notesSocketContext';
+import Loader from 'react-loader-spinner';
 
 const WysiwygNotepad = ({
   notes = null,
@@ -58,7 +63,7 @@ const WysiwygNotepad = ({
 }) => {
   const notesSocket = useContext(NotesSocketContext);
   const isLoadingProposal = useSelector(isProposalLoading);
-  console.log('inside note socket', notesSocket);
+  // console.log('inside note socket', notesSocket);
   const emptyTextBlock = {
     type: 'doc',
     content: [
@@ -71,31 +76,27 @@ const WysiwygNotepad = ({
   const [json, setJSON] = useState(emptyTextBlock);
   const [content, setContent] = useState('<p></p>');
   const [notesId, setNotesId] = useState('');
-  // const isNotesFetched = useSelector(selectIsNotesFetched);
+  const isNotesFetched = useSelector(selectIsNotesFetched);
   const isNotesWebSocketExists = useSelector(selectIsNotesWebSocketExists);
   const usercolor = randomColor({ luminosity: 'light' });
-  // console.log('inside content', content, notes);
-  console.log('inside notes', isNotesWebSocketExists);
 
-  // console.log('fetch socket', isNotesWebSocketExists);
-
-  const fetchLatestNotes = () => {
+  const fetchLatestNotes = useCallback(() => {
+    console.log('fetchLatestNotes', proposalId);
     const proposalId = selectedBid.get('id', '');
-    console.log('inside fetch latest notes proposalId', proposalId);
     if (proposalId) dispatch(fetchNotes(proposalId));
-  };
+  }, [selectedBid]);
 
-  // useEffect(() => {
-  //   // if (_.isEmpty(notes)) {
-  //   console.log('inside notes', isNotesWebSocketExists);
-  //   if (!isNotesWebSocketExists) fetchLatestNotes();
-  //   // }
-  //   // fetchLatestNotes();
-  //   // return () => {
-  //   //   console.log('WYSIWYG Unmount');
-  //   //   setContent('<p></p>');
-  //   // };
-  // }, []);
+  useEffect(() => {
+    console.log('inside notes', isNotesWebSocketExists);
+
+    if (!isNotesWebSocketExists) fetchLatestNotes();
+    // }
+    // fetchLatestNotes();
+    return () => {
+      console.log('WYSIWYG Unmount');
+      dispatch(resetNotes());
+    };
+  }, []);
   // const ydoc = new Y.Doc();
   // console.log("YDOC", ydoc);
 
@@ -480,16 +481,18 @@ const WysiwygNotepad = ({
       onUpdate: ({ editor }) => {
         const Ejson = editor.getJSON();
         // send the content to an API here
+        console.log('ejson', Ejson, isNotesFetched);
+        // if (isNotesFetched && content != '<p></p>')
         memoizedSaveDB(Ejson);
       }
     },
-    [content]
+    [content, isNotesFetched]
   );
-
+  console.log('ejson notews fetch', isNotesFetched);
   const constructNoteV2 = (
     proposalId,
     notesId,
-    noteText = emptyTextBlock, // non stringified block data i.e as returned from Editor {block:[], entityMap:{}}
+    noteText = {}, // non stringified block data i.e as returned from Editor {block:[], entityMap:{}}
     userEmail = '',
     userName = '',
     userRole = ''
@@ -506,8 +509,8 @@ const WysiwygNotepad = ({
   };
 
   const memoizedSaveDB = useCallback(
-    debounce(noteText => {
-      console.log('noteText', noteText);
+    noteText => {
+      console.log('memoizedSaveDB', noteText);
       const proposalId = selectedBid.get('id');
       const noteSaveReqBody = constructNoteV2(
         proposalId,
@@ -517,8 +520,26 @@ const WysiwygNotepad = ({
         userName,
         userRole
       );
-      if (!isLoadingProposal) updateNote(proposalId, noteSaveReqBody);
-    }, 100),
+      if (isNotesFetched && noteText?.content?.length >= 2) {
+        console.log('1st');
+        updateNote(proposalId, noteSaveReqBody);
+      }
+      if (noteText?.content?.length < 2) {
+        console.log('out2', isNotesFetched);
+        if (
+          isNotesFetched &&
+          noteText?.content[0]?.content[0]?.hasOwnProperty('text')
+        ) {
+          console.log('2nd');
+          updateNote(proposalId, noteSaveReqBody);
+        }
+        if (isNotesFetched && noteText?.content[0]?.hasOwnProperty('text')) {
+          console.log('3rd');
+          updateNote(proposalId, noteSaveReqBody);
+        }
+      }
+      console.log('out');
+    },
     [notes, selectedBid, notesId, userEmail, userName, userRole]
   );
 
@@ -529,7 +550,21 @@ const WysiwygNotepad = ({
           <div>
             <MenuBar editor={editor} />
           </div>
-          <EditorContent editor={editor} className="editor-scroll" />
+          {isNotesFetched ? (
+            <EditorContent editor={editor} className="editor-scroll" />
+          ) : (
+            <Loader
+              type="TailSpin"
+              color="#297DFD"
+              width={30}
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh'
+              }}
+            />
+          )}
         </div>
       )}
     </>
