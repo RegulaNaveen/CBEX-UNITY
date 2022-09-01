@@ -1,3 +1,9 @@
+.proposal-wrapper {
+  .processing-txt {
+    display: block;
+  }
+}
+
 @media screen and (max-width: 1200px) and (min-width: 300px) {
   .proposal-wrapper {
     height: 100%;
@@ -263,6 +269,12 @@
     p.greencolor {
       color: #2acb42;
       font-size: 30px;
+
+      @media only screen and (max-width: 1600px) {
+        .processing-txt {
+          font-size: 22px;
+        }
+      }
     }
     p.greencolorsidebaropenfont {
       color: #2acb42;
