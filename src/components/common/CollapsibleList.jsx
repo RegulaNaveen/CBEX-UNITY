@@ -18,11 +18,9 @@ import {
   onHandleOpenClose,
   handleSelectedSection
 } from '../../redux/actions/sidebar-actions';
-
 const CollapsibleQuestionMapping = React.lazy(() =>
   import('./CollapsibleQuestionMapping')
 );
-
 type State = {
   isCollapsed: boolean
 };

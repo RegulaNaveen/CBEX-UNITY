@@ -78,51 +78,77 @@ const loadSidebar = props => {
   useEffect(() => {
     if (product?.current?.clientWidth < product?.current?.scrollWidth)
       setisProductTooltip(true);
+    else setisProductTooltip(false);
     if (protocol?.current?.clientWidth < protocol?.current?.scrollWidth)
       setisProtocolTooltip(true);
+    else setisProtocolTooltip(false);
     if (customer?.current?.clientWidth < customer?.current?.scrollWidth)
       setisCustomerTooltip(true);
+    else setisProtocolTooltip(false);
     if (linebusiness?.current?.clientWidth < linebusiness?.current?.scrollWidth)
       setisLinebusinessTooltip(true);
+    else setisLinebusinessTooltip(false);
     if (therapeutic?.current?.clientWidth < therapeutic?.current?.scrollWidth)
       setisTherapeuticTooltip(true);
+    else setisTherapeuticTooltip(false);
     if (
       producthalfscreen?.current?.clientWidth <
       producthalfscreen?.current?.scrollWidth
     )
       setisProductTooltipHalfscreen(true);
+    else setisProductTooltipHalfscreen(false);
     if (
       protocolhalfscreen?.current?.clientWidth <
       protocolhalfscreen?.current?.scrollWidth
     )
       setisProtocolTooltipHalfscreen(true);
+    else setisProtocolTooltipHalfscreen(false);
     if (
       customerhalfscreen?.current?.clientWidth <
       customerhalfscreen?.current?.scrollWidth
     )
       setisCustomerTooltipHalfscreen(true);
+    else setisCustomerTooltipHalfscreen(false);
     if (
       linebusinesshalfscreen?.current?.clientWidth <
       linebusinesshalfscreen?.current?.scrollWidth
     )
       setisLinebusinessTooltipHalfscreen(true);
+    else setisLinebusinessTooltipHalfscreen(false);
     if (
       therapeutichalfscreen?.current?.clientWidth <
       therapeutichalfscreen?.current?.scrollWidth
     )
       setisTherapeuticTooltipHalfscreen(true);
+    else setisTherapeuticTooltipHalfscreen(false);
   }, [
-    therapeutic?.current,
-    customer?.current,
-    protocol?.current,
-    product?.current,
-    linebusiness?.current,
-    therapeutichalfscreen?.current,
-    customerhalfscreen?.current,
-    protocolhalfscreen?.current,
-    producthalfscreen?.current,
-    linebusinesshalfscreen?.current
+    therapeutic?.current?.scrollWidth,
+    customer?.current?.scrollWidth,
+    protocol?.current?.scrollWidth,
+    product?.current?.scrollWidth,
+    linebusiness?.current?.scrollWidth,
+    therapeutichalfscreen?.current?.scrollWidth,
+    customerhalfscreen?.current?.scrollWidth,
+    protocolhalfscreen?.current?.scrollWidth,
+    producthalfscreen?.current?.scrollWidth,
+    linebusinesshalfscreen?.current?.scrollWidth,
+    windowSize,
+    isOpen
   ]);
+
+  const renderProcessingTxt = (
+    <span className="processing-txt">Processing</span>
+  );
+
+  const smallHeaderClass =
+    windowSize < 641
+      ? 'boldtext halfscreen-header-ellipses-blade'
+      : 'boldtext sidebaropenfont';
+
+  const headerClassName = isOpen
+    ? smallHeaderClass
+    : 'boldtext halfscreen-header-ellipses';
+
   if (isBladeOpen) {
     return (
       <Grid container>
@@ -151,13 +177,7 @@ const loadSidebar = props => {
             >
               <Typography
                 variant="body2"
-                className={
-                  isOpen
-                    ? windowSize < 641
-                      ? 'boldtext halfscreen-header-ellipses-blade'
-                      : 'boldtext sidebaropenfont'
-                    : 'boldtext halfscreen-header-ellipses'
-                }
+                className={headerClassName}
                 ref={customerhalfscreen}
               >
                 {Customer || placeholder}
@@ -175,13 +195,7 @@ const loadSidebar = props => {
             >
               <Typography
                 variant="body2"
-                className={
-                  isOpen
-                    ? windowSize < 641
-                      ? 'boldtext halfscreen-header-ellipses-blade'
-                      : 'boldtext sidebaropenfont'
-                    : 'boldtext halfscreen-header-ellipses'
-                }
+                className={headerClassName}
                 ref={linebusinesshalfscreen}
               >
                 {lineOfBusiness || placeholder}
@@ -215,13 +229,7 @@ const loadSidebar = props => {
             >
               <Typography
                 variant="body2"
-                className={
-                  isOpen
-                    ? windowSize < 641
-                      ? 'boldtext halfscreen-header-ellipses-blade'
-                      : 'boldtext sidebaropenfont'
-                    : 'boldtext halfscreen-header-ellipses'
-                }
+                className={headerClassName}
                 ref={therapeutichalfscreen}
               >
                 {therapeuticArea || placeholder}
@@ -242,13 +250,7 @@ const loadSidebar = props => {
             >
               <Typography
                 variant="body2"
-                className={
-                  isOpen
-                    ? windowSize < 641
-                      ? 'boldtext halfscreen-header-ellipses-blade'
-                      : 'boldtext sidebaropenfont'
-                    : 'boldtext halfscreen-header-ellipses'
-                }
+                className={headerClassName}
                 ref={producthalfscreen}
               >
                 {productName || placeholder}
@@ -269,13 +271,7 @@ const loadSidebar = props => {
             >
               <Typography
                 variant="body2"
-                className={
-                  isOpen
-                    ? windowSize < 641
-                      ? 'boldtext halfscreen-header-ellipses-blade'
-                      : 'boldtext sidebaropenfont'
-                    : 'boldtext halfscreen-header-ellipses'
-                }
+                className={headerClassName}
                 ref={protocolhalfscreen}
               >
                 {protocolNumber || placeholder}
@@ -299,7 +295,7 @@ const loadSidebar = props => {
               Days Until Due
             </Typography>
             <p className="boldtext greencolorsidebaropenfont lesslineheight">
-              {bidStatus ? 'Processing' : daysRemain}
+              {bidStatus ? renderProcessingTxt : daysRemain}
             </p>
           </Paper>
         </Grid>
@@ -469,7 +465,7 @@ const loadSidebar = props => {
                 Days Until Due
               </Typography>
               <p className="boldtext greencolor lesslineheight">
-                {bidStatus ? 'Processing' : daysRemain}
+                {bidStatus ? renderProcessingTxt : daysRemain}
               </p>
             </Paper>
           </Grid>

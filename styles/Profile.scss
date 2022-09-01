@@ -8,10 +8,10 @@
     // margin: 0.5em;
     overflow: visible;
   }
-.top-space .dd-input-wrapper {
-  display: flex;
-  width: 80%;
-}
+  .top-space .dd-input-wrapper {
+    display: flex;
+    width: 80%;
+  }
   .account-preference-wrapper {
     margin: 1em;
   }
@@ -34,10 +34,15 @@
     font-family: $proximaNova;
   }
 
+  .bold-label {
+    color: #000 !important;
+    font-weight: 600;
+  }
+
   .top-space {
     margin-top: 1em;
   }
-  .profile-dropdown{
+  .profile-dropdown {
     display: flex;
     width: 80%;
   }
@@ -48,5 +53,44 @@
 
   .button {
     margin: 10px;
+  }
+
+  .card-heading {
+    font-family: 'Proxima Nova';
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 32px;
+  }
+
+  .card-label {
+    color: #444444;
+    font-family: 'Proxima Nova';
+    font-size: 14px;
+    letter-spacing: 0;
+    line-height: 24px;
+  }
+  .optional-help-text {
+    color: #444444;
+    font-family: 'Proxima Nova';
+    font-size: 13px;
+    letter-spacing: 0;
+    line-height: 24px;
+  }
+
+  .card-item {
+    color: #000000;
+    font-family: 'Proxima Nova';
+    font-size: 16px;
+    letter-spacing: 0;
+    line-height: 24px;
+  }
+
+  .preference-label {
+    color: #444444;
+    font-family: 'Proxima Nova';
+    font-size: 16px;
+    letter-spacing: 0;
+    line-height: 24px;
   }
 }

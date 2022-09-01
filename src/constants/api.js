@@ -36,7 +36,7 @@ switch (environment) {
     SOCKET_URL =
       'wss://l3p8o0zg48.execute-api.us-east-1.amazonaws.com/production';
     NOTES_SOCKET_URL =
-      'wss://662wdhv4y1.execute-api.us-east-1.amazonaws.com/production';
+      'wss://1qq7rwcx08.execute-api.us-east-1.amazonaws.com/production';
     break;
   case 'DEV2':
     PROPOSAL_API_ENDPOINT =
@@ -98,7 +98,7 @@ switch (environment) {
     SOCKET_URL =
       'wss://nthe94se04.execute-api.us-east-1.amazonaws.com/production';
     NOTES_SOCKET_URL =
-      'wss://662wdhv4y1.execute-api.us-east-1.amazonaws.com/production';
+      'wss://za42jrafie.execute-api.us-east-1.amazonaws.com/production';
     break;
   default:
     // DEV Data
@@ -116,7 +116,7 @@ switch (environment) {
     SOCKET_URL =
       'wss://sgag59jkn1.execute-api.us-east-1.amazonaws.com/production';
     NOTES_SOCKET_URL =
-      'wss://662wdhv4y1.execute-api.us-east-1.amazonaws.com/production';
+      'wss://g3ukgizvkl.execute-api.us-east-1.amazonaws.com/production';
     break;
 }
 
