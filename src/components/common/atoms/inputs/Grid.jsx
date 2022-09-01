@@ -123,6 +123,20 @@ const loadSidebar = props => {
     producthalfscreen?.current,
     linebusinesshalfscreen?.current
   ]);
+
+  const renderProcessingTxt = (
+    <span className="processing-txt">Processing</span>
+  );
+
+  const smallHeaderClass =
+    windowSize < 641
+      ? 'boldtext halfscreen-header-ellipses-blade'
+      : 'boldtext sidebaropenfont';
+
+  const headerClassName = isOpen
+    ? smallHeaderClass
+    : 'boldtext halfscreen-header-ellipses';
+
   if (isBladeOpen) {
     return (
       <Grid container>
@@ -151,13 +165,7 @@ const loadSidebar = props => {
             >
               <Typography
                 variant="body2"
-                className={
-                  isOpen
-                    ? windowSize < 641
-                      ? 'boldtext halfscreen-header-ellipses-blade'
-                      : 'boldtext sidebaropenfont'
-                    : 'boldtext halfscreen-header-ellipses'
-                }
+                className={headerClassName}
                 ref={customerhalfscreen}
               >
                 {Customer || placeholder}
@@ -175,13 +183,7 @@ const loadSidebar = props => {
             >
               <Typography
                 variant="body2"
-                className={
-                  isOpen
-                    ? windowSize < 641
-                      ? 'boldtext halfscreen-header-ellipses-blade'
-                      : 'boldtext sidebaropenfont'
-                    : 'boldtext halfscreen-header-ellipses'
-                }
+                className={headerClassName}
                 ref={linebusinesshalfscreen}
               >
                 {lineOfBusiness || placeholder}
@@ -215,13 +217,7 @@ const loadSidebar = props => {
             >
               <Typography
                 variant="body2"
-                className={
-                  isOpen
-                    ? windowSize < 641
-                      ? 'boldtext halfscreen-header-ellipses-blade'
-                      : 'boldtext sidebaropenfont'
-                    : 'boldtext halfscreen-header-ellipses'
-                }
+                className={headerClassName}
                 ref={therapeutichalfscreen}
               >
                 {therapeuticArea || placeholder}
@@ -242,13 +238,7 @@ const loadSidebar = props => {
             >
               <Typography
                 variant="body2"
-                className={
-                  isOpen
-                    ? windowSize < 641
-                      ? 'boldtext halfscreen-header-ellipses-blade'
-                      : 'boldtext sidebaropenfont'
-                    : 'boldtext halfscreen-header-ellipses'
-                }
+                className={headerClassName}
                 ref={producthalfscreen}
               >
                 {productName || placeholder}
@@ -269,13 +259,7 @@ const loadSidebar = props => {
             >
               <Typography
                 variant="body2"
-                className={
-                  isOpen
-                    ? windowSize < 641
-                      ? 'boldtext halfscreen-header-ellipses-blade'
-                      : 'boldtext sidebaropenfont'
-                    : 'boldtext halfscreen-header-ellipses'
-                }
+                className={headerClassName}
                 ref={protocolhalfscreen}
               >
                 {protocolNumber || placeholder}
@@ -299,7 +283,7 @@ const loadSidebar = props => {
               Days Until Due
             </Typography>
             <p className="boldtext greencolorsidebaropenfont lesslineheight">
-              {bidStatus ? 'Processing' : daysRemain}
+              {bidStatus ? renderProcessingTxt : daysRemain}
             </p>
           </Paper>
         </Grid>
@@ -469,7 +453,7 @@ const loadSidebar = props => {
                 Days Until Due
               </Typography>
               <p className="boldtext greencolor lesslineheight">
-                {bidStatus ? 'Processing' : daysRemain}
+                {bidStatus ? renderProcessingTxt : daysRemain}
               </p>
             </Paper>
           </Grid>
