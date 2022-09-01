@@ -129,18 +129,12 @@ class Questions extends Component {
       isNotesWebSocketExists
     } = this.props;
     fetchUsers();
-    // if (!isNotesWebSocketExists) this.handleFetchNotes();
     getSFNonEditabelInfoField();
     callPickListLookupSfData();
     window.addEventListener('resize', this.resize.bind(this));
     this.resize();
   }
 
-  // handleFetchNotes = () => {
-  //   console.log('handleFetchNotes', this.props.isNotesWebSocketExists);
-  //   const proposalId = this.props.selectedBid.get('id', '');
-  //   if (proposalId) fetchNotes(proposalId);
-  // };
   componentDidUpdate(prevProps: Map) {
     const {
       setQuestion,
@@ -545,9 +539,7 @@ class Questions extends Component {
                 </div>
                 {
                   <NotesSocketContext.Consumer>
-                    {value => value.wsInstance && <WysiwygNotepad />
-                    // <WysiwygNotepad />
-                    }
+                    {value => value.wsInstance && <WysiwygNotepad />}
                   </NotesSocketContext.Consumer>
                 }
               </div>

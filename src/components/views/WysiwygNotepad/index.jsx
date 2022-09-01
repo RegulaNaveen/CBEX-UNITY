@@ -78,13 +78,10 @@ const WysiwygNotepad = ({
   const usercolor = randomColor({ luminosity: 'light' });
   const proposalId = selectedBid.get('id', '');
   const fetchLatestNotes = useCallback(() => {
-    console.log('fetchLatestNotes', proposalId);
     if (proposalId) dispatch(fetchNotes(proposalId));
   }, [proposalId]);
 
   useEffect(() => {
-    console.log('inside notes', isNotesWebSocketExists);
-
     if (!isNotesWebSocketExists) fetchLatestNotes();
     return () => {
       console.log('WYSIWYG Unmount');
@@ -475,14 +472,12 @@ const WysiwygNotepad = ({
       onUpdate: ({ editor }) => {
         const Ejson = editor.getJSON();
         // send the content to an API here
-        console.log('ejson', Ejson, isNotesFetched);
-        // if (isNotesFetched && content != '<p></p>')
         memoizedSaveDB(Ejson);
       }
     },
     [content, isNotesFetched]
   );
-  console.log('ejson notews fetch', isNotesFetched);
+
   const constructNoteV2 = (
     proposalId,
     notesId,
@@ -519,17 +514,14 @@ const WysiwygNotepad = ({
         !isNotesWebSocketExists &&
         noteText?.content?.length >= 2
       ) {
-        console.log('1st');
         updateNote(proposalId, noteSaveReqBody);
       }
       if (noteText?.content?.length < 2) {
-        console.log('out2', isNotesFetched);
         if (
           isNotesFetched &&
           !isNotesWebSocketExists &&
           noteText?.content[0]?.content[0]?.hasOwnProperty('text')
         ) {
-          console.log('2nd');
           updateNote(proposalId, noteSaveReqBody);
         }
         if (
@@ -537,11 +529,9 @@ const WysiwygNotepad = ({
           !isNotesWebSocketExists &&
           noteText?.content[0]?.hasOwnProperty('text')
         ) {
-          console.log('3rd');
           updateNote(proposalId, noteSaveReqBody);
         }
       }
-      console.log('out');
     },
     [notes, selectedBid, notesId, userEmail, userName, userRole]
   );

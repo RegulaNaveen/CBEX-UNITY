@@ -43,7 +43,6 @@ function onFetchNotesDone(state, action) {
   const {
     payload: { data, isFromSocket, socketExists }
   } = action;
-  console.log('inside exists', socketExists);
   data.isFromSocket = !!isFromSocket;
   return (
     state

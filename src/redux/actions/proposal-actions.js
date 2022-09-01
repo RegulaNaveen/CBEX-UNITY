@@ -734,7 +734,6 @@ export const getOpportunity = (
   id: string,
   flag = false
 ): ThunkAction<string, Object> => {
-  console.log('get oppppp');
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({ type: PROPOSAL_INFO_LOADING, payload: {} });
     try {
