@@ -13,6 +13,7 @@ const {
   ERROR_UPDATING_NOTE,
   MODE_DEFAULT,
   CHANGE_MODE,
+  RESET_NOTES,
   SET_EDITOR
 } = REDUX_TYPES.NOTEPAD;
 
@@ -21,6 +22,7 @@ const INITIAL_STATE = fromJS({
   notes: [],
   editor: {},
   isNotesFetched: false,
+  isNotesWebSocketExists: false,
   fetchingNotes: false,
   fetchNotesErrorMsg: '',
   uploadingNote: false,
@@ -41,13 +43,17 @@ function onFetchNotes(state) {
 
 function onFetchNotesDone(state, action) {
   const {
-    payload: { data, isFromSocket }
+    payload: { data, isFromSocket, socketExists }
   } = action;
   data.isFromSocket = !!isFromSocket;
-  return state
-    .set('notes', data)
-    .set('fetchingNotes', false)
-    .set('isNotesFetched', true);
+  return (
+    state
+      .set('notes', data)
+      // .set('notes', socketExists ? [] : data)
+      .set('fetchingNotes', false)
+      .set('isNotesFetched', true)
+      .set('isNotesWebSocketExists', socketExists)
+  );
 }
 
 function onErrorFetchingNotes(state, action) {
@@ -87,6 +93,10 @@ function onUpdateNoteDone(state) {
   return state.set('uploadingNote', false);
 }
 
+function onResetNotes(state) {
+  return state.set('notes', []).set('isNotesWebSocketExists', false);
+}
+
 function onErrorUpdatingNote(state, action) {
   const {
     payload: { data }
@@ -112,6 +122,7 @@ const actionMap = {
   [UPDATE_NOTE]: onUpdateNote,
   [UPDATE_NOTE_DONE]: onUpdateNoteDone,
   [ERROR_UPDATING_NOTE]: onErrorUpdatingNote,
+  [RESET_NOTES]: onResetNotes,
   [SET_EDITOR]: onSetEditor
 };
 

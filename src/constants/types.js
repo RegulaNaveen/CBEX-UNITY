@@ -114,6 +114,7 @@ const NOTEPAD = {
   MODE_READ: 'notepad_mode_read',
   MODE_EDIT: 'notepad_mode_edit',
   CHANGE_MODE: 'notepad_change_mode',
+  RESET_NOTES: 'reset_notes',
   SET_EDITOR: 'set_editor'
 };
 

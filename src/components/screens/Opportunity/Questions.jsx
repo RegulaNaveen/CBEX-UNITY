@@ -528,12 +528,12 @@ class Questions extends Component {
               >
                 <div id="panel-notepad-header">
                   <Typography variant="h3">Notepad</Typography>
-                  <Typography variant="body2" gutterBottom>
-                    Currently, the notepad best supports one user entering
-                    information at a time
-                  </Typography>
                 </div>
-                <WysiwygNotepad />
+                {
+                  <NotesSocketContext.Consumer>
+                    {value => value.wsInstance && <WysiwygNotepad />}
+                  </NotesSocketContext.Consumer>
+                }
               </div>
             </Panel>
           </div>

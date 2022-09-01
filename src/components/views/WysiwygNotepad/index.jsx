@@ -37,18 +37,20 @@ import {
   getUserName,
   getUserEmail,
   getUserRole,
-  selectIsNotesFetched
+  selectIsNotesFetched,
+  selectIsNotesWebSocketExists
 } from '../../../redux/selectors';
 import MenuBar from './MenuBar';
 import {
   updateNote,
   fetchNotes,
+  resetNotes,
   setEditor
 } from '../../../redux/actions/notepad-actions';
 // import { SocketContext } from '../../../context/SocketContext';
 // import * as Y from "yjs";
-import { debounce } from 'lodash';
 import NotesSocketContext from '../../../context/notesSocketContext';
+import Loader from 'react-loader-spinner';
 
 const WysiwygNotepad = ({
   notes = null,
@@ -57,12 +59,9 @@ const WysiwygNotepad = ({
   userEmail,
   userRole,
   updateNote,
-  fetchNotes,
   proposalDetails
 }) => {
   const notesSocket = useContext(NotesSocketContext);
-
-  const dispatch = useDispatch();
 
   const emptyTextBlock = {
     type: 'doc',
@@ -72,25 +71,26 @@ const WysiwygNotepad = ({
       }
     ]
   };
+  const dispatch = useDispatch();
   const [json, setJSON] = useState(emptyTextBlock);
   const [content, setContent] = useState('<p></p>');
   const [notesId, setNotesId] = useState('');
   const isNotesFetched = useSelector(selectIsNotesFetched);
+  const isNotesWebSocketExists = useSelector(selectIsNotesWebSocketExists);
   const usercolor = randomColor({ luminosity: 'light' });
+  const proposalId = selectedBid.get('id', '');
+
+  const fetchLatestNotes = useCallback(() => {
+    if (proposalId) dispatch(fetchNotes(proposalId));
+  }, [proposalId]);
 
   useEffect(() => {
-    fetchLatestNotes();
+    if (!isNotesWebSocketExists) fetchLatestNotes();
     return () => {
       console.log('WYSIWYG Unmount');
-      setContent('<p></p>');
+      dispatch(resetNotes());
     };
   }, []);
-
-  const fetchLatestNotes = () => {
-    const proposalId = selectedBid.get('id', '');
-    if (proposalId) fetchNotes(proposalId);
-  };
-
   // const ydoc = new Y.Doc();
   // console.log("YDOC", ydoc);
 
@@ -483,14 +483,14 @@ const WysiwygNotepad = ({
             HorizontalRule,
             CodeBlock
           ],
-      content: content || '<p></p>',
+      content: content,
       onUpdate: ({ editor }) => {
         const Ejson = editor.getJSON();
         // send the content to an API here
         memoizedSaveDB(Ejson);
       }
     },
-    [content]
+    [content, isNotesFetched]
   );
 
   dispatch(setEditor(editor));
@@ -498,7 +498,7 @@ const WysiwygNotepad = ({
   const constructNoteV2 = (
     proposalId,
     notesId,
-    noteText = emptyTextBlock, // non stringified block data i.e as returned from Editor {block:[], entityMap:{}}
+    noteText = {}, // non stringified block data i.e as returned from Editor {block:[], entityMap:{}}
     userEmail = '',
     userName = '',
     userRole = ''
@@ -515,8 +515,8 @@ const WysiwygNotepad = ({
   };
 
   const memoizedSaveDB = useCallback(
-    debounce(noteText => {
-      console.log('noteText', noteText);
+    noteText => {
+      console.log('memoizedSaveDB', noteText);
       const proposalId = selectedBid.get('id');
       const noteSaveReqBody = constructNoteV2(
         proposalId,
@@ -526,19 +526,46 @@ const WysiwygNotepad = ({
         userName,
         userRole
       );
-      updateNote(proposalId, noteSaveReqBody);
-    }, 100),
+      if (isNotesFetched && noteText?.content?.length >= 2) {
+        updateNote(proposalId, noteSaveReqBody);
+      }
+      if (noteText?.content?.length < 2) {
+        if (
+          isNotesFetched &&
+          noteText?.content[0]?.content[0]?.hasOwnProperty('text')
+        ) {
+          updateNote(proposalId, noteSaveReqBody);
+        }
+        if (isNotesFetched && noteText?.content[0]?.hasOwnProperty('text')) {
+          updateNote(proposalId, noteSaveReqBody);
+        }
+      }
+    },
     [notes, selectedBid, notesId, userEmail, userName, userRole]
   );
 
   return (
     <>
-      {notesSocket.wsInstance && isNotesFetched && (
+      {notesSocket.wsInstance && (
         <div className="editor-notepad">
           <div>
             <MenuBar editor={editor} />
           </div>
-          <EditorContent editor={editor} className="editor-scroll" />
+          {isNotesFetched ? (
+            <EditorContent editor={editor} className="editor-scroll" />
+          ) : (
+            <Loader
+              type="TailSpin"
+              color="#297DFD"
+              width={30}
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh'
+              }}
+            />
+          )}
         </div>
       )}
     </>

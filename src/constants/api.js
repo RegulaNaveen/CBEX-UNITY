@@ -116,7 +116,7 @@ switch (environment) {
     SOCKET_URL =
       'wss://sgag59jkn1.execute-api.us-east-1.amazonaws.com/production';
     NOTES_SOCKET_URL =
-      'wss://662wdhv4y1.execute-api.us-east-1.amazonaws.com/production';
+      'wss://g3ukgizvkl.execute-api.us-east-1.amazonaws.com/production';
     break;
 }
 
