@@ -13,12 +13,14 @@ const {
   ERROR_UPDATING_NOTE,
   MODE_DEFAULT,
   CHANGE_MODE,
-  RESET_NOTES
+  RESET_NOTES,
+  SET_EDITOR
 } = REDUX_TYPES.NOTEPAD;
 
 const INITIAL_STATE = fromJS({
   proposalID: '',
   notes: [],
+  editor: {},
   isNotesFetched: false,
   isNotesWebSocketExists: false,
   fetchingNotes: false,
@@ -102,6 +104,13 @@ function onErrorUpdatingNote(state, action) {
   return state.set('uploadingNote', false).set('uploadNoteErrorMsg', data);
 }
 
+function onSetEditor(state, action) {
+  const {
+    payload: { value }
+  } = action;
+  return state.set('editor', value);
+}
+
 const actionMap = {
   [FETCH_NOTES]: onFetchNotes,
   [FETCH_NOTES_DONE]: onFetchNotesDone,
@@ -113,7 +122,8 @@ const actionMap = {
   [UPDATE_NOTE]: onUpdateNote,
   [UPDATE_NOTE_DONE]: onUpdateNoteDone,
   [ERROR_UPDATING_NOTE]: onErrorUpdatingNote,
-  [RESET_NOTES]: onResetNotes
+  [RESET_NOTES]: onResetNotes,
+  [SET_EDITOR]: onSetEditor
 };
 
 export default function(state = INITIAL_STATE, action) {

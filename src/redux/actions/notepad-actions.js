@@ -16,7 +16,8 @@ const {
   ERROR_ADDING_NOTE,
   CHANGE_MODE,
   MODE_DEFAULT,
-  RESET_NOTES
+  RESET_NOTES,
+  SET_EDITOR
 } = REDUX_TYPES.NOTEPAD;
 
 export function fetchNotes(proposalID) {
@@ -75,6 +76,10 @@ export function updateNote(id, note) {
       dispatch({ type: ERROR_UPDATING_NOTE, payload: { data: err } });
     }
   };
+}
+
+export function setEditor(value) {
+  return dispatch => dispatch({ type: SET_EDITOR, payload: { value } });
 }
 
 export function changeMode(mode) {

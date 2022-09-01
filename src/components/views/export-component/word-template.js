@@ -17,6 +17,9 @@ import {
   ImageRun,
   ExternalHyperlink
 } from 'docx';
+
+import { DocxSerializer, defaultNodes, defaultMarks } from 'prosemirror-docx';
+
 import { cloneDeep, isString } from 'lodash';
 import moment from 'moment-timezone';
 import { API } from '../../../constants';
@@ -538,94 +541,35 @@ export function getStyle(styleMaps, index) {
   }
   return { styles, styleId };
 }
-function getNotesCell(paras) {
-  return new TableCell({
-    children: [...paras],
-    width: questionCellWidth100,
-    margins: cellMargin5P
-  });
-}
-function getNoteRows(notes) {
-  let paras = [];
-  let rows = [
-    new TableRow({
-      children: [getSectionNameCell('General Notes', questionCellWidth100)]
-    })
-  ];
-  try {
-    notes.forEach(note => {
-      let { noteText } = note;
-      noteText = JSON.parse(noteText);
-      let { blocks } = noteText;
-      blocks.forEach(block => {
-        let texts = [];
-        let { text, inlineStyleRanges, type, depth } = block;
-        let listType = type.includes('list-item')
-          ? { bullet: { level: depth } }
-          : {};
-        let styleMap = [];
-        inlineStyleRanges.forEach(range => {
-          let { style, offset, length } = range;
-          styleMap.push({ start: offset, end: offset + length - 1, style });
-        });
 
-        let lastStyleId = '';
-        let lastText = '';
-        let lastStyle = {};
-        for (let i = 0; i < text.length; i++) {
-          let { styles, styleId } = getStyle(styleMap, i);
-          if (styleId === lastStyleId) {
-            lastText += text[i];
-          } else {
-            texts.push(
-              new TextRun({
-                ...{ text: lastText },
-                ...lastStyle
-              })
-            );
-            lastText = text[i];
-          }
-          lastStyleId = styleId;
-          lastStyle = styles;
+function getNoteRows(editor) {
+  const nodeSerializer = {
+    ...defaultNodes,
+    hardBreak: defaultNodes.hard_break,
+    codeBlock: defaultNodes.code_block,
+    orderedList: defaultNodes.bullet_list,
+    listItem: defaultNodes.bullet_list,
+    bulletList: defaultNodes.bullet_list,
+    horizontalRule: defaultNodes.horizontal_rule
+  };
 
-          if (text.length - 1 === i)
-            texts.push(
-              new TextRun({
-                ...{ text: lastText },
-                ...styles
-              })
-            );
-        }
+  const markSerializer = {
+    ...defaultMarks,
+    strike: defaultMarks.strikethrough,
+    bold: defaultMarks.strong,
+    subscript: defaultMarks.subscript,
+    superscript: defaultMarks.superscript,
+    underline: defaultMarks.underline,
+    smallcaps: defaultMarks.smallcaps,
+    allcaps: defaultMarks.allcaps,
+    italic: defaultMarks.em,
+    highlight: defaultMarks.highlight
+  };
 
-        paras.push(
-          new Paragraph({
-            ...{
-              children: texts
-            },
-            ...listType
-          })
-        );
-      });
-    });
+  const docxSerializer = new DocxSerializer(nodeSerializer, markSerializer);
+  const wordDocument = docxSerializer.serialize(editor?.view?.state?.doc);
 
-    rows.push(
-      new TableRow({
-        children: [getNotesCell(paras)],
-        cantSplit: false
-      })
-    );
-
-    return rows;
-  } catch (error) {
-    console.log('Error while formatting the notes');
-    return rows;
-  }
-}
-function getNotesTable(notes) {
-  return new Table({
-    rows: getNoteRows(notes),
-    layout: TableLayoutType.FIXED
-  });
+  return wordDocument?.documentWrapper?.document?.body;
 }
 
 function getHeaderInfoRows(details) {
@@ -1004,8 +948,10 @@ export function createWord(content) {
     data: { proposalQuestions, proposalDetails },
     notes,
     filterState,
-    image
+    image,
+    editor
   } = content;
+  console.log(' rdx editor', editor);
   const filteredQuestions = getFilteredQuestion(proposalQuestions, filterState);
 
   const SectionList = {
@@ -1051,10 +997,31 @@ export function createWord(content) {
   // Adding Note Section in Document
   if (filterState.includesNotes)
     SectionList.sections.push({
-      properties: {
-        type: SectionType.CONTINUOUS
-      },
-      children: [getNotesTable(notes)]
+      children: [
+        new Table({
+          rows: [
+            new TableRow({
+              children: [
+                getSectionNameCell('General Notes', questionCellWidth100)
+              ]
+            })
+          ],
+          layout: TableLayoutType.FIXED
+        }),
+        new Table({
+          rows: [
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [getNoteRows(editor)],
+                  margins: cellMargin5P
+                })
+              ]
+            })
+          ],
+          layout: TableLayoutType.FIXED
+        })
+      ]
     });
 
   const document = new Document(SectionList);

@@ -75,8 +75,8 @@ const CustomApolloRichText = ({
 
     refStyle.height = initialElementH;
     const refHeight = scrollHeight > elementH ? scrollH : scrollHeight;
+    // refStyle.height = `${refHeight + 0.4}px`;
     refStyle.height = `${refHeight}px`;
-    return true;
   };
 
   /**
@@ -85,7 +85,12 @@ const CustomApolloRichText = ({
   useEffect(() => {
     setRichTextData(INITIAL_DATA);
     // Restrict Richtext height upto 5 lines
-    setRefElementStyle(richTextContainerRef, 125, 120, '5px');
+    if (INITIAL_DATA.text) {
+      setRefElementStyle(richTextContainerRef, 125, 120, '5px');
+    } else {
+      const { style: refStyle } = richTextContainerRef.current;
+      refStyle.height = 'auto';
+    }
   }, [INITIAL_DATA]);
 
   /**
@@ -169,6 +174,7 @@ const CustomApolloRichText = ({
       className={classNames('custom-rich-text', {
         readonly: !isRichTextEditable,
         popover: isRichTextEditable,
+        disabled,
         [className]: !!className
       })}
     >
@@ -180,7 +186,7 @@ const CustomApolloRichText = ({
         ref={richTextContainerRef}
         aria-hidden="true"
         onClick={() => {
-          if (!isRichTextEditable) onClickHTML();
+          if (!isRichTextEditable && !disabled) onClickHTML();
         }}
       >
         <RichTextEditor
@@ -190,7 +196,6 @@ const CustomApolloRichText = ({
           defaultValue={richTextData.value}
           onChange={onChangeHandler}
           ref={richTextEditorRef}
-          disabled={!!disabled}
         />
       </div>
     </div>

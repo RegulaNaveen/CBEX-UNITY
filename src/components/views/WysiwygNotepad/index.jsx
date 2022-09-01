@@ -19,6 +19,7 @@ import BulletList from '@tiptap/extension-bullet-list';
 import ListItem from '@tiptap/extension-list-item';
 import OrderedList from '@tiptap/extension-ordered-list';
 import Heading from '@tiptap/extension-heading';
+import HorizontalRule from '@tiptap/extension-horizontal-rule';
 import Link from '@tiptap/extension-link';
 import Code from '@tiptap/extension-code';
 import CodeBlock from '@tiptap/extension-code-block';
@@ -43,7 +44,8 @@ import MenuBar from './MenuBar';
 import {
   updateNote,
   fetchNotes,
-  resetNotes
+  resetNotes,
+  setEditor
 } from '../../../redux/actions/notepad-actions';
 // import { SocketContext } from '../../../context/SocketContext';
 // import * as Y from "yjs";
@@ -61,6 +63,7 @@ const WysiwygNotepad = ({
   proposalDetails
 }) => {
   const notesSocket = useContext(NotesSocketContext);
+
   const emptyTextBlock = {
     type: 'doc',
     content: [
@@ -78,10 +81,12 @@ const WysiwygNotepad = ({
   const usercolor = randomColor({ luminosity: 'light' });
   const proposalId = selectedBid.get('id', '');
   const fetchLatestNotes = useCallback(() => {
+    console.log('fetch notiiiiiiiiiiii');
     if (proposalId) dispatch(fetchNotes(proposalId));
   }, [proposalId]);
 
   useEffect(() => {
+    console.log('sockettttttt', !isNotesWebSocketExists);
     if (!isNotesWebSocketExists) fetchLatestNotes();
     return () => {
       console.log('WYSIWYG Unmount');
@@ -131,6 +136,7 @@ const WysiwygNotepad = ({
       OrderedList,
       ListItem,
       Heading,
+      HorizontalRule,
       Link,
       Code,
       CodeBlock,
@@ -441,7 +447,9 @@ const WysiwygNotepad = ({
             Underline,
             Code,
             CodeBlock,
+            HardBreak,
             HighLight,
+            HorizontalRule,
             Subscript,
             Superscript,
             TextAlign.configure({
@@ -467,7 +475,16 @@ const WysiwygNotepad = ({
               }
             })
           ]
-        : [StarterKit, Underline, Link, Code, HighLight, HardBreak, CodeBlock],
+        : [
+            StarterKit,
+            Underline,
+            Link,
+            Code,
+            HighLight,
+            HardBreak,
+            HorizontalRule,
+            CodeBlock
+          ],
       content: content,
       onUpdate: ({ editor }) => {
         const Ejson = editor.getJSON();
@@ -477,6 +494,8 @@ const WysiwygNotepad = ({
     },
     [content, isNotesFetched]
   );
+
+  dispatch(setEditor(editor));
 
   const constructNoteV2 = (
     proposalId,
@@ -514,6 +533,7 @@ const WysiwygNotepad = ({
         !isNotesWebSocketExists &&
         noteText?.content?.length >= 2
       ) {
+        console.log('11111');
         updateNote(proposalId, noteSaveReqBody);
       }
       if (noteText?.content?.length < 2) {
@@ -522,6 +542,7 @@ const WysiwygNotepad = ({
           !isNotesWebSocketExists &&
           noteText?.content[0]?.content[0]?.hasOwnProperty('text')
         ) {
+          console.log('2222222');
           updateNote(proposalId, noteSaveReqBody);
         }
         if (
@@ -529,9 +550,11 @@ const WysiwygNotepad = ({
           !isNotesWebSocketExists &&
           noteText?.content[0]?.hasOwnProperty('text')
         ) {
+          console.log('333333');
           updateNote(proposalId, noteSaveReqBody);
         }
       }
+      console.log('4444');
     },
     [notes, selectedBid, notesId, userEmail, userName, userRole]
   );

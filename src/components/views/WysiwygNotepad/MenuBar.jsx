@@ -176,17 +176,6 @@ export default ({ editor }) => {
       isActive: () => editor.isActive('orderedList')
     },
     {
-      icon: 'list-check-2',
-      title: 'Task List',
-      action: () =>
-        editor
-          .chain()
-          .focus()
-          .toggleTaskList()
-          .run(),
-      isActive: () => editor.isActive('taskList')
-    },
-    {
       type: 'divider'
     },
     {
