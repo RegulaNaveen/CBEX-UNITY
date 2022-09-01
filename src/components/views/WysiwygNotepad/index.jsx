@@ -49,7 +49,6 @@ import {
 } from '../../../redux/actions/notepad-actions';
 // import { SocketContext } from '../../../context/SocketContext';
 // import * as Y from "yjs";
-import { debounce, has } from 'lodash';
 import NotesSocketContext from '../../../context/notesSocketContext';
 import Loader from 'react-loader-spinner';
 
