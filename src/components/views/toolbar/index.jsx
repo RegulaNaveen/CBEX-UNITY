@@ -99,6 +99,8 @@ class Toolbar extends Component<{}, State> {
         </Link>
         {results && (
           <div
+            onClick={() => window.location.replace('/ubuild')}
+            style={{cursor: 'pointer'}}
             className={
               (this.props &&
                 this.props?.location &&
@@ -107,9 +109,10 @@ class Toolbar extends Component<{}, State> {
                 : 'ubuild-link'
             }
           >
-            <Link to={UBUILD}  className='toolbar-space'>
+            <div className='toolbar-space' ><p className='ubuild-title'>U-Build</p></div>
+            {/* <Link to={UBUILD} replace  className='toolbar-space'>
               <p className='ubuild-title'>U-Build</p>
-            </Link>
+            </Link> */}
           </div>
         )}
         <Notification />
