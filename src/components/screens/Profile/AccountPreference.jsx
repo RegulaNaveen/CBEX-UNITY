@@ -53,12 +53,12 @@ const AccountPreference = ({
           Account Preferences
         </Typography>
         <div className="top-space">
-          <Typography className="grey-text" variant="caption" gutterBottom>
+          <Typography variant="body2" gutterBottom>
             Email
           </Typography>
         </div>
         <div>
-          <Typography className="bold-text" variant="caption" gutterBottom>
+          <Typography className="bold-text" variant="body1" gutterBottom>
             {email}
           </Typography>
         </div>
@@ -94,7 +94,8 @@ const AccountPreference = ({
                 gutterBottom
                 style={{ fontSize: '12px' }}
               >
-                Your role will determine the visible questions in an opportunity
+                Your role will help determine the most appropriate questions
+                displayed
               </Typography>
             </>
           )}
@@ -107,7 +108,7 @@ const AccountPreference = ({
           ) : (
             <>
               <Select
-                label="Preferred Timezone"
+                label="Time Zone"
                 helperText={
                   <Typography
                     className="grey-text"
@@ -115,7 +116,7 @@ const AccountPreference = ({
                     gutterBottom
                     style={{ fontSize: '12px' }}
                   >
-                    Your timezone will affect when Unity updates you
+                    Your time zone can determine when notifications are sent
                   </Typography>
                 }
                 value={currentTimezoneID}

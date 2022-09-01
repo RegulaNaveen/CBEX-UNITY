@@ -24,7 +24,7 @@ const NotificationPreference = ({
         >
           <th style={{ flexGrow: '3', alignSelf: 'flex-start' }}>
             <Typography className="grey-text" variant="caption" gutterBottom>
-              Notifications Preferences
+              Notification
             </Typography>
           </th>
           <th style={{ flexGrow: '0', marginRight: '2.9em' }}>
@@ -78,7 +78,7 @@ const NotificationPreference = ({
                     <td style={{ flexGrow: '3' }}>
                       <Typography
                         className="grey-text"
-                        variant="caption"
+                        variant=" body2"
                         gutterBottom
                       >
                         {title}
@@ -172,12 +172,13 @@ const NotificationPreference = ({
           }) => {
             return (
               preference_type === 'EMAIL' && (
-                <div className="bold-text" key={preference_id}>
+                <div key={preference_id}>
                   <Checkbox
                     label={
                       <Typography
-                        className="bold-text"
-                        variant="caption"
+                        // className="bold-text"
+                        // checked
+                        variant="body1"
                         gutterBottom
                       >
                         {title}
