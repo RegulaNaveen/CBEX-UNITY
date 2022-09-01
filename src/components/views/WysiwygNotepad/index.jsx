@@ -81,12 +81,10 @@ const WysiwygNotepad = ({
   const usercolor = randomColor({ luminosity: 'light' });
   const proposalId = selectedBid.get('id', '');
   const fetchLatestNotes = useCallback(() => {
-    console.log('fetch notiiiiiiiiiiii');
     if (proposalId) dispatch(fetchNotes(proposalId));
   }, [proposalId]);
 
   useEffect(() => {
-    console.log('sockettttttt', !isNotesWebSocketExists);
     if (!isNotesWebSocketExists) fetchLatestNotes();
     return () => {
       console.log('WYSIWYG Unmount');
@@ -528,33 +526,20 @@ const WysiwygNotepad = ({
         userName,
         userRole
       );
-      if (
-        isNotesFetched &&
-        !isNotesWebSocketExists &&
-        noteText?.content?.length >= 2
-      ) {
-        console.log('11111');
+      if (isNotesFetched && noteText?.content?.length >= 2) {
         updateNote(proposalId, noteSaveReqBody);
       }
       if (noteText?.content?.length < 2) {
         if (
           isNotesFetched &&
-          !isNotesWebSocketExists &&
           noteText?.content[0]?.content[0]?.hasOwnProperty('text')
         ) {
-          console.log('2222222');
           updateNote(proposalId, noteSaveReqBody);
         }
-        if (
-          isNotesFetched &&
-          !isNotesWebSocketExists &&
-          noteText?.content[0]?.hasOwnProperty('text')
-        ) {
-          console.log('333333');
+        if (isNotesFetched && noteText?.content[0]?.hasOwnProperty('text')) {
           updateNote(proposalId, noteSaveReqBody);
         }
       }
-      console.log('4444');
     },
     [notes, selectedBid, notesId, userEmail, userName, userRole]
   );
