@@ -107,7 +107,7 @@ class Toolbar extends Component<{}, State> {
                 : 'ubuild-link'
             }
           >
-            <Link to={UBUILD} className='toolbar-space'>
+            <Link to={UBUILD} onClick={() => {window.location.href="/ubuild"}} className='toolbar-space'>
               <p className='ubuild-title'>U-Build</p>
             </Link>
           </div>

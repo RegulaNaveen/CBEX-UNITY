@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import Link from 'apollo-react/components/Link';
@@ -18,8 +18,9 @@ import {
   onHandleOpenClose,
   handleSelectedSection
 } from '../../redux/actions/sidebar-actions';
-
-import CollapsibleQuestionMapping from  './CollapsibleQuestionMapping';
+const CollapsibleQuestionMapping = React.lazy(() =>
+  import('./CollapsibleQuestionMapping')
+);
 type State = {
   isCollapsed: boolean
 };
@@ -224,7 +225,7 @@ class CollapsibleList extends Component<Props, State> {
             </div>
 
             {/* Question List */}
-            {/* <Suspense fallback={<div>Loading...</div>}> */}
+            <Suspense fallback={<div>Loading...</div>}>
               <CollapsibleQuestionMapping
                 questions={questions}
                 milestone={milestone}
@@ -232,7 +233,7 @@ class CollapsibleList extends Component<Props, State> {
                 setQuestionToDisplayHistory={setQuestionToDisplayHistory}
                 isNotepadOpen={isNotepadOpen}
               />
-            {/* </Suspense> */}
+            </Suspense>
 
             {/* Add New Question Button */}
             {selectedBid.get('isCurrent') && (
