@@ -38,9 +38,7 @@ import {
   getMilestoneSections,
   getEditQuestionData,
   getIsOpen,
-  getSelectedBid,
-  selectIsNotesFetched,
-  selectIsNotesWebSocketExists
+  getSelectedBid
 } from '../../../redux/selectors';
 import {
   selectUniqueMilestones,
@@ -54,7 +52,6 @@ import { getAllUsers } from '../../../redux/actions/sso-auth-actions';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import { getCountriesNameForCode } from '../../../utils/utils';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
-import { fetchNotes } from '../../../redux/actions/notepad-actions';
 import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions';
 import WysiwygNotepad from '../../views/WysiwygNotepad';
 import ANSWER_TYPES from '../../../constants/answerTypes';
@@ -85,9 +82,7 @@ type Props = {
   activeQuestionsFilterCount: Number,
   allSectionsExpanded: boolean,
   expandAllSections: Function,
-  editQuestionsData: Map,
-  isNotesFetched: boolean,
-  isNotesWebSocketExists: boolean
+  editQuestionsData: Map
 };
 
 type State = {
@@ -122,8 +117,7 @@ class Questions extends Component {
     const {
       fetchUsers,
       getSFNonEditabelInfoField,
-      callPickListLookupSfData,
-      isNotesWebSocketExists
+      callPickListLookupSfData
     } = this.props;
     fetchUsers();
     getSFNonEditabelInfoField();
@@ -625,9 +619,7 @@ const mapStateToProps = (state: Map) => ({
   allSectionsExpanded: selectAreAllSectionsExpanded(state),
   editQuestionsData: getEditQuestionData(state),
   selectedBid: getSelectedBid(state),
-  getBidList: getBidList(state),
-  isNotesFetched: selectIsNotesFetched(state),
-  isNotesWebSocketExists: selectIsNotesWebSocketExists(state)
+  getBidList: getBidList(state)
 });
 
 export default compose(
