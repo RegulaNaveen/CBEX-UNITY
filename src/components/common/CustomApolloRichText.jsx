@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
-// import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from 'uuid';
 import classNames from 'classnames';
+import useUpdateEffect from '../../hooks/useUpdateEffect';
 
 const CustomApolloRichText = ({
   richTextString,
@@ -53,7 +54,7 @@ const CustomApolloRichText = ({
   const [isRichTextEditable, setIsRichTextEditable] = useState(isEditable);
   const richTextContainerRef = useRef(null);
   const richTextEditorRef = useRef(null);
-
+  const richTextKey = useRef(uuid());
   /**
    * Function to Add Delay for Specific Seconds
    */
@@ -93,6 +94,10 @@ const CustomApolloRichText = ({
     }
   }, [INITIAL_DATA]);
 
+  useUpdateEffect(() => {
+    richTextKey.current = uuid();
+  }, [INITIAL_DATA]);
+
   /**
    * Set Focus on RichText Editor
    */
@@ -119,7 +124,6 @@ const CustomApolloRichText = ({
       onFocus();
     }
   };
-
   /**
    * OnChange RichText Editor
    */
@@ -153,7 +157,8 @@ const CustomApolloRichText = ({
       richTextContainerRef.current &&
       !richTextContainerRef.current.contains(e.target) &&
       isEmpty(e.target.closest('.MuiPopover-root')) &&
-      isEmpty(e.target.closest('.MuiDialog-root'))
+      isEmpty(e.target.closest('.MuiDialog-root')) &&
+      isRichTextEditable
     ) {
       setIsRichTextEditable(false);
       if (onBlur) onBlur(richTextData);
@@ -196,6 +201,7 @@ const CustomApolloRichText = ({
           defaultValue={richTextData.value}
           onChange={onChangeHandler}
           ref={richTextEditorRef}
+          key={richTextKey.current}
         />
       </div>
     </div>
