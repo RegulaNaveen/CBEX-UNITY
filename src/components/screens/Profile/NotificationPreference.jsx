@@ -11,7 +11,11 @@ const NotificationPreference = ({
   return (
     <div>
       <Card interactive className="card-wrapper">
-        <Typography className="bold-text" variant="title2" gutterBottom>
+        <Typography
+          className="card-heading bold-text"
+          variant="title2"
+          gutterBottom
+        >
           Notification Preferences
         </Typography>
         <tr
@@ -23,17 +27,17 @@ const NotificationPreference = ({
           }}
         >
           <th style={{ flexGrow: '3', alignSelf: 'flex-start' }}>
-            <Typography className="grey-text" variant="caption" gutterBottom>
+            <Typography className="card-label" variant="caption" gutterBottom>
               Notification
             </Typography>
           </th>
           <th style={{ flexGrow: '0', marginRight: '2.9em' }}>
-            <Typography className="grey-text" variant="caption" gutterBottom>
+            <Typography className="card-label" variant="caption" gutterBottom>
               In-App
             </Typography>
           </th>
           <th style={{ flexGrow: '0', marginRight: '1.5em' }}>
-            <Typography className="grey-text" variant="caption" gutterBottom>
+            <Typography className="card-label" variant="caption" gutterBottom>
               Email
             </Typography>
           </th>
@@ -77,7 +81,7 @@ const NotificationPreference = ({
                   >
                     <td style={{ flexGrow: '3' }}>
                       <Typography
-                        className="grey-text"
+                        className="preference-label"
                         variant=" body2"
                         gutterBottom
                       >
@@ -148,7 +152,7 @@ const NotificationPreference = ({
         </table>
 
         <div className="top-space">
-          <Typography className="grey-text" variant="caption" gutterBottom>
+          <Typography className="card-label" variant="caption" gutterBottom>
             Email Preferences
           </Typography>
         </div>
@@ -179,6 +183,13 @@ const NotificationPreference = ({
                         // className="bold-text"
                         // checked
                         variant="body1"
+                        className={
+                          (preference_selected
+                          ? !!(preference_selected == 'CHECKED')
+                          : !!(default_type == 'CHECKED'))
+                            ? 'preference-label bold-label'
+                            : 'preference-label'
+                        }
                         gutterBottom
                       >
                         {title}

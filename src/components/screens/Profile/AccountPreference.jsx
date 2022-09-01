@@ -49,16 +49,24 @@ const AccountPreference = ({
   return (
     <div>
       <Card interactive className="card-wrapper">
-        <Typography className="bold-text" variant="title2" gutterBottom>
+        <Typography
+          className="card-heading bold-text"
+          variant="title2"
+          gutterBottom
+        >
           Account Preferences
         </Typography>
         <div className="top-space">
-          <Typography variant="body2" gutterBottom>
+          <Typography className="card-label" variant="body2" gutterBottom>
             Email
           </Typography>
         </div>
         <div>
-          <Typography className="bold-text" variant="body1" gutterBottom>
+          <Typography
+            className="card-item bold-label"
+            variant="body1"
+            gutterBottom
+          >
             {email}
           </Typography>
         </div>
@@ -82,17 +90,25 @@ const AccountPreference = ({
             <>
               <Dropdown
                 id="dd-team-member"
-                title="User Role"
+                title={
+                  <Typography
+                    className="card-label"
+                    variant="body2"
+                    gutterBottom
+                  >
+                    User Role
+                  </Typography>
+                }
                 placeholder="Select"
                 items={rolesList ? rolesList.sort() : []}
                 onClick={onRoleChange}
                 value={roleName}
               />
               <Typography
-                className="grey-text"
+                className="optional-help-text"
                 variant="caption"
                 gutterBottom
-                style={{ fontSize: '12px' }}
+                // style={{ fontSize: '12px' }}
               >
                 Your role will help determine the most appropriate questions
                 displayed
@@ -108,13 +124,21 @@ const AccountPreference = ({
           ) : (
             <>
               <Select
-                label="Time Zone"
+                label={
+                  <Typography
+                    className="card-label"
+                    variant="body2"
+                    gutterBottom
+                  >
+                    Time Zone
+                  </Typography>
+                }
                 helperText={
                   <Typography
-                    className="grey-text"
+                    className="optional-help-text"
                     variant="caption"
                     gutterBottom
-                    style={{ fontSize: '12px' }}
+                    // style={{ fontSize: '13px' }}
                   >
                     Your time zone can determine when notifications are sent
                   </Typography>
@@ -127,7 +151,9 @@ const AccountPreference = ({
               >
                 {timezoneList.map(({ time_zone_id, description }) => {
                   return (
-                    <MenuItem value={time_zone_id}>{description}</MenuItem>
+                    <MenuItem className="card-item" value={time_zone_id}>
+                      {description}
+                    </MenuItem>
                   );
                 })}
               </Select>
