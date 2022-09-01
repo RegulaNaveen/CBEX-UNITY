@@ -80,6 +80,7 @@ const WysiwygNotepad = ({
   const isNotesWebSocketExists = useSelector(selectIsNotesWebSocketExists);
   const usercolor = randomColor({ luminosity: 'light' });
   const proposalId = selectedBid.get('id', '');
+
   const fetchLatestNotes = useCallback(() => {
     if (proposalId) dispatch(fetchNotes(proposalId));
   }, [proposalId]);

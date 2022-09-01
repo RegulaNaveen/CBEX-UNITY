@@ -1,4 +1,3 @@
-// @flow
 import React, { Component } from 'react';
 import { withRouter, Match } from 'react-router-dom';
 import { Map } from 'immutable'; // NOSONAR
@@ -156,6 +155,7 @@ export class Opportunity extends Component<Props, State> {
       selectedBid
     } = this.props;
     this.context.updateSocketOppId(params.id);
+
     const thisProposalId = selectedBid.get('id', '');
     const prevProposalId = prevProps.selectedBid.get('id', '');
 
@@ -257,18 +257,13 @@ export class Opportunity extends Component<Props, State> {
   };
 
   renderContent = () => {
-    const {
-      enableValidateTab,
-      selectedView,
-      windowSize,
-      wsInstance,
-      ydoc
-    } = this.state;
+    const { enableValidateTab, selectedView, windowSize } = this.state;
     const {
       isLoading,
       details,
       isOpen,
       selectedBid,
+
       match: { params }
     } = this.props;
     const { bidStatus } = selectedBid.toJS();
@@ -288,21 +283,18 @@ export class Opportunity extends Component<Props, State> {
           windowSize={windowSize}
           bidStatus={bidStatus}
         />
-        {wsInstance && ydoc && (
-          <NotesSocketContext.Provider
-            value={{ wsInstance: wsInstance, ydoc: ydoc }}
-          >
-            <UnityTab
-              id={params.id}
-              enableValidateTab={enableValidateTab}
-              selectedView={selectedView}
-            />
-          </NotesSocketContext.Provider>
-        )}
+        <NotesSocketContext.Provider
+          value={{ wsInstance: this.state.wsInstance, ydoc: this.state.ydoc }}
+        >
+          <UnityTab
+            id={params.id}
+            enableValidateTab={enableValidateTab}
+            selectedView={selectedView}
+          />
+        </NotesSocketContext.Provider>
       </div>
     );
   };
-
   render() {
     const {
       isSidebarOpen,

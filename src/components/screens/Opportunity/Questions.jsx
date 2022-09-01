@@ -61,10 +61,6 @@ import ANSWER_TYPES from '../../../constants/answerTypes';
 import NotesSocketContext from '../../../context/notesSocketContext';
 import QuestionsSectionMapping from './QuestionsSectionMapping';
 
-// const QuestionsSectionMapping = React.lazy(() =>
-//   import('./QuestionsSectionMapping')
-// );
-
 type Props = {
   match: Match,
   details: Map,
