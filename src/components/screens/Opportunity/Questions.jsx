@@ -55,6 +55,7 @@ import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
 import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions';
 import WysiwygNotepad from '../../views/WysiwygNotepad';
 import ANSWER_TYPES from '../../../constants/answerTypes';
+import NotesSocketContext from '../../../context/notesSocketContext';
 import QuestionsSectionMapping from './QuestionsSectionMapping';
 
 type Props = {
@@ -526,25 +527,25 @@ class Questions extends Component {
               >
                 <div id="panel-notepad-header">
                   <Typography variant="h3">Notepad</Typography>
-                  <Typography variant="body2" gutterBottom>
-                    Currently, the notepad best supports one user entering
-                    information at a time
-                  </Typography>
                 </div>
-                <WysiwygNotepad />
+                {
+                  <NotesSocketContext.Consumer>
+                    {value => value.wsInstance && <WysiwygNotepad />}
+                  </NotesSocketContext.Consumer>
+                }
               </div>
             </Panel>
           </div>
           {/* Question list */}
           <div id="panel-questions-list">
             <div className="tasksList-wrapper">
-                <QuestionsSectionMapping
-                  {...this.props}
-                  {...this.state}
-                  setQuestionToDisplayHistory={this.setQuestionToDisplayHistory}
-                  setTabFromQuestionNotes={this.setTabFromQuestionNotes}
-                  onAddQuestion={this.onAddQuestion}
-                />
+              <QuestionsSectionMapping
+                {...this.props}
+                {...this.state}
+                setQuestionToDisplayHistory={this.setQuestionToDisplayHistory}
+                setTabFromQuestionNotes={this.setTabFromQuestionNotes}
+                onAddQuestion={this.onAddQuestion}
+              />
             </div>
           </div>
         </div>
