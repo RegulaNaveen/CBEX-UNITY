@@ -37,8 +37,7 @@ import {
   getUserEmail,
   getUserRole,
   selectIsNotesFetched,
-  selectIsNotesWebSocketExists,
-  isProposalLoading
+  selectIsNotesWebSocketExists
 } from '../../../redux/selectors';
 import MenuBar from './MenuBar';
 import {
@@ -62,8 +61,6 @@ const WysiwygNotepad = ({
   proposalDetails
 }) => {
   const notesSocket = useContext(NotesSocketContext);
-  const isLoadingProposal = useSelector(isProposalLoading);
-  // console.log('inside note socket', notesSocket);
   const emptyTextBlock = {
     type: 'doc',
     content: [
@@ -79,19 +76,16 @@ const WysiwygNotepad = ({
   const isNotesFetched = useSelector(selectIsNotesFetched);
   const isNotesWebSocketExists = useSelector(selectIsNotesWebSocketExists);
   const usercolor = randomColor({ luminosity: 'light' });
-
+  const proposalId = selectedBid.get('id', '');
   const fetchLatestNotes = useCallback(() => {
     console.log('fetchLatestNotes', proposalId);
-    const proposalId = selectedBid.get('id', '');
     if (proposalId) dispatch(fetchNotes(proposalId));
-  }, [selectedBid]);
+  }, [proposalId]);
 
   useEffect(() => {
     console.log('inside notes', isNotesWebSocketExists);
 
     if (!isNotesWebSocketExists) fetchLatestNotes();
-    // }
-    // fetchLatestNotes();
     return () => {
       console.log('WYSIWYG Unmount');
       dispatch(resetNotes());
@@ -520,7 +514,11 @@ const WysiwygNotepad = ({
         userName,
         userRole
       );
-      if (isNotesFetched && noteText?.content?.length >= 2) {
+      if (
+        isNotesFetched &&
+        !isNotesWebSocketExists &&
+        noteText?.content?.length >= 2
+      ) {
         console.log('1st');
         updateNote(proposalId, noteSaveReqBody);
       }
@@ -528,12 +526,17 @@ const WysiwygNotepad = ({
         console.log('out2', isNotesFetched);
         if (
           isNotesFetched &&
+          !isNotesWebSocketExists &&
           noteText?.content[0]?.content[0]?.hasOwnProperty('text')
         ) {
           console.log('2nd');
           updateNote(proposalId, noteSaveReqBody);
         }
-        if (isNotesFetched && noteText?.content[0]?.hasOwnProperty('text')) {
+        if (
+          isNotesFetched &&
+          !isNotesWebSocketExists &&
+          noteText?.content[0]?.hasOwnProperty('text')
+        ) {
           console.log('3rd');
           updateNote(proposalId, noteSaveReqBody);
         }

@@ -93,7 +93,7 @@ function onUpdateNoteDone(state) {
 }
 
 function onResetNotes(state) {
-  return state.set('notes', []);
+  return state.set('notes', []).set('isNotesWebSocketExists', false);
 }
 
 function onErrorUpdatingNote(state, action) {
