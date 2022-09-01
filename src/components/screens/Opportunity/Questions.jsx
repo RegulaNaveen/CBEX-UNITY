@@ -1,6 +1,6 @@
 // @flow
 // eslint-disable-next-line react/destructuring-assignment
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import { withRouter, Match } from 'react-router-dom';
 import { List, Map } from 'immutable';
 import { compose } from 'redux';
@@ -55,8 +55,9 @@ import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
 import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions';
 import WysiwygNotepad from '../../views/WysiwygNotepad';
 import ANSWER_TYPES from '../../../constants/answerTypes';
-import NotesSocketContext from '../../../context/notesSocketContext';
-import QuestionsSectionMapping from './QuestionsSectionMapping';
+const QuestionsSectionMapping = React.lazy(() =>
+  import('./QuestionsSectionMapping')
+);
 
 type Props = {
   match: Match,
@@ -539,13 +540,15 @@ class Questions extends Component {
           {/* Question list */}
           <div id="panel-questions-list">
             <div className="tasksList-wrapper">
-              <QuestionsSectionMapping
-                {...this.props}
-                {...this.state}
-                setQuestionToDisplayHistory={this.setQuestionToDisplayHistory}
-                setTabFromQuestionNotes={this.setTabFromQuestionNotes}
-                onAddQuestion={this.onAddQuestion}
-              />
+              <Suspense fallback={<div>Loading...</div>}>
+                <QuestionsSectionMapping
+                  {...this.props}
+                  {...this.state}
+                  setQuestionToDisplayHistory={this.setQuestionToDisplayHistory}
+                  setTabFromQuestionNotes={this.setTabFromQuestionNotes}
+                  onAddQuestion={this.onAddQuestion}
+                />
+              </Suspense>
             </div>
           </div>
         </div>
