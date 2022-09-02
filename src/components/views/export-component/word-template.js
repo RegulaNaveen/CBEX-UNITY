@@ -20,7 +20,7 @@ import {
 
 import { DocxSerializer, defaultNodes, defaultMarks } from 'prosemirror-docx';
 
-import { cloneDeep, isString } from 'lodash';
+import { cloneDeep, has, isObject, isString } from 'lodash';
 import moment from 'moment-timezone';
 import { API } from '../../../constants';
 import {
@@ -192,6 +192,26 @@ function getFormattedTextCells(paras) {
       bottom: { color: 'FFFFFF' }
     }
   });
+}
+
+function parseJson(str) {
+  try {
+    return JSON.parse(str);
+  } catch (e) {
+    return false;
+  }
+}
+
+function isContainFormattedAnswer(lastAnswerJS) {
+  const formattedAnswer =
+    has(lastAnswerJS, 'formattedAnswer') && lastAnswerJS.formattedAnswer;
+  const parseFormattedData =
+    !formattedAnswer || isObject(formattedAnswer)
+      ? formattedAnswer
+      : parseJson(formattedAnswer);
+
+  if (parseFormattedData) return true;
+  return false;
 }
 
 function getFormattedTextRows(formatedTextBlocks) {
@@ -447,7 +467,9 @@ function questionTables(proposalQuestions) {
       .forEach(question => {
         const questionText = question.questionText || '';
         rows.push(
-          question?.answers[question?.answers.length - 1].formattedAnswer
+          isContainFormattedAnswer(
+            question?.answers[question?.answers.length - 1]
+          )
             ? new TableRow({
                 children: [
                   getQuestionTextCell(questionText),
@@ -644,12 +666,15 @@ function getProposalTeamsRows(questions) {
     coreTeamQuestions.forEach(question => {
       let { questionText, answers } = question;
       coreTeamRows.push(
-        answers.formattedAnswer
+        isContainFormattedAnswer(
+          question?.answers[question?.answers.length - 1]
+        )
           ? new TableRow({
               children: [
                 getAnswerCell(questionText, '', questionCellWidth50),
-                // getAnswerCell(getLastAnswer(answers), '', questionCellWidth50)
-                getFormattedTextTable(answers.formattedAnswer)
+                getFormattedTextTable(
+                  answers[question?.answers.length - 1].formattedAnswer
+                )
               ]
             })
           : new TableRow({
@@ -664,12 +689,11 @@ function getProposalTeamsRows(questions) {
     otherTeamQuestions.forEach(question => {
       const { questionText, answers } = question;
       coreTeamRows.push(
-        answers.formattedAnswer
+        isContainFormattedAnswer(answers[answers.length - 1])
           ? new TableRow({
               children: [
                 getAnswerCell(questionText, '', questionCellWidth50),
-                // getAnswerCell(getLastAnswer(answers), '', questionCellWidth50)
-                getFormattedTextTable(answers.formattedAnswer)
+                getFormattedTextTable(answers[answers.length - 1])
               ]
             })
           : new TableRow({
