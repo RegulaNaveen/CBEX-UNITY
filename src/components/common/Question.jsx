@@ -621,6 +621,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               onBlur={() => this.setSelectRow(false)}
               disabled={checkDisableFlag()}
               onChange={this.handlePropsalChange}
+              placeholder={checkDisableFlag() ? '' : 'Click to answer'}
             />
           </SFAnswerValidationWrapper>
         );
@@ -641,6 +642,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               multiple={false}
               loading={loading}
               disabled={checkDisableFlag()}
+              placeholder={checkDisableFlag() ? '' : 'Click to answer'}
             />
           </SFAnswerValidationWrapper>
         );

@@ -26,7 +26,7 @@
       color: $neutral6;
       font-family: 'ProximaNova-Regular';
       pointer-events: none;
-      font-size: 12px;
+      font-size: 16px;
       letter-spacing: 0;
       line-height: 24px;
       pointer-events: none;
@@ -36,7 +36,8 @@
     .a-MuiChip-labelSmall,
     .date-picker input,
     .multiselect-wrapper .multiselect-header .multiselect-header-selected {
-      font-size: 12px;
+      font-size: 16px;
+      font-family: 'ProximaNova-Regular';
     }
 
     .proposal-text-area {
@@ -53,7 +54,7 @@
       min-width: 176px;
       border: 1px solid #d9d9d9;
       border-radius: 4px;
-      font-size: 12px;
+      font-size: 16px;
     }
 
     .multiselect-wrapper .multiselect-header .multiselect-header-placeholder {
@@ -62,7 +63,7 @@
       color: $neutral6;
       font-family: 'ProximaNova-Regular';
       pointer-events: none;
-      font-size: 12px;
+      font-size: 16px;
       letter-spacing: 0;
       line-height: 24px;
       margin-left: 8px;
