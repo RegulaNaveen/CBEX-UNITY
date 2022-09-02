@@ -33,7 +33,7 @@ const SystemIntegrations = ({
   isNotepadOpen,
   handleVerifyPredictedAnsClick
 }) => {
-  const gridColRatio = isNotepadOpen ? [10, 2] : [11, 1];
+  const gridColRatio = isNotepadOpen ? [10, 2] : [10, 2];
   const SalesForceCondition = () => {
     if (sficon !== 'n/a' && isEmpty(checkSfAnswer) === false) {
       return hasDifferentSFanswer === false ? (
