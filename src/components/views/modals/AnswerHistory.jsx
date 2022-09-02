@@ -53,14 +53,15 @@ class AnswerHistory extends Component<Props> {
         const res = await getAnsHistory(proposalID, questionID);
         this.setState({ loading: false });
         if (res.status) {
-          const availableAns = question?.toJS().answers;
-          if (!isEmpty(availableAns) && Array.isArray(availableAns)) {
-            const cloneAnswers = [...availableAns];
-            if (res.data.length > 0) cloneAnswers.pop();
-            modifiedAns = fromJS([...cloneAnswers, ...res.data]);
-          } else {
-            modifiedAns = fromJS(res.data);
-          }
+          // const availableAns = question?.toJS().answers;
+          // if (!isEmpty(availableAns) && Array.isArray(availableAns)) {
+          //   const cloneAnswers = [...availableAns];
+          //   if (res.data.length > 0) cloneAnswers.pop();
+          //   modifiedAns = fromJS([...cloneAnswers, ...res.data]);
+          // } else {
+          //   modifiedAns = fromJS(res.data);
+          // }
+          modifiedAns = fromJS(res.data);
         }
         this.setState(prevState => ({
           question: prevState.question.set('answers', modifiedAns)
