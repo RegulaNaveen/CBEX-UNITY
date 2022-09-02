@@ -126,7 +126,7 @@ export class Opportunity extends Component<Props, State> {
       if (this.props.location?.pathname !== DASHBOARD)
         this.context.updateSocketOppId(params.id);
       else this.context.updateSocketOppId(null);
-    } else console.log('called  from ubuild');
+    }
 
     window.addEventListener('storage', e => this.handleStorageChange(e));
     window.addEventListener('resize', this.handleResize);
@@ -174,9 +174,8 @@ export class Opportunity extends Component<Props, State> {
           this.props?.location &&
           this.props.location?.pathname) !== UBUILD
       ) {
-        console.log('called not from ubuild in component update');
         this.context.updateSocketOppId(params.id);
-      } else console.log('called  from ubuild in component update');
+      }
 
       //intial load case
       if (!prevProposalId && thisProposalId) {
