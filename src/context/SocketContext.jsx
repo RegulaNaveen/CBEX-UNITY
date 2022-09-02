@@ -13,7 +13,7 @@ import {
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
 import { getUserName, getUserEmail, getUserId } from '../SessionHandler';
-
+import { REFRESH_WEBSOCKET_CONNECTION } from '../constants/app';
 const userName = getUserName();
 const userEmail = getUserEmail();
 const userId = getUserId();
@@ -27,7 +27,7 @@ export const SocketContext = createContext();
 
 const SocketContextProvider = props => {
   const socket = useRef(null);
-
+  let refreshInterval = null;
   /**
    * Checks for socket connection
    */
@@ -62,9 +62,28 @@ const SocketContextProvider = props => {
   };
 
   /**
+   * Refresh socket's connection
+   */
+  const refreshConnection = ws => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'REFRESH',
+          body: 'REFRESH'
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /**
    * Function called after bid creation completed
    */
-  const refreshOpportunity = (id) => {
+  const refreshOpportunity = id => {
     props.getOpportunityInfo(id, true);
   };
 
@@ -84,6 +103,10 @@ const SocketContextProvider = props => {
               body: { data: { userId, userEmail, userName } }
             })
           );
+
+          refreshInterval = setInterval(() => {
+            refreshSocketConnection();
+          }, [REFRESH_WEBSOCKET_CONNECTION]);
         }
         if (currentOppNo.get) {
           sendUpdateConnection(currentOppNo.get, newSocket);
@@ -169,6 +192,10 @@ const SocketContextProvider = props => {
     waitForSocketConnection(() => sendUpdateConnection(oppId, null));
   };
 
+  const refreshSocketConnection = () => {
+    waitForSocketConnection(() => refreshConnection(null));
+  };
+
   const disconnectSocket = () => {
     if (isSocketConnected()) {
       socket?.current?.send(
@@ -177,6 +204,7 @@ const SocketContextProvider = props => {
           body: {}
         })
       );
+      clearInterval(refreshInterval);
     }
   };
 

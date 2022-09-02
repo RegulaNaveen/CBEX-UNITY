@@ -26,4 +26,6 @@ const PROPOSAL = {
   SWITCH_TEMP_PROGRESS_MSG: 'Switching template is in progress..'
 };
 
-export { DEFAULT, PROPOSAL };
+const REFRESH_WEBSOCKET_CONNECTION = 60000; // 1 minute
+
+export { DEFAULT, PROPOSAL, REFRESH_WEBSOCKET_CONNECTION };
