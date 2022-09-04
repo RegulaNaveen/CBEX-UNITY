@@ -730,6 +730,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     let checkSfAnswer;
     let integrationvalidation;
     const sficon = sfField;
+    let qvidIntegration = false;
     const currentBidID = selectedBid.toJS().id;
     const oppordata = oppdata.toJS();
     const deploymentDate = '2022-08-05';
@@ -756,11 +757,14 @@ export class TaskRow extends React.PureComponent<Props, State> {
       integrationvalidation = true;
     }
     integrationvalidation = has(Qvidianquestions[0], qvicon);
+    if (qvidianIntegration && qvidianIntegration === 'Qvidian') {
+      qvidIntegration = true;
+    }
     dateIsAfter
-      ? integrationmatch === qvidianIntegration
-      : has(Qvidianquestions[0], qvicon)
-      ? (integrationmatch = Qvidianquestions[0][qvicon])
-      : null;
+      ? (integrationmatch = qvidIntegration)
+      : (integrationmatch = has(Qvidianquestions[0], qvicon)
+          ? (integrationmatch = Qvidianquestions[0][qvicon])
+          : null);
     if (answers) {
       if (!questionID) lastAnswer = answers.last();
       else lastAnswer = answers.get('answers').last();

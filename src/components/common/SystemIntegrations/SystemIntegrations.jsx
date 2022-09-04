@@ -58,10 +58,26 @@ const SystemIntegrations = ({
           </div>
         </Tooltip>
       ) : (
-        <Incoming
-          className="integration-icon"
-          style={{ fill: '#9e54b0', height: '28px', opacity: '50%' }}
-        />
+        <Tooltip
+          variant="light"
+          title={
+            sficon !== 'n/a' ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: `<p><b>Source</b><br>CRM</p>`
+                }}
+              />
+            ) : null
+          }
+          placement="top"
+        >
+          <div>
+            <Incoming
+              className="integration-icon"
+              style={{ fill: '#9e54b0', height: '28px', opacity: '50%' }}
+            />
+          </div>
+        </Tooltip>
       );
     }
     if (
@@ -70,15 +86,47 @@ const SystemIntegrations = ({
       isEmpty(checkSfAnswer) === true
     ) {
       return hasDifferentSFanswer === true ? (
-        <Incoming
-          className="integration-icon"
-          style={{ fill: '#9e54b0', height: '28px', opacity: '50%' }}
-        />
+        <Tooltip
+          variant="light"
+          title={
+            sficon !== 'n/a' ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: `<p><b>Source</b><br>CRM</p>`
+                }}
+              />
+            ) : null
+          }
+          placement="top"
+        >
+          <div>
+            <Incoming
+              className="integration-icon"
+              style={{ fill: '#9e54b0', height: '28px', opacity: '50%' }}
+            />
+          </div>
+        </Tooltip>
       ) : (
-        <Incoming
-          className="integration-icon1"
-          style={{ fill: '#b7b7b7', height: '28px' }}
-        />
+        <Tooltip
+          variant="light"
+          title={
+            sficon !== 'n/a' ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: `<p><b>Source</b><br>CRM</p>`
+                }}
+              />
+            ) : null
+          }
+          placement="top"
+        >
+          <div>
+            <Incoming
+              className="integration-icon1"
+              style={{ fill: '#b7b7b7', height: '28px' }}
+            />
+          </div>
+        </Tooltip>
       );
     }
     if (isEmpty(sficon)) return null;
@@ -99,10 +147,12 @@ const SystemIntegrations = ({
           }
           placement="top"
         >
-          <Outgoing
-            style={{ fill: '#00c221', height: '28px' }}
-            className="integration-icon"
-          />
+          <div>
+            <Outgoing
+              style={{ fill: '#00c221', height: '28px' }}
+              className="integration-icon"
+            />
+          </div>
         </Tooltip>
       );
     }
@@ -130,10 +180,26 @@ const SystemIntegrations = ({
           </div>
         </Tooltip>
       ) : (
-        <Outgoing
-          style={{ fill: '#b7b7b7', height: '28px' }}
-          className="integration-icon"
-        />
+        <Tooltip
+          variant="light"
+          title={
+            integrationmatch ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: `<p><b>Destination</b><br>Qvidian</p>`
+                }}
+              />
+            ) : null
+          }
+          placement="top"
+        >
+          <div className="wrap-integration">
+            <Outgoing
+              style={{ fill: '#b7b7b7', height: '28px' }}
+              className="integration-icon"
+            />
+          </div>
+        </Tooltip>
       );
     }
   };
