@@ -490,11 +490,26 @@ export class TaskRow extends React.PureComponent<Props, State> {
         if (!selectedRow) this.setSelectRow(true);
       },
       onBlur: data => {
+        let saveDate = false;
+        const previousAnsText = getConvertedAnsString(answerValue).trim();
+
+        // save the formatting change
         if (
           !isEqual(richTextData.value, data.value) &&
           !isEmpty(data.text.trim())
         )
-          this.handleRichTextChange(data);
+          saveDate = true;
+        // save the data if we see any text difference.
+        else if (
+          previousAnsText !== data.text.trim() &&
+          data.text.trim() !== ''
+        )
+          saveDate = true;
+        // save the data if user removes the whole answer.
+        else if (previousAnsText !== '' && data.text.trim() === '')
+          saveDate = true;
+
+        if (saveDate) this.handleRichTextChange(data);
 
         this.setState({ enableRichtext: false });
 
