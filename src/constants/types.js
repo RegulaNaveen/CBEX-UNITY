@@ -115,7 +115,8 @@ const NOTEPAD = {
   MODE_EDIT: 'notepad_mode_edit',
   CHANGE_MODE: 'notepad_change_mode',
   RESET_NOTES: 'reset_notes',
-  SET_EDITOR: 'set_editor'
+  SET_EDITOR: 'set_editor',
+  UPDATE_NOTE_IN_STORE: 'UPDATE_NOTE_IN_STORE'
 };
 
 const PROFILE = {
