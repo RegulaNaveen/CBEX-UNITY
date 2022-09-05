@@ -490,7 +490,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
         if (!selectedRow) this.setSelectRow(true);
       },
       onBlur: data => {
-        if (!isEqual(richTextData.value, data.value))
+        if (
+          !isEqual(richTextData.value, data.value) &&
+          !isEmpty(data.text.trim())
+        )
           this.handleRichTextChange(data);
 
         this.setState({ enableRichtext: false });
@@ -611,7 +614,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
             sfObject={sfObject}
           >
             <AutoCompleteWithAddOption
-              // sectionName={sectionName}
               sfObject={sfObject}
               lov={finalOptions}
               sfField={sfField}

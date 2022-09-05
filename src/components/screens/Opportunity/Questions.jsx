@@ -117,6 +117,7 @@ class Questions extends Component {
   }
 
   componentDidMount() {
+    window.localStorage.setItem('enableFirstExpand', 'true');
     const {
       fetchUsers,
       getSFNonEditabelInfoField,

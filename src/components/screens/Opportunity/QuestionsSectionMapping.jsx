@@ -104,7 +104,7 @@ const QuestionsSectionMapping = ({
   useUpdateEffect(() => setResetData(false), [data]);
 
   // Func to render CollapsibleList Component
-  const renderAllSection = section => {
+  const renderAllSection = (section, indx) => {
     const sectionName = section.get('sectionName');
     const questions = section.get('questions');
     return (
@@ -122,6 +122,7 @@ const QuestionsSectionMapping = ({
             ? true
             : allSectionsExpanded
         }
+        isFirstSection={indx < 1}
         setQuestionToDisplayHistory={setQuestionToDisplayHistory}
         isNotepadOpen={isNotepadOpen}
       />
@@ -132,8 +133,8 @@ const QuestionsSectionMapping = ({
   if (!allSectionsExpanded || isQuestionsFiltersEnabled) {
     return (
       !isEmpty(allSections) &&
-      allSections.valueSeq().map(section => {
-        return renderAllSection(section);
+      allSections.valueSeq().map((section, indx) => {
+        return renderAllSection(section, indx);
       })
     );
   }
@@ -145,7 +146,7 @@ const QuestionsSectionMapping = ({
         data.map((_, indx) => {
           if (indx + 1 <= [...allSections.values()].length) {
             const section = [...allSections.values()][indx];
-            return renderAllSection(section);
+            return renderAllSection(section, indx);
           }
           return null;
         })}
