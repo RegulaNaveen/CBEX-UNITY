@@ -30,8 +30,8 @@
   "license": "ISC",
   "dependencies": {
     "@datapunt/matomo-tracker-react": "^0.3.1",
-    "@react-pdf/font": "^2.2.0",
-    "@react-pdf/renderer": "2.1.1",
+    "@react-pdf/font": "^2.3.0",
+    "@react-pdf/renderer": "3.0.0",
     "@tiptap/extension-bold": "^2.0.0-beta.28",
     "@tiptap/extension-code-block": "^2.0.0-beta.42",
     "@tiptap/extension-collaboration": "^2.0.0-beta.38",

@@ -40,7 +40,7 @@ import { WebsocketProvider } from '../../../context/y-websocket';
 import { NOTES_SOCKET_URL } from '../../../constants/api';
 import NotesSocketContext from '../../../context/notesSocketContext';
 import * as Y from 'yjs';
-
+import { UBUILD, DASHBOARD } from '../../../routes';
 const ThemeContext = React.createContext('light');
 type State = {
   selectedView: string
@@ -119,6 +119,15 @@ export class Opportunity extends Component<Props, State> {
 
     getOpportunityInfo(params.id);
 
+    if (
+      (this.props && this.props?.location && this.props.location?.pathname) !==
+      UBUILD
+    ) {
+      if (this.props.location?.pathname !== DASHBOARD)
+        this.context.updateSocketOppId(params.id);
+      else this.context.updateSocketOppId(null);
+    }
+
     window.addEventListener('storage', e => this.handleStorageChange(e));
     window.addEventListener('resize', this.handleResize);
     const windowSize = window.innerWidth;
@@ -154,14 +163,19 @@ export class Opportunity extends Component<Props, State> {
       match: { params },
       selectedBid
     } = this.props;
-    this.context.updateSocketOppId(params.id);
-
     const thisProposalId = selectedBid.get('id', '');
     const prevProposalId = prevProps.selectedBid.get('id', '');
 
     // Bid changed
     if (prevProposalId !== thisProposalId) {
       console.log(prevProposalId, 'selected bid changed to', thisProposalId);
+      if (
+        (this.props &&
+          this.props?.location &&
+          this.props.location?.pathname) !== UBUILD
+      ) {
+        this.context.updateSocketOppId(params.id);
+      }
 
       //intial load case
       if (!prevProposalId && thisProposalId) {

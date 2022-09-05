@@ -98,14 +98,24 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     return (
       <div className="toolbar-account-menu">
         <Grid container style={{ padding: '10px' }}>
-          <Grid item>
+          {/* <Grid item>
             <Avatar alt="avatar" src="">
               {name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0)}
             </Avatar>
-          </Grid>
+          </Grid> */}
           <Grid item>
-            <p className="toolbar-account-menu-name">{name}</p>
-            <p className="toolbar-account-menu-email">{email}</p>
+            <p
+              className="toolbar-account-menu-name"
+              style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+            >
+              {name}
+            </p>
+            <p
+              className="toolbar-account-menu-email"
+              style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+            >
+              {email}
+            </p>
           </Grid>
         </Grid>
 
