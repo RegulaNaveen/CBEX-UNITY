@@ -79,7 +79,8 @@ const PROPOSAL = {
   BOX_ADDITIONAL_LINK: 'BOX_ADDITIONAL_LINK',
   BOX_ADDITIONAL_LINK_ERROR: 'BOX_ADDITIONAL_LINK_ERROR',
   SWITCH_TEMP_STATUS: 'switch_temp_status',
-  SWITCH_TEMP_IN_PROGRESS: 'switch_temp_in_progress'
+  SWITCH_TEMP_IN_PROGRESS: 'switch_temp_in_progress',
+  RESET_PROPOSALID: 'reset_proposalId'
 };
 
 const PROPOSALS = {
