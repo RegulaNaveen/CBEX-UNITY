@@ -55,7 +55,6 @@ import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
 import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions';
 import WysiwygNotepad from '../../views/WysiwygNotepad';
 import ANSWER_TYPES from '../../../constants/answerTypes';
-import NotesSocketContext from '../../../context/notesSocketContext';
 
 const QuestionsSectionMapping = React.lazy(() =>
   import('./QuestionsSectionMapping')
@@ -534,9 +533,7 @@ class Questions extends Component {
                 <div id="panel-notepad-header">
                   <Typography variant="h3">Notepad</Typography>
                 </div>
-                <NotesSocketContext.Consumer>
-                  {value => value.wsInstance && <WysiwygNotepad />}
-                </NotesSocketContext.Consumer>
+                <WysiwygNotepad />
               </div>
             </Panel>
           </div>
