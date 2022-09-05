@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { List } from "immutable";
-import isEmpty from "lodash-es/isEmpty";
-import TextField from "@material-ui/core/TextField";
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { List } from 'immutable';
+import isEmpty from 'lodash-es/isEmpty';
+import TextField from '@material-ui/core/TextField';
 import Autocomplete, {
-  createFilterOptions,
-} from "@material-ui/lab/Autocomplete";
-import { getLookUpOptionsSelector } from "../../../redux/selectors";
+  createFilterOptions
+} from '@material-ui/lab/Autocomplete';
+import { getLookUpOptionsSelector } from '../../../redux/selectors';
 
 const filter = createFilterOptions();
 
@@ -21,7 +21,7 @@ const AutoCompleteWithAddOption = ({
   onFocus,
   onBlur,
   multiple,
-  loading,
+  loading
 }) => {
   const getSFOptions = (sfObject, sfField) =>
     options[`SF#${sfObject}_SF#${sfField}`]
@@ -43,7 +43,7 @@ const AutoCompleteWithAddOption = ({
 
   const getAnswer = () => {
     if (isEmpty(answer)) {
-      return multiple ? [] : "";
+      return multiple ? [] : '';
     }
     return multiple ? answer : answer?.trim();
   };
@@ -52,20 +52,20 @@ const AutoCompleteWithAddOption = ({
   const [currentLov, setCurrentLov] = useState(getOptions());
   const [clearable, setClearable] = useState(true);
 
-  const addAnswerPicklist = (arr) => {
-    return arr.map((item) =>
-      item.includes("add ")
-        ? item.replace('add "', "").replace(/\"/g, "")
+  const addAnswerPicklist = arr => {
+    return arr.map(item =>
+      item.includes('add ')
+        ? item.replace('add "', '').replace(/\"/g, '')
         : item
     );
   };
 
-  const addAnswerSingle = (str) => {
+  const addAnswerSingle = str => {
     if (str === null) {
-      return " ";
+      return ' ';
     }
-    return str.substring(0, 4) === "add "
-      ? str.replace('add "', "").replace(/\"/g, "")
+    return str.substring(0, 4) === 'add '
+      ? str.replace('add "', '').replace(/\"/g, '')
       : str;
   };
 
@@ -84,7 +84,7 @@ const AutoCompleteWithAddOption = ({
     }
     let currentOptions = [...getOptions()];
     let newOptions = currentOptions.filter(
-      (el) => selectedVal.indexOf(el) === -1
+      el => selectedVal.indexOf(el) === -1
     );
     setCurrentLov(newOptions);
   }, [answer]);
@@ -95,17 +95,22 @@ const AutoCompleteWithAddOption = ({
   }, [loading]);
 
   const placeHolder = () => {
-    const placeholder = "Click to answer";
-    if (multiple) return selectedVal && selectedVal.length ? "" : placeholder;
-    else return selectedVal ? "" : placeholder;
+    const placeholder = 'Click to answer';
+    if (multiple)
+      return disabled
+        ? ''
+        : selectedVal && selectedVal.length
+        ? ''
+        : placeholder;
+    else return disabled ? '' : selectedVal ? '' : placeholder;
   };
   let placeholder = placeHolder();
 
-  const onTextChange = (event) => {
+  const onTextChange = event => {
     disableClearable(event.currentTarget.value);
   };
 
-  const disableClearable = (value) => {
+  const disableClearable = value => {
     if (value) {
       setClearable(false);
       return;
@@ -119,7 +124,11 @@ const AutoCompleteWithAddOption = ({
       <Autocomplete
         filterOptions={(currentLov, params) => {
           const filtered = filter(currentLov, params);
-          if (params.inputValue !== "" && !lov.includes(params.inputValue ) && !selectedVal.includes(params.inputValue)) {
+          if (
+            params.inputValue !== '' &&
+            !lov.includes(params.inputValue) &&
+            !selectedVal.includes(params.inputValue)
+          ) {
             filtered.push(`add "${params.inputValue}"`);
           }
           return filtered;
@@ -129,13 +138,13 @@ const AutoCompleteWithAddOption = ({
         onBlur={onBlur}
         onFocus={onFocus}
         disabled={disabled}
-        style={{ resize: "vertical" }}
+        style={{ resize: 'vertical' }}
         options={currentLov}
         multiple={multiple}
         onChange={handleChange}
         freeSolo
         value={selectedVal}
-        renderInput={(params) => {
+        renderInput={params => {
           return (
             <TextField
               onChange={onTextChange}
@@ -150,8 +159,8 @@ const AutoCompleteWithAddOption = ({
   );
 };
 
-const mapStateToProps = (state) => ({
-  options: getLookUpOptionsSelector(state),
+const mapStateToProps = state => ({
+  options: getLookUpOptionsSelector(state)
 });
 
 export default connect(mapStateToProps)(AutoCompleteWithAddOption);
