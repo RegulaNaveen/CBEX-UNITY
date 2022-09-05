@@ -483,7 +483,7 @@ function getHtml(
   notes,
   filterState
 ) {
-  const html = `
+  let html = `
         <html>
         <body>
             ${getStyle()}
@@ -495,6 +495,10 @@ function getHtml(
         </body>
         </html>    
     `;
+
+  // this is added to handle , some data having unclosed span tag.
+  const SpanExp = /[^<]\/span>/g;
+  if (html.match(SpanExp)) html = html?.replace(SpanExp, '</span>');
   return html;
 }
 const MyDoc = (
@@ -521,11 +525,7 @@ const MyDoc = (
           </View>
           <Html
             renderers={{
-              tr: ({ style, children }) => (
-                <View style={style}>
-                  {children}
-                </View>
-              )
+              tr: ({ style, children }) => <View style={style}>{children}</View>
             }}
           >
             {getHtml(
