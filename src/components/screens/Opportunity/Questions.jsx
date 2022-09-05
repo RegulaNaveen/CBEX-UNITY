@@ -511,11 +511,13 @@ class Questions extends Component {
         </div>
         <div id="panelwrapper">
           {/* Notepad */}
-          <div id="panel-notepad">
+          <div id="panel-notepad" style={{ borderRadius: '5px' }}>
             <Panel
               minWidth={notepadMinWidthPx}
               maxWidth={notepadMaxWidthPx}
               width={notepadMaxWidthPx}
+              className="notepad-classoverride"
+              style={{ borderRadius: '5px' }}
               resizable
               onClose={() => {
                 this.setIsNotepadOpen(false);
