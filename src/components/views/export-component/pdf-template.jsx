@@ -70,6 +70,17 @@ Font.register({
   ]
 });
 
+// TO-DO : need to get font otf files to support respective fonts
+Font.register({ family: 'Georgia', src: ProximaNova });
+Font.register({ family: 'Arial', src: ProximaNova });
+Font.register({ family: 'Arial Black', src: ProximaNova });
+Font.register({ family: 'Courier New', src: ProximaNova });
+Font.register({ family: 'Helvetica', src: ProximaNova });
+Font.register({ family: 'Times New Roman', src: ProximaNova });
+Font.register({ family: 'Impact', src: ProximaNova });
+Font.register({ family: 'Lucida Console', src: ProximaNova });
+Font.register({ family: 'Roboto', src: ProximaNova });
+
 const styles = StyleSheet.create({
   page: {
     paddingBottom: '18vh'
