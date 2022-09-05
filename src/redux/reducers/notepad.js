@@ -116,9 +116,7 @@ function updateNoteInStore(state, action) {
   const {
     payload: { note }
   } = action;
-  console.log('state is', state, 'action is', action);
   return state.set('notes', note);
-  // .set('isNotesWebSocketExists', false);
 }
 const actionMap = {
   [FETCH_NOTES]: onFetchNotes,
