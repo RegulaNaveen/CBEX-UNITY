@@ -440,50 +440,39 @@ const WysiwygNotepad = ({
 
   const editor = useEditor(
     {
-      extensions: notesSocket.wsInstance
-        ? [
-            StarterKit,
-            Underline,
-            Code,
-            CodeBlock,
-            HardBreak,
-            HighLight,
-            HorizontalRule,
-            Subscript,
-            Superscript,
-            TextAlign.configure({
-              types: ['heading', 'paragraph']
-            }),
-            Collaboration.configure({
-              document: notesSocket.ydoc
-            }),
-            CollaborationCursor.configure({
-              provider: notesSocket.wsInstance,
-              user: {
-                name: userName + ' ' + 'is typing....',
-                color: usercolor
-              }
-            }),
-            Link.configure({
-              autolink: true,
-              linkOnPaste: false,
-              validate: href => /^https?:\/\// || /^www?:\/\//.test(href),
-              protocols: ['ftp', 'mailto'],
-              HTMLAttributes: {
-                class: 'my-custom-class'
-              }
-            })
-          ]
-        : [
-            StarterKit,
-            Underline,
-            Link,
-            Code,
-            HighLight,
-            HardBreak,
-            HorizontalRule,
-            CodeBlock
-          ],
+      extensions: [
+        StarterKit,
+        Underline,
+        Code,
+        CodeBlock,
+        HardBreak,
+        HighLight,
+        HorizontalRule,
+        Subscript,
+        Superscript,
+        TextAlign.configure({
+          types: ['heading', 'paragraph']
+        }),
+        Collaboration.configure({
+          document: notesSocket.ydoc
+        }),
+        CollaborationCursor.configure({
+          provider: notesSocket.wsInstance,
+          user: {
+            name: userName + ' ' + 'is typing....',
+            color: usercolor
+          }
+        }),
+        Link.configure({
+          autolink: true,
+          linkOnPaste: false,
+          validate: href => /^https?:\/\// || /^www?:\/\//.test(href),
+          protocols: ['ftp', 'mailto'],
+          HTMLAttributes: {
+            class: 'my-custom-class'
+          }
+        })
+      ],
       content: content,
       onUpdate: ({ editor }) => {
         const Ejson = editor.getJSON();
