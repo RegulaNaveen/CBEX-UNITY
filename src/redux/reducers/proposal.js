@@ -50,7 +50,8 @@ const {
   BOX_ADDITIONAL_LINK,
   BOX_ADDITIONAL_LINK_ERROR,
   SWITCH_TEMP_STATUS,
-  SWITCH_TEMP_IN_PROGRESS
+  SWITCH_TEMP_IN_PROGRESS,
+  RESET_PROPOSALID
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -211,6 +212,12 @@ const updateProposalDetail = (state, action) => {
     console.log('Cannot update proposal details', error.message);
   }
   return state;
+};
+
+const resetProposalId = state => {
+  let selectBid = state.toJS().selectedBid;
+  selectBid.id = '';
+  return state.set('selectedBid', fromJS(selectBid));
 };
 
 const setOpportunityInfo = (state, action) => {
@@ -879,7 +886,8 @@ const actionMap = {
   [SWITCH_TEMP_STATUS]: (state, { payload }) =>
     state.set('switchTempCallStatus', payload),
   [SWITCH_TEMP_IN_PROGRESS]: (state, { payload }) =>
-    state.set('switchTempInProgress', payload)
+    state.set('switchTempInProgress', payload),
+  [RESET_PROPOSALID]: resetProposalId
 };
 
 export default function(

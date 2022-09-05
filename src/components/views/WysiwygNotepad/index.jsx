@@ -532,11 +532,17 @@ const WysiwygNotepad = ({
       if (noteText?.content?.length < 2) {
         if (
           isNotesFetched &&
+          noteText?.content &&
+          noteText?.content[0]?.content &&
           noteText?.content[0]?.content[0]?.hasOwnProperty('text')
         ) {
           updateNote(proposalId, noteSaveReqBody);
         }
-        if (isNotesFetched && noteText?.content[0]?.hasOwnProperty('text')) {
+        if (
+          isNotesFetched &&
+          noteText?.content &&
+          noteText?.content[0]?.hasOwnProperty('text')
+        ) {
           updateNote(proposalId, noteSaveReqBody);
         }
       }
