@@ -621,6 +621,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               onBlur={() => this.setSelectRow(false)}
               disabled={checkDisableFlag()}
               onChange={this.handlePropsalChange}
+              placeholder={checkDisableFlag() ? '' : 'Click to answer'}
             />
           </SFAnswerValidationWrapper>
         );
@@ -641,6 +642,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               multiple={false}
               loading={loading}
               disabled={checkDisableFlag()}
+              placeholder={checkDisableFlag() ? '' : 'Click to answer'}
             />
           </SFAnswerValidationWrapper>
         );
@@ -728,6 +730,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     let checkSfAnswer;
     let integrationvalidation;
     const sficon = sfField;
+    let qvidIntegration = false;
     const currentBidID = selectedBid.toJS().id;
     const oppordata = oppdata.toJS();
     const deploymentDate = '2022-08-05';
@@ -754,11 +757,14 @@ export class TaskRow extends React.PureComponent<Props, State> {
       integrationvalidation = true;
     }
     integrationvalidation = has(Qvidianquestions[0], qvicon);
+    if (qvidianIntegration && qvidianIntegration === 'Qvidian') {
+      qvidIntegration = true;
+    }
     dateIsAfter
-      ? integrationmatch === qvidianIntegration
-      : has(Qvidianquestions[0], qvicon)
-      ? (integrationmatch = Qvidianquestions[0][qvicon])
-      : null;
+      ? (integrationmatch = qvidIntegration)
+      : (integrationmatch = has(Qvidianquestions[0], qvicon)
+          ? (integrationmatch = Qvidianquestions[0][qvicon])
+          : null);
     if (answers) {
       if (!questionID) lastAnswer = answers.last();
       else lastAnswer = answers.get('answers').last();
@@ -790,8 +796,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
       enableRichtext
     } = this.state;
     const smallScreenWidth = screenWidth < 641 ? [8, 4] : [10, 2];
-    const gridColRatio = isNotepadOpen ? smallScreenWidth : [10, 2];
-
+    const mediumScreen =
+      screenWidth < 950 ? [10, 2] : screenWidth < 900 ? [10, 2] : [11, 1];
+    const gridColRatio = isNotepadOpen ? smallScreenWidth : mediumScreen;
+    console.log(screenWidth);
     return (
       <Grid
         container
