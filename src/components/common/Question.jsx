@@ -801,7 +801,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
     const mediumScreen =
       screenWidth < 950 ? [10, 2] : screenWidth < 900 ? [10, 2] : [11, 1];
     const gridColRatio = isNotepadOpen ? smallScreenWidth : mediumScreen;
-    console.log(screenWidth);
     return (
       <Grid
         container

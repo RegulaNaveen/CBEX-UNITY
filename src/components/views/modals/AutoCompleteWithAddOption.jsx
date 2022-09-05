@@ -70,6 +70,9 @@ const AutoCompleteWithAddOption = ({
       : str;
   };
 
+  /**
+   * Trigger func on select option
+   */
   const handleChange = (event, newValue) => {
     const modifiedAnswer = multiple
       ? addAnswerPicklist(newValue)
@@ -79,13 +82,15 @@ const AutoCompleteWithAddOption = ({
       ? modifiedAnswer
       : modifiedAnswer.trim();
     const isValidVal = !isEqual(selectedVal, newTrimVal);
-    // console.log({ prevValue: selectedVal, newValue: newTrimVal });
     if (!isValidVal) return;
 
     setSelectedVal(modifiedAnswer);
     onChange(modifiedAnswer);
   };
 
+  /**
+   * setCurrentLov onUpdate answer state
+   */
   useEffect(() => {
     setSelectedVal(getAnswer());
     if (isEmpty(selectedVal)) {
@@ -98,6 +103,9 @@ const AutoCompleteWithAddOption = ({
     setCurrentLov(newOptions);
   }, [answer]);
 
+  /**
+   * setClearable onUpdate loading state
+   */
   useEffect(() => {
     setClearable(true);
     if (selectedVal && !loading) setClearable(false);
