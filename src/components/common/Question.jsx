@@ -796,8 +796,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
       enableRichtext
     } = this.state;
     const smallScreenWidth = screenWidth < 641 ? [8, 4] : [10, 2];
-    const gridColRatio = isNotepadOpen ? smallScreenWidth : [10, 2];
-
+    const mediumScreen =
+      screenWidth < 950 ? [10, 2] : screenWidth < 900 ? [10, 2] : [11, 1];
+    const gridColRatio = isNotepadOpen ? smallScreenWidth : mediumScreen;
+    console.log(screenWidth);
     return (
       <Grid
         container
