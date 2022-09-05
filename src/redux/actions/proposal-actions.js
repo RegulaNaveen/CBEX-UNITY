@@ -78,7 +78,8 @@ const {
   BOX_ADDITIONAL_LINK,
   BOX_ADDITIONAL_LINK_ERROR,
   SWITCH_TEMP_STATUS,
-  SWITCH_TEMP_IN_PROGRESS
+  SWITCH_TEMP_IN_PROGRESS,
+  RESET_PROPOSALID
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -775,6 +776,10 @@ export const getOpportunity = (
       dispatch({ type: NEW_BID_CREATED, payload: { flag: false } });
     }
   };
+};
+
+export const resetProposalId = () => {
+  return dispatch => dispatch({ type: RESET_PROPOSALID, payload: {} });
 };
 
 export const changeBid = bid => {
