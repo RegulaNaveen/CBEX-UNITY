@@ -160,19 +160,19 @@ const AccountPreference = ({
             </>
           )}
         </div>
-        {/* <div className="top-space">
+       <div className="top-space">
           <Typography className="grey-text" variant="caption" gutterBottom>
             Opportunity Preferences
           </Typography>
         </div>
 
-        {!userPreference?.length && (
+        {/*{!userPreference?.length && (
           <div>
             <Typography className="grey-text" variant="caption" gutterBottom>
               Not found!
             </Typography>
           </div>
-        )}
+       )}*/}
 
         {userPreference.map(
           (
@@ -218,7 +218,7 @@ const AccountPreference = ({
               )
             );
           }
-        )} */}
+        )}
       </Card>
     </div>
   );
