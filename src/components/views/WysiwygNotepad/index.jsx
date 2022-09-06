@@ -68,7 +68,8 @@ const WysiwygNotepad = ({
     type: 'doc',
     content: [
       {
-        type: 'paragraph'
+        type: 'paragraph',
+        attrs: { textAlign: 'left' }
       }
     ]
   };
