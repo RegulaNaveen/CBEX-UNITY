@@ -1,8 +1,10 @@
+import './styles.scss';
 import Collaboration from '@tiptap/extension-collaboration';
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
 import { connect } from 'react-redux';
 import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import Loader from 'react-loader-spinner';
 import randomColor from 'randomcolor';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -28,8 +30,9 @@ import HighLight from '@tiptap/extension-highlight';
 import TextAlign from '@tiptap/extension-text-align';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
-
+import Mention from '@tiptap/extension-mention';
 import { v4 as uuidv4 } from 'uuid';
+
 import {
   getProposalDetails,
   selectNotes,
@@ -47,10 +50,8 @@ import {
   resetNotes,
   setEditor
 } from '../../../redux/actions/notepad-actions';
-// import { SocketContext } from '../../../context/SocketContext';
-// import * as Y from "yjs";
 import NotesSocketContext from '../../../context/notesSocketContext';
-import Loader from 'react-loader-spinner';
+import suggestion from './suggestion';
 
 const WysiwygNotepad = ({
   notes = null,
@@ -141,7 +142,8 @@ const WysiwygNotepad = ({
       HighLight,
       HardBreak,
       Subscript,
-      Superscript
+      Superscript,
+      Mention
     ]);
     setContent(data);
   }, [json, notes]);
@@ -471,6 +473,17 @@ const WysiwygNotepad = ({
               HTMLAttributes: {
                 class: 'my-custom-class'
               }
+            }),
+            Mention.configure({
+              HTMLAttributes: {
+                class: 'mention'
+              },
+              renderLabel({ options, node }) {
+                console.log({ options, node });
+                return `${options.suggestion.char}${node.attrs.label ??
+                  node.attrs.id}`;
+              },
+              suggestion
             })
           ]
         : [
@@ -481,9 +494,10 @@ const WysiwygNotepad = ({
             HighLight,
             HardBreak,
             HorizontalRule,
-            CodeBlock
+            CodeBlock,
+            Mention
           ],
-      content: content,
+      content,
       onUpdate: ({ editor }) => {
         const Ejson = editor.getJSON();
         // send the content to an API here
@@ -516,7 +530,7 @@ const WysiwygNotepad = ({
 
   const memoizedSaveDB = useCallback(
     noteText => {
-      console.log('memoizedSaveDB', noteText);
+      // console.log('memoizedSaveDB', noteText);
       const proposalId = selectedBid.get('id');
       const noteSaveReqBody = constructNoteV2(
         proposalId,
@@ -547,16 +561,16 @@ const WysiwygNotepad = ({
   return (
     <>
       {notesSocket.wsInstance && (
-        <div className="editor-notepad">
+        <div className='editor-notepad'>
           <div>
             <MenuBar editor={editor} />
           </div>
           {isNotesFetched ? (
-            <EditorContent editor={editor} className="editor-scroll" />
+            <EditorContent editor={editor} className='editor-scroll' />
           ) : (
             <Loader
-              type="TailSpin"
-              color="#297DFD"
+              type='TailSpin'
+              color='#297DFD'
               width={30}
               style={{
                 display: 'flex',
