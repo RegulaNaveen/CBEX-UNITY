@@ -147,6 +147,7 @@ const WysiwygNotepad = ({
     setContent(data);
   }, [json, notes]);
 
+  useEffect(() => {}, [content]);
   const styleMarks = (blk, map) => {
     console.log('calling styleeeeeeee', blk.entityRanges);
     let tempMarks = [];
@@ -188,7 +189,7 @@ const WysiwygNotepad = ({
     console.log('we have nothing');
     if (_.isEmpty(block.text)) {
       console.log('if nothing');
-      jdata.content.push({ type: 'paragraph' });
+      jdata.content.push({ type: 'paragraph', attrs: { textAlign: 'left' } });
     } else {
       jdata.content.push({
         type: 'paragraph',
@@ -196,7 +197,8 @@ const WysiwygNotepad = ({
           {
             type: 'text',
             marks: _.isEmpty(marks) ? undefined : marks,
-            text: block.text
+            text: block.text,
+            attrs: { textAlign: 'left' }
           }
         ]
       });
@@ -435,9 +437,9 @@ const WysiwygNotepad = ({
     });
     let finalJSON = JSON.parse(JSON.stringify(jdata));
     console.log('final', finalJSON);
+    memoizedSaveDB(finalJSON);
     return finalJSON;
   };
-
   const editor = useEditor(
     {
       extensions: [
@@ -528,10 +530,14 @@ const WysiwygNotepad = ({
       {notesSocket.wsInstance && (
         <div className="editor-notepad">
           <div>
-            <MenuBar editor={editor} />
+            <MenuBar key={selectedBid.get('id')} editor={editor} />
           </div>
           {isNotesFetched ? (
-            <EditorContent editor={editor} className="editor-scroll" />
+            <EditorContent
+              key={selectedBid.get('id')}
+              editor={editor}
+              className="editor-scroll"
+            />
           ) : (
             <Loader
               type="TailSpin"
