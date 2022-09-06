@@ -147,9 +147,7 @@ const WysiwygNotepad = ({
     setContent(data);
   }, [json, notes]);
 
-  useEffect(() => {
-    console.log('re render because content changed', content);
-  }, [content]);
+  useEffect(() => {}, [content]);
   const styleMarks = (blk, map) => {
     console.log('calling styleeeeeeee', blk.entityRanges);
     let tempMarks = [];
@@ -442,7 +440,6 @@ const WysiwygNotepad = ({
     memoizedSaveDB(finalJSON);
     return finalJSON;
   };
-  console.log('content is', content);
   const editor = useEditor(
     {
       extensions: [
@@ -482,7 +479,6 @@ const WysiwygNotepad = ({
       onUpdate: ({ editor }) => {
         const Ejson = editor.getJSON();
         updateNoteInStore();
-        console.log('on update is called', Ejson);
         // send the content to an API here
         memoizedSaveDB(Ejson);
       }
