@@ -68,13 +68,19 @@ const WysiwygNotepad = ({
     type: 'doc',
     content: [
       {
-        type: 'paragraph'
+        type: 'paragraph',
+        attrs: { textAlign: 'left' }
       }
     ]
   };
   const dispatch = useDispatch();
   const [json, setJSON] = useState(emptyTextBlock);
   const [content, setContent] = useState('<p></p>');
+  const [proposalNoteRender, setProposalNoteRender] = useState(true);
+
+  const [proposalIdState, setProposalIdState] = useState(
+    selectedBid.get('id', '')
+  );
   const [notesId, setNotesId] = useState('');
   const isNotesFetched = useSelector(selectIsNotesFetched);
   const isNotesWebSocketExists = useSelector(selectIsNotesWebSocketExists);
@@ -148,6 +154,11 @@ const WysiwygNotepad = ({
   }, [json, notes]);
 
   useEffect(() => {}, [content]);
+  useEffect(() => {
+    console.log('proposal id changed to ', selectedBid.get('id'));
+    setProposalIdState(selectedBid.get('id'));
+  }, [selectedBid]);
+
   const styleMarks = (blk, map) => {
     console.log('calling styleeeeeeee', blk.entityRanges);
     let tempMarks = [];
@@ -483,7 +494,7 @@ const WysiwygNotepad = ({
         memoizedSaveDB(Ejson);
       }
     },
-    [content, isNotesFetched]
+    [proposalIdState, content, isNotesFetched]
   );
 
   dispatch(setEditor(editor));
