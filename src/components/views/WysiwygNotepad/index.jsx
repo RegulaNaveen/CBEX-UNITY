@@ -158,7 +158,7 @@ const WysiwygNotepad = ({
     console.log('proposal id changed to ', selectedBid.get('id'));
     setProposalIdState(selectedBid.get('id'));
   }, [selectedBid]);
-
+  console.log('users length', notesSocket?.wsInstance?.awareness);
   const styleMarks = (blk, map) => {
     console.log('calling styleeeeeeee', blk.entityRanges);
     let tempMarks = [];
@@ -452,48 +452,91 @@ const WysiwygNotepad = ({
     return finalJSON;
   };
   const editor = useEditor(
-    {
-      extensions: [
-        StarterKit,
-        Underline,
-        Code,
-        CodeBlock,
-        HardBreak,
-        HighLight,
-        HorizontalRule,
-        Subscript,
-        Superscript,
-        TextAlign.configure({
-          types: ['heading', 'paragraph']
-        }),
-        Collaboration.configure({
-          document: notesSocket.ydoc
-        }),
-        CollaborationCursor.configure({
-          provider: notesSocket.wsInstance,
-          user: {
-            name: userName + ' ' + 'is typing....',
-            color: usercolor
+    notesSocket?.wsInstance?.awareness?.states?.size > 1
+      ? {
+          extensions: [
+            StarterKit,
+            Underline,
+            Code,
+            CodeBlock,
+            HardBreak,
+            HighLight,
+            HorizontalRule,
+            Subscript,
+            Superscript,
+            TextAlign.configure({
+              types: ['heading', 'paragraph']
+            }),
+            Collaboration.configure({
+              document: notesSocket.ydoc
+            }),
+            CollaborationCursor.configure({
+              provider: notesSocket.wsInstance,
+              user: {
+                name: userName + ' ' + 'is typing....',
+                color: usercolor
+              }
+            }),
+            Link.configure({
+              autolink: true,
+              linkOnPaste: false,
+              validate: href => /^https?:\/\// || /^www?:\/\//.test(href),
+              protocols: ['ftp', 'mailto'],
+              HTMLAttributes: {
+                class: 'my-custom-class'
+              }
+            })
+          ],
+          // content: content,
+          onUpdate: ({ editor }) => {
+            const Ejson = editor.getJSON();
+            updateNoteInStore();
+            // send the content to an API here
+            memoizedSaveDB(Ejson);
           }
-        }),
-        Link.configure({
-          autolink: true,
-          linkOnPaste: false,
-          validate: href => /^https?:\/\// || /^www?:\/\//.test(href),
-          protocols: ['ftp', 'mailto'],
-          HTMLAttributes: {
-            class: 'my-custom-class'
+        }
+      : {
+          extensions: [
+            StarterKit,
+            Underline,
+            Code,
+            CodeBlock,
+            HardBreak,
+            HighLight,
+            HorizontalRule,
+            Subscript,
+            Superscript,
+            TextAlign.configure({
+              types: ['heading', 'paragraph']
+            }),
+            Collaboration.configure({
+              document: notesSocket.ydoc
+            }),
+            CollaborationCursor.configure({
+              provider: notesSocket.wsInstance,
+              user: {
+                name: userName + ' ' + 'is typing....',
+                color: usercolor
+              }
+            }),
+            Link.configure({
+              autolink: true,
+              linkOnPaste: false,
+              validate: href => /^https?:\/\// || /^www?:\/\//.test(href),
+              protocols: ['ftp', 'mailto'],
+              HTMLAttributes: {
+                class: 'my-custom-class'
+              }
+            })
+          ],
+          content: content,
+          onUpdate: ({ editor }) => {
+            const Ejson = editor.getJSON();
+            updateNoteInStore();
+            // send the content to an API here
+            memoizedSaveDB(Ejson);
           }
-        })
-      ],
-      content: content,
-      onUpdate: ({ editor }) => {
-        const Ejson = editor.getJSON();
-        updateNoteInStore();
-        // send the content to an API here
-        memoizedSaveDB(Ejson);
-      }
-    },
+        },
     [proposalIdState, content, isNotesFetched]
   );
 
