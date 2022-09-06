@@ -55,6 +55,7 @@ const CustomApolloRichText = ({
   const richTextContainerRef = useRef(null);
   const richTextEditorRef = useRef(null);
   const richTextKey = useRef(uuid());
+
   /**
    * Function to Add Delay for Specific Seconds
    */
@@ -81,7 +82,7 @@ const CustomApolloRichText = ({
   };
 
   /**
-   * Update on external changes
+   * Update RichText data on external changes
    */
   useEffect(() => {
     setRichTextData(INITIAL_DATA);
@@ -94,6 +95,9 @@ const CustomApolloRichText = ({
     }
   }, [INITIAL_DATA]);
 
+  /**
+   * Update RichText Key to reRender Component
+   */
   useUpdateEffect(() => {
     richTextKey.current = uuid();
   }, [INITIAL_DATA]);
@@ -108,14 +112,14 @@ const CustomApolloRichText = ({
   };
 
   /**
-   * Set focus on load
+   * Set IsRichTextEditable state on external change
    */
   useEffect(() => {
     setIsRichTextEditable(isEditable);
   }, [isEditable]);
 
   /**
-   * onClick Edit button handler
+   * OnClick ReadOnly RichText
    */
   const onClickHTML = () => {
     setIsRichTextEditable(true);
@@ -124,6 +128,7 @@ const CustomApolloRichText = ({
       onFocus();
     }
   };
+
   /**
    * OnChange RichText Editor
    */
@@ -150,7 +155,7 @@ const CustomApolloRichText = ({
   };
 
   /**
-   * Handle Outside Click Function
+   * Handle Click Outside RichText
    */
   const handleClickOutside = e => {
     if (
@@ -166,7 +171,7 @@ const CustomApolloRichText = ({
   };
 
   /**
-   * Trigger Outside Click
+   * Trigger Click Outside RichText
    */
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
