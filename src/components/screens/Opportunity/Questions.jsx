@@ -115,8 +115,9 @@ class Questions extends Component {
       totalWidth: ''
     };
   }
-
+  static contextType = NotesSocketContext;
   componentDidMount() {
+    window.localStorage.setItem('enableFirstExpand', 'true');
     const {
       fetchUsers,
       getSFNonEditabelInfoField,
@@ -533,9 +534,7 @@ class Questions extends Component {
                 <div id="panel-notepad-header">
                   <Typography variant="h3">Notepad</Typography>
                 </div>
-                <NotesSocketContext.Consumer>
-                  {value => value.wsInstance && <WysiwygNotepad />}
-                </NotesSocketContext.Consumer>
+                {this.context.wsInstance ? <WysiwygNotepad /> : ''}
               </div>
             </Panel>
           </div>

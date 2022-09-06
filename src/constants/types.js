@@ -79,7 +79,8 @@ const PROPOSAL = {
   BOX_ADDITIONAL_LINK: 'BOX_ADDITIONAL_LINK',
   BOX_ADDITIONAL_LINK_ERROR: 'BOX_ADDITIONAL_LINK_ERROR',
   SWITCH_TEMP_STATUS: 'switch_temp_status',
-  SWITCH_TEMP_IN_PROGRESS: 'switch_temp_in_progress'
+  SWITCH_TEMP_IN_PROGRESS: 'switch_temp_in_progress',
+  RESET_PROPOSALID: 'reset_proposalId'
 };
 
 const PROPOSALS = {
@@ -115,7 +116,8 @@ const NOTEPAD = {
   MODE_EDIT: 'notepad_mode_edit',
   CHANGE_MODE: 'notepad_change_mode',
   RESET_NOTES: 'reset_notes',
-  SET_EDITOR: 'set_editor'
+  SET_EDITOR: 'set_editor',
+  UPDATE_NOTE_IN_STORE: 'UPDATE_NOTE_IN_STORE'
 };
 
 const PROFILE = {

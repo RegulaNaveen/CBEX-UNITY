@@ -14,7 +14,8 @@ import {
   updateAnswerFromWebSocket,
   updateProposalDetailFromWebSocket,
   updateSwitchTempStatusFromWebSocket,
-  updateSwitchInProgress
+  updateSwitchInProgress,
+  resetProposalId
 } from '../../../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../../../redux/actions/notepad-actions';
 import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
@@ -41,6 +42,7 @@ import { NOTES_SOCKET_URL } from '../../../constants/api';
 import NotesSocketContext from '../../../context/notesSocketContext';
 import * as Y from 'yjs';
 import { UBUILD, DASHBOARD } from '../../../routes';
+
 const ThemeContext = React.createContext('light');
 type State = {
   selectedView: string
@@ -74,7 +76,8 @@ type Props = {
   trackPageView: any,
   proposalDetail: any,
   getOpportunityInfo: (oppId: string, flag?: boolean) => void,
-  setSeenOne: Function
+  setSeenOne: Function,
+  setResetProposalId: Function
 };
 
 export class Opportunity extends Component<Props, State> {
@@ -165,7 +168,6 @@ export class Opportunity extends Component<Props, State> {
     } = this.props;
     const thisProposalId = selectedBid.get('id', '');
     const prevProposalId = prevProps.selectedBid.get('id', '');
-
     // Bid changed
     if (prevProposalId !== thisProposalId) {
       console.log(prevProposalId, 'selected bid changed to', thisProposalId);
@@ -207,9 +209,9 @@ export class Opportunity extends Component<Props, State> {
   };
 
   componentWillUnmount() {
-    const { handleOpenClose } = this.props;
+    const { handleOpenClose, setResetProposalId } = this.props;
     if (handleOpenClose) handleOpenClose(false);
-
+    setResetProposalId();
     localStorage.removeItem('proposalTypeView');
     localStorage.removeItem('proposalId');
 
@@ -378,6 +380,7 @@ export default compose(
     updateProposalNotes: updateProposalNotesFromWebSocket,
     updateSwitchTempStatus: updateSwitchTempStatusFromWebSocket,
     setSwitchInProgress: updateSwitchInProgress,
-    setSeenOne: notificationActions.setSeenOne
+    setSeenOne: notificationActions.setSeenOne,
+    setResetProposalId: resetProposalId
   })
 )(MatomoHOC(Opportunity));
