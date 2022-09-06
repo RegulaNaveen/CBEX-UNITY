@@ -76,7 +76,6 @@ const WysiwygNotepad = ({
   const dispatch = useDispatch();
   const [json, setJSON] = useState(emptyTextBlock);
   const [content, setContent] = useState('<p></p>');
-  const [proposalNoteRender, setProposalNoteRender] = useState(true);
 
   const [proposalIdState, setProposalIdState] = useState(
     selectedBid.get('id', '')
@@ -158,7 +157,7 @@ const WysiwygNotepad = ({
     console.log('proposal id changed to ', selectedBid.get('id'));
     setProposalIdState(selectedBid.get('id'));
   }, [selectedBid]);
-  console.log('users length', notesSocket?.wsInstance?.awareness);
+  // console.log('users length', notesSocket?.wsInstance?.awareness);
   const styleMarks = (blk, map) => {
     console.log('calling styleeeeeeee', blk.entityRanges);
     let tempMarks = [];
