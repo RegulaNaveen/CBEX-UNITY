@@ -17,7 +17,8 @@ const {
   CHANGE_MODE,
   MODE_DEFAULT,
   RESET_NOTES,
-  SET_EDITOR
+  SET_EDITOR,
+  UPDATE_NOTE_IN_STORE
 } = REDUX_TYPES.NOTEPAD;
 
 export function fetchNotes(proposalID) {
@@ -74,6 +75,16 @@ export function updateNote(id, note) {
       // dispatch(fetchNotes(id));
     } catch (err) {
       dispatch({ type: ERROR_UPDATING_NOTE, payload: { data: err } });
+    }
+  };
+}
+
+export function updateNoteInStore(note) {
+  return async dispatch => {
+    try {
+      dispatch({ type: UPDATE_NOTE_IN_STORE, payload: { note } });
+    } catch (err) {
+      console.log('error occurred in updating note is store.');
     }
   };
 }
