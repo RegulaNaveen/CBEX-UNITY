@@ -1,4 +1,3 @@
-import './styles.scss';
 import Collaboration from '@tiptap/extension-collaboration';
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
 import { connect } from 'react-redux';
@@ -479,9 +478,7 @@ const WysiwygNotepad = ({
                 class: 'mention'
               },
               renderLabel({ options, node }) {
-                console.log({ options, node });
-                return `${options.suggestion.char}${node.attrs.label ??
-                  node.attrs.id}`;
+                return `${node.attrs.label ?? node.attrs.id}`;
               },
               suggestion
             })
@@ -495,7 +492,15 @@ const WysiwygNotepad = ({
             HardBreak,
             HorizontalRule,
             CodeBlock,
-            Mention
+            Mention.configure({
+              HTMLAttributes: {
+                class: 'mention'
+              },
+              renderLabel({ options, node }) {
+                return `${node.attrs.label ?? node.attrs.id}`;
+              },
+              suggestion
+            })
           ],
       content,
       onUpdate: ({ editor }) => {
@@ -530,7 +535,6 @@ const WysiwygNotepad = ({
 
   const memoizedSaveDB = useCallback(
     noteText => {
-      // console.log('memoizedSaveDB', noteText);
       const proposalId = selectedBid.get('id');
       const noteSaveReqBody = constructNoteV2(
         proposalId,

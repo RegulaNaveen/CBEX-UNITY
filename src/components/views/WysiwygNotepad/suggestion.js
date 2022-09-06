@@ -1,24 +1,31 @@
 import { ReactRenderer } from '@tiptap/react';
 import tippy from 'tippy.js';
 
-import MentionList from './MentionList.jsx';
+import MentionList from './MentionList';
+import getAdUsers from '../../../api/getADUsers';
 
 export default {
-  items: ({ query }) => {
-    return [
-      { id: 'Lea@.comThompson', label: 'Lea Thompson' },
-      { id: 'Cyndi@.comLauper', label: 'Cyndi Lauper' },
-      { id: 'Tom@.comCruise', label: 'Tom Cruise' },
-      { id: 'Jerry@.comHall', label: 'Jerry Hall' },
-      { id: 'Joan@.comCollins', label: 'Joan Collins' },
-      { id: 'Winona@.comRyder', label: 'Winona Ryder' },
-      { id: 'Christina@.comApplegate', label: 'Christina Applegate' },
-      { id: 'Alyssa@.comMilano', label: 'Alyssa Milano' }
-    ];
-    //   .filter(item => item.toLowerCase().startsWith(query.toLowerCase()))
-    //   .slice(0, 5);
+  items: async ({ query }) => {
+    let updatedOptions = [{ label: '', id: '' }];
+    try {
+      const adUsers = await getAdUsers(query);
+      if (adUsers.length > 0) {
+        updatedOptions = adUsers.map(user => {
+          return {
+            id: `${user.email?.toLowerCase() || ''}`,
+            label: `${user.first_name || ''} ${user.last_name || ''}`,
+            listOption: `${user.first_name || ''} ${user.last_name ||
+              ''} (${user.email?.toLowerCase() || ''})`
+          };
+        });
+      }
+      return updatedOptions.slice(0, 15);
+    } catch (error) {
+      console.log('error in generating usernames for notes suggestion');
+      console.error(error);
+      return updatedOptions;
+    }
   },
-
   render: () => {
     let component;
     let popup;
@@ -72,5 +79,6 @@ export default {
         component.destroy();
       }
     };
-  }
+  },
+  allowSpaces: true
 };
