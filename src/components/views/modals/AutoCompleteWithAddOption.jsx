@@ -93,7 +93,7 @@ const AutoCompleteWithAddOption = ({
     setClearable(true);
     if (selectedVal && !loading) setClearable(false);
   }, [loading]);
-
+  // Added condition to show placeholder only when textbox enabled
   const placeHolder = () => {
     const placeholder = 'Click to answer';
     if (multiple)
