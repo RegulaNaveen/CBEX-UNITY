@@ -14,7 +14,8 @@ const {
   MODE_DEFAULT,
   CHANGE_MODE,
   RESET_NOTES,
-  SET_EDITOR
+  SET_EDITOR,
+  UPDATE_NOTE_IN_STORE
 } = REDUX_TYPES.NOTEPAD;
 
 const INITIAL_STATE = fromJS({
@@ -111,6 +112,12 @@ function onSetEditor(state, action) {
   return state.set('editor', value);
 }
 
+function updateNoteInStore(state, action) {
+  const {
+    payload: { note }
+  } = action;
+  return state.set('notes', note);
+}
 const actionMap = {
   [FETCH_NOTES]: onFetchNotes,
   [FETCH_NOTES_DONE]: onFetchNotesDone,
@@ -123,7 +130,8 @@ const actionMap = {
   [UPDATE_NOTE_DONE]: onUpdateNoteDone,
   [ERROR_UPDATING_NOTE]: onErrorUpdatingNote,
   [RESET_NOTES]: onResetNotes,
-  [SET_EDITOR]: onSetEditor
+  [SET_EDITOR]: onSetEditor,
+  [UPDATE_NOTE_IN_STORE]: updateNoteInStore
 };
 
 export default function(state = INITIAL_STATE, action) {
