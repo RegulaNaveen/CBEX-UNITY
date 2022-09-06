@@ -93,7 +93,10 @@
     &.dd-header-disabled {
       background-color: #f2f2f2;
       cursor: not-allowed;
-
+      outline: none;
+      user-select: text;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
       &:before {
         border-color: #b5b5b5 transparent transparent transparent;
       }
