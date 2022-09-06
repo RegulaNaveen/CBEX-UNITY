@@ -8,7 +8,10 @@ import { isEmpty, isString, unionBy } from 'lodash';
 import { diffWordsWithSpace } from 'diff';
 import Loader from 'apollo-react/components/Loader';
 
-import { getProposalTeamAssignedRoles } from '../../../redux/selectors';
+import {
+  getProposalTeamAssignedRoles,
+  getSelectedBid
+} from '../../../redux/selectors';
 import { getOpportunityData } from '../../../redux/selectors/proposal';
 import { Close } from '../../svg';
 import { parseMomentDate } from '../../../utils/DateUtils';
@@ -25,7 +28,8 @@ type Props = {
   proposalTeamAnswers: Object,
   opportunityData: Object,
   closeModal: () => void,
-  getAnsHistory: Function
+  getAnsHistory: Function,
+  selectedBid: Object
 };
 
 class AnswerHistory extends Component<Props> {
@@ -39,11 +43,9 @@ class AnswerHistory extends Component<Props> {
   }
 
   componentDidMount() {
-    const { question, opportunityData, getAnsHistory } = this.props;
+    const { question, getAnsHistory, selectedBid } = this.props;
     const questionID = question?.toJS()?.questionId;
-    const proposalID = Object.values(opportunityData?.toJS())?.find(
-      ({ isCurrent }) => isCurrent
-    )?.proposal?.proposalId;
+    const proposalID = selectedBid?.toJS()?.id;
 
     // Set History List form Api
     if (questionID && proposalID) {
@@ -53,14 +55,6 @@ class AnswerHistory extends Component<Props> {
         const res = await getAnsHistory(proposalID, questionID);
         this.setState({ loading: false });
         if (res.status) {
-          // const availableAns = question?.toJS().answers;
-          // if (!isEmpty(availableAns) && Array.isArray(availableAns)) {
-          //   const cloneAnswers = [...availableAns];
-          //   if (res.data.length > 0) cloneAnswers.pop();
-          //   modifiedAns = fromJS([...cloneAnswers, ...res.data]);
-          // } else {
-          //   modifiedAns = fromJS(res.data);
-          // }
           modifiedAns = fromJS(res.data);
         }
         this.setState(prevState => ({
@@ -464,7 +458,8 @@ class AnswerHistory extends Component<Props> {
 
 const mapStateToProps = (state: Map) => ({
   proposalTeamAnswers: getProposalTeamAssignedRoles(state),
-  opportunityData: getOpportunityData(state)
+  opportunityData: getOpportunityData(state),
+  selectedBid: getSelectedBid(state)
 });
 
 const mapDispatchToProps = {
