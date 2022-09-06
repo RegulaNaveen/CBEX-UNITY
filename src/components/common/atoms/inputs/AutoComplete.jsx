@@ -34,7 +34,6 @@ const Autocomplete = props => {
     });
   }
   filter();
-  console.log('options', options);
   function extractEmails(str) {
     let result = String(str).match(
       /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
@@ -144,15 +143,15 @@ const Autocomplete = props => {
         multiple
         loading={options.length == 0}
         options={options || []}
-        chipColor='white'
-        size='small'
+        chipColor="white"
+        size="small"
         limitChips={5}
         disableCloseOnSelect={false}
         value={value}
         onChange={handleChange}
         inputValue={inputVal}
         onInputChange={onInputChange}
-        noOptionsText='No matches found'
+        noOptionsText="No matches found"
         onFocus={onInputFocus}
         onBlur={e => props.onBlur()}
         disabled={disabled || false}

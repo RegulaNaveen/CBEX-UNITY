@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { List } from "immutable";
-import isEmpty from "lodash-es/isEmpty";
-import TextField from "@material-ui/core/TextField";
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { List } from 'immutable';
+import isEmpty from 'lodash/isEmpty';
+import isEqual from 'lodash/isEqual';
+import TextField from '@material-ui/core/TextField';
 import Autocomplete, {
-  createFilterOptions,
-} from "@material-ui/lab/Autocomplete";
-import { getLookUpOptionsSelector } from "../../../redux/selectors";
+  createFilterOptions
+} from '@material-ui/lab/Autocomplete';
+import { getLookUpOptionsSelector } from '../../../redux/selectors';
 
 const filter = createFilterOptions();
 
@@ -21,11 +22,11 @@ const AutoCompleteWithAddOption = ({
   onFocus,
   onBlur,
   multiple,
-  loading,
+  loading
 }) => {
-  const getSFOptions = (sfObject, sfField) =>
-    options[`SF#${sfObject}_SF#${sfField}`]
-      ? options[`SF#${sfObject}_SF#${sfField}`]
+  const getSFOptions = (sfObj, sfFld) =>
+    options[`SF#${sfObj}_SF#${sfFld}`]
+      ? options[`SF#${sfObj}_SF#${sfFld}`]
       : [];
 
   const getOptions = () => {
@@ -43,7 +44,7 @@ const AutoCompleteWithAddOption = ({
 
   const getAnswer = () => {
     if (isEmpty(answer)) {
-      return multiple ? [] : "";
+      return multiple ? [] : '';
     }
     return multiple ? answer : answer?.trim();
   };
@@ -52,75 +53,99 @@ const AutoCompleteWithAddOption = ({
   const [currentLov, setCurrentLov] = useState(getOptions());
   const [clearable, setClearable] = useState(true);
 
-  const addAnswerPicklist = (arr) => {
-    return arr.map((item) =>
-      item.includes("add ")
-        ? item.replace('add "', "").replace(/\"/g, "")
+  const addAnswerPicklist = arr => {
+    return arr.map(item =>
+      item.includes('add ')
+        ? item.replace('add "', '').replace(/\"/g, '')
         : item
     );
   };
 
-  const addAnswerSingle = (str) => {
+  const addAnswerSingle = str => {
     if (str === null) {
-      return " ";
+      return ' ';
     }
-    return str.substring(0, 4) === "add "
-      ? str.replace('add "', "").replace(/\"/g, "")
+    return str.substring(0, 4) === 'add '
+      ? str.replace('add "', '').replace(/\"/g, '')
       : str;
   };
 
+  /**
+   * Trigger func on select option
+   */
   const handleChange = (event, newValue) => {
     const modifiedAnswer = multiple
       ? addAnswerPicklist(newValue)
       : addAnswerSingle(newValue);
+
+    const newTrimVal = Array.isArray(modifiedAnswer)
+      ? modifiedAnswer
+      : modifiedAnswer.trim();
+    const isValidVal = !isEqual(selectedVal, newTrimVal);
+    if (!isValidVal) return;
+
     setSelectedVal(modifiedAnswer);
     onChange(modifiedAnswer);
   };
 
+  /**
+   * setCurrentLov onUpdate answer state
+   */
   useEffect(() => {
     setSelectedVal(getAnswer());
     if (isEmpty(selectedVal)) {
       setClearable(true);
     }
-    let currentOptions = [...getOptions()];
-    let newOptions = currentOptions.filter(
-      (el) => selectedVal.indexOf(el) === -1
+    const currentOptions = [...getOptions()];
+    const newOptions = currentOptions.filter(
+      el => selectedVal.indexOf(el) === -1
     );
     setCurrentLov(newOptions);
   }, [answer]);
 
+  /**
+   * setClearable onUpdate loading state
+   */
   useEffect(() => {
     setClearable(true);
     if (selectedVal && !loading) setClearable(false);
   }, [loading]);
 
+  /**
+   * Set Autocomplete Placeholder
+   */
   const placeHolder = () => {
-    const placeholder = "Click to answer";
-    if (multiple) return selectedVal && selectedVal.length ? "" : placeholder;
-    else return selectedVal ? "" : placeholder;
+    const placeholder = 'Click to answer';
+    if (multiple) {
+      return selectedVal && selectedVal.length ? '' : placeholder;
+    }
+    return selectedVal ? '' : placeholder;
   };
-  let placeholder = placeHolder();
+  const placeholder = placeHolder();
 
-  const onTextChange = (event) => {
-    disableClearable(event.currentTarget.value);
-  };
-
-  const disableClearable = (value) => {
-    if (value) {
+  /**
+   * onChange Autocomplete Input Text
+   */
+  const onTextChange = event => {
+    if (event.currentTarget.value) {
       setClearable(false);
       return;
     }
     setClearable(true);
-    return;
   };
 
   return (
     <div className="auto-complete-with-add-option">
       <Autocomplete
-        filterOptions={(currentLov, params) => {
-          const filtered = filter(currentLov, params);
-          if (params.inputValue !== "" && !lov.includes(params.inputValue ) && !selectedVal.includes(params.inputValue)) {
-            filtered.push(`add "${params.inputValue}"`);
+        filterOptions={(currentList, params) => {
+          const filtered = filter(currentList, params);
+          const inputVal = params.inputValue.trim();
+          if (
+            inputVal !== '' &&
+            !lov.includes(inputVal) &&
+            !selectedVal.includes(inputVal)
+          ) {
+            filtered.push(`add "${inputVal}"`);
           }
           return filtered;
         }}
@@ -129,13 +154,13 @@ const AutoCompleteWithAddOption = ({
         onBlur={onBlur}
         onFocus={onFocus}
         disabled={disabled}
-        style={{ resize: "vertical" }}
+        style={{ resize: 'vertical' }}
         options={currentLov}
         multiple={multiple}
         onChange={handleChange}
         freeSolo
         value={selectedVal}
-        renderInput={(params) => {
+        renderInput={params => {
           return (
             <TextField
               onChange={onTextChange}
@@ -150,8 +175,8 @@ const AutoCompleteWithAddOption = ({
   );
 };
 
-const mapStateToProps = (state) => ({
-  options: getLookUpOptionsSelector(state),
+const mapStateToProps = state => ({
+  options: getLookUpOptionsSelector(state)
 });
 
 export default connect(mapStateToProps)(AutoCompleteWithAddOption);

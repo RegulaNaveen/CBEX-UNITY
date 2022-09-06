@@ -59,8 +59,15 @@ class CollapsibleList extends Component<Props, State> {
   }
 
   componentDidMount() {
-    const { isCheckedAll } = this.props;
-    setTimeout(() => this.setState({ isCollapsed: !!isCheckedAll }), 0);
+    const { isCheckedAll, isFirstSection } = this.props;
+    const enableFirstExpand = window.localStorage.getItem('enableFirstExpand');
+    let setIsCollapsed;
+    if (enableFirstExpand === 'true') {
+      setIsCollapsed = { isCollapsed: !!isFirstSection || !!isCheckedAll };
+      window.localStorage.setItem('enableFirstExpand', 'false');
+    } else setIsCollapsed = { isCollapsed: !!isCheckedAll };
+
+    setTimeout(() => this.setState(setIsCollapsed), 0);
   }
 
   componentDidUpdate(prevProps) {

@@ -47,7 +47,8 @@ import {
   updateNote,
   fetchNotes,
   resetNotes,
-  setEditor
+  setEditor,
+  updateNoteInStore
 } from '../../../redux/actions/notepad-actions';
 import NotesSocketContext from '../../../context/notesSocketContext';
 import suggestion from './suggestion';
@@ -147,6 +148,7 @@ const WysiwygNotepad = ({
     setContent(data);
   }, [json, notes]);
 
+  useEffect(() => {}, [content]);
   const styleMarks = (blk, map) => {
     console.log('calling styleeeeeeee', blk.entityRanges);
     let tempMarks = [];
@@ -188,7 +190,7 @@ const WysiwygNotepad = ({
     console.log('we have nothing');
     if (_.isEmpty(block.text)) {
       console.log('if nothing');
-      jdata.content.push({ type: 'paragraph' });
+      jdata.content.push({ type: 'paragraph', attrs: { textAlign: 'left' } });
     } else {
       jdata.content.push({
         type: 'paragraph',
@@ -196,7 +198,8 @@ const WysiwygNotepad = ({
           {
             type: 'text',
             marks: _.isEmpty(marks) ? undefined : marks,
-            text: block.text
+            text: block.text,
+            attrs: { textAlign: 'left' }
           }
         ]
       });
@@ -435,76 +438,57 @@ const WysiwygNotepad = ({
     });
     let finalJSON = JSON.parse(JSON.stringify(jdata));
     console.log('final', finalJSON);
+    memoizedSaveDB(finalJSON);
     return finalJSON;
   };
-
   const editor = useEditor(
     {
-      extensions: notesSocket.wsInstance
-        ? [
-            StarterKit,
-            Underline,
-            Code,
-            CodeBlock,
-            HardBreak,
-            HighLight,
-            HorizontalRule,
-            Subscript,
-            Superscript,
-            TextAlign.configure({
-              types: ['heading', 'paragraph']
-            }),
-            Collaboration.configure({
-              document: notesSocket.ydoc
-            }),
-            CollaborationCursor.configure({
-              provider: notesSocket.wsInstance,
-              user: {
-                name: userName + ' ' + 'is typing....',
-                color: usercolor
-              }
-            }),
-            Link.configure({
-              autolink: true,
-              linkOnPaste: false,
-              validate: href => /^https?:\/\// || /^www?:\/\//.test(href),
-              protocols: ['ftp', 'mailto'],
-              HTMLAttributes: {
-                class: 'my-custom-class'
-              }
-            }),
-            Mention.configure({
-              HTMLAttributes: {
-                class: 'mention'
-              },
-              renderLabel({ options, node }) {
-                return `${node.attrs.label ?? node.attrs.id}`;
-              },
-              suggestion
-            })
-          ]
-        : [
-            StarterKit,
-            Underline,
-            Link,
-            Code,
-            HighLight,
-            HardBreak,
-            HorizontalRule,
-            CodeBlock,
-            Mention.configure({
-              HTMLAttributes: {
-                class: 'mention'
-              },
-              renderLabel({ options, node }) {
-                return `${node.attrs.label ?? node.attrs.id}`;
-              },
-              suggestion
-            })
-          ],
+      extensions: [
+        StarterKit,
+        Underline,
+        Code,
+        CodeBlock,
+        HardBreak,
+        HighLight,
+        HorizontalRule,
+        Subscript,
+        Superscript,
+        TextAlign.configure({
+          types: ['heading', 'paragraph']
+        }),
+        Collaboration.configure({
+          document: notesSocket.ydoc
+        }),
+        CollaborationCursor.configure({
+          provider: notesSocket.wsInstance,
+          user: {
+            name: userName + ' ' + 'is typing....',
+            color: usercolor
+          }
+        }),
+        Link.configure({
+          autolink: true,
+          linkOnPaste: false,
+          validate: href => /^https?:\/\// || /^www?:\/\//.test(href),
+          protocols: ['ftp', 'mailto'],
+          HTMLAttributes: {
+            class: 'my-custom-class'
+          }
+        }),
+        Mention.configure({
+          HTMLAttributes: {
+            class: 'mention'
+          },
+          renderLabel({ options, node }) {
+            return `${node.attrs.label ?? node.attrs.id}`;
+          },
+          suggestion
+        })
+      ],
       content,
       onUpdate: ({ editor }) => {
         const Ejson = editor.getJSON();
+        updateNoteInStore();
         // send the content to an API here
         memoizedSaveDB(Ejson);
       }
@@ -544,19 +528,8 @@ const WysiwygNotepad = ({
         userName,
         userRole
       );
-      if (isNotesFetched && noteText?.content?.length >= 2) {
+      if (isNotesFetched) {
         updateNote(proposalId, noteSaveReqBody);
-      }
-      if (noteText?.content?.length < 2) {
-        if (
-          isNotesFetched &&
-          noteText?.content[0]?.content[0]?.hasOwnProperty('text')
-        ) {
-          updateNote(proposalId, noteSaveReqBody);
-        }
-        if (isNotesFetched && noteText?.content[0]?.hasOwnProperty('text')) {
-          updateNote(proposalId, noteSaveReqBody);
-        }
       }
     },
     [notes, selectedBid, notesId, userEmail, userName, userRole]
@@ -567,10 +540,14 @@ const WysiwygNotepad = ({
       {notesSocket.wsInstance && (
         <div className='editor-notepad'>
           <div>
-            <MenuBar editor={editor} />
+            <MenuBar key={selectedBid.get('id')} editor={editor} />
           </div>
           {isNotesFetched ? (
-            <EditorContent editor={editor} className='editor-scroll' />
+            <EditorContent
+              key={selectedBid.get('id')}
+              editor={editor}
+              className='editor-scroll'
+            />
           ) : (
             <Loader
               type='TailSpin'
@@ -601,6 +578,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   updateNote,
-  fetchNotes
+  fetchNotes,
+  updateNoteInStore
 };
 export default connect(mapStateToProps, mapDispatchToProps)(WysiwygNotepad);
