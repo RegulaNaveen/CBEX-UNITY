@@ -1,0 +1,26 @@
+.recent-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 6px 12px 14px;
+}
+
+.recent-gear-icon {
+  color: #595959;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+}
+
+.recent-card {
+  display: flex;
+  width: auto;
+  /* max-width: 800px; */
+  height: 450px;
+  position: absolute;
+  margin-top: 70px;
+  margin-left: 30px;
+}
+
+.recent-search-field {
+  max-width: 400px;
+}
