@@ -1,7 +1,5 @@
 @media screen and (max-width: 1200px) and (min-width: 300px) {
   .task-table-row {
-    display: grid;
-    grid-template-columns: 1.3fr 1.3fr 160px;
     padding: 8px;
     align-items: center;
     border-radius: 2px;
@@ -91,10 +89,8 @@
   }
 }
 
-@media only screen and (min-width: 1201px) and (max-width: 3000px) {
+@media only screen and (min-width: 1201px) {
   .task-table-row {
-    display: grid;
-    grid-template-columns: 1.3fr 1.3fr 160px;
     padding: 10px 8px;
     align-items: flex-start;
     border-radius: 2px;
@@ -185,10 +181,6 @@
   }
 }
 
-.question-row-header {
-  font-weight: bold;
-}
-
 .question-row {
   .question-text-container {
     display: flex;
@@ -269,6 +261,22 @@
 }
 
 .task-table-row {
+  &.question-row {
+    & > div {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 100px;
+
+      & > div {
+        &:nth-child(even) {
+          max-width: none;
+        }
+        &:nth-child(odd) {
+          max-width: none;
+        }
+      }
+    }
+  }
+
   .question-label-container {
     display: flex;
     justify-content: space-between;

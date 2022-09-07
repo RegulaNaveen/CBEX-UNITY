@@ -121,6 +121,7 @@ export function getLastAnswer(answers) {
     const lastAnswer = answers[answers.length - 1];
     return lastAnswer.answer.toString();
   } catch (error) {
+    console.log(error)
     return '';
   }
 }
@@ -210,7 +211,7 @@ function isContainFormattedAnswer(lastAnswerJS) {
       ? formattedAnswer
       : parseJson(formattedAnswer);
 
-  if (parseFormattedData) return true;
+  if (parseFormattedData.value) return true;
   return false;
 }
 
@@ -688,7 +689,7 @@ function getProposalTeamsRows(questions) {
 
     otherTeamQuestions.forEach(question => {
       const { questionText, answers } = question;
-      coreTeamRows.push(
+      otherTeamRows.push(
         isContainFormattedAnswer(answers[answers.length - 1])
           ? new TableRow({
               children: [
