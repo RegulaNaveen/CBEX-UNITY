@@ -3,25 +3,23 @@ import Loader from 'react-loader-spinner';
 import Card from 'apollo-react/components/Card';
 import PropTypes from 'prop-types';
 import Typography from 'apollo-react/components/Typography';
-import Checkbox from 'apollo-react/components/Checkbox';
 import MenuItem from 'apollo-react/components/MenuItem';
 import Select from 'apollo-react/components/Select';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { getRoles, isRolesInfoLoading } from '../../../redux/selectors';
-import { onSetUserRole } from '../../../redux/actions/sso-auth-actions';
-import Dropdown from '../../common/atoms/inputs/Dropdown';
+import { getRoles, isRolesInfoLoading } from '../../../../redux/selectors';
+import { onSetUserRole } from '../../../../redux/actions/sso-auth-actions';
+import Dropdown from '../../../common/atoms/inputs/Dropdown';
 
 const AccountPreference = ({
   email,
   role,
   roleName,
   setRoleName,
-  userPreference,
-  handleUserPreferenceChange,
+
   handleUpdateTimezone,
   isFetchingTimezone,
-  isUpdatingTimezone,
+
   timezoneList,
   timezoneID,
   currentTimezoneID,
@@ -149,8 +147,10 @@ const AccountPreference = ({
                 fullWidth
                 error={!!errorUpdatingTimezone}
               >
-                {timezoneList.map(({ time_zone_id, description }) => {
+                {// eslint-disable-next-line camelcase
+                timezoneList.map(({ time_zone_id, description }) => {
                   return (
+                    // eslint-disable-next-line camelcase
                     <MenuItem className="card-item" value={time_zone_id}>
                       {description}
                     </MenuItem>
@@ -246,11 +246,8 @@ AccountPreference.propTypes = {
   role: PropTypes.string,
   roleName: PropTypes.string,
   setRoleName: PropTypes.string,
-  userPreference: PropTypes.array,
-  handleUserPreferenceChange: PropTypes.func,
   handleUpdateTimezone: PropTypes.func,
   isFetchingTimezone: PropTypes.bool,
-  isUpdatingTimezone: PropTypes.bool,
   timezoneList: PropTypes.array,
   timezoneID: PropTypes.string,
   currentTimezoneID: PropTypes.string,

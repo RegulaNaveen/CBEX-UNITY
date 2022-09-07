@@ -12,15 +12,12 @@ import { Container } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import List from '@material-ui/core/List';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import Divider from '@material-ui/core/Divider';
+
 // eslint-disable-next-line import/no-extraneous-dependencies
 import ListItem from '@material-ui/core/ListItem';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import ListItemText from '@material-ui/core/ListItemText';
 
-import { logout } from '../../../redux/actions/auth-actions';
-import { LOGIN } from '../../../routes';
+import { logout } from '../../../../redux/actions/auth-actions';
+import { LOGIN } from '../../../../routes';
 
 const useStyles = makeStyles(theme => ({
   layout: {
@@ -89,7 +86,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const SideNav = ({ name, roleName }) => {
+const SideNav = ({ name, role }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -120,7 +117,7 @@ const SideNav = ({ name, roleName }) => {
               variant="caption"
               gutterBottom
             >
-              {roleName}
+              {role}
             </Typography>
           </div>
 
@@ -174,12 +171,14 @@ const SideNav = ({ name, roleName }) => {
 
 SideNav.defaultProps = {
   name: '',
-  roleName: ''
+  // roleName: '',
+  role: ''
 };
 
 SideNav.propTypes = {
   name: PropTypes.string,
-  roleName: PropTypes.string
+  // roleName: PropTypes.string,
+  role: PropTypes.string
 };
 
 export default SideNav;

@@ -19,7 +19,7 @@ import ProposalComponent from './components/screens/Proposal';
 import OpportunityComponent from './components/screens/Opportunity';
 import DashboardComponent from './components/screens/Dashboard';
 import UbuildShellComponent from './components/screens/Ubuild';
-import ProfileComponent from './components/screens/Profile';
+import ProfileComponent from './components/screens/Profile/AccountPreferences';
 import '../styles/App.scss';
 import matomoInstace from './utils/Matomo';
 import SocketContextProvider from './context/SocketContext';
