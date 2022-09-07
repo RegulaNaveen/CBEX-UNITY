@@ -572,7 +572,14 @@ function getNoteRows(editor) {
     orderedList: defaultNodes.bullet_list,
     listItem: defaultNodes.bullet_list,
     bulletList: defaultNodes.bullet_list,
-    horizontalRule: defaultNodes.horizontal_rule
+    horizontalRule: defaultNodes.horizontal_rule,
+    mention: (state, node) => {
+      const email = new TextRun({
+        text: node.attrs.id,
+        color: '0047AB'
+      });
+      state.text(email);
+    }
   };
 
   const markSerializer = {

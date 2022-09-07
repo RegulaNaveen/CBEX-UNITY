@@ -59,6 +59,7 @@ import HighLight from '@tiptap/extension-highlight';
 import TextAlign from '@tiptap/extension-text-align';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
+import Mention from '@tiptap/extension-mention';
 
 Font.register({
   family: 'ProximaNova',
@@ -471,7 +472,15 @@ function getNotesRows(notes) {
           HorizontalRule,
           HardBreak,
           Subscript,
-          Superscript
+          Superscript,
+          Mention.configure({
+            HTMLAttributes: {
+              style: `color:blue;`
+            },
+            renderLabel({ options, node }) {
+              return `${node.attrs.id}`;
+            }
+          })
         ]);
         console.log('ddata', data);
         data += `</td></tr></table>`;
