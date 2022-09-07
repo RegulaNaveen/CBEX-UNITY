@@ -230,13 +230,19 @@ function checkFormattedAnswer(answers) {
     const lastAnswer = answers[answers.length - 1];
     let formattedAnswer;
     if (lastAnswer?.formattedAnswer) {
-      if (isString(lastAnswer?.formattedAnswer))
-        formattedAnswer = JSON.parse(lastAnswer?.formattedAnswer);
+      if (isString(lastAnswer?.formattedAnswer)){
+        try {
+          formattedAnswer = JSON.parse(lastAnswer?.formattedAnswer);
+        } catch {
+          return lastAnswer.answer.toString();
+        }
+      }
       else formattedAnswer = lastAnswer?.formattedAnswer;
-      return formattedAnswer?.html;
+      if(formattedAnswer?.html) return formattedAnswer?.html;
     }
     return lastAnswer.answer.toString();
   } catch (error) {
+    console.log(error);
     return '';
   }
 }
