@@ -21,15 +21,18 @@
     outline: none;
 
     .dd-wrapper .dd-header .dd-header-placeholder {
-      height: 24px;
+      height: auto;
       width: 100%;
       color: $neutral6;
       font-family: 'ProximaNova-Regular';
       pointer-events: none;
-      font-size: 12px;
+      font-size: 0.75rem;
       letter-spacing: 0;
-      line-height: 24px;
+      line-height: 1rem;
       pointer-events: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .dd-wrapper .dd-header .dd-header-selected,

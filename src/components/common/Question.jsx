@@ -817,8 +817,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
     const gridColRatio = isNotepadOpen ? smallScreenWidth : mediumScreen;
     return (
       <div
-        className={`task-table-row${
-          selectedRow ? ' selected-task-table-row' : ''
+        className={`task-table-row question-row ${
+          selectedRow ? 'selected-task-table-row' : ''
         }`}
         style={{ margin: '2px 0px' }}
       >
