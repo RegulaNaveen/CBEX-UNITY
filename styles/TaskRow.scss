@@ -1,7 +1,5 @@
 @media screen and (max-width: 1200px) and (min-width: 300px) {
   .task-table-row {
-    // display: grid;
-    // grid-template-columns: 1.3fr 1.3fr 160px;
     padding: 8px;
     align-items: center;
     border-radius: 2px;
@@ -93,8 +91,6 @@
 
 @media only screen and (min-width: 1201px) {
   .task-table-row {
-    // display: grid;
-    // grid-template-columns: 1.3fr 1.3fr 160px;
     padding: 10px 8px;
     align-items: flex-start;
     border-radius: 2px;
