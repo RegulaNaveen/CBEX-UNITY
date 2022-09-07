@@ -364,11 +364,11 @@ const SystemIntegrations = ({
     <Grid
       item
       xs={gridColRatio[1]}
-      className={
+      className={`actions-grid-item ${
         hasDifferentSFanswer && isCurrentBid
           ? 'validation-wrapper-integration'
           : 'no-integration'
-      }
+      }`}
     >
       <div
         style={{
