@@ -40,8 +40,9 @@ import * as notificationActions from '../../../redux/actions/notification-action
 import { WebsocketProvider } from '../../../context/y-websocket';
 import { NOTES_SOCKET_URL } from '../../../constants/api';
 import NotesSocketContext from '../../../context/notesSocketContext';
-import * as Y from 'yjs';
+import { websocketNotesApi } from '../../../api/notepad';
 import { UBUILD, DASHBOARD } from '../../../routes';
+import * as Y from 'yjs';
 
 const ThemeContext = React.createContext('light');
 type State = {
@@ -178,11 +179,13 @@ export class Opportunity extends Component<Props, State> {
       ) {
         this.context.updateSocketOppId(params.id);
       }
-
+      websocketNotesApi(thisProposalId);
       //intial load case
       if (!prevProposalId && thisProposalId) {
         if (!this.state.wsInstance) {
-          this.createNewNotesSocketConnection(thisProposalId);
+          setTimeout(() => {
+            this.createNewNotesSocketConnection(thisProposalId);
+          }, 2000);
         }
       } else {
         this.state.wsInstance?.destroy();
@@ -197,12 +200,16 @@ export class Opportunity extends Component<Props, State> {
     console.log('proposal details are', proposalId);
     console.log('creating new connection');
     const { ydoc } = this.state;
+    const clientName = Math.random()
+      .toString(36)
+      .substr(2, 20);
     const storedValue = `doc-${proposalId}`;
     if (proposalId) {
       const wsProvider = new WebsocketProvider(
         NOTES_SOCKET_URL,
         `?=${storedValue}&`,
-        ydoc
+        ydoc,
+        { params: { name: clientName } }
       );
       this.setState({ wsInstance: wsProvider });
     }

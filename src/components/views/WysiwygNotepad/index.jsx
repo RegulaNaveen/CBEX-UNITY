@@ -528,12 +528,12 @@ const WysiwygNotepad = ({
               }
             })
           ],
-          content: content,
+          // content: content,
           onUpdate: ({ editor }) => {
-            const Ejson = editor.getJSON();
+            // const Ejson = editor.getJSON();
             updateNoteInStore();
             // send the content to an API here
-            memoizedSaveDB(Ejson);
+            // memoizedSaveDB(Ejson);
           }
         },
     [proposalIdState, content, isNotesFetched]

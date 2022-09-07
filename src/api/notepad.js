@@ -21,6 +21,22 @@ export function fetchNotesApi(proposalID) {
   });
 }
 
+export function websocketNotesApi(proposalID) {
+  const config = {
+    headers: {
+      'x-api-key': API_KEY,
+      'x-access-token': getAccessToken()
+    }
+  };
+
+  return new Promise((resolve, reject) => {
+    axiosInstance
+      .put(`${NOTEPAD_API_URL}/websocket/${proposalID}`, {}, config)
+      .then(response => resolve(response.data))
+      .catch(err => reject(err));
+  });
+}
+
 export function addNoteApi(proposalID, note) {
   const config = {
     headers: {
