@@ -1,5 +1,5 @@
 import React from 'react';
-import ProfileLayout from '../ProfilePageLayout';
+import ProfileLayout from '../ProfileLayout';
 
 const RecentActivity = () => {
   return <ProfileLayout>RecentActivity</ProfileLayout>;

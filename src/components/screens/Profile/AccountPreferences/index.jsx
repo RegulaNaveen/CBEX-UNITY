@@ -21,7 +21,7 @@ import {
   getUserName,
   getUserRole
 } from '../../../../SessionHandler';
-import ProfileLayout from '../ProfilePageLayout';
+import ProfileLayout from '../ProfileLayout';
 import AccountPreference from './AccountPreference';
 import NotificationPreference from './NotificationPreference';
 

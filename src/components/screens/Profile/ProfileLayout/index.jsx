@@ -47,7 +47,7 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-const ProfilePageLayout = ({ children }) => {
+const ProfileLayout = ({ children }) => {
   const dispatch = useDispatch();
   const styles = {
     backgroundColor: '#f6f7fb',
@@ -177,12 +177,12 @@ const ProfilePageLayout = ({ children }) => {
   );
 };
 
-ProfilePageLayout.defaultProps = {
+ProfileLayout.defaultProps = {
   children: <></>
 };
 
-ProfilePageLayout.propTypes = {
+ProfileLayout.propTypes = {
   children: PropTypes.element
 };
 
-export default ProfilePageLayout;
+export default ProfileLayout;
