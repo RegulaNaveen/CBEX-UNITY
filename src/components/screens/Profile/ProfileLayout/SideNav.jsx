@@ -1,5 +1,6 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+
+import { Link, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import Avatar from 'apollo-react/components/Avatar';
@@ -17,7 +18,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 
 import { logout } from '../../../../redux/actions/auth-actions';
-import { LOGIN } from '../../../../routes';
+import { LOGIN, PROFILE, RECENT_ACTIVITY } from '../../../../routes';
 
 const useStyles = makeStyles(theme => ({
   layout: {
@@ -130,22 +131,23 @@ const SideNav = ({ name, role }) => {
                 key="Account Preference"
                 classes={{ root: classes.root, selected: classes.selected }}
               >
-                <Typography style={{ color: '#fff' }} gutterBottom>
-                  Account Preferences
-                </Typography>
+                <Link style={{ textDecoration: 'none' }} to={PROFILE}>
+                  <Typography style={{ color: '#fff' }} gutterBottom>
+                    Account Preferences
+                  </Typography>
+                </Link>
               </ListItem>
-              {/* <Divider />
+              {/* <Divider /> */}
               <ListItem
                 button
                 key="Recent Activity"
                 classes={{ root: classes.root, selected: classes.selected }}
               >
-                <ListItemText
-                  primary="Recent Activity"
-                  classes={{ root: classes.root, selected: classes.selected }}
-                />
+                <Link style={{ textDecoration: 'none' }} to={RECENT_ACTIVITY}>
+                  <Typography gutterBottom>Recent Activity</Typography>
+                </Link>
               </ListItem>
-              <Divider /> */}
+              {/* <Divider /> */}
             </List>
           </div>
         </div>
