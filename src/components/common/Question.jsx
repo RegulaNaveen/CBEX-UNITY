@@ -629,6 +629,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             sfObject={sfObject}
           >
             <AutoCompleteWithAddOption
+              // sectionName={sectionName}
               sfObject={sfObject}
               lov={finalOptions}
               sfField={sfField}
