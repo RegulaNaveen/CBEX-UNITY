@@ -261,14 +261,19 @@
 }
 
 .task-table-row {
-  & > div > div {
-    &:nth-child(even) {
-      max-width: none;
-      flex: 0 1 100px;
-    }
-    &:nth-child(odd) {
-      max-width: none;
-      flex: 1;
+  &.question-row {
+    & > div {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 100px;
+
+      & > div {
+        &:nth-child(even) {
+          max-width: none;
+        }
+        &:nth-child(odd) {
+          max-width: none;
+        }
+      }
     }
   }
 
