@@ -22,6 +22,7 @@ import {
   View,
   StyleSheet,
   Text,
+  // Mark,
   Font,
   Image,
   Link as HtmlLink
@@ -42,6 +43,7 @@ import HighLight from '@tiptap/extension-highlight';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
 import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
 
 Font.register({
   family: 'ProximaNova',
@@ -435,7 +437,8 @@ function getNotesRows(notes, editor) {
         Link,
         HighLight,
         Subscript,
-        Superscript
+        Superscript,
+        Underline
       ]);
       console.log('ddata', data);
       data += `</td></tr></table>`;
@@ -505,10 +508,19 @@ const MyDoc = (
                 <View style={style}>{children}</View>
               ),
               a: ({ style, element, children }) => {
+                console.log('style', style);
                 return (
                   <HtmlLink style={style} href={element.attrs.href}>
                     <Text>{children}</Text>
                   </HtmlLink>
+                );
+              },
+              mark: ({ style, element, children }) => {
+                console.log('style', style, element);
+                return (
+                  <Text style={(style, { backgroundColor: '#ff9300' })}>
+                    {children}
+                  </Text>
                 );
               }
             }}
