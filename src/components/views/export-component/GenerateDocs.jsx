@@ -120,7 +120,8 @@ const GenerateDocs = () => {
           data: getSelectedBidData(),
           notes: getSelectedBidNotes(),
           filterState,
-          image: logo.current
+          image: logo.current,
+          editor
         });
         exportBlob.then(blob => {
           saveAs(blob, `${fileName}.pdf`);
@@ -131,7 +132,7 @@ const GenerateDocs = () => {
           notes: getSelectedBidNotes(),
           filterState,
           image: logo.current,
-          editor: editor
+          editor
         });
         Packer.toBlob(exportBlob).then(blob => {
           saveAs(blob, `${fileName}.docx`);

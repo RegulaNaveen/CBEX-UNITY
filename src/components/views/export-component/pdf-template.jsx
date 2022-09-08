@@ -25,6 +25,7 @@ import {
   Font,
   Image
 } from '@react-pdf/renderer';
+import './AnnotationLayer.css';
 import React from 'react';
 import Html from 'react-pdf-html';
 import { isString } from 'lodash';
@@ -230,15 +231,14 @@ function checkFormattedAnswer(answers) {
     const lastAnswer = answers[answers.length - 1];
     let formattedAnswer;
     if (lastAnswer?.formattedAnswer) {
-      if (isString(lastAnswer?.formattedAnswer)){
+      if (isString(lastAnswer?.formattedAnswer)) {
         try {
           formattedAnswer = JSON.parse(lastAnswer?.formattedAnswer);
         } catch {
           return lastAnswer.answer.toString();
         }
-      }
-      else formattedAnswer = lastAnswer?.formattedAnswer;
-      if(formattedAnswer?.html) return formattedAnswer?.html;
+      } else formattedAnswer = lastAnswer?.formattedAnswer;
+      if (formattedAnswer?.html) return formattedAnswer?.html;
     }
     return lastAnswer.answer.toString();
   } catch (error) {
@@ -434,7 +434,8 @@ function getQuestionToCustomerRows(questions) {
   return html;
 }
 
-function getNotesRows(notes) {
+function getNotesRows(notes, editor) {
+  console.log('tapas notessss ', notes, editor);
   let html = ``;
   html += `<table class="notesTable table marginTop20">`;
   html += `<tr>`;
@@ -444,41 +445,41 @@ function getNotesRows(notes) {
   let data = ``;
   data += `<table><tr><td style="border:1px solid black;padding:10px">`;
   try {
-    notes.forEach(note => {
-      let { noteText } = note;
-      // let noteContentState = EditorState.createEmpty();
-      try {
-        console.log('noteText pdf', noteText);
-        let json = JSON.parse(noteText);
-        data += generateHTML(json, [
-          TipTapDocument,
-          Paragraph,
-          TipTapText,
-          Bold,
-          Italic,
-          Strike,
-          Underline,
-          BulletList,
-          OrderedList,
-          ListItem,
-          Heading,
-          Link,
-          Code,
-          CodeBlock,
-          HighLight,
-          HorizontalRule,
-          HardBreak,
-          Subscript,
-          Superscript
-        ]);
-        console.log('ddata', data);
-        data += `</td></tr></table>`;
-        html += data;
-        return html;
-      } catch (err) {
-        console.log('pdf notes error', err);
-      }
-    });
+    // editor?.view?.state?.doc.forEach(note => {
+    const noteText = editor.getJSON();
+    // let noteContentState = EditorState.createEmpty();
+    try {
+      console.log('noteText pdf', noteText);
+      // let json = JSON.parse(noteText);
+      data += generateHTML(noteText, [
+        TipTapDocument,
+        Paragraph,
+        TipTapText,
+        Bold,
+        Italic,
+        Strike,
+        Underline,
+        BulletList,
+        OrderedList,
+        ListItem,
+        Heading,
+        Link,
+        Code,
+        CodeBlock,
+        HighLight,
+        HorizontalRule,
+        HardBreak,
+        Subscript,
+        Superscript
+      ]);
+      console.log('ddata', data);
+      data += `</td></tr></table>`;
+      html += data;
+      return html;
+    } catch (err) {
+      console.log('pdf notes error', err);
+    }
+    // });
   } catch (error) {
     console.log('Error in getNotesRows');
   }
@@ -490,7 +491,8 @@ function getHtml(
   questions,
   filteredQuestions,
   notes,
-  filterState
+  filterState,
+  editor
 ) {
   let html = `
         <html>
@@ -500,7 +502,7 @@ function getHtml(
             ${getProposalTeamsRows(questions)}
             ${getQuestionToCustomerRows(questions)}
             ${questionTables(filteredQuestions)}
-            ${filterState.includesNotes ? getNotesRows(notes) : ''}
+            ${filterState.includesNotes ? getNotesRows(notes, editor) : ''}
         </body>
         </html>    
     `;
@@ -515,7 +517,8 @@ const MyDoc = (
   questions,
   filteredQuestions,
   notes,
-  filterState
+  filterState,
+  editor
 ) => {
   return (
     <Document>
@@ -542,7 +545,8 @@ const MyDoc = (
               questions,
               filteredQuestions,
               notes,
-              filterState
+              filterState,
+              editor
             )}
           </Html>
         </View>
@@ -619,7 +623,8 @@ export function createPdf(content) {
   let {
     data: { proposalQuestions, proposalDetails },
     notes,
-    filterState
+    filterState,
+    editor
   } = content;
   const filteredQuestions = getFilteredQuestion(proposalQuestions, filterState);
   return pdf(
@@ -628,7 +633,8 @@ export function createPdf(content) {
       proposalQuestions,
       filteredQuestions,
       notes,
-      filterState
+      filterState,
+      editor
     )
   ).toBlob();
 }
