@@ -22,7 +22,6 @@ import {
   View,
   StyleSheet,
   Text,
-  // Mark,
   Font,
   Image,
   Link as HtmlLink
@@ -514,11 +513,7 @@ const MyDoc = (
                 );
               },
               mark: ({ style, children }) => {
-                return (
-                  <Text style={(style, { backgroundColor: '#ff9300' })}>
-                    {children}
-                  </Text>
-                );
+                return <Text style={style}>{children}</Text>;
               }
             }}
           >
