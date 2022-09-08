@@ -185,12 +185,14 @@ export class Opportunity extends Component<Props, State> {
         if (!this.state.wsInstance) {
           setTimeout(() => {
             this.createNewNotesSocketConnection(thisProposalId);
-          }, 2000);
+          }, 5000);
         }
       } else {
         this.state.wsInstance?.destroy();
         this.setState({ ydoc: new Y.Doc() }, () => {
-          this.createNewNotesSocketConnection(thisProposalId);
+          setTimeout(() => {
+            this.createNewNotesSocketConnection(thisProposalId);
+          }, 5000);
         });
       }
     }
@@ -200,16 +202,12 @@ export class Opportunity extends Component<Props, State> {
     console.log('proposal details are', proposalId);
     console.log('creating new connection');
     const { ydoc } = this.state;
-    const clientName = Math.random()
-      .toString(36)
-      .substr(2, 20);
     const storedValue = `doc-${proposalId}`;
     if (proposalId) {
       const wsProvider = new WebsocketProvider(
         NOTES_SOCKET_URL,
         `?=${storedValue}&`,
-        ydoc,
-        { params: { name: clientName } }
+        ydoc
       );
       this.setState({ wsInstance: wsProvider });
     }
