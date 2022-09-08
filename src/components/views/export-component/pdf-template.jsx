@@ -419,7 +419,6 @@ function getQuestionToCustomerRows(questions) {
 }
 
 function getNotesRows(notes, editor) {
-  console.log('tapas notessss ', notes, editor);
   let html = ``;
   html += `<table class="notesTable table marginTop20">`;
   html += `<tr>`;
@@ -508,15 +507,13 @@ const MyDoc = (
                 <View style={style}>{children}</View>
               ),
               a: ({ style, element, children }) => {
-                console.log('style', style);
                 return (
                   <HtmlLink style={style} href={element.attrs.href}>
                     <Text>{children}</Text>
                   </HtmlLink>
                 );
               },
-              mark: ({ style, element, children }) => {
-                console.log('style', style, element);
+              mark: ({ style, children }) => {
                 return (
                   <Text style={(style, { backgroundColor: '#ff9300' })}>
                     {children}
