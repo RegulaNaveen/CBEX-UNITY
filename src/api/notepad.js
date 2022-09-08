@@ -31,7 +31,7 @@ export function websocketNotesApi(proposalID) {
 
   return new Promise((resolve, reject) => {
     axiosInstance
-      .put(`${NOTEPAD_API_URL}/websocket/${proposalID}`, {}, config)
+      .put(`${NOTEPAD_API_URL}/v2/${proposalID}`, {}, config)
       .then(response => resolve(response.data))
       .catch(err => reject(err));
   });

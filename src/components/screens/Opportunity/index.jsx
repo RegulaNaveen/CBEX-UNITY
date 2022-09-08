@@ -179,24 +179,38 @@ export class Opportunity extends Component<Props, State> {
       ) {
         this.context.updateSocketOppId(params.id);
       }
-      websocketNotesApi(thisProposalId);
+    }
+    this.triggerWebsocketNotesApi(prevProposalId, thisProposalId);
+  }
+
+  componentWillUnmount() {
+    const { handleOpenClose, setResetProposalId } = this.props;
+    if (handleOpenClose) handleOpenClose(false);
+    setResetProposalId();
+    localStorage.removeItem('proposalTypeView');
+    localStorage.removeItem('proposalId');
+
+    window.removeEventListener('storage', this.handleStorageChange);
+    this.context.updateSocketOppId(null);
+    this.state.wsInstance?.destroy();
+  }
+
+  triggerWebsocketNotesApi = async (prevProposalId, thisProposalId) => {
+    if (prevProposalId !== thisProposalId) {
+      await websocketNotesApi(thisProposalId);
       //intial load case
       if (!prevProposalId && thisProposalId) {
         if (!this.state.wsInstance) {
-          setTimeout(() => {
-            this.createNewNotesSocketConnection(thisProposalId);
-          }, 5000);
+          this.createNewNotesSocketConnection(thisProposalId);
         }
       } else {
         this.state.wsInstance?.destroy();
         this.setState({ ydoc: new Y.Doc() }, () => {
-          setTimeout(() => {
-            this.createNewNotesSocketConnection(thisProposalId);
-          }, 5000);
+          this.createNewNotesSocketConnection(thisProposalId);
         });
       }
     }
-  }
+  };
 
   createNewNotesSocketConnection = proposalId => {
     console.log('proposal details are', proposalId);
@@ -212,18 +226,6 @@ export class Opportunity extends Component<Props, State> {
       this.setState({ wsInstance: wsProvider });
     }
   };
-
-  componentWillUnmount() {
-    const { handleOpenClose, setResetProposalId } = this.props;
-    if (handleOpenClose) handleOpenClose(false);
-    setResetProposalId();
-    localStorage.removeItem('proposalTypeView');
-    localStorage.removeItem('proposalId');
-
-    window.removeEventListener('storage', this.handleStorageChange);
-    this.context.updateSocketOppId(null);
-    this.state.wsInstance?.destroy();
-  }
 
   handleResize = () => {
     let windowSize = window.innerWidth;
