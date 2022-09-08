@@ -56,6 +56,10 @@
       &:hover {
         background-color: $neptune-hover;
       }
+
+      &.active {
+        background-color: $neptune-hover;
+      }
     }
   }
 
@@ -89,6 +93,13 @@
     position: relative;
     padding: 8px;
     padding-right: 20px;
+
+    &:focus {
+      border-color: #0768fd;
+      transition-duration: 0.2s;
+      transition-property: border-color;
+      outline: none !important;
+    }
 
     &.dd-header-disabled {
       background-color: #f2f2f2;
