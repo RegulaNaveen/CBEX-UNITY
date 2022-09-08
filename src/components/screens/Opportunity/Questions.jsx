@@ -170,7 +170,7 @@ class Questions extends Component {
       this.setState({ proposalNoteRender: false });
       setTimeout(() => {
         this.setState({ proposalNoteRender: true });
-      }, [10000]);
+      }, 5000);
     }
     //bid change check ends
   }
