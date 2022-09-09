@@ -19,6 +19,7 @@ let UBUILD_ARTIFACT = '';
 let SF_HOST_URL = '';
 let SOCKET_URL = '';
 let NOTES_SOCKET_URL = '';
+let LAUNCH_DARKLY_CLIENT_ID = '630712f317eece1138e5445d';
 
 switch (environment) {
   case 'UAT':
@@ -198,5 +199,6 @@ export {
   SOCKET_URL,
   PROFILE,
   NOTIFICATION,
-  NOTES_SOCKET_URL
+  NOTES_SOCKET_URL,
+  LAUNCH_DARKLY_CLIENT_ID
 };
