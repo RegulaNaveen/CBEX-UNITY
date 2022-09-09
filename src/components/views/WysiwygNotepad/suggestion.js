@@ -2,28 +2,30 @@ import { ReactRenderer } from '@tiptap/react';
 import tippy from 'tippy.js';
 
 import MentionList from './MentionList';
-import getAdUsers from '../../../api/getADUsers';
+import getADUsers from '../../../api/getADUsers';
 
 export default {
   items: async ({ query }) => {
-    let updatedOptions = [{ label: '', id: '' }];
+    let autoCompleteList = [];
     try {
-      const adUsers = await getAdUsers(query);
-      if (adUsers.length > 0) {
-        updatedOptions = adUsers.map(user => {
-          return {
-            id: `${user.email?.toLowerCase() || ''}`,
-            label: `${user.first_name || ''} ${user.last_name || ''}`,
-            listOption: `${user.first_name || ''} ${user.last_name ||
-              ''} (${user.email?.toLowerCase() || ''})`
-          };
-        });
+      if (query.length > 1) {
+        const adUsers = await getADUsers(query);
+        if (adUsers?.length > 0) {
+          autoCompleteList = adUsers.map(user => {
+            return {
+              id: `${user.email?.toLowerCase() || ''}`,
+              label: `${user.first_name || ''} ${user.last_name || ''}`,
+              listOption: `${user.first_name || ''} ${user.last_name ||
+                ''} (${user.email?.toLowerCase() || ''})`
+            };
+          });
+        }
       }
-      return updatedOptions.slice(0, 15);
+      return autoCompleteList.slice(0, 15);
     } catch (error) {
       console.log('error in generating usernames for notes suggestion');
       console.error(error);
-      return updatedOptions;
+      return autoCompleteList.slice(0, 15);
     }
   },
   render: () => {

@@ -9,7 +9,6 @@ export default forwardRef((props, ref) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const selectItem = index => {
-    console.log({ propsitems: props.items});
     // TODO
     // 1. Remove console logs
     // 2. Call notification API from here
@@ -60,19 +59,20 @@ export default forwardRef((props, ref) => {
 
   return (
     <div className='mention-items'>
-      {props.items.length ? (
-        props.items.map((item, index) => (
-          <button
-            className={`mention-item ${index === selectedIndex ? 'is-selected' : ''}`}
-            key={index}
-            onClick={() => selectItem(index)}
-          >
-            {item.listOption}
-          </button>
-        ))
-      ) : (
-        <div className='mention-item'>No result</div>
-      )}
+      {props?.items?.length
+        ? props?.items.map((item, index) => (
+            <button
+              type='button'
+              className={`mention-item ${
+                index === selectedIndex ? 'is-selected' : ''
+              }`}
+              key={index}
+              onClick={() => selectItem(index)}
+            >
+              {item.listOption}
+            </button>
+          ))
+        : null}
     </div>
   );
 });
