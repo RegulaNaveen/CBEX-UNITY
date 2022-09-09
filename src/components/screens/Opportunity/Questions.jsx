@@ -56,6 +56,7 @@ import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions'
 import WysiwygNotepad from '../../views/WysiwygNotepad';
 import ANSWER_TYPES from '../../../constants/answerTypes';
 import NotesSocketContext from '../../../context/notesSocketContext';
+import { withLDConsumer } from 'launchdarkly-react-client-sdk';
 
 const QuestionsSectionMapping = React.lazy(() =>
   import('./QuestionsSectionMapping')
@@ -85,7 +86,8 @@ type Props = {
   activeQuestionsFilterCount: Number,
   allSectionsExpanded: boolean,
   expandAllSections: Function,
-  editQuestionsData: Map
+  editQuestionsData: Map,
+  flags: Object
 };
 
 type State = {
@@ -209,6 +211,7 @@ class Questions extends Component {
       proposalDetail,
       trackEvent
     } = this.props;
+
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `CheckBoxes: ${userActions.click} On ${item} Checkbox`,
@@ -533,8 +536,14 @@ class Questions extends Component {
               >
                 <div id="panel-notepad-header">
                   <Typography variant="h3">Notepad</Typography>
+                  {`Launch darkly flags : ${JSON.stringify(this.props.flags)}`}
                 </div>
-                {this.context.wsInstance ? <WysiwygNotepad /> : ''}
+
+                {this.context.wsInstance && this.props?.flags?.notepad ? (
+                  <WysiwygNotepad />
+                ) : (
+                  ''
+                )}
               </div>
             </Panel>
           </div>
@@ -639,4 +648,4 @@ export default compose(
     getSFNonEditabelInfoField: getSFNonEditabelField,
     callPickListLookupSfData
   })
-)(MatomoHOC(Questions));
+)(MatomoHOC(withLDConsumer()(Questions)));

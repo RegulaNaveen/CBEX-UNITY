@@ -5,6 +5,8 @@ import { Provider } from 'react-redux';
 import { MatomoProvider } from '@datapunt/matomo-tracker-react';
 import { store } from './store';
 import PrivateRoute from './PrivateRoute';
+import { withLDProvider } from 'launchdarkly-react-client-sdk';
+
 import {
   LOGIN,
   PROPOSALS,
@@ -24,6 +26,7 @@ import '../styles/App.scss';
 import matomoInstace from './utils/Matomo';
 import SocketContextProvider from './context/SocketContext';
 import ErrorBoundaryComponent from './components/HOC/ErrorBoundary';
+import { LAUNCH_DARKLY_CLIENT_ID } from './constants/api';
 
 const App = () => (
   <Provider store={store}>
@@ -53,4 +56,11 @@ const App = () => (
   </Provider>
 );
 
-export default App;
+export default withLDProvider({
+  clientSideID: LAUNCH_DARKLY_CLIENT_ID,
+  user: {
+    key: 'tapas.dhar@iqvia.com',
+    name: 'Tapas Dhar',
+    email: 'tapas.dhar@iqvia.com'
+  }
+})(App);
