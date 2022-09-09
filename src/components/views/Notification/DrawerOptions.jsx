@@ -7,11 +7,11 @@ const DrawerOptions = ({ isShow, closeIsDrawerOptions, setSeenBatch }) => {
   return isShow ? (
     <div>
       <ClickAwayListener onClickAway={closeIsDrawerOptions}>
-        <div tabIndex={-1} className='notification-drawer-option-container'>
-          {/* <div className='notification-option-item'>
+        <div tabIndex={-1} className="notification-drawer-option-container">
+          <div className="notification-option-item">
             <p>View all</p>
-          </div> */}
-          <div className='notification-option-item'>
+          </div>
+          <div className="notification-option-item">
             {/* TODO: pass user email for onClick seen update parameter  */}
             <p onClick={() => setSeenBatch(['01'])}>Mark all as read</p>
           </div>
