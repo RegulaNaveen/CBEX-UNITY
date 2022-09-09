@@ -5,7 +5,9 @@ import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import { v4 as uuid } from 'uuid';
 import classNames from 'classnames';
+import Button from 'apollo-react/components/Button';
 import useUpdateEffect from '../../hooks/useUpdateEffect';
+import TagUserList from './TagUserList';
 
 const CustomApolloRichText = ({
   richTextString,
@@ -54,7 +56,10 @@ const CustomApolloRichText = ({
   const [isRichTextEditable, setIsRichTextEditable] = useState(isEditable);
   const richTextContainerRef = useRef(null);
   const richTextEditorRef = useRef(null);
-  const richTextKey = useRef(uuid());
+  const richTextKeyRef = useRef(uuid());
+  const backspaceRef = useRef(false);
+  const rangeRef = useRef(null);
+  const searchTagRef = useRef('');
 
   /**
    * Function to Add Delay for Specific Seconds
@@ -99,7 +104,7 @@ const CustomApolloRichText = ({
    * Update RichText Key to reRender Component
    */
   useUpdateEffect(() => {
-    richTextKey.current = uuid();
+    richTextKeyRef.current = uuid();
   }, [INITIAL_DATA]);
 
   /**
@@ -129,10 +134,31 @@ const CustomApolloRichText = ({
     }
   };
 
+  const getLastWordBeforeCaret = async () => {
+    const range = window.getSelection().getRangeAt(0);
+    const { collapsed, startOffset, startContainer } = range;
+    rangeRef.current = range;
+
+    await timeout(0);
+    if (collapsed) {
+      let text = startContainer.textContent.substring(0, startOffset);
+      if (backspaceRef.current) {
+        backspaceRef.current = false;
+        text = startContainer.textContent.substring(0, startOffset - 1);
+      }
+      return text.split(' ').pop();
+    }
+    return '';
+  };
+
   /**
    * OnChange RichText Editor
    */
-  const onChangeHandler = (value, html) => {
+  const onChangeHandler = async (value, html) => {
+    const resp = await getLastWordBeforeCaret();
+    searchTagRef.current = resp;
+    console.log({ wordBeforeCursor: resp });
+
     if (isEqual(richTextData.value, value)) return; // break func
 
     const text = value.blocks
@@ -170,12 +196,22 @@ const CustomApolloRichText = ({
     }
   };
 
+  const handleEditorBackspace = event => {
+    if (event.key === 'Backspace') {
+      backspaceRef.current = true;
+    }
+  };
+
   /**
    * Trigger Click Outside RichText
    */
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEditorBackspace);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEditorBackspace);
+    };
   });
 
   // Render Popover RichText Editor
@@ -205,9 +241,12 @@ const CustomApolloRichText = ({
           variant={isRichTextEditable ? 'popover' : 'view'}
           defaultValue={richTextData.value}
           onChange={onChangeHandler}
+          onClick={() => console.log('Editor Clicked')}
           ref={richTextEditorRef}
-          key={richTextKey.current}
+          key={richTextKeyRef.current}
         />
+        {/* TagUserList Component for adding tag */}
+        <TagUserList ref={{ rangeRef, searchTagRef }} />
       </div>
     </div>
   );
@@ -242,12 +281,5 @@ CustomApolloRichText.propTypes = {
   error: PropTypes.bool,
   disabled: PropTypes.bool
 };
-
-/**
- * Memo func to compare prev next props
- */
-// const propsAreEqual = (prevProp, nextProp) => {
-//   return isEqual(prevProp.richTextString, nextProp.richTextString);
-// };
 
 export default CustomApolloRichText;

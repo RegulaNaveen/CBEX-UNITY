@@ -1,0 +1,28 @@
+.tag-user-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  background: $white;
+  border: 1px solid $neutral1;
+  border-radius: 2px;
+  list-style: none;
+  box-shadow: 0 4px 8px -2px rgba(9, 30, 66, 0.25),
+    0 0 1px rgba(9, 30, 66, 0.31);
+
+  .list-item {
+    padding: 4px 12px;
+    font-size: 14px;
+    border-bottom: 1px solid $neutral1;
+
+    &:last-child {
+      border: none;
+    }
+
+    &:hover,
+    &.active {
+      background-color: $darkerBlue;
+      color: $white;
+    }
+  }
+}
