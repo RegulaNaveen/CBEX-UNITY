@@ -83,7 +83,8 @@ switch (environment) {
     SF_HOST_URL = 'https://iqvia.my.salesforce.com/';
     SOCKET_URL =
       'wss://29nghekakl.execute-api.us-east-1.amazonaws.com/production';
-
+    NOTES_SOCKET_URL =
+      'wss://0kmubx9x18.execute-api.us-east-1.amazonaws.com/production';
     break;
   case 'QA':
     // UDEV Data
