@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useHistory } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+import { RECENT_ACTIVITY } from '../../../routes';
 import { connect } from 'react-redux';
 import Bell from 'apollo-react-icons/Bell';
 import Cog from 'apollo-react-icons/Cog';
@@ -41,6 +44,11 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
     () => (unreadNotifications ? unreadNotifications.length : 0),
     [unreadNotifications]
   );
+
+  const history = useHistory();
+  const redirectAllNotifications = () => {
+   history.push(RECENT_ACTIVITY);
+  };
 
   return (
     <>
@@ -110,6 +118,10 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
                   View All Notifications
                 </Typography>
               </div> */}
+              {notificationCount > 0 && (
+                <p className='view-All-notifications'
+                  onClick={() => {redirectAllNotifications()}}>View All Notifications</p>
+              )}
             </div>
           </ClickAwayListener>
         )}
