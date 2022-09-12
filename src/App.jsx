@@ -59,8 +59,13 @@ const App = () => (
 export default withLDProvider({
   clientSideID: LAUNCH_DARKLY_CLIENT_ID,
   user: {
-    key: 'tapas.dhar@iqvia.com',
-    name: 'Tapas Dhar',
-    email: 'tapas.dhar@iqvia.com'
+    key: 'tapas.dhar1@iqvia.com',
+    name: 'Tapas ',
+    email: 'tapas.dhar1@iqvia.com',
+    custom: {
+      role: 'developer2',
+      groups: ['IQVIA']
+    }
   }
+  // options: { allAttributesPrivate: true }
 })(App);
