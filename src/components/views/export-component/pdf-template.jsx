@@ -42,6 +42,7 @@ import HighLight from '@tiptap/extension-highlight';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
 import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
 
 Font.register({
   family: 'ProximaNova',
@@ -417,7 +418,6 @@ function getQuestionToCustomerRows(questions) {
 }
 
 function getNotesRows(notes, editor) {
-  console.log('tapas notessss ', notes, editor);
   let html = ``;
   html += `<table class="notesTable table marginTop20">`;
   html += `<tr>`;
@@ -435,7 +435,8 @@ function getNotesRows(notes, editor) {
         Link,
         HighLight,
         Subscript,
-        Superscript
+        Superscript,
+        Underline
       ]);
       console.log('ddata', data);
       data += `</td></tr></table>`;
@@ -510,6 +511,9 @@ const MyDoc = (
                     <Text>{children}</Text>
                   </HtmlLink>
                 );
+              },
+              mark: ({ style, children }) => {
+                return <Text style={style}>{children}</Text>;
               }
             }}
           >
