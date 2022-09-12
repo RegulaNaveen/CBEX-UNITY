@@ -40,6 +40,10 @@
         &:hover {
           background-color: $neptune-hover;
         }
+
+        &.focused {
+          border: 2px solid #0557d5;
+        }
       }
 
       .multiselect-icon {
@@ -85,6 +89,15 @@
       border: 1px solid $neutral4;
       box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);
       cursor: pointer;
+
+      &:hover,
+      &:focus-within,
+      &:focus-visible {
+        border-color: #0768fd;
+        transition-duration: 0.2s;
+        transition-property: border-color;
+        outline: none !important;
+      }
 
       &.multiselect-disabled {
         background-color: #f2f2f2;

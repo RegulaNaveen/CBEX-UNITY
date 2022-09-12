@@ -8,6 +8,7 @@ import { OrderedMap } from 'immutable';
 
 import { useLazyLoad, useUpdateEffect } from '../../../hooks';
 import CollapsibleList from '../../common/CollapsibleList';
+import { QuestionsRefContext } from '../../screens/Opportunity/Questions';
 
 const NUM_PER_PAGE = 2;
 
@@ -108,24 +109,32 @@ const QuestionsSectionMapping = ({
     const sectionName = section.get('sectionName');
     const questions = section.get('questions');
     return (
-      <CollapsibleList
-        questions={questions}
-        title={sectionName}
-        milestone={filterMilestone}
-        key={sectionName}
-        setTabFromQuestionNotes={(val, title, flag) =>
-          setTabFromQuestionNotes(val, title, flag)
+      <QuestionsRefContext.Consumer>
+        {
+          (questionsRef) => (
+            <CollapsibleList
+              questions={questions}
+              title={sectionName}
+              milestone={filterMilestone}
+              key={sectionName}
+              setTabFromQuestionNotes={(val, title, flag) =>
+                setTabFromQuestionNotes(val, title, flag)
+              }
+              onAddQuestion={value => onAddQuestion(value)}
+              isCheckedAll={
+                sidebarscroll && sidebarscroll.length && sidebarscroll === sectionName
+                  ? true
+                  : allSectionsExpanded
+              }
+              isFirstSection={indx < 1}
+              setQuestionToDisplayHistory={setQuestionToDisplayHistory}
+              isNotepadOpen={isNotepadOpen}
+              listIndex={indx}
+              questionsRef={questionsRef}
+            />
+          )
         }
-        onAddQuestion={value => onAddQuestion(value)}
-        isCheckedAll={
-          sidebarscroll && sidebarscroll.length && sidebarscroll === sectionName
-            ? true
-            : allSectionsExpanded
-        }
-        isFirstSection={indx < 1}
-        setQuestionToDisplayHistory={setQuestionToDisplayHistory}
-        isNotepadOpen={isNotepadOpen}
-      />
+      </QuestionsRefContext.Consumer>
     );
   };
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
+import { EditorState } from 'draft-js';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import { v4 as uuid } from 'uuid';
@@ -193,6 +194,14 @@ const CustomApolloRichText = ({
         onClick={() => {
           if (!isRichTextEditable && !disabled) onClickHTML();
         }}
+        tabIndex={isRichTextEditable ? -1 : 0}
+        onFocus={() => {
+          const { editorState } = richTextEditorRef.current.state;
+          richTextEditorRef.current.setState({
+            editorState: EditorState.moveFocusToEnd(editorState)
+          })
+          richTextContainerRef.current.scrollTop = richTextContainerRef.current.scrollHeight;
+          if(!isRichTextEditable && !disabled) onClickHTML() }}
       >
         <RichTextEditor
           placeholder={placeholder || ''}
@@ -200,6 +209,8 @@ const CustomApolloRichText = ({
           variant={isRichTextEditable ? 'popover' : 'view'}
           defaultValue={richTextData.value}
           onChange={onChangeHandler}
+          tabIndex={0}
+          onBlur={() => { setIsRichTextEditable(false); if (onBlur) onBlur(richTextData); }}
           ref={richTextEditorRef}
           key={richTextKey.current}
         />

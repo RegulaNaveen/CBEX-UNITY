@@ -35,19 +35,28 @@ class Multiselect extends PureComponent<Props, State> {
     super(props);
 
     this.ref = React.createRef();
+    this.listRef = React.createRef();
 
     this.state = {
       isCollapsed: false,
-      selectedValues: []
+      selectedValues: [],
+      isFocused: false,
+      focusedValue: ''
     };
   }
 
   componentDidMount() {
     window.addEventListener('click', this.handleOutsideClick);
-
+    window.addEventListener('keydown', this.handleKeyDown);
+    
     const { value: lastAnswer } = this.props;
 
     if (!isEmpty(lastAnswer)) this.setState({ selectedValues: lastAnswer });
+    // add focus listener to element
+    if (this.ref.current) {
+      this.ref.current.addEventListener('focusin', this.handleFocusIn);
+      this.ref.current.addEventListener('focusout', this.handleFocusOut);
+  }
   }
 
   componentDidUpdate(prevProps: Object, prevState: Object) {
@@ -121,8 +130,105 @@ class Multiselect extends PureComponent<Props, State> {
     );
   };
 
+  handleFocusIn = (event) => {
+    this.setState({ isFocused: true });
+  }
+
+  handleFocusOut = (event) => {
+    this.setState({ isFocused: false });
+  }
+
+  handleDownArrowPress = () => {
+    const { focusedValue } = this.state;
+    const { items } = this.props;
+    let focusedIndex = 0;
+
+    if (items.size === 0) return;
+
+    const currentFocusedIndex = items.indexOf(focusedValue);
+    if (currentFocusedIndex > -1 && currentFocusedIndex <= items.size - 2) {
+      focusedIndex = currentFocusedIndex + 1;
+      this.setState({ focusedValue: items.get(focusedIndex) });
+    }
+
+  }
+
+  handleUpArrowPress = () => {
+    const { focusedValue } = this.state;
+    const { items } = this.props;
+    let focusedIndex = 0;
+
+    if (items.size === 0) return;
+
+    const currentFocusedIndex = items.indexOf(focusedValue);
+    if (currentFocusedIndex > -1 && currentFocusedIndex > 0) {
+      focusedIndex = currentFocusedIndex - 1;
+      this.setState({ focusedValue: items.get(focusedIndex) });
+    }
+
+  }
+
+  handleOptionSelect = () => {
+    const { focusedValue, selectedValues } = this.state;
+    let index = -1;
+    const newArray = cloneDeep(selectedValues);
+
+    if (!selectedValues.includes(focusedValue)) newArray.push(focusedValue);
+    else {
+      index = newArray.indexOf(focusedValue);
+      if (index > -1) newArray.splice(index, 1);
+    }
+
+    this.setState({ selectedValues: newArray });
+    this.forceUpdate();
+
+  }
+
+  handleKeyDown = (event) => {
+    const { isCollapsed, focusedValue, isFocused, selectedValues } = this.state;
+    const { items, onClick, lastAnswer } = this.props;
+    
+    if (!isFocused) return;
+
+    if (['Escape', 'Enter', 'ArrowUp', 'ArrowDown', 'Space'].includes(event.code)) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    if (event.code === 'Escape' || event.code === 'Tab') {
+      this.setState({ isCollapsed: false });
+      return;
+    }
+
+    if (event.code === 'Enter') {
+      if (!isCollapsed) {
+        console.log("items.size", items.size)
+        this.setState({ isCollapsed: true, focusedValue: items.size > 0 ? items.get(0): '' });
+      } else {
+        this.setState({ isCollapsed: false });
+      }
+      return;
+    }
+
+    if (!isCollapsed) return;
+
+    if (event.code === 'ArrowDown') {
+      this.handleDownArrowPress();
+      return;
+    }
+
+    if (event.code === 'ArrowUp') {
+      this.handleUpArrowPress();
+    }
+
+    if (event.code === 'Space') {
+      this.handleOptionSelect();
+    }
+
+  }
+
   render() {
-    const { isCollapsed, selectedValues } = this.state;
+    const { isCollapsed, selectedValues, focusedValue } = this.state;
     const { id, placeholder, items, title, error, disabled } = this.props;
 
     return (
@@ -145,6 +251,7 @@ class Multiselect extends PureComponent<Props, State> {
             onClick={() => {
               if (!disabled) this.handleCollapse();
             }}
+            tabIndex={0}
           >
             {!isEmpty(selectedValues) ? (
               this.renderSelectedItems()
@@ -155,7 +262,7 @@ class Multiselect extends PureComponent<Props, State> {
             )}
           </div>
           {isCollapsed && (
-            <ul className="multiselect-list">
+            <ul className="multiselect-list" ref={this.listRef}>
               {!isEmpty(items) &&
                 items.map(item => (
                   <MultiselectItem
@@ -163,6 +270,8 @@ class Multiselect extends PureComponent<Props, State> {
                     item={item}
                     key={uuidv4()}
                     isSelected={selectedValues.includes(item)}
+                    focused={focusedValue === item}
+                    parentRef={this.listRef}
                   />
                 ))}
             </ul>

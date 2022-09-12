@@ -880,6 +880,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               <div className="question-hint">
                 {questionHint ? (
                   <Tooltip
+                    tabIndex={-1}
                     variant="light"
                     title={
                       questionHintJSON ? (
