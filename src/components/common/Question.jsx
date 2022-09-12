@@ -629,6 +629,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             sfObject={sfObject}
           >
             <AutoCompleteWithAddOption
+              // sectionName={sectionName}
               sfObject={sfObject}
               lov={finalOptions}
               sfField={sfField}
@@ -815,114 +816,115 @@ export class TaskRow extends React.PureComponent<Props, State> {
       screenWidth < 950 ? [10, 2] : screenWidth < 900 ? [10, 2] : [11, 1];
     const gridColRatio = isNotepadOpen ? smallScreenWidth : mediumScreen;
     return (
-      <Grid
-        container
-        className={`task-table-row${
-          selectedRow ? ' selected-task-table-row' : ''
+      <div
+        className={`task-table-row question-row ${
+          selectedRow ? 'selected-task-table-row' : ''
         }`}
         style={{ margin: '2px 0px' }}
       >
-        <Grid item xs={gridColRatio[0]}>
-          {/* Question Text and Milestone */}
-          <div
-            className={classNames('question-label-container', {
-              'has-richtext-icon': enableRichtext
-            })}
-            ref={this.quesTextContainerRef}
-          >
+        <Grid container className="question-title-grid">
+          <Grid item xs={gridColRatio[0]} className="question-grid-item">
+            {/* Question Text and Milestone */}
             <div
-              className="question-label-inner"
-              ref={this.quesTextInnerLeftRef}
-              style={{ minHeight: 'auto' }}
+              className={classNames('question-label-container', {
+                'has-richtext-icon': enableRichtext
+              })}
+              ref={this.quesTextContainerRef}
             >
-              {/* Question Text */}
-              <div className="questiontext-richtext">
-                <div className="question-title-txt">
-                  {questionJSON ? (
-                    <RichTextEditor
-                      style={{ minHeight: '0px' }}
-                      variant="view"
-                      defaultValue={JSON.parse(questionJSON)}
-                    />
+              <div
+                className="question-label-inner"
+                ref={this.quesTextInnerLeftRef}
+                style={{ minHeight: 'auto' }}
+              >
+                {/* Question Text */}
+                <div className="questiontext-richtext">
+                  <div className="question-title-txt">
+                    {questionJSON ? (
+                      <RichTextEditor
+                        style={{ minHeight: '0px' }}
+                        variant="view"
+                        defaultValue={JSON.parse(questionJSON)}
+                      />
+                    ) : (
+                      <p>{questionText}</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Edit Question Icon */}
+                <div className="question-edit">
+                  {isCustomQuestion && isCurrentBid && (
+                    <span
+                      aria-hidden="true"
+                      onClick={() => {
+                        setEditQuestionData({
+                          questionText,
+                          questionHTML,
+                          questionJSON,
+                          questionHintJSON,
+                          section: sectionName,
+                          answerType: answerConfiguration.get('type'),
+                          roleNames,
+                          questionAnswered: !!lastAnswer,
+                          questionId: qId
+                        });
+                      }}
+                    >
+                      <Edit className="edit-icon" />
+                    </span>
+                  )}
+                </div>
+
+                {/* Question Hint */}
+                <div className="question-hint">
+                  {questionHint ? (
+                    <Tooltip
+                      variant="light"
+                      title={
+                        questionHintJSON ? (
+                          <RichTextEditor
+                            variant="view"
+                            defaultValue={JSON.parse(questionHintJSON)}
+                          />
+                        ) : (
+                          <div>{questionHint}</div>
+                        )
+                      }
+                      placement="top"
+                    >
+                      <IconButton
+                        color="primary"
+                        style={{ margin: 0 }}
+                        size="small"
+                        className="question-tooltip-icon"
+                      >
+                        <InfoIcon style={{ fontSize: '16px' }} />
+                      </IconButton>
+                    </Tooltip>
                   ) : (
-                    <p>{questionText}</p>
+                    <></>
                   )}
                 </div>
               </div>
 
-              {/* Edit Question Icon */}
-              <div className="question-edit">
-                {isCustomQuestion && isCurrentBid && (
-                  <span
-                    aria-hidden="true"
-                    onClick={() => {
-                      setEditQuestionData({
-                        questionText,
-                        questionHTML,
-                        questionJSON,
-                        questionHintJSON,
-                        section: sectionName,
-                        answerType: answerConfiguration.get('type'),
-                        roleNames,
-                        questionAnswered: !!lastAnswer,
-                        questionId: qId
-                      });
-                    }}
-                  >
-                    <Edit className="edit-icon" />
-                  </span>
-                )}
-              </div>
-
-              {/* Question Hint */}
-              <div className="question-hint">
-                {questionHint ? (
-                  <Tooltip
-                    variant="light"
-                    title={
-                      questionHintJSON ? (
-                        <RichTextEditor
-                          variant="view"
-                          defaultValue={JSON.parse(questionHintJSON)}
-                        />
-                      ) : (
-                        <div>{questionHint}</div>
-                      )
-                    }
-                    placement="top"
-                  >
-                    <IconButton
-                      color="primary"
-                      style={{ margin: 0 }}
-                      size="small"
-                      className="question-tooltip-icon"
-                    >
-                      <InfoIcon style={{ fontSize: '16px' }} />
-                    </IconButton>
-                  </Tooltip>
-                ) : (
-                  <></>
+              {/* Milestone Chip */}
+              <div className="milestone-chip" ref={this.quesTextInnerRightRef}>
+                {this.renderTags(
+                  milestone,
+                  milestoneNew,
+                  ismilestoneavailable,
+                  lastAnswer
                 )}
               </div>
             </div>
-
-            {/* Milestone Chip */}
-            <div className="milestone-chip" ref={this.quesTextInnerRightRef}>
-              {this.renderTags(
-                milestone,
-                milestoneNew,
-                ismilestoneavailable,
-                lastAnswer
-              )}
-            </div>
-          </div>
+          </Grid>
+          <Grid item xs={gridColRatio[1]} className="empty-grid-item">
+            <></>
+          </Grid>
         </Grid>
-        <Grid item xs={gridColRatio[1]}>
-          <></>
-        </Grid>
-        <Grid container>
+        <Grid container className="answer-grid">
           {/* Answer */}
-          <Grid item xs={gridColRatio[0]}>
+          <Grid item xs={gridColRatio[0]} className="answer-grid-item">
             <div>
               {answerConfiguration
                 ? this.renderAnswer(
@@ -959,7 +961,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer}
           />
         </Grid>
-      </Grid>
+      </div>
     );
   }
 }
