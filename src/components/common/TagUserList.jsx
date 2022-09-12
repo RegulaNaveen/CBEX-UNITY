@@ -20,17 +20,21 @@ const userList = [
   }
 ];
 
-const TagUserList = forwardRef((props, ref) => {
-  const { rangeRef, searchTagRef } = ref;
+const TagUserList = forwardRef(({ searchTag, close }, ref) => {
+  const { rangeRef, richTextEditorRef } = ref;
 
-  const onClickHandler = e => {
+  const timeout = ms => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  };
+
+  const onClickHandler = async e => {
     const tagName = e.target.getAttribute('display-name');
     const refRange = rangeRef.current;
     const { commonAncestorContainer, startOffset } = refRange;
     // set start selection
     refRange.setStart(
       commonAncestorContainer,
-      startOffset - searchTagRef.current.length
+      startOffset - searchTag.length - 1
     );
     // set end selection
     refRange.setEnd(commonAncestorContainer, startOffset);
@@ -42,7 +46,16 @@ const TagUserList = forwardRef((props, ref) => {
     newNode.innerHTML = `${tagName} `;
     refRange.insertNode(newNode);
     // Remove selection
-    window.getSelection().removeAllRanges();
+    // window.getSelection().removeAllRanges();
+
+    await timeout(0);
+    console.log('Change Event');
+    // const element = richTextEditorRef.current;
+    // const event = new Event('change');
+    // element.addEventListener('click', { capture: true });
+    // richTextEditorRef.current.focus();
+
+    close(); // callback func to close
   };
 
   return (

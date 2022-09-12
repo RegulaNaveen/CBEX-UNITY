@@ -5,9 +5,10 @@ import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import { v4 as uuid } from 'uuid';
 import classNames from 'classnames';
-import Button from 'apollo-react/components/Button';
-import useUpdateEffect from '../../hooks/useUpdateEffect';
+import { useUpdateEffect } from '../../hooks';
 import TagUserList from './TagUserList';
+
+let firstRender = true;
 
 const CustomApolloRichText = ({
   richTextString,
@@ -59,7 +60,8 @@ const CustomApolloRichText = ({
   const richTextKeyRef = useRef(uuid());
   const backspaceRef = useRef(false);
   const rangeRef = useRef(null);
-  const searchTagRef = useRef('');
+  // const searchTagRef = useRef(null);
+  const [searchTag, setSearchTag] = useState(null);
 
   /**
    * Function to Add Delay for Specific Seconds
@@ -135,6 +137,11 @@ const CustomApolloRichText = ({
   };
 
   const getLastWordBeforeCaret = async () => {
+    if (firstRender) {
+      firstRender = false;
+      return null;
+    } // return empty on first render
+
     const range = window.getSelection().getRangeAt(0);
     const { collapsed, startOffset, startContainer } = range;
     rangeRef.current = range;
@@ -146,9 +153,11 @@ const CustomApolloRichText = ({
         backspaceRef.current = false;
         text = startContainer.textContent.substring(0, startOffset - 1);
       }
-      return text.split(' ').pop();
+      const filteredTxt = text.split(' ').pop();
+      const isValidTxt = filteredTxt.match(/^@[^@]*$/gi);
+      return isValidTxt ? filteredTxt.substring(1) : null;
     }
-    return '';
+    return null;
   };
 
   /**
@@ -156,8 +165,9 @@ const CustomApolloRichText = ({
    */
   const onChangeHandler = async (value, html) => {
     const resp = await getLastWordBeforeCaret();
-    searchTagRef.current = resp;
+    setSearchTag(resp);
     console.log({ wordBeforeCursor: resp });
+    console.log({ value, html });
 
     if (isEqual(richTextData.value, value)) return; // break func
 
@@ -246,7 +256,13 @@ const CustomApolloRichText = ({
           key={richTextKeyRef.current}
         />
         {/* TagUserList Component for adding tag */}
-        <TagUserList ref={{ rangeRef, searchTagRef }} />
+        {searchTag != null && (
+          <TagUserList
+            ref={{ rangeRef, richTextEditorRef }}
+            searchTag={searchTag}
+            close={() => setSearchTag(null)}
+          />
+        )}
       </div>
     </div>
   );
