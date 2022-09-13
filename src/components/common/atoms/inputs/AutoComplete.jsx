@@ -85,14 +85,12 @@ const Autocomplete = props => {
               mail: `${p.email.toLowerCase()}`
             };
           });
-          // console.log(updatedOptions, 'UO');
           setOptions(updatedOptions);
           updatedOptions.length > 0 ? setNoOptionsText(1) : setNoOptionsText(0);
         });
     } catch (error) {
       console.error(error);
     }
-    console.log({ updatedOptions });
   };
   const handleChange = (event, newValue, reason) => {
     setValue(newValue);
@@ -127,7 +125,6 @@ const Autocomplete = props => {
     elem.className += ' disable';
     // elem.classList.add('disable');
   };
-  console.log(callAccept, !callAccept, isEmpty(options));
   return (
     <div className={`${disabled ? 'autocomplete-disabled' : 'autocomplete'}`}>
       <AutocompleteV2
