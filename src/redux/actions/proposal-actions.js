@@ -788,7 +788,7 @@ export const changeBid = bid => {
       type: CHANGE_BID,
       payload: bid
     });
-    dispatch(fetchNotes(bid.bidId));
+    // dispatch(fetchNotes(bid.bidId));
   };
 };
 
@@ -798,7 +798,7 @@ export const UpdateNewBid = bid => {
       type: ADD_NEW_BID,
       payload: bid
     });
-    dispatch(fetchNotes(bid.proposal.proposalId));
+    // dispatch(fetchNotes(bid.proposal.proposalId));
   };
 };
 

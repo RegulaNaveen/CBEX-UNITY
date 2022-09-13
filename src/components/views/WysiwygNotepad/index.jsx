@@ -31,7 +31,6 @@ import {
 import NotesSocketContext from '../../../context/notesSocketContext';
 
 const WysiwygNotepad = ({
-  notes = null,
   selectedBid,
   userName,
   userEmail,
@@ -60,7 +59,6 @@ const WysiwygNotepad = ({
     console.log('proposal id changed to ', selectedBid.get('id'));
     setProposalIdState(selectedBid.get('id'));
   }, [selectedBid]);
-  // console.log('users length', notesSocket?.wsInstance?.awareness);
 
   const editor = useEditor(
     {
@@ -96,20 +94,15 @@ const WysiwygNotepad = ({
       ],
       onUpdate: ({ editor }) => {
         // const Ejson = editor.getJSON();
-        updateNoteInStore();
-        // send the content to an API here
-        // memoizedSaveDB(Ejson);
       }
     },
-    [proposalIdState]
+    [proposalIdState, notesSocket.wsInstance]
   );
-
   dispatch(setEditor(editor));
-
   return (
     <>
       {notesSocket.wsInstance && (
-        <div className="editor-notepad">
+        <div className="editor-notepad" key={proposalIdState}>
           <div>
             <MenuBar key={proposalIdState} editor={editor} />
           </div>
@@ -125,7 +118,6 @@ const WysiwygNotepad = ({
 };
 
 const mapStateToProps = state => ({
-  notes: selectNotes(state),
   selectedBid: getSelectedBid(state),
   userName: getUserName(state),
   userEmail: getUserEmail(state),
