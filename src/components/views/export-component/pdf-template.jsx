@@ -206,6 +206,13 @@ function getStyle() {
     [data-block="true"] {
         padding-bottom:10px;
     }
+    li {
+      align-items: flex-start;
+      padding-bottom: 8px;
+    }
+    li_bullet {
+      padding-top: 5px;
+    }
  </style>`;
 }
 
