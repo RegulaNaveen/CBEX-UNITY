@@ -40,8 +40,9 @@ import * as notificationActions from '../../../redux/actions/notification-action
 import { WebsocketProvider } from '../../../context/y-websocket';
 import { NOTES_SOCKET_URL } from '../../../constants/api';
 import NotesSocketContext from '../../../context/notesSocketContext';
-import * as Y from 'yjs';
+import { websocketNotesApi } from '../../../api/notepad';
 import { UBUILD, DASHBOARD } from '../../../routes';
+import * as Y from 'yjs';
 
 const ThemeContext = React.createContext('light');
 type State = {
@@ -178,7 +179,25 @@ export class Opportunity extends Component<Props, State> {
       ) {
         this.context.updateSocketOppId(params.id);
       }
+    }
+    this.triggerWebsocketNotesApi(prevProposalId, thisProposalId);
+  }
 
+  componentWillUnmount() {
+    const { handleOpenClose, setResetProposalId } = this.props;
+    if (handleOpenClose) handleOpenClose(false);
+    setResetProposalId();
+    localStorage.removeItem('proposalTypeView');
+    localStorage.removeItem('proposalId');
+
+    window.removeEventListener('storage', this.handleStorageChange);
+    this.context.updateSocketOppId(null);
+    this.state.wsInstance?.destroy();
+  }
+
+  triggerWebsocketNotesApi = async (prevProposalId, thisProposalId) => {
+    if (prevProposalId !== thisProposalId) {
+      await websocketNotesApi(thisProposalId);
       //intial load case
       if (!prevProposalId && thisProposalId) {
         if (!this.state.wsInstance) {
@@ -191,7 +210,7 @@ export class Opportunity extends Component<Props, State> {
         });
       }
     }
-  }
+  };
 
   createNewNotesSocketConnection = proposalId => {
     console.log('proposal details are', proposalId);
@@ -207,18 +226,6 @@ export class Opportunity extends Component<Props, State> {
       this.setState({ wsInstance: wsProvider });
     }
   };
-
-  componentWillUnmount() {
-    const { handleOpenClose, setResetProposalId } = this.props;
-    if (handleOpenClose) handleOpenClose(false);
-    setResetProposalId();
-    localStorage.removeItem('proposalTypeView');
-    localStorage.removeItem('proposalId');
-
-    window.removeEventListener('storage', this.handleStorageChange);
-    this.context.updateSocketOppId(null);
-    this.state.wsInstance?.destroy();
-  }
 
   handleResize = () => {
     let windowSize = window.innerWidth;

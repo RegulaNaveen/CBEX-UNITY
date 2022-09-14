@@ -16,20 +16,23 @@
     background-color: $white;
     border: $border;
     border-radius: 4px;
-    padding-right: 16px;
+    padding-right: 4px;
     margin-bottom: 16px;
     outline: none;
 
     .dd-wrapper .dd-header .dd-header-placeholder {
-      height: 24px;
+      height: auto;
       width: 100%;
       color: $neutral6;
       font-family: 'ProximaNova-Regular';
       pointer-events: none;
-      font-size: 12px;
+      font-size: 0.75rem;
       letter-spacing: 0;
-      line-height: 24px;
+      line-height: 1rem;
       pointer-events: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .dd-wrapper .dd-header .dd-header-selected,
@@ -51,10 +54,10 @@
       margin-top: 0 !important;
       font-family: 'ProximaNova-Regular';
       font-size: 16px;
-      min-width: 176px;
+      min-width: auto;
       border: 1px solid #d9d9d9;
       border-radius: 4px;
-      font-size: 16px;
+      font-size: 12px;
     }
 
     .multiselect-wrapper .multiselect-header .multiselect-header-placeholder {
@@ -205,7 +208,8 @@
     }
   }
 }
-@media only screen and (min-width: 1201px) and (max-width: 3000px) {
+
+@media only screen and (min-width: 1201px) {
   .task-wrapper {
     flex: 1;
     display: flex;
@@ -214,7 +218,7 @@
     border: $border;
     border-radius: 4px;
     padding-left: 16px;
-    padding-right: 16px;
+    padding-right: 4px;
     margin-bottom: 16px;
     outline: none;
 
