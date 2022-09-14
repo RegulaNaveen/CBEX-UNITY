@@ -13,7 +13,8 @@ const {
   API_KEY,
   LOOKUP_OPTIONS_API,
   PROPOSAL_OT_LIST,
-  PROPOSAL_SWITCH_OT
+  PROPOSAL_SWITCH_OT,
+  USER_API_URL
 } = API.PROPOSAL;
 
 let onGoingAnswer = {};
@@ -308,4 +309,22 @@ export const deleteProposalUser = (proposalId, data) => {
       data
     }
   );
+};
+
+/**
+ * Get Users List Api
+ */
+export const getUsersListApiCall = async (searchTerm): Promise<Object> => {
+  return new Promise((resolve, reject) => {
+    axiosInstance
+      .get(`${USER_API_URL}/${searchTerm}`, {
+        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
 };

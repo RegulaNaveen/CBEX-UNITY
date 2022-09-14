@@ -25,7 +25,8 @@ import {
   getOTListData,
   changeProposalOT,
   deleteProposalUser,
-  getProposalAnswer
+  getProposalAnswer,
+  getUsersListApiCall
 } from '../../api/proposal';
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getUniqueMilestones } from '../selectors/proposal';
@@ -962,6 +963,22 @@ export const getProposalAnswerHistory = (
     // Api Response
     const response = await getProposalAnswer(proposalId, questionId);
     return { status: true, title: DEFAULT.SUCCESS, data: response };
+  } catch (error) {
+    // Error
+    console.log(error?.response);
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
+  }
+};
+
+/**
+ * Get Users List
+ */
+export const getUsersList = searchTerm => async () => {
+  try {
+    // Api Response
+    const response = await getUsersListApiCall(searchTerm);
+    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
   } catch (error) {
     // Error
     console.log(error?.response);

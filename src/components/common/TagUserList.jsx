@@ -21,7 +21,7 @@ const userList = [
 ];
 
 const TagUserList = forwardRef(({ searchTag, close }, ref) => {
-  const { rangeRef, richTextEditorRef } = ref;
+  const { rangeRef, selectionRef, richTextEditorRef } = ref;
 
   const timeout = ms => {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -29,31 +29,30 @@ const TagUserList = forwardRef(({ searchTag, close }, ref) => {
 
   const onClickHandler = async e => {
     const tagName = e.target.getAttribute('display-name');
-    const refRange = rangeRef.current;
-    const { commonAncestorContainer, startOffset } = refRange;
-    // set start selection
-    refRange.setStart(
-      commonAncestorContainer,
-      startOffset - searchTag.length - 1
-    );
-    // set end selection
-    refRange.setEnd(commonAncestorContainer, startOffset);
-    window.getSelection().addRange(refRange);
-    // Delete selected text
-    refRange.deleteContents();
-    // Insert new tag
+    const range = rangeRef.current;
+    const { commonAncestorContainer, startOffset } = range;
+
+    range.setStart(commonAncestorContainer, startOffset - searchTag.length - 1); // set start selection
+    range.setEnd(commonAncestorContainer, startOffset); // set end selection
+    window.getSelection().addRange(range);
+
+    range.deleteContents(); // Delete selected text
+
     const newNode = document.createElement('u');
-    newNode.innerHTML = `${tagName} `;
-    refRange.insertNode(newNode);
-    // Remove selection
-    // window.getSelection().removeAllRanges();
+    newNode.innerHTML = `${tagName}`;
+    range.insertNode(newNode); // Insert new tag
+
+    // const selection = selectionRef.current;
+    // selection.removeAllRanges(); // Remove selection
 
     await timeout(0);
-    console.log('Change Event');
-    // const element = richTextEditorRef.current;
-    // const event = new Event('change');
-    // element.addEventListener('click', { capture: true });
-    // richTextEditorRef.current.focus();
+    // Move the cursor after newNode
+    // range.setStartAfter(newNode);
+    // range.setEndAfter(newNode);
+    // selection.addRange(range);
+
+    // const richTextElement = richTextEditorRef.current;
+    // richTextElement.focus();
 
     close(); // callback func to close
   };

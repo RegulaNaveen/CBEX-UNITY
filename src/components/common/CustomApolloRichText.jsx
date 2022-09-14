@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import isEmpty from 'lodash/isEmpty';
@@ -7,6 +8,7 @@ import { v4 as uuid } from 'uuid';
 import classNames from 'classnames';
 import { useUpdateEffect } from '../../hooks';
 import TagUserList from './TagUserList';
+import { getUsersList } from '../../redux/actions/proposal-actions';
 
 let firstRender = true;
 
@@ -55,13 +57,15 @@ const CustomApolloRichText = ({
   // Component State
   const [richTextData, setRichTextData] = useState(INITIAL_DATA);
   const [isRichTextEditable, setIsRichTextEditable] = useState(isEditable);
+  const [searchTag, setSearchTag] = useState(null);
+  // Component Refs
   const richTextContainerRef = useRef(null);
   const richTextEditorRef = useRef(null);
   const richTextKeyRef = useRef(uuid());
   const backspaceRef = useRef(false);
   const rangeRef = useRef(null);
-  // const searchTagRef = useRef(null);
-  const [searchTag, setSearchTag] = useState(null);
+  const selectionRef = useRef(null);
+  const dispatch = useDispatch();
 
   /**
    * Function to Add Delay for Specific Seconds
@@ -136,15 +140,30 @@ const CustomApolloRichText = ({
     }
   };
 
+  useUpdateEffect(() => {
+    if (!searchTag) return () => {};
+
+    const timer = setTimeout(async () => {
+      const res = await dispatch(getUsersList(searchTag));
+      console.log({ res });
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [searchTag]);
+
   const getLastWordBeforeCaret = async () => {
     if (firstRender) {
       firstRender = false;
       return null;
-    } // return empty on first render
+    } // break func on first render
 
-    const range = window.getSelection().getRangeAt(0);
-    const { collapsed, startOffset, startContainer } = range;
+    const selection = window.getSelection && window.getSelection();
+    selectionRef.current = selection;
+    // if (selection && selection.rangeCount === 0) return null; // break func on selected range 0
+
+    const range = selection.getRangeAt(0);
     rangeRef.current = range;
+    const { collapsed, startOffset, startContainer } = range;
 
     await timeout(0);
     if (collapsed) {
@@ -202,6 +221,7 @@ const CustomApolloRichText = ({
       isRichTextEditable
     ) {
       setIsRichTextEditable(false);
+      setSearchTag(null);
       if (onBlur) onBlur(richTextData);
     }
   };
@@ -258,7 +278,7 @@ const CustomApolloRichText = ({
         {/* TagUserList Component for adding tag */}
         {searchTag != null && (
           <TagUserList
-            ref={{ rangeRef, richTextEditorRef }}
+            ref={{ rangeRef, selectionRef, richTextEditorRef }}
             searchTag={searchTag}
             close={() => setSearchTag(null)}
           />
