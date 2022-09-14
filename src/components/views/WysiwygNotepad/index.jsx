@@ -2,7 +2,6 @@ import Collaboration from '@tiptap/extension-collaboration';
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
 import { connect, useSelector, useDispatch } from 'react-redux';
 import React, { useEffect, useState, useContext } from 'react';
-import Loader from 'react-loader-spinner';
 import randomColor from 'randomcolor';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -13,7 +12,6 @@ import TextAlign from '@tiptap/extension-text-align';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
 import Mention from '@tiptap/extension-mention';
-import { v4 as uuidv4 } from 'uuid';
 
 import {
   getProposalDetails,
@@ -108,7 +106,6 @@ const WysiwygNotepad = ({
           suggestion
         })
       ],
-      content,
       onUpdate: ({ editor }) => {
         // const Ejson = editor.getJSON();
         updateNoteInStore();
