@@ -7,7 +7,9 @@ type Props = {
   onClick: Function,
   item: string,
   isSelected: boolean,
-  parentRef: any
+  parentRef: any,
+  focused: boolean,
+  key: any
 };
 
 class MultiselectItem extends Component<Props> {

@@ -202,7 +202,6 @@ class Multiselect extends PureComponent<Props, State> {
 
     if (event.code === 'Enter') {
       if (!isCollapsed) {
-        console.log("items.size", items.size)
         this.setState({ isCollapsed: true, focusedValue: items.size > 0 ? items.get(0): '' });
       } else {
         this.setState({ isCollapsed: false });
@@ -264,11 +263,11 @@ class Multiselect extends PureComponent<Props, State> {
           {isCollapsed && (
             <ul className="multiselect-list" ref={this.listRef}>
               {!isEmpty(items) &&
-                items.map(item => (
+                items.map((item, itemIndex) => (
                   <MultiselectItem
                     onClick={this.onSelect}
                     item={item}
-                    key={uuidv4()}
+                    key={`${id}-multiselect-${itemIndex}`}
                     isSelected={selectedValues.includes(item)}
                     focused={focusedValue === item}
                     parentRef={this.listRef}
