@@ -11,6 +11,8 @@ import HighLight from '@tiptap/extension-highlight';
 import TextAlign from '@tiptap/extension-text-align';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
+import Mention from '@tiptap/extension-mention';
+
 import {
   getProposalDetails,
   selectNotes,
@@ -29,6 +31,7 @@ import {
   updateNoteInStore
 } from '../../../redux/actions/notepad-actions';
 import NotesSocketContext from '../../../context/notesSocketContext';
+import suggestion from './suggestion';
 
 const WysiwygNotepad = ({
   selectedBid,
@@ -90,6 +93,15 @@ const WysiwygNotepad = ({
           HTMLAttributes: {
             class: 'my-custom-class'
           }
+        }),
+        Mention.configure({
+          HTMLAttributes: {
+            class: 'mention'
+          },
+          renderLabel({ options, node }) {
+            return `${node.attrs.label ?? node.attrs.id}`;
+          },
+          suggestion
         })
       ],
       onUpdate: ({ editor }) => {
@@ -102,14 +114,14 @@ const WysiwygNotepad = ({
   return (
     <>
       {notesSocket.wsInstance && (
-        <div className="editor-notepad" key={proposalIdState}>
+        <div className='editor-notepad' key={proposalIdState}>
           <div>
             <MenuBar key={proposalIdState} editor={editor} />
           </div>
           <EditorContent
             key={proposalIdState}
             editor={editor}
-            className="editor-scroll"
+            className='editor-scroll'
           />
         </div>
       )}
