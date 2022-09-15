@@ -21,11 +21,11 @@ export default {
           });
         }
       }
-      return autoCompleteList.slice(0, 15);
+      return autoCompleteList;
     } catch (error) {
       console.log('error in generating usernames for notes suggestion');
       console.error(error);
-      return autoCompleteList.slice(0, 15);
+      return autoCompleteList;
     }
   },
   render: () => {
