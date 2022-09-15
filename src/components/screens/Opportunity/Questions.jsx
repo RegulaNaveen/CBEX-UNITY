@@ -14,6 +14,7 @@ import Grid from 'apollo-react/components/Grid';
 import Panel from 'apollo-react/components/Panel';
 import Typography from 'apollo-react/components/Typography';
 
+import Loader from 'react-loader-spinner';
 import { Add, Refresh } from '../../svg';
 import BidHistory from '../../common/Bidhistory';
 import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
@@ -56,7 +57,6 @@ import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions'
 import WysiwygNotepad from '../../views/WysiwygNotepad';
 import ANSWER_TYPES from '../../../constants/answerTypes';
 import NotesSocketContext from '../../../context/notesSocketContext';
-import Loader from 'react-loader-spinner';
 
 export const QuestionsRefContext = createContext(null);
 
@@ -88,8 +88,7 @@ type Props = {
   activeQuestionsFilterCount: Number,
   allSectionsExpanded: boolean,
   expandAllSections: Function,
-  editQuestionsData: Map,
-  flags: Object
+  editQuestionsData: Map
 };
 
 type State = {
@@ -539,6 +538,7 @@ class Questions extends Component {
         </div>
         <div id="panelwrapper">
           {/* Notepad */}
+
           <div id="panel-notepad" style={{ borderRadius: '5px' }}>
             <Panel
               minWidth={notepadMinWidthPx}
@@ -562,6 +562,7 @@ class Questions extends Component {
                 <div id="panel-notepad-header">
                   <Typography variant="h3">Notepad</Typography>
                 </div>
+
                 {this.state.proposalNoteRender && this.context.wsInstance ? (
                   <WysiwygNotepad />
                 ) : (
@@ -580,6 +581,7 @@ class Questions extends Component {
               </div>
             </Panel>
           </div>
+
           {/* Question list */}
           <div id="panel-questions-list">
             <div className="tasksList-wrapper" ref={this.questionsRef}>
@@ -685,4 +687,4 @@ export default compose(
     getSFNonEditabelInfoField: getSFNonEditabelField,
     callPickListLookupSfData
   })
-)(MatomoHOC(withLDConsumer()(Questions)));
+)(MatomoHOC(Questions));
