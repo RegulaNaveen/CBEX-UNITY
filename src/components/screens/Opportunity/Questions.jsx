@@ -1,6 +1,6 @@
 // @flow
 // eslint-disable-next-line react/destructuring-assignment
-import React, { Component, Suspense } from 'react';
+import React, { createRef, createContext, Component, Suspense } from 'react';
 import { withRouter, Match } from 'react-router-dom';
 import { List, Map } from 'immutable';
 import { compose } from 'redux';
@@ -57,6 +57,8 @@ import WysiwygNotepad from '../../views/WysiwygNotepad';
 import ANSWER_TYPES from '../../../constants/answerTypes';
 import NotesSocketContext from '../../../context/notesSocketContext';
 import Loader from 'react-loader-spinner';
+
+export const QuestionsRefContext = createContext(null);
 
 const QuestionsSectionMapping = React.lazy(() =>
   import('./QuestionsSectionMapping')
@@ -116,6 +118,7 @@ class Questions extends Component {
       totalWidth: '',
       proposalNoteRender: true
     };
+    this.questionsRef = createRef(null);
   }
   static contextType = NotesSocketContext;
   componentDidMount() {
@@ -577,15 +580,17 @@ class Questions extends Component {
           </div>
           {/* Question list */}
           <div id="panel-questions-list">
-            <div className="tasksList-wrapper">
+            <div className="tasksList-wrapper" ref={this.questionsRef}>
               <Suspense fallback={<div>Loading...</div>}>
-                <QuestionsSectionMapping
-                  {...this.props}
-                  {...this.state}
-                  setQuestionToDisplayHistory={this.setQuestionToDisplayHistory}
-                  setTabFromQuestionNotes={this.setTabFromQuestionNotes}
-                  onAddQuestion={this.onAddQuestion}
-                />
+                <QuestionsRefContext.Provider value={this.questionsRef}>
+                  <QuestionsSectionMapping
+                    {...this.props}
+                    {...this.state}
+                    setQuestionToDisplayHistory={this.setQuestionToDisplayHistory}
+                    setTabFromQuestionNotes={this.setTabFromQuestionNotes}
+                    onAddQuestion={this.onAddQuestion}
+                  />
+                </QuestionsRefContext.Provider>
               </Suspense>
             </div>
           </div>

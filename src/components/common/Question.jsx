@@ -880,6 +880,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                   {questionHint ? (
                     <Tooltip
                       variant="light"
+                      tabIndex={-1}
                       title={
                         questionHintJSON ? (
                           <RichTextEditor
@@ -906,7 +907,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                   )}
                 </div>
               </div>
-
+              
               {/* Milestone Chip */}
               <div className="milestone-chip" ref={this.quesTextInnerRightRef}>
                 {this.renderTags(

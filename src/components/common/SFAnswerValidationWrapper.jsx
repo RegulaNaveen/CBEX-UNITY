@@ -46,6 +46,7 @@ class SFAnswerValidationWrapper extends Component {
               <li>Does not match Salesforce value.</li>
               <li>
                 <a
+                  tabIndex={-1}
                   className="take-me-to-SF"
                   href={this.getLink()}
                   target="_blank"

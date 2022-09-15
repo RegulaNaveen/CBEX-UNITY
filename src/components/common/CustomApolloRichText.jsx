@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
+import { EditorState } from 'draft-js';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import { v4 as uuid } from 'uuid';
@@ -103,8 +104,15 @@ const CustomApolloRichText = ({
    */
   const setFocusOnEditor = async () => {
     await timeout(0);
-    if (richTextEditorRef.current && enableFocus)
+    if (richTextEditorRef.current && enableFocus) {      
+      const rect = richTextContainerRef.current.getBoundingClientRect();
       richTextEditorRef.current.focus();
+      if (rect.top < 0) {
+        richTextContainerRef.current.scrollIntoView(true);
+      } else if (rect.bottom > (window.innerHeight || document.documentElement.clientHeight)) {
+        richTextContainerRef.current.scrollIntoView(false);
+      }
+    }
   };
 
   /**
@@ -193,6 +201,14 @@ const CustomApolloRichText = ({
         onClick={() => {
           if (!isRichTextEditable && !disabled) onClickHTML();
         }}
+        tabIndex={(!isRichTextEditable && !disabled) ? 0 : -1}
+        onFocus={() => {
+          const { editorState } = richTextEditorRef.current.state;
+          richTextEditorRef.current.setState({
+            editorState: EditorState.moveFocusToEnd(editorState)
+          })
+          richTextContainerRef.current.scrollTop = richTextContainerRef.current.scrollHeight;
+          if(!isRichTextEditable && !disabled) onClickHTML() }}
       >
         <RichTextEditor
           placeholder={placeholder || ''}
@@ -200,6 +216,8 @@ const CustomApolloRichText = ({
           variant={isRichTextEditable ? 'popover' : 'view'}
           defaultValue={richTextData.value}
           onChange={onChangeHandler}
+          tabIndex={(!isRichTextEditable && !disabled) ? 0 : -1}
+          onBlur={() => { setIsRichTextEditable(false); if (onBlur) onBlur(richTextData); }}
           ref={richTextEditorRef}
           key={richTextKey.current}
         />
