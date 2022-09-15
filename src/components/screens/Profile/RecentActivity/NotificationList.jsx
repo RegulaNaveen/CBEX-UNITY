@@ -66,12 +66,17 @@ const NotificationList = ({
   return (
     <div className="notification-item">
       {/* Dot Icon */}
-
-      {isSeen && (
-        <StatusDotSolid fontSize="small" className="notification-item-dot" />
-      )}
+      <div style={{ width: '14px' }}>
+        {!isSeen && (
+          <StatusDotSolid
+            fontSize="small"
+            className="notification-item-dots"
+            style={{ height: '14px', marginTop: '4px' }}
+          />
+        )}
+      </div>
       {/* Content */}
-      <div className="notification-item-content">
+      <div className="notification-item-content ">
         {/* Header */}
         <div className="notification-item-header">
           <Typography

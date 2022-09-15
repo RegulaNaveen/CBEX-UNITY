@@ -1,19 +1,20 @@
 import React from 'react';
 
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, NavLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import Avatar from 'apollo-react/components/Avatar';
 import CloseCircle from 'apollo-react-icons/CloseCircle';
 import Button from 'apollo-react/components/Button';
 import Typography from 'apollo-react/components/Typography';
+import MuiListItem from '@material-ui/core/ListItem';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Container } from '@material-ui/core';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import makeStyles from '@material-ui/core/styles/makeStyles';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import List from '@material-ui/core/List';
-
+import Divider from '@material-ui/core/Divider';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import ListItem from '@material-ui/core/ListItem';
 
@@ -56,13 +57,12 @@ const useStyles = makeStyles(theme => ({
   },
   root: {
     '&$selected': {
-      backgroundColor: '#0768fd',
-      color: '#fff !important',
-
-      '&:hover': {
-        backgroundColor: '#0768fd',
-        color: '#000 !important'
-      }
+      backgroundColor: 'blue',
+      color: 'white'
+    },
+    '&$selected:hover': {
+      backgroundColor: 'blue',
+      color: 'white'
     }
   },
   selected: {},
@@ -97,6 +97,10 @@ const SideNav = ({ name, role }) => {
     history.push(LOGIN);
   };
 
+  const handleListItemClick = (event, index) => {
+    setSelectedIndex(index);
+  };
+
   return (
     <Container className={classes.container} disablePadding>
       {/* <div cla></div> */}
@@ -125,30 +129,53 @@ const SideNav = ({ name, role }) => {
           <div className={classes.item}>
             <List disablePadding>
               <ListItem
-                // selected={true}
-                selected
                 button
                 key="Account Preference"
                 classes={{ root: classes.root, selected: classes.selected }}
               >
-                <Link style={{ textDecoration: 'none' }} to={PROFILE}>
-                  <Typography style={{ color: '#fff' }} gutterBottom>
+                <NavLink
+                  to={PROFILE}
+                  activeClassName="current"
+                  style={{ textDecoration: 'none' }}
+                >
+                  <Typography
+                    gutterBottom
+                    style={{
+                      fontSize: '16px',
+                      fontWeight: 500,
+                      lineHeight: '40px'
+                    }}
+                  >
                     Account Preferences
                   </Typography>
-                </Link>
+                </NavLink>
               </ListItem>
-              {/* <Divider /> */}
               <ListItem
                 button
                 key="Recent Activity"
                 classes={{ root: classes.root, selected: classes.selected }}
               >
-                <Link style={{ textDecoration: 'none' }} to={RECENT_ACTIVITY}>
-                  <Typography gutterBottom>Recent Activity</Typography>
-                </Link>
+                <NavLink
+                  activeClassName="current"
+                  style={{ textDecoration: 'none' }}
+                  to={RECENT_ACTIVITY}
+                >
+                  <Typography
+                    gutterBottom
+                    style={{
+                      fontSize: '16px',
+                      fontWeight: 500,
+                      lineHeight: '40px',
+                      paddingTop: '5px'
+                    }}
+                  >
+                    Recent Activity
+                  </Typography>
+                </NavLink>
               </ListItem>
               {/* <Divider /> */}
             </List>
+            <Divider style={{ marginTop: '0.25em' }} />
           </div>
         </div>
         <div className={classes.lowerPart}>
