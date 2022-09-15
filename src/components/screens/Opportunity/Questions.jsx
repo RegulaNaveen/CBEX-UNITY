@@ -536,7 +536,6 @@ class Questions extends Component {
               >
                 <div id="panel-notepad-header">
                   <Typography variant="h3">Notepad</Typography>
-                  {`Launch darkly flags : ${JSON.stringify(this.props.flags)}`}
                 </div>
 
                 {this.context.wsInstance && this.props?.flags?.notepad ? (
