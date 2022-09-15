@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
-import { withRouter } from 'react-router-dom';
 import { RECENT_ACTIVITY } from '../../../routes';
 import { connect } from 'react-redux';
 import Bell from 'apollo-react-icons/Bell';

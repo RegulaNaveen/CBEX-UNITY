@@ -1,7 +1,6 @@
 import React from 'react';
 import Bell from 'apollo-react-icons/Bell';
 import { useHistory } from 'react-router-dom';
-import { withRouter } from 'react-router-dom';
 import { RECENT_ACTIVITY } from '../../../routes';
 
 const NoNotification = () => {
