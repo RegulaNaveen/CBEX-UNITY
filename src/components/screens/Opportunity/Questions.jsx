@@ -56,6 +56,7 @@ import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions'
 import WysiwygNotepad from '../../views/WysiwygNotepad';
 import ANSWER_TYPES from '../../../constants/answerTypes';
 import NotesSocketContext from '../../../context/notesSocketContext';
+import Loader from 'react-loader-spinner';
 
 export const QuestionsRefContext = createContext(null);
 
@@ -114,7 +115,8 @@ class Questions extends Component {
       sidebarscroll: '',
       open: false,
       isNotepadOpen: true,
-      totalWidth: ''
+      totalWidth: '',
+      proposalNoteRender: true
     };
     this.questionsRef = createRef(null);
   }
@@ -153,6 +155,27 @@ class Questions extends Component {
     if (prevProps.editQuestionsData.size === 0 && editQuestionsData.size > 0) {
       this.onClose();
     }
+
+    // bid change check start
+    const {
+      match: { params },
+      selectedBid
+    } = this.props;
+    const thisProposalId = selectedBid.get('id', '');
+    const prevProposalId = prevProps.selectedBid.get('id', '');
+    // Bid changed
+    if (prevProposalId !== thisProposalId) {
+      console.log(
+        prevProposalId,
+        'in question component selected bid changed to',
+        thisProposalId
+      );
+      this.setState({ proposalNoteRender: false });
+      setTimeout(() => {
+        this.setState({ proposalNoteRender: true });
+      }, 5000);
+    }
+    //bid change check ends
   }
 
   componentWillUnmount() {
@@ -537,7 +560,21 @@ class Questions extends Component {
                 <div id="panel-notepad-header">
                   <Typography variant="h3">Notepad</Typography>
                 </div>
-                {this.context.wsInstance ? <WysiwygNotepad /> : ''}
+                {this.state.proposalNoteRender && this.context.wsInstance ? (
+                  <WysiwygNotepad />
+                ) : (
+                  <Loader
+                    type="TailSpin"
+                    color="#297DFD"
+                    width={30}
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '100vh'
+                    }}
+                  />
+                )}
               </div>
             </Panel>
           </div>

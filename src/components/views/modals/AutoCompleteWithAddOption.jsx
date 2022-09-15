@@ -81,8 +81,12 @@ const AutoCompleteWithAddOption = ({
     const newTrimVal = Array.isArray(modifiedAnswer)
       ? modifiedAnswer
       : modifiedAnswer.trim();
-    const isValidVal = !isEqual(selectedVal, newTrimVal);
-    if (!isValidVal) return;
+    console.log({
+      selectedVal,
+      newTrimVal,
+      isValid: !isEqual(selectedVal, newTrimVal)
+    });
+    if (isEqual(selectedVal, newTrimVal)) return;
 
     setSelectedVal(modifiedAnswer);
     onChange(modifiedAnswer);
@@ -114,14 +118,16 @@ const AutoCompleteWithAddOption = ({
   /**
    * Set Autocomplete Placeholder
    */
-  const placeHolder = () => {
-    const placeholder = 'Click to answer';
-    if (multiple) {
-      return selectedVal && selectedVal.length ? '' : placeholder;
-    }
-    return selectedVal ? '' : placeholder;
-  };
-  const placeholder = placeHolder();
+  const defaultPlaceholder = 'Click to answer';
+  let placeholder = null;
+  if (multiple) {
+    const placeholderTxt =
+      selectedVal && selectedVal.length ? '' : defaultPlaceholder;
+    placeholder = disabled ? '' : placeholderTxt;
+  } else {
+    const placeholderTxt = selectedVal ? '' : defaultPlaceholder;
+    placeholder = disabled ? '' : placeholderTxt;
+  }
 
   /**
    * onChange Autocomplete Input Text
