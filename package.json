@@ -1,6 +1,6 @@
 {
   "name": "gbo-efficiencies-frontend",
-  "version": "4.4.1",
+  "version": "4.4.2",
   "description": "GBO Efficiencies Frontend App",
   "main": "index.js",
   "scripts": {
