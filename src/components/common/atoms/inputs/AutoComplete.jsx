@@ -1,23 +1,22 @@
 import React, { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import AutocompleteV2 from 'apollo-react/components/AutocompleteV2';
+import { isEmpty } from 'lodash';
 import { API } from '../../../../constants';
 import { getAccessTokenFromLocalStorage as getAccessToken } from '../../../../SessionHandler';
-
 const { USER_API_URL, API_KEY } = API.PROPOSAL;
 const Autocomplete = props => {
   const [options, setOptions] = useState([]);
   const [value, setValue] = useState([]);
   const [callAccept, setCallAccept] = useState(false);
   const [inputVal, setInputVal] = useState('');
-
+  const [getNoOptionsText, setNoOptionsText] = useState(1);
   const text = String(props?.text)
     .trimStart()
     .trimEnd();
   const previousController = useRef();
   const { disabled } = props;
   // let callAccept = false;
-
   function filter() {
     value.map(row => {
       let matched = row.email;
@@ -40,7 +39,6 @@ const Autocomplete = props => {
     );
     return result ? (result.length ? result[0] : '') : '';
   }
-
   /**
    * Extracts name from the string format: `Firstname Lastname(name@example.com)`
    */
@@ -52,7 +50,6 @@ const Autocomplete = props => {
         : ''
       : '';
   }
-
   useEffect(() => {
     if (Boolean(text.length)) {
       let Val = text.split(',').map(v => {
@@ -63,7 +60,6 @@ const Autocomplete = props => {
       setValue(Val);
     } else setValue([]);
   }, [text]);
-
   const getData = async searchTerm => {
     if (previousController.current) {
       previousController.current.abort();
@@ -89,15 +85,13 @@ const Autocomplete = props => {
               mail: `${p.email.toLowerCase()}`
             };
           });
-          // console.log(updatedOptions, 'UO');
           setOptions(updatedOptions);
+          updatedOptions.length > 0 ? setNoOptionsText(1) : setNoOptionsText(0);
         });
     } catch (error) {
       console.error(error);
     }
-    console.log({ updatedOptions });
   };
-
   const handleChange = (event, newValue, reason) => {
     setValue(newValue);
     const proposaluser = newValue.map(v => {
@@ -106,11 +100,9 @@ const Autocomplete = props => {
     if (proposaluser.length === 0) props.onChange(' ', text, reason);
     else props.onChange(proposaluser.join(','), text, reason);
   };
-
-  const onInputChange = _.debounce((event, value) => {
+  const onInputChange = (event, value) => {
     setInputVal(value);
     const elem = document.querySelectorAll('.a-MuiAutocomplete-popper').item(0);
-
     if (value) {
       setCallAccept(true);
       // setCount(1);
@@ -122,12 +114,10 @@ const Autocomplete = props => {
       setOptions([]);
       elem.className += ' disable';
     }
-  }, 100);
-
+  };
   const timeout = ms => {
     return new Promise(resolve => setTimeout(resolve, ms));
   };
-
   const onInputFocus = async () => {
     props.onFocus();
     // await timeout(500);
@@ -135,13 +125,11 @@ const Autocomplete = props => {
     elem.className += ' disable';
     // elem.classList.add('disable');
   };
-
   return (
     <div className={`${disabled ? 'autocomplete-disabled' : 'autocomplete'}`}>
       <AutocompleteV2
         fullWidth
         multiple
-        loading={options.length == 0}
         options={options || []}
         chipColor="white"
         size="small"
@@ -151,7 +139,9 @@ const Autocomplete = props => {
         onChange={handleChange}
         inputValue={inputVal}
         onInputChange={onInputChange}
-        noOptionsText="No matches found"
+        noOptionsText={
+          getNoOptionsText === 0 ? 'No Matches Found' : 'Loading...'
+        }
         onFocus={onInputFocus}
         onBlur={e => props.onBlur()}
         disabled={disabled || false}
@@ -159,11 +149,9 @@ const Autocomplete = props => {
     </div>
   );
 };
-
 Autocomplete.propTypes = {
   disabled: PropTypes.bool.isRequired,
   onFocus: PropTypes.func.isRequired,
   onBlur: PropTypes.func.isRequired
 };
-
 export default Autocomplete;
