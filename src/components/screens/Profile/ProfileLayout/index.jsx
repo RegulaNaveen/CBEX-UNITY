@@ -5,24 +5,8 @@ import Footer from 'apollo-react/components/Footer';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Loader from 'apollo-react/components/Loader';
 import { useSelector, useDispatch } from 'react-redux';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import Snackbar from '@material-ui/core/Snackbar';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import MuiAlert from '@material-ui/lab/Alert';
 import PropTypes from 'prop-types';
 import Toolbar from '../../../views/toolbar';
-
-import {
-  fetchUserPreference,
-  fetchTimezone
-} from '../../../../redux/actions/profile-actions';
-import {
-  selectIsUpdatingUserPreference,
-  selectIsFetchingUserPreference,
-  selectFetchUserPreferenceErrorMsg,
-  selectUpdateUserPreferenceErrorMsg,
-  selectFetchTimezoneErrorMsg
-} from '../../../../redux/selectors';
 
 import SideNav from './SideNav';
 import {
@@ -43,71 +27,22 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
-
 const ProfileLayout = ({ children }) => {
   const dispatch = useDispatch();
   const styles = {
     backgroundColor: '#f6f7fb',
     minHeight: 'calc(100vh - 57px)'
   };
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const isFetchingUserPreference = useSelector(selectIsFetchingUserPreference);
-  const isUpdatingUserPreference = useSelector(selectIsUpdatingUserPreference);
-  const errorFetchingUserPreference = useSelector(
-    selectFetchUserPreferenceErrorMsg
-  );
-  const errorUpdatingUserPreference = useSelector(
-    selectUpdateUserPreferenceErrorMsg
-  );
-
-  const errorFetchingTimezone = useSelector(selectFetchTimezoneErrorMsg);
 
   const classes = useStyles();
-  const name = getUserName();
-  const email = getUserEmail();
-  const role = getUserRole();
-  const token = getAccessToken();
+  const name = useSelector(getUserName);
+  const email = useSelector(getUserEmail);
+  const role = useSelector(getUserRole);
+  const token = useSelector(getAccessToken);
   const [roleName, setRoleName] = useState('');
-
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setOpenSnackbar(false);
-  };
-
-  useEffect(() => {
-    dispatch(fetchUserPreference());
-    dispatch(fetchTimezone());
-  }, []);
-
-  useEffect(() => {
-    if (
-      errorUpdatingUserPreference ||
-      errorFetchingUserPreference ||
-      errorFetchingTimezone
-    )
-      setOpenSnackbar(true);
-  }, [errorUpdatingUserPreference, errorFetchingUserPreference]);
-
-  if (isFetchingUserPreference) {
-    return (
-      <div
-        className="profile-wrapper"
-        style={{ justifyContent: 'center', alignItems: 'center' }}
-      >
-        <Loader />
-      </div>
-    );
-  }
 
   return (
     <div className="profile-wrapper">
-      {isUpdatingUserPreference && <Loader />}
       <Toolbar selected="dashboard" />
 
       <Grid container disablePadding style={styles}>
@@ -162,15 +97,6 @@ const ProfileLayout = ({ children }) => {
               />
             </Grid>
           </div>
-          <Snackbar
-            open={openSnackbar}
-            autoHideDuration={6000}
-            onClose={handleClose}
-          >
-            <Alert onClose={handleClose} severity="error">
-              Something went wrong, Please try after sometime.
-            </Alert>
-          </Snackbar>
         </Grid>
       </Grid>
     </div>

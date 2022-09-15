@@ -128,15 +128,15 @@ const SideNav = ({ name, role }) => {
 
           <div className={classes.item}>
             <List disablePadding>
-              <ListItem
-                button
-                key="Account Preference"
-                classes={{ root: classes.root, selected: classes.selected }}
+              <NavLink
+                to={PROFILE}
+                activeClassName="current"
+                style={{ textDecoration: 'none' }}
               >
-                <NavLink
-                  to={PROFILE}
-                  activeClassName="current"
-                  style={{ textDecoration: 'none' }}
+                <ListItem
+                  button
+                  key="Account Preference"
+                  // classes={{ root: classes.root, selected: classes.selected }}
                 >
                   <Typography
                     gutterBottom
@@ -148,17 +148,17 @@ const SideNav = ({ name, role }) => {
                   >
                     Account Preferences
                   </Typography>
-                </NavLink>
-              </ListItem>
-              <ListItem
-                button
-                key="Recent Activity"
-                classes={{ root: classes.root, selected: classes.selected }}
+                </ListItem>
+              </NavLink>
+              <NavLink
+                activeClassName="current"
+                style={{ textDecoration: 'none' }}
+                to={RECENT_ACTIVITY}
               >
-                <NavLink
-                  activeClassName="current"
-                  style={{ textDecoration: 'none' }}
-                  to={RECENT_ACTIVITY}
+                <ListItem
+                  button
+                  key="Recent Activity"
+                  // classes={{ root: classes.root, selected: classes.selected }}
                 >
                   <Typography
                     gutterBottom
@@ -171,8 +171,8 @@ const SideNav = ({ name, role }) => {
                   >
                     Recent Activity
                   </Typography>
-                </NavLink>
-              </ListItem>
+                </ListItem>
+              </NavLink>
               {/* <Divider /> */}
             </List>
             <Divider style={{ marginTop: '0.25em' }} />

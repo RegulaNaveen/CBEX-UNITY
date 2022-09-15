@@ -1,5 +1,8 @@
 import Grid from 'apollo-react/components/Grid';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import Loader from 'apollo-react/components/Loader';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -8,12 +11,21 @@ import {
   updateUserTimezone
 } from '../../../../redux/actions/profile-actions';
 import {
+  fetchUserPreference,
+  fetchTimezone
+} from '../../../../redux/actions/profile-actions';
+import {
   selectUserPreference,
   selectIsFetchingTimezone,
   selectIsUpdatingTimezone,
   selectTimezoneList,
   selectTimezoneID,
-  selectUpdateTimezoneErrorMsg
+  selectUpdateTimezoneErrorMsg,
+  selectIsFetchingUserPreference,
+  selectIsUpdatingUserPreference,
+  selectFetchUserPreferenceErrorMsg,
+  selectUpdateUserPreferenceErrorMsg,
+  selectFetchTimezoneErrorMsg
 } from '../../../../redux/selectors';
 
 import {
@@ -27,6 +39,7 @@ import NotificationPreference from './NotificationPreference';
 
 function AccountPreferences() {
   const dispatch = useDispatch();
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const isFetchingTimezone = useSelector(selectIsFetchingTimezone);
   const isUpdatingTimezone = useSelector(selectIsUpdatingTimezone);
   const timezoneList = useSelector(selectTimezoneList);
@@ -38,6 +51,16 @@ function AccountPreferences() {
   const name = getUserName();
   const email = getUserEmail();
   const role = getUserRole();
+  const isFetchingUserPreference = useSelector(selectIsFetchingUserPreference);
+  const isUpdatingUserPreference = useSelector(selectIsUpdatingUserPreference);
+  const errorFetchingUserPreference = useSelector(
+    selectFetchUserPreferenceErrorMsg
+  );
+  const errorUpdatingUserPreference = useSelector(
+    selectUpdateUserPreferenceErrorMsg
+  );
+
+  const errorFetchingTimezone = useSelector(selectFetchTimezoneErrorMsg);
 
   const [roleName, setRoleName] = useState('');
   const [currentTimezoneID, setCurrentTimezoneID] = useState('');
@@ -45,6 +68,14 @@ function AccountPreferences() {
   const handleUpdateTimezone = e => {
     setCurrentTimezoneID(e.target.value);
     dispatch(updateUserTimezone(e.target.value));
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenSnackbar(false);
   };
 
   /**
@@ -118,44 +149,85 @@ function AccountPreferences() {
     dispatch(updateUserPreference(preferenceId, preferenceSelected));
   };
 
+  useEffect(() => {
+    dispatch(fetchUserPreference());
+    dispatch(fetchTimezone());
+  }, []);
+
+  useEffect(() => {
+    if (
+      errorUpdatingUserPreference ||
+      errorFetchingUserPreference ||
+      errorFetchingTimezone
+    )
+      setOpenSnackbar(true);
+  }, [errorUpdatingUserPreference, errorFetchingUserPreference]);
+
+  function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+
+  // if (isFetchingUserPreference) {
+  //   return (
+  //     <div
+  //       className="profile-wrapper"
+  //       style={{ justifyContent: 'center', alignItems: 'center' }}
+  //     >
+  //       <Loader />
+  //     </div>
+  //   );
+  // }
+
   return (
-    <ProfileLayout>
-      <Grid
-        container
-        item
-        md={12}
-        sm={12}
-        xs={12}
-        style={{ paddingTop: '1.2em', margin: '0' }}
-        spacing={2}
+    <>
+      <ProfileLayout>
+        {isUpdatingUserPreference && <Loader />}
+        <Grid
+          container
+          item
+          md={12}
+          sm={12}
+          xs={12}
+          style={{ paddingTop: '1.2em', margin: '0' }}
+          spacing={2}
+        >
+          <Grid item md={6} sm={12} xs={12}>
+            <AccountPreference
+              name={name}
+              email={email}
+              role={role}
+              roleName={roleName}
+              setRoleName={setRoleName}
+              userPreference={userPreference}
+              isFetchingTimezone={isFetchingTimezone}
+              isUpdatingTimezone={isUpdatingTimezone}
+              timezoneList={timezoneList}
+              timezoneID={timezoneID}
+              handleUserPreferenceChange={handleUserPreferenceChange}
+              handleUpdateTimezone={handleUpdateTimezone}
+              currentTimezoneID={currentTimezoneID}
+              setCurrentTimezoneID={setCurrentTimezoneID}
+              errorUpdatingTimezone={errorUpdatingTimezone}
+            />
+          </Grid>
+          <Grid item md={6} sm={12} xs={12}>
+            <NotificationPreference
+              userPreference={userPreference}
+              handleUserPreferenceChange={handleUserPreferenceChange}
+            />
+          </Grid>
+        </Grid>
+      </ProfileLayout>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleClose}
       >
-        <Grid item md={6} sm={12} xs={12}>
-          <AccountPreference
-            name={name}
-            email={email}
-            role={role}
-            roleName={roleName}
-            setRoleName={setRoleName}
-            userPreference={userPreference}
-            isFetchingTimezone={isFetchingTimezone}
-            isUpdatingTimezone={isUpdatingTimezone}
-            timezoneList={timezoneList}
-            timezoneID={timezoneID}
-            handleUserPreferenceChange={handleUserPreferenceChange}
-            handleUpdateTimezone={handleUpdateTimezone}
-            currentTimezoneID={currentTimezoneID}
-            setCurrentTimezoneID={setCurrentTimezoneID}
-            errorUpdatingTimezone={errorUpdatingTimezone}
-          />
-        </Grid>
-        <Grid item md={6} sm={12} xs={12}>
-          <NotificationPreference
-            userPreference={userPreference}
-            handleUserPreferenceChange={handleUserPreferenceChange}
-          />
-        </Grid>
-      </Grid>
-    </ProfileLayout>
+        <Alert onClose={handleClose} severity="error">
+          Something went wrong, Please try after sometime.
+        </Alert>
+      </Snackbar>
+    </>
   );
 }
 
