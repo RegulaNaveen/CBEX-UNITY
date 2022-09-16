@@ -23,8 +23,10 @@ import {
   StyleSheet,
   Text,
   Font,
-  Image
+  Image,
+  Link as HtmlLink
 } from '@react-pdf/renderer';
+import './AnnotationLayer.css';
 import React from 'react';
 import Html from 'react-pdf-html';
 import { isString } from 'lodash';
@@ -34,31 +36,14 @@ import ProximaNovaBold from '../../../../fonts/Proxima Nova Alt Bold.otf';
 import ProximaNovaBoldItalic from '../../../../fonts/Proxima-Nova-Bold-It.otf';
 import ProximaNovaItalic from '../../../../fonts/Proxima-Nova-Reg-It.otf';
 import moment from 'moment';
-import { convertFromHTML, convertFromRaw, EditorState } from 'draft-js';
-import ReactDOMServer from 'react-dom/server';
-import RichTextEditor from '../../common/RichTextEditor';
 import { generateHTML } from '@tiptap/core';
-
-import Bold from '@tiptap/extension-bold';
-import TipTapDocument from '@tiptap/extension-document';
-import Paragraph from '@tiptap/extension-paragraph';
-import TipTapText from '@tiptap/extension-text';
-import Italic from '@tiptap/extension-italic';
-import Strike from '@tiptap/extension-strike';
-import Underline from '@tiptap/extension-underline';
-import BulletList from '@tiptap/extension-bullet-list';
-import ListItem from '@tiptap/extension-list-item';
-import OrderedList from '@tiptap/extension-ordered-list';
-import Heading from '@tiptap/extension-heading';
 import Link from '@tiptap/extension-link';
-import Code from '@tiptap/extension-code';
-import HardBreak from '@tiptap/extension-hard-break';
-import HorizontalRule from '@tiptap/extension-horizontal-rule';
-import CodeBlock from '@tiptap/extension-code-block';
 import HighLight from '@tiptap/extension-highlight';
-import TextAlign from '@tiptap/extension-text-align';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
+import Mention from '@tiptap/extension-mention';
+import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
 
 Font.register({
   family: 'ProximaNova',
@@ -69,17 +54,6 @@ Font.register({
     { src: ProximaNova, fontStyle: 'normal' }
   ]
 });
-
-// TO-DO : need to get font otf files to support respective fonts
-Font.register({ family: 'Georgia', src: ProximaNova });
-Font.register({ family: 'Arial', src: ProximaNova });
-Font.register({ family: 'Arial Black', src: ProximaNova });
-Font.register({ family: 'Courier New', src: ProximaNova });
-Font.register({ family: 'Helvetica', src: ProximaNova });
-Font.register({ family: 'Times New Roman', src: ProximaNova });
-Font.register({ family: 'Impact', src: ProximaNova });
-Font.register({ family: 'Lucida Console', src: ProximaNova });
-Font.register({ family: 'Roboto', src: ProximaNova });
 
 const styles = StyleSheet.create({
   page: {
@@ -130,6 +104,9 @@ const styles = StyleSheet.create({
 
 function getStyle() {
   return `<style>
+    *{
+        font-family: ProximaNova !important;
+      }
     h1{
         font-size: 20px;
         margin: 5px;
@@ -212,13 +189,13 @@ function getStyle() {
     }
     .public-DraftStyleDefault-depth2.public-DraftStyleDefault-listLTR {
         margin-left: 15px;
-    } 
+    }
     .public-DraftStyleDefault-depth3.public-DraftStyleDefault-listLTR {
         margin-left: 20px;
-    } 
+    }
     .public-DraftStyleDefault-depth4.public-DraftStyleDefault-listLTR {
         margin-left: 25px;
-    }  
+    }
     .MuiGrid-root{
         display:none;
     }
@@ -230,6 +207,13 @@ function getStyle() {
     [data-block="true"] {
         padding-bottom:10px;
     }
+    li {
+      align-items: flex-start;
+      padding-bottom: 8px;
+    }
+    li_bullet {
+      padding-top: 5px;
+    }
  </style>`;
 }
 
@@ -238,13 +222,18 @@ function checkFormattedAnswer(answers) {
     const lastAnswer = answers[answers.length - 1];
     let formattedAnswer;
     if (lastAnswer?.formattedAnswer) {
-      if (isString(lastAnswer?.formattedAnswer))
-        formattedAnswer = JSON.parse(lastAnswer?.formattedAnswer);
-      else formattedAnswer = lastAnswer?.formattedAnswer;
-      return formattedAnswer?.html;
+      if (isString(lastAnswer?.formattedAnswer)) {
+        try {
+          formattedAnswer = JSON.parse(lastAnswer?.formattedAnswer);
+        } catch {
+          return lastAnswer.answer.toString();
+        }
+      } else formattedAnswer = lastAnswer?.formattedAnswer;
+      if (formattedAnswer?.html) return formattedAnswer?.html;
     }
     return lastAnswer.answer.toString();
   } catch (error) {
+    console.log(error);
     return '';
   }
 }
@@ -436,7 +425,7 @@ function getQuestionToCustomerRows(questions) {
   return html;
 }
 
-function getNotesRows(notes) {
+function getNotesRows(notes, editor) {
   let html = ``;
   html += `<table class="notesTable table marginTop20">`;
   html += `<tr>`;
@@ -446,41 +435,32 @@ function getNotesRows(notes) {
   let data = ``;
   data += `<table><tr><td style="border:1px solid black;padding:10px">`;
   try {
-    notes.forEach(note => {
-      let { noteText } = note;
-      // let noteContentState = EditorState.createEmpty();
-      try {
-        console.log('noteText pdf', noteText);
-        let json = JSON.parse(noteText);
-        data += generateHTML(json, [
-          TipTapDocument,
-          Paragraph,
-          TipTapText,
-          Bold,
-          Italic,
-          Strike,
-          Underline,
-          BulletList,
-          OrderedList,
-          ListItem,
-          Heading,
-          Link,
-          Code,
-          CodeBlock,
-          HighLight,
-          HorizontalRule,
-          HardBreak,
-          Subscript,
-          Superscript
-        ]);
-        console.log('ddata', data);
-        data += `</td></tr></table>`;
-        html += data;
-        return html;
-      } catch (err) {
-        console.log('pdf notes error', err);
-      }
-    });
+    const noteText = editor.getJSON();
+    try {
+      console.log('noteText pdf', noteText);
+      data += generateHTML(noteText, [
+        StarterKit,
+        Link,
+        HighLight,
+        Subscript,
+        Superscript,
+        Underline,
+        Mention.configure({
+          HTMLAttributes: {
+            style: `color:blue;`
+          },
+          renderLabel({ options, node }) {
+            return `${node.attrs.id}`;
+          }
+        })
+      ]);
+      console.log('ddata', data);
+      data += `</td></tr></table>`;
+      html += data;
+      return html;
+    } catch (err) {
+      console.log('pdf notes error', err);
+    }
   } catch (error) {
     console.log('Error in getNotesRows');
   }
@@ -492,7 +472,8 @@ function getHtml(
   questions,
   filteredQuestions,
   notes,
-  filterState
+  filterState,
+  editor
 ) {
   let html = `
         <html>
@@ -502,9 +483,9 @@ function getHtml(
             ${getProposalTeamsRows(questions)}
             ${getQuestionToCustomerRows(questions)}
             ${questionTables(filteredQuestions)}
-            ${filterState.includesNotes ? getNotesRows(notes) : ''}
+            ${filterState.includesNotes ? getNotesRows(notes, editor) : ''}
         </body>
-        </html>    
+        </html>
     `;
 
   // this is added to handle , some data having unclosed span tag.
@@ -517,7 +498,8 @@ const MyDoc = (
   questions,
   filteredQuestions,
   notes,
-  filterState
+  filterState,
+  editor
 ) => {
   return (
     <Document>
@@ -536,7 +518,19 @@ const MyDoc = (
           </View>
           <Html
             renderers={{
-              tr: ({ style, children }) => <View style={style}>{children}</View>
+              tr: ({ style, children }) => (
+                <View style={style}>{children}</View>
+              ),
+              a: ({ style, element, children }) => {
+                return (
+                  <HtmlLink style={style} href={element.attrs.href}>
+                    <Text>{children}</Text>
+                  </HtmlLink>
+                );
+              },
+              mark: ({ style, children }) => {
+                return <Text style={style}>{children}</Text>;
+              }
             }}
           >
             {getHtml(
@@ -544,7 +538,8 @@ const MyDoc = (
               questions,
               filteredQuestions,
               notes,
-              filterState
+              filterState,
+              editor
             )}
           </Html>
         </View>
@@ -621,7 +616,8 @@ export function createPdf(content) {
   let {
     data: { proposalQuestions, proposalDetails },
     notes,
-    filterState
+    filterState,
+    editor
   } = content;
   const filteredQuestions = getFilteredQuestion(proposalQuestions, filterState);
   return pdf(
@@ -630,7 +626,8 @@ export function createPdf(content) {
       proposalQuestions,
       filteredQuestions,
       notes,
-      filterState
+      filterState,
+      editor
     )
   ).toBlob();
 }

@@ -214,3 +214,44 @@
   user-select: none;
   white-space: nowrap;
 }
+
+/* Styles for User tag feature in notepad */
+.ProseMirror {
+  > * + * {
+    margin-top: 0.75em;
+  }
+}
+
+.mention {
+  color: $neptune-primary;
+  padding: 0.1rem 0.3rem;
+}
+
+.mention-items {
+  background: $white;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05), 0px 10px 20px rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.8);
+  font-size: 0.9rem;
+  overflow: hidden;
+  padding: 0.2rem;
+  position: relative;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.mention-item {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.4rem;
+  display: block;
+  margin: 0;
+  padding: 0.2rem 0.4rem;
+  text-align: left;
+  width: 100%;
+
+  &.is-selected {
+    border-color: $black;
+  }
+}
+/* END Styles for User tag feature in notepad */

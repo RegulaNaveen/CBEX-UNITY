@@ -56,6 +56,10 @@
       &:hover {
         background-color: $neptune-hover;
       }
+
+      &.active {
+        background-color: $neptune-hover;
+      }
     }
   }
 
@@ -90,10 +94,20 @@
     padding: 8px;
     padding-right: 20px;
 
+    &:focus {
+      border-color: #0768fd;
+      transition-duration: 0.2s;
+      transition-property: border-color;
+      outline: none !important;
+    }
+
     &.dd-header-disabled {
       background-color: #f2f2f2;
       cursor: not-allowed;
-
+      outline: none;
+      user-select: text;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
       &:before {
         border-color: #b5b5b5 transparent transparent transparent;
       }

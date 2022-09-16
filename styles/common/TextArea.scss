@@ -93,7 +93,7 @@
   margin-top: 0 !important;
   font-family: $proximaNova;
   font-size: 16px;
-  min-width: 176px;
+  min-width: auto;
   border: 1px solid #d9d9d9;
   border-radius: 4px;
 
@@ -164,7 +164,7 @@
       }
     }
   }
-  textarea{
-    padding: 5px!important;
+  textarea {
+    padding: 5px !important;
   }
 }

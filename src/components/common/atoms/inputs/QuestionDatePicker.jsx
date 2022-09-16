@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import DatePicker from 'apollo-react/components/DatePickerV2';
 import moment from 'moment';
 import { CloseCircle } from '../../../svg';
@@ -15,6 +15,7 @@ const QuestionDatePicker = ({
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [resetsubmit, setresetsubmit] = useState(false);
+  const datePickerRef = useRef(null);
   useEffect(() => {
     value = String(value)
       .trimStart()
@@ -68,6 +69,7 @@ const QuestionDatePicker = ({
           }
           if (!dte) handleDayChange(' ', value);
         }}
+        ref={datePickerRef}
       />
       {resetsubmit && !disabled && (
         <button
@@ -84,6 +86,7 @@ const QuestionDatePicker = ({
           }}
           type="button"
           className="resetButton"
+          tabIndex={-1}
         >
           <CloseCircle fill="#444" />
         </button>
