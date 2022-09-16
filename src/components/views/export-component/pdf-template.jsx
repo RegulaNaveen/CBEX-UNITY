@@ -41,6 +41,7 @@ import Link from '@tiptap/extension-link';
 import HighLight from '@tiptap/extension-highlight';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
+import Mention from '@tiptap/extension-mention';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 
@@ -443,7 +444,15 @@ function getNotesRows(notes, editor) {
         HighLight,
         Subscript,
         Superscript,
-        Underline
+        Underline,
+        Mention.configure({
+          HTMLAttributes: {
+            style: `color:blue;`
+          },
+          renderLabel({ options, node }) {
+            return `${node.attrs.id}`;
+          }
+        })
       ]);
       console.log('ddata', data);
       data += `</td></tr></table>`;

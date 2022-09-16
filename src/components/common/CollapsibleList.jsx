@@ -46,7 +46,8 @@ type Props = {
   proposalDetail: any,
   milestone: any,
   selectedBid: Map,
-  isNotepadOpen: boolean
+  isNotepadOpen: boolean,
+  listIndex: number
 };
 
 class CollapsibleList extends Component<Props, State> {
@@ -55,6 +56,7 @@ class CollapsibleList extends Component<Props, State> {
   constructor(props: Object) {
     super(props);
     this.taskRef = React.createRef();
+    this.collapseTriggerRef = React.createRef(null);
     this.state = { isCollapsed: false };
   }
 
@@ -68,6 +70,11 @@ class CollapsibleList extends Component<Props, State> {
     } else setIsCollapsed = { isCollapsed: !!isCheckedAll };
 
     setTimeout(() => this.setState(setIsCollapsed), 0);
+    document.addEventListener('keydown', this.keyboardShortcutListener.bind(this));
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown',this.keyboardShortcutListener.bind(this));
   }
 
   componentDidUpdate(prevProps) {
@@ -174,6 +181,23 @@ class CollapsibleList extends Component<Props, State> {
     });
   };
 
+  keyboardShortcutListener = (e) => {
+    const { listIndex, questionsRef } = this.props;
+    const altKeyPressed = e.altKey;
+    if (
+      altKeyPressed &&
+      String(e.key).toLowerCase() === 'q'
+      ) {
+        if (this.taskRef.current.contains(document.activeElement)) {
+          this.collapseTriggerRef.current.focus();
+        } else if (!questionsRef.current.contains(document.activeElement)) {
+          if (listIndex === 0) {
+            this.collapseTriggerRef.current.focus();
+          }
+        }
+      } else return
+  }
+
   render() {
     const { isCollapsed } = this.state;
     const { onAddQuestion } = this.props;
@@ -189,12 +213,13 @@ class CollapsibleList extends Component<Props, State> {
       <div className="task-wrapper" ref={this.taskRef} id={this.createId()}>
         {/* Expand Arrow Icon */}
         <button
-          id="arrow-icon"
+          id={`arrow-icon-${this.createId()}`}
           className="task-icon-wrapper"
           onClick={this.handleCollapse}
           onKeyPress={this.handleKeyPress}
           type="button"
           tabIndex={0}
+          ref={this.collapseTriggerRef}
         >
           <img
             className="task-icon"
