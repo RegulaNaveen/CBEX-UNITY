@@ -8,7 +8,7 @@ export default {
   items: async ({ query }) => {
     let autoCompleteList = [];
     try {
-      if (query.length > 1) {
+      if (query.length >= 1) {
         const adUsers = await getADUsers(query);
         if (adUsers?.length > 0) {
           autoCompleteList = adUsers.map(user => {
@@ -21,11 +21,11 @@ export default {
           });
         }
       }
-      return autoCompleteList.slice(0, 15);
+      return autoCompleteList;
     } catch (error) {
       console.log('error in generating usernames for notes suggestion');
       console.error(error);
-      return autoCompleteList.slice(0, 15);
+      return autoCompleteList;
     }
   },
   render: () => {

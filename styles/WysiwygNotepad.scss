@@ -236,6 +236,8 @@
   overflow: hidden;
   padding: 0.2rem;
   position: relative;
+  max-height: 250px;
+  overflow-y: auto;
 }
 
 .mention-item {
