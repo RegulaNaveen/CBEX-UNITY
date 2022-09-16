@@ -5,7 +5,7 @@ import { connect, useSelector } from 'react-redux';
 import Search from 'apollo-react/components/Search';
 import Cog from 'apollo-react-icons/Cog';
 import Card from 'apollo-react/components/Card';
-import Divider from '@material-ui/core/Divider';
+import { Divider } from '@material-ui/core/Divider';
 import ProfileLayout from '../ProfileLayout';
 import DrawerOptions from '../../../views/Notification/DrawerOptions';
 import {
@@ -80,14 +80,7 @@ const RecentActivity = ({ unreadNotifications, setNotifications }) => {
 
   return (
     <ProfileLayout>
-      <Grid
-        container
-        item
-        md={12}
-        sm={12}
-        xs={12}
-        style={{ padding: '0 2em 0 1em', margin: '0' }}
-      >
+      <Grid container item md={12} sm={12} xs={12} className="recent-grid">
         <Grid item md={12} sm={12} xs={12} className="recent-search-field">
           <Search
             placeholder="Search recent notifications"
@@ -96,25 +89,13 @@ const RecentActivity = ({ unreadNotifications, setNotifications }) => {
             className="recent-search-input"
           />
         </Grid>
-        <Grid item md={12} sm={12} xs={12} style={{ paddingTop: '0.5em' }}>
+        <Grid item md={12} sm={12} xs={12} className="recent-grid-item">
           <Card interactive className="recent-card">
-            <table style={{ display: 'flex', flexDirection: 'column' }}>
+            <table className="table-body">
               <thead>
-                <tr
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    marginTop: '1em',
-                    paddingLeft: '36px'
-                  }}
-                >
-                  <th
-                    style={{
-                      alignSelf: 'flex-start',
-                      marginLeft: '-1em'
-                    }}
-                  >
-                    <td style={{ textAlign: 'left', paddingLeft: '0.5em' }}>
+                <tr className="table-row">
+                  <th className="table-head">
+                    <td className="table-data">
                       <Typography
                         className="recent-header"
                         variant="h1"
@@ -124,23 +105,12 @@ const RecentActivity = ({ unreadNotifications, setNotifications }) => {
                       </Typography>
                     </td>
                   </th>
-                  <th
-                    style={{
-                      flexGrow: '0',
-                      marginRight: '1em'
-                    }}
-                  >
+                  <th className="recent-table-head">
                     <Typography
-                      className="recent-header"
+                      className="recent-cog"
                       variant="caption"
                       gutterBottom
                       onClick={toggleIsDrawerOptions}
-                      style={{
-                        color: '#595959',
-                        height: '16px',
-                        width: '16px',
-                        cursor: 'pointer'
-                      }}
                     >
                       <Cog />
                       <DrawerOptions
@@ -155,21 +125,8 @@ const RecentActivity = ({ unreadNotifications, setNotifications }) => {
                 {!isEmpty(sortedAllNotification) ? (
                   sortedAllNotification.map(item => {
                     return (
-                      <tr
-                        style={{
-                          // overflowY: 'auto',
-                          display: 'block',
-                          marginTop: '0.5em',
-                          marginLeft: '0.5em'
-                        }}
-                      >
-                        <td
-                          style={{
-                            display: 'block',
-                            textAlign: 'left'
-                            // paddingLeft: '1em'
-                          }}
-                        >
+                      <tr className="recent-table-row">
+                        <td className="recent-table-data">
                           <NotificationList
                             key={item.id}
                             id={item.id}
@@ -179,17 +136,7 @@ const RecentActivity = ({ unreadNotifications, setNotifications }) => {
                             isSeen={item.read}
                             createdAt={item.updated_date}
                           />
-                          <Divider
-                            variant="inset"
-                            style={{
-                              marginLeft: '23px',
-                              marginTop: '2em',
-                              height: '1px',
-                              width: '941px',
-                              marginRight: '23px',
-                              backgroundColor: '#F6F7FB'
-                            }}
-                          />
+                          <Divider variant="inset" className="recent-divider" />
                         </td>
                       </tr>
                     );
