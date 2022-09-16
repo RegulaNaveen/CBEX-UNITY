@@ -26,6 +26,23 @@ const PROPOSAL = {
   SWITCH_TEMP_PROGRESS_MSG: 'Switching template is in progress..'
 };
 
+const PROFILE = {
+  ACCOUNT_PREFERENCES: 'Account Preferences',
+  EMAIL: 'Email',
+  USER_ROLE: 'User Role',
+  ROLE_HELPER_TEXT:
+    'Your role will help determine the most appropriate questions displayed',
+  TIME_ZONE: ' Time Zone',
+  TIME_ZONE_HELPER_TEXT:
+    'Your time zone can determine when notifications are sent',
+  ERROR_TEXT: 'Something went wrong, Please try after sometime.',
+  NOTIFICATION_PREFERENCE: 'Notification Preferences',
+  NOTIFICATION: 'Notification',
+  IN_APP: ' In-App',
+  NOT_FOUND: ' Not found!',
+  EMAIL_PREFERENCES: 'Email Preferences'
+};
+
 const REFRESH_WEBSOCKET_CONNECTION = 60000; // 1 minute
 
-export { DEFAULT, PROPOSAL, REFRESH_WEBSOCKET_CONNECTION };
+export { DEFAULT, PROPOSAL, REFRESH_WEBSOCKET_CONNECTION, PROFILE };
