@@ -137,4 +137,23 @@
     display: flex;
     justify-content: space-between;
   }
+  .container-wrap {
+    background-color: #f6f7fb;
+    min-height: calc(100vh - 57px);
+  }
+  .sideNav-wrapper {
+    margin-right: 0.5em;
+  }
+  .right-container-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    // align-item: center;
+    flex-wrap: nowrap;
+  }
+  .footer {
+    margin: 0 !important;
+    padding: 10px 24px 15px 24px !important;
+    height: 15px;
+  }
 }
