@@ -119,12 +119,6 @@ const RecentActivity = ({ unreadNotifications, setNotifications }) => {
                         className="recent-header"
                         variant="h1"
                         gutterBottom
-                        style={{
-                          fontWeight: 600,
-                          lineHeight: '32px',
-                          fontSize: '20px',
-                          paddingLeft: '0.75em'
-                        }}
                       >
                         Notifications
                       </Typography>

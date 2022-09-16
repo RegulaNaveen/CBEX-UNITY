@@ -69,7 +69,6 @@ const useStyles = makeStyles(theme => ({
   logout: {
     padding: '0 24px',
     marginBottom: '-5px'
-    // paddingTop: theme.spacing(20)
   },
   userDetails: {
     textAlign: 'center',
@@ -99,7 +98,6 @@ const SideNav = ({ name, role }) => {
 
   return (
     <Container className={classes.container} disablePadding>
-      {/* <div cla></div> */}
       <div className={classes.layout}>
         <div className={classes.upperPart}>
           <div className={classes.profilepic}>
@@ -131,7 +129,6 @@ const SideNav = ({ name, role }) => {
                   style={{ textDecoration: 'none' }}
                 >
                   <ListItem
-                    // button
                     key="Account Preference"
                     className="acct-pref"
                     classes={{ root: classes.root, selected: classes.selected }}
@@ -156,7 +153,6 @@ const SideNav = ({ name, role }) => {
                   to={RECENT_ACTIVITY}
                 >
                   <ListItem
-                    // button
                     key="Recent Activity"
                     className="acct-pref"
                     classes={{ root: classes.root, selected: classes.selected }}
@@ -203,13 +199,11 @@ const SideNav = ({ name, role }) => {
 
 SideNav.defaultProps = {
   name: '',
-  // roleName: '',
   role: ''
 };
 
 SideNav.propTypes = {
   name: PropTypes.string,
-  // roleName: PropTypes.string,
   role: PropTypes.string
 };
 

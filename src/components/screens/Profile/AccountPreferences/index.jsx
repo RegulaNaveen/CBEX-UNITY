@@ -167,17 +167,6 @@ function AccountPreferences() {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
 
-  // if (isFetchingUserPreference) {
-  //   return (
-  //     <div
-  //       className="profile-wrapper"
-  //       style={{ justifyContent: 'center', alignItems: 'center' }}
-  //     >
-  //       <Loader />
-  //     </div>
-  //   );
-  // }
-
   return (
     <>
       <ProfileLayout>
