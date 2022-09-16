@@ -1,5 +1,5 @@
 .notification {
-  position: "relative";
+  position: 'relative';
   width: fit-content;
   display: inline-flex;
   margin-left: 25%;
@@ -89,7 +89,7 @@
 }
 .notification-item-content {
   flex-grow: 1;
-  padding-left: 2px;
+  padding-left: 10px;
 }
 .notification-item-header {
   display: flex;
