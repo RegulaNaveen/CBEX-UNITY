@@ -38,31 +38,51 @@ class Dropdown extends PureComponent<Props, State> {
     super(props);
 
     this.ref = React.createRef();
+    this.listRef = React.createRef();
 
     this.state = {
       isCollapsed: false,
-      selectedValue: ''
+      selectedValue: '',
+      isFocused: false,
+      focusedValue: ''
     };
   }
 
   componentDidMount() {
-    const { selectedValue } = this.props;
+    const { selectedValue, value } = this.props;
     window.addEventListener('click', this.closeOnOutsideClick);
+    window.addEventListener('keydown', this.handleKeyDown);
     if (selectedValue) {
       const { onClick } = this.props;
       onClick(selectedValue);
-      this.setState({ selectedValue });
+      this.setState({ selectedValue, focusedValue: selectedValue });
+    } else if (value) {
+      const { onClick } = this.props;
+      onClick(value);
+      this.setState({ selectedValue: value, focusedValue: value });
+    }
+
+    // add focus listener to element
+    if (this.ref.current) {
+      this.ref.current.addEventListener('focusin', this.handleFocusIn);
+      this.ref.current.addEventListener('focusout', this.handleFocusOut);
     }
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.value != this.props.value) {
-      this.setState({ selectedValue: this.props.value });
+      this.setState({ selectedValue: this.props.value, focusedValue: this.props.value });
     }
   }
 
   componentWillUnmount() {
     window.removeEventListener('click', this.closeOnOutsideClick);
+    window.removeEventListener('keydown', this.handleKeyDown);
+    // remove focus listener from element
+    if (this.ref.current) {
+      this.ref.current.removeEventListener('focusin', this.handleFocusIn);
+      this.ref.current.removeEventListener('focusout', this.handleFocusOut);
+    }
   }
 
   closeOnOutsideClick = (event: SyntheticEvent<EventTarget>) => {
@@ -86,17 +106,99 @@ class Dropdown extends PureComponent<Props, State> {
     const { onClick } = this.props;
     onClick(value);
 
-    this.setState({ selectedValue: value, isCollapsed: false });
+    this.setState({ selectedValue: value, isCollapsed: false, focusedValue: value });
   };
 
   handleReset = () => {
     const { onClick } = this.props;
     onClick('');
-    this.setState({ selectedValue: '', isCollapsed: false });
+
+    this.setState({ selectedValue: '', isCollapsed: false, focusedValue: '' });
   };
 
+  handleFocusIn = (event) => {
+    this.setState({ isFocused: true });
+  }
+
+  handleFocusOut = (event) => {
+    this.setState({ isFocused: false });
+  }
+
+  handleDownArrowPress = () => {
+    const { focusedValue } = this.state;
+    const { items } = this.props;
+    let focusedIndex = 0;
+
+    if (items.size === 0) return;
+
+    const currentFocusedIndex = items.indexOf(focusedValue);
+    if (currentFocusedIndex > -1 && currentFocusedIndex <= items.size - 2) {
+      focusedIndex = currentFocusedIndex + 1;
+      this.setState({ focusedValue: items.get(focusedIndex) });
+    }
+
+  }
+
+  handleUpArrowPress = () => {
+    const { focusedValue } = this.state;
+    const { items } = this.props;
+    let focusedIndex = 0;
+
+    if (items.size === 0) return;
+
+    const currentFocusedIndex = items.indexOf(focusedValue);
+    if (currentFocusedIndex > -1 && currentFocusedIndex > 0) {
+      focusedIndex = currentFocusedIndex - 1;
+      this.setState({ focusedValue: items.get(focusedIndex) });
+    }
+
+  }
+
+  handleKeyDown = (event) => {
+    const { isCollapsed, focusedValue, isFocused } = this.state;
+    const { items, onClick } = this.props;
+    
+    if (!isFocused) return;
+
+    if (['Escape', 'Enter', 'ArrowUp', 'ArrowDown'].includes(event.code)) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    if (event.code === 'Escape' || event.code === 'Tab') {
+      this.setState({ isCollapsed: false });
+      return;
+    }
+
+    if (event.code === 'Enter') {
+      let newFocusedValue = focusedValue;
+      if (!isCollapsed) {
+        if (items.size > 0 && focusedValue === '') {
+          newFocusedValue = items.get(0);
+        }
+        this.setState({ isCollapsed: true, focusedValue: newFocusedValue });
+      } else {
+        this.setState({ isCollapsed: false, selectedValue: newFocusedValue });
+        onClick(newFocusedValue);
+      }
+      return;
+    }
+
+    if (!isCollapsed) return;
+
+    if (event.code === 'ArrowDown') {
+      this.handleDownArrowPress();
+      return;
+    }
+
+    if (event.code === 'ArrowUp') {
+      this.handleUpArrowPress();
+    }
+
+  }
+
   render() {
-    const { isCollapsed, selectedValue } = this.state;
+    const { isCollapsed, selectedValue, focusedValue, offsetTop } = this.state;
     const {
       placeholder,
       id,
@@ -126,6 +228,7 @@ class Dropdown extends PureComponent<Props, State> {
               }
               ref={this.ref}
               role="presentation"
+              tabIndex={0}
               onClick={() => {
                 if (!disabled) this.handleCollapse();
                 return;
@@ -138,13 +241,15 @@ class Dropdown extends PureComponent<Props, State> {
               )}
             </div>
             {isCollapsed && (
-              <ul className="dd-list">
+              <ul className="dd-list" tabIndex={-1} ref={this.listRef}>
                 {items &&
                   items.map(item => (
                     <DropdownItem
                       onClick={this.handleClick}
                       item={item}
                       key={item}
+                      focused={focusedValue === item}
+                      parentRef={this.listRef}
                     />
                   ))}
               </ul>
