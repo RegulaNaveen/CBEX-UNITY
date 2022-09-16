@@ -8,7 +8,7 @@ export default {
   items: async ({ query }) => {
     let autoCompleteList = [];
     try {
-      if (query.length > 1) {
+      if (query.length >= 1) {
         const adUsers = await getADUsers(query);
         if (adUsers?.length > 0) {
           autoCompleteList = adUsers.map(user => {
