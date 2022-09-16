@@ -93,4 +93,48 @@
     letter-spacing: 0;
     line-height: 24px;
   }
+  .time-zone-select {
+    max-width: 80%;
+  }
+  .acc-pref-wrapper {
+    padding-top: 1.2em;
+    margin: 0;
+  }
+  .notification-tr-head-wrap {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1em;
+    text-align: left;
+  }
+  .th-one {
+    flex-grow: 3;
+    align-self: flex-start;
+  }
+  .th-two {
+    flex-grow: 0;
+    margin-right: 2.9em;
+  }
+  .th-three {
+    flex-grow: 0;
+    margin-right: 1.5em;
+  }
+  .td-one {
+    flex-grow: 3;
+  }
+  .td-two {
+    flex-grow: 0;
+    margin-right: 2em;
+  }
+  .td-three {
+    flex-grow: 0;
+  }
+  .notification-table {
+    overflow-y: auto;
+    display: block;
+    margin-top: 0.5em;
+  }
+  .notification-tr {
+    display: flex;
+    justify-content: space-between;
+  }
 }
