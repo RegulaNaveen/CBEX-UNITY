@@ -125,6 +125,7 @@
   overflow-y: auto;
   background-color: $white;
   right: 0px;
+  padding-top: 10px;
 }
 .notification-option-item {
   height: 30px;
@@ -151,4 +152,20 @@
 .no-notification-bell {
   color: #797979;
   font-size: xx-large;
+}
+
+.view-All-notifications {
+  color: $neptune-primary !important;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  cursor: pointer;
+  padding-bottom: '15px';
+  padding-top: '15px'
+}
+
+.no-notification-viewAll {
+  color: $neptune-primary !important;
+  font-weight: 300 !important;
+  cursor: pointer;
 }

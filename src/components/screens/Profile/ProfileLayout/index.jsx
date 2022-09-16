@@ -1,5 +1,5 @@
 import Grid from 'apollo-react/components/Grid';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Footer from 'apollo-react/components/Footer';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import makeStyles from '@material-ui/core/styles/makeStyles';
@@ -17,9 +17,6 @@ import {
 } from '../../../../SessionHandler';
 
 const useStyles = makeStyles(() => ({
-  item: {
-    // padding: '10px',
-  },
   footer: {
     margin: '0 !important',
     padding: '10px 24px 15px 24px !important',

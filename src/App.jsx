@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { MatomoProvider } from '@datapunt/matomo-tracker-react';
 import { store } from './store';
 import PrivateRoute from './PrivateRoute';
+
 import {
   LOGIN,
   PROPOSALS,

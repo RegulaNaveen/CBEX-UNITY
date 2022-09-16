@@ -121,6 +121,7 @@ export function getLastAnswer(answers) {
     const lastAnswer = answers[answers.length - 1];
     return lastAnswer.answer.toString();
   } catch (error) {
+    console.log(error)
     return '';
   }
 }
@@ -210,7 +211,7 @@ function isContainFormattedAnswer(lastAnswerJS) {
       ? formattedAnswer
       : parseJson(formattedAnswer);
 
-  if (parseFormattedData) return true;
+  if (parseFormattedData.value) return true;
   return false;
 }
 
@@ -572,7 +573,14 @@ function getNoteRows(editor) {
     orderedList: defaultNodes.bullet_list,
     listItem: defaultNodes.bullet_list,
     bulletList: defaultNodes.bullet_list,
-    horizontalRule: defaultNodes.horizontal_rule
+    horizontalRule: defaultNodes.horizontal_rule,
+    mention: (state, node) => {
+      const email = new TextRun({
+        text: node.attrs.id,
+        color: '0047AB'
+      });
+      state.text(email);
+    }
   };
 
   const markSerializer = {
@@ -688,7 +696,7 @@ function getProposalTeamsRows(questions) {
 
     otherTeamQuestions.forEach(question => {
       const { questionText, answers } = question;
-      coreTeamRows.push(
+      otherTeamRows.push(
         isContainFormattedAnswer(answers[answers.length - 1])
           ? new TableRow({
               children: [

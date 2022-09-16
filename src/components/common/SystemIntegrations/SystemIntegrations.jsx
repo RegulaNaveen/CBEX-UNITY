@@ -49,6 +49,7 @@ const SystemIntegrations = ({
             ) : null
           }
           placement="top"
+          tabIndex={-1}
         >
           <div>
             <Incoming
@@ -70,6 +71,7 @@ const SystemIntegrations = ({
             ) : null
           }
           placement="top"
+          tabIndex={-1}
         >
           <div>
             <Incoming
@@ -98,6 +100,7 @@ const SystemIntegrations = ({
             ) : null
           }
           placement="top"
+          tabIndex={-1}
         >
           <div>
             <Incoming
@@ -119,6 +122,7 @@ const SystemIntegrations = ({
             ) : null
           }
           placement="top"
+          tabIndex={-1}
         >
           <div>
             <Incoming
@@ -146,6 +150,7 @@ const SystemIntegrations = ({
             ) : null
           }
           placement="top"
+          tabIndex={-1}
         >
           <div>
             <Outgoing
@@ -171,6 +176,7 @@ const SystemIntegrations = ({
             />
           }
           placement="top"
+          tabIndex={-1}
         >
           <div>
             <Outgoing
@@ -192,6 +198,7 @@ const SystemIntegrations = ({
             ) : null
           }
           placement="top"
+          tabIndex={-1}
         >
           <div className="wrap-integration">
             <Outgoing
@@ -221,6 +228,7 @@ const SystemIntegrations = ({
           type="button"
           onClick={answeronhistory}
           className="integration-buttons"
+          tabIndex={-1}
         >
           <Calendar style={{ color: '#b7b7b7' }} className="integration-icon" />
         </IconButton>
@@ -232,7 +240,7 @@ const SystemIntegrations = ({
       !isAnswered(lastAnswer, isAnswerPredicted)
     ) {
       return (
-        <Tooltip variant="light" title="Unity Predicted Answer" placement="top">
+        <Tooltip variant="light" title="Unity Predicted Answer" placement="top" tabIndex={-1}>
           <IconButton
             disabled={!isCurrentBid}
             style={{
@@ -242,6 +250,7 @@ const SystemIntegrations = ({
               paddingRight: '0px'
             }}
             className="bluecalendar"
+            tabIndex={-1}
           >
             <CalendarCheck
               fontSize="22px"
@@ -273,6 +282,7 @@ const SystemIntegrations = ({
           type="button"
           onClick={answeronhistory}
           className="integration-buttons"
+          tabIndex={-1}
         >
           <CalendarCheck
             className="answered2 integration-icon"
@@ -301,6 +311,7 @@ const SystemIntegrations = ({
           type="button"
           onClick={answeronhistory}
           className="integration-buttons"
+          tabIndex={-1}
         >
           <img
             src={indeterminate}
@@ -331,6 +342,7 @@ const SystemIntegrations = ({
           type="button"
           onClick={answeronhistory}
           className="integration-buttons"
+          tabIndex={-1}
         >
           <img src={indeterminate} alt="indeterminate" className="answered" />
         </IconButton>
@@ -351,6 +363,7 @@ const SystemIntegrations = ({
         type="button"
         onClick={answeronhistory}
         className="integration-buttons"
+        tabIndex={-1}
       >
         <CalendarCheck
           className="answered1 integration-icon"
@@ -364,11 +377,11 @@ const SystemIntegrations = ({
     <Grid
       item
       xs={gridColRatio[1]}
-      className={
+      className={`actions-grid-item ${
         hasDifferentSFanswer && isCurrentBid
           ? 'validation-wrapper-integration'
           : 'no-integration'
-      }
+      }`}
     >
       <div
         style={{

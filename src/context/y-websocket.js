@@ -30,8 +30,10 @@ const messageAuth = 2;
 const reconnectTimeoutBase = 1200;
 const maxReconnectTimeout = 2500;
 // @todo - this should depend on awareness.outdatedTime
-const messageReconnectTimeout = 30000;
+const messageReconnectTimeout = 480000;
+const refreshConnectionTimeout = 30000;
 
+let refreshInterval;
 /**
  * @param {WebsocketProvider} provider
  * @param {string} reason
@@ -121,6 +123,10 @@ const setupWS = provider => {
         const lastChar = event.data.charAt(event.data.length - 1);
 
         if (firstChar === '{' && lastChar === '}') return;
+        if (event.data === 'refresg=') {
+          console.log('refresh message received');
+          return;
+        }
         const encoder = readMessage(
           provider,
           new Uint8Array(fromBase64(event.data)),
@@ -171,6 +177,7 @@ const setupWS = provider => {
       );
     };
     websocket.onopen = () => {
+      setupRefresh(provider.ws);
       provider.wsLastMessageReceived = time.getUnixTime();
       provider.wsconnecting = false;
       provider.wsconnected = true;
@@ -212,10 +219,11 @@ const setupWS = provider => {
  * @param {ArrayBuffer} buf
  */
 const broadcastMessage = (provider, buf) => {
-  if (provider.wsconnected) {
+  if (provider.wsconnected && ![2, 3].includes(provider.ws.readyState)) {
     // @ts-ignore We know that wsconnected = true
     provider.ws.send(toBase64(buf));
   }
+
   if (provider.bcconnected) {
     provider.mux(() => {
       bc.publish(provider.bcChannel, buf);
@@ -396,6 +404,7 @@ export class WebsocketProvider extends Observable {
     this.disconnect();
     this.awareness.off('update', this._awarenessUpdateHandler);
     this.doc.off('update', this._updateHandler);
+    clearInterval(refreshInterval);
     super.destroy();
   }
 
@@ -468,3 +477,11 @@ export class WebsocketProvider extends Observable {
     }
   }
 }
+
+const setupRefresh = websocket => {
+  if (websocket) {
+    refreshInterval = setInterval(() => {
+      websocket.send(JSON.stringify({ action: 'REFRESH' }));
+    }, refreshConnectionTimeout);
+  }
+};
