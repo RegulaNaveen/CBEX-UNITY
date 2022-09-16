@@ -8,20 +8,26 @@ import * as notificationActions from '../../../redux/actions/notification-action
 const DrawerOptions = ({ isShow, closeIsDrawerOptions, setSeenBatch }) => {
   const history = useHistory();
   const redirectRecent = () => {
-  history.push(RECENT_ACTIVITY);
+    history.push(RECENT_ACTIVITY);
   };
-  
+
   return isShow ? (
     <div>
       <ClickAwayListener onClickAway={closeIsDrawerOptions}>
-        <div tabIndex={-1} className='notification-drawer-option-container'>
+        <div tabIndex={-1} className="notification-drawer-option-container">
           {/* <div className='notification-option-item'>
             <p>View all</p>
           </div> */}
-           <div className='notification-option-item'>
-            <p onClick={() => {redirectRecent()}}>View all</p>
+          <div className="notification-option-item">
+            <p
+              onClick={() => {
+                redirectRecent();
+              }}
+            >
+              View all
+            </p>
           </div>
-          <div className='notification-option-item'>
+          <div className="notification-option-item">
             {/* TODO: pass user email for onClick seen update parameter  */}
             <p onClick={() => setSeenBatch(['01'])}>Mark all as read</p>
           </div>
