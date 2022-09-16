@@ -12,6 +12,7 @@ import TextAlign from '@tiptap/extension-text-align';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
 import Mention from '@tiptap/extension-mention';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import {
   getProposalDetails,
@@ -42,6 +43,7 @@ const WysiwygNotepad = ({
   proposalDetails
 }) => {
   const notesSocket = useContext(NotesSocketContext);
+  const { notesUserTag } = useFlags();
 
   const dispatch = useDispatch();
   const [proposalIdState, setProposalIdState] = useState(
@@ -101,7 +103,7 @@ const WysiwygNotepad = ({
           renderLabel({ options, node }) {
             return `${node.attrs.label ?? node.attrs.id}`;
           },
-          suggestion
+          suggestion: notesUserTag ? suggestion : null
         })
       ],
       onUpdate: ({ editor }) => {
