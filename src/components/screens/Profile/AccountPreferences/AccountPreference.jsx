@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Loader from 'react-loader-spinner';
 import Card from 'apollo-react/components/Card';
+import Checkbox from 'apollo-react/components/Checkbox';
 import PropTypes from 'prop-types';
 import Typography from 'apollo-react/components/Typography';
 import MenuItem from 'apollo-react/components/MenuItem';
@@ -16,10 +17,10 @@ const AccountPreference = ({
   role,
   roleName,
   setRoleName,
-
+  userPreference,
+  handleUserPreferenceChange,
   handleUpdateTimezone,
   isFetchingTimezone,
-
   timezoneList,
   timezoneID,
   currentTimezoneID,
@@ -160,19 +161,11 @@ const AccountPreference = ({
             </>
           )}
         </div>
-       <div className="top-space">
+        <div className="top-space">
           <Typography className="grey-text" variant="caption" gutterBottom>
             Opportunity Preferences
           </Typography>
         </div>
-
-        {/*{!userPreference?.length && (
-          <div>
-            <Typography className="grey-text" variant="caption" gutterBottom>
-              Not found!
-            </Typography>
-          </div>
-       )}*/}
 
         {userPreference.map(
           (
@@ -246,13 +239,15 @@ AccountPreference.propTypes = {
   role: PropTypes.string,
   roleName: PropTypes.string,
   setRoleName: PropTypes.string,
+  handleUserPreferenceChange: PropTypes.func,
   handleUpdateTimezone: PropTypes.func,
   isFetchingTimezone: PropTypes.bool,
   timezoneList: PropTypes.array,
   timezoneID: PropTypes.string,
   currentTimezoneID: PropTypes.string,
   setCurrentTimezoneID: PropTypes.func,
-  errorUpdatingTimezone: PropTypes.string
+  errorUpdatingTimezone: PropTypes.string,
+  userPreference: PropTypes.array
 };
 
 export default AccountPreference;
