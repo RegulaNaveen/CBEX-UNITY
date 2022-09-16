@@ -238,6 +238,23 @@
   position: relative;
   max-height: 250px;
   overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: $neutral1;
+  }
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: $neutral4;
+    border-radius: 5px;
+  }
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: $neutral6;
+  }
 }
 
 .mention-item {
