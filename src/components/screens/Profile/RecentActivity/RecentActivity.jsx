@@ -5,6 +5,7 @@ import { connect, useSelector } from 'react-redux';
 import Search from 'apollo-react/components/Search';
 import Cog from 'apollo-react-icons/Cog';
 import Card from 'apollo-react/components/Card';
+import Divider from '@material-ui/core/Divider';
 import ProfileLayout from '../ProfileLayout';
 import DrawerOptions from '../../../views/Notification/DrawerOptions';
 import {
@@ -12,7 +13,6 @@ import {
   getUnreadNotifications
 } from '../../../../redux/selectors';
 import moment from 'moment';
-import Divider from '@material-ui/core/Divider';
 import ListItem from '../../../views/Notification/ListItem';
 import NoNotification from '../../../views/Notification/NoNotification';
 import MatomoHOC from '../../../HOC/MatomoHOC';
@@ -122,7 +122,8 @@ const RecentActivity = ({ unreadNotifications, setNotifications }) => {
                         style={{
                           fontWeight: 600,
                           lineHeight: '32px',
-                          fontSize: '20px'
+                          fontSize: '20px',
+                          paddingLeft: '0.75em'
                         }}
                       >
                         Notifications

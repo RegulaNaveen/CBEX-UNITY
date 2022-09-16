@@ -46,14 +46,14 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'space-around',
     paddingBottom: theme.spacing(1)
   },
+  active: {
+    backgroundColor: 'blue'
+  },
   list: {
     width: 250
   },
   fullList: {
     width: 'auto'
-  },
-  active: {
-    backgroundColor: '#0768fd'
   },
   root: {
     '&$selected': {
@@ -97,10 +97,6 @@ const SideNav = ({ name, role }) => {
     history.push(LOGIN);
   };
 
-  const handleListItemClick = (event, index) => {
-    setSelectedIndex(index);
-  };
-
   return (
     <Container className={classes.container} disablePadding>
       {/* <div cla></div> */}
@@ -128,51 +124,58 @@ const SideNav = ({ name, role }) => {
 
           <div className={classes.item}>
             <List disablePadding>
-              <NavLink
-                to={PROFILE}
-                activeClassName="current"
-                style={{ textDecoration: 'none' }}
-              >
-                <ListItem
-                  button
-                  key="Account Preference"
-                  // classes={{ root: classes.root, selected: classes.selected }}
+              <div className="nav">
+                <NavLink
+                  to={PROFILE}
+                  activeClassName="selected"
+                  style={{ textDecoration: 'none' }}
                 >
-                  <Typography
-                    gutterBottom
-                    style={{
-                      fontSize: '16px',
-                      fontWeight: 500,
-                      lineHeight: '40px'
-                    }}
+                  <ListItem
+                    // button
+                    key="Account Preference"
+                    className="acct-pref"
+                    classes={{ root: classes.root, selected: classes.selected }}
                   >
-                    Account Preferences
-                  </Typography>
-                </ListItem>
-              </NavLink>
-              <NavLink
-                activeClassName="current"
-                style={{ textDecoration: 'none' }}
-                to={RECENT_ACTIVITY}
-              >
-                <ListItem
-                  button
-                  key="Recent Activity"
-                  // classes={{ root: classes.root, selected: classes.selected }}
+                    <Typography
+                      className="List-label"
+                      gutterBottom
+                      style={{
+                        fontSize: '16px',
+                        fontWeight: '500',
+                        lineHeight: '24px',
+                        width: '148px'
+                      }}
+                    >
+                      Account Preferences
+                    </Typography>
+                  </ListItem>
+                </NavLink>
+                <NavLink
+                  activeClassName="selected"
+                  style={{ textDecoration: 'none' }}
+                  to={RECENT_ACTIVITY}
                 >
-                  <Typography
-                    gutterBottom
-                    style={{
-                      fontSize: '16px',
-                      fontWeight: 500,
-                      lineHeight: '40px',
-                      paddingTop: '5px'
-                    }}
+                  <ListItem
+                    // button
+                    key="Recent Activity"
+                    className="acct-pref"
+                    classes={{ root: classes.root, selected: classes.selected }}
                   >
-                    Recent Activity
-                  </Typography>
-                </ListItem>
-              </NavLink>
+                    <Typography
+                      className="List-label"
+                      gutterBottom
+                      style={{
+                        fontSize: '16px',
+                        fontWeight: '500',
+                        lineHeight: '24px',
+                        width: '148px'
+                      }}
+                    >
+                      Recent Activity
+                    </Typography>
+                  </ListItem>
+                </NavLink>
+              </div>
               {/* <Divider /> */}
             </List>
             <Divider style={{ marginTop: '0.25em' }} />

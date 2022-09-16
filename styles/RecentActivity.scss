@@ -8,13 +8,15 @@
 
 .recent-card {
   padding: 1em;
-  height: '73vh';
-  /* overflow: scroll; */
+  // height: '73vh';
+  // overflow: hidden;
+  height: 430px;
 }
 
 .recent-activity-tab {
-  height: 430px;
-  overflow-y: scroll;
+  height: 350px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .recent-activity-tab::-webkit-scrollbar {
@@ -23,8 +25,9 @@
 }
 
 .recent-activity-tab::-webkit-scrollbar-thumb {
-  background: #e1e1e1;
+  background: #706d6d;
   border-radius: 5px;
+  height: 10px;
 }
 
 .recent-search-field {
@@ -43,20 +46,38 @@
 .notification-items {
   padding-left: '1em';
 }
-.MuiButtonBase-root {
-  .current {
-    background: #0768fd !important;
-    height: 48px;
-    width: 387px;
-    text-align: center;
-    color: white;
-    padding: 10px;
-    .MuiTypography-body1 {
-      align-items: center;
-      display: flex;
-      color: white;
-      justify-content: center;
-      height: 28px;
-    }
+
+.notification-content-data {
+  padding-top: 4px;
+  font-size: 14px;
+  a {
+    color: $neptune-primary !important;
+    text-decoration: none;
+  }
+}
+// .MuiButtonBase-root {
+//   .selected {
+//     background-color: #0768fd;
+//     height: 48px;
+//     width: 387px;
+//     text-align: center;
+//     color: white;
+//     padding: 10px;
+//     .MuiTypography-body1 {
+//       align-items: center;
+//       display: flex;
+//       color: white;
+//       justify-content: center;
+//       height: 28px;
+//     }
+//   }
+// }
+
+.selected {
+  .acct-pref {
+    background-color: #0768fd !important;
+  }
+  .List-label {
+    color: white !important;
   }
 }
