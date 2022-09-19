@@ -1,26 +1,28 @@
 import Grid from 'apollo-react/components/Grid';
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Typography from 'apollo-react/components/Typography';
 import { connect, useSelector } from 'react-redux';
 import Search from 'apollo-react/components/Search';
 import Cog from 'apollo-react-icons/Cog';
 import Card from 'apollo-react/components/Card';
+import moment from 'moment';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import Divider from '@material-ui/core/Divider';
+import { isEmpty, orderBy } from 'lodash';
 import ProfileLayout from '../ProfileLayout';
 import DrawerOptions from '../../../views/Notification/DrawerOptions';
 import {
   getAllNotifications,
   getUnreadNotifications
 } from '../../../../redux/selectors';
-import moment from 'moment';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '../../../views/Notification/ListItem';
+
 import NoNotification from '../../../views/Notification/NoNotification';
 import MatomoHOC from '../../../HOC/MatomoHOC';
 import * as notificationActions from '../../../../redux/actions/notification-actions';
 
 import NotificationList from './NotificationList';
-import { isEmpty, set, orderBy } from 'lodash';
-const RecentActivity = ({ unreadNotifications, setNotifications }) => {
+
+const RecentActivity = ({ setNotifications }) => {
   const allNotifications = useSelector(getAllNotifications);
   const [isDrawerOptions, setIsDrawerOptions] = useState(false);
   const [searchKey, setSearchKey] = useState('');
@@ -160,21 +162,8 @@ const RecentActivity = ({ unreadNotifications, setNotifications }) => {
                 {!isEmpty(sortedAllNotification) ? (
                   sortedAllNotification.map(item => {
                     return (
-                      <tr
-                        style={{
-                          // overflowY: 'auto',
-                          display: 'block',
-                          marginTop: '0.5em',
-                          marginLeft: '0.5em'
-                        }}
-                      >
-                        <td
-                          style={{
-                            display: 'block',
-                            textAlign: 'left'
-                            // paddingLeft: '1em'
-                          }}
-                        >
+                      <tr className="notification-tr">
+                        <td className="notification-td">
                           <NotificationList
                             key={item.id}
                             id={item.id}
@@ -184,17 +173,7 @@ const RecentActivity = ({ unreadNotifications, setNotifications }) => {
                             isSeen={item.read}
                             createdAt={item.updated_date}
                           />
-                          <Divider
-                            variant="inset"
-                            style={{
-                              marginLeft: '23px',
-                              marginTop: '2em',
-                              height: '1px',
-                              width: '941px',
-                              marginRight: '23px',
-                              backgroundColor: '#F6F7FB'
-                            }}
-                          />
+                          <Divider variant="inset" className="divider-wrp" />
                         </td>
                       </tr>
                     );
