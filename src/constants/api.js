@@ -19,7 +19,7 @@ let UBUILD_ARTIFACT = '';
 let SF_HOST_URL = '';
 let SOCKET_URL = '';
 let NOTES_SOCKET_URL = '';
-let LAUNCH_DARKLY_CLIENT_ID = '';
+let LAUNCH_DARKLY_CLIENT_ID = '630712f317eece1138e5445c';
 
 switch (environment) {
   case 'UAT':
@@ -86,6 +86,7 @@ switch (environment) {
       'wss://29nghekakl.execute-api.us-east-1.amazonaws.com/production';
     NOTES_SOCKET_URL =
       'wss://0kmubx9x18.execute-api.us-east-1.amazonaws.com/production';
+    LAUNCH_DARKLY_CLIENT_ID = '630712f317eece1138e5445d';
     break;
   case 'QA':
     // UDEV Data
@@ -121,7 +122,6 @@ switch (environment) {
       'wss://sgag59jkn1.execute-api.us-east-1.amazonaws.com/production';
     NOTES_SOCKET_URL =
       'wss://g3ukgizvkl.execute-api.us-east-1.amazonaws.com/production';
-    LAUNCH_DARKLY_CLIENT_ID = '630712f317eece1138e5445c';
     break;
 }
 
