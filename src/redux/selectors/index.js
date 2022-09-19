@@ -192,7 +192,7 @@ export const getProposalsFilters = (state: Map): Object =>
 
 // Sidebar Selectors
 export const getSelectedSection = (state: Object): string =>
-  siderbarSelectors.getSelectedSectionSelector(state.sidebar);
+  siderbarSelectors.getSelectedSectionSelector(state?.sidebar);
 
 export const getIsOpen = (state: Object): string =>
   siderbarSelectors.getIsOpen(state.sidebar);
