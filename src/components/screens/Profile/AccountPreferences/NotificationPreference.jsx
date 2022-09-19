@@ -28,7 +28,7 @@ const NotificationPreference = ({
         >
           <th style={{ flexGrow: '3', alignSelf: 'flex-start' }}>
             <Typography className="card-label" variant="caption" gutterBottom>
-              Notification
+              Notification Preferences
             </Typography>
           </th>
           <th style={{ flexGrow: '0', marginRight: '2.9em' }}>
@@ -73,10 +73,7 @@ const NotificationPreference = ({
                 // eslint-disable-next-line camelcase
                 preference_type === 'NOTIFICATION' && (
                   <tr
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between'
-                    }}
+                    className="notification-tr"
                     key={preference_id}
                   >
                     <td style={{ flexGrow: '3' }}>

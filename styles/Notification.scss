@@ -1,5 +1,5 @@
 .notification {
-  position: "relative";
+  position: 'relative';
   width: fit-content;
   display: inline-flex;
   margin-left: 25%;
@@ -89,7 +89,7 @@
 }
 .notification-item-content {
   flex-grow: 1;
-  padding-left: 2px;
+  padding-left: 10px;
 }
 .notification-item-header {
   display: flex;
@@ -125,6 +125,7 @@
   overflow-y: auto;
   background-color: $white;
   right: 0px;
+  padding-top: 10px;
 }
 .notification-option-item {
   height: 30px;
@@ -151,4 +152,25 @@
 .no-notification-bell {
   color: #797979;
   font-size: xx-large;
+}
+
+.notification-tr {
+  display: flex;
+  justify-content: space-between;
+  line-height: 2;
+}
+.view-All-notifications {
+  color: $neptune-primary !important;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  cursor: pointer;
+  padding-bottom: '15px';
+  padding-top: '15px'
+}
+
+.no-notification-viewAll {
+  color: $neptune-primary !important;
+  font-weight: 300 !important;
+  cursor: pointer;
 }

@@ -15,6 +15,7 @@ import Panel from 'apollo-react/components/Panel';
 import Typography from 'apollo-react/components/Typography';
 import Loader from 'react-loader-spinner';
 
+import Loader from 'react-loader-spinner';
 import { Add, Refresh } from '../../svg';
 import BidHistory from '../../common/Bidhistory';
 import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
@@ -237,6 +238,7 @@ class Questions extends Component {
       proposalDetail,
       trackEvent
     } = this.props;
+
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `CheckBoxes: ${userActions.click} On ${item} Checkbox`,
@@ -544,6 +546,7 @@ class Questions extends Component {
         </div>
         <div id="panelwrapper">
           {/* Notepad */}
+
           <div id="panel-notepad" style={{ borderRadius: '5px' }}>
             <Panel
               minWidth={notepadMinWidthPx}
@@ -567,6 +570,7 @@ class Questions extends Component {
                 <div id="panel-notepad-header">
                   <Typography variant="h3">Notepad</Typography>
                 </div>
+
                 {this.state.proposalNoteRender && this.context.wsInstance ? (
                   <WysiwygNotepad />
                 ) : (
@@ -585,6 +589,7 @@ class Questions extends Component {
               </div>
             </Panel>
           </div>
+
           {/* Question list */}
           <div id="panel-questions-list">
             <div className="tasksList-wrapper" ref={this.questionsRef}>

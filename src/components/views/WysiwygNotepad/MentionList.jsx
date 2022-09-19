@@ -2,32 +2,42 @@ import React, {
   forwardRef,
   useEffect,
   useImperativeHandle,
-  useState
+  useState,
+  useRef
 } from 'react';
 
 export default forwardRef((props, ref) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const selectedRef = useRef();
 
   const selectItem = index => {
     // TODO
-    // 1. Remove console logs
-    // 2. Call notification API from here
+    // Call notification API from here
     const item = props.items[index];
 
     if (item) {
-      // props.command({ id: item.id });
       props.command(item);
     }
+  };
+
+  const scrollSelectedRef = () => {
+    selectedRef.current.scrollIntoView({
+      behavior: 'auto',
+      block: 'nearest',
+      inline: 'start'
+    });
   };
 
   const upHandler = () => {
     setSelectedIndex(
       (selectedIndex + props.items.length - 1) % props.items.length
     );
+    scrollSelectedRef();
   };
 
   const downHandler = () => {
     setSelectedIndex((selectedIndex + 1) % props.items.length);
+    scrollSelectedRef();
   };
 
   const enterHandler = () => {
@@ -66,6 +76,7 @@ export default forwardRef((props, ref) => {
               className={`mention-item ${
                 index === selectedIndex ? 'is-selected' : ''
               }`}
+              ref={index === selectedIndex ? selectedRef : null}
               key={index}
               onClick={() => selectItem(index)}
             >
