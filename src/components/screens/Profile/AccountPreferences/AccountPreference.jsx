@@ -161,11 +161,11 @@ const AccountPreference = ({
             </>
           )}
         </div>
-        <div className="top-space">
+        {userPreference && userPreference.some((val) => val.preference_type === 'OPP') && <div className="top-space">
           <Typography className="grey-text" variant="caption" gutterBottom>
             Opportunity Preferences
           </Typography>
-        </div>
+        </div>}
 
         {userPreference.map(
           (
