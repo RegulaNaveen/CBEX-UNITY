@@ -26,7 +26,7 @@ import {
   Image,
   Link as HtmlLink
 } from '@react-pdf/renderer';
-import './AnnotationLayer.css';
+// import './AnnotationLayer.css';
 import React from 'react';
 import Html from 'react-pdf-html';
 import { isString } from 'lodash';
@@ -209,10 +209,14 @@ function getStyle() {
     }
     li {
       align-items: flex-start;
-      padding-bottom: 8px;
+      line-height:2px;
     }
-    li_bullet {
-      padding-top: 5px;
+    li_bullet, .li_bullet {
+      margin-botton:4px;
+    }
+    ol,ul,p{
+      margin-top:3px !important;
+      margin-bottom:3px !important;
     }
  </style>`;
 }
@@ -516,8 +520,18 @@ const MyDoc = (
               Opportunity Overview
             </Text>
           </View>
-          <Html
+          <Html 
+            style={{ fontSize: 10 }}
             renderers={{
+              p: ({ style, children }) => { 
+                if(children != "") {
+                  return (
+                    <View style={style}>{children}</View>
+                  )
+                } else { 
+                  return <View style={{ height:18 }}></View>;
+                }
+              },
               tr: ({ style, children }) => (
                 <View style={style}>{children}</View>
               ),
