@@ -28,6 +28,7 @@ const PROPOSAL = {
 
 const PROFILE = {
   ACCOUNT_PREFERENCES: 'Account Preferences',
+  RECENT_ACTIVITY: 'Recent Activity',
   EMAIL: 'Email',
   USER_ROLE: 'User Role',
   ROLE_HELPER_TEXT:
@@ -40,7 +41,8 @@ const PROFILE = {
   NOTIFICATION: 'Notification',
   IN_APP: ' In-App',
   NOT_FOUND: ' Not found!',
-  EMAIL_PREFERENCES: 'Email Preferences'
+  EMAIL_PREFERENCES: 'Email Preferences',
+  LOGOUT: ' Log Out'
 };
 
 const REFRESH_WEBSOCKET_CONNECTION = 60000; // 1 minute

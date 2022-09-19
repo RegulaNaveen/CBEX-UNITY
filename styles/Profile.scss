@@ -156,4 +156,89 @@
     padding: 10px 24px 15px 24px !important;
     height: 15px;
   }
+  .layout {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    // align-item: center;
+    height: 87vh;
+  }
+
+  .container {
+    background-color: #fff;
+    min-height: calc(100vh - 57px);
+    margin-top: 0;
+    padding: 0 0 1em 0 !important;
+  }
+  .item {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-top: 20px !important;
+  }
+  .profilePic {
+    padding-top: 40px;
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: 15px;
+  }
+  .active {
+    background-color: blue;
+  }
+  .list {
+    width: 250;
+  }
+  .fullList {
+    width: auto;
+  }
+
+  .logout {
+    padding: 0 24px;
+    margin-bottom: -5px;
+  }
+  .userDetails {
+    text-align: center;
+    margin: 0;
+    line-height: 24px;
+  }
+  .greyText {
+    color: #7f7f7f;
+    font-weight: 530;
+    font-family: 'ProximaNova-Regular';
+  }
+  .bold-text {
+    font-weight: 700;
+    color: #000;
+    font-family: ProximaNova-Regular;
+  }
+  .nav-text {
+    text-decoration: none;
+  }
+  .nav-menu-label {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    width: 148px;
+  }
+  .divider-wrap {
+    margin-top: 0.25em;
+  }
+  .user-name {
+    height: 24px;
+    color: #000000;
+    font-family: 'Proxima Nova';
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 24px;
+    text-align: center;
+  }
+  .user-role-label {
+    height: 24px;
+    color: #999999;
+    font-family: 'Proxima Nova';
+    font-size: 13px;
+    letter-spacing: 0;
+    line-height: 24px;
+    text-align: center;
+  }
 }
