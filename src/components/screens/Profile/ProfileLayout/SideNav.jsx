@@ -1,26 +1,25 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+
+import { Link, useHistory, NavLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import Avatar from 'apollo-react/components/Avatar';
 import CloseCircle from 'apollo-react-icons/CloseCircle';
 import Button from 'apollo-react/components/Button';
 import Typography from 'apollo-react/components/Typography';
+import MuiListItem from '@material-ui/core/ListItem';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Container } from '@material-ui/core';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import makeStyles from '@material-ui/core/styles/makeStyles';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import List from '@material-ui/core/List';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import Divider from '@material-ui/core/Divider';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import ListItem from '@material-ui/core/ListItem';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import ListItemText from '@material-ui/core/ListItemText';
 
-import { logout } from '../../../redux/actions/auth-actions';
-import { LOGIN } from '../../../routes';
+import { logout } from '../../../../redux/actions/auth-actions';
+import { LOGIN, PROFILE, RECENT_ACTIVITY } from '../../../../routes';
 
 const useStyles = makeStyles(theme => ({
   layout: {
@@ -47,24 +46,23 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'space-around',
     paddingBottom: theme.spacing(1)
   },
+  active: {
+    backgroundColor: 'blue'
+  },
   list: {
     width: 250
   },
   fullList: {
     width: 'auto'
   },
-  active: {
-    backgroundColor: '#0768fd'
-  },
   root: {
     '&$selected': {
-      backgroundColor: '#0768fd',
-      color: '#fff !important',
-
-      '&:hover': {
-        backgroundColor: '#0768fd',
-        color: '#000 !important'
-      }
+      backgroundColor: 'blue',
+      color: 'white'
+    },
+    '&$selected:hover': {
+      backgroundColor: 'blue',
+      color: 'white'
     }
   },
   selected: {},
@@ -89,7 +87,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const SideNav = ({ name, roleName }) => {
+const SideNav = ({ name, role }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -120,36 +118,67 @@ const SideNav = ({ name, roleName }) => {
               variant="caption"
               gutterBottom
             >
-              {roleName}
+              {role}
             </Typography>
           </div>
 
           <div className={classes.item}>
             <List disablePadding>
-              <ListItem
-                // selected={true}
-                selected
-                button
-                key="Account Preference"
-                classes={{ root: classes.root, selected: classes.selected }}
-              >
-                <Typography style={{ color: '#fff' }} gutterBottom>
-                  Account Preferences
-                </Typography>
-              </ListItem>
-              {/* <Divider />
-              <ListItem
-                button
-                key="Recent Activity"
-                classes={{ root: classes.root, selected: classes.selected }}
-              >
-                <ListItemText
-                  primary="Recent Activity"
-                  classes={{ root: classes.root, selected: classes.selected }}
-                />
-              </ListItem>
-              <Divider /> */}
+              <div className="nav">
+                <NavLink
+                  to={PROFILE}
+                  activeClassName="selected"
+                  style={{ textDecoration: 'none' }}
+                >
+                  <ListItem
+                    // button
+                    key="Account Preference"
+                    className="acct-pref"
+                    classes={{ root: classes.root, selected: classes.selected }}
+                  >
+                    <Typography
+                      className="List-label"
+                      gutterBottom
+                      style={{
+                        fontSize: '16px',
+                        fontWeight: '500',
+                        lineHeight: '24px',
+                        width: '148px'
+                      }}
+                    >
+                      Account Preferences
+                    </Typography>
+                  </ListItem>
+                </NavLink>
+                <NavLink
+                  activeClassName="selected"
+                  style={{ textDecoration: 'none' }}
+                  to={RECENT_ACTIVITY}
+                >
+                  <ListItem
+                    // button
+                    key="Recent Activity"
+                    className="acct-pref"
+                    classes={{ root: classes.root, selected: classes.selected }}
+                  >
+                    <Typography
+                      className="List-label"
+                      gutterBottom
+                      style={{
+                        fontSize: '16px',
+                        fontWeight: '500',
+                        lineHeight: '24px',
+                        width: '148px'
+                      }}
+                    >
+                      Recent Activity
+                    </Typography>
+                  </ListItem>
+                </NavLink>
+              </div>
+              {/* <Divider /> */}
             </List>
+            <Divider style={{ marginTop: '0.25em' }} />
           </div>
         </div>
         <div className={classes.lowerPart}>
@@ -174,12 +203,14 @@ const SideNav = ({ name, roleName }) => {
 
 SideNav.defaultProps = {
   name: '',
-  roleName: ''
+  // roleName: '',
+  role: ''
 };
 
 SideNav.propTypes = {
   name: PropTypes.string,
-  roleName: PropTypes.string
+  // roleName: PropTypes.string,
+  role: PropTypes.string
 };
 
 export default SideNav;

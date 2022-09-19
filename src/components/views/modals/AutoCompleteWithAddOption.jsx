@@ -159,6 +159,7 @@ const AutoCompleteWithAddOption = ({
         disableClearable={clearable}
         onBlur={onBlur}
         onFocus={onFocus}
+        openOnFocus
         disabled={disabled}
         style={{ resize: 'vertical' }}
         options={currentLov}

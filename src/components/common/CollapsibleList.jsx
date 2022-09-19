@@ -117,7 +117,7 @@ class CollapsibleList extends Component<Props, State> {
   createId = () => {
     const { title } = this.props;
     return title
-      .toLocaleLowerCase()
+      ?.toLocaleLowerCase()
       .split(' ')
       .join('-');
   };
@@ -210,7 +210,7 @@ class CollapsibleList extends Component<Props, State> {
       isNotepadOpen
     } = this.props;
     return (
-      <div className="task-wrapper" ref={this.taskRef} id={this.createId()}>
+      <div className="task-wrapper" ref={this.taskRef} id={this.createId()} data-testid="collapsible-list">
         {/* Expand Arrow Icon */}
         <button
           id={`arrow-icon-${this.createId()}`}
