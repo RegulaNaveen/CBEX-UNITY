@@ -1,7 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import Loader from 'apollo-react/components/Loader';
+import map from 'lodash/map';
+import IconButton from 'apollo-react/components/IconButton';
+import InfoIcon from 'apollo-react-icons/Info';
+import Tooltip from 'apollo-react/components/Tooltip';
 
-const INITIAL_DETAILS = {
+const INITIAL_LIST_TITLE = {
+  therapeutic: 'Therapeutic Area',
+  sites: 'Total Sites',
+  indication: 'Indication',
+  patients: 'Total Patients',
+  regions: 'Therapeutic Area'
+};
+
+const INITIAL_LIST_VAL = {
   therapeutic: '',
   sites: '',
   indication: '',
@@ -10,7 +22,7 @@ const INITIAL_DETAILS = {
 };
 
 const PriceModeler = () => {
-  const [additionalDetails, setAdditionalDetails] = useState(INITIAL_DETAILS);
+  const [additionalDetails, setAdditionalDetails] = useState(INITIAL_LIST_VAL);
   const [loading, setLoading] = useState(false);
 
   /**
@@ -30,13 +42,25 @@ const PriceModeler = () => {
 
   useEffect(() => {
     setLoading(true);
-    // Calling fetchData func
+    // Calling function
     fetchData().then(res => {
       console.log(res);
       setLoading(false);
       setAdditionalDetails(res);
     });
   }, []);
+
+  const infoIconWithTooltip = (
+    <Tooltip variant="light" tabIndex={-1} title="Hint Text" placement="top">
+      <IconButton
+        color="primary"
+        size="small"
+        className="question-tooltip-icon"
+      >
+        <InfoIcon className="info-icon" />
+      </IconButton>
+    </Tooltip>
+  );
 
   return (
     <div className="price-modeler task-wrapper">
@@ -45,32 +69,18 @@ const PriceModeler = () => {
 
       <h2 className="price-modeler__title">Price Modeler Ballpark Estimate</h2>
       <p className="price-modeler__price">
-        $3.5M <span className="price-modeler__info">Icon</span>
+        $3.5M <span className="price-modeler__info">{infoIconWithTooltip}</span>
       </p>
       <div className="price-modeler__details">
-        <div className="price-modeler__details-item">
-          <h3>Therapeutic Area:</h3>
-          <i>{additionalDetails.therapeutic}</i>
-        </div>
-        <div className="price-modeler__details-item">
-          <h3>Total Sites:</h3>
-          <i>{additionalDetails.sites}</i>
-        </div>
-        <div className="price-modeler__details-item">
-          <h3>Indication:</h3>
-          <i>{additionalDetails.indication}</i>
-        </div>
-        <div className="price-modeler__details-item">
-          <h3>Total Patients:</h3>
-          <i>{additionalDetails.patients}</i>
-        </div>
-        <div className="price-modeler__details-item">
-          <h3>Therapeutic Area:</h3>
-          <i>{additionalDetails.regions}</i>
-        </div>
+        {map(additionalDetails, (item, key) => (
+          <div className="price-modeler__details-item">
+            <h3>{INITIAL_LIST_TITLE[key]}:</h3>
+            <i>{item || '-'}</i>
+          </div>
+        ))}
       </div>
     </div>
   );
 };
 
-export default React.memo(PriceModeler);
+export default PriceModeler;
