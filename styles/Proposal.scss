@@ -1,4 +1,15 @@
 .proposal-wrapper {
+  .proposal-details {
+    background-color: $neutral1;
+  }
+  ._question-tab {
+    padding: 0 20px;
+    background-color: $white;
+    &::before {
+      left: 0;
+      right: 0;
+    }
+  }
   .processing-txt {
     display: block;
   }
@@ -76,17 +87,6 @@
       padding: 0px;
       padding-left: 0px;
       padding-top: 8px;
-    }
-
-    ._question-tab {
-      padding-left: 20px;
-    }
-
-    .proposal-details .MuiPaper-rounded {
-      border-radius: unset;
-      padding: 5px;
-      text-align: center;
-      flex: 1 1 17%;
     }
     p.boldtext {
       font-weight: 600;
@@ -272,17 +272,6 @@
       padding: 0px;
       padding-left: 0px;
       padding-top: 8px;
-    }
-
-    ._question-tab {
-      padding-left: 20px;
-    }
-
-    .proposal-details .MuiPaper-rounded {
-      border-radius: unset;
-      padding: 5px;
-      text-align: center;
-      flex: 1 1 17%;
     }
     p.boldtext {
       font-weight: 600;
