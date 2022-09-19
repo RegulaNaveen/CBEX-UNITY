@@ -162,7 +162,7 @@ const AccountPreference = ({
           )}
         </div>
         {userPreference && userPreference.some((val) => val.preference_type === 'OPP') && <div className="top-space">
-          <Typography className="grey-text" variant="caption" gutterBottom>
+          <Typography className="grey-text opp-prefesize" variant="caption" gutterBottom>
             Opportunity Preferences
           </Typography>
         </div>}
