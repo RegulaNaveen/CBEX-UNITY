@@ -121,7 +121,7 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList, f
               name="fileType"
               canDeselect={false}
             >
-              {/* <MenuItem value={docType.pdf}>{`${docType.pdf} (Default)`}</MenuItem> */}
+              <MenuItem value={docType.pdf}>{`${docType.pdf} (Default)`}</MenuItem>
               <MenuItem value={docType.doc}>{docType.doc}</MenuItem>
             </Select>
           </div>
