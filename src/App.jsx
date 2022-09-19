@@ -12,7 +12,8 @@ import {
   DASHBOARD,
   UBUILD,
   OPPORTUNITYS,
-  PROFILE
+  PROFILE,
+  RECENT_ACTIVITY
 } from './routes';
 import SessionHandler from './SSOSessionHandler';
 import Login from './components/screens/Auth/Login';
@@ -20,7 +21,8 @@ import ProposalComponent from './components/screens/Proposal';
 import OpportunityComponent from './components/screens/Opportunity';
 import DashboardComponent from './components/screens/Dashboard';
 import UbuildShellComponent from './components/screens/Ubuild';
-import ProfileComponent from './components/screens/Profile';
+import ProfileComponent from './components/screens/Profile/AccountPreferences';
+import RecentActivityComponent from './components/screens/Profile/RecentActivity';
 import '../styles/App.scss';
 import matomoInstace from './utils/Matomo';
 import SocketContextProvider from './context/SocketContext';
@@ -39,6 +41,10 @@ const App = () => (
                 <PrivateRoute path={DASHBOARD} component={DashboardComponent} />
                 <PrivateRoute path={PROPOSALS} component={ProposalComponent} />
                 <PrivateRoute path={PROFILE} component={ProfileComponent} />
+                <PrivateRoute
+                  path={RECENT_ACTIVITY}
+                  component={RecentActivityComponent}
+                />
                 <PrivateRoute
                   path={OPPORTUNITYS}
                   component={OpportunityComponent}

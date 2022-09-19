@@ -34,6 +34,27 @@ describe('Notification Preference Component is rendered in Dom', () => {
     expect(wrapper.text().includes(chkText)).toBe(true);
   });
 
+  test('check for Answer Changes', () => {
+    const wrapper = shallow(<NotificationPreference />);
+    expect(wrapper.exists()).toBe(true);
+    const chkText = 'Answer Changes';
+    expect(wrapper.text().includes(chkText)).toBe(true);
+  });
+
+  test('check for New document added Changes', () => {
+    const wrapper = shallow(<NotificationPreference />);
+    expect(wrapper.exists()).toBe(true);
+    const chkText = 'New document added';
+    expect(wrapper.text().includes(chkText)).toBe(true);
+  });
+  
+  test('check for Question assigned to my role Changes', () => {
+    const wrapper = shallow(<NotificationPreference />);
+    expect(wrapper.exists()).toBe(true);
+    const chkText = 'Question assigned to my role';
+    expect(wrapper.text().includes(chkText)).toBe(true);
+  });
+
   test('Check for In-App text', () => {
     const props = {
       handleEmailPreferenceChange: jest.fn(),
