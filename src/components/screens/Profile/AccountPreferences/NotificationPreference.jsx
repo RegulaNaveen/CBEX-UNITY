@@ -73,11 +73,7 @@ const NotificationPreference = ({
                 // eslint-disable-next-line camelcase
                 preference_type === 'NOTIFICATION' && (
                   <tr
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      lineHeight: 2.5
-                    }}
+                    className="notification-tr"
                     key={preference_id}
                   >
                     <td style={{ flexGrow: '3' }}>
