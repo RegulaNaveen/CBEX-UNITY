@@ -161,7 +161,7 @@ const AccountPreference = ({
             </>
           )}
         </div>
-        {/*<div className="top-space">
+        <div className="top-space">
           <Typography className="grey-text" variant="caption" gutterBottom>
             Opportunity Preferences
           </Typography>
@@ -211,7 +211,7 @@ const AccountPreference = ({
               )
             );
           }
-        )}*/}
+        )}
       </Card>
     </div>
   );

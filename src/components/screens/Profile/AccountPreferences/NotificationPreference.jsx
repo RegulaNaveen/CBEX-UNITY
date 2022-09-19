@@ -75,7 +75,8 @@ const NotificationPreference = ({
                   <tr
                     style={{
                       display: 'flex',
-                      justifyContent: 'space-between'
+                      justifyContent: 'space-between',
+                      lineHeight: 2.5
                     }}
                     key={preference_id}
                   >
