@@ -48,6 +48,10 @@
       line-height: 1.375rem;
     }
 
+    @media screen and (max-width: 1090px) {
+      max-width: 460px;
+    }
+
     &-item {
       h3 {
         color: $neutral9;

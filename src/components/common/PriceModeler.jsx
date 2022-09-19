@@ -73,7 +73,7 @@ const PriceModeler = () => {
       </p>
       <div className="price-modeler__details">
         {map(additionalDetails, (item, key) => (
-          <div className="price-modeler__details-item">
+          <div className="price-modeler__details-item" key={key}>
             <h3>{INITIAL_LIST_TITLE[key]}:</h3>
             <i>{item || '-'}</i>
           </div>

@@ -14,8 +14,6 @@ import Grid from 'apollo-react/components/Grid';
 import Panel from 'apollo-react/components/Panel';
 import Typography from 'apollo-react/components/Typography';
 import Loader from 'react-loader-spinner';
-
-import Loader from 'react-loader-spinner';
 import { Add, Refresh } from '../../svg';
 import BidHistory from '../../common/Bidhistory';
 import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
