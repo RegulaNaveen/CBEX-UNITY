@@ -139,3 +139,46 @@
   margin-top: 0.5em;
   margin-left: 0.5em;
 }
+
+.setting-icon {
+  color: #595959 !important;
+  height: 16px;
+  width: 16px;
+  cursor: pointer;
+}
+
+.notification-label {
+  font-weight: 600;
+  line-height: 32px;
+  font-size: 20px;
+}
+
+.notification-header-tr {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1em;
+  padding-left: 36px;
+}
+.notification-th-one {
+  align-self: flex-start;
+  margin-left: -1em;
+}
+.notification-th-two {
+  flex-grow: 0;
+  margin-right: 1em;
+}
+.notification-label-td {
+  text-align: left;
+  padding-left: 0.5em;
+}
+.notification-table-wrp {
+  display: flex;
+  flex-direction: column;
+}
+.notification-grid-wrp {
+  padding-top: 0.5em;
+}
+.notification-container-wrp {
+  padding: 0 2em 0 1em;
+  margin: 0;
+}

@@ -64,11 +64,11 @@ const NotificationPreference = ({
             }) => {
               return (
                 preferenceType === 'NOTIFICATION' && (
-                  <tr className="notification-tr" key={preferenceId}>
+                  <tr className="notification-pref-tr" key={preferenceId}>
                     <td className="td-one">
                       <Typography
                         className="preference-label"
-                        variant=" body2"
+                        variant="body2"
                         gutterBottom
                       >
                         {title}

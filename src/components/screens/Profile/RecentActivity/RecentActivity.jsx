@@ -88,7 +88,7 @@ const RecentActivity = ({ setNotifications }) => {
         md={12}
         sm={12}
         xs={12}
-        style={{ padding: '0 2em 0 1em', margin: '0' }}
+        className="notification-container-wrp recent-activity-wrapper"
       >
         <Grid item md={12} sm={12} xs={12} className="recent-search-field">
           <Search
@@ -98,56 +98,28 @@ const RecentActivity = ({ setNotifications }) => {
             className="recent-search-input"
           />
         </Grid>
-        <Grid item md={12} sm={12} xs={12} style={{ paddingTop: '0.5em' }}>
+        <Grid item md={12} sm={12} xs={12} className="notification-grid-wrp">
           <Card interactive className="recent-card">
-            <table style={{ display: 'flex', flexDirection: 'column' }}>
+            <table className="notification-table-wrp">
               <thead>
-                <tr
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    marginTop: '1em',
-                    paddingLeft: '36px'
-                  }}
-                >
-                  <th
-                    style={{
-                      alignSelf: 'flex-start',
-                      marginLeft: '-1em'
-                    }}
-                  >
-                    <td style={{ textAlign: 'left', paddingLeft: '0.5em' }}>
+                <tr className="notification-header-tr">
+                  <th className="notification-th-one">
+                    <td className="notification-label-td">
                       <Typography
-                        className="recent-header"
+                        className="recent-header notification-label"
                         variant="h1"
                         gutterBottom
-                        style={{
-                          fontWeight: 600,
-                          lineHeight: '32px',
-                          fontSize: '20px'
-                        }}
                       >
                         Notifications
                       </Typography>
                     </td>
                   </th>
-                  <th
-                    style={{
-                      flexGrow: '0',
-                      marginRight: '1em'
-                    }}
-                  >
+                  <th className="notification-th-two">
                     <Typography
-                      className="recent-header"
+                      className="recent-header setting-icon"
                       variant="caption"
                       gutterBottom
                       onClick={toggleIsDrawerOptions}
-                      style={{
-                        color: '#595959',
-                        height: '16px',
-                        width: '16px',
-                        cursor: 'pointer'
-                      }}
                     >
                       <Cog />
                       <DrawerOptions
