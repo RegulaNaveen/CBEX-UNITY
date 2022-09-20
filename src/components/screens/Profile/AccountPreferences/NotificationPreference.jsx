@@ -30,7 +30,7 @@ const NotificationPreference = ({
         <tr className="notification-tr-head-wrap">
           <th className="th-one">
             <Typography className="card-label" variant="caption" gutterBottom>
-              {NOTIFICATION}
+              Notification Preferences
             </Typography>
           </th>
           <th className="th-two">
@@ -63,9 +63,10 @@ const NotificationPreference = ({
               preference_selected: preferenceSelected
             }) => {
               return (
-                preferenceType === 'NOTIFICATION' && (
-                  <tr className="notification-tr" key={preferenceId}>
-                    <td className="td-one">
+                // eslint-disable-next-line camelcase
+                preference_type === 'NOTIFICATION' && (
+                  <tr className="notification-tr" key={preference_id}>
+                    <td style={{ flexGrow: '3' }}>
                       <Typography
                         className="preference-label"
                         variant=" body2"

@@ -154,6 +154,11 @@
   font-size: xx-large;
 }
 
+.notification-tr {
+  display: flex;
+  justify-content: space-between;
+  line-height: 2;
+}
 .view-All-notifications {
   color: $neptune-primary !important;
   display: flex;

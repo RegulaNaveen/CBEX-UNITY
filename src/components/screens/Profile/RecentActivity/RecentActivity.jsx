@@ -6,7 +6,9 @@ import Search from 'apollo-react/components/Search';
 import Cog from 'apollo-react-icons/Cog';
 import Card from 'apollo-react/components/Card';
 import ProfileLayout from '../ProfileLayout';
-import DrawerOptions from '../../../views/Notification/DrawerOptions';
+// import DrawerOptions from '../../../views/Notification/DrawerOptions';
+import RecentDrawerOptions from './RecentDrawerOptions';
+import Loader from 'apollo-react/components/Loader';
 import {
   getAllNotifications,
   getUnreadNotifications
@@ -14,7 +16,8 @@ import {
 import moment from 'moment';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '../../../views/Notification/ListItem';
-import NoNotification from '../../../views/Notification/NoNotification';
+// import NoNotification from '../../../views/Notification/NoNotification';
+import RecentNoNotification from './RecentNoNotification';
 import MatomoHOC from '../../../HOC/MatomoHOC';
 import * as notificationActions from '../../../../redux/actions/notification-actions';
 
@@ -27,7 +30,7 @@ const RecentActivity = ({ unreadNotifications, setNotifications }) => {
   const [notificationList, setNotificationList] = useState([]);
   const mydate = moment();
   console.log('date', mydate.format());
-  console.log({ getAllNotifications });
+  console.log({ allNotifications });
 
   const closeIsDrawerOptions = () => {
     setIsDrawerOptions(false);
@@ -72,11 +75,17 @@ const RecentActivity = ({ unreadNotifications, setNotifications }) => {
     () =>
       orderBy(
         notificationList,
-        [item => new Date(item.updated_date)],
+        [item => new Date(item.created_date)],
         ['desc']
       ),
     [notificationList]
   );
+  console.log({
+    notificationList: notificationList.map(i => new Date(i.created_date)),
+    sortedAllNotification: sortedAllNotification.map(
+      i => new Date(i.created_date)
+    )
+  });
 
   return (
     <ProfileLayout>
@@ -148,7 +157,7 @@ const RecentActivity = ({ unreadNotifications, setNotifications }) => {
                       }}
                     >
                       <Cog />
-                      <DrawerOptions
+                      <RecentDrawerOptions
                         isShow={isDrawerOptions}
                         closeIsDrawerOptions={closeIsDrawerOptions}
                       />
@@ -182,7 +191,7 @@ const RecentActivity = ({ unreadNotifications, setNotifications }) => {
                             oppNo={item.opportunity_no}
                             data={item.body}
                             isSeen={item.read}
-                            createdAt={item.updated_date}
+                            createdAt={item.created_date}
                           />
                           <Divider
                             variant="inset"
@@ -201,7 +210,7 @@ const RecentActivity = ({ unreadNotifications, setNotifications }) => {
                   })
                 ) : (
                   <div className="recent-no-notification">
-                    <NoNotification />
+                    <RecentNoNotification />
                   </div>
                 )}
                 {/* </tr> */}
