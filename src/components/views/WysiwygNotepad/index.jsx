@@ -13,6 +13,7 @@ import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
 import Mention from '@tiptap/extension-mention';
 import { useFlags } from 'launchdarkly-react-client-sdk';
+import getMentionEmails from '../../../utils/getMentionEmails';
 
 import {
   getProposalDetails,
@@ -49,6 +50,7 @@ const WysiwygNotepad = ({
   const [proposalIdState, setProposalIdState] = useState(
     selectedBid.get('id', '')
   );
+  const [mentionEmails, setMentionEmails] = useState([]);
 
   const isNotesFetched = useSelector(selectIsNotesFetched);
   const usercolor = randomColor({ luminosity: 'light' });
@@ -63,7 +65,13 @@ const WysiwygNotepad = ({
   useEffect(() => {
     console.log('proposal id changed to ', selectedBid.get('id'));
     setProposalIdState(selectedBid.get('id'));
+    setMentionEmails([]);
   }, [selectedBid]);
+
+  const mentionNotification = editor => {
+    const newMentions = getMentionEmails(editor);
+    setMentionEmails(newMentions);
+  };
 
   const editor = useEditor(
     {
@@ -108,6 +116,7 @@ const WysiwygNotepad = ({
       ],
       onUpdate: ({ editor }) => {
         // const Ejson = editor.getJSON();
+        mentionNotification(editor.getJSON(), mentionEmails);
       }
     },
     [proposalIdState, notesSocket.wsInstance]
