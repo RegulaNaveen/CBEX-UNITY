@@ -9,6 +9,7 @@ import moment from 'moment';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import Divider from '@material-ui/core/Divider';
 import { isEmpty, orderBy } from 'lodash';
+import PropTypes from 'prop-types';
 import ProfileLayout from '../ProfileLayout';
 import DrawerOptions from '../../../views/Notification/DrawerOptions';
 import {
@@ -44,9 +45,8 @@ const RecentActivity = ({ setNotifications }) => {
   }, []);
 
   useEffect(() => {
-    let notifications = allNotifications;
     if (searchKey.trim()) {
-      notifications = allNotifications.filter(item =>
+      allNotifications.filter(item =>
         item.body.toLowerCase().includes(searchKey.trim().toLowerCase())
       );
     }
@@ -65,6 +65,7 @@ const RecentActivity = ({ setNotifications }) => {
     );
     console.log('filtered notification ', notifications);
     setNotificationList(notifications);
+    return () => {};
   }, [searchKey]);
 
   /**
@@ -155,7 +156,6 @@ const RecentActivity = ({ setNotifications }) => {
                     <NoNotification />
                   </div>
                 )}
-                {/* </tr> */}
               </tbody>
             </table>
           </Card>
@@ -164,7 +164,16 @@ const RecentActivity = ({ setNotifications }) => {
     </ProfileLayout>
   );
 };
-const mapStateToProps = (state: Map) => ({
+
+RecentActivity.defaultProps = {
+  setNotifications: () => {}
+};
+
+RecentActivity.propTypes = {
+  setNotifications: PropTypes.func
+};
+
+const mapStateToProps = state => ({
   unreadNotifications: getUnreadNotifications(state)
 });
 const mapDispatchToProps = {
