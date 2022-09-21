@@ -34,7 +34,11 @@ const NotificationPreference = ({
             </Typography>
           </th>
           <th className="th-two">
-            <Typography className="card-label" variant="caption" gutterBottom>
+            <Typography
+              className="card-label size-14"
+              variant="caption"
+              gutterBottom
+            >
               {IN_APP}
             </Typography>
           </th>
