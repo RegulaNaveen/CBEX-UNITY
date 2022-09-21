@@ -168,17 +168,17 @@
 }
 
 .notification-scrollbar{
-  height: 320px;
-      overflow-y: auto;
-      overflow-x: hidden;
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .notification-scrollbar::-webkit-scrollbar {
-    width: 7px;
-    height: 7px;
+  width: 7px;
+  height: 7px;
   }
   
-  .notification-scrollbar::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius:10px;
-    height:10px;
+.notification-scrollbar::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius:10px;
+  height:10px;
   }
