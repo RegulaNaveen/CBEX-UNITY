@@ -28,8 +28,8 @@
     font-family: $proximaNova;
   }
 
-  .opp-prefesize{
-    font-size: 19px;
+  .opp-prefesize {
+    font-size: 14px;
     color: #444444;
   }
 
@@ -68,13 +68,13 @@
     line-height: 32px;
   }
 
-  .size-14{
+  .size-14 {
     font-size: 14px !important;
   }
   .card-label {
     color: #444444;
     font-family: 'Proxima Nova';
-    font-size: 19px;
+    font-size: 14px;
     letter-spacing: 0;
     line-height: 24px;
   }
@@ -100,5 +100,156 @@
     font-size: 16px;
     letter-spacing: 0;
     line-height: 24px;
+  }
+  .time-zone-select {
+    max-width: 80%;
+  }
+  .acc-pref-wrapper {
+    padding-top: 1.2em;
+    margin: 0;
+  }
+  .notification-tr-head-wrap {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1em;
+    text-align: left;
+  }
+  .th-one {
+    flex-grow: 3;
+    align-self: flex-start;
+  }
+  .th-two {
+    flex-grow: 0;
+    margin-right: 2.9em;
+  }
+  .th-three {
+    flex-grow: 0;
+    margin-right: 1.5em;
+  }
+  .td-one {
+    flex-grow: 3;
+  }
+  .td-two {
+    flex-grow: 0;
+    margin-right: 2em;
+  }
+  .td-three {
+    flex-grow: 0;
+  }
+  .notification-table {
+    overflow-y: auto;
+    display: block;
+    margin-top: 0.5em;
+  }
+  .notification-pref-tr {
+    display: flex;
+    justify-content: space-between;
+  }
+  .container-wrap {
+    background-color: #f6f7fb;
+    min-height: calc(100vh - 57px);
+  }
+  .sideNav-wrapper {
+    margin-right: 0.5em;
+  }
+  .right-container-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    // align-item: center;
+    flex-wrap: nowrap;
+  }
+  .footer {
+    margin: 0 !important;
+    padding: 10px 24px 15px 24px !important;
+    height: 15px;
+  }
+  .layout {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    // align-item: center;
+    height: 87vh;
+  }
+
+  .container {
+    background-color: #fff;
+    min-height: calc(100vh - 57px);
+    margin-top: 0;
+    padding: 0 0 1em 0 !important;
+  }
+  .item {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-top: 20px !important;
+  }
+  .profilePic {
+    padding-top: 40px;
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: 15px;
+  }
+  .active {
+    background-color: blue;
+  }
+  .list {
+    width: 250;
+  }
+  .fullList {
+    width: auto;
+  }
+
+  .logout {
+    padding: 0 24px;
+    margin-bottom: -5px;
+  }
+  .userDetails {
+    text-align: center;
+    margin: 0;
+    line-height: 24px;
+  }
+  .greyText {
+    color: #7f7f7f;
+    font-weight: 530;
+    font-family: 'ProximaNova-Regular';
+  }
+  .bold-text {
+    font-weight: 700;
+    color: #000;
+    font-family: ProximaNova-Regular;
+  }
+  .nav-text {
+    text-decoration: none;
+  }
+  .nav-menu-label {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    width: 148px;
+    margin: 0;
+  }
+  .divider-wrap {
+    margin-top: 0.25em;
+    background-color: #f6f7fb;
+    height: 1px;
+  }
+  .user-name {
+    height: 24px;
+    color: #000000;
+    font-family: 'Proxima Nova';
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 24px;
+    text-align: center;
+  }
+  .user-role-label {
+    height: 24px;
+    color: #999999;
+    font-family: 'Proxima Nova';
+    font-size: 13px;
+    letter-spacing: 0;
+    line-height: 24px;
+    text-align: center;
   }
 }
