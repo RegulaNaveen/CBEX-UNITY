@@ -40,15 +40,15 @@
     }
 
     .editor-notepad {
-      border-top: 1px solid $neutral4;
+      border-top: $border;
       .editor__header {
-        border-bottom: 1px solid $neutral4;
+        border-bottom: $border;
       }
     }
   }
 
   .react-resizable {
-    border: 1px solid $neutral4 !important;
+    border: $border !important;
     border-radius: 5px;
 
     & > * {
