@@ -1,33 +1,35 @@
 import Grid from 'apollo-react/components/Grid';
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Typography from 'apollo-react/components/Typography';
 import { connect, useSelector } from 'react-redux';
 import Search from 'apollo-react/components/Search';
 import Cog from 'apollo-react-icons/Cog';
 import Card from 'apollo-react/components/Card';
+import moment from 'moment';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import Divider from '@material-ui/core/Divider';
+import { isEmpty, orderBy } from 'lodash';
+import PropTypes from 'prop-types';
 import ProfileLayout from '../ProfileLayout';
-// import DrawerOptions from '../../../views/Notification/DrawerOptions';
+
 import RecentDrawerOptions from './RecentDrawerOptions';
 import Loader from 'apollo-react/components/Loader';
 import {
   getAllNotifications,
   getUnreadNotifications
 } from '../../../../redux/selectors';
-import moment from 'moment';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '../../../views/Notification/ListItem';
-// import NoNotification from '../../../views/Notification/NoNotification';
 import RecentNoNotification from './RecentNoNotification';
 import MatomoHOC from '../../../HOC/MatomoHOC';
 import * as notificationActions from '../../../../redux/actions/notification-actions';
 
 import NotificationList from './NotificationList';
-import { isEmpty, set, orderBy } from 'lodash';
-const RecentActivity = ({ unreadNotifications, setNotifications }) => {
+
+const RecentActivity = ({ setNotifications }) => {
   const allNotifications = useSelector(getAllNotifications);
   const [isDrawerOptions, setIsDrawerOptions] = useState(false);
   const [searchKey, setSearchKey] = useState('');
   const [notificationList, setNotificationList] = useState([]);
+  const [loading, setLoading] = useState(false);
   const mydate = moment();
   console.log('date', mydate.format());
   console.log({ allNotifications });
@@ -45,9 +47,8 @@ const RecentActivity = ({ unreadNotifications, setNotifications }) => {
   }, []);
 
   useEffect(() => {
-    let notifications = allNotifications;
     if (searchKey.trim()) {
-      notifications = allNotifications.filter(item =>
+      allNotifications.filter(item =>
         item.body.toLowerCase().includes(searchKey.trim().toLowerCase())
       );
     }
@@ -66,6 +67,7 @@ const RecentActivity = ({ unreadNotifications, setNotifications }) => {
     );
     console.log('filtered notification ', notifications);
     setNotificationList(notifications);
+    return () => {};
   }, [searchKey]);
 
   /**
@@ -87,6 +89,13 @@ const RecentActivity = ({ unreadNotifications, setNotifications }) => {
     )
   });
 
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  }, []);
+
   return (
     <ProfileLayout>
       <Grid
@@ -95,7 +104,7 @@ const RecentActivity = ({ unreadNotifications, setNotifications }) => {
         md={12}
         sm={12}
         xs={12}
-        style={{ padding: '0 2em 0 1em', margin: '0' }}
+        className="notification-container-wrp recent-activity-wrapper"
       >
         <Grid item md={12} sm={12} xs={12} className="recent-search-field">
           <Search
@@ -105,56 +114,28 @@ const RecentActivity = ({ unreadNotifications, setNotifications }) => {
             className="recent-search-input"
           />
         </Grid>
-        <Grid item md={12} sm={12} xs={12} style={{ paddingTop: '0.5em' }}>
+        <Grid item md={12} sm={12} xs={12} className="notification-grid-wrp">
           <Card interactive className="recent-card">
-            <table style={{ display: 'flex', flexDirection: 'column' }}>
+            <table className="notification-table-wrp">
               <thead>
-                <tr
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    marginTop: '1em',
-                    paddingLeft: '36px'
-                  }}
-                >
-                  <th
-                    style={{
-                      alignSelf: 'flex-start',
-                      marginLeft: '-1em'
-                    }}
-                  >
-                    <td style={{ textAlign: 'left', paddingLeft: '0.5em' }}>
+                <tr className="notification-header-tr">
+                  <th className="notification-th-one">
+                    <td className="notification-label-td">
                       <Typography
-                        className="recent-header"
+                        className="recent-header notification-label"
                         variant="h1"
                         gutterBottom
-                        style={{
-                          fontWeight: 600,
-                          lineHeight: '32px',
-                          fontSize: '20px'
-                        }}
                       >
                         Notifications
                       </Typography>
                     </td>
                   </th>
-                  <th
-                    style={{
-                      flexGrow: '0',
-                      marginRight: '1em'
-                    }}
-                  >
+                  <th className="notification-th-two">
                     <Typography
-                      className="recent-header"
+                      className="recent-header setting-icon"
                       variant="caption"
                       gutterBottom
                       onClick={toggleIsDrawerOptions}
-                      style={{
-                        color: '#595959',
-                        height: '16px',
-                        width: '16px',
-                        cursor: 'pointer'
-                      }}
                     >
                       <Cog />
                       <RecentDrawerOptions
@@ -165,25 +146,13 @@ const RecentActivity = ({ unreadNotifications, setNotifications }) => {
                   </th>
                 </tr>
               </thead>
+              {loading ? <Loader isInner /> : null}
               <tbody className="recent-activity-tab">
                 {!isEmpty(sortedAllNotification) ? (
                   sortedAllNotification.map(item => {
                     return (
-                      <tr
-                        style={{
-                          // overflowY: 'auto',
-                          display: 'block',
-                          marginTop: '0.5em',
-                          marginLeft: '0.5em'
-                        }}
-                      >
-                        <td
-                          style={{
-                            display: 'block',
-                            textAlign: 'left'
-                            // paddingLeft: '1em'
-                          }}
-                        >
+                      <tr className="notification-tr">
+                        <td className="notification-td">
                           <NotificationList
                             key={item.id}
                             id={item.id}
@@ -193,17 +162,7 @@ const RecentActivity = ({ unreadNotifications, setNotifications }) => {
                             isSeen={item.read}
                             createdAt={item.created_date}
                           />
-                          <Divider
-                            variant="inset"
-                            style={{
-                              marginLeft: '23px',
-                              marginTop: '2em',
-                              height: '1px',
-                              width: '941px',
-                              marginRight: '23px',
-                              backgroundColor: '#F6F7FB'
-                            }}
-                          />
+                          <Divider variant="inset" className="divider-wrp" />
                         </td>
                       </tr>
                     );
@@ -213,7 +172,6 @@ const RecentActivity = ({ unreadNotifications, setNotifications }) => {
                     <RecentNoNotification />
                   </div>
                 )}
-                {/* </tr> */}
               </tbody>
             </table>
           </Card>
@@ -222,7 +180,16 @@ const RecentActivity = ({ unreadNotifications, setNotifications }) => {
     </ProfileLayout>
   );
 };
-const mapStateToProps = (state: Map) => ({
+
+RecentActivity.defaultProps = {
+  setNotifications: () => {}
+};
+
+RecentActivity.propTypes = {
+  setNotifications: PropTypes.func
+};
+
+const mapStateToProps = state => ({
   unreadNotifications: getUnreadNotifications(state)
 });
 const mapDispatchToProps = {

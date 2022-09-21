@@ -1,4 +1,3 @@
-import { AUTH } from '../../constants/api';
 export const getAllNotifications = notification =>
   notification.notifications
     .filter(item => item.read || !item.read)
