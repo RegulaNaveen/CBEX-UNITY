@@ -5,7 +5,6 @@ import { connect, useSelector } from 'react-redux';
 import Search from 'apollo-react/components/Search';
 import Cog from 'apollo-react-icons/Cog';
 import Card from 'apollo-react/components/Card';
-import moment from 'moment';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import Divider from '@material-ui/core/Divider';
 import { isEmpty, orderBy } from 'lodash';
@@ -30,9 +29,6 @@ const RecentActivity = ({ setNotifications }) => {
   const [searchKey, setSearchKey] = useState('');
   const [notificationList, setNotificationList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const mydate = moment();
-  console.log('date', mydate.format());
-  console.log({ allNotifications });
 
   const closeIsDrawerOptions = () => {
     setIsDrawerOptions(false);
@@ -58,16 +54,12 @@ const RecentActivity = ({ setNotifications }) => {
   useEffect(() => {
     if (isEmpty(searchKey.trim())) {
       setNotificationList(allNotifications);
-      return () => {};
     }
-    console.log(searchKey);
 
     const notifications = allNotifications.filter(item =>
       item.body.toLowerCase().includes(searchKey.trim().toLowerCase())
     );
-    console.log('filtered notification ', notifications);
     setNotificationList(notifications);
-    return () => {};
   }, [searchKey]);
 
   /**
@@ -82,12 +74,6 @@ const RecentActivity = ({ setNotifications }) => {
       ),
     [notificationList]
   );
-  console.log({
-    notificationList: notificationList.map(i => new Date(i.created_date)),
-    sortedAllNotification: sortedAllNotification.map(
-      i => new Date(i.created_date)
-    )
-  });
 
   useEffect(() => {
     setLoading(true);
