@@ -27,17 +27,17 @@ const NotificationPreference = ({
           }}
         >
           <th style={{ flexGrow: '3', alignSelf: 'flex-start' }}>
-            <Typography className="card-label" variant="caption" gutterBottom>
-              Notification Preferences
+            <Typography className="card-label size-14" variant="caption" gutterBottom>
+              Notification
             </Typography>
           </th>
           <th style={{ flexGrow: '0', marginRight: '2.9em' }}>
-            <Typography className="card-label" variant="caption" gutterBottom>
+            <Typography className="card-label size-14" variant="caption" gutterBottom>
               In-App
             </Typography>
           </th>
           <th style={{ flexGrow: '0', marginRight: '1.5em' }}>
-            <Typography className="card-label" variant="caption" gutterBottom>
+            <Typography className="card-label size-14" variant="caption" gutterBottom>
               Email
             </Typography>
           </th>
