@@ -96,6 +96,7 @@ const RecentActivity = ({ setNotifications }) => {
           <Search
             placeholder="Search recent notifications"
             fullwidth
+            value={searchKey}
             onChange={e => setSearchKey(e.target.value)}
             className="recent-search-input"
           />
@@ -155,7 +156,10 @@ const RecentActivity = ({ setNotifications }) => {
                   })
                 ) : (
                   <div className="recent-no-notification">
-                    <RecentNoNotification />
+                    <RecentNoNotification
+                      resetSearch={setSearchKey}
+                      notificationCount={allNotifications.length}
+                    />
                   </div>
                 )}
               </tbody>
