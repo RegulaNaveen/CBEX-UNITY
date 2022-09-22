@@ -37,7 +37,7 @@ const SideNav = ({ name, role }) => {
       <div className="layout">
         <div className="upperPart">
           <div className="profilePic">
-            <Avatar className="profileavtar" alt="avatar" src="" size="extraLarge">
+            <Avatar className="profileAvtar" alt="avatar" src="" size="extraLarge">
               {name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0)}
             </Avatar>
           </div>
