@@ -21,7 +21,7 @@ const NotificationPreference = ({
     <div>
       <Card interactive className="card-wrapper">
         <Typography
-          className="card-heading bold-text"
+          className="card-heading"
           variant="title2"
           gutterBottom
         >

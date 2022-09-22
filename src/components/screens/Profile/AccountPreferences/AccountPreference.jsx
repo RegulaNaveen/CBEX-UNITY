@@ -58,7 +58,7 @@ const AccountPreference = ({
     <div>
       <Card interactive className="card-wrapper">
         <Typography
-          className="card-heading bold-text"
+          className="card-heading"
           variant="title2"
           gutterBottom
         >
@@ -168,7 +168,7 @@ const AccountPreference = ({
           )}
         </div>
         {userPreference && userPreference.some((val) => val.preference_type === 'OPP') && <div className="top-space">
-          <Typography className="grey-text opp-prefesize" variant="caption" gutterBottom>
+          <Typography className="card-label" variant="caption" gutterBottom>
             Opportunity Preferences
           </Typography>
         </div>}
