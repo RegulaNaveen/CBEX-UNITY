@@ -126,6 +126,13 @@ const CustomApolloRichText = ({
    * onClick Edit button handler
    */
   const onClickHTML = () => {
+    if (richTextEditorRef.current) {
+      const { editorState } = richTextEditorRef.current.state;
+      richTextEditorRef.current.setState({
+        editorState: EditorState.moveFocusToEnd(editorState)
+      })
+      richTextContainerRef.current.scrollTop = richTextContainerRef.current.scrollHeight;      
+    }
     setIsRichTextEditable(true);
     if (enableFocus) {
       setFocusOnEditor();
@@ -173,12 +180,34 @@ const CustomApolloRichText = ({
     }
   };
 
+  const blur = () => {
+    if (onBlur) onBlur(richTextData)
+  }
+
   /**
    * Trigger Outside Click
    */
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
+  });
+
+  const handleKeyDown = e => {
+    if (richTextContainerRef.current.contains(e.target)) {
+      if ((e.shiftKey && e.key === 'Tab') || e.key === 'Tab') {
+        blur();
+        if (isRichTextEditable) {
+          setTimeout(() => {
+            setIsRichTextEditable(false);
+          }, 0);
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
   });
 
   // Render Popover RichText Editor
@@ -203,12 +232,8 @@ const CustomApolloRichText = ({
         }}
         tabIndex={(!isRichTextEditable && !disabled) ? 0 : -1}
         onFocus={() => {
-          const { editorState } = richTextEditorRef.current.state;
-          richTextEditorRef.current.setState({
-            editorState: EditorState.moveFocusToEnd(editorState)
-          })
-          richTextContainerRef.current.scrollTop = richTextContainerRef.current.scrollHeight;
-          if(!isRichTextEditable && !disabled) onClickHTML() }}
+          if(!isRichTextEditable && !disabled) onClickHTML() }
+        }
       >
         <RichTextEditor
           placeholder={placeholder || ''}
@@ -217,7 +242,6 @@ const CustomApolloRichText = ({
           defaultValue={richTextData.value}
           onChange={onChangeHandler}
           tabIndex={(!isRichTextEditable && !disabled) ? 0 : -1}
-          onBlur={() => { setIsRichTextEditable(false); if (onBlur) onBlur(richTextData); }}
           ref={richTextEditorRef}
           key={richTextKey.current}
         />
