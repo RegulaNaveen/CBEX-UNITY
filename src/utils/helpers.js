@@ -34,3 +34,12 @@ export const objectContains = (
   if (!isEmpty(found)) return true;
   return false;
 };
+
+// Function to parse stringify Json
+export function parseStringifyJson(str) {
+  try {
+    return JSON.parse(str);
+  } catch (e) {
+    return false;
+  }
+}

@@ -1,0 +1,13 @@
+.event-launcher {
+  &__modal {
+    & > div:first-child {
+      & > div:nth-child(2) {
+        padding-bottom: 4px;
+      }
+    }
+    .content-heading {
+      display: block;
+      padding-bottom: 12px;
+    }
+  }
+}

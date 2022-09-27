@@ -23,7 +23,8 @@ const PROPOSAL = {
   SWITCH_TEMP_SUCCESS: 'Opportunity type has been changed successfully',
   SWITCH_TEMP_FAILED: 'Operation failed due to error',
   SWITCH_TEMP_PROGRESS_TITLE: 'Opportunity Type Change',
-  SWITCH_TEMP_PROGRESS_MSG: 'Switching template is in progress..'
+  SWITCH_TEMP_PROGRESS_MSG: 'Switching template is in progress..',
+  EVENT_LAUNCHER: 'Event Launcher'
 };
 
 const PROFILE = {
