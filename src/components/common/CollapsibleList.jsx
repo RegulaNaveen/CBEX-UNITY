@@ -18,6 +18,7 @@ import {
   onHandleOpenClose,
   handleSelectedSection
 } from '../../redux/actions/sidebar-actions';
+
 const CollapsibleQuestionMapping = React.lazy(() =>
   import('./CollapsibleQuestionMapping')
 );
@@ -70,11 +71,17 @@ class CollapsibleList extends Component<Props, State> {
     } else setIsCollapsed = { isCollapsed: !!isCheckedAll };
 
     setTimeout(() => this.setState(setIsCollapsed), 0);
-    document.addEventListener('keydown', this.keyboardShortcutListener.bind(this));
+    document.addEventListener(
+      'keydown',
+      this.keyboardShortcutListener.bind(this)
+    );
   }
 
   componentWillUnmount() {
-    document.removeEventListener('keydown',this.keyboardShortcutListener.bind(this));
+    document.removeEventListener(
+      'keydown',
+      this.keyboardShortcutListener.bind(this)
+    );
   }
 
   componentDidUpdate(prevProps) {
@@ -181,22 +188,19 @@ class CollapsibleList extends Component<Props, State> {
     });
   };
 
-  keyboardShortcutListener = (e) => {
+  keyboardShortcutListener = e => {
     const { listIndex, questionsRef } = this.props;
     const altKeyPressed = e.altKey;
-    if (
-      altKeyPressed &&
-      String(e.key).toLowerCase() === 'q'
-      ) {
-        if (this.taskRef.current.contains(document.activeElement)) {
+    if (altKeyPressed && String(e.key).toLowerCase() === 'q') {
+      if (this.taskRef.current.contains(document.activeElement)) {
+        this.collapseTriggerRef.current.focus();
+      } else if (!questionsRef.current.contains(document.activeElement)) {
+        if (listIndex === 0) {
           this.collapseTriggerRef.current.focus();
-        } else if (!questionsRef.current.contains(document.activeElement)) {
-          if (listIndex === 0) {
-            this.collapseTriggerRef.current.focus();
-          }
         }
-      } else return
-  }
+      }
+    } else return;
+  };
 
   render() {
     const { isCollapsed } = this.state;
@@ -210,7 +214,12 @@ class CollapsibleList extends Component<Props, State> {
       isNotepadOpen
     } = this.props;
     return (
-      <div className="task-wrapper" ref={this.taskRef} id={this.createId()} data-testid="collapsible-list">
+      <div
+        className="task-wrapper"
+        ref={this.taskRef}
+        id={this.createId()}
+        data-testid="collapsible-list"
+      >
         {/* Expand Arrow Icon */}
         <button
           id={`arrow-icon-${this.createId()}`}

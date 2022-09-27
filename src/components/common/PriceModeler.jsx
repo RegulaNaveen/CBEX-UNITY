@@ -65,7 +65,11 @@ const PriceModeler = () => {
   return (
     <div className="price-modeler task-wrapper">
       {/* Modal Loading */}
-      {loading && <Loader isInner />}
+      {loading && (
+        <div className="price-modeler__loader">
+          <Loader isInner />
+        </div>
+      )}
 
       <h2 className="price-modeler__title">Price Modeler Ballpark Estimate</h2>
       <p className="price-modeler__price">

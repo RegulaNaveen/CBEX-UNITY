@@ -8,7 +8,7 @@ import { OrderedMap } from 'immutable';
 
 import { useLazyLoad, useUpdateEffect } from '../../../hooks';
 import CollapsibleList from '../../common/CollapsibleList';
-import { QuestionsRefContext } from '../../screens/Opportunity/Questions';
+import { QuestionsRefContext } from './Questions';
 
 const NUM_PER_PAGE = 2;
 
@@ -107,33 +107,34 @@ const QuestionsSectionMapping = ({
   // Func to render CollapsibleList Component
   const renderAllSection = (section, indx) => {
     const sectionName = section.get('sectionName');
+    const sectionOrder = section.get('sectionOrder');
     const questions = section.get('questions');
     return (
       <QuestionsRefContext.Consumer>
-        {
-          (questionsRef) => (
-            <CollapsibleList
-              questions={questions}
-              title={sectionName}
-              milestone={filterMilestone}
-              key={sectionName}
-              setTabFromQuestionNotes={(val, title, flag) =>
-                setTabFromQuestionNotes(val, title, flag)
-              }
-              onAddQuestion={value => onAddQuestion(value)}
-              isCheckedAll={
-                sidebarscroll && sidebarscroll.length && sidebarscroll === sectionName
-                  ? true
-                  : allSectionsExpanded
-              }
-              isFirstSection={indx < 1}
-              setQuestionToDisplayHistory={setQuestionToDisplayHistory}
-              isNotepadOpen={isNotepadOpen}
-              listIndex={indx}
-              questionsRef={questionsRef}
-            />
-          )
-        }
+        {questionsRef => (
+          <CollapsibleList
+            questions={questions}
+            title={sectionName}
+            milestone={filterMilestone}
+            key={sectionOrder}
+            setTabFromQuestionNotes={(val, title, flag) =>
+              setTabFromQuestionNotes(val, title, flag)
+            }
+            onAddQuestion={value => onAddQuestion(value)}
+            isCheckedAll={
+              sidebarscroll &&
+              sidebarscroll.length &&
+              sidebarscroll === sectionName
+                ? true
+                : allSectionsExpanded
+            }
+            isFirstSection={indx < 1}
+            setQuestionToDisplayHistory={setQuestionToDisplayHistory}
+            isNotepadOpen={isNotepadOpen}
+            listIndex={indx}
+            questionsRef={questionsRef}
+          />
+        )}
       </QuestionsRefContext.Consumer>
     );
   };

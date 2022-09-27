@@ -6,6 +6,9 @@
     display: block;
     padding: 0.5rem 1rem;
   }
+  &__loader > div {
+    z-index: 999;
+  }
   &__title {
     @media screen and (max-width: 1250px) {
       font-size: 1.1875rem;

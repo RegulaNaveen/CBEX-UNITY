@@ -1,27 +1,39 @@
-#welcomemodal{
-    .MuiPaper-root.MuiDialog-paper.MuiDialog-paperScrollPaper.MuiDialog-paperWidthSm.MuiPaper-rounded > div > div {
-        height: 90px;
-    }
-    .MuiDialog-paperWidthSm{
-        max-width: 590px !important;
-    }
+#welcomemodal {
+  .MuiPaper-root.MuiDialog-paper.MuiDialog-paperScrollPaper.MuiDialog-paperWidthSm.MuiPaper-rounded
+    > div
+    > div {
+    height: 90px;
+  }
+  .MuiDialog-paperWidthSm {
+    max-width: 590px !important;
+  }
 
-    .MuiIconButton-root{
-        display: none;
-     }
+  .MuiIconButton-root {
+    display: none;
+  }
 
-    .role-modal{
-        padding-top: 10px;
-        display: inline-flex;
-    }
+  .role-modal {
+    padding-top: 10px;
+    display: inline-flex;
+  }
 
-    .MuiDialogActions-root.MuiDialogActions-spacing >div > button:nth-child(1) {
-        display: none;
-    }
+  .MuiDialogActions-root.MuiDialogActions-spacing > div > button:nth-child(1) {
+    display: none;
+  }
 
-    .role-modal p.para{
-        font-family: $proximaNova;
-        font-size: 16px;
-        color: #747474;
+  .role-modal p.para {
+    font-family: $proximaNova;
+    font-size: 16px;
+    color: #747474;
+  }
+
+  .MuiInputBase-root {
+    font-family: Proxima Nova, Noto Sans, Helvetica, Arial, sans-serif;
+
+    .MuiInputBase-input {
+      border: 1px solid $neutral4;
+      padding: 8px 8px 8px 7px;
+      line-height: 1.5;
     }
+  }
 }
