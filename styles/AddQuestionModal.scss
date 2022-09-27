@@ -167,7 +167,7 @@
   box-sizing: border-box;
   height: 94px;
   width: 100%;
-  border: 1px solid $neutral4;
+  border: $border;
   border-radius: 4px;
   background-color: $white;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);
@@ -184,7 +184,7 @@
   box-sizing: border-box;
   height: 40px;
   width: 100%;
-  border: 1px solid $neutral4;
+  border: $border;
   border-radius: 4px;
   background-color: $white;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);

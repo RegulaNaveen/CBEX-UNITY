@@ -94,6 +94,7 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
                 </div>
               </div>
               {/* Notification List items */}
+              <div className='notification-scrollbar' >
               {notificationCount > 0 ? (
                 unreadNotifications.map(item => {
                   return (
@@ -122,6 +123,7 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
                   onClick={() => {redirectAllNotifications()}}>View All Notifications</p>
               )}
             </div>
+          </div>
           </ClickAwayListener>
         )}
       </div>

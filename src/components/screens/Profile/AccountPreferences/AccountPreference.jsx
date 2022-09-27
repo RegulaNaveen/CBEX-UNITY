@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getRoles, isRolesInfoLoading } from '../../../../redux/selectors';
 import { onSetUserRole } from '../../../../redux/actions/sso-auth-actions';
 import Dropdown from '../../../common/atoms/inputs/Dropdown';
+import { PROFILE } from '../../../../constants/app';
 
 const AccountPreference = ({
   email,
@@ -27,6 +28,14 @@ const AccountPreference = ({
   setCurrentTimezoneID,
   errorUpdatingTimezone
 }) => {
+  const {
+    ACCOUNT_PREFERENCES,
+    EMAIL,
+    USER_ROLE,
+    ROLE_HELPER_TEXT,
+    TIME_ZONE,
+    TIME_ZONE_HELPER_TEXT
+  } = PROFILE;
   const dispatch = useDispatch();
 
   const isRolesLoading = useSelector(isRolesInfoLoading);
@@ -49,15 +58,15 @@ const AccountPreference = ({
     <div>
       <Card interactive className="card-wrapper">
         <Typography
-          className="card-heading bold-text"
+          className="card-heading"
           variant="title2"
           gutterBottom
         >
-          Account Preferences
+          {ACCOUNT_PREFERENCES}
         </Typography>
         <div className="top-space">
           <Typography className="card-label" variant="body2" gutterBottom>
-            Email
+            {EMAIL}
           </Typography>
         </div>
         <div>
@@ -95,7 +104,7 @@ const AccountPreference = ({
                     variant="body2"
                     gutterBottom
                   >
-                    User Role
+                    {USER_ROLE}
                   </Typography>
                 }
                 placeholder="Select"
@@ -107,15 +116,13 @@ const AccountPreference = ({
                 className="optional-help-text"
                 variant="caption"
                 gutterBottom
-                // style={{ fontSize: '12px' }}
               >
-                Your role will help determine the most appropriate questions
-                displayed
+                {ROLE_HELPER_TEXT}
               </Typography>
             </>
           )}
         </div>
-        <div className="top-space" style={{ maxWidth: '80%' }}>
+        <div className="top-space time-zone-select">
           {isFetchingTimezone ? (
             <div className="toolbar-account-menu-option-loader">
               <Loader type="TailSpin" color="#297DFD" height={35} width={35} />
@@ -129,7 +136,7 @@ const AccountPreference = ({
                     variant="body2"
                     gutterBottom
                   >
-                    Time Zone
+                    {TIME_ZONE}
                   </Typography>
                 }
                 helperText={
@@ -137,9 +144,8 @@ const AccountPreference = ({
                     className="optional-help-text"
                     variant="caption"
                     gutterBottom
-                    // style={{ fontSize: '13px' }}
                   >
-                    Your time zone can determine when notifications are sent
+                    {TIME_ZONE_HELPER_TEXT}
                   </Typography>
                 }
                 value={currentTimezoneID}
@@ -148,21 +154,21 @@ const AccountPreference = ({
                 fullWidth
                 error={!!errorUpdatingTimezone}
               >
-                {// eslint-disable-next-line camelcase
-                timezoneList.map(({ time_zone_id, description }) => {
-                  return (
-                    // eslint-disable-next-line camelcase
-                    <MenuItem className="card-item" value={time_zone_id}>
-                      {description}
-                    </MenuItem>
-                  );
-                })}
+                {timezoneList.map(
+                  ({ time_zone_id: timeZoneId, description }) => {
+                    return (
+                      <MenuItem className="card-item" value={timeZoneId}>
+                        {description}
+                      </MenuItem>
+                    );
+                  }
+                )}
               </Select>
             </>
           )}
         </div>
         {userPreference && userPreference.some((val) => val.preference_type === 'OPP') && <div className="top-space">
-          <Typography className="grey-text" variant="caption" gutterBottom>
+          <Typography className="card-label" variant="caption" gutterBottom>
             Opportunity Preferences
           </Typography>
         </div>}
