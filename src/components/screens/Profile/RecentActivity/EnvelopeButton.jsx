@@ -6,12 +6,12 @@ import Tooltip from 'apollo-react/components/Tooltip';
 const EnvelopeButton = ({ isSeen, onClick }) => {
   const read = (
     <Tooltip variant="light" title="read" placement="top">
-      <EmailRead className="envelope-icon" onClick={() => onClick()} />
+      <EmailRead className="envelope-icon-read" onClick={() => onClick()} />
     </Tooltip>
   );
   const unread = (
     <Tooltip variant="light" title="Mark as read" placement="top">
-      <Email className="envelope-icon" onClick={() => onClick()} />
+      <Email className="envelope-icon-unread" onClick={() => onClick()} />
     </Tooltip>
   );
   return isSeen ? read : unread;

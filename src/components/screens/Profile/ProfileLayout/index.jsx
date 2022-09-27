@@ -1,13 +1,9 @@
 import Grid from 'apollo-react/components/Grid';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Footer from 'apollo-react/components/Footer';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import Loader from 'apollo-react/components/Loader';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import Toolbar from '../../../views/toolbar';
-
 import SideNav from './SideNav';
 import {
   getUserEmail,
@@ -16,25 +12,7 @@ import {
   getAccessToken
 } from '../../../../SessionHandler';
 
-const useStyles = makeStyles(() => ({
-  item: {
-    // padding: '10px',
-  },
-  footer: {
-    margin: '0 !important',
-    padding: '10px 24px 15px 24px !important',
-    height: '15px'
-  }
-}));
-
 const ProfileLayout = ({ children }) => {
-  const dispatch = useDispatch();
-  const styles = {
-    backgroundColor: '#f6f7fb',
-    minHeight: 'calc(100vh - 57px)'
-  };
-
-  const classes = useStyles();
   const name = useSelector(getUserName);
   const email = useSelector(getUserEmail);
   const role = useSelector(getUserRole);
@@ -45,7 +23,7 @@ const ProfileLayout = ({ children }) => {
     <div className="profile-wrapper">
       <Toolbar selected="dashboard" />
 
-      <Grid container disablePadding style={styles}>
+      <Grid container disablePadding className="container-wrap">
         <Grid container item xs={3} sm={4} md={3} lg={3}>
           <Grid
             item
@@ -53,7 +31,7 @@ const ProfileLayout = ({ children }) => {
             sm={12}
             md={12}
             lg={12}
-            style={{ marginRight: '0.5em' }}
+            className="sideNav-wrapper"
           >
             <SideNav
               name={name}
@@ -72,13 +50,7 @@ const ProfileLayout = ({ children }) => {
           xs={9}
           md={9}
           lg={9}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            alignItem: 'center',
-            flexWrap: 'nowrap'
-          }}
+          className="right-container-wrap"
         >
           <div>{children}</div>
 
@@ -93,7 +65,7 @@ const ProfileLayout = ({ children }) => {
                     disabled: true
                   }
                 ]}
-                className={` ${classes.footer}`}
+                className="footer"
               />
             </Grid>
           </div>
