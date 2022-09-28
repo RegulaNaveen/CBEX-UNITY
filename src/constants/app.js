@@ -10,7 +10,8 @@ const DEFAULT = {
   ERROR_400: 'Error 400 bad request !!',
   ERROR_404: 'Error 404 not found !!',
   REQUEST_FAILED: 'Request failed due to an error !!',
-  CLICK_TO_ANS: 'Click to answer'
+  CLICK_TO_ANS: 'Click to answer',
+  CLICK_ICON_TO_BEGIN: 'Click icon to begin'
 };
 
 const PROPOSAL = {
@@ -24,7 +25,10 @@ const PROPOSAL = {
   SWITCH_TEMP_FAILED: 'Operation failed due to error',
   SWITCH_TEMP_PROGRESS_TITLE: 'Opportunity Type Change',
   SWITCH_TEMP_PROGRESS_MSG: 'Switching template is in progress..',
-  EVENT_LAUNCHER: 'Event Launcher'
+  EVENT_LAUNCHER: 'Event Launcher',
+  LAUNCH_OUTLOOK: 'Launch Outlook',
+  SELECT_VARIABLES: 'Select Variables',
+  ATTENDEES: 'Attendees'
 };
 
 const PROFILE = {

@@ -18,6 +18,7 @@ import {
   onHandleOpenClose,
   handleSelectedSection
 } from '../../redux/actions/sidebar-actions';
+
 const CollapsibleQuestionMapping = React.lazy(() =>
   import('./CollapsibleQuestionMapping')
 );
@@ -70,11 +71,10 @@ class CollapsibleList extends Component<Props, State> {
     } else setIsCollapsed = { isCollapsed: !!isCheckedAll };
 
     setTimeout(() => this.setState(setIsCollapsed), 0);
-    document.addEventListener('keydown', this.keyboardShortcutListener.bind(this));
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown',this.keyboardShortcutListener.bind(this));
+    document.addEventListener(
+      'keydown',
+      this.keyboardShortcutListener.bind(this)
+    );
   }
 
   componentDidUpdate(prevProps) {
@@ -93,10 +93,16 @@ class CollapsibleList extends Component<Props, State> {
       setTimeout(() => this.setState({ isCollapsed: !!isCheckedAll }), 0);
   }
 
+  componentWillUnmount() {
+    document.removeEventListener(
+      'keydown',
+      this.keyboardShortcutListener.bind(this)
+    );
+  }
+
   handleCollapse = () => {
     const { isCollapsed } = this.state;
     const { title, selectedSection, changeSelectedSection } = this.props;
-    this.setState({ isCollapsed: !isCollapsed });
     this.trackMatomoEventBladeToggle(!isCollapsed);
     const titleId = title
       .toLocaleLowerCase()
@@ -105,6 +111,7 @@ class CollapsibleList extends Component<Props, State> {
     if (titleId === selectedSection) {
       changeSelectedSection(null);
     }
+    this.setState({ isCollapsed: !isCollapsed });
   };
 
   handleKeyPress = (event: KeyboardEvent) => {
@@ -181,22 +188,19 @@ class CollapsibleList extends Component<Props, State> {
     });
   };
 
-  keyboardShortcutListener = (e) => {
+  keyboardShortcutListener = e => {
     const { listIndex, questionsRef } = this.props;
     const altKeyPressed = e.altKey;
-    if (
-      altKeyPressed &&
-      String(e.key).toLowerCase() === 'q'
-      ) {
-        if (this.taskRef.current.contains(document.activeElement)) {
+    if (altKeyPressed && String(e.key).toLowerCase() === 'q') {
+      if (this.taskRef.current.contains(document.activeElement)) {
+        this.collapseTriggerRef.current.focus();
+      } else if (!questionsRef.current.contains(document.activeElement)) {
+        if (listIndex === 0) {
           this.collapseTriggerRef.current.focus();
-        } else if (!questionsRef.current.contains(document.activeElement)) {
-          if (listIndex === 0) {
-            this.collapseTriggerRef.current.focus();
-          }
         }
-      } else return
-  }
+      }
+    }
+  };
 
   render() {
     const { isCollapsed } = this.state;
@@ -210,7 +214,12 @@ class CollapsibleList extends Component<Props, State> {
       isNotepadOpen
     } = this.props;
     return (
-      <div className="task-wrapper" ref={this.taskRef} id={this.createId()} data-testid="collapsible-list">
+      <div
+        className="task-wrapper"
+        ref={this.taskRef}
+        id={this.createId()}
+        data-testid="collapsible-list"
+      >
         {/* Expand Arrow Icon */}
         <button
           id={`arrow-icon-${this.createId()}`}

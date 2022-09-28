@@ -14,6 +14,13 @@ const CollapsibleQuestionMapping = ({
       (questionConfig.get('active', true) ||
         questionConfig.get('isCustomQuestion', true));
 
+    if (
+      title === 'Proposal Team' &&
+      (visible || typeof visible === 'undefined')
+    ) {
+      console.log({ questionConfig: questionConfig?.toJS() });
+    }
+
     return (
       (visible || typeof visible === 'undefined') && (
         <Question

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Loader from 'react-loader-spinner';
 import classNames from 'classnames';
 import { compose } from 'redux';
+import * as Y from 'yjs';
 import {
   UpdateNewBid,
   expandAllSectionsAction,
@@ -42,9 +43,9 @@ import { NOTES_SOCKET_URL } from '../../../constants/api';
 import NotesSocketContext from '../../../context/notesSocketContext';
 import { websocketNotesApi } from '../../../api/notepad';
 import { UBUILD, DASHBOARD } from '../../../routes';
-import * as Y from 'yjs';
 
-const ThemeContext = React.createContext('light');
+// const ThemeContext = React.createContext('light');
+
 type State = {
   selectedView: string
 };
@@ -134,9 +135,7 @@ export class Opportunity extends Component<Props, State> {
 
     window.addEventListener('storage', e => this.handleStorageChange(e));
     window.addEventListener('resize', this.handleResize);
-    const windowSize = window.innerWidth;
-
-    // NOSONAR
+    // const windowSize = window.innerWidth;
 
     const enableValidateTab = localStorage.getItem('enableValidateTab');
     if (enableValidateTab === null) {
@@ -195,10 +194,37 @@ export class Opportunity extends Component<Props, State> {
     this.state.wsInstance?.destroy();
   }
 
+  handleResize = () => {
+    const windowSize = window.innerWidth;
+    this.setState({ windowSize });
+  };
+
+  handleStorageChange(e) {
+    const {
+      getValidatedData,
+      match: { params }
+    } = this.props;
+
+    if (e.key === 'enableValidateTab') {
+      const isEnabled = e.newValue === 'true';
+      const { selectedView: selectedViewState } = this.state;
+      this.setState({
+        enableValidateTab: isEnabled,
+        selectedView:
+          !isEnabled && selectedViewState === 'validate'
+            ? 'questions'
+            : selectedViewState
+      });
+      if (isEnabled) {
+        getValidatedData(params.id);
+      }
+    }
+  }
+
   triggerWebsocketNotesApi = async (prevProposalId, thisProposalId) => {
     if (prevProposalId !== thisProposalId) {
       await websocketNotesApi(thisProposalId);
-      //intial load case
+      // initial load case
       if (!prevProposalId && thisProposalId) {
         if (!this.state.wsInstance) {
           this.createNewNotesSocketConnection(thisProposalId);
@@ -226,34 +252,6 @@ export class Opportunity extends Component<Props, State> {
       this.setState({ wsInstance: wsProvider });
     }
   };
-
-  handleResize = () => {
-    let windowSize = window.innerWidth;
-
-    this.setState({ windowSize });
-  };
-
-  handleStorageChange(e) {
-    const {
-      getValidatedData,
-      match: { params }
-    } = this.props;
-
-    if (e.key === 'enableValidateTab') {
-      const isEnabled = e.newValue === 'true';
-      const { selectedView: selectedViewState } = this.state;
-      this.setState({
-        enableValidateTab: isEnabled,
-        selectedView:
-          !isEnabled && selectedViewState === 'validate'
-            ? 'questions'
-            : selectedViewState
-      });
-      if (isEnabled) {
-        getValidatedData(params.id);
-      }
-    }
-  }
 
   trackMatomoEventTabs = tab => {
     const {
@@ -318,6 +316,7 @@ export class Opportunity extends Component<Props, State> {
       </div>
     );
   };
+
   render() {
     const {
       isSidebarOpen,
