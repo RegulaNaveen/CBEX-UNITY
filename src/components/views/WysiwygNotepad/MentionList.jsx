@@ -5,6 +5,7 @@ import React, {
   useState,
   useRef
 } from 'react';
+import { updateMentions } from '../../../api/notepad';
 
 export default forwardRef((props, ref) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -17,6 +18,11 @@ export default forwardRef((props, ref) => {
 
     if (item) {
       props.command(item);
+      const proposalId = props.proposalId;
+      const email = item.id;
+      if (proposalId && email) {
+        updateMentions(proposalId, email);
+      }
     }
   };
 

@@ -3,6 +3,8 @@ import tippy from 'tippy.js';
 
 import MentionList from './MentionList';
 import getADUsers from '../../../api/getADUsers';
+import { store } from '../../../store';
+import { getSelectedBid } from '../../../redux/selectors';
 
 export default {
   items: async ({ query }) => {
@@ -34,6 +36,7 @@ export default {
 
     return {
       onStart: props => {
+        props.proposalId = getSelectedBid(store.getState())?.get('id', '');
         component = new ReactRenderer(MentionList, {
           props,
           editor: props.editor

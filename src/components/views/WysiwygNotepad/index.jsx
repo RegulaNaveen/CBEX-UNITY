@@ -12,7 +12,6 @@ import TextAlign from '@tiptap/extension-text-align';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
 import Mention from '@tiptap/extension-mention';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 import getMentionEmails from '../../../utils/getMentionEmails';
 
 import {
