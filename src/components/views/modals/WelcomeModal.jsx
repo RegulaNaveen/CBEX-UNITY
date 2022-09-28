@@ -69,7 +69,7 @@ const WelcomeModal = ({ roles, onRoleChange, id }) => {
             fullWidth
           >
             {rolesList &&
-              rolesList.map(rl => {
+              rolesList.sort().map(rl => {
                 return (
                   <MenuItem key={rl} value={rl}>
                     {rl}
