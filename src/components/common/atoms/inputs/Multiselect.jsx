@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 import { isEmpty, cloneDeep, isEqual } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import MultiselectItem from './MultiselectItem';
+import { SocketContext } from '../../../../context/SocketContext';
 
 type Props = {
   id?: string,
@@ -12,23 +13,27 @@ type Props = {
   onClick: (selectedValues: Array<string>, lastAnswer: Array<string>) => void,
   value?: Array<string>,
   error?: mixed,
-  disabled: boolean
+  disabled: boolean,
+  lockQuestionOnFocus?: boolean
 };
 
 type State = {
-  isCollapsed: boolean,
+  isOpen: boolean,
   selectedValues: Array<string>
 };
 
 class Multiselect extends PureComponent<Props, State> {
   ref: any;
+  static contextType = SocketContext;
 
   static defaultProps = {
     id: undefined,
     title: undefined,
     value: undefined,
     error: undefined,
-    disabled: false
+    disabled: false,
+    lockQuestionOnFocus: false,
+    isFocusedOnce: false
   };
 
   constructor(props: Object) {
@@ -38,7 +43,7 @@ class Multiselect extends PureComponent<Props, State> {
     this.listRef = React.createRef();
 
     this.state = {
-      isCollapsed: false,
+      isOpen: false,
       selectedValues: [],
       isFocused: false,
       focusedValue: ''
@@ -48,7 +53,7 @@ class Multiselect extends PureComponent<Props, State> {
   componentDidMount() {
     window.addEventListener('click', this.handleOutsideClick);
     window.addEventListener('keydown', this.handleKeyDown);
-    
+
     const { value: lastAnswer } = this.props;
 
     if (!isEmpty(lastAnswer)) this.setState({ selectedValues: lastAnswer });
@@ -56,11 +61,11 @@ class Multiselect extends PureComponent<Props, State> {
     if (this.ref.current) {
       this.ref.current.addEventListener('focusin', this.handleFocusIn);
       this.ref.current.addEventListener('focusout', this.handleFocusOut);
-  }
+    }
   }
 
   componentDidUpdate(prevProps: Object, prevState: Object) {
-    const { isCollapsed, selectedValues } = this.state;
+    const { isOpen, selectedValues } = this.state;
     const { onClick, value: lastAnswer } = this.props;
     const { value: prevlastAnswer } = prevProps;
 
@@ -68,34 +73,40 @@ class Multiselect extends PureComponent<Props, State> {
       this.setState({ selectedValues: lastAnswer });
     }
 
-    if (prevState.isCollapsed !== isCollapsed) {
-      if (!isCollapsed) onClick(selectedValues, lastAnswer || []);
+    if (prevState.isOpen !== isOpen) {
+      if (!isOpen) onClick(selectedValues, lastAnswer || []);
+    }
+
+    //  apply condition if already locked only then unlock
+    if (this.state.isFocusedOnce) {
+      if (!this.state.isOpen && !this.state.isFocused)
+        this.context?.questionUnlockWrapper(this.props.questionId);
     }
   }
 
   componentWillUnmount() {
-    const { isCollapsed, selectedValues } = this.state;
+    const { isOpen, selectedValues } = this.state;
     const { onClick, value: lastAnswer } = this.props;
     // when multi-select is not collapsed, update changes on component destroy
-    if (isCollapsed) onClick(selectedValues, lastAnswer || []);
+    if (isOpen) onClick(selectedValues, lastAnswer || []);
     window.removeEventListener('click', this.handleOutsideClick);
   }
 
   handleOutsideClick = (event: SyntheticEvent<EventTarget>) => {
     const { setSelectRow } = this.props;
     if (this.ref.current !== event.target) {
-      this.setState({ isCollapsed: false });
+      this.setState({ isOpen: false });
       if (setSelectRow) setSelectRow(false);
     }
   };
 
   handleCollapse = () => {
-    const { isCollapsed } = this.state;
+    const { isOpen } = this.state;
     const { setSelectRow } = this.props;
 
-    this.setState({ isCollapsed: !isCollapsed });
+    this.setState({ isOpen: !isOpen });
 
-    if (setSelectRow) setSelectRow(!isCollapsed);
+    if (setSelectRow) setSelectRow(!isOpen);
   };
 
   onSelect = (event: SyntheticEvent<EventTarget>, value: string) => {
@@ -130,13 +141,13 @@ class Multiselect extends PureComponent<Props, State> {
     );
   };
 
-  handleFocusIn = (event) => {
-    this.setState({ isFocused: true });
-  }
+  handleFocusIn = event => {
+    this.setState({ isFocused: true, isFocusedOnce: true });
+  };
 
-  handleFocusOut = (event) => {
+  handleFocusOut = event => {
     this.setState({ isFocused: false });
-  }
+  };
 
   handleDownArrowPress = () => {
     const { focusedValue } = this.state;
@@ -150,8 +161,7 @@ class Multiselect extends PureComponent<Props, State> {
       focusedIndex = currentFocusedIndex + 1;
       this.setState({ focusedValue: items.get(focusedIndex) });
     }
-
-  }
+  };
 
   handleUpArrowPress = () => {
     const { focusedValue } = this.state;
@@ -165,8 +175,7 @@ class Multiselect extends PureComponent<Props, State> {
       focusedIndex = currentFocusedIndex - 1;
       this.setState({ focusedValue: items.get(focusedIndex) });
     }
-
-  }
+  };
 
   handleOptionSelect = () => {
     const { focusedValue, selectedValues } = this.state;
@@ -181,35 +190,39 @@ class Multiselect extends PureComponent<Props, State> {
 
     this.setState({ selectedValues: newArray });
     this.forceUpdate();
+  };
 
-  }
-
-  handleKeyDown = (event) => {
-    const { isCollapsed, focusedValue, isFocused, selectedValues } = this.state;
+  handleKeyDown = event => {
+    const { isOpen, focusedValue, isFocused, selectedValues } = this.state;
     const { items, onClick, lastAnswer } = this.props;
-    
+
     if (!isFocused) return;
 
-    if (['Escape', 'Enter', 'ArrowUp', 'ArrowDown', 'Space'].includes(event.code)) {
+    if (
+      ['Escape', 'Enter', 'ArrowUp', 'ArrowDown', 'Space'].includes(event.code)
+    ) {
       event.preventDefault();
       event.stopPropagation();
     }
 
     if (event.code === 'Escape' || event.code === 'Tab') {
-      this.setState({ isCollapsed: false });
+      this.setState({ isOpen: false });
       return;
     }
 
     if (event.code === 'Enter') {
-      if (!isCollapsed) {
-        this.setState({ isCollapsed: true, focusedValue: items.size > 0 ? items.get(0): '' });
+      if (!isOpen) {
+        this.setState({
+          isOpen: true,
+          focusedValue: items.size > 0 ? items.get(0) : ''
+        });
       } else {
-        this.setState({ isCollapsed: false });
+        this.setState({ isOpen: false });
       }
       return;
     }
 
-    if (!isCollapsed) return;
+    if (!isOpen) return;
 
     if (event.code === 'ArrowDown') {
       this.handleDownArrowPress();
@@ -223,11 +236,10 @@ class Multiselect extends PureComponent<Props, State> {
     if (event.code === 'Space') {
       this.handleOptionSelect();
     }
-
-  }
+  };
 
   render() {
-    const { isCollapsed, selectedValues, focusedValue } = this.state;
+    const { isOpen, selectedValues, focusedValue } = this.state;
     const { id, placeholder, items, title, error, disabled } = this.props;
 
     return (
@@ -248,6 +260,10 @@ class Multiselect extends PureComponent<Props, State> {
             }
             role="presentation"
             onClick={() => {
+              console.log('onclick is called from multi select');
+              if (this.props.lockQuestionOnFocus)
+                this.context?.questionLockWrapper(this.props.questionId);
+
               if (!disabled) this.handleCollapse();
             }}
             tabIndex={0}
@@ -260,7 +276,7 @@ class Multiselect extends PureComponent<Props, State> {
               </div>
             )}
           </div>
-          {isCollapsed && (
+          {isOpen && (
             <ul className="multiselect-list" ref={this.listRef}>
               {!isEmpty(items) &&
                 items.map((item, itemIndex) => (

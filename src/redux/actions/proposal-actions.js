@@ -79,7 +79,8 @@ const {
   BOX_ADDITIONAL_LINK_ERROR,
   SWITCH_TEMP_STATUS,
   SWITCH_TEMP_IN_PROGRESS,
-  RESET_PROPOSALID
+  RESET_PROPOSALID,
+  QUESTION_LOCK_BY_USER
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -115,6 +116,7 @@ export const getProposalByID = (id: string): ThunkAction<string, Object> => {
 };
 
 export const setProposalAnswerData = (
+  socketContext,
   proposalId: string,
   questionId: string,
   answer: string,
@@ -136,7 +138,8 @@ export const setProposalAnswerData = (
         userData,
         editorData
       );
-
+      console.log('answer update called for rich text editor');
+      await socketContext.questionUnlockWrapper(questionId, data);
       dispatch({
         type: PROPOSAL_ANSWER,
         payload: {
@@ -158,6 +161,7 @@ export const setProposalAnswerData = (
         payload: { questionId, loading: false }
       });
     } catch (err) {
+      console.log('error occurred ', err);
       dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err } });
     }
   };
@@ -305,12 +309,10 @@ export const getProposalUpdated = (id: string): ThunkAction<string, Object> => {
   };
 };
 
-export const updateProposalDetailFromWebSocket = (
-  data
-): ThunkAction<string, Object> => {
+export const updateQuestionLockByUser = (data): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
-      type: PROPOSAL_DETAIL_UPDATE,
+      type: QUESTION_LOCK_BY_USER,
       payload: data
     });
   };

@@ -8,7 +8,8 @@ import {
   updateAnswerFromWebSocket,
   updateProposalDetailFromWebSocket,
   updateSwitchTempStatusFromWebSocket,
-  updateSwitchInProgress
+  updateSwitchInProgress,
+  updateQuestionLockByUser
 } from '../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
@@ -45,7 +46,7 @@ const SocketContextProvider = props => {
   /**
    * Update socket's oppId when user switches Opportunity in the tool
    */
-  const sendUpdateConnection = (oppId, ws) => {
+  const sendUpdateConnection = (oppId, proposalId, ws) => {
     try {
       if (!ws) {
         ws = socket.current;
@@ -53,7 +54,10 @@ const SocketContextProvider = props => {
       ws.send(
         JSON.stringify({
           action: 'UPDATE_CONNECTION',
-          body: { oppId }
+          body: {
+            oppId,
+            proposalId: typeof proposalId === 'object' ? '' : proposalId
+          }
         })
       );
     } catch (error) {
@@ -73,6 +77,43 @@ const SocketContextProvider = props => {
         JSON.stringify({
           action: 'REFRESH',
           body: 'REFRESH'
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /**
+   *  Question Lock
+   */
+  const questionLock = (questionId, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'QUESTION',
+          body: { event: 'QUESTION_LOCK', data: { questionId } }
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  /**
+   *  Question Lock
+   */
+  const questionUnlock = (questionId, answer, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'QUESTION',
+          body: { event: 'QUESTION_UNLOCK', questionId, answer }
         })
       );
     } catch (error) {
@@ -154,6 +195,17 @@ const SocketContextProvider = props => {
           case 'IN_APP_NOTIFICATION_RECEIVED':
             updateNotification();
             break;
+          case 'QUESTION_LOCK':
+            // every user will get this message of lock
+            // add in redux store with additional parameter userId locked
+            // data: {userInfo:{userName,userEmail,userId}, questionId }
+            console.log('data in socket is ', data);
+            updateQuestionLockByUser(data);
+            break;
+          case 'QUESTION_UNLOCK':
+            // in this case original user will not receive this message
+            // update question answer how it is done in action
+            break;
           default:
             break;
         }
@@ -187,9 +239,17 @@ const SocketContextProvider = props => {
     }, 2000);
   };
 
-  const updateSocketOppId = oppId => {
+  const updateSocketOppId = (oppId, proposalId) => {
     currentOppNo.set(oppId);
-    waitForSocketConnection(() => sendUpdateConnection(oppId, null));
+    waitForSocketConnection(() =>
+      sendUpdateConnection(oppId, proposalId, null)
+    );
+  };
+  const questionLockWrapper = questionId => {
+    waitForSocketConnection(() => questionLock(questionId, null));
+  };
+  const questionUnlockWrapper = (questionId, answer) => {
+    waitForSocketConnection(() => questionUnlock(questionId, answer, null));
   };
 
   const refreshSocketConnection = () => {
@@ -228,7 +288,9 @@ const SocketContextProvider = props => {
         initiateConnection,
         updateSocketOppId,
         disconnectSocket,
-        isSocketConnected
+        isSocketConnected,
+        questionLockWrapper,
+        questionUnlockWrapper
       }}
     >
       {props.children}

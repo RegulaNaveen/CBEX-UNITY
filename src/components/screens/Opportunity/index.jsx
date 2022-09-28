@@ -106,7 +106,8 @@ export class Opportunity extends Component<Props, State> {
       eventCategories,
       location: { search },
       match: { params },
-      setSeenOne
+      setSeenOne,
+      selectedBid
     } = this.props;
     const winLocationSearch = window.location.search;
     const queryparams = new URLSearchParams(winLocationSearch);
@@ -123,13 +124,15 @@ export class Opportunity extends Component<Props, State> {
 
     getOpportunityInfo(params.id);
 
+    const proposalId = selectedBid.get('id', '');
+    console.log('porposal id here is', typeof proposalId);
     if (
       (this.props && this.props?.location && this.props.location?.pathname) !==
       UBUILD
     ) {
       if (this.props.location?.pathname !== DASHBOARD)
-        this.context.updateSocketOppId(params.id);
-      else this.context.updateSocketOppId(null);
+        this.context.updateSocketOppId(params.id, proposalId);
+      else this.context.updateSocketOppId(null, null);
     }
 
     window.addEventListener('storage', e => this.handleStorageChange(e));
@@ -171,13 +174,18 @@ export class Opportunity extends Component<Props, State> {
     const prevProposalId = prevProps.selectedBid.get('id', '');
     // Bid changed
     if (prevProposalId !== thisProposalId) {
-      console.log(prevProposalId, 'selected bid changed to', thisProposalId);
+      console.log(
+        prevProposalId,
+        'selected bid changed to',
+        thisProposalId,
+        typeof thisProposalId
+      );
       if (
         (this.props &&
           this.props?.location &&
           this.props.location?.pathname) !== UBUILD
       ) {
-        this.context.updateSocketOppId(params.id);
+        this.context.updateSocketOppId(params.id, thisProposalId);
       }
     }
     this.triggerWebsocketNotesApi(prevProposalId, thisProposalId);
@@ -191,7 +199,7 @@ export class Opportunity extends Component<Props, State> {
     localStorage.removeItem('proposalId');
 
     window.removeEventListener('storage', this.handleStorageChange);
-    this.context.updateSocketOppId(null);
+    this.context.updateSocketOppId(null, null);
     this.state.wsInstance?.destroy();
   }
 

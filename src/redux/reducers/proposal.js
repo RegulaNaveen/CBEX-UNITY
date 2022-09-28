@@ -51,7 +51,8 @@ const {
   BOX_ADDITIONAL_LINK_ERROR,
   SWITCH_TEMP_STATUS,
   SWITCH_TEMP_IN_PROGRESS,
-  RESET_PROPOSALID
+  RESET_PROPOSALID,
+  QUESTION_LOCK_BY_USER
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -211,6 +212,37 @@ const updateProposalDetail = (state, action) => {
   } catch (error) {
     console.log('Cannot update proposal details', error.message);
   }
+  return state;
+};
+
+const updateQuestionLockByUser = (state, action) => {
+  // try {
+  console.log('action is ', action);
+  const { userInfo, questionId, proposalId } = action.payload.data;
+  console.log('userinfo is ', userInfo, questionId, proposalId);
+  let selectedBid = state.getIn(['selectedBid', 'id']);
+  if (selectedBid === proposalId) {
+    const proposalQuestions = state.proposal.proposalQuestions;
+    console.log('porposal Questions are', proposalQuestions);
+  }
+
+  //   if (proposalId) {
+  //     let opportunityData = state.get('opportunityData');
+  //     let selectedBid = state.getIn(['selectedBid', 'id']);
+
+  //     // Updating the state for opportunityData with latest proposalDetails
+  //     opportunityData = opportunityData.setIn(
+  //       [proposalId, 'proposal', 'proposalDetails'],
+  //       proposalDetails
+  //     );
+  //     state = state.set('opportunityData', new OrderedMap(opportunityData));
+  //     // Update the current proposalDetails if the selected Bid is equal to processed Bid
+  //     if (selectedBid === proposalId)
+  //       state = state.set('proposalDetails', proposalDetails);
+  //   }
+  // } catch (error) {
+  //   console.log('Cannot update proposal details', error.message);
+  // }
   return state;
 };
 
@@ -887,7 +919,8 @@ const actionMap = {
     state.set('switchTempCallStatus', payload),
   [SWITCH_TEMP_IN_PROGRESS]: (state, { payload }) =>
     state.set('switchTempInProgress', payload),
-  [RESET_PROPOSALID]: resetProposalId
+  [RESET_PROPOSALID]: resetProposalId,
+  [QUESTION_LOCK_BY_USER]: updateQuestionLockByUser
 };
 
 export default function(

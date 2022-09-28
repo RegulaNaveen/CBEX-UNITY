@@ -2,6 +2,7 @@
 import React, { PureComponent } from 'react';
 import DropdownItem from './DropdownItem';
 import { CloseCircle } from '../../../svg';
+import { SocketContext } from '../../../../context/SocketContext';
 
 type Props = {
   id?: string,
@@ -13,7 +14,8 @@ type Props = {
   withReset?: boolean,
   selectedValue: mixed,
   error?: mixed,
-  disabled?: boolean
+  disabled?: boolean,
+  lockQuestionOnFocus?: boolean
 };
 
 type State = {
@@ -23,6 +25,7 @@ type State = {
 
 class Dropdown extends PureComponent<Props, State> {
   ref: any;
+  static contextType = SocketContext;
 
   static defaultProps = {
     id: undefined,
@@ -31,7 +34,9 @@ class Dropdown extends PureComponent<Props, State> {
     value: undefined,
     withReset: false,
     error: [],
-    disabled: false
+    disabled: false,
+    lockQuestionOnFocus: false,
+    isFocusedOnce: false
   };
 
   constructor(props: Object) {
@@ -41,7 +46,7 @@ class Dropdown extends PureComponent<Props, State> {
     this.listRef = React.createRef();
 
     this.state = {
-      isCollapsed: false,
+      isCollapsed: true,
       selectedValue: '',
       isFocused: false,
       focusedValue: ''
@@ -71,7 +76,15 @@ class Dropdown extends PureComponent<Props, State> {
 
   componentDidUpdate(prevProps) {
     if (prevProps.value != this.props.value) {
-      this.setState({ selectedValue: this.props.value, focusedValue: this.props.value });
+      this.setState({
+        selectedValue: this.props.value,
+        focusedValue: this.props.value
+      });
+    }
+    //  apply condition if already locked only then unlock
+    if (this.state.isFocusedOnce) {
+      if (this.state.isCollapsed && !this.state.isFocused)
+        this.context?.questionUnlockWrapper(this.props.questionId);
     }
   }
 
@@ -88,16 +101,20 @@ class Dropdown extends PureComponent<Props, State> {
   closeOnOutsideClick = (event: SyntheticEvent<EventTarget>) => {
     const { setSelectRow } = this.props;
     if (this.ref.current !== event.target) {
-      this.setState({ isCollapsed: false });
-      if (setSelectRow) setSelectRow(false);
+      this.setState({ isCollapsed: true });
+      if (setSelectRow) {
+        setSelectRow(false);
+      }
     }
   };
 
   handleCollapse = () => {
-    const { isCollapsed } = this.state;
+    const { isCollapsed, isFocused } = this.state;
     const { setSelectRow } = this.props;
     this.setState({ isCollapsed: !isCollapsed });
-    if (setSelectRow) setSelectRow(!isCollapsed);
+    if (setSelectRow) {
+      if (isCollapsed && !isFocused) setSelectRow(false);
+    }
   };
 
   handleClick = (event: SyntheticEvent<EventTarget>, value: string) => {
@@ -106,23 +123,35 @@ class Dropdown extends PureComponent<Props, State> {
     const { onClick } = this.props;
     onClick(value);
 
-    this.setState({ selectedValue: value, isCollapsed: false, focusedValue: value });
+    this.setState({
+      selectedValue: value,
+      isCollapsed: false,
+      focusedValue: value
+    });
   };
 
   handleReset = () => {
     const { onClick } = this.props;
     onClick('');
 
-    this.setState({ selectedValue: '', isCollapsed: false, focusedValue: '' });
+    this.setState({ selectedValue: '', isCollapsed: true, focusedValue: '' });
   };
 
-  handleFocusIn = (event) => {
-    this.setState({ isFocused: true });
-  }
+  handleFocusIn = event => {
+    console.log('focus function called on number field', this.props);
 
-  handleFocusOut = (event) => {
+    this.setState({ isFocused: true, isFocusedOnce: true });
+    this.props.setSelectRow(true);
+  };
+
+  handleFocusOut = event => {
     this.setState({ isFocused: false });
-  }
+    const { isCollapsed } = this.state;
+    const { setSelectRow } = this.props;
+    if (setSelectRow && isCollapsed) {
+      setSelectRow(false);
+    }
+  };
 
   handleDownArrowPress = () => {
     const { focusedValue } = this.state;
@@ -136,8 +165,7 @@ class Dropdown extends PureComponent<Props, State> {
       focusedIndex = currentFocusedIndex + 1;
       this.setState({ focusedValue: items.get(focusedIndex) });
     }
-
-  }
+  };
 
   handleUpArrowPress = () => {
     const { focusedValue } = this.state;
@@ -151,13 +179,12 @@ class Dropdown extends PureComponent<Props, State> {
       focusedIndex = currentFocusedIndex - 1;
       this.setState({ focusedValue: items.get(focusedIndex) });
     }
+  };
 
-  }
-
-  handleKeyDown = (event) => {
+  handleKeyDown = event => {
     const { isCollapsed, focusedValue, isFocused } = this.state;
     const { items, onClick } = this.props;
-    
+
     if (!isFocused) return;
 
     if (['Escape', 'Enter', 'ArrowUp', 'ArrowDown'].includes(event.code)) {
@@ -166,7 +193,7 @@ class Dropdown extends PureComponent<Props, State> {
     }
 
     if (event.code === 'Escape' || event.code === 'Tab') {
-      this.setState({ isCollapsed: false });
+      this.setState({ isCollapsed: true });
       return;
     }
 
@@ -176,9 +203,9 @@ class Dropdown extends PureComponent<Props, State> {
         if (items.size > 0 && focusedValue === '') {
           newFocusedValue = items.get(0);
         }
-        this.setState({ isCollapsed: true, focusedValue: newFocusedValue });
+        this.setState({ isCollapsed: false, focusedValue: newFocusedValue });
       } else {
-        this.setState({ isCollapsed: false, selectedValue: newFocusedValue });
+        this.setState({ isCollapsed: true, selectedValue: newFocusedValue });
         onClick(newFocusedValue);
       }
       return;
@@ -194,8 +221,7 @@ class Dropdown extends PureComponent<Props, State> {
     if (event.code === 'ArrowUp') {
       this.handleUpArrowPress();
     }
-
-  }
+  };
 
   render() {
     const { isCollapsed, selectedValue, focusedValue, offsetTop } = this.state;
@@ -230,6 +256,9 @@ class Dropdown extends PureComponent<Props, State> {
               role="presentation"
               tabIndex={0}
               onClick={() => {
+                console.log('onclick is called from drop down');
+                if (this.props.lockQuestionOnFocus)
+                  this.context?.questionLockWrapper(this.props.questionId);
                 if (!disabled) this.handleCollapse();
                 return;
               }}
@@ -240,7 +269,7 @@ class Dropdown extends PureComponent<Props, State> {
                 <div className="dd-header-placeholder">{placeholder}</div>
               )}
             </div>
-            {isCollapsed && (
+            {!isCollapsed && (
               <ul className="dd-list" tabIndex={-1} ref={this.listRef}>
                 {items &&
                   items.map(item => (

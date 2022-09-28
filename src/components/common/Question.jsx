@@ -46,6 +46,7 @@ import ANSWER_TYPES from '../../constants/answerTypes';
 import CustomApolloRichText from './CustomApolloRichText';
 import { DEFAULT } from '../../constants/app';
 import AutoCompleteWithAddOption from '../views/modals/AutoCompleteWithAddOption';
+import { SocketContext } from '../../context/SocketContext';
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
 type State = {
@@ -88,6 +89,8 @@ type Props = {
   isNotepadOpen: boolean
 };
 export class TaskRow extends React.PureComponent<Props, State> {
+  static contextType = SocketContext;
+
   constructor(props: Object) {
     super(props);
 
@@ -128,7 +131,13 @@ export class TaskRow extends React.PureComponent<Props, State> {
       setAnswerLoading,
       deleteProposalUser
     } = this.props;
-    setProposalAnswer(proposalId, questionId, textValue, userData).then(() => {
+    setProposalAnswer(
+      this.context,
+      proposalId,
+      questionId,
+      textValue,
+      userData
+    ).then(() => {
       const [deletedVal] = xor(
         textValue?.trim() ? textValue?.trim().split(',') : [],
         lastValue?.trim() ? lastValue?.trim().split(',') : []
@@ -172,14 +181,25 @@ export class TaskRow extends React.PureComponent<Props, State> {
         s1.join(' ').trim() !== s2.join(' ').trim()
       )
         setProposalAnswer(
+          this.context,
           proposalId,
           questionId,
           String(textValue).trim(),
           userData,
           editorData
         );
+      this.context.questionUnlockWrapper(questionId);
     } else if (!textValue.trim() && lastAnswer.trim()) {
-      setProposalAnswer(proposalId, questionId, ' ', userData, editorData);
+      setProposalAnswer(
+        this.context,
+        proposalId,
+        questionId,
+
+        userData,
+        editorData
+      );
+    } else {
+      this.context.questionUnlockWrapper(questionId);
     }
 
     this.trackMatomoEventSubmitAnswer(textValue);
@@ -197,10 +217,18 @@ export class TaskRow extends React.PureComponent<Props, State> {
     else this.setState({ changeIcon: '#00c221' });
 
     const editorText = text.trim() || ' ';
-    setProposalAnswer(proposalId, questionId, String(editorText), userData, {
-      value,
-      html
-    });
+
+    setProposalAnswer(
+      this.context,
+      proposalId,
+      questionId,
+      String(editorText),
+      userData,
+      {
+        value,
+        html
+      }
+    );
     this.trackMatomoEventSubmitAnswer(editorData.text);
     this.setSelectRow(false);
   };
@@ -223,6 +251,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       answerType === ANSWER_TYPES.PICKLIST_LOOKUP
     ) {
       setProposalAnswer(
+        this.context,
         proposalId,
         questionId,
         predictedAnswer.get('answer'),
@@ -230,6 +259,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       );
     } else {
       setProposalAnswer(
+        this.context,
         proposalId,
         questionId,
         String(predictedAnswer.get('answer')).trim(),
@@ -239,10 +269,17 @@ export class TaskRow extends React.PureComponent<Props, State> {
   };
 
   onClickChange = (selectedValue: string, lastAnswer: string) => {
+    console.log(selectedValue, 'reached inside click change', lastAnswer);
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
 
     if (lastAnswer !== selectedValue)
-      setProposalAnswer(proposalId, questionId, selectedValue, userData);
+      setProposalAnswer(
+        this.context,
+        proposalId,
+        questionId,
+        selectedValue,
+        userData
+      );
 
     this.trackMatomoEventSubmitAnswer(selectedValue);
     this.setSelectRow(false);
@@ -257,7 +294,13 @@ export class TaskRow extends React.PureComponent<Props, State> {
           parseMomentDate(selectedDay.trim()) &&
         selectedDay
       )
-        setProposalAnswer(proposalId, questionId, selectedDay, userData);
+        setProposalAnswer(
+          this.context,
+          proposalId,
+          questionId,
+          selectedDay,
+          userData
+        );
     });
     this.trackMatomoEventSubmitAnswer(selectedDay);
   };
@@ -269,7 +312,13 @@ export class TaskRow extends React.PureComponent<Props, State> {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
 
     if (!isEqual(lastAnswer, selectedValues))
-      setProposalAnswer(proposalId, questionId, selectedValues, userData);
+      setProposalAnswer(
+        this.context,
+        proposalId,
+        questionId,
+        selectedValues,
+        userData
+      );
 
     this.trackMatomoEventSubmitAnswer(selectedValues);
   };
@@ -281,6 +330,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
   };
 
   onChildInputFocus = () => {
+    console.log('focus function called on number field');
+    this.context.questionLockWrapper(this.props.questionId);
     this.setSelectRow(true);
   };
 
@@ -358,6 +409,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
     this.setState({ selectedDay: ' ' }, () => {
       setProposalAnswer(
+        this.context,
         proposalId,
         questionId,
         this.state.selectedDay,
@@ -459,6 +511,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
     // Richtext Props
     const richTextAnswerField = {
+      // questionId: this.props.questionId,
       richTextString: getConvertedAnsString(answerValue),
       richTextVal: richTextData.value,
       richTextHtml: richTextData.html,
@@ -488,6 +541,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
         }
 
         if (!selectedRow) this.setSelectRow(true);
+        console.log('on focus called for rich text editor');
+        this.context.questionLockWrapper(this.props.questionId);
       },
       onBlur: data => {
         let saveDate = false;
@@ -509,7 +564,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
         else if (previousAnsText !== '' && data.text.trim() === '')
           saveDate = true;
 
-        if (saveDate) this.handleRichTextChange(data);
+        if (saveDate) {
+          this.handleRichTextChange(data);
+        } else {
+          console.log('on blur called no answer change');
+          this.context.questionUnlockWrapper(this.props.questionId);
+        }
 
         this.setState({ enableRichtext: false });
 
@@ -569,6 +629,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
               value={answerValue}
               setSelectRow={this.setSelectRow}
               disabled={checkDisableFlag()}
+              questionId={this.props.questionId}
+              lockQuestionOnFocus
             />
           </SFAnswerValidationWrapper>
         );
@@ -586,6 +648,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
               value={answerValue}
               setSelectRow={this.setSelectRow}
               disabled={checkDisableFlag()}
+              questionId={this.props.questionId}
+              lockQuestionOnFocus
             />
           </SFAnswerValidationWrapper>
         );
@@ -599,8 +663,15 @@ export class TaskRow extends React.PureComponent<Props, State> {
               value={answerValue}
               resetDate={this.resetDate}
               handleDayChange={this.handleDayChange}
-              onFocus={() => this.setSelectRow(true)}
-              onBlur={() => this.setSelectRow(false)}
+              onFocus={() => {
+                this.context.questionLockWrapper(this.props.questionId);
+
+                this.setSelectRow(true);
+              }}
+              onBlur={() => {
+                this.context.questionUnlockWrapper(this.props.questionId);
+                this.setSelectRow(false);
+              }}
               disabled={checkDisableFlag()}
             />
           </SFAnswerValidationWrapper>
@@ -618,6 +689,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
               value={answerValueComplex}
               setSelectRow={this.setSelectRow}
               disabled={checkDisableFlag()}
+              questionId={this.props.questionId}
+              lockQuestionOnFocus
             />
           </SFAnswerValidationWrapper>
         );
@@ -635,8 +708,14 @@ export class TaskRow extends React.PureComponent<Props, State> {
               sfField={sfField}
               multiple
               answer={answerValueComplex}
-              onFocus={() => this.setSelectRow(true)}
-              onBlur={() => this.setSelectRow(false)}
+              onFocus={() => {
+                this.context.questionLockWrapper(this.props.questionId);
+                this.setSelectRow(true);
+              }}
+              onBlur={() => {
+                this.context.questionUnlockWrapper(this.props.questionId);
+                this.setSelectRow(false);
+              }}
               disabled={checkDisableFlag()}
               onChange={this.handlePropsalChange}
             />
@@ -652,8 +731,14 @@ export class TaskRow extends React.PureComponent<Props, State> {
               sfObject={sfObject}
               lov={finalOptions}
               sfField={sfField}
-              onFocus={() => this.setSelectRow(true)}
-              onBlur={() => this.setSelectRow(false)}
+              onFocus={() => {
+                this.context.questionLockWrapper(this.props.questionId);
+                this.setSelectRow(true);
+              }}
+              onBlur={() => {
+                this.context.questionUnlockWrapper(this.props.questionId);
+                this.setSelectRow(false);
+              }}
               onChange={this.handlePropsalChange}
               answer={answerValue || ''}
               multiple={false}
@@ -907,7 +992,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                   )}
                 </div>
               </div>
-              
+
               {/* Milestone Chip */}
               <div className="milestone-chip" ref={this.quesTextInnerRightRef}>
                 {this.renderTags(
