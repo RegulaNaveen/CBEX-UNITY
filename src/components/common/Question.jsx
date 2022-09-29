@@ -121,10 +121,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
     this.resize();
   }
 
-  componentDidUpdate() {
-    console.log('questionLockInfo', this.props.questionLockInfo);
-  }
-
   handlePropsalChange = (textValue, lastValue, reason) => {
     const {
       setProposalAnswer,
@@ -276,7 +272,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     console.log(selectedValue, 'reached inside click change', lastAnswer);
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
 
-    if (lastAnswer !== selectedValue)
+    if (lastAnswer !== selectedValue) {
       setProposalAnswer(
         this.context,
         proposalId,
@@ -284,9 +280,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
         selectedValue,
         userData
       );
+    }
 
     this.trackMatomoEventSubmitAnswer(selectedValue);
-    this.setSelectRow(false);
+    // this.setSelectRow(false);
   };
 
   handleDayChange = (selectedDay: string, lastAnswer: Date) => {
@@ -340,6 +337,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
   };
 
   setSelectRow = value => {
+    // call question unlock
+    console.log('value is select row', value);
+    // if (!value) this.context.questionUnlockWrapper(this.props.questionId);
     this.setState({ selectedRow: value });
   };
 
@@ -657,6 +657,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
               onClick={val => this.onClickChange(val, answerValue)}
               value={answerValue}
               setSelectRow={this.setSelectRow}
+              onBlur={() => {
+                console.log(event, 'selected Value is', selectedValue);
+                // call question unlock
+                // this.context.questionUnlockWrapper(this.props.questionId);
+                console.log('onblur called for select');
+              }}
               disabled={checkDisableFlag()}
               questionId={this.props.questionId}
               lockedBySelf={!!this.isQuestionLockedBySelf()}

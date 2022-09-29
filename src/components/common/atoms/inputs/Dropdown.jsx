@@ -82,10 +82,10 @@ class Dropdown extends PureComponent<Props, State> {
       });
     }
     //  apply condition if already locked only then unlock
-    if (this.props.lockedBySelf) {
-      if (this.state.isCollapsed && !this.state.isFocused)
-        this.context?.questionUnlockWrapper(this.props.questionId);
-    }
+    // if (this.props.lockedBySelf) {
+    //   if (this.state.isCollapsed && !this.state.isFocused)
+    //     this.context?.questionUnlockWrapper(this.props.questionId);
+    // }
   }
 
   componentWillUnmount() {
@@ -101,9 +101,11 @@ class Dropdown extends PureComponent<Props, State> {
   closeOnOutsideClick = (event: SyntheticEvent<EventTarget>) => {
     const { setSelectRow } = this.props;
     if (this.ref.current !== event.target) {
-      this.setState({ isCollapsed: true });
       if (setSelectRow) {
-        setSelectRow(false);
+        console.log('called from close on outside click');
+        this.setState({ isCollapsed: true }, () => {
+          this.props.setSelectRow(false);
+        });
       }
     }
   };
@@ -111,10 +113,14 @@ class Dropdown extends PureComponent<Props, State> {
   handleCollapse = () => {
     const { isCollapsed, isFocused } = this.state;
     const { setSelectRow } = this.props;
-    this.setState({ isCollapsed: !isCollapsed });
-    if (setSelectRow) {
-      if (isCollapsed && !isFocused) setSelectRow(false);
-    }
+    this.setState({ isCollapsed: !isCollapsed }, () => {
+      if (this.props.setSelectRow) {
+        if (this.state.isCollapsed && !this.state.isFocused) {
+          console.log('called from handle collapse');
+          setSelectRow(false);
+        }
+      }
+    });
   };
 
   handleClick = (event: SyntheticEvent<EventTarget>, value: string) => {
@@ -122,10 +128,12 @@ class Dropdown extends PureComponent<Props, State> {
 
     const { onClick } = this.props;
     onClick(value);
+    console.log('called from handle click');
+    this.props.setSelectRow(false);
 
     this.setState({
       selectedValue: value,
-      isCollapsed: false,
+      isCollapsed: true,
       focusedValue: value
     });
   };
@@ -148,7 +156,10 @@ class Dropdown extends PureComponent<Props, State> {
     this.setState({ isFocused: false });
     const { isCollapsed } = this.state;
     const { setSelectRow } = this.props;
-    if (setSelectRow && isCollapsed) {
+    console.log('event value', event.target);
+    if (setSelectRow) {
+      console.log('called from handle focus out');
+      // this.setState({ isCollapsed: true });
       setSelectRow(false);
     }
   };
@@ -224,7 +235,13 @@ class Dropdown extends PureComponent<Props, State> {
   };
 
   render() {
-    const { isCollapsed, selectedValue, focusedValue, offsetTop } = this.state;
+    const {
+      isCollapsed,
+      selectedValue,
+      focusedValue,
+      offsetTop,
+      isFocused
+    } = this.state;
     const {
       placeholder,
       id,
@@ -261,6 +278,9 @@ class Dropdown extends PureComponent<Props, State> {
                   this.context?.questionLockWrapper(this.props.questionId);
                 if (!disabled) this.handleCollapse();
                 return;
+              }}
+              onBlur={() => {
+                this.props.onBlur();
               }}
             >
               {selectedValue || value ? (

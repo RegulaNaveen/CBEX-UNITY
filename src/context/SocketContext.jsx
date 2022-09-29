@@ -229,16 +229,13 @@ const SocketContextProvider = props => {
             // every user will get this message of lock
             // add in redux store with additional parameter userId locked
             // data: {userInfo:{userName,userEmail,userId}, questionId }
-            console.log('data in socket lock question is ', data);
             updateQuestionLock(data);
             break;
           case 'QUESTION_UNLOCK':
             // in this case original user will not receive this message
             // update question answer how it is done in action
-            console.log('data in socket unlock question is ', data);
             updateQuestionUnlock(data);
             if (data.data.latestAnswer) {
-              console.log('answer update found');
               setProposalAnswerDatafromSocket(
                 data.data.questionId,
                 data.data.latestAnswer
@@ -248,7 +245,6 @@ const SocketContextProvider = props => {
           case 'QUESTIONS':
             // in this case original user will not receive this message
             // update question answer how it is done in action
-            console.log('data in socket questions lock details is ', data);
             getQuestionLockDetails(data);
             break;
           default:

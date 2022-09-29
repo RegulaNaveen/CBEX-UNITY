@@ -10,7 +10,6 @@ type Props = {
 };
 
 class DropdownItem extends Component<Props> {
-
   constructor(props) {
     super(props);
     this.itemRef = React.createRef();
@@ -38,7 +37,7 @@ class DropdownItem extends Component<Props> {
       <li
         ref={this.itemRef}
         role="option"
-        className={classNames("dd-list-item", { 'active': focused })}
+        className={classNames('dd-list-item', { active: focused })}
         onClick={this.handleClick}
         tabIndex={-1}
         id={item}
