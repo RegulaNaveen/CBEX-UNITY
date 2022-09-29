@@ -498,7 +498,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
           !isEqual(richTextData.value, data.value) &&
           !isEmpty(data.text.trim())
         )
-          saveDate = true;
+          if (
+            isEmpty(richTextData.value.blocks) &&
+            lastAnswerJS?.answer === data.value?.blocks[0]?.text
+          )
+            saveDate = false;
+          else saveDate = true;
         // save the data if we see any text difference.
         else if (
           previousAnsText !== data.text.trim() &&
@@ -907,7 +912,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                   )}
                 </div>
               </div>
-              
+
               {/* Milestone Chip */}
               <div className="milestone-chip" ref={this.quesTextInnerRightRef}>
                 {this.renderTags(
