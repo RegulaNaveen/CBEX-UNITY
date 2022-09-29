@@ -85,7 +85,7 @@ export function getMentions(proposalID) {
   });
 }
 
-export function updateMentions(proposalID, email: string) {
+export function updateMentions(proposalID, email: string, emp_id: string) {
   const config = {
     headers: {
       'x-api-key': API_KEY,
@@ -94,7 +94,11 @@ export function updateMentions(proposalID, email: string) {
   };
   return new Promise((resolve, reject) => {
     axiosInstance
-      .put(`${NOTEPAD_API_URL}/v2/${proposalID}/mentions`, { email }, config)
+      .put(
+        `${NOTEPAD_API_URL}/v2/${proposalID}/mentions`,
+        { email, emp_id },
+        config
+      )
       .then(response => resolve(response.data))
       .catch(err => reject(err));
   });

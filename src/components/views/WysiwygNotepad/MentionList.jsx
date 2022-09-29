@@ -15,13 +15,13 @@ export default forwardRef((props, ref) => {
     // TODO
     // Call notification API from here
     const item = props.items[index];
-
     if (item) {
       props.command(item);
       const proposalId = props.proposalId;
       const email = item.id;
-      if (proposalId && email) {
-        updateMentions(proposalId, email);
+      const emp_id = item.emp_id;
+      if (proposalId && email && emp_id) {
+        updateMentions(proposalId, email, emp_id);
       }
     }
   };

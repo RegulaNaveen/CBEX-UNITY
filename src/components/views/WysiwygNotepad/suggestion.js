@@ -18,7 +18,8 @@ export default {
               id: `${user.email?.toLowerCase() || ''}`,
               label: `${user.first_name || ''} ${user.last_name || ''}`,
               listOption: `${user.first_name || ''} ${user.last_name ||
-                ''} (${user.email?.toLowerCase() || ''})`
+                ''} (${user.email?.toLowerCase() || ''})`,
+              emp_id: user.emp_id
             };
           });
         }
