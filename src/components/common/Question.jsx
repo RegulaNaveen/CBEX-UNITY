@@ -656,10 +656,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
               onClick={val => this.onClickChange(val, answerValue)}
               value={answerValue}
               setSelectRow={this.setSelectRow}
-              onBlur={() => {
-                // call question unlock
-                this.context.questionUnlockWrapper(this.props.questionId);
-              }}
               disabled={checkDisableFlag()}
               questionId={this.props.questionId}
               lockedBySelf={!!this.isQuestionLockedBySelf()}
@@ -1096,7 +1092,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             </div>
           ) : (
             ''
-          )} 
+          )}
            */}
           {this.isQuestionLocked() && this.isQuestionLockedByOther() ? (
             <div>
