@@ -35,8 +35,7 @@ class Dropdown extends PureComponent<Props, State> {
     withReset: false,
     error: [],
     disabled: false,
-    lockQuestionOnFocus: false,
-    isFocusedOnce: false
+    lockQuestionOnFocus: false
   };
 
   constructor(props: Object) {
@@ -148,7 +147,7 @@ class Dropdown extends PureComponent<Props, State> {
   handleFocusIn = event => {
     console.log('focus function called on number field', this.props);
 
-    this.setState({ isFocused: true, isFocusedOnce: true });
+    this.setState({ isFocused: true });
     this.props.setSelectRow(true);
   };
 
@@ -156,10 +155,8 @@ class Dropdown extends PureComponent<Props, State> {
     this.setState({ isFocused: false });
     const { isCollapsed } = this.state;
     const { setSelectRow } = this.props;
-    console.log('event value', event.target);
     if (setSelectRow) {
       console.log('called from handle focus out');
-      // this.setState({ isCollapsed: true });
       setSelectRow(false);
     }
   };

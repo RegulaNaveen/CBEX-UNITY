@@ -119,7 +119,8 @@ const SocketContextProvider = props => {
           body: {
             event: 'QUESTION_UNLOCK',
             data: {
-              latestAnswer: answer
+              latestAnswer: answer,
+              questionId
             }
           }
         })
@@ -234,13 +235,14 @@ const SocketContextProvider = props => {
           case 'QUESTION_UNLOCK':
             // in this case original user will not receive this message
             // update question answer how it is done in action
-            updateQuestionUnlock(data);
             if (data.data.latestAnswer) {
               setProposalAnswerDatafromSocket(
                 data.data.questionId,
                 data.data.latestAnswer
               );
             }
+            updateQuestionUnlock(data);
+
             break;
           case 'QUESTIONS':
             // in this case original user will not receive this message

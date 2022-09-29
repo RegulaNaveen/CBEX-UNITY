@@ -658,10 +658,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               setSelectRow={this.setSelectRow}
               onBlur={() => {
                 // call question unlock
-
                 this.context.questionUnlockWrapper(this.props.questionId);
-
-                console.log('onblur called for select');
               }}
               disabled={checkDisableFlag()}
               questionId={this.props.questionId}
@@ -707,6 +704,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
               setSelectRow={this.setSelectRow}
               disabled={checkDisableFlag()}
               questionId={this.props.questionId}
+              onBlur={() => {
+                // call question unlock
+                this.context.questionUnlockWrapper(this.props.questionId);
+              }}
+              lockedBySelf={!!this.isQuestionLockedBySelf()}
               lockQuestionOnFocus
             />
           </SFAnswerValidationWrapper>

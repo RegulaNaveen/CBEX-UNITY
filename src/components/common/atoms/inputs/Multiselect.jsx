@@ -32,8 +32,7 @@ class Multiselect extends PureComponent<Props, State> {
     value: undefined,
     error: undefined,
     disabled: false,
-    lockQuestionOnFocus: false,
-    isFocusedOnce: false
+    lockQuestionOnFocus: false
   };
 
   constructor(props: Object) {
@@ -76,12 +75,6 @@ class Multiselect extends PureComponent<Props, State> {
     if (prevState.isOpen !== isOpen) {
       if (!isOpen) onClick(selectedValues, lastAnswer || []);
     }
-
-    //  apply condition if already locked only then unlock
-    if (this.state.isFocusedOnce) {
-      if (!this.state.isOpen && !this.state.isFocused)
-        this.context?.questionUnlockWrapper(this.props.questionId);
-    }
   }
 
   componentWillUnmount() {
@@ -95,8 +88,11 @@ class Multiselect extends PureComponent<Props, State> {
   handleOutsideClick = (event: SyntheticEvent<EventTarget>) => {
     const { setSelectRow } = this.props;
     if (this.ref.current !== event.target) {
-      this.setState({ isOpen: false });
-      if (setSelectRow) setSelectRow(false);
+      if (setSelectRow) {
+        this.setState({ isOpen: false }, () => {
+          this.props.setSelectRow(false);
+        });
+      }
     }
   };
 
@@ -104,9 +100,14 @@ class Multiselect extends PureComponent<Props, State> {
     const { isOpen } = this.state;
     const { setSelectRow } = this.props;
 
-    this.setState({ isOpen: !isOpen });
-
-    if (setSelectRow) setSelectRow(!isOpen);
+    this.setState({ isOpen: !isOpen }, () => {
+      if (this.props.setSelectRow) {
+        if (!this.state.isOpen && !this.state.isFocused) {
+          console.log('called from handle collapse');
+          setSelectRow(false);
+        }
+      }
+    });
   };
 
   onSelect = (event: SyntheticEvent<EventTarget>, value: string) => {
@@ -142,11 +143,18 @@ class Multiselect extends PureComponent<Props, State> {
   };
 
   handleFocusIn = event => {
-    this.setState({ isFocused: true, isFocusedOnce: true });
+    this.setState({ isFocused: true });
+    this.props.setSelectRow(true);
   };
 
   handleFocusOut = event => {
     this.setState({ isFocused: false });
+    const { isOpen } = this.state;
+    const { setSelectRow } = this.props;
+    if (setSelectRow) {
+      console.log('called from handle focus out');
+      setSelectRow(false);
+    }
   };
 
   handleDownArrowPress = () => {
@@ -261,11 +269,12 @@ class Multiselect extends PureComponent<Props, State> {
             role="presentation"
             onClick={() => {
               console.log('onclick is called from multi select');
-              if (this.props.lockQuestionOnFocus)
+              if (this.props.lockQuestionOnFocus && !this.props.lockedBySelf)
                 this.context?.questionLockWrapper(this.props.questionId);
 
               if (!disabled) this.handleCollapse();
             }}
+            onBlur={this.props.onBlur}
             tabIndex={0}
           >
             {!isEmpty(selectedValues) ? (
