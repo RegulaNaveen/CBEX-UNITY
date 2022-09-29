@@ -161,7 +161,8 @@ const SocketContextProvider = props => {
         updateProposalNotes,
         updateSwitchTempStatus,
         setSwitchInProgress,
-        updateNotification
+        updateNotification,
+        updateQuestionLock
       } = props;
 
       // On Message Recieve
@@ -200,7 +201,7 @@ const SocketContextProvider = props => {
             // add in redux store with additional parameter userId locked
             // data: {userInfo:{userName,userEmail,userId}, questionId }
             console.log('data in socket is ', data);
-            updateQuestionLockByUser(data);
+            updateQuestionLock(data);
             break;
           case 'QUESTION_UNLOCK':
             // in this case original user will not receive this message
@@ -308,7 +309,8 @@ const mapDispatchToProps = {
   updateProposalNotes: updateProposalNotesFromWebSocket,
   updateSwitchTempStatus: updateSwitchTempStatusFromWebSocket,
   setSwitchInProgress: updateSwitchInProgress,
-  updateNotification: setNotification
+  updateNotification: setNotification,
+  updateQuestionLock: updateQuestionLockByUser
 };
 
 export default connect(

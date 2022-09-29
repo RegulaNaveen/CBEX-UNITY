@@ -1,6 +1,6 @@
 // @flow
 import { cloneDeep } from 'lodash';
-import { Map, fromJS, OrderedMap } from 'immutable'; // NOSONAR
+import { Map, fromJS, OrderedMap, is } from 'immutable'; // NOSONAR
 import { REDUX_TYPES } from '../../constants';
 import type { ApiAction } from '../actions/action-types';
 import { getUniqueMilestones } from '../selectors/proposal';
@@ -212,37 +212,6 @@ const updateProposalDetail = (state, action) => {
   } catch (error) {
     console.log('Cannot update proposal details', error.message);
   }
-  return state;
-};
-
-const updateQuestionLockByUser = (state, action) => {
-  // try {
-  console.log('action is ', action);
-  const { userInfo, questionId, proposalId } = action.payload.data;
-  console.log('userinfo is ', userInfo, questionId, proposalId);
-  let selectedBid = state.getIn(['selectedBid', 'id']);
-  if (selectedBid === proposalId) {
-    const proposalQuestions = state.proposal.proposalQuestions;
-    console.log('porposal Questions are', proposalQuestions);
-  }
-
-  //   if (proposalId) {
-  //     let opportunityData = state.get('opportunityData');
-  //     let selectedBid = state.getIn(['selectedBid', 'id']);
-
-  //     // Updating the state for opportunityData with latest proposalDetails
-  //     opportunityData = opportunityData.setIn(
-  //       [proposalId, 'proposal', 'proposalDetails'],
-  //       proposalDetails
-  //     );
-  //     state = state.set('opportunityData', new OrderedMap(opportunityData));
-  //     // Update the current proposalDetails if the selected Bid is equal to processed Bid
-  //     if (selectedBid === proposalId)
-  //       state = state.set('proposalDetails', proposalDetails);
-  //   }
-  // } catch (error) {
-  //   console.log('Cannot update proposal details', error.message);
-  // }
   return state;
 };
 
@@ -482,6 +451,7 @@ const onProposalError = (state: Map, action: Object): Map => {
   return state.set('proposalError', payload).set('isProposalLoading', false);
 };
 
+// state is propoal
 const onProposalAnswer = (state: Map, action: Object): Map => {
   const {
     payload: { data, questionId: referenceId, hasDifferentSFanswer }
@@ -533,6 +503,75 @@ const onProposalAnswer = (state: Map, action: Object): Map => {
     .set('proposalAnswer', INITIAL_STATE.proposalAnswer)
     .set('isProposalAnswerLoading', false)
     .set('opportunityData', opportunityData);
+};
+
+// state is propoal
+const updateQuestionLockByUser = (state: Map, action: Object): Map => {
+  const {
+    data: { oppNo, questionId, proposalId, userEmail, userId, userName }
+  } = action.payload;
+  console.log('state is', state);
+  let newState = fromJS({});
+  console.log(
+    '------',
+    oppNo,
+    questionId,
+    proposalId,
+    userEmail,
+    userId,
+    userName
+  );
+
+  const { proposalDetails } = action.payload;
+
+  if (proposalId) {
+    let opportunityData = state.get('opportunityData');
+    console.log('opportunityData is', opportunityData);
+    let selectedBid = state.getIn(['selectedBid', 'id']);
+
+    const indexOfListToUpdate = opportunityData
+      .getIn([proposalId, 'proposalQuestions'])
+      .findIndex(listItem => {
+        return listItem.questionId === questionId;
+      });
+    console.log('indexOfListToUpdate', indexOfListToUpdate);
+    // Updating the state for opportunityData with latest proposalDetails
+    const opportunityDataNew = opportunityData.updateIn(
+      [proposalId, 'proposalQuestions', indexOfListToUpdate],
+      value => ({
+        ...value,
+        questionLockInfo: { userInfo: userEmail, userId, userName }
+      })
+    );
+    console.log('new opportunityData is', opportunityDataNew);
+
+    // Update the current proposalDetails if the selected Bid is equal to processed Bid
+    if (selectedBid === proposalId) {
+      const indexOfListToUpdateCurrent = state
+        .get('proposalQuestions')
+        .findIndex(listItem => {
+          return listItem.questionId === questionId;
+        });
+      console.log('indexOfListToUpdateCurrent is', indexOfListToUpdateCurrent);
+      newState = state.updateIn(
+        ['proposalQuestions', indexOfListToUpdateCurrent],
+        value => ({
+          ...value,
+          questionLockInfo: { userInfo: userEmail, userId, userName }
+        })
+      );
+      console.log(
+        'newState proposal questions is ',
+        newState.get('proposalQuestions')
+      );
+      const proposalQuestionsNew = newState.get('proposalQuestions');
+      return state
+        .set('proposalQuestions', proposalQuestionsNew)
+        .set('opportunityData', opportunityDataNew);
+    }
+
+    return state.set('opportunityData', opportunityDataNew);
+  }
 };
 
 const onProposalAnswerLoading = (state: Map, action: Object): Map => {

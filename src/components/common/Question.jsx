@@ -120,7 +120,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
     window.addEventListener('resize', this.resize.bind(this));
     this.resize();
   }
-
+  componentDidUpdate() {
+    console.log('questionLockInfo', this.props.questionLockInfo);
+  }
   handlePropsalChange = (textValue, lastValue, reason) => {
     const {
       setProposalAnswer,
