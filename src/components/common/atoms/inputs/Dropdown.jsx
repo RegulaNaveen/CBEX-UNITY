@@ -82,7 +82,7 @@ class Dropdown extends PureComponent<Props, State> {
       });
     }
     //  apply condition if already locked only then unlock
-    if (this.state.isFocusedOnce) {
+    if (this.props.lockedBySelf) {
       if (this.state.isCollapsed && !this.state.isFocused)
         this.context?.questionUnlockWrapper(this.props.questionId);
     }
@@ -257,7 +257,7 @@ class Dropdown extends PureComponent<Props, State> {
               tabIndex={0}
               onClick={() => {
                 console.log('onclick is called from drop down');
-                if (this.props.lockQuestionOnFocus)
+                if (this.props.lockQuestionOnFocus && !this.props.lockedBySelf)
                   this.context?.questionLockWrapper(this.props.questionId);
                 if (!disabled) this.handleCollapse();
                 return;

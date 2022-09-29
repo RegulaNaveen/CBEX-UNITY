@@ -81,7 +81,8 @@ const {
   SWITCH_TEMP_IN_PROGRESS,
   RESET_PROPOSALID,
   QUESTION_LOCK_BY_USER,
-  QUESTION_UNLOCK_BY_USER
+  QUESTION_UNLOCK_BY_USER,
+  QUESTION_LOCK_DETAILS_ALL
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -141,6 +142,51 @@ export const setProposalAnswerData = (
       );
       console.log('answer update called for rich text editor');
       await socketContext.questionUnlockWrapper(questionId, data);
+      dispatch({
+        type: PROPOSAL_ANSWER,
+        payload: {
+          data: Array.isArray(data.answers) ? data.answers : data,
+          questionId,
+          hasDifferentSFanswer: data.hasDifferentSFanswer || false
+        }
+      });
+
+      const { modifiedQuestions } = data;
+      if (!isEmpty(modifiedQuestions)) {
+        modifiedQuestions.forEach(question => {
+          dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
+        });
+      }
+      dispatch(onQuestionsFilterApplied(questionsFilter));
+      dispatch({
+        type: PROPOSAL_ANSWER_LOADING,
+        payload: { questionId, loading: false }
+      });
+    } catch (err) {
+      console.log('error occurred ', err);
+      dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err } });
+    }
+  };
+};
+
+export const setProposalAnswerDatafromSocket = (
+  questionId: string,
+  data: any
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>, getState) => {
+    console.log(
+      'quesiton Id is',
+      questionId,
+      'data is in socket answer update',
+      data
+    );
+    dispatch({
+      type: PROPOSAL_ANSWER_LOADING,
+      payload: { questionId, loading: true }
+    });
+    const questionsFilter = getQuestionsFilters(getState());
+
+    try {
       dispatch({
         type: PROPOSAL_ANSWER,
         payload: {
@@ -318,6 +364,17 @@ export const updateQuestionLockByUser = (data): ThunkAction<string, Object> => {
     });
   };
 };
+export const getQuestionLockDetailsAll = (
+  data
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: QUESTION_LOCK_DETAILS_ALL,
+      payload: data
+    });
+  };
+};
+
 export const updateQuestionUnlockByUser = (
   data
 ): ThunkAction<string, Object> => {

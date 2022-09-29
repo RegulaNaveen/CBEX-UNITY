@@ -183,7 +183,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       if (
         s1.length !== s2.length ||
         s1.join(' ').trim() !== s2.join(' ').trim()
-      )
+      ) {
         setProposalAnswer(
           this.context,
           proposalId,
@@ -192,7 +192,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
           userData,
           editorData
         );
-      this.context.questionUnlockWrapper(questionId);
+      } else this.context.questionUnlockWrapper(questionId);
     } else if (!textValue.trim() && lastAnswer.trim()) {
       setProposalAnswer(
         this.context,
@@ -659,6 +659,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               setSelectRow={this.setSelectRow}
               disabled={checkDisableFlag()}
               questionId={this.props.questionId}
+              lockedBySelf={!!this.isQuestionLockedBySelf()}
               lockQuestionOnFocus
             />
           </SFAnswerValidationWrapper>

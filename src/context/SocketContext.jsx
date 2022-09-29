@@ -10,7 +10,9 @@ import {
   updateSwitchTempStatusFromWebSocket,
   updateSwitchInProgress,
   updateQuestionLockByUser,
-  updateQuestionUnlockByUser
+  updateQuestionUnlockByUser,
+  getQuestionLockDetailsAll,
+  setProposalAnswerDatafromSocket
 } from '../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
@@ -104,7 +106,7 @@ const SocketContextProvider = props => {
     }
   };
   /**
-   *  Question Lock
+   *  Question unLock
    */
   const questionUnlock = (questionId, answer, ws) => {
     try {
@@ -114,7 +116,30 @@ const SocketContextProvider = props => {
       ws.send(
         JSON.stringify({
           action: 'QUESTION',
-          body: { event: 'QUESTION_UNLOCK', questionId, answer }
+          body: {
+            event: 'QUESTION_UNLOCK',
+            data: {
+              latestAnswer: answer
+            }
+          }
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  /**
+   *  Get ALL Question Lock Details
+   */
+  const questionLockDetails = ws => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'QUESTION',
+          body: { event: 'QUESTIONS' }
         })
       );
     } catch (error) {
@@ -164,7 +189,9 @@ const SocketContextProvider = props => {
         setSwitchInProgress,
         updateNotification,
         updateQuestionLock,
-        updateQuestionUnlock
+        updateQuestionUnlock,
+        getQuestionLockDetails,
+        setProposalAnswerDatafromSocket
       } = props;
 
       // On Message Recieve
@@ -210,6 +237,19 @@ const SocketContextProvider = props => {
             // update question answer how it is done in action
             console.log('data in socket unlock question is ', data);
             updateQuestionUnlock(data);
+            if (data.data.latestAnswer) {
+              console.log('answer update found');
+              setProposalAnswerDatafromSocket(
+                data.data.questionId,
+                data.data.latestAnswer
+              );
+            }
+            break;
+          case 'QUESTIONS':
+            // in this case original user will not receive this message
+            // update question answer how it is done in action
+            console.log('data in socket questions lock details is ', data);
+            getQuestionLockDetails(data);
             break;
           default:
             break;
@@ -257,6 +297,10 @@ const SocketContextProvider = props => {
     waitForSocketConnection(() => questionUnlock(questionId, answer, null));
   };
 
+  const questionLockDetailsWrapper = () => {
+    waitForSocketConnection(() => questionLockDetails(null));
+  };
+
   const refreshSocketConnection = () => {
     waitForSocketConnection(() => refreshConnection(null));
   };
@@ -295,7 +339,8 @@ const SocketContextProvider = props => {
         disconnectSocket,
         isSocketConnected,
         questionLockWrapper,
-        questionUnlockWrapper
+        questionUnlockWrapper,
+        questionLockDetailsWrapper
       }}
     >
       {props.children}
@@ -315,7 +360,9 @@ const mapDispatchToProps = {
   setSwitchInProgress: updateSwitchInProgress,
   updateNotification: setNotification,
   updateQuestionLock: updateQuestionLockByUser,
-  updateQuestionUnlock: updateQuestionUnlockByUser
+  updateQuestionUnlock: updateQuestionUnlockByUser,
+  getQuestionLockDetails: getQuestionLockDetailsAll,
+  setProposalAnswerDatafromSocket: setProposalAnswerDatafromSocket
 };
 
 export default connect(

@@ -1,5 +1,5 @@
 // @flow
-import { cloneDeep } from 'lodash';
+import { isEmpty, cloneDeep } from 'lodash';
 import { Map, fromJS, OrderedMap, is } from 'immutable'; // NOSONAR
 import { REDUX_TYPES } from '../../constants';
 import type { ApiAction } from '../actions/action-types';
@@ -53,7 +53,8 @@ const {
   SWITCH_TEMP_IN_PROGRESS,
   RESET_PROPOSALID,
   QUESTION_LOCK_BY_USER,
-  QUESTION_UNLOCK_BY_USER
+  QUESTION_UNLOCK_BY_USER,
+  QUESTION_LOCK_DETAILS_ALL
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -452,6 +453,25 @@ const onProposalError = (state: Map, action: Object): Map => {
   return state.set('proposalError', payload).set('isProposalLoading', false);
 };
 
+const onUpdateModifiedQuestion = (state: Map, action: Object): Map => {
+  const { question } = action.payload;
+
+  let newState = fromJS({});
+
+  const indexOfQuestionToUpdate = state
+    .get('proposalQuestions')
+    .findIndex(listItem => listItem.questionId === question.questionId);
+
+  newState = state.setIn(
+    ['proposalQuestions', indexOfQuestionToUpdate],
+    question
+  );
+
+  const proposalQuestions = newState.get('proposalQuestions');
+
+  return state.set('proposalQuestions', proposalQuestions);
+};
+
 // state is propoal
 const onProposalAnswer = (state: Map, action: Object): Map => {
   const {
@@ -511,7 +531,6 @@ const updateQuestionLockByUser = (state: Map, action: Object): Map => {
   const {
     data: { oppNo, questionId, proposalId, userEmail, userId, userName }
   } = action.payload;
-  console.log('state is', state);
   let newState = fromJS({});
   console.log(
     '------',
@@ -573,13 +592,80 @@ const updateQuestionLockByUser = (state: Map, action: Object): Map => {
   }
 };
 
+const questionLockDetails = (state: Map, action: Object): Map => {
+  const { data } = action.payload;
+  let newState = fromJS(state);
+
+  console.log('in question lock details reducer', data);
+
+  if (data.length > 0) {
+    for (let i = 0; i < data.length; i++) {
+      let newAction = {
+        payload: {
+          data: data[i]
+        }
+      };
+      newState = updateQuestionLockByUser(newState, newAction);
+    }
+    console.log('newState after adding all locks', newState);
+    return newState;
+  }
+  return state;
+};
 // state is propoal
 const updateQuestionUnlockByUser = (state: Map, action: Object): Map => {
   const {
-    data: { oppNo, questionId, proposalId, userEmail, userId, userName }
+    data: {
+      // latestAnswer,
+      oppNo,
+      questionId,
+      proposalId,
+      userEmail,
+      userId,
+      userName
+    }
   } = action.payload;
-  console.log('state is', state);
+  // console.log('got the latestANswer', latestAnswer);
   let newState = fromJS({});
+  // let state = prevState;
+
+  // if (latestAnswer) {
+  //   // step 0 get questionsFilter
+  //   const questionsFilter = getQuestionsFilters(state);
+
+  //   // step 1 update answer
+  //   const answerUpdateAction = {
+  //     payload: {
+  //       data: Array.isArray(latestAnswer.answers)
+  //         ? latestAnswer.answers
+  //         : latestAnswer,
+  //       questionId,
+  //       hasDifferentSFanswer: latestAnswer.hasDifferentSFanswer || false
+  //     }
+  //   };
+  //   state = fromJS(onProposalAnswer(state, answerUpdateAction));
+
+  //   // step 2 modify questions
+  //   const { modifiedQuestions } = latestAnswer;
+
+  //   if (!isEmpty(modifiedQuestions)) {
+  //     modifiedQuestions.forEach(question => {
+  //       const modifyQuestionAction = {
+  //         payload: {
+  //           question
+  //         }
+  //       };
+  //       state = onUpdateModifiedQuestion(state, modifyQuestionAction);
+  //     });
+  //   }
+
+  //   // step 3 filter question
+  //   onQuestionsFilterApplied(questionsFilter);
+
+  //   console.log('newState is', newState);
+  // }
+
+  console.log('state is', state);
   console.log(
     '------',
     oppNo,
@@ -830,25 +916,6 @@ const onGettingfetchBoxAdditionalLinkError = (
   return state.set('boxAdditionalLink', error);
 };
 
-const onUpdateModifiedQuestion = (state: Map, action: Object): Map => {
-  const { question } = action.payload;
-
-  let newState = fromJS({});
-
-  const indexOfQuestionToUpdate = state
-    .get('proposalQuestions')
-    .findIndex(listItem => listItem.questionId === question.questionId);
-
-  newState = state.setIn(
-    ['proposalQuestions', indexOfQuestionToUpdate],
-    question
-  );
-
-  const proposalQuestions = newState.get('proposalQuestions');
-
-  return state.set('proposalQuestions', proposalQuestions);
-};
-
 const onFetchingValidatedProposaData = (state: Map): Map => {
   return state
     .set('fetchingValidatedProposalData', true)
@@ -1026,7 +1093,8 @@ const actionMap = {
     state.set('switchTempInProgress', payload),
   [RESET_PROPOSALID]: resetProposalId,
   [QUESTION_LOCK_BY_USER]: updateQuestionLockByUser,
-  [QUESTION_UNLOCK_BY_USER]: updateQuestionUnlockByUser
+  [QUESTION_UNLOCK_BY_USER]: updateQuestionUnlockByUser,
+  [QUESTION_LOCK_DETAILS_ALL]: questionLockDetails
 };
 
 export default function(
