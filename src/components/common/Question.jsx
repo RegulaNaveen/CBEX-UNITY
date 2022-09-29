@@ -273,13 +273,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
         {
           id: 1,
           value: JSON.stringify({
-            answer: selectedDay,
-            sectionName,
-            questionText,
-            questionHTML,
-            questionJSON,
-            questionHintJSON,
-            questionId,
             proposalDetail
           })
         },

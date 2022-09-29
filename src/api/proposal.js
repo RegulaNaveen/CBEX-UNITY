@@ -63,8 +63,9 @@ export const setProposalAnswer = async (
   answerType: string
 ): Promise<Object> => {
   if (onGoingAnswer[questionId]) onGoingAnswer[questionId]();
-  const payload = { answer, userData, trackEventData, answerType };
+  const payload = { answer, userData, answerType };
   if (editorData) payload.formattedAnswer = editorData;
+  if (trackEventData) payload.trackEventData = trackEventData;
 
   return axiosInstance
     .put(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`, payload, {
