@@ -80,7 +80,8 @@ const {
   SWITCH_TEMP_STATUS,
   SWITCH_TEMP_IN_PROGRESS,
   RESET_PROPOSALID,
-  QUESTION_LOCK_BY_USER
+  QUESTION_LOCK_BY_USER,
+  QUESTION_UNLOCK_BY_USER
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -313,6 +314,16 @@ export const updateQuestionLockByUser = (data): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: QUESTION_LOCK_BY_USER,
+      payload: data
+    });
+  };
+};
+export const updateQuestionUnlockByUser = (
+  data
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: QUESTION_UNLOCK_BY_USER,
       payload: data
     });
   };

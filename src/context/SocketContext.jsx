@@ -9,7 +9,8 @@ import {
   updateProposalDetailFromWebSocket,
   updateSwitchTempStatusFromWebSocket,
   updateSwitchInProgress,
-  updateQuestionLockByUser
+  updateQuestionLockByUser,
+  updateQuestionUnlockByUser
 } from '../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
@@ -162,7 +163,8 @@ const SocketContextProvider = props => {
         updateSwitchTempStatus,
         setSwitchInProgress,
         updateNotification,
-        updateQuestionLock
+        updateQuestionLock,
+        updateQuestionUnlock
       } = props;
 
       // On Message Recieve
@@ -200,12 +202,14 @@ const SocketContextProvider = props => {
             // every user will get this message of lock
             // add in redux store with additional parameter userId locked
             // data: {userInfo:{userName,userEmail,userId}, questionId }
-            console.log('data in socket is ', data);
+            console.log('data in socket lock question is ', data);
             updateQuestionLock(data);
             break;
           case 'QUESTION_UNLOCK':
             // in this case original user will not receive this message
             // update question answer how it is done in action
+            console.log('data in socket unlock question is ', data);
+            updateQuestionUnlock(data);
             break;
           default:
             break;
@@ -310,7 +314,8 @@ const mapDispatchToProps = {
   updateSwitchTempStatus: updateSwitchTempStatusFromWebSocket,
   setSwitchInProgress: updateSwitchInProgress,
   updateNotification: setNotification,
-  updateQuestionLock: updateQuestionLockByUser
+  updateQuestionLock: updateQuestionLockByUser,
+  updateQuestionUnlock: updateQuestionUnlockByUser
 };
 
 export default connect(

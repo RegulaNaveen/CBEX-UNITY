@@ -120,9 +120,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
     window.addEventListener('resize', this.resize.bind(this));
     this.resize();
   }
+
   componentDidUpdate() {
     console.log('questionLockInfo', this.props.questionLockInfo);
   }
+
   handlePropsalChange = (textValue, lastValue, reason) => {
     const {
       setProposalAnswer,
@@ -446,9 +448,15 @@ export class TaskRow extends React.PureComponent<Props, State> {
     let answerValue = '';
     let answerValueComplex;
     let finalOptions = options;
-    const checkDisableFlag = () =>
-      checkNonEditableFields(noneditableField, sfField, sfObject) ||
-      !isCurrentBid;
+    const checkDisableFlag = () => {
+      if (this.isQuestionLocked() && this.isQuestionLockedByOther())
+        return true;
+
+      return (
+        checkNonEditableFields(noneditableField, sfField, sfObject) ||
+        !isCurrentBid
+      );
+    };
 
     if (answer) {
       if (isObject(answer)) answerValueComplex = answer.toJS();
@@ -793,6 +801,26 @@ export class TaskRow extends React.PureComponent<Props, State> {
     this.setState({ screenWidth: window.innerWidth });
   }
 
+  isQuestionLocked = () => {
+    return (
+      this.props.questionLockInfo && this.props.questionLockInfo.get('userInfo')
+    );
+  };
+
+  isQuestionLockedBySelf = () => {
+    return (
+      this.isQuestionLocked() &&
+      this.props.userData.email === this.props.questionLockInfo.get('userInfo')
+    );
+  };
+
+  isQuestionLockedByOther = () => {
+    return (
+      this.isQuestionLocked() &&
+      this.props.userData.email !== this.props.questionLockInfo.get('userInfo')
+    );
+  };
+
   render() {
     const {
       answers,
@@ -1048,6 +1076,26 @@ export class TaskRow extends React.PureComponent<Props, State> {
             handleVerifyPredictedAnsClick={this.handleVerifyPredictedAnsClick}
             hasDifferentSFanswer={hasDifferentSFanswer}
           />
+          <br />
+          {/* Question Lock Info */}
+          {/* {this.props.questionLockInfo &&
+          this.props.questionLockInfo.get('userName') &&
+          this.props.userData.email !==
+            this.props.questionLockInfo.get('userInfo') ? (
+            <div>
+              {this.props.questionLockInfo.get('userName')} is typing...
+            </div>
+          ) : (
+            ''
+          )} 
+           */}
+          {this.isQuestionLocked() && this.isQuestionLockedByOther() ? (
+            <div>
+              {this.props.questionLockInfo.get('userName')} is typing...
+            </div>
+          ) : (
+            ''
+          )}
         </Grid>
       </div>
     );
