@@ -342,7 +342,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
       trackEvent,
       questionId
     } = this.props;
-    console.log('tapas eventCategories', eventCategories.pd(this.props));
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Question: ${questionText} (${sectionName})`,
