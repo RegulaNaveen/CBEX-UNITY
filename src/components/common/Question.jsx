@@ -85,7 +85,8 @@ type Props = {
   roleNames: Array<string>,
   isCustomQuestion: boolean,
   hasDifferentSFanswer: boolean,
-  isNotepadOpen: boolean
+  isNotepadOpen: boolean,
+  events: Object
 };
 export class TaskRow extends React.PureComponent<Props, State> {
   constructor(props: Object) {
@@ -249,7 +250,47 @@ export class TaskRow extends React.PureComponent<Props, State> {
   };
 
   handleDayChange = (selectedDay: string, lastAnswer: Date) => {
-    const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+    const {
+      setProposalAnswer,
+      proposalId,
+      questionId,
+      userData,
+      eventCategories,
+      proposalDetail,
+      questionText,
+      questionHTML,
+      questionJSON,
+      questionHintJSON,
+      sectionName,
+      events
+    } = this.props;
+
+    const trackEventData = {
+      category: eventCategories.pd(this.props),
+      action: `Question: ${questionText} (${sectionName})`,
+      name: `Answer: ${selectedDay}`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify({
+            answer: selectedDay,
+            sectionName,
+            questionText,
+            questionHTML,
+            questionJSON,
+            questionHintJSON,
+            questionId,
+            proposalDetail
+          })
+        },
+        {
+          id: 2,
+          value: JSON.stringify({
+            events
+          })
+        }
+      ]
+    };
 
     this.setState({ selectedDay }, () => {
       if (
@@ -257,7 +298,15 @@ export class TaskRow extends React.PureComponent<Props, State> {
           parseMomentDate(selectedDay.trim()) &&
         selectedDay
       )
-        setProposalAnswer(proposalId, questionId, selectedDay, userData);
+        setProposalAnswer(
+          proposalId,
+          questionId,
+          selectedDay,
+          userData,
+          null,
+          trackEventData,
+          'date'
+        );
     });
     this.trackMatomoEventSubmitAnswer(selectedDay);
   };
@@ -300,6 +349,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       trackEvent,
       questionId
     } = this.props;
+    console.log('tapas eventCategories', eventCategories.pd(this.props));
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Question: ${questionText} (${sectionName})`,
@@ -497,8 +547,14 @@ export class TaskRow extends React.PureComponent<Props, State> {
         if (
           !isEqual(richTextData.value, data.value) &&
           !isEmpty(data.text.trim())
-        )
+        ) {
+          if (
+            isEmpty(richTextData.value.blocks) &&
+            lastAnswerJS?.answer === data.value?.blocks[0]?.text
+          )
+            saveDate = false;
           saveDate = true;
+        }
         // save the data if we see any text difference.
         else if (
           previousAnsText !== data.text.trim() &&
@@ -735,7 +791,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
       selectedBid,
       proposalInfo,
       isNotepadOpen,
-      questionId
+      questionId,
+      events
     } = this.props;
     const questionID = answers.get('questionId');
     const qvicon = questionId;
@@ -907,7 +964,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                   )}
                 </div>
               </div>
-              
+
               {/* Milestone Chip */}
               <div className="milestone-chip" ref={this.quesTextInnerRightRef}>
                 {this.renderTags(

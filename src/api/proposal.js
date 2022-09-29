@@ -58,10 +58,12 @@ export const setProposalAnswer = async (
   questionId: string,
   answer: string,
   userData: Object,
-  editorData: any
+  editorData: any,
+  trackEventData: Object,
+  answerType: string
 ): Promise<Object> => {
   if (onGoingAnswer[questionId]) onGoingAnswer[questionId]();
-  const payload = { answer, userData };
+  const payload = { answer, userData, trackEventData, answerType };
   if (editorData) payload.formattedAnswer = editorData;
 
   return axiosInstance
