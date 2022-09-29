@@ -307,12 +307,10 @@
       .event-launcher {
         margin-top: -3px;
         padding-left: 5px;
-        color: $green;
-        svg {
-          font-size: 23px;
-          &:focus {
-            outline: none;
-          }
+        &__tooltip-btn {
+          color: $green;
+          width: auto;
+          height: auto;
         }
       }
       .question-edit {
