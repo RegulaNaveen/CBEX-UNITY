@@ -281,7 +281,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
         userData
       );
     }
-
     this.trackMatomoEventSubmitAnswer(selectedValue);
     // this.setSelectRow(false);
   };
@@ -658,9 +657,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
               value={answerValue}
               setSelectRow={this.setSelectRow}
               onBlur={() => {
-                console.log(event, 'selected Value is', selectedValue);
                 // call question unlock
-                // this.context.questionUnlockWrapper(this.props.questionId);
+
+                this.context.questionUnlockWrapper(this.props.questionId);
+
                 console.log('onblur called for select');
               }}
               disabled={checkDisableFlag()}

@@ -279,9 +279,7 @@ class Dropdown extends PureComponent<Props, State> {
                 if (!disabled) this.handleCollapse();
                 return;
               }}
-              onBlur={() => {
-                this.props.onBlur();
-              }}
+              onBlur={this.props.onBlur}
             >
               {selectedValue || value ? (
                 <p className="dd-header-selected">{selectedValue || value}</p>
