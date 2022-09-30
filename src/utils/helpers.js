@@ -34,3 +34,23 @@ export const objectContains = (
   if (!isEmpty(found)) return true;
   return false;
 };
+
+// Function to parse stringify Json
+export function parseStringifyJson(str) {
+  try {
+    return JSON.parse(str);
+  } catch (e) {
+    return false;
+  }
+}
+
+export function extractEmails(text) {
+  const emails = text.match(
+    /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+  );
+  return emails ? emails[0] : null;
+}
+
+export const avoidSpecialChars = string => {
+  return string.replace(/[&\/\\#,+$~%.'":*?<>]/g, '');
+};
