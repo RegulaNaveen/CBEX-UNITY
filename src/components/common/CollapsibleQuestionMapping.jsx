@@ -43,7 +43,7 @@ const CollapsibleQuestionMapping = ({
           isCustomQuestion={questionConfig.get('isCustomQuestion')}
           hasDifferentSFanswer={questionConfig.get('hasDifferentSFanswer')}
           isNotepadOpen={isNotepadOpen}
-          events={questionConfig.get('events')}
+          events={questionConfig.get('events') || {}}
         />
       )
     );
