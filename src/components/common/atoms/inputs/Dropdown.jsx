@@ -124,21 +124,16 @@ class Dropdown extends PureComponent<Props, State> {
 
   handleClick = (event: SyntheticEvent<EventTarget>, value: string) => {
     event.stopPropagation();
-    const { onClick, value: lastAnswer, lockedBySelf } = this.props;
+    const { onClick, lockedBySelf } = this.props;
     onClick(value);
-    console.log('called from handle click', lastAnswer, value);
-    this.props.setSelectRow(false);
+    console.log('called from handle click');
+    if (this.props.setSelectRow) this.props.setSelectRow(false);
 
     this.setState({
       selectedValue: value,
       isCollapsed: true,
       focusedValue: value
     });
-    // if (value === lastAnswer) {
-    //   if (lockedBySelf) {
-    //     this.context?.questionUnlockWrapper(this.props.questionId);
-    //   }
-    // }
   };
 
   handleReset = () => {

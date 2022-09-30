@@ -469,8 +469,16 @@ export class TaskRow extends React.PureComponent<Props, State> {
         >
           <Autocomplete
             sectionName={sectionName}
-            onFocus={() => this.setSelectRow(true)}
-            onBlur={() => this.setSelectRow(false)}
+            onFocus={() => {
+              // call question lock
+              this.context.questionLockWrapper(this.props.questionId);
+              this.setSelectRow(true);
+            }}
+            onBlur={() => {
+              this.context.questionUnlockWrapper(this.props.questionId);
+
+              this.setSelectRow(false);
+            }}
             onChange={this.handlePropsalChange}
             text={answerValue}
             disabled={checkDisableFlag()}

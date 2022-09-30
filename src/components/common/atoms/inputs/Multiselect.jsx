@@ -156,7 +156,7 @@ class Multiselect extends PureComponent<Props, State> {
 
   handleFocusIn = event => {
     this.setState({ isFocused: true });
-    this.props.setSelectRow(true);
+    if (this.props.setSelectRow) this.props.setSelectRow(true);
   };
 
   handleFocusOut = event => {
