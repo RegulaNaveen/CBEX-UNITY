@@ -16,6 +16,7 @@ const CollapsibleQuestionMapping = ({
     return (
       (visible || typeof visible === 'undefined') && (
         <Question
+          questionData={questionConfig}
           key={questionConfig.get('questionId')}
           ismilestoneavailable={milestone}
           milestone={questionConfig.get('milestone')}
