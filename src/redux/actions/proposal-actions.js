@@ -120,9 +120,7 @@ export const setProposalAnswerData = (
   questionId: string,
   answer: string,
   userData: Object,
-  editorData: any,
-  trackEventData: Object,
-  answerType: String
+  editorData: any
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
     dispatch({
@@ -137,9 +135,7 @@ export const setProposalAnswerData = (
         questionId,
         answer,
         userData,
-        editorData,
-        trackEventData,
-        answerType
+        editorData
       );
 
       dispatch({
