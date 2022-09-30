@@ -1,22 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import Loader from 'apollo-react/components/Loader';
 import map from 'lodash/map';
 import IconButton from 'apollo-react/components/IconButton';
 import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
+import { useSelector, useDispatch } from 'react-redux';
+import { getSelectedBid } from '../../redux/selectors/proposal';
+import { getPriceModelerData } from '../../redux/actions/proposal-actions';
+import CustomModal from './CustomModal';
+import { DEFAULT } from '../../constants/app';
+import { convertToInternationalCurrency } from '../../utils/helpers';
 
 const INITIAL_LIST_TITLE = {
   therapeutic: 'Therapeutic Area',
   sites: 'Total Sites',
-  indication: 'Indication',
+  phase: 'Phase',
   patients: 'Total Patients',
   regions: 'Therapeutic Area'
 };
 
 const INITIAL_LIST_VAL = {
+  cost: '',
   therapeutic: '',
   sites: '',
-  indication: '',
+  phase: '',
   patients: '',
   regions: ''
 };
@@ -24,34 +31,56 @@ const INITIAL_LIST_VAL = {
 const PriceModeler = () => {
   const [additionalDetails, setAdditionalDetails] = useState(INITIAL_LIST_VAL);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const dispatch = useDispatch();
+  const selectedBid = useSelector(getSelectedBid)?.toJS();
+  const memoizeBid = useMemo(() => selectedBid, [selectedBid?.id]);
+  const proposalID = memoizeBid?.id;
 
   /**
-   * Fetch Price Modeler Data from Api
+   * Trigger Price Modeler Api on Bid change
    */
-  const fetchData = async () => {
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    const apiResponse = {
-      therapeutic: 'Cardiovascular',
-      sites: '12',
-      indication: 'Arrhythmia',
-      patients: '250',
-      regions: 'United States, Canada, Mexico'
-    };
-    return apiResponse;
-  };
-
   useEffect(() => {
-    setLoading(true);
-    // Calling function
-    fetchData().then(res => {
-      console.log(res);
+    (async () => {
+      setLoading(true);
+      const response = await dispatch(getPriceModelerData(proposalID));
       setLoading(false);
-      setAdditionalDetails(res);
-    });
-  }, []);
+      console.log({ response });
+      if (response.status) {
+        const {
+          Cost: cost,
+          TherapyArea__c: therapeutic,
+          Number_of_Sites__c: sites,
+          Phase_P__c: phase,
+          Patients_Enrolled__c: patients,
+          Potential_Regions__c: regions
+        } = response.data.latestDetails;
 
+        setAdditionalDetails({
+          cost,
+          therapeutic,
+          sites,
+          phase,
+          patients,
+          regions
+        });
+      } else {
+        setError(true);
+        setErrorMsg(response.msg);
+      }
+    })();
+  }, [memoizeBid]);
+
+  // Price Modeler Tooltip
   const infoIconWithTooltip = (
-    <Tooltip variant="light" tabIndex={-1} title="Hint Text" placement="top">
+    <Tooltip
+      variant="light"
+      tabIndex={-1}
+      title="Price Modeler"
+      placement="top"
+    >
       <IconButton
         color="primary"
         size="small"
@@ -73,16 +102,40 @@ const PriceModeler = () => {
 
       <h2 className="price-modeler__title">Price Modeler Ballpark Estimate</h2>
       <p className="price-modeler__price">
-        $3.5M <span className="price-modeler__info">{infoIconWithTooltip}</span>
+        {`$${
+          additionalDetails.cost
+            ? convertToInternationalCurrency(additionalDetails.cost)
+            : '0.0M'
+        }`}{' '}
+        <span className="price-modeler__info">{infoIconWithTooltip}</span>
       </p>
       <div className="price-modeler__details">
-        {map(additionalDetails, (item, key) => (
-          <div className="price-modeler__details-item" key={key}>
-            <h3>{INITIAL_LIST_TITLE[key]}:</h3>
-            <i>{item || '-'}</i>
-          </div>
-        ))}
+        {map(additionalDetails, (item, key) => {
+          if (key === 'cost') return null;
+          return (
+            <div className="price-modeler__details-item" key={key}>
+              <h3>{INITIAL_LIST_TITLE[key]}:</h3>
+              <i>{item || '-'}</i>
+            </div>
+          );
+        })}
       </div>
+
+      {/* Warning Modal */}
+      {error && (
+        <CustomModal
+          open={error}
+          title={DEFAULT.ALERT}
+          message={errorMsg}
+          variant="error"
+          onClose={() => setError(false)}
+          buttonProps={[
+            { className: 'display-none' },
+            { label: DEFAULT.CLOSE }
+          ]}
+          modalStyle={{ maxWidth: 342 }}
+        />
+      )}
     </div>
   );
 };

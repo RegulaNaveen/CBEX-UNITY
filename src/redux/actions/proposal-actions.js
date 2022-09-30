@@ -5,6 +5,7 @@ import axios from 'axios';
 
 import { REDUX_TYPES, API } from '../../constants';
 import type { Dispatch, ThunkAction } from './action-types';
+import dummyPriceModeler from '../../dummyPriceModelerData.json';
 
 import {
   getProposalInfo,
@@ -25,7 +26,8 @@ import {
   getOTListData,
   changeProposalOT,
   deleteProposalUser,
-  getProposalAnswer
+  getProposalAnswer,
+  priceModelerApi
 } from '../../api/proposal';
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getUniqueMilestones } from '../selectors/proposal';
@@ -962,6 +964,24 @@ export const getProposalAnswerHistory = (
     // Api Response
     const response = await getProposalAnswer(proposalId, questionId);
     return { status: true, title: DEFAULT.SUCCESS, data: response };
+  } catch (error) {
+    // Error
+    console.log(error?.response);
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
+  }
+};
+
+/**
+ * Get Price Modeler Data
+ */
+export const getPriceModelerData = proposalId => async () => {
+  try {
+    // Api Response
+    // const response = await priceModelerApi(proposalId);
+    // return { status: true, title: DEFAULT.SUCCESS, data: response.data };
+    await new Promise(resolve => setTimeout(resolve, 2500));
+    return { status: true, title: DEFAULT.SUCCESS, data: dummyPriceModeler };
   } catch (error) {
     // Error
     console.log(error?.response);
