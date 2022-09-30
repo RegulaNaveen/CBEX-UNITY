@@ -13,6 +13,7 @@ import CustomModal from '../../common/CustomModal';
 import { DEFAULT, PROPOSAL } from '../../../constants/app';
 import { extractEmails, parseStringifyJson } from '../../../utils/helpers';
 import { selectProposalQuestions } from '../../../redux/selectors/proposal';
+import { getUserData } from '../../../redux/selectors';
 
 const modalStyle = { maxWidth: 545, width: '100%' };
 const attendees = [
@@ -20,10 +21,15 @@ const attendees = [
   'All Roles associated with opportunity'
 ];
 
-const EventLauncher = ({ questionData }) => {
+const EventLauncher = ({
+  questionData,
+  proposalDetail,
+  trackMatomoEventLauncher
+}) => {
   const quesData = questionData?.toJS();
   const hasEvent = quesData?.events && !isEmpty(quesData?.events);
   const eventStartDate = quesData?.answers[0]?.answer;
+  const userData = useSelector(getUserData);
   const eventFlag = useSelector(state =>
     state.proposal.get('eventLauncherFlag')
   );
@@ -126,6 +132,24 @@ const EventLauncher = ({ questionData }) => {
       subject,
       filteredEmails.join(', ')
     );
+
+    const trackEventPayload = {
+      action: `Event Launched : ${subject} : ${body}`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify({
+            proposalDetail,
+            questionText: quesData?.questionText,
+            userData,
+            event: quesData?.events,
+            startDate,
+            endDate
+          })
+        }
+      ]
+    };
+    trackMatomoEventLauncher(trackEventPayload);
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 

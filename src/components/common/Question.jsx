@@ -88,7 +88,8 @@ type Props = {
   roleNames: Array<string>,
   isCustomQuestion: boolean,
   hasDifferentSFanswer: boolean,
-  isNotepadOpen: boolean
+  isNotepadOpen: boolean,
+  events: Object
 };
 export class TaskRow extends React.PureComponent<Props, State> {
   constructor(props: Object) {
@@ -301,11 +302,14 @@ export class TaskRow extends React.PureComponent<Props, State> {
       questionHintJSON,
       sectionName,
       trackEvent,
-      questionId
+      questionId,
+      events
     } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
-      action: `Question: ${questionText} (${sectionName})`,
+      action: events
+        ? `Event: ${questionText} (${sectionName})`
+        : `Question: ${questionText} (${sectionName})`,
       name: `Answer: ${data}`,
       customDimensions: [
         {
@@ -320,6 +324,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
             questionId,
             proposalDetail
           })
+        },
+        {
+          events: events || []
         }
       ]
     });
@@ -354,6 +361,16 @@ export class TaskRow extends React.PureComponent<Props, State> {
           })
         }
       ]
+    });
+  };
+
+  trackMatomoEventLauncher = data => {
+    const { eventCategories, trackEvent } = this.props;
+    const { action, customDimensions } = data;
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action,
+      customDimensions
     });
   };
 
@@ -491,8 +508,14 @@ export class TaskRow extends React.PureComponent<Props, State> {
         if (
           !isEqual(richTextData.value, data.value) &&
           !isEmpty(data.text.trim())
-        )
-          saveDate = true;
+        ) {
+          if (
+            isEmpty(richTextData.value.blocks) &&
+            lastAnswerJS?.answer === data.value?.blocks[0]?.text
+          )
+            saveDate = false;
+          else saveDate = true;
+        }
         // save the data if we see any text difference.
         else if (
           previousAnsText !== data.text.trim() &&
@@ -731,7 +754,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
       proposalInfo,
       isNotepadOpen,
       questionId,
-      questionData
+      events,
+      questionData,
+      proposalDetail,
+      eventCategories
     } = this.props;
     const questionID = answers.get('questionId');
     const qvicon = questionId;
@@ -848,7 +874,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 </div>
 
                 {/* Event Launcher Component */}
-                <EventLauncher questionData={questionData} />
+                <EventLauncher
+                  questionData={questionData}
+                  proposalDetail={proposalDetail}
+                  eventCategories={eventCategories}
+                  trackMatomoEventLauncher={this.trackMatomoEventLauncher}
+                />
 
                 {/* Edit Question Icon */}
                 {isCustomQuestion && isCurrentBid && (
