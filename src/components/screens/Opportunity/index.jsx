@@ -16,7 +16,8 @@ import {
   updateProposalDetailFromWebSocket,
   updateSwitchTempStatusFromWebSocket,
   updateSwitchInProgress,
-  resetProposalId
+  resetProposalId,
+  setEventLauncherFlag
 } from '../../../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../../../redux/actions/notepad-actions';
 import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
@@ -43,8 +44,8 @@ import { NOTES_SOCKET_URL } from '../../../constants/api';
 import NotesSocketContext from '../../../context/notesSocketContext';
 import { websocketNotesApi } from '../../../api/notepad';
 import { UBUILD, DASHBOARD } from '../../../routes';
-
-// const ThemeContext = React.createContext('light');
+import featureFlags from '../../../constants/featureFlags';
+import launchDarkly from '../../../utils/launchDarkly';
 
 type State = {
   selectedView: string
@@ -79,7 +80,8 @@ type Props = {
   proposalDetail: any,
   getOpportunityInfo: (oppId: string, flag?: boolean) => void,
   setSeenOne: Function,
-  setResetProposalId: Function
+  setResetProposalId: Function,
+  setEventLauncherFlg: Function
 };
 
 export class Opportunity extends Component<Props, State> {
@@ -164,7 +166,8 @@ export class Opportunity extends Component<Props, State> {
   componentDidUpdate(prevProps, prevState) {
     const {
       match: { params },
-      selectedBid
+      selectedBid,
+      setEventLauncherFlg
     } = this.props;
     const thisProposalId = selectedBid.get('id', '');
     const prevProposalId = prevProps.selectedBid.get('id', '');
@@ -180,6 +183,12 @@ export class Opportunity extends Component<Props, State> {
       }
     }
     this.triggerWebsocketNotesApi(prevProposalId, thisProposalId);
+
+    // Set Event Launcher Flag
+    (async () => {
+      const flagValue = await launchDarkly(featureFlags.EVENT_LAUNCHER, false);
+      setEventLauncherFlg(flagValue);
+    })();
   }
 
   componentWillUnmount() {
@@ -387,6 +396,7 @@ export default compose(
     updateSwitchTempStatus: updateSwitchTempStatusFromWebSocket,
     setSwitchInProgress: updateSwitchInProgress,
     setSeenOne: notificationActions.setSeenOne,
-    setResetProposalId: resetProposalId
+    setResetProposalId: resetProposalId,
+    setEventLauncherFlg: setEventLauncherFlag
   })
 )(MatomoHOC(Opportunity));

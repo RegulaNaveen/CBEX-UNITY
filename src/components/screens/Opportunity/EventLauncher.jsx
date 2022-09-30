@@ -11,11 +11,7 @@ import moment from 'moment';
 
 import CustomModal from '../../common/CustomModal';
 import { DEFAULT, PROPOSAL } from '../../../constants/app';
-import {
-  avoidSpecialChars,
-  extractEmails,
-  parseStringifyJson
-} from '../../../utils/helpers';
+import { extractEmails, parseStringifyJson } from '../../../utils/helpers';
 import { selectProposalQuestions } from '../../../redux/selectors/proposal';
 import { getUserData } from '../../../redux/selectors';
 
@@ -34,9 +30,12 @@ const EventLauncher = ({
   const hasEvent = quesData?.events && !isEmpty(quesData?.events);
   const eventStartDate = quesData?.answers[0]?.answer;
   const userData = useSelector(getUserData);
+  const eventFlag = useSelector(state =>
+    state.proposal.get('eventLauncherFlag')
+  );
 
   // Component will return null if no event found
-  if (!hasEvent) return null;
+  if (!hasEvent || !eventFlag) return null;
 
   // Get proposalQuestions - Redux State
   const proposalQuestions = useSelector(selectProposalQuestions);
@@ -95,10 +94,9 @@ const EventLauncher = ({
    * Generate Event Url Function
    */
   const generateEventUrl = (startDate, endDate, body, subject, email) => {
-    // console.log({ startDate, endDate, body, subject, email });
-    const bodyStr = avoidSpecialChars(body);
-    const subjectStr = avoidSpecialChars(subject);
-    return `https://outlook.office.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose%20&rru=addevent&startdt=${startDate}&enddt=${endDate}&body=${bodyStr}@&.&subject=${subjectStr}&to=${email}&online=1`;
+    const bodyStr = encodeURIComponent(body);
+    const subjectStr = encodeURIComponent(subject);
+    return `https://outlook.office.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose%20&rru=addevent&startdt=${startDate}&enddt=${endDate}&body=${bodyStr}&.&subject=${subjectStr}&to=${email}&online=1`;
   };
 
   const checkDateAge = date => {
