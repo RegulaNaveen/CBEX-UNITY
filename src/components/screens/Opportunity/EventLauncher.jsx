@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import CalendarEvent from 'apollo-react-icons/CalendarEvent';
 import Tooltip from 'apollo-react/components/Tooltip';
@@ -17,6 +17,8 @@ import {
   parseStringifyJson
 } from '../../../utils/helpers';
 import { selectProposalQuestions } from '../../../redux/selectors/proposal';
+import launchDarkly from '../../../utils/launchDarkly';
+import featureFlags from '../../../constants/featureFlags';
 
 const modalStyle = { maxWidth: 545, width: '100%' };
 const attendees = [
@@ -28,6 +30,7 @@ const EventLauncher = ({ questionData }) => {
   const quesData = questionData?.toJS();
   const hasEvent = quesData?.events && !isEmpty(quesData?.events);
   const eventStartDate = quesData?.answers[0]?.answer;
+  const [showEventLauncher, setShowEventLauncher] = useState(false);
 
   // Component will return null if no event found
   if (!hasEvent) return null;
@@ -39,6 +42,14 @@ const EventLauncher = ({ questionData }) => {
   // Component State
   const [openModal, setOpenModal] = useState(false);
   const [attendeesVal, setAttendeesVal] = React.useState(attendees[0]);
+
+  useEffect(() => {
+    const ldApiCall = async () => {
+      const flagValue = await launchDarkly(featureFlags.EVENT_LAUNCHER, false);
+      setShowEventLauncher(flagValue);
+    };
+    ldApiCall();
+  }, []);
 
   const proposalTeam = useMemo(() => {
     if (!openModal) return []; // break func
