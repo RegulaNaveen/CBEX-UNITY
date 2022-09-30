@@ -188,7 +188,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
           userData,
           editorData
         );
-      } else this.context.questionUnlockWrapper(questionId);
+      }
     } else if (!textValue.trim() && lastAnswer.trim()) {
       setProposalAnswer(
         this.context,
@@ -198,9 +198,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
         userData,
         editorData
       );
-    } else {
-      this.context.questionUnlockWrapper(questionId);
     }
+    this.context.questionUnlockWrapper(questionId);
 
     this.trackMatomoEventSubmitAnswer(textValue);
     this.setSelectRow(false);
@@ -577,8 +576,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
           this.handleRichTextChange(data);
         } else {
           console.log('on blur called no answer change');
-          this.context.questionUnlockWrapper(this.props.questionId);
         }
+        this.context.questionUnlockWrapper(this.props.questionId);
 
         this.setState({ enableRichtext: false });
 
@@ -639,6 +638,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
               setSelectRow={this.setSelectRow}
               disabled={checkDisableFlag()}
               questionId={this.props.questionId}
+              onBlur={() => {
+                // call unlock question
+                this.context.questionUnlockWrapper(this.props.questionId);
+              }}
+              lockedBySelf={!!this.isQuestionLockedBySelf()}
               lockQuestionOnFocus
             />
           </SFAnswerValidationWrapper>
@@ -654,6 +658,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
               placeholder={checkDisableFlag() ? '' : 'Click to answer'}
               items={finalOptions}
               onClick={val => this.onClickChange(val, answerValue)}
+              onBlur={() => {
+                // call unlock question
+                this.context.questionUnlockWrapper(this.props.questionId);
+              }}
               value={answerValue}
               setSelectRow={this.setSelectRow}
               disabled={checkDisableFlag()}
@@ -700,10 +708,13 @@ export class TaskRow extends React.PureComponent<Props, State> {
               setSelectRow={this.setSelectRow}
               disabled={checkDisableFlag()}
               questionId={this.props.questionId}
-              onBlur={() => {
-                // call question unlock
-                this.context.questionUnlockWrapper(this.props.questionId);
-              }}
+              lastAnswer={lastAnswer}
+              // onBlur={(isOpen, isFocused) => {
+              //   console.log('states multiselect', isOpen, isFocused);
+              //   // call question unlock
+              //   console.log('on blur is called in multiselect');
+              //   this.context.questionUnlockWrapper(this.props.questionId);
+              // }}
               lockedBySelf={!!this.isQuestionLockedBySelf()}
               lockQuestionOnFocus
             />

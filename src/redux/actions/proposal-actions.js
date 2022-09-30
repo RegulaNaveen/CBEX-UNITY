@@ -141,7 +141,7 @@ export const setProposalAnswerData = (
         editorData
       );
       console.log('answer update called for rich text editor');
-      await socketContext.questionUnlockWrapper(questionId, data);
+      await socketContext.questionAnswerUpdateWrapper(questionId, data);
       dispatch({
         type: PROPOSAL_ANSWER,
         payload: {

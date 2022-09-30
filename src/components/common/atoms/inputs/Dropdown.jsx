@@ -100,10 +100,10 @@ class Dropdown extends PureComponent<Props, State> {
         this.setState({ isCollapsed: true }, () => {
           setSelectRow(false);
           //  apply condition if already locked only then unlock
-          if (lockedBySelf) {
-            if (this.state.isCollapsed && !this.state.isFocused)
-              this.context?.questionUnlockWrapper(this.props.questionId);
-          }
+          // if (lockedBySelf) {
+          //   if (this.state.isCollapsed && !this.state.isFocused)
+          //     this.context?.questionUnlockWrapper(this.props.questionId);
+          // }
         });
       }
     }
@@ -134,11 +134,11 @@ class Dropdown extends PureComponent<Props, State> {
       isCollapsed: true,
       focusedValue: value
     });
-    if (value === lastAnswer) {
-      if (lockedBySelf) {
-        this.context?.questionUnlockWrapper(this.props.questionId);
-      }
-    }
+    // if (value === lastAnswer) {
+    //   if (lockedBySelf) {
+    //     this.context?.questionUnlockWrapper(this.props.questionId);
+    //   }
+    // }
   };
 
   handleReset = () => {
@@ -282,6 +282,7 @@ class Dropdown extends PureComponent<Props, State> {
                 if (!disabled) this.handleCollapse();
                 return;
               }}
+              onBlur={this.props.onBlur}
             >
               {selectedValue || value ? (
                 <p className="dd-header-selected">{selectedValue || value}</p>

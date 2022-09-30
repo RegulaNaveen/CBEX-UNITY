@@ -106,6 +106,31 @@ const SocketContextProvider = props => {
     }
   };
   /**
+   *  Question answerUpdate
+   */
+  const questionAnswerUpdate = (questionId, answer, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'QUESTION',
+          body: {
+            event: 'QUESTION_ANSWER_UPDATE',
+            data: {
+              latestAnswer: answer,
+              questionId
+            }
+          }
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /**
    *  Question unLock
    */
   const questionUnlock = (questionId, answer, ws) => {
@@ -119,7 +144,7 @@ const SocketContextProvider = props => {
           body: {
             event: 'QUESTION_UNLOCK',
             data: {
-              latestAnswer: answer,
+              // latestAnswer: answer,
               questionId
             }
           }
@@ -235,13 +260,25 @@ const SocketContextProvider = props => {
           case 'QUESTION_UNLOCK':
             // in this case original user will not receive this message
             // update question answer how it is done in action
+            // if (data.data.latestAnswer) {
+            //   setProposalAnswerDatafromSocket(
+            //     data.data.questionId,
+            //     data.data.latestAnswer
+            //   );
+            // }
+            updateQuestionUnlock(data);
+
+            break;
+          case 'QUESTION_ANSWER_UPDATE':
+            // in this case original user will not receive this message
+            // update question answer how it is done in action
             if (data.data.latestAnswer) {
               setProposalAnswerDatafromSocket(
                 data.data.questionId,
                 data.data.latestAnswer
               );
             }
-            updateQuestionUnlock(data);
+            // updateQuestionUnlock(data);
 
             break;
           case 'QUESTIONS':
@@ -295,6 +332,12 @@ const SocketContextProvider = props => {
     waitForSocketConnection(() => questionUnlock(questionId, answer, null));
   };
 
+  const questionAnswerUpdateWrapper = (questionId, answer) => {
+    waitForSocketConnection(() =>
+      questionAnswerUpdate(questionId, answer, null)
+    );
+  };
+
   const questionLockDetailsWrapper = () => {
     waitForSocketConnection(() => questionLockDetails(null));
   };
@@ -338,7 +381,8 @@ const SocketContextProvider = props => {
         isSocketConnected,
         questionLockWrapper,
         questionUnlockWrapper,
-        questionLockDetailsWrapper
+        questionLockDetailsWrapper,
+        questionAnswerUpdateWrapper
       }}
     >
       {props.children}

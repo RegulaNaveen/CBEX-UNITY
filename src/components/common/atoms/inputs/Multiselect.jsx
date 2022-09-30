@@ -86,11 +86,16 @@ class Multiselect extends PureComponent<Props, State> {
   }
 
   handleOutsideClick = (event: SyntheticEvent<EventTarget>) => {
-    const { setSelectRow } = this.props;
+    const { setSelectRow, lockedBySelf } = this.props;
     if (this.ref.current !== event.target) {
       if (setSelectRow) {
         this.setState({ isOpen: false }, () => {
           this.props.setSelectRow(false);
+
+          if (lockedBySelf) {
+            if (!this.state.isOpen && !this.state.isFocused)
+              this.context?.questionUnlockWrapper(this.props.questionId);
+          }
         });
       }
     }
@@ -125,6 +130,13 @@ class Multiselect extends PureComponent<Props, State> {
     }
 
     this.setState({ selectedValues: newArray });
+
+    if (value === this.props.lastAnswer) {
+      if (this.props.lockedBySelf) {
+        this.context?.questionUnlockWrapper(this.props.questionId);
+      }
+    }
+
     this.forceUpdate();
   };
 
@@ -149,12 +161,12 @@ class Multiselect extends PureComponent<Props, State> {
 
   handleFocusOut = event => {
     this.setState({ isFocused: false });
-    const { isOpen } = this.state;
-    const { setSelectRow } = this.props;
-    if (setSelectRow) {
-      console.log('called from handle focus out');
-      setSelectRow(false);
-    }
+    // const { isOpen } = this.state;
+    // const { setSelectRow } = this.props;
+    // if (setSelectRow) {
+    //   console.log('called from handle focus out');
+    //   setSelectRow(false);
+    // }
   };
 
   handleDownArrowPress = () => {
@@ -253,7 +265,12 @@ class Multiselect extends PureComponent<Props, State> {
     return (
       <>
         {title && <p className="multiselect-title">{title}</p>}
-        <div className="multiselect-wrapper">
+        <div
+          className="multiselect-wrapper"
+          // onBlur={() =>
+          //   this.props.onBlur(this.state.isOpen, this.state.isFocused)
+          // }
+        >
           <div
             id={id}
             ref={this.ref}
@@ -274,7 +291,6 @@ class Multiselect extends PureComponent<Props, State> {
 
               if (!disabled) this.handleCollapse();
             }}
-            onBlur={this.props.onBlur}
             tabIndex={0}
           >
             {!isEmpty(selectedValues) ? (
