@@ -144,7 +144,6 @@ const SocketContextProvider = props => {
           body: {
             event: 'QUESTION_UNLOCK',
             data: {
-              // latestAnswer: answer,
               questionId
             }
           }
