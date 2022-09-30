@@ -18,8 +18,6 @@ import {
 } from '../../../utils/helpers';
 import { selectProposalQuestions } from '../../../redux/selectors/proposal';
 import { getUserData } from '../../../redux/selectors';
-// import launchDarkly from '../../../utils/launchDarkly';
-// import featureFlags from '../../../constants/featureFlags';
 
 const modalStyle = { maxWidth: 545, width: '100%' };
 const attendees = [
@@ -36,7 +34,6 @@ const EventLauncher = ({
   const hasEvent = quesData?.events && !isEmpty(quesData?.events);
   const eventStartDate = quesData?.answers[0]?.answer;
   const userData = useSelector(getUserData);
-  const [showEventLauncher, setShowEventLauncher] = useState(false);
 
   // Component will return null if no event found
   if (!hasEvent) return null;
@@ -48,15 +45,6 @@ const EventLauncher = ({
   // Component State
   const [openModal, setOpenModal] = useState(false);
   const [attendeesVal, setAttendeesVal] = React.useState(attendees[0]);
-
-  // useEffect(() => {
-  //   const ldApiCall = async () => {
-  //     const flagValue = await launchDarkly(featureFlags.EVENT_LAUNCHER, false);
-  //     console.log('tapas flags: ', flagValue);
-  //     setShowEventLauncher(flagValue);
-  //   };
-  //   ldApiCall();
-  // }, []);
 
   const proposalTeam = useMemo(() => {
     if (!openModal) return []; // break func
