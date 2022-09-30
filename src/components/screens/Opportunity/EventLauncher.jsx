@@ -92,14 +92,14 @@ const EventLauncher = ({ questionData }) => {
     // console.log({ startDate, endDate, body, subject, email });
     const bodyStr = avoidSpecialChars(body);
     const subjectStr = avoidSpecialChars(subject);
-    return `https://outlook.office.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose%20&rru=addevent&startdt=${startDate}&enddt=${endDate}&body=${bodyStr}&subject=${subjectStr}&to=${email}&online=1`;
+    return `https://outlook.office.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose%20&rru=addevent&startdt=${startDate}&enddt=${endDate}&body=${bodyStr}@&.&subject=${subjectStr}&to=${email}&online=1`;
   };
 
   const checkDateAge = date => {
-    const formatedDt = moment(date).format('YYYY-MM-DD');
-    if (moment(formatedDt).isSame(moment(), 'day')) return 'today';
-    if (moment(formatedDt).isAfter(moment(), 'day')) return 'future';
-    if (moment(formatedDt).isBefore(moment(), 'day')) return null;
+    const formattedDt = moment(date).format('YYYY-MM-DD');
+    if (moment(formattedDt).isSame(moment(), 'day')) return 'today';
+    if (moment(formattedDt).isAfter(moment(), 'day')) return 'future';
+    if (moment(formattedDt).isBefore(moment(), 'day')) return null;
     return null;
   };
 
@@ -107,9 +107,9 @@ const EventLauncher = ({ questionData }) => {
     const dateTimeFormat = 'YYYY-MM-DDTHH:mm:ss';
     const { EventBody: body, EventSubject: subject } = eventData;
     const dateAge = checkDateAge(eventStartDate);
-    const formatedDt = moment(eventStartDate).format('YYYY-MM-DD');
+    const formattedDt = moment(eventStartDate).format('YYYY-MM-DD');
 
-    let startDate = `${formatedDt}T08:00:00`;
+    let startDate = `${formattedDt}T08:00:00`;
     if (dateAge === 'today') {
       startDate = moment()
         .add(60, 'minutes')

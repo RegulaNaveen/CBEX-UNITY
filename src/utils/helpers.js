@@ -52,5 +52,5 @@ export function extractEmails(text) {
 }
 
 export const avoidSpecialChars = string => {
-  return string.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
+  return string.replace(/[&\/\\#,+$~%.'":*?<>]/g, '');
 };
