@@ -139,6 +139,7 @@ export class Opportunity extends Component<Props, State> {
     window.addEventListener('resize', this.handleResize);
     // const windowSize = window.innerWidth;
 
+    // NOSONAR
     const enableValidateTab = localStorage.getItem('enableValidateTab');
     if (enableValidateTab === null) {
       localStorage.setItem('enableValidateTab', false);
@@ -156,7 +157,6 @@ export class Opportunity extends Component<Props, State> {
 
     // Scroll
     try {
-      console.log('Back to top#');
       window.scrollTo(0, 0);
     } catch (error) {
       console.log(error);
@@ -173,7 +173,6 @@ export class Opportunity extends Component<Props, State> {
     const prevProposalId = prevProps.selectedBid.get('id', '');
     // Bid changed
     if (prevProposalId !== thisProposalId) {
-      console.log(prevProposalId, 'selected bid changed to', thisProposalId);
       if (
         (this.props &&
           this.props?.location &&
@@ -248,8 +247,7 @@ export class Opportunity extends Component<Props, State> {
   };
 
   createNewNotesSocketConnection = proposalId => {
-    console.log('proposal details are', proposalId);
-    console.log('creating new connection');
+    // console.log('creating new connection');
     const { ydoc } = this.state;
     const storedValue = `doc-${proposalId}`;
     if (proposalId) {

@@ -25,7 +25,8 @@ import {
   getOTListData,
   changeProposalOT,
   deleteProposalUser,
-  getProposalAnswer
+  getProposalAnswer,
+  priceModelerApi
 } from '../../api/proposal';
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getUniqueMilestones } from '../selectors/proposal';
@@ -971,6 +972,26 @@ export const getProposalAnswerHistory = (
   }
 };
 
+/**
+ * Get Price Modeler Data
+ */
+export const getPriceModelerData = proposalId => async () => {
+  try {
+    // Api Response
+    const response = await priceModelerApi(proposalId);
+    console.log('Price Modeler Api Response', response.data);
+    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
+  } catch (error) {
+    // Error
+    console.log(error?.response);
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
+  }
+};
+
+/**
+ * Set Flag for Event Launcher
+ */
 export const setEventLauncherFlag = val => {
   return dispatch => {
     dispatch({

@@ -40,6 +40,21 @@
     }
   }
 }
+
+.proposal-info-container {
+  .MuiPaper-rounded {
+    border-radius: unset;
+    padding: 5px;
+    text-align: center;
+    flex: 1 1 17%;
+
+    @media screen and (max-width: 1200px) {
+      display: grid;
+      justify-content: center;
+    }
+  }
+}
+
 @media screen and (max-width: 1200px) and (min-width: 300px) {
   .proposal-wrapper {
     height: 100%;
@@ -70,16 +85,6 @@
       padding-top: 8px;
     }
 
-    ._question-tab {
-      padding-left: 20px;
-    }
-
-    .proposal-details .MuiPaper-rounded {
-      border-radius: unset;
-      padding: 5px;
-      text-align: center;
-      flex: 1 1 17%;
-    }
     p.boldtext {
       font-weight: 600;
       color: #000;
@@ -264,17 +269,6 @@
       padding: 0px;
       padding-left: 0px;
       padding-top: 8px;
-    }
-
-    ._question-tab {
-      padding-left: 20px;
-    }
-
-    .proposal-details .MuiPaper-rounded {
-      border-radius: unset;
-      padding: 5px;
-      text-align: center;
-      flex: 1 1 17%;
     }
     p.boldtext {
       font-weight: 600;

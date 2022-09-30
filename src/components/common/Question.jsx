@@ -3,7 +3,7 @@
 import React from 'react';
 import { Map, List } from 'immutable';
 import { connect } from 'react-redux';
-import { isObject, isEqual, isEmpty, xor, has } from 'lodash';
+import { isObject, isEqual, isEmpty, xor, has, isString } from 'lodash';
 import IconButton from 'apollo-react/components/IconButton';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import Grid from 'apollo-react/components/Grid';
@@ -685,19 +685,20 @@ export class TaskRow extends React.PureComponent<Props, State> {
   };
 
   renderTags = (milestone, milestoneNew, ismilestoneavailable, lastAnswer) => {
+    const lastAns = isString(lastAnswer) ? lastAnswer : '';
     if (milestoneNew && !isEmpty(milestoneNew)) {
       return (
         <div className="chipview">
-          {milestoneNew ? (
-            <ChipView label={milestoneNew} answer={lastAnswer} />
+          {milestoneNew && isString(milestoneNew) ? (
+            <ChipView label={milestoneNew} answer={lastAns} />
           ) : null}
         </div>
       );
     }
     return (
       <div className="chipview">
-        {milestone ? (
-          <ChipView label={String(milestone)} answer={lastAnswer} />
+        {milestone && isString(milestone) ? (
+          <ChipView label={milestone} answer={lastAns} />
         ) : null}
       </div>
     );
