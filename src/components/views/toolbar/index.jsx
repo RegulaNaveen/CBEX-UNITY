@@ -132,7 +132,7 @@ class Toolbar extends Component<{}, State> {
               tabIndex={-1}
             >
               <Avatar src='' className='tb-profile-avatar'>
-                {name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0)}
+                {name && name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0)}
               </Avatar>
               {isCollapsed ? (
                 <ArrowUp style={{ color: '#fff', fontSize: 20 }} />
