@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import CalendarEvent from 'apollo-react-icons/CalendarEvent';
 import Tooltip from 'apollo-react/components/Tooltip';

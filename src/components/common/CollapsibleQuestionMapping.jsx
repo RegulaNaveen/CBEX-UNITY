@@ -13,7 +13,6 @@ const CollapsibleQuestionMapping = ({
       questionConfig.get('visible', true) &&
       (questionConfig.get('active', true) ||
         questionConfig.get('isCustomQuestion', true));
-
     return (
       (visible || typeof visible === 'undefined') && (
         <Question
