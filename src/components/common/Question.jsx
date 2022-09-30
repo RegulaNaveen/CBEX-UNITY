@@ -364,6 +364,16 @@ export class TaskRow extends React.PureComponent<Props, State> {
     });
   };
 
+  trackMatomoEventLauncher = data => {
+    const { eventCategories, trackEvent } = this.props;
+    const { action, customDimensions } = data;
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action,
+      customDimensions
+    });
+  };
+
   resetDate = () => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
     this.setState({ selectedDay: ' ' }, () => {
@@ -744,7 +754,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
       isNotepadOpen,
       questionId,
       events,
-      questionData
+      questionData,
+      proposalDetail,
+      eventCategories
     } = this.props;
     const questionID = answers.get('questionId');
     const qvicon = questionId;
@@ -861,7 +873,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 </div>
 
                 {/* Event Launcher Component */}
-                <EventLauncher questionData={questionData} />
+                <EventLauncher
+                  questionData={questionData}
+                  proposalDetail={proposalDetail}
+                  eventCategories={eventCategories}
+                  trackMatomoEventLauncher={this.trackMatomoEventLauncher}
+                />
 
                 {/* Edit Question Icon */}
                 {isCustomQuestion && isCurrentBid && (
