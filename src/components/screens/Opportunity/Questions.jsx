@@ -165,11 +165,6 @@ class Questions extends Component {
     const prevProposalId = prevProps.selectedBid.get('id', '');
     // Bid changed
     if (prevProposalId !== thisProposalId) {
-      console.log(
-        prevProposalId,
-        'in question component selected bid changed to',
-        thisProposalId
-      );
       this.setState({ proposalNoteRender: false });
       setTimeout(() => {
         this.setState({ proposalNoteRender: true });

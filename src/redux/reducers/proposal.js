@@ -227,7 +227,6 @@ const setOpportunityInfo = (state, action) => {
   const { payload } = action;
   let opportunityData = new OrderedMap({});
   let selectedBid = Map({});
-  // console.log(`payload`, payload);
   payload.forEach(proposal => {
     if (proposal.isCurrent) {
       selectedBid = selectedBid
@@ -270,7 +269,6 @@ const setOpportunityInfo = (state, action) => {
     selectedBid.get('id'),
     'proposalQuestions'
   ]);
-  // console.log(`proposalQuestions`, proposalQuestions)
 
   const milestones = getUniqueMilestones(proposalQuestions);
 
@@ -532,15 +530,6 @@ const updateQuestionLockByUser = (state: Map, action: Object): Map => {
     data: { oppNo, questionId, proposalId, userEmail, userId, userName }
   } = action.payload;
   let newState = fromJS({});
-  console.log(
-    '------',
-    oppNo,
-    questionId,
-    proposalId,
-    userEmail,
-    userId,
-    userName
-  );
 
   if (proposalId) {
     let opportunityData = state.get('opportunityData');
@@ -615,45 +604,7 @@ const updateQuestionUnlockByUser = (state: Map, action: Object): Map => {
       userName
     }
   } = action.payload;
-  // console.log('got the latestANswer', latestAnswer);
   let newState = fromJS({});
-  // let state = prevState;
-
-  // if (latestAnswer) {
-  //   // step 0 get questionsFilter
-  //   const questionsFilter = getQuestionsFilters(state);
-
-  //   // step 1 update answer
-  //   const answerUpdateAction = {
-  //     payload: {
-  //       data: Array.isArray(latestAnswer.answers)
-  //         ? latestAnswer.answers
-  //         : latestAnswer,
-  //       questionId,
-  //       hasDifferentSFanswer: latestAnswer.hasDifferentSFanswer || false
-  //     }
-  //   };
-  //   state = fromJS(onProposalAnswer(state, answerUpdateAction));
-
-  //   // step 2 modify questions
-  //   const { modifiedQuestions } = latestAnswer;
-
-  //   if (!isEmpty(modifiedQuestions)) {
-  //     modifiedQuestions.forEach(question => {
-  //       const modifyQuestionAction = {
-  //         payload: {
-  //           question
-  //         }
-  //       };
-  //       state = onUpdateModifiedQuestion(state, modifyQuestionAction);
-  //     });
-  //   }
-
-  //   // step 3 filter question
-  //   onQuestionsFilterApplied(questionsFilter);
-
-  //   console.log('newState is', newState);
-  // }
 
   if (proposalId) {
     let opportunityData = state.get('opportunityData');

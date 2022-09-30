@@ -108,7 +108,6 @@ class Multiselect extends PureComponent<Props, State> {
     this.setState({ isOpen: !isOpen }, () => {
       if (this.props.setSelectRow) {
         if (!this.state.isOpen && !this.state.isFocused) {
-          console.log('called from handle collapse');
           setSelectRow(false);
         }
       }
@@ -161,12 +160,6 @@ class Multiselect extends PureComponent<Props, State> {
 
   handleFocusOut = event => {
     this.setState({ isFocused: false });
-    // const { isOpen } = this.state;
-    // const { setSelectRow } = this.props;
-    // if (setSelectRow) {
-    //   console.log('called from handle focus out');
-    //   setSelectRow(false);
-    // }
   };
 
   handleDownArrowPress = () => {
@@ -285,7 +278,6 @@ class Multiselect extends PureComponent<Props, State> {
             }
             role="presentation"
             onClick={() => {
-              console.log('onclick is called from multi select');
               if (this.props.lockQuestionOnFocus && !this.props.lockedBySelf)
                 this.context?.questionLockWrapper(this.props.questionId);
 

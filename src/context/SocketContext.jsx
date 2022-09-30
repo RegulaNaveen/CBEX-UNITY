@@ -252,25 +252,16 @@ const SocketContextProvider = props => {
             updateNotification();
             break;
           case 'QUESTION_LOCK':
-            // every user will get this message of lock
-            // add in redux store with additional parameter userId locked
-            // data: {userInfo:{userName,userEmail,userId}, questionId }
+            // Question locked by a user
             updateQuestionLock(data);
             break;
           case 'QUESTION_UNLOCK':
-            // in this case original user will not receive this message
-            // update question answer how it is done in action
-            // if (data.data.latestAnswer) {
-            //   setProposalAnswerDatafromSocket(
-            //     data.data.questionId,
-            //     data.data.latestAnswer
-            //   );
-            // }
+            // Question unlocked by a user
+
             updateQuestionUnlock(data);
 
             break;
           case 'QUESTION_ANSWER_UPDATE':
-            // in this case original user will not receive this message
             // update question answer how it is done in action
             if (data.data.latestAnswer) {
               setProposalAnswerDatafromSocket(
@@ -278,12 +269,10 @@ const SocketContextProvider = props => {
                 data.data.latestAnswer
               );
             }
-            // updateQuestionUnlock(data);
 
             break;
           case 'QUESTIONS':
-            // in this case original user will not receive this message
-            // update question answer how it is done in action
+            // Get list of questions already locked by other users
             getQuestionLockDetails(data);
             break;
           default:

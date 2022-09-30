@@ -96,14 +96,8 @@ class Dropdown extends PureComponent<Props, State> {
     const { setSelectRow, lockedBySelf } = this.props;
     if (this.ref.current !== event.target) {
       if (setSelectRow) {
-        console.log('called from close on outside click');
         this.setState({ isCollapsed: true }, () => {
           setSelectRow(false);
-          //  apply condition if already locked only then unlock
-          // if (lockedBySelf) {
-          //   if (this.state.isCollapsed && !this.state.isFocused)
-          //     this.context?.questionUnlockWrapper(this.props.questionId);
-          // }
         });
       }
     }
@@ -115,7 +109,6 @@ class Dropdown extends PureComponent<Props, State> {
     this.setState({ isCollapsed: !isCollapsed }, () => {
       if (this.props.setSelectRow) {
         if (this.state.isCollapsed && !this.state.isFocused) {
-          console.log('called from handle collapse');
           setSelectRow(false);
         }
       }
@@ -126,7 +119,6 @@ class Dropdown extends PureComponent<Props, State> {
     event.stopPropagation();
     const { onClick, lockedBySelf } = this.props;
     onClick(value);
-    console.log('called from handle click');
     if (this.props.setSelectRow) this.props.setSelectRow(false);
 
     this.setState({
@@ -144,22 +136,12 @@ class Dropdown extends PureComponent<Props, State> {
   };
 
   handleFocusIn = event => {
-    console.log('focus function called on number field', this.props);
-
     this.setState({ isFocused: true });
     this.props.setSelectRow(true);
   };
 
   handleFocusOut = event => {
     this.setState({ isFocused: false });
-    // const { isCollapsed } = this.state;
-    // const { setSelectRow } = this.props;
-    // console.log('event value', event.target);
-    // if (setSelectRow) {
-    //   console.log('called from handle focus out');
-    //   // this.setState({ isCollapsed: true });
-    //   setSelectRow(false);
-    // }
   };
 
   handleDownArrowPress = () => {
@@ -271,7 +253,6 @@ class Dropdown extends PureComponent<Props, State> {
               role="presentation"
               tabIndex={0}
               onClick={() => {
-                console.log('onclick is called from drop down');
                 if (this.props.lockQuestionOnFocus && !this.props.lockedBySelf)
                   this.context?.questionLockWrapper(this.props.questionId);
                 if (!disabled) this.handleCollapse();

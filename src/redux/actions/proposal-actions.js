@@ -140,7 +140,6 @@ export const setProposalAnswerData = (
         userData,
         editorData
       );
-      console.log('answer update called for rich text editor');
       await socketContext.questionAnswerUpdateWrapper(questionId, data);
       dispatch({
         type: PROPOSAL_ANSWER,
@@ -174,12 +173,6 @@ export const setProposalAnswerDatafromSocket = (
   data: any
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
-    console.log(
-      'quesiton Id is',
-      questionId,
-      'data is in socket answer update',
-      data
-    );
     dispatch({
       type: PROPOSAL_ANSWER_LOADING,
       payload: { questionId, loading: true }

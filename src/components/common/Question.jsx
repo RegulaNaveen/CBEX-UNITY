@@ -268,7 +268,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
   };
 
   onClickChange = (selectedValue: string, lastAnswer: string) => {
-    console.log(selectedValue, 'reached inside click change', lastAnswer);
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
 
     if (lastAnswer !== selectedValue) {
@@ -329,15 +328,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
   };
 
   onChildInputFocus = () => {
-    console.log('focus function called on number field');
     this.context.questionLockWrapper(this.props.questionId);
     this.setSelectRow(true);
   };
 
   setSelectRow = value => {
     // call question unlock
-    console.log('value is select row', value);
-    // if (!value) this.context.questionUnlockWrapper(this.props.questionId);
     this.setState({ selectedRow: value });
   };
 
@@ -557,7 +553,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
         }
 
         if (!selectedRow) this.setSelectRow(true);
-        console.log('on focus called for rich text editor');
         this.context.questionLockWrapper(this.props.questionId);
       },
       onBlur: data => {
@@ -717,12 +712,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
               disabled={checkDisableFlag()}
               questionId={this.props.questionId}
               lastAnswer={lastAnswer}
-              // onBlur={(isOpen, isFocused) => {
-              //   console.log('states multiselect', isOpen, isFocused);
-              //   // call question unlock
-              //   console.log('on blur is called in multiselect');
-              //   this.context.questionUnlockWrapper(this.props.questionId);
-              // }}
               lockedBySelf={!!this.isQuestionLockedBySelf()}
               lockQuestionOnFocus
             />

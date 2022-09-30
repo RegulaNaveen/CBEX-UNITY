@@ -125,7 +125,6 @@ export class Opportunity extends Component<Props, State> {
     getOpportunityInfo(params.id);
 
     const proposalId = selectedBid.get('id', '');
-    console.log('porposal id here is', typeof proposalId);
     if (
       (this.props && this.props?.location && this.props.location?.pathname) !==
       UBUILD
@@ -174,12 +173,6 @@ export class Opportunity extends Component<Props, State> {
     const prevProposalId = prevProps.selectedBid.get('id', '');
     // Bid changed
     if (prevProposalId !== thisProposalId) {
-      console.log(
-        prevProposalId,
-        'selected bid changed to',
-        thisProposalId,
-        typeof thisProposalId
-      );
       if (
         (this.props &&
           this.props?.location &&
@@ -221,8 +214,6 @@ export class Opportunity extends Component<Props, State> {
   };
 
   createNewNotesSocketConnection = proposalId => {
-    console.log('proposal details are', proposalId);
-    console.log('creating new connection');
     const { ydoc } = this.state;
     const storedValue = `doc-${proposalId}`;
     if (proposalId) {
