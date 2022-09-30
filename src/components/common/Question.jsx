@@ -514,7 +514,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             lastAnswerJS?.answer === data.value?.blocks[0]?.text
           )
             saveDate = false;
-          saveDate = true;
+          else saveDate = true;
         }
         // save the data if we see any text difference.
         else if (
