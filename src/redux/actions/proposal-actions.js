@@ -5,7 +5,6 @@ import axios from 'axios';
 
 import { REDUX_TYPES, API } from '../../constants';
 import type { Dispatch, ThunkAction } from './action-types';
-import dummyPriceModeler from '../../dummyPriceModelerData.json';
 
 import {
   getProposalInfo,
@@ -978,10 +977,9 @@ export const getProposalAnswerHistory = (
 export const getPriceModelerData = proposalId => async () => {
   try {
     // Api Response
-    // const response = await priceModelerApi(proposalId);
-    // return { status: true, title: DEFAULT.SUCCESS, data: response.data };
-    await new Promise(resolve => setTimeout(resolve, 2500));
-    return { status: true, title: DEFAULT.SUCCESS, data: dummyPriceModeler };
+    const response = await priceModelerApi(proposalId);
+    console.log('Price Modeler Api Response', response.data);
+    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
   } catch (error) {
     // Error
     console.log(error?.response);

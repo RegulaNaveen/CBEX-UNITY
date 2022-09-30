@@ -115,7 +115,7 @@ const PriceModeler = () => {
           return (
             <div className="price-modeler__details-item" key={key}>
               <h3>{INITIAL_LIST_TITLE[key]}:</h3>
-              <i>{item || '-'}</i>
+              <i>{item || 'N/A'}</i>
             </div>
           );
         })}
