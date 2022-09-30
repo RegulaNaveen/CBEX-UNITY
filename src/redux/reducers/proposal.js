@@ -532,22 +532,22 @@ const updateQuestionLockByUser = (state: Map, action: Object): Map => {
   let newState = fromJS({});
 
   if (proposalId) {
-    let opportunityData = state.get('opportunityData');
+    // let opportunityData = state.get('opportunityData');
     let selectedBid = state.getIn(['selectedBid', 'id']);
 
-    const indexOfListToUpdate = opportunityData
-      .getIn([proposalId, 'proposalQuestions'])
-      .findIndex(listItem => {
-        return listItem.questionId === questionId;
-      });
-    // Updating the state for opportunityData with latest lock details
-    const opportunityDataNew = opportunityData.updateIn(
-      [proposalId, 'proposalQuestions', indexOfListToUpdate],
-      value => ({
-        ...value,
-        questionLockInfo: { userInfo: userEmail, userId, userName }
-      })
-    );
+    // const indexOfListToUpdate = opportunityData
+    //   .getIn([proposalId, 'proposalQuestions'])
+    //   .findIndex(listItem => {
+    //     return listItem.questionId === questionId;
+    //   });
+    // // Updating the state for opportunityData with latest lock details
+    // const opportunityDataNew = opportunityData.updateIn(
+    //   [proposalId, 'proposalQuestions', indexOfListToUpdate],
+    //   value => ({
+    //     ...value,
+    //     questionLockInfo: { userInfo: userEmail, userId, userName }
+    //   })
+    // );
 
     // Update the current lock details if the selected Bid is equal to processed Bid
     if (selectedBid === proposalId) {
@@ -565,12 +565,12 @@ const updateQuestionLockByUser = (state: Map, action: Object): Map => {
       );
 
       const proposalQuestionsNew = newState.get('proposalQuestions');
-      return state
-        .set('proposalQuestions', proposalQuestionsNew)
-        .set('opportunityData', opportunityDataNew);
+      return state.set('proposalQuestions', proposalQuestionsNew);
+      // .set('opportunityData', opportunityDataNew);
     }
 
-    return state.set('opportunityData', opportunityDataNew);
+    // return state.set('opportunityData', opportunityDataNew);
+    return state;
   }
 };
 
@@ -607,22 +607,22 @@ const updateQuestionUnlockByUser = (state: Map, action: Object): Map => {
   let newState = fromJS({});
 
   if (proposalId) {
-    let opportunityData = state.get('opportunityData');
+    // let opportunityData = state.get('opportunityData');
     let selectedBid = state.getIn(['selectedBid', 'id']);
 
-    const indexOfListToUpdate = opportunityData
-      .getIn([proposalId, 'proposalQuestions'])
-      .findIndex(listItem => {
-        return listItem.questionId === questionId;
-      });
+    // const indexOfListToUpdate = opportunityData
+    //   .getIn([proposalId, 'proposalQuestions'])
+    //   .findIndex(listItem => {
+    //     return listItem.questionId === questionId;
+    //   });
     // Updating the state for opportunityData with latest proposalDetails
-    const opportunityDataNew = opportunityData.updateIn(
-      [proposalId, 'proposalQuestions', indexOfListToUpdate],
-      value => ({
-        ...value,
-        questionLockInfo: {}
-      })
-    );
+    // const opportunityDataNew = opportunityData.updateIn(
+    //   [proposalId, 'proposalQuestions', indexOfListToUpdate],
+    //   value => ({
+    //     ...value,
+    //     questionLockInfo: {}
+    //   })
+    // );
 
     // Update the current proposalDetails if the selected Bid is equal to processed Bid
     if (selectedBid === proposalId) {
@@ -640,12 +640,12 @@ const updateQuestionUnlockByUser = (state: Map, action: Object): Map => {
       );
 
       const proposalQuestionsNew = newState.get('proposalQuestions');
-      return state
-        .set('proposalQuestions', proposalQuestionsNew)
-        .set('opportunityData', opportunityDataNew);
+      return state.set('proposalQuestions', proposalQuestionsNew);
+      // .set('opportunityData', opportunityDataNew);
     }
 
-    return state.set('opportunityData', opportunityDataNew);
+    // return state.set('opportunityData', opportunityDataNew);
+    return state;
   }
 };
 
