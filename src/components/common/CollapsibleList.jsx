@@ -77,13 +77,6 @@ class CollapsibleList extends Component<Props, State> {
     );
   }
 
-  componentWillUnmount() {
-    document.removeEventListener(
-      'keydown',
-      this.keyboardShortcutListener.bind(this)
-    );
-  }
-
   componentDidUpdate(prevProps) {
     const { selectedSection, isCheckedAll } = this.props;
     const { id } = this.taskRef.current;
@@ -100,10 +93,16 @@ class CollapsibleList extends Component<Props, State> {
       setTimeout(() => this.setState({ isCollapsed: !!isCheckedAll }), 0);
   }
 
+  componentWillUnmount() {
+    document.removeEventListener(
+      'keydown',
+      this.keyboardShortcutListener.bind(this)
+    );
+  }
+
   handleCollapse = () => {
     const { isCollapsed } = this.state;
     const { title, selectedSection, changeSelectedSection } = this.props;
-    this.setState({ isCollapsed: !isCollapsed });
     this.trackMatomoEventBladeToggle(!isCollapsed);
     const titleId = title
       .toLocaleLowerCase()
@@ -112,6 +111,7 @@ class CollapsibleList extends Component<Props, State> {
     if (titleId === selectedSection) {
       changeSelectedSection(null);
     }
+    this.setState({ isCollapsed: !isCollapsed });
   };
 
   handleKeyPress = (event: KeyboardEvent) => {
@@ -199,7 +199,7 @@ class CollapsibleList extends Component<Props, State> {
           this.collapseTriggerRef.current.focus();
         }
       }
-    } else return;
+    }
   };
 
   render() {

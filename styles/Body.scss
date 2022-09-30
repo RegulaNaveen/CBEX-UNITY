@@ -31,4 +31,15 @@ body {
       box-shadow: none !important;
     }
   }
+  .event-launcher__tooltip {
+    padding: 6px 10px;
+    h3 {
+      font-weight: 600;
+      letter-spacing: 0.4px;
+    }
+    h4 {
+      font-weight: 400;
+      font-size: 14px;
+    }
+  }
 }
