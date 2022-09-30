@@ -69,7 +69,6 @@ module.exports = env => {
         favicon: `./img/favicon/favicon-${apiEnv.replace(/['"]+/g, '')}.ico`
       }),
       new webpack.DefinePlugin({ 'process.env.API_ENV': apiEnv })
-    ],
-    devtool: 'source-map'
+    ]
   };
 };
