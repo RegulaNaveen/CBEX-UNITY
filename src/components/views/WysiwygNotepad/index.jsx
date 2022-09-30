@@ -49,7 +49,6 @@ const WysiwygNotepad = ({
   const [proposalIdState, setProposalIdState] = useState(
     selectedBid.get('id', '')
   );
-  const [mentionEmails, setMentionEmails] = useState([]);
   const [notesUserTag, setNotesUserTag] = useState(false);
 
   const isNotesFetched = useSelector(selectIsNotesFetched);
@@ -77,13 +76,7 @@ const WysiwygNotepad = ({
   useEffect(() => {
     console.log('proposal id changed to ', selectedBid.get('id'));
     setProposalIdState(selectedBid.get('id'));
-    setMentionEmails([]);
   }, [selectedBid]);
-
-  const mentionNotification = editor => {
-    const newMentions = getMentionEmails(editor);
-    setMentionEmails(newMentions);
-  };
 
   const editor = useEditor(
     {
@@ -128,7 +121,6 @@ const WysiwygNotepad = ({
       ],
       onUpdate: ({ editor }) => {
         // const Ejson = editor.getJSON();
-        mentionNotification(editor.getJSON(), mentionEmails);
       }
     },
     [proposalIdState, notesSocket.wsInstance, notesUserTag]
