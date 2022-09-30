@@ -51,7 +51,8 @@ const {
   BOX_ADDITIONAL_LINK_ERROR,
   SWITCH_TEMP_STATUS,
   SWITCH_TEMP_IN_PROGRESS,
-  RESET_PROPOSALID
+  RESET_PROPOSALID,
+  SET_EVENT_LAUNCHER_FLAG
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -121,7 +122,8 @@ const INITIAL_STATE: Map = fromJS({
   lookUpOptions: {},
   boxAdditionalLink: {},
   switchTempCallStatus: false,
-  switchTempInProgress: false
+  switchTempInProgress: false,
+  eventLauncherFlag: false
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -887,7 +889,9 @@ const actionMap = {
     state.set('switchTempCallStatus', payload),
   [SWITCH_TEMP_IN_PROGRESS]: (state, { payload }) =>
     state.set('switchTempInProgress', payload),
-  [RESET_PROPOSALID]: resetProposalId
+  [RESET_PROPOSALID]: resetProposalId,
+  [SET_EVENT_LAUNCHER_FLAG]: (state, { payload }) =>
+    state.set('eventLauncherFlag', payload)
 };
 
 export default function(

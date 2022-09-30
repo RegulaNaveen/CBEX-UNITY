@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import CalendarEvent from 'apollo-react-icons/CalendarEvent';
 import Tooltip from 'apollo-react/components/Tooltip';
@@ -11,14 +11,8 @@ import moment from 'moment';
 
 import CustomModal from '../../common/CustomModal';
 import { DEFAULT, PROPOSAL } from '../../../constants/app';
-import {
-  avoidSpecialChars,
-  extractEmails,
-  parseStringifyJson
-} from '../../../utils/helpers';
+import { extractEmails, parseStringifyJson } from '../../../utils/helpers';
 import { selectProposalQuestions } from '../../../redux/selectors/proposal';
-import launchDarkly from '../../../utils/launchDarkly';
-import featureFlags from '../../../constants/featureFlags';
 
 const modalStyle = { maxWidth: 545, width: '100%' };
 const attendees = [
@@ -30,10 +24,12 @@ const EventLauncher = ({ questionData }) => {
   const quesData = questionData?.toJS();
   const hasEvent = quesData?.events && !isEmpty(quesData?.events);
   const eventStartDate = quesData?.answers[0]?.answer;
-  const [showEventLauncher, setShowEventLauncher] = useState(false);
+  const eventFlag = useSelector(state =>
+    state.proposal.get('eventLauncherFlag')
+  );
 
   // Component will return null if no event found
-  if (!hasEvent) return null;
+  if (!hasEvent || !eventFlag) return null;
 
   // Get proposalQuestions - Redux State
   const proposalQuestions = useSelector(selectProposalQuestions);
@@ -42,14 +38,6 @@ const EventLauncher = ({ questionData }) => {
   // Component State
   const [openModal, setOpenModal] = useState(false);
   const [attendeesVal, setAttendeesVal] = React.useState(attendees[0]);
-
-  useEffect(() => {
-    const ldApiCall = async () => {
-      const flagValue = await launchDarkly(featureFlags.EVENT_LAUNCHER, false);
-      setShowEventLauncher(flagValue);
-    };
-    ldApiCall();
-  }, []);
 
   const proposalTeam = useMemo(() => {
     if (!openModal) return []; // break func
@@ -100,10 +88,9 @@ const EventLauncher = ({ questionData }) => {
    * Generate Event Url Function
    */
   const generateEventUrl = (startDate, endDate, body, subject, email) => {
-    // console.log({ startDate, endDate, body, subject, email });
-    const bodyStr = avoidSpecialChars(body);
-    const subjectStr = avoidSpecialChars(subject);
-    return `https://outlook.office.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose%20&rru=addevent&startdt=${startDate}&enddt=${endDate}&body=${bodyStr}@&.&subject=${subjectStr}&to=${email}&online=1`;
+    const bodyStr = encodeURIComponent(body);
+    const subjectStr = encodeURIComponent(subject);
+    return `https://outlook.office.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose%20&rru=addevent&startdt=${startDate}&enddt=${endDate}&body=${bodyStr}&.&subject=${subjectStr}&to=${email}&online=1`;
   };
 
   const checkDateAge = date => {
