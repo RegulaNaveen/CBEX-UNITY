@@ -241,7 +241,7 @@ const CustomApolloRichText = ({
           variant={isRichTextEditable ? 'popover' : 'view'}
           defaultValue={richTextData.value}
           onChange={onChangeHandler}
-          tabIndex={(!isRichTextEditable && !disabled) ? 0 : -1}
+          // tabIndex={(!isRichTextEditable && !disabled) ? 0 : -1}
           ref={richTextEditorRef}
           key={richTextKey.current}
         />
