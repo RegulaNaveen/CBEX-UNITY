@@ -794,7 +794,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       integrationvalidation = true;
     }
     integrationvalidation = has(Qvidianquestions[0], qvicon);
-    if (qvidianIntegration && qvidianIntegration === 'Qvidian') {
+    if (qvidianIntegration) {
       qvidIntegration = true;
     }
     dateIsAfter
