@@ -22,11 +22,11 @@ axiosInstance.interceptors.response.use(
     return res;
   },
   err => {
+    const res = err?.response;
     if (
-      (err.response.status === 500 &&
-        err.response.data.message === 'Invalid Access Token') ||
-      err.response.data.message.includes('accessToken') ||
-      err.response.data.message === 'Access Token has expired'
+      (res?.status === 500 && res?.data?.message === 'Invalid Access Token') ||
+      res?.data?.message === 'Access Token has expired' ||
+      res?.data?.message?.includes('accessToken')
     ) {
       console.log('logging out of system because of token expiry...Bye bye');
       dispatch(logout());

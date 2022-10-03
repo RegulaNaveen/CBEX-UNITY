@@ -13,7 +13,6 @@ import classNames from 'classnames';
 import Grid from 'apollo-react/components/Grid';
 import Panel from 'apollo-react/components/Panel';
 import Typography from 'apollo-react/components/Typography';
-
 import Loader from 'react-loader-spinner';
 import { Add, Refresh } from '../../svg';
 import BidHistory from '../../common/Bidhistory';
@@ -57,6 +56,7 @@ import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions'
 import WysiwygNotepad from '../../views/WysiwygNotepad';
 import ANSWER_TYPES from '../../../constants/answerTypes';
 import NotesSocketContext from '../../../context/notesSocketContext';
+import PriceModeler from '../../common/PriceModeler';
 
 export const QuestionsRefContext = createContext(null);
 
@@ -88,7 +88,9 @@ type Props = {
   activeQuestionsFilterCount: Number,
   allSectionsExpanded: boolean,
   expandAllSections: Function,
-  editQuestionsData: Map
+  editQuestionsData: Map,
+  setQuestion: Function,
+  hasQuestionError: boolean
 };
 
 type State = {
@@ -99,7 +101,10 @@ type State = {
 };
 
 const MANUAL_REFRESH = false;
+let firstRender = true;
 class Questions extends Component {
+  static contextType = NotesSocketContext;
+
   constructor(props: Object) {
     super(props);
 
@@ -120,8 +125,9 @@ class Questions extends Component {
     };
     this.questionsRef = createRef(null);
   }
-  static contextType = NotesSocketContext;
+
   componentDidMount() {
+    firstRender = false;
     window.localStorage.setItem('enableFirstExpand', 'true');
     const {
       fetchUsers,
@@ -165,17 +171,12 @@ class Questions extends Component {
     const prevProposalId = prevProps.selectedBid.get('id', '');
     // Bid changed
     if (prevProposalId !== thisProposalId) {
-      console.log(
-        prevProposalId,
-        'in question component selected bid changed to',
-        thisProposalId
-      );
       this.setState({ proposalNoteRender: false });
       setTimeout(() => {
         this.setState({ proposalNoteRender: true });
       }, 5000);
     }
-    //bid change check ends
+    // bid change check ends
   }
 
   componentWillUnmount() {
@@ -474,9 +475,14 @@ class Questions extends Component {
     const notepadMaxWidthPx = isOpen
       ? notepadMinWidthPx
       : (window.innerWidth - minPixelToExclude) * (47 / 100); // 50% of the total screen size
+
     return (
       <>
-        <BidHistory />
+        <div className="opportunity-details">
+          <BidHistory />
+          {!firstRender && <PriceModeler />}
+        </div>
+
         {/* Expand and Filter */}
         <div>
           <div className="tasksList-title-wrapper">

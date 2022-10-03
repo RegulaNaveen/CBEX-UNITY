@@ -25,7 +25,8 @@ import {
   getOTListData,
   changeProposalOT,
   deleteProposalUser,
-  getProposalAnswer
+  getProposalAnswer,
+  priceModelerApi
 } from '../../api/proposal';
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getUniqueMilestones } from '../selectors/proposal';
@@ -79,7 +80,8 @@ const {
   BOX_ADDITIONAL_LINK_ERROR,
   SWITCH_TEMP_STATUS,
   SWITCH_TEMP_IN_PROGRESS,
-  RESET_PROPOSALID
+  RESET_PROPOSALID,
+  SET_EVENT_LAUNCHER_FLAG
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -968,4 +970,33 @@ export const getProposalAnswerHistory = (
     const msg = getErrorMessage(error);
     return { status: false, title: DEFAULT.ALERT, msg };
   }
+};
+
+/**
+ * Get Price Modeler Data
+ */
+export const getPriceModelerData = proposalId => async () => {
+  try {
+    // Api Response
+    const response = await priceModelerApi(proposalId);
+    console.log('Price Modeler Api Response', response.data);
+    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
+  } catch (error) {
+    // Error
+    console.log(error?.response);
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
+  }
+};
+
+/**
+ * Set Flag for Event Launcher
+ */
+export const setEventLauncherFlag = val => {
+  return dispatch => {
+    dispatch({
+      type: SET_EVENT_LAUNCHER_FLAG,
+      payload: val
+    });
+  };
 };

@@ -146,6 +146,7 @@
         color: #696969;
         margin-bottom: 5px;
         max-height: 215px;
+        min-height: 40px;
         overflow: auto;
 
         &::-webkit-scrollbar {

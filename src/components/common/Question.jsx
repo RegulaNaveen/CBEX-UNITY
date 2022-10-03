@@ -3,7 +3,7 @@
 import React from 'react';
 import { Map, List } from 'immutable';
 import { connect } from 'react-redux';
-import { isObject, isEqual, isEmpty, xor, isString, has } from 'lodash';
+import { isObject, isEqual, isEmpty, xor, has, isString } from 'lodash';
 import IconButton from 'apollo-react/components/IconButton';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import Grid from 'apollo-react/components/Grid';
@@ -46,6 +46,8 @@ import ANSWER_TYPES from '../../constants/answerTypes';
 import CustomApolloRichText from './CustomApolloRichText';
 import { DEFAULT } from '../../constants/app';
 import AutoCompleteWithAddOption from '../views/modals/AutoCompleteWithAddOption';
+import EventLauncher from '../screens/Opportunity/EventLauncher';
+import { parseStringifyJson } from '../../utils/helpers';
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
 type State = {
@@ -55,6 +57,7 @@ type State = {
 };
 
 type Props = {
+  questionData: Map,
   questionId: string,
   proposalId: string,
   answers: Map,
@@ -85,7 +88,8 @@ type Props = {
   roleNames: Array<string>,
   isCustomQuestion: boolean,
   hasDifferentSFanswer: boolean,
-  isNotepadOpen: boolean
+  isNotepadOpen: boolean,
+  events: Object
 };
 export class TaskRow extends React.PureComponent<Props, State> {
   constructor(props: Object) {
@@ -298,11 +302,14 @@ export class TaskRow extends React.PureComponent<Props, State> {
       questionHintJSON,
       sectionName,
       trackEvent,
-      questionId
+      questionId,
+      events
     } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
-      action: `Question: ${questionText} (${sectionName})`,
+      action: events
+        ? `Event: ${questionText} (${sectionName})`
+        : `Question: ${questionText} (${sectionName})`,
       name: `Answer: ${data}`,
       customDimensions: [
         {
@@ -317,6 +324,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
             questionId,
             proposalDetail
           })
+        },
+        {
+          events: events || []
         }
       ]
     });
@@ -351,6 +361,16 @@ export class TaskRow extends React.PureComponent<Props, State> {
           })
         }
       ]
+    });
+  };
+
+  trackMatomoEventLauncher = data => {
+    const { eventCategories, trackEvent } = this.props;
+    const { action, customDimensions } = data;
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action,
+      customDimensions
     });
   };
 
@@ -434,15 +454,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
     const getConvertedAnsString = str =>
       !String(str).trim() ? '' : String(str).trim();
 
-    // Function to parse stringify Json
-    function parseJson(str) {
-      try {
-        return JSON.parse(str);
-      } catch (e) {
-        return false;
-      }
-    }
-
     const lastAnswerJS = lastAnswer?.toJS();
     const formattedAnswer =
       has(lastAnswerJS, 'formattedAnswer') && lastAnswerJS.formattedAnswer;
@@ -450,7 +461,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     const parseFormattedData =
       !formattedAnswer || isObject(formattedAnswer)
         ? formattedAnswer
-        : parseJson(formattedAnswer);
+        : parseStringifyJson(formattedAnswer);
 
     const richTextData = parseFormattedData || {
       html: '',
@@ -673,19 +684,20 @@ export class TaskRow extends React.PureComponent<Props, State> {
   };
 
   renderTags = (milestone, milestoneNew, ismilestoneavailable, lastAnswer) => {
+    const lastAns = isString(lastAnswer) ? lastAnswer : '';
     if (milestoneNew && !isEmpty(milestoneNew)) {
       return (
         <div className="chipview">
-          {milestoneNew ? (
-            <ChipView label={milestoneNew} answer={lastAnswer} />
+          {milestoneNew && isString(milestoneNew) ? (
+            <ChipView label={milestoneNew} answer={lastAns} />
           ) : null}
         </div>
       );
     }
     return (
       <div className="chipview">
-        {milestone ? (
-          <ChipView label={String(milestone)} answer={lastAnswer} />
+        {milestone && isString(milestone) ? (
+          <ChipView label={milestone} answer={lastAns} />
         ) : null}
       </div>
     );
@@ -740,7 +752,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
       selectedBid,
       proposalInfo,
       isNotepadOpen,
-      questionId
+      questionId,
+      events,
+      questionData,
+      proposalDetail,
+      eventCategories
     } = this.props;
     const questionID = answers.get('questionId');
     const qvicon = questionId;
@@ -856,9 +872,17 @@ export class TaskRow extends React.PureComponent<Props, State> {
                   </div>
                 </div>
 
+                {/* Event Launcher Component */}
+                <EventLauncher
+                  questionData={questionData}
+                  proposalDetail={proposalDetail}
+                  eventCategories={eventCategories}
+                  trackMatomoEventLauncher={this.trackMatomoEventLauncher}
+                />
+
                 {/* Edit Question Icon */}
-                <div className="question-edit">
-                  {isCustomQuestion && isCurrentBid && (
+                {isCustomQuestion && isCurrentBid && (
+                  <div className="question-edit">
                     <span
                       aria-hidden="true"
                       onClick={() => {
@@ -877,12 +901,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
                     >
                       <Edit className="edit-icon" />
                     </span>
-                  )}
-                </div>
+                  </div>
+                )}
 
                 {/* Question Hint */}
-                <div className="question-hint">
-                  {questionHint ? (
+                {questionHint && (
+                  <div className="question-hint">
                     <Tooltip
                       variant="light"
                       tabIndex={-1}
@@ -907,10 +931,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
                         <InfoIcon style={{ fontSize: '16px' }} />
                       </IconButton>
                     </Tooltip>
-                  ) : (
-                    <></>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
 
               {/* Milestone Chip */}

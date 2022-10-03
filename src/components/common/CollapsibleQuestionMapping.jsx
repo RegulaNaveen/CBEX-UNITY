@@ -13,10 +13,10 @@ const CollapsibleQuestionMapping = ({
       questionConfig.get('visible', true) &&
       (questionConfig.get('active', true) ||
         questionConfig.get('isCustomQuestion', true));
-
     return (
       (visible || typeof visible === 'undefined') && (
         <Question
+          questionData={questionConfig}
           key={questionConfig.get('questionId')}
           ismilestoneavailable={milestone}
           milestone={questionConfig.get('milestone')}
@@ -43,6 +43,7 @@ const CollapsibleQuestionMapping = ({
           isCustomQuestion={questionConfig.get('isCustomQuestion')}
           hasDifferentSFanswer={questionConfig.get('hasDifferentSFanswer')}
           isNotepadOpen={isNotepadOpen}
+          events={questionConfig.get('events') || {}}
         />
       )
     );
