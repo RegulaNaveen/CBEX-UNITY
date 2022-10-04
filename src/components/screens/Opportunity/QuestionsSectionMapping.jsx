@@ -8,8 +8,8 @@ import { OrderedMap } from 'immutable';
 
 import { useLazyLoad, useUpdateEffect } from '../../../hooks';
 import CollapsibleList from '../../common/CollapsibleList';
-import { QuestionsRefContext } from '../../screens/Opportunity/Questions';
 import { SocketContext } from '../../../context/SocketContext';
+import { QuestionsRefContext } from './Questions';
 
 const NUM_PER_PAGE = 2;
 
@@ -113,6 +113,7 @@ const QuestionsSectionMapping = ({
   // Func to render CollapsibleList Component
   const renderAllSection = (section, indx) => {
     const sectionName = section.get('sectionName');
+    const sectionOrder = section.get('sectionOrder');
     const questions = section.get('questions');
     return (
       <QuestionsRefContext.Consumer>
@@ -121,7 +122,7 @@ const QuestionsSectionMapping = ({
             questions={questions}
             title={sectionName}
             milestone={filterMilestone}
-            key={sectionName}
+            key={sectionOrder}
             setTabFromQuestionNotes={(val, title, flag) =>
               setTabFromQuestionNotes(val, title, flag)
             }

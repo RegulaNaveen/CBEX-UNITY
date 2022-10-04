@@ -309,3 +309,15 @@ export const deleteProposalUser = (proposalId, data) => {
     }
   );
 };
+
+/**
+ * Get Price Modeler Data
+ */
+export const priceModelerApi = proposalId => {
+  return axiosInstance.get(
+    `${PROPOSAL_API_URL}/cost?proposalId=${proposalId}`,
+    {
+      headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+    }
+  );
+};

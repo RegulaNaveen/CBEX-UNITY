@@ -151,7 +151,7 @@ const loadSidebar = props => {
 
   if (isBladeOpen) {
     return (
-      <Grid container>
+      <Grid container className="proposal-info-container">
         <Grid item xs={12} style={containerStyle}>
           <Paper style={styles} className="sidebarduedatedsg open">
             <Typography variant="body2" className="greytext sidebaropenfont">
@@ -304,7 +304,7 @@ const loadSidebar = props => {
   }
 
   return (
-    <Grid container>
+    <Grid container className="proposal-info-container">
       <Grid item xs={12} style={containerStyle}>
         <Grid item xs={1}>
           <Paper style={styles} className="duedatedsg">

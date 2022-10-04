@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import Loader from 'react-loader-spinner';
 import classNames from 'classnames';
 import { compose } from 'redux';
+import * as Y from 'yjs';
+import isEmpty from 'lodash/isEmpty';
 import {
   UpdateNewBid,
   expandAllSectionsAction,
@@ -15,7 +17,9 @@ import {
   updateProposalDetailFromWebSocket,
   updateSwitchTempStatusFromWebSocket,
   updateSwitchInProgress,
-  resetProposalId
+  resetProposalId,
+  setEventLauncherFlag,
+  changeBid
 } from '../../../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../../../redux/actions/notepad-actions';
 import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
@@ -42,9 +46,10 @@ import { NOTES_SOCKET_URL } from '../../../constants/api';
 import NotesSocketContext from '../../../context/notesSocketContext';
 import { websocketNotesApi } from '../../../api/notepad';
 import { UBUILD, DASHBOARD } from '../../../routes';
-import * as Y from 'yjs';
+import featureFlags from '../../../constants/featureFlags';
+import launchDarkly from '../../../utils/launchDarkly';
+import { getBidList } from '../../../redux/selectors/proposal';
 
-const ThemeContext = React.createContext('light');
 type State = {
   selectedView: string
 };
@@ -78,7 +83,10 @@ type Props = {
   proposalDetail: any,
   getOpportunityInfo: (oppId: string, flag?: boolean) => void,
   setSeenOne: Function,
-  setResetProposalId: Function
+  setResetProposalId: Function,
+  setEventLauncherFlg: Function,
+  bidList: any,
+  changeBidInView: Function
 };
 
 export class Opportunity extends Component<Props, State> {
@@ -136,10 +144,9 @@ export class Opportunity extends Component<Props, State> {
 
     window.addEventListener('storage', e => this.handleStorageChange(e));
     window.addEventListener('resize', this.handleResize);
-    const windowSize = window.innerWidth;
+    // const windowSize = window.innerWidth;
 
     // NOSONAR
-
     const enableValidateTab = localStorage.getItem('enableValidateTab');
     if (enableValidateTab === null) {
       localStorage.setItem('enableValidateTab', false);
@@ -157,7 +164,6 @@ export class Opportunity extends Component<Props, State> {
 
     // Scroll
     try {
-      console.log('Back to top#');
       window.scrollTo(0, 0);
     } catch (error) {
       console.log(error);
@@ -167,7 +173,10 @@ export class Opportunity extends Component<Props, State> {
   componentDidUpdate(prevProps, prevState) {
     const {
       match: { params },
-      selectedBid
+      selectedBid,
+      setEventLauncherFlg,
+      bidList,
+      changeBidInView
     } = this.props;
     const thisProposalId = selectedBid.get('id', '');
     const prevProposalId = prevProps.selectedBid.get('id', '');
@@ -181,7 +190,33 @@ export class Opportunity extends Component<Props, State> {
         this.context.updateSocketOppId(params.id, thisProposalId);
       }
     }
+    // Bid level redirection
+    // Applied when a `bidNo` query param is found in the url
+    // Example ?bidNo=3
+    const winLocationSearch = window.location.search;
+    const queryparams = new URLSearchParams(winLocationSearch);
+    const bidNo = queryparams.get('bidNo');
+    const prevBidList = prevProps.bidList;
+    if (
+      bidNo &&
+      Array.isArray(bidList) &&
+      bidList.length > 0 &&
+      bidList.length !== prevBidList.length // check to prevent infinite rerenders
+    ) {
+      const bidItemToSelect = bidList.find(item => item.bidNo === bidNo);
+      if (!isEmpty(bidItemToSelect)) {
+        changeBidInView(bidItemToSelect);
+      }
+    }
+    // END Bid level redirection
+
     this.triggerWebsocketNotesApi(prevProposalId, thisProposalId);
+
+    // Set Event Launcher Flag
+    (async () => {
+      const flagValue = await launchDarkly(featureFlags.EVENT_LAUNCHER, false);
+      setEventLauncherFlg(flagValue);
+    })();
   }
 
   componentWillUnmount() {
@@ -196,10 +231,37 @@ export class Opportunity extends Component<Props, State> {
     this.state.wsInstance?.destroy();
   }
 
+  handleResize = () => {
+    const windowSize = window.innerWidth;
+    this.setState({ windowSize });
+  };
+
+  handleStorageChange(e) {
+    const {
+      getValidatedData,
+      match: { params }
+    } = this.props;
+
+    if (e.key === 'enableValidateTab') {
+      const isEnabled = e.newValue === 'true';
+      const { selectedView: selectedViewState } = this.state;
+      this.setState({
+        enableValidateTab: isEnabled,
+        selectedView:
+          !isEnabled && selectedViewState === 'validate'
+            ? 'questions'
+            : selectedViewState
+      });
+      if (isEnabled) {
+        getValidatedData(params.id);
+      }
+    }
+  }
+
   triggerWebsocketNotesApi = async (prevProposalId, thisProposalId) => {
     if (prevProposalId !== thisProposalId) {
       await websocketNotesApi(thisProposalId);
-      //intial load case
+      // initial load case
       if (!prevProposalId && thisProposalId) {
         if (!this.state.wsInstance) {
           this.createNewNotesSocketConnection(thisProposalId);
@@ -225,34 +287,6 @@ export class Opportunity extends Component<Props, State> {
       this.setState({ wsInstance: wsProvider });
     }
   };
-
-  handleResize = () => {
-    let windowSize = window.innerWidth;
-
-    this.setState({ windowSize });
-  };
-
-  handleStorageChange(e) {
-    const {
-      getValidatedData,
-      match: { params }
-    } = this.props;
-
-    if (e.key === 'enableValidateTab') {
-      const isEnabled = e.newValue === 'true';
-      const { selectedView: selectedViewState } = this.state;
-      this.setState({
-        enableValidateTab: isEnabled,
-        selectedView:
-          !isEnabled && selectedViewState === 'validate'
-            ? 'questions'
-            : selectedViewState
-      });
-      if (isEnabled) {
-        getValidatedData(params.id);
-      }
-    }
-  }
 
   trackMatomoEventTabs = tab => {
     const {
@@ -317,6 +351,7 @@ export class Opportunity extends Component<Props, State> {
       </div>
     );
   };
+
   render() {
     const {
       isSidebarOpen,
@@ -368,7 +403,8 @@ const mapStateToProps = (state: Map) => ({
   proposalDetail: getProposalDetails(state),
   isOpen: getIsOpen(state),
   selectedBid: getSelectedBid(state),
-  newbidflag: getStatusOfNewBid(state)
+  newbidflag: getStatusOfNewBid(state),
+  bidList: getBidList(state)
 });
 
 export default compose(
@@ -387,6 +423,8 @@ export default compose(
     updateSwitchTempStatus: updateSwitchTempStatusFromWebSocket,
     setSwitchInProgress: updateSwitchInProgress,
     setSeenOne: notificationActions.setSeenOne,
-    setResetProposalId: resetProposalId
+    setResetProposalId: resetProposalId,
+    setEventLauncherFlg: setEventLauncherFlag,
+    changeBidInView: changeBid
   })
 )(MatomoHOC(Opportunity));

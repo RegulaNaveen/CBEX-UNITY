@@ -63,17 +63,11 @@ const WysiwygNotepad = ({
     };
     ldApiCall();
     return () => {
-      console.log('WYSIWYG Unmount');
       dispatch(resetNotes());
     };
   }, []);
 
   useEffect(() => {
-    console.log({ notesUserTag });
-  }, [notesUserTag]);
-
-  useEffect(() => {
-    console.log('proposal id changed to ', selectedBid.get('id'));
     setProposalIdState(selectedBid.get('id'));
   }, [selectedBid]);
 
@@ -128,14 +122,14 @@ const WysiwygNotepad = ({
   return (
     <>
       {notesSocket.wsInstance && (
-        <div className='editor-notepad' key={proposalIdState}>
+        <div className="editor-notepad" key={proposalIdState}>
           <div>
             <MenuBar key={proposalIdState} editor={editor} />
           </div>
           <EditorContent
             key={proposalIdState}
             editor={editor}
-            className='editor-scroll'
+            className="editor-scroll"
           />
         </div>
       )}

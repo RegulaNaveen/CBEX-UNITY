@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState, useContext } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import { EditorState } from 'draft-js';
@@ -7,6 +7,7 @@ import isEqual from 'lodash/isEqual';
 import { v4 as uuid } from 'uuid';
 import classNames from 'classnames';
 import useUpdateEffect from '../../hooks/useUpdateEffect';
+
 const CustomApolloRichText = ({
   questionId,
   richTextString,

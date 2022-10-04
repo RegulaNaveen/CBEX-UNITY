@@ -314,7 +314,10 @@ export const getBidList = createSelector(getOpportunityData, opportunity => {
           'proposal',
           'proposalDetails',
           'pertinentDetails'
-        ])
+        ]),
+        bidNo: String(
+          item.getIn(['proposal', 'proposalDetails', 'bidNo']) || ''
+        )
       });
     });
 

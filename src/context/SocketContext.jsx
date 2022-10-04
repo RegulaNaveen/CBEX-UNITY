@@ -314,20 +314,18 @@ const SocketContextProvider = props => {
     );
   };
   const questionLockWrapper = questionId => {
-    waitForSocketConnection(() => questionLock(questionId, null));
+    questionLock(questionId, null);
   };
   const questionUnlockWrapper = (questionId, answer) => {
-    waitForSocketConnection(() => questionUnlock(questionId, answer, null));
+    questionUnlock(questionId, answer, null);
   };
 
   const questionAnswerUpdateWrapper = (questionId, answer) => {
-    waitForSocketConnection(() =>
-      questionAnswerUpdate(questionId, answer, null)
-    );
+    questionAnswerUpdate(questionId, answer, null);
   };
 
   const questionLockDetailsWrapper = () => {
-    waitForSocketConnection(() => questionLockDetails(null));
+    questionLockDetails(null);
   };
 
   const refreshSocketConnection = () => {

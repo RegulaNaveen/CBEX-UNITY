@@ -54,7 +54,8 @@ const {
   RESET_PROPOSALID,
   QUESTION_LOCK_BY_USER,
   QUESTION_UNLOCK_BY_USER,
-  QUESTION_LOCK_DETAILS_ALL
+  QUESTION_LOCK_DETAILS_ALL,
+  SET_EVENT_LAUNCHER_FLAG
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -124,7 +125,8 @@ const INITIAL_STATE: Map = fromJS({
   lookUpOptions: {},
   boxAdditionalLink: {},
   switchTempCallStatus: false,
-  switchTempInProgress: false
+  switchTempInProgress: false,
+  eventLauncherFlag: false
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -1017,7 +1019,9 @@ const actionMap = {
   [RESET_PROPOSALID]: resetProposalId,
   [QUESTION_LOCK_BY_USER]: updateQuestionLockByUser,
   [QUESTION_UNLOCK_BY_USER]: updateQuestionUnlockByUser,
-  [QUESTION_LOCK_DETAILS_ALL]: questionLockDetails
+  [QUESTION_LOCK_DETAILS_ALL]: questionLockDetails,
+  [SET_EVENT_LAUNCHER_FLAG]: (state, { payload }) =>
+    state.set('eventLauncherFlag', payload)
 };
 
 export default function(
