@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useContext } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -8,6 +8,7 @@ import { OrderedMap } from 'immutable';
 
 import { useLazyLoad, useUpdateEffect } from '../../../hooks';
 import CollapsibleList from '../../common/CollapsibleList';
+import { SocketContext } from '../../../context/SocketContext';
 import { QuestionsRefContext } from './Questions';
 
 const NUM_PER_PAGE = 2;
@@ -24,6 +25,7 @@ const QuestionsSectionMapping = ({
   setTabFromQuestionNotes,
   onAddQuestion
 }) => {
+  const socketContext = useContext(SocketContext);
   const [allSections, setAllSections] = useState(new OrderedMap([]));
   const [resetLazy, setResetLazy] = useState(false);
   const [resetData, setResetData] = useState(false);
@@ -44,6 +46,10 @@ const QuestionsSectionMapping = ({
       setResetLazy(true);
     }
   }, [allSectionsExpanded, bidId]);
+
+  useEffect(() => {
+    socketContext.questionLockDetailsWrapper();
+  }, []);
 
   // Get filtered Sections logic
   const getFilteredSections = useMemo(() => {

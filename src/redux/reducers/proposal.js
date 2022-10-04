@@ -1,6 +1,6 @@
 // @flow
-import { cloneDeep } from 'lodash';
-import { Map, fromJS, OrderedMap } from 'immutable'; // NOSONAR
+import { isEmpty, cloneDeep } from 'lodash';
+import { Map, fromJS, OrderedMap, is } from 'immutable'; // NOSONAR
 import { REDUX_TYPES } from '../../constants';
 import type { ApiAction } from '../actions/action-types';
 import { getUniqueMilestones } from '../selectors/proposal';
@@ -52,6 +52,9 @@ const {
   SWITCH_TEMP_STATUS,
   SWITCH_TEMP_IN_PROGRESS,
   RESET_PROPOSALID,
+  QUESTION_LOCK_BY_USER,
+  QUESTION_UNLOCK_BY_USER,
+  QUESTION_LOCK_DETAILS_ALL,
   SET_EVENT_LAUNCHER_FLAG
 } = REDUX_TYPES.PROPOSAL;
 
@@ -226,7 +229,6 @@ const setOpportunityInfo = (state, action) => {
   const { payload } = action;
   let opportunityData = new OrderedMap({});
   let selectedBid = Map({});
-  // console.log(`payload`, payload);
   payload.forEach(proposal => {
     if (proposal.isCurrent) {
       selectedBid = selectedBid
@@ -269,7 +271,6 @@ const setOpportunityInfo = (state, action) => {
     selectedBid.get('id'),
     'proposalQuestions'
   ]);
-  // console.log(`proposalQuestions`, proposalQuestions)
 
   const milestones = getUniqueMilestones(proposalQuestions);
 
@@ -452,6 +453,26 @@ const onProposalError = (state: Map, action: Object): Map => {
   return state.set('proposalError', payload).set('isProposalLoading', false);
 };
 
+const onUpdateModifiedQuestion = (state: Map, action: Object): Map => {
+  const { question } = action.payload;
+
+  let newState = fromJS({});
+
+  const indexOfQuestionToUpdate = state
+    .get('proposalQuestions')
+    .findIndex(listItem => listItem.questionId === question.questionId);
+
+  newState = state.setIn(
+    ['proposalQuestions', indexOfQuestionToUpdate],
+    question
+  );
+
+  const proposalQuestions = newState.get('proposalQuestions');
+
+  return state.set('proposalQuestions', proposalQuestions);
+};
+
+// state is propoal
 const onProposalAnswer = (state: Map, action: Object): Map => {
   const {
     payload: { data, questionId: referenceId, hasDifferentSFanswer }
@@ -503,6 +524,131 @@ const onProposalAnswer = (state: Map, action: Object): Map => {
     .set('proposalAnswer', INITIAL_STATE.proposalAnswer)
     .set('isProposalAnswerLoading', false)
     .set('opportunityData', opportunityData);
+};
+
+// state is propoal
+const updateQuestionLockByUser = (state: Map, action: Object): Map => {
+  const {
+    data: { oppNo, questionId, proposalId, userEmail, userId, userName }
+  } = action.payload;
+  let newState = fromJS({});
+
+  if (proposalId) {
+    let opportunityData = state.get('opportunityData');
+    let selectedBid = state.getIn(['selectedBid', 'id']);
+
+    const indexOfListToUpdate = opportunityData
+      .getIn([proposalId, 'proposalQuestions'])
+      .findIndex(listItem => {
+        return listItem.questionId === questionId;
+      });
+    // Updating the state for opportunityData with latest lock details
+    const opportunityDataNew = opportunityData.updateIn(
+      [proposalId, 'proposalQuestions', indexOfListToUpdate],
+      value => ({
+        ...value,
+        questionLockInfo: { userInfo: userEmail, userId, userName }
+      })
+    );
+
+    // Update the current lock details if the selected Bid is equal to processed Bid
+    if (selectedBid === proposalId) {
+      const indexOfListToUpdateCurrent = state
+        .get('proposalQuestions')
+        .findIndex(listItem => {
+          return listItem.questionId === questionId;
+        });
+      newState = state.updateIn(
+        ['proposalQuestions', indexOfListToUpdateCurrent],
+        value => ({
+          ...value,
+          questionLockInfo: { userInfo: userEmail, userId, userName }
+        })
+      );
+
+      const proposalQuestionsNew = newState.get('proposalQuestions');
+      return state
+        .set('proposalQuestions', proposalQuestionsNew)
+        .set('opportunityData', opportunityDataNew);
+    }
+
+    return state.set('opportunityData', opportunityDataNew);
+  }
+};
+
+const questionLockDetails = (state: Map, action: Object): Map => {
+  const { data } = action.payload;
+  let newState = fromJS(state);
+
+  if (data.length > 0) {
+    for (let i = 0; i < data.length; i++) {
+      let newAction = {
+        payload: {
+          data: data[i]
+        }
+      };
+      newState = updateQuestionLockByUser(newState, newAction);
+    }
+    return newState;
+  }
+  return state;
+};
+// state is propoal
+const updateQuestionUnlockByUser = (state: Map, action: Object): Map => {
+  const {
+    data: {
+      // latestAnswer,
+      oppNo,
+      questionId,
+      proposalId,
+      userEmail,
+      userId,
+      userName
+    }
+  } = action.payload;
+  let newState = fromJS({});
+
+  if (proposalId) {
+    let opportunityData = state.get('opportunityData');
+    let selectedBid = state.getIn(['selectedBid', 'id']);
+
+    const indexOfListToUpdate = opportunityData
+      .getIn([proposalId, 'proposalQuestions'])
+      .findIndex(listItem => {
+        return listItem.questionId === questionId;
+      });
+    // Updating the state for opportunityData with latest proposalDetails
+    const opportunityDataNew = opportunityData.updateIn(
+      [proposalId, 'proposalQuestions', indexOfListToUpdate],
+      value => ({
+        ...value,
+        questionLockInfo: {}
+      })
+    );
+
+    // Update the current proposalDetails if the selected Bid is equal to processed Bid
+    if (selectedBid === proposalId) {
+      const indexOfListToUpdateCurrent = state
+        .get('proposalQuestions')
+        .findIndex(listItem => {
+          return listItem.questionId === questionId;
+        });
+      newState = state.updateIn(
+        ['proposalQuestions', indexOfListToUpdateCurrent],
+        value => ({
+          ...value,
+          questionLockInfo: {}
+        })
+      );
+
+      const proposalQuestionsNew = newState.get('proposalQuestions');
+      return state
+        .set('proposalQuestions', proposalQuestionsNew)
+        .set('opportunityData', opportunityDataNew);
+    }
+
+    return state.set('opportunityData', opportunityDataNew);
+  }
 };
 
 const onProposalAnswerLoading = (state: Map, action: Object): Map => {
@@ -695,25 +841,6 @@ const onGettingfetchBoxAdditionalLinkError = (
   return state.set('boxAdditionalLink', error);
 };
 
-const onUpdateModifiedQuestion = (state: Map, action: Object): Map => {
-  const { question } = action.payload;
-
-  let newState = fromJS({});
-
-  const indexOfQuestionToUpdate = state
-    .get('proposalQuestions')
-    .findIndex(listItem => listItem.questionId === question.questionId);
-
-  newState = state.setIn(
-    ['proposalQuestions', indexOfQuestionToUpdate],
-    question
-  );
-
-  const proposalQuestions = newState.get('proposalQuestions');
-
-  return state.set('proposalQuestions', proposalQuestions);
-};
-
 const onFetchingValidatedProposaData = (state: Map): Map => {
   return state
     .set('fetchingValidatedProposalData', true)
@@ -890,6 +1017,9 @@ const actionMap = {
   [SWITCH_TEMP_IN_PROGRESS]: (state, { payload }) =>
     state.set('switchTempInProgress', payload),
   [RESET_PROPOSALID]: resetProposalId,
+  [QUESTION_LOCK_BY_USER]: updateQuestionLockByUser,
+  [QUESTION_UNLOCK_BY_USER]: updateQuestionUnlockByUser,
+  [QUESTION_LOCK_DETAILS_ALL]: questionLockDetails,
   [SET_EVENT_LAUNCHER_FLAG]: (state, { payload }) =>
     state.set('eventLauncherFlag', payload)
 };
