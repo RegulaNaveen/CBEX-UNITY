@@ -7,17 +7,7 @@ import StatusDotSolid from 'apollo-react-icons/StatusDotSolid';
 import * as notificationActions from '../../../redux/actions/notification-actions';
 import EnvelopeButton from './EnvelopeButton';
 
-const ListItem = ({
-  id,
-  url,
-  oppNo,
-  data,
-  isSeen,
-  setSeenOne,
-  createdAt,
-  preferenceCode,
-  bidNo
-}) => {
+const ListItem = ({ id, url, oppNo, data, isSeen, setSeenOne, createdAt }) => {
   const history = useHistory();
   const getYesterday = () => {
     let d = new Date();
@@ -41,24 +31,22 @@ const ListItem = ({
     }
   };
   const oppNoAsHyperlink = (word: string) =>
-    `<a style="display: inline-block" href='${window.location.origin}/opportunities/${oppNo}?notification_id=${id}'>${word}</a>`;
-  const hyperlinkWithBid = (word: string) =>
-    `<a style="display: inline-block" href='${window.location.origin}/opportunities/${oppNo}?notification_id=${id}&bidNo=${bidNo}'>${word}</a>`;
+    `<a style="display: inline-block" href='${window.location.origin}${url}'>${word}</a>`;
 
   const dataToHtml = () => {
     const dataArr = data.split(' ').map((word, index, arr) => {
       // Converting the sentence "Opportunity <OPP_NO> Bid <BID_NO>" to hyperlink
       if (word === 'Opportunity' && arr[index + 1] === oppNo) {
-        return bidNo ? hyperlinkWithBid(word) : oppNoAsHyperlink(word);
+        return oppNoAsHyperlink(word);
       }
       if (word === oppNo) {
-        return bidNo ? hyperlinkWithBid(word) : oppNoAsHyperlink(word);
+        return oppNoAsHyperlink(word);
       }
       if (word === 'Bid' && arr[index - 1] === oppNo) {
-        return bidNo ? hyperlinkWithBid(word) : oppNoAsHyperlink(word);
+        return oppNoAsHyperlink(word);
       }
       if (arr[index - 1] === 'Bid' && arr[index - 2] === oppNo) {
-        return bidNo ? hyperlinkWithBid(word) : oppNoAsHyperlink(word);
+        return oppNoAsHyperlink(word);
       }
       return word;
     });
@@ -70,7 +58,6 @@ const ListItem = ({
   return (
     <div className='notification-item'>
       {/* Dot Icon */}
-      {/* <StatusDotSolid fontSize='small' className='notification-item-dot' /> */}
       {!isSeen && (
         <StatusDotSolid fontSize='small' className='notification-item-dots' />
       )}
@@ -82,7 +69,7 @@ const ListItem = ({
             variant='body2'
             className='notification-item-header-title'
             onClick={() => {
-              history.push(`${url}?notification_id=${id}`);
+              history.push(url);
               history.go();
             }}
           >
