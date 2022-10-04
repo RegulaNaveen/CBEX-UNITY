@@ -9,6 +9,7 @@ import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import Grid from 'apollo-react/components/Grid';
 import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
+import Typography from 'apollo-react/components/Typography'
 import moment from 'moment';
 import classNames from 'classnames';
 
@@ -641,10 +642,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
               setSelectRow={this.setSelectRow}
               disabled={checkDisableFlag()}
               questionId={this.props.questionId}
-              onBlur={() => {
-                // call unlock question
-                this.context.questionUnlockWrapper(this.props.questionId);
-              }}
               lockedBySelf={!!this.isQuestionLockedBySelf()}
               lockQuestionOnFocus
             />
@@ -661,10 +658,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
               placeholder={checkDisableFlag() ? '' : 'Click to answer'}
               items={finalOptions}
               onClick={val => this.onClickChange(val, answerValue)}
-              onBlur={() => {
-                // call unlock question
-                this.context.questionUnlockWrapper(this.props.questionId);
-              }}
               value={answerValue}
               setSelectRow={this.setSelectRow}
               disabled={checkDisableFlag()}
@@ -1046,6 +1039,17 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 )}
               </div>
             </div>
+            {
+              this.isQuestionLocked() && this.isQuestionLockedByOther() ? (
+                <Typography
+                  variant="subtitle1"
+                  className="status-txt"
+                >
+                  {this.props.questionLockInfo.get('userName')} is typing...
+                </Typography>
+              ) : null
+            }
+            
           </Grid>
           <Grid item xs={gridColRatio[1]} className="empty-grid-item">
             <></>
@@ -1102,13 +1106,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
             ''
           )}
            */}
-          {this.isQuestionLocked() && this.isQuestionLockedByOther() ? (
-            <div>
-              {this.props.questionLockInfo.get('userName')} is typing...
-            </div>
-          ) : (
-            ''
-          )}
         </Grid>
       </div>
     );
