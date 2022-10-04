@@ -20,8 +20,7 @@ import {
 import RecentNoNotification from './RecentNoNotification';
 import MatomoHOC from '../../../HOC/MatomoHOC';
 import * as notificationActions from '../../../../redux/actions/notification-actions';
-
-import NotificationList from './NotificationList';
+import ListItem from '../../../views/Notification/ListItem';
 
 const RecentActivity = ({ setNotifications }) => {
   const allNotifications = useSelector(getAllNotifications);
@@ -140,7 +139,7 @@ const RecentActivity = ({ setNotifications }) => {
                     return (
                       <tr className="notification-tr">
                         <td className="notification-td">
-                          <NotificationList
+                          <ListItem
                             key={item.id}
                             id={item.id}
                             url={item.url}
@@ -148,6 +147,8 @@ const RecentActivity = ({ setNotifications }) => {
                             data={item.body}
                             isSeen={item.read}
                             createdAt={item.created_date}
+                            preferenceCode={item.preference_code || ''}
+                            bidNo={item.bodyJson?.bidNo || null}
                           />
                           <Divider variant="inset" className="divider-wrp" />
                         </td>

@@ -46,7 +46,7 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
 
   const history = useHistory();
   const redirectAllNotifications = () => {
-   history.push(RECENT_ACTIVITY);
+    history.push(RECENT_ACTIVITY);
   };
 
   return (
@@ -95,25 +95,27 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
               </div>
               {/* Notification List items */}
               <div className='notification-scrollbar' >
-              {notificationCount > 0 ? (
-                unreadNotifications.map(item => {
-                  return (
-                    <ListItem
-                      key={item.id}
-                      id={item.id}
-                      url={item.url}
-                      oppNo={item.opportunity_no}
-                      data={item.body}
-                      isSeen={item.read}
-                      createdAt={item.created_date}
-                    />
-                  );
-                })
-              ) : (
-                <NoNotification />
-              )}
-              {/* View All Notifications Button*/}
-              {/* <div>
+                {notificationCount > 0 ? (
+                  unreadNotifications.map(item => {
+                    return (
+                      <ListItem
+                        key={item.id}
+                        id={item.id}
+                        url={item.url}
+                        oppNo={item.opportunity_no}
+                        data={item.body}
+                        isSeen={item.read}
+                        createdAt={item.created_date}
+                        preferenceCode={item.preference_code || ''}
+                        bidNo={item.bodyJson?.bidNo || null}
+                      />
+                    );
+                  })
+                ) : (
+                  <NoNotification />
+                )}
+                {/* View All Notifications Button*/}
+                {/* <div>
                 <Typography variant='body2' className='view-all-notifications'>
                   View All Notifications
                 </Typography>
