@@ -167,14 +167,18 @@ class AnswerHistory extends Component<Props> {
         if (isValidatedUnityPredictedAnswer) {
           return (
             <span key={uuidv4()}>
-              <b>Validated Unity Predicted Answer</b>
+              <b>{`${
+                userName === 'UnityPredictedAnswer'
+                  ? answers?.toJS()[0]?.answer
+                  : 'Validated Unity Predicted Answer'
+              }`}</b>
             </span>
           );
         }
         if (isPicklistValidUnityPredAns) {
           return (
             <span key={uuidv4()}>
-              <b>Validated Unity Predicted Answer</b>
+              <b>NA</b>
             </span>
           );
         }
