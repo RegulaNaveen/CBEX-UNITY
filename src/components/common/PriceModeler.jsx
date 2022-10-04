@@ -16,7 +16,7 @@ const INITIAL_LIST_TITLE = {
   sites: 'Total Sites',
   phase: 'Phase',
   patients: 'Total Patients',
-  regions: 'Therapeutic Area'
+  regions: 'Regions',
 };
 
 const INITIAL_LIST_VAL = {
@@ -25,7 +25,7 @@ const INITIAL_LIST_VAL = {
   sites: '',
   phase: '',
   patients: '',
-  regions: ''
+  regions: '',
 };
 
 const PriceModeler = () => {
@@ -55,7 +55,7 @@ const PriceModeler = () => {
           Number_of_Sites__c: sites,
           Phase_P__c: phase,
           Patients_Enrolled__c: patients,
-          Potential_Regions__c: regions
+          Potential_Regions__c: regions,
         } = response.data.latestDetails;
 
         setAdditionalDetails({
@@ -64,7 +64,7 @@ const PriceModeler = () => {
           sites,
           phase,
           patients,
-          regions
+          regions,
         });
       } else {
         setError(true);
@@ -131,7 +131,7 @@ const PriceModeler = () => {
           onClose={() => setError(false)}
           buttonProps={[
             { className: 'display-none' },
-            { label: DEFAULT.CLOSE }
+            { label: DEFAULT.CLOSE },
           ]}
           modalStyle={{ maxWidth: 342 }}
         />
