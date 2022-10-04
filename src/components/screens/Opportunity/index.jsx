@@ -6,6 +6,7 @@ import Loader from 'react-loader-spinner';
 import classNames from 'classnames';
 import { compose } from 'redux';
 import * as Y from 'yjs';
+import isEmpty from 'lodash/isEmpty';
 import {
   UpdateNewBid,
   expandAllSectionsAction,
@@ -17,7 +18,8 @@ import {
   updateSwitchTempStatusFromWebSocket,
   updateSwitchInProgress,
   resetProposalId,
-  setEventLauncherFlag
+  setEventLauncherFlag,
+  changeBid
 } from '../../../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../../../redux/actions/notepad-actions';
 import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
@@ -46,6 +48,7 @@ import { websocketNotesApi } from '../../../api/notepad';
 import { UBUILD, DASHBOARD } from '../../../routes';
 import featureFlags from '../../../constants/featureFlags';
 import launchDarkly from '../../../utils/launchDarkly';
+import { getBidList } from '../../../redux/selectors/proposal';
 
 type State = {
   selectedView: string
@@ -81,7 +84,9 @@ type Props = {
   getOpportunityInfo: (oppId: string, flag?: boolean) => void,
   setSeenOne: Function,
   setResetProposalId: Function,
-  setEventLauncherFlg: Function
+  setEventLauncherFlg: Function,
+  bidList: any,
+  changeBidInView: Function
 };
 
 export class Opportunity extends Component<Props, State> {
@@ -167,7 +172,9 @@ export class Opportunity extends Component<Props, State> {
     const {
       match: { params },
       selectedBid,
-      setEventLauncherFlg
+      setEventLauncherFlg,
+      bidList,
+      changeBidInView
     } = this.props;
     const thisProposalId = selectedBid.get('id', '');
     const prevProposalId = prevProps.selectedBid.get('id', '');
@@ -181,6 +188,26 @@ export class Opportunity extends Component<Props, State> {
         this.context.updateSocketOppId(params.id);
       }
     }
+    // Bid level redirection
+    // Applied when a `bidNo` query param is found in the url
+    // Example ?bidNo=3
+    const winLocationSearch = window.location.search;
+    const queryparams = new URLSearchParams(winLocationSearch);
+    const bidNo = queryparams.get('bidNo');
+    const prevBidList = prevProps.bidList;
+    if (
+      bidNo &&
+      Array.isArray(bidList) &&
+      bidList.length > 0 &&
+      bidList.length !== prevBidList.length // check to prevent infinite rerenders
+    ) {
+      const bidItemToSelect = bidList.find(item => item.bidNo === bidNo);
+      if (!isEmpty(bidItemToSelect)) {
+        changeBidInView(bidItemToSelect);
+      }
+    }
+    // END Bid level redirection
+
     this.triggerWebsocketNotesApi(prevProposalId, thisProposalId);
 
     // Set Event Launcher Flag
@@ -375,7 +402,8 @@ const mapStateToProps = (state: Map) => ({
   proposalDetail: getProposalDetails(state),
   isOpen: getIsOpen(state),
   selectedBid: getSelectedBid(state),
-  newbidflag: getStatusOfNewBid(state)
+  newbidflag: getStatusOfNewBid(state),
+  bidList: getBidList(state)
 });
 
 export default compose(
@@ -395,6 +423,7 @@ export default compose(
     setSwitchInProgress: updateSwitchInProgress,
     setSeenOne: notificationActions.setSeenOne,
     setResetProposalId: resetProposalId,
-    setEventLauncherFlg: setEventLauncherFlag
+    setEventLauncherFlg: setEventLauncherFlag,
+    changeBidInView: changeBid
   })
 )(MatomoHOC(Opportunity));
