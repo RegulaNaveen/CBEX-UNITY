@@ -178,7 +178,7 @@ class AnswerHistory extends Component<Props> {
         if (isPicklistValidUnityPredAns) {
           return (
             <span key={uuidv4()}>
-              <b>NA</b>
+              <b>Validated Unity Predicted Answer</b>
             </span>
           );
         }
