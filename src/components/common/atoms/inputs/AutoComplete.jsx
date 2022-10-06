@@ -54,10 +54,8 @@ const Autocomplete = props => {
       setUnlockTimeout(null);
     } else {
       const timer = setTimeout(() => {
-        console.log('Reached', autocompleteRef);
-        const test = autocompleteRef.current.value;
-        console.log('Reo', test);
-        autocompleteRef.current.blur();
+        const inputElem = autocompleteRef.current.getElementsByTagName('input');
+        if (inputElem.length > 0) inputElem[0].blur();
       }, QUESTION_UNLOCK_TIMEOUT);
       setUnlockTimeout(timer);
     }
@@ -126,6 +124,7 @@ const Autocomplete = props => {
     resetUnlockTimer(true);
   };
   const onInputChange = (event, value) => {
+    resetUnlockTimer();
     setInputVal(value);
     const elem = document.querySelectorAll('.a-MuiAutocomplete-popper').item(0);
     if (value) {
@@ -139,18 +138,17 @@ const Autocomplete = props => {
       setOptions([]);
       elem.className += ' disable';
     }
-    resetUnlockTimer();
   };
   const timeout = ms => {
     return new Promise(resolve => setTimeout(resolve, ms));
   };
 
   const onInputFocus = async () => {
+    resetUnlockTimer();
     props.onFocus();
     // await timeout(500);
     const elem = document.querySelectorAll('.a-MuiAutocomplete-popper').item(0);
     elem.className += ' disable';
-    resetUnlockTimer();
     // elem.classList.add('disable');
   };
   return (
@@ -173,7 +171,6 @@ const Autocomplete = props => {
         }
         onFocus={onInputFocus}
         onBlur={e => {
-          console.log('OnBlur Called');
           props.onBlur();
           resetUnlockTimer(true);
         }}
