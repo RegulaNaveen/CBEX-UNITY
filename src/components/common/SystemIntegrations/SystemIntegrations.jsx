@@ -141,13 +141,11 @@ const SystemIntegrations = ({
         <Tooltip
           variant="light"
           title={
-            integrationmatch ? (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: `<p><b>Destination</b><br>Qvidian</p>`
-                }}
-              />
-            ) : null
+            <div
+              dangerouslySetInnerHTML={{
+                __html: `<p><b>Destination</b><br>Qvidian</p>`
+              }}
+            />
           }
           placement="top"
           tabIndex={-1}
