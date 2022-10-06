@@ -84,6 +84,22 @@ const {
   SET_EVENT_LAUNCHER_FLAG
 } = REDUX_TYPES.PROPOSAL;
 
+/**
+ * Updates bidNo Query param without page reload
+ */
+const updateBidNoQueryparam = bidNo => {
+  if ('URLSearchParams' in window) {
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.set('bidNo', bidNo);
+    // New url
+    const newRelativePathQuery = `${
+      window.location.pathname
+    }?${searchParams.toString()}`;
+    // Update URL without pageload
+    window.history.pushState(null, '', newRelativePathQuery);
+  }
+};
+
 export type ProposalInfo = {};
 
 export const getProposal = (id: string): ThunkAction<string, Object> => {
@@ -785,6 +801,9 @@ export const resetProposalId = () => {
 };
 
 export const changeBid = bid => {
+  if (bid?.bidNo) {
+    updateBidNoQueryparam(bid?.bidNo);
+  }
   return dispatch => {
     dispatch({
       type: CHANGE_BID,
