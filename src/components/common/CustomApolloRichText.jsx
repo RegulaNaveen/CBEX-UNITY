@@ -57,7 +57,7 @@ const CustomApolloRichText = ({
   const richTextContainerRef = useRef(null);
   const richTextEditorRef = useRef(null);
   const richTextKey = useRef(uuid());
-  const [questionTimer, setQuestionTimer] = useState(null);
+  const [unlockTimeout, setUnlockTimeout] = useState(null);
 
   /**
    * Function to Add Delay for Specific Seconds
@@ -66,15 +66,21 @@ const CustomApolloRichText = ({
     return new Promise(resolve => setTimeout(resolve, ms));
   };
 
+  /**
+   *
+   * @param {*} clear to remove the timer
+   * function to set timer for auto unlock and auto save
+   */
   const resetUnlockTimer = (clear = false) => {
-    clearTimeout(questionTimer);
+    clearTimeout(unlockTimeout);
     if (clear) {
-      setQuestionTimer(null);
+      setUnlockTimeout(null);
     } else {
       const timer = setTimeout(() => {
         setIsRichTextEditable(false);
+        if (onBlur) onBlur(richTextData);
       }, 10000);
-      setQuestionTimer(timer);
+      setUnlockTimeout(timer);
     }
   };
 
@@ -156,6 +162,7 @@ const CustomApolloRichText = ({
     if (enableFocus) {
       setFocusOnEditor();
       onFocus();
+      resetUnlockTimer();
     }
   };
   /**
