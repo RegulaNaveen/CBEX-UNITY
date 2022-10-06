@@ -20,7 +20,7 @@
   background-color: $white;
   color: $neptune-primary;
   cursor: pointer;
-  border: 1px solid $neutral4;
+  border: $border;
   border-radius: 5px;
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
   outline: none;
@@ -122,16 +122,16 @@
   }
 }
 .saverole-button:disabled,
-.saverole-button[disabled]{
- opacity: 0.5;
+.saverole-button[disabled] {
+  opacity: 0.5;
 }
 
 .saverole-button {
   height: 40px;
   float: right;
-  width: 81px;
+  width: 92px;
   background-color: $blue;
-  color: white;
+  color: $white;
   cursor: pointer;
   border: none;
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);

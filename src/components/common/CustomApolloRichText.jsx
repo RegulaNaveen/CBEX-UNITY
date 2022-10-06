@@ -9,6 +9,7 @@ import classNames from 'classnames';
 import useUpdateEffect from '../../hooks/useUpdateEffect';
 
 const CustomApolloRichText = ({
+  questionId,
   richTextString,
   richTextVal,
   richTextHtml,
@@ -104,12 +105,15 @@ const CustomApolloRichText = ({
    */
   const setFocusOnEditor = async () => {
     await timeout(0);
-    if (richTextEditorRef.current && enableFocus) {      
+    if (richTextEditorRef.current && enableFocus) {
       const rect = richTextContainerRef.current.getBoundingClientRect();
       richTextEditorRef.current.focus();
       if (rect.top < 0) {
         richTextContainerRef.current.scrollIntoView(true);
-      } else if (rect.bottom > (window.innerHeight || document.documentElement.clientHeight)) {
+      } else if (
+        rect.bottom >
+        (window.innerHeight || document.documentElement.clientHeight)
+      ) {
         richTextContainerRef.current.scrollIntoView(false);
       }
     }
@@ -126,6 +130,14 @@ const CustomApolloRichText = ({
    * onClick Edit button handler
    */
   const onClickHTML = () => {
+    if (richTextEditorRef.current) {
+      const { editorState } = richTextEditorRef.current.state;
+      richTextEditorRef.current.setState({
+        editorState: EditorState.moveFocusToEnd(editorState)
+      });
+      richTextContainerRef.current.scrollTop =
+        richTextContainerRef.current.scrollHeight;
+    }
     setIsRichTextEditable(true);
     if (enableFocus) {
       setFocusOnEditor();
@@ -173,12 +185,34 @@ const CustomApolloRichText = ({
     }
   };
 
+  const blur = () => {
+    if (onBlur) onBlur(richTextData);
+  };
+
   /**
    * Trigger Outside Click
    */
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
+  });
+
+  const handleKeyDown = e => {
+    if (richTextContainerRef.current.contains(e.target)) {
+      if ((e.shiftKey && e.key === 'Tab') || e.key === 'Tab') {
+        blur();
+        if (isRichTextEditable) {
+          setTimeout(() => {
+            setIsRichTextEditable(false);
+          }, 0);
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   });
 
   // Render Popover RichText Editor
@@ -201,14 +235,10 @@ const CustomApolloRichText = ({
         onClick={() => {
           if (!isRichTextEditable && !disabled) onClickHTML();
         }}
-        tabIndex={(!isRichTextEditable && !disabled) ? 0 : -1}
+        tabIndex={!isRichTextEditable && !disabled ? 0 : -1}
         onFocus={() => {
-          const { editorState } = richTextEditorRef.current.state;
-          richTextEditorRef.current.setState({
-            editorState: EditorState.moveFocusToEnd(editorState)
-          })
-          richTextContainerRef.current.scrollTop = richTextContainerRef.current.scrollHeight;
-          if(!isRichTextEditable && !disabled) onClickHTML() }}
+          if (!isRichTextEditable && !disabled) onClickHTML();
+        }}
       >
         <RichTextEditor
           placeholder={placeholder || ''}
@@ -216,8 +246,7 @@ const CustomApolloRichText = ({
           variant={isRichTextEditable ? 'popover' : 'view'}
           defaultValue={richTextData.value}
           onChange={onChangeHandler}
-          tabIndex={(!isRichTextEditable && !disabled) ? 0 : -1}
-          onBlur={() => { setIsRichTextEditable(false); if (onBlur) onBlur(richTextData); }}
+          tabIndex={!isRichTextEditable && !disabled ? 0 : -1}
           ref={richTextEditorRef}
           key={richTextKey.current}
         />
@@ -227,6 +256,7 @@ const CustomApolloRichText = ({
 };
 
 CustomApolloRichText.defaultProps = {
+  questionId: '',
   richTextString: '',
   richTextVal: { blocks: [] },
   richTextHtml: '',
@@ -242,6 +272,7 @@ CustomApolloRichText.defaultProps = {
 };
 
 CustomApolloRichText.propTypes = {
+  questionId: PropTypes.string,
   richTextString: PropTypes.string,
   richTextVal: PropTypes.object,
   richTextHtml: PropTypes.string,

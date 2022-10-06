@@ -3,141 +3,129 @@ import Card from 'apollo-react/components/Card';
 import Typography from 'apollo-react/components/Typography';
 import Checkbox from 'apollo-react/components/Checkbox';
 import PropTypes from 'prop-types';
+import { PROFILE } from '../../../../constants/app';
 
 const NotificationPreference = ({
   userPreference,
   handleUserPreferenceChange
 }) => {
+  const {
+    NOTIFICATION_PREFERENCE,
+    NOTIFICATION,
+    IN_APP,
+    EMAIL,
+    NOT_FOUND,
+    EMAIL_PREFERENCES
+  } = PROFILE;
   return (
     <div>
       <Card interactive className="card-wrapper">
         <Typography
-          className="card-heading bold-text"
+          className="card-heading"
           variant="title2"
           gutterBottom
         >
-          Notification Preferences
+          {NOTIFICATION_PREFERENCE}
         </Typography>
-        <tr
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginTop: '1em',
-            textAlign: 'left'
-          }}
-        >
-          <th style={{ flexGrow: '3', alignSelf: 'flex-start' }}>
+        <tr className="notification-tr-head-wrap">
+          <th className="th-one">
             <Typography className="card-label" variant="caption" gutterBottom>
-              Notification Preferences
+              {NOTIFICATION}
             </Typography>
           </th>
-          <th style={{ flexGrow: '0', marginRight: '2.9em' }}>
-            <Typography className="card-label" variant="caption" gutterBottom>
-              In-App
+          <th className="th-two">
+            <Typography
+              className="card-label size-14"
+              variant="caption"
+              gutterBottom
+            >
+              {IN_APP}
             </Typography>
           </th>
-          <th style={{ flexGrow: '0', marginRight: '1.5em' }}>
+          <th className="th-three">
             <Typography className="card-label" variant="caption" gutterBottom>
-              Email
+              {EMAIL}
             </Typography>
           </th>
         </tr>
 
-        <table
-          style={{
-            overflowY: 'auto',
-            display: 'block',
-            marginTop: '0.5em'
-          }}
-        >
+        <table className="notification-table">
           {!userPreference?.length && (
             <div>
               <Typography className="grey-text" variant="caption" gutterBottom>
-                Not found!
+                {NOT_FOUND}
               </Typography>
             </div>
           )}
           {userPreference?.map(
-            (
-              {
-                preference_id,
-                title,
-                preference_type,
-                default_type,
-                mandatory,
-                preference_selected
-              },
-              index
-            ) => {
+            ({
+              preference_id: preferenceId,
+              title,
+              preference_type: preferenceType,
+              default_type: defaultType,
+              mandatory,
+              preference_selected: preferenceSelected
+            }) => {
               return (
-                // eslint-disable-next-line camelcase
-                preference_type === 'NOTIFICATION' && (
-                  <tr
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between'
-                    }}
-                    key={preference_id}
-                  >
-                    <td style={{ flexGrow: '3' }}>
+                preferenceType === 'NOTIFICATION' && (
+                  <tr className="notification-pref-tr" key={preferenceId}>
+                    <td className="td-one">
                       <Typography
                         className="preference-label"
-                        variant=" body2"
+                        variant="body2"
                         gutterBottom
                       >
                         {title}
                       </Typography>
                     </td>
-                    <td style={{ flexGrow: '0', marginRight: '2em' }}>
+                    <td className="td-two">
                       <Checkbox
                         disabled={
                           !!(mandatory === 'BOTH' || mandatory === 'IN_APP')
                         }
                         checked={
-                          preference_selected
+                          preferenceSelected
                             ? !!(
-                                preference_selected == 'BOTH' ||
-                                preference_selected == 'IN-APP'
+                                preferenceSelected === 'BOTH' ||
+                                preferenceSelected === 'IN-APP'
                               )
                             : !!(
-                                default_type == 'BOTH' ||
-                                default_type == 'IN-APP'
+                                defaultType === 'BOTH' ||
+                                defaultType === 'IN-APP'
                               )
                         }
                         onChange={(e, checked) =>
                           handleUserPreferenceChange(
                             e,
                             checked,
-                            preference_id,
+                            preferenceId,
                             'IN-APP'
                           )
                         }
                         size="small"
                       />
                     </td>
-                    <td style={{ flexGrow: '0' }}>
+                    <td className="td-three">
                       <Checkbox
-                        // disabled={email.disabled}
-                        // checked={email.checked}
                         disabled={
                           !!(mandatory === 'BOTH' || mandatory === 'EMAIL')
                         }
                         checked={
-                          preference_selected
+                          preferenceSelected
                             ? !!(
-                                preference_selected == 'BOTH' ||
-                                preference_selected == 'EMAIL'
+                                preferenceSelected === 'BOTH' ||
+                                preferenceSelected === 'EMAIL'
                               )
                             : !!(
-                                default_type == 'BOTH' ||
-                                default_type == 'EMAIL'
+                                defaultType === 'BOTH' ||
+                                defaultType === 'EMAIL'
                               )
                         }
                         onChange={(e, checked) =>
                           handleUserPreferenceChange(
                             e,
                             checked,
-                            preference_id,
+                            preferenceId,
                             'EMAIL'
                           )
                         }
@@ -153,40 +141,38 @@ const NotificationPreference = ({
 
         <div className="top-space">
           <Typography className="card-label" variant="caption" gutterBottom>
-            Email Preferences
+            {EMAIL_PREFERENCES}
           </Typography>
         </div>
 
         {!userPreference?.length && (
           <div>
             <Typography className="grey-text" variant="caption" gutterBottom>
-              Not found!
+              {NOT_FOUND}
             </Typography>
           </div>
         )}
 
         {userPreference?.map(
           ({
-            preference_id,
+            preference_id: preferenceId,
             title,
-            preference_type,
-            default_type,
+            preference_type: preferenceType,
+            default_type: defaultType,
             mandatory,
-            preference_selected
+            preference_selected: preferenceSelected
           }) => {
             return (
-              preference_type === 'EMAIL' && (
-                <div key={preference_id}>
+              preferenceType === 'EMAIL' && (
+                <div key={preferenceId}>
                   <Checkbox
                     label={
                       <Typography
-                        // className="bold-text"
-                        // checked
                         variant="body1"
                         className={
-                          (preference_selected
-                          ? !!(preference_selected == 'CHECKED')
-                          : !!(default_type == 'CHECKED'))
+                          (preferenceSelected
+                          ? !!(preferenceSelected === 'CHECKED')
+                          : !!(defaultType === 'CHECKED'))
                             ? 'preference-label bold-label'
                             : 'preference-label'
                         }
@@ -197,15 +183,15 @@ const NotificationPreference = ({
                     }
                     disabled={!!(mandatory === 'TRUE')}
                     checked={
-                      preference_selected
-                        ? !!(preference_selected == 'CHECKED')
-                        : !!(default_type == 'CHECKED')
+                      preferenceSelected
+                        ? !!(preferenceSelected === 'CHECKED')
+                        : !!(defaultType === 'CHECKED')
                     }
                     onChange={(e, checked) =>
                       handleUserPreferenceChange(
                         e,
                         checked,
-                        preference_id,
+                        preferenceId,
                         'EMAIL_PREFERENCE'
                       )
                     }

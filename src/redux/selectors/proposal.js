@@ -119,7 +119,7 @@ export const hasProposalErrors = (proposal: Map): Map =>
   proposal.get('proposalError');
 
 export const getProposalDetails = (proposal: Map): Map =>
-  proposal.get('proposalDetails');
+  proposal?.get('proposalDetails');
 
 export const setProposalAnswer = (proposal: Map): Map =>
   proposal.get('proposalAnswer');
@@ -199,7 +199,7 @@ export function getUniqueMilestones(questions) {
 }
 
 export function selectProposal(state) {
-  return state.proposal;
+  return state?.proposal;
 }
 
 export const selectProposalQuestions = createSelector(
@@ -288,7 +288,7 @@ export const getEditQuestionData = createSelector(selectProposal, proposal =>
 );
 
 export const getSelectedBid = createSelector(selectProposal, proposal =>
-  proposal.get('selectedBid')
+  proposal?.get('selectedBid')
 );
 export const getStatusOfNewBid = createSelector(selectProposal, proposal =>
   proposal.get('newbidflag') || false
@@ -314,7 +314,10 @@ export const getBidList = createSelector(getOpportunityData, opportunity => {
           'proposal',
           'proposalDetails',
           'pertinentDetails'
-        ])
+        ]),
+        bidNo: String(
+          item.getIn(['proposal', 'proposalDetails', 'bidNo']) || ''
+        )
       });
     });
 

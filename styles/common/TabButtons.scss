@@ -1,6 +1,6 @@
 .tab-buttons {
   display: grid;
-  border: 1px solid $neutral4;
+  border: $border;
   border-radius: 4px;
   box-shadow: 0 4px 4px 0 rgba($color: $black, $alpha: 0.04);
   align-content: center;
@@ -12,7 +12,7 @@
     width: 100%;
     outline: none;
     border: none;
-    border-right: 1px solid $neutral4;
+    border-right: $border;
     cursor: pointer;
     font-family: $proximaNova;
     font-size: 16px;

@@ -25,7 +25,8 @@ import {
   getOTListData,
   changeProposalOT,
   deleteProposalUser,
-  getProposalAnswer
+  getProposalAnswer,
+  priceModelerApi
 } from '../../api/proposal';
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getUniqueMilestones } from '../selectors/proposal';
@@ -79,7 +80,11 @@ const {
   BOX_ADDITIONAL_LINK_ERROR,
   SWITCH_TEMP_STATUS,
   SWITCH_TEMP_IN_PROGRESS,
-  RESET_PROPOSALID
+  RESET_PROPOSALID,
+  QUESTION_LOCK_BY_USER,
+  QUESTION_UNLOCK_BY_USER,
+  QUESTION_LOCK_DETAILS_ALL,
+  SET_EVENT_LAUNCHER_FLAG
 } = REDUX_TYPES.PROPOSAL;
 
 export type ProposalInfo = {};
@@ -115,6 +120,7 @@ export const getProposalByID = (id: string): ThunkAction<string, Object> => {
 };
 
 export const setProposalAnswerData = (
+  socketContext,
   proposalId: string,
   questionId: string,
   answer: string,
@@ -136,7 +142,7 @@ export const setProposalAnswerData = (
         userData,
         editorData
       );
-
+      await socketContext.questionAnswerUpdateWrapper(questionId, data);
       dispatch({
         type: PROPOSAL_ANSWER,
         payload: {
@@ -158,6 +164,46 @@ export const setProposalAnswerData = (
         payload: { questionId, loading: false }
       });
     } catch (err) {
+      console.log('error occurred ', err);
+      dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err } });
+    }
+  };
+};
+
+export const setProposalAnswerDatafromSocket = (
+  questionId: string,
+  data: any
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>, getState) => {
+    dispatch({
+      type: PROPOSAL_ANSWER_LOADING,
+      payload: { questionId, loading: true }
+    });
+    const questionsFilter = getQuestionsFilters(getState());
+
+    try {
+      dispatch({
+        type: PROPOSAL_ANSWER,
+        payload: {
+          data: Array.isArray(data.answers) ? data.answers : data,
+          questionId,
+          hasDifferentSFanswer: data.hasDifferentSFanswer || false
+        }
+      });
+
+      const { modifiedQuestions } = data;
+      if (!isEmpty(modifiedQuestions)) {
+        modifiedQuestions.forEach(question => {
+          dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
+        });
+      }
+      dispatch(onQuestionsFilterApplied(questionsFilter));
+      dispatch({
+        type: PROPOSAL_ANSWER_LOADING,
+        payload: { questionId, loading: false }
+      });
+    } catch (err) {
+      console.log('error occurred ', err);
       dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err } });
     }
   };
@@ -305,12 +351,31 @@ export const getProposalUpdated = (id: string): ThunkAction<string, Object> => {
   };
 };
 
-export const updateProposalDetailFromWebSocket = (
+export const updateQuestionLockByUser = (data): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: QUESTION_LOCK_BY_USER,
+      payload: data
+    });
+  };
+};
+export const getQuestionLockDetailsAll = (
   data
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
-      type: PROPOSAL_DETAIL_UPDATE,
+      type: QUESTION_LOCK_DETAILS_ALL,
+      payload: data
+    });
+  };
+};
+
+export const updateQuestionUnlockByUser = (
+  data
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: QUESTION_UNLOCK_BY_USER,
       payload: data
     });
   };
@@ -968,4 +1033,33 @@ export const getProposalAnswerHistory = (
     const msg = getErrorMessage(error);
     return { status: false, title: DEFAULT.ALERT, msg };
   }
+};
+
+/**
+ * Get Price Modeler Data
+ */
+export const getPriceModelerData = proposalId => async () => {
+  try {
+    // Api Response
+    const response = await priceModelerApi(proposalId);
+    console.log('Price Modeler Api Response', response.data);
+    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
+  } catch (error) {
+    // Error
+    console.log(error?.response);
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
+  }
+};
+
+/**
+ * Set Flag for Event Launcher
+ */
+export const setEventLauncherFlag = val => {
+  return dispatch => {
+    dispatch({
+      type: SET_EVENT_LAUNCHER_FLAG,
+      payload: val
+    });
+  };
 };

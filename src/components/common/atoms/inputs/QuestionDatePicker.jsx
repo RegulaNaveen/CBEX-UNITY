@@ -62,7 +62,6 @@ const QuestionDatePicker = ({
           ];
           setInputValue(dte);
           if (dte && dateregx.test(dte)) {
-            console.log(dte);
             dte = String(dte).split('-');
             dte = `${yr.indexOf(dte[1]) + 1}/${dte[0]}/${dte[2]}`;
             handleDayChange(moment(dte).format(), value);

@@ -8,7 +8,11 @@ import {
   updateAnswerFromWebSocket,
   updateProposalDetailFromWebSocket,
   updateSwitchTempStatusFromWebSocket,
-  updateSwitchInProgress
+  updateSwitchInProgress,
+  updateQuestionLockByUser,
+  updateQuestionUnlockByUser,
+  getQuestionLockDetailsAll,
+  setProposalAnswerDatafromSocket
 } from '../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
@@ -45,7 +49,7 @@ const SocketContextProvider = props => {
   /**
    * Update socket's oppId when user switches Opportunity in the tool
    */
-  const sendUpdateConnection = (oppId, ws) => {
+  const sendUpdateConnection = (oppId, proposalId, ws) => {
     try {
       if (!ws) {
         ws = socket.current;
@@ -53,7 +57,10 @@ const SocketContextProvider = props => {
       ws.send(
         JSON.stringify({
           action: 'UPDATE_CONNECTION',
-          body: { oppId }
+          body: {
+            oppId,
+            proposalId: typeof proposalId === 'object' ? '' : proposalId
+          }
         })
       );
     } catch (error) {
@@ -73,6 +80,91 @@ const SocketContextProvider = props => {
         JSON.stringify({
           action: 'REFRESH',
           body: 'REFRESH'
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /**
+   *  Question Lock
+   */
+  const questionLock = (questionId, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'QUESTION',
+          body: { event: 'QUESTION_LOCK', data: { questionId } }
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  /**
+   *  Question answerUpdate
+   */
+  const questionAnswerUpdate = (questionId, answer, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'QUESTION',
+          body: {
+            event: 'QUESTION_ANSWER_UPDATE',
+            data: {
+              latestAnswer: answer,
+              questionId
+            }
+          }
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /**
+   *  Question unLock
+   */
+  const questionUnlock = (questionId, answer, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'QUESTION',
+          body: {
+            event: 'QUESTION_UNLOCK',
+            data: {
+              questionId
+            }
+          }
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  /**
+   *  Get ALL Question Lock Details
+   */
+  const questionLockDetails = ws => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'QUESTION',
+          body: { event: 'QUESTIONS' }
         })
       );
     } catch (error) {
@@ -120,7 +212,11 @@ const SocketContextProvider = props => {
         updateProposalNotes,
         updateSwitchTempStatus,
         setSwitchInProgress,
-        updateNotification
+        updateNotification,
+        updateQuestionLock,
+        updateQuestionUnlock,
+        getQuestionLockDetails,
+        setProposalAnswerDatafromSocket
       } = props;
 
       // On Message Recieve
@@ -153,6 +249,30 @@ const SocketContextProvider = props => {
             break;
           case 'IN_APP_NOTIFICATION_RECEIVED':
             updateNotification();
+            break;
+          case 'QUESTION_LOCK':
+            // Question locked by a user
+            updateQuestionLock(data);
+            break;
+          case 'QUESTION_UNLOCK':
+            // Question unlocked by a user
+
+            updateQuestionUnlock(data);
+
+            break;
+          case 'QUESTION_ANSWER_UPDATE':
+            // update question answer how it is done in action
+            if (data.data.latestAnswer) {
+              setProposalAnswerDatafromSocket(
+                data.data.questionId,
+                data.data.latestAnswer
+              );
+            }
+
+            break;
+          case 'QUESTIONS':
+            // Get list of questions already locked by other users
+            getQuestionLockDetails(data);
             break;
           default:
             break;
@@ -187,9 +307,25 @@ const SocketContextProvider = props => {
     }, 2000);
   };
 
-  const updateSocketOppId = oppId => {
+  const updateSocketOppId = (oppId, proposalId) => {
     currentOppNo.set(oppId);
-    waitForSocketConnection(() => sendUpdateConnection(oppId, null));
+    waitForSocketConnection(() =>
+      sendUpdateConnection(oppId, proposalId, null)
+    );
+  };
+  const questionLockWrapper = questionId => {
+    questionLock(questionId, null);
+  };
+  const questionUnlockWrapper = (questionId, answer) => {
+    questionUnlock(questionId, answer, null);
+  };
+
+  const questionAnswerUpdateWrapper = (questionId, answer) => {
+    questionAnswerUpdate(questionId, answer, null);
+  };
+
+  const questionLockDetailsWrapper = () => {
+    questionLockDetails(null);
   };
 
   const refreshSocketConnection = () => {
@@ -228,7 +364,11 @@ const SocketContextProvider = props => {
         initiateConnection,
         updateSocketOppId,
         disconnectSocket,
-        isSocketConnected
+        isSocketConnected,
+        questionLockWrapper,
+        questionUnlockWrapper,
+        questionLockDetailsWrapper,
+        questionAnswerUpdateWrapper
       }}
     >
       {props.children}
@@ -246,7 +386,11 @@ const mapDispatchToProps = {
   updateProposalNotes: updateProposalNotesFromWebSocket,
   updateSwitchTempStatus: updateSwitchTempStatusFromWebSocket,
   setSwitchInProgress: updateSwitchInProgress,
-  updateNotification: setNotification
+  updateNotification: setNotification,
+  updateQuestionLock: updateQuestionLockByUser,
+  updateQuestionUnlock: updateQuestionUnlockByUser,
+  getQuestionLockDetails: getQuestionLockDetailsAll,
+  setProposalAnswerDatafromSocket: setProposalAnswerDatafromSocket
 };
 
 export default connect(

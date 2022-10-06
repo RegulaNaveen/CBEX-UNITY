@@ -12,7 +12,6 @@ import TextAlign from '@tiptap/extension-text-align';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
 import Mention from '@tiptap/extension-mention';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import {
   getProposalDetails,
@@ -33,6 +32,8 @@ import {
 } from '../../../redux/actions/notepad-actions';
 import NotesSocketContext from '../../../context/notesSocketContext';
 import suggestion from './suggestion';
+import launchDarkly from '../../../utils/launchDarkly';
+import featureFlags from '../../../constants/featureFlags';
 
 const WysiwygNotepad = ({
   selectedBid,
@@ -43,25 +44,30 @@ const WysiwygNotepad = ({
   proposalDetails
 }) => {
   const notesSocket = useContext(NotesSocketContext);
-  const { notesUserTag } = useFlags();
-
   const dispatch = useDispatch();
   const [proposalIdState, setProposalIdState] = useState(
     selectedBid.get('id', '')
   );
+  const [notesUserTag, setNotesUserTag] = useState(false);
 
   const isNotesFetched = useSelector(selectIsNotesFetched);
   const usercolor = randomColor({ luminosity: 'light' });
 
   useEffect(() => {
+    const ldApiCall = async () => {
+      const notesUserTagValue = await launchDarkly(
+        featureFlags.NOTES_USER_TAG,
+        false
+      );
+      setNotesUserTag(notesUserTagValue);
+    };
+    ldApiCall();
     return () => {
-      console.log('WYSIWYG Unmount');
       dispatch(resetNotes());
     };
   }, []);
 
   useEffect(() => {
-    console.log('proposal id changed to ', selectedBid.get('id'));
     setProposalIdState(selectedBid.get('id'));
   }, [selectedBid]);
 
@@ -110,20 +116,20 @@ const WysiwygNotepad = ({
         // const Ejson = editor.getJSON();
       }
     },
-    [proposalIdState, notesSocket.wsInstance]
+    [proposalIdState, notesSocket.wsInstance, notesUserTag]
   );
   dispatch(setEditor(editor));
   return (
     <>
       {notesSocket.wsInstance && (
-        <div className='editor-notepad' key={proposalIdState}>
+        <div className="editor-notepad" key={proposalIdState}>
           <div>
             <MenuBar key={proposalIdState} editor={editor} />
           </div>
           <EditorContent
             key={proposalIdState}
             editor={editor}
-            className='editor-scroll'
+            className="editor-scroll"
           />
         </div>
       )}

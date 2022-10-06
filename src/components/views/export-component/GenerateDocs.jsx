@@ -41,7 +41,7 @@ const GenerateDocs = () => {
     milestones: [defaultOption],
     interestedParties: defaultOption,
     fileName: 'Unity Export',
-    fileType: docType.doc,
+    fileType: docType.pdf,
     milestoneOptions: []
   });
 
