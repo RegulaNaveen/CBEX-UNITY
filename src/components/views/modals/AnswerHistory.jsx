@@ -159,19 +159,19 @@ class AnswerHistory extends Component<Props> {
       const userInitials = getUserInitials(userName);
       const parsedDate = parseMomentDate(date);
       const avatarRandomColor = randomColor({ luminosity: 'dark' });
-
       const renderAnswers = () => {
         const isFirstItem = index === 0;
         const isLastItem = index === answers.toJS().length - 1;
         const isOnlyOneAnswer = answers.toJS().length === 1;
+
         if (isValidatedUnityPredictedAnswer) {
           return (
             <span key={uuidv4()}>
-              <b>{`${
-                userName === 'UnityPredictedAnswer'
-                  ? answers?.toJS()[0]?.answer
-                  : 'Validated Unity Predicted Answer'
-              }`}</b>
+              {userName === 'UnityPredictedAnswer' ? (
+                `${_answer.get('answer')}`
+              ) : (
+                <b>Validated Unity Predicted Answer</b>
+              )}
             </span>
           );
         }

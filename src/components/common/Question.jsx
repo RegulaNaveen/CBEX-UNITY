@@ -50,6 +50,12 @@ import AutoCompleteWithAddOption from '../views/modals/AutoCompleteWithAddOption
 import { SocketContext } from '../../context/SocketContext';
 import EventLauncher from '../screens/Opportunity/EventLauncher';
 import { parseStringifyJson } from '../../utils/helpers';
+import withIdleStateDetection from '../HOC/IdleStateDetector';
+
+const DropdownWithIdleStateDetection = withIdleStateDetection(Dropdown);
+const QuestionDatePickerWithIdleStateDetection = withIdleStateDetection(QuestionDatePicker);
+const MultiSelectWithIdleStateDetection = withIdleStateDetection(Multiselect);
+const AutoCompleteWithAddOptionWithIdleStateDetection = withIdleStateDetection(AutoCompleteWithAddOption);
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
 type State = {
@@ -136,6 +142,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       setAnswerLoading,
       deleteProposalUser
     } = this.props;
+    console.log('set proposal answer');
     setProposalAnswer(
       this.context,
       proposalId,
@@ -143,25 +150,25 @@ export class TaskRow extends React.PureComponent<Props, State> {
       textValue,
       userData
     ).then(() => {
-      const [deletedVal] = xor(
-        textValue?.trim() ? textValue?.trim().split(',') : [],
-        lastValue?.trim() ? lastValue?.trim().split(',') : []
-      );
-      const [deletedEmail] = String(deletedVal).match(
-        /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
-      );
-      if (reason === 'remove-option' && deletedEmail) {
-        setAnswerLoading(questionId, true);
-        const { sectionName, sectionOrder } = section.toJS();
-        deleteProposalUser(
-          proposalId,
-          deletedEmail,
-          sectionOrder,
-          sectionName
-        ).then(() => {
-          setAnswerLoading(questionId, false);
-        });
-      }
+      // const [deletedVal] = xor(
+      //   textValue?.trim() ? textValue?.trim().split(',') : [],
+      //   lastValue?.trim() ? lastValue?.trim().split(',') : []
+      // );
+      // const [deletedEmail] = String(deletedVal).match(
+      //   /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+      // );
+      // if (reason === 'remove-option' && deletedEmail) {
+      //   setAnswerLoading(questionId, true);
+      //   const { sectionName, sectionOrder } = section.toJS();
+      //   deleteProposalUser(
+      //     proposalId,
+      //     deletedEmail,
+      //     sectionOrder,
+      //     sectionName
+      //   ).then(() => {
+      //     setAnswerLoading(questionId, false);
+      //   });
+      // }
     });
     this.trackMatomoEventSubmitAnswer(textValue);
   };
@@ -648,7 +655,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <Dropdown
+            <DropdownWithIdleStateDetection
               id="dd-proposal-answer"
               placeholder={checkDisableFlag() ? '' : 'Click to answer'}
               items={optionsYN}
@@ -668,7 +675,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <Dropdown
+            <DropdownWithIdleStateDetection
               id="dd-proposal-answer"
               placeholder={checkDisableFlag() ? '' : 'Click to answer'}
               items={finalOptions}
@@ -688,13 +695,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <QuestionDatePicker
+            <QuestionDatePickerWithIdleStateDetection
               value={answerValue}
               resetDate={this.resetDate}
               handleDayChange={this.handleDayChange}
               onFocus={() => {
                 this.context.questionLockWrapper(this.props.questionId);
-
                 this.setSelectRow(true);
               }}
               onBlur={() => {
@@ -711,7 +717,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <Multiselect
+            <MultiSelectWithIdleStateDetection
               placeholder={checkDisableFlag() ? '' : 'Click to answer'}
               items={finalOptions}
               onClick={this.onSelectValues}
@@ -732,7 +738,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <AutoCompleteWithAddOption
+            <AutoCompleteWithAddOptionWithIdleStateDetection
               // sectionName={sectionName}
               sfObject={sfObject}
               lov={finalOptions}
@@ -758,7 +764,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <AutoCompleteWithAddOption
+            <AutoCompleteWithAddOptionWithIdleStateDetection
               sfObject={sfObject}
               lov={finalOptions}
               sfField={sfField}
@@ -767,6 +773,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 this.setSelectRow(true);
               }}
               onBlur={() => {
+                console.log('blur lookup')
                 this.context.questionUnlockWrapper(this.props.questionId);
                 this.setSelectRow(false);
               }}
@@ -1113,7 +1120,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
             handleVerifyPredictedAnsClick={this.handleVerifyPredictedAnsClick}
             hasDifferentSFanswer={hasDifferentSFanswer}
           />
-          <br />
           {/* Question Lock Info */}
           {/* {this.props.questionLockInfo &&
           this.props.questionLockInfo.get('userName') &&

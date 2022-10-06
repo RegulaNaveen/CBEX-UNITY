@@ -15,7 +15,10 @@ type Props = {
   selectedValue: mixed,
   error?: mixed,
   disabled?: boolean,
-  lockQuestionOnFocus?: boolean
+  lockQuestionOnFocus?: boolean,
+  toggleWatch?: Function,
+  onCascadeChange?: Function,
+  forceBlur?: boolean
 };
 
 type State = {
@@ -80,6 +83,10 @@ class Dropdown extends PureComponent<Props, State> {
         focusedValue: this.props.value
       });
     }
+
+    if (this.props.forceBlur) {
+     this.ref.current && this.ref.current.blur();
+    }
   }
 
   componentWillUnmount() {
@@ -110,6 +117,7 @@ class Dropdown extends PureComponent<Props, State> {
   };
 
   handleClick = (event: SyntheticEvent<EventTarget>, value: string) => {
+    console.log('val', value)
     event.stopPropagation();
     const { onClick, lockedBySelf } = this.props;
     onClick(value);
@@ -133,15 +141,27 @@ class Dropdown extends PureComponent<Props, State> {
     this.setState({ isFocused: true });
     this.props.setSelectRow(true);
     if (this.props.lockQuestionOnFocus && !this.props.lockedBySelf) {
+      if (this.props.toggleWatch) {
+        this.props.toggleWatch(true);
+      }
       this.context?.questionLockWrapper(this.props.questionId);
     }
   };
 
   handleFocusOut = event => {
-    // call to unlock question
-    this.context.questionUnlockWrapper(this.props.questionId);
-    this.setState({ isFocused: false });
-    this.props.setSelectRow(false);
+    event.preventDefault();
+    event.stopPropagation();
+    setTimeout(() => {
+      this.setState({ isFocused: false, isCollapsed: true });
+      this.props.setSelectRow(false);
+      if (this.props.lockedBySelf) {
+        // call to unlock question
+          this.context.questionUnlockWrapper(this.props.questionId);
+      }
+      if (this.props.toggleWatch) {
+        this.props.toggleWatch(false);
+      }
+    }, 500);
   };
 
   handleDownArrowPress = () => {
@@ -256,7 +276,7 @@ class Dropdown extends PureComponent<Props, State> {
                 if (!disabled) this.handleCollapse();
                 return;
               }}
-              onBlur={this.props.onBlur}
+              // onBlur={this.props.onBlur}
             >
               {selectedValue || value ? (
                 <p className="dd-header-selected">{selectedValue || value}</p>

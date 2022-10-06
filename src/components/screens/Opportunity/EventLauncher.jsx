@@ -28,7 +28,9 @@ const EventLauncher = ({
 }) => {
   const quesData = questionData?.toJS();
   const hasEvent = quesData?.events && !isEmpty(quesData?.events);
-  const eventStartDate = quesData?.answers[0]?.answer;
+  const eventStartDate = !isEmpty(quesData?.answers)
+    ? [...quesData?.answers].pop()?.answer
+    : null;
   const userData = useSelector(getUserData);
   const eventFlag = useSelector(state =>
     state.proposal.get('eventLauncherFlag')
@@ -36,6 +38,8 @@ const EventLauncher = ({
 
   // Component will return null if no event found
   if (!hasEvent || !eventFlag) return null;
+
+  console.log({ quesData });
 
   // Get proposalQuestions - Redux State
   const proposalQuestions = useSelector(selectProposalQuestions);
@@ -208,9 +212,7 @@ const EventLauncher = ({
         <span>
           <IconButton
             className="event-launcher__tooltip-btn"
-            disabled={
-              isEmpty(quesData?.answers) || !checkDateAge(eventStartDate)
-            }
+            disabled={isEmpty(eventStartDate) || !checkDateAge(eventStartDate)}
             onClick={() => setOpenModal(true)}
           >
             <CalendarEvent />
