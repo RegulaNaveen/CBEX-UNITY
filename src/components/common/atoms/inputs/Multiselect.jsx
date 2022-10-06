@@ -16,7 +16,7 @@ type Props = {
   disabled: boolean,
   lockQuestionOnFocus?: boolean,
   toggleWatch?: Function,
-  onChange?: Function,
+  onCascadeChange?: Function,
   forceBlur?: boolean
 };
 
@@ -87,7 +87,6 @@ class Multiselect extends PureComponent<Props, State> {
       }
       if (this.props.toggleWatch) this.props.toggleWatch(false);
       if (this.props.lockedBySelf) {
-        if (!this.state.isOpen && !this.state.isFocused)
         this.context?.questionUnlockWrapper(this.props.questionId);
       }
     }
@@ -278,18 +277,18 @@ class Multiselect extends PureComponent<Props, State> {
     if (!isOpen) return;
 
     if (event.code === 'ArrowDown') {
-      if (this.props.onChange) this.props.onChange();
+      if (this.props.onCascadeChange) this.props.onCascadeChange();
       this.handleDownArrowPress();
       return;
     }
 
     if (event.code === 'ArrowUp') {
-      if (this.props.onChange) this.props.onChange();
+      if (this.props.onCascadeChange) this.props.onCascadeChange();
       this.handleUpArrowPress();
     }
 
     if (event.code === 'Space') {
-      if (this.props.onChange) this.props.onChange();
+      if (this.props.onCascadeChange) this.props.onCascadeChange();
       this.handleOptionSelect();
     }
   };

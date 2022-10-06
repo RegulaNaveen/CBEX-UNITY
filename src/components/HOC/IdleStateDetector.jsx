@@ -43,7 +43,6 @@ export default function withIdleStateDetection(Component) {
         addWatcher() {
             const { questionId } = this.props;
             return setTimeout(() => {
-                this.context?.questionUnlockWrapper(questionId);
                 this.setState({ forceBlur: true });
             }, QUESTION_UNLOCK_TIMEOUT);
         }
@@ -65,7 +64,7 @@ export default function withIdleStateDetection(Component) {
             return (
                 <Component
                     toggleWatch={this.handleToggleWatch}
-                    onChange={this.handleChange}
+                    onCascadeChange={this.handleChange}
                     forceBlur={this.state.forceBlur}
                     {...this.props}
                 />
