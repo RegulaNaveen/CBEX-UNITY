@@ -141,11 +141,13 @@ const SystemIntegrations = ({
         <Tooltip
           variant="light"
           title={
-            <div
-              dangerouslySetInnerHTML={{
-                __html: `<p><b>Destination</b><br>Qvidian</p>`
-              }}
-            />
+            integrationmatch ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: `<p><b>Destination</b><br>Qvidian</p>`
+                }}
+              />
+            ) : null
           }
           placement="top"
           tabIndex={-1}
@@ -187,11 +189,13 @@ const SystemIntegrations = ({
         <Tooltip
           variant="light"
           title={
-            <div
-              dangerouslySetInnerHTML={{
-                __html: `<p><b>Destination</b><br>Qvidian</p>`
-              }}
-            />
+            integrationmatch ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: `<p><b>Destination</b><br>Qvidian</p>`
+                }}
+              />
+            ) : null
           }
           placement="top"
           tabIndex={-1}
@@ -233,6 +237,7 @@ const SystemIntegrations = ({
     if (
       isAnswerPredicted &&
       !loading &&
+      !isEmpty(lastAnswer?.get('answer')) &&
       !isAnswered(lastAnswer, isAnswerPredicted)
     ) {
       return (
