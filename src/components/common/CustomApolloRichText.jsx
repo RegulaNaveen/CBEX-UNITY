@@ -7,6 +7,7 @@ import isEqual from 'lodash/isEqual';
 import { v4 as uuid } from 'uuid';
 import classNames from 'classnames';
 import useUpdateEffect from '../../hooks/useUpdateEffect';
+import { QUESTION_UNLOCK_TIMEOUT } from '../../constants/app';
 
 const CustomApolloRichText = ({
   questionId,
@@ -79,7 +80,7 @@ const CustomApolloRichText = ({
       const timer = setTimeout(() => {
         setIsRichTextEditable(false);
         if (onBlur) onBlur(richTextData);
-      }, 10000);
+      }, QUESTION_UNLOCK_TIMEOUT);
       setUnlockTimeout(timer);
     }
   };

@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import _ from 'lodash';
 import removeSpecialChars from '../../../../utils/pasteUtils';
+import { QUESTION_UNLOCK_TIMEOUT } from '../../../../constants/app';
 
 type Props = {
   id?: string,
@@ -145,7 +146,7 @@ class TextArea extends PureComponent<Props, State> {
       const timer = setTimeout(() => {
         // write unlock logic here
         this.numberInput.current.blur();
-      }, 10000);
+      }, QUESTION_UNLOCK_TIMEOUT);
       this.setState({ unlockTimeout: timer });
     }
   };
