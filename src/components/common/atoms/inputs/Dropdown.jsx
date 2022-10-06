@@ -15,7 +15,10 @@ type Props = {
   selectedValue: mixed,
   error?: mixed,
   disabled?: boolean,
-  lockQuestionOnFocus?: boolean
+  lockQuestionOnFocus?: boolean,
+  toggleWatch?: Function,
+  onChange?: Function,
+  forceBlur?: boolean
 };
 
 type State = {
@@ -80,6 +83,10 @@ class Dropdown extends PureComponent<Props, State> {
         focusedValue: this.props.value
       });
     }
+
+    if (this.props.forceBlur) {
+      this.handleFocusOut();
+    }
   }
 
   componentWillUnmount() {
@@ -133,6 +140,9 @@ class Dropdown extends PureComponent<Props, State> {
     this.setState({ isFocused: true });
     this.props.setSelectRow(true);
     if (this.props.lockQuestionOnFocus && !this.props.lockedBySelf) {
+      if (this.props.toggleWatch) {
+        this.props.toggleWatch(true);
+      }
       this.context?.questionLockWrapper(this.props.questionId);
     }
   };
@@ -140,8 +150,11 @@ class Dropdown extends PureComponent<Props, State> {
   handleFocusOut = event => {
     // call to unlock question
     this.context.questionUnlockWrapper(this.props.questionId);
-    this.setState({ isFocused: false });
+    this.setState({ isFocused: false, isCollapsed: true });
     this.props.setSelectRow(false);
+    if (this.props.toggleWatch) {
+      this.props.toggleWatch(false);
+    }
   };
 
   handleDownArrowPress = () => {

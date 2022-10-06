@@ -14,7 +14,10 @@ type Props = {
   value?: Array<string>,
   error?: mixed,
   disabled: boolean,
-  lockQuestionOnFocus?: boolean
+  lockQuestionOnFocus?: boolean,
+  toggleWatch?: Function,
+  onChange?: Function,
+  forceBlur?: boolean
 };
 
 type State = {
@@ -65,7 +68,7 @@ class Multiselect extends PureComponent<Props, State> {
 
   componentDidUpdate(prevProps: Object, prevState: Object) {
     const { isOpen, selectedValues } = this.state;
-    const { onClick, value: lastAnswer } = this.props;
+    const { onClick, value: lastAnswer, forceBlur } = this.props;
     const { value: prevlastAnswer } = prevProps;
 
     if (!isEqual(prevlastAnswer, lastAnswer)) {
@@ -74,6 +77,19 @@ class Multiselect extends PureComponent<Props, State> {
 
     if (prevState.isOpen !== isOpen) {
       if (!isOpen) onClick(selectedValues, lastAnswer || []);
+    }
+
+    if (forceBlur === true) {
+      if (isOpen) {
+        this.setState({ selectedValues: lastAnswer, isOpen: false }, () => {
+          this.props.setSelectRow(false);
+        });
+      }
+      if (this.props.toggleWatch) this.props.toggleWatch(false);
+      if (this.props.lockedBySelf) {
+        if (!this.state.isOpen && !this.state.isFocused)
+        this.context?.questionUnlockWrapper(this.props.questionId);
+      }
     }
   }
 
@@ -90,6 +106,7 @@ class Multiselect extends PureComponent<Props, State> {
     if (this.ref.current !== event.target) {
       if (setSelectRow) {
         this.setState({ isOpen: false }, () => {
+          if (this.props.toggleWatch) this.props.toggleWatch(false);
           this.props.setSelectRow(false);
 
           if (lockedBySelf) {
@@ -160,6 +177,7 @@ class Multiselect extends PureComponent<Props, State> {
 
   handleFocusOut = event => {
     this.setState({ isFocused: false });
+    if (this.props.setSelectRow) this.props.setSelectRow(false);
   };
 
   handleDownArrowPress = () => {
@@ -219,7 +237,15 @@ class Multiselect extends PureComponent<Props, State> {
     }
 
     if (event.code === 'Escape' || event.code === 'Tab') {
-      this.setState({ isOpen: false });
+      this.setState({ isOpen: false }, () => {
+        if (this.props.toggleWatch) {
+          this.props.toggleWatch(false);
+        }
+        if (this.props.lockedBySelf) {
+          if (!this.state.isOpen && !this.state.isFocused) {}
+            this.context?.questionUnlockWrapper(this.props.questionId);
+        }
+      });
       return;
     }
 
@@ -229,8 +255,22 @@ class Multiselect extends PureComponent<Props, State> {
           isOpen: true,
           focusedValue: items.size > 0 ? items.get(0) : ''
         });
+        if (this.props.lockQuestionOnFocus && !this.props.lockedBySelf) {
+          if (this.props.toggleWatch) {
+            this.props.toggleWatch(true);
+          }
+          this.context?.questionLockWrapper(this.props.questionId);
+        }
       } else {
-        this.setState({ isOpen: false });
+        this.setState({ isOpen: false }, () => {
+          if (this.props.toggleWatch) {
+            this.props.toggleWatch(false);
+          }
+          if (this.props.lockedBySelf) {
+            if (!this.state.isOpen && !this.state.isFocused) {}
+              this.context?.questionUnlockWrapper(this.props.questionId);
+          }
+        });
       }
       return;
     }
@@ -238,15 +278,18 @@ class Multiselect extends PureComponent<Props, State> {
     if (!isOpen) return;
 
     if (event.code === 'ArrowDown') {
+      if (this.props.onChange) this.props.onChange();
       this.handleDownArrowPress();
       return;
     }
 
     if (event.code === 'ArrowUp') {
+      if (this.props.onChange) this.props.onChange();
       this.handleUpArrowPress();
     }
 
     if (event.code === 'Space') {
+      if (this.props.onChange) this.props.onChange();
       this.handleOptionSelect();
     }
   };
@@ -278,6 +321,7 @@ class Multiselect extends PureComponent<Props, State> {
             }
             role="presentation"
             onClick={() => {
+              if (this.props.toggleWatch) this.props.toggleWatch(true);
               if (this.props.lockQuestionOnFocus && !this.props.lockedBySelf)
                 this.context?.questionLockWrapper(this.props.questionId);
 
