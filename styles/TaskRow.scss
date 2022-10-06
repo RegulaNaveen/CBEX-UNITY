@@ -277,6 +277,17 @@
     }
   }
 
+  .question-title-grid {
+    .question-grid-item {
+      .status-txt {
+        color: $neptune-primary;
+        font-weight: 500;
+        font-size: 12px;
+        font-style: italic;
+      }
+    }
+  }
+
   .question-label-container {
     display: flex;
     justify-content: space-between;

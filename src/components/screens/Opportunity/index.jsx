@@ -114,7 +114,8 @@ export class Opportunity extends Component<Props, State> {
       eventCategories,
       location: { search },
       match: { params },
-      setSeenOne
+      setSeenOne,
+      selectedBid
     } = this.props;
     const winLocationSearch = window.location.search;
     const queryparams = new URLSearchParams(winLocationSearch);
@@ -131,13 +132,14 @@ export class Opportunity extends Component<Props, State> {
 
     getOpportunityInfo(params.id);
 
+    const proposalId = selectedBid.get('id', '');
     if (
       (this.props && this.props?.location && this.props.location?.pathname) !==
       UBUILD
     ) {
       if (this.props.location?.pathname !== DASHBOARD)
-        this.context.updateSocketOppId(params.id);
-      else this.context.updateSocketOppId(null);
+        this.context.updateSocketOppId(params.id, proposalId);
+      else this.context.updateSocketOppId(null, null);
     }
 
     window.addEventListener('storage', e => this.handleStorageChange(e));
@@ -185,7 +187,7 @@ export class Opportunity extends Component<Props, State> {
           this.props?.location &&
           this.props.location?.pathname) !== UBUILD
       ) {
-        this.context.updateSocketOppId(params.id);
+        this.context.updateSocketOppId(params.id, thisProposalId);
       }
     }
     // Bid level redirection
@@ -225,7 +227,7 @@ export class Opportunity extends Component<Props, State> {
     localStorage.removeItem('proposalId');
 
     window.removeEventListener('storage', this.handleStorageChange);
-    this.context.updateSocketOppId(null);
+    this.context.updateSocketOppId(null, null);
     this.state.wsInstance?.destroy();
   }
 
@@ -274,7 +276,6 @@ export class Opportunity extends Component<Props, State> {
   };
 
   createNewNotesSocketConnection = proposalId => {
-    // console.log('creating new connection');
     const { ydoc } = this.state;
     const storedValue = `doc-${proposalId}`;
     if (proposalId) {
