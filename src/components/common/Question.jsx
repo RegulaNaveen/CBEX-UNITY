@@ -1113,7 +1113,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
             handleVerifyPredictedAnsClick={this.handleVerifyPredictedAnsClick}
             hasDifferentSFanswer={hasDifferentSFanswer}
           />
-          <br />
           {/* Question Lock Info */}
           {/* {this.props.questionLockInfo &&
           this.props.questionLockInfo.get('userName') &&
