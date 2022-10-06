@@ -24,7 +24,7 @@ const AutoCompleteWithAddOption = ({
   multiple,
   loading,
   toggleWatch,
-  onChange: cascadeChange,
+  onCascadeChange,
   forceBlur
 }) => {
   const getSFOptions = (sfObj, sfFld) =>
@@ -95,7 +95,7 @@ const AutoCompleteWithAddOption = ({
 
     setSelectedVal(modifiedAnswer);
     onChange(modifiedAnswer);
-    if (cascadeChange) cascadeChange();
+    if (onCascadeChange) onCascadeChange();
   };
 
   /**
@@ -139,6 +139,7 @@ const AutoCompleteWithAddOption = ({
    * onChange Autocomplete Input Text
    */
   const onTextChange = event => {
+    if (onCascadeChange) onCascadeChange();
     if (event.currentTarget.value) {
       setClearable(false);
       return;
@@ -158,8 +159,13 @@ const AutoCompleteWithAddOption = ({
 
   useEffect(() => {
     if (forceBlur === true) {
-      handleBlur();
-      if (autoCompleteRef.current) autoCompleteRef.current.blur()
+      if (autoCompleteRef.current) {
+        console.log(autoCompleteRef.current);
+        autoCompleteRef.current.blur();
+        setTimeout(() => {
+          autoCompleteRef.current.value="";
+        }, 100);
+      }
     }
   }, [forceBlur]);
 
