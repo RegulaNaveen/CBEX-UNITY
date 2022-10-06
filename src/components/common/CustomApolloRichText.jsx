@@ -57,11 +57,25 @@ const CustomApolloRichText = ({
   const richTextContainerRef = useRef(null);
   const richTextEditorRef = useRef(null);
   const richTextKey = useRef(uuid());
+  const [questionTimer, setQuestionTimer] = useState(null);
+
   /**
    * Function to Add Delay for Specific Seconds
    */
   const timeout = ms => {
     return new Promise(resolve => setTimeout(resolve, ms));
+  };
+
+  const resetUnlockTimer = (clear = false) => {
+    clearTimeout(questionTimer);
+    if (clear) {
+      setQuestionTimer(null);
+    } else {
+      const timer = setTimeout(() => {
+        setIsRichTextEditable(false);
+      }, 10000);
+      setQuestionTimer(timer);
+    }
   };
 
   /**
@@ -167,6 +181,8 @@ const CustomApolloRichText = ({
     if (clientHeight <= 230) setRefElementStyle(richTextContainerRef, 230, 230);
 
     if (onChange) onChange(resultObj); // onChange callback func
+
+    resetUnlockTimer();
   };
 
   /**
@@ -182,6 +198,7 @@ const CustomApolloRichText = ({
     ) {
       setIsRichTextEditable(false);
       if (onBlur) onBlur(richTextData);
+      resetUnlockTimer(true);
     }
   };
 
