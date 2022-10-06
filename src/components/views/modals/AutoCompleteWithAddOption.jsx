@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
 import isEmpty from 'lodash/isEmpty';
@@ -22,7 +22,10 @@ const AutoCompleteWithAddOption = ({
   onFocus,
   onBlur,
   multiple,
-  loading
+  loading,
+  toggleWatch,
+  onChange: cascadeChange,
+  forceBlur
 }) => {
   const getSFOptions = (sfObj, sfFld) =>
     options[`SF#${sfObj}_SF#${sfFld}`]
@@ -52,6 +55,8 @@ const AutoCompleteWithAddOption = ({
   const [selectedVal, setSelectedVal] = useState(getAnswer());
   const [currentLov, setCurrentLov] = useState(getOptions());
   const [clearable, setClearable] = useState(true);
+
+  const autoCompleteRef = useRef(null);
 
   const addAnswerPicklist = arr => {
     return arr.map(item =>
@@ -90,6 +95,7 @@ const AutoCompleteWithAddOption = ({
 
     setSelectedVal(modifiedAnswer);
     onChange(modifiedAnswer);
+    if (cascadeChange) cascadeChange();
   };
 
   /**
@@ -140,6 +146,23 @@ const AutoCompleteWithAddOption = ({
     setClearable(true);
   };
 
+  const handleFocus = useCallback(() => {
+    if (toggleWatch) toggleWatch(true);
+    onFocus()
+  }, []);
+
+  const handleBlur = useCallback(() => {
+    if (toggleWatch) toggleWatch(false);
+    onBlur();
+  }, []);
+
+  useEffect(() => {
+    if (forceBlur === true) {
+      handleBlur();
+      if (autoCompleteRef.current) autoCompleteRef.current.blur()
+    }
+  }, [forceBlur]);
+
   return (
     <div className="auto-complete-with-add-option">
       <Autocomplete
@@ -157,8 +180,8 @@ const AutoCompleteWithAddOption = ({
         }}
         size="small"
         disableClearable={clearable}
-        onBlur={onBlur}
-        onFocus={onFocus}
+        onBlur={handleBlur}
+        onFocus={handleFocus}
         openOnFocus
         disabled={disabled}
         style={{ resize: 'vertical' }}
@@ -174,6 +197,7 @@ const AutoCompleteWithAddOption = ({
               placeholder={placeholder}
               {...params}
               variant="outlined"
+              inputRef={autoCompleteRef}
             />
           );
         }}

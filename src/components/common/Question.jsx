@@ -50,6 +50,12 @@ import AutoCompleteWithAddOption from '../views/modals/AutoCompleteWithAddOption
 import { SocketContext } from '../../context/SocketContext';
 import EventLauncher from '../screens/Opportunity/EventLauncher';
 import { parseStringifyJson } from '../../utils/helpers';
+import withIdleStateDetection from '../HOC/IdleStateDetector';
+
+const DropdownWithIdleStateDetection = withIdleStateDetection(Dropdown);
+const QuestionDatePickerWithIdleStateDetection = withIdleStateDetection(QuestionDatePicker);
+const MultiSelectWithIdleStateDetection = withIdleStateDetection(Multiselect);
+const AutoCompleteWithAddOptionWithIdleStateDetection = withIdleStateDetection(AutoCompleteWithAddOption);
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
 type State = {
@@ -648,7 +654,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <Dropdown
+            <DropdownWithIdleStateDetection
               id="dd-proposal-answer"
               placeholder={checkDisableFlag() ? '' : 'Click to answer'}
               items={optionsYN}
@@ -668,7 +674,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <Dropdown
+            <DropdownWithIdleStateDetection
               id="dd-proposal-answer"
               placeholder={checkDisableFlag() ? '' : 'Click to answer'}
               items={finalOptions}
@@ -688,7 +694,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <QuestionDatePicker
+            <QuestionDatePickerWithIdleStateDetection
               value={answerValue}
               resetDate={this.resetDate}
               handleDayChange={this.handleDayChange}
@@ -711,7 +717,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <Multiselect
+            <MultiSelectWithIdleStateDetection
               placeholder={checkDisableFlag() ? '' : 'Click to answer'}
               items={finalOptions}
               onClick={this.onSelectValues}
@@ -732,7 +738,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <AutoCompleteWithAddOption
+            <AutoCompleteWithAddOptionWithIdleStateDetection
               // sectionName={sectionName}
               sfObject={sfObject}
               lov={finalOptions}
@@ -758,7 +764,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <AutoCompleteWithAddOption
+            <AutoCompleteWithAddOptionWithIdleStateDetection
               sfObject={sfObject}
               lov={finalOptions}
               sfField={sfField}
