@@ -150,7 +150,8 @@ const SystemIntegrations = ({
               <p>
                 <b>Destinations</b>
                 <br />
-                Qvidian, Price Modeler
+                Qvidian
+                <br /> Price Modeler
               </p>
             ) : priceModelerIntegration ? (
               <p>
@@ -192,7 +193,8 @@ const SystemIntegrations = ({
               <p>
                 <b>Destination</b>
                 <br />
-                Qvidian, Price Modeler
+                Qvidian
+                <br /> Price Modeler
               </p>
             ) : priceModelerIntegration ? (
               <p>
