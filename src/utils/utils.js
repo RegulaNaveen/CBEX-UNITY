@@ -28,6 +28,26 @@ function getCountryOptions() {
   return Object.values(CountryMap);
 }
 
+/**
+ * @returns {string[]}
+ */
+function updateEventSubjectBody(str, data) {
+  const obj = {
+    '[opportunity_number]' : data['CRM #'],
+    '[line_of_business]': data['Line of business'],
+    '[customer]':data['Customer'],
+    '[product_name]':data['Product name'],
+    '[therapeutic_area]':data['Therapeutic area'],
+    '[protocol_number]':data['Protocol number'],
+    '[bid_no]':data['bidNo'],
+  }
+   for (const key in obj) {
+     if(str.includes(key)){
+       str  = str.replaceAll(key, obj[key]);
+     }
+   }
+   return str;
+}
 function isUserUbuildAdmin() {
   if (!localStorage.getItem('id_token')) return false;
 
@@ -181,5 +201,6 @@ export {
   getUserInitials,
   getUserName,
   getProposalIdlist,
-  checkNonEditableFields
+  checkNonEditableFields,
+  updateEventSubjectBody
 };
