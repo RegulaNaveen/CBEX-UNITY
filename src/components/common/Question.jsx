@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 // @flow
 /* eslint-disable no-plusplus */
 import React from 'react';
@@ -54,9 +56,13 @@ import { parseStringifyJson } from '../../utils/helpers';
 import withIdleStateDetection from '../HOC/IdleStateDetector';
 
 const DropdownWithIdleStateDetection = withIdleStateDetection(Dropdown);
-const QuestionDatePickerWithIdleStateDetection = withIdleStateDetection(QuestionDatePicker);
+const QuestionDatePickerWithIdleStateDetection = withIdleStateDetection(
+  QuestionDatePicker
+);
 const MultiSelectWithIdleStateDetection = withIdleStateDetection(Multiselect);
-const AutoCompleteWithAddOptionWithIdleStateDetection = withIdleStateDetection(AutoCompleteWithAddOption);
+const AutoCompleteWithAddOptionWithIdleStateDetection = withIdleStateDetection(
+  AutoCompleteWithAddOption
+);
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
 type State = {
@@ -774,7 +780,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 this.setSelectRow(true);
               }}
               onBlur={() => {
-                console.log('blur lookup')
+                console.log('blur lookup');
                 this.context.questionUnlockWrapper(this.props.questionId);
                 this.setSelectRow(false);
               }}

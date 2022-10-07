@@ -95,7 +95,7 @@ const SystemIntegrations = ({
           title={
             sficon !== 'n/a' ? (
               <p>
-                <b>Source</b>
+                <b>Source </b>
                 <br />
                 CRM
               </p>
