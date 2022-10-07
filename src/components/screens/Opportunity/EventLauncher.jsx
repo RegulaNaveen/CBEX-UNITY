@@ -14,6 +14,7 @@ import { DEFAULT, PROPOSAL } from '../../../constants/app';
 import { extractEmails, parseStringifyJson } from '../../../utils/helpers';
 import { selectProposalQuestions } from '../../../redux/selectors/proposal';
 import { getUserData } from '../../../redux/selectors';
+import { updateEventSubjectBody } from '../../../utils/utils';
 
 const modalStyle = { maxWidth: 545, width: '100%' };
 const attendees = [
@@ -98,8 +99,11 @@ const EventLauncher = ({
    * Generate Event Url Function
    */
   const generateEventUrl = (startDate, endDate, body, subject, email) => {
-    const bodyStr = encodeURIComponent(body);
-    const subjectStr = encodeURIComponent(subject);
+    const updatedbody = updateEventSubjectBody(body, proposalDetail);
+    const updatedsubject = updateEventSubjectBody(subject, proposalDetail);
+    
+    const bodyStr = encodeURIComponent(updatedbody);
+    const subjectStr = encodeURIComponent(updatedsubject);
     return `https://outlook.office.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose%20&rru=addevent&startdt=${startDate}&enddt=${endDate}&body=${bodyStr}&.&subject=${subjectStr}&to=${email}&online=1`;
   };
 
