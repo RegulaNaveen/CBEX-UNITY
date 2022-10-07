@@ -7,6 +7,7 @@ import isEqual from 'lodash/isEqual';
 import { v4 as uuid } from 'uuid';
 import classNames from 'classnames';
 import useUpdateEffect from '../../hooks/useUpdateEffect';
+import { QUESTION_UNLOCK_TIMEOUT } from '../../constants/app';
 
 const CustomApolloRichText = ({
   questionId,
@@ -57,11 +58,31 @@ const CustomApolloRichText = ({
   const richTextContainerRef = useRef(null);
   const richTextEditorRef = useRef(null);
   const richTextKey = useRef(uuid());
+  const [unlockTimeout, setUnlockTimeout] = useState(null);
+
   /**
    * Function to Add Delay for Specific Seconds
    */
   const timeout = ms => {
     return new Promise(resolve => setTimeout(resolve, ms));
+  };
+
+  /**
+   *
+   * @param {*} clear to remove the timer
+   * function to set timer for auto unlock and auto save
+   */
+  const resetUnlockTimer = (clear = false) => {
+    clearTimeout(unlockTimeout);
+    if (clear) {
+      setUnlockTimeout(null);
+    } else {
+      const timer = setTimeout(() => {
+        setIsRichTextEditable(false);
+        if (onBlur) onBlur(richTextData);
+      }, QUESTION_UNLOCK_TIMEOUT);
+      setUnlockTimeout(timer);
+    }
   };
 
   /**
@@ -142,6 +163,7 @@ const CustomApolloRichText = ({
     if (enableFocus) {
       setFocusOnEditor();
       onFocus();
+      resetUnlockTimer();
     }
   };
   /**
@@ -167,6 +189,8 @@ const CustomApolloRichText = ({
     if (clientHeight <= 230) setRefElementStyle(richTextContainerRef, 230, 230);
 
     if (onChange) onChange(resultObj); // onChange callback func
+
+    resetUnlockTimer();
   };
 
   /**
@@ -182,6 +206,7 @@ const CustomApolloRichText = ({
     ) {
       setIsRichTextEditable(false);
       if (onBlur) onBlur(richTextData);
+      resetUnlockTimer(true);
     }
   };
 

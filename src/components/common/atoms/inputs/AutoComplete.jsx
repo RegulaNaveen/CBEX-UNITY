@@ -4,6 +4,8 @@ import AutocompleteV2 from 'apollo-react/components/AutocompleteV2';
 import { isEmpty } from 'lodash';
 import { API } from '../../../../constants';
 import { getAccessTokenFromLocalStorage as getAccessToken } from '../../../../SessionHandler';
+import { QUESTION_UNLOCK_TIMEOUT } from '../../../../constants/app';
+
 const { USER_API_URL, API_KEY } = API.PROPOSAL;
 const Autocomplete = props => {
   const [options, setOptions] = useState([]);
@@ -11,6 +13,8 @@ const Autocomplete = props => {
   const [callAccept, setCallAccept] = useState(false);
   const [inputVal, setInputVal] = useState('');
   const [getNoOptionsText, setNoOptionsText] = useState(1);
+  const autocompleteRef = useRef();
+  const [unlockTimeout, setUnlockTimeout] = useState(null);
   const text = String(props?.text)
     .trimStart()
     .trimEnd();
@@ -39,6 +43,24 @@ const Autocomplete = props => {
     );
     return result ? (result.length ? result[0] : '') : '';
   }
+  /**
+   *
+   * @param {*} clear to remove the timer
+   * function to set timer for auto unlock and auto save
+   */
+  const resetUnlockTimer = (clear = false) => {
+    clearTimeout(unlockTimeout);
+    if (clear) {
+      setUnlockTimeout(null);
+    } else {
+      const timer = setTimeout(() => {
+        const inputElem = autocompleteRef.current.getElementsByTagName('input');
+        if (inputElem.length > 0) inputElem[0].blur();
+      }, QUESTION_UNLOCK_TIMEOUT);
+      setUnlockTimeout(timer);
+    }
+  };
+
   /**
    * Extracts name from the string format: `Firstname Lastname(name@example.com)`
    */
@@ -99,8 +121,10 @@ const Autocomplete = props => {
     });
     if (proposaluser.length === 0) props.onChange(' ', text, reason);
     else props.onChange(proposaluser.join(','), text, reason);
+    resetUnlockTimer(true);
   };
   const onInputChange = (event, value) => {
+    resetUnlockTimer();
     setInputVal(value);
     const elem = document.querySelectorAll('.a-MuiAutocomplete-popper').item(0);
     if (value) {
@@ -118,7 +142,9 @@ const Autocomplete = props => {
   const timeout = ms => {
     return new Promise(resolve => setTimeout(resolve, ms));
   };
+
   const onInputFocus = async () => {
+    resetUnlockTimer();
     props.onFocus();
     // await timeout(500);
     const elem = document.querySelectorAll('.a-MuiAutocomplete-popper').item(0);
@@ -128,6 +154,7 @@ const Autocomplete = props => {
   return (
     <div className={`${disabled ? 'autocomplete-disabled' : 'autocomplete'}`}>
       <AutocompleteV2
+        ref={autocompleteRef}
         fullWidth
         multiple
         options={options || []}
@@ -143,7 +170,10 @@ const Autocomplete = props => {
           getNoOptionsText === 0 ? 'No Matches Found' : 'Loading...'
         }
         onFocus={onInputFocus}
-        onBlur={e => props.onBlur()}
+        onBlur={e => {
+          props.onBlur();
+          resetUnlockTimer(true);
+        }}
         disabled={disabled || false}
       />
     </div>

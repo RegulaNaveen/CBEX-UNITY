@@ -51,5 +51,6 @@ const PROFILE = {
 };
 
 const REFRESH_WEBSOCKET_CONNECTION = 60000; // 1 minute
+export const QUESTION_UNLOCK_TIMEOUT = 90 * 1000; // 90 seconds (1.5minutes)
 
 export { DEFAULT, PROPOSAL, REFRESH_WEBSOCKET_CONNECTION, PROFILE };
