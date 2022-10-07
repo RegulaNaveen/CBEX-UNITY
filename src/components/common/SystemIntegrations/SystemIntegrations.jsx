@@ -233,6 +233,7 @@ const SystemIntegrations = ({
     if (
       isAnswerPredicted &&
       !loading &&
+      !isEmpty(lastAnswer?.get('answer')) &&
       !isAnswered(lastAnswer, isAnswerPredicted)
     ) {
       return (

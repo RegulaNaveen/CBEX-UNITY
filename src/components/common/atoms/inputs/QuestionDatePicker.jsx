@@ -11,7 +11,10 @@ const QuestionDatePicker = ({
   handleDayChange,
   onFocus,
   onBlur,
-  disabled = false
+  disabled = false,
+  toggleWatch,
+  onCascadeChange,
+  forceBlur
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [resetsubmit, setresetsubmit] = useState(false);
@@ -28,6 +31,29 @@ const QuestionDatePicker = ({
     if (value) setresetsubmit(true);
     else setresetsubmit(false);
   }, [value]);
+
+  useEffect(() => {
+    if (forceBlur === true) {
+      value = String(value)
+      .trimStart()
+      .trimEnd();
+      value =
+        String(new Date(value)).includes('Invalid') || !String(value).length
+          ? ''
+          : moment(value).format('DD-MMM-YYYY');
+      setInputValue(value);
+      if (datePickerRef.current) {
+        datePickerRef.current.closeCalendar(); // close calendar popup
+        if (datePickerRef.current.inputRef.current) {
+          datePickerRef.current.inputRef.current.setAttribute("aria-invalid", "false"); // remove error state from input
+          datePickerRef.current.inputRef.current.blur(); // closes watcher too
+        }
+      } else {
+        onBlur();
+      }
+    }
+  }, [forceBlur]);
+
   return (
     <div className={`date-picker ${disabled ? 'disabled' : ''}`}>
       <DatePicker
@@ -38,6 +64,7 @@ const QuestionDatePicker = ({
         inputProps={{
           onFocus: e => {
             onFocus();
+            if (toggleWatch) toggleWatch(true);
           },
           onBlur: e => {
             onBlur();
@@ -67,6 +94,7 @@ const QuestionDatePicker = ({
             handleDayChange(moment(dte).format(), value);
           }
           if (!dte) handleDayChange(' ', value);
+          if (onCascadeChange) onCascadeChange();
         }}
         ref={datePickerRef}
       />

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
 import isEmpty from 'lodash/isEmpty';
@@ -22,7 +22,10 @@ const AutoCompleteWithAddOption = ({
   onFocus,
   onBlur,
   multiple,
-  loading
+  loading,
+  toggleWatch,
+  onCascadeChange,
+  forceBlur
 }) => {
   const getSFOptions = (sfObj, sfFld) =>
     options[`SF#${sfObj}_SF#${sfFld}`]
@@ -52,6 +55,8 @@ const AutoCompleteWithAddOption = ({
   const [selectedVal, setSelectedVal] = useState(getAnswer());
   const [currentLov, setCurrentLov] = useState(getOptions());
   const [clearable, setClearable] = useState(true);
+
+  const autoCompleteRef = useRef(null);
 
   const addAnswerPicklist = arr => {
     return arr.map(item =>
@@ -90,6 +95,7 @@ const AutoCompleteWithAddOption = ({
 
     setSelectedVal(modifiedAnswer);
     onChange(modifiedAnswer);
+    if (onCascadeChange) onCascadeChange();
   };
 
   /**
@@ -133,12 +139,35 @@ const AutoCompleteWithAddOption = ({
    * onChange Autocomplete Input Text
    */
   const onTextChange = event => {
+    if (onCascadeChange) onCascadeChange();
     if (event.currentTarget.value) {
       setClearable(false);
       return;
     }
     setClearable(true);
   };
+
+  const handleFocus = useCallback(() => {
+    if (toggleWatch) toggleWatch(true);
+    onFocus()
+  }, []);
+
+  const handleBlur = useCallback(() => {
+    if (toggleWatch) toggleWatch(false);
+    onBlur();
+  }, []);
+
+  useEffect(() => {
+    if (forceBlur === true) {
+      if (autoCompleteRef.current) {
+        console.log(autoCompleteRef.current);
+        autoCompleteRef.current.blur();
+        setTimeout(() => {
+          autoCompleteRef.current.value="";
+        }, 100);
+      }
+    }
+  }, [forceBlur]);
 
   return (
     <div className="auto-complete-with-add-option">
@@ -157,8 +186,8 @@ const AutoCompleteWithAddOption = ({
         }}
         size="small"
         disableClearable={clearable}
-        onBlur={onBlur}
-        onFocus={onFocus}
+        onBlur={handleBlur}
+        onFocus={handleFocus}
         openOnFocus
         disabled={disabled}
         style={{ resize: 'vertical' }}
@@ -174,6 +203,7 @@ const AutoCompleteWithAddOption = ({
               placeholder={placeholder}
               {...params}
               variant="outlined"
+              inputRef={autoCompleteRef}
             />
           );
         }}
