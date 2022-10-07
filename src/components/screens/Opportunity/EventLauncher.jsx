@@ -12,14 +12,15 @@ import moment from 'moment';
 import CustomModal from '../../common/CustomModal';
 import { DEFAULT, PROPOSAL } from '../../../constants/app';
 import { extractEmails, parseStringifyJson } from '../../../utils/helpers';
-import { selectProposalQuestions } from '../../../redux/selectors/proposal';
+import {
+  getSelectedBid,
+  selectProposalQuestions
+} from '../../../redux/selectors/proposal';
 import { getUserData } from '../../../redux/selectors';
+import { updateEventSubjectBody } from '../../../utils/utils';
 
 const modalStyle = { maxWidth: 545, width: '100%' };
-const attendees = [
-  'Pre-defined event roles',
-  'All Roles associated with opportunity'
-];
+const attendees = ['Expected team members', 'All assigned team members'];
 
 const EventLauncher = ({
   questionData,
@@ -30,20 +31,24 @@ const EventLauncher = ({
   const hasEvent = quesData?.events && !isEmpty(quesData?.events);
   const eventStartDate = !isEmpty(quesData?.answers)
     ? [...quesData?.answers].pop()?.answer
-    : null;
+    : '';
   const userData = useSelector(getUserData);
   const eventFlag = useSelector(state =>
     state.proposal.get('eventLauncherFlag')
   );
+  const { isCurrent } = useSelector(getSelectedBid)?.toJS();
 
   // Component will return null if no event found
-  if (!hasEvent || !eventFlag) return null;
-
-  console.log({ quesData });
+  if (!hasEvent || !eventFlag || !isCurrent) return null;
 
   // Get proposalQuestions - Redux State
   const proposalQuestions = useSelector(selectProposalQuestions);
   const eventData = parseStringifyJson(quesData?.events);
+
+  // console.log(`${quesData.questionText}`, {
+  //   answers: quesData?.answers,
+  //   eventRoles: eventData.EventRoles
+  // });
 
   // Component State
   const [openModal, setOpenModal] = useState(false);
@@ -59,15 +64,22 @@ const EventLauncher = ({
         const visible =
           item.visible === true &&
           (active === true || isCustomQuestion === true);
-        const email = [
-          ...new Set(
-            answers
-              .map(({ answer }) => answer.trim().split(','))
-              .flat()
-              .map(i => extractEmails(i))
-              .filter(i => !isEmpty(i))
-          )
-        ];
+
+        let email = [];
+        if (!isEmpty(answers)) {
+          const { answer } = [...answers].pop();
+          if (!isEmpty(answer.trim())) {
+            email = [
+              ...new Set(
+                answer
+                  .trim()
+                  .split(',')
+                  .map(i => extractEmails(i))
+                  .filter(i => i !== null)
+              )
+            ];
+          }
+        }
 
         if (
           !isEmpty(email) &&
@@ -98,8 +110,11 @@ const EventLauncher = ({
    * Generate Event Url Function
    */
   const generateEventUrl = (startDate, endDate, body, subject, email) => {
-    const bodyStr = encodeURIComponent(body);
-    const subjectStr = encodeURIComponent(subject);
+    const updatedbody = updateEventSubjectBody(body, proposalDetail);
+    const updatedsubject = updateEventSubjectBody(subject, proposalDetail);
+    
+    const bodyStr = encodeURIComponent(updatedbody);
+    const subjectStr = encodeURIComponent(updatedsubject);
     return `https://outlook.office.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose%20&rru=addevent&startdt=${startDate}&enddt=${endDate}&body=${bodyStr}&.&subject=${subjectStr}&to=${email}&online=1`;
   };
 
@@ -196,29 +211,33 @@ const EventLauncher = ({
     </CustomModal>
   );
 
+  const eventIcon = (
+    <IconButton
+      className="event-launcher__tooltip-btn"
+      disabled={isEmpty(eventStartDate.trim())}
+      onClick={() => setOpenModal(true)}
+    >
+      <CalendarEvent />
+    </IconButton>
+  );
+
   return (
     <div className="event-launcher">
-      <Tooltip
-        variant="light"
-        tabIndex={-1}
-        placement="top"
-        title={
-          <div className="event-launcher__tooltip">
-            <h3>{PROPOSAL.EVENT_LAUNCHER}</h3>
-            <h4>{DEFAULT.CLICK_ICON_TO_BEGIN}</h4>
-          </div>
-        }
-      >
-        <span>
-          <IconButton
-            className="event-launcher__tooltip-btn"
-            disabled={isEmpty(eventStartDate) || !checkDateAge(eventStartDate)}
-            onClick={() => setOpenModal(true)}
-          >
-            <CalendarEvent />
-          </IconButton>
-        </span>
-      </Tooltip>
+      {!isEmpty(eventStartDate.trim()) && (
+        <Tooltip
+          variant="light"
+          tabIndex={-1}
+          placement="top"
+          title={
+            <div className="event-launcher__tooltip">
+              <h3>{PROPOSAL.EVENT_LAUNCHER}</h3>
+              <h4>{DEFAULT.CLICK_ICON_TO_BEGIN}</h4>
+            </div>
+          }
+        >
+          <span>{eventIcon}</span>
+        </Tooltip>
+      )}
 
       {/* Call Event Modal */}
       {eventLauncherModal}

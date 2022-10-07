@@ -18,9 +18,7 @@ import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actio
 import { setNotification } from '../redux/actions/notification-actions';
 import { getUserName, getUserEmail, getUserId } from '../SessionHandler';
 import { REFRESH_WEBSOCKET_CONNECTION } from '../constants/app';
-const userName = getUserName();
-const userEmail = getUserEmail();
-const userId = getUserId();
+
 const currentOppNo = {
   get: localStorage.getItem('oppNo') || null,
   set: value => localStorage.setItem('oppNo', value)
@@ -183,6 +181,15 @@ const SocketContextProvider = props => {
    * Initiates connection only if socket is not connected
    */
   const initiateConnection = () => {
+    const userName = getUserName();
+    const userEmail = getUserEmail();
+    const userId = getUserId();
+    // return if userInfo is null
+    if (!userId && !userEmail && !userName) {
+      console.log('Socket not initiated: User not logged in');
+      return;
+    }
+
     if (!isSocketConnected()) {
       console.log('Initiating new socket connection');
       const newSocket = new WebSocket(SOCKET_URL);
