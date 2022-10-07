@@ -43,11 +43,11 @@ const SystemIntegrations = ({
           variant="light"
           title={
             sficon !== 'n/a' ? (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: `<p><b>Source</b><br>CRM</p>`
-                }}
-              />
+              <p>
+                <b>Source</b>
+                <br />
+                CRM
+              </p>
             ) : null
           }
           placement="top"
@@ -65,11 +65,11 @@ const SystemIntegrations = ({
           variant="light"
           title={
             sficon !== 'n/a' ? (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: `<p><b>Source</b><br>CRM</p>`
-                }}
-              />
+              <p>
+                <b>Source</b>
+                <br />
+                CRM
+              </p>
             ) : null
           }
           placement="top"
@@ -94,11 +94,11 @@ const SystemIntegrations = ({
           variant="light"
           title={
             sficon !== 'n/a' ? (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: `<p><b>Source</b><br>CRM</p>`
-                }}
-              />
+              <p>
+                <b>Source</b>
+                <br />
+                CRM
+              </p>
             ) : null
           }
           placement="top"
@@ -147,23 +147,23 @@ const SystemIntegrations = ({
           variant="light"
           title={
             priceModelerIntegration && integrationvalidation ? (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: `<p><b>Destinations</b><br>Qvidian, Price Modeler</p>`
-                }}
-              />
+              <p>
+                <b>Destinations</b>
+                <br />
+                Qvidian, Price Modeler
+              </p>
             ) : priceModelerIntegration ? (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: `<p><b>Destination</b><br>Price Modeler</p>`
-                }}
-              />
+              <p>
+                <b>Destination</b>
+                <br />
+                Price Modeler
+              </p>
             ) : integrationvalidation ? (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: `<p><b>Destination</b><br>Qvidian</p>`
-                }}
-              />
+              <p>
+                <b>Destination</b>
+                <br />
+                Qvidian
+              </p>
             ) : (
               ''
             )
@@ -189,23 +189,23 @@ const SystemIntegrations = ({
           variant="light"
           title={
             priceModelerIntegration && integrationvalidation ? (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: `<p><b>Destination</b><br>Qvidian, Price Modeler</p>`
-                }}
-              />
+              <p>
+                <b>Destination</b>
+                <br />
+                Qvidian, Price Modeler
+              </p>
             ) : priceModelerIntegration ? (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: `<p><b>Destination</b><br>Price Modeler</p>`
-                }}
-              />
+              <p>
+                <b>Destination</b>
+                <br />
+                Price Modeler
+              </p>
             ) : integrationvalidation ? (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: `<p><b>Destination</b><br>Qvidian</p>`
-                }}
-              />
+              <p>
+                <b>Destination</b>
+                <br />
+                Qvidian
+              </p>
             ) : (
               ''
             )
@@ -225,23 +225,23 @@ const SystemIntegrations = ({
           variant="light"
           title={
             priceModelerIntegration && integrationvalidation ? (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: `<p><b>Destination</b><br>Qvidian, Price Modeler</p>`
-                }}
-              />
+              <p>
+                <b>Destination</b>
+                <br />
+                Qvidian, Price Modeler
+              </p>
             ) : priceModelerIntegration ? (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: `<p><b>Destination</b><br>Price Modeler</p>`
-                }}
-              />
+              <p>
+                <b>Destination</b>
+                <br />
+                Price Modeler
+              </p>
             ) : integrationvalidation ? (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: `<p><b>Destination</b><br>Qvidian</p>`
-                }}
-              />
+              <p>
+                <b>Destination</b>
+                <br />
+                Qvidian
+              </p>
             ) : (
               ''
             )
