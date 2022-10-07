@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 // @flow
 /* eslint-disable no-plusplus */
 import React from 'react';
@@ -20,6 +22,7 @@ import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
 import Qvidianquestions from './qvidian';
 import SystemIntegrations from './SystemIntegrations/SystemIntegrations';
+import PriceModel from './PriceModel';
 import {
   setProposalAnswerData,
   setEditQuestionData,
@@ -53,9 +56,13 @@ import { parseStringifyJson } from '../../utils/helpers';
 import withIdleStateDetection from '../HOC/IdleStateDetector';
 
 const DropdownWithIdleStateDetection = withIdleStateDetection(Dropdown);
-const QuestionDatePickerWithIdleStateDetection = withIdleStateDetection(QuestionDatePicker);
+const QuestionDatePickerWithIdleStateDetection = withIdleStateDetection(
+  QuestionDatePicker
+);
 const MultiSelectWithIdleStateDetection = withIdleStateDetection(Multiselect);
-const AutoCompleteWithAddOptionWithIdleStateDetection = withIdleStateDetection(AutoCompleteWithAddOption);
+const AutoCompleteWithAddOptionWithIdleStateDetection = withIdleStateDetection(
+  AutoCompleteWithAddOption
+);
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
 type State = {
@@ -773,7 +780,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 this.setSelectRow(true);
               }}
               onBlur={() => {
-                console.log('blur lookup')
+                console.log('blur lookup');
                 this.context.questionUnlockWrapper(this.props.questionId);
                 this.setSelectRow(false);
               }}
@@ -893,6 +900,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     let integrationmatch;
     let checkSfAnswer;
     let integrationvalidation;
+    let priceModelerIntegration;
     const sficon = sfField;
     let qvidIntegration = false;
     const currentBidID = selectedBid.toJS().id;
@@ -924,6 +932,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     if (qvidianIntegration) {
       qvidIntegration = true;
     }
+    priceModelerIntegration = has(PriceModel[0], qvicon);
     dateIsAfter
       ? (integrationmatch = qvidIntegration)
       : (integrationmatch = has(Qvidianquestions[0], qvicon)
@@ -1104,6 +1113,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             gridColRatio={gridColRatio}
             integrationmatch={integrationmatch}
             integrationvalidation={integrationvalidation}
+            priceModelerIntegration={priceModelerIntegration}
             answeronhistory={this.displayAnswerOnHistory}
             answerdate={answerDate}
             isAnswerPredicted={isAnswerPredicted}
