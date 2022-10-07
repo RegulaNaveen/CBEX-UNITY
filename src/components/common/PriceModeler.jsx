@@ -47,7 +47,7 @@ const PriceModeler = () => {
       setLoading(true);
       const response = await dispatch(getPriceModelerData(proposalID));
       setLoading(false);
-      console.log({ response });
+      // console.log({ response });
       if (response.status) {
         const {
           Cost: cost,

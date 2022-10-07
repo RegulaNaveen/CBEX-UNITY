@@ -44,10 +44,10 @@ const EventLauncher = ({
   const proposalQuestions = useSelector(selectProposalQuestions);
   const eventData = parseStringifyJson(quesData?.events);
 
-  console.log(`${quesData.questionText}`, {
-    answers: quesData?.answers,
-    eventRoles: eventData.EventRoles
-  });
+  // console.log(`${quesData.questionText}`, {
+  //   answers: quesData?.answers,
+  //   eventRoles: eventData.EventRoles
+  // });
 
   // Component State
   const [openModal, setOpenModal] = useState(false);
@@ -97,7 +97,6 @@ const EventLauncher = ({
     const { EventRoles: eventRoles } = eventData;
     // onChange attendees value
     if (attendeesVal === attendees[0]) {
-      console.log({ proposalTeam });
       const filteredTeam = proposalTeam.filter(i =>
         i.roleNames.some(role => eventRoles.includes(role))
       );
@@ -105,8 +104,6 @@ const EventLauncher = ({
     }
     return [...new Set(proposalTeam.map(i => i.email).flat())];
   }, [openModal, attendeesVal]);
-
-  console.log({ filteredEmails });
 
   /**
    * Generate Event Url Function
