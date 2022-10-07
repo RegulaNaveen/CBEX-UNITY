@@ -32,7 +32,6 @@ function getCountryOptions() {
  * @returns {string[]}
  */
 function updateEventSubjectBody(str, data) {
-  console.log(`str`, str)
   const obj = {
     '[opportunity_number]' : data['CRM #'],
     '[line_of_business]': data['Line of business'],
