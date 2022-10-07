@@ -20,6 +20,7 @@ import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
 import Qvidianquestions from './qvidian';
 import SystemIntegrations from './SystemIntegrations/SystemIntegrations';
+import PriceModel from './PriceModel';
 import {
   setProposalAnswerData,
   setEditQuestionData,
@@ -886,6 +887,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     let integrationmatch;
     let checkSfAnswer;
     let integrationvalidation;
+    let priceModelerIntegration;
     const sficon = sfField;
     let qvidIntegration = false;
     const currentBidID = selectedBid.toJS().id;
@@ -917,6 +919,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     if (qvidianIntegration) {
       qvidIntegration = true;
     }
+    priceModelerIntegration = has(PriceModel[0], qvicon);
     dateIsAfter
       ? (integrationmatch = qvidIntegration)
       : (integrationmatch = has(Qvidianquestions[0], qvicon)
@@ -1097,6 +1100,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             gridColRatio={gridColRatio}
             integrationmatch={integrationmatch}
             integrationvalidation={integrationvalidation}
+            priceModelerIntegration={priceModelerIntegration}
             answeronhistory={this.displayAnswerOnHistory}
             answerdate={answerDate}
             isAnswerPredicted={isAnswerPredicted}

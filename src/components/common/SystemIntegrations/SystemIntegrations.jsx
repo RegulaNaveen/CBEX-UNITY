@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/prop-types */
 /* eslint-disable consistent-return */
 /* eslint-disable no-undef */
@@ -19,6 +20,7 @@ const SystemIntegrations = ({
   sficon,
   integrationmatch,
   integrationvalidation,
+  priceModelerIntegration,
   answeronhistory,
   answerdate,
   isAnswerPredicted,
@@ -136,16 +138,35 @@ const SystemIntegrations = ({
     if (isEmpty(sficon)) return null;
   };
   const QvidianValidation = () => {
-    if (integrationvalidation === true && changeIcon === '#00c221') {
+    if (
+      (integrationvalidation === true && changeIcon === '#00c221') ||
+      (priceModelerIntegration === true && changeIcon === '#00c221')
+    ) {
       return (
         <Tooltip
           variant="light"
           title={
-            <div
-              dangerouslySetInnerHTML={{
-                __html: `<p><b>Destination</b><br>Qvidian</p>`
-              }}
-            />
+            priceModelerIntegration && integrationvalidation ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: `<p><b>Destinations</b><br>Qvidian, Price Modeler</p>`
+                }}
+              />
+            ) : priceModelerIntegration ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: `<p><b>Destination</b><br>Price Modeler</p>`
+                }}
+              />
+            ) : integrationvalidation ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: `<p><b>Destination</b><br>Qvidian</p>`
+                }}
+              />
+            ) : (
+              ''
+            )
           }
           placement="top"
           tabIndex={-1}
@@ -159,7 +180,7 @@ const SystemIntegrations = ({
         </Tooltip>
       );
     }
-    if (integrationvalidation === true) {
+    if (integrationvalidation === true || priceModelerIntegration === true) {
       return lastAnswer
         ?.toJS()
         .answer?.toString()
@@ -167,11 +188,27 @@ const SystemIntegrations = ({
         <Tooltip
           variant="light"
           title={
-            <div
-              dangerouslySetInnerHTML={{
-                __html: `<p><b>Destination</b><br>Qvidian</p>`
-              }}
-            />
+            priceModelerIntegration && integrationvalidation ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: `<p><b>Destination</b><br>Qvidian, Price Modeler</p>`
+                }}
+              />
+            ) : priceModelerIntegration ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: `<p><b>Destination</b><br>Price Modeler</p>`
+                }}
+              />
+            ) : integrationvalidation ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: `<p><b>Destination</b><br>Qvidian</p>`
+                }}
+              />
+            ) : (
+              ''
+            )
           }
           placement="top"
           tabIndex={-1}
@@ -187,11 +224,27 @@ const SystemIntegrations = ({
         <Tooltip
           variant="light"
           title={
-            <div
-              dangerouslySetInnerHTML={{
-                __html: `<p><b>Destination</b><br>Qvidian</p>`
-              }}
-            />
+            priceModelerIntegration && integrationvalidation ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: `<p><b>Destination</b><br>Qvidian, Price Modeler</p>`
+                }}
+              />
+            ) : priceModelerIntegration ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: `<p><b>Destination</b><br>Price Modeler</p>`
+                }}
+              />
+            ) : integrationvalidation ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: `<p><b>Destination</b><br>Qvidian</p>`
+                }}
+              />
+            ) : (
+              ''
+            )
           }
           placement="top"
           tabIndex={-1}
