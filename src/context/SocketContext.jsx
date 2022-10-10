@@ -314,6 +314,18 @@ const SocketContextProvider = props => {
     }, 2000);
   };
 
+  const waitForSocketConnectionMinInterval = callback => {
+    setTimeout(() => {
+      if (isSocketConnected()) {
+        if (callback instanceof Function) {
+          callback();
+        }
+      } else {
+        waitForSocketConnectionMinInterval(callback);
+      }
+    }, 100);
+  };
+
   const updateSocketOppId = (oppId, proposalId) => {
     currentOppNo.set(oppId);
     waitForSocketConnection(() =>
@@ -321,18 +333,18 @@ const SocketContextProvider = props => {
     );
   };
   const questionLockWrapper = questionId => {
-    questionLock(questionId, null);
+    waitForSocketConnectionMinInterval(() => questionLock(questionId, null));
   };
   const questionUnlockWrapper = (questionId, answer) => {
-    questionUnlock(questionId, answer, null);
+    waitForSocketConnectionMinInterval(() => questionUnlock(questionId, answer, null));
   };
 
   const questionAnswerUpdateWrapper = (questionId, answer) => {
-    questionAnswerUpdate(questionId, answer, null);
+    waitForSocketConnectionMinInterval(() => questionAnswerUpdate(questionId, answer, null));
   };
 
   const questionLockDetailsWrapper = () => {
-    questionLockDetails(null);
+    waitForSocketConnectionMinInterval(() => questionLockDetails(null));
   };
 
   const refreshSocketConnection = () => {
