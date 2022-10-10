@@ -81,7 +81,7 @@ class Multiselect extends PureComponent<Props, State> {
 
     if (forceBlur === true) {
       if (isOpen) {
-        this.setState({ selectedValues: lastAnswer, isOpen: false }, () => {
+        this.setState({ isOpen: false }, () => {
           this.props.setSelectRow(false);
         });
       }
@@ -132,6 +132,7 @@ class Multiselect extends PureComponent<Props, State> {
 
   onSelect = (event: SyntheticEvent<EventTarget>, value: string) => {
     event.stopPropagation();
+    if (this.props.onCascadeChange) this.props.onCascadeChange();
 
     const { selectedValues } = this.state;
 
