@@ -133,6 +133,7 @@ export class Opportunity extends Component<Props, State> {
     getOpportunityInfo(params.id);
 
     const proposalId = selectedBid.get('id', '');
+    localStorage.setItem('proposalId', proposalId);
     if (
       (this.props && this.props?.location && this.props.location?.pathname) !==
       UBUILD
@@ -180,6 +181,7 @@ export class Opportunity extends Component<Props, State> {
     } = this.props;
     const thisProposalId = selectedBid.get('id', '');
     const prevProposalId = prevProps.selectedBid.get('id', '');
+
     // Bid changed
     if (prevProposalId !== thisProposalId) {
       if (
@@ -188,6 +190,7 @@ export class Opportunity extends Component<Props, State> {
           this.props.location?.pathname) !== UBUILD
       ) {
         this.context.updateSocketOppId(params.id, thisProposalId);
+        localStorage.setItem('proposalId', thisProposalId);
       }
     }
     // Bid level redirection
