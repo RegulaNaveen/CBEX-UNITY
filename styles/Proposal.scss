@@ -26,6 +26,7 @@
     & > div {
       &:nth-child(1) {
         grid-area: one;
+        align-self: baseline;
         padding-right: 0.875rem;
       }
       &:nth-child(2) {
