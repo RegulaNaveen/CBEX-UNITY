@@ -159,7 +159,8 @@ class Questions extends Component {
 
     // on Edit question
     if (prevProps.editQuestionsData.size === 0 && editQuestionsData.size > 0) {
-      this.onClose();
+      this.setState({ showModal: true });
+      this.trackMatomoEventToggleQModal(true);
     }
 
     // bid change check start
@@ -225,8 +226,7 @@ class Questions extends Component {
   };
 
   onAddQuestion = value => {
-    this.setState({ currentsection: value });
-    this.onClose();
+    this.setState({ currentsection: value, showModal: true });
   };
 
   trackMatomoEventForCheckBoxes = item => {
@@ -329,7 +329,7 @@ class Questions extends Component {
 
   onClose = () => {
     const { showModal } = this.state;
-    this.setState({ showModal: !showModal });
+    this.setState({ showModal: false });
     this.trackMatomoEventToggleQModal(!showModal);
   };
 
@@ -628,7 +628,10 @@ class Questions extends Component {
               document.dispatchEvent(clearsidebarselectsection);
             }
           }}
-          AddNewQuestion={this.onClose}
+          AddNewQuestion={() => {
+            this.setState({ showModal: true });
+            this.trackMatomoEventToggleQModal(true);
+          }}
           RefreshProposal={this.getProposalInfoUpdated}
           // eslint-disable-next-line react/destructuring-assignment
           currentTab={this.state.currentTab}
