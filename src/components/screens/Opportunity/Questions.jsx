@@ -480,7 +480,6 @@ class Questions extends Component {
       <>
         <div className="opportunity-details">
           <BidHistory />
-          {!firstRender && <PriceModeler />}
         </div>
 
         {/* Expand and Filter */}
