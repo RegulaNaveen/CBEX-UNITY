@@ -498,38 +498,39 @@ const onProposalAnswer = (state: Map, action: Object): Map => {
 
   //case  when user is not in the same proposal Id
   if (selectedBidId !== proposalId) {
-    let newState = fromJS({});
+    // let newState = fromJS({});
 
-    const indexOfListToUpdate = state
-      .getIn(['opportunityData', proposalId, 'proposalQuestions'])
-      .findIndex(listItem => {
-        return listItem.questionId === referenceId;
-      });
+    // const indexOfListToUpdate = state
+    //   .getIn(['opportunityData', proposalId, 'proposalQuestions'])
+    //   .findIndex(listItem => {
+    //     return listItem.questionId === referenceId;
+    //   });
 
-    newState = state.setIn(
-      [
-        'opportunityData',
-        proposalId,
-        'proposalQuestions',
-        indexOfListToUpdate,
-        'answers'
-      ],
-      data
-    );
-    newState = newState.setIn(
-      [
-        'opportunityData',
-        proposalId,
-        'proposalQuestions',
-        indexOfListToUpdate,
-        'hasDifferentSFanswer'
-      ],
-      hasDifferentSFanswer
-    );
+    // newState = state.setIn(
+    //   [
+    //     'opportunityData',
+    //     proposalId,
+    //     'proposalQuestions',
+    //     indexOfListToUpdate,
+    //     'answers'
+    //   ],
+    //   data
+    // );
+    // newState = newState.setIn(
+    //   [
+    //     'opportunityData',
+    //     proposalId,
+    //     'proposalQuestions',
+    //     indexOfListToUpdate,
+    //     'hasDifferentSFanswer'
+    //   ],
+    //   hasDifferentSFanswer
+    // );
 
-    const opportunityData = newState.get('opportunityData');
+    // const opportunityData = newState.get('opportunityData');
 
-    return state.set('opportunityData', opportunityData);
+    // return state.set('opportunityData', opportunityData);
+    return state;
   }
 
   // update current selected bid and return
