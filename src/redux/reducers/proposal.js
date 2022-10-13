@@ -1,5 +1,5 @@
 // @flow
-import { isEmpty, cloneDeep } from 'lodash';
+import { isEqual, cloneDeep } from 'lodash';
 import { Map, fromJS, OrderedMap, is } from 'immutable'; // NOSONAR
 import { REDUX_TYPES } from '../../constants';
 import type { ApiAction } from '../actions/action-types';
@@ -271,27 +271,32 @@ const setOpportunityInfo = (state, action) => {
     selectedBid.get('id'),
     'proposalQuestions'
   ]);
-
-  const milestones = getUniqueMilestones(proposalQuestions);
-
-  let questionsFilter = state.get('questionsFilter');
-  let milestoneGroup = fromJS({});
-  milestones.forEach(milestone => {
-    milestoneGroup = milestoneGroup.set(
-      milestone,
-      Map({
-        checked: false,
-        label: milestone,
-        className: CLASS_QUES_FIL_ITEM
-      })
-    );
-  });
-  milestoneGroup = milestoneGroup.set('logic', 'OR');
-  questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
+  if (proposalQuestions) {
+    const milestones = getUniqueMilestones(proposalQuestions);
+    let questionsFilter = state.get('questionsFilter');
+    let milestoneGroup = fromJS({});
+    milestones.forEach(milestone => {
+      milestoneGroup = milestoneGroup.set(
+        milestone,
+        Map({
+          checked: false,
+          label: milestone,
+          className: CLASS_QUES_FIL_ITEM
+        })
+      );
+    });
+    milestoneGroup = milestoneGroup.set('logic', 'OR');
+    questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
+    return state
+      .set('proposalDetails', proposalDetails)
+      .set('proposalQuestions', proposalQuestions)
+      .set('questionsFilter', questionsFilter)
+      .set('isProposalLoading', false)
+      .set('opportunityData', opportunityData)
+      .set('selectedBid', selectedBid);
+  }
   return state
     .set('proposalDetails', proposalDetails)
-    .set('proposalQuestions', proposalQuestions)
-    .set('questionsFilter', questionsFilter)
     .set('isProposalLoading', false)
     .set('opportunityData', opportunityData)
     .set('selectedBid', selectedBid);
@@ -299,6 +304,7 @@ const setOpportunityInfo = (state, action) => {
 
 const onChangeBid = (state: Map, action: Object): Map => {
   const { payload } = action;
+  console.log('payload.bid is ', payload.bid);
   let opportunityData = state.get('opportunityData');
   const {
     agreementId,
@@ -306,12 +312,12 @@ const onChangeBid = (state: Map, action: Object): Map => {
     proposalDetails,
     opportunityType,
     questionTemplateVersionNumber: templateversion
-  } = opportunityData.getIn([payload.bidId, 'proposal']);
+  } = opportunityData.getIn([payload.bid.bidId, 'proposal']);
   let selectedBid = Map({
-    id: payload.bidId,
-    isCurrent: payload.isCurrent,
-    pertinentDetails: payload.pertinentDetails,
-    bidName: payload.bidName,
+    id: payload.bid.bidId,
+    isCurrent: payload.bid.isCurrent,
+    pertinentDetails: payload.bid.pertinentDetails,
+    bidName: payload.bid.bidName,
     questionTemplateVersionNumber: templateversion || '',
     opportunityType: opportunityType || '',
     agreementId: agreementId || '',
@@ -319,32 +325,39 @@ const onChangeBid = (state: Map, action: Object): Map => {
     opportunityId: proposalDetails['opportunityId']
   });
 
-  const proposalQuestions = opportunityData.getIn([
-    selectedBid.get('id'),
-    'proposalQuestions'
-  ]);
+  const proposalQuestions = payload.proposalDetails.proposalQuestions;
+  // const proposalQuestions = opportunityData.getIn([
+  //   selectedBid.get('id'),
+  //   'proposalQuestions'
+  // ]);
 
-  const milestones = getUniqueMilestones(proposalQuestions);
+  if (proposalQuestions) {
+    const milestones = getUniqueMilestones(proposalQuestions);
 
-  let questionsFilter = state.get('questionsFilter');
-  let milestoneGroup = fromJS({});
-  milestones.forEach(milestone => {
-    milestoneGroup = milestoneGroup.set(
-      milestone,
-      Map({
-        checked: false,
-        label: milestone,
-        className: CLASS_QUES_FIL_ITEM
-      })
-    );
-  });
-  milestoneGroup = milestoneGroup.set('logic', 'OR');
-  questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
+    let questionsFilter = state.get('questionsFilter');
+    let milestoneGroup = fromJS({});
+    milestones.forEach(milestone => {
+      milestoneGroup = milestoneGroup.set(
+        milestone,
+        Map({
+          checked: false,
+          label: milestone,
+          className: CLASS_QUES_FIL_ITEM
+        })
+      );
+    });
+    milestoneGroup = milestoneGroup.set('logic', 'OR');
+    questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
 
+    return state
+      .set('proposalDetails', proposalDetails)
+      .set('proposalQuestions', proposalQuestions)
+      .set('questionsFilter', questionsFilter)
+      .set('isProposalLoading', false)
+      .set('selectedBid', selectedBid);
+  }
   return state
     .set('proposalDetails', proposalDetails)
-    .set('proposalQuestions', proposalQuestions)
-    .set('questionsFilter', questionsFilter)
     .set('isProposalLoading', false)
     .set('selectedBid', selectedBid);
 };
@@ -483,40 +496,41 @@ const onProposalAnswer = (state: Map, action: Object): Map => {
     : data.proposalId;
   const selectedBidId = state.getIn(['selectedBid', 'id']);
 
-  //case  when user is not in the same proposal Id
+  // case  when user is not in the same proposal Id
   if (selectedBidId !== proposalId) {
-    let newState = fromJS({});
+    // let newState = fromJS({});
 
-    const indexOfListToUpdate = state
-      .getIn(['opportunityData', proposalId, 'proposalQuestions'])
-      .findIndex(listItem => {
-        return listItem.questionId === referenceId;
-      });
+    // const indexOfListToUpdate = state
+    //   .getIn(['opportunityData', proposalId, 'proposalQuestions'])
+    //   .findIndex(listItem => {
+    //     return listItem.questionId === referenceId;
+    //   });
 
-    newState = state.setIn(
-      [
-        'opportunityData',
-        proposalId,
-        'proposalQuestions',
-        indexOfListToUpdate,
-        'answers'
-      ],
-      data
-    );
-    newState = newState.setIn(
-      [
-        'opportunityData',
-        proposalId,
-        'proposalQuestions',
-        indexOfListToUpdate,
-        'hasDifferentSFanswer'
-      ],
-      hasDifferentSFanswer
-    );
+    // newState = state.setIn(
+    //   [
+    //     'opportunityData',
+    //     proposalId,
+    //     'proposalQuestions',
+    //     indexOfListToUpdate,
+    //     'answers'
+    //   ],
+    //   data
+    // );
+    // newState = newState.setIn(
+    //   [
+    //     'opportunityData',
+    //     proposalId,
+    //     'proposalQuestions',
+    //     indexOfListToUpdate,
+    //     'hasDifferentSFanswer'
+    //   ],
+    //   hasDifferentSFanswer
+    // );
 
-    const opportunityData = newState.get('opportunityData');
+    // const opportunityData = newState.get('opportunityData');
 
-    return state.set('opportunityData', opportunityData);
+    // return state.set('opportunityData', opportunityData);
+    return state;
   }
 
   // update current selected bid and return
@@ -569,13 +583,13 @@ const onProposalAnswer = (state: Map, action: Object): Map => {
 // state is propoal
 const updateQuestionLockByUser = (state: Map, action: Object): Map => {
   const {
-    data: { oppNo, questionId, proposalId, userEmail, userId, userName }
+    data: { questionId, proposalId, userEmail, userId, userName }
   } = action.payload;
   let newState = fromJS({});
 
   if (proposalId) {
     // let opportunityData = state.get('opportunityData');
-    let selectedBid = state.getIn(['selectedBid', 'id']);
+    const selectedBid = state.getIn(['selectedBid', 'id']);
 
     // const indexOfListToUpdate = opportunityData
     //   .getIn([proposalId, 'proposalQuestions'])
@@ -607,7 +621,10 @@ const updateQuestionLockByUser = (state: Map, action: Object): Map => {
       );
 
       const proposalQuestionsNew = newState.get('proposalQuestions');
-      return state.set('proposalQuestions', proposalQuestionsNew);
+      const prevProposalQuestions = state.get('proposalQuestions');
+      if (!isEqual(prevProposalQuestions, proposalQuestionsNew)) {
+        return state.set('proposalQuestions', proposalQuestionsNew);
+      }
       // .set('opportunityData', opportunityDataNew);
     }
 
@@ -622,7 +639,7 @@ const questionLockDetails = (state: Map, action: Object): Map => {
 
   if (data.length > 0) {
     for (let i = 0; i < data.length; i++) {
-      let newAction = {
+      const newAction = {
         payload: {
           data: data[i]
         }
@@ -636,21 +653,13 @@ const questionLockDetails = (state: Map, action: Object): Map => {
 // state is propoal
 const updateQuestionUnlockByUser = (state: Map, action: Object): Map => {
   const {
-    data: {
-      // latestAnswer,
-      oppNo,
-      questionId,
-      proposalId,
-      userEmail,
-      userId,
-      userName
-    }
+    data: { questionId, proposalId }
   } = action.payload;
   let newState = fromJS({});
 
   if (proposalId) {
     // let opportunityData = state.get('opportunityData');
-    let selectedBid = state.getIn(['selectedBid', 'id']);
+    const selectedBid = state.getIn(['selectedBid', 'id']);
 
     // const indexOfListToUpdate = opportunityData
     //   .getIn([proposalId, 'proposalQuestions'])
@@ -675,14 +684,20 @@ const updateQuestionUnlockByUser = (state: Map, action: Object): Map => {
         });
       newState = state.updateIn(
         ['proposalQuestions', indexOfListToUpdateCurrent],
-        value => ({
-          ...value,
-          questionLockInfo: {}
-        })
+        value => {
+          const newValue = value;
+          delete newValue.questionLockInfo;
+          return {
+            ...newValue
+          };
+        }
       );
 
       const proposalQuestionsNew = newState.get('proposalQuestions');
-      return state.set('proposalQuestions', proposalQuestionsNew);
+      const prevProposalQuestions = state.get('proposalQuestions');
+      if (!isEqual(prevProposalQuestions, proposalQuestionsNew)) {
+        return state.set('proposalQuestions', proposalQuestionsNew);
+      }
       // .set('opportunityData', opportunityDataNew);
     }
 
@@ -710,7 +725,7 @@ const onProposalAnswerLoading = (state: Map, action: Object): Map => {
   );
 
   const proposalQuestions = newState.get('proposalQuestions');
-  let filterQuestionsLen = state.get('filteredProposalQuestions');
+  const filterQuestionsLen = state.get('filteredProposalQuestions');
   if (Array.isArray(filterQuestionsLen)) {
     const filterindexOfListToUpdate = filterQuestionsLen.findIndex(listItem => {
       return listItem.questionId === referenceId;
@@ -719,16 +734,15 @@ const onProposalAnswerLoading = (state: Map, action: Object): Map => {
       ['filteredProposalQuestions', filterindexOfListToUpdate, 'loading'],
       loading
     );
-    let filterQuestions = newState.get('filteredProposalQuestions');
+    const filterQuestions = newState.get('filteredProposalQuestions');
     return state
       .set('proposalQuestions', proposalQuestions)
       .set('filteredProposalQuestions', filterQuestions)
       .set('isProposalAnswerLoading', loading);
-  } else {
-    return state
-      .set('proposalQuestions', proposalQuestions)
-      .set('isProposalAnswerLoading', loading);
   }
+  return state
+    .set('proposalQuestions', proposalQuestions)
+    .set('isProposalAnswerLoading', loading);
 };
 
 const onProposalAnswerError = (state: Map, action: Object): Map => {
