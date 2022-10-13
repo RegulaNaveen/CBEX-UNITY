@@ -104,12 +104,12 @@ const INITIAL_STATE: Map = fromJS({
     rolegroup: {
       myUserRole: {
         checked: false,
-        label: 'My User Role',
+        label: 'Responsible',
         className: CLASS_QUES_FIL_R1_C1
       },
       interestedParty: {
         checked: false,
-        label: 'Interested Party',
+        label: 'Informed',
         className: 'questions-filter__row2-col1'
       },
       logic: 'AND'
