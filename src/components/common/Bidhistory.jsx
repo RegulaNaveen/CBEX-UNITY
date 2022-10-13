@@ -10,6 +10,7 @@ import {
 import { parseMomentDate } from '../../utils/DateUtils';
 import { Checkmark } from '../svg';
 import { changeBid } from '../../redux/actions/proposal-actions';
+import PriceModeler from './PriceModeler';
 
 const BidHistory = () => {
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -150,10 +151,13 @@ const BidHistory = () => {
                 created
               </p>
             </div>
+            <div className="bid-history-pricemodeler-content">
+             <PriceModeler />
+            </div>
           </div>
         </div>
       )}
-    </div>
+     </div>
     : null } 
     </>
   );
