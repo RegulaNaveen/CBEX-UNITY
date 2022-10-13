@@ -208,7 +208,11 @@ const SocketContextProvider = props => {
           }, [REFRESH_WEBSOCKET_CONNECTION]);
         }
         if (currentOppNo.get) {
-          sendUpdateConnection(currentOppNo.get, newSocket);
+          sendUpdateConnection(
+            currentOppNo.get,
+            localStorage.getItem('proposalId'),
+            newSocket
+          );
         }
       };
 
@@ -336,11 +340,15 @@ const SocketContextProvider = props => {
     waitForSocketConnectionMinInterval(() => questionLock(questionId, null));
   };
   const questionUnlockWrapper = (questionId, answer) => {
-    waitForSocketConnectionMinInterval(() => questionUnlock(questionId, answer, null));
+    waitForSocketConnectionMinInterval(() =>
+      questionUnlock(questionId, answer, null)
+    );
   };
 
   const questionAnswerUpdateWrapper = (questionId, answer) => {
-    waitForSocketConnectionMinInterval(() => questionAnswerUpdate(questionId, answer, null));
+    waitForSocketConnectionMinInterval(() =>
+      questionAnswerUpdate(questionId, answer, null)
+    );
   };
 
   const questionLockDetailsWrapper = () => {

@@ -521,8 +521,8 @@ class Questions extends Component {
                   className="tasksList-add-icon-wrapper"
                   role="presentation"
                   onClick={() => {
-                    this.setState({ currentsection: '' });
-                    this.onClose();
+                    this.setState({ currentsection: '', showModal: true });
+                    this.trackMatomoEventToggleQModal(true);
                   }}
                 >
                   <Add className="tasksList-add-icon" />

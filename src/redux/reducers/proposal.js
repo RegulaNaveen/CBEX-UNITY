@@ -478,6 +478,48 @@ const onProposalAnswer = (state: Map, action: Object): Map => {
     payload: { data, questionId: referenceId, hasDifferentSFanswer }
   } = action;
 
+  const proposalId = Array.isArray(data)
+    ? data[data.length - 1].proposalId
+    : data.proposalId;
+  const selectedBidId = state.getIn(['selectedBid', 'id']);
+
+  //case  when user is not in the same proposal Id
+  if (selectedBidId !== proposalId) {
+    let newState = fromJS({});
+
+    const indexOfListToUpdate = state
+      .getIn(['opportunityData', proposalId, 'proposalQuestions'])
+      .findIndex(listItem => {
+        return listItem.questionId === referenceId;
+      });
+
+    newState = state.setIn(
+      [
+        'opportunityData',
+        proposalId,
+        'proposalQuestions',
+        indexOfListToUpdate,
+        'answers'
+      ],
+      data
+    );
+    newState = newState.setIn(
+      [
+        'opportunityData',
+        proposalId,
+        'proposalQuestions',
+        indexOfListToUpdate,
+        'hasDifferentSFanswer'
+      ],
+      hasDifferentSFanswer
+    );
+
+    const opportunityData = newState.get('opportunityData');
+
+    return state.set('opportunityData', opportunityData);
+  }
+
+  // update current selected bid and return
   let newState = fromJS({});
 
   const indexOfListToUpdate = state
@@ -485,8 +527,6 @@ const onProposalAnswer = (state: Map, action: Object): Map => {
     .findIndex(listItem => {
       return listItem.questionId === referenceId;
     });
-
-  let selectedBidId = state.getIn(['selectedBid', 'id']);
 
   newState = state
     .setIn(['proposalQuestions', indexOfListToUpdate, 'answers'], data)
