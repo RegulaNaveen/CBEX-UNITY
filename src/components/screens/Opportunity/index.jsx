@@ -120,6 +120,8 @@ export class Opportunity extends Component<Props, State> {
     const winLocationSearch = window.location.search;
     const queryparams = new URLSearchParams(winLocationSearch);
     const notificationId = queryparams.get('notification_id');
+    const bidNumber = queryparams.get('bidNo');
+    console.log('bidNumber is ', bidNumber);
     if (notificationId) {
       setSeenOne(notificationId);
     }
@@ -130,7 +132,7 @@ export class Opportunity extends Component<Props, State> {
 
     if (!authData) getRefreshAuthData();
 
-    getOpportunityInfo(params.id);
+    getOpportunityInfo(params.id, bidNumber);
 
     const proposalId = selectedBid.get('id', '');
     localStorage.setItem('proposalId', proposalId);

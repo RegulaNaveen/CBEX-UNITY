@@ -271,27 +271,32 @@ const setOpportunityInfo = (state, action) => {
     selectedBid.get('id'),
     'proposalQuestions'
   ]);
-
-  const milestones = getUniqueMilestones(proposalQuestions);
-
-  let questionsFilter = state.get('questionsFilter');
-  let milestoneGroup = fromJS({});
-  milestones.forEach(milestone => {
-    milestoneGroup = milestoneGroup.set(
-      milestone,
-      Map({
-        checked: false,
-        label: milestone,
-        className: CLASS_QUES_FIL_ITEM
-      })
-    );
-  });
-  milestoneGroup = milestoneGroup.set('logic', 'OR');
-  questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
+  if (proposalQuestions) {
+    const milestones = getUniqueMilestones(proposalQuestions);
+    let questionsFilter = state.get('questionsFilter');
+    let milestoneGroup = fromJS({});
+    milestones.forEach(milestone => {
+      milestoneGroup = milestoneGroup.set(
+        milestone,
+        Map({
+          checked: false,
+          label: milestone,
+          className: CLASS_QUES_FIL_ITEM
+        })
+      );
+    });
+    milestoneGroup = milestoneGroup.set('logic', 'OR');
+    questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
+    return state
+      .set('proposalDetails', proposalDetails)
+      .set('proposalQuestions', proposalQuestions)
+      .set('questionsFilter', questionsFilter)
+      .set('isProposalLoading', false)
+      .set('opportunityData', opportunityData)
+      .set('selectedBid', selectedBid);
+  }
   return state
     .set('proposalDetails', proposalDetails)
-    .set('proposalQuestions', proposalQuestions)
-    .set('questionsFilter', questionsFilter)
     .set('isProposalLoading', false)
     .set('opportunityData', opportunityData)
     .set('selectedBid', selectedBid);
@@ -299,6 +304,7 @@ const setOpportunityInfo = (state, action) => {
 
 const onChangeBid = (state: Map, action: Object): Map => {
   const { payload } = action;
+  console.log('payload.bid is ', payload.bid);
   let opportunityData = state.get('opportunityData');
   const {
     agreementId,
@@ -306,12 +312,12 @@ const onChangeBid = (state: Map, action: Object): Map => {
     proposalDetails,
     opportunityType,
     questionTemplateVersionNumber: templateversion
-  } = opportunityData.getIn([payload.bidId, 'proposal']);
+  } = opportunityData.getIn([payload.bid.bidId, 'proposal']);
   let selectedBid = Map({
-    id: payload.bidId,
-    isCurrent: payload.isCurrent,
-    pertinentDetails: payload.pertinentDetails,
-    bidName: payload.bidName,
+    id: payload.bid.bidId,
+    isCurrent: payload.bid.isCurrent,
+    pertinentDetails: payload.bid.pertinentDetails,
+    bidName: payload.bid.bidName,
     questionTemplateVersionNumber: templateversion || '',
     opportunityType: opportunityType || '',
     agreementId: agreementId || '',
@@ -319,32 +325,39 @@ const onChangeBid = (state: Map, action: Object): Map => {
     opportunityId: proposalDetails['opportunityId']
   });
 
-  const proposalQuestions = opportunityData.getIn([
-    selectedBid.get('id'),
-    'proposalQuestions'
-  ]);
+  const proposalQuestions = payload.proposalDetails.proposalQuestions;
+  // const proposalQuestions = opportunityData.getIn([
+  //   selectedBid.get('id'),
+  //   'proposalQuestions'
+  // ]);
 
-  const milestones = getUniqueMilestones(proposalQuestions);
+  if (proposalQuestions) {
+    const milestones = getUniqueMilestones(proposalQuestions);
 
-  let questionsFilter = state.get('questionsFilter');
-  let milestoneGroup = fromJS({});
-  milestones.forEach(milestone => {
-    milestoneGroup = milestoneGroup.set(
-      milestone,
-      Map({
-        checked: false,
-        label: milestone,
-        className: CLASS_QUES_FIL_ITEM
-      })
-    );
-  });
-  milestoneGroup = milestoneGroup.set('logic', 'OR');
-  questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
+    let questionsFilter = state.get('questionsFilter');
+    let milestoneGroup = fromJS({});
+    milestones.forEach(milestone => {
+      milestoneGroup = milestoneGroup.set(
+        milestone,
+        Map({
+          checked: false,
+          label: milestone,
+          className: CLASS_QUES_FIL_ITEM
+        })
+      );
+    });
+    milestoneGroup = milestoneGroup.set('logic', 'OR');
+    questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
 
+    return state
+      .set('proposalDetails', proposalDetails)
+      .set('proposalQuestions', proposalQuestions)
+      .set('questionsFilter', questionsFilter)
+      .set('isProposalLoading', false)
+      .set('selectedBid', selectedBid);
+  }
   return state
     .set('proposalDetails', proposalDetails)
-    .set('proposalQuestions', proposalQuestions)
-    .set('questionsFilter', questionsFilter)
     .set('isProposalLoading', false)
     .set('selectedBid', selectedBid);
 };

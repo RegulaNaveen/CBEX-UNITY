@@ -26,10 +26,11 @@ import {
   changeProposalOT,
   deleteProposalUser,
   getProposalAnswer,
-  priceModelerApi
+  priceModelerApi,
+  getAllProposals
 } from '../../api/proposal';
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
-import { getUniqueMilestones } from '../selectors/proposal';
+import { getUniqueMilestones, getBidList } from '../selectors/proposal';
 import { getProposalIdlist } from '../../utils/utils';
 import { fetchNotes } from './notepad-actions';
 import { DEFAULT } from '../../constants/app';
@@ -814,6 +815,89 @@ export const closeNewbidflags = (): ThunkAction<string, Object> => {
 
 export const getOpportunity = (
   id: string,
+  bidNumber,
+  flag = false
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    const bidNo = parseInt(bidNumber);
+    dispatch({ type: PROPOSAL_INFO_LOADING, payload: {} });
+    let selectedProposalId;
+
+    try {
+      const allProposals = await getAllProposals(id);
+
+      const proposal = allProposals.find(
+        thisProposal => thisProposal.proposal.proposalDetails.bidNo === bidNo
+      );
+      const isCurrentProposal = allProposals.find(
+        thisProposal => thisProposal.isCurrent === true
+      );
+
+      if (proposal) selectedProposalId = proposal.proposal.proposalId;
+
+      const proposalCount = allProposals.length;
+      const maxLimit = 500;
+
+      let callstomake = parseInt(proposalCount / maxLimit);
+      let additionalcallstomake = proposalCount % maxLimit;
+      if (additionalcallstomake) {
+        callstomake = callstomake + 1;
+      }
+      let from = 0;
+      let urls = [];
+      let proposalsData = [];
+      for (let index = 0; index < proposalCount; index += 1) {
+        let trueOrFalse;
+
+        if (selectedProposalId) {
+          // user on previous bid
+          if (allProposals[index].proposal.proposalId === selectedProposalId) {
+            urls.push(
+              axios.get(
+                `${PROPOSAL_API_URL}/${allProposals[index].proposal.proposalId}`
+              )
+            );
+          } else {
+            proposalsData.push(allProposals[index]);
+          }
+        } else {
+          // user on current bid
+          if (allProposals[index].isCurrent) {
+            urls.push(
+              axios.get(
+                `${PROPOSAL_API_URL}/${allProposals[index].proposal.proposalId}`
+              )
+            );
+          } else {
+            proposalsData.push(allProposals[index]);
+          }
+        }
+      }
+      let data = await getPaginateProposal(urls);
+      data = data.map(v => v['data']).flat();
+      data[0].isCurrent =
+        isCurrentProposal.proposal.proposalId === data[0].proposal.proposalId;
+      proposalsData.push(data[0]);
+      // data.push()
+      console.log('proposalsdata is', proposalsData);
+      dispatch({ type: OPPORTUNITY_INFO, payload: proposalsData });
+      dispatch({
+        type: UPDATE_BOX_BIDS,
+        payload: getProposalIdlist(proposalsData)
+      });
+      if (flag) {
+        dispatch({ type: NEW_BID_CREATED, payload: { flag } });
+      }
+    } catch (err) {
+      console.log('error occurred ', err);
+      dispatch({ type: PROPOSAL_INFO_ERROR, payload: err });
+      dispatch({ type: NEW_BID_CREATED, payload: { flag: false } });
+    }
+  };
+};
+
+export const getOpportunityPrev = (
+  id: string,
   flag = false
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
@@ -844,6 +928,7 @@ export const getOpportunity = (
       //     break;
       //   }
       // }
+      console.log('data is ', data);
       dispatch({ type: OPPORTUNITY_INFO, payload: data });
       dispatch({
         type: UPDATE_BOX_BIDS,
@@ -863,16 +948,34 @@ export const resetProposalId = () => {
   return dispatch => dispatch({ type: RESET_PROPOSALID, payload: {} });
 };
 
-export const changeBid = bid => {
+export const changeBidPrev = bid => {
   if (bid?.bidNo) {
     updateBidNoQueryparam(bid?.bidNo);
   }
   return dispatch => {
+    console.log('bid in change bid is', bid);
     dispatch({
       type: CHANGE_BID,
       payload: bid
     });
     // dispatch(fetchNotes(bid.bidId));
+  };
+};
+export const changeBid = bid => {
+  if (bid?.bidNo) {
+    updateBidNoQueryparam(bid?.bidNo);
+  }
+  return async dispatch => {
+    console.log('bid in change bid is', bid);
+    const response = await axios.get(`${PROPOSAL_API_URL}/${bid.bidId}`);
+    console.log(response, 'is response');
+    dispatch({
+      type: CHANGE_BID,
+      payload: {
+        proposalDetails: { ...response.data, isCurrent: bid.isCurrent },
+        bid
+      }
+    });
   };
 };
 
