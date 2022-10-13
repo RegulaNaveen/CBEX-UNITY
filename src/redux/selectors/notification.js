@@ -18,6 +18,12 @@ export const getAllNotifications = notification =>
       item.id,
       item.bodyJson?.bidNo || null
     );
+
+    // if documentId exists, find and replace documentTitle in body with hyperlink
+    if (item.bodyJson && item.bodyJson.documentId) {
+      item.body = item.body.replace(item.bodyJson.documentTitle, `<a target="_blank" href="https://app.box.com/file/${item.bodyJson.documentId}">${item.bodyJson.documentTitle}</a>`)
+    }
+
     return item;
   });
 
@@ -34,6 +40,12 @@ export const getUnreadNotifications = notification =>
       );
       // Add timestamp for sorting
       item.timestamp = new Date(item.created_date).getTime();
+
+      // if documentId exists, find and replace documentTitle in body with hyperlink
+      if (item.bodyJson && item.bodyJson.documentId) {
+        item.body = item.body.replace(item.bodyJson.documentTitle, `<a target="_blank" href="https://app.box.com/file/${item.bodyJson.documentId}">${item.bodyJson.documentTitle}</a>`)
+      }
+
       return item;
     })
     .sort((x, y) => y.timestamp - x.timestamp);
