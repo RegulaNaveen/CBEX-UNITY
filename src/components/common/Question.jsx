@@ -27,8 +27,7 @@ import {
   setProposalAnswerData,
   setEditQuestionData,
   setProposalAnswerLoading,
-  deleteProposalUserFromDB,
-  getPriceModelerData,
+  deleteProposalUserFromDB
 } from '../../redux/actions/proposal-actions';
 import {
   getUserData,
@@ -105,8 +104,7 @@ type Props = {
   isCustomQuestion: boolean,
   hasDifferentSFanswer: boolean,
   isNotepadOpen: boolean,
-  events: Object,
-  updatePriceModeler:any,
+  events: Object
 };
 export class TaskRow extends React.PureComponent<Props, State> {
   static contextType = SocketContext;
@@ -183,19 +181,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
   };
 
   handleTextChange = (textValue, lastAnswer, editorData) => {
-    const { setProposalAnswer, proposalId, questionId, userData, sfField, updatePriceModeler } = this.props;
-    // if(["Therapy_Area__c",
-    // "Number_of_Sites__c",
-    // "Phase_P__c",
-    // "Patients_Enrolled__c",
-    // "Potential_Regions__c"].indexOf(sfField) > 0){
-
-    //   // call price modular API after 5-10 sec
-
-    //   //
-
-    // }
-    updatePriceModeler( proposalId)
+    const { setProposalAnswer, proposalId, questionId, userData } = this.props;
     const s1 = textValue
       .trim()
       .split(' ')
@@ -1174,6 +1160,5 @@ export default connect(mapStateToProps, {
   setProposalAnswer: setProposalAnswerData,
   setAnswerLoading: setProposalAnswerLoading,
   deleteProposalUser: deleteProposalUserFromDB,
-  setEditQuestionData,
-  updatePriceModeler:getPriceModelerData,
+  setEditQuestionData
 })(MatomoHOC(TaskRow));

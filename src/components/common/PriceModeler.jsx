@@ -5,8 +5,11 @@ import IconButton from 'apollo-react/components/IconButton';
 import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
 import { useSelector, useDispatch } from 'react-redux';
-import { getSelectedBid } from '../../redux/selectors/proposal';
-import { getPriceModelerData, priceMod } from '../../redux/actions/proposal-actions';
+import {
+  getSelectedBid,
+  getPriceModuler
+} from '../../redux/selectors/proposal';
+import { getPriceModelerData } from '../../redux/actions/proposal-actions';
 import CustomModal from './CustomModal';
 import { DEFAULT } from '../../constants/app';
 import { convertToInternationalCurrency } from '../../utils/helpers';
@@ -19,7 +22,7 @@ const INITIAL_LIST_TITLE = {
   regions: 'Regions'
 };
 
- export const INITIAL_LIST_VAL = {
+export const INITIAL_LIST_VAL = {
   cost: '',
   therapeutic: '',
   sites: '',
@@ -28,14 +31,16 @@ const INITIAL_LIST_TITLE = {
   regions: ''
 };
 
+// TODO
+// Fixed in a hurry, Need to add a loader on price modeler data load
 const PriceModeler = () => {
-  const [additionalDetails, setAdditionalDetails] = useState(INITIAL_LIST_VAL);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
   const dispatch = useDispatch();
   const selectedBid = useSelector(getSelectedBid)?.toJS();
+  const priceModeler = useSelector(getPriceModuler)?.toJS();
   const memoizeBid = useMemo(() => selectedBid, [selectedBid?.id]);
   const proposalID = memoizeBid?.id;
 
@@ -43,35 +48,7 @@ const PriceModeler = () => {
    * Trigger Price Modeler Api on Bid change
    */
   useEffect(() => {
-    (async () => {
-      setLoading(true);
-      const response = await dispatch(getPriceModelerData(proposalID));
-      setLoading(false);
-      // console.log({ response });
-      if (response.status) {
-        const {
-          Cost: cost,
-          TherapyArea__c: therapeutic,
-          Number_of_Sites__c: sites,
-          Phase_P__c: phase,
-          Patients_Enrolled__c: patients,
-          Potential_Regions__c: regions
-        } = response.data.latestDetails;
-        // dispatch(priceMod())
-
-        setAdditionalDetails({
-          cost,
-          therapeutic,
-          sites,
-          phase,
-          patients,
-          regions
-        });
-      } else {
-        setError(true);
-        setErrorMsg(response.msg);
-      }
-    })();
+    dispatch(getPriceModelerData(proposalID));
   }, [memoizeBid]);
 
   // Price Modeler Tooltip
@@ -104,14 +81,14 @@ const PriceModeler = () => {
       <h2 className="price-modeler__title">Price Modeler Ballpark Estimate</h2>
       <p className="price-modeler__price">
         {`$${
-          additionalDetails.cost
-            ? convertToInternationalCurrency(additionalDetails.cost)
+          priceModeler.cost
+            ? convertToInternationalCurrency(priceModeler.cost)
             : '0.0M'
         }`}{' '}
         <span className="price-modeler__info">{infoIconWithTooltip}</span>
       </p>
       <div className="price-modeler__details">
-        {map(additionalDetails, (item, key) => {
+        {map(priceModeler, (item, key) => {
           if (key === 'cost') return null;
           return (
             <div className="price-modeler__details-item" key={key}>

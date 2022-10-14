@@ -85,7 +85,7 @@ const PROPOSAL = {
   QUESTION_UNLOCK_BY_USER: 'QUESTION_UNLOCK_BY_USER',
   QUESTION_LOCK_DETAILS_ALL: 'QUESTION_LOCK_DETAILS_ALL',
   SET_EVENT_LAUNCHER_FLAG: 'set_event_launcher_flag',
-  SET_PRICE_MODULER_FIELDS: 'set_price_moduler_fields'
+  SET_PRICE_MODELER_FIELDS: 'set_price_modeler_fields'
 };
 
 const PROPOSALS = {
