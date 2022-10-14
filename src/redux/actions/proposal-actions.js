@@ -2,6 +2,7 @@
 import { isEmpty, cloneDeep, uniqBy } from 'lodash';
 import { fromJS } from 'immutable';
 import axios from 'axios';
+import { INITIAL_LIST_VAL } from '../../components/common/PriceModeler';
 
 import { REDUX_TYPES, API } from '../../constants';
 import type { Dispatch, ThunkAction } from './action-types';
@@ -85,7 +86,8 @@ const {
   QUESTION_LOCK_BY_USER,
   QUESTION_UNLOCK_BY_USER,
   QUESTION_LOCK_DETAILS_ALL,
-  SET_EVENT_LAUNCHER_FLAG
+  SET_EVENT_LAUNCHER_FLAG,
+  SET_PRICE_MODULER_FIELDS,
 } = REDUX_TYPES.PROPOSAL;
 
 /**
@@ -1157,13 +1159,27 @@ export const getProposalAnswerHistory = (
   }
 };
 
+// export const priceMod = data => {
+//   return async dispatch => {
+//     dispatch({
+//       type: SET_PRICE_MODULER_FIELDS,
+//       payload: data
+//     });
+//   };
+// };
+
 /**
  * Get Price Modeler Data
  */
+
 export const getPriceModelerData = proposalId => async () => {
+  console.log("pricemodeler data")
   try {
     // Api Response
     const response = await priceModelerApi(proposalId);
+    if (response.data){
+      dispatch({ type:  SET_PRICE_MODULER_FIELDS, payload: response.data});
+    }
     console.log('Price Modeler Api Response', response.data);
     return { status: true, title: DEFAULT.SUCCESS, data: response.data };
   } catch (error) {

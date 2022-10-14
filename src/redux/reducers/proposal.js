@@ -55,7 +55,9 @@ const {
   QUESTION_LOCK_BY_USER,
   QUESTION_UNLOCK_BY_USER,
   QUESTION_LOCK_DETAILS_ALL,
-  SET_EVENT_LAUNCHER_FLAG
+  SET_EVENT_LAUNCHER_FLAG,
+  SET_PRICE_MODULER_FIELDS,
+  
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -126,7 +128,15 @@ const INITIAL_STATE: Map = fromJS({
   boxAdditionalLink: {},
   switchTempCallStatus: false,
   switchTempInProgress: false,
-  eventLauncherFlag: false
+  eventLauncherFlag: false,
+  priceModuler: {
+    cost: '',
+    therapeutic: '',
+    sites: '',
+    phase: '',
+    patients: '',
+    regions: ''
+  }
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -1022,6 +1032,26 @@ const onDeleteQuestion = (state, action) => {
   }
 };
 
+const setPriceModulerFields = (state, action) => {
+  const {
+    Cost: cost,
+    TherapyArea__c: therapeutic,
+    Number_of_Sites__c: sites,
+    Phase_P__c: phase,
+    Patients_Enrolled__c: patients,
+    Potential_Regions__c: regions
+  } = action.payload.latestDetails;
+
+  return state.set('priceModuler',{
+    cost,
+    therapeutic,
+    sites,
+    phase,
+    patients,
+    regions
+  })
+}
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
@@ -1075,7 +1105,8 @@ const actionMap = {
   [QUESTION_UNLOCK_BY_USER]: updateQuestionUnlockByUser,
   [QUESTION_LOCK_DETAILS_ALL]: questionLockDetails,
   [SET_EVENT_LAUNCHER_FLAG]: (state, { payload }) =>
-    state.set('eventLauncherFlag', payload)
+    state.set('eventLauncherFlag', payload),
+    [SET_PRICE_MODULER_FIELDS]: setPriceModulerFields
 };
 
 export default function(

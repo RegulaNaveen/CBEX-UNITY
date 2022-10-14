@@ -6,7 +6,7 @@ import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
 import { useSelector, useDispatch } from 'react-redux';
 import { getSelectedBid } from '../../redux/selectors/proposal';
-import { getPriceModelerData } from '../../redux/actions/proposal-actions';
+import { getPriceModelerData, priceMod } from '../../redux/actions/proposal-actions';
 import CustomModal from './CustomModal';
 import { DEFAULT } from '../../constants/app';
 import { convertToInternationalCurrency } from '../../utils/helpers';
@@ -19,7 +19,7 @@ const INITIAL_LIST_TITLE = {
   regions: 'Regions'
 };
 
-const INITIAL_LIST_VAL = {
+ export const INITIAL_LIST_VAL = {
   cost: '',
   therapeutic: '',
   sites: '',
@@ -57,6 +57,7 @@ const PriceModeler = () => {
           Patients_Enrolled__c: patients,
           Potential_Regions__c: regions
         } = response.data.latestDetails;
+        // dispatch(priceMod())
 
         setAdditionalDetails({
           cost,
