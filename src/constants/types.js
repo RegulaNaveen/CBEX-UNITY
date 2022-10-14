@@ -84,10 +84,12 @@ const PROPOSAL = {
   QUESTION_LOCK_BY_USER: 'QUESTION_LOCK_BY_USER',
   QUESTION_UNLOCK_BY_USER: 'QUESTION_UNLOCK_BY_USER',
   QUESTION_LOCK_DETAILS_ALL: 'QUESTION_LOCK_DETAILS_ALL',
-  SET_EVENT_LAUNCHER_FLAG: 'set_event_launcher_flag'
+  SET_EVENT_LAUNCHER_FLAG: 'set_event_launcher_flag',
+  SET_PRICE_MODELER_FIELDS: 'set_price_modeler_fields'
 };
 
 const PROPOSALS = {
+  GET_PRICEMODELER: 'get_pricemodeler',
   SET_PROPOSAL_VIEW_TYPE: 'set_proposal_view_type',
   ON_GET_PROPOSALS: 'on_get_proposals',
   ERROR_ON_GET_PROPOSALS: 'error_on_get_proposals',

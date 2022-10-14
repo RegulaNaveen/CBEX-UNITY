@@ -2,6 +2,7 @@
 import { isEmpty, cloneDeep, uniqBy } from 'lodash';
 import { fromJS } from 'immutable';
 import axios from 'axios';
+import { INITIAL_LIST_VAL } from '../../components/common/PriceModeler';
 
 import { REDUX_TYPES, API } from '../../constants';
 import type { Dispatch, ThunkAction } from './action-types';
@@ -34,6 +35,7 @@ import { getUniqueMilestones, getBidList } from '../selectors/proposal';
 import { getProposalIdlist } from '../../utils/utils';
 import { fetchNotes } from './notepad-actions';
 import { DEFAULT } from '../../constants/app';
+import isPriceModelerQuestion from '../../utils/isPriceModelerQuestion';
 
 const { PROPOSAL_API_URL } = API.PROPOSAL;
 const {
@@ -85,7 +87,8 @@ const {
   QUESTION_LOCK_BY_USER,
   QUESTION_UNLOCK_BY_USER,
   QUESTION_LOCK_DETAILS_ALL,
-  SET_EVENT_LAUNCHER_FLAG
+  SET_EVENT_LAUNCHER_FLAG,
+  SET_PRICE_MODELER_FIELDS
 } = REDUX_TYPES.PROPOSAL;
 
 /**
@@ -136,6 +139,19 @@ export const getProposalByID = (id: string): ThunkAction<string, Object> => {
   };
 };
 
+/**
+ * Get Price Modeler Data
+ */
+export const getPriceModelerData = proposalId => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    try {
+      const response = await priceModelerApi(proposalId);
+      dispatch({ type: SET_PRICE_MODELER_FIELDS, payload: response.data });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
 export const setProposalAnswerData = (
   socketContext,
   proposalId: string,
@@ -159,6 +175,11 @@ export const setProposalAnswerData = (
         userData,
         editorData
       );
+      // Check is price modeler question
+      const allQuestions = selectProposalQuestions(getState());
+      if (isPriceModelerQuestion(questionId, allQuestions)) {
+        await getPriceModelerData(proposalId)(dispatch);
+      }
       await socketContext.questionAnswerUpdateWrapper(questionId, data);
       dispatch({
         type: PROPOSAL_ANSWER,
@@ -1149,23 +1170,6 @@ export const getProposalAnswerHistory = (
     // Api Response
     const response = await getProposalAnswer(proposalId, questionId);
     return { status: true, title: DEFAULT.SUCCESS, data: response };
-  } catch (error) {
-    // Error
-    console.log(error?.response);
-    const msg = getErrorMessage(error);
-    return { status: false, title: DEFAULT.ALERT, msg };
-  }
-};
-
-/**
- * Get Price Modeler Data
- */
-export const getPriceModelerData = proposalId => async () => {
-  try {
-    // Api Response
-    const response = await priceModelerApi(proposalId);
-    console.log('Price Modeler Api Response', response.data);
-    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
   } catch (error) {
     // Error
     console.log(error?.response);
