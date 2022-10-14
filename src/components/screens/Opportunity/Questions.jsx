@@ -23,7 +23,7 @@ import {
   resetQuestionsFilterAction,
   clearQuestionsFilterAction,
   expandAllSectionsAction,
-  callPickListLookupSfData
+  callPickListLookupSfData,
 } from '../../../redux/actions/proposal-actions';
 import {
   getProposalDetails,
@@ -38,14 +38,18 @@ import {
   getMilestoneSections,
   getEditQuestionData,
   getIsOpen,
-  getSelectedBid
+  getSelectedBid,
 } from '../../../redux/selectors';
 import {
   selectUniqueMilestones,
   selectAreAllSectionsExpanded,
-  getBidList
+  getBidList,
 } from '../../../redux/selectors/proposal';
 import { selectUserRole } from '../../../redux/selectors/sso-auth';
+import Switch from 'apollo-react/components/Switch';
+import Tooltip from 'apollo-react/components/Tooltip';
+import InfoIcon from 'apollo-react-icons/Info';
+import IconButton from 'apollo-react/components/IconButton';
 import Sidebar from '../../views/Sidebar';
 import AnswerHistory from '../../views/modals/AnswerHistory';
 import { getAllUsers } from '../../../redux/actions/sso-auth-actions';
@@ -90,14 +94,14 @@ type Props = {
   expandAllSections: Function,
   editQuestionsData: Map,
   setQuestion: Function,
-  hasQuestionError: boolean
+  hasQuestionError: boolean,
 };
 
 type State = {
   showModal: boolean,
   selectedQuestionForHistory: string,
   isHistoryModalShown: boolean,
-  showFilter: boolean
+  showFilter: boolean,
 };
 
 const MANUAL_REFRESH = false;
@@ -121,7 +125,7 @@ class Questions extends Component {
       open: false,
       isNotepadOpen: true,
       totalWidth: '',
-      proposalNoteRender: true
+      proposalNoteRender: true,
     };
     this.questionsRef = createRef(null);
   }
@@ -132,7 +136,7 @@ class Questions extends Component {
     const {
       fetchUsers,
       getSFNonEditabelInfoField,
-      callPickListLookupSfData
+      callPickListLookupSfData,
     } = this.props;
     fetchUsers();
     getSFNonEditabelInfoField();
@@ -147,7 +151,7 @@ class Questions extends Component {
       hasQuestionError,
       userRole,
       applyQuestionsFilter,
-      editQuestionsData
+      editQuestionsData,
     } = this.props;
     if (prevProps.isQuestionLoading && setQuestion && !hasQuestionError)
       this.onClose();
@@ -165,7 +169,7 @@ class Questions extends Component {
     // bid change check start
     const {
       match: { params },
-      selectedBid
+      selectedBid,
     } = this.props;
     const thisProposalId = selectedBid.get('id', '');
     const prevProposalId = prevProps.selectedBid.get('id', '');
@@ -195,7 +199,7 @@ class Questions extends Component {
 
   handleFilterClick() {
     this.setState(({ showFilter }) => ({
-      showFilter: !showFilter
+      showFilter: !showFilter,
     }));
   }
 
@@ -204,7 +208,7 @@ class Questions extends Component {
     applyQuestionsFilter(filterName, checked, groupName);
   }
 
-  scrollToSelectedElement = title => {
+  scrollToSelectedElement = (title) => {
     setTimeout(() => {
       const item = document.getElementById(
         `notepad-${String(title).toLocaleLowerCase()}`
@@ -224,17 +228,17 @@ class Questions extends Component {
     );
   };
 
-  onAddQuestion = value => {
+  onAddQuestion = (value) => {
     this.setState({ currentsection: value });
     this.onClose();
   };
 
-  trackMatomoEventForCheckBoxes = item => {
+  trackMatomoEventForCheckBoxes = (item) => {
     const {
       userActions,
       eventCategories,
       proposalDetail,
-      trackEvent
+      trackEvent,
     } = this.props;
 
     trackEvent({
@@ -243,9 +247,9 @@ class Questions extends Component {
       customDimensions: [
         {
           id: 1,
-          value: JSON.stringify(proposalDetail)
-        }
-      ]
+          value: JSON.stringify(proposalDetail),
+        },
+      ],
     });
   };
 
@@ -257,17 +261,17 @@ class Questions extends Component {
       customDimensions: [
         {
           id: 1,
-          value: JSON.stringify(proposalDetail)
-        }
-      ]
+          value: JSON.stringify(proposalDetail),
+        },
+      ],
     });
   };
 
-  trackMatomoEventSidebarToggle = action => {
+  trackMatomoEventSidebarToggle = (action) => {
     const openOrclose = action ? 'Open' : 'Close';
     const { userActions } = this.props;
     this.trackMatomoEvent({
-      action: `Blade: ${userActions.click} On Blade To ${openOrclose} Sidebar`
+      action: `Blade: ${userActions.click} On Blade To ${openOrclose} Sidebar`,
     });
   };
 
@@ -281,13 +285,13 @@ class Questions extends Component {
     this.trackMatomoEventSidebarToggle(!isOpen);
   };
 
-  trackMatomoEventToggleQModal = action => {
+  trackMatomoEventToggleQModal = (action) => {
     const openOrclose = action ? 'Open' : 'Close';
     const {
       userActions,
       eventCategories,
       proposalDetail,
-      trackEvent
+      trackEvent,
     } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
@@ -295,9 +299,9 @@ class Questions extends Component {
       customDimensions: [
         {
           id: 1,
-          value: JSON.stringify(proposalDetail)
-        }
-      ]
+          value: JSON.stringify(proposalDetail),
+        },
+      ],
     });
   };
 
@@ -306,7 +310,7 @@ class Questions extends Component {
       userActions,
       eventCategories,
       proposalDetail,
-      trackEvent
+      trackEvent,
     } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
@@ -314,15 +318,15 @@ class Questions extends Component {
       customDimensions: [
         {
           id: 1,
-          value: JSON.stringify(proposalDetail)
-        }
-      ]
+          value: JSON.stringify(proposalDetail),
+        },
+      ],
     });
   };
 
   getProposalInfoUpdated = () => {
     const { getProposalInfoUpdated, getBidList } = this.props;
-    const currentbid = getBidList.filter(v => v.isCurrent === true);
+    const currentbid = getBidList.filter((v) => v.isCurrent === true);
     getProposalInfoUpdated(currentbid[0].bidId);
     this.trackMatomoEventRefreshInfo();
   };
@@ -341,14 +345,14 @@ class Questions extends Component {
     const {
       sections,
       filteredSections,
-      isQuestionsFiltersEnabled
+      isQuestionsFiltersEnabled,
     } = this.props;
 
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
 
     let question = allSections
       .valueSeq()
-      .find(section => section.getIn(['questions', selectedAnswer]))
+      .find((section) => section.getIn(['questions', selectedAnswer]))
       .getIn(['questions', selectedAnswer]);
 
     const answerConfigType = question
@@ -368,7 +372,7 @@ class Questions extends Component {
 
       if (questionId) newAnswers = newAnswers.getIn(['answers', 'answers']);
       if (newAnswers) {
-        newAnswers = newAnswers.map(ans => {
+        newAnswers = newAnswers.map((ans) => {
           const newAns = getCountriesNameForCode(ans.get('answer', List()));
           return ans.set('answer', newAns);
         });
@@ -378,7 +382,7 @@ class Questions extends Component {
 
     this.setState({
       selectedQuestionForHistory: question,
-      isHistoryModalShown: true
+      isHistoryModalShown: true,
     });
   };
 
@@ -386,7 +390,7 @@ class Questions extends Component {
     this.setState({ isNotepadOpen: value });
   };
 
-  expandsection = e => {
+  expandsection = (e) => {
     const { expandAllSections } = this.props;
     expandAllSections(false);
     this.setState({ sidebarscroll: e });
@@ -417,7 +421,7 @@ class Questions extends Component {
               <Grid container spacing={2} key={groupName} className={groupName}>
                 {group
                   .entrySeq()
-                  .filter(value => value[0] !== 'logic')
+                  .filter((value) => value[0] !== 'logic')
                   .map(([key, filter]) => (
                     <Grid
                       item
@@ -459,14 +463,14 @@ class Questions extends Component {
       allSectionsExpanded,
       editQuestionsData,
       isOpen,
-      noneditableField
+      noneditableField,
     } = this.props;
     const {
       showModal,
       selectedQuestionForHistory,
       isHistoryModalShown,
       open,
-      isNotepadOpen
+      isNotepadOpen,
     } = this.state;
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
     const minPixelToExclude = 20;
@@ -486,6 +490,19 @@ class Questions extends Component {
         {/* Expand and Filter */}
         <div>
           <div className="tasksList-title-wrapper">
+            <div className="N/A toggle-switch">
+              <Switch label="Mark N/A" size="small" />
+              <Tooltip
+                variant="light"
+                disableTouchListener
+                title="Lorem ipsum"
+                placement="left"
+              >
+                <IconButton color="primary">
+                  <InfoIcon />
+                </IconButton>
+              </Tooltip>
+            </div>
             <div className="taskList-icons-wrapper">
               <ApolloCheckbox
                 label="Expand All"
@@ -498,7 +515,7 @@ class Questions extends Component {
                     const clearsidebarselectsection = new CustomEvent(
                       'clearsidebarselectsection',
                       {
-                        detail: true
+                        detail: true,
                       }
                     );
                     document.dispatchEvent(clearsidebarselectsection);
@@ -544,7 +561,6 @@ class Questions extends Component {
         </div>
         <div id="panelwrapper">
           {/* Notepad */}
-
           <div id="panel-notepad" style={{ borderRadius: '5px' }}>
             <Panel
               minWidth={notepadMinWidthPx}
@@ -562,7 +578,7 @@ class Questions extends Component {
             >
               <div
                 className={classNames('panel-notepad-inner', {
-                  hidden: !isNotepadOpen
+                  hidden: !isNotepadOpen,
                 })}
               >
                 <div id="panel-notepad-header">
@@ -580,15 +596,15 @@ class Questions extends Component {
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',
-                      height: '100vh'
+                      height: '100vh',
                     }}
                   />
                 )}
               </div>
             </Panel>
           </div>
-
           {/* Question list */}
+
           <div id="panel-questions-list">
             <div className="tasksList-wrapper" ref={this.questionsRef}>
               <Suspense fallback={<div>Loading...</div>}>
@@ -610,11 +626,11 @@ class Questions extends Component {
         <Sidebar
           sections={allSections}
           id={selectedBid.get('id')}
-          onAddQuestion={value => {
+          onAddQuestion={(value) => {
             this.setState({ currentsection: value });
           }}
-          onscrollelement={e => this.expandsection(e)}
-          expandAll={e => {
+          onscrollelement={(e) => this.expandsection(e)}
+          expandAll={(e) => {
             this.setState({ sidebarscroll: '' }, () => {
               this.handleIsCheckedAll();
             });
@@ -622,7 +638,7 @@ class Questions extends Component {
               const clearsidebarselectsection = new CustomEvent(
                 'clearsidebarselectsection',
                 {
-                  detail: true
+                  detail: true,
                 }
               );
               document.dispatchEvent(clearsidebarselectsection);
@@ -677,7 +693,7 @@ const mapStateToProps = (state: Map) => ({
   allSectionsExpanded: selectAreAllSectionsExpanded(state),
   editQuestionsData: getEditQuestionData(state),
   selectedBid: getSelectedBid(state),
-  getBidList: getBidList(state)
+  getBidList: getBidList(state),
 });
 
 export default compose(
@@ -691,6 +707,6 @@ export default compose(
     expandAllSections: expandAllSectionsAction,
     handleOpenClose: onHandleOpenClose,
     getSFNonEditabelInfoField: getSFNonEditabelField,
-    callPickListLookupSfData
+    callPickListLookupSfData,
   })
 )(MatomoHOC(Questions));
