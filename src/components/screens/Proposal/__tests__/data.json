@@ -266,12 +266,12 @@
             },
             "myUserRole": {
                 "checked": false,
-                "label": "Responsible",
+                "label": "Responsible Role",
                 "className": "questions-filter__row1-col1"
             },
             "interestedParty": {
                 "checked": false,
-                "label": "Informed",
+                "label": "Informed Party",
                 "className": "questions-filter__row2-col1"
             },
             "Challenge Call": {
@@ -27137,12 +27137,12 @@
         },
         "myUserRole": {
             "checked": false,
-            "label": "Responsible",
+            "label": "Responsible Role",
             "className": "questions-filter__row1-col1"
         },
         "interestedParty": {
             "checked": false,
-            "label": "Informed",
+            "label": "Informed Party",
             "className": "questions-filter__row2-col1"
         },
         "Challenge Call": {
