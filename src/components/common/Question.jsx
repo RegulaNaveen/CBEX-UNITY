@@ -590,7 +590,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
           !isEmpty(data.text.trim())
         )
           if (
-            isEmpty(richTextData.value.blocks) &&
+            isEmpty(richTextData.value?.blocks) &&
             lastAnswerJS?.answer === data.value?.blocks[0]?.text
           )
             saveDate = false;
@@ -607,8 +607,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
         if (saveDate) {
           this.handleRichTextChange(data);
-        } else {
-          console.log('on blur called no answer change');
         }
         this.context.questionUnlockWrapper(this.props.questionId);
 
