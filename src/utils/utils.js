@@ -174,9 +174,18 @@ function getUserName(userName) {
 }
 
 function getProposalIdlist(data = []) {
-  const sortedData = data.sort(
-    (a, b) => b.proposal.proposalDate - a.proposal.proposalDate
-  );
+  const sortProposalsByDateDesc = (i, j) => {
+    const fallBackValue = 0; // keeps original order
+    try {
+      const firstItem = Date.parse(i?.proposal?.proposalDate) || fallBackValue;
+      const secondItem = Date.parse(j?.proposal?.proposalDate) || fallBackValue;
+      return secondItem - firstItem;
+    } catch (error) {
+      console.error('sortProposalsByDateDesc', error);
+      return fallBackValue;
+    }
+  };
+  const sortedData = data.sort(sortProposalsByDateDesc);
   return sortedData.map(d => {
     return {
       proposalId: d.proposal.proposalId,
