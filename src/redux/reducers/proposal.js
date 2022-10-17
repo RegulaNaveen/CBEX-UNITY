@@ -1,5 +1,5 @@
 // @flow
-import { isEqual, cloneDeep } from 'lodash';
+import _, { isEqual, cloneDeep } from 'lodash';
 import { Map, fromJS, OrderedMap, is } from 'immutable'; // NOSONAR
 import { REDUX_TYPES } from '../../constants';
 import type { ApiAction } from '../actions/action-types';
@@ -628,8 +628,7 @@ const updateQuestionUnlockByUser = (state: Map, action: Object): Map => {
       newState = state.updateIn(
         ['proposalQuestions', indexOfListToUpdateCurrent],
         value => ({
-          ...value,
-          questionLockInfo: {}
+          ..._.omit(value, 'questionLockInfo')
         })
       );
 
