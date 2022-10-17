@@ -313,7 +313,7 @@ const setOpportunityInfo = (state, action) => {
 
 const onChangeBid = (state: Map, action: Object): Map => {
   const { payload } = action;
-  console.log('payload.bid is ', payload.bid);
+
   let opportunityData = state.get('opportunityData');
   const {
     agreementId,
@@ -335,10 +335,6 @@ const onChangeBid = (state: Map, action: Object): Map => {
   });
 
   const proposalQuestions = payload.proposalDetails.proposalQuestions;
-  // const proposalQuestions = opportunityData.getIn([
-  //   selectedBid.get('id'),
-  //   'proposalQuestions'
-  // ]);
 
   if (proposalQuestions) {
     const milestones = getUniqueMilestones(proposalQuestions);
@@ -507,38 +503,6 @@ const onProposalAnswer = (state: Map, action: Object): Map => {
 
   // case  when user is not in the same proposal Id
   if (selectedBidId !== proposalId) {
-    // let newState = fromJS({});
-
-    // const indexOfListToUpdate = state
-    //   .getIn(['opportunityData', proposalId, 'proposalQuestions'])
-    //   .findIndex(listItem => {
-    //     return listItem.questionId === referenceId;
-    //   });
-
-    // newState = state.setIn(
-    //   [
-    //     'opportunityData',
-    //     proposalId,
-    //     'proposalQuestions',
-    //     indexOfListToUpdate,
-    //     'answers'
-    //   ],
-    //   data
-    // );
-    // newState = newState.setIn(
-    //   [
-    //     'opportunityData',
-    //     proposalId,
-    //     'proposalQuestions',
-    //     indexOfListToUpdate,
-    //     'hasDifferentSFanswer'
-    //   ],
-    //   hasDifferentSFanswer
-    // );
-
-    // const opportunityData = newState.get('opportunityData');
-
-    // return state.set('opportunityData', opportunityData);
     return state;
   }
 
@@ -597,22 +561,7 @@ const updateQuestionLockByUser = (state: Map, action: Object): Map => {
   let newState = fromJS({});
 
   if (proposalId) {
-    // let opportunityData = state.get('opportunityData');
     const selectedBid = state.getIn(['selectedBid', 'id']);
-
-    // const indexOfListToUpdate = opportunityData
-    //   .getIn([proposalId, 'proposalQuestions'])
-    //   .findIndex(listItem => {
-    //     return listItem.questionId === questionId;
-    //   });
-    // // Updating the state for opportunityData with latest lock details
-    // const opportunityDataNew = opportunityData.updateIn(
-    //   [proposalId, 'proposalQuestions', indexOfListToUpdate],
-    //   value => ({
-    //     ...value,
-    //     questionLockInfo: { userInfo: userEmail, userId, userName }
-    //   })
-    // );
 
     // Update the current lock details if the selected Bid is equal to processed Bid
     if (selectedBid === proposalId) {
@@ -634,10 +583,8 @@ const updateQuestionLockByUser = (state: Map, action: Object): Map => {
       if (!isEqual(prevProposalQuestions, proposalQuestionsNew)) {
         return state.set('proposalQuestions', proposalQuestionsNew);
       }
-      // .set('opportunityData', opportunityDataNew);
     }
 
-    // return state.set('opportunityData', opportunityDataNew);
     return state;
   }
 };
@@ -670,20 +617,6 @@ const updateQuestionUnlockByUser = (state: Map, action: Object): Map => {
     // let opportunityData = state.get('opportunityData');
     const selectedBid = state.getIn(['selectedBid', 'id']);
 
-    // const indexOfListToUpdate = opportunityData
-    //   .getIn([proposalId, 'proposalQuestions'])
-    //   .findIndex(listItem => {
-    //     return listItem.questionId === questionId;
-    //   });
-    // Updating the state for opportunityData with latest proposalDetails
-    // const opportunityDataNew = opportunityData.updateIn(
-    //   [proposalId, 'proposalQuestions', indexOfListToUpdate],
-    //   value => ({
-    //     ...value,
-    //     questionLockInfo: {}
-    //   })
-    // );
-
     // Update the current proposalDetails if the selected Bid is equal to processed Bid
     if (selectedBid === proposalId) {
       const indexOfListToUpdateCurrent = state
@@ -691,8 +624,6 @@ const updateQuestionUnlockByUser = (state: Map, action: Object): Map => {
         .findIndex(listItem => {
           return listItem.questionId === questionId;
         });
-
-      console.log('pre state is', state);
 
       newState = state.updateIn(
         ['proposalQuestions', indexOfListToUpdateCurrent],
@@ -707,10 +638,8 @@ const updateQuestionUnlockByUser = (state: Map, action: Object): Map => {
       if (!isEqual(prevProposalQuestions, proposalQuestionsNew)) {
         return state.set('proposalQuestions', proposalQuestionsNew);
       }
-      // .set('opportunityData', opportunityDataNew);
     }
 
-    // return state.set('opportunityData', opportunityDataNew);
     return state;
   }
 };

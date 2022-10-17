@@ -208,10 +208,6 @@ const SocketContextProvider = props => {
 
           if (![UBUILD, DASHBOARD].includes(location)) {
             setTimeout(() => {
-              console.log(
-                'On socket open current Opportunity Number is',
-                currentOppNo.get
-              );
               sendUpdateConnection(
                 currentOppNo.get,
                 localStorage.getItem('proposalId'),

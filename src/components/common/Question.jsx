@@ -612,9 +612,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
         this.setState({ enableRichtext: false });
 
-        // Ye style prop me check laga lete hai shayad idhar se hi error generate kar rha hai
-        // Rahul calling me baat karke aaya may be controll revoke ho jayega
-
         // Change title style for richEdit icon
         const {
           style: quesTitleLStyle,
