@@ -590,7 +590,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
           !isEmpty(data.text.trim())
         )
           if (
-            isEmpty(richTextData.value.blocks) &&
+            isEmpty(richTextData.value?.blocks) &&
             lastAnswerJS?.answer === data.value?.blocks[0]?.text
           )
             saveDate = false;
@@ -607,12 +607,13 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
         if (saveDate) {
           this.handleRichTextChange(data);
-        } else {
-          console.log('on blur called no answer change');
         }
         this.context.questionUnlockWrapper(this.props.questionId);
 
         this.setState({ enableRichtext: false });
+
+        // Ye style prop me check laga lete hai shayad idhar se hi error generate kar rha hai
+        // Rahul calling me baat karke aaya may be controll revoke ho jayega
 
         // Change title style for richEdit icon
         const {

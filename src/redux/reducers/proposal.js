@@ -691,15 +691,15 @@ const updateQuestionUnlockByUser = (state: Map, action: Object): Map => {
         .findIndex(listItem => {
           return listItem.questionId === questionId;
         });
+
+      console.log('pre state is', state);
+
       newState = state.updateIn(
         ['proposalQuestions', indexOfListToUpdateCurrent],
-        value => {
-          const newValue = value;
-          delete newValue.questionLockInfo;
-          return {
-            ...newValue
-          };
-        }
+        value => ({
+          ...value,
+          questionLockInfo: {}
+        })
       );
 
       const proposalQuestionsNew = newState.get('proposalQuestions');

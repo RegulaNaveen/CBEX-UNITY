@@ -204,17 +204,25 @@ const SocketContextProvider = props => {
             })
           );
 
+          const location = window.location?.pathname;
+
+          if (![UBUILD, DASHBOARD].includes(location)) {
+            setTimeout(() => {
+              console.log(
+                'On socket open current Opportunity Number is',
+                currentOppNo.get
+              );
+              sendUpdateConnection(
+                currentOppNo.get,
+                localStorage.getItem('proposalId'),
+                newSocket
+              );
+            }, 1000);
+          }
+
           refreshInterval = setInterval(() => {
             refreshSocketConnection();
           }, [REFRESH_WEBSOCKET_CONNECTION]);
-        }
-        const location = window.location?.pathname;
-        if (![UBUILD, DASHBOARD].includes(location)) {
-          sendUpdateConnection(
-            currentOppNo.get,
-            localStorage.getItem('proposalId'),
-            newSocket
-          );
         }
       };
 
