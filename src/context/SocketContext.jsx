@@ -209,7 +209,7 @@ const SocketContextProvider = props => {
           if (![UBUILD, DASHBOARD].includes(location)) {
             setTimeout(() => {
               sendUpdateConnection(
-                currentOppNo.get,
+                localStorage.getItem('oppNo'),
                 localStorage.getItem('proposalId'),
                 newSocket
               );

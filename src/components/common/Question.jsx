@@ -157,25 +157,25 @@ export class TaskRow extends React.PureComponent<Props, State> {
       textValue,
       userData
     ).then(() => {
-      // const [deletedVal] = xor(
-      //   textValue?.trim() ? textValue?.trim().split(',') : [],
-      //   lastValue?.trim() ? lastValue?.trim().split(',') : []
-      // );
-      // const [deletedEmail] = String(deletedVal).match(
-      //   /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
-      // );
-      // if (reason === 'remove-option' && deletedEmail) {
-      //   setAnswerLoading(questionId, true);
-      //   const { sectionName, sectionOrder } = section.toJS();
-      //   deleteProposalUser(
-      //     proposalId,
-      //     deletedEmail,
-      //     sectionOrder,
-      //     sectionName
-      //   ).then(() => {
-      //     setAnswerLoading(questionId, false);
-      //   });
-      // }
+      const [deletedVal] = xor(
+        textValue?.trim() ? textValue?.trim().split(',') : [],
+        lastValue?.trim() ? lastValue?.trim().split(',') : []
+      );
+      const [deletedEmail] = String(deletedVal).match(
+        /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+      );
+      if (reason === 'remove-option' && deletedEmail) {
+        setAnswerLoading(questionId, true);
+        const { sectionName, sectionOrder } = section.toJS();
+        deleteProposalUser(
+          proposalId,
+          deletedEmail,
+          sectionOrder,
+          sectionName
+        ).then(() => {
+          setAnswerLoading(questionId, false);
+        });
+      }
     });
     this.trackMatomoEventSubmitAnswer(textValue);
   };
