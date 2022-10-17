@@ -2,6 +2,7 @@
 import { isEmpty, cloneDeep, uniqBy } from 'lodash';
 import { fromJS } from 'immutable';
 import axios from 'axios';
+import { INITIAL_LIST_VAL } from '../../components/common/PriceModeler';
 
 import { REDUX_TYPES, API } from '../../constants';
 import type { Dispatch, ThunkAction } from './action-types';
@@ -34,6 +35,7 @@ import { getUniqueMilestones, getBidList } from '../selectors/proposal';
 import { getProposalIdlist } from '../../utils/utils';
 import { fetchNotes } from './notepad-actions';
 import { DEFAULT } from '../../constants/app';
+import isPriceModelerQuestion from '../../utils/isPriceModelerQuestion';
 
 const { PROPOSAL_API_URL } = API.PROPOSAL;
 const {
@@ -85,7 +87,8 @@ const {
   QUESTION_LOCK_BY_USER,
   QUESTION_UNLOCK_BY_USER,
   QUESTION_LOCK_DETAILS_ALL,
-  SET_EVENT_LAUNCHER_FLAG
+  SET_EVENT_LAUNCHER_FLAG,
+  SET_PRICE_MODELER_FIELDS
 } = REDUX_TYPES.PROPOSAL;
 
 /**
@@ -136,6 +139,19 @@ export const getProposalByID = (id: string): ThunkAction<string, Object> => {
   };
 };
 
+/**
+ * Get Price Modeler Data
+ */
+export const getPriceModelerData = proposalId => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    try {
+      const response = await priceModelerApi(proposalId);
+      dispatch({ type: SET_PRICE_MODELER_FIELDS, payload: response.data });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
 export const setProposalAnswerData = (
   socketContext,
   proposalId: string,
@@ -159,6 +175,11 @@ export const setProposalAnswerData = (
         userData,
         editorData
       );
+      // Check is price modeler question
+      const allQuestions = selectProposalQuestions(getState());
+      if (isPriceModelerQuestion(questionId, allQuestions)) {
+        await getPriceModelerData(proposalId)(dispatch);
+      }
       await socketContext.questionAnswerUpdateWrapper(questionId, data);
       dispatch({
         type: PROPOSAL_ANSWER,
@@ -878,8 +899,6 @@ export const getOpportunity = (
       data[0].isCurrent =
         isCurrentProposal.proposal.proposalId === data[0].proposal.proposalId;
       proposalsData.push(data[0]);
-      // data.push()
-      console.log('proposalsdata is', proposalsData);
       dispatch({ type: OPPORTUNITY_INFO, payload: proposalsData });
       dispatch({
         type: UPDATE_BOX_BIDS,
@@ -896,79 +915,16 @@ export const getOpportunity = (
   };
 };
 
-export const getOpportunityPrev = (
-  id: string,
-  flag = false
-): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<string, Object>) => {
-    dispatch({ type: PROPOSAL_INFO_LOADING, payload: {} });
-    try {
-      const getproposolcount = await getProposalCount(id);
-      const { count, maxLimit } = getproposolcount;
-      let callstomake = parseInt(count / maxLimit);
-      let additionalcallstomake = count % maxLimit;
-      if (additionalcallstomake) {
-        callstomake = callstomake + 1;
-      }
-      let from = 0;
-      let urls = [];
-      for (let index = 0; index < callstomake; index++) {
-        urls.push(
-          axios.get(`${PROPOSAL_API_URL}/opportunity/${id}?from=${from}`)
-        );
-        from = from + maxLimit;
-      }
-      let data = await getPaginateProposal(urls);
-      data = data.map(v => v['data']).flat();
-      // fetch notes for current bid
-      // for (let proposal of data) {
-      //   if (proposal.isCurrent) {
-      //     // fetchNotes(proposal.proposal.proposalId);
-      //     dispatch(fetchNotes(proposal.proposal.proposalId));
-      //     break;
-      //   }
-      // }
-      console.log('data is ', data);
-      dispatch({ type: OPPORTUNITY_INFO, payload: data });
-      dispatch({
-        type: UPDATE_BOX_BIDS,
-        payload: getProposalIdlist(data)
-      });
-      if (flag) {
-        dispatch({ type: NEW_BID_CREATED, payload: { flag } });
-      }
-    } catch (err) {
-      dispatch({ type: PROPOSAL_INFO_ERROR, payload: err });
-      dispatch({ type: NEW_BID_CREATED, payload: { flag: false } });
-    }
-  };
-};
-
 export const resetProposalId = () => {
   return dispatch => dispatch({ type: RESET_PROPOSALID, payload: {} });
 };
 
-export const changeBidPrev = bid => {
-  if (bid?.bidNo) {
-    updateBidNoQueryparam(bid?.bidNo);
-  }
-  return dispatch => {
-    console.log('bid in change bid is', bid);
-    dispatch({
-      type: CHANGE_BID,
-      payload: bid
-    });
-    // dispatch(fetchNotes(bid.bidId));
-  };
-};
 export const changeBid = bid => {
   if (bid?.bidNo) {
     updateBidNoQueryparam(bid?.bidNo);
   }
   return async dispatch => {
-    console.log('bid in change bid is', bid);
     const response = await axios.get(`${PROPOSAL_API_URL}/${bid.bidId}`);
-    console.log(response, 'is response');
     dispatch({
       type: CHANGE_BID,
       payload: {
@@ -1149,23 +1105,6 @@ export const getProposalAnswerHistory = (
     // Api Response
     const response = await getProposalAnswer(proposalId, questionId);
     return { status: true, title: DEFAULT.SUCCESS, data: response };
-  } catch (error) {
-    // Error
-    console.log(error?.response);
-    const msg = getErrorMessage(error);
-    return { status: false, title: DEFAULT.ALERT, msg };
-  }
-};
-
-/**
- * Get Price Modeler Data
- */
-export const getPriceModelerData = proposalId => async () => {
-  try {
-    // Api Response
-    const response = await priceModelerApi(proposalId);
-    console.log('Price Modeler Api Response', response.data);
-    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
   } catch (error) {
     // Error
     console.log(error?.response);

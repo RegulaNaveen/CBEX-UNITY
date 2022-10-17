@@ -18,6 +18,7 @@ import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actio
 import { setNotification } from '../redux/actions/notification-actions';
 import { getUserName, getUserEmail, getUserId } from '../SessionHandler';
 import { REFRESH_WEBSOCKET_CONNECTION } from '../constants/app';
+import { UBUILD, DASHBOARD } from '../routes';
 
 const currentOppNo = {
   get: localStorage.getItem('oppNo') || null,
@@ -203,16 +204,21 @@ const SocketContextProvider = props => {
             })
           );
 
+          const location = window.location?.pathname;
+
+          if (![UBUILD, DASHBOARD].includes(location)) {
+            setTimeout(() => {
+              sendUpdateConnection(
+                localStorage.getItem('oppNo'),
+                localStorage.getItem('proposalId'),
+                newSocket
+              );
+            }, 1000);
+          }
+
           refreshInterval = setInterval(() => {
             refreshSocketConnection();
           }, [REFRESH_WEBSOCKET_CONNECTION]);
-        }
-        if (currentOppNo.get) {
-          sendUpdateConnection(
-            currentOppNo.get,
-            localStorage.getItem('proposalId'),
-            newSocket
-          );
         }
       };
 
@@ -293,6 +299,7 @@ const SocketContextProvider = props => {
       // On Close
       newSocket.onclose = event => {
         console.log('Socket onClose');
+        clearInterval(refreshInterval);
       };
       // On Error
       newSocket.onerror = event => {

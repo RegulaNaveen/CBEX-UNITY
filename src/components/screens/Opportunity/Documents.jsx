@@ -29,7 +29,7 @@ import {
 
 const styles = {
   padding: 16,
-  textAlign: 'left',
+  textAlign: 'left'
 };
 type Props = {
   match: Match,
@@ -41,7 +41,7 @@ type Props = {
 
 type State = {
   selectedBid: string
-}
+};
 
 class Documents extends Component<Props, State> {
   oppNo = '';
@@ -49,7 +49,7 @@ class Documents extends Component<Props, State> {
     super(props);
     this.state = {
       selectedBid: ''
-    }
+    };
   }
   getBrowser = () => {
     const { userAgent } = navigator;
@@ -71,7 +71,14 @@ class Documents extends Component<Props, State> {
   };
 
   componentDidMount() {
-    const { bids, match, getAdditionalLink, proposalDetail, selectedBid, location: { search } } = this.props;
+    const {
+      bids,
+      match,
+      getAdditionalLink,
+      proposalDetail,
+      selectedBid,
+      location: { search }
+    } = this.props;
     const { id } = selectedBid.toJS();
     const selectedView = new URLSearchParams(search).get('viewType');
     // Opportunity number from the link
@@ -89,7 +96,7 @@ class Documents extends Component<Props, State> {
       if (currentBid) this.swtichTabs(currentBid.proposalId);
     }
 
-    if(selectedView && selectedView === 'documents' && id){
+    if (selectedView && selectedView === 'documents' && id) {
       this.swtichTabs(id);
     }
   }
@@ -102,18 +109,20 @@ class Documents extends Component<Props, State> {
     // Calling API to get boxFolderId;
     getBoxId(proposalId);
   }
-  openAdditonalUrl(url,activelink) {
+  openAdditonalUrl(url, activelink) {
     const { updateBoxId } = this.props;
-    this.setState({selectedBid: activelink},()=>{
+    this.setState({ selectedBid: activelink }, () => {
       updateBoxId(url);
-    })
+    });
   }
   isValidURL(str) {
-    var res = str.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
-    return (res !== null)
-  };
+    var res = str.match(
+      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+    );
+    return res !== null;
+  }
 
-  renderContent = (boxId) => {
+  renderContent = boxId => {
     const { isGettingBoxId, onGettingBoxIdError } = this.props;
     let url = '';
     if (isGettingBoxId)
@@ -121,8 +130,8 @@ class Documents extends Component<Props, State> {
         <Loader type="TailSpin" color="#297DFD" height={100} width={100} />
       );
 
-    if (!boxId || onGettingBoxIdError){
-      url = ''
+    if (!boxId || onGettingBoxIdError) {
+      url = '';
       return <p>No documents available for this proposal</p>;
     }
     console.log('url1 :>> ', url);
@@ -153,23 +162,27 @@ class Documents extends Component<Props, State> {
     const consentPropertyName = localStorage.getItem('unity_document_consent');
     return (
       <div className="main-doc">
-         <div className="title-document">
-           <h3>Documents</h3>
-           <p className="para-document">Welcome to the Opportunity Documents section. You can check here any documents associated to this particular opportunity.
-             For that you need to access with your enterprise email account to access Box.com
-           </p>
+        <div className="title-document">
+          <h3>Documents</h3>
+          <p className="para-document">
+            Welcome to the Opportunity Documents section. You can check here any
+            documents associated to this particular opportunity. For that you
+            need to access with your enterprise email account to access Box.com
+          </p>
         </div>
-      <div className="documents">
-        <div className="doc-tab-index">
-        <div className="sidebar-sopportunitylinks">
-        <Grid container spacing={2}>
-          <Grid item xs>
-            <Paper style={styles}>
-              <Typography variant="body2" className="boxlocation">Box Locations</Typography>
-            </Paper>
-          </Grid>
-        </Grid>
-        {/* <ul className="opportunity-link">
+        <div className="documents">
+          <div className="doc-tab-index">
+            <div className="sidebar-sopportunitylinks">
+              <Grid container spacing={2}>
+                <Grid item xs>
+                  <Paper style={styles}>
+                    <Typography variant="body2" className="boxlocation">
+                      Box Locations
+                    </Typography>
+                  </Paper>
+                </Grid>
+              </Grid>
+              {/* <ul className="opportunity-link">
           <li
            onClick={()=> this.openAdditonalUrl(oppfolderID, 'oppactive')}
             className={`${selectedBid == 'oppactive' ? 'selectedBid' : ''} spacebetween`}
@@ -177,54 +190,65 @@ class Documents extends Component<Props, State> {
             Opportunity {this.oppNo}
           </li>
         </ul> */}
-          <Accordion defaultExpanded={true}>
-            <AccordionSummary>
-              <Typography>Bids</Typography>
-            </AccordionSummary>
-            <AccordionDetails className="bidlistdetail">
-              <ul className="bidlist-document">
-              {
-                bids.map((v) =>
-                  <li
-                    className={(selectedBid === v.proposalId ? 'selectedBid' : '')}
-                    key={v.proposalId}
-                    onClick={() => { this.swtichTabs(v.proposalId) }}>
-                    {this.oppNo} - Bid {v.bidNo}
-                  </li>
-                )
-              }
-            </ul>
-            </AccordionDetails>
-        </Accordion>
-        <Accordion defaultExpanded={true} >
-            <AccordionSummary>
-              <Typography>Additional Links</Typography>
-            </AccordionSummary>
-            <AccordionDetails className="additionalbidlinkdetail">
-              <ul className="additionalink-document">
-                {
-                  data && Array.isArray(data) && data.length > 0 && data.map((_v)=>
-                    <li onClick={()=> this.openAdditonalUrl(_v.link, _v.linkdesc)} 
-                    className={(selectedBid === _v.linkdesc ? 'selectedBid' : '')}
-                    >{_v.linkdesc}</li>  
-                  )
-                }
-            </ul>
-            </AccordionDetails>
-        </Accordion>
-        </div>
-        </div>
-        <div className="doc-tab-content">
-          <div className="doc-tab-content-inner">
-            {this.renderContent(boxId)}
+              <Accordion defaultExpanded={true}>
+                <AccordionSummary>
+                  <Typography>Bids</Typography>
+                </AccordionSummary>
+                <AccordionDetails className="bidlistdetail">
+                  <ul className="bidlist-document">
+                    {bids.map(v => (
+                      <li
+                        className={
+                          selectedBid === v.proposalId ? 'selectedBid' : ''
+                        }
+                        key={v.proposalId}
+                        onClick={() => {
+                          this.swtichTabs(v.proposalId);
+                        }}
+                      >
+                        {this.oppNo} - Bid {v.bidNo}
+                      </li>
+                    ))}
+                  </ul>
+                </AccordionDetails>
+              </Accordion>
+              <Accordion defaultExpanded={true}>
+                <AccordionSummary>
+                  <Typography>Additional Links</Typography>
+                </AccordionSummary>
+                <AccordionDetails className="additionalbidlinkdetail">
+                  <ul className="additionalink-document">
+                    {data &&
+                      Array.isArray(data) &&
+                      data.length > 0 &&
+                      data.map(_v => (
+                        <li
+                          onClick={() =>
+                            this.openAdditonalUrl(_v.link, _v.linkdesc)
+                          }
+                          className={
+                            selectedBid === _v.linkdesc ? 'selectedBid' : ''
+                          }
+                        >
+                          {_v.linkdesc}
+                        </li>
+                      ))}
+                  </ul>
+                </AccordionDetails>
+              </Accordion>
+            </div>
           </div>
+          <div className="doc-tab-content">
+            <div className="doc-tab-content-inner">
+              {this.renderContent(boxId)}
+            </div>
+          </div>
+          {!consentPropertyName && this.getBrowser().includes('Edge') && (
+            <DocumentModal />
+          )}
         </div>
-        {
-          !consentPropertyName && this.getBrowser().includes('Edge') && <DocumentModal />
-        }
       </div>
-      </div>
-    )
+    );
   }
 }
 
@@ -235,14 +259,14 @@ const mapStateToProps = state => ({
   bids: getAllBidsForIndex(state),
   selectedBid: getSelectedBid(state),
   boxLinks: getAdditionalLinks(state),
-  proposalDetail: getProposalDetails(state),
+  proposalDetail: getProposalDetails(state)
 });
 
 export default compose(
   withRouter,
-  connect(mapStateToProps, { 
-    getBoxId: onGetProposalBoxId, 
+  connect(mapStateToProps, {
+    getBoxId: onGetProposalBoxId,
     getAdditionalLink: getAdditionalBoxLink,
-    updateBoxId: setupdateBoxId 
+    updateBoxId: setupdateBoxId
   })
 )(Documents);

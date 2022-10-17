@@ -121,7 +121,6 @@ export class Opportunity extends Component<Props, State> {
     const queryparams = new URLSearchParams(winLocationSearch);
     const notificationId = queryparams.get('notification_id');
     const bidNumber = queryparams.get('bidNo');
-    console.log('bidNumber is ', bidNumber);
     if (notificationId) {
       setSeenOne(notificationId);
     }
