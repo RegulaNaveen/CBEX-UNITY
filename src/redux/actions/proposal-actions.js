@@ -26,7 +26,8 @@ import {
   changeProposalOT,
   deleteProposalUser,
   getProposalAnswer,
-  priceModelerApi
+  priceModelerApi,
+  setNotApplicableQuestionApi
 } from '../../api/proposal';
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getUniqueMilestones } from '../selectors/proposal';
@@ -84,7 +85,10 @@ const {
   QUESTION_LOCK_BY_USER,
   QUESTION_UNLOCK_BY_USER,
   QUESTION_LOCK_DETAILS_ALL,
-  SET_EVENT_LAUNCHER_FLAG
+  SET_EVENT_LAUNCHER_FLAG,
+  SHOW_NA_CHECKBOX,
+  UPDATE_NOT_APPLICABLE_PROGRESS,
+  UPDATE_NOT_APPLICABLE_DONE
 } = REDUX_TYPES.PROPOSAL;
 
 /**
@@ -135,19 +139,98 @@ export const getProposalByID = (id: string): ThunkAction<string, Object> => {
   };
 };
 
+export function setNotApplicableQuestion(
+  proposalId,
+  questionId,
+  questionStatus
+) {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: UPDATE_NOT_APPLICABLE_PROGRESS,
+        payload: { questionId, loading: true }
+      });
+      console.log('tapas data ', proposalId, questionId, questionStatus);
+      const { data } = await setNotApplicableQuestionApi(
+        proposalId,
+        questionId,
+        questionStatus
+      );
+      console.log('after API call N/A', data);
+      dispatch({
+        type: UPDATE_NOT_APPLICABLE_DONE,
+        payload: { data: data.data, questionId, questionStatus }
+      });
+    } catch (err) {
+      // dispatch({
+      //   type: ERROR_UPDATING_USER_TIMEZONE,
+      //   payload: { data: err }
+      // });
+    }
+  };
+}
+
+// export const setNotApplicableQuestion = (
+//   proposalId: string,
+//   questionId: string,
+//   status: Boolean
+// ): ThunkAction<string, Object> => {
+//   return async (dispatch: Dispatch<string, Object>) => {
+//     dispatch({
+//       type: UPDATE_NOT_APPLICABLE_PROGRESS,
+//       payload: { questionId, loading: true }
+//     });
+//     console.log('here inside not app.');
+//     try {
+//       const { data } = await setNotApplicableQuestionApi(
+//         proposalId,
+//         questionId,
+//         status
+//       );
+//       console.log('after API call N/A', data);
+//       // dispatch({
+//       //   type: PROPOSAL_ANSWER,
+//       //   payload: {
+//       //     data: Array.isArray(data.answers) ? data.answers : data,
+//       //     questionId,
+//       //     hasDifferentSFanswer: data.hasDifferentSFanswer || false
+//       //   }
+//       // });
+
+//       // const { modifiedQuestions } = data;
+//       // if (!isEmpty(modifiedQuestions)) {
+//       //   modifiedQuestions.forEach(question => {
+//       //     dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
+//       //   });
+//       // }
+//       // dispatch(onQuestionsFilterApplied(questionsFilter));
+//       // dispatch({
+//       //   type: PROPOSAL_ANSWER_LOADING,
+//       //   payload: { questionId, loading: false }
+//       // });
+//     } catch (err) {
+//       console.log('error occurred ', err);
+//       // dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err } });
+//     }
+//   };
+// };
+
 export const setProposalAnswerData = (
   socketContext,
   proposalId: string,
   questionId: string,
   answer: string,
   userData: Object,
-  editorData: any
+  editorData: any,
+  isUpdatingNa: Boolean
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
-    dispatch({
-      type: PROPOSAL_ANSWER_LOADING,
-      payload: { questionId, loading: true }
-    });
+    if (!isUpdatingNa) {
+      dispatch({
+        type: PROPOSAL_ANSWER_LOADING,
+        payload: { questionId, loading: true }
+      });
+    }
     const questionsFilter = getQuestionsFilters(getState());
 
     try {
@@ -1078,6 +1161,16 @@ export const setEventLauncherFlag = val => {
   return dispatch => {
     dispatch({
       type: SET_EVENT_LAUNCHER_FLAG,
+      payload: val
+    });
+  };
+};
+
+export const setShowNaCheckbox = val => {
+  console.log('tapas checkbox ', val);
+  return dispatch => {
+    dispatch({
+      type: SHOW_NA_CHECKBOX,
       payload: val
     });
   };

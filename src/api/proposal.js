@@ -53,6 +53,29 @@ export const getProposalAnswer = async (
   });
 };
 
+export const setNotApplicableQuestionApi = async (
+  proposalId: string,
+  questionId: string,
+  status: Boolean
+): Promise<Object> => {
+  const payload = { status };
+
+  return axiosInstance
+    .put(
+      `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}/notapplicable`,
+      payload,
+      {
+        headers: {
+          'x-api-key': `${API_KEY}`,
+          'x-access-token': `${getAccessToken()}`
+        }
+      }
+    )
+    .then(res => {
+      return res;
+    });
+};
+
 export const setProposalAnswer = async (
   proposalId: string,
   questionId: string,

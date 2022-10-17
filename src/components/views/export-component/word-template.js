@@ -121,7 +121,7 @@ export function getLastAnswer(answers) {
     const lastAnswer = answers[answers.length - 1];
     return lastAnswer.answer.toString();
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return '';
   }
 }
@@ -921,6 +921,7 @@ export function getFilteredQuestion(proposalQuestions, filterState) {
     milestones
   } = filterState;
   let questions = cloneDeep(proposalQuestions);
+  console.log('tapas question to export ', questions);
 
   // Answered and Unanswered filter block
   if (answered && unanswered) {

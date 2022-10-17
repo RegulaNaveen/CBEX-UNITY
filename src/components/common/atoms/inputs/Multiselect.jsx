@@ -147,10 +147,8 @@ class Multiselect extends PureComponent<Props, State> {
 
     this.setState({ selectedValues: newArray });
 
-    if (value === this.props.lastAnswer) {
-      if (this.props.lockedBySelf) {
-        this.context?.questionUnlockWrapper(this.props.questionId);
-      }
+    if (value === this.props.lastAnswer && this.props.lockedBySelf) {
+      this.context?.questionUnlockWrapper(this.props.questionId);
     }
 
     this.forceUpdate();
@@ -242,8 +240,9 @@ class Multiselect extends PureComponent<Props, State> {
           this.props.toggleWatch(false);
         }
         if (this.props.lockedBySelf) {
-          if (!this.state.isOpen && !this.state.isFocused) {}
-            this.context?.questionUnlockWrapper(this.props.questionId);
+          if (!this.state.isOpen && !this.state.isFocused) {
+          }
+          this.context?.questionUnlockWrapper(this.props.questionId);
         }
       });
       return;
@@ -267,8 +266,9 @@ class Multiselect extends PureComponent<Props, State> {
             this.props.toggleWatch(false);
           }
           if (this.props.lockedBySelf) {
-            if (!this.state.isOpen && !this.state.isFocused) {}
-              this.context?.questionUnlockWrapper(this.props.questionId);
+            if (!this.state.isOpen && !this.state.isFocused) {
+            }
+            this.context?.questionUnlockWrapper(this.props.questionId);
           }
         });
       }

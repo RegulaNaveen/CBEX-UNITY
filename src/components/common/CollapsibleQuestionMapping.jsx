@@ -12,7 +12,9 @@ const CollapsibleQuestionMapping = ({
     const visible =
       questionConfig.get('visible', true) &&
       (questionConfig.get('active', true) ||
-        questionConfig.get('isCustomQuestion', true));
+        questionConfig.get('isCustomQuestion', true)) &&
+      !questionConfig.get('notapplicable');
+
     return (
       (visible || typeof visible === 'undefined') && (
         <Question
@@ -36,6 +38,7 @@ const CollapsibleQuestionMapping = ({
           sectionName={title}
           setQuestionToDisplayHistory={setQuestionToDisplayHistory}
           loading={questionConfig.get('loading', false)}
+          NaLoading={questionConfig.get('NaLoading', false)}
           questionHint={questionConfig.get('questionHint', '')}
           questionHintHTML={questionConfig.get('questionHintHTML', '')}
           questionHintJSON={questionConfig.get('questionHintJSON')}
@@ -45,6 +48,7 @@ const CollapsibleQuestionMapping = ({
           hasDifferentSFanswer={questionConfig.get('hasDifferentSFanswer')}
           isNotepadOpen={isNotepadOpen}
           events={questionConfig.get('events') || {}}
+          isNotApplicable={questionConfig.get('notapplicable')}
         />
       )
     );

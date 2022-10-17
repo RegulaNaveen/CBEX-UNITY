@@ -28,19 +28,22 @@ import {
   setEditQuestionData,
   setProposalAnswerLoading,
   deleteProposalUserFromDB,
+  setShowNaCheckbox,
+  setNotApplicableQuestion
 } from '../../redux/actions/proposal-actions';
 import {
   getUserData,
   getProposalDetails,
   getSelectedBid,
   getnoneditableField,
+  getShowNaCheckbox
 } from '../../redux/selectors';
 import { getOpportunityData } from '../../redux/selectors/proposal';
 import MatomoHOC from '../HOC/MatomoHOC';
 import {
   checkNonEditableFields,
   getCountriesNameForCode,
-  getCountryOptions,
+  getCountryOptions
 } from '../../utils/utils';
 import ChipView from './Chip/ChipView';
 import Autocomplete from './atoms/inputs/AutoComplete';
@@ -55,6 +58,7 @@ import EventLauncher from '../screens/Opportunity/EventLauncher';
 import { parseStringifyJson } from '../../utils/helpers';
 import withIdleStateDetection from '../HOC/IdleStateDetector';
 import Checkbox from 'apollo-react/components/Checkbox';
+import Loader from 'apollo-react/components/Loader';
 
 const DropdownWithIdleStateDetection = withIdleStateDetection(Dropdown);
 const QuestionDatePickerWithIdleStateDetection = withIdleStateDetection(
@@ -70,6 +74,7 @@ type State = {
   selectedDay: string,
   selectedRow: Boolean,
   changeIcon: '',
+  check: 'false'
 };
 
 type Props = {
@@ -88,6 +93,7 @@ type Props = {
   userData: Object,
   oppdata: Object,
   setProposalAnswer: Function,
+  setNotApplicable: Function,
   setAnswerLoading: Function,
   deleteProposalUser: Function,
   setQuestionToDisplayHistory: (answer: string) => void,
@@ -100,12 +106,14 @@ type Props = {
   milestoneNew: any,
   ismilestoneavailable: string,
   loading: Boolean,
+  NaLoading: Boolean,
   setEditQuestionData: (data: Object) => void,
   roleNames: Array<string>,
   isCustomQuestion: boolean,
   hasDifferentSFanswer: boolean,
   isNotepadOpen: boolean,
   events: Object,
+  isNotApplicable: Boolean
 };
 export class TaskRow extends React.PureComponent<Props, State> {
   static contextType = SocketContext;
@@ -122,7 +130,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       selectedRow: false,
       iconColor: '#00c221',
       screenWidth: '',
-      enableRichtext: false,
+      enableRichtext: false
     };
   }
 
@@ -138,6 +146,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     }
     window.addEventListener('resize', this.resize.bind(this));
     this.resize();
+    console.log('tapas question data: ', this.props.questionData.toJS());
   }
 
   handlePropsalChange = (textValue, lastValue, reason) => {
@@ -148,7 +157,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       userData,
       section,
       setAnswerLoading,
-      deleteProposalUser,
+      deleteProposalUser
     } = this.props;
     console.log('set proposal answer');
     setProposalAnswer(
@@ -186,11 +195,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
     const s1 = textValue
       .trim()
       .split(' ')
-      .filter((v) => v.trim().length > 0);
+      .filter(v => v.trim().length > 0);
     const s2 = lastAnswer
       .trim()
       .split(' ')
-      .filter((v) => v.trim().length > 0);
+      .filter(v => v.trim().length > 0);
 
     if (isEmpty(s1)) this.setState({ changeIcon: '#b7b7b7' });
     else this.setState({ changeIcon: '#00c221' });
@@ -228,7 +237,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
   /**
    * Func to save data onBlur RichText Editor
    */
-  handleRichTextChange = (editorData) => {
+  handleRichTextChange = editorData => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
     const { value, html, text } = editorData;
 
@@ -245,21 +254,21 @@ export class TaskRow extends React.PureComponent<Props, State> {
       userData,
       {
         value,
-        html,
+        html
       }
     );
     this.trackMatomoEventSubmitAnswer(editorData.text);
     this.setSelectRow(false);
   };
 
-  handleVerifyPredictedAnsClick = (predictedAnswer) => {
+  handleVerifyPredictedAnsClick = predictedAnswer => {
     const {
       setProposalAnswer,
       proposalId,
       questionId,
       userData,
       lastAnswer,
-      answerConfiguration,
+      answerConfiguration
     } = this.props;
     const answerType = answerConfiguration.get('type');
     this.setState({ iconColor: '#015ff1' });
@@ -352,12 +361,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
     this.setSelectRow(true);
   };
 
-  setSelectRow = (value) => {
+  setSelectRow = value => {
     // call question unlock
     this.setState({ selectedRow: value });
   };
 
-  trackMatomoEventSubmitAnswer = (data) => {
+  trackMatomoEventSubmitAnswer = data => {
     const {
       eventCategories,
       proposalDetail,
@@ -368,7 +377,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       sectionName,
       trackEvent,
       questionId,
-      events,
+      events
     } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
@@ -387,13 +396,13 @@ export class TaskRow extends React.PureComponent<Props, State> {
             questionJSON,
             questionHintJSON,
             questionId,
-            proposalDetail,
-          }),
+            proposalDetail
+          })
         },
         {
-          events: events || [],
-        },
-      ],
+          events: events || []
+        }
+      ]
     });
   };
 
@@ -407,7 +416,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       questionHintJSON,
       sectionName,
       trackEvent,
-      questionId,
+      questionId
     } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
@@ -422,20 +431,20 @@ export class TaskRow extends React.PureComponent<Props, State> {
             questionJSON,
             questionHintJSON,
             questionId,
-            proposalDetail,
-          }),
-        },
-      ],
+            proposalDetail
+          })
+        }
+      ]
     });
   };
 
-  trackMatomoEventLauncher = (data) => {
+  trackMatomoEventLauncher = data => {
     const { eventCategories, trackEvent } = this.props;
     const { action, customDimensions } = data;
     trackEvent({
       category: eventCategories.pd(this.props),
       action,
-      customDimensions,
+      customDimensions
     });
   };
 
@@ -453,13 +462,60 @@ export class TaskRow extends React.PureComponent<Props, State> {
     });
   };
 
-  renderCheckbox = () => {
-    return (
-      <div>
-        N/A
-        <Checkbox />
-      </div>
-    );
+  renderNACheckbox = () => {
+    if (this.props.showNaCheckbox) {
+      const {
+        setProposalAnswer,
+        proposalId,
+        questionId,
+        userData,
+        questionData,
+        setNotApplicable,
+        NaLoading,
+        isNotApplicable
+      } = this.props;
+
+      return (
+        <div style={{ width: '10px', marginRight: '30px' }}>
+          N/A{' '}
+          {NaLoading ? (
+            <span
+              style={{
+                position: 'relative',
+                top: '1.5em'
+              }}
+            >
+              <Loader
+                isInner
+                size={20}
+                style={{
+                  width: '20px',
+                  height: '20px'
+                }}
+              />
+            </span>
+          ) : (
+            <Checkbox
+              checked={isNotApplicable}
+              onClick={() => {
+                setNotApplicable(proposalId, questionId, !isNotApplicable);
+                if (!isNotApplicable) {
+                  setProposalAnswer(
+                    this.context,
+                    proposalId,
+                    questionId,
+                    'N/A',
+                    userData,
+                    null,
+                    true
+                  );
+                }
+              }}
+            />
+          )}
+        </div>
+      );
+    }
   };
 
   renderAnswer = (
@@ -475,7 +531,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       selectedBid,
       noneditableField,
       hasDifferentSFanswer,
-      loading,
+      loading
     } = this.props;
 
     const { selectedRow } = this.state;
@@ -539,7 +595,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     }
 
     // Function to converted Answer String
-    const getConvertedAnsString = (str) =>
+    const getConvertedAnsString = str =>
       !String(str).trim() ? '' : String(str).trim();
 
     const lastAnswerJS = lastAnswer?.toJS();
@@ -553,7 +609,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
     const richTextData = parseFormattedData || {
       html: '',
-      value: { blocks: [] },
+      value: { blocks: [] }
     };
 
     // Richtext Props
@@ -572,7 +628,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         const {
           clientWidth: quesTitleLW,
           style: quesTitleLStyle,
-          firstChild,
+          firstChild
         } = this.quesTextInnerLeftRef.current;
         const { clientWidth: quesTitleRW } = this.quesTextInnerRightRef.current;
 
@@ -590,7 +646,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         if (!selectedRow) this.setSelectRow(true);
         this.context.questionLockWrapper(this.props.questionId);
       },
-      onBlur: (data) => {
+      onBlur: data => {
         let saveDate = false;
         const previousAnsText = getConvertedAnsString(answerValue).trim();
 
@@ -627,13 +683,13 @@ export class TaskRow extends React.PureComponent<Props, State> {
         // Change title style for richEdit icon
         const {
           style: quesTitleLStyle,
-          firstChild,
+          firstChild
         } = this.quesTextInnerLeftRef.current;
         quesTitleLStyle.minHeight = 'auto';
         firstChild.style.maxWidth = 'none';
 
         this.setSelectRow(false);
-      },
+      }
     };
 
     switch (type) {
@@ -645,7 +701,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             sfObject={sfObject}
           >
             <div style={{ display: 'flex' }}>
-              {this.renderCheckbox()}
+              {this.renderNACheckbox()}
               <CustomApolloRichText {...richTextAnswerField} />
             </div>
           </SFAnswerValidationWrapper>
@@ -659,13 +715,13 @@ export class TaskRow extends React.PureComponent<Props, State> {
             sfObject={sfObject}
           >
             <div style={{ display: 'flex' }}>
-              {this.renderCheckbox()}
+              {this.renderNACheckbox()}
               <TextArea
                 className="proposal-text-area"
                 placeholder={checkDisableFlag() ? '' : 'Click to answer'}
                 type="number"
                 onBlur={this.handleTextChange}
-                onFocus={(e) => this.onChildInputFocus(e)}
+                onFocus={e => this.onChildInputFocus(e)}
                 value={answerValue || ''}
                 disabled={checkDisableFlag()}
               />
@@ -679,12 +735,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
             sfObject={sfObject}
           >
             <div style={{ display: 'flex' }}>
-              {this.renderCheckbox()}
+              {this.renderNACheckbox()}
               <DropdownWithIdleStateDetection
                 id="dd-proposal-answer"
                 placeholder={checkDisableFlag() ? '' : 'Click to answer'}
                 items={optionsYN}
-                onClick={(val) => this.onClickChange(val, answerValue)}
+                onClick={val => this.onClickChange(val, answerValue)}
                 value={answerValue}
                 setSelectRow={this.setSelectRow}
                 disabled={checkDisableFlag()}
@@ -702,12 +758,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
             sfObject={sfObject}
           >
             <div style={{ display: 'flex' }}>
-              {this.renderCheckbox()}
+              {this.renderNACheckbox()}
               <DropdownWithIdleStateDetection
                 id="dd-proposal-answer"
                 placeholder={checkDisableFlag() ? '' : 'Click to answer'}
                 items={finalOptions}
-                onClick={(val) => this.onClickChange(val, answerValue)}
+                onClick={val => this.onClickChange(val, answerValue)}
                 value={answerValue}
                 setSelectRow={this.setSelectRow}
                 disabled={checkDisableFlag()}
@@ -726,7 +782,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             sfObject={sfObject}
           >
             <div style={{ display: 'flex' }}>
-              {this.renderCheckbox()}
+              {this.renderNACheckbox()}
               <QuestionDatePickerWithIdleStateDetection
                 value={answerValue}
                 resetDate={this.resetDate}
@@ -751,7 +807,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             sfObject={sfObject}
           >
             <div style={{ display: 'flex' }}>
-              {this.renderCheckbox()}
+              {this.renderNACheckbox()}
               <MultiSelectWithIdleStateDetection
                 placeholder={checkDisableFlag() ? '' : 'Click to answer'}
                 items={finalOptions}
@@ -775,7 +831,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             sfObject={sfObject}
           >
             <div style={{ display: 'flex' }}>
-              {this.renderCheckbox()}
+              {this.renderNACheckbox()}
               <AutoCompleteWithAddOptionWithIdleStateDetection
                 // sectionName={sectionName}
                 sfObject={sfObject}
@@ -804,7 +860,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             sfObject={sfObject}
           >
             <div style={{ display: 'flex' }}>
-              {this.renderCheckbox()}
+              {this.renderNACheckbox()}
               <AutoCompleteWithAddOptionWithIdleStateDetection
                 sfObject={sfObject}
                 lov={finalOptions}
@@ -926,6 +982,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       questionData,
       proposalDetail,
       eventCategories,
+      NaLoading
     } = this.props;
     const questionID = answers.get('questionId');
     const qvicon = questionId;
@@ -1001,7 +1058,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       iconColor,
       changeIcon,
       screenWidth,
-      enableRichtext,
+      enableRichtext
     } = this.state;
     const smallScreenWidth = screenWidth < 641 ? [8, 4] : [10, 2];
     const mediumScreen =
@@ -1011,7 +1068,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       <div
         className={`task-table-row question-row ${
           selectedRow ? 'selected-task-table-row' : ''
-        }`}
+        } ${NaLoading ? 'fade-area' : ''}`}
         style={{ margin: '2px 0px' }}
       >
         <Grid container className="question-title-grid">
@@ -1019,7 +1076,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             {/* Question Text and Milestone */}
             <div
               className={classNames('question-label-container', {
-                'has-richtext-icon': enableRichtext,
+                'has-richtext-icon': enableRichtext
               })}
               ref={this.quesTextContainerRef}
             >
@@ -1066,7 +1123,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                           answerType: answerConfiguration.get('type'),
                           roleNames,
                           questionAnswered: !!lastAnswer,
-                          questionId: qId,
+                          questionId: qId
                         });
                       }}
                     >
@@ -1189,11 +1246,13 @@ const mapStateToProps = (state: Object) => ({
   selectedBid: getSelectedBid(state),
   oppdata: getOpportunityData(state),
   noneditableField: getnoneditableField(state),
+  showNaCheckbox: getShowNaCheckbox(state)
 });
 
 export default connect(mapStateToProps, {
   setProposalAnswer: setProposalAnswerData,
   setAnswerLoading: setProposalAnswerLoading,
   deleteProposalUser: deleteProposalUserFromDB,
-  setEditQuestionData,
+  setNotApplicable: setNotApplicableQuestion,
+  setEditQuestionData
 })(MatomoHOC(TaskRow));
