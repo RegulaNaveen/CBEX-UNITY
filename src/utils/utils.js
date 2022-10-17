@@ -33,20 +33,20 @@ function getCountryOptions() {
  */
 function updateEventSubjectBody(str, data) {
   const obj = {
-    '[opportunity_number]' : data['CRM #'],
+    '[opportunity_number]': data['CRM #'],
     '[line_of_business]': data['Line of business'],
-    '[customer]':data['Customer'],
-    '[product_name]':data['Product name'],
-    '[therapeutic_area]':data['Therapeutic area'],
-    '[protocol_number]':data['Protocol number'],
-    '[bid_no]':data['bidNo'],
+    '[customer]': data['Customer'],
+    '[product_name]': data['Product name'],
+    '[therapeutic_area]': data['Therapeutic area'],
+    '[protocol_number]': data['Protocol number'],
+    '[bid_no]': data['bidNo']
+  };
+  for (const key in obj) {
+    if (str.includes(key)) {
+      str = str.replaceAll(key, obj[key]);
+    }
   }
-   for (const key in obj) {
-     if(str.includes(key)){
-       str  = str.replaceAll(key, obj[key]);
-     }
-   }
-   return str;
+  return str;
 }
 function isUserUbuildAdmin() {
   if (!localStorage.getItem('id_token')) return false;
@@ -162,34 +162,34 @@ function rearrangeDiff(diffAnswers) {
 }
 
 function getUserInitials(userName) {
-  if (userName === 'AnswerPulledFromSalesforce')
-    return 'SA';
-  if (userName === 'UnityPredictedAnswer')
-    return 'UA';
+  if (userName === 'AnswerPulledFromSalesforce') return 'SA';
+  if (userName === 'UnityPredictedAnswer') return 'UA';
   return userName.split(' ')[0].charAt(0) + userName.split(' ')[1].charAt(0);
 }
 
 function getUserName(userName) {
-  if (userName === 'AnswerPulledFromSalesforce')
-    return 'Salesforce Answer';
-  if (userName === 'UnityPredictedAnswer')
-    return 'Unity Predicted Answer';
+  if (userName === 'AnswerPulledFromSalesforce') return 'Salesforce Answer';
+  if (userName === 'UnityPredictedAnswer') return 'Unity Predicted Answer';
   return userName;
 }
 
-function getProposalIdlist(data=[]){
-    const sortedData = data.sort((a,b)=>b.proposal.proposalDate - a.proposal.proposalDate);
-    return sortedData.map((d)=>{
-      return {
-        proposalId: d.proposal.proposalId,
-        boxId: d.proposal.proposalDetails.boxId,
-        bidNo: d.proposal.proposalDetails['bidNo'] || ''
-      }
-    }); 
+function getProposalIdlist(data = []) {
+  const sortedData = data.sort(
+    (a, b) => b.proposal.proposalDate - a.proposal.proposalDate
+  );
+  return sortedData.map(d => {
+    return {
+      proposalId: d.proposal.proposalId,
+      boxId: d.proposal.proposalDetails.boxId,
+      bidNo: d.proposal.proposalDetails['bidNo'] || ''
+    };
+  });
 }
 
-function checkNonEditableFields(PreField, sfField, sfObject){
-    return PreField.some((el) => (el.sfField === sfField && el.sfObject === sfObject));
+function checkNonEditableFields(PreField, sfField, sfObject) {
+  return PreField.some(
+    el => el.sfField === sfField && el.sfObject === sfObject
+  );
 }
 
 export {
