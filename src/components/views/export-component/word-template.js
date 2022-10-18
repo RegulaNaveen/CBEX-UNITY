@@ -28,6 +28,7 @@ import {
   applyinterestedPartiesFilter,
   applyMileStonesFilter,
   applyMyUserRoleFilter,
+  applyNotApplicableFilter,
   applyUnAnsweredFilter
 } from './filter-util';
 
@@ -918,7 +919,8 @@ export function getFilteredQuestion(proposalQuestions, filterState) {
     unanswered,
     myRole,
     interestedParties,
-    milestones
+    milestones,
+    includesNa
   } = filterState;
   let questions = cloneDeep(proposalQuestions);
   console.log('tapas question to export ', questions);
@@ -932,6 +934,10 @@ export function getFilteredQuestion(proposalQuestions, filterState) {
     questions = applyUnAnsweredFilter(questions);
   } else if (!answered && !unanswered) {
     questions = [];
+  }
+
+  if (!includesNa) {
+    questions = applyNotApplicableFilter(questions);
   }
 
   // My user role questions
