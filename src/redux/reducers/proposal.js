@@ -609,7 +609,8 @@ const questionLockDetails = (state: Map, action: Object): Map => {
 // state is propoal
 const updateQuestionUnlockByUser = (state: Map, action: Object): Map => {
   const {
-    data: { questionId, proposalId }
+    data: { questionId, proposalId },
+    clientQuestionId
   } = action.payload;
   let newState = fromJS({});
 
@@ -622,7 +623,7 @@ const updateQuestionUnlockByUser = (state: Map, action: Object): Map => {
       const indexOfListToUpdateCurrent = state
         .get('proposalQuestions')
         .findIndex(listItem => {
-          return listItem.questionId === questionId;
+          return listItem.questionId === clientQuestionId;
         });
 
       newState = state.updateIn(

@@ -144,7 +144,8 @@ const SocketContextProvider = props => {
             event: 'QUESTION_UNLOCK',
             data: {
               questionId
-            }
+            },
+            clientQuestionId: questionId
           }
         })
       );
