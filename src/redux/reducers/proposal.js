@@ -118,6 +118,13 @@ const INITIAL_STATE: Map = fromJS({
       },
       logic: 'AND'
     },
+    notapplicablegroup: {
+      showInactiveQuestions: {
+        checked: false,
+        label: 'show inactive questions',
+        className: CLASS_QUES_FIL_R1_C1
+      }
+    },
     milestoneGroup: {}
   }),
   filteredProposalQuestions: Map({}),

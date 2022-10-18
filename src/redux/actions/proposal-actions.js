@@ -616,6 +616,20 @@ function applyInterestedPartyFilter(questions) {
   return filteredQuestions;
 }
 
+function applyShowInactiveQuestionsFilter(questions) {
+  const role = localStorage.getItem('userRole');
+  let filteredQuestions = cloneDeep(questions);
+  if (role) {
+    filteredQuestions = fromJS(filteredQuestions)
+      .filter(question => {
+        const isNA = question.get('notapplicable');
+        return isNA;
+      })
+      .toJS();
+  }
+  return filteredQuestions;
+}
+
 function applyMilestoneFilter(questions, milestone) {
   let filteredQuestions = cloneDeep(questions);
   if (milestone) {
@@ -767,6 +781,14 @@ export function onQuestionsFilterApplied(questionsFilter) {
               applyInterestedPartyFilter
             );
             break;
+          case 'showInactiveQuestions':
+            withinGroupFilteredQuestions = filterGroup(
+              withinGroupFilteredQuestions,
+              filteredQuestions,
+              logic,
+              applyShowInactiveQuestionsFilter
+            );
+            break;
           default:
             withinGroupFilteredQuestions = filterGroup(
               withinGroupFilteredQuestions,
@@ -796,6 +818,7 @@ export function onApplyQuestionsFilter(
   checked = false,
   groupName
 ) {
+  console.log('tapas filters ', filterName, checked, groupName);
   return async (dispatch, getState) => {
     const state = getState();
     let questionsFilter = getQuestionsFilters(state);
