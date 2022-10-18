@@ -59,6 +59,7 @@ import { parseStringifyJson } from '../../utils/helpers';
 import withIdleStateDetection from '../HOC/IdleStateDetector';
 import Checkbox from 'apollo-react/components/Checkbox';
 import Loader from 'apollo-react/components/Loader';
+import RadioQuestion from './atoms/inputs/RadioQuestion';
 
 const DropdownWithIdleStateDetection = withIdleStateDetection(Dropdown);
 const QuestionDatePickerWithIdleStateDetection = withIdleStateDetection(
@@ -68,6 +69,7 @@ const MultiSelectWithIdleStateDetection = withIdleStateDetection(Multiselect);
 const AutoCompleteWithAddOptionWithIdleStateDetection = withIdleStateDetection(
   AutoCompleteWithAddOption
 );
+const RadioQuestionIdleStateDetection = withIdleStateDetection(RadioQuestion);
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
 type State = {
@@ -692,6 +694,16 @@ export class TaskRow extends React.PureComponent<Props, State> {
       }
     };
 
+    // onFocus for question concurrency
+    const concurrencyFocusHandler = () => {
+      this.context.questionLockWrapper(this.props.questionId);
+      this.setSelectRow(true);
+    };
+    // onBlur for question concurrency
+    const concurrencyBlurHandler = () => {
+      this.context.questionUnlockWrapper(this.props.questionId);
+      this.setSelectRow(false);
+    };
     switch (type) {
       case 'text': {
         answerValue = getConvertedAnsString(answerValue);
@@ -830,27 +842,20 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <div style={{ display: 'flex' }}>
-              {this.renderNACheckbox()}
-              <AutoCompleteWithAddOptionWithIdleStateDetection
-                // sectionName={sectionName}
-                sfObject={sfObject}
-                lov={finalOptions}
-                sfField={sfField}
-                multiple
-                answer={answerValueComplex}
-                onFocus={() => {
-                  this.context.questionLockWrapper(this.props.questionId);
-                  this.setSelectRow(true);
-                }}
-                onBlur={() => {
-                  this.context.questionUnlockWrapper(this.props.questionId);
-                  this.setSelectRow(false);
-                }}
-                disabled={checkDisableFlag()}
-                onChange={this.handlePropsalChange}
-              />
-            </div>
+            {' '}
+            {this.renderNACheckbox()}
+            <AutoCompleteWithAddOptionWithIdleStateDetection
+              // sectionName={sectionName}
+              sfObject={sfObject}
+              lov={finalOptions}
+              sfField={sfField}
+              multiple
+              answer={answerValueComplex}
+              onFocus={concurrencyFocusHandler}
+              onBlur={concurrencyBlurHandler}
+              disabled={checkDisableFlag()}
+              onChange={this.handlePropsalChange}
+            />
           </SFAnswerValidationWrapper>
         );
       case 'select-lookup':
@@ -859,28 +864,36 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <div style={{ display: 'flex' }}>
-              {this.renderNACheckbox()}
-              <AutoCompleteWithAddOptionWithIdleStateDetection
-                sfObject={sfObject}
-                lov={finalOptions}
-                sfField={sfField}
-                onFocus={() => {
-                  this.context.questionLockWrapper(this.props.questionId);
-                  this.setSelectRow(true);
-                }}
-                onBlur={() => {
-                  console.log('blur lookup');
-                  this.context.questionUnlockWrapper(this.props.questionId);
-                  this.setSelectRow(false);
-                }}
-                onChange={this.handlePropsalChange}
-                answer={answerValue || ''}
-                multiple={false}
-                loading={loading}
-                disabled={checkDisableFlag()}
-              />
-            </div>
+            {this.renderNACheckbox()}
+            <AutoCompleteWithAddOptionWithIdleStateDetection
+              sfObject={sfObject}
+              lov={finalOptions}
+              sfField={sfField}
+              onFocus={concurrencyFocusHandler}
+              onBlur={concurrencyBlurHandler}
+              onChange={this.handlePropsalChange}
+              answer={answerValue || ''}
+              multiple={false}
+              loading={loading}
+              disabled={checkDisableFlag()}
+            />
+          </SFAnswerValidationWrapper>
+        );
+      case ANSWER_TYPES.RADIO:
+        return (
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            sfObject={sfObject}
+          >
+            <RadioQuestionIdleStateDetection
+              id="dd-proposal-answer"
+              items={finalOptions}
+              onClick={val => this.onClickChange(val, answerValue)}
+              value={answerValue}
+              disabled={checkDisableFlag()}
+              onFocus={concurrencyFocusHandler}
+              onBlur={concurrencyBlurHandler}
+            />
           </SFAnswerValidationWrapper>
         );
       default:

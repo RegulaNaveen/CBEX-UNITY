@@ -103,8 +103,9 @@ class Multiselect extends PureComponent<Props, State> {
   handleOutsideClick = (event: SyntheticEvent<EventTarget>) => {
     const { setSelectRow, lockedBySelf } = this.props;
     if (this.ref.current !== event.target) {
+      this.setState({ isOpen: false });
       if (setSelectRow) {
-        this.setState({ isOpen: false }, () => {
+        this.setState({ isOpen: true }, () => {
           if (this.props.toggleWatch) this.props.toggleWatch(false);
           this.props.setSelectRow(false);
 
@@ -113,6 +114,7 @@ class Multiselect extends PureComponent<Props, State> {
               this.context?.questionUnlockWrapper(this.props.questionId);
           }
         });
+        this.setState({ isOpen: false });
       }
     }
   };
