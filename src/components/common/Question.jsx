@@ -213,7 +213,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         this.context,
         proposalId,
         questionId,
-
+        ' ',
         userData,
         editorData
       );
