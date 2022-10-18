@@ -108,16 +108,19 @@ const CustomApolloRichText = ({
    * Update on external changes
    */
   useEffect(() => {
-    setRichTextData(INITIAL_DATA);
     // Restrict Richtext height upto 5 lines
     if (richTextEditorRef.current && richTextEditorRef.current.editorRef.current.editorContainer) {
-      if (INITIAL_DATA.text) {
+      if (richTextData.text) {
          setRefElementStyle(richTextEditorRef.current.editorRef.current.editorContainer, 125, 120, '5px');
       } else {
         const { style: refStyle } = richTextEditorRef.current.editorRef.current.editorContainer;
         refStyle.height = 'auto';
       }
     }
+  }, [richTextData]);
+
+  useEffect(() => {
+    setRichTextData(INITIAL_DATA);
   }, [INITIAL_DATA]);
 
   useUpdateEffect(() => {
@@ -183,7 +186,7 @@ const CustomApolloRichText = ({
       } = richTextEditorRef.current.editorRef.current.editorContainer;
 
       if (scrollHeight < 230) refStyle.height = 'auto';
-      if (clientHeight <= 230) setRefElementStyle(richTextEditorRef.current.editorRef.current.editorContainer, 230, 230);
+      // if (clientHeight <= 230) setRefElementStyle(richTextEditorRef.current.editorRef.current.editorContainer, 230, 230);
     }
 
     if (onChange) onChange(resultObj); // onChange callback func
