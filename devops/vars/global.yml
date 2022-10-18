@@ -3,4 +3,4 @@ variables:
   Project: cbex
   Product: unity
   Module: frontend
-  DeployStack: "False"
+  DeployStack: "True"
