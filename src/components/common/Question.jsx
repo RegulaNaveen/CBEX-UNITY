@@ -29,21 +29,21 @@ import {
   setProposalAnswerLoading,
   deleteProposalUserFromDB,
   setShowNaCheckbox,
-  setNotApplicableQuestion
+  setNotApplicableQuestion,
 } from '../../redux/actions/proposal-actions';
 import {
   getUserData,
   getProposalDetails,
   getSelectedBid,
   getnoneditableField,
-  getShowNaCheckbox
+  getShowNaCheckbox,
 } from '../../redux/selectors';
 import { getOpportunityData } from '../../redux/selectors/proposal';
 import MatomoHOC from '../HOC/MatomoHOC';
 import {
   checkNonEditableFields,
   getCountriesNameForCode,
-  getCountryOptions
+  getCountryOptions,
 } from '../../utils/utils';
 import ChipView from './Chip/ChipView';
 import Autocomplete from './atoms/inputs/AutoComplete';
@@ -76,7 +76,7 @@ type State = {
   selectedDay: string,
   selectedRow: Boolean,
   changeIcon: '',
-  check: 'false'
+  check: 'false',
 };
 
 type Props = {
@@ -115,7 +115,7 @@ type Props = {
   hasDifferentSFanswer: boolean,
   isNotepadOpen: boolean,
   events: Object,
-  isNotApplicable: Boolean
+  isNotApplicable: Boolean,
 };
 export class TaskRow extends React.PureComponent<Props, State> {
   static contextType = SocketContext;
@@ -132,7 +132,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       selectedRow: false,
       iconColor: '#00c221',
       screenWidth: '',
-      enableRichtext: false
+      enableRichtext: false,
     };
   }
 
@@ -159,7 +159,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       userData,
       section,
       setAnswerLoading,
-      deleteProposalUser
+      deleteProposalUser,
     } = this.props;
     console.log('set proposal answer');
     setProposalAnswer(
@@ -197,11 +197,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
     const s1 = textValue
       .trim()
       .split(' ')
-      .filter(v => v.trim().length > 0);
+      .filter((v) => v.trim().length > 0);
     const s2 = lastAnswer
       .trim()
       .split(' ')
-      .filter(v => v.trim().length > 0);
+      .filter((v) => v.trim().length > 0);
 
     if (isEmpty(s1)) this.setState({ changeIcon: '#b7b7b7' });
     else this.setState({ changeIcon: '#00c221' });
@@ -225,7 +225,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
         this.context,
         proposalId,
         questionId,
-
         userData,
         editorData
       );
@@ -239,7 +238,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
   /**
    * Func to save data onBlur RichText Editor
    */
-  handleRichTextChange = editorData => {
+  handleRichTextChange = (editorData) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
     const { value, html, text } = editorData;
 
@@ -256,21 +255,21 @@ export class TaskRow extends React.PureComponent<Props, State> {
       userData,
       {
         value,
-        html
+        html,
       }
     );
     this.trackMatomoEventSubmitAnswer(editorData.text);
     this.setSelectRow(false);
   };
 
-  handleVerifyPredictedAnsClick = predictedAnswer => {
+  handleVerifyPredictedAnsClick = (predictedAnswer) => {
     const {
       setProposalAnswer,
       proposalId,
       questionId,
       userData,
       lastAnswer,
-      answerConfiguration
+      answerConfiguration,
     } = this.props;
     const answerType = answerConfiguration.get('type');
     this.setState({ iconColor: '#015ff1' });
@@ -363,12 +362,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
     this.setSelectRow(true);
   };
 
-  setSelectRow = value => {
+  setSelectRow = (value) => {
     // call question unlock
     this.setState({ selectedRow: value });
   };
 
-  trackMatomoEventSubmitAnswer = data => {
+  trackMatomoEventSubmitAnswer = (data) => {
     const {
       eventCategories,
       proposalDetail,
@@ -379,7 +378,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       sectionName,
       trackEvent,
       questionId,
-      events
+      events,
     } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
@@ -398,13 +397,13 @@ export class TaskRow extends React.PureComponent<Props, State> {
             questionJSON,
             questionHintJSON,
             questionId,
-            proposalDetail
-          })
+            proposalDetail,
+          }),
         },
         {
-          events: events || []
-        }
-      ]
+          events: events || [],
+        },
+      ],
     });
   };
 
@@ -418,7 +417,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       questionHintJSON,
       sectionName,
       trackEvent,
-      questionId
+      questionId,
     } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
@@ -433,20 +432,20 @@ export class TaskRow extends React.PureComponent<Props, State> {
             questionJSON,
             questionHintJSON,
             questionId,
-            proposalDetail
-          })
-        }
-      ]
+            proposalDetail,
+          }),
+        },
+      ],
     });
   };
 
-  trackMatomoEventLauncher = data => {
+  trackMatomoEventLauncher = (data) => {
     const { eventCategories, trackEvent } = this.props;
     const { action, customDimensions } = data;
     trackEvent({
       category: eventCategories.pd(this.props),
       action,
-      customDimensions
+      customDimensions,
     });
   };
 
@@ -474,7 +473,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         questionData,
         setNotApplicable,
         NaLoading,
-        isNotApplicable
+        isNotApplicable,
       } = this.props;
 
       return (
@@ -484,7 +483,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             <span
               style={{
                 position: 'relative',
-                top: '1.5em'
+                top: '1.5em',
               }}
             >
               <Loader
@@ -492,7 +491,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 size={20}
                 style={{
                   width: '20px',
-                  height: '20px'
+                  height: '20px',
                 }}
               />
             </span>
@@ -533,7 +532,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       selectedBid,
       noneditableField,
       hasDifferentSFanswer,
-      loading
+      loading,
     } = this.props;
 
     const { selectedRow } = this.state;
@@ -565,22 +564,43 @@ export class TaskRow extends React.PureComponent<Props, State> {
           hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
           sfObject={sfObject}
         >
-          <Autocomplete
-            sectionName={sectionName}
-            onFocus={() => {
-              // call question lock
-              this.context.questionLockWrapper(this.props.questionId);
-              this.setSelectRow(true);
-            }}
-            onBlur={() => {
-              this.context.questionUnlockWrapper(this.props.questionId);
+          <span
+            style={
+              `${this.props.showNaCheckbox}`
+                ? {
+                    display: 'flex',
+                    alignItems: 'stretch',
+                    // border: '1px solid blue',
+                  }
+                : ''
+            }
+          >
+            <span
+              className={this.props.showNaCheckbox ? 'markNaAutoActive' : ''}
+            >
+              {this.renderNACheckbox()}
+            </span>
+            <span
+              style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
+            >
+              <Autocomplete
+                sectionName={sectionName}
+                onFocus={() => {
+                  // call question lock
+                  this.context.questionLockWrapper(this.props.questionId);
+                  this.setSelectRow(true);
+                }}
+                onBlur={() => {
+                  this.context.questionUnlockWrapper(this.props.questionId);
 
-              this.setSelectRow(false);
-            }}
-            onChange={this.handlePropsalChange}
-            text={answerValue}
-            disabled={checkDisableFlag()}
-          />
+                  this.setSelectRow(false);
+                }}
+                onChange={this.handlePropsalChange}
+                text={answerValue}
+                disabled={checkDisableFlag()}
+              />
+            </span>
+          </span>
         </SFAnswerValidationWrapper>
       );
     }
@@ -597,7 +617,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     }
 
     // Function to converted Answer String
-    const getConvertedAnsString = str =>
+    const getConvertedAnsString = (str) =>
       !String(str).trim() ? '' : String(str).trim();
 
     const lastAnswerJS = lastAnswer?.toJS();
@@ -611,7 +631,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
     const richTextData = parseFormattedData || {
       html: '',
-      value: { blocks: [] }
+      value: { blocks: [] },
     };
 
     // Richtext Props
@@ -630,7 +650,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         const {
           clientWidth: quesTitleLW,
           style: quesTitleLStyle,
-          firstChild
+          firstChild,
         } = this.quesTextInnerLeftRef.current;
         const { clientWidth: quesTitleRW } = this.quesTextInnerRightRef.current;
 
@@ -648,7 +668,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         if (!selectedRow) this.setSelectRow(true);
         this.context.questionLockWrapper(this.props.questionId);
       },
-      onBlur: data => {
+      onBlur: (data) => {
         let saveDate = false;
         const previousAnsText = getConvertedAnsString(answerValue).trim();
 
@@ -685,13 +705,13 @@ export class TaskRow extends React.PureComponent<Props, State> {
         // Change title style for richEdit icon
         const {
           style: quesTitleLStyle,
-          firstChild
+          firstChild,
         } = this.quesTextInnerLeftRef.current;
         quesTitleLStyle.minHeight = 'auto';
         firstChild.style.maxWidth = 'none';
 
         this.setSelectRow(false);
-      }
+      },
     };
 
     // onFocus for question concurrency
@@ -712,10 +732,27 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <div style={{ display: 'flex' }}>
-              {this.renderNACheckbox()}
-              <CustomApolloRichText {...richTextAnswerField} />
-            </div>
+            {console.log('showw', this.props.showNaCheckbox)}
+            <span
+              style={
+                `${this.props.showNaCheckbox}`
+                  ? {
+                      display: 'flex',
+                      alignItems: 'stretch',
+                      // border: '1px solid blue',
+                    }
+                  : ''
+              }
+            >
+              <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
+                {this.renderNACheckbox()}
+              </span>
+              <span
+                style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
+              >
+                <CustomApolloRichText {...richTextAnswerField} />
+              </span>
+            </span>
           </SFAnswerValidationWrapper>
         );
       }
@@ -726,18 +763,29 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <div style={{ display: 'flex' }}>
-              {this.renderNACheckbox()}
+            <span
+              style={
+                `${this.props.showNaCheckbox}`
+                  ? {
+                      display: 'flex',
+                      // alignItems: 'stretch',
+                    }
+                  : ''
+              }
+            >
+              <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
+                {this.renderNACheckbox()}
+              </span>
               <TextArea
                 className="proposal-text-area"
                 placeholder={checkDisableFlag() ? '' : 'Click to answer'}
                 type="number"
                 onBlur={this.handleTextChange}
-                onFocus={e => this.onChildInputFocus(e)}
+                onFocus={(e) => this.onChildInputFocus(e)}
                 value={answerValue || ''}
                 disabled={checkDisableFlag()}
               />
-            </div>
+            </span>
           </SFAnswerValidationWrapper>
         );
       case 'y/n':
@@ -746,13 +794,24 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <div style={{ display: 'flex' }}>
-              {this.renderNACheckbox()}
+            <span
+              style={
+                `${this.props.showNaCheckbox}`
+                  ? {
+                      display: 'flex',
+                      // alignItems: 'stretch',
+                    }
+                  : ''
+              }
+            >
+              <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
+                {this.renderNACheckbox()}
+              </span>
               <DropdownWithIdleStateDetection
                 id="dd-proposal-answer"
                 placeholder={checkDisableFlag() ? '' : 'Click to answer'}
                 items={optionsYN}
-                onClick={val => this.onClickChange(val, answerValue)}
+                onClick={(val) => this.onClickChange(val, answerValue)}
                 value={answerValue}
                 setSelectRow={this.setSelectRow}
                 disabled={checkDisableFlag()}
@@ -760,7 +819,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 lockedBySelf={!!this.isQuestionLockedBySelf()}
                 lockQuestionOnFocus
               />
-            </div>
+            </span>
           </SFAnswerValidationWrapper>
         );
       case 'select':
@@ -769,13 +828,25 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <div style={{ display: 'flex' }}>
-              {this.renderNACheckbox()}
+            <span
+              style={
+                `${this.props.showNaCheckbox}`
+                  ? {
+                      display: 'flex',
+                      // alignItems: 'stretch',
+                      // border: '1px solid blue',
+                    }
+                  : ''
+              }
+            >
+              <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
+                {this.renderNACheckbox()}
+              </span>
               <DropdownWithIdleStateDetection
                 id="dd-proposal-answer"
                 placeholder={checkDisableFlag() ? '' : 'Click to answer'}
                 items={finalOptions}
-                onClick={val => this.onClickChange(val, answerValue)}
+                onClick={(val) => this.onClickChange(val, answerValue)}
                 value={answerValue}
                 setSelectRow={this.setSelectRow}
                 disabled={checkDisableFlag()}
@@ -783,7 +854,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 lockedBySelf={!!this.isQuestionLockedBySelf()}
                 lockQuestionOnFocus
               />
-            </div>
+            </span>
           </SFAnswerValidationWrapper>
         );
 
@@ -793,23 +864,39 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <div style={{ display: 'flex' }}>
-              {this.renderNACheckbox()}
-              <QuestionDatePickerWithIdleStateDetection
-                value={answerValue}
-                resetDate={this.resetDate}
-                handleDayChange={this.handleDayChange}
-                onFocus={() => {
-                  this.context.questionLockWrapper(this.props.questionId);
-                  this.setSelectRow(true);
-                }}
-                onBlur={() => {
-                  this.context.questionUnlockWrapper(this.props.questionId);
-                  this.setSelectRow(false);
-                }}
-                disabled={checkDisableFlag()}
-              />
-            </div>
+            <span
+              style={
+                `${this.props.showNaCheckbox}`
+                  ? {
+                      display: 'flex',
+                      alignItems: 'stretch',
+                      // border: '1px solid blue',
+                    }
+                  : ''
+              }
+            >
+              <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
+                {this.renderNACheckbox()}
+              </span>
+              <span
+                style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
+              >
+                <QuestionDatePickerWithIdleStateDetection
+                  value={answerValue}
+                  resetDate={this.resetDate}
+                  handleDayChange={this.handleDayChange}
+                  onFocus={() => {
+                    this.context.questionLockWrapper(this.props.questionId);
+                    this.setSelectRow(true);
+                  }}
+                  onBlur={() => {
+                    this.context.questionUnlockWrapper(this.props.questionId);
+                    this.setSelectRow(false);
+                  }}
+                  disabled={checkDisableFlag()}
+                />
+              </span>
+            </span>
           </SFAnswerValidationWrapper>
         );
       case ANSWER_TYPES.PICKLIST:
@@ -818,8 +905,20 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <div style={{ display: 'flex' }}>
-              {this.renderNACheckbox()}
+            <span
+              style={
+                `${this.props.showNaCheckbox}`
+                  ? {
+                      display: 'flex',
+                      // alignItems: 'stretch',
+                      // border: '1px solid blue',
+                    }
+                  : ''
+              }
+            >
+              <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
+                {this.renderNACheckbox()}
+              </span>
               <MultiSelectWithIdleStateDetection
                 placeholder={checkDisableFlag() ? '' : 'Click to answer'}
                 items={finalOptions}
@@ -832,7 +931,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 lockedBySelf={!!this.isQuestionLockedBySelf()}
                 lockQuestionOnFocus
               />
-            </div>
+            </span>
           </SFAnswerValidationWrapper>
         );
       case ANSWER_TYPES.PICKLIST_LOOKUP:
@@ -842,20 +941,37 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            {' '}
-            {this.renderNACheckbox()}
-            <AutoCompleteWithAddOptionWithIdleStateDetection
-              // sectionName={sectionName}
-              sfObject={sfObject}
-              lov={finalOptions}
-              sfField={sfField}
-              multiple
-              answer={answerValueComplex}
-              onFocus={concurrencyFocusHandler}
-              onBlur={concurrencyBlurHandler}
-              disabled={checkDisableFlag()}
-              onChange={this.handlePropsalChange}
-            />
+            <span
+              style={
+                `${this.props.showNaCheckbox}`
+                  ? {
+                      display: 'flex',
+                      alignItems: 'stretch',
+                      // border: '1px solid blue',
+                    }
+                  : ''
+              }
+            >
+              <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
+                {this.renderNACheckbox()}
+              </span>
+              <span
+                style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
+              >
+                <AutoCompleteWithAddOptionWithIdleStateDetection
+                  // sectionName={sectionName}
+                  sfObject={sfObject}
+                  lov={finalOptions}
+                  sfField={sfField}
+                  multiple
+                  answer={answerValueComplex}
+                  onFocus={concurrencyFocusHandler}
+                  onBlur={concurrencyBlurHandler}
+                  disabled={checkDisableFlag()}
+                  onChange={this.handlePropsalChange}
+                />
+              </span>
+            </span>
           </SFAnswerValidationWrapper>
         );
       case 'select-lookup':
@@ -864,19 +980,37 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            {this.renderNACheckbox()}
-            <AutoCompleteWithAddOptionWithIdleStateDetection
-              sfObject={sfObject}
-              lov={finalOptions}
-              sfField={sfField}
-              onFocus={concurrencyFocusHandler}
-              onBlur={concurrencyBlurHandler}
-              onChange={this.handlePropsalChange}
-              answer={answerValue || ''}
-              multiple={false}
-              loading={loading}
-              disabled={checkDisableFlag()}
-            />
+            <span
+              style={
+                `${this.props.showNaCheckbox}`
+                  ? {
+                      display: 'flex',
+                      alignItems: 'stretch',
+                      // border: '1px solid blue',
+                    }
+                  : ''
+              }
+            >
+              <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
+                {this.renderNACheckbox()}
+              </span>
+              <span
+                style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
+              >
+                <AutoCompleteWithAddOptionWithIdleStateDetection
+                  sfObject={sfObject}
+                  lov={finalOptions}
+                  sfField={sfField}
+                  onFocus={concurrencyFocusHandler}
+                  onBlur={concurrencyBlurHandler}
+                  onChange={this.handlePropsalChange}
+                  answer={answerValue || ''}
+                  multiple={false}
+                  loading={loading}
+                  disabled={checkDisableFlag()}
+                />
+              </span>
+            </span>
           </SFAnswerValidationWrapper>
         );
       case ANSWER_TYPES.RADIO:
@@ -885,15 +1019,30 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <RadioQuestionIdleStateDetection
-              id="dd-proposal-answer"
-              items={finalOptions}
-              onClick={val => this.onClickChange(val, answerValue)}
-              value={answerValue}
-              disabled={checkDisableFlag()}
-              onFocus={concurrencyFocusHandler}
-              onBlur={concurrencyBlurHandler}
-            />
+            <span
+              style={
+                `${this.props.showNaCheckbox}`
+                  ? {
+                      display: 'flex',
+                      // alignItems: 'stretch',
+                      // border: '1px solid blue',
+                    }
+                  : ''
+              }
+            >
+              <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
+                {this.renderNACheckbox()}
+              </span>
+              <RadioQuestionIdleStateDetection
+                id="dd-proposal-answer"
+                items={finalOptions}
+                onClick={(val) => this.onClickChange(val, answerValue)}
+                value={answerValue}
+                disabled={checkDisableFlag()}
+                onFocus={concurrencyFocusHandler}
+                onBlur={concurrencyBlurHandler}
+              />
+            </span>
           </SFAnswerValidationWrapper>
         );
       default:
@@ -995,7 +1144,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       questionData,
       proposalDetail,
       eventCategories,
-      NaLoading
+      NaLoading,
     } = this.props;
     const questionID = answers.get('questionId');
     const qvicon = questionId;
@@ -1071,7 +1220,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       iconColor,
       changeIcon,
       screenWidth,
-      enableRichtext
+      enableRichtext,
     } = this.state;
     const smallScreenWidth = screenWidth < 641 ? [8, 4] : [10, 2];
     const mediumScreen =
@@ -1089,7 +1238,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             {/* Question Text and Milestone */}
             <div
               className={classNames('question-label-container', {
-                'has-richtext-icon': enableRichtext
+                'has-richtext-icon': enableRichtext,
               })}
               ref={this.quesTextContainerRef}
             >
@@ -1136,7 +1285,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                           answerType: answerConfiguration.get('type'),
                           roleNames,
                           questionAnswered: !!lastAnswer,
-                          questionId: qId
+                          questionId: qId,
                         });
                       }}
                     >
@@ -1259,7 +1408,7 @@ const mapStateToProps = (state: Object) => ({
   selectedBid: getSelectedBid(state),
   oppdata: getOpportunityData(state),
   noneditableField: getnoneditableField(state),
-  showNaCheckbox: getShowNaCheckbox(state)
+  showNaCheckbox: getShowNaCheckbox(state),
 });
 
 export default connect(mapStateToProps, {
@@ -1267,5 +1416,5 @@ export default connect(mapStateToProps, {
   setAnswerLoading: setProposalAnswerLoading,
   deleteProposalUser: deleteProposalUserFromDB,
   setNotApplicable: setNotApplicableQuestion,
-  setEditQuestionData
+  setEditQuestionData,
 })(MatomoHOC(TaskRow));

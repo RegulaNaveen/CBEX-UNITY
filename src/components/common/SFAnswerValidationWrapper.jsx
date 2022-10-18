@@ -37,7 +37,8 @@ class SFAnswerValidationWrapper extends Component {
       <div
         className={`wrap-with-validation ${
           hasDifferentSFanswer ? 'hasDifferentSFanswer' : ''
-        }${showNaCheckbox ? 'markNaActive' : ''}`}
+        } 
+        `}
       >
         {this.props.children}
         {hasDifferentSFanswer && (
