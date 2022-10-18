@@ -496,12 +496,14 @@ class Questions extends Component {
         {/* Expand and Filter */}
         <div>
           <div className="tasksList-title-wrapper">
-            <div className="N/A toggle-switch">
+            <div className="tasklist-start-menu-separator" />
+            <div className="N/A na-toggle-switch">
+              <span style={{ padding: '10px' }}>Mark N/A</span>
               <Switch
-                label="Mark N/A"
+                // label="Mark N/A"
                 checked={this.props.showNaCheckbox}
                 onChange={this.handleOnChangeNaSwitch}
-                // size="small"
+                size="small"
               />
               <Tooltip
                 variant="light"
@@ -514,6 +516,7 @@ class Questions extends Component {
                 </IconButton>
               </Tooltip>
             </div>
+            <div className="tasklist-mid-menu-separator" />
             <div className="taskList-icons-wrapper">
               <ApolloCheckbox
                 label="Expand All"
