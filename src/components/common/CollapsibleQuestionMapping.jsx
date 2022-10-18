@@ -1,4 +1,6 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { selectIsQuestionsFilterEnabled } from '../../redux/selectors';
 import Question from './Question';
 
 const CollapsibleQuestionMapping = ({
@@ -8,12 +10,12 @@ const CollapsibleQuestionMapping = ({
   setQuestionToDisplayHistory,
   isNotepadOpen
 }) => {
+  const isQuestionsFiltersEnabled = useSelector(selectIsQuestionsFilterEnabled);
   return questions.valueSeq().map(questionConfig => {
     const visible =
       questionConfig.get('visible', true) &&
       (questionConfig.get('active', true) ||
-        questionConfig.get('isCustomQuestion', true)) &&
-      !questionConfig.get('notapplicable');
+        questionConfig.get('isCustomQuestion', true));
 
     return (
       (visible || typeof visible === 'undefined') && (
