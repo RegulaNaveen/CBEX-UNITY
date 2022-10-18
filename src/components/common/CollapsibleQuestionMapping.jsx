@@ -12,10 +12,11 @@ const CollapsibleQuestionMapping = ({
 }) => {
   const isQuestionsFiltersEnabled = useSelector(selectIsQuestionsFilterEnabled);
   return questions.valueSeq().map(questionConfig => {
-    const visible =
+    let visible =
       questionConfig.get('visible', true) &&
       (questionConfig.get('active', true) ||
-        questionConfig.get('isCustomQuestion', true));
+        questionConfig.get('isCustomQuestion', true)) &&
+      (!questionConfig.get('notapplicable') || isQuestionsFiltersEnabled);
 
     return (
       (visible || typeof visible === 'undefined') && (

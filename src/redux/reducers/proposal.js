@@ -122,7 +122,7 @@ const INITIAL_STATE: Map = fromJS({
       showInactiveQuestions: {
         checked: false,
         label: 'show inactive questions',
-        className: CLASS_QUES_FIL_R1_C1
+        className: 'questions-filter__row2-col2'
       }
     },
     milestoneGroup: {}
@@ -729,6 +729,18 @@ const onUpdateProposalNAQuestionDone = (state: Map, action: Object): Map => {
     const filterindexOfListToUpdate = filterQuestionsLen.findIndex(listItem => {
       return listItem.questionId === referenceId;
     });
+
+    let updatedAnswers = filterQuestionsLen[filterindexOfListToUpdate]?.answers;
+    if (!data?.notapplicable)
+      for (let index = updatedAnswers.length - 1; index > 0; index--) {
+        if (updatedAnswers[index].answer === 'N/A') updatedAnswers.pop();
+        else break;
+      }
+    console.log('tapas filterindexOfListToUpdate', updatedAnswers);
+
+    //filterQuestionsLen[filterindexOfListToUpdate]?.answers?.map((answer)={
+
+    // })
     newState = state
       .setIn(
         [
@@ -741,6 +753,10 @@ const onUpdateProposalNAQuestionDone = (state: Map, action: Object): Map => {
       .setIn(
         ['proposalQuestions', filterindexOfListToUpdate, 'NaLoading'],
         false
+      )
+      .setIn(
+        ['proposalQuestions', filterindexOfListToUpdate, 'answers'],
+        updatedAnswers
       );
 
     let filterQuestions = newState.get('filteredProposalQuestions');
