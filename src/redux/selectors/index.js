@@ -1,12 +1,14 @@
 // @flow
-import { Map } from 'immutable';
+import { Map } from 'immutable'; // NOSONAR
 import * as proposalsSelectors from './proposals';
 import * as proposalSelectors from './proposal';
 import * as authSelectors from './auth';
 import * as siderbarSelectors from './sidebar';
 import * as ssoAuthSelectors from './sso-auth';
+import * as notificationSelectors from './notification';
 
 export * from './notepad';
+export * from './profile';
 
 // SSO Auth selectors
 export const getUserAuthStatus = (state: Object): boolean =>
@@ -136,6 +138,8 @@ export const getProposalBoxId = (state: Object): string =>
 
 export const getAllBidsForIndex = (state: Object): string =>
   state.proposal.get('boxBids');
+export const getAdditionalLinks = (state: Object): string =>
+  state.proposal.get('boxAdditionalLink');
 
 export const getValidatedProposalData = (state: Object): Object =>
   proposalSelectors.getValidatedProposalData(state.proposal);
@@ -164,7 +168,8 @@ export const getEditQuestionData = state =>
   proposalSelectors.getEditQuestionData(state);
 
 export const getSelectedBid = state => proposalSelectors.getSelectedBid(state);
-export const getStatusOfNewBid = state => proposalSelectors.getStatusOfNewBid(state);
+export const getStatusOfNewBid = state =>
+  proposalSelectors.getStatusOfNewBid(state);
 
 // Tabbar Selectors
 export const getProposals = (state: Object): Array<Object> =>
@@ -187,7 +192,21 @@ export const getProposalsFilters = (state: Map): Object =>
 
 // Sidebar Selectors
 export const getSelectedSection = (state: Object): string =>
-  siderbarSelectors.getSelectedSectionSelector(state.sidebar);
+  siderbarSelectors.getSelectedSectionSelector(state?.sidebar);
 
 export const getIsOpen = (state: Object): string =>
   siderbarSelectors.getIsOpen(state.sidebar);
+
+export const getnoneditableField = (state: Map): Object =>
+  proposalsSelectors.getnoneditableField(state.proposals);
+
+export const getLookUpOptionsSelector = (state: Map): Object =>
+  proposalSelectors.getLookUpOptionsSelector(state.proposal);
+
+// Notification selectors
+export const getAllNotifications = state =>
+  notificationSelectors.getAllNotifications(state.notification);
+export const getNotificationLoading = state =>
+  notificationSelectors.getNotificationLoading(state.notification);
+export const getUnreadNotifications = state =>
+  notificationSelectors.getUnreadNotifications(state.notification);

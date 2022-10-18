@@ -1,5 +1,5 @@
 // @flow
-import { Map } from 'immutable';
+import { Map } from 'immutable'; // NOSONAR
 import { isEmpty } from 'lodash';
 
 export const getProposals = (proposals: Map): Array<Object> => {
@@ -34,3 +34,6 @@ export const getPage = (proposals: Map): Object => proposals.get('page');
 
 export const getNumOfRows = (proposals: Map): Object =>
   proposals.get('numRows');
+
+export const getnoneditableField = (proposals: Map): Object =>
+  proposals.get('nonEditableSF');

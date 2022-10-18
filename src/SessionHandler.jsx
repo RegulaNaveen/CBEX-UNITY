@@ -39,6 +39,10 @@ export const getUserName = () => {
   return localStorage.getItem('userName');
 };
 
+export const getUserId = () => {
+  return localStorage.getItem('userId');
+};
+
 export const getAccessToken = () => {
   return localStorage.getItem('accessToken');
 };

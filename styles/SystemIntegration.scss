@@ -1,0 +1,53 @@
+
+.intergration-icon {
+  align-self: center;
+  margin-left: 10px;
+}
+
+.validation-wrapper-integration {
+  display: flex;
+  align-items: start;
+  padding-left: 5px;
+ }
+
+.no-integration {
+  display: flex;
+  padding-left: 5px;
+
+}
+
+.integration-iconbuttons
+{
+  
+  text-align: 'center';
+  outline: 'none';
+  border: 'none';
+  background-Color: 'transparent';
+  color: '#297dfd';
+  cursor: 'pointer';
+  width: '24px';
+  height: '24px';
+}
+.integration-buttons {
+  padding-right: 10px;
+  display: flex;
+  text-align: 'center';
+  outline: 'none';
+  border: 'none';
+  background-color: 'transparent';
+  color: '#297dfd';
+  cursor: 'pointer';
+  width: '24px';
+  height: '24px';
+}
+.outgoing-integration {
+  height: 24px;
+  width:24px;
+}
+
+.bluecalendar .MuiIconButton-label {
+  width: 100%;
+  display: flex;
+  position: relative;
+  align-items: inherit;
+}

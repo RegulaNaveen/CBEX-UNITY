@@ -1,10 +1,11 @@
 // @flow
 import { isEmpty, cloneDeep, uniqBy } from 'lodash';
 import { fromJS } from 'immutable';
-import { REDUX_TYPES } from '../../constants';
-import type { Dispatch, ThunkAction } from './action-types';
-import { API } from '../../constants';
 import axios from 'axios';
+
+import { REDUX_TYPES, API } from '../../constants';
+import type { Dispatch, ThunkAction } from './action-types';
+
 import {
   getProposalInfo,
   setProposalAnswer,
@@ -17,18 +18,23 @@ import {
   getValidatedProposalData,
   editProposalQuestionData,
   deleteProposalQuestionData,
-  getOpportunityInfo,
-  getProposalCount, getPaginateProposal
+  getProposalCount,
+  getPaginateProposal,
+  getPickListLookupSfData,
+  fetchAdditionalBoxLink,
+  getOTListData,
+  changeProposalOT,
+  deleteProposalUser,
+  getProposalAnswer,
+  priceModelerApi
 } from '../../api/proposal';
-const {
-  PROPOSAL_API_URL
-} = API.PROPOSAL;
-
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getUniqueMilestones } from '../selectors/proposal';
 import { getProposalIdlist } from '../../utils/utils';
 import { fetchNotes } from './notepad-actions';
+import { DEFAULT } from '../../constants/app';
 
+const { PROPOSAL_API_URL } = API.PROPOSAL;
 const {
   PROPOSAL_INFO,
   PROPOSAL_INFO_LOADING,
@@ -67,8 +73,35 @@ const {
   UPDATE_BOX_BIDS,
   CHANGE_BID,
   ADD_NEW_BID,
-  NEW_BID_CREATED
+  NEW_BID_CREATED,
+  PROPOSAL_DETAIL_UPDATE,
+  UPDATE_LOOKUP_OPTIONS,
+  BOX_ADDITIONAL_LINK,
+  BOX_ADDITIONAL_LINK_ERROR,
+  SWITCH_TEMP_STATUS,
+  SWITCH_TEMP_IN_PROGRESS,
+  RESET_PROPOSALID,
+  QUESTION_LOCK_BY_USER,
+  QUESTION_UNLOCK_BY_USER,
+  QUESTION_LOCK_DETAILS_ALL,
+  SET_EVENT_LAUNCHER_FLAG
 } = REDUX_TYPES.PROPOSAL;
+
+/**
+ * Updates bidNo Query param without page reload
+ */
+const updateBidNoQueryparam = bidNo => {
+  if ('URLSearchParams' in window) {
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.set('bidNo', bidNo);
+    // New url
+    const newRelativePathQuery = `${
+      window.location.pathname
+    }?${searchParams.toString()}`;
+    // Update URL without pageload
+    window.history.pushState(null, '', newRelativePathQuery);
+  }
+};
 
 export type ProposalInfo = {};
 
@@ -103,26 +136,103 @@ export const getProposalByID = (id: string): ThunkAction<string, Object> => {
 };
 
 export const setProposalAnswerData = (
+  socketContext,
   proposalId: string,
   questionId: string,
   answer: string,
-  userData: Object
+  userData: Object,
+  editorData: any
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
     dispatch({
       type: PROPOSAL_ANSWER_LOADING,
       payload: { questionId, loading: true }
     });
-    let questionsFilter = getQuestionsFilters(getState());
+    const questionsFilter = getQuestionsFilters(getState());
 
     try {
       const { data } = await setProposalAnswer(
         proposalId,
         questionId,
         answer,
-        userData
+        userData,
+        editorData
       );
+      await socketContext.questionAnswerUpdateWrapper(questionId, data);
+      dispatch({
+        type: PROPOSAL_ANSWER,
+        payload: {
+          data: Array.isArray(data.answers) ? data.answers : data,
+          questionId,
+          hasDifferentSFanswer: data.hasDifferentSFanswer || false
+        }
+      });
 
+      const { modifiedQuestions } = data;
+      if (!isEmpty(modifiedQuestions)) {
+        modifiedQuestions.forEach(question => {
+          dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
+        });
+      }
+      dispatch(onQuestionsFilterApplied(questionsFilter));
+      dispatch({
+        type: PROPOSAL_ANSWER_LOADING,
+        payload: { questionId, loading: false }
+      });
+    } catch (err) {
+      console.log('error occurred ', err);
+      dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err } });
+    }
+  };
+};
+
+export const setProposalAnswerDatafromSocket = (
+  questionId: string,
+  data: any
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>, getState) => {
+    dispatch({
+      type: PROPOSAL_ANSWER_LOADING,
+      payload: { questionId, loading: true }
+    });
+    const questionsFilter = getQuestionsFilters(getState());
+
+    try {
+      dispatch({
+        type: PROPOSAL_ANSWER,
+        payload: {
+          data: Array.isArray(data.answers) ? data.answers : data,
+          questionId,
+          hasDifferentSFanswer: data.hasDifferentSFanswer || false
+        }
+      });
+
+      const { modifiedQuestions } = data;
+      if (!isEmpty(modifiedQuestions)) {
+        modifiedQuestions.forEach(question => {
+          dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
+        });
+      }
+      dispatch(onQuestionsFilterApplied(questionsFilter));
+      dispatch({
+        type: PROPOSAL_ANSWER_LOADING,
+        payload: { questionId, loading: false }
+      });
+    } catch (err) {
+      console.log('error occurred ', err);
+      dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err } });
+    }
+  };
+};
+
+export const updateAnswerFromWebSocket = (
+  data = {}
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>, getState) => {
+    const { questionId } = data;
+    let questionsFilter = getQuestionsFilters(getState());
+
+    try {
       if (Array.isArray(data.answers)) {
         dispatch({
           type: PROPOSAL_ANSWER,
@@ -142,7 +252,6 @@ export const setProposalAnswerData = (
           }
         });
       }
-
       const { modifiedQuestions } = data;
       if (!isEmpty(modifiedQuestions)) {
         modifiedQuestions.forEach(question => {
@@ -150,12 +259,8 @@ export const setProposalAnswerData = (
         });
       }
       dispatch(onQuestionsFilterApplied(questionsFilter));
-      dispatch({
-        type: PROPOSAL_ANSWER_LOADING,
-        payload: { questionId, loading: false }
-      });
     } catch (err) {
-      dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err } });
+      console.log('Error in updating answer from WS', error);
     }
   };
 };
@@ -262,6 +367,36 @@ export const getProposalUpdated = (id: string): ThunkAction<string, Object> => {
   };
 };
 
+export const updateQuestionLockByUser = (data): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: QUESTION_LOCK_BY_USER,
+      payload: data
+    });
+  };
+};
+export const getQuestionLockDetailsAll = (
+  data
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: QUESTION_LOCK_DETAILS_ALL,
+      payload: data
+    });
+  };
+};
+
+export const updateQuestionUnlockByUser = (
+  data
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: QUESTION_UNLOCK_BY_USER,
+      payload: data
+    });
+  };
+};
+
 export const onGetProposalBoxId = (id: string): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({ type: PROPOSAL_BOX_ID_LOADING, payload: {} });
@@ -269,6 +404,37 @@ export const onGetProposalBoxId = (id: string): ThunkAction<string, Object> => {
       const { data } = await getProposlBoxId(id);
       const { BoxId: boxId } = data.proposal.proposalDetails;
       dispatch({ type: PROPOSAL_BOX_ID, payload: { boxId } });
+    } catch (error) {
+      dispatch({
+        type: PROPOSAL_BOX_ID_ERROR,
+        payload: { error: error.error }
+      });
+    }
+  };
+};
+export const getAdditionalBoxLink = (
+  oppID: string,
+  crmNo: string,
+  customer: string
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    try {
+      const { data } = await fetchAdditionalBoxLink(oppID, crmNo, customer);
+      dispatch({ type: BOX_ADDITIONAL_LINK, payload: { boxlink: data } });
+    } catch (error) {
+      dispatch({
+        type: BOX_ADDITIONAL_LINK_ERROR,
+        payload: { error: error }
+      });
+    }
+  };
+};
+
+export const setupdateBoxId = (url: string): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({ type: PROPOSAL_BOX_ID_LOADING, payload: {} });
+    try {
+      dispatch({ type: PROPOSAL_BOX_ID, payload: { boxId: url } });
     } catch (error) {
       dispatch({
         type: PROPOSAL_BOX_ID_ERROR,
@@ -397,6 +563,73 @@ function filterGroup(
   }
 }
 
+export function getQuestionsFilterApplied(questionsArr, questionsFilter) {
+  let filteredQuestions = questionsArr;
+  questionsFilter.entrySeq().forEach(([groupName, group]) => {
+    let withinGroupFilteredQuestions = [];
+    // Set the logic for current filter Group
+    let logic = group.get('logic');
+    let considerGroup = false;
+
+    group.entrySeq().forEach(([filterName, filter]) => {
+      // Do not process for logic key or the filter is not checked
+      if (filterName === 'logic' || !filter.get('checked')) return;
+
+      considerGroup = true;
+
+      switch (filterName) {
+        case 'myUserRole':
+          withinGroupFilteredQuestions = filterGroup(
+            withinGroupFilteredQuestions,
+            filteredQuestions,
+            logic,
+            applyMyUserRoleFilter
+          );
+          break;
+        case 'answered':
+          withinGroupFilteredQuestions = filterGroup(
+            withinGroupFilteredQuestions,
+            filteredQuestions,
+            logic,
+            applyAnsweredFilter
+          );
+          break;
+        case 'unanswered':
+          withinGroupFilteredQuestions = filterGroup(
+            withinGroupFilteredQuestions,
+            filteredQuestions,
+            logic,
+            applyUnAnsweredFilter
+          );
+          break;
+        case 'interestedParty':
+          withinGroupFilteredQuestions = filterGroup(
+            withinGroupFilteredQuestions,
+            filteredQuestions,
+            logic,
+            applyInterestedPartyFilter
+          );
+          break;
+        default:
+          withinGroupFilteredQuestions = filterGroup(
+            withinGroupFilteredQuestions,
+            filteredQuestions,
+            logic,
+            applyMilestoneFilter,
+            filterName
+          );
+          break;
+      }
+    });
+
+    if (considerGroup) filteredQuestions = withinGroupFilteredQuestions;
+
+    considerGroup = false;
+  });
+
+  return filteredQuestions;
+}
+
 export function onQuestionsFilterApplied(questionsFilter) {
   return async (dispatch, getState) => {
     const state = getState();
@@ -406,7 +639,6 @@ export function onQuestionsFilterApplied(questionsFilter) {
     });
 
     let filteredQuestions = cloneDeep(selectProposalQuestions(state));
-
     questionsFilter.entrySeq().forEach(([groupName, group]) => {
       let withinGroupFilteredQuestions = [];
       // Set the logic for current filter Group
@@ -495,8 +727,15 @@ export function onApplyQuestionsFilter(
 }
 
 export function resetQuestionsFilterAction() {
-  return async dispatch => {
-    dispatch({ type: RESET_QUESTIONS_FILTER });
+  return async (dispatch, getState) => {
+    let questionsFilter = getQuestionsFilters(getState());
+    questionsFilter = questionsFilter.map(group => {
+      return group.map(filter => {
+        if (typeof filter === 'string') return filter;
+        return filter.set('checked', false);
+      });
+    });
+    dispatch({ type: RESET_QUESTIONS_FILTER, payload: questionsFilter });
   };
 }
 
@@ -569,11 +808,14 @@ export const deleteProposalQuestion = (
 };
 export const closeNewbidflags = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
-    dispatch({ type: NEW_BID_CREATED, payload: {flag : false} });
-  }
-}
+    dispatch({ type: NEW_BID_CREATED, payload: { flag: false } });
+  };
+};
 
-export const getOpportunity = (id: string, flag = false ): ThunkAction<string, Object> => {
+export const getOpportunity = (
+  id: string,
+  flag = false
+): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({ type: PROPOSAL_INFO_LOADING, payload: {} });
     try {
@@ -581,46 +823,56 @@ export const getOpportunity = (id: string, flag = false ): ThunkAction<string, O
       const { count, maxLimit } = getproposolcount;
       let callstomake = parseInt(count / maxLimit);
       let additionalcallstomake = count % maxLimit;
-      if(additionalcallstomake){
+      if (additionalcallstomake) {
         callstomake = callstomake + 1;
       }
       let from = 0;
       let urls = [];
       for (let index = 0; index < callstomake; index++) {
-          urls.push(axios.get(`${PROPOSAL_API_URL}/opportunity/${id}?from=${from}`))
-          from = from + 5;       
+        urls.push(
+          axios.get(`${PROPOSAL_API_URL}/opportunity/${id}?from=${from}`)
+        );
+        from = from + maxLimit;
       }
       let data = await getPaginateProposal(urls);
       data = data.map(v => v['data']).flat();
       // fetch notes for current bid
-      for (let proposal of data) {
-        if (proposal.isCurrent) {
-          dispatch(fetchNotes(proposal.proposal.proposalId));
-          break;
-        }
-      }
+      // for (let proposal of data) {
+      //   if (proposal.isCurrent) {
+      //     // fetchNotes(proposal.proposal.proposalId);
+      //     dispatch(fetchNotes(proposal.proposal.proposalId));
+      //     break;
+      //   }
+      // }
       dispatch({ type: OPPORTUNITY_INFO, payload: data });
       dispatch({
         type: UPDATE_BOX_BIDS,
         payload: getProposalIdlist(data)
       });
-      if(flag){
-        dispatch({ type: NEW_BID_CREATED, payload: {flag} });
+      if (flag) {
+        dispatch({ type: NEW_BID_CREATED, payload: { flag } });
       }
     } catch (err) {
       dispatch({ type: PROPOSAL_INFO_ERROR, payload: err });
-      dispatch({ type: NEW_BID_CREATED, payload: {flag : false} });
+      dispatch({ type: NEW_BID_CREATED, payload: { flag: false } });
     }
   };
 };
 
+export const resetProposalId = () => {
+  return dispatch => dispatch({ type: RESET_PROPOSALID, payload: {} });
+};
+
 export const changeBid = bid => {
+  if (bid?.bidNo) {
+    updateBidNoQueryparam(bid?.bidNo);
+  }
   return dispatch => {
     dispatch({
       type: CHANGE_BID,
       payload: bid
     });
-    dispatch(fetchNotes(bid.bidId));
+    // dispatch(fetchNotes(bid.bidId));
   };
 };
 
@@ -630,6 +882,203 @@ export const UpdateNewBid = bid => {
       type: ADD_NEW_BID,
       payload: bid
     });
-    dispatch(fetchNotes(bid.proposal.proposalId));
+    // dispatch(fetchNotes(bid.proposal.proposalId));
+  };
+};
+
+export const callPickListLookupSfData = (): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    try {
+      let lookupMap = {};
+      const response = await getPickListLookupSfData();
+      const { data } = response.data;
+      data.forEach(row => {
+        const options = row.PicklistValues;
+        lookupMap[`${row.PK}_${row.SK}`] = options;
+      });
+      dispatch({ type: UPDATE_LOOKUP_OPTIONS, payload: lookupMap });
+    } catch (error) {
+      console.log('Lookup API failed');
+    }
+  };
+};
+
+/**
+ * Get Error Message from response
+ */
+export function getErrorMessage(error) {
+  if (error.response) {
+    let msg = error.response.data.message;
+    const isErr400 = error.response.status === 400;
+    const isErr404 = error.response.status === 404;
+    if (isErr400 && isEmpty(msg)) msg = DEFAULT.ERROR_400;
+    if (isErr404 && isEmpty(msg)) msg = DEFAULT.ERROR_404;
+    if (!isErr400 && !isErr404 && isEmpty(msg)) msg = DEFAULT.REQUEST_FAILED;
+    return msg;
+  }
+  return 'Unexpected error occurred';
+}
+
+/**
+ * Fetch All Opportunity Type
+ */
+export const fetchOTListData = () => async () => {
+  try {
+    // Api Response
+    const response = await getOTListData();
+    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
+  } catch (error) {
+    // Error
+    console.log(error.response);
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
+  }
+};
+
+/**
+ * Switch Temp Status Update - Action
+ */
+export const updateSwitchTempStatusFromWebSocket = data => {
+  return async dispatch => {
+    dispatch({
+      type: SWITCH_TEMP_STATUS,
+      payload: data
+    });
+  };
+};
+
+/**
+ * Activate Proposal Loading - Action
+ */
+export const activateProposalLoading = () => {
+  return async dispatch => {
+    dispatch({
+      type: PROPOSAL_INFO_LOADING,
+      payload: {}
+    });
+  };
+};
+
+/**
+ * Deactivate Proposal Loading - Action
+ */
+export const deactivateProposalLoading = () => {
+  return async dispatch => {
+    dispatch({
+      type: PROPOSAL_INFO_ERROR,
+      payload: undefined
+    });
+  };
+};
+
+/**
+ * Fetch All Opportunity Type
+ */
+export const changeOpportunityType = switchTempData => async () => {
+  try {
+    // Api Response
+    const response = await changeProposalOT(switchTempData);
+    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
+  } catch (error) {
+    // Error
+    console.log(error.response);
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
+  }
+};
+
+/**
+ * Switch Temp In Progress - Action
+ */
+export const updateSwitchInProgress = data => {
+  return async dispatch => {
+    dispatch({
+      type: SWITCH_TEMP_IN_PROGRESS,
+      payload: data
+    });
+  };
+};
+
+/**
+ * Set Proposal Answer Loading - Action
+ */
+export const setProposalAnswerLoading = (questionId, loading) => {
+  return async dispatch => {
+    dispatch({
+      type: PROPOSAL_ANSWER_LOADING,
+      payload: { questionId, loading }
+    });
+  };
+};
+
+/**
+ * Delete Proposal User from Selected Answer
+ */
+export const deleteProposalUserFromDB = (
+  proposalId,
+  email,
+  sectionOrder,
+  sectionName
+) => async () => {
+  try {
+    // Api Response
+    const response = await deleteProposalUser(proposalId, {
+      email,
+      section: { sectionOrder, sectionName }
+    });
+    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
+  } catch (error) {
+    // Error
+    console.log(error.response);
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
+  }
+};
+
+/**
+ * Get Proposal Answers History
+ */
+export const getProposalAnswerHistory = (
+  proposalId: string,
+  questionId: string
+) => async () => {
+  try {
+    // Api Response
+    const response = await getProposalAnswer(proposalId, questionId);
+    return { status: true, title: DEFAULT.SUCCESS, data: response };
+  } catch (error) {
+    // Error
+    console.log(error?.response);
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
+  }
+};
+
+/**
+ * Get Price Modeler Data
+ */
+export const getPriceModelerData = proposalId => async () => {
+  try {
+    // Api Response
+    const response = await priceModelerApi(proposalId);
+    console.log('Price Modeler Api Response', response.data);
+    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
+  } catch (error) {
+    // Error
+    console.log(error?.response);
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
+  }
+};
+
+/**
+ * Set Flag for Event Launcher
+ */
+export const setEventLauncherFlag = val => {
+  return dispatch => {
+    dispatch({
+      type: SET_EVENT_LAUNCHER_FLAG,
+      payload: val
+    });
   };
 };

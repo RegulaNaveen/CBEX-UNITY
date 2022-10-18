@@ -1,38 +1,102 @@
-.documents {
-  display: flex;
-  justify-content: space-between;
-  height: 100%;
-  .doc-tab-index {
-    flex: 1;
-    border-top: 66px solid #0061D5;
-    background-color: #f5f5f5;
-    ul {
-      list-style: none;
-      padding-top: 15px;
-      li {
-        color: #6287ab;
-        font-weight: bold;
-        padding: 5px;
-        cursor: pointer;  
-      }
-      li:hover {
-        background-color: #eee;
-      }
-      .selectedBid{
-        background-color: #eee;
-      }
-    }
+.main-doc {
+  .para-document {
+    font-size: 12px;
+    font-family: $proximaNova;
+    font-weight: 650;
+    padding-top: 10px;
+    padding-bottom: 2px;
   }
-  .doc-tab-content {
-    flex: 4; 
-    padding-left: 5px;
-    .doc-tab-content-inner {
-      justify-content: center;
-      display: flex;
+  .sidebar-sopportunitylinks > div {
+    width: auto;
+    margin: 0px;
+  }
+  .sidebar-sopportunitylinks > div > div {
+    padding-top: 0px !important;
+  }
+  .documents {
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+    margin-top: 5px;
+    ul.opportunity-link {
+      padding-left: 30px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+    ul.bidlist-document {
+      padding-bottom: 10px;
+      padding-top: 0px;
+    }
+    .doc-tab-index {
       flex: 1;
-      align-items: center;
-      height: 100vh;
-      background: #f5f5f5;
+      border: 1px solid $neutral4;
+      background-color: #f6f7fb;
+      overflow: auto;
+
+      .MuiPaper-elevation1 {
+        border-width: 1px 0 1px;
+        border-top-color: transparent;
+      }
+
+      .MuiAccordion-root {
+        background-color: transparent !important;
+        border: none;
+      }
+      ul {
+        list-style: none;
+        li {
+          color: #0061d5;
+          // font-weight: bold;
+          padding: 5px;
+          cursor: pointer;
+        }
+        li:hover {
+          background-color: #eee;
+        }
+        .selectedBid {
+          background-color: #eee;
+        }
+      }
+      .boxlocation {
+        font-size: 20px;
+        font-weight: bold;
+      }
+    }
+    .doc-tab-index > div {
+      width: 100%;
+      margin: auto;
+    }
+    .doc-tab-index > div > div {
+      padding-top: 0px;
+    }
+    .doc-tab-content {
+      flex: 4;
+      padding-left: 1rem;
+
+      .doc-tab-content-inner {
+        justify-content: center;
+        display: flex;
+        flex: 1;
+        align-items: center;
+        height: calc(100vh - -1px);
+        background: #f5f5f5;
+        border: 1px solid $neutral4;
+      }
     }
   }
+}
+.MuiAccordionSummary-content > p {
+  color: #000;
+  font-weight: bold;
+}
+.main-footer-inner {
+  text-align: left;
+  margin-left: 10%;
+}
+
+.additionalink-document {
+  padding-right: 0px;
+}
+.MuiAccordionDetails-root.additionalbidlinkdetail {
+  padding-right: 0px;
 }

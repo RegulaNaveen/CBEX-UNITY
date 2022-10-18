@@ -4,7 +4,90 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.4] - YYYY-MM-DD
+### Added
+- IQVIACBEXU-1194:Add Bell Icon for User In-App Notifications
+- IQVIACBEXU-1987: Feedback Item - update notifications to include Opportunity hyperlinks in message
+### Fixed
+- IQVIACBEXU-1852: Gear icon options should not appear when click on the bell icon
+- IQVIACBEXU-1718: "All" role is still being used on Production. Implemented function to check current user role in Ubuild roles list.
+- IQVIACBEXU-1359: Create ability to add alternate answer for defined list.
+- IQVIACBEXU-1961: CLONE - Gear icon options should not appear when click on the bell icon
+- IQVIACBEXU-1953: Fixed Socket for New Bid loading issues
+- IQVIACBEXU-1990: Fixed Gear icon issue in notification drawer.
 
+## [4.3.1] - YYYY-MM-DD
+### Fixed
+- IQVIACBEXU-1727: Formatting issues when pasting into the Notepad
+- IQVIACBEXU-1735: Fixed: Notepad not editable for historic bids
+- IQVIACBEXU-1732: Fixed: Misalignment with notes and last section of questions
+## [4.3] - YYYY-MM-DD
+### Added
+  - IQVIACBEXU-1693: Number should be shown when add more than 5 users
+  - IQVIACBEXU-1696: Tool tip is not aligned to first line for a questions with bullets and numbering
+  - IQVIACBEXU-1692: Able to add same User name multiple times for a role in proposal team section
+  - IQVIACBEXU-1358: Additional Links to Box
+  - IQVIACBEXU-1421: Create SalesForce Link
+  - IQVIACBEXU-1344: Pull Notes out of the blade. The new note section uses react-draft-wysiwyg.
+  - IQVIACBEXU-1400: Create the ability to export Unity data
+  - IQVIACBEXU-1423: Made sticky notepad and UI fixes for 1344
+  - IQVIACBEXU-1576: Add ability to select multiple milestones for export options
+  - IQVIACBEXU-1636: Notepad toolbar hides when user scrolls down
+  - IQVIACBEXU-1637: Increased scrollbar width in notepad
+  - IQVIACBEXU-1644: Fixed close button in date field
+### Changed
+### Fixed
+  - IQVIACBEXU-1668: Fixed Notes are not getting save on collapse. Added fetch notes on notes mount
+  - IQVIACBEXU-1630: Fixed tooltip and edit question icon Alignment
+  - IQVIACBEXU-1529: "Control" Text format is bigger in Blade section.
+  - IQVIACBEXU-1669: Dropdown value not showing correctly for Answer in Unity
+  - IQVIACBEXU-1667: Space need to be corrected between the questions
+  - IQVIACBEXU-1557: Question & Tool tip formatting is not working in unity as per the ubuild
+  - IQVIACBEXU-1659: In unity system not showing correctly for long milestone name
+  - IQVIACBEXU-1670: Questions are displaying over custom question pop up
+  - IQVIACBEXU-1670: Other questions are displaying over the single select and multi select dropdown options
+  - IQVIACBEXU-1670: White gap is coming for blade when both blade and custom question pop up are opened
+  - IQVIACBEXU-1662: Background highlight for questions is not displaying
+  - IQVIACBEXU-1677: Font size issue for custom questions
+  - IQVIACBEXU-1695: Date should be aligned to the Top of the text box when flag appears
+  - IQVIACBEXU-1679: Unity predicted answer grey icon alignment issue. Implemented different grid column ratio for question and answer on note collapse and open
+  - IQVIACBEXU-1691: At the end of the notes section, if user press enter key than cursor doesn't come down and scroll bar is going up.
+  - IQVIACBEXU-1690: Notes font size is inconsistent in word document when user exports.
+  - IQVIACBEXU-1685:Notes section shows previous opportunity notes text after clicking on export opportunity icon
+  - IQVIACBEXU-1525: 1400 fixes
+  - IQVIACBEXU-1694: "Add new Question" Text is not correctly aligned.
+  - IQVIACBEXU-1699: Additional Links not appearing in Box
+  - IQVIACBEXU-1697: Date not removing if user clears it
+  - IQVIACBEXU-1698: Date not removing if user clears it
+  - IQVIACBEXU-1704: Not answered" text is not center aligned to textbox for unity predicted answers
+  - IQVIACBEXU-1700: Milestone Filters Showing on Non-Applicable Template
+## [4.2] - YYYY-MM-DD
+### Added
+  - IQVIACBEXU-1311: Flag end users when an auto-populated response has been manually edited
+  - IQVIACBEXU-1284: Auto close Unity Banner
+  - IQVIACBEXU-1361: If user replacing with existing email then the history part not completely red striked out.
+  - IQVIACBEXU-1245: Unity - Box will not allow user to to log-in unless language is selected
+  - IQVIACBEXU-939: Develop "Look Up" answer type functionality
+### Changed
+### Fixed
+  - IQVIACBEXU-1293: Regression/Legacy For date type - if user validates the unity predicted answer , the blue font is changed to black.
+  - IQVIACBEXU-1295: Regression: Bid History is spilling over to footer section in Documents tab When user create more than 20 Bids
+  - IQVIACBEXU-1249: Legacy : Custom question issue when filters applied
+  - IQVIACBEXU-1230: Made text fit the question div, when the zoom level is above 100%.
+  - IQVIACBEXU-1251: Fixed the smooshed text at the top of unity page.
+  - IQVIACBEXU-1256: Fixed "Not answered" text not appearing in front of the question. 
+  - IQVIACBEXU-1257: Fixed the header getting split in 2 rows when blade is opened. Fixed the propotion. 
+  - IQVIACBEXU-1347-internal: Unity header fields are not updating as per SF value.
+  - IQVIACBEXU-1348-internal: Business developer field is not updating once we update the field from SF.
+  - IQVIACBEXU-1282: Bid due date field is striking Answer History even if answer from SF are same
+  - IQVIACBEXU-1232: Unity - Unable to Identify Bid when Bid History is collapsed
+  - IQVIACBEXU-1341: Edge case:Filters applied in one opportunity card are mapping over to other opportunities
+  - IQVIACBEXU-1118: Loading issues if user switch among My Docket, Recent and All tabs in quick pace.
+  - IQVIACBEXU-1247: Textbox not expanding to maximum length while inputting the data
+  - IQVIACBEXU-1248: Textbox should be in expanded state if user expands the textbox manually
+  - IQVIACBEXU-1340: Legacy: Rows filtered and opportunity cards displaying are not matching
+  - IQVIACBEXU-1365: Date completed filed is not centered for questions which has flags.
+  
 ## [4.1] - YYYY-MM-DD
 ### Added
   - IQVIACBEXU-1061: Opportunity Type version is displayed in footer of Unity record

@@ -1,5 +1,5 @@
 // @flow
-import { Map } from 'immutable';
+import { Map } from 'immutable'; // NOSONAR
 
 export const getAuthData = (auth: Map): Map => auth.get('authData');
 

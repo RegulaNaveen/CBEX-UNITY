@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import type { Match } from 'react-router-dom';
-import { Map } from 'immutable';
+import { Map } from 'immutable'; // NOSONAR
 import { connect } from 'react-redux';
 import Loader from 'react-loader-spinner';
 import classNames from 'classnames';

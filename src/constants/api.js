@@ -18,6 +18,8 @@ let UBUILD_ENABLED = false;
 let UBUILD_ARTIFACT = '';
 let SF_HOST_URL = '';
 let SOCKET_URL = '';
+let NOTES_SOCKET_URL = '';
+let LAUNCH_DARKLY_CLIENT_ID = '630712f317eece1138e5445c';
 
 switch (environment) {
   case 'UAT':
@@ -32,7 +34,25 @@ switch (environment) {
     REDIRECTION_URL = 'https://uat-unity.iqvia.app/';
     UBUILD_ARTIFACT = 'https://uat-ubuild.iqvia.app/main.js';
     SF_HOST_URL = 'https://iqvia--uat.lightning.force.com/';
-    SOCKET_URL = 'wss://l3p8o0zg48.execute-api.us-east-1.amazonaws.com/production';
+    SOCKET_URL =
+      'wss://l3p8o0zg48.execute-api.us-east-1.amazonaws.com/production';
+    NOTES_SOCKET_URL =
+      'wss://1qq7rwcx08.execute-api.us-east-1.amazonaws.com/production';
+    break;
+  case 'DEV2':
+    PROPOSAL_API_ENDPOINT =
+      'https://new4hoe11j.execute-api.us-east-1.amazonaws.com/dev2';
+    PROPOSAL_API_KEY = 'L8In0zYYjBuWm2Fae4KU4FOacxstdku293lJ30S3';
+    NORMAL_AUTH_API_ENDPOINT =
+      'https://byp6zagvkb.execute-api.us-east-1.amazonaws.com/unity-dev';
+    COGNITO_HOST = 'https://dev-unity.auth.us-east-1.amazoncognito.com';
+    // AUTH_KEY = '';
+    CLIENT_ID = 'uf2jbhv4jcprcdiqc5rupg665';
+    REDIRECTION_URL = 'https://dev2-unity.dev.iqvia.app/';
+    UBUILD_ARTIFACT = 'https://dev2-ubuild.dev.iqvia.app/main.js';
+    SF_HOST_URL = 'https://iqvia--hotfix.lightning.force.com/';
+    SOCKET_URL =
+      'wss://07hl4u2wt5.execute-api.us-east-1.amazonaws.com/production';
     break;
   case 'DEV2':
     PROPOSAL_API_ENDPOINT =
@@ -49,17 +69,20 @@ switch (environment) {
     SOCKET_URL = 'wss://07hl4u2wt5.execute-api.us-east-1.amazonaws.com/production';
     break;
   case 'DEMO':
-    PROPOSAL_API_ENDPOINT = 
-    'https://yfpduar618.execute-api.us-east-1.amazonaws.com/demo';
+    PROPOSAL_API_ENDPOINT =
+      'https://yfpduar618.execute-api.us-east-1.amazonaws.com/demo';
     PROPOSAL_API_KEY = 'Q2HUSjNGhX3V5wZ78Ggh1536NtsIeJ7W3Vbfx2mv';
     NORMAL_AUTH_API_ENDPOINT =
-    'https://byp6zagvkb.execute-api.us-east-1.amazonaws.com/unity-dev';
+      'https://byp6zagvkb.execute-api.us-east-1.amazonaws.com/unity-dev';
     COGNITO_HOST = 'https://dev-unity.auth.us-east-1.amazoncognito.com';
     CLIENT_ID = 'uf2jbhv4jcprcdiqc5rupg665';
     REDIRECTION_URL = 'https://demo-unity.dev.iqvia.app/';
     UBUILD_ARTIFACT = 'https://demo-ubuild.dev.iqvia.app/main.js';
     SF_HOST_URL = 'https://iqvia--hotfix.lightning.force.com/';
-    SOCKET_URL = 'wss://ld700ndvyb.execute-api.us-east-1.amazonaws.com/production';
+    SOCKET_URL =
+      'wss://ld700ndvyb.execute-api.us-east-1.amazonaws.com/production';
+    NOTES_SOCKET_URL =
+      'wss://0x9widxpxd.execute-api.us-east-1.amazonaws.com/production';
     break;
   case 'PROD':
     PROPOSAL_API_ENDPOINT =
@@ -73,38 +96,46 @@ switch (environment) {
     REDIRECTION_URL = 'https://unity.iqvia.app/';
     UBUILD_ARTIFACT = 'https://ubuild.iqvia.app/main.js';
     SF_HOST_URL = 'https://iqvia.my.salesforce.com/';
-    SOCKET_URL = 'wss://29nghekakl.execute-api.us-east-1.amazonaws.com/production';
+    SOCKET_URL =
+      'wss://29nghekakl.execute-api.us-east-1.amazonaws.com/production';
+    NOTES_SOCKET_URL =
+      'wss://0kmubx9x18.execute-api.us-east-1.amazonaws.com/production';
+    LAUNCH_DARKLY_CLIENT_ID = '630712f317eece1138e5445d';
     break;
   case 'QA':
     // UDEV Data
     PROPOSAL_API_ENDPOINT =
       'https://r1g9pjnmbb.execute-api.us-east-1.amazonaws.com/qa';
     PROPOSAL_API_KEY = 'YXrOu45imb6d03erOkZB2PuBOsYQYZ93pnmQK6C0';
-    //NORMAL_AUTH_API_ENDPOINT =
-    // 'https://aiz2k1qjjl.execute-api.us-east-1.amazonaws.com/dev';
-    //COGNITO_HOST = 'https://unity-dev.auth.us-east-1.amazoncognito.com';
-    //CLIENT_ID = '5qa83je2aga90r53kte3mori93';
     NORMAL_AUTH_API_ENDPOINT =
-     'https://cokteh9f4e.execute-api.us-east-1.amazonaws.com/qa';
+      'https://cokteh9f4e.execute-api.us-east-1.amazonaws.com/qa';
     COGNITO_HOST = 'https://qa-unity.auth.us-east-1.amazoncognito.com';
     CLIENT_ID = '65ie0siehm65hisi4n1avlaa0r';
     REDIRECTION_URL = 'https://qa-unity.iqvia.app/';
     UBUILD_ARTIFACT = 'https://qa-ubuild.iqvia.app/main.js';
     SF_HOST_URL = 'https://iqvia--staging.lightning.force.com/';
-    SOCKET_URL = 'wss://nthe94se04.execute-api.us-east-1.amazonaws.com/production';
+    SOCKET_URL =
+      'wss://nthe94se04.execute-api.us-east-1.amazonaws.com/production';
+    NOTES_SOCKET_URL =
+      'wss://za42jrafie.execute-api.us-east-1.amazonaws.com/production';
     break;
   default:
     // DEV Data
-    PROPOSAL_API_ENDPOINT = 'https://olyxc9cn1m.execute-api.us-east-1.amazonaws.com/dev';
+    PROPOSAL_API_ENDPOINT =
+      'https://olyxc9cn1m.execute-api.us-east-1.amazonaws.com/dev';
     PROPOSAL_API_KEY = 'SmXooYpNRX4u0dlRrebjt3PUnJJma5cm5ipK3nSV';
     NORMAL_AUTH_API_ENDPOINT =
       'https://byp6zagvkb.execute-api.us-east-1.amazonaws.com/unity-dev';
     COGNITO_HOST = 'https://dev-unity.auth.us-east-1.amazoncognito.com';
     CLIENT_ID = 'uf2jbhv4jcprcdiqc5rupg665';
     REDIRECTION_URL = 'https://dev-unity.dev.iqvia.app/';
+    // REDIRECTION_URL = 'http://localhost:8080';
     UBUILD_ARTIFACT = 'https://dev-ubuild.dev.iqvia.app/main.js';
     SF_HOST_URL = 'https://iqvia--crm.lightning.force.com/';
-    SOCKET_URL = 'wss://sgag59jkn1.execute-api.us-east-1.amazonaws.com/production';
+    SOCKET_URL =
+      'wss://sgag59jkn1.execute-api.us-east-1.amazonaws.com/production';
+    NOTES_SOCKET_URL =
+      'wss://g3ukgizvkl.execute-api.us-east-1.amazonaws.com/production';
     break;
 }
 
@@ -131,10 +162,15 @@ const AUTH = {
 
 const PROPOSAL_API_URL = `${PROPOSAL_API_ENDPOINT}/api/proposals`;
 const PROPOSAL_API_ALL = `${PROPOSAL_API_URL}/all`;
+const NON_EDITABLE_SF_FIELD_URL = `${PROPOSAL_API_ENDPOINT}/api/questions/noneditablesffield`;
 const PROPOSAL_API_ALL_BY_STATUS = `${PROPOSAL_API_URL}/all-by-status`;
 const PROPOSAL_QUESTIONS_API_URL = `${PROPOSAL_API_ENDPOINT}/api/questions`;
 const PROPOSAL_FILTER_VALUES = `${PROPOSAL_API_URL}/acceptanceCriteriaValues`;
 const PROPOSAL_VALIDATED_DATA = `${PROPOSAL_API_URL}/validations`;
+const LOOKUP_OPTIONS_API = `${PROPOSAL_API_ENDPOINT}/api/questions/lookup-options`;
+const PROPOSAL_OT_LIST = `${PROPOSAL_API_URL}/opportunityTypes`;
+const PROPOSAL_SWITCH_OT = `${PROPOSAL_API_URL}/switch/opportunityType`;
+const USER_API_URL = `${PROPOSAL_API_URL}/users`;
 
 const MAMOTO_IQVIA = 'https://useranalytics.solutions.iqvia.com/';
 
@@ -147,13 +183,28 @@ const PROPOSAL = {
   PROPOSAL_FILTER_VALUES,
   PROPOSAL_VALIDATED_DATA,
   API_KEY: PROPOSAL_API_KEY,
-  MAMOTO_IQVIA
+  MAMOTO_IQVIA,
+  NON_EDITABLE_SF_FIELD_URL,
+  LOOKUP_OPTIONS_API,
+  PROPOSAL_OT_LIST,
+  PROPOSAL_SWITCH_OT,
+  USER_API_URL
 };
 
 const NOTEPAD_API_URL = `${PROPOSAL_API_ENDPOINT}/api/notes`;
+const PROFILE_API_URL = `${PROPOSAL_API_ENDPOINT}/api/user`;
+const NOTIFICATION_API_URL = `${PROPOSAL_API_ENDPOINT}/api/app-notification`;
 
 const NOTEPAD = {
   NOTEPAD_API_URL
+};
+
+const PROFILE = {
+  PROFILE_API_URL,
+  PROPOSAL_API_ENDPOINT
+};
+const NOTIFICATION = {
+  NOTIFICATION_API_URL
 };
 
 export {
@@ -163,5 +214,9 @@ export {
   UBUILD_ENABLED,
   UBUILD_ARTIFACT,
   SF_HOST_URL,
-  SOCKET_URL
+  SOCKET_URL,
+  PROFILE,
+  NOTIFICATION,
+  NOTES_SOCKET_URL,
+  LAUNCH_DARKLY_CLIENT_ID
 };

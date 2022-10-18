@@ -1,0 +1,129 @@
+@mixin popoverStyle {
+  display: inline-flex;
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 6px);
+}
+
+.custom-rich-text {
+  border: $border;
+  position: relative;
+  box-sizing: content-box;
+  border-radius: 0.25rem;
+  transition-duration: 0.2s;
+  transition-property: border-color;
+  transition-timing-function: linear;
+  transition-delay: 0.2s;
+  background: $white;
+
+  &:hover {
+    border-color: $neptune-primary;
+  }
+
+  &.disabled {
+    background-color: $neutral2;
+    opacity: 0.8;
+
+    &:hover {
+      border-color: $neutral4;
+    }
+  }
+
+  .custom-rich-text-inner {
+    min-height: 38px;
+    overflow: auto;
+    resize: vertical;
+  }
+
+  [class*='RichEditor-editor'] {
+    padding: 0;
+  }
+
+  &.readonly {
+    display: block;
+
+    [class*='public-DraftEditorPlaceholder-root'] {
+      padding-top: 8px;
+    }
+
+    [class*='DraftEditor-editorContainer'] {
+      cursor: pointer;
+    }
+
+    &.disabled {
+      [class*='DraftEditor-editorContainer'] {
+        cursor: not-allowed !important;
+      }
+    }
+  }
+
+  &.popover {
+    display: block;
+
+    .popover-inner {
+      & > div {
+        & > div:nth-child(1) {
+          @include popoverStyle;
+
+          & > div:nth-child(1) {
+            .MuiSvgIcon-root {
+              margin-right: 1px;
+              color: $neutral7 !important;
+            }
+          }
+          & > div:nth-child(2) {
+            width: 17rem;
+            transition: none;
+            .MuiInputBase-input {
+              font: inherit;
+              color: $black;
+              width: 100%;
+              border: 1px solid #d9d9d9;
+              height: 40px;
+              margin: 0;
+              display: block;
+              padding: 8px 8px 8px 7px;
+              min-width: 0;
+              background: none;
+              box-sizing: border-box;
+              line-height: 1.5;
+              border-radius: 4px;
+              animation-name: mui-auto-fill-cancel;
+              letter-spacing: inherit;
+              animation-duration: 10ms;
+              transition-duration: 0.4s;
+              transition-property: border-color;
+              -webkit-tap-highlight-color: transparent;
+            }
+          }
+        }
+      }
+    }
+
+    .style-button-group {
+      .icon-button {
+        height: 2.375rem;
+        width: 2.375rem;
+      }
+    }
+
+    [class*='RichEditor-editor'] {
+      border: none;
+      font-family: $proximaNova;
+
+      [class*='public-DraftEditorPlaceholder-root'] {
+        padding-top: 8px;
+      }
+
+      [class*='DraftEditor-root'] {
+        border: none;
+        line-height: inherit;
+        resize: none;
+
+        [class*='DraftEditor-editorContainer'] {
+          padding: 0;
+        }
+      }
+    }
+  }
+}

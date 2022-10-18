@@ -60,13 +60,13 @@ module.exports = env => {
       host: 'localhost',
       historyApiFallback: true,
       hot: true,
-      open: 'Google Chrome',
+      open: 'chrome',
       disableHostCheck: true
     },
     plugins: [
       new HtmlWebpackPlugin({
         template: 'src/index.html',
-        favicon: `./img/favicon/favicon-${apiEnv.replace(/['"]+/g, '')}.ico`,
+        favicon: `./img/favicon/favicon-${apiEnv.replace(/['"]+/g, '')}.ico`
       }),
       new webpack.DefinePlugin({ 'process.env.API_ENV': apiEnv })
     ]

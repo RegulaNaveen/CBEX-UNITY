@@ -1,34 +1,70 @@
-div#unityfooter{
-    height: 0px !important;
-}
+.unity-footer {
+  height: 0px !important;
+  border-top: 1px solid $neutral4;
 
-#unityfooter>div>div{
-    width: 100%;
-    justify-content: space-between;
-    align-items: center;
-}
+  & > div {
+    & > div {
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      & > div {
+        margin-top: 0;
+      }
+    }
+  }
 
-#unityfooter>div>div>a{
-    margin-left: 70px;
-}
-
-#unityfooter>div>p{
-    margin-right: 50px;
-}
-
-.MuiButton-textPrimary:hover {
-    background-color: none
-}
-
-#unityfooter span.MuiButton-label{
+  span.MuiButton-label {
     color: #646464;
     font-weight: 800;
-    font-family: 'ProximaNova-Regular';
-}
-[href="https://www.iqvia.com/"]{
+    font-family: $proximaNova;
+  }
+
+  button {
+    padding: 0 5px !important;
+
+    &.red-btn {
+      opacity: 1 !important;
+      min-width: auto;
+      svg {
+        margin: -3px 0 0 0;
+        width: 1.3rem;
+        height: 1.3rem;
+      }
+      span {
+        color: #e20000 !important;
+      }
+    }
+
+    &.ques-temp-info {
+      pointer-events: none;
+      margin-left: 0 !important;
+    }
+    &.switch-temp-btn {
+      span.MuiButton-label {
+        color: $neptune-primary;
+      }
+    }
+  }
+
+  [href="https://www.iqvia.com/"] {
     pointer-events: none;
+  }
+
+  .MuiButton-textPrimary:hover {
+    background-color: none;
+  }
 }
 
-#unityfooter button {
-    pointer-events: none;
+.display-none {
+  display: none !important;
+}
+
+button.no-animation {
+  &:hover {
+    background-color: transparent !important;
+    opacity: 0.8;
+  }
+  [class*='MuiTouchRipple-root'] {
+    display: none !important;
+  }
 }

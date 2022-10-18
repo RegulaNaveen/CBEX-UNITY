@@ -9,13 +9,14 @@ import Badge from 'apollo-react/components/Badge';
 import PlusIcon from 'apollo-react-icons/Plus';
 import CardIcon from 'apollo-react-icons/Card';
 import SyncIcon from 'apollo-react-icons/Sync';
+import Download from 'apollo-react-icons/Download';
 import Close from 'apollo-react-icons/Close';
 import IconButton from 'apollo-react/components/IconButton';
 import Typography from 'apollo-react/components/Typography';
 import Tooltip from 'apollo-react/components/Tooltip';
 import { neptunePrimaryDark, neutral7 } from 'apollo-react/colors';
 
-import Notepad from './Notepad';
+// import Notepad from './Notepad';
 import chevronRight from '../../../img/chevron-right.svg';
 import {
   handleSelectedSection,
@@ -33,6 +34,8 @@ import { REDUX_TYPES } from '../../constants';
 
 import MatomoHOC from '../HOC/MatomoHOC';
 import { selectAreAllSectionsExpanded } from '../../redux/selectors/proposal';
+import {actionChannel, UI_ACTION} from '../../uiActions/ui-actions'
+const MANUAL_REFRESH = false;
 
 type Props = {
   sections: Map,
@@ -133,20 +136,25 @@ class Sidebar extends Component<Props, State> {
     this.trackMatomoEventSidebarToggle(!isOpen);
   };
 
-  scrollToSelectedElement = (event: SyntheticInputEvent<EventTarget>) => {
+  timeout = ms => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  };
+
+  scrollToSelectedElement = async (event: SyntheticInputEvent<EventTarget>) => {
     event.stopPropagation();
 
     const {
       target: { textContent, id }
     } = event;
     const { setSelectedSection, handleOpenClose, onscrollelement } = this.props;
-    onscrollelement(textContent)
+    onscrollelement(textContent);
 
     const itemToScroll = textContent
       .toLocaleLowerCase()
       .split(' ')
       .join('-');
 
+    await this.timeout(100);
     const item: ?HTMLElement = document.getElementById(itemToScroll);
 
     // delayed 1s so that sidebar will close and height of question section wpn't change
@@ -243,18 +251,6 @@ class Sidebar extends Component<Props, State> {
       selectedBid
     } = this.props;
     const { selectedSection, activeTabIndex } = this.state;
-    const NotepadTab = () =>
-      notes.size === 0 ? (
-        <Typography variant="body2" style={{ fontWeight: 'inherit' }}>
-          Notepad
-        </Typography>
-      ) : (
-        <Badge variant="dot">
-          <Typography variant="body2" style={{ fontWeight: 'inherit' }}>
-            Notepad
-          </Typography>
-        </Badge>
-      );
 
     return (
       <div
@@ -273,7 +269,9 @@ class Sidebar extends Component<Props, State> {
           </button>
           <div>
             <div className="titlebar">
-              <Typography variant="title1" gutterBottom>
+              <Typography variant="title1"  style={{
+                    fontSize: 20
+                  }} gutterBottom>
                 Controls
               </Typography>
               <IconButton size="small" onClick={this.handleItemsVisibility}>
@@ -319,6 +317,22 @@ class Sidebar extends Component<Props, State> {
                   }}
                 />
               </Tooltip>
+              <Tooltip title="Export Opportunity" placement="top">
+                <Download
+                  style={{
+                    color: neptunePrimaryDark,
+                    width: 20,
+                    height: 20,
+                    margin: 3,
+                    cursor: 'pointer'
+                  }}
+                  onClick={e => {
+                    this.handleItemsVisibility(e);
+                    actionChannel.next({ name : UI_ACTION.openGenerateModal })
+                  }}
+                />
+              </Tooltip>
+              { MANUAL_REFRESH &&  
               <Tooltip title="Refresh Proposal Sources" placement="right">
                 <SyncIcon
                   style={{
@@ -338,6 +352,7 @@ class Sidebar extends Component<Props, State> {
                   }}
                 />
               </Tooltip>
+              }
             </div>
             <Tabs
               value={activeTabIndex}
@@ -346,18 +361,22 @@ class Sidebar extends Component<Props, State> {
               truncate
             >
               <Tab label="Index" />
-              <Tab label={<NotepadTab />} style={{ paddingRight: '8px' }} />
             </Tabs>
-            {activeTabIndex === 0 && (
+            {(activeTabIndex === 0 && sections) && (
               <div className="sidebar-content-list">
                 {sections.valueSeq().map(section => {
                   const sectionName = section.get('sectionName');
                   const sectionNameId = sectionName.toLocaleLowerCase().split(' ').join('-');
                   const questions = section.get('questions');
                   const someQuestionsAreVisible = questions
-                    .valueSeq()
-                    .map(question => question.get('visible', true))
-                    .includes(true);
+                  .valueSeq()
+                  .map(
+                    (question) =>
+                        question.get('visible', true) &&
+                        (question.get('active', true) ||
+                          question.get('isCustomQuestion', true))
+                  )
+                  .includes(true);
 
                   if (someQuestionsAreVisible)
                     return (
@@ -378,14 +397,6 @@ class Sidebar extends Component<Props, State> {
                   return null;
                 })}
               </div>
-            )}
-            {activeTabIndex === 1 && (
-              <Notepad
-                sections={sections}
-                id={id}
-                selectedtitle={selectedtitle || ''}
-                trackMatomoNoteSubmit={this.trackMatomoNoteSubmit}
-              />
             )}
           </div>
         </div>

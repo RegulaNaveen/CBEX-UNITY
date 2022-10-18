@@ -6,7 +6,8 @@ import { REDUX_TYPES } from '../../constants';
 import {
   onGetAllProposals,
   onGetByStatus,
-  onGetFilterValues
+  onGetFilterValues,
+  onGetSFNonEditabelField
 } from '../../api/proposals';
 
 const {
@@ -17,7 +18,8 @@ const {
   ON_SET_PROPOSALS_FILTERS,
   SET_PROPOSAL_FILTERING,
   SET_PAGE,
-  SET_NUM_OF_ROWS
+  SET_NUM_OF_ROWS,
+  NON_EDITABLE_SF_FIELD
 } = REDUX_TYPES.PROPOSALS;
 
 const formatProposal = (proposal: Object): Object => {
@@ -195,7 +197,7 @@ export const onFilteringProposals = (
       });
 
       let data = { proposals: [] };
-      if (tabIndex === 0) {
+      if (Number(tabIndex) === 0) {
         const userEmail = localStorage.getItem('userEmail') || '';
         const response = await onGetByStatus(
           filterPayload,
@@ -203,7 +205,7 @@ export const onFilteringProposals = (
           userEmail
         );
         data = response.data;
-      } else if (tabIndex === 1) {
+      } else if (Number(tabIndex) === 1) {
         const userEmail = localStorage.getItem('userEmail') || '';
         const response = await onGetByStatus(
           filterPayload,
@@ -226,10 +228,6 @@ export const onFilteringProposals = (
       dispatch({ type: ERROR_ON_GET_PROPOSALS, payload: { error } });
     } finally {
       dispatch(setPageAction(1)); // resetting page to 1
-      dispatch({
-        type: SET_PROPOSAL_FILTERING,
-        payload: false
-      });
     }
   };
 };
@@ -267,4 +265,20 @@ export const setNumberOfRowsAction = (rowsCount: Number) => {
       payload: rowsCount
     });
   };
+};
+
+export const getSFNonEditabelField = (): ThunkAction<String, Object> => async (
+  dispatch: Dispatch<Object, Object>
+) => {
+  try {
+    const { data } = await onGetSFNonEditabelField();
+    if (data) {
+      dispatch({
+        type: NON_EDITABLE_SF_FIELD,
+        payload: data
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };
