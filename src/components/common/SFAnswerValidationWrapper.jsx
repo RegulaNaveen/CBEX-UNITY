@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getSelectedBid } from '../../redux/selectors';
+import { getSelectedBid, getShowNaCheckbox } from '../../redux/selectors';
 import { SF_HOST_URL } from '../../constants/api';
 
 const primarySFobject = {
   ResourceRequest: 'pse__Resource_Request__c',
   Opportunity: 'Opportunity',
   BidHistory: 'Bid_History__c',
-  Account: 'Account'
+  Account: 'Account',
 };
 
 class SFAnswerValidationWrapper extends Component {
@@ -27,17 +27,17 @@ class SFAnswerValidationWrapper extends Component {
     if (sfObject === primarySFobject.ResourceRequest)
       return `${SF_HOST_URL}lightning/r/Bid_History__c/${agreementId}/related/Bid_History_Resource_Requests__r/view`;
     if (sfObject === primarySFobject.Account)
-      return `${SF_HOST_URL}lightning/r/Account/${accountId}/view`;  
+      return `${SF_HOST_URL}lightning/r/Account/${accountId}/view`;
     return `${SF_HOST_URL}`;
   }
 
   render() {
-    const { hasDifferentSFanswer } = this.props;
+    const { hasDifferentSFanswer, showNaCheckbox } = this.props;
     return (
       <div
         className={`wrap-with-validation ${
           hasDifferentSFanswer ? 'hasDifferentSFanswer' : ''
-        }`}
+        }${showNaCheckbox ? 'markNaActive' : ''}`}
       >
         {this.props.children}
         {hasDifferentSFanswer && (
@@ -64,7 +64,8 @@ class SFAnswerValidationWrapper extends Component {
 }
 
 const mapStateToProps = (state: Object) => ({
-  selectedBid: getSelectedBid(state)
+  selectedBid: getSelectedBid(state),
+  showNaCheckbox: getShowNaCheckbox(state),
 });
 
 export default connect(mapStateToProps)(SFAnswerValidationWrapper);
