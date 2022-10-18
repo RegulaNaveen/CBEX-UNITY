@@ -280,8 +280,11 @@ const SocketContextProvider = props => {
           case 'QUESTION_ANSWER_UPDATE':
             // update question answer how it is done in action
             if (data.data.latestAnswer) {
+              const questionId = Array.isArray(data.data.latestAnswer)
+                ? data.data.latestAnswer[data.data.latestAnswer.length - 1].questionId
+                : data.data.latestAnswer.questionId;
               setProposalAnswerDatafromSocket(
-                data.data.questionId,
+                questionId,
                 data.data.latestAnswer
               );
             }
