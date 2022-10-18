@@ -59,6 +59,7 @@ const CustomApolloRichText = ({
   const richTextEditorRef = useRef(null);
   const richTextKey = useRef(uuid());
   const [unlockTimeout, setUnlockTimeout] = useState(null);
+  const [isFocused, setIsFocused] = useState(false);
 
   /**
    * Function to Add Delay for Specific Seconds
@@ -109,17 +110,18 @@ const CustomApolloRichText = ({
    */
   useEffect(() => {
     // Restrict Richtext height upto 5 lines
-    if (richTextEditorRef.current && richTextEditorRef.current.editorRef.current.editorContainer) {
-      if (richTextData.text) {
-         setRefElementStyle(richTextEditorRef.current.editorRef.current.editorContainer, 125, 120, '5px');
-      } else {
-        const { style: refStyle } = richTextEditorRef.current.editorRef.current.editorContainer;
-        refStyle.height = 'auto';
+    setTimeout(() => {
+      console.log(richTextEditorRef.current.editorRef.current.editorContainer)
+      if (richTextEditorRef.current && richTextEditorRef.current.editorRef.current.editorContainer) {
+        if (richTextData.text) {
+           setRefElementStyle(richTextEditorRef.current.editorRef.current.editorContainer, 125, 120, '5px');
+        } else {
+          const { style: refStyle } = richTextEditorRef.current.editorRef.current.editorContainer;
+          refStyle.height = 'auto';
+        }
       }
-    }
-  }, [richTextData]);
+    }, 100);
 
-  useEffect(() => {
     setRichTextData(INITIAL_DATA);
   }, [INITIAL_DATA]);
 
@@ -186,7 +188,7 @@ const CustomApolloRichText = ({
       } = richTextEditorRef.current.editorRef.current.editorContainer;
 
       if (scrollHeight < 230) refStyle.height = 'auto';
-      // if (clientHeight <= 230) setRefElementStyle(richTextEditorRef.current.editorRef.current.editorContainer, 230, 230);
+      if (clientHeight <= 230) setRefElementStyle(richTextEditorRef.current.editorRef.current.editorContainer, 230, 230);
     }
 
     if (onChange) onChange(resultObj); // onChange callback func
@@ -203,13 +205,14 @@ const CustomApolloRichText = ({
       !richTextContainerRef.current.contains(e.target) &&
       isEmpty(e.target.closest('.MuiPopover-root')) &&
       isEmpty(e.target.closest('.MuiDialog-root')) &&
-      !disabled
+      isFocused
     ) {
       blur();
     }
   };
 
   const blur = () => {
+    setIsFocused(false);
     if (onBlur) onBlur(richTextData);
     resetUnlockTimer(true);
   };
@@ -226,12 +229,14 @@ const CustomApolloRichText = ({
     if (richTextContainerRef.current.contains(e.target)) {
       if ((e.shiftKey && e.key === 'Tab') || e.key === 'Tab') {
         blur();
+        setIsFocused(false);
       }
     }
   };
 
   const handleFocus = useCallback(() => {
     if (enableFocus) {
+      setIsFocused(true);
       resetUnlockTimer();
     }
     onFocus();
