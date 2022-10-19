@@ -291,6 +291,7 @@
   .question-label-container {
     display: flex;
     justify-content: space-between;
+    align-items: flex-end;
     padding-bottom: 5px;
     width: 100%;
     transition: width 0.2s;
@@ -300,6 +301,7 @@
     }
     .question-label-inner {
       display: flex;
+      align-items: flex-end;
 
       .questiontext-richtext {
         z-index: 0;
@@ -348,6 +350,7 @@
 
     .milestone-chip {
       padding-left: 0.25rem;
+      margin-right: 24px;
 
       .chipview {
         z-index: 1;
