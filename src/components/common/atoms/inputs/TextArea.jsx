@@ -145,7 +145,7 @@ class TextArea extends PureComponent<Props, State> {
     } else {
       const timer = setTimeout(() => {
         // write unlock logic here
-        this.numberInput.current.blur();
+        if (this.numberInput.current) this.numberInput.current.blur();
       }, QUESTION_UNLOCK_TIMEOUT);
       this.setState({ unlockTimeout: timer });
     }
