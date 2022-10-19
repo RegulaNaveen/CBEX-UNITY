@@ -16,16 +16,11 @@
   .opportunity-details {
     margin-bottom: 1rem;
     margin-top: 0.5rem;
-    display: grid;
-    grid-template-columns: minmax(0, 2.8fr) minmax(390px, 1fr);
-    grid-gap: 1rem;
-    grid-template-areas:
-      'one two'
-      'one two';
 
     & > div {
       &:nth-child(1) {
         grid-area: one;
+        align-self: baseline;
         padding-right: 0.875rem;
       }
       &:nth-child(2) {
