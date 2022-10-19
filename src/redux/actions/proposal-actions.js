@@ -92,7 +92,8 @@ const {
   SHOW_NA_CHECKBOX,
   UPDATE_NOT_APPLICABLE_PROGRESS,
   UPDATE_NOT_APPLICABLE_DONE,
-  SET_PRICE_MODELER_FIELDS
+  SET_PRICE_MODELER_FIELDS,
+  ERROR_UPDATE_NOT_APPLICABLE
 } = REDUX_TYPES.PROPOSAL;
 
 /**
@@ -166,10 +167,10 @@ export function setNotApplicableQuestion(
         payload: { data: data.data, questionId, questionStatus }
       });
     } catch (err) {
-      // dispatch({
-      //   type: ERROR_UPDATING_USER_TIMEZONE,
-      //   payload: { data: err }
-      // });
+      dispatch({
+        type: ERROR_UPDATE_NOT_APPLICABLE,
+        payload: { questionId, loading: false }
+      });
     }
   };
 }

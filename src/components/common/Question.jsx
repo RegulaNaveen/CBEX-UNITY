@@ -464,7 +464,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     });
   };
 
-  renderNACheckbox = checkDisableFlag => {
+  renderNACheckbox = (checkDisableFlag, answer) => {
     if (this.props.showNaCheckbox) {
       const {
         setProposalAnswer,
@@ -506,16 +506,16 @@ export class TaskRow extends React.PureComponent<Props, State> {
               onClick={() => {
                 if (checkDisableFlag()) return;
                 setNotApplicable(proposalId, questionId, !isNotApplicable);
-                if (!isNotApplicable) {
-                  // setProposalAnswer(
-                  //   this.context,
-                  //   proposalId,
-                  //   questionId,
-                  //   'N/A',
-                  //   userData,
-                  //   null,
-                  //   true
-                  // );
+                if (!isNotApplicable && answer !== 'N/A') {
+                  setProposalAnswer(
+                    this.context,
+                    proposalId,
+                    questionId,
+                    'N/A',
+                    userData,
+                    null,
+                    true
+                  );
                 }
               }}
             />
@@ -584,7 +584,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             <span
               className={this.props.showNaCheckbox ? 'markNaAutoActive' : ''}
             >
-              {this.renderNACheckbox(checkDisableFlag)}
+              {this.renderNACheckbox(checkDisableFlag, answer)}
             </span>
             <span
               style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
@@ -749,7 +749,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag)}
+                {this.renderNACheckbox(checkDisableFlag, answer)}
               </span>
               <span
                 style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
@@ -778,7 +778,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag)}
+                {this.renderNACheckbox(checkDisableFlag, answer)}
               </span>
               <TextArea
                 className="proposal-text-area"
@@ -809,7 +809,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag)}
+                {this.renderNACheckbox(checkDisableFlag, answer)}
               </span>
               <DropdownWithIdleStateDetection
                 id="dd-proposal-answer"
@@ -844,7 +844,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag)}
+                {this.renderNACheckbox(checkDisableFlag, answer)}
               </span>
               <DropdownWithIdleStateDetection
                 id="dd-proposal-answer"
@@ -880,7 +880,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag)}
+                {this.renderNACheckbox(checkDisableFlag, answer)}
               </span>
               <span
                 style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
@@ -921,7 +921,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag)}
+                {this.renderNACheckbox(checkDisableFlag, answer)}
               </span>
               <MultiSelectWithIdleStateDetection
                 placeholder={checkDisableFlag() ? '' : 'Click to answer'}
@@ -957,7 +957,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag)}
+                {this.renderNACheckbox(checkDisableFlag, answer)}
               </span>
               <span
                 style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
@@ -996,7 +996,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag)}
+                {this.renderNACheckbox(checkDisableFlag, answer)}
               </span>
               <span
                 style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
@@ -1035,7 +1035,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag)}
+                {this.renderNACheckbox(checkDisableFlag, answer)}
               </span>
               <RadioQuestionIdleStateDetection
                 id="dd-proposal-answer"

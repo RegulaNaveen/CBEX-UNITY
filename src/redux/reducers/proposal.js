@@ -59,7 +59,8 @@ const {
   QUESTION_LOCK_DETAILS_ALL,
   SET_EVENT_LAUNCHER_FLAG,
   SHOW_NA_CHECKBOX,
-  SET_PRICE_MODELER_FIELDS
+  SET_PRICE_MODELER_FIELDS,
+  ERROR_UPDATE_NOT_APPLICABLE
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -694,6 +695,45 @@ const onProposalAnswerLoading = (state: Map, action: Object): Map => {
     .set('isProposalAnswerLoading', loading);
 };
 
+const onErrorUpdateNotApplicable = (state: Map, action: Object): Map => {
+  const {
+    payload: { questionId: referenceId, loading = false }
+  } = action;
+
+  let newState = fromJS({});
+
+  const indexOfListToUpdate = state
+    .get('proposalQuestions')
+    .findIndex(listItem => {
+      return listItem.questionId === referenceId;
+    });
+
+  newState = state.setIn(
+    ['proposalQuestions', indexOfListToUpdate, 'NaLoading'],
+    loading
+  );
+
+  const proposalQuestions = newState.get('proposalQuestions');
+  let filterQuestionsLen = state.get('filteredProposalQuestions');
+  if (Array.isArray(filterQuestionsLen)) {
+    const filterindexOfListToUpdate = filterQuestionsLen.findIndex(listItem => {
+      return listItem.questionId === referenceId;
+    });
+    newState = state.setIn(
+      ['filteredProposalQuestions', filterindexOfListToUpdate, 'NaLoading'],
+      loading
+    );
+    let filterQuestions = newState.get('filteredProposalQuestions');
+    return state
+      .set('proposalQuestions', proposalQuestions)
+      .set('filteredProposalQuestions', filterQuestions)
+      .set('isProposalNAQuestionLoading', loading);
+  } else {
+    return state
+      .set('proposalQuestions', proposalQuestions)
+      .set('isProposalNAQuestionLoading', loading);
+  }
+};
 const onUpdateProposalNAQuestionDone = (state: Map, action: Object): Map => {
   const {
     payload: { data, questionId: referenceId, loading = false }
@@ -722,11 +762,13 @@ const onUpdateProposalNAQuestionDone = (state: Map, action: Object): Map => {
     });
 
     let updatedAnswers = filterQuestionsLen[filterindexOfListToUpdate]?.answers;
-    if (!data?.notapplicable)
-      for (let index = updatedAnswers.length - 1; index > 0; index--) {
-        if (updatedAnswers[index].answer === 'N/A') updatedAnswers.pop();
-        else break;
-      }
+    if (!data?.notapplicable) {
+      if (updatedAnswers[index].answer === 'N/A') updatedAnswers.pop();
+    }
+    // for (let index = updatedAnswers.length - 1; index > 0; index--) {
+    //   if (updatedAnswers[index].answer === 'N/A') updatedAnswers.pop();
+    //   else break;
+    // }
     console.log('tapas filterindexOfListToUpdate', updatedAnswers);
 
     //filterQuestionsLen[filterindexOfListToUpdate]?.answers?.map((answer)={
@@ -1110,6 +1152,7 @@ const actionMap = {
   [PROPOSAL_ANSWER_LOADING]: onProposalAnswerLoading,
   [UPDATE_NOT_APPLICABLE_PROGRESS]: onProposalNAQuestionLoading,
   [UPDATE_NOT_APPLICABLE_DONE]: onUpdateProposalNAQuestionDone,
+  [ERROR_UPDATE_NOT_APPLICABLE]: onErrorUpdateNotApplicable,
   [PROPOSAL_ANSWER_ERROR]: onProposalAnswerError,
   [QUESTION_SECTION_INFO]: onQuestionSectionInfoLoaded,
   [QUESTION_SECTION_LOADING]: onQuestionSectionLoading,

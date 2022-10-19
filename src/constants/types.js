@@ -88,7 +88,8 @@ const PROPOSAL = {
   SHOW_NA_CHECKBOX: 'show_na_checkbox',
   UPDATE_NOT_APPLICABLE_PROGRESS: 'update_not_applicable_progress',
   UPDATE_NOT_APPLICABLE_DONE: 'update_not_applicable_done',
-  SET_PRICE_MODELER_FIELDS: 'set_price_modeler_fields'
+  SET_PRICE_MODELER_FIELDS: 'set_price_modeler_fields',
+  ERROR_UPDATE_NOT_APPLICABLE: 'error_update_not_applicable'
 };
 
 const PROPOSALS = {
