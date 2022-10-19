@@ -936,9 +936,9 @@ export function getFilteredQuestion(proposalQuestions, filterState) {
     questions = [];
   }
 
-  // if (!includesNa) {
-  //   questions = applyNotApplicableFilter(questions);
-  // }
+  if (!includesNa) {
+    questions = applyNotApplicableFilter(questions);
+  }
 
   // My user role questions
   if (myRole) questions = applyMyUserRoleFilter(questions);

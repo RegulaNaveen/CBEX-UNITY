@@ -116,15 +116,14 @@ const INITIAL_STATE: Map = fromJS({
         label: 'Interested Party',
         className: 'questions-filter__row2-col1'
       },
-      logic: 'AND'
-    },
-    notapplicablegroup: {
       showInactiveQuestions: {
         checked: false,
         label: 'show inactive questions',
-        className: 'questions-filter__row2-col2'
-      }
+        className: 'questions-filter__row3-col1'
+      },
+      logic: 'AND'
     },
+
     milestoneGroup: {}
   }),
   filteredProposalQuestions: Map({}),
