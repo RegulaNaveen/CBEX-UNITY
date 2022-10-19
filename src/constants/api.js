@@ -133,7 +133,9 @@ switch (environment) {
     UBUILD_ARTIFACT = 'https://l4-ubuild.iqvia.app/main.js';
     SF_HOST_URL = 'https://iqvia--uthfixchk.lightning.force.com/';
     SOCKET_URL =
-      'wss://nthe94se04.execute-api.us-east-1.amazonaws.com/production';
+      ' wss://j3xgedpk7j.execute-api.us-east-1.amazonaws.com/undefined';
+    NOTES_SOCKET_URL =
+      'wss://gni5ivpjhh.execute-api.us-east-1.amazonaws.com/production';
     break;
   default:
     // DEV Data
