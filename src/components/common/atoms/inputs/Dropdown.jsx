@@ -140,7 +140,7 @@ class Dropdown extends PureComponent<Props, State> {
   handleFocusIn = event => {
     this.setState({ isFocused: true });
     if (this.props.setSelectRow) this.props.setSelectRow(true);
-    if (this.props.lockQuestionOnFocus && !this.props.lockedBySelf) {
+    if (this.props.lockQuestionOnFocus) {
       if (this.props.toggleWatch) {
         this.props.toggleWatch(true);
       }
