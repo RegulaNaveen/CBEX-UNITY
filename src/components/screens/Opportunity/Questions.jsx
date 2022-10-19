@@ -1,6 +1,6 @@
 // @flow
 // eslint-disable-next-line react/destructuring-assignment
-import React, { Component } from 'react';
+import React, { createRef, createContext, Component, Suspense } from 'react';
 import { withRouter, Match } from 'react-router-dom';
 import { List, Map } from 'immutable';
 import { compose } from 'redux';
@@ -10,13 +10,11 @@ import Link from 'apollo-react/components/Link';
 import Filter from 'apollo-react-icons/Filter';
 import ApolloCheckbox from 'apollo-react/components/Checkbox';
 import classNames from 'classnames';
-import { v4 as uuidv4 } from 'uuid';
 import Grid from 'apollo-react/components/Grid';
 import Panel from 'apollo-react/components/Panel';
-import Typography from 'apollo-react/components/Typography/Typography';
-
+import Typography from 'apollo-react/components/Typography';
+import Loader from 'react-loader-spinner';
 import { Add, Refresh } from '../../svg';
-import CollapsibleList from '../../common/CollapsibleList';
 import BidHistory from '../../common/Bidhistory';
 import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
 import {
@@ -53,10 +51,18 @@ import AnswerHistory from '../../views/modals/AnswerHistory';
 import { getAllUsers } from '../../../redux/actions/sso-auth-actions';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import { getCountriesNameForCode } from '../../../utils/utils';
-import chevronRight from '../../../../img/chevron-right.svg';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
 import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions';
 import WysiwygNotepad from '../../views/WysiwygNotepad';
+import ANSWER_TYPES from '../../../constants/answerTypes';
+import NotesSocketContext from '../../../context/notesSocketContext';
+import PriceModeler from '../../common/PriceModeler';
+
+export const QuestionsRefContext = createContext(null);
+
+const QuestionsSectionMapping = React.lazy(() =>
+  import('./QuestionsSectionMapping')
+);
 
 type Props = {
   match: Match,
@@ -82,7 +88,9 @@ type Props = {
   activeQuestionsFilterCount: Number,
   allSectionsExpanded: boolean,
   expandAllSections: Function,
-  editQuestionsData: Map
+  editQuestionsData: Map,
+  setQuestion: Function,
+  hasQuestionError: boolean
 };
 
 type State = {
@@ -93,8 +101,10 @@ type State = {
 };
 
 const MANUAL_REFRESH = false;
+let firstRender = true;
+class Questions extends Component {
+  static contextType = NotesSocketContext;
 
-class Questions extends Component<Props, State> {
   constructor(props: Object) {
     super(props);
 
@@ -109,11 +119,16 @@ class Questions extends Component<Props, State> {
       showFilter: false,
       sidebarscroll: '',
       open: false,
-      isNotepadOpen: true
+      isNotepadOpen: true,
+      totalWidth: '',
+      proposalNoteRender: true
     };
+    this.questionsRef = createRef(null);
   }
 
   componentDidMount() {
+    firstRender = false;
+    window.localStorage.setItem('enableFirstExpand', 'true');
     const {
       fetchUsers,
       getSFNonEditabelInfoField,
@@ -122,6 +137,8 @@ class Questions extends Component<Props, State> {
     fetchUsers();
     getSFNonEditabelInfoField();
     callPickListLookupSfData();
+    window.addEventListener('resize', this.resize.bind(this));
+    this.resize();
   }
 
   componentDidUpdate(prevProps: Map) {
@@ -144,6 +161,22 @@ class Questions extends Component<Props, State> {
     if (prevProps.editQuestionsData.size === 0 && editQuestionsData.size > 0) {
       this.onClose();
     }
+
+    // bid change check start
+    const {
+      match: { params },
+      selectedBid
+    } = this.props;
+    const thisProposalId = selectedBid.get('id', '');
+    const prevProposalId = prevProps.selectedBid.get('id', '');
+    // Bid changed
+    if (prevProposalId !== thisProposalId) {
+      this.setState({ proposalNoteRender: false });
+      setTimeout(() => {
+        this.setState({ proposalNoteRender: true });
+      }, 5000);
+    }
+    // bid change check ends
   }
 
   componentWillUnmount() {
@@ -151,6 +184,7 @@ class Questions extends Component<Props, State> {
     if (handleOpenClose) handleOpenClose(false);
 
     if (resetQuestionsFilter) resetQuestionsFilter();
+    // this.state.wsInstance?.destroy();
   }
 
   handleIsCheckedAll = () => {
@@ -190,6 +224,11 @@ class Questions extends Component<Props, State> {
     );
   };
 
+  onAddQuestion = value => {
+    this.setState({ currentsection: value });
+    this.onClose();
+  };
+
   trackMatomoEventForCheckBoxes = item => {
     const {
       userActions,
@@ -197,6 +236,7 @@ class Questions extends Component<Props, State> {
       proposalDetail,
       trackEvent
     } = this.props;
+
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `CheckBoxes: ${userActions.click} On ${item} Checkbox`,
@@ -318,7 +358,7 @@ class Questions extends Component<Props, State> {
     const sfField = question.get('sfField', '');
 
     if (
-      answerConfigType === 'picklist' &&
+      answerConfigType === ANSWER_TYPES.PICKLIST &&
       (sfObject === 'Bid_History__c' ||
         sfObject === 'Apttus__APTS_Agreement__c') &&
       sfField === 'Targeted_Countries__c'
@@ -352,65 +392,8 @@ class Questions extends Component<Props, State> {
     this.setState({ sidebarscroll: e });
   };
 
-  renderQuestions() {
-    try {
-      const {
-        sections,
-        filteredSections,
-        isQuestionsFiltersEnabled,
-        filterMilestone,
-        allSectionsExpanded
-      } = this.props;
-      const { sidebarscroll, isNotepadOpen } = this.state;
-
-      const allSections = isQuestionsFiltersEnabled
-        ? filteredSections
-        : sections;
-      return allSections.valueSeq().map(section => {
-        const sectionName = section.get('sectionName');
-        const questions = section.get('questions');
-        const someQuestionsAreVisible = questions
-          .valueSeq()
-          .map(
-            question =>
-              question.get('visible', true) &&
-              (question.get('active', true) ||
-                question.get('isCustomQuestion', true))
-          )
-          .includes(true);
-
-        if (someQuestionsAreVisible)
-          return (
-            <CollapsibleList
-              questions={questions}
-              title={sectionName}
-              milestone={filterMilestone}
-              key={sectionName}
-              setTabFromQuestionNotes={(val, title, flag) =>
-                this.setTabFromQuestionNotes(val, title, flag)
-              }
-              onAddQuestion={value => {
-                this.setState({ currentsection: value });
-                this.onClose();
-              }}
-              isCheckedAll={
-                sidebarscroll &&
-                sidebarscroll.length &&
-                sidebarscroll === sectionName
-                  ? true
-                  : allSectionsExpanded
-              }
-              setQuestionToDisplayHistory={this.setQuestionToDisplayHistory}
-              isNotepadOpen = {isNotepadOpen}
-            />
-          );
-
-        return null;
-      });
-    } catch (error) {
-      console.log(error);
-      return false;
-    }
+  resize() {
+    this.setState({ totalWidth: window.innerWidth });
   }
 
   renderFilter() {
@@ -431,7 +414,7 @@ class Questions extends Component<Props, State> {
               </Link>
             </div>
             {questionsFilters.entrySeq().map(([groupName, group]) => (
-              <Grid container spacing={2} className={groupName}>
+              <Grid container spacing={2} key={groupName} className={groupName}>
                 {group
                   .entrySeq()
                   .filter(value => value[0] !== 'logic')
@@ -439,7 +422,7 @@ class Questions extends Component<Props, State> {
                     <Grid
                       item
                       xs={3}
-                      key={uuidv4()}
+                      key={key}
                       className={classNames(
                         'questions-filter__item',
                         filter.get('className'),
@@ -485,9 +468,7 @@ class Questions extends Component<Props, State> {
       open,
       isNotepadOpen
     } = this.state;
-
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
-
     const minPixelToExclude = 20;
     const notepadMinWidthPx =
       (window.innerWidth - minPixelToExclude) * (30 / 100); // 30% of the total screen size
@@ -497,7 +478,11 @@ class Questions extends Component<Props, State> {
 
     return (
       <>
-        <BidHistory />
+        <div className="opportunity-details">
+          <BidHistory />
+          {!firstRender && <PriceModeler />}
+        </div>
+
         {/* Expand and Filter */}
         <div>
           <div className="tasksList-title-wrapper">
@@ -559,11 +544,14 @@ class Questions extends Component<Props, State> {
         </div>
         <div id="panelwrapper">
           {/* Notepad */}
-          <div id="panel-notepad">
+
+          <div id="panel-notepad" style={{ borderRadius: '5px' }}>
             <Panel
               minWidth={notepadMinWidthPx}
               maxWidth={notepadMaxWidthPx}
               width={notepadMaxWidthPx}
+              className="notepad-classoverride"
+              style={{ borderRadius: '5px' }}
               resizable
               onClose={() => {
                 this.setIsNotepadOpen(false);
@@ -579,18 +567,44 @@ class Questions extends Component<Props, State> {
               >
                 <div id="panel-notepad-header">
                   <Typography variant="h3">Notepad</Typography>
-                  <Typography variant="body2" gutterBottom>
-                    Currently, the notepad best supports one user entering
-                    information at a time
-                  </Typography>
                 </div>
-                <WysiwygNotepad />
+
+                {this.state.proposalNoteRender && this.context.wsInstance ? (
+                  <WysiwygNotepad />
+                ) : (
+                  <Loader
+                    type="TailSpin"
+                    color="#297DFD"
+                    width={30}
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '100vh'
+                    }}
+                  />
+                )}
               </div>
             </Panel>
           </div>
+
           {/* Question list */}
           <div id="panel-questions-list">
-            <div className="tasksList-wrapper">{this.renderQuestions()}</div>
+            <div className="tasksList-wrapper" ref={this.questionsRef}>
+              <Suspense fallback={<div>Loading...</div>}>
+                <QuestionsRefContext.Provider value={this.questionsRef}>
+                  <QuestionsSectionMapping
+                    {...this.props}
+                    {...this.state}
+                    setQuestionToDisplayHistory={
+                      this.setQuestionToDisplayHistory
+                    }
+                    setTabFromQuestionNotes={this.setTabFromQuestionNotes}
+                    onAddQuestion={this.onAddQuestion}
+                  />
+                </QuestionsRefContext.Provider>
+              </Suspense>
+            </div>
           </div>
         </div>
         <Sidebar

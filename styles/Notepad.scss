@@ -10,11 +10,12 @@
   position: sticky;
   top: 0;
   overflow: hidden;
-  padding-right: 25;
-  padding-bottom: 10;
+  padding-right: 25px;
+  margin-bottom: 16px;
   ::-webkit-scrollbar {
     width: 8px;
   }
+
   /* Track */
   ::-webkit-scrollbar-track {
     background: #f1f1f1;
@@ -32,14 +33,37 @@
   .panel-notepad-inner {
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
 
     &.hidden {
       display: none;
     }
+
+    .editor-notepad {
+      border-top: $border;
+      .editor__header {
+        border-bottom: $border;
+      }
+    }
   }
 
-  & > div {
-    border-bottom: 1px solid #e9e9e9;
+  .react-resizable {
+    border: $border !important;
+    border-radius: 5px;
+
+    & > * {
+      &:last-child {
+        & > div {
+          background-color: transparent !important;
+        }
+        &:hover {
+          div {
+            background-color: $neptune-primary !important;
+          }
+        }
+      }
+    }
+
     & > div:first-child {
       height: 100%;
       & > div {
@@ -65,7 +89,7 @@
     width: 100%;
 
     .DraftEditor-editorContainer {
-      padding: 5px;
+      padding: 8px 12px;
       * {
         font-size: 14px;
       }
@@ -80,15 +104,16 @@
 }
 
 #panel-notepad-header {
-  padding: 10;
-  border-top: 1px solid #e9e9e9;
+  padding: 12px 12px 4px;
+
   & > h3 {
-    font-family: 'ProximaNova-Regular';
+    font-family: $proximaNova;
     font-size: 22px;
     font-weight: 600;
+    margin-bottom: 4px;
   }
   & > p {
-    font-family: 'ProximaNova-Regular';
+    font-family: $proximaNova;
     font-size: 14px;
   }
 }

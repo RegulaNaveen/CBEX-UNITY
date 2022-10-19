@@ -1,0 +1,211 @@
+.recent-header {
+  color: #000000;
+  font-family: 'Proxima Nova';
+  letter-spacing: 0;
+  height: 32px;
+  width: 767px;
+  font-weight: 600 !important;
+  line-height: 32px !important;
+  font-size: 20px !important;
+  padding-left: 0.75em !important;
+  width: auto;
+}
+.recent-cog {
+  color: #595959 !important;
+  height: 16px !important;
+  width: 16px !important;
+  cursor: pointer;
+}
+
+.recent-no-notification {
+  font-weight: 600;
+}
+.recent-grid {
+  padding: 0 2em 0 1em;
+  margin: 0;
+}
+.recent-grid-item {
+  padding-top: 0.5em;
+}
+.table-body {
+  display: flex;
+  flex-direction: column;
+}
+.table-data {
+  text-align: left;
+  padding-left: 0.5em;
+}
+.table-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1em;
+  padding-left: 36px;
+}
+.recent-table-data {
+  display: block;
+  text-align: left;
+}
+.table-head {
+  align-self: flex-start;
+  margin-left: -1em;
+}
+.recent-table-row {
+  display: block;
+  margin-top: 0.5em;
+  margin-left: 0.5em;
+}
+.recent-table-head {
+  flex-grow: 0;
+  margin-right: 1em;
+}
+.recent-card {
+  padding: 1em;
+  height: 430px;
+  margin-bottom: 1em !important;
+}
+
+.recent-activity-tab {
+  height: 350px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.recent-activity-tab::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+.recent-activity-tab::-webkit-scrollbar-thumb {
+  background: #706d6d;
+  border-radius: 5px;
+  height: 10px;
+}
+
+.recent-search-field {
+  width: 400px;
+}
+
+.recent-search-input {
+  height: 40px;
+  width: 427px;
+  padding-bottom: '1em';
+}
+
+.notification-item-dots {
+  color: #df216d;
+  height: 14px !important;
+  margin-top: 4px !important;
+}
+.notification-items {
+  padding-left: '1em';
+}
+
+.notification-content-data {
+  padding-top: 4px;
+  font-size: 14px;
+  a {
+    color: $neptune-primary !important;
+    text-decoration: none;
+  }
+}
+
+.selected {
+  .acct-pref {
+    background-color: #0768fd !important;
+  }
+  .List-label {
+    color: white !important;
+  }
+}
+
+.divider-wrp {
+  margin-left: 23px !important;
+  margin-top: 2em;
+  height: 1px;
+  width: 941px;
+  margin-right: 23px;
+  background-color: #f6f7fb;
+}
+
+.notification-td {
+  display: block;
+  text-align: left;
+}
+
+.notification-tr {
+  display: block;
+  margin-top: 0.5em;
+  margin-left: 0.5em;
+}
+
+.envelope-icon-read {
+  color: #595959;
+  height: 14px;
+  cursor: pointer;
+}
+
+.envelope-icon-unread {
+  color: #595959;
+  height: 14px;
+  cursor: pointer;
+}
+.setting-icon {
+  color: #595959 !important;
+  height: 16px;
+  width: 16px;
+  cursor: pointer;
+}
+
+.notification-label {
+  font-weight: 600;
+  line-height: 32px;
+  font-size: 20px;
+}
+
+.notification-header-tr {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1em;
+  padding-left: 36px;
+}
+.notification-th-one {
+  align-self: flex-start;
+  margin-left: -1em;
+}
+.notification-th-two {
+  flex-grow: 0;
+  margin-right: 1em;
+}
+.notification-label-td {
+  text-align: left;
+  padding-left: 0.5em;
+}
+.notification-table-wrp {
+  display: flex;
+  flex-direction: column;
+}
+.notification-grid-wrp {
+  padding-top: 0.5em;
+}
+.notification-container-wrp {
+  padding: 0 2em 0 1em;
+  margin: 0;
+  position: relative;
+}
+.recent-drawer-option-container {
+  position: absolute;
+  width: 150px;
+  border: 0.5px solid #8080803d;
+  max-height: 100px;
+  background-color: white;
+  right: 1px;
+  padding-top: 8px;
+}
+.recent-option-item p {
+  font-size: 14px;
+  text-align: left;
+  width: 93%;
+  padding-left: 20px;
+  position: relative;
+  top: 33%;
+}

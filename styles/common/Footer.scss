@@ -1,5 +1,6 @@
 .unity-footer {
   height: 0px !important;
+  border-top: 1px solid $neutral4;
 
   & > div {
     & > div {
@@ -15,7 +16,7 @@
   span.MuiButton-label {
     color: #646464;
     font-weight: 800;
-    font-family: 'ProximaNova-Regular';
+    font-family: $proximaNova;
   }
 
   button {

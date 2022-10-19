@@ -1,184 +1,143 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { connect } from 'react-redux';
-import debounce from 'lodash/debounce';
-import { EditorState, convertFromRaw, convertToRaw } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-import { v4 as uuidv4 } from 'uuid';
+import Collaboration from '@tiptap/extension-collaboration';
+import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
+import { connect, useSelector, useDispatch } from 'react-redux';
+import React, { useEffect, useState, useContext } from 'react';
+import randomColor from 'randomcolor';
+import { EditorContent, useEditor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
+import Link from '@tiptap/extension-link';
+import HighLight from '@tiptap/extension-highlight';
+import TextAlign from '@tiptap/extension-text-align';
+import Subscript from '@tiptap/extension-subscript';
+import Superscript from '@tiptap/extension-superscript';
+import Mention from '@tiptap/extension-mention';
+
 import {
+  getProposalDetails,
   selectNotes,
   getSelectedBid,
   getUserName,
   getUserEmail,
-  getUserRole
+  getUserRole,
+  selectIsNotesFetched
 } from '../../../redux/selectors';
-import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { updateNote, fetchNotes } from '../../../redux/actions/notepad-actions';
-import 'draft-js/dist/Draft.css';
-import { getProposalDetails } from '../../../redux/selectors';
-const jsonDP = require('jsondiffpatch');
+import MenuBar from './MenuBar';
+import {
+  updateNote,
+  fetchNotes,
+  resetNotes,
+  setEditor,
+  updateNoteInStore
+} from '../../../redux/actions/notepad-actions';
+import NotesSocketContext from '../../../context/notesSocketContext';
+import suggestion from './suggestion';
+import launchDarkly from '../../../utils/launchDarkly';
+import featureFlags from '../../../constants/featureFlags';
 
 const WysiwygNotepad = ({
-  notes = null,
   selectedBid,
   userName,
   userEmail,
   userRole,
   updateNote,
-  fetchNotes,
   proposalDetails
 }) => {
-  const emptyTextBlock = {
-    blocks: [
-      {
-        key: uuidv4(),
-        text: '...',
-        type: 'unstyled',
-        depth: 0,
-        entityRanges: [],
-        data: {}
-      }
-    ],
-    entityMap: {}
-  };
-  const constructNoteV2 = (
-    proposalId,
-    notesId,
-    noteText = emptyTextBlock, // non stringified block data i.e as returned from Editor {block:[], entityMap:{}}
-    userEmail = '',
-    userName = '',
-    userRole = ''
-  ) => {
-    return {
-      proposalId,
-      notesId: notesId || uuidv4(),
-      noteText: JSON.stringify(noteText),
-      createdBy: { userEmail, userName, userRole },
-      section: null,
-      isNoteV2: true,
-      oppNo: proposalDetails['CRM #']
+  const notesSocket = useContext(NotesSocketContext);
+  const dispatch = useDispatch();
+  const [proposalIdState, setProposalIdState] = useState(
+    selectedBid.get('id', '')
+  );
+  const [notesUserTag, setNotesUserTag] = useState(false);
+
+  const isNotesFetched = useSelector(selectIsNotesFetched);
+  const usercolor = randomColor({ luminosity: 'light' });
+
+  useEffect(() => {
+    const ldApiCall = async () => {
+      const notesUserTagValue = await launchDarkly(
+        featureFlags.NOTES_USER_TAG,
+        false
+      );
+      setNotesUserTag(notesUserTagValue);
     };
-  };
-
-  const initialEditorState = EditorState.createEmpty();
-  const [editorState, setEditorState] = useState(initialEditorState);
-  const [notesId, setNotesId] = useState('');
-  const [isReadOnly, setIsReadOnly] = useState(false);
-
-  useEffect(() => {
-    console.log('notes changed< Rerendered', notes);
-    console.log({ selectedBid: selectedBid.get('id') });
-    if (!notes.isFromSocket) {
-      if (notes.size > 0) {
-        const newNotes =
-          typeof notes.get(0).toJS().noteText !== 'object'
-            ? JSON.parse(notes.get(0).toJS().noteText)
-            : notes.get(0).toJS().noteText;
-
-        setNotesId(notes.get(0).toJS().notesId);
-        setEditorState(EditorState.createWithContent(convertFromRaw(newNotes)));
-      } else {
-        setEditorState(initialEditorState);
-      }
-      setIsReadOnly(!selectedBid.get('isCurrent'));
-    } else {
-      const raw = convertToRaw(editorState.getCurrentContent());
-      const delta = jsonDP.diff(raw, JSON.parse(notes.get(0).toJS().noteText));
-      if (!delta) {
-        console.log('no change found in notes from socket so returned');
-        return;
-      }
-      const nextContentState = convertFromRaw(jsonDP.patch(raw, delta));
-      const stateWithContent = EditorState.createWithContent(nextContentState);
-      const currentSelection = editorState.getSelection();
-      try {
-        const stateWithContentAndSelection = EditorState.forceSelection(
-          stateWithContent,
-          currentSelection
-        );
-        setEditorState(stateWithContentAndSelection);
-      } catch (e) {
-        console.log('error occured in force selection', e);
-        setEditorState(stateWithContent);
-      }
-    }
-  }, [notes, selectedBid]);
-
-  const fetchLatestNotes = () => {
-    const proposalId = selectedBid.get('id', '');
-    if (proposalId) fetchNotes(proposalId);
-  };
-
-  useEffect(() => {
-    fetchLatestNotes();
+    ldApiCall();
     return () => {
-      console.log('WYSIWYG Unmount');
-      setEditorState(initialEditorState);
+      dispatch(resetNotes());
     };
   }, []);
 
-  const memoizedSaveDB = useCallback(
-    debounce(noteText => {
-      const proposalId = selectedBid.get('id');
-      const noteSaveReqBody = constructNoteV2(
-        proposalId,
-        notesId,
-        noteText,
-        userEmail,
-        userName,
-        userRole
-      );
+  useEffect(() => {
+    setProposalIdState(selectedBid.get('id'));
+  }, [selectedBid]);
 
-      updateNote(proposalId, noteSaveReqBody);
-    }, 100),
-    [notes, selectedBid, notesId, userEmail, userName, userRole]
-  );
-
-  const onEditorsChange = useCallback(
-    updatedEditorState => {
-      const raw = convertToRaw(editorState.getCurrentContent());
-      const updatedRaw = convertToRaw(updatedEditorState.getCurrentContent());
-      const delta = jsonDP.diff(raw, updatedRaw);
-      setEditorState(updatedEditorState);
-      if (!delta) {
-        console.log('no change found in notes after key event');
-        return;
+  const editor = useEditor(
+    {
+      extensions: [
+        StarterKit,
+        Underline,
+        Link,
+        HighLight,
+        Subscript,
+        Superscript,
+        TextAlign.configure({
+          types: ['heading', 'paragraph']
+        }),
+        Collaboration.configure({
+          document: notesSocket.ydoc
+        }),
+        CollaborationCursor.configure({
+          provider: notesSocket.wsInstance,
+          user: {
+            name: `${userName} is typing....`,
+            color: usercolor
+          }
+        }),
+        Link.configure({
+          autolink: true,
+          linkOnPaste: false,
+          validate: href => /^https?:\/\// || /^www?:\/\//.test(href),
+          protocols: ['ftp', 'mailto'],
+          HTMLAttributes: {
+            class: 'my-custom-class'
+          }
+        }),
+        Mention.configure({
+          HTMLAttributes: {
+            class: 'mention'
+          },
+          renderLabel({ options, node }) {
+            return `${node.attrs.label ?? node.attrs.id}`;
+          },
+          suggestion: notesUserTag ? suggestion : null
+        })
+      ],
+      onUpdate: ({ editor }) => {
+        // const Ejson = editor.getJSON();
       }
-      memoizedSaveDB(updatedRaw);
     },
-
-    [editorState, memoizedSaveDB]
+    [proposalIdState, notesSocket.wsInstance, notesUserTag]
   );
-
+  dispatch(setEditor(editor));
   return (
-    <Editor
-      key="draft_editor"
-      editorState={editorState}
-      onEditorStateChange={onEditorsChange}
-      readOnly={isReadOnly}
-      // onBlur={e => fetchLatestNotes()}
-      toolbar={{
-        options: [
-          'inline',
-          // 'blockType',
-          // 'fontSize',
-          // 'fontFamily',
-          'list',
-          // 'textAlign',
-          // 'colorPicker',
-          // 'link',
-          // 'embedded',
-          // 'emoji',
-          // 'image',
-          // 'remove',
-          'history'
-        ]
-      }}
-    />
+    <>
+      {notesSocket.wsInstance && (
+        <div className="editor-notepad" key={proposalIdState}>
+          <div>
+            <MenuBar key={proposalIdState} editor={editor} />
+          </div>
+          <EditorContent
+            key={proposalIdState}
+            editor={editor}
+            className="editor-scroll"
+          />
+        </div>
+      )}
+    </>
   );
 };
 
 const mapStateToProps = state => ({
-  notes: selectNotes(state),
   selectedBid: getSelectedBid(state),
   userName: getUserName(state),
   userEmail: getUserEmail(state),
@@ -188,7 +147,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   updateNote,
-  fetchNotes
+  fetchNotes,
+  updateNoteInStore
 };
-
 export default connect(mapStateToProps, mapDispatchToProps)(WysiwygNotepad);

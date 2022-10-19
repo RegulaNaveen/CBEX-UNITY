@@ -136,20 +136,25 @@ class Sidebar extends Component<Props, State> {
     this.trackMatomoEventSidebarToggle(!isOpen);
   };
 
-  scrollToSelectedElement = (event: SyntheticInputEvent<EventTarget>) => {
+  timeout = ms => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  };
+
+  scrollToSelectedElement = async (event: SyntheticInputEvent<EventTarget>) => {
     event.stopPropagation();
 
     const {
       target: { textContent, id }
     } = event;
     const { setSelectedSection, handleOpenClose, onscrollelement } = this.props;
-    onscrollelement(textContent)
+    onscrollelement(textContent);
 
     const itemToScroll = textContent
       .toLocaleLowerCase()
       .split(' ')
       .join('-');
 
+    await this.timeout(100);
     const item: ?HTMLElement = document.getElementById(itemToScroll);
 
     // delayed 1s so that sidebar will close and height of question section wpn't change

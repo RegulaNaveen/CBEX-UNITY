@@ -15,7 +15,10 @@ const {
   ERROR_FETCHING_NOTES,
   ERROR_ADDING_NOTE,
   CHANGE_MODE,
-  MODE_DEFAULT
+  MODE_DEFAULT,
+  RESET_NOTES,
+  SET_EDITOR,
+  UPDATE_NOTE_IN_STORE
 } = REDUX_TYPES.NOTEPAD;
 
 export function fetchNotes(proposalID) {
@@ -25,7 +28,10 @@ export function fetchNotes(proposalID) {
       const data = await fetchNotesApi(proposalID);
       dispatch({
         type: FETCH_NOTES_DONE,
-        payload: { data: fromJS(data.notes) }
+        payload: {
+          data: fromJS(data.notes),
+          socketExists: fromJS(data.notesWebsocketExists)
+        }
       });
     } catch (err) {
       dispatch({ type: ERROR_FETCHING_NOTES, payload: { data: err } });
@@ -73,8 +79,26 @@ export function updateNote(id, note) {
   };
 }
 
+export function updateNoteInStore(note) {
+  return async dispatch => {
+    try {
+      dispatch({ type: UPDATE_NOTE_IN_STORE, payload: { note } });
+    } catch (err) {
+      console.log('error occurred in updating note is store.');
+    }
+  };
+}
+
+export function setEditor(value) {
+  return dispatch => dispatch({ type: SET_EDITOR, payload: { value } });
+}
+
 export function changeMode(mode) {
   return dispatch => dispatch({ type: CHANGE_MODE, payload: { mode } });
+}
+
+export function resetNotes() {
+  return dispatch => dispatch({ type: RESET_NOTES, payload: {} });
 }
 
 export default fetchNotes;

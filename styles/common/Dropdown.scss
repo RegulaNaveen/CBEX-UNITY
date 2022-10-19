@@ -36,12 +36,12 @@
     right: 0px;
     bottom: 0px;
     transform: translateY(100%);
-    max-height: 200px;
+    max-height: 160px;
     overflow-y: scroll;
     width: 100%;
     background-color: $white;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 1;
+    z-index: 9;
     font-family: $proximaNova;
     font-size: 16px;
     letter-spacing: 0;
@@ -54,6 +54,10 @@
       border-bottom: 1px solid $neutral3;
 
       &:hover {
+        background-color: $neptune-hover;
+      }
+
+      &.active {
         background-color: $neptune-hover;
       }
     }
@@ -83,17 +87,27 @@
     max-height: max-content;
     background-color: $white;
     border-radius: 5px;
-    border: 1px solid $neutral4;
+    border: $border;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);
     cursor: pointer;
     position: relative;
     padding: 8px;
     padding-right: 20px;
 
+    &:focus {
+      border-color: #0768fd;
+      transition-duration: 0.2s;
+      transition-property: border-color;
+      outline: none !important;
+    }
+
     &.dd-header-disabled {
       background-color: #f2f2f2;
       cursor: not-allowed;
-
+      outline: none;
+      user-select: text;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
       &:before {
         border-color: #b5b5b5 transparent transparent transparent;
       }
@@ -108,7 +122,6 @@
       font-size: 16px;
       letter-spacing: 0;
       line-height: 24px;
-      pointer-events: none;
     }
 
     .dd-header-selected {
@@ -122,7 +135,7 @@
     &:before {
       content: '';
       position: absolute;
-      border: 6px solid;
+      border: 5px solid;
       border-color: $neutral8 transparent transparent transparent;
       right: 6px;
       top: 60%;

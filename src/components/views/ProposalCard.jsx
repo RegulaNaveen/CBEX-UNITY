@@ -36,107 +36,84 @@ const ProposalCard = ({
     const { id } = currentTarget;
     localStorage.setItem('proposalTypeView', id);
   }
+  const NO_DATA = 'No data';
+  const NO_DATA_PLACEHOLDER = 'no-data-placeholder';
+  const CLASS_SECTION_DATA = 'section-data';
+
+  const checkNoDataClass = (keyToCheck: string) =>
+    keyToCheck === NO_DATA ? NO_DATA_PLACEHOLDER : undefined;
 
   return (
-    <div className="card">
-      <div className="header-section">
+    <div className='card'>
+      <div className='header-section'>
         <div>
-          <p
-            className={title === 'No data' ? 'no-data-placeholder' : undefined}
-          >
-            {title}
-          </p>
-          <p
-            className={
-              opportunityName === 'No data' ? 'no-data-placeholder' : undefined
-            }
-          >
-            {opportunityName}
-          </p>
+          <p className={checkNoDataClass(title)}>{title}</p>
+          <p className={checkNoDataClass(opportunityName)}>{opportunityName}</p>
         </div>
       </div>
 
-      <div className="info-section">
-        
-        <div className="section-data">
-          <span><b>Customer:</b> </span>
-          <span
-            className={
-              customer === 'No data' ? 'no-data-placeholder' : undefined
-            }
-          >
-            {customer}
+      <div className='info-section'>
+        <div className={CLASS_SECTION_DATA}>
+          <span>
+            <b>Customer:</b>{' '}
           </span>
+          <span className={checkNoDataClass(customer)}>{customer}</span>
         </div>
-        <div className="section-data">
-          <span><b>Protocol Number:</b></span>
-          <span
-            className={
-              protocolNumber === 'No data' ? 'no-data-placeholder' : undefined
-            }
-          >
+        <div className={CLASS_SECTION_DATA}>
+          <span>
+            <b>Protocol Number:</b>
+          </span>
+          <span className={checkNoDataClass(protocolNumber)}>
             {protocolNumber}
           </span>
         </div>
-        <div className="section-data">
-          <span><b>Phase:</b></span>
-          <span
-            className={phase === 'No data' ? 'no-data-placeholder' : undefined}
-          >
-            {phase}
+        <div className={CLASS_SECTION_DATA}>
+          <span>
+            <b>Phase:</b>
           </span>
+          <span className={checkNoDataClass(phase)}>{phase}</span>
         </div>
-        <div className="section-data">
-          <span><b>Therapeutic Area:</b></span>
-          <span
-            className={
-              therapeuticArea === 'No data' ? 'no-data-placeholder' : undefined
-            }
-          >
+        <div className={CLASS_SECTION_DATA}>
+          <span>
+            <b>Therapeutic Area:</b>
+          </span>
+          <span className={checkNoDataClass(therapeuticArea)}>
             {therapeuticArea}
           </span>
         </div>
-        <div className="section-data">
-          <span><b>Verbatim Indication:</b></span>
-          <span
-            className={
-              verbatimIndication === 'No data'
-                ? 'no-data-placeholder'
-                : undefined
-            }
-          >
+        <div className={CLASS_SECTION_DATA}>
+          <span>
+            <b>Verbatim Indication:</b>
+          </span>
+          <span className={checkNoDataClass(verbatimIndication)}>
             {verbatimIndication}
           </span>
         </div>
-        <div className="section-data">
-          <span><b>Bid Due Date:</b></span>
-          <span
-            className={
-              dueDate === 'No data' ? 'no-data-placeholder' : undefined
-            }
-          >
-            {dueDate}
+        <div className={CLASS_SECTION_DATA}>
+          <span>
+            <b>Bid Due Date:</b>
           </span>
+          <span className={checkNoDataClass(dueDate)}>{dueDate}</span>
         </div>
       </div>
 
-      <div className="buttons-section">
+      <div className='buttons-section'>
         <div
-          className="button"
-          id="questions"
-          role="presentation"
+          className='button'
+          id='questions'
+          role='presentation'
           onClick={setProposalTypeView}
         >
           <Link to={`${OPPORTUNITY}${title}`}>
-            <House fontSize="large" htmlColor="#b350bf"></House>
+            <House fontSize='large' htmlColor='#b350bf'></House>
           </Link>
           <p>Questions</p>
         </div>
 
         <div
-          className="button"
-          id="documents"
-          role="presentation"
+          className='button'
+          id='documents'
+          role='presentation'
           onClick={setProposalTypeView}
         >
           <Link to={`${OPPORTUNITY}${title}?viewType=documents`}>
@@ -146,12 +123,12 @@ const ProposalCard = ({
         </div>
 
         <div
-          className="button"
-          id="documents"
-          role="presentation"
+          className='button'
+          id='documents'
+          role='presentation'
           onClick={setProposalTypeView}
         >
-         <div>
+          <div>
             <p>{daysRemain}</p>
             <p>Days until Bid Due</p>
           </div>

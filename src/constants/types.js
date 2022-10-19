@@ -79,7 +79,12 @@ const PROPOSAL = {
   BOX_ADDITIONAL_LINK: 'BOX_ADDITIONAL_LINK',
   BOX_ADDITIONAL_LINK_ERROR: 'BOX_ADDITIONAL_LINK_ERROR',
   SWITCH_TEMP_STATUS: 'switch_temp_status',
-  SWITCH_TEMP_IN_PROGRESS: 'switch_temp_in_progress'
+  SWITCH_TEMP_IN_PROGRESS: 'switch_temp_in_progress',
+  RESET_PROPOSALID: 'reset_proposalId',
+  QUESTION_LOCK_BY_USER: 'QUESTION_LOCK_BY_USER',
+  QUESTION_UNLOCK_BY_USER: 'QUESTION_UNLOCK_BY_USER',
+  QUESTION_LOCK_DETAILS_ALL: 'QUESTION_LOCK_DETAILS_ALL',
+  SET_EVENT_LAUNCHER_FLAG: 'set_event_launcher_flag'
 };
 
 const PROPOSALS = {
@@ -113,8 +118,46 @@ const NOTEPAD = {
   MODE_DEFAULT: 'notepad_mode_default',
   MODE_READ: 'notepad_mode_read',
   MODE_EDIT: 'notepad_mode_edit',
-  CHANGE_MODE: 'notepad_change_mode'
+  CHANGE_MODE: 'notepad_change_mode',
+  RESET_NOTES: 'reset_notes',
+  SET_EDITOR: 'set_editor',
+  UPDATE_NOTE_IN_STORE: 'UPDATE_NOTE_IN_STORE'
+};
+
+const PROFILE = {
+  FETCH_USER_PREFERENCE: 'fetch_user_preference',
+  FETCH_USER_PREFERENCE_DONE: 'fetch_user_preference_done',
+  UPDATE_USER_PREFERENCE: 'update_user_preference',
+  UPDATE_USER_PREFERENCE_DONE: 'update_user_preference_done',
+  ERROR_FETCHING_USER_PREFERENCE: 'error_fetching_user_preference',
+  ERROR_UPDATING_USER_PREFERENCE: 'error_updating_user_preference',
+  FETCH_TIMEZONE: 'fetch_timezone',
+  FETCH_TIMEZONE_DONE: 'fetch_timezone_done',
+  UPDATE_USER_TIMEZONE: 'update_user_timezone',
+  UPDATE_USER_TIMEZONE_DONE: 'update_user_timezone_done',
+  ERROR_FETCHING_TIMEZONE: 'error_fetching_timezone',
+  ERROR_UPDATING_USER_TIMEZONE: 'error_updating_user_timezone'
+};
+
+const NOTIFICATION = {
+  GET_NOTIFICATIONS: 'get_notifications',
+  GET_FILTERED_NOTIFICATIONS: 'get_filtered_notifications',
+  SET_NOTIFICATIONS: 'set_notifications',
+  UPDATE_SEEN: 'update_seen',
+  UPDATE_SEEN_BATCH: 'update_seen_batch',
+  SET_IS_LOADING: 'set_is_loading',
+  GET_IS_LOADING: 'get_is_loading'
 };
 
 const UBUILD_ADMIN = 'ubuildAdmin';
-export { AUTH, SSO_AUTH, PROPOSALS, PROPOSAL, SIDEBAR, NOTEPAD, UBUILD_ADMIN };
+export {
+  AUTH,
+  SSO_AUTH,
+  PROPOSALS,
+  PROPOSAL,
+  SIDEBAR,
+  NOTEPAD,
+  UBUILD_ADMIN,
+  PROFILE,
+  NOTIFICATION
+};

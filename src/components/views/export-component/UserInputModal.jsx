@@ -7,6 +7,8 @@ import Select from 'apollo-react/components/Select';
 import Button from 'apollo-react/components/Button';
 import _ from 'lodash'
 import { defaultOption, docType } from './GenerateDocs';
+import {getSelectedBid} from '../../../redux/selectors/proposal';
+import { useSelector } from 'react-redux';
 
 const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList, fetchLatestNotes}) => {
     const  {
@@ -21,6 +23,7 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList, f
       milestones
     } = filterState;
 
+    const selectedBid = useSelector(getSelectedBid);
     const [state, setState] = React.useState({
       open: false
     });
@@ -46,8 +49,7 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList, f
           if(event.name === UI_ACTION.openGenerateModal){
             handleOpen();
             fetchLatestNotes();
-          }
-            
+          }   
         }
       });
       return ()=>{
@@ -56,7 +58,7 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList, f
           
         handleClose();
       }
-    }, [])
+    }, [selectedBid])
   
     const handleClose = ()=> setState({...state, ...{open:false}});
     const handleOpen = ()=> setState({...state, ...{open:true}});
@@ -117,6 +119,7 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList, f
               onChange={handleTextChange}
               fullWidth
               name="fileType"
+              canDeselect={false}
             >
               <MenuItem value={docType.pdf}>{`${docType.pdf} (Default)`}</MenuItem>
               <MenuItem value={docType.doc}>{docType.doc}</MenuItem>

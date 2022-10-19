@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import Link from 'apollo-react/components/Link';
@@ -13,14 +13,15 @@ import {
 } from '../../redux/selectors';
 import chevronRight from '../../../img/chevron-right.svg';
 import chevronDown from '../../../img/chevron-down.svg';
-import Question from './Question';
 import MatomoHOC from '../HOC/MatomoHOC';
-
 import {
   onHandleOpenClose,
   handleSelectedSection
 } from '../../redux/actions/sidebar-actions';
 
+const CollapsibleQuestionMapping = React.lazy(() =>
+  import('./CollapsibleQuestionMapping')
+);
 type State = {
   isCollapsed: boolean
 };
@@ -46,7 +47,8 @@ type Props = {
   proposalDetail: any,
   milestone: any,
   selectedBid: Map,
-  isNotepadOpen: boolean
+  isNotepadOpen: boolean,
+  listIndex: number
 };
 
 class CollapsibleList extends Component<Props, State> {
@@ -54,17 +56,25 @@ class CollapsibleList extends Component<Props, State> {
 
   constructor(props: Object) {
     super(props);
-
     this.taskRef = React.createRef();
-
-    this.state = {
-      isCollapsed: false
-    };
+    this.collapseTriggerRef = React.createRef(null);
+    this.state = { isCollapsed: false };
   }
 
   componentDidMount() {
-    const { isCheckedAll } = this.props;
-    setTimeout(() => this.setState({ isCollapsed: !!isCheckedAll }), 0);
+    const { isCheckedAll, isFirstSection } = this.props;
+    const enableFirstExpand = window.localStorage.getItem('enableFirstExpand');
+    let setIsCollapsed;
+    if (enableFirstExpand === 'true') {
+      setIsCollapsed = { isCollapsed: !!isFirstSection || !!isCheckedAll };
+      window.localStorage.setItem('enableFirstExpand', 'false');
+    } else setIsCollapsed = { isCollapsed: !!isCheckedAll };
+
+    setTimeout(() => this.setState(setIsCollapsed), 0);
+    document.addEventListener(
+      'keydown',
+      this.keyboardShortcutListener.bind(this)
+    );
   }
 
   componentDidUpdate(prevProps) {
@@ -83,10 +93,16 @@ class CollapsibleList extends Component<Props, State> {
       setTimeout(() => this.setState({ isCollapsed: !!isCheckedAll }), 0);
   }
 
+  componentWillUnmount() {
+    document.removeEventListener(
+      'keydown',
+      this.keyboardShortcutListener.bind(this)
+    );
+  }
+
   handleCollapse = () => {
     const { isCollapsed } = this.state;
     const { title, selectedSection, changeSelectedSection } = this.props;
-    this.setState({ isCollapsed: !isCollapsed });
     this.trackMatomoEventBladeToggle(!isCollapsed);
     const titleId = title
       .toLocaleLowerCase()
@@ -95,6 +111,7 @@ class CollapsibleList extends Component<Props, State> {
     if (titleId === selectedSection) {
       changeSelectedSection(null);
     }
+    this.setState({ isCollapsed: !isCollapsed });
   };
 
   handleKeyPress = (event: KeyboardEvent) => {
@@ -106,18 +123,15 @@ class CollapsibleList extends Component<Props, State> {
 
   createId = () => {
     const { title } = this.props;
-
-    const id = title
-      .toLocaleLowerCase()
+    return title
+      ?.toLocaleLowerCase()
       .split(' ')
       .join('-');
-
-    return id;
   };
 
   showNotesCount = title => {
     const { notes, handleOpenClose, setTabFromQuestionNotes } = this.props;
-    if (notes && notes && notes.size && notes.size > 0) {
+    if (notes && notes.size && notes.size > 0) {
       const count = notes.filter(
         note => note.getIn(['section', 'sectionName'], '') === title
       );
@@ -174,6 +188,20 @@ class CollapsibleList extends Component<Props, State> {
     });
   };
 
+  keyboardShortcutListener = e => {
+    const { listIndex, questionsRef } = this.props;
+    const altKeyPressed = e.altKey;
+    if (altKeyPressed && String(e.key).toLowerCase() === 'q') {
+      if (this.taskRef.current.contains(document.activeElement)) {
+        this.collapseTriggerRef.current.focus();
+      } else if (!questionsRef.current.contains(document.activeElement)) {
+        if (listIndex === 0) {
+          this.collapseTriggerRef.current.focus();
+        }
+      }
+    }
+  };
+
   render() {
     const { isCollapsed } = this.state;
     const { onAddQuestion } = this.props;
@@ -186,14 +214,21 @@ class CollapsibleList extends Component<Props, State> {
       isNotepadOpen
     } = this.props;
     return (
-      <div className="task-wrapper" ref={this.taskRef} id={this.createId()}>
+      <div
+        className="task-wrapper"
+        ref={this.taskRef}
+        id={this.createId()}
+        data-testid="collapsible-list"
+      >
+        {/* Expand Arrow Icon */}
         <button
-          id="arrow-icon"
+          id={`arrow-icon-${this.createId()}`}
           className="task-icon-wrapper"
           onClick={this.handleCollapse}
           onKeyPress={this.handleKeyPress}
           type="button"
           tabIndex={0}
+          ref={this.collapseTriggerRef}
         >
           <img
             className="task-icon"
@@ -214,6 +249,7 @@ class CollapsibleList extends Component<Props, State> {
           </div>
         ) : (
           <div className="task-table-wrapper">
+            {/* Section Header */}
             <div
               className="task-table-headers"
               role="button"
@@ -229,50 +265,18 @@ class CollapsibleList extends Component<Props, State> {
               </div>
             </div>
 
-            {questions.valueSeq().map(questionConfig => {
-              const visible =
-                questionConfig.get('visible', true) &&
-                (questionConfig.get('active', true) ||
-                  questionConfig.get('isCustomQuestion', true));
+            {/* Question List */}
+            <Suspense fallback={<div>Loading...</div>}>
+              <CollapsibleQuestionMapping
+                questions={questions}
+                milestone={milestone}
+                title={title}
+                setQuestionToDisplayHistory={setQuestionToDisplayHistory}
+                isNotepadOpen={isNotepadOpen}
+              />
+            </Suspense>
 
-              return (
-                (visible || typeof visible === 'undefined') && (
-                  <Question
-                    ismilestoneavailable={milestone}
-                    key={questionConfig.get('questionId')}
-                    milestone={questionConfig.get('milestone')}
-                    milestoneNew={questionConfig.get('milestoneNew')}
-                    questionId={questionConfig.get('questionId')}
-                    proposalId={questionConfig.get('proposalId')}
-                    answers={questionConfig.get('answers')}
-                    questionText={questionConfig.get('questionText')}
-                    questionHTML={questionConfig.get('questionHTML')}
-                    questionJSON={questionConfig.get('questionJSON')}
-                    answerConfiguration={questionConfig.get(
-                      'answerConfiguration'
-                    )}
-                    section={questionConfig.get('section')}
-                    sfObject={questionConfig.get('sfObject')}
-                    sfField={questionConfig.get('sfField')}
-                    sectionName={title}
-                    setQuestionToDisplayHistory={setQuestionToDisplayHistory}
-                    loading={questionConfig.get('loading', false)}
-                    questionHint={questionConfig.get('questionHint', '')}
-                    questionHintHTML={questionConfig.get(
-                      'questionHintHTML',
-                      ''
-                    )}
-                    questionHintJSON={questionConfig.get('questionHintJSON')}
-                    roleNames={questionConfig.get('roleNames')}
-                    isCustomQuestion={questionConfig.get('isCustomQuestion')}
-                    hasDifferentSFanswer={questionConfig.get(
-                      'hasDifferentSFanswer'
-                    )}
-                    isNotepadOpen={isNotepadOpen}
-                  />
-                )
-              );
-            })}
+            {/* Add New Question Button */}
             {selectedBid.get('isCurrent') && (
               <div className="add-question">
                 <Link
