@@ -132,7 +132,7 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList, f
             <Checkbox  value={answered} checked={answered} name="answered" label="Answered" onChange={handleBooleanChange} />
           </div>
           <div className='exportOptionsCell'>
-            <Checkbox  value={myRole} checked={myRole} name="myRole" label="Responsible Role" onChange={handleBooleanChange}/>
+            <Checkbox  value={myRole} checked={myRole} name="myRole" label="Responsible" onChange={handleBooleanChange}/>
           </div>
         </div>
         <div className='exportOptionsRow exportOptionsRow-fourth'>
