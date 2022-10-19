@@ -85,7 +85,7 @@ class Dropdown extends PureComponent<Props, State> {
     }
 
     if (this.props.forceBlur) {
-     this.ref.current && this.ref.current.blur();
+      this.ref.current && this.ref.current.blur();
     }
   }
 
@@ -117,7 +117,7 @@ class Dropdown extends PureComponent<Props, State> {
   };
 
   handleClick = (event: SyntheticEvent<EventTarget>, value: string) => {
-    console.log('val', value)
+    console.log('val', value);
     event.stopPropagation();
     const { onClick, lockedBySelf } = this.props;
     onClick(value);
@@ -139,7 +139,7 @@ class Dropdown extends PureComponent<Props, State> {
 
   handleFocusIn = event => {
     this.setState({ isFocused: true });
-    this.props.setSelectRow(true);
+    if (this.props.setSelectRow) this.props.setSelectRow(true);
     if (this.props.lockQuestionOnFocus && !this.props.lockedBySelf) {
       if (this.props.toggleWatch) {
         this.props.toggleWatch(true);
@@ -156,7 +156,7 @@ class Dropdown extends PureComponent<Props, State> {
       this.props.setSelectRow(false);
       if (this.props.lockedBySelf) {
         // call to unlock question
-          this.context.questionUnlockWrapper(this.props.questionId);
+        this.context.questionUnlockWrapper(this.props.questionId);
       }
       if (this.props.toggleWatch) {
         this.props.toggleWatch(false);
@@ -196,7 +196,6 @@ class Dropdown extends PureComponent<Props, State> {
     const { isCollapsed, focusedValue, isFocused } = this.state;
     const { items, onClick } = this.props;
 
-    
     if (!isFocused) return;
     if (['Escape', 'Enter', 'ArrowUp', 'ArrowDown'].includes(event.code)) {
       event.preventDefault();

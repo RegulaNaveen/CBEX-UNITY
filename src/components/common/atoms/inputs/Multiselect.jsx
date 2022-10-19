@@ -17,12 +17,12 @@ type Props = {
   lockQuestionOnFocus?: boolean,
   toggleWatch?: Function,
   onCascadeChange?: Function,
-  forceBlur?: boolean
+  forceBlur?: boolean,
 };
 
 type State = {
   isOpen: boolean,
-  selectedValues: Array<string>
+  selectedValues: Array<string>,
 };
 
 class Multiselect extends PureComponent<Props, State> {
@@ -35,7 +35,7 @@ class Multiselect extends PureComponent<Props, State> {
     value: undefined,
     error: undefined,
     disabled: false,
-    lockQuestionOnFocus: false
+    lockQuestionOnFocus: false,
   };
 
   constructor(props: Object) {
@@ -48,7 +48,7 @@ class Multiselect extends PureComponent<Props, State> {
       isOpen: false,
       selectedValues: [],
       isFocused: false,
-      focusedValue: ''
+      focusedValue: '',
     };
   }
 
@@ -170,12 +170,12 @@ class Multiselect extends PureComponent<Props, State> {
     );
   };
 
-  handleFocusIn = event => {
+  handleFocusIn = (event) => {
     this.setState({ isFocused: true });
     if (this.props.setSelectRow) this.props.setSelectRow(true);
   };
 
-  handleFocusOut = event => {
+  handleFocusOut = (event) => {
     this.setState({ isFocused: false });
     if (this.props.setSelectRow) this.props.setSelectRow(false);
   };
@@ -223,7 +223,7 @@ class Multiselect extends PureComponent<Props, State> {
     this.forceUpdate();
   };
 
-  handleKeyDown = event => {
+  handleKeyDown = (event) => {
     const { isOpen, focusedValue, isFocused, selectedValues } = this.state;
     const { items, onClick, lastAnswer } = this.props;
 
@@ -254,7 +254,7 @@ class Multiselect extends PureComponent<Props, State> {
       if (!isOpen) {
         this.setState({
           isOpen: true,
-          focusedValue: items.size > 0 ? items.get(0) : ''
+          focusedValue: items.size > 0 ? items.get(0) : '',
         });
         if (this.props.lockQuestionOnFocus && !this.props.lockedBySelf) {
           if (this.props.toggleWatch) {
@@ -357,7 +357,7 @@ class Multiselect extends PureComponent<Props, State> {
         </div>
         {error &&
           error.length > 0 &&
-          error.map(v => {
+          error.map((v) => {
             if (v.roleNames)
               return (
                 <p

@@ -48,7 +48,9 @@ const QuestionsSectionMapping = ({
   }, [allSectionsExpanded, bidId]);
 
   useEffect(() => {
-    socketContext.questionLockDetailsWrapper();
+    setTimeout(() => {
+      socketContext.questionLockDetailsWrapper();
+    }, 2000);
   }, []);
 
   // Get filtered Sections logic

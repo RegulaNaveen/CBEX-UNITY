@@ -88,9 +88,11 @@ const PROPOSAL = {
   SHOW_NA_CHECKBOX: 'show_na_checkbox',
   UPDATE_NOT_APPLICABLE_PROGRESS: 'update_not_applicable_progress',
   UPDATE_NOT_APPLICABLE_DONE: 'update_not_applicable_done'
+  SET_PRICE_MODELER_FIELDS: 'set_price_modeler_fields'
 };
 
 const PROPOSALS = {
+  GET_PRICEMODELER: 'get_pricemodeler',
   SET_PROPOSAL_VIEW_TYPE: 'set_proposal_view_type',
   ON_GET_PROPOSALS: 'on_get_proposals',
   ERROR_ON_GET_PROPOSALS: 'error_on_get_proposals',
