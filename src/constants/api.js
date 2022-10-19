@@ -121,7 +121,7 @@ switch (environment) {
       'wss://za42jrafie.execute-api.us-east-1.amazonaws.com/production';
     break;
   case 'L4':
-    // UDEV Data
+    // L4 Data
     PROPOSAL_API_ENDPOINT =
       'https://v51h8rf355.execute-api.us-east-1.amazonaws.com/l4';
     PROPOSAL_API_KEY = 'PZdKkDgB2p3BZXbm9QnTX2aJtdxJkkz37hgYksJ7';
@@ -133,7 +133,7 @@ switch (environment) {
     UBUILD_ARTIFACT = 'https://l4-ubuild.iqvia.app/main.js';
     SF_HOST_URL = 'https://iqvia--uthfixchk.lightning.force.com/';
     SOCKET_URL =
-      ' wss://j3xgedpk7j.execute-api.us-east-1.amazonaws.com/undefined';
+      'wss://j3xgedpk7j.execute-api.us-east-1.amazonaws.com/production';
     NOTES_SOCKET_URL =
       'wss://gni5ivpjhh.execute-api.us-east-1.amazonaws.com/production';
     break;
