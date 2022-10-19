@@ -16,12 +16,12 @@ stages:
   - deploydev2
   - buildl4
   - deployl4
-  # - buildqa
-  # - deployqa
-  # - builddemo
-  # - deploydemo
-  # - builduat
-  # - deployuat
+  - buildqa
+  - deployqa
+  - builddemo
+  - deploydemo
+  - builduat
+  - deployuat
   # - buildprod
   # - deployprod
   #- deploystack
