@@ -593,3 +593,12 @@
     }
   }
 }
+
+.mark-na-panel {
+  background-color: $neutral1;
+  box-shadow: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 1rem;
+}

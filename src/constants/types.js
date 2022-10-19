@@ -87,7 +87,7 @@ const PROPOSAL = {
   SET_EVENT_LAUNCHER_FLAG: 'set_event_launcher_flag',
   SHOW_NA_CHECKBOX: 'show_na_checkbox',
   UPDATE_NOT_APPLICABLE_PROGRESS: 'update_not_applicable_progress',
-  UPDATE_NOT_APPLICABLE_DONE: 'update_not_applicable_done'
+  UPDATE_NOT_APPLICABLE_DONE: 'update_not_applicable_done',
   SET_PRICE_MODELER_FIELDS: 'set_price_modeler_fields'
 };
 

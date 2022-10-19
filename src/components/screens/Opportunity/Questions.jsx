@@ -495,80 +495,106 @@ class Questions extends Component {
         {/* Expand and Filter */}
         <div>
           <div className="tasksList-title-wrapper">
-            <div className="tasklist-start-menu-separator" />
-            <div className="N/A na-toggle-switch">
-              <span style={{ padding: '10px' }}>Mark N/A</span>
-              <Switch
-                // label="Mark N/A"
-                checked={this.props.showNaCheckbox}
-                onChange={this.handleOnChangeNaSwitch}
-                size="small"
-              />
-              <Tooltip
-                variant="light"
-                disableTouchListener
-                title="Lorem ipsum"
-                placement="left"
-              >
-                <IconButton color="primary">
-                  <InfoIcon />
-                </IconButton>
-              </Tooltip>
-            </div>
-            <div className="tasklist-mid-menu-separator" />
-            <div className="taskList-icons-wrapper">
-              <ApolloCheckbox
-                label="Expand All"
-                checked={allSectionsExpanded}
-                onChange={(e, checked) => {
-                  this.setState({ sidebarscroll: '' }, () => {
-                    this.handleIsCheckedAll(checked);
-                  });
-                  if (!checked) {
-                    const clearsidebarselectsection = new CustomEvent(
-                      'clearsidebarselectsection',
-                      {
-                        detail: true
-                      }
-                    );
-                    document.dispatchEvent(clearsidebarselectsection);
-                  }
-                }}
-              />
-              {MANUAL_REFRESH && (
-                <div
-                  title="Refresh"
-                  className="tasksList-refresh-icon-wrapper"
-                  role="presentation"
-                  onClick={this.getProposalInfoUpdated}
+            <Panel
+              minWidth={isNotepadOpen ? notepadMinWidthPx : 20}
+              maxWidth={isNotepadOpen ? notepadMaxWidthPx : 20}
+              width={isNotepadOpen ? notepadMaxWidthPx : 20}
+              hideButton
+              // className="notepad-classoverride"
+              // style={{ borderRadius: '5px' }}
+              resizable
+              onClose={() => {
+                // this.setIsNotepadOpen(false);
+              }}
+              onOpen={() => {
+                // this.setIsNotepadOpen(true);
+              }}
+              style={{ visibility: 'hidden' }}
+            >
+              {/* <div
+                className={classNames('panel-notepad-inner', {
+                  hidden: !isNotepadOpen
+                })}
+              /> */}
+              {/* <div className="tasklist-start-menu-separator" /> */}
+              {/* <div /> */}
+            </Panel>
+            <Panel width="100%" hideButton className="mark-na-panel">
+              <div className="N/A na-toggle-switch">
+                <span style={{ padding: '10px' }}>Mark N/A</span>
+                <Switch
+                  // label="Mark N/A"
+                  style={{ marginRight: '-2px' }}
+                  checked={this.props.showNaCheckbox}
+                  onChange={this.handleOnChangeNaSwitch}
+                  size="small"
+                />
+                <Tooltip
+                  variant="light"
+                  disableTouchListener
+                  title={this.props.showNaCheckbox ? 'NA ON' : 'NA OFF'}
+                  placement="top"
                 >
-                  <Refresh className="tasksList-add-icon" />
-                </div>
-              )}
-              {selectedBid.get('isCurrent') && (
-                <div
-                  title="Add New Question"
-                  className="tasksList-add-icon-wrapper"
-                  role="presentation"
-                  onClick={() => {
-                    this.setState({ currentsection: '', showModal: true });
-                    this.trackMatomoEventToggleQModal(true);
+                  <IconButton color="primary">
+                    <InfoIcon />
+                  </IconButton>
+                </Tooltip>
+              </div>
+              <div className="tasklist-mid-menu-separator" />
+              <div className="taskList-icons-wrapper">
+                <ApolloCheckbox
+                  label="Expand All"
+                  checked={allSectionsExpanded}
+                  onChange={(e, checked) => {
+                    this.setState({ sidebarscroll: '' }, () => {
+                      this.handleIsCheckedAll(checked);
+                    });
+                    if (!checked) {
+                      const clearsidebarselectsection = new CustomEvent(
+                        'clearsidebarselectsection',
+                        {
+                          detail: true
+                        }
+                      );
+                      document.dispatchEvent(clearsidebarselectsection);
+                    }
                   }}
+                />
+                {MANUAL_REFRESH && (
+                  <div
+                    title="Refresh"
+                    className="tasksList-refresh-icon-wrapper"
+                    role="presentation"
+                    onClick={this.getProposalInfoUpdated}
+                  >
+                    <Refresh className="tasksList-add-icon" />
+                  </div>
+                )}
+                {selectedBid.get('isCurrent') && (
+                  <div
+                    title="Add New Question"
+                    className="tasksList-add-icon-wrapper"
+                    role="presentation"
+                    onClick={() => {
+                      this.setState({ currentsection: '', showModal: true });
+                      this.trackMatomoEventToggleQModal(true);
+                    }}
+                  >
+                    <Add className="tasksList-add-icon" />
+                  </div>
+                )}
+                <Button
+                  variant="secondary"
+                  size="small"
+                  icon={<Filter fontSize="extraSmall" />}
+                  onClick={() => this.handleFilterClick()}
                 >
-                  <Add className="tasksList-add-icon" />
-                </div>
-              )}
-              <Button
-                variant="secondary"
-                size="small"
-                icon={<Filter fontSize="extraSmall" />}
-                onClick={() => this.handleFilterClick()}
-              >
-                {activeQuestionsFilterCount
-                  ? `Filter (${activeQuestionsFilterCount})`
-                  : 'Filter'}
-              </Button>
-            </div>
+                  {activeQuestionsFilterCount
+                    ? `Filter (${activeQuestionsFilterCount})`
+                    : 'Filter'}
+                </Button>
+              </div>
+            </Panel>
           </div>
           {this.renderFilter()}
         </div>

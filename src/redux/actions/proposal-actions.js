@@ -28,7 +28,7 @@ import {
   deleteProposalUser,
   getProposalAnswer,
   priceModelerApi,
-  setNotApplicableQuestionApi
+  setNotApplicableQuestionApi,
   getAllProposals
 } from '../../api/proposal';
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
@@ -91,7 +91,7 @@ const {
   SET_EVENT_LAUNCHER_FLAG,
   SHOW_NA_CHECKBOX,
   UPDATE_NOT_APPLICABLE_PROGRESS,
-  UPDATE_NOT_APPLICABLE_DONE
+  UPDATE_NOT_APPLICABLE_DONE,
   SET_PRICE_MODELER_FIELDS
 } = REDUX_TYPES.PROPOSAL;
 

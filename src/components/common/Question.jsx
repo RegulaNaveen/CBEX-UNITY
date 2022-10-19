@@ -507,15 +507,15 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 if (checkDisableFlag()) return;
                 setNotApplicable(proposalId, questionId, !isNotApplicable);
                 if (!isNotApplicable) {
-                  setProposalAnswer(
-                    this.context,
-                    proposalId,
-                    questionId,
-                    'N/A',
-                    userData,
-                    null,
-                    true
-                  );
+                  // setProposalAnswer(
+                  //   this.context,
+                  //   proposalId,
+                  //   questionId,
+                  //   'N/A',
+                  //   userData,
+                  //   null,
+                  //   true
+                  // );
                 }
               }}
             />

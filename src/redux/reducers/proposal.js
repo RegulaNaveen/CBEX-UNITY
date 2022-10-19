@@ -58,7 +58,7 @@ const {
   QUESTION_UNLOCK_BY_USER,
   QUESTION_LOCK_DETAILS_ALL,
   SET_EVENT_LAUNCHER_FLAG,
-  SHOW_NA_CHECKBOX
+  SHOW_NA_CHECKBOX,
   SET_PRICE_MODELER_FIELDS
 } = REDUX_TYPES.PROPOSAL;
 
@@ -138,7 +138,7 @@ const INITIAL_STATE: Map = fromJS({
   switchTempCallStatus: false,
   switchTempInProgress: false,
   eventLauncherFlag: false,
-  showNaCheckbox: false
+  showNaCheckbox: false,
   priceModeler: fromJS({
     cost: '',
     therapeutic: '',
@@ -1159,7 +1159,7 @@ const actionMap = {
   [SET_EVENT_LAUNCHER_FLAG]: (state, { payload }) =>
     state.set('eventLauncherFlag', payload),
   [SHOW_NA_CHECKBOX]: (state, { payload }) =>
-    state.set('showNaCheckbox', payload)
+    state.set('showNaCheckbox', payload),
   [SET_PRICE_MODELER_FIELDS]: setPriceModulerFields
 };
 
