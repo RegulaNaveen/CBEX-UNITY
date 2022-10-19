@@ -148,7 +148,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
     }
     window.addEventListener('resize', this.resize.bind(this));
     this.resize();
-    console.log('tapas question data: ', this.props.questionData.toJS());
   }
 
   handlePropsalChange = (textValue, lastValue, reason) => {
@@ -538,7 +537,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
       selectedBid,
       noneditableField,
       hasDifferentSFanswer,
-      loading
+      loading,
+      isNotApplicable
     } = this.props;
 
     const { selectedRow } = this.state;

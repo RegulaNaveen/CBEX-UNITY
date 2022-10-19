@@ -155,7 +155,7 @@ export function setNotApplicableQuestion(
         type: UPDATE_NOT_APPLICABLE_PROGRESS,
         payload: { questionId, loading: true }
       });
-      console.log('tapas data ', proposalId, questionId, questionStatus);
+
       const { data } = await setNotApplicableQuestionApi(
         proposalId,
         questionId,
@@ -841,7 +841,6 @@ export function onApplyQuestionsFilter(
   checked = false,
   groupName
 ) {
-  console.log('tapas filters ', filterName, checked, groupName);
   return async (dispatch, getState) => {
     const state = getState();
     let questionsFilter = getQuestionsFilters(state);
@@ -1233,7 +1232,6 @@ export const setEventLauncherFlag = val => {
 };
 
 export const setShowNaCheckbox = val => {
-  console.log('tapas checkbox ', val);
   return dispatch => {
     dispatch({
       type: SHOW_NA_CHECKBOX,

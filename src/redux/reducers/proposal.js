@@ -763,17 +763,10 @@ const onUpdateProposalNAQuestionDone = (state: Map, action: Object): Map => {
 
     let updatedAnswers = filterQuestionsLen[filterindexOfListToUpdate]?.answers;
     if (!data?.notapplicable) {
-      if (updatedAnswers[index].answer === 'N/A') updatedAnswers.pop();
+      if (updatedAnswers[updatedAnswers.length - 1].answer === 'N/A')
+        updatedAnswers.pop();
     }
-    // for (let index = updatedAnswers.length - 1; index > 0; index--) {
-    //   if (updatedAnswers[index].answer === 'N/A') updatedAnswers.pop();
-    //   else break;
-    // }
-    console.log('tapas filterindexOfListToUpdate', updatedAnswers);
 
-    //filterQuestionsLen[filterindexOfListToUpdate]?.answers?.map((answer)={
-
-    // })
     newState = state
       .setIn(
         [

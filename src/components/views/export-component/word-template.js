@@ -923,7 +923,6 @@ export function getFilteredQuestion(proposalQuestions, filterState) {
     includesNa
   } = filterState;
   let questions = cloneDeep(proposalQuestions);
-  console.log('tapas question to export ', questions);
 
   // Answered and Unanswered filter block
   if (answered && unanswered) {
