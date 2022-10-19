@@ -2,18 +2,18 @@ workflow:
   rules:
     - if: '$CI_PIPELINE_SOURCE != "merge_request_event"' # Disable pipeline for Merge requests
 
-include:
-  - local: devops/vars/global.yml
-  - project: 'CBEx/devops'
-    ref: test
-    file: /gitlab_balckduck_scan.yml
+#include:
+  #- local: devops/vars/global.yml
+  #- project: 'CBEx/devops'
+    #ref: test
+    #file: /gitlab_balckduck_scan.yml
 
 stages:
   #- sonar #sonar report
   # - builddev
   # - deploydev
-  - builddev3
-  - deploydev3
+  - builddev2
+  - deploydev2
   - buildl4
   - deployl4
   # - buildqa
@@ -24,7 +24,7 @@ stages:
   # - deployuat
   # - buildprod
   # - deployprod
-  - deploystack
+  #- deploystack
 
 .sonar:
   stage: sonar
@@ -120,7 +120,7 @@ deploydev2:
   tags:
     - docker
 
-dev3:
+.dev3:
   stage: builddev3
   image: node:12
   when: manual
@@ -143,7 +143,7 @@ dev3:
   tags:
     - docker
 
-deploydev3:
+.deploydev3:
   stage: deploydev3
   when: manual
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
@@ -233,11 +233,11 @@ deployl4:
   tags:
     - docker
 
-.qa:
+qa:
   stage: buildqa
   image: node:14
   needs:
-    - deploydev
+    - deploydev2
   when: manual
   variables:
     Environment: $CI_JOB_NAME
@@ -256,7 +256,7 @@ deployl4:
   tags:
     - docker
 
-.deployqa:
+deployqa:
   stage: deployqa
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
@@ -271,7 +271,7 @@ deployl4:
   tags:
     - docker
 
-.uat:
+uat:
   stage: builduat
   image: node:14
   variables:
@@ -295,7 +295,7 @@ deployl4:
   tags:
     - docker
 
-.deployuat:
+deployuat:
   stage: deployuat
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
@@ -348,7 +348,7 @@ deployl4:
   tags:
     - docker
 
-deploystack:
+.deploystack:
   stage: deploystack
   rules:
     #- if:  $CI_COMMIT_REF_NAME =~ /^feature/ || $CI_COMMIT_REF_NAME =~ /^bugfix/
