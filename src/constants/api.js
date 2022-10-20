@@ -128,7 +128,7 @@ switch (environment) {
     NORMAL_AUTH_API_ENDPOINT =
       'https://2gydoa5dw6.execute-api.us-east-1.amazonaws.com/l4';
     COGNITO_HOST = 'https://l4-unity.auth.us-east-1.amazoncognito.com';
-    CLIENT_ID = '23ckdii2ckdkms0dla79aak9an';
+    CLIENT_ID = '5cal3rohkqshgv9iufmpafu4cr';
     REDIRECTION_URL = 'https://l4-unity.iqvia.app/';
     UBUILD_ARTIFACT = 'https://l4-ubuild.iqvia.app/main.js';
     SF_HOST_URL = 'https://iqvia--uthfixchk.lightning.force.com/';
