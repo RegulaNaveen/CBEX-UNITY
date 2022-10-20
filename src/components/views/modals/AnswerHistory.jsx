@@ -272,7 +272,11 @@ class AnswerHistory extends Component<Props> {
             );
           };
 
-          if (questionType === 'select' || questionType === 'select-lookup') {
+          if (
+            questionType === 'select' ||
+            questionType === 'select-lookup' ||
+            questionType === 'radio'
+          ) {
             const prevAnswer = () => {
               const answersArr = answers.toJS();
               return answersArr[index + 1] ? answersArr[index + 1].answer : '';

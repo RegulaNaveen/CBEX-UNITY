@@ -54,6 +54,7 @@ import { SocketContext } from '../../context/SocketContext';
 import EventLauncher from '../screens/Opportunity/EventLauncher';
 import { parseStringifyJson } from '../../utils/helpers';
 import withIdleStateDetection from '../HOC/IdleStateDetector';
+import RadioQuestion from './atoms/inputs/RadioQuestion';
 
 const DropdownWithIdleStateDetection = withIdleStateDetection(Dropdown);
 const QuestionDatePickerWithIdleStateDetection = withIdleStateDetection(
@@ -63,6 +64,7 @@ const MultiSelectWithIdleStateDetection = withIdleStateDetection(Multiselect);
 const AutoCompleteWithAddOptionWithIdleStateDetection = withIdleStateDetection(
   AutoCompleteWithAddOption
 );
+const RadioQuestionIdleStateDetection = withIdleStateDetection(RadioQuestion);
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
 type State = {
@@ -157,25 +159,25 @@ export class TaskRow extends React.PureComponent<Props, State> {
       textValue,
       userData
     ).then(() => {
-      // const [deletedVal] = xor(
-      //   textValue?.trim() ? textValue?.trim().split(',') : [],
-      //   lastValue?.trim() ? lastValue?.trim().split(',') : []
-      // );
-      // const [deletedEmail] = String(deletedVal).match(
-      //   /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
-      // );
-      // if (reason === 'remove-option' && deletedEmail) {
-      //   setAnswerLoading(questionId, true);
-      //   const { sectionName, sectionOrder } = section.toJS();
-      //   deleteProposalUser(
-      //     proposalId,
-      //     deletedEmail,
-      //     sectionOrder,
-      //     sectionName
-      //   ).then(() => {
-      //     setAnswerLoading(questionId, false);
-      //   });
-      // }
+      const [deletedVal] = xor(
+        textValue?.trim() ? textValue?.trim().split(',') : [],
+        lastValue?.trim() ? lastValue?.trim().split(',') : []
+      );
+      const [deletedEmail] = String(deletedVal).match(
+        /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+      );
+      if (reason === 'remove-option' && deletedEmail) {
+        setAnswerLoading(questionId, true);
+        const { sectionName, sectionOrder } = section.toJS();
+        deleteProposalUser(
+          proposalId,
+          deletedEmail,
+          sectionOrder,
+          sectionName
+        ).then(() => {
+          setAnswerLoading(questionId, false);
+        });
+      }
     });
     this.trackMatomoEventSubmitAnswer(textValue);
   };
@@ -213,7 +215,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         this.context,
         proposalId,
         questionId,
-
+        ' ',
         userData,
         editorData
       );
@@ -590,7 +592,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
           !isEmpty(data.text.trim())
         )
           if (
-            isEmpty(richTextData.value.blocks) &&
+            isEmpty(richTextData.value?.blocks) &&
             lastAnswerJS?.answer === data.value?.blocks[0]?.text
           )
             saveDate = false;
@@ -607,8 +609,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
         if (saveDate) {
           this.handleRichTextChange(data);
-        } else {
-          console.log('on blur called no answer change');
         }
         this.context.questionUnlockWrapper(this.props.questionId);
 
@@ -626,6 +626,16 @@ export class TaskRow extends React.PureComponent<Props, State> {
       }
     };
 
+    // onFocus for question concurrency
+    const concurrencyFocusHandler = () => {
+      this.context.questionLockWrapper(this.props.questionId);
+      this.setSelectRow(true);
+    };
+    // onBlur for question concurrency
+    const concurrencyBlurHandler = () => {
+      this.context.questionUnlockWrapper(this.props.questionId);
+      this.setSelectRow(false);
+    };
     switch (type) {
       case 'text': {
         answerValue = getConvertedAnsString(answerValue);
@@ -752,14 +762,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
               sfField={sfField}
               multiple
               answer={answerValueComplex}
-              onFocus={() => {
-                this.context.questionLockWrapper(this.props.questionId);
-                this.setSelectRow(true);
-              }}
-              onBlur={() => {
-                this.context.questionUnlockWrapper(this.props.questionId);
-                this.setSelectRow(false);
-              }}
+              onFocus={concurrencyFocusHandler}
+              onBlur={concurrencyBlurHandler}
               disabled={checkDisableFlag()}
               onChange={this.handlePropsalChange}
             />
@@ -775,20 +779,30 @@ export class TaskRow extends React.PureComponent<Props, State> {
               sfObject={sfObject}
               lov={finalOptions}
               sfField={sfField}
-              onFocus={() => {
-                this.context.questionLockWrapper(this.props.questionId);
-                this.setSelectRow(true);
-              }}
-              onBlur={() => {
-                console.log('blur lookup');
-                this.context.questionUnlockWrapper(this.props.questionId);
-                this.setSelectRow(false);
-              }}
+              onFocus={concurrencyFocusHandler}
+              onBlur={concurrencyBlurHandler}
               onChange={this.handlePropsalChange}
               answer={answerValue || ''}
               multiple={false}
               loading={loading}
               disabled={checkDisableFlag()}
+            />
+          </SFAnswerValidationWrapper>
+        );
+      case ANSWER_TYPES.RADIO:
+        return (
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            sfObject={sfObject}
+          >
+            <RadioQuestionIdleStateDetection
+              id="dd-proposal-answer"
+              items={finalOptions}
+              onClick={val => this.onClickChange(val, answerValue)}
+              value={answerValue}
+              disabled={checkDisableFlag()}
+              onFocus={concurrencyFocusHandler}
+              onBlur={concurrencyBlurHandler}
             />
           </SFAnswerValidationWrapper>
         );
@@ -802,7 +816,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     if (milestoneNew && !isEmpty(milestoneNew)) {
       return (
         <div className="chipview">
-          {milestoneNew && isString(milestoneNew) ? (
+          {milestoneNew ? (
             <ChipView label={milestoneNew} answer={lastAns} />
           ) : null}
         </div>
@@ -810,9 +824,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     }
     return (
       <div className="chipview">
-        {milestone && isString(milestone) ? (
-          <ChipView label={milestone} answer={lastAns} />
-        ) : null}
+        {milestone ? <ChipView label={milestone} answer={lastAns} /> : null}
       </div>
     );
   };
