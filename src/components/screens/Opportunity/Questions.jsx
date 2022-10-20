@@ -469,7 +469,8 @@ class Questions extends Component {
       allSectionsExpanded,
       editQuestionsData,
       isOpen,
-      noneditableField
+      noneditableField,
+      showNaCheckbox
     } = this.props;
     const {
       showModal,
@@ -500,39 +501,22 @@ class Questions extends Component {
               maxWidth={isNotepadOpen ? notepadMaxWidthPx : 20}
               width={isNotepadOpen ? notepadMaxWidthPx : 20}
               hideButton
-              // className="notepad-classoverride"
-              // style={{ borderRadius: '5px' }}
               resizable
-              onClose={() => {
-                // this.setIsNotepadOpen(false);
-              }}
-              onOpen={() => {
-                // this.setIsNotepadOpen(true);
-              }}
               style={{ visibility: 'hidden' }}
-            >
-              {/* <div
-                className={classNames('panel-notepad-inner', {
-                  hidden: !isNotepadOpen
-                })}
-              /> */}
-              {/* <div className="tasklist-start-menu-separator" /> */}
-              {/* <div /> */}
-            </Panel>
+            />
             <Panel width="100%" hideButton className="mark-na-panel">
               <div className="N/A na-toggle-switch">
                 <span style={{ padding: '10px' }}>Mark N/A</span>
                 <Switch
-                  // label="Mark N/A"
                   style={{ marginRight: '-2px' }}
-                  checked={this.props.showNaCheckbox}
+                  checked={showNaCheckbox}
                   onChange={this.handleOnChangeNaSwitch}
                   size="small"
                 />
                 <Tooltip
                   variant="light"
                   disableTouchListener
-                  title={this.props.showNaCheckbox ? 'NA ON' : 'NA OFF'}
+                  title={showNaCheckbox ? 'NA ON' : 'NA OFF'}
                   placement="top"
                 >
                   <IconButton color="primary">

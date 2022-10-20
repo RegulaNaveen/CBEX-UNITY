@@ -175,51 +175,6 @@ export function setNotApplicableQuestion(
   };
 }
 
-// export const setNotApplicableQuestion = (
-//   proposalId: string,
-//   questionId: string,
-//   status: Boolean
-// ): ThunkAction<string, Object> => {
-//   return async (dispatch: Dispatch<string, Object>) => {
-//     dispatch({
-//       type: UPDATE_NOT_APPLICABLE_PROGRESS,
-//       payload: { questionId, loading: true }
-//     });
-//     console.log('here inside not app.');
-//     try {
-//       const { data } = await setNotApplicableQuestionApi(
-//         proposalId,
-//         questionId,
-//         status
-//       );
-//       console.log('after API call N/A', data);
-//       // dispatch({
-//       //   type: PROPOSAL_ANSWER,
-//       //   payload: {
-//       //     data: Array.isArray(data.answers) ? data.answers : data,
-//       //     questionId,
-//       //     hasDifferentSFanswer: data.hasDifferentSFanswer || false
-//       //   }
-//       // });
-
-//       // const { modifiedQuestions } = data;
-//       // if (!isEmpty(modifiedQuestions)) {
-//       //   modifiedQuestions.forEach(question => {
-//       //     dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
-//       //   });
-//       // }
-//       // dispatch(onQuestionsFilterApplied(questionsFilter));
-//       // dispatch({
-//       //   type: PROPOSAL_ANSWER_LOADING,
-//       //   payload: { questionId, loading: false }
-//       // });
-//     } catch (err) {
-//       console.log('error occurred ', err);
-//       // dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err } });
-//     }
-//   };
-// };
-
 /**
  * Get Price Modeler Data
  */

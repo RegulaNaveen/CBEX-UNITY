@@ -88,11 +88,8 @@
     }
     .fade-area {
       opacity: 0.1;
-
       animation: cssAnimation 0s ease-in 1.5s forwards;
-
       transition: opacity 0.25s;
-
       transition: opacity 1.5s ease-in-out;
     }
 
@@ -101,16 +98,12 @@
         visibility: hidden;
         display: none;
         opacity: 0;
-
         overflow: hidden;
       }
     }
 
     @-webkit-keyframes cssAnimation {
       to {
-        // width: 0;
-
-        // height: 0;
         opacity: 0;
         visibility: hidden;
         display: none;
@@ -211,11 +204,8 @@
   }
   .fade-area {
     opacity: 0.1;
-
     animation: cssAnimation 0s ease-in 1.5s forwards;
-
     transition: opacity 0.25s;
-
     transition: opacity 1.5s ease-in-out;
   }
 
@@ -224,16 +214,12 @@
       visibility: hidden;
       display: none;
       opacity: 0;
-
       overflow: hidden;
     }
   }
 
   @-webkit-keyframes cssAnimation {
     to {
-      // width: 0;
-
-      // height: 0;
       opacity: 0;
       visibility: hidden;
       display: none;
@@ -417,11 +403,8 @@
   }
   .fade-area {
     opacity: 0.1;
-
     animation: cssAnimation 0s ease-in 1.5s forwards;
-
     transition: opacity 0.25s;
-
     transition: opacity 1.5s ease-in-out;
   }
 
@@ -430,16 +413,12 @@
       visibility: hidden;
       display: none;
       opacity: 0;
-
       overflow: hidden;
     }
   }
 
   @-webkit-keyframes cssAnimation {
     to {
-      // width: 0;
-
-      // height: 0;
       opacity: 0;
       visibility: hidden;
       display: none;

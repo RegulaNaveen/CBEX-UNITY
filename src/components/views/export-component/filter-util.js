@@ -1,7 +1,5 @@
 export const applyAnsweredFilter = questions => {
-  //const role = localStorage.getItem('userRole');
-  let filteredQuestions;
-  filteredQuestions = questions.filter(question => {
+  const filteredQuestions = questions.filter(question => {
     let answers;
     try {
       answers = question.answers;
