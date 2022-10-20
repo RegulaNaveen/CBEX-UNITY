@@ -127,3 +127,22 @@
     }
   }
 }
+
+.custom-rich-text-inner {
+
+    &.popover-inner {
+      & > div {
+        & > div:nth-child(1) {
+          display: none !important;
+        }
+      }
+
+      &.focused {
+        & > div {
+          & > div:nth-child(1) {
+            display: inline-flex !important;
+          }
+        } 
+      }
+    }
+}
