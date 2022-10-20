@@ -473,13 +473,14 @@ export class TaskRow extends React.PureComponent<Props, State> {
         questionData,
         setNotApplicable,
         NaLoading,
-        isNotApplicable
+        isNotApplicable,
+        loading
       } = this.props;
 
       return (
         <div style={{ width: '10px', marginRight: '30px' }}>
           N/A{' '}
-          {NaLoading ? (
+          {NaLoading || loading ? (
             <span
               style={{
                 position: 'relative',
@@ -504,18 +505,16 @@ export class TaskRow extends React.PureComponent<Props, State> {
               disabled={checkDisableFlag()}
               onClick={() => {
                 if (checkDisableFlag()) return;
-                setNotApplicable(proposalId, questionId, !isNotApplicable);
-                if (!isNotApplicable && answer !== 'N/A') {
+                if (!isNotApplicable) {
                   setProposalAnswer(
                     this.context,
                     proposalId,
                     questionId,
                     'N/A',
-                    userData,
-                    null,
-                    true
+                    userData
                   );
                 }
+                setNotApplicable(proposalId, questionId, !isNotApplicable);
               }}
             />
           )}
@@ -1146,7 +1145,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
       questionData,
       proposalDetail,
       eventCategories,
-      NaLoading
+      NaLoading,
+      showNaCheckbox
     } = this.props;
     const questionID = answers.get('questionId');
     const qvicon = questionId;
@@ -1377,6 +1377,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
             lastAnswer={lastAnswer}
             iconColor={iconColor}
             loading={loading}
+            NaLoading={NaLoading}
+            showNaCheckbox={showNaCheckbox}
             isNotepadOpen={isNotepadOpen}
             changeIcon={changeIcon}
             isCurrentBid={isCurrentBid}
