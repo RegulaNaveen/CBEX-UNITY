@@ -640,17 +640,7 @@ function applyInterestedPartyFilter(questions) {
 }
 
 function applyShowInactiveQuestionsFilter(questions) {
-  const role = localStorage.getItem('userRole');
-  let filteredQuestions = cloneDeep(questions);
-  if (role) {
-    filteredQuestions = fromJS(filteredQuestions)
-      .filter(question => {
-        const isNA = question.get('notapplicable');
-        return isNA;
-      })
-      .toJS();
-  }
-  return filteredQuestions;
+  return questions;
 }
 
 function applyMilestoneFilter(questions, milestone) {

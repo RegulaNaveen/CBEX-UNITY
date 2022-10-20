@@ -463,7 +463,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     });
   };
 
-  renderNACheckbox = (checkDisableFlag, answer) => {
+  renderNACheckbox = (checkDisableFlag, answers, type) => {
     if (this.props.showNaCheckbox) {
       const {
         setProposalAnswer,
@@ -505,6 +505,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
               disabled={checkDisableFlag()}
               onClick={() => {
                 if (checkDisableFlag()) return;
+
+                // const answersData = answers.toJS();
+
                 if (!isNotApplicable) {
                   setProposalAnswer(
                     this.context,
@@ -514,6 +517,48 @@ export class TaskRow extends React.PureComponent<Props, State> {
                     userData
                   );
                 }
+                // else {
+                //   for (
+                //     let index = answersData.length - 1;
+                //     index >= 0;
+                //     index--
+                //   ) {
+                //     if (answersData[index]?.answer === 'N/A') answersData.pop();
+                //     else break;
+                //   }
+                //   const lastAnswer = answersData[answersData.length - 1];
+                //   if (type === 'text') {
+                //     const formattedAnswer =
+                //       has(lastAnswer, 'formattedAnswer') &&
+                //       lastAnswer.formattedAnswer;
+
+                //     const parseFormattedData =
+                //       !formattedAnswer || isObject(formattedAnswer)
+                //         ? formattedAnswer
+                //         : parseStringifyJson(formattedAnswer);
+
+                //     const richTextData = parseFormattedData || {
+                //       html: '',
+                //       value: { blocks: [] }
+                //     };
+
+                //     const editorData = {
+                //       text: lastAnswer?.answer || '',
+                //       value: richTextData.value,
+                //       html: richTextData.html
+                //     };
+                //
+                //     this.handleRichTextChange(editorData);
+                //   } else {
+                //     setProposalAnswer(
+                //       this.context,
+                //       proposalId,
+                //       questionId,
+                //       lastAnswer?.answer || '',
+                //       userData
+                //     );
+                //   }
+                // }
                 setNotApplicable(proposalId, questionId, !isNotApplicable);
               }}
             />
@@ -583,7 +628,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             <span
               className={this.props.showNaCheckbox ? 'markNaAutoActive' : ''}
             >
-              {this.renderNACheckbox(checkDisableFlag, answer)}
+              {this.renderNACheckbox(checkDisableFlag, answers, 'Autocomplete')}
             </span>
             <span
               style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
@@ -602,7 +647,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 }}
                 onChange={this.handlePropsalChange}
                 text={answerValue}
-                disabled={checkDisableFlag()}
+                disabled={checkDisableFlag() || isNotApplicable}
               />
             </span>
           </span>
@@ -648,7 +693,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       enableFocus: true,
       isEditable: false,
       placeholder: checkDisableFlag() ? '' : DEFAULT.CLICK_TO_ANS,
-      disabled: checkDisableFlag(),
+      disabled: checkDisableFlag() || isNotApplicable,
       onFocus: () => {
         // Change title style for richEdit icon
         const { clientWidth: quesTitleW } = this.quesTextContainerRef.current;
@@ -748,7 +793,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, answer)}
+                {this.renderNACheckbox(checkDisableFlag, answers, 'text')}
               </span>
               <span
                 style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
@@ -777,7 +822,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, answer)}
+                {this.renderNACheckbox(checkDisableFlag, answers, 'number')}
               </span>
               <TextArea
                 className="proposal-text-area"
@@ -786,7 +831,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 onBlur={this.handleTextChange}
                 onFocus={e => this.onChildInputFocus(e)}
                 value={answerValue || ''}
-                disabled={checkDisableFlag()}
+                disabled={checkDisableFlag() || isNotApplicable}
               />
             </span>
           </SFAnswerValidationWrapper>
@@ -808,7 +853,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, answer)}
+                {this.renderNACheckbox(checkDisableFlag, answers, 'y/n')}
               </span>
               <DropdownWithIdleStateDetection
                 id="dd-proposal-answer"
@@ -817,7 +862,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 onClick={val => this.onClickChange(val, answerValue)}
                 value={answerValue}
                 setSelectRow={this.setSelectRow}
-                disabled={checkDisableFlag()}
+                disabled={checkDisableFlag() || isNotApplicable}
                 questionId={this.props.questionId}
                 lockedBySelf={!!this.isQuestionLockedBySelf()}
                 lockQuestionOnFocus
@@ -843,7 +888,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, answer)}
+                {this.renderNACheckbox(checkDisableFlag, answers, 'select')}
               </span>
               <DropdownWithIdleStateDetection
                 id="dd-proposal-answer"
@@ -852,7 +897,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 onClick={val => this.onClickChange(val, answerValue)}
                 value={answerValue}
                 setSelectRow={this.setSelectRow}
-                disabled={checkDisableFlag()}
+                disabled={checkDisableFlag() || isNotApplicable}
                 questionId={this.props.questionId}
                 lockedBySelf={!!this.isQuestionLockedBySelf()}
                 lockQuestionOnFocus
@@ -879,7 +924,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, answer)}
+                {this.renderNACheckbox(checkDisableFlag, answers, 'date')}
               </span>
               <span
                 style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
@@ -896,7 +941,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                     this.context.questionUnlockWrapper(this.props.questionId);
                     this.setSelectRow(false);
                   }}
-                  disabled={checkDisableFlag()}
+                  disabled={checkDisableFlag() || isNotApplicable}
                 />
               </span>
             </span>
@@ -920,7 +965,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, answer)}
+                {this.renderNACheckbox(checkDisableFlag, answers, 'picklist')}
               </span>
               <MultiSelectWithIdleStateDetection
                 placeholder={checkDisableFlag() ? '' : 'Click to answer'}
@@ -928,7 +973,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 onClick={this.onSelectValues}
                 value={answerValueComplex}
                 setSelectRow={this.setSelectRow}
-                disabled={checkDisableFlag()}
+                disabled={checkDisableFlag() || isNotApplicable}
                 questionId={this.props.questionId}
                 lastAnswer={lastAnswer}
                 lockedBySelf={!!this.isQuestionLockedBySelf()}
@@ -956,7 +1001,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, answer)}
+                {this.renderNACheckbox(
+                  checkDisableFlag,
+                  answers,
+                  'multi-select-lookup'
+                )}
               </span>
               <span
                 style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
@@ -970,7 +1019,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                   answer={answerValueComplex}
                   onFocus={concurrencyFocusHandler}
                   onBlur={concurrencyBlurHandler}
-                  disabled={checkDisableFlag()}
+                  disabled={checkDisableFlag() || isNotApplicable}
                   onChange={this.handlePropsalChange}
                 />
               </span>
@@ -995,7 +1044,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, answer)}
+                {this.renderNACheckbox(
+                  checkDisableFlag,
+                  answers,
+                  'select-lookup'
+                )}
               </span>
               <span
                 style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
@@ -1010,7 +1063,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                   answer={answerValue || ''}
                   multiple={false}
                   loading={loading}
-                  disabled={checkDisableFlag()}
+                  disabled={checkDisableFlag() || isNotApplicable}
                 />
               </span>
             </span>
@@ -1034,14 +1087,14 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, answer)}
+                {this.renderNACheckbox(checkDisableFlag, answers, 'radio')}
               </span>
               <RadioQuestionIdleStateDetection
                 id="dd-proposal-answer"
                 items={finalOptions}
                 onClick={val => this.onClickChange(val, answerValue)}
                 value={answerValue}
-                disabled={checkDisableFlag()}
+                disabled={checkDisableFlag() || isNotApplicable}
                 onFocus={concurrencyFocusHandler}
                 onBlur={concurrencyBlurHandler}
               />

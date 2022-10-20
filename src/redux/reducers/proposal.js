@@ -120,7 +120,7 @@ const INITIAL_STATE: Map = fromJS({
       },
       showInactiveQuestions: {
         checked: false,
-        label: 'show inactive questions',
+        label: 'Include N/A Questions',
         className: 'questions-filter__row3-col1'
       },
       logic: 'AND'
@@ -742,23 +742,7 @@ const onUpdateProposalNAQuestionDone = (state: Map, action: Object): Map => {
 
   console.log('inside update proposal na ', data);
 
-  const proposalId = Array.isArray(data?.answers)
-    ? data.answers[data.answers.length - 1].proposalId
-    : data.answers.proposalId;
-  console.log('here 1');
-  const selectedBidId = state.getIn(['selectedBid', 'id']);
-  console.log('here 2');
-
-  // case  when user is not in the same proposal Id
-  if (selectedBidId !== proposalId) {
-    console.log('testing return');
-    return state;
-  }
-  console.log('here 3');
-
-  // update current selected bid and return
   let newState = fromJS({});
-  console.log('here 4');
 
   const indexOfListToUpdate = state
     .get('proposalQuestions')
@@ -768,29 +752,7 @@ const onUpdateProposalNAQuestionDone = (state: Map, action: Object): Map => {
 
   console.log('indexOfListToUpdate ', indexOfListToUpdate);
 
-  const updatedAnswers = data?.answers;
-  console.log('before update answers: ', updatedAnswers);
-  if (!data?.notapplicable) {
-    if (updatedAnswers[updatedAnswers.length - 1].answer === 'N/A')
-      updatedAnswers.pop();
-  }
-  console.log('after update answers: ', updatedAnswers);
-
   newState = state
-    .setIn(
-      ['proposalQuestions', indexOfListToUpdate, 'answers'],
-      updatedAnswers
-    )
-    .setIn(
-      [
-        'opportunityData',
-        selectedBidId,
-        'proposalQuestions',
-        indexOfListToUpdate,
-        'answers'
-      ],
-      updatedAnswers
-    )
     .setIn(
       ['proposalQuestions', indexOfListToUpdate, 'notapplicable'],
       data?.notapplicable
@@ -798,13 +760,10 @@ const onUpdateProposalNAQuestionDone = (state: Map, action: Object): Map => {
     .setIn(['proposalQuestions', indexOfListToUpdate, 'NaLoading'], loading);
 
   const proposalQuestions = newState.get('proposalQuestions');
-  const opportunityData = newState.get('opportunityData');
 
   return state
     .set('proposalQuestions', proposalQuestions)
-    .set('proposalAnswer', INITIAL_STATE.proposalAnswer)
     .set('isProposalAnswerLoading', false)
-    .set('opportunityData', opportunityData)
     .set('isProposalNAQuestionLoading', false);
 };
 
