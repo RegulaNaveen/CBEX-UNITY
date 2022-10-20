@@ -107,7 +107,7 @@ const ProposalCard = ({
           <Link to={`${OPPORTUNITY}${title}`}>
             <House fontSize='large' htmlColor='#b350bf'></House>
           </Link>
-          <p>Questions</p>
+          <p>Strategy Development</p>
         </div>
 
         <div
