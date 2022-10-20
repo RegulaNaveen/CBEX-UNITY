@@ -226,10 +226,9 @@ const CustomApolloRichText = ({
   });
 
   const handleKeyDown = e => {
-    if (richTextContainerRef.current.contains(e.target)) {
+    if (richTextContainerRef.current.contains(e.target) && isFocused) {
       if ((e.shiftKey && e.key === 'Tab') || e.key === 'Tab') {
         blur();
-        setIsFocused(false);
       }
     }
   };
@@ -241,6 +240,14 @@ const CustomApolloRichText = ({
     }
     onFocus();
   }, []);
+
+  const handleBlur = () => {
+    setTimeout(() => {
+      if (richTextContainerRef.current.querySelector('.MuiFormControl-root') === null && isFocused) {
+        blur();
+      }
+    }, 300);
+  }
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
@@ -260,7 +267,8 @@ const CustomApolloRichText = ({
       <div
         className={classNames('custom-rich-text-inner', {
           'popover-inner': !disabled,
-          error: !!error
+          error: !!error,
+          'focused': isFocused
         })}
         ref={richTextContainerRef}
       >
@@ -274,6 +282,7 @@ const CustomApolloRichText = ({
           ref={richTextEditorRef}
           key={richTextKey.current}
           onFocus={handleFocus}
+          onBlur={handleBlur}
         />
       </div>
     </div>
