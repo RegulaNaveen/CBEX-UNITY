@@ -174,7 +174,7 @@ const UserInputModal = ({
               value={myRole}
               checked={myRole}
               name="myRole"
-              label="My user role"
+              label="Responsible"
               onChange={handleBooleanChange}
             />
           </div>

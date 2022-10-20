@@ -100,6 +100,7 @@
     "uuid": "^8.3.0",
     "y-protocols": "^1.0.5",
     "y-websocket": "^1.4.3",
+    "yarn": "^1.22.19",
     "yjs": "^13.5.41"
   },
   "devDependencies": {
