@@ -161,7 +161,7 @@ export function setNotApplicableQuestion(
         questionId,
         questionStatus
       );
-      console.log('after API call N/A', data);
+
       dispatch({
         type: UPDATE_NOT_APPLICABLE_DONE,
         payload: { data: data.data, questionId, questionStatus }
