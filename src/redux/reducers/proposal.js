@@ -734,12 +734,31 @@ const onErrorUpdateNotApplicable = (state: Map, action: Object): Map => {
       .set('isProposalNAQuestionLoading', loading);
   }
 };
+
 const onUpdateProposalNAQuestionDone = (state: Map, action: Object): Map => {
   const {
     payload: { data, questionId: referenceId, loading = false }
   } = action;
 
+  console.log('inside update proposal na ', data);
+
+  const proposalId = Array.isArray(data?.answers)
+    ? data.answers[data.answers.length - 1].proposalId
+    : data.answers.proposalId;
+  console.log('here 1');
+  const selectedBidId = state.getIn(['selectedBid', 'id']);
+  console.log('here 2');
+
+  // case  when user is not in the same proposal Id
+  if (selectedBidId !== proposalId) {
+    console.log('testing return');
+    return state;
+  }
+  console.log('here 3');
+
+  // update current selected bid and return
   let newState = fromJS({});
+  console.log('here 4');
 
   const indexOfListToUpdate = state
     .get('proposalQuestions')
@@ -747,54 +766,46 @@ const onUpdateProposalNAQuestionDone = (state: Map, action: Object): Map => {
       return listItem.questionId === referenceId;
     });
 
+  console.log('indexOfListToUpdate ', indexOfListToUpdate);
+
+  const updatedAnswers = data?.answers;
+  console.log('before update answers: ', updatedAnswers);
+  if (!data?.notapplicable) {
+    if (updatedAnswers[updatedAnswers.length - 1].answer === 'N/A')
+      updatedAnswers.pop();
+  }
+  console.log('after update answers: ', updatedAnswers);
+
   newState = state
-    .setIn(['proposalQuestions', indexOfListToUpdate, 'NaLoading'], false)
+    .setIn(
+      ['proposalQuestions', indexOfListToUpdate, 'answers'],
+      updatedAnswers
+    )
+    .setIn(
+      [
+        'opportunityData',
+        selectedBidId,
+        'proposalQuestions',
+        indexOfListToUpdate,
+        'answers'
+      ],
+      updatedAnswers
+    )
     .setIn(
       ['proposalQuestions', indexOfListToUpdate, 'notapplicable'],
       data?.notapplicable
-    );
+    )
+    .setIn(['proposalQuestions', indexOfListToUpdate, 'NaLoading'], loading);
 
   const proposalQuestions = newState.get('proposalQuestions');
-  const filterQuestionsLen = state.get('filteredProposalQuestions');
-  if (Array.isArray(filterQuestionsLen)) {
-    const filterindexOfListToUpdate = filterQuestionsLen.findIndex(listItem => {
-      return listItem.questionId === referenceId;
-    });
+  const opportunityData = newState.get('opportunityData');
 
-    let updatedAnswers = filterQuestionsLen[filterindexOfListToUpdate]?.answers;
-    if (!data?.notapplicable) {
-      if (updatedAnswers[updatedAnswers.length - 1].answer === 'N/A')
-        updatedAnswers.pop();
-    }
-
-    newState = state
-      .setIn(
-        [
-          'filteredProposalQuestions',
-          filterindexOfListToUpdate,
-          'notapplicable'
-        ],
-        data?.notapplicable
-      )
-      .setIn(
-        ['proposalQuestions', filterindexOfListToUpdate, 'NaLoading'],
-        false
-      )
-      .setIn(
-        ['proposalQuestions', filterindexOfListToUpdate, 'answers'],
-        updatedAnswers
-      );
-
-    let filterQuestions = newState.get('filteredProposalQuestions');
-    return state
-      .set('proposalQuestions', proposalQuestions)
-      .set('filteredProposalQuestions', filterQuestions)
-      .set('isProposalNAQuestionLoading', false);
-  } else {
-    return state
-      .set('proposalQuestions', proposalQuestions)
-      .set('isProposalNAQuestionLoading', false);
-  }
+  return state
+    .set('proposalQuestions', proposalQuestions)
+    .set('proposalAnswer', INITIAL_STATE.proposalAnswer)
+    .set('isProposalAnswerLoading', false)
+    .set('opportunityData', opportunityData)
+    .set('isProposalNAQuestionLoading', false);
 };
 
 const onProposalNAQuestionLoading = (state: Map, action: Object): Map => {
