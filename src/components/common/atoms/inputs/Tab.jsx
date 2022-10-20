@@ -23,7 +23,7 @@ const UnityTab = ({ id, enableValidateTab, selectedView }) => {
             truncate
             className="_question-tab"
           >
-            <Tab label="Questions" />
+            <Tab label="Strategy Development" />
             <Tab label="Documents" />
             <Tab label="Validate" />
           </Tabs>
@@ -44,7 +44,7 @@ const UnityTab = ({ id, enableValidateTab, selectedView }) => {
           truncate
           className="_question-tab"
         >
-          <Tab label="Questions" />
+          <Tab label="Strategy Development" />
           <Tab label="Documents" />
         </Tabs>
         <div style={{ padding: 20, paddingTop: 5 }}>
