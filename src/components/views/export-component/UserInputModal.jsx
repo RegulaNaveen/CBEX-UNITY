@@ -211,7 +211,7 @@ const UserInputModal = ({
         <div className="exportOptionsRow exportOptionsRow-second-last">
           <div className="exportOptionsCell">
             <Select
-              label="Select by interested parties"
+              label="Select by Informed"
               value={interestedParties}
               onChange={handleTextChange}
               fullWidth
