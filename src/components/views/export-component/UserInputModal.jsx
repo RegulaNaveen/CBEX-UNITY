@@ -146,7 +146,7 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList, f
         <div className='exportOptionsRow exportOptionsRow-second-last'>
           <div className='exportOptionsCell'>
             <Select
-              label="Select by interested parties"
+              label="Select by Informed"
               value={interestedParties}
               onChange={handleTextChange}
               fullWidth
