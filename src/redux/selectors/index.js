@@ -136,6 +136,10 @@ export const getProposalBoxIdError = (state: Object): string =>
 export const getProposalBoxId = (state: Object): string =>
   proposalSelectors.getProposalBoxId(state.proposal);
 
+export const getShowNaCheckbox = state => {
+  return state.proposal.get('showNaCheckbox');
+};
+
 export const getAllBidsForIndex = (state: Object): string =>
   state.proposal.get('boxBids');
 export const getAdditionalLinks = (state: Object): string =>

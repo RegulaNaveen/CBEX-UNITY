@@ -464,6 +464,7 @@
   }
   .exportOptionsRow {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     label {
       font-size: 14px;

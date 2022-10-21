@@ -12,6 +12,8 @@ const {
   PROPOSAL_INFO_ERROR,
   PROPOSAL_ANSWER,
   PROPOSAL_ANSWER_LOADING,
+  UPDATE_NOT_APPLICABLE_PROGRESS,
+  UPDATE_NOT_APPLICABLE_DONE,
   PROPOSAL_ANSWER_ERROR,
   QUESTION_SECTION_INFO,
   QUESTION_SECTION_LOADING,
@@ -56,7 +58,9 @@ const {
   QUESTION_UNLOCK_BY_USER,
   QUESTION_LOCK_DETAILS_ALL,
   SET_EVENT_LAUNCHER_FLAG,
-  SET_PRICE_MODELER_FIELDS
+  SHOW_NA_CHECKBOX,
+  SET_PRICE_MODELER_FIELDS,
+  ERROR_UPDATE_NOT_APPLICABLE
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -69,6 +73,7 @@ const INITIAL_STATE: Map = fromJS({
   proposalError: undefined,
   proposalAnswer: '',
   isProposalAnswerLoading: false,
+  isProposalNAQuestionLoading: false,
   proposalAnswerError: undefined,
   proposalQuestionSection: Map({}),
   isQuestionSectionLoading: false,
@@ -113,8 +118,14 @@ const INITIAL_STATE: Map = fromJS({
         label: 'Informed',
         className: 'questions-filter__row2-col1'
       },
+      showInactiveQuestions: {
+        checked: false,
+        label: 'Include N/A Questions',
+        className: 'questions-filter__row3-col1'
+      },
       logic: 'AND'
     },
+
     milestoneGroup: {}
   }),
   filteredProposalQuestions: Map({}),
@@ -128,6 +139,7 @@ const INITIAL_STATE: Map = fromJS({
   switchTempCallStatus: false,
   switchTempInProgress: false,
   eventLauncherFlag: false,
+  showNaCheckbox: false,
   priceModeler: fromJS({
     cost: '',
     therapeutic: '',
@@ -683,6 +695,118 @@ const onProposalAnswerLoading = (state: Map, action: Object): Map => {
     .set('isProposalAnswerLoading', loading);
 };
 
+const onErrorUpdateNotApplicable = (state: Map, action: Object): Map => {
+  const {
+    payload: { questionId: referenceId, loading = false }
+  } = action;
+
+  let newState = fromJS({});
+
+  const indexOfListToUpdate = state
+    .get('proposalQuestions')
+    .findIndex(listItem => {
+      return listItem.questionId === referenceId;
+    });
+
+  newState = state.setIn(
+    ['proposalQuestions', indexOfListToUpdate, 'NaLoading'],
+    loading
+  );
+
+  const proposalQuestions = newState.get('proposalQuestions');
+  let filterQuestionsLen = state.get('filteredProposalQuestions');
+  if (Array.isArray(filterQuestionsLen)) {
+    const filterindexOfListToUpdate = filterQuestionsLen.findIndex(listItem => {
+      return listItem.questionId === referenceId;
+    });
+    newState = state.setIn(
+      ['filteredProposalQuestions', filterindexOfListToUpdate, 'NaLoading'],
+      loading
+    );
+    let filterQuestions = newState.get('filteredProposalQuestions');
+    return state
+      .set('proposalQuestions', proposalQuestions)
+      .set('filteredProposalQuestions', filterQuestions)
+      .set('isProposalNAQuestionLoading', loading);
+  } else {
+    return state
+      .set('proposalQuestions', proposalQuestions)
+      .set('isProposalNAQuestionLoading', loading);
+  }
+};
+
+const onUpdateProposalNAQuestionDone = (state: Map, action: Object): Map => {
+  const {
+    payload: { data, questionId: referenceId, loading = false }
+  } = action;
+
+  console.log('inside update proposal na ', data);
+
+  let newState = fromJS({});
+
+  const indexOfListToUpdate = state
+    .get('proposalQuestions')
+    .findIndex(listItem => {
+      return listItem.questionId === referenceId;
+    });
+
+  console.log('indexOfListToUpdate ', indexOfListToUpdate);
+
+  newState = state
+    .setIn(
+      ['proposalQuestions', indexOfListToUpdate, 'notapplicable'],
+      data?.notapplicable
+    )
+    .setIn(['proposalQuestions', indexOfListToUpdate, 'NaLoading'], loading);
+
+  const proposalQuestions = newState.get('proposalQuestions');
+
+  return state
+    .set('proposalQuestions', proposalQuestions)
+    .set('isProposalAnswerLoading', false)
+    .set('isProposalNAQuestionLoading', false);
+};
+
+const onProposalNAQuestionLoading = (state: Map, action: Object): Map => {
+  const {
+    payload: { questionId: referenceId, loading = false }
+  } = action;
+
+  let newState = fromJS({});
+
+  const indexOfListToUpdate = state
+    .get('proposalQuestions')
+    .findIndex(listItem => {
+      return listItem.questionId === referenceId;
+    });
+
+  newState = state.setIn(
+    ['proposalQuestions', indexOfListToUpdate, 'NaLoading'],
+    loading
+  );
+
+  const proposalQuestions = newState.get('proposalQuestions');
+  let filterQuestionsLen = state.get('filteredProposalQuestions');
+  if (Array.isArray(filterQuestionsLen)) {
+    const filterindexOfListToUpdate = filterQuestionsLen.findIndex(listItem => {
+      return listItem.questionId === referenceId;
+    });
+    newState = state.setIn(
+      ['filteredProposalQuestions', filterindexOfListToUpdate, 'NaLoading'],
+      loading
+    );
+    let filterQuestions = newState.get('filteredProposalQuestions');
+    return state
+      .set('proposalQuestions', proposalQuestions)
+      .set('filteredProposalQuestions', filterQuestions)
+      .set('isProposalNAQuestionLoading', loading);
+  } else {
+    return state
+      .set('proposalQuestions', proposalQuestions)
+      .set('isProposalNAQuestionLoading', loading);
+  }
+};
+
 const onProposalAnswerError = (state: Map, action: Object): Map => {
   const {
     payload: { err, questionId }
@@ -989,6 +1113,9 @@ const actionMap = {
   [PROPOSAL_INFO_ERROR]: onProposalError,
   [PROPOSAL_ANSWER]: onProposalAnswer,
   [PROPOSAL_ANSWER_LOADING]: onProposalAnswerLoading,
+  [UPDATE_NOT_APPLICABLE_PROGRESS]: onProposalNAQuestionLoading,
+  [UPDATE_NOT_APPLICABLE_DONE]: onUpdateProposalNAQuestionDone,
+  [ERROR_UPDATE_NOT_APPLICABLE]: onErrorUpdateNotApplicable,
   [PROPOSAL_ANSWER_ERROR]: onProposalAnswerError,
   [QUESTION_SECTION_INFO]: onQuestionSectionInfoLoaded,
   [QUESTION_SECTION_LOADING]: onQuestionSectionLoading,
@@ -1037,6 +1164,8 @@ const actionMap = {
   [QUESTION_LOCK_DETAILS_ALL]: questionLockDetails,
   [SET_EVENT_LAUNCHER_FLAG]: (state, { payload }) =>
     state.set('eventLauncherFlag', payload),
+  [SHOW_NA_CHECKBOX]: (state, { payload }) =>
+    state.set('showNaCheckbox', payload),
   [SET_PRICE_MODELER_FIELDS]: setPriceModulerFields
 };
 

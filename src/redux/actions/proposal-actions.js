@@ -28,6 +28,7 @@ import {
   deleteProposalUser,
   getProposalAnswer,
   priceModelerApi,
+  setNotApplicableQuestionApi,
   getAllProposals
 } from '../../api/proposal';
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
@@ -88,7 +89,11 @@ const {
   QUESTION_UNLOCK_BY_USER,
   QUESTION_LOCK_DETAILS_ALL,
   SET_EVENT_LAUNCHER_FLAG,
-  SET_PRICE_MODELER_FIELDS
+  SHOW_NA_CHECKBOX,
+  UPDATE_NOT_APPLICABLE_PROGRESS,
+  UPDATE_NOT_APPLICABLE_DONE,
+  SET_PRICE_MODELER_FIELDS,
+  ERROR_UPDATE_NOT_APPLICABLE
 } = REDUX_TYPES.PROPOSAL;
 
 /**
@@ -139,6 +144,37 @@ export const getProposalByID = (id: string): ThunkAction<string, Object> => {
   };
 };
 
+export function setNotApplicableQuestion(
+  proposalId,
+  questionId,
+  questionStatus
+) {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: UPDATE_NOT_APPLICABLE_PROGRESS,
+        payload: { questionId, loading: true }
+      });
+
+      const { data } = await setNotApplicableQuestionApi(
+        proposalId,
+        questionId,
+        questionStatus
+      );
+
+      dispatch({
+        type: UPDATE_NOT_APPLICABLE_DONE,
+        payload: { data: data.data, questionId, questionStatus }
+      });
+    } catch (err) {
+      dispatch({
+        type: ERROR_UPDATE_NOT_APPLICABLE,
+        payload: { questionId, loading: false }
+      });
+    }
+  };
+}
+
 /**
  * Get Price Modeler Data
  */
@@ -158,13 +194,16 @@ export const setProposalAnswerData = (
   questionId: string,
   answer: string,
   userData: Object,
-  editorData: any
+  editorData: any,
+  isUpdatingNa: Boolean
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
-    dispatch({
-      type: PROPOSAL_ANSWER_LOADING,
-      payload: { questionId, loading: true }
-    });
+    if (!isUpdatingNa) {
+      dispatch({
+        type: PROPOSAL_ANSWER_LOADING,
+        payload: { questionId, loading: true }
+      });
+    }
     const questionsFilter = getQuestionsFilters(getState());
 
     try {
@@ -555,6 +594,10 @@ function applyInterestedPartyFilter(questions) {
   return filteredQuestions;
 }
 
+function applyShowInactiveQuestionsFilter(questions) {
+  return questions;
+}
+
 function applyMilestoneFilter(questions, milestone) {
   let filteredQuestions = cloneDeep(questions);
   if (milestone) {
@@ -704,6 +747,14 @@ export function onQuestionsFilterApplied(questionsFilter) {
               filteredQuestions,
               logic,
               applyInterestedPartyFilter
+            );
+            break;
+          case 'showInactiveQuestions':
+            withinGroupFilteredQuestions = filterGroup(
+              withinGroupFilteredQuestions,
+              filteredQuestions,
+              logic,
+              applyShowInactiveQuestionsFilter
             );
             break;
           default:
@@ -1120,6 +1171,15 @@ export const setEventLauncherFlag = val => {
   return dispatch => {
     dispatch({
       type: SET_EVENT_LAUNCHER_FLAG,
+      payload: val
+    });
+  };
+};
+
+export const setShowNaCheckbox = val => {
+  return dispatch => {
+    dispatch({
+      type: SHOW_NA_CHECKBOX,
       payload: val
     });
   };

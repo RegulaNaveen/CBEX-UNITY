@@ -23,7 +23,8 @@ import {
   resetQuestionsFilterAction,
   clearQuestionsFilterAction,
   expandAllSectionsAction,
-  callPickListLookupSfData
+  callPickListLookupSfData,
+  setShowNaCheckbox
 } from '../../../redux/actions/proposal-actions';
 import {
   getProposalDetails,
@@ -38,7 +39,8 @@ import {
   getMilestoneSections,
   getEditQuestionData,
   getIsOpen,
-  getSelectedBid
+  getSelectedBid,
+  getShowNaCheckbox
 } from '../../../redux/selectors';
 import {
   selectUniqueMilestones,
@@ -46,6 +48,10 @@ import {
   getBidList
 } from '../../../redux/selectors/proposal';
 import { selectUserRole } from '../../../redux/selectors/sso-auth';
+import Switch from 'apollo-react/components/Switch';
+import Tooltip from 'apollo-react/components/Tooltip';
+import InfoIcon from 'apollo-react-icons/Info';
+import IconButton from 'apollo-react/components/IconButton';
 import Sidebar from '../../views/Sidebar';
 import AnswerHistory from '../../views/modals/AnswerHistory';
 import { getAllUsers } from '../../../redux/actions/sso-auth-actions';
@@ -337,6 +343,10 @@ class Questions extends Component {
     this.setState({ isHistoryModalShown: false });
   };
 
+  handleOnChangeNaSwitch = (e, checked) => {
+    this.props.handleShowNaCheckbox(checked);
+  };
+
   setQuestionToDisplayHistory = (selectedAnswer: string) => {
     const {
       sections,
@@ -459,7 +469,8 @@ class Questions extends Component {
       allSectionsExpanded,
       editQuestionsData,
       isOpen,
-      noneditableField
+      noneditableField,
+      showNaCheckbox
     } = this.props;
     const {
       showModal,
@@ -485,65 +496,94 @@ class Questions extends Component {
         {/* Expand and Filter */}
         <div>
           <div className="tasksList-title-wrapper">
-            <div className="taskList-icons-wrapper">
-              <ApolloCheckbox
-                label="Expand All"
-                checked={allSectionsExpanded}
-                onChange={(e, checked) => {
-                  this.setState({ sidebarscroll: '' }, () => {
-                    this.handleIsCheckedAll(checked);
-                  });
-                  if (!checked) {
-                    const clearsidebarselectsection = new CustomEvent(
-                      'clearsidebarselectsection',
-                      {
-                        detail: true
-                      }
-                    );
-                    document.dispatchEvent(clearsidebarselectsection);
-                  }
-                }}
-              />
-              {MANUAL_REFRESH && (
-                <div
-                  title="Refresh"
-                  className="tasksList-refresh-icon-wrapper"
-                  role="presentation"
-                  onClick={this.getProposalInfoUpdated}
+            <Panel
+              minWidth={isNotepadOpen ? notepadMinWidthPx : 20}
+              maxWidth={isNotepadOpen ? notepadMaxWidthPx : 20}
+              width={isNotepadOpen ? notepadMaxWidthPx : 20}
+              hideButton
+              resizable
+              style={{ visibility: 'hidden' }}
+            />
+            <Panel width="100%" hideButton className="mark-na-panel">
+              <div className="N/A na-toggle-switch">
+                <span style={{ padding: '10px' }}>Mark N/A</span>
+                <Switch
+                  style={{ marginRight: '-2px' }}
+                  checked={showNaCheckbox}
+                  onChange={this.handleOnChangeNaSwitch}
+                  size="small"
+                />
+                <Tooltip
+                  variant="light"
+                  disableTouchListener
+                  title={showNaCheckbox ? 'NA ON' : 'NA OFF'}
+                  placement="top"
                 >
-                  <Refresh className="tasksList-add-icon" />
-                </div>
-              )}
-              {selectedBid.get('isCurrent') && (
-                <div
-                  title="Add New Question"
-                  className="tasksList-add-icon-wrapper"
-                  role="presentation"
-                  onClick={() => {
-                    this.setState({ currentsection: '', showModal: true });
-                    this.trackMatomoEventToggleQModal(true);
+                  <IconButton color="primary">
+                    <InfoIcon />
+                  </IconButton>
+                </Tooltip>
+              </div>
+              <div className="tasklist-mid-menu-separator" />
+              <div className="taskList-icons-wrapper">
+                <ApolloCheckbox
+                  label="Expand All"
+                  checked={allSectionsExpanded}
+                  onChange={(e, checked) => {
+                    this.setState({ sidebarscroll: '' }, () => {
+                      this.handleIsCheckedAll(checked);
+                    });
+                    if (!checked) {
+                      const clearsidebarselectsection = new CustomEvent(
+                        'clearsidebarselectsection',
+                        {
+                          detail: true
+                        }
+                      );
+                      document.dispatchEvent(clearsidebarselectsection);
+                    }
                   }}
+                />
+                {MANUAL_REFRESH && (
+                  <div
+                    title="Refresh"
+                    className="tasksList-refresh-icon-wrapper"
+                    role="presentation"
+                    onClick={this.getProposalInfoUpdated}
+                  >
+                    <Refresh className="tasksList-add-icon" />
+                  </div>
+                )}
+                {selectedBid.get('isCurrent') && (
+                  <div
+                    title="Add New Question"
+                    className="tasksList-add-icon-wrapper"
+                    role="presentation"
+                    onClick={() => {
+                      this.setState({ currentsection: '', showModal: true });
+                      this.trackMatomoEventToggleQModal(true);
+                    }}
+                  >
+                    <Add className="tasksList-add-icon" />
+                  </div>
+                )}
+                <Button
+                  variant="secondary"
+                  size="small"
+                  icon={<Filter fontSize="extraSmall" />}
+                  onClick={() => this.handleFilterClick()}
                 >
-                  <Add className="tasksList-add-icon" />
-                </div>
-              )}
-              <Button
-                variant="secondary"
-                size="small"
-                icon={<Filter fontSize="extraSmall" />}
-                onClick={() => this.handleFilterClick()}
-              >
-                {activeQuestionsFilterCount
-                  ? `Filter (${activeQuestionsFilterCount})`
-                  : 'Filter'}
-              </Button>
-            </div>
+                  {activeQuestionsFilterCount
+                    ? `Filter (${activeQuestionsFilterCount})`
+                    : 'Filter'}
+                </Button>
+              </div>
+            </Panel>
           </div>
           {this.renderFilter()}
         </div>
         <div id="panelwrapper">
           {/* Notepad */}
-
           <div id="panel-notepad" style={{ borderRadius: '5px' }}>
             <Panel
               minWidth={notepadMinWidthPx}
@@ -586,8 +626,8 @@ class Questions extends Component {
               </div>
             </Panel>
           </div>
-
           {/* Question list */}
+
           <div id="panel-questions-list">
             <div className="tasksList-wrapper" ref={this.questionsRef}>
               <Suspense fallback={<div>Loading...</div>}>
@@ -679,7 +719,8 @@ const mapStateToProps = (state: Map) => ({
   allSectionsExpanded: selectAreAllSectionsExpanded(state),
   editQuestionsData: getEditQuestionData(state),
   selectedBid: getSelectedBid(state),
-  getBidList: getBidList(state)
+  getBidList: getBidList(state),
+  showNaCheckbox: getShowNaCheckbox(state)
 });
 
 export default compose(
@@ -692,6 +733,7 @@ export default compose(
     clearQuestionsFilter: clearQuestionsFilterAction,
     expandAllSections: expandAllSectionsAction,
     handleOpenClose: onHandleOpenClose,
+    handleShowNaCheckbox: setShowNaCheckbox,
     getSFNonEditabelInfoField: getSFNonEditabelField,
     callPickListLookupSfData
   })

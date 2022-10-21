@@ -28,6 +28,7 @@ import {
   applyinterestedPartiesFilter,
   applyMileStonesFilter,
   applyMyUserRoleFilter,
+  applyNotApplicableFilter,
   applyUnAnsweredFilter
 } from './filter-util';
 
@@ -121,7 +122,7 @@ export function getLastAnswer(answers) {
     const lastAnswer = answers[answers.length - 1];
     return lastAnswer.answer.toString();
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return '';
   }
 }
@@ -918,7 +919,8 @@ export function getFilteredQuestion(proposalQuestions, filterState) {
     unanswered,
     myRole,
     interestedParties,
-    milestones
+    milestones,
+    includesNa
   } = filterState;
   let questions = cloneDeep(proposalQuestions);
 
@@ -931,6 +933,10 @@ export function getFilteredQuestion(proposalQuestions, filterState) {
     questions = applyUnAnsweredFilter(questions);
   } else if (!answered && !unanswered) {
     questions = [];
+  }
+
+  if (!includesNa) {
+    questions = applyNotApplicableFilter(questions);
   }
 
   // My user role questions
