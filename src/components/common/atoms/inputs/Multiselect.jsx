@@ -146,10 +146,8 @@ class Multiselect extends PureComponent<Props, State> {
 
     this.setState({ selectedValues: newArray });
 
-    if (value === this.props.lastAnswer) {
-      if (this.props.lockedBySelf) {
-        this.context?.questionUnlockWrapper(this.props.questionId);
-      }
+    if (value === this.props.lastAnswer && this.props.lockedBySelf) {
+      this.context?.questionUnlockWrapper(this.props.questionId);
     }
 
     this.forceUpdate();
