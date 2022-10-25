@@ -262,6 +262,22 @@ export const getProposalCount = async (id: string): Promise<Object> => {
       });
   });
 };
+
+export const getAllProposals = async (id: string): Promise<Object> => {
+  return new Promise((resolve, reject) => {
+    axiosInstance
+      .get(`${PROPOSAL_API_URL}/opportunity/all/${id}`, {
+        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};
+
 export const getPaginateProposal = async (urls): Promise<Object> => {
   return new Promise((resolve, reject) => {
     Promise.all(urls)
@@ -327,4 +343,16 @@ export const getUsersListApiCall = async (searchTerm): Promise<Object> => {
         reject(err);
       });
   });
+}
+
+/**
+ * Get Price Modeler Data
+ */
+export const priceModelerApi = proposalId => {
+  return axiosInstance.get(
+    `${PROPOSAL_API_URL}/cost?proposalId=${proposalId}`,
+    {
+      headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+    }
+  );
 };

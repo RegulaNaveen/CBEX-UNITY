@@ -1,6 +1,6 @@
 // @flow
 // eslint-disable-next-line react/destructuring-assignment
-import React, { Component, Suspense } from 'react';
+import React, { createRef, createContext, Component, Suspense } from 'react';
 import { withRouter, Match } from 'react-router-dom';
 import { List, Map } from 'immutable';
 import { compose } from 'redux';
@@ -13,7 +13,7 @@ import classNames from 'classnames';
 import Grid from 'apollo-react/components/Grid';
 import Panel from 'apollo-react/components/Panel';
 import Typography from 'apollo-react/components/Typography';
-
+import Loader from 'react-loader-spinner';
 import { Add, Refresh } from '../../svg';
 import BidHistory from '../../common/Bidhistory';
 import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
@@ -56,7 +56,9 @@ import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions'
 import WysiwygNotepad from '../../views/WysiwygNotepad';
 import ANSWER_TYPES from '../../../constants/answerTypes';
 import NotesSocketContext from '../../../context/notesSocketContext';
-import Loader from 'react-loader-spinner';
+import PriceModeler from '../../common/PriceModeler';
+
+export const QuestionsRefContext = createContext(null);
 
 const QuestionsSectionMapping = React.lazy(() =>
   import('./QuestionsSectionMapping')
@@ -86,7 +88,9 @@ type Props = {
   activeQuestionsFilterCount: Number,
   allSectionsExpanded: boolean,
   expandAllSections: Function,
-  editQuestionsData: Map
+  editQuestionsData: Map,
+  setQuestion: Function,
+  hasQuestionError: boolean
 };
 
 type State = {
@@ -97,7 +101,10 @@ type State = {
 };
 
 const MANUAL_REFRESH = false;
+let firstRender = true;
 class Questions extends Component {
+  static contextType = NotesSocketContext;
+
   constructor(props: Object) {
     super(props);
 
@@ -116,9 +123,11 @@ class Questions extends Component {
       totalWidth: '',
       proposalNoteRender: true
     };
+    this.questionsRef = createRef(null);
   }
-  static contextType = NotesSocketContext;
+
   componentDidMount() {
+    firstRender = false;
     window.localStorage.setItem('enableFirstExpand', 'true');
     const {
       fetchUsers,
@@ -150,7 +159,8 @@ class Questions extends Component {
 
     // on Edit question
     if (prevProps.editQuestionsData.size === 0 && editQuestionsData.size > 0) {
-      this.onClose();
+      this.setState({ showModal: true });
+      this.trackMatomoEventToggleQModal(true);
     }
 
     // bid change check start
@@ -162,17 +172,12 @@ class Questions extends Component {
     const prevProposalId = prevProps.selectedBid.get('id', '');
     // Bid changed
     if (prevProposalId !== thisProposalId) {
-      console.log(
-        prevProposalId,
-        'in question component selected bid changed to',
-        thisProposalId
-      );
       this.setState({ proposalNoteRender: false });
       setTimeout(() => {
         this.setState({ proposalNoteRender: true });
-      }, [10000]);
+      }, 5000);
     }
-    //bid change check ends
+    // bid change check ends
   }
 
   componentWillUnmount() {
@@ -221,8 +226,7 @@ class Questions extends Component {
   };
 
   onAddQuestion = value => {
-    this.setState({ currentsection: value });
-    this.onClose();
+    this.setState({ currentsection: value, showModal: true });
   };
 
   trackMatomoEventForCheckBoxes = item => {
@@ -232,6 +236,7 @@ class Questions extends Component {
       proposalDetail,
       trackEvent
     } = this.props;
+
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `CheckBoxes: ${userActions.click} On ${item} Checkbox`,
@@ -324,7 +329,7 @@ class Questions extends Component {
 
   onClose = () => {
     const { showModal } = this.state;
-    this.setState({ showModal: !showModal });
+    this.setState({ showModal: false });
     this.trackMatomoEventToggleQModal(!showModal);
   };
 
@@ -470,9 +475,13 @@ class Questions extends Component {
     const notepadMaxWidthPx = isOpen
       ? notepadMinWidthPx
       : (window.innerWidth - minPixelToExclude) * (47 / 100); // 50% of the total screen size
+
     return (
       <>
-        <BidHistory />
+        <div className="opportunity-details">
+          <BidHistory />
+        </div>
+
         {/* Expand and Filter */}
         <div>
           <div className="tasksList-title-wrapper">
@@ -511,8 +520,8 @@ class Questions extends Component {
                   className="tasksList-add-icon-wrapper"
                   role="presentation"
                   onClick={() => {
-                    this.setState({ currentsection: '' });
-                    this.onClose();
+                    this.setState({ currentsection: '', showModal: true });
+                    this.trackMatomoEventToggleQModal(true);
                   }}
                 >
                   <Add className="tasksList-add-icon" />
@@ -534,6 +543,7 @@ class Questions extends Component {
         </div>
         <div id="panelwrapper">
           {/* Notepad */}
+
           <div id="panel-notepad" style={{ borderRadius: '5px' }}>
             <Panel
               minWidth={notepadMinWidthPx}
@@ -557,6 +567,7 @@ class Questions extends Component {
                 <div id="panel-notepad-header">
                   <Typography variant="h3">Notepad</Typography>
                 </div>
+
                 {this.state.proposalNoteRender && this.context.wsInstance ? (
                   <WysiwygNotepad />
                 ) : (
@@ -575,17 +586,22 @@ class Questions extends Component {
               </div>
             </Panel>
           </div>
+
           {/* Question list */}
           <div id="panel-questions-list">
-            <div className="tasksList-wrapper">
+            <div className="tasksList-wrapper" ref={this.questionsRef}>
               <Suspense fallback={<div>Loading...</div>}>
-                <QuestionsSectionMapping
-                  {...this.props}
-                  {...this.state}
-                  setQuestionToDisplayHistory={this.setQuestionToDisplayHistory}
-                  setTabFromQuestionNotes={this.setTabFromQuestionNotes}
-                  onAddQuestion={this.onAddQuestion}
-                />
+                <QuestionsRefContext.Provider value={this.questionsRef}>
+                  <QuestionsSectionMapping
+                    {...this.props}
+                    {...this.state}
+                    setQuestionToDisplayHistory={
+                      this.setQuestionToDisplayHistory
+                    }
+                    setTabFromQuestionNotes={this.setTabFromQuestionNotes}
+                    onAddQuestion={this.onAddQuestion}
+                  />
+                </QuestionsRefContext.Provider>
               </Suspense>
             </div>
           </div>
@@ -611,7 +627,10 @@ class Questions extends Component {
               document.dispatchEvent(clearsidebarselectsection);
             }
           }}
-          AddNewQuestion={this.onClose}
+          AddNewQuestion={() => {
+            this.setState({ showModal: true });
+            this.trackMatomoEventToggleQModal(true);
+          }}
           RefreshProposal={this.getProposalInfoUpdated}
           // eslint-disable-next-line react/destructuring-assignment
           currentTab={this.state.currentTab}

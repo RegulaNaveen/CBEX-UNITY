@@ -40,6 +40,10 @@
         &:hover {
           background-color: $neptune-hover;
         }
+
+        &.focused {
+          border: 1.5px solid #0557d5;
+        }
       }
 
       .multiselect-icon {
@@ -82,7 +86,7 @@
       min-height: 40px;
       background-color: $white;
       border-radius: 5px;
-      border: 1px solid $neutral4;
+      border: $border;
       box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);
       cursor: pointer;
 
@@ -175,6 +179,10 @@
         &:hover {
           background-color: $neptune-hover;
         }
+
+        &.focused {
+          border: 1.5px solid #0557d5;
+        }
       }
 
       .multiselect-icon {
@@ -217,7 +225,7 @@
       min-height: 40px;
       background-color: $white;
       border-radius: 5px;
-      border: 1px solid $neutral4;
+      border: $border;
       box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);
       cursor: pointer;
 
@@ -264,6 +272,27 @@
         border-color: $neutral8 transparent transparent transparent;
         right: 6px;
         top: 18px;
+      }
+    }
+  }
+}
+
+.multiselect-header {
+  &:hover,
+  &:focus-within,
+  &:focus-visible {
+    border-color: #0768fd;
+    transition-duration: 0.2s;
+    transition-property: border-color;
+    outline: none !important;
+  }
+}
+
+.multiselect-wrapper {
+  .multiselect-list {
+    .multiselect-list-item {
+      &.focused {
+        border: 1.5px solid #0557d5;
       }
     }
   }

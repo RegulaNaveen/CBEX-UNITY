@@ -376,72 +376,72 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     const isQuestionAnswered = editQuestionsData.get('questionAnswered');
     if (!isLoading) {
       return (
-        <div className='modal-content'>
-          <div className='modal-wrapper-title'>
-            <div className='modal-segment-title'>
-              <p className='modal-title'>
+        <div className="modal-content">
+          <div className="modal-wrapper-title">
+            <div className="modal-segment-title">
+              <p className="modal-title">
                 {isEditMode ? 'Edit Question' : 'Add New Question'}
               </p>
               <div
-                title='Close'
-                className='close-modal-icon'
-                role='presentation'
+                title="Close"
+                className="close-modal-icon"
+                role="presentation"
                 onClick={onClose}
               >
-                <Close className='close-icon' />
+                <Close className="close-icon" />
               </div>
             </div>
           </div>
-          <div className='modal-wrapper-body'>
-            <div className='modal-segment'>
+          <div className="modal-wrapper-body">
+            <div className="modal-segment">
               <TextArea
-                id='question-text-area'
-                className='modal-text-area'
-                placeholder='Question text'
-                title='Enter Question Text'
+                id="question-text-area"
+                className="modal-text-area"
+                placeholder="Question text"
+                title="Enter Question Text"
                 value={isEditMode ? questionText : questionText || ''}
-                type='text'
+                type="text"
                 error={this.state.error.filter(v => v.questiontext)}
                 onChange={e => this.handleTextChange(e)}
               />
             </div>
-            <div className='modal-segment'>
-              <div className='modal-answer-type'>
+            <div className="modal-segment">
+              <div className="modal-answer-type">
                 <Dropdown
-                  id='dd-andwer-type'
-                  placeholder='Select'
+                  id="dd-andwer-type"
+                  placeholder="Select"
                   items={answerTypesList}
-                  title='Answer Type'
+                  title="Answer Type"
                   selectedValue={isEditMode && answerType}
                   error={this.state.error.filter(v => v.answerType)}
                   onClick={this.onAnswerTypeChange}
                   disabled={isQuestionAnswered}
                 />
                 {isQuestionAnswered && (
-                  <p className='disabled-text'>
+                  <p className="disabled-text">
                     The option is disabled due to the question already been
                     answered
                   </p>
                 )}
               </div>
             </div>
-            <div className='modal-segment'>
+            <div className="modal-segment">
               <Dropdown
-                id='dd-team-member'
-                placeholder='Select'
+                id="dd-team-member"
+                placeholder="Select"
                 items={sectionNames}
                 selectedValue={isEditMode ? section : selectedValue}
-                title='Section'
+                title="Section"
                 error={this.state.error.filter(v => v.section)}
                 onClick={this.onQuestionSectionChange}
               />
             </div>
-            <div className='modal-segment'>
+            <div className="modal-segment">
               <Multiselect
-                id='dd-team-member'
-                placeholder='Select'
+                id="dd-team-member"
+                placeholder="Select"
                 items={rolesList}
-                title='Which team member roles will answer'
+                title="Which team member roles will answer"
                 value={isEditMode && roleNames}
                 error={this.state.error.filter(v => v.roleNames)}
                 onClick={this.onRoleChange}
@@ -449,27 +449,27 @@ export class AddQuestionModal extends PureComponent<Props, State> {
               />
             </div>
           </div>
-          <div className='modal-wrapper-footer'>
-            <div className='modal-footer-content'>
-              <div className='modal-footer-left'>
+          <div className="modal-wrapper-footer">
+            <div className="modal-footer-content">
+              <div className="modal-footer-left">
                 {isEditMode && (
                   <>
-                    <div className='modal-button-delete'>
+                    <div className="modal-button-delete">
                       <PrimaryButton
-                        className='delete-button'
-                        id='delete-button'
+                        className="delete-button"
+                        id="delete-button"
                         onClick={this.onDelete}
                         disabled={isQuestionAnswered}
                       >
                         {isQuestionAnswered ? (
                           <Tooltip
-                            title='The question was answered previously and cannot be deleted'
-                            placement='top'
+                            title="The question was answered previously and cannot be deleted"
+                            placement="top"
                           >
                             <div>
                               <Trash
-                                className='trash-icon'
-                                fontSize='extraSmall'
+                                className="trash-icon"
+                                fontSize="extraSmall"
                               />{' '}
                               Delete
                             </div>
@@ -477,8 +477,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                         ) : (
                           <div>
                             <Trash
-                              className='trash-icon'
-                              fontSize='extraSmall'
+                              className="trash-icon"
+                              fontSize="extraSmall"
                             />{' '}
                             Delete
                           </div>
@@ -488,11 +488,11 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                   </>
                 )}
               </div>
-              <div className='modal-footer-right'>
-                <div className='modal-button-cancel'>
+              <div className="modal-footer-right">
+                <div className="modal-button-cancel">
                   <PrimaryButton
-                    className='close-button'
-                    id='cancel-button'
+                    className="close-button"
+                    id="cancel-button"
                     onClick={() => {
                       this.setState({ error: [] });
                       onClose();
@@ -501,10 +501,10 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                     Cancel
                   </PrimaryButton>
                 </div>
-                <div className='modal-button-okay'>
+                <div className="modal-button-okay">
                   <PrimaryButton
-                    className='okay-button'
-                    id='okay-button'
+                    className="okay-button"
+                    id="okay-button"
                     onClick={this.onSave}
                   >
                     {isEditMode ? 'Save' : 'Okay'}
@@ -518,9 +518,9 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     }
 
     return (
-      <div className='modal-loader'>
-        <Loader type='TailSpin' color='#297DFD' height={100} width={100} />
-        <p className='modal-loader-title'>{loaderText}</p>
+      <div className="modal-loader">
+        <Loader type="TailSpin" color="#297DFD" height={100} width={100} />
+        <p className="modal-loader-title">{loaderText}</p>
       </div>
     );
   };
@@ -560,8 +560,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
           'sidebar-open': isSidebarOpen
         })}
       >
-        <div className='add-question-modal-dialog-blur' />
-        <div className='add-question-modal-dialog-wrapper'>
+        <div className="add-question-modal-dialog-blur" />
+        <div className="add-question-modal-dialog-wrapper">
           {!isQuestionSectionLoading &&
           !isAnswerTypesLoading &&
           !isRolesLoading ? (
@@ -574,14 +574,14 @@ export class AddQuestionModal extends PureComponent<Props, State> {
               currentsection
             )
           ) : (
-            <div className='modal-loader'>
+            <div className="modal-loader">
               <Loader
-                type='TailSpin'
-                color='#297DFD'
+                type="TailSpin"
+                color="#297DFD"
                 height={100}
                 width={100}
               />
-              <p className='modal-loader-title'>
+              <p className="modal-loader-title">
                 Loading custom question options
               </p>
             </div>

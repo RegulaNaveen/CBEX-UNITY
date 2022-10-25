@@ -56,6 +56,10 @@
       &:hover {
         background-color: $neptune-hover;
       }
+
+      &.active {
+        background-color: $neptune-hover;
+      }
     }
   }
 
@@ -83,12 +87,19 @@
     max-height: max-content;
     background-color: $white;
     border-radius: 5px;
-    border: 1px solid $neutral4;
+    border: $border;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);
     cursor: pointer;
     position: relative;
     padding: 8px;
     padding-right: 20px;
+
+    &:focus {
+      border-color: #0768fd;
+      transition-duration: 0.2s;
+      transition-property: border-color;
+      outline: none !important;
+    }
 
     &.dd-header-disabled {
       background-color: #f2f2f2;

@@ -8,15 +8,18 @@ import {
   updateAnswerFromWebSocket,
   updateProposalDetailFromWebSocket,
   updateSwitchTempStatusFromWebSocket,
-  updateSwitchInProgress
+  updateSwitchInProgress,
+  updateQuestionLockByUser,
+  updateQuestionUnlockByUser,
+  getQuestionLockDetailsAll,
+  setProposalAnswerDatafromSocket
 } from '../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
 import { getUserName, getUserEmail, getUserId } from '../SessionHandler';
 import { REFRESH_WEBSOCKET_CONNECTION } from '../constants/app';
-const userName = getUserName();
-const userEmail = getUserEmail();
-const userId = getUserId();
+import { UBUILD, DASHBOARD } from '../routes';
+
 const currentOppNo = {
   get: localStorage.getItem('oppNo') || null,
   set: value => localStorage.setItem('oppNo', value)
@@ -45,7 +48,7 @@ const SocketContextProvider = props => {
   /**
    * Update socket's oppId when user switches Opportunity in the tool
    */
-  const sendUpdateConnection = (oppId, ws) => {
+  const sendUpdateConnection = (oppId, proposalId, ws) => {
     try {
       if (!ws) {
         ws = socket.current;
@@ -53,7 +56,10 @@ const SocketContextProvider = props => {
       ws.send(
         JSON.stringify({
           action: 'UPDATE_CONNECTION',
-          body: { oppId }
+          body: {
+            oppId,
+            proposalId: typeof proposalId === 'object' ? '' : proposalId
+          }
         })
       );
     } catch (error) {
@@ -81,6 +87,92 @@ const SocketContextProvider = props => {
   };
 
   /**
+   *  Question Lock
+   */
+  const questionLock = (questionId, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'QUESTION',
+          body: { event: 'QUESTION_LOCK', data: { questionId } }
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  /**
+   *  Question answerUpdate
+   */
+  const questionAnswerUpdate = (questionId, answer, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'QUESTION',
+          body: {
+            event: 'QUESTION_ANSWER_UPDATE',
+            data: {
+              latestAnswer: answer,
+              questionId
+            }
+          }
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /**
+   *  Question unLock
+   */
+  const questionUnlock = (questionId, answer, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'QUESTION',
+          body: {
+            event: 'QUESTION_UNLOCK',
+            data: {
+              questionId
+            },
+            clientQuestionId: questionId
+          }
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  /**
+   *  Get ALL Question Lock Details
+   */
+  const questionLockDetails = ws => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'QUESTION',
+          body: { event: 'QUESTIONS' }
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /**
    * Function called after bid creation completed
    */
   const refreshOpportunity = id => {
@@ -91,6 +183,15 @@ const SocketContextProvider = props => {
    * Initiates connection only if socket is not connected
    */
   const initiateConnection = () => {
+    const userName = getUserName();
+    const userEmail = getUserEmail();
+    const userId = getUserId();
+    // return if userInfo is null
+    if (!userId && !userEmail && !userName) {
+      console.log('Socket not initiated: User not logged in');
+      return;
+    }
+
     if (!isSocketConnected()) {
       console.log('Initiating new socket connection');
       const newSocket = new WebSocket(SOCKET_URL);
@@ -104,12 +205,21 @@ const SocketContextProvider = props => {
             })
           );
 
+          const location = window.location?.pathname;
+
+          if (![UBUILD, DASHBOARD].includes(location)) {
+            setTimeout(() => {
+              sendUpdateConnection(
+                localStorage.getItem('oppNo'),
+                localStorage.getItem('proposalId'),
+                newSocket
+              );
+            }, 1000);
+          }
+
           refreshInterval = setInterval(() => {
             refreshSocketConnection();
           }, [REFRESH_WEBSOCKET_CONNECTION]);
-        }
-        if (currentOppNo.get) {
-          sendUpdateConnection(currentOppNo.get, newSocket);
         }
       };
 
@@ -120,7 +230,11 @@ const SocketContextProvider = props => {
         updateProposalNotes,
         updateSwitchTempStatus,
         setSwitchInProgress,
-        updateNotification
+        updateNotification,
+        updateQuestionLock,
+        updateQuestionUnlock,
+        getQuestionLockDetails,
+        setProposalAnswerDatafromSocket
       } = props;
 
       // On Message Recieve
@@ -154,6 +268,34 @@ const SocketContextProvider = props => {
           case 'IN_APP_NOTIFICATION_RECEIVED':
             updateNotification();
             break;
+          case 'QUESTION_LOCK':
+            // Question locked by a user
+            updateQuestionLock(data);
+            break;
+          case 'QUESTION_UNLOCK':
+            // Question unlocked by a user
+
+            updateQuestionUnlock(data);
+
+            break;
+          case 'QUESTION_ANSWER_UPDATE':
+            // update question answer how it is done in action
+            if (data.data.latestAnswer) {
+              const questionId = Array.isArray(data.data.latestAnswer)
+                ? data.data.latestAnswer[data.data.latestAnswer.length - 1]
+                    .questionId
+                : data.data.latestAnswer.questionId;
+              setProposalAnswerDatafromSocket(
+                questionId,
+                data.data.latestAnswer
+              );
+            }
+
+            break;
+          case 'QUESTIONS':
+            // Get list of questions already locked by other users
+            getQuestionLockDetails(data);
+            break;
           default:
             break;
         }
@@ -162,6 +304,7 @@ const SocketContextProvider = props => {
       // On Close
       newSocket.onclose = event => {
         console.log('Socket onClose');
+        clearInterval(refreshInterval);
       };
       // On Error
       newSocket.onerror = event => {
@@ -187,9 +330,59 @@ const SocketContextProvider = props => {
     }, 2000);
   };
 
-  const updateSocketOppId = oppId => {
+  const waitForSocketConnectionMinInterval = callback => {
+    setTimeout(() => {
+      if (isSocketConnected()) {
+        if (callback instanceof Function) {
+          callback();
+        }
+      } else {
+        waitForSocketConnectionMinInterval(callback);
+      }
+    }, 100);
+  };
+  let timer;
+  let currentQuestionToLock;
+  /**
+   *
+   * @param {*} clear to remove the timer
+   * function to set timer for auto unlock and auto save
+   */
+  const resetLockTimer = questionId => {
+    clearTimeout(timer);
+    currentQuestionToLock = questionId;
+    timer = setTimeout(() => {
+      clearTimeout(timer);
+      questionLock(questionId, null);
+      currentQuestionToLock = undefined;
+    }, 1000);
+  };
+
+  const updateSocketOppId = (oppId, proposalId) => {
     currentOppNo.set(oppId);
-    waitForSocketConnection(() => sendUpdateConnection(oppId, null));
+    waitForSocketConnection(() =>
+      sendUpdateConnection(oppId, proposalId, null)
+    );
+  };
+  const questionLockWrapper = questionId => {
+    waitForSocketConnectionMinInterval(() => resetLockTimer(questionId));
+  };
+  const questionUnlockWrapper = (questionId, answer) => {
+    waitForSocketConnectionMinInterval(() => {
+      if (currentQuestionToLock === questionId) clearTimeout(timer);
+
+      questionUnlock(questionId, answer, null);
+    });
+  };
+
+  const questionAnswerUpdateWrapper = (questionId, answer) => {
+    waitForSocketConnectionMinInterval(() =>
+      questionAnswerUpdate(questionId, answer, null)
+    );
+  };
+
+  const questionLockDetailsWrapper = () => {
+    waitForSocketConnectionMinInterval(() => questionLockDetails(null));
   };
 
   const refreshSocketConnection = () => {
@@ -228,7 +421,11 @@ const SocketContextProvider = props => {
         initiateConnection,
         updateSocketOppId,
         disconnectSocket,
-        isSocketConnected
+        isSocketConnected,
+        questionLockWrapper,
+        questionUnlockWrapper,
+        questionLockDetailsWrapper,
+        questionAnswerUpdateWrapper
       }}
     >
       {props.children}
@@ -246,7 +443,11 @@ const mapDispatchToProps = {
   updateProposalNotes: updateProposalNotesFromWebSocket,
   updateSwitchTempStatus: updateSwitchTempStatusFromWebSocket,
   setSwitchInProgress: updateSwitchInProgress,
-  updateNotification: setNotification
+  updateNotification: setNotification,
+  updateQuestionLock: updateQuestionLockByUser,
+  updateQuestionUnlock: updateQuestionUnlockByUser,
+  getQuestionLockDetails: getQuestionLockDetailsAll,
+  setProposalAnswerDatafromSocket: setProposalAnswerDatafromSocket
 };
 
 export default connect(

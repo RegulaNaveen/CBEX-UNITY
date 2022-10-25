@@ -1,6 +1,51 @@
 .proposal-wrapper {
+  .proposal-details {
+    background-color: $neutral1;
+  }
+  ._question-tab {
+    padding: 0 20px;
+    background-color: $white;
+    &::before {
+      left: 0;
+      right: 0;
+    }
+  }
   .processing-txt {
     display: block;
+  }
+  .opportunity-details {
+    margin-bottom: 1rem;
+    margin-top: 0.5rem;
+
+    & > div {
+      &:nth-child(1) {
+        grid-area: one;
+        align-self: baseline;
+        padding-right: 0.875rem;
+      }
+      &:nth-child(2) {
+        grid-area: two;
+      }
+    }
+
+    & > .task-wrapper {
+      margin-bottom: 0;
+      box-shadow: 0px 8px 20px 2px rgba(50, 52, 56, 0.12);
+
+      .task-table-wrapper {
+        padding: 0;
+      }
+    }
+
+    @media screen and (max-width: 1250px) {
+      grid-template-columns: minmax(0, 2.8fr) minmax(320px, 1fr);
+    }
+
+    @media screen and (max-width: 1090px) {
+      grid-template-areas:
+        'one one'
+        'two two';
+    }
   }
 }
 
@@ -33,20 +78,9 @@
       padding-left: 0px;
       padding-top: 8px;
     }
-
-    ._question-tab {
-      padding-left: 20px;
-    }
-
-    .proposal-details .MuiPaper-rounded {
-      border-radius: unset;
-      padding: 5px;
-      text-align: center;
-      flex: 1 1 17%;
-    }
     p.boldtext {
       font-weight: 600;
-      color: #000;
+      color: $black;
       font-family: $proximaNova;
     }
     .sidebarduedatedsg {
@@ -69,24 +103,24 @@
       padding-left: 15px !important;
     }
     p.greencolor {
-      color: #2acb42;
+      color: $success;
       font-size: 30px;
     }
     p.greencolorsidebaropenfont {
-      color: #2acb42;
+      color: $success;
       font-size: 12px;
     }
     p.greytext {
-      color: #7f7f7f;
+      color: $neutral10;
       font-weight: 530;
       font-family: $proximaNova;
     }
     button.MuiTab-textColorInherit {
-      color: #7f7f7f;
+      color: $neutral10;
       font-weight: 500;
     }
     button.Mui-selected {
-      color: #000;
+      color: $black;
       font-weight: 500;
     }
     .proposal-details {
@@ -116,7 +150,7 @@
             height: 32px;
             width: 32px;
             border-radius: 50%;
-            background-color: #0557d5;
+            background-color: $darkerBlue;
             box-shadow: 0 4px 8px 0 rgba(41, 125, 253, 0.16),
               0 4px 4px 0 rgba(0, 0, 0, 0.04),
               0 8px 16px 0 rgba(41, 125, 253, 0.32);
@@ -135,7 +169,7 @@
             height: 32px;
             width: 32px;
             border-radius: 50%;
-            background-color: #0557d5;
+            background-color: $darkerBlue;
             box-shadow: 0 4px 8px 0 rgba(41, 125, 253, 0.16),
               0 4px 4px 0 rgba(0, 0, 0, 0.04),
               0 8px 16px 0 rgba(41, 125, 253, 0.32);
@@ -161,7 +195,7 @@
         .questions-filter__grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-          background-color: #f6f7fb;
+          background-color: $neutral1;
           padding: 12px 24px;
           margin-bottom: 8px;
 
@@ -229,20 +263,9 @@
       padding-left: 0px;
       padding-top: 8px;
     }
-
-    ._question-tab {
-      padding-left: 20px;
-    }
-
-    .proposal-details .MuiPaper-rounded {
-      border-radius: unset;
-      padding: 5px;
-      text-align: center;
-      flex: 1 1 17%;
-    }
     p.boldtext {
       font-weight: 600;
-      color: #000;
+      color: $black;
       font-family: $proximaNova;
     }
     .sidebarduedatedsg {
@@ -267,7 +290,7 @@
       padding-left: 15px !important;
     }
     p.greencolor {
-      color: #2acb42;
+      color: $success;
       font-size: 30px;
 
       @media only screen and (max-width: 1600px) {
@@ -277,20 +300,20 @@
       }
     }
     p.greencolorsidebaropenfont {
-      color: #2acb42;
+      color: $success;
       font-size: 12px;
     }
     p.greytext {
-      color: #7f7f7f;
+      color: $neutral10;
       font-weight: 530;
       font-family: $proximaNova;
     }
     button.MuiTab-textColorInherit {
-      color: #7f7f7f;
+      color: $neutral10;
       font-weight: 500;
     }
     button.Mui-selected {
-      color: #000;
+      color: $black;
       font-weight: 500;
     }
     .proposal-details {
@@ -320,7 +343,7 @@
             height: 32px;
             width: 32px;
             border-radius: 50%;
-            background-color: #0557d5;
+            background-color: $darkerBlue;
             box-shadow: 0 4px 8px 0 rgba(41, 125, 253, 0.16),
               0 4px 4px 0 rgba(0, 0, 0, 0.04),
               0 8px 16px 0 rgba(41, 125, 253, 0.32);
@@ -339,7 +362,7 @@
             height: 32px;
             width: 32px;
             border-radius: 50%;
-            background-color: #0557d5;
+            background-color: $darkerBlue;
             box-shadow: 0 4px 8px 0 rgba(41, 125, 253, 0.16),
               0 4px 4px 0 rgba(0, 0, 0, 0.04),
               0 8px 16px 0 rgba(41, 125, 253, 0.32);
@@ -365,7 +388,7 @@
         .questions-filter__grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-          background-color: #f6f7fb;
+          background-color: $neutral1;
           padding: 12px 24px;
           margin-bottom: 8px;
 
@@ -405,17 +428,17 @@
 }
 
 .autocomplete-text {
-  color: #000000 !important;
+  color: $black !important;
   font-family: $proximaNova !important;
   font-size: 16px !important;
   input {
     height: 36px !important;
-    color: #000000 !important;
+    color: $black !important;
     font-family: $proximaNova !important;
     font-size: 16px !important;
   }
   .a-MuiChip-label {
-    color: #000000 !important;
+    color: $black !important;
     font-family: $proximaNova !important;
     font-size: 16px !important;
   }
@@ -444,7 +467,7 @@
     label {
       font-size: 14px;
       font-family: $proximaNova !important;
-      color: #000;
+      color: $black;
     }
     .exportOptionsCell {
       width: 48%;
@@ -456,18 +479,18 @@
       width: 90%;
       margin-bottom: 5px;
       margin-top: 7px;
-      color: #000000 !important;
+      color: $black !important;
       font-family: $proximaNova !important;
       font-size: 16px !important;
     }
     .exportFileName:hover,
     .exportFileName:focus-visible {
-      border-color: #0768fd !important;
+      border-color: $neptune-primary !important;
       outline: none;
     }
     span.fileNameAlert {
       display: none;
-      color: #d8000c;
+      color: $error;
       font-size: 12px;
     }
     .exportFileName:required:invalid + span.fileNameAlert {
@@ -487,13 +510,13 @@
   position: relative;
   label {
     > span:first-child::before {
-      background-color: #0768fd;
+      background-color: $neptune-primary;
       content: '-';
       position: absolute;
       width: 16px;
       height: 16px;
       border-radius: 2px;
-      color: #fff;
+      color: $white;
       font-size: 25px;
       display: flex;
       align-items: center;

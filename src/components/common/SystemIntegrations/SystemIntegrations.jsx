@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/prop-types */
 /* eslint-disable consistent-return */
 /* eslint-disable no-undef */
@@ -19,6 +20,7 @@ const SystemIntegrations = ({
   sficon,
   integrationmatch,
   integrationvalidation,
+  priceModelerIntegration,
   answeronhistory,
   answerdate,
   isAnswerPredicted,
@@ -41,14 +43,15 @@ const SystemIntegrations = ({
           variant="light"
           title={
             sficon !== 'n/a' ? (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: `<p><b>Source</b><br>CRM</p>`
-                }}
-              />
+              <p>
+                <b>Source</b>
+                <br />
+                CRM
+              </p>
             ) : null
           }
           placement="top"
+          tabIndex={-1}
         >
           <div>
             <Incoming
@@ -62,14 +65,15 @@ const SystemIntegrations = ({
           variant="light"
           title={
             sficon !== 'n/a' ? (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: `<p><b>Source</b><br>CRM</p>`
-                }}
-              />
+              <p>
+                <b>Source</b>
+                <br />
+                CRM
+              </p>
             ) : null
           }
           placement="top"
+          tabIndex={-1}
         >
           <div>
             <Incoming
@@ -90,14 +94,15 @@ const SystemIntegrations = ({
           variant="light"
           title={
             sficon !== 'n/a' ? (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: `<p><b>Source</b><br>CRM</p>`
-                }}
-              />
+              <p>
+                <b>Source </b>
+                <br />
+                CRM
+              </p>
             ) : null
           }
           placement="top"
+          tabIndex={-1}
         >
           <div>
             <Incoming
@@ -119,6 +124,7 @@ const SystemIntegrations = ({
             ) : null
           }
           placement="top"
+          tabIndex={-1}
         >
           <div>
             <Incoming
@@ -132,20 +138,39 @@ const SystemIntegrations = ({
     if (isEmpty(sficon)) return null;
   };
   const QvidianValidation = () => {
-    if (integrationvalidation === true && changeIcon === '#00c221') {
+    if (
+      (integrationvalidation === true && changeIcon === '#00c221') ||
+      (priceModelerIntegration === true && changeIcon === '#00c221')
+    ) {
       return (
         <Tooltip
           variant="light"
           title={
-            integrationmatch ? (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: `<p><b>Destination</b><br>Qvidian</p>`
-                }}
-              />
-            ) : null
+            priceModelerIntegration && integrationvalidation ? (
+              <p>
+                <b>Destinations</b>
+                <br />
+                Qvidian
+                <br /> Price Modeler
+              </p>
+            ) : priceModelerIntegration ? (
+              <p>
+                <b>Destination</b>
+                <br />
+                Price Modeler
+              </p>
+            ) : integrationvalidation ? (
+              <p>
+                <b>Destination</b>
+                <br />
+                Qvidian
+              </p>
+            ) : (
+              ''
+            )
           }
           placement="top"
+          tabIndex={-1}
         >
           <div>
             <Outgoing
@@ -156,7 +181,7 @@ const SystemIntegrations = ({
         </Tooltip>
       );
     }
-    if (integrationvalidation === true) {
+    if (integrationvalidation === true || priceModelerIntegration === true) {
       return lastAnswer
         ?.toJS()
         .answer?.toString()
@@ -164,13 +189,31 @@ const SystemIntegrations = ({
         <Tooltip
           variant="light"
           title={
-            <div
-              dangerouslySetInnerHTML={{
-                __html: `<p><b>Destination</b><br>Qvidian</p>`
-              }}
-            />
+            priceModelerIntegration && integrationvalidation ? (
+              <p>
+                <b>Destination</b>
+                <br />
+                Qvidian
+                <br /> Price Modeler
+              </p>
+            ) : priceModelerIntegration ? (
+              <p>
+                <b>Destination</b>
+                <br />
+                Price Modeler
+              </p>
+            ) : integrationvalidation ? (
+              <p>
+                <b>Destination</b>
+                <br />
+                Qvidian
+              </p>
+            ) : (
+              ''
+            )
           }
           placement="top"
+          tabIndex={-1}
         >
           <div>
             <Outgoing
@@ -183,15 +226,30 @@ const SystemIntegrations = ({
         <Tooltip
           variant="light"
           title={
-            integrationmatch ? (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: `<p><b>Destination</b><br>Qvidian</p>`
-                }}
-              />
-            ) : null
+            priceModelerIntegration && integrationvalidation ? (
+              <p>
+                <b>Destination</b>
+                <br />
+                Qvidian, Price Modeler
+              </p>
+            ) : priceModelerIntegration ? (
+              <p>
+                <b>Destination</b>
+                <br />
+                Price Modeler
+              </p>
+            ) : integrationvalidation ? (
+              <p>
+                <b>Destination</b>
+                <br />
+                Qvidian
+              </p>
+            ) : (
+              ''
+            )
           }
           placement="top"
+          tabIndex={-1}
         >
           <div className="wrap-integration">
             <Outgoing
@@ -221,6 +279,7 @@ const SystemIntegrations = ({
           type="button"
           onClick={answeronhistory}
           className="integration-buttons"
+          tabIndex={-1}
         >
           <Calendar style={{ color: '#b7b7b7' }} className="integration-icon" />
         </IconButton>
@@ -229,10 +288,16 @@ const SystemIntegrations = ({
     if (
       isAnswerPredicted &&
       !loading &&
+      !isEmpty(lastAnswer?.get('answer')) &&
       !isAnswered(lastAnswer, isAnswerPredicted)
     ) {
       return (
-        <Tooltip variant="light" title="Unity Predicted Answer" placement="top">
+        <Tooltip
+          variant="light"
+          title="Unity Predicted Answer"
+          placement="top"
+          tabIndex={-1}
+        >
           <IconButton
             disabled={!isCurrentBid}
             style={{
@@ -242,6 +307,7 @@ const SystemIntegrations = ({
               paddingRight: '0px'
             }}
             className="bluecalendar"
+            tabIndex={-1}
           >
             <CalendarCheck
               fontSize="22px"
@@ -273,6 +339,7 @@ const SystemIntegrations = ({
           type="button"
           onClick={answeronhistory}
           className="integration-buttons"
+          tabIndex={-1}
         >
           <CalendarCheck
             className="answered2 integration-icon"
@@ -301,6 +368,7 @@ const SystemIntegrations = ({
           type="button"
           onClick={answeronhistory}
           className="integration-buttons"
+          tabIndex={-1}
         >
           <img
             src={indeterminate}
@@ -331,6 +399,7 @@ const SystemIntegrations = ({
           type="button"
           onClick={answeronhistory}
           className="integration-buttons"
+          tabIndex={-1}
         >
           <img src={indeterminate} alt="indeterminate" className="answered" />
         </IconButton>
@@ -351,6 +420,7 @@ const SystemIntegrations = ({
         type="button"
         onClick={answeronhistory}
         className="integration-buttons"
+        tabIndex={-1}
       >
         <CalendarCheck
           className="answered1 integration-icon"

@@ -19,6 +19,7 @@ let UBUILD_ARTIFACT = '';
 let SF_HOST_URL = '';
 let SOCKET_URL = '';
 let NOTES_SOCKET_URL = '';
+let LAUNCH_DARKLY_CLIENT_ID = '630712f317eece1138e5445c';
 
 switch (environment) {
   case 'UAT':
@@ -66,6 +67,8 @@ switch (environment) {
     SF_HOST_URL = 'https://iqvia--hotfix.lightning.force.com/';
     SOCKET_URL =
       'wss://ld700ndvyb.execute-api.us-east-1.amazonaws.com/production';
+    NOTES_SOCKET_URL =
+      'wss://0x9widxpxd.execute-api.us-east-1.amazonaws.com/production';
     break;
   case 'PROD':
     PROPOSAL_API_ENDPOINT =
@@ -81,7 +84,9 @@ switch (environment) {
     SF_HOST_URL = 'https://iqvia.my.salesforce.com/';
     SOCKET_URL =
       'wss://29nghekakl.execute-api.us-east-1.amazonaws.com/production';
-
+    NOTES_SOCKET_URL =
+      'wss://0kmubx9x18.execute-api.us-east-1.amazonaws.com/production';
+    LAUNCH_DARKLY_CLIENT_ID = '630712f317eece1138e5445d';
     break;
   case 'QA':
     // UDEV Data
@@ -198,5 +203,6 @@ export {
   SOCKET_URL,
   PROFILE,
   NOTIFICATION,
-  NOTES_SOCKET_URL
+  NOTES_SOCKET_URL,
+  LAUNCH_DARKLY_CLIENT_ID
 };

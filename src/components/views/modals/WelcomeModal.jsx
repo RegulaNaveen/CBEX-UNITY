@@ -37,23 +37,23 @@ const WelcomeModal = ({ roles, onRoleChange, id }) => {
   return (
     <Modal
       open={state.image}
-      image=''
-      alt='Welcome to Unity!'
-      title='Welcome to Unity!'
-      subtitle=''
+      image=""
+      alt="Welcome to Unity!"
+      title="Welcome to Unity!"
+      subtitle=""
       hideButtons
-      message=''
+      message=""
       id={id}
-      variant='default'
+      variant="default"
     >
-      <section className='role-modal'>
-        <p className='para'>
+      <section className="role-modal">
+        <p className="para">
           Before you can use all of the features of the Unity platform, we need
           to setup the user role for your profile.
         </p>
       </section>
-      <section className='role-modal'>
-        <p className='para'>
+      <section className="role-modal">
+        <p className="para">
           <b>Please select your user role below.</b> This role can be updated
           anytime in your profile dashboard.
         </p>
@@ -61,15 +61,15 @@ const WelcomeModal = ({ roles, onRoleChange, id }) => {
       <section>
         <div style={{ maxWidth: 250 }}>
           <Select
-            label='User Role'
-            helperText=''
+            label="User Role"
+            helperText=""
             value={role}
             onChange={e => setrole(e.target.value)}
-            placeholder='Select a Role'
+            placeholder="Select a Role"
             fullWidth
           >
             {rolesList &&
-              rolesList.map(rl => {
+              rolesList.sort().map(rl => {
                 return (
                   <MenuItem key={rl} value={rl}>
                     {rl}
@@ -80,8 +80,8 @@ const WelcomeModal = ({ roles, onRoleChange, id }) => {
         </div>
         <PrimaryButton
           disabled={!role}
-          className='saverole-button'
-          id='saverole-button'
+          className="saverole-button"
+          id="saverole-button"
           onClick={() => {
             onRoleChange(role);
             handleClose('image');

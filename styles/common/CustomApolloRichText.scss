@@ -6,7 +6,7 @@
 }
 
 .custom-rich-text {
-  border: 1px solid $neutral4;
+  border: $border;
   position: relative;
   box-sizing: content-box;
   border-radius: 0.25rem;
@@ -126,4 +126,23 @@
       }
     }
   }
+}
+
+.custom-rich-text-inner {
+
+    &.popover-inner {
+      & > div {
+        & > div:nth-child(1) {
+          display: none !important;
+        }
+      }
+
+      &.focused {
+        & > div {
+          & > div:nth-child(1) {
+            display: inline-flex !important;
+          }
+        } 
+      }
+    }
 }

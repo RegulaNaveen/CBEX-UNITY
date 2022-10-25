@@ -119,6 +119,7 @@ const UserInputModal = ({initExport, filterState, filterStateUpdate, roleList, f
               onChange={handleTextChange}
               fullWidth
               name="fileType"
+              canDeselect={false}
             >
               <MenuItem value={docType.pdf}>{`${docType.pdf} (Default)`}</MenuItem>
               <MenuItem value={docType.doc}>{docType.doc}</MenuItem>

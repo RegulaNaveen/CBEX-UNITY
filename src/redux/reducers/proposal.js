@@ -1,6 +1,6 @@
 // @flow
-import { cloneDeep } from 'lodash';
-import { Map, fromJS, OrderedMap } from 'immutable'; // NOSONAR
+import _, { isEqual, cloneDeep } from 'lodash';
+import { Map, fromJS, OrderedMap, is } from 'immutable'; // NOSONAR
 import { REDUX_TYPES } from '../../constants';
 import type { ApiAction } from '../actions/action-types';
 import { getUniqueMilestones } from '../selectors/proposal';
@@ -51,7 +51,12 @@ const {
   BOX_ADDITIONAL_LINK_ERROR,
   SWITCH_TEMP_STATUS,
   SWITCH_TEMP_IN_PROGRESS,
-  RESET_PROPOSALID
+  RESET_PROPOSALID,
+  QUESTION_LOCK_BY_USER,
+  QUESTION_UNLOCK_BY_USER,
+  QUESTION_LOCK_DETAILS_ALL,
+  SET_EVENT_LAUNCHER_FLAG,
+  SET_PRICE_MODELER_FIELDS
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -121,7 +126,16 @@ const INITIAL_STATE: Map = fromJS({
   lookUpOptions: {},
   boxAdditionalLink: {},
   switchTempCallStatus: false,
-  switchTempInProgress: false
+  switchTempInProgress: false,
+  eventLauncherFlag: false,
+  priceModeler: fromJS({
+    cost: '',
+    therapeutic: '',
+    sites: '',
+    phase: '',
+    patients: '',
+    regions: ''
+  })
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -224,7 +238,6 @@ const setOpportunityInfo = (state, action) => {
   const { payload } = action;
   let opportunityData = new OrderedMap({});
   let selectedBid = Map({});
-  // console.log(`payload`, payload);
   payload.forEach(proposal => {
     if (proposal.isCurrent) {
       selectedBid = selectedBid
@@ -267,28 +280,32 @@ const setOpportunityInfo = (state, action) => {
     selectedBid.get('id'),
     'proposalQuestions'
   ]);
-  // console.log(`proposalQuestions`, proposalQuestions)
-
-  const milestones = getUniqueMilestones(proposalQuestions);
-
-  let questionsFilter = state.get('questionsFilter');
-  let milestoneGroup = fromJS({});
-  milestones.forEach(milestone => {
-    milestoneGroup = milestoneGroup.set(
-      milestone,
-      Map({
-        checked: false,
-        label: milestone,
-        className: CLASS_QUES_FIL_ITEM
-      })
-    );
-  });
-  milestoneGroup = milestoneGroup.set('logic', 'OR');
-  questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
+  if (proposalQuestions) {
+    const milestones = getUniqueMilestones(proposalQuestions);
+    let questionsFilter = state.get('questionsFilter');
+    let milestoneGroup = fromJS({});
+    milestones.forEach(milestone => {
+      milestoneGroup = milestoneGroup.set(
+        milestone,
+        Map({
+          checked: false,
+          label: milestone,
+          className: CLASS_QUES_FIL_ITEM
+        })
+      );
+    });
+    milestoneGroup = milestoneGroup.set('logic', 'OR');
+    questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
+    return state
+      .set('proposalDetails', proposalDetails)
+      .set('proposalQuestions', proposalQuestions)
+      .set('questionsFilter', questionsFilter)
+      .set('isProposalLoading', false)
+      .set('opportunityData', opportunityData)
+      .set('selectedBid', selectedBid);
+  }
   return state
     .set('proposalDetails', proposalDetails)
-    .set('proposalQuestions', proposalQuestions)
-    .set('questionsFilter', questionsFilter)
     .set('isProposalLoading', false)
     .set('opportunityData', opportunityData)
     .set('selectedBid', selectedBid);
@@ -296,6 +313,7 @@ const setOpportunityInfo = (state, action) => {
 
 const onChangeBid = (state: Map, action: Object): Map => {
   const { payload } = action;
+
   let opportunityData = state.get('opportunityData');
   const {
     agreementId,
@@ -303,12 +321,12 @@ const onChangeBid = (state: Map, action: Object): Map => {
     proposalDetails,
     opportunityType,
     questionTemplateVersionNumber: templateversion
-  } = opportunityData.getIn([payload.bidId, 'proposal']);
+  } = opportunityData.getIn([payload.bid.bidId, 'proposal']);
   let selectedBid = Map({
-    id: payload.bidId,
-    isCurrent: payload.isCurrent,
-    pertinentDetails: payload.pertinentDetails,
-    bidName: payload.bidName,
+    id: payload.bid.bidId,
+    isCurrent: payload.bid.isCurrent,
+    pertinentDetails: payload.bid.pertinentDetails,
+    bidName: payload.bid.bidName,
     questionTemplateVersionNumber: templateversion || '',
     opportunityType: opportunityType || '',
     agreementId: agreementId || '',
@@ -316,32 +334,35 @@ const onChangeBid = (state: Map, action: Object): Map => {
     opportunityId: proposalDetails['opportunityId']
   });
 
-  const proposalQuestions = opportunityData.getIn([
-    selectedBid.get('id'),
-    'proposalQuestions'
-  ]);
+  const proposalQuestions = payload.proposalDetails.proposalQuestions;
 
-  const milestones = getUniqueMilestones(proposalQuestions);
+  if (proposalQuestions) {
+    const milestones = getUniqueMilestones(proposalQuestions);
 
-  let questionsFilter = state.get('questionsFilter');
-  let milestoneGroup = fromJS({});
-  milestones.forEach(milestone => {
-    milestoneGroup = milestoneGroup.set(
-      milestone,
-      Map({
-        checked: false,
-        label: milestone,
-        className: CLASS_QUES_FIL_ITEM
-      })
-    );
-  });
-  milestoneGroup = milestoneGroup.set('logic', 'OR');
-  questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
+    let questionsFilter = state.get('questionsFilter');
+    let milestoneGroup = fromJS({});
+    milestones.forEach(milestone => {
+      milestoneGroup = milestoneGroup.set(
+        milestone,
+        Map({
+          checked: false,
+          label: milestone,
+          className: CLASS_QUES_FIL_ITEM
+        })
+      );
+    });
+    milestoneGroup = milestoneGroup.set('logic', 'OR');
+    questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
 
+    return state
+      .set('proposalDetails', proposalDetails)
+      .set('proposalQuestions', proposalQuestions)
+      .set('questionsFilter', questionsFilter)
+      .set('isProposalLoading', false)
+      .set('selectedBid', selectedBid);
+  }
   return state
     .set('proposalDetails', proposalDetails)
-    .set('proposalQuestions', proposalQuestions)
-    .set('questionsFilter', questionsFilter)
     .set('isProposalLoading', false)
     .set('selectedBid', selectedBid);
 };
@@ -450,11 +471,42 @@ const onProposalError = (state: Map, action: Object): Map => {
   return state.set('proposalError', payload).set('isProposalLoading', false);
 };
 
+const onUpdateModifiedQuestion = (state: Map, action: Object): Map => {
+  const { question } = action.payload;
+
+  let newState = fromJS({});
+
+  const indexOfQuestionToUpdate = state
+    .get('proposalQuestions')
+    .findIndex(listItem => listItem.questionId === question.questionId);
+
+  newState = state.setIn(
+    ['proposalQuestions', indexOfQuestionToUpdate],
+    question
+  );
+
+  const proposalQuestions = newState.get('proposalQuestions');
+
+  return state.set('proposalQuestions', proposalQuestions);
+};
+
+// state is propoal
 const onProposalAnswer = (state: Map, action: Object): Map => {
   const {
     payload: { data, questionId: referenceId, hasDifferentSFanswer }
   } = action;
 
+  const proposalId = Array.isArray(data)
+    ? data[data.length - 1].proposalId
+    : data.proposalId;
+  const selectedBidId = state.getIn(['selectedBid', 'id']);
+
+  // case  when user is not in the same proposal Id
+  if (selectedBidId !== proposalId) {
+    return state;
+  }
+
+  // update current selected bid and return
   let newState = fromJS({});
 
   const indexOfListToUpdate = state
@@ -462,8 +514,6 @@ const onProposalAnswer = (state: Map, action: Object): Map => {
     .findIndex(listItem => {
       return listItem.questionId === referenceId;
     });
-
-  let selectedBidId = state.getIn(['selectedBid', 'id']);
 
   newState = state
     .setIn(['proposalQuestions', indexOfListToUpdate, 'answers'], data)
@@ -503,6 +553,97 @@ const onProposalAnswer = (state: Map, action: Object): Map => {
     .set('opportunityData', opportunityData);
 };
 
+// state is propoal
+const updateQuestionLockByUser = (state: Map, action: Object): Map => {
+  const {
+    data: { questionId, proposalId, userEmail, userId, userName }
+  } = action.payload;
+  let newState = fromJS({});
+
+  if (proposalId) {
+    const selectedBid = state.getIn(['selectedBid', 'id']);
+
+    // Update the current lock details if the selected Bid is equal to processed Bid
+    if (selectedBid === proposalId) {
+      const indexOfListToUpdateCurrent = state
+        .get('proposalQuestions')
+        .findIndex(listItem => {
+          return listItem.questionId === questionId;
+        });
+      newState = state.updateIn(
+        ['proposalQuestions', indexOfListToUpdateCurrent],
+        value => ({
+          ...value,
+          questionLockInfo: { userInfo: userEmail, userId, userName }
+        })
+      );
+
+      const proposalQuestionsNew = newState.get('proposalQuestions');
+      const prevProposalQuestions = state.get('proposalQuestions');
+      if (!isEqual(prevProposalQuestions, proposalQuestionsNew)) {
+        return state.set('proposalQuestions', proposalQuestionsNew);
+      }
+    }
+
+    return state;
+  }
+};
+
+const questionLockDetails = (state: Map, action: Object): Map => {
+  const { data } = action.payload;
+  let newState = fromJS(state);
+
+  if (data.length > 0) {
+    for (let i = 0; i < data.length; i++) {
+      const newAction = {
+        payload: {
+          data: data[i]
+        }
+      };
+      newState = updateQuestionLockByUser(newState, newAction);
+    }
+    return newState;
+  }
+  return state;
+};
+// state is propoal
+const updateQuestionUnlockByUser = (state: Map, action: Object): Map => {
+  const {
+    data: { questionId, proposalId },
+    clientQuestionId
+  } = action.payload;
+  let newState = fromJS({});
+
+  if (proposalId) {
+    // let opportunityData = state.get('opportunityData');
+    const selectedBid = state.getIn(['selectedBid', 'id']);
+
+    // Update the current proposalDetails if the selected Bid is equal to processed Bid
+    if (selectedBid === proposalId) {
+      const indexOfListToUpdateCurrent = state
+        .get('proposalQuestions')
+        .findIndex(listItem => {
+          return listItem.questionId === clientQuestionId;
+        });
+
+      newState = state.updateIn(
+        ['proposalQuestions', indexOfListToUpdateCurrent],
+        value => ({
+          ..._.omit(value, 'questionLockInfo')
+        })
+      );
+
+      const proposalQuestionsNew = newState.get('proposalQuestions');
+      const prevProposalQuestions = state.get('proposalQuestions');
+      if (!isEqual(prevProposalQuestions, proposalQuestionsNew)) {
+        return state.set('proposalQuestions', proposalQuestionsNew);
+      }
+    }
+
+    return state;
+  }
+};
+
 const onProposalAnswerLoading = (state: Map, action: Object): Map => {
   const {
     payload: { questionId: referenceId, loading = false }
@@ -522,7 +663,7 @@ const onProposalAnswerLoading = (state: Map, action: Object): Map => {
   );
 
   const proposalQuestions = newState.get('proposalQuestions');
-  let filterQuestionsLen = state.get('filteredProposalQuestions');
+  const filterQuestionsLen = state.get('filteredProposalQuestions');
   if (Array.isArray(filterQuestionsLen)) {
     const filterindexOfListToUpdate = filterQuestionsLen.findIndex(listItem => {
       return listItem.questionId === referenceId;
@@ -531,16 +672,15 @@ const onProposalAnswerLoading = (state: Map, action: Object): Map => {
       ['filteredProposalQuestions', filterindexOfListToUpdate, 'loading'],
       loading
     );
-    let filterQuestions = newState.get('filteredProposalQuestions');
+    const filterQuestions = newState.get('filteredProposalQuestions');
     return state
       .set('proposalQuestions', proposalQuestions)
       .set('filteredProposalQuestions', filterQuestions)
       .set('isProposalAnswerLoading', loading);
-  } else {
-    return state
-      .set('proposalQuestions', proposalQuestions)
-      .set('isProposalAnswerLoading', loading);
   }
+  return state
+    .set('proposalQuestions', proposalQuestions)
+    .set('isProposalAnswerLoading', loading);
 };
 
 const onProposalAnswerError = (state: Map, action: Object): Map => {
@@ -693,25 +833,6 @@ const onGettingfetchBoxAdditionalLinkError = (
   return state.set('boxAdditionalLink', error);
 };
 
-const onUpdateModifiedQuestion = (state: Map, action: Object): Map => {
-  const { question } = action.payload;
-
-  let newState = fromJS({});
-
-  const indexOfQuestionToUpdate = state
-    .get('proposalQuestions')
-    .findIndex(listItem => listItem.questionId === question.questionId);
-
-  newState = state.setIn(
-    ['proposalQuestions', indexOfQuestionToUpdate],
-    question
-  );
-
-  const proposalQuestions = newState.get('proposalQuestions');
-
-  return state.set('proposalQuestions', proposalQuestions);
-};
-
 const onFetchingValidatedProposaData = (state: Map): Map => {
   return state
     .set('fetchingValidatedProposalData', true)
@@ -839,6 +960,29 @@ const onDeleteQuestion = (state, action) => {
   }
 };
 
+const setPriceModulerFields = (state, action) => {
+  const {
+    Cost,
+    TherapyArea__c,
+    Number_of_Sites__c,
+    Phase_P__c,
+    Patients_Enrolled__c,
+    Potential_Regions__c
+  } = action.payload.latestDetails;
+
+  return state.set(
+    'priceModeler',
+    fromJS({
+      cost: Cost,
+      therapeutic: TherapyArea__c,
+      sites: Number_of_Sites__c,
+      phase: Phase_P__c,
+      patients: Patients_Enrolled__c,
+      regions: Potential_Regions__c
+    })
+  );
+};
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
@@ -887,7 +1031,13 @@ const actionMap = {
     state.set('switchTempCallStatus', payload),
   [SWITCH_TEMP_IN_PROGRESS]: (state, { payload }) =>
     state.set('switchTempInProgress', payload),
-  [RESET_PROPOSALID]: resetProposalId
+  [RESET_PROPOSALID]: resetProposalId,
+  [QUESTION_LOCK_BY_USER]: updateQuestionLockByUser,
+  [QUESTION_UNLOCK_BY_USER]: updateQuestionUnlockByUser,
+  [QUESTION_LOCK_DETAILS_ALL]: questionLockDetails,
+  [SET_EVENT_LAUNCHER_FLAG]: (state, { payload }) =>
+    state.set('eventLauncherFlag', payload),
+  [SET_PRICE_MODELER_FIELDS]: setPriceModulerFields
 };
 
 export default function(

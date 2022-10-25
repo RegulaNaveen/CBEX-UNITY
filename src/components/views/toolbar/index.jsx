@@ -1,17 +1,16 @@
 // @flow
-import React, { useState, Component, createRef } from 'react';
+import React, { Component, createRef } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Avatar } from '@material-ui/core';
-import Search from 'apollo-react-icons/Search';
-import Bell from 'apollo-react-icons/Bell';
+import ArrowDown from 'apollo-react-icons/ArrowDown';
+import ArrowUp from 'apollo-react-icons/ArrowUp';
+
 import ToolbarMenu from './ToolbarMenu';
-import { DropMenu } from '../../svg';
 import { DASHBOARD, UBUILD } from '../../../routes';
-import { UBUILD_ENABLED } from '../../../constants/api';
 import { isUserUbuildAdmin } from '../../../utils/utils';
 import { getUserName, getUserRole } from '../../../SessionHandler';
 import { getRolesInfo } from '../../../redux/actions/proposal-actions';
@@ -20,8 +19,6 @@ import { getRoles } from '../../../redux/selectors';
 import WelcomeModal from '../modals/WelcomeModal';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import Notification from '../Notification/index';
-import ArrowDown from 'apollo-react-icons/ArrowDown';
-import ArrowUp from 'apollo-react-icons/ArrowUp';
 
 type State = { isCollapsed: boolean };
 class Toolbar extends Component<{}, State> {
@@ -92,15 +89,16 @@ class Toolbar extends Component<{}, State> {
     const results = isUserUbuildAdmin();
     const name = getUserName();
     return (
-      <div className='toolbar-wrapper'>
+      <div className="toolbar-wrapper">
         <Link to={DASHBOARD}>
-          <p className='toolbar-title'>IQVIA™</p>
-          <p className='toolbar-title'>Unity</p>
+          <p className="toolbar-title">IQVIA™</p>
+          <p className="toolbar-title">Unity</p>
         </Link>
         {results && (
           <div
             onClick={() => window.location.replace('/ubuild')}
-            style={{cursor: 'pointer'}}
+            aria-hidden="true"
+            style={{ cursor: 'pointer' }}
             className={
               (this.props &&
                 this.props?.location &&
@@ -109,7 +107,9 @@ class Toolbar extends Component<{}, State> {
                 : 'ubuild-link'
             }
           >
-            <div className='toolbar-space' ><p className='ubuild-title'>U-Build</p></div>
+            <div className="toolbar-space">
+              <p className="ubuild-title">U-Build</p>
+            </div>
             {/* <Link to={UBUILD} replace  className='toolbar-space'>
               <p className='ubuild-title'>U-Build</p>
             </Link> */}
@@ -117,22 +117,23 @@ class Toolbar extends Component<{}, State> {
         )}
         <Notification />
 
-        <div className='toolbar-account-spacer' style={{ flex: 0 }}>
-          <div ref={this.wrapperRef} className='toolbar-account-wrapper'>
+        <div className="toolbar-account-spacer" style={{ flex: 0 }}>
+          <div ref={this.wrapperRef} className="toolbar-account-wrapper">
             <div
               className={classnames(
                 'toolbar-account-info',
                 isCollapsed && 'expanded'
               )}
-              id='menu-title'
-              role='button'
+              id="menu-title"
+              role="button"
               onClick={this.handleCollapse}
               onKeyPress={this.handleKeyPress}
-              type='button'
+              type="button"
               tabIndex={-1}
             >
-              <Avatar src='' className='tb-profile-avatar'>
-                {name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0)}
+              <Avatar src="" className="tb-profile-avatar">
+                {name &&
+                  name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0)}
               </Avatar>
               {isCollapsed ? (
                 <ArrowUp style={{ color: '#fff', fontSize: 20 }} />
@@ -143,7 +144,7 @@ class Toolbar extends Component<{}, State> {
             </div>
             {isCollapsed ? (
               <ToolbarMenu
-                name='Profile'
+                name="Profile"
                 handleCollapse={this.handleCollapse}
               />
             ) : null}
@@ -153,7 +154,7 @@ class Toolbar extends Component<{}, State> {
           roleName === 'undefined' ||
           !this.isRoleInUbuild(rolesList || [], roleName)) && (
           <WelcomeModal
-            id='welcomemodal'
+            id="welcomemodal"
             roles={rolesList || []}
             onRoleChange={e => this.onRoleChange(e)}
           />

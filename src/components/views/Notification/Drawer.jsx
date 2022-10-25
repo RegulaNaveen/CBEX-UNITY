@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useHistory } from 'react-router-dom';
+import { RECENT_ACTIVITY } from '../../../routes';
 import { connect } from 'react-redux';
 import Bell from 'apollo-react-icons/Bell';
 import Cog from 'apollo-react-icons/Cog';
@@ -41,6 +43,11 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
     () => (unreadNotifications ? unreadNotifications.length : 0),
     [unreadNotifications]
   );
+
+  const history = useHistory();
+  const redirectAllNotifications = () => {
+    history.push(RECENT_ACTIVITY);
+  };
 
   return (
     <>
@@ -87,30 +94,36 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
                 </div>
               </div>
               {/* Notification List items */}
-              {notificationCount > 0 ? (
-                unreadNotifications.map(item => {
-                  return (
-                    <ListItem
-                      key={item.id}
-                      id={item.id}
-                      url={item.url}
-                      oppNo={item.opportunity_no}
-                      data={item.body}
-                      isSeen={item.read}
-                      createdAt={item.created_date}
-                    />
-                  );
-                })
-              ) : (
-                <NoNotification />
-              )}
-              {/* View All Notifications Button*/}
-              {/* <div>
+              <div className='notification-scrollbar' >
+                {notificationCount > 0 ? (
+                  unreadNotifications.map(item => {
+                    return (
+                      <ListItem
+                        key={item.id}
+                        id={item.id}
+                        url={item.url}
+                        oppNo={item.opportunity_no}
+                        data={item.body}
+                        isSeen={item.read}
+                        createdAt={item.created_date}
+                      />
+                    );
+                  })
+                ) : (
+                  <NoNotification />
+                )}
+                {/* View All Notifications Button*/}
+                {/* <div>
                 <Typography variant='body2' className='view-all-notifications'>
                   View All Notifications
                 </Typography>
               </div> */}
+              {notificationCount > 0 && (
+                <p className='view-All-notifications'
+                  onClick={() => {redirectAllNotifications()}}>View All Notifications</p>
+              )}
             </div>
+          </div>
           </ClickAwayListener>
         )}
       </div>

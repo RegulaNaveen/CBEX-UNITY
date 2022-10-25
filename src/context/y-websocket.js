@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 /*
 Unlike stated in the LICENSE file, it is not necessary to include the copyright notice and permission notice when you copy code from this file.
 */
@@ -9,18 +10,18 @@ Unlike stated in the LICENSE file, it is not necessary to include the copyright 
 /* eslint-env browser */
 
 import * as Y from 'yjs'; // eslint-disable-line
-import * as bc from 'lib0/broadcastchannel.js';
-import * as time from 'lib0/time.js';
-import * as encoding from 'lib0/encoding.js';
-import * as decoding from 'lib0/decoding.js';
-import * as syncProtocol from 'y-protocols/sync.js';
-import * as authProtocol from 'y-protocols/auth.js';
-import * as awarenessProtocol from 'y-protocols/awareness.js';
-import * as mutex from 'lib0/mutex.js';
-import { Observable } from 'lib0/observable.js';
-import * as math from 'lib0/math.js';
-import * as url from 'lib0/url.js';
-import { toBase64, fromBase64 } from 'lib0/buffer.js';
+import * as bc from 'lib0/broadcastchannel';
+import * as time from 'lib0/time';
+import * as encoding from 'lib0/encoding';
+import * as decoding from 'lib0/decoding';
+import * as syncProtocol from 'y-protocols/sync';
+import * as authProtocol from 'y-protocols/auth';
+import * as awarenessProtocol from 'y-protocols/awareness';
+import * as mutex from 'lib0/mutex';
+import { Observable } from 'lib0/observable';
+import * as math from 'lib0/math';
+import * as url from 'lib0/url';
+import { toBase64, fromBase64 } from 'lib0/buffer';
 
 const messageSync = 0;
 const messageQueryAwareness = 3;
@@ -30,8 +31,10 @@ const messageAuth = 2;
 const reconnectTimeoutBase = 1200;
 const maxReconnectTimeout = 2500;
 // @todo - this should depend on awareness.outdatedTime
-const messageReconnectTimeout = 30000;
+const messageReconnectTimeout = 480000;
+const refreshConnectionTimeout = 30000;
 
+let refreshInterval;
 /**
  * @param {WebsocketProvider} provider
  * @param {string} reason
@@ -121,6 +124,10 @@ const setupWS = provider => {
         const lastChar = event.data.charAt(event.data.length - 1);
 
         if (firstChar === '{' && lastChar === '}') return;
+        if (event.data === 'refresg=') {
+          console.log('refresh message received');
+          return;
+        }
         const encoder = readMessage(
           provider,
           new Uint8Array(fromBase64(event.data)),
@@ -135,6 +142,7 @@ const setupWS = provider => {
       }
     };
     websocket.onclose = () => {
+      clearInterval(refreshInterval);
       provider.ws = null;
       provider.wsconnecting = false;
       if (provider.wsconnected) {
@@ -171,6 +179,7 @@ const setupWS = provider => {
       );
     };
     websocket.onopen = () => {
+      setupRefresh(provider.ws);
       provider.wsLastMessageReceived = time.getUnixTime();
       provider.wsconnecting = false;
       provider.wsconnected = true;
@@ -212,10 +221,11 @@ const setupWS = provider => {
  * @param {ArrayBuffer} buf
  */
 const broadcastMessage = (provider, buf) => {
-  if (provider.wsconnected) {
+  if (provider.wsconnected && ![2, 3].includes(provider.ws.readyState)) {
     // @ts-ignore We know that wsconnected = true
     provider.ws.send(toBase64(buf));
   }
+
   if (provider.bcconnected) {
     provider.mux(() => {
       bc.publish(provider.bcChannel, buf);
@@ -396,6 +406,7 @@ export class WebsocketProvider extends Observable {
     this.disconnect();
     this.awareness.off('update', this._awarenessUpdateHandler);
     this.doc.off('update', this._updateHandler);
+    clearInterval(refreshInterval);
     super.destroy();
   }
 
@@ -468,3 +479,11 @@ export class WebsocketProvider extends Observable {
     }
   }
 }
+
+const setupRefresh = websocket => {
+  if (websocket) {
+    refreshInterval = setInterval(() => {
+      websocket.send(JSON.stringify({ action: 'REFRESH' }));
+    }, refreshConnectionTimeout);
+  }
+};

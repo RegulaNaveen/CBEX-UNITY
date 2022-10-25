@@ -1,14 +1,17 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 // @flow
 /* eslint-disable no-plusplus */
 import React from 'react';
 import { Map, List } from 'immutable';
 import { connect } from 'react-redux';
-import { isObject, isEqual, isEmpty, xor, isString, has } from 'lodash';
+import { isObject, isEqual, isEmpty, xor, has, isString } from 'lodash';
 import IconButton from 'apollo-react/components/IconButton';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import Grid from 'apollo-react/components/Grid';
 import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
+import Typography from 'apollo-react/components/Typography';
 import moment from 'moment';
 import classNames from 'classnames';
 
@@ -19,6 +22,7 @@ import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
 import Qvidianquestions from './qvidian';
 import SystemIntegrations from './SystemIntegrations/SystemIntegrations';
+import PriceModel from './PriceModel';
 import {
   setProposalAnswerData,
   setEditQuestionData,
@@ -46,6 +50,19 @@ import ANSWER_TYPES from '../../constants/answerTypes';
 import CustomApolloRichText from './CustomApolloRichText';
 import { DEFAULT } from '../../constants/app';
 import AutoCompleteWithAddOption from '../views/modals/AutoCompleteWithAddOption';
+import { SocketContext } from '../../context/SocketContext';
+import EventLauncher from '../screens/Opportunity/EventLauncher';
+import { parseStringifyJson } from '../../utils/helpers';
+import withIdleStateDetection from '../HOC/IdleStateDetector';
+
+const DropdownWithIdleStateDetection = withIdleStateDetection(Dropdown);
+const QuestionDatePickerWithIdleStateDetection = withIdleStateDetection(
+  QuestionDatePicker
+);
+const MultiSelectWithIdleStateDetection = withIdleStateDetection(Multiselect);
+const AutoCompleteWithAddOptionWithIdleStateDetection = withIdleStateDetection(
+  AutoCompleteWithAddOption
+);
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
 type State = {
@@ -55,6 +72,7 @@ type State = {
 };
 
 type Props = {
+  questionData: Map,
   questionId: string,
   proposalId: string,
   answers: Map,
@@ -85,9 +103,12 @@ type Props = {
   roleNames: Array<string>,
   isCustomQuestion: boolean,
   hasDifferentSFanswer: boolean,
-  isNotepadOpen: boolean
+  isNotepadOpen: boolean,
+  events: Object
 };
 export class TaskRow extends React.PureComponent<Props, State> {
+  static contextType = SocketContext;
+
   constructor(props: Object) {
     super(props);
 
@@ -128,7 +149,14 @@ export class TaskRow extends React.PureComponent<Props, State> {
       setAnswerLoading,
       deleteProposalUser
     } = this.props;
-    setProposalAnswer(proposalId, questionId, textValue, userData).then(() => {
+    console.log('set proposal answer');
+    setProposalAnswer(
+      this.context,
+      proposalId,
+      questionId,
+      textValue,
+      userData
+    ).then(() => {
       const [deletedVal] = xor(
         textValue?.trim() ? textValue?.trim().split(',') : [],
         lastValue?.trim() ? lastValue?.trim().split(',') : []
@@ -170,17 +198,27 @@ export class TaskRow extends React.PureComponent<Props, State> {
       if (
         s1.length !== s2.length ||
         s1.join(' ').trim() !== s2.join(' ').trim()
-      )
+      ) {
         setProposalAnswer(
+          this.context,
           proposalId,
           questionId,
           String(textValue).trim(),
           userData,
           editorData
         );
+      }
     } else if (!textValue.trim() && lastAnswer.trim()) {
-      setProposalAnswer(proposalId, questionId, ' ', userData, editorData);
+      setProposalAnswer(
+        this.context,
+        proposalId,
+        questionId,
+        ' ',
+        userData,
+        editorData
+      );
     }
+    this.context.questionUnlockWrapper(questionId);
 
     this.trackMatomoEventSubmitAnswer(textValue);
     this.setSelectRow(false);
@@ -197,10 +235,18 @@ export class TaskRow extends React.PureComponent<Props, State> {
     else this.setState({ changeIcon: '#00c221' });
 
     const editorText = text.trim() || ' ';
-    setProposalAnswer(proposalId, questionId, String(editorText), userData, {
-      value,
-      html
-    });
+
+    setProposalAnswer(
+      this.context,
+      proposalId,
+      questionId,
+      String(editorText),
+      userData,
+      {
+        value,
+        html
+      }
+    );
     this.trackMatomoEventSubmitAnswer(editorData.text);
     this.setSelectRow(false);
   };
@@ -223,6 +269,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       answerType === ANSWER_TYPES.PICKLIST_LOOKUP
     ) {
       setProposalAnswer(
+        this.context,
         proposalId,
         questionId,
         predictedAnswer.get('answer'),
@@ -230,6 +277,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       );
     } else {
       setProposalAnswer(
+        this.context,
         proposalId,
         questionId,
         String(predictedAnswer.get('answer')).trim(),
@@ -241,11 +289,17 @@ export class TaskRow extends React.PureComponent<Props, State> {
   onClickChange = (selectedValue: string, lastAnswer: string) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
 
-    if (lastAnswer !== selectedValue)
-      setProposalAnswer(proposalId, questionId, selectedValue, userData);
-
+    if (lastAnswer !== selectedValue) {
+      setProposalAnswer(
+        this.context,
+        proposalId,
+        questionId,
+        selectedValue,
+        userData
+      );
+    }
     this.trackMatomoEventSubmitAnswer(selectedValue);
-    this.setSelectRow(false);
+    // this.setSelectRow(false);
   };
 
   handleDayChange = (selectedDay: string, lastAnswer: Date) => {
@@ -257,7 +311,13 @@ export class TaskRow extends React.PureComponent<Props, State> {
           parseMomentDate(selectedDay.trim()) &&
         selectedDay
       )
-        setProposalAnswer(proposalId, questionId, selectedDay, userData);
+        setProposalAnswer(
+          this.context,
+          proposalId,
+          questionId,
+          selectedDay,
+          userData
+        );
     });
     this.trackMatomoEventSubmitAnswer(selectedDay);
   };
@@ -269,7 +329,13 @@ export class TaskRow extends React.PureComponent<Props, State> {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
 
     if (!isEqual(lastAnswer, selectedValues))
-      setProposalAnswer(proposalId, questionId, selectedValues, userData);
+      setProposalAnswer(
+        this.context,
+        proposalId,
+        questionId,
+        selectedValues,
+        userData
+      );
 
     this.trackMatomoEventSubmitAnswer(selectedValues);
   };
@@ -281,10 +347,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
   };
 
   onChildInputFocus = () => {
+    this.context.questionLockWrapper(this.props.questionId);
     this.setSelectRow(true);
   };
 
   setSelectRow = value => {
+    // call question unlock
     this.setState({ selectedRow: value });
   };
 
@@ -298,11 +366,14 @@ export class TaskRow extends React.PureComponent<Props, State> {
       questionHintJSON,
       sectionName,
       trackEvent,
-      questionId
+      questionId,
+      events
     } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
-      action: `Question: ${questionText} (${sectionName})`,
+      action: events
+        ? `Event: ${questionText} (${sectionName})`
+        : `Question: ${questionText} (${sectionName})`,
       name: `Answer: ${data}`,
       customDimensions: [
         {
@@ -317,6 +388,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
             questionId,
             proposalDetail
           })
+        },
+        {
+          events: events || []
         }
       ]
     });
@@ -354,10 +428,21 @@ export class TaskRow extends React.PureComponent<Props, State> {
     });
   };
 
+  trackMatomoEventLauncher = data => {
+    const { eventCategories, trackEvent } = this.props;
+    const { action, customDimensions } = data;
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action,
+      customDimensions
+    });
+  };
+
   resetDate = () => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
     this.setState({ selectedDay: ' ' }, () => {
       setProposalAnswer(
+        this.context,
         proposalId,
         questionId,
         this.state.selectedDay,
@@ -392,9 +477,14 @@ export class TaskRow extends React.PureComponent<Props, State> {
     let answerValue = '';
     let answerValueComplex;
     let finalOptions = options;
-    const checkDisableFlag = () =>
-      checkNonEditableFields(noneditableField, sfField, sfObject) ||
-      !isCurrentBid;
+    const checkDisableFlag = () => {
+      if (this.isQuestionLockedByOther()) return true;
+
+      return (
+        checkNonEditableFields(noneditableField, sfField, sfObject) ||
+        !isCurrentBid
+      );
+    };
 
     if (answer) {
       if (isObject(answer)) answerValueComplex = answer.toJS();
@@ -409,8 +499,16 @@ export class TaskRow extends React.PureComponent<Props, State> {
         >
           <Autocomplete
             sectionName={sectionName}
-            onFocus={() => this.setSelectRow(true)}
-            onBlur={() => this.setSelectRow(false)}
+            onFocus={() => {
+              // call question lock
+              this.context.questionLockWrapper(this.props.questionId);
+              this.setSelectRow(true);
+            }}
+            onBlur={() => {
+              this.context.questionUnlockWrapper(this.props.questionId);
+
+              this.setSelectRow(false);
+            }}
             onChange={this.handlePropsalChange}
             text={answerValue}
             disabled={checkDisableFlag()}
@@ -434,15 +532,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
     const getConvertedAnsString = str =>
       !String(str).trim() ? '' : String(str).trim();
 
-    // Function to parse stringify Json
-    function parseJson(str) {
-      try {
-        return JSON.parse(str);
-      } catch (e) {
-        return false;
-      }
-    }
-
     const lastAnswerJS = lastAnswer?.toJS();
     const formattedAnswer =
       has(lastAnswerJS, 'formattedAnswer') && lastAnswerJS.formattedAnswer;
@@ -450,7 +539,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     const parseFormattedData =
       !formattedAnswer || isObject(formattedAnswer)
         ? formattedAnswer
-        : parseJson(formattedAnswer);
+        : parseStringifyJson(formattedAnswer);
 
     const richTextData = parseFormattedData || {
       html: '',
@@ -459,6 +548,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
     // Richtext Props
     const richTextAnswerField = {
+      // questionId: this.props.questionId,
       richTextString: getConvertedAnsString(answerValue),
       richTextVal: richTextData.value,
       richTextHtml: richTextData.html,
@@ -488,6 +578,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         }
 
         if (!selectedRow) this.setSelectRow(true);
+        this.context.questionLockWrapper(this.props.questionId);
       },
       onBlur: data => {
         let saveDate = false;
@@ -498,7 +589,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
           !isEqual(richTextData.value, data.value) &&
           !isEmpty(data.text.trim())
         )
-          saveDate = true;
+          if (
+            isEmpty(richTextData.value?.blocks) &&
+            lastAnswerJS?.answer === data.value?.blocks[0]?.text
+          )
+            saveDate = false;
+          else saveDate = true;
         // save the data if we see any text difference.
         else if (
           previousAnsText !== data.text.trim() &&
@@ -509,17 +605,22 @@ export class TaskRow extends React.PureComponent<Props, State> {
         else if (previousAnsText !== '' && data.text.trim() === '')
           saveDate = true;
 
-        if (saveDate) this.handleRichTextChange(data);
+        if (saveDate) {
+          this.handleRichTextChange(data);
+        }
+        this.context.questionUnlockWrapper(this.props.questionId);
 
         this.setState({ enableRichtext: false });
 
-        // Change title style for richEdit icon
-        const {
-          style: quesTitleLStyle,
-          firstChild
-        } = this.quesTextInnerLeftRef.current;
-        quesTitleLStyle.minHeight = 'auto';
-        firstChild.style.maxWidth = 'none';
+        if (this.quesTextInnerLeftRef.current) {
+          // Change title style for richEdit icon
+          const {
+            style: quesTitleLStyle,
+            firstChild
+          } = this.quesTextInnerLeftRef.current;
+          quesTitleLStyle.minHeight = 'auto';
+          firstChild.style.maxWidth = 'none';
+        }
 
         this.setSelectRow(false);
       }
@@ -561,7 +662,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <Dropdown
+            <DropdownWithIdleStateDetection
               id="dd-proposal-answer"
               placeholder={checkDisableFlag() ? '' : 'Click to answer'}
               items={optionsYN}
@@ -569,6 +670,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
               value={answerValue}
               setSelectRow={this.setSelectRow}
               disabled={checkDisableFlag()}
+              questionId={this.props.questionId}
+              lockedBySelf={!!this.isQuestionLockedBySelf()}
+              lockQuestionOnFocus
             />
           </SFAnswerValidationWrapper>
         );
@@ -578,7 +682,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <Dropdown
+            <DropdownWithIdleStateDetection
               id="dd-proposal-answer"
               placeholder={checkDisableFlag() ? '' : 'Click to answer'}
               items={finalOptions}
@@ -586,6 +690,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
               value={answerValue}
               setSelectRow={this.setSelectRow}
               disabled={checkDisableFlag()}
+              questionId={this.props.questionId}
+              lockedBySelf={!!this.isQuestionLockedBySelf()}
+              lockQuestionOnFocus
             />
           </SFAnswerValidationWrapper>
         );
@@ -595,12 +702,18 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <QuestionDatePicker
+            <QuestionDatePickerWithIdleStateDetection
               value={answerValue}
               resetDate={this.resetDate}
               handleDayChange={this.handleDayChange}
-              onFocus={() => this.setSelectRow(true)}
-              onBlur={() => this.setSelectRow(false)}
+              onFocus={() => {
+                this.context.questionLockWrapper(this.props.questionId);
+                this.setSelectRow(true);
+              }}
+              onBlur={() => {
+                this.context.questionUnlockWrapper(this.props.questionId);
+                this.setSelectRow(false);
+              }}
               disabled={checkDisableFlag()}
             />
           </SFAnswerValidationWrapper>
@@ -611,13 +724,17 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <Multiselect
+            <MultiSelectWithIdleStateDetection
               placeholder={checkDisableFlag() ? '' : 'Click to answer'}
               items={finalOptions}
               onClick={this.onSelectValues}
               value={answerValueComplex}
               setSelectRow={this.setSelectRow}
               disabled={checkDisableFlag()}
+              questionId={this.props.questionId}
+              lastAnswer={lastAnswer}
+              lockedBySelf={!!this.isQuestionLockedBySelf()}
+              lockQuestionOnFocus
             />
           </SFAnswerValidationWrapper>
         );
@@ -628,15 +745,21 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <AutoCompleteWithAddOption
+            <AutoCompleteWithAddOptionWithIdleStateDetection
               // sectionName={sectionName}
               sfObject={sfObject}
               lov={finalOptions}
               sfField={sfField}
               multiple
               answer={answerValueComplex}
-              onFocus={() => this.setSelectRow(true)}
-              onBlur={() => this.setSelectRow(false)}
+              onFocus={() => {
+                this.context.questionLockWrapper(this.props.questionId);
+                this.setSelectRow(true);
+              }}
+              onBlur={() => {
+                this.context.questionUnlockWrapper(this.props.questionId);
+                this.setSelectRow(false);
+              }}
               disabled={checkDisableFlag()}
               onChange={this.handlePropsalChange}
             />
@@ -648,12 +771,19 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            <AutoCompleteWithAddOption
+            <AutoCompleteWithAddOptionWithIdleStateDetection
               sfObject={sfObject}
               lov={finalOptions}
               sfField={sfField}
-              onFocus={() => this.setSelectRow(true)}
-              onBlur={() => this.setSelectRow(false)}
+              onFocus={() => {
+                this.context.questionLockWrapper(this.props.questionId);
+                this.setSelectRow(true);
+              }}
+              onBlur={() => {
+                console.log('blur lookup');
+                this.context.questionUnlockWrapper(this.props.questionId);
+                this.setSelectRow(false);
+              }}
               onChange={this.handlePropsalChange}
               answer={answerValue || ''}
               multiple={false}
@@ -668,20 +798,19 @@ export class TaskRow extends React.PureComponent<Props, State> {
   };
 
   renderTags = (milestone, milestoneNew, ismilestoneavailable, lastAnswer) => {
+    const lastAns = isString(lastAnswer) ? lastAnswer : '';
     if (milestoneNew && !isEmpty(milestoneNew)) {
       return (
         <div className="chipview">
           {milestoneNew ? (
-            <ChipView label={milestoneNew} answer={lastAnswer} />
+            <ChipView label={milestoneNew} answer={lastAns} />
           ) : null}
         </div>
       );
     }
     return (
       <div className="chipview">
-        {milestone ? (
-          <ChipView label={String(milestone)} answer={lastAnswer} />
-        ) : null}
+        {milestone ? <ChipView label={milestone} answer={lastAns} /> : null}
       </div>
     );
   };
@@ -705,6 +834,26 @@ export class TaskRow extends React.PureComponent<Props, State> {
   resize() {
     this.setState({ screenWidth: window.innerWidth });
   }
+
+  isQuestionLocked = () => {
+    return (
+      this.props.questionLockInfo && this.props.questionLockInfo.get('userInfo')
+    );
+  };
+
+  isQuestionLockedBySelf = () => {
+    return (
+      this.isQuestionLocked() &&
+      this.props.userData.email === this.props.questionLockInfo.get('userInfo')
+    );
+  };
+
+  isQuestionLockedByOther = () => {
+    return (
+      this.isQuestionLocked() &&
+      this.props.userData.email !== this.props.questionLockInfo.get('userInfo')
+    );
+  };
 
   render() {
     const {
@@ -735,7 +884,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
       selectedBid,
       proposalInfo,
       isNotepadOpen,
-      questionId
+      questionId,
+      events,
+      questionData,
+      proposalDetail,
+      eventCategories
     } = this.props;
     const questionID = answers.get('questionId');
     const qvicon = questionId;
@@ -745,6 +898,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     let integrationmatch;
     let checkSfAnswer;
     let integrationvalidation;
+    let priceModelerIntegration;
     const sficon = sfField;
     let qvidIntegration = false;
     const currentBidID = selectedBid.toJS().id;
@@ -773,9 +927,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
       integrationvalidation = true;
     }
     integrationvalidation = has(Qvidianquestions[0], qvicon);
-    if (qvidianIntegration && qvidianIntegration === 'Qvidian') {
+    if (qvidianIntegration) {
       qvidIntegration = true;
     }
+    priceModelerIntegration = has(PriceModel[0], qvicon);
     dateIsAfter
       ? (integrationmatch = qvidIntegration)
       : (integrationmatch = has(Qvidianquestions[0], qvicon)
@@ -851,9 +1006,17 @@ export class TaskRow extends React.PureComponent<Props, State> {
                   </div>
                 </div>
 
+                {/* Event Launcher Component */}
+                <EventLauncher
+                  questionData={questionData}
+                  proposalDetail={proposalDetail}
+                  eventCategories={eventCategories}
+                  trackMatomoEventLauncher={this.trackMatomoEventLauncher}
+                />
+
                 {/* Edit Question Icon */}
-                <div className="question-edit">
-                  {isCustomQuestion && isCurrentBid && (
+                {isCustomQuestion && isCurrentBid && (
+                  <div className="question-edit">
                     <span
                       aria-hidden="true"
                       onClick={() => {
@@ -872,14 +1035,15 @@ export class TaskRow extends React.PureComponent<Props, State> {
                     >
                       <Edit className="edit-icon" />
                     </span>
-                  )}
-                </div>
+                  </div>
+                )}
 
                 {/* Question Hint */}
-                <div className="question-hint">
-                  {questionHint ? (
+                {questionHint && (
+                  <div className="question-hint">
                     <Tooltip
                       variant="light"
+                      tabIndex={-1}
                       title={
                         questionHintJSON ? (
                           <RichTextEditor
@@ -901,10 +1065,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
                         <InfoIcon style={{ fontSize: '16px' }} />
                       </IconButton>
                     </Tooltip>
-                  ) : (
-                    <></>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
 
               {/* Milestone Chip */}
@@ -917,6 +1079,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 )}
               </div>
             </div>
+            {this.isQuestionLockedByOther() ? (
+              <Typography variant="subtitle1" className="status-txt">
+                {this.props.questionLockInfo.get('userName')} is typing...
+              </Typography>
+            ) : null}
           </Grid>
           <Grid item xs={gridColRatio[1]} className="empty-grid-item">
             <></>
@@ -944,6 +1111,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             gridColRatio={gridColRatio}
             integrationmatch={integrationmatch}
             integrationvalidation={integrationvalidation}
+            priceModelerIntegration={priceModelerIntegration}
             answeronhistory={this.displayAnswerOnHistory}
             answerdate={answerDate}
             isAnswerPredicted={isAnswerPredicted}
@@ -960,6 +1128,18 @@ export class TaskRow extends React.PureComponent<Props, State> {
             handleVerifyPredictedAnsClick={this.handleVerifyPredictedAnsClick}
             hasDifferentSFanswer={hasDifferentSFanswer}
           />
+          {/* Question Lock Info */}
+          {/* {this.props.questionLockInfo &&
+          this.props.questionLockInfo.get('userName') &&
+          this.props.userData.email !==
+            this.props.questionLockInfo.get('userInfo') ? (
+            <div>
+              {this.props.questionLockInfo.get('userName')} is typing...
+            </div>
+          ) : (
+            ''
+          )}
+           */}
         </Grid>
       </div>
     );
