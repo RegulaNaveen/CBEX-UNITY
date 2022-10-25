@@ -365,8 +365,8 @@ deploystack:
     - if: '$DeployStack == "True"' #this flag drives whether to deploy the infrastructure stack
       when: always
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-  dependencies:
-    - l4
+  #dependencies:
+    #- l4
   script:
     - source build.env
     - aws cloudformation validate-template --template-body file://devops/cloudformation/cbex-unity-frontend-cf.yml --region $Region
