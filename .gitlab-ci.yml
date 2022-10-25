@@ -2,7 +2,7 @@ workflow:
   rules:
     - if: '$CI_PIPELINE_SOURCE != "merge_request_event"' # Disable pipeline for Merge requests
 
-#include:
+include:
   - local: devops/vars/global.yml
   - project: 'CBEx/devops'
     ref: test
