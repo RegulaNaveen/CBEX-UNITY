@@ -110,11 +110,15 @@ const EventLauncher = ({
    * Generate Event Url Function
    */
   const generateEventUrl = (startDate, endDate, body, subject, email) => {
-    const updatedbody = updateEventSubjectBody(body, proposalDetail);
-    const updatedsubject = updateEventSubjectBody(subject, proposalDetail);
-    
-    const bodyStr = encodeURIComponent(updatedbody);
-    const subjectStr = encodeURIComponent(updatedsubject);
+    const updatedBody = updateEventSubjectBody(body, proposalDetail);
+    const updatedSubject = updateEventSubjectBody(subject, proposalDetail);
+
+    const bodyStr = encodeURIComponent(
+      updatedBody.replace(new RegExp('\\n', 'g'), '<br />')
+    );
+    const subjectStr = encodeURIComponent(
+      updatedSubject.replace(new RegExp('\\n', 'g'), '<br />')
+    );
     return `https://outlook.office.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose%20&rru=addevent&startdt=${startDate}&enddt=${endDate}&body=${bodyStr}&.&subject=${subjectStr}&to=${email}&online=1`;
   };
 
@@ -205,7 +209,7 @@ const EventLauncher = ({
         }
       >
         {attendees.map(item => (
-          <Radio value={item} label={item} />
+          <Radio value={item} key={item} label={item} />
         ))}
       </RadioGroup>
     </CustomModal>
