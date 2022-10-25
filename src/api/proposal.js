@@ -53,6 +53,29 @@ export const getProposalAnswer = async (
   });
 };
 
+export const setNotApplicableQuestionApi = async (
+  proposalId: string,
+  questionId: string,
+  status: Boolean
+): Promise<Object> => {
+  const payload = { status };
+
+  return axiosInstance
+    .put(
+      `${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}/notapplicable`,
+      payload,
+      {
+        headers: {
+          'x-api-key': `${API_KEY}`,
+          'x-access-token': `${getAccessToken()}`
+        }
+      }
+    )
+    .then(res => {
+      return res;
+    });
+};
+
 export const setProposalAnswer = async (
   proposalId: string,
   questionId: string,
@@ -261,6 +284,22 @@ export const getProposalCount = async (id: string): Promise<Object> => {
       });
   });
 };
+
+export const getAllProposals = async (id: string): Promise<Object> => {
+  return new Promise((resolve, reject) => {
+    axiosInstance
+      .get(`${PROPOSAL_API_URL}/opportunity/all/${id}`, {
+        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};
+
 export const getPaginateProposal = async (urls): Promise<Object> => {
   return new Promise((resolve, reject) => {
     Promise.all(urls)

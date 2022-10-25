@@ -2,6 +2,7 @@
 import { isEmpty, cloneDeep, uniqBy } from 'lodash';
 import { fromJS } from 'immutable';
 import axios from 'axios';
+import { INITIAL_LIST_VAL } from '../../components/common/PriceModeler';
 
 import { REDUX_TYPES, API } from '../../constants';
 import type { Dispatch, ThunkAction } from './action-types';
@@ -26,13 +27,16 @@ import {
   changeProposalOT,
   deleteProposalUser,
   getProposalAnswer,
-  priceModelerApi
+  priceModelerApi,
+  setNotApplicableQuestionApi,
+  getAllProposals
 } from '../../api/proposal';
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
-import { getUniqueMilestones } from '../selectors/proposal';
+import { getUniqueMilestones, getBidList } from '../selectors/proposal';
 import { getProposalIdlist } from '../../utils/utils';
 import { fetchNotes } from './notepad-actions';
 import { DEFAULT } from '../../constants/app';
+import isPriceModelerQuestion from '../../utils/isPriceModelerQuestion';
 
 const { PROPOSAL_API_URL } = API.PROPOSAL;
 const {
@@ -84,7 +88,12 @@ const {
   QUESTION_LOCK_BY_USER,
   QUESTION_UNLOCK_BY_USER,
   QUESTION_LOCK_DETAILS_ALL,
-  SET_EVENT_LAUNCHER_FLAG
+  SET_EVENT_LAUNCHER_FLAG,
+  SHOW_NA_CHECKBOX,
+  UPDATE_NOT_APPLICABLE_PROGRESS,
+  UPDATE_NOT_APPLICABLE_DONE,
+  SET_PRICE_MODELER_FIELDS,
+  ERROR_UPDATE_NOT_APPLICABLE
 } = REDUX_TYPES.PROPOSAL;
 
 /**
@@ -135,19 +144,66 @@ export const getProposalByID = (id: string): ThunkAction<string, Object> => {
   };
 };
 
+export function setNotApplicableQuestion(
+  proposalId,
+  questionId,
+  questionStatus
+) {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: UPDATE_NOT_APPLICABLE_PROGRESS,
+        payload: { questionId, loading: true }
+      });
+
+      const { data } = await setNotApplicableQuestionApi(
+        proposalId,
+        questionId,
+        questionStatus
+      );
+
+      dispatch({
+        type: UPDATE_NOT_APPLICABLE_DONE,
+        payload: { data: data.data, questionId, questionStatus }
+      });
+    } catch (err) {
+      dispatch({
+        type: ERROR_UPDATE_NOT_APPLICABLE,
+        payload: { questionId, loading: false }
+      });
+    }
+  };
+}
+
+/**
+ * Get Price Modeler Data
+ */
+export const getPriceModelerData = proposalId => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    try {
+      const response = await priceModelerApi(proposalId);
+      dispatch({ type: SET_PRICE_MODELER_FIELDS, payload: response.data });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
 export const setProposalAnswerData = (
   socketContext,
   proposalId: string,
   questionId: string,
   answer: string,
   userData: Object,
-  editorData: any
+  editorData: any,
+  isUpdatingNa: Boolean
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
-    dispatch({
-      type: PROPOSAL_ANSWER_LOADING,
-      payload: { questionId, loading: true }
-    });
+    if (!isUpdatingNa) {
+      dispatch({
+        type: PROPOSAL_ANSWER_LOADING,
+        payload: { questionId, loading: true }
+      });
+    }
     const questionsFilter = getQuestionsFilters(getState());
 
     try {
@@ -158,6 +214,11 @@ export const setProposalAnswerData = (
         userData,
         editorData
       );
+      // Check is price modeler question
+      const allQuestions = selectProposalQuestions(getState());
+      if (isPriceModelerQuestion(questionId, allQuestions)) {
+        await getPriceModelerData(proposalId)(dispatch);
+      }
       await socketContext.questionAnswerUpdateWrapper(questionId, data);
       dispatch({
         type: PROPOSAL_ANSWER,
@@ -533,6 +594,10 @@ function applyInterestedPartyFilter(questions) {
   return filteredQuestions;
 }
 
+function applyShowInactiveQuestionsFilter(questions) {
+  return questions;
+}
+
 function applyMilestoneFilter(questions, milestone) {
   let filteredQuestions = cloneDeep(questions);
   if (milestone) {
@@ -684,6 +749,14 @@ export function onQuestionsFilterApplied(questionsFilter) {
               applyInterestedPartyFilter
             );
             break;
+          case 'showInactiveQuestions':
+            withinGroupFilteredQuestions = filterGroup(
+              withinGroupFilteredQuestions,
+              filteredQuestions,
+              logic,
+              applyShowInactiveQuestionsFilter
+            );
+            break;
           default:
             withinGroupFilteredQuestions = filterGroup(
               withinGroupFilteredQuestions,
@@ -814,45 +887,79 @@ export const closeNewbidflags = (): ThunkAction<string, Object> => {
 
 export const getOpportunity = (
   id: string,
+  bidNumber,
   flag = false
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
+    const bidNo = parseInt(bidNumber);
     dispatch({ type: PROPOSAL_INFO_LOADING, payload: {} });
+    let selectedProposalId;
+
     try {
-      const getproposolcount = await getProposalCount(id);
-      const { count, maxLimit } = getproposolcount;
-      let callstomake = parseInt(count / maxLimit);
-      let additionalcallstomake = count % maxLimit;
+      const allProposals = await getAllProposals(id);
+
+      const proposal = allProposals.find(
+        thisProposal => thisProposal.proposal.proposalDetails.bidNo === bidNo
+      );
+      const isCurrentProposal = allProposals.find(
+        thisProposal => thisProposal.isCurrent === true
+      );
+
+      if (proposal) selectedProposalId = proposal.proposal.proposalId;
+
+      const proposalCount = allProposals.length;
+      const maxLimit = 500;
+
+      let callstomake = parseInt(proposalCount / maxLimit);
+      let additionalcallstomake = proposalCount % maxLimit;
       if (additionalcallstomake) {
         callstomake = callstomake + 1;
       }
       let from = 0;
       let urls = [];
-      for (let index = 0; index < callstomake; index++) {
-        urls.push(
-          axios.get(`${PROPOSAL_API_URL}/opportunity/${id}?from=${from}`)
-        );
-        from = from + maxLimit;
+      let proposalsData = [];
+      for (let index = 0; index < proposalCount; index += 1) {
+        let trueOrFalse;
+
+        if (selectedProposalId) {
+          // user on previous bid
+          if (allProposals[index].proposal.proposalId === selectedProposalId) {
+            urls.push(
+              axios.get(
+                `${PROPOSAL_API_URL}/${allProposals[index].proposal.proposalId}`
+              )
+            );
+          } else {
+            proposalsData.push(allProposals[index]);
+          }
+        } else {
+          // user on current bid
+          if (allProposals[index].isCurrent) {
+            urls.push(
+              axios.get(
+                `${PROPOSAL_API_URL}/${allProposals[index].proposal.proposalId}`
+              )
+            );
+          } else {
+            proposalsData.push(allProposals[index]);
+          }
+        }
       }
       let data = await getPaginateProposal(urls);
       data = data.map(v => v['data']).flat();
-      // fetch notes for current bid
-      // for (let proposal of data) {
-      //   if (proposal.isCurrent) {
-      //     // fetchNotes(proposal.proposal.proposalId);
-      //     dispatch(fetchNotes(proposal.proposal.proposalId));
-      //     break;
-      //   }
-      // }
-      dispatch({ type: OPPORTUNITY_INFO, payload: data });
+      data[0].isCurrent =
+        isCurrentProposal.proposal.proposalId === data[0].proposal.proposalId;
+      proposalsData.push(data[0]);
+      dispatch({ type: OPPORTUNITY_INFO, payload: proposalsData });
       dispatch({
         type: UPDATE_BOX_BIDS,
-        payload: getProposalIdlist(data)
+        payload: getProposalIdlist(proposalsData)
       });
       if (flag) {
         dispatch({ type: NEW_BID_CREATED, payload: { flag } });
       }
     } catch (err) {
+      console.log('error occurred ', err);
       dispatch({ type: PROPOSAL_INFO_ERROR, payload: err });
       dispatch({ type: NEW_BID_CREATED, payload: { flag: false } });
     }
@@ -867,12 +974,15 @@ export const changeBid = bid => {
   if (bid?.bidNo) {
     updateBidNoQueryparam(bid?.bidNo);
   }
-  return dispatch => {
+  return async dispatch => {
+    const response = await axios.get(`${PROPOSAL_API_URL}/${bid.bidId}`);
     dispatch({
       type: CHANGE_BID,
-      payload: bid
+      payload: {
+        proposalDetails: { ...response.data, isCurrent: bid.isCurrent },
+        bid
+      }
     });
-    // dispatch(fetchNotes(bid.bidId));
   };
 };
 
@@ -1055,29 +1165,21 @@ export const getProposalAnswerHistory = (
 };
 
 /**
- * Get Price Modeler Data
- */
-export const getPriceModelerData = proposalId => async () => {
-  try {
-    // Api Response
-    const response = await priceModelerApi(proposalId);
-    console.log('Price Modeler Api Response', response.data);
-    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
-  } catch (error) {
-    // Error
-    console.log(error?.response);
-    const msg = getErrorMessage(error);
-    return { status: false, title: DEFAULT.ALERT, msg };
-  }
-};
-
-/**
  * Set Flag for Event Launcher
  */
 export const setEventLauncherFlag = val => {
   return dispatch => {
     dispatch({
       type: SET_EVENT_LAUNCHER_FLAG,
+      payload: val
+    });
+  };
+};
+
+export const setShowNaCheckbox = val => {
+  return dispatch => {
+    dispatch({
+      type: SHOW_NA_CHECKBOX,
       payload: val
     });
   };

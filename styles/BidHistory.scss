@@ -12,8 +12,14 @@
     padding-top: 20px;
     padding-bottom: 20px;
 
+    .bid-history-pricemodeler-content{
+      flex: 30%;
+      border-left: 1px solid #dfdfdf;
+      position: relative;
+    }
+
     .bid-history-left-content {
-      flex: 50%;
+      flex: 30%;
       border-right: 1px solid #dfdfdf;
       position: relative;
 
@@ -121,8 +127,9 @@
       }
     }
     .bid-history-right-content {
-      flex: 50%;
+      flex: 40%;
       padding-left: 15px;
+      padding-right: 15px;
 
       .review-title {
         // color: #f2f2f2;

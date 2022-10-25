@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import { EditorState } from 'draft-js';
@@ -59,6 +59,7 @@ const CustomApolloRichText = ({
   const richTextEditorRef = useRef(null);
   const richTextKey = useRef(uuid());
   const [unlockTimeout, setUnlockTimeout] = useState(null);
+  const [isFocused, setIsFocused] = useState(false);
 
   /**
    * Function to Add Delay for Specific Seconds
@@ -78,8 +79,10 @@ const CustomApolloRichText = ({
       setUnlockTimeout(null);
     } else {
       const timer = setTimeout(() => {
-        setIsRichTextEditable(false);
-        if (onBlur) onBlur(richTextData);
+        if (richTextEditorRef.current && richTextEditorRef.current.editorRef.current) {
+          richTextEditorRef.current.editorRef.current.blur();
+        }
+        blur();
       }, QUESTION_UNLOCK_TIMEOUT);
       setUnlockTimeout(timer);
     }
@@ -95,8 +98,7 @@ const CustomApolloRichText = ({
     initialElementH = 'auto'
   ) => {
     await timeout(0);
-    const { scrollHeight, style: refStyle } = elementRef.current;
-
+    const { scrollHeight, style: refStyle } = elementRef;
     refStyle.height = initialElementH;
     const refHeight = scrollHeight > elementH ? scrollH : scrollHeight;
     // refStyle.height = `${refHeight + 0.4}px`;
@@ -107,14 +109,20 @@ const CustomApolloRichText = ({
    * Update on external changes
    */
   useEffect(() => {
-    setRichTextData(INITIAL_DATA);
     // Restrict Richtext height upto 5 lines
-    if (INITIAL_DATA.text) {
-      setRefElementStyle(richTextContainerRef, 125, 120, '5px');
-    } else {
-      const { style: refStyle } = richTextContainerRef.current;
-      refStyle.height = 'auto';
-    }
+    setTimeout(() => {
+      console.log(richTextEditorRef.current.editorRef.current.editorContainer)
+      if (richTextEditorRef.current && richTextEditorRef.current.editorRef.current.editorContainer) {
+        if (richTextData.text) {
+           setRefElementStyle(richTextEditorRef.current.editorRef.current.editorContainer, 125, 120, '5px');
+        } else {
+          const { style: refStyle } = richTextEditorRef.current.editorRef.current.editorContainer;
+          refStyle.height = 'auto';
+        }
+      }
+    }, 100);
+
+    setRichTextData(INITIAL_DATA);
   }, [INITIAL_DATA]);
 
   useUpdateEffect(() => {
@@ -151,14 +159,6 @@ const CustomApolloRichText = ({
    * onClick Edit button handler
    */
   const onClickHTML = () => {
-    if (richTextEditorRef.current) {
-      const { editorState } = richTextEditorRef.current.state;
-      richTextEditorRef.current.setState({
-        editorState: EditorState.moveFocusToEnd(editorState)
-      });
-      richTextContainerRef.current.scrollTop =
-        richTextContainerRef.current.scrollHeight;
-    }
     setIsRichTextEditable(true);
     if (enableFocus) {
       setFocusOnEditor();
@@ -179,14 +179,17 @@ const CustomApolloRichText = ({
     const resultObj = { text, value, html };
     setRichTextData(resultObj);
 
-    // Restrict Richtext height upto 10 lines
-    const {
-      clientHeight,
-      scrollHeight,
-      style: refStyle
-    } = richTextContainerRef.current;
-    if (scrollHeight < 230) refStyle.height = 'auto';
-    if (clientHeight <= 230) setRefElementStyle(richTextContainerRef, 230, 230);
+    if (richTextEditorRef.current && richTextEditorRef.current.editorRef.current.editorContainer) {
+      // Restrict Richtext height upto 10 lines
+      const {
+        clientHeight,
+        scrollHeight,
+        style: refStyle
+      } = richTextEditorRef.current.editorRef.current.editorContainer;
+
+      if (scrollHeight < 230) refStyle.height = 'auto';
+      if (clientHeight <= 230) setRefElementStyle(richTextEditorRef.current.editorRef.current.editorContainer, 230, 230);
+    }
 
     if (onChange) onChange(resultObj); // onChange callback func
 
@@ -202,16 +205,16 @@ const CustomApolloRichText = ({
       !richTextContainerRef.current.contains(e.target) &&
       isEmpty(e.target.closest('.MuiPopover-root')) &&
       isEmpty(e.target.closest('.MuiDialog-root')) &&
-      isRichTextEditable
+      isFocused
     ) {
-      setIsRichTextEditable(false);
-      if (onBlur) onBlur(richTextData);
-      resetUnlockTimer(true);
+      blur();
     }
   };
 
   const blur = () => {
+    setIsFocused(false);
     if (onBlur) onBlur(richTextData);
+    resetUnlockTimer(true);
   };
 
   /**
@@ -223,17 +226,28 @@ const CustomApolloRichText = ({
   });
 
   const handleKeyDown = e => {
-    if (richTextContainerRef.current.contains(e.target)) {
+    if (richTextContainerRef.current.contains(e.target) && isFocused) {
       if ((e.shiftKey && e.key === 'Tab') || e.key === 'Tab') {
         blur();
-        if (isRichTextEditable) {
-          setTimeout(() => {
-            setIsRichTextEditable(false);
-          }, 0);
-        }
       }
     }
   };
+
+  const handleFocus = useCallback(() => {
+    if (enableFocus) {
+      setIsFocused(true);
+      resetUnlockTimer();
+    }
+    onFocus();
+  }, []);
+
+  const handleBlur = () => {
+    setTimeout(() => {
+      if (richTextContainerRef.current.querySelector('.MuiFormControl-root') === null && isFocused) {
+        blur();
+      }
+    }, 300);
+  }
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
@@ -244,36 +258,31 @@ const CustomApolloRichText = ({
   return (
     <div
       className={classNames('custom-rich-text', {
-        readonly: !isRichTextEditable,
-        popover: isRichTextEditable,
+        readonly: disabled,
+        popover: !disabled,
         disabled,
         [className]: !!className
       })}
     >
       <div
         className={classNames('custom-rich-text-inner', {
-          'popover-inner': isRichTextEditable,
-          error: !!error
+          'popover-inner': !disabled,
+          error: !!error,
+          'focused': isFocused
         })}
         ref={richTextContainerRef}
-        aria-hidden="true"
-        onClick={() => {
-          if (!isRichTextEditable && !disabled) onClickHTML();
-        }}
-        tabIndex={!isRichTextEditable && !disabled ? 0 : -1}
-        onFocus={() => {
-          if (!isRichTextEditable && !disabled) onClickHTML();
-        }}
       >
         <RichTextEditor
           placeholder={placeholder || ''}
           spellCheck={false}
-          variant={isRichTextEditable ? 'popover' : 'view'}
+          variant={!disabled ? 'popover' : 'view'}
           defaultValue={richTextData.value}
           onChange={onChangeHandler}
-          tabIndex={!isRichTextEditable && !disabled ? 0 : -1}
+          tabIndex={!disabled ? 0 : -1}
           ref={richTextEditorRef}
           key={richTextKey.current}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
         />
       </div>
     </div>

@@ -38,6 +38,7 @@ const GenerateDocs = () => {
     unanswered: false,
     myRole: false,
     includesNotes: true,
+    includesNa: false,
     milestones: [defaultOption],
     interestedParties: defaultOption,
     fileName: 'Unity Export',

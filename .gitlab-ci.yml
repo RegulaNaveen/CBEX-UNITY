@@ -82,6 +82,7 @@ stages:
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
   tags:
     - docker
+
 dev2:
   stage: builddev2
   image: node:14
@@ -191,6 +192,7 @@ deployl4:
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
   tags:
     - docker
+
 .demo:
   stage: builddemo
   image: node:14
@@ -233,7 +235,7 @@ deployl4:
   tags:
     - docker
 
-qa:
+.qa:
   stage: buildqa
   image: node:14
   needs:
@@ -256,7 +258,7 @@ qa:
   tags:
     - docker
 
-deployqa:
+.deployqa:
   stage: deployqa
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
@@ -271,7 +273,7 @@ deployqa:
   tags:
     - docker
 
-uat:
+.uat:
   stage: builduat
   image: node:14
   variables:
@@ -295,7 +297,7 @@ uat:
   tags:
     - docker
 
-deployuat:
+.deployuat:
   stage: deployuat
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:

@@ -86,6 +86,29 @@
     .public-DraftStyleDefault-block {
       margin: 2px 0px;
     }
+    .fade-area {
+      opacity: 0.1;
+      animation: cssAnimation 0s ease-in 1.5s forwards;
+      transition: opacity 0.25s;
+      transition: opacity 1.5s ease-in-out;
+    }
+
+    @keyframes cssAnimation {
+      to {
+        visibility: hidden;
+        display: none;
+        opacity: 0;
+        overflow: hidden;
+      }
+    }
+
+    @-webkit-keyframes cssAnimation {
+      to {
+        opacity: 0;
+        visibility: hidden;
+        display: none;
+      }
+    }
   }
 }
 
@@ -177,6 +200,29 @@
     }
     .public-DraftStyleDefault-block {
       margin: 2px 0px;
+    }
+  }
+  .fade-area {
+    opacity: 0.1;
+    animation: cssAnimation 0s ease-in 1.5s forwards;
+    transition: opacity 0.25s;
+    transition: opacity 1.5s ease-in-out;
+  }
+
+  @keyframes cssAnimation {
+    to {
+      visibility: hidden;
+      display: none;
+      opacity: 0;
+      overflow: hidden;
+    }
+  }
+
+  @-webkit-keyframes cssAnimation {
+    to {
+      opacity: 0;
+      visibility: hidden;
+      display: none;
     }
   }
 }
@@ -353,6 +399,29 @@
         z-index: 1;
         position: relative;
       }
+    }
+  }
+  .fade-area {
+    opacity: 0.1;
+    animation: cssAnimation 0s ease-in 1.5s forwards;
+    transition: opacity 0.25s;
+    transition: opacity 1.5s ease-in-out;
+  }
+
+  @keyframes cssAnimation {
+    to {
+      visibility: hidden;
+      display: none;
+      opacity: 0;
+      overflow: hidden;
+    }
+  }
+
+  @-webkit-keyframes cssAnimation {
+    to {
+      opacity: 0;
+      visibility: hidden;
+      display: none;
     }
   }
 }

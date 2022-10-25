@@ -27,6 +27,8 @@ const SystemIntegrations = ({
   isAnswered,
   lastAnswer,
   loading,
+  NaLoading,
+  showNaCheckbox,
   changeIcon,
   isCurrentBid,
   sfObject,
@@ -452,7 +454,7 @@ const SystemIntegrations = ({
           {CalendarCondition()}
         </div>
         <div style={{ display: 'flex', height: '20px', width: '24px' }}>
-          {loading ? (
+          {loading && !NaLoading && !showNaCheckbox ? (
             <span
               style={{
                 marginLeft: '0px',

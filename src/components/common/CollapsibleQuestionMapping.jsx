@@ -1,4 +1,6 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { selectIsQuestionsFilterEnabled } from '../../redux/selectors';
 import Question from './Question';
 
 const CollapsibleQuestionMapping = ({
@@ -8,11 +10,14 @@ const CollapsibleQuestionMapping = ({
   setQuestionToDisplayHistory,
   isNotepadOpen
 }) => {
+  const isQuestionsFiltersEnabled = useSelector(selectIsQuestionsFilterEnabled);
   return questions.valueSeq().map(questionConfig => {
-    const visible =
+    let visible =
       questionConfig.get('visible', true) &&
       (questionConfig.get('active', true) ||
-        questionConfig.get('isCustomQuestion', true));
+        questionConfig.get('isCustomQuestion', true)) &&
+      (!questionConfig.get('notapplicable') || isQuestionsFiltersEnabled);
+
     return (
       (visible || typeof visible === 'undefined') && (
         <Question
@@ -36,6 +41,7 @@ const CollapsibleQuestionMapping = ({
           sectionName={title}
           setQuestionToDisplayHistory={setQuestionToDisplayHistory}
           loading={questionConfig.get('loading', false)}
+          NaLoading={questionConfig.get('NaLoading', false)}
           questionHint={questionConfig.get('questionHint', '')}
           questionHintHTML={questionConfig.get('questionHintHTML', '')}
           questionHintJSON={questionConfig.get('questionHintJSON')}
@@ -45,6 +51,7 @@ const CollapsibleQuestionMapping = ({
           hasDifferentSFanswer={questionConfig.get('hasDifferentSFanswer')}
           isNotepadOpen={isNotepadOpen}
           events={questionConfig.get('events') || {}}
+          isNotApplicable={questionConfig.get('notapplicable')}
         />
       )
     );

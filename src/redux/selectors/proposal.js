@@ -345,3 +345,7 @@ export const getIsQuestionAnswered = createSelector(
  
 export const getLookUpOptionsSelector = (proposals: Map): Object =>
   proposals.get('lookUpOptions')
+
+export const getPriceModuler = createSelector(selectProposal, proposal =>
+  proposal?.get('priceModeler')
+);
