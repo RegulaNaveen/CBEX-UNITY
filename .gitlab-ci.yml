@@ -247,7 +247,7 @@ qa:
   stage: buildqa
   image: node:14
   needs:
-    - deploydev2
+    - deploydev
   when: manual
   variables:
     Environment: $CI_JOB_NAME
@@ -286,8 +286,8 @@ uat:
   image: node:14
   variables:
     Environment: $CI_JOB_NAME
-  #needs:
-  #- deployqa
+  needs:
+  - deployqa
   when: manual
   only:
     - tags
@@ -310,7 +310,7 @@ deployuat:
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
     - uat
-  #when: manual
+  when: manual
   only:
     - tags
   script:
