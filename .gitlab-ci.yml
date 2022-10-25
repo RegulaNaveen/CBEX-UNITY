@@ -2,32 +2,31 @@ workflow:
   rules:
     - if: '$CI_PIPELINE_SOURCE != "merge_request_event"' # Disable pipeline for Merge requests
 
-include:
-  - local: devops/vars/global.yml
-  - project: 'CBEx/devops'
-    ref: test
-    file: /gitlab_balckduck_scan.yml
+#include:
+  #- local: devops/vars/global.yml
+  #- project: 'CBEx/devops'
+    #ref: test
+    #file: /gitlab_balckduck_scan.yml
 
 stages:
-  - blackduckscan
-  - sonar #sonar report
-  #- builddev
-  #- deploydev
+  #- sonar #sonar report
+  # - builddev
+  # - deploydev
   - builddev2
-  - deploystack
   - deploydev2
-  #- buildqa
-  #- deployqa
-  #- builddemo
-  #- deploydemo
-  #- builduat
-  #- deployuat
-  #- buildprod
-  #- deployprod
+  - buildl4
+  - deployl4
+  - buildqa
+  - deployqa
+  - builddemo
+  - deploydemo
+  - builduat
+  - deployuat
+  # - buildprod
+  # - deployprod
   #- deploystack
-  
 
-sonar:
+.sonar:
   stage: sonar
   image: sonarsource/sonar-scanner-cli:4.5
   rules:
@@ -122,15 +121,17 @@ deploydev2:
   tags:
     - docker
 
-dev2:
-  stage: builddev2
-  image: node:14
+.dev3:
+  stage: builddev3
+  image: node:12
+  when: manual
   variables:
     Environment: $CI_JOB_NAME
   only:
-    - dev2
+    - L4
   script:
-    - cat $devaccount > build.env #(Skip if creating env in production account)
+    - cat $devaccount >> build.env
+    - cat $frontendacmdev >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
     - yarn cache clean
@@ -142,36 +143,51 @@ dev2:
       - build.env
   tags:
     - docker
- 
-deploystack:
-  stage: deploystack
-  rules:
-    #- if:  $CI_COMMIT_REF_NAME =~ /^feature/ || $CI_COMMIT_REF_NAME =~ /^bugfix/
-      #when: never
-    #- if:  $CI_COMMIT_REF_NAME =~ /demonew/
-      #when: never
-    - if: '$DeployStack == "True"' #this flag drives whether to deploy the infrastructure stack
-      when: always
-  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-  dependencies:
-    - dev2
-  script:
-    - source build.env
-    - aws cloudformation validate-template --template-body file://devops/cloudformation/cbex-unity-frontend-cf.yml --region $Region
-    - aws cloudformation deploy --stack-name $Project-$Product-$Module-$Environment --template-file devops/cloudformation/cbex-unity-frontend-cf.yml --parameter-overrides $(cat devops/vars/cfparameters.ini) $(cat build.env) --tags $(cat devops/vars/cftags.ini) Environment=$Environment Lifecycle=$Environment --region $Region
 
-deploydev2:
-  stage: deploydev2
+.deploydev3:
+  stage: deploydev3
+  when: manual
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
-    - dev2
-  when: manual
+    - dev3
   only:
-    - dev2
-    #- dev
-    #- tags
+    - L4
   script:    
     - source build.env  
+    - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
+    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
+  tags:
+    - docker
+
+l4:
+  stage: buildl4
+  image: node:14
+  when: manual
+  variables:
+    Environment: $CI_JOB_NAME
+  only:
+    - L4
+  script:
+    - cat devops/vars/${Environment}.env >> build.env
+    - source build.env
+    - yarn cache clean
+    - yarn install
+    - yarn build:$Environment
+  artifacts:
+    paths:
+      - dist/
+      - build.env
+  tags:
+    - docker
+
+deployl4:
+  stage: deployl4
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  needs:
+    - l4
+  when: manual
+  script:    
+    - source build.env
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
   tags:
@@ -223,7 +239,7 @@ deploydev2:
   stage: buildqa
   image: node:14
   needs:
-    - deploydev
+    - deploydev2
   when: manual
   variables:
     Environment: $CI_JOB_NAME
@@ -345,7 +361,7 @@ deploydev2:
       when: always
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   dependencies:
-    - demo
+    - l4
   script:
     - source build.env
     - aws cloudformation validate-template --template-body file://devops/cloudformation/cbex-unity-frontend-cf.yml --region $Region
