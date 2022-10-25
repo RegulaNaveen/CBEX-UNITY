@@ -188,8 +188,8 @@ buildl4:
 deployl4:
   stage: deployl4
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-  needs:
-    - buildl4
+  #needs:
+    #- buildl4
   when: manual
   script:    
     - source build.env
