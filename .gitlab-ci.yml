@@ -3,15 +3,15 @@ workflow:
     - if: '$CI_PIPELINE_SOURCE != "merge_request_event"' # Disable pipeline for Merge requests
 
 #include:
-  #- local: devops/vars/global.yml
-  #- project: 'CBEx/devops'
-    #ref: test
-    #file: /gitlab_balckduck_scan.yml
+  - local: devops/vars/global.yml
+  - project: 'CBEx/devops'
+    ref: test
+    file: /gitlab_balckduck_scan.yml
 
 stages:
-  #- sonar #sonar report
-  # - builddev
-  # - deploydev
+  - sonar #sonar report
+  - builddev
+  - deploydev
   - builddev2
   - deploydev2
   - buildl4
@@ -22,11 +22,11 @@ stages:
   - deploydemo
   - builduat
   - deployuat
-  # - buildprod
-  # - deployprod
-  #- deploystack
+  - buildprod
+  - deployprod
+  - deploystack
 
-.sonar:
+sonar:
   stage: sonar
   image: sonarsource/sonar-scanner-cli:4.5
   rules:
@@ -43,7 +43,7 @@ stages:
     - apk upgrade --update-cache --available && apk add openssl && rm -rf /var/cache/apk/*
     - sonar-scanner -X -Dsonar.branch.name=$CI_COMMIT_REF_NAME -Dsonar.projectKey=$CI_PROJECT_NAME
 
-.dev:
+dev:
   stage: builddev
   image: node:14
   variables:
@@ -67,7 +67,7 @@ stages:
   tags:
     - docker
 
-.deploydev:
+deploydev:
   stage: deploydev
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
@@ -90,7 +90,9 @@ dev2:
     Environment: $CI_JOB_NAME
   when: manual
   only:
-    - dev2
+    - dev
+    - migration
+    - tags
   script:
     - cat $devaccount > build.env #(Skip if creating env in production account)
     - cat devops/vars/${Environment}.env >> build.env
@@ -111,9 +113,9 @@ deploydev2:
   needs:
     - dev2
   only:
-    - dev2
-    #- dev
-    #- tags
+    - dev
+    - migration
+    - tags
   script:
     - source build.env
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
@@ -166,7 +168,9 @@ l4:
   variables:
     Environment: $CI_JOB_NAME
   only:
-    - L4
+    - dev
+    - migration
+    - tags
   script:
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
@@ -193,7 +197,7 @@ deployl4:
   tags:
     - docker
 
-.demo:
+demo:
   stage: builddemo
   image: node:14
   variables:
@@ -218,7 +222,7 @@ deployl4:
   tags:
     - docker
 
-.deploydemo:
+deploydemo:
   stage: deploydemo
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
@@ -235,7 +239,7 @@ deployl4:
   tags:
     - docker
 
-.qa:
+qa:
   stage: buildqa
   image: node:14
   needs:
@@ -258,7 +262,7 @@ deployl4:
   tags:
     - docker
 
-.deployqa:
+deployqa:
   stage: deployqa
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
@@ -273,7 +277,7 @@ deployl4:
   tags:
     - docker
 
-.uat:
+uat:
   stage: builduat
   image: node:14
   variables:
@@ -297,7 +301,7 @@ deployl4:
   tags:
     - docker
 
-.deployuat:
+deployuat:
   stage: deployuat
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
@@ -312,7 +316,7 @@ deployl4:
   tags:
     - docker
 
-.prod:
+prod:
   stage: buildprod
   image: node:14
   variables:
@@ -335,7 +339,7 @@ deployl4:
   tags:
     - docker
 
-.deployprod:
+deployprod:
   stage: deployprod
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
@@ -350,7 +354,7 @@ deployl4:
   tags:
     - docker
 
-.deploystack:
+deploystack:
   stage: deploystack
   rules:
     #- if:  $CI_COMMIT_REF_NAME =~ /^feature/ || $CI_COMMIT_REF_NAME =~ /^bugfix/
