@@ -140,7 +140,7 @@ class Dropdown extends PureComponent<Props, State> {
   handleFocusIn = event => {
     this.setState({ isFocused: true });
     if (this.props.setSelectRow) this.props.setSelectRow(true);
-    if (this.props.lockQuestionOnFocus && !this.props.lockedBySelf) {
+    if (this.props.lockQuestionOnFocus) {
       if (this.props.toggleWatch) {
         this.props.toggleWatch(true);
       }
@@ -151,17 +151,19 @@ class Dropdown extends PureComponent<Props, State> {
   handleFocusOut = event => {
     event.preventDefault();
     event.stopPropagation();
-    setTimeout(() => {
-      this.setState({ isFocused: false, isCollapsed: true });
-      this.props.setSelectRow(false);
-      if (this.props.lockedBySelf) {
-        // call to unlock question
-        this.context.questionUnlockWrapper(this.props.questionId);
-      }
-      if (this.props.toggleWatch) {
-        this.props.toggleWatch(false);
-      }
-    }, 500);
+    if (this.props.setSelectRow) {
+      setTimeout(() => {
+        this.setState({ isFocused: false, isCollapsed: true });
+        this.props.setSelectRow(false);
+        if (this.props.lockedBySelf) {
+          // call to unlock question
+          this.context.questionUnlockWrapper(this.props.questionId);
+        }
+        if (this.props.toggleWatch) {
+          this.props.toggleWatch(false);
+        }
+      }, 500);
+    }
   };
 
   handleDownArrowPress = () => {

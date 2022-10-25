@@ -750,13 +750,15 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
         this.setState({ enableRichtext: false });
 
-        // Change title style for richEdit icon
-        const {
-          style: quesTitleLStyle,
-          firstChild
-        } = this.quesTextInnerLeftRef.current;
-        quesTitleLStyle.minHeight = 'auto';
-        firstChild.style.maxWidth = 'none';
+        if (this.quesTextInnerLeftRef.current) {
+          // Change title style for richEdit icon
+          const {
+            style: quesTitleLStyle,
+            firstChild
+          } = this.quesTextInnerLeftRef.current;
+          quesTitleLStyle.minHeight = 'auto';
+          firstChild.style.maxWidth = 'none';
+        }
 
         this.setSelectRow(false);
       }
