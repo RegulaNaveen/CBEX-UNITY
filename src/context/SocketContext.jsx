@@ -12,7 +12,8 @@ import {
   updateQuestionLockByUser,
   updateQuestionUnlockByUser,
   getQuestionLockDetailsAll,
-  setProposalAnswerDatafromSocket
+  setProposalAnswerDatafromSocket,
+  setNotApplicableQuestionFromSocket
 } from '../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
@@ -262,7 +263,8 @@ const SocketContextProvider = props => {
         updateQuestionLock,
         updateQuestionUnlock,
         getQuestionLockDetails,
-        setProposalAnswerDatafromSocket
+        setProposalAnswerDatafromSocket,
+        setNotApplicableQuestionFromSocket
       } = props;
 
       // On Message Recieve
@@ -321,8 +323,12 @@ const SocketContextProvider = props => {
             break;
           case 'QUESTION_NA_UPDATE':
             // update question answer how it is done in action
-
-            console.log('tapas socket data for N/A', data.data);
+            if (data.data) {
+              setNotApplicableQuestionFromSocket(
+                data.data.questionId,
+                data.data.naStatus
+              );
+            }
 
             break;
           case 'QUESTIONS':
@@ -487,7 +493,8 @@ const mapDispatchToProps = {
   updateQuestionLock: updateQuestionLockByUser,
   updateQuestionUnlock: updateQuestionUnlockByUser,
   getQuestionLockDetails: getQuestionLockDetailsAll,
-  setProposalAnswerDatafromSocket: setProposalAnswerDatafromSocket
+  setProposalAnswerDatafromSocket: setProposalAnswerDatafromSocket,
+  setNotApplicableQuestionFromSocket: setNotApplicableQuestionFromSocket
 };
 
 export default connect(

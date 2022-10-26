@@ -91,6 +91,7 @@ const {
   SET_EVENT_LAUNCHER_FLAG,
   SHOW_NA_CHECKBOX,
   UPDATE_NOT_APPLICABLE_PROGRESS,
+  UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE,
   UPDATE_NOT_APPLICABLE_DONE,
   SET_PRICE_MODELER_FIELDS,
   ERROR_UPDATE_NOT_APPLICABLE
@@ -167,6 +168,27 @@ export function setNotApplicableQuestion(
       dispatch({
         type: UPDATE_NOT_APPLICABLE_DONE,
         payload: { data: data.data, questionId, questionStatus }
+      });
+    } catch (err) {
+      dispatch({
+        type: ERROR_UPDATE_NOT_APPLICABLE,
+        payload: { questionId, loading: false }
+      });
+    }
+  };
+}
+
+export function setNotApplicableQuestionFromSocket(questionId, questionStatus) {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: UPDATE_NOT_APPLICABLE_PROGRESS,
+        payload: { questionId, loading: true }
+      });
+
+      dispatch({
+        type: UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE,
+        payload: { questionId, questionStatus }
       });
     } catch (err) {
       dispatch({

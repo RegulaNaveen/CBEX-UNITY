@@ -555,7 +555,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
               disabled={checkDisableFlag()}
               onClick={async () => {
                 if (checkDisableFlag()) return;
-                setNotApplicable(proposalId, questionId, !isNotApplicable);
+                setNotApplicable(
+                  proposalId,
+                  questionId,
+                  !isNotApplicable,
+                  this.context
+                );
                 if (!isNotApplicable) {
                   setProposalAnswer(
                     this.context,
