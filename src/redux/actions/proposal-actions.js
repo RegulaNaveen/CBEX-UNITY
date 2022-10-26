@@ -147,7 +147,8 @@ export const getProposalByID = (id: string): ThunkAction<string, Object> => {
 export function setNotApplicableQuestion(
   proposalId,
   questionId,
-  questionStatus
+  questionStatus,
+  socketContext
 ) {
   return async dispatch => {
     try {
@@ -155,6 +156,7 @@ export function setNotApplicableQuestion(
         type: UPDATE_NOT_APPLICABLE_PROGRESS,
         payload: { questionId, loading: true }
       });
+      await socketContext.naQuestionUpdateWrapper(questionId, questionStatus);
 
       const { data } = await setNotApplicableQuestionApi(
         proposalId,

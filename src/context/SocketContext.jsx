@@ -104,6 +104,34 @@ const SocketContextProvider = props => {
       console.log(error);
     }
   };
+
+  /**
+   *
+   * @param {*} questionId
+   * @param {*} status
+   * @param {*} ws
+   */
+  const naQuestionUpdate = (questionId, naStatus, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'QUESTION',
+          body: {
+            event: 'QUESTION_NA_UPDATE',
+            data: {
+              naStatus,
+              questionId
+            }
+          }
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
   /**
    *  Question answerUpdate
    */
@@ -290,6 +318,11 @@ const SocketContextProvider = props => {
                 data.data.latestAnswer
               );
             }
+            break;
+          case 'QUESTION_NA_UPDATE':
+            // update question answer how it is done in action
+
+            console.log('tapas socket data for N/A', data.data);
 
             break;
           case 'QUESTIONS':
@@ -381,6 +414,12 @@ const SocketContextProvider = props => {
     );
   };
 
+  const naQuestionUpdateWrapper = (questionId, status) => {
+    waitForSocketConnectionMinInterval(() =>
+      naQuestionUpdate(questionId, status, null)
+    );
+  };
+
   const questionLockDetailsWrapper = () => {
     waitForSocketConnectionMinInterval(() => questionLockDetails(null));
   };
@@ -425,7 +464,8 @@ const SocketContextProvider = props => {
         questionLockWrapper,
         questionUnlockWrapper,
         questionLockDetailsWrapper,
-        questionAnswerUpdateWrapper
+        questionAnswerUpdateWrapper,
+        naQuestionUpdateWrapper
       }}
     >
       {props.children}
