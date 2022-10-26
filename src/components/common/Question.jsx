@@ -60,6 +60,7 @@ import withIdleStateDetection from '../HOC/IdleStateDetector';
 import Checkbox from 'apollo-react/components/Checkbox';
 import Loader from 'apollo-react/components/Loader';
 import RadioQuestion from './atoms/inputs/RadioQuestion';
+import { getProposalAnswer } from '../../api/proposal';
 
 const DropdownWithIdleStateDetection = withIdleStateDetection(Dropdown);
 const QuestionDatePickerWithIdleStateDetection = withIdleStateDetection(
@@ -216,7 +217,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
           questionId,
           String(textValue).trim(),
           userData,
-          editorDataSocketContext
+          editorData
         );
       }
     } else if (!textValue.trim() && lastAnswer.trim()) {
@@ -331,6 +332,56 @@ export class TaskRow extends React.PureComponent<Props, State> {
         );
     });
     this.trackMatomoEventSubmitAnswer(selectedDay);
+  };
+
+  handleUncheckNaQuestion = async type => {
+    const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+
+    const answersData = await getProposalAnswer(proposalId, questionId);
+
+    if (answersData[answersData.length - 1]?.answer === 'N/A') {
+      answersData.pop();
+    }
+
+    const lastAnswer = answersData[answersData.length - 1];
+    if (type === 'text') {
+      const formattedAnswer =
+        has(lastAnswer, 'formattedAnswer') && lastAnswer.formattedAnswer;
+
+      const parseFormattedData =
+        !formattedAnswer || isObject(formattedAnswer)
+          ? formattedAnswer
+          : parseStringifyJson(formattedAnswer);
+
+      const richTextData = parseFormattedData || {
+        html: '',
+        value: { blocks: [] }
+      };
+
+      const editorData = {
+        text: lastAnswer?.answer || '',
+        value: richTextData.value,
+        html: richTextData.html
+      };
+
+      this.handleRichTextChange(editorData);
+    } else if (type === 'number') {
+      setProposalAnswer(
+        this.context,
+        proposalId,
+        questionId,
+        lastAnswer?.answer ? String(lastAnswer?.answer).trim() : ' ',
+        userData
+      );
+    } else {
+      setProposalAnswer(
+        this.context,
+        proposalId,
+        questionId,
+        lastAnswer?.answer || '',
+        userData
+      );
+    }
   };
 
   onSelectValues = (
@@ -463,14 +514,13 @@ export class TaskRow extends React.PureComponent<Props, State> {
     });
   };
 
-  renderNACheckbox = (checkDisableFlag, answers, type) => {
+  renderNACheckbox = (checkDisableFlag, type) => {
     if (this.props.showNaCheckbox) {
       const {
         setProposalAnswer,
         proposalId,
         questionId,
         userData,
-        questionData,
         setNotApplicable,
         NaLoading,
         isNotApplicable,
@@ -503,11 +553,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }}
               checked={isNotApplicable}
               disabled={checkDisableFlag()}
-              onClick={() => {
+              onClick={async () => {
                 if (checkDisableFlag()) return;
-
-                // const answersData = answers.toJS();
-
+                setNotApplicable(proposalId, questionId, !isNotApplicable);
                 if (!isNotApplicable) {
                   setProposalAnswer(
                     this.context,
@@ -516,50 +564,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                     'N/A',
                     userData
                   );
-                }
-                // else {
-                //   for (
-                //     let index = answersData.length - 1;
-                //     index >= 0;
-                //     index--
-                //   ) {
-                //     if (answersData[index]?.answer === 'N/A') answersData.pop();
-                //     else break;
-                //   }
-                //   const lastAnswer = answersData[answersData.length - 1];
-                //   if (type === 'text') {
-                //     const formattedAnswer =
-                //       has(lastAnswer, 'formattedAnswer') &&
-                //       lastAnswer.formattedAnswer;
-
-                //     const parseFormattedData =
-                //       !formattedAnswer || isObject(formattedAnswer)
-                //         ? formattedAnswer
-                //         : parseStringifyJson(formattedAnswer);
-
-                //     const richTextData = parseFormattedData || {
-                //       html: '',
-                //       value: { blocks: [] }
-                //     };
-
-                //     const editorData = {
-                //       text: lastAnswer?.answer || '',
-                //       value: richTextData.value,
-                //       html: richTextData.html
-                //     };
-                //
-                //     this.handleRichTextChange(editorData);
-                //   } else {
-                //     setProposalAnswer(
-                //       this.context,
-                //       proposalId,
-                //       questionId,
-                //       lastAnswer?.answer || '',
-                //       userData
-                //     );
-                //   }
-                // }
-                setNotApplicable(proposalId, questionId, !isNotApplicable);
+                } else this.handleUncheckNaQuestion(type);
               }}
             />
           )}
@@ -628,7 +633,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             <span
               className={this.props.showNaCheckbox ? 'markNaAutoActive' : ''}
             >
-              {this.renderNACheckbox(checkDisableFlag, answers, 'Autocomplete')}
+              {this.renderNACheckbox(checkDisableFlag, 'Autocomplete')}
             </span>
             <span
               style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
@@ -782,7 +787,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            {console.log('showw', this.props.showNaCheckbox)}
             <span
               style={
                 `${this.props.showNaCheckbox}`
@@ -795,7 +799,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, answers, 'text')}
+                {this.renderNACheckbox(checkDisableFlag, 'text')}
               </span>
               <span
                 style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
@@ -824,7 +828,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, answers, 'number')}
+                {this.renderNACheckbox(checkDisableFlag, 'number')}
               </span>
               <TextArea
                 className="proposal-text-area"
@@ -855,7 +859,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, answers, 'y/n')}
+                {this.renderNACheckbox(checkDisableFlag, 'y/n')}
               </span>
               <DropdownWithIdleStateDetection
                 id="dd-proposal-answer"
@@ -890,7 +894,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, answers, 'select')}
+                {this.renderNACheckbox(checkDisableFlag, 'select')}
               </span>
               <DropdownWithIdleStateDetection
                 id="dd-proposal-answer"
@@ -926,7 +930,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, answers, 'date')}
+                {this.renderNACheckbox(checkDisableFlag, 'date')}
               </span>
               <span
                 style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
@@ -967,7 +971,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, answers, 'picklist')}
+                {this.renderNACheckbox(checkDisableFlag, 'picklist')}
               </span>
               <MultiSelectWithIdleStateDetection
                 placeholder={checkDisableFlag() ? '' : 'Click to answer'}
@@ -1005,7 +1009,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
                 {this.renderNACheckbox(
                   checkDisableFlag,
-                  answers,
+
                   'multi-select-lookup'
                 )}
               </span>
@@ -1048,7 +1052,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
                 {this.renderNACheckbox(
                   checkDisableFlag,
-                  answers,
+
                   'select-lookup'
                 )}
               </span>
@@ -1089,7 +1093,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, answers, 'radio')}
+                {this.renderNACheckbox(checkDisableFlag, 'radio')}
               </span>
               <RadioQuestionIdleStateDetection
                 id="dd-proposal-answer"
