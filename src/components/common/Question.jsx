@@ -532,60 +532,42 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
       return (
         <div style={{ width: '10px', marginRight: '30px' }}>
-          N/A{' '}
-          {NaLoading ? (
-            <span
-              style={{
-                position: 'relative',
-                top: '1.5em'
-              }}
-            >
-              <Loader
-                isInner
-                size={20}
-                style={{
-                  width: '20px',
-                  height: '20px'
-                }}
-              />
-            </span>
-          ) : (
-            <Checkbox
-              style={{
-                cursor: `${checkDisableFlag() ? 'not-allowed' : 'pointer'}`
-              }}
-              checked={isNotApplicable}
-              disabled={checkDisableFlag() || NaLoading}
-              onClick={async () => {
-                if (checkDisableFlag()) return;
-                setNotApplicableLoading(questionId);
+          N/A
+          <Checkbox
+            style={{
+              cursor: `${checkDisableFlag() ? 'not-allowed' : 'pointer'}`
+            }}
+            checked={isNotApplicable}
+            disabled={checkDisableFlag() || NaLoading}
+            onClick={async () => {
+              if (checkDisableFlag()) return;
+              setNotApplicableLoading(questionId);
 
-                if (!isNotApplicable) {
-                  await setProposalAnswer(
-                    this.context,
-                    proposalId,
-                    questionId,
-                    'N/A',
-                    userData
-                  );
-                  setNotApplicable(
-                    proposalId,
-                    questionId,
-                    !isNotApplicable,
-                    this.context
-                  );
-                } else {
-                  await this.handleUncheckNaQuestion(type);
-                  setNotApplicable(
-                    proposalId,
-                    questionId,
-                    !isNotApplicable,
-                    this.context
-                  );
-                }
-              }}
-            />
-          )}
+              if (!isNotApplicable) {
+                await setProposalAnswer(
+                  this.context,
+                  proposalId,
+                  questionId,
+                  'N/A',
+                  userData
+                );
+                setNotApplicable(
+                  proposalId,
+                  questionId,
+                  !isNotApplicable,
+                  this.context
+                );
+              } else {
+                await this.handleUncheckNaQuestion(type);
+                setNotApplicable(
+                  proposalId,
+                  questionId,
+                  !isNotApplicable,
+                  this.context
+                );
+              }
+            }}
+          />
         </div>
       );
     }
@@ -605,7 +587,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
       noneditableField,
       hasDifferentSFanswer,
       loading,
-      isNotApplicable
+      isNotApplicable,
+      NaLoading
     } = this.props;
 
     const { selectedRow } = this.state;
@@ -619,6 +602,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     let finalOptions = options;
     const checkDisableFlag = () => {
       if (this.isQuestionLockedByOther()) return true;
+      if (NaLoading) return true;
 
       return (
         checkNonEditableFields(noneditableField, sfField, sfObject) ||
