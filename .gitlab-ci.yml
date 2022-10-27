@@ -169,12 +169,12 @@ deploydev2:
   tags:
     - docker
 
-l4:
+buildl4:
   stage: buildl4
   image: node:14
   when: manual
   variables:
-    Environment: $CI_JOB_NAME
+    Environment: l4
   only:
     - dev
     - migration
