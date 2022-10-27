@@ -160,14 +160,15 @@ export function setNotApplicableQuestion(
   questionStatus,
   socketContext
 ) {
-  return async dispatch => {
+  return async (dispatch: Dispatch<string, Object>, getState) => {
     try {
       // dispatch({
       //   type: UPDATE_NOT_APPLICABLE_PROGRESS,
       //   payload: { questionId, loading: true }
       // });
+
       await socketContext.naQuestionUpdateWrapper(questionId, questionStatus);
-      // const questionsFilter = getQuestionsFilters(getState());
+
       const { data } = await setNotApplicableQuestionApi(
         proposalId,
         questionId,
@@ -178,6 +179,7 @@ export function setNotApplicableQuestion(
         type: UPDATE_NOT_APPLICABLE_DONE,
         payload: { data: data.data, questionId, questionStatus }
       });
+      const questionsFilter = getQuestionsFilters(getState());
       dispatch(onQuestionsFilterApplied(questionsFilter));
     } catch (err) {
       dispatch({
@@ -189,7 +191,7 @@ export function setNotApplicableQuestion(
 }
 
 export function setNotApplicableQuestionFromSocket(questionId, questionStatus) {
-  return async dispatch => {
+  return async (dispatch, getState) => {
     try {
       // dispatch({
       //   type: UPDATE_NOT_APPLICABLE_PROGRESS,
@@ -200,6 +202,8 @@ export function setNotApplicableQuestionFromSocket(questionId, questionStatus) {
         type: UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE,
         payload: { questionId, questionStatus }
       });
+      const questionsFilter = getQuestionsFilters(getState());
+      dispatch(onQuestionsFilterApplied(questionsFilter));
     } catch (err) {
       dispatch({
         type: ERROR_UPDATE_NOT_APPLICABLE,
