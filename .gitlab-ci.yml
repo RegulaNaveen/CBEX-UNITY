@@ -8,6 +8,12 @@ include:
     ref: test
     file: /gitlab_balckduck_scan.yml
 
+include:
+  - project: 'CBEx/unity/Unity-QA'
+    ref: Unity_QA_Testing
+    file: /.gitlab-ci.yml
+
+
 stages:
   - sonar #sonar report
   - blackduckscan
@@ -25,6 +31,7 @@ stages:
   - deployuat
   - buildprod
   - deployprod
+  - pafexecution_regression
   - deploystack
 
 sonar:
@@ -357,6 +364,19 @@ deployprod:
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
   tags:
     - docker
+
+pafexecution_regression:
+  stage: pafexecution_regression
+  needs:
+  - deployqa
+  when: manual
+  variables:
+    ENV_NAME: svt
+  trigger:
+    project: 'CBEx/unity/Unity-QA'
+    branch: Unity_QA_Testing
+    strategy: depend
+
 
 deploystack:
   stage: deploystack
