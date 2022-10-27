@@ -216,7 +216,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
           questionId,
           String(textValue).trim(),
           userData,
-          editorDataSocketContext
+          editorData
         );
       }
     } else if (!textValue.trim() && lastAnswer.trim()) {
@@ -782,7 +782,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
             sfObject={sfObject}
           >
-            {console.log('showw', this.props.showNaCheckbox)}
             <span
               style={
                 `${this.props.showNaCheckbox}`
