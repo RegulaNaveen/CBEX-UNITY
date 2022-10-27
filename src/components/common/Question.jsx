@@ -542,6 +542,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             onClick={async () => {
               if (checkDisableFlag()) return;
               setNotApplicableLoading(questionId);
+              this.context.questionLockWrapper(questionId);
 
               if (!isNotApplicable) {
                 await setProposalAnswer(
@@ -557,6 +558,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                   !isNotApplicable,
                   this.context
                 );
+                this.context.questionUnlockWrapper(questionId);
               } else {
                 await this.handleUncheckNaQuestion(type);
                 setNotApplicable(
@@ -565,6 +567,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                   !isNotApplicable,
                   this.context
                 );
+                this.context.questionUnlockWrapper(questionId);
               }
             }}
           />

@@ -191,10 +191,10 @@ export function setNotApplicableQuestion(
 export function setNotApplicableQuestionFromSocket(questionId, questionStatus) {
   return async dispatch => {
     try {
-      dispatch({
-        type: UPDATE_NOT_APPLICABLE_PROGRESS,
-        payload: { questionId, loading: true }
-      });
+      // dispatch({
+      //   type: UPDATE_NOT_APPLICABLE_PROGRESS,
+      //   payload: { questionId, loading: true }
+      // });
 
       dispatch({
         type: UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE,
