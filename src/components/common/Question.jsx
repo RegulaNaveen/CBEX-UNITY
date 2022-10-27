@@ -378,7 +378,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         this.context,
         proposalId,
         questionId,
-        lastAnswer?.answer || '',
+        lastAnswer?.answer || ' ',
         userData
       );
     }
@@ -530,7 +530,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       return (
         <div style={{ width: '10px', marginRight: '30px' }}>
           N/A{' '}
-          {NaLoading || loading ? (
+          {NaLoading ? (
             <span
               style={{
                 position: 'relative',

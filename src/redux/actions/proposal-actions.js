@@ -158,7 +158,7 @@ export function setNotApplicableQuestion(
         payload: { questionId, loading: true }
       });
       await socketContext.naQuestionUpdateWrapper(questionId, questionStatus);
-
+      const questionsFilter = getQuestionsFilters(getState());
       const { data } = await setNotApplicableQuestionApi(
         proposalId,
         questionId,
@@ -169,6 +169,7 @@ export function setNotApplicableQuestion(
         type: UPDATE_NOT_APPLICABLE_DONE,
         payload: { data: data.data, questionId, questionStatus }
       });
+      dispatch(onQuestionsFilterApplied(questionsFilter));
     } catch (err) {
       dispatch({
         type: ERROR_UPDATE_NOT_APPLICABLE,
