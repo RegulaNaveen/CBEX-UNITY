@@ -368,8 +368,10 @@ deployprod:
 pafexecution_regression:
   stage: pafexecution_regression
   needs:
-  - deployqa
+    - deployqa
   when: manual
+  only:
+    - tags
   variables:
     ENV_NAME: svt
   trigger:
