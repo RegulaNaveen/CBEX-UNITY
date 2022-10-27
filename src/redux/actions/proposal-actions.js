@@ -145,6 +145,15 @@ export const getProposalByID = (id: string): ThunkAction<string, Object> => {
   };
 };
 
+export function setNotApplicableLoader(questionId) {
+  return async dispatch => {
+    dispatch({
+      type: UPDATE_NOT_APPLICABLE_PROGRESS,
+      payload: { questionId, loading: true }
+    });
+  };
+}
+
 export function setNotApplicableQuestion(
   proposalId,
   questionId,
@@ -153,12 +162,12 @@ export function setNotApplicableQuestion(
 ) {
   return async dispatch => {
     try {
-      dispatch({
-        type: UPDATE_NOT_APPLICABLE_PROGRESS,
-        payload: { questionId, loading: true }
-      });
+      // dispatch({
+      //   type: UPDATE_NOT_APPLICABLE_PROGRESS,
+      //   payload: { questionId, loading: true }
+      // });
       await socketContext.naQuestionUpdateWrapper(questionId, questionStatus);
-      const questionsFilter = getQuestionsFilters(getState());
+      // const questionsFilter = getQuestionsFilters(getState());
       const { data } = await setNotApplicableQuestionApi(
         proposalId,
         questionId,

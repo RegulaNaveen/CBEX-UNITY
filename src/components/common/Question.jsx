@@ -29,7 +29,8 @@ import {
   setProposalAnswerLoading,
   deleteProposalUserFromDB,
   setShowNaCheckbox,
-  setNotApplicableQuestion
+  setNotApplicableQuestion,
+  setNotApplicableLoader
 } from '../../redux/actions/proposal-actions';
 import {
   getUserData,
@@ -97,6 +98,7 @@ type Props = {
   oppdata: Object,
   setProposalAnswer: Function,
   setNotApplicable: Function,
+  setNotApplicableLoading: Function,
   setAnswerLoading: Function,
   deleteProposalUser: Function,
   setQuestionToDisplayHistory: (answer: string) => void,
@@ -524,7 +526,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
         setNotApplicable,
         NaLoading,
         isNotApplicable,
-        loading
+        loading,
+        setNotApplicableLoading
       } = this.props;
 
       return (
@@ -552,24 +555,34 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 cursor: `${checkDisableFlag() ? 'not-allowed' : 'pointer'}`
               }}
               checked={isNotApplicable}
-              disabled={checkDisableFlag()}
+              disabled={checkDisableFlag() || NaLoading}
               onClick={async () => {
                 if (checkDisableFlag()) return;
-                setNotApplicable(
-                  proposalId,
-                  questionId,
-                  !isNotApplicable,
-                  this.context
-                );
+                setNotApplicableLoading(questionId);
+
                 if (!isNotApplicable) {
-                  setProposalAnswer(
+                  await setProposalAnswer(
                     this.context,
                     proposalId,
                     questionId,
                     'N/A',
                     userData
                   );
-                } else this.handleUncheckNaQuestion(type);
+                  setNotApplicable(
+                    proposalId,
+                    questionId,
+                    !isNotApplicable,
+                    this.context
+                  );
+                } else {
+                  await this.handleUncheckNaQuestion(type);
+                  setNotApplicable(
+                    proposalId,
+                    questionId,
+                    !isNotApplicable,
+                    this.context
+                  );
+                }
               }}
             />
           )}
@@ -1296,7 +1309,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       <div
         className={`task-table-row question-row ${
           selectedRow ? 'selected-task-table-row' : ''
-        } ${NaLoading ? 'fade-area' : ''}`}
+        } ${NaLoading ? 'fade-area' : ''} `}
         style={{ margin: '2px 0px' }}
       >
         <Grid container className="question-title-grid">
@@ -1484,5 +1497,6 @@ export default connect(mapStateToProps, {
   setAnswerLoading: setProposalAnswerLoading,
   deleteProposalUser: deleteProposalUserFromDB,
   setNotApplicable: setNotApplicableQuestion,
+  setNotApplicableLoading: setNotApplicableLoader,
   setEditQuestionData
 })(MatomoHOC(TaskRow));
