@@ -180,6 +180,7 @@ buildl4:
     - migration
     - tags
   script:
+    - cat $prod_build >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
     - yarn cache clean
@@ -261,6 +262,7 @@ qa:
   only:
     - tags
   script:
+    - cat $prod_build >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
     - yarn cache clean
@@ -338,6 +340,7 @@ prod:
     - deployuat
   when: manual
   script:
+    - cat $prod_build >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
     - yarn cache clean
