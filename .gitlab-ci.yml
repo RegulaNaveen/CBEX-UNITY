@@ -169,7 +169,7 @@ deploydev2:
   tags:
     - docker
 
-buildl4:
+l4:
   stage: buildl4
   image: node:14
   when: manual
