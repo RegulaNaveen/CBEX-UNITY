@@ -8,6 +8,12 @@ include:
     ref: test
     file: /gitlab_balckduck_scan.yml
 
+include:
+  - project: 'CBEx/unity/Unity-QA'
+    ref: Unity_QA_Testing
+    file: /.gitlab-ci.yml
+
+
 stages:
   - sonar #sonar report
   - blackduckscan
@@ -25,6 +31,7 @@ stages:
   - deployuat
   - buildprod
   - deployprod
+  - pafexecution_regression
   - deploystack
 
 sonar:
@@ -167,12 +174,13 @@ buildl4:
   image: node:14
   when: manual
   variables:
-    Environment: $CI_JOB_NAME
+    Environment: l4
   only:
     - dev
     - migration
     - tags
   script:
+    - cat $prod_build >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
     - yarn cache clean
@@ -254,6 +262,7 @@ qa:
   only:
     - tags
   script:
+    - cat $prod_build >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
     - yarn cache clean
@@ -276,8 +285,8 @@ deployqa:
     - tags
   script:
     - source build.env
-    - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
-    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
+    - aws s3 sync dist/ s3://$BucketName/ --delete --region "us-east-1"
+    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
   tags:
     - docker
 
@@ -331,6 +340,7 @@ prod:
     - deployuat
   when: manual
   script:
+    - cat $prod_build >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
     - yarn cache clean
@@ -357,6 +367,21 @@ deployprod:
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
   tags:
     - docker
+
+pafexecution_regression:
+  stage: pafexecution_regression
+  needs:
+    - deployqa
+  when: manual
+  only:
+    - tags
+  variables:
+    ENV_NAME: svt
+  trigger:
+    project: 'CBEx/unity/Unity-QA'
+    branch: Unity_QA_Testing
+    strategy: depend
+
 
 deploystack:
   stage: deploystack
