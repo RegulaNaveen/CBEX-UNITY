@@ -282,7 +282,8 @@ const SocketContextProvider = props => {
             // update question answer how it is done in action
             if (data.data.latestAnswer) {
               const questionId = Array.isArray(data.data.latestAnswer)
-                ? data.data.latestAnswer[data.data.latestAnswer.length - 1].questionId
+                ? data.data.latestAnswer[data.data.latestAnswer.length - 1]
+                    .questionId
                 : data.data.latestAnswer.questionId;
               setProposalAnswerDatafromSocket(
                 questionId,
@@ -340,6 +341,22 @@ const SocketContextProvider = props => {
       }
     }, 100);
   };
+  let timer;
+  let currentQuestionToLock;
+  /**
+   *
+   * @param {*} clear to remove the timer
+   * function to set timer for auto unlock and auto save
+   */
+  const resetLockTimer = questionId => {
+    clearTimeout(timer);
+    currentQuestionToLock = questionId;
+    timer = setTimeout(() => {
+      clearTimeout(timer);
+      questionLock(questionId, null);
+      currentQuestionToLock = undefined;
+    }, 1000);
+  };
 
   const updateSocketOppId = (oppId, proposalId) => {
     currentOppNo.set(oppId);
@@ -348,12 +365,14 @@ const SocketContextProvider = props => {
     );
   };
   const questionLockWrapper = questionId => {
-    waitForSocketConnectionMinInterval(() => questionLock(questionId, null));
+    waitForSocketConnectionMinInterval(() => resetLockTimer(questionId));
   };
   const questionUnlockWrapper = (questionId, answer) => {
-    waitForSocketConnectionMinInterval(() =>
-      questionUnlock(questionId, answer, null)
-    );
+    waitForSocketConnectionMinInterval(() => {
+      if (currentQuestionToLock === questionId) clearTimeout(timer);
+
+      questionUnlock(questionId, answer, null);
+    });
   };
 
   const questionAnswerUpdateWrapper = (questionId, answer) => {

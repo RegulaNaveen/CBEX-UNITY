@@ -6,6 +6,7 @@ const ANSWER_TYPES = {
   SELECT_LOOKUP: 'select-lookup',
   DATE: 'date',
   PICKLIST: 'picklist',
-  PICKLIST_LOOKUP: 'picklist-lookup'
+  PICKLIST_LOOKUP: 'picklist-lookup',
+  RADIO: 'radio'
 };
 export default ANSWER_TYPES;

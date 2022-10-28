@@ -135,10 +135,38 @@
           font-weight: 600;
         }
 
+        .na-toggle-switch {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: flex-start;
+
+          .MuiSwitch-track {
+            height: 24px;
+            width: 48px;
+          }
+          .MuiSwitch-switchBase {
+            top: -8px;
+            left: -8px;
+          }
+          .MuiSwitch-thumb {
+            width: 22px;
+            height: 22px;
+          }
+        }
+
+        .tasklist-mid-menu-separator {
+          width: 25%;
+        }
+        .tasklist-start-menu-separator {
+          width: 50%;
+        }
+
         .taskList-icons-wrapper {
           display: flex;
           flex-direction: row;
           align-items: center;
+          flex-grow: 1;
 
           .taskList-checkbox-wrapper {
             margin-right: 10px;
@@ -234,6 +262,17 @@
   }
 }
 
+.markNaActive {
+  margin-top: -5px;
+  margin-bottom: -12px;
+  margin-left: -39px;
+}
+
+.markNaAutoActive {
+  margin-bottom: -18px;
+  margin-left: -39px;
+}
+
 @media only screen and (min-width: 1201px) and (max-width: 3000px) {
   .proposal-wrapper {
     height: 100%;
@@ -326,6 +365,33 @@
         .tasksList-title {
           font-size: 18px;
           font-weight: 600;
+        }
+
+        .na-toggle-switch {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: flex-start;
+
+          .MuiSwitch-track {
+            height: 24px;
+            width: 48px;
+          }
+          .MuiSwitch-switchBase {
+            top: -8px;
+            left: -8px;
+          }
+          .MuiSwitch-thumb {
+            width: 22px;
+            height: 22px;
+          }
+        }
+
+        .tasklist-mid-menu-separator {
+          width: 15%;
+        }
+        .tasklist-start-menu-separator {
+          width: 40%;
         }
 
         .taskList-icons-wrapper {
@@ -463,6 +529,7 @@
   }
   .exportOptionsRow {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     label {
       font-size: 14px;
@@ -525,4 +592,13 @@
       z-index: 1;
     }
   }
+}
+
+.mark-na-panel {
+  background-color: $neutral1;
+  box-shadow: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 1rem;
 }
