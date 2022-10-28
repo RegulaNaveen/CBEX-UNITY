@@ -27,7 +27,7 @@ const UnityTab = ({ id, enableValidateTab, selectedView }) => {
   useEffect(() => {
     console.log('useeffect called', proposalQuestions);
     if (proposalID) {
-      oppData[proposalID].proposal.Approvals = [
+      oppData[proposalID].proposal.approvals = [
         {
           ApprovalSectionTitle: 'DSda',
           ApprovalSectionRightQuestions: [],
@@ -124,7 +124,7 @@ const UnityTab = ({ id, enableValidateTab, selectedView }) => {
 
   const getApprovalQuestionIds = (opportunityData) => {
     const approvalQIdsArr = [];
-    opportunityData?.proposal?.Approvals.forEach((qIdApproval) => {
+    opportunityData?.proposal?.approvals.forEach((qIdApproval) => {
       if (qIdApproval?.ApprovalSectionLeftQuestions?.length !== 0) {
         qIdApproval?.ApprovalSectionLeftQuestions?.map((leftQId) => {
           approvalQIdsArr.push(leftQId.ApprovalQuestionId);
