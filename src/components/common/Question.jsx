@@ -29,7 +29,8 @@ import {
   setProposalAnswerLoading,
   deleteProposalUserFromDB,
   setShowNaCheckbox,
-  setNotApplicableQuestion
+  setNotApplicableQuestion,
+  setNotApplicableLoader
 } from '../../redux/actions/proposal-actions';
 import {
   getUserData,
@@ -60,6 +61,7 @@ import withIdleStateDetection from '../HOC/IdleStateDetector';
 import Checkbox from 'apollo-react/components/Checkbox';
 import Loader from 'apollo-react/components/Loader';
 import RadioQuestion from './atoms/inputs/RadioQuestion';
+import { getProposalAnswer } from '../../api/proposal';
 
 const DropdownWithIdleStateDetection = withIdleStateDetection(Dropdown);
 const QuestionDatePickerWithIdleStateDetection = withIdleStateDetection(
@@ -96,6 +98,7 @@ type Props = {
   oppdata: Object,
   setProposalAnswer: Function,
   setNotApplicable: Function,
+  setNotApplicableLoading: Function,
   setAnswerLoading: Function,
   deleteProposalUser: Function,
   setQuestionToDisplayHistory: (answer: string) => void,
@@ -333,13 +336,63 @@ export class TaskRow extends React.PureComponent<Props, State> {
     this.trackMatomoEventSubmitAnswer(selectedDay);
   };
 
+  handleUncheckNaQuestion = async type => {
+    const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+
+    const answersData = await getProposalAnswer(proposalId, questionId);
+
+    if (answersData[answersData.length - 1]?.answer === 'N/A') {
+      answersData.pop();
+    }
+
+    const lastAnswer = answersData[answersData.length - 1];
+    if (type === 'text') {
+      const formattedAnswer =
+        has(lastAnswer, 'formattedAnswer') && lastAnswer.formattedAnswer;
+
+      const parseFormattedData =
+        !formattedAnswer || isObject(formattedAnswer)
+          ? formattedAnswer
+          : parseStringifyJson(formattedAnswer);
+
+      const richTextData = parseFormattedData || {
+        html: '',
+        value: { blocks: [] }
+      };
+
+      const editorData = {
+        text: lastAnswer?.answer || '',
+        value: richTextData.value,
+        html: richTextData.html
+      };
+
+      this.handleRichTextChange(editorData);
+    } else if (type === 'number') {
+      setProposalAnswer(
+        this.context,
+        proposalId,
+        questionId,
+        lastAnswer?.answer ? String(lastAnswer?.answer).trim() : ' ',
+        userData
+      );
+    } else {
+      setProposalAnswer(
+        this.context,
+        proposalId,
+        questionId,
+        lastAnswer?.answer || ' ',
+        userData
+      );
+    }
+  };
+
   onSelectValues = (
     selectedValues: Array<string>,
     lastAnswer: Array<string>
   ) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
 
-    if (!isEqual(lastAnswer, selectedValues))
+    if (!isEqual(lastAnswer, selectedValues) && selectedValues !== undefined) {
       setProposalAnswer(
         this.context,
         proposalId,
@@ -347,6 +400,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         selectedValues,
         userData
       );
+    }
 
     this.trackMatomoEventSubmitAnswer(selectedValues);
   };
@@ -463,106 +517,58 @@ export class TaskRow extends React.PureComponent<Props, State> {
     });
   };
 
-  renderNACheckbox = (checkDisableFlag, answers, type) => {
+  renderNACheckbox = (checkDisableFlag, type) => {
     if (this.props.showNaCheckbox) {
       const {
         setProposalAnswer,
         proposalId,
         questionId,
         userData,
-        questionData,
         setNotApplicable,
         NaLoading,
         isNotApplicable,
-        loading
+        loading,
+        setNotApplicableLoading
       } = this.props;
 
       return (
         <div style={{ width: '10px', marginRight: '30px' }}>
-          N/A{' '}
-          {NaLoading || loading ? (
-            <span
-              style={{
-                position: 'relative',
-                top: '1.5em'
-              }}
-            >
-              <Loader
-                isInner
-                size={20}
-                style={{
-                  width: '20px',
-                  height: '20px'
-                }}
-              />
-            </span>
-          ) : (
-            <Checkbox
-              style={{
-                cursor: `${checkDisableFlag() ? 'not-allowed' : 'pointer'}`
-              }}
-              checked={isNotApplicable}
-              disabled={checkDisableFlag()}
-              onClick={() => {
-                if (checkDisableFlag()) return;
+          N/A
+          <Checkbox
+            style={{
+              cursor: `${checkDisableFlag() ? 'not-allowed' : 'pointer'}`
+            }}
+            checked={isNotApplicable}
+            disabled={checkDisableFlag() || NaLoading}
+            onClick={async () => {
+              if (checkDisableFlag()) return;
+              setNotApplicableLoading(questionId);
 
-                // const answersData = answers.toJS();
-
-                if (!isNotApplicable) {
-                  setProposalAnswer(
-                    this.context,
-                    proposalId,
-                    questionId,
-                    'N/A',
-                    userData
-                  );
-                }
-                // else {
-                //   for (
-                //     let index = answersData.length - 1;
-                //     index >= 0;
-                //     index--
-                //   ) {
-                //     if (answersData[index]?.answer === 'N/A') answersData.pop();
-                //     else break;
-                //   }
-                //   const lastAnswer = answersData[answersData.length - 1];
-                //   if (type === 'text') {
-                //     const formattedAnswer =
-                //       has(lastAnswer, 'formattedAnswer') &&
-                //       lastAnswer.formattedAnswer;
-
-                //     const parseFormattedData =
-                //       !formattedAnswer || isObject(formattedAnswer)
-                //         ? formattedAnswer
-                //         : parseStringifyJson(formattedAnswer);
-
-                //     const richTextData = parseFormattedData || {
-                //       html: '',
-                //       value: { blocks: [] }
-                //     };
-
-                //     const editorData = {
-                //       text: lastAnswer?.answer || '',
-                //       value: richTextData.value,
-                //       html: richTextData.html
-                //     };
-                //
-                //     this.handleRichTextChange(editorData);
-                //   } else {
-                //     setProposalAnswer(
-                //       this.context,
-                //       proposalId,
-                //       questionId,
-                //       lastAnswer?.answer || '',
-                //       userData
-                //     );
-                //   }
-                // }
-                setNotApplicable(proposalId, questionId, !isNotApplicable);
-              }}
-            />
-          )}
+              if (!isNotApplicable) {
+                await setProposalAnswer(
+                  this.context,
+                  proposalId,
+                  questionId,
+                  'N/A',
+                  userData
+                );
+                setNotApplicable(
+                  proposalId,
+                  questionId,
+                  !isNotApplicable,
+                  this.context
+                );
+              } else {
+                await this.handleUncheckNaQuestion(type);
+                setNotApplicable(
+                  proposalId,
+                  questionId,
+                  !isNotApplicable,
+                  this.context
+                );
+              }
+            }}
+          />
         </div>
       );
     }
@@ -582,7 +588,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
       noneditableField,
       hasDifferentSFanswer,
       loading,
-      isNotApplicable
+      isNotApplicable,
+      NaLoading
     } = this.props;
 
     const { selectedRow } = this.state;
@@ -594,8 +601,17 @@ export class TaskRow extends React.PureComponent<Props, State> {
     let answerValue = '';
     let answerValueComplex;
     let finalOptions = options;
+    const checkDisableFlagRadio = () => {
+      if (NaLoading) return true;
+
+      return (
+        checkNonEditableFields(noneditableField, sfField, sfObject) ||
+        !isCurrentBid
+      );
+    };
     const checkDisableFlag = () => {
       if (this.isQuestionLockedByOther()) return true;
+      if (NaLoading) return true;
 
       return (
         checkNonEditableFields(noneditableField, sfField, sfObject) ||
@@ -628,7 +644,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             <span
               className={this.props.showNaCheckbox ? 'markNaAutoActive' : ''}
             >
-              {this.renderNACheckbox(checkDisableFlag, answers, 'Autocomplete')}
+              {this.renderNACheckbox(checkDisableFlag, 'Autocomplete')}
             </span>
             <span
               style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
@@ -794,7 +810,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, answers, 'text')}
+                {this.renderNACheckbox(checkDisableFlag, 'text')}
               </span>
               <span
                 style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
@@ -823,7 +839,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, answers, 'number')}
+                {this.renderNACheckbox(checkDisableFlag, 'number')}
               </span>
               <TextArea
                 className="proposal-text-area"
@@ -854,7 +870,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, answers, 'y/n')}
+                {this.renderNACheckbox(checkDisableFlag, 'y/n')}
               </span>
               <DropdownWithIdleStateDetection
                 id="dd-proposal-answer"
@@ -889,7 +905,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, answers, 'select')}
+                {this.renderNACheckbox(checkDisableFlag, 'select')}
               </span>
               <DropdownWithIdleStateDetection
                 id="dd-proposal-answer"
@@ -925,7 +941,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, answers, 'date')}
+                {this.renderNACheckbox(checkDisableFlag, 'date')}
               </span>
               <span
                 style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
@@ -966,7 +982,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, answers, 'picklist')}
+                {this.renderNACheckbox(checkDisableFlag, 'picklist')}
               </span>
               <MultiSelectWithIdleStateDetection
                 placeholder={checkDisableFlag() ? '' : 'Click to answer'}
@@ -1004,7 +1020,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
                 {this.renderNACheckbox(
                   checkDisableFlag,
-                  answers,
+
                   'multi-select-lookup'
                 )}
               </span>
@@ -1047,7 +1063,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
                 {this.renderNACheckbox(
                   checkDisableFlag,
-                  answers,
+
                   'select-lookup'
                 )}
               </span>
@@ -1088,14 +1104,14 @@ export class TaskRow extends React.PureComponent<Props, State> {
               }
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, answers, 'radio')}
+                {this.renderNACheckbox(checkDisableFlag, 'radio')}
               </span>
               <RadioQuestionIdleStateDetection
                 id="dd-proposal-answer"
                 items={finalOptions}
                 onClick={val => this.onClickChange(val, answerValue)}
                 value={answerValue}
-                disabled={checkDisableFlag() || isNotApplicable}
+                disabled={checkDisableFlagRadio() || isNotApplicable}
                 onFocus={concurrencyFocusHandler}
                 onBlur={concurrencyBlurHandler}
               />
@@ -1286,7 +1302,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       <div
         className={`task-table-row question-row ${
           selectedRow ? 'selected-task-table-row' : ''
-        } ${NaLoading ? 'fade-area' : ''}`}
+        } ${NaLoading ? 'fade-area' : ''} `}
         style={{ margin: '2px 0px' }}
       >
         <Grid container className="question-title-grid">
@@ -1474,5 +1490,6 @@ export default connect(mapStateToProps, {
   setAnswerLoading: setProposalAnswerLoading,
   deleteProposalUser: deleteProposalUserFromDB,
   setNotApplicable: setNotApplicableQuestion,
+  setNotApplicableLoading: setNotApplicableLoader,
   setEditQuestionData
 })(MatomoHOC(TaskRow));

@@ -344,7 +344,7 @@ class Multiselect extends PureComponent<Props, State> {
                     onClick={this.onSelect}
                     item={item}
                     key={`${id}-multiselect-${itemIndex}`}
-                    isSelected={selectedValues.includes(item)}
+                    isSelected={selectedValues?.includes(item)}
                     focused={focusedValue === item}
                     parentRef={this.listRef}
                   />

@@ -12,7 +12,8 @@ import {
   updateQuestionLockByUser,
   updateQuestionUnlockByUser,
   getQuestionLockDetailsAll,
-  setProposalAnswerDatafromSocket
+  setProposalAnswerDatafromSocket,
+  setNotApplicableQuestionFromSocket
 } from '../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
@@ -98,6 +99,34 @@ const SocketContextProvider = props => {
         JSON.stringify({
           action: 'QUESTION',
           body: { event: 'QUESTION_LOCK', data: { questionId } }
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /**
+   *
+   * @param {*} questionId
+   * @param {*} status
+   * @param {*} ws
+   */
+  const naQuestionUpdate = (questionId, naStatus, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'QUESTION',
+          body: {
+            event: 'QUESTION_NA_UPDATE',
+            data: {
+              naStatus,
+              questionId
+            }
+          }
         })
       );
     } catch (error) {
@@ -234,7 +263,8 @@ const SocketContextProvider = props => {
         updateQuestionLock,
         updateQuestionUnlock,
         getQuestionLockDetails,
-        setProposalAnswerDatafromSocket
+        setProposalAnswerDatafromSocket,
+        setNotApplicableQuestionFromSocket
       } = props;
 
       // On Message Recieve
@@ -288,6 +318,15 @@ const SocketContextProvider = props => {
               setProposalAnswerDatafromSocket(
                 questionId,
                 data.data.latestAnswer
+              );
+            }
+            break;
+          case 'QUESTION_NA_UPDATE':
+            // update question answer how it is done in action
+            if (data.data) {
+              setNotApplicableQuestionFromSocket(
+                data.data.questionId,
+                data.data.naStatus
               );
             }
 
@@ -381,6 +420,12 @@ const SocketContextProvider = props => {
     );
   };
 
+  const naQuestionUpdateWrapper = (questionId, status) => {
+    waitForSocketConnectionMinInterval(() =>
+      naQuestionUpdate(questionId, status, null)
+    );
+  };
+
   const questionLockDetailsWrapper = () => {
     waitForSocketConnectionMinInterval(() => questionLockDetails(null));
   };
@@ -425,7 +470,8 @@ const SocketContextProvider = props => {
         questionLockWrapper,
         questionUnlockWrapper,
         questionLockDetailsWrapper,
-        questionAnswerUpdateWrapper
+        questionAnswerUpdateWrapper,
+        naQuestionUpdateWrapper
       }}
     >
       {props.children}
@@ -447,7 +493,8 @@ const mapDispatchToProps = {
   updateQuestionLock: updateQuestionLockByUser,
   updateQuestionUnlock: updateQuestionUnlockByUser,
   getQuestionLockDetails: getQuestionLockDetailsAll,
-  setProposalAnswerDatafromSocket: setProposalAnswerDatafromSocket
+  setProposalAnswerDatafromSocket: setProposalAnswerDatafromSocket,
+  setNotApplicableQuestionFromSocket: setNotApplicableQuestionFromSocket
 };
 
 export default connect(
