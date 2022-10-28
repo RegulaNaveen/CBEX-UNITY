@@ -755,8 +755,8 @@ const onUpdateProposalNAQuestionDone = (state: Map, action: Object): Map => {
 
   newState = state
     .setIn(
-      ['proposalQuestions', indexOfListToUpdate, 'notapplicable'],
-      data?.notapplicable
+      ['proposalQuestions', indexOfListToUpdate, 'notApplicable'],
+      data?.notApplicable
     )
     .setIn(['proposalQuestions', indexOfListToUpdate, 'NaLoading'], loading);
 
@@ -786,7 +786,7 @@ const onUpdateProposalNAQuestionFromSocketDone = (
 
   newState = state
     .setIn(
-      ['proposalQuestions', indexOfListToUpdate, 'notapplicable'],
+      ['proposalQuestions', indexOfListToUpdate, 'notApplicable'],
       questionStatus
     )
     .setIn(['proposalQuestions', indexOfListToUpdate, 'NaLoading'], loading);
