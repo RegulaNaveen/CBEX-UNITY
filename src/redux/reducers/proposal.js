@@ -14,6 +14,7 @@ const {
   PROPOSAL_ANSWER_LOADING,
   UPDATE_NOT_APPLICABLE_PROGRESS,
   UPDATE_NOT_APPLICABLE_DONE,
+  UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE,
   PROPOSAL_ANSWER_ERROR,
   QUESTION_SECTION_INFO,
   QUESTION_SECTION_LOADING,
@@ -754,8 +755,39 @@ const onUpdateProposalNAQuestionDone = (state: Map, action: Object): Map => {
 
   newState = state
     .setIn(
-      ['proposalQuestions', indexOfListToUpdate, 'notapplicable'],
-      data?.notapplicable
+      ['proposalQuestions', indexOfListToUpdate, 'notApplicable'],
+      data?.notApplicable
+    )
+    .setIn(['proposalQuestions', indexOfListToUpdate, 'NaLoading'], loading);
+
+  const proposalQuestions = newState.get('proposalQuestions');
+
+  return state
+    .set('proposalQuestions', proposalQuestions)
+    .set('isProposalAnswerLoading', false)
+    .set('isProposalNAQuestionLoading', false);
+};
+
+const onUpdateProposalNAQuestionFromSocketDone = (
+  state: Map,
+  action: Object
+): Map => {
+  const {
+    payload: { questionStatus, questionId: referenceId, loading = false }
+  } = action;
+
+  let newState = fromJS({});
+
+  const indexOfListToUpdate = state
+    .get('proposalQuestions')
+    .findIndex(listItem => {
+      return listItem.questionId === referenceId;
+    });
+
+  newState = state
+    .setIn(
+      ['proposalQuestions', indexOfListToUpdate, 'notApplicable'],
+      questionStatus
     )
     .setIn(['proposalQuestions', indexOfListToUpdate, 'NaLoading'], loading);
 
@@ -1115,6 +1147,7 @@ const actionMap = {
   [PROPOSAL_ANSWER_LOADING]: onProposalAnswerLoading,
   [UPDATE_NOT_APPLICABLE_PROGRESS]: onProposalNAQuestionLoading,
   [UPDATE_NOT_APPLICABLE_DONE]: onUpdateProposalNAQuestionDone,
+  [UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE]: onUpdateProposalNAQuestionFromSocketDone,
   [ERROR_UPDATE_NOT_APPLICABLE]: onErrorUpdateNotApplicable,
   [PROPOSAL_ANSWER_ERROR]: onProposalAnswerError,
   [QUESTION_SECTION_INFO]: onQuestionSectionInfoLoaded,

@@ -16,7 +16,7 @@ const CollapsibleQuestionMapping = ({
       questionConfig.get('visible', true) &&
       (questionConfig.get('active', true) ||
         questionConfig.get('isCustomQuestion', true)) &&
-      (!questionConfig.get('notapplicable') || isQuestionsFiltersEnabled);
+      (!questionConfig.get('notApplicable') || isQuestionsFiltersEnabled);
 
     return (
       (visible || typeof visible === 'undefined') && (
@@ -51,7 +51,7 @@ const CollapsibleQuestionMapping = ({
           hasDifferentSFanswer={questionConfig.get('hasDifferentSFanswer')}
           isNotepadOpen={isNotepadOpen}
           events={questionConfig.get('events') || {}}
-          isNotApplicable={questionConfig.get('notapplicable')}
+          isNotApplicable={questionConfig.get('notApplicable')}
         />
       )
     );
