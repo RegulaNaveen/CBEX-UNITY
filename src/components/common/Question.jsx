@@ -601,6 +601,14 @@ export class TaskRow extends React.PureComponent<Props, State> {
     let answerValue = '';
     let answerValueComplex;
     let finalOptions = options;
+    const checkDisableFlagRadio = () => {
+      if (NaLoading) return true;
+
+      return (
+        checkNonEditableFields(noneditableField, sfField, sfObject) ||
+        !isCurrentBid
+      );
+    };
     const checkDisableFlag = () => {
       if (this.isQuestionLockedByOther()) return true;
       if (NaLoading) return true;
@@ -1103,7 +1111,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 items={finalOptions}
                 onClick={val => this.onClickChange(val, answerValue)}
                 value={answerValue}
-                disabled={checkDisableFlag() || isNotApplicable}
+                disabled={checkDisableFlagRadio() || isNotApplicable}
                 onFocus={concurrencyFocusHandler}
                 onBlur={concurrencyBlurHandler}
               />
