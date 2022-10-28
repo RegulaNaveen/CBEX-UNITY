@@ -87,6 +87,8 @@ const PROPOSAL = {
   SET_EVENT_LAUNCHER_FLAG: 'set_event_launcher_flag',
   SHOW_NA_CHECKBOX: 'show_na_checkbox',
   UPDATE_NOT_APPLICABLE_PROGRESS: 'update_not_applicable_progress',
+  UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE:
+    'update_not_applicable_from_socket_done',
   UPDATE_NOT_APPLICABLE_DONE: 'update_not_applicable_done',
   SET_PRICE_MODELER_FIELDS: 'set_price_modeler_fields',
   ERROR_UPDATE_NOT_APPLICABLE: 'error_update_not_applicable'

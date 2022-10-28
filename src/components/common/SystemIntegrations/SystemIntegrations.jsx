@@ -454,7 +454,7 @@ const SystemIntegrations = ({
           {CalendarCondition()}
         </div>
         <div style={{ display: 'flex', height: '20px', width: '24px' }}>
-          {loading && !NaLoading && !showNaCheckbox ? (
+          {loading ? (
             <span
               style={{
                 marginLeft: '0px',

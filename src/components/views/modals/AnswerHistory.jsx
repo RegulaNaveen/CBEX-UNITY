@@ -234,11 +234,13 @@ class AnswerHistory extends Component<Props> {
           }
           const showDate = (answer, nextAnswer, indx) => {
             const tmp = answers.toJS();
-            if (new Date(answer) == 'Invalid Date') {
-              return renderWord('Invalid Date', 'removed');
-            }
             let styleClass =
               !isOnlyOneAnswer && !isLastItem ? 'changed' : undefined;
+
+            if (new Date(answer) === 'Invalid Date') {
+              return renderWord('Invalid Date', 'removed');
+            }
+
             // Dont add styles if answers are same
             // We use .substring(0, 10) to get only the yyyy-mm-dd out of a String like '2022-04-30T00:00:00+05:30'
             if (
@@ -249,7 +251,14 @@ class AnswerHistory extends Component<Props> {
               styleClass = undefined;
             }
             const newdate = renderWord(
-              String(parseMomentDate(answer)),
+              String(
+                // eslint-disable-next-line no-nested-ternary
+                answer === 'N/A'
+                  ? 'N/A'
+                  : answer === ''
+                  ? ''
+                  : parseMomentDate(answer)
+              ),
               styleClass
             );
             let nextdate = '';
@@ -261,7 +270,13 @@ class AnswerHistory extends Component<Props> {
               tmp.length > 1
             ) {
               nextdate = renderWord(
-                String(parseMomentDate(nextAnswer)),
+                String(
+                  nextAnswer === 'N/A'
+                    ? 'N/A'
+                    : answer === ''
+                    ? ''
+                    : parseMomentDate(nextAnswer)
+                ),
                 'removed'
               );
             }
@@ -333,7 +348,14 @@ class AnswerHistory extends Component<Props> {
               .trimStart()
               .trimEnd();
             if (!String(answer).length) {
-              return renderWord(parseMomentDate(nextAnswer), 'removed');
+              return renderWord(
+                nextAnswer === 'N/A'
+                  ? 'N/A'
+                  : answer === ''
+                  ? ''
+                  : parseMomentDate(nextAnswer),
+                'removed'
+              );
             }
             return <p>{showDate(answer, nextAnswer, index)}</p>;
           }

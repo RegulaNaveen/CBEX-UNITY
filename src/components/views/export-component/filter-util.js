@@ -47,7 +47,7 @@ export const applyNotApplicableFilter = questions => {
   filteredQuestions = questions.filter(question => {
     let na;
     try {
-      na = question.notapplicable;
+      na = question.notApplicable;
     } catch (error) {}
     try {
       return !na;
