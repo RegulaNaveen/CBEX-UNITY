@@ -392,7 +392,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
   ) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
 
-    if (!isEqual(lastAnswer, selectedValues))
+    if (!isEqual(lastAnswer, selectedValues) && selectedValues !== undefined) {
       setProposalAnswer(
         this.context,
         proposalId,
@@ -400,6 +400,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         selectedValues,
         userData
       );
+    }
 
     this.trackMatomoEventSubmitAnswer(selectedValues);
   };
