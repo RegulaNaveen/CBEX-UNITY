@@ -70,7 +70,7 @@ dev:
 deploydev:
   stage: deploydev
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-  when:manual
+  when: manual
   needs:
     - dev
   only:
