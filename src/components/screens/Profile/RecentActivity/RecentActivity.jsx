@@ -166,7 +166,7 @@ const RecentActivity = ({ setNotifications }) => {
               {loading ? <Loader isInner /> : null}
               <tbody
                 className="recent-activity-tab"
-                style={{ height: cardHeight + 30 }}
+                style={{ height: cardHeight - 100 }}
               >
                 {!isEmpty(sortedAllNotification) ? (
                   sortedAllNotification.map(item => {
