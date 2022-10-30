@@ -1,5 +1,5 @@
 import Grid from 'apollo-react/components/Grid';
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Typography from 'apollo-react/components/Typography';
 import { connect, useSelector } from 'react-redux';
 import Search from 'apollo-react/components/Search';
@@ -28,7 +28,34 @@ const RecentActivity = ({ setNotifications }) => {
   const [searchKey, setSearchKey] = useState('');
   const [notificationList, setNotificationList] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const [navHeight, setHeight] = useState(window.innerHeight);
+  let cardHeight;
+  const updateDimensions = () => {
+    setHeight(window.innerHeight);
+  };
+  useEffect(() => {
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
+  }, []);
+  const fiftyPerc = navHeight > 1217 && navHeight < 1828;
+  const sixtySevPerc = navHeight > 913 && navHeight < 1218;
+  const seventyFivePerc = navHeight > 811 && navHeight < 914;
+  const eightyPerc = navHeight > 761 && navHeight < 812;
+  const ninetyPerc = navHeight > 676 && navHeight < 762;
+  const hundredPerc = navHeight > 608 && navHeight < 677;
+  if (fiftyPerc) {
+    cardHeight = navHeight - (navHeight / 100) * 18;
+  } else if (sixtySevPerc) {
+    cardHeight = navHeight - (navHeight / 100) * 21;
+  } else if (seventyFivePerc) {
+    cardHeight = navHeight - (navHeight / 100) * 23;
+  } else if (eightyPerc) {
+    cardHeight = navHeight - (navHeight / 100) * 25;
+  } else if (ninetyPerc) {
+    cardHeight = navHeight - (navHeight / 100) * 28;
+  } else if (hundredPerc) {
+    cardHeight = navHeight - (navHeight / 100) * 30;
+  }
   const closeIsDrawerOptions = () => {
     setIsDrawerOptions(false);
   };
@@ -101,7 +128,11 @@ const RecentActivity = ({ setNotifications }) => {
           />
         </Grid>
         <Grid item md={12} sm={12} xs={12} className="notification-grid-wrp">
-          <Card interactive className="recent-card">
+          <Card
+            interactive
+            className="recent-card"
+            style={{ height: cardHeight }}
+          >
             <table className="notification-table-wrp">
               <thead>
                 <tr className="notification-header-tr">
@@ -133,7 +164,10 @@ const RecentActivity = ({ setNotifications }) => {
                 </tr>
               </thead>
               {loading ? <Loader isInner /> : null}
-              <tbody className="recent-activity-tab">
+              <tbody
+                className="recent-activity-tab"
+                style={{ height: cardHeight + 30 }}
+              >
                 {!isEmpty(sortedAllNotification) ? (
                   sortedAllNotification.map(item => {
                     return (
