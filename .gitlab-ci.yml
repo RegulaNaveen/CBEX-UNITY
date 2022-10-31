@@ -124,7 +124,7 @@ deploydev2:
   tags:
     - docker
 
-demo:
+
 l4:
   stage: buildl4
   image: node:14
@@ -158,6 +158,8 @@ deployl4:
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
   tags:
     - docker
+  
+demo:  
   stage: builddemo
   image: node:14
   variables:
