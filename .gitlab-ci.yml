@@ -132,7 +132,7 @@ l4:
   variables:
     Environment: $CI_JOB_NAME
   only:
-    - L4
+    - tags
   script:
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
