@@ -12,6 +12,7 @@
     "build:sdev": "webpack --mode production --env.API_ENV=SDEV",
     "build:udev": "webpack --mode production --env.API_ENV=UDEV",
     "build:qa": "webpack --mode production --env.API_ENV=QA",
+    "build:l4": "webpack --mode production --env.API_ENV=L4",
     "build:crm": "webpack --mode production --env.API_ENV=CRM",
     "build:uat": "webpack --mode production --env.API_ENV=UAT",
     "build:prod": "webpack --mode production --env.API_ENV=PROD",
@@ -100,6 +101,7 @@
     "uuid": "^8.3.0",
     "y-protocols": "^1.0.5",
     "y-websocket": "^1.4.3",
+    "yarn": "^1.22.19",
     "yjs": "^13.5.41"
   },
   "devDependencies": {
