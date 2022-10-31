@@ -19,8 +19,8 @@ stages:
   - deployl4
   - buildqa
   - deployqa
-  - builddemo
-  - deploydemo
+  #- builddemo
+  #- deploydemo
   - builduat
   - deployuat
   - buildprod
@@ -150,7 +150,7 @@ deployl4:
   stage: deployl4
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
-    - buildl4
+    - l4
   when: manual
   script:    
     - source build.env
@@ -159,7 +159,7 @@ deployl4:
   tags:
     - docker
   
-demo:  
+.demo:  
   stage: builddemo
   image: node:14
   variables:
@@ -184,7 +184,7 @@ demo:
   tags:
     - docker
 
-deploydemo:
+.deploydemo:
   stage: deploydemo
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
