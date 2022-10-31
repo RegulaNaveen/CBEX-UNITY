@@ -25,98 +25,7 @@ const UnityTab = ({ id, enableValidateTab, selectedView }) => {
   const proposalID = memoizeBid?.id;
 
   useEffect(() => {
-    console.log('useeffect called', proposalQuestions);
     if (proposalID) {
-      oppData[proposalID].proposal.approvals = [
-        {
-          ApprovalSectionTitle: 'DSda',
-          ApprovalSectionRightQuestions: [],
-          ApprovalSectionOrder: 4,
-          ApprovalSectionLeftQuestions: [
-            {
-              ApprovalQuestion: 'Intervention type',
-              ApprovalQuestionId: '97fa382a-6fe3-40f5-8af6-97b460fb261b',
-              ApprovalQuestionOrder: 1,
-            },
-          ],
-        },
-        {
-          ApprovalSectionTitle: 'Test Approval Section31',
-          ApprovalSectionRightQuestions: [
-            {
-              ApprovalQuestion:
-                "High-level scope for opportunity. What customers want and what they definitely don't want. radio button man radio",
-              ApprovalQuestionId: '97fa382a-6fe3-40f5-8af6-97b460fb261b',
-              ApprovalQuestionOrder: 1,
-            },
-            {
-              ApprovalQuestion: 'Akash Indicationn gyjaaaa',
-              ApprovalQuestionId: '97fa382a-6fe3-40f5-8af6-97b460fb261b',
-              ApprovalQuestionOrder: 2,
-            },
-          ],
-          ApprovalSectionOrder: 1,
-          ApprovalSectionLeftQuestions: [
-            {
-              ApprovalQuestion: 'Opportunity Type',
-              ApprovalQuestionId: '97fa382a-6fe3-40f5-8af6-97b460fb261b',
-              ApprovalQuestionOrder: 1,
-            },
-          ],
-        },
-        {
-          ApprovalSectionTitle: 'DSSD',
-          ApprovalSectionRightQuestions: [
-            {
-              ApprovalQuestion: 'Intervention type',
-              ApprovalQuestionId: '97fa382a-6fe3-40f5-8af6-97b460fb261b',
-              ApprovalQuestionOrder: 1,
-            },
-          ],
-          ApprovalSectionOrder: 3,
-          ApprovalSectionLeftQuestions: [
-            {
-              ApprovalQuestion: 'Phase I study type',
-              ApprovalQuestionId: '97fa382a-6fe3-40f5-8af6-97b460fb261b',
-              ApprovalQuestionOrder: 1,
-            },
-          ],
-        },
-        {
-          ApprovalSectionTitle: 'New Test38',
-          ApprovalSectionRightQuestions: [
-            {
-              ApprovalQuestion: 'Akash Indicationn gyjaaaa',
-              ApprovalQuestionId: '97fa382a-6fe3-40f5-8af6-97b460fb261b',
-              ApprovalQuestionOrder: 1,
-            },
-          ],
-          ApprovalSectionOrder: 2,
-          ApprovalSectionLeftQuestions: [
-            {
-              ApprovalQuestion:
-                'How many scenarios, if any, did the customer request?',
-              ApprovalQuestionId: '97fa382a-6fe3-40f5-8af6-97b460fb261b',
-              ApprovalQuestionOrder: 1,
-            },
-            {
-              ApprovalQuestion: 'Is this a rare disease?',
-              ApprovalQuestionId: '97fa382a-6fe3-40f5-8af6-97b460fb261b',
-              ApprovalQuestionOrder: 2,
-            },
-            {
-              ApprovalQuestion: 'Opportunity Type',
-              ApprovalQuestionId: '97fa382a-6fe3-40f5-8af6-97b460fb261b',
-              ApprovalQuestionOrder: 3,
-            },
-            {
-              ApprovalQuestion: 'Which of the following applies?',
-              ApprovalQuestionId: '01a4d805-3b4b-4549-b308-5a2dfb8cdaa9',
-              ApprovalQuestionOrder: 4,
-            },
-          ],
-        },
-      ];
       let opportunityData = oppData[proposalID];
       getApprovalQuestionIds(opportunityData);
     }
@@ -124,15 +33,15 @@ const UnityTab = ({ id, enableValidateTab, selectedView }) => {
 
   const getApprovalQuestionIds = (opportunityData) => {
     const approvalQIdsArr = [];
-    opportunityData?.proposal?.approvals.forEach((qIdApproval) => {
+    opportunityData?.proposal?.approvals?.forEach((qIdApproval) => {
       if (qIdApproval?.ApprovalSectionLeftQuestions?.length !== 0) {
-        qIdApproval?.ApprovalSectionLeftQuestions?.map((leftQId) => {
-          approvalQIdsArr.push(leftQId.ApprovalQuestionId);
+        qIdApproval.ApprovalSectionLeftQuestions.forEach((leftQId) => {
+          approvalQIdsArr.push(leftQId);
         });
       }
       if (qIdApproval?.ApprovalSectionRightQuestions?.length !== 0) {
-        qIdApproval?.ApprovalSectionRightQuestions?.forEach((rightQId) => {
-          approvalQIdsArr.push(rightQId.ApprovalQuestionId);
+        qIdApproval.ApprovalSectionRightQuestions.forEach((rightQId) => {
+          approvalQIdsArr.push(rightQId);
         });
       }
     });
