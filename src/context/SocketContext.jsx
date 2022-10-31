@@ -12,7 +12,9 @@ import {
   updateQuestionLockByUser,
   updateQuestionUnlockByUser,
   getQuestionLockDetailsAll,
-  setProposalAnswerDatafromSocket
+  setProposalAnswerDatafromSocket,
+  setPriceModelerRecalculationStatusAction,
+  updatePriceModelerEstimateAction
 } from '../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
@@ -234,7 +236,9 @@ const SocketContextProvider = props => {
         updateQuestionLock,
         updateQuestionUnlock,
         getQuestionLockDetails,
-        setProposalAnswerDatafromSocket
+        setProposalAnswerDatafromSocket,
+        setPriceModelerRecalculationStatus,
+        updatePriceModelerEstimate
       } = props;
 
       // On Message Recieve
@@ -295,6 +299,12 @@ const SocketContextProvider = props => {
           case 'QUESTIONS':
             // Get list of questions already locked by other users
             getQuestionLockDetails(data);
+            break;
+          case 'COST_ESTIMATE_CALCULATING':
+            setPriceModelerRecalculationStatus(true);
+            break;
+          case 'COST_ESTIMATE_UPDATE':
+            updatePriceModelerEstimate(data.data);
             break;
           default:
             break;
@@ -447,7 +457,9 @@ const mapDispatchToProps = {
   updateQuestionLock: updateQuestionLockByUser,
   updateQuestionUnlock: updateQuestionUnlockByUser,
   getQuestionLockDetails: getQuestionLockDetailsAll,
-  setProposalAnswerDatafromSocket: setProposalAnswerDatafromSocket
+  setProposalAnswerDatafromSocket: setProposalAnswerDatafromSocket,
+  setPriceModelerRecalculationStatus: setPriceModelerRecalculationStatusAction,
+  updatePriceModelerEstimate: updatePriceModelerEstimateAction
 };
 
 export default connect(

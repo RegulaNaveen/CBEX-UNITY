@@ -4,10 +4,12 @@ import map from 'lodash/map';
 import IconButton from 'apollo-react/components/IconButton';
 import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
+import CircularProgress from 'apollo-react/components/CircularProgress';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   getSelectedBid,
-  getPriceModuler
+  getPriceModuler,
+  selectIsPriceModelerEstimateRecalculating
 } from '../../redux/selectors/proposal';
 import { getPriceModelerData } from '../../redux/actions/proposal-actions';
 import CustomModal from './CustomModal';
@@ -41,6 +43,9 @@ const PriceModeler = () => {
   const dispatch = useDispatch();
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const priceModeler = useSelector(getPriceModuler)?.toJS();
+  const isPriceModelerRecalculating = useSelector(
+    selectIsPriceModelerEstimateRecalculating
+  );
   const memoizeBid = useMemo(() => selectedBid, [selectedBid?.id]);
   const proposalID = memoizeBid?.id;
 
@@ -86,6 +91,28 @@ const PriceModeler = () => {
             : '0.0M'
         }`}{' '}
         <span className="price-modeler__info">{infoIconWithTooltip}</span>
+        {isPriceModelerRecalculating ? (
+          <span className="price-modeler__recalculating">
+            <Tooltip
+              variant="light"
+              tabIndex={-1}
+              title="Recalculating"
+              placement="top"
+              data-testid="price-modeler-recalc-tooltip"
+            >
+              <CircularProgress
+                variant="indeterminate"
+                size={20}
+                style={{
+                  color: 'rgb(255, 147, 0)',
+                  width: '20px',
+                  height: '20px'
+                }}
+                data-testid="price-modeler-recalc-loader"
+              />
+            </Tooltip>
+          </span>
+        ) : null}
       </p>
       <div className="price-modeler__details">
         {map(priceModeler, (item, key) => {

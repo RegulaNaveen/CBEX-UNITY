@@ -349,3 +349,7 @@ export const getLookUpOptionsSelector = (proposals: Map): Object =>
 export const getPriceModuler = createSelector(selectProposal, proposal =>
   proposal?.get('priceModeler')
 );
+
+export const selectIsPriceModelerEstimateRecalculating = createSelector(selectProposal, proposal =>
+  proposal?.get('priceModelerRecalculating', false)
+);

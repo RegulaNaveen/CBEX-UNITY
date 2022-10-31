@@ -56,7 +56,9 @@ const {
   QUESTION_UNLOCK_BY_USER,
   QUESTION_LOCK_DETAILS_ALL,
   SET_EVENT_LAUNCHER_FLAG,
-  SET_PRICE_MODELER_FIELDS
+  SET_PRICE_MODELER_FIELDS,
+  SET_PRICE_MODELER_RECALCULATING,
+  PRICE_MODELER_UPDATE
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -135,7 +137,8 @@ const INITIAL_STATE: Map = fromJS({
     phase: '',
     patients: '',
     regions: ''
-  })
+  }),
+  priceModelerRecalculating: false
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -983,6 +986,29 @@ const setPriceModulerFields = (state, action) => {
   );
 };
 
+const updatePriceModelerEstimate = (state, action) => {
+  const {
+    Cost,
+    TherapyArea__c,
+    Number_of_Sites__c,
+    Phase_P__c,
+    Patients_Enrolled__c,
+    Potential_Regions__c
+  } = action.payload;
+
+  return state.set(
+    'priceModeler',
+    fromJS({
+      cost: Cost,
+      therapeutic: TherapyArea__c,
+      sites: Number_of_Sites__c,
+      phase: Phase_P__c,
+      patients: Patients_Enrolled__c,
+      regions: Potential_Regions__c
+    })
+  );
+};
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
@@ -1037,7 +1063,10 @@ const actionMap = {
   [QUESTION_LOCK_DETAILS_ALL]: questionLockDetails,
   [SET_EVENT_LAUNCHER_FLAG]: (state, { payload }) =>
     state.set('eventLauncherFlag', payload),
-  [SET_PRICE_MODELER_FIELDS]: setPriceModulerFields
+  [SET_PRICE_MODELER_FIELDS]: setPriceModulerFields,
+  [SET_PRICE_MODELER_RECALCULATING]: (state, { payload }) =>
+    state.set('priceModelerRecalculating', payload),
+  [PRICE_MODELER_UPDATE]: updatePriceModelerEstimate
 };
 
 export default function(
