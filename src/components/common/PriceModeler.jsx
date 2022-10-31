@@ -93,15 +93,24 @@ const PriceModeler = () => {
         <span className="price-modeler__info">{infoIconWithTooltip}</span>
         {isPriceModelerRecalculating ? (
           <span className="price-modeler__recalculating">
-            <CircularProgress
-              variant="indeterminate"
-              size={20}
-              style={{
-                color: 'rgb(255, 147, 0)',
-                width: '20px',
-                height: '20px'
-              }}
-            />
+            <Tooltip
+              variant="light"
+              tabIndex={-1}
+              title="Recalculating"
+              placement="top"
+              data-testid="price-modeler-recalc-tooltip"
+            >
+              <CircularProgress
+                variant="indeterminate"
+                size={20}
+                style={{
+                  color: 'rgb(255, 147, 0)',
+                  width: '20px',
+                  height: '20px'
+                }}
+                data-testid="price-modeler-recalc-loader"
+              />
+            </Tooltip>
           </span>
         ) : null}
       </p>

@@ -4,7 +4,7 @@
 
   &.task-wrapper {
     display: block;
-    border:none;
+    border: none;
     padding: 0.5rem 1rem;
   }
   &__loader > div {
@@ -64,6 +64,6 @@
   }
   &__recalculating {
     margin-left: 0.25rem;
-    margin-top: 0.25rem;
+    margin-top: 0.325rem;
   }
 }

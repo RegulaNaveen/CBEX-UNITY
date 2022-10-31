@@ -304,7 +304,7 @@ const SocketContextProvider = props => {
             setPriceModelerRecalculationStatus(true);
             break;
           case 'COST_ESTIMATE_UPDATE':
-            updatePriceModelerEstimate(data.data);            
+            updatePriceModelerEstimate(data.data);
             break;
           default:
             break;
