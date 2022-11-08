@@ -7,6 +7,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import ChevronRight from 'apollo-react-icons/ChevronRight';
 
 import { selectProposalQuestions } from '../../../redux/selectors/index';
+import QuestionItem from './QuestionItem';
 
 const generateQuestionsHash = proposalQuestions => {
   try {
@@ -47,14 +48,12 @@ const Section = ({ approval }) => {
       <Grid container spacing={2}>
         <Grid item xs={8}>
           {ApprovalSectionLeftQuestions?.map(item => (
-            // <QuestionItem question={questionHash[item.ApprovalQuestionId]} />
-            <p>Question Item</p>
+            <QuestionItem question={questionHash[item] || {}} />
           ))}
         </Grid>
         <Grid item xs={4}>
           {ApprovalSectionRightQuestions?.map(item => (
-            // <QuestionItem question={questionHash[item.ApprovalQuestionId]} />
-            <p>Question Item</p>
+            <QuestionItem question={questionHash[item] || {}} />
           ))}
         </Grid>
       </Grid>
