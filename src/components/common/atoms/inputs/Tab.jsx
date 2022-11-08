@@ -12,6 +12,7 @@ import {
   getProposalQuestions,
   getSelectedBid,
 } from '../../../../redux/selectors/proposal';
+import Approvals from '../../../screens/Approvals/index';
 
 const UnityTab = ({ id, enableValidateTab, selectedView }) => {
   const [value, setValue] = useState(0);
@@ -103,7 +104,7 @@ const UnityTab = ({ id, enableValidateTab, selectedView }) => {
               </Tabs>
               <div style={{ padding: 20, paddingTop: 5 }}>
                 {value === 0 && <Questions proposalID={id} />}
-                {value === 1 && approvalsFlag && showApprovalTab && 'Approvals'}
+                {value === 1 && <Approvals />}
                 {value === 2 && <Documents />}
                 {value === 3 && <Validate />}
               </div>
@@ -147,7 +148,7 @@ const UnityTab = ({ id, enableValidateTab, selectedView }) => {
             </Tabs>
             <div style={{ padding: 20, paddingTop: 5 }}>
               {value === 0 && <Questions proposalID={id} />}
-              {value === 1 && 'Approvals'}
+              {value === 1 && <Approvals />}
               {value === 2 && <Documents />}
             </div>
           </>
