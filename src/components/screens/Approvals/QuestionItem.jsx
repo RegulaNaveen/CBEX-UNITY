@@ -8,6 +8,14 @@ import QuestionLabel from './QuestionLabel';
 import AnswerHistory from '../../views/modals/AnswerHistory';
 import ANSWER_TYPES from '../../../constants/answerTypes';
 import { getCountriesNameForCode } from '../../../utils/utils';
+import TextQuestion from './InputComponents/TextQuestion';
+import NumberQuestion from './InputComponents/NumberQuestion';
+import DateQuestion from './InputComponents/DateQuestion';
+import RadioQuestion from './InputComponents/RadioQuestion';
+import SelectQuestion from './InputComponents/SelectQuestion';
+import MultiSelectQuestion from './InputComponents/MultiSelectQuestion';
+import YesNoQuestion from './InputComponents/YesNoQuestion';
+import ProposalTeamQuestion from './InputComponents/ProposalTeamQuestion';
 
 const QuestionItem = ({ question }) => {
   const [isShowHistory, setIsShowHistory] = useState(false);
@@ -45,15 +53,43 @@ const QuestionItem = ({ question }) => {
     return questionMap;
   };
 
+  const FallbackComponent = () => {
+    return <div>Question type not found</div>;
+  };
+  const renderQuestion = () => {
+    if (question?.section?.sectionName === 'Proposal Team') {
+      return <ProposalTeamQuestion question={question} />;
+    }
+    const ComponentMapper = {
+      [ANSWER_TYPES.TEXT]: <TextQuestion question={question} />,
+      [ANSWER_TYPES.NUMBER]: <NumberQuestion question={question} />,
+      [ANSWER_TYPES.DATE]: <DateQuestion question={question} />,
+      [ANSWER_TYPES.RADIO]: <RadioQuestion question={question} />,
+      [ANSWER_TYPES.SELECT_LOOKUP]: <SelectQuestion question={question} />,
+      [ANSWER_TYPES.SELECT]: <SelectQuestion question={question} />,
+      [ANSWER_TYPES.PICKLIST]: <MultiSelectQuestion question={question} />,
+      [ANSWER_TYPES.PICKLIST_LOOKUP]: (
+        <MultiSelectQuestion question={question} />
+      ),
+      [ANSWER_TYPES.YES_NO]: <YesNoQuestion question={question} />
+    };
+
+    return (
+      ComponentMapper[question?.answerConfiguration?.type] || (
+        <FallbackComponent />
+      )
+    );
+  };
+
   return isEmpty(question) ? (
-    <>Question data Empty</>
+    <></>
   ) : (
     <div>
       <Box mt={2}>
         <QuestionLabel questionLabel={question?.questionText || ''} />
         <Grid container spacing={2}>
           <Grid item xs={11}>
-            question item
+            {renderQuestion()}
           </Grid>
           <Grid item xs={1}>
             <div
