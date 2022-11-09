@@ -27,6 +27,7 @@ import {
   changeProposalOT,
   deleteProposalUser,
   getProposalAnswer,
+  getUsersListApiCall,
   priceModelerApi,
   setNotApplicableQuestionApi,
   getAllProposals
@@ -1201,6 +1202,22 @@ export const getProposalAnswerHistory = (
     return { status: false, title: DEFAULT.ALERT, msg };
   }
 };
+
+/**
+ * Get Users List
+ */
+export const getUsersList = searchTerm => async () => {
+  try {
+    // Api Response
+    const response = await getUsersListApiCall(searchTerm);
+    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
+  } catch (error) {
+    // Error
+    console.log(error?.response);
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
+  }
+}
 
 /**
  * Set Flag for Event Launcher
