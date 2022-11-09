@@ -1,17 +1,26 @@
-import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useCallback
+} from 'react';
 import PropTypes from 'prop-types';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
-import { EditorState, SelectionState, Modifier, convertToRaw, CompositeDecorator } from 'apollo-react/node_modules/draft-js';
+import {
+  EditorState,
+  SelectionState,
+  Modifier,
+  convertToRaw,
+  CompositeDecorator
+} from 'apollo-react/node_modules/draft-js';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import { v4 as uuid } from 'uuid';
 import classNames from 'classnames';
-import { useUpdateEffect } from '../../hooks';
+import useUpdateEffect from '../../hooks/useUpdateEffect';
 import TagUserList from './TagUserList';
-import { getUsersList } from '../../redux/actions/proposal-actions';
 
-let firstRender = true;
 import { QUESTION_UNLOCK_TIMEOUT } from '../../constants/app';
 
 // CustomApolloRichText Utilities
@@ -19,7 +28,7 @@ import { QUESTION_UNLOCK_TIMEOUT } from '../../constants/app';
 /**
  * Function to find user tag pattern and return an object of pattering matching status
  * @param {editorState} EditorState
- * @returns {{ userQuery, offsetRange }} 
+ * @returns {{ userQuery, offsetRange }}
  */
 function getUserTagQueryInfo(editorState) {
   let queryInfo = {
@@ -30,15 +39,20 @@ function getUserTagQueryInfo(editorState) {
 
   const selectionState = editorState.getSelection();
   if (selectionState.isCollapsed()) {
-    const anchorKey = editorState.getSelection().getAnchorKey();
-    const anchorOffset = editorState.getSelection().getAnchorOffset();
-    const blockOnSelection = editorState.getCurrentContent().getBlockForKey(anchorKey);
+    const anchorKey = selectionState.getAnchorKey();
+    const anchorOffset = selectionState.getAnchorOffset();
+    const blockOnSelection = editorState
+      .getCurrentContent()
+      .getBlockForKey(anchorKey);
     const blockText = blockOnSelection.text.substring(0, anchorOffset);
     const filteredTxt = blockText.split(' ').pop();
     const isValidTxt = filteredTxt.match(/^@[^@]*$/gi);
     if (isValidTxt) {
       queryInfo.userQuery = filteredTxt.substring(1);
-      queryInfo.offsetRange = { start: anchorOffset - filteredTxt.length , end: anchorOffset };
+      queryInfo.offsetRange = {
+        start: anchorOffset - filteredTxt.length,
+        end: anchorOffset
+      };
       queryInfo.anchorKey = anchorKey;
     }
   }
@@ -46,17 +60,20 @@ function getUserTagQueryInfo(editorState) {
   return queryInfo;
 }
 
-/** 
- * DraftJS decorator strategy function to find entities of type 'MENTION' 
+/**
+ * DraftJS decorator strategy function to find entities of type 'MENTION'
  * @param {contentBlock} EditorState
  * @param {callback} callback
  * @param {contentState} contentState
  */
 function handleUserTagStrategy(contentBlock, callback, contentState) {
-  contentBlock.findEntityRanges((character) => {
-    const entityKey = character.getEntity()
-    return entityKey !== null && contentState.getEntity(entityKey).getType() === 'MENTION'
-  }, callback)
+  contentBlock.findEntityRanges(character => {
+    const entityKey = character.getEntity();
+    return (
+      entityKey !== null &&
+      contentState.getEntity(entityKey).getType() === 'MENTION'
+    );
+  }, callback);
 }
 
 const mentionStyles = {
@@ -65,7 +82,11 @@ const mentionStyles = {
 
 // MENTION entity's component
 function MentionComponent(props) {
-  return <span {...props} style={mentionStyles}>{ props.children }</span>
+  return (
+    <span {...props} style={mentionStyles}>
+      {props.children}
+    </span>
+  );
 }
 
 // decorator for DraftJS Editor Component
@@ -126,19 +147,16 @@ const CustomApolloRichText = ({
   const [unlockTimeout, setUnlockTimeout] = useState(null);
   const [isFocused, setIsFocused] = useState(false);
   const [searchTag, setSearchTag] = useState(null);
-  const [queryStringRange, setQueryStringRange] = useState({ start: 0, end: 0 });
+  const [queryStringRange, setQueryStringRange] = useState({
+    start: 0,
+    end: 0
+  });
   const [anchorKey, setAnchorKey] = useState(null);
 
   // Component Refs
   const richTextContainerRef = useRef(null);
   const richTextEditorRef = useRef(null);
   const richTextKeyRef = useRef(uuid());
-  const backspaceRef = useRef(false);
-  const rangeRef = useRef(null);
-  const selectionRef = useRef(null);
-  
-  const dispatch = useDispatch();
-
 
   /**
    * Function to Add Delay for Specific Seconds
@@ -156,9 +174,13 @@ const CustomApolloRichText = ({
     clearTimeout(unlockTimeout);
     if (clear) {
       setUnlockTimeout(null);
+      timeoutRef.current = null;
     } else {
       const timer = setTimeout(() => {
-        if (richTextEditorRef.current && richTextEditorRef.current.editorRef.current) {
+        if (
+          richTextEditorRef.current &&
+          richTextEditorRef.current.editorRef.current
+        ) {
           richTextEditorRef.current.editorRef.current.blur();
         }
         blur();
@@ -188,13 +210,15 @@ const CustomApolloRichText = ({
     // this timeout cannot be AVOIDED since it will wait for 500ms to let apollo component to update it's internal state on first render
     setTimeout(() => {
       if (richTextEditorRef.current) {
-        const { editorState } = richTextEditorRef.current.state;
+        const editorState = richTextEditorRef.current.state.editorState;
         const newEditorState = EditorState.set(editorState, {
           decorator: compositeDecorator
         });
         richTextEditorRef.current.setState({ editorState: newEditorState });
       }
     }, 500);
+    if (isEqual(richTextData.value, INITIAL_DATA.value)) return; // break func
+    resetUnlockTimer();
   }, [richTextData]);
 
   /**
@@ -203,11 +227,21 @@ const CustomApolloRichText = ({
   useEffect(() => {
     // Restrict Richtext height upto 5 lines
     setTimeout(() => {
-      if (richTextEditorRef.current && richTextEditorRef.current.editorRef.current.editorContainer) {
+      if (
+        richTextEditorRef.current &&
+        richTextEditorRef.current.editorRef.current.editorContainer
+      ) {
         if (richTextData.text) {
-           setRefElementStyle(richTextEditorRef.current.editorRef.current.editorContainer, 125, 120, '5px');
+          setRefElementStyle(
+            richTextEditorRef.current.editorRef.current.editorContainer,
+            125,
+            120,
+            '5px'
+          );
         } else {
-          const { style: refStyle } = richTextEditorRef.current.editorRef.current.editorContainer;
+          const {
+            style: refStyle
+          } = richTextEditorRef.current.editorRef.current.editorContainer;
           refStyle.height = 'auto';
         }
       }
@@ -261,22 +295,7 @@ const CustomApolloRichText = ({
     }
   };
 
-  useUpdateEffect(() => {
-    if (!searchTag) return () => {};
-
-    const timer = setTimeout(async () => {
-      const res = await dispatch(getUsersList(searchTag));
-      console.log({ res });
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [searchTag]);
-
-  /**
-   * OnChange RichText Editor
-   */
-  const onChangeHandler = async (value, html) => {
-    // this timeout cannot be AVOIDED since it will wait for 500ms to let apollo component to update it's internal state on change event
+  const handleUserMention = async () => {
     await timeout(500);
     if (richTextEditorRef.current) {
       const editorState = richTextEditorRef.current.state.editorState;
@@ -285,9 +304,19 @@ const CustomApolloRichText = ({
         setSearchTag(userQueryInfo.userQuery);
         setQueryStringRange(userQueryInfo.offsetRange);
         setAnchorKey(userQueryInfo.anchorKey);
+      } else {
+        setSearchTag(null);
+        setQueryStringRange({ start: 0, end: 0 });
+        setAnchorKey(null);
       }
     }
+  };
 
+  /**
+   * OnChange RichText Editor
+   */
+  const onChangeHandler = async (value, html) => {
+    handleUserMention();
     if (isEqual(richTextData.value, value)) return; // break func
 
     const text = value.blocks
@@ -297,7 +326,10 @@ const CustomApolloRichText = ({
     const resultObj = { text, value, html };
     setRichTextData(resultObj);
 
-    if (richTextEditorRef.current && richTextEditorRef.current.editorRef.current.editorContainer) {
+    if (
+      richTextEditorRef.current &&
+      richTextEditorRef.current.editorRef.current.editorContainer
+    ) {
       // Restrict Richtext height upto 10 lines
       const {
         clientHeight,
@@ -306,12 +338,15 @@ const CustomApolloRichText = ({
       } = richTextEditorRef.current.editorRef.current.editorContainer;
 
       if (scrollHeight < 230) refStyle.height = 'auto';
-      if (clientHeight <= 230) setRefElementStyle(richTextEditorRef.current.editorRef.current.editorContainer, 230, 230);
+      if (clientHeight <= 230)
+        setRefElementStyle(
+          richTextEditorRef.current.editorRef.current.editorContainer,
+          230,
+          230
+        );
     }
 
     if (onChange) onChange(resultObj); // onChange callback func
-
-    resetUnlockTimer();
   };
 
   /**
@@ -323,6 +358,9 @@ const CustomApolloRichText = ({
       !richTextContainerRef.current.contains(e.target) &&
       isEmpty(e.target.closest('.MuiPopover-root')) &&
       isEmpty(e.target.closest('.MuiDialog-root')) &&
+      isEmpty(e.target.closest('.tag-user-list')) &&
+      isEmpty(e.target.closest('.tag-user-list-empty')) &&
+      isEmpty(e.target.closest('.tag-user-list-loader')) &&
       isFocused
     ) {
       setSearchTag(null);
@@ -330,27 +368,21 @@ const CustomApolloRichText = ({
     }
   };
 
-  const handleEditorBackspace = event => {
-    if (event.key === 'Backspace') {
-      backspaceRef.current = true;
-    }
-  }
-
   const blur = () => {
     setIsFocused(false);
+    setSearchTag(null);
+    console.log(richTextData.text);
     if (onBlur) onBlur(richTextData);
     resetUnlockTimer(true);
-  }
-  
+  };
+
   /**
    * Trigger Click Outside RichText
    */
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleEditorBackspace);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleEditorBackspace);
     };
   });
 
@@ -370,29 +402,21 @@ const CustomApolloRichText = ({
     onFocus();
   }, []);
 
-  const handleBlur = () => {
-    const isTagUsersClosed = richTextContainerRef.current.querySelector('.tag-user-list') === null;
-    setTimeout(() => {
-      if (
-        richTextContainerRef.current.querySelector('.MuiFormControl-root') === null &&
-        isTagUsersClosed &&
-        isFocused
-      ) {
-        blur();
-      }
-    }, 300);
-  }
-
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   });
 
-  const handleUserTag = (user) => {
+  const handleUserTag = user => {
+    console.log('user', user, queryStringRange);
+    const userName = `${user.last_name}, ${user.first_name}`;
     if (richTextEditorRef.current) {
       const editorState = richTextEditorRef.current.state.editorState;
       const contentState = editorState.getCurrentContent();
-      const contentStateWithMentionAdded = contentState.createEntity('MENTION', 'IMMUTABLE');
+      const contentStateWithMentionAdded = contentState.createEntity(
+        'MENTION',
+        'IMMUTABLE'
+      );
       const entityKey = contentStateWithMentionAdded.getLastCreatedEntityKey();
       let selectionState = SelectionState.createEmpty(anchorKey);
       selectionState = selectionState.merge({
@@ -403,11 +427,11 @@ const CustomApolloRichText = ({
       const contentStateWithMention = Modifier.replaceText(
         contentState,
         selectionState,
-        user
+        userName
       );
       let newSelectionState = selectionState.merge({
         anchorOffset: selectionState.getAnchorOffset(),
-        focusOffset: selectionState.getAnchorOffset() + user.length
+        focusOffset: selectionState.getAnchorOffset() + userName.length
       });
       const contentStateWithEntity = Modifier.applyEntity(
         contentStateWithMention,
@@ -418,16 +442,22 @@ const CustomApolloRichText = ({
         currentContent: contentStateWithEntity
       });
       newSelectionState = selectionState.merge({
-        anchorOffset: selectionState.getAnchorOffset() + user.length,
-        focusOffset: selectionState.getAnchorOffset() + user.length
+        anchorOffset: selectionState.getAnchorOffset() + userName.length,
+        focusOffset: selectionState.getAnchorOffset() + userName.length
       });
-      newEditorState = EditorState.forceSelection(newEditorState, newSelectionState);
-      const newContentStateRaw = convertToRaw(newEditorState.getCurrentContent());
+      newEditorState = EditorState.forceSelection(
+        newEditorState,
+        newSelectionState
+      );
+      const newContentStateRaw = convertToRaw(
+        newEditorState.getCurrentContent()
+      );
       const text = newContentStateRaw.blocks
         .map(item => item.text)
         .filter(item => !isEmpty(item.trim()))
         .join(' ');
-      const html = richTextEditorRef.current.editorRef &&
+      const html =
+        richTextEditorRef.current.editorRef &&
         richTextEditorRef.current.editorRef.current &&
         richTextEditorRef.current.editorRef.current.editor &&
         richTextEditorRef.current.editorRef.current.editor.innerHTML;
@@ -436,49 +466,51 @@ const CustomApolloRichText = ({
       richTextEditorRef.current.setState({ editorState: newEditorState });
       resetUnlockTimer();
     }
-  }
+  };
 
   // Render Popover RichText Editor
   return (
-    <div
-      className={classNames('custom-rich-text', {
-        readonly: disabled,
-        popover: !disabled,
-        disabled,
-        [className]: !!className
-      })}
-    >
+    <>
       <div
-        className={classNames('custom-rich-text-inner', {
-          'popover-inner': !disabled,
-          error: !!error,
-          'focused': isFocused
+        className={classNames('custom-rich-text', {
+          readonly: disabled,
+          popover: !disabled,
+          disabled,
+          [className]: !!className
         })}
-        ref={richTextContainerRef}
       >
-        <RichTextEditor
-          placeholder={placeholder || ''}
-          spellCheck={false}
-          variant={!disabled ? 'popover' : 'view'}
-          defaultValue={richTextData.value}
-          onChange={onChangeHandler}
-          tabIndex={!disabled ? 0 : -1}
-          ref={richTextEditorRef}
-          key={richTextKeyRef.current}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-        />
-        {/* TagUserList Component for adding tag */}
-        {searchTag != null && (
+        <div
+          className={classNames('custom-rich-text-inner', {
+            'popover-inner': !disabled,
+            error: !!error,
+            focused: isFocused
+          })}
+          ref={richTextContainerRef}
+        >
+          <RichTextEditor
+            placeholder={placeholder || ''}
+            spellCheck={false}
+            variant={!disabled ? 'popover' : 'view'}
+            defaultValue={richTextData.value}
+            onChange={onChangeHandler}
+            tabIndex={!disabled ? 0 : -1}
+            ref={richTextEditorRef}
+            key={richTextKeyRef.current}
+            onFocus={handleFocus}
+          />
+        </div>
+      </div>
+      {/* TagUserList Component for adding tag */}
+      {searchTag !== null && (
+        <div style={{ position: 'relative' }}>
           <TagUserList
-            ref={{ rangeRef, selectionRef, richTextEditorRef }}
             searchTag={searchTag}
-            onSelect={(user) => handleUserTag(user)}
+            onSelect={user => handleUserTag(user)}
             close={() => setSearchTag(null)}
           />
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 };
 
