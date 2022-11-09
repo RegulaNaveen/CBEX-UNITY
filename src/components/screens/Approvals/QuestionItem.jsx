@@ -16,6 +16,7 @@ import SelectQuestion from './InputComponents/SelectQuestion';
 import MultiSelectQuestion from './InputComponents/MultiSelectQuestion';
 import YesNoQuestion from './InputComponents/YesNoQuestion';
 import ProposalTeamQuestion from './InputComponents/ProposalTeamQuestion';
+import getLastAnswer from './getLastAnswer';
 
 const QuestionItem = ({ question }) => {
   const [isShowHistory, setIsShowHistory] = useState(false);
@@ -57,21 +58,40 @@ const QuestionItem = ({ question }) => {
     return <div>Question type not found</div>;
   };
   const renderQuestion = () => {
+    const lastAnswer = getLastAnswer(question);
     if (question?.section?.sectionName === 'Proposal Team') {
-      return <ProposalTeamQuestion question={question} />;
+      return (
+        <ProposalTeamQuestion question={question} lastAnswer={lastAnswer} />
+      );
     }
     const ComponentMapper = {
-      [ANSWER_TYPES.TEXT]: <TextQuestion question={question} />,
-      [ANSWER_TYPES.NUMBER]: <NumberQuestion question={question} />,
-      [ANSWER_TYPES.DATE]: <DateQuestion question={question} />,
-      [ANSWER_TYPES.RADIO]: <RadioQuestion question={question} />,
-      [ANSWER_TYPES.SELECT_LOOKUP]: <SelectQuestion question={question} />,
-      [ANSWER_TYPES.SELECT]: <SelectQuestion question={question} />,
-      [ANSWER_TYPES.PICKLIST]: <MultiSelectQuestion question={question} />,
-      [ANSWER_TYPES.PICKLIST_LOOKUP]: (
-        <MultiSelectQuestion question={question} />
+      [ANSWER_TYPES.TEXT]: (
+        <TextQuestion question={question} lastAnswer={lastAnswer} />
       ),
-      [ANSWER_TYPES.YES_NO]: <YesNoQuestion question={question} />
+      [ANSWER_TYPES.NUMBER]: (
+        <NumberQuestion question={question} lastAnswer={lastAnswer} />
+      ),
+      [ANSWER_TYPES.DATE]: (
+        <DateQuestion question={question} lastAnswer={lastAnswer} />
+      ),
+      [ANSWER_TYPES.RADIO]: (
+        <RadioQuestion question={question} lastAnswer={lastAnswer} />
+      ),
+      [ANSWER_TYPES.SELECT_LOOKUP]: (
+        <SelectQuestion question={question} lastAnswer={lastAnswer} />
+      ),
+      [ANSWER_TYPES.SELECT]: (
+        <SelectQuestion question={question} lastAnswer={lastAnswer} />
+      ),
+      [ANSWER_TYPES.PICKLIST]: (
+        <MultiSelectQuestion question={question} lastAnswer={lastAnswer} />
+      ),
+      [ANSWER_TYPES.PICKLIST_LOOKUP]: (
+        <MultiSelectQuestion question={question} lastAnswer={lastAnswer} />
+      ),
+      [ANSWER_TYPES.YES_NO]: (
+        <YesNoQuestion question={question} lastAnswer={lastAnswer} />
+      )
     };
 
     return (

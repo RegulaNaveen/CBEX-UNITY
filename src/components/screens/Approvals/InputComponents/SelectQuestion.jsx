@@ -1,7 +1,7 @@
 import React from 'react';
 import AutoCompleteWithAddOption from '../../../views/modals/AutoCompleteWithAddOption';
 
-const SelectQuestion = ({ question }) => {
+const SelectQuestion = ({ question, lastAnswer }) => {
   return (
     <AutoCompleteWithAddOption
       sfObject={question.sfObject}
@@ -10,7 +10,7 @@ const SelectQuestion = ({ question }) => {
       onFocus={() => {}}
       onBlur={() => {}}
       disabled={false}
-      // answer={answerValue}
+      answer={lastAnswer.answer}
       // onChange={this.handlePropsalChange}
     />
   );

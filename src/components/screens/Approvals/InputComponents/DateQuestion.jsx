@@ -1,7 +1,7 @@
 import React from 'react';
 import QuestionDatePicker from '../../../common/atoms/inputs/QuestionDatePicker';
 
-const DateQuestion = ({ question }) => {
+const DateQuestion = ({ question, lastAnswer }) => {
   const resetDate = () => {
     // TODO
     // Set proposal answer to empty value
@@ -13,7 +13,7 @@ const DateQuestion = ({ question }) => {
 
   return (
     <QuestionDatePicker
-      // value={answerValue}
+      value={lastAnswer.answer}
       resetDate={resetDate}
       handleDayChange={handleDayChange}
       onFocus={() => {}}

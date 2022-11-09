@@ -1,7 +1,7 @@
 import React from 'react';
 import AutoComplete from '../../../common/atoms/inputs/AutoComplete';
 
-const NumberQuestion = ({ question }) => {
+const ProposalTeamQuestion = ({ question, lastAnswer }) => {
   return (
     <>
       <AutoComplete
@@ -9,11 +9,11 @@ const NumberQuestion = ({ question }) => {
         onFocus={() => {}}
         onBlur={() => {}}
         // onChange={this.handlePropsalChange}
-        // text={answerValue}
+        text={lastAnswer.answer}
         disabled={false}
       />
     </>
   );
 };
 
-export default NumberQuestion;
+export default ProposalTeamQuestion;

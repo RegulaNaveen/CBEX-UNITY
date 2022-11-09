@@ -1,14 +1,13 @@
 import React from 'react';
 import TextArea from '../../../common/atoms/inputs/TextArea';
 
-const NumberQuestion = ({ question }) => {
+const NumberQuestion = ({ question, lastAnswer }) => {
   return (
     <>
       <TextArea
         className="proposal-text-area"
         type="number"
-        // onBlur={this.handleTextChange}
-        // value={answerValue || ''}
+        value={lastAnswer.answer}
       />
     </>
   );

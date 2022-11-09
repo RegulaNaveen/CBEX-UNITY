@@ -1,13 +1,12 @@
 import React from 'react';
 import RadioQuestion from '../../../common/atoms/inputs/RadioQuestion';
 
-const RadioQuestionInput = ({ question }) => {
+const RadioQuestionInput = ({ question, lastAnswer }) => {
   return (
     <RadioQuestion
-      // value={answerValue}
+      value={lastAnswer.answer}
       // onClick={val => this.onClickChange(val, answerValue)}
-      // items={finalOptions}
-      items={['foo', 'bar']}
+      items={question?.answerConfiguration?.options}
       disabled={false}
       onFocus={() => {}}
       onBlur={() => {}}

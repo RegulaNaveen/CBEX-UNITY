@@ -1,32 +1,34 @@
 import React from 'react';
+import isObject from 'lodash/isObject';
+import has from 'lodash/has';
 import CustomApolloRichText from '../../../common/CustomApolloRichText';
+import { parseStringifyJson } from '../../../../utils/helpers';
 
-const TextQuestion = ({ question }) => {
-  //   let lastAnswer;
-  //   const lastAnswerJS = lastAnswer?.toJS();
-  //   const formattedAnswer =
-  //     has(lastAnswerJS, 'formattedAnswer') && lastAnswerJS.formattedAnswer;
+// Function to converted Answer String
+const getConvertedAnsString = str =>
+  !String(str).trim() ? '' : String(str).trim();
 
-  //   const parseFormattedData =
-  //     !formattedAnswer || isObject(formattedAnswer)
-  //       ? formattedAnswer
-  //       : parseStringifyJson(formattedAnswer);
+const TextQuestion = ({ question, lastAnswer }) => {
+  const formattedAnswer =
+    has(lastAnswer, 'formattedAnswer') && lastAnswer.formattedAnswer;
 
-  //   const richTextData = parseFormattedData || {
-  //     html: '',
-  //     value: { blocks: [] }
-  //   };
+  const parseFormattedData =
+    !formattedAnswer || isObject(formattedAnswer)
+      ? formattedAnswer
+      : parseStringifyJson(formattedAnswer);
+
+  const richTextData = parseFormattedData || {
+    html: '',
+    value: { blocks: [] }
+  };
 
   const richtextProps = {
-    // questionId: this.props.questionId,
-    richTextString: '',
-    richTextVal: '',
-    richTextHtml: '',
-    enableFocus: false,
+    richTextString: getConvertedAnsString(lastAnswer),
+    richTextVal: richTextData.value,
+    richTextHtml: richTextData.html,
+    enableFocus: true,
     isEditable: false,
-    disabled: false,
-    onFocus: () => {},
-    onBlur: () => {}
+    disabled: false
   };
   return (
     <>
