@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   getSelectedBid,
   getPriceModuler,
-  selectIsPriceModelerEstimateRecalculating
+  selectIsPriceModelerEstimateRecalculating,
 } from '../../redux/selectors/proposal';
 import { getPriceModelerData } from '../../redux/actions/proposal-actions';
 import CustomModal from './CustomModal';
@@ -21,7 +21,7 @@ const INITIAL_LIST_TITLE = {
   sites: 'Total Sites',
   phase: 'Phase',
   patients: 'Total Patients',
-  regions: 'Regions'
+  regions: 'Regions',
 };
 
 export const INITIAL_LIST_VAL = {
@@ -30,7 +30,7 @@ export const INITIAL_LIST_VAL = {
   sites: '',
   phase: '',
   patients: '',
-  regions: ''
+  regions: '',
 };
 
 // TODO
@@ -61,7 +61,7 @@ const PriceModeler = () => {
     <Tooltip
       variant="light"
       tabIndex={-1}
-      title="Excludes investigator grants, vendor costs and other expenses"
+      title="The fields listed below are required for an estimate to be displayed. Excludes investigator grants, vendor costs, and other expenses"
       placement="top"
     >
       <IconButton
@@ -83,12 +83,12 @@ const PriceModeler = () => {
         </div>
       )}
 
-      <h2 className="price-modeler__title">Price Modeler Ballpark Estimate</h2>
+      <h2 className="price-modeler__title">Price Modeler Estimate</h2>
       <p className="price-modeler__price">
         {`$${
-          priceModeler.cost
+          priceModeler.cost && priceModeler.cost !== '0'
             ? convertToInternationalCurrency(priceModeler.cost)
-            : '0.0M'
+            : '--'
         }`}{' '}
         <span className="price-modeler__info">{infoIconWithTooltip}</span>
         {isPriceModelerRecalculating ? (
@@ -106,7 +106,7 @@ const PriceModeler = () => {
                 style={{
                   color: 'rgb(255, 147, 0)',
                   width: '20px',
-                  height: '20px'
+                  height: '20px',
                 }}
                 data-testid="price-modeler-recalc-loader"
               />
@@ -136,7 +136,7 @@ const PriceModeler = () => {
           onClose={() => setError(false)}
           buttonProps={[
             { className: 'display-none' },
-            { label: DEFAULT.CLOSE }
+            { label: DEFAULT.CLOSE },
           ]}
           modalStyle={{ maxWidth: 342 }}
         />
