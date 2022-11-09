@@ -8,6 +8,7 @@ import ChevronRight from 'apollo-react-icons/ChevronRight';
 
 import { selectProposalQuestions } from '../../../redux/selectors/index';
 import QuestionItem from './QuestionItem';
+import ActionButtons from './ActionButtons';
 
 const generateQuestionsHash = proposalQuestions => {
   try {
@@ -55,6 +56,9 @@ const Section = ({ approval }) => {
           {ApprovalSectionRightQuestions?.map(item => (
             <QuestionItem question={questionHash[item] || {}} />
           ))}
+        </Grid>
+        <Grid item xs={12}>
+          <ActionButtons />
         </Grid>
       </Grid>
     );
