@@ -22,6 +22,7 @@ import useUpdateEffect from '../../hooks/useUpdateEffect';
 import TagUserList from './TagUserList';
 
 import { QUESTION_UNLOCK_TIMEOUT } from '../../constants/app';
+import featureFlags from '../../constants/featureFlags';
 
 // CustomApolloRichText Utilities
 
@@ -111,7 +112,8 @@ const CustomApolloRichText = ({
   enableFocus,
   className,
   error,
-  disabled
+  disabled,
+  canUserTagInQuestion
 }) => {
   // Set initial blocks structure if only string available
   let richtextObject = richTextVal;
@@ -174,7 +176,6 @@ const CustomApolloRichText = ({
     clearTimeout(unlockTimeout);
     if (clear) {
       setUnlockTimeout(null);
-      timeoutRef.current = null;
     } else {
       const timer = setTimeout(() => {
         if (
@@ -209,7 +210,7 @@ const CustomApolloRichText = ({
   useEffect(() => {
     // this timeout cannot be AVOIDED since it will wait for 500ms to let apollo component to update it's internal state on first render
     setTimeout(() => {
-      if (richTextEditorRef.current) {
+      if (richTextEditorRef.current && canUserTagInQuestion) {
         const editorState = richTextEditorRef.current.state.editorState;
         const newEditorState = EditorState.set(editorState, {
           decorator: compositeDecorator
@@ -219,7 +220,7 @@ const CustomApolloRichText = ({
     }, 500);
     if (isEqual(richTextData.value, INITIAL_DATA.value)) return; // break func
     resetUnlockTimer();
-  }, [richTextData]);
+  }, [richTextData, canUserTagInQuestion]);
 
   /**
    * Update RichText data on external changes
@@ -316,7 +317,9 @@ const CustomApolloRichText = ({
    * OnChange RichText Editor
    */
   const onChangeHandler = async (value, html) => {
-    handleUserMention();
+    if (canUserTagInQuestion) {
+      handleUserMention();
+    }
     if (isEqual(richTextData.value, value)) return; // break func
 
     const text = value.blocks
@@ -502,7 +505,7 @@ const CustomApolloRichText = ({
       </div>
       {/* TagUserList Component for adding tag */}
       {searchTag !== null && (
-        <div style={{ position: 'relative' }}>
+        <div style={{ position: 'relative' }} data-testid="tag-user-list">
           <TagUserList
             searchTag={searchTag}
             onSelect={user => handleUserTag(user)}
@@ -527,7 +530,8 @@ CustomApolloRichText.defaultProps = {
   enableFocus: false,
   className: '',
   error: false,
-  disabled: false
+  disabled: false,
+  canUserTagInQuestion: false
 };
 
 CustomApolloRichText.propTypes = {
@@ -543,7 +547,8 @@ CustomApolloRichText.propTypes = {
   enableFocus: PropTypes.bool,
   className: PropTypes.string,
   error: PropTypes.bool,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  canUserTagInQuestion: PropTypes.bool
 };
 
 export default CustomApolloRichText;

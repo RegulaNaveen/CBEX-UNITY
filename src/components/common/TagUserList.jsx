@@ -11,9 +11,15 @@ const TagUserList = ({ searchTag, onSelect, close }) => {
   async function fetchUsers() {
     setfetchingUsers(true);
     try {
-      const usersListResponse = await getUsersListApiCall(searchTag);
-      if (usersListResponse && Array.isArray(usersListResponse.data)) {
-        setUsers(usersListResponse.data);
+      if (searchTag !== null && searchTag.length > 0) {
+        const usersListResponse = await getUsersListApiCall(searchTag);
+        if (usersListResponse && Array.isArray(usersListResponse.data)) {
+          setUsers(usersListResponse.data);
+        } else {
+          setUsers([]);
+        }
+      } else {
+        setUsers([]);
       }
     } catch (e) {
       console.log('Error in retrieving users');
@@ -24,9 +30,7 @@ const TagUserList = ({ searchTag, onSelect, close }) => {
   }
 
   useEffect(() => {
-    if (searchTag !== null && searchTag.length > 0) {
-      fetchUsers();
-    }
+    fetchUsers();
   }, [searchTag]);
 
   const onClickHandler = async (e, user) => {
