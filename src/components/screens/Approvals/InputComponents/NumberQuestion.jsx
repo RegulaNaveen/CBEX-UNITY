@@ -3,24 +3,12 @@ import { useDispatch } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 import TextArea from '../../../common/atoms/inputs/TextArea';
 import { setProposalAnswerData } from '../../../../redux/actions/proposal-actions';
-import { SocketContext } from '../../../../context/SocketContext';
-import {
-  getUserName,
-  getUserEmail,
-  getUserId
-} from '../../../../SessionHandler';
 
-const NumberQuestion = ({ question, lastAnswer }) => {
-  const context = useContext(SocketContext);
+const NumberQuestion = ({ question, lastAnswer, userData, socketContext }) => {
   const dispatch = useDispatch();
 
   const handleTextChange = (textValue, lastAnswer, editorData) => {
     const { proposalId, questionId } = question;
-    const userData = {
-      email: getUserName(),
-      name: getUserEmail(),
-      role: getUserId()
-    };
     const s1 = textValue
       .trim()
       .split(' ')
@@ -37,7 +25,7 @@ const NumberQuestion = ({ question, lastAnswer }) => {
       ) {
         dispatch(
           setProposalAnswerData(
-            context,
+            socketContext,
             proposalId,
             questionId,
             String(textValue).trim(),
@@ -49,7 +37,7 @@ const NumberQuestion = ({ question, lastAnswer }) => {
     } else if (!textValue.trim() && lastAnswer.trim()) {
       dispatch(
         setProposalAnswerData(
-          context,
+          socketContext,
           proposalId,
           questionId,
           ' ',

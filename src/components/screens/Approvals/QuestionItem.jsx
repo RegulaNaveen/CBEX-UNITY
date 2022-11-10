@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Grid from 'apollo-react/components/Grid';
 import Box from 'apollo-react/components/Box';
 import { Map, List, fromJS } from 'immutable';
@@ -17,9 +17,17 @@ import MultiSelectQuestion from './InputComponents/MultiSelectQuestion';
 import YesNoQuestion from './InputComponents/YesNoQuestion';
 import ProposalTeamQuestion from './InputComponents/ProposalTeamQuestion';
 import getLastAnswer from './getLastAnswer';
+import { getUserName, getUserEmail, getUserId } from '../../../SessionHandler';
+import { SocketContext } from '../../../context/SocketContext';
 
 const QuestionItem = ({ question }) => {
+  const socketContext = useContext(SocketContext);
   const [isShowHistory, setIsShowHistory] = useState(false);
+  const getUserData = () => ({
+    email: getUserName(),
+    name: getUserEmail(),
+    role: getUserId()
+  });
 
   const prepareAnswerHistoryData = question => {
     let questionMap = fromJS(question);
@@ -59,39 +67,25 @@ const QuestionItem = ({ question }) => {
   };
   const renderQuestion = () => {
     const lastAnswer = getLastAnswer(question);
+    const inputProps = {
+      question,
+      lastAnswer,
+      userData: getUserData(),
+      socketContext
+    };
     if (question?.section?.sectionName === 'Proposal Team') {
-      return (
-        <ProposalTeamQuestion question={question} lastAnswer={lastAnswer} />
-      );
+      return <ProposalTeamQuestion {...inputProps} />;
     }
     const ComponentMapper = {
-      [ANSWER_TYPES.TEXT]: (
-        <TextQuestion question={question} lastAnswer={lastAnswer} />
-      ),
-      [ANSWER_TYPES.NUMBER]: (
-        <NumberQuestion question={question} lastAnswer={lastAnswer} />
-      ),
-      [ANSWER_TYPES.DATE]: (
-        <DateQuestion question={question} lastAnswer={lastAnswer} />
-      ),
-      [ANSWER_TYPES.RADIO]: (
-        <RadioQuestion question={question} lastAnswer={lastAnswer} />
-      ),
-      [ANSWER_TYPES.SELECT_LOOKUP]: (
-        <SelectQuestion question={question} lastAnswer={lastAnswer} />
-      ),
-      [ANSWER_TYPES.SELECT]: (
-        <SelectQuestion question={question} lastAnswer={lastAnswer} />
-      ),
-      [ANSWER_TYPES.PICKLIST]: (
-        <MultiSelectQuestion question={question} lastAnswer={lastAnswer} />
-      ),
-      [ANSWER_TYPES.PICKLIST_LOOKUP]: (
-        <MultiSelectQuestion question={question} lastAnswer={lastAnswer} />
-      ),
-      [ANSWER_TYPES.YES_NO]: (
-        <YesNoQuestion question={question} lastAnswer={lastAnswer} />
-      )
+      [ANSWER_TYPES.TEXT]: <TextQuestion {...inputProps} />,
+      [ANSWER_TYPES.NUMBER]: <NumberQuestion {...inputProps} />,
+      [ANSWER_TYPES.DATE]: <DateQuestion {...inputProps} />,
+      [ANSWER_TYPES.RADIO]: <RadioQuestion {...inputProps} />,
+      [ANSWER_TYPES.SELECT_LOOKUP]: <SelectQuestion {...inputProps} />,
+      [ANSWER_TYPES.SELECT]: <SelectQuestion {...inputProps} />,
+      [ANSWER_TYPES.PICKLIST]: <MultiSelectQuestion {...inputProps} />,
+      [ANSWER_TYPES.PICKLIST_LOOKUP]: <MultiSelectQuestion {...inputProps} />,
+      [ANSWER_TYPES.YES_NO]: <YesNoQuestion {...inputProps} />
     };
 
     return (

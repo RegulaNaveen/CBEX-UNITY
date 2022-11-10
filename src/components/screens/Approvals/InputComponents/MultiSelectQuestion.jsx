@@ -1,4 +1,5 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 import AutoCompleteWithAddOption from '../../../views/modals/AutoCompleteWithAddOption';
 import ANSWER_TYPES from '../../../../constants/answerTypes';
@@ -6,9 +7,16 @@ import {
   getCountriesNameForCode,
   getCountryOptions
 } from '../../../../utils/utils';
+import { setProposalAnswerData } from '../../../../redux/actions/proposal-actions';
 
-const MultiSelectQuestion = ({ question, lastAnswer }) => {
+const MultiSelectQuestion = ({
+  question,
+  lastAnswer,
+  userData,
+  socketContext
+}) => {
   try {
+    const dispatch = useDispatch();
     const questionType = question?.answerConfiguration?.type;
     const sfObject = question?.sfObject;
     const sfField = question?.sfField;
@@ -27,6 +35,19 @@ const MultiSelectQuestion = ({ question, lastAnswer }) => {
       finalOptions = getCountryOptions();
     }
 
+    const changeHandler = textValue => {
+      const { proposalId, questionId } = question;
+      dispatch(
+        setProposalAnswerData(
+          socketContext,
+          proposalId,
+          questionId,
+          textValue,
+          userData
+        )
+      );
+    };
+
     return (
       <AutoCompleteWithAddOption
         sfObject={sfObject}
@@ -37,7 +58,7 @@ const MultiSelectQuestion = ({ question, lastAnswer }) => {
         disabled={false}
         multiple
         answer={answerValue}
-        // onChange={this.handlePropsalChange}
+        onChange={changeHandler}
       />
     );
   } catch (error) {
