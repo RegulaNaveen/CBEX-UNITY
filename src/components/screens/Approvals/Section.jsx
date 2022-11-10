@@ -70,7 +70,6 @@ const Section = ({ approval }) => {
       expanded={expanded}
       onChange={() => setExpanded(prev => !prev)}
     >
-      {console.log(questionHash)}
       <AccordionSummary expandIcon={<ChevronRight />}>
         <p className="accordion-title">{ApprovalSectionTitle}</p>
       </AccordionSummary>
