@@ -110,6 +110,7 @@ class AnswerHistory extends Component<Props> {
     let answers = question.get('answers').reverse();
     const questionId = answers.get('questionId');
 
+    console.log(questionType, 'qtype');
     if (questionId) answers = question.getIn(['answers', 'answers']).reverse();
     if (answers.isEmpty()) return this.renderAnswerResponsables();
 
@@ -135,6 +136,7 @@ class AnswerHistory extends Component<Props> {
       const isValidatedUnityPredictedAnswer =
         questionType !== ANSWER_TYPES.PICKLIST &&
         questionType !== ANSWER_TYPES.PICKLIST_LOOKUP &&
+        questionType !== 'checkbox' &&
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'UnityPredictedAnswer' &&
         answer === nextAnswer;
@@ -142,7 +144,8 @@ class AnswerHistory extends Component<Props> {
       // picklist answers are array so they require different check than other question types
       const isPicklistValidUnityPredAns =
         (questionType === ANSWER_TYPES.PICKLIST ||
-          questionType === ANSWER_TYPES.PICKLIST_LOOKUP) &&
+          questionType === ANSWER_TYPES.PICKLIST_LOOKUP ||
+          questionType === ANSWER_TYPES.CHECKBOX) &&
         answers &&
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'UnityPredictedAnswer' &&
