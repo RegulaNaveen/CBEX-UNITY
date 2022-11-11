@@ -24,7 +24,8 @@ import {
   clearQuestionsFilterAction,
   expandAllSectionsAction,
   callPickListLookupSfData,
-  setShowNaCheckbox
+  setShowNaCheckbox,
+  fetchUserTagFlagInQuestion
 } from '../../../redux/actions/proposal-actions';
 import {
   getProposalDetails,
@@ -145,6 +146,7 @@ class Questions extends Component {
     callPickListLookupSfData();
     window.addEventListener('resize', this.resize.bind(this));
     this.resize();
+    this.props.fetchUserTagFlagInQuestion();
   }
 
   componentDidUpdate(prevProps: Map) {
@@ -735,6 +737,7 @@ export default compose(
     handleOpenClose: onHandleOpenClose,
     handleShowNaCheckbox: setShowNaCheckbox,
     getSFNonEditabelInfoField: getSFNonEditabelField,
-    callPickListLookupSfData
+    callPickListLookupSfData,
+    fetchUserTagFlagInQuestion
   })
 )(MatomoHOC(Questions));

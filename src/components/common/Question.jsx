@@ -39,7 +39,10 @@ import {
   getnoneditableField,
   getShowNaCheckbox
 } from '../../redux/selectors';
-import { getOpportunityData } from '../../redux/selectors/proposal';
+import {
+  getCanUserTagInQuestion,
+  getOpportunityData
+} from '../../redux/selectors/proposal';
 import MatomoHOC from '../HOC/MatomoHOC';
 import {
   checkNonEditableFields,
@@ -118,7 +121,8 @@ type Props = {
   hasDifferentSFanswer: boolean,
   isNotepadOpen: boolean,
   events: Object,
-  isNotApplicable: Boolean
+  isNotApplicable: Boolean,
+  canUserTagInQuestion: Boolean
 };
 export class TaskRow extends React.PureComponent<Props, State> {
   static contextType = SocketContext;
@@ -589,7 +593,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
       hasDifferentSFanswer,
       loading,
       isNotApplicable,
-      NaLoading
+      NaLoading,
+      canUserTagInQuestion
     } = this.props;
 
     const { selectedRow } = this.state;
@@ -703,6 +708,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     // Richtext Props
     const richTextAnswerField = {
       // questionId: this.props.questionId,
+      canUserTagInQuestion,
       richTextString: getConvertedAnsString(answerValue),
       richTextVal: richTextData.value,
       richTextHtml: richTextData.html,
@@ -1482,7 +1488,8 @@ const mapStateToProps = (state: Object) => ({
   selectedBid: getSelectedBid(state),
   oppdata: getOpportunityData(state),
   noneditableField: getnoneditableField(state),
-  showNaCheckbox: getShowNaCheckbox(state)
+  showNaCheckbox: getShowNaCheckbox(state),
+  canUserTagInQuestion: getCanUserTagInQuestion(state)
 });
 
 export default connect(mapStateToProps, {
