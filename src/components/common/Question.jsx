@@ -14,10 +14,9 @@ import Tooltip from 'apollo-react/components/Tooltip';
 import Typography from 'apollo-react/components/Typography';
 import moment from 'moment';
 import classNames from 'classnames';
-import MenuItem from 'apollo-react/components/MenuItem';
-import Select from '@material-ui/core/Select';
 import { Edit } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import TextArea from './atoms/inputs/TextArea';
 import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
@@ -219,7 +218,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
       userData
     ).then(() => {
       const [deletedVal] = xor(
-        textValue?.trim() ? textValue?.trim().split(',') : [],
+        textValue.target.value?.trim()
+          ? textValue.target.value?.trim().split(',')
+          : [],
         lastValue?.trim() ? lastValue?.trim().split(',') : []
       );
       const [deletedEmail] = String(deletedVal).match(
