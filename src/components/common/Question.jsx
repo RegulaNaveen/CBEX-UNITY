@@ -1177,8 +1177,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 `${this.props.showNaCheckbox}`
                   ? {
                       display: 'flex'
-                      // alignItems: 'stretch',
-                      // border: '1px solid blue',
                     }
                   : ''
               }
