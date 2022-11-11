@@ -131,7 +131,7 @@ const WysiwygNotepad = ({
             const editorTextLen = String(editor.getHTML()).length;
             matamoObj.category = `Proposal Detail (CRM#:${proposalDetails['CRM #']})`
             matamoObj.action = `Event: Notepad ${proposalDetails['CRM #']}`
-            matamoObj.name = `Notepad: char length ${editorTextLen}`
+            matamoObj.name = `Notepad: char count ${editorTextLen}`
             matamoObj.customDimensions = [JSON.stringify(proposalDetails),{user: userEmail},{role: userRole}]
             saveDataInMatomo(trackEvent, matamoObj);
             clearTimeout(timeout);
@@ -141,7 +141,7 @@ const WysiwygNotepad = ({
        const editorTextLen = String(editor.getHTML()).length;
        matamoObj.category = `Proposal Detail (CRM#:${proposalDetails['CRM #']})`
        matamoObj.action = `Event: Notepad ${proposalDetails['CRM #']}`
-       matamoObj.name = `Notepad: char length ${editorTextLen}`
+       matamoObj.name = `Notepad: char count ${editorTextLen}`
        matamoObj.customDimensions = [JSON.stringify(proposalDetails),{user: userEmail},{role: userRole}]
        saveDataInMatomo(trackEvent, matamoObj);
       },
@@ -157,7 +157,7 @@ const WysiwygNotepad = ({
         const editorTextLen = String(editor.getHTML()).length;
         matamoObj.category = `Proposal Detail (CRM#:${proposalDetails['CRM #']})`
         matamoObj.action = `Event: Notepad ${proposalDetails['CRM #']}`
-        matamoObj.name = `Notepad: char length ${editorTextLen}`
+        matamoObj.name = `Notepad: char count ${editorTextLen}`
         matamoObj.customDimensions = [JSON.stringify(proposalDetails),{user: userEmail},{role: userRole}]
         saveDataInMatomo(trackEvent, matamoObj);
       },
