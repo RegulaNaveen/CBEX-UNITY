@@ -19,6 +19,7 @@ import ProposalTeamQuestion from './InputComponents/ProposalTeamQuestion';
 import getLastAnswer from './getLastAnswer';
 import { getUserName, getUserEmail, getUserId } from '../../../SessionHandler';
 import { SocketContext } from '../../../context/SocketContext';
+import SFAnswerValidationWrapper from '../../common/SFAnswerValidationWrapper';
 
 const QuestionItem = ({ question }) => {
   const socketContext = useContext(SocketContext);
@@ -87,11 +88,21 @@ const QuestionItem = ({ question }) => {
       [ANSWER_TYPES.PICKLIST_LOOKUP]: <MultiSelectQuestion {...inputProps} />,
       [ANSWER_TYPES.YES_NO]: <YesNoQuestion {...inputProps} />
     };
+    const SFNestedAnswerItem = () => {
+      return (
+        <SFAnswerValidationWrapper
+          hasDifferentSFanswer={question.hasDifferentSFanswer}
+          sfObject={question.sfObject}
+        >
+          {ComponentMapper[question?.answerConfiguration?.type]}
+        </SFAnswerValidationWrapper>
+      );
+    };
 
-    return (
-      ComponentMapper[question?.answerConfiguration?.type] || (
-        <FallbackComponent />
-      )
+    return ComponentMapper[question?.answerConfiguration?.type] ? (
+      <SFNestedAnswerItem />
+    ) : (
+      <FallbackComponent />
     );
   };
 
