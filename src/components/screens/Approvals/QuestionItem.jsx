@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import Grid from 'apollo-react/components/Grid';
 import Box from 'apollo-react/components/Box';
+import Loader from 'apollo-react/components/Loader';
 import { Map, List, fromJS } from 'immutable';
 import isEmpty from 'lodash/isEmpty';
 import CalendarIcon from './CalendarIcon';
@@ -66,6 +67,23 @@ const QuestionItem = ({ question }) => {
   const FallbackComponent = () => {
     return <div>Question type not found</div>;
   };
+  const CustomLoader = () => (
+    <span
+      style={{
+        marginLeft: '0px',
+        position: 'relative'
+      }}
+    >
+      <Loader
+        isInner
+        size={20}
+        style={{
+          width: '20px',
+          height: '20px'
+        }}
+      />
+    </span>
+  );
   const renderQuestion = () => {
     const lastAnswer = getLastAnswer(question);
     const inputProps = {
@@ -113,7 +131,7 @@ const QuestionItem = ({ question }) => {
       <Box mt={2}>
         <QuestionLabel questionLabel={question?.questionText || ''} />
         <Grid container spacing={2}>
-          <Grid item xs={11}>
+          <Grid item xs={10}>
             {renderQuestion()}
           </Grid>
           <Grid item xs={1}>
@@ -125,6 +143,15 @@ const QuestionItem = ({ question }) => {
               <CalendarIcon />
             </div>
           </Grid>
+          {question.loading ? (
+            <Grid item xs={1}>
+              <CustomLoader />
+            </Grid>
+          ) : (
+            <Grid item xs={1}>
+              <></>
+            </Grid>
+          )}
         </Grid>
       </Box>
       {isShowHistory && (
