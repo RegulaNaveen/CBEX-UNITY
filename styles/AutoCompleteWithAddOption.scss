@@ -1,5 +1,6 @@
 @media screen and (max-width: 1200px) and (min-width: 300px) {
-  .auto-complete-with-add-option {
+  .auto-complete-with-add-option,
+  .checkboxtype {
     .MuiChip-root {
       background-color: #ffffff;
       border: 1px solid black;
@@ -127,7 +128,8 @@
   }
 }
 @media screen and (max-width: 3000px) and (min-width: 1201px) {
-  .auto-complete-with-add-option {
+  .auto-complete-with-add-option,
+  .checkboxtype {
     .MuiChip-root {
       background-color: #ffffff;
       border: 1px solid black;
