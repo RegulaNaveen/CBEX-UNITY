@@ -12,6 +12,7 @@ import TextAlign from '@tiptap/extension-text-align';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
 import Mention from '@tiptap/extension-mention';
+import moment from 'moment';
 
 import {
   getProposalDetails,
@@ -34,14 +35,16 @@ import NotesSocketContext from '../../../context/notesSocketContext';
 import suggestion from './suggestion';
 import launchDarkly from '../../../utils/launchDarkly';
 import featureFlags from '../../../constants/featureFlags';
-
+import { saveDataInMatomo, createMatomoObj } from '../../../utils/utils';
+const matamoObj = {}
 const WysiwygNotepad = ({
   selectedBid,
   userName,
   userEmail,
   userRole,
   updateNote,
-  proposalDetails
+  proposalDetails,
+  trackEvent
 }) => {
   const notesSocket = useContext(NotesSocketContext);
   const dispatch = useDispatch();
@@ -70,7 +73,15 @@ const WysiwygNotepad = ({
   useEffect(() => {
     setProposalIdState(selectedBid.get('id'));
   }, [selectedBid]);
-
+  useEffect(() => {
+    if(document.querySelector(".notepad-classoverride")){
+      document.querySelector(".notepad-classoverride").addEventListener('click', ()=>{
+        if(!localStorage.getItem('notepadStartDuration')){
+            localStorage.setItem('notepadStartDuration', moment().utc().format('MMMM Do YYYY, h:mm:ss a'))
+        }
+      })
+    }
+  }, []);
   const editor = useEditor(
     {
       extensions: [
@@ -114,6 +125,139 @@ const WysiwygNotepad = ({
       ],
       onUpdate: ({ editor }) => {
         // const Ejson = editor.getJSON();
+      },
+      onCreate: ({ editor }) => {
+          let timeout = setTimeout(() => {
+            const editorTextLen = String(editor.getHTML()).length;
+            matamoObj.category = `Proposal Detail (CRM#:${proposalDetails['CRM #']})`
+            matamoObj.action = `Event: Notepad ${proposalDetails['CRM #']}`
+            matamoObj.name = `Notepad: char length ${editorTextLen}`
+            matamoObj.customDimensions = [JSON.stringify(proposalDetails),{user: userEmail},{role: userRole}]
+            saveDataInMatomo(trackEvent, matamoObj);
+            clearTimeout(timeout);
+          }, 3000);
+       },
+      onFocus: ({ editor }) => {
+       const editorTextLen = String(editor.getHTML()).length;
+       matamoObj.category = `Proposal Detail (CRM#:${proposalDetails['CRM #']})`
+       matamoObj.action = `Event: Notepad ${proposalDetails['CRM #']}`
+       matamoObj.name = `Notepad: char length ${editorTextLen}`
+       matamoObj.customDimensions = [JSON.stringify(proposalDetails),{user: userEmail},{role: userRole}]
+       saveDataInMatomo(trackEvent, matamoObj);
+      },
+      onBlur: ({ editor }) => {
+        if(localStorage.getItem('notepadStartDuration')){
+          matamoObj.category = `Proposal Detail (CRM#:${proposalDetails['CRM #']})`
+          matamoObj.action = `Event: Notepad ${proposalDetails['CRM #']}`
+          matamoObj.name = `Notepad: Duration ${localStorage.getItem('notepadStartDuration')} - ${moment().utc().format('MMMM Do YYYY, h:mm:ss a')}`
+          matamoObj.customDimensions = [JSON.stringify(proposalDetails),{user: userEmail},{role: userRole}]
+          saveDataInMatomo(trackEvent, matamoObj);  
+          localStorage.removeItem('notepadStartDuration');
+        }
+        const editorTextLen = String(editor.getHTML()).length;
+        matamoObj.category = `Proposal Detail (CRM#:${proposalDetails['CRM #']})`
+        matamoObj.action = `Event: Notepad ${proposalDetails['CRM #']}`
+        matamoObj.name = `Notepad: char length ${editorTextLen}`
+        matamoObj.customDimensions = [JSON.stringify(proposalDetails),{user: userEmail},{role: userRole}]
+        saveDataInMatomo(trackEvent, matamoObj);
+      },
+      onTransaction: ({ editor }) => {
+        const text = editor.state.doc.textBetween(editor.state.selection.from, editor.state.selection.to, ' ');
+        if(text){
+          document.onkeydown = (event) => {
+            // bold
+            if((event.ctrlKey && event.code == 'KeyB') || (event.key == 'Meta' && event.code == 'KeyB')){
+              const matamoObj = createMatomoObj(proposalDetails, userEmail, userRole, 'bold event');
+              console.log('matamoObj :>> ', matamoObj);
+              saveDataInMatomo(trackEvent, matamoObj);
+            }
+            // italic
+            if((event.ctrlKey && event.code == 'KeyI') || (event.key == 'Meta' && event.code == 'KeyI')){
+              const matamoObj = createMatomoObj(proposalDetails, userEmail, userRole, 'Italic')
+              saveDataInMatomo(trackEvent, matamoObj);
+            }
+            // underline
+            if((event.ctrlKey && event.code == 'KeyU') || (event.key == 'Meta' && event.code == 'KeyU')){
+              const matamoObj = createMatomoObj(proposalDetails, userEmail, userRole, 'underline')
+              saveDataInMatomo(trackEvent, matamoObj);
+            }
+            // Strikethrough
+            if((event.ctrlKey && event.shiftKey && event.code == 'KeyX') || (event.key == 'Meta' && event.shiftKey && event.code == 'KeyX')){
+              const matamoObj = createMatomoObj(proposalDetails, userEmail, userRole, 'Strike')
+              saveDataInMatomo(trackEvent, matamoObj);
+            }
+            // Highlight
+            if((event.ctrlKey && event.shiftKey && event.code == 'KeyH') || (event.key == 'Meta' && event.shiftKey && event.code == 'KeyH')){
+              const matamoObj = createMatomoObj(proposalDetails, userEmail, userRole, 'Highlight')
+              saveDataInMatomo(trackEvent, matamoObj);
+            }
+            // align-center
+            if((event.ctrlKey && event.shiftKey && event.code == 'KeyE') || (event.key == 'Meta' && event.shiftKey && event.code == 'KeyE')){
+              const matamoObj = createMatomoObj(proposalDetails, userEmail, userRole, 'align-center')
+              saveDataInMatomo(trackEvent, matamoObj);
+            }
+            // align-left
+            if((event.ctrlKey && event.shiftKey && event.code == 'KeyL') || (event.key == 'Meta' && event.shiftKey && event.code == 'KeyL')){
+              const matamoObj = createMatomoObj(proposalDetails, userEmail, userRole, 'align-left')
+              saveDataInMatomo(trackEvent, matamoObj);
+            }
+            // align-right
+            if((event.ctrlKey && event.shiftKey && event.code == 'KeyR') || (event.key == 'Meta' && event.shiftKey && event.code == 'KeyR')){
+              const matamoObj = createMatomoObj(proposalDetails, userEmail, userRole, 'align-right')
+              saveDataInMatomo(trackEvent, matamoObj);
+            }
+            // subscript
+            if((event.ctrlKey && event.code == 'Comma') || (event.key == 'Meta' && event.code == 'Comma')){
+              const matamoObj = createMatomoObj(proposalDetails, userEmail, userRole, 'subscript')
+              saveDataInMatomo(trackEvent, matamoObj);
+            }
+            // Superscript
+            if((event.ctrlKey && event.code == 'Period') || (event.key == 'Meta' && event.code == 'Period')){
+              const matamoObj = createMatomoObj(proposalDetails, userEmail, userRole, 'superscript')
+              saveDataInMatomo(trackEvent, matamoObj);
+            }
+            // Heading 1
+            if((event.ctrlKey && event.altKey && event.code == 'Digit1') || (event.key == 'Meta' && event.altKey && event.code == 'Digit1')){
+              const matamoObj = createMatomoObj(proposalDetails, userEmail, userRole, 'Heading 1')
+              saveDataInMatomo(trackEvent, matamoObj);
+            }
+            // Heading 2
+            if((event.ctrlKey && event.altKey && event.code == 'Digit2') || (event.key == 'Meta' && event.altKey && event.code == 'Digit2')){
+              const matamoObj = createMatomoObj(proposalDetails, userEmail, userRole, 'Heading 2')
+              saveDataInMatomo(trackEvent, matamoObj);
+            }
+            // Paragraph
+            if((event.ctrlKey && event.altKey && event.code == 'Digit0') || (event.key == 'Meta' && event.altKey && event.code == 'Digit0')){
+              const matamoObj = createMatomoObj(proposalDetails, userEmail, userRole, 'paragraph')
+              saveDataInMatomo(trackEvent, matamoObj);
+            }
+            // Bullet List
+            if((event.ctrlKey && event.shiftKey && event.code == 'Digit8') || (event.key == 'Meta' && event.shiftKey && event.code == 'Digit8')){
+              const matamoObj = createMatomoObj(proposalDetails, userEmail, userRole, 'Bullet List')
+              saveDataInMatomo(trackEvent, matamoObj);
+            }
+            // Ordered List
+            if((event.ctrlKey && event.shiftKey && event.code == 'Digit7') || (event.key == 'Meta' && event.shiftKey && event.code == 'Digit7')){
+              const matamoObj = createMatomoObj(proposalDetails, userEmail, userRole, 'Ordered List')
+              saveDataInMatomo(trackEvent, matamoObj);
+            }
+            // Hard Break
+            if((event.shiftKey && event.code == 'Enter') || (event.key == 'Meta' && event.code == 'Enter')){
+              const matamoObj = createMatomoObj(proposalDetails, userEmail, userRole, 'text-wrap')
+              saveDataInMatomo(trackEvent, matamoObj);
+            }
+            // Undo
+            if((event.ctrlKey && event.code == 'KeyZ') || (event.key == 'Meta' && event.code == 'KeyZ')){
+              const matamoObj = createMatomoObj(proposalDetails, userEmail, userRole, 'Undo')
+              saveDataInMatomo(trackEvent, matamoObj);
+            }
+            // Redo
+            if((event.ctrlKey && event.code == 'KeyY') || (event.key == 'Meta' && event.code == 'KeyY')){
+              const matamoObj = createMatomoObj(proposalDetails, userEmail, userRole, 'Redo')
+              saveDataInMatomo(trackEvent, matamoObj);
+            }
+          }
+        }
       }
     },
     [proposalIdState, notesSocket.wsInstance, notesUserTag]
@@ -124,7 +268,13 @@ const WysiwygNotepad = ({
       {notesSocket.wsInstance && (
         <div className="editor-notepad" key={proposalIdState}>
           <div>
-            <MenuBar key={proposalIdState} editor={editor} />
+            <MenuBar 
+            key={proposalIdState} 
+            proposalDetails={proposalDetails}
+            userRole={userRole}
+            userEmail={userEmail}
+            editor={editor} 
+            trackEvent={trackEvent} />
           </div>
           <EditorContent
             key={proposalIdState}
