@@ -72,7 +72,7 @@ const UnityTab = ({ id, enableValidateTab, selectedView }) => {
       // eslint-disable-next-line no-unused-expressions
       approvalsFlag && showApprovalTab ? setValue(2) : setValue(1);
     }
-  }, [selectedView]);
+  }, [selectedView, approvalsFlag, showApprovalTab]);
   const handleChangeTab = (event, value) => {
     setValue(value);
   };
