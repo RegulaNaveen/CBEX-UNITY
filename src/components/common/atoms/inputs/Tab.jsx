@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
+import { useHistory } from 'react-router';
 import { shallowEqual, useSelector } from 'react-redux';
 import Questions from '../../../screens/Opportunity/Questions';
 import Documents from '../../../screens/Opportunity/Documents';
@@ -13,7 +14,12 @@ import {
   getSelectedBid,
 } from '../../../../redux/selectors/proposal';
 
-const UnityTab = ({ id, enableValidateTab, selectedView }) => {
+const UnityTab = ({
+  id,
+  enableValidateTab,
+  selectedView,
+  onChangeSelectedTab,
+}) => {
   const [value, setValue] = useState(0);
   const [approvalsFlag, setApprovalsFlag] = useState(false);
   const [showApprovalTab, setShowApprovalTab] = useState(false);
@@ -23,6 +29,7 @@ const UnityTab = ({ id, enableValidateTab, selectedView }) => {
   const proposalQuestions = useSelector(getProposalQuestions, shallowEqual);
   const memoizeBid = useMemo(() => selectedBid, [selectedBid?.id]);
   const proposalID = memoizeBid?.id;
+  const history = useHistory();
 
   useEffect(() => {
     if (proposalID) {
@@ -71,9 +78,42 @@ const UnityTab = ({ id, enableValidateTab, selectedView }) => {
     if (selectedView && selectedView === 'documents') {
       // eslint-disable-next-line no-unused-expressions
       approvalsFlag && showApprovalTab ? setValue(2) : setValue(1);
+    } else if (selectedView && selectedView === 'approvals') {
+      setValue(1);
+    } else if (selectedView && selectedView === 'questions') {
+      setValue(0);
     }
   }, [selectedView, approvalsFlag, showApprovalTab]);
+
+  const winLocationSearch = window.location.search;
   const handleChangeTab = (event, value) => {
+    const selectView = new URLSearchParams(winLocationSearch);
+    if (approvalsFlag && showApprovalTab) {
+      if (value === 0) {
+        onChangeSelectedTab('questions');
+        history.push(window.location.pathname);
+      }
+      if (value === 1) {
+        selectView.set('viewType', 'approvals');
+        onChangeSelectedTab('approvals');
+        history.push(`${window.location.pathname}?${selectView.toString()}`);
+      }
+      if (value === 2) {
+        selectView.set('viewType', 'documents');
+        onChangeSelectedTab('documents');
+        history.push(`${window.location.pathname}?${selectView.toString()}`);
+      }
+    } else {
+      if (value === 0) {
+        onChangeSelectedTab('questions');
+        history.push(window.location.pathname);
+      }
+      if (value === 1) {
+        onChangeSelectedTab('documents');
+        selectView.set('viewType', 'documents');
+        history.push(`${window.location.pathname}?${selectView.toString()}`);
+      }
+    }
     setValue(value);
   };
 
