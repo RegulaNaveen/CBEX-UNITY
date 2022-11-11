@@ -7,6 +7,7 @@ const ANSWER_TYPES = {
   DATE: 'date',
   PICKLIST: 'picklist',
   PICKLIST_LOOKUP: 'picklist-lookup',
-  RADIO: 'radio'
+  RADIO: 'radio',
+  CHECKBOX: 'checkbox'
 };
 export default ANSWER_TYPES;

@@ -14,12 +14,13 @@ import Tooltip from 'apollo-react/components/Tooltip';
 import Typography from 'apollo-react/components/Typography';
 import moment from 'moment';
 import classNames from 'classnames';
-
 import { Edit } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import TextArea from './atoms/inputs/TextArea';
 import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
+import CheckBoxQuestions from './atoms/inputs/CheckBoxQuestions';
 import Qvidianquestions from './qvidian';
 import SystemIntegrations from './SystemIntegrations/SystemIntegrations';
 import PriceModel from './PriceModel';
@@ -65,6 +66,7 @@ import Checkbox from 'apollo-react/components/Checkbox';
 import Loader from 'apollo-react/components/Loader';
 import RadioQuestion from './atoms/inputs/RadioQuestion';
 import { getProposalAnswer } from '../../api/proposal';
+import { ListItemText } from '@material-ui/core';
 
 const DropdownWithIdleStateDetection = withIdleStateDetection(Dropdown);
 const QuestionDatePickerWithIdleStateDetection = withIdleStateDetection(
@@ -75,6 +77,9 @@ const AutoCompleteWithAddOptionWithIdleStateDetection = withIdleStateDetection(
   AutoCompleteWithAddOption
 );
 const RadioQuestionIdleStateDetection = withIdleStateDetection(RadioQuestion);
+const CheckBoxQuestionsIdleStateDetection = withIdleStateDetection(
+  CheckBoxQuestions
+);
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
 type State = {
@@ -177,6 +182,49 @@ export class TaskRow extends React.PureComponent<Props, State> {
     ).then(() => {
       const [deletedVal] = xor(
         textValue?.trim() ? textValue?.trim().split(',') : [],
+        lastValue?.trim() ? lastValue?.trim().split(',') : []
+      );
+      const [deletedEmail] = String(deletedVal).match(
+        /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+      );
+      if (reason === 'remove-option' && deletedEmail) {
+        setAnswerLoading(questionId, true);
+        const { sectionName, sectionOrder } = section.toJS();
+        deleteProposalUser(
+          proposalId,
+          deletedEmail,
+          sectionOrder,
+          sectionName
+        ).then(() => {
+          setAnswerLoading(questionId, false);
+        });
+      }
+    });
+    this.trackMatomoEventSubmitAnswer(textValue);
+  };
+
+  handleCheckboxPropsalChange = (textValue, lastValue, reason) => {
+    const {
+      setProposalAnswer,
+      proposalId,
+      questionId,
+      userData,
+      section,
+      setAnswerLoading,
+      deleteProposalUser
+    } = this.props;
+    console.log('set proposal answer');
+    setProposalAnswer(
+      this.context,
+      proposalId,
+      questionId,
+      textValue.target.value,
+      userData
+    ).then(() => {
+      const [deletedVal] = xor(
+        textValue.target.value?.trim()
+          ? textValue.target.value?.trim().split(',')
+          : [],
         lastValue?.trim() ? lastValue?.trim().split(',') : []
       );
       const [deletedEmail] = String(deletedVal).match(
@@ -606,6 +654,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     let answerValue = '';
     let answerValueComplex;
     let finalOptions = options;
+
     const checkDisableFlagRadio = () => {
       if (NaLoading) return true;
 
@@ -686,7 +735,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
       answerValueComplex = getCountriesNameForCode(answerValueComplex || []);
       finalOptions = getCountryOptions();
     }
-
     // Function to converted Answer String
     const getConvertedAnsString = str =>
       !String(str).trim() ? '' : String(str).trim();
@@ -1120,6 +1168,36 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 disabled={checkDisableFlagRadio() || isNotApplicable}
                 onFocus={concurrencyFocusHandler}
                 onBlur={concurrencyBlurHandler}
+              />
+            </span>
+          </SFAnswerValidationWrapper>
+        );
+      case ANSWER_TYPES.CHECKBOX:
+        return (
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            sfObject={sfObject}
+          >
+            <span
+              style={
+                `${this.props.showNaCheckbox}`
+                  ? {
+                      display: 'flex'
+                    }
+                  : ''
+              }
+              className="checkboxtype"
+            >
+              <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
+                {this.renderNACheckbox(checkDisableFlag, 'checkbox')}
+              </span>
+              <CheckBoxQuestionsIdleStateDetection
+                answerValue={answerValueComplex || ''}
+                finalOptions={finalOptions}
+                disabled={checkDisableFlagRadio() || isNotApplicable}
+                onOpen={concurrencyFocusHandler}
+                onClose={concurrencyBlurHandler}
+                onChange={this.handleCheckboxPropsalChange}
               />
             </span>
           </SFAnswerValidationWrapper>

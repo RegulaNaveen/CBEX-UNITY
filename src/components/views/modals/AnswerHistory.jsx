@@ -184,7 +184,8 @@ class AnswerHistory extends Component<Props> {
         }
         if (
           questionType !== ANSWER_TYPES.PICKLIST &&
-          questionType !== ANSWER_TYPES.PICKLIST_LOOKUP
+          questionType !== ANSWER_TYPES.PICKLIST_LOOKUP &&
+          questionType !== ANSWER_TYPES.CHECKBOX
         ) {
           const renderWord = (word, status) => (
             <span className={status} key={uuidv4()}>
