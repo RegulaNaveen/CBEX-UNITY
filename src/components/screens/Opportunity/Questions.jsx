@@ -41,7 +41,9 @@ import {
   getEditQuestionData,
   getIsOpen,
   getSelectedBid,
-  getShowNaCheckbox
+  getShowNaCheckbox,
+  getUserEmail,
+  getUserRole
 } from '../../../redux/selectors';
 import {
   selectUniqueMilestones,
@@ -57,14 +59,14 @@ import Sidebar from '../../views/Sidebar';
 import AnswerHistory from '../../views/modals/AnswerHistory';
 import { getAllUsers } from '../../../redux/actions/sso-auth-actions';
 import MatomoHOC from '../../HOC/MatomoHOC';
-import { getCountriesNameForCode } from '../../../utils/utils';
+import { createMatomoObj, getCountriesNameForCode, saveDataInMatomo, throttle } from '../../../utils/utils';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
 import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions';
 import WysiwygNotepad from '../../views/WysiwygNotepad';
 import ANSWER_TYPES from '../../../constants/answerTypes';
 import NotesSocketContext from '../../../context/notesSocketContext';
 import PriceModeler from '../../common/PriceModeler';
-
+import moment from 'moment';
 export const QuestionsRefContext = createContext(null);
 
 const QuestionsSectionMapping = React.lazy(() =>
@@ -114,6 +116,7 @@ class Questions extends Component {
 
   constructor(props: Object) {
     super(props);
+    this.resizeObserver = null;
 
     this.state = {
       showModal: false,
@@ -139,7 +142,11 @@ class Questions extends Component {
     const {
       fetchUsers,
       getSFNonEditabelInfoField,
-      callPickListLookupSfData
+      callPickListLookupSfData,
+      userEmail,
+      userRole,
+      proposalDetail,
+      trackEvent
     } = this.props;
     fetchUsers();
     getSFNonEditabelInfoField();
@@ -147,6 +154,13 @@ class Questions extends Component {
     window.addEventListener('resize', this.resize.bind(this));
     this.resize();
     this.props.fetchUserTagFlagInQuestion();
+    this.resizeObserver = new ResizeObserver(throttle((entries) =>{
+      const matamoObj = createMatomoObj(proposalDetail, userEmail, userRole, 'drag event');
+      saveDataInMatomo(trackEvent, matamoObj);
+    }, 3000));
+  if(this.resizeObserver){
+    this.resizeObserver.observe(document.querySelector(".notepad-classoverride"));
+  }
   }
 
   componentDidUpdate(prevProps: Map) {
@@ -189,10 +203,28 @@ class Questions extends Component {
   }
 
   componentWillUnmount() {
+    const {
+      proposalDetail,
+      trackEvent,
+      userEmail,
+      userRole
+    } = this.props;
+    if(localStorage.getItem('notepadStartDuration')){
+        const matamoObj = {}
+        matamoObj.category = `Proposal Detail (CRM#:${proposalDetail['CRM #']})`
+        matamoObj.action = `Event: Notepad ${proposalDetail['CRM #']}`
+        matamoObj.name = `Notepad: Duration ${localStorage.getItem('notepadStartDuration')} - ${moment().utc().format('MMMM Do YYYY, h:mm:ss a')}`
+        matamoObj.customDimensions = [JSON.stringify(proposalDetail),{user: userEmail},{role: userRole}]
+        saveDataInMatomo(trackEvent, matamoObj);  
+        localStorage.removeItem('notepadStartDuration');
+   }
     const { handleOpenClose, resetQuestionsFilter } = this.props;
     if (handleOpenClose) handleOpenClose(false);
 
     if (resetQuestionsFilter) resetQuestionsFilter();
+    if (this.resizeObserver && this.resizeObserver.disconnect) {
+      this.resizeObserver.disconnect();
+    }
     // this.state.wsInstance?.destroy();
   }
 
@@ -472,7 +504,12 @@ class Questions extends Component {
       editQuestionsData,
       isOpen,
       noneditableField,
-      showNaCheckbox
+      showNaCheckbox,
+      trackEvent,
+      eventCategories,
+      proposalDetail,
+      userEmail,
+      userRole
     } = this.props;
     const {
       showModal,
@@ -488,7 +525,6 @@ class Questions extends Component {
     const notepadMaxWidthPx = isOpen
       ? notepadMinWidthPx
       : (window.innerWidth - minPixelToExclude) * (47 / 100); // 50% of the total screen size
-
     return (
       <>
         <div className="opportunity-details">
@@ -596,6 +632,8 @@ class Questions extends Component {
               resizable
               onClose={() => {
                 this.setIsNotepadOpen(false);
+                const matamoObj = createMatomoObj(proposalDetail, userEmail, userRole, 'closed event')
+                saveDataInMatomo(trackEvent, matamoObj);
               }}
               onOpen={() => {
                 this.setIsNotepadOpen(true);
@@ -611,7 +649,7 @@ class Questions extends Component {
                 </div>
 
                 {this.state.proposalNoteRender && this.context.wsInstance ? (
-                  <WysiwygNotepad />
+                  <WysiwygNotepad trackEvent={trackEvent} eventCategories={eventCategories} />
                 ) : (
                   <Loader
                     type="TailSpin"
@@ -722,6 +760,8 @@ const mapStateToProps = (state: Map) => ({
   editQuestionsData: getEditQuestionData(state),
   selectedBid: getSelectedBid(state),
   getBidList: getBidList(state),
+  userEmail: getUserEmail(state),
+  userRole: getUserRole(state),
   showNaCheckbox: getShowNaCheckbox(state)
 });
 
