@@ -23,11 +23,9 @@ const CheckBoxQuestions = (props: Props) => {
     finalOptions
   } = props;
   let selectItems = null;
-  console.log(finalOptions, 'fo');
   const selectedNames = [];
   if (!isEmpty(finalOptions)) {
     selectItems = finalOptions.map(item => {
-      console.log(item, 'itm');
       if (answerValue?.indexOf(item) > -1) {
         selectedNames.push(item);
       }
