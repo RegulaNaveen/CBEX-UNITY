@@ -34,9 +34,11 @@ import {
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getUniqueMilestones, getBidList } from '../selectors/proposal';
 import { getProposalIdlist } from '../../utils/utils';
+import launchDarkly from '../../utils/launchDarkly';
 import { fetchNotes } from './notepad-actions';
 import { DEFAULT } from '../../constants/app';
 import isPriceModelerQuestion from '../../utils/isPriceModelerQuestion';
+import featureFlags from '../../constants/featureFlags';
 
 const { PROPOSAL_API_URL } = API.PROPOSAL;
 const {
@@ -94,7 +96,8 @@ const {
   UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE,
   UPDATE_NOT_APPLICABLE_DONE,
   SET_PRICE_MODELER_FIELDS,
-  ERROR_UPDATE_NOT_APPLICABLE
+  ERROR_UPDATE_NOT_APPLICABLE,
+  SET_CAN_USER_TAG_IN_QUESTION
 } = REDUX_TYPES.PROPOSAL;
 
 /**
@@ -1219,6 +1222,24 @@ export const setShowNaCheckbox = val => {
     dispatch({
       type: SHOW_NA_CHECKBOX,
       payload: val
+    });
+  };
+};
+
+export const fetchUserTagFlagInQuestion = () => {
+  return async dispatch => {
+    const answerUserTagFlagValue = await launchDarkly(
+      featureFlags.ANSWER_USER_TAG
+    );
+    dispatch(setCanUserTagInQuestion(answerUserTagFlagValue));
+  };
+};
+
+export const setCanUserTagInQuestion = can => {
+  return dispatch => {
+    dispatch({
+      type: SET_CAN_USER_TAG_IN_QUESTION,
+      payload: can
     });
   };
 };

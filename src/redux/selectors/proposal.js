@@ -185,7 +185,7 @@ function createSectionsFromQuestions(questions) {
 }
 
 export function getUniqueMilestones(questions) {
-  const filteredQuestions = questions.filter((q)=>shouldInclude(q))
+  const filteredQuestions = questions.filter(q => shouldInclude(q));
   const milestones = [];
   fromJS(filteredQuestions)
     .valueSeq()
@@ -290,8 +290,9 @@ export const getEditQuestionData = createSelector(selectProposal, proposal =>
 export const getSelectedBid = createSelector(selectProposal, proposal =>
   proposal?.get('selectedBid')
 );
-export const getStatusOfNewBid = createSelector(selectProposal, proposal =>
-  proposal.get('newbidflag') || false
+export const getStatusOfNewBid = createSelector(
+  selectProposal,
+  proposal => proposal.get('newbidflag') || false
 );
 
 export const getOpportunityData = createSelector(selectProposal, proposal =>
@@ -308,7 +309,8 @@ export const getBidList = createSelector(getOpportunityData, opportunity => {
         bidDate: item.getIn(['proposal', 'proposalDate']),
         bidId: item.getIn(['proposal', 'proposalId']),
         isCurrent: item.get('isCurrent'),
-        bidName: `Bid ${item.getIn(['proposal', 'proposalDetails', 'bidNo']) || ''}`,
+        bidName: `Bid ${item.getIn(['proposal', 'proposalDetails', 'bidNo']) ||
+          ''}`,
         bidStatus: item.get('inProgress') || '',
         pertinentDetails: item.getIn([
           'proposal',
@@ -342,10 +344,15 @@ export const getIsQuestionAnswered = createSelector(
     return isQuestionAnswered > -1 ? true : false;
   }
 );
- 
+
 export const getLookUpOptionsSelector = (proposals: Map): Object =>
-  proposals.get('lookUpOptions')
+  proposals.get('lookUpOptions');
 
 export const getPriceModuler = createSelector(selectProposal, proposal =>
   proposal?.get('priceModeler')
+);
+
+export const getCanUserTagInQuestion = createSelector(
+  selectProposal,
+  proposal => proposal?.get('canUserTagInQuestion')
 );

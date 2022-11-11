@@ -61,7 +61,8 @@ const {
   SET_EVENT_LAUNCHER_FLAG,
   SHOW_NA_CHECKBOX,
   SET_PRICE_MODELER_FIELDS,
-  ERROR_UPDATE_NOT_APPLICABLE
+  ERROR_UPDATE_NOT_APPLICABLE,
+  SET_CAN_USER_TAG_IN_QUESTION
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -148,7 +149,8 @@ const INITIAL_STATE: Map = fromJS({
     phase: '',
     patients: '',
     regions: ''
-  })
+  }),
+  canUserTagInQuestion: false
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -1199,7 +1201,9 @@ const actionMap = {
     state.set('eventLauncherFlag', payload),
   [SHOW_NA_CHECKBOX]: (state, { payload }) =>
     state.set('showNaCheckbox', payload),
-  [SET_PRICE_MODELER_FIELDS]: setPriceModulerFields
+  [SET_PRICE_MODELER_FIELDS]: setPriceModulerFields,
+  [SET_CAN_USER_TAG_IN_QUESTION]: (state, { payload }) =>
+    state.set('canUserTagInQuestion', payload)
 };
 
 export default function(
