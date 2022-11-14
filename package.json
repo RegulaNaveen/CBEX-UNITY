@@ -1,10 +1,11 @@
 {
   "name": "gbo-efficiencies-frontend",
-  "version": "4.5",
+  "version": "4.5.1",
   "description": "GBO Efficiencies Frontend App",
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --mode development --env.API_ENV=DEV",
+    "l4": "webpack-dev-server --mode production --env.API_ENV=L4",
     "dev:uat": "webpack-dev-server --mode development --env.API_ENV=UAT",
     "build:dev": "webpack --mode production --env.API_ENV=DEV",
     "build:dev2": "webpack --mode production --env.API_ENV=DEV2",
