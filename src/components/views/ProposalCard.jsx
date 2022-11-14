@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ThumbsUp from 'apollo-react-icons/ThumbsUp';
 import { Folder, Clipboard, RightArrow } from '../svg';
 import { OPPORTUNITY } from '../../routes';
 import House from 'apollo-react-icons/House';
@@ -108,6 +109,18 @@ const ProposalCard = ({
             <House fontSize='large' htmlColor='#b350bf'></House>
           </Link>
           <p>Strategy Development</p>
+        </div>
+
+        <div
+          className='button'
+          id='approvals'
+          role='presentation'
+          onClick={setProposalTypeView}
+        >
+          <Link to={`${OPPORTUNITY}${title}?viewType=approvals`}>
+            <ThumbsUp fontSize='large' htmlColor='#1faa00' />
+          </Link>
+          <p>Approvals</p>
         </div>
 
         <div
