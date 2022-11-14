@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import Grid from 'apollo-react/components/Grid';
 import Box from 'apollo-react/components/Box';
 import Loader from 'apollo-react/components/Loader';
+import IconButton from 'apollo-react/components/IconButton';
 import { Map, List, fromJS } from 'immutable';
 import isEmpty from 'lodash/isEmpty';
 import CalendarIcon from './CalendarIcon';
@@ -135,23 +136,18 @@ const QuestionItem = ({ question }) => {
             {renderQuestion()}
           </Grid>
           <Grid item xs={1}>
-            <div
+            <IconButton
+              size="small"
               onClick={() => {
                 setIsShowHistory(true);
               }}
             >
               <CalendarIcon />
-            </div>
+            </IconButton>
           </Grid>
-          {question.loading ? (
-            <Grid item xs={1}>
-              <CustomLoader />
-            </Grid>
-          ) : (
-            <Grid item xs={1}>
-              <></>
-            </Grid>
-          )}
+          <Grid item xs={1}>
+            <div>{question.loading && <CustomLoader />}</div>
+          </Grid>
         </Grid>
       </Box>
       {isShowHistory && (
