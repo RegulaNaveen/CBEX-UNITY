@@ -7,6 +7,7 @@ import RadioGroup from 'apollo-react/components/RadioGroup';
 import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
 import IconButton from 'apollo-react/components/IconButton';
+import Modal from 'apollo-react/components/Modal';
 import moment from 'moment';
 
 import CustomModal from '../../common/CustomModal';
@@ -27,6 +28,9 @@ const EventLauncher = ({
   proposalDetail,
   trackMatomoEventLauncher
 }) => {
+  const [bodyStr, setBodyStr] = useState('');
+  const [url, setUrl] = useState('');
+  const [bodyHtml, setBodyHtml] = useState('');
   const quesData = questionData?.toJS();
   const hasEvent = quesData?.events && !isEmpty(quesData?.events);
   const eventStartDate = !isEmpty(quesData?.answers)
@@ -45,10 +49,7 @@ const EventLauncher = ({
   const proposalQuestions = useSelector(selectProposalQuestions);
   const eventData = parseStringifyJson(quesData?.events);
 
-  // console.log(`${quesData.questionText}`, {
-  //   answers: quesData?.answers,
-  //   eventRoles: eventData.EventRoles
-  // });
+  const bodytoHtml = eventData?.EventBody;
 
   // Component State
   const [openModal, setOpenModal] = useState(false);
@@ -112,16 +113,17 @@ const EventLauncher = ({
   const generateEventUrl = (startDate, endDate, body, subject, email) => {
     const updatedBody = updateEventSubjectBody(body, proposalDetail);
     const updatedSubject = updateEventSubjectBody(subject, proposalDetail);
-
-    const bodyStr = encodeURIComponent(
-      updatedBody.replace(new RegExp('\\n', 'g'), '<br />')
-    );
+    setBodyStr(body);
     const subjectStr = encodeURIComponent(
       updatedSubject.replace(new RegExp('\\n', 'g'), '<br />')
     );
-    return `https://outlook.office.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose%20&rru=addevent&startdt=${startDate}&enddt=${endDate}&body=${bodyStr}&.&subject=${subjectStr}&to=${email}&online=1`;
+    return `https://outlook.office.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose%20&rru=addevent&startdt=${startDate}&enddt=${endDate}&to=${email}&.&subject=${subjectStr}&body=Unity%20has%20copied%20your%20invite%20details%20to%20your%20clipboard.%20Press%20Control%20%2B%20V%20to%20paste%20this%20content%20to%20include%20it%20in%20your%20meeting%20invite%20and%20share%20it%20with%20your%20team.&online=1`;
   };
-
+  const newString = !isEmpty(bodyStr) ? bodyStr.html : bodyStr;
+  const content = bodytoHtml;
+  const blob = new Blob([content], { type: 'text/html' });
+  const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
+  navigator.clipboard.write([clipboardItem]);
   const checkDateAge = date => {
     const formattedDt = moment(date).format('YYYY-MM-DD');
     if (moment(formattedDt).isSame(moment(), 'day')) return 'today';
@@ -130,12 +132,16 @@ const EventLauncher = ({
     return null;
   };
 
-  const launchButtonHandler = () => {
+  const launchRichTextButtonHandler = () => {
     const dateTimeFormat = 'YYYY-MM-DDTHH:mm:ss';
-    const { EventBody: body, EventSubject: subject } = eventData;
+    const {
+      EventBody: body,
+      EventSubject: subject,
+      EventHtml: html
+    } = eventData;
+    setBodyHtml(body);
     const dateAge = checkDateAge(eventStartDate);
     const formattedDt = moment(eventStartDate).format('YYYY-MM-DD');
-
     let startDate = `${formattedDt}T08:00:00`;
     if (dateAge === 'today') {
       startDate = moment()
@@ -148,12 +154,14 @@ const EventLauncher = ({
       .format(dateTimeFormat);
 
     // Calling generateEventUrl func
-    const url = generateEventUrl(
-      startDate,
-      endDate,
-      body,
-      subject,
-      filteredEmails.join(', ')
+    setUrl(
+      generateEventUrl(
+        startDate,
+        endDate,
+        body,
+        subject,
+        filteredEmails.join(', ')
+      )
     );
 
     const trackEventPayload = {
@@ -175,7 +183,6 @@ const EventLauncher = ({
     trackMatomoEventLauncher(trackEventPayload);
     window.open(url, '_blank', 'noopener,noreferrer');
   };
-
   // Event Modal
   const eventLauncherModal = openModal && (
     <CustomModal
@@ -188,7 +195,7 @@ const EventLauncher = ({
         {
           label: PROPOSAL.LAUNCH_OUTLOOK,
           disabled: isEmpty(filteredEmails),
-          onClick: launchButtonHandler
+          onClick: launchRichTextButtonHandler
         }
       ]}
       modalStyle={modalStyle}
