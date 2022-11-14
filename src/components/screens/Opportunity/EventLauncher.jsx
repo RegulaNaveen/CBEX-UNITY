@@ -1,4 +1,3 @@
-/* eslint-disable react/no-danger */
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import CalendarEvent from 'apollo-react-icons/CalendarEvent';
