@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
+import { useHistory } from 'react-router';
 import { shallowEqual, useSelector } from 'react-redux';
 import Questions from '../../../screens/Opportunity/Questions';
 import Documents from '../../../screens/Opportunity/Documents';
@@ -10,11 +11,16 @@ import launchDarkly from '../../../../utils/launchDarkly';
 import {
   getOpportunityData,
   getProposalQuestions,
-  getSelectedBid,
+  getSelectedBid
 } from '../../../../redux/selectors/proposal';
 import Approvals from '../../../screens/Approvals/index';
 
-const UnityTab = ({ id, enableValidateTab, selectedView }) => {
+const UnityTab = ({
+  id,
+  enableValidateTab,
+  selectedView,
+  onChangeSelectedTab
+}) => {
   const [value, setValue] = useState(0);
   const [approvalsFlag, setApprovalsFlag] = useState(false);
   const [showApprovalTab, setShowApprovalTab] = useState(false);
@@ -24,16 +30,28 @@ const UnityTab = ({ id, enableValidateTab, selectedView }) => {
   const proposalQuestions = useSelector(getProposalQuestions, shallowEqual);
   const memoizeBid = useMemo(() => selectedBid, [selectedBid?.id]);
   const proposalID = memoizeBid?.id;
+  const history = useHistory();
 
   const tabs = [
     {
       label: 'Strategy Development',
       value: 0,
-      component: <Questions proposalID={id} />
+      component: <Questions proposalID={id} />,
+      path: 'questions'
     },
-    { label: 'Approvals', value: 1, component: <Approvals /> },
-    { label: 'Documents', value: 2, component: <Documents /> },
-    { label: 'Validate', value: 3, component: <Validate /> }
+    {
+      label: 'Approvals',
+      value: 1,
+      component: <Approvals />,
+      path: 'approvals'
+    },
+    {
+      label: 'Documents',
+      value: 2,
+      component: <Documents />,
+      path: 'documents'
+    },
+    { label: 'Validate', value: 3, component: <Validate />, path: 'validate' }
   ];
 
   useEffect(() => {
@@ -43,16 +61,16 @@ const UnityTab = ({ id, enableValidateTab, selectedView }) => {
     }
   }, [memoizeBid, proposalQuestions]);
 
-  const getApprovalQuestionIds = (opportunityData) => {
+  const getApprovalQuestionIds = opportunityData => {
     const approvalQIdsArr = [];
-    opportunityData?.proposal?.approvals?.forEach((qIdApproval) => {
+    opportunityData?.proposal?.approvals?.forEach(qIdApproval => {
       if (qIdApproval?.ApprovalSectionLeftQuestions?.length !== 0) {
-        qIdApproval.ApprovalSectionLeftQuestions.forEach((leftQId) => {
+        qIdApproval.ApprovalSectionLeftQuestions.forEach(leftQId => {
           approvalQIdsArr.push(leftQId);
         });
       }
       if (qIdApproval?.ApprovalSectionRightQuestions?.length !== 0) {
-        qIdApproval.ApprovalSectionRightQuestions.forEach((rightQId) => {
+        qIdApproval.ApprovalSectionRightQuestions.forEach(rightQId => {
           approvalQIdsArr.push(rightQId);
         });
       }
@@ -89,8 +107,24 @@ const UnityTab = ({ id, enableValidateTab, selectedView }) => {
         .value;
       setValue(isApprovalTabVisible ? approvalTabValue : 0); // Shows questions tab if Approvals are not found for the proposal
     }
+    if (selectedView && selectedView === 'questions') {
+      setValue(0);
+    }
   }, [selectedView, approvalsFlag, showApprovalTab]);
+
+  const winLocationSearch = window.location.search;
   const handleChangeTab = (event, value) => {
+    const selectView = new URLSearchParams(winLocationSearch);
+    const currentTab = tabs.find(item => item.value === value);
+    const currentPath = currentTab.path || '';
+    onChangeSelectedTab(currentPath);
+    selectView.set('viewType', currentPath);
+    if (value === 0) {
+      // No need to update pathname for question tab
+      history.push(`${window.location.pathname}`);
+    } else {
+      history.push(`${window.location.pathname}?${selectView.toString()}`);
+    }
     setValue(value);
   };
 
@@ -99,6 +133,7 @@ const UnityTab = ({ id, enableValidateTab, selectedView }) => {
       const approvalFlag = await launchDarkly(featureFlags.APPROVALS, false);
       setApprovalsFlag(approvalFlag);
     })();
+    console.log({ selectedView });
   }, []);
 
   /**

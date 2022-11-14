@@ -201,6 +201,49 @@ function checkNonEditableFields(PreField, sfField, sfObject) {
   );
 }
 
+const saveDataInMatomo = (trackEvent, data) => {
+  console.log(`trackEvent`, trackEvent)
+  const { category, action, name, customDimensions } = data;
+  trackEvent({
+    category: category,
+    action: action,
+    name: name,
+    customDimensions: customDimensions
+  });
+}
+
+const throttle = (func, delay) => {
+  // Previously called time of the function
+  let prev = 0;
+  return (...args) => {
+    // Current called time of the function
+    let now = new Date().getTime();
+
+    // Logging the difference between previously
+    // called and current called timings
+     
+    // If difference is greater than delay call
+    // the function again.
+    if(now - prev> delay){
+      prev = now;
+
+      // "..." is the spread operator here
+      // returning the function with the
+      // array of arguments
+      return func(...args); 
+    }
+  }
+}
+
+  const createMatomoObj = (proposalDetails, userEmail, userRole, action) => {
+    const matamoObj = {}
+    matamoObj.category = `Proposal Detail (CRM#:${proposalDetails['CRM #']})`
+    matamoObj.action = `Event: Notepad ${proposalDetails['CRM #']}`
+    matamoObj.name = `Notepad: ${action}`
+    matamoObj.customDimensions = [JSON.stringify(proposalDetails), {user: userEmail},{role: userRole}]
+    return matamoObj
+  }
+
 export {
   getCountriesNameForCode,
   getCountryOptions,
@@ -211,5 +254,8 @@ export {
   getUserName,
   getProposalIdlist,
   checkNonEditableFields,
-  updateEventSubjectBody
+  updateEventSubjectBody,
+  saveDataInMatomo,
+  throttle,
+  createMatomoObj
 };
