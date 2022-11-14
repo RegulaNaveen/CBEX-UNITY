@@ -286,7 +286,7 @@ prod:
   only:
     - tags
   needs:
-    - deployuat
+    - deployl4
   when: manual
   script:
     - cat devops/vars/${Environment}.env >> build.env
