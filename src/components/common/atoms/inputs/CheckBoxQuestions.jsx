@@ -13,7 +13,7 @@ type Props = {
   onChange(): void
 };
 
-const RadioQuestion = (props: Props) => {
+const CheckBoxQuestions = (props: Props) => {
   const {
     answerValue,
     disabled,
@@ -54,4 +54,4 @@ const RadioQuestion = (props: Props) => {
     </Select>
   );
 };
-export default RadioQuestion;
+export default CheckBoxQuestions;
