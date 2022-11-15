@@ -101,6 +101,7 @@ dev:
       - build.env
   tags:
     - docker
+  environment: dev
 
 deploydev:
   stage: deploydev
@@ -117,6 +118,7 @@ deploydev:
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
   tags:
     - docker
+  environment: dev
 
 dev2:
   stage: builddev2
@@ -141,6 +143,7 @@ dev2:
       - build.env
   tags:
     - docker
+  environment: dev2
 
 deploydev2:
   stage: deploydev2
@@ -157,6 +160,7 @@ deploydev2:
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
   tags:
     - docker
+  environment: dev2
 
 .dev3:
   stage: builddev3
@@ -180,6 +184,7 @@ deploydev2:
       - build.env
   tags:
     - docker
+  environment: dev3
 
 .deploydev3:
   stage: deploydev3
@@ -195,6 +200,7 @@ deploydev2:
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
   tags:
     - docker
+  environment: dev3
 
 buildl4:
   stage: buildl4
@@ -219,6 +225,7 @@ buildl4:
       - build.env
   tags:
     - docker
+  environment: l4
 
 deployl4:
   stage: deployl4
@@ -235,6 +242,7 @@ deployl4:
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
   tags:
     - docker
+  environment: l4
 
 demo:
   stage: builddemo
@@ -260,6 +268,7 @@ demo:
       - build.env
   tags:
     - docker
+  environment: demo
 
 deploydemo:
   stage: deploydemo
@@ -277,6 +286,7 @@ deploydemo:
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
   tags:
     - docker
+  environment: demo
 
 qa:
   stage: buildqa
@@ -301,6 +311,7 @@ qa:
       - build.env
   tags:
     - docker
+  environment: qa
 
 deployqa:
   stage: deployqa
@@ -316,6 +327,7 @@ deployqa:
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
   tags:
     - docker
+  environment: qa
 
 uat:
   stage: builduat
@@ -340,6 +352,7 @@ uat:
       - build.env
   tags:
     - docker
+  environment: uat
 
 deployuat:
   stage: deployuat
@@ -355,6 +368,7 @@ deployuat:
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
   tags:
     - docker
+  environment: uat
 
 prod:
   stage: buildprod
@@ -379,6 +393,7 @@ prod:
       - build.env
   tags:
     - docker
+  environment: prod
 
 deployprod:
   stage: deployprod
@@ -394,12 +409,13 @@ deployprod:
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
   tags:
     - docker
+  environment: prod
 
 pafexecution_regression:
   stage: pafexecution_regression
   needs:
     - deployqa
-  when: manual
+  #when: manual
   only:
     - tags
   variables:
