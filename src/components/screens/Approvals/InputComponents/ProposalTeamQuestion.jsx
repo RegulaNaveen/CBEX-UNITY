@@ -54,7 +54,7 @@ const ProposalTeamQuestion = ({
           onFocus={() => {}}
           onBlur={() => {}}
           onChange={handleAnswerChange}
-          text={lastAnswer.answer}
+          text={lastAnswer.answer || ''}
           disabled={false}
         />
       </>
