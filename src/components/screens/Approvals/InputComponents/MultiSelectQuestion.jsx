@@ -21,7 +21,10 @@ const MultiSelectQuestion = ({
     const sfObject = question?.sfObject;
     const sfField = question?.sfField;
     let finalOptions = question?.answerConfiguration?.options;
-    let answerValue = isEmpty(lastAnswer.answer) ? [] : lastAnswer.answer;
+    let answerValue =
+      isEmpty(lastAnswer.answer) || lastAnswer.answer === 'N/A'
+        ? []
+        : lastAnswer.answer;
 
     // Special logic for Targeted_Countries__c sfField
     if (
