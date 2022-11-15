@@ -18,6 +18,7 @@ import RadioQuestion from './InputComponents/RadioQuestion';
 import SelectQuestion from './InputComponents/SelectQuestion';
 import MultiSelectQuestion from './InputComponents/MultiSelectQuestion';
 import YesNoQuestion from './InputComponents/YesNoQuestion';
+import CheckBoxQuestion from './InputComponents/CheckBoxQuestion';
 import ProposalTeamQuestion from './InputComponents/ProposalTeamQuestion';
 import getLastAnswer from './getLastAnswer';
 import { getUserName, getUserEmail, getUserId } from '../../../SessionHandler';
@@ -98,7 +99,8 @@ const QuestionItem = ({ question }) => {
       [ANSWER_TYPES.SELECT]: <SelectQuestion {...inputProps} />,
       [ANSWER_TYPES.PICKLIST]: <MultiSelectQuestion {...inputProps} />,
       [ANSWER_TYPES.PICKLIST_LOOKUP]: <MultiSelectQuestion {...inputProps} />,
-      [ANSWER_TYPES.YES_NO]: <YesNoQuestion {...inputProps} />
+      [ANSWER_TYPES.YES_NO]: <YesNoQuestion {...inputProps} />,
+      [ANSWER_TYPES.CHECKBOX]: <CheckBoxQuestion {...inputProps} />
     };
 
     const SFNestedAnswerItem = () => {
