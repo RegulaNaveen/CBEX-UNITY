@@ -5,18 +5,24 @@ workflow:
 include:
   - local: devops/vars/global.yml
   - project: 'CBEx/devops'
+    stage: prebuild
     ref: test
     file: /gitlab_balckduck_scan.yml
+    when: always
 
 include:
   - project: 'CBEx/unity/Unity-QA'
     ref: Unity_QA_Testing
     file: /.gitlab-ci.yml
-
+    when: always
+    needs:
+      - deployqa
 
 stages:
-  - sonar #sonar report
-  - blackduckscan
+  - prebuild
+  #- sonar #sonar report
+  #- test 
+  #- blackduckscan
   - builddev
   - deploydev
   - builddev2
@@ -35,8 +41,10 @@ stages:
   - deploystack
 
 sonar:
-  stage: sonar
+  stage: prebuild
   image: sonarsource/sonar-scanner-cli:4.5
+  #needs:
+    #- test
   rules:
     - if: $CI_COMMIT_REF_NAME == "dev" || $CI_COMMIT_REF_NAME =~ /^feature/ || $CI_COMMIT_REF_NAME =~ /^bugfix/
     - when: always
@@ -47,9 +55,28 @@ sonar:
     key: '${CI_JOB_NAME}'
     paths:
       - .sonar/cache
+  artifacts:
+    paths:
+      - coverage/
   script:
     - apk upgrade --update-cache --available && apk add openssl && rm -rf /var/cache/apk/*
     - sonar-scanner -X -Dsonar.branch.name=$CI_COMMIT_REF_NAME -Dsonar.projectKey=$CI_PROJECT_NAME
+  
+#test:
+  #stage: prebuild
+  #image: node:14
+  #except: 
+    #- qa
+    #- uat
+  #script:
+    #- yarn install #v1.22.5
+    #- yarn run test --coverage
+  #artifacts:
+    #paths:
+      #- coverage/
+  #allow_failure: false
+  #tags:
+    #- docker
 
 dev:
   stage: builddev

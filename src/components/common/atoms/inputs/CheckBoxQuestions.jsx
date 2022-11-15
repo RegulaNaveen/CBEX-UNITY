@@ -46,7 +46,7 @@ const CheckBoxQuestions = (props: Props) => {
         if (isEmpty(selected)) return 'Select';
         return selectedNames.join(', ');
       }}
-      placeholder="Select"
+      placeholder={!isEmpty(answerValue) ? '' : 'Select'}
       fullWidth
       multiple
     >
