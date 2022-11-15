@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import Grid from 'apollo-react/components/Grid';
+import PropTypes from 'prop-types';
 import Box from 'apollo-react/components/Box';
 import Loader from 'apollo-react/components/Loader';
 import IconButton from 'apollo-react/components/IconButton';
@@ -32,8 +33,8 @@ const QuestionItem = ({ question }) => {
     role: getUserId()
   });
 
-  const prepareAnswerHistoryData = question => {
-    let questionMap = fromJS(question);
+  const prepareAnswerHistoryData = questionData => {
+    let questionMap = fromJS(questionData);
 
     // This Logic was copy pasted from src/components/screens/opportunity/Questions.jsx
     // It prepares answer data for a specific answer type.
@@ -68,23 +69,13 @@ const QuestionItem = ({ question }) => {
   const FallbackComponent = () => {
     return <div>Question type not found</div>;
   };
+
   const CustomLoader = () => (
-    <span
-      style={{
-        marginLeft: '0px',
-        position: 'relative'
-      }}
-    >
-      <Loader
-        isInner
-        size={20}
-        style={{
-          width: '20px',
-          height: '20px'
-        }}
-      />
+    <span className="loader-cover">
+      <Loader isInner size={20} style={{ width: '20px', height: '20px' }} />
     </span>
   );
+
   const renderQuestion = () => {
     const lastAnswer = getLastAnswer(question);
     const inputProps = {
@@ -93,9 +84,11 @@ const QuestionItem = ({ question }) => {
       userData: getUserData(),
       socketContext
     };
+
     if (question?.section?.sectionName === 'Proposal Team') {
       return <ProposalTeamQuestion {...inputProps} />;
     }
+
     const ComponentMapper = {
       [ANSWER_TYPES.TEXT]: <TextQuestion {...inputProps} />,
       [ANSWER_TYPES.NUMBER]: <NumberQuestion {...inputProps} />,
@@ -107,6 +100,7 @@ const QuestionItem = ({ question }) => {
       [ANSWER_TYPES.PICKLIST_LOOKUP]: <MultiSelectQuestion {...inputProps} />,
       [ANSWER_TYPES.YES_NO]: <YesNoQuestion {...inputProps} />
     };
+
     const SFNestedAnswerItem = () => {
       return (
         <SFAnswerValidationWrapper
@@ -125,41 +119,49 @@ const QuestionItem = ({ question }) => {
     );
   };
 
-  return isEmpty(question) ? (
-    <></>
-  ) : (
-    <div>
-      <Box mt={2}>
-        <QuestionLabel questionLabel={question?.questionText || ''} />
-        <Grid container spacing={2}>
-          <Grid item xs={10}>
-            {renderQuestion()}
+  return (
+    !isEmpty(question) && (
+      <>
+        <Box mt={2}>
+          <Grid container>
+            <Grid item xs={10} className="ques-title-cover">
+              <QuestionLabel questionLabel={question?.questionText || ''} />
+            </Grid>
+            <Grid item xs={2} className="answer-actions">
+              {' '}
+            </Grid>
+            <Grid item xs={10} className="answer-input">
+              {renderQuestion()}
+            </Grid>
+            <Grid item xs={2} className="answer-actions">
+              <IconButton
+                size="small"
+                onClick={() => {
+                  setIsShowHistory(true);
+                }}
+                style={{ color: '#b7b7b7' }}
+              >
+                <CalendarIcon />
+              </IconButton>
+              {question.loading && <CustomLoader />}
+            </Grid>
           </Grid>
-          <Grid item xs={1}>
-            <IconButton
-              size="small"
-              onClick={() => {
-                setIsShowHistory(true);
-              }}
-            >
-              <CalendarIcon />
-            </IconButton>
-          </Grid>
-          <Grid item xs={1}>
-            <div>{question.loading && <CustomLoader />}</div>
-          </Grid>
-        </Grid>
-      </Box>
-      {isShowHistory && (
-        <AnswerHistory
-          question={prepareAnswerHistoryData(question)}
-          closeModal={() => {
-            setIsShowHistory(false);
-          }}
-        />
-      )}
-    </div>
+        </Box>
+        {isShowHistory && (
+          <AnswerHistory
+            question={prepareAnswerHistoryData(question)}
+            closeModal={() => {
+              setIsShowHistory(false);
+            }}
+          />
+        )}
+      </>
+    )
   );
+};
+
+QuestionItem.propTypes = {
+  question: PropTypes.object.isRequired
 };
 
 export default QuestionItem;

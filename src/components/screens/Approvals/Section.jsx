@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import Grid from 'apollo-react/components/Grid';
 import { useSelector } from 'react-redux';
-import Accordion from '@material-ui/core/Accordion';
+import PropTypes from 'prop-types';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import AccordionDetails from '@material-ui/core/AccordionDetails';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import ChevronRight from 'apollo-react-icons/ChevronRight';
 
 import { selectProposalQuestions } from '../../../redux/selectors/index';
 import QuestionItem from './QuestionItem';
 import ActionButtons from './ActionButtons';
+import CustomAccordion from '../../common/CustomAccordion/CustomAccordion';
+import CustomAccordionSummary from '../../common/CustomAccordion/CustomAccordionSummary';
 
 const generateQuestionsHash = proposalQuestions => {
   try {
@@ -44,38 +45,40 @@ const Section = ({ approval }) => {
   } = approval;
   const [expanded, setExpanded] = useState(false);
 
-  const SectionBody = () => {
-    return (
-      <Grid container spacing={2}>
-        <Grid item xs={8}>
-          {ApprovalSectionLeftQuestions?.map(item => (
-            <QuestionItem question={questionHash[item] || {}} />
-          ))}
-        </Grid>
-        <Grid item xs={4}>
-          {ApprovalSectionRightQuestions?.map(item => (
-            <QuestionItem question={questionHash[item] || {}} />
-          ))}
-        </Grid>
-        <Grid item xs={12}>
-          <ActionButtons />
-        </Grid>
+  const renderSectionBody = (
+    <Grid container className="approval-ques">
+      <Grid item xs={8} className="approval-ques-left">
+        {ApprovalSectionLeftQuestions?.map(item => (
+          <QuestionItem question={questionHash[item] || {}} />
+        ))}
       </Grid>
-    );
-  };
+      <Grid item xs={4} className="approval-ques-right">
+        {ApprovalSectionRightQuestions?.map(item => (
+          <QuestionItem question={questionHash[item] || {}} />
+        ))}
+      </Grid>
+      <Grid item xs={12} className="approval-ques-actions">
+        <ActionButtons />
+      </Grid>
+    </Grid>
+  );
 
   return (
-    <Accordion
+    <CustomAccordion
       className="accordion-container"
       expanded={expanded}
       onChange={() => setExpanded(prev => !prev)}
     >
-      <AccordionSummary expandIcon={<ChevronRight />}>
+      <CustomAccordionSummary>
         <p className="accordion-title">{ApprovalSectionTitle}</p>
-      </AccordionSummary>
-      <AccordionDetails>{SectionBody()}</AccordionDetails>
-    </Accordion>
+      </CustomAccordionSummary>
+      <AccordionDetails>{renderSectionBody}</AccordionDetails>
+    </CustomAccordion>
   );
+};
+
+Section.propTypes = {
+  approval: PropTypes.object.isRequired
 };
 
 export default Section;
