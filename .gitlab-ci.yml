@@ -85,7 +85,6 @@ dev:
     Environment: $CI_JOB_NAME
   only:
     - dev
-    - env_update
     - tags
   script:
     - cat $devaccount >> build.env
@@ -110,7 +109,6 @@ deploydev:
     - dev
   only:
     - dev
-    - env_update
     - tags
   script:
     - source build.env
