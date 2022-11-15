@@ -5,7 +5,6 @@ import {
   getOpportunityData,
   getSelectedBid
 } from '../../../redux/selectors/proposal';
-
 import Section from './Section';
 
 const Approvals = () => {
@@ -22,16 +21,18 @@ const Approvals = () => {
   }, [memoizeBid]);
 
   return (
-    <>
+    <div className="approvals-tab">
       {approvals.length > 0 ? (
         approvals.map(approval => {
-          return <Section approval={approval} />;
+          return (
+            <Section key={approval.ApprovalSectionTitle} approval={approval} />
+          );
         })
       ) : (
         <>No Approval Questions</>
       )}
       {console.log(approvals)}
-    </>
+    </div>
   );
 };
 

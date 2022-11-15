@@ -1,0 +1,54 @@
+.approvals-tab {
+  margin-top: 2px;
+
+  .custom-accordion-summary {
+    .MuiAccordionSummary-content {
+      &[class*='Mui-expanded'] {
+        & > p {
+          color: $neutral9;
+        }
+      }
+    }
+  }
+
+  .MuiBox-root {
+    padding: 0 14px;
+    margin-top: 32px;
+
+    &:first-child {
+      margin-top: 6px;
+    }
+
+    label + .MuiInput-formControl {
+      margin-top: 0px;
+    }
+    .ques-title {
+      margin-bottom: 5px;
+    }
+
+    .loader-cover {
+      margin-left: 0px;
+      position: relative;
+      display: inline-block;
+      top: 11px;
+    }
+  }
+
+  .accordion-title {
+    letter-spacing: 0.4px;
+  }
+
+  .approval-ques {
+    &-actions {
+      margin-top: 12px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+
+      .delete-btn svg {
+        font-size: 15px !important;
+        margin-top: -2px;
+      }
+    }
+  }
+}
