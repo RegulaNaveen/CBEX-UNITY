@@ -118,7 +118,11 @@ const ProposalCard = ({
           onClick={setProposalTypeView}
         >
           <Link to={`${OPPORTUNITY}${title}?viewType=approvals`}>
-            <ThumbsUp fontSize='large' htmlColor='#1faa00' />
+            <ThumbsUp
+              fontSize="large"
+              htmlColor="#1faa00"
+              style={{ transform: 'scaleX(-1)' }}
+            />
           </Link>
           <p>Approvals</p>
         </div>
