@@ -139,9 +139,8 @@ const QuestionItem = ({ question }) => {
                 onClick={() => {
                   setIsShowHistory(true);
                 }}
-                style={{ color: '#b7b7b7' }}
               >
-                <CalendarIcon />
+                <CalendarIcon question={question} />
               </IconButton>
               {question.loading && <CustomLoader />}
             </Grid>
