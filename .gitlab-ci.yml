@@ -12,6 +12,10 @@ include:
   - project: 'CBEx/unity/Unity-QA'
     ref: Unity_QA_Testing
     file: /.gitlab-ci.yml
+    when: always
+    needs:
+      - deployqa
+
 
 
 stages:
