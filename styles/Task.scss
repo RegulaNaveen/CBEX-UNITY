@@ -8,6 +8,23 @@
     padding-right: 4px;
     margin-right: 12px;
   }
+  .checkboxtype {
+    .MuiInputBase-input {
+      border: 0px;
+    }
+    .MuiFormControl-fullWidth {
+      width: 100%;
+      border: 1px solid $neutral4;
+      border-radius: 4px;
+    }
+    :hover {
+      border-color: $neptune-primary;
+    }
+    .MuiFormControl-marginNormal {
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+  }
 }
 
 @media screen and (max-width: 1200px) and (min-width: 300px) {
@@ -379,4 +396,8 @@
   border-color: $black !important;
   background-color: $white !important;
   opacity: 1;
+}
+.MuiMenu-paper {
+  margin-top: 38px;
+  margin-left: 0px !important;
 }

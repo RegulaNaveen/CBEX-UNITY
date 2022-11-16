@@ -44,7 +44,7 @@ class SFAnswerValidationWrapper extends Component {
         {hasDifferentSFanswer && (
           <div className="alert-sf-diff">
             <ul>
-              <li>Does not match Salesforce value.</li>
+              <li>Does not match CRM value.</li>
               <li>
                 <a
                   tabIndex={-1}

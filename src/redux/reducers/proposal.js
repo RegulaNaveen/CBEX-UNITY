@@ -14,6 +14,7 @@ const {
   PROPOSAL_ANSWER_LOADING,
   UPDATE_NOT_APPLICABLE_PROGRESS,
   UPDATE_NOT_APPLICABLE_DONE,
+  UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE,
   PROPOSAL_ANSWER_ERROR,
   QUESTION_SECTION_INFO,
   QUESTION_SECTION_LOADING,
@@ -60,7 +61,8 @@ const {
   SET_EVENT_LAUNCHER_FLAG,
   SHOW_NA_CHECKBOX,
   SET_PRICE_MODELER_FIELDS,
-  ERROR_UPDATE_NOT_APPLICABLE
+  ERROR_UPDATE_NOT_APPLICABLE,
+  SET_CAN_USER_TAG_IN_QUESTION
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -147,7 +149,8 @@ const INITIAL_STATE: Map = fromJS({
     phase: '',
     patients: '',
     regions: ''
-  })
+  }),
+  canUserTagInQuestion: false
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -754,8 +757,39 @@ const onUpdateProposalNAQuestionDone = (state: Map, action: Object): Map => {
 
   newState = state
     .setIn(
-      ['proposalQuestions', indexOfListToUpdate, 'notapplicable'],
-      data?.notapplicable
+      ['proposalQuestions', indexOfListToUpdate, 'notApplicable'],
+      data?.notApplicable
+    )
+    .setIn(['proposalQuestions', indexOfListToUpdate, 'NaLoading'], loading);
+
+  const proposalQuestions = newState.get('proposalQuestions');
+
+  return state
+    .set('proposalQuestions', proposalQuestions)
+    .set('isProposalAnswerLoading', false)
+    .set('isProposalNAQuestionLoading', false);
+};
+
+const onUpdateProposalNAQuestionFromSocketDone = (
+  state: Map,
+  action: Object
+): Map => {
+  const {
+    payload: { questionStatus, questionId: referenceId, loading = false }
+  } = action;
+
+  let newState = fromJS({});
+
+  const indexOfListToUpdate = state
+    .get('proposalQuestions')
+    .findIndex(listItem => {
+      return listItem.questionId === referenceId;
+    });
+
+  newState = state
+    .setIn(
+      ['proposalQuestions', indexOfListToUpdate, 'notApplicable'],
+      questionStatus
     )
     .setIn(['proposalQuestions', indexOfListToUpdate, 'NaLoading'], loading);
 
@@ -1115,6 +1149,7 @@ const actionMap = {
   [PROPOSAL_ANSWER_LOADING]: onProposalAnswerLoading,
   [UPDATE_NOT_APPLICABLE_PROGRESS]: onProposalNAQuestionLoading,
   [UPDATE_NOT_APPLICABLE_DONE]: onUpdateProposalNAQuestionDone,
+  [UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE]: onUpdateProposalNAQuestionFromSocketDone,
   [ERROR_UPDATE_NOT_APPLICABLE]: onErrorUpdateNotApplicable,
   [PROPOSAL_ANSWER_ERROR]: onProposalAnswerError,
   [QUESTION_SECTION_INFO]: onQuestionSectionInfoLoaded,
@@ -1166,7 +1201,9 @@ const actionMap = {
     state.set('eventLauncherFlag', payload),
   [SHOW_NA_CHECKBOX]: (state, { payload }) =>
     state.set('showNaCheckbox', payload),
-  [SET_PRICE_MODELER_FIELDS]: setPriceModulerFields
+  [SET_PRICE_MODELER_FIELDS]: setPriceModulerFields,
+  [SET_CAN_USER_TAG_IN_QUESTION]: (state, { payload }) =>
+    state.set('canUserTagInQuestion', payload)
 };
 
 export default function(
