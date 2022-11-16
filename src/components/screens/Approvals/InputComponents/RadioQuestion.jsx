@@ -7,7 +7,8 @@ const RadioQuestionInput = ({
   question,
   lastAnswer,
   userData,
-  socketContext
+  socketContext,
+  trackMatomoEventSubmitAnswer
 }) => {
   const dispatch = useDispatch();
 
@@ -23,6 +24,7 @@ const RadioQuestionInput = ({
           userData
         )
       );
+      trackMatomoEventSubmitAnswer(selectedValue);
     }
   };
 

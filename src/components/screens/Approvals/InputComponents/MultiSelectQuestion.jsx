@@ -13,7 +13,8 @@ const MultiSelectQuestion = ({
   question,
   lastAnswer,
   userData,
-  socketContext
+  socketContext,
+  trackMatomoEventSubmitAnswer
 }) => {
   try {
     const dispatch = useDispatch();
@@ -49,6 +50,7 @@ const MultiSelectQuestion = ({
           userData
         )
       );
+      trackMatomoEventSubmitAnswer(textValue);
     };
 
     return (

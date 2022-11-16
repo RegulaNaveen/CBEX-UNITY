@@ -3,7 +3,13 @@ import { useDispatch } from 'react-redux';
 import { setProposalAnswerData } from '../../../../redux/actions/proposal-actions';
 import YNDropdown from '../../../common/atoms/inputs/Dropdown';
 
-const YesNoQuestion = ({ question, lastAnswer, userData, socketContext }) => {
+const YesNoQuestion = ({
+  question,
+  lastAnswer,
+  userData,
+  socketContext,
+  trackMatomoEventSubmitAnswer
+}) => {
   try {
     const dispatch = useDispatch();
     const changeHandler = (selectedValue: string, lastAnswer: string) => {
@@ -18,6 +24,7 @@ const YesNoQuestion = ({ question, lastAnswer, userData, socketContext }) => {
             userData
           )
         );
+        trackMatomoEventSubmitAnswer(selectedValue);
       }
     };
     const optionsYN = ['Yes', 'No'];

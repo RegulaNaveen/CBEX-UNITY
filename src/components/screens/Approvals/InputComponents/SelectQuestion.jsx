@@ -3,7 +3,13 @@ import { useDispatch } from 'react-redux';
 import AutoCompleteWithAddOption from '../../../views/modals/AutoCompleteWithAddOption';
 import { setProposalAnswerData } from '../../../../redux/actions/proposal-actions';
 
-const SelectQuestion = ({ question, lastAnswer, userData, socketContext }) => {
+const SelectQuestion = ({
+  question,
+  lastAnswer,
+  userData,
+  socketContext,
+  trackMatomoEventSubmitAnswer
+}) => {
   const dispatch = useDispatch();
 
   const changeHandler = textValue => {
@@ -17,6 +23,7 @@ const SelectQuestion = ({ question, lastAnswer, userData, socketContext }) => {
         userData
       )
     );
+    trackMatomoEventSubmitAnswer(textValue);
   };
 
   return (

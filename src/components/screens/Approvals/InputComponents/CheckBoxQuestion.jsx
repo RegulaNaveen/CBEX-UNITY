@@ -13,7 +13,8 @@ const CheckBoxQuestion = ({
   question,
   lastAnswer,
   userData,
-  socketContext
+  socketContext,
+  trackMatomoEventSubmitAnswer
 }) => {
   try {
     const dispatch = useDispatch();
@@ -49,6 +50,7 @@ const CheckBoxQuestion = ({
           userData
         )
       );
+      trackMatomoEventSubmitAnswer(textValue.target.value);
     };
 
     return (

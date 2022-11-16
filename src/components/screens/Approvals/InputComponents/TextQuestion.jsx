@@ -12,7 +12,13 @@ import { setProposalAnswerData } from '../../../../redux/actions/proposal-action
 const getConvertedAnsString = str =>
   !String(str).trim() ? '' : String(str).trim();
 
-const TextQuestion = ({ question, lastAnswer, userData, socketContext }) => {
+const TextQuestion = ({
+  question,
+  lastAnswer,
+  userData,
+  socketContext,
+  trackMatomoEventSubmitAnswer
+}) => {
   const dispatch = useDispatch();
   const answerValue = lastAnswer.answer || '';
   const formattedAnswer =
@@ -47,6 +53,7 @@ const TextQuestion = ({ question, lastAnswer, userData, socketContext }) => {
         }
       )
     );
+    trackMatomoEventSubmitAnswer(editorData.text);
   };
 
   const richtextProps = {

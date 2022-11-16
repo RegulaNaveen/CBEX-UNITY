@@ -11,7 +11,8 @@ const ProposalTeamQuestion = ({
   question,
   lastAnswer,
   userData,
-  socketContext
+  socketContext,
+  trackMatomoEventSubmitAnswer
 }) => {
   try {
     const dispatch = useDispatch();
@@ -45,6 +46,7 @@ const ProposalTeamQuestion = ({
           );
         }
       });
+      trackMatomoEventSubmitAnswer(textValue);
     };
 
     return (
