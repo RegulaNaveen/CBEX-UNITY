@@ -154,15 +154,18 @@ const EventLauncher = ({
       .format(dateTimeFormat);
 
     // Calling generateEventUrl func
-    setUrl(
-      generateEventUrl(
-        startDate,
-        endDate,
-        body,
-        subject,
-        filteredEmails.join(', ')
-      )
-    );
+    const geturl = generateEventUrl(
+      startDate,
+      endDate,
+      body,
+      subject,
+      filteredEmails.join(', ')
+    )
+    if (geturl) {
+      setUrl(
+        geturl
+      );
+    }
 
     const trackEventPayload = {
       action: `Event Launched : ${subject} : ${body}`,
@@ -181,7 +184,7 @@ const EventLauncher = ({
       ]
     };
     trackMatomoEventLauncher(trackEventPayload);
-    window.open(url, '_blank', 'noopener,noreferrer');
+    window.open(geturl, '_blank', 'noopener,noreferrer');
   };
   // Event Modal
   const eventLauncherModal = openModal && (
