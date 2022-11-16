@@ -11,6 +11,8 @@ import {
   isString,
   isArray
 } from 'lodash';
+import Checkbox from 'apollo-react/components/Checkbox/Checkbox';
+import useUpdateEffect from '../../../../hooks/useUpdateEffect';
 
 type Props = {
   answerValue: Array,
@@ -32,14 +34,14 @@ const CheckBoxQuestions = (props: Props) => {
     finalOptions,
     isNotApplicable
   } = props;
-  const [changeItem, setChangeItem] = useState(answerValue);
+  const [changeItem, setChangeItem] = useState(answerValue || []);
   const [getFocus, setFocus] = useState(false);
   const checkBoxRef = useRef();
   let selectItems = null;
   const selectedNames = [];
   if (!isEmpty(finalOptions)) {
     selectItems = finalOptions.map(item => {
-      if (answerValue?.indexOf(item) > -1) {
+      if (changeItem?.indexOf(item) > -1) {
         selectedNames.push(item);
       }
       return (
@@ -49,24 +51,60 @@ const CheckBoxQuestions = (props: Props) => {
       );
     });
   }
-
-  useEffect(() => {
-    setChangeItem(answerValue);
-  }, [answerValue]);
   const onChangeItem = e => {
     setChangeItem(e.target.value);
   };
   const onBlurCheckBox = () => {
-    onClose();
-    if (!isEqual(changeItem, answerValue)) {
+    getFocus ? onOpen : onClose();
+    if (!isEqual(changeItem, answerValue) && getFocus === false) {
       onChange(changeItem);
     }
     setFocus(false);
   };
+  const useActiveElement = () => {
+    const [listenersReady, setListenersReady] = React.useState(
+      false
+    ); /** Useful when working with autoFocus */
+    const [activeElement, setActiveElement] = React.useState(
+      document.activeElement
+    );
 
+    React.useEffect(() => {
+      const onFocus = event => setActiveElement(event.target);
+
+      window.addEventListener('focus', onFocus, true);
+
+      setListenersReady(true);
+
+      return () => {
+        window.removeEventListener('focus', onFocus);
+      };
+    }, []);
+
+    return {
+      activeElement,
+      listenersReady
+    };
+  };
+
+  const { activeElement, listenersReady } = useActiveElement();
+
+  React.useEffect(() => {
+    console.log(getFocus, 'gettingfocus');
+  }, [activeElement]);
+
+  useUpdateEffect(() => {
+    if (changeItem.length !== answerValue.length) setChangeItem(answerValue);
+  }, [answerValue.length]);
   const onFocusCheckBox = () => {
-    setFocus(true);
-    onOpen();
+    setFocus(
+      !isEmpty(
+        activeElement?.className?.match('Mui-focusVisible') ||
+          activeElement?.className?.match('MuiListItem-button') ||
+          activeElement?.className?.match('MuiInput-input')
+      )
+    );
+    getFocus ? onOpen() : onClose();
   };
   return (
     <div
@@ -74,8 +112,10 @@ const CheckBoxQuestions = (props: Props) => {
       onFocus={() => onFocusCheckBox()}
       onBlur={() => onBlurCheckBox()}
       className="selectSpan"
+      ref={checkBoxRef}
     >
       <Select
+        key={answerValue.length}
         value={!isEmpty(changeItem) ? changeItem : []}
         finalOptions={finalOptions}
         disabled={disabled || isNotApplicable}
@@ -87,7 +127,6 @@ const CheckBoxQuestions = (props: Props) => {
         placeholder={!isEmpty(changeItem) ? '' : 'Select'}
         fullWidth
         multiple
-        ref={checkBoxRef}
       >
         {selectItems}
       </Select>
