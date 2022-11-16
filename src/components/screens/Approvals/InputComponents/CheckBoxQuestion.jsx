@@ -54,12 +54,14 @@ const CheckBoxQuestion = ({
     };
 
     return (
-      <CheckBoxQuestions
-        answerValue={answerValue}
-        finalOptions={finalOptions}
-        disabled={false}
-        onChange={changeHandler}
-      />
+      <div className="checkboxtype">
+        <CheckBoxQuestions
+          answerValue={answerValue}
+          finalOptions={finalOptions}
+          disabled={false}
+          onChange={changeHandler}
+        />
+      </div>
     );
   } catch (error) {
     console.error(error);
