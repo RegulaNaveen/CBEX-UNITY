@@ -11,7 +11,8 @@ const MatomoHOC = (Component: any) => {
       })`,
     plainPd: `Proposal Detail`,
     tb: `ToolBar Menu`,
-    pg: `Pagination`
+    pg: `Pagination`,
+    crmNo: `Proposal Detail (CRM#: ${localStorage.getItem('oppNo') || ''})`
   };
   const actions = {
     click: 'Clicked',
