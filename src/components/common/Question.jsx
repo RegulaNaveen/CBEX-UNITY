@@ -295,7 +295,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
    */
   handleRichTextChange = editorData => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
-    const { value, html, text } = editorData;
+    const { value, html, text, htmlExport } = editorData;
 
     if (isEmpty(text)) this.setState({ changeIcon: '#b7b7b7' });
     else this.setState({ changeIcon: '#00c221' });
@@ -310,7 +310,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
       userData,
       {
         value,
-        html
+        html,
+        htmlExport
       }
     );
     this.trackMatomoEventSubmitAnswer(editorData.text);
@@ -409,13 +410,15 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
       const richTextData = parseFormattedData || {
         html: '',
-        value: { blocks: [] }
+        value: { blocks: [] },
+        htmlExport: ''
       };
 
       const editorData = {
         text: lastAnswer?.answer || '',
         value: richTextData.value,
-        html: richTextData.html
+        html: richTextData.html,
+        htmlExport: richTextData.htmlExport
       };
 
       this.handleRichTextChange(editorData);
@@ -748,10 +751,15 @@ export class TaskRow extends React.PureComponent<Props, State> {
         ? formattedAnswer
         : parseStringifyJson(formattedAnswer);
 
-    const richTextData = parseFormattedData || {
+    let richTextData = parseFormattedData || {
       html: '',
-      value: { blocks: [] }
+      value: { blocks: [] },
+      htmlExport: ''
     };
+
+    if (!richTextData.htmlExport && richTextData.html) {
+      richTextData.htmlExport = richTextData.html;
+    }
 
     // Richtext Props
     const richTextAnswerField = {
@@ -760,6 +768,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       richTextString: getConvertedAnsString(answerValue),
       richTextVal: richTextData.value,
       richTextHtml: richTextData.html,
+      richTextHtmlExport: richTextData.htmlExport,
       enableFocus: true,
       isEditable: false,
       placeholder: checkDisableFlag() ? '' : DEFAULT.CLICK_TO_ANS,

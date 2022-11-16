@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import classNames from 'classnames';
-import { getUsersListApiCall } from '../../api/proposal';
 import Loader from 'apollo-react/components/Loader';
+import getADUsers from '../../api/getADUsers';
 
 const TagUserList = ({ searchTag, onSelect, close }) => {
   const [fetchingUsers, setfetchingUsers] = useState(false);
@@ -12,12 +12,8 @@ const TagUserList = ({ searchTag, onSelect, close }) => {
     setfetchingUsers(true);
     try {
       if (searchTag !== null && searchTag.length > 0) {
-        const usersListResponse = await getUsersListApiCall(searchTag);
-        if (usersListResponse && Array.isArray(usersListResponse.data)) {
-          setUsers(usersListResponse.data);
-        } else {
-          setUsers([]);
-        }
+        const usersList = await getADUsers(searchTag);
+        setUsers(usersList);
       } else {
         setUsers([]);
       }
@@ -25,7 +21,9 @@ const TagUserList = ({ searchTag, onSelect, close }) => {
       console.log('Error in retrieving users');
       setUsers([]);
     } finally {
-      setfetchingUsers(false);
+      if (searchTag !== true) {
+        setfetchingUsers(false);
+      }
     }
   }
 
@@ -67,11 +65,7 @@ const TagUserList = ({ searchTag, onSelect, close }) => {
   }
 
   if (isEmpty(users)) {
-    return (
-      <div className="tag-user-list-empty">
-        <p>No User Found</p>
-      </div>
-    );
+    return null;
   }
 
   return (
@@ -84,7 +78,7 @@ const TagUserList = ({ searchTag, onSelect, close }) => {
           key={item.id}
           aria-hidden="true"
         >
-          {`${item.last_name}, ${item.first_name} (${item.email})`}
+          {`${item.first_name} ${item.last_name}(${item.email})`}
         </li>
       ))}
     </ul>
