@@ -1,5 +1,5 @@
 // @flow
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import MenuItem from 'apollo-react/components/MenuItem';
 import Select from 'apollo-react/components/Select';
 import {
@@ -49,6 +49,10 @@ const CheckBoxQuestions = (props: Props) => {
       );
     });
   }
+
+  useEffect(() => {
+    setChangeItem(answerValue);
+  }, [answerValue]);
   const onChangeItem = e => {
     setChangeItem(e.target.value);
   };
