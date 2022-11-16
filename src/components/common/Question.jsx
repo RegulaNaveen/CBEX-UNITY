@@ -218,7 +218,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       this.context,
       proposalId,
       questionId,
-      textValue.target.value,
+      textValue,
       userData
     ).then(() => {
       const [deletedVal] = xor(
@@ -1194,10 +1194,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
               <CheckBoxQuestionsIdleStateDetection
                 answerValue={answerValueComplex || ''}
                 finalOptions={finalOptions}
-                disabled={checkDisableFlagRadio() || isNotApplicable}
-                onOpen={concurrencyFocusHandler}
-                onClose={concurrencyBlurHandler}
-                onChange={this.handleCheckboxPropsalChange}
+                disabled={checkDisableFlag() || isNotApplicable}
+                onOpen={() => concurrencyFocusHandler()}
+                onClose={() => {
+                  concurrencyBlurHandler();
+                }}
+                onChange={e => this.handleCheckboxPropsalChange(e)}
               />
             </span>
           </SFAnswerValidationWrapper>
