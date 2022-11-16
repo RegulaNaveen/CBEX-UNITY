@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import Grid from 'apollo-react/components/Grid';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import Box from 'apollo-react/components/Box';
 import Loader from 'apollo-react/components/Loader';
 import IconButton from 'apollo-react/components/IconButton';
@@ -24,10 +25,26 @@ import getLastAnswer from './getLastAnswer';
 import { getUserName, getUserEmail, getUserId } from '../../../SessionHandler';
 import { SocketContext } from '../../../context/SocketContext';
 import SFAnswerValidationWrapper from '../../common/SFAnswerValidationWrapper';
+import MatomoHOC from '../../HOC/MatomoHOC';
+import {
+  getOpportunityData,
+  getSelectedBid
+} from '../../../redux/selectors/proposal';
 
-const QuestionItem = ({ question }) => {
+const QuestionItem = ({
+  question,
+  approvalSectionTitle,
+  eventCategories,
+  trackEvent
+}) => {
   const socketContext = useContext(SocketContext);
   const [isShowHistory, setIsShowHistory] = useState(false);
+
+  const selectedBid = useSelector(getSelectedBid)?.toJS();
+  const allOppData = useSelector(getOpportunityData)?.toJS();
+  const proposalId = selectedBid?.id;
+  const opportunityData = allOppData[proposalId];
+
   const getUserData = () => ({
     email: getUserName(),
     name: getUserEmail(),
@@ -77,13 +94,48 @@ const QuestionItem = ({ question }) => {
     </span>
   );
 
+  const trackMatomoEventSubmitAnswer = answer => {
+    const {
+      section,
+      questionText,
+      questionHTML,
+      questionJSON,
+      questionHintJSON,
+      questionId
+    } = question;
+    const { sectionName } = section;
+    const proposalDetail = opportunityData?.proposal?.proposalDetails;
+    trackEvent({
+      category: eventCategories.crmNo,
+      action: `Question: ${questionText} (${sectionName}) (${approvalSectionTitle})`,
+      name: `Answer: ${answer}`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify({
+            answer,
+            sectionName,
+            questionText,
+            questionHTML,
+            questionJSON,
+            questionHintJSON,
+            questionId,
+            proposalDetail,
+            approvalSectionTitle
+          })
+        }
+      ]
+    });
+  };
+
   const renderQuestion = () => {
     const lastAnswer = getLastAnswer(question);
     const inputProps = {
       question,
       lastAnswer,
       userData: getUserData(),
-      socketContext
+      socketContext,
+      trackMatomoEventSubmitAnswer
     };
 
     if (question?.section?.sectionName === 'Proposal Team') {
@@ -162,7 +214,10 @@ const QuestionItem = ({ question }) => {
 };
 
 QuestionItem.propTypes = {
-  question: PropTypes.object.isRequired
+  question: PropTypes.object.isRequired,
+  approvalSectionTitle: PropTypes.object.isRequired,
+  eventCategories: PropTypes.object.isRequired,
+  trackEvent: PropTypes.func.isRequired
 };
 
-export default QuestionItem;
+export default MatomoHOC(QuestionItem);

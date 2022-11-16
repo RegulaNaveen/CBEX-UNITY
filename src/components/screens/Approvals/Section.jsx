@@ -49,12 +49,18 @@ const Section = ({ approval }) => {
     <Grid container className="approval-ques">
       <Grid item xs={8} className="approval-ques-left">
         {ApprovalSectionLeftQuestions?.map(item => (
-          <QuestionItem question={questionHash[item] || {}} />
+          <QuestionItem
+            question={questionHash[item] || {}}
+            approvalSectionTitle={ApprovalSectionTitle}
+          />
         ))}
       </Grid>
       <Grid item xs={4} className="approval-ques-right">
         {ApprovalSectionRightQuestions?.map(item => (
-          <QuestionItem question={questionHash[item] || {}} />
+          <QuestionItem
+            question={questionHash[item] || {}}
+            approvalSectionTitle={ApprovalSectionTitle}
+          />
         ))}
       </Grid>
       <Grid item xs={12} className="approval-ques-actions">

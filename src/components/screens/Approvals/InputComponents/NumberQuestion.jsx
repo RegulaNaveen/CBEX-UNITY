@@ -4,7 +4,13 @@ import isEmpty from 'lodash/isEmpty';
 import TextArea from '../../../common/atoms/inputs/TextArea';
 import { setProposalAnswerData } from '../../../../redux/actions/proposal-actions';
 
-const NumberQuestion = ({ question, lastAnswer, userData, socketContext }) => {
+const NumberQuestion = ({
+  question,
+  lastAnswer,
+  userData,
+  socketContext,
+  trackMatomoEventSubmitAnswer
+}) => {
   const dispatch = useDispatch();
 
   const handleTextChange = (textValue, lastAnswer, editorData) => {
@@ -46,6 +52,7 @@ const NumberQuestion = ({ question, lastAnswer, userData, socketContext }) => {
         )
       );
     }
+    trackMatomoEventSubmitAnswer(String(textValue).trim());
   };
   return (
     <>
