@@ -1,0 +1,406 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Approval Input Components Test DateQuestion 1`] = `
+LoadedCheerio {
+  "0": <div
+    class="date-picker "
+  >
+    <div
+      class="MuiFormControl-root MuiTextField-root MuiFormControl-marginNormal MuiFormControl-fullWidth"
+    >
+      <label
+        class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink"
+        data-shrink="true"
+      />
+      <div
+        class="MuiInputBase-root MuiInput-root MuiInputBase-fullWidth MuiInput-fullWidth MuiInputBase-formControl MuiInput-formControl MuiInputBase-adornedStart"
+      >
+        <div
+          class="MuiInputAdornment-root makeStyles-startIcon-12 MuiInputAdornment-positionStart"
+        >
+          <svg
+            aria-hidden="true"
+            class="MuiSvgIcon-root"
+            focusable="false"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M20.2608696,3.625 L18.2173913,3.59 C18.0973294,3.59 18,3.50081229 18,3.38 L18,1.96875 C18,1.48550084 17.6106824,1 17.1304348,1 C16.6501872,1 16.2608696,1.48550084 16.2608696,1.96875 L16.2608696,6 C16.26,7 14.61,7 14.6086957,6 L14.6086957,4.0625 C14.6086957,3.82087542 14.4140368,3.625 14.173913,3.625 L8.95652174,3.59375 C8.83679861,3.59375096 8.73960933,3.49634544 8.73913043,3.375875 L8.73913043,1.84375 C8.73913043,1.36050084 8.34981283,1 7.86956522,1 C7.38931761,1 7,1.36050084 7,1.84375 L7,6 C7,7 5.5,7 5.47826087,6 L5.47826087,4.0625 C5.47826087,3.82087542 5.28360207,3.625 5.04347826,3.625 L3.73913043,3.625 C2.77863522,3.625 2,4.40850169 2,5.375 L2,20.25 C2,21.2164983 2.77863522,22 3.73913043,22 L20.2608696,22 C21.2213648,22 22,21.2164983 22,20.25 L22,5.375 C22,4.40850169 21.2213648,3.625 20.2608696,3.625 Z M19.5789474,20 L4.42105263,20 C4.18851168,20 4,19.810582 4,19.5769231 L4,9.42307692 C4,9.18941799 4.18851168,9 4.42105263,9 L19.5789474,9 C19.8114883,9 20,9.18941799 20,9.42307692 L20,19.5769231 C20,19.810582 19.8114883,20 19.5789474,20 Z"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </div>
+        <input
+          aria-invalid="false"
+          class="MuiInputBase-input MuiInput-input MuiInputBase-inputAdornedStart"
+          placeholder="DD-MMM-YYYY"
+          style="resize:none;min-width:auto;padding-left:31px"
+          type="text"
+          value=""
+        />
+      </div>
+    </div>
+  </div>,
+  "_root": LoadedCheerio {
+    "0": Document {
+      "children": Array [
+        <html>
+          <head />
+          <body />
+        </html>,
+      ],
+      "endIndex": null,
+      "next": null,
+      "parent": null,
+      "prev": null,
+      "startIndex": null,
+      "type": "root",
+      "x-mode": "quirks",
+    },
+    "_root": [Circular],
+    "length": 1,
+    "options": Object {
+      "decodeEntities": true,
+      "xml": false,
+    },
+  },
+  "length": 1,
+  "options": Object {
+    "decodeEntities": true,
+    "xml": false,
+  },
+}
+`;
+
+exports[`Test Approval Input Components Test MultiSelectQuestion 1`] = `
+LoadedCheerio {
+  "0": <div
+    class="auto-complete-with-add-option"
+  >
+    <div
+      aria-expanded="false"
+      class="MuiAutocomplete-root"
+      role="combobox"
+      style="resize:vertical"
+    >
+      <div
+        class="MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth"
+      >
+        <div
+          class="MuiInputBase-root MuiOutlinedInput-root MuiAutocomplete-inputRoot MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd MuiOutlinedInput-adornedEnd MuiInputBase-marginDense MuiOutlinedInput-marginDense"
+        >
+          <input
+            aria-autocomplete="list"
+            aria-invalid="false"
+            autocapitalize="none"
+            autocomplete="off"
+            class="MuiInputBase-input MuiOutlinedInput-input MuiAutocomplete-input MuiAutocomplete-inputFocused MuiInputBase-inputAdornedEnd MuiOutlinedInput-inputAdornedEnd MuiInputBase-inputMarginDense MuiOutlinedInput-inputMarginDense"
+            placeholder="Click to answer"
+            spellcheck="false"
+            type="text"
+            value=""
+          />
+          <div
+            class="MuiAutocomplete-endAdornment"
+          />
+          <fieldset
+            aria-hidden="true"
+            class="PrivateNotchedOutline-root-28 MuiOutlinedInput-notchedOutline"
+            style="padding-left:8px"
+          >
+            <legend
+              class="PrivateNotchedOutline-legend-29"
+              style="width:0.01px"
+            >
+              <span>
+                ​
+              </span>
+            </legend>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </div>,
+  "_root": LoadedCheerio {
+    "0": Document {
+      "children": Array [
+        <html>
+          <head />
+          <body />
+        </html>,
+      ],
+      "endIndex": null,
+      "next": null,
+      "parent": null,
+      "prev": null,
+      "startIndex": null,
+      "type": "root",
+      "x-mode": "quirks",
+    },
+    "_root": [Circular],
+    "length": 1,
+    "options": Object {
+      "decodeEntities": true,
+      "xml": false,
+    },
+  },
+  "length": 1,
+  "options": Object {
+    "decodeEntities": true,
+    "xml": false,
+  },
+}
+`;
+
+exports[`Test Approval Input Components Test RadioQuestion 1`] = `
+LoadedCheerio {
+  "0": <div
+    class="MuiFormGroup-root"
+    role="radiogroup"
+  >
+    <label
+      class="MuiFormControlLabel-root makeStyles-root-22"
+    >
+      <span
+        aria-disabled="false"
+        class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-24 MuiRadio-root MuiRadio-colorPrimary MuiIconButton-colorPrimary"
+      >
+        <span
+          class="MuiIconButton-label"
+        >
+          <input
+            class="PrivateSwitchBase-input-27"
+            type="radio"
+            value="Apple"
+          />
+          <svg
+            aria-hidden="true"
+            class="MuiSvgIcon-root"
+            focusable="false"
+            viewBox="0 0 24 24"
+          >
+            <g
+              fill-rule="evenodd"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="8"
+              />
+              <circle
+                cx="12"
+                cy="12"
+                fill="#FFF"
+                r="7"
+              />
+            </g>
+          </svg>
+        </span>
+      </span>
+      <span
+        class="MuiTypography-root MuiFormControlLabel-label makeStyles-label-23 MuiTypography-body1"
+      >
+        Apple
+      </span>
+    </label>
+    <label
+      class="MuiFormControlLabel-root makeStyles-root-22"
+    >
+      <span
+        aria-disabled="false"
+        class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-24 MuiRadio-root MuiRadio-colorPrimary MuiIconButton-colorPrimary"
+      >
+        <span
+          class="MuiIconButton-label"
+        >
+          <input
+            class="PrivateSwitchBase-input-27"
+            type="radio"
+            value="Banana"
+          />
+          <svg
+            aria-hidden="true"
+            class="MuiSvgIcon-root"
+            focusable="false"
+            viewBox="0 0 24 24"
+          >
+            <g
+              fill-rule="evenodd"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="8"
+              />
+              <circle
+                cx="12"
+                cy="12"
+                fill="#FFF"
+                r="7"
+              />
+            </g>
+          </svg>
+        </span>
+      </span>
+      <span
+        class="MuiTypography-root MuiFormControlLabel-label makeStyles-label-23 MuiTypography-body1"
+      >
+        Banana
+      </span>
+    </label>
+    <label
+      class="MuiFormControlLabel-root makeStyles-root-22"
+    >
+      <span
+        aria-disabled="false"
+        class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-24 MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-checked-25 Mui-checked MuiIconButton-colorPrimary"
+      >
+        <span
+          class="MuiIconButton-label"
+        >
+          <input
+            checked=""
+            class="PrivateSwitchBase-input-27"
+            type="radio"
+            value="Orange"
+          />
+          <svg
+            aria-hidden="true"
+            class="MuiSvgIcon-root"
+            focusable="false"
+            viewBox="0 0 24 24"
+          >
+            <g
+              fill-rule="evenodd"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="8"
+              />
+              <path
+                d="M12,5 C8.13400675,5 5,8.13400675 5,12 C5,15.8659932 8.13400675,19 12,19 C15.8659932,19 19,15.8659932 19,12 C19,8.13400675 15.8659932,5 12,5 Z M12,7 C14.7614237,7 17,9.23857625 17,12 C17,14.7614237 14.7614237,17 12,17 C9.23857625,17 7,14.7614237 7,12 C7,9.23857625 9.23857625,7 12,7 Z"
+                fill="#FFF"
+                fill-rule="nonzero"
+              />
+            </g>
+          </svg>
+        </span>
+      </span>
+      <span
+        class="MuiTypography-root MuiFormControlLabel-label makeStyles-label-23 makeStyles-checkedLabel-20 MuiTypography-body1"
+      >
+        Orange
+      </span>
+    </label>
+  </div>,
+  "_root": LoadedCheerio {
+    "0": Document {
+      "children": Array [
+        <html>
+          <head />
+          <body />
+        </html>,
+      ],
+      "endIndex": null,
+      "next": null,
+      "parent": null,
+      "prev": null,
+      "startIndex": null,
+      "type": "root",
+      "x-mode": "quirks",
+    },
+    "_root": [Circular],
+    "length": 1,
+    "options": Object {
+      "decodeEntities": true,
+      "xml": false,
+    },
+  },
+  "length": 1,
+  "options": Object {
+    "decodeEntities": true,
+    "xml": false,
+  },
+}
+`;
+
+exports[`Test Approval Input Components Test SelectQuestion 1`] = `
+LoadedCheerio {
+  "0": <div
+    class="auto-complete-with-add-option"
+  >
+    <div
+      aria-expanded="false"
+      class="MuiAutocomplete-root"
+      role="combobox"
+      style="resize:vertical"
+    >
+      <div
+        class="MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth"
+      >
+        <div
+          class="MuiInputBase-root MuiOutlinedInput-root MuiAutocomplete-inputRoot MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd MuiOutlinedInput-adornedEnd MuiInputBase-marginDense MuiOutlinedInput-marginDense"
+        >
+          <input
+            aria-autocomplete="list"
+            aria-invalid="false"
+            autocapitalize="none"
+            autocomplete="off"
+            class="MuiInputBase-input MuiOutlinedInput-input MuiAutocomplete-input MuiAutocomplete-inputFocused MuiInputBase-inputAdornedEnd MuiOutlinedInput-inputAdornedEnd MuiInputBase-inputMarginDense MuiOutlinedInput-inputMarginDense"
+            placeholder=""
+            spellcheck="false"
+            type="text"
+            value=""
+          />
+          <div
+            class="MuiAutocomplete-endAdornment"
+          />
+          <fieldset
+            aria-hidden="true"
+            class="PrivateNotchedOutline-root-28 MuiOutlinedInput-notchedOutline"
+            style="padding-left:8px"
+          >
+            <legend
+              class="PrivateNotchedOutline-legend-29"
+              style="width:0.01px"
+            >
+              <span>
+                ​
+              </span>
+            </legend>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </div>,
+  "_root": LoadedCheerio {
+    "0": Document {
+      "children": Array [
+        <html>
+          <head />
+          <body />
+        </html>,
+      ],
+      "endIndex": null,
+      "next": null,
+      "parent": null,
+      "prev": null,
+      "startIndex": null,
+      "type": "root",
+      "x-mode": "quirks",
+    },
+    "_root": [Circular],
+    "length": 1,
+    "options": Object {
+      "decodeEntities": true,
+      "xml": false,
+    },
+  },
+  "length": 1,
+  "options": Object {
+    "decodeEntities": true,
+    "xml": false,
+  },
+}
+`;
