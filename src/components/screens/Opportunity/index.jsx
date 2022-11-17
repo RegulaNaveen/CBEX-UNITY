@@ -126,12 +126,7 @@ export class Opportunity extends Component<Props, State> {
     }
     expandAllSections(false);
     const selectedView = new URLSearchParams(search).get('viewType');
-    if (selectedView && selectedView === 'documents')
-      this.setState({ selectedView });
-    else if (selectedView && selectedView === 'approvals')
-      this.setState({ selectedView });
-    else if (selectedView && selectedView === 'questions')
-      this.setState({ selectedView });
+    if (selectedView) this.setState({ selectedView });
 
     if (!authData) getRefreshAuthData();
 

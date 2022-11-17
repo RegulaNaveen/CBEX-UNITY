@@ -11,14 +11,15 @@ import launchDarkly from '../../../../utils/launchDarkly';
 import {
   getOpportunityData,
   getProposalQuestions,
-  getSelectedBid,
+  getSelectedBid
 } from '../../../../redux/selectors/proposal';
+import Approvals from '../../../screens/Approvals/index';
 
 const UnityTab = ({
   id,
   enableValidateTab,
   selectedView,
-  onChangeSelectedTab,
+  onChangeSelectedTab
 }) => {
   const [value, setValue] = useState(0);
   const [approvalsFlag, setApprovalsFlag] = useState(false);
@@ -31,6 +32,28 @@ const UnityTab = ({
   const proposalID = memoizeBid?.id;
   const history = useHistory();
 
+  const tabs = [
+    {
+      label: 'Strategy Development',
+      value: 0,
+      component: <Questions proposalID={id} />,
+      path: 'questions'
+    },
+    {
+      label: 'Approvals',
+      value: 1,
+      component: <Approvals />,
+      path: 'approvals'
+    },
+    {
+      label: 'Documents',
+      value: 2,
+      component: <Documents />,
+      path: 'documents'
+    },
+    { label: 'Validate', value: 3, component: <Validate />, path: 'validate' }
+  ];
+
   useEffect(() => {
     if (proposalID) {
       let opportunityData = oppData[proposalID];
@@ -38,16 +61,16 @@ const UnityTab = ({
     }
   }, [memoizeBid, proposalQuestions]);
 
-  const getApprovalQuestionIds = (opportunityData) => {
+  const getApprovalQuestionIds = opportunityData => {
     const approvalQIdsArr = [];
-    opportunityData?.proposal?.approvals?.forEach((qIdApproval) => {
+    opportunityData?.proposal?.approvals?.forEach(qIdApproval => {
       if (qIdApproval?.ApprovalSectionLeftQuestions?.length !== 0) {
-        qIdApproval.ApprovalSectionLeftQuestions.forEach((leftQId) => {
+        qIdApproval.ApprovalSectionLeftQuestions.forEach(leftQId => {
           approvalQIdsArr.push(leftQId);
         });
       }
       if (qIdApproval?.ApprovalSectionRightQuestions?.length !== 0) {
-        qIdApproval.ApprovalSectionRightQuestions.forEach((rightQId) => {
+        qIdApproval.ApprovalSectionRightQuestions.forEach(rightQId => {
           approvalQIdsArr.push(rightQId);
         });
       }
@@ -76,11 +99,15 @@ const UnityTab = ({
 
   useEffect(() => {
     if (selectedView && selectedView === 'documents') {
-      // eslint-disable-next-line no-unused-expressions
-      approvalsFlag && showApprovalTab ? setValue(2) : setValue(1);
-    } else if (selectedView && selectedView === 'approvals') {
-      setValue(1);
-    } else if (selectedView && selectedView === 'questions') {
+      setValue(tabs.find(item => item.label === 'Documents').value);
+    }
+    if (selectedView && selectedView === 'approvals') {
+      const isApprovalTabVisible = approvalsFlag && showApprovalTab;
+      const approvalTabValue = tabs.find(item => item.label === 'Approvals')
+        .value;
+      setValue(isApprovalTabVisible ? approvalTabValue : 0); // Shows questions tab if Approvals are not found for the proposal
+    }
+    if (selectedView && selectedView === 'questions') {
       setValue(0);
     }
   }, [selectedView, approvalsFlag, showApprovalTab]);
@@ -88,31 +115,15 @@ const UnityTab = ({
   const winLocationSearch = window.location.search;
   const handleChangeTab = (event, value) => {
     const selectView = new URLSearchParams(winLocationSearch);
-    if (approvalsFlag && showApprovalTab) {
-      if (value === 0) {
-        onChangeSelectedTab('questions');
-        history.push(window.location.pathname);
-      }
-      if (value === 1) {
-        selectView.set('viewType', 'approvals');
-        onChangeSelectedTab('approvals');
-        history.push(`${window.location.pathname}?${selectView.toString()}`);
-      }
-      if (value === 2) {
-        selectView.set('viewType', 'documents');
-        onChangeSelectedTab('documents');
-        history.push(`${window.location.pathname}?${selectView.toString()}`);
-      }
+    const currentTab = tabs.find(item => item.value === value);
+    const currentPath = currentTab.path || '';
+    onChangeSelectedTab(currentPath);
+    selectView.set('viewType', currentPath);
+    if (value === 0) {
+      // No need to update pathname for question tab
+      history.push(`${window.location.pathname}`);
     } else {
-      if (value === 0) {
-        onChangeSelectedTab('questions');
-        history.push(window.location.pathname);
-      }
-      if (value === 1) {
-        onChangeSelectedTab('documents');
-        selectView.set('viewType', 'documents');
-        history.push(`${window.location.pathname}?${selectView.toString()}`);
-      }
+      history.push(`${window.location.pathname}?${selectView.toString()}`);
     }
     setValue(value);
   };
@@ -122,96 +133,47 @@ const UnityTab = ({
       const approvalFlag = await launchDarkly(featureFlags.APPROVALS, false);
       setApprovalsFlag(approvalFlag);
     })();
+    console.log({ selectedView });
   }, []);
 
-  const renderTab = (v) => {
-    if (v) {
-      return (
-        <>
-          {approvalsFlag && showApprovalTab ? (
-            <>
-              <Tabs
-                value={value}
-                onChange={handleChangeTab}
-                truncate
-                className="_question-tab"
-              >
-                <Tab label="Strategy Development" />
-                <Tab label="Approvals" />
-                <Tab label="Documents" />
-                <Tab label="Validate" />
-              </Tabs>
-              <div style={{ padding: 20, paddingTop: 5 }}>
-                {value === 0 && <Questions proposalID={id} />}
-                {value === 1 && approvalsFlag && showApprovalTab && 'Approvals'}
-                {value === 2 && <Documents />}
-                {value === 3 && <Validate />}
-              </div>
-            </>
-          ) : (
-            <>
-              <Tabs
-                value={value}
-                onChange={handleChangeTab}
-                truncate
-                className="_question-tab"
-              >
-                <Tab label="Strategy Development" />
-                <Tab label="Documents" />
-                <Tab label="Validate" />
-              </Tabs>
-              <div style={{ padding: 20, paddingTop: 5 }}>
-                {value === 0 && <Questions proposalID={id} />}
-                {value === 1 && <Documents />}
-                {value === 2 && <Validate />}
-              </div>
-            </>
-          )}
-        </>
-      );
+  /**
+   * Decides which tabs to be rendered
+   * @returns Array of objects
+   */
+  const visibleTabs = () => {
+    let tabsToReturn = tabs;
+    const isApprovalTab = approvalsFlag && showApprovalTab;
+    if (!isApprovalTab) {
+      tabsToReturn = tabsToReturn.filter(item => item.label !== 'Approvals');
     }
+    if (!enableValidateTab) {
+      tabsToReturn = tabsToReturn.filter(item => item.label !== 'Validate');
+    }
+    return tabsToReturn;
+  };
 
+  const renderTab = () => {
     return (
       <>
-        {approvalsFlag && showApprovalTab ? (
-          <>
-            <Tabs
-              value={value}
-              onChange={handleChangeTab}
-              truncate
-              className="_question-tab"
-            >
-              <Tab label="Strategy Development" />
-              <Tab label="Approvals" />
-              <Tab label="Documents" />
-            </Tabs>
-            <div style={{ padding: 20, paddingTop: 5 }}>
-              {value === 0 && <Questions proposalID={id} />}
-              {value === 1 && 'Approvals'}
-              {value === 2 && <Documents />}
-            </div>
-          </>
-        ) : (
-          <>
-            <Tabs
-              value={value}
-              onChange={handleChangeTab}
-              truncate
-              className="_question-tab"
-            >
-              <Tab label="Strategy Development" />
-              <Tab label="Documents" />
-            </Tabs>
-            <div style={{ padding: 20, paddingTop: 5 }}>
-              {value === 0 && <Questions proposalID={id} />}
-              {value === 1 && <Documents />}
-            </div>
-          </>
-        )}
+        <Tabs
+          value={value}
+          onChange={handleChangeTab}
+          truncate
+          className="_question-tab"
+        >
+          {visibleTabs().map(item => {
+            return <Tab label={item.label} value={item.value} />;
+          })}
+        </Tabs>
+        <div style={{ padding: 20, paddingTop: 5 }}>
+          {visibleTabs().map(item => {
+            return value === item.value && item.component;
+          })}
+        </div>
       </>
     );
   };
-  return <div className="tab-container">{renderTab(enableValidateTab)}</div>;
+  return <div className="tab-container">{renderTab()}</div>;
 };
 
 export default UnityTab;
