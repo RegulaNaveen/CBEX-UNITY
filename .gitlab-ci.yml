@@ -81,7 +81,7 @@ deploydev:
     - tags
   script:
     - source build.env
-    - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
+    - aws s3 sync dist/ s3://$BucketName/ --delete --region "us-east-1"
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
   tags:
     - docker
@@ -119,7 +119,7 @@ deploydev2:
     - tags
   script:
     - source build.env
-    - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
+    - aws s3 sync dist/ s3://$BucketName/ --delete --region "us-east-1"
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
   tags:
     - docker
@@ -154,7 +154,7 @@ deployl4:
   when: manual
   script:    
     - source build.env
-    - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
+    - aws s3 sync dist/ s3://$BucketName/ --delete --region "us-east-1"
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
   tags:
     - docker
@@ -234,7 +234,7 @@ deployqa:
     - tags
   script:
     - source build.env
-    - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
+    - aws s3 sync dist/ s3://$BucketName/ --delete --region "us-east-1"
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
   tags:
     - docker
@@ -273,7 +273,7 @@ deployuat:
     - tags
   script:
     - source build.env
-    - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
+    - aws s3 sync dist/ s3://$BucketName/ --delete --region "us-east-1"
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
   tags:
     - docker
