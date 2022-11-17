@@ -11,7 +11,6 @@ import {
   isString,
   isArray
 } from 'lodash';
-import Checkbox from 'apollo-react/components/Checkbox/Checkbox';
 import useUpdateEffect from '../../../../hooks/useUpdateEffect';
 
 type Props = {
@@ -36,6 +35,7 @@ const CheckBoxQuestions = (props: Props) => {
   } = props;
   const [changeItem, setChangeItem] = useState(answerValue || []);
   const [getFocus, setFocus] = useState(false);
+  const [checkBoxFocus, setCheckBoxFocus] = useState(false);
   const checkBoxRef = useRef();
   let selectItems = null;
   const selectedNames = [];
@@ -55,11 +55,12 @@ const CheckBoxQuestions = (props: Props) => {
     setChangeItem(e.target.value);
   };
   const onBlurCheckBox = () => {
-    getFocus ? onOpen : onClose();
-    if (!isEqual(changeItem, answerValue) && getFocus === false) {
+    if (!isEqual(changeItem, answerValue)) {
       onChange(changeItem);
     }
+    setCheckBoxFocus(false);
     setFocus(false);
+    onClose();
   };
   const useActiveElement = () => {
     const [listenersReady, setListenersReady] = React.useState(
@@ -90,13 +91,6 @@ const CheckBoxQuestions = (props: Props) => {
   const { activeElement, listenersReady } = useActiveElement();
 
   React.useEffect(() => {
-    console.log(getFocus, 'gettingfocus');
-  }, [activeElement]);
-
-  useUpdateEffect(() => {
-    if (changeItem.length !== answerValue.length) setChangeItem(answerValue);
-  }, [answerValue.length]);
-  const onFocusCheckBox = () => {
     setFocus(
       !isEmpty(
         activeElement?.className?.match('Mui-focusVisible') ||
@@ -104,7 +98,16 @@ const CheckBoxQuestions = (props: Props) => {
           activeElement?.className?.match('MuiInput-input')
       )
     );
-    getFocus ? onOpen() : onClose();
+    getFocus && checkBoxFocus ? onOpen() : onClose();
+  }, [activeElement]);
+
+  useUpdateEffect(() => {
+    if (changeItem.length !== answerValue.length) setChangeItem(answerValue);
+  }, [answerValue.length]);
+  const onFocusCheckBox = () => {
+    setFocus(true);
+    setCheckBoxFocus(true);
+    onOpen();
   };
   return (
     <div
