@@ -20,7 +20,9 @@ type Props = {
   onOpen(): void,
   onClose(): void,
   onChange(): void,
-  isNotApplicable: any
+  isNotApplicable: any,
+  blurSpan: any,
+  focusSpan: any
 };
 
 const CheckBoxQuestions = (props: Props) => {
@@ -30,9 +32,12 @@ const CheckBoxQuestions = (props: Props) => {
     onOpen,
     onClose,
     onChange,
+    blurSpan,
+    focusSpan,
     finalOptions,
     isNotApplicable
   } = props;
+
   const [changeItem, setChangeItem] = useState(answerValue || []);
   const [getFocus, setFocus] = useState(false);
   const [checkBoxFocus, setCheckBoxFocus] = useState(false);
@@ -55,11 +60,14 @@ const CheckBoxQuestions = (props: Props) => {
     setChangeItem(e.target.value);
   };
   const onBlurCheckBox = () => {
-    if (!isEqual(changeItem, answerValue)) {
+    if (
+      !getFocus &&
+      blurSpan &&
+      !isEqual(changeItem, answerValue) &&
+      !isEmpty(changeItem)
+    ) {
       onChange(changeItem);
     }
-    setCheckBoxFocus(false);
-    setFocus(false);
     onClose();
   };
   const useActiveElement = () => {
@@ -99,21 +107,20 @@ const CheckBoxQuestions = (props: Props) => {
       )
     );
     getFocus && checkBoxFocus ? onOpen() : onClose();
+    console.log(getFocus, 'getFocus');
   }, [activeElement]);
 
   useUpdateEffect(() => {
     if (changeItem.length !== answerValue.length) setChangeItem(answerValue);
   }, [answerValue.length]);
   const onFocusCheckBox = () => {
-    setFocus(true);
-    setCheckBoxFocus(true);
     onOpen();
   };
   return (
     <div
       tabIndex={0}
-      onFocus={() => onFocusCheckBox()}
-      onBlur={() => onBlurCheckBox()}
+      onFocus={onFocusCheckBox}
+      onBlur={onBlurCheckBox}
       className="selectSpan"
       ref={checkBoxRef}
     >

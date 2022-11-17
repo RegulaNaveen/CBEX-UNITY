@@ -144,7 +144,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
       selectedRow: false,
       iconColor: '#00c221',
       screenWidth: '',
-      enableRichtext: false
+      enableRichtext: false,
+      focusedSpan: false,
+      blurredSpan: false
     };
   }
 
@@ -675,7 +677,16 @@ export class TaskRow extends React.PureComponent<Props, State> {
         !isCurrentBid
       );
     };
+    const onFocusCheckBox = () => {
+      this.setState({ focusedSpan: true });
+    };
 
+    const onBlurCheckBox = () => {
+      this.setState({ blurredSpan: true });
+    };
+
+    const focusState = this.state.focusedSpan;
+    const blurState = this.state.blurredSpan;
     if (answer) {
       if (isObject(answer)) answerValueComplex = answer.toJS();
       else answerValue = answer.toString();
@@ -838,7 +849,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
           quesTitleLStyle.minHeight = 'auto';
           firstChild.style.maxWidth = 'none';
         }
-
         this.setSelectRow(false);
       }
     };
@@ -1188,6 +1198,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             sfObject={sfObject}
           >
             <span
+              tabIndex={0}
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
@@ -1196,6 +1207,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
                   : ''
               }
               className="checkboxtype"
+              onFocus={onFocusCheckBox}
+              onBlur={onBlurCheckBox}
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
                 {this.renderNACheckbox(checkDisableFlag, 'checkbox')}
@@ -1209,6 +1222,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
                   concurrencyBlurHandler();
                 }}
                 onChange={e => this.handleCheckboxPropsalChange(e)}
+                focusSpan={focusState}
+                blurSpan={blurState}
               />
             </span>
           </SFAnswerValidationWrapper>
@@ -1387,7 +1402,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
       iconColor,
       changeIcon,
       screenWidth,
-      enableRichtext
+      enableRichtext,
+      focusedSpan,
+      blurredSpan
     } = this.state;
     const smallScreenWidth = screenWidth < 641 ? [8, 4] : [10, 2];
     const mediumScreen =
