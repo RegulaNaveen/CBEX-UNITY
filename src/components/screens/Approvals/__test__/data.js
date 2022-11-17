@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 export const dummyQuestions = [
   {
     proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
@@ -280,105 +281,6 @@ export const dummyQuestions = [
         user: 'ashiq.sultan@iqvia.com',
         userName: 'Ashiq Sultan',
         userRole: 'Core - Proposal Developer',
-        date: '2022-11-09T14:29:54.208Z',
-        answer: ['Ferrari'],
-        proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: false
-      },
-      {
-        user: 'ashiq.sultan@iqvia.com',
-        userName: 'Ashiq Sultan',
-        userRole: 'Core - Proposal Developer',
-        date: '2022-11-09T14:30:04.421Z',
-        answer: ['Ferrari', 'BMW'],
-        proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: false
-      },
-      {
-        user: 'ashiq.sultan@iqvia.com',
-        userName: 'Ashiq Sultan',
-        userRole: 'Core - Proposal Developer',
-        date: '2022-11-10T08:32:00.327Z',
-        answer: ['Ferrari', 'BMW', 'Mercedes'],
-        proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: false
-      },
-      {
-        user: 'ashiq.sultan@iqvia.com',
-        userName: 'Ashiq Sultan',
-        userRole: 'Core - Proposal Developer',
-        date: '2022-11-10T08:32:04.313Z',
-        answer: ['Ferrari', 'BMW', 'Mercedes', 'Ford'],
-        proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: false
-      },
-      {
-        user: 'ashiq.sultan@iqvia.com',
-        userName: 'Ashiq Sultan',
-        userRole: 'Core - Proposal Developer',
-        date: '2022-11-10T08:32:06.892Z',
-        answer: ['BMW', 'Mercedes', 'Ford'],
-        proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: false
-      },
-      {
-        user: 'ashiq.sultan@iqvia.com',
-        userName: 'Ashiq Sultan',
-        userRole: 'Core - Proposal Developer',
-        date: '2022-11-10T08:32:07.446Z',
-        answer: ['BMW', 'Mercedes', 'Ford'],
-        proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: false
-      },
-      {
-        user: 'ashiq.sultan@iqvia.com',
-        userName: 'Ashiq Sultan',
-        userRole: 'Core - Proposal Developer',
-        date: '2022-11-10T08:32:10.045Z',
-        answer: ['Mercedes', 'Ford'],
-        proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: false
-      },
-      {
-        user: 'ashiq.sultan@iqvia.com',
-        userName: 'Ashiq Sultan',
-        userRole: 'Core - Proposal Developer',
-        date: '2022-11-10T08:32:12.329Z',
-        answer: ['Mercedes'],
-        proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: false
-      },
-      {
-        user: 'ashiq.sultan@iqvia.com',
-        userName: 'Ashiq Sultan',
-        userRole: 'Core - Proposal Developer',
-        date: '2022-11-10T08:32:21.117Z',
-        answer: ['Mercedes', 'BMW'],
-        proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: false
-      },
-      {
-        user: 'ashiq.sultan@iqvia.com',
-        userName: 'Ashiq Sultan',
-        userRole: 'Core - Proposal Developer',
-        date: '2022-11-10T08:38:33.567Z',
-        answer: ['Mercedes', 'BMW', 'Toyota'],
-        proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: false
-      },
-      {
-        user: 'ashiq.sultan@iqvia.com',
-        userName: 'Ashiq Sultan',
-        userRole: 'Core - Proposal Developer',
-        date: '2022-11-11T07:50:47.355Z',
-        answer: ['Mercedes', 'Toyota'],
-        proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: false
-      },
-      {
-        user: 'ashiq.sultan@iqvia.com',
-        userName: 'Ashiq Sultan',
-        userRole: 'Core - Proposal Developer',
         date: '2022-11-11T07:51:19.352Z',
         answer: ['Mercedes', 'Toyota', 'Ferrari'],
         proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
@@ -390,15 +292,6 @@ export const dummyQuestions = [
         userRole: 'Core - Proposal Developer',
         date: '2022-11-15T08:44:20.208Z',
         answer: ['Toyota', 'Ferrari'],
-        proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: false
-      },
-      {
-        user: 'ashiq.sultan@iqvia.com',
-        userName: 'Ashiq Sultan',
-        userRole: 'Core - Proposal Developer',
-        date: '2022-11-15T08:44:23.474Z',
-        answer: ['Ferrari'],
         proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
         updatedInPG: false
       },
@@ -435,15 +328,6 @@ export const dummyQuestions = [
         userRole: 'Core - Proposal Developer',
         date: '2022-11-15T08:45:07.731Z',
         answer: ['Toyota', 'Mercedes'],
-        proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: false
-      },
-      {
-        user: 'ashiq.sultan@iqvia.com',
-        userName: 'Ashiq Sultan',
-        userRole: 'Core - Proposal Developer',
-        date: '2022-11-15T08:45:11.630Z',
-        answer: ['Toyota'],
         proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
         updatedInPG: false
       },

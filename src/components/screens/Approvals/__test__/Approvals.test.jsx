@@ -13,7 +13,6 @@ import SelectQuestion from '../InputComponents/SelectQuestion';
 import MultiSelectQuestion from '../InputComponents/MultiSelectQuestion';
 import ProposalTeamQuestion from '../InputComponents/ProposalTeamQuestion';
 import NumberQuestion from '../InputComponents/NumberQuestion';
-import TextQuestion from '../InputComponents/TextQuestion';
 import YesNoQuestion from '../InputComponents/YesNoQuestion';
 import CheckBoxQuestion from '../InputComponents/CheckBoxQuestion';
 import { sfOptions, dummyQuestions } from './data';
@@ -105,19 +104,6 @@ describe('Snapshot Test Approval Input Components', () => {
     const container = render(
       <Provider store={store}>
         <NumberQuestion {...props} />
-      </Provider>
-    );
-    expect(container).toMatchSnapshot();
-  });
-  test('Test TextQuestion', () => {
-    const question = dummyQuestions.find(
-      item => item.answerConfiguration.type === 'text'
-    );
-    const lastAnswer = getLastAnswer(question);
-    const props = { question, lastAnswer };
-    const container = render(
-      <Provider store={store}>
-        <TextQuestion {...props} />
       </Provider>
     );
     expect(container).toMatchSnapshot();

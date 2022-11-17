@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { isUserUbuildAdmin } from '../utils/utils';
 
 // @flow

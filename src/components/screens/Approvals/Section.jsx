@@ -11,7 +11,7 @@ import ActionButtons from './ActionButtons';
 import CustomAccordion from '../../common/CustomAccordion/CustomAccordion';
 import CustomAccordionSummary from '../../common/CustomAccordion/CustomAccordionSummary';
 
-const generateQuestionsHash = proposalQuestions => {
+export const generateQuestionsHash = proposalQuestions => {
   try {
     const hash = {};
     if (Array.isArray(proposalQuestions)) {
