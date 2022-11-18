@@ -12,6 +12,7 @@ import {
   SelectionState,
   Modifier,
   convertToRaw,
+  convertFromRaw,
   CompositeDecorator
 } from 'apollo-react/node_modules/draft-js';
 import isEmpty from 'lodash/isEmpty';
@@ -22,7 +23,10 @@ import useUpdateEffect from '../../hooks/useUpdateEffect';
 import TagUserList from './TagUserList';
 
 import { QUESTION_UNLOCK_TIMEOUT } from '../../constants/app';
-import featureFlags from '../../constants/featureFlags';
+import {
+  MentionComponentWithEmail,
+  MentionComponentWithName
+} from './ApolloRichTextComponents/MentionComponent';
 
 // CustomApolloRichText Utilities
 
@@ -46,12 +50,19 @@ function getUserTagQueryInfo(editorState) {
       .getCurrentContent()
       .getBlockForKey(anchorKey);
     const blockText = blockOnSelection.text.substring(0, anchorOffset);
-    const filteredTxt = blockText.split(' ').pop();
-    const isValidTxt = filteredTxt.match(/^@[^@]*$/gi);
-    if (isValidTxt) {
-      queryInfo.userQuery = filteredTxt.substring(1);
+    const reversedText = blockText
+      .split('')
+      .reverse()
+      .join('');
+    const matchResults = reversedText.matchAll(/([^@]*)@/gi);
+    const matchResultsArr = Array.from(matchResults);
+    if (matchResultsArr.length > 0) {
+      queryInfo.userQuery = matchResultsArr[0][1]
+        .split('')
+        .reverse()
+        .join('');
       queryInfo.offsetRange = {
-        start: anchorOffset - filteredTxt.length,
+        start: anchorOffset - (matchResultsArr[0][1].length + 1),
         end: anchorOffset
       };
       queryInfo.anchorKey = anchorKey;
@@ -77,24 +88,18 @@ function handleUserTagStrategy(contentBlock, callback, contentState) {
   }, callback);
 }
 
-const mentionStyles = {
-  color: '#0768fd'
-};
-
-// MENTION entity's component
-function MentionComponent(props) {
-  return (
-    <span {...props} style={mentionStyles}>
-      {props.children}
-    </span>
-  );
-}
-
 // decorator for DraftJS Editor Component
-const compositeDecorator = new CompositeDecorator([
+export const compositeDecorator = new CompositeDecorator([
   {
     strategy: handleUserTagStrategy,
-    component: MentionComponent
+    component: MentionComponentWithName
+  }
+]);
+
+export const compositeDecoratorHidden = new CompositeDecorator([
+  {
+    strategy: handleUserTagStrategy,
+    component: MentionComponentWithEmail
   }
 ]);
 
@@ -104,6 +109,7 @@ const CustomApolloRichText = ({
   richTextString,
   richTextVal,
   richTextHtml,
+  richTextHtmlExport,
   placeholder,
   onBlur,
   onChange,
@@ -138,9 +144,11 @@ const CustomApolloRichText = ({
     () => ({
       text: richTextString,
       value: richtextObject,
-      html: richTextHtml
+      html: richTextHtml,
+      htmlExport: richTextHtmlExport,
+      docExport: richtextObject
     }),
-    [richTextString, richTextHtml]
+    [richTextString, richTextHtml, richTextHtmlExport]
   );
 
   // Component State
@@ -158,7 +166,9 @@ const CustomApolloRichText = ({
   // Component Refs
   const richTextContainerRef = useRef(null);
   const richTextEditorRef = useRef(null);
+  const richTextEditorRefHidden = useRef(null);
   const richTextKeyRef = useRef(uuid());
+  const richTextKeyRefHidden = useRef(uuid());
 
   /**
    * Function to Add Delay for Specific Seconds
@@ -184,6 +194,7 @@ const CustomApolloRichText = ({
         ) {
           richTextEditorRef.current.editorRef.current.blur();
         }
+        setRichTextData(rteValue => rteValue);
         blur();
       }, QUESTION_UNLOCK_TIMEOUT);
       setUnlockTimeout(timer);
@@ -216,6 +227,17 @@ const CustomApolloRichText = ({
           decorator: compositeDecorator
         });
         richTextEditorRef.current.setState({ editorState: newEditorState });
+        if (richTextEditorRefHidden.current) {
+          const newEditorStateHidden = EditorState.set(
+            EditorState.createWithContent(convertFromRaw(richTextData.value)),
+            {
+              decorator: compositeDecoratorHidden
+            }
+          );
+          richTextEditorRefHidden.current.setState({
+            editorState: newEditorStateHidden
+          });
+        }
       }
     }, 500);
     if (isEqual(richTextData.value, INITIAL_DATA.value)) return; // break func
@@ -256,6 +278,7 @@ const CustomApolloRichText = ({
    */
   useUpdateEffect(() => {
     richTextKeyRef.current = uuid();
+    richTextKeyRefHidden.current = uuid();
   }, [INITIAL_DATA]);
 
   /**
@@ -326,7 +349,24 @@ const CustomApolloRichText = ({
       .map(item => item.text)
       .filter(item => !isEmpty(item.trim()))
       .join(' ');
-    const resultObj = { text, value, html };
+
+    const htmlHidden =
+      richTextEditorRefHidden.current.editorRef &&
+      richTextEditorRefHidden.current.editorRef.current &&
+      richTextEditorRefHidden.current.editorRef.current.editor &&
+      richTextEditorRefHidden.current.editorRef.current.editor.innerHTML;
+
+    const valueHidden =
+      richTextEditorRefHidden.current &&
+      richTextEditorRefHidden.current.state.editorState &&
+      richTextEditorRefHidden.current.state.editorState.getCurrentContent();
+    const resultObj = {
+      text,
+      value,
+      html,
+      htmlExport: htmlHidden,
+      docExport: valueHidden
+    };
     setRichTextData(resultObj);
 
     if (
@@ -362,7 +402,6 @@ const CustomApolloRichText = ({
       isEmpty(e.target.closest('.MuiPopover-root')) &&
       isEmpty(e.target.closest('.MuiDialog-root')) &&
       isEmpty(e.target.closest('.tag-user-list')) &&
-      isEmpty(e.target.closest('.tag-user-list-empty')) &&
       isEmpty(e.target.closest('.tag-user-list-loader')) &&
       isFocused
     ) {
@@ -374,8 +413,22 @@ const CustomApolloRichText = ({
   const blur = () => {
     setIsFocused(false);
     setSearchTag(null);
-    console.log(richTextData.text);
-    if (onBlur) onBlur(richTextData);
+    const htmlHidden =
+      richTextEditorRefHidden.current.editorRef &&
+      richTextEditorRefHidden.current.editorRef.current &&
+      richTextEditorRefHidden.current.editorRef.current.editor &&
+      richTextEditorRefHidden.current.editorRef.current.editor.innerHTML;
+    const valueHidden =
+      richTextEditorRefHidden.current &&
+      richTextEditorRefHidden.current.state.editorState &&
+      richTextEditorRefHidden.current.state.editorState.getCurrentContent();
+    const resultObj = {
+      ...richTextData,
+      htmlExport: htmlHidden,
+      docExport: valueHidden
+    };
+
+    if (onBlur) onBlur(resultObj);
     resetUnlockTimer(true);
   };
 
@@ -411,14 +464,16 @@ const CustomApolloRichText = ({
   });
 
   const handleUserTag = user => {
-    console.log('user', user, queryStringRange);
-    const userName = `${user.last_name}, ${user.first_name}`;
+    const userName = `${user.first_name} ${user.last_name}`;
     if (richTextEditorRef.current) {
       const editorState = richTextEditorRef.current.state.editorState;
+      const editorStateHidden =
+        richTextEditorRefHidden.current.state.editorState;
       const contentState = editorState.getCurrentContent();
       const contentStateWithMentionAdded = contentState.createEntity(
         'MENTION',
-        'IMMUTABLE'
+        'IMMUTABLE',
+        user
       );
       const entityKey = contentStateWithMentionAdded.getLastCreatedEntityKey();
       let selectionState = SelectionState.createEmpty(anchorKey);
@@ -444,6 +499,9 @@ const CustomApolloRichText = ({
       let newEditorState = EditorState.set(editorState, {
         currentContent: contentStateWithEntity
       });
+      let newEditorStateHidden = EditorState.set(editorStateHidden, {
+        currentContent: contentStateWithEntity
+      });
       newSelectionState = selectionState.merge({
         anchorOffset: selectionState.getAnchorOffset() + userName.length,
         focusOffset: selectionState.getAnchorOffset() + userName.length
@@ -464,7 +522,25 @@ const CustomApolloRichText = ({
         richTextEditorRef.current.editorRef.current &&
         richTextEditorRef.current.editorRef.current.editor &&
         richTextEditorRef.current.editorRef.current.editor.innerHTML;
-      const resultObj = { text, value: newContentStateRaw, html };
+
+      const htmlHidden =
+        richTextEditorRefHidden.current.editorRef &&
+        richTextEditorRefHidden.current.editorRef.current &&
+        richTextEditorRefHidden.current.editorRef.current.editor &&
+        richTextEditorRefHidden.current.editorRef.current.editor.innerHTML;
+
+      const valueHidden =
+        richTextEditorRefHidden.current &&
+        richTextEditorRefHidden.current.state.editorState &&
+        richTextEditorRefHidden.current.state.editorState.getCurrentContent();
+
+      const resultObj = {
+        text,
+        value: newContentStateRaw,
+        html,
+        htmlExport: htmlHidden,
+        docExport: valueHidden
+      };
       setRichTextData(resultObj);
       richTextEditorRef.current.setState({ editorState: newEditorState });
       resetUnlockTimer();
@@ -500,6 +576,17 @@ const CustomApolloRichText = ({
             ref={richTextEditorRef}
             key={richTextKeyRef.current}
             onFocus={handleFocus}
+          />
+        </div>
+        <div style={{ display: 'none' }}>
+          <RichTextEditor
+            placeholder={''}
+            spellCheck={false}
+            variant="readOnly"
+            defaultValue={richTextData.value}
+            tabIndex={-1}
+            ref={richTextEditorRefHidden}
+            key={richTextKeyRefHidden.current}
           />
         </div>
       </div>

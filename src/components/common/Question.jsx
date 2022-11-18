@@ -144,7 +144,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
       selectedRow: false,
       iconColor: '#00c221',
       screenWidth: '',
-      enableRichtext: false
+      enableRichtext: false,
+      focusedSpan: false,
+      blurredSpan: false
     };
   }
 
@@ -218,7 +220,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       this.context,
       proposalId,
       questionId,
-      textValue.target.value,
+      textValue,
       userData
     ).then(() => {
       const [deletedVal] = xor(
@@ -295,7 +297,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
    */
   handleRichTextChange = editorData => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
-    const { value, html, text } = editorData;
+    const { value, html, text, htmlExport } = editorData;
 
     if (isEmpty(text)) this.setState({ changeIcon: '#b7b7b7' });
     else this.setState({ changeIcon: '#00c221' });
@@ -310,7 +312,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
       userData,
       {
         value,
-        html
+        html,
+        htmlExport
       }
     );
     this.trackMatomoEventSubmitAnswer(editorData.text);
@@ -409,13 +412,15 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
       const richTextData = parseFormattedData || {
         html: '',
-        value: { blocks: [] }
+        value: { blocks: [] },
+        htmlExport: ''
       };
 
       const editorData = {
         text: lastAnswer?.answer || '',
         value: richTextData.value,
-        html: richTextData.html
+        html: richTextData.html,
+        htmlExport: richTextData.htmlExport
       };
 
       this.handleRichTextChange(editorData);
@@ -672,7 +677,16 @@ export class TaskRow extends React.PureComponent<Props, State> {
         !isCurrentBid
       );
     };
+    const onFocusCheckBox = () => {
+      this.setState({ focusedSpan: true });
+    };
 
+    const onBlurCheckBox = () => {
+      this.setState({ blurredSpan: true });
+    };
+
+    const focusState = this.state.focusedSpan;
+    const blurState = this.state.blurredSpan;
     if (answer) {
       if (isObject(answer)) answerValueComplex = answer.toJS();
       else answerValue = answer.toString();
@@ -748,10 +762,15 @@ export class TaskRow extends React.PureComponent<Props, State> {
         ? formattedAnswer
         : parseStringifyJson(formattedAnswer);
 
-    const richTextData = parseFormattedData || {
+    let richTextData = parseFormattedData || {
       html: '',
-      value: { blocks: [] }
+      value: { blocks: [] },
+      htmlExport: ''
     };
+
+    if (!richTextData.htmlExport && richTextData.html) {
+      richTextData.htmlExport = richTextData.html;
+    }
 
     // Richtext Props
     const richTextAnswerField = {
@@ -760,6 +779,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       richTextString: getConvertedAnsString(answerValue),
       richTextVal: richTextData.value,
       richTextHtml: richTextData.html,
+      richTextHtmlExport: richTextData.htmlExport,
       enableFocus: true,
       isEditable: false,
       placeholder: checkDisableFlag() ? '' : DEFAULT.CLICK_TO_ANS,
@@ -829,7 +849,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
           quesTitleLStyle.minHeight = 'auto';
           firstChild.style.maxWidth = 'none';
         }
-
         this.setSelectRow(false);
       }
     };
@@ -1179,6 +1198,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             sfObject={sfObject}
           >
             <span
+              tabIndex={0}
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
@@ -1187,6 +1207,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
                   : ''
               }
               className="checkboxtype"
+              onFocus={onFocusCheckBox}
+              onBlur={onBlurCheckBox}
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
                 {this.renderNACheckbox(checkDisableFlag, 'checkbox')}
@@ -1194,10 +1216,14 @@ export class TaskRow extends React.PureComponent<Props, State> {
               <CheckBoxQuestionsIdleStateDetection
                 answerValue={answerValueComplex || ''}
                 finalOptions={finalOptions}
-                disabled={checkDisableFlagRadio() || isNotApplicable}
-                onOpen={concurrencyFocusHandler}
-                onClose={concurrencyBlurHandler}
-                onChange={this.handleCheckboxPropsalChange}
+                disabled={checkDisableFlag() || isNotApplicable}
+                onOpen={() => concurrencyFocusHandler()}
+                onClose={() => {
+                  concurrencyBlurHandler();
+                }}
+                onChange={e => this.handleCheckboxPropsalChange(e)}
+                focusSpan={focusState}
+                blurSpan={blurState}
               />
             </span>
           </SFAnswerValidationWrapper>
@@ -1376,7 +1402,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
       iconColor,
       changeIcon,
       screenWidth,
-      enableRichtext
+      enableRichtext,
+      focusedSpan,
+      blurredSpan
     } = this.state;
     const smallScreenWidth = screenWidth < 641 ? [8, 4] : [10, 2];
     const mediumScreen =
