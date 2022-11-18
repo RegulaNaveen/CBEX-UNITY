@@ -11,6 +11,7 @@ import HighLight from '@tiptap/extension-highlight';
 import TextAlign from '@tiptap/extension-text-align';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
+import CharacterCount from '@tiptap/extension-character-count'
 import Mention from '@tiptap/extension-mention';
 import moment from 'moment';
 
@@ -92,6 +93,7 @@ const WysiwygNotepad = ({
         HighLight,
         Subscript,
         Superscript,
+        CharacterCount,
         TextAlign.configure({
           types: ['heading', 'paragraph']
         }),
@@ -130,7 +132,7 @@ const WysiwygNotepad = ({
       onCreate: ({ editor }) => {
         seteditorloadingcount(editorloadingcount + 1)
         let timeout = setTimeout(() => {
-          const editorTextLen = String(editor.getHTML()).length;
+          const editorTextLen = editor.storage.characterCount.characters();
           if (editorloadingcount == 1) {
             matamoObj.category = `Proposal Detail (CRM#:${proposalDetails['CRM #']})`
             matamoObj.action = `Event: Notepad ${proposalDetails['CRM #']}`
@@ -142,7 +144,7 @@ const WysiwygNotepad = ({
         }, 3000);
       },
       onFocus: ({ editor }) => {
-        const editorTextLen = String(editor.getHTML()).length;
+        const editorTextLen = editor.storage.characterCount.characters();
         matamoObj.category = `Proposal Detail (CRM#:${proposalDetails['CRM #']})`
         matamoObj.action = `Event: Notepad ${proposalDetails['CRM #']}`
         matamoObj.name = `Notepad: char count ${editorTextLen}`
@@ -158,7 +160,7 @@ const WysiwygNotepad = ({
           saveDataInMatomo(trackEvent, matamoObj);
           localStorage.removeItem('notepadStartDuration');
         }
-        const editorTextLen = String(editor.getHTML()).length;
+        const editorTextLen = editor.storage.characterCount.characters()
         matamoObj.category = `Proposal Detail (CRM#:${proposalDetails['CRM #']})`
         matamoObj.action = `Event: Notepad ${proposalDetails['CRM #']}`
         matamoObj.name = `Notepad: char count ${editorTextLen}`
