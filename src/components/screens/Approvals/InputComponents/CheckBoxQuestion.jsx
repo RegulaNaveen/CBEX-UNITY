@@ -22,10 +22,7 @@ const CheckBoxQuestion = ({
     const sfObject = question?.sfObject;
     const sfField = question?.sfField;
     let finalOptions = question?.answerConfiguration?.options;
-    let answerValue =
-      isEmpty(lastAnswer.answer) || lastAnswer.answer === 'N/A'
-        ? []
-        : lastAnswer.answer;
+    let answerValue = Array.isArray(lastAnswer.answer) ? lastAnswer.answer : [];
 
     // Special logic for Targeted_Countries__c sfField
     if (
