@@ -30,6 +30,7 @@ import {
   getOpportunityData,
   getSelectedBid
 } from '../../../redux/selectors/proposal';
+import CustomLoader from './CustomLoader';
 
 const QuestionItem = ({
   question,
@@ -87,12 +88,6 @@ const QuestionItem = ({
   const FallbackComponent = () => {
     return <div>Question type not found</div>;
   };
-
-  const CustomLoader = () => (
-    <span className="loader-cover">
-      <Loader isInner size={20} style={{ width: '20px', height: '20px' }} />
-    </span>
-  );
 
   const trackMatomoEventSubmitAnswer = answer => {
     const {
@@ -196,7 +191,7 @@ const QuestionItem = ({
               >
                 <CalendarIcon question={question} />
               </IconButton>
-              {question.loading && <CustomLoader />}
+              <CustomLoader questionId={question.questionId} />
             </Grid>
           </Grid>
         </Box>

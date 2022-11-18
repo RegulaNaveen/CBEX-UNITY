@@ -50,7 +50,8 @@ const TextQuestion = ({
         {
           value,
           html
-        }
+        },
+        true
       )
     );
     trackMatomoEventSubmitAnswer(editorData.text);

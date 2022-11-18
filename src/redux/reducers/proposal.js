@@ -62,7 +62,8 @@ const {
   SHOW_NA_CHECKBOX,
   SET_PRICE_MODELER_FIELDS,
   ERROR_UPDATE_NOT_APPLICABLE,
-  SET_CAN_USER_TAG_IN_QUESTION
+  SET_CAN_USER_TAG_IN_QUESTION,
+  SET_APPROVAL_QUESTION_LOADING
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -149,6 +150,10 @@ const INITIAL_STATE: Map = fromJS({
     phase: '',
     patients: '',
     regions: ''
+  }),
+  approvalQuestionLoading: fromJS({
+    questionId: '',
+    value: false
   }),
   canUserTagInQuestion: false
 });
@@ -1141,6 +1146,11 @@ const setPriceModulerFields = (state, action) => {
   );
 };
 
+const setApprovalQuestionLoading = (state, action) => {
+  const { questionId, value } = action.payload;
+  return state.set('approvalQuestionLoading', fromJS({ questionId, value }));
+};
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
@@ -1202,6 +1212,7 @@ const actionMap = {
   [SHOW_NA_CHECKBOX]: (state, { payload }) =>
     state.set('showNaCheckbox', payload),
   [SET_PRICE_MODELER_FIELDS]: setPriceModulerFields,
+  [SET_APPROVAL_QUESTION_LOADING]: setApprovalQuestionLoading,
   [SET_CAN_USER_TAG_IN_QUESTION]: (state, { payload }) =>
     state.set('canUserTagInQuestion', payload)
 };
