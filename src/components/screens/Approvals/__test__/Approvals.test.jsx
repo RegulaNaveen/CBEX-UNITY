@@ -13,8 +13,8 @@ import SelectQuestion from '../InputComponents/SelectQuestion';
 import MultiSelectQuestion from '../InputComponents/MultiSelectQuestion';
 import ProposalTeamQuestion from '../InputComponents/ProposalTeamQuestion';
 import NumberQuestion from '../InputComponents/NumberQuestion';
-import TextQuestion from '../InputComponents/TextQuestion';
 import YesNoQuestion from '../InputComponents/YesNoQuestion';
+import CheckBoxQuestion from '../InputComponents/CheckBoxQuestion';
 import { sfOptions, dummyQuestions } from './data';
 import { getLastAnswer } from '../../../views/export-component/word-template';
 
@@ -28,20 +28,14 @@ const store = mockStore(initialState);
 const mockDispatch = store.dispatch;
 store.dispatch = jest.fn(mockDispatch);
 
-const propsForSelectTypeQuestions = {
-  lastAnswer: { answer: 'Orange' },
-  question: {
-    sfObject: 'n/a',
-    sfField: 'n/a',
-    answerConfiguration: { options: ['Apple', 'Banana', 'Orange'] }
-  }
-};
-describe('Test Approval Input Components', () => {
+describe('Snapshot Test Approval Input Components', () => {
   beforeEach(() => {});
   test('Test DateQuestion', () => {
-    const props = {
-      lastAnswer: { answer: '' }
-    };
+    const question = dummyQuestions.find(
+      item => item.answerConfiguration.type === 'date'
+    );
+    const lastAnswer = getLastAnswer(question);
+    const props = { question, lastAnswer };
     const container = render(
       <Provider store={store}>
         <DateQuestion {...props} />
@@ -50,7 +44,11 @@ describe('Test Approval Input Components', () => {
     expect(container).toMatchSnapshot();
   });
   test('Test RadioQuestion', () => {
-    const props = propsForSelectTypeQuestions;
+    const question = dummyQuestions.find(
+      item => item.answerConfiguration.type === 'radio'
+    );
+    const lastAnswer = getLastAnswer(question);
+    const props = { question, lastAnswer };
     const container = render(
       <Provider store={store}>
         <RadioQuestion {...props} />
@@ -59,7 +57,11 @@ describe('Test Approval Input Components', () => {
     expect(container).toMatchSnapshot();
   });
   test('Test SelectQuestion', () => {
-    const props = propsForSelectTypeQuestions;
+    const question = dummyQuestions.find(
+      item => item.answerConfiguration.type === 'select-lookup'
+    );
+    const lastAnswer = getLastAnswer(question);
+    const props = { question, lastAnswer };
     const container = render(
       <Provider store={store}>
         <SelectQuestion {...props} />
@@ -80,8 +82,56 @@ describe('Test Approval Input Components', () => {
     );
     expect(container).toMatchSnapshot();
   });
-  // test('Test ProposalTeamQuestion', () => {});
-  // test('Test NumberQuestion', () => {});
-  // test('Test TextQuestion', () => {});
-  // test('Test YesNoQuestion', () => {});
+  test('Test ProposalTeamQuestion', () => {
+    const question = dummyQuestions.find(
+      item => item.section.sectionName === 'Proposal Team'
+    );
+    const lastAnswer = getLastAnswer(question);
+    const props = { question, lastAnswer };
+    const container = render(
+      <Provider store={store}>
+        <ProposalTeamQuestion {...props} />
+      </Provider>
+    );
+    expect(container).toMatchSnapshot();
+  });
+  test('Test NumberQuestion', () => {
+    const question = dummyQuestions.find(
+      item => item.answerConfiguration.type === 'number'
+    );
+    const lastAnswer = getLastAnswer(question);
+    const props = { question, lastAnswer };
+    const container = render(
+      <Provider store={store}>
+        <NumberQuestion {...props} />
+      </Provider>
+    );
+    expect(container).toMatchSnapshot();
+  });
+  test('Test YesNoQuestion', () => {
+    const question = dummyQuestions.find(
+      item => item.answerConfiguration.type === 'y/n'
+    );
+    const lastAnswer = getLastAnswer(question);
+    const props = { question, lastAnswer };
+    const container = render(
+      <Provider store={store}>
+        <YesNoQuestion {...props} />
+      </Provider>
+    );
+    expect(container).toMatchSnapshot();
+  });
+  test('Test CheckboxQuestion', () => {
+    const question = dummyQuestions.find(
+      item => item.answerConfiguration.type === 'checkbox'
+    );
+    const lastAnswer = getLastAnswer(question);
+    const props = { question, lastAnswer };
+    const container = render(
+      <Provider store={store}>
+        <CheckBoxQuestion {...props} />
+      </Provider>
+    );
+    expect(container).toMatchSnapshot();
+  });
 });
