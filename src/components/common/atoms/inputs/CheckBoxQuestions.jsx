@@ -12,6 +12,7 @@ import {
   isArray
 } from 'lodash';
 import useUpdateEffect from '../../../../hooks/useUpdateEffect';
+import { FormControl } from '@material-ui/core';
 
 type Props = {
   answerValue: Array,
@@ -64,7 +65,7 @@ const CheckBoxQuestions = (props: Props) => {
       !getFocus &&
       blurSpan &&
       !isEqual(changeItem, answerValue) &&
-      !isEmpty(changeItem)
+      !isEmpty(answerValue)
     ) {
       onChange(changeItem);
     }
@@ -103,18 +104,18 @@ const CheckBoxQuestions = (props: Props) => {
       !isEmpty(
         activeElement?.className?.match('Mui-focusVisible') ||
           activeElement?.className?.match('MuiListItem-button') ||
-          activeElement?.className?.match('MuiInput-input')
+          activeElement?.className?.match('MuiInput-input') ||
+          activeElement?.className?.match('PrivateSwitchBase')
       )
     );
     getFocus && checkBoxFocus ? onOpen() : onClose();
-    console.log(getFocus, 'getFocus');
   }, [activeElement]);
 
   useUpdateEffect(() => {
     if (changeItem.length !== answerValue.length) setChangeItem(answerValue);
   }, [answerValue.length]);
   const onFocusCheckBox = () => {
-    onOpen();
+    if (focusSpan) onOpen();
   };
   return (
     <div
@@ -124,22 +125,24 @@ const CheckBoxQuestions = (props: Props) => {
       className="selectSpan"
       ref={checkBoxRef}
     >
-      <Select
-        key={answerValue.length}
-        value={!isEmpty(changeItem) ? changeItem : []}
-        finalOptions={finalOptions}
-        disabled={disabled || isNotApplicable}
-        onChange={e => onChangeItem(e)}
-        renderValue={selected => {
-          if (isEmpty(selected)) return 'Select';
-          return selectedNames.join(', ');
-        }}
-        placeholder={!isEmpty(changeItem) ? '' : 'Select'}
-        fullWidth
-        multiple
-      >
-        {selectItems}
-      </Select>
+      <FormControl className="checkboxtype" fullWidth>
+        <Select
+          key={answerValue.length}
+          value={!isEmpty(changeItem) ? changeItem : []}
+          finalOptions={finalOptions}
+          disabled={disabled || isNotApplicable}
+          onChange={e => onChangeItem(e)}
+          renderValue={selected => {
+            if (isEmpty(selected)) return 'Select';
+            return selectedNames.join(', ');
+          }}
+          placeholder={!isEmpty(changeItem) ? '' : 'Select'}
+          fullWidth
+          multiple
+        >
+          {selectItems}
+        </Select>
+      </FormControl>
     </div>
   );
 };
