@@ -56,6 +56,8 @@ const CheckBoxQuestion = ({
           answerValue={answerValue}
           finalOptions={finalOptions}
           disabled={false}
+          onOpen={() => {}}
+          onClose={() => {}}
           onChange={changeHandler}
         />
       </div>
