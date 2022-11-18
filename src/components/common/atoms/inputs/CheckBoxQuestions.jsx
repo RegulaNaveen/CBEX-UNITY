@@ -65,7 +65,7 @@ const CheckBoxQuestions = (props: Props) => {
       !getFocus &&
       blurSpan &&
       !isEqual(changeItem, answerValue) &&
-      !isEmpty(changeItem)
+      !isEmpty(answerValue)
     ) {
       onChange(changeItem);
     }
@@ -109,8 +109,6 @@ const CheckBoxQuestions = (props: Props) => {
       )
     );
     getFocus && checkBoxFocus ? onOpen() : onClose();
-    console.log(getFocus, 'getFocus');
-    console.log(activeElement, 'ace');
   }, [activeElement]);
 
   useUpdateEffect(() => {
