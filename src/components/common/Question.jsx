@@ -677,8 +677,19 @@ export class TaskRow extends React.PureComponent<Props, State> {
         !isCurrentBid
       );
     };
+    // onFocus for question concurrency
+    const concurrencyFocusHandler = () => {
+      this.context.questionLockWrapper(this.props.questionId);
+      this.setSelectRow(true);
+    };
+    // onBlur for question concurrency
+    const concurrencyBlurHandler = () => {
+      this.context.questionUnlockWrapper(this.props.questionId);
+      this.setSelectRow(false);
+    };
     const onFocusCheckBox = () => {
       this.setState({ focusedSpan: true });
+      concurrencyFocusHandler();
     };
 
     const onBlurCheckBox = () => {
@@ -853,16 +864,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
       }
     };
 
-    // onFocus for question concurrency
-    const concurrencyFocusHandler = () => {
-      this.context.questionLockWrapper(this.props.questionId);
-      this.setSelectRow(true);
-    };
-    // onBlur for question concurrency
-    const concurrencyBlurHandler = () => {
-      this.context.questionUnlockWrapper(this.props.questionId);
-      this.setSelectRow(false);
-    };
     switch (type) {
       case 'text': {
         answerValue = getConvertedAnsString(answerValue);
@@ -1206,7 +1207,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
                     }
                   : ''
               }
-              className="checkboxtype"
               onFocus={onFocusCheckBox}
               onBlur={onBlurCheckBox}
             >
