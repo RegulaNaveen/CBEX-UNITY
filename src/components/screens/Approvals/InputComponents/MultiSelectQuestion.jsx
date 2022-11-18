@@ -44,7 +44,9 @@ const MultiSelectQuestion = ({
           proposalId,
           questionId,
           textValue,
-          userData
+          userData,
+          null,
+          true
         )
       );
       trackMatomoEventSubmitAnswer(textValue);

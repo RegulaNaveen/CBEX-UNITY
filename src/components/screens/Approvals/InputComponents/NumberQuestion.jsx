@@ -36,7 +36,8 @@ const NumberQuestion = ({
             questionId,
             String(textValue).trim(),
             userData,
-            editorData
+            editorData,
+            true
           )
         );
       }
@@ -48,7 +49,8 @@ const NumberQuestion = ({
           questionId,
           ' ',
           userData,
-          editorData
+          editorData,
+          true
         )
       );
     }

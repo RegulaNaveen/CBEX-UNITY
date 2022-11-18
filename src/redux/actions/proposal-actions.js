@@ -97,7 +97,8 @@ const {
   UPDATE_NOT_APPLICABLE_DONE,
   SET_PRICE_MODELER_FIELDS,
   ERROR_UPDATE_NOT_APPLICABLE,
-  SET_CAN_USER_TAG_IN_QUESTION
+  SET_CAN_USER_TAG_IN_QUESTION,
+  SET_APPROVAL_QUESTION_LOADING
 } = REDUX_TYPES.PROPOSAL;
 
 /**
@@ -229,6 +230,20 @@ export const getPriceModelerData = proposalId => {
     }
   };
 };
+
+export const setApprovalQuestionLoading = (questionId, value) => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    try {
+      dispatch({
+        type: SET_APPROVAL_QUESTION_LOADING,
+        payload: { questionId, value }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
 export const setProposalAnswerData = (
   socketContext,
   proposalId: string,
@@ -236,10 +251,11 @@ export const setProposalAnswerData = (
   answer: string,
   userData: Object,
   editorData: any,
-  isUpdatingNa: Boolean
+  disableLoader = false
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
-    if (!isUpdatingNa) {
+    dispatch(setApprovalQuestionLoading(questionId, true));
+    if (!disableLoader) {
       dispatch({
         type: PROPOSAL_ANSWER_LOADING,
         payload: { questionId, loading: true }
@@ -277,10 +293,13 @@ export const setProposalAnswerData = (
         });
       }
       dispatch(onQuestionsFilterApplied(questionsFilter));
-      dispatch({
-        type: PROPOSAL_ANSWER_LOADING,
-        payload: { questionId, loading: false }
-      });
+      if (!disableLoader) {
+        dispatch({
+          type: PROPOSAL_ANSWER_LOADING,
+          payload: { questionId, loading: false }
+        });
+      }
+      dispatch(setApprovalQuestionLoading(questionId, false));
     } catch (err) {
       console.log('error occurred ', err);
       dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err } });
