@@ -1,12 +1,42 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import classNames from 'classnames';
 import Loader from 'apollo-react/components/Loader';
 import getADUsers from '../../api/getADUsers';
 
-const TagUserList = ({ searchTag, onSelect, close }) => {
+function TagUserListItem({ active, item, onClickHandler }) {
+  const listItemRef = useRef(null);
+
+  useEffect(() => {
+    if (listItemRef.current && active) {
+      listItemRef.current.scrollIntoView({
+        behavior: 'auto',
+        block: 'nearest',
+        inline: 'start'
+      });
+    }
+  }, [active]);
+
+  return (
+    <li
+      ref={listItemRef}
+      className={classNames('list-item', {
+        active
+      })}
+      onClick={e => onClickHandler(e, item)}
+      display-name={item.name}
+      key={item.id}
+      aria-hidden="true"
+    >
+      {`${item.first_name} ${item.last_name}(${item.email})`}
+    </li>
+  );
+}
+
+const TagUserList = ({ searchTag, onSelect, close, updateSearchTag }) => {
   const [fetchingUsers, setfetchingUsers] = useState(false);
   const [users, setUsers] = useState([]);
+  const [activeOptionIndex, setActiveOptionIndex] = useState(0);
 
   async function fetchUsers() {
     setfetchingUsers(true);
@@ -24,12 +54,71 @@ const TagUserList = ({ searchTag, onSelect, close }) => {
       if (searchTag !== true) {
         setfetchingUsers(false);
       }
+      setActiveOptionIndex(0);
     }
   }
 
   useEffect(() => {
     fetchUsers();
   }, [searchTag]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDownListener);
+    return () => window.removeEventListener('keydown', handleKeyDownListener);
+  }, [users]);
+
+  function handleKeyDownListener(event) {
+    console.log('Received event', users.length);
+    if (users.length === 0) return;
+    if (['Escape', 'Enter', 'ArrowUp', 'ArrowDown'].includes(event.code)) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    if (event.code === 'Escape') {
+      handleEscapeKeyPress();
+      return;
+    }
+
+    if (event.code === 'Enter') {
+      handleEnterKeyPress();
+      return;
+    }
+
+    if (event.code === 'ArrowDown') {
+      handleArrowKeyDownPress();
+      return;
+    }
+
+    if (event.code === 'ArrowUp') {
+      handleArrowKeyUpPress();
+    }
+  }
+
+  function handleArrowKeyUpPress() {
+    setActiveOptionIndex(prevActiveOptionIndex =>
+      prevActiveOptionIndex > 0
+        ? prevActiveOptionIndex - 1
+        : prevActiveOptionIndex
+    );
+  }
+  function handleArrowKeyDownPress() {
+    setActiveOptionIndex(prevActiveOptionIndex =>
+      prevActiveOptionIndex < users.length - 1
+        ? prevActiveOptionIndex + 1
+        : prevActiveOptionIndex
+    );
+  }
+  function handleEnterKeyPress() {
+    setActiveOptionIndex(activeIndex => {
+      onSelect(users[activeIndex]);
+      close();
+      return 0;
+    });
+  }
+  function handleEscapeKeyPress() {
+    close();
+  }
 
   const onClickHandler = async (e, user) => {
     e.preventDefault();
@@ -70,16 +159,12 @@ const TagUserList = ({ searchTag, onSelect, close }) => {
 
   return (
     <ul className="tag-user-list">
-      {users.map((item, indx) => (
-        <li
-          className={classNames('list-item', { active: !indx })}
-          onClick={e => onClickHandler(e, item)}
-          display-name={item.name}
-          key={item.id}
-          aria-hidden="true"
-        >
-          {`${item.first_name} ${item.last_name}(${item.email})`}
-        </li>
+      {users.map((item, index) => (
+        <TagUserListItem
+          item={item}
+          active={activeOptionIndex === index}
+          onClickHandler={onClickHandler}
+        />
       ))}
     </ul>
   );
