@@ -109,7 +109,6 @@ const CheckBoxQuestions = (props: Props) => {
       )
     );
     getFocus && checkBoxFocus ? onOpen() : onClose();
-    console.log(getFocus, 'getFocus');
   }, [activeElement]);
 
   useUpdateEffect(() => {
