@@ -31,7 +31,6 @@ const Approvals = () => {
       ) : (
         <>No Approval Questions</>
       )}
-      {console.log(approvals)}
     </div>
   );
 };

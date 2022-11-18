@@ -1,6 +1,81 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Test Approval Input Components Test DateQuestion 1`] = `
+exports[`Snapshot Test Approval Input Components Test CheckboxQuestion 1`] = `
+LoadedCheerio {
+  "0": <div
+    class="checkboxtype"
+  >
+    <div
+      class="MuiFormControl-root MuiTextField-root MuiFormControl-marginNormal MuiFormControl-fullWidth"
+      finaloptions="blinded,named"
+    >
+      <label
+        class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiFormLabel-filled"
+        data-shrink="true"
+      />
+      <div
+        class="MuiInputBase-root MuiInput-root MuiInputBase-fullWidth MuiInput-fullWidth MuiInputBase-formControl MuiInput-formControl"
+      >
+        <div
+          aria-haspopup="listbox"
+          class="MuiSelect-root MuiSelect-select MuiSelect-selectMenu makeStyles-hint-51 makeStyles-truncate-53 MuiInputBase-input MuiInput-input"
+          role="button"
+          tabindex="0"
+        >
+          Select
+        </div>
+        <input
+          aria-hidden="true"
+          class="MuiSelect-nativeInput"
+          style="resize:none;min-width:auto"
+          tabindex="-1"
+          value=""
+        />
+        <svg
+          aria-hidden="true"
+          class="MuiSvgIcon-root MuiSelect-icon"
+          focusable="false"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M17.8683007,8.40581224 C17.6869393,8.15513929 17.3462588,8 16.9768872,8 L7.0229403,8 C6.65377846,8.00013957 6.31332217,8.15514488 6.13198429,8.40564066 C5.9506464,8.65613644 5.95653333,8.96329718 6.14739007,9.20946397 L11.1243635,15.6155569 C11.309782,15.8542034 11.6418267,16 11.9999138,16 C12.3580008,16 12.6900455,15.8542034 12.875464,15.6155569 L17.8524374,9.20946397 C18.0433515,8.96340454 18.0494128,8.65632814 17.8683007,8.40581224 Z"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>,
+  "_root": LoadedCheerio {
+    "0": Document {
+      "children": Array [
+        <html>
+          <head />
+          <body />
+        </html>,
+      ],
+      "endIndex": null,
+      "next": null,
+      "parent": null,
+      "prev": null,
+      "startIndex": null,
+      "type": "root",
+      "x-mode": "quirks",
+    },
+    "_root": [Circular],
+    "length": 1,
+    "options": Object {
+      "decodeEntities": true,
+      "xml": false,
+    },
+  },
+  "length": 1,
+  "options": Object {
+    "decodeEntities": true,
+    "xml": false,
+  },
+}
+`;
+
+exports[`Snapshot Test Approval Input Components Test DateQuestion 1`] = `
 LoadedCheerio {
   "0": <div
     class="date-picker "
@@ -72,7 +147,7 @@ LoadedCheerio {
 }
 `;
 
-exports[`Test Approval Input Components Test MultiSelectQuestion 1`] = `
+exports[`Snapshot Test Approval Input Components Test MultiSelectQuestion 1`] = `
 LoadedCheerio {
   "0": <div
     class="auto-complete-with-add-option"
@@ -152,7 +227,154 @@ LoadedCheerio {
 }
 `;
 
-exports[`Test Approval Input Components Test RadioQuestion 1`] = `
+exports[`Snapshot Test Approval Input Components Test NumberQuestion 1`] = `
+LoadedCheerio {
+  "0": <input
+    class="text-number-wrapper proposal-text-area"
+    value=""
+  />,
+  "_root": LoadedCheerio {
+    "0": Document {
+      "children": Array [
+        <html>
+          <head />
+          <body />
+        </html>,
+      ],
+      "endIndex": null,
+      "next": null,
+      "parent": null,
+      "prev": null,
+      "startIndex": null,
+      "type": "root",
+      "x-mode": "quirks",
+    },
+    "_root": [Circular],
+    "length": 1,
+    "options": Object {
+      "decodeEntities": true,
+      "xml": false,
+    },
+  },
+  "length": 1,
+  "options": Object {
+    "decodeEntities": true,
+    "xml": false,
+  },
+}
+`;
+
+exports[`Snapshot Test Approval Input Components Test ProposalTeamQuestion 1`] = `
+LoadedCheerio {
+  "0": <div
+    class="autocomplete"
+  >
+    <div
+      class="makeStyles-labelWrapper-45"
+    />
+    <div
+      aria-expanded="false"
+      class="a-MuiAutocomplete-root makeStyles-root-32 makeStyles-small-41 a-MuiAutocomplete-fullWidth a-MuiAutocomplete-hasClearIcon"
+      role="combobox"
+    >
+      <div>
+        <div
+          class="MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth"
+        >
+          <div
+            class="MuiInputBase-root a-MuiOutlinedInput-root a-MuiAutocomplete-inputRoot MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd a-MuiOutlinedInput-adornedEnd MuiInputBase-marginDense a-MuiOutlinedInput-marginDense"
+          >
+            <input
+              aria-autocomplete="list"
+              aria-invalid="false"
+              autocapitalize="none"
+              autocomplete="off"
+              class="MuiInputBase-input a-MuiOutlinedInput-input a-MuiAutocomplete-input a-MuiAutocomplete-inputFocused MuiInputBase-inputAdornedEnd a-MuiOutlinedInput-inputAdornedEnd MuiInputBase-inputMarginDense a-MuiOutlinedInput-inputMarginDense"
+              spellcheck="false"
+              type="text"
+              value=""
+            />
+            <div
+              class="a-MuiAutocomplete-endAdornment"
+            >
+              <button
+                aria-label="Clear"
+                class="MuiButtonBase-root MuiIconButton-root a-MuiAutocomplete-clearIndicator"
+                tabindex="-1"
+                title="Clear"
+                type="button"
+              >
+                <span
+                  class="MuiIconButton-label"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root makeStyles-fontSizeExtraSmall-16 undefined MuiSvgIcon-fontSizeSmall makeStyles-fontSizeSmall-15"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M4.92884133,4.93003344 C8.8339631,1.02504258 15.1660983,1.02307108 19.0736526,4.92562949 C22.9754491,8.83543465 22.9754491,15.1645654 19.0736526,19.0743705 C15.1660983,22.9769289 8.8339631,22.9749574 4.92884133,19.0699666 C1.02371956,15.1649758 1.02371956,8.83502431 4.92884133,4.93003344 Z M15.9222405,8.07512091 C15.5965776,7.74934015 15.0683871,7.7491535 14.7424939,8.07470403 L14.7424939,8.07470403 L12.148636,10.6676672 C12.1095179,10.7068709 12.0564028,10.7289035 12.0010113,10.7289035 C11.9456199,10.7289035 11.8925048,10.7068709 11.8533866,10.6676672 L11.8533866,10.6676672 L9.26036285,8.07470403 C8.93031374,7.77679792 8.42450562,7.79013469 8.11062527,8.10501945 C7.79674491,8.4199042 7.78519409,8.9255819 8.08436944,9.25446058 L8.08436944,9.25446058 L10.6782273,11.8474237 C10.717394,11.8863858 10.7394139,11.9393446 10.7394139,11.9945806 C10.7394139,12.0498167 10.717394,12.1027755 10.6782273,12.1417375 L10.6782273,12.1417375 L8.08436944,14.7338669 C7.92775627,14.8902521 7.83975725,15.1024602 7.83975725,15.3237452 C7.83975725,15.5450302 7.92775627,15.7572384 8.08436944,15.9136235 C8.41363173,16.2311693 8.93527075,16.2311693 9.26453304,15.9136235 L9.26453304,15.9136235 L11.8575568,13.3206603 C11.9394039,13.2399243 12.0709592,13.2399243 12.1528062,13.3206603 L12.1528062,13.3206603 L14.7466641,15.9136235 C15.0771955,16.2077504 15.5799777,16.1926257 15.892219,15.8791628 C16.2044604,15.5657 16.2174537,15.0630316 15.9218234,14.7338669 L15.9218234,14.7338669 L13.3279656,12.1417375 C13.2468448,12.0603907 13.2468448,11.9287706 13.3279656,11.8474237 L13.3279656,11.8474237 L15.9218234,9.25446058 C16.2477166,8.92891003 16.2479033,8.40090169 15.9222405,8.07512091 Z"
+                      fill-rule="evenodd"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+            <fieldset
+              aria-hidden="true"
+              class="a-PrivateNotchedOutline-root-1 a-MuiOutlinedInput-notchedOutline"
+              style="padding-left:8px"
+            >
+              <legend
+                class="a-PrivateNotchedOutline-legend-2"
+                style="width:0.01px"
+              >
+                <span>
+                  ​
+                </span>
+              </legend>
+            </fieldset>
+          </div>
+        </div>
+        <span
+          class="makeStyles-hiddenPlaceholder-39"
+        />
+      </div>
+    </div>
+  </div>,
+  "_root": LoadedCheerio {
+    "0": Document {
+      "children": Array [
+        <html>
+          <head />
+          <body />
+        </html>,
+      ],
+      "endIndex": null,
+      "next": null,
+      "parent": null,
+      "prev": null,
+      "startIndex": null,
+      "type": "root",
+      "x-mode": "quirks",
+    },
+    "_root": [Circular],
+    "length": 1,
+    "options": Object {
+      "decodeEntities": true,
+      "xml": false,
+    },
+  },
+  "length": 1,
+  "options": Object {
+    "decodeEntities": true,
+    "xml": false,
+  },
+}
+`;
+
+exports[`Snapshot Test Approval Input Components Test RadioQuestion 1`] = `
 LoadedCheerio {
   "0": <div
     class="MuiFormGroup-root"
@@ -171,7 +393,7 @@ LoadedCheerio {
           <input
             class="PrivateSwitchBase-input-27"
             type="radio"
-            value="Apple"
+            value="Toyota"
           />
           <svg
             aria-hidden="true"
@@ -200,7 +422,7 @@ LoadedCheerio {
       <span
         class="MuiTypography-root MuiFormControlLabel-label makeStyles-label-23 MuiTypography-body1"
       >
-        Apple
+        Toyota
       </span>
     </label>
     <label
@@ -216,7 +438,7 @@ LoadedCheerio {
           <input
             class="PrivateSwitchBase-input-27"
             type="radio"
-            value="Banana"
+            value="Mercedes"
           />
           <svg
             aria-hidden="true"
@@ -245,7 +467,7 @@ LoadedCheerio {
       <span
         class="MuiTypography-root MuiFormControlLabel-label makeStyles-label-23 MuiTypography-body1"
       >
-        Banana
+        Mercedes
       </span>
     </label>
     <label
@@ -253,16 +475,15 @@ LoadedCheerio {
     >
       <span
         aria-disabled="false"
-        class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-24 MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-checked-25 Mui-checked MuiIconButton-colorPrimary"
+        class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-24 MuiRadio-root MuiRadio-colorPrimary MuiIconButton-colorPrimary"
       >
         <span
           class="MuiIconButton-label"
         >
           <input
-            checked=""
             class="PrivateSwitchBase-input-27"
             type="radio"
-            value="Orange"
+            value="Ferrari"
           />
           <svg
             aria-hidden="true"
@@ -278,19 +499,110 @@ LoadedCheerio {
                 cy="12"
                 r="8"
               />
-              <path
-                d="M12,5 C8.13400675,5 5,8.13400675 5,12 C5,15.8659932 8.13400675,19 12,19 C15.8659932,19 19,15.8659932 19,12 C19,8.13400675 15.8659932,5 12,5 Z M12,7 C14.7614237,7 17,9.23857625 17,12 C17,14.7614237 14.7614237,17 12,17 C9.23857625,17 7,14.7614237 7,12 C7,9.23857625 9.23857625,7 12,7 Z"
+              <circle
+                cx="12"
+                cy="12"
                 fill="#FFF"
-                fill-rule="nonzero"
+                r="7"
               />
             </g>
           </svg>
         </span>
       </span>
       <span
-        class="MuiTypography-root MuiFormControlLabel-label makeStyles-label-23 makeStyles-checkedLabel-20 MuiTypography-body1"
+        class="MuiTypography-root MuiFormControlLabel-label makeStyles-label-23 MuiTypography-body1"
       >
-        Orange
+        Ferrari
+      </span>
+    </label>
+    <label
+      class="MuiFormControlLabel-root makeStyles-root-22"
+    >
+      <span
+        aria-disabled="false"
+        class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-24 MuiRadio-root MuiRadio-colorPrimary MuiIconButton-colorPrimary"
+      >
+        <span
+          class="MuiIconButton-label"
+        >
+          <input
+            class="PrivateSwitchBase-input-27"
+            type="radio"
+            value="Ford"
+          />
+          <svg
+            aria-hidden="true"
+            class="MuiSvgIcon-root"
+            focusable="false"
+            viewBox="0 0 24 24"
+          >
+            <g
+              fill-rule="evenodd"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="8"
+              />
+              <circle
+                cx="12"
+                cy="12"
+                fill="#FFF"
+                r="7"
+              />
+            </g>
+          </svg>
+        </span>
+      </span>
+      <span
+        class="MuiTypography-root MuiFormControlLabel-label makeStyles-label-23 MuiTypography-body1"
+      >
+        Ford
+      </span>
+    </label>
+    <label
+      class="MuiFormControlLabel-root makeStyles-root-22"
+    >
+      <span
+        aria-disabled="false"
+        class="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-24 MuiRadio-root MuiRadio-colorPrimary MuiIconButton-colorPrimary"
+      >
+        <span
+          class="MuiIconButton-label"
+        >
+          <input
+            class="PrivateSwitchBase-input-27"
+            type="radio"
+            value="BMW"
+          />
+          <svg
+            aria-hidden="true"
+            class="MuiSvgIcon-root"
+            focusable="false"
+            viewBox="0 0 24 24"
+          >
+            <g
+              fill-rule="evenodd"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="8"
+              />
+              <circle
+                cx="12"
+                cy="12"
+                fill="#FFF"
+                r="7"
+              />
+            </g>
+          </svg>
+        </span>
+      </span>
+      <span
+        class="MuiTypography-root MuiFormControlLabel-label makeStyles-label-23 MuiTypography-body1"
+      >
+        BMW
       </span>
     </label>
   </div>,
@@ -325,7 +637,7 @@ LoadedCheerio {
 }
 `;
 
-exports[`Test Approval Input Components Test SelectQuestion 1`] = `
+exports[`Snapshot Test Approval Input Components Test SelectQuestion 1`] = `
 LoadedCheerio {
   "0": <div
     class="auto-complete-with-add-option"
@@ -348,7 +660,7 @@ LoadedCheerio {
             autocapitalize="none"
             autocomplete="off"
             class="MuiInputBase-input MuiOutlinedInput-input MuiAutocomplete-input MuiAutocomplete-inputFocused MuiInputBase-inputAdornedEnd MuiOutlinedInput-inputAdornedEnd MuiInputBase-inputMarginDense MuiOutlinedInput-inputMarginDense"
-            placeholder=""
+            placeholder="Click to answer"
             spellcheck="false"
             type="text"
             value=""
@@ -371,6 +683,56 @@ LoadedCheerio {
             </legend>
           </fieldset>
         </div>
+      </div>
+    </div>
+  </div>,
+  "_root": LoadedCheerio {
+    "0": Document {
+      "children": Array [
+        <html>
+          <head />
+          <body />
+        </html>,
+      ],
+      "endIndex": null,
+      "next": null,
+      "parent": null,
+      "prev": null,
+      "startIndex": null,
+      "type": "root",
+      "x-mode": "quirks",
+    },
+    "_root": [Circular],
+    "length": 1,
+    "options": Object {
+      "decodeEntities": true,
+      "xml": false,
+    },
+  },
+  "length": 1,
+  "options": Object {
+    "decodeEntities": true,
+    "xml": false,
+  },
+}
+`;
+
+exports[`Snapshot Test Approval Input Components Test YesNoQuestion 1`] = `
+LoadedCheerio {
+  "0": <div
+    class="dd-input-wrapper"
+  >
+    <div
+      class="dd-wrapper"
+    >
+      <div
+        class="dd-header"
+        role="presentation"
+        tabindex="0"
+      >
+        <div
+          class="dd-header-placeholder"
+        />
       </div>
     </div>
   </div>,
