@@ -20,7 +20,9 @@ const DateQuestion = ({
         proposalId,
         questionId,
         ' ',
-        userData
+        userData,
+        null,
+        true
       )
     );
     trackMatomoEventSubmitAnswer(' ');
@@ -40,7 +42,9 @@ const DateQuestion = ({
           proposalId,
           questionId,
           selectedDay,
-          userData
+          userData,
+          null,
+          true
         )
       );
       trackMatomoEventSubmitAnswer(selectedDay);

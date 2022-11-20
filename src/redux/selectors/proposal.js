@@ -356,3 +356,7 @@ export const getCanUserTagInQuestion = createSelector(
   selectProposal,
   proposal => proposal?.get('canUserTagInQuestion')
 );
+export const getApprovalQuestionLoading = createSelector(
+  selectProposal,
+  proposal => proposal?.get('approvalQuestionLoading')
+);
