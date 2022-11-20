@@ -222,30 +222,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       questionId,
       textValue,
       userData
-    ).then(() => {
-      const [deletedVal] = xor(
-        textValue.target.value?.trim()
-          ? textValue.target.value?.trim().split(',')
-          : [],
-        lastValue?.trim() ? lastValue?.trim().split(',') : []
-      );
-      const [deletedEmail] = String(deletedVal).match(
-        /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
-      );
-      if (reason === 'remove-option' && deletedEmail) {
-        setAnswerLoading(questionId, true);
-        const { sectionName, sectionOrder } = section.toJS();
-        deleteProposalUser(
-          proposalId,
-          deletedEmail,
-          sectionOrder,
-          sectionName
-        ).then(() => {
-          setAnswerLoading(questionId, false);
-        });
-      }
-    });
-    this.trackMatomoEventSubmitAnswer(textValue);
+    );
   };
 
   handleTextChange = (textValue, lastAnswer, editorData) => {
@@ -689,10 +666,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
     };
     const onFocusCheckBox = () => {
       this.setState({ focusedSpan: true });
-      concurrencyFocusHandler();
+      this.setState({ blurredSpan: false });
     };
 
     const onBlurCheckBox = () => {
+      this.setState({ focusedSpan: false });
       this.setState({ blurredSpan: true });
     };
 
@@ -1199,7 +1177,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
             sfObject={sfObject}
           >
             <span
-              tabIndex={0}
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
@@ -1207,24 +1184,29 @@ export class TaskRow extends React.PureComponent<Props, State> {
                     }
                   : ''
               }
-              onFocus={onFocusCheckBox}
-              onBlur={onBlurCheckBox}
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
                 {this.renderNACheckbox(checkDisableFlag, 'checkbox')}
               </span>
-              <CheckBoxQuestionsIdleStateDetection
-                answerValue={answerValueComplex || ''}
-                finalOptions={finalOptions}
-                disabled={checkDisableFlag() || isNotApplicable}
-                onOpen={() => concurrencyFocusHandler()}
-                onClose={() => {
-                  concurrencyBlurHandler();
-                }}
-                onChange={e => this.handleCheckboxPropsalChange(e)}
-                focusSpan={focusState}
-                blurSpan={blurState}
-              />
+              <div
+                className="checkboxwrapper"
+                tabIndex={0}
+                onFocus={onFocusCheckBox}
+                onBlur={onBlurCheckBox}
+              >
+                <CheckBoxQuestionsIdleStateDetection
+                  answerValue={answerValueComplex || ''}
+                  finalOptions={finalOptions}
+                  disabled={checkDisableFlag() || isNotApplicable}
+                  onOpen={() => concurrencyFocusHandler()}
+                  onClose={() => {
+                    concurrencyBlurHandler();
+                  }}
+                  onChange={e => this.handleCheckboxPropsalChange(e)}
+                  focusSpan={focusState}
+                  blurSpan={blurState}
+                />
+              </div>
             </span>
           </SFAnswerValidationWrapper>
         );

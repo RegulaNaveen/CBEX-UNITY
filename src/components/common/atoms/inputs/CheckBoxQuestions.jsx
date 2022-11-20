@@ -2,17 +2,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import MenuItem from 'apollo-react/components/MenuItem';
 import Select from 'apollo-react/components/Select';
-import {
-  isObject,
-  isEqual,
-  isEmpty,
-  xor,
-  has,
-  isString,
-  isArray
-} from 'lodash';
-import useUpdateEffect from '../../../../hooks/useUpdateEffect';
+import { isEqual, isEmpty, isObject } from 'lodash';
 import { FormControl } from '@material-ui/core';
+import useUpdateEffect from '../../../../hooks/useUpdateEffect';
 
 type Props = {
   answerValue: Array,
@@ -25,7 +17,6 @@ type Props = {
   blurSpan: any,
   focusSpan: any
 };
-
 const CheckBoxQuestions = (props: Props) => {
   const {
     answerValue,
@@ -38,10 +29,9 @@ const CheckBoxQuestions = (props: Props) => {
     finalOptions,
     isNotApplicable
   } = props;
-
   const [changeItem, setChangeItem] = useState(answerValue || []);
   const [getFocus, setFocus] = useState(false);
-  const [checkBoxFocus, setCheckBoxFocus] = useState(false);
+  const [getSpan, setSpan] = useState(false);
   const checkBoxRef = useRef();
   let selectItems = null;
   const selectedNames = [];
@@ -60,17 +50,7 @@ const CheckBoxQuestions = (props: Props) => {
   const onChangeItem = e => {
     setChangeItem(e.target.value);
   };
-  const onBlurCheckBox = () => {
-    if (
-      !getFocus &&
-      blurSpan &&
-      !isEqual(changeItem, answerValue) &&
-      !isEmpty(answerValue)
-    ) {
-      onChange(changeItem);
-    }
-    onClose();
-  };
+
   const useActiveElement = () => {
     const [listenersReady, setListenersReady] = React.useState(
       false
@@ -79,7 +59,7 @@ const CheckBoxQuestions = (props: Props) => {
       document.activeElement
     );
 
-    React.useEffect(() => {
+    useEffect(() => {
       const onFocus = event => setActiveElement(event.target);
 
       window.addEventListener('focus', onFocus, true);
@@ -99,38 +79,65 @@ const CheckBoxQuestions = (props: Props) => {
 
   const { activeElement, listenersReady } = useActiveElement();
 
-  React.useEffect(() => {
+  useEffect(() => {
+    setSpan(focusSpan);
+  }, [focusSpan]);
+
+  useEffect(() => {
     setFocus(
       !isEmpty(
         activeElement?.className?.match('Mui-focusVisible') ||
           activeElement?.className?.match('MuiListItem-button') ||
-          activeElement?.className?.match('MuiInput-input') ||
-          activeElement?.className?.match('PrivateSwitchBase')
+          activeElement?.className?.match('PrivateSwitchBase') ||
+          activeElement?.className?.match('Mui-selected') ||
+          activeElement?.className?.match('MuiInput-input')
       )
     );
-    getFocus && checkBoxFocus ? onOpen() : onClose();
+    if (
+      activeElement?.className?.match('task-wrapper') ||
+      activeElement?.className?.match('makeStyles-truncate')
+    )
+      setFocus(false);
   }, [activeElement]);
 
+  const onBlurCheckBox = () => {
+    if (
+      !getFocus &&
+      !isEqual(changeItem, answerValue) &&
+      isObject(answerValue)
+    ) {
+      onChange(changeItem);
+      setFocus(false);
+    }
+    if (!getFocus) onClose();
+  };
   useUpdateEffect(() => {
     if (changeItem.length !== answerValue.length) setChangeItem(answerValue);
   }, [answerValue.length]);
-  const onFocusCheckBox = () => {
-    onOpen();
+  const onFocusCheckBox = event => {
+    if (getFocus || event.target.localName === 'li') onOpen();
+  };
+  const handleKeyDown = event => {
+    if (event.key === 'Tab') onClose();
   };
   return (
     <div
       tabIndex={0}
-      onFocus={onFocusCheckBox}
-      onBlur={onBlurCheckBox}
       className="selectSpan"
+      onFocus={onFocusCheckBox}
       ref={checkBoxRef}
     >
-      <FormControl className="checkboxtype" fullWidth>
+      <FormControl
+        className="checkboxtype"
+        fullWidth
+        disabled={disabled || isNotApplicable}
+        onBlur={onBlurCheckBox}
+        onKeyDown={handleKeyDown}
+      >
         <Select
           key={answerValue.length}
           value={!isEmpty(changeItem) ? changeItem : []}
           finalOptions={finalOptions}
-          disabled={disabled || isNotApplicable}
           onChange={e => onChangeItem(e)}
           renderValue={selected => {
             if (isEmpty(selected)) return 'Select';
