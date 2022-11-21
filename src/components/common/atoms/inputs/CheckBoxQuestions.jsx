@@ -103,6 +103,9 @@ const CheckBoxQuestions = (props: Props) => {
           activeElement?.className?.match('Mui-selected')
       )
     );
+    setFocus(
+      activeElement.localName === 'li' || activeElement.localName === 'input'
+    );
     if (
       activeElement?.className?.match('task-wrapper') ||
       activeElement?.className?.match('makeStyles-truncate')

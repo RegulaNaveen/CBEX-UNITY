@@ -665,13 +665,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
       this.setSelectRow(false);
     };
     const onFocusCheckBox = () => {
-      this.setState({ focusedSpan: true });
-      this.setState({ blurredSpan: false });
+      this.setState({ focusedSpan: true, blurredSpan: false });
     };
 
     const onBlurCheckBox = () => {
-      this.setState({ focusedSpan: false });
-      this.setState({ blurredSpan: true });
+      this.setState({ focusedSpan: false, blurredSpan: true });
     };
 
     const focusState = this.state.focusedSpan;
