@@ -104,7 +104,7 @@ const CheckBoxQuestions = (props: Props) => {
       (!getFocus &&
         !isEqual(changeItem, answerValue) &&
         isObject(answerValue)) ||
-      (isString(answerValue) && !isEmpty(changeItem))
+      (!getFocus && isString(answerValue) && !isEmpty(changeItem))
     ) {
       onChange(changeItem);
       setFocus(false);
