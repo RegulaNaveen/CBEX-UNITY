@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import MenuItem from 'apollo-react/components/MenuItem';
 import Select from 'apollo-react/components/Select';
-import { isEqual, isEmpty, isObject } from 'lodash';
+import { isEqual, isEmpty, isObject, isString } from 'lodash';
 import { FormControl } from '@material-ui/core';
 import useUpdateEffect from '../../../../hooks/useUpdateEffect';
 
@@ -89,8 +89,7 @@ const CheckBoxQuestions = (props: Props) => {
         activeElement?.className?.match('Mui-focusVisible') ||
           activeElement?.className?.match('MuiListItem-button') ||
           activeElement?.className?.match('PrivateSwitchBase') ||
-          activeElement?.className?.match('Mui-selected') ||
-          activeElement?.className?.match('MuiInput-input')
+          activeElement?.className?.match('Mui-selected')
       )
     );
     if (
@@ -102,14 +101,18 @@ const CheckBoxQuestions = (props: Props) => {
 
   const onBlurCheckBox = () => {
     if (
-      !getFocus &&
-      !isEqual(changeItem, answerValue) &&
-      isObject(answerValue)
+      (!getFocus &&
+        !isEqual(changeItem, answerValue) &&
+        isObject(answerValue)) ||
+      (isString(answerValue) && !isEmpty(changeItem))
     ) {
       onChange(changeItem);
       setFocus(false);
     }
-    if (!getFocus) onClose();
+    if (!getFocus) {
+      setFocus(false);
+      onClose();
+    }
   };
   useUpdateEffect(() => {
     if (changeItem.length !== answerValue.length) setChangeItem(answerValue);
