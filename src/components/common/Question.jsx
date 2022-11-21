@@ -1198,6 +1198,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
                   answerValue={answerValueComplex || ''}
                   finalOptions={finalOptions}
                   disabled={checkDisableFlag() || isNotApplicable}
+                  currentSFanswer={this.props.currentSFanswer}
+                  sfField={sfField}
+                  sfObject={sfObject}
                   onOpen={() => concurrencyFocusHandler()}
                   onClose={() => {
                     concurrencyBlurHandler();

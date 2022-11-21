@@ -4,7 +4,9 @@ import MenuItem from 'apollo-react/components/MenuItem';
 import Select from 'apollo-react/components/Select';
 import { isEqual, isEmpty, isObject, isString } from 'lodash';
 import { FormControl } from '@material-ui/core';
+import { connect } from 'react-redux';
 import useUpdateEffect from '../../../../hooks/useUpdateEffect';
+import { getLookUpOptionsSelector } from '../../../../redux/selectors';
 
 type Props = {
   answerValue: Array,
@@ -15,7 +17,9 @@ type Props = {
   onChange(): void,
   isNotApplicable: any,
   blurSpan: any,
-  focusSpan: any
+  focusSpan: any,
+  sfField: any,
+  sfObject: any
 };
 const CheckBoxQuestions = (props: Props) => {
   const {
@@ -27,16 +31,23 @@ const CheckBoxQuestions = (props: Props) => {
     blurSpan,
     focusSpan,
     finalOptions,
-    isNotApplicable
+    isNotApplicable,
+    options,
+    sfObject,
+    sfField
   } = props;
   const [changeItem, setChangeItem] = useState(answerValue || []);
   const [getFocus, setFocus] = useState(false);
   const [getSpan, setSpan] = useState(false);
   const checkBoxRef = useRef();
+  const finalLov =
+    finalOptions?.toJS().length > 0
+      ? finalOptions
+      : options[`SF#${sfObject}_SF#${sfField}`];
   let selectItems = null;
   const selectedNames = [];
-  if (!isEmpty(finalOptions)) {
-    selectItems = finalOptions.map(item => {
+  if (!isEmpty(finalLov)) {
+    selectItems = finalLov.map(item => {
       if (changeItem?.indexOf(item) > -1) {
         selectedNames.push(item);
       }
@@ -95,11 +106,12 @@ const CheckBoxQuestions = (props: Props) => {
     if (
       activeElement?.className?.match('task-wrapper') ||
       activeElement?.className?.match('makeStyles-truncate')
-    )
+    ) {
       setFocus(false);
+    }
   }, [activeElement]);
 
-  const onBlurCheckBox = () => {
+  const onBlurCheckBox = event => {
     if (
       (!getFocus &&
         !isEqual(changeItem, answerValue) &&
@@ -133,15 +145,14 @@ const CheckBoxQuestions = (props: Props) => {
       <FormControl
         className="checkboxtype"
         fullWidth
-        disabled={disabled || isNotApplicable}
         onBlur={onBlurCheckBox}
         onKeyDown={handleKeyDown}
       >
         <Select
           key={answerValue.length}
           value={!isEmpty(changeItem) ? changeItem : []}
-          finalOptions={finalOptions}
           onChange={e => onChangeItem(e)}
+          disabled={disabled}
           renderValue={selected => {
             if (isEmpty(selected)) return 'Select';
             return selectedNames.join(', ');
@@ -156,4 +167,7 @@ const CheckBoxQuestions = (props: Props) => {
     </div>
   );
 };
-export default CheckBoxQuestions;
+const mapStateToProps = state => ({
+  options: getLookUpOptionsSelector(state)
+});
+export default connect(mapStateToProps)(CheckBoxQuestions);
