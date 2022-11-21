@@ -2,17 +2,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import MenuItem from 'apollo-react/components/MenuItem';
 import Select from 'apollo-react/components/Select';
-import {
-  isObject,
-  isEqual,
-  isEmpty,
-  xor,
-  has,
-  isString,
-  isArray
-} from 'lodash';
-import useUpdateEffect from '../../../../hooks/useUpdateEffect';
+import { isEqual, isEmpty, isObject, isString } from 'lodash';
 import { FormControl } from '@material-ui/core';
+import { connect } from 'react-redux';
+import useUpdateEffect from '../../../../hooks/useUpdateEffect';
+import { getLookUpOptionsSelector } from '../../../../redux/selectors';
 
 type Props = {
   answerValue: Array,
@@ -23,9 +17,10 @@ type Props = {
   onChange(): void,
   isNotApplicable: any,
   blurSpan: any,
-  focusSpan: any
+  focusSpan: any,
+  sfField: any,
+  sfObject: any
 };
-
 const CheckBoxQuestions = (props: Props) => {
   const {
     answerValue,
@@ -36,17 +31,23 @@ const CheckBoxQuestions = (props: Props) => {
     blurSpan,
     focusSpan,
     finalOptions,
-    isNotApplicable
+    isNotApplicable,
+    options,
+    sfObject,
+    sfField
   } = props;
-
   const [changeItem, setChangeItem] = useState(answerValue || []);
   const [getFocus, setFocus] = useState(false);
-  const [checkBoxFocus, setCheckBoxFocus] = useState(false);
+  const [getSpan, setSpan] = useState(false);
   const checkBoxRef = useRef();
+  const finalLov =
+    finalOptions?.toJS().length > 0
+      ? finalOptions
+      : options[`SF#${sfObject}_SF#${sfField}`];
   let selectItems = null;
   const selectedNames = [];
-  if (!isEmpty(finalOptions)) {
-    selectItems = finalOptions.map(item => {
+  if (!isEmpty(finalLov)) {
+    selectItems = finalLov.map(item => {
       if (changeItem?.indexOf(item) > -1) {
         selectedNames.push(item);
       }
@@ -60,17 +61,7 @@ const CheckBoxQuestions = (props: Props) => {
   const onChangeItem = e => {
     setChangeItem(e.target.value);
   };
-  const onBlurCheckBox = () => {
-    if (
-      !getFocus &&
-      blurSpan &&
-      !isEqual(changeItem, answerValue) &&
-      !isEmpty(answerValue)
-    ) {
-      onChange(changeItem);
-    }
-    onClose();
-  };
+
   const useActiveElement = () => {
     const [listenersReady, setListenersReady] = React.useState(
       false
@@ -79,7 +70,7 @@ const CheckBoxQuestions = (props: Props) => {
       document.activeElement
     );
 
-    React.useEffect(() => {
+    useEffect(() => {
       const onFocus = event => setActiveElement(event.target);
 
       window.addEventListener('focus', onFocus, true);
@@ -99,39 +90,69 @@ const CheckBoxQuestions = (props: Props) => {
 
   const { activeElement, listenersReady } = useActiveElement();
 
-  React.useEffect(() => {
+  useEffect(() => {
+    setSpan(focusSpan);
+  }, [focusSpan]);
+
+  useEffect(() => {
     setFocus(
       !isEmpty(
         activeElement?.className?.match('Mui-focusVisible') ||
           activeElement?.className?.match('MuiListItem-button') ||
-          activeElement?.className?.match('MuiInput-input') ||
-          activeElement?.className?.match('PrivateSwitchBase')
+          activeElement?.className?.match('PrivateSwitchBase') ||
+          activeElement?.className?.match('Mui-selected')
       )
     );
-    getFocus && checkBoxFocus ? onOpen() : onClose();
+    if (
+      activeElement?.className?.match('task-wrapper') ||
+      activeElement?.className?.match('makeStyles-truncate')
+    ) {
+      setFocus(false);
+    }
   }, [activeElement]);
 
+  const onBlurCheckBox = event => {
+    if (
+      (!getFocus &&
+        !isEqual(changeItem, answerValue) &&
+        isObject(answerValue)) ||
+      (!getFocus && isString(answerValue) && !isEmpty(changeItem))
+    ) {
+      onChange(changeItem);
+      setFocus(false);
+    }
+    if (!getFocus) {
+      setFocus(false);
+      onClose();
+    }
+  };
   useUpdateEffect(() => {
     if (changeItem.length !== answerValue.length) setChangeItem(answerValue);
   }, [answerValue.length]);
-  const onFocusCheckBox = () => {
-    onOpen();
+  const onFocusCheckBox = event => {
+    if (getFocus || event.target.localName === 'li') onOpen();
+  };
+  const handleKeyDown = event => {
+    if (event.key === 'Tab') onClose();
   };
   return (
     <div
       tabIndex={0}
-      onFocus={onFocusCheckBox}
-      onBlur={onBlurCheckBox}
       className="selectSpan"
+      onFocus={onFocusCheckBox}
       ref={checkBoxRef}
     >
-      <FormControl className="checkboxtype" fullWidth>
+      <FormControl
+        className="checkboxtype"
+        fullWidth
+        onBlur={onBlurCheckBox}
+        onKeyDown={handleKeyDown}
+      >
         <Select
           key={answerValue.length}
           value={!isEmpty(changeItem) ? changeItem : []}
-          finalOptions={finalOptions}
-          disabled={disabled || isNotApplicable}
           onChange={e => onChangeItem(e)}
+          disabled={disabled}
           renderValue={selected => {
             if (isEmpty(selected)) return 'Select';
             return selectedNames.join(', ');
@@ -146,4 +167,7 @@ const CheckBoxQuestions = (props: Props) => {
     </div>
   );
 };
-export default CheckBoxQuestions;
+const mapStateToProps = state => ({
+  options: getLookUpOptionsSelector(state)
+});
+export default connect(mapStateToProps)(CheckBoxQuestions);
