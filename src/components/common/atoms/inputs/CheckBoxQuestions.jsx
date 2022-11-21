@@ -112,8 +112,6 @@ const CheckBoxQuestions = (props: Props) => {
     ) {
       setFocus(false);
     }
-    console.log(activeElement.localName, activeElement.localName === 'li');
-    console.log(getFocus, 'focus');
   }, [activeElement]);
 
   const onBlurCheckBox = event => {
