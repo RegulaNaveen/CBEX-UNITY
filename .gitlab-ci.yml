@@ -69,7 +69,7 @@ test:
     - uat
   script:
     - yarn install #v1.22.5
-    - yarn test
+    #- yarn test
     - yarn coverage
   artifacts:
     paths:
