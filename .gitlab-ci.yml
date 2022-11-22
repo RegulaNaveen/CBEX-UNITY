@@ -14,7 +14,7 @@ stages:
   - prebuild
   #- sonar #sonar report
   #- test 
-  #- blackduckscan
+  - blackduckscan
   - builddev
   - deploydev
   - builddev2
