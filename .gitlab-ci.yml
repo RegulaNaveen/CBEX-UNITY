@@ -4,7 +4,7 @@ workflow:
 
 include:
   - local: devops/vars/global.yml
-    stage: prebuild
+  - stage: prebuild
   - project: 'CBEx/devops'
     ref: test
     file: /gitlab_balckduck_scan.yml
