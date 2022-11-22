@@ -151,7 +151,7 @@ switch (environment) {
     COGNITO_HOST = 'https://dev-unity.auth.us-east-1.amazoncognito.com';
     CLIENT_ID = 'uf2jbhv4jcprcdiqc5rupg665';
     REDIRECTION_URL = 'https://dev-unity.dev.iqvia.app/';
-    // REDIRECTION_URL = 'http://localhost:8080';
+    REDIRECTION_URL = 'http://localhost:8080';
     UBUILD_ARTIFACT = 'https://dev-ubuild.dev.iqvia.app/main.js';
     SF_HOST_URL = 'https://iqvia--crm.lightning.force.com/';
     SOCKET_URL =
@@ -229,6 +229,8 @@ const NOTIFICATION = {
   NOTIFICATION_API_URL
 };
 
+const APPROVALS_URL = `${PROPOSAL_API_URL}/approvals`;
+
 export {
   AUTH,
   PROPOSAL,
@@ -240,5 +242,6 @@ export {
   PROFILE,
   NOTIFICATION,
   NOTES_SOCKET_URL,
-  LAUNCH_DARKLY_CLIENT_ID
+  LAUNCH_DARKLY_CLIENT_ID,
+  APPROVALS_URL
 };

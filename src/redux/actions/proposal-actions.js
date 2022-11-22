@@ -2,10 +2,9 @@
 import { isEmpty, cloneDeep, uniqBy } from 'lodash';
 import { fromJS } from 'immutable';
 import axios from 'axios';
-import { INITIAL_LIST_VAL } from '../../components/common/PriceModeler';
+import type { Dispatch, ThunkAction } from './action-types';
 
 import { REDUX_TYPES, API } from '../../constants';
-import type { Dispatch, ThunkAction } from './action-types';
 
 import {
   getProposalInfo,
@@ -19,7 +18,6 @@ import {
   getValidatedProposalData,
   editProposalQuestionData,
   deleteProposalQuestionData,
-  getProposalCount,
   getPaginateProposal,
   getPickListLookupSfData,
   fetchAdditionalBoxLink,
@@ -32,10 +30,9 @@ import {
   getAllProposals
 } from '../../api/proposal';
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
-import { getUniqueMilestones, getBidList } from '../selectors/proposal';
-import { getProposalIdlist } from '../../utils/utils';
+import { getUniqueMilestones } from '../selectors/proposal';
+import { getErrorMessage, getProposalIdlist } from '../../utils/utils';
 import launchDarkly from '../../utils/launchDarkly';
-import { fetchNotes } from './notepad-actions';
 import { DEFAULT } from '../../constants/app';
 import isPriceModelerQuestion from '../../utils/isPriceModelerQuestion';
 import featureFlags from '../../constants/featureFlags';
@@ -80,7 +77,6 @@ const {
   CHANGE_BID,
   ADD_NEW_BID,
   NEW_BID_CREATED,
-  PROPOSAL_DETAIL_UPDATE,
   UPDATE_LOOKUP_OPTIONS,
   BOX_ADDITIONAL_LINK,
   BOX_ADDITIONAL_LINK_ERROR,
@@ -197,11 +193,6 @@ export function setNotApplicableQuestion(
 export function setNotApplicableQuestionFromSocket(questionId, questionStatus) {
   return async (dispatch, getState) => {
     try {
-      // dispatch({
-      //   type: UPDATE_NOT_APPLICABLE_PROGRESS,
-      //   payload: { questionId, loading: true }
-      // });
-
       dispatch({
         type: UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE,
         payload: { questionId, questionStatus }
@@ -680,12 +671,11 @@ function filterGroup(
 ) {
   if (logic === 'AND') {
     return uniqBy(filterCallback(allQuestions), 'questionId');
-  } else {
-    return uniqBy(
-      [...filteredQuestions, ...filterCallback(allQuestions, filterName)],
-      'questionId'
-    );
   }
+  return uniqBy(
+    [...filteredQuestions, ...filterCallback(allQuestions, filterName)],
+    'questionId'
+  );
 }
 
 export function getQuestionsFilterApplied(questionsArr, questionsFilter) {
@@ -693,7 +683,7 @@ export function getQuestionsFilterApplied(questionsArr, questionsFilter) {
   questionsFilter.entrySeq().forEach(([groupName, group]) => {
     let withinGroupFilteredQuestions = [];
     // Set the logic for current filter Group
-    let logic = group.get('logic');
+    const logic = group.get('logic');
     let considerGroup = false;
 
     group.entrySeq().forEach(([filterName, filter]) => {
@@ -767,7 +757,7 @@ export function onQuestionsFilterApplied(questionsFilter) {
     questionsFilter.entrySeq().forEach(([groupName, group]) => {
       let withinGroupFilteredQuestions = [];
       // Set the logic for current filter Group
-      let logic = group.get('logic');
+      const logic = group.get('logic');
       let considerGroup = false;
 
       group.entrySeq().forEach(([filterName, filter]) => {
@@ -1074,22 +1064,6 @@ export const callPickListLookupSfData = (): ThunkAction<string, Object> => {
 };
 
 /**
- * Get Error Message from response
- */
-export function getErrorMessage(error) {
-  if (error.response) {
-    let msg = error.response.data.message;
-    const isErr400 = error.response.status === 400;
-    const isErr404 = error.response.status === 404;
-    if (isErr400 && isEmpty(msg)) msg = DEFAULT.ERROR_400;
-    if (isErr404 && isEmpty(msg)) msg = DEFAULT.ERROR_404;
-    if (!isErr400 && !isErr404 && isEmpty(msg)) msg = DEFAULT.REQUEST_FAILED;
-    return msg;
-  }
-  return 'Unexpected error occurred';
-}
-
-/**
  * Fetch All Opportunity Type
  */
 export const fetchOTListData = () => async () => {
@@ -1245,20 +1219,20 @@ export const setShowNaCheckbox = val => {
   };
 };
 
-export const fetchUserTagFlagInQuestion = () => {
-  return async dispatch => {
-    const answerUserTagFlagValue = await launchDarkly(
-      featureFlags.ANSWER_USER_TAG
-    );
-    dispatch(setCanUserTagInQuestion(answerUserTagFlagValue));
-  };
-};
-
 export const setCanUserTagInQuestion = can => {
   return dispatch => {
     dispatch({
       type: SET_CAN_USER_TAG_IN_QUESTION,
       payload: can
     });
+  };
+};
+
+export const fetchUserTagFlagInQuestion = () => {
+  return async dispatch => {
+    const answerUserTagFlagValue = await launchDarkly(
+      featureFlags.ANSWER_USER_TAG
+    );
+    dispatch(setCanUserTagInQuestion(answerUserTagFlagValue));
   };
 };

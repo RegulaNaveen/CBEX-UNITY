@@ -159,7 +159,6 @@ const Autocomplete = props => {
         multiple
         options={options || []}
         chipColor="white"
-        size="small"
         limitChips={5}
         disableCloseOnSelect={false}
         value={value}

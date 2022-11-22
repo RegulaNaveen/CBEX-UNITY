@@ -210,7 +210,7 @@ const QuestionItem = ({
 
 QuestionItem.propTypes = {
   question: PropTypes.object.isRequired,
-  approvalSectionTitle: PropTypes.object.isRequired,
+  approvalSectionTitle: PropTypes.string.isRequired,
   eventCategories: PropTypes.object.isRequired,
   trackEvent: PropTypes.func.isRequired
 };

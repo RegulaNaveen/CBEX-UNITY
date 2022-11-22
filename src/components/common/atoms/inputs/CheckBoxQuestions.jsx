@@ -129,7 +129,6 @@ const CheckBoxQuestions = (props: Props) => {
         <Select
           key={answerValue.length}
           value={!isEmpty(changeItem) ? changeItem : []}
-          finalOptions={finalOptions}
           disabled={disabled || isNotApplicable}
           onChange={e => onChangeItem(e)}
           renderValue={selected => {

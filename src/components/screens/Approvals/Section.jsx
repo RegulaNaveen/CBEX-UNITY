@@ -52,6 +52,7 @@ const Section = ({ approval }) => {
           <QuestionItem
             question={questionHash[item] || {}}
             approvalSectionTitle={ApprovalSectionTitle}
+            key={item}
           />
         ))}
       </Grid>
@@ -60,6 +61,7 @@ const Section = ({ approval }) => {
           <QuestionItem
             question={questionHash[item] || {}}
             approvalSectionTitle={ApprovalSectionTitle}
+            key={item}
           />
         ))}
       </Grid>
