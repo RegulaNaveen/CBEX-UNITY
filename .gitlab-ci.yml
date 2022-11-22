@@ -7,9 +7,9 @@ include:
     stage: 
       - prebuild
   - project: 'CBEx/devops'
-      ref: test
-      file: /gitlab_balckduck_scan.yml
-      when: always
+    ref: test
+    file: /gitlab_balckduck_scan.yml
+    when: always
 
 #include:
   #- project: 'CBEx/unity/Unity-QA'
