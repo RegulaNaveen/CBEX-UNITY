@@ -10,14 +10,6 @@ include:
     file: /gitlab_balckduck_scan.yml
     when: always
 
-include:
-  - project: 'CBEx/unity/Unity-QA'
-    ref: Unity_QA_Testing
-    file: /.gitlab-ci.yml
-    when: always
-    needs:
-      - deployqa
-
 stages:
   - prebuild
   #- sonar #sonar report
