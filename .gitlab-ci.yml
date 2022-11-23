@@ -70,7 +70,7 @@ test:
   script:
     - yarn install #v1.22.5
     #- yarn test
-    - yarn coverage
+    #- yarn coverage
   artifacts:
     paths:
       - coverage/
