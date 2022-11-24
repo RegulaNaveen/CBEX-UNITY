@@ -18,7 +18,7 @@ const PriceModelerWithSocketContext = () => (
   </Provider>
 );
 
-describe.skip('Price Modeler concurrency', () => {
+describe('Price Modeler concurrency', () => {
   let ws;
   beforeAll(() => {
     ws = new WS('ws://localhost:8081');
@@ -45,7 +45,7 @@ describe.skip('Price Modeler concurrency', () => {
       <PriceModelerWithSocketContext />
     );
     await waitFor(() => {
-      expect(getByText('Price Modeler Ballpark Estimate')).toBeInTheDocument();
+      expect(getByText('Price Modeler Estimate')).toBeInTheDocument();
     });
     // send "COST_ESTIMATE_CALCULATING" event message on websocket
     await ws.connected;
@@ -63,7 +63,7 @@ describe.skip('Price Modeler concurrency', () => {
       <PriceModelerWithSocketContext />
     );
     await waitFor(() => {
-      expect(getByText('Price Modeler Ballpark Estimate')).toBeInTheDocument();
+      expect(getByText('Price Modeler Estimate')).toBeInTheDocument();
     });
     // send "COST_ESTIMATE_CALCULATING" event message on websocket
     await ws.connected;
@@ -95,7 +95,7 @@ describe.skip('Price Modeler concurrency', () => {
       <PriceModelerWithSocketContext />
     );
     await waitFor(() => {
-      expect(getByText('Price Modeler Ballpark Estimate')).toBeInTheDocument();
+      expect(getByText('Price Modeler Estimate')).toBeInTheDocument();
     });
     // send "COST_ESTIMATE_UPDATE" event message on websocket
     const data = {
