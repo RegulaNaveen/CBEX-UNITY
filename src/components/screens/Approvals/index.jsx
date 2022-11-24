@@ -112,28 +112,28 @@ const Approvals = props => {
         <div>
           <BidHistory />
         </div>
-        <Panel hideButton maxWidth={700} minWidth={1540}>
-          <div
-            style={{
-              // border: '1px solid black',
-              display: 'flex',
-              marginBottom: '8px',
-              justifyContent: 'flex-end'
-            }}
+        {/* <Panel hideButton maxWidth={700} minWidth={1540}> */}
+        <div
+          style={{
+            // border: '1px solid black',
+            display: 'flex',
+            marginBottom: '8px',
+            justifyContent: 'flex-end'
+          }}
+        >
+          <Button
+            variant="secondary"
+            size="small"
+            icon={<Filter fontSize="extraSmall" />}
+            onClick={handleFilterClick}
           >
-            <Button
-              variant="secondary"
-              size="small"
-              icon={<Filter fontSize="extraSmall" />}
-              onClick={handleFilterClick}
-            >
-              {/* {selectActiveQuestionsFilterCount
+            {/* {selectActiveQuestionsFilterCount
                 ? `Filter (${activeQuestionsFilterCount})`
                 : 'Filter'} */}
-              Filter
-            </Button>
-          </div>
-        </Panel>
+            Filter
+          </Button>
+        </div>
+        {/* </Panel> */}
         {renderFilter()}
         {approvals?.length > 0 ? (
           approvals?.map(approval => {
@@ -150,23 +150,26 @@ const Approvals = props => {
               style={{
                 height: '60vh',
                 display: 'flex',
-                justifyContent: 'center',
-                flexDirection: 'column',
-                alignItems: 'center'
+                justifyContent: 'center'
+                // flexDirection: 'column',
+                // alignItems: 'center'
               }}
             >
               <Card
                 style={{
-                  maxWidth: 426,
-                  height: 200,
+                  maxWidth: 600,
+                  height: 150,
                   display: 'flex',
                   justifyContent: 'center',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  color: '#e0e0e0'
+                  color: '#7f7f7f',
+                  padding: '20px'
                 }}
               >
-                <ClipboardCheck style={{ fontSize: '48px' }} />
+                <ClipboardCheck
+                  style={{ fontSize: '48px', marginBottom: '10px' }}
+                />
                 No Approval associated with your selected bid
               </Card>
             </div>
