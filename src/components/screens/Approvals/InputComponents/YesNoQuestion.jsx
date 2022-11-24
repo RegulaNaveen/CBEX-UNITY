@@ -8,10 +8,12 @@ const YesNoQuestion = ({
   lastAnswer,
   userData,
   socketContext,
-  trackMatomoEventSubmitAnswer
+  trackMatomoEventSubmitAnswer,
+  checkDisableFlag
 }) => {
   try {
     const dispatch = useDispatch();
+    const { questionLockWrapper, questionUnlockWrapper } = socketContext;
     const changeHandler = (selectedValue: string, lastAnswer: string) => {
       const { proposalId, questionId } = question;
       if (lastAnswer !== selectedValue) {
@@ -32,10 +34,16 @@ const YesNoQuestion = ({
       <>
         <YNDropdown
           items={optionsYN}
-          disabled={false}
+          disabled={checkDisableFlag()}
           questionId={question.questionId}
           value={lastAnswer.answer}
           onClick={val => changeHandler(val, lastAnswer.answer)}
+          onFocus={() => {
+            questionLockWrapper(question?.questionId);
+          }}
+          onBlur={() => {
+            questionUnlockWrapper(question?.questionId);
+          }}
         />
       </>
     );

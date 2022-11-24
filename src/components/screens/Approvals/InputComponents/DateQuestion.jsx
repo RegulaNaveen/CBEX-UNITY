@@ -9,9 +9,11 @@ const DateQuestion = ({
   lastAnswer,
   userData,
   socketContext,
-  trackMatomoEventSubmitAnswer
+  trackMatomoEventSubmitAnswer,
+  checkDisableFlag
 }) => {
   const dispatch = useDispatch();
+  const { questionLockWrapper, questionUnlockWrapper } = socketContext;
   const resetDate = () => {
     const { proposalId, questionId } = question;
     dispatch(
@@ -52,13 +54,18 @@ const DateQuestion = ({
   };
 
   return (
-    <QuestionDatePicker
-      value={lastAnswer.answer}
-      resetDate={resetDate}
-      handleDayChange={handleDayChange}
-      onFocus={() => {}}
-      onBlur={() => {}}
-    />
+      <QuestionDatePicker
+        disabled={checkDisableFlag()}
+        value={lastAnswer.answer}
+        resetDate={resetDate}
+        handleDayChange={handleDayChange}
+        onFocus={() => {
+          questionLockWrapper(question?.questionId);
+        }}
+        onBlur={() => {
+          questionUnlockWrapper(question?.questionId);
+        }}
+      />
   );
 };
 

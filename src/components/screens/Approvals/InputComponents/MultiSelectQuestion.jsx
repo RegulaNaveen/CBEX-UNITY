@@ -14,10 +14,12 @@ const MultiSelectQuestion = ({
   lastAnswer,
   userData,
   socketContext,
-  trackMatomoEventSubmitAnswer
+  trackMatomoEventSubmitAnswer,
+  checkDisableFlag
 }) => {
   try {
     const dispatch = useDispatch();
+    const { questionLockWrapper, questionUnlockWrapper } = socketContext;
     const questionType = question?.answerConfiguration?.type;
     const sfObject = question?.sfObject;
     const sfField = question?.sfField;
@@ -53,17 +55,21 @@ const MultiSelectQuestion = ({
     };
 
     return (
-      <AutoCompleteWithAddOption
-        sfObject={sfObject}
-        sfField={sfField}
-        lov={finalOptions}
-        onFocus={() => {}}
-        onBlur={() => {}}
-        disabled={false}
-        multiple
-        answer={answerValue}
-        onChange={changeHandler}
-      />
+        <AutoCompleteWithAddOption
+          sfObject={sfObject}
+          sfField={sfField}
+          lov={finalOptions}
+          onFocus={() => {
+            questionLockWrapper(question?.questionId);
+          }}
+          onBlur={() => {
+            questionUnlockWrapper(question?.questionId);
+          }}
+          disabled={checkDisableFlag()}
+          multiple
+          answer={answerValue}
+          onChange={changeHandler}
+        />
     );
   } catch (error) {
     console.error(error);

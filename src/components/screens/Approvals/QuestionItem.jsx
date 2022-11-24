@@ -125,12 +125,29 @@ const QuestionItem = ({
 
   const renderQuestion = () => {
     const lastAnswer = getLastAnswer(question);
+    const isQuestionLocked = () => {
+      return question?.questionLockInfo && question?.questionLockInfo?.userInfo;
+    };
+
+    const isQuestionLockedByOther = () => {
+      return (
+        isQuestionLocked() &&
+        getUserEmail() !== question?.questionLockInfo?.userInfo
+      );
+    };
+
+    const checkDisableFlag = () => {
+      if (isQuestionLockedByOther()) return true;
+
+      return false;
+    };
     const inputProps = {
       question,
       lastAnswer,
       userData: getUserData(),
       socketContext,
-      trackMatomoEventSubmitAnswer
+      trackMatomoEventSubmitAnswer,
+      checkDisableFlag
     };
 
     if (question?.section?.sectionName === 'Proposal Team') {

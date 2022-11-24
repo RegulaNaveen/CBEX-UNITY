@@ -9,9 +9,11 @@ const NumberQuestion = ({
   lastAnswer,
   userData,
   socketContext,
-  trackMatomoEventSubmitAnswer
+  trackMatomoEventSubmitAnswer,
+  checkDisableFlag
 }) => {
   const dispatch = useDispatch();
+  const { questionLockWrapper, questionUnlockWrapper } = socketContext;
 
   const handleTextChange = (textValue, lastAnswer, editorData) => {
     const { proposalId, questionId } = question;
@@ -55,14 +57,17 @@ const NumberQuestion = ({
       );
     }
     trackMatomoEventSubmitAnswer(String(textValue).trim());
+    questionUnlockWrapper(question?.questionId);
   };
   return (
     <>
       <TextArea
+        disabled={checkDisableFlag()}
         className="proposal-text-area"
         type="number"
         value={lastAnswer.answer}
         onBlur={handleTextChange}
+        onFocus={() => questionLockWrapper(question?.questionId)}
       />
     </>
   );

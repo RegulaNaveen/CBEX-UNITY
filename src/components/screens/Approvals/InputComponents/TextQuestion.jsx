@@ -17,7 +17,8 @@ const TextQuestion = ({
   lastAnswer,
   userData,
   socketContext,
-  trackMatomoEventSubmitAnswer
+  trackMatomoEventSubmitAnswer,
+  checkDisableFlag
 }) => {
   const dispatch = useDispatch();
   const answerValue = lastAnswer.answer || '';
@@ -33,29 +34,6 @@ const TextQuestion = ({
   const richTextData = parseFormattedData || {
     html: '',
     value: { blocks: [] }
-  };
-
-  const isQuestionLocked = () => {
-    return question?.questionLockInfo && question?.questionLockInfo?.userInfo;
-  };
-
-  const isQuestionLockedByOther = () => {
-    console.log('tapas questio lioc', question?.questionLockInfo, userData);
-    return (
-      isQuestionLocked() &&
-      userData?.name !== question?.questionLockInfo?.userInfo
-    );
-  };
-
-  const checkDisableFlag = () => {
-    if (isQuestionLockedByOther()) return true;
-    // if (NaLoading) return true;
-
-    // return (
-    //   checkNonEditableFields(noneditableField, sfField, sfObject) ||
-    //   !isCurrentBid
-    // );
-    return false;
   };
 
   const handleRichTextChange = editorData => {
@@ -116,7 +94,6 @@ const TextQuestion = ({
       questionUnlockWrapper(question?.questionId);
     },
     onFocus: () => {
-      console.log('tapas focused text');
       questionLockWrapper(question?.questionId);
     }
   };
