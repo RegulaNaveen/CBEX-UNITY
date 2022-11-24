@@ -10,17 +10,17 @@ include:
     when: always
 
 #include:
-  #- project: 'CBEx/unity/Unity-QA'
-    #ref: Unity_QA_Testing
-    #file: /.gitlab-ci.yml
-    #when: always
-    #needs:
-      #- deployqa
+#- project: 'CBEx/unity/Unity-QA'
+#ref: Unity_QA_Testing
+#file: /.gitlab-ci.yml
+#when: always
+#needs:
+#- deployqa
 
 stages:
   - prebuild
   #- sonar #sonar report
-  #- test 
+  #- test
   - blackduckscan
   - builddev
   - deploydev
@@ -60,17 +60,17 @@ sonar:
   script:
     - apk upgrade --update-cache --available && apk add openssl && rm -rf /var/cache/apk/*
     - sonar-scanner -X -Dsonar.branch.name=$CI_COMMIT_REF_NAME -Dsonar.projectKey=$CI_PROJECT_NAME
-  
+
 test:
   stage: prebuild
   image: node:14
-  except: 
+  except:
     - qa
     - uat
   script:
     - yarn install #v1.22.5
     #- yarn test
-    #- yarn coverage
+    - yarn coverage
   artifacts:
     paths:
       - coverage/
@@ -192,8 +192,8 @@ deploydev2:
     - dev3
   only:
     - L4
-  script:    
-    - source build.env  
+  script:
+    - source build.env
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
   tags:
@@ -234,7 +234,7 @@ deployl4:
   only:
     - dev
     - tags
-  script:    
+  script:
     - source build.env
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
@@ -333,8 +333,8 @@ uat:
   variables:
     Environment: $CI_JOB_NAME
   needs:
-  #- deployqa
-  - pafexecution_regression
+    #- deployqa
+    - pafexecution_regression
   when: manual
   only:
     - tags
@@ -414,7 +414,7 @@ pafexecution_regression:
   stage: pafexecution_regression
   needs:
     - deployqa
-  when: always 
+  when: always
   only:
     - tags
   variables:
@@ -423,7 +423,6 @@ pafexecution_regression:
     project: 'CBEx/unity/Unity-QA'
     branch: Unity_QA_Testing
     strategy: depend
-
 
 deploystack:
   stage: deploystack
@@ -436,7 +435,7 @@ deploystack:
       when: always
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   #dependencies:
-    #- l4
+  #- l4
   script:
     - source build.env
     - aws cloudformation validate-template --template-body file://devops/cloudformation/cbex-unity-frontend-cf.yml --region $Region
