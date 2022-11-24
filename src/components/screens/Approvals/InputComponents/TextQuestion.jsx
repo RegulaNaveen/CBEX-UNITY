@@ -23,7 +23,7 @@ const TextQuestion = ({
   const answerValue = lastAnswer.answer || '';
   const formattedAnswer =
     has(lastAnswer, 'formattedAnswer') && lastAnswer.formattedAnswer;
-  const { questionLockWrappers, questionUnlockWrapper } = socketContext;
+  const { questionLockWrapper, questionUnlockWrapper } = socketContext;
 
   const parseFormattedData =
     !formattedAnswer || isObject(formattedAnswer)
@@ -35,14 +35,27 @@ const TextQuestion = ({
     value: { blocks: [] }
   };
 
+  const isQuestionLocked = () => {
+    return question?.questionLockInfo && question?.questionLockInfo?.userInfo;
+  };
+
+  const isQuestionLockedByOther = () => {
+    console.log('tapas questio lioc', question?.questionLockInfo, userData);
+    return (
+      isQuestionLocked() &&
+      userData?.name !== question?.questionLockInfo?.userInfo
+    );
+  };
+
   const checkDisableFlag = () => {
-    if (socketContext.isQuestionLockedByOther()) return true;
+    if (isQuestionLockedByOther()) return true;
     // if (NaLoading) return true;
 
     // return (
     //   checkNonEditableFields(noneditableField, sfField, sfObject) ||
     //   !isCurrentBid
     // );
+    return false;
   };
 
   const handleRichTextChange = editorData => {
@@ -74,7 +87,7 @@ const TextQuestion = ({
     richTextHtml: richTextData.html,
     enableFocus: true,
     isEditable: false,
-    disabled: checkDisableFlag,
+    disabled: checkDisableFlag(),
     onBlur: data => {
       let saveDate = false;
       const previousAnsText = getConvertedAnsString(answerValue).trim();
@@ -102,8 +115,9 @@ const TextQuestion = ({
       }
       questionUnlockWrapper(question?.questionId);
     },
-    onfocus: () => {
-      questionLockWrappers(question?.questionId);
+    onFocus: () => {
+      console.log('tapas focused text');
+      questionLockWrapper(question?.questionId);
     }
   };
   return (
