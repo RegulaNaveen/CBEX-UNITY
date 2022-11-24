@@ -23,6 +23,7 @@ const TextQuestion = ({
   const answerValue = lastAnswer.answer || '';
   const formattedAnswer =
     has(lastAnswer, 'formattedAnswer') && lastAnswer.formattedAnswer;
+  const { questionLockWrappers, questionUnlockWrapper } = socketContext;
 
   const parseFormattedData =
     !formattedAnswer || isObject(formattedAnswer)
@@ -32,6 +33,16 @@ const TextQuestion = ({
   const richTextData = parseFormattedData || {
     html: '',
     value: { blocks: [] }
+  };
+
+  const checkDisableFlag = () => {
+    if (socketContext.isQuestionLockedByOther()) return true;
+    // if (NaLoading) return true;
+
+    // return (
+    //   checkNonEditableFields(noneditableField, sfField, sfObject) ||
+    //   !isCurrentBid
+    // );
   };
 
   const handleRichTextChange = editorData => {
@@ -63,7 +74,7 @@ const TextQuestion = ({
     richTextHtml: richTextData.html,
     enableFocus: true,
     isEditable: false,
-    disabled: false,
+    disabled: checkDisableFlag,
     onBlur: data => {
       let saveDate = false;
       const previousAnsText = getConvertedAnsString(answerValue).trim();
@@ -89,6 +100,10 @@ const TextQuestion = ({
       if (saveDate) {
         handleRichTextChange(data);
       }
+      questionUnlockWrapper(question?.questionId);
+    },
+    onfocus: () => {
+      questionLockWrappers(question?.questionId);
     }
   };
   return (
