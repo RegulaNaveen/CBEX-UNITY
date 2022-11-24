@@ -18,7 +18,7 @@ const PriceModelerWithSocketContext = () => (
   </Provider>
 );
 
-describe('Price Modeler concurrency', () => {
+describe.skip('Price Modeler concurrency', () => {
   let ws;
   beforeAll(() => {
     ws = new WS('ws://localhost:8081');
