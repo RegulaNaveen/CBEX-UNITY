@@ -112,7 +112,7 @@ deploydev:
     - tags
   script:
     - source build.env
-    - aws s3 sync dist/ s3://$BucketName/ --delete --region "us-east-1"
+    - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
   tags:
     - docker
@@ -243,7 +243,7 @@ deployl4:
   environment: l4
 
 
-.demo:  
+demo:  
   stage: builddemo
   image: node:14
   variables:
@@ -269,7 +269,7 @@ deployl4:
     - docker
   environment: demo
 
-.deploydemo:
+deploydemo:
   stage: deploydemo
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
