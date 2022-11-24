@@ -139,6 +139,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.0.6",
     "jest-runner-eslint": "^0.10.1",
+    "jest-websocket-mock": "^2.4.0",
     "jsdom": "^16.2.1",
     "jsdom-global": "^3.0.2",
     "mocha": "^7.1.1",

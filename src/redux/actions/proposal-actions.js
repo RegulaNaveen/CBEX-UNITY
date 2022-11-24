@@ -98,7 +98,9 @@ const {
   SET_PRICE_MODELER_FIELDS,
   ERROR_UPDATE_NOT_APPLICABLE,
   SET_CAN_USER_TAG_IN_QUESTION,
-  SET_APPROVAL_QUESTION_LOADING
+  SET_APPROVAL_QUESTION_LOADING,
+  SET_PRICE_MODELER_RECALCULATING,
+  PRICE_MODELER_UPDATE
 } = REDUX_TYPES.PROPOSAL;
 
 /**
@@ -238,6 +240,42 @@ export const setApprovalQuestionLoading = (questionId, value) => {
         type: SET_APPROVAL_QUESTION_LOADING,
         payload: { questionId, value }
       });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+/**
+ * Redux action function to set price modeler recalculating status
+ * @param {isRecalculating} boolean
+ */
+export const setPriceModelerRecalculationStatusAction = (
+  isRecalculating = false
+) => {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: SET_PRICE_MODELER_RECALCULATING,
+        payload: isRecalculating
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+/**
+ * Redux action function to update Price Modeler Estimate and reset recalcuting status
+ * @param {costUpdate} Object
+ */
+export const updatePriceModelerEstimateAction = (costUpdate = {}) => {
+  return async dispatch => {
+    try {
+      if (!isEmpty(costUpdate)) {
+        dispatch({ type: PRICE_MODELER_UPDATE, payload: costUpdate });
+      }
+      dispatch(setPriceModelerRecalculationStatusAction(false));
     } catch (error) {
       console.error(error);
     }

@@ -207,7 +207,7 @@ buildl4:
   variables:
     Environment: l4
   only:
-    - dev
+    #- dev
     - migration
     - tags
   script:
@@ -232,7 +232,7 @@ deployl4:
     - buildl4
   when: manual
   only:
-    - dev
+    #- dev
     - tags
   script:
     - source build.env
@@ -242,7 +242,8 @@ deployl4:
     - docker
   environment: l4
 
-demo:
+
+demo:  
   stage: builddemo
   image: node:14
   variables:
