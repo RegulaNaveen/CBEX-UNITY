@@ -415,7 +415,7 @@ pafexecution_regression:
   stage: pafexecution_regression
   needs:
     - deployqa
-  when: always
+  #when: always
   only:
     - tags
   variables:
