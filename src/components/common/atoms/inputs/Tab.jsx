@@ -142,7 +142,7 @@ const UnityTab = ({
    */
   const visibleTabs = () => {
     let tabsToReturn = tabs;
-    const isApprovalTab = approvalsFlag && showApprovalTab;
+    const isApprovalTab = approvalsFlag;
     if (!isApprovalTab) {
       tabsToReturn = tabsToReturn.filter(item => item.label !== 'Approvals');
     }

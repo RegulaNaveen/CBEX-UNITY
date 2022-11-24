@@ -8,26 +8,28 @@ import { List, Map } from 'immutable';
 import Link from 'apollo-react/components/Link';
 import { compose } from 'redux';
 import ApolloCheckbox from 'apollo-react/components/Checkbox';
+import ClipboardCheck from 'apollo-react-icons/ClipboardCheck';
+import Card from 'apollo-react/components/Card';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import {
   getOpportunityData,
-  getSelectedBid,
+  getSelectedBid
 } from '../../../redux/selectors/proposal';
 import BidHistory from '../../common/Bidhistory';
 import Section from './Section';
 import {
   getQuestionsFilters,
-  selectActiveQuestionsFilterCount,
+  selectActiveQuestionsFilterCount
 } from '../../../redux/selectors';
 import {
   clearQuestionsFilterAction,
-  onApplyQuestionsFilter,
+  onApplyQuestionsFilter
 } from '../../../redux/actions/proposal-actions';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import Grid from 'apollo-react/components/Grid';
 
-const Approvals = (props) => {
+const Approvals = props => {
   // console.log({ activeQuestionsFilterCount });
   const [approvals, setApprovals] = useState([]);
   const selectedBid = useSelector(getSelectedBid)?.toJS();
@@ -73,7 +75,7 @@ const Approvals = (props) => {
               <Grid container spacing={2} key={groupName} className={groupName}>
                 {group
                   .entrySeq()
-                  .filter((value) => value[0] !== 'logic')
+                  .filter(value => value[0] !== 'logic')
                   .map(([key, filter]) => (
                     <Grid
                       item
@@ -116,7 +118,7 @@ const Approvals = (props) => {
               // border: '1px solid black',
               display: 'flex',
               marginBottom: '8px',
-              justifyContent: 'flex-end',
+              justifyContent: 'flex-end'
             }}
           >
             <Button
@@ -133,8 +135,8 @@ const Approvals = (props) => {
           </div>
         </Panel>
         {renderFilter()}
-        {approvals.length > 0 ? (
-          approvals.map((approval) => {
+        {approvals?.length > 0 ? (
+          approvals?.map(approval => {
             return (
               <Section
                 key={approval.ApprovalSectionTitle}
@@ -143,7 +145,32 @@ const Approvals = (props) => {
             );
           })
         ) : (
-          <>No Approval Questions</>
+          <>
+            <div
+              style={{
+                height: '60vh',
+                display: 'flex',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                alignItems: 'center'
+              }}
+            >
+              <Card
+                style={{
+                  maxWidth: 426,
+                  height: 200,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  color: '#e0e0e0'
+                }}
+              >
+                <ClipboardCheck style={{ fontSize: '48px' }} />
+                No Approval associated with your selected bid
+              </Card>
+            </div>
+          </>
         )}
       </div>
     </>
@@ -151,12 +178,12 @@ const Approvals = (props) => {
 };
 
 const mapStateToProps = (state: Map) => ({
-  questionsFilters: getQuestionsFilters(state),
+  questionsFilters: getQuestionsFilters(state)
 });
 export default compose(
   withRouter,
   connect(mapStateToProps, {
     applyQuestionsFilter: onApplyQuestionsFilter,
-    clearQuestionsFilter: clearQuestionsFilterAction,
+    clearQuestionsFilter: clearQuestionsFilterAction
   })
 )(MatomoHOC(Approvals));
