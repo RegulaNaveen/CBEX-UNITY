@@ -52,7 +52,7 @@ module.exports = env => {
       ]
     },
     resolve: {
-      extensions: ['.js', '.jsx']
+      extensions: ['.js', '.jsx', '.mjs']
     },
     devServer: {
       contentBase: path.resolve(__dirname, 'dist'),
