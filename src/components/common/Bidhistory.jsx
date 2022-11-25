@@ -5,7 +5,7 @@ import chevronDown from '../../../img/chevron-down.svg';
 import {
   getBidList,
   getSelectedBid,
-  getIsQuestionAnswered
+  getIsQuestionAnswered,
 } from '../../redux/selectors/proposal';
 import { parseMomentDate } from '../../utils/DateUtils';
 import { Checkmark } from '../svg';
@@ -13,6 +13,9 @@ import { changeBid } from '../../redux/actions/proposal-actions';
 import PriceModeler from './PriceModeler';
 
 const BidHistory = () => {
+  const winLocationSearch = window.location.search;
+
+  const selectedView = new URLSearchParams(winLocationSearch).get('viewType');
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [showHoverText, setShowHoverText] = useState(false);
   const dispatch = useDispatch();
@@ -21,7 +24,7 @@ const BidHistory = () => {
   const selectedBid = useSelector(getSelectedBid);
   const isQuestionAnswered = useSelector(getIsQuestionAnswered);
 
-  const handleKeyPress = event => {
+  const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
       handleCollapse();
@@ -39,126 +42,131 @@ const BidHistory = () => {
 
   return (
     <>
-    { (bidList.length) ?
-    <div className="bid-history task-wrapper">
-      <button
-        id="arrow-icon"
-        className="task-icon-wrapper"
-        onClick={handleCollapse}
-        onKeyPress={handleKeyPress}
-        type="button"
-        tabIndex={0}
-      >
-        <img
-          className="task-icon"
-          src={isCollapsed ? chevronDown : chevronRight}
-          alt="question arrow"
-        />
-      </button>
-      {!isCollapsed ? (
-        <div
-          className="task-title-wrapper"
-          role="button"
-          onClick={handleCollapse}
-          onKeyPress={handleKeyPress}
-          tabIndex={-1}
-        >
-          <p id="task-title" className="task-title">
-            Bid History
-          </p>
-        </div>
-      ) : (
-        <div className="task-table-wrapper">
-          <div className="bid-history-content-wrapper">
-            <div className="bid-history-left-content">
-              <div
-                className="task-table-headers bid-history-title"
-                role="button"
-                onClick={handleCollapse}
-                onKeyPress={handleKeyPress}
-                tabIndex={-1}
-              >
-                <div className="task-title bid-title">
-                  <p>Bid History</p>
-                </div>
-              </div>
-              <p className="helper-text">
-                Select any bid to review questions and answers from that
-                iteration
+      {bidList.length ? (
+        <div className="bid-history task-wrapper">
+          <button
+            id="arrow-icon"
+            className="task-icon-wrapper"
+            onClick={handleCollapse}
+            onKeyPress={handleKeyPress}
+            type="button"
+            tabIndex={0}
+          >
+            <img
+              className="task-icon"
+              src={isCollapsed ? chevronDown : chevronRight}
+              alt="question arrow"
+            />
+          </button>
+          {!isCollapsed ? (
+            <div
+              className="task-title-wrapper"
+              role="button"
+              onClick={handleCollapse}
+              onKeyPress={handleKeyPress}
+              tabIndex={-1}
+            >
+              <p id="task-title" className="task-title">
+                Bid History
               </p>
-              <div className="task-table-row bid-list-wrapper">
-                <div className="bid-list-header-row">
-                  <div>Bid Number</div>
-                  <div>Bid Due Date</div>
-                </div>
-                <div
-                  style={{ width: '100%' }}
-                  onMouseEnter={() => {
-                    if (isQuestionAnswered && !showHoverText)
-                      setShowHoverText(true);
-                  }}
-                  onMouseLeave={() => {
-                    if (showHoverText) setShowHoverText(false);
-                  }}
-                >
-                  {bidList.length > 0 &&
-                    bidList.map(item => (
-                      <div
-                        onClick={() => {
-                          if (!isQuestionAnswered) dispatch(changeBid(item));
-                        }}
-                        className={`bid-list-row ${
-                          selectedBid.get('id') === item.bidId
-                            ? 'selected-bid'
-                            : ''
-                        } 
+            </div>
+          ) : (
+            <div className="task-table-wrapper">
+              <div className="bid-history-content-wrapper">
+                <div className="bid-history-left-content">
+                  <div
+                    className="task-table-headers bid-history-title"
+                    role="button"
+                    onClick={handleCollapse}
+                    onKeyPress={handleKeyPress}
+                    tabIndex={-1}
+                  >
+                    <div className="task-title bid-title">
+                      <p>Bid History</p>
+                    </div>
+                  </div>
+                  <p className="helper-text">
+                    Select any bid to review questions and answers from that
+                    iteration
+                  </p>
+                  <div className="task-table-row bid-list-wrapper">
+                    <div className="bid-list-header-row">
+                      <div>Bid Number</div>
+                      <div>Bid Due Date</div>
+                    </div>
+                    <div
+                      style={{ width: '100%' }}
+                      onMouseEnter={() => {
+                        if (isQuestionAnswered && !showHoverText)
+                          setShowHoverText(true);
+                      }}
+                      onMouseLeave={() => {
+                        if (showHoverText) setShowHoverText(false);
+                      }}
+                    >
+                      {bidList.length > 0 &&
+                        bidList.map((item) => (
+                          <div
+                            onClick={() => {
+                              if (!isQuestionAnswered)
+                                dispatch(changeBid(item));
+                            }}
+                            className={`bid-list-row ${
+                              selectedBid.get('id') === item.bidId
+                                ? 'selected-bid'
+                                : ''
+                            } 
                       ${isQuestionAnswered ? 'bid-switching-not-allowed' : ''}`}
-                        key={item.bidId}
-                      >
-                        <div>
-                          {item.bidName}  {( selectedBid.get('id') === item.bidId &&  selectedBid.get('bidStatus') ) ? 
-                          '(processing)' : 
-                          item.isCurrent && '(Current)'}
-                        </div>
-                        <div>{parseMomentDate(item.bidDueDate)}</div>
-                        {item.bidId === selectedBid.get('id') && (
-                          <Checkmark
-                            className="selected-bid-check"
-                            style={{ marginLeft: '6px' }}
-                          />
-                        )}
-                      </div>
-                    ))}
+                            key={item.bidId}
+                          >
+                            <div>
+                              {item.bidName}{' '}
+                              {selectedBid.get('id') === item.bidId &&
+                              selectedBid.get('bidStatus')
+                                ? '(processing)'
+                                : item.isCurrent && '(Current)'}
+                            </div>
+                            <div>{parseMomentDate(item.bidDueDate)}</div>
+                            {item.bidId === selectedBid.get('id') && (
+                              <Checkmark
+                                className="selected-bid-check"
+                                style={{ marginLeft: '6px' }}
+                              />
+                            )}
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                  {showHoverText && (
+                    <div className="hover-text">
+                      <p>Please wait for the question to be answered</p>
+                    </div>
+                  )}
                 </div>
-              </div>
-              {showHoverText && (
-                <div className="hover-text">
-                  <p>Please wait for the question to be answered</p>
+                <div className="bid-history-right-content">
+                  <p className="review-title">For Review</p>
+                  <p className="summary-title">Bid Change Summary</p>
+                  <p className="pertinent-details-title">
+                    Pertinent Details / Specific Rebid Request
+                  </p>
+                  <div className="pertinent-details-section">
+                    <p>{selectedBid.get('pertinentDetails')}</p>
+                  </div>
+                  <p className="helper-text">
+                    This text was provided by Salesforce user when latest bid
+                    was created
+                  </p>
                 </div>
-              )}
-            </div>
-            <div className="bid-history-right-content">
-              <p className="review-title">For Review</p>
-              <p className="summary-title">Bid Change Summary</p>
-              <p className="pertinent-details-title">
-                Pertinent Details / Specific Rebid Request
-              </p>
-              <div className="pertinent-details-section">
-                <p>{selectedBid.get('pertinentDetails')}</p>
+                {selectedView === 'questions' || selectedView === null ? (
+                  <div className="bid-history-pricemodeler-content">
+                    <PriceModeler />
+                  </div>
+                ) : null}
               </div>
-              <p className="helper-text">
-                This text was provided by Salesforce user when latest bid was
-                created
-              </p>
             </div>
-            <div className="bid-history-pricemodeler-content">
-             <PriceModeler />
-            </div>
-          </div>
+          )}
         </div>
-      )}
-     </div>
-    : null } 
+      ) : null}
     </>
   );
 };
