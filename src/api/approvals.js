@@ -3,9 +3,9 @@ import { getAccessTokenFromLocalStorage as getAccessToken } from '../SessionHand
 import { APPROVALS_URL, PROPOSAL } from '../constants/api';
 
 /**
- * Get Opportunity Type List
+ * Get Approvals List Api call
  */
-const getApprovals = proposalId => {
+export const getApprovalsApi = proposalId => {
   return axiosInstance.get(`${APPROVALS_URL}?proposal_id=${proposalId}`, {
     headers: {
       'x-api-key': PROPOSAL.API_KEY,
@@ -14,4 +14,32 @@ const getApprovals = proposalId => {
   });
 };
 
-export default getApprovals;
+/**
+ * Delete Approval Api call
+ */
+export const deleteApprovalsApi = (proposalId, sectionId) => {
+  return axiosInstance.delete(
+    `${APPROVALS_URL}/one?proposal_id=${proposalId}&section_id=${sectionId}`,
+    {
+      headers: {
+        'x-api-key': PROPOSAL.API_KEY,
+        'x-access-token': getAccessToken()
+      }
+    }
+  );
+};
+
+/**
+ * Duplicate Approval Api call
+ */
+export const duplicateApprovalApi = (proposalId, sectionId) => {
+  return axiosInstance.put(
+    `${APPROVALS_URL}/duplicate?proposal_id=${proposalId}&section_id=${sectionId}`,
+    {
+      headers: {
+        'x-api-key': PROPOSAL.API_KEY,
+        'x-access-token': getAccessToken()
+      }
+    }
+  );
+};

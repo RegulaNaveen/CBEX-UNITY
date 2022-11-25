@@ -36,22 +36,27 @@ const UnityTab = ({
     {
       label: 'Strategy Development',
       value: 0,
-      component: <Questions proposalID={id} />,
+      component: <Questions key="Strategy Development" proposalID={id} />,
       path: 'questions'
     },
     {
       label: 'Approvals',
       value: 1,
-      component: <Approvals />,
+      component: <Approvals key="Approvals" />,
       path: 'approvals'
     },
     {
       label: 'Documents',
       value: 2,
-      component: <Documents />,
+      component: <Documents key="Documents" />,
       path: 'documents'
     },
-    { label: 'Validate', value: 3, component: <Validate />, path: 'validate' }
+    {
+      label: 'Validate',
+      value: 3,
+      component: <Validate key="Validate" />,
+      path: 'validate'
+    }
   ];
 
   useEffect(() => {
@@ -133,7 +138,6 @@ const UnityTab = ({
       const approvalFlag = await launchDarkly(featureFlags.APPROVALS, false);
       setApprovalsFlag(approvalFlag);
     })();
-    console.log({ selectedView });
   }, []);
 
   /**
@@ -162,7 +166,9 @@ const UnityTab = ({
           className="_question-tab"
         >
           {visibleTabs().map(item => {
-            return <Tab label={item.label} value={item.value} />;
+            return (
+              <Tab key={item.label} label={item.label} value={item.value} />
+            );
           })}
         </Tabs>
         <div style={{ padding: 20, paddingTop: 5 }}>

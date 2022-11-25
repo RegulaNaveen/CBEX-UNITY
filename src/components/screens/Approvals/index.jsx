@@ -3,39 +3,42 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from 'apollo-react/components/Loader';
 
-import { fetchAllApprovals } from '../../../redux/actions/approval-actions';
-
 import {
-  getOpportunityData,
-  getSelectedBid
-} from '../../../redux/selectors/proposal';
+  fetchAllApprovals,
+  setQuestionHashAction
+} from '../../../redux/actions/approval-actions';
+import { getSelectedBid } from '../../../redux/selectors/proposal';
 import Section from './Section';
 import BidHistory from '../../common/Bidhistory';
+import { selectProposalQuestions } from '../../../redux/selectors';
+import { generateQuestionsHash } from './utils';
 
 const Approvals = () => {
   const approvals = useSelector(state => state.approvals.allApprovals);
-
-  // const [approvals, setApprovals] = useState([]);
+  const proposalQuestions = useSelector(selectProposalQuestions);
   const [loading, setLoading] = useState(false);
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const memoizeBid = useMemo(() => selectedBid, [selectedBid?.id]);
-  // const allOppData = useSelector(getOpportunityData)?.toJS();
   const dispatch = useDispatch();
 
   useEffect(() => {
     setLoading(true);
     const proposalId = memoizeBid?.id;
     console.log('Bid Change Triggered - (useEffect)');
-    // const opportunityData = allOppData[proposalId];
-    // const newApprovals = opportunityData?.proposal?.approvals;
 
     (async () => {
-      await dispatch(fetchAllApprovals(proposalId));
+      const response = await dispatch(fetchAllApprovals(proposalId));
       setLoading(false);
+      if (!response.status) {
+        alert('Api Failed');
+      }
     })();
-
-    // setApprovals(newApprovals);
   }, [memoizeBid]);
+
+  useEffect(() => {
+    const quesHashData = generateQuestionsHash(proposalQuestions);
+    dispatch(setQuestionHashAction(quesHashData));
+  }, [proposalQuestions]);
 
   return (
     <div className="approvals-tab">
@@ -45,11 +48,12 @@ const Approvals = () => {
       <BidHistory />
 
       {!isEmpty(approvals) ? (
-        approvals.map(approval => {
-          return (
-            <Section key={approval.ApprovalSectionTitle} approval={approval} />
-          );
-        })
+        approvals.map(approval => (
+          <Section
+            key={approval.ApprovalSectionId}
+            sectionId={approval.ApprovalSectionId}
+          />
+        ))
       ) : (
         <p className="no-approval">No Approval Questions</p>
       )}

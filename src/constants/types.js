@@ -161,7 +161,10 @@ const NOTIFICATION = {
 
 const APPROVALS = {
   SET_APPROVALS: 'set_approvals',
-  SET_LOADING: 'set_loading'
+  DELETE_APPROVALS: 'delete_approvals',
+  DUPLICATE_APPROVALS: 'duplicate_approvals',
+  SET_LOADING: 'set_loading',
+  SET_QUES_HASH: 'set_ques_hash'
 };
 
 const UBUILD_ADMIN = 'ubuildAdmin';

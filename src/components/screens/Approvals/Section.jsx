@@ -1,92 +1,62 @@
-import React, { useState, useEffect } from 'react';
-import Grid from 'apollo-react/components/Grid';
+import React, { useState, createContext } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import omit from 'lodash/omit';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import AccordionDetails from '@material-ui/core/AccordionDetails';
+import Loader from 'apollo-react/components/Loader';
+import isEmpty from 'lodash/isEmpty';
 
-import { selectProposalQuestions } from '../../../redux/selectors/index';
-import QuestionItem from './QuestionItem';
-import ActionButtons from './ActionButtons';
 import CustomAccordion from '../../common/CustomAccordion/CustomAccordion';
 import CustomAccordionSummary from '../../common/CustomAccordion/CustomAccordionSummary';
+import SectionActive from './SectionActive';
+import SectionFreezed from './SectionFreezed';
 
-export const generateQuestionsHash = proposalQuestions => {
-  try {
-    const hash = {};
-    if (Array.isArray(proposalQuestions)) {
-      // Filter questions on the current template
-      const templateQuestions = proposalQuestions.filter(item => item.active);
-      if (Array.isArray(templateQuestions) && templateQuestions.length > 0) {
-        templateQuestions.forEach(question => {
-          hash[question.questionId] = question;
-        });
-      }
-    }
-    return hash;
-  } catch (error) {
-    console.error(error);
-    return {};
-  }
-};
+export const ApprovalContext = createContext();
 
-const Section = ({ approval }) => {
-  const proposalQuestions = useSelector(selectProposalQuestions);
-  const [questionHash, setQuestionHash] = useState({});
-
-  useEffect(() => {
-    setQuestionHash(generateQuestionsHash(proposalQuestions));
-  }, [proposalQuestions]);
-
-  const {
-    ApprovalSectionTitle = '',
-    ApprovalSectionLeftQuestions,
-    ApprovalSectionRightQuestions
-  } = approval;
+const Section = ({ sectionId }) => {
   const [expanded, setExpanded] = useState(false);
+  const [sectionLoading, setSectionLoading] = useState(false);
+  const dispatchLoadingEvent = (actionType, payload) => {
+    if (actionType === 'SET_LOADING') {
+      setSectionLoading(payload);
+    }
+  };
 
-  const renderSectionBody = (
-    <Grid container className="approval-ques">
-      <Grid item xs={8} className="approval-ques-left">
-        {ApprovalSectionLeftQuestions?.map(item => (
-          <QuestionItem
-            question={questionHash[item] || {}}
-            approvalSectionTitle={ApprovalSectionTitle}
-            key={item}
-          />
-        ))}
-      </Grid>
-      <Grid item xs={4} className="approval-ques-right">
-        {ApprovalSectionRightQuestions?.map(item => (
-          <QuestionItem
-            question={questionHash[item] || {}}
-            approvalSectionTitle={ApprovalSectionTitle}
-            key={item}
-          />
-        ))}
-      </Grid>
-      <Grid item xs={12} className="approval-ques-actions">
-        <ActionButtons />
-      </Grid>
-    </Grid>
+  const approval = useSelector(state =>
+    state.approvals.allApprovals.find(i => i.ApprovalSectionId === sectionId)
   );
+  const { ApprovalSectionTitle = '', ArchivedData = [] } = approval;
 
   return (
-    <CustomAccordion
-      className="accordion-container"
-      expanded={expanded}
-      onChange={() => setExpanded(prev => !prev)}
-    >
-      <CustomAccordionSummary>
-        <p className="accordion-title">{ApprovalSectionTitle}</p>
-      </CustomAccordionSummary>
-      <AccordionDetails>{renderSectionBody}</AccordionDetails>
-    </CustomAccordion>
+    <ApprovalContext.Provider value={{ sectionLoading, dispatchLoadingEvent }}>
+      <CustomAccordion
+        className="accordion-container"
+        expanded={expanded}
+        onChange={() => setExpanded(prev => !prev)}
+      >
+        <CustomAccordionSummary>
+          <p className="accordion-title">{`${ApprovalSectionTitle}${
+            !isEmpty(ArchivedData) ? ' 1' : ''
+          }`}</p>
+        </CustomAccordionSummary>
+        <AccordionDetails className="accordion-body">
+          {/* Modal Loading */}
+          {sectionLoading && <Loader isInner />}
+
+          {/* Component for all Freezed Approval */}
+          <SectionFreezed archivedData={ArchivedData} />
+
+          {/* Component for Active Active */}
+          <SectionActive {...omit(approval, ['ArchivedData'])} />
+        </AccordionDetails>
+      </CustomAccordion>
+    </ApprovalContext.Provider>
   );
 };
 
 Section.propTypes = {
-  approval: PropTypes.object.isRequired
+  sectionId: PropTypes.string.isRequired
 };
 
-export default Section;
+export default React.memo(Section);

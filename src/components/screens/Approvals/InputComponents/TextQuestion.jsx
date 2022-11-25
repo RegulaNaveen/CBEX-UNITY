@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import isObject from 'lodash/isObject';
+import PropTypes from 'prop-types';
 import has from 'lodash/has';
 import isEqual from 'lodash/isEqual';
 import isEmpty from 'lodash/isEmpty';
@@ -15,6 +16,7 @@ const getConvertedAnsString = str =>
 const TextQuestion = ({
   question,
   lastAnswer,
+  disabled,
   userData,
   socketContext,
   trackMatomoEventSubmitAnswer
@@ -63,7 +65,7 @@ const TextQuestion = ({
     richTextHtml: richTextData.html,
     enableFocus: true,
     isEditable: false,
-    disabled: false,
+    disabled,
     onBlur: data => {
       let saveDate = false;
       const previousAnsText = getConvertedAnsString(answerValue).trim();
@@ -91,11 +93,17 @@ const TextQuestion = ({
       }
     }
   };
-  return (
-    <>
-      <CustomApolloRichText {...richtextProps} />
-    </>
-  );
+
+  return <CustomApolloRichText {...richtextProps} />;
+};
+
+TextQuestion.propTypes = {
+  question: PropTypes.object.isRequired,
+  lastAnswer: PropTypes.object.isRequired,
+  disabled: PropTypes.any.isRequired,
+  userData: PropTypes.any.isRequired,
+  socketContext: PropTypes.object.isRequired,
+  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired
 };
 
 export default TextQuestion;

@@ -3,12 +3,36 @@
   min-height: 300px;
   position: relative;
 
-  .custom-accordion-summary {
-    .MuiAccordionSummary-content {
-      &[class*='Mui-expanded'] {
-        & > p {
-          color: $neutral9;
+  .accordion-body {
+    position: relative;
+    display: block;
+    counter-reset: css-counter 0;
+
+    .approval-ques {
+      counter-increment: css-counter 1;
+
+      .approval-sec-title {
+        &:after {
+          content: ' ' counter(css-counter);
         }
+      }
+
+      &:first-child {
+        .approval-sec-title {
+          display: none;
+        }
+      }
+      .approval-sec-title {
+        color: $black;
+        font-weight: bold;
+        padding: 4px 14px 16px;
+      }
+      hr {
+        width: calc(100% - 20px);
+        border-color: $neutral4 transparent transparent;
+        border-top-width: 2px;
+        margin: 26px 10px 16px;
+        border-style: solid;
       }
     }
   }
@@ -36,7 +60,8 @@
     }
   }
 
-  .accordion-title {
+  .accordion-title,
+  .approval-sec-title {
     letter-spacing: 0.4px;
   }
 
