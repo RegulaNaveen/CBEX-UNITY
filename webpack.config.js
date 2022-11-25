@@ -19,6 +19,11 @@ module.exports = env => {
           loader: 'babel-loader'
         },
         {
+          test: /\.mjs$/,
+          include: /node_modules/,
+          type: 'javascript/auto'
+        },
+        {
           test: /\.(js|jsx)$/,
           enforce: 'pre',
           loader: 'eslint-loader',
