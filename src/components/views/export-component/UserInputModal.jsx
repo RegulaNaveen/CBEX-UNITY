@@ -226,7 +226,7 @@ const UserInputModal = ({
           </div>
           <div className="exportOptionsCell">
             <Select
-              label="Select by Milestones"
+              label="Select by Tags"
               value={milestones}
               onChange={handleMileStoneChange}
               fullWidth
