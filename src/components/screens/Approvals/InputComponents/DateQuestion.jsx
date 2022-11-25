@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import QuestionDatePicker from '../../../common/atoms/inputs/QuestionDatePicker';
 import { parseMomentDate } from '../../../../utils/DateUtils';
@@ -7,6 +8,7 @@ import { setProposalAnswerData } from '../../../../redux/actions/proposal-action
 const DateQuestion = ({
   question,
   lastAnswer,
+  disabled,
   userData,
   socketContext,
   trackMatomoEventSubmitAnswer
@@ -28,7 +30,7 @@ const DateQuestion = ({
     trackMatomoEventSubmitAnswer(' ');
   };
 
-  const handleDayChange = (selectedDay: string, lastAnswerValue = '') => {
+  const handleDayChange = (selectedDay, lastAnswerValue = '') => {
     const { proposalId, questionId } = question;
 
     if (
@@ -58,8 +60,18 @@ const DateQuestion = ({
       handleDayChange={handleDayChange}
       onFocus={() => {}}
       onBlur={() => {}}
+      disabled={!!disabled}
     />
   );
+};
+
+DateQuestion.propTypes = {
+  question: PropTypes.object.isRequired,
+  lastAnswer: PropTypes.object.isRequired,
+  disabled: PropTypes.any.isRequired,
+  userData: PropTypes.any.isRequired,
+  socketContext: PropTypes.object.isRequired,
+  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired
 };
 
 export default DateQuestion;

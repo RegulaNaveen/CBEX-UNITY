@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 import xor from 'lodash/xor';
 import AutoComplete from '../../../common/atoms/inputs/AutoComplete';
 import {
@@ -10,6 +11,7 @@ import {
 const ProposalTeamQuestion = ({
   question,
   lastAnswer,
+  disabled,
   userData,
   socketContext,
   trackMatomoEventSubmitAnswer
@@ -57,7 +59,7 @@ const ProposalTeamQuestion = ({
           onBlur={() => {}}
           onChange={handleAnswerChange}
           text={lastAnswer.answer || ''}
-          disabled={false}
+          disabled={!!disabled}
         />
       </>
     );
@@ -65,6 +67,15 @@ const ProposalTeamQuestion = ({
     console.error(error);
     return <p>Error rendering Proposal Team question</p>;
   }
+};
+
+ProposalTeamQuestion.propTypes = {
+  question: PropTypes.object.isRequired,
+  lastAnswer: PropTypes.object.isRequired,
+  disabled: PropTypes.any.isRequired,
+  userData: PropTypes.any.isRequired,
+  socketContext: PropTypes.object.isRequired,
+  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired
 };
 
 export default ProposalTeamQuestion;

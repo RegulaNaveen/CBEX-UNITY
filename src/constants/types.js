@@ -159,6 +159,14 @@ const NOTIFICATION = {
   GET_IS_LOADING: 'get_is_loading'
 };
 
+const APPROVALS = {
+  SET_APPROVALS: 'set_approvals',
+  DELETE_APPROVALS: 'delete_approvals',
+  DUPLICATE_APPROVALS: 'duplicate_approvals',
+  SET_LOADING: 'set_loading',
+  SET_QUES_HASH: 'set_ques_hash'
+};
+
 const UBUILD_ADMIN = 'ubuildAdmin';
 export {
   AUTH,
@@ -169,5 +177,6 @@ export {
   NOTEPAD,
   UBUILD_ADMIN,
   PROFILE,
-  NOTIFICATION
+  NOTIFICATION,
+  APPROVALS
 };

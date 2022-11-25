@@ -1,9 +1,9 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import configureMockStore from 'redux-mock-store';
-import { configure, mount, shallow, render } from 'enzyme';
+import { configure, render } from 'enzyme';
 import thunk from 'redux-thunk';
-import { Map, fromJS } from 'immutable';
+import { Map } from 'immutable';
 import { Provider } from 'react-redux';
 import Adapter from 'enzyme-adapter-react-16';
 
