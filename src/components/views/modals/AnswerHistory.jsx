@@ -1,16 +1,17 @@
 // @flow
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { Map, fromJS } from 'immutable'; // NOSONAR
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
 import { isEmpty, isString, unionBy } from 'lodash';
 import { diffWordsWithSpace } from 'diff';
 import Loader from 'apollo-react/components/Loader';
-
+import Button from 'apollo-react/components/Button/Button';
 import {
   getProposalTeamAssignedRoles,
-  getSelectedBid
+  getSelectedBid,
+  getUserData
 } from '../../../redux/selectors';
 import { getOpportunityData } from '../../../redux/selectors/proposal';
 import { Close } from '../../svg';
@@ -21,7 +22,12 @@ import {
   getUserName
 } from '../../../utils/utils';
 import ANSWER_TYPES from '../../../constants/answerTypes';
-import { getProposalAnswerHistory } from '../../../redux/actions/proposal-actions';
+import {
+  getProposalAnswerHistory,
+  setProposalAnswerData
+} from '../../../redux/actions/proposal-actions';
+import getLastAnswer from '../../screens/Approvals/getLastAnswer';
+import { SocketContext } from '../../../context/SocketContext';
 
 type Props = {
   question: Map,
@@ -29,15 +35,22 @@ type Props = {
   opportunityData: Object,
   closeModal: () => void,
   getAnsHistory: Function,
-  selectedBid: Object
+  selectedBid: Object,
+  userData: Object,
+  setProposalAnswer: Function
 };
 
+let renderComp;
+let lockQuestion;
 class AnswerHistory extends Component<Props> {
+  static contextType = SocketContext;
+
   constructor(props: Object) {
     super(props);
 
     this.state = {
       question: this.props.question.set('answers', fromJS([])),
+      lastAnswer: getLastAnswer(this.props.question.set('answers', fromJS([]))),
       loading: false
     };
   }
@@ -69,6 +82,74 @@ class AnswerHistory extends Component<Props> {
   componentWillUnmount() {
     if (document.body) document.body.classList.remove('no-scroll');
   }
+
+  handleVerifyPredictedAnsClick = predictedAnswer => {
+    const { question } = this.state;
+    const questionType = question.getIn(['answerConfiguration', 'type']);
+    const answers = question.get('answers').reverse();
+    const questions = question.reverse();
+    const questionId = questions.get('questionId');
+
+    const proposalId = answers.get(0).get('proposalId');
+    const { setProposalAnswer, userData, lastAnswer } = this.props;
+    renderComp = uuidv4();
+    const answerType = questionType;
+    // picklist value should not be converted to string while saving
+    if (
+      answerType === ANSWER_TYPES.PICKLIST ||
+      answerType === ANSWER_TYPES.PICKLIST_LOOKUP ||
+      answerType === ANSWER_TYPES.CHECKBOX
+    ) {
+      setProposalAnswer(
+        this.context,
+        proposalId,
+        questionId,
+        predictedAnswer.get('answer'),
+        userData
+      );
+    } else {
+      setProposalAnswer(
+        this.context,
+        proposalId,
+        questionId,
+        String(predictedAnswer.get('answer')).trim(),
+        userData,
+        '',
+        false
+      );
+    }
+  };
+
+  handleRejectPredictedAnsClick = () => {
+    const { question } = this.state;
+    const questionType = question.getIn(['answerConfiguration', 'type']);
+    const answers = question.get('answers').reverse();
+    const questions = question.reverse();
+    const questionId = questions.get('questionId');
+
+    const proposalId = answers.get(0).get('proposalId');
+    const { setProposalAnswer, userData, lastAnswer } = this.props;
+    renderComp = uuidv4();
+    const answerType = questionType;
+    // picklist value should not be converted to string while saving
+    if (
+      answerType === ANSWER_TYPES.PICKLIST ||
+      answerType === ANSWER_TYPES.PICKLIST_LOOKUP ||
+      answerType === ANSWER_TYPES.CHECKBOX
+    ) {
+      setProposalAnswer(this.context, proposalId, questionId, [], userData);
+    } else {
+      setProposalAnswer(
+        this.context,
+        proposalId,
+        questionId,
+        ' ',
+        userData,
+        '',
+        false
+      );
+    }
+  };
 
   renderAnswerResponsables = () => {
     const { proposalTeamAnswers } = this.props;
@@ -109,16 +190,22 @@ class AnswerHistory extends Component<Props> {
     const sectionName = question.getIn(['section', 'sectionName']);
     let answers = question.get('answers').reverse();
     const questionId = answers.get('questionId');
-
+    renderComp = uuidv4();
     if (questionId) answers = question.getIn(['answers', 'answers']).reverse();
     if (answers.isEmpty()) return this.renderAnswerResponsables();
+    const questions = question.reverse();
+    const questionIdentifier = questions.get('questionId');
+    lockQuestion = questionIdentifier;
 
     return answers.map((_answer, index) => {
       const userName = _answer.get('userName') || 'Default User';
       const date = _answer.get('date');
       let answer = _answer.get('answer');
       const proposalId = _answer.get('proposalId');
+      const lastAnswer = answers.get(0).toJS();
+      const indexNo = index;
       let bidNo = '';
+      let isCurrentBid = '';
       if (
         proposalId &&
         opportunityData.get(proposalId)?.toJS()?.proposal?.proposalDetails
@@ -126,12 +213,23 @@ class AnswerHistory extends Component<Props> {
       ) {
         bidNo = this.props.opportunityData.get(proposalId).toJS().proposal
           .proposalDetails.bidNo;
+        isCurrentBid =
+          this.props.opportunityData.get(proposalId).toJS().isCurrent === true
+            ? this.props.opportunityData.get(proposalId).toJS().proposal
+                .proposalDetails.bidNo
+            : 'NA';
       }
-
       let nextAnswer = answers.get(index + 1)
         ? answers.get(index + 1).get('answer')
         : answer;
 
+      if (
+        isCurrentBid === bidNo &&
+        lastAnswer.userName === 'UnityPredictedAnswer' &&
+        userName === 'UnityPredictedAnswer'
+      ) {
+        this.context.questionLockWrapper(questionIdentifier);
+      }
       const isValidatedUnityPredictedAnswer =
         questionType !== ANSWER_TYPES.PICKLIST &&
         questionType !== ANSWER_TYPES.PICKLIST_LOOKUP &&
@@ -363,7 +461,6 @@ class AnswerHistory extends Component<Props> {
 
           return <p>{answer}</p>;
         }
-
         // function to convert Answer to normal JSON
         const convertAnsToJSON = ansData => {
           if (isEmpty(ansData)) return [];
@@ -415,15 +512,39 @@ class AnswerHistory extends Component<Props> {
             </div>
           </div>
           <div className="answer-meta-data">
-            <p>{parsedDate}</p>
-            {bidNo ? <p>Bid {bidNo}</p> : null}
+            <p className="answer-history-para">{parsedDate}</p>
+            {bidNo ? <p className="answer-history-para">Bid {bidNo}</p> : null}
+            {indexNo === 0 &&
+            isCurrentBid === bidNo &&
+            lastAnswer.userName === 'UnityPredictedAnswer' &&
+            userName === 'UnityPredictedAnswer' ? (
+              <div className="answer-meta-buttons">
+                <button
+                  size="small"
+                  type="button"
+                  className="answer-history-reject"
+                  onClick={() => this.handleRejectPredictedAnsClick()}
+                >
+                  Reject
+                </button>
+                <button
+                  size="small"
+                  type="button"
+                  className="answer-history-accept"
+                  onClick={() => this.handleVerifyPredictedAnsClick(_answer)}
+                >
+                  Accept
+                </button>
+              </div>
+            ) : null}
           </div>
         </div>
       );
     });
   };
 
-  closeModal = () => {
+  closeModalWindow = () => {
+    this.context.questionUnlockWrapper(lockQuestion);
     const { closeModal } = this.props;
     closeModal();
   };
@@ -434,8 +555,7 @@ class AnswerHistory extends Component<Props> {
 
   onModalKeyPress = (event: SyntheticKeyboardEvent<EventTarget>) => {
     if (event.key === 'Escape') {
-      const { closeModal } = this.props;
-      closeModal();
+      this.closeModalWindow();
     }
   };
 
@@ -448,7 +568,8 @@ class AnswerHistory extends Component<Props> {
     return (
       <section
         id="answer-history-modal"
-        onClick={this.closeModal}
+        key={renderComp}
+        onClick={this.closeModalWindow}
         role="button" // eslint-disable-line
         tabIndex={0}
         onKeyUp={this.onModalKeyPress}
@@ -469,7 +590,7 @@ class AnswerHistory extends Component<Props> {
               </h1>
               <p>{questionTitle}</p>
             </div>
-            <button type="button" onClick={closeModal}>
+            <button type="button" onClick={this.closeModalWindow}>
               <Close />
             </button>
           </div>
@@ -477,7 +598,7 @@ class AnswerHistory extends Component<Props> {
           <div className="modal-body">{!loading && this.renderContent()}</div>
 
           <div className="modal-actions">
-            <button type="button" onClick={closeModal}>
+            <button type="button" onClick={this.closeModalWindow}>
               Close
             </button>
           </div>
@@ -489,12 +610,14 @@ class AnswerHistory extends Component<Props> {
 
 const mapStateToProps = (state: Map) => ({
   proposalTeamAnswers: getProposalTeamAssignedRoles(state),
+  userData: getUserData(state),
   opportunityData: getOpportunityData(state),
   selectedBid: getSelectedBid(state)
 });
 
 const mapDispatchToProps = {
-  getAnsHistory: getProposalAnswerHistory
+  getAnsHistory: getProposalAnswerHistory,
+  setProposalAnswer: setProposalAnswerData
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AnswerHistory);

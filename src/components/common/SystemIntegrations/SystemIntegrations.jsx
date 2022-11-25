@@ -35,7 +35,8 @@ const SystemIntegrations = ({
   hasDifferentSFanswer,
   answerText,
   isNotepadOpen,
-  handleVerifyPredictedAnsClick
+  handleVerifyPredictedAnsClick,
+  disabled
 }) => {
   const gridColRatio = isNotepadOpen ? [10, 2] : [11, 1];
   const SalesForceCondition = () => {
@@ -296,12 +297,14 @@ const SystemIntegrations = ({
       return (
         <Tooltip
           variant="light"
-          title="Unity Predicted Answer"
+          title={
+            disabled ? 'Question locked by user' : 'Unity Predicted Answer'
+          }
           placement="top"
           tabIndex={-1}
         >
           <IconButton
-            disabled={!isCurrentBid}
+            disabled={disabled || !isCurrentBid}
             style={{
               height: '24px',
               width: '24px',
@@ -315,7 +318,8 @@ const SystemIntegrations = ({
               fontSize="22px"
               style={{ color: '#015ff1' }}
               className="integration-icon"
-              onClick={() => handleVerifyPredictedAnsClick(lastAnswer)}
+              // onClick={() => handleVerifyPredictedAnsClick(lastAnswer)}
+              onClick={answeronhistory}
             />
           </IconButton>
         </Tooltip>

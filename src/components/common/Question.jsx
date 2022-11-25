@@ -1330,6 +1330,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       0,
       proposalTimeStamp.indexOf('T')
     );
+    const integrationLocked = this.isQuestionLockedByOther() ? true : false;
     const dateIsAfter = moment(proposalCreationDate).isAfter(
       moment(deploymentDate)
     );
@@ -1361,6 +1362,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       if (!questionID) lastAnswer = answers.last();
       else lastAnswer = answers.get('answers').last();
     }
+
     if (lastAnswer) {
       if (
         lastAnswer.get &&
@@ -1552,6 +1554,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             answerText={answerText}
             handleVerifyPredictedAnsClick={this.handleVerifyPredictedAnsClick}
             hasDifferentSFanswer={hasDifferentSFanswer}
+            disabled={integrationLocked}
           />
           {/* Question Lock Info */}
           {/* {this.props.questionLockInfo &&
