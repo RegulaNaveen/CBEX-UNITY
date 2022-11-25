@@ -69,3 +69,15 @@
     }
   }
 }
+
+.approval-filter {
+  display: flex;
+  margin-bottom: 8px;
+  justify-content: flex-end;
+}
+
+.no-approval-wrapper {
+  display: flex;
+  justify-content: center;
+  height: 60vh;
+}

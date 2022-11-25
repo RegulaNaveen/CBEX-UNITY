@@ -1,36 +1,29 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import Panel from 'apollo-react/components/Panel';
+import { useSelector, connect } from 'react-redux';
 import Button from 'apollo-react/components/Button';
 import Filter from 'apollo-react-icons/Filter';
-import { withRouter, Match } from 'react-router-dom';
-import { List, Map } from 'immutable';
+import { withRouter } from 'react-router-dom';
 import Link from 'apollo-react/components/Link';
 import { compose } from 'redux';
 import ApolloCheckbox from 'apollo-react/components/Checkbox';
 import ClipboardCheck from 'apollo-react-icons/ClipboardCheck';
 import Card from 'apollo-react/components/Card';
 import classNames from 'classnames';
-import { connect } from 'react-redux';
+import Grid from 'apollo-react/components/Grid';
 import {
   getOpportunityData,
-  getSelectedBid
+  getSelectedBid,
 } from '../../../redux/selectors/proposal';
 import BidHistory from '../../common/Bidhistory';
 import Section from './Section';
-import {
-  getQuestionsFilters,
-  selectActiveQuestionsFilterCount
-} from '../../../redux/selectors';
+import { getQuestionsFilters } from '../../../redux/selectors';
 import {
   clearQuestionsFilterAction,
-  onApplyQuestionsFilter
+  onApplyQuestionsFilter,
 } from '../../../redux/actions/proposal-actions';
 import MatomoHOC from '../../HOC/MatomoHOC';
-import Grid from 'apollo-react/components/Grid';
 
-const Approvals = props => {
-  // console.log({ activeQuestionsFilterCount });
+const Approvals = (props) => {
   const [approvals, setApprovals] = useState([]);
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const memoizeBid = useMemo(() => selectedBid, [selectedBid?.id]);
@@ -45,7 +38,6 @@ const Approvals = props => {
   }, [memoizeBid]);
 
   const handleFilterClick = () => {
-    // alert('working');
     setShowFilter(!showFilter);
   };
 
@@ -55,7 +47,6 @@ const Approvals = props => {
   };
 
   const renderFilter = () => {
-    // const { showFilter } = this.state;
     const { questionsFilters, clearQuestionsFilter } = props;
     if (showFilter) {
       return (
@@ -75,7 +66,7 @@ const Approvals = props => {
               <Grid container spacing={2} key={groupName} className={groupName}>
                 {group
                   .entrySeq()
-                  .filter(value => value[0] !== 'logic')
+                  .filter((value) => value[0] !== 'logic')
                   .map(([key, filter]) => (
                     <Grid
                       item
@@ -112,31 +103,19 @@ const Approvals = props => {
         <div>
           <BidHistory />
         </div>
-        {/* <Panel hideButton maxWidth={700} minWidth={1540}> */}
-        <div
-          style={{
-            // border: '1px solid black',
-            display: 'flex',
-            marginBottom: '8px',
-            justifyContent: 'flex-end'
-          }}
-        >
+        <div className="approval-filter">
           <Button
             variant="secondary"
             size="small"
             icon={<Filter fontSize="extraSmall" />}
             onClick={handleFilterClick}
           >
-            {/* {selectActiveQuestionsFilterCount
-                ? `Filter (${activeQuestionsFilterCount})`
-                : 'Filter'} */}
             Filter
           </Button>
         </div>
-        {/* </Panel> */}
         {renderFilter()}
         {approvals?.length > 0 ? (
-          approvals?.map(approval => {
+          approvals?.map((approval) => {
             return (
               <Section
                 key={approval.ApprovalSectionTitle}
@@ -146,15 +125,7 @@ const Approvals = props => {
           })
         ) : (
           <>
-            <div
-              style={{
-                height: '60vh',
-                display: 'flex',
-                justifyContent: 'center'
-                // flexDirection: 'column',
-                // alignItems: 'center'
-              }}
-            >
+            <div className="no-approval-wrapper">
               <Card
                 style={{
                   maxWidth: 600,
@@ -164,7 +135,7 @@ const Approvals = props => {
                   flexDirection: 'column',
                   alignItems: 'center',
                   color: '#7f7f7f',
-                  padding: '20px'
+                  padding: '20px',
                 }}
               >
                 <ClipboardCheck
@@ -180,13 +151,13 @@ const Approvals = props => {
   );
 };
 
-const mapStateToProps = (state: Map) => ({
-  questionsFilters: getQuestionsFilters(state)
+const mapStateToProps = (state) => ({
+  questionsFilters: getQuestionsFilters(state),
 });
 export default compose(
   withRouter,
   connect(mapStateToProps, {
     applyQuestionsFilter: onApplyQuestionsFilter,
-    clearQuestionsFilter: clearQuestionsFilterAction
+    clearQuestionsFilter: clearQuestionsFilterAction,
   })
 )(MatomoHOC(Approvals));
