@@ -1,3 +1,5 @@
+import isEmpty from 'lodash/isEmpty';
+import { v4 as uuid } from 'uuid';
 import { APPROVALS } from '../../constants/types';
 
 const INITIAL_STATE = {
@@ -19,11 +21,50 @@ const setLoading = (state, actions) => {
 };
 
 const duplicateApproval = (state, action) => {
-  return { ...state };
+  const { sectionId, proposalId, quesHashData } = action.payload;
+  console.log({ quesHashData });
+
+  const modifiedApprovals = state.allApprovals.map(approval => {
+    if (approval.ApprovalSectionId === sectionId) {
+      const newFreezedData = {
+        id: uuid(),
+        proposal_id: proposalId,
+        section_id: approval.ApprovalSectionId,
+        section_title: approval.ApprovalSectionTitle,
+        section_order: approval.ApprovalSectionOrder,
+        section_left_questions: approval.ApprovalSectionLeftQuestions.map(
+          i => quesHashData[i]
+        ).filter(i => !isEmpty(i)),
+        section_right_questions: approval.ApprovalSectionRightQuestions.map(
+          i => quesHashData[i]
+        ).filter(i => !isEmpty(i))
+      };
+
+      return {
+        ...approval,
+        ArchivedData: approval.ArchivedData.concat([newFreezedData])
+      };
+    }
+    return approval;
+  });
+
+  console.log({ modifiedApprovals });
+
+  return { ...state, allApprovals: modifiedApprovals };
 };
 
 const deleteApprovals = (state, action) => {
-  return { ...state };
+  const { payload: sectionId } = action;
+
+  const modifiedApprovals = state.allApprovals.map(approval => {
+    if (approval.ApprovalSectionId === sectionId) {
+      const [, ...rest] = approval.ArchivedData;
+      return { ...approval, ArchivedData: rest };
+    }
+    return approval;
+  });
+
+  return { ...state, allApprovals: modifiedApprovals };
 };
 
 const actionMap = {

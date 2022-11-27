@@ -211,10 +211,13 @@ const QuestionItem = ({
   );
 };
 
+QuestionItem.defaultProps = {
+  disabled: false
+};
 QuestionItem.propTypes = {
   question: PropTypes.object.isRequired,
   approvalSectionTitle: PropTypes.string.isRequired,
-  disabled: PropTypes.any.isRequired,
+  disabled: PropTypes.any,
   eventCategories: PropTypes.object.isRequired,
   trackEvent: PropTypes.func.isRequired
 };
