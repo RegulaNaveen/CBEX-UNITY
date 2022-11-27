@@ -42,6 +42,8 @@ type Props = {
 
 let renderComp;
 let lockQuestion;
+let conditionBlankPredicted;
+let indexNo;
 class AnswerHistory extends Component<Props> {
   static contextType = SocketContext;
 
@@ -92,7 +94,6 @@ class AnswerHistory extends Component<Props> {
 
     const proposalId = answers.get(0).get('proposalId');
     const { setProposalAnswer, userData, lastAnswer } = this.props;
-    renderComp = uuidv4();
     const answerType = questionType;
     // picklist value should not be converted to string while saving
     if (
@@ -118,6 +119,8 @@ class AnswerHistory extends Component<Props> {
         false
       );
     }
+
+    renderComp = uuidv4();
   };
 
   handleRejectPredictedAnsClick = () => {
@@ -129,7 +132,6 @@ class AnswerHistory extends Component<Props> {
 
     const proposalId = answers.get(0).get('proposalId');
     const { setProposalAnswer, userData, lastAnswer } = this.props;
-    renderComp = uuidv4();
     const answerType = questionType;
     // picklist value should not be converted to string while saving
     if (
@@ -149,6 +151,8 @@ class AnswerHistory extends Component<Props> {
         false
       );
     }
+
+    renderComp = uuidv4();
   };
 
   renderAnswerResponsables = () => {
@@ -185,25 +189,25 @@ class AnswerHistory extends Component<Props> {
 
   renderContent = () => {
     const { opportunityData } = this.props;
-    const { question } = this.state;
+    const { question, loading } = this.state;
+
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const sectionName = question.getIn(['section', 'sectionName']);
     let answers = question.get('answers').reverse();
     const questionId = answers.get('questionId');
-    renderComp = uuidv4();
     if (questionId) answers = question.getIn(['answers', 'answers']).reverse();
     if (answers.isEmpty()) return this.renderAnswerResponsables();
     const questions = question.reverse();
     const questionIdentifier = questions.get('questionId');
     lockQuestion = questionIdentifier;
-
+    const lastAnswer = answers.get(0).toJS();
     return answers.map((_answer, index) => {
       const userName = _answer.get('userName') || 'Default User';
       const date = _answer.get('date');
       let answer = _answer.get('answer');
       const proposalId = _answer.get('proposalId');
-      const lastAnswer = answers.get(0).toJS();
-      const indexNo = index;
+      indexNo = index;
+      renderComp = uuidv4();
       let bidNo = '';
       let isCurrentBid = '';
       if (
@@ -261,7 +265,15 @@ class AnswerHistory extends Component<Props> {
         const isFirstItem = index === 0;
         const isLastItem = index === answers.toJS().length - 1;
         const isOnlyOneAnswer = answers.toJS().length === 1;
-
+        // checking if last answer is empty and the answer before is unitypredicted
+        conditionBlankPredicted =
+          isEmpty(
+            answers
+              ?.get(indexNo)
+              ?.get('answer')
+              .trim()
+          ) &&
+          answers?.get(indexNo + 1)?.get('userName') === 'UnityPredictedAnswer';
         if (isValidatedUnityPredictedAnswer) {
           return (
             <span key={uuidv4()}>
@@ -496,48 +508,55 @@ class AnswerHistory extends Component<Props> {
           </ul>
         );
       };
-
       return (
-        <div className="answer-container" key={uuidv4()}>
-          <div className="main-container">
-            <span
-              style={{ backgroundColor: avatarRandomColor }}
-              className="avatar"
-            >
-              {userInitials}
-            </span>
-            <div>
-              <p>{getUserName(userName)}</p>
-              {renderAnswers()}
-            </div>
-          </div>
-          <div className="answer-meta-data">
-            <p className="answer-history-para">{parsedDate}</p>
-            {bidNo ? <p className="answer-history-para">Bid {bidNo}</p> : null}
-            {indexNo === 0 &&
-            isCurrentBid === bidNo &&
-            lastAnswer.userName === 'UnityPredictedAnswer' &&
-            userName === 'UnityPredictedAnswer' ? (
-              <div className="answer-meta-buttons">
-                <button
-                  size="small"
-                  type="button"
-                  className="answer-history-reject"
-                  onClick={() => this.handleRejectPredictedAnsClick()}
+        <div>
+          {conditionBlankPredicted ? null : (
+            <div className="answer-container" key={renderComp}>
+              <div className="main-container">
+                <span
+                  style={{ backgroundColor: avatarRandomColor }}
+                  className="avatar"
                 >
-                  Reject
-                </button>
-                <button
-                  size="small"
-                  type="button"
-                  className="answer-history-accept"
-                  onClick={() => this.handleVerifyPredictedAnsClick(_answer)}
-                >
-                  Accept
-                </button>
+                  {userInitials}
+                </span>
+                <div>
+                  <p>{getUserName(userName)}</p>
+                  {renderAnswers()}
+                </div>
               </div>
-            ) : null}
-          </div>
+              <div className="answer-meta-data">
+                <p className="answer-history-para">{parsedDate}</p>
+                {bidNo ? (
+                  <p className="answer-history-para">Bid {bidNo}</p>
+                ) : null}
+                {indexNo === 0 &&
+                isCurrentBid === bidNo &&
+                lastAnswer.userName === 'UnityPredictedAnswer' &&
+                userName === 'UnityPredictedAnswer' ? (
+                  <div className="answer-meta-buttons">
+                    <button
+                      size="small"
+                      type="button"
+                      className="answer-history-reject"
+                      onClick={() => this.handleRejectPredictedAnsClick()}
+                    >
+                      Reject
+                    </button>
+                    <button
+                      size="small"
+                      type="button"
+                      className="answer-history-accept"
+                      onClick={() =>
+                        this.handleVerifyPredictedAnsClick(_answer)
+                      }
+                    >
+                      Accept
+                    </button>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+          )}
         </div>
       );
     });
@@ -568,7 +587,7 @@ class AnswerHistory extends Component<Props> {
     return (
       <section
         id="answer-history-modal"
-        key={renderComp}
+        key={uuidv4()}
         onClick={this.closeModalWindow}
         role="button" // eslint-disable-line
         tabIndex={0}

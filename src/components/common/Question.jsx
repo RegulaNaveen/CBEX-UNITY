@@ -1533,6 +1533,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
           <SystemIntegrations
             checkSfAnswer={checkSfAnswer}
             sficon={sficon}
+            answers={answers}
             gridColRatio={gridColRatio}
             integrationmatch={integrationmatch}
             integrationvalidation={integrationvalidation}

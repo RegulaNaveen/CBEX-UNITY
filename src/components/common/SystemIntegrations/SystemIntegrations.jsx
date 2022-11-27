@@ -36,8 +36,11 @@ const SystemIntegrations = ({
   answerText,
   isNotepadOpen,
   handleVerifyPredictedAnsClick,
-  disabled
+  disabled,
+  answers
 }) => {
+  const answer = answers.reverse();
+
   const gridColRatio = isNotepadOpen ? [10, 2] : [11, 1];
   const SalesForceCondition = () => {
     if (sficon !== 'n/a' && isEmpty(checkSfAnswer) === false) {
@@ -266,7 +269,14 @@ const SystemIntegrations = ({
   };
 
   const CalendarCondition = () => {
-    if (answerdate === 'Not Answered' && !isAnswerPredicted) {
+    if (
+      (answerdate === 'Not Answered' && !isAnswerPredicted) ||
+      (lastAnswer
+        ?.toJS()
+        .answer?.toString()
+        .trim().length < 1 &&
+        answer?.get(1)?.get('userName') === 'UnityPredictedAnswer')
+    ) {
       return (
         <IconButton
           style={{
@@ -328,7 +338,8 @@ const SystemIntegrations = ({
     if (
       isAnswered(lastAnswer, isAnswerPredicted) &&
       !loading &&
-      changeIcon === '#00c221'
+      changeIcon === '#00c221' &&
+      answer?.get(1)?.get('userName') !== 'UnityPredictedAnswer'
     ) {
       return (
         <IconButton
@@ -357,7 +368,8 @@ const SystemIntegrations = ({
     if (
       !isAnswered(lastAnswer, isAnswerPredicted) &&
       !loading &&
-      changeIcon === '#b7b7b7'
+      changeIcon === '#b7b7b7' &&
+      answer?.get(1)?.get('userName') !== 'UnityPredictedAnswer'
     ) {
       return (
         <IconButton
@@ -388,7 +400,8 @@ const SystemIntegrations = ({
       lastAnswer
         ?.toJS()
         .answer?.toString()
-        .trim().length < 1
+        .trim().length < 1 &&
+      answer?.get(1)?.get('userName') !== 'UnityPredictedAnswer'
     ) {
       return (
         <IconButton
