@@ -334,8 +334,8 @@ uat:
   variables:
     Environment: $CI_JOB_NAME
   needs:
-    - deployqa
-    #- pafexecution_regression
+    #- deployqa
+    - pafexecution_regression
   when: manual
   only:
     - tags
