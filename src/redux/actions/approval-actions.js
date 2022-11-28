@@ -59,17 +59,25 @@ export const deleteApproval = (proposalId, sectionId) => async dispatch => {
   }
 };
 
-export const duplicateApprovalAction = newData => ({
+export const duplicateApprovalAction = (
+  sectionId,
+  proposalId,
+  quesHashData
+) => ({
   type: APPROVALS.DUPLICATE_APPROVALS,
-  payload: newData
+  payload: { sectionId, proposalId, quesHashData }
 });
 
-export const duplicateApproval = (proposalId, sectionId) => async dispatch => {
+export const duplicateApproval = (proposalId, sectionId) => async (
+  dispatch,
+  getState
+) => {
   try {
+    const { quesHashData } = getState().approvals;
     // Api Response
     const response = await duplicateApprovalApi(proposalId, sectionId);
     console.log('Duplicate Approval response: ', response.data);
-    dispatch(duplicateApprovalAction(response.data.data));
+    dispatch(duplicateApprovalAction(sectionId, proposalId, quesHashData));
     return { status: true, title: DEFAULT.SUCCESS, data: response.data.data };
   } catch (error) {
     // Error

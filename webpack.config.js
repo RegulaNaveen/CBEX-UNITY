@@ -19,6 +19,11 @@ module.exports = env => {
           loader: 'babel-loader'
         },
         {
+          test: /\.mjs$/,
+          include: /node_modules/,
+          type: 'javascript/auto'
+        },
+        {
           test: /\.(js|jsx)$/,
           enforce: 'pre',
           loader: 'eslint-loader',
@@ -52,7 +57,7 @@ module.exports = env => {
       ]
     },
     resolve: {
-      extensions: ['.js', '.jsx']
+      extensions: ['.js', '.jsx', '.mjs']
     },
     devServer: {
       contentBase: path.resolve(__dirname, 'dist'),

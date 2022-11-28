@@ -28,7 +28,7 @@ const store = mockStore(initialState);
 const mockDispatch = store.dispatch;
 store.dispatch = jest.fn(mockDispatch);
 
-describe('Snapshot Test Approval Input Components', () => {
+describe.skip('Snapshot Test Approval Input Components', () => {
   beforeEach(() => {});
   test('Test DateQuestion', () => {
     const question = dummyQuestions.find(

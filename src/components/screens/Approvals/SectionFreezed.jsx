@@ -11,12 +11,13 @@ const SectionFreezed = ({ archivedData }) => {
       .reverse()
       .map(
         ({
+          id,
           section_left_questions: leftQues,
           section_right_questions: rightQues,
           section_title: title
         }) => {
           return (
-            <Grid container className="approval-ques">
+            <Grid container className="approval-ques" key={id}>
               <Grid item xs={12} className="approval-sec-title">
                 {title}
               </Grid>
@@ -25,6 +26,7 @@ const SectionFreezed = ({ archivedData }) => {
                   leftQues.map(item => (
                     <QuestionItem
                       question={item}
+                      approvalSectionTitle={title}
                       key={item.questionId}
                       disabled
                     />
@@ -35,6 +37,7 @@ const SectionFreezed = ({ archivedData }) => {
                   rightQues.map(item => (
                     <QuestionItem
                       question={item}
+                      approvalSectionTitle={title}
                       key={item.questionId}
                       disabled
                     />

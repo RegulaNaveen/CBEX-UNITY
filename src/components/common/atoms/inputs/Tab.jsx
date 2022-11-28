@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useHistory } from 'react-router-dom';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
-import { useHistory } from 'react-router';
 import { shallowEqual, useSelector } from 'react-redux';
 import Questions from '../../../screens/Opportunity/Questions';
 import Documents from '../../../screens/Opportunity/Documents';
@@ -59,13 +59,6 @@ const UnityTab = ({
     }
   ];
 
-  useEffect(() => {
-    if (proposalID) {
-      let opportunityData = oppData[proposalID];
-      getApprovalQuestionIds(opportunityData);
-    }
-  }, [memoizeBid, proposalQuestions]);
-
   const getApprovalQuestionIds = opportunityData => {
     const approvalQIdsArr = [];
     opportunityData?.proposal?.approvals?.forEach(qIdApproval => {
@@ -103,6 +96,13 @@ const UnityTab = ({
   };
 
   useEffect(() => {
+    if (proposalID) {
+      const opportunityData = oppData[proposalID];
+      getApprovalQuestionIds(opportunityData);
+    }
+  }, [memoizeBid, proposalQuestions]);
+
+  useEffect(() => {
     if (selectedView && selectedView === 'documents') {
       setValue(tabs.find(item => item.label === 'Documents').value);
     }
@@ -118,19 +118,19 @@ const UnityTab = ({
   }, [selectedView, approvalsFlag, showApprovalTab]);
 
   const winLocationSearch = window.location.search;
-  const handleChangeTab = (event, value) => {
+  const handleChangeTab = (event, val) => {
     const selectView = new URLSearchParams(winLocationSearch);
-    const currentTab = tabs.find(item => item.value === value);
+    const currentTab = tabs.find(item => item.value === val);
     const currentPath = currentTab.path || '';
+    setValue(val);
     onChangeSelectedTab(currentPath);
     selectView.set('viewType', currentPath);
-    if (value === 0) {
+    if (val === 0) {
       // No need to update pathname for question tab
       history.push(`${window.location.pathname}`);
     } else {
       history.push(`${window.location.pathname}?${selectView.toString()}`);
     }
-    setValue(value);
   };
 
   useEffect(() => {

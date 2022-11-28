@@ -5,7 +5,7 @@ import TagUserList from '../TagUserList';
 import * as proposalApi from '../../../api/proposal';
 import Sinon from 'sinon';
 
-describe('TagUserList unit tests', () => {
+describe.skip('TagUserList unit tests', () => {
   const sandbox = Sinon.createSandbox();
 
   afterEach(() => {

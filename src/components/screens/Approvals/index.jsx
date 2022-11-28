@@ -13,11 +13,16 @@ import Section from './Section';
 import BidHistory from '../../common/Bidhistory';
 import { selectProposalQuestions } from '../../../redux/selectors';
 import { generateQuestionsHash } from './utils';
+import { DEFAULT } from '../../../constants/app';
+import CustomModal from '../../common/CustomModal';
 
 const Approvals = () => {
   const approvals = useSelector(state => state.approvals.allApprovals);
   const proposalQuestions = useSelector(selectProposalQuestions);
   const [loading, setLoading] = useState(false);
+  const [warning, setWarning] = useState(false);
+  const [warningTitle, setWarningTitle] = useState('');
+  const [warningText, setWarningText] = useState('');
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const memoizeBid = useMemo(() => selectedBid, [selectedBid?.id]);
   const dispatch = useDispatch();
@@ -36,7 +41,9 @@ const Approvals = () => {
       const response = await dispatch(fetchAllApprovals(proposalId));
       setLoading(false);
       if (!response.status) {
-        alert('Api Failed');
+        setWarningTitle(response.title);
+        setWarningText(response.message);
+        setWarning(true);
       }
     })();
   }, [memoizeBid]);
@@ -62,6 +69,19 @@ const Approvals = () => {
         ))
       ) : (
         <p className="no-approval">No Approval Questions</p>
+      )}
+
+      {/* Warning Modal */}
+      {warning && (
+        <CustomModal
+          open={warning}
+          title={warningTitle}
+          message={warningText}
+          variant="error"
+          handleClose={() => setWarning(false)}
+          buttonProps={[{ className: 'hidden' }, { label: DEFAULT.CLOSE }]}
+          modalStyle={{ maxWidth: 342 }}
+        />
       )}
     </div>
   );

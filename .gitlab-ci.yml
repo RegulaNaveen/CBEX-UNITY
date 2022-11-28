@@ -10,17 +10,17 @@ include:
     when: always
 
 #include:
-  #- project: 'CBEx/unity/Unity-QA'
-    #ref: Unity_QA_Testing
-    #file: /.gitlab-ci.yml
-    #when: always
-    #needs:
-      #- deployqa
+#- project: 'CBEx/unity/Unity-QA'
+#ref: Unity_QA_Testing
+#file: /.gitlab-ci.yml
+#when: always
+#needs:
+#- deployqa
 
 stages:
   - prebuild
   #- sonar #sonar report
-  #- test 
+  #- test
   - blackduckscan
   - builddev
   - deploydev
@@ -30,13 +30,13 @@ stages:
   - deployl4
   - buildqa
   - deployqa
+  - pafexecution_regression
   - builddemo
   - deploydemo
   - builduat
   - deployuat
   - buildprod
   - deployprod
-  - pafexecution_regression
   - deploystack
 
 sonar:
@@ -60,11 +60,11 @@ sonar:
   script:
     - apk upgrade --update-cache --available && apk add openssl && rm -rf /var/cache/apk/*
     - sonar-scanner -X -Dsonar.branch.name=$CI_COMMIT_REF_NAME -Dsonar.projectKey=$CI_PROJECT_NAME
-  
+
 test:
   stage: prebuild
   image: node:14
-  except: 
+  except:
     - qa
     - uat
   script:
@@ -192,8 +192,8 @@ deploydev2:
     - dev3
   only:
     - L4
-  script:    
-    - source build.env  
+  script:
+    - source build.env
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
   tags:
@@ -207,7 +207,7 @@ buildl4:
   variables:
     Environment: l4
   only:
-    - dev
+    #- dev
     - migration
     - tags
   script:
@@ -232,9 +232,9 @@ deployl4:
     - buildl4
   when: manual
   only:
-    - dev
+    #- dev
     - tags
-  script:    
+  script:
     - source build.env
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
@@ -242,7 +242,8 @@ deployl4:
     - docker
   environment: l4
 
-demo:
+
+demo:  
   stage: builddemo
   image: node:14
   variables:
@@ -333,7 +334,8 @@ uat:
   variables:
     Environment: $CI_JOB_NAME
   needs:
-  - deployqa
+    - deployqa
+    #- pafexecution_regression
   when: manual
   only:
     - tags
@@ -413,7 +415,7 @@ pafexecution_regression:
   stage: pafexecution_regression
   needs:
     - deployqa
-  when: always 
+  #when: always
   only:
     - tags
   variables:
@@ -422,7 +424,6 @@ pafexecution_regression:
     project: 'CBEx/unity/Unity-QA'
     branch: Unity_QA_Testing
     strategy: depend
-
 
 deploystack:
   stage: deploystack
@@ -435,7 +436,7 @@ deploystack:
       when: always
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   #dependencies:
-    #- l4
+  #- l4
   script:
     - source build.env
     - aws cloudformation validate-template --template-body file://devops/cloudformation/cbex-unity-frontend-cf.yml --region $Region

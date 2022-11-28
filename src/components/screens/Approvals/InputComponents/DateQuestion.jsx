@@ -65,10 +65,13 @@ const DateQuestion = ({
   );
 };
 
+DateQuestion.defaultProps = {
+  disabled: false
+};
 DateQuestion.propTypes = {
   question: PropTypes.object.isRequired,
   lastAnswer: PropTypes.object.isRequired,
-  disabled: PropTypes.any.isRequired,
+  disabled: PropTypes.any,
   userData: PropTypes.any.isRequired,
   socketContext: PropTypes.object.isRequired,
   trackMatomoEventSubmitAnswer: PropTypes.func.isRequired

@@ -1,5 +1,8 @@
 const DEFAULT = {
   OK: 'Ok',
+  DELETE: 'Delete',
+  DUPLICATE: 'Duplicate',
+  EMAIL: 'Email',
   ALERT: 'Alert',
   CLOSE: 'Close',
   SUCCESS: 'Success',
