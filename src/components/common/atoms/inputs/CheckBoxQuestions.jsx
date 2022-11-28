@@ -40,10 +40,10 @@ const CheckBoxQuestions = (props: Props) => {
   const [getFocus, setFocus] = useState(false);
   const [getSpan, setSpan] = useState(false);
   const checkBoxRef = useRef();
-  const finalLov =
-    finalOptions?.toJS().length > 0
-      ? finalOptions
-      : options[`SF#${sfObject}_SF#${sfField}`];
+
+  const finalLov = !isEmpty(finalOptions)
+    ? finalOptions
+    : options[`SF#${sfObject}_SF#${sfField}`];
   let selectItems = null;
   const selectedNames = [];
   if (!isEmpty(finalLov)) {

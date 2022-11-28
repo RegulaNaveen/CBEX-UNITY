@@ -76,7 +76,6 @@ switch (environment) {
     NOTES_SOCKET_URL =
       'wss://3q3atw4co6.execute-api.us-east-1.amazonaws.com/production';
     break;
-
   case 'DEV3':
     PROPOSAL_API_ENDPOINT =
       'https://q4i0wr1pi7.execute-api.us-east-1.amazonaws.com/dev3';
