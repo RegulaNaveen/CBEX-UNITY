@@ -14,6 +14,12 @@ const Filters = props => {
     console.log({ filterName, checked });
     dispatch(updateFilters(filterName, checked));
   };
+  const clearAllFilters = () => {
+    const filterNames = approvalFilters.map(i => i.name);
+    filterNames.forEach(name => {
+      dispatch(updateFilters(name, false));
+    });
+  };
 
   return (
     <div className="questions-filter__container">
@@ -23,7 +29,7 @@ const Filters = props => {
           <Link
             className="clear-all"
             size="small"
-            // onClick={() => clearQuestionsFilter()}
+            onClick={() => clearAllFilters()}
           >
             Clear All
           </Link>

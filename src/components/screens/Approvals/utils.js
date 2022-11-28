@@ -54,12 +54,15 @@ const informedFilter = questions => {
 const filteredQuestions = (questions, approvalfilters) => {
   const appliedFilters = approvalfilters.filter(i => i.value).map(i => i.name);
   console.log({ appliedFilters });
+  // Filters for roles group
   if (appliedFilters.includes('responsible')) {
     questions = responsibleFilter(questions);
   }
   if (appliedFilters.includes('informed')) {
     questions = informedFilter(questions);
   }
+  // Filters For answer group
+  // Note: The questions object is getting mutated, add future filters which are not related to answers above this logic.
   if (
     appliedFilters.includes('answered') &&
     appliedFilters.includes('unanswered')
@@ -69,7 +72,7 @@ const filteredQuestions = (questions, approvalfilters) => {
   if (appliedFilters.includes('answered')) {
     questions = answeredFilter(questions);
   }
-  if (appliedFilters.includes('responsible')) {
+  if (appliedFilters.includes('unanswered')) {
     questions = unansweredFilter(questions);
   }
   return questions;
