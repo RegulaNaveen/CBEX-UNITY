@@ -21,6 +21,7 @@ import Filters from './Filters';
 const Approvals = () => {
   const approvals = useSelector(state => state.approvals.allApprovals);
   const filters = useSelector(state => state.approvals.filters);
+  const [isShowFilters, setIsShowFilters] = useState(false);
   const proposalQuestions = useSelector(selectProposalQuestions);
   const [loading, setLoading] = useState(false);
   const [warning, setWarning] = useState(false);
@@ -61,13 +62,16 @@ const Approvals = () => {
       <div
         style={{ display: 'flex', justifyContent: 'end', paddingBottom: '5px' }}
       >
-        <SecondaryButton>
+        <SecondaryButton
+          onClick={() => {
+            setIsShowFilters(val => !val);
+          }}
+        >
           <Filter className="filter-icon" />
           Filter
         </SecondaryButton>
       </div>
-      <Filters />
-
+      {isShowFilters && <Filters />}
       {!isEmpty(approvals) ? (
         approvals.map(approval => (
           <Section
