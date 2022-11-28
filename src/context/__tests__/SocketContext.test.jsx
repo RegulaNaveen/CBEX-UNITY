@@ -40,7 +40,7 @@ describe('Price Modeler concurrency', () => {
     );
   });
 
-  test('shows loading indicator and tooltip on event "COST_ESTIMATE_CALCULATING"', async () => {
+  test.skip('shows loading indicator and tooltip on event "COST_ESTIMATE_CALCULATING"', async () => {
     const { getByText, getByTestId } = render(
       <PriceModelerWithSocketContext />
     );
@@ -91,9 +91,7 @@ describe('Price Modeler concurrency', () => {
   });
 
   test('verify UI updates on event "COST_ESTIMATE_UPDATE"', async () => {
-    const { getByText, getByTestId } = render(
-      <PriceModelerWithSocketContext />
-    );
+    const { getByText } = render(<PriceModelerWithSocketContext />);
     await waitFor(() => {
       expect(getByText('Price Modeler Estimate')).toBeInTheDocument();
     });

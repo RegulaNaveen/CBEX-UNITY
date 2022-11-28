@@ -313,25 +313,27 @@ const SystemIntegrations = ({
           placement="top"
           tabIndex={-1}
         >
-          <IconButton
-            disabled={disabled || !isCurrentBid}
-            style={{
-              height: '24px',
-              width: '24px',
-              paddingLeft: '0px',
-              paddingRight: '0px'
-            }}
-            className="bluecalendar"
-            tabIndex={-1}
-          >
-            <CalendarCheck
-              fontSize="22px"
-              style={{ color: '#015ff1' }}
-              className="integration-icon"
-              // onClick={() => handleVerifyPredictedAnsClick(lastAnswer)}
-              onClick={answeronhistory}
-            />
-          </IconButton>
+          <span>
+            <IconButton
+              disabled={disabled || !isCurrentBid}
+              style={{
+                height: '24px',
+                width: '24px',
+                paddingLeft: '0px',
+                paddingRight: '0px'
+              }}
+              className="bluecalendar"
+              tabIndex={-1}
+            >
+              <CalendarCheck
+                fontSize="22px"
+                style={{ color: '#015ff1' }}
+                className="integration-icon"
+                // onClick={() => handleVerifyPredictedAnsClick(lastAnswer)}
+                onClick={answeronhistory}
+              />
+            </IconButton>
+          </span>
         </Tooltip>
       );
     }

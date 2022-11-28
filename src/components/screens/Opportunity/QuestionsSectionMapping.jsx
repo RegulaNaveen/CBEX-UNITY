@@ -83,7 +83,6 @@ const QuestionsSectionMapping = ({
    * Get limited Section Data for Lazy Loading
    */
   const onGrabData = currentPage => {
-    // console.log({ currentPage });
     setResetLazy(false);
     return new Promise(resolve => {
       setTimeout(() => {
@@ -118,7 +117,7 @@ const QuestionsSectionMapping = ({
     const sectionOrder = section.get('sectionOrder');
     const questions = section.get('questions');
     return (
-      <QuestionsRefContext.Consumer>
+      <QuestionsRefContext.Consumer key={sectionName}>
         {questionsRef => (
           <CollapsibleList
             questions={questions}

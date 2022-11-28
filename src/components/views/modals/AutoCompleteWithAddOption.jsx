@@ -149,7 +149,7 @@ const AutoCompleteWithAddOption = ({
 
   const handleFocus = useCallback(() => {
     if (toggleWatch) toggleWatch(true);
-    onFocus()
+    onFocus();
   }, []);
 
   const handleBlur = useCallback(() => {
@@ -163,7 +163,7 @@ const AutoCompleteWithAddOption = ({
         console.log(autoCompleteRef.current);
         autoCompleteRef.current.blur();
         setTimeout(() => {
-          autoCompleteRef.current.value="";
+          autoCompleteRef.current.value = '';
         }, 100);
       }
     }

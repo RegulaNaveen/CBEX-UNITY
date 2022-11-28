@@ -26,9 +26,9 @@ import {
   getProposalAnswerHistory,
   setProposalAnswerData
 } from '../../../redux/actions/proposal-actions';
-import getLastAnswer from '../../screens/Approvals/getLastAnswer';
 import { SocketContext } from '../../../context/SocketContext';
 import MatomoHOC from '../../HOC/MatomoHOC';
+import { getLastAnswer } from '../../screens/Approvals/utils';
 
 type Props = {
   question: Map,

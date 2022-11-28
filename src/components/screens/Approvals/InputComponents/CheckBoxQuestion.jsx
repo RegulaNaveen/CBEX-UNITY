@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import isEmpty from 'lodash/isEmpty';
+import PropTypes from 'prop-types';
 import CheckBoxQuestions from '../../../common/atoms/inputs/CheckBoxQuestions';
 import ANSWER_TYPES from '../../../../constants/answerTypes';
 import {
@@ -12,6 +12,7 @@ import { setProposalAnswerData } from '../../../../redux/actions/proposal-action
 const CheckBoxQuestion = ({
   question,
   lastAnswer,
+  disabled,
   userData,
   socketContext,
   trackMatomoEventSubmitAnswer
@@ -55,7 +56,7 @@ const CheckBoxQuestion = ({
         <CheckBoxQuestions
           answerValue={answerValue}
           finalOptions={finalOptions}
-          disabled={false}
+          disabled={!!disabled}
           onOpen={() => {}}
           onClose={() => {}}
           onChange={changeHandler}
@@ -66,6 +67,18 @@ const CheckBoxQuestion = ({
     console.error(error);
     return <p>Error rendering CheckBoxQuestion</p>;
   }
+};
+
+CheckBoxQuestion.defaultProps = {
+  disabled: false
+};
+CheckBoxQuestion.propTypes = {
+  question: PropTypes.object.isRequired,
+  lastAnswer: PropTypes.object.isRequired,
+  disabled: PropTypes.any,
+  userData: PropTypes.any.isRequired,
+  socketContext: PropTypes.object.isRequired,
+  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired
 };
 
 export default CheckBoxQuestion;

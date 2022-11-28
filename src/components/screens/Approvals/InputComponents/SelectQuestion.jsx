@@ -1,11 +1,13 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 import AutoCompleteWithAddOption from '../../../views/modals/AutoCompleteWithAddOption';
 import { setProposalAnswerData } from '../../../../redux/actions/proposal-actions';
 
 const SelectQuestion = ({
   question,
   lastAnswer,
+  disabled,
   userData,
   socketContext,
   trackMatomoEventSubmitAnswer
@@ -33,11 +35,23 @@ const SelectQuestion = ({
       lov={question?.answerConfiguration?.options}
       onFocus={() => {}}
       onBlur={() => {}}
-      disabled={false}
+      disabled={!!disabled}
       answer={lastAnswer.answer}
       onChange={changeHandler}
     />
   );
+};
+
+SelectQuestion.defaultProps = {
+  disabled: false
+};
+SelectQuestion.propTypes = {
+  question: PropTypes.object.isRequired,
+  lastAnswer: PropTypes.object.isRequired,
+  disabled: PropTypes.any,
+  userData: PropTypes.any.isRequired,
+  socketContext: PropTypes.object.isRequired,
+  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired
 };
 
 export default SelectQuestion;
