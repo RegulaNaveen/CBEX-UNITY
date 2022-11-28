@@ -113,100 +113,60 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
         }
       ]
     });
-    trackEvent({
-      category: eventCategories.crmNo,
-      action: `Approval: ${action}`,
-      name: `Approval Answer: ${action}: (${ApprovalSectionTitle}) (${ArchivedData.length - 1})`,
-      customDimensions: [
-        {
-          id: 1,
-          value: JSON.stringify({
-            proposalDetail,
-            aprovaldata,
-            totalApproval: ArchivedData.length - 1
-          })
-        }
-      ]
-    });
-    trackEvent({
-      category: eventCategories.crmNo,
-      action: `Approval ${action}`,
-      name: `Approval: ${action} click event`,
-      customDimensions: [
-        {
-          id: 1,
-          value: JSON.stringify({
-            proposalDetail,
-            aprovaldata
-          })
-        }
-      ]
-    });
   }
 
   const duplicateEventMatomo = (action, aprovaldata) => {
-    const proposalDetail = opportunityData?.proposal?.proposalDetails;
-    const { ApprovalSectionTitle } = aprovaldata;
-    trackEvent({
-      category: eventCategories.crmNo,
-      action: `Approval: creation`,
-      name: `Approval Answer: creation: (${ApprovalSectionTitle}) (${ArchivedData.length + 1})`,
-      customDimensions: [
-        {
-          id: 1,
-          value: JSON.stringify({
-            proposalDetail,
-            aprovaldata,
-            totalApproval: ArchivedData.length + 1
-          })
-        }
-      ]
-    });
-    trackEvent({
-      category: eventCategories.crmNo,
-      action: `Approval: ${action}`,
-      name: `Approval Answer: ${action}: (${ApprovalSectionTitle}) (${ArchivedData.length + 1})`,
-      customDimensions: [
-        {
-          id: 1,
-          value: JSON.stringify({
-            proposalDetail,
-            aprovaldata,
-            totalApproval: ArchivedData.length + 1
-          })
-        }
-      ]
-    });
-    trackEvent({
-      category: eventCategories.crmNo,
-      action: `Approval: ${action} click event`,
-      name: `Approval Answer: ${action}`,
-      customDimensions: [
-        {
-          id: 1,
-          value: JSON.stringify({
-            proposalDetail,
-            aprovaldata,
-            totalApproval: ArchivedData.length + 1
-          })
-        }
-      ]
-    });
-    trackEvent({
-      category: eventCategories.crmNo,
-      action: `Approval:  ${action} count`,
-      name: `Approval Answer: Approval count: ${ArchivedData.length + 1}`,
-      customDimensions: [
-        {
-          id: 1,
-          value: JSON.stringify({
-            proposalDetail,
-            aprovaldata,
-            totalApproval: ArchivedData.length + 1
-          })
-        }
-      ]
-    });
+    try {
+      const proposalDetail = opportunityData?.proposal?.proposalDetails;
+      const { ApprovalSectionTitle } = aprovaldata;
+      trackEvent({
+        category: eventCategories.crmNo,
+        action: `Approval: creation`,
+        name: `Approval Answer: creation: (${ApprovalSectionTitle}) (${ArchivedData.length + 1})`,
+        customDimensions: [
+          {
+            id: 1,
+            value: JSON.stringify({
+              proposalDetail,
+              aprovaldata,
+              totalApproval: ArchivedData.length + 1
+            })
+          }
+        ]
+      });
+      trackEvent({
+        category: eventCategories.crmNo,
+        action: `Approval: ${action}`,
+        name: `Approval Answer: ${action}: (${ApprovalSectionTitle}) (${ArchivedData.length + 1})`,
+        customDimensions: [
+          {
+            id: 1,
+            value: JSON.stringify({
+              proposalDetail,
+              aprovaldata,
+              totalApproval: ArchivedData.length + 1
+            })
+          }
+        ]
+      });
+      trackEvent({
+        category: eventCategories.crmNo,
+        action: `Approval:  ${action} count`,
+        name: `Approval Answer: Approval count: ${ArchivedData.length + 1}`,
+        customDimensions: [
+          {
+            id: 1,
+            value: JSON.stringify({
+              proposalDetail,
+              aprovaldata,
+              totalApproval: ArchivedData.length + 1
+            })
+          }
+        ]
+      });
+    } catch (error) {
+      console.log('error :>> ', error);
+    }
   }
 
   const emailEventMatomo = (action, aprovaldata) => {
@@ -216,20 +176,6 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
       category: eventCategories.crmNo,
       action: `Approval ${action}`,
       name: `Approval: ${action}: (${ApprovalSectionTitle}) (${ApprovalSectionOrder})`,
-      customDimensions: [
-        {
-          id: 1,
-          value: JSON.stringify({
-            proposalDetail,
-            aprovaldata
-          })
-        }
-      ]
-    });
-    trackEvent({
-      category: eventCategories.crmNo,
-      action: `Approval ${action}`,
-      name: `Approval: ${action} click event`,
       customDimensions: [
         {
           id: 1,
@@ -302,9 +248,9 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
             const response = await dispatch(
               duplicateApproval(proposalId, sectionId)
             );
-            if (response && response.data) {
-              trackMatomoEventSubmitAnswer('Duplicate', response.data);
-            }
+            // if (response && response.data) {
+            trackMatomoEventSubmitAnswer('Duplicate', approval);
+            // }
             dispatchLoadingEvent('SET_LOADING', false);
             if (!response.status) {
               setWarningTitle(response.title);
