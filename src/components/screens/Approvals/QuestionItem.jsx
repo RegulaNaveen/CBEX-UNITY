@@ -102,7 +102,7 @@ const QuestionItem = ({
     const proposalDetail = opportunityData?.proposal?.proposalDetails;
     trackEvent({
       category: eventCategories.crmNo,
-      action: `Question: ${questionText} (${sectionName}) (${approvalSectionTitle})`,
+      action: `Approval Question: ${questionText} (${sectionName}) (${approvalSectionTitle})`,
       name: `Answer: ${answer}`,
       customDimensions: [
         {
@@ -165,8 +165,8 @@ const QuestionItem = ({
     return ComponentMapper[question?.answerConfiguration?.type] ? (
       <SFNestedAnswerItem />
     ) : (
-      <FallbackComponent />
-    );
+        <FallbackComponent />
+      );
   };
 
   return useMemo(
