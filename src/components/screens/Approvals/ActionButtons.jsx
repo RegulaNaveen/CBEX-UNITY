@@ -114,7 +114,7 @@ const ActionButtons = ({ sectionId }) => {
           title={warningTitle}
           message={warningText}
           variant="error"
-          handleClose={() => setWarning(false)}
+          onClose={() => setWarning(false)}
           buttonProps={[{ className: 'hidden' }, { label: DEFAULT.CLOSE }]}
           modalStyle={{ maxWidth: 342 }}
         />
