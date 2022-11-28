@@ -34,21 +34,28 @@ const Filters = props => {
             Clear All
           </Link>
         </div>
-        {filterGroups.map(group => (
-          <Grid container spacing={2}>
-            {approvalFilters
-              .filter(i => i.group === group)
-              .map(item => (
-                <Grid item xs={3}>
-                  <ApolloCheckbox
-                    size="small"
-                    label={item.displayName}
-                    checked={item.value}
-                    onChange={(e, checked) => updateFilter(item.name, checked)}
-                  />
-                </Grid>
-              ))}
-          </Grid>
+        {filterGroups.map((group, index) => (
+          <div>
+            <Grid container spacing={2}>
+              {approvalFilters
+                .filter(i => i.group === group)
+                .map(item => (
+                  <Grid item xs={3}>
+                    <ApolloCheckbox
+                      size="small"
+                      label={item.displayName}
+                      checked={item.value}
+                      onChange={(e, checked) =>
+                        updateFilter(item.name, checked)
+                      }
+                    />
+                  </Grid>
+                ))}
+            </Grid>
+            {index !== filterGroups.length - 1 ? (
+              <hr className="filter-horizontal" />
+            ) : null}
+          </div>
         ))}
       </div>
     </div>
