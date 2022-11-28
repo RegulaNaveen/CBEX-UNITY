@@ -1,28 +1,13 @@
 import React from 'react';
 import '@testing-library/jest-dom';
-import { cleanup, fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import configureMockStore from 'redux-mock-store';
-import { configure, mount, shallow, render } from 'enzyme';
-import thunk from 'redux-thunk';
+import { configure, render } from 'enzyme';
 import { Map, fromJS } from 'immutable';
 import { Provider } from 'react-redux';
 import Adapter from 'enzyme-adapter-react-16';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Approvals from '../index';
-import getQuestionsFilters from '../../../../redux/selectors';
-import { getSelectedBid } from '../../../../redux/selectors/proposal';
-import {
-  clearQuestionsFilterAction,
-  onApplyQuestionsFilter,
-} from '../../../../redux/actions/proposal-actions';
-// import userEvent from '@testing-library/user-event';
-// import { opportunityData } from './opportunityData';
-
-import {
-  getOpportunityData,
-  getBidList,
-} from '../../../../redux/selectors/proposal';
-import selectQuestionsFilters from '../../../../redux/selectors/proposal';
 import * as data from '../../Proposal/__tests__/data.json';
 
 configure({ adapter: new Adapter() });
@@ -41,18 +26,8 @@ const userActions = fromJS(data.userActions);
 const milestones = fromJS(data.milestones);
 const proposalID = fromJS(data.proposalID);
 const selectedBid = fromJS(data.proposalID);
-
-// const activeQuestionsFilterCount = data.activeQuestionsFilterCount;
-// const filterMilestone = data.filterMilestone;
-// const filteredSections = data.filteredSections;
-// const isQuestionLoading = data.isQuestionLoading;
 const userRole = fromJS(data.userRole);
-// const allSectionsExpanded = data.allSectionsExpanded;
 const sections = fromJS(data.sections);
-// const oppData = Map(fromJS(opportunityData));
-
-// const mockDispatch = store.dispatch;
-// store.dispatch = jest.fn(mockDispatch);
 
 let initialState = {
   ssoAuth,
@@ -84,32 +59,15 @@ let initialState = {
   userActions,
   milestones,
   proposalID,
-
-  // activeQuestionsFilterCount,
-  // filterMilestone,
-  // details,
-  // filteredSections,
-  // isQuestionLoading,
   userRole,
-  // allSectionsExpanded,
   onAddQuestion: jest.fn(),
   expandAll: jest.fn(),
   AddNewQuestion: jest.fn(),
   RefreshProposal: jest.fn(),
   getBidList: jest.fn(),
-
-  // expandAll: jest.fn(),
   currentTab: null,
 };
 describe('Testing approvals', () => {
-  //   const mock = {
-  //     proposalSelectors: jest.fn(),
-  //   };
-  //   const props = {
-  //     applyQuestionsFilter: onApplyQuestionsFilter(),
-  //     questionsFilters: getQuestionsFilters(),
-  //     clearQuestionsFilter: clearQuestionsFilterAction(),
-  //   };
   let store;
   beforeEach(() => {
     store = mockStore(initialState);
@@ -140,7 +98,7 @@ describe('Testing approvals', () => {
     expect(renderFilterFunc).toHaveBeenCalledWith();
   });
 
-  test('test component rendering', async () => {
+  test('test component when there is no approval', async () => {
     const props = {
       applyQuestionsFilter: jest.fn(),
       clearQuestionsFilter: jest.fn(),
@@ -176,7 +134,6 @@ describe('Testing approvals', () => {
         </Router>
       </Provider>
     );
-    screen.debug();
     const filterBtn = screen.getByTestId(/filter-btn/);
     expect(filterBtn).toBeTruthy();
     await fireEvent.click(filterBtn);
