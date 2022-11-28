@@ -70,7 +70,7 @@ function getLineOfBusinessAsPerLogic(
   salesForceLobIsFSP
 ) {
   let finalLOB = '';
-  lobMapping.forEach(function(data) {
+  lobMapping.forEach(function (data) {
     if (finalLOB !== '') return false;
     const { name } = data;
     data.values.forEach(d => {
@@ -221,28 +221,37 @@ const throttle = (func, delay) => {
 
     // Logging the difference between previously
     // called and current called timings
-     
+
     // If difference is greater than delay call
     // the function again.
-    if(now - prev> delay){
+    if (now - prev > delay) {
       prev = now;
 
       // "..." is the spread operator here
       // returning the function with the
       // array of arguments
-      return func(...args); 
+      return func(...args);
     }
   }
 }
 
-  const createMatomoObj = (proposalDetails, userEmail, userRole, action) => {
-    const matamoObj = {}
-    matamoObj.category = `Proposal Detail (CRM#:${proposalDetails['CRM #']})`
-    matamoObj.action = `Event: Notepad ${proposalDetails['CRM #']}`
-    matamoObj.name = `Notepad: ${action}`
-    matamoObj.customDimensions = [JSON.stringify(proposalDetails), {user: userEmail},{role: userRole}]
-    return matamoObj
-  }
+const createMatomoObj = (proposalDetails, userEmail, userRole, action) => {
+  const matamoObj = {}
+  matamoObj.category = `Proposal Detail (CRM#:${proposalDetails['CRM #']})`
+  matamoObj.action = `Event: Notepad ${proposalDetails['CRM #']}`
+  matamoObj.name = `Notepad: ${action}`
+  matamoObj.customDimensions = [
+    {
+      id: 1,
+      value: JSON.stringify({
+        proposalDetails,
+        userEmail,
+        userRole
+      })
+    }
+  ]
+  return matamoObj
+}
 
 export {
   getCountriesNameForCode,
