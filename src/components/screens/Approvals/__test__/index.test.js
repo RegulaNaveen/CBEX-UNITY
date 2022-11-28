@@ -13,13 +13,14 @@ import getQuestionsFilters from '../../../../redux/selectors';
 import { getSelectedBid } from '../../../../redux/selectors/proposal';
 import {
   clearQuestionsFilterAction,
-  onApplyQuestionsFilter
+  onApplyQuestionsFilter,
 } from '../../../../redux/actions/proposal-actions';
+// import userEvent from '@testing-library/user-event';
 // import { opportunityData } from './opportunityData';
 
 import {
   getOpportunityData,
-  getBidList
+  getBidList,
 } from '../../../../redux/selectors/proposal';
 import selectQuestionsFilters from '../../../../redux/selectors/proposal';
 import * as data from '../../Proposal/__tests__/data.json';
@@ -98,7 +99,7 @@ let initialState = {
   getBidList: jest.fn(),
 
   // expandAll: jest.fn(),
-  currentTab: null
+  currentTab: null,
 };
 describe('Testing approvals', () => {
   //   const mock = {
@@ -114,13 +115,13 @@ describe('Testing approvals', () => {
     store = mockStore(initialState);
   });
 
-  test.only('render Approval component', async () => {
+  test('render Approval component', async () => {
     const props = {
       applyQuestionsFilter: jest.fn(),
       clearQuestionsFilter: jest.fn(),
       selectQuestionsFilters: jest.fn(),
       getSelectedBid: jest.fn(),
-      getOpportunityData: jest.fn()
+      getOpportunityData: jest.fn(),
     };
     render(
       <Provider store={store}>
@@ -129,27 +130,59 @@ describe('Testing approvals', () => {
         </Router>
       </Provider>
     );
-    await expect(screen.getByTestId('bid-history')).toBeTruthy();
-    // expect(getByTestId('collapsible-list')).toBeInTheDocument();
+    await expect(screen.queryAllByTestId('bid-history')).toBeTruthy();
   });
-  //   test('Test filter function', () => {
-  //     const renderFilterFunc = jest.fn();
-  //     const mockFunc = renderFilterFunc();
-  //     expect(mockFunc).toBeUndefined();
-  //     expect(renderFilterFunc).toHaveBeenCalledTimes(1);
-  //     expect(renderFilterFunc).toHaveBeenCalledWith();
-  //   });
-  // test('test component rendering', () => {
-  //   const renderFilterFunc = jest.fn();
-  //   const mockFunc = renderFilterFunc();
-  //   expect(mockFunc).toBeUndefined();
-  //   const { getByTestId } = render(
-  //     <Provider store={store}>
-  //       <Router>
-  //         <Approvals {...mockData} />
-  //       </Router>
-  //     </Provider>
-  //   );
-  //   expect(screen.getByTestId('collapsible-list')).toBeInTheDocument();
-  // });
+  test.skip('Test filter function', () => {
+    const renderFilterFunc = jest.fn();
+    const mockFunc = renderFilterFunc();
+    expect(mockFunc).toBeUndefined();
+    expect(renderFilterFunc).toHaveBeenCalledTimes(1);
+    expect(renderFilterFunc).toHaveBeenCalledWith();
+  });
+
+  test('test component rendering', async () => {
+    const props = {
+      applyQuestionsFilter: jest.fn(),
+      clearQuestionsFilter: jest.fn(),
+      selectQuestionsFilters: jest.fn(),
+      getSelectedBid: jest.fn(),
+      getOpportunityData: jest.fn(),
+    };
+    const renderFilterFunc = jest.fn();
+    const mockFunc = renderFilterFunc();
+    expect(mockFunc).toBeUndefined();
+    render(
+      <Provider store={store}>
+        <Router>
+          <Approvals {...props} />
+        </Router>
+      </Provider>
+    );
+    await expect(screen.queryAllByTestId('No_approvals')).toBeTruthy();
+  });
+
+  test.skip('Click event ', async () => {
+    const props = {
+      applyQuestionsFilter: jest.fn(),
+      clearQuestionsFilter: jest.fn(),
+      selectQuestionsFilters: jest.fn(),
+      getSelectedBid: jest.fn(),
+      getOpportunityData: jest.fn(),
+    };
+    render(
+      <Provider store={store}>
+        <Router>
+          <Approvals {...props} />
+        </Router>
+      </Provider>
+    );
+    screen.debug();
+    const filterBtn = screen.getByTestId(/filter-btn/);
+    expect(filterBtn).toBeTruthy();
+    await fireEvent.click(filterBtn);
+    screen.debug(filterBtn);
+    await waitFor(() => {
+      expect(screen.getByText(/Filters/i)).toBeTruthy();
+    });
+  });
 });
