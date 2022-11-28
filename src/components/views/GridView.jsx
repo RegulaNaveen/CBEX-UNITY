@@ -25,7 +25,8 @@ const formatProposal = (proposal: Object) => {
     phase: proposal.phase || placeholder,
     therapeuticArea: proposal.therapeuticArea || placeholder,
     verbatimIndication: proposal['verbatim indication'] || placeholder,
-    proposalId: proposal.proposalId || placeholder
+    proposalId: proposal.proposalId || placeholder,
+    approvalsCount: proposal.approvalsCount || null
   };
 
   return formatted;
@@ -62,6 +63,7 @@ class GridView extends Component<Props> {
               therapeuticArea={formatted.therapeuticArea}
               verbatimIndication={formatted.verbatimIndication}
               proposalId={formatted.proposalId}
+              approvalsCount={formatted.approvalsCount}
             />
           );
         })}
