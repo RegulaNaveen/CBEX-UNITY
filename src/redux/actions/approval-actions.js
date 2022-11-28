@@ -92,3 +92,8 @@ export const duplicateApproval = (proposalId, sectionId) => async (
     return { status: false, title: DEFAULT.ALERT, msg };
   }
 };
+
+export const updateFilters = (name, value) => ({
+  type: APPROVALS.UPDATE_FILTERS,
+  payload: { name, value }
+});
