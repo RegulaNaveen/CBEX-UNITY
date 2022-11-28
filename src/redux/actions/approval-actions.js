@@ -42,10 +42,18 @@ export const deleteApprovalAction = approvalId => ({
   payload: approvalId
 });
 
-export const deleteApproval = (proposalId, sectionId) => async dispatch => {
+export const deleteApproval = (proposalId, sectionId) => async (
+  dispatch,
+  getState
+) => {
   try {
+    const proposalDetails = getState().proposal?.get('proposalDetails');
     // Api Response
-    const response = await deleteApprovalsApi(proposalId, sectionId);
+    const response = await deleteApprovalsApi(
+      proposalId,
+      sectionId,
+      proposalDetails['CRM #']
+    );
     console.log('Delete Approval response: ', response.data);
     dispatch(deleteApprovalAction(sectionId));
     return { status: true, title: DEFAULT.SUCCESS, data: response.data };

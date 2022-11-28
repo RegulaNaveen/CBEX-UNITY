@@ -60,14 +60,14 @@ const ActionButtons = ({ sectionId }) => {
           {showDeleteModal && (
             <CustomModal
               open={showDeleteModal}
-              title="Alert"
+              title="Are you sure?"
               message="The content of that approval section will be removed."
-              variant="warning"
+              variant="error"
               onClose={() => setShowDeleteModal(false)}
               buttonProps={[
                 {},
                 {
-                  label: 'Yes, Delete',
+                  label: 'Delete',
                   onClick: deleteAfterConfirmHandler
                 }
               ]}

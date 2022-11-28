@@ -1,7 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import configureMockStore from 'redux-mock-store';
-import { configure, render } from 'enzyme';
+import { configure, render, shallow } from 'enzyme';
 import thunk from 'redux-thunk';
 import { Map } from 'immutable';
 import { Provider } from 'react-redux';
@@ -17,6 +17,7 @@ import YesNoQuestion from '../InputComponents/YesNoQuestion';
 import CheckBoxQuestion from '../InputComponents/CheckBoxQuestion';
 import { sfOptions, dummyQuestions } from './data';
 import { getLastAnswer } from '../../../views/export-component/word-template';
+import Approvals from '../../../../redux/reducers/approvals';
 
 configure({ adapter: new Adapter() });
 const middlewares = [thunk];
@@ -133,5 +134,12 @@ describe.skip('Snapshot Test Approval Input Components', () => {
       </Provider>
     );
     expect(container).toMatchSnapshot();
+  });
+});
+
+describe('Approvals Component', () => {
+  it('Should render', () => {
+    const wrapper = shallow(<Approvals />);
+    expect(wrapper).toBeDefined();
   });
 });
