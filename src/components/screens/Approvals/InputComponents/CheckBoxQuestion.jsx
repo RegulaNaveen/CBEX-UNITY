@@ -54,18 +54,25 @@ const CheckBoxQuestion = ({
     };
 
     return (
-      <div className="checkboxtype">
+      <div
+        className="checkboxtype"
+        // onFocus={() => {
+        //   questionLockWrapper(question?.questionId);
+        // }}
+      >
         <CheckBoxQuestions
           answerValue={answerValue}
           finalOptions={finalOptions}
-          disabled={checkDisableFlag() || !!disabled}
+          disabled={!!disabled}
+          onOpen={() => {}}
+          onClose={() => {}}
           onChange={changeHandler}
-          onOpen={() => {
-            questionLockWrapper(question?.questionId);
-          }}
-          onClose={() => {
-            questionUnlockWrapper(question?.questionId);
-          }}
+          // onFocus={() => {
+          //   questionLockWrapper(question?.questionId);
+          // }}
+          // onBlur={() => {
+          //   questionUnlockWrapper(question?.questionId);
+          // }}
         />
       </div>
     );
