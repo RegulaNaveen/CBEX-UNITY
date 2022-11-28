@@ -5,7 +5,33 @@ import { APPROVALS } from '../../constants/types';
 const INITIAL_STATE = {
   allApprovals: [],
   quesHashData: {},
-  isLoading: false
+  isLoading: false,
+  filters: [
+    {
+      name: 'answered',
+      displayName: 'Answered',
+      group: 'answer',
+      value: false
+    },
+    {
+      name: 'unanswered',
+      displayName: 'Unanswered',
+      group: 'answer',
+      value: false
+    },
+    {
+      name: 'responsible',
+      displayName: 'Responsible',
+      group: 'roles',
+      value: false
+    },
+    {
+      name: 'informed',
+      displayName: 'Informed',
+      group: 'roles',
+      value: false
+    }
+  ]
 };
 
 const setApprovals = (state, action) => {
@@ -67,12 +93,22 @@ const deleteApprovals = (state, action) => {
   return { ...state, allApprovals: modifiedApprovals };
 };
 
+const updateFilter = (state, action) => {
+  const { payload } = action;
+  const { name, value } = payload;
+  const newFilters = state.filters.map(obj =>
+    obj.name === name ? { ...obj, value } : obj
+  );
+  return { ...state, filters: newFilters };
+};
+
 const actionMap = {
   [APPROVALS.SET_APPROVALS]: setApprovals,
   [APPROVALS.SET_QUES_HASH]: setQuesHash,
   [APPROVALS.SET_LOADING]: setLoading,
   [APPROVALS.DUPLICATE_APPROVALS]: duplicateApproval,
-  [APPROVALS.DELETE_APPROVALS]: deleteApprovals
+  [APPROVALS.DELETE_APPROVALS]: deleteApprovals,
+  [APPROVALS.UPDATE_FILTERS]: updateFilter
 };
 
 export default function(state = INITIAL_STATE, action) {
