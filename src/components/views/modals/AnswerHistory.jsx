@@ -43,7 +43,6 @@ type Props = {
   eventCategories: any,
   events: any
 };
-let renderComp;
 let lockQuestion;
 let conditionBlankPredicted;
 let indexNo;
@@ -95,6 +94,7 @@ class AnswerHistory extends Component<Props> {
     const questionText = questions.get('questionText');
     const proposalId = answers.get(0).get('proposalId');
     const sectionName = question.get('section').toJS().sectionName;
+    const answer = answers.get(0).get('answer');
     const questionHTML = questions.get('questionHtml');
     const questionJSON = questions.get('questionJSON');
     const questionHintJSON = questions.get('questionHintJSON');
@@ -130,14 +130,12 @@ class AnswerHistory extends Component<Props> {
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Answer History Event: ${questionText} (${sectionName})`,
-      name: `Verified Answer: ${predictedAnswer.get('answer')} by ${
-        userData.name
-      }(${userData.email})`,
+      name: `Verified Answer: ${answer} by ${userData.name} ${userData.email}`,
       customDimensions: [
         {
           id: 1,
           value: JSON.stringify({
-            answer: predictedAnswer.get('answer'),
+            answer: answer,
             sectionName,
             questionText,
             questionHTML,
@@ -156,7 +154,13 @@ class AnswerHistory extends Component<Props> {
   };
 
   handleRejectPredictedAnsClick = predictedAnswer => {
-    const { trackEvent, eventCategories, events, opportunityData } = this.props;
+    const {
+      trackEvent,
+      eventCategories,
+      events,
+      opportunityData,
+      userData
+    } = this.props;
     const { question } = this.state;
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const answers = question.get('answers').reverse();
@@ -164,6 +168,7 @@ class AnswerHistory extends Component<Props> {
     const questionId = questions.get('questionId');
     const questionText = questions.get('questionText');
     const proposalId = answers.get(0).get('proposalId');
+    const answer = answers.get(0).get('answer');
     const sectionName = question.get('section').toJS().sectionName;
     const questionHTML = questions.get('questionHtml');
     const questionJSON = questions.get('questionJSON');
@@ -171,7 +176,7 @@ class AnswerHistory extends Component<Props> {
     const proposalDetail =
       proposalId &&
       opportunityData.get(proposalId)?.toJS()?.proposal?.proposalDetails;
-    const { setProposalAnswer, userData, lastAnswer } = this.props;
+    const { setProposalAnswer, lastAnswer } = this.props;
     const answerType = questionType;
     // picklist value should not be converted to string while saving
     if (
@@ -194,14 +199,12 @@ class AnswerHistory extends Component<Props> {
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Answer History Event: ${questionText} (${sectionName})`,
-      name: `Rejected Answer: ${predictedAnswer.get('answer')} by ${
-        userData.name
-      }(${userData.email})`,
+      name: `Rejected Answer: ${answer} by ${userData.name} ${userData.email}`,
       customDimensions: [
         {
           id: 1,
           value: JSON.stringify({
-            answer: predictedAnswer.get('answer'),
+            answer: answer,
             sectionName,
             questionText,
             questionHTML,
@@ -280,7 +283,6 @@ class AnswerHistory extends Component<Props> {
       let answer = _answer.get('answer');
       const proposalId = _answer.get('proposalId');
       indexNo = index;
-      renderComp = uuidv4();
       let bidNo = '';
       let isCurrentBid = '';
       if (
@@ -562,7 +564,7 @@ class AnswerHistory extends Component<Props> {
       };
       return (
         <div>
-          <div className="answer-container" key={renderComp}>
+          <div className="answer-container" key={uuidv4()}>
             <div className="main-container">
               <span
                 style={{ backgroundColor: avatarRandomColor }}
