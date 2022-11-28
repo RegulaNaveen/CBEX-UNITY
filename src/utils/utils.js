@@ -236,19 +236,6 @@ const throttle = (func, delay) => {
   };
 };
 
-const createMatomoObj = (proposalDetails, userEmail, userRole, action) => {
-  const matamoObj = {};
-  matamoObj.category = `Proposal Detail (CRM#:${proposalDetails['CRM #']})`;
-  matamoObj.action = `Event: Notepad ${proposalDetails['CRM #']}`;
-  matamoObj.name = `Notepad: ${action}`;
-  matamoObj.customDimensions = [
-    JSON.stringify(proposalDetails),
-    { user: userEmail },
-    { role: userRole }
-  ];
-  return matamoObj;
-};
-
 /**
  * Get Error Message from response
  */
@@ -264,6 +251,24 @@ export function getErrorMessage(error) {
   }
   return 'Unexpected error occurred';
 }
+
+const createMatomoObj = (proposalDetails, userEmail, userRole, action) => {
+  const matamoObj = {};
+  matamoObj.category = `Proposal Detail (CRM#:${proposalDetails['CRM #']})`;
+  matamoObj.action = `Event: Notepad ${proposalDetails['CRM #']}`;
+  matamoObj.name = `Notepad: ${action}`;
+  matamoObj.customDimensions = [
+    {
+      id: 1,
+      value: JSON.stringify({
+        proposalDetails,
+        userEmail,
+        userRole
+      })
+    }
+  ];
+  return matamoObj;
+};
 
 export {
   getCountriesNameForCode,

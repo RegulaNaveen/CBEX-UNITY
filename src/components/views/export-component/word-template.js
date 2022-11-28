@@ -244,13 +244,13 @@ function getFormattedTextRows(formatedTextBlocks) {
   try {
     const { entityMap } = textBlocks.value;
     let mentions = [];
+    let offset = 0;
     textBlocks.value.blocks.forEach(block => {
       const texts = [];
       let { text, inlineStyleRanges, type, depth, entityRanges } = block;
       if (Array.isArray(entityRanges) && entityRanges.length > 0) {
         entityRanges = entityRanges.reverse();
         entityRanges.forEach(entity => {
-          let textArr = text.split('');
           if (
             entityMap &&
             entityMap[entity.key] &&
@@ -258,15 +258,11 @@ function getFormattedTextRows(formatedTextBlocks) {
             entityMap[entity.key]['data']['email']
           ) {
             mentions.push({
-              start: entity.offset,
-              end: entity.offset + entity.length,
-              email:
-                (entityMap[entity.key]['data'] &&
-                  entityMap[entity.key]['data']['email']) ||
-                ''
+              start: offset + entity.offset,
+              end: offset + entity.offset + entity.length,
+              email: entityMap[entity.key]['data']['email'] || ''
             });
           }
-          text = textArr.join('');
         });
       }
       const listType = type.includes('list-item')
@@ -285,7 +281,7 @@ function getFormattedTextRows(formatedTextBlocks) {
       const mentionsStartList = mentions.map(m => m.start);
       for (let i = 0; i < text.length; i++) {
         const { styles, styleId } = getFormattedTextStyles(styleMap, i);
-        const mentionIndex = mentionsStartList.findIndex(m => m === i);
+        const mentionIndex = mentionsStartList.findIndex(m => m === i + offset);
         if (mentionIndex > -1) {
           if (lastText.length > 0) {
             texts.push(
@@ -294,13 +290,13 @@ function getFormattedTextRows(formatedTextBlocks) {
                 ...styles
               })
             );
+            lastText = '';
           }
-          lastText = '';
           texts.push(
             new ExternalHyperlink({
               children: [
                 new TextRun({
-                  text: text.slice(i, mentions[mentionIndex].end),
+                  text: text.slice(i, mentions[mentionIndex].end - offset),
                   font: DEFAULT_FONT,
                   size: 15,
                   color: themeBlue,
@@ -310,7 +306,7 @@ function getFormattedTextRows(formatedTextBlocks) {
               link: `mailto:${mentions[mentionIndex].email}`
             })
           );
-          i = mentions[mentionIndex].end - 1;
+          i = mentions[mentionIndex].end - offset - 1;
           continue;
         }
         if (styleId === lastStyleId) {
@@ -345,6 +341,7 @@ function getFormattedTextRows(formatedTextBlocks) {
           ...listType
         })
       );
+      offset += text.length;
     });
 
     rows.push(
