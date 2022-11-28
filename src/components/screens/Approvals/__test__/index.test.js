@@ -13,11 +13,14 @@ import getQuestionsFilters from '../../../../redux/selectors';
 import { getSelectedBid } from '../../../../redux/selectors/proposal';
 import {
   clearQuestionsFilterAction,
-  onApplyQuestionsFilter,
+  onApplyQuestionsFilter
 } from '../../../../redux/actions/proposal-actions';
 // import { opportunityData } from './opportunityData';
 
-import { getOpportunityData } from '../../../../redux/selectors/proposal';
+import {
+  getOpportunityData,
+  getBidList
+} from '../../../../redux/selectors/proposal';
 import selectQuestionsFilters from '../../../../redux/selectors/proposal';
 import * as data from '../../Proposal/__tests__/data.json';
 
@@ -73,6 +76,7 @@ let initialState = {
   getQuestionsFilters: jest.fn(),
   getSelectedBid: jest.fn(),
   getOpportunityData: jest.fn(),
+  getPriceModuler: jest.fn(),
   eventCategories,
   proposalDetail,
   questionsFilters,
@@ -91,12 +95,11 @@ let initialState = {
   expandAll: jest.fn(),
   AddNewQuestion: jest.fn(),
   RefreshProposal: jest.fn(),
-  // getBidList: jest.fn(),
+  getBidList: jest.fn(),
 
   // expandAll: jest.fn(),
-  currentTab: null,
+  currentTab: null
 };
-const store = mockStore(initialState);
 describe('Testing approvals', () => {
   //   const mock = {
   //     proposalSelectors: jest.fn(),
@@ -106,14 +109,18 @@ describe('Testing approvals', () => {
   //     questionsFilters: getQuestionsFilters(),
   //     clearQuestionsFilter: clearQuestionsFilterAction(),
   //   };
+  let store;
+  beforeEach(() => {
+    store = mockStore(initialState);
+  });
 
-  test('render Approval component', () => {
+  test.only('render Approval component', async () => {
     const props = {
       applyQuestionsFilter: jest.fn(),
       clearQuestionsFilter: jest.fn(),
       selectQuestionsFilters: jest.fn(),
       getSelectedBid: jest.fn(),
-      getOpportunityData: jest.fn(),
+      getOpportunityData: jest.fn()
     };
     render(
       <Provider store={store}>
@@ -122,7 +129,7 @@ describe('Testing approvals', () => {
         </Router>
       </Provider>
     );
-    expect(screen.getByTestId('bid-history')).toBeInTheDocument();
+    await expect(screen.getByTestId('bid-history')).toBeTruthy();
     // expect(getByTestId('collapsible-list')).toBeInTheDocument();
   });
   //   test('Test filter function', () => {

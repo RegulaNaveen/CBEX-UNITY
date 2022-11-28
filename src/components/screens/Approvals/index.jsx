@@ -12,18 +12,18 @@ import classNames from 'classnames';
 import Grid from 'apollo-react/components/Grid';
 import {
   getOpportunityData,
-  getSelectedBid,
+  getSelectedBid
 } from '../../../redux/selectors/proposal';
 import BidHistory from '../../common/Bidhistory';
 import Section from './Section';
 import { getQuestionsFilters } from '../../../redux/selectors';
 import {
   clearQuestionsFilterAction,
-  onApplyQuestionsFilter,
+  onApplyQuestionsFilter
 } from '../../../redux/actions/proposal-actions';
 import MatomoHOC from '../../HOC/MatomoHOC';
 
-const Approvals = (props) => {
+const Approvals = props => {
   const [approvals, setApprovals] = useState([]);
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const memoizeBid = useMemo(() => selectedBid, [selectedBid?.id]);
@@ -66,7 +66,7 @@ const Approvals = (props) => {
               <Grid container spacing={2} key={groupName} className={groupName}>
                 {group
                   .entrySeq()
-                  .filter((value) => value[0] !== 'logic')
+                  .filter(value => value[0] !== 'logic')
                   .map(([key, filter]) => (
                     <Grid
                       item
@@ -97,11 +97,14 @@ const Approvals = (props) => {
     return null;
   };
 
+  console.log('Hi to myself');
+
   return (
     <>
       <div>
         <div>
-          <BidHistory />
+          {console.log('Noi')}
+          <BidHistory data-testid="bid-history" />
         </div>
         <div className="approval-filter">
           <Button
@@ -115,7 +118,7 @@ const Approvals = (props) => {
         </div>
         {renderFilter()}
         {approvals?.length > 0 ? (
-          approvals?.map((approval) => {
+          approvals?.map(approval => {
             return (
               <Section
                 key={approval.ApprovalSectionTitle}
@@ -135,7 +138,7 @@ const Approvals = (props) => {
                   flexDirection: 'column',
                   alignItems: 'center',
                   color: '#7f7f7f',
-                  padding: '20px',
+                  padding: '20px'
                 }}
               >
                 <ClipboardCheck
@@ -151,13 +154,13 @@ const Approvals = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  questionsFilters: getQuestionsFilters(state),
+const mapStateToProps = state => ({
+  questionsFilters: getQuestionsFilters(state)
 });
 export default compose(
   withRouter,
   connect(mapStateToProps, {
     applyQuestionsFilter: onApplyQuestionsFilter,
-    clearQuestionsFilter: clearQuestionsFilterAction,
+    clearQuestionsFilter: clearQuestionsFilterAction
   })
 )(MatomoHOC(Approvals));
