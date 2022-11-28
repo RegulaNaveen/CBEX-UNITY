@@ -12,10 +12,12 @@ const ProposalTeamQuestion = ({
   lastAnswer,
   userData,
   socketContext,
-  trackMatomoEventSubmitAnswer
+  trackMatomoEventSubmitAnswer,
+  checkDisableFlag
 }) => {
   try {
     const dispatch = useDispatch();
+    const { questionLockWrapper, questionUnlockWrapper } = socketContext;
     const handleAnswerChange = (textValue, lastValue, reason) => {
       const { proposalId, questionId, section } = question;
       const { sectionName, sectionOrder } = section;
@@ -53,11 +55,15 @@ const ProposalTeamQuestion = ({
       <>
         <AutoComplete
           sectionName={question.section?.sectionName}
-          onFocus={() => {}}
-          onBlur={() => {}}
+          onFocus={() => {
+            questionLockWrapper(question?.questionId);
+          }}
+          onBlur={() => {
+            questionUnlockWrapper(question?.questionId);
+          }}
           onChange={handleAnswerChange}
           text={lastAnswer.answer || ''}
-          disabled={false}
+          disabled={checkDisableFlag()}
         />
       </>
     );
