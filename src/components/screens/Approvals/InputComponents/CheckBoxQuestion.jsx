@@ -54,7 +54,16 @@ const CheckBoxQuestion = ({
     };
 
     return (
-      <div className="checkboxtype">
+      <div
+        className="checkboxtype"
+        disabled={checkDisableFlag() || !!disabled}
+        onFocus={() => {
+          questionLockWrapper(question?.questionId);
+        }}
+        onBlur={() => {
+          questionUnlockWrapper(question?.questionId);
+        }}
+      >
         <CheckBoxQuestions
           answerValue={answerValue}
           finalOptions={finalOptions}
@@ -62,12 +71,6 @@ const CheckBoxQuestion = ({
           onOpen={() => {}}
           onClose={() => {}}
           onChange={changeHandler}
-          onFocus={() => {
-            questionLockWrapper(question?.questionId);
-          }}
-          onBlur={() => {
-            questionUnlockWrapper(question?.questionId);
-          }}
         />
       </div>
     );
