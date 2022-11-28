@@ -17,9 +17,9 @@ export const getApprovalsApi = proposalId => {
 /**
  * Delete Approval Api call
  */
-export const deleteApprovalsApi = (proposalId, sectionId) => {
+export const deleteApprovalsApi = (proposalId, sectionId, oppId) => {
   return axiosInstance.delete(
-    `${APPROVALS_URL}/one?proposal_id=${proposalId}&section_id=${sectionId}`,
+    `${APPROVALS_URL}/one?proposal_id=${proposalId}&section_id=${sectionId}&opp_id=${oppId}`,
     {
       headers: {
         'x-api-key': PROPOSAL.API_KEY,

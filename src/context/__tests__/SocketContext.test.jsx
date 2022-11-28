@@ -91,9 +91,7 @@ describe('Price Modeler concurrency', () => {
   });
 
   test('verify UI updates on event "COST_ESTIMATE_UPDATE"', async () => {
-    const { getByText, getByTestId } = render(
-      <PriceModelerWithSocketContext />
-    );
+    const { getByText } = render(<PriceModelerWithSocketContext />);
     await waitFor(() => {
       expect(getByText('Price Modeler Estimate')).toBeInTheDocument();
     });

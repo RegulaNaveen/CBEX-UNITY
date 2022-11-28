@@ -13,6 +13,7 @@ const SectionActive = ({
   ApprovalSectionRightQuestions: rightQues = []
 }) => {
   const questionHash = useSelector(state => state.approvals.quesHashData);
+  console.log({ questionHash });
 
   return (
     <Grid container className="approval-ques">
