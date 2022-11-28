@@ -35,8 +35,12 @@ const SystemIntegrations = ({
   hasDifferentSFanswer,
   answerText,
   isNotepadOpen,
-  handleVerifyPredictedAnsClick
+  handleVerifyPredictedAnsClick,
+  disabled,
+  answers
 }) => {
+  const answer = answers.reverse();
+
   const gridColRatio = isNotepadOpen ? [10, 2] : [11, 1];
   const SalesForceCondition = () => {
     if (sficon !== 'n/a' && isEmpty(checkSfAnswer) === false) {
@@ -265,7 +269,14 @@ const SystemIntegrations = ({
   };
 
   const CalendarCondition = () => {
-    if (answerdate === 'Not Answered' && !isAnswerPredicted) {
+    if (
+      (answerdate === 'Not Answered' && !isAnswerPredicted) ||
+      (lastAnswer
+        ?.toJS()
+        .answer?.toString()
+        .trim().length < 1 &&
+        answer?.get(1)?.get('userName') === 'UnityPredictedAnswer')
+    ) {
       return (
         <IconButton
           style={{
@@ -296,13 +307,15 @@ const SystemIntegrations = ({
       return (
         <Tooltip
           variant="light"
-          title="Unity Predicted Answer"
+          title={
+            disabled ? 'Question locked by user' : 'Unity Predicted Answer'
+          }
           placement="top"
           tabIndex={-1}
         >
           <span>
             <IconButton
-              disabled={!isCurrentBid}
+              disabled={disabled || !isCurrentBid}
               style={{
                 height: '24px',
                 width: '24px',
@@ -316,7 +329,8 @@ const SystemIntegrations = ({
                 fontSize="22px"
                 style={{ color: '#015ff1' }}
                 className="integration-icon"
-                onClick={() => handleVerifyPredictedAnsClick(lastAnswer)}
+                // onClick={() => handleVerifyPredictedAnsClick(lastAnswer)}
+                onClick={answeronhistory}
               />
             </IconButton>
           </span>
@@ -326,7 +340,8 @@ const SystemIntegrations = ({
     if (
       isAnswered(lastAnswer, isAnswerPredicted) &&
       !loading &&
-      changeIcon === '#00c221'
+      changeIcon === '#00c221' &&
+      answer?.get(1)?.get('userName') !== 'UnityPredictedAnswer'
     ) {
       return (
         <IconButton
@@ -355,7 +370,8 @@ const SystemIntegrations = ({
     if (
       !isAnswered(lastAnswer, isAnswerPredicted) &&
       !loading &&
-      changeIcon === '#b7b7b7'
+      changeIcon === '#b7b7b7' &&
+      answer?.get(1)?.get('userName') !== 'UnityPredictedAnswer'
     ) {
       return (
         <IconButton
@@ -386,7 +402,8 @@ const SystemIntegrations = ({
       lastAnswer
         ?.toJS()
         .answer?.toString()
-        .trim().length < 1
+        .trim().length < 1 &&
+      answer?.get(1)?.get('userName') !== 'UnityPredictedAnswer'
     ) {
       return (
         <IconButton
