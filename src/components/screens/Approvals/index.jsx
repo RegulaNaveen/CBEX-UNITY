@@ -1,68 +1,106 @@
+import { isEmpty } from 'lodash';
 import React, { useEffect, useState, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import Loader from 'apollo-react/components/Loader';
+
 import ClipboardCheck from 'apollo-react-icons/ClipboardCheck';
 import Card from 'apollo-react/components/Card';
 import {
-  getOpportunityData,
-  getSelectedBid,
-} from '../../../redux/selectors/proposal';
-import BidHistory from '../../common/Bidhistory';
+  fetchAllApprovals,
+  setQuestionHashAction
+} from '../../../redux/actions/approval-actions';
+import { getSelectedBid } from '../../../redux/selectors/proposal';
 import Section from './Section';
+import BidHistory from '../../common/Bidhistory';
+import { selectProposalQuestions } from '../../../redux/selectors';
+import { generateQuestionsHash } from './utils';
+import { DEFAULT } from '../../../constants/app';
+import CustomModal from '../../common/CustomModal';
 
 const Approvals = () => {
-  const [approvals, setApprovals] = useState([]);
+  const approvals = useSelector(state => state.approvals.allApprovals);
+  const proposalQuestions = useSelector(selectProposalQuestions);
+  const [loading, setLoading] = useState(false);
+  const [warning, setWarning] = useState(false);
+  const [warningTitle, setWarningTitle] = useState('');
+  const [warningText, setWarningText] = useState('');
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const memoizeBid = useMemo(() => selectedBid, [selectedBid?.id]);
-  const allOppData = useSelector(getOpportunityData)?.toJS();
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    setLoading(true);
     const proposalId = memoizeBid?.id;
-    const opportunityData = allOppData[proposalId];
-    const newApprovals = opportunityData?.proposal?.approvals;
-    setApprovals(newApprovals);
+    console.log('Bid Change Triggered - (useEffect)');
+
+    (async () => {
+      const response = await dispatch(fetchAllApprovals(proposalId));
+      setLoading(false);
+      if (!response.status) {
+        setWarningTitle(response.title);
+        setWarningText(response.message);
+        setWarning(true);
+      }
+    })();
   }, [memoizeBid]);
 
+  useEffect(() => {
+    const quesHashData = generateQuestionsHash(proposalQuestions);
+    dispatch(setQuestionHashAction(quesHashData));
+  }, [proposalQuestions]);
+
   return (
-    <>
-      <div>
-        <div>
-          <BidHistory data-testid="bid-history" />
-        </div>
-        {approvals?.length > 0 ? (
-          approvals?.map((approval) => {
-            return (
-              <Section
-                key={approval.ApprovalSectionTitle}
-                approval={approval}
+    <div className="approvals-tab">
+      {/* Modal Loading */}
+      {loading && <Loader isInner />}
+
+      <BidHistory data-testid="bid-history" />
+
+      {!isEmpty(approvals) ? (
+        approvals.map(approval => (
+          <Section
+            key={approval.ApprovalSectionId}
+            sectionId={approval.ApprovalSectionId}
+          />
+        ))
+      ) : (
+        <>
+          <div className="no-approval-wrapper">
+            <Card
+              style={{
+                maxWidth: 600,
+                height: 150,
+                display: 'flex',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                alignItems: 'center',
+                color: '#7f7f7f',
+                padding: '20px'
+              }}
+            >
+              <ClipboardCheck
+                style={{ fontSize: '48px', marginBottom: '10px' }}
+                data-testid="No_approvals"
               />
-            );
-          })
-        ) : (
-          <>
-            <div className="no-approval-wrapper">
-              <Card
-                style={{
-                  maxWidth: 600,
-                  height: 150,
-                  display: 'flex',
-                  justifyContent: 'center',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  color: '#7f7f7f',
-                  padding: '20px',
-                }}
-              >
-                <ClipboardCheck
-                  style={{ fontSize: '48px', marginBottom: '10px' }}
-                  data-testid="No_approvals"
-                />
-                No Approval associated with your selected bid
-              </Card>
-            </div>
-          </>
-        )}
-      </div>
-    </>
+              No Approval associated with your selected bid
+            </Card>
+          </div>
+        </>
+      )}
+
+      {/* Warning Modal */}
+      {warning && (
+        <CustomModal
+          open={warning}
+          title={warningTitle}
+          message={warningText}
+          variant="error"
+          handleClose={() => setWarning(false)}
+          buttonProps={[{ className: 'hidden' }, { label: DEFAULT.CLOSE }]}
+          modalStyle={{ maxWidth: 342 }}
+        />
+      )}
+    </div>
   );
 };
 

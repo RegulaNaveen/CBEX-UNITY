@@ -25,7 +25,7 @@ const RadioQuestion = (props: Props) => {
       onBlur={() => onBlur()}
     >
       {items.map(item => (
-        <Radio value={item} label={item} />
+        <Radio key={item} value={item} label={item} />
       ))}
     </RadioGroup>
   );

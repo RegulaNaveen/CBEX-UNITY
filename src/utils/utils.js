@@ -1,5 +1,6 @@
 import jwt_decode from 'jwt-decode';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
+import { DEFAULT } from '../constants/app';
 import CountryMap from '../constants/country.json';
 import { UBUILD_ADMIN } from '../constants/types';
 
@@ -70,7 +71,7 @@ function getLineOfBusinessAsPerLogic(
   salesForceLobIsFSP
 ) {
   let finalLOB = '';
-  lobMapping.forEach(function (data) {
+  lobMapping.forEach(function(data) {
     if (finalLOB !== '') return false;
     const { name } = data;
     data.values.forEach(d => {
@@ -202,7 +203,7 @@ function checkNonEditableFields(PreField, sfField, sfObject) {
 }
 
 const saveDataInMatomo = (trackEvent, data) => {
-  console.log(`trackEvent`, trackEvent)
+  console.log(`trackEvent`, trackEvent);
   const { category, action, name, customDimensions } = data;
   trackEvent({
     category: category,
@@ -210,7 +211,7 @@ const saveDataInMatomo = (trackEvent, data) => {
     name: name,
     customDimensions: customDimensions
   });
-}
+};
 
 const throttle = (func, delay) => {
   // Previously called time of the function
@@ -232,14 +233,30 @@ const throttle = (func, delay) => {
       // array of arguments
       return func(...args);
     }
+  };
+};
+
+/**
+ * Get Error Message from response
+ */
+export function getErrorMessage(error) {
+  if (error.response) {
+    let msg = error.response.data.message;
+    const isErr400 = error.response.status === 400;
+    const isErr404 = error.response.status === 404;
+    if (isErr400 && isEmpty(msg)) msg = DEFAULT.ERROR_400;
+    if (isErr404 && isEmpty(msg)) msg = DEFAULT.ERROR_404;
+    if (!isErr400 && !isErr404 && isEmpty(msg)) msg = DEFAULT.REQUEST_FAILED;
+    return msg;
   }
+  return 'Unexpected error occurred';
 }
 
 const createMatomoObj = (proposalDetails, userEmail, userRole, action) => {
-  const matamoObj = {}
-  matamoObj.category = `Proposal Detail (CRM#:${proposalDetails['CRM #']})`
-  matamoObj.action = `Event: Notepad ${proposalDetails['CRM #']}`
-  matamoObj.name = `Notepad: ${action}`
+  const matamoObj = {};
+  matamoObj.category = `Proposal Detail (CRM#:${proposalDetails['CRM #']})`;
+  matamoObj.action = `Event: Notepad ${proposalDetails['CRM #']}`;
+  matamoObj.name = `Notepad: ${action}`;
   matamoObj.customDimensions = [
     {
       id: 1,
@@ -249,9 +266,9 @@ const createMatomoObj = (proposalDetails, userEmail, userRole, action) => {
         userRole
       })
     }
-  ]
-  return matamoObj
-}
+  ];
+  return matamoObj;
+};
 
 export {
   getCountriesNameForCode,

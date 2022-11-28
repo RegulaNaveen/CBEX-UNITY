@@ -1,9 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import Grid from 'apollo-react/components/Grid';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import Box from 'apollo-react/components/Box';
-import Loader from 'apollo-react/components/Loader';
 import IconButton from 'apollo-react/components/IconButton';
 import { Map, List, fromJS } from 'immutable';
 import isEmpty from 'lodash/isEmpty';
@@ -21,7 +20,6 @@ import MultiSelectQuestion from './InputComponents/MultiSelectQuestion';
 import YesNoQuestion from './InputComponents/YesNoQuestion';
 import CheckBoxQuestion from './InputComponents/CheckBoxQuestion';
 import ProposalTeamQuestion from './InputComponents/ProposalTeamQuestion';
-import getLastAnswer from './getLastAnswer';
 import { getUserName, getUserEmail, getUserId } from '../../../SessionHandler';
 import { SocketContext } from '../../../context/SocketContext';
 import SFAnswerValidationWrapper from '../../common/SFAnswerValidationWrapper';
@@ -31,10 +29,12 @@ import {
   getSelectedBid
 } from '../../../redux/selectors/proposal';
 import CustomLoader from './CustomLoader';
+import { getLastAnswer } from './utils';
 
 const QuestionItem = ({
-  question,
-  approvalSectionTitle,
+  question = {},
+  approvalSectionTitle = '',
+  disabled,
   eventCategories,
   trackEvent
 }) => {
@@ -144,6 +144,7 @@ const QuestionItem = ({
     const inputProps = {
       question,
       lastAnswer,
+      disabled,
       userData: getUserData(),
       socketContext,
       trackMatomoEventSubmitAnswer,
@@ -185,49 +186,55 @@ const QuestionItem = ({
     );
   };
 
-  return (
-    !isEmpty(question) && (
-      <>
-        <Box mt={2}>
-          <Grid container>
-            <Grid item xs={10} className="ques-title-cover">
-              <QuestionLabel questionLabel={question?.questionText || ''} />
+  return useMemo(
+    () =>
+      !isEmpty(question) && (
+        <>
+          <Box mt={2}>
+            <Grid container>
+              <Grid item xs={10} className="ques-title-cover">
+                <QuestionLabel questionLabel={question?.questionText || ''} />
+              </Grid>
+              <Grid item xs={2} className="answer-actions">
+                {' '}
+              </Grid>
+              <Grid item xs={10} className="answer-input">
+                {renderQuestion()}
+              </Grid>
+              <Grid item xs={2} className="answer-actions">
+                <IconButton
+                  size="small"
+                  onClick={() => {
+                    setIsShowHistory(true);
+                  }}
+                >
+                  <CalendarIcon question={question} />
+                </IconButton>
+                <CustomLoader questionId={question.questionId} />
+              </Grid>
             </Grid>
-            <Grid item xs={2} className="answer-actions">
-              {' '}
-            </Grid>
-            <Grid item xs={10} className="answer-input">
-              {renderQuestion()}
-            </Grid>
-            <Grid item xs={2} className="answer-actions">
-              <IconButton
-                size="small"
-                onClick={() => {
-                  setIsShowHistory(true);
-                }}
-              >
-                <CalendarIcon question={question} />
-              </IconButton>
-              <CustomLoader questionId={question.questionId} />
-            </Grid>
-          </Grid>
-        </Box>
-        {isShowHistory && (
-          <AnswerHistory
-            question={prepareAnswerHistoryData(question)}
-            closeModal={() => {
-              setIsShowHistory(false);
-            }}
-          />
-        )}
-      </>
-    )
+          </Box>
+          {isShowHistory && (
+            <AnswerHistory
+              question={prepareAnswerHistoryData(question)}
+              closeModal={() => {
+                setIsShowHistory(false);
+              }}
+            />
+          )}
+        </>
+      ),
+    [question, isShowHistory]
   );
 };
 
+QuestionItem.defaultProps = {
+  disabled: false
+};
 QuestionItem.propTypes = {
   question: PropTypes.object.isRequired,
-  approvalSectionTitle: PropTypes.object.isRequired,
+  approvalSectionTitle: PropTypes.string.isRequired,
+  disabled: PropTypes.any,
   eventCategories: PropTypes.object.isRequired,
   trackEvent: PropTypes.func.isRequired
 };
