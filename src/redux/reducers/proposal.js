@@ -60,10 +60,12 @@ const {
   QUESTION_LOCK_DETAILS_ALL,
   SET_EVENT_LAUNCHER_FLAG,
   SHOW_NA_CHECKBOX,
-  SET_PRICE_MODELER_FIELDS,
   ERROR_UPDATE_NOT_APPLICABLE,
   SET_CAN_USER_TAG_IN_QUESTION,
-  SET_APPROVAL_QUESTION_LOADING
+  SET_APPROVAL_QUESTION_LOADING,
+  SET_PRICE_MODELER_FIELDS,
+  SET_PRICE_MODELER_RECALCULATING,
+  PRICE_MODELER_UPDATE,
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -155,7 +157,8 @@ const INITIAL_STATE: Map = fromJS({
     questionId: '',
     value: false
   }),
-  canUserTagInQuestion: false
+  canUserTagInQuestion: false,
+  priceModelerRecalculating: false
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -1149,6 +1152,28 @@ const setPriceModulerFields = (state, action) => {
 const setApprovalQuestionLoading = (state, action) => {
   const { questionId, value } = action.payload;
   return state.set('approvalQuestionLoading', fromJS({ questionId, value }));
+}
+const updatePriceModelerEstimate = (state, action) => {
+  const {
+    Cost,
+    TherapyArea__c,
+    Number_of_Sites__c,
+    Phase_P__c,
+    Patients_Enrolled__c,
+    Potential_Regions__c
+  } = action.payload;
+
+  return state.set(
+    'priceModeler',
+    fromJS({
+      cost: Cost,
+      therapeutic: TherapyArea__c,
+      sites: Number_of_Sites__c,
+      phase: Phase_P__c,
+      patients: Patients_Enrolled__c,
+      regions: Potential_Regions__c
+    })
+  );
 };
 
 const actionMap = {
@@ -1214,7 +1239,10 @@ const actionMap = {
   [SET_PRICE_MODELER_FIELDS]: setPriceModulerFields,
   [SET_APPROVAL_QUESTION_LOADING]: setApprovalQuestionLoading,
   [SET_CAN_USER_TAG_IN_QUESTION]: (state, { payload }) =>
-    state.set('canUserTagInQuestion', payload)
+    state.set('canUserTagInQuestion', payload),
+  [SET_PRICE_MODELER_RECALCULATING]: (state, { payload }) =>
+    state.set('priceModelerRecalculating', payload),
+  [PRICE_MODELER_UPDATE]: updatePriceModelerEstimate
 };
 
 export default function(

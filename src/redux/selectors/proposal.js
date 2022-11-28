@@ -356,7 +356,12 @@ export const getCanUserTagInQuestion = createSelector(
   selectProposal,
   proposal => proposal?.get('canUserTagInQuestion')
 );
+
 export const getApprovalQuestionLoading = createSelector(
   selectProposal,
   proposal => proposal?.get('approvalQuestionLoading')
+);
+
+export const selectIsPriceModelerEstimateRecalculating = createSelector(selectProposal, proposal =>
+  proposal?.get('priceModelerRecalculating', false)
 );
