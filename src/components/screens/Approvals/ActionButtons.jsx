@@ -57,7 +57,7 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
     trackEvent({
       category: eventCategories.crmNo,
       action: `Approval ${action}`,
-      name: `Approval Answer: ${action}: (${ApprovalSectionTitle}) (${ApprovalSectionOrder})`,
+      name: `Approval: ${action}: (${ApprovalSectionTitle}) (${ApprovalSectionOrder})`,
       customDimensions: [
         {
           id: 1,
@@ -71,7 +71,7 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
     trackEvent({
       category: eventCategories.crmNo,
       action: `Approval ${action}`,
-      name: `Approval Answer: ${action} click event`,
+      name: `Approval: ${action} click event`,
       customDimensions: [
         {
           id: 1,
@@ -89,7 +89,7 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
     const { ApprovalSectionTitle, ApprovalSectionOrder } = aprovaldata;
     trackEvent({
       category: eventCategories.crmNo,
-      action: `Approval ${action}`,
+      action: `Approval: ${action}`,
       name: `Approval Answer: ${action}: (${ApprovalSectionTitle}) (${ApprovalSectionOrder})`,
       customDimensions: [
         {
@@ -103,8 +103,22 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
     });
     trackEvent({
       category: eventCategories.crmNo,
-      action: `Approval ${action}`,
-      name: `Approval Answer: ${action}: click event`,
+      action: `Approval: ${action} click event`,
+      name: `Approval Answer: ${action}`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify({
+            proposalDetail,
+            aprovaldata
+          })
+        }
+      ]
+    });
+    trackEvent({
+      category: eventCategories.crmNo,
+      action: `Approval:  ${action} count`,
+      name: `Approval Answer: Approval count: ${ApprovalSectionOrder}`,
       customDimensions: [
         {
           id: 1,
