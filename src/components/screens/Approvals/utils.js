@@ -32,6 +32,19 @@ const responsibleFilter = questions => {
     return Array.isArray(item.roleNames) && item.roleNames.includes(userRole);
   });
 };
+const informedFilter = questions => {
+  return questions.filter(item => {
+    const userRole = localStorage.getItem('userRole') || '';
+    if (item.interestedParties) {
+      const interestedPartiesArr = item.interestedParties.split(',');
+      return (
+        Array.isArray(interestedPartiesArr) &&
+        interestedPartiesArr.includes(userRole)
+      );
+    }
+    return false;
+  });
+};
 
 /**
  * Function to apply filter logic for questions to be rendered in Approval page
@@ -43,6 +56,9 @@ const filteredQuestions = (questions, approvalfilters) => {
   console.log({ appliedFilters });
   if (appliedFilters.includes('responsible')) {
     questions = responsibleFilter(questions);
+  }
+  if (appliedFilters.includes('informed')) {
+    questions = informedFilter(questions);
   }
   if (
     appliedFilters.includes('answered') &&
