@@ -19,6 +19,7 @@ const NumberQuestion = ({
 
   const handleTextChange = (textValue, lastAns, editorData) => {
     const { proposalId, questionId } = question;
+
     const s1 = textValue
       .trim()
       .split(' ')
@@ -27,6 +28,7 @@ const NumberQuestion = ({
       .trim()
       .split(' ')
       .filter(v => v.trim().length > 0);
+    questionUnlockWrapper(question?.questionId);
 
     if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
       if (
@@ -59,7 +61,6 @@ const NumberQuestion = ({
       );
     }
     trackMatomoEventSubmitAnswer(String(textValue).trim());
-    questionUnlockWrapper(question?.questionId);
   };
 
   return (
