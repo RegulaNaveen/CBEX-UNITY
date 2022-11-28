@@ -169,13 +169,42 @@
       }
     }
   }
+  .answer-history-para {
+    justify-content: flex-end;
+    display: flex;
+    flex-direction: row;
+  }
+  .answer-history-accept {
+    outline: none;
+    border: none;
+    background: #0768fd;
+    color: white;
+    border-radius: 5px;
+    font-size: 14px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  .answer-history-reject {
+    outline: none;
+    border: 1px solid $neutral4;
+    background: white;
+    color: #0768fd;
+    border-radius: 5px;
+    font-size: 14px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  .answer-meta-buttons {
+    display: flex;
+  }
 }
 
 .no-scroll {
   overflow: hidden;
 }
 
-.bluegrid{
+.bluegrid {
   margin: 0px;
   padding: 0px;
   position: absolute;
@@ -185,4 +214,3 @@
   height: 3px;
   background: linear-gradient(to right, rgb(37, 0, 86), rgb(0, 118, 174));
 }
-
