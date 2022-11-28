@@ -5,7 +5,8 @@ import Loader from 'apollo-react/components/Loader';
 
 import {
   fetchAllApprovals,
-  setQuestionHashAction
+  setQuestionHashAction,
+  fetchApprovalSendEmailFlag
 } from '../../../redux/actions/approval-actions';
 import { getSelectedBid } from '../../../redux/selectors/proposal';
 import Section from './Section';
@@ -25,6 +26,11 @@ const Approvals = () => {
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const memoizeBid = useMemo(() => selectedBid, [selectedBid?.id]);
   const dispatch = useDispatch();
+
+  // get email flag status on mount
+  useEffect(() => {
+    dispatch(fetchApprovalSendEmailFlag());
+  }, []);
 
   useEffect(() => {
     setLoading(true);

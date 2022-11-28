@@ -164,6 +164,7 @@ const TagUserList = ({ searchTag, onSelect, close, updateSearchTag }) => {
           item={item}
           active={activeOptionIndex === index}
           onClickHandler={onClickHandler}
+          key={`tag-user-item-${index + 1}`}
         />
       ))}
     </ul>

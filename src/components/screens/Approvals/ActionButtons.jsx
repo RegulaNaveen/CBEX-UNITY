@@ -11,6 +11,15 @@ import {
   duplicateApproval,
 } from '../../../redux/actions/approval-actions';
 import { getOpportunityData, getSelectedBid } from '../../../redux/selectors/proposal';
+import {
+  selectCanSendEmail,
+  selectQuestionsHash
+} from '../../../redux/selectors/approvals';
+import {
+  generateApprovalEmailInfo,
+  generateApprovalEmailURL
+} from '../../../utils/emailUtils';
+import { getProposalDetails } from '../../../redux/selectors';
 import { DEFAULT } from '../../../constants/app';
 import CustomModal from '../../common/CustomModal';
 import MatomoHOC from '../../HOC/MatomoHOC';
@@ -25,6 +34,10 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
   const approval = useSelector(state =>
     state.approvals.allApprovals.find(i => i.ApprovalSectionId === sectionId)
   );
+  const canSendEmail = useSelector(selectCanSendEmail);
+  const questionsMap = useSelector(selectQuestionsHash);
+  const proposalDetails = useSelector(getProposalDetails);
+
   const { ArchivedData = [] } = approval;
 
   const selectedBid = useSelector(getSelectedBid)?.toJS();
@@ -35,6 +48,38 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
 
   const dispatch = useDispatch();
 
+  async function handleSendEmailClick() {
+    const emailInfo = generateApprovalEmailInfo(
+      approval,
+      Object.values(questionsMap),
+      proposalDetails
+    );
+    trackMatomoEventSubmitAnswer('Email', approval)
+    if (
+      emailInfo.subject &&
+      Array.isArray(emailInfo.to) &&
+      emailInfo.to.length > 0 &&
+      Array.isArray(emailInfo.cc)
+    ) {
+      try {
+        const blob = new Blob([emailInfo.body], { type: 'text/html' });
+        const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
+        await navigator.clipboard.write([clipboardItem]);
+      } catch (e) {
+        console.log(
+          '[Approvals] ActionButtons: Error in copying approval data to clipboard',
+          e
+        );
+      }
+      window.open(
+        generateApprovalEmailURL(emailInfo.subject, emailInfo.to, emailInfo.cc)
+      );
+    } else {
+      console.log(
+        '[Approvals] ActionButtons: Error in email data. please check subject, to and cc'
+      );
+    }
+  }
   const deleteAfterConfirmHandler = () => {
     setShowDeleteModal(false);
     dispatchLoadingEvent('SET_LOADING', true);
@@ -52,6 +97,119 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
     })();
   };
   const deleteEventMatomo = (action, aprovaldata) => {
+    const proposalDetail = opportunityData?.proposal?.proposalDetails;
+    const { ApprovalSectionTitle } = aprovaldata;
+    trackEvent({
+      category: eventCategories.crmNo,
+      action: `Approval ${action}`,
+      name: `Approval: ${action}: (${ApprovalSectionTitle}) (${ArchivedData.length - 1})`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify({
+            proposalDetail,
+            aprovaldata
+          })
+        }
+      ]
+    });
+    trackEvent({
+      category: eventCategories.crmNo,
+      action: `Approval: ${action}`,
+      name: `Approval Answer: ${action}: (${ApprovalSectionTitle}) (${ArchivedData.length - 1})`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify({
+            proposalDetail,
+            aprovaldata,
+            totalApproval: ArchivedData.length - 1
+          })
+        }
+      ]
+    });
+    trackEvent({
+      category: eventCategories.crmNo,
+      action: `Approval ${action}`,
+      name: `Approval: ${action} click event`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify({
+            proposalDetail,
+            aprovaldata
+          })
+        }
+      ]
+    });
+  }
+
+  const duplicateEventMatomo = (action, aprovaldata) => {
+    const proposalDetail = opportunityData?.proposal?.proposalDetails;
+    const { ApprovalSectionTitle } = aprovaldata;
+    trackEvent({
+      category: eventCategories.crmNo,
+      action: `Approval: creation`,
+      name: `Approval Answer: creation: (${ApprovalSectionTitle}) (${ArchivedData.length + 1})`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify({
+            proposalDetail,
+            aprovaldata,
+            totalApproval: ArchivedData.length + 1
+          })
+        }
+      ]
+    });
+    trackEvent({
+      category: eventCategories.crmNo,
+      action: `Approval: ${action}`,
+      name: `Approval Answer: ${action}: (${ApprovalSectionTitle}) (${ArchivedData.length + 1})`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify({
+            proposalDetail,
+            aprovaldata,
+            totalApproval: ArchivedData.length + 1
+          })
+        }
+      ]
+    });
+    trackEvent({
+      category: eventCategories.crmNo,
+      action: `Approval: ${action} click event`,
+      name: `Approval Answer: ${action}`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify({
+            proposalDetail,
+            aprovaldata,
+            totalApproval: ArchivedData.length + 1
+          })
+        }
+      ]
+    });
+    trackEvent({
+      category: eventCategories.crmNo,
+      action: `Approval:  ${action} count`,
+      name: `Approval Answer: Approval count: ${ArchivedData.length + 1}`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify({
+            proposalDetail,
+            aprovaldata,
+            totalApproval: ArchivedData.length + 1
+          })
+        }
+      ]
+    });
+  }
+
+  const emailEventMatomo = (action, aprovaldata) => {
     const proposalDetail = opportunityData?.proposal?.proposalDetails;
     const { ApprovalSectionTitle, ApprovalSectionOrder } = aprovaldata;
     trackEvent({
@@ -84,53 +242,6 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
     });
   }
 
-  const duplicateEventMatomo = (action, aprovaldata) => {
-    const proposalDetail = opportunityData?.proposal?.proposalDetails;
-    const { ApprovalSectionTitle, ApprovalSectionOrder } = aprovaldata;
-    trackEvent({
-      category: eventCategories.crmNo,
-      action: `Approval: ${action}`,
-      name: `Approval Answer: ${action}: (${ApprovalSectionTitle}) (${ApprovalSectionOrder})`,
-      customDimensions: [
-        {
-          id: 1,
-          value: JSON.stringify({
-            proposalDetail,
-            aprovaldata
-          })
-        }
-      ]
-    });
-    trackEvent({
-      category: eventCategories.crmNo,
-      action: `Approval: ${action} click event`,
-      name: `Approval Answer: ${action}`,
-      customDimensions: [
-        {
-          id: 1,
-          value: JSON.stringify({
-            proposalDetail,
-            aprovaldata
-          })
-        }
-      ]
-    });
-    trackEvent({
-      category: eventCategories.crmNo,
-      action: `Approval:  ${action} count`,
-      name: `Approval Answer: Approval count: ${ApprovalSectionOrder}`,
-      customDimensions: [
-        {
-          id: 1,
-          value: JSON.stringify({
-            proposalDetail,
-            aprovaldata
-          })
-        }
-      ]
-    });
-  }
-
   const trackMatomoEventSubmitAnswer = (action, aprovaldata) => {
     if (action == 'Duplicate') {
       duplicateEventMatomo(action, aprovaldata)
@@ -141,7 +252,7 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
     }
 
     if (action == 'Email') {
-      duplicateEventMatomo(action, aprovaldata)
+      emailEventMatomo(action, aprovaldata)
     }
   };
 
@@ -205,14 +316,17 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
       >
         {DEFAULT.DUPLICATE}
       </Button>
-      <Button
-        variant="primary"
-        icon={<EmailClick fontSize="extraSmall" />}
-        style={{ marginRight: 10 }}
-        className="email-btn"
-      >
-        {DEFAULT.EMAIL}
-      </Button>
+      {canSendEmail ? (
+        <Button
+          variant="primary"
+          icon={<EmailClick fontSize="extraSmall" />}
+          style={{ marginRight: 10 }}
+          className="email-btn"
+          onClick={handleSendEmailClick}
+        >
+          {DEFAULT.EMAIL}
+        </Button>
+      ) : null}
 
       {/* Warning Modal */}
       {warning && (

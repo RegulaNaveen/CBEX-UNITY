@@ -5,7 +5,8 @@ import { APPROVALS } from '../../constants/types';
 const INITIAL_STATE = {
   allApprovals: [],
   quesHashData: {},
-  isLoading: false
+  isLoading: false,
+  canSendEmail: false
 };
 
 const setApprovals = (state, action) => {
@@ -67,12 +68,17 @@ const deleteApprovals = (state, action) => {
   return { ...state, allApprovals: modifiedApprovals };
 };
 
+const setCanSendEmail = (state, action) => {
+  return { ...state, canSendEmail: action.payload };
+};
+
 const actionMap = {
   [APPROVALS.SET_APPROVALS]: setApprovals,
   [APPROVALS.SET_QUES_HASH]: setQuesHash,
   [APPROVALS.SET_LOADING]: setLoading,
   [APPROVALS.DUPLICATE_APPROVALS]: duplicateApproval,
-  [APPROVALS.DELETE_APPROVALS]: deleteApprovals
+  [APPROVALS.DELETE_APPROVALS]: deleteApprovals,
+  [APPROVALS.SET_CAN_SEND_EMAIL_IN_APPROVALS]: setCanSendEmail
 };
 
 export default function(state = INITIAL_STATE, action) {
