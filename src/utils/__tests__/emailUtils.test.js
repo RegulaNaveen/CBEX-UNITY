@@ -401,7 +401,10 @@ describe('emailUtils generateApprovalEmailInfo unit tests', () => {
       ApprovalSectionRightQuestions: ['32c0b1ac-a2cc-403c-84a8-7e3dfd6fa580'],
       ApprovalSectionId: 'd791a317-8f1b-488b-85cb-4247fca2b156',
       ApprovalSectionOrder: 1,
-      ApprovalSectionLeftQuestions: ['0c391d22-8c40-4823-bd8e-9967802ee108'],
+      ApprovalSectionLeftQuestions: [
+        '0c391d22-8c40-4823-bd8e-9967802ee108',
+        '6b162e05-a2ed-4690-871d-0976b8bcc776'
+      ],
       ArchivedData: []
     };
     const mockQuestions = [

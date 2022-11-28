@@ -186,8 +186,61 @@ describe('TagUserList unit tests', () => {
     fireEvent.keyDown(document, { key: 'ArrowDown', code: 'ArrowDown' });
     fireEvent.keyDown(document, { key: 'ArrowUp', code: 'ArrowUp' });
     fireEvent.keyDown(document, { key: 'ArrowDown', code: 'ArrowDown' });
-    fireEvent.keyDown(document, { key: 'Enter', code: 'Escape' });
+    fireEvent.keyDown(document, { key: 'Escape', code: 'Escape' });
     expect(mockOnSelect).toHaveBeenCalledTimes(0);
     expect(mockClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('should stay at same index if there are no more option on up or down key press', async () => {
+    const mockOnSelect = jest.fn();
+    const mockClose = jest.fn();
+    const props = {
+      searchTag: 'a',
+      onSelect: mockOnSelect,
+      close: mockClose
+    };
+    const userlistStubCall = sandbox.stub(getADUsers, 'default').resolves([
+      {
+        first_name: 'John',
+        last_name: 'Doe',
+        email: 'johndoe@noone.himself'
+      }
+    ]);
+
+    const { findByText } = render(<TagUserList {...props} />);
+    await waitFor(async () => {
+      expect(userlistStubCall.callCount).toEqual(1);
+      expect(
+        await findByText('John Doe(johndoe@noone.himself)')
+      ).toBeInTheDocument();
+    });
+    fireEvent.keyDown(document, { key: 'ArrowDown', code: 'ArrowDown' });
+    fireEvent.keyDown(document, { key: 'ArrowUp', code: 'ArrowUp' });
+    fireEvent.keyDown(document, { key: 'ArrowDown', code: 'ArrowDown' });
+    fireEvent.keyDown(document, { key: 'Escape', code: 'Escape' });
+    expect(mockOnSelect).toHaveBeenCalledTimes(0);
+    expect(mockClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('should handle key and do nothing if list is empty', async () => {
+    const mockOnSelect = jest.fn();
+    const mockClose = jest.fn();
+    const props = {
+      searchTag: 'a',
+      onSelect: mockOnSelect,
+      close: mockClose
+    };
+    const userlistStubCall = sandbox.stub(getADUsers, 'default').resolves([]);
+
+    const { findByText } = render(<TagUserList {...props} />);
+    await waitFor(async () => {
+      expect(userlistStubCall.callCount).toEqual(1);
+    });
+    fireEvent.keyDown(document, { key: 'ArrowDown', code: 'ArrowDown' });
+    fireEvent.keyDown(document, { key: 'ArrowUp', code: 'ArrowUp' });
+    fireEvent.keyDown(document, { key: 'ArrowDown', code: 'ArrowDown' });
+    fireEvent.keyDown(document, { key: 'Enter', code: 'Enter' });
+    expect(mockOnSelect).toHaveBeenCalledTimes(0);
+    expect(mockClose).toHaveBeenCalledTimes(0);
   });
 });
