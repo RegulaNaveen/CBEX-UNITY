@@ -1,4 +1,4 @@
-function getProposalTeamUsers(questions = []) {
+export function getProposalTeamUsers(questions = []) {
   let answers = new Set();
   try {
     questions
@@ -189,6 +189,10 @@ export function generateApprovalEmailInfo(
       '[emailUtils] Error in creating email body for a approval section',
       e
     );
+    emailSubject = '';
+    toUsers = [];
+    ccUsers = [];
+    emailBody = '';
   }
   return {
     subject: emailSubject,
