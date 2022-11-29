@@ -40,10 +40,10 @@ const CheckBoxQuestions = (props: Props) => {
   const [getFocus, setFocus] = useState(false);
   const [getSpan, setSpan] = useState(false);
   const checkBoxRef = useRef();
-
-  const finalLov = !isEmpty(finalOptions)
-    ? finalOptions
-    : options[`SF#${sfObject}_SF#${sfField}`];
+  const finalLov =
+    finalOptions?.size > 0
+      ? finalOptions
+      : options[`SF#${sfObject}_SF#${sfField}`];
   let selectItems = null;
   const selectedNames = [];
   if (!isEmpty(finalLov)) {
@@ -154,8 +154,8 @@ const CheckBoxQuestions = (props: Props) => {
         <Select
           key={answerValue.length}
           value={!isEmpty(changeItem) ? changeItem : []}
-          disabled={disabled || isNotApplicable}
           onChange={e => onChangeItem(e)}
+          disabled={disabled}
           renderValue={selected => {
             if (isEmpty(selected)) return 'Select';
             return selectedNames.join(', ');
