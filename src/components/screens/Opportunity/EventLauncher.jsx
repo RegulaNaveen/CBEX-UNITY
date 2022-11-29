@@ -32,7 +32,6 @@ const EventLauncher = ({
   const [url, setUrl] = useState('');
   const [bodyHtml, setBodyHtml] = useState('');
   const quesData = questionData?.toJS();
-  console.log({ quesData });
   const hasEvent = quesData?.events && !isEmpty(quesData?.events);
   const eventStartDate = !isEmpty(quesData?.answers)
     ? [...quesData?.answers].pop()?.answer
