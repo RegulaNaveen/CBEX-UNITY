@@ -10,7 +10,10 @@ import {
   deleteApproval,
   duplicateApproval
 } from '../../../redux/actions/approval-actions';
-import { getSelectedBid } from '../../../redux/selectors/proposal';
+import {
+  getOpportunityData,
+  getSelectedBid
+} from '../../../redux/selectors/proposal';
 import {
   selectCanSendEmail,
   selectQuestionsHash
@@ -22,8 +25,9 @@ import {
 import { getProposalDetails } from '../../../redux/selectors';
 import { DEFAULT } from '../../../constants/app';
 import CustomModal from '../../common/CustomModal';
+import MatomoHOC from '../../HOC/MatomoHOC';
 
-const ActionButtons = ({ sectionId }) => {
+const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { id: proposalId = '' } = useSelector(getSelectedBid)?.toJS();
   const { dispatchLoadingEvent } = useContext(ApprovalContext);
@@ -38,7 +42,107 @@ const ActionButtons = ({ sectionId }) => {
   const proposalDetails = useSelector(getProposalDetails);
 
   const { ArchivedData = [] } = approval;
+
+  const selectedBid = useSelector(getSelectedBid)?.toJS();
+  const allOppData = useSelector(getOpportunityData)?.toJS();
+  const pId = selectedBid?.id;
+  const opportunityData = allOppData[pId];
+
   const dispatch = useDispatch();
+
+  const deleteEventMatomo = (action, aprovaldata) => {
+    const proposalDetail = opportunityData?.proposal?.proposalDetails;
+    const { ApprovalSectionTitle } = aprovaldata;
+    trackEvent({
+      category: eventCategories.crmNo,
+      action: `Approval ${action}`,
+      name: `Approval: ${action}: (${ApprovalSectionTitle}) (${ArchivedData.length -
+        1})`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify({
+            proposalDetail,
+            aprovaldata
+          })
+        }
+      ]
+    });
+  };
+
+  const duplicateEventMatomo = (action, aprovaldata) => {
+    try {
+      const proposalDetail = opportunityData?.proposal?.proposalDetails;
+      const { ApprovalSectionTitle } = aprovaldata;
+      trackEvent({
+        category: eventCategories.crmNo,
+        action: `Approval: creation`,
+        name: `Approval Answer: creation: (${ApprovalSectionTitle}) (${ArchivedData.length +
+          1})`,
+        customDimensions: [
+          {
+            id: 1,
+            value: JSON.stringify({
+              proposalDetail,
+              aprovaldata,
+              totalApproval: ArchivedData.length + 1
+            })
+          }
+        ]
+      });
+      trackEvent({
+        category: eventCategories.crmNo,
+        action: `Approval:  ${action} count`,
+        name: `Approval Answer: Approval ${action} count: ${ArchivedData.length +
+          1}`,
+        customDimensions: [
+          {
+            id: 1,
+            value: JSON.stringify({
+              proposalDetail,
+              aprovaldata,
+              totalApproval: ArchivedData.length + 1
+            })
+          }
+        ]
+      });
+    } catch (error) {
+      console.log('error :>> ', error);
+    }
+  };
+
+  const emailEventMatomo = (action, aprovaldata) => {
+    const proposalDetail = opportunityData?.proposal?.proposalDetails;
+    const { ApprovalSectionTitle, ApprovalSectionOrder } = aprovaldata;
+    trackEvent({
+      category: eventCategories.crmNo,
+      action: `Approval ${action}`,
+      name: `Approval: ${action}: (${ApprovalSectionTitle}) (${ApprovalSectionOrder})`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify({
+            proposalDetail,
+            aprovaldata
+          })
+        }
+      ]
+    });
+  };
+
+  const trackMatomoEventSubmitAnswer = (action, aprovaldata) => {
+    if (action === 'Duplicate') {
+      duplicateEventMatomo(action, aprovaldata);
+    }
+
+    if (action === 'Delete') {
+      deleteEventMatomo(action, aprovaldata);
+    }
+
+    if (action === 'Email') {
+      emailEventMatomo(action, aprovaldata);
+    }
+  };
 
   async function handleSendEmailClick() {
     const emailInfo = generateApprovalEmailInfo(
@@ -46,6 +150,7 @@ const ActionButtons = ({ sectionId }) => {
       Object.values(questionsMap),
       proposalDetails
     );
+    trackMatomoEventSubmitAnswer('Email', approval);
     if (
       emailInfo.subject &&
       Array.isArray(emailInfo.to) &&
@@ -67,8 +172,7 @@ const ActionButtons = ({ sectionId }) => {
       );
     } else {
       console.log(
-        '[Approvals] ActionButtons: Error in email data. please check subject, to and cc',
-        e
+        '[Approvals] ActionButtons: Error in email data. please check subject, to and cc'
       );
     }
   }
@@ -77,6 +181,9 @@ const ActionButtons = ({ sectionId }) => {
     dispatchLoadingEvent('SET_LOADING', true);
     (async () => {
       const response = await dispatch(deleteApproval(proposalId, sectionId));
+      if (response) {
+        trackMatomoEventSubmitAnswer('Delete', approval);
+      }
       dispatchLoadingEvent('SET_LOADING', false);
       if (!response.status) {
         setWarningTitle(response.title);
@@ -132,6 +239,9 @@ const ActionButtons = ({ sectionId }) => {
             const response = await dispatch(
               duplicateApproval(proposalId, sectionId)
             );
+            // if (response && response.data) {
+            trackMatomoEventSubmitAnswer('Duplicate', approval);
+            // }
             dispatchLoadingEvent('SET_LOADING', false);
             if (!response.status) {
               setWarningTitle(response.title);
@@ -172,7 +282,9 @@ const ActionButtons = ({ sectionId }) => {
 };
 
 ActionButtons.propTypes = {
-  sectionId: PropTypes.string.isRequired
+  sectionId: PropTypes.string.isRequired,
+  trackEvent: PropTypes.func.isRequired,
+  eventCategories: PropTypes.object.isRequired
 };
 
-export default ActionButtons;
+export default MatomoHOC(ActionButtons);
