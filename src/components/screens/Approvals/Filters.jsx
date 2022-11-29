@@ -5,17 +5,17 @@ import Grid from 'apollo-react/components/Grid';
 import ApolloCheckbox from 'apollo-react/components/Checkbox';
 import { updateFilters } from '../../../redux/actions/approval-actions';
 
-const Filters = (props) => {
-  const approvalFilters = useSelector((state) => state.approvals.filters);
+const Filters = props => {
+  const approvalFilters = useSelector(state => state.approvals.filters);
   const dispatch = useDispatch();
-  const filterGroups = [...new Set(approvalFilters.map((i) => i.group))];
+  const filterGroups = [...new Set(approvalFilters.map(i => i.group))];
 
   const updateFilter = (filterName, checked) => {
     dispatch(updateFilters(filterName, checked));
   };
   const clearAllFilters = () => {
-    const filterNames = approvalFilters.map((i) => i.name);
-    filterNames.forEach((name) => {
+    const filterNames = approvalFilters.map(i => i.name);
+    filterNames.forEach(name => {
       dispatch(updateFilters(name, false));
     });
   };
@@ -39,8 +39,8 @@ const Filters = (props) => {
           <div>
             <Grid container spacing={2}>
               {approvalFilters
-                .filter((i) => i.group === group)
-                .map((item) => (
+                .filter(i => i.group === group)
+                .map(item => (
                   <Grid item xs={3}>
                     <ApolloCheckbox
                       size="small"
