@@ -15,7 +15,7 @@ import { DEFAULT, PROPOSAL } from '../../../constants/app';
 import { extractEmails, parseStringifyJson } from '../../../utils/helpers';
 import {
   getSelectedBid,
-  selectProposalQuestions,
+  selectProposalQuestions
 } from '../../../redux/selectors/proposal';
 import { getUserData } from '../../../redux/selectors';
 import { updateEventSubjectBody } from '../../../utils/utils';
@@ -26,18 +26,19 @@ const attendees = ['Expected team members', 'All assigned team members'];
 const EventLauncher = ({
   questionData,
   proposalDetail,
-  trackMatomoEventLauncher,
+  trackMatomoEventLauncher
 }) => {
   const [bodyStr, setBodyStr] = useState('');
   const [url, setUrl] = useState('');
   const [bodyHtml, setBodyHtml] = useState('');
   const quesData = questionData?.toJS();
+  console.log({ quesData });
   const hasEvent = quesData?.events && !isEmpty(quesData?.events);
   const eventStartDate = !isEmpty(quesData?.answers)
     ? [...quesData?.answers].pop()?.answer
     : '';
   const userData = useSelector(getUserData);
-  const eventFlag = useSelector((state) =>
+  const eventFlag = useSelector(state =>
     state.proposal.get('eventLauncherFlag')
   );
   const { isCurrent } = useSelector(getSelectedBid)?.toJS();
@@ -59,7 +60,7 @@ const EventLauncher = ({
   const proposalTeam = useMemo(() => {
     if (!openModal) return []; // break func
     const team = [];
-    proposalQuestions.forEach((item) => {
+    proposalQuestions.forEach(item => {
       const { section, answers, roleNames, isCustomQuestion, active } = item;
       const { sectionName } = section;
       if (sectionName === 'Proposal Team') {
@@ -76,9 +77,9 @@ const EventLauncher = ({
                 answer
                   .trim()
                   .split(',')
-                  .map((i) => extractEmails(i))
-                  .filter((i) => i !== null)
-              ),
+                  .map(i => extractEmails(i))
+                  .filter(i => i !== null)
+              )
             ];
           }
         }
@@ -100,12 +101,12 @@ const EventLauncher = ({
     const { EventRoles: eventRoles } = eventData;
     // onChange attendees value
     if (attendeesVal === attendees[0]) {
-      const filteredTeam = proposalTeam.filter((i) =>
-        i.roleNames.some((role) => eventRoles.includes(role))
+      const filteredTeam = proposalTeam.filter(i =>
+        i.roleNames.some(role => eventRoles.includes(role))
       );
-      return [...new Set(filteredTeam.map((i) => i.email).flat())];
+      return [...new Set(filteredTeam.map(i => i.email).flat())];
     }
-    return [...new Set(proposalTeam.map((i) => i.email).flat())];
+    return [...new Set(proposalTeam.map(i => i.email).flat())];
   }, [openModal, attendeesVal]);
 
   /**
@@ -125,7 +126,7 @@ const EventLauncher = ({
   const blob = new Blob([content], { type: 'text/html' });
   const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
   navigator.clipboard.write([clipboardItem]);
-  const checkDateAge = (date) => {
+  const checkDateAge = date => {
     const formattedDt = moment(date).format('YYYY-MM-DD');
     if (moment(formattedDt).isSame(moment(), 'day')) return 'today';
     if (moment(formattedDt).isAfter(moment(), 'day')) return 'future';
@@ -138,7 +139,7 @@ const EventLauncher = ({
     const {
       EventBody: body,
       EventSubject: subject,
-      EventHtml: html,
+      EventHtml: html
     } = eventData;
     setBodyHtml(body);
     const dateAge = checkDateAge(eventStartDate);
@@ -177,10 +178,10 @@ const EventLauncher = ({
             userData,
             event: quesData?.events,
             startDate,
-            endDate,
-          }),
-        },
-      ],
+            endDate
+          })
+        }
+      ]
     };
     trackMatomoEventLauncher(trackEventPayload);
     window.open(geturl, '_blank', 'noopener,noreferrer');
@@ -191,14 +192,14 @@ const EventLauncher = ({
       open={openModal}
       title={PROPOSAL.EVENT_LAUNCHER}
       className="event-launcher__modal"
-      onClose={() => setOpenModal((prev) => !prev)}
+      onClose={() => setOpenModal(prev => !prev)}
       buttonProps={[
         { className: 'display-none' },
         {
           label: PROPOSAL.LAUNCH_OUTLOOK,
           disabled: isEmpty(filteredEmails),
-          onClick: launchRichTextButtonHandler,
-        },
+          onClick: launchRichTextButtonHandler
+        }
       ]}
       modalStyle={modalStyle}
     >
@@ -209,7 +210,7 @@ const EventLauncher = ({
         aria-label="attendees"
         name="attendees"
         value={attendeesVal}
-        onChange={(e) => setAttendeesVal(e.target.value)}
+        onChange={e => setAttendeesVal(e.target.value)}
         error={isEmpty(filteredEmails)}
         helperText={
           isEmpty(filteredEmails)
@@ -217,7 +218,7 @@ const EventLauncher = ({
             : ''
         }
       >
-        {attendees.map((item) => (
+        {attendees.map(item => (
           <Radio value={item} key={item} label={item} />
         ))}
       </RadioGroup>
@@ -259,7 +260,7 @@ const EventLauncher = ({
 };
 
 EventLauncher.propTypes = {
-  questionData: PropTypes.object.isRequired,
+  questionData: PropTypes.object.isRequired
 };
 
 export default EventLauncher;
