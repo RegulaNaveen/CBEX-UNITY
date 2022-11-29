@@ -11,6 +11,15 @@ import {
   duplicateApproval
 } from '../../../redux/actions/approval-actions';
 import { getSelectedBid } from '../../../redux/selectors/proposal';
+import {
+  selectCanSendEmail,
+  selectQuestionsHash
+} from '../../../redux/selectors/approvals';
+import {
+  generateApprovalEmailInfo,
+  generateApprovalEmailURL
+} from '../../../utils/emailUtils';
+import { getProposalDetails } from '../../../redux/selectors';
 import { DEFAULT } from '../../../constants/app';
 import CustomModal from '../../common/CustomModal';
 
@@ -24,9 +33,45 @@ const ActionButtons = ({ sectionId }) => {
   const approval = useSelector(state =>
     state.approvals.allApprovals.find(i => i.ApprovalSectionId === sectionId)
   );
+  const canSendEmail = useSelector(selectCanSendEmail);
+  const questionsMap = useSelector(selectQuestionsHash);
+  const proposalDetails = useSelector(getProposalDetails);
+
   const { ArchivedData = [] } = approval;
   const dispatch = useDispatch();
 
+  async function handleSendEmailClick() {
+    const emailInfo = generateApprovalEmailInfo(
+      approval,
+      Object.values(questionsMap),
+      proposalDetails
+    );
+    if (
+      emailInfo.subject &&
+      Array.isArray(emailInfo.to) &&
+      emailInfo.to.length > 0 &&
+      Array.isArray(emailInfo.cc)
+    ) {
+      try {
+        const blob = new Blob([emailInfo.body], { type: 'text/html' });
+        const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
+        await navigator.clipboard.write([clipboardItem]);
+      } catch (e) {
+        console.log(
+          '[Approvals] ActionButtons: Error in copying approval data to clipboard',
+          e
+        );
+      }
+      window.open(
+        generateApprovalEmailURL(emailInfo.subject, emailInfo.to, emailInfo.cc)
+      );
+    } else {
+      console.log(
+        '[Approvals] ActionButtons: Error in email data. please check subject, to and cc',
+        e
+      );
+    }
+  }
   const deleteAfterConfirmHandler = () => {
     setShowDeleteModal(false);
     dispatchLoadingEvent('SET_LOADING', true);
@@ -98,14 +143,17 @@ const ActionButtons = ({ sectionId }) => {
       >
         {DEFAULT.DUPLICATE}
       </Button>
-      <Button
-        variant="primary"
-        icon={<EmailClick fontSize="extraSmall" />}
-        style={{ marginRight: 10 }}
-        className="email-btn"
-      >
-        {DEFAULT.EMAIL}
-      </Button>
+      {canSendEmail ? (
+        <Button
+          variant="primary"
+          icon={<EmailClick fontSize="extraSmall" />}
+          style={{ marginRight: 10 }}
+          className="email-btn"
+          onClick={handleSendEmailClick}
+        >
+          {DEFAULT.EMAIL}
+        </Button>
+      ) : null}
 
       {/* Warning Modal */}
       {warning && (
