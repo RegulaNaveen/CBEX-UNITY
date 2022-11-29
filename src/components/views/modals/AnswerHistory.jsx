@@ -4,7 +4,7 @@ import { connect, useSelector } from 'react-redux';
 import { Map, fromJS } from 'immutable'; // NOSONAR
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
-import { isEmpty, isString, unionBy } from 'lodash';
+import { isEmpty, isString, unionBy, isObject } from 'lodash';
 import { diffWordsWithSpace } from 'diff';
 import Loader from 'apollo-react/components/Loader';
 import Button from 'apollo-react/components/Button/Button';
@@ -29,6 +29,7 @@ import {
 import { SocketContext } from '../../../context/SocketContext';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import { getLastAnswer } from '../../screens/Approvals/utils';
+import { QUESTION_UNLOCK_TIMEOUT } from '../../../constants/app';
 
 type Props = {
   question: Map,
@@ -54,8 +55,10 @@ class AnswerHistory extends Component<Props> {
     this.state = {
       question: this.props.question.set('answers', fromJS([])),
       lastAnswer: getLastAnswer(this.props.question.set('answers', fromJS([]))),
-      loading: false
+      loading: false,
+      mouseMoving: false
     };
+    this.setMouseMove = this.setMouseMove.bind(this);
   }
 
   componentDidMount() {
@@ -82,6 +85,17 @@ class AnswerHistory extends Component<Props> {
 
   componentWillUnmount() {
     if (document.body) document.body.classList.remove('no-scroll');
+  }
+
+  setMouseMove(e) {
+    e.preventDefault();
+    this.setState({ mouseMoving: true });
+
+    let timeout;
+    (() => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => this.setState({ mouseMoving: false }), 50);
+    })();
   }
 
   handleVerifyPredictedAnsClick = predictedAnswer => {
@@ -257,19 +271,6 @@ class AnswerHistory extends Component<Props> {
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const sectionName = question.getIn(['section', 'sectionName']);
     let answers = question.get('answers').reverse();
-    conditionBlankPredicted =
-      answers.size &&
-      isString(answers?.get(0)?.get('answer')) &&
-      isEmpty(
-        answers
-          ?.get(0)
-          ?.get('answer')
-          .trim()
-      ) &&
-      answers?.get(0 + 1)?.get('userName') === 'UnityPredictedAnswer';
-    if (conditionBlankPredicted) {
-      answers = answers.delete(0).delete(0);
-    }
     const questionId = answers.get('questionId');
     if (questionId) answers = question.getIn(['answers', 'answers']).reverse();
     if (answers.isEmpty()) return this.renderAnswerResponsables();
@@ -277,6 +278,21 @@ class AnswerHistory extends Component<Props> {
     const questionIdentifier = questions.get('questionId');
     lockQuestion = questionIdentifier;
     const lastAnswer = answers.get(0).toJS();
+    answers.map((_answer, index) => {
+      const currentAnswer =
+        isObject(answers?.get(index)?.get('answer')) &&
+        answers?.get(index)?.get('answer').size === 0
+          ? ' '
+          : answers?.get(index)?.get('answer');
+      conditionBlankPredicted =
+        answers.size &&
+        isString(currentAnswer) &&
+        isEmpty(currentAnswer.trim()) &&
+        answers?.get(index + 1)?.get('userName') === 'UnityPredictedAnswer';
+      if (conditionBlankPredicted) {
+        answers = answers.delete(index).delete(index);
+      }
+    });
     return answers.map((_answer, index) => {
       const userName = _answer.get('userName') || 'Default User';
       const date = _answer.get('date');
@@ -308,6 +324,10 @@ class AnswerHistory extends Component<Props> {
       ) {
         this.context.questionLockWrapper(questionIdentifier);
       }
+
+      setTimeout(() => {
+        this.closeModalWindow();
+      }, QUESTION_UNLOCK_TIMEOUT);
       const isValidatedUnityPredictedAnswer =
         questionType !== ANSWER_TYPES.PICKLIST &&
         questionType !== ANSWER_TYPES.PICKLIST_LOOKUP &&
@@ -628,11 +648,20 @@ class AnswerHistory extends Component<Props> {
     }
   };
 
+  addWatcher() {
+    return setTimeout(() => {
+      this.closeModalWindow();
+    }, QUESTION_UNLOCK_TIMEOUT);
+  }
+
   render() {
     const { closeModal } = this.props;
     const { question, loading } = this.state;
     const answers = question.get('answers');
     const questionTitle = question.get('questionText');
+    if (this.state.mouseMoving) {
+      this.addWatcher();
+    }
     return (
       <section
         id="answer-history-modal"
@@ -640,6 +669,7 @@ class AnswerHistory extends Component<Props> {
         onClick={this.closeModalWindow}
         role="button" // eslint-disable-line
         tabIndex={0}
+        onMouseMove={e => this.setMouseMove(e)}
         onKeyUp={this.onModalKeyPress}
       >
         <div
