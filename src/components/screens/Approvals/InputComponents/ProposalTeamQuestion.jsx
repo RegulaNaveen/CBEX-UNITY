@@ -57,12 +57,12 @@ const ProposalTeamQuestion = ({
       <>
         <AutoComplete
           sectionName={question.section?.sectionName}
-          onFocus={() => {
-            questionLockWrapper(question?.questionId);
-          }}
-          onBlur={() => {
-            questionUnlockWrapper(question?.questionId);
-          }}
+          // onFocus={() => {
+          //   questionLockWrapper(question?.questionId);
+          // }}
+          // onBlur={() => {
+          //   questionUnlockWrapper(question?.questionId);
+          // }}
           onChange={handleAnswerChange}
           text={lastAnswer.answer || ''}
           disabled={checkDisableFlag() || !!disabled}

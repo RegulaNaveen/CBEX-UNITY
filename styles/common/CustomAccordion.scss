@@ -2,7 +2,12 @@
   &.MuiAccordion-root {
     box-shadow: 0 8px 1rem 0 rgba(0, 0, 0, 0.08);
     margin-bottom: 0.5rem;
-    border: 2px solid $neutral4;
+    border: 1px solid $neutral4;
+    border-radius: 4px;
+
+    &:first-child {
+      margin-top: 0 !important;
+    }
 
     &[class*='Mui-expanded'] {
       margin: 0.5rem 0;

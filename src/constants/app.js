@@ -55,5 +55,6 @@ const PROFILE = {
 
 const REFRESH_WEBSOCKET_CONNECTION = 60000; // 1 minute
 export const QUESTION_UNLOCK_TIMEOUT = 90 * 1000; // 90 seconds (1.5minutes)
+export const URL_REGEXP = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
 
 export { DEFAULT, PROPOSAL, REFRESH_WEBSOCKET_CONNECTION, PROFILE };
