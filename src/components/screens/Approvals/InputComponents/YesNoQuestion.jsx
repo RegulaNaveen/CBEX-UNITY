@@ -41,12 +41,12 @@ const YesNoQuestion = ({
           questionId={question.questionId}
           value={lastAnswer.answer}
           onClick={val => changeHandler(val, lastAnswer.answer)}
-          onFocus={() => {
-            questionLockWrapper(question?.questionId);
-          }}
-          onBlur={() => {
-            questionUnlockWrapper(question?.questionId);
-          }}
+          // onFocus={() => {
+          //   questionLockWrapper(question?.questionId);
+          // }}
+          // onBlur={() => {
+          //   questionUnlockWrapper(question?.questionId);
+          // }}
         />
       </>
     );

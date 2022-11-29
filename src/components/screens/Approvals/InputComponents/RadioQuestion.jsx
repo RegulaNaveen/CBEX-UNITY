@@ -38,12 +38,12 @@ const RadioQuestionInput = ({
       onClick={val => changeHandler(val, lastAnswer.answer)}
       items={question?.answerConfiguration?.options}
       disabled={checkDisableFlag() || !!disabled}
-      onFocus={() => {
-        questionLockWrapper(question?.questionId);
-      }}
-      onBlur={() => {
-        questionUnlockWrapper(question?.questionId);
-      }}
+      // onFocus={() => {
+      //   questionLockWrapper(question?.questionId);
+      // }}
+      // onBlur={() => {
+      //   questionUnlockWrapper(question?.questionId);
+      // }}
     />
   );
 };
