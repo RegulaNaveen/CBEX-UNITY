@@ -136,23 +136,8 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
       });
       trackEvent({
         category: eventCategories.crmNo,
-        action: `Approval: ${action}`,
-        name: `Approval Answer: ${action}: (${ApprovalSectionTitle}) (${ArchivedData.length + 1})`,
-        customDimensions: [
-          {
-            id: 1,
-            value: JSON.stringify({
-              proposalDetail,
-              aprovaldata,
-              totalApproval: ArchivedData.length + 1
-            })
-          }
-        ]
-      });
-      trackEvent({
-        category: eventCategories.crmNo,
         action: `Approval:  ${action} count`,
-        name: `Approval Answer: Approval count: ${ArchivedData.length + 1}`,
+        name: `Approval Answer: Approval Duplicate count: ${ArchivedData.length + 1}`,
         customDimensions: [
           {
             id: 1,
