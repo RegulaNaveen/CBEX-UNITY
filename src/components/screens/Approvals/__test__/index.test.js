@@ -9,6 +9,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Approvals from '../index';
 import * as data from '../../Proposal/__tests__/data.json';
+import { allApprovals, quesHashData } from './data';
 
 configure({ adapter: new Adapter() });
 const mockStore = configureMockStore();
@@ -28,10 +29,12 @@ const proposalID = fromJS(data.proposalID);
 const selectedBid = fromJS(data.proposalID);
 const userRole = fromJS(data.userRole);
 const sections = fromJS(data.sections);
+const approvals = { allApprovals, quesHashData };
 
 let initialState = {
   ssoAuth,
   sidebar,
+  approvals,
   notepad,
   proposal,
   proposals,
