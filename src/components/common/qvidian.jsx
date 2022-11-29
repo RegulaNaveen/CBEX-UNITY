@@ -1,13 +1,12 @@
 export default [
   {
-    'Proposal Team-P0X': 'Business Developer Team',
     'Proposal Team-D6B': 'TSL Team',
+    'Proposal Team-L8N': 'Project Lead Team',
     'Proposal Team-P0C': 'Medic Team',
-    'Proposal Team-A2W': 'Project Lead Team',
+    'Proposal Team-P0X': 'Business Development Lead Name',
     'Proposal Team-Z5P': 'Proposal Developer Team',
     'Proposal Team-O0Z': 'Analytics Strategy Lead Team',
     'Proposal Team-L6S': 'Clinical DS&B Team',
-    'Country Strategy-N9P': 'Target Countries',
     'Win Strategy-J5S': 'Study Outcome Success',
     'Win Strategy-AB9': 'Historic strategy impact',
     'Win Strategy-U9B': 'Customer Need and Selection Criteria',
@@ -25,12 +24,40 @@ export default [
     'Opportunity Overview-I7N': 'Therapeutic Area',
     '8959b856-0f49-4c4e-8ec8-f5955320866a': 'Indication',
     'Opportunity Overview-D3B': 'Study Phase',
-    '7ba722f4-8822-4e64-8086-acc8dbc746ab':
-      'Is this a full or partial virtual trial?',
     '5c2af12a-f1ff-41a9-bd74-fe2ae340faff': 'Study Start Date',
     'Opportunity Overview-Z1V': 'Study Compound',
-    'Country Strategy-H7V': 'Country Strategy-H7V',
+    'Country Strategy-H7V': 'Study Region(s)',
     '6bdaa786-a85a-454e-add6-f930ef3ec88a': 'Customers Primary Hot Button',
-    'Proposal Team-L8N': 'Project Leadership, Director'
+    'c717c432-fed0-4d91-b7d8-cb970ef3700a': 'Verbatim Indication Term',
+    'Opportunity Overview-S5U': 'Population Age Group',
+    'Opportunity Overview-K9T': 'Protocol Number',
+    'Country Strategy-N9P': 'Which countries did the customer specify?',
+    '969ac244-5781-49ae-ad02-e157f5b06a3e': 'Is this a BTS Proposal?',
+    'c30cc52d-a98a-422d-b464-9fba20ef673f': 'Multiple / alternative Scenarios',
+    'c0a77004-ecbe-4bd4-98e9-b7b8aa542197':
+      'Does DIPA add value to this opportunity?',
+    'ab06da67-cfdf-4925-b1c1-c55a880d3324': 'Feasibility Overview & Challenges',
+    'a3cbf40e-b01a-4b87-80e1-960a5f8b7390': 'Operational Challenges',
+    '8d422d68-8f18-4f88-bc8b-73417e168cb2': 'FPR / FPI Date',
+    'fb430a29-66f0-4c4d-8eac-1dc03bc160d6': 'Award Timelines',
+    'Diversity and Inclusion-AW3':
+      'Did the customer request  Diversity in Clinical Trials (DICT) for this opportunity?',
+    '71aacb8c-f7a9-42d7-922e-e2387eabf6c8': 'Number of Sites',
+    '5c62039d-98d2-42d3-824a-1341d07c0f35':
+      'Do we have an MSA with this customer?',
+    '2a30b4ac-354e-4168-987a-aa4b70910b77': 'Most serious study challenge',
+    'e01b3c3e-87b8-4ab4-bc7e-a32f62f7abf1': 'Number of patients enrolled',
+    'e8fd9762-e57f-4822-9f5b-4f94d9d48e92': 'Is this part of a Program?',
+    'eb5151cb-e89d-4cb1-a57f-27fce7d42247': 'IQVIA internal solutions',
+    '07ddfd1c-5058-48cd-82cd-9785d19e9e34': 'Recruitment Strategy',
+    'c3fc468c-19cc-462c-9835-1a5d0ecb8c67': 'Monitoring Approach',
+    '3e942083-6775-4f94-ae91-60cd818a2a07': 'Vendors',
+    '3bca848c-72e0-49f6-9a8d-d3c628010185':
+      'Securing resources to be named in proposal & CVs',
+    '7ba722f4-8822-4e64-8086-acc8dbc746ab':
+      'Is a Decentralized Clinical Trial (DCT) being considered for this trial?',
+    'c60cf8b1-e1dd-42df-a89f-98c44ff1032a': 'Indication',
+    'f34d5f57-9445-48a9-9b55-6d847dd8b681': 'Number of Sites',
+    'Proposal Team-A2W': 'Project Lead Team'
   }
 ];
