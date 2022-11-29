@@ -1,6 +1,6 @@
 .approvals-tab {
   margin-top: 2px;
-  min-height: 300px;
+  min-height: 73vh;
   position: relative;
 
   .accordion-body {
@@ -92,4 +92,18 @@
       margin-bottom: 0px;
     }
   }
+}
+
+.filter-icon {
+  fill: $neptune-primary;
+  margin-right: 5px;
+}
+
+.filter-horizontal {
+  display: block;
+  height: 0.8px;
+  border: 0.6em;
+  border-top: 1px solid #ccc;
+  margin: 0.6em -0.5em 0.6em -0.5em;
+  padding: 0;
 }

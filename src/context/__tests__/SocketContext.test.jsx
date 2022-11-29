@@ -41,20 +41,19 @@ describe('Price Modeler concurrency', () => {
   });
 
   test('shows loading indicator and tooltip on event "COST_ESTIMATE_CALCULATING"', async () => {
-    const { getByText, getByTestId } = render(
+    const { getByText, findByTestId } = render(
       <PriceModelerWithSocketContext />
     );
-    await waitFor(() => {
-      expect(getByText('Price Modeler Estimate')).toBeInTheDocument();
-    });
+    expect(getByText('Price Modeler Estimate')).toBeInTheDocument();
     // send "COST_ESTIMATE_CALCULATING" event message on websocket
     await ws.connected;
     await ws.send(
       JSON.stringify({ data: {}, event: 'COST_ESTIMATE_CALCULATING' })
     );
-    waitFor(() => {
-      expect(getByTestId('price-modeler-recalc-loader')).toBeInTheDocument();
-      expect(getByTestId('price-modeler-recalc-tooltip')).toBeInTheDocument();
+    await waitFor(async () => {
+      expect(
+        await findByTestId('price-modeler-recalc-loader')
+      ).toBeInTheDocument();
     });
   });
 
@@ -62,9 +61,7 @@ describe('Price Modeler concurrency', () => {
     const { getByText, getByTestId } = render(
       <PriceModelerWithSocketContext />
     );
-    await waitFor(() => {
-      expect(getByText('Price Modeler Estimate')).toBeInTheDocument();
-    });
+    expect(getByText('Price Modeler Estimate')).toBeInTheDocument();
     // send "COST_ESTIMATE_CALCULATING" event message on websocket
     await ws.connected;
     await ws.send(
@@ -84,19 +81,12 @@ describe('Price Modeler concurrency', () => {
       expect(getByTestId('price-modeler-recalc-loader'))
         .not()
         .toBeInTheDocument();
-      expect(getByTestId('price-modeler-recalc-tooltip'))
-        .not()
-        .toBeInTheDocument();
     });
   });
 
   test('verify UI updates on event "COST_ESTIMATE_UPDATE"', async () => {
-    const { getByText, getByTestId } = render(
-      <PriceModelerWithSocketContext />
-    );
-    await waitFor(() => {
-      expect(getByText('Price Modeler Estimate')).toBeInTheDocument();
-    });
+    const { getByText, findByText } = render(<PriceModelerWithSocketContext />);
+    expect(getByText('Price Modeler Estimate')).toBeInTheDocument();
     // send "COST_ESTIMATE_UPDATE" event message on websocket
     const data = {
       Cost: 1000000,
@@ -107,9 +97,9 @@ describe('Price Modeler concurrency', () => {
       Potential_Regions__c: 'Asia Pacific'
     };
     await ws.send(JSON.stringify({ data, event: 'COST_ESTIMATE_UPDATE' }));
-    await waitFor(() => {
-      expect(getByText(data.TherapyArea__c)).toBeInTheDocument();
-      expect(getByText(data.Potential_Regions__c)).toBeInTheDocument();
+    await waitFor(async () => {
+      expect(await findByText(data.TherapyArea__c)).toBeInTheDocument();
+      expect(await findByText(data.Potential_Regions__c)).toBeInTheDocument();
     });
   });
 });
