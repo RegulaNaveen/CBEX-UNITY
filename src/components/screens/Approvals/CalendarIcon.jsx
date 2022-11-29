@@ -2,7 +2,7 @@ import React from 'react';
 import isEmpty from 'lodash/isEmpty';
 import Calendar from 'apollo-react-icons/Calendar';
 import CalendarCheck from 'apollo-react-icons/CalendarCheck';
-import getLastAnswer from './getLastAnswer';
+import { getLastAnswer } from './utils';
 
 const CalendarIcon = ({ question }) => {
   const lastAnswer = getLastAnswer(question);

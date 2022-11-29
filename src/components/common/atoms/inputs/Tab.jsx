@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useHistory } from 'react-router-dom';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
-import { useHistory } from 'react-router';
 import { shallowEqual, useSelector } from 'react-redux';
 import Questions from '../../../screens/Opportunity/Questions';
 import Documents from '../../../screens/Opportunity/Documents';
@@ -36,30 +36,28 @@ const UnityTab = ({
     {
       label: 'Strategy Development',
       value: 0,
-      component: <Questions proposalID={id} />,
+      component: <Questions key="Strategy Development" proposalID={id} />,
       path: 'questions'
     },
     {
       label: 'Approvals',
       value: 1,
-      component: <Approvals />,
+      component: <Approvals key="Approvals" />,
       path: 'approvals'
     },
     {
       label: 'Documents',
       value: 2,
-      component: <Documents />,
+      component: <Documents key="Documents" />,
       path: 'documents'
     },
-    { label: 'Validate', value: 3, component: <Validate />, path: 'validate' }
-  ];
-
-  useEffect(() => {
-    if (proposalID) {
-      let opportunityData = oppData[proposalID];
-      getApprovalQuestionIds(opportunityData);
+    {
+      label: 'Validate',
+      value: 3,
+      component: <Validate key="Validate" />,
+      path: 'validate'
     }
-  }, [memoizeBid, proposalQuestions]);
+  ];
 
   const getApprovalQuestionIds = opportunityData => {
     const approvalQIdsArr = [];
@@ -98,6 +96,13 @@ const UnityTab = ({
   };
 
   useEffect(() => {
+    if (proposalID) {
+      const opportunityData = oppData[proposalID];
+      getApprovalQuestionIds(opportunityData);
+    }
+  }, [memoizeBid, proposalQuestions]);
+
+  useEffect(() => {
     if (selectedView && selectedView === 'documents') {
       setValue(tabs.find(item => item.label === 'Documents').value);
     }
@@ -113,19 +118,19 @@ const UnityTab = ({
   }, [selectedView, approvalsFlag, showApprovalTab]);
 
   const winLocationSearch = window.location.search;
-  const handleChangeTab = (event, value) => {
+  const handleChangeTab = (event, val) => {
     const selectView = new URLSearchParams(winLocationSearch);
-    const currentTab = tabs.find(item => item.value === value);
+    const currentTab = tabs.find(item => item.value === val);
     const currentPath = currentTab.path || '';
+    setValue(val);
     onChangeSelectedTab(currentPath);
     selectView.set('viewType', currentPath);
-    if (value === 0) {
+    if (val === 0) {
       // No need to update pathname for question tab
       history.push(`${window.location.pathname}`);
     } else {
       history.push(`${window.location.pathname}?${selectView.toString()}`);
     }
-    setValue(value);
   };
 
   useEffect(() => {
@@ -133,7 +138,6 @@ const UnityTab = ({
       const approvalFlag = await launchDarkly(featureFlags.APPROVALS, false);
       setApprovalsFlag(approvalFlag);
     })();
-    console.log({ selectedView });
   }, []);
 
   /**
@@ -142,7 +146,7 @@ const UnityTab = ({
    */
   const visibleTabs = () => {
     let tabsToReturn = tabs;
-    const isApprovalTab = approvalsFlag && showApprovalTab;
+    const isApprovalTab = approvalsFlag;
     if (!isApprovalTab) {
       tabsToReturn = tabsToReturn.filter(item => item.label !== 'Approvals');
     }
@@ -162,7 +166,9 @@ const UnityTab = ({
           className="_question-tab"
         >
           {visibleTabs().map(item => {
-            return <Tab label={item.label} value={item.value} />;
+            return (
+              <Tab key={item.label} label={item.label} value={item.value} />
+            );
           })}
         </Tabs>
         <div style={{ padding: 20, paddingTop: 5 }}>

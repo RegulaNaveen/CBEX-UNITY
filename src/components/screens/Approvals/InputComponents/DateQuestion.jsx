@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import QuestionDatePicker from '../../../common/atoms/inputs/QuestionDatePicker';
 import { parseMomentDate } from '../../../../utils/DateUtils';
@@ -7,11 +8,14 @@ import { setProposalAnswerData } from '../../../../redux/actions/proposal-action
 const DateQuestion = ({
   question,
   lastAnswer,
+  disabled,
   userData,
   socketContext,
-  trackMatomoEventSubmitAnswer
+  trackMatomoEventSubmitAnswer,
+  checkDisableFlag
 }) => {
   const dispatch = useDispatch();
+  const { questionLockWrapper, questionUnlockWrapper } = socketContext;
   const resetDate = () => {
     const { proposalId, questionId } = question;
     dispatch(
@@ -28,7 +32,7 @@ const DateQuestion = ({
     trackMatomoEventSubmitAnswer(' ');
   };
 
-  const handleDayChange = (selectedDay: string, lastAnswerValue = '') => {
+  const handleDayChange = (selectedDay, lastAnswerValue = '') => {
     const { proposalId, questionId } = question;
 
     if (
@@ -53,13 +57,30 @@ const DateQuestion = ({
 
   return (
     <QuestionDatePicker
+      disabled={checkDisableFlag() || !!disabled}
       value={lastAnswer.answer}
       resetDate={resetDate}
       handleDayChange={handleDayChange}
-      onFocus={() => {}}
-      onBlur={() => {}}
+      onFocus={() => {
+        questionLockWrapper(question?.questionId);
+      }}
+      onBlur={() => {
+        questionUnlockWrapper(question?.questionId);
+      }}
     />
   );
+};
+
+DateQuestion.defaultProps = {
+  disabled: false
+};
+DateQuestion.propTypes = {
+  question: PropTypes.object.isRequired,
+  lastAnswer: PropTypes.object.isRequired,
+  disabled: PropTypes.any,
+  userData: PropTypes.any.isRequired,
+  socketContext: PropTypes.object.isRequired,
+  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired
 };
 
 export default DateQuestion;

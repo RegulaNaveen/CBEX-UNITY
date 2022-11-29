@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import isEmpty from 'lodash/isEmpty';
+import PropTypes from 'prop-types';
 import CheckBoxQuestions from '../../../common/atoms/inputs/CheckBoxQuestions';
 import ANSWER_TYPES from '../../../../constants/answerTypes';
 import {
@@ -12,12 +12,15 @@ import { setProposalAnswerData } from '../../../../redux/actions/proposal-action
 const CheckBoxQuestion = ({
   question,
   lastAnswer,
+  disabled,
   userData,
   socketContext,
-  trackMatomoEventSubmitAnswer
+  trackMatomoEventSubmitAnswer,
+  checkDisableFlag
 }) => {
   try {
     const dispatch = useDispatch();
+    const { questionLockWrapper, questionUnlockWrapper } = socketContext;
     const questionType = question?.answerConfiguration?.type;
     const sfObject = question?.sfObject;
     const sfField = question?.sfField;
@@ -51,14 +54,25 @@ const CheckBoxQuestion = ({
     };
 
     return (
-      <div className="checkboxtype">
+      <div
+        className="checkboxtype"
+        // onFocus={() => {
+        //   questionLockWrapper(question?.questionId);
+        // }}
+      >
         <CheckBoxQuestions
           answerValue={answerValue}
           finalOptions={finalOptions}
-          disabled={false}
+          disabled={!!disabled}
           onOpen={() => {}}
           onClose={() => {}}
           onChange={changeHandler}
+          // onFocus={() => {
+          //   questionLockWrapper(question?.questionId);
+          // }}
+          // onBlur={() => {
+          //   questionUnlockWrapper(question?.questionId);
+          // }}
         />
       </div>
     );
@@ -66,6 +80,18 @@ const CheckBoxQuestion = ({
     console.error(error);
     return <p>Error rendering CheckBoxQuestion</p>;
   }
+};
+
+CheckBoxQuestion.defaultProps = {
+  disabled: false
+};
+CheckBoxQuestion.propTypes = {
+  question: PropTypes.object.isRequired,
+  lastAnswer: PropTypes.object.isRequired,
+  disabled: PropTypes.any,
+  userData: PropTypes.any.isRequired,
+  socketContext: PropTypes.object.isRequired,
+  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired
 };
 
 export default CheckBoxQuestion;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 import xor from 'lodash/xor';
 import AutoComplete from '../../../common/atoms/inputs/AutoComplete';
 import {
@@ -10,12 +11,15 @@ import {
 const ProposalTeamQuestion = ({
   question,
   lastAnswer,
+  disabled,
   userData,
   socketContext,
-  trackMatomoEventSubmitAnswer
+  trackMatomoEventSubmitAnswer,
+  checkDisableFlag
 }) => {
   try {
     const dispatch = useDispatch();
+    const { questionLockWrapper, questionUnlockWrapper } = socketContext;
     const handleAnswerChange = (textValue, lastValue, reason) => {
       const { proposalId, questionId, section } = question;
       const { sectionName, sectionOrder } = section;
@@ -53,11 +57,15 @@ const ProposalTeamQuestion = ({
       <>
         <AutoComplete
           sectionName={question.section?.sectionName}
-          onFocus={() => {}}
-          onBlur={() => {}}
+          onFocus={() => {
+            questionLockWrapper(question?.questionId);
+          }}
+          onBlur={() => {
+            questionUnlockWrapper(question?.questionId);
+          }}
           onChange={handleAnswerChange}
           text={lastAnswer.answer || ''}
-          disabled={false}
+          disabled={checkDisableFlag() || !!disabled}
         />
       </>
     );
@@ -65,6 +73,18 @@ const ProposalTeamQuestion = ({
     console.error(error);
     return <p>Error rendering Proposal Team question</p>;
   }
+};
+
+ProposalTeamQuestion.defaultProps = {
+  disabled: false
+};
+ProposalTeamQuestion.propTypes = {
+  question: PropTypes.object.isRequired,
+  lastAnswer: PropTypes.object.isRequired,
+  disabled: PropTypes.any,
+  userData: PropTypes.any.isRequired,
+  socketContext: PropTypes.object.isRequired,
+  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired
 };
 
 export default ProposalTeamQuestion;
