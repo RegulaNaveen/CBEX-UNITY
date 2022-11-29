@@ -17,9 +17,9 @@ const NumberQuestion = ({
   const dispatch = useDispatch();
   const { questionLockWrapper, questionUnlockWrapper } = socketContext;
 
-  const handleTextChange = (textValue, lastAns, editorData) => {
+  const handleTextChange = (textValue, lastAns = ' ', editorData) => {
     const { proposalId, questionId } = question;
-    questionUnlockWrapper(question?.questionId);
+    // questionUnlockWrapper(question?.questionId);
     const s1 = textValue
       .trim()
       .split(' ')
@@ -70,7 +70,7 @@ const NumberQuestion = ({
         type="number"
         value={lastAnswer.answer}
         onBlur={handleTextChange}
-        onFocus={() => questionLockWrapper(question?.questionId)}
+        // onFocus={() => questionLockWrapper(question?.questionId)}
       />
     </>
   );

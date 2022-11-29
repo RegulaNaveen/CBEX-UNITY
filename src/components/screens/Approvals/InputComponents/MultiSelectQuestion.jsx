@@ -60,12 +60,12 @@ const MultiSelectQuestion = ({
         sfObject={sfObject}
         sfField={sfField}
         lov={finalOptions}
-        onFocus={() => {
-          questionLockWrapper(question?.questionId);
-        }}
-        onBlur={() => {
-          questionUnlockWrapper(question?.questionId);
-        }}
+        // onFocus={() => {
+        //   questionLockWrapper(question?.questionId);
+        // }}
+        // onBlur={() => {
+        //   questionUnlockWrapper(question?.questionId);
+        // }}
         disabled={checkDisableFlag() || !!disabled}
         multiple
         answer={answerValue}

@@ -36,12 +36,12 @@ const SelectQuestion = ({
       sfObject={question.sfObject}
       sfField={question.sfField}
       lov={question?.answerConfiguration?.options}
-      onFocus={() => {
-        questionLockWrapper(question?.questionId);
-      }}
-      onBlur={() => {
-        questionUnlockWrapper(question?.questionId);
-      }}
+      // onFocus={() => {
+      //   questionLockWrapper(question?.questionId);
+      // }}
+      // onBlur={() => {
+      //   questionUnlockWrapper(question?.questionId);
+      // }}
       disabled={checkDisableFlag() || !!disabled}
       answer={lastAnswer.answer}
       onChange={changeHandler}

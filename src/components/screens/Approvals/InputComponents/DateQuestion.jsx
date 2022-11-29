@@ -61,12 +61,12 @@ const DateQuestion = ({
       value={lastAnswer.answer}
       resetDate={resetDate}
       handleDayChange={handleDayChange}
-      onFocus={() => {
-        questionLockWrapper(question?.questionId);
-      }}
-      onBlur={() => {
-        questionUnlockWrapper(question?.questionId);
-      }}
+      // onFocus={() => {
+      //   questionLockWrapper(question?.questionId);
+      // }}
+      // onBlur={() => {
+      //   questionUnlockWrapper(question?.questionId);
+      // }}
     />
   );
 };
