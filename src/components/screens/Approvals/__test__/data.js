@@ -484,6 +484,48 @@ export const dummyQuestions = [
     events: '',
     notApplicable: false,
     questionApproval: false
+  },
+  {
+    proposalId: '1614582d-4312-425d-a01f-5d47a9c90a38',
+    questionId: 'medical monitoring-A7W',
+    section: {
+      sectionOrder: 28,
+      sectionName: 'Medical Monitoring'
+    },
+    questionText:
+      'What types of output would the customer like for trial decisions?',
+    answerConfiguration: {
+      type: 'picklist',
+      options: [
+        'Simple data listings generated for each cohort from clinical and safety databases',
+        'Patient Profiles',
+        'Formal TLFs'
+      ]
+    },
+    roleNames: ['Core - Business Developer', 'X - Medical Bidder - IQB'],
+    answers: [],
+    questionOrder: 3,
+    visible: false,
+    locked: false,
+    sfObject: 'n/a',
+    sfField: 'n/a',
+    logic:
+      '{"type":"binary","operation":"And","condition":[{"type":"unary","operation":"","condition":[{"fieldName":"Opportunity Overview-I7N","fieldValue":"Oncology","operator":"Equal"}]},{"type":"unary","operation":"","condition":[{"fieldName":"Opportunity Overview-D9N","fieldValue":"Yes","operator":"Equal"}]}]}',
+    milestoneNew: [],
+    opportunityType: 'Default Type',
+    hasDifferentSFanswer: false,
+    isCustomQuestion: false,
+    questionJSON:
+      '{"blocks":[{"key":"pn5bt","text":"What types of output would the customer like for trial decisions?","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}',
+    questionHTML:
+      '<div data-contents="true"><div data-block="true" data-editor="a7u04" data-offset-key="pn5bt-0-0"><div data-offset-key="pn5bt-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="pn5bt-0-0"><span data-text="true">What types of output would the customer like for trial decisions?/span></span></div></div></div>',
+    questionHintJSON: '',
+    questionHintHTML: '',
+    active: true,
+    integration: '',
+    events: '',
+    notApplicable: false,
+    questionApproval: false
   }
 ];
 export const sfOptions = {
