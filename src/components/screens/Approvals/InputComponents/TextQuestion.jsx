@@ -19,12 +19,14 @@ const TextQuestion = ({
   disabled,
   userData,
   socketContext,
-  trackMatomoEventSubmitAnswer
+  trackMatomoEventSubmitAnswer,
+  checkDisableFlag
 }) => {
   const dispatch = useDispatch();
   const answerValue = lastAnswer.answer || '';
   const formattedAnswer =
     has(lastAnswer, 'formattedAnswer') && lastAnswer.formattedAnswer;
+  const { questionLockWrapper, questionUnlockWrapper } = socketContext;
 
   const parseFormattedData =
     !formattedAnswer || isObject(formattedAnswer)
@@ -65,7 +67,7 @@ const TextQuestion = ({
     richTextHtml: richTextData.html,
     enableFocus: true,
     isEditable: false,
-    disabled,
+    disabled: checkDisableFlag() || disabled,
     onBlur: data => {
       let saveDate = false;
       const previousAnsText = getConvertedAnsString(answerValue).trim();
@@ -91,7 +93,11 @@ const TextQuestion = ({
       if (saveDate) {
         handleRichTextChange(data);
       }
+      // questionUnlockWrapper(question?.questionId);
     }
+    // onFocus: () => {
+    //   questionLockWrapper(question?.questionId);
+    // }
   };
 
   return <CustomApolloRichText {...richtextProps} />;

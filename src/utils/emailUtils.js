@@ -1,3 +1,5 @@
+import { URL_REGEXP } from '../constants/app';
+
 export function getProposalTeamUsers(questions = []) {
   let answers = new Set();
   try {
@@ -25,6 +27,18 @@ export function getProposalTeamUsers(questions = []) {
     );
   }
   return Array.from(answers);
+}
+
+function handleHyperlinks(answer) {
+  let chunks = answer.split(' ');
+  chunks = chunks.map(chunk => {
+    if (URL_REGEXP.test(chunk)) {
+      return `<a href="${chunk}">${chunk}</a>`;
+    } else {
+      return chunk;
+    }
+  });
+  return chunks.join(' ');
 }
 
 export function generateApprovalEmailInfo(
@@ -125,8 +139,13 @@ export function generateApprovalEmailInfo(
       questionsForThisApproval = allQuestions.filter(question =>
         approvalQuestionIds.includes(question.questionId)
       );
-      ccUsers = getProposalTeamUsers(questionsForThisApproval);
-      ccUsers = ccUsers.filter(user => !toUsers.includes(user));
+      const approversQuestion = questionsForThisApproval.find(
+        question => question.questionText === 'Approvers'
+      );
+      if (approversQuestion) {
+        ccUsers = getProposalTeamUsers([approversQuestion]);
+        ccUsers = ccUsers.filter(user => !toUsers.includes(user));
+      }
     }
     const decisionQuestion = questionsForThisApproval.find(
       question => question.questionText === 'Decision'
@@ -169,8 +188,14 @@ export function generateApprovalEmailInfo(
         question.answers.length > 0
           ? (question.answers[question.answers.length - 1].formattedAnswer &&
               question.answers[question.answers.length - 1].formattedAnswer
-                .htmlExport) ||
-            `<p>${question.answers[question.answers.length - 1].answer}</p>`
+                .htmlExport &&
+              handleHyperlinks(
+                question.answers[question.answers.length - 1].formattedAnswer
+                  .htmlExport
+              )) ||
+            `<p>${handleHyperlinks(
+              question.answers[question.answers.length - 1].answer
+            )}</p>`
           : '';
       answerHTML = answerHTML.replace(
         /data-[a-zA-Z0-9-]*=\"[a-zA-Z0-9-]*\"/g,

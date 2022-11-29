@@ -24,8 +24,8 @@ export const fetchAllApprovals = proposalId => async dispatch => {
   } catch (error) {
     // Error
     console.log(error.response);
-    const msg = getErrorMessage(error);
-    return { status: false, title: DEFAULT.ALERT, msg };
+    const message = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, message };
   }
 };
 
@@ -62,8 +62,8 @@ export const deleteApproval = (proposalId, sectionId) => async (
   } catch (error) {
     // Error
     console.log(error.response);
-    const msg = getErrorMessage(error);
-    return { status: false, title: DEFAULT.ALERT, msg };
+    const message = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, message };
   }
 };
 
@@ -90,8 +90,8 @@ export const duplicateApproval = (proposalId, sectionId) => async (
   } catch (error) {
     // Error
     console.log(error.response);
-    const msg = getErrorMessage(error);
-    return { status: false, title: DEFAULT.ALERT, msg };
+    const message = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, message };
   }
 };
 

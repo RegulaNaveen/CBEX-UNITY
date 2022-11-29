@@ -10,12 +10,15 @@ const SelectQuestion = ({
   disabled,
   userData,
   socketContext,
-  trackMatomoEventSubmitAnswer
+  trackMatomoEventSubmitAnswer,
+  checkDisableFlag
 }) => {
   const dispatch = useDispatch();
+  const { questionLockWrapper, questionUnlockWrapper } = socketContext;
 
   const changeHandler = textValue => {
     const { proposalId, questionId } = question;
+
     dispatch(
       setProposalAnswerData(
         socketContext,
@@ -33,9 +36,13 @@ const SelectQuestion = ({
       sfObject={question.sfObject}
       sfField={question.sfField}
       lov={question?.answerConfiguration?.options}
-      onFocus={() => {}}
-      onBlur={() => {}}
-      disabled={!!disabled}
+      // onFocus={() => {
+      //   questionLockWrapper(question?.questionId);
+      // }}
+      // onBlur={() => {
+      //   questionUnlockWrapper(question?.questionId);
+      // }}
+      disabled={checkDisableFlag() || !!disabled}
       answer={lastAnswer.answer}
       onChange={changeHandler}
     />
