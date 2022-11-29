@@ -93,11 +93,11 @@ const TextQuestion = ({
       if (saveDate) {
         handleRichTextChange(data);
       }
-      questionUnlockWrapper(question?.questionId);
-    },
-    onFocus: () => {
-      questionLockWrapper(question?.questionId);
+      // questionUnlockWrapper(question?.questionId);
     }
+    // onFocus: () => {
+    //   questionLockWrapper(question?.questionId);
+    // }
   };
 
   return <CustomApolloRichText {...richtextProps} />;
