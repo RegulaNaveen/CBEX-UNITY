@@ -166,7 +166,9 @@ const APPROVALS = {
   DELETE_APPROVALS: 'delete_approvals',
   DUPLICATE_APPROVALS: 'duplicate_approvals',
   SET_LOADING: 'set_loading',
-  SET_QUES_HASH: 'set_ques_hash'
+  SET_QUES_HASH: 'set_ques_hash',
+  SET_CAN_SEND_EMAIL_IN_APPROVALS: 'SET_CAN_SEND_EMAIL_IN_APPROVALS',
+  UPDATE_FILTERS: 'update_filters'
 };
 
 const UBUILD_ADMIN = 'ubuildAdmin';

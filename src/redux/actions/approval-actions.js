@@ -4,8 +4,10 @@ import {
   getApprovalsApi
 } from '../../api/approvals';
 import { DEFAULT } from '../../constants/app';
+import featureFlags from '../../constants/featureFlags';
 import { APPROVALS } from '../../constants/types';
 import { getErrorMessage } from '../../utils/utils';
+import launchDarkly from '../../utils/launchDarkly';
 
 export const setAllApprovals = data => ({
   type: APPROVALS.SET_APPROVALS,
@@ -92,3 +94,26 @@ export const duplicateApproval = (proposalId, sectionId) => async (
     return { status: false, title: DEFAULT.ALERT, msg };
   }
 };
+
+export const setCanSendEmailInApprovals = can => {
+  return dispatch => {
+    dispatch({
+      type: APPROVALS.SET_CAN_SEND_EMAIL_IN_APPROVALS,
+      payload: can
+    });
+  };
+};
+
+export const fetchApprovalSendEmailFlag = () => {
+  return async dispatch => {
+    const approvalSendEmailFlagValue = await launchDarkly(
+      featureFlags.APPROVAL_SEND_EMAIL
+    );
+    dispatch(setCanSendEmailInApprovals(approvalSendEmailFlagValue));
+  };
+};
+
+export const updateFilters = (name, value) => ({
+  type: APPROVALS.UPDATE_FILTERS,
+  payload: { name, value }
+});

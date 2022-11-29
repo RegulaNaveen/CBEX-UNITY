@@ -7,7 +7,8 @@ import ClipboardCheck from 'apollo-react-icons/ClipboardCheck';
 import Card from 'apollo-react/components/Card';
 import {
   fetchAllApprovals,
-  setQuestionHashAction
+  setQuestionHashAction,
+  fetchApprovalSendEmailFlag
 } from '../../../redux/actions/approval-actions';
 import { getSelectedBid } from '../../../redux/selectors/proposal';
 import Section from './Section';
@@ -16,9 +17,14 @@ import { selectProposalQuestions } from '../../../redux/selectors';
 import { generateQuestionsHash } from './utils';
 import { DEFAULT } from '../../../constants/app';
 import CustomModal from '../../common/CustomModal';
+import { SecondaryButton } from '../../common/atoms/Buttons';
+import { Filter } from '../../svg';
+import Filters from './Filters';
 
 const Approvals = () => {
   const approvals = useSelector(state => state.approvals.allApprovals);
+  const filters = useSelector(state => state.approvals.filters);
+  const [isShowFilters, setIsShowFilters] = useState(false);
   const proposalQuestions = useSelector(selectProposalQuestions);
   const [loading, setLoading] = useState(false);
   const [warning, setWarning] = useState(false);
@@ -27,6 +33,11 @@ const Approvals = () => {
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const memoizeBid = useMemo(() => selectedBid, [selectedBid?.id]);
   const dispatch = useDispatch();
+
+  // get email flag status on mount
+  useEffect(() => {
+    dispatch(fetchApprovalSendEmailFlag());
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -45,9 +56,9 @@ const Approvals = () => {
   }, [memoizeBid]);
 
   useEffect(() => {
-    const quesHashData = generateQuestionsHash(proposalQuestions);
+    const quesHashData = generateQuestionsHash(proposalQuestions, filters);
     dispatch(setQuestionHashAction(quesHashData));
-  }, [proposalQuestions]);
+  }, [proposalQuestions, filters]);
 
   return (
     <div className="approvals-tab">
@@ -56,6 +67,19 @@ const Approvals = () => {
 
       <BidHistory data-testid="bid-history" />
 
+      <div
+        style={{ display: 'flex', justifyContent: 'end', paddingBottom: '5px' }}
+      >
+        <SecondaryButton
+          onClick={() => {
+            setIsShowFilters(val => !val);
+          }}
+        >
+          <Filter className="filter-icon" />
+          Filter
+        </SecondaryButton>
+      </div>
+      {isShowFilters && <Filters />}
       {!isEmpty(approvals) ? (
         approvals.map(approval => (
           <Section

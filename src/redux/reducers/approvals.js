@@ -5,7 +5,34 @@ import { APPROVALS } from '../../constants/types';
 const INITIAL_STATE = {
   allApprovals: [],
   quesHashData: {},
-  isLoading: false
+  isLoading: false,
+  canSendEmail: false,
+  filters: [
+    {
+      name: 'answered',
+      displayName: 'Answered',
+      group: 'answer',
+      value: false
+    },
+    {
+      name: 'unanswered',
+      displayName: 'Unanswered',
+      group: 'answer',
+      value: false
+    },
+    {
+      name: 'responsible',
+      displayName: 'Responsible',
+      group: 'roles',
+      value: false
+    },
+    {
+      name: 'informed',
+      displayName: 'Informed',
+      group: 'roles',
+      value: false
+    }
+  ]
 };
 
 const setApprovals = (state, action) => {
@@ -67,12 +94,27 @@ const deleteApprovals = (state, action) => {
   return { ...state, allApprovals: modifiedApprovals };
 };
 
+const setCanSendEmail = (state, action) => {
+  return { ...state, canSendEmail: action.payload };
+};
+
+const updateFilter = (state, action) => {
+  const { payload } = action;
+  const { name, value } = payload;
+  const newFilters = state.filters.map(obj =>
+    obj.name === name ? { ...obj, value } : obj
+  );
+  return { ...state, filters: newFilters };
+};
+
 const actionMap = {
   [APPROVALS.SET_APPROVALS]: setApprovals,
   [APPROVALS.SET_QUES_HASH]: setQuesHash,
   [APPROVALS.SET_LOADING]: setLoading,
   [APPROVALS.DUPLICATE_APPROVALS]: duplicateApproval,
-  [APPROVALS.DELETE_APPROVALS]: deleteApprovals
+  [APPROVALS.DELETE_APPROVALS]: deleteApprovals,
+  [APPROVALS.SET_CAN_SEND_EMAIL_IN_APPROVALS]: setCanSendEmail,
+  [APPROVALS.UPDATE_FILTERS]: updateFilter
 };
 
 export default function(state = INITIAL_STATE, action) {

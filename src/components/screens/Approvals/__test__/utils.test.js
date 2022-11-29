@@ -29,18 +29,44 @@ describe('Test getLastAnswer function', () => {
 });
 
 describe('Test generateQuestionsHash for approvals', () => {
+  const approvalFilters = [
+    {
+      name: 'answered',
+      displayName: 'Answered',
+      group: 'answer',
+      value: false
+    },
+    {
+      name: 'unanswered',
+      displayName: 'Unanswered',
+      group: 'answer',
+      value: false
+    },
+    {
+      name: 'responsible',
+      displayName: 'Responsible',
+      group: 'roles',
+      value: false
+    },
+    {
+      name: 'informed',
+      displayName: 'Informed',
+      group: 'roles',
+      value: false
+    }
+  ];
   it('Should return question hash only with active propoerty as true', () => {
     const activeQuestions = dummyQuestions.filter(i => i.active === true);
     const expectedHash = {};
     activeQuestions.forEach(i => {
       expectedHash[i.questionId] = i;
     });
-    const receivedHash = generateQuestionsHash(dummyQuestions);
+    const receivedHash = generateQuestionsHash(dummyQuestions, approvalFilters);
     expect(receivedHash).toEqual(expectedHash);
   });
   it('Should handle error gracefully by returning empty object incase of error', () => {
     const expectedHash = {};
-    const receivedHash = generateQuestionsHash(undefined);
+    const receivedHash = generateQuestionsHash(undefined, approvalFilters);
     expect(receivedHash).toEqual(expectedHash);
   });
 });
