@@ -56,7 +56,8 @@ describe('Test generateQuestionsHash for approvals', () => {
     }
   ];
   it('Should return question hash only with active propoerty as true', () => {
-    const activeQuestions = dummyQuestions.filter(i => i.active === true);
+    const visibleQuestions = dummyQuestions.filter(i => i.visible === true);
+    const activeQuestions = visibleQuestions.filter(i => i.active === true);
     const expectedHash = {};
     activeQuestions.forEach(i => {
       expectedHash[i.questionId] = i;
