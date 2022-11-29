@@ -10,14 +10,17 @@ import {
   deleteApproval,
   duplicateApproval,
 } from '../../../redux/actions/approval-actions';
-import { getOpportunityData, getSelectedBid } from '../../../redux/selectors/proposal';
+import {
+  getOpportunityData,
+  getSelectedBid,
+} from '../../../redux/selectors/proposal';
 import {
   selectCanSendEmail,
-  selectQuestionsHash
+  selectQuestionsHash,
 } from '../../../redux/selectors/approvals';
 import {
   generateApprovalEmailInfo,
-  generateApprovalEmailURL
+  generateApprovalEmailURL,
 } from '../../../utils/emailUtils';
 import { getProposalDetails } from '../../../redux/selectors';
 import { DEFAULT } from '../../../constants/app';
@@ -31,8 +34,8 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
   const [warning, setWarning] = useState(false);
   const [warningTitle, setWarningTitle] = useState('');
   const [warningText, setWarningText] = useState('');
-  const approval = useSelector(state =>
-    state.approvals.allApprovals.find(i => i.ApprovalSectionId === sectionId)
+  const approval = useSelector((state) =>
+    state.approvals.allApprovals.find((i) => i.ApprovalSectionId === sectionId)
   );
   const canSendEmail = useSelector(selectCanSendEmail);
   const questionsMap = useSelector(selectQuestionsHash);
@@ -45,7 +48,6 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
   const P_Id = selectedBid?.id;
   const opportunityData = allOppData[P_Id];
 
-
   const dispatch = useDispatch();
 
   async function handleSendEmailClick() {
@@ -54,7 +56,7 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
       Object.values(questionsMap),
       proposalDetails
     );
-    trackMatomoEventSubmitAnswer('Email', approval)
+    trackMatomoEventSubmitAnswer('Email', approval);
     if (
       emailInfo.subject &&
       Array.isArray(emailInfo.to) &&
@@ -102,18 +104,19 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
     trackEvent({
       category: eventCategories.crmNo,
       action: `Approval ${action}`,
-      name: `Approval: ${action}: (${ApprovalSectionTitle}) (${ArchivedData.length - 1})`,
+      name: `Approval: ${action}: (${ApprovalSectionTitle}) (${ArchivedData.length -
+        1})`,
       customDimensions: [
         {
           id: 1,
           value: JSON.stringify({
             proposalDetail,
-            aprovaldata
-          })
-        }
-      ]
+            aprovaldata,
+          }),
+        },
+      ],
     });
-  }
+  };
 
   const duplicateEventMatomo = (action, aprovaldata) => {
     try {
@@ -122,37 +125,39 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
       trackEvent({
         category: eventCategories.crmNo,
         action: `Approval: creation`,
-        name: `Approval Answer: creation: (${ApprovalSectionTitle}) (${ArchivedData.length + 1})`,
+        name: `Approval Answer: creation: (${ApprovalSectionTitle}) (${ArchivedData.length +
+          1})`,
         customDimensions: [
           {
             id: 1,
             value: JSON.stringify({
               proposalDetail,
               aprovaldata,
-              totalApproval: ArchivedData.length + 1
-            })
-          }
-        ]
+              totalApproval: ArchivedData.length + 1,
+            }),
+          },
+        ],
       });
       trackEvent({
         category: eventCategories.crmNo,
         action: `Approval:  ${action} count`,
-        name: `Approval Answer: Approval ${action} count: ${ArchivedData.length + 1}`,
+        name: `Approval Answer: Approval ${action} count: ${ArchivedData.length +
+          1}`,
         customDimensions: [
           {
             id: 1,
             value: JSON.stringify({
               proposalDetail,
               aprovaldata,
-              totalApproval: ArchivedData.length + 1
-            })
-          }
-        ]
+              totalApproval: ArchivedData.length + 1,
+            }),
+          },
+        ],
       });
     } catch (error) {
       console.log('error :>> ', error);
     }
-  }
+  };
 
   const emailEventMatomo = (action, aprovaldata) => {
     const proposalDetail = opportunityData?.proposal?.proposalDetails;
@@ -166,24 +171,24 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
           id: 1,
           value: JSON.stringify({
             proposalDetail,
-            aprovaldata
-          })
-        }
-      ]
+            aprovaldata,
+          }),
+        },
+      ],
     });
-  }
+  };
 
   const trackMatomoEventSubmitAnswer = (action, aprovaldata) => {
     if (action == 'Duplicate') {
-      duplicateEventMatomo(action, aprovaldata)
+      duplicateEventMatomo(action, aprovaldata);
     }
 
     if (action == 'Delete') {
-      deleteEventMatomo(action, aprovaldata)
+      deleteEventMatomo(action, aprovaldata);
     }
 
     if (action == 'Email') {
-      emailEventMatomo(action, aprovaldata)
+      emailEventMatomo(action, aprovaldata);
     }
   };
 
@@ -214,8 +219,8 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
                 {},
                 {
                   label: 'Delete',
-                  onClick: deleteAfterConfirmHandler
-                }
+                  onClick: deleteAfterConfirmHandler,
+                },
               ]}
               modalStyle={{ maxWidth: 460 }}
             />
@@ -273,14 +278,11 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
       )}
     </>
   );
-
-
 };
 
 ActionButtons.propTypes = {
   sectionId: PropTypes.string.isRequired,
-  trackEvent: PropTypes.func.isRequired
+  trackEvent: PropTypes.func.isRequired,
 };
 
 export default MatomoHOC(ActionButtons);
-
