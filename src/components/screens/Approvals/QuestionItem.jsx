@@ -165,8 +165,8 @@ const QuestionItem = ({
     return ComponentMapper[question?.answerConfiguration?.type] ? (
       <SFNestedAnswerItem />
     ) : (
-        <FallbackComponent />
-      );
+      <FallbackComponent />
+    );
   };
 
   return useMemo(
@@ -200,6 +200,7 @@ const QuestionItem = ({
           {isShowHistory && (
             <AnswerHistory
               question={prepareAnswerHistoryData(question)}
+              tab="Approval"
               closeModal={() => {
                 setIsShowHistory(false);
               }}
