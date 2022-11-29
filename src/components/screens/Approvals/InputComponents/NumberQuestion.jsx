@@ -67,7 +67,6 @@ const NumberQuestion = ({
       <TextArea
         disabled={checkDisableFlag() || !!disabled}
         className="proposal-text-area"
-        type="number"
         value={lastAnswer.answer}
         onBlur={handleTextChange}
         onFocus={() => questionLockWrapper(question?.questionId)}
