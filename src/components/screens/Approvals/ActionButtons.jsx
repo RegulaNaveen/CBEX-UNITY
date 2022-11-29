@@ -137,7 +137,7 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
       trackEvent({
         category: eventCategories.crmNo,
         action: `Approval:  ${action} count`,
-        name: `Approval Answer: Approval Duplicate count: ${ArchivedData.length + 1}`,
+        name: `Approval Answer: Approval ${action} count: ${ArchivedData.length + 1}`,
         customDimensions: [
           {
             id: 1,
