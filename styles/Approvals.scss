@@ -3,6 +3,48 @@
   min-height: 73vh;
   position: relative;
 
+  .a-MuiInputBase-root.Mui-disabled {
+    color: #999999 !important;
+    cursor: default;
+    pointer-events: none;
+    opacity: 1;
+
+    .a-MuiOutlinedInput-notchedOutline {
+      opacity: 1 !important;
+      background-color: #f5f5f5 !important;
+      border-color: rgba(0, 0, 0, 0.26) !important;
+    }
+  }
+
+  .date-picker,
+  .checkboxtype {
+    .a-MuiInputBase-root.Mui-disabled {
+      .a-MuiInputBase-input {
+        border-color: rgba(0, 0, 0, 0.26) !important;
+      }
+    }
+  }
+
+  .filter-container {
+    .filter-btn {
+      display: flex;
+      justify-content: end;
+      padding-bottom: 12px;
+      button {
+        font-size: 14px;
+        padding: 0 8px;
+        border-radius: 3px;
+        box-shadow: none;
+
+        svg {
+          font-size: 16.8px;
+          width: auto;
+          height: 20px;
+        }
+      }
+    }
+  }
+
   .accordion-body {
     position: relative;
     display: block;
@@ -106,4 +148,10 @@
   border-top: 1px solid #ccc;
   margin: 0.6em -0.5em 0.6em -0.5em;
   padding: 0;
+}
+
+.no-approval-wrapper {
+  display: flex;
+  justify-content: center;
+  height: 60vh;
 }
