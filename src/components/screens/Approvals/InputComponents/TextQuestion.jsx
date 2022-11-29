@@ -94,7 +94,12 @@ const TextQuestion = ({
     }
   };
 
-  return <CustomApolloRichText {...richtextProps} />;
+  return (
+    <CustomApolloRichText
+      className="approval-text-question"
+      {...richtextProps}
+    />
+  );
 };
 
 TextQuestion.defaultProps = {
