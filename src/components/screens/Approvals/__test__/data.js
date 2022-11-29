@@ -5,12 +5,12 @@ export const dummyQuestions = [
     questionId: 'Proposal Team-P0X',
     section: {
       sectionOrder: 40,
-      sectionName: 'Proposal Team'
+      sectionName: 'Proposal Team',
     },
     questionText: 'Business Developer',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer', 'Core - Proposal Developer'],
     answers: [
@@ -22,7 +22,7 @@ export const dummyQuestions = [
         answer: 'Upendra Mannuru(upendrareddy.mannuru@iqvia.com)',
         formattedAnswer: '',
         proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -32,8 +32,8 @@ export const dummyQuestions = [
         answer: 'Upendra Mannuru(upendrareddy.mannuru@iqvia.com)',
         proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
         formattedAnswer: 'Upendra Mannuru(upendrareddy.mannuru@iqvia.com)',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 1,
     visible: true,
@@ -44,15 +44,15 @@ export const dummyQuestions = [
     milestoneNew: [
       {
         Name: 'Overview',
-        Color: '#000000'
-      }
+        Color: '#000000',
+      },
     ],
     opportunityType:
       'Ballpark,Strategy Call Template (Updated),Core Clinical (Option 4),Opportunity Launch Call (not preferred),Opportunity Launch Call (preferred),APAC ',
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'Upendra Mannuru(upendrareddy.mannuru@iqvia.com)',
-      time: '2022-11-09T13:02:48.684Z'
+      time: '2022-11-09T13:02:48.684Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -65,19 +65,19 @@ export const dummyQuestions = [
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   {
     proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
     questionId: '08d746ad-fa16-4742-91a3-72ec99e42a49',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'Question to test date type',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Clinical DS&B'],
     answers: [
@@ -88,8 +88,8 @@ export const dummyQuestions = [
         date: '2022-11-15T09:09:28.732Z',
         answer: ' ',
         proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: true
-      }
+        updatedInPG: true,
+      },
     ],
     questionOrder: 20,
     visible: true,
@@ -110,20 +110,20 @@ export const dummyQuestions = [
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   {
     proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
     questionId: 'eb8b8096-af17-4a0b-abc4-05ebf8194100',
     section: {
       sectionOrder: 2,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText:
       "High-level scope for opportunity. What customers want and what they definitely don't want. radio button man radio",
     answerConfiguration: {
       type: 'radio',
-      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW']
+      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW'],
     },
     roleNames: ['(Test) Core Teamm'],
     answers: [
@@ -135,7 +135,7 @@ export const dummyQuestions = [
         answer: 'Toyota',
         formattedAnswer: 'Toyota',
         proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'ashiq.sultan@iqvia.com',
@@ -144,8 +144,8 @@ export const dummyQuestions = [
         date: '2022-11-15T09:26:02.530Z',
         answer: 'Toyota',
         proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: true
-      }
+        updatedInPG: true,
+      },
     ],
     questionOrder: 12,
     visible: true,
@@ -168,20 +168,20 @@ export const dummyQuestions = [
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   {
     proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
     questionId: 'Pricing-M9U',
     section: {
       sectionOrder: 7,
-      sectionName: 'Pricing'
+      sectionName: 'Pricing',
     },
     questionText:
       'How was it calculated (e.g., similar study, competitive benchmark, internal budget allocation, third-party benchmark)?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -206,19 +206,19 @@ export const dummyQuestions = [
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   {
     proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
     questionId: '885c9508-43e8-498d-8b7a-28e85545e36d',
     section: {
       sectionOrder: 2,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'Number',
     answerConfiguration: {
       type: 'number',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [
@@ -229,8 +229,8 @@ export const dummyQuestions = [
         date: '2022-11-15T11:04:45.412Z',
         answer: '1234',
         proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: true
-      }
+        updatedInPG: true,
+      },
     ],
     questionOrder: 17,
     visible: true,
@@ -254,19 +254,19 @@ export const dummyQuestions = [
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   {
     proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
     questionId: '3abda00c-7528-4807-9685-ef188f14e43d',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'testing multiselect lookup',
     answerConfiguration: {
       type: 'picklist-lookup',
-      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW']
+      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW'],
     },
     roleNames: [
       'Spec - CEVA',
@@ -274,7 +274,7 @@ export const dummyQuestions = [
       'Core - Clinical DS&B',
       'Core - Analytics Strategy Lead',
       'Core - Medical Strategy Lead',
-      'Core - Business Developer'
+      'Core - Business Developer',
     ],
     answers: [
       {
@@ -284,7 +284,7 @@ export const dummyQuestions = [
         date: '2022-11-11T07:51:19.352Z',
         answer: ['Mercedes', 'Toyota', 'Ferrari'],
         proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'ashiq.sultan@iqvia.com',
@@ -293,7 +293,7 @@ export const dummyQuestions = [
         date: '2022-11-15T08:44:20.208Z',
         answer: ['Toyota', 'Ferrari'],
         proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'ashiq.sultan@iqvia.com',
@@ -302,7 +302,7 @@ export const dummyQuestions = [
         date: '2022-11-15T08:44:23.789Z',
         answer: ['Ferrari'],
         proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'ashiq.sultan@iqvia.com',
@@ -311,7 +311,7 @@ export const dummyQuestions = [
         date: '2022-11-15T08:44:27.294Z',
         answer: [],
         proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'ashiq.sultan@iqvia.com',
@@ -320,7 +320,7 @@ export const dummyQuestions = [
         date: '2022-11-15T08:45:02.987Z',
         answer: ['Toyota'],
         proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'ashiq.sultan@iqvia.com',
@@ -329,7 +329,7 @@ export const dummyQuestions = [
         date: '2022-11-15T08:45:07.731Z',
         answer: ['Toyota', 'Mercedes'],
         proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'ashiq.sultan@iqvia.com',
@@ -338,8 +338,8 @@ export const dummyQuestions = [
         date: '2022-11-15T08:45:15.252Z',
         answer: [],
         proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 17,
     visible: true,
@@ -360,19 +360,19 @@ export const dummyQuestions = [
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   {
     proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
     questionId: '3d532e1f-10f7-4155-b3d0-aa8f06f1de83',
     section: {
       sectionOrder: 2,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'Checkbox question',
     answerConfiguration: {
       type: 'checkbox',
-      options: ['blinded', 'named']
+      options: ['blinded', 'named'],
     },
     roleNames: ['Core - Medical Strategy Lead'],
     answers: [],
@@ -395,14 +395,14 @@ export const dummyQuestions = [
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   {
     proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
     questionId: '1bcdda0b-093c-4e35-aaf5-cb76434008ba',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'A question to test single select lookup',
     answerConfiguration: {
@@ -416,8 +416,8 @@ export const dummyQuestions = [
         'Other - enter comments',
         'Patient Recruitment - Refer',
         'Quest Diagnostics Provider List',
-        'Self-service analytics (GFL)'
-      ]
+        'Self-service analytics (GFL)',
+      ],
     },
     roleNames: ['Core - Analytics Strategy Lead', 'Core - Business Developer'],
     answers: [
@@ -428,8 +428,8 @@ export const dummyQuestions = [
         date: '2022-11-14T13:19:38.320Z',
         answer: 'ADSC Post Award Local Country Support',
         proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
-        updatedInPG: true
-      }
+        updatedInPG: true,
+      },
     ],
     questionOrder: 19,
     visible: true,
@@ -450,19 +450,19 @@ export const dummyQuestions = [
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   {
     proposalId: 'a850a835-c765-43af-8138-7d6b68e1c2cb',
     questionId: 'aef778bb-75d4-460e-8327-c013429328c8',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'A question to test yes no answer type',
     answerConfiguration: {
       type: 'y/n',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -483,14 +483,14 @@ export const dummyQuestions = [
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   {
     proposalId: '1614582d-4312-425d-a01f-5d47a9c90a38',
     questionId: 'medical monitoring-A7W',
     section: {
       sectionOrder: 28,
-      sectionName: 'Medical Monitoring'
+      sectionName: 'Medical Monitoring',
     },
     questionText:
       'What types of output would the customer like for trial decisions?',
@@ -499,8 +499,8 @@ export const dummyQuestions = [
       options: [
         'Simple data listings generated for each cohort from clinical and safety databases',
         'Patient Profiles',
-        'Formal TLFs'
-      ]
+        'Formal TLFs',
+      ],
     },
     roleNames: ['Core - Business Developer', 'X - Medical Bidder - IQB'],
     answers: [],
@@ -525,19 +525,19 @@ export const dummyQuestions = [
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
-  }
+    questionApproval: false,
+  },
 ];
 export const sfOptions = {
   'SF#Bid_History__c_SF#Is_this_part_of_a_Program__c': [
     'Not part of a program',
     'Yes - lead opportunity',
-    'Yes - not the lead'
+    'Yes - not the lead',
   ],
   'SF#Bid_History__c_SF#Targeted_Countries__c': [
     'United States of America',
-    'India'
-  ]
+    'India',
+  ],
 };
 
 export const approvalsPayload = [
@@ -547,15 +547,15 @@ export const approvalsPayload = [
     ApprovalSectionRightQuestions: [
       '885c9508-43e8-498d-8b7a-28e85545e36d',
       '3abda00c-7528-4807-9685-ef188f14e43d',
-      '3d532e1f-10f7-4155-b3d0-aa8f06f1de83'
+      '3d532e1f-10f7-4155-b3d0-aa8f06f1de83',
     ],
     ApprovalSectionLeftQuestions: [
       '1bcdda0b-093c-4e35-aaf5-cb76434008ba',
       '08d746ad-fa16-4742-91a3-72ec99e42a49',
       'Proposal Team-P0X',
       'eb8b8096-af17-4a0b-abc4-05ebf8194100',
-      'Pricing-M9U'
-    ]
+      'Pricing-M9U',
+    ],
   },
   {
     ApprovalSectionTitle: 'ApprovalSection test 02',
@@ -564,15 +564,15 @@ export const approvalsPayload = [
       '08d746ad-fa16-4742-91a3-72ec99e42a49',
       'Proposal Team-P0X',
       'eb8b8096-af17-4a0b-abc4-05ebf8194100',
-      'Pricing-M9U'
+      'Pricing-M9U',
     ],
     ApprovalSectionOrder: 2,
     ApprovalSectionLeftQuestions: [
       '885c9508-43e8-498d-8b7a-28e85545e36d',
       '3abda00c-7528-4807-9685-ef188f14e43d',
-      '3d532e1f-10f7-4155-b3d0-aa8f06f1de83'
-    ]
-  }
+      '3d532e1f-10f7-4155-b3d0-aa8f06f1de83',
+    ],
+  },
 ];
 
 export const allApprovals = [
@@ -588,7 +588,7 @@ export const allApprovals = [
       'Pricing-M9U',
       '722f9c3c-5538-4b64-bda5-76604d61da46',
       'Proposal Team-L6S',
-      '0b11bf24-0724-4a4d-99bc-dd716abacd4b'
+      '0b11bf24-0724-4a4d-99bc-dd716abacd4b',
     ],
     ApprovalSectionId: 'd791a317-8f1b-488b-85cb-4247fca2b156',
     ApprovalSectionOrder: 1,
@@ -609,9 +609,9 @@ export const allApprovals = [
       'Win Strategy-J5S',
       '6d0145c2-e3dd-47a4-b294-e214d2e56be8',
       'Opportunity Overview-J7C',
-      'd9fe4838-0541-4acb-b909-076a01e64b96'
+      'd9fe4838-0541-4acb-b909-076a01e64b96',
     ],
-    ArchivedData: []
+    ArchivedData: [],
   },
   {
     ApprovalSectionTitle: 'ApprovalSection 02',
@@ -622,7 +622,7 @@ export const allApprovals = [
       '4a43e4fd-3a85-4678-91fb-33baaed52417',
       'Opportunity Overview-N0J',
       '8c37b79a-4b5d-44d1-935a-2d8a42c488a9',
-      '33599949-9b11-4817-8678-bae813411d66'
+      '33599949-9b11-4817-8678-bae813411d66',
     ],
     ApprovalSectionId: '23a1991b-fb43-46de-8930-29b9c0e35281',
     ApprovalSectionOrder: 2,
@@ -632,9 +632,9 @@ export const allApprovals = [
       '1bcdda0b-093c-4e35-aaf5-cb76434008ba',
       'Opportunity Overview-Z5U',
       'Opportunity Overview-N9U',
-      'Opportunity Overview-H8Z'
+      'Opportunity Overview-H8Z',
     ],
-    ArchivedData: []
+    ArchivedData: [],
   },
   {
     ApprovalSectionTitle: 'new test section',
@@ -642,7 +642,7 @@ export const allApprovals = [
       '4bc31e61-4dc4-435a-bf61-41513f2d33cf',
       '3abda00c-7528-4807-9685-ef188f14e43d',
       'Proposal Team-E5N',
-      'Proposal Team-Z5P'
+      'Proposal Team-Z5P',
     ],
     ApprovalSectionId: 'e3afe134-5d45-44fd-b55d-df38c9b1dbfe',
     ApprovalSectionOrder: 3,
@@ -651,7 +651,7 @@ export const allApprovals = [
       'f064f897-7d34-45ed-b340-83f2e0205e6e',
       '7eacd7be-9092-4625-8bf0-f89deca7b40c',
       '1bcdda0b-093c-4e35-aaf5-cb76434008ba',
-      'Proposal Team-W6D'
+      'Proposal Team-W6D',
     ],
     ArchivedData: [
       {
@@ -666,18 +666,18 @@ export const allApprovals = [
             questionId: '7e490369-ec74-4930-af26-12ce3d4c49e8',
             section: {
               sectionOrder: 5,
-              sectionName: 'Win Strategy'
+              sectionName: 'Win Strategy',
             },
             questionText: 'Question to test number type question',
             answerConfiguration: {
               type: 'number',
-              options: []
+              options: [],
             },
             roleNames: [
               'Spec - Feasibility',
               'Core - Analytics Strategy Lead',
               'Core - Clinical DS&B',
-              'Core - Business Developer'
+              'Core - Business Developer',
             ],
             answers: [],
             questionOrder: 23,
@@ -699,20 +699,20 @@ export const allApprovals = [
             integration: '',
             events: '',
             notApplicable: false,
-            questionApproval: false
+            questionApproval: false,
           },
           {
             proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
             questionId: 'f064f897-7d34-45ed-b340-83f2e0205e6e',
             section: {
               sectionOrder: 5,
-              sectionName: 'Win Strategy'
+              sectionName: 'Win Strategy',
             },
             questionText:
               'Test Question. This question is visible only in approval secton',
             answerConfiguration: {
               type: 'radio',
-              options: ['None', 'Some', 'All']
+              options: ['None', 'Some', 'All'],
             },
             roleNames: ['Core - Proposal Developer'],
             answers: [
@@ -729,7 +729,7 @@ export const allApprovals = [
                 created_by: '1095134',
                 updated_by: '1095134',
                 created_date: '2022-11-25T06:55:05.212Z',
-                updated_date: '2022-11-25T06:55:05.212Z'
+                updated_date: '2022-11-25T06:55:05.212Z',
               },
               {
                 proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -744,7 +744,7 @@ export const allApprovals = [
                 created_by: '1095134',
                 updated_by: '1095134',
                 created_date: '2022-11-27T15:39:38.876Z',
-                updated_date: '2022-11-27T15:39:38.876Z'
+                updated_date: '2022-11-27T15:39:38.876Z',
               },
               {
                 proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -759,8 +759,8 @@ export const allApprovals = [
                 created_by: '1095134',
                 updated_by: '1095134',
                 created_date: '2022-11-27T18:45:13.393Z',
-                updated_date: '2022-11-27T18:45:13.393Z'
-              }
+                updated_date: '2022-11-27T18:45:13.393Z',
+              },
             ],
             questionOrder: 26,
             visible: true,
@@ -782,25 +782,25 @@ export const allApprovals = [
             integration: '',
             events: '',
             notApplicable: false,
-            questionApproval: true
+            questionApproval: true,
           },
           {
             proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
             questionId: '7eacd7be-9092-4625-8bf0-f89deca7b40c',
             section: {
               sectionOrder: 5,
-              sectionName: 'Win Strategy'
+              sectionName: 'Win Strategy',
             },
             questionText: 'testing multiselect',
             answerConfiguration: {
               type: 'picklist',
-              options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW']
+              options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW'],
             },
             roleNames: [
               'Core - Medical Strategy Lead',
               'Core - Clinical DS&B',
               'Core - Analytics Strategy Lead',
-              'Core - Business Developer'
+              'Core - Business Developer',
             ],
             answers: [],
             questionOrder: 18,
@@ -822,14 +822,14 @@ export const allApprovals = [
             integration: '',
             events: '',
             notApplicable: false,
-            questionApproval: false
+            questionApproval: false,
           },
           {
             proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
             questionId: '1bcdda0b-093c-4e35-aaf5-cb76434008ba',
             section: {
               sectionOrder: 5,
-              sectionName: 'Win Strategy'
+              sectionName: 'Win Strategy',
             },
             questionText: 'A question to test single select lookup',
             answerConfiguration: {
@@ -859,12 +859,12 @@ export const allApprovals = [
                 'Quest Diagnostics Patient Recruitment',
                 'Quest Diagnostics Provider List',
                 'Self-service analytics (GFL)',
-                'Site/Inv Patient Density'
-              ]
+                'Site/Inv Patient Density',
+              ],
             },
             roleNames: [
               'Core - Analytics Strategy Lead',
-              'Core - Business Developer'
+              'Core - Business Developer',
             ],
             answers: [],
             questionOrder: 19,
@@ -886,19 +886,19 @@ export const allApprovals = [
             integration: '',
             events: '',
             notApplicable: false,
-            questionApproval: false
+            questionApproval: false,
           },
           {
             proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
             questionId: 'Proposal Team-W6D',
             section: {
               sectionOrder: 40,
-              sectionName: 'Proposal Team'
+              sectionName: 'Proposal Team',
             },
             questionText: 'Business Manager',
             answerConfiguration: {
               type: 'text',
-              options: []
+              options: [],
             },
             roleNames: ['Core - Proposal Developer'],
             answers: [
@@ -916,8 +916,8 @@ export const allApprovals = [
                 created_by: '1088411',
                 updated_by: '1088411',
                 created_date: '2022-11-25T12:02:18.938Z',
-                updated_date: '2022-11-25T12:02:18.938Z'
-              }
+                updated_date: '2022-11-25T12:02:18.938Z',
+              },
             ],
             questionOrder: 22,
             visible: true,
@@ -938,8 +938,8 @@ export const allApprovals = [
             integration: '',
             events: '',
             notApplicable: false,
-            questionApproval: false
-          }
+            questionApproval: false,
+          },
         ],
         section_right_questions: [
           {
@@ -947,19 +947,19 @@ export const allApprovals = [
             questionId: '4bc31e61-4dc4-435a-bf61-41513f2d33cf',
             section: {
               sectionOrder: 5,
-              sectionName: 'Win Strategy'
+              sectionName: 'Win Strategy',
             },
             questionText: 'A question to test Radio type answer',
             answerConfiguration: {
               type: 'radio',
-              options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW']
+              options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW'],
             },
             roleNames: [
               'Core - Analytics Strategy Lead',
               'Core - Business Developer',
               'Core - Clinical DS&B',
               'Core - Medical Strategy Lead',
-              'Core - Project Lead'
+              'Core - Project Lead',
             ],
             answers: [
               {
@@ -975,7 +975,7 @@ export const allApprovals = [
                 created_by: '1095134',
                 updated_by: '1095134',
                 created_date: '2022-11-25T06:20:03.526Z',
-                updated_date: '2022-11-25T06:20:03.526Z'
+                updated_date: '2022-11-25T06:20:03.526Z',
               },
               {
                 proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -990,7 +990,7 @@ export const allApprovals = [
                 created_by: '1095134',
                 updated_by: '1095134',
                 created_date: '2022-11-25T06:22:33.491Z',
-                updated_date: '2022-11-25T06:22:33.491Z'
+                updated_date: '2022-11-25T06:22:33.491Z',
               },
               {
                 proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -1005,7 +1005,7 @@ export const allApprovals = [
                 created_by: '1095134',
                 updated_by: '1095134',
                 created_date: '2022-11-25T06:55:14.524Z',
-                updated_date: '2022-11-25T06:55:14.524Z'
+                updated_date: '2022-11-25T06:55:14.524Z',
               },
               {
                 proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -1020,7 +1020,7 @@ export const allApprovals = [
                 created_by: '1095134',
                 updated_by: '1095134',
                 created_date: '2022-11-25T17:00:03.022Z',
-                updated_date: '2022-11-25T17:00:03.022Z'
+                updated_date: '2022-11-25T17:00:03.022Z',
               },
               {
                 proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -1035,7 +1035,7 @@ export const allApprovals = [
                 created_by: '1095134',
                 updated_by: '1095134',
                 created_date: '2022-11-25T17:52:53.752Z',
-                updated_date: '2022-11-25T17:52:53.752Z'
+                updated_date: '2022-11-25T17:52:53.752Z',
               },
               {
                 proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -1050,8 +1050,8 @@ export const allApprovals = [
                 created_by: '1095134',
                 updated_by: '1095134',
                 created_date: '2022-11-27T18:49:12.483Z',
-                updated_date: '2022-11-27T18:49:12.483Z'
-              }
+                updated_date: '2022-11-27T18:49:12.483Z',
+              },
             ],
             questionOrder: 21,
             visible: true,
@@ -1072,19 +1072,19 @@ export const allApprovals = [
             integration: '',
             events: '',
             notApplicable: false,
-            questionApproval: false
+            questionApproval: false,
           },
           {
             proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
             questionId: '3abda00c-7528-4807-9685-ef188f14e43d',
             section: {
               sectionOrder: 5,
-              sectionName: 'Win Strategy'
+              sectionName: 'Win Strategy',
             },
             questionText: 'testing multiselect lookup',
             answerConfiguration: {
               type: 'picklist-lookup',
-              options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW']
+              options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW'],
             },
             roleNames: [
               'Spec - CEVA',
@@ -1092,7 +1092,7 @@ export const allApprovals = [
               'Core - Clinical DS&B',
               'Core - Analytics Strategy Lead',
               'Core - Medical Strategy Lead',
-              'Core - Business Developer'
+              'Core - Business Developer',
             ],
             answers: [],
             questionOrder: 17,
@@ -1114,19 +1114,19 @@ export const allApprovals = [
             integration: '',
             events: '',
             notApplicable: false,
-            questionApproval: false
+            questionApproval: false,
           },
           {
             proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
             questionId: 'Proposal Team-E5N',
             section: {
               sectionOrder: 40,
-              sectionName: 'Proposal Team'
+              sectionName: 'Proposal Team',
             },
             questionText: 'RFI',
             answerConfiguration: {
               type: 'text',
-              options: []
+              options: [],
             },
             roleNames: ['Core - Proposal Developer'],
             answers: [],
@@ -1141,7 +1141,7 @@ export const allApprovals = [
             hasDifferentSFanswer: false,
             currentSFanswer: {
               value: '',
-              time: '2022-11-28T05:48:36.867Z'
+              time: '2022-11-28T05:48:36.867Z',
             },
             isCustomQuestion: false,
             questionJSON:
@@ -1154,23 +1154,23 @@ export const allApprovals = [
             integration: '',
             events: '',
             notApplicable: false,
-            questionApproval: false
+            questionApproval: false,
           },
           {
             proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
             questionId: 'Proposal Team-Z5P',
             section: {
               sectionOrder: 40,
-              sectionName: 'Proposal Team'
+              sectionName: 'Proposal Team',
             },
             questionText: 'Proposal Developer',
             answerConfiguration: {
               type: 'text',
-              options: []
+              options: [],
             },
             roleNames: [
               'Core - Business Developer',
-              'Core - Proposal Developer'
+              'Core - Proposal Developer',
             ],
             answers: [],
             questionOrder: 2,
@@ -1183,15 +1183,15 @@ export const allApprovals = [
             milestoneNew: [
               {
                 Name: 'Overview',
-                Color: '#000000'
-              }
+                Color: '#000000',
+              },
             ],
             opportunityType:
               'Ballpark,Strategy Call Template (Updated),Core Clinical (Option 4),Opportunity Launch Call (not preferred),Opportunity Launch Call (preferred),APAC ',
             hasDifferentSFanswer: false,
             currentSFanswer: {
               value: '',
-              time: '2022-11-28T05:48:37.888Z'
+              time: '2022-11-28T05:48:37.888Z',
             },
             isCustomQuestion: false,
             questionJSON:
@@ -1204,14 +1204,14 @@ export const allApprovals = [
             integration: '',
             events: '',
             notApplicable: false,
-            questionApproval: false
-          }
+            questionApproval: false,
+          },
         ],
         created_date: '2022-11-28T07:57:58.692Z',
-        updated_date: '2022-11-28T07:57:58.692Z'
-      }
-    ]
-  }
+        updated_date: '2022-11-28T07:57:58.692Z',
+      },
+    ],
+  },
 ];
 
 export const quesHashData = {
@@ -1220,12 +1220,12 @@ export const quesHashData = {
     questionId: '01a4d805-3b4b-4549-b308-5a2dfb8cdaa9',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'this is some question added single select lookup',
     answerConfiguration: {
       type: 'select-lookup',
-      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW']
+      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW'],
     },
     roleNames: [
       'Core - TSL',
@@ -1234,7 +1234,7 @@ export const quesHashData = {
       'Core - Medical Strategy Lead',
       'Core - Clinical DS&B',
       'Core - Business Developer',
-      'Core - Analytics Strategy Lead'
+      'Core - Analytics Strategy Lead',
     ],
     answers: [],
     questionOrder: 14,
@@ -1256,19 +1256,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '02dc2099-f2e5-4c35-b484-7e51f700f0f9': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '02dc2099-f2e5-4c35-b484-7e51f700f0f9',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'Radio Question',
     answerConfiguration: {
       type: 'radio',
-      options: ['None', 'Some', 'All']
+      options: ['None', 'Some', 'All'],
     },
     roleNames: ['(Test) Core Teamm'],
     answers: [],
@@ -1291,19 +1291,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '031a40ac-a2d8-456a-ab05-d17cdd1ba292': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '031a40ac-a2d8-456a-ab05-d17cdd1ba292',
     section: {
       sectionOrder: 3,
-      sectionName: 'SF answers(Text)'
+      sectionName: 'SF answers(Text)',
     },
     questionText: 'Indication',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - TSL', 'Core - Proposal Developer'],
     answers: [],
@@ -1326,19 +1326,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '03907dac-df2c-46df-a3e4-c87c44ae13a0': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '03907dac-df2c-46df-a3e4-c87c44ae13a0',
     section: {
       sectionOrder: 78,
-      sectionName: 'Events'
+      sectionName: 'Events',
     },
     questionText: 'Event testing new',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Biostats'],
     answers: [
@@ -1350,8 +1350,8 @@ export const quesHashData = {
         answer: '05-Dec-2022',
         formattedAnswer: '',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 18,
     visible: true,
@@ -1375,19 +1375,19 @@ export const quesHashData = {
     events:
       '{"EventSubject":"Checking the 11/25/2022","EventBody":"<ul><li><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/2022_West_Java_earthquake\\"><strong>An earthquake</strong></a> centred near <a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/Cianjur,_Cianjur_Regency\\">Cianjur</a> in Indonesia\'s <a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/West_Java\\">West Java</a> kills at least 271 people and injures more than 2,000 others.</p></li><li><p>In <a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/Canadian_football\\">Canadian football</a>, the <a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/Toronto_Argonauts\\">Toronto Argonauts</a> defeat the <a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/Winnipeg_Blue_Bombers\\">Winnipeg Blue Bombers</a> in <a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/109th_Grey_Cup\\"><strong>the Grey Cup</strong></a> <em>(</em><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/Grey_Cup_Most_Valuable_Player\\"><em>MVP</em></a><em> </em><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/H%C3%A9noc_Muamba\\"><em>Hénoc Muamba</em></a><em> pictured)</em>.</p></li><li><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/NASA\\">NASA</a>\'s <a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/Artemis_1\\"><strong>Artemis 1</strong></a> is successfully launched on an uncrewed test flight to the <a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/Moon\\">Moon</a>.</p></li><li><p>The United Nations estimates the <a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/World_population\\"><strong>world population</strong></a> to have exceeded eight billion.</p></li><li><p>In cricket, <a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/2022_ICC_Men%27s_T20_World_Cup\\">the ICC Men\'s T20 World Cup</a> concludes with <a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/England_cricket_team\\">England</a> defeating <a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/Pakistan_national_cricket_team\\">Pakistan</a> in <a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/2022_ICC_Men%27s_T20_World_Cup_Final\\"><strong>the final</strong></a>.</p></li></ul><p><strong>Ongoing</strong>:</p><ul><li><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/2022_FIFA_World_Cup\\">FIFA World Cup</a></p></li><li><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/Mahsa_Amini_protests\\">Mahsa Amini protests</a></p></li><li><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/2022_Russian_invasion_of_Ukraine\\">Russian invasion of Ukraine</a></p></li></ul><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/Deaths_in_2022\\"><strong>Recent deaths</strong></a>:</p><ul><li><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/Cecilia_Suyat_Marshall\\"><span>Cecilia Suyat Marshall</span></a></p></li><li><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/John_Y._Brown_Jr.\\"><span>John Y. Brown Jr.</span></a></p></li><li><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/Mickey_Kuhn\\">Mickey Kuhn</a></p></li><li><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/Michael_Pertschuk\\">Michael Pertschuk</a></p></li><li><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/Jeremy_Lloyds\\">Jeremy Lloyds</a></p></li><li><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/Dwight_Garner_(American_football)\\">Dwight Garner</a></p></li></ul>","EventPrimaryCondition":"Bid History Creation","ModifiedAt":"2022-11-25T05:35:18.150Z","EventRoles":["Core - Proposal Developer"],"EntityType":"Events","ModifiedBy":"Vamsi Krishna","EventUnitType":"Business Days","EventQuestionId":"03907dac-df2c-46df-a3e4-c87c44ae13a0","SK":"EVENTS#a5197a7c-ec91-4132-b1e9-628366de7de4","EventId":"a5197a7c-ec91-4132-b1e9-628366de7de4","EventNoOfUnits":5,"PK":"EVENTS#a5197a7c-ec91-4132-b1e9-628366de7de4","EventOperator":"addition","CreatedAt":"2022-11-25T05:35:18.150Z","questionId":"03907dac-df2c-46df-a3e4-c87c44ae13a0"}',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '047f734a-e953-4363-9454-ae9e79cafa56': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '047f734a-e953-4363-9454-ae9e79cafa56',
     section: {
       sectionOrder: 2,
-      sectionName: 'Customer Scenarios & BTS RFPs'
+      sectionName: 'Customer Scenarios & BTS RFPs',
     },
     questionText: 'test2',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Biostats'],
     answers: [],
@@ -1412,19 +1412,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '08d746ad-fa16-4742-91a3-72ec99e42a49': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '08d746ad-fa16-4742-91a3-72ec99e42a49',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'Question to test date type',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Clinical DS&B'],
     answers: [],
@@ -1447,19 +1447,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '0b11bf24-0724-4a4d-99bc-dd716abacd4b': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '0b11bf24-0724-4a4d-99bc-dd716abacd4b',
     section: {
       sectionOrder: 3,
-      sectionName: 'SF answers(Text)'
+      sectionName: 'SF answers(Text)',
     },
     questionText: 'SF answer 1',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       '(Test) Core Teamm',
@@ -1467,7 +1467,7 @@ export const quesHashData = {
       'Core - Clinical DS&B',
       'Core - Medical Strategy Lead',
       'Core - Project Lead',
-      'Core - Proposal Developer'
+      'Core - Proposal Developer',
     ],
     answers: [
       {
@@ -1478,7 +1478,7 @@ export const quesHashData = {
         answer: 'Clinical',
         formattedAnswer: 'Clinical',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
@@ -1493,7 +1493,7 @@ export const quesHashData = {
         created_by: '1095367',
         updated_by: '1095367',
         created_date: '2022-11-28T05:40:09.387Z',
-        updated_date: '2022-11-28T05:40:09.387Z'
+        updated_date: '2022-11-28T05:40:09.387Z',
       },
       {
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
@@ -1508,7 +1508,7 @@ export const quesHashData = {
         created_by: '1095367',
         updated_by: '1095367',
         created_date: '2022-11-28T05:40:09.387Z',
-        updated_date: '2022-11-28T05:40:09.387Z'
+        updated_date: '2022-11-28T05:40:09.387Z',
       },
       {
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
@@ -1523,7 +1523,7 @@ export const quesHashData = {
         created_by: '1095367',
         updated_by: '1095367',
         created_date: '2022-11-28T05:40:09.387Z',
-        updated_date: '2022-11-28T05:40:09.387Z'
+        updated_date: '2022-11-28T05:40:09.387Z',
       },
       {
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
@@ -1538,8 +1538,8 @@ export const quesHashData = {
         created_by: '1095367',
         updated_by: '1095367',
         created_date: '2022-11-28T05:40:09.387Z',
-        updated_date: '2022-11-28T05:40:09.387Z'
-      }
+        updated_date: '2022-11-28T05:40:09.387Z',
+      },
     ],
     questionOrder: 1,
     visible: true,
@@ -1554,7 +1554,7 @@ export const quesHashData = {
     hasDifferentSFanswer: true,
     currentSFanswer: {
       value: 'Clinical',
-      time: '2022-11-28T05:48:28.918Z'
+      time: '2022-11-28T05:48:28.918Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -1567,19 +1567,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '0e9c5fdf-1b84-4938-8cf5-561ac5fb0691': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '0e9c5fdf-1b84-4938-8cf5-561ac5fb0691',
     section: {
       sectionOrder: 78,
-      sectionName: 'Events'
+      sectionName: 'Events',
     },
     questionText: 'Event7',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Analytics Strategy Lead'],
     answers: [],
@@ -1602,19 +1602,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '118d08d4-8e82-4d94-a0a6-92d0637dad8b': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '118d08d4-8e82-4d94-a0a6-92d0637dad8b',
     section: {
       sectionOrder: 2,
-      sectionName: 'Customer Scenarios & BTS RFPs'
+      sectionName: 'Customer Scenarios & BTS RFPs',
     },
     questionText: 'test 3 check',
     answerConfiguration: {
       type: 'checkbox',
-      options: ['None', 'Some', 'All']
+      options: ['None', 'Some', 'All'],
     },
     roleNames: ['Core - Clinical DS&B'],
     answers: [],
@@ -1633,7 +1633,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '',
-      time: '2022-11-28T05:48:28.996Z'
+      time: '2022-11-28T05:48:28.996Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -1646,14 +1646,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '169654b0-578e-45b0-b5de-a6e4118b561c': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '169654b0-578e-45b0-b5de-a6e4118b561c',
     section: {
       sectionOrder: 76,
-      sectionName: '777(Do not edit)'
+      sectionName: '777(Do not edit)',
     },
     questionText: '     Proposal_Deliverable__c    ',
     answerConfiguration: {
@@ -1663,8 +1663,8 @@ export const quesHashData = {
         'Full Proposal',
         'High Level strategy assumptions, experience & Budget',
         'N/A',
-        'Summary of study assumptions, experience & budget'
-      ]
+        'Summary of study assumptions, experience & budget',
+      ],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [
@@ -1676,7 +1676,7 @@ export const quesHashData = {
         answer: 'Brief text',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -1686,7 +1686,7 @@ export const quesHashData = {
         answer: 'Brief text',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -1696,7 +1696,7 @@ export const quesHashData = {
         answer: 'Summary of study assumptions, experience & budget',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -1706,7 +1706,7 @@ export const quesHashData = {
         answer: 'Summary of study assumptions, experience & budget',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Summary of study assumptions, experience & budget',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -1716,7 +1716,7 @@ export const quesHashData = {
         answer: 'Summary of study assumptions, experience & budget',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Summary of study assumptions, experience & budget',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -1726,7 +1726,7 @@ export const quesHashData = {
         answer: 'Full Proposal',
         formattedAnswer: 'Full Proposal',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -1736,8 +1736,8 @@ export const quesHashData = {
         answer: 'Full Proposal',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'Full Proposal',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 7,
     visible: true,
@@ -1749,7 +1749,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'Full Proposal',
-      time: '2022-11-28T05:48:29.605Z'
+      time: '2022-11-28T05:48:29.605Z',
     },
     isCustomQuestion: false,
     questionJSON: '',
@@ -1760,19 +1760,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '18e7c537-b49d-4b74-a9a8-413fc1dc1e9b': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '18e7c537-b49d-4b74-a9a8-413fc1dc1e9b',
     section: {
       sectionOrder: 2,
-      sectionName: 'Customer Scenarios & BTS RFPs'
+      sectionName: 'Customer Scenarios & BTS RFPs',
     },
     questionText: 'test2 check',
     answerConfiguration: {
       type: 'checkbox',
-      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW']
+      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW'],
     },
     roleNames: ['Spec - Biostats'],
     answers: [],
@@ -1795,27 +1795,27 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '1b62e755-7687-47fa-8b74-a6e09bc2abd6': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '1b62e755-7687-47fa-8b74-a6e09bc2abd6',
     section: {
       sectionOrder: 4,
-      sectionName: 'History'
+      sectionName: 'History',
     },
     questionText: 'checkbox1 ',
     answerConfiguration: {
       type: 'checkbox',
       options: [
         'We must prepare the budget strictly according to the customer’s specifications - we are not allowed to change any of the specs provided by the customer',
-        'We are allowed to modify some specifications provided by the customer for the budget such as the number and/or distribution of countries and sites; screen failure rate; monitoring assumptions etc.'
-      ]
+        'We are allowed to modify some specifications provided by the customer for the budget such as the number and/or distribution of countries and sites; screen failure rate; monitoring assumptions etc.',
+      ],
     },
     roleNames: [
       'Core - Medical Strategy Lead',
       'Spec - Biostats',
-      'Core - Proposal Developer'
+      'Core - Proposal Developer',
     ],
     answers: [],
     questionOrder: 18,
@@ -1837,14 +1837,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '1bcdda0b-093c-4e35-aaf5-cb76434008ba': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '1bcdda0b-093c-4e35-aaf5-cb76434008ba',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'A question to test single select lookup',
     answerConfiguration: {
@@ -1874,8 +1874,8 @@ export const quesHashData = {
         'Quest Diagnostics Patient Recruitment',
         'Quest Diagnostics Provider List',
         'Self-service analytics (GFL)',
-        'Site/Inv Patient Density'
-      ]
+        'Site/Inv Patient Density',
+      ],
     },
     roleNames: ['Core - Analytics Strategy Lead', 'Core - Business Developer'],
     answers: [],
@@ -1898,19 +1898,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '1bf56f82-5676-4a2d-9494-e51b3da90659': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '1bf56f82-5676-4a2d-9494-e51b3da90659',
     section: {
       sectionOrder: 12,
-      sectionName: 'Site Strategy'
+      sectionName: 'Site Strategy',
     },
     questionText: 'Is Study Hub needed to support the trial?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - TSL', 'Core - Business Developer'],
     answers: [],
@@ -1934,14 +1934,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '1cb03885-9579-4922-9550-7f618b52e74a': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '1cb03885-9579-4922-9550-7f618b52e74a',
     section: {
       sectionOrder: 37,
-      sectionName: 'Details-For-Backend'
+      sectionName: 'Details-For-Backend',
     },
     questionText: 'Ballpark',
     answerConfiguration: {
@@ -1951,8 +1951,8 @@ export const quesHashData = {
         'N/A',
         'Price per Patient Range',
         'Ratecard & FTE Table (FSP Only)',
-        'Rounded Ballpark'
-      ]
+        'Rounded Ballpark',
+      ],
     },
     roleNames: ['Core - TSL'],
     answers: [
@@ -1964,7 +1964,7 @@ export const quesHashData = {
         answer: 'Awardable',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -1974,7 +1974,7 @@ export const quesHashData = {
         answer: 'Awardable',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -1984,7 +1984,7 @@ export const quesHashData = {
         answer: 'Rounded Ballpark',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -1994,7 +1994,7 @@ export const quesHashData = {
         answer: 'Rounded Ballpark',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Rounded Ballpark',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -2004,7 +2004,7 @@ export const quesHashData = {
         answer: 'Rounded Ballpark',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Rounded Ballpark',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -2014,7 +2014,7 @@ export const quesHashData = {
         answer: 'Full Budget',
         formattedAnswer: 'Full Budget',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -2024,8 +2024,8 @@ export const quesHashData = {
         answer: 'Full Budget',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'Full Budget',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 15,
     visible: false,
@@ -2040,7 +2040,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'Full Budget',
-      time: '2022-11-28T05:48:29.684Z'
+      time: '2022-11-28T05:48:29.684Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -2053,19 +2053,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '1d08d2da-e1e4-41b3-a7b4-ad05f5aa4353': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '1d08d2da-e1e4-41b3-a7b4-ad05f5aa4353',
     section: {
       sectionOrder: 73,
-      sectionName: 'Role Test_Do Not Answer_Automation data'
+      sectionName: 'Role Test_Do Not Answer_Automation data',
     },
     questionText: 'Sudhakar Test1 ',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['(Test) Core Teamm'],
     answers: [],
@@ -2088,19 +2088,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '1ee003a5-533c-4940-8e57-45ec4bc64a7f': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '1ee003a5-533c-4940-8e57-45ec4bc64a7f',
     section: {
       sectionOrder: 72,
-      sectionName: 'New section'
+      sectionName: 'New section',
     },
     questionText: 'testRepeat',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Data Management'],
     answers: [],
@@ -2123,19 +2123,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '24361908-8f6a-4c06-8c00-d39351e4e6b9': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '24361908-8f6a-4c06-8c00-d39351e4e6b9',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'Date',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [
@@ -2151,7 +2151,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:19:40.281Z',
-        updated_date: '2022-11-25T06:19:40.281Z'
+        updated_date: '2022-11-25T06:19:40.281Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -2165,7 +2165,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:19:40.281Z',
-        updated_date: '2022-11-25T06:19:40.281Z'
+        updated_date: '2022-11-25T06:19:40.281Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -2179,7 +2179,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:19:40.281Z',
-        updated_date: '2022-11-25T06:19:40.281Z'
+        updated_date: '2022-11-25T06:19:40.281Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -2193,7 +2193,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:19:40.281Z',
-        updated_date: '2022-11-25T06:19:40.281Z'
+        updated_date: '2022-11-25T06:19:40.281Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -2207,7 +2207,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:22:43.138Z',
-        updated_date: '2022-11-25T06:22:43.138Z'
+        updated_date: '2022-11-25T06:22:43.138Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -2221,7 +2221,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:22:43.138Z',
-        updated_date: '2022-11-25T06:22:43.138Z'
+        updated_date: '2022-11-25T06:22:43.138Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -2235,7 +2235,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:22:43.138Z',
-        updated_date: '2022-11-25T06:22:43.138Z'
+        updated_date: '2022-11-25T06:22:43.138Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -2249,7 +2249,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:22:43.138Z',
-        updated_date: '2022-11-25T06:22:43.138Z'
+        updated_date: '2022-11-25T06:22:43.138Z',
       },
       {
         user: 'UnityPredictedAnswer',
@@ -2259,8 +2259,8 @@ export const quesHashData = {
         answer: '30-Nov-2022',
         formattedAnswer: '',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 18,
     visible: true,
@@ -2285,19 +2285,19 @@ export const quesHashData = {
     events:
       '{"EventSubject":"Dropdown","EventBody":"<p><span style=\\"color: rgb(77, 81, 86); color: rgb(77, 81, 86)\\">React is a free and open-source front-end JavaScript library for building user interfaces based on UI components. It is maintained by Meta and a community of individual developers and companies.&nbsp;</span><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/React_(JavaScript_library)\\"><span style=\\"color: rgb(26, 13, 171); color: rgb(26, 13, 171)\\">Wikipedia</span></a></p><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=react+initial+release+date&amp;stick=H4sIAAAAAAAAAOPgE-LWz9U3MDTKMSyrKNNSzii30k_Oz8lJTS7JzM_TL85PKylPLEq1SiwoSE0sUkhJLEldxCpVlJqYXKKQmZdZkpmYo1CUmpOaWJwKlgQAVJm841EAAAA&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0Q6BMoAHoECH8QAg\\"><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">Initial release date</span></strong></a><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">:&nbsp;</span></strong><span style=\\"color: rgb(77, 81, 86); color: rgb(77, 81, 86)\\">29 May 2013</span></p><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=react+platform&amp;stick=H4sIAAAAAAAAAOPgE-LWz9U3MDTKMSyrKNNSyCi30k_Oz8lJTS7JzM_TL85PKylPLEq1KshJLEnLL8pdxMpXlJqYXKIAEwAA2rqUBkIAAAA&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0Q6BMoAHoECHkQAg\\"><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">Platform</span></strong></a><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">:&nbsp;</span></strong><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=Web+platform&amp;stick=H4sIAAAAAAAAAOPgE-LWz9U3MDTKMSyrKFPiAnHSCtKzKyu0FDLKrfST83NyUpNLMvPz9Ivz00rKE4tSrQpyEkvS8otyF7HyhKcmKcC4O1gZd7EzcTAAAPZo_IhUAAAA&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0QmxMoAXoECHkQAw\\"><span style=\\"color: rgb(26, 13, 171); color: rgb(26, 13, 171)\\">Web platform</span></a></p><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=react+developers&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0Q6BMoAHoECF8QAg\\"><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">Developer(s)</span></strong></a><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">:&nbsp;</span></strong><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=Meta&amp;stick=H4sIAAAAAAAAAONgVuLSz9U3yMitTCsuW8TK4ptakggAq8ksHxUAAAA&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0QmxMoAXoECF8QAw\\"><span style=\\"color: rgb(26, 13, 171); color: rgb(26, 13, 171)\\">Meta</span></a>&nbsp;and community</p><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=react+original+authors&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0Q6BMoAHoECHwQAg\\"><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">Original author(s)</span></strong></a><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">:&nbsp;</span></strong><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=Jordan+Walke&amp;stick=H4sIAAAAAAAAAONgVuLVT9c3NMwwSTFLMjLKW8TK45VflJKYpxCemJOdCgDaMNwXIAAAAA&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0QmxMoAXoECHwQAw\\"><span style=\\"color: rgb(26, 13, 171); color: rgb(26, 13, 171)\\">Jordan Walke</span></a></p><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=react+license&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0Q6BMoAHoECH0QAg\\"><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">License</span></strong></a><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">:&nbsp;</span></strong><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=MIT+License&amp;stick=H4sIAAAAAAAAAONgVuLQz9U3MCkryF3Eyu3rGaLgk5mcmlecCgA_x3mRGgAAAA&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0QmxMoAXoECH0QAw\\"><span style=\\"color: rgb(26, 13, 171); color: rgb(26, 13, 171)\\">MIT License</span></a></p><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=react+repository&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0Q6BMoAHoECH4QAg\\"><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">Repository</span></strong></a><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">:&nbsp;</span></strong><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"http://github.com/facebook/react\\"><span style=\\"color: rgb(26, 13, 171); color: rgb(26, 13, 171)\\">github.com</span>/<span style=\\"color: rgb(26, 13, 171); color: rgb(26, 13, 171)\\">facebook</span>/react</a></p><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=react+programming+language&amp;stick=H4sIAAAAAAAAAOPgE-LWz9U3MDTKMSyrKNPSySi30k_Oz8lJTS7JzM_TL85PKylPLEq1KijKTy9KzM3NzEtXyEnMSy9NTE9dxCpVlJqYXKKATRIA9k8vDVoAAAA&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0Q6BMoAHoECHgQAg\\"><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">Programming language</span></strong></a><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">:&nbsp;</span></strong><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=JavaScript&amp;stick=H4sIAAAAAAAAAOPgE-LWz9U3MDTKMSyrKFPiAHGMCizNtXQyyq30k_NzclKTSzLz8_SL89NKyhOLUq0KivLTixJzczPz0hVyEvPSSxPTUxexcnklliUGJxdlFpTsYGXcxc7EwQAAZiXVbFwAAAA&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0QmxMoAXoECHgQAw\\"><span style=\\"color: rgb(26, 13, 171); color: rgb(26, 13, 171)\\">JavaScript</span></a></p><p>&nbsp;</p>","EventPrimaryCondition":"Bid History Creation","ModifiedAt":"2022-11-15T12:24:44.234Z","EventRoles":["(Test) Core Teamm"],"EntityType":"Events","ModifiedBy":"Sushil Munda","EventUnitType":"Business Days","EventQuestionId":"24361908-8f6a-4c06-8c00-d39351e4e6b9","SK":"EVENTS#a8776aca-1a59-4d3f-af09-7a7607e70aec","EventId":"a8776aca-1a59-4d3f-af09-7a7607e70aec","EventNoOfUnits":2,"PK":"EVENTS#a8776aca-1a59-4d3f-af09-7a7607e70aec","EventOperator":"addition","CreatedAt":"2022-11-15T12:24:44.234Z","questionId":"24361908-8f6a-4c06-8c00-d39351e4e6b9"}',
     notApplicable: false,
-    questionApproval: true
+    questionApproval: true,
   },
   '257dbe89-b940-4a06-9e8f-ef3eff1885f5': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '257dbe89-b940-4a06-9e8f-ef3eff1885f5',
     section: {
       sectionOrder: 76,
-      sectionName: '777(Do not edit)'
+      sectionName: '777(Do not edit)',
     },
     questionText: '     RFP_Ranking__c    ',
     answerConfiguration: {
       type: 'select',
-      options: ['1', '2', '3', '4', '5']
+      options: ['1', '2', '3', '4', '5'],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [
@@ -2309,7 +2309,7 @@ export const quesHashData = {
         answer: '3',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -2319,7 +2319,7 @@ export const quesHashData = {
         answer: '3',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -2329,7 +2329,7 @@ export const quesHashData = {
         answer: '2',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -2339,7 +2339,7 @@ export const quesHashData = {
         answer: '2',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: '2',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -2349,7 +2349,7 @@ export const quesHashData = {
         answer: '2',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: '2',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -2359,7 +2359,7 @@ export const quesHashData = {
         answer: '2',
         formattedAnswer: '2',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -2369,8 +2369,8 @@ export const quesHashData = {
         answer: '2',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: '2',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 8,
     visible: true,
@@ -2382,7 +2382,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '2',
-      time: '2022-11-28T05:48:29.994Z'
+      time: '2022-11-28T05:48:29.994Z',
     },
     isCustomQuestion: false,
     questionJSON: '',
@@ -2393,14 +2393,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '25a459ce-5966-47ac-8e2d-74ca5c1cbe88': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '25a459ce-5966-47ac-8e2d-74ca5c1cbe88',
     section: {
       sectionOrder: 80,
-      sectionName: '2975 test'
+      sectionName: '2975 test',
     },
     questionText: 'Test2',
     answerConfiguration: {
@@ -2413,8 +2413,8 @@ export const quesHashData = {
         'Phase 2b',
         'Phase 3',
         'Phase 3b',
-        'Phase 4'
-      ]
+        'Phase 4',
+      ],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [
@@ -2426,7 +2426,7 @@ export const quesHashData = {
         answer: 'Phase 1',
         formattedAnswer: 'Phase 1',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'rahul.tiwari@iqvia.com',
@@ -2435,8 +2435,8 @@ export const quesHashData = {
         date: '2022-11-28T05:38:26.630Z',
         answer: 'Phase 2',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: true
-      }
+        updatedInPG: true,
+      },
     ],
     questionOrder: 2,
     visible: true,
@@ -2449,7 +2449,7 @@ export const quesHashData = {
     hasDifferentSFanswer: true,
     currentSFanswer: {
       value: 'Phase 1',
-      time: '2022-11-28T05:48:30.076Z'
+      time: '2022-11-28T05:48:30.076Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -2462,20 +2462,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '26521cdd-6ef9-4589-b52c-3f00d55ecda2': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '26521cdd-6ef9-4589-b52c-3f00d55ecda2',
     section: {
       sectionOrder: 20,
-      sectionName: 'Key Budget Specs'
+      sectionName: 'Key Budget Specs',
     },
     questionText:
       'Is a decentralized approach to trial delivery appropriate for this proposal?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -2499,14 +2499,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '316d5a8c-f92d-44bd-b0d5-eac2f6ff30cc': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '316d5a8c-f92d-44bd-b0d5-eac2f6ff30cc',
     section: {
       sectionOrder: 9,
-      sectionName: 'Study Timelines'
+      sectionName: 'Study Timelines',
     },
     questionText: 'Checkbox are the best',
     answerConfiguration: {
@@ -2516,8 +2516,8 @@ export const quesHashData = {
         'EPON',
         'PEN',
         'IQVIA NASH global site network',
-        'Other'
-      ]
+        'Other',
+      ],
     },
     roleNames: [
       'Core - Business Developer',
@@ -2528,7 +2528,7 @@ export const quesHashData = {
       'Core - TSL',
       'Spec - Biostats',
       'Spec - Business Account Manager',
-      'Spec - CEVA'
+      'Spec - CEVA',
     ],
     answers: [],
     questionOrder: 14,
@@ -2551,19 +2551,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '32da3152-da1f-40ca-82dd-b0e6a96aefae': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '32da3152-da1f-40ca-82dd-b0e6a96aefae',
     section: {
       sectionOrder: 78,
-      sectionName: 'Events'
+      sectionName: 'Events',
     },
     questionText: 'Event1',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [
@@ -2575,8 +2575,8 @@ export const quesHashData = {
         answer: '07-Dec-2022',
         formattedAnswer: '',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 1,
     visible: true,
@@ -2601,14 +2601,14 @@ export const quesHashData = {
     events:
       '{"EventSubject":"kkkkkkk","EventBody":"{\\"json\\":\\"{\\\\\\"blocks\\\\\\":[{\\\\\\"key\\\\\\":\\\\\\"6qclh\\\\\\",\\\\\\"text\\\\\\":\\\\\\" \\\\\\",\\\\\\"type\\\\\\":\\\\\\"unstyled\\\\\\",\\\\\\"depth\\\\\\":0,\\\\\\"inlineStyleRanges\\\\\\":[],\\\\\\"entityRanges\\\\\\":[],\\\\\\"data\\\\\\":{}},{\\\\\\"key\\\\\\":\\\\\\"4sphm\\\\\\",\\\\\\"text\\\\\\":\\\\\\"Approach 2: \\\\\\",\\\\\\"type\\\\\\":\\\\\\"unstyled\\\\\\",\\\\\\"depth\\\\\\":0,\\\\\\"inlineStyleRanges\\\\\\":[{\\\\\\"offset\\\\\\":0,\\\\\\"length\\\\\\":11,\\\\\\"style\\\\\\":\\\\\\"BOLD\\\\\\"}],\\\\\\"entityRanges\\\\\\":[],\\\\\\"data\\\\\\":{}},{\\\\\\"key\\\\\\":\\\\\\"3b7gt\\\\\\",\\\\\\"text\\\\\\":\\\\\\"Store the JSON object into the variable.\\\\\\",\\\\\\"type\\\\\\":\\\\\\"ordered-list-item\\\\\\",\\\\\\"depth\\\\\\":0,\\\\\\"inlineStyleRanges\\\\\\":[],\\\\\\"entityRanges\\\\\\":[],\\\\\\"data\\\\\\":{}},{\\\\\\"key\\\\\\":\\\\\\"a4h93\\\\\\",\\\\\\"text\\\\\\":\\\\\\"First put all keys in a list.\\\\\\",\\\\\\"type\\\\\\":\\\\\\"ordered-list-item\\\\\\",\\\\\\"depth\\\\\\":0,\\\\\\"inlineStyleRanges\\\\\\":[],\\\\\\"entityRanges\\\\\\":[],\\\\\\"data\\\\\\":{}},{\\\\\\"key\\\\\\":\\\\\\"bd0pk\\\\\\",\\\\\\"text\\\\\\":\\\\\\"Create an element <table>.\\\\\\",\\\\\\"type\\\\\\":\\\\\\"ordered-list-item\\\\\\",\\\\\\"depth\\\\\\":0,\\\\\\"inlineStyleRanges\\\\\\":[],\\\\\\"entityRanges\\\\\\":[],\\\\\\"data\\\\\\":{}},{\\\\\\"key\\\\\\":\\\\\\"1jov0\\\\\\",\\\\\\"text\\\\\\":\\\\\\"Create a <tr> element for the header of the table.\\\\\\",\\\\\\"type\\\\\\":\\\\\\"unordered-list-item\\\\\\",\\\\\\"depth\\\\\\":0,\\\\\\"inlineStyleRanges\\\\\\":[],\\\\\\"entityRanges\\\\\\":[],\\\\\\"data\\\\\\":{}},{\\\\\\"key\\\\\\":\\\\\\"9jgno\\\\\\",\\\\\\"text\\\\\\":\\\\\\"Visit the keys list and create a <th> for each value and insert it into the <tr> element created for the header.\\\\\\",\\\\\\"type\\\\\\":\\\\\\"unordered-list-item\\\\\\",\\\\\\"depth\\\\\\":0,\\\\\\"inlineStyleRanges\\\\\\":[],\\\\\\"entityRanges\\\\\\":[],\\\\\\"data\\\\\\":{}},{\\\\\\"key\\\\\\":\\\\\\"ueih\\\\\\",\\\\\\"text\\\\\\":\\\\\\"Then, for every entry in the object, create a cell and insert it to the particular row.\\\\\\",\\\\\\"type\\\\\\":\\\\\\"unordered-list-item\\\\\\",\\\\\\"depth\\\\\\":0,\\\\\\"inlineStyleRanges\\\\\\":[],\\\\\\"entityRanges\\\\\\":[],\\\\\\"data\\\\\\":{}},{\\\\\\"key\\\\\\":\\\\\\"7doip\\\\\\",\\\\\\"text\\\\\\":\\\\\\"Leave the column empty if there is no value of that key.\\\\\\",\\\\\\"type\\\\\\":\\\\\\"unordered-list-item\\\\\\",\\\\\\"depth\\\\\\":0,\\\\\\"inlineStyleRanges\\\\\\":[],\\\\\\"entityRanges\\\\\\":[],\\\\\\"data\\\\\\":{}},{\\\\\\"key\\\\\\":\\\\\\"ce3jl\\\\\\",\\\\\\"text\\\\\\":\\\\\\" Tip: The onblur event is the opposite of the onfocus event. \\\\\\",\\\\\\"type\\\\\\":\\\\\\"unstyled\\\\\\",\\\\\\"depth\\\\\\":0,\\\\\\"inlineStyleRanges\\\\\\":[{\\\\\\"offset\\\\\\":1,\\\\\\"length\\\\\\":4,\\\\\\"style\\\\\\":\\\\\\"BOLD\\\\\\"}],\\\\\\"entityRanges\\\\\\":[{\\\\\\"offset\\\\\\":46,\\\\\\"length\\\\\\":7,\\\\\\"key\\\\\\":0}],\\\\\\"data\\\\\\":{}}],\\\\\\"entityMap\\\\\\":{\\\\\\"0\\\\\\":{\\\\\\"type\\\\\\":\\\\\\"LINK\\\\\\",\\\\\\"mutability\\\\\\":\\\\\\"MUTABLE\\\\\\",\\\\\\"data\\\\\\":{\\\\\\"href\\\\\\":\\\\\\"https://www.w3schools.com/JSREF/event_onfocus.asp\\\\\\",\\\\\\"url\\\\\\":\\\\\\"https://www.w3schools.com/JSREF/event_onfocus.asp\\\\\\"}}}}\\",\\"html\\":\\"<div data-contents=\\\\\\"true\\\\\\"><div data-block=\\\\\\"true\\\\\\" data-editor=\\\\\\"8tuoe\\\\\\" data-offset-key=\\\\\\"6qclh-0-0\\\\\\"><div data-offset-key=\\\\\\"6qclh-0-0\\\\\\" class=\\\\\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\\\\\"><span data-offset-key=\\\\\\"6qclh-0-0\\\\\\"><span data-text=\\\\\\"true\\\\\\"> </span></span></div></div><div data-block=\\\\\\"true\\\\\\" data-editor=\\\\\\"8tuoe\\\\\\" data-offset-key=\\\\\\"4sphm-0-0\\\\\\"><div data-offset-key=\\\\\\"4sphm-0-0\\\\\\" class=\\\\\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\\\\\"><span data-offset-key=\\\\\\"4sphm-0-0\\\\\\" style=\\\\\\"font-weight: bold;\\\\\\"><span data-text=\\\\\\"true\\\\\\">Approach 2:</span></span><span data-offset-key=\\\\\\"4sphm-0-1\\\\\\"><span data-text=\\\\\\"true\\\\\\"> </span></span></div></div><ol class=\\\\\\"public-DraftStyleDefault-ol\\\\\\" data-offset-key=\\\\\\"3b7gt-0-0\\\\\\"><li class=\\\\\\"public-DraftStyleDefault-orderedListItem public-DraftStyleDefault-reset public-DraftStyleDefault-depth0 public-DraftStyleDefault-listLTR\\\\\\" data-block=\\\\\\"true\\\\\\" data-editor=\\\\\\"8tuoe\\\\\\" data-offset-key=\\\\\\"3b7gt-0-0\\\\\\"><div data-offset-key=\\\\\\"3b7gt-0-0\\\\\\" class=\\\\\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\\\\\"><span data-offset-key=\\\\\\"3b7gt-0-0\\\\\\"><span data-text=\\\\\\"true\\\\\\">Store the JSON object into the variable.</span></span></div></li><li class=\\\\\\"public-DraftStyleDefault-orderedListItem public-DraftStyleDefault-depth0 public-DraftStyleDefault-listLTR\\\\\\" data-block=\\\\\\"true\\\\\\" data-editor=\\\\\\"8tuoe\\\\\\" data-offset-key=\\\\\\"a4h93-0-0\\\\\\"><div data-offset-key=\\\\\\"a4h93-0-0\\\\\\" class=\\\\\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\\\\\"><span data-offset-key=\\\\\\"a4h93-0-0\\\\\\"><span data-text=\\\\\\"true\\\\\\">First put all keys in a list.</span></span></div></li><li class=\\\\\\"public-DraftStyleDefault-orderedListItem public-DraftStyleDefault-depth0 public-DraftStyleDefault-listLTR\\\\\\" data-block=\\\\\\"true\\\\\\" data-editor=\\\\\\"8tuoe\\\\\\" data-offset-key=\\\\\\"bd0pk-0-0\\\\\\"><div data-offset-key=\\\\\\"bd0pk-0-0\\\\\\" class=\\\\\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\\\\\"><span data-offset-key=\\\\\\"bd0pk-0-0\\\\\\"><span data-text=\\\\\\"true\\\\\\">Create an element &lt;table&gt;.</span></span></div></li></ol><ul class=\\\\\\"public-DraftStyleDefault-ul\\\\\\" data-offset-key=\\\\\\"1jov0-0-0\\\\\\"><li class=\\\\\\"public-DraftStyleDefault-unorderedListItem public-DraftStyleDefault-reset public-DraftStyleDefault-depth0 public-DraftStyleDefault-listLTR\\\\\\" data-block=\\\\\\"true\\\\\\" data-editor=\\\\\\"8tuoe\\\\\\" data-offset-key=\\\\\\"1jov0-0-0\\\\\\"><div data-offset-key=\\\\\\"1jov0-0-0\\\\\\" class=\\\\\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\\\\\"><span data-offset-key=\\\\\\"1jov0-0-0\\\\\\"><span data-text=\\\\\\"true\\\\\\">Create a &lt;tr&gt; element for the header of the table.</span></span></div></li><li class=\\\\\\"public-DraftStyleDefault-unorderedListItem public-DraftStyleDefault-depth0 public-DraftStyleDefault-listLTR\\\\\\" data-block=\\\\\\"true\\\\\\" data-editor=\\\\\\"8tuoe\\\\\\" data-offset-key=\\\\\\"9jgno-0-0\\\\\\"><div data-offset-key=\\\\\\"9jgno-0-0\\\\\\" class=\\\\\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\\\\\"><span data-offset-key=\\\\\\"9jgno-0-0\\\\\\"><span data-text=\\\\\\"true\\\\\\">Visit the keys list and create a &lt;th&gt; for each value and insert it into the &lt;tr&gt; element created for the header.</span></span></div></li><li class=\\\\\\"public-DraftStyleDefault-unorderedListItem public-DraftStyleDefault-depth0 public-DraftStyleDefault-listLTR\\\\\\" data-block=\\\\\\"true\\\\\\" data-editor=\\\\\\"8tuoe\\\\\\" data-offset-key=\\\\\\"ueih-0-0\\\\\\"><div data-offset-key=\\\\\\"ueih-0-0\\\\\\" class=\\\\\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\\\\\"><span data-offset-key=\\\\\\"ueih-0-0\\\\\\"><span data-text=\\\\\\"true\\\\\\">Then, for every entry in the object, create a cell and insert it to the particular row.</span></span></div></li><li class=\\\\\\"public-DraftStyleDefault-unorderedListItem public-DraftStyleDefault-depth0 public-DraftStyleDefault-listLTR\\\\\\" data-block=\\\\\\"true\\\\\\" data-editor=\\\\\\"8tuoe\\\\\\" data-offset-key=\\\\\\"7doip-0-0\\\\\\"><div data-offset-key=\\\\\\"7doip-0-0\\\\\\" class=\\\\\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\\\\\"><span data-offset-key=\\\\\\"7doip-0-0\\\\\\"><span data-text=\\\\\\"true\\\\\\">Leave the column empty if there is no value of that key.</span></span></div></li></ul><div data-block=\\\\\\"true\\\\\\" data-editor=\\\\\\"8tuoe\\\\\\" data-offset-key=\\\\\\"ce3jl-0-0\\\\\\"><div data-offset-key=\\\\\\"ce3jl-0-0\\\\\\" class=\\\\\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\\\\\"><span data-offset-key=\\\\\\"ce3jl-0-0\\\\\\"><span data-text=\\\\\\"true\\\\\\"> </span></span><span data-offset-key=\\\\\\"ce3jl-0-1\\\\\\" style=\\\\\\"font-weight: bold;\\\\\\"><span data-text=\\\\\\"true\\\\\\">Tip:</span></span><span data-offset-key=\\\\\\"ce3jl-0-2\\\\\\"><span data-text=\\\\\\"true\\\\\\"> The onblur event is the opposite of the onfocus event. </span></span></div></div></div>\\"}","EventPrimaryCondition":"Bid History Creation","ModifiedAt":"2022-11-12T11:29:05.382Z","EventRoles":["(Test) Core Teamm"],"EntityType":"Events","ModifiedBy":"Sushil Munda","EventUnitType":"Business Days","EventQuestionId":"32da3152-da1f-40ca-82dd-b0e6a96aefae","SK":"EVENTS#c1d740dd-2a09-48aa-856f-654000cf302b","EventId":"c1d740dd-2a09-48aa-856f-654000cf302b","EventNoOfUnits":7,"PK":"EVENTS#c1d740dd-2a09-48aa-856f-654000cf302b","EventOperator":"addition","CreatedAt":"2022-10-03T16:00:25.880Z","questionId":"32da3152-da1f-40ca-82dd-b0e6a96aefae"}',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '333ccf38-6aef-4fbc-8c13-6994c1e2a1f1': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '333ccf38-6aef-4fbc-8c13-6994c1e2a1f1',
     section: {
       sectionOrder: 76,
-      sectionName: '777(Do not edit)'
+      sectionName: '777(Do not edit)',
     },
     questionText: '     IQVIA_Core_Main_Differentiator__c    ',
     answerConfiguration: {
@@ -2617,8 +2617,8 @@ export const quesHashData = {
         'Advanced Analytics',
         'Domain Expertise',
         'Transformative Technology',
-        'Unparalleled Data'
-      ]
+        'Unparalleled Data',
+      ],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [],
@@ -2632,7 +2632,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '',
-      time: '2022-11-28T05:48:30.318Z'
+      time: '2022-11-28T05:48:30.318Z',
     },
     isCustomQuestion: false,
     questionJSON: '',
@@ -2643,19 +2643,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '33599949-9b11-4817-8678-bae813411d66': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '33599949-9b11-4817-8678-bae813411d66',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'test',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [],
@@ -2678,24 +2678,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: true
+    questionApproval: true,
   },
   '35a968fd-fd50-4983-be6d-c45f3e6cf6ba': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '35a968fd-fd50-4983-be6d-c45f3e6cf6ba',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'test',
     answerConfiguration: {
       type: 'checkbox',
-      options: ['Data Management', 'Biostatistics', 'Medical Writing', 'none']
+      options: ['Data Management', 'Biostatistics', 'Medical Writing', 'none'],
     },
     roleNames: [
       'Core - Project Lead',
       'Core - Business Developer',
-      'Spec - Biostats'
+      'Spec - Biostats',
     ],
     answers: [],
     questionOrder: 30,
@@ -2721,19 +2721,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '363bc74e-e250-4472-ba22-0e106bf2d5b0': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '363bc74e-e250-4472-ba22-0e106bf2d5b0',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText: 'Are there any additional ICFs anticipated for this study?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - RSU'],
     answers: [],
@@ -2759,19 +2759,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '37274d40-4ce2-4132-a784-3b0bc1f4aed4': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '37274d40-4ce2-4132-a784-3b0bc1f4aed4',
     section: {
       sectionOrder: 69,
-      sectionName: 'new666'
+      sectionName: 'new666',
     },
     questionText: 'Testing ',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['(Test) Core Teamm'],
     answers: [
@@ -2791,17 +2791,17 @@ export const quesHashData = {
                 depth: 0,
                 inlineStyleRanges: [],
                 entityRanges: [],
-                data: {}
-              }
+                data: {},
+              },
             ],
-            entityMap: {}
+            entityMap: {},
           },
           html:
-            '<div data-contents="true"><div data-block="true" data-editor="crud1" data-offset-key="87tl4-0-0"><div data-offset-key="87tl4-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="87tl4-0-0" style=""><span data-text="true">test</span></span></div></div></div>'
+            '<div data-contents="true"><div data-block="true" data-editor="crud1" data-offset-key="87tl4-0-0"><div data-offset-key="87tl4-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="87tl4-0-0" style=""><span data-text="true">test</span></span></div></div></div>',
         },
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: true
-      }
+        updatedInPG: true,
+      },
     ],
     questionOrder: 2,
     visible: true,
@@ -2817,19 +2817,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '3abda00c-7528-4807-9685-ef188f14e43d': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '3abda00c-7528-4807-9685-ef188f14e43d',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'testing multiselect lookup',
     answerConfiguration: {
       type: 'picklist-lookup',
-      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW']
+      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW'],
     },
     roleNames: [
       'Spec - CEVA',
@@ -2837,7 +2837,7 @@ export const quesHashData = {
       'Core - Clinical DS&B',
       'Core - Analytics Strategy Lead',
       'Core - Medical Strategy Lead',
-      'Core - Business Developer'
+      'Core - Business Developer',
     ],
     answers: [],
     questionOrder: 17,
@@ -2859,19 +2859,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '3d016622-ff30-43c7-a86f-68de2a1bac4e': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '3d016622-ff30-43c7-a86f-68de2a1bac4e',
     section: {
       sectionOrder: 77,
-      sectionName: 'Answer History'
+      sectionName: 'Answer History',
     },
     questionText: 'AH2',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['(Test) Core Teamm'],
     answers: [
@@ -2883,7 +2883,7 @@ export const quesHashData = {
         answer: 'test',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'vamsi.krishna5@iqvia.com',
@@ -2901,16 +2901,16 @@ export const quesHashData = {
                 depth: 0,
                 inlineStyleRanges: [],
                 entityRanges: [],
-                data: {}
-              }
+                data: {},
+              },
             ],
-            entityMap: {}
+            entityMap: {},
           },
           html:
-            '<div data-contents="true"><div data-block="true" data-editor="m34a" data-offset-key="111r7-0-0"><div data-offset-key="111r7-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="111r7-0-0"><span data-text="true">updated</span></span></div></div></div>'
+            '<div data-contents="true"><div data-block="true" data-editor="m34a" data-offset-key="111r7-0-0"><div data-offset-key="111r7-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="111r7-0-0"><span data-text="true">updated</span></span></div></div></div>',
         },
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: true
+        updatedInPG: true,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -2920,7 +2920,7 @@ export const quesHashData = {
         answer: 'test',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'vamsi.krishna5@iqvia.com',
@@ -2938,16 +2938,16 @@ export const quesHashData = {
                 depth: 0,
                 inlineStyleRanges: [],
                 entityRanges: [],
-                data: {}
-              }
+                data: {},
+              },
             ],
-            entityMap: {}
+            entityMap: {},
           },
           html:
-            '<div data-contents="true"><div data-block="true" data-editor="fcgu7" data-offset-key="6c8g6-0-0"><div data-offset-key="6c8g6-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="6c8g6-0-0"><span data-text="true">test</span></span></div></div></div>'
+            '<div data-contents="true"><div data-block="true" data-editor="fcgu7" data-offset-key="6c8g6-0-0"><div data-offset-key="6c8g6-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="6c8g6-0-0"><span data-text="true">test</span></span></div></div></div>',
         },
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: true
+        updatedInPG: true,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -2957,7 +2957,7 @@ export const quesHashData = {
         answer: 'test',
         formattedAnswer: 'test',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -2967,8 +2967,8 @@ export const quesHashData = {
         answer: 'test',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'test',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 2,
     visible: true,
@@ -2981,7 +2981,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'test',
-      time: '2022-11-28T05:48:30.492Z'
+      time: '2022-11-28T05:48:30.492Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -2994,19 +2994,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '3d532e1f-10f7-4155-b3d0-aa8f06f1de83': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '3d532e1f-10f7-4155-b3d0-aa8f06f1de83',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'Checkbox question',
     answerConfiguration: {
       type: 'checkbox',
-      options: ['blinded', 'named']
+      options: ['blinded', 'named'],
     },
     roleNames: ['Core - Medical Strategy Lead'],
     answers: [],
@@ -3029,19 +3029,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '3e520595-3ec4-4f87-8d77-130f792e9fdc': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '3e520595-3ec4-4f87-8d77-130f792e9fdc',
     section: {
       sectionOrder: 77,
-      sectionName: 'Answer History'
+      sectionName: 'Answer History',
     },
     questionText: 'AH4',
     answerConfiguration: {
       type: 'number',
-      options: []
+      options: [],
     },
     roleNames: ['(Test) Core Teamm'],
     answers: [
@@ -3053,7 +3053,7 @@ export const quesHashData = {
         answer: '1',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'vamsi.krishna5@iqvia.com',
@@ -3062,7 +3062,7 @@ export const quesHashData = {
         date: '2022-09-05T13:08:42.788Z',
         answer: ' ',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: true
+        updatedInPG: true,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -3072,7 +3072,7 @@ export const quesHashData = {
         answer: '1',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'vamsi.krishna5@iqvia.com',
@@ -3081,7 +3081,7 @@ export const quesHashData = {
         date: '2022-09-05T13:41:43.431Z',
         answer: ' ',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: true
+        updatedInPG: true,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -3091,7 +3091,7 @@ export const quesHashData = {
         answer: '1',
         formattedAnswer: '1',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -3101,8 +3101,8 @@ export const quesHashData = {
         answer: '1',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: '1',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 4,
     visible: true,
@@ -3115,7 +3115,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '1',
-      time: '2022-11-28T05:48:30.670Z'
+      time: '2022-11-28T05:48:30.670Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -3128,19 +3128,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '3ff9b52f-0c90-4019-adcb-70be0f1f7466': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '3ff9b52f-0c90-4019-adcb-70be0f1f7466',
     section: {
       sectionOrder: 49,
-      sectionName: 'Feasibility Analytics Notes (ADSC) (Demo)'
+      sectionName: 'Feasibility Analytics Notes (ADSC) (Demo)',
     },
     questionText: 'Other recruitment strategies',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [],
@@ -3155,8 +3155,8 @@ export const quesHashData = {
     milestoneNew: [
       {
         Name: 'Budget',
-        Color: '#000000'
-      }
+        Color: '#000000',
+      },
     ],
     opportunityType: 'Default Type',
     hasDifferentSFanswer: false,
@@ -3171,19 +3171,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '419aefb5-1200-4c8b-9855-0769d152e86c': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '419aefb5-1200-4c8b-9855-0769d152e86c',
     section: {
       sectionOrder: 79,
-      sectionName: 'Checkbox Validation'
+      sectionName: 'Checkbox Validation',
     },
     questionText: 'BR_Checkbox2',
     answerConfiguration: {
       type: 'checkbox',
-      options: ['blinded', 'named']
+      options: ['blinded', 'named'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -3207,19 +3207,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '43c06f92-4b2c-4084-a3ab-0e917ed265a4': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '43c06f92-4b2c-4084-a3ab-0e917ed265a4',
     section: {
       sectionOrder: 80,
-      sectionName: '2975 test'
+      sectionName: '2975 test',
     },
     questionText: 'Test 3',
     answerConfiguration: {
       type: 'picklist-lookup',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Medical Writing'],
     answers: [
@@ -3231,7 +3231,7 @@ export const quesHashData = {
         answer: ['United States of America'],
         formattedAnswer: ['United States of America'],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'rahul.tiwari@iqvia.com',
@@ -3240,8 +3240,8 @@ export const quesHashData = {
         date: '2022-11-28T05:38:33.067Z',
         answer: [],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 3,
     visible: true,
@@ -3253,7 +3253,7 @@ export const quesHashData = {
     hasDifferentSFanswer: true,
     currentSFanswer: {
       value: ['US'],
-      time: '2022-11-28T05:48:30.822Z'
+      time: '2022-11-28T05:48:30.822Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -3266,26 +3266,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '4580d77a-de2a-4dc7-bab3-02b33a14e1e3': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '4580d77a-de2a-4dc7-bab3-02b33a14e1e3',
     section: {
       sectionOrder: 8,
-      sectionName: 'Document Availability'
+      sectionName: 'Document Availability',
     },
     questionText: 'checkbox type question',
     answerConfiguration: {
       type: 'checkbox',
-      options: ['Yes', 'No', 'N/A']
+      options: ['Yes', 'No', 'N/A'],
     },
     roleNames: [
       'Core - Clinical DS&B',
       'Core - Project Lead',
       'Spec - Biostats',
       'Core - TSL',
-      'Spec - CEVA'
+      'Spec - CEVA',
     ],
     answers: [],
     questionOrder: 7,
@@ -3308,19 +3308,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '47c7a8e6-f1a4-4cbd-acc9-060b45cc13fa': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '47c7a8e6-f1a4-4cbd-acc9-060b45cc13fa',
     section: {
       sectionOrder: 81,
-      sectionName: 'Business rule'
+      sectionName: 'Business rule',
     },
     questionText: 'CheckBox Question Question 2',
     answerConfiguration: {
       type: 'checkbox',
-      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW']
+      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW'],
     },
     roleNames: [
       '(Test) Core Teamm',
@@ -3335,7 +3335,7 @@ export const quesHashData = {
       'Core - TSL',
       'Spec - Business Account Manager',
       'Spec - CEVA',
-      'Spec - Data Management'
+      'Spec - Data Management',
     ],
     answers: [],
     questionOrder: 5,
@@ -3360,14 +3360,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '4a2c941e-6343-4d5d-94a6-bd4bc1c5d476': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '4a2c941e-6343-4d5d-94a6-bd4bc1c5d476',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'Multi-Lookup',
     answerConfiguration: {
@@ -3376,8 +3376,8 @@ export const quesHashData = {
         'Protocol writing',
         'Sample size calculations',
         'study design',
-        'critical evaluation of customer protocol/design by our Advisory services analytics'
-      ]
+        'critical evaluation of customer protocol/design by our Advisory services analytics',
+      ],
     },
     roleNames: ['Core - Project Lead', 'Core - Proposal Developer'],
     answers: [],
@@ -3403,19 +3403,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: true
+    questionApproval: true,
   },
   '4a43e4fd-3a85-4678-91fb-33baaed52417': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '4a43e4fd-3a85-4678-91fb-33baaed52417',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'Heaven or Hell Text',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['(Test) Core Teamm'],
     answers: [],
@@ -3441,26 +3441,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '4bc31e61-4dc4-435a-bf61-41513f2d33cf': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '4bc31e61-4dc4-435a-bf61-41513f2d33cf',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'A question to test Radio type answer',
     answerConfiguration: {
       type: 'radio',
-      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW']
+      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW'],
     },
     roleNames: [
       'Core - Analytics Strategy Lead',
       'Core - Business Developer',
       'Core - Clinical DS&B',
       'Core - Medical Strategy Lead',
-      'Core - Project Lead'
+      'Core - Project Lead',
     ],
     answers: [
       {
@@ -3475,7 +3475,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:20:03.526Z',
-        updated_date: '2022-11-25T06:20:03.526Z'
+        updated_date: '2022-11-25T06:20:03.526Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -3489,7 +3489,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:20:03.526Z',
-        updated_date: '2022-11-25T06:20:03.526Z'
+        updated_date: '2022-11-25T06:20:03.526Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -3503,7 +3503,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:20:03.526Z',
-        updated_date: '2022-11-25T06:20:03.526Z'
+        updated_date: '2022-11-25T06:20:03.526Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -3517,7 +3517,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:20:03.526Z',
-        updated_date: '2022-11-25T06:20:03.526Z'
+        updated_date: '2022-11-25T06:20:03.526Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -3531,7 +3531,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:22:33.491Z',
-        updated_date: '2022-11-25T06:22:33.491Z'
+        updated_date: '2022-11-25T06:22:33.491Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -3545,7 +3545,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:22:33.491Z',
-        updated_date: '2022-11-25T06:22:33.491Z'
+        updated_date: '2022-11-25T06:22:33.491Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -3559,7 +3559,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:22:33.491Z',
-        updated_date: '2022-11-25T06:22:33.491Z'
+        updated_date: '2022-11-25T06:22:33.491Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -3573,7 +3573,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:22:33.491Z',
-        updated_date: '2022-11-25T06:22:33.491Z'
+        updated_date: '2022-11-25T06:22:33.491Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -3587,7 +3587,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:55:14.524Z',
-        updated_date: '2022-11-25T06:55:14.524Z'
+        updated_date: '2022-11-25T06:55:14.524Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -3601,7 +3601,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:55:14.524Z',
-        updated_date: '2022-11-25T06:55:14.524Z'
+        updated_date: '2022-11-25T06:55:14.524Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -3615,7 +3615,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:55:14.524Z',
-        updated_date: '2022-11-25T06:55:14.524Z'
+        updated_date: '2022-11-25T06:55:14.524Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -3629,7 +3629,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:55:14.524Z',
-        updated_date: '2022-11-25T06:55:14.524Z'
+        updated_date: '2022-11-25T06:55:14.524Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -3643,7 +3643,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T17:00:03.022Z',
-        updated_date: '2022-11-25T17:00:03.022Z'
+        updated_date: '2022-11-25T17:00:03.022Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -3657,7 +3657,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T17:00:03.022Z',
-        updated_date: '2022-11-25T17:00:03.022Z'
+        updated_date: '2022-11-25T17:00:03.022Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -3671,7 +3671,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T17:00:03.022Z',
-        updated_date: '2022-11-25T17:00:03.022Z'
+        updated_date: '2022-11-25T17:00:03.022Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -3685,7 +3685,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T17:00:03.022Z',
-        updated_date: '2022-11-25T17:00:03.022Z'
+        updated_date: '2022-11-25T17:00:03.022Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -3699,7 +3699,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T17:52:53.752Z',
-        updated_date: '2022-11-25T17:52:53.752Z'
+        updated_date: '2022-11-25T17:52:53.752Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -3713,7 +3713,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T17:52:53.752Z',
-        updated_date: '2022-11-25T17:52:53.752Z'
+        updated_date: '2022-11-25T17:52:53.752Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -3727,7 +3727,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T17:52:53.752Z',
-        updated_date: '2022-11-25T17:52:53.752Z'
+        updated_date: '2022-11-25T17:52:53.752Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -3741,7 +3741,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T17:52:53.752Z',
-        updated_date: '2022-11-25T17:52:53.752Z'
+        updated_date: '2022-11-25T17:52:53.752Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -3755,7 +3755,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T18:49:12.483Z',
-        updated_date: '2022-11-27T18:49:12.483Z'
+        updated_date: '2022-11-27T18:49:12.483Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -3769,7 +3769,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T18:49:12.483Z',
-        updated_date: '2022-11-27T18:49:12.483Z'
+        updated_date: '2022-11-27T18:49:12.483Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -3783,7 +3783,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T18:49:12.483Z',
-        updated_date: '2022-11-27T18:49:12.483Z'
+        updated_date: '2022-11-27T18:49:12.483Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -3797,8 +3797,8 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T18:49:12.483Z',
-        updated_date: '2022-11-27T18:49:12.483Z'
-      }
+        updated_date: '2022-11-27T18:49:12.483Z',
+      },
     ],
     questionOrder: 21,
     visible: true,
@@ -3819,19 +3819,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '4c68f9bd-1e9c-4675-aedc-3d7a46a41ae5': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '4c68f9bd-1e9c-4675-aedc-3d7a46a41ae5',
     section: {
       sectionOrder: 64,
-      sectionName: 'test1'
+      sectionName: 'test1',
     },
     questionText: 'test @777',
     answerConfiguration: {
       type: 'picklist',
-      options: ['Yes - face-to-face', 'Yes- virtual', 'No']
+      options: ['Yes - face-to-face', 'Yes- virtual', 'No'],
     },
     roleNames: ['Spec - Business Account Manager', 'Core - TSL'],
     answers: [],
@@ -3844,8 +3844,8 @@ export const quesHashData = {
     milestoneNew: [
       {
         Name: 'Prep',
-        Color: '#000000'
-      }
+        Color: '#000000',
+      },
     ],
     opportunityType:
       'Default Type,OT,ADSGH,APAC ,Core Clinical (Option 4),Ballpark,Opportunity Launch Call (not preferred),Strategy Call Template (Updated),Opportunity Launch Call (preferred)',
@@ -3861,19 +3861,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '535fd323-77b2-47ec-9454-4374534cafeb': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '535fd323-77b2-47ec-9454-4374534cafeb',
     section: {
       sectionOrder: 78,
-      sectionName: 'Events'
+      sectionName: 'Events',
     },
     questionText: 'EventTest1',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - TSL'],
     answers: [],
@@ -3896,14 +3896,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '5ac98328-96f0-420c-99bf-fc7fa3e776d9': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '5ac98328-96f0-420c-99bf-fc7fa3e776d9',
     section: {
       sectionOrder: 34,
-      sectionName: 'Action List'
+      sectionName: 'Action List',
     },
     questionText: 'Budget deliverable',
     answerConfiguration: {
@@ -3913,8 +3913,8 @@ export const quesHashData = {
         'N/A',
         'Price per Patient Range',
         'Ratecard & FTE Table (FSP Only)',
-        'Rounded Ballpark'
-      ]
+        'Rounded Ballpark',
+      ],
     },
     roleNames: ['Core - Medical Strategy Lead'],
     answers: [
@@ -3926,7 +3926,7 @@ export const quesHashData = {
         answer: ['Full Budget'],
         formattedAnswer: ['Full Budget'],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -3936,8 +3936,8 @@ export const quesHashData = {
         answer: ['Full Budget'],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: ['Full Budget'],
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 2,
     visible: true,
@@ -3949,7 +3949,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: ['Full Budget'],
-      time: '2022-11-28T05:48:30.899Z'
+      time: '2022-11-28T05:48:30.899Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -3962,19 +3962,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '5bfc2756-9354-4d9b-a1e6-b60c0c5d001b': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '5bfc2756-9354-4d9b-a1e6-b60c0c5d001b',
     section: {
       sectionOrder: 77,
-      sectionName: 'Answer History'
+      sectionName: 'Answer History',
     },
     questionText: 'AH6',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['(Test) Core Teamm'],
     answers: [
@@ -3986,7 +3986,7 @@ export const quesHashData = {
         answer: '2022-11-30',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'vamsi.krishna5@iqvia.com',
@@ -3995,7 +3995,7 @@ export const quesHashData = {
         date: '2022-09-05T13:09:23.983Z',
         answer: ' ',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: true
+        updatedInPG: true,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -4005,7 +4005,7 @@ export const quesHashData = {
         answer: '2023-01-25',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -4015,7 +4015,7 @@ export const quesHashData = {
         answer: '2023-01-25',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: '2023-01-25',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -4025,7 +4025,7 @@ export const quesHashData = {
         answer: '2023-01-25',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: '2023-01-25',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -4035,7 +4035,7 @@ export const quesHashData = {
         answer: '2023-11-30',
         formattedAnswer: '2023-11-30',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -4045,8 +4045,8 @@ export const quesHashData = {
         answer: '2023-11-30',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: '2023-11-30',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 5,
     visible: true,
@@ -4059,7 +4059,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '2023-11-30',
-      time: '2022-11-28T05:48:30.982Z'
+      time: '2022-11-28T05:48:30.982Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -4072,22 +4072,22 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '5c503ee9-72dc-4350-997d-35c79a1f0f8e': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '5c503ee9-72dc-4350-997d-35c79a1f0f8e',
     section: {
       sectionOrder: 72,
-      sectionName: 'New section'
+      sectionName: 'New section',
     },
     questionText: 'Que',
     answerConfiguration: {
       type: 'picklist',
       options: [
         'We must prepare the budget strictly according to the customer’s specifications - we are not allowed to change any of the specs provided by the customer',
-        'We are allowed to modify some specifications provided by the customer for the budget such as the number and/or distribution of countries and sites; screen failure rate; monitoring assumptions etc.'
-      ]
+        'We are allowed to modify some specifications provided by the customer for the budget such as the number and/or distribution of countries and sites; screen failure rate; monitoring assumptions etc.',
+      ],
     },
     roleNames: ['Core - Project Lead'],
     answers: [
@@ -4099,7 +4099,7 @@ export const quesHashData = {
         answer: ['test'],
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -4109,7 +4109,7 @@ export const quesHashData = {
         answer: ['test'],
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -4119,7 +4119,7 @@ export const quesHashData = {
         answer: ['test'],
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -4129,7 +4129,7 @@ export const quesHashData = {
         answer: ['test'],
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: ['test'],
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -4139,7 +4139,7 @@ export const quesHashData = {
         answer: ['test'],
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: ['test'],
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -4149,7 +4149,7 @@ export const quesHashData = {
         answer: ['test'],
         formattedAnswer: ['test'],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -4159,8 +4159,8 @@ export const quesHashData = {
         answer: ['test'],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: ['test'],
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 1,
     visible: true,
@@ -4177,7 +4177,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: ['test'],
-      time: '2022-11-28T05:48:31.078Z'
+      time: '2022-11-28T05:48:31.078Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -4192,19 +4192,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '5c6f1611-4b40-466f-8958-377974e5b3a8': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '5c6f1611-4b40-466f-8958-377974e5b3a8',
     section: {
       sectionOrder: 68,
-      sectionName: 'new444'
+      sectionName: 'new444',
     },
     questionText: 'jyyyyyyyyyyyyyyyyyykuyyyyyyyyyyyyyyyyyygjyjg',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - CEVA'],
     answers: [
@@ -4216,8 +4216,8 @@ export const quesHashData = {
         answer: '06-Dec-2022',
         formattedAnswer: '',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 1,
     visible: true,
@@ -4241,19 +4241,19 @@ export const quesHashData = {
     events:
       '{"EventSubject":"Testttt","EventBody":"<div data-contents=\\"true\\"><div data-block=\\"true\\" data-editor=\\"dinij\\" data-offset-key=\\"9gr1f-0-0\\"><div data-offset-key=\\"9gr1f-0-0\\" class=\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\"><span data-offset-key=\\"9gr1f-0-0\\"><br data-text=\\"true\\"></span></div></div></div>","EventPrimaryCondition":"Bid History Creation","ModifiedAt":"2022-11-07T07:15:06.447Z","EventRoles":["Core - Proposal Developer","(Test) Core Teamm"],"EntityType":"Events","ModifiedBy":"Ankit Sharma","EventUnitType":"Business Days","EventQuestionId":"5c6f1611-4b40-466f-8958-377974e5b3a8","SK":"EVENTS#f640c983-299b-4399-94f9-f39f31fdad9c","EventId":"f640c983-299b-4399-94f9-f39f31fdad9c","EventNoOfUnits":6,"PK":"EVENTS#f640c983-299b-4399-94f9-f39f31fdad9c","EventOperator":"addition","CreatedAt":"2022-11-07T07:15:06.447Z","questionId":"5c6f1611-4b40-466f-8958-377974e5b3a8"}',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '5d20d295-69b8-4fff-bc48-22dee17f0fbb': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '5d20d295-69b8-4fff-bc48-22dee17f0fbb',
     section: {
       sectionOrder: 73,
-      sectionName: 'Role Test_Do Not Answer_Automation data'
+      sectionName: 'Role Test_Do Not Answer_Automation data',
     },
     questionText: 'Question Role 4 test  ',
     answerConfiguration: {
       type: 'number',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -4276,19 +4276,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '60fe6d23-bb26-4bd7-84ea-d9f4279207b0': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '60fe6d23-bb26-4bd7-84ea-d9f4279207b0',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'test New icon_Text',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Business Account Manager'],
     answers: [],
@@ -4311,14 +4311,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: true
+    questionApproval: true,
   },
   '65e23228-5de2-48cf-ad45-e5828e35b41d': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '65e23228-5de2-48cf-ad45-e5828e35b41d',
     section: {
       sectionOrder: 74,
-      sectionName: 'Testing LOOKUP fields'
+      sectionName: 'Testing LOOKUP fields',
     },
     questionText: 'Multiselect look up',
     answerConfiguration: {
@@ -4341,8 +4341,8 @@ export const quesHashData = {
         'Imaging - CT scan',
         'Imaging - EEG',
         'Endoscopy',
-        'Other'
-      ]
+        'Other',
+      ],
     },
     roleNames: ['(Test) Core Teamm'],
     answers: [
@@ -4354,7 +4354,7 @@ export const quesHashData = {
         answer: ['Japan'],
         formattedAnswer: ['Japan'],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -4364,8 +4364,8 @@ export const quesHashData = {
         answer: ['Japan'],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: ['Japan'],
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 2,
     visible: true,
@@ -4380,7 +4380,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: ['Japan'],
-      time: '2022-11-28T05:48:31.183Z'
+      time: '2022-11-28T05:48:31.183Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -4393,19 +4393,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '6848eb9f-e710-4692-bb7e-c6e7ba9fcab4': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '6848eb9f-e710-4692-bb7e-c6e7ba9fcab4',
     section: {
       sectionOrder: 78,
-      sectionName: 'Events'
+      sectionName: 'Events',
     },
     questionText: 'SF answer 2',
     answerConfiguration: {
       type: 'number',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer', 'Core - Medical Strategy Lead'],
     answers: [
@@ -4417,7 +4417,7 @@ export const quesHashData = {
         answer: '30',
         formattedAnswer: '30',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -4427,8 +4427,8 @@ export const quesHashData = {
         answer: '30',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: '30',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 17,
     visible: true,
@@ -4440,7 +4440,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '30',
-      time: '2022-11-28T05:48:31.384Z'
+      time: '2022-11-28T05:48:31.384Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -4453,19 +4453,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '69d4622e-cd40-4006-b917-400c6a0ccf99': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '69d4622e-cd40-4006-b917-400c6a0ccf99',
     section: {
       sectionOrder: 3,
-      sectionName: 'SF answers(Text)'
+      sectionName: 'SF answers(Text)',
     },
     questionText: 'testing',
     answerConfiguration: {
       type: 'checkbox',
-      options: ['Data Management', 'Biostatistics', 'Medical Writing', 'none']
+      options: ['Data Management', 'Biostatistics', 'Medical Writing', 'none'],
     },
     roleNames: ['Core - Business Developer', 'Core - Analytics Strategy Lead'],
     answers: [],
@@ -4488,19 +4488,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '6bff16cf-87bd-400d-b0c7-0e61a0c62d7c': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '6bff16cf-87bd-400d-b0c7-0e61a0c62d7c',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: ' Akash Indicationn',
     answerConfiguration: {
       type: 'select',
-      options: ['dfcgvhb', 'APAC', 'Global', 'Japan']
+      options: ['dfcgvhb', 'APAC', 'Global', 'Japan'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -4523,19 +4523,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '6d0145c2-e3dd-47a4-b294-e214d2e56be8': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '6d0145c2-e3dd-47a4-b294-e214d2e56be8',
     section: {
       sectionOrder: 70,
-      sectionName: 'new666'
+      sectionName: 'new666',
     },
     questionText: 'ijillhfg',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - CEVA'],
     answers: [],
@@ -4560,19 +4560,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '70da4ae1-38d7-4d67-83e3-0bf8e79d2560': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '70da4ae1-38d7-4d67-83e3-0bf8e79d2560',
     section: {
       sectionOrder: 81,
-      sectionName: 'Business rule'
+      sectionName: 'Business rule',
     },
     questionText: 'Question to be attached',
     answerConfiguration: {
       type: 'select',
-      options: ['None', 'Some', 'All']
+      options: ['None', 'Some', 'All'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -4596,19 +4596,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '70ea4b04-792b-4285-9dfd-6bd711e39425': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '70ea4b04-792b-4285-9dfd-6bd711e39425',
     section: {
       sectionOrder: 79,
-      sectionName: 'Checkbox Validation'
+      sectionName: 'Checkbox Validation',
     },
     questionText: 'BR_Checkbox1',
     answerConfiguration: {
       type: 'checkbox',
-      options: ['blinded', 'named']
+      options: ['blinded', 'named'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -4634,19 +4634,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '773a73ec-d406-4eb1-9d2d-194fe37053f0': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '773a73ec-d406-4eb1-9d2d-194fe37053f0',
     section: {
       sectionOrder: 78,
-      sectionName: 'Events'
+      sectionName: 'Events',
     },
     questionText: 'Event3',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [
@@ -4658,8 +4658,8 @@ export const quesHashData = {
         answer: '01-Dec-2022',
         formattedAnswer: '',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 3,
     visible: true,
@@ -4684,24 +4684,24 @@ export const quesHashData = {
     events:
       '{"EventSubject":"Event test again","EventBody":"<p><strong><s><span style=\\"color: rgb(77, 81, 86); color: rgb(77, 81, 86)\\">React is a free and open-source front-end JavaScript library for building user interfaces based on UI components. It is maintained by Meta and a community of individual developers and companies.&nbsp;</span></s></strong><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class\\" href=\\"https://en.wikipedia.org/wiki/React_(JavaScript_library)\\"><strong><s><span style=\\"color: rgb(26, 13, 171); color: rgb(26, 13, 171)\\">Wikipedia</span></s></strong></a></p><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=react+initial+release+date&amp;stick=H4sIAAAAAAAAAOPgE-LWz9U3MDTKMSyrKNNSzii30k_Oz8lJTS7JzM_TL85PKylPLEq1SiwoSE0sUkhJLEldxCpVlJqYXKKQmZdZkpmYo1CUmpOaWJwKlgQAVJm841EAAAA&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0Q6BMoAHoECH8QAg\\"><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">Initial release date</span></strong></a><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">:&nbsp;</span></strong><span style=\\"color: rgb(77, 81, 86); color: rgb(77, 81, 86)\\">29 May 2013</span></p><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=react+platform&amp;stick=H4sIAAAAAAAAAOPgE-LWz9U3MDTKMSyrKNNSyCi30k_Oz8lJTS7JzM_TL85PKylPLEq1KshJLEnLL8pdxMpXlJqYXKIAEwAA2rqUBkIAAAA&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0Q6BMoAHoECHkQAg\\"><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">Platform</span></strong></a><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">:&nbsp;</span></strong><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=Web+platform&amp;stick=H4sIAAAAAAAAAOPgE-LWz9U3MDTKMSyrKFPiAnHSCtKzKyu0FDLKrfST83NyUpNLMvPz9Ivz00rKE4tSrQpyEkvS8otyF7HyhKcmKcC4O1gZd7EzcTAAAPZo_IhUAAAA&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0QmxMoAXoECHkQAw\\"><span style=\\"color: rgb(26, 13, 171); color: rgb(26, 13, 171)\\">Web platform</span></a></p><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=react+developers&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0Q6BMoAHoECF8QAg\\"><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">Developer(s)</span></strong></a><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">:&nbsp;</span></strong><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=Meta&amp;stick=H4sIAAAAAAAAAONgVuLSz9U3yMitTCsuW8TK4ptakggAq8ksHxUAAAA&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0QmxMoAXoECF8QAw\\"><span style=\\"color: rgb(26, 13, 171); color: rgb(26, 13, 171)\\">Meta</span></a>&nbsp;and community</p><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=react+original+authors&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0Q6BMoAHoECHwQAg\\"><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">Original author(s)</span></strong></a><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">:&nbsp;</span></strong><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=Jordan+Walke&amp;stick=H4sIAAAAAAAAAONgVuLVT9c3NMwwSTFLMjLKW8TK45VflJKYpxCemJOdCgDaMNwXIAAAAA&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0QmxMoAXoECHwQAw\\"><span style=\\"color: rgb(26, 13, 171); color: rgb(26, 13, 171)\\">Jordan Walke</span></a></p><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=react+license&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0Q6BMoAHoECH0QAg\\"><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">License</span></strong></a><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">:&nbsp;</span></strong><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=MIT+License&amp;stick=H4sIAAAAAAAAAONgVuLQz9U3MCkryF3Eyu3rGaLgk5mcmlecCgA_x3mRGgAAAA&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0QmxMoAXoECH0QAw\\"><span style=\\"color: rgb(26, 13, 171); color: rgb(26, 13, 171)\\">MIT License</span></a></p><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=react+repository&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0Q6BMoAHoECH4QAg\\"><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">Repository</span></strong></a><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">:&nbsp;</span></strong><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class\\" href=\\"http://github.com/facebook/react\\"><span style=\\"color: rgb(26, 13, 171); color: rgb(26, 13, 171)\\">github.com</span>/<span style=\\"color: rgb(26, 13, 171); color: rgb(26, 13, 171)\\">facebook</span>/react</a></p><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=react+programming+language&amp;stick=H4sIAAAAAAAAAOPgE-LWz9U3MDTKMSyrKNPSySi30k_Oz8lJTS7JzM_TL85PKylPLEq1KijKTy9KzM3NzEtXyEnMSy9NTE9dxCpVlJqYXKKATRIA9k8vDVoAAAA&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0Q6BMoAHoECHgQAg\\"><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">Programming language</span></strong></a><strong><span style=\\"color: rgb(32, 33, 36); color: rgb(32, 33, 36)\\">:&nbsp;</span></strong><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=JavaScript&amp;stick=H4sIAAAAAAAAAOPgE-LWz9U3MDTKMSyrKFPiAHGMCizNtXQyyq30k_NzclKTSzLz8_SL89NKyhOLUq0KivLTixJzczPz0hVyEvPSSxPTUxexcnklliUGJxdlFpTsYGXcxc7EwQAAZiXVbFwAAAA&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0QmxMoAXoECHgQAw\\"><span style=\\"color: rgb(26, 13, 171); color: rgb(26, 13, 171)\\">JavaScript</span></a></p><p>&nbsp;</p>","EventPrimaryCondition":"Bid History Creation","ModifiedAt":"2022-11-16T10:31:54.241Z","EventRoles":["(Test) Core Teamm","Team"],"EntityType":"Events","ModifiedBy":"Sushil Munda","EventUnitType":"Business Days","EventQuestionId":"773a73ec-d406-4eb1-9d2d-194fe37053f0","SK":"EVENTS#9d34663e-5189-4859-b944-6719fcbf2ce2","EventId":"9d34663e-5189-4859-b944-6719fcbf2ce2","EventNoOfUnits":3,"PK":"EVENTS#9d34663e-5189-4859-b944-6719fcbf2ce2","EventOperator":"addition","CreatedAt":"2022-11-16T10:31:54.241Z","questionId":"773a73ec-d406-4eb1-9d2d-194fe37053f0"}',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '77a97fe2-7659-4b80-b719-65382dd9f211': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '77a97fe2-7659-4b80-b719-65382dd9f211',
     section: {
       sectionOrder: 78,
-      sectionName: 'Events'
+      sectionName: 'Events',
     },
     questionText: 'Event10',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Medical Strategy Lead',
       'Core - Project Lead',
-      'Core - Proposal Developer'
+      'Core - Proposal Developer',
     ],
     answers: [
       {
@@ -4712,7 +4712,7 @@ export const quesHashData = {
         answer: '2021-09-30',
         formattedAnswer: '2021-09-30',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'rahul.tiwari@iqvia.com',
@@ -4721,7 +4721,7 @@ export const quesHashData = {
         date: '2022-11-28T05:38:58.004Z',
         answer: ' ',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: true
+        updatedInPG: true,
       },
       {
         user: 'UnityPredictedAnswer',
@@ -4731,8 +4731,8 @@ export const quesHashData = {
         answer: '30-Nov-2022',
         formattedAnswer: '',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 11,
     visible: true,
@@ -4746,7 +4746,7 @@ export const quesHashData = {
     hasDifferentSFanswer: true,
     currentSFanswer: {
       value: '2021-09-30',
-      time: '2022-11-28T05:48:31.548Z'
+      time: '2022-11-28T05:48:31.548Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -4760,25 +4760,25 @@ export const quesHashData = {
     events:
       '{"EventSubject":"[opportunity_number],[line_of_business],[customer]","EventBody":"1. React is a free and open-source front-end JavaScript library for building user interfaces based on UI components. It is maintained by Meta and a community of individual \\n2. developers and companies. Wikipedia\\n3. Initial release date: 29 May 2013\\n4. Platform: Web platform\\n5. Developer(s): Meta and community\\n6. Original author(s): Jordan Walke\\n7. License: MIT License\\n8. Repository: github.com/facebook/react\\n9. Programming language: JavaScript","EventPrimaryCondition":"Bid History Creation","ModifiedAt":"2022-11-16T15:48:11.147Z","EventRoles":["(Test) Core Teamm","Core - Proposal Developer","Core - Project Lead"],"EntityType":"Events","ModifiedBy":"Sushil Munda","EventUnitType":"Business Days","EventQuestionId":"77a97fe2-7659-4b80-b719-65382dd9f211","SK":"EVENTS#d61d990a-9b9c-4c95-9697-dad96c8e9684","EventId":"d61d990a-9b9c-4c95-9697-dad96c8e9684","EventNoOfUnits":2,"PK":"EVENTS#d61d990a-9b9c-4c95-9697-dad96c8e9684","EventOperator":"addition","CreatedAt":"2022-10-07T06:08:50.664Z","questionId":"77a97fe2-7659-4b80-b719-65382dd9f211"}',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '7e490369-ec74-4930-af26-12ce3d4c49e8': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '7e490369-ec74-4930-af26-12ce3d4c49e8',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'Question to test number type question',
     answerConfiguration: {
       type: 'number',
-      options: []
+      options: [],
     },
     roleNames: [
       'Spec - Feasibility',
       'Core - Analytics Strategy Lead',
       'Core - Clinical DS&B',
-      'Core - Business Developer'
+      'Core - Business Developer',
     ],
     answers: [],
     questionOrder: 23,
@@ -4800,25 +4800,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '7eacd7be-9092-4625-8bf0-f89deca7b40c': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '7eacd7be-9092-4625-8bf0-f89deca7b40c',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'testing multiselect',
     answerConfiguration: {
       type: 'picklist',
-      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW']
+      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW'],
     },
     roleNames: [
       'Core - Medical Strategy Lead',
       'Core - Clinical DS&B',
       'Core - Analytics Strategy Lead',
-      'Core - Business Developer'
+      'Core - Business Developer',
     ],
     answers: [],
     questionOrder: 18,
@@ -4840,19 +4840,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '815393d1-b65a-4b2c-9db8-e6798e3b5b13': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '815393d1-b65a-4b2c-9db8-e6798e3b5b13',
     section: {
       sectionOrder: 75,
-      sectionName: 'Salesforce Section Test'
+      sectionName: 'Salesforce Section Test',
     },
     questionText: 'SF MultiSelect question',
     answerConfiguration: {
       type: 'picklist-lookup',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Biostats'],
     answers: [
@@ -4864,7 +4864,7 @@ export const quesHashData = {
         answer: 'Awardable',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'sudhakar.palaniyappan@iqvia.com',
@@ -4873,7 +4873,7 @@ export const quesHashData = {
         date: '2022-08-26T14:19:07.717Z',
         answer: ['Ballpark'],
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'sudhakar.palaniyappan@iqvia.com',
@@ -4882,7 +4882,7 @@ export const quesHashData = {
         date: '2022-08-26T14:19:11.137Z',
         answer: ['Ballpark', 'Ballpark range PSB'],
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'sudhakar.palaniyappan@iqvia.com',
@@ -4891,7 +4891,7 @@ export const quesHashData = {
         date: '2022-08-26T14:19:16.076Z',
         answer: ['Ballpark', 'Ballpark range PSB', 'Price per patient'],
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -4901,7 +4901,7 @@ export const quesHashData = {
         answer: ['Rounded Ballpark'],
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -4911,7 +4911,7 @@ export const quesHashData = {
         answer: ['Rounded Ballpark'],
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: ['Rounded Ballpark'],
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -4921,7 +4921,7 @@ export const quesHashData = {
         answer: ['Rounded Ballpark'],
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: ['Rounded Ballpark'],
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -4931,7 +4931,7 @@ export const quesHashData = {
         answer: ['Full Budget'],
         formattedAnswer: ['Full Budget'],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -4941,8 +4941,8 @@ export const quesHashData = {
         answer: ['Full Budget'],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: ['Full Budget'],
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 2,
     visible: true,
@@ -4955,7 +4955,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: ['Full Budget'],
-      time: '2022-11-28T05:48:31.621Z'
+      time: '2022-11-28T05:48:31.621Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -4968,19 +4968,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '84ad1997-0d25-41e0-8071-bdf09b64782f': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '84ad1997-0d25-41e0-8071-bdf09b64782f',
     section: {
       sectionOrder: 73,
-      sectionName: 'Role Test_Do Not Answer_Automation data'
+      sectionName: 'Role Test_Do Not Answer_Automation data',
     },
     questionText: ' Question Role 2 test ',
     answerConfiguration: {
       type: 'picklist',
-      options: ['Call', 'Email']
+      options: ['Call', 'Email'],
     },
     roleNames: ['(Test) Specialty Team'],
     answers: [],
@@ -5003,14 +5003,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '84cb5673-c379-41da-8fd7-82df830a6fc7': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '84cb5673-c379-41da-8fd7-82df830a6fc7',
     section: {
       sectionOrder: 73,
-      sectionName: 'Role Test_Do Not Answer_Automation data'
+      sectionName: 'Role Test_Do Not Answer_Automation data',
     },
     questionText: ' Question Role 1 test ',
     answerConfiguration: {
@@ -5027,8 +5027,8 @@ export const quesHashData = {
         'CEC',
         'other-oversight group',
         'other - adjudication committee',
-        'none'
-      ]
+        'none',
+      ],
     },
     roleNames: ['(Test) Specialty Team'],
     answers: [],
@@ -5051,19 +5051,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '8754bff0-f0bc-4985-9342-a5746a5c2b22': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '8754bff0-f0bc-4985-9342-a5746a5c2b22',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'q002: if q001 is red then this should be blue',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       '(Test) Core Teamm',
@@ -5074,7 +5074,7 @@ export const quesHashData = {
       'Core - Business Developer',
       'Core - Project Lead',
       'Core - Proposal Developer',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [],
     questionOrder: 11,
@@ -5099,19 +5099,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '885c9508-43e8-498d-8b7a-28e85545e36d': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '885c9508-43e8-498d-8b7a-28e85545e36d',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'Number',
     answerConfiguration: {
       type: 'number',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [],
@@ -5137,19 +5137,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: true
+    questionApproval: true,
   },
   '8a535211-d234-4706-a93e-9cc7bfa036e0': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '8a535211-d234-4706-a93e-9cc7bfa036e0',
     section: {
       sectionOrder: 40,
-      sectionName: 'Proposal Team'
+      sectionName: 'Proposal Team',
     },
     questionText: 'PD',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['(Test) Core Teamm', '(Test) Specialty Team'],
     answers: [
@@ -5165,7 +5165,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:51:47.202Z',
-        updated_date: '2022-11-08T04:51:47.202Z'
+        updated_date: '2022-11-08T04:51:47.202Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5179,7 +5179,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:51:47.202Z',
-        updated_date: '2022-11-08T04:51:47.202Z'
+        updated_date: '2022-11-08T04:51:47.202Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5193,7 +5193,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:51:47.202Z',
-        updated_date: '2022-11-08T04:51:47.202Z'
+        updated_date: '2022-11-08T04:51:47.202Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5207,7 +5207,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:51:47.202Z',
-        updated_date: '2022-11-08T04:51:47.202Z'
+        updated_date: '2022-11-08T04:51:47.202Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5221,7 +5221,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:51:51.029Z',
-        updated_date: '2022-11-08T04:51:51.029Z'
+        updated_date: '2022-11-08T04:51:51.029Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5235,7 +5235,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:51:51.029Z',
-        updated_date: '2022-11-08T04:51:51.029Z'
+        updated_date: '2022-11-08T04:51:51.029Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5249,7 +5249,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:51:51.029Z',
-        updated_date: '2022-11-08T04:51:51.029Z'
+        updated_date: '2022-11-08T04:51:51.029Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5263,7 +5263,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:51:51.029Z',
-        updated_date: '2022-11-08T04:51:51.029Z'
+        updated_date: '2022-11-08T04:51:51.029Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5277,7 +5277,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:51:59.766Z',
-        updated_date: '2022-11-08T04:51:59.766Z'
+        updated_date: '2022-11-08T04:51:59.766Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5291,7 +5291,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:51:59.766Z',
-        updated_date: '2022-11-08T04:51:59.766Z'
+        updated_date: '2022-11-08T04:51:59.766Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5305,7 +5305,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:51:59.766Z',
-        updated_date: '2022-11-08T04:51:59.766Z'
+        updated_date: '2022-11-08T04:51:59.766Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5319,7 +5319,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:51:59.766Z',
-        updated_date: '2022-11-08T04:51:59.766Z'
+        updated_date: '2022-11-08T04:51:59.766Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5333,7 +5333,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:03.532Z',
-        updated_date: '2022-11-08T04:52:03.532Z'
+        updated_date: '2022-11-08T04:52:03.532Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5347,7 +5347,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:03.532Z',
-        updated_date: '2022-11-08T04:52:03.532Z'
+        updated_date: '2022-11-08T04:52:03.532Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5361,7 +5361,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:03.532Z',
-        updated_date: '2022-11-08T04:52:03.532Z'
+        updated_date: '2022-11-08T04:52:03.532Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5375,7 +5375,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:03.532Z',
-        updated_date: '2022-11-08T04:52:03.532Z'
+        updated_date: '2022-11-08T04:52:03.532Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5389,7 +5389,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:12.725Z',
-        updated_date: '2022-11-08T04:52:12.725Z'
+        updated_date: '2022-11-08T04:52:12.725Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5403,7 +5403,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:12.725Z',
-        updated_date: '2022-11-08T04:52:12.725Z'
+        updated_date: '2022-11-08T04:52:12.725Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5417,7 +5417,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:12.725Z',
-        updated_date: '2022-11-08T04:52:12.725Z'
+        updated_date: '2022-11-08T04:52:12.725Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5431,7 +5431,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:12.725Z',
-        updated_date: '2022-11-08T04:52:12.725Z'
+        updated_date: '2022-11-08T04:52:12.725Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5445,7 +5445,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:16.102Z',
-        updated_date: '2022-11-08T04:52:16.102Z'
+        updated_date: '2022-11-08T04:52:16.102Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5459,7 +5459,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:16.102Z',
-        updated_date: '2022-11-08T04:52:16.102Z'
+        updated_date: '2022-11-08T04:52:16.102Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5473,7 +5473,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:16.102Z',
-        updated_date: '2022-11-08T04:52:16.102Z'
+        updated_date: '2022-11-08T04:52:16.102Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5487,7 +5487,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:16.102Z',
-        updated_date: '2022-11-08T04:52:16.102Z'
+        updated_date: '2022-11-08T04:52:16.102Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5501,7 +5501,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:27.599Z',
-        updated_date: '2022-11-08T04:52:27.599Z'
+        updated_date: '2022-11-08T04:52:27.599Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5515,7 +5515,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:27.599Z',
-        updated_date: '2022-11-08T04:52:27.599Z'
+        updated_date: '2022-11-08T04:52:27.599Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5529,7 +5529,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:27.599Z',
-        updated_date: '2022-11-08T04:52:27.599Z'
+        updated_date: '2022-11-08T04:52:27.599Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5543,7 +5543,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:27.599Z',
-        updated_date: '2022-11-08T04:52:27.599Z'
+        updated_date: '2022-11-08T04:52:27.599Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5557,7 +5557,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:31.542Z',
-        updated_date: '2022-11-08T04:52:31.542Z'
+        updated_date: '2022-11-08T04:52:31.542Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5571,7 +5571,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:31.542Z',
-        updated_date: '2022-11-08T04:52:31.542Z'
+        updated_date: '2022-11-08T04:52:31.542Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5585,7 +5585,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:31.542Z',
-        updated_date: '2022-11-08T04:52:31.542Z'
+        updated_date: '2022-11-08T04:52:31.542Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5599,7 +5599,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:31.542Z',
-        updated_date: '2022-11-08T04:52:31.542Z'
+        updated_date: '2022-11-08T04:52:31.542Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5613,7 +5613,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:41.034Z',
-        updated_date: '2022-11-08T04:52:41.034Z'
+        updated_date: '2022-11-08T04:52:41.034Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5627,7 +5627,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:41.034Z',
-        updated_date: '2022-11-08T04:52:41.034Z'
+        updated_date: '2022-11-08T04:52:41.034Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5641,7 +5641,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:41.034Z',
-        updated_date: '2022-11-08T04:52:41.034Z'
+        updated_date: '2022-11-08T04:52:41.034Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5655,7 +5655,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:41.034Z',
-        updated_date: '2022-11-08T04:52:41.034Z'
+        updated_date: '2022-11-08T04:52:41.034Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5669,7 +5669,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:44.763Z',
-        updated_date: '2022-11-08T04:52:44.763Z'
+        updated_date: '2022-11-08T04:52:44.763Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5683,7 +5683,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:44.763Z',
-        updated_date: '2022-11-08T04:52:44.763Z'
+        updated_date: '2022-11-08T04:52:44.763Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5697,7 +5697,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:44.763Z',
-        updated_date: '2022-11-08T04:52:44.763Z'
+        updated_date: '2022-11-08T04:52:44.763Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5711,7 +5711,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:44.763Z',
-        updated_date: '2022-11-08T04:52:44.763Z'
+        updated_date: '2022-11-08T04:52:44.763Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5725,7 +5725,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:54.011Z',
-        updated_date: '2022-11-08T04:52:54.011Z'
+        updated_date: '2022-11-08T04:52:54.011Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5739,7 +5739,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:54.011Z',
-        updated_date: '2022-11-08T04:52:54.011Z'
+        updated_date: '2022-11-08T04:52:54.011Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5753,7 +5753,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:54.011Z',
-        updated_date: '2022-11-08T04:52:54.011Z'
+        updated_date: '2022-11-08T04:52:54.011Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5767,7 +5767,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:54.011Z',
-        updated_date: '2022-11-08T04:52:54.011Z'
+        updated_date: '2022-11-08T04:52:54.011Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5781,7 +5781,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:57.681Z',
-        updated_date: '2022-11-08T04:52:57.681Z'
+        updated_date: '2022-11-08T04:52:57.681Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5795,7 +5795,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:57.681Z',
-        updated_date: '2022-11-08T04:52:57.681Z'
+        updated_date: '2022-11-08T04:52:57.681Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5809,7 +5809,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:57.681Z',
-        updated_date: '2022-11-08T04:52:57.681Z'
+        updated_date: '2022-11-08T04:52:57.681Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5823,7 +5823,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:52:57.681Z',
-        updated_date: '2022-11-08T04:52:57.681Z'
+        updated_date: '2022-11-08T04:52:57.681Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5837,7 +5837,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:53:03.871Z',
-        updated_date: '2022-11-08T04:53:03.871Z'
+        updated_date: '2022-11-08T04:53:03.871Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5851,7 +5851,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:53:03.871Z',
-        updated_date: '2022-11-08T04:53:03.871Z'
+        updated_date: '2022-11-08T04:53:03.871Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5865,7 +5865,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:53:03.871Z',
-        updated_date: '2022-11-08T04:53:03.871Z'
+        updated_date: '2022-11-08T04:53:03.871Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5879,7 +5879,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:53:03.871Z',
-        updated_date: '2022-11-08T04:53:03.871Z'
+        updated_date: '2022-11-08T04:53:03.871Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5893,7 +5893,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:53:07.443Z',
-        updated_date: '2022-11-08T04:53:07.443Z'
+        updated_date: '2022-11-08T04:53:07.443Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5907,7 +5907,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:53:07.443Z',
-        updated_date: '2022-11-08T04:53:07.443Z'
+        updated_date: '2022-11-08T04:53:07.443Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5921,7 +5921,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:53:07.443Z',
-        updated_date: '2022-11-08T04:53:07.443Z'
+        updated_date: '2022-11-08T04:53:07.443Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5935,7 +5935,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:53:07.443Z',
-        updated_date: '2022-11-08T04:53:07.443Z'
+        updated_date: '2022-11-08T04:53:07.443Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5949,7 +5949,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:53:15.865Z',
-        updated_date: '2022-11-08T04:53:15.865Z'
+        updated_date: '2022-11-08T04:53:15.865Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5963,7 +5963,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:53:15.865Z',
-        updated_date: '2022-11-08T04:53:15.865Z'
+        updated_date: '2022-11-08T04:53:15.865Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5977,7 +5977,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:53:15.865Z',
-        updated_date: '2022-11-08T04:53:15.865Z'
+        updated_date: '2022-11-08T04:53:15.865Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -5991,7 +5991,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:53:15.865Z',
-        updated_date: '2022-11-08T04:53:15.865Z'
+        updated_date: '2022-11-08T04:53:15.865Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6005,7 +6005,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:53:19.338Z',
-        updated_date: '2022-11-08T04:53:19.338Z'
+        updated_date: '2022-11-08T04:53:19.338Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6019,7 +6019,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:53:19.338Z',
-        updated_date: '2022-11-08T04:53:19.338Z'
+        updated_date: '2022-11-08T04:53:19.338Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6033,7 +6033,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:53:19.338Z',
-        updated_date: '2022-11-08T04:53:19.338Z'
+        updated_date: '2022-11-08T04:53:19.338Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6047,7 +6047,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T04:53:19.338Z',
-        updated_date: '2022-11-08T04:53:19.338Z'
+        updated_date: '2022-11-08T04:53:19.338Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6061,7 +6061,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:00:08.928Z',
-        updated_date: '2022-11-08T05:00:08.928Z'
+        updated_date: '2022-11-08T05:00:08.928Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6075,7 +6075,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:00:08.928Z',
-        updated_date: '2022-11-08T05:00:08.928Z'
+        updated_date: '2022-11-08T05:00:08.928Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6089,7 +6089,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:00:08.928Z',
-        updated_date: '2022-11-08T05:00:08.928Z'
+        updated_date: '2022-11-08T05:00:08.928Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6103,7 +6103,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:00:08.928Z',
-        updated_date: '2022-11-08T05:00:08.928Z'
+        updated_date: '2022-11-08T05:00:08.928Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6117,7 +6117,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:00:22.109Z',
-        updated_date: '2022-11-08T05:00:22.109Z'
+        updated_date: '2022-11-08T05:00:22.109Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6131,7 +6131,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:00:22.109Z',
-        updated_date: '2022-11-08T05:00:22.109Z'
+        updated_date: '2022-11-08T05:00:22.109Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6145,7 +6145,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:00:22.109Z',
-        updated_date: '2022-11-08T05:00:22.109Z'
+        updated_date: '2022-11-08T05:00:22.109Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6159,7 +6159,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:00:22.109Z',
-        updated_date: '2022-11-08T05:00:22.109Z'
+        updated_date: '2022-11-08T05:00:22.109Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6173,7 +6173,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:00:40.612Z',
-        updated_date: '2022-11-08T05:00:40.612Z'
+        updated_date: '2022-11-08T05:00:40.612Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6187,7 +6187,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:00:40.612Z',
-        updated_date: '2022-11-08T05:00:40.612Z'
+        updated_date: '2022-11-08T05:00:40.612Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6201,7 +6201,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:00:40.612Z',
-        updated_date: '2022-11-08T05:00:40.612Z'
+        updated_date: '2022-11-08T05:00:40.612Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6215,7 +6215,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:00:40.612Z',
-        updated_date: '2022-11-08T05:00:40.612Z'
+        updated_date: '2022-11-08T05:00:40.612Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6229,7 +6229,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:00:45.211Z',
-        updated_date: '2022-11-08T05:00:45.211Z'
+        updated_date: '2022-11-08T05:00:45.211Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6243,7 +6243,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:00:45.211Z',
-        updated_date: '2022-11-08T05:00:45.211Z'
+        updated_date: '2022-11-08T05:00:45.211Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6257,7 +6257,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:00:45.211Z',
-        updated_date: '2022-11-08T05:00:45.211Z'
+        updated_date: '2022-11-08T05:00:45.211Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6271,7 +6271,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:00:45.211Z',
-        updated_date: '2022-11-08T05:00:45.211Z'
+        updated_date: '2022-11-08T05:00:45.211Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6285,7 +6285,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:00:53.948Z',
-        updated_date: '2022-11-08T05:00:53.948Z'
+        updated_date: '2022-11-08T05:00:53.948Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6299,7 +6299,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:00:53.948Z',
-        updated_date: '2022-11-08T05:00:53.948Z'
+        updated_date: '2022-11-08T05:00:53.948Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6313,7 +6313,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:00:53.948Z',
-        updated_date: '2022-11-08T05:00:53.948Z'
+        updated_date: '2022-11-08T05:00:53.948Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6327,7 +6327,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:00:53.948Z',
-        updated_date: '2022-11-08T05:00:53.948Z'
+        updated_date: '2022-11-08T05:00:53.948Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6341,7 +6341,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:00:57.965Z',
-        updated_date: '2022-11-08T05:00:57.965Z'
+        updated_date: '2022-11-08T05:00:57.965Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6355,7 +6355,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:00:57.965Z',
-        updated_date: '2022-11-08T05:00:57.965Z'
+        updated_date: '2022-11-08T05:00:57.965Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6369,7 +6369,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:00:57.965Z',
-        updated_date: '2022-11-08T05:00:57.965Z'
+        updated_date: '2022-11-08T05:00:57.965Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6383,7 +6383,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:00:57.965Z',
-        updated_date: '2022-11-08T05:00:57.965Z'
+        updated_date: '2022-11-08T05:00:57.965Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6397,7 +6397,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:03.637Z',
-        updated_date: '2022-11-08T05:01:03.637Z'
+        updated_date: '2022-11-08T05:01:03.637Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6411,7 +6411,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:03.637Z',
-        updated_date: '2022-11-08T05:01:03.637Z'
+        updated_date: '2022-11-08T05:01:03.637Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6425,7 +6425,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:03.637Z',
-        updated_date: '2022-11-08T05:01:03.637Z'
+        updated_date: '2022-11-08T05:01:03.637Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6439,7 +6439,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:03.637Z',
-        updated_date: '2022-11-08T05:01:03.637Z'
+        updated_date: '2022-11-08T05:01:03.637Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6453,7 +6453,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:07.651Z',
-        updated_date: '2022-11-08T05:01:07.651Z'
+        updated_date: '2022-11-08T05:01:07.651Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6467,7 +6467,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:07.651Z',
-        updated_date: '2022-11-08T05:01:07.651Z'
+        updated_date: '2022-11-08T05:01:07.651Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6481,7 +6481,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:07.651Z',
-        updated_date: '2022-11-08T05:01:07.651Z'
+        updated_date: '2022-11-08T05:01:07.651Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6495,7 +6495,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:07.651Z',
-        updated_date: '2022-11-08T05:01:07.651Z'
+        updated_date: '2022-11-08T05:01:07.651Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6509,7 +6509,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:16.234Z',
-        updated_date: '2022-11-08T05:01:16.234Z'
+        updated_date: '2022-11-08T05:01:16.234Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6523,7 +6523,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:16.234Z',
-        updated_date: '2022-11-08T05:01:16.234Z'
+        updated_date: '2022-11-08T05:01:16.234Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6537,7 +6537,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:16.234Z',
-        updated_date: '2022-11-08T05:01:16.234Z'
+        updated_date: '2022-11-08T05:01:16.234Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6551,7 +6551,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:16.234Z',
-        updated_date: '2022-11-08T05:01:16.234Z'
+        updated_date: '2022-11-08T05:01:16.234Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6565,7 +6565,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:19.611Z',
-        updated_date: '2022-11-08T05:01:19.611Z'
+        updated_date: '2022-11-08T05:01:19.611Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6579,7 +6579,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:19.611Z',
-        updated_date: '2022-11-08T05:01:19.611Z'
+        updated_date: '2022-11-08T05:01:19.611Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6593,7 +6593,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:19.611Z',
-        updated_date: '2022-11-08T05:01:19.611Z'
+        updated_date: '2022-11-08T05:01:19.611Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6607,7 +6607,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:19.611Z',
-        updated_date: '2022-11-08T05:01:19.611Z'
+        updated_date: '2022-11-08T05:01:19.611Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6621,7 +6621,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:27.482Z',
-        updated_date: '2022-11-08T05:01:27.482Z'
+        updated_date: '2022-11-08T05:01:27.482Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6635,7 +6635,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:27.482Z',
-        updated_date: '2022-11-08T05:01:27.482Z'
+        updated_date: '2022-11-08T05:01:27.482Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6649,7 +6649,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:27.482Z',
-        updated_date: '2022-11-08T05:01:27.482Z'
+        updated_date: '2022-11-08T05:01:27.482Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6663,7 +6663,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:27.482Z',
-        updated_date: '2022-11-08T05:01:27.482Z'
+        updated_date: '2022-11-08T05:01:27.482Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6677,7 +6677,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:31.921Z',
-        updated_date: '2022-11-08T05:01:31.921Z'
+        updated_date: '2022-11-08T05:01:31.921Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6691,7 +6691,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:31.921Z',
-        updated_date: '2022-11-08T05:01:31.921Z'
+        updated_date: '2022-11-08T05:01:31.921Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6705,7 +6705,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:31.921Z',
-        updated_date: '2022-11-08T05:01:31.921Z'
+        updated_date: '2022-11-08T05:01:31.921Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6719,7 +6719,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:31.921Z',
-        updated_date: '2022-11-08T05:01:31.921Z'
+        updated_date: '2022-11-08T05:01:31.921Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6733,7 +6733,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:38.149Z',
-        updated_date: '2022-11-08T05:01:38.149Z'
+        updated_date: '2022-11-08T05:01:38.149Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6747,7 +6747,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:38.149Z',
-        updated_date: '2022-11-08T05:01:38.149Z'
+        updated_date: '2022-11-08T05:01:38.149Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6761,7 +6761,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:38.149Z',
-        updated_date: '2022-11-08T05:01:38.149Z'
+        updated_date: '2022-11-08T05:01:38.149Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6775,7 +6775,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:38.149Z',
-        updated_date: '2022-11-08T05:01:38.149Z'
+        updated_date: '2022-11-08T05:01:38.149Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6789,7 +6789,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:41.743Z',
-        updated_date: '2022-11-08T05:01:41.743Z'
+        updated_date: '2022-11-08T05:01:41.743Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6803,7 +6803,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:41.743Z',
-        updated_date: '2022-11-08T05:01:41.743Z'
+        updated_date: '2022-11-08T05:01:41.743Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6817,7 +6817,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:41.743Z',
-        updated_date: '2022-11-08T05:01:41.743Z'
+        updated_date: '2022-11-08T05:01:41.743Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6831,7 +6831,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:41.743Z',
-        updated_date: '2022-11-08T05:01:41.743Z'
+        updated_date: '2022-11-08T05:01:41.743Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6845,7 +6845,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:46.912Z',
-        updated_date: '2022-11-08T05:01:46.912Z'
+        updated_date: '2022-11-08T05:01:46.912Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6859,7 +6859,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:46.912Z',
-        updated_date: '2022-11-08T05:01:46.912Z'
+        updated_date: '2022-11-08T05:01:46.912Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6873,7 +6873,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:46.912Z',
-        updated_date: '2022-11-08T05:01:46.912Z'
+        updated_date: '2022-11-08T05:01:46.912Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6887,7 +6887,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:46.912Z',
-        updated_date: '2022-11-08T05:01:46.912Z'
+        updated_date: '2022-11-08T05:01:46.912Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6901,7 +6901,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:50.741Z',
-        updated_date: '2022-11-08T05:01:50.741Z'
+        updated_date: '2022-11-08T05:01:50.741Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6915,7 +6915,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:50.741Z',
-        updated_date: '2022-11-08T05:01:50.741Z'
+        updated_date: '2022-11-08T05:01:50.741Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6929,7 +6929,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:50.741Z',
-        updated_date: '2022-11-08T05:01:50.741Z'
+        updated_date: '2022-11-08T05:01:50.741Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6943,7 +6943,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:01:50.741Z',
-        updated_date: '2022-11-08T05:01:50.741Z'
+        updated_date: '2022-11-08T05:01:50.741Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6957,7 +6957,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:00.321Z',
-        updated_date: '2022-11-08T05:02:00.321Z'
+        updated_date: '2022-11-08T05:02:00.321Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6971,7 +6971,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:00.321Z',
-        updated_date: '2022-11-08T05:02:00.321Z'
+        updated_date: '2022-11-08T05:02:00.321Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6985,7 +6985,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:00.321Z',
-        updated_date: '2022-11-08T05:02:00.321Z'
+        updated_date: '2022-11-08T05:02:00.321Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -6999,7 +6999,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:00.321Z',
-        updated_date: '2022-11-08T05:02:00.321Z'
+        updated_date: '2022-11-08T05:02:00.321Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7013,7 +7013,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:04.943Z',
-        updated_date: '2022-11-08T05:02:04.943Z'
+        updated_date: '2022-11-08T05:02:04.943Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7027,7 +7027,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:04.943Z',
-        updated_date: '2022-11-08T05:02:04.943Z'
+        updated_date: '2022-11-08T05:02:04.943Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7041,7 +7041,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:04.943Z',
-        updated_date: '2022-11-08T05:02:04.943Z'
+        updated_date: '2022-11-08T05:02:04.943Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7055,7 +7055,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:04.943Z',
-        updated_date: '2022-11-08T05:02:04.943Z'
+        updated_date: '2022-11-08T05:02:04.943Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7069,7 +7069,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:19.365Z',
-        updated_date: '2022-11-08T05:02:19.365Z'
+        updated_date: '2022-11-08T05:02:19.365Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7083,7 +7083,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:19.365Z',
-        updated_date: '2022-11-08T05:02:19.365Z'
+        updated_date: '2022-11-08T05:02:19.365Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7097,7 +7097,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:19.365Z',
-        updated_date: '2022-11-08T05:02:19.365Z'
+        updated_date: '2022-11-08T05:02:19.365Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7111,7 +7111,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:19.365Z',
-        updated_date: '2022-11-08T05:02:19.365Z'
+        updated_date: '2022-11-08T05:02:19.365Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7125,7 +7125,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:23.541Z',
-        updated_date: '2022-11-08T05:02:23.541Z'
+        updated_date: '2022-11-08T05:02:23.541Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7139,7 +7139,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:23.541Z',
-        updated_date: '2022-11-08T05:02:23.541Z'
+        updated_date: '2022-11-08T05:02:23.541Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7153,7 +7153,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:23.541Z',
-        updated_date: '2022-11-08T05:02:23.541Z'
+        updated_date: '2022-11-08T05:02:23.541Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7167,7 +7167,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:23.541Z',
-        updated_date: '2022-11-08T05:02:23.541Z'
+        updated_date: '2022-11-08T05:02:23.541Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7181,7 +7181,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:31.497Z',
-        updated_date: '2022-11-08T05:02:31.497Z'
+        updated_date: '2022-11-08T05:02:31.497Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7195,7 +7195,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:31.497Z',
-        updated_date: '2022-11-08T05:02:31.497Z'
+        updated_date: '2022-11-08T05:02:31.497Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7209,7 +7209,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:31.497Z',
-        updated_date: '2022-11-08T05:02:31.497Z'
+        updated_date: '2022-11-08T05:02:31.497Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7223,7 +7223,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:31.497Z',
-        updated_date: '2022-11-08T05:02:31.497Z'
+        updated_date: '2022-11-08T05:02:31.497Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7237,7 +7237,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:35.476Z',
-        updated_date: '2022-11-08T05:02:35.476Z'
+        updated_date: '2022-11-08T05:02:35.476Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7251,7 +7251,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:35.476Z',
-        updated_date: '2022-11-08T05:02:35.476Z'
+        updated_date: '2022-11-08T05:02:35.476Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7265,7 +7265,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:35.476Z',
-        updated_date: '2022-11-08T05:02:35.476Z'
+        updated_date: '2022-11-08T05:02:35.476Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7279,7 +7279,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:35.476Z',
-        updated_date: '2022-11-08T05:02:35.476Z'
+        updated_date: '2022-11-08T05:02:35.476Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7293,7 +7293,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:52.675Z',
-        updated_date: '2022-11-08T05:02:52.675Z'
+        updated_date: '2022-11-08T05:02:52.675Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7307,7 +7307,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:52.675Z',
-        updated_date: '2022-11-08T05:02:52.675Z'
+        updated_date: '2022-11-08T05:02:52.675Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7321,7 +7321,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:52.675Z',
-        updated_date: '2022-11-08T05:02:52.675Z'
+        updated_date: '2022-11-08T05:02:52.675Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7335,7 +7335,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:52.675Z',
-        updated_date: '2022-11-08T05:02:52.675Z'
+        updated_date: '2022-11-08T05:02:52.675Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7349,7 +7349,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:57.330Z',
-        updated_date: '2022-11-08T05:02:57.330Z'
+        updated_date: '2022-11-08T05:02:57.330Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7363,7 +7363,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:57.330Z',
-        updated_date: '2022-11-08T05:02:57.330Z'
+        updated_date: '2022-11-08T05:02:57.330Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7377,7 +7377,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:57.330Z',
-        updated_date: '2022-11-08T05:02:57.330Z'
+        updated_date: '2022-11-08T05:02:57.330Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7391,7 +7391,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:02:57.330Z',
-        updated_date: '2022-11-08T05:02:57.330Z'
+        updated_date: '2022-11-08T05:02:57.330Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7405,7 +7405,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:03:25.301Z',
-        updated_date: '2022-11-08T05:03:25.301Z'
+        updated_date: '2022-11-08T05:03:25.301Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7419,7 +7419,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:03:25.301Z',
-        updated_date: '2022-11-08T05:03:25.301Z'
+        updated_date: '2022-11-08T05:03:25.301Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7433,7 +7433,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:03:25.301Z',
-        updated_date: '2022-11-08T05:03:25.301Z'
+        updated_date: '2022-11-08T05:03:25.301Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7447,7 +7447,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:03:25.301Z',
-        updated_date: '2022-11-08T05:03:25.301Z'
+        updated_date: '2022-11-08T05:03:25.301Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7461,7 +7461,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:03:29.659Z',
-        updated_date: '2022-11-08T05:03:29.659Z'
+        updated_date: '2022-11-08T05:03:29.659Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7475,7 +7475,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:03:29.659Z',
-        updated_date: '2022-11-08T05:03:29.659Z'
+        updated_date: '2022-11-08T05:03:29.659Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7489,7 +7489,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:03:29.659Z',
-        updated_date: '2022-11-08T05:03:29.659Z'
+        updated_date: '2022-11-08T05:03:29.659Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7503,7 +7503,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:03:29.659Z',
-        updated_date: '2022-11-08T05:03:29.659Z'
+        updated_date: '2022-11-08T05:03:29.659Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7517,7 +7517,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:03:40.153Z',
-        updated_date: '2022-11-08T05:03:40.153Z'
+        updated_date: '2022-11-08T05:03:40.153Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7531,7 +7531,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:03:40.153Z',
-        updated_date: '2022-11-08T05:03:40.153Z'
+        updated_date: '2022-11-08T05:03:40.153Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7545,7 +7545,7 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:03:40.153Z',
-        updated_date: '2022-11-08T05:03:40.153Z'
+        updated_date: '2022-11-08T05:03:40.153Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -7559,8 +7559,8 @@ export const quesHashData = {
         created_by: '1138123',
         updated_by: '1138123',
         created_date: '2022-11-08T05:03:40.153Z',
-        updated_date: '2022-11-08T05:03:40.153Z'
-      }
+        updated_date: '2022-11-08T05:03:40.153Z',
+      },
     ],
     questionOrder: 30,
     visible: true,
@@ -7573,7 +7573,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '',
-      time: '2022-11-28T05:48:32.050Z'
+      time: '2022-11-28T05:48:32.050Z',
     },
     isCustomQuestion: false,
     questionJSON: '',
@@ -7584,19 +7584,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '8a554654-04aa-4bac-a219-5357651cf237': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '8a554654-04aa-4bac-a219-5357651cf237',
     section: {
       sectionOrder: 78,
-      sectionName: 'Events'
+      sectionName: 'Events',
     },
     questionText: 'Event2',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [
@@ -7608,7 +7608,7 @@ export const quesHashData = {
         answer: '2021-09-30',
         formattedAnswer: '2021-09-30',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -7618,8 +7618,8 @@ export const quesHashData = {
         answer: '2021-09-30',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: '2021-09-30',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 2,
     visible: true,
@@ -7634,7 +7634,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '2021-09-30',
-      time: '2022-11-28T05:48:32.143Z'
+      time: '2022-11-28T05:48:32.143Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -7648,19 +7648,19 @@ export const quesHashData = {
     events:
       '{"EventSubject":"kuch to likh bhai..............\\nnai likhana bhai","EventBody":"<p><strong style=\\"font-family: Georgia, serif; font-size: 18px;\\">React is free and open-source front-end JavaScript library for Building user interfaces based on UI components. It is maintained by Meta and a community of individual developera and companies.&nbsp;</strong><a href=\\"https://en.wikipedia.org/wiki/React_(JavaScript_library)\\" target=\\"_blank\\"><strong style=\\"font-family: Georgia, serif; font-size: 18px;\\">Wikipedia</strong></a></p><p>1. Initial release date: 29 may 2013</p><p>2. Platform:&nbsp;<a href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=Web+platform&amp;stick=H4sIAAAAAAAAAOPgE-LWz9U3MDTKMSyrKFPiAnHSCtKzKyu0FDLKrfST83NyUpNLMvPz9Ivz00rKE4tSrQpyEkvS8otyF7HyhKcmKcC4O1gZd7EzcTAAAPZo_IhUAAAA&amp;sa=X&amp;ved=2ahUKEwic7bjG8K_7AhUHiGMGHUuMCn0QmxMoAXoECHkQAw\\" target=\\"_blank\\">Web platform</a>&nbsp;added</p><br>","EventPrimaryCondition":"Bid History Creation","ModifiedAt":"2022-11-18T10:10:35.368Z","EventRoles":["Core - Business Developer","(Test) Specialty Team"],"EntityType":"Events","ModifiedBy":"Amrita Mohanta","EventUnitType":"Business Days","EventQuestionId":"8a554654-04aa-4bac-a219-5357651cf237","SK":"EVENTS#b1776ee0-d62f-4b40-9bbf-3f4124f69b9d","EventId":"b1776ee0-d62f-4b40-9bbf-3f4124f69b9d","EventNoOfUnits":1,"PK":"EVENTS#b1776ee0-d62f-4b40-9bbf-3f4124f69b9d","EventOperator":"addition","CreatedAt":"2022-10-05T03:37:43.541Z","questionId":"8a554654-04aa-4bac-a219-5357651cf237"}',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '8b191939-7c54-4c07-9344-728e02223b5f': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '8b191939-7c54-4c07-9344-728e02223b5f',
     section: {
       sectionOrder: 81,
-      sectionName: 'Business rule'
+      sectionName: 'Business rule',
     },
     questionText: 'Datasource to check LOV',
     answerConfiguration: {
       type: 'checkbox',
-      options: ['No', 'Yes']
+      options: ['No', 'Yes'],
     },
     roleNames: [
       'Spec - Biostats',
@@ -7675,7 +7675,7 @@ export const quesHashData = {
       'Core - Clinical DS&B',
       'Core - Business Developer',
       '(Test) Core Teamm',
-      '(Test) Specialty Team'
+      '(Test) Specialty Team',
     ],
     answers: [
       {
@@ -7686,7 +7686,7 @@ export const quesHashData = {
         answer: 'No',
         formattedAnswer: 'No',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'rahul.tiwari@iqvia.com',
@@ -7695,8 +7695,8 @@ export const quesHashData = {
         date: '2022-11-28T05:38:47.525Z',
         answer: ['Yes'],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 6,
     visible: true,
@@ -7709,7 +7709,7 @@ export const quesHashData = {
     hasDifferentSFanswer: true,
     currentSFanswer: {
       value: 'No',
-      time: '2022-11-28T05:48:32.227Z'
+      time: '2022-11-28T05:48:32.227Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -7722,19 +7722,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '8c37b79a-4b5d-44d1-935a-2d8a42c488a9': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '8c37b79a-4b5d-44d1-935a-2d8a42c488a9',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'Test Colon',
     answerConfiguration: {
       type: 'select',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Clinical DS&B', 'Core - Business Developer'],
     answers: [],
@@ -7763,19 +7763,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: true
+    questionApproval: true,
   },
   '91818dff-c679-4392-9bec-b6de9923e965': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '91818dff-c679-4392-9bec-b6de9923e965',
     section: {
       sectionOrder: 6,
-      sectionName: 'Diversity and Inclusion'
+      sectionName: 'Diversity and Inclusion',
     },
     questionText: 'Please explain Other',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['(Test) Core Teamm', '(Test) Specialty Team'],
     answers: [],
@@ -7798,19 +7798,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '927a2f3d-f4d8-4c88-840f-0946bc27a717': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '927a2f3d-f4d8-4c88-840f-0946bc27a717',
     section: {
       sectionOrder: 73,
-      sectionName: 'Role Test_Do Not Answer_Automation data'
+      sectionName: 'Role Test_Do Not Answer_Automation data',
     },
     questionText: 'predicted text',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['(Test) Core Teamm'],
     answers: [],
@@ -7835,20 +7835,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '93783727-64e6-4f8e-aace-b15264b78ba1': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '93783727-64e6-4f8e-aace-b15264b78ba1',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText:
       'q004: if q003 is yes then the answer should have Ford, Ferrari and BMW',
     answerConfiguration: {
       type: 'picklist',
-      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW']
+      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW'],
     },
     roleNames: [
       'Core - Analytics Strategy Lead',
@@ -7857,7 +7857,7 @@ export const quesHashData = {
       'Core - Medical Strategy Lead',
       'Core - Proposal Developer',
       'Core - Project Lead',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [],
     questionOrder: 13,
@@ -7884,19 +7884,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '964e57e6-367c-468f-8eb4-dbefb61298be': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '964e57e6-367c-468f-8eb4-dbefb61298be',
     section: {
       sectionOrder: 40,
-      sectionName: 'Proposal Team'
+      sectionName: 'Proposal Team',
     },
     questionText: 'TSL Testing',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['(Test) Core Teamm'],
     answers: [
@@ -7907,7 +7907,7 @@ export const quesHashData = {
         date: '2022-11-16T08:19:35.145Z',
         answer: 'Abhishek Jha(abhishek.jha@iqvia.com)',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: true
+        updatedInPG: true,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -7917,7 +7917,7 @@ export const quesHashData = {
         answer: '',
         formattedAnswer: '',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -7927,8 +7927,8 @@ export const quesHashData = {
         answer: '',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: '',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 31,
     visible: true,
@@ -7941,7 +7941,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '',
-      time: '2022-11-28T05:48:32.303Z'
+      time: '2022-11-28T05:48:32.303Z',
     },
     isCustomQuestion: false,
     questionJSON: '',
@@ -7952,19 +7952,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '9693cca4-e132-494d-ba49-68fe956dfac6': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '9693cca4-e132-494d-ba49-68fe956dfac6',
     section: {
       sectionOrder: 2,
-      sectionName: 'Customer Scenarios & BTS RFPs'
+      sectionName: 'Customer Scenarios & BTS RFPs',
     },
     questionText: 'Test',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - TSL'],
     answers: [],
@@ -7987,19 +7987,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '976e0675-cb16-4d4c-b7c4-eb35626d46f3': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '976e0675-cb16-4d4c-b7c4-eb35626d46f3',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'this is a yes no question',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -8022,19 +8022,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '9896cb42-ef1b-43e8-94ae-ebf713f736c2': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '9896cb42-ef1b-43e8-94ae-ebf713f736c2',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'Single-Lookup',
     answerConfiguration: {
       type: 'select-lookup',
-      options: ['IQVIA', 'Customer']
+      options: ['IQVIA', 'Customer'],
     },
     roleNames: ['Core - Proposal Developer', 'Core - TSL', 'Spec - Biostats'],
     answers: [],
@@ -8060,19 +8060,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: true
+    questionApproval: true,
   },
   '9b4313c8-9645-4e61-9d9b-b7f6bd0cc035': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '9b4313c8-9645-4e61-9d9b-b7f6bd0cc035',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'test question 001 this is radio type',
     answerConfiguration: {
       type: 'radio',
-      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW']
+      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW'],
     },
     roleNames: [
       'Core - Business Developer',
@@ -8081,7 +8081,7 @@ export const quesHashData = {
       'Core - Proposal Developer',
       'Core - Clinical DS&B',
       'Core - Analytics Strategy Lead',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [
       {
@@ -8096,7 +8096,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:54:45.911Z',
-        updated_date: '2022-11-25T06:54:45.911Z'
+        updated_date: '2022-11-25T06:54:45.911Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -8110,7 +8110,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:54:45.911Z',
-        updated_date: '2022-11-25T06:54:45.911Z'
+        updated_date: '2022-11-25T06:54:45.911Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -8124,7 +8124,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:54:45.911Z',
-        updated_date: '2022-11-25T06:54:45.911Z'
+        updated_date: '2022-11-25T06:54:45.911Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -8138,7 +8138,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:54:45.911Z',
-        updated_date: '2022-11-25T06:54:45.911Z'
+        updated_date: '2022-11-25T06:54:45.911Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -8152,7 +8152,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T15:39:33.699Z',
-        updated_date: '2022-11-27T15:39:33.699Z'
+        updated_date: '2022-11-27T15:39:33.699Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -8166,7 +8166,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T15:39:33.699Z',
-        updated_date: '2022-11-27T15:39:33.699Z'
+        updated_date: '2022-11-27T15:39:33.699Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -8180,7 +8180,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T15:39:33.699Z',
-        updated_date: '2022-11-27T15:39:33.699Z'
+        updated_date: '2022-11-27T15:39:33.699Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -8194,8 +8194,8 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T15:39:33.699Z',
-        updated_date: '2022-11-27T15:39:33.699Z'
-      }
+        updated_date: '2022-11-27T15:39:33.699Z',
+      },
     ],
     questionOrder: 28,
     visible: true,
@@ -8217,19 +8217,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '9cb0c382-b02d-4f98-8ee4-802472da99b6': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '9cb0c382-b02d-4f98-8ee4-802472da99b6',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'radiotype test 001 01',
     answerConfiguration: {
       type: 'radio',
-      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW']
+      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW'],
     },
     roleNames: [
       'Core - Medical Strategy Lead',
@@ -8238,7 +8238,7 @@ export const quesHashData = {
       'Core - Analytics Strategy Lead',
       'Core - Project Lead',
       'Core - Proposal Developer',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [],
     questionOrder: 16,
@@ -8260,20 +8260,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '9e23a17a-8e2d-439c-80d5-39b6ae68ed41': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '9e23a17a-8e2d-439c-80d5-39b6ae68ed41',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText:
       'Who will be responsible for site contracts and negotiation efforts?',
     answerConfiguration: {
       type: 'select',
-      options: ['IQVIA', 'Customer']
+      options: ['IQVIA', 'Customer'],
     },
     roleNames: ['Spec - RSU', 'Core - Project Lead'],
     answers: [],
@@ -8297,19 +8297,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '9eb5eec7-d357-4855-926c-27a1c6a6de1d': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '9eb5eec7-d357-4855-926c-27a1c6a6de1d',
     section: {
       sectionOrder: 77,
-      sectionName: 'Answer History'
+      sectionName: 'Answer History',
     },
     questionText: 'AH9',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['(Test) Core Teamm'],
     answers: [
@@ -8320,8 +8320,8 @@ export const quesHashData = {
         date: '2022-09-05T13:11:00.933Z',
         answer: 'No',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: true
-      }
+        updatedInPG: true,
+      },
     ],
     questionOrder: 8,
     visible: true,
@@ -8342,19 +8342,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   '9f0c0d92-14bd-45cd-8d56-49343d18ffe4': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: '9f0c0d92-14bd-45cd-8d56-49343d18ffe4',
     section: {
       sectionOrder: 3,
-      sectionName: 'SF answers(Text)'
+      sectionName: 'SF answers(Text)',
     },
     questionText: 'SF answer 1',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - TSL'],
     answers: [
@@ -8366,7 +8366,7 @@ export const quesHashData = {
         answer: 'test',
         formattedAnswer: 'test',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -8376,8 +8376,8 @@ export const quesHashData = {
         answer: 'test',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'test',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 2,
     visible: true,
@@ -8389,7 +8389,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'test',
-      time: '2022-11-28T05:48:32.555Z'
+      time: '2022-11-28T05:48:32.555Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -8402,20 +8402,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Action List-E8B': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Action List-E8B',
     section: {
       sectionOrder: 34,
-      sectionName: 'Action List'
+      sectionName: 'Action List',
     },
     questionText:
       'What actions are needed to lock down the strategy; who is the owner and what is the deadline?',
     answerConfiguration: {
       type: 'picklist',
-      options: ['No', 'Yes']
+      options: ['No', 'Yes'],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [
@@ -8427,7 +8427,7 @@ export const quesHashData = {
         answer: ['Yes'],
         formattedAnswer: ['Yes'],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -8437,8 +8437,8 @@ export const quesHashData = {
         answer: ['Yes'],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: ['Yes'],
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 1,
     visible: true,
@@ -8450,7 +8450,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: ['Yes'],
-      time: '2022-11-28T05:48:32.634Z'
+      time: '2022-11-28T05:48:32.634Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -8463,20 +8463,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Award Timelines-C4V': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Award Timelines-C4V',
     section: {
       sectionOrder: 35,
-      sectionName: 'Award Timelines'
+      sectionName: 'Award Timelines',
     },
     questionText:
       'Why is it important for the customer to make a decision by that date?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -8499,19 +8499,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Award Timelines-N3X': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Award Timelines-N3X',
     section: {
       sectionOrder: 35,
-      sectionName: 'Award Timelines'
+      sectionName: 'Award Timelines',
     },
     questionText: 'What is the expected award timeline?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [
@@ -8520,7 +8520,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:01.589Z',
-        answer: '2021-09-30'
+        answer: '2021-09-30',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -8530,7 +8530,7 @@ export const quesHashData = {
         answer: '2021-09-30',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -8540,7 +8540,7 @@ export const quesHashData = {
         answer: '2021-09-30',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -8550,7 +8550,7 @@ export const quesHashData = {
         answer: '2021-09-30',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -8560,7 +8560,7 @@ export const quesHashData = {
         answer: '2021-09-30',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: '2021-09-30',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -8570,7 +8570,7 @@ export const quesHashData = {
         answer: '2021-09-30',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: '2021-09-30',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -8580,7 +8580,7 @@ export const quesHashData = {
         answer: '2021-09-30',
         formattedAnswer: '2021-09-30',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -8590,8 +8590,8 @@ export const quesHashData = {
         answer: '2021-09-30',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: '2021-09-30',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 5,
     visible: true,
@@ -8603,7 +8603,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '2021-09-30',
-      time: '2022-11-28T05:48:32.834Z'
+      time: '2022-11-28T05:48:32.834Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -8616,19 +8616,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Award Timelines-V3Z': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Award Timelines-V3Z',
     section: {
       sectionOrder: 35,
-      sectionName: 'Award Timelines'
+      sectionName: 'Award Timelines',
     },
     questionText: 'Where is the bid defense?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -8644,7 +8644,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '',
-      time: '2022-11-28T05:48:33.085Z'
+      time: '2022-11-28T05:48:33.085Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -8657,19 +8657,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Award Timelines-Y8U': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Award Timelines-Y8U',
     section: {
       sectionOrder: 35,
-      sectionName: 'Award Timelines'
+      sectionName: 'Award Timelines',
     },
     questionText: 'When is the bid defense?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -8685,7 +8685,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '',
-      time: '2022-11-28T05:48:33.168Z'
+      time: '2022-11-28T05:48:33.168Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -8698,19 +8698,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Award Timelines-Z4C': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Award Timelines-Z4C',
     section: {
       sectionOrder: 35,
-      sectionName: 'Award Timelines'
+      sectionName: 'Award Timelines',
     },
     questionText: 'Is there a known bid defense meeting?',
     answerConfiguration: {
       type: 'select',
-      options: ['No', 'Not Sure', 'Yes']
+      options: ['No', 'Not Sure', 'Yes'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -8724,7 +8724,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '',
-      time: '2022-11-28T05:48:33.244Z'
+      time: '2022-11-28T05:48:33.244Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -8737,19 +8737,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Award Timelines-Z7Y': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Award Timelines-Z7Y',
     section: {
       sectionOrder: 35,
-      sectionName: 'Award Timelines'
+      sectionName: 'Award Timelines',
     },
     questionText: 'Presentation Date Status',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -8765,7 +8765,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '',
-      time: '2022-11-28T05:48:33.322Z'
+      time: '2022-11-28T05:48:33.322Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -8778,19 +8778,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Biosimiliar-H9W': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Biosimiliar-H9W',
     section: {
       sectionOrder: 14,
-      sectionName: 'Biosimilar'
+      sectionName: 'Biosimilar',
     },
     questionText: 'Who will provide the study comparator?',
     answerConfiguration: {
       type: 'select',
-      options: ['Customer', 'IQVIA']
+      options: ['Customer', 'IQVIA'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -8815,19 +8815,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Biosimiliar-M0R': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Biosimiliar-M0R',
     section: {
       sectionOrder: 14,
-      sectionName: 'Biosimilar'
+      sectionName: 'Biosimilar',
     },
     questionText: 'Has the manufacturing process been finalized?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -8852,19 +8852,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Biosimiliar-N5E': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Biosimiliar-N5E',
     section: {
       sectionOrder: 14,
-      sectionName: 'Biosimilar'
+      sectionName: 'Biosimilar',
     },
     questionText: 'Does the customer have a portfolio of biosimilar products?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -8889,20 +8889,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Biosimiliar-P7J': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Biosimiliar-P7J',
     section: {
       sectionOrder: 14,
-      sectionName: 'Biosimilar'
+      sectionName: 'Biosimilar',
     },
     questionText:
       "What is the status of any non-clinical studies in the customer's development program, particularly in-vitro studies?",
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -8927,20 +8927,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Biosimiliar-S9K': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Biosimiliar-S9K',
     section: {
       sectionOrder: 14,
-      sectionName: 'Biosimilar'
+      sectionName: 'Biosimilar',
     },
     questionText:
       'Did or does the customer plan to scale up or change the manufacturing process between the phase I and phase III studies?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -8965,20 +8965,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Biosimiliar-T9G': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Biosimiliar-T9G',
     section: {
       sectionOrder: 14,
-      sectionName: 'Biosimilar'
+      sectionName: 'Biosimilar',
     },
     questionText:
       'Has the customer conducted a comprehensive analytical similarity evaluation of the biosimilar versus an approved reference product – specifically for refence products from the US or the European Union?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -9003,19 +9003,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Biosimiliar-V6X': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Biosimiliar-V6X',
     section: {
       sectionOrder: 14,
-      sectionName: 'Biosimilar'
+      sectionName: 'Biosimilar',
     },
     questionText: 'When will the clinical batch(es) be available?',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -9040,19 +9040,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Biostatistics-A0K': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Biostatistics-A0K',
     section: {
       sectionOrder: 25,
-      sectionName: 'Biostatistics'
+      sectionName: 'Biostatistics',
     },
     questionText: 'Number of SDTM datasets',
     answerConfiguration: {
       type: 'number',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Biostats'],
     answers: [],
@@ -9075,14 +9075,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Biostatistics-A3N': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Biostatistics-A3N',
     section: {
       sectionOrder: 25,
-      sectionName: 'Biostatistics'
+      sectionName: 'Biostatistics',
     },
     questionText: 'What is the randomization mechanism?',
     answerConfiguration: {
@@ -9090,8 +9090,8 @@ export const quesHashData = {
       options: [
         'Cenduit',
         'Medidata - need IVR quote',
-        'Medidata - no IVR quote'
-      ]
+        'Medidata - no IVR quote',
+      ],
     },
     roleNames: ['Spec - Biostats'],
     answers: [],
@@ -9116,19 +9116,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Biostatistics-E3W': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Biostatistics-E3W',
     section: {
       sectionOrder: 25,
-      sectionName: 'Biostatistics'
+      sectionName: 'Biostatistics',
     },
     questionText: 'Is there a PK component?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Spec - Biostats'],
     answers: [],
@@ -9153,19 +9153,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Biostatistics-H4T': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Biostatistics-H4T',
     section: {
       sectionOrder: 25,
-      sectionName: 'Biostatistics'
+      sectionName: 'Biostatistics',
     },
     questionText: 'Will we deliver SAS code to customer?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Spec - Biostats'],
     answers: [],
@@ -9190,19 +9190,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Biostatistics-I2J': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Biostatistics-I2J',
     section: {
       sectionOrder: 25,
-      sectionName: 'Biostatistics'
+      sectionName: 'Biostatistics',
     },
     questionText: 'List any other mid-study deliverables:',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Biostats'],
     answers: [],
@@ -9227,19 +9227,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Biostatistics-I7H': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Biostatistics-I7H',
     section: {
       sectionOrder: 25,
-      sectionName: 'Biostatistics'
+      sectionName: 'Biostatistics',
     },
     questionText: 'Is the study randomized?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Spec - Biostats'],
     answers: [],
@@ -9264,20 +9264,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Biostatistics-J5P': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Biostatistics-J5P',
     section: {
       sectionOrder: 25,
-      sectionName: 'Biostatistics'
+      sectionName: 'Biostatistics',
     },
     questionText:
       'Does the customer expect IQVIA to follow their standards/SOPs or IQVIA standards/SOPs for the Biostatistics analysis and programming?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Biostats'],
     answers: [],
@@ -9302,19 +9302,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Biostatistics-J7X': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Biostatistics-J7X',
     section: {
       sectionOrder: 25,
-      sectionName: 'Biostatistics'
+      sectionName: 'Biostatistics',
     },
     questionText: 'Does IQVIA need to support a DSMB (or equivalent)?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Spec - Biostats'],
     answers: [],
@@ -9339,19 +9339,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Biostatistics-J9A': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Biostatistics-J9A',
     section: {
       sectionOrder: 25,
-      sectionName: 'Biostatistics'
+      sectionName: 'Biostatistics',
     },
     questionText: 'Number of data transfers in SDTM format',
     answerConfiguration: {
       type: 'number',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Biostats'],
     answers: [],
@@ -9376,19 +9376,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Biostatistics-O3B': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Biostatistics-O3B',
     section: {
       sectionOrder: 25,
-      sectionName: 'Biostatistics'
+      sectionName: 'Biostatistics',
     },
     questionText: 'Is there a formal interim analysis?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Spec - Biostats'],
     answers: [],
@@ -9413,19 +9413,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Biostatistics-W1L': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Biostatistics-W1L',
     section: {
       sectionOrder: 25,
-      sectionName: 'Biostatistics'
+      sectionName: 'Biostatistics',
     },
     questionText: 'Number of Analysis ADaM datasets',
     answerConfiguration: {
       type: 'number',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Biostats'],
     answers: [],
@@ -9450,19 +9450,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Biostatistics-X9X': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Biostatistics-X9X',
     section: {
       sectionOrder: 25,
-      sectionName: 'Biostatistics'
+      sectionName: 'Biostatistics',
     },
     questionText: 'Is CDISC ADaM compliance expected (FDA requires it)?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Spec - Biostats', 'Spec - Data Management'],
     answers: [],
@@ -9487,19 +9487,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Biostatistics-Y1O': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Biostatistics-Y1O',
     section: {
       sectionOrder: 25,
-      sectionName: 'Biostatistics'
+      sectionName: 'Biostatistics',
     },
     questionText: 'Will the customer or IQVIA develop the SAP?',
     answerConfiguration: {
       type: 'select',
-      options: ['Customer', 'IQVIA']
+      options: ['Customer', 'IQVIA'],
     },
     roleNames: ['Spec - Biostats'],
     answers: [],
@@ -9524,20 +9524,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Biostatistics-Z1Z': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Biostatistics-Z1Z',
     section: {
       sectionOrder: 25,
-      sectionName: 'Biostatistics'
+      sectionName: 'Biostatistics',
     },
     questionText:
       'Will pharmacokineticist services be provided by IQVIA PK team or by customer?',
     answerConfiguration: {
       type: 'select',
-      options: ['IQVIA PK team', 'Customer']
+      options: ['IQVIA PK team', 'Customer'],
     },
     roleNames: ['Spec - Biostats'],
     answers: [],
@@ -9562,19 +9562,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Biostatistics-Z4N': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Biostatistics-Z4N',
     section: {
       sectionOrder: 25,
-      sectionName: 'Biostatistics'
+      sectionName: 'Biostatistics',
     },
     questionText: 'Will we provide a stat summary of PK parameters?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Spec - Biostats'],
     answers: [],
@@ -9599,20 +9599,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'CEVA-A1O': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'CEVA-A1O',
     section: {
       sectionOrder: 26,
-      sectionName: 'CEVA'
+      sectionName: 'CEVA',
     },
     questionText:
       'How many <endpoints or images> are expected to be reviewed by the EAC?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - CEVA'],
     answers: [],
@@ -9637,19 +9637,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'CEVA-AT9': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'CEVA-AT9',
     section: {
       sectionOrder: 26,
-      sectionName: 'CEVA'
+      sectionName: 'CEVA',
     },
     questionText: 'Did the customer provide specifics for CEVA?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -9672,20 +9672,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'CEVA-B3M': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'CEVA-B3M',
     section: {
       sectionOrder: 26,
-      sectionName: 'CEVA'
+      sectionName: 'CEVA',
     },
     questionText:
       'Is IQVIA responsible for selecting and recruiting the committee members, with customer approval?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Spec - CEVA'],
     answers: [],
@@ -9710,20 +9710,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'CEVA-D9L': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'CEVA-D9L',
     section: {
       sectionOrder: 26,
-      sectionName: 'CEVA'
+      sectionName: 'CEVA',
     },
     questionText:
       'For data review meetings, please define the frequency and type of meetings (e.g., quarterly, teleconference)',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - CEVA'],
     answers: [],
@@ -9748,19 +9748,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'CEVA-G7J': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'CEVA-G7J',
     section: {
       sectionOrder: 26,
-      sectionName: 'CEVA'
+      sectionName: 'CEVA',
     },
     questionText: 'Will workflow be parallel, single or committee?',
     answerConfiguration: {
       type: 'select',
-      options: ['parallel', 'single', 'committee']
+      options: ['parallel', 'single', 'committee'],
     },
     roleNames: ['Spec - CEVA'],
     answers: [],
@@ -9785,19 +9785,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'CEVA-M7E': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'CEVA-M7E',
     section: {
       sectionOrder: 26,
-      sectionName: 'CEVA'
+      sectionName: 'CEVA',
     },
     questionText: 'What types of <endpoint events or images> are expected?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - CEVA'],
     answers: [],
@@ -9822,20 +9822,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'CEVA-M8A': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'CEVA-M8A',
     section: {
       sectionOrder: 26,
-      sectionName: 'CEVA'
+      sectionName: 'CEVA',
     },
     questionText:
       'Should IQVIA assume full responsibility for committee meeting planning?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Spec - CEVA'],
     answers: [],
@@ -9860,19 +9860,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'CEVA-Q0P': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'CEVA-Q0P',
     section: {
       sectionOrder: 26,
-      sectionName: 'CEVA'
+      sectionName: 'CEVA',
     },
     questionText: 'Will there be triggered events?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Spec - CEVA'],
     answers: [],
@@ -9897,19 +9897,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'CEVA-Q1B': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'CEVA-Q1B',
     section: {
       sectionOrder: 26,
-      sectionName: 'CEVA'
+      sectionName: 'CEVA',
     },
     questionText: 'How many RADs will there be?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - CEVA'],
     answers: [],
@@ -9934,20 +9934,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'CEVA-Q6Y': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'CEVA-Q6Y',
     section: {
       sectionOrder: 26,
-      sectionName: 'CEVA'
+      sectionName: 'CEVA',
     },
     questionText:
       'How many members does the customer expect to serve on the committee?',
     answerConfiguration: {
       type: 'number',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - CEVA'],
     answers: [],
@@ -9972,19 +9972,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'CEVA-Q7P': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'CEVA-Q7P',
     section: {
       sectionOrder: 26,
-      sectionName: 'CEVA'
+      sectionName: 'CEVA',
     },
     questionText: 'How many?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - CEVA'],
     answers: [],
@@ -10009,19 +10009,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'CEVA-R2X': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'CEVA-R2X',
     section: {
       sectionOrder: 26,
-      sectionName: 'CEVA'
+      sectionName: 'CEVA',
     },
     questionText: 'Will any other meetings be F2F?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Spec - CEVA'],
     answers: [],
@@ -10046,19 +10046,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'CEVA-R7L': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'CEVA-R7L',
     section: {
       sectionOrder: 26,
-      sectionName: 'CEVA'
+      sectionName: 'CEVA',
     },
     questionText: 'Should IQVIA plan to hold a committee kickoff meeting?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes - face-to-face', 'Yes- virtual', 'No']
+      options: ['Yes - face-to-face', 'Yes- virtual', 'No'],
     },
     roleNames: ['Spec - CEVA'],
     answers: [],
@@ -10083,14 +10083,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'CEVA-R8N': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'CEVA-R8N',
     section: {
       sectionOrder: 26,
-      sectionName: 'CEVA'
+      sectionName: 'CEVA',
     },
     questionText: 'What kind of CEVA committee (inc CEC/DMC) is needed?',
     answerConfiguration: {
@@ -10107,8 +10107,8 @@ export const quesHashData = {
         'CEC',
         'other-oversight group',
         'other - adjudication committee',
-        'none'
-      ]
+        'none',
+      ],
     },
     roleNames: ['Spec - CEVA'],
     answers: [],
@@ -10133,19 +10133,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'CEVA-T7I': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'CEVA-T7I',
     section: {
       sectionOrder: 26,
-      sectionName: 'CEVA'
+      sectionName: 'CEVA',
     },
     questionText: 'What type of adjudication (electronic or manual)?',
     answerConfiguration: {
       type: 'select',
-      options: ['electronic', 'manual']
+      options: ['electronic', 'manual'],
     },
     roleNames: ['Spec - CEVA'],
     answers: [],
@@ -10170,20 +10170,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'CEVA-T9S': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'CEVA-T9S',
     section: {
       sectionOrder: 26,
-      sectionName: 'CEVA'
+      sectionName: 'CEVA',
     },
     questionText:
       'Should IQVIA assume responsibility for drafting the committee Charter, with the customer’s approval?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Spec - CEVA'],
     answers: [],
@@ -10208,19 +10208,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'CEVA-U7F': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'CEVA-U7F',
     section: {
       sectionOrder: 26,
-      sectionName: 'CEVA'
+      sectionName: 'CEVA',
     },
     questionText: 'Will we do an endpoint lock?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Spec - CEVA'],
     answers: [],
@@ -10245,20 +10245,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'CEVA-U9J': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'CEVA-U9J',
     section: {
       sectionOrder: 26,
-      sectionName: 'CEVA'
+      sectionName: 'CEVA',
     },
     questionText:
       'Is IQVIA responsible for contracting and paying the committee members?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Spec - CEVA'],
     answers: [],
@@ -10283,19 +10283,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'CEVA-Y3S': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'CEVA-Y3S',
     section: {
       sectionOrder: 26,
-      sectionName: 'CEVA'
+      sectionName: 'CEVA',
     },
     questionText: 'What % of disagreements should we include?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - CEVA'],
     answers: [],
@@ -10320,19 +10320,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'CEVA-Y6M': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'CEVA-Y6M',
     section: {
       sectionOrder: 26,
-      sectionName: 'CEVA'
+      sectionName: 'CEVA',
     },
     questionText: 'Are there any interim report deliverables?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - CEVA'],
     answers: [],
@@ -10357,26 +10357,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Core Information-B4S': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Core Information-B4S',
     section: {
       sectionOrder: 20,
-      sectionName: 'Key Budget Specs'
+      sectionName: 'Key Budget Specs',
     },
     questionText: 'SDM %:',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Medical Strategy Lead',
       'Core - TSL',
       'Core - Proposal Developer',
       'X - Proposal Leader',
-      'Core - Clinical DS&B'
+      'Core - Clinical DS&B',
     ],
     answers: [],
     questionOrder: 10,
@@ -10400,26 +10400,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Core Information-E0D': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Core Information-E0D',
     section: {
       sectionOrder: 20,
-      sectionName: 'Key Budget Specs'
+      sectionName: 'Key Budget Specs',
     },
     questionText: 'Patients enrolled:',
     answerConfiguration: {
       type: 'number',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Medical Strategy Lead',
       'Core - TSL',
       'Core - Proposal Developer',
       'X - Proposal Leader',
-      'Core - Clinical DS&B'
+      'Core - Clinical DS&B',
     ],
     answers: [
       {
@@ -10427,7 +10427,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:00.888Z',
-        answer: '30'
+        answer: '30',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -10437,7 +10437,7 @@ export const quesHashData = {
         answer: '30',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -10447,7 +10447,7 @@ export const quesHashData = {
         answer: '30',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -10457,7 +10457,7 @@ export const quesHashData = {
         answer: '30',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -10467,7 +10467,7 @@ export const quesHashData = {
         answer: '30',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: '30',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -10477,7 +10477,7 @@ export const quesHashData = {
         answer: '30',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: '30',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -10487,7 +10487,7 @@ export const quesHashData = {
         answer: '30',
         formattedAnswer: '30',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -10497,8 +10497,8 @@ export const quesHashData = {
         answer: '30',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: '30',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 4,
     visible: true,
@@ -10512,7 +10512,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '30',
-      time: '2022-11-28T05:48:33.399Z'
+      time: '2022-11-28T05:48:33.399Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -10525,26 +10525,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Core Information-H8O': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Core Information-H8O',
     section: {
       sectionOrder: 20,
-      sectionName: 'Key Budget Specs'
+      sectionName: 'Key Budget Specs',
     },
     questionText: 'Patients screened:',
     answerConfiguration: {
       type: 'number',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Medical Strategy Lead',
       'Core - TSL',
       'Core - Proposal Developer',
       'X - Proposal Leader',
-      'Core - Clinical DS&B'
+      'Core - Clinical DS&B',
     ],
     answers: [
       {
@@ -10552,7 +10552,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:00.970Z',
-        answer: '44'
+        answer: '44',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -10562,7 +10562,7 @@ export const quesHashData = {
         answer: '44',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -10572,7 +10572,7 @@ export const quesHashData = {
         answer: '44',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -10582,7 +10582,7 @@ export const quesHashData = {
         answer: '44',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -10592,7 +10592,7 @@ export const quesHashData = {
         answer: '44',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: '44',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -10602,7 +10602,7 @@ export const quesHashData = {
         answer: '44',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: '44',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -10612,7 +10612,7 @@ export const quesHashData = {
         answer: '44',
         formattedAnswer: '44',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -10622,8 +10622,8 @@ export const quesHashData = {
         answer: '44',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: '44',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 2,
     visible: true,
@@ -10637,7 +10637,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '44',
-      time: '2022-11-28T05:48:33.477Z'
+      time: '2022-11-28T05:48:33.477Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -10650,14 +10650,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Core Information-J7T': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Core Information-J7T',
     section: {
       sectionOrder: 20,
-      sectionName: 'Key Budget Specs'
+      sectionName: 'Key Budget Specs',
     },
     questionText: 'Is the customer open to a risked-based monitoring approach?',
     answerConfiguration: {
@@ -10667,8 +10667,8 @@ export const quesHashData = {
         'Virtual Trial Hybrid',
         'Reduced Source Data Verification',
         'Data-driven Trial',
-        'No'
-      ]
+        'No',
+      ],
     },
     roleNames: ['Core - Business Developer', 'Core - Clinical DS&B'],
     answers: [],
@@ -10695,26 +10695,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Core Information-K3H': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Core Information-K3H',
     section: {
       sectionOrder: 20,
-      sectionName: 'Key Budget Specs'
+      sectionName: 'Key Budget Specs',
     },
     questionText: 'Target min/page:',
     answerConfiguration: {
       type: 'number',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Medical Strategy Lead',
       'Core - TSL',
       'Core - Proposal Developer',
       'X - Proposal Leader',
-      'Core - Clinical DS&B'
+      'Core - Clinical DS&B',
     ],
     answers: [],
     questionOrder: 11,
@@ -10738,26 +10738,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Core Information-P3I': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Core Information-P3I',
     section: {
       sectionOrder: 20,
-      sectionName: 'Key Budget Specs'
+      sectionName: 'Key Budget Specs',
     },
     questionText: 'Unique CRFs:',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Medical Strategy Lead',
       'Core - TSL',
       'Core - Proposal Developer',
       'X - Proposal Leader',
-      'Core - Clinical DS&B'
+      'Core - Clinical DS&B',
     ],
     answers: [],
     questionOrder: 9,
@@ -10781,26 +10781,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Core Information-R3C': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Core Information-R3C',
     section: {
       sectionOrder: 20,
-      sectionName: 'Key Budget Specs'
+      sectionName: 'Key Budget Specs',
     },
     questionText: 'Dropout rate:',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Medical Strategy Lead',
       'Core - TSL',
       'Core - Proposal Developer',
       'X - Proposal Leader',
-      'Core - Clinical DS&B'
+      'Core - Clinical DS&B',
     ],
     answers: [],
     questionOrder: 5,
@@ -10824,14 +10824,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Core Information-R4P': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Core Information-R4P',
     section: {
       sectionOrder: 20,
-      sectionName: 'Key Budget Specs'
+      sectionName: 'Key Budget Specs',
     },
     questionText: 'Which EDC Platform is proposed?',
     answerConfiguration: {
@@ -10847,8 +10847,8 @@ export const quesHashData = {
         'Medrio',
         'IBM CD',
         'Paper',
-        'Other'
-      ]
+        'Other',
+      ],
     },
     roleNames: ['Spec - Data Management', 'Core - Business Developer'],
     answers: [],
@@ -10873,26 +10873,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Core Information-V9R': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Core Information-V9R',
     section: {
       sectionOrder: 20,
-      sectionName: 'Key Budget Specs'
+      sectionName: 'Key Budget Specs',
     },
     questionText: 'SF rate:',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Medical Strategy Lead',
       'Core - TSL',
       'Core - Proposal Developer',
       'X - Proposal Leader',
-      'Core - Clinical DS&B'
+      'Core - Clinical DS&B',
     ],
     answers: [],
     questionOrder: 3,
@@ -10916,26 +10916,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Core Information-Y8W': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Core Information-Y8W',
     section: {
       sectionOrder: 20,
-      sectionName: 'Key Budget Specs'
+      sectionName: 'Key Budget Specs',
     },
     questionText: 'CRF pages per patient (total):',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Medical Strategy Lead',
       'Core - TSL',
       'Core - Proposal Developer',
       'X - Proposal Leader',
-      'Core - Clinical DS&B'
+      'Core - Clinical DS&B',
     ],
     answers: [],
     questionOrder: 8,
@@ -10959,26 +10959,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Core Information-Z1N': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Core Information-Z1N',
     section: {
       sectionOrder: 20,
-      sectionName: 'Key Budget Specs'
+      sectionName: 'Key Budget Specs',
     },
     questionText: 'Patients completed:',
     answerConfiguration: {
       type: 'number',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Medical Strategy Lead',
       'Core - TSL',
       'Core - Proposal Developer',
       'X - Proposal Leader',
-      'Core - Clinical DS&B'
+      'Core - Clinical DS&B',
     ],
     answers: [
       {
@@ -10986,7 +10986,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:01.050Z',
-        answer: '30'
+        answer: '30',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -10996,7 +10996,7 @@ export const quesHashData = {
         answer: '30',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -11006,7 +11006,7 @@ export const quesHashData = {
         answer: '30',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -11016,7 +11016,7 @@ export const quesHashData = {
         answer: '30',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -11026,7 +11026,7 @@ export const quesHashData = {
         answer: '30',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: '30',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -11036,7 +11036,7 @@ export const quesHashData = {
         answer: '30',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: '30',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -11046,7 +11046,7 @@ export const quesHashData = {
         answer: '30',
         formattedAnswer: '30',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -11056,8 +11056,8 @@ export const quesHashData = {
         answer: '30',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: '30',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 6,
     visible: true,
@@ -11071,7 +11071,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '30',
-      time: '2022-11-28T05:48:33.559Z'
+      time: '2022-11-28T05:48:33.559Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -11084,25 +11084,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Country Strategy-E0O': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Country Strategy-E0O',
     section: {
       sectionOrder: 11,
-      sectionName: 'Country Strategy'
+      sectionName: 'Country Strategy',
     },
     questionText: 'Is the customer open to our country recommendations?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - Medical Strategy Lead',
       'Core - Project Lead',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [],
     questionOrder: 7,
@@ -11124,25 +11124,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Country Strategy-E5C': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Country Strategy-E5C',
     section: {
       sectionOrder: 14,
-      sectionName: 'Biosimilar'
+      sectionName: 'Biosimilar',
     },
     questionText: 'Should it be supplied centrally?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: [
       'Core - TSL',
       'Spec - Feasibility',
       'Core - Medical Strategy Lead',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 6,
@@ -11164,27 +11164,27 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Country Strategy-F7M': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Country Strategy-F7M',
     section: {
       sectionOrder: 11,
-      sectionName: 'Country Strategy'
+      sectionName: 'Country Strategy',
     },
     questionText:
       'Are there any countries or regions the customer would like us to avoid?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - Medical Strategy Lead',
       'Core - Project Lead',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 5,
@@ -11206,26 +11206,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Country Strategy-J0J': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Country Strategy-J0J',
     section: {
       sectionOrder: 14,
-      sectionName: 'Biosimilar'
+      sectionName: 'Biosimilar',
     },
     questionText:
       'Is the comparator approved and reimbursed in the target countries?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - TSL',
       'Spec - Feasibility',
       'Core - Medical Strategy Lead',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 5,
@@ -11247,25 +11247,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Country Strategy-N7G': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Country Strategy-N7G',
     section: {
       sectionOrder: 11,
-      sectionName: 'Country Strategy'
+      sectionName: 'Country Strategy',
     },
     questionText: 'Is a Core MAP/SIM or IQB Feasibility Call required?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: [
       'Core - TSL',
       'Core - Medical Strategy Lead',
       'Core - Project Lead',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 9,
@@ -11287,14 +11287,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Country Strategy-N9P': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Country Strategy-N9P',
     section: {
       sectionOrder: 11,
-      sectionName: 'Country Strategy'
+      sectionName: 'Country Strategy',
     },
     questionText: 'Did the customer specify any target countries?',
     answerConfiguration: {
@@ -11555,15 +11555,15 @@ export const quesHashData = {
         'Western Sahara',
         'Yemen',
         'Zambia',
-        'Zimbabwe'
-      ]
+        'Zimbabwe',
+      ],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - Medical Strategy Lead',
       'Core - Project Lead',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [
       {
@@ -11571,7 +11571,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:00.273Z',
-        answer: 'US'
+        answer: 'US',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -11581,7 +11581,7 @@ export const quesHashData = {
         answer: ['United States of America'],
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -11591,7 +11591,7 @@ export const quesHashData = {
         answer: ['United States of America'],
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -11601,7 +11601,7 @@ export const quesHashData = {
         answer: ['United States of America'],
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -11611,7 +11611,7 @@ export const quesHashData = {
         answer: ['United States of America'],
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: ['United States of America'],
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -11621,7 +11621,7 @@ export const quesHashData = {
         answer: ['United States of America'],
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: ['United States of America'],
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -11631,7 +11631,7 @@ export const quesHashData = {
         answer: ['United States of America'],
         formattedAnswer: ['United States of America'],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -11641,8 +11641,8 @@ export const quesHashData = {
         answer: ['United States of America'],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: ['United States of America'],
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 3,
     visible: true,
@@ -11654,7 +11654,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: ['United States of America'],
-      time: '2022-11-28T05:48:33.629Z'
+      time: '2022-11-28T05:48:33.629Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -11667,26 +11667,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Country Strategy-T6A': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Country Strategy-T6A',
     section: {
       sectionOrder: 11,
-      sectionName: 'Country Strategy'
+      sectionName: 'Country Strategy',
     },
     questionText: 'Which and why?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - Medical Strategy Lead',
       'Core - Project Lead',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 6,
@@ -11710,25 +11710,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Country Strategy-U2K': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Country Strategy-U2K',
     section: {
       sectionOrder: 11,
-      sectionName: 'Country Strategy'
+      sectionName: 'Country Strategy',
     },
     questionText:
       'Which regions/countries does the customer intend to register the product in?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Business Developer',
       'X - Proposal Leader',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [],
     questionOrder: 1,
@@ -11750,26 +11750,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Country Strategy-U8V': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Country Strategy-U8V',
     section: {
       sectionOrder: 11,
-      sectionName: 'Country Strategy'
+      sectionName: 'Country Strategy',
     },
     questionText:
       'What is their rationale for including these regions/countries?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - Medical Strategy Lead',
       'Core - Project Lead',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [],
     questionOrder: 4,
@@ -11791,19 +11791,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Country Strategy-W4K': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Country Strategy-W4K',
     section: {
       sectionOrder: 11,
-      sectionName: 'Country Strategy'
+      sectionName: 'Country Strategy',
     },
     questionText: 'What is needed to finalize the country strategy?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - TSL', 'X - Proposal Leader'],
     answers: [],
@@ -11826,19 +11826,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Data Management-AU6': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Data Management-AU6',
     section: {
       sectionOrder: 27,
-      sectionName: 'Data Management'
+      sectionName: 'Data Management',
     },
     questionText: 'Did the customer provide specifics for Data Management?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -11861,19 +11861,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Data Management-D8H': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Data Management-D8H',
     section: {
       sectionOrder: 27,
-      sectionName: 'Data Management'
+      sectionName: 'Data Management',
     },
     questionText: 'Are third-party vendor data sources involved?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Spec - Data Management'],
     answers: [],
@@ -11898,20 +11898,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Data Management-I3O': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Data Management-I3O',
     section: {
       sectionOrder: 27,
-      sectionName: 'Data Management'
+      sectionName: 'Data Management',
     },
     questionText:
       'How many coded terms are expected per patient (Med Hx, Con Med, AE)?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Data Management'],
     answers: [],
@@ -11936,19 +11936,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Data Management-J0G': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Data Management-J0G',
     section: {
       sectionOrder: 27,
-      sectionName: 'Data Management'
+      sectionName: 'Data Management',
     },
     questionText: 'Who will build it and in what version?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Data Management'],
     answers: [],
@@ -11973,19 +11973,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Data Management-J3L': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Data Management-J3L',
     section: {
       sectionOrder: 27,
-      sectionName: 'Data Management'
+      sectionName: 'Data Management',
     },
     questionText: 'What is the status of the database build?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Data Management'],
     answers: [],
@@ -12010,20 +12010,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Data Management-N5Q': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Data Management-N5Q',
     section: {
       sectionOrder: 27,
-      sectionName: 'Data Management'
+      sectionName: 'Data Management',
     },
     questionText:
       'If using IVRS, should it be integrated into the EDC database?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes - automated import', 'Yes - backend data source', 'No']
+      options: ['Yes - automated import', 'Yes - backend data source', 'No'],
     },
     roleNames: ['Spec - Data Management'],
     answers: [],
@@ -12048,19 +12048,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Data Management-N8X': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Data Management-N8X',
     section: {
       sectionOrder: 27,
-      sectionName: 'Data Management'
+      sectionName: 'Data Management',
     },
     questionText: 'Specify the amount of data to be cleaned:',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Data Management'],
     answers: [],
@@ -12085,20 +12085,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Data Management-O7Y': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Data Management-O7Y',
     section: {
       sectionOrder: 27,
-      sectionName: 'Data Management'
+      sectionName: 'Data Management',
     },
     questionText:
       'If the customer prefers Rave, will the study be built on the customer’s URL or IQVIA’s?',
     answerConfiguration: {
       type: 'select',
-      options: ["Customer's URL", "IQVIA's URL"]
+      options: ["Customer's URL", "IQVIA's URL"],
     },
     roleNames: ['Spec - Data Management'],
     answers: [],
@@ -12123,20 +12123,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Data Management-P0N': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Data Management-P0N',
     section: {
       sectionOrder: 27,
-      sectionName: 'Data Management'
+      sectionName: 'Data Management',
     },
     questionText:
       'What is the expected number of manual queries or the expected query rate for the trial?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Data Management'],
     answers: [],
@@ -12161,19 +12161,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Data Management-P4O': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Data Management-P4O',
     section: {
       sectionOrder: 27,
-      sectionName: 'Data Management'
+      sectionName: 'Data Management',
     },
     questionText: 'Does the customer expect IQVIA to build the database?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Spec - Data Management'],
     answers: [],
@@ -12198,20 +12198,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Data Management-Q6I': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Data Management-Q6I',
     section: {
       sectionOrder: 27,
-      sectionName: 'Data Management'
+      sectionName: 'Data Management',
     },
     questionText:
       'What is the expected frequency of imports from the third-party vendors?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Data Management'],
     answers: [],
@@ -12236,20 +12236,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Data Management-S6W': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Data Management-S6W',
     section: {
       sectionOrder: 27,
-      sectionName: 'Data Management'
+      sectionName: 'Data Management',
     },
     questionText:
       'Does the customer expect to receive periodic data transfers via export from IQVIA (data dumps or clean)?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Spec - Data Management'],
     answers: [],
@@ -12274,19 +12274,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Data Management-T0K': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Data Management-T0K',
     section: {
       sectionOrder: 27,
-      sectionName: 'Data Management'
+      sectionName: 'Data Management',
     },
     questionText: 'List the number and source(s) of external data:',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Data Management'],
     answers: [],
@@ -12311,20 +12311,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Data Management-T0T': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Data Management-T0T',
     section: {
       sectionOrder: 27,
-      sectionName: 'Data Management'
+      sectionName: 'Data Management',
     },
     questionText:
       'If coding Concomitant Medications, would IQVIA code these terms to the ATC level?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Data Management'],
     answers: [],
@@ -12349,19 +12349,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Data Management-W0Y': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Data Management-W0Y',
     section: {
       sectionOrder: 27,
-      sectionName: 'Data Management'
+      sectionName: 'Data Management',
     },
     questionText: 'If so, how often or at what interval (per type)?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Data Management'],
     answers: [],
@@ -12386,20 +12386,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Data Management-W7C': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Data Management-W7C',
     section: {
       sectionOrder: 27,
-      sectionName: 'Data Management'
+      sectionName: 'Data Management',
     },
     questionText:
       'Are coding dictionary versions expected to be updated during the study?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Spec - Data Management'],
     answers: [],
@@ -12424,19 +12424,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Data Management-X5Q': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Data Management-X5Q',
     section: {
       sectionOrder: 27,
-      sectionName: 'Data Management'
+      sectionName: 'Data Management',
     },
     questionText: 'Will Screen Failure pages be entered into the EDC database?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Spec - Data Management'],
     answers: [],
@@ -12461,24 +12461,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Data Strategy-E6P': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Data Strategy-E6P',
     section: {
       sectionOrder: 17,
-      sectionName: 'Data Strategy'
+      sectionName: 'Data Strategy',
     },
     questionText: 'What outputs will ADSC provide for proposal?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - TSL',
       'Core - Analytics Strategy Lead',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 3,
@@ -12500,24 +12500,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Data Strategy-L4C': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Data Strategy-L4C',
     section: {
       sectionOrder: 17,
-      sectionName: 'Data Strategy'
+      sectionName: 'Data Strategy',
     },
     questionText: 'How critical is the ADSC data to the study strategy?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - TSL',
       'Core - Analytics Strategy Lead',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 5,
@@ -12539,14 +12539,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Data Strategy-O0U': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Data Strategy-O0U',
     section: {
       sectionOrder: 17,
-      sectionName: 'Data Strategy'
+      sectionName: 'Data Strategy',
     },
     questionText: 'Which self-service data sources can be leveraged?',
     answerConfiguration: {
@@ -12566,13 +12566,13 @@ export const quesHashData = {
         'Pipeline Architect',
         'Prevalence data',
         'TransMed',
-        'TriNetX EMR'
-      ]
+        'TriNetX EMR',
+      ],
     },
     roleNames: [
       'Core - TSL',
       'Core - Analytics Strategy Lead',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 2,
@@ -12585,7 +12585,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '',
-      time: '2022-11-28T05:48:33.707Z'
+      time: '2022-11-28T05:48:33.707Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -12598,14 +12598,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Data Strategy-T7F': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Data Strategy-T7F',
     section: {
       sectionOrder: 17,
-      sectionName: 'Data Strategy'
+      sectionName: 'Data Strategy',
     },
     questionText: 'What data strategy services are required?',
     answerConfiguration: {
@@ -12635,8 +12635,8 @@ export const quesHashData = {
         'Quest Diagnostics Patient Recruitment',
         'Quest Diagnostics Provider List',
         'Self-service analytics (GFL)',
-        'Site/Inv Patient Density'
-      ]
+        'Site/Inv Patient Density',
+      ],
     },
     roleNames: ['Core - TSL', 'Spec - Feasibility', 'X - Proposal Leader'],
     answers: [],
@@ -12659,25 +12659,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Data Strategy-U5S': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Data Strategy-U5S',
     section: {
       sectionOrder: 17,
-      sectionName: 'Data Strategy'
+      sectionName: 'Data Strategy',
     },
     questionText:
       'Are there compounds and/or ICD codes that should be included in the data strategy?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - TSL',
       'Core - Analytics Strategy Lead',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 6,
@@ -12700,24 +12700,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Data Strategy-Z7K': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Data Strategy-Z7K',
     section: {
       sectionOrder: 17,
-      sectionName: 'Data Strategy'
+      sectionName: 'Data Strategy',
     },
     questionText: 'Which ADSC teams need to be engaged?',
     answerConfiguration: {
       type: 'picklist',
-      options: ['dfcgvhb', 'APAC', 'Global', 'Japan']
+      options: ['dfcgvhb', 'APAC', 'Global', 'Japan'],
     },
     roleNames: [
       'Core - TSL',
       'Core - Analytics Strategy Lead',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 4,
@@ -12739,25 +12739,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Deliverables-A2Z': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Deliverables-A2Z',
     section: {
       sectionOrder: 32,
-      sectionName: 'Deliverables'
+      sectionName: 'Deliverables',
     },
     questionText:
       'What kind of study experience should we present to best showcase our experience for this RFP? (E.g., global, regional or country TA or indication experience; compound experience; similar indication experience etc.) ',
     answerConfiguration: {
       type: 'picklist',
-      options: ['TA', 'indication', 'compound', 'region', 'other']
+      options: ['TA', 'indication', 'compound', 'region', 'other'],
     },
     roleNames: [
       'Core - Business Developer',
       'X - Proposal Leader',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [],
     questionOrder: 4,
@@ -12779,25 +12779,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Deliverables-N5H': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Deliverables-N5H',
     section: {
       sectionOrder: 2,
-      sectionName: 'Customer Scenarios & BTS RFPs'
+      sectionName: 'Customer Scenarios & BTS RFPs',
     },
     questionText:
       'For strict bid-to-spec RFPs, is the customer open to IQVIA proposing an alternative scenario?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: [
       'Core - Business Developer',
       'X - Proposal Leader',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [],
     questionOrder: 4,
@@ -12821,14 +12821,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Deliverables-O7K': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Deliverables-O7K',
     section: {
       sectionOrder: 32,
-      sectionName: 'Deliverables'
+      sectionName: 'Deliverables',
     },
     questionText: 'Pricing Tool',
     answerConfiguration: {
@@ -12840,8 +12840,8 @@ export const quesHashData = {
         'NOBI',
         'sNOBI',
         'dNOBI',
-        'Hours*rates/fee for service'
-      ]
+        'Hours*rates/fee for service',
+      ],
     },
     roleNames: ['Spec - Strategic Pricing', 'Core - Proposal Developer'],
     answers: [
@@ -12853,7 +12853,7 @@ export const quesHashData = {
         answer: 'Awardable',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -12863,7 +12863,7 @@ export const quesHashData = {
         answer: 'Awardable',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -12873,7 +12873,7 @@ export const quesHashData = {
         answer: 'Rounded Ballpark',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -12883,7 +12883,7 @@ export const quesHashData = {
         answer: 'Rounded Ballpark',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Rounded Ballpark',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -12893,7 +12893,7 @@ export const quesHashData = {
         answer: 'Rounded Ballpark',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Rounded Ballpark',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -12903,7 +12903,7 @@ export const quesHashData = {
         answer: 'Full Budget',
         formattedAnswer: 'Full Budget',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -12913,8 +12913,8 @@ export const quesHashData = {
         answer: 'Full Budget',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'Full Budget',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 2,
     visible: false,
@@ -12928,7 +12928,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'Full Budget',
-      time: '2022-11-28T05:48:33.780Z'
+      time: '2022-11-28T05:48:33.780Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -12941,14 +12941,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Deliverables-R4F': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Deliverables-R4F',
     section: {
       sectionOrder: 32,
-      sectionName: 'Deliverables'
+      sectionName: 'Deliverables',
     },
     questionText: 'Proposal deliverable',
     answerConfiguration: {
@@ -12958,13 +12958,13 @@ export const quesHashData = {
         'Full Proposal',
         'High Level strategy assumptions, experience & Budget',
         'N/A',
-        'Summary of study assumptions, experience & budget'
-      ]
+        'Summary of study assumptions, experience & budget',
+      ],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - Proposal Developer',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [
       {
@@ -12972,7 +12972,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:01.428Z',
-        answer: 'Brief text'
+        answer: 'Brief text',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -12982,7 +12982,7 @@ export const quesHashData = {
         answer: 'Brief text',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -12992,7 +12992,7 @@ export const quesHashData = {
         answer: 'Brief text',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -13002,7 +13002,7 @@ export const quesHashData = {
         answer: 'Summary of study assumptions, experience & budget',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -13012,7 +13012,7 @@ export const quesHashData = {
         answer: 'Summary of study assumptions, experience & budget',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Summary of study assumptions, experience & budget',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -13022,7 +13022,7 @@ export const quesHashData = {
         answer: 'Summary of study assumptions, experience & budget',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Summary of study assumptions, experience & budget',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -13032,7 +13032,7 @@ export const quesHashData = {
         answer: 'Full Proposal',
         formattedAnswer: 'Full Proposal',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -13042,8 +13042,8 @@ export const quesHashData = {
         answer: 'Full Proposal',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'Full Proposal',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 3,
     visible: true,
@@ -13055,7 +13055,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'Full Proposal',
-      time: '2022-11-28T05:48:34.234Z'
+      time: '2022-11-28T05:48:34.234Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -13068,24 +13068,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Deliverables-T6T': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Deliverables-T6T',
     section: {
       sectionOrder: 32,
-      sectionName: 'Deliverables'
+      sectionName: 'Deliverables',
     },
     questionText: 'Draft contract deliverable',
     answerConfiguration: {
       type: 'select',
-      options: ['ATP', 'SUWO', 'LOI', 'None']
+      options: ['ATP', 'SUWO', 'LOI', 'None'],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - Proposal Developer',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 6,
@@ -13107,27 +13107,27 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Deliverables-U4Q': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Deliverables-U4Q',
     section: {
       sectionOrder: 2,
-      sectionName: 'Customer Scenarios & BTS RFPs'
+      sectionName: 'Customer Scenarios & BTS RFPs',
     },
     questionText: 'Which of the following applies?',
     answerConfiguration: {
       type: 'select',
       options: [
         'We must prepare the budget strictly according to the customer’s specifications - we are not allowed to change any of the specs provided by the customer',
-        'We are allowed to modify some specifications provided by the customer for the budget such as the number and/or distribution of countries and sites; screen failure rate; monitoring assumptions etc.'
-      ]
+        'We are allowed to modify some specifications provided by the customer for the budget such as the number and/or distribution of countries and sites; screen failure rate; monitoring assumptions etc.',
+      ],
     },
     roleNames: [
       'Core - Business Developer',
       'X - Proposal Leader',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [],
     questionOrder: 3,
@@ -13149,26 +13149,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Device-B5L': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Device-B5L',
     section: {
       sectionOrder: 15,
-      sectionName: 'Device'
+      sectionName: 'Device',
     },
     questionText:
       'Is the device FDA approved or CE marked in Europe for the intended indication?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: [
       'Core - TSL',
       'Core - Medical Strategy Lead',
       'X - Proposal Leader',
-      'Core - Business Developer'
+      'Core - Business Developer',
     ],
     answers: [],
     questionOrder: 1,
@@ -13192,14 +13192,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Device-F2D': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Device-F2D',
     section: {
       sectionOrder: 15,
-      sectionName: 'Device'
+      sectionName: 'Device',
     },
     questionText: 'What kind of study is this?',
     answerConfiguration: {
@@ -13208,14 +13208,14 @@ export const quesHashData = {
         'Pivotal',
         'First in human',
         'Post-marketing study (PMS)',
-        'Diagnostic'
-      ]
+        'Diagnostic',
+      ],
     },
     roleNames: [
       'Core - TSL',
       'Core - Medical Strategy Lead',
       'X - Proposal Leader',
-      'Core - Business Developer'
+      'Core - Business Developer',
     ],
     answers: [],
     questionOrder: 2,
@@ -13239,25 +13239,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Device-L3K': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Device-L3K',
     section: {
       sectionOrder: 15,
-      sectionName: 'Device'
+      sectionName: 'Device',
     },
     questionText: 'Is this a prospective or retrospective study?',
     answerConfiguration: {
       type: 'select',
-      options: ['Prospective', 'Retrospective']
+      options: ['Prospective', 'Retrospective'],
     },
     roleNames: [
       'Core - TSL',
       'Core - Medical Strategy Lead',
       'X - Proposal Leader',
-      'Core - Business Developer'
+      'Core - Business Developer',
     ],
     answers: [],
     questionOrder: 3,
@@ -13281,26 +13281,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Device-L4M': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Device-L4M',
     section: {
       sectionOrder: 15,
-      sectionName: 'Device'
+      sectionName: 'Device',
     },
     questionText:
       'Does the study involve patients (retrospective and lab-based studies do not require patients)?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: [
       'Core - TSL',
       'Core - Medical Strategy Lead',
       'X - Proposal Leader',
-      'Core - Business Developer'
+      'Core - Business Developer',
     ],
     answers: [],
     questionOrder: 4,
@@ -13324,19 +13324,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Diversity and Inclusion-AW3': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Diversity and Inclusion-AW3',
     section: {
       sectionOrder: 6,
-      sectionName: 'Diversity and Inclusion'
+      sectionName: 'Diversity and Inclusion',
     },
     questionText: 'Did the customer request DICT?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer', 'Core - TSL'],
     answers: [],
@@ -13359,14 +13359,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Diversity and Inclusion-AW4': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Diversity and Inclusion-AW4',
     section: {
       sectionOrder: 6,
-      sectionName: 'Diversity and Inclusion'
+      sectionName: 'Diversity and Inclusion',
     },
     questionText: 'What aspects of D&I should be added to the proposal?',
     answerConfiguration: {
@@ -13377,8 +13377,8 @@ export const quesHashData = {
         'Site Training / STS',
         'Protocol Design',
         'Patient Recruitment',
-        'Consulting'
-      ]
+        'Consulting',
+      ],
     },
     roleNames: ['Core - Business Developer', 'Core - TSL'],
     answers: [],
@@ -13403,20 +13403,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Diversity and Inclusion-AW5': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Diversity and Inclusion-AW5',
     section: {
       sectionOrder: 6,
-      sectionName: 'Diversity and Inclusion'
+      sectionName: 'Diversity and Inclusion',
     },
     questionText:
       'What expected impact will these have on the timeline? (positive?/negative?)',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer', 'Core - TSL'],
     answers: [],
@@ -13441,14 +13441,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Document Availability-AY9': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Document Availability-AY9',
     section: {
       sectionOrder: 8,
-      sectionName: 'Document Availability'
+      sectionName: 'Document Availability',
     },
     questionText: 'Which documents are available today?',
     answerConfiguration: {
@@ -13459,8 +13459,8 @@ export const quesHashData = {
         'Investigator Brochure/Investigational Medicinal Product Dossier',
         'Overview of Compound',
         'Results from previous studies',
-        'GMP Certificate for Study Compound'
-      ]
+        'GMP Certificate for Study Compound',
+      ],
     },
     roleNames: ['Core - Business Developer', 'Core - Proposal Developer'],
     answers: [],
@@ -13483,19 +13483,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Document Availability-D2S': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Document Availability-D2S',
     section: {
       sectionOrder: 8,
-      sectionName: 'Document Availability'
+      sectionName: 'Document Availability',
     },
     questionText: 'When will the schedule of events be available?',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [
@@ -13507,7 +13507,7 @@ export const quesHashData = {
         answer: '07-Sep-2022',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'ankit.sharma3@iqvia.com',
@@ -13516,7 +13516,7 @@ export const quesHashData = {
         date: '2022-11-25T12:48:06.874Z',
         answer: ' ',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: true
+        updatedInPG: true,
       },
       {
         user: 'UnityPredictedAnswer',
@@ -13526,8 +13526,8 @@ export const quesHashData = {
         answer: '30-Nov-2022',
         formattedAnswer: '',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 3,
     visible: true,
@@ -13553,19 +13553,19 @@ export const quesHashData = {
     events:
       '{"EventSubject":"gldfkjg gfkdjgfd fkgjfd","EventBody":"fdjs fgdghjfdkg fdjghjdfkg dfjkhgdfkjghjkdf","EventPrimaryCondition":"Bid History Creation","ModifiedAt":"2022-09-29T14:20:25.790Z","EventRoles":["Core - Business Developer"],"EntityType":"Events","ModifiedBy":"Amrita Mohanta","EventUnitType":"Business Days","EventQuestionId":"cd800075-1ef4-445f-9812-9c1ed6c36e6a","SK":"EVENTS#32de41b3-d698-4a75-a531-9e6ad70ef7a3","EventId":"32de41b3-d698-4a75-a531-9e6ad70ef7a3","EventNoOfUnits":2,"PK":"EVENTS#32de41b3-d698-4a75-a531-9e6ad70ef7a3","EventOperator":"addition","CreatedAt":"2022-09-29T14:20:25.790Z","questionId":"Document Availability-D2S"}',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Document Availability-N8T': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Document Availability-N8T',
     section: {
       sectionOrder: 8,
-      sectionName: 'Document Availability'
+      sectionName: 'Document Availability',
     },
     questionText: 'Paste link to compound overview',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -13590,19 +13590,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Document Availability-Q4I': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Document Availability-Q4I',
     section: {
       sectionOrder: 8,
-      sectionName: 'Document Availability'
+      sectionName: 'Document Availability',
     },
     questionText: 'When will the compound overview be available?',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -13627,19 +13627,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Documents-A6D': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Documents-A6D',
     section: {
       sectionOrder: 8,
-      sectionName: 'Document Availability'
+      sectionName: 'Document Availability',
     },
     questionText: 'When will the IB be available?',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -13664,24 +13664,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Feasibility Deliverables-D5C': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Feasibility Deliverables-D5C',
     section: {
       sectionOrder: 18,
-      sectionName: 'Feasibility Deliverables'
+      sectionName: 'Feasibility Deliverables',
     },
     questionText: 'How will the feasibility data sources be used?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - TSL',
       'Core - Business Developer',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 1,
@@ -13703,25 +13703,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'History-E3L': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'History-E3L',
     section: {
       sectionOrder: 4,
-      sectionName: 'History'
+      sectionName: 'History',
     },
     questionText: 'What are the CRM numbers of related studies?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Business Developer',
       'Spec - Feasibility',
       'Core - TSL',
-      'Spec - Business Account Manager'
+      'Spec - Business Account Manager',
     ],
     answers: [],
     questionOrder: 4,
@@ -13736,7 +13736,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '',
-      time: '2022-11-28T05:48:34.293Z'
+      time: '2022-11-28T05:48:34.293Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -13749,25 +13749,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'History-F3K': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'History-F3K',
     section: {
       sectionOrder: 4,
-      sectionName: 'History'
+      sectionName: 'History',
     },
     questionText:
       'In which population(s) was PK profile and safety studied (e.g., Caucasian, Chinese, Japanese etc)?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - TSL',
       'Core - Medical Strategy Lead',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 16,
@@ -13791,24 +13791,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'History-F3O': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'History-F3O',
     section: {
       sectionOrder: 4,
-      sectionName: 'History'
+      sectionName: 'History',
     },
     questionText: 'If applicable, what is the location of the Phase I study?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 13,
@@ -13832,24 +13832,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'History-G8Z': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'History-G8Z',
     section: {
       sectionOrder: 4,
-      sectionName: 'History'
+      sectionName: 'History',
     },
     questionText: 'What are they?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 10,
@@ -13873,19 +13873,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'History-H5E': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'History-H5E',
     section: {
       sectionOrder: 4,
-      sectionName: 'History'
+      sectionName: 'History',
     },
     questionText: 'Have we worked with this customer previously?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -13913,24 +13913,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'History-P5A': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'History-P5A',
     section: {
       sectionOrder: 4,
-      sectionName: 'History'
+      sectionName: 'History',
     },
     questionText: 'If applicable, what is the status of the Phase II study?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 14,
@@ -13954,25 +13954,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'History-P8G': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'History-P8G',
     section: {
       sectionOrder: 4,
-      sectionName: 'History'
+      sectionName: 'History',
     },
     questionText: 'Who is the best person to contact for this?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Business Developer',
       'Spec - Feasibility',
       'Core - TSL',
-      'Spec - Business Account Manager'
+      'Spec - Business Account Manager',
     ],
     answers: [],
     questionOrder: 3,
@@ -13996,25 +13996,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'History-R6S': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'History-R6S',
     section: {
       sectionOrder: 4,
-      sectionName: 'History'
+      sectionName: 'History',
     },
     questionText: 'If applicable, what is the location of the Phase II study?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - TSL',
       'Core - Medical Strategy Lead',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 15,
@@ -14038,27 +14038,27 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'History-R6X': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'History-R6X',
     section: {
       sectionOrder: 4,
-      sectionName: 'History'
+      sectionName: 'History',
     },
     questionText:
       'Do we need to reach out to ops teams for lessons learned on related previous or ongoing studies?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: [
       'Core - Business Developer',
       'Spec - Feasibility',
       'Core - TSL',
       'Spec - Business Account Manager',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 2,
@@ -14083,20 +14083,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'History-T4L': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'History-T4L',
     section: {
       sectionOrder: 4,
-      sectionName: 'History'
+      sectionName: 'History',
     },
     questionText:
       'Who conducted the earlier phase studies? (Name if customer willing to share; if not, was it a small, medium, or large CRO?)',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -14120,25 +14120,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'History-T6C': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'History-T6C',
     section: {
       sectionOrder: 4,
-      sectionName: 'History'
+      sectionName: 'History',
     },
     questionText:
       'Are we managing other studies or standalone services for this customer?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 9,
@@ -14162,19 +14162,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'History-T8E': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'History-T8E',
     section: {
       sectionOrder: 4,
-      sectionName: 'History'
+      sectionName: 'History',
     },
     questionText: 'Why is the customer considering a different CRO?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -14199,20 +14199,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'History-T9P': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'History-T9P',
     section: {
       sectionOrder: 4,
-      sectionName: 'History'
+      sectionName: 'History',
     },
     questionText:
       'Since IQVIA is the incumbent CRO but this is a competitive bid, why is the customer exploring other options besides IQVIA?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer', 'Core - Project Lead'],
     answers: [],
@@ -14237,20 +14237,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'History-V9F': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'History-V9F',
     section: {
       sectionOrder: 4,
-      sectionName: 'History'
+      sectionName: 'History',
     },
     questionText:
       'Have we conducted similar studies in the same target countries before? \n\n-something thing darkside\n1. numbered list\n2. numbered list\n3. numbered list',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - TSL', 'Spec - Feasibility'],
     answers: [
@@ -14261,8 +14261,8 @@ export const quesHashData = {
         date: '2022-11-10T16:57:05.324Z',
         answer: 'Yes',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: true
-      }
+        updatedInPG: true,
+      },
     ],
     questionOrder: 1,
     visible: false,
@@ -14285,24 +14285,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'History-Z4E': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'History-Z4E',
     section: {
       sectionOrder: 4,
-      sectionName: 'History'
+      sectionName: 'History',
     },
     questionText: 'How are they going?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 11,
@@ -14326,24 +14326,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'History-Z7Q': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'History-Z7Q',
     section: {
       sectionOrder: 4,
-      sectionName: 'History'
+      sectionName: 'History',
     },
     questionText: 'If applicable, what is the status of the Phase I study?',
     answerConfiguration: {
       type: 'select',
-      options: ['Ongoing', 'Completed']
+      options: ['Ongoing', 'Completed'],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 12,
@@ -14367,19 +14367,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'ISSC-I9X': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'ISSC-I9X',
     section: {
       sectionOrder: 24,
-      sectionName: 'ISSC'
+      sectionName: 'ISSC',
     },
     questionText: 'Is the SSU Manager needed for this study?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['X - Proposal Leader'],
     answers: [],
@@ -14404,19 +14404,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'ISSC-M4H': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'ISSC-M4H',
     section: {
       sectionOrder: 24,
-      sectionName: 'ISSC'
+      sectionName: 'ISSC',
     },
     questionText: 'GPSS ICF support Needed?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['X - Proposal Leader'],
     answers: [],
@@ -14441,24 +14441,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'ISSC-T4H': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'ISSC-T4H',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText: 'Is the customer planning Central IRB or Local IRB support?',
     answerConfiguration: {
       type: 'select',
-      options: ['Central IRB', 'Local IRB']
+      options: ['Central IRB', 'Local IRB'],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 6,
@@ -14480,19 +14480,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'ISSC-T9E': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'ISSC-T9E',
     section: {
       sectionOrder: 24,
-      sectionName: 'ISSC'
+      sectionName: 'ISSC',
     },
     questionText: 'Is the SSU Model being utilized for this study?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['X - Proposal Leader'],
     answers: [],
@@ -14517,14 +14517,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Key Budget Specs-AB1': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Key Budget Specs-AB1',
     section: {
       sectionOrder: 20,
-      sectionName: 'Key Budget Specs'
+      sectionName: 'Key Budget Specs',
     },
     questionText: 'Do we have any of these key budget specs?',
     answerConfiguration: {
@@ -14540,15 +14540,15 @@ export const quesHashData = {
         'Unique CRFs',
         'SDM %',
         'Target min/page',
-        'Customer-preferred EDC platform'
-      ]
+        'Customer-preferred EDC platform',
+      ],
     },
     roleNames: [
       'Core - Medical Strategy Lead',
       'Core - TSL',
       'Core - Proposal Developer',
       'X - Proposal Leader',
-      'Core - Clinical DS&B'
+      'Core - Clinical DS&B',
     ],
     answers: [],
     questionOrder: 1,
@@ -14570,19 +14570,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Key stakeholders-Y0L': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Key stakeholders-Y0L',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: "Who is the decision maker in the customer's org?",
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -14607,19 +14607,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Medical Monitoring-P6H': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Medical Monitoring-P6H',
     section: {
       sectionOrder: 28,
-      sectionName: 'Medical Monitoring'
+      sectionName: 'Medical Monitoring',
     },
     questionText: 'Will IQVIA perform medical review of patient profiles?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer', 'X - Medical Bidder - IQB'],
     answers: [],
@@ -14644,14 +14644,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Medical Monitoring-V3U': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Medical Monitoring-V3U',
     section: {
       sectionOrder: 28,
-      sectionName: 'Medical Monitoring'
+      sectionName: 'Medical Monitoring',
     },
     questionText: 'What is the role of the MM in the meeting?',
     answerConfiguration: {
@@ -14660,8 +14660,8 @@ export const quesHashData = {
         'Non-voting member',
         'attendance only',
         'Review of data prior to meetings',
-        'Slide preparation and presentation at the meeting'
-      ]
+        'Slide preparation and presentation at the meeting',
+      ],
     },
     roleNames: ['Core - Business Developer', 'X - Medical Bidder - IQB'],
     answers: [],
@@ -14686,19 +14686,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Medical Writing-D0G': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Medical Writing-D0G',
     section: {
       sectionOrder: 29,
-      sectionName: 'Medical Writing'
+      sectionName: 'Medical Writing',
     },
     questionText: 'Are patient narratives required?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Spec - Medical Writing'],
     answers: [],
@@ -14723,19 +14723,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Medical Writing-D9G': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Medical Writing-D9G',
     section: {
       sectionOrder: 29,
-      sectionName: 'Medical Writing'
+      sectionName: 'Medical Writing',
     },
     questionText: 'How many patient narratives should be included?',
     answerConfiguration: {
       type: 'number',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Medical Writing'],
     answers: [],
@@ -14760,14 +14760,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Medical Writing-E6Y': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Medical Writing-E6Y',
     section: {
       sectionOrder: 29,
-      sectionName: 'Medical Writing'
+      sectionName: 'Medical Writing',
     },
     questionText: 'Specify what tasks are expected:',
     answerConfiguration: {
@@ -14776,8 +14776,8 @@ export const quesHashData = {
         'Protocol writing',
         'Sample size calculations',
         'study design',
-        'critical evaluation of customer protocol/design by our Advisory services analytics'
-      ]
+        'critical evaluation of customer protocol/design by our Advisory services analytics',
+      ],
     },
     roleNames: ['Spec - Medical Writing'],
     answers: [],
@@ -14802,19 +14802,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Medical Writing-G2L': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Medical Writing-G2L',
     section: {
       sectionOrder: 29,
-      sectionName: 'Medical Writing'
+      sectionName: 'Medical Writing',
     },
     questionText: 'Will the customer or IQVIA develop the protocol?',
     answerConfiguration: {
       type: 'select',
-      options: ['Customer', 'IQVIA']
+      options: ['Customer', 'IQVIA'],
     },
     roleNames: ['Core - Business Developer', 'Spec - Medical Writing'],
     answers: [],
@@ -14839,14 +14839,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Medical Writing-M9S': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Medical Writing-M9S',
     section: {
       sectionOrder: 29,
-      sectionName: 'Medical Writing'
+      sectionName: 'Medical Writing',
     },
     questionText: 'Does IQVIA medical writing scope include:',
     answerConfiguration: {
@@ -14854,8 +14854,8 @@ export const quesHashData = {
       options: [
         'More than 1 CSR',
         'Results posted to EudraCT/Clinical Trials.gov',
-        'Manuscript publishing'
-      ]
+        'Manuscript publishing',
+      ],
     },
     roleNames: ['Spec - Medical Writing'],
     answers: [],
@@ -14880,19 +14880,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Medical Writing-P1L': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Medical Writing-P1L',
     section: {
       sectionOrder: 29,
-      sectionName: 'Medical Writing'
+      sectionName: 'Medical Writing',
     },
     questionText: 'How many protocols should be included in the DSUR?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Medical Writing'],
     answers: [],
@@ -14917,20 +14917,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Medical Writing-T1I': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Medical Writing-T1I',
     section: {
       sectionOrder: 29,
-      sectionName: 'Medical Writing'
+      sectionName: 'Medical Writing',
     },
     questionText:
       'We typically provide 2 review cycles for protocol writing and CSR writing activities in accordance with our SOPs. Does the customer require more review cycles than this?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Spec - Medical Writing'],
     answers: [],
@@ -14955,20 +14955,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Meetings-A1I': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Meetings-A1I',
     section: {
       sectionOrder: 21,
-      sectionName: 'Meetings'
+      sectionName: 'Meetings',
     },
     questionText:
       'Do we need to decrease meetings from standards or limit attendees at client telecons?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - TSL', 'X - Proposal Leader'],
     answers: [],
@@ -14991,24 +14991,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Meetings-C8Q': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Meetings-C8Q',
     section: {
       sectionOrder: 21,
-      sectionName: 'Meetings'
+      sectionName: 'Meetings',
     },
     questionText: 'Will the investigator meeting be face-to-face or virtual?',
     answerConfiguration: {
       type: 'select',
-      options: ['Face-to-face', 'Virtual', 'Hybrid', 'None']
+      options: ['Face-to-face', 'Virtual', 'Hybrid', 'None'],
     },
     roleNames: [
       'Core - Business Developer',
       'X - Proposal Leader',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [],
     questionOrder: 2,
@@ -15030,19 +15030,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Meetings-D0F': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Meetings-D0F',
     section: {
       sectionOrder: 21,
-      sectionName: 'Meetings'
+      sectionName: 'Meetings',
     },
     questionText: 'Do we need any other face-to-face meetings?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - TSL', 'X - Proposal Leader'],
     answers: [],
@@ -15065,24 +15065,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Meetings-E9M': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Meetings-E9M',
     section: {
       sectionOrder: 21,
-      sectionName: 'Meetings'
+      sectionName: 'Meetings',
     },
     questionText: 'Will we have a KOM?',
     answerConfiguration: {
       type: 'select',
-      options: ['Face-to-face', 'Virtual', 'No']
+      options: ['Face-to-face', 'Virtual', 'No'],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 1,
@@ -15104,26 +15104,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Meetings-G6B': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Meetings-G6B',
     section: {
       sectionOrder: 21,
-      sectionName: 'Meetings'
+      sectionName: 'Meetings',
     },
     questionText:
       'What is the expected timing of the investigator meeting? (i.e. before or after FPI)',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - Medical Strategy Lead',
       'X - Proposal Leader',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [],
     questionOrder: 5,
@@ -15147,14 +15147,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Meetings-Q5O': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Meetings-Q5O',
     section: {
       sectionOrder: 21,
-      sectionName: 'Meetings'
+      sectionName: 'Meetings',
     },
     questionText:
       'For global studies, will there be one global investigator meeting or several regional meetings?',
@@ -15163,13 +15163,13 @@ export const quesHashData = {
       options: [
         'One global meeting',
         'Several regional meetings',
-        'Not applicable'
-      ]
+        'Not applicable',
+      ],
     },
     roleNames: [
       'Core - Business Developer',
       'X - Proposal Leader',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [],
     questionOrder: 3,
@@ -15193,19 +15193,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Meetings-Y8X': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Meetings-Y8X',
     section: {
       sectionOrder: 21,
-      sectionName: 'Meetings'
+      sectionName: 'Meetings',
     },
     questionText: 'Where will regional meetings be held?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['X - Proposal Leader', 'Core - TSL'],
     answers: [],
@@ -15230,19 +15230,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Opportunity Overview-D2Y': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Opportunity Overview-D2Y',
     section: {
       sectionOrder: 37,
-      sectionName: 'Details-For-Backend'
+      sectionName: 'Details-For-Backend',
     },
     questionText: 'Verbatim indication',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [
@@ -15251,7 +15251,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:02.094Z',
-        answer: 'test'
+        answer: 'test',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15261,7 +15261,7 @@ export const quesHashData = {
         answer: 'test',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15271,7 +15271,7 @@ export const quesHashData = {
         answer: 'test',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15281,7 +15281,7 @@ export const quesHashData = {
         answer: 'test',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15291,7 +15291,7 @@ export const quesHashData = {
         answer: 'test',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'test',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15301,7 +15301,7 @@ export const quesHashData = {
         answer: 'test',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'test',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15311,7 +15311,7 @@ export const quesHashData = {
         answer: 'test',
         formattedAnswer: 'test',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15321,8 +15321,8 @@ export const quesHashData = {
         answer: 'test',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'test',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 7,
     visible: false,
@@ -15337,7 +15337,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'test',
-      time: '2022-11-28T05:48:34.367Z'
+      time: '2022-11-28T05:48:34.367Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -15350,19 +15350,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Opportunity Overview-D3B': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Opportunity Overview-D3B',
     section: {
       sectionOrder: 37,
-      sectionName: 'Details-For-Backend'
+      sectionName: 'Details-For-Backend',
     },
     questionText: 'Phase',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [
@@ -15371,7 +15371,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:02.166Z',
-        answer: 'Phase 1'
+        answer: 'Phase 1',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15381,7 +15381,7 @@ export const quesHashData = {
         answer: 'Phase 1',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15391,7 +15391,7 @@ export const quesHashData = {
         answer: 'Phase 1',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15401,7 +15401,7 @@ export const quesHashData = {
         answer: 'Phase 1',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15411,7 +15411,7 @@ export const quesHashData = {
         answer: 'Phase 1',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Phase 1',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15421,7 +15421,7 @@ export const quesHashData = {
         answer: 'Phase 1',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Phase 1',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15431,7 +15431,7 @@ export const quesHashData = {
         answer: 'Phase 1',
         formattedAnswer: 'Phase 1',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15441,8 +15441,8 @@ export const quesHashData = {
         answer: 'Phase 1',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'Phase 1',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 6,
     visible: false,
@@ -15457,7 +15457,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'Phase 1',
-      time: '2022-11-28T05:48:34.444Z'
+      time: '2022-11-28T05:48:34.444Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -15470,19 +15470,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Opportunity Overview-D9N': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Opportunity Overview-D9N',
     section: {
       sectionOrder: 37,
-      sectionName: 'Details-For-Backend'
+      sectionName: 'Details-For-Backend',
     },
     questionText: 'Is this IQVIA Biotech',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [
@@ -15491,7 +15491,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:02.237Z',
-        answer: 'No'
+        answer: 'No',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15501,7 +15501,7 @@ export const quesHashData = {
         answer: 'No',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15511,7 +15511,7 @@ export const quesHashData = {
         answer: 'No',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15521,7 +15521,7 @@ export const quesHashData = {
         answer: 'No',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15531,7 +15531,7 @@ export const quesHashData = {
         answer: 'Yes',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Yes',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15541,7 +15541,7 @@ export const quesHashData = {
         answer: 'Yes',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Yes',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15551,7 +15551,7 @@ export const quesHashData = {
         answer: 'Yes',
         formattedAnswer: 'Yes',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15561,8 +15561,8 @@ export const quesHashData = {
         answer: 'Yes',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'Yes',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 5,
     visible: false,
@@ -15577,7 +15577,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'Yes',
-      time: '2022-11-28T05:48:34.539Z'
+      time: '2022-11-28T05:48:34.539Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -15590,19 +15590,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Opportunity Overview-H1X': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Opportunity Overview-H1X',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'Opportunity Type',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer', 'Core - Proposal Developer'],
     answers: [
@@ -15611,7 +15611,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:46:53.142Z',
-        answer: 'RFP'
+        answer: 'RFP',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15621,7 +15621,7 @@ export const quesHashData = {
         answer: 'RFP',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15631,7 +15631,7 @@ export const quesHashData = {
         answer: 'RFP',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15641,7 +15641,7 @@ export const quesHashData = {
         answer: 'BTS Ballpark',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15651,7 +15651,7 @@ export const quesHashData = {
         answer: 'BTS Ballpark',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'BTS Ballpark',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15661,7 +15661,7 @@ export const quesHashData = {
         answer: 'BTS Ballpark',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'BTS Ballpark',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15671,7 +15671,7 @@ export const quesHashData = {
         answer: 'BTS Ballpark',
         formattedAnswer: 'BTS Ballpark',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15681,8 +15681,8 @@ export const quesHashData = {
         answer: 'BTS Ballpark',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'BTS Ballpark',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 4,
     visible: true,
@@ -15694,7 +15694,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'BTS Ballpark',
-      time: '2022-11-28T05:48:34.637Z'
+      time: '2022-11-28T05:48:34.637Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -15707,19 +15707,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Opportunity Overview-H8Z': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Opportunity Overview-H8Z',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'Test',
     answerConfiguration: {
       type: 'picklist-lookup',
-      options: ['CRF', 'protocol', 'ICF', 'CSR', 'other']
+      options: ['CRF', 'protocol', 'ICF', 'CSR', 'other'],
     },
     roleNames: [
       'Core - Business Developer',
@@ -15728,7 +15728,7 @@ export const quesHashData = {
       'Spec - RSU',
       'Spec - Safety',
       'Spec - Site Analytics',
-      'Spec - Medical Writing'
+      'Spec - Medical Writing',
     ],
     answers: [
       {
@@ -15736,56 +15736,56 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:46:53.284Z',
-        answer: 'RFP'
+        answer: 'RFP',
       },
       {
         user: 'AnswerPulledFromSalesforce',
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:46:53.284Z',
-        answer: 'RFP'
+        answer: 'RFP',
       },
       {
         user: 'AnswerPulledFromSalesforce',
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:46:53.284Z',
-        answer: 'RFP'
+        answer: 'RFP',
       },
       {
         user: 'AnswerPulledFromSalesforce',
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:46:53.284Z',
-        answer: 'RFP'
+        answer: 'RFP',
       },
       {
         user: 'AnswerPulledFromSalesforce',
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:46:53.284Z',
-        answer: 'RFP'
+        answer: 'RFP',
       },
       {
         user: 'AnswerPulledFromSalesforce',
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:46:53.284Z',
-        answer: 'RFP'
+        answer: 'RFP',
       },
       {
         user: 'AnswerPulledFromSalesforce',
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:46:53.284Z',
-        answer: 'RFP'
+        answer: 'RFP',
       },
       {
         user: 'AnswerPulledFromSalesforce',
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:46:53.284Z',
-        answer: 'RFP'
+        answer: 'RFP',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15795,7 +15795,7 @@ export const quesHashData = {
         answer: 'Test 101',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15805,7 +15805,7 @@ export const quesHashData = {
         answer: 'Test 101',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15815,7 +15815,7 @@ export const quesHashData = {
         answer: 'Test 101',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15825,7 +15825,7 @@ export const quesHashData = {
         answer: 'Test 101',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15835,7 +15835,7 @@ export const quesHashData = {
         answer: ['Test 101'],
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15845,7 +15845,7 @@ export const quesHashData = {
         answer: ['Test 101'],
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15855,7 +15855,7 @@ export const quesHashData = {
         answer: ['Test 101'],
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15865,7 +15865,7 @@ export const quesHashData = {
         answer: ['Test 101'],
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15875,7 +15875,7 @@ export const quesHashData = {
         answer: ['Test 101'],
         formattedAnswer: ['Test 101'],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15885,8 +15885,8 @@ export const quesHashData = {
         answer: ['Test 101'],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: ['Test 101'],
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 1,
     visible: false,
@@ -15899,8 +15899,8 @@ export const quesHashData = {
     milestoneNew: [
       {
         Name: 'Proposal',
-        Color: '#000000'
-      }
+        Color: '#000000',
+      },
     ],
     interestedParties: '(Test) Core Teamm',
     opportunityType:
@@ -15912,7 +15912,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: ['Test 101'],
-      time: '2022-11-28T05:48:34.714Z'
+      time: '2022-11-28T05:48:34.714Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -15927,19 +15927,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: true
+    questionApproval: true,
   },
   'Opportunity Overview-I7N': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Opportunity Overview-I7N',
     section: {
       sectionOrder: 37,
-      sectionName: 'Details-For-Backend'
+      sectionName: 'Details-For-Backend',
     },
     questionText: 'Therapeutic area',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [
@@ -15948,7 +15948,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:02.316Z',
-        answer: 'Acute Care'
+        answer: 'Acute Care',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15958,7 +15958,7 @@ export const quesHashData = {
         answer: 'Acute Care',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15968,7 +15968,7 @@ export const quesHashData = {
         answer: 'Acute Care',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15978,7 +15978,7 @@ export const quesHashData = {
         answer: 'Acute Care',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15988,7 +15988,7 @@ export const quesHashData = {
         answer: 'Acute Care',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Acute Care',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -15998,7 +15998,7 @@ export const quesHashData = {
         answer: 'Acute Care',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Acute Care',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16008,7 +16008,7 @@ export const quesHashData = {
         answer: 'Acute Care',
         formattedAnswer: 'Acute Care',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16018,8 +16018,8 @@ export const quesHashData = {
         answer: 'Acute Care',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'Acute Care',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 8,
     visible: false,
@@ -16034,7 +16034,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'Acute Care',
-      time: '2022-11-28T05:48:34.830Z'
+      time: '2022-11-28T05:48:34.830Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -16047,19 +16047,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Opportunity Overview-J5U': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Opportunity Overview-J5U',
     section: {
       sectionOrder: 37,
-      sectionName: 'Details-For-Backend'
+      sectionName: 'Details-For-Backend',
     },
     questionText: 'Bid Number',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [
@@ -16068,7 +16068,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:02.393Z',
-        answer: '1'
+        answer: '1',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16078,7 +16078,7 @@ export const quesHashData = {
         answer: '2',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16088,7 +16088,7 @@ export const quesHashData = {
         answer: '2',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16098,7 +16098,7 @@ export const quesHashData = {
         answer: '3',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16108,7 +16108,7 @@ export const quesHashData = {
         answer: '3',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: '3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16118,7 +16118,7 @@ export const quesHashData = {
         answer: '3',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: '3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16128,7 +16128,7 @@ export const quesHashData = {
         answer: '5',
         formattedAnswer: '5',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16138,8 +16138,8 @@ export const quesHashData = {
         answer: '5',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: '5',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 12,
     visible: false,
@@ -16154,7 +16154,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '5',
-      time: '2022-11-28T05:48:34.907Z'
+      time: '2022-11-28T05:48:34.907Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -16167,25 +16167,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Opportunity Overview-J7C': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Opportunity Overview-J7C',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText:
       'Are we running similar studies that could compete with this study?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'X - Proposal Leader',
       'Core - TSL',
-      'Core - Business Developer'
+      'Core - Business Developer',
     ],
     answers: [
       {
@@ -16201,7 +16201,7 @@ export const quesHashData = {
         created_by: '1105454',
         updated_by: '1105454',
         created_date: '2022-11-16T07:17:54.769Z',
-        updated_date: '2022-11-16T07:17:54.769Z'
+        updated_date: '2022-11-16T07:17:54.769Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -16216,7 +16216,7 @@ export const quesHashData = {
         created_by: '1105454',
         updated_by: '1105454',
         created_date: '2022-11-16T07:17:54.769Z',
-        updated_date: '2022-11-16T07:17:54.769Z'
+        updated_date: '2022-11-16T07:17:54.769Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -16231,7 +16231,7 @@ export const quesHashData = {
         created_by: '1105454',
         updated_by: '1105454',
         created_date: '2022-11-16T07:17:54.769Z',
-        updated_date: '2022-11-16T07:17:54.769Z'
+        updated_date: '2022-11-16T07:17:54.769Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -16246,7 +16246,7 @@ export const quesHashData = {
         created_by: '1105454',
         updated_by: '1105454',
         created_date: '2022-11-16T07:17:54.769Z',
-        updated_date: '2022-11-16T07:17:54.769Z'
+        updated_date: '2022-11-16T07:17:54.769Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -16261,7 +16261,7 @@ export const quesHashData = {
         created_by: '1105454',
         updated_by: '1105454',
         created_date: '2022-11-16T07:18:22.695Z',
-        updated_date: '2022-11-16T07:18:22.695Z'
+        updated_date: '2022-11-16T07:18:22.695Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -16276,7 +16276,7 @@ export const quesHashData = {
         created_by: '1105454',
         updated_by: '1105454',
         created_date: '2022-11-16T07:18:22.695Z',
-        updated_date: '2022-11-16T07:18:22.695Z'
+        updated_date: '2022-11-16T07:18:22.695Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -16291,7 +16291,7 @@ export const quesHashData = {
         created_by: '1105454',
         updated_by: '1105454',
         created_date: '2022-11-16T07:18:22.695Z',
-        updated_date: '2022-11-16T07:18:22.695Z'
+        updated_date: '2022-11-16T07:18:22.695Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -16306,7 +16306,7 @@ export const quesHashData = {
         created_by: '1105454',
         updated_by: '1105454',
         created_date: '2022-11-16T07:18:22.695Z',
-        updated_date: '2022-11-16T07:18:22.695Z'
+        updated_date: '2022-11-16T07:18:22.695Z',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16316,7 +16316,7 @@ export const quesHashData = {
         answer: '10',
         formattedAnswer: '10',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16326,8 +16326,8 @@ export const quesHashData = {
         answer: '10',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: '10',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 10,
     visible: true,
@@ -16339,7 +16339,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '10',
-      time: '2022-11-28T05:48:35.000Z'
+      time: '2022-11-28T05:48:35.000Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -16352,19 +16352,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: true
+    questionApproval: true,
   },
   'Opportunity Overview-K9T': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Opportunity Overview-K9T',
     section: {
       sectionOrder: 37,
-      sectionName: 'Details-For-Backend'
+      sectionName: 'Details-For-Backend',
     },
     questionText: 'Protocol number',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [
@@ -16373,7 +16373,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:02.456Z',
-        answer: 'dcc - 2618 - 01 - 009'
+        answer: 'dcc - 2618 - 01 - 009',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16383,7 +16383,7 @@ export const quesHashData = {
         answer: 'dcc - 2618 - 01 - 009',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16393,7 +16393,7 @@ export const quesHashData = {
         answer: 'dcc - 2618 - 01 - 009',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16403,7 +16403,7 @@ export const quesHashData = {
         answer: 'dcc - 2618 - 01 - 009',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16413,7 +16413,7 @@ export const quesHashData = {
         answer: 'dcc - 2618 - 01 - 009',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'dcc - 2618 - 01 - 009',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16423,7 +16423,7 @@ export const quesHashData = {
         answer: 'dcc - 2618 - 01 - 009',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'dcc - 2618 - 01 - 009',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16433,7 +16433,7 @@ export const quesHashData = {
         answer: 'dcc - 2618 - 01 - 009',
         formattedAnswer: 'dcc - 2618 - 01 - 009',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16443,8 +16443,8 @@ export const quesHashData = {
         answer: 'dcc - 2618 - 01 - 009',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'dcc - 2618 - 01 - 009',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 9,
     visible: false,
@@ -16459,7 +16459,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'dcc - 2618 - 01 - 009',
-      time: '2022-11-28T05:48:35.100Z'
+      time: '2022-11-28T05:48:35.100Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -16472,19 +16472,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Opportunity Overview-M9D': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Opportunity Overview-M9D',
     section: {
       sectionOrder: 37,
-      sectionName: 'Details-For-Backend'
+      sectionName: 'Details-For-Backend',
     },
     questionText: 'Customer',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [
@@ -16493,7 +16493,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:02.575Z',
-        answer: 'Test-K'
+        answer: 'Test-K',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16503,7 +16503,7 @@ export const quesHashData = {
         answer: 'Test-K',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16513,7 +16513,7 @@ export const quesHashData = {
         answer: 'Test-K',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16523,7 +16523,7 @@ export const quesHashData = {
         answer: 'Test-K',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16533,7 +16533,7 @@ export const quesHashData = {
         answer: 'Test-K',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Test-K',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16543,7 +16543,7 @@ export const quesHashData = {
         answer: 'Test-K',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Test-K',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16553,7 +16553,7 @@ export const quesHashData = {
         answer: 'Test-K',
         formattedAnswer: 'Test-K',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16563,8 +16563,8 @@ export const quesHashData = {
         answer: 'Test-K',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'Test-K',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 1,
     visible: false,
@@ -16579,7 +16579,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'Test-K',
-      time: '2022-11-28T05:48:35.191Z'
+      time: '2022-11-28T05:48:35.191Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -16592,19 +16592,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Opportunity Overview-N0J': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Opportunity Overview-N0J',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'Study design',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Medical Strategy Lead', 'X - Proposal Leader'],
     answers: [],
@@ -16633,24 +16633,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: true
+    questionApproval: true,
   },
   'Opportunity Overview-N9U': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Opportunity Overview-N9U',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'Intervention type',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - Proposal Developer',
-      'Core - Project Lead'
+      'Core - Project Lead',
     ],
     answers: [
       {
@@ -16661,7 +16661,7 @@ export const quesHashData = {
         answer: 'Chemical/Small Molecule',
         formattedAnswer: 'Chemical/Small Molecule',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16671,8 +16671,8 @@ export const quesHashData = {
         answer: 'Chemical/Small Molecule',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'Chemical/Small Molecule',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 3,
     visible: false,
@@ -16687,7 +16687,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'Chemical/Small Molecule',
-      time: '2022-11-28T05:48:35.277Z'
+      time: '2022-11-28T05:48:35.277Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -16702,19 +16702,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Opportunity Overview-O7Z': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Opportunity Overview-O7Z',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'Is this a rescue study?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [
@@ -16723,8 +16723,8 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:46:53.531Z',
-        answer: 'RFP'
-      }
+        answer: 'RFP',
+      },
     ],
     questionOrder: 8,
     visible: true,
@@ -16748,19 +16748,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Opportunity Overview-R4U': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Opportunity Overview-R4U',
     section: {
       sectionOrder: 37,
-      sectionName: 'Details-For-Backend'
+      sectionName: 'Details-For-Backend',
     },
     questionText: 'Resource Request',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [
@@ -16770,8 +16770,8 @@ export const quesHashData = {
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:02.648Z',
         answer:
-          'GBO-Lead PD, GBO-Bid Grid, DSB-CEVA, DSB-MW, DSB-Bios, DSB-DM, DSB-RSU, Strategic Pricing Lead'
-      }
+          'GBO-Lead PD, GBO-Bid Grid, DSB-CEVA, DSB-MW, DSB-Bios, DSB-DM, DSB-RSU, Strategic Pricing Lead',
+      },
     ],
     questionOrder: 11,
     visible: false,
@@ -16786,7 +16786,7 @@ export const quesHashData = {
     hasDifferentSFanswer: true,
     currentSFanswer: {
       value: '',
-      time: '2022-11-28T05:48:35.366Z'
+      time: '2022-11-28T05:48:35.366Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -16799,19 +16799,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Opportunity Overview-R5U': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Opportunity Overview-R5U',
     section: {
       sectionOrder: 37,
-      sectionName: 'Details-For-Backend'
+      sectionName: 'Details-For-Backend',
     },
     questionText: 'Patient Type',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [
@@ -16820,7 +16820,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:02.718Z',
-        answer: 'Healthy Normal Volunteers'
+        answer: 'Healthy Normal Volunteers',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16830,7 +16830,7 @@ export const quesHashData = {
         answer: 'Healthy Normal Volunteers',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16840,7 +16840,7 @@ export const quesHashData = {
         answer: 'Healthy Normal Volunteers',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16850,7 +16850,7 @@ export const quesHashData = {
         answer: 'Healthy Normal Volunteers',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16860,7 +16860,7 @@ export const quesHashData = {
         answer: 'Healthy Normal Volunteers',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Healthy Normal Volunteers',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16870,7 +16870,7 @@ export const quesHashData = {
         answer: 'Healthy Normal Volunteers',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Healthy Normal Volunteers',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16880,7 +16880,7 @@ export const quesHashData = {
         answer: 'Healthy Normal Volunteers',
         formattedAnswer: 'Healthy Normal Volunteers',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16890,8 +16890,8 @@ export const quesHashData = {
         answer: 'Healthy Normal Volunteers',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'Healthy Normal Volunteers',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 13,
     visible: false,
@@ -16906,7 +16906,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'Healthy Normal Volunteers',
-      time: '2022-11-28T05:48:35.480Z'
+      time: '2022-11-28T05:48:35.480Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -16919,19 +16919,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Opportunity Overview-S5U': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Opportunity Overview-S5U',
     section: {
       sectionOrder: 37,
-      sectionName: 'Details-For-Backend'
+      sectionName: 'Details-For-Backend',
     },
     questionText: 'Population Age Group',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [
@@ -16940,7 +16940,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:02.788Z',
-        answer: 'Adult - 17+ Years'
+        answer: 'Adult - 17+ Years',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16950,7 +16950,7 @@ export const quesHashData = {
         answer: 'Adult - 17+ Years',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16960,7 +16960,7 @@ export const quesHashData = {
         answer: 'Adult - 17+ Years',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16970,7 +16970,7 @@ export const quesHashData = {
         answer: 'Adult - 17+ Years',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16980,7 +16980,7 @@ export const quesHashData = {
         answer: 'Adult - 17+ Years',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Adult - 17+ Years',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -16990,7 +16990,7 @@ export const quesHashData = {
         answer: 'Adult - 17+ Years',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Adult - 17+ Years',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17000,7 +17000,7 @@ export const quesHashData = {
         answer: 'Adult - 17+ Years',
         formattedAnswer: 'Adult - 17+ Years',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17010,8 +17010,8 @@ export const quesHashData = {
         answer: 'Adult - 17+ Years',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'Adult - 17+ Years',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 14,
     visible: false,
@@ -17026,7 +17026,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'Adult - 17+ Years',
-      time: '2022-11-28T05:48:35.577Z'
+      time: '2022-11-28T05:48:35.577Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -17039,24 +17039,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Opportunity Overview-S7R': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Opportunity Overview-S7R',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'Is this a rare disease?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: [
       'Core - Medical Strategy Lead',
       'X - Proposal Leader',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [
       {
@@ -17064,7 +17064,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:46:53.754Z',
-        answer: 'false'
+        answer: 'false',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17074,7 +17074,7 @@ export const quesHashData = {
         answer: 'false',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17084,7 +17084,7 @@ export const quesHashData = {
         answer: 'false',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17094,7 +17094,7 @@ export const quesHashData = {
         answer: 'false',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17104,7 +17104,7 @@ export const quesHashData = {
         answer: 'false',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'false',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17114,7 +17114,7 @@ export const quesHashData = {
         answer: 'false',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'false',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17124,7 +17124,7 @@ export const quesHashData = {
         answer: 'false',
         formattedAnswer: 'false',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17134,8 +17134,8 @@ export const quesHashData = {
         answer: 'false',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'false',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 7,
     visible: true,
@@ -17147,7 +17147,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'false',
-      time: '2022-11-28T05:48:35.795Z'
+      time: '2022-11-28T05:48:35.795Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -17160,19 +17160,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Opportunity Overview-T1U': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Opportunity Overview-T1U',
     section: {
       sectionOrder: 37,
-      sectionName: 'Details-For-Backend'
+      sectionName: 'Details-For-Backend',
     },
     questionText: 'Bid due date',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [
@@ -17181,7 +17181,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:02.919Z',
-        answer: '2021-11-25'
+        answer: '2021-11-25',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17191,7 +17191,7 @@ export const quesHashData = {
         answer: '2022-11-30',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17201,7 +17201,7 @@ export const quesHashData = {
         answer: '2022-11-30',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17211,7 +17211,7 @@ export const quesHashData = {
         answer: '2023-01-25',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17221,7 +17221,7 @@ export const quesHashData = {
         answer: '2023-01-25',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: '2023-01-25',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17231,7 +17231,7 @@ export const quesHashData = {
         answer: '2023-01-25',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: '2023-01-25',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17241,7 +17241,7 @@ export const quesHashData = {
         answer: '2023-11-30',
         formattedAnswer: '2023-11-30',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17251,8 +17251,8 @@ export const quesHashData = {
         answer: '2023-11-30',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: '2023-11-30',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 3,
     visible: false,
@@ -17269,7 +17269,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '2023-11-30',
-      time: '2022-11-28T05:48:35.864Z'
+      time: '2022-11-28T05:48:35.864Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -17283,19 +17283,19 @@ export const quesHashData = {
     events:
       '{"EventSubject":"ssssssssss","EventBody":"bbbbbbbbbb","EventPrimaryCondition":"Bid History Creation","ModifiedAt":"2022-10-03T12:33:38.443Z","EventRoles":["Core - Proposal Developer"],"EntityType":"Events","ModifiedBy":"Simran Negi","EventUnitType":"Business Days","EventQuestionId":"9c94709e-b410-4aa2-be1a-6269cd5fe39f","SK":"EVENTS#54a07870-41f9-4a85-bb12-c9e008fc9c39","EventId":"54a07870-41f9-4a85-bb12-c9e008fc9c39","EventNoOfUnits":4,"PK":"EVENTS#54a07870-41f9-4a85-bb12-c9e008fc9c39","EventOperator":"addition","CreatedAt":"2022-10-03T12:33:38.443Z","questionId":"Opportunity Overview-T1U"}',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Opportunity Overview-Y6P': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Opportunity Overview-Y6P',
     section: {
       sectionOrder: 37,
-      sectionName: 'Details-For-Backend'
+      sectionName: 'Details-For-Backend',
     },
     questionText: 'Line of business',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [
@@ -17304,7 +17304,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:02.999Z',
-        answer: 'Early Clinical Development'
+        answer: 'Early Clinical Development',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17314,7 +17314,7 @@ export const quesHashData = {
         answer: 'Early Clinical Development',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17324,7 +17324,7 @@ export const quesHashData = {
         answer: 'Clinical',
         formattedAnswer: {},
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: true
+        updatedInPG: true,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17334,7 +17334,7 @@ export const quesHashData = {
         answer: 'Clinical',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17344,7 +17344,7 @@ export const quesHashData = {
         answer: 'Clinical',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17354,7 +17354,7 @@ export const quesHashData = {
         answer: 'Clinical',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Clinical',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17364,7 +17364,7 @@ export const quesHashData = {
         answer: 'Clinical',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Clinical',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17374,7 +17374,7 @@ export const quesHashData = {
         answer: 'Clinical',
         formattedAnswer: 'Clinical',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17384,8 +17384,8 @@ export const quesHashData = {
         answer: 'Clinical',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'Clinical',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 4,
     visible: false,
@@ -17400,7 +17400,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'Clinical',
-      time: '2022-11-28T05:48:35.958Z'
+      time: '2022-11-28T05:48:35.958Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -17413,19 +17413,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Opportunity Overview-Z1V': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Opportunity Overview-Z1V',
     section: {
       sectionOrder: 37,
-      sectionName: 'Details-For-Backend'
+      sectionName: 'Details-For-Backend',
     },
     questionText: 'Product name',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [
@@ -17434,7 +17434,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:03.080Z',
-        answer: 'dcc - 2618 -'
+        answer: 'dcc - 2618 -',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17444,7 +17444,7 @@ export const quesHashData = {
         answer: 'dcc - 2618 -',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17454,7 +17454,7 @@ export const quesHashData = {
         answer: 'dcc - 2618 -',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17464,7 +17464,7 @@ export const quesHashData = {
         answer: 'dcc - 2618 -',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17474,7 +17474,7 @@ export const quesHashData = {
         answer: 'dcc - 2618 -',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'dcc - 2618 -',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17484,7 +17484,7 @@ export const quesHashData = {
         answer: 'dcc - 2618 -',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'dcc - 2618 -',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17494,7 +17494,7 @@ export const quesHashData = {
         answer: 'dcc - 2618 -',
         formattedAnswer: 'dcc - 2618 -',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17504,8 +17504,8 @@ export const quesHashData = {
         answer: 'dcc - 2618 -',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'dcc - 2618 -',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 10,
     visible: false,
@@ -17520,7 +17520,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'dcc - 2618 -',
-      time: '2022-11-28T05:48:36.059Z'
+      time: '2022-11-28T05:48:36.059Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -17533,19 +17533,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Opportunity Overview-Z4X': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Opportunity Overview-Z4X',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'Phase I study type',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer', 'Core - Proposal Developer'],
     answers: [
@@ -17554,7 +17554,7 @@ export const quesHashData = {
         userName: 'Vamsi Krishna',
         userRole: 'Business Developer',
         date: '2021-09-29T10:57:00.235Z',
-        answer: 'test'
+        answer: 'test',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17564,7 +17564,7 @@ export const quesHashData = {
         answer: '',
         formattedAnswer: {},
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: true
+        updatedInPG: true,
       },
       {
         user: 'Dheera.Sharma@iqvia.com',
@@ -17582,19 +17582,19 @@ export const quesHashData = {
                 depth: 0,
                 inlineStyleRanges: [],
                 entityRanges: [],
-                data: {}
-              }
+                data: {},
+              },
             ],
-            entityMap: {}
+            entityMap: {},
           },
           html:
             '<div data-contents="true"><div data-block="true" data-editor="4krna" data-offset-key="3e06r-0-0"><div data-offset-key="3e06r-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="3e06r-0-0"><span data-text="true">Randomized2</span></span></div></div></div>',
           htmlExport:
-            '<div data-contents="true"><div data-block="true" data-editor="1gegp" data-offset-key="3e06r-0-0"><div data-offset-key="3e06r-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="3e06r-0-0"><span data-text="true">Randomized2</span></span></div></div></div>'
+            '<div data-contents="true"><div data-block="true" data-editor="1gegp" data-offset-key="3e06r-0-0"><div data-offset-key="3e06r-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="3e06r-0-0"><span data-text="true">Randomized2</span></span></div></div></div>',
         },
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: true
-      }
+        updatedInPG: true,
+      },
     ],
     questionOrder: 5,
     visible: true,
@@ -17609,7 +17609,7 @@ export const quesHashData = {
     hasDifferentSFanswer: true,
     currentSFanswer: {
       value: '',
-      time: '2022-11-28T05:48:36.149Z'
+      time: '2022-11-28T05:48:36.149Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -17624,19 +17624,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Opportunity Overview-Z5U': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Opportunity Overview-Z5U',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'Bid Number',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Medical Strategy Lead', 'Core - Proposal Developer'],
     answers: [
@@ -17648,7 +17648,7 @@ export const quesHashData = {
         answer: '5',
         formattedAnswer: '5',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17658,8 +17658,8 @@ export const quesHashData = {
         answer: '5',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: '5',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 2,
     visible: true,
@@ -17671,7 +17671,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '5',
-      time: '2022-11-28T05:48:36.210Z'
+      time: '2022-11-28T05:48:36.210Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -17684,19 +17684,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Opportunity Overview-Z7C': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Opportunity Overview-Z7C',
     section: {
       sectionOrder: 37,
-      sectionName: 'Details-For-Backend'
+      sectionName: 'Details-For-Backend',
     },
     questionText: 'CRM #',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [
@@ -17705,7 +17705,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:03.152Z',
-        answer: 'UZA82559'
+        answer: 'UZA82559',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17715,7 +17715,7 @@ export const quesHashData = {
         answer: 'UZA82559',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17725,7 +17725,7 @@ export const quesHashData = {
         answer: 'UZA82559',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17735,7 +17735,7 @@ export const quesHashData = {
         answer: 'UZA82559',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17745,7 +17745,7 @@ export const quesHashData = {
         answer: 'UZA82559',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'UZA82559',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17755,7 +17755,7 @@ export const quesHashData = {
         answer: 'UZA82559',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'UZA82559',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17765,7 +17765,7 @@ export const quesHashData = {
         answer: 'UZA82559',
         formattedAnswer: 'UZA82559',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -17775,8 +17775,8 @@ export const quesHashData = {
         answer: 'UZA82559',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'UZA82559',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 2,
     visible: false,
@@ -17791,7 +17791,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'UZA82559',
-      time: '2022-11-28T05:48:36.300Z'
+      time: '2022-11-28T05:48:36.300Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -17804,20 +17804,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Patient Recruitment-G7B': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Patient Recruitment-G7B',
     section: {
       sectionOrder: 30,
-      sectionName: 'Patient Recruitment'
+      sectionName: 'Patient Recruitment',
     },
     questionText:
       'Will this study require recruitment budget allocated directly to sites?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - TSL', 'X - Proposal Leader'],
     answers: [],
@@ -17842,19 +17842,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Patient Recruitment-I6E': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Patient Recruitment-I6E',
     section: {
       sectionOrder: 30,
-      sectionName: 'Patient Recruitment'
+      sectionName: 'Patient Recruitment',
     },
     questionText: 'Enrollment Tracking On?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - TSL', 'X - Proposal Leader'],
     answers: [],
@@ -17879,19 +17879,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Patient Recruitment-I7Q': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Patient Recruitment-I7Q',
     section: {
       sectionOrder: 30,
-      sectionName: 'Patient Recruitment'
+      sectionName: 'Patient Recruitment',
     },
     questionText: 'Will this study require a recruitment management plan?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - TSL'],
     answers: [],
@@ -17916,20 +17916,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Patient Recruitment-R4X': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Patient Recruitment-R4X',
     section: {
       sectionOrder: 30,
-      sectionName: 'Patient Recruitment'
+      sectionName: 'Patient Recruitment',
     },
     questionText:
       'If recruiting patients into this study will be difficult, what targeted recruitment strategies will we propose?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['X - Proposal Leader', 'Core - TSL'],
     answers: [],
@@ -17952,19 +17952,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Patient Recruitment-R9P': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Patient Recruitment-R9P',
     section: {
       sectionOrder: 30,
-      sectionName: 'Patient Recruitment'
+      sectionName: 'Patient Recruitment',
     },
     questionText: 'How much?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['X - Proposal Leader', 'Core - TSL'],
     answers: [],
@@ -17989,19 +17989,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Pharmacovigilance-B1Q': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Pharmacovigilance-B1Q',
     section: {
       sectionOrder: 31,
-      sectionName: 'Pharmacovigilance'
+      sectionName: 'Pharmacovigilance',
     },
     questionText: 'Confirm safety level (depends on # of SAEs)',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Safety'],
     answers: [],
@@ -18026,20 +18026,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Pharmacovigilance-B4O': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Pharmacovigilance-B4O',
     section: {
       sectionOrder: 31,
-      sectionName: 'Pharmacovigilance'
+      sectionName: 'Pharmacovigilance',
     },
     questionText:
       'Will the IQVIA QIP be included in proposal? Or are we using IQB algs?',
     answerConfiguration: {
       type: 'select',
-      options: ['IQVIA QIP', 'IQB algs']
+      options: ['IQVIA QIP', 'IQB algs'],
     },
     roleNames: ['Spec - Safety'],
     answers: [],
@@ -18064,24 +18064,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Pharmacovigilance-F2T': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Pharmacovigilance-F2T',
     section: {
       sectionOrder: 31,
-      sectionName: 'Pharmacovigilance'
+      sectionName: 'Pharmacovigilance',
     },
     questionText: 'Will IQVIA hold the safety database?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: [
       'Spec - Safety',
       'Core - Business Developer',
-      'Core - Clinical DS&B'
+      'Core - Clinical DS&B',
     ],
     answers: [],
     questionOrder: 1,
@@ -18105,25 +18105,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Pharmacovigilance-O5L': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Pharmacovigilance-O5L',
     section: {
       sectionOrder: 31,
-      sectionName: 'Pharmacovigilance'
+      sectionName: 'Pharmacovigilance',
     },
     questionText:
       'Will IQVIA be responsible for safety submissions to regulatory authorities, ethics committees and investigator sites?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: [
       'Spec - Safety',
       'Core - Business Developer',
-      'Core - Clinical DS&B'
+      'Core - Clinical DS&B',
     ],
     answers: [],
     questionOrder: 2,
@@ -18147,19 +18147,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Pricing-C8T': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Pricing-C8T',
     section: {
       sectionOrder: 7,
-      sectionName: 'Pricing'
+      sectionName: 'Pricing',
     },
     questionText: 'Credit assessment score',
     answerConfiguration: {
       type: 'number',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer', 'Core - Proposal Developer'],
     answers: [],
@@ -18175,7 +18175,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '',
-      time: '2022-11-28T05:48:36.379Z'
+      time: '2022-11-28T05:48:36.379Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -18188,20 +18188,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Pricing-L8I': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Pricing-L8I',
     section: {
       sectionOrder: 7,
-      sectionName: 'Pricing'
+      sectionName: 'Pricing',
     },
     questionText:
       'Would adopting the terms be high, medium, or low risk for IQVIA?',
     answerConfiguration: {
       type: 'select',
-      options: ['High', 'Medium', 'Low', 'Not Applicable']
+      options: ['High', 'Medium', 'Low', 'Not Applicable'],
     },
     roleNames: ['Spec - Strategic Pricing'],
     answers: [],
@@ -18226,24 +18226,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Pricing-M2A': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Pricing-M2A',
     section: {
       sectionOrder: 7,
-      sectionName: 'Pricing'
+      sectionName: 'Pricing',
     },
     questionText: 'Date risk assessed?',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: [
       'Spec - Strategic Pricing',
       'Core - Proposal Developer',
-      'Core - Business Developer'
+      'Core - Business Developer',
     ],
     answers: [],
     questionOrder: 9,
@@ -18256,7 +18256,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '',
-      time: '2022-11-28T05:48:36.457Z'
+      time: '2022-11-28T05:48:36.457Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -18269,20 +18269,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Pricing-M9U': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Pricing-M9U',
     section: {
       sectionOrder: 7,
-      sectionName: 'Pricing'
+      sectionName: 'Pricing',
     },
     questionText:
       'How was it calculated (e.g., similar study, competitive benchmark, internal budget allocation, third-party benchmark)?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -18307,27 +18307,27 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Pricing-N1W': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Pricing-N1W',
     section: {
       sectionOrder: 7,
-      sectionName: 'Pricing'
+      sectionName: 'Pricing',
     },
     questionText:
       'If the customer asked for any non-standard pricing or commercial terms (i.e. discounts, bonus/penalty or fixed price), how confident are we that we can deliver the study according to the customer’s expectations?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - TSL',
       'Core - Project Lead',
       'Spec - Executive Oversight',
       'Spec - Strategic Pricing',
-      'Core - Business Developer'
+      'Core - Business Developer',
     ],
     answers: [],
     questionOrder: 7,
@@ -18349,19 +18349,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Pricing-P3F': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Pricing-P3F',
     section: {
       sectionOrder: 7,
-      sectionName: 'Pricing'
+      sectionName: 'Pricing',
     },
     questionText: 'Is our estimate in keeping with that?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -18386,20 +18386,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Pricing-Q3F': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Pricing-Q3F',
     section: {
       sectionOrder: 7,
-      sectionName: 'Pricing'
+      sectionName: 'Pricing',
     },
     questionText:
       'Is the customer’s price point all-inclusive (professional fees + pass-through expenses)?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -18424,19 +18424,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Pricing-S4K': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Pricing-S4K',
     section: {
       sectionOrder: 7,
-      sectionName: 'Pricing'
+      sectionName: 'Pricing',
     },
     questionText: 'How flexible is the customer on price point?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -18459,19 +18459,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Pricing-W9S': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Pricing-W9S',
     section: {
       sectionOrder: 7,
-      sectionName: 'Pricing'
+      sectionName: 'Pricing',
     },
     questionText: "What is the customer's price point, if known?",
     answerConfiguration: {
       type: 'number',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -18495,19 +18495,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Pricing-Y2Q': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Pricing-Y2Q',
     section: {
       sectionOrder: 7,
-      sectionName: 'Pricing'
+      sectionName: 'Pricing',
     },
     questionText: 'Is a customer discount in place or was one requested?',
     answerConfiguration: {
       type: 'select-lookup',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [
@@ -18516,7 +18516,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:00.073Z',
-        answer: 'Yes'
+        answer: 'Yes',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -18526,7 +18526,7 @@ export const quesHashData = {
         answer: 'Yes',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -18536,7 +18536,7 @@ export const quesHashData = {
         answer: 'Yes',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -18546,7 +18546,7 @@ export const quesHashData = {
         answer: 'Yes',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -18556,7 +18556,7 @@ export const quesHashData = {
         answer: 'Yes',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Yes',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -18566,7 +18566,7 @@ export const quesHashData = {
         answer: 'Yes',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Yes',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -18576,7 +18576,7 @@ export const quesHashData = {
         answer: 'Yes',
         formattedAnswer: 'Yes',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -18586,8 +18586,8 @@ export const quesHashData = {
         answer: 'Yes',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'Yes',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 5,
     visible: true,
@@ -18599,7 +18599,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'Yes',
-      time: '2022-11-28T05:48:36.532Z'
+      time: '2022-11-28T05:48:36.532Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -18612,19 +18612,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Proposal Team-A2W': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Proposal Team-A2W',
     section: {
       sectionOrder: 40,
-      sectionName: 'Proposal Team'
+      sectionName: 'Proposal Team',
     },
     questionText: 'Proposal Leader',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [],
@@ -18641,7 +18641,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '',
-      time: '2022-11-28T05:48:36.589Z'
+      time: '2022-11-28T05:48:36.589Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -18654,19 +18654,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Proposal Team-E5N': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Proposal Team-E5N',
     section: {
       sectionOrder: 40,
-      sectionName: 'Proposal Team'
+      sectionName: 'Proposal Team',
     },
     questionText: 'RFI',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [],
@@ -18681,7 +18681,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '',
-      time: '2022-11-28T05:48:36.867Z'
+      time: '2022-11-28T05:48:36.867Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -18694,19 +18694,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Proposal Team-L6F': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Proposal Team-L6F',
     section: {
       sectionOrder: 40,
-      sectionName: 'Proposal Team'
+      sectionName: 'Proposal Team',
     },
     questionText: 'PM Bidder',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['X - Proposal Leader', 'Core - Proposal Developer'],
     answers: [],
@@ -18731,19 +18731,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Proposal Team-W6D': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Proposal Team-W6D',
     section: {
       sectionOrder: 40,
-      sectionName: 'Proposal Team'
+      sectionName: 'Proposal Team',
     },
     questionText: 'Business Manager',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [],
@@ -18766,19 +18766,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Proposal Timelines-A9U': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Proposal Timelines-A9U',
     section: {
       sectionOrder: 33,
-      sectionName: 'Proposal Timelines'
+      sectionName: 'Proposal Timelines',
     },
     questionText: 'SIM/MAP/IQB Strategy Call',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [],
@@ -18803,19 +18803,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Proposal Timelines-C0V': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Proposal Timelines-C0V',
     section: {
       sectionOrder: 33,
-      sectionName: 'Proposal Timelines'
+      sectionName: 'Proposal Timelines',
     },
     questionText: 'Strategy (Countries/sites/timelines) provided',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [],
@@ -18838,19 +18838,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Proposal Timelines-E8A': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Proposal Timelines-E8A',
     section: {
       sectionOrder: 33,
-      sectionName: 'Proposal Timelines'
+      sectionName: 'Proposal Timelines',
     },
     questionText: 'Proposal Lock',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [
@@ -18862,8 +18862,8 @@ export const quesHashData = {
         answer: '01-Dec-2022',
         formattedAnswer: '',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 15,
     visible: true,
@@ -18887,19 +18887,19 @@ export const quesHashData = {
     events:
       '{"EventSubject":"Test bbbb","EventBody":"Test bbb","EventPrimaryCondition":"Bid History Creation","ModifiedAt":"2022-10-04T07:24:21.213Z","EventRoles":["Core - Clinical DS&B","Core - Proposal Developer","Core - TSL"],"EntityType":"Events","ModifiedBy":"Simran Negi","EventUnitType":"Business Days","EventQuestionId":"fc024b15-77cf-4613-9780-14e192fab03b","SK":"EVENTS#74509ceb-5a90-4cd1-a918-e337418d8315","EventId":"74509ceb-5a90-4cd1-a918-e337418d8315","EventNoOfUnits":3,"PK":"EVENTS#74509ceb-5a90-4cd1-a918-e337418d8315","EventOperator":"addition","CreatedAt":"2022-09-29T09:56:08.737Z","questionId":"Proposal Timelines-E8A"}',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Proposal Timelines-J5G': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Proposal Timelines-J5G',
     section: {
       sectionOrder: 33,
-      sectionName: 'Proposal Timelines'
+      sectionName: 'Proposal Timelines',
     },
     questionText: 'Team to return budget revisions',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [],
@@ -18924,19 +18924,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Proposal Timelines-J8C': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Proposal Timelines-J8C',
     section: {
       sectionOrder: 33,
-      sectionName: 'Proposal Timelines'
+      sectionName: 'Proposal Timelines',
     },
     questionText: 'Draft budget out to team',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [
@@ -18948,8 +18948,8 @@ export const quesHashData = {
         answer: '09-Dec-2022',
         formattedAnswer: '',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 4,
     visible: false,
@@ -18975,19 +18975,19 @@ export const quesHashData = {
     events:
       '{"EventSubject":"ankit","EventBody":"<p>ankit </p>","EventPrimaryCondition":"Bid History Creation","ModifiedAt":"2022-11-15T16:19:59.101Z","EventRoles":["(Test) Specialty Team"],"EntityType":"Events","ModifiedBy":"Ankit Sharma","EventUnitType":"Business Days","EventQuestionId":"3ab7c8e3-f76f-407a-824c-534fd847d7c3","SK":"EVENTS#7f5b654d-4fa2-4b6e-bf3b-789b7bffe973","EventId":"7f5b654d-4fa2-4b6e-bf3b-789b7bffe973","EventNoOfUnits":9,"PK":"EVENTS#7f5b654d-4fa2-4b6e-bf3b-789b7bffe973","EventOperator":"addition","CreatedAt":"2022-11-15T16:19:59.101Z","questionId":"Proposal Timelines-J8C"}',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Proposal Timelines-N0Z': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Proposal Timelines-N0Z',
     section: {
       sectionOrder: 33,
-      sectionName: 'Proposal Timelines'
+      sectionName: 'Proposal Timelines',
     },
     questionText: 'Draft text to target team',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [],
@@ -19012,19 +19012,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Proposal Timelines-N5C': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Proposal Timelines-N5C',
     section: {
       sectionOrder: 33,
-      sectionName: 'Proposal Timelines'
+      sectionName: 'Proposal Timelines',
     },
     questionText: '2nd draft budget to team',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [
@@ -19036,8 +19036,8 @@ export const quesHashData = {
         answer: '29-Nov-2022',
         formattedAnswer: '',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 11,
     visible: false,
@@ -19063,19 +19063,19 @@ export const quesHashData = {
     events:
       '{"EventSubject":"event test updated again","EventBody":"<h2><em style=\\"font-size: 14px;\\">React is a free and open-source front-end JavaScript library for building user interfaces based on UI components. It is maintained by Meta and a community of individual developers and companies. </em><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class ruhjFe NJLBac fl ruhjFe NJLBac fl my-custom-class ruhjFe NJLBac fl ruhjFe NJLBac fl my-custom-class my-custom-class ruhjFe NJLBac fl ruhjFe NJLBac fl my-custom-class ruhjFe NJLBac fl ruhjFe NJLBac fl my-custom-class my-custom-class my-custom-class ruhjFe NJLBac fl ruhjFe NJLBac fl my-custom-class ruhjFe NJLBac fl ruhjFe NJLBac fl my-custom-class my-custom-class ruhjFe NJLBac fl ruhjFe NJLBac fl my-custom-class ruhjFe NJLBac fl ruhjFe NJLBac fl\\" href=\\"https://en.wikipedia.org/wiki/React_(JavaScript_library)\\"><em style=\\"font-size: 14px;\\">Wikipedia</em></a></h2><p><span style=\\"font-family: &quot;Times New Roman&quot;, Times, serif; font-size: 16px;\\"><em><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class fl fl my-custom-class fl fl\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=react+initial+release+date&amp;stick=H4sIAAAAAAAAAOPgE-LWz9U3MDTKMSyrKNNSzii30k_Oz8lJTS7JzM_TL85PKylPLEq1SiwoSE0sUkhJLEldxCpVlJqYXKKQmZdZkpmYo1CUmpOaWJwKlgQAVJm841EAAAA&amp;sa=X&amp;ved=2ahUKEwiMmIexw777AhXQSGwGHdH0BfkQ6BMoAHoECGwQAg\\" style=\\"\\"><strong style=\\"\\">Initial release date</strong></a><strong style=\\"\\">: </strong><span style=\\"color: rgb(77, 81, 86);\\">29 May 2013</span></em></span></p><p><span style=\\"font-family: &quot;Times New Roman&quot;, Times, serif; font-size: 16px;\\"><em>&nbsp;&nbsp;<a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class fl fl my-custom-class fl fl\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=react+platform&amp;stick=H4sIAAAAAAAAAOPgE-LWz9U3MDTKMSyrKNNSyCi30k_Oz8lJTS7JzM_TL85PKylPLEq1KshJLEnLL8pdxMpXlJqYXKIAEwAA2rqUBkIAAAA&amp;sa=X&amp;ved=2ahUKEwiMmIexw777AhXQSGwGHdH0BfkQ6BMoAHoECGoQAg\\"><strong>Platform</strong></a><strong>: </strong><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class fl fl my-custom-class fl fl\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=Web+platform&amp;stick=H4sIAAAAAAAAAOPgE-LWz9U3MDTKMSyrKFPiAnHSCtKzKyu0FDLKrfST83NyUpNLMvPz9Ivz00rKE4tSrQpyEkvS8otyF7HyhKcmKcC4O1gZd7EzcTAAAPZo_IhUAAAA&amp;sa=X&amp;ved=2ahUKEwiMmIexw777AhXQSGwGHdH0BfkQmxMoAXoECGoQAw\\"><span style=\\"color: rgb(77, 81, 86); color: rgb(77, 81, 86)\\">Web platform</span></a></em></span></p><p><span style=\\"font-family: &quot;Times New Roman&quot;, Times, serif; font-size: 16px;\\"><em><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class fl fl my-custom-class fl fl\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=react+developers&amp;sa=X&amp;ved=2ahUKEwiMmIexw777AhXQSGwGHdH0BfkQ6BMoAHoECG0QAg\\"><strong>Developer(s)</strong></a><strong>: </strong><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class fl fl my-custom-class fl fl\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=Meta&amp;stick=H4sIAAAAAAAAAONgVuLSz9U3yMitTCsuW8TK4ptakggAq8ksHxUAAAA&amp;sa=X&amp;ved=2ahUKEwiMmIexw777AhXQSGwGHdH0BfkQmxMoAXoECG0QAw\\"><span style=\\"color: rgb(77, 81, 86); color: rgb(77, 81, 86)\\">Meta</span></a><span style=\\"color: rgb(77, 81, 86); color: rgb(77, 81, 86)\\"> and community</span></em></span></p><p><span style=\\"font-family: &quot;Times New Roman&quot;, Times, serif; font-size: 16px;\\"><em><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class fl fl my-custom-class fl fl\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=react+original+authors&amp;sa=X&amp;ved=2ahUKEwiMmIexw777AhXQSGwGHdH0BfkQ6BMoAHoECGkQAg\\"><strong>Original author(s)</strong></a><strong>: </strong><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class fl fl my-custom-class fl fl\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=Jordan+Walke&amp;stick=H4sIAAAAAAAAAONgVuLVT9c3NMwwSTFLMjLKW8TK45VflJKYpxCemJOdCgDaMNwXIAAAAA&amp;sa=X&amp;ved=2ahUKEwiMmIexw777AhXQSGwGHdH0BfkQmxMoAXoECGkQAw\\"><span style=\\"color: rgb(77, 81, 86); color: rgb(77, 81, 86)\\">Jordan Walke</span></a></em></span></p><p><span style=\\"font-family: &quot;Times New Roman&quot;, Times, serif; font-size: 16px;\\"><em><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class fl fl my-custom-class fl fl\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=react+license&amp;sa=X&amp;ved=2ahUKEwiMmIexw777AhXQSGwGHdH0BfkQ6BMoAHoECH0QAg\\"><strong>License</strong></a><strong>: </strong><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class fl fl my-custom-class fl fl\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=MIT+License&amp;stick=H4sIAAAAAAAAAONgVuLQz9U3MCkryF3Eyu3rGaLgk5mcmlecCgA_x3mRGgAAAA&amp;sa=X&amp;ved=2ahUKEwiMmIexw777AhXQSGwGHdH0BfkQmxMoAXoECH0QAw\\"><span style=\\"color: rgb(77, 81, 86); color: rgb(77, 81, 86)\\">MIT License</span></a></em></span></p><p><span style=\\"font-family: &quot;Times New Roman&quot;, Times, serif; font-size: 16px;\\"><em><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class fl fl my-custom-class fl fl\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=react+repository&amp;sa=X&amp;ved=2ahUKEwiMmIexw777AhXQSGwGHdH0BfkQ6BMoAHoFCIEBEAI\\"><strong>Repository</strong></a><strong>: </strong><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class\\" href=\\"http://github.com/facebook/react\\"><span style=\\"color: rgb(77, 81, 86); color: rgb(77, 81, 86)\\">github.com/facebook/react</span></a></em></span></p><p><span style=\\"font-family: &quot;Times New Roman&quot;, Times, serif; font-size: 16px;\\"><em><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class fl fl my-custom-class fl fl\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=react+programming+language&amp;stick=H4sIAAAAAAAAAOPgE-LWz9U3MDTKMSyrKNPSySi30k_Oz8lJTS7JzM_TL85PKylPLEq1KijKTy9KzM3NzEtXyEnMSy9NTE9dxCpVlJqYXKKATRIA9k8vDVoAAAA&amp;sa=X&amp;ved=2ahUKEwiMmIexw777AhXQSGwGHdH0BfkQ6BMoAHoECHwQAg\\"><strong>Programming language</strong></a><strong>: </strong></em></span><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class my-custom-class fl fl my-custom-class fl fl my-custom-class my-custom-class fl fl my-custom-class fl fl\\" href=\\"https://www.google.com/search?rlz=1C1GCEA_enIN1015IN1015&amp;q=JavaScript&amp;stick=H4sIAAAAAAAAAOPgE-LWz9U3MDTKMSyrKFPiAHGMCizNtXQyyq30k_NzclKTSzLz8_SL89NKyhOLUq0KivLTixJzczPz0hVyEvPSSxPTUxexcnklliUGJxdlFpTsYGXcxc7EwQAAZiXVbFwAAAA&amp;sa=X&amp;ved=2ahUKEwiMmIexw777AhXQSGwGHdH0BfkQmxMoAXoECHwQAw\\"><span style=\\"color: rgb(77, 81, 86); font-family: &quot;Times New Roman&quot;, Times, serif; font-size: 16px;\\"><em>JavaScript</em></span></a></p>","EventPrimaryCondition":"Bid History Creation","ModifiedAt":"2022-11-21T06:40:41.999Z","EventRoles":["Core - TSL","(Test) Specialty Team"],"EntityType":"Events","ModifiedBy":"Sushil Munda","EventUnitType":"Business Days","EventQuestionId":"627c8473-184b-4d4d-ad60-c36b5c5d00f7","SK":"EVENTS#b0c55605-5d60-4be0-b191-e50d35472bcd","EventId":"b0c55605-5d60-4be0-b191-e50d35472bcd","EventNoOfUnits":1,"PK":"EVENTS#b0c55605-5d60-4be0-b191-e50d35472bcd","EventOperator":"addition","CreatedAt":"2022-11-18T07:51:35.990Z","questionId":"Proposal Timelines-N5C"}',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Proposal Timelines-N6V': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Proposal Timelines-N6V',
     section: {
       sectionOrder: 33,
-      sectionName: 'Proposal Timelines'
+      sectionName: 'Proposal Timelines',
     },
     questionText: 'Budget and text finalized',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [],
@@ -19098,19 +19098,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Proposal Timelines-O1D': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Proposal Timelines-O1D',
     section: {
       sectionOrder: 33,
-      sectionName: 'Proposal Timelines'
+      sectionName: 'Proposal Timelines',
     },
     questionText: 'Budget approval',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [
@@ -19122,8 +19122,8 @@ export const quesHashData = {
         answer: '08-Dec-2022',
         formattedAnswer: '',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 16,
     visible: false,
@@ -19149,19 +19149,19 @@ export const quesHashData = {
     events:
       '{"EventSubject":"ggggggggggggggghhhhhha","EventBody":"jjjjjjjjjjjjjjjjjjjjjjj","EventPrimaryCondition":"Bid History Creation","ModifiedAt":"2022-10-14T09:31:28.392Z","EventRoles":["(Test) Core Teamm","Spec - Biostats","Core - Clinical DS&B","Core - Analytics Strategy Lead"],"EntityType":"Events","ModifiedBy":"Varsha Kumari","EventUnitType":"Business Days","EventQuestionId":"0746f59c-1d19-4993-b6cc-a4b7b3b97092","SK":"EVENTS#d8a4ebe1-0147-4c66-ba33-4f6c2a341cd6","EventId":"d8a4ebe1-0147-4c66-ba33-4f6c2a341cd6","EventNoOfUnits":8,"PK":"EVENTS#d8a4ebe1-0147-4c66-ba33-4f6c2a341cd6","EventOperator":"addition","CreatedAt":"2022-10-04T08:45:55.638Z","questionId":"Proposal Timelines-O1D"}',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Proposal Timelines-P1D': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Proposal Timelines-P1D',
     section: {
       sectionOrder: 33,
-      sectionName: 'Proposal Timelines'
+      sectionName: 'Proposal Timelines',
     },
     questionText: '2nd draft text responses due from team',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [],
@@ -19186,19 +19186,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Proposal Timelines-P2N': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Proposal Timelines-P2N',
     section: {
       sectionOrder: 33,
-      sectionName: 'Proposal Timelines'
+      sectionName: 'Proposal Timelines',
     },
     questionText: 'Budget approval method',
     answerConfiguration: {
       type: 'select',
-      options: ['Call', 'Email']
+      options: ['Call', 'Email'],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [],
@@ -19223,19 +19223,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Proposal Timelines-P7P': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Proposal Timelines-P7P',
     section: {
       sectionOrder: 33,
-      sectionName: 'Proposal Timelines'
+      sectionName: 'Proposal Timelines',
     },
     questionText: 'QC & finalization',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [],
@@ -19258,19 +19258,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Proposal Timelines-R6Y': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Proposal Timelines-R6Y',
     section: {
       sectionOrder: 33,
-      sectionName: 'Proposal Timelines'
+      sectionName: 'Proposal Timelines',
     },
     questionText: 'Strategy approval',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [],
@@ -19293,19 +19293,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Proposal Timelines-S0M': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Proposal Timelines-S0M',
     section: {
       sectionOrder: 33,
-      sectionName: 'Proposal Timelines'
+      sectionName: 'Proposal Timelines',
     },
     questionText: '2nd draft budget responses due from team',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [
@@ -19317,8 +19317,8 @@ export const quesHashData = {
         answer: '02-Dec-2022',
         formattedAnswer: '',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 13,
     visible: false,
@@ -19344,19 +19344,19 @@ export const quesHashData = {
     events:
       '{"EventSubject":"Simran","EventBody":"Testing Testing 1 2 3","EventPrimaryCondition":"Bid History Creation","ModifiedAt":"2022-10-02T17:34:25.622Z","EventRoles":["Core - Project Lead"],"EntityType":"Events","ModifiedBy":"Ankit Sharma","EventUnitType":"Business Days","EventQuestionId":"a8a1f8c4-1618-4818-a8be-d6440602678f","SK":"EVENTS#040c13aa-7f20-492f-909c-01ad3c237d95","EventId":"040c13aa-7f20-492f-909c-01ad3c237d95","EventNoOfUnits":4,"PK":"EVENTS#040c13aa-7f20-492f-909c-01ad3c237d95","EventOperator":"addition","CreatedAt":"2022-10-02T17:34:25.622Z","questionId":"Proposal Timelines-S0M"}',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Proposal Timelines-V7C': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Proposal Timelines-V7C',
     section: {
       sectionOrder: 33,
-      sectionName: 'Proposal Timelines'
+      sectionName: 'Proposal Timelines',
     },
     questionText: 'Strategy approval method',
     answerConfiguration: {
       type: 'select',
-      options: ['Call', 'Email']
+      options: ['Call', 'Email'],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [],
@@ -19379,19 +19379,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Proposal Timelines-W3H': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Proposal Timelines-W3H',
     section: {
       sectionOrder: 33,
-      sectionName: 'Proposal Timelines'
+      sectionName: 'Proposal Timelines',
     },
     questionText: 'Deliverable due to customer',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [
@@ -19400,7 +19400,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:01.506Z',
-        answer: '2021-11-25'
+        answer: '2021-11-25',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -19410,7 +19410,7 @@ export const quesHashData = {
         answer: '2022-11-30',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -19420,7 +19420,7 @@ export const quesHashData = {
         answer: '2022-11-30',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -19430,7 +19430,7 @@ export const quesHashData = {
         answer: '2023-01-25',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -19440,7 +19440,7 @@ export const quesHashData = {
         answer: '2023-01-25',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: '2023-01-25',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -19450,7 +19450,7 @@ export const quesHashData = {
         answer: '2023-01-25',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: '2023-01-25',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -19460,7 +19460,7 @@ export const quesHashData = {
         answer: '2023-11-30',
         formattedAnswer: '2023-11-30',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -19470,8 +19470,8 @@ export const quesHashData = {
         answer: '2023-11-30',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: '2023-11-30',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 19,
     visible: true,
@@ -19483,7 +19483,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '2023-11-30',
-      time: '2022-11-28T05:48:37.975Z'
+      time: '2022-11-28T05:48:37.975Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -19496,19 +19496,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Proposal Timelines-Y7I': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Proposal Timelines-Y7I',
     section: {
       sectionOrder: 33,
-      sectionName: 'Proposal Timelines'
+      sectionName: 'Proposal Timelines',
     },
     questionText: 'Team to return text revisions',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [],
@@ -19533,19 +19533,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Proposal Timelines-Y7T': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Proposal Timelines-Y7T',
     section: {
       sectionOrder: 33,
-      sectionName: 'Proposal Timelines'
+      sectionName: 'Proposal Timelines',
     },
     questionText: 'Questions for customer due (if applicable)',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [],
@@ -19568,19 +19568,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Proposal Timelines-Z5H': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Proposal Timelines-Z5H',
     section: {
       sectionOrder: 33,
-      sectionName: 'Proposal Timelines'
+      sectionName: 'Proposal Timelines',
     },
     questionText: '2nd draft text to team',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [
@@ -19592,8 +19592,8 @@ export const quesHashData = {
         answer: '07-Dec-2022',
         formattedAnswer: '',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 10,
     visible: true,
@@ -19619,20 +19619,20 @@ export const quesHashData = {
     events:
       '{"EventSubject":"sssssssssss","EventBody":"<p></p>","EventPrimaryCondition":"Bid History Creation","ModifiedAt":"2022-11-22T10:31:18.802Z","EventRoles":["Core - Business Developer"],"EntityType":"Events","ModifiedBy":"Simran Negi","EventUnitType":"Business Days","EventQuestionId":"5f6eb4a3-c6a9-4711-bb73-9efaecc2f7d9","SK":"EVENTS#14ca44b1-7dff-49bf-8ddc-ea12d9a33a78","EventId":"14ca44b1-7dff-49bf-8ddc-ea12d9a33a78","EventNoOfUnits":7,"PK":"EVENTS#14ca44b1-7dff-49bf-8ddc-ea12d9a33a78","EventOperator":"addition","CreatedAt":"2022-11-22T10:31:18.802Z","questionId":"Proposal Timelines-Z5H"}',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Questions for the Customer-M8F': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Questions for the Customer-M8F',
     section: {
       sectionOrder: 36,
-      sectionName: 'Questions for the Customer'
+      sectionName: 'Questions for the Customer',
     },
     questionText:
       'Are there any questions for the customer? If yes, click the + button to document question(s) here.',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [],
@@ -19657,20 +19657,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-A4D': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-A4D',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText:
       'Does the customer have a Pediatric Investigational Plan (PIP)?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No', 'N/A']
+      options: ['Yes', 'No', 'N/A'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -19693,26 +19693,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-B1K': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-B1K',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText:
       'Will the update(s) be administrative or substantial (including EDC updates)?',
     answerConfiguration: {
       type: 'select',
-      options: ['administrative', 'substantial']
+      options: ['administrative', 'substantial'],
     },
     roleNames: [
       'Core - Clinical DS&B',
       'X - Proposal Leader',
       'Core - TSL',
-      'Spec - RSU'
+      'Spec - RSU',
     ],
     answers: [],
     questionOrder: 19,
@@ -19736,19 +19736,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-B9G': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-B9G',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText: 'Does the customer need our support for the submissions?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer', 'Spec - RSU'],
     answers: [],
@@ -19771,20 +19771,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-D5Y': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-D5Y',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText:
       'Will there be additional visits to program for site payments?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['X - Proposal Leader', 'Core - TSL'],
     answers: [],
@@ -19809,25 +19809,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-F5D': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-F5D',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText: 'If so, how many?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - Clinical DS&B',
       'X - Proposal Leader',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [],
     questionOrder: 18,
@@ -19851,24 +19851,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-G6P': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-G6P',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText: 'Is Phase I data available in the Japanese population?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - TSL',
-      'Core - Medical Strategy Lead'
+      'Core - Medical Strategy Lead',
     ],
     answers: [],
     questionOrder: 25,
@@ -19892,19 +19892,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-H2H': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-H2H',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText: 'If yes, for which countries or regions?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer', 'Spec - RSU'],
     answers: [],
@@ -19929,20 +19929,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-H4L': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-H4L',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText:
       'Does the customer want any of these documents to be delivered in English?',
     answerConfiguration: {
       type: 'picklist',
-      options: ['CRF', 'protocol', 'ICF', 'CSR', 'other']
+      options: ['CRF', 'protocol', 'ICF', 'CSR', 'other'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -19967,27 +19967,27 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-K6R': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-K6R',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText:
       'Could regulatory approval to conduct the study in the target countries/regions be contingent upon satisfying special requirements for certain patient populations (i.e. patient populations participating in studies with a placebo arm or consenting patients with cognitive impairments, etc.)?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Business Developer',
       'Spec - RSU',
       'Spec - Feasibility',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 12,
@@ -20009,19 +20009,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-L1M': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-L1M',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText: 'Do they plan to have a meeting?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -20046,20 +20046,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-L8G': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-L8G',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText:
       'Has the customer met with or planned discussions with regulatory agencies to discuss the study or overall development program?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -20082,25 +20082,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-N2K': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-N2K',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText: 'Should IQVIA budget for protocol amendments?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - Clinical DS&B',
       'X - Proposal Leader',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [],
     questionOrder: 17,
@@ -20122,20 +20122,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-N4T': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-N4T',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText:
       'When is the approval notification expected for the key regions/countries?',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer', 'Spec - RSU'],
     answers: [],
@@ -20160,27 +20160,27 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-O0P': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-O0P',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText:
       'Has the customer been advised on the minimum patient requirements for the target countries/regions?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: [
       'Core - Business Developer',
       'Spec - RSU',
       'Spec - Feasibility',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 13,
@@ -20204,20 +20204,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-O2X': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-O2X',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText:
       'Is support needed for regulatory strategy and/or engagement with regulators?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer', 'Spec - RSU'],
     answers: [],
@@ -20242,20 +20242,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-R0C': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-R0C',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText:
       'Has the customer applied for authorization to conduct the study in the target study countries or other countries where they are currently conducting other studies?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer', 'Spec - RSU'],
     answers: [],
@@ -20278,26 +20278,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-S1V': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-S1V',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText:
       'Are there any requirements related to the proportion of different patient ethnicities?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Business Developer',
       'Spec - RSU',
       'Spec - Feasibility',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [],
     questionOrder: 15,
@@ -20319,19 +20319,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-S3V': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-S3V',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText: 'If yes, has the customer met the regulatory requirements?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer', 'Spec - RSU'],
     answers: [],
@@ -20354,20 +20354,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-U2Z': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-U2Z',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText:
       'Will the CRO act as the ICCC / legal representative in Japan?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer', 'Core - TSL'],
     answers: [],
@@ -20396,19 +20396,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-W3G': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-W3G',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText: 'Should they include amendments to site contracts as well?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['X - Proposal Leader', 'Core - TSL'],
     answers: [],
@@ -20433,19 +20433,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-W7V': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-W7V',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText: 'When?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -20470,19 +20470,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-W9F': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-W9F',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText: 'If yes, what are they?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - RSU', 'Spec - Feasibility', 'Core - TSL'],
     answers: [],
@@ -20507,19 +20507,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-Y7H': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-Y7H',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText: 'For which countries?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer', 'Spec - RSU'],
     answers: [],
@@ -20544,20 +20544,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-Z0N': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-Z0N',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText:
       'Has the customer had a formal consultation meeting with the PMDA?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -20582,19 +20582,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Regulatory Considerations-Z7P': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Regulatory Considerations-Z7P',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText: 'Will IP labeling support be needed?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer', 'Spec - RSU'],
     answers: [],
@@ -20619,24 +20619,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Scenarios-M7X': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Scenarios-M7X',
     section: {
       sectionOrder: 2,
-      sectionName: 'Customer Scenarios & BTS RFPs'
+      sectionName: 'Customer Scenarios & BTS RFPs',
     },
     questionText: 'How many scenarios, if any, did the customer request?',
     answerConfiguration: {
       type: 'number',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - Proposal Developer',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [
       {
@@ -20644,7 +20644,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:46:59.809Z',
-        answer: '2'
+        answer: '2',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -20654,7 +20654,7 @@ export const quesHashData = {
         answer: '1',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -20664,7 +20664,7 @@ export const quesHashData = {
         answer: '1',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -20674,7 +20674,7 @@ export const quesHashData = {
         answer: '1',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -20684,7 +20684,7 @@ export const quesHashData = {
         answer: '1',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: '1',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -20694,7 +20694,7 @@ export const quesHashData = {
         answer: '1',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: '1',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -20704,7 +20704,7 @@ export const quesHashData = {
         answer: '1',
         formattedAnswer: '1',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -20714,8 +20714,8 @@ export const quesHashData = {
         answer: '1',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: '1',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 1,
     visible: true,
@@ -20727,7 +20727,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '1',
-      time: '2022-11-28T05:48:38.050Z'
+      time: '2022-11-28T05:48:38.050Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -20740,20 +20740,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Scenarios-Y4Y': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Scenarios-Y4Y',
     section: {
       sectionOrder: 2,
-      sectionName: 'Customer Scenarios & BTS RFPs'
+      sectionName: 'Customer Scenarios & BTS RFPs',
     },
     questionText:
       'What are the scenarios and what kind out of output and level of detail does the customer expect for each scenario? (Applies to customer-requested scenarios and/or BTS vs ALT scenarios.)',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -20778,19 +20778,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Services-A4S': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Services-A4S',
     section: {
       sectionOrder: 22,
-      sectionName: 'Services'
+      sectionName: 'Services',
     },
     questionText: 'Who will provide grants for IQVIA countries?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['X - Proposal Leader'],
     answers: [],
@@ -20815,19 +20815,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Services-C6Y': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Services-C6Y',
     section: {
       sectionOrder: 22,
-      sectionName: 'Services'
+      sectionName: 'Services',
     },
     questionText: 'Who will contract with the vendors: IQVIA or customer?',
     answerConfiguration: {
       type: 'select',
-      options: ['IQVIA', 'Customer']
+      options: ['IQVIA', 'Customer'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -20850,14 +20850,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Services-D3P': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Services-D3P',
     section: {
       sectionOrder: 22,
-      sectionName: 'Services'
+      sectionName: 'Services',
     },
     questionText: 'Which documents are IQVIA responsible for translating?',
     answerConfiguration: {
@@ -20876,13 +20876,13 @@ export const quesHashData = {
         'Patient Recruitment materials',
         'Amendments',
         'Back Translations',
-        'Other'
-      ]
+        'Other',
+      ],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 12,
@@ -20906,24 +20906,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Services-D7P': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Services-D7P',
     section: {
       sectionOrder: 22,
-      sectionName: 'Services'
+      sectionName: 'Services',
     },
     questionText: "List any documents considered 'other' above.",
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 13,
@@ -20947,20 +20947,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Services-E2T': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Services-E2T',
     section: {
       sectionOrder: 22,
-      sectionName: 'Services'
+      sectionName: 'Services',
     },
     questionText:
       'Who will provide translations for IQVIA-supported countries?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['X - Proposal Leader'],
     answers: [],
@@ -20985,20 +20985,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Services-E4L': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Services-E4L',
     section: {
       sectionOrder: 22,
-      sectionName: 'Services'
+      sectionName: 'Services',
     },
     questionText:
       'Does the customer have a preference as to whether a central lab or local lab is used?',
     answerConfiguration: {
       type: 'select',
-      options: ['Central lab', 'Local lab']
+      options: ['Central lab', 'Local lab'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -21023,14 +21023,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Services-F5Y': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Services-F5Y',
     section: {
       sectionOrder: 22,
-      sectionName: 'Services'
+      sectionName: 'Services',
     },
     questionText: 'Which third-party vendor services are needed?',
     answerConfiguration: {
@@ -21060,14 +21060,14 @@ export const quesHashData = {
         'SMO - Site Management Organisations',
         'Site Supplies and Equipment',
         'Translations',
-        'ePRO / eCOA'
-      ]
+        'ePRO / eCOA',
+      ],
     },
     roleNames: [
       'Core - Proposal Developer',
       'Core - TSL',
       'Core - Business Developer',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [
       {
@@ -21075,7 +21075,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:01.124Z',
-        answer: 'N/A'
+        answer: 'N/A',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -21085,7 +21085,7 @@ export const quesHashData = {
         answer: ['N/A'],
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -21095,7 +21095,7 @@ export const quesHashData = {
         answer: ['N/A'],
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -21105,7 +21105,7 @@ export const quesHashData = {
         answer: ['N/A'],
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -21115,7 +21115,7 @@ export const quesHashData = {
         answer: ['N/A'],
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: ['N/A'],
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -21125,7 +21125,7 @@ export const quesHashData = {
         answer: ['N/A'],
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: ['N/A'],
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -21135,7 +21135,7 @@ export const quesHashData = {
         answer: ['N/A'],
         formattedAnswer: ['N/A'],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -21145,8 +21145,8 @@ export const quesHashData = {
         answer: ['N/A'],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: ['N/A'],
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 6,
     visible: true,
@@ -21158,7 +21158,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: ['N/A'],
-      time: '2022-11-28T05:48:38.131Z'
+      time: '2022-11-28T05:48:38.131Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -21171,19 +21171,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Services-G2A': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Services-G2A',
     section: {
       sectionOrder: 22,
-      sectionName: 'Services'
+      sectionName: 'Services',
     },
     questionText: 'Which meetings should IQVIA staff be involved in?',
     answerConfiguration: {
       type: 'picklist',
-      options: ['Client meetings', 'internal team meetings', 'CRA meetings']
+      options: ['Client meetings', 'internal team meetings', 'CRA meetings'],
     },
     roleNames: ['X - Proposal Leader'],
     answers: [],
@@ -21208,20 +21208,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Services-G3S': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Services-G3S',
     section: {
       sectionOrder: 22,
-      sectionName: 'Services'
+      sectionName: 'Services',
     },
     questionText:
       "What are the customer's preferred vendors for any required third-party services?",
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -21246,19 +21246,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Services-H3D': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Services-H3D',
     section: {
       sectionOrder: 22,
-      sectionName: 'Services'
+      sectionName: 'Services',
     },
     questionText: 'Which resource will manage the CRAs?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['X - Proposal Leader'],
     answers: [],
@@ -21283,20 +21283,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Services-K6F': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Services-K6F',
     section: {
       sectionOrder: 22,
-      sectionName: 'Services'
+      sectionName: 'Services',
     },
     questionText:
       'What is the child CRM opportunity number for the IQVIA support component?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -21321,25 +21321,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Services-P6I': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Services-P6I',
     section: {
       sectionOrder: 22,
-      sectionName: 'Services'
+      sectionName: 'Services',
     },
     questionText: 'What level of investigator grant estimates are required?',
     answerConfiguration: {
       type: 'picklist',
-      options: ['High', 'Medium', 'Low', 'Not Applicable']
+      options: ['High', 'Medium', 'Low', 'Not Applicable'],
     },
     roleNames: [
       'Core - TSL',
       'Core - Business Developer',
       'Core - Medical Strategy Lead',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 2,
@@ -21363,24 +21363,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Services-Q6A': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Services-Q6A',
     section: {
       sectionOrder: 22,
-      sectionName: 'Services'
+      sectionName: 'Services',
     },
     questionText: 'What are the estimated word counts?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 15,
@@ -21404,14 +21404,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Services-Q6M': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Services-Q6M',
     section: {
       sectionOrder: 22,
-      sectionName: 'Services'
+      sectionName: 'Services',
     },
     questionText: 'What standard clinical trial services are needed? ',
     answerConfiguration: {
@@ -21498,8 +21498,8 @@ export const quesHashData = {
         'RBM - Central Monitoring',
         'RNPS',
         'Site Training Solutions (STS)',
-        'eCOA (eDiary, ePRO, ClinRO, ObsRO, PerfO)'
-      ]
+        'eCOA (eDiary, ePRO, ClinRO, ObsRO, PerfO)',
+      ],
     },
     roleNames: ['Core - Business Developer', 'Core - Proposal Developer'],
     answers: [
@@ -21509,7 +21509,7 @@ export const quesHashData = {
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:01.205Z',
         answer:
-          'Biostatistical;CEVA;Data Management;ECD - Clinical Monitoring;ECD - Clinical Project Manager;Feasibility;IVR (Cenduit);Medical & Scientific;Medical Writing;Patient Recruitment;Regulatory;Site ID/Start-up'
+          'Biostatistical;CEVA;Data Management;ECD - Clinical Monitoring;ECD - Clinical Project Manager;Feasibility;IVR (Cenduit);Medical & Scientific;Medical Writing;Patient Recruitment;Regulatory;Site ID/Start-up',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -21528,11 +21528,11 @@ export const quesHashData = {
           'Medical Writing',
           'Patient Recruitment',
           'Regulatory',
-          'Site ID/Start-up'
+          'Site ID/Start-up',
         ],
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -21551,11 +21551,11 @@ export const quesHashData = {
           'Medical Writing',
           'Patient Recruitment',
           'Regulatory',
-          'Site ID/Start-up'
+          'Site ID/Start-up',
         ],
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -21574,11 +21574,11 @@ export const quesHashData = {
           'Medical Writing',
           'Patient Recruitment',
           'Regulatory',
-          'Site ID/Start-up'
+          'Site ID/Start-up',
         ],
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -21597,7 +21597,7 @@ export const quesHashData = {
           'Medical Writing',
           'Patient Recruitment',
           'Regulatory',
-          'Site ID/Start-up'
+          'Site ID/Start-up',
         ],
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: [
@@ -21612,9 +21612,9 @@ export const quesHashData = {
           'Medical Writing',
           'Patient Recruitment',
           'Regulatory',
-          'Site ID/Start-up'
+          'Site ID/Start-up',
         ],
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -21633,7 +21633,7 @@ export const quesHashData = {
           'Medical Writing',
           'Patient Recruitment',
           'Regulatory',
-          'Site ID/Start-up'
+          'Site ID/Start-up',
         ],
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: [
@@ -21648,9 +21648,9 @@ export const quesHashData = {
           'Medical Writing',
           'Patient Recruitment',
           'Regulatory',
-          'Site ID/Start-up'
+          'Site ID/Start-up',
         ],
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -21669,7 +21669,7 @@ export const quesHashData = {
           'Medical Writing',
           'Patient Recruitment',
           'Regulatory',
-          'Site ID/Start-up'
+          'Site ID/Start-up',
         ],
         formattedAnswer: [
           'Biostatistical',
@@ -21683,10 +21683,10 @@ export const quesHashData = {
           'Medical Writing',
           'Patient Recruitment',
           'Regulatory',
-          'Site ID/Start-up'
+          'Site ID/Start-up',
         ],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -21705,7 +21705,7 @@ export const quesHashData = {
           'Medical Writing',
           'Patient Recruitment',
           'Regulatory',
-          'Site ID/Start-up'
+          'Site ID/Start-up',
         ],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: [
@@ -21720,10 +21720,10 @@ export const quesHashData = {
           'Medical Writing',
           'Patient Recruitment',
           'Regulatory',
-          'Site ID/Start-up'
+          'Site ID/Start-up',
         ],
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 1,
     visible: true,
@@ -21748,9 +21748,9 @@ export const quesHashData = {
         'Medical Writing',
         'Patient Recruitment',
         'Regulatory',
-        'Site ID/Start-up'
+        'Site ID/Start-up',
       ],
-      time: '2022-11-28T05:48:38.219Z'
+      time: '2022-11-28T05:48:38.219Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -21765,24 +21765,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Services-Q6X': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Services-Q6X',
     section: {
       sectionOrder: 22,
-      sectionName: 'Services'
+      sectionName: 'Services',
     },
     questionText: 'Are we using standard word counts?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 14,
@@ -21806,19 +21806,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Services-S5L': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Services-S5L',
     section: {
       sectionOrder: 22,
-      sectionName: 'Services'
+      sectionName: 'Services',
     },
     questionText: 'Who will be responsible for oversight of IQVIA CRAs?',
     answerConfiguration: {
       type: 'select',
-      options: ['IQB', 'Q']
+      options: ['IQB', 'Q'],
     },
     roleNames: ['X - Proposal Leader'],
     answers: [],
@@ -21843,14 +21843,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Services-T7E': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Services-T7E',
     section: {
       sectionOrder: 22,
-      sectionName: 'Services'
+      sectionName: 'Services',
     },
     questionText: 'Which IQVIA internal solutions are needed?',
     answerConfiguration: {
@@ -21866,13 +21866,13 @@ export const quesHashData = {
         'Consulting',
         'Commercialization',
         'Global Regulatory Affairs (IND)',
-        'Clinical Trial Educators'
-      ]
+        'Clinical Trial Educators',
+      ],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 11,
@@ -21894,20 +21894,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Services-T8W': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Services-T8W',
     section: {
       sectionOrder: 22,
-      sectionName: 'Services'
+      sectionName: 'Services',
     },
     questionText:
       'Confirm whether study includes clinical site start-up only, submission support or both.',
     answerConfiguration: {
       type: 'select',
-      options: ['clinical site start-up', 'submission support', 'both']
+      options: ['clinical site start-up', 'submission support', 'both'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -21932,20 +21932,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Services-U8B': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Services-U8B',
     section: {
       sectionOrder: 22,
-      sectionName: 'Services'
+      sectionName: 'Services',
     },
     questionText:
       'What is the child CRM opportunity number for the PK stats component?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -21970,19 +21970,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Services-U9J': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Services-U9J',
     section: {
       sectionOrder: 22,
-      sectionName: 'Services'
+      sectionName: 'Services',
     },
     questionText: 'Which resource will review the MVR?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['X - Proposal Leader'],
     answers: [],
@@ -22007,25 +22007,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Services-V5P': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Services-V5P',
     section: {
       sectionOrder: 22,
-      sectionName: 'Services'
+      sectionName: 'Services',
     },
     questionText:
       'How many patient visits are required (for grants estimates)?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Medical Strategy Lead',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 3,
@@ -22049,19 +22049,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Services-W5G': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Services-W5G',
     section: {
       sectionOrder: 22,
-      sectionName: 'Services'
+      sectionName: 'Services',
     },
     questionText: 'What is the rationale for that preference?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -22086,20 +22086,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Services-Y4Y': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Services-Y4Y',
     section: {
       sectionOrder: 22,
-      sectionName: 'Services'
+      sectionName: 'Services',
     },
     questionText:
       "If the customer does not want to receive a quotation for a necessary 3rd-party service, what is the customer's plan to manage the service?",
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -22122,19 +22122,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Services-Z8Z': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Services-Z8Z',
     section: {
       sectionOrder: 22,
-      sectionName: 'Services'
+      sectionName: 'Services',
     },
     questionText: 'Is the customer open to using our standard eTMF, Wingspan?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -22157,20 +22157,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Site Outreach-B3V': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Site Outreach-B3V',
     section: {
       sectionOrder: 13,
-      sectionName: 'Site Outreach'
+      sectionName: 'Site Outreach',
     },
     questionText:
       'Are there any sites or investigators that we should or should not contact?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -22195,19 +22195,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Site Outreach-D4H': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Site Outreach-D4H',
     section: {
       sectionOrder: 13,
-      sectionName: 'Site Outreach'
+      sectionName: 'Site Outreach',
     },
     questionText: 'Which sites and investigators?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -22232,26 +22232,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Site Outreach-M6H': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Site Outreach-M6H',
     section: {
       sectionOrder: 13,
-      sectionName: 'Site Outreach'
+      sectionName: 'Site Outreach',
     },
     questionText:
       'Is the existing protocol synopsis acceptable for use with site outreach or does the customer have a blinded proposal synopsis available?',
     answerConfiguration: {
       type: 'select',
-      options: ['Existing protocol synopsis', 'Blinded synopsis available']
+      options: ['Existing protocol synopsis', 'Blinded synopsis available'],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - TSL',
       'Core - Medical Strategy Lead',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 3,
@@ -22275,27 +22275,27 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Site Outreach-N0V': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Site Outreach-N0V',
     section: {
       sectionOrder: 13,
-      sectionName: 'Site Outreach'
+      sectionName: 'Site Outreach',
     },
     questionText:
       'Do we have customer approval to conduct an outreach to potential sites, if needed?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - TSL',
       'Core - Medical Strategy Lead',
       'Spec - Feasibility',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 1,
@@ -22319,25 +22319,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Site Outreach-P4Y': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Site Outreach-P4Y',
     section: {
       sectionOrder: 13,
-      sectionName: 'Site Outreach'
+      sectionName: 'Site Outreach',
     },
     questionText:
       'Has the customer consulted with any of these about the study, or do they intend to?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - Medical Strategy Lead',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [],
     questionOrder: 5,
@@ -22361,26 +22361,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Site Outreach-R4O': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Site Outreach-R4O',
     section: {
       sectionOrder: 13,
-      sectionName: 'Site Outreach'
+      sectionName: 'Site Outreach',
     },
     questionText:
       'Has the customer identified any leading sites, clinical networks, investigators or KOLs in the target countries?',
     answerConfiguration: {
       type: 'picklist',
-      options: ['Leading sites', 'Clinical networks', 'Investigators', 'KOL']
+      options: ['Leading sites', 'Clinical networks', 'Investigators', 'KOL'],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - Medical Strategy Lead',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 4,
@@ -22404,26 +22404,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Site Outreach-R6Z': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Site Outreach-R6Z',
     section: {
       sectionOrder: 13,
-      sectionName: 'Site Outreach'
+      sectionName: 'Site Outreach',
     },
     questionText: 'Does the outreach need to be blinded?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - TSL',
       'Core - Medical Strategy Lead',
       'Spec - Feasibility',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 2,
@@ -22447,19 +22447,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Site Outreach-U2T': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Site Outreach-U2T',
     section: {
       sectionOrder: 13,
-      sectionName: 'Site Outreach'
+      sectionName: 'Site Outreach',
     },
     questionText: 'Where are they based and were any challenges raised?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -22484,20 +22484,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Site Strategy-D0S': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Site Strategy-D0S',
     section: {
       sectionOrder: 12,
-      sectionName: 'Site Strategy'
+      sectionName: 'Site Strategy',
     },
     questionText:
       'What is the patient pathway? Consider whether this is a specialty population and whether it would differ among the target countries.',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Medical Strategy Lead', 'Core - TSL'],
     answers: [],
@@ -22522,19 +22522,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Site Strategy-I7K': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Site Strategy-I7K',
     section: {
       sectionOrder: 12,
-      sectionName: 'Site Strategy'
+      sectionName: 'Site Strategy',
     },
     questionText: 'What is the estimated number of sites needed?',
     answerConfiguration: {
       type: 'number',
-      options: []
+      options: [],
     },
     roleNames: ['Core - TSL', 'X - Proposal Leader'],
     answers: [
@@ -22543,7 +22543,7 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:00.343Z',
-        answer: '5'
+        answer: '5',
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -22553,7 +22553,7 @@ export const quesHashData = {
         answer: '5',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -22563,7 +22563,7 @@ export const quesHashData = {
         answer: '5',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -22573,7 +22573,7 @@ export const quesHashData = {
         answer: '5',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -22583,7 +22583,7 @@ export const quesHashData = {
         answer: '5',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: '5',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -22593,7 +22593,7 @@ export const quesHashData = {
         answer: '5',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: '5',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -22603,7 +22603,7 @@ export const quesHashData = {
         answer: '5',
         formattedAnswer: '5',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -22613,8 +22613,8 @@ export const quesHashData = {
         answer: '5',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: '5',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 12,
     visible: false,
@@ -22628,7 +22628,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '5',
-      time: '2022-11-28T05:48:38.310Z'
+      time: '2022-11-28T05:48:38.310Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -22641,19 +22641,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Site Strategy-I9D': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Site Strategy-I9D',
     section: {
       sectionOrder: 12,
-      sectionName: 'Site Strategy'
+      sectionName: 'Site Strategy',
     },
     questionText: 'What is the target patient population?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -22678,25 +22678,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Site Strategy-J0J': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Site Strategy-J0J',
     section: {
       sectionOrder: 12,
-      sectionName: 'Site Strategy'
+      sectionName: 'Site Strategy',
     },
     questionText:
       'Are there any nuances when it comes to finding these patients that will help with site/investigator list development?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Medical Strategy Lead',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 10,
@@ -22720,25 +22720,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Site Strategy-L0E': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Site Strategy-L0E',
     section: {
       sectionOrder: 12,
-      sectionName: 'Site Strategy'
+      sectionName: 'Site Strategy',
     },
     questionText:
       'What are the key eligibility criteria that will most influence enrollment?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Medical Strategy Lead',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 9,
@@ -22762,24 +22762,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Site Strategy-M4P': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Site Strategy-M4P',
     section: {
       sectionOrder: 12,
-      sectionName: 'Site Strategy'
+      sectionName: 'Site Strategy',
     },
     questionText: 'What are the best ways for sites to find patients?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - TSL',
       'Core - Medical Strategy Lead',
-      'Spec - Feasibility'
+      'Spec - Feasibility',
     ],
     answers: [],
     questionOrder: 6,
@@ -22803,14 +22803,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Site Strategy-N4S': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Site Strategy-N4S',
     section: {
       sectionOrder: 12,
-      sectionName: 'Site Strategy'
+      sectionName: 'Site Strategy',
     },
     questionText:
       'Are there any internal IQVIA networks we need to include in the proposal?',
@@ -22821,13 +22821,13 @@ export const quesHashData = {
         'EPON',
         'PEN',
         'IQVIA NASH global site network',
-        'Other'
-      ]
+        'Other',
+      ],
     },
     roleNames: [
       'Core - TSL',
       'Core - Medical Strategy Lead',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 8,
@@ -22851,20 +22851,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Site Strategy-N6D': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Site Strategy-N6D',
     section: {
       sectionOrder: 12,
-      sectionName: 'Site Strategy'
+      sectionName: 'Site Strategy',
     },
     questionText:
       'Are there specific treatments or procedures that can be used to identify these patients?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Medical Strategy Lead'],
     answers: [],
@@ -22892,19 +22892,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Site Strategy-O2R': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Site Strategy-O2R',
     section: {
       sectionOrder: 12,
-      sectionName: 'Site Strategy'
+      sectionName: 'Site Strategy',
     },
     questionText: 'What is the investigator profile?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Medical Strategy Lead', 'Core - TSL'],
     answers: [],
@@ -22929,25 +22929,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Site Strategy-O6S': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Site Strategy-O6S',
     section: {
       sectionOrder: 12,
-      sectionName: 'Site Strategy'
+      sectionName: 'Site Strategy',
     },
     questionText:
       'What specialty/type of sites should be targeted in the target countries or regions?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - TSL',
       'Core - Medical Strategy Lead',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 5,
@@ -22971,26 +22971,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Site Strategy-O7J': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Site Strategy-O7J',
     section: {
       sectionOrder: 11,
-      sectionName: 'Country Strategy'
+      sectionName: 'Country Strategy',
     },
     questionText:
       'Are there important country or region-specific factors to consider? (e.g., standard of care, reimbursement, approved treatments, etc.)',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - TSL',
       'Core - Medical Strategy Lead',
       'Core - Business Developer',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 8,
@@ -23014,20 +23014,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Site Strategy-S1J': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Site Strategy-S1J',
     section: {
       sectionOrder: 12,
-      sectionName: 'Site Strategy'
+      sectionName: 'Site Strategy',
     },
     questionText:
       'Is there a need for a custom site tiering strategy? What data points/weights would that include?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - TSL', 'X - Proposal Leader'],
     answers: [],
@@ -23052,25 +23052,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Study Challenges-A4K': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Study Challenges-A4K',
     section: {
       sectionOrder: 10,
-      sectionName: 'Study Challenges'
+      sectionName: 'Study Challenges',
     },
     questionText:
       'Are there any serious feasibility challenges for this study?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Medical Strategy Lead',
       'Spec - Feasibility',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [],
     questionOrder: 6,
@@ -23094,20 +23094,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Study Challenges-G0H': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Study Challenges-G0H',
     section: {
       sectionOrder: 10,
-      sectionName: 'Study Challenges'
+      sectionName: 'Study Challenges',
     },
     questionText:
       'Are there any serious study challenges from a medical perspective?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Medical Strategy Lead', 'Core - TSL'],
     answers: [],
@@ -23132,25 +23132,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Study Challenges-O2J': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Study Challenges-O2J',
     section: {
       sectionOrder: 10,
-      sectionName: 'Study Challenges'
+      sectionName: 'Study Challenges',
     },
     questionText:
       'Are there any tests/procedures in the protocol that could be problematic, requiring outreach to the local country leads/sites? (e.g., equipment used, non-routine tests)',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Medical Strategy Lead',
       'Spec - Feasibility',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [],
     questionOrder: 3,
@@ -23174,26 +23174,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Study Challenges-Y4Q': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Study Challenges-Y4Q',
     section: {
       sectionOrder: 10,
-      sectionName: 'Study Challenges'
+      sectionName: 'Study Challenges',
     },
     questionText:
       'What are the likely operational challenges for this study and how can the risk be mitigated from an operational perspective?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - TSL',
       'Core - Medical Strategy Lead',
       'Core - Project Lead',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 5,
@@ -23215,20 +23215,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Study Challenges-Y6D': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Study Challenges-Y6D',
     section: {
       sectionOrder: 10,
-      sectionName: 'Study Challenges'
+      sectionName: 'Study Challenges',
     },
     questionText:
       'Brief medical overview (how are patients treated, type of sites, attractiveness of study to sites/patients)',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Medical Strategy Lead', 'Core - TSL'],
     answers: [],
@@ -23253,25 +23253,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Study Challenges-Y6R': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Study Challenges-Y6R',
     section: {
       sectionOrder: 10,
-      sectionName: 'Study Challenges'
+      sectionName: 'Study Challenges',
     },
     questionText:
       'Will it be difficult to find sites or patients to participate in the study? Why or why not?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Medical Strategy Lead',
       'Spec - Feasibility',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [],
     questionOrder: 4,
@@ -23295,19 +23295,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Study Timelines-A0X': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Study Timelines-A0X',
     section: {
       sectionOrder: 9,
-      sectionName: 'Study Timelines'
+      sectionName: 'Study Timelines',
     },
     questionText: 'What is IQVIA’s preliminary recruitment rate estimate?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - TSL'],
     answers: [],
@@ -23330,14 +23330,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Study Timelines-B5M': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Study Timelines-B5M',
     section: {
       sectionOrder: 9,
-      sectionName: 'Study Timelines'
+      sectionName: 'Study Timelines',
     },
     questionText: 'What is the top timeline priority for the customer?',
     answerConfiguration: {
@@ -23351,14 +23351,14 @@ export const quesHashData = {
         'LPO',
         'DBL',
         'Final CSR',
-        'Other'
-      ]
+        'Other',
+      ],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - Medical Strategy Lead',
       'Core - Project Lead',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [],
     questionOrder: 1,
@@ -23380,25 +23380,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Study Timelines-B6J': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Study Timelines-B6J',
     section: {
       sectionOrder: 9,
-      sectionName: 'Study Timelines'
+      sectionName: 'Study Timelines',
     },
     questionText:
       'If the customer is not flexible with their timelines, what is the driving factor behind the timelines (e.g. investment funding, corporate goals, etc.)?',
     answerConfiguration: {
       type: 'picklist',
-      options: ['Investment funding', 'corporate goals', 'other']
+      options: ['Investment funding', 'corporate goals', 'other'],
     },
     roleNames: [
       'Core - Business Developer',
       'X - Proposal Leader',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [],
     questionOrder: 3,
@@ -23422,26 +23422,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Study Timelines-D0Q': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Study Timelines-D0Q',
     section: {
       sectionOrder: 9,
-      sectionName: 'Study Timelines'
+      sectionName: 'Study Timelines',
     },
     questionText:
       'When will the final Investigational Medicinal Product (IMP) be ready for shipment to sites?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - Medical Strategy Lead',
       'X - Proposal Leader',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [],
     questionOrder: 8,
@@ -23463,19 +23463,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Study Timelines-J1W': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Study Timelines-J1W',
     section: {
       sectionOrder: 9,
-      sectionName: 'Study Timelines'
+      sectionName: 'Study Timelines',
     },
     questionText: 'What is our recommended FPI date?',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - TSL'],
     answers: [],
@@ -23501,26 +23501,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Study Timelines-L1B': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Study Timelines-L1B',
     section: {
       sectionOrder: 9,
-      sectionName: 'Study Timelines'
+      sectionName: 'Study Timelines',
     },
     questionText:
       'If the customer is preparing the protocol, when will it be ready and what could lead to a delay from the customer’s end?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - TSL',
       'X - Proposal Leader',
-      'Core - Medical Strategy Lead'
+      'Core - Medical Strategy Lead',
     ],
     answers: [],
     questionOrder: 4,
@@ -23542,19 +23542,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Study Timelines-M0Z': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Study Timelines-M0Z',
     section: {
       sectionOrder: 9,
-      sectionName: 'Study Timelines'
+      sectionName: 'Study Timelines',
     },
     questionText: "What are the customer's recruitment expectations based on?",
     answerConfiguration: {
       type: 'picklist',
-      options: ['KOL', 'previous study experience', 'feasibility', 'other']
+      options: ['KOL', 'previous study experience', 'feasibility', 'other'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -23577,24 +23577,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Study Timelines-N4W': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Study Timelines-N4W',
     section: {
       sectionOrder: 9,
-      sectionName: 'Study Timelines'
+      sectionName: 'Study Timelines',
     },
     questionText: 'How flexible is the customer with the timelines?',
     answerConfiguration: {
       type: 'select',
-      options: ['not at all', 'somewhat', 'very']
+      options: ['not at all', 'somewhat', 'very'],
     },
     roleNames: [
       'Core - Business Developer',
       'X - Proposal Leader',
-      'Core - TSL'
+      'Core - TSL',
     ],
     answers: [],
     questionOrder: 2,
@@ -23616,19 +23616,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Study Timelines-P7U': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Study Timelines-P7U',
     section: {
       sectionOrder: 9,
-      sectionName: 'Study Timelines'
+      sectionName: 'Study Timelines',
     },
     questionText: 'What is our recommended treatment duration?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - TSL', 'X - Proposal Leader'],
     answers: [],
@@ -23651,19 +23651,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Study Timelines-Q7N': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Study Timelines-Q7N',
     section: {
       sectionOrder: 9,
-      sectionName: 'Study Timelines'
+      sectionName: 'Study Timelines',
     },
     questionText: 'What is our recommended start date?',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - TSL', 'Core - Business Developer'],
     answers: [],
@@ -23686,19 +23686,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Study Timelines-R7C': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Study Timelines-R7C',
     section: {
       sectionOrder: 9,
-      sectionName: 'Study Timelines'
+      sectionName: 'Study Timelines',
     },
     questionText: 'What is our recommended enrollment duration?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - TSL'],
     answers: [],
@@ -23721,19 +23721,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Study Timelines-X4O': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Study Timelines-X4O',
     section: {
       sectionOrder: 9,
-      sectionName: 'Study Timelines'
+      sectionName: 'Study Timelines',
     },
     questionText: 'Are the customer’s recruitment targets realistic?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - TSL'],
     answers: [],
@@ -23756,19 +23756,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Study Timelines-Y5Q': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Study Timelines-Y5Q',
     section: {
       sectionOrder: 9,
-      sectionName: 'Study Timelines'
+      sectionName: 'Study Timelines',
     },
     questionText: 'What is our recommended follow-up duration?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - TSL', 'X - Proposal Leader'],
     answers: [],
@@ -23791,20 +23791,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Team structure & location-A2Q': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Team structure & location-A2Q',
     section: {
       sectionOrder: 19,
-      sectionName: 'Team Structure & Location'
+      sectionName: 'Team Structure & Location',
     },
     questionText:
       'Does the customer have a preferred location of the Data Team Lead?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -23829,20 +23829,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Team structure & location-C0X': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Team structure & location-C0X',
     section: {
       sectionOrder: 19,
-      sectionName: 'Team Structure & Location'
+      sectionName: 'Team Structure & Location',
     },
     questionText:
       'Does the customer have a preference for where key team members are based (e.g., PL, Medic)? If yes, where?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -23865,25 +23865,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Team structure & location-G6Y': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Team structure & location-G6Y',
     section: {
       sectionOrder: 19,
-      sectionName: 'Team Structure & Location'
+      sectionName: 'Team Structure & Location',
     },
     questionText: 'Where should medics be based?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - TSL',
       'X - Proposal Leader',
       'X - Medical Bidder - IQB',
-      'Core - Medical Strategy Lead'
+      'Core - Medical Strategy Lead',
     ],
     answers: [],
     questionOrder: 9,
@@ -23907,20 +23907,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Team structure & location-G7M': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Team structure & location-G7M',
     section: {
       sectionOrder: 19,
-      sectionName: 'Team Structure & Location'
+      sectionName: 'Team Structure & Location',
     },
     questionText:
       'Is the customer open to having some back-end activities delivered outside Japan?',
     answerConfiguration: {
       type: 'picklist',
-      options: ['Data Management', 'Biostatistics', 'Medical Writing', 'none']
+      options: ['Data Management', 'Biostatistics', 'Medical Writing', 'none'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -23945,25 +23945,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Team structure & location-H8W': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Team structure & location-H8W',
     section: {
       sectionOrder: 19,
-      sectionName: 'Team Structure & Location'
+      sectionName: 'Team Structure & Location',
     },
     questionText: 'Do we need an unblinded statistician?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: [
       'Core - Business Developer',
       'X - Proposal Leader',
       'Core - TSL',
-      'Spec - Biostats'
+      'Spec - Biostats',
     ],
     answers: [],
     questionOrder: 13,
@@ -23987,19 +23987,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Team structure & location-H9K': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Team structure & location-H9K',
     section: {
       sectionOrder: 19,
-      sectionName: 'Team Structure & Location'
+      sectionName: 'Team Structure & Location',
     },
     questionText: 'Which PM model are we using?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - TSL', 'X - Proposal Leader', 'Core - Project Lead'],
     answers: [
@@ -24008,8 +24008,8 @@ export const quesHashData = {
         userName: 'AnswerPulledFromSalesforce',
         userRole: 'AnswerPulledFromSalesforce',
         date: '2021-09-28T06:47:00.810Z',
-        answer: 'RFP'
-      }
+        answer: 'RFP',
+      },
     ],
     questionOrder: 1,
     visible: false,
@@ -24032,20 +24032,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Team structure & location-I2A': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Team structure & location-I2A',
     section: {
       sectionOrder: 19,
-      sectionName: 'Team Structure & Location'
+      sectionName: 'Team Structure & Location',
     },
     questionText:
       'Specify which activities the customer will allow to be delivered outside Japan for the service-lines selected above.',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -24070,19 +24070,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Team structure & location-I8T': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Team structure & location-I8T',
     section: {
       sectionOrder: 19,
-      sectionName: 'Team Structure & Location'
+      sectionName: 'Team Structure & Location',
     },
     questionText: 'Where should the global & regional PM leads be located?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer', 'Core - Project Lead'],
     answers: [],
@@ -24107,24 +24107,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Team structure & location-K3X': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Team structure & location-K3X',
     section: {
       sectionOrder: 19,
-      sectionName: 'Team Structure & Location'
+      sectionName: 'Team Structure & Location',
     },
     questionText: 'Does the customer expect to have an unblinded study team?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - TSL',
-      'Core - Project Lead'
+      'Core - Project Lead',
     ],
     answers: [],
     questionOrder: 12,
@@ -24148,20 +24148,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Team structure & location-L0U': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Team structure & location-L0U',
     section: {
       sectionOrder: 19,
-      sectionName: 'Team Structure & Location'
+      sectionName: 'Team Structure & Location',
     },
     questionText:
       'Should we include IL2 for internal use or customer use as well?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['X - Proposal Leader'],
     answers: [],
@@ -24186,24 +24186,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Team structure & location-O1D': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Team structure & location-O1D',
     section: {
       sectionOrder: 19,
-      sectionName: 'Team Structure & Location'
+      sectionName: 'Team Structure & Location',
     },
     questionText: 'Blinded or named?',
     answerConfiguration: {
       type: 'select',
-      options: ['blinded', 'named']
+      options: ['blinded', 'named'],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - TSL',
-      'Core - Project Lead'
+      'Core - Project Lead',
     ],
     answers: [],
     questionOrder: 17,
@@ -24227,19 +24227,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Team structure & location-P2F': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Team structure & location-P2F',
     section: {
       sectionOrder: 19,
-      sectionName: 'Team Structure & Location'
+      sectionName: 'Team Structure & Location',
     },
     questionText: 'If a smaller study, can we use a PM/CTM combo?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['X - Proposal Leader'],
     answers: [],
@@ -24264,19 +24264,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Team structure & location-S5N': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Team structure & location-S5N',
     section: {
       sectionOrder: 19,
-      sectionName: 'Team Structure & Location'
+      sectionName: 'Team Structure & Location',
     },
     questionText: 'Is a Project Integration Manager (PIM) needed?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - TSL'],
     answers: [],
@@ -24301,20 +24301,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Team structure & location-U6J': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Team structure & location-U6J',
     section: {
       sectionOrder: 19,
-      sectionName: 'Team Structure & Location'
+      sectionName: 'Team Structure & Location',
     },
     questionText:
       'Is the customer open to resourcing from low-cost regions to meet a desired price point?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -24337,20 +24337,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Team structure & location-X4D': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Team structure & location-X4D',
     section: {
       sectionOrder: 19,
-      sectionName: 'Team Structure & Location'
+      sectionName: 'Team Structure & Location',
     },
     questionText:
       'Do we need to include a Program Manager/Director in addition to PMs?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['X - Proposal Leader'],
     answers: [],
@@ -24375,20 +24375,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Team structure & location-X4O': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Team structure & location-X4O',
     section: {
       sectionOrder: 19,
-      sectionName: 'Team Structure & Location'
+      sectionName: 'Team Structure & Location',
     },
     questionText:
       'Does the customer have a preference for the location of the Biostatistics team?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -24413,14 +24413,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Team structure & location-Z6R': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Team structure & location-Z6R',
     section: {
       sectionOrder: 19,
-      sectionName: 'Team Structure & Location'
+      sectionName: 'Team Structure & Location',
     },
     questionText:
       'Is the customer open to having any of the following leads based outside Japan?',
@@ -24430,8 +24430,8 @@ export const quesHashData = {
         'Data management team lead',
         'Biostatistics lead',
         'Medical writing lead',
-        'Safety lead'
-      ]
+        'Safety lead',
+      ],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -24456,20 +24456,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Win Strategy-AB9': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Win Strategy-AB9',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText:
       'Are there any learnings from our history with this customer that would impact our strategy? If so, what?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -24492,19 +24492,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Win Strategy-AK6': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Win Strategy-AK6',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'How can we meet that challenge?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -24527,19 +24527,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Win Strategy-AO8': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Win Strategy-AO8',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'What is the # 1 hot button issue for our customer?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -24562,19 +24562,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Win Strategy-AP6': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Win Strategy-AP6',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: "What's our customer's most serious study challenge?",
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -24597,20 +24597,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Win Strategy-AR2': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Win Strategy-AR2',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText:
       "What makes IQVIA uniquely positioned to meet the customer's needs/challenges?",
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -24633,19 +24633,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Win Strategy-D1D': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Win Strategy-D1D',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'Who are our main competitors for this study?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -24659,7 +24659,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '',
-      time: '2022-11-28T05:48:38.411Z'
+      time: '2022-11-28T05:48:38.411Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -24672,26 +24672,26 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Win Strategy-J5S': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Win Strategy-J5S',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText:
       'What business, scientific or other advantage will a successful study bring the customer?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - Project Lead',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 9,
@@ -24714,19 +24714,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Win Strategy-L8Z': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Win Strategy-L8Z',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'What problem is our customer trying to solve?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -24749,27 +24749,27 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'Win Strategy-U9B': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'Win Strategy-U9B',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText:
       "What are the customer's explicit needs and selection criteria?",
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - Medical Strategy Lead',
       'Core - Project Lead',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [
       {
@@ -24791,10 +24791,10 @@ export const quesHashData = {
                   {
                     offset: 0,
                     length: 12,
-                    key: 0
-                  }
+                    key: 0,
+                  },
                 ],
-                data: {}
+                data: {},
               },
               {
                 key: '4hgrd',
@@ -24806,10 +24806,10 @@ export const quesHashData = {
                   {
                     offset: 0,
                     length: 13,
-                    key: 1
-                  }
+                    key: 1,
+                  },
                 ],
-                data: {}
+                data: {},
               },
               {
                 key: '5j35v',
@@ -24821,10 +24821,10 @@ export const quesHashData = {
                   {
                     offset: 0,
                     length: 23,
-                    key: 2
-                  }
+                    key: 2,
+                  },
                 ],
-                data: {}
+                data: {},
               },
               {
                 key: 'a384b',
@@ -24833,8 +24833,8 @@ export const quesHashData = {
                 depth: 0,
                 inlineStyleRanges: [],
                 entityRanges: [],
-                data: {}
-              }
+                data: {},
+              },
             ],
             entityMap: {
               '0': {
@@ -24844,8 +24844,8 @@ export const quesHashData = {
                   emp_id: '1095164',
                   first_name: 'Poonam',
                   last_name: 'Dubey',
-                  email: 'Poonam.Dubey@iqvia.com'
-                }
+                  email: 'Poonam.Dubey@iqvia.com',
+                },
               },
               '1': {
                 type: 'MENTION',
@@ -24854,8 +24854,8 @@ export const quesHashData = {
                   emp_id: '1101790',
                   first_name: 'Vamsi',
                   last_name: 'Krishna',
-                  email: 'vamsi.krishna5@iqvia.com'
-                }
+                  email: 'vamsi.krishna5@iqvia.com',
+                },
               },
               '2': {
                 type: 'MENTION',
@@ -24864,19 +24864,19 @@ export const quesHashData = {
                   emp_id: '1088411',
                   first_name: 'Keerthiprasath',
                   last_name: 'Chandran',
-                  email: 'keerthiprasath.chandran@iqvia.com'
-                }
-              }
-            }
+                  email: 'keerthiprasath.chandran@iqvia.com',
+                },
+              },
+            },
           },
           html:
             '<div data-contents="true"><div data-block="true" data-editor="f0cqv" data-offset-key="1deeo-0-0"><div data-offset-key="1deeo-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span style="color: rgb(7, 104, 253);"><span data-offset-key="1deeo-0-0"><span data-text="true">Poonam Dubey</span></span></span></div></div><div data-block="true" data-editor="f0cqv" data-offset-key="4hgrd-0-0"><div data-offset-key="4hgrd-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span style="color: rgb(7, 104, 253);"><span data-offset-key="4hgrd-0-0"><span data-text="true">Vamsi Krishna</span></span></span></div></div><div data-block="true" data-editor="f0cqv" data-offset-key="5j35v-0-0"><div data-offset-key="5j35v-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="5j35v-0-0"><span data-text="true">@keerthipr</span></span></div></div><div data-block="true" data-editor="f0cqv" data-offset-key="a384b-0-0"><div data-offset-key="a384b-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="a384b-0-0"><br data-text="true"></span></div></div></div>',
           htmlExport:
-            '<div data-contents="true"><div data-block="true" data-editor="t728" data-offset-key="1deeo-0-0"><div data-offset-key="1deeo-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><a href="mailto:Poonam.Dubey@iqvia.com" style="color: rgb(7, 104, 253);"><span data-offset-key="1deeo-0-0"><span data-text="true">Poonam Dubey</span></span></a></div></div><div data-block="true" data-editor="t728" data-offset-key="4hgrd-0-0"><div data-offset-key="4hgrd-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><a href="mailto:vamsi.krishna5@iqvia.com" style="color: rgb(7, 104, 253);"><span data-offset-key="4hgrd-0-0"><span data-text="true">Vamsi Krishna</span></span></a></div></div><div data-block="true" data-editor="t728" data-offset-key="5j35v-0-0"><div data-offset-key="5j35v-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><a href="mailto:keerthiprasath.chandran@iqvia.com" style="color: rgb(7, 104, 253);"><span data-offset-key="5j35v-0-0"><span data-text="true">Keerthiprasath Chandran</span></span></a></div></div><div data-block="true" data-editor="t728" data-offset-key="a384b-0-0"><div data-offset-key="a384b-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="a384b-0-0"><br data-text="true"></span></div></div></div>'
+            '<div data-contents="true"><div data-block="true" data-editor="t728" data-offset-key="1deeo-0-0"><div data-offset-key="1deeo-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><a href="mailto:Poonam.Dubey@iqvia.com" style="color: rgb(7, 104, 253);"><span data-offset-key="1deeo-0-0"><span data-text="true">Poonam Dubey</span></span></a></div></div><div data-block="true" data-editor="t728" data-offset-key="4hgrd-0-0"><div data-offset-key="4hgrd-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><a href="mailto:vamsi.krishna5@iqvia.com" style="color: rgb(7, 104, 253);"><span data-offset-key="4hgrd-0-0"><span data-text="true">Vamsi Krishna</span></span></a></div></div><div data-block="true" data-editor="t728" data-offset-key="5j35v-0-0"><div data-offset-key="5j35v-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><a href="mailto:keerthiprasath.chandran@iqvia.com" style="color: rgb(7, 104, 253);"><span data-offset-key="5j35v-0-0"><span data-text="true">Keerthiprasath Chandran</span></span></a></div></div><div data-block="true" data-editor="t728" data-offset-key="a384b-0-0"><div data-offset-key="a384b-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="a384b-0-0"><br data-text="true"></span></div></div></div>',
         },
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: true
-      }
+        updatedInPG: true,
+      },
     ],
     questionOrder: 1,
     visible: true,
@@ -24888,7 +24888,7 @@ export const quesHashData = {
     hasDifferentSFanswer: true,
     currentSFanswer: {
       value: '',
-      time: '2022-11-28T05:48:38.487Z'
+      time: '2022-11-28T05:48:38.487Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -24901,19 +24901,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'a1d85191-e0bc-450f-ad1e-966dce979260': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'a1d85191-e0bc-450f-ad1e-966dce979260',
     section: {
       sectionOrder: 81,
-      sectionName: 'Business rule'
+      sectionName: 'Business rule',
     },
     questionText: 'CheckBox Question Question',
     answerConfiguration: {
       type: 'checkbox',
-      options: ['blinded', 'named']
+      options: ['blinded', 'named'],
     },
     roleNames: [
       '(Test) Core Teamm',
@@ -24928,7 +24928,7 @@ export const quesHashData = {
       'Spec - Biostats',
       'Spec - Business Account Manager',
       'Spec - CEVA',
-      'Spec - Data Management'
+      'Spec - Data Management',
     ],
     answers: [],
     questionOrder: 4,
@@ -24951,14 +24951,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'a2d96456-f993-4b40-9cc2-2c39fc58e19d': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'a2d96456-f993-4b40-9cc2-2c39fc58e19d',
     section: {
       sectionOrder: 76,
-      sectionName: '777(Do not edit)'
+      sectionName: '777(Do not edit)',
     },
     questionText: '     Requested_Services__c    ',
     answerConfiguration: {
@@ -25045,8 +25045,8 @@ export const quesHashData = {
         'RBM - Central Monitoring',
         'RNPS',
         'Site Training Solutions (STS)',
-        'eCOA (eDiary, ePRO, ClinRO, ObsRO, PerfO)'
-      ]
+        'eCOA (eDiary, ePRO, ClinRO, ObsRO, PerfO)',
+      ],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [
@@ -25067,11 +25067,11 @@ export const quesHashData = {
           'Medical Writing',
           'Patient Recruitment',
           'Regulatory',
-          'Site ID/Start-up'
+          'Site ID/Start-up',
         ],
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -25090,11 +25090,11 @@ export const quesHashData = {
           'Medical Writing',
           'Patient Recruitment',
           'Regulatory',
-          'Site ID/Start-up'
+          'Site ID/Start-up',
         ],
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -25113,11 +25113,11 @@ export const quesHashData = {
           'Medical Writing',
           'Patient Recruitment',
           'Regulatory',
-          'Site ID/Start-up'
+          'Site ID/Start-up',
         ],
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -25136,7 +25136,7 @@ export const quesHashData = {
           'Medical Writing',
           'Patient Recruitment',
           'Regulatory',
-          'Site ID/Start-up'
+          'Site ID/Start-up',
         ],
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: [
@@ -25151,9 +25151,9 @@ export const quesHashData = {
           'Medical Writing',
           'Patient Recruitment',
           'Regulatory',
-          'Site ID/Start-up'
+          'Site ID/Start-up',
         ],
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -25172,7 +25172,7 @@ export const quesHashData = {
           'Medical Writing',
           'Patient Recruitment',
           'Regulatory',
-          'Site ID/Start-up'
+          'Site ID/Start-up',
         ],
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: [
@@ -25187,9 +25187,9 @@ export const quesHashData = {
           'Medical Writing',
           'Patient Recruitment',
           'Regulatory',
-          'Site ID/Start-up'
+          'Site ID/Start-up',
         ],
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -25208,7 +25208,7 @@ export const quesHashData = {
           'Medical Writing',
           'Patient Recruitment',
           'Regulatory',
-          'Site ID/Start-up'
+          'Site ID/Start-up',
         ],
         formattedAnswer: [
           'Biostatistical',
@@ -25222,10 +25222,10 @@ export const quesHashData = {
           'Medical Writing',
           'Patient Recruitment',
           'Regulatory',
-          'Site ID/Start-up'
+          'Site ID/Start-up',
         ],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -25244,7 +25244,7 @@ export const quesHashData = {
           'Medical Writing',
           'Patient Recruitment',
           'Regulatory',
-          'Site ID/Start-up'
+          'Site ID/Start-up',
         ],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: [
@@ -25259,10 +25259,10 @@ export const quesHashData = {
           'Medical Writing',
           'Patient Recruitment',
           'Regulatory',
-          'Site ID/Start-up'
+          'Site ID/Start-up',
         ],
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 2,
     visible: true,
@@ -25285,9 +25285,9 @@ export const quesHashData = {
         'Medical Writing',
         'Patient Recruitment',
         'Regulatory',
-        'Site ID/Start-up'
+        'Site ID/Start-up',
       ],
-      time: '2022-11-28T05:48:38.565Z'
+      time: '2022-11-28T05:48:38.565Z',
     },
     isCustomQuestion: false,
     questionJSON: '',
@@ -25298,25 +25298,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'a3ae46f9-9434-4d24-bff2-b47bf79fc4fc': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'a3ae46f9-9434-4d24-bff2-b47bf79fc4fc',
     section: {
       sectionOrder: 4,
-      sectionName: 'History'
+      sectionName: 'History',
     },
     questionText: 'New checkbox',
     answerConfiguration: {
       type: 'checkbox',
-      options: ['High', 'Medium', 'Low', 'Not Applicable']
+      options: ['High', 'Medium', 'Low', 'Not Applicable'],
     },
     roleNames: [
       'Spec - CEVA',
       'Core - Clinical DS&B',
       'Core - Project Lead',
-      'Core - Proposal Developer'
+      'Core - Proposal Developer',
     ],
     answers: [],
     questionOrder: 17,
@@ -25338,19 +25338,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'a64bdf99-60a0-4e39-b986-f645c46c3cb6': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'a64bdf99-60a0-4e39-b986-f645c46c3cb6',
     section: {
       sectionOrder: 53,
-      sectionName: 'Key Milestones & Deliverable Timelines (Demo)'
+      sectionName: 'Key Milestones & Deliverable Timelines (Demo)',
     },
     questionText: 'Red Phone Call with Customer (if applicable)',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [],
@@ -25376,19 +25376,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'a7d41782-10f7-482f-ae04-d0c8bcb48268': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'a7d41782-10f7-482f-ae04-d0c8bcb48268',
     section: {
       sectionOrder: 81,
-      sectionName: 'Business rule'
+      sectionName: 'Business rule',
     },
     questionText: 'Picklist Question',
     answerConfiguration: {
       type: 'picklist-lookup',
-      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW']
+      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW'],
     },
     roleNames: [
       '(Test) Core Teamm',
@@ -25402,7 +25402,7 @@ export const quesHashData = {
       'Core - Proposal Developer',
       'Spec - Business Account Manager',
       'Spec - Biostats',
-      'Spec - CEVA'
+      'Spec - CEVA',
     ],
     answers: [],
     questionOrder: 2,
@@ -25424,19 +25424,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'a8917084-2e83-4e40-8192-36eab723b930': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'a8917084-2e83-4e40-8192-36eab723b930',
     section: {
       sectionOrder: 78,
-      sectionName: 'Events'
+      sectionName: 'Events',
     },
     questionText: 'New Event Test',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - TSL', 'Spec - Business Account Manager'],
     answers: [
@@ -25448,8 +25448,8 @@ export const quesHashData = {
         answer: '30-Nov-2022',
         formattedAnswer: '',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 19,
     visible: true,
@@ -25473,19 +25473,19 @@ export const quesHashData = {
     events:
       '{"EventSubject":"Test fest","EventBody":"<table><tbody><tr><td colspan=\\"1\\" rowspan=\\"1\\"><p>SL No.</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Department Name</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Position Title</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Job #</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Location</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Grade</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p># Positions</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Hiring Manager</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Last date for applications</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Recruitment POC</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Comments</p></td></tr><tr><td colspan=\\"1\\" rowspan=\\"1\\"><p>8</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Tech Centre</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Senior Software Developer</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>R1311878</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Bengaluru</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>140</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>1</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Sharon Madhurika Kalas</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>8-Nov-22</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Ira Thakur</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>• Professional experience with front end, web software development using either React or Angular or JavaScript<br>• Experience in .Net (or) <a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class\\" href=\\"http://ASP.Net\\">ASP.Net</a> (or) .Net Core<br>• Hands on experience in C#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Preferred Qualifications:<br>• Bachelor\'s degree in computer science, computer engineering or equivalent experience in related technical discipline<br>• 5+ years of experience in software development using .Net and having front end development exposure.<br>• Good problem solving and troubleshooting skills.<br>• Thorough knowledge on OOPS concepts.<br><br>Good to Have: API (or) Web API (or) RESTFUL service (or) MicroServices<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SQL, Prior experience in Jenkins, GIT, Elastic search</p></td></tr><tr><td colspan=\\"1\\" rowspan=\\"1\\"><p>9</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Tech Centre</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Senior Software Developer</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>R1325810</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Bengaluru</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>140</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>1</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Nishant Chandresh</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>8-Nov-22</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Ira Thakur</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>BigData Spark/Scala Developer (Scala is a must have skill)<br>5-7 years Years Experience in Hadoop and developing BigData processing applications. <br>Profound experience with developing BigData applications using Spark.<br>Basic Functional knowledge in Scala.<br>Good knowledge on Data Ingestion techniques into Big Data platform from variety of sources.<br>Good experience in working with Hive, Impala.<br>Develop highly scalable and extensible Big Data platform which enables collection, storage, modeling, and analysis of massive data sets from numerous data sources.<br>Should have very good knowledge on SQL Programming, ETL DataWareHousing concepts.<br>Candidate should have experience in writing Unix Scripts.<br>Good understanding of CI/CD process, Git, Jenkins. <br>Knowledge on Apache Airflow is an added advantage.</p></td></tr><tr><td colspan=\\"1\\" rowspan=\\"1\\"><p>50</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>SLCM</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Software Dev / Senior Soft Dev</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>R1312895</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Bengaluru/Kochi</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>130/140</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Multiple&nbsp;</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Venkat Raj</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>8-Nov-22</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Prabhath Bhat</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>PL SQL + Unix (Both Mandatory)</p></td></tr><tr><td colspan=\\"1\\" rowspan=\\"1\\"><p>51</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>SLCM</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Software Dev / Senior Soft Dev</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>R1266582</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Bengaluru/Kochi</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>130/140</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Multiple&nbsp;</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Tom Stubits</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>8-Nov-22</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Prabhath Bhat</p></td><td colspan=\\"1\\" rowspan=\\"1\\"><p>Strong in <a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class\\" href=\\"http://VB.NET\\">VB.NET</a> ,<a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class\\" href=\\"http://C#.NET\\">C#.NET</a>, .NET Framework, VS 2005-VS 2013, IIS, <a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class my-custom-class\\" href=\\"http://ASP.NET\\">ASP.NET</a>, Javascript. • Windows Server 2008, and above. • Strong SQL Server exp</p></td></tr><tr><td colspan=\\"1\\" rowspan=\\"1\\"><p><br></p><br></td><td colspan=\\"1\\" rowspan=\\"1\\"><p><br></p><br></td><td colspan=\\"1\\" rowspan=\\"1\\"><p><br></p><br></td><td colspan=\\"1\\" rowspan=\\"1\\"><p><br></p><br></td><td colspan=\\"1\\" rowspan=\\"1\\"><p><br></p><br></td><td colspan=\\"1\\" rowspan=\\"1\\"><p><br></p><br></td><td colspan=\\"1\\" rowspan=\\"1\\"><p><br></p><br></td><td colspan=\\"1\\" rowspan=\\"1\\"><p><br></p><br></td><td colspan=\\"1\\" rowspan=\\"1\\"><br></td><td colspan=\\"1\\" rowspan=\\"1\\"><p><br></p><br></td><td colspan=\\"1\\" rowspan=\\"1\\"><p><br></p><br></td><br></tr></tbody></table>","EventPrimaryCondition":"Bid History Creation","ModifiedAt":"2022-11-17T07:52:59.892Z","EventRoles":["Core - TSL"],"EntityType":"Events","ModifiedBy":"Sushil Munda","EventUnitType":"Business Days","EventQuestionId":"a8917084-2e83-4e40-8192-36eab723b930","SK":"EVENTS#cea5e359-6b29-4998-b013-6ea17f2f3428","EventId":"cea5e359-6b29-4998-b013-6ea17f2f3428","EventNoOfUnits":2,"PK":"EVENTS#cea5e359-6b29-4998-b013-6ea17f2f3428","EventOperator":"addition","CreatedAt":"2022-11-04T11:15:22.942Z","questionId":"a8917084-2e83-4e40-8192-36eab723b930"}',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'aafe9b44-5346-4453-9be7-d2372ed1db65': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'aafe9b44-5346-4453-9be7-d2372ed1db65',
     section: {
       sectionOrder: 73,
-      sectionName: 'Role Test_Do Not Answer_Automation data'
+      sectionName: 'Role Test_Do Not Answer_Automation data',
     },
     questionText: ' Question Role 3 test ',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -25508,24 +25508,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'aecc5888-fa6a-4681-bfdd-38a4dfc0b43d': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'aecc5888-fa6a-4681-bfdd-38a4dfc0b43d',
     section: {
       sectionOrder: 3,
-      sectionName: 'SF answers(Text)'
+      sectionName: 'SF answers(Text)',
     },
     questionText: 'SF answer 2',
     answerConfiguration: {
       type: 'number',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Medical Strategy Lead',
       'Core - Clinical DS&B',
-      'Core - Business Developer'
+      'Core - Business Developer',
     ],
     answers: [],
     questionOrder: 4,
@@ -25549,19 +25549,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'af819f3b-787f-4f13-be82-b0754285ba6e': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'af819f3b-787f-4f13-be82-b0754285ba6e',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'q001 :answer this as red',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Proposal Developer',
@@ -25580,7 +25580,7 @@ export const quesHashData = {
       'Spec - Feasibility',
       'Team',
       '(Test) Specialty Team',
-      '(Test) Core Teamm'
+      '(Test) Core Teamm',
     ],
     answers: [],
     questionOrder: 10,
@@ -25603,19 +25603,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'b224267b-6d9a-4fa7-8564-188a86081330': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'b224267b-6d9a-4fa7-8564-188a86081330',
     section: {
       sectionOrder: 78,
-      sectionName: 'Events'
+      sectionName: 'Events',
     },
     questionText: 'TestEvent2',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Business Account Manager'],
     answers: [],
@@ -25638,14 +25638,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'b333c990-8f66-4faf-8dba-d76782179dc1': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'b333c990-8f66-4faf-8dba-d76782179dc1',
     section: {
       sectionOrder: 76,
-      sectionName: '777(Do not edit)'
+      sectionName: '777(Do not edit)',
     },
     questionText: '     Research_Study_Classification__c    ',
     answerConfiguration: {
@@ -25655,8 +25655,8 @@ export const quesHashData = {
         'Low-intervention clinical trial (non-randomized)',
         'Low-intervention clinical trial (randomized)',
         'Not a research study',
-        'Observational study'
-      ]
+        'Observational study',
+      ],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [
@@ -25668,7 +25668,7 @@ export const quesHashData = {
         answer: 'High-intervention clinical trial (randomized)',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -25678,7 +25678,7 @@ export const quesHashData = {
         answer: 'High-intervention clinical trial (randomized)',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -25688,7 +25688,7 @@ export const quesHashData = {
         answer: 'High-intervention clinical trial (randomized)',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -25698,7 +25698,7 @@ export const quesHashData = {
         answer: 'High-intervention clinical trial (randomized)',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'High-intervention clinical trial (randomized)',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -25708,7 +25708,7 @@ export const quesHashData = {
         answer: 'High-intervention clinical trial (randomized)',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'High-intervention clinical trial (randomized)',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -25718,7 +25718,7 @@ export const quesHashData = {
         answer: 'High-intervention clinical trial (randomized)',
         formattedAnswer: 'High-intervention clinical trial (randomized)',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -25728,8 +25728,8 @@ export const quesHashData = {
         answer: 'High-intervention clinical trial (randomized)',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'High-intervention clinical trial (randomized)',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 6,
     visible: true,
@@ -25741,7 +25741,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'High-intervention clinical trial (randomized)',
-      time: '2022-11-28T05:48:38.745Z'
+      time: '2022-11-28T05:48:38.745Z',
     },
     isCustomQuestion: false,
     questionJSON: '',
@@ -25752,19 +25752,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'b3dfb312-8663-4b30-94bf-988dc7f97514': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'b3dfb312-8663-4b30-94bf-988dc7f97514',
     section: {
       sectionOrder: 52,
-      sectionName: 'Proposal Deliverables (Demo)'
+      sectionName: 'Proposal Deliverables (Demo)',
     },
     questionText: 'yoo yooo',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['(Test) Core Teamm'],
     answers: [],
@@ -25787,14 +25787,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'b79c7f57-ffc8-4710-9c9b-6036f95d267d': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'b79c7f57-ffc8-4710-9c9b-6036f95d267d',
     section: {
       sectionOrder: 76,
-      sectionName: '777(Do not edit)'
+      sectionName: '777(Do not edit)',
     },
     questionText: '     Early_Engagement_COE__c    ',
     answerConfiguration: {
@@ -25819,8 +25819,8 @@ export const quesHashData = {
         'Psychiatry',
         'Rare Diseases',
         'Reproductive Health',
-        'Rheumatology'
-      ]
+        'Rheumatology',
+      ],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [
@@ -25832,7 +25832,7 @@ export const quesHashData = {
         answer: ['Not Applicable'],
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -25842,7 +25842,7 @@ export const quesHashData = {
         answer: ['Not Applicable'],
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -25852,7 +25852,7 @@ export const quesHashData = {
         answer: ['Not Applicable'],
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -25862,7 +25862,7 @@ export const quesHashData = {
         answer: ['Not Applicable'],
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: ['Not Applicable'],
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -25872,7 +25872,7 @@ export const quesHashData = {
         answer: ['Not Applicable'],
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: ['Not Applicable'],
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -25882,7 +25882,7 @@ export const quesHashData = {
         answer: ['Not Applicable'],
         formattedAnswer: ['Not Applicable'],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -25892,8 +25892,8 @@ export const quesHashData = {
         answer: ['Not Applicable'],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: ['Not Applicable'],
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 4,
     visible: true,
@@ -25905,7 +25905,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: ['Not Applicable'],
-      time: '2022-11-28T05:48:38.918Z'
+      time: '2022-11-28T05:48:38.918Z',
     },
     isCustomQuestion: false,
     questionJSON: '',
@@ -25916,19 +25916,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'bc2f2f6f-5ef3-4df9-9182-e6471310feb2': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'bc2f2f6f-5ef3-4df9-9182-e6471310feb2',
     section: {
       sectionOrder: 74,
-      sectionName: 'Testing LOOKUP fields'
+      sectionName: 'Testing LOOKUP fields',
     },
     questionText: 'Multi select look up sf answer',
     answerConfiguration: {
       type: 'picklist-lookup',
-      options: []
+      options: [],
     },
     roleNames: ['(Test) Core Teamm'],
     answers: [
@@ -25940,7 +25940,7 @@ export const quesHashData = {
         answer: 'Japan',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -25950,7 +25950,7 @@ export const quesHashData = {
         answer: ['Japan'],
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -25960,7 +25960,7 @@ export const quesHashData = {
         answer: ['Japan'],
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'vamsi.krishna5@iqvia.com',
@@ -25969,7 +25969,7 @@ export const quesHashData = {
         date: '2022-09-05T13:44:36.628Z',
         answer: ['Europe/Middle East/Africa EMEA', 'Japan'],
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -25979,7 +25979,7 @@ export const quesHashData = {
         answer: ['Japan'],
         formattedAnswer: ['Japan'],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -25989,8 +25989,8 @@ export const quesHashData = {
         answer: ['Japan'],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: ['Japan'],
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 4,
     visible: true,
@@ -26003,7 +26003,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: ['Japan'],
-      time: '2022-11-28T05:48:38.994Z'
+      time: '2022-11-28T05:48:38.994Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -26016,19 +26016,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'bc4bbedf-a606-4386-b3d6-4060b24a3e66': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'bc4bbedf-a606-4386-b3d6-4060b24a3e66',
     section: {
       sectionOrder: 78,
-      sectionName: 'Events'
+      sectionName: 'Events',
     },
     questionText: 'Testing1',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - CEVA'],
     answers: [],
@@ -26051,24 +26051,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'bdb904a2-8eb9-4045-a8d7-c9616e17218c': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'bdb904a2-8eb9-4045-a8d7-c9616e17218c',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'Question to check checkbox types',
     answerConfiguration: {
       type: 'checkbox',
-      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW']
+      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW'],
     },
     roleNames: [
       'Core - Analytics Strategy Lead',
       'Core - Business Developer',
-      'Core - Clinical DS&B'
+      'Core - Clinical DS&B',
     ],
     answers: [],
     questionOrder: 27,
@@ -26090,20 +26090,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'biostatistics-V5G': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'biostatistics-V5G',
     section: {
       sectionOrder: 25,
-      sectionName: 'Biostatistics'
+      sectionName: 'Biostatistics',
     },
     questionText:
       'What triggers the interim analyses (patient count or timeline)?',
     answerConfiguration: {
       type: 'select',
-      options: ['Patient count', 'Timeline']
+      options: ['Patient count', 'Timeline'],
     },
     roleNames: ['Core - TSL', 'X - Proposal Leader'],
     answers: [],
@@ -26128,19 +26128,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'c7817aa8-5000-4ae2-a7b0-f5b00d014788': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'c7817aa8-5000-4ae2-a7b0-f5b00d014788',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'luckiest girl alive text',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['(Test) Core Teamm'],
     answers: [
@@ -26152,7 +26152,7 @@ export const quesHashData = {
         answer: 'Acute Care',
         formattedAnswer: 'Acute Care',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -26162,8 +26162,8 @@ export const quesHashData = {
         answer: 'Acute Care',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'Acute Care',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 16,
     visible: true,
@@ -26179,7 +26179,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'Acute Care',
-      time: '2022-11-28T05:48:39.237Z'
+      time: '2022-11-28T05:48:39.237Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -26194,19 +26194,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: true
+    questionApproval: true,
   },
   'cae61312-0260-4e02-b8a9-6cf4ed2f2abe': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'cae61312-0260-4e02-b8a9-6cf4ed2f2abe',
     section: {
       sectionOrder: 30,
-      sectionName: 'Patient Recruitment'
+      sectionName: 'Patient Recruitment',
     },
     questionText: 'patients count',
     answerConfiguration: {
       type: 'number',
-      options: []
+      options: [],
     },
     roleNames: ['(Test) Core Teamm', '(Test) Specialty Team'],
     answers: [
@@ -26218,7 +26218,7 @@ export const quesHashData = {
         answer: '30',
         formattedAnswer: '30',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -26228,8 +26228,8 @@ export const quesHashData = {
         answer: '30',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: '30',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 6,
     visible: true,
@@ -26241,7 +26241,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '30',
-      time: '2022-11-28T05:48:39.310Z'
+      time: '2022-11-28T05:48:39.310Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -26254,19 +26254,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'cce108eb-acc7-4e06-834c-7b036ae236d9': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'cce108eb-acc7-4e06-834c-7b036ae236d9',
     section: {
       sectionOrder: 78,
-      sectionName: 'Events'
+      sectionName: 'Events',
     },
     questionText: 'NewEvent',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - TSL'],
     answers: [],
@@ -26289,19 +26289,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'cce1f5fe-2430-4743-b503-c1f05b5fc45b': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'cce1f5fe-2430-4743-b503-c1f05b5fc45b',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'Single-Select',
     answerConfiguration: {
       type: 'select',
-      options: ['Patient count', 'Timeline']
+      options: ['Patient count', 'Timeline'],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [],
@@ -26327,22 +26327,22 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: true
+    questionApproval: true,
   },
   'ce6f3898-0124-4ef6-bb97-be96a4b0f814': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'ce6f3898-0124-4ef6-bb97-be96a4b0f814',
     section: {
       sectionOrder: 2,
-      sectionName: 'Customer Scenarios & BTS RFPs'
+      sectionName: 'Customer Scenarios & BTS RFPs',
     },
     questionText: 'Test Checkbox',
     answerConfiguration: {
       type: 'checkbox',
       options: [
         'We must prepare the budget strictly according to the customer’s specifications - we are not allowed to change any of the specs provided by the customer',
-        'We are allowed to modify some specifications provided by the customer for the budget such as the number and/or distribution of countries and sites; screen failure rate; monitoring assumptions etc.'
-      ]
+        'We are allowed to modify some specifications provided by the customer for the budget such as the number and/or distribution of countries and sites; screen failure rate; monitoring assumptions etc.',
+      ],
     },
     roleNames: ['Core - Medical Strategy Lead', 'Core - TSL'],
     answers: [],
@@ -26365,14 +26365,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'ced1230e-f936-496b-86a7-dc5299cdc7b5': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'ced1230e-f936-496b-86a7-dc5299cdc7b5',
     section: {
       sectionOrder: 77,
-      sectionName: 'Answer History'
+      sectionName: 'Answer History',
     },
     questionText: 'AH7',
     answerConfiguration: {
@@ -26402,8 +26402,8 @@ export const quesHashData = {
         'Regulatory & Drug Development Solutions',
         'Risk Based Deals',
         'SEMIO',
-        'Safety & Med Info'
-      ]
+        'Safety & Med Info',
+      ],
     },
     roleNames: ['(Test) Core Teamm'],
     answers: [
@@ -26415,7 +26415,7 @@ export const quesHashData = {
         answer: 'Clinical',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'vamsi.krishna5@iqvia.com',
@@ -26424,7 +26424,7 @@ export const quesHashData = {
         date: '2022-09-05T13:09:45.429Z',
         answer: 'Clinical Technology',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: true
+        updatedInPG: true,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -26434,7 +26434,7 @@ export const quesHashData = {
         answer: 'Clinical',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'vamsi.krishna5@iqvia.com',
@@ -26443,7 +26443,7 @@ export const quesHashData = {
         date: '2022-09-05T13:48:40.577Z',
         answer: 'Commercial Solutions',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: true
+        updatedInPG: true,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -26453,7 +26453,7 @@ export const quesHashData = {
         answer: 'Clinical',
         formattedAnswer: 'Clinical',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -26463,8 +26463,8 @@ export const quesHashData = {
         answer: 'Clinical',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'Clinical',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 6,
     visible: true,
@@ -26477,7 +26477,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'Clinical',
-      time: '2022-11-28T05:48:39.466Z'
+      time: '2022-11-28T05:48:39.466Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -26490,19 +26490,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'cf055632-e9fd-428f-a5a6-eb6a936624f3': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'cf055632-e9fd-428f-a5a6-eb6a936624f3',
     section: {
       sectionOrder: 78,
-      sectionName: 'Events'
+      sectionName: 'Events',
     },
     questionText: 'Event9',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Business Account Manager', 'Core - Project Lead'],
     answers: [],
@@ -26525,19 +26525,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'cfada4fd-9fc5-478b-b705-3bd951262949': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'cfada4fd-9fc5-478b-b705-3bd951262949',
     section: {
       sectionOrder: 2,
-      sectionName: 'Customer Scenarios & BTS RFPs'
+      sectionName: 'Customer Scenarios & BTS RFPs',
     },
     questionText: 'testt',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Business Account Manager'],
     answers: [],
@@ -26563,19 +26563,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'd010237f-a18e-46bb-ae9e-703ac6c4992a': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'd010237f-a18e-46bb-ae9e-703ac6c4992a',
     section: {
       sectionOrder: 77,
-      sectionName: 'Answer History'
+      sectionName: 'Answer History',
     },
     questionText: 'AH1',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['(Test) Core Teamm'],
     answers: [
@@ -26595,16 +26595,16 @@ export const quesHashData = {
                 depth: 0,
                 inlineStyleRanges: [],
                 entityRanges: [],
-                data: {}
-              }
+                data: {},
+              },
             ],
-            entityMap: {}
+            entityMap: {},
           },
           html:
-            '<div data-contents="true"><div data-block="true" data-editor="d1m91" data-offset-key="cnd1i-0-0"><div data-offset-key="cnd1i-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="cnd1i-0-0"><span data-text="true">Updted in bid 2</span></span></div></div></div>'
+            '<div data-contents="true"><div data-block="true" data-editor="d1m91" data-offset-key="cnd1i-0-0"><div data-offset-key="cnd1i-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="cnd1i-0-0"><span data-text="true">Updted in bid 2</span></span></div></div></div>',
         },
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: true
+        updatedInPG: true,
       },
       {
         user: 'vamsi.krishna5@iqvia.com',
@@ -26622,17 +26622,17 @@ export const quesHashData = {
                 depth: 0,
                 inlineStyleRanges: [],
                 entityRanges: [],
-                data: {}
-              }
+                data: {},
+              },
             ],
-            entityMap: {}
+            entityMap: {},
           },
           html:
-            '<div data-contents="true"><div data-block="true" data-editor="3kh01" data-offset-key="cnd1i-0-0"><div data-offset-key="cnd1i-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="cnd1i-0-0"><span data-text="true">test updated</span></span></div></div></div>'
+            '<div data-contents="true"><div data-block="true" data-editor="3kh01" data-offset-key="cnd1i-0-0"><div data-offset-key="cnd1i-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="cnd1i-0-0"><span data-text="true">test updated</span></span></div></div></div>',
         },
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: true
-      }
+        updatedInPG: true,
+      },
     ],
     questionOrder: 1,
     visible: true,
@@ -26656,19 +26656,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'd0c55c9b-fd0e-44ab-afd8-7bc6c0090423': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'd0c55c9b-fd0e-44ab-afd8-7bc6c0090423',
     section: {
       sectionOrder: 78,
-      sectionName: 'Events'
+      sectionName: 'Events',
     },
     questionText: 'Event8',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - CEVA'],
     answers: [],
@@ -26682,7 +26682,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '',
-      time: '2022-11-28T05:48:39.519Z'
+      time: '2022-11-28T05:48:39.519Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -26695,19 +26695,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'd44bcb44-183c-4bad-9b97-d64fd9f43d08': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'd44bcb44-183c-4bad-9b97-d64fd9f43d08',
     section: {
       sectionOrder: 3,
-      sectionName: 'SF answers(Text)'
+      sectionName: 'SF answers(Text)',
     },
     questionText: 'SF answer 2',
     answerConfiguration: {
       type: 'picklist',
-      options: ['None', 'Some', 'All']
+      options: ['None', 'Some', 'All'],
     },
     roleNames: ['Core - Clinical DS&B'],
     answers: [],
@@ -26730,19 +26730,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'd4ba72a4-b1d7-445d-b680-09fac22f6eb3': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'd4ba72a4-b1d7-445d-b680-09fac22f6eb3',
     section: {
       sectionOrder: 81,
-      sectionName: 'Business rule'
+      sectionName: 'Business rule',
     },
     questionText: 'Picklist Question 2',
     answerConfiguration: {
       type: 'picklist-lookup',
-      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW']
+      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW'],
     },
     roleNames: [
       '(Test) Core Teamm',
@@ -26757,7 +26757,7 @@ export const quesHashData = {
       'Spec - Biostats',
       'Spec - Business Account Manager',
       'Spec - Data Management',
-      'Spec - CEVA'
+      'Spec - CEVA',
     ],
     answers: [],
     questionOrder: 3,
@@ -26782,19 +26782,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'd76503d5-9f84-4b93-9d90-92de3ad49f59': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'd76503d5-9f84-4b93-9d90-92de3ad49f59',
     section: {
       sectionOrder: 3,
-      sectionName: 'SF answers(Text)'
+      sectionName: 'SF answers(Text)',
     },
     questionText: 'Test',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Spec - Biostats', 'Core - TSL'],
     answers: [],
@@ -26817,19 +26817,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'd89f1843-a248-412b-85d5-4f3226eef279': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'd89f1843-a248-412b-85d5-4f3226eef279',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'Test Radio',
     answerConfiguration: {
       type: 'radio',
-      options: ['dfcgvhb', 'APAC', 'Global', 'Japan']
+      options: ['dfcgvhb', 'APAC', 'Global', 'Japan'],
     },
     roleNames: ['(Test) Specialty Team', 'Core - Analytics Strategy Lead'],
     answers: [],
@@ -26854,19 +26854,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: true
+    questionApproval: true,
   },
   'd9fe4838-0541-4acb-b909-076a01e64b96': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'd9fe4838-0541-4acb-b909-076a01e64b96',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'Multi-Select',
     answerConfiguration: {
       type: 'picklist',
-      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW']
+      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW'],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [],
@@ -26892,19 +26892,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: true
+    questionApproval: true,
   },
   'data management-O6G': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'data management-O6G',
     section: {
       sectionOrder: 27,
-      sectionName: 'Data Management'
+      sectionName: 'Data Management',
     },
     questionText: 'How many pages per screen failure are expected?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Data Management'],
     answers: [],
@@ -26929,24 +26929,24 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'ddc72c6a-21de-494b-b668-480b4d95cae8': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'ddc72c6a-21de-494b-b668-480b4d95cae8',
     section: {
       sectionOrder: 78,
-      sectionName: 'Events'
+      sectionName: 'Events',
     },
     questionText: 'EventTest2',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: [
       '(Test) Specialty Team',
       'Core - Analytics Strategy Lead',
-      'Core - Business Developer'
+      'Core - Business Developer',
     ],
     answers: [],
     questionOrder: 13,
@@ -26969,19 +26969,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'de334761-576a-4ea8-93ac-4a134180ebe7': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'de334761-576a-4ea8-93ac-4a134180ebe7',
     section: {
       sectionOrder: 74,
-      sectionName: 'Testing LOOKUP fields'
+      sectionName: 'Testing LOOKUP fields',
     },
     questionText: 'single select look up sf answer',
     answerConfiguration: {
       type: 'select-lookup',
-      options: []
+      options: [],
     },
     roleNames: ['(Test) Core Teamm'],
     answers: [
@@ -26993,7 +26993,7 @@ export const quesHashData = {
         answer: 'Early Clinical Development',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -27003,7 +27003,7 @@ export const quesHashData = {
         answer: 'Clinical',
         formattedAnswer: {},
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: true
+        updatedInPG: true,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -27013,7 +27013,7 @@ export const quesHashData = {
         answer: 'Clinical',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -27023,7 +27023,7 @@ export const quesHashData = {
         answer: 'Clinical',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -27033,7 +27033,7 @@ export const quesHashData = {
         answer: 'Clinical',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Clinical',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -27043,7 +27043,7 @@ export const quesHashData = {
         answer: 'Clinical',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'Clinical',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -27053,7 +27053,7 @@ export const quesHashData = {
         answer: 'Clinical',
         formattedAnswer: 'Clinical',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -27063,8 +27063,8 @@ export const quesHashData = {
         answer: 'Clinical',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'Clinical',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 3,
     visible: true,
@@ -27077,7 +27077,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'Clinical',
-      time: '2022-11-28T05:48:39.590Z'
+      time: '2022-11-28T05:48:39.590Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -27090,19 +27090,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'e3dd93a7-8d66-4c19-b8c1-47df0e9c8fb2': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'e3dd93a7-8d66-4c19-b8c1-47df0e9c8fb2',
     section: {
       sectionOrder: 57,
-      sectionName: 'Call Objectives (Demo)'
+      sectionName: 'Call Objectives (Demo)',
     },
     questionText: 'new question test',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -27125,14 +27125,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'e45c93a1-ed24-44e9-964b-b22b8c158ae6': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'e45c93a1-ed24-44e9-964b-b22b8c158ae6',
     section: {
       sectionOrder: 76,
-      sectionName: '777(Do not edit)'
+      sectionName: '777(Do not edit)',
     },
     questionText: '     Novel_Trial_Design__c    ',
     answerConfiguration: {
@@ -27142,8 +27142,8 @@ export const quesHashData = {
         'External Comparators',
         'Master Protocol',
         'Not Applicable',
-        'Other'
-      ]
+        'Other',
+      ],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [],
@@ -27157,7 +27157,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '',
-      time: '2022-11-28T05:48:39.739Z'
+      time: '2022-11-28T05:48:39.739Z',
     },
     isCustomQuestion: false,
     questionJSON: '',
@@ -27168,19 +27168,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'e49ea62b-0a74-45c0-bdc1-5ec2e1b24dde': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'e49ea62b-0a74-45c0-bdc1-5ec2e1b24dde',
     section: {
       sectionOrder: 2,
-      sectionName: 'Customer Scenarios & BTS RFPs'
+      sectionName: 'Customer Scenarios & BTS RFPs',
     },
     questionText: 'Customer test question',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Medical Strategy Lead'],
     answers: [],
@@ -27206,19 +27206,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'e768bcaa-5578-4aab-b12d-a1f108a4f886': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'e768bcaa-5578-4aab-b12d-a1f108a4f886',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'test1 check',
     answerConfiguration: {
       type: 'checkbox',
-      options: ['Yes - face-to-face', 'Yes- virtual', 'No']
+      options: ['Yes - face-to-face', 'Yes- virtual', 'No'],
     },
     roleNames: ['Spec - Executive Oversight'],
     answers: [],
@@ -27241,19 +27241,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'e8647cb5-7e1f-4d57-b510-260b77298752': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'e8647cb5-7e1f-4d57-b510-260b77298752',
     section: {
       sectionOrder: 78,
-      sectionName: 'Events'
+      sectionName: 'Events',
     },
     questionText: 'Event6',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Medical Strategy Lead'],
     answers: [
@@ -27265,8 +27265,8 @@ export const quesHashData = {
         answer: '02-Dec-2022',
         formattedAnswer: '',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 7,
     visible: true,
@@ -27291,20 +27291,20 @@ export const quesHashData = {
     events:
       '{"EventSubject":"Sushil munda","EventBody":"<h1>Create Your Own Click Away Listener using React</h1><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class base-card__full-link base-card__full-link\\" href=\\"https://www.linkedin.com/in/hasanshingieti?trk=pulse-article_main-author-card\\"><strong>Hasan S.</strong></a></p><h3>Hasan S.</h3><h4>JavaScript | React.js | REST APIs | Node.js | Web Apps | SharePoint | Azure</h4><p>Published Mar 21, 2020</p><p><a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class base-main-card__cta base-main-card__cta\\" href=\\"https://www.linkedin.com/signup/cold-join?session_redirect=https%3A%2F%2Fwww%2Elinkedin%2Ecom%2Fpulse%2Fcreate-your-own-click-away-listener-using-react-hasan-shingieti&amp;trk=pulse-article_main-author-card__cta-button\\"><strong>+ Follow</strong></a></p><p>As a developer, you may have encountered the need to work with dialogs to display additional content or controls when a user clicks a button. It\'s fairly common to design a button that opens a dialog when it is clicked and closes it when it is clicked again; wax on-wax off. But to give your user experience a more natural feel, you may decide to, or must meet requirements that, implement the ability for the user to close the dialog by simply clicking anywhere outside the dialog without having to use the same button to toggle it.</p><p>There are libraries out there, such as <a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://material-ui.com/getting-started/installation/\\">Material-UI</a>, that provide React components allowing you to design dialogs and menus with a variety of capabilities, including <a target=\\"_blank\\" rel=\\"noopener noreferrer nofollow\\" class=\\"my-custom-class my-custom-class my-custom-class\\" href=\\"https://material-ui.com/components/click-away-listener/\\">the ability to detect \\"click away\\" events</a>. Material-UI is a great option for your design needs, but you may not be able to use it because the existing project you\'re working on wasn\'t designed with it and a refactor is out of the question or you may not want to include it in your project just to use a couple of components. Rather than telling your client or boss that it can\'t be done or if you want to minimize third-party modules, you can roll your own click away listener!</p><p>This post will walk through an example of how you can create a wrapper component in React that will detect when a click happens outside of the contents nested within it.</p><h3><strong>Summary</strong></h3><p>Here\'s a summary of what the click away listener component will do:</p>","EventPrimaryCondition":"Bid History Creation","ModifiedAt":"2022-11-15T17:05:25.055Z","EventRoles":["(Test) Specialty Team","Core - Analytics Strategy Lead"],"EntityType":"Events","ModifiedBy":"Ankit Sharma","EventUnitType":"Business Days","EventQuestionId":"e8647cb5-7e1f-4d57-b510-260b77298752","SK":"EVENTS#bf134599-cd38-49dd-859d-664cf1e427e5","EventId":"bf134599-cd38-49dd-859d-664cf1e427e5","EventNoOfUnits":4,"PK":"EVENTS#bf134599-cd38-49dd-859d-664cf1e427e5","EventOperator":"addition","CreatedAt":"2022-11-15T17:04:36.371Z","questionId":"e8647cb5-7e1f-4d57-b510-260b77298752"}',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'eb8b8096-af17-4a0b-abc4-05ebf8194100': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'eb8b8096-af17-4a0b-abc4-05ebf8194100',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText:
       "High-level scope for opportunity. What customers want and what they definitely don't want. radio button man radio",
     answerConfiguration: {
       type: 'radio',
-      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW']
+      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW'],
     },
     roleNames: ['(Test) Core Teamm'],
     answers: [
@@ -27320,7 +27320,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:17:26.925Z',
-        updated_date: '2022-11-25T06:17:26.925Z'
+        updated_date: '2022-11-25T06:17:26.925Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27334,7 +27334,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:17:26.925Z',
-        updated_date: '2022-11-25T06:17:26.925Z'
+        updated_date: '2022-11-25T06:17:26.925Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27348,7 +27348,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:17:26.925Z',
-        updated_date: '2022-11-25T06:17:26.925Z'
+        updated_date: '2022-11-25T06:17:26.925Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27362,7 +27362,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:17:26.925Z',
-        updated_date: '2022-11-25T06:17:26.925Z'
+        updated_date: '2022-11-25T06:17:26.925Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27376,7 +27376,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:19:16.487Z',
-        updated_date: '2022-11-25T06:19:16.487Z'
+        updated_date: '2022-11-25T06:19:16.487Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27390,7 +27390,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:19:16.487Z',
-        updated_date: '2022-11-25T06:19:16.487Z'
+        updated_date: '2022-11-25T06:19:16.487Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27404,7 +27404,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:19:16.487Z',
-        updated_date: '2022-11-25T06:19:16.487Z'
+        updated_date: '2022-11-25T06:19:16.487Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27418,7 +27418,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:19:16.487Z',
-        updated_date: '2022-11-25T06:19:16.487Z'
+        updated_date: '2022-11-25T06:19:16.487Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27432,7 +27432,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:22:25.533Z',
-        updated_date: '2022-11-25T06:22:25.533Z'
+        updated_date: '2022-11-25T06:22:25.533Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27446,7 +27446,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:22:25.533Z',
-        updated_date: '2022-11-25T06:22:25.533Z'
+        updated_date: '2022-11-25T06:22:25.533Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27460,7 +27460,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:22:25.533Z',
-        updated_date: '2022-11-25T06:22:25.533Z'
+        updated_date: '2022-11-25T06:22:25.533Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27474,7 +27474,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:22:25.533Z',
-        updated_date: '2022-11-25T06:22:25.533Z'
+        updated_date: '2022-11-25T06:22:25.533Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27488,7 +27488,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:54:57.872Z',
-        updated_date: '2022-11-25T06:54:57.872Z'
+        updated_date: '2022-11-25T06:54:57.872Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27502,7 +27502,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:54:57.872Z',
-        updated_date: '2022-11-25T06:54:57.872Z'
+        updated_date: '2022-11-25T06:54:57.872Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27516,7 +27516,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:54:57.872Z',
-        updated_date: '2022-11-25T06:54:57.872Z'
+        updated_date: '2022-11-25T06:54:57.872Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27530,7 +27530,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:54:57.872Z',
-        updated_date: '2022-11-25T06:54:57.872Z'
+        updated_date: '2022-11-25T06:54:57.872Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27544,7 +27544,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T14:31:44.928Z',
-        updated_date: '2022-11-25T14:31:44.928Z'
+        updated_date: '2022-11-25T14:31:44.928Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27558,7 +27558,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T14:31:44.928Z',
-        updated_date: '2022-11-25T14:31:44.928Z'
+        updated_date: '2022-11-25T14:31:44.928Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27572,7 +27572,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T14:31:44.928Z',
-        updated_date: '2022-11-25T14:31:44.928Z'
+        updated_date: '2022-11-25T14:31:44.928Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27586,7 +27586,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T14:31:44.928Z',
-        updated_date: '2022-11-25T14:31:44.928Z'
+        updated_date: '2022-11-25T14:31:44.928Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27600,7 +27600,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T14:34:24.056Z',
-        updated_date: '2022-11-25T14:34:24.056Z'
+        updated_date: '2022-11-25T14:34:24.056Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27614,7 +27614,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T14:34:24.056Z',
-        updated_date: '2022-11-25T14:34:24.056Z'
+        updated_date: '2022-11-25T14:34:24.056Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27628,7 +27628,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T14:34:24.056Z',
-        updated_date: '2022-11-25T14:34:24.056Z'
+        updated_date: '2022-11-25T14:34:24.056Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27642,7 +27642,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T14:34:24.056Z',
-        updated_date: '2022-11-25T14:34:24.056Z'
+        updated_date: '2022-11-25T14:34:24.056Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27656,7 +27656,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T15:37:50.762Z',
-        updated_date: '2022-11-27T15:37:50.762Z'
+        updated_date: '2022-11-27T15:37:50.762Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27670,7 +27670,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T15:37:50.762Z',
-        updated_date: '2022-11-27T15:37:50.762Z'
+        updated_date: '2022-11-27T15:37:50.762Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27684,7 +27684,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T15:37:50.762Z',
-        updated_date: '2022-11-27T15:37:50.762Z'
+        updated_date: '2022-11-27T15:37:50.762Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27698,7 +27698,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T15:37:50.762Z',
-        updated_date: '2022-11-27T15:37:50.762Z'
+        updated_date: '2022-11-27T15:37:50.762Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27712,7 +27712,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T17:00:43.114Z',
-        updated_date: '2022-11-27T17:00:43.114Z'
+        updated_date: '2022-11-27T17:00:43.114Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27726,7 +27726,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T17:00:43.114Z',
-        updated_date: '2022-11-27T17:00:43.114Z'
+        updated_date: '2022-11-27T17:00:43.114Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27740,7 +27740,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T17:00:43.114Z',
-        updated_date: '2022-11-27T17:00:43.114Z'
+        updated_date: '2022-11-27T17:00:43.114Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27754,7 +27754,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T17:00:43.114Z',
-        updated_date: '2022-11-27T17:00:43.114Z'
+        updated_date: '2022-11-27T17:00:43.114Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27768,7 +27768,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T17:01:13.536Z',
-        updated_date: '2022-11-27T17:01:13.536Z'
+        updated_date: '2022-11-27T17:01:13.536Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27782,7 +27782,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T17:01:13.536Z',
-        updated_date: '2022-11-27T17:01:13.536Z'
+        updated_date: '2022-11-27T17:01:13.536Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27796,7 +27796,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T17:01:13.536Z',
-        updated_date: '2022-11-27T17:01:13.536Z'
+        updated_date: '2022-11-27T17:01:13.536Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27810,7 +27810,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T17:01:13.536Z',
-        updated_date: '2022-11-27T17:01:13.536Z'
+        updated_date: '2022-11-27T17:01:13.536Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27824,7 +27824,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T17:02:06.823Z',
-        updated_date: '2022-11-27T17:02:06.823Z'
+        updated_date: '2022-11-27T17:02:06.823Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27838,7 +27838,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T17:02:06.823Z',
-        updated_date: '2022-11-27T17:02:06.823Z'
+        updated_date: '2022-11-27T17:02:06.823Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27852,7 +27852,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T17:02:06.823Z',
-        updated_date: '2022-11-27T17:02:06.823Z'
+        updated_date: '2022-11-27T17:02:06.823Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27866,7 +27866,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T17:02:06.823Z',
-        updated_date: '2022-11-27T17:02:06.823Z'
+        updated_date: '2022-11-27T17:02:06.823Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27880,7 +27880,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T17:02:37.940Z',
-        updated_date: '2022-11-27T17:02:37.940Z'
+        updated_date: '2022-11-27T17:02:37.940Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27894,7 +27894,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T17:02:37.940Z',
-        updated_date: '2022-11-27T17:02:37.940Z'
+        updated_date: '2022-11-27T17:02:37.940Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27908,7 +27908,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T17:02:37.940Z',
-        updated_date: '2022-11-27T17:02:37.940Z'
+        updated_date: '2022-11-27T17:02:37.940Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27922,7 +27922,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T17:02:37.940Z',
-        updated_date: '2022-11-27T17:02:37.940Z'
+        updated_date: '2022-11-27T17:02:37.940Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27936,7 +27936,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T18:45:06.321Z',
-        updated_date: '2022-11-27T18:45:06.321Z'
+        updated_date: '2022-11-27T18:45:06.321Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27950,7 +27950,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T18:45:06.321Z',
-        updated_date: '2022-11-27T18:45:06.321Z'
+        updated_date: '2022-11-27T18:45:06.321Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27964,7 +27964,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T18:45:06.321Z',
-        updated_date: '2022-11-27T18:45:06.321Z'
+        updated_date: '2022-11-27T18:45:06.321Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27978,7 +27978,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T18:45:06.321Z',
-        updated_date: '2022-11-27T18:45:06.321Z'
+        updated_date: '2022-11-27T18:45:06.321Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -27992,7 +27992,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T18:49:19.107Z',
-        updated_date: '2022-11-27T18:49:19.107Z'
+        updated_date: '2022-11-27T18:49:19.107Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -28006,7 +28006,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T18:49:19.107Z',
-        updated_date: '2022-11-27T18:49:19.107Z'
+        updated_date: '2022-11-27T18:49:19.107Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -28020,7 +28020,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T18:49:19.107Z',
-        updated_date: '2022-11-27T18:49:19.107Z'
+        updated_date: '2022-11-27T18:49:19.107Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -28034,8 +28034,8 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T18:49:19.107Z',
-        updated_date: '2022-11-27T18:49:19.107Z'
-      }
+        updated_date: '2022-11-27T18:49:19.107Z',
+      },
     ],
     questionOrder: 12,
     visible: true,
@@ -28058,19 +28058,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'ed499a22-db61-46c5-9e8d-08c6b3becd02': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'ed499a22-db61-46c5-9e8d-08c6b3becd02',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'this is a checkbox type question',
     answerConfiguration: {
       type: 'checkbox',
-      options: ['CRF', 'protocol', 'ICF', 'CSR', 'other']
+      options: ['CRF', 'protocol', 'ICF', 'CSR', 'other'],
     },
     roleNames: [
       'Core - Clinical DS&B',
@@ -28078,7 +28078,7 @@ export const quesHashData = {
       'Core - TSL',
       'Spec - Business Account Manager',
       'Spec - Data Management',
-      'Spec - Medical Writing'
+      'Spec - Medical Writing',
     ],
     answers: [],
     questionOrder: 25,
@@ -28101,20 +28101,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'f064f897-7d34-45ed-b340-83f2e0205e6e': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'f064f897-7d34-45ed-b340-83f2e0205e6e',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText:
       'Test Question. This question is visible only in approval secton',
     answerConfiguration: {
       type: 'radio',
-      options: ['None', 'Some', 'All']
+      options: ['None', 'Some', 'All'],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [
@@ -28130,7 +28130,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:55:05.212Z',
-        updated_date: '2022-11-25T06:55:05.212Z'
+        updated_date: '2022-11-25T06:55:05.212Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -28144,7 +28144,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:55:05.212Z',
-        updated_date: '2022-11-25T06:55:05.212Z'
+        updated_date: '2022-11-25T06:55:05.212Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -28158,7 +28158,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:55:05.212Z',
-        updated_date: '2022-11-25T06:55:05.212Z'
+        updated_date: '2022-11-25T06:55:05.212Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -28172,7 +28172,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-25T06:55:05.212Z',
-        updated_date: '2022-11-25T06:55:05.212Z'
+        updated_date: '2022-11-25T06:55:05.212Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -28186,7 +28186,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T15:39:38.876Z',
-        updated_date: '2022-11-27T15:39:38.876Z'
+        updated_date: '2022-11-27T15:39:38.876Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -28200,7 +28200,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T15:39:38.876Z',
-        updated_date: '2022-11-27T15:39:38.876Z'
+        updated_date: '2022-11-27T15:39:38.876Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -28214,7 +28214,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T15:39:38.876Z',
-        updated_date: '2022-11-27T15:39:38.876Z'
+        updated_date: '2022-11-27T15:39:38.876Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -28228,7 +28228,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T15:39:38.876Z',
-        updated_date: '2022-11-27T15:39:38.876Z'
+        updated_date: '2022-11-27T15:39:38.876Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -28242,7 +28242,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T18:45:13.393Z',
-        updated_date: '2022-11-27T18:45:13.393Z'
+        updated_date: '2022-11-27T18:45:13.393Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -28256,7 +28256,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T18:45:13.393Z',
-        updated_date: '2022-11-27T18:45:13.393Z'
+        updated_date: '2022-11-27T18:45:13.393Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -28270,7 +28270,7 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T18:45:13.393Z',
-        updated_date: '2022-11-27T18:45:13.393Z'
+        updated_date: '2022-11-27T18:45:13.393Z',
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -28284,8 +28284,8 @@ export const quesHashData = {
         created_by: '1095134',
         updated_by: '1095134',
         created_date: '2022-11-27T18:45:13.393Z',
-        updated_date: '2022-11-27T18:45:13.393Z'
-      }
+        updated_date: '2022-11-27T18:45:13.393Z',
+      },
     ],
     questionOrder: 26,
     visible: true,
@@ -28307,19 +28307,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: true
+    questionApproval: true,
   },
   'f085f403-b445-4843-8698-b9110c2739dd': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'f085f403-b445-4843-8698-b9110c2739dd',
     section: {
       sectionOrder: 78,
-      sectionName: 'Events'
+      sectionName: 'Events',
     },
     questionText: 'Event4',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [
@@ -28331,8 +28331,8 @@ export const quesHashData = {
         answer: '01-Dec-2022',
         formattedAnswer: '',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 4,
     visible: true,
@@ -28357,19 +28357,19 @@ export const quesHashData = {
     events:
       '{"EventSubject":"test for adding format","EventBody":"{\\"json\\":\\"{\\\\\\"blocks\\\\\\":[{\\\\\\"key\\\\\\":\\\\\\"cfmvg\\\\\\",\\\\\\"text\\\\\\":\\\\\\" React components implement a render() method that takes input data and returns what to display. This example uses an XML-like syntax called JSX. Input data that is passed into the component can be accessed by render() via this.props. \\\\\\",\\\\\\"type\\\\\\":\\\\\\"CenterAlignedBlock\\\\\\",\\\\\\"depth\\\\\\":0,\\\\\\"inlineStyleRanges\\\\\\":[{\\\\\\"offset\\\\\\":1,\\\\\\"length\\\\\\":234,\\\\\\"style\\\\\\":\\\\\\"STRIKETHROUGH\\\\\\"},{\\\\\\"offset\\\\\\":30,\\\\\\"length\\\\\\":8,\\\\\\"style\\\\\\":\\\\\\"CODE\\\\\\"},{\\\\\\"offset\\\\\\":210,\\\\\\"length\\\\\\":8,\\\\\\"style\\\\\\":\\\\\\"CODE\\\\\\"},{\\\\\\"offset\\\\\\":223,\\\\\\"length\\\\\\":10,\\\\\\"style\\\\\\":\\\\\\"CODE\\\\\\"}],\\\\\\"entityRanges\\\\\\":[],\\\\\\"data\\\\\\":{}}],\\\\\\"entityMap\\\\\\":{}}\\",\\"html\\":\\"<div data-contents=\\\\\\"true\\\\\\"><div class=\\\\\\"DraftEditor-alignCenter\\\\\\" data-block=\\\\\\"true\\\\\\" data-editor=\\\\\\"e7uao\\\\\\" data-offset-key=\\\\\\"cfmvg-0-0\\\\\\"><div data-offset-key=\\\\\\"cfmvg-0-0\\\\\\" class=\\\\\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\\\\\"><span data-offset-key=\\\\\\"cfmvg-0-0\\\\\\"><span data-text=\\\\\\"true\\\\\\"> </span></span><span data-offset-key=\\\\\\"cfmvg-0-1\\\\\\" style=\\\\\\"text-decoration: line-through;\\\\\\"><span data-text=\\\\\\"true\\\\\\">React components implement a </span></span><span data-offset-key=\\\\\\"cfmvg-0-2\\\\\\" style=\\\\\\"text-decoration: line-through; background-color: rgba(0, 0, 0, 0.05); font-family: &quot;Proxima Nova&quot;, &quot;Nunito Sans&quot;, sans-serif; font-size: 16px; padding: 2px;\\\\\\"><span data-text=\\\\\\"true\\\\\\">render()</span></span><span data-offset-key=\\\\\\"cfmvg-0-3\\\\\\" style=\\\\\\"text-decoration: line-through;\\\\\\"><span data-text=\\\\\\"true\\\\\\"> method that takes input data and returns what to display. This example uses an XML-like syntax called JSX. Input data that is passed into the component can be accessed by </span></span><span data-offset-key=\\\\\\"cfmvg-0-4\\\\\\" style=\\\\\\"text-decoration: line-through; background-color: rgba(0, 0, 0, 0.05); font-family: &quot;Proxima Nova&quot;, &quot;Nunito Sans&quot;, sans-serif; font-size: 16px; padding: 2px;\\\\\\"><span data-text=\\\\\\"true\\\\\\">render()</span></span><span data-offset-key=\\\\\\"cfmvg-0-5\\\\\\" style=\\\\\\"text-decoration: line-through;\\\\\\"><span data-text=\\\\\\"true\\\\\\"> via </span></span><span data-offset-key=\\\\\\"cfmvg-0-6\\\\\\" style=\\\\\\"text-decoration: line-through; background-color: rgba(0, 0, 0, 0.05); font-family: &quot;Proxima Nova&quot;, &quot;Nunito Sans&quot;, sans-serif; font-size: 16px; padding: 2px;\\\\\\"><span data-text=\\\\\\"true\\\\\\">this.props</span></span><span data-offset-key=\\\\\\"cfmvg-0-7\\\\\\" style=\\\\\\"text-decoration: line-through;\\\\\\"><span data-text=\\\\\\"true\\\\\\">. </span></span></div></div></div>\\"}","EventPrimaryCondition":"Bid History Creation","ModifiedAt":"2022-11-12T09:13:36.199Z","EventRoles":["(Test) Core Teamm"],"EntityType":"Events","ModifiedBy":"Sushil Munda","EventUnitType":"Business Days","EventQuestionId":"f085f403-b445-4843-8698-b9110c2739dd","SK":"EVENTS#27e73489-0f69-4983-ad34-0b9aeaed9d0b","EventId":"27e73489-0f69-4983-ad34-0b9aeaed9d0b","EventNoOfUnits":3,"PK":"EVENTS#27e73489-0f69-4983-ad34-0b9aeaed9d0b","EventOperator":"addition","CreatedAt":"2022-11-12T09:13:36.199Z","questionId":"f085f403-b445-4843-8698-b9110c2739dd"}',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'f4704ef1-ae4c-4904-b41b-b2be70d95574': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'f4704ef1-ae4c-4904-b41b-b2be70d95574',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'q003: is red in Spectral color ',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No', 'N/A']
+      options: ['Yes', 'No', 'N/A'],
     },
     roleNames: [
       'Core - Clinical DS&B',
@@ -28378,7 +28378,7 @@ export const quesHashData = {
       'Core - TSL',
       'Core - Medical Strategy Lead',
       'Core - Analytics Strategy Lead',
-      'Core - Business Developer'
+      'Core - Business Developer',
     ],
     answers: [],
     questionOrder: 12,
@@ -28403,19 +28403,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'f4770300-865f-4431-8e0b-0c03466a6109': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'f4770300-865f-4431-8e0b-0c03466a6109',
     section: {
       sectionOrder: 78,
-      sectionName: 'Events'
+      sectionName: 'Events',
     },
     questionText: 'Event5',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer', 'Core - Project Lead'],
     answers: [
@@ -28427,8 +28427,8 @@ export const quesHashData = {
         answer: '29-Nov-2022',
         formattedAnswer: '',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 6,
     visible: true,
@@ -28452,19 +28452,19 @@ export const quesHashData = {
     events:
       '{"EventSubject":"Color testing update","EventBody":"<p><br></p><h1 style=\\"text-align: center\\"><strong><span style=\\"color: rgb(51, 51, 51); color: rgb(51, 51, 51)\\"><u>This is an Example</u></span></strong></h1><p style=\\"text-align: center\\"><span style=\\"color: rgb(51, 51, 51); color: rgb(51, 51, 51)\\"><br><br></span></p><h2><span style=\\"color: rgb(51, 51, 51); color: rgb(51, 51, 51)\\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quis sem et.</span></h2><h2><strong><span style=\\"color: rgb(51, 51, 51); color: rgb(51, 51, 51)\\">Tip:</span></strong><span style=\\"color: rgb(51, 51, 51); color: rgb(51, 51, 51)\\"> The onblur event is the opposite of the onfocus event.</span></h2><h2>·&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong><span style=\\"color: rgb(0, 176, 80); color: rgb(0, 176, 80)\\">Etiam arcu elit, tempor at condimentum sit amet, mollis id</span></strong><span style=\\"color: rgb(51, 51, 51); color: rgb(51, 51, 51)\\">turpis. Ut eget vestibulum sem.</span></h2><h2>·&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style=\\"color: rgb(51, 51, 51); color: rgb(51, 51, 51)\\">Proin porta dolor ex, vitae consequat urna commodo vel.</span></h2><h2>·&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong><span style=\\"color: rgb(46, 117, 182); color: rgb(46, 117, 182)\\">Cras tincidunt ac eros ac blandit.</span></strong></h2><h2><span style=\\"color: rgb(51, 51, 51); color: rgb(51, 51, 51)\\"><br><br></span></h2><h2><strong><span style=\\"color: rgb(226, 0, 0); color: rgb(226, 0, 0)\\">Nulla commodo ligula cursus:</span></strong></h2><h2><em><span style=\\"color: rgb(51, 51, 51); color: rgb(51, 51, 51)\\">tempor metus nec, vestibulum arcu.</span></em></h2><h2><span style=\\"color: rgb(51, 51, 51); color: rgb(51, 51, 51)\\"><u>SED SAGITTIS HENDRERIT SAPIEN, VEL VIVERRA SAPIEN EGESTAS AT.</u></span></h2><p>&nbsp;<br></p>","EventPrimaryCondition":"Bid History Creation","ModifiedAt":"2022-11-17T07:44:44.589Z","EventRoles":["(Test) Core Teamm","(Test) Specialty Team"],"EntityType":"Events","ModifiedBy":"Sushil Munda","EventUnitType":"Business Days","EventQuestionId":"f4770300-865f-4431-8e0b-0c03466a6109","SK":"EVENTS#39e0efd3-4284-4dd9-bcaa-b38f50ecc768","EventId":"39e0efd3-4284-4dd9-bcaa-b38f50ecc768","EventNoOfUnits":1,"PK":"EVENTS#39e0efd3-4284-4dd9-bcaa-b38f50ecc768","EventOperator":"addition","CreatedAt":"2022-11-13T08:17:51.905Z","questionId":"f4770300-865f-4431-8e0b-0c03466a6109"}',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'f4cc7604-b236-4fcc-8d31-c514e22aee1f': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'f4cc7604-b236-4fcc-8d31-c514e22aee1f',
     section: {
       sectionOrder: 74,
-      sectionName: 'Testing LOOKUP fields'
+      sectionName: 'Testing LOOKUP fields',
     },
     questionText: 'single select look up',
     answerConfiguration: {
       type: 'select-lookup',
-      options: ['None', 'Some', 'All']
+      options: ['None', 'Some', 'All'],
     },
     roleNames: ['(Test) Core Teamm'],
     answers: [],
@@ -28488,19 +28488,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'f5c179f0-720f-4f58-94f1-74c211daab45': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'f5c179f0-720f-4f58-94f1-74c211daab45',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText: 'Who will be responsible for deveolping the Master ICF?',
     answerConfiguration: {
       type: 'select',
-      options: ['IQVIA', 'Customer']
+      options: ['IQVIA', 'Customer'],
     },
     roleNames: ['Core - Clinical DS&B', 'Spec - RSU'],
     answers: [],
@@ -28524,19 +28524,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'f6e9f7e4-47c4-4e81-bc71-e6a3b0f6d13d': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'f6e9f7e4-47c4-4e81-bc71-e6a3b0f6d13d',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText: 'Who will be responsible for initial RA submission?',
     answerConfiguration: {
       type: 'select',
-      options: ['IQVIA', 'Customer']
+      options: ['IQVIA', 'Customer'],
     },
     roleNames: ['Spec - RSU', 'Core - Project Lead'],
     answers: [],
@@ -28560,19 +28560,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'f7c42f54-9595-4fd2-9eda-6c71de04d970': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'f7c42f54-9595-4fd2-9eda-6c71de04d970',
     section: {
       sectionOrder: 75,
-      sectionName: 'Salesforce Section Test'
+      sectionName: 'Salesforce Section Test',
     },
     questionText: 'SF Single select question',
     answerConfiguration: {
       type: 'select-lookup',
-      options: []
+      options: [],
     },
     roleNames: ['Spec - Biostats', 'Core - Business Developer'],
     answers: [
@@ -28584,7 +28584,7 @@ export const quesHashData = {
         answer: 'N/A',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -28594,7 +28594,7 @@ export const quesHashData = {
         answer: 'N/A',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -28604,7 +28604,7 @@ export const quesHashData = {
         answer: 'N/A',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -28614,7 +28614,7 @@ export const quesHashData = {
         answer: 'N/A',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'N/A',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -28624,7 +28624,7 @@ export const quesHashData = {
         answer: 'N/A',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: 'N/A',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -28634,7 +28634,7 @@ export const quesHashData = {
         answer: 'N/A',
         formattedAnswer: 'N/A',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -28644,8 +28644,8 @@ export const quesHashData = {
         answer: 'N/A',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'N/A',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 1,
     visible: true,
@@ -28658,7 +28658,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: 'N/A',
-      time: '2022-11-28T05:48:39.935Z'
+      time: '2022-11-28T05:48:39.935Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -28671,25 +28671,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'f830f595-e9d2-4c31-bc6d-6c9ddb298a11': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'f830f595-e9d2-4c31-bc6d-6c9ddb298a11',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'Discussion Question  to test Text type answer',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - Analytics Strategy Lead',
       'Core - Clinical DS&B',
-      'Core - Medical Strategy Lead'
+      'Core - Medical Strategy Lead',
     ],
     answers: [],
     questionOrder: 22,
@@ -28711,19 +28711,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'f9d5b3c5-0bfe-4776-8da2-f5688dbe693f': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'f9d5b3c5-0bfe-4776-8da2-f5688dbe693f',
     section: {
       sectionOrder: 1,
-      sectionName: 'Opportunity Overvieww Mine'
+      sectionName: 'Opportunity Overvieww Mine',
     },
     questionText: 'Checking new question business rule',
     answerConfiguration: {
       type: 'select',
-      options: ['CLII (510(k) OUS equivalent)', 'CLIII (PMA OUS equivalent)']
+      options: ['CLII (510(k) OUS equivalent)', 'CLIII (PMA OUS equivalent)'],
     },
     roleNames: ['(Test) Core Teamm', '(Test) Specialty Team'],
     answers: [],
@@ -28746,19 +28746,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'fa275f08-a670-490d-b5ce-b3b87a622940': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'fa275f08-a670-490d-b5ce-b3b87a622940',
     section: {
       sectionOrder: 5,
-      sectionName: 'Win Strategy'
+      sectionName: 'Win Strategy',
     },
     questionText: 'radio type question test 01',
     answerConfiguration: {
       type: 'radio',
-      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW']
+      options: ['Toyota', 'Mercedes', 'Ferrari', 'Ford', 'BMW'],
     },
     roleNames: ['Core - Business Developer', 'Core - Analytics Strategy Lead'],
     answers: [],
@@ -28781,19 +28781,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'fdd0dca3-9bc4-41d4-9e44-5936abb535e2': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'fdd0dca3-9bc4-41d4-9e44-5936abb535e2',
     section: {
       sectionOrder: 79,
-      sectionName: 'Checkbox Validation'
+      sectionName: 'Checkbox Validation',
     },
     questionText: 'DS_Checkbox',
     answerConfiguration: {
       type: 'checkbox',
-      options: ['None', 'Some', 'All']
+      options: ['None', 'Some', 'All'],
     },
     roleNames: ['Core - Business Developer'],
     answers: [
@@ -28805,7 +28805,7 @@ export const quesHashData = {
         answer: 'No',
         formattedAnswer: 'No',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -28815,8 +28815,8 @@ export const quesHashData = {
         answer: ['No'],
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: ['No'],
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 3,
     visible: true,
@@ -28829,7 +28829,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: ['No'],
-      time: '2022-11-28T05:48:40.027Z'
+      time: '2022-11-28T05:48:40.027Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -28842,19 +28842,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'fec394fb-1fa6-46e5-91c5-bd160edaeceb': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'fec394fb-1fa6-46e5-91c5-bd160edaeceb',
     section: {
       sectionOrder: 12,
-      sectionName: 'Site Strategy'
+      sectionName: 'Site Strategy',
     },
     questionText: 'What Study Hub integrations would be needed?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer', 'Core - Clinical DS&B'],
     answers: [],
@@ -28881,19 +28881,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'ffbdffa3-483a-4586-bf1e-08264917875c': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'ffbdffa3-483a-4586-bf1e-08264917875c',
     section: {
       sectionOrder: 78,
-      sectionName: 'Events'
+      sectionName: 'Events',
     },
     questionText: 'SF question',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [
@@ -28905,7 +28905,7 @@ export const quesHashData = {
         answer: 'Clinical',
         formattedAnswer: 'Clinical',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -28915,8 +28915,8 @@ export const quesHashData = {
         answer: 'Clinical',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: 'Clinical',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 5,
     visible: true,
@@ -28929,7 +28929,7 @@ export const quesHashData = {
     hasDifferentSFanswer: true,
     currentSFanswer: {
       value: 'Clinical',
-      time: '2022-11-28T05:48:40.106Z'
+      time: '2022-11-28T05:48:40.106Z',
     },
     isCustomQuestion: false,
     questionJSON:
@@ -28942,19 +28942,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'ffd13eb1-e8e9-431b-b429-47458bc6ce66': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'ffd13eb1-e8e9-431b-b429-47458bc6ce66',
     section: {
       sectionOrder: 76,
-      sectionName: '777(Do not edit)'
+      sectionName: '777(Do not edit)',
     },
     questionText: '     FPI_Date__c    ',
     answerConfiguration: {
       type: 'date',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Proposal Developer'],
     answers: [
@@ -28966,7 +28966,7 @@ export const quesHashData = {
         answer: '2021-09-30',
         formattedAnswer: '',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -28976,7 +28976,7 @@ export const quesHashData = {
         answer: '2021-09-30',
         proposalId: '0adfe0af-57e2-4d2f-a010-fbb385c4d9d3',
         formattedAnswer: '',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -28986,7 +28986,7 @@ export const quesHashData = {
         answer: '2021-09-30',
         formattedAnswer: '',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -28996,7 +28996,7 @@ export const quesHashData = {
         answer: '2021-09-30',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: '2021-09-30',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -29006,7 +29006,7 @@ export const quesHashData = {
         answer: '2021-09-30',
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
         formattedAnswer: '2021-09-30',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -29016,7 +29016,7 @@ export const quesHashData = {
         answer: '2021-09-30',
         formattedAnswer: '2021-09-30',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
-        updatedInPG: false
+        updatedInPG: false,
       },
       {
         user: 'AnswerPulledFromSalesforce',
@@ -29026,8 +29026,8 @@ export const quesHashData = {
         answer: '2021-09-30',
         proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
         formattedAnswer: '2021-09-30',
-        updatedInPG: false
-      }
+        updatedInPG: false,
+      },
     ],
     questionOrder: 3,
     visible: true,
@@ -29039,7 +29039,7 @@ export const quesHashData = {
     hasDifferentSFanswer: false,
     currentSFanswer: {
       value: '2021-09-30',
-      time: '2022-11-28T05:48:40.182Z'
+      time: '2022-11-28T05:48:40.182Z',
     },
     isCustomQuestion: false,
     questionJSON: '',
@@ -29050,20 +29050,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'medical monitoring-A2J': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'medical monitoring-A2J',
     section: {
       sectionOrder: 28,
-      sectionName: 'Medical Monitoring'
+      sectionName: 'Medical Monitoring',
     },
     questionText:
       'What beeper hours do we want to include during Active vs LTFU?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['X - Medical Bidder - IQB'],
     answers: [],
@@ -29088,14 +29088,14 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'medical monitoring-A7W': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'medical monitoring-A7W',
     section: {
       sectionOrder: 28,
-      sectionName: 'Medical Monitoring'
+      sectionName: 'Medical Monitoring',
     },
     questionText:
       'What types of output would the customer like for trial decisions?',
@@ -29104,8 +29104,8 @@ export const quesHashData = {
       options: [
         'Simple data listings generated for each cohort from clinical and safety databases',
         'Patient Profiles',
-        'Formal TLFs'
-      ]
+        'Formal TLFs',
+      ],
     },
     roleNames: ['Core - Business Developer', 'X - Medical Bidder - IQB'],
     answers: [],
@@ -29130,20 +29130,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'medical monitoring-D3Y': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'medical monitoring-D3Y',
     section: {
       sectionOrder: 28,
-      sectionName: 'Medical Monitoring'
+      sectionName: 'Medical Monitoring',
     },
     questionText:
       'Should safety review meetings be included in the budget (SRCs, CRM, DSMB, DMC, CEC)?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['Core - Business Developer', 'X - Medical Bidder - IQB'],
     answers: [],
@@ -29168,19 +29168,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'medical monitoring-G3Y': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'medical monitoring-G3Y',
     section: {
       sectionOrder: 28,
-      sectionName: 'Medical Monitoring'
+      sectionName: 'Medical Monitoring',
     },
     questionText: 'What FTEs do we want to include during Active vs LTFU?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['X - Medical Bidder - IQB'],
     answers: [],
@@ -29205,20 +29205,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'monitoring approach-B2I': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'monitoring approach-B2I',
     section: {
       sectionOrder: 23,
-      sectionName: 'Monitoring Approach'
+      sectionName: 'Monitoring Approach',
     },
     questionText:
       'If vendors are performing regional monitoring, which CTM will review the trip reports for each vendor?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['X - Proposal Leader', 'Core - Clinical DS&B'],
     answers: [],
@@ -29243,19 +29243,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'monitoring approach-C8E': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'monitoring approach-C8E',
     section: {
       sectionOrder: 23,
-      sectionName: 'Monitoring Approach'
+      sectionName: 'Monitoring Approach',
     },
     questionText: 'Any co-monitoring needed?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['X - Proposal Leader', 'Core - Clinical DS&B', 'Core - TSL'],
     answers: [],
@@ -29280,19 +29280,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'monitoring approach-E8B': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'monitoring approach-E8B',
     section: {
       sectionOrder: 23,
-      sectionName: 'Monitoring Approach'
+      sectionName: 'Monitoring Approach',
     },
     questionText: 'Will CTM do manual cohort management?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['X - Proposal Leader', 'Core - Clinical DS&B'],
     answers: [],
@@ -29317,19 +29317,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'monitoring approach-F7V': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'monitoring approach-F7V',
     section: {
       sectionOrder: 23,
-      sectionName: 'Monitoring Approach'
+      sectionName: 'Monitoring Approach',
     },
     questionText: 'Which is the global lead?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['X - Proposal Leader', 'Core - Clinical DS&B'],
     answers: [],
@@ -29354,19 +29354,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'monitoring approach-I1E': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'monitoring approach-I1E',
     section: {
       sectionOrder: 23,
-      sectionName: 'Monitoring Approach'
+      sectionName: 'Monitoring Approach',
     },
     questionText: 'Will CDRC perform any phone visits?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['X - Proposal Leader', 'Core - Clinical DS&B'],
     answers: [],
@@ -29391,19 +29391,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'monitoring approach-J4I': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'monitoring approach-J4I',
     section: {
       sectionOrder: 23,
-      sectionName: 'Monitoring Approach'
+      sectionName: 'Monitoring Approach',
     },
     questionText: 'Will CDRC perform remote review?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['X - Proposal Leader', 'Core - Clinical DS&B'],
     answers: [],
@@ -29428,19 +29428,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'monitoring approach-J6A': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'monitoring approach-J6A',
     section: {
       sectionOrder: 23,
-      sectionName: 'Monitoring Approach'
+      sectionName: 'Monitoring Approach',
     },
     questionText: 'Will any site visits be performed via phone?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['X - Proposal Leader', 'Core - Clinical DS&B'],
     answers: [],
@@ -29465,19 +29465,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'monitoring approach-K3M': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'monitoring approach-K3M',
     section: {
       sectionOrder: 23,
-      sectionName: 'Monitoring Approach'
+      sectionName: 'Monitoring Approach',
     },
     questionText: 'Are we including CDRC?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['X - Proposal Leader', 'Core - Clinical DS&B'],
     answers: [],
@@ -29502,19 +29502,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'monitoring approach-L4T': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'monitoring approach-L4T',
     section: {
       sectionOrder: 23,
-      sectionName: 'Monitoring Approach'
+      sectionName: 'Monitoring Approach',
     },
     questionText: 'Location and number of CTMs?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['X - Proposal Leader', 'Core - Clinical DS&B'],
     answers: [],
@@ -29539,19 +29539,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'monitoring approach-M8V': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'monitoring approach-M8V',
     section: {
       sectionOrder: 23,
-      sectionName: 'Monitoring Approach'
+      sectionName: 'Monitoring Approach',
     },
     questionText: 'Provide location of CDRC heads:',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['X - Proposal Leader', 'Core - Clinical DS&B'],
     answers: [],
@@ -29576,19 +29576,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'monitoring approach-N0Z': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'monitoring approach-N0Z',
     section: {
       sectionOrder: 23,
-      sectionName: 'Monitoring Approach'
+      sectionName: 'Monitoring Approach',
     },
     questionText: 'Will CDRC perform any portion of site management?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['X - Proposal Leader', 'Core - Clinical DS&B'],
     answers: [],
@@ -29613,19 +29613,19 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'monitoring approach-S3W': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'monitoring approach-S3W',
     section: {
       sectionOrder: 23,
-      sectionName: 'Monitoring Approach'
+      sectionName: 'Monitoring Approach',
     },
     questionText: 'Will CDRC perform review of patient profiles?',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['X - Proposal Leader', 'Core - Clinical DS&B'],
     answers: [],
@@ -29650,20 +29650,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'monitoring approach-T2C': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'monitoring approach-T2C',
     section: {
       sectionOrder: 23,
-      sectionName: 'Monitoring Approach'
+      sectionName: 'Monitoring Approach',
     },
     questionText:
       'For double-blind studies, is unblinded pharmacy monitoring required? (We need to know whether sites will require unblinded personnel to prepare the IP.)',
     answerConfiguration: {
       type: 'select',
-      options: ['Yes', 'No']
+      options: ['Yes', 'No'],
     },
     roleNames: ['X - Proposal Leader', 'Core - Clinical DS&B', 'Core - TSL'],
     answers: [],
@@ -29688,20 +29688,20 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'pharmacovigilance-T7Z': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'pharmacovigilance-T7Z',
     section: {
       sectionOrder: 31,
-      sectionName: 'Pharmacovigilance'
+      sectionName: 'Pharmacovigilance',
     },
     questionText:
       'Child Opportunity number for IQVIA Pharmacovigilance budget:',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: ['Core - Business Developer'],
     answers: [],
@@ -29726,25 +29726,25 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
+    questionApproval: false,
   },
   'regulatory considerations-R6Z': {
     proposalId: '604cde82-edd8-410a-8682-d52cbfaa602e',
     questionId: 'regulatory considerations-R6Z',
     section: {
       sectionOrder: 16,
-      sectionName: 'Regulatory Considerations'
+      sectionName: 'Regulatory Considerations',
     },
     questionText:
       'Which regulatory agency(ies) does the customer intend to submit the study results to?',
     answerConfiguration: {
       type: 'text',
-      options: []
+      options: [],
     },
     roleNames: [
       'Core - Business Developer',
       'Core - TSL',
-      'X - Proposal Leader'
+      'X - Proposal Leader',
     ],
     answers: [],
     questionOrder: 1,
@@ -29766,6 +29766,33 @@ export const quesHashData = {
     integration: '',
     events: '',
     notApplicable: false,
-    questionApproval: false
-  }
+    questionApproval: false,
+  },
 };
+
+export const filters = [
+  {
+    name: 'answered',
+    displayName: 'Answered',
+    group: 'answer',
+    value: false,
+  },
+  {
+    name: 'unanswered',
+    displayName: 'Unanswered',
+    group: 'answer',
+    value: false,
+  },
+  {
+    name: 'responsible',
+    displayName: 'Responsible',
+    group: 'roles',
+    value: false,
+  },
+  {
+    name: 'informed',
+    displayName: 'Informed',
+    group: 'roles',
+    value: false,
+  },
+];
