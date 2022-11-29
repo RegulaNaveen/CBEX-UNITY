@@ -15,10 +15,12 @@ const MultiSelectQuestion = ({
   disabled,
   userData,
   socketContext,
-  trackMatomoEventSubmitAnswer
+  trackMatomoEventSubmitAnswer,
+  checkDisableFlag
 }) => {
   try {
     const dispatch = useDispatch();
+    const { questionLockWrapper, questionUnlockWrapper } = socketContext;
     const questionType = question?.answerConfiguration?.type;
     const sfObject = question?.sfObject;
     const sfField = question?.sfField;
@@ -58,9 +60,13 @@ const MultiSelectQuestion = ({
         sfObject={sfObject}
         sfField={sfField}
         lov={finalOptions}
-        onFocus={() => {}}
-        onBlur={() => {}}
-        disabled={!!disabled}
+        onFocus={() => {
+          questionLockWrapper(question?.questionId);
+        }}
+        onBlur={() => {
+          questionUnlockWrapper(question?.questionId);
+        }}
+        disabled={checkDisableFlag() || !!disabled}
         multiple
         answer={answerValue}
         onChange={changeHandler}

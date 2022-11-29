@@ -3,6 +3,8 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from 'apollo-react/components/Loader';
 
+import ClipboardCheck from 'apollo-react-icons/ClipboardCheck';
+import Card from 'apollo-react/components/Card';
 import {
   fetchAllApprovals,
   setQuestionHashAction,
@@ -63,7 +65,7 @@ const Approvals = () => {
       {/* Modal Loading */}
       {loading && <Loader isInner />}
 
-      <BidHistory />
+      <BidHistory data-testid="bid-history" />
 
       <div
         style={{ display: 'flex', justifyContent: 'end', paddingBottom: '5px' }}
@@ -86,7 +88,28 @@ const Approvals = () => {
           />
         ))
       ) : (
-        <p className="no-approval">No Approval Questions</p>
+        <>
+          <div className="no-approval-wrapper">
+            <Card
+              style={{
+                maxWidth: 600,
+                height: 150,
+                display: 'flex',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                alignItems: 'center',
+                color: '#7f7f7f',
+                padding: '20px'
+              }}
+            >
+              <ClipboardCheck
+                style={{ fontSize: '48px', marginBottom: '10px' }}
+                data-testid="No_approvals"
+              />
+              No Approval associated with your selected bid
+            </Card>
+          </div>
+        </>
       )}
 
       {/* Warning Modal */}

@@ -10,9 +10,11 @@ const RadioQuestionInput = ({
   disabled,
   userData,
   socketContext,
-  trackMatomoEventSubmitAnswer
+  trackMatomoEventSubmitAnswer,
+  checkDisableFlag
 }) => {
   const dispatch = useDispatch();
+  const { questionLockWrapper, questionUnlockWrapper } = socketContext;
 
   const changeHandler = (selectedValue, lastAns) => {
     const { proposalId, questionId } = question;
@@ -35,9 +37,13 @@ const RadioQuestionInput = ({
       value={lastAnswer.answer}
       onClick={val => changeHandler(val, lastAnswer.answer)}
       items={question?.answerConfiguration?.options}
-      disabled={!!disabled}
-      onFocus={() => {}}
-      onBlur={() => {}}
+      disabled={checkDisableFlag() || !!disabled}
+      onFocus={() => {
+        questionLockWrapper(question?.questionId);
+      }}
+      onBlur={() => {
+        questionUnlockWrapper(question?.questionId);
+      }}
     />
   );
 };
