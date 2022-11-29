@@ -213,7 +213,7 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
             <CustomModal
               open={showDeleteModal}
               title="Are you sure?"
-              message="The content of that approval section will be removed."
+              message="Delete this approval section if the additional call is not required."
               variant="error"
               onClose={() => setShowDeleteModal(false)}
               buttonProps={[
@@ -239,10 +239,8 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
             const response = await dispatch(
               duplicateApproval(proposalId, sectionId)
             );
-            // if (response && response.data) {
-            trackMatomoEventSubmitAnswer('Duplicate', approval);
-            // }
             dispatchLoadingEvent('SET_LOADING', false);
+            trackMatomoEventSubmitAnswer('Duplicate', approval);
             if (!response.status) {
               setWarningTitle(response.title);
               setWarningText(response.message);
