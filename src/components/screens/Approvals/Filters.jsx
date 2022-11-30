@@ -36,12 +36,12 @@ const Filters = props => {
           </Link>
         </div>
         {filterGroups.map((group, index) => (
-          <div>
+          <div key={group}>
             <Grid container spacing={2}>
               {approvalFilters
                 .filter(i => i.group === group)
                 .map(item => (
-                  <Grid item xs={3}>
+                  <Grid item xs={3} key={item.name}>
                     <ApolloCheckbox
                       size="small"
                       label={item.displayName}
