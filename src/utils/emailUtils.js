@@ -1,5 +1,9 @@
 import moment from 'moment';
-import { URL_REGEXP } from '../constants/app';
+import {
+  URL_REGEXP,
+  PROPOSAL_TEAM_USER_MATCH_REGEXP,
+  RTE_DATA_ATTR_REGEXP
+} from '../constants/app';
 
 export function getProposalTeamUsers(questions = []) {
   let answers = new Set();
@@ -14,7 +18,7 @@ export function getProposalTeamUsers(questions = []) {
           const recentAnswer =
             question.answers[question.answers.length - 1].answer;
           recentAnswer.split(',').forEach(user => {
-            const foundMail = user.match(/[a-zA-Z\w]*\((.*)\)/);
+            const foundMail = user.match(PROPOSAL_TEAM_USER_MATCH_REGEXP);
             if (foundMail !== null && foundMail[1]) {
               answers.add(foundMail[1]);
             }
@@ -48,7 +52,7 @@ function formatProposalTeamAnswers(answer) {
     formattedAnswer = answer
       .split(',')
       .map(user => {
-        const userMatchFound = user.match(/([a-zA-Z0-9\W]*\w)(\(.*\))/);
+        const userMatchFound = user.match();
         if (userMatchFound !== null) {
           return `${userMatchFound[1]} ${userMatchFound[2]}`;
         }
@@ -246,10 +250,7 @@ export function generateApprovalEmailInfo(
                 question.answers[question.answers.length - 1].answer
               )}</p>`
             : '';
-        answerHTML = answerHTML.replace(
-          /data-[a-zA-Z0-9-]*=\"[a-zA-Z0-9-]*\"/g,
-          ''
-        );
+        answerHTML = answerHTML.replace(RTE_DATA_ATTR_REGEXP, '');
       }
       emailBody += `<tr>
         <td>${question.questionText}</td>
