@@ -2,7 +2,8 @@ import moment from 'moment';
 import {
   URL_REGEXP,
   PROPOSAL_TEAM_USER_MATCH_REGEXP,
-  RTE_DATA_ATTR_REGEXP
+  RTE_DATA_ATTR_REGEXP,
+  PROPOSAL_TEAM_EMAIL_MATCH_REGEXP
 } from '../constants/app';
 
 export function getProposalTeamUsers(questions = []) {
@@ -18,7 +19,7 @@ export function getProposalTeamUsers(questions = []) {
           const recentAnswer =
             question.answers[question.answers.length - 1].answer;
           recentAnswer.split(',').forEach(user => {
-            const foundMail = user.match(PROPOSAL_TEAM_USER_MATCH_REGEXP);
+            const foundMail = user.match(PROPOSAL_TEAM_EMAIL_MATCH_REGEXP);
             if (foundMail !== null && foundMail[1]) {
               answers.add(foundMail[1]);
             }
@@ -52,7 +53,7 @@ function formatProposalTeamAnswers(answer) {
     formattedAnswer = answer
       .split(',')
       .map(user => {
-        const userMatchFound = user.match();
+        const userMatchFound = user.match(PROPOSAL_TEAM_USER_MATCH_REGEXP);
         if (userMatchFound !== null) {
           return `${userMatchFound[1]} ${userMatchFound[2]}`;
         }
