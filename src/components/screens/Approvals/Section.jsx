@@ -11,12 +11,14 @@ import CustomAccordion from '../../common/CustomAccordion/CustomAccordion';
 import CustomAccordionSummary from '../../common/CustomAccordion/CustomAccordionSummary';
 import SectionActive from './SectionActive';
 import SectionFreezed from './SectionFreezed';
+import { shouldShowSection } from './utils';
 
 export const ApprovalContext = createContext();
 
 const Section = ({ sectionId }) => {
   const [expanded, setExpanded] = useState(false);
   const [sectionLoading, setSectionLoading] = useState(false);
+  const questionHash = useSelector(state => state.approvals.quesHashData);
   const dispatchLoadingEvent = (actionType, payload) => {
     if (actionType === 'SET_LOADING') {
       setSectionLoading(payload);
@@ -28,7 +30,7 @@ const Section = ({ sectionId }) => {
   );
   const { ApprovalSectionTitle = '', ArchivedData = [] } = approval;
 
-  return (
+  const SectionContent = () => (
     <ApprovalContext.Provider value={{ sectionLoading, dispatchLoadingEvent }}>
       <CustomAccordion
         className="accordion-container"
@@ -53,6 +55,8 @@ const Section = ({ sectionId }) => {
       </CustomAccordion>
     </ApprovalContext.Provider>
   );
+
+  return shouldShowSection(questionHash, approval) ? <SectionContent /> : null;
 };
 
 Section.propTypes = {
