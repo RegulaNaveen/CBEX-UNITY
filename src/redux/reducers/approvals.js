@@ -6,6 +6,7 @@ const INITIAL_STATE = {
   allApprovals: [],
   quesHashData: {},
   isLoading: false,
+  canSendEmail: false,
   filters: [
     {
       name: 'answered',
@@ -93,6 +94,10 @@ const deleteApprovals = (state, action) => {
   return { ...state, allApprovals: modifiedApprovals };
 };
 
+const setCanSendEmail = (state, action) => {
+  return { ...state, canSendEmail: action.payload };
+};
+
 const updateFilter = (state, action) => {
   const { payload } = action;
   const { name, value } = payload;
@@ -108,6 +113,7 @@ const actionMap = {
   [APPROVALS.SET_LOADING]: setLoading,
   [APPROVALS.DUPLICATE_APPROVALS]: duplicateApproval,
   [APPROVALS.DELETE_APPROVALS]: deleteApprovals,
+  [APPROVALS.SET_CAN_SEND_EMAIL_IN_APPROVALS]: setCanSendEmail,
   [APPROVALS.UPDATE_FILTERS]: updateFilter
 };
 

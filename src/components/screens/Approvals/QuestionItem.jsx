@@ -102,7 +102,7 @@ const QuestionItem = ({
     const proposalDetail = opportunityData?.proposal?.proposalDetails;
     trackEvent({
       category: eventCategories.crmNo,
-      action: `Question: ${questionText} (${sectionName}) (${approvalSectionTitle})`,
+      action: `Approval Question: ${questionText} (${sectionName}) (${approvalSectionTitle})`,
       name: `Answer: ${answer}`,
       customDimensions: [
         {
@@ -125,13 +125,30 @@ const QuestionItem = ({
 
   const renderQuestion = () => {
     const lastAnswer = getLastAnswer(question);
+    const isQuestionLocked = () => {
+      return question?.questionLockInfo && question?.questionLockInfo?.userInfo;
+    };
+
+    const isQuestionLockedByOther = () => {
+      return (
+        isQuestionLocked() &&
+        getUserEmail() !== question?.questionLockInfo?.userInfo
+      );
+    };
+
+    const checkDisableFlag = () => {
+      if (isQuestionLockedByOther()) return true;
+
+      return false;
+    };
     const inputProps = {
       question,
       lastAnswer,
       disabled,
       userData: getUserData(),
       socketContext,
-      trackMatomoEventSubmitAnswer
+      trackMatomoEventSubmitAnswer,
+      checkDisableFlag
     };
 
     if (question?.section?.sectionName === 'Proposal Team') {
@@ -165,8 +182,8 @@ const QuestionItem = ({
     return ComponentMapper[question?.answerConfiguration?.type] ? (
       <SFNestedAnswerItem />
     ) : (
-      <FallbackComponent />
-    );
+        <FallbackComponent />
+      );
   };
 
   return useMemo(

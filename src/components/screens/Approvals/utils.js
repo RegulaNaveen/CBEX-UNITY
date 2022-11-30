@@ -87,8 +87,10 @@ export const generateQuestionsHash = (proposalQuestions, approvalfilters) => {
   try {
     const hash = {};
     if (Array.isArray(proposalQuestions)) {
+      // Visible Questions
+      const visibleQuestions = proposalQuestions.filter(item => item.visible);
       // Filter questions on the current template
-      const templateQuestions = proposalQuestions.filter(item => item.active);
+      const templateQuestions = visibleQuestions.filter(item => item.active);
       let questions = templateQuestions;
       questions = filteredQuestions(questions, approvalfilters);
       if (Array.isArray(questions) && questions.length > 0) {

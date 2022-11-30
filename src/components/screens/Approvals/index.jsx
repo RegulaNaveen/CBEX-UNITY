@@ -3,9 +3,12 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from 'apollo-react/components/Loader';
 
+import ClipboardCheck from 'apollo-react-icons/ClipboardCheck';
+import Card from 'apollo-react/components/Card';
 import {
   fetchAllApprovals,
-  setQuestionHashAction
+  setQuestionHashAction,
+  fetchApprovalSendEmailFlag
 } from '../../../redux/actions/approval-actions';
 import { getSelectedBid } from '../../../redux/selectors/proposal';
 import Section from './Section';
@@ -30,6 +33,11 @@ const Approvals = () => {
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const memoizeBid = useMemo(() => selectedBid, [selectedBid?.id]);
   const dispatch = useDispatch();
+
+  // get email flag status on mount
+  useEffect(() => {
+    dispatch(fetchApprovalSendEmailFlag());
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -57,31 +65,55 @@ const Approvals = () => {
       {/* Modal Loading */}
       {loading && <Loader isInner />}
 
-      <BidHistory />
+      <BidHistory data-testid="bid-history" />
 
-      <div
-        style={{ display: 'flex', justifyContent: 'end', paddingBottom: '5px' }}
-      >
-        <SecondaryButton
-          onClick={() => {
-            setIsShowFilters(val => !val);
-          }}
-        >
-          <Filter className="filter-icon" />
-          Filter
-        </SecondaryButton>
+      <div className="filter-container">
+        <div className="filter-btn">
+          <SecondaryButton
+            onClick={() => {
+              setIsShowFilters(val => !val);
+            }}
+          >
+            <Filter className="filter-icon" />
+            Filter
+          </SecondaryButton>
+        </div>
+        {isShowFilters && <Filters />}
       </div>
-      {isShowFilters && <Filters />}
-      {!isEmpty(approvals) ? (
-        approvals.map(approval => (
-          <Section
-            key={approval.ApprovalSectionId}
-            sectionId={approval.ApprovalSectionId}
-          />
-        ))
-      ) : (
-        <p className="no-approval">No Approval Questions</p>
-      )}
+
+      <div className="all-approvals-container">
+        {!isEmpty(approvals) ? (
+          approvals.map(approval => (
+            <Section
+              key={approval.ApprovalSectionId}
+              sectionId={approval.ApprovalSectionId}
+            />
+          ))
+        ) : (
+          <>
+            <div className="no-approval-wrapper">
+              <Card
+                style={{
+                  maxWidth: 600,
+                  height: 150,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  color: '#7f7f7f',
+                  padding: '20px'
+                }}
+              >
+                <ClipboardCheck
+                  style={{ fontSize: '48px', marginBottom: '10px' }}
+                  data-testid="No_approvals"
+                />
+                No Approval associated with your selected bid
+              </Card>
+            </div>
+          </>
+        )}
+      </div>
 
       {/* Warning Modal */}
       {warning && (

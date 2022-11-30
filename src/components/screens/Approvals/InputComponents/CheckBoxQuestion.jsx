@@ -15,10 +15,12 @@ const CheckBoxQuestion = ({
   disabled,
   userData,
   socketContext,
-  trackMatomoEventSubmitAnswer
+  trackMatomoEventSubmitAnswer,
+  checkDisableFlag
 }) => {
   try {
     const dispatch = useDispatch();
+    const { questionLockWrapper, questionUnlockWrapper } = socketContext;
     const questionType = question?.answerConfiguration?.type;
     const sfObject = question?.sfObject;
     const sfField = question?.sfField;
@@ -52,7 +54,12 @@ const CheckBoxQuestion = ({
     };
 
     return (
-      <div className="checkboxtype">
+      <div
+        className="checkboxtype"
+        // onFocus={() => {
+        //   questionLockWrapper(question?.questionId);
+        // }}
+      >
         <CheckBoxQuestions
           answerValue={answerValue}
           finalOptions={finalOptions}
@@ -60,6 +67,12 @@ const CheckBoxQuestion = ({
           onOpen={() => {}}
           onClose={() => {}}
           onChange={changeHandler}
+          // onFocus={() => {
+          //   questionLockWrapper(question?.questionId);
+          // }}
+          // onBlur={() => {
+          //   questionUnlockWrapper(question?.questionId);
+          // }}
         />
       </div>
     );

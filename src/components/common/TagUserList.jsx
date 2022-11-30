@@ -40,22 +40,14 @@ const TagUserList = ({ searchTag, onSelect, close, updateSearchTag }) => {
 
   async function fetchUsers() {
     setfetchingUsers(true);
-    try {
-      if (searchTag !== null && searchTag.length > 0) {
-        const usersList = await getADUsers(searchTag);
-        setUsers(usersList);
-      } else {
-        setUsers([]);
-      }
-    } catch (e) {
-      console.log('Error in retrieving users');
+    if (searchTag !== null && searchTag.length > 0) {
+      const usersList = await getADUsers(searchTag);
+      setUsers(usersList);
+    } else {
       setUsers([]);
-    } finally {
-      if (searchTag !== true) {
-        setfetchingUsers(false);
-      }
-      setActiveOptionIndex(0);
     }
+    setActiveOptionIndex(0);
+    setfetchingUsers(false);
   }
 
   useEffect(() => {
@@ -68,7 +60,6 @@ const TagUserList = ({ searchTag, onSelect, close, updateSearchTag }) => {
   }, [users]);
 
   function handleKeyDownListener(event) {
-    console.log('Received event', users.length);
     if (users.length === 0) return;
     if (['Escape', 'Enter', 'ArrowUp', 'ArrowDown'].includes(event.code)) {
       event.preventDefault();
@@ -102,6 +93,7 @@ const TagUserList = ({ searchTag, onSelect, close, updateSearchTag }) => {
         : prevActiveOptionIndex
     );
   }
+
   function handleArrowKeyDownPress() {
     setActiveOptionIndex(prevActiveOptionIndex =>
       prevActiveOptionIndex < users.length - 1
@@ -109,6 +101,7 @@ const TagUserList = ({ searchTag, onSelect, close, updateSearchTag }) => {
         : prevActiveOptionIndex
     );
   }
+
   function handleEnterKeyPress() {
     setActiveOptionIndex(activeIndex => {
       onSelect(users[activeIndex]);
@@ -116,6 +109,7 @@ const TagUserList = ({ searchTag, onSelect, close, updateSearchTag }) => {
       return 0;
     });
   }
+
   function handleEscapeKeyPress() {
     close();
   }
@@ -164,6 +158,7 @@ const TagUserList = ({ searchTag, onSelect, close, updateSearchTag }) => {
           item={item}
           active={activeOptionIndex === index}
           onClickHandler={onClickHandler}
+          key={`tag-user-item-${index + 1}`}
         />
       ))}
     </ul>

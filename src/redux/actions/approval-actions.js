@@ -4,8 +4,10 @@ import {
   getApprovalsApi
 } from '../../api/approvals';
 import { DEFAULT } from '../../constants/app';
+import featureFlags from '../../constants/featureFlags';
 import { APPROVALS } from '../../constants/types';
 import { getErrorMessage } from '../../utils/utils';
+import launchDarkly from '../../utils/launchDarkly';
 
 export const setAllApprovals = data => ({
   type: APPROVALS.SET_APPROVALS,
@@ -22,8 +24,8 @@ export const fetchAllApprovals = proposalId => async dispatch => {
   } catch (error) {
     // Error
     console.log(error.response);
-    const msg = getErrorMessage(error);
-    return { status: false, title: DEFAULT.ALERT, msg };
+    const message = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, message };
   }
 };
 
@@ -60,8 +62,8 @@ export const deleteApproval = (proposalId, sectionId) => async (
   } catch (error) {
     // Error
     console.log(error.response);
-    const msg = getErrorMessage(error);
-    return { status: false, title: DEFAULT.ALERT, msg };
+    const message = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, message };
   }
 };
 
@@ -88,9 +90,27 @@ export const duplicateApproval = (proposalId, sectionId) => async (
   } catch (error) {
     // Error
     console.log(error.response);
-    const msg = getErrorMessage(error);
-    return { status: false, title: DEFAULT.ALERT, msg };
+    const message = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, message };
   }
+};
+
+export const setCanSendEmailInApprovals = can => {
+  return dispatch => {
+    dispatch({
+      type: APPROVALS.SET_CAN_SEND_EMAIL_IN_APPROVALS,
+      payload: can
+    });
+  };
+};
+
+export const fetchApprovalSendEmailFlag = () => {
+  return async dispatch => {
+    const approvalSendEmailFlagValue = await launchDarkly(
+      featureFlags.APPROVAL_SEND_EMAIL
+    );
+    dispatch(setCanSendEmailInApprovals(approvalSendEmailFlagValue));
+  };
 };
 
 export const updateFilters = (name, value) => ({
