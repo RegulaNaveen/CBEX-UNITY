@@ -56,7 +56,8 @@ class AnswerHistory extends Component<Props> {
       question: this.props.question.set('answers', fromJS([])),
       lastAnswer: getLastAnswer(this.props.question.set('answers', fromJS([]))),
       loading: false,
-      mouseMoving: false
+      mouseMoving: false,
+      timerReset: QUESTION_UNLOCK_TIMEOUT
     };
     this.setMouseMove = this.setMouseMove.bind(this);
   }
@@ -83,6 +84,25 @@ class AnswerHistory extends Component<Props> {
     if (document.body) document.body.classList.add('no-scroll');
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.mouseMoving !== this.state.mouseMoving) {
+      const { timerReset, mouseMoving } = this.state;
+      if (!mouseMoving) {
+        console.log('Start watching for IDLE status');
+        const newTimeoutID = this.addWatcher();
+        this.setState({
+          timerReset: newTimeoutID
+        });
+      } else if (mouseMoving) {
+        console.log('Stop watching for IDLE status');
+        clearTimeout(timerReset);
+        this.setState({
+          timerReset: QUESTION_UNLOCK_TIMEOUT
+        });
+      }
+    }
+  }
+
   componentWillUnmount() {
     if (document.body) document.body.classList.remove('no-scroll');
   }
@@ -90,7 +110,6 @@ class AnswerHistory extends Component<Props> {
   setMouseMove(e) {
     e.preventDefault();
     this.setState({ mouseMoving: true });
-
     let timeout;
     (() => {
       clearTimeout(timeout);
@@ -267,7 +286,7 @@ class AnswerHistory extends Component<Props> {
 
   renderContent = () => {
     const { opportunityData } = this.props;
-    const { question, loading } = this.state;
+    const { question, loading, mouseMoving, timerReset } = this.state;
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const sectionName = question.getIn(['section', 'sectionName']);
     let answers = question.get('answers').reverse();
@@ -325,9 +344,6 @@ class AnswerHistory extends Component<Props> {
         this.context.questionLockWrapper(questionIdentifier);
       }
 
-      setTimeout(() => {
-        this.closeModalWindow();
-      }, QUESTION_UNLOCK_TIMEOUT);
       const isValidatedUnityPredictedAnswer =
         questionType !== ANSWER_TYPES.PICKLIST &&
         questionType !== ANSWER_TYPES.PICKLIST_LOOKUP &&
@@ -649,9 +665,10 @@ class AnswerHistory extends Component<Props> {
   };
 
   addWatcher() {
+    const { timerReset } = this.state;
     return setTimeout(() => {
       this.closeModalWindow();
-    }, QUESTION_UNLOCK_TIMEOUT);
+    }, timerReset);
   }
 
   render() {
@@ -659,13 +676,9 @@ class AnswerHistory extends Component<Props> {
     const { question, loading } = this.state;
     const answers = question.get('answers');
     const questionTitle = question.get('questionText');
-    if (this.state.mouseMoving) {
-      this.addWatcher();
-    }
     return (
       <section
         id="answer-history-modal"
-        key={uuidv4()}
         onClick={this.closeModalWindow}
         role="button" // eslint-disable-line
         tabIndex={0}
