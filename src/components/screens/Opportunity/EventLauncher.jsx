@@ -50,6 +50,7 @@ const EventLauncher = ({
   const eventData = parseStringifyJson(quesData?.events);
 
   const bodytoHtml = eventData?.EventBody;
+  const eventSubject = eventData?.EventSubject;
 
   // Component State
   const [openModal, setOpenModal] = useState(false);
@@ -160,11 +161,9 @@ const EventLauncher = ({
       body,
       subject,
       filteredEmails.join(', ')
-    )
+    );
     if (geturl) {
-      setUrl(
-        geturl
-      );
+      setUrl(geturl);
     }
 
     const trackEventPayload = {
@@ -237,7 +236,7 @@ const EventLauncher = ({
 
   return (
     <div className="event-launcher">
-      {!isEmpty(eventStartDate.trim()) && (
+      {!isEmpty(eventStartDate.trim()) && !isEmpty(eventSubject.trim()) && (
         <Tooltip
           variant="light"
           tabIndex={-1}

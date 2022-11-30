@@ -107,7 +107,7 @@ const UnityTab = ({
       setValue(tabs.find(item => item.label === 'Documents').value);
     }
     if (selectedView && selectedView === 'approvals') {
-      const isApprovalTabVisible = approvalsFlag && showApprovalTab;
+      const isApprovalTabVisible = approvalsFlag;
       const approvalTabValue = tabs.find(item => item.label === 'Approvals')
         .value;
       setValue(isApprovalTabVisible ? approvalTabValue : 0); // Shows questions tab if Approvals are not found for the proposal
