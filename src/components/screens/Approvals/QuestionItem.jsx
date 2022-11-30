@@ -123,6 +123,40 @@ const QuestionItem = ({
     });
   };
 
+  const trackUPAMatomoEventSubmitAnswer = answer => {
+    const {
+      section,
+      questionText,
+      questionHTML,
+      questionJSON,
+      questionHintJSON,
+      questionId
+    } = question;
+    const { sectionName } = section;
+    const proposalDetail = opportunityData?.proposal?.proposalDetails;
+    trackEvent({
+      category: eventCategories.crmNo,
+      action: `Approval Question Unity Predicted: ${questionText} (${sectionName}) (${approvalSectionTitle})`,
+      name: `Answer: ${answer}`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify({
+            answer,
+            sectionName,
+            questionText,
+            questionHTML,
+            questionJSON,
+            questionHintJSON,
+            questionId,
+            proposalDetail,
+            approvalSectionTitle
+          })
+        }
+      ]
+    });
+  };
+
   const renderQuestion = () => {
     const lastAnswer = getLastAnswer(question);
     const isQuestionLocked = () => {
@@ -150,7 +184,12 @@ const QuestionItem = ({
       trackMatomoEventSubmitAnswer,
       checkDisableFlag
     };
-
+    if (
+      inputProps.lastAnswer &&
+      inputProps.lastAnswer.userName === 'UnityPredictedAnswer'
+    ) {
+      trackMatomoEventSubmitAnswer(inputProps.lastAnswer.answer);
+    }
     if (question?.section?.sectionName === 'Proposal Team') {
       return <ProposalTeamQuestion {...inputProps} />;
     }
