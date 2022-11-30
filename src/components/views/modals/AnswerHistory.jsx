@@ -118,7 +118,13 @@ class AnswerHistory extends Component<Props> {
   }
 
   handleVerifyPredictedAnsClick = predictedAnswer => {
-    const { trackEvent, eventCategories, events, opportunityData } = this.props;
+    const {
+      trackEvent,
+      eventCategories,
+      events,
+      opportunityData,
+      tab
+    } = this.props;
     const { question } = this.state;
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const answers = question.get('answers').reverse();
@@ -160,9 +166,13 @@ class AnswerHistory extends Component<Props> {
         false
       );
     }
+    let action = 'Answer History';
+    if (tab && tab === 'Approval') {
+      action = 'Approval Answer History';
+    }
     trackEvent({
       category: eventCategories.pd(this.props),
-      action: `Answer History Event: ${questionText} (${sectionName})`,
+      action: `${action} Event: ${questionText} (${sectionName})`,
       name: `Verified Answer: ${answer} by ${userData.name} ${userData.email}`,
       customDimensions: [
         {
@@ -192,7 +202,8 @@ class AnswerHistory extends Component<Props> {
       eventCategories,
       events,
       opportunityData,
-      userData
+      userData,
+      tab
     } = this.props;
     const { question } = this.state;
     const questionType = question.getIn(['answerConfiguration', 'type']);
@@ -229,9 +240,13 @@ class AnswerHistory extends Component<Props> {
         false
       );
     }
+    let action = 'Answer History';
+    if (tab && tab === 'Approval') {
+      action = 'Approval Answer History';
+    }
     trackEvent({
       category: eventCategories.pd(this.props),
-      action: `Answer History Event: ${questionText} (${sectionName})`,
+      action: `${action} Event: ${questionText} (${sectionName})`,
       name: `Rejected Answer: ${answer} by ${userData.name} ${userData.email}`,
       customDimensions: [
         {
