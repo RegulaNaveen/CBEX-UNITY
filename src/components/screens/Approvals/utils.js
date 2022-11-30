@@ -20,11 +20,22 @@ export const getLastAnswer = question => {
   }
 };
 
+// Empty Answers are stored with a spaces
+const isAnswerEmpty = answer => isEmpty(answer) || answer === ' ';
+
+// answeredFilter => Only answered
 const answeredFilter = questions => {
-  return questions.filter(item => !isEmpty(item.answers));
+  return questions.filter(question => {
+    const lastAnswer = getLastAnswer(question);
+    return !isAnswerEmpty(lastAnswer.answer);
+  });
 };
+// UnansweredFilter => No Answers and Indetermined Answers
 const unansweredFilter = questions => {
-  return questions.filter(item => isEmpty(item.answers));
+  return questions.filter(question => {
+    const lastAnswer = getLastAnswer(question);
+    return isAnswerEmpty(lastAnswer.answer);
+  });
 };
 const responsibleFilter = questions => {
   return questions.filter(item => {
@@ -103,5 +114,34 @@ export const generateQuestionsHash = (proposalQuestions, approvalfilters) => {
   } catch (error) {
     console.error(error);
     return {};
+  }
+};
+
+/**
+ * Function used to decide whether to show or hide an Approval Section
+ * The questionHash changes based on filters applied on the UI
+ * When an Approval Section doesn't contain any questions matching the applied filters then the Section should be hidden
+ * @param {*} questionHash Redux approvals.quesHashData or return value of `generateQuestionsHash` function
+ * @param {*} approvalSection - A single Approval Section data from redux i.e approval item from allApprovals array `approvals.allApprovals[0]`
+ * @returns
+ */
+export const shouldShowSection = (
+  questionHash = {},
+  approvalSection = {}
+): Boolean => {
+  try {
+    const questionIds = Object.keys(questionHash) || [];
+    const leftQuestions = approvalSection?.ApprovalSectionLeftQuestions || [];
+    const rightQuestions = approvalSection?.ApprovalSectionRightQuestions || [];
+    const approvalQuestionIds = [...leftQuestions, ...rightQuestions];
+    const intersectingQuestions = questionIds.filter(i =>
+      approvalQuestionIds.includes(i)
+    );
+    // If intersectingQuestions length is 0 it means
+    // the filtered questionHash does not contain any questionId which is present in the current approval section
+    return intersectingQuestions.length > 0;
+  } catch (error) {
+    console.error(error);
+    return true;
   }
 };
