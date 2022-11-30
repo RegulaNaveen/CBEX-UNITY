@@ -29769,3 +29769,30 @@ export const quesHashData = {
     questionApproval: false
   }
 };
+
+export const filters = [
+  {
+    name: 'answered',
+    displayName: 'Answered',
+    group: 'answer',
+    value: false
+  },
+  {
+    name: 'unanswered',
+    displayName: 'Unanswered',
+    group: 'answer',
+    value: false
+  },
+  {
+    name: 'responsible',
+    displayName: 'Responsible',
+    group: 'roles',
+    value: false
+  },
+  {
+    name: 'informed',
+    displayName: 'Informed',
+    group: 'roles',
+    value: false
+  }
+];

@@ -56,8 +56,22 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
     trackEvent({
       category: eventCategories.crmNo,
       action: `Approval ${action}`,
-      name: `Approval: ${action}: (${ApprovalSectionTitle}) (${ArchivedData.length -
-        1})`,
+      name: `Approval: ${action}: ${ApprovalSectionTitle} ${ArchivedData.length +
+        1}`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify({
+            proposalDetail,
+            aprovaldata
+          })
+        }
+      ]
+    });
+    trackEvent({
+      category: eventCategories.crmNo,
+      action: `Approval ${action}`,
+      name: `Approval: Duplicate Count: ${ArchivedData.length - 1}`,
       customDimensions: [
         {
           id: 1,
@@ -77,8 +91,8 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
       trackEvent({
         category: eventCategories.crmNo,
         action: `Approval: creation`,
-        name: `Approval Answer: creation: (${ApprovalSectionTitle}) (${ArchivedData.length +
-          1})`,
+        name: `Approval Answer: creation: ${ApprovalSectionTitle} ${ArchivedData.length +
+          2}`,
         customDimensions: [
           {
             id: 1,
@@ -113,11 +127,12 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
 
   const emailEventMatomo = (action, aprovaldata) => {
     const proposalDetail = opportunityData?.proposal?.proposalDetails;
-    const { ApprovalSectionTitle, ApprovalSectionOrder } = aprovaldata;
+    const { ApprovalSectionTitle } = aprovaldata;
     trackEvent({
       category: eventCategories.crmNo,
       action: `Approval ${action}`,
-      name: `Approval: ${action}: (${ApprovalSectionTitle}) (${ApprovalSectionOrder})`,
+      name: `Approval: ${action}: ${ApprovalSectionTitle} ${ArchivedData.length +
+        1}`,
       customDimensions: [
         {
           id: 1,
@@ -151,30 +166,19 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
       proposalDetails
     );
     trackMatomoEventSubmitAnswer('Email', approval);
-    if (
-      emailInfo.subject &&
-      Array.isArray(emailInfo.to) &&
-      emailInfo.to.length > 0 &&
-      Array.isArray(emailInfo.cc)
-    ) {
-      try {
-        const blob = new Blob([emailInfo.body], { type: 'text/html' });
-        const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
-        await navigator.clipboard.write([clipboardItem]);
-      } catch (e) {
-        console.log(
-          '[Approvals] ActionButtons: Error in copying approval data to clipboard',
-          e
-        );
-      }
-      window.open(
-        generateApprovalEmailURL(emailInfo.subject, emailInfo.to, emailInfo.cc)
-      );
-    } else {
+    try {
+      const blob = new Blob([emailInfo.body], { type: 'text/html' });
+      const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
+      await navigator.clipboard.write([clipboardItem]);
+    } catch (e) {
       console.log(
-        '[Approvals] ActionButtons: Error in email data. please check subject, to and cc'
+        '[Approvals] ActionButtons: Error in copying approval data to clipboard',
+        e
       );
     }
+    window.open(
+      generateApprovalEmailURL(emailInfo.subject, emailInfo.to, emailInfo.cc)
+    );
   }
   const deleteAfterConfirmHandler = () => {
     setShowDeleteModal(false);

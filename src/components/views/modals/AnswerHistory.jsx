@@ -4,7 +4,7 @@ import { connect, useSelector } from 'react-redux';
 import { Map, fromJS } from 'immutable'; // NOSONAR
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
-import { isEmpty, isString, unionBy } from 'lodash';
+import { isEmpty, isString, unionBy, isObject } from 'lodash';
 import { diffWordsWithSpace } from 'diff';
 import Loader from 'apollo-react/components/Loader';
 import Button from 'apollo-react/components/Button/Button';
@@ -29,6 +29,7 @@ import {
 import { SocketContext } from '../../../context/SocketContext';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import { getLastAnswer } from '../../screens/Approvals/utils';
+import { QUESTION_UNLOCK_TIMEOUT } from '../../../constants/app';
 
 type Props = {
   question: Map,
@@ -54,8 +55,11 @@ class AnswerHistory extends Component<Props> {
     this.state = {
       question: this.props.question.set('answers', fromJS([])),
       lastAnswer: getLastAnswer(this.props.question.set('answers', fromJS([]))),
-      loading: false
+      loading: false,
+      mouseMoving: false,
+      timerReset: QUESTION_UNLOCK_TIMEOUT
     };
+    this.setMouseMove = this.setMouseMove.bind(this);
   }
 
   componentDidMount() {
@@ -80,12 +84,47 @@ class AnswerHistory extends Component<Props> {
     if (document.body) document.body.classList.add('no-scroll');
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.mouseMoving !== this.state.mouseMoving) {
+      const { timerReset, mouseMoving } = this.state;
+      if (!mouseMoving) {
+        console.log('Start watching for IDLE status');
+        const newTimeoutID = this.addWatcher();
+        this.setState({
+          timerReset: newTimeoutID
+        });
+      } else if (mouseMoving) {
+        console.log('Stop watching for IDLE status');
+        clearTimeout(timerReset);
+        this.setState({
+          timerReset: QUESTION_UNLOCK_TIMEOUT
+        });
+      }
+    }
+  }
+
   componentWillUnmount() {
     if (document.body) document.body.classList.remove('no-scroll');
   }
 
+  setMouseMove(e) {
+    e.preventDefault();
+    this.setState({ mouseMoving: true });
+    let timeout;
+    (() => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => this.setState({ mouseMoving: false }), 50);
+    })();
+  }
+
   handleVerifyPredictedAnsClick = predictedAnswer => {
-    const { trackEvent, eventCategories, events, opportunityData } = this.props;
+    const {
+      trackEvent,
+      eventCategories,
+      events,
+      opportunityData,
+      tab
+    } = this.props;
     const { question } = this.state;
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const answers = question.get('answers').reverse();
@@ -127,9 +166,13 @@ class AnswerHistory extends Component<Props> {
         false
       );
     }
+    let action = 'Answer History';
+    if (tab && tab === 'Approval') {
+      action = 'Approval Answer History';
+    }
     trackEvent({
       category: eventCategories.pd(this.props),
-      action: `Answer History Event: ${questionText} (${sectionName})`,
+      action: `${action} Event: ${questionText} (${sectionName})`,
       name: `Verified Answer: ${answer} by ${userData.name} ${userData.email}`,
       customDimensions: [
         {
@@ -159,7 +202,8 @@ class AnswerHistory extends Component<Props> {
       eventCategories,
       events,
       opportunityData,
-      userData
+      userData,
+      tab
     } = this.props;
     const { question } = this.state;
     const questionType = question.getIn(['answerConfiguration', 'type']);
@@ -196,9 +240,13 @@ class AnswerHistory extends Component<Props> {
         false
       );
     }
+    let action = 'Answer History';
+    if (tab && tab === 'Approval') {
+      action = 'Approval Answer History';
+    }
     trackEvent({
       category: eventCategories.pd(this.props),
-      action: `Answer History Event: ${questionText} (${sectionName})`,
+      action: `${action} Event: ${questionText} (${sectionName})`,
       name: `Rejected Answer: ${answer} by ${userData.name} ${userData.email}`,
       customDimensions: [
         {
@@ -253,23 +301,10 @@ class AnswerHistory extends Component<Props> {
 
   renderContent = () => {
     const { opportunityData } = this.props;
-    const { question, loading } = this.state;
+    const { question, loading, mouseMoving, timerReset } = this.state;
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const sectionName = question.getIn(['section', 'sectionName']);
     let answers = question.get('answers').reverse();
-    conditionBlankPredicted =
-      answers.size &&
-      isString(answers?.get(0)?.get('answer')) &&
-      isEmpty(
-        answers
-          ?.get(0)
-          ?.get('answer')
-          .trim()
-      ) &&
-      answers?.get(0 + 1)?.get('userName') === 'UnityPredictedAnswer';
-    if (conditionBlankPredicted) {
-      answers = answers.delete(0).delete(0);
-    }
     const questionId = answers.get('questionId');
     if (questionId) answers = question.getIn(['answers', 'answers']).reverse();
     if (answers.isEmpty()) return this.renderAnswerResponsables();
@@ -277,6 +312,21 @@ class AnswerHistory extends Component<Props> {
     const questionIdentifier = questions.get('questionId');
     lockQuestion = questionIdentifier;
     const lastAnswer = answers.get(0).toJS();
+    answers.map((_answer, index) => {
+      const currentAnswer =
+        isObject(answers?.get(index)?.get('answer')) &&
+        answers?.get(index)?.get('answer').size === 0
+          ? ' '
+          : answers?.get(index)?.get('answer');
+      conditionBlankPredicted =
+        answers.size &&
+        isString(currentAnswer) &&
+        isEmpty(currentAnswer.trim()) &&
+        answers?.get(index + 1)?.get('userName') === 'UnityPredictedAnswer';
+      if (conditionBlankPredicted) {
+        answers = answers.delete(index).delete(index);
+      }
+    });
     return answers.map((_answer, index) => {
       const userName = _answer.get('userName') || 'Default User';
       const date = _answer.get('date');
@@ -308,6 +358,7 @@ class AnswerHistory extends Component<Props> {
       ) {
         this.context.questionLockWrapper(questionIdentifier);
       }
+
       const isValidatedUnityPredictedAnswer =
         questionType !== ANSWER_TYPES.PICKLIST &&
         questionType !== ANSWER_TYPES.PICKLIST_LOOKUP &&
@@ -628,6 +679,13 @@ class AnswerHistory extends Component<Props> {
     }
   };
 
+  addWatcher() {
+    const { timerReset } = this.state;
+    return setTimeout(() => {
+      this.closeModalWindow();
+    }, timerReset);
+  }
+
   render() {
     const { closeModal } = this.props;
     const { question, loading } = this.state;
@@ -636,10 +694,10 @@ class AnswerHistory extends Component<Props> {
     return (
       <section
         id="answer-history-modal"
-        key={uuidv4()}
         onClick={this.closeModalWindow}
         role="button" // eslint-disable-line
         tabIndex={0}
+        onMouseMove={e => this.setMouseMove(e)}
         onKeyUp={this.onModalKeyPress}
       >
         <div

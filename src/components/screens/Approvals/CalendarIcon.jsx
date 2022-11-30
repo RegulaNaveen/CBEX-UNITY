@@ -3,6 +3,9 @@ import isEmpty from 'lodash/isEmpty';
 import Calendar from 'apollo-react-icons/Calendar';
 import CalendarCheck from 'apollo-react-icons/CalendarCheck';
 import { getLastAnswer } from './utils';
+import indeterminate from '../../../../img/Indeterminate.svg';
+
+const IndeterminateIcon = () => <img src={indeterminate} alt="indeterminate" />;
 
 const CalendarIcon = ({ question }) => {
   const lastAnswer = getLastAnswer(question);
@@ -16,6 +19,10 @@ const CalendarIcon = ({ question }) => {
   const isAnswerEmpty = answer => isEmpty(answer) || answer === ' ';
 
   const renderCalendarIcon = () => {
+    // No Answers i.e lastAnswer is an Empty Object {}
+    if (Object.keys(lastAnswer).length === 0) {
+      return <Calendar style={{ color: color.unAnswered }} />;
+    }
     // UnityPredictedAnswer
     if (
       !isAnswerEmpty(lastAnswer.answer) &&
@@ -27,8 +34,8 @@ const CalendarIcon = ({ question }) => {
     if (!isAnswerEmpty(lastAnswer.answer)) {
       return <CalendarCheck style={{ color: color.answered }} />;
     }
-    // Unanswered
-    return <Calendar style={{ color: color.unAnswered }} />;
+    // Indertermined | Unanswered
+    return <IndeterminateIcon />;
   };
   return renderCalendarIcon();
 };
