@@ -151,30 +151,19 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
       proposalDetails
     );
     trackMatomoEventSubmitAnswer('Email', approval);
-    if (
-      emailInfo.subject &&
-      Array.isArray(emailInfo.to) &&
-      emailInfo.to.length > 0 &&
-      Array.isArray(emailInfo.cc)
-    ) {
-      try {
-        const blob = new Blob([emailInfo.body], { type: 'text/html' });
-        const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
-        await navigator.clipboard.write([clipboardItem]);
-      } catch (e) {
-        console.log(
-          '[Approvals] ActionButtons: Error in copying approval data to clipboard',
-          e
-        );
-      }
-      window.open(
-        generateApprovalEmailURL(emailInfo.subject, emailInfo.to, emailInfo.cc)
-      );
-    } else {
+    try {
+      const blob = new Blob([emailInfo.body], { type: 'text/html' });
+      const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
+      await navigator.clipboard.write([clipboardItem]);
+    } catch (e) {
       console.log(
-        '[Approvals] ActionButtons: Error in email data. please check subject, to and cc'
+        '[Approvals] ActionButtons: Error in copying approval data to clipboard',
+        e
       );
     }
+    window.open(
+      generateApprovalEmailURL(emailInfo.subject, emailInfo.to, emailInfo.cc)
+    );
   }
   const deleteAfterConfirmHandler = () => {
     setShowDeleteModal(false);

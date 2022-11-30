@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { URL_REGEXP } from '../constants/app';
 
 export function getProposalTeamUsers(questions = []) {
@@ -41,13 +42,31 @@ function handleHyperlinks(answer) {
   return chunks.join(' ');
 }
 
+function formatProposalTeamAnswers(answer) {
+  let formattedAnswer = '';
+  if (answer.length > 0) {
+    formattedAnswer = answer
+      .split(',')
+      .map(user => {
+        const userMatchFound = user.match(/([a-zA-Z0-9\W]*\w)(\(.*\))/);
+        if (userMatchFound !== null) {
+          return `${userMatchFound[1]} ${userMatchFound[2]}`;
+        }
+        return user;
+      })
+      .join(', ');
+  }
+  return formattedAnswer;
+}
+
 export function generateApprovalEmailInfo(
   approvalSection,
   allQuestions,
   proposalDetails = {}
 ) {
   let emailSubject = '';
-  const emailHead = `<html>
+  const emailHead = `
+  <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
     <head>
     <style>
         #approval-email-content {
@@ -60,7 +79,6 @@ export function generateApprovalEmailInfo(
         }
         table {
             border-spacing: 0;
-            margin: 16px 0;
         }
         table td, table th{
             padding: 5px;
@@ -86,7 +104,6 @@ export function generateApprovalEmailInfo(
         .summary-table td:first-child{
             background: #00A3E0;
             color: #FFFFFF;
-            min-width: 150px;
             font-weight: bold;
         }
         .summary-table td:not(:first-child) {
@@ -107,6 +124,25 @@ export function generateApprovalEmailInfo(
         .public-DraftStyleDefault-depth4.public-DraftStyleDefault-listLTR {
             margin-left: 25px;
         }
+        <!--[if mso]>
+          table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            mso-table-lspace: 0pt !important;
+            mso-table-rspace: 0pt !important;
+            padding: 0;
+          }
+          table * {
+            padding: 0;
+            margin: 0;
+          }
+          p {
+            margin: 0;
+          }
+          table td, table th{
+            padding: 5pt;
+          }
+        <![endif]-->
  </style>
     </head><body>`;
   const emailFoot = `
@@ -144,7 +180,6 @@ export function generateApprovalEmailInfo(
       );
       if (approversQuestion) {
         ccUsers = getProposalTeamUsers([approversQuestion]);
-        ccUsers = ccUsers.filter(user => !toUsers.includes(user));
       }
     }
     const decisionQuestion = questionsForThisApproval.find(
@@ -168,39 +203,54 @@ export function generateApprovalEmailInfo(
     emailBody += `<p>Below is a summary of the ${
       approvalSection.ApprovalSectionTitle
     }${decisionAnswer ? ' - ' + decisionAnswer : ''}:</p>`;
-    emailBody += `<table class="summary-table">
+    emailBody += `<br/><table cellpadding="0" cellspacing="0" class="summary-table">
     <tbody>
-      <tr><td>Customer</td><td>${proposalDetails['Customer'] || ''}</td></tr>
+      <tr><td><p>Customer</p></td><td><p>${proposalDetails['Customer'] ||
+        ''}</p></td></tr>
       <tr><td>Protocol Title</td><td>${proposalDetails['Product name'] ||
         ''}</td></tr>
       <tr><td>Indication</td><td>${proposalDetails['Verbatim indication'] ||
         ''}</td></tr>
       <tr><td>Phase</td><td>${proposalDetails['Phase'] || ''}</td></tr>
       <tr><td>Bid Number</td><td>${proposalDetails['bidNo'] || ''}</td></tr>
-      <tr><td>Due Date</td><td>${proposalDetails['Bid due date'] ||
-        ''}</td></tr>
+      <tr><td>Due Date</td><td>${
+        String(new Date(proposalDetails['Bid due date'] || '')).includes(
+          'Invalid'
+        ) || !String(proposalDetails['Bid due date'] || '').length
+          ? ''
+          : moment(proposalDetails['Bid due date'] || '').format('DD-MMM-YYYY')
+      }</td></tr>
     </tbody></table>`;
-    emailBody += `<table><thead>`;
+    emailBody += `<br/><table><thead>`;
     emailBody += `<tr><th>${approvalSection.ApprovalSectionTitle}</th><th></th></tr></thead><tbody>`;
 
     questionsForThisApproval.forEach((question, qIndex) => {
-      let answerHTML =
-        question.answers.length > 0
-          ? (question.answers[question.answers.length - 1].formattedAnswer &&
-              question.answers[question.answers.length - 1].formattedAnswer
-                .htmlExport &&
-              handleHyperlinks(
+      let answerHTML = '';
+      if (question.section.sectionName === 'Proposal Team') {
+        answerHTML = formatProposalTeamAnswers(
+          question.answers.length > 0
+            ? question.answers[question.answers.length - 1].answer
+            : ''
+        );
+      } else {
+        answerHTML =
+          question.answers.length > 0
+            ? (question.answers[question.answers.length - 1].formattedAnswer &&
                 question.answers[question.answers.length - 1].formattedAnswer
-                  .htmlExport
-              )) ||
-            `<p>${handleHyperlinks(
-              question.answers[question.answers.length - 1].answer
-            )}</p>`
-          : '';
-      answerHTML = answerHTML.replace(
-        /data-[a-zA-Z0-9-]*=\"[a-zA-Z0-9-]*\"/g,
-        ''
-      );
+                  .htmlExport &&
+                handleHyperlinks(
+                  question.answers[question.answers.length - 1].formattedAnswer
+                    .htmlExport
+                )) ||
+              `<p>${handleHyperlinks(
+                question.answers[question.answers.length - 1].answer
+              )}</p>`
+            : '';
+        answerHTML = answerHTML.replace(
+          /data-[a-zA-Z0-9-]*=\"[a-zA-Z0-9-]*\"/g,
+          ''
+        );
+      }
       emailBody += `<tr>
         <td>${question.questionText}</td>
         <td>${answerHTML}</td>
