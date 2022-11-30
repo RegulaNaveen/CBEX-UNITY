@@ -11,7 +11,6 @@ const Filters = props => {
   const filterGroups = [...new Set(approvalFilters.map(i => i.group))];
 
   const updateFilter = (filterName, checked) => {
-    console.log({ filterName, checked });
     dispatch(updateFilters(filterName, checked));
   };
   const clearAllFilters = () => {
@@ -25,9 +24,11 @@ const Filters = props => {
     <div className="questions-filter__container">
       <div className="questions-filter__grid column_style">
         <div className="filtertitle">Filters</div>
+
         <div>
           <Link
             className="clear-all"
+            data-testid="clear-all-btn"
             size="small"
             onClick={() => clearAllFilters()}
           >
@@ -45,9 +46,10 @@ const Filters = props => {
                       size="small"
                       label={item.displayName}
                       checked={item.value}
-                      onChange={(e, checked) =>
-                        updateFilter(item.name, checked)
-                      }
+                      onChange={(e, checked) => {
+                        updateFilter(item.name, checked);
+                      }}
+                      data-testid="filter-checkbox"
                     />
                   </Grid>
                 ))}

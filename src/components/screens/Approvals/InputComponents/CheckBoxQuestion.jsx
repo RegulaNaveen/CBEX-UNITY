@@ -41,16 +41,17 @@ const CheckBoxQuestion = ({
 
     const changeHandler = textValue => {
       const { proposalId, questionId } = question;
+
       dispatch(
         setProposalAnswerData(
           socketContext,
           proposalId,
           questionId,
-          textValue.target.value,
+          textValue,
           userData
         )
       );
-      trackMatomoEventSubmitAnswer(textValue.target.value);
+      trackMatomoEventSubmitAnswer(textValue);
     };
 
     return (
@@ -66,7 +67,7 @@ const CheckBoxQuestion = ({
           disabled={!!disabled}
           onOpen={() => {}}
           onClose={() => {}}
-          onChange={changeHandler}
+          onChange={e => changeHandler(e)}
           // onFocus={() => {
           //   questionLockWrapper(question?.questionId);
           // }}
