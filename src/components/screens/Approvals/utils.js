@@ -20,11 +20,22 @@ export const getLastAnswer = question => {
   }
 };
 
+// Empty Answers are stored with a spaces
+const isAnswerEmpty = answer => isEmpty(answer) || answer === ' ';
+
+// answeredFilter => Only answered
 const answeredFilter = questions => {
-  return questions.filter(item => !isEmpty(item.answers));
+  return questions.filter(question => {
+    const lastAnswer = getLastAnswer(question);
+    return !isAnswerEmpty(lastAnswer.answer);
+  });
 };
+// UnansweredFilter => No Answers and Indetermined Answers
 const unansweredFilter = questions => {
-  return questions.filter(item => isEmpty(item.answers));
+  return questions.filter(question => {
+    const lastAnswer = getLastAnswer(question);
+    return isAnswerEmpty(lastAnswer.answer);
+  });
 };
 const responsibleFilter = questions => {
   return questions.filter(item => {
