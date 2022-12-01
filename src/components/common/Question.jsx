@@ -1326,10 +1326,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
     const oppordata = oppdata.toJS();
     const deploymentDate = '2022-08-05';
     const proposalTimeStamp = oppordata[currentBidID]?.proposal?.proposalDate;
-    const proposalCreationDate = proposalTimeStamp.substring(
-      0,
-      proposalTimeStamp.indexOf('T')
-    );
+    const proposalCreationDate = proposalTimeStamp
+      ? proposalTimeStamp.substring(0, proposalTimeStamp.indexOf('T'))
+      : '';
     const integrationLocked = this.isQuestionLockedByOther() ? true : false;
     const dateIsAfter = moment(proposalCreationDate).isAfter(
       moment(deploymentDate)

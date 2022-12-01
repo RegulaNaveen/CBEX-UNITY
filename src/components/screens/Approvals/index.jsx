@@ -40,9 +40,9 @@ const Approvals = () => {
   }, []);
 
   useEffect(() => {
-    setLoading(true);
     const proposalId = memoizeBid?.id;
-    console.log('Bid Change Triggered - (useEffect)');
+    if (!proposalId) return () => {};
+    setLoading(true);
 
     (async () => {
       const response = await dispatch(fetchAllApprovals(proposalId));
@@ -53,6 +53,7 @@ const Approvals = () => {
         setWarning(true);
       }
     })();
+    return () => {};
   }, [memoizeBid]);
 
   useEffect(() => {
@@ -62,9 +63,6 @@ const Approvals = () => {
 
   return (
     <div className="approvals-tab">
-      {/* Modal Loading */}
-      {loading && <Loader isInner />}
-
       <BidHistory data-testid="bid-history" />
 
       <div className="filter-container">
@@ -82,6 +80,9 @@ const Approvals = () => {
       </div>
 
       <div className="all-approvals-container">
+        {/* Modal Loading */}
+        {loading && <Loader isInner />}
+
         {!isEmpty(approvals) ? (
           approvals.map(approval => (
             <Section
@@ -122,7 +123,7 @@ const Approvals = () => {
           title={warningTitle}
           message={warningText}
           variant="error"
-          handleClose={() => setWarning(false)}
+          onClose={() => setWarning(false)}
           buttonProps={[{ className: 'hidden' }, { label: DEFAULT.CLOSE }]}
           modalStyle={{ maxWidth: 342 }}
         />

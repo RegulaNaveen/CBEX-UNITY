@@ -35,16 +35,30 @@ export function getProposalTeamUsers(questions = []) {
   return Array.from(answers);
 }
 
-function handleHyperlinks(answer) {
-  let chunks = answer.split(' ');
-  chunks = chunks.map(chunk => {
-    if (URL_REGEXP.test(chunk)) {
-      return `<a href="${chunk}">${chunk}</a>`;
-    } else {
-      return chunk;
-    }
-  });
-  return chunks.join(' ');
+function handleHyperlinks(answer, config) {
+  try {
+    if (answer === 'N/A' && config && config.type === 'date') return 'N/A';
+
+    if (answer && config && config.type === 'date')
+      return moment(answer).format('DD-MMM-YYYY');
+  } catch (error) {
+    console.log('Error in formatDate');
+  }
+  if (typeof answer === 'string') {
+    let chunks = answer.split(' ');
+    chunks = chunks.map(chunk => {
+      if (URL_REGEXP.test(chunk)) {
+        return `<a href="${chunk}">${chunk}</a>`;
+      } else {
+        return chunk;
+      }
+    });
+    return chunks.join(' ');
+  }
+  if (answer) {
+    return answer.toString();
+  }
+  return answer;
 }
 
 function formatProposalTeamAnswers(answer) {
@@ -245,10 +259,12 @@ export function generateApprovalEmailInfo(
                   .htmlExport &&
                 handleHyperlinks(
                   question.answers[question.answers.length - 1].formattedAnswer
-                    .htmlExport
+                    .htmlExport,
+                  question.answerConfiguration
                 )) ||
               `<p>${handleHyperlinks(
-                question.answers[question.answers.length - 1].answer
+                question.answers[question.answers.length - 1].answer,
+                question.answerConfiguration
               )}</p>`
             : '';
         answerHTML = answerHTML.replace(RTE_DATA_ATTR_REGEXP, '');

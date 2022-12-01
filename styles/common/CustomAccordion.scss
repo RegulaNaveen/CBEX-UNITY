@@ -1,7 +1,7 @@
 .unity-custom-accordion {
   &.MuiAccordion-root {
-    box-shadow: 0 8px 1rem 0 rgba(0, 0, 0, 0.08);
-    margin-bottom: 0.5rem;
+    box-shadow: none;
+    margin-bottom: 1rem;
     border: 1px solid $neutral4;
     border-radius: 4px;
 
@@ -10,7 +10,7 @@
     }
 
     &[class*='Mui-expanded'] {
-      margin: 0.5rem 0;
+      margin: 1rem 0;
     }
 
     &:before {
@@ -18,8 +18,8 @@
     }
     .MuiAccordionSummary-root {
       flex-direction: row-reverse;
-      padding: 0 0.5rem 0 0;
-      min-height: 52px;
+      padding: 0 0.7rem;
+      min-height: 60px;
 
       .MuiAccordionSummary-content {
         margin: 12px 0;
@@ -35,6 +35,9 @@
         width: 30px;
         height: 30px;
 
+        &.MuiIconButton-root {
+          color: $black;
+        }
         &[class*='Mui-expanded'] {
           transform: rotate(90deg);
         }

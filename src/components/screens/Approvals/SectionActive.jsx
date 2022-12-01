@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Grid from 'apollo-react/components/Grid';
 import QuestionItem from './QuestionItem';
 import ActionButtons from './ActionButtons';
+import { getSelectedBid } from '../../../redux/selectors';
 
 const SectionActive = ({
   ApprovalSectionId,
@@ -13,7 +14,8 @@ const SectionActive = ({
   ApprovalSectionRightQuestions: rightQues = []
 }) => {
   const questionHash = useSelector(state => state.approvals.quesHashData);
-  console.log({ questionHash });
+  const { id: proposalId, isCurrent } = useSelector(getSelectedBid)?.toJS();
+  const selectedBidIsCurrent = !!isCurrent;
 
   return (
     <Grid container className="approval-ques">
@@ -27,6 +29,7 @@ const SectionActive = ({
               question={questionHash[item] || {}}
               approvalSectionTitle={ApprovalSectionTitle}
               key={item}
+              disabled={!selectedBidIsCurrent}
             />
           ))}
       </Grid>
@@ -37,11 +40,16 @@ const SectionActive = ({
               question={questionHash[item] || {}}
               approvalSectionTitle={ApprovalSectionTitle}
               key={item}
+              disabled={!selectedBidIsCurrent}
             />
           ))}
       </Grid>
       <Grid item xs={12} className="approval-ques-actions">
-        <ActionButtons sectionId={ApprovalSectionId} />
+        <ActionButtons
+          sectionId={ApprovalSectionId}
+          proposalId={proposalId}
+          selectedBidIsCurrent={selectedBidIsCurrent}
+        />
       </Grid>
     </Grid>
   );
