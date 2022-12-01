@@ -22,7 +22,7 @@
 
   &.disabled {
     background-color: $neutral2;
-    border-color: rgba(0, 0, 0, 0.26);
+    border-color: $border-color-disabled;
     opacity: 0.8;
 
     &:hover {
