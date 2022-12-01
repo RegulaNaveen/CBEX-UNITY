@@ -35,6 +35,7 @@ export const deleteApprovalsApi = (proposalId, sectionId, oppId) => {
 export const duplicateApprovalApi = (proposalId, sectionId) => {
   return axiosInstance.put(
     `${APPROVALS_URL}/duplicate?proposal_id=${proposalId}&section_id=${sectionId}`,
+    {},
     {
       headers: {
         'x-api-key': PROPOSAL.API_KEY,
