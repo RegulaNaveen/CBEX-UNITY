@@ -70,11 +70,11 @@ class AnswerHistory extends Component<Props> {
     const questionID = question?.toJS()?.questionId;
     const proposalID = selectedBid?.toJS()?.id;
     const { lastAnswer } = this.state;
-    bidNo = this.props.opportunityData.get(proposalID).toJS().proposal
+    bidNo = this.props.opportunityData?.get(proposalID)?.toJS().proposal
       .proposalDetails.bidNo;
     isCurrentBid =
-      this.props.opportunityData.get(proposalID).toJS().isCurrent === true
-        ? this.props.opportunityData.get(proposalID).toJS().proposal
+      this.props.opportunityData?.get(proposalID)?.toJS().isCurrent === true
+        ? this.props.opportunityData?.get(proposalID)?.toJS().proposal
             .proposalDetails.bidNo
         : 'NA';
     if (
