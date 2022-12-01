@@ -83,7 +83,6 @@ class AnswerHistory extends Component<Props> {
     ) {
       this.context.questionLockWrapper(questionIdentifier);
       if (this.props.toggleWatch) {
-        console.log(this.props.toggleWatch, 'togglewatch true');
         this.props.toggleWatch(true);
       }
     }
@@ -388,7 +387,9 @@ class AnswerHistory extends Component<Props> {
         if (isValidatedUnityPredictedAnswer) {
           return (
             <span key={uuidv4()}>
-              {userName === 'UnityPredictedAnswer' ? (
+              {answers.get(index).get('userName') === 'UnityPredictedAnswer' &&
+              answers.get(index + 1).get('userName') ===
+                'UnityPredictedAnswer' ? (
                 `${_answer.get('answer')}`
               ) : (
                 <b>Validated Unity Predicted Answer</b>
@@ -399,7 +400,17 @@ class AnswerHistory extends Component<Props> {
         if (isPicklistValidUnityPredAns) {
           return (
             <span key={uuidv4()}>
-              <b>Validated Unity Predicted Answer</b>
+              {answers.get(index).get('userName') === 'UnityPredictedAnswer' &&
+              answers.get(index + 1).get('userName') ===
+                'UnityPredictedAnswer' ? (
+                _answer.get('answer').map(singleAnswer => (
+                  <li key={uuidv4()} className="">
+                    {singleAnswer}
+                  </li>
+                ))
+              ) : (
+                <b>Validated Unity Predicted Answer</b>
+              )}
             </span>
           );
         }
