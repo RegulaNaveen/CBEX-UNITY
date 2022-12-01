@@ -17,9 +17,8 @@ import { selectProposalQuestions } from '../../../redux/selectors';
 import { generateQuestionsHash } from './utils';
 import { DEFAULT } from '../../../constants/app';
 import CustomModal from '../../common/CustomModal';
-import { SecondaryButton } from '../../common/atoms/Buttons';
-import { Filter } from '../../svg';
 import Filters from './Filters';
+import FilterButton from './FilterButton';
 
 const Approvals = () => {
   const approvals = useSelector(state => state.approvals.allApprovals);
@@ -67,14 +66,7 @@ const Approvals = () => {
 
       <div className="filter-container">
         <div className="filter-btn">
-          <SecondaryButton
-            onClick={() => {
-              setIsShowFilters(val => !val);
-            }}
-          >
-            <Filter className="filter-icon" />
-            Filter
-          </SecondaryButton>
+          <FilterButton setIsShowFilters={setIsShowFilters} />
         </div>
         {isShowFilters && <Filters />}
       </div>
