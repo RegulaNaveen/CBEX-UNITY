@@ -146,10 +146,17 @@ const QuestionsSectionMapping = ({
     );
   };
 
+  const allSectionLength = [...allSections.values()].length;
+
+  // Render No Questions UI
+  if (!allSectionLength) {
+    return <div className="no-ques-opp">No Questions Available</div>;
+  }
+
   // Render all Sections - Collapsed
   if (!allSectionsExpanded || isQuestionsFiltersEnabled) {
     return (
-      !isEmpty(allSections) &&
+      allSectionLength &&
       allSections.valueSeq().map((section, indx) => {
         return renderAllSection(section, indx);
       })

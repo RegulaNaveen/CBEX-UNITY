@@ -17,9 +17,8 @@ import { selectProposalQuestions } from '../../../redux/selectors';
 import { generateQuestionsHash } from './utils';
 import { DEFAULT } from '../../../constants/app';
 import CustomModal from '../../common/CustomModal';
-import { SecondaryButton } from '../../common/atoms/Buttons';
-import { Filter } from '../../svg';
 import Filters from './Filters';
+import FilterButton from './FilterButton';
 
 const Approvals = () => {
   const approvals = useSelector(state => state.approvals.allApprovals);
@@ -40,9 +39,9 @@ const Approvals = () => {
   }, []);
 
   useEffect(() => {
-    setLoading(true);
     const proposalId = memoizeBid?.id;
-    console.log('Bid Change Triggered - (useEffect)');
+    if (!proposalId) return () => {};
+    setLoading(true);
 
     (async () => {
       const response = await dispatch(fetchAllApprovals(proposalId));
@@ -53,6 +52,7 @@ const Approvals = () => {
         setWarning(true);
       }
     })();
+    return () => {};
   }, [memoizeBid]);
 
   useEffect(() => {
@@ -62,26 +62,19 @@ const Approvals = () => {
 
   return (
     <div className="approvals-tab">
-      {/* Modal Loading */}
-      {loading && <Loader isInner />}
-
       <BidHistory data-testid="bid-history" />
 
       <div className="filter-container">
         <div className="filter-btn">
-          <SecondaryButton
-            onClick={() => {
-              setIsShowFilters(val => !val);
-            }}
-          >
-            <Filter className="filter-icon" />
-            Filter
-          </SecondaryButton>
+          <FilterButton setIsShowFilters={setIsShowFilters} />
         </div>
         {isShowFilters && <Filters />}
       </div>
 
       <div className="all-approvals-container">
+        {/* Modal Loading */}
+        {loading && <Loader isInner />}
+
         {!isEmpty(approvals) ? (
           approvals.map(approval => (
             <Section
@@ -122,7 +115,7 @@ const Approvals = () => {
           title={warningTitle}
           message={warningText}
           variant="error"
-          handleClose={() => setWarning(false)}
+          onClose={() => setWarning(false)}
           buttonProps={[{ className: 'hidden' }, { label: DEFAULT.CLOSE }]}
           modalStyle={{ maxWidth: 342 }}
         />

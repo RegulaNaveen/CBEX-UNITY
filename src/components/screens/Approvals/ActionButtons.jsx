@@ -23,14 +23,19 @@ import {
   generateApprovalEmailURL
 } from '../../../utils/emailUtils';
 import { getProposalDetails } from '../../../redux/selectors';
-import { DEFAULT } from '../../../constants/app';
+import { APPROVALS, DEFAULT } from '../../../constants/app';
 import CustomModal from '../../common/CustomModal';
 import MatomoHOC from '../../HOC/MatomoHOC';
 
-const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const { id: proposalId = '' } = useSelector(getSelectedBid)?.toJS();
+const ActionButtons = ({
+  sectionId,
+  trackEvent,
+  eventCategories,
+  proposalId,
+  selectedBidIsCurrent
+}) => {
   const { dispatchLoadingEvent } = useContext(ApprovalContext);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [warning, setWarning] = useState(false);
   const [warningTitle, setWarningTitle] = useState('');
   const [warningText, setWarningText] = useState('');
@@ -197,10 +202,12 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
     })();
   };
 
-  return (
-    <>
-      {!isEmpty(ArchivedData) && (
-        <>
+  // Delete & Duplicate Button Jsx
+  let renderDeleteAndDuplicate = null;
+  if (selectedBidIsCurrent) {
+    renderDeleteAndDuplicate = (
+      <>
+        {!isEmpty(ArchivedData) && (
           <Button
             variant="text"
             size="small"
@@ -211,50 +218,59 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
           >
             {DEFAULT.DELETE}
           </Button>
+        )}
 
-          {/* Delete Confirmation Modal */}
-          {showDeleteModal && (
-            <CustomModal
-              open={showDeleteModal}
-              title="Are you sure?"
-              message="Delete this approval section if the additional call is not required."
-              variant="error"
-              onClose={() => setShowDeleteModal(false)}
-              buttonProps={[
-                {},
-                {
-                  label: 'Delete',
-                  onClick: deleteAfterConfirmHandler
-                }
-              ]}
-              modalStyle={{ maxWidth: 460 }}
-            />
-          )}
-        </>
-      )}
+        {/* Delete Confirmation Modal */}
+        {showDeleteModal && (
+          <CustomModal
+            open={showDeleteModal}
+            title={DEFAULT.ARE_YOU_SURE}
+            message={APPROVALS.DELETE_MSG}
+            variant="error"
+            onClose={() => setShowDeleteModal(false)}
+            buttonProps={[
+              {},
+              {
+                label: DEFAULT.DELETE,
+                onClick: deleteAfterConfirmHandler
+              }
+            ]}
+            modalStyle={{ maxWidth: 460 }}
+          />
+        )}
 
-      <Button
-        variant="secondary"
-        style={{ marginRight: 10 }}
-        className="duplicate-btn"
-        onClick={() => {
-          dispatchLoadingEvent('SET_LOADING', true);
-          (async () => {
-            const response = await dispatch(
-              duplicateApproval(proposalId, sectionId)
-            );
-            dispatchLoadingEvent('SET_LOADING', false);
-            trackMatomoEventSubmitAnswer('Duplicate', approval);
-            if (!response.status) {
-              setWarningTitle(response.title);
-              setWarningText(response.message);
-              setWarning(true);
-            }
-          })();
-        }}
-      >
-        {DEFAULT.DUPLICATE}
-      </Button>
+        <Button
+          variant="secondary"
+          style={{ marginRight: 10 }}
+          className="duplicate-btn"
+          onClick={() => {
+            dispatchLoadingEvent('SET_LOADING', true);
+            (async () => {
+              const response = await dispatch(
+                duplicateApproval(proposalId, sectionId)
+              );
+              dispatchLoadingEvent('SET_LOADING', false);
+              trackMatomoEventSubmitAnswer('Duplicate', approval);
+              if (!response.status) {
+                setWarningTitle(response.title);
+                setWarningText(response.message);
+                setWarning(true);
+              }
+            })();
+          }}
+        >
+          {DEFAULT.DUPLICATE}
+        </Button>
+      </>
+    );
+  }
+
+  return (
+    <>
+      {/* Render Delete & Duplicate Buttons */}
+      {renderDeleteAndDuplicate}
+
+      {/* Email Button */}
       {canSendEmail ? (
         <Button
           variant="primary"
@@ -286,7 +302,9 @@ const ActionButtons = ({ sectionId, trackEvent, eventCategories }) => {
 ActionButtons.propTypes = {
   sectionId: PropTypes.string.isRequired,
   trackEvent: PropTypes.func.isRequired,
-  eventCategories: PropTypes.object.isRequired
+  eventCategories: PropTypes.object.isRequired,
+  proposalId: PropTypes.string.isRequired,
+  selectedBidIsCurrent: PropTypes.bool.isRequired
 };
 
 export default MatomoHOC(ActionButtons);

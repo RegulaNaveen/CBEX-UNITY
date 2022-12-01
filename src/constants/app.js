@@ -14,7 +14,8 @@ const DEFAULT = {
   ERROR_404: 'Error 404 not found !!',
   REQUEST_FAILED: 'Request failed due to an error !!',
   CLICK_TO_ANS: 'Click to answer',
-  CLICK_ICON_TO_BEGIN: 'Click icon to begin'
+  CLICK_ICON_TO_BEGIN: 'Click icon to begin',
+  ARE_YOU_SURE: 'Are you sure?'
 };
 
 const PROPOSAL = {
@@ -53,6 +54,11 @@ const PROFILE = {
   LOGOUT: ' Log Out'
 };
 
+const APPROVALS = {
+  DELETE_MSG:
+    'Delete this approval section if the additional approval is not required.'
+};
+
 const REFRESH_WEBSOCKET_CONNECTION = 60000; // 1 minute
 export const QUESTION_UNLOCK_TIMEOUT = 90 * 1000; // 90 seconds (1.5minutes)
 export const URL_REGEXP = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
@@ -60,4 +66,4 @@ export const PROPOSAL_TEAM_USER_MATCH_REGEXP = /([a-zA-Z0-9\W]*\w)(\(.*\))/; // 
 export const PROPOSAL_TEAM_EMAIL_MATCH_REGEXP = /[a-zA-Z\w]*\((.*)\)/; // matches proposal team user email
 export const RTE_DATA_ATTR_REGEXP = /data-[a-zA-Z0-9-]*=\"[a-zA-Z0-9-]*\"/g; // matches RichTextEditor data attributes
 
-export { DEFAULT, PROPOSAL, REFRESH_WEBSOCKET_CONNECTION, PROFILE };
+export { DEFAULT, PROPOSAL, REFRESH_WEBSOCKET_CONNECTION, PROFILE, APPROVALS };
