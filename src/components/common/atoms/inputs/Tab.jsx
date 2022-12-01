@@ -59,48 +59,17 @@ const UnityTab = ({
     }
   ];
 
-  const getApprovalQuestionIds = opportunityData => {
-    const approvalQIdsArr = [];
-    opportunityData?.proposal?.approvals?.forEach(qIdApproval => {
-      if (qIdApproval?.ApprovalSectionLeftQuestions?.length !== 0) {
-        qIdApproval.ApprovalSectionLeftQuestions.forEach(leftQId => {
-          approvalQIdsArr.push(leftQId);
-        });
-      }
-      if (qIdApproval?.ApprovalSectionRightQuestions?.length !== 0) {
-        qIdApproval.ApprovalSectionRightQuestions.forEach(rightQId => {
-          approvalQIdsArr.push(rightQId);
-        });
-      }
-    });
-
-    const uniqueArr = [...new Set(approvalQIdsArr)];
-    let found = false;
-    setShowApprovalTab(false);
-    // eslint-disable-next-line no-restricted-syntax
-    for (const quesId of uniqueArr) {
-      if (found) break;
-      if (proposalQuestions) {
-        // eslint-disable-next-line no-restricted-syntax
-        for (const proposalQues of proposalQuestions) {
-          if (quesId === proposalQues?.questionId) {
-            if (proposalQues?.active) {
-              found = true;
-              setShowApprovalTab(true);
-              break;
-            }
-          }
-        }
-      }
-    }
-  };
-
   useEffect(() => {
     if (proposalID) {
       const opportunityData = oppData[proposalID];
-      getApprovalQuestionIds(opportunityData);
+
+      if (opportunityData?.proposal?.approvals) {
+        setShowApprovalTab(true);
+      } else {
+        setShowApprovalTab(false);
+      }
     }
-  }, [memoizeBid, proposalQuestions]);
+  }, []);
 
   useEffect(() => {
     if (selectedView && selectedView === 'documents') {
@@ -147,7 +116,7 @@ const UnityTab = ({
   const visibleTabs = () => {
     let tabsToReturn = tabs;
     const isApprovalTab = approvalsFlag;
-    if (!isApprovalTab) {
+    if (!isApprovalTab || !showApprovalTab) {
       tabsToReturn = tabsToReturn.filter(item => item.label !== 'Approvals');
     }
     if (!enableValidateTab) {
