@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import MenuItem from 'apollo-react/components/MenuItem';
 import Select from 'apollo-react/components/Select';
-import { isEqual, isEmpty, isObject, isString } from 'lodash';
+import { isEqual, isEmpty, isObject, isString, isArray } from 'lodash';
 import { FormControl } from '@material-ui/core';
 import { connect } from 'react-redux';
 import useUpdateEffect from '../../../../hooks/useUpdateEffect';
@@ -40,8 +40,14 @@ const CheckBoxQuestions = (props: Props) => {
   const [getFocus, setFocus] = useState(false);
   const [getSpan, setSpan] = useState(false);
   const checkBoxRef = useRef();
+  let lengthOfOptions;
+  if (isArray(finalOptions)) {
+    lengthOfOptions = finalOptions.length;
+  } else if (isObject(finalOptions)) {
+    lengthOfOptions = finalOptions.size;
+  }
   const finalLov =
-    finalOptions?.length > 0
+    lengthOfOptions > 0
       ? finalOptions
       : options[`SF#${sfObject}_SF#${sfField}`];
   let selectItems = null;
