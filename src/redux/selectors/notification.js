@@ -19,9 +19,40 @@ export const getAllNotifications = notification =>
       item.bodyJson?.bidNo || null
     );
 
-    // if documentId exists, find and replace documentTitle in body with hyperlink
-    if (item.bodyJson && item.bodyJson.documentId) {
-      item.body = item.body.replace(item.bodyJson.documentTitle, `<a style="display: inline-block;" target="_blank" href="https://app.box.com/file/${item.bodyJson.documentId}">${item.bodyJson.documentTitle}</a>`)
+    switch (item.preference_code) {
+      case 'NEW_DOCUMENT': {
+        // if documentId exists, find and replace documentTitle in body with hyperlink
+        if (item.bodyJson && item.bodyJson.documentId) {
+          item.body = item.body.replace(
+            item.bodyJson.documentTitle,
+            `<a style="display: inline-block;" target="_blank" href="https://app.box.com/file/${item.bodyJson.documentId}">
+            ${item.bodyJson.documentTitle}
+            </a>`
+          );
+        }
+        break;
+      }
+      case 'ANSWER_TAG': {
+        if (
+          item.bodyJson &&
+          item.bodyJson.questionAnswer &&
+          item.bodyJson.questionText
+        ) {
+          item.body = item.body.replace(
+            `${item.bodyJson.questionText} ${item.bodyJson.questionAnswer}`,
+            `<a style="display: inline-block;" target="_blank" href="${onClickLink(
+              item.opportunity_no,
+              item.id,
+              item.bodyJson?.bidNo || null
+            )}">${item.bodyJson.questionText} ${
+              item.bodyJson.questionAnswer
+            }</a>`
+          );
+        }
+        break;
+      }
+      default:
+        break;
     }
 
     return item;
@@ -41,9 +72,40 @@ export const getUnreadNotifications = notification =>
       // Add timestamp for sorting
       item.timestamp = new Date(item.created_date).getTime();
 
-      // if documentId exists, find and replace documentTitle in body with hyperlink
-      if (item.bodyJson && item.bodyJson.documentId) {
-        item.body = item.body.replace(item.bodyJson.documentTitle, `<a style="display: inline-block;" target="_blank" href="https://app.box.com/file/${item.bodyJson.documentId}">${item.bodyJson.documentTitle}</a>`)
+      switch (item.preference_code) {
+        case 'NEW_DOCUMENT': {
+          // if documentId exists, find and replace documentTitle in body with hyperlink
+          if (item.bodyJson && item.bodyJson.documentId) {
+            item.body = item.body.replace(
+              item.bodyJson.documentTitle,
+              `<a style="display: inline-block;" target="_blank" href="https://app.box.com/file/${item.bodyJson.documentId}">
+              ${item.bodyJson.documentTitle}
+              </a>`
+            );
+          }
+          break;
+        }
+        case 'ANSWER_TAG': {
+          if (
+            item.bodyJson &&
+            item.bodyJson.questionAnswer &&
+            item.bodyJson.questionText
+          ) {
+            item.body = item.body.replace(
+              `${item.bodyJson.questionText} ${item.bodyJson.questionAnswer}`,
+              `<a style="display: inline-block;" target="_blank" href="${onClickLink(
+                item.opportunity_no,
+                item.id,
+                item.bodyJson?.bidNo || null
+              )}">${item.bodyJson.questionText} ${
+                item.bodyJson.questionAnswer
+              }</a>`
+            );
+          }
+          break;
+        }
+        default:
+          break;
       }
 
       return item;
