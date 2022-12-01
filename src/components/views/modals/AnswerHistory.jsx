@@ -728,7 +728,8 @@ const mapDispatchToProps = {
   getAnsHistory: getProposalAnswerHistory,
   setProposalAnswer: setProposalAnswerData
 };
+const MemoizedAnswerHistory = React.memo(AnswerHistory);
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(MatomoHOC(withIdleStateDetection(AnswerHistory)));
+)(MatomoHOC(withIdleStateDetection(MemoizedAnswerHistory)));
