@@ -206,8 +206,8 @@ const SocketContextProvider = props => {
   /**
    * Function called after bid creation completed
    */
-  const refreshOpportunity = id => {
-    props.getOpportunityInfo(id, true);
+  const refreshOpportunity = (id, bidNo) => {
+    props.getOpportunityInfo(id, bidNo, true);
   };
 
   /**
@@ -280,7 +280,10 @@ const SocketContextProvider = props => {
             addNewBid(data.data);
             break;
           case 'COMPLETED':
-            refreshOpportunity(data.oppId);
+            refreshOpportunity(
+              data.oppId,
+              data.data.proposal.proposalDetails.bidNo
+            );
             break;
           case 'ANSWER_UPDATE':
             if (updateAnswerAction) updateAnswerAction(data.data);

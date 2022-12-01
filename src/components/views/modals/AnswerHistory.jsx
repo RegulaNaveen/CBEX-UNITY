@@ -572,7 +572,7 @@ class AnswerHistory extends Component<Props> {
               return renderWord(
                 nextAnswer === 'N/A'
                   ? 'N/A'
-                  : answer === ''
+                  : nextAnswer === ''
                   ? ''
                   : parseMomentDate(nextAnswer),
                 'removed'
