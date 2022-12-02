@@ -11,14 +11,13 @@ import CustomAccordion from '../../common/CustomAccordion/CustomAccordion';
 import CustomAccordionSummary from '../../common/CustomAccordion/CustomAccordionSummary';
 import SectionActive from './SectionActive';
 import SectionFreezed from './SectionFreezed';
-import { shouldShowSection } from './utils';
 
 export const ApprovalContext = createContext();
 
 const Section = ({ sectionId }) => {
   const [expanded, setExpanded] = useState(false);
   const [sectionLoading, setSectionLoading] = useState(false);
-  const questionHash = useSelector(state => state.approvals.quesHashData);
+  const [isAllActiveDisplayed, setIsAllActiveDisplayed] = useState(true);
   const dispatchLoadingEvent = (actionType, payload) => {
     if (actionType === 'SET_LOADING') {
       setSectionLoading(payload);
@@ -30,12 +29,16 @@ const Section = ({ sectionId }) => {
   );
   const { ApprovalSectionTitle = '', ArchivedData = [] } = approval;
 
-  const SectionContent = () => (
+  const style = {
+    display: !isAllActiveDisplayed ? 'none' : ''
+  };
+  return (
     <ApprovalContext.Provider value={{ sectionLoading, dispatchLoadingEvent }}>
       <CustomAccordion
         className="accordion-container"
         expanded={expanded}
         onChange={() => setExpanded(prev => !prev)}
+        style={style}
       >
         <CustomAccordionSummary>
           <p className="accordion-title">{`${ApprovalSectionTitle}${
@@ -50,13 +53,14 @@ const Section = ({ sectionId }) => {
           <SectionFreezed archivedData={ArchivedData} />
 
           {/* Component for Active Active */}
-          <SectionActive {...omit(approval, ['ArchivedData'])} />
+          <SectionActive
+            {...omit(approval, ['ArchivedData'])}
+            setIsAllActiveDisplayed={setIsAllActiveDisplayed}
+          />
         </AccordionDetails>
       </CustomAccordion>
     </ApprovalContext.Provider>
   );
-  // return shouldShowSection(questionHash, approval) ? <SectionContent /> : null;
-  return <SectionContent />;
 };
 
 Section.propTypes = {

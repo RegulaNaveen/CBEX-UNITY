@@ -39,13 +39,22 @@ const QuestionItem = ({
   isQuesFreezed,
   archivedQuestion,
   eventCategories,
-  trackEvent
+  trackEvent,
+  updateQuestionVisibility
 }) => {
   const question = isQuesFreezed
     ? archivedQuestion
     : useSelector(getQuestion(questionId));
   const approvalFilters = useSelector(state => state.approvals.filters);
   const isShowQuestion = shouldShowQuestion(question, approvalFilters);
+
+  useEffect(() => {
+    // Calculates the no of visibile questions
+    // Used to decide the visibility of a Section
+    if (!isQuesFreezed) {
+      updateQuestionVisibility(questionId, isShowQuestion);
+    }
+  }, [approvalFilters]);
 
   // Component will return null in case of empty question value
   if (isEmpty(question)) return null;
@@ -264,7 +273,8 @@ QuestionItem.defaultProps = {
     answers: [],
     visible: false,
     active: false
-  }
+  },
+  updateQuestionVisibility: () => {}
 };
 QuestionItem.propTypes = {
   questionId: PropTypes.string.isRequired,
@@ -273,7 +283,8 @@ QuestionItem.propTypes = {
   isQuesFreezed: PropTypes.any,
   eventCategories: PropTypes.object.isRequired,
   trackEvent: PropTypes.func.isRequired,
-  archivedQuestion: PropTypes.any
+  archivedQuestion: PropTypes.any,
+  updateQuestionVisibility: PropTypes.func
 };
 
 export default MatomoHOC(QuestionItem);

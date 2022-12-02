@@ -52,35 +52,6 @@ const informedFilter: Boolean = question => {
   return false;
 };
 
-/**
- * Function used to decide whether to show or hide an Approval Section
- * The questionHash changes based on filters applied on the UI
- * When an Approval Section doesn't contain any questions matching the applied filters then the Section should be hidden
- * @param {*} questionHash Redux approvals.quesHashData or return value of `generateQuestionsHash` function
- * @param {*} approvalSection - A single Approval Section data from redux i.e approval item from allApprovals array `approvals.allApprovals[0]`
- * @returns
- */
-export const shouldShowSection = (
-  questionHash = {},
-  approvalSection = {}
-): Boolean => {
-  try {
-    const questionIds = Object.keys(questionHash) || [];
-    const leftQuestions = approvalSection?.ApprovalSectionLeftQuestions || [];
-    const rightQuestions = approvalSection?.ApprovalSectionRightQuestions || [];
-    const approvalQuestionIds = [...leftQuestions, ...rightQuestions];
-    const intersectingQuestions = questionIds.filter(i =>
-      approvalQuestionIds.includes(i)
-    );
-    // If intersectingQuestions length is 0 it means
-    // the filtered questionHash does not contain any questionId which is present in the current approval section
-    return intersectingQuestions.length > 0;
-  } catch (error) {
-    console.error(error);
-    return true;
-  }
-};
-
 export const shouldShowQuestion = (question = {}, approvalfilters): Boolean => {
   const filterAnswers = [];
   const appliedFilters = approvalfilters.filter(i => i.value).map(i => i.name);
@@ -110,11 +81,5 @@ export const shouldShowQuestion = (question = {}, approvalfilters): Boolean => {
       }
     }
   }
-  console.log('======START========');
-  console.log({ questionText: question.questionText });
-  console.log({ answeredFilter: answeredFilter(question) });
-  console.log({ filterAnswers });
-  console.log(filterAnswers.length > 0 && filterAnswers.every(i => i === true));
-  console.log('======END========');
   return filterAnswers.length > 0 && filterAnswers.every(i => i === true);
 };
