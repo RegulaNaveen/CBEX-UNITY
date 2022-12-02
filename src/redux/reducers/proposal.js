@@ -585,12 +585,10 @@ const updateQuestionLockByUser = (state: Map, action: Object): Map => {
 
   if (proposalId) {
     const selectedBid = state.getIn(['selectedBid', 'id']);
-
+    const currentUserEmail = localStorage.getItem('userEmail') || '';
     // Update the current lock details if the selected Bid is equal to processed Bid
-    if (
-      selectedBid === proposalId &&
-      userEmail !== localStorage.get('userEmail')
-    ) {
+    // Prevent State update if the user locking the bid is same as the current user
+    if (selectedBid === proposalId && userEmail != currentUserEmail) {
       const indexOfListToUpdateCurrent = state
         .get('proposalQuestions')
         .findIndex(listItem => {
@@ -1155,7 +1153,7 @@ const setPriceModulerFields = (state, action) => {
 const setApprovalQuestionLoading = (state, action) => {
   const { questionId, value } = action.payload;
   return state.set('approvalQuestionLoading', fromJS({ questionId, value }));
-}
+};
 const updatePriceModelerEstimate = (state, action) => {
   const {
     Cost,
