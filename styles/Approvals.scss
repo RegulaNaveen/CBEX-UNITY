@@ -123,28 +123,6 @@
         margin-top: 0px;
         margin-bottom: 0px;
       }
-
-      .MuiInputBase-input {
-        font: inherit;
-        color: #000000;
-        width: 100%;
-        border: 1px solid #d9d9d9;
-        height: 40px;
-        margin: 0;
-        display: block;
-        padding: 8px 8px 8px 7px;
-        min-width: 0;
-        background: none;
-        box-sizing: border-box;
-        line-height: 1.5;
-        border-radius: 4px;
-        animation-name: mui-auto-fill-cancel;
-        letter-spacing: inherit;
-        animation-duration: 10ms;
-        transition-duration: 0.4s;
-        transition-property: border-color;
-        -webkit-tap-highlight-color: transparent;
-      }
     }
   }
 
