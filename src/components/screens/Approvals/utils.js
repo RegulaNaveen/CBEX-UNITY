@@ -145,3 +145,7 @@ export const shouldShowSection = (
     return true;
   }
 };
+
+export const shouldShowQuestion = question => {
+  return question.visible && question.active;
+};

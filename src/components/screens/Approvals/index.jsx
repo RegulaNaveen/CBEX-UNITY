@@ -56,8 +56,8 @@ const Approvals = () => {
   }, [memoizeBid]);
 
   useEffect(() => {
-    const quesHashData = generateQuestionsHash(proposalQuestions, filters);
-    dispatch(setQuestionHashAction(quesHashData));
+    // const quesHashData = generateQuestionsHash(proposalQuestions, filters);
+    // dispatch(setQuestionHashAction(quesHashData));
   }, [proposalQuestions, filters]);
 
   return (

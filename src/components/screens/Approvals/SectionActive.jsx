@@ -13,7 +13,7 @@ const SectionActive = ({
   ApprovalSectionLeftQuestions: leftQues = [],
   ApprovalSectionRightQuestions: rightQues = []
 }) => {
-  const questionHash = useSelector(state => state.approvals.quesHashData);
+  // const questionHash = useSelector(state => state.approvals.quesHashData);
   const { id: proposalId, isCurrent } = useSelector(getSelectedBid)?.toJS();
   const selectedBidIsCurrent = !!isCurrent;
 
@@ -26,7 +26,7 @@ const SectionActive = ({
         {!isEmpty(leftQues) &&
           leftQues.map(item => (
             <QuestionItem
-              question={questionHash[item] || {}}
+              questionId={item}
               approvalSectionTitle={ApprovalSectionTitle}
               key={item}
               disabled={!selectedBidIsCurrent}
@@ -37,7 +37,7 @@ const SectionActive = ({
         {!isEmpty(rightQues) &&
           rightQues.map(item => (
             <QuestionItem
-              question={questionHash[item] || {}}
+              questionId={item}
               approvalSectionTitle={ApprovalSectionTitle}
               key={item}
               disabled={!selectedBidIsCurrent}

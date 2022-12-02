@@ -30,15 +30,18 @@ import {
 } from '../../../redux/selectors/proposal';
 import CustomLoader from './CustomLoader';
 import { getLastAnswer } from './utils';
+import { getQuestion } from '../../../redux/selectors';
 
 const QuestionItem = ({
-  question = {},
+  questionId = '',
   approvalSectionTitle = '',
   disabled,
   isQuesFreezed,
   eventCategories,
   trackEvent
 }) => {
+  const question = useSelector(getQuestion(questionId));
+
   // Component will return null in case of empty question value
   if (isEmpty(question)) return null;
 
@@ -247,7 +250,7 @@ QuestionItem.defaultProps = {
   isQuesFreezed: false
 };
 QuestionItem.propTypes = {
-  question: PropTypes.object.isRequired,
+  questionId: PropTypes.string.isRequired,
   approvalSectionTitle: PropTypes.string.isRequired,
   disabled: PropTypes.any,
   isQuesFreezed: PropTypes.any,
