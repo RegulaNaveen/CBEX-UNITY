@@ -55,7 +55,8 @@ const Section = ({ sectionId }) => {
       </CustomAccordion>
     </ApprovalContext.Provider>
   );
-  return shouldShowSection(questionHash, approval) ? <SectionContent /> : null;
+  // return shouldShowSection(questionHash, approval) ? <SectionContent /> : null;
+  return <SectionContent />;
 };
 
 Section.propTypes = {

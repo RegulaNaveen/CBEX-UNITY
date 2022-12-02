@@ -29,7 +29,7 @@ import {
   getSelectedBid
 } from '../../../redux/selectors/proposal';
 import CustomLoader from './CustomLoader';
-import { getLastAnswer } from './utils';
+import { getLastAnswer, shouldShowQuestion } from './utils';
 import { getQuestion } from '../../../redux/selectors';
 
 const QuestionItem = ({
@@ -44,8 +44,8 @@ const QuestionItem = ({
   const question = isQuesFreezed
     ? archivedQuestion
     : useSelector(getQuestion(questionId));
-  const questionHash = useSelector(state => state.approvals.quesHashData);
-  const isShowQuestion = !isEmpty(questionHash[questionId]);
+  const approvalFilters = useSelector(state => state.approvals.filters);
+  const isShowQuestion = shouldShowQuestion(question, approvalFilters);
 
   // Component will return null in case of empty question value
   if (isEmpty(question)) return null;
@@ -247,7 +247,7 @@ const QuestionItem = ({
           )}
         </>
       ) : null,
-    [question, isShowHistory, isShowQuestion]
+    [question, isShowHistory, isShowQuestion, approvalFilters]
   );
 };
 
