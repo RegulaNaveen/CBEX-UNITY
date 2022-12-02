@@ -1,13 +1,12 @@
 // @flow
 import React, { Component } from 'react';
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import { Map, fromJS } from 'immutable'; // NOSONAR
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
-import { isEmpty, isString, unionBy, isObject } from 'lodash';
+import { isEmpty, isString, unionBy, isObject, has } from 'lodash';
 import { diffWordsWithSpace } from 'diff';
 import Loader from 'apollo-react/components/Loader';
-import Button from 'apollo-react/components/Button/Button';
 import {
   getProposalTeamAssignedRoles,
   getSelectedBid,
@@ -28,9 +27,8 @@ import {
 } from '../../../redux/actions/proposal-actions';
 import { SocketContext } from '../../../context/SocketContext';
 import MatomoHOC from '../../HOC/MatomoHOC';
-import { getLastAnswer } from '../../screens/Approvals/utils';
-import { QUESTION_UNLOCK_TIMEOUT } from '../../../constants/app';
 import withIdleStateDetection from '../../HOC/IdleStateDetector';
+import { getLastAnswer } from '../../screens/Approvals/utils';
 
 type Props = {
   question: Map,
@@ -44,6 +42,8 @@ type Props = {
   trackEvent: any,
   eventCategories: any,
   events: any,
+  tab: any,
+  isQuesFreezed: any,
   onCascadeChange: any
 };
 let lockQuestion;
@@ -52,21 +52,23 @@ let indexNo;
 let questionIdentifier;
 let bidNo = '';
 let isCurrentBid = '';
+let taggedUserFormat;
 class AnswerHistory extends Component<Props> {
   static contextType = SocketContext;
 
   constructor(props: Object) {
     super(props);
+    const { question, isQuesFreezed } = this.props;
     this.state = {
-      question: this.props.question.set('answers', fromJS([])),
-      lastAnswer: getLastAnswer(this.props.question.toJS()),
+      question: !isQuesFreezed ? question.set('answers', fromJS([])) : question,
+      lastAnswer: getLastAnswer(question.toJS()),
       loading: false
     };
     this.setMouseMove = this.setMouseMove.bind(this);
   }
 
   componentDidMount() {
-    const { question, getAnsHistory, selectedBid } = this.props;
+    const { question, getAnsHistory, selectedBid, isQuesFreezed } = this.props;
     const questionID = question?.toJS()?.questionId;
     const proposalID = selectedBid?.toJS()?.id;
     const { lastAnswer } = this.state;
@@ -79,7 +81,7 @@ class AnswerHistory extends Component<Props> {
         : 'NA';
     if (
       isCurrentBid === bidNo &&
-      lastAnswer.userName === 'UnityPredictedAnswer'
+      lastAnswer?.userName === 'UnityPredictedAnswer'
     ) {
       this.context.questionLockWrapper(questionIdentifier);
       if (this.props.toggleWatch) {
@@ -87,7 +89,7 @@ class AnswerHistory extends Component<Props> {
       }
     }
     // Set History List form Api
-    if (questionID && proposalID) {
+    if (questionID && proposalID && !isQuesFreezed) {
       (async () => {
         let modifiedAns = question.get('answers');
         this.setState({ loading: true });
@@ -143,7 +145,7 @@ class AnswerHistory extends Component<Props> {
     const proposalDetail =
       proposalId &&
       opportunityData.get(proposalId)?.toJS()?.proposal?.proposalDetails;
-    const { setProposalAnswer, userData, lastAnswer } = this.props;
+    const { setProposalAnswer, userData } = this.props;
     const answerType = questionType;
     // picklist value should not be converted to string while saving
     if (
@@ -223,7 +225,7 @@ class AnswerHistory extends Component<Props> {
     const proposalDetail =
       proposalId &&
       opportunityData.get(proposalId)?.toJS()?.proposal?.proposalDetails;
-    const { setProposalAnswer, lastAnswer } = this.props;
+    const { setProposalAnswer } = this.props;
     const answerType = questionType;
     // picklist value should not be converted to string while saving
     if (
@@ -302,9 +304,26 @@ class AnswerHistory extends Component<Props> {
     });
   };
 
+  parseJson = str => {
+    try {
+      return JSON.parse(str);
+    } catch (e) {
+      return str;
+    }
+  };
+
+  extractName = str => {
+    const splirt_array = str.split('.');
+    return splirt_array // check null
+      ? splirt_array.length > 0
+        ? splirt_array[0].trim()
+        : ''
+      : '';
+  };
+
   renderContent = () => {
     const { opportunityData } = this.props;
-    const { question, loading } = this.state;
+    const { question } = this.state;
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const sectionName = question.getIn(['section', 'sectionName']);
     let answers = question.get('answers').reverse();
@@ -315,7 +334,7 @@ class AnswerHistory extends Component<Props> {
     questionIdentifier = questions.get('questionId');
     lockQuestion = questionIdentifier;
     const lastAnswer = answers.get(0).toJS();
-    answers.map((_answer, index) => {
+    answers.forEach((_answer, index) => {
       const currentAnswer =
         isObject(answers?.get(index)?.get('answer')) &&
         answers?.get(index)?.get('answer').size === 0
@@ -330,6 +349,7 @@ class AnswerHistory extends Component<Props> {
         answers = answers.delete(index).delete(index);
       }
     });
+
     return answers.map((_answer, index) => {
       const userName = _answer.get('userName') || 'Default User';
       const date = _answer.get('date');
@@ -384,6 +404,16 @@ class AnswerHistory extends Component<Props> {
         const isLastItem = index === answers.toJS().length - 1;
         const isOnlyOneAnswer = answers.toJS().length === 1;
         // checking if last answer is empty and the answer before is unitypredicted
+        const formattedAnswer = answers?.get(index)?.get('formattedAnswer');
+        const newFormattedAnswer = this.parseJson(formattedAnswer);
+        if (
+          isObject(newFormattedAnswer) &&
+          newFormattedAnswer.hasOwnProperty('htmlExport')
+        ) {
+          taggedUserFormat = newFormattedAnswer.htmlExport.match(
+            /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+          );
+        }
         if (isValidatedUnityPredictedAnswer) {
           return (
             <span key={uuidv4()}>
@@ -451,15 +481,27 @@ class AnswerHistory extends Component<Props> {
                 if (intersection.includes(ans)) return renderWord(ans, '');
                 if (removed.includes(ans)) return renderWord(ans, 'removed');
                 if (added.includes(ans)) return renderWord(ans, 'changed');
-                return null;
               });
             }
             const diffAnswers = diffWordsWithSpace(nextAnswer, answer);
             return rearrangeDiff(diffAnswers).map(
               ({ value, added, removed }) => {
-                if (removed) return renderWord(value, 'removed');
-                if (added) return renderWord(value, 'changed');
-                return <span key={uuidv4()}>{value} </span>;
+                const newValue =
+                  taggedUserFormat?.map(item => {
+                    const extractedValue =
+                      this.extractName(item)
+                        .charAt(0)
+                        .toUpperCase() +
+                      this.extractName(item)
+                        .slice(1)
+                        .toLowerCase();
+                    return extractedValue.match(value.split(' ')[0])
+                      ? value.replace(extractedValue, `@${extractedValue}`)
+                      : null;
+                  }) || value;
+                if (removed) return renderWord(newValue, 'removed');
+                if (added) return renderWord(newValue, 'changed');
+                return <span key={uuidv4()}>{newValue} </span>;
               }
             );
           }
@@ -641,7 +683,7 @@ class AnswerHistory extends Component<Props> {
               ) : null}
               {indexNo === 0 &&
               isCurrentBid === bidNo &&
-              lastAnswer.userName === 'UnityPredictedAnswer' &&
+              lastAnswer?.userName === 'UnityPredictedAnswer' &&
               userName === 'UnityPredictedAnswer' ? (
                 <div className="answer-meta-buttons">
                   <button
