@@ -1,13 +1,12 @@
 // @flow
 import React, { Component } from 'react';
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import { Map, fromJS } from 'immutable'; // NOSONAR
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
 import { isEmpty, isString, unionBy, isObject } from 'lodash';
 import { diffWordsWithSpace } from 'diff';
 import Loader from 'apollo-react/components/Loader';
-import Button from 'apollo-react/components/Button/Button';
 import {
   getProposalTeamAssignedRoles,
   getSelectedBid,
@@ -28,8 +27,6 @@ import {
 } from '../../../redux/actions/proposal-actions';
 import { SocketContext } from '../../../context/SocketContext';
 import MatomoHOC from '../../HOC/MatomoHOC';
-import { getLastAnswer } from '../../screens/Approvals/utils';
-import { QUESTION_UNLOCK_TIMEOUT } from '../../../constants/app';
 import withIdleStateDetection from '../../HOC/IdleStateDetector';
 
 type Props = {
@@ -44,6 +41,8 @@ type Props = {
   trackEvent: any,
   eventCategories: any,
   events: any,
+  tab: any,
+  isQuesFreezed: any,
   onCascadeChange: any
 };
 let lockQuestion;
@@ -57,16 +56,16 @@ class AnswerHistory extends Component<Props> {
 
   constructor(props: Object) {
     super(props);
+    const { question, isQuesFreezed } = this.props;
     this.state = {
-      question: this.props.question.set('answers', fromJS([])),
-      lastAnswer: getLastAnswer(this.props.question.toJS()),
+      question: !isQuesFreezed ? question.set('answers', fromJS([])) : question,
       loading: false
     };
     this.setMouseMove = this.setMouseMove.bind(this);
   }
 
   componentDidMount() {
-    const { question, getAnsHistory, selectedBid } = this.props;
+    const { question, getAnsHistory, selectedBid, isQuesFreezed } = this.props;
     const questionID = question?.toJS()?.questionId;
     const proposalID = selectedBid?.toJS()?.id;
     const { lastAnswer } = this.state;
@@ -87,7 +86,7 @@ class AnswerHistory extends Component<Props> {
       }
     }
     // Set History List form Api
-    if (questionID && proposalID) {
+    if (questionID && proposalID && !isQuesFreezed) {
       (async () => {
         let modifiedAns = question.get('answers');
         this.setState({ loading: true });
@@ -143,7 +142,7 @@ class AnswerHistory extends Component<Props> {
     const proposalDetail =
       proposalId &&
       opportunityData.get(proposalId)?.toJS()?.proposal?.proposalDetails;
-    const { setProposalAnswer, userData, lastAnswer } = this.props;
+    const { setProposalAnswer, userData } = this.props;
     const answerType = questionType;
     // picklist value should not be converted to string while saving
     if (
@@ -223,7 +222,7 @@ class AnswerHistory extends Component<Props> {
     const proposalDetail =
       proposalId &&
       opportunityData.get(proposalId)?.toJS()?.proposal?.proposalDetails;
-    const { setProposalAnswer, lastAnswer } = this.props;
+    const { setProposalAnswer } = this.props;
     const answerType = questionType;
     // picklist value should not be converted to string while saving
     if (
