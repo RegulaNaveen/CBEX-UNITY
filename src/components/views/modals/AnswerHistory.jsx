@@ -27,7 +27,7 @@ import {
 } from '../../../redux/actions/proposal-actions';
 import { SocketContext } from '../../../context/SocketContext';
 import MatomoHOC from '../../HOC/MatomoHOC';
-import { QUESTION_UNLOCK_TIMEOUT } from '../../../constants/app';
+import withIdleStateDetection from '../../HOC/IdleStateDetector';
 
 type Props = {
   question: Map,
@@ -42,11 +42,15 @@ type Props = {
   eventCategories: any,
   events: any,
   tab: any,
-  isQuesFreezed: any
+  isQuesFreezed: any,
+  onCascadeChange: any
 };
 let lockQuestion;
 let conditionBlankPredicted;
 let indexNo;
+let questionIdentifier;
+let bidNo = '';
+let isCurrentBid = '';
 class AnswerHistory extends Component<Props> {
   static contextType = SocketContext;
 
@@ -55,9 +59,7 @@ class AnswerHistory extends Component<Props> {
     const { question, isQuesFreezed } = this.props;
     this.state = {
       question: !isQuesFreezed ? question.set('answers', fromJS([])) : question,
-      loading: false,
-      mouseMoving: false,
-      timerReset: QUESTION_UNLOCK_TIMEOUT
+      loading: false
     };
     this.setMouseMove = this.setMouseMove.bind(this);
   }
@@ -66,6 +68,23 @@ class AnswerHistory extends Component<Props> {
     const { question, getAnsHistory, selectedBid, isQuesFreezed } = this.props;
     const questionID = question?.toJS()?.questionId;
     const proposalID = selectedBid?.toJS()?.id;
+    const { lastAnswer } = this.state;
+    bidNo = this.props.opportunityData?.get(proposalID)?.toJS().proposal
+      .proposalDetails.bidNo;
+    isCurrentBid =
+      this.props.opportunityData?.get(proposalID)?.toJS().isCurrent === true
+        ? this.props.opportunityData?.get(proposalID)?.toJS().proposal
+            .proposalDetails.bidNo
+        : 'NA';
+    if (
+      isCurrentBid === bidNo &&
+      lastAnswer.userName === 'UnityPredictedAnswer'
+    ) {
+      this.context.questionLockWrapper(questionIdentifier);
+      if (this.props.toggleWatch) {
+        this.props.toggleWatch(true);
+      }
+    }
     // Set History List form Api
     if (questionID && proposalID && !isQuesFreezed) {
       (async () => {
@@ -85,21 +104,10 @@ class AnswerHistory extends Component<Props> {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.mouseMoving !== this.state.mouseMoving) {
-      const { timerReset, mouseMoving } = this.state;
-      if (!mouseMoving) {
-        // console.log('Start watching for IDLE status');
-        const newTimeoutID = this.addWatcher();
-        this.setState({
-          timerReset: newTimeoutID
-        });
-      } else if (mouseMoving) {
-        // console.log('Stop watching for IDLE status');
-        clearTimeout(timerReset);
-        this.setState({
-          timerReset: QUESTION_UNLOCK_TIMEOUT
-        });
-      }
+    if (this.props.forceBlur === true) {
+      if (this.props.toggleWatch) this.props.toggleWatch(false);
+      this.context?.questionUnlockWrapper(questionIdentifier);
+      this.closeModalWindow();
     }
   }
 
@@ -108,13 +116,7 @@ class AnswerHistory extends Component<Props> {
   }
 
   setMouseMove(e) {
-    e.preventDefault();
-    this.setState({ mouseMoving: true });
-    let timeout;
-    (() => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => this.setState({ mouseMoving: false }), 50);
-    })();
+    if (this.props.onCascadeChange) this.props.onCascadeChange();
   }
 
   handleVerifyPredictedAnsClick = predictedAnswer => {
@@ -301,7 +303,7 @@ class AnswerHistory extends Component<Props> {
 
   renderContent = () => {
     const { opportunityData } = this.props;
-    const { question, loading, mouseMoving, timerReset } = this.state;
+    const { question, loading } = this.state;
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const sectionName = question.getIn(['section', 'sectionName']);
     let answers = question.get('answers').reverse();
@@ -309,7 +311,7 @@ class AnswerHistory extends Component<Props> {
     if (questionId) answers = question.getIn(['answers', 'answers']).reverse();
     if (answers.isEmpty()) return this.renderAnswerResponsables();
     const questions = question.reverse();
-    const questionIdentifier = questions.get('questionId');
+    questionIdentifier = questions.get('questionId');
     lockQuestion = questionIdentifier;
     const lastAnswer = answers.get(0).toJS();
     answers.map((_answer, index) => {
@@ -333,8 +335,6 @@ class AnswerHistory extends Component<Props> {
       let answer = _answer.get('answer');
       const proposalId = _answer.get('proposalId');
       indexNo = index;
-      let bidNo = '';
-      let isCurrentBid = '';
       if (
         proposalId &&
         opportunityData.get(proposalId)?.toJS()?.proposal?.proposalDetails
@@ -351,13 +351,6 @@ class AnswerHistory extends Component<Props> {
       const nextAnswer = answers.get(index + 1)
         ? answers.get(index + 1).get('answer')
         : answer;
-      if (
-        isCurrentBid === bidNo &&
-        lastAnswer.userName === 'UnityPredictedAnswer' &&
-        userName === 'UnityPredictedAnswer'
-      ) {
-        this.context.questionLockWrapper(questionIdentifier);
-      }
 
       const isValidatedUnityPredictedAnswer =
         questionType !== ANSWER_TYPES.PICKLIST &&
@@ -393,7 +386,9 @@ class AnswerHistory extends Component<Props> {
         if (isValidatedUnityPredictedAnswer) {
           return (
             <span key={uuidv4()}>
-              {userName === 'UnityPredictedAnswer' ? (
+              {answers.get(index).get('userName') === 'UnityPredictedAnswer' &&
+              answers.get(index + 1).get('userName') ===
+                'UnityPredictedAnswer' ? (
                 `${_answer.get('answer')}`
               ) : (
                 <b>Validated Unity Predicted Answer</b>
@@ -404,7 +399,17 @@ class AnswerHistory extends Component<Props> {
         if (isPicklistValidUnityPredAns) {
           return (
             <span key={uuidv4()}>
-              <b>Validated Unity Predicted Answer</b>
+              {answers.get(index).get('userName') === 'UnityPredictedAnswer' &&
+              answers.get(index + 1).get('userName') ===
+                'UnityPredictedAnswer' ? (
+                _answer.get('answer').map(singleAnswer => (
+                  <li key={uuidv4()} className="">
+                    {singleAnswer}
+                  </li>
+                ))
+              ) : (
+                <b>Validated Unity Predicted Answer</b>
+              )}
             </span>
           );
         }
@@ -572,7 +577,7 @@ class AnswerHistory extends Component<Props> {
               return renderWord(
                 nextAnswer === 'N/A'
                   ? 'N/A'
-                  : answer === ''
+                  : nextAnswer === ''
                   ? ''
                   : parseMomentDate(nextAnswer),
                 'removed'
@@ -615,7 +620,7 @@ class AnswerHistory extends Component<Props> {
       };
       return (
         <div>
-          <div className="answer-container" key={uuidv4()}>
+          <div className="answer-container">
             <div className="main-container">
               <span
                 style={{ backgroundColor: avatarRandomColor }}
@@ -664,6 +669,7 @@ class AnswerHistory extends Component<Props> {
   };
 
   closeModalWindow = () => {
+    if (this.props.toggleWatch) this.props.toggleWatch(false);
     this.context.questionUnlockWrapper(lockQuestion);
     const { closeModal } = this.props;
     closeModal();
@@ -678,13 +684,6 @@ class AnswerHistory extends Component<Props> {
       this.closeModalWindow();
     }
   };
-
-  addWatcher() {
-    const { timerReset } = this.state;
-    return setTimeout(() => {
-      this.closeModalWindow();
-    }, timerReset);
-  }
 
   render() {
     const { closeModal } = this.props;
@@ -739,7 +738,8 @@ const mapDispatchToProps = {
   getAnsHistory: getProposalAnswerHistory,
   setProposalAnswer: setProposalAnswerData
 };
+const MemoizedAnswerHistory = React.memo(AnswerHistory);
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(MatomoHOC(AnswerHistory));
+)(MatomoHOC(withIdleStateDetection(MemoizedAnswerHistory)));

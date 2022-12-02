@@ -29,7 +29,36 @@ const proposalID = fromJS(data.proposalID);
 const selectedBid = fromJS(data.proposalID);
 const userRole = fromJS(data.userRole);
 const sections = fromJS(data.sections);
-const approvals = { allApprovals, quesHashData };
+const approvals = {
+  allApprovals,
+  quesHashData,
+  filters: [
+    {
+      name: 'answered',
+      displayName: 'Answered',
+      group: 'answer',
+      value: false
+    },
+    {
+      name: 'unanswered',
+      displayName: 'Unanswered',
+      group: 'answer',
+      value: false
+    },
+    {
+      name: 'responsible',
+      displayName: 'Responsible',
+      group: 'roles',
+      value: false
+    },
+    {
+      name: 'informed',
+      displayName: 'Informed',
+      group: 'roles',
+      value: false
+    }
+  ]
+};
 
 let initialState = {
   ssoAuth,
@@ -68,7 +97,7 @@ let initialState = {
   AddNewQuestion: jest.fn(),
   RefreshProposal: jest.fn(),
   getBidList: jest.fn(),
-  currentTab: null,
+  currentTab: null
 };
 describe('Testing approvals', () => {
   let store;
@@ -82,7 +111,7 @@ describe('Testing approvals', () => {
       clearQuestionsFilter: jest.fn(),
       selectQuestionsFilters: jest.fn(),
       getSelectedBid: jest.fn(),
-      getOpportunityData: jest.fn(),
+      getOpportunityData: jest.fn()
     };
     render(
       <Provider store={store}>
@@ -107,7 +136,7 @@ describe('Testing approvals', () => {
       clearQuestionsFilter: jest.fn(),
       selectQuestionsFilters: jest.fn(),
       getSelectedBid: jest.fn(),
-      getOpportunityData: jest.fn(),
+      getOpportunityData: jest.fn()
     };
     const renderFilterFunc = jest.fn();
     const mockFunc = renderFilterFunc();
@@ -128,7 +157,7 @@ describe('Testing approvals', () => {
       clearQuestionsFilter: jest.fn(),
       selectQuestionsFilters: jest.fn(),
       getSelectedBid: jest.fn(),
-      getOpportunityData: jest.fn(),
+      getOpportunityData: jest.fn()
     };
     render(
       <Provider store={store}>
