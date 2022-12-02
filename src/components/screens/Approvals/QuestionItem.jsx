@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState, useEffect } from 'react';
 import Grid from 'apollo-react/components/Grid';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
@@ -41,6 +41,11 @@ const QuestionItem = ({
   trackEvent
 }) => {
   const question = useSelector(getQuestion(questionId));
+  const questionText = question ? question.questionText : 'default';
+
+  useEffect(() => {
+    console.log('Question Item rerendered', questionText);
+  });
 
   // Component will return null in case of empty question value
   if (isEmpty(question)) return null;
@@ -54,8 +59,8 @@ const QuestionItem = ({
   const opportunityData = allOppData[proposalId];
 
   const getUserData = () => ({
-    email: getUserName(),
-    name: getUserEmail(),
+    name: getUserName(),
+    email: getUserEmail(),
     role: getUserId()
   });
 
