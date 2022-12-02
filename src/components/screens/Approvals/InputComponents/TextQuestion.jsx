@@ -96,6 +96,8 @@ const TextQuestion = ({
 
       if (saveDate) {
         handleRichTextChange(data);
+      } else {
+        questionUnlockWrapper(question?.questionId);
       }
     },
     onFocus: () => {

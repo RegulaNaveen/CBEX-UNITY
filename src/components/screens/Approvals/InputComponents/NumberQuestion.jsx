@@ -17,49 +17,55 @@ const NumberQuestion = ({
   const dispatch = useDispatch();
   const { questionLockWrapper, questionUnlockWrapper } = socketContext;
 
-  const handleTextChange = (textValue, lastAns = ' ', editorData) => {
-    const { proposalId, questionId } = question;
-    // questionUnlockWrapper(question?.questionId);
-    const s1 = textValue
-      .trim()
-      .split(' ')
-      .filter(v => v.trim().length > 0);
-    const s2 = lastAns
-      .trim()
-      .split(' ')
-      .filter(v => v.trim().length > 0);
+  const handleTextChange = async (textValue, lastAns = ' ', editorData) => {
+    try {
+      const { proposalId, questionId } = question;
+      const s1 = textValue
+        .trim()
+        .split(' ')
+        .filter(v => v.trim().length > 0);
+      const s2 = lastAns
+        .trim()
+        .split(' ')
+        .filter(v => v.trim().length > 0);
 
-    if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
-      if (
-        s1.length !== s2.length ||
-        s1.join(' ').trim() !== s2.join(' ').trim()
-      ) {
-        dispatch(
+      if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
+        if (
+          s1.length !== s2.length ||
+          s1.join(' ').trim() !== s2.join(' ').trim()
+        ) {
+          await dispatch(
+            setProposalAnswerData(
+              socketContext,
+              proposalId,
+              questionId,
+              String(textValue).trim(),
+              userData,
+              editorData,
+              true
+            )
+          );
+          questionUnlockWrapper(question?.questionId);
+        }
+      } else if (!textValue.trim() && lastAns.trim()) {
+        await dispatch(
           setProposalAnswerData(
             socketContext,
             proposalId,
             questionId,
-            String(textValue).trim(),
+            ' ',
             userData,
             editorData,
             true
           )
         );
+        questionUnlockWrapper(question?.questionId);
       }
-    } else if (!textValue.trim() && lastAns.trim()) {
-      dispatch(
-        setProposalAnswerData(
-          socketContext,
-          proposalId,
-          questionId,
-          ' ',
-          userData,
-          editorData,
-          true
-        )
-      );
+      trackMatomoEventSubmitAnswer(String(textValue).trim());
+    } catch (error) {
+      console.error(error);
+      questionUnlockWrapper(question?.questionId);
     }
-    trackMatomoEventSubmitAnswer(String(textValue).trim());
   };
 
   return (
@@ -70,7 +76,7 @@ const NumberQuestion = ({
         type="number"
         value={lastAnswer.answer}
         onBlur={handleTextChange}
-        // onFocus={() => questionLockWrapper(question?.questionId)}
+        onFocus={() => questionLockWrapper(question?.questionId)}
       />
     </>
   );

@@ -20,49 +20,55 @@ const ProposalTeamQuestion = ({
   try {
     const dispatch = useDispatch();
     const { questionLockWrapper, questionUnlockWrapper } = socketContext;
-    const handleAnswerChange = (textValue, lastValue, reason) => {
-      const { proposalId, questionId, section } = question;
-      const { sectionName, sectionOrder } = section;
-      dispatch(
-        setProposalAnswerData(
-          socketContext,
-          proposalId,
-          questionId,
-          textValue,
-          userData
-        )
-      ).then(() => {
-        const [deletedVal] = xor(
-          textValue?.trim() ? textValue?.trim().split(',') : [],
-          lastValue?.trim() ? lastValue?.trim().split(',') : []
-        );
-        const [deletedEmail] = String(deletedVal).match(
-          /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
-        );
-        if (reason === 'remove-option' && deletedEmail) {
-          dispatch(
-            deleteProposalUserFromDB(
-              proposalId,
-              deletedEmail,
-              sectionOrder,
-              sectionName
-            )
+    const handleAnswerChange = async (textValue, lastValue, reason) => {
+      try {
+        const { proposalId, questionId, section } = question;
+        const { sectionName, sectionOrder } = section;
+        dispatch(
+          setProposalAnswerData(
+            socketContext,
+            proposalId,
+            questionId,
+            textValue,
+            userData
+          )
+        ).then(() => {
+          questionUnlockWrapper(question?.questionId);
+          const [deletedVal] = xor(
+            textValue?.trim() ? textValue?.trim().split(',') : [],
+            lastValue?.trim() ? lastValue?.trim().split(',') : []
           );
-        }
-      });
-      trackMatomoEventSubmitAnswer(textValue);
+          const [deletedEmail] = String(deletedVal).match(
+            /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+          );
+          if (reason === 'remove-option' && deletedEmail) {
+            dispatch(
+              deleteProposalUserFromDB(
+                proposalId,
+                deletedEmail,
+                sectionOrder,
+                sectionName
+              )
+            );
+          }
+        });
+        trackMatomoEventSubmitAnswer(textValue);
+      } catch (error) {
+        console.error(error);
+        questionUnlockWrapper(question?.questionId);
+      }
     };
 
     return (
       <>
         <AutoComplete
           sectionName={question.section?.sectionName}
-          // onFocus={() => {
-          //   questionLockWrapper(question?.questionId);
-          // }}
-          // onBlur={() => {
-          //   questionUnlockWrapper(question?.questionId);
-          // }}
+          onFocus={() => {
+            questionLockWrapper(question?.questionId);
+          }}
+          onBlur={() => {
+            questionUnlockWrapper(question?.questionId);
+          }}
           onChange={handleAnswerChange}
           text={lastAnswer.answer || ''}
           disabled={checkDisableFlag() || !!disabled}

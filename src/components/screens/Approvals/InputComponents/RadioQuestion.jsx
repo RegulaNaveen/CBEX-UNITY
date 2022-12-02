@@ -16,19 +16,25 @@ const RadioQuestionInput = ({
   const dispatch = useDispatch();
   const { questionLockWrapper, questionUnlockWrapper } = socketContext;
 
-  const changeHandler = (selectedValue, lastAns) => {
-    const { proposalId, questionId } = question;
-    if (lastAns !== selectedValue) {
-      dispatch(
-        setProposalAnswerData(
-          socketContext,
-          proposalId,
-          questionId,
-          selectedValue,
-          userData
-        )
-      );
-      trackMatomoEventSubmitAnswer(selectedValue);
+  const changeHandler = async (selectedValue, lastAns) => {
+    try {
+      const { proposalId, questionId } = question;
+      if (lastAns !== selectedValue) {
+        await dispatch(
+          setProposalAnswerData(
+            socketContext,
+            proposalId,
+            questionId,
+            selectedValue,
+            userData
+          )
+        );
+        questionUnlockWrapper(question?.questionId);
+        trackMatomoEventSubmitAnswer(selectedValue);
+      }
+    } catch (error) {
+      console.error(error);
+      questionUnlockWrapper(question?.questionId);
     }
   };
 
@@ -38,12 +44,12 @@ const RadioQuestionInput = ({
       onClick={val => changeHandler(val, lastAnswer.answer)}
       items={question?.answerConfiguration?.options}
       disabled={checkDisableFlag() || !!disabled}
-      // onFocus={() => {
-      //   questionLockWrapper(question?.questionId);
-      // }}
-      // onBlur={() => {
-      //   questionUnlockWrapper(question?.questionId);
-      // }}
+      onFocus={() => {
+        questionLockWrapper(question?.questionId);
+      }}
+      onBlur={() => {
+        questionUnlockWrapper(question?.questionId);
+      }}
     />
   );
 };
