@@ -64,16 +64,14 @@ const CheckBoxQuestion = ({
         <CheckBoxQuestions
           answerValue={answerValue}
           finalOptions={finalOptions}
-          disabled={!!disabled}
-          onOpen={() => {}}
-          onClose={() => {}}
-          onChange={e => changeHandler(e)}
-          onFocus={() => {
+          disabled={checkDisableFlag() || !!disabled}
+          onOpen={() => {
             questionLockWrapper(question?.questionId);
           }}
-          onBlur={() => {
+          onClose={() => {
             questionUnlockWrapper(question?.questionId);
           }}
+          onChange={e => changeHandler(e)}
         />
       </div>
     );

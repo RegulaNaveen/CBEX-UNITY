@@ -46,6 +46,9 @@ const NumberQuestion = ({
             )
           );
           questionUnlockWrapper(question?.questionId);
+          trackMatomoEventSubmitAnswer(String(textValue).trim());
+        } else {
+          questionUnlockWrapper(question?.questionId);
         }
       } else if (!textValue.trim() && lastAns.trim()) {
         await dispatch(
@@ -60,8 +63,10 @@ const NumberQuestion = ({
           )
         );
         questionUnlockWrapper(question?.questionId);
+        trackMatomoEventSubmitAnswer(String(textValue).trim());
+      } else {
+        questionUnlockWrapper(question?.questionId);
       }
-      trackMatomoEventSubmitAnswer(String(textValue).trim());
     } catch (error) {
       console.error(error);
       questionUnlockWrapper(question?.questionId);
