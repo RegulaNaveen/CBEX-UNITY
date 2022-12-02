@@ -34,6 +34,12 @@
       }
     }
 
+    .autocomplete-disabled {
+      .a-MuiChip-clickable {
+        z-index: 1;
+      }
+    }
+
     .accordion-body {
       position: relative;
       display: block;
