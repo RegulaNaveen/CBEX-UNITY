@@ -23,25 +23,43 @@ const SectionFreezed = ({ archivedData }) => {
               </Grid>
               <Grid item xs={8} className="approval-ques-left">
                 {!isEmpty(leftQues) &&
-                  leftQues.map(item => (
-                    <QuestionItem
-                      question={item}
-                      approvalSectionTitle={title}
-                      key={item.questionId}
-                      disabled
-                    />
-                  ))}
+                  leftQues.map(item => {
+                    if (
+                      item.visible &&
+                      (item.active || item.isCustomQuestion)
+                    ) {
+                      return (
+                        <QuestionItem
+                          question={item}
+                          approvalSectionTitle={title}
+                          key={item.questionId}
+                          disabled
+                          isQuesFreezed
+                        />
+                      );
+                    }
+                    return null;
+                  })}
               </Grid>
               <Grid item xs={4} className="approval-ques-right">
                 {!isEmpty(rightQues) &&
-                  rightQues.map(item => (
-                    <QuestionItem
-                      question={item}
-                      approvalSectionTitle={title}
-                      key={item.questionId}
-                      disabled
-                    />
-                  ))}
+                  rightQues.map(item => {
+                    if (
+                      item.visible &&
+                      (item.active || item.isCustomQuestion)
+                    ) {
+                      return (
+                        <QuestionItem
+                          question={item}
+                          approvalSectionTitle={title}
+                          key={item.questionId}
+                          disabled
+                          isQuesFreezed
+                        />
+                      );
+                    }
+                    return null;
+                  })}
               </Grid>
               <hr />
             </Grid>

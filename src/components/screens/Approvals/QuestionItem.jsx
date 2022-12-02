@@ -35,9 +35,13 @@ const QuestionItem = ({
   question = {},
   approvalSectionTitle = '',
   disabled,
+  isQuesFreezed,
   eventCategories,
   trackEvent
 }) => {
+  // Component will return null in case of empty question value
+  if (isEmpty(question)) return null;
+
   const socketContext = useContext(SocketContext);
   const [isShowHistory, setIsShowHistory] = useState(false);
 
@@ -103,40 +107,6 @@ const QuestionItem = ({
     trackEvent({
       category: eventCategories.crmNo,
       action: `Approval Question: ${questionText} (${sectionName}) (${approvalSectionTitle})`,
-      name: `Answer: ${answer}`,
-      customDimensions: [
-        {
-          id: 1,
-          value: JSON.stringify({
-            answer,
-            sectionName,
-            questionText,
-            questionHTML,
-            questionJSON,
-            questionHintJSON,
-            questionId,
-            proposalDetail,
-            approvalSectionTitle
-          })
-        }
-      ]
-    });
-  };
-
-  const trackUPAMatomoEventSubmitAnswer = answer => {
-    const {
-      section,
-      questionText,
-      questionHTML,
-      questionJSON,
-      questionHintJSON,
-      questionId
-    } = question;
-    const { sectionName } = section;
-    const proposalDetail = opportunityData?.proposal?.proposalDetails;
-    trackEvent({
-      category: eventCategories.crmNo,
-      action: `Approval Question Unity Predicted: ${questionText} (${sectionName}) (${approvalSectionTitle})`,
       name: `Answer: ${answer}`,
       customDimensions: [
         {
@@ -226,55 +196,61 @@ const QuestionItem = ({
   };
 
   return useMemo(
-    () =>
-      !isEmpty(question) && (
-        <>
-          <Box mt={2}>
-            <Grid container>
-              <Grid item xs={10} className="ques-title-cover">
-                <QuestionLabel questionLabel={question?.questionText || ''} />
-              </Grid>
-              <Grid item xs={2} className="answer-actions">
-                {' '}
-              </Grid>
-              <Grid item xs={10} className="answer-input">
-                {renderQuestion()}
-              </Grid>
-              <Grid item xs={2} className="answer-actions">
-                <IconButton
-                  size="small"
-                  onClick={() => {
-                    setIsShowHistory(true);
-                  }}
-                >
-                  <CalendarIcon question={question} />
-                </IconButton>
-                <CustomLoader questionId={question.questionId} />
-              </Grid>
+    () => (
+      <>
+        <Box mt={2}>
+          <Grid container>
+            <Grid item xs={10} className="ques-title-cover">
+              <QuestionLabel questionLabel={question?.questionText || ''} />
             </Grid>
-          </Box>
-          {isShowHistory && (
-            <AnswerHistory
-              question={prepareAnswerHistoryData(question)}
-              tab="Approval"
-              closeModal={() => {
-                setIsShowHistory(false);
-              }}
-            />
-          )}
-        </>
-      ),
+            <Grid item xs={2}>
+              {' '}
+            </Grid>
+            <Grid item xs={10} className="answer-input">
+              {renderQuestion()}
+            </Grid>
+            <Grid item xs={2} className="answer-actions">
+              <IconButton
+                size="small"
+                onClick={() => {
+                  setIsShowHistory(true);
+                }}
+              >
+                <CalendarIcon question={question} />
+              </IconButton>
+              {!isQuesFreezed && (
+                <CustomLoader questionId={question.questionId} />
+              )}
+            </Grid>
+          </Grid>
+        </Box>
+
+        {/* Answer History Component */}
+        {isShowHistory && (
+          <AnswerHistory
+            question={prepareAnswerHistoryData(question)}
+            tab="Approval"
+            isQuesFreezed={!!isQuesFreezed}
+            closeModal={() => {
+              setIsShowHistory(false);
+            }}
+          />
+        )}
+      </>
+    ),
     [question, isShowHistory]
   );
 };
 
 QuestionItem.defaultProps = {
-  disabled: false
+  disabled: false,
+  isQuesFreezed: false
 };
 QuestionItem.propTypes = {
   question: PropTypes.object.isRequired,
   approvalSectionTitle: PropTypes.string.isRequired,
   disabled: PropTypes.any,
+  isQuesFreezed: PropTypes.any,
   eventCategories: PropTypes.object.isRequired,
   trackEvent: PropTypes.func.isRequired
 };

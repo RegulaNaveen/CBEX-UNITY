@@ -1,13 +1,12 @@
 // @flow
 import React, { Component } from 'react';
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import { Map, fromJS } from 'immutable'; // NOSONAR
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
 import { isEmpty, isString, unionBy, isObject, has } from 'lodash';
 import { diffWordsWithSpace } from 'diff';
 import Loader from 'apollo-react/components/Loader';
-import Button from 'apollo-react/components/Button/Button';
 import {
   getProposalTeamAssignedRoles,
   getSelectedBid,
@@ -28,9 +27,8 @@ import {
 } from '../../../redux/actions/proposal-actions';
 import { SocketContext } from '../../../context/SocketContext';
 import MatomoHOC from '../../HOC/MatomoHOC';
-import { getLastAnswer } from '../../screens/Approvals/utils';
-import { QUESTION_UNLOCK_TIMEOUT } from '../../../constants/app';
 import withIdleStateDetection from '../../HOC/IdleStateDetector';
+import { getLastAnswer } from '../../screens/Approvals/utils';
 
 type Props = {
   question: Map,
@@ -44,6 +42,8 @@ type Props = {
   trackEvent: any,
   eventCategories: any,
   events: any,
+  tab: any,
+  isQuesFreezed: any,
   onCascadeChange: any
 };
 let lockQuestion;
@@ -58,16 +58,17 @@ class AnswerHistory extends Component<Props> {
 
   constructor(props: Object) {
     super(props);
+    const { question, isQuesFreezed } = this.props;
     this.state = {
-      question: this.props.question.set('answers', fromJS([])),
-      lastAnswer: getLastAnswer(this.props.question.toJS()),
+      question: !isQuesFreezed ? question.set('answers', fromJS([])) : question,
+      lastAnswer: getLastAnswer(question.toJS()),
       loading: false
     };
     this.setMouseMove = this.setMouseMove.bind(this);
   }
 
   componentDidMount() {
-    const { question, getAnsHistory, selectedBid } = this.props;
+    const { question, getAnsHistory, selectedBid, isQuesFreezed } = this.props;
     const questionID = question?.toJS()?.questionId;
     const proposalID = selectedBid?.toJS()?.id;
     const { lastAnswer } = this.state;
@@ -80,7 +81,7 @@ class AnswerHistory extends Component<Props> {
         : 'NA';
     if (
       isCurrentBid === bidNo &&
-      lastAnswer.userName === 'UnityPredictedAnswer'
+      lastAnswer?.userName === 'UnityPredictedAnswer'
     ) {
       this.context.questionLockWrapper(questionIdentifier);
       if (this.props.toggleWatch) {
@@ -88,7 +89,7 @@ class AnswerHistory extends Component<Props> {
       }
     }
     // Set History List form Api
-    if (questionID && proposalID) {
+    if (questionID && proposalID && !isQuesFreezed) {
       (async () => {
         let modifiedAns = question.get('answers');
         this.setState({ loading: true });
@@ -144,7 +145,7 @@ class AnswerHistory extends Component<Props> {
     const proposalDetail =
       proposalId &&
       opportunityData.get(proposalId)?.toJS()?.proposal?.proposalDetails;
-    const { setProposalAnswer, userData, lastAnswer } = this.props;
+    const { setProposalAnswer, userData } = this.props;
     const answerType = questionType;
     // picklist value should not be converted to string while saving
     if (
@@ -224,7 +225,7 @@ class AnswerHistory extends Component<Props> {
     const proposalDetail =
       proposalId &&
       opportunityData.get(proposalId)?.toJS()?.proposal?.proposalDetails;
-    const { setProposalAnswer, lastAnswer } = this.props;
+    const { setProposalAnswer } = this.props;
     const answerType = questionType;
     // picklist value should not be converted to string while saving
     if (
@@ -322,7 +323,7 @@ class AnswerHistory extends Component<Props> {
 
   renderContent = () => {
     const { opportunityData } = this.props;
-    const { question, loading } = this.state;
+    const { question } = this.state;
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const sectionName = question.getIn(['section', 'sectionName']);
     let answers = question.get('answers').reverse();
@@ -333,7 +334,7 @@ class AnswerHistory extends Component<Props> {
     questionIdentifier = questions.get('questionId');
     lockQuestion = questionIdentifier;
     const lastAnswer = answers.get(0).toJS();
-    answers.map((_answer, index) => {
+    answers.forEach((_answer, index) => {
       const currentAnswer =
         isObject(answers?.get(index)?.get('answer')) &&
         answers?.get(index)?.get('answer').size === 0
@@ -348,6 +349,7 @@ class AnswerHistory extends Component<Props> {
         answers = answers.delete(index).delete(index);
       }
     });
+
     return answers.map((_answer, index) => {
       const userName = _answer.get('userName') || 'Default User';
       const date = _answer.get('date');
@@ -681,7 +683,7 @@ class AnswerHistory extends Component<Props> {
               ) : null}
               {indexNo === 0 &&
               isCurrentBid === bidNo &&
-              lastAnswer.userName === 'UnityPredictedAnswer' &&
+              lastAnswer?.userName === 'UnityPredictedAnswer' &&
               userName === 'UnityPredictedAnswer' ? (
                 <div className="answer-meta-buttons">
                   <button
