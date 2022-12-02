@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import isObject from 'lodash/isObject';
 import PropTypes from 'prop-types';
 import has from 'lodash/has';
@@ -8,6 +8,7 @@ import isEmpty from 'lodash/isEmpty';
 import CustomApolloRichText from '../../../common/CustomApolloRichText';
 import { parseStringifyJson } from '../../../../utils/helpers';
 import { setProposalAnswerData } from '../../../../redux/actions/proposal-actions';
+import { getCanUserTagInQuestion } from '../../../../redux/selectors/proposal';
 
 // Function to converted Answer String
 const getConvertedAnsString = str =>
@@ -27,6 +28,7 @@ const TextQuestion = ({
   const formattedAnswer =
     has(lastAnswer, 'formattedAnswer') && lastAnswer.formattedAnswer;
   const { questionLockWrapper, questionUnlockWrapper } = socketContext;
+  const canUserTagInQuestion = useSelector(getCanUserTagInQuestion);
 
   const parseFormattedData =
     !formattedAnswer || isObject(formattedAnswer)
@@ -68,6 +70,8 @@ const TextQuestion = ({
     enableFocus: true,
     isEditable: false,
     disabled: checkDisableFlag() || disabled,
+    canUserTagInQuestion,
+
     onBlur: data => {
       let saveDate = false;
       const previousAnsText = getConvertedAnsString(answerValue).trim();
