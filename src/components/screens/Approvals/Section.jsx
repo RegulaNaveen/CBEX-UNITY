@@ -18,7 +18,7 @@ export const ApprovalContext = createContext();
 const Section = ({ sectionId }) => {
   const [expanded, setExpanded] = useState(false);
   const [sectionLoading, setSectionLoading] = useState(false);
-  // const questionHash = useSelector(state => state.approvals.quesHashData);
+  const questionHash = useSelector(state => state.approvals.quesHashData);
   const dispatchLoadingEvent = (actionType, payload) => {
     if (actionType === 'SET_LOADING') {
       setSectionLoading(payload);
@@ -47,7 +47,7 @@ const Section = ({ sectionId }) => {
           {sectionLoading && <Loader isInner />}
 
           {/* Component for all Freezed Approval */}
-          {/* <SectionFreezed archivedData={ArchivedData} /> */}
+          <SectionFreezed archivedData={ArchivedData} />
 
           {/* Component for Active Active */}
           <SectionActive {...omit(approval, ['ArchivedData'])} />
@@ -55,9 +55,7 @@ const Section = ({ sectionId }) => {
       </CustomAccordion>
     </ApprovalContext.Provider>
   );
-
-  // return shouldShowSection(questionHash, approval) ? <SectionContent /> : null;
-  return <SectionContent />;
+  return shouldShowSection(questionHash, approval) ? <SectionContent /> : null;
 };
 
 Section.propTypes = {

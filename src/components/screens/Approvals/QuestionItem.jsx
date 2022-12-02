@@ -37,15 +37,15 @@ const QuestionItem = ({
   approvalSectionTitle = '',
   disabled,
   isQuesFreezed,
+  archivedQuestion,
   eventCategories,
   trackEvent
 }) => {
-  const question = useSelector(getQuestion(questionId));
-  const questionText = question ? question.questionText : 'default';
-
-  useEffect(() => {
-    console.log('Question Item rerendered', questionText);
-  });
+  const question = isQuesFreezed
+    ? archivedQuestion
+    : useSelector(getQuestion(questionId));
+  const questionHash = useSelector(state => state.approvals.quesHashData);
+  const isShowQuestion = !isEmpty(questionHash[questionId]);
 
   // Component will return null in case of empty question value
   if (isEmpty(question)) return null;
@@ -204,55 +204,67 @@ const QuestionItem = ({
   };
 
   return useMemo(
-    () => (
-      <>
-        <Box mt={2}>
-          <Grid container>
-            <Grid item xs={10} className="ques-title-cover">
-              <QuestionLabel questionLabel={question?.questionText || ''} />
+    () =>
+      isShowQuestion ? (
+        <>
+          <Box mt={2}>
+            <Grid container>
+              <Grid item xs={10} className="ques-title-cover">
+                <QuestionLabel questionLabel={question?.questionText || ''} />
+              </Grid>
+              <Grid item xs={2}>
+                {' '}
+              </Grid>
+              <Grid item xs={10} className="answer-input">
+                {renderQuestion()}
+              </Grid>
+              <Grid item xs={2} className="answer-actions">
+                <IconButton
+                  size="small"
+                  onClick={() => {
+                    setIsShowHistory(true);
+                  }}
+                >
+                  <CalendarIcon question={question} />
+                </IconButton>
+                {!isQuesFreezed && (
+                  <CustomLoader questionId={question.questionId} />
+                )}
+              </Grid>
             </Grid>
-            <Grid item xs={2}>
-              {' '}
-            </Grid>
-            <Grid item xs={10} className="answer-input">
-              {renderQuestion()}
-            </Grid>
-            <Grid item xs={2} className="answer-actions">
-              <IconButton
-                size="small"
-                onClick={() => {
-                  setIsShowHistory(true);
-                }}
-              >
-                <CalendarIcon question={question} />
-              </IconButton>
-              {!isQuesFreezed && (
-                <CustomLoader questionId={question.questionId} />
-              )}
-            </Grid>
-          </Grid>
-        </Box>
+          </Box>
 
-        {/* Answer History Component */}
-        {isShowHistory && (
-          <AnswerHistory
-            question={prepareAnswerHistoryData(question)}
-            tab="Approval"
-            isQuesFreezed={!!isQuesFreezed}
-            closeModal={() => {
-              setIsShowHistory(false);
-            }}
-          />
-        )}
-      </>
-    ),
-    [question, isShowHistory]
+          {/* Answer History Component */}
+          {isShowHistory && (
+            <AnswerHistory
+              question={prepareAnswerHistoryData(question)}
+              tab="Approval"
+              isQuesFreezed={!!isQuesFreezed}
+              closeModal={() => {
+                setIsShowHistory(false);
+              }}
+            />
+          )}
+        </>
+      ) : null,
+    [question, isShowHistory, isShowQuestion]
   );
 };
 
 QuestionItem.defaultProps = {
   disabled: false,
-  isQuesFreezed: false
+  isQuesFreezed: false,
+  archivedQuestion: {
+    proposalId: '',
+    questionId: '',
+    questionText: '',
+    answerConfiguration: {
+      type: 'number'
+    },
+    answers: [],
+    visible: false,
+    active: false
+  }
 };
 QuestionItem.propTypes = {
   questionId: PropTypes.string.isRequired,
@@ -260,7 +272,8 @@ QuestionItem.propTypes = {
   disabled: PropTypes.any,
   isQuesFreezed: PropTypes.any,
   eventCategories: PropTypes.object.isRequired,
-  trackEvent: PropTypes.func.isRequired
+  trackEvent: PropTypes.func.isRequired,
+  archivedQuestion: PropTypes.any
 };
 
 export default MatomoHOC(QuestionItem);

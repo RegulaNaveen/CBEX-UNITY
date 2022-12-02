@@ -30,11 +30,12 @@ const SectionFreezed = ({ archivedData }) => {
                     ) {
                       return (
                         <QuestionItem
-                          question={item}
+                          questionId={item.questionId}
                           approvalSectionTitle={title}
                           key={item.questionId}
                           disabled
                           isQuesFreezed
+                          archivedQuestion={item}
                         />
                       );
                     }
@@ -50,11 +51,12 @@ const SectionFreezed = ({ archivedData }) => {
                     ) {
                       return (
                         <QuestionItem
-                          question={item}
+                          questionId={item.questionId}
                           approvalSectionTitle={title}
                           key={item.questionId}
                           disabled
                           isQuesFreezed
+                          archivedQuestion={item}
                         />
                       );
                     }

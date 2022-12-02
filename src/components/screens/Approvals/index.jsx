@@ -22,9 +22,9 @@ import FilterButton from './FilterButton';
 
 const Approvals = () => {
   const approvals = useSelector(state => state.approvals.allApprovals);
-  // const filters = useSelector(state => state.approvals.filters);
+  const filters = useSelector(state => state.approvals.filters);
   const [isShowFilters, setIsShowFilters] = useState(false);
-  // const proposalQuestions = useSelector(selectProposalQuestions);
+  const proposalQuestions = useSelector(selectProposalQuestions);
   const [loading, setLoading] = useState(false);
   const [warning, setWarning] = useState(false);
   const [warningTitle, setWarningTitle] = useState('');
@@ -55,10 +55,10 @@ const Approvals = () => {
     return () => {};
   }, [memoizeBid]);
 
-  // useEffect(() => {
-  //   // const quesHashData = generateQuestionsHash(proposalQuestions, filters);
-  //   // dispatch(setQuestionHashAction(quesHashData));
-  // }, [proposalQuestions, filters]);
+  useEffect(() => {
+    const quesHashData = generateQuestionsHash(proposalQuestions, filters);
+    dispatch(setQuestionHashAction(quesHashData));
+  }, [proposalQuestions, filters]);
 
   return (
     <div className="approvals-tab">
