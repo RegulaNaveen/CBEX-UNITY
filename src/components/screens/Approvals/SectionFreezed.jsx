@@ -1,10 +1,17 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
 import Grid from 'apollo-react/components/Grid';
 import QuestionItem from './QuestionItem';
 
-const SectionFreezed = ({ archivedData }) => {
+const SectionFreezed = ({ ApprovalSectionId }) => {
+  const approval = useSelector(state =>
+    state.approvals.allApprovals.find(
+      i => i.ApprovalSectionId === ApprovalSectionId
+    )
+  );
+  const archivedData = approval.ArchivedData;
   return (
     !isEmpty(archivedData) &&
     archivedData
@@ -30,11 +37,12 @@ const SectionFreezed = ({ archivedData }) => {
                     ) {
                       return (
                         <QuestionItem
-                          question={item}
+                          questionId={item.questionId}
                           approvalSectionTitle={title}
                           key={item.questionId}
                           disabled
                           isQuesFreezed
+                          archivedQuestion={item}
                         />
                       );
                     }
@@ -50,11 +58,12 @@ const SectionFreezed = ({ archivedData }) => {
                     ) {
                       return (
                         <QuestionItem
-                          question={item}
+                          questionId={item.questionId}
                           approvalSectionTitle={title}
                           key={item.questionId}
                           disabled
                           isQuesFreezed
+                          archivedQuestion={item}
                         />
                       );
                     }
@@ -70,7 +79,7 @@ const SectionFreezed = ({ archivedData }) => {
 };
 
 SectionFreezed.propTypes = {
-  archivedData: PropTypes.array.isRequired
+  ApprovalSectionId: PropTypes.string.isRequired
 };
 
 export default SectionFreezed;

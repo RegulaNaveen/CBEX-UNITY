@@ -160,6 +160,11 @@ export const selectIsQuestionsFilterEnabled = state =>
 export const selectProposalQuestions = state =>
   proposalSelectors.selectProposalQuestions(state);
 
+export const getQuestion = questionId => state =>
+  proposalSelectors
+    .selectProposalQuestions(state)
+    .find(i => i.questionId === questionId);
+
 export const selectSections = state => proposalSelectors.selectSections(state);
 
 export const selectFilteredSections = state =>

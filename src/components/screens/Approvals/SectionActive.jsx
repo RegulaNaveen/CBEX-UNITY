@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
@@ -11,11 +11,30 @@ const SectionActive = ({
   ApprovalSectionId,
   ApprovalSectionTitle = '',
   ApprovalSectionLeftQuestions: leftQues = [],
-  ApprovalSectionRightQuestions: rightQues = []
+  ApprovalSectionRightQuestions: rightQues = [],
+  setIsAllActiveDisplayed
 }) => {
-  const questionHash = useSelector(state => state.approvals.quesHashData);
   const { id: proposalId, isCurrent } = useSelector(getSelectedBid)?.toJS();
   const selectedBidIsCurrent = !!isCurrent;
+
+  // Stores the hash of visible questions
+  // Used to decide the visibility of a section
+  const [questionVisibility, setQuestionVisibility] = useState({});
+  const isAllQuestionsVisible = useMemo(() => {
+    const valuesArr = Object.values(questionVisibility) || [];
+    if (valuesArr.length > 0 && valuesArr.every(i => i === false)) {
+      return false;
+    }
+    return true;
+  }, [questionVisibility]);
+  const updateQuestionVisibility = (questionId, value) => {
+    setQuestionVisibility(i => {
+      return { ...i, [questionId]: value };
+    });
+  };
+  useEffect(() => {
+    setIsAllActiveDisplayed(isAllQuestionsVisible);
+  }, [isAllQuestionsVisible]);
 
   return (
     <Grid container className="approval-ques">
@@ -26,10 +45,11 @@ const SectionActive = ({
         {!isEmpty(leftQues) &&
           leftQues.map(item => (
             <QuestionItem
-              question={questionHash[item] || {}}
+              questionId={item}
               approvalSectionTitle={ApprovalSectionTitle}
               key={item}
               disabled={!selectedBidIsCurrent}
+              updateQuestionVisibility={updateQuestionVisibility}
             />
           ))}
       </Grid>
@@ -37,10 +57,11 @@ const SectionActive = ({
         {!isEmpty(rightQues) &&
           rightQues.map(item => (
             <QuestionItem
-              question={questionHash[item] || {}}
+              questionId={item}
               approvalSectionTitle={ApprovalSectionTitle}
               key={item}
               disabled={!selectedBidIsCurrent}
+              updateQuestionVisibility={updateQuestionVisibility}
             />
           ))}
       </Grid>
@@ -59,7 +80,8 @@ SectionActive.propTypes = {
   ApprovalSectionId: PropTypes.string.isRequired,
   ApprovalSectionTitle: PropTypes.string.isRequired,
   ApprovalSectionLeftQuestions: PropTypes.array.isRequired,
-  ApprovalSectionRightQuestions: PropTypes.array.isRequired
+  ApprovalSectionRightQuestions: PropTypes.array.isRequired,
+  setIsAllActiveDisplayed: PropTypes.func.isRequired
 };
 
 export default SectionActive;

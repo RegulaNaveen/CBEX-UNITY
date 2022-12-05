@@ -32,25 +32,26 @@ export const getAllNotifications = notification =>
         }
         break;
       }
-      case 'ANSWER_TAG': {
-        if (
-          item.bodyJson &&
-          item.bodyJson.questionAnswer &&
-          item.bodyJson.questionText
-        ) {
-          item.body = item.body.replace(
-            `${item.bodyJson.questionText} ${item.bodyJson.questionAnswer}`,
-            `<a style="display: inline-block;" target="_blank" href="${onClickLink(
-              item.opportunity_no,
-              item.id,
-              item.bodyJson?.bidNo || null
-            )}">${item.bodyJson.questionText} ${
-              item.bodyJson.questionAnswer
-            }</a>`
-          );
-        }
-        break;
-      }
+      // FIXME: 2056 -> Make hyperlink only if it redirects user to that particular question
+      // case 'ANSWER_TAG': {
+      //   if (
+      //     item.bodyJson &&
+      //     item.bodyJson.questionAnswer &&
+      //     item.bodyJson.questionText
+      //   ) {
+      //     item.body = item.body.replace(
+      //       `${item.bodyJson.questionText} ${item.bodyJson.questionAnswer}`,
+      //       `<a style="display: inline-block;" target="_blank" href="${onClickLink(
+      //         item.opportunity_no,
+      //         item.id,
+      //         item.bodyJson?.bidNo || null
+      //       )}">${item.bodyJson.questionText} ${
+      //         item.bodyJson.questionAnswer
+      //       }</a>`
+      //     );
+      //   }
+      //   break;
+      // }
       default:
         break;
     }

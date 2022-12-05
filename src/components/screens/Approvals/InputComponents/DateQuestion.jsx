@@ -16,42 +16,53 @@ const DateQuestion = ({
 }) => {
   const dispatch = useDispatch();
   const { questionLockWrapper, questionUnlockWrapper } = socketContext;
-  const resetDate = () => {
-    const { proposalId, questionId } = question;
-    dispatch(
-      setProposalAnswerData(
-        socketContext,
-        proposalId,
-        questionId,
-        ' ',
-        userData,
-        null,
-        true
-      )
-    );
-    trackMatomoEventSubmitAnswer(' ');
-  };
-
-  const handleDayChange = (selectedDay, lastAnswerValue = '') => {
-    const { proposalId, questionId } = question;
-
-    if (
-      parseMomentDate(lastAnswerValue.trim()) !==
-        parseMomentDate(selectedDay.trim()) &&
-      selectedDay
-    ) {
-      dispatch(
+  const resetDate = async () => {
+    try {
+      const { proposalId, questionId } = question;
+      await dispatch(
         setProposalAnswerData(
           socketContext,
           proposalId,
           questionId,
-          selectedDay,
+          ' ',
           userData,
           null,
           true
         )
       );
-      trackMatomoEventSubmitAnswer(selectedDay);
+      questionUnlockWrapper(question?.questionId);
+      trackMatomoEventSubmitAnswer(' ');
+    } catch (error) {
+      console.error(error);
+      questionUnlockWrapper(question?.questionId);
+    }
+  };
+
+  const handleDayChange = async (selectedDay, lastAnswerValue = '') => {
+    try {
+      const { proposalId, questionId } = question;
+      if (
+        parseMomentDate(lastAnswerValue.trim()) !==
+          parseMomentDate(selectedDay.trim()) &&
+        selectedDay
+      ) {
+        await dispatch(
+          setProposalAnswerData(
+            socketContext,
+            proposalId,
+            questionId,
+            selectedDay,
+            userData,
+            null,
+            true
+          )
+        );
+        questionUnlockWrapper(question?.questionId);
+        trackMatomoEventSubmitAnswer(selectedDay);
+      }
+    } catch (error) {
+      console.error(error);
+      questionUnlockWrapper(question?.questionId);
     }
   };
 
@@ -61,12 +72,12 @@ const DateQuestion = ({
       value={lastAnswer.answer}
       resetDate={resetDate}
       handleDayChange={handleDayChange}
-      // onFocus={() => {
-      //   questionLockWrapper(question?.questionId);
-      // }}
-      // onBlur={() => {
-      //   questionUnlockWrapper(question?.questionId);
-      // }}
+      onFocus={() => {
+        questionLockWrapper(question?.questionId);
+      }}
+      onBlur={() => {
+        questionUnlockWrapper(question?.questionId);
+      }}
     />
   );
 };

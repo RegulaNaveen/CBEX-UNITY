@@ -34,6 +34,12 @@
       }
     }
 
+    .autocomplete-disabled {
+      .a-MuiChip-clickable {
+        z-index: 1;
+      }
+    }
+
     .accordion-body {
       position: relative;
       display: block;
@@ -187,10 +193,9 @@
     height: 60vh;
   }
   .approval-text-question {
-    .DraftEditor-editorContainer {
-      padding-top: 2px !important;
-      padding-bottom: 2px !important;
-      line-height: 8px !important;
+    .public-DraftStyleDefault-block {
+      margin-bottom: 0;
+      margin-top: 0;
     }
   }
 }

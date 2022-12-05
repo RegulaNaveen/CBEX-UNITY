@@ -17,19 +17,25 @@ const YesNoQuestion = ({
     const dispatch = useDispatch();
     const { questionLockWrapper, questionUnlockWrapper } = socketContext;
     const optionsYN = ['Yes', 'No'];
-    const changeHandler = (selectedValue, lastAns) => {
-      const { proposalId, questionId } = question;
-      if (lastAns !== selectedValue) {
-        dispatch(
-          setProposalAnswerData(
-            socketContext,
-            proposalId,
-            questionId,
-            selectedValue,
-            userData
-          )
-        );
-        trackMatomoEventSubmitAnswer(selectedValue);
+    const changeHandler = async (selectedValue, lastAns) => {
+      try {
+        const { proposalId, questionId } = question;
+        if (lastAns !== selectedValue) {
+          await dispatch(
+            setProposalAnswerData(
+              socketContext,
+              proposalId,
+              questionId,
+              selectedValue,
+              userData
+            )
+          );
+          questionUnlockWrapper(question?.questionId);
+          trackMatomoEventSubmitAnswer(selectedValue);
+        }
+      } catch (error) {
+        console.error(error);
+        questionUnlockWrapper(question?.questionId);
       }
     };
 
@@ -41,12 +47,12 @@ const YesNoQuestion = ({
           questionId={question.questionId}
           value={lastAnswer.answer}
           onClick={val => changeHandler(val, lastAnswer.answer)}
-          // onFocus={() => {
-          //   questionLockWrapper(question?.questionId);
-          // }}
-          // onBlur={() => {
-          //   questionUnlockWrapper(question?.questionId);
-          // }}
+          onFocus={() => {
+            questionLockWrapper(question?.questionId);
+          }}
+          onBlur={() => {
+            questionUnlockWrapper(question?.questionId);
+          }}
         />
       </>
     );
