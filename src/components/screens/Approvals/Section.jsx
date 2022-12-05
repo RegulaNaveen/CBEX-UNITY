@@ -23,11 +23,14 @@ const Section = ({ sectionId }) => {
       setSectionLoading(payload);
     }
   };
-
   const approval = useSelector(state =>
     state.approvals.allApprovals.find(i => i.ApprovalSectionId === sectionId)
   );
-  const { ApprovalSectionTitle = '', ArchivedData = [] } = approval;
+  const {
+    ApprovalSectionTitle = '',
+    ArchivedData = [],
+    ApprovalSectionId
+  } = approval;
 
   const style = {
     display: !isAllActiveDisplayed ? 'none' : ''
@@ -50,7 +53,7 @@ const Section = ({ sectionId }) => {
           {sectionLoading && <Loader isInner />}
 
           {/* Component for all Freezed Approval */}
-          <SectionFreezed archivedData={ArchivedData} />
+          <SectionFreezed ApprovalSectionId={ApprovalSectionId} />
 
           {/* Component for Active Active */}
           <SectionActive
