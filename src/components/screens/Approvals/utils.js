@@ -23,16 +23,18 @@ export const getLastAnswer = question => {
 
 // Empty Answers are stored with a spaces
 const isAnswerEmpty = answer => isEmpty(answer) || answer === ' ';
+const isUnityPredicted = (lastAnswer = {}) =>
+  lastAnswer?.userName === 'UnityPredictedAnswer';
 
 // answeredFilter => Only answered
 const answeredFilter: Boolean = question => {
   const lastAnswer = getLastAnswer(question);
-  return !isAnswerEmpty(lastAnswer.answer);
+  return !isAnswerEmpty(lastAnswer.answer) && !isUnityPredicted(lastAnswer);
 };
-// UnansweredFilter => No Answers and Indetermined Answers
+// UnansweredFilter => No Answers, Indetermined Answers and Unity Predicted Answers
 const unansweredFilter: Boolean = question => {
   const lastAnswer = getLastAnswer(question);
-  return isAnswerEmpty(lastAnswer.answer);
+  return isAnswerEmpty(lastAnswer.answer) || isUnityPredicted(lastAnswer);
 };
 const responsibleFilter: Boolean = question => {
   const userRole = localStorage.getItem('userRole') || '';
