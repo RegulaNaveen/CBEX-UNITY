@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState, useEffect } from 'react';
 import Grid from 'apollo-react/components/Grid';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
@@ -29,16 +29,33 @@ import {
   getSelectedBid
 } from '../../../redux/selectors/proposal';
 import CustomLoader from './CustomLoader';
-import { getLastAnswer } from './utils';
+import { getLastAnswer, shouldShowQuestion } from './utils';
+import { getQuestion } from '../../../redux/selectors';
 
 const QuestionItem = ({
-  question = {},
+  questionId = '',
   approvalSectionTitle = '',
   disabled,
   isQuesFreezed,
+  archivedQuestion,
   eventCategories,
-  trackEvent
+  trackEvent,
+  updateQuestionVisibility
 }) => {
+  const question = isQuesFreezed
+    ? archivedQuestion
+    : useSelector(getQuestion(questionId));
+  const approvalFilters = useSelector(state => state.approvals.filters);
+  const isShowQuestion = shouldShowQuestion(question, approvalFilters);
+
+  useEffect(() => {
+    // Calculates the no of visibile questions
+    // Used to decide the visibility of a Section
+    if (!isQuesFreezed) {
+      updateQuestionVisibility(questionId, isShowQuestion);
+    }
+  }, [approvalFilters]);
+
   // Component will return null in case of empty question value
   if (isEmpty(question)) return null;
 
@@ -51,8 +68,8 @@ const QuestionItem = ({
   const opportunityData = allOppData[proposalId];
 
   const getUserData = () => ({
-    email: getUserName(),
-    name: getUserEmail(),
+    name: getUserName(),
+    email: getUserEmail(),
     role: getUserId()
   });
 
@@ -196,63 +213,78 @@ const QuestionItem = ({
   };
 
   return useMemo(
-    () => (
-      <>
-        <Box mt={2}>
-          <Grid container>
-            <Grid item xs={10} className="ques-title-cover">
-              <QuestionLabel questionLabel={question?.questionText || ''} />
+    () =>
+      isShowQuestion ? (
+        <>
+          <Box mt={2}>
+            <Grid container>
+              <Grid item xs={10} className="ques-title-cover">
+                <QuestionLabel questionLabel={question?.questionText || ''} />
+              </Grid>
+              <Grid item xs={2}>
+                {' '}
+              </Grid>
+              <Grid item xs={10} className="answer-input">
+                {renderQuestion()}
+              </Grid>
+              <Grid item xs={2} className="answer-actions">
+                <IconButton
+                  size="small"
+                  onClick={() => {
+                    setIsShowHistory(true);
+                  }}
+                >
+                  <CalendarIcon question={question} />
+                </IconButton>
+                {!isQuesFreezed && (
+                  <CustomLoader questionId={question.questionId} />
+                )}
+              </Grid>
             </Grid>
-            <Grid item xs={2}>
-              {' '}
-            </Grid>
-            <Grid item xs={10} className="answer-input">
-              {renderQuestion()}
-            </Grid>
-            <Grid item xs={2} className="answer-actions">
-              <IconButton
-                size="small"
-                onClick={() => {
-                  setIsShowHistory(true);
-                }}
-              >
-                <CalendarIcon question={question} />
-              </IconButton>
-              {!isQuesFreezed && (
-                <CustomLoader questionId={question.questionId} />
-              )}
-            </Grid>
-          </Grid>
-        </Box>
+          </Box>
 
-        {/* Answer History Component */}
-        {isShowHistory && (
-          <AnswerHistory
-            question={prepareAnswerHistoryData(question)}
-            tab="Approval"
-            isQuesFreezed={!!isQuesFreezed}
-            closeModal={() => {
-              setIsShowHistory(false);
-            }}
-          />
-        )}
-      </>
-    ),
-    [question, isShowHistory]
+          {/* Answer History Component */}
+          {isShowHistory && (
+            <AnswerHistory
+              question={prepareAnswerHistoryData(question)}
+              tab="Approval"
+              isQuesFreezed={!!isQuesFreezed}
+              closeModal={() => {
+                setIsShowHistory(false);
+              }}
+            />
+          )}
+        </>
+      ) : null,
+    [question, isShowHistory, isShowQuestion, approvalFilters]
   );
 };
 
 QuestionItem.defaultProps = {
   disabled: false,
-  isQuesFreezed: false
+  isQuesFreezed: false,
+  archivedQuestion: {
+    proposalId: '',
+    questionId: '',
+    questionText: '',
+    answerConfiguration: {
+      type: 'number'
+    },
+    answers: [],
+    visible: false,
+    active: false
+  },
+  updateQuestionVisibility: () => {}
 };
 QuestionItem.propTypes = {
-  question: PropTypes.object.isRequired,
+  questionId: PropTypes.string.isRequired,
   approvalSectionTitle: PropTypes.string.isRequired,
   disabled: PropTypes.any,
   isQuesFreezed: PropTypes.any,
   eventCategories: PropTypes.object.isRequired,
-  trackEvent: PropTypes.func.isRequired
+  trackEvent: PropTypes.func.isRequired,
+  archivedQuestion: PropTypes.any,
+  updateQuestionVisibility: PropTypes.func
 };
 
 export default MatomoHOC(QuestionItem);

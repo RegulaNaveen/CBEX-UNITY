@@ -7,14 +7,11 @@ import ClipboardCheck from 'apollo-react-icons/ClipboardCheck';
 import Card from 'apollo-react/components/Card';
 import {
   fetchAllApprovals,
-  setQuestionHashAction,
   fetchApprovalSendEmailFlag
 } from '../../../redux/actions/approval-actions';
 import { getSelectedBid } from '../../../redux/selectors/proposal';
 import Section from './Section';
 import BidHistory from '../../common/Bidhistory';
-import { selectProposalQuestions } from '../../../redux/selectors';
-import { generateQuestionsHash } from './utils';
 import { DEFAULT } from '../../../constants/app';
 import CustomModal from '../../common/CustomModal';
 import Filters from './Filters';
@@ -22,9 +19,7 @@ import FilterButton from './FilterButton';
 
 const Approvals = () => {
   const approvals = useSelector(state => state.approvals.allApprovals);
-  const filters = useSelector(state => state.approvals.filters);
   const [isShowFilters, setIsShowFilters] = useState(false);
-  const proposalQuestions = useSelector(selectProposalQuestions);
   const [loading, setLoading] = useState(false);
   const [warning, setWarning] = useState(false);
   const [warningTitle, setWarningTitle] = useState('');
@@ -55,11 +50,6 @@ const Approvals = () => {
     return () => {};
   }, [memoizeBid]);
 
-  useEffect(() => {
-    const quesHashData = generateQuestionsHash(proposalQuestions, filters);
-    dispatch(setQuestionHashAction(quesHashData));
-  }, [proposalQuestions, filters]);
-
   return (
     <div className="approvals-tab">
       <BidHistory data-testid="bid-history" />
@@ -80,6 +70,7 @@ const Approvals = () => {
             <Section
               key={approval.ApprovalSectionId}
               sectionId={approval.ApprovalSectionId}
+              title={approval.ApprovalSectionTitle}
             />
           ))
         ) : (
