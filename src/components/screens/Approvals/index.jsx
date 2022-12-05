@@ -7,7 +7,6 @@ import ClipboardCheck from 'apollo-react-icons/ClipboardCheck';
 import Card from 'apollo-react/components/Card';
 import {
   fetchAllApprovals,
-  setQuestionHashAction,
   fetchApprovalSendEmailFlag
 } from '../../../redux/actions/approval-actions';
 import { getSelectedBid } from '../../../redux/selectors/proposal';
@@ -71,6 +70,7 @@ const Approvals = () => {
             <Section
               key={approval.ApprovalSectionId}
               sectionId={approval.ApprovalSectionId}
+              title={approval.ApprovalSectionTitle}
             />
           ))
         ) : (

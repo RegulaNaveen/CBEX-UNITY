@@ -1,11 +1,8 @@
-import isEmpty from 'lodash/isEmpty';
 import { v4 as uuid } from 'uuid';
 import { APPROVALS } from '../../constants/types';
 
 const INITIAL_STATE = {
   allApprovals: [],
-  quesHashData: {},
-  isLoading: false,
   canSendEmail: false,
   filters: [
     {
@@ -36,35 +33,29 @@ const INITIAL_STATE = {
 };
 
 const setApprovals = (state, action) => {
-  return { ...state, allApprovals: action.payload };
-};
-
-const setQuesHash = (state, action) => {
-  return { ...state, quesHashData: action.payload };
-};
-
-const setLoading = (state, actions) => {
-  return { ...state, isLoading: actions.payload };
+  const { payload } = action;
+  return {
+    ...state,
+    allApprovals: payload.map(i => ({
+      ...i,
+      ArchivedData: i.ArchivedData.reverse()
+    }))
+  };
 };
 
 const duplicateApproval = (state, action) => {
-  const { sectionId, proposalId, quesHashData } = action.payload;
-  console.log({ quesHashData });
+  const { sectionId, proposalId, data } = action.payload;
 
   const modifiedApprovals = state.allApprovals.map(approval => {
     if (approval.ApprovalSectionId === sectionId) {
       const newFreezedData = {
         id: uuid(),
         proposal_id: proposalId,
-        section_id: approval.ApprovalSectionId,
-        section_title: approval.ApprovalSectionTitle,
-        section_order: approval.ApprovalSectionOrder,
-        section_left_questions: approval.ApprovalSectionLeftQuestions.map(
-          i => quesHashData[i]
-        ).filter(i => !isEmpty(i)),
-        section_right_questions: approval.ApprovalSectionRightQuestions.map(
-          i => quesHashData[i]
-        ).filter(i => !isEmpty(i))
+        section_id: data.ApprovalSectionId,
+        section_title: data.ApprovalSectionTitle,
+        section_order: data.ApprovalSectionOrder,
+        section_left_questions: data.ApprovalSectionLeftQuestions,
+        section_right_questions: data.ApprovalSectionRightQuestions
       };
 
       return {
@@ -75,8 +66,6 @@ const duplicateApproval = (state, action) => {
     return approval;
   });
 
-  console.log({ modifiedApprovals });
-
   return { ...state, allApprovals: modifiedApprovals };
 };
 
@@ -85,8 +74,8 @@ const deleteApprovals = (state, action) => {
 
   const modifiedApprovals = state.allApprovals.map(approval => {
     if (approval.ApprovalSectionId === sectionId) {
-      const [, ...rest] = approval.ArchivedData;
-      return { ...approval, ArchivedData: rest };
+      const removedLastData = approval.ArchivedData.slice(0, -1);
+      return { ...approval, ArchivedData: removedLastData };
     }
     return approval;
   });
@@ -109,8 +98,6 @@ const updateFilter = (state, action) => {
 
 const actionMap = {
   [APPROVALS.SET_APPROVALS]: setApprovals,
-  [APPROVALS.SET_QUES_HASH]: setQuesHash,
-  [APPROVALS.SET_LOADING]: setLoading,
   [APPROVALS.DUPLICATE_APPROVALS]: duplicateApproval,
   [APPROVALS.DELETE_APPROVALS]: deleteApprovals,
   [APPROVALS.SET_CAN_SEND_EMAIL_IN_APPROVALS]: setCanSendEmail,
