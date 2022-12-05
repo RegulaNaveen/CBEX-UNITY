@@ -11,34 +11,34 @@ import CustomAccordion from '../../common/CustomAccordion/CustomAccordion';
 import CustomAccordionSummary from '../../common/CustomAccordion/CustomAccordionSummary';
 import SectionActive from './SectionActive';
 import SectionFreezed from './SectionFreezed';
-import { shouldShowSection } from './utils';
 
 export const ApprovalContext = createContext();
 
-const Section = ({ sectionId }) => {
+const Section = ({ sectionId, title }) => {
   const [expanded, setExpanded] = useState(false);
   const [sectionLoading, setSectionLoading] = useState(false);
-  const questionHash = useSelector(state => state.approvals.quesHashData);
+  const [isAllActiveDisplayed, setIsAllActiveDisplayed] = useState(true);
   const dispatchLoadingEvent = (actionType, payload) => {
     if (actionType === 'SET_LOADING') {
       setSectionLoading(payload);
     }
   };
-
   const approval = useSelector(state =>
     state.approvals.allApprovals.find(i => i.ApprovalSectionId === sectionId)
   );
-  const { ApprovalSectionTitle = '', ArchivedData = [] } = approval;
+  const { ArchivedData = [] } = approval;
+  const style = { display: !isAllActiveDisplayed ? 'none' : '' };
 
-  const SectionContent = () => (
+  return (
     <ApprovalContext.Provider value={{ sectionLoading, dispatchLoadingEvent }}>
       <CustomAccordion
         className="accordion-container"
         expanded={expanded}
         onChange={() => setExpanded(prev => !prev)}
+        style={style}
       >
         <CustomAccordionSummary>
-          <p className="accordion-title">{`${ApprovalSectionTitle}${
+          <p className="accordion-title">{`${title}${
             !isEmpty(ArchivedData) ? ' 1' : ''
           }`}</p>
         </CustomAccordionSummary>
@@ -46,21 +46,24 @@ const Section = ({ sectionId }) => {
           {/* Modal Loading */}
           {sectionLoading && <Loader isInner />}
 
-          {/* Component for all Freezed Approval */}
-          <SectionFreezed archivedData={ArchivedData} />
+          {/* Render all SectionFreezed Component */}
+          {!isEmpty(ArchivedData) &&
+            ArchivedData.map(item => <SectionFreezed {...item} />)}
 
           {/* Component for Active Active */}
-          <SectionActive {...omit(approval, ['ArchivedData'])} />
+          <SectionActive
+            {...omit(approval, ['ArchivedData'])}
+            setIsAllActiveDisplayed={setIsAllActiveDisplayed}
+          />
         </AccordionDetails>
       </CustomAccordion>
     </ApprovalContext.Provider>
   );
-
-  return shouldShowSection(questionHash, approval) ? <SectionContent /> : null;
 };
 
 Section.propTypes = {
-  sectionId: PropTypes.string.isRequired
+  sectionId: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired
 };
 
 export default React.memo(Section);

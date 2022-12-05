@@ -1,5 +1,5 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import isObject from 'lodash/isObject';
 import PropTypes from 'prop-types';
 import has from 'lodash/has';
@@ -8,6 +8,7 @@ import isEmpty from 'lodash/isEmpty';
 import CustomApolloRichText from '../../../common/CustomApolloRichText';
 import { parseStringifyJson } from '../../../../utils/helpers';
 import { setProposalAnswerData } from '../../../../redux/actions/proposal-actions';
+import { getCanUserTagInQuestion } from '../../../../redux/selectors/proposal';
 
 // Function to converted Answer String
 const getConvertedAnsString = str =>
@@ -27,6 +28,7 @@ const TextQuestion = ({
   const formattedAnswer =
     has(lastAnswer, 'formattedAnswer') && lastAnswer.formattedAnswer;
   const { questionLockWrapper, questionUnlockWrapper } = socketContext;
+  const canUserTagInQuestion = useSelector(getCanUserTagInQuestion);
 
   const parseFormattedData =
     !formattedAnswer || isObject(formattedAnswer)
@@ -38,27 +40,31 @@ const TextQuestion = ({
     value: { blocks: [] }
   };
 
-  const handleRichTextChange = editorData => {
-    const { proposalId, questionId } = question;
-    const { value, html, text } = editorData;
-
-    const editorText = text.trim() || ' ';
-
-    dispatch(
-      setProposalAnswerData(
-        socketContext,
-        proposalId,
-        questionId,
-        String(editorText),
-        userData,
-        {
-          value,
-          html
-        },
-        true
-      )
-    );
-    trackMatomoEventSubmitAnswer(editorData.text);
+  const handleRichTextChange = async editorData => {
+    try {
+      const { proposalId, questionId } = question;
+      const { value, html, text } = editorData;
+      const editorText = text.trim() || ' ';
+      await dispatch(
+        setProposalAnswerData(
+          socketContext,
+          proposalId,
+          questionId,
+          String(editorText),
+          userData,
+          {
+            value,
+            html
+          },
+          true
+        )
+      );
+      questionUnlockWrapper(question?.questionId);
+      trackMatomoEventSubmitAnswer(editorData.text);
+    } catch (error) {
+      console.error(error);
+      questionUnlockWrapper(question?.questionId);
+    }
   };
 
   const richtextProps = {
@@ -68,6 +74,8 @@ const TextQuestion = ({
     enableFocus: true,
     isEditable: false,
     disabled: checkDisableFlag() || disabled,
+    canUserTagInQuestion,
+
     onBlur: data => {
       let saveDate = false;
       const previousAnsText = getConvertedAnsString(answerValue).trim();
@@ -92,12 +100,13 @@ const TextQuestion = ({
 
       if (saveDate) {
         handleRichTextChange(data);
+      } else {
+        questionUnlockWrapper(question?.questionId);
       }
-      // questionUnlockWrapper(question?.questionId);
+    },
+    onFocus: () => {
+      questionLockWrapper(question?.questionId);
     }
-    // onFocus: () => {
-    //   questionLockWrapper(question?.questionId);
-    // }
   };
 
   return (

@@ -39,41 +39,39 @@ const CheckBoxQuestion = ({
       finalOptions = getCountryOptions();
     }
 
-    const changeHandler = textValue => {
-      const { proposalId, questionId } = question;
-
-      dispatch(
-        setProposalAnswerData(
-          socketContext,
-          proposalId,
-          questionId,
-          textValue,
-          userData
-        )
-      );
-      trackMatomoEventSubmitAnswer(textValue);
+    const changeHandler = async textValue => {
+      try {
+        const { proposalId, questionId } = question;
+        await dispatch(
+          setProposalAnswerData(
+            socketContext,
+            proposalId,
+            questionId,
+            textValue,
+            userData
+          )
+        );
+        questionUnlockWrapper(question?.questionId);
+        trackMatomoEventSubmitAnswer(textValue);
+      } catch (error) {
+        console.error(error);
+        questionUnlockWrapper(question?.questionId);
+      }
     };
 
     return (
-      <div
-        className="checkboxtype"
-        // onFocus={() => {
-        //   questionLockWrapper(question?.questionId);
-        // }}
-      >
+      <div className="checkboxtype">
         <CheckBoxQuestions
           answerValue={answerValue}
           finalOptions={finalOptions}
-          disabled={!!disabled}
-          onOpen={() => {}}
-          onClose={() => {}}
+          disabled={checkDisableFlag() || !!disabled}
+          onOpen={() => {
+            questionLockWrapper(question?.questionId);
+          }}
+          onClose={() => {
+            questionUnlockWrapper(question?.questionId);
+          }}
           onChange={e => changeHandler(e)}
-          // onFocus={() => {
-          //   questionLockWrapper(question?.questionId);
-          // }}
-          // onBlur={() => {
-          //   questionUnlockWrapper(question?.questionId);
-          // }}
         />
       </div>
     );

@@ -16,19 +16,24 @@ const SelectQuestion = ({
   const dispatch = useDispatch();
   const { questionLockWrapper, questionUnlockWrapper } = socketContext;
 
-  const changeHandler = textValue => {
-    const { proposalId, questionId } = question;
-
-    dispatch(
-      setProposalAnswerData(
-        socketContext,
-        proposalId,
-        questionId,
-        textValue,
-        userData
-      )
-    );
-    trackMatomoEventSubmitAnswer(textValue);
+  const changeHandler = async textValue => {
+    try {
+      const { proposalId, questionId } = question;
+      await dispatch(
+        setProposalAnswerData(
+          socketContext,
+          proposalId,
+          questionId,
+          textValue,
+          userData
+        )
+      );
+      questionUnlockWrapper(question?.questionId);
+      trackMatomoEventSubmitAnswer(textValue);
+    } catch (error) {
+      console.error(error);
+      questionUnlockWrapper(question?.questionId);
+    }
   };
 
   return (
@@ -36,12 +41,12 @@ const SelectQuestion = ({
       sfObject={question.sfObject}
       sfField={question.sfField}
       lov={question?.answerConfiguration?.options}
-      // onFocus={() => {
-      //   questionLockWrapper(question?.questionId);
-      // }}
-      // onBlur={() => {
-      //   questionUnlockWrapper(question?.questionId);
-      // }}
+      onFocus={() => {
+        questionLockWrapper(question?.questionId);
+      }}
+      onBlur={() => {
+        questionUnlockWrapper(question?.questionId);
+      }}
       disabled={checkDisableFlag() || !!disabled}
       answer={lastAnswer.answer}
       onChange={changeHandler}
