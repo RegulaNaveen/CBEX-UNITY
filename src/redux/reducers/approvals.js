@@ -38,7 +38,7 @@ const setApprovals = (state, action) => {
     ...state,
     allApprovals: payload.map(i => ({
       ...i,
-      ArchivedData: i.ArchivedData.reverse()
+      ArchivedData: i.ArchivedData?.reverse() || []
     }))
   };
 };
