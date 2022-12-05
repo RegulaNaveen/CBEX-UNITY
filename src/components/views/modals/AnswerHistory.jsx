@@ -416,11 +416,15 @@ class AnswerHistory extends Component<Props> {
         }
         if (isValidatedUnityPredictedAnswer) {
           return (
-            <span key={uuidv4()}>
+            <span key={uuidv4()} className="unity-predicted-section">
               {answers.get(index).get('userName') === 'UnityPredictedAnswer' &&
               answers.get(index + 1).get('userName') ===
                 'UnityPredictedAnswer' ? (
-                `${_answer.get('answer')}`
+                questionType === 'date' ? (
+                  `${parseMomentDate(_answer.get('answer'))}`
+                ) : (
+                  `${_answer.get('answer')}`
+                )
               ) : (
                 <b>Validated Unity Predicted Answer</b>
               )}
@@ -429,12 +433,12 @@ class AnswerHistory extends Component<Props> {
         }
         if (isPicklistValidUnityPredAns) {
           return (
-            <span key={uuidv4()}>
+            <span key={uuidv4()} className="unity-predicted-section">
               {answers.get(index).get('userName') === 'UnityPredictedAnswer' &&
               answers.get(index + 1).get('userName') ===
                 'UnityPredictedAnswer' ? (
                 _answer.get('answer').map(singleAnswer => (
-                  <li key={uuidv4()} className="">
+                  <li key={uuidv4()} className="multi-select-answer-history">
                     {singleAnswer}
                   </li>
                 ))
