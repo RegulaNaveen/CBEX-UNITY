@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import isObject from 'lodash/isObject';
 import PropTypes from 'prop-types';
@@ -40,27 +40,31 @@ const TextQuestion = ({
     value: { blocks: [] }
   };
 
-  const handleRichTextChange = editorData => {
-    const { proposalId, questionId } = question;
-    const { value, html, text } = editorData;
-
-    const editorText = text.trim() || ' ';
-
-    dispatch(
-      setProposalAnswerData(
-        socketContext,
-        proposalId,
-        questionId,
-        String(editorText),
-        userData,
-        {
-          value,
-          html
-        },
-        true
-      )
-    );
-    trackMatomoEventSubmitAnswer(editorData.text);
+  const handleRichTextChange = async editorData => {
+    try {
+      const { proposalId, questionId } = question;
+      const { value, html, text } = editorData;
+      const editorText = text.trim() || ' ';
+      await dispatch(
+        setProposalAnswerData(
+          socketContext,
+          proposalId,
+          questionId,
+          String(editorText),
+          userData,
+          {
+            value,
+            html
+          },
+          true
+        )
+      );
+      questionUnlockWrapper(question?.questionId);
+      trackMatomoEventSubmitAnswer(editorData.text);
+    } catch (error) {
+      console.error(error);
+      questionUnlockWrapper(question?.questionId);
+    }
   };
 
   const richtextProps = {
@@ -96,12 +100,13 @@ const TextQuestion = ({
 
       if (saveDate) {
         handleRichTextChange(data);
+      } else {
+        questionUnlockWrapper(question?.questionId);
       }
-      // questionUnlockWrapper(question?.questionId);
+    },
+    onFocus: () => {
+      questionLockWrapper(question?.questionId);
     }
-    // onFocus: () => {
-    //   questionLockWrapper(question?.questionId);
-    // }
   };
 
   return (
