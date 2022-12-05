@@ -47,7 +47,7 @@ const ProposalCard = ({
 
   const checkNoDataClass = (keyToCheck: string) =>
     keyToCheck === NO_DATA ? NO_DATA_PLACEHOLDER : undefined;
-  console.log({ title }, { opportunityName }, { isApprovalCountPresent });
+
   return (
     <div className="card">
       <div className="header-section">
