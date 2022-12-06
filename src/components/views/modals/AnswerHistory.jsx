@@ -52,7 +52,61 @@ let indexNo;
 let questionIdentifier;
 let bidNo = '';
 let isCurrentBid = '';
-let taggedUserFormat;
+
+function handleUserMentionInAnswer(formattedAnswer = null) {
+  let finalAnswer = '';
+  try {
+    const formattedAnswerJSON = JSON.parse(formattedAnswer);
+    let mentions = [];
+    let offset = 0;
+
+    formattedAnswerJSON.value.blocks.forEach(block => {
+      const texts = [];
+      let { text, entityRanges } = block;
+      if (Array.isArray(entityRanges) && entityRanges.length > 0) {
+        entityRanges = entityRanges.reverse();
+        entityRanges.forEach(entity => {
+          mentions.push({
+            start: offset + entity.offset,
+            end: offset + entity.offset + entity.length
+          });
+        });
+      }
+
+      let lastText = '';
+      mentions = mentions.sort((a, b) => a.start - b.start);
+      const mentionsStartList = mentions.map(m => m.start);
+      for (let i = 0; i < text.length; i++) {
+        const mentionIndex = mentionsStartList.findIndex(m => m === i + offset);
+        if (mentionIndex > -1) {
+          if (lastText.length > 0) {
+            texts.push(lastText);
+            lastText = '';
+          }
+          texts.push(
+            `@${text.slice(
+              mentions[mentionIndex].start,
+              mentions[mentionIndex].end
+            )}`
+          );
+          i = mentions[mentionIndex].end - offset - 1;
+          continue;
+        }
+        lastText = text[i];
+        texts.push(lastText);
+      }
+      finalAnswer += texts.join('');
+      offset += text.length;
+    });
+  } catch (e) {
+    console.log(
+      '[AnswerHistory: handleUserMentionInAnswer] Error in parsing formattedAnswer for user tags'
+    );
+    finalAnswer = '';
+  }
+  return finalAnswer;
+}
+
 class AnswerHistory extends Component<Props> {
   static contextType = SocketContext;
 
@@ -353,7 +407,13 @@ class AnswerHistory extends Component<Props> {
     return answers.map((_answer, index) => {
       const userName = _answer.get('userName') || 'Default User';
       const date = _answer.get('date');
-      let answer = _answer.get('answer');
+      // get formattedAnswer if present or fallback to answer
+      let answer = _answer.get('formattedAnswer', null);
+      if (answer !== null) {
+        answer = handleUserMentionInAnswer(answer);
+      } else {
+        answer = _answer.get('answer');
+      }
       const proposalId = _answer.get('proposalId');
       indexNo = index;
       if (
@@ -369,9 +429,16 @@ class AnswerHistory extends Component<Props> {
                 .proposalDetails.bidNo
             : 'NA';
       }
-      const nextAnswer = answers.get(index + 1)
-        ? answers.get(index + 1).get('answer')
-        : answer;
+
+      let nextAnswer = answer;
+      if (answers.get(index + 1)) {
+        nextAnswer = answers.get(index + 1).get('formattedAnswer', null);
+        if (nextAnswer !== null) {
+          nextAnswer = handleUserMentionInAnswer(nextAnswer);
+        } else {
+          nextAnswer = answer;
+        }
+      }
 
       const isValidatedUnityPredictedAnswer =
         questionType !== ANSWER_TYPES.PICKLIST &&
@@ -403,17 +470,6 @@ class AnswerHistory extends Component<Props> {
         const isFirstItem = index === 0;
         const isLastItem = index === answers.toJS().length - 1;
         const isOnlyOneAnswer = answers.toJS().length === 1;
-        // checking if last answer is empty and the answer before is unitypredicted
-        const formattedAnswer = answers?.get(index)?.get('formattedAnswer');
-        const newFormattedAnswer = this.parseJson(formattedAnswer);
-        if (
-          isObject(newFormattedAnswer) &&
-          newFormattedAnswer.hasOwnProperty('htmlExport')
-        ) {
-          taggedUserFormat = newFormattedAnswer.htmlExport.match(
-            /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
-          );
-        }
         if (isValidatedUnityPredictedAnswer) {
           return (
             <span key={uuidv4()} className="unity-predicted-section">
@@ -490,22 +546,9 @@ class AnswerHistory extends Component<Props> {
             const diffAnswers = diffWordsWithSpace(nextAnswer, answer);
             return rearrangeDiff(diffAnswers).map(
               ({ value, added, removed }) => {
-                const newValue =
-                  taggedUserFormat?.map(item => {
-                    const extractedValue =
-                      this.extractName(item)
-                        .charAt(0)
-                        .toUpperCase() +
-                      this.extractName(item)
-                        .slice(1)
-                        .toLowerCase();
-                    return extractedValue.match(value.split(' ')[0])
-                      ? value.replace(extractedValue, `@${extractedValue}`)
-                      : null;
-                  }) || value;
-                if (removed) return renderWord(newValue, 'removed');
-                if (added) return renderWord(newValue, 'changed');
-                return <span key={uuidv4()}>{newValue} </span>;
+                if (removed) return renderWord(value, 'removed');
+                if (added) return renderWord(value, 'changed');
+                return <span key={uuidv4()}>{value} </span>;
               }
             );
           }
