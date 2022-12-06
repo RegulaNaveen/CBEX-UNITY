@@ -12,12 +12,10 @@ import {
 } from '../../../redux/actions/approval-actions';
 import {
   getOpportunityData,
-  getSelectedBid
+  getSelectedBid,
+  selectProposalQuestions
 } from '../../../redux/selectors/proposal';
-import {
-  selectCanSendEmail,
-  selectQuestionsHash
-} from '../../../redux/selectors/approvals';
+import { selectCanSendEmail } from '../../../redux/selectors/approvals';
 import {
   generateApprovalEmailInfo,
   generateApprovalEmailURL
@@ -26,6 +24,7 @@ import { getProposalDetails } from '../../../redux/selectors';
 import { APPROVALS, DEFAULT } from '../../../constants/app';
 import CustomModal from '../../common/CustomModal';
 import MatomoHOC from '../../HOC/MatomoHOC';
+import { cloneDeep } from 'lodash';
 
 const ActionButtons = ({
   sectionId,
@@ -43,8 +42,9 @@ const ActionButtons = ({
     state.approvals.allApprovals.find(i => i.ApprovalSectionId === sectionId)
   );
   const canSendEmail = useSelector(selectCanSendEmail);
-  const questionsMap = useSelector(selectQuestionsHash);
   const proposalDetails = useSelector(getProposalDetails);
+  const proposalQuestions = useSelector(selectProposalQuestions);
+  const approvalFilters = useSelector(state => state.approvals.filters);
 
   const { ArchivedData = [] } = approval;
 
@@ -167,8 +167,9 @@ const ActionButtons = ({
   async function handleSendEmailClick() {
     const emailInfo = generateApprovalEmailInfo(
       approval,
-      Object.values(questionsMap),
-      proposalDetails
+      cloneDeep(proposalQuestions),
+      proposalDetails,
+      approvalFilters
     );
     trackMatomoEventSubmitAnswer('Email', approval);
     try {
