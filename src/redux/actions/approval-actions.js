@@ -6,7 +6,7 @@ import {
 import { DEFAULT } from '../../constants/app';
 import featureFlags from '../../constants/featureFlags';
 import { APPROVALS } from '../../constants/types';
-import { getErrorMessage } from '../../utils/utils';
+import { getErrorMessage, getApprovalCount } from '../../utils/utils';
 import launchDarkly from '../../utils/launchDarkly';
 
 export const setAllApprovals = data => ({
@@ -14,16 +14,20 @@ export const setAllApprovals = data => ({
   payload: data
 });
 
-export const fetchAllApprovals = proposalId => async dispatch => {
+export const fetchAllApprovals = (proposalId, questions) => async dispatch => {
   try {
     // Api Response
-    const response = await getApprovalsApi(proposalId);
-    console.log('fetch all Approval response: ', response.data.data);
-    dispatch(setAllApprovals(response.data.data));
-    return { status: true, title: DEFAULT.SUCCESS, data: response.data.data };
+    const response = await getApprovalsApi(proposalId, questions);
+    let { data } = response.data;
+    const finalApproval = await getApprovalCount(data, questions);
+    if (finalApproval === 0) {
+      data = [];
+    }
+    console.log('fetch all Approval response: ', data);
+    dispatch(setAllApprovals(data));
+    return { status: true, title: DEFAULT.SUCCESS, data };
   } catch (error) {
     // Error
-    console.log(error.response);
     const message = getErrorMessage(error);
     return { status: false, title: DEFAULT.ALERT, message };
   }
