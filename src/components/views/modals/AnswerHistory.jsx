@@ -408,9 +408,11 @@ class AnswerHistory extends Component<Props> {
       const userName = _answer.get('userName') || 'Default User';
       const date = _answer.get('date');
       // get formattedAnswer if present or fallback to answer
-      let answer = _answer.get('formattedAnswer', null);
-      if (answer !== null) {
-        answer = handleUserMentionInAnswer(answer);
+      const answerCheck = _answer.get('formattedAnswer');
+      let answer = _answer.get('answer');
+      if (!isEmpty(answerCheck)) {
+        answer =
+          handleUserMentionInAnswer(answerCheck) || _answer.get('answer');
       } else {
         answer = _answer.get('answer');
       }
@@ -430,13 +432,21 @@ class AnswerHistory extends Component<Props> {
             : 'NA';
       }
 
-      let nextAnswer = answer;
+      const nextAnswerCheck = answers?.get(index + 1)?.get('formattedAnswer');
+      let nextAnswer = answers.get(index + 1)
+        ? answers.get(index + 1).get('answer')
+        : answer;
+
       if (answers.get(index + 1)) {
-        nextAnswer = answers.get(index + 1).get('formattedAnswer', null);
-        if (nextAnswer !== null) {
-          nextAnswer = handleUserMentionInAnswer(nextAnswer);
+        nextAnswer = answers.get(index + 1).get('formattedAnswer');
+        if (!isEmpty(nextAnswerCheck)) {
+          nextAnswer =
+            handleUserMentionInAnswer(nextAnswerCheck) ||
+            answers.get(index + 1).get('answer');
         } else {
-          nextAnswer = answer;
+          nextAnswer = answers.get(index + 1)
+            ? answers.get(index + 1).get('answer')
+            : answer;
         }
       }
 
