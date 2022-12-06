@@ -15,7 +15,7 @@ import { shouldShowSection } from './utils';
 
 export const ApprovalContext = createContext();
 
-const Section = ({ sectionId, title }) => {
+const Section = ({ sectionId, title, testVisibility }) => {
   const [expanded, setExpanded] = useState(false);
   const [sectionLoading, setSectionLoading] = useState(false);
   const [isAllActiveDisplayed, setIsAllActiveDisplayed] = useState(true);
@@ -40,7 +40,7 @@ const Section = ({ sectionId, title }) => {
 
   return (
     <>
-      {sectionVisibility ? (
+      {sectionVisibility || testVisibility ? (
         <ApprovalContext.Provider
           value={{ sectionLoading, dispatchLoadingEvent }}
         >
@@ -76,9 +76,13 @@ const Section = ({ sectionId, title }) => {
   );
 };
 
+Section.defaultProps = {
+  testVisibility: false // Used only for unit testing
+};
 Section.propTypes = {
   sectionId: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
+  testVisibility: PropTypes.bool
 };
 
 export default React.memo(Section);

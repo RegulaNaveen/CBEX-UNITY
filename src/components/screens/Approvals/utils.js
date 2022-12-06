@@ -56,35 +56,42 @@ const informedFilter: Boolean = question => {
 };
 
 export const shouldShowQuestion = (question = {}, approvalfilters): Boolean => {
-  const filterAnswers = [];
-  const appliedFilters = approvalfilters.filter(i => i.value).map(i => i.name);
-  if (question.visible && question.active) {
-    filterAnswers.push(true);
-
-    // Filters for roles group
-    if (appliedFilters.includes('responsible')) {
-      filterAnswers.push(responsibleFilter(question));
-    }
-    if (appliedFilters.includes('informed')) {
-      filterAnswers.push(informedFilter(question));
-    }
-
-    // Filters For answer group
-    if (
-      appliedFilters.includes('answered') &&
-      appliedFilters.includes('unanswered')
-    ) {
+  try {
+    const filterAnswers = [];
+    const appliedFilters = approvalfilters
+      .filter(i => i.value)
+      .map(i => i.name);
+    if (question.visible && question.active) {
       filterAnswers.push(true);
-    } else {
-      if (appliedFilters.includes('answered')) {
-        filterAnswers.push(answeredFilter(question));
+
+      // Filters for roles group
+      if (appliedFilters.includes('responsible')) {
+        filterAnswers.push(responsibleFilter(question));
       }
-      if (appliedFilters.includes('unanswered')) {
-        filterAnswers.push(unansweredFilter(question));
+      if (appliedFilters.includes('informed')) {
+        filterAnswers.push(informedFilter(question));
+      }
+
+      // Filters For answer group
+      if (
+        appliedFilters.includes('answered') &&
+        appliedFilters.includes('unanswered')
+      ) {
+        filterAnswers.push(true);
+      } else {
+        if (appliedFilters.includes('answered')) {
+          filterAnswers.push(answeredFilter(question));
+        }
+        if (appliedFilters.includes('unanswered')) {
+          filterAnswers.push(unansweredFilter(question));
+        }
       }
     }
+    return filterAnswers.length > 0 && filterAnswers.every(i => i === true);
+  } catch (error) {
+    console.error(error);
+    return false;
   }
-  return filterAnswers.length > 0 && filterAnswers.every(i => i === true);
 };
 
 export const shouldShowSection = sectionId => {
