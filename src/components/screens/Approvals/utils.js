@@ -1,6 +1,7 @@
 // @flow
 /* eslint no-param-reassign: 0 */
 import isEmpty from 'lodash/isEmpty';
+import { store } from '../../../store';
 
 /**
  * Function to get the last answer object from a proposal question object
@@ -84,4 +85,34 @@ export const shouldShowQuestion = (question = {}, approvalfilters): Boolean => {
     }
   }
   return filterAnswers.length > 0 && filterAnswers.every(i => i === true);
+};
+
+export const shouldShowSection = sectionId => {
+  try {
+    const state = store.getState();
+    const allApprovals = state.approvals.allApprovals;
+    const approvalsFilters = state.approvals.filters;
+    const proposalQuestions = state.proposal.get('proposalQuestions');
+    const approvalSection =
+      allApprovals.find(i => i.ApprovalSectionId === sectionId) || {};
+    const leftQuestions = approvalSection.ApprovalSectionLeftQuestions || [];
+    const rightQuestions = approvalSection.ApprovalSectionRightQuestions || [];
+    const questionIds = [...leftQuestions, ...rightQuestions];
+    const visibilityArr = [];
+    questionIds.forEach(questionId => {
+      const questionObj =
+        proposalQuestions.find(i => i.questionId === questionId) || {};
+      const isQuestionVisible = shouldShowQuestion(
+        questionObj,
+        approvalsFilters
+      );
+      visibilityArr.push(isQuestionVisible);
+    });
+    const returnValue =
+      visibilityArr.length > 0 && visibilityArr.some(i => i === true);
+    return returnValue;
+  } catch (error) {
+    console.error(error);
+    return true;
+  }
 };
