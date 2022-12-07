@@ -31,7 +31,8 @@ const formatProposal = (proposal: Object): Object => {
     opportunityName,
     opportunityOverview,
     usersList,
-    approvalsCount
+    approvalsCount,
+    isApprovalCountPresent
   } = proposal;
 
   if (!isEmpty(opportunityOverview)) {
@@ -50,6 +51,7 @@ const formatProposal = (proposal: Object): Object => {
       opportunityOverview.OpportunityStatus || '';
     formattedProposal.usersList = usersList;
     formattedProposal.approvalsCount = approvalsCount;
+    formattedProposal.isApprovalCountPresent = isApprovalCountPresent;
     return formattedProposal;
   }
 

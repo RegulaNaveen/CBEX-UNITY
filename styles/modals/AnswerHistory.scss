@@ -111,6 +111,12 @@
             &.changed {
               color: $neptune-secondary;
             }
+            &.multi-select-answer-history {
+              margin-left: 0px;
+            }
+            &.unity-predicted-section {
+              display: flex;
+            }
           }
 
           p:first-of-type {

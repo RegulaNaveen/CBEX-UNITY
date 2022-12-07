@@ -17,7 +17,8 @@ type Props = {
   therapeuticArea: string,
   verbatimIndication: string,
   proposalId: string,
-  approvalsCount: any
+  approvalsCount: any,
+  isApprovalCountPresent: Boolean
 };
 
 const ProposalCard = ({
@@ -31,7 +32,8 @@ const ProposalCard = ({
   therapeuticArea,
   verbatimIndication,
   proposalId,
-  approvalsCount
+  approvalsCount,
+  isApprovalCountPresent
 }: Props) => {
   function setProposalTypeView({
     currentTarget
@@ -45,6 +47,7 @@ const ProposalCard = ({
 
   const checkNoDataClass = (keyToCheck: string) =>
     keyToCheck === NO_DATA ? NO_DATA_PLACEHOLDER : undefined;
+
   return (
     <div className="card">
       <div className="header-section">
@@ -117,23 +120,19 @@ const ProposalCard = ({
           id="approvals"
           role="presentation"
           onClick={setProposalTypeView}
-          disabled={!approvalsCount || approvalsCount <= 0}
+          disabled={!isApprovalCountPresent}
         >
-          {!approvalsCount || approvalsCount <= 0 ? (
+          {!isApprovalCountPresent ? (
             <ThumbsUp
               fontSize="large"
-              htmlColor={
-                !approvalsCount || approvalsCount <= 0 ? '#7f7f7f' : '#1faa00'
-              }
+              htmlColor={!isApprovalCountPresent ? '#7f7f7f' : '#1faa00'}
               style={{ transform: 'scaleX(-1)' }}
             />
           ) : (
             <Link to={`${OPPORTUNITY}${title}?viewType=approvals`}>
               <ThumbsUp
                 fontSize="large"
-                htmlColor={
-                  !approvalsCount || approvalsCount <= 0 ? '#7f7f7f' : '#1faa00'
-                }
+                htmlColor={!isApprovalCountPresent ? '#7f7f7f' : '#1faa00'}
                 style={{ transform: 'scaleX(-1)' }}
               />
             </Link>
