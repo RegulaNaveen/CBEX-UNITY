@@ -3,6 +3,7 @@ import Grid from 'apollo-react/components/Grid';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import Box from 'apollo-react/components/Box';
+import Typography from 'apollo-react/components/Typography';
 import IconButton from 'apollo-react/components/IconButton';
 import { Map, List, fromJS } from 'immutable';
 import isEmpty from 'lodash/isEmpty';
@@ -144,18 +145,19 @@ const QuestionItem = ({
     });
   };
 
+  const isQuestionLocked = () => {
+    return question?.questionLockInfo && question?.questionLockInfo?.userInfo;
+  };
+
+  const isQuestionLockedByOther = () => {
+    return (
+      isQuestionLocked() &&
+      getUserEmail() !== question?.questionLockInfo?.userInfo
+    );
+  };
+
   const renderQuestion = () => {
     const lastAnswer = getLastAnswer(question);
-    const isQuestionLocked = () => {
-      return question?.questionLockInfo && question?.questionLockInfo?.userInfo;
-    };
-
-    const isQuestionLockedByOther = () => {
-      return (
-        isQuestionLocked() &&
-        getUserEmail() !== question?.questionLockInfo?.userInfo
-      );
-    };
 
     const checkDisableFlag = () => {
       if (isQuestionLockedByOther()) return true;
@@ -219,6 +221,13 @@ const QuestionItem = ({
           <Box mt={2}>
             <Grid container>
               <Grid item xs={10} className="ques-title-cover">
+                {question?.answerConfiguration?.type === ANSWER_TYPES.TEXT &&
+                !isEmpty(question?.questionLockInfo) &&
+                isQuestionLockedByOther() ? (
+                  <Typography variant="subtitle1" className="status-txt">
+                    {question.questionLockInfo?.userName} is typing...
+                  </Typography>
+                ) : null}
                 <QuestionLabel questionLabel={question?.questionText || ''} />
               </Grid>
               <Grid item xs={2}>
