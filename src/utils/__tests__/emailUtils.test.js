@@ -395,7 +395,7 @@ describe('emailUtils generateApprovalEmailInfo unit tests', () => {
     expect(result).toHaveProperty('body');
   });
 
-  it('should return suject with decision answer', () => {
+  it('should return subject with decision answer', () => {
     const approvalSection = {
       ApprovalSectionTitle: 'Strategy Approval test 01',
       ApprovalSectionRightQuestions: ['32c0b1ac-a2cc-403c-84a8-7e3dfd6fa580'],
@@ -432,7 +432,7 @@ describe('emailUtils generateApprovalEmailInfo unit tests', () => {
           '<div data-contents="true"><div data-block="true" data-editor="2hg89" data-offset-key="s536q-0-0"><div data-offset-key="s536q-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="s536q-0-0"><span data-text="true">Customer Accounts/span></span></div></div></div>',
         questionHintJSON: '',
         questionHintHTML: '',
-        active: false,
+        active: true,
         integration: '',
         events: '',
         notApplicable: false,
@@ -578,7 +578,8 @@ describe('emailUtils generateApprovalEmailInfo unit tests', () => {
     const result = generateApprovalEmailInfo(
       approvalSection,
       mockQuestions,
-      {}
+      {},
+      []
     );
     expect(result.subject).toMatch(/Decision answer/);
   });

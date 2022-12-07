@@ -31,7 +31,8 @@ describe('Send Email Button tests', () => {
     store.dispatch(
       setAllApprovals([
         {
-          ApprovalSectionId: 'test-id'
+          ApprovalSectionId: 'test-id',
+          ArchivedData: []
         }
       ])
     );
@@ -59,7 +60,8 @@ describe('Send Email Button tests', () => {
     store.dispatch(
       setAllApprovals([
         {
-          ApprovalSectionId: 'test-id'
+          ApprovalSectionId: 'test-id',
+          ArchivedData: []
         }
       ])
     );
@@ -86,12 +88,13 @@ describe('Send Email Button tests', () => {
     });
   });
 
-  it.skip('should call click handler on clicking email button', async () => {
+  it('should call click handler on clicking email button', async () => {
     const props = { sectionId: 'test-id' };
     store.dispatch(
       setAllApprovals([
         {
-          ApprovalSectionId: 'test-id'
+          ApprovalSectionId: 'test-id',
+          ArchivedData: []
         }
       ])
     );

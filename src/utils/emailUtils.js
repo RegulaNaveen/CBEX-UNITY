@@ -5,6 +5,7 @@ import {
   RTE_DATA_ATTR_REGEXP,
   PROPOSAL_TEAM_EMAIL_MATCH_REGEXP
 } from '../constants/app';
+import { shouldShowQuestion } from '../components/screens/Approvals/utils';
 
 export function getProposalTeamUsers(questions = []) {
   let answers = new Set();
@@ -81,7 +82,8 @@ function formatProposalTeamAnswers(answer) {
 export function generateApprovalEmailInfo(
   approvalSection,
   allQuestions,
-  proposalDetails = {}
+  proposalDetails = {},
+  approvalFilters = []
 ) {
   let emailSubject = '';
   const emailHead = `
@@ -193,6 +195,10 @@ export function generateApprovalEmailInfo(
     if (approvalQuestionIds.length > 0) {
       questionsForThisApproval = allQuestions.filter(question =>
         approvalQuestionIds.includes(question.questionId)
+      );
+      // applying approval filter(s)
+      questionsForThisApproval = questionsForThisApproval.filter(q =>
+        shouldShowQuestion(q, approvalFilters)
       );
       const approversQuestion = questionsForThisApproval.find(
         question => question.questionText === 'Approvers'
