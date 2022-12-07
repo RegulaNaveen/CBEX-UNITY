@@ -122,6 +122,41 @@ function logLobDetails(record) {
  * function to rearrange diff'ed answers from diff js library
  */
 
+const getApprovalCount = (approvals, proposalQuestions) => {
+  try {
+    const finalapproval = [];
+    return new Promise(resolve => {
+      let approvalCount = 0;
+      if (approvals.length) {
+        // eslint-disable-next-line array-callback-return
+        approvals.map(v => {
+          if (
+            v.ApprovalSectionLeftQuestions.length ||
+            v.ApprovalSectionRightQuestions.length
+          ) {
+            const arr = [
+              ...v.ApprovalSectionLeftQuestions,
+              ...v.ApprovalSectionRightQuestions
+            ];
+            const uniqueQuestionID = new Set();
+            const extendedSet = new Set([...uniqueQuestionID, ...arr]);
+            const res = proposalQuestions.some(
+              c => c.active && extendedSet.has(c.questionId)
+            );
+            if (res) {
+              approvalCount += 1;
+              finalapproval.push(v);
+            }
+          }
+        });
+      }
+      resolve({ approvalCount, finalapproval });
+    });
+  } catch (error) {
+    console.log(`error in getApprovalCount`, error);
+  }
+};
+
 function rearrangeDiff(diffAnswers) {
   let rearrangedDiffAnswers = [];
   let subAdditionDiffAnswers = [];
@@ -283,5 +318,6 @@ export {
   updateEventSubjectBody,
   saveDataInMatomo,
   throttle,
-  createMatomoObj
+  createMatomoObj,
+  getApprovalCount
 };
