@@ -76,35 +76,39 @@ const QuestionItem = ({
 
   const prepareAnswerHistoryData = questionData => {
     let questionMap = fromJS(questionData);
+    try {
+      // This Logic was copy pasted from src/components/screens/opportunity/Questions.jsx
+      // It prepares answer data for a specific answer type.
+      // If possible move this logic inside AnswerHistory component to avoid duplication of code
+      const answerConfigType = questionMap
+        .get('answerConfiguration', Map({ type: '' }))
+        .get('type', '');
+      const sfObject = questionMap.get('sfObject', '');
+      const sfField = questionMap.get('sfField', '');
+      if (
+        answerConfigType === ANSWER_TYPES.PICKLIST &&
+        (sfObject === 'Bid_History__c' ||
+          sfObject === 'Apttus__APTS_Agreement__c') &&
+        sfField === 'Targeted_Countries__c'
+      ) {
+        let newAnswers = questionMap.get('answers', List());
+        const questionId = newAnswers.get('questionId');
 
-    // This Logic was copy pasted from src/components/screens/opportunity/Questions.jsx
-    // It prepares answer data for a specific answer type.
-    // If possible move this logic inside AnswerHistory component to avoid duplication of code
-    const answerConfigType = questionMap
-      .get('answerConfiguration', Map({ type: '' }))
-      .get('type', '');
-    const sfObject = questionMap.get('sfObject', '');
-    const sfField = questionMap.get('sfField', '');
-    if (
-      answerConfigType === ANSWER_TYPES.PICKLIST &&
-      (sfObject === 'Bid_History__c' ||
-        sfObject === 'Apttus__APTS_Agreement__c') &&
-      sfField === 'Targeted_Countries__c'
-    ) {
-      let newAnswers = questionMap.get('answers', List());
-      const questionId = newAnswers.get('questionId');
-
-      if (questionId) newAnswers = newAnswers.getIn(['answers', 'answers']);
-      if (newAnswers) {
-        newAnswers = newAnswers.map(ans => {
-          const newAns = getCountriesNameForCode(ans.get('answer', List()));
-          return ans.set('answer', newAns);
-        });
-        questionMap = questionMap.set('answers', newAnswers);
+        if (questionId) newAnswers = newAnswers.getIn(['answers', 'answers']);
+        if (newAnswers) {
+          newAnswers = newAnswers.map(ans => {
+            const newAns = getCountriesNameForCode(ans.get('answer', List()));
+            return ans.set('answer', newAns);
+          });
+          questionMap = questionMap.set('answers', newAnswers);
+        }
       }
+      // END of copied Logic
+      return questionMap;
+    } catch (error) {
+      console.error(error);
+      return questionMap;
     }
-    // END of copied Logic
-    return questionMap;
   };
 
   const FallbackComponent = () => {
