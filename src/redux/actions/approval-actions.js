@@ -48,6 +48,7 @@ export const deleteApproval = (proposalId, sectionId) => async (
     );
     console.log('Delete Approval response: ', response.data);
     dispatch(deleteApprovalAction(sectionId));
+    await new Promise(resolve => setTimeout(resolve, 1000));
     return { status: true, title: DEFAULT.SUCCESS, data: response.data };
   } catch (error) {
     // Error
@@ -70,6 +71,7 @@ export const duplicateApproval = (proposalId, sectionId) => async dispatch => {
     dispatch(
       duplicateApprovalAction(sectionId, proposalId, response.data.data)
     );
+    await new Promise(resolve => setTimeout(resolve, 1000));
     return { status: true, title: DEFAULT.SUCCESS, data: response.data.data };
   } catch (error) {
     // Error
