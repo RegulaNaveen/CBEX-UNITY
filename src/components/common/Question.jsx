@@ -806,7 +806,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         )
           if (
             isEmpty(richTextData.value?.blocks) &&
-            lastAnswerJS?.answer === data.value?.blocks[0]?.text
+            lastAnswerJS?.answer === data.text
           )
             saveDate = false;
           else saveDate = true;
