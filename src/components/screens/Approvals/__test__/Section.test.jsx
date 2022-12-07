@@ -20,7 +20,10 @@ describe('Approval Section Component', () => {
         <ApprovalContext.Provider
           value={{ sectionLoading: false, dispatchLoadingEvent: jest.fn() }}
         >
-          <Section sectionId="d791a317-8f1b-488b-85cb-4247fca2b156" />
+          <Section
+            sectionId="d791a317-8f1b-488b-85cb-4247fca2b156"
+            testVisibility
+          />
         </ApprovalContext.Provider>
       </Provider>
     );
