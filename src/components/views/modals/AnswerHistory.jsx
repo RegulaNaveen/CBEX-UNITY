@@ -53,7 +53,7 @@ let questionIdentifier;
 let bidNo = '';
 let isCurrentBid = '';
 
-function handleUserMentionInAnswer(formattedAnswer = null) {
+function handleUserMentionInAnswer(formattedAnswer = null, answer = '') {
   let finalAnswer = '';
   try {
     const formattedAnswerJSON = JSON.parse(formattedAnswer);
@@ -61,7 +61,6 @@ function handleUserMentionInAnswer(formattedAnswer = null) {
     let offset = 0;
 
     formattedAnswerJSON.value.blocks.forEach(block => {
-      const texts = [];
       let { text, entityRanges } = block;
       if (Array.isArray(entityRanges) && entityRanges.length > 0) {
         entityRanges = entityRanges.reverse();
@@ -80,29 +79,27 @@ function handleUserMentionInAnswer(formattedAnswer = null) {
         const mentionIndex = mentionsStartList.findIndex(m => m === i + offset);
         if (mentionIndex > -1) {
           if (lastText.length > 0) {
-            texts.push(lastText);
+            finalAnswer += lastText;
             lastText = '';
           }
-          texts.push(
-            `@${text.slice(
-              mentions[mentionIndex].start,
-              mentions[mentionIndex].end
-            )}`
-          );
+          finalAnswer += `@${text.slice(
+            mentions[mentionIndex].start - offset,
+            mentions[mentionIndex].end - offset
+          )}`;
           i = mentions[mentionIndex].end - offset - 1;
           continue;
         }
-        lastText = text[i];
-        texts.push(lastText);
+        finalAnswer += text[i];
       }
-      finalAnswer += texts.join('');
+      finalAnswer += ' ';
       offset += text.length;
     });
   } catch (e) {
     console.log(
-      '[AnswerHistory: handleUserMentionInAnswer] Error in parsing formattedAnswer for user tags'
+      '[AnswerHistory: handleUserMentionInAnswer] Error in parsing formattedAnswer for user tags',
+      e
     );
-    finalAnswer = '';
+    finalAnswer = answer;
   }
   return finalAnswer;
 }
@@ -412,7 +409,8 @@ class AnswerHistory extends Component<Props> {
       let answer = _answer.get('answer');
       if (!isEmpty(answerCheck)) {
         answer =
-          handleUserMentionInAnswer(answerCheck) || _answer.get('answer');
+          handleUserMentionInAnswer(answerCheck, _answer.get('answer')) ||
+          _answer.get('answer');
       } else {
         answer = _answer.get('answer');
       }
@@ -441,7 +439,7 @@ class AnswerHistory extends Component<Props> {
         nextAnswer = answers.get(index + 1).get('formattedAnswer');
         if (!isEmpty(nextAnswerCheck)) {
           nextAnswer =
-            handleUserMentionInAnswer(nextAnswerCheck) ||
+            handleUserMentionInAnswer(nextAnswerCheck, nextAnswer) ||
             answers.get(index + 1).get('answer');
         } else {
           nextAnswer = answers.get(index + 1)
