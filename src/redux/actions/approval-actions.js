@@ -19,15 +19,21 @@ export const fetchAllApprovals = (proposalId, questions) => async dispatch => {
     // Api Response
     const response = await getApprovalsApi(proposalId, questions);
     let { data } = response.data;
-    const finalApproval = await getApprovalCount(data, questions);
-    if (finalApproval === 0) {
+    const { approvalCount, finalapproval } = await getApprovalCount(
+      data,
+      questions
+    );
+    if (approvalCount && approvalCount === 0) {
       data = [];
+    } else {
+      data = finalapproval;
     }
     console.log('fetch all Approval response: ', data);
     dispatch(setAllApprovals(data));
     return { status: true, title: DEFAULT.SUCCESS, data };
   } catch (error) {
     // Error
+    console.log(`error`, error);
     const message = getErrorMessage(error);
     return { status: false, title: DEFAULT.ALERT, message };
   }

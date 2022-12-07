@@ -124,6 +124,7 @@ function logLobDetails(record) {
 
 const getApprovalCount = (approvals, proposalQuestions) => {
   try {
+    const finalapproval = [];
     return new Promise(resolve => {
       let approvalCount = 0;
       if (approvals.length) {
@@ -144,11 +145,12 @@ const getApprovalCount = (approvals, proposalQuestions) => {
             );
             if (res) {
               approvalCount += 1;
+              finalapproval.push(v);
             }
           }
         });
       }
-      resolve(approvalCount);
+      resolve({ approvalCount, finalapproval });
     });
   } catch (error) {
     console.log(`error in getApprovalCount`, error);
