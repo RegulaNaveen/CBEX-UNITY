@@ -196,6 +196,13 @@
     .public-DraftStyleDefault-block {
       margin: 2px 0px;
     }
+    .answer-grid-item {
+      .autocomplete {
+        .a-MuiChip-label {
+          max-width: 350px;
+        }
+      }
+    }
   }
   .fade-area {
     opacity: 0.1;
