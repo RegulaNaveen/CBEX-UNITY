@@ -72,6 +72,8 @@ const CheckBoxQuestion = ({
             questionUnlockWrapper(question?.questionId);
           }}
           onChange={e => changeHandler(e)}
+          sfField={sfField}
+          sfObject={sfObject}
         />
       </div>
     );

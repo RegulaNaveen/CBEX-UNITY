@@ -6,7 +6,7 @@ import {
 import { DEFAULT } from '../../constants/app';
 import featureFlags from '../../constants/featureFlags';
 import { APPROVALS } from '../../constants/types';
-import { getErrorMessage } from '../../utils/utils';
+import { getErrorMessage, getApprovalCount } from '../../utils/utils';
 import launchDarkly from '../../utils/launchDarkly';
 
 export const setAllApprovals = data => ({
@@ -14,16 +14,26 @@ export const setAllApprovals = data => ({
   payload: data
 });
 
-export const fetchAllApprovals = proposalId => async dispatch => {
+export const fetchAllApprovals = (proposalId, questions) => async dispatch => {
   try {
     // Api Response
-    const response = await getApprovalsApi(proposalId);
-    console.log('fetch all Approval response: ', response.data.data);
-    dispatch(setAllApprovals(response.data.data));
-    return { status: true, title: DEFAULT.SUCCESS, data: response.data.data };
+    const response = await getApprovalsApi(proposalId, questions);
+    let { data } = response.data;
+    const { approvalCount, finalapproval } = await getApprovalCount(
+      data,
+      questions
+    );
+    if (approvalCount && approvalCount === 0) {
+      data = [];
+    } else {
+      data = finalapproval;
+    }
+    console.log('fetch all Approval response: ', data);
+    dispatch(setAllApprovals(data));
+    return { status: true, title: DEFAULT.SUCCESS, data };
   } catch (error) {
     // Error
-    console.log(error.response);
+    console.log(`error`, error);
     const message = getErrorMessage(error);
     return { status: false, title: DEFAULT.ALERT, message };
   }
@@ -48,6 +58,7 @@ export const deleteApproval = (proposalId, sectionId) => async (
     );
     console.log('Delete Approval response: ', response.data);
     dispatch(deleteApprovalAction(sectionId));
+    await new Promise(resolve => setTimeout(resolve, 1000));
     return { status: true, title: DEFAULT.SUCCESS, data: response.data };
   } catch (error) {
     // Error
@@ -70,6 +81,7 @@ export const duplicateApproval = (proposalId, sectionId) => async dispatch => {
     dispatch(
       duplicateApprovalAction(sectionId, proposalId, response.data.data)
     );
+    await new Promise(resolve => setTimeout(resolve, 1000));
     return { status: true, title: DEFAULT.SUCCESS, data: response.data.data };
   } catch (error) {
     // Error

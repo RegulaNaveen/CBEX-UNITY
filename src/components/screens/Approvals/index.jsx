@@ -9,7 +9,10 @@ import {
   fetchAllApprovals,
   fetchApprovalSendEmailFlag
 } from '../../../redux/actions/approval-actions';
-import { getSelectedBid } from '../../../redux/selectors/proposal';
+import {
+  getSelectedBid,
+  getProposalQuestions
+} from '../../../redux/selectors/proposal';
 import Section from './Section';
 import BidHistory from '../../common/Bidhistory';
 import { DEFAULT } from '../../../constants/app';
@@ -19,6 +22,7 @@ import FilterButton from './FilterButton';
 
 const Approvals = () => {
   const approvals = useSelector(state => state.approvals.allApprovals);
+  const questions = useSelector(getProposalQuestions);
   const [isShowFilters, setIsShowFilters] = useState(false);
   const [loading, setLoading] = useState(false);
   const [warning, setWarning] = useState(false);
@@ -39,7 +43,7 @@ const Approvals = () => {
     setLoading(true);
 
     (async () => {
-      const response = await dispatch(fetchAllApprovals(proposalId));
+      const response = await dispatch(fetchAllApprovals(proposalId, questions));
       setLoading(false);
       if (!response.status) {
         setWarningTitle(response.title);

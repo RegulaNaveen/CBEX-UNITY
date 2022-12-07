@@ -6,6 +6,11 @@
   .all-approvals-container {
     position: relative;
 
+    .custom-autocomplete
+      .a-MuiAutocomplete-inputRoot[class*='MuiOutlinedInput-root'][class*='MuiOutlinedInput-marginDense'] {
+      min-height: 40px;
+    }
+
     .a-MuiOutlinedInput-root.Mui-disabled {
       cursor: default;
       pointer-events: none;
@@ -197,5 +202,11 @@
       margin-bottom: 0;
       margin-top: 0;
     }
+  }
+  .status-txt {
+    color: $neptune-primary;
+    font-weight: 500;
+    font-size: 12px;
+    font-style: italic;
   }
 }

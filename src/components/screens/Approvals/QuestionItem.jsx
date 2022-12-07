@@ -3,6 +3,7 @@ import Grid from 'apollo-react/components/Grid';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import Box from 'apollo-react/components/Box';
+import Typography from 'apollo-react/components/Typography';
 import IconButton from 'apollo-react/components/IconButton';
 import { Map, List, fromJS } from 'immutable';
 import isEmpty from 'lodash/isEmpty';
@@ -75,35 +76,39 @@ const QuestionItem = ({
 
   const prepareAnswerHistoryData = questionData => {
     let questionMap = fromJS(questionData);
+    try {
+      // This Logic was copy pasted from src/components/screens/opportunity/Questions.jsx
+      // It prepares answer data for a specific answer type.
+      // If possible move this logic inside AnswerHistory component to avoid duplication of code
+      const answerConfigType = questionMap
+        .get('answerConfiguration', Map({ type: '' }))
+        .get('type', '');
+      const sfObject = questionMap.get('sfObject', '');
+      const sfField = questionMap.get('sfField', '');
+      if (
+        answerConfigType === ANSWER_TYPES.PICKLIST &&
+        (sfObject === 'Bid_History__c' ||
+          sfObject === 'Apttus__APTS_Agreement__c') &&
+        sfField === 'Targeted_Countries__c'
+      ) {
+        let newAnswers = questionMap.get('answers', List());
+        const questionId = newAnswers.get('questionId');
 
-    // This Logic was copy pasted from src/components/screens/opportunity/Questions.jsx
-    // It prepares answer data for a specific answer type.
-    // If possible move this logic inside AnswerHistory component to avoid duplication of code
-    const answerConfigType = questionMap
-      .get('answerConfiguration', Map({ type: '' }))
-      .get('type', '');
-    const sfObject = questionMap.get('sfObject', '');
-    const sfField = questionMap.get('sfField', '');
-    if (
-      answerConfigType === ANSWER_TYPES.PICKLIST &&
-      (sfObject === 'Bid_History__c' ||
-        sfObject === 'Apttus__APTS_Agreement__c') &&
-      sfField === 'Targeted_Countries__c'
-    ) {
-      let newAnswers = questionMap.get('answers', List());
-      const questionId = newAnswers.get('questionId');
-
-      if (questionId) newAnswers = newAnswers.getIn(['answers', 'answers']);
-      if (newAnswers) {
-        newAnswers = newAnswers.map(ans => {
-          const newAns = getCountriesNameForCode(ans.get('answer', List()));
-          return ans.set('answer', newAns);
-        });
-        questionMap = questionMap.set('answers', newAnswers);
+        if (questionId) newAnswers = newAnswers.getIn(['answers', 'answers']);
+        if (newAnswers) {
+          newAnswers = newAnswers.map(ans => {
+            const newAns = getCountriesNameForCode(ans.get('answer', List()));
+            return ans.set('answer', newAns);
+          });
+          questionMap = questionMap.set('answers', newAnswers);
+        }
       }
+      // END of copied Logic
+      return questionMap;
+    } catch (error) {
+      console.error(error);
+      return questionMap;
     }
-    // END of copied Logic
-    return questionMap;
   };
 
   const FallbackComponent = () => {
@@ -144,18 +149,19 @@ const QuestionItem = ({
     });
   };
 
+  const isQuestionLocked = () => {
+    return question?.questionLockInfo && question?.questionLockInfo?.userInfo;
+  };
+
+  const isQuestionLockedByOther = () => {
+    return (
+      isQuestionLocked() &&
+      getUserEmail() !== question?.questionLockInfo?.userInfo
+    );
+  };
+
   const renderQuestion = () => {
     const lastAnswer = getLastAnswer(question);
-    const isQuestionLocked = () => {
-      return question?.questionLockInfo && question?.questionLockInfo?.userInfo;
-    };
-
-    const isQuestionLockedByOther = () => {
-      return (
-        isQuestionLocked() &&
-        getUserEmail() !== question?.questionLockInfo?.userInfo
-      );
-    };
 
     const checkDisableFlag = () => {
       if (isQuestionLockedByOther()) return true;
@@ -219,6 +225,13 @@ const QuestionItem = ({
           <Box mt={2}>
             <Grid container>
               <Grid item xs={10} className="ques-title-cover">
+                {question?.answerConfiguration?.type === ANSWER_TYPES.TEXT &&
+                !isEmpty(question?.questionLockInfo) &&
+                isQuestionLockedByOther() ? (
+                  <Typography variant="subtitle1" className="status-txt">
+                    {question.questionLockInfo?.userName} is typing...
+                  </Typography>
+                ) : null}
                 <QuestionLabel questionLabel={question?.questionText || ''} />
               </Grid>
               <Grid item xs={2}>

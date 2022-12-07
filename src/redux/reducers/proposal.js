@@ -274,6 +274,10 @@ const setOpportunityInfo = (state, action) => {
           'questionTemplateVersionNumber',
           proposal.proposal['questionTemplateVersionNumber'] || ''
         )
+        .set(
+          'isApprovalCountPresent',
+          proposal.proposal['isApprovalCountPresent'] || false
+        )
         .set('opportunityType', proposal.proposal['opportunityType'] || '')
         .set('isCurrent', true)
         .set('bidStatus', proposal.proposal['inProgress'] || false)
@@ -343,7 +347,8 @@ const onChangeBid = (state: Map, action: Object): Map => {
     accountId,
     proposalDetails,
     opportunityType,
-    questionTemplateVersionNumber: templateversion
+    questionTemplateVersionNumber: templateversion,
+    isApprovalCountPresent
   } = opportunityData.getIn([payload.bid.bidId, 'proposal']);
   let selectedBid = Map({
     id: payload.bid.bidId,
@@ -351,6 +356,7 @@ const onChangeBid = (state: Map, action: Object): Map => {
     pertinentDetails: payload.bid.pertinentDetails,
     bidName: payload.bid.bidName,
     questionTemplateVersionNumber: templateversion || '',
+    isApprovalCountPresent: isApprovalCountPresent || false,
     opportunityType: opportunityType || '',
     agreementId: agreementId || '',
     accountId: accountId || '',
@@ -441,6 +447,10 @@ const addNewBid = (state: Map, action: Object): Map => {
     .set(
       'questionTemplateVersionNumber',
       data.proposal['questionTemplateVersionNumber'] || ''
+    )
+    .set(
+      'isApprovalCountPresent',
+      data.proposal['isApprovalCountPresent'] || false
     )
     .set('opportunityType', data.proposal['opportunityType'] || '')
     .set('isCurrent', true)
