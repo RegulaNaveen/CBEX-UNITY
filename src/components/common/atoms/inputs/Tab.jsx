@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
-import { shallowEqual, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Questions from '../../../screens/Opportunity/Questions';
 import Documents from '../../../screens/Opportunity/Documents';
 import Validate from '../../../screens/Opportunity/Validate';
@@ -10,7 +10,6 @@ import featureFlags from '../../../../constants/featureFlags';
 import launchDarkly from '../../../../utils/launchDarkly';
 import {
   getOpportunityData,
-  getProposalQuestions,
   getSelectedBid
 } from '../../../../redux/selectors/proposal';
 import Approvals from '../../../screens/Approvals/index';
@@ -26,8 +25,8 @@ const UnityTab = ({
   const [showApprovalTab, setShowApprovalTab] = useState(false);
 
   const selectedBid = useSelector(getSelectedBid)?.toJS();
+  const isApprovalCount = selectedBid?.isApprovalCountPresent || false;
   const oppData = useSelector(getOpportunityData)?.toJS();
-  const proposalQuestions = useSelector(getProposalQuestions, shallowEqual);
   const memoizeBid = useMemo(() => selectedBid, [selectedBid?.id]);
   const proposalID = memoizeBid?.id;
   const history = useHistory();
@@ -60,14 +59,10 @@ const UnityTab = ({
   ];
 
   useEffect(() => {
-    if (proposalID) {
-      const opportunityData = oppData[proposalID];
-
-      if (opportunityData?.proposal?.approvals) {
-        setShowApprovalTab(true);
-      } else {
-        setShowApprovalTab(false);
-      }
+    if (isApprovalCount) {
+      setShowApprovalTab(true);
+    } else {
+      setShowApprovalTab(false);
     }
   }, []);
 
