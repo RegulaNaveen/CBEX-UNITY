@@ -6,6 +6,11 @@
   .all-approvals-container {
     position: relative;
 
+    .custom-autocomplete
+      .a-MuiAutocomplete-inputRoot[class*='MuiOutlinedInput-root'][class*='MuiOutlinedInput-marginDense'] {
+      min-height: 40px;
+    }
+
     .a-MuiOutlinedInput-root.Mui-disabled {
       cursor: default;
       pointer-events: none;

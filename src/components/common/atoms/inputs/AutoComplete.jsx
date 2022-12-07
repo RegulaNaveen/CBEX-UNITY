@@ -152,11 +152,16 @@ const Autocomplete = props => {
     // elem.classList.add('disable');
   };
   return (
-    <div className={`${disabled ? 'autocomplete-disabled' : 'autocomplete'}`}>
+    <div
+      className={`custom-autocomplete ${
+        disabled ? 'autocomplete-disabled' : 'autocomplete'
+      }`}
+    >
       <AutocompleteV2
         ref={autocompleteRef}
         fullWidth
         multiple
+        size="small"
         options={options || []}
         chipColor="white"
         limitChips={5}
