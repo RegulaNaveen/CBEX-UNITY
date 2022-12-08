@@ -1,8 +1,21 @@
 import React, { useEffect, useState, useRef } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import classNames from 'classnames';
-import Loader from 'apollo-react/components/Loader';
-import getADUsers from '../../api/getADUsers';
+import { CancelableADRequestApi } from '../../api/getADUsers';
+
+function formatUser(user, query) {
+  const name = `${user.first_name} ${user.last_name}`;
+  const queryMatchResult = name.match(new RegExp(query, 'i'));
+  if (queryMatchResult !== null) {
+    const start = queryMatchResult['index'];
+    const first = name.slice(0, start);
+    const matched = name.slice(start, start + query.length);
+    const last = name.slice(start + query.length, name.length);
+    return [first, <b>{matched}</b>, last, `(${user.email})`];
+  } else {
+    return [name, `(${user.email})`];
+  }
+}
 
 function TagUserListItem({ active, item, onClickHandler }) {
   const listItemRef = useRef(null);
@@ -28,12 +41,12 @@ function TagUserListItem({ active, item, onClickHandler }) {
       key={item.id}
       aria-hidden="true"
     >
-      {`${item.first_name} ${item.last_name}(${item.email})`}
+      {item.formattedUser}
     </li>
   );
 }
 
-const TagUserList = ({ searchTag, onSelect, close, updateSearchTag }) => {
+const TagUserList = ({ searchTag, onSelect, close }) => {
   const [fetchingUsers, setfetchingUsers] = useState(false);
   const [users, setUsers] = useState([]);
   const [activeOptionIndex, setActiveOptionIndex] = useState(0);
@@ -41,7 +54,12 @@ const TagUserList = ({ searchTag, onSelect, close, updateSearchTag }) => {
   async function fetchUsers() {
     setfetchingUsers(true);
     if (searchTag !== null && searchTag.length > 0) {
-      const usersList = await getADUsers(searchTag);
+      let usersList = await CancelableADRequestApi.getUsersByQuery(searchTag);
+      usersList = usersList.map(user => ({
+        ...user,
+        formattedUser: formatUser(user, searchTag)
+      }));
+      console.log(usersList);
       setUsers(usersList);
     } else {
       setUsers([]);
@@ -124,25 +142,7 @@ const TagUserList = ({ searchTag, onSelect, close, updateSearchTag }) => {
   if (fetchingUsers) {
     return (
       <div className="tag-user-list-loader">
-        <span
-          style={{
-            marginLeft: '0px',
-            marginRight: '6px',
-            position: 'relative',
-            top: '15px',
-            width: '20px'
-          }}
-        >
-          <Loader
-            isInner
-            size={20}
-            style={{
-              width: '20px',
-              height: '20px'
-            }}
-          />
-        </span>
-        <p>Fetching users...</p>
+        <p>Loading...</p>
       </div>
     );
   }
@@ -151,6 +151,7 @@ const TagUserList = ({ searchTag, onSelect, close, updateSearchTag }) => {
     return null;
   }
 
+  // Can be enhanced with Popper component
   return (
     <ul className="tag-user-list">
       {users.map((item, index) => (
