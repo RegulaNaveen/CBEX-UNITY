@@ -225,8 +225,7 @@ const QuestionItem = ({
           <Box mt={2}>
             <Grid container>
               <Grid item xs={10} className="ques-title-cover">
-                {question?.answerConfiguration?.type === ANSWER_TYPES.TEXT &&
-                !isEmpty(question?.questionLockInfo) &&
+                {!isEmpty(question?.questionLockInfo) &&
                 isQuestionLockedByOther() ? (
                   <Typography variant="subtitle1" className="status-txt">
                     {question.questionLockInfo?.userName} is typing...

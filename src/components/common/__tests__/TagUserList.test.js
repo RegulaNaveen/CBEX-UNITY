@@ -2,7 +2,7 @@ import React from 'react';
 import { render, waitFor, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import TagUserList from '../TagUserList';
-import * as getADUsers from '../../../api/getADUsers';
+import { CancelableADRequestApi } from '../../../api/getADUsers';
 import Sinon from 'sinon';
 
 describe('TagUserList unit tests', () => {
@@ -19,19 +19,19 @@ describe('TagUserList unit tests', () => {
     const props = {
       searchTag: 'a'
     };
-    const userlistStubCall = sandbox.stub(getADUsers, 'default').resolves([
-      {
-        first_name: 'John',
-        last_name: 'Doe',
-        email: 'johndoe@noone.himself'
-      }
-    ]);
+    const userlistStubCall = sandbox
+      .stub(CancelableADRequestApi, 'getUsersByQuery')
+      .resolves([
+        {
+          first_name: 'John',
+          last_name: 'Doe',
+          email: 'johndoe@noone.himself'
+        }
+      ]);
     const { findByText } = render(<TagUserList {...props} />);
     await waitFor(async () => {
       expect(userlistStubCall.callCount).toEqual(1);
-      expect(
-        await findByText('John Doe(johndoe@noone.himself)')
-      ).toBeInTheDocument();
+      expect(await findByText(/(johndoe@noone.himself)/)).toBeInTheDocument();
     });
   });
 
@@ -39,7 +39,10 @@ describe('TagUserList unit tests', () => {
     let props = {
       searchTag: null
     };
-    const userlistStubCall = sandbox.stub(getADUsers, 'default');
+    const userlistStubCall = sandbox.stub(
+      CancelableADRequestApi,
+      'getUsersByQuery'
+    );
     userlistStubCall.onCall(0).resolves([
       {
         first_name: 'John',
@@ -58,7 +61,10 @@ describe('TagUserList unit tests', () => {
     let props = {
       searchTag: 'a'
     };
-    const userlistStubCall = sandbox.stub(getADUsers, 'default');
+    const userlistStubCall = sandbox.stub(
+      CancelableADRequestApi,
+      'getUsersByQuery'
+    );
     userlistStubCall.withArgs('invalid').resolves([]);
     userlistStubCall.resolves([
       {
@@ -75,7 +81,7 @@ describe('TagUserList unit tests', () => {
     await waitFor(async () => {
       expect(userlistStubCall.callCount).toEqual(2);
       expect(
-        await queryByText('John Doe(johndoe@noone.himself)')
+        await queryByText(/(johndoe@noone.himself)/)
       ).not.toBeInTheDocument();
     });
   });
@@ -84,7 +90,9 @@ describe('TagUserList unit tests', () => {
     const props = {
       searchTag: 'a'
     };
-    const userlistStubCall = sandbox.stub(getADUsers, 'default').resolves([]);
+    const userlistStubCall = sandbox
+      .stub(CancelableADRequestApi, 'getUsersByQuery')
+      .resolves([]);
     const { findByText } = render(<TagUserList {...props} />);
     await waitFor(async () => {
       expect(userlistStubCall.callCount).toEqual(1);
@@ -99,22 +107,22 @@ describe('TagUserList unit tests', () => {
       onSelect: mockOnSelect,
       close: mockClose
     };
-    const userlistStubCall = sandbox.stub(getADUsers, 'default').resolves([
-      {
-        first_name: 'John',
-        last_name: 'Doe',
-        email: 'johndoe@noone.himself'
-      }
-    ]);
+    const userlistStubCall = sandbox
+      .stub(CancelableADRequestApi, 'getUsersByQuery')
+      .resolves([
+        {
+          first_name: 'John',
+          last_name: 'Doe',
+          email: 'johndoe@noone.himself'
+        }
+      ]);
 
     const { screen, findByText } = render(<TagUserList {...props} />);
     await waitFor(async () => {
       expect(userlistStubCall.callCount).toEqual(1);
-      expect(
-        await findByText('John Doe(johndoe@noone.himself)')
-      ).toBeInTheDocument();
+      expect(await findByText(/(johndoe@noone.himself)/)).toBeInTheDocument();
     });
-    fireEvent.click(await findByText('John Doe(johndoe@noone.himself)'));
+    fireEvent.click(await findByText(/(johndoe@noone.himself)/));
     expect(mockOnSelect).toHaveBeenCalledTimes(1);
     expect(mockClose).toHaveBeenCalledTimes(1);
   });
@@ -127,25 +135,25 @@ describe('TagUserList unit tests', () => {
       onSelect: mockOnSelect,
       close: mockClose
     };
-    const userlistStubCall = sandbox.stub(getADUsers, 'default').resolves([
-      {
-        first_name: 'John',
-        last_name: 'Doe',
-        email: 'johndoe@noone.himself'
-      },
-      {
-        first_name: 'Jane',
-        last_name: 'Doe',
-        email: 'janedoe@noone.herself'
-      }
-    ]);
+    const userlistStubCall = sandbox
+      .stub(CancelableADRequestApi, 'getUsersByQuery')
+      .resolves([
+        {
+          first_name: 'John',
+          last_name: 'Doe',
+          email: 'johndoe@noone.himself'
+        },
+        {
+          first_name: 'Jane',
+          last_name: 'Doe',
+          email: 'janedoe@noone.herself'
+        }
+      ]);
 
     const { screen, findByText } = render(<TagUserList {...props} />);
     await waitFor(async () => {
       expect(userlistStubCall.callCount).toEqual(1);
-      expect(
-        await findByText('John Doe(johndoe@noone.himself)')
-      ).toBeInTheDocument();
+      expect(await findByText(/(johndoe@noone.himself)/)).toBeInTheDocument();
     });
     fireEvent.keyDown(document, { key: 'ArrowDown', code: 'ArrowDown' });
     fireEvent.keyDown(document, { key: 'ArrowUp', code: 'ArrowUp' });
@@ -163,25 +171,25 @@ describe('TagUserList unit tests', () => {
       onSelect: mockOnSelect,
       close: mockClose
     };
-    const userlistStubCall = sandbox.stub(getADUsers, 'default').resolves([
-      {
-        first_name: 'John',
-        last_name: 'Doe',
-        email: 'johndoe@noone.himself'
-      },
-      {
-        first_name: 'Jane',
-        last_name: 'Doe',
-        email: 'janedoe@noone.herself'
-      }
-    ]);
+    const userlistStubCall = sandbox
+      .stub(CancelableADRequestApi, 'getUsersByQuery')
+      .resolves([
+        {
+          first_name: 'John',
+          last_name: 'Doe',
+          email: 'johndoe@noone.himself'
+        },
+        {
+          first_name: 'Jane',
+          last_name: 'Doe',
+          email: 'janedoe@noone.herself'
+        }
+      ]);
 
     const { findByText } = render(<TagUserList {...props} />);
     await waitFor(async () => {
       expect(userlistStubCall.callCount).toEqual(1);
-      expect(
-        await findByText('John Doe(johndoe@noone.himself)')
-      ).toBeInTheDocument();
+      expect(await findByText(/(johndoe@noone.himself)/)).toBeInTheDocument();
     });
     fireEvent.keyDown(document, { key: 'ArrowDown', code: 'ArrowDown' });
     fireEvent.keyDown(document, { key: 'ArrowUp', code: 'ArrowUp' });
@@ -199,20 +207,20 @@ describe('TagUserList unit tests', () => {
       onSelect: mockOnSelect,
       close: mockClose
     };
-    const userlistStubCall = sandbox.stub(getADUsers, 'default').resolves([
-      {
-        first_name: 'John',
-        last_name: 'Doe',
-        email: 'johndoe@noone.himself'
-      }
-    ]);
+    const userlistStubCall = sandbox
+      .stub(CancelableADRequestApi, 'getUsersByQuery')
+      .resolves([
+        {
+          first_name: 'John',
+          last_name: 'Doe',
+          email: 'johndoe@noone.himself'
+        }
+      ]);
 
     const { findByText } = render(<TagUserList {...props} />);
     await waitFor(async () => {
       expect(userlistStubCall.callCount).toEqual(1);
-      expect(
-        await findByText('John Doe(johndoe@noone.himself)')
-      ).toBeInTheDocument();
+      expect(await findByText(/(johndoe@noone.himself)/)).toBeInTheDocument();
     });
     fireEvent.keyDown(document, { key: 'ArrowDown', code: 'ArrowDown' });
     fireEvent.keyDown(document, { key: 'ArrowUp', code: 'ArrowUp' });
@@ -230,7 +238,9 @@ describe('TagUserList unit tests', () => {
       onSelect: mockOnSelect,
       close: mockClose
     };
-    const userlistStubCall = sandbox.stub(getADUsers, 'default').resolves([]);
+    const userlistStubCall = sandbox
+      .stub(CancelableADRequestApi, 'getUsersByQuery')
+      .resolves([]);
 
     const { findByText } = render(<TagUserList {...props} />);
     await waitFor(async () => {
