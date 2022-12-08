@@ -803,13 +803,22 @@ export class TaskRow extends React.PureComponent<Props, State> {
         if (
           !isEqual(richTextData.value, data.value) &&
           !isEmpty(data.text.trim())
-        )
-          if (
-            isEmpty(richTextData.value?.blocks) &&
-            lastAnswerJS?.answer === data.text
-          )
+        ) {
+          let prevAnswerBlocks = richTextData.value.blocks.filter(
+            block => block.text.length > 0
+          );
+          let answerBlocks = data.value.blocks.filter(
+            block => block.text.length > 0
+          );
+          if (isEqual(prevAnswerBlocks, answerBlocks)) {
             saveDate = false;
-          else saveDate = true;
+          } else if (
+            isEmpty(richTextData.value?.blocks) &&
+            lastAnswerJS?.answer.trim() === data.text.trim()
+          ) {
+            saveDate = false;
+          } else saveDate = true;
+        }
         // save the data if we see any text difference.
         else if (
           previousAnsText !== data.text.trim() &&

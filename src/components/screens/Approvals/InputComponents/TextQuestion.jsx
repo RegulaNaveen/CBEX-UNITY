@@ -84,13 +84,22 @@ const TextQuestion = ({
       if (
         !isEqual(richTextData.value, data.value) &&
         !isEmpty(data.text.trim())
-      )
-        if (
-          isEmpty(richTextData.value?.blocks) &&
-          lastAnswer?.answer === data.value?.blocks[0]?.text
-        )
+      ) {
+        let prevAnswerBlocks = richTextData.value.blocks.filter(
+          block => block.text.length > 0
+        );
+        let answerBlocks = data.value.blocks.filter(
+          block => block.text.length > 0
+        );
+        if (isEqual(prevAnswerBlocks, answerBlocks)) {
           saveDate = false;
-        else saveDate = true;
+        } else if (
+          isEmpty(richTextData.value?.blocks) &&
+          lastAnswer?.answer.trim() === data.text.trim()
+        ) {
+          saveDate = false;
+        } else saveDate = true;
+      }
       // save the data if we see any text difference.
       else if (previousAnsText !== data.text.trim() && data.text.trim() !== '')
         saveDate = true;
