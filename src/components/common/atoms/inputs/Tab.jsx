@@ -62,7 +62,14 @@ const UnityTab = ({
     if (isApprovalCount) {
       setShowApprovalTab(true);
     } else {
+      const urlParams = new URLSearchParams(window.location.search);
       setShowApprovalTab(false);
+      if (urlParams && urlParams?.get('viewType')?.includes('approval')) {
+        history.push(`${window.location.pathname}`);
+        if (window && window.scrollTo) {
+          window.scrollTo(0, 0);
+        }
+      }
     }
   }, []);
 
@@ -70,7 +77,7 @@ const UnityTab = ({
     if (selectedView && selectedView === 'documents') {
       setValue(tabs.find(item => item.label === 'Documents').value);
     }
-    if (selectedView && selectedView === 'approvals') {
+    if (selectedView && selectedView === 'approvals' && isApprovalCount) {
       const isApprovalTabVisible = approvalsFlag;
       const approvalTabValue = tabs.find(item => item.label === 'Approvals')
         .value;
