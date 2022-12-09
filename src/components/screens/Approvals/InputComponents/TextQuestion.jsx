@@ -95,7 +95,7 @@ const TextQuestion = ({
           saveDate = false;
         } else if (
           isEmpty(richTextData.value?.blocks) &&
-          lastAnswer?.answer.trim() === data.text.trim()
+          previousAnsText === data.text.trim()
         ) {
           saveDate = false;
         } else saveDate = true;
