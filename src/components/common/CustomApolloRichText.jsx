@@ -184,9 +184,9 @@ const CustomApolloRichText = ({
    */
   const resetUnlockTimer = (clear = false) => {
     // to always make sure recently created timeout gets cleared
-    setUnlockTimeout(prevUnlockTimeot => {
-      clearTimeout(prevUnlockTimeot);
-      return prevUnlockTimeot;
+    setUnlockTimeout(prevUnlockTimeout => {
+      clearTimeout(prevUnlockTimeout);
+      return prevUnlockTimeout;
     });
     if (clear) {
       setUnlockTimeout(null);
