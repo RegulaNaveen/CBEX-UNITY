@@ -183,7 +183,11 @@ const CustomApolloRichText = ({
    * function to set timer for auto unlock and auto save
    */
   const resetUnlockTimer = (clear = false) => {
-    clearTimeout(unlockTimeout);
+    // to always make sure recently created timeout gets cleared
+    setUnlockTimeout(prevUnlockTimeot => {
+      clearTimeout(prevUnlockTimeot);
+      return prevUnlockTimeot;
+    });
     if (clear) {
       setUnlockTimeout(null);
     } else {
@@ -241,7 +245,10 @@ const CustomApolloRichText = ({
       }
     }, 500);
     if (isEqual(richTextData.value, INITIAL_DATA.value)) return; // break func
-    resetUnlockTimer();
+    // enable timer only if field is focused
+    if (isFocused) {
+      resetUnlockTimer();
+    }
   }, [richTextData, canUserTagInQuestion]);
 
   /**
@@ -450,13 +457,13 @@ const CustomApolloRichText = ({
     }
   };
 
-  const handleFocus = useCallback(() => {
+  const handleFocus = () => {
     if (enableFocus) {
       setIsFocused(true);
       resetUnlockTimer();
     }
     onFocus();
-  }, []);
+  };
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
@@ -595,7 +602,7 @@ const CustomApolloRichText = ({
         <div style={{ position: 'relative' }} data-testid="tag-user-list">
           <TagUserList
             searchTag={searchTag}
-            onSelect={user => handleUserTag(user)}
+            onSelect={handleUserTag}
             close={() => setSearchTag(null)}
           />
         </div>
