@@ -7,7 +7,7 @@
 import Calendar from 'apollo-react-icons/Calendar';
 import CalendarCheck from 'apollo-react-icons/CalendarCheck';
 import IconButton from 'apollo-react/components/IconButton';
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Loader from 'apollo-react/components/Loader';
 import Tooltip from 'apollo-react/components/Tooltip';
 import isEmpty from 'lodash-es/isEmpty';
