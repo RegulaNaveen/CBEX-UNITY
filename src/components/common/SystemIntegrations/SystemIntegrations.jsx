@@ -7,10 +7,11 @@
 import Calendar from 'apollo-react-icons/Calendar';
 import CalendarCheck from 'apollo-react-icons/CalendarCheck';
 import IconButton from 'apollo-react/components/IconButton';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Loader from 'apollo-react/components/Loader';
 import Tooltip from 'apollo-react/components/Tooltip';
 import isEmpty from 'lodash-es/isEmpty';
+import { v4 as uuidv4 } from 'uuid';
 import Grid from 'apollo-react/components/Grid';
 import indeterminate from '../../../../img/Indeterminate.svg';
 import { Outgoing, Incoming } from '../../svg';
@@ -40,6 +41,11 @@ const SystemIntegrations = ({
   answers
 }) => {
   const answer = answers.reverse();
+  const [keyState, setKeyState] = useState(uuidv4());
+
+  useEffect(() => {
+    setKeyState(uuidv4());
+  }, [answers?.toJS()?.length]);
 
   const gridColRatio = isNotepadOpen ? [10, 2] : [11, 1];
   const SalesForceCondition = () => {
@@ -467,7 +473,7 @@ const SystemIntegrations = ({
           justifyContent: 'center'
         }}
       >
-        <div style={{ display: 'flex' }}>
+        <div key={keyState} style={{ display: 'flex' }}>
           {SalesForceCondition()}
           {QvidianValidation()}
           {CalendarCondition()}
