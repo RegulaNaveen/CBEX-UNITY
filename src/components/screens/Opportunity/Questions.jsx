@@ -59,7 +59,12 @@ import Sidebar from '../../views/Sidebar';
 import AnswerHistory from '../../views/modals/AnswerHistory';
 import { getAllUsers } from '../../../redux/actions/sso-auth-actions';
 import MatomoHOC from '../../HOC/MatomoHOC';
-import { createMatomoObj, getCountriesNameForCode, saveDataInMatomo, throttle } from '../../../utils/utils';
+import {
+  createMatomoObj,
+  getCountriesNameForCode,
+  saveDataInMatomo,
+  throttle
+} from '../../../utils/utils';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
 import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions';
 import WysiwygNotepad from '../../views/WysiwygNotepad';
@@ -67,6 +72,7 @@ import ANSWER_TYPES from '../../../constants/answerTypes';
 import NotesSocketContext from '../../../context/notesSocketContext';
 import PriceModeler from '../../common/PriceModeler';
 import moment from 'moment';
+import VerticalTabsCollapsiblePanel from './layout/navigation/VerticalTabsCollapsiblePanel';
 export const QuestionsRefContext = createContext(null);
 
 const QuestionsSectionMapping = React.lazy(() =>
@@ -154,13 +160,22 @@ class Questions extends Component {
     window.addEventListener('resize', this.resize.bind(this));
     this.resize();
     this.props.fetchUserTagFlagInQuestion();
-    this.resizeObserver = new ResizeObserver(throttle((entries) =>{
-      const matamoObj = createMatomoObj(proposalDetail, userEmail, userRole, 'drag event');
-      saveDataInMatomo(trackEvent, matamoObj);
-    }, 3000));
-  if(this.resizeObserver){
-    this.resizeObserver.observe(document.querySelector(".notepad-classoverride"));
-  }
+    this.resizeObserver = new ResizeObserver(
+      throttle(entries => {
+        const matamoObj = createMatomoObj(
+          proposalDetail,
+          userEmail,
+          userRole,
+          'drag event'
+        );
+        saveDataInMatomo(trackEvent, matamoObj);
+      }, 3000)
+    );
+    if (this.resizeObserver) {
+      this.resizeObserver.observe(
+        document.querySelector('.notepad-classoverride')
+      );
+    }
   }
 
   componentDidUpdate(prevProps: Map) {
@@ -203,21 +218,24 @@ class Questions extends Component {
   }
 
   componentWillUnmount() {
-    const {
-      proposalDetail,
-      trackEvent,
-      userEmail,
-      userRole
-    } = this.props;
-    if(localStorage.getItem('notepadStartDuration')){
-        const matamoObj = {}
-        matamoObj.category = `Proposal Detail (CRM#:${proposalDetail['CRM #']})`
-        matamoObj.action = `Event: Notepad ${proposalDetail['CRM #']}`
-        matamoObj.name = `Notepad: Duration ${localStorage.getItem('notepadStartDuration')} - ${moment().utc().format('MMMM Do YYYY, h:mm:ss a')}`
-        matamoObj.customDimensions = [JSON.stringify(proposalDetail),{user: userEmail},{role: userRole}]
-        saveDataInMatomo(trackEvent, matamoObj);  
-        localStorage.removeItem('notepadStartDuration');
-   }
+    const { proposalDetail, trackEvent, userEmail, userRole } = this.props;
+    if (localStorage.getItem('notepadStartDuration')) {
+      const matamoObj = {};
+      matamoObj.category = `Proposal Detail (CRM#:${proposalDetail['CRM #']})`;
+      matamoObj.action = `Event: Notepad ${proposalDetail['CRM #']}`;
+      matamoObj.name = `Notepad: Duration ${localStorage.getItem(
+        'notepadStartDuration'
+      )} - ${moment()
+        .utc()
+        .format('MMMM Do YYYY, h:mm:ss a')}`;
+      matamoObj.customDimensions = [
+        JSON.stringify(proposalDetail),
+        { user: userEmail },
+        { role: userRole }
+      ];
+      saveDataInMatomo(trackEvent, matamoObj);
+      localStorage.removeItem('notepadStartDuration');
+    }
     const { handleOpenClose, resetQuestionsFilter } = this.props;
     if (handleOpenClose) handleOpenClose(false);
 
@@ -532,7 +550,7 @@ class Questions extends Component {
         </div>
 
         {/* Expand and Filter */}
-        <div>
+        {/* <div>
           <div className="tasksList-title-wrapper">
             <Panel
               minWidth={isNotepadOpen ? notepadMinWidthPx : 20}
@@ -619,56 +637,204 @@ class Questions extends Component {
             </Panel>
           </div>
           {this.renderFilter()}
-        </div>
+        </div> */}
         <div id="panelwrapper">
-          {/* Notepad */}
-          <div id="panel-notepad" style={{ borderRadius: '5px' }}>
-            <Panel
-              minWidth={notepadMinWidthPx}
-              maxWidth={notepadMaxWidthPx}
-              width={notepadMaxWidthPx}
-              className="notepad-classoverride"
-              style={{ borderRadius: '5px' }}
-              resizable
-              onClose={() => {
-                this.setIsNotepadOpen(false);
-                const matamoObj = createMatomoObj(proposalDetail, userEmail, userRole, 'closed event')
-                saveDataInMatomo(trackEvent, matamoObj);
-              }}
-              onOpen={() => {
-                this.setIsNotepadOpen(true);
-              }}
-            >
-              <div
-                className={classNames('panel-notepad-inner', {
-                  hidden: !isNotepadOpen
-                })}
-              >
-                <div id="panel-notepad-header">
-                  <Typography variant="h3">Notepad</Typography>
-                </div>
+          <VerticalTabsCollapsiblePanel
+            renderPanel={activeTab => {
+              if (activeTab === 0) {
+                /* Notepad */
+                return (
+                  <div id="panel-notepad" style={{ borderRadius: '5px' }}>
+                    <Panel
+                      minWidth={notepadMinWidthPx}
+                      maxWidth={notepadMaxWidthPx}
+                      width={notepadMaxWidthPx}
+                      className="notepad-classoverride"
+                      style={{ borderRadius: '5px' }}
+                      resizable
+                      onClose={() => {
+                        this.setIsNotepadOpen(false);
+                        const matamoObj = createMatomoObj(
+                          proposalDetail,
+                          userEmail,
+                          userRole,
+                          'closed event'
+                        );
+                        saveDataInMatomo(trackEvent, matamoObj);
+                      }}
+                      onOpen={() => {
+                        this.setIsNotepadOpen(true);
+                      }}
+                    >
+                      <div
+                        className={classNames('panel-notepad-inner', {
+                          hidden: !isNotepadOpen
+                        })}
+                      >
+                        <div id="panel-notepad-header">
+                          <Typography variant="h3">Notepad</Typography>
+                        </div>
 
-                {this.state.proposalNoteRender && this.context.wsInstance ? (
-                  <WysiwygNotepad trackEvent={trackEvent} eventCategories={eventCategories} />
-                ) : (
-                  <Loader
-                    type="TailSpin"
-                    color="#297DFD"
-                    width={30}
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: '100vh'
-                    }}
-                  />
-                )}
-              </div>
-            </Panel>
-          </div>
+                        {this.state.proposalNoteRender &&
+                        this.context.wsInstance ? (
+                          <WysiwygNotepad
+                            trackEvent={trackEvent}
+                            eventCategories={eventCategories}
+                          />
+                        ) : (
+                          <Loader
+                            type="TailSpin"
+                            color="#297DFD"
+                            width={30}
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              height: '100vh'
+                            }}
+                          />
+                        )}
+                      </div>
+                    </Panel>
+                  </div>
+                );
+              } else if (activeTab === 1) {
+                return (
+                  <div id="panel-notepad" style={{ borderRadius: '5px' }}>
+                    <Panel
+                      minWidth={notepadMinWidthPx}
+                      maxWidth={notepadMaxWidthPx}
+                      width={notepadMaxWidthPx}
+                      className="notepad-classoverride"
+                      style={{ borderRadius: '5px' }}
+                      resizable
+                      onClose={() => {
+                        this.setIsNotepadOpen(false);
+                        const matamoObj = createMatomoObj(
+                          proposalDetail,
+                          userEmail,
+                          userRole,
+                          'closed event'
+                        );
+                        saveDataInMatomo(trackEvent, matamoObj);
+                      }}
+                      onOpen={() => {
+                        this.setIsNotepadOpen(true);
+                      }}
+                    >
+                      <div
+                        className={classNames('panel-notepad-inner', {
+                          hidden: !isNotepadOpen
+                        })}
+                      >
+                        <div id="panel-notepad-header">
+                          <Typography variant="h3">Notepad</Typography>
+                        </div>
+
+                        {this.state.proposalNoteRender &&
+                        this.context.wsInstance ? (
+                          <WysiwygNotepad
+                            trackEvent={trackEvent}
+                            eventCategories={eventCategories}
+                          />
+                        ) : (
+                          <Loader
+                            type="TailSpin"
+                            color="#297DFD"
+                            width={30}
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              height: '100vh'
+                            }}
+                          />
+                        )}
+                      </div>
+                    </Panel>
+                  </div>
+                );
+              }
+            }}
+          />
           {/* Question list */}
-
           <div id="panel-questions-list">
+            <div className="tasksList-title-wrapper">
+              <div className="N/A na-toggle-switch">
+                <span style={{ padding: '10px' }}>Mark N/A</span>
+                <Switch
+                  style={{ marginRight: '-2px' }}
+                  checked={showNaCheckbox}
+                  onChange={this.handleOnChangeNaSwitch}
+                  size="small"
+                />
+                <Tooltip
+                  variant="light"
+                  disableTouchListener
+                  title={showNaCheckbox ? 'NA ON' : 'NA OFF'}
+                  placement="top"
+                >
+                  <IconButton color="primary">
+                    <InfoIcon />
+                  </IconButton>
+                </Tooltip>
+              </div>
+              <div className="tasklist-mid-menu-separator" />
+              <div className="taskList-icons-wrapper">
+                <ApolloCheckbox
+                  label="Expand All"
+                  checked={allSectionsExpanded}
+                  onChange={(e, checked) => {
+                    this.setState({ sidebarscroll: '' }, () => {
+                      this.handleIsCheckedAll(checked);
+                    });
+                    if (!checked) {
+                      const clearsidebarselectsection = new CustomEvent(
+                        'clearsidebarselectsection',
+                        {
+                          detail: true
+                        }
+                      );
+                      document.dispatchEvent(clearsidebarselectsection);
+                    }
+                  }}
+                />
+                {MANUAL_REFRESH && (
+                  <div
+                    title="Refresh"
+                    className="tasksList-refresh-icon-wrapper"
+                    role="presentation"
+                    onClick={this.getProposalInfoUpdated}
+                  >
+                    <Refresh className="tasksList-add-icon" />
+                  </div>
+                )}
+                {selectedBid.get('isCurrent') && (
+                  <div
+                    title="Add New Question"
+                    className="tasksList-add-icon-wrapper"
+                    role="presentation"
+                    onClick={() => {
+                      this.setState({ currentsection: '', showModal: true });
+                      this.trackMatomoEventToggleQModal(true);
+                    }}
+                  >
+                    <Add className="tasksList-add-icon" />
+                  </div>
+                )}
+                <Button
+                  variant="secondary"
+                  size="small"
+                  icon={<Filter fontSize="extraSmall" />}
+                  onClick={() => this.handleFilterClick()}
+                >
+                  {activeQuestionsFilterCount
+                    ? `Filter (${activeQuestionsFilterCount})`
+                    : 'Filter'}
+                </Button>
+              </div>
+            </div>
+            {this.renderFilter()}
             <div className="tasksList-wrapper" ref={this.questionsRef}>
               <Suspense fallback={<div>Loading...</div>}>
                 <QuestionsRefContext.Provider value={this.questionsRef}>
