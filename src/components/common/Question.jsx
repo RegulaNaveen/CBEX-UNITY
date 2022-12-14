@@ -1326,7 +1326,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     let answerDate = 'Not Answered';
     let isAnswerPredicted = false;
     let integrationmatch;
-    // let checkSfAnswer;
+    let checkSfAnswer;
     let integrationvalidation;
     let priceModelerIntegration;
     const sficon = sfField;
@@ -1347,15 +1347,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
     const dateIsBefore = moment(proposalCreationDate).isBefore(
       moment(deploymentDate)
     );
-    // if (
-    //   typeof currentSFanswer !== 'undefined' &&
-    //   _.isEmpty(currentSFanswer) !== true
-    // ) {
-    //   // this.setState({
-    //   //   checkSfAnswer: currentSFanswer.toJS().value
-    //   // });
-    //   // checkSfAnswer = currentSFanswer.toJS().value;
-    // }
+    if (
+      typeof currentSFanswer !== 'undefined' &&
+      _.isEmpty(currentSFanswer) !== true
+    ) {
+      checkSfAnswer = currentSFanswer.toJS().value;
+    }
     if (dateIsAfter) {
       integrationvalidation = true;
     }
@@ -1542,12 +1539,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
           {/* System Integrations */}
           <SystemIntegrations
-            checkSfAnswer={
-              typeof currentSFanswer !== 'undefined' &&
-              _.isEmpty(currentSFanswer) !== true
-                ? currentSFanswer.toJS().value
-                : undefined
-            }
+            checkSfAnswer={checkSfAnswer}
             sficon={sficon}
             answers={answers}
             gridColRatio={gridColRatio}

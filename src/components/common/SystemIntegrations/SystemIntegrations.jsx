@@ -7,7 +7,7 @@
 import Calendar from 'apollo-react-icons/Calendar';
 import CalendarCheck from 'apollo-react-icons/CalendarCheck';
 import IconButton from 'apollo-react/components/IconButton';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Loader from 'apollo-react/components/Loader';
 import Tooltip from 'apollo-react/components/Tooltip';
 import isEmpty from 'lodash/isEmpty';
@@ -40,6 +40,10 @@ const SystemIntegrations = ({
   answers
 }) => {
   const answer = answers.reverse();
+
+  useEffect(() => {
+    SalesForceCondition();
+  }, [answers?.toJS()?.length]);
 
   const gridColRatio = isNotepadOpen ? [10, 2] : [11, 1];
   const SalesForceCondition = () => {
