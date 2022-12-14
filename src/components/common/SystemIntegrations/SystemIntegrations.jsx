@@ -42,8 +42,9 @@ const SystemIntegrations = ({
   const answer = answers.reverse();
 
   useEffect(() => {
+    console.log('salesforcecond');
     SalesForceCondition();
-  }, [answers?.toJS()?.length]);
+  }, [answers?.get(0)?.get('answer')]);
 
   const gridColRatio = isNotepadOpen ? [10, 2] : [11, 1];
   const SalesForceCondition = () => {
