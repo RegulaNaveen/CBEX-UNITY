@@ -10,8 +10,7 @@ import IconButton from 'apollo-react/components/IconButton';
 import React, { useState, useEffect } from 'react';
 import Loader from 'apollo-react/components/Loader';
 import Tooltip from 'apollo-react/components/Tooltip';
-import isEmpty from 'lodash-es/isEmpty';
-import { v4 as uuidv4 } from 'uuid';
+import isEmpty from 'lodash/isEmpty';
 import Grid from 'apollo-react/components/Grid';
 import indeterminate from '../../../../img/Indeterminate.svg';
 import { Outgoing, Incoming } from '../../svg';
@@ -41,15 +40,15 @@ const SystemIntegrations = ({
   answers
 }) => {
   const answer = answers.reverse();
-  const [keyState, setKeyState] = useState(uuidv4());
+  const [sfAnswer, setSfanswer] = useState(checkSfAnswer);
 
   useEffect(() => {
-    setKeyState(uuidv4());
-  }, [answers?.toJS()?.length]);
+    setSfanswer(checkSfAnswer);
+  }, [checkSfAnswer]);
 
   const gridColRatio = isNotepadOpen ? [10, 2] : [11, 1];
   const SalesForceCondition = () => {
-    if (sficon !== 'n/a' && isEmpty(checkSfAnswer) === false) {
+    if (sficon !== 'n/a' && isEmpty(sfAnswer) === false) {
       return hasDifferentSFanswer === false ? (
         <Tooltip
           variant="light"
@@ -99,7 +98,7 @@ const SystemIntegrations = ({
     if (
       sficon !== 'n/a' &&
       isEmpty(sficon) === false &&
-      isEmpty(checkSfAnswer) === true
+      isEmpty(sfAnswer) === true
     ) {
       return hasDifferentSFanswer === true ? (
         <Tooltip
@@ -473,7 +472,7 @@ const SystemIntegrations = ({
           justifyContent: 'center'
         }}
       >
-        <div key={keyState} style={{ display: 'flex' }}>
+        <div style={{ display: 'flex' }}>
           {SalesForceCondition()}
           {QvidianValidation()}
           {CalendarCondition()}
