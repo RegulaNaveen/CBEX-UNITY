@@ -43,6 +43,7 @@ const SystemIntegrations = ({
   const [sfAnswer, setSfanswer] = useState(checkSfAnswer);
 
   useEffect(() => {
+    console.log({ checkSfAnswer });
     setSfanswer(checkSfAnswer);
   }, [checkSfAnswer]);
 
@@ -65,6 +66,7 @@ const SystemIntegrations = ({
           tabIndex={-1}
         >
           <div>
+            {console.log('sim1 purple')}
             <Incoming
               style={{ fill: '#9E54B0', height: '28px' }}
               className="integration-icon"
@@ -87,6 +89,7 @@ const SystemIntegrations = ({
           tabIndex={-1}
         >
           <div>
+            {console.log('sim2')}
             <Incoming
               className="integration-icon"
               style={{ fill: '#9e54b0', height: '28px', opacity: '50%' }}
@@ -116,6 +119,7 @@ const SystemIntegrations = ({
           tabIndex={-1}
         >
           <div>
+            {console.log('sim3')}
             <Incoming
               className="integration-icon"
               style={{ fill: '#9e54b0', height: '28px', opacity: '50%' }}
@@ -138,6 +142,7 @@ const SystemIntegrations = ({
           tabIndex={-1}
         >
           <div>
+            {console.log('sim4')}
             <Incoming
               className="integration-icon1"
               style={{ fill: '#b7b7b7', height: '28px' }}
