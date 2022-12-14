@@ -19,28 +19,28 @@ import {
   getProposalBoxIdIsLoading,
   getAdditionalLinks,
   getProposalDetails,
-  getSelectedBid
+  getSelectedBid,
 } from '../../../redux/selectors';
 import {
   onGetProposalBoxId,
   getAdditionalBoxLink,
-  setupdateBoxId
+  setupdateBoxId,
 } from '../../../redux/actions/proposal-actions';
 
 const styles = {
   padding: 16,
-  textAlign: 'left'
+  textAlign: 'left',
 };
 type Props = {
   match: Match,
   getBoxId: (proposalId: string) => void,
   isGettingBoxId: boolean,
   onGettingBoxIdError: Object,
-  boxId: string
+  boxId: string,
 };
 
 type State = {
-  selectedBid: string
+  selectedBid: string,
 };
 
 class Documents extends Component<Props, State> {
@@ -48,7 +48,7 @@ class Documents extends Component<Props, State> {
   constructor(props: Object) {
     super(props);
     this.state = {
-      selectedBid: ''
+      selectedBid: '',
     };
   }
   getBrowser = () => {
@@ -77,7 +77,7 @@ class Documents extends Component<Props, State> {
       getAdditionalLink,
       proposalDetail,
       selectedBid,
-      location: { search }
+      location: { search },
     } = this.props;
     const { id } = selectedBid.toJS();
     const selectedView = new URLSearchParams(search).get('viewType');
@@ -104,7 +104,7 @@ class Documents extends Component<Props, State> {
     const { getBoxId } = this.props;
     // Setting the selected proposal
     this.setState(() => ({
-      selectedBid: proposalId
+      selectedBid: proposalId,
     }));
     // Calling API to get boxFolderId;
     getBoxId(proposalId);
@@ -167,7 +167,17 @@ class Documents extends Component<Props, State> {
           <p className="para-document">
             Welcome to the Opportunity Documents section. You can check here any
             documents associated to this particular opportunity. For that you
-            need to access with your enterprise email account to access Box.com
+            need to access with your enterprise email account to access Box.com.
+            For assistance with Box.com or to obtain access submit a VIA ticket
+            <span> </span>
+            <a
+              style={{ textDecoration: 'none', color: '#0768fd' }}
+              href="https://quintiles.service-now.com/via?id=sc_cat_item&sys_id=d0e1bce09038790090f625c1886a1a73"
+              target="_blank"
+              rel="noreferrer"
+            >
+              here.
+            </a>
           </p>
         </div>
         <div className="documents">
@@ -259,7 +269,7 @@ const mapStateToProps = state => ({
   bids: getAllBidsForIndex(state),
   selectedBid: getSelectedBid(state),
   boxLinks: getAdditionalLinks(state),
-  proposalDetail: getProposalDetails(state)
+  proposalDetail: getProposalDetails(state),
 });
 
 export default compose(
@@ -267,6 +277,6 @@ export default compose(
   connect(mapStateToProps, {
     getBoxId: onGetProposalBoxId,
     getAdditionalLink: getAdditionalBoxLink,
-    updateBoxId: setupdateBoxId
+    updateBoxId: setupdateBoxId,
   })
 )(Documents);
