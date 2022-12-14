@@ -41,11 +41,6 @@ const SystemIntegrations = ({
 }) => {
   const answer = answers.reverse();
 
-  useEffect(() => {
-    console.log('salesforcecond');
-    SalesForceCondition();
-  }, [answers?.get(0)?.get('answer')]);
-
   const gridColRatio = isNotepadOpen ? [10, 2] : [11, 1];
   const SalesForceCondition = () => {
     if (sficon !== 'n/a' && isEmpty(checkSfAnswer) === false) {
@@ -155,6 +150,12 @@ const SystemIntegrations = ({
       return null;
     }
   };
+
+  useEffect(() => {
+    console.log('salesforcecond', answers?.get(0)?.get('answer'));
+    SalesForceCondition();
+  }, [answers?.get(0)?.get('answer')]);
+
   const QvidianValidation = () => {
     if (
       (integrationvalidation === true && changeIcon === '#00c221') ||
