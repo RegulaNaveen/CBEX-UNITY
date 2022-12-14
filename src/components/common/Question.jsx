@@ -86,7 +86,8 @@ type State = {
   selectedDay: string,
   selectedRow: Boolean,
   changeIcon: '',
-  check: 'false'
+  check: 'false',
+  checkSfAnswer: any
 };
 
 type Props = {
@@ -146,7 +147,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
       screenWidth: '',
       enableRichtext: false,
       focusedSpan: false,
-      blurredSpan: false
+      blurredSpan: false,
+      checkSfAnswer: ''
     };
   }
 
@@ -1326,7 +1328,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     let answerDate = 'Not Answered';
     let isAnswerPredicted = false;
     let integrationmatch;
-    let checkSfAnswer;
+    // let checkSfAnswer;
     let integrationvalidation;
     let priceModelerIntegration;
     const sficon = sfField;
@@ -1351,7 +1353,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
       typeof currentSFanswer !== 'undefined' &&
       _.isEmpty(currentSFanswer) !== true
     ) {
-      checkSfAnswer = currentSFanswer.toJS().value;
+      this.setState({
+        checkSfAnswer: currentSFanswer.toJS().value
+      });
+      // checkSfAnswer = currentSFanswer.toJS().value;
     }
     if (dateIsAfter) {
       integrationvalidation = true;
@@ -1539,7 +1544,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
           {/* System Integrations */}
           <SystemIntegrations
-            checkSfAnswer={checkSfAnswer}
+            checkSfAnswer={this.state.checkSfAnswer}
             sficon={sficon}
             answers={answers}
             gridColRatio={gridColRatio}

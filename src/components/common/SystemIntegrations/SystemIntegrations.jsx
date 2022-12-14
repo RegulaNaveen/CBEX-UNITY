@@ -7,7 +7,7 @@
 import Calendar from 'apollo-react-icons/Calendar';
 import CalendarCheck from 'apollo-react-icons/CalendarCheck';
 import IconButton from 'apollo-react/components/IconButton';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Loader from 'apollo-react/components/Loader';
 import Tooltip from 'apollo-react/components/Tooltip';
 import isEmpty from 'lodash/isEmpty';
@@ -40,16 +40,10 @@ const SystemIntegrations = ({
   answers
 }) => {
   const answer = answers.reverse();
-  const [sfAnswer, setSfanswer] = useState(checkSfAnswer);
-
-  useEffect(() => {
-    console.log({ checkSfAnswer });
-    setSfanswer(checkSfAnswer);
-  }, [checkSfAnswer]);
 
   const gridColRatio = isNotepadOpen ? [10, 2] : [11, 1];
   const SalesForceCondition = () => {
-    if (sficon !== 'n/a' && isEmpty(sfAnswer) === false) {
+    if (sficon !== 'n/a' && isEmpty(checkSfAnswer) === false) {
       return hasDifferentSFanswer === false ? (
         <Tooltip
           variant="light"
@@ -101,7 +95,7 @@ const SystemIntegrations = ({
     if (
       sficon !== 'n/a' &&
       isEmpty(sficon) === false &&
-      isEmpty(sfAnswer) === true
+      isEmpty(checkSfAnswer) === true
     ) {
       return hasDifferentSFanswer === true ? (
         <Tooltip
@@ -151,7 +145,10 @@ const SystemIntegrations = ({
         </Tooltip>
       );
     }
-    if (isEmpty(sficon)) return null;
+    if (isEmpty(sficon)) {
+      console.log('sim5');
+      return null;
+    }
   };
   const QvidianValidation = () => {
     if (
