@@ -86,8 +86,7 @@ type State = {
   selectedDay: string,
   selectedRow: Boolean,
   changeIcon: '',
-  check: 'false',
-  checkSfAnswer: any
+  check: 'false'
 };
 
 type Props = {
@@ -147,8 +146,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       screenWidth: '',
       enableRichtext: false,
       focusedSpan: false,
-      blurredSpan: false,
-      checkSfAnswer: ''
+      blurredSpan: false
     };
   }
 
@@ -1349,15 +1347,15 @@ export class TaskRow extends React.PureComponent<Props, State> {
     const dateIsBefore = moment(proposalCreationDate).isBefore(
       moment(deploymentDate)
     );
-    if (
-      typeof currentSFanswer !== 'undefined' &&
-      _.isEmpty(currentSFanswer) !== true
-    ) {
-      this.setState({
-        checkSfAnswer: currentSFanswer.toJS().value
-      });
-      // checkSfAnswer = currentSFanswer.toJS().value;
-    }
+    // if (
+    //   typeof currentSFanswer !== 'undefined' &&
+    //   _.isEmpty(currentSFanswer) !== true
+    // ) {
+    //   // this.setState({
+    //   //   checkSfAnswer: currentSFanswer.toJS().value
+    //   // });
+    //   // checkSfAnswer = currentSFanswer.toJS().value;
+    // }
     if (dateIsAfter) {
       integrationvalidation = true;
     }
@@ -1544,7 +1542,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
           {/* System Integrations */}
           <SystemIntegrations
-            checkSfAnswer={this.state.checkSfAnswer}
+            checkSfAnswer={
+              typeof currentSFanswer !== 'undefined' &&
+              _.isEmpty(currentSFanswer) !== true
+                ? currentSFanswer.toJS().value
+                : undefined
+            }
             sficon={sficon}
             answers={answers}
             gridColRatio={gridColRatio}
