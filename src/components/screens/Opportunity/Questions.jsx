@@ -571,9 +571,44 @@ class Questions extends Component {
             <VerticalTabsCollapsiblePanel
               renderPanel={activeTab => {
                 // Check activeTab value and render required component
-                // if (activeTab === 0) {
-                // Component to render
-                // }
+                if (activeTab === 1) {
+                  return (
+                    <div id="panel-notepad" style={{ borderRadius: '5px' }}>
+                      <Panel
+                        minWidth={notepadMinWidthPx}
+                        maxWidth={notepadMaxWidthPx}
+                        width={notepadMaxWidthPx}
+                        className="notepad-classoverride"
+                        style={{ borderRadius: '5px' }}
+                        resizable
+                        onClose={() => {
+                          this.setIsNotepadOpen(false);
+                          const matamoObj = createMatomoObj(
+                            proposalDetail,
+                            userEmail,
+                            userRole,
+                            'closed event'
+                          );
+                          saveDataInMatomo(trackEvent, matamoObj);
+                        }}
+                        onOpen={() => {
+                          this.setIsNotepadOpen(true);
+                        }}
+                      >
+                        <div
+                          className={classNames('panel-notepad-inner', {
+                            hidden: !isNotepadOpen
+                          })}
+                        >
+                          <div id="panel-notepad-header">
+                            <Typography variant="h3">Tac 02 Title</Typography>
+                          </div>
+                          Tab 02 Content
+                        </div>
+                      </Panel>
+                    </div>
+                  );
+                }
                 /* Notepad */
                 return (
                   <div id="panel-notepad" style={{ borderRadius: '5px' }}>
