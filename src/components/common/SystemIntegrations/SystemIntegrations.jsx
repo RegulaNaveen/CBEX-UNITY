@@ -7,7 +7,7 @@
 import Calendar from 'apollo-react-icons/Calendar';
 import CalendarCheck from 'apollo-react-icons/CalendarCheck';
 import IconButton from 'apollo-react/components/IconButton';
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Loader from 'apollo-react/components/Loader';
 import Tooltip from 'apollo-react/components/Tooltip';
 import isEmpty from 'lodash/isEmpty';
@@ -40,15 +40,22 @@ const SystemIntegrations = ({
   answers
 }) => {
   const answer = answers.reverse();
+  const [latestSfAnswer, setlatestSfAnswer] = useState(false);
 
   useEffect(() => {
-    console.log('salesforcecond', answers?.get(0)?.get('answer'));
-    SalesForceCondition();
+    console.log('salesforcecond', answers?.get(0)?.get('userName'));
+    if (answers?.get(0)?.get('userName') === 'AnswerPulledFromSalesforce') {
+      console.log('aaannsswweerrsss');
+      setlatestSfAnswer(true);
+    }
   }, [answers?.get(0)?.get('answer')]);
 
   const gridColRatio = isNotepadOpen ? [10, 2] : [11, 1];
   const SalesForceCondition = () => {
-    if (sficon !== 'n/a' && isEmpty(checkSfAnswer) === false) {
+    if (
+      (sficon !== 'n/a' && isEmpty(checkSfAnswer) === false) ||
+      latestSfAnswer
+    ) {
       return hasDifferentSFanswer === false ? (
         <Tooltip
           variant="light"
