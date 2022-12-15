@@ -5,7 +5,7 @@ import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete, {
-  createFilterOptions
+  createFilterOptions,
 } from '@material-ui/lab/Autocomplete';
 import { getLookUpOptionsSelector } from '../../../redux/selectors';
 
@@ -25,7 +25,7 @@ const AutoCompleteWithAddOption = ({
   loading,
   toggleWatch,
   onCascadeChange,
-  forceBlur
+  forceBlur,
 }) => {
   const getSFOptions = (sfObj, sfFld) =>
     options[`SF#${sfObj}_SF#${sfFld}`]
@@ -53,20 +53,21 @@ const AutoCompleteWithAddOption = ({
   };
 
   const [selectedVal, setSelectedVal] = useState(getAnswer());
+  const [modAnswer, setModAnswer] = useState(getAnswer());
   const [currentLov, setCurrentLov] = useState(getOptions());
   const [clearable, setClearable] = useState(true);
 
   const autoCompleteRef = useRef(null);
 
-  const addAnswerPicklist = arr => {
-    return arr.map(item =>
+  const addAnswerPicklist = (arr) => {
+    return arr.map((item) =>
       item.includes('add ')
         ? item.replace('add "', '').replace(/\"/g, '')
         : item
     );
   };
 
-  const addAnswerSingle = str => {
+  const addAnswerSingle = (str) => {
     if (str === null) {
       return ' ';
     }
@@ -89,12 +90,13 @@ const AutoCompleteWithAddOption = ({
     console.log({
       selectedVal,
       newTrimVal,
-      isValid: !isEqual(selectedVal, newTrimVal)
+      isValid: !isEqual(selectedVal, newTrimVal),
     });
     if (isEqual(selectedVal, newTrimVal)) return;
 
     setSelectedVal(modifiedAnswer);
-    onChange(modifiedAnswer);
+    setModAnswer(modifiedAnswer);
+    if (!multiple) onChange(modifiedAnswer);
     if (onCascadeChange) onCascadeChange();
   };
 
@@ -108,7 +110,7 @@ const AutoCompleteWithAddOption = ({
     }
     const currentOptions = [...getOptions()];
     const newOptions = currentOptions.filter(
-      el => selectedVal.indexOf(el) === -1
+      (el) => selectedVal.indexOf(el) === -1
     );
     setCurrentLov(newOptions);
   }, [answer]);
@@ -118,9 +120,8 @@ const AutoCompleteWithAddOption = ({
    */
   useEffect(() => {
     setClearable(true);
-    if (selectedVal && !loading) setClearable(false);
+    if (selectedVal && loading) setClearable(false);
   }, [loading]);
-
   /**
    * Set Autocomplete Placeholder
    */
@@ -138,7 +139,7 @@ const AutoCompleteWithAddOption = ({
   /**
    * onChange Autocomplete Input Text
    */
-  const onTextChange = event => {
+  const onTextChange = (event) => {
     if (onCascadeChange) onCascadeChange();
     if (event.currentTarget.value) {
       setClearable(false);
@@ -186,17 +187,20 @@ const AutoCompleteWithAddOption = ({
         }}
         size="small"
         disableClearable={clearable}
-        onBlur={handleBlur}
+        onBlur={() => {
+          if (multiple) onChange(modAnswer);
+          handleBlur();
+        }}
         onFocus={handleFocus}
-        openOnFocus
         disabled={disabled}
         style={{ resize: 'vertical' }}
         options={currentLov}
         multiple={multiple}
         onChange={handleChange}
         freeSolo
+        disableCloseOnSelect={multiple}
         value={selectedVal}
-        renderInput={params => {
+        renderInput={(params) => {
           return (
             <TextField
               onChange={onTextChange}
@@ -212,8 +216,8 @@ const AutoCompleteWithAddOption = ({
   );
 };
 
-const mapStateToProps = state => ({
-  options: getLookUpOptionsSelector(state)
+const mapStateToProps = (state) => ({
+  options: getLookUpOptionsSelector(state),
 });
 
 export default connect(mapStateToProps)(AutoCompleteWithAddOption);
