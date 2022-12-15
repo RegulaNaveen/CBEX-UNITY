@@ -156,11 +156,7 @@ class Questions extends Component {
     const {
       fetchUsers,
       getSFNonEditabelInfoField,
-      callPickListLookupSfData,
-      userEmail,
-      userRole,
-      proposalDetail,
-      trackEvent
+      callPickListLookupSfData
     } = this.props;
     fetchUsers();
     getSFNonEditabelInfoField();
@@ -176,22 +172,6 @@ class Questions extends Component {
         console.error(err);
         this.setState({ isShowVerticalTab: false });
       });
-    this.resizeObserver = new ResizeObserver(
-      throttle(entries => {
-        const matamoObj = createMatomoObj(
-          proposalDetail,
-          userEmail,
-          userRole,
-          'drag event'
-        );
-        saveDataInMatomo(trackEvent, matamoObj);
-      }, 3000)
-    );
-    if (this.resizeObserver) {
-      this.resizeObserver.observe(
-        document.querySelector('.notepad-classoverride')
-      );
-    }
   }
 
   componentDidUpdate(prevProps: Map) {
@@ -200,7 +180,10 @@ class Questions extends Component {
       hasQuestionError,
       userRole,
       applyQuestionsFilter,
-      editQuestionsData
+      editQuestionsData,
+      userEmail,
+      proposalDetail,
+      trackEvent
     } = this.props;
     if (prevProps.isQuestionLoading && setQuestion && !hasQuestionError)
       this.onClose();
@@ -231,6 +214,28 @@ class Questions extends Component {
       }, 5000);
     }
     // bid change check ends
+
+    // Resize Observer Matomo event for Notepad component
+    this.resizeObserver = new ResizeObserver(
+      throttle(entries => {
+        const matamoObj = createMatomoObj(
+          proposalDetail,
+          userEmail,
+          userRole,
+          'drag event'
+        );
+        console.log('ResizeObserver called');
+        saveDataInMatomo(trackEvent, matamoObj);
+      }, 3000)
+    );
+    if (
+      this.resizeObserver &&
+      document.querySelector('.notepad-classoverride')
+    ) {
+      this.resizeObserver.observe(
+        document.querySelector('.notepad-classoverride')
+      );
+    }
   }
 
   componentWillUnmount() {
@@ -578,7 +583,6 @@ class Questions extends Component {
                         minWidth={notepadMinWidthPx}
                         maxWidth={notepadMaxWidthPx}
                         width={notepadMaxWidthPx}
-                        className="notepad-classoverride"
                         style={{ borderRadius: '5px' }}
                         resizable
                         onClose={() => {
@@ -609,6 +613,7 @@ class Questions extends Component {
                     </div>
                   );
                 }
+                // Default render for activeTab === 0
                 /* Notepad */
                 return (
                   <div id="panel-notepad" style={{ borderRadius: '5px' }}>
@@ -667,60 +672,7 @@ class Questions extends Component {
                 );
               }}
             />
-          ) : (
-            <div id="panel-notepad" style={{ borderRadius: '5px' }}>
-              <Panel
-                minWidth={notepadMinWidthPx}
-                maxWidth={notepadMaxWidthPx}
-                width={notepadMaxWidthPx}
-                className="notepad-classoverride"
-                style={{ borderRadius: '5px' }}
-                resizable
-                onClose={() => {
-                  this.setIsNotepadOpen(false);
-                  const matamoObj = createMatomoObj(
-                    proposalDetail,
-                    userEmail,
-                    userRole,
-                    'closed event'
-                  );
-                  saveDataInMatomo(trackEvent, matamoObj);
-                }}
-                onOpen={() => {
-                  this.setIsNotepadOpen(true);
-                }}
-              >
-                <div
-                  className={classNames('panel-notepad-inner', {
-                    hidden: !isNotepadOpen
-                  })}
-                >
-                  <div id="panel-notepad-header">
-                    <Typography variant="h3">Notepad</Typography>
-                  </div>
-
-                  {this.state.proposalNoteRender && this.context.wsInstance ? (
-                    <WysiwygNotepad
-                      trackEvent={trackEvent}
-                      eventCategories={eventCategories}
-                    />
-                  ) : (
-                    <Loader
-                      type="TailSpin"
-                      color="#297DFD"
-                      width={30}
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        height: '100vh'
-                      }}
-                    />
-                  )}
-                </div>
-              </Panel>
-            </div>
-          )}
+          ) : null}
           {/* Question list */}
           <div id="panel-questions-list">
             <div className="tasksList-title-wrapper">
