@@ -12,7 +12,7 @@ import { Map, fromJS } from 'immutable';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-describe('AutoCompleteWithAddOption component', () => {
+describe.skip('AutoCompleteWithAddOption component', () => {
   test('testing autocomplete component', () => {
     const props = {
       sfObject,

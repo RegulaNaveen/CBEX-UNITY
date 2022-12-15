@@ -80,6 +80,8 @@ const AutoCompleteWithAddOption = ({
    * Trigger func on select option
    */
   const handleChange = (event, newValue) => {
+    console.log('event', event);
+    if (event.type === 'click') autoCompleteRef.current.focus();
     const modifiedAnswer = multiple
       ? addAnswerPicklist(newValue)
       : addAnswerSingle(newValue);
