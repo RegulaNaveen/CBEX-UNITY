@@ -43,10 +43,18 @@ const SystemIntegrations = ({
   const [latestSfAnswer, setlatestSfAnswer] = useState(false);
 
   useEffect(() => {
-    console.log('salesforcecond', answers?.get(0)?.get('userName'));
-    if (answers?.get(0)?.get('userName') === 'AnswerPulledFromSalesforce') {
-      console.log('aaannsswweerrsss');
+    console.log(
+      'salesforcecond',
+      answers?.get(0)?.get('userName'),
+      answers?.get(0)?.get('answer')
+    );
+    if (
+      answers?.get(0)?.get('userName') === 'AnswerPulledFromSalesforce' &&
+      !isEmpty(answers?.get(0)?.get('answer'))
+    ) {
       setlatestSfAnswer(true);
+    } else {
+      setlatestSfAnswer(false);
     }
   }, [answers?.get(0)?.get('answer')]);
 
@@ -72,7 +80,6 @@ const SystemIntegrations = ({
           tabIndex={-1}
         >
           <div>
-            {console.log('sim1 purple')}
             <Incoming
               style={{ fill: '#9E54B0', height: '28px' }}
               className="integration-icon"
@@ -95,7 +102,6 @@ const SystemIntegrations = ({
           tabIndex={-1}
         >
           <div>
-            {console.log('sim2')}
             <Incoming
               className="integration-icon"
               style={{ fill: '#9e54b0', height: '28px', opacity: '50%' }}
@@ -125,7 +131,6 @@ const SystemIntegrations = ({
           tabIndex={-1}
         >
           <div>
-            {console.log('sim3')}
             <Incoming
               className="integration-icon"
               style={{ fill: '#9e54b0', height: '28px', opacity: '50%' }}
@@ -148,7 +153,6 @@ const SystemIntegrations = ({
           tabIndex={-1}
         >
           <div>
-            {console.log('sim4')}
             <Incoming
               className="integration-icon1"
               style={{ fill: '#b7b7b7', height: '28px' }}
@@ -158,7 +162,6 @@ const SystemIntegrations = ({
       );
     }
     if (isEmpty(sficon)) {
-      console.log('sim5');
       return null;
     }
   };
