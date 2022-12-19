@@ -167,7 +167,17 @@ class Documents extends Component<Props, State> {
           <p className="para-document">
             Welcome to the Opportunity Documents section. You can check here any
             documents associated to this particular opportunity. For that you
-            need to access with your enterprise email account to access Box.com
+            need to access with your enterprise email account to access Box.com.
+            For assistance with Box.com or to obtain access submit a VIA ticket
+            <span> </span>
+            <a
+              style={{ textDecoration: 'none', color: '#0768fd' }}
+              href="https://quintiles.service-now.com/via?id=sc_cat_item&sys_id=d0e1bce09038790090f625c1886a1a73"
+              target="_blank"
+              rel="noreferrer"
+            >
+              here.
+            </a>
           </p>
         </div>
         <div className="documents">
