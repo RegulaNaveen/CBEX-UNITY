@@ -121,7 +121,7 @@ const AutoCompleteWithAddOption = ({
    */
   useEffect(() => {
     setClearable(true);
-    if (selectedVal && loading) setClearable(false);
+    if (selectedVal && !loading) setClearable(false);
   }, [loading]);
   /**
    * Set Autocomplete Placeholder
