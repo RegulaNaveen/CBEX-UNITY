@@ -43,11 +43,6 @@ const SystemIntegrations = ({
   const [latestSfAnswer, setlatestSfAnswer] = useState(false);
 
   useEffect(() => {
-    console.log(
-      'salesforcecond',
-      answers?.get(0)?.get('userName'),
-      answers?.get(0)?.get('answer')
-    );
     if (
       answers?.get(0)?.get('userName') === 'AnswerPulledFromSalesforce' &&
       !isEmpty(answers?.get(0)?.get('answer'))
