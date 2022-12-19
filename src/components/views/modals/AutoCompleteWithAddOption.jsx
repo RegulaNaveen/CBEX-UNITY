@@ -5,7 +5,7 @@ import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete, {
-  createFilterOptions,
+  createFilterOptions
 } from '@material-ui/lab/Autocomplete';
 import { getLookUpOptionsSelector } from '../../../redux/selectors';
 
@@ -25,7 +25,7 @@ const AutoCompleteWithAddOption = ({
   loading,
   toggleWatch,
   onCascadeChange,
-  forceBlur,
+  forceBlur
 }) => {
   const getSFOptions = (sfObj, sfFld) =>
     options[`SF#${sfObj}_SF#${sfFld}`]
@@ -59,15 +59,15 @@ const AutoCompleteWithAddOption = ({
 
   const autoCompleteRef = useRef(null);
 
-  const addAnswerPicklist = (arr) => {
-    return arr.map((item) =>
+  const addAnswerPicklist = arr => {
+    return arr.map(item =>
       item.includes('add ')
         ? item.replace('add "', '').replace(/\"/g, '')
         : item
     );
   };
 
-  const addAnswerSingle = (str) => {
+  const addAnswerSingle = str => {
     if (str === null) {
       return ' ';
     }
@@ -91,7 +91,7 @@ const AutoCompleteWithAddOption = ({
     console.log({
       selectedVal,
       newTrimVal,
-      isValid: !isEqual(selectedVal, newTrimVal),
+      isValid: !isEqual(selectedVal, newTrimVal)
     });
     if (isEqual(selectedVal, newTrimVal)) return;
 
@@ -111,7 +111,7 @@ const AutoCompleteWithAddOption = ({
     }
     const currentOptions = [...getOptions()];
     const newOptions = currentOptions.filter(
-      (el) => selectedVal.indexOf(el) === -1
+      el => selectedVal.indexOf(el) === -1
     );
     setCurrentLov(newOptions);
   }, [answer]);
@@ -140,7 +140,7 @@ const AutoCompleteWithAddOption = ({
   /**
    * onChange Autocomplete Input Text
    */
-  const onTextChange = (event) => {
+  const onTextChange = event => {
     if (onCascadeChange) onCascadeChange();
     if (event.currentTarget.value) {
       setClearable(false);
@@ -207,7 +207,7 @@ const AutoCompleteWithAddOption = ({
         freeSolo
         disableCloseOnSelect={multiple}
         value={selectedVal}
-        renderInput={(params) => {
+        renderInput={params => {
           return (
             <TextField
               onChange={onTextChange}
@@ -223,8 +223,8 @@ const AutoCompleteWithAddOption = ({
   );
 };
 
-const mapStateToProps = (state) => ({
-  options: getLookUpOptionsSelector(state),
+const mapStateToProps = state => ({
+  options: getLookUpOptionsSelector(state)
 });
 
 export default connect(mapStateToProps)(AutoCompleteWithAddOption);
