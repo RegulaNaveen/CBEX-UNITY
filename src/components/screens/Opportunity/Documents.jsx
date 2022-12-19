@@ -19,28 +19,28 @@ import {
   getProposalBoxIdIsLoading,
   getAdditionalLinks,
   getProposalDetails,
-  getSelectedBid,
+  getSelectedBid
 } from '../../../redux/selectors';
 import {
   onGetProposalBoxId,
   getAdditionalBoxLink,
-  setupdateBoxId,
+  setupdateBoxId
 } from '../../../redux/actions/proposal-actions';
 
 const styles = {
   padding: 16,
-  textAlign: 'left',
+  textAlign: 'left'
 };
 type Props = {
   match: Match,
   getBoxId: (proposalId: string) => void,
   isGettingBoxId: boolean,
   onGettingBoxIdError: Object,
-  boxId: string,
+  boxId: string
 };
 
 type State = {
-  selectedBid: string,
+  selectedBid: string
 };
 
 class Documents extends Component<Props, State> {
@@ -48,7 +48,7 @@ class Documents extends Component<Props, State> {
   constructor(props: Object) {
     super(props);
     this.state = {
-      selectedBid: '',
+      selectedBid: ''
     };
   }
   getBrowser = () => {
@@ -77,7 +77,7 @@ class Documents extends Component<Props, State> {
       getAdditionalLink,
       proposalDetail,
       selectedBid,
-      location: { search },
+      location: { search }
     } = this.props;
     const { id } = selectedBid.toJS();
     const selectedView = new URLSearchParams(search).get('viewType');
@@ -104,7 +104,7 @@ class Documents extends Component<Props, State> {
     const { getBoxId } = this.props;
     // Setting the selected proposal
     this.setState(() => ({
-      selectedBid: proposalId,
+      selectedBid: proposalId
     }));
     // Calling API to get boxFolderId;
     getBoxId(proposalId);
@@ -269,7 +269,7 @@ const mapStateToProps = state => ({
   bids: getAllBidsForIndex(state),
   selectedBid: getSelectedBid(state),
   boxLinks: getAdditionalLinks(state),
-  proposalDetail: getProposalDetails(state),
+  proposalDetail: getProposalDetails(state)
 });
 
 export default compose(
@@ -277,6 +277,6 @@ export default compose(
   connect(mapStateToProps, {
     getBoxId: onGetProposalBoxId,
     getAdditionalLink: getAdditionalBoxLink,
-    updateBoxId: setupdateBoxId,
+    updateBoxId: setupdateBoxId
   })
 )(Documents);
