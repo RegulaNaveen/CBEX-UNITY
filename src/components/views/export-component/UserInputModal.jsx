@@ -263,7 +263,10 @@ const UserInputModal = ({
             variant="primary"
             disabled={!disable()}
             style={{ marginRight: 0 }}
-            onClick={() => initExport()}
+            onClick={() => {
+              initExport();
+              handleClose();
+            }}
           >
             Ok
           </Button>
