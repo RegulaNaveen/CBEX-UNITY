@@ -156,9 +156,7 @@ const SystemIntegrations = ({
         </Tooltip>
       );
     }
-    if (isEmpty(sficon)) {
-      return null;
-    }
+    if (isEmpty(sficon)) return null;
   };
 
   const QvidianValidation = () => {
