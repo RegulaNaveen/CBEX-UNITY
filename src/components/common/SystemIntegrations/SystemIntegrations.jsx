@@ -40,16 +40,16 @@ const SystemIntegrations = ({
   answers
 }) => {
   const answer = answers.reverse();
-  const [latestSfAnswer, setlatestSfAnswer] = useState(false);
+  const [latestSfAnswer, setLatestSfAnswer] = useState(false);
 
   useEffect(() => {
     if (
       answers?.get(0)?.get('userName') === 'AnswerPulledFromSalesforce' &&
       !isEmpty(answers?.get(0)?.get('answer'))
     ) {
-      setlatestSfAnswer(true);
+      setLatestSfAnswer(true);
     } else {
-      setlatestSfAnswer(false);
+      setLatestSfAnswer(false);
     }
   }, [answers?.get(0)?.get('answer')]);
 
