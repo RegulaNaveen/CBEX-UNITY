@@ -175,6 +175,7 @@ const AutoCompleteWithAddOption = ({
   return (
     <div className="auto-complete-with-add-option">
       <Autocomplete
+        data-testid="autocomplete-test"
         filterOptions={(currentList, params) => {
           const filtered = filter(currentList, params);
           const inputVal = params.inputValue.trim();
@@ -190,7 +191,12 @@ const AutoCompleteWithAddOption = ({
         size="small"
         disableClearable={clearable}
         onBlur={() => {
-          if (multiple) onChange(modAnswer);
+          if (
+            multiple &&
+            // eslint-disable-next-line react/prop-types
+            answer?.length !== modAnswer.length
+          )
+            onChange(modAnswer);
           handleBlur();
         }}
         onFocus={handleFocus}
