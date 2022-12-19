@@ -1,5 +1,6 @@
 #panelwrapper {
   display: flex;
+  flex-grow: 1;
   height: max-content;
   padding-top: 8px;
 }

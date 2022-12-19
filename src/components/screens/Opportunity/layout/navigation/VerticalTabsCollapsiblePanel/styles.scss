@@ -22,4 +22,8 @@
   ::-webkit-scrollbar-thumb:hover {
     background: #c1a9a9;
   }
+
+  &.hide {
+    display: none;
+  }
 }

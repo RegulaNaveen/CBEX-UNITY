@@ -19,6 +19,7 @@ import { DEFAULT } from '../../../constants/app';
 import CustomModal from '../../common/CustomModal';
 import Filters from './Filters';
 import FilterButton from './FilterButton';
+import ViewAboveVerticalTabs from '../../views/ViewAboveVerticalTabs';
 
 const Approvals = () => {
   const approvals = useSelector(state => state.approvals.allApprovals);
@@ -56,7 +57,9 @@ const Approvals = () => {
 
   return (
     <div className="approvals-tab">
-      <BidHistory data-testid="bid-history" />
+      <ViewAboveVerticalTabs>
+        <BidHistory data-testid="bid-history" />
+      </ViewAboveVerticalTabs>
 
       <div className="filter-container">
         <div className="filter-btn">

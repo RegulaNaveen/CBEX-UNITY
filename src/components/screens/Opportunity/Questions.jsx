@@ -12,7 +12,6 @@ import ApolloCheckbox from 'apollo-react/components/Checkbox';
 import classNames from 'classnames';
 import Grid from 'apollo-react/components/Grid';
 import Panel from 'apollo-react/components/Panel';
-import Typography from 'apollo-react/components/Typography';
 import Loader from 'react-loader-spinner';
 import { Add, Refresh } from '../../svg';
 import BidHistory from '../../common/Bidhistory';
@@ -67,19 +66,10 @@ import {
 } from '../../../utils/utils';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
 import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions';
-import WysiwygNotepad from '../../views/WysiwygNotepad';
 import ANSWER_TYPES from '../../../constants/answerTypes';
 import NotesSocketContext from '../../../context/notesSocketContext';
-import PriceModeler from '../../common/PriceModeler';
 import moment from 'moment';
-import VerticalTabsCollapsiblePanel from './layout/navigation/VerticalTabsCollapsiblePanel';
-import launchDarkly from '../../../utils/launchDarkly';
-import featureFlags from '../../../constants/featureFlags';
-
-const getVerticalTabFlag = async () => {
-  const verticalTabFlag = await launchDarkly(featureFlags.VERTICAL_TAB, false);
-  return verticalTabFlag;
-};
+import ViewAboveVerticalTabs from '../../views/ViewAboveVerticalTabs';
 
 export const QuestionsRefContext = createContext(null);
 
@@ -164,14 +154,6 @@ class Questions extends Component {
     window.addEventListener('resize', this.resize.bind(this));
     this.resize();
     this.props.fetchUserTagFlagInQuestion();
-    getVerticalTabFlag()
-      .then(value => {
-        this.setState({ isShowVerticalTab: value });
-      })
-      .catch(err => {
-        console.error(err);
-        this.setState({ isShowVerticalTab: false });
-      });
   }
 
   componentDidUpdate(prevProps: Map) {
@@ -540,23 +522,13 @@ class Questions extends Component {
       isQuestionsFiltersEnabled,
       activeQuestionsFilterCount,
       allSectionsExpanded,
-      editQuestionsData,
       isOpen,
-      noneditableField,
-      showNaCheckbox,
-      trackEvent,
-      eventCategories,
-      proposalDetail,
-      userEmail,
-      userRole
+      showNaCheckbox
     } = this.props;
     const {
       showModal,
       selectedQuestionForHistory,
-      isHistoryModalShown,
-      open,
-      isNotepadOpen,
-      isShowVerticalTab
+      isHistoryModalShown
     } = this.state;
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
     const minPixelToExclude = 20;
@@ -567,112 +539,13 @@ class Questions extends Component {
       : (window.innerWidth - minPixelToExclude) * (47 / 100); // 50% of the total screen size
     return (
       <>
-        <div className="opportunity-details">
-          <BidHistory />
-        </div>
+        <ViewAboveVerticalTabs>
+          <div className="opportunity-details">
+            <BidHistory />
+          </div>
+        </ViewAboveVerticalTabs>
 
         <div id="panelwrapper">
-          {isShowVerticalTab ? (
-            <VerticalTabsCollapsiblePanel
-              renderPanel={activeTab => {
-                // Check activeTab value and render required component
-                if (activeTab === 1) {
-                  return (
-                    <div id="panel-notepad" style={{ borderRadius: '5px' }}>
-                      <Panel
-                        minWidth={notepadMinWidthPx}
-                        maxWidth={notepadMaxWidthPx}
-                        width={notepadMaxWidthPx}
-                        style={{ borderRadius: '5px' }}
-                        resizable
-                        onClose={() => {
-                          this.setIsNotepadOpen(false);
-                          const matamoObj = createMatomoObj(
-                            proposalDetail,
-                            userEmail,
-                            userRole,
-                            'closed event'
-                          );
-                          saveDataInMatomo(trackEvent, matamoObj);
-                        }}
-                        onOpen={() => {
-                          this.setIsNotepadOpen(true);
-                        }}
-                      >
-                        <div
-                          className={classNames('panel-notepad-inner', {
-                            hidden: !isNotepadOpen
-                          })}
-                        >
-                          <div id="panel-notepad-header">
-                            <Typography variant="h3">Tac 02 Title</Typography>
-                          </div>
-                          Tab 02 Content
-                        </div>
-                      </Panel>
-                    </div>
-                  );
-                }
-                // Default render for activeTab === 0
-                /* Notepad */
-                return (
-                  <div id="panel-notepad" style={{ borderRadius: '5px' }}>
-                    <Panel
-                      minWidth={notepadMinWidthPx}
-                      maxWidth={notepadMaxWidthPx}
-                      width={notepadMaxWidthPx}
-                      className="notepad-classoverride"
-                      style={{ borderRadius: '5px' }}
-                      resizable
-                      onClose={() => {
-                        this.setIsNotepadOpen(false);
-                        const matamoObj = createMatomoObj(
-                          proposalDetail,
-                          userEmail,
-                          userRole,
-                          'closed event'
-                        );
-                        saveDataInMatomo(trackEvent, matamoObj);
-                      }}
-                      onOpen={() => {
-                        this.setIsNotepadOpen(true);
-                      }}
-                    >
-                      <div
-                        className={classNames('panel-notepad-inner', {
-                          hidden: !isNotepadOpen
-                        })}
-                      >
-                        <div id="panel-notepad-header">
-                          <Typography variant="h3">Notepad</Typography>
-                        </div>
-
-                        {this.state.proposalNoteRender &&
-                        this.context.wsInstance ? (
-                          <WysiwygNotepad
-                            trackEvent={trackEvent}
-                            eventCategories={eventCategories}
-                          />
-                        ) : (
-                          <Loader
-                            type="TailSpin"
-                            color="#297DFD"
-                            width={30}
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                              height: '100vh'
-                            }}
-                          />
-                        )}
-                      </div>
-                    </Panel>
-                  </div>
-                );
-              }}
-            />
-          ) : null}
           {/* Question list */}
           <div id="panel-questions-list">
             <div className="tasksList-title-wrapper">

@@ -145,6 +145,7 @@
         .taskList-icons-wrapper {
           display: flex;
           flex-direction: row;
+          justify-content: flex-end;
           align-items: center;
 
           .taskList-checkbox-wrapper {
@@ -333,6 +334,7 @@
         .taskList-icons-wrapper {
           display: flex;
           flex-direction: row;
+          justify-content: flex-end;
           align-items: center;
 
           .taskList-checkbox-wrapper {
