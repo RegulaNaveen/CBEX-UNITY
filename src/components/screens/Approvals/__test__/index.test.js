@@ -1,15 +1,23 @@
 import React from 'react';
 import '@testing-library/jest-dom';
-import { fireEvent, screen } from '@testing-library/react';
+import * as ReactDOM from 'react-dom';
+import {
+  fireEvent,
+  screen,
+  render as reactTestingRender
+} from '@testing-library/react';
 import configureMockStore from 'redux-mock-store';
 import { configure, render } from 'enzyme';
 import { Map, fromJS } from 'immutable';
 import { Provider } from 'react-redux';
 import Adapter from 'enzyme-adapter-react-16';
+import Sinon from 'sinon';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Approvals from '../index';
 import * as data from '../../Proposal/__tests__/data.json';
 import { allApprovals, quesHashData } from './data';
+import * as ApprovalActions from '../../../../redux/actions/approval-actions';
+import * as ProposalActions from '../../../../redux/actions/proposal-actions';
 
 configure({ adapter: new Adapter() });
 const mockStore = configureMockStore();
@@ -101,6 +109,18 @@ let initialState = {
 };
 describe('Testing approvals', () => {
   let store;
+  let sinonSandbox;
+  beforeAll(() => {
+    ReactDOM.createPortal = jest.fn((element, node) => {
+      return element;
+    });
+    sinonSandbox = Sinon.createSandbox();
+  });
+
+  afterEach(() => {
+    sinonSandbox.restore();
+  });
+
   beforeEach(() => {
     store = mockStore(initialState);
   });
@@ -113,14 +133,24 @@ describe('Testing approvals', () => {
       getSelectedBid: jest.fn(),
       getOpportunityData: jest.fn()
     };
-    render(
+
+    sinonSandbox
+      .stub(ApprovalActions, 'fetchAllApprovals')
+      .returns({ type: 'FETCH_ALL_APPROVALS' });
+    sinonSandbox
+      .stub(ApprovalActions, 'fetchApprovalSendEmailFlag')
+      .returns({ type: 'fetchApprovalSendEmailFlag' });
+    sinonSandbox
+      .stub(ProposalActions, 'getPriceModelerData')
+      .returns({ type: 'GET_PRICE_MODELERDATA' });
+    const { queryAllByTestId } = reactTestingRender(
       <Provider store={store}>
         <Router>
           <Approvals {...props} />
         </Router>
       </Provider>
     );
-    await expect(screen.queryAllByTestId('bid-history')).toBeTruthy();
+    await expect(queryAllByTestId('bid-history')).toBeTruthy();
   });
   test.skip('Test filter function', () => {
     const renderFilterFunc = jest.fn();
@@ -141,14 +171,23 @@ describe('Testing approvals', () => {
     const renderFilterFunc = jest.fn();
     const mockFunc = renderFilterFunc();
     expect(mockFunc).toBeUndefined();
-    render(
+    sinonSandbox
+      .stub(ApprovalActions, 'fetchAllApprovals')
+      .returns({ type: 'FETCH_ALL_APPROVALS' });
+    sinonSandbox
+      .stub(ApprovalActions, 'fetchApprovalSendEmailFlag')
+      .returns({ type: 'fetchApprovalSendEmailFlag' });
+    sinonSandbox
+      .stub(ProposalActions, 'getPriceModelerData')
+      .returns({ type: 'GET_PRICE_MODELERDATA' });
+    const { queryAllByTestId } = reactTestingRender(
       <Provider store={store}>
         <Router>
           <Approvals {...props} />
         </Router>
       </Provider>
     );
-    await expect(screen.queryAllByTestId('No_approvals')).toBeTruthy();
+    await expect(queryAllByTestId('No_approvals')).toBeTruthy();
   });
 
   test('Click event ', async () => {
@@ -159,7 +198,16 @@ describe('Testing approvals', () => {
       getSelectedBid: jest.fn(),
       getOpportunityData: jest.fn()
     };
-    render(
+    sinonSandbox
+      .stub(ApprovalActions, 'fetchAllApprovals')
+      .returns({ type: 'FETCH_ALL_APPROVALS' });
+    sinonSandbox
+      .stub(ApprovalActions, 'fetchApprovalSendEmailFlag')
+      .returns({ type: 'fetchApprovalSendEmailFlag' });
+    sinonSandbox
+      .stub(ProposalActions, 'getPriceModelerData')
+      .returns({ type: 'GET_PRICE_MODELERDATA' });
+    reactTestingRender(
       <Provider store={store}>
         <Router>
           <Approvals {...props} />
