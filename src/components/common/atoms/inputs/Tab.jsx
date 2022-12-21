@@ -212,7 +212,7 @@ const UnityTab = ({
         </Tabs>
         <div style={{ padding: 20, paddingTop: 5 }}>
           <div id="fullwidth-view-above-vertical-tabs"></div>
-          <div style={{ display: 'flex' }}>
+          <div style={{ display: 'flex', marginTop: '16px' }}>
             {isShowVerticalTab ? (
               <VerticalTabsCollapsiblePanel
                 showQuestionsForCustomerTab={showQuestionsForCustomerTab}
