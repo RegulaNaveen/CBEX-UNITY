@@ -120,7 +120,7 @@ function topHeading(details) {
 export function getLastAnswer(answers) {
   try {
     const lastAnswer = answers[answers.length - 1];
-    return lastAnswer.answer.toString();
+    return (lastAnswer && lastAnswer.answer.toString()) || '';
   } catch (error) {
     console.log(error);
     return '';
@@ -212,7 +212,7 @@ function isContainFormattedAnswer(lastAnswerJS) {
       ? formattedAnswer
       : parseJson(formattedAnswer);
 
-  if (parseFormattedData.value) return true;
+  if (parseFormattedData && parseFormattedData.value) return true;
   return false;
 }
 
