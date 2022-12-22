@@ -19,7 +19,7 @@ import {
   updateSwitchInProgress,
   resetProposalId,
   setEventLauncherFlag,
-  changeBid,
+  changeBid
 } from '../../../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../../../redux/actions/notepad-actions';
 import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
@@ -28,7 +28,7 @@ import {
   getProposalDetails,
   getSelectedBid,
   isProposalLoading,
-  getStatusOfNewBid,
+  getStatusOfNewBid
 } from '../../../redux/selectors';
 import Toolbar from '../../views/toolbar';
 import MatomoHOC from '../../HOC/MatomoHOC';
@@ -51,7 +51,7 @@ import launchDarkly from '../../../utils/launchDarkly';
 import { getBidList } from '../../../redux/selectors/proposal';
 
 type State = {
-  selectedView: string,
+  selectedView: string
 };
 
 type Props = {
@@ -86,7 +86,7 @@ type Props = {
   setResetProposalId: Function,
   setEventLauncherFlg: Function,
   bidList: any,
-  changeBidInView: Function,
+  changeBidInView: Function
 };
 
 export class Opportunity extends Component<Props, State> {
@@ -99,7 +99,7 @@ export class Opportunity extends Component<Props, State> {
       enableValidateTab: false,
       windowSize: window.innerWidth,
       ydoc: new Y.Doc(),
-      wsInstance: undefined,
+      wsInstance: undefined
     };
   }
 
@@ -115,7 +115,7 @@ export class Opportunity extends Component<Props, State> {
       location: { search },
       match: { params },
       setSeenOne,
-      selectedBid,
+      selectedBid
     } = this.props;
     const winLocationSearch = window.location.search;
     const queryparams = new URLSearchParams(winLocationSearch);
@@ -143,7 +143,7 @@ export class Opportunity extends Component<Props, State> {
       else this.context.updateSocketOppId(null, null);
     }
 
-    window.addEventListener('storage', (e) => this.handleStorageChange(e));
+    window.addEventListener('storage', e => this.handleStorageChange(e));
     window.addEventListener('resize', this.handleResize);
     // const windowSize = window.innerWidth;
 
@@ -154,13 +154,13 @@ export class Opportunity extends Component<Props, State> {
     } else if (enableValidateTab === 'true') {
       getValidatedData(params.id);
       this.setState({
-        enableValidateTab: true,
+        enableValidateTab: true
       });
     }
 
     // Track Page view
     trackPageView({
-      documentTitle: `${eventCategories.plainPd}`,
+      documentTitle: `${eventCategories.plainPd}`
     });
 
     // Scroll
@@ -177,7 +177,7 @@ export class Opportunity extends Component<Props, State> {
       selectedBid,
       setEventLauncherFlg,
       bidList,
-      changeBidInView,
+      changeBidInView
     } = this.props;
     const thisProposalId = selectedBid.get('id', '');
     const prevProposalId = prevProps.selectedBid.get('id', '');
@@ -206,7 +206,7 @@ export class Opportunity extends Component<Props, State> {
       bidList.length > 0 &&
       bidList.length !== prevBidList.length // check to prevent infinite rerenders
     ) {
-      const bidItemToSelect = bidList.find((item) => item.bidNo === bidNo);
+      const bidItemToSelect = bidList.find(item => item.bidNo === bidNo);
       if (!isEmpty(bidItemToSelect)) {
         changeBidInView(bidItemToSelect);
       }
@@ -242,7 +242,7 @@ export class Opportunity extends Component<Props, State> {
   handleStorageChange(e) {
     const {
       getValidatedData,
-      match: { params },
+      match: { params }
     } = this.props;
 
     if (e.key === 'enableValidateTab') {
@@ -253,7 +253,7 @@ export class Opportunity extends Component<Props, State> {
         selectedView:
           !isEnabled && selectedViewState === 'validate'
             ? 'questions'
-            : selectedViewState,
+            : selectedViewState
       });
       if (isEnabled) {
         getValidatedData(params.id);
@@ -278,7 +278,7 @@ export class Opportunity extends Component<Props, State> {
     }
   };
 
-  createNewNotesSocketConnection = (proposalId) => {
+  createNewNotesSocketConnection = proposalId => {
     const { ydoc } = this.state;
     const storedValue = `doc-${proposalId}`;
     if (proposalId) {
@@ -291,12 +291,12 @@ export class Opportunity extends Component<Props, State> {
     }
   };
 
-  trackMatomoEventTabs = (tab) => {
+  trackMatomoEventTabs = tab => {
     const {
       eventCategories,
       userActions,
       proposalDetail,
-      trackEvent,
+      trackEvent
     } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
@@ -304,13 +304,13 @@ export class Opportunity extends Component<Props, State> {
       customDimensions: [
         {
           id: 1,
-          value: JSON.stringify(proposalDetail),
-        },
-      ],
+          value: JSON.stringify(proposalDetail)
+        }
+      ]
     });
   };
 
-  onChangeSelectedTab = (value) => {
+  onChangeSelectedTab = value => {
     this.setState({ selectedView: value });
   };
 
@@ -327,7 +327,7 @@ export class Opportunity extends Component<Props, State> {
       isOpen,
       selectedBid,
 
-      match: { params },
+      match: { params }
     } = this.props;
     const { bidStatus } = selectedBid.toJS();
     if (isLoading)
@@ -339,16 +339,16 @@ export class Opportunity extends Component<Props, State> {
 
     return (
       <div className="proposal-details">
-        <GenerateDocs />
-        <UnityGrid
-          data={details}
-          isOpen={isOpen}
-          windowSize={windowSize}
-          bidStatus={bidStatus}
-        />
         <NotesSocketContext.Provider
           value={{ wsInstance: this.state.wsInstance, ydoc: this.state.ydoc }}
         >
+          <GenerateDocs />
+          <UnityGrid
+            data={details}
+            isOpen={isOpen}
+            windowSize={windowSize}
+            bidStatus={bidStatus}
+          />
           <UnityTab
             id={params.id}
             enableValidateTab={enableValidateTab}
@@ -365,17 +365,17 @@ export class Opportunity extends Component<Props, State> {
       isSidebarOpen,
       selectedBid,
       newbidflag,
-      closeNewbidflag,
+      closeNewbidflag
     } = this.props;
     const {
       questionTemplateVersionNumber,
       opportunityType,
-      bidStatus,
+      bidStatus
     } = selectedBid.toJS();
     return (
       <div
         className={classNames('proposal-wrapper', {
-          'is-collapsed': isSidebarOpen,
+          'is-collapsed': isSidebarOpen
         })}
       >
         <Toolbar />
@@ -412,7 +412,7 @@ const mapStateToProps = (state: Map) => ({
   isOpen: getIsOpen(state),
   selectedBid: getSelectedBid(state),
   newbidflag: getStatusOfNewBid(state),
-  bidList: getBidList(state),
+  bidList: getBidList(state)
 });
 
 export default compose(
@@ -433,6 +433,6 @@ export default compose(
     setSeenOne: notificationActions.setSeenOne,
     setResetProposalId: resetProposalId,
     setEventLauncherFlg: setEventLauncherFlag,
-    changeBidInView: changeBid,
+    changeBidInView: changeBid
   })
 )(MatomoHOC(Opportunity));
