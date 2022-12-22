@@ -53,6 +53,7 @@ const AutoCompleteWithAddOption = ({
   };
 
   const [selectedVal, setSelectedVal] = useState(getAnswer());
+  const [modAnswer, setModAnswer] = useState(getAnswer());
   const [currentLov, setCurrentLov] = useState(getOptions());
   const [clearable, setClearable] = useState(true);
 
@@ -79,6 +80,7 @@ const AutoCompleteWithAddOption = ({
    * Trigger func on select option
    */
   const handleChange = (event, newValue) => {
+    if (event.type === 'click') autoCompleteRef.current.focus();
     const modifiedAnswer = multiple
       ? addAnswerPicklist(newValue)
       : addAnswerSingle(newValue);
@@ -94,7 +96,8 @@ const AutoCompleteWithAddOption = ({
     if (isEqual(selectedVal, newTrimVal)) return;
 
     setSelectedVal(modifiedAnswer);
-    onChange(modifiedAnswer);
+    setModAnswer(modifiedAnswer);
+    if (!multiple) onChange(modifiedAnswer);
     if (onCascadeChange) onCascadeChange();
   };
 
@@ -120,7 +123,6 @@ const AutoCompleteWithAddOption = ({
     setClearable(true);
     if (selectedVal && !loading) setClearable(false);
   }, [loading]);
-
   /**
    * Set Autocomplete Placeholder
    */
@@ -149,7 +151,7 @@ const AutoCompleteWithAddOption = ({
 
   const handleFocus = useCallback(() => {
     if (toggleWatch) toggleWatch(true);
-    onFocus()
+    onFocus();
   }, []);
 
   const handleBlur = useCallback(() => {
@@ -163,7 +165,7 @@ const AutoCompleteWithAddOption = ({
         console.log(autoCompleteRef.current);
         autoCompleteRef.current.blur();
         setTimeout(() => {
-          autoCompleteRef.current.value="";
+          autoCompleteRef.current.value = '';
         }, 100);
       }
     }
@@ -172,6 +174,7 @@ const AutoCompleteWithAddOption = ({
   return (
     <div className="auto-complete-with-add-option">
       <Autocomplete
+        data-testid="autocomplete-test"
         filterOptions={(currentList, params) => {
           const filtered = filter(currentList, params);
           const inputVal = params.inputValue.trim();
@@ -186,15 +189,23 @@ const AutoCompleteWithAddOption = ({
         }}
         size="small"
         disableClearable={clearable}
-        onBlur={handleBlur}
+        onBlur={() => {
+          if (
+            multiple &&
+            // eslint-disable-next-line react/prop-types
+            answer?.length !== modAnswer.length
+          )
+            onChange(modAnswer);
+          handleBlur();
+        }}
         onFocus={handleFocus}
-        openOnFocus
         disabled={disabled}
         style={{ resize: 'vertical' }}
         options={currentLov}
         multiple={multiple}
         onChange={handleChange}
         freeSolo
+        disableCloseOnSelect={multiple}
         value={selectedVal}
         renderInput={params => {
           return (

@@ -7,7 +7,7 @@ const primarySFobject = {
   ResourceRequest: 'pse__Resource_Request__c',
   Opportunity: 'Opportunity',
   BidHistory: 'Bid_History__c',
-  Account: 'Account',
+  Account: 'Account'
 };
 
 class SFAnswerValidationWrapper extends Component {
@@ -53,7 +53,7 @@ class SFAnswerValidationWrapper extends Component {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Click here to open on SF
+                  Click here to open on CRM
                 </a>
               </li>
             </ul>
@@ -66,7 +66,7 @@ class SFAnswerValidationWrapper extends Component {
 
 const mapStateToProps = (state: Object) => ({
   selectedBid: getSelectedBid(state),
-  showNaCheckbox: getShowNaCheckbox(state),
+  showNaCheckbox: getShowNaCheckbox(state)
 });
 
 export default connect(mapStateToProps)(SFAnswerValidationWrapper);

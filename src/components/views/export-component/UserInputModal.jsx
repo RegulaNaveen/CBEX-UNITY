@@ -226,7 +226,7 @@ const UserInputModal = ({
           </div>
           <div className="exportOptionsCell">
             <Select
-              label="Select by Milestones"
+              label="Select by Tags"
               value={milestones}
               onChange={handleMileStoneChange}
               fullWidth
@@ -263,7 +263,10 @@ const UserInputModal = ({
             variant="primary"
             disabled={!disable()}
             style={{ marginRight: 0 }}
-            onClick={() => initExport()}
+            onClick={() => {
+              initExport();
+              handleClose();
+            }}
           >
             Ok
           </Button>

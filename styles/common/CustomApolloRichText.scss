@@ -22,6 +22,7 @@
 
   &.disabled {
     background-color: $neutral2;
+    border-color: $border-color-disabled;
     opacity: 0.8;
 
     &:hover {
@@ -129,20 +130,19 @@
 }
 
 .custom-rich-text-inner {
-
-    &.popover-inner {
-      & > div {
-        & > div:nth-child(1) {
-          display: none !important;
-        }
-      }
-
-      &.focused {
-        & > div {
-          & > div:nth-child(1) {
-            display: inline-flex !important;
-          }
-        } 
+  &.popover-inner {
+    & > div {
+      & > div:nth-child(1) {
+        display: none !important;
       }
     }
+
+    &.focused {
+      & > div {
+        & > div:nth-child(1) {
+          display: inline-flex !important;
+        }
+      }
+    }
+  }
 }

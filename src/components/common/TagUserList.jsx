@@ -1,37 +1,136 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import classNames from 'classnames';
-import { getUsersListApiCall } from '../../api/proposal';
-import Loader from 'apollo-react/components/Loader';
+import { CancelableADRequestApi } from '../../api/getADUsers';
+
+function formatUser(user, query) {
+  const name = `${user.first_name} ${user.last_name}`;
+  const queryMatchResult = name.match(new RegExp(query, 'i'));
+  if (queryMatchResult !== null) {
+    const start = queryMatchResult['index'];
+    const first = name.slice(0, start);
+    const matched = name.slice(start, start + query.length);
+    const last = name.slice(start + query.length, name.length);
+    return [first, <b>{matched}</b>, last, `(${user.email})`];
+  } else {
+    return [name, `(${user.email})`];
+  }
+}
+
+function TagUserListItem({ active, item, onClickHandler }) {
+  const listItemRef = useRef(null);
+
+  useEffect(() => {
+    if (listItemRef.current && active) {
+      listItemRef.current.scrollIntoView({
+        behavior: 'auto',
+        block: 'nearest',
+        inline: 'start'
+      });
+    }
+  }, [active]);
+
+  return (
+    <li
+      ref={listItemRef}
+      className={classNames('list-item', {
+        active
+      })}
+      onClick={e => onClickHandler(e, item)}
+      display-name={item.name}
+      key={item.id}
+      aria-hidden="true"
+    >
+      {item.formattedUser}
+    </li>
+  );
+}
 
 const TagUserList = ({ searchTag, onSelect, close }) => {
   const [fetchingUsers, setfetchingUsers] = useState(false);
   const [users, setUsers] = useState([]);
+  const [activeOptionIndex, setActiveOptionIndex] = useState(0);
 
   async function fetchUsers() {
     setfetchingUsers(true);
-    try {
-      if (searchTag !== null && searchTag.length > 0) {
-        const usersListResponse = await getUsersListApiCall(searchTag);
-        if (usersListResponse && Array.isArray(usersListResponse.data)) {
-          setUsers(usersListResponse.data);
-        } else {
-          setUsers([]);
-        }
-      } else {
-        setUsers([]);
-      }
-    } catch (e) {
-      console.log('Error in retrieving users');
+    if (searchTag !== null && searchTag.length > 0) {
+      let usersList = await CancelableADRequestApi.getUsersByQuery(searchTag);
+      usersList = usersList.map(user => ({
+        ...user,
+        formattedUser: formatUser(user, searchTag)
+      }));
+      console.log(usersList);
+      setUsers(usersList);
+    } else {
       setUsers([]);
-    } finally {
-      setfetchingUsers(false);
     }
+    setActiveOptionIndex(0);
+    setfetchingUsers(false);
   }
 
   useEffect(() => {
     fetchUsers();
   }, [searchTag]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDownListener);
+    return () => window.removeEventListener('keydown', handleKeyDownListener);
+  }, [users]);
+
+  function handleKeyDownListener(event) {
+    if (users.length === 0) return;
+    if (['Escape', 'Enter', 'ArrowUp', 'ArrowDown'].includes(event.code)) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    if (event.code === 'Escape') {
+      handleEscapeKeyPress();
+      return;
+    }
+
+    if (event.code === 'Enter') {
+      handleEnterKeyPress();
+      return;
+    }
+
+    if (event.code === 'ArrowDown') {
+      handleArrowKeyDownPress();
+      return;
+    }
+
+    if (event.code === 'ArrowUp') {
+      handleArrowKeyUpPress();
+    }
+  }
+
+  function handleArrowKeyUpPress() {
+    setActiveOptionIndex(prevActiveOptionIndex =>
+      prevActiveOptionIndex > 0
+        ? prevActiveOptionIndex - 1
+        : prevActiveOptionIndex
+    );
+  }
+
+  function handleArrowKeyDownPress() {
+    setActiveOptionIndex(prevActiveOptionIndex =>
+      prevActiveOptionIndex < users.length - 1
+        ? prevActiveOptionIndex + 1
+        : prevActiveOptionIndex
+    );
+  }
+
+  function handleEnterKeyPress() {
+    setActiveOptionIndex(activeIndex => {
+      onSelect(users[activeIndex]);
+      close();
+      return 0;
+    });
+  }
+
+  function handleEscapeKeyPress() {
+    close();
+  }
 
   const onClickHandler = async (e, user) => {
     e.preventDefault();
@@ -43,49 +142,25 @@ const TagUserList = ({ searchTag, onSelect, close }) => {
   if (fetchingUsers) {
     return (
       <div className="tag-user-list-loader">
-        <span
-          style={{
-            marginLeft: '0px',
-            marginRight: '6px',
-            position: 'relative',
-            top: '15px',
-            width: '20px'
-          }}
-        >
-          <Loader
-            isInner
-            size={20}
-            style={{
-              width: '20px',
-              height: '20px'
-            }}
-          />
-        </span>
-        <p>Fetching users...</p>
+        <p>Loading...</p>
       </div>
     );
   }
 
   if (isEmpty(users)) {
-    return (
-      <div className="tag-user-list-empty">
-        <p>No User Found</p>
-      </div>
-    );
+    return null;
   }
 
+  // Can be enhanced with Popper component
   return (
     <ul className="tag-user-list">
-      {users.map((item, indx) => (
-        <li
-          className={classNames('list-item', { active: !indx })}
-          onClick={e => onClickHandler(e, item)}
-          display-name={item.name}
-          key={item.id}
-          aria-hidden="true"
-        >
-          {`${item.last_name}, ${item.first_name} (${item.email})`}
-        </li>
+      {users.map((item, index) => (
+        <TagUserListItem
+          item={item}
+          active={activeOptionIndex === index}
+          onClickHandler={onClickHandler}
+          key={`tag-user-item-${index + 1}`}
+        />
       ))}
     </ul>
   );

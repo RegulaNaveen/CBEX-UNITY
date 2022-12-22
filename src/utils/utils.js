@@ -1,5 +1,6 @@
 import jwt_decode from 'jwt-decode';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
+import { DEFAULT } from '../constants/app';
 import CountryMap from '../constants/country.json';
 import { UBUILD_ADMIN } from '../constants/types';
 
@@ -121,6 +122,41 @@ function logLobDetails(record) {
  * function to rearrange diff'ed answers from diff js library
  */
 
+const getApprovalCount = (approvals, proposalQuestions) => {
+  try {
+    const finalapproval = [];
+    return new Promise(resolve => {
+      let approvalCount = 0;
+      if (approvals.length) {
+        // eslint-disable-next-line array-callback-return
+        approvals.map(v => {
+          if (
+            v.ApprovalSectionLeftQuestions.length ||
+            v.ApprovalSectionRightQuestions.length
+          ) {
+            const arr = [
+              ...v.ApprovalSectionLeftQuestions,
+              ...v.ApprovalSectionRightQuestions
+            ];
+            const uniqueQuestionID = new Set();
+            const extendedSet = new Set([...uniqueQuestionID, ...arr]);
+            const res = proposalQuestions.some(
+              c => c.active && extendedSet.has(c.questionId)
+            );
+            if (res) {
+              approvalCount += 1;
+              finalapproval.push(v);
+            }
+          }
+        });
+      }
+      resolve({ approvalCount, finalapproval });
+    });
+  } catch (error) {
+    console.log(`error in getApprovalCount`, error);
+  }
+};
+
 function rearrangeDiff(diffAnswers) {
   let rearrangedDiffAnswers = [];
   let subAdditionDiffAnswers = [];
@@ -202,7 +238,7 @@ function checkNonEditableFields(PreField, sfField, sfObject) {
 }
 
 const saveDataInMatomo = (trackEvent, data) => {
-  console.log(`trackEvent`, trackEvent)
+  console.log(`trackEvent`, trackEvent);
   const { category, action, name, customDimensions } = data;
   trackEvent({
     category: category,
@@ -210,7 +246,7 @@ const saveDataInMatomo = (trackEvent, data) => {
     name: name,
     customDimensions: customDimensions
   });
-}
+};
 
 const throttle = (func, delay) => {
   // Previously called time of the function
@@ -221,28 +257,53 @@ const throttle = (func, delay) => {
 
     // Logging the difference between previously
     // called and current called timings
-     
+
     // If difference is greater than delay call
     // the function again.
-    if(now - prev> delay){
+    if (now - prev > delay) {
       prev = now;
 
       // "..." is the spread operator here
       // returning the function with the
       // array of arguments
-      return func(...args); 
+      return func(...args);
     }
+  };
+};
+
+/**
+ * Get Error Message from response
+ */
+export function getErrorMessage(error) {
+  if (error.response) {
+    let msg = error.response.data.message;
+    const isErr400 = error.response.status === 400;
+    const isErr404 = error.response.status === 404;
+    if (isErr400 && isEmpty(msg)) msg = DEFAULT.ERROR_400;
+    if (isErr404 && isEmpty(msg)) msg = DEFAULT.ERROR_404;
+    if (!isErr400 && !isErr404 && isEmpty(msg)) msg = DEFAULT.REQUEST_FAILED;
+    return msg;
   }
+  return 'Unexpected error occurred';
 }
 
-  const createMatomoObj = (proposalDetails, userEmail, userRole, action) => {
-    const matamoObj = {}
-    matamoObj.category = `Proposal Detail (CRM#:${proposalDetails['CRM #']})`
-    matamoObj.action = `Event: Notepad ${proposalDetails['CRM #']}`
-    matamoObj.name = `Notepad: ${action}`
-    matamoObj.customDimensions = [JSON.stringify(proposalDetails), {user: userEmail},{role: userRole}]
-    return matamoObj
-  }
+const createMatomoObj = (proposalDetails, userEmail, userRole, action) => {
+  const matamoObj = {};
+  matamoObj.category = `Proposal Detail (CRM#:${proposalDetails['CRM #']})`;
+  matamoObj.action = `Event: Notepad ${proposalDetails['CRM #']}`;
+  matamoObj.name = `Notepad: ${action}`;
+  matamoObj.customDimensions = [
+    {
+      id: 1,
+      value: JSON.stringify({
+        proposalDetails,
+        userEmail,
+        userRole
+      })
+    }
+  ];
+  return matamoObj;
+};
 
 export {
   getCountriesNameForCode,
@@ -257,5 +318,6 @@ export {
   updateEventSubjectBody,
   saveDataInMatomo,
   throttle,
-  createMatomoObj
+  createMatomoObj,
+  getApprovalCount
 };

@@ -4,10 +4,12 @@ import map from 'lodash/map';
 import IconButton from 'apollo-react/components/IconButton';
 import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
+import CircularProgress from 'apollo-react/components/CircularProgress';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   getSelectedBid,
-  getPriceModuler
+  getPriceModuler,
+  selectIsPriceModelerEstimateRecalculating
 } from '../../redux/selectors/proposal';
 import { getPriceModelerData } from '../../redux/actions/proposal-actions';
 import CustomModal from './CustomModal';
@@ -41,6 +43,9 @@ const PriceModeler = () => {
   const dispatch = useDispatch();
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const priceModeler = useSelector(getPriceModuler)?.toJS();
+  const isPriceModelerRecalculating = useSelector(
+    selectIsPriceModelerEstimateRecalculating
+  );
   const memoizeBid = useMemo(() => selectedBid, [selectedBid?.id]);
   const proposalID = memoizeBid?.id;
 
@@ -56,7 +61,7 @@ const PriceModeler = () => {
     <Tooltip
       variant="light"
       tabIndex={-1}
-      title="Excludes investigator grants, vendor costs and other expenses"
+      title="The fields listed below are required for an estimate to be displayed. Excludes investigator grants, vendor costs, and other expenses"
       placement="top"
     >
       <IconButton
@@ -78,14 +83,37 @@ const PriceModeler = () => {
         </div>
       )}
 
-      <h2 className="price-modeler__title">Price Modeler Ballpark Estimate</h2>
+      <h2 className="price-modeler__title">Price Modeler Estimate</h2>
       <p className="price-modeler__price">
         {`$${
-          priceModeler.cost
+          priceModeler.cost && priceModeler.cost !== '0'
             ? convertToInternationalCurrency(priceModeler.cost)
-            : '0.0M'
+            : '--'
         }`}{' '}
         <span className="price-modeler__info">{infoIconWithTooltip}</span>
+        {isPriceModelerRecalculating ? (
+          <span
+            className="price-modeler__recalculating"
+            data-testid="price-modeler-recalc-loader"
+          >
+            <Tooltip
+              variant="light"
+              tabIndex={-1}
+              title="Recalculating"
+              placement="top"
+            >
+              <CircularProgress
+                variant="indeterminate"
+                size={20}
+                style={{
+                  color: 'rgb(255, 147, 0)',
+                  width: '20px',
+                  height: '20px'
+                }}
+              />
+            </Tooltip>
+          </span>
+        ) : null}
       </p>
       <div className="price-modeler__details">
         {map(priceModeler, (item, key) => {
@@ -93,7 +121,7 @@ const PriceModeler = () => {
           return (
             <div className="price-modeler__details-item" key={key}>
               <h3>{INITIAL_LIST_TITLE[key]}:</h3>
-              <i>{item || 'N/A'}</i>
+              <i>{item === '' || item === ' ' ? 'N/A' : item || 'N/A'}</i>
             </div>
           );
         })}

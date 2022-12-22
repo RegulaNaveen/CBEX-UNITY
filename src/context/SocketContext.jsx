@@ -13,7 +13,9 @@ import {
   updateQuestionUnlockByUser,
   getQuestionLockDetailsAll,
   setProposalAnswerDatafromSocket,
-  setNotApplicableQuestionFromSocket
+  setNotApplicableQuestionFromSocket,
+  setPriceModelerRecalculationStatusAction,
+  updatePriceModelerEstimateAction
 } from '../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
@@ -204,8 +206,8 @@ const SocketContextProvider = props => {
   /**
    * Function called after bid creation completed
    */
-  const refreshOpportunity = id => {
-    props.getOpportunityInfo(id, true);
+  const refreshOpportunity = (id, bidNo) => {
+    props.getOpportunityInfo(id, bidNo, true);
   };
 
   /**
@@ -264,7 +266,9 @@ const SocketContextProvider = props => {
         updateQuestionUnlock,
         getQuestionLockDetails,
         setProposalAnswerDatafromSocket,
-        setNotApplicableQuestionFromSocket
+        setNotApplicableQuestionFromSocket,
+        setPriceModelerRecalculationStatus,
+        updatePriceModelerEstimate
       } = props;
 
       // On Message Recieve
@@ -276,7 +280,10 @@ const SocketContextProvider = props => {
             addNewBid(data.data);
             break;
           case 'COMPLETED':
-            refreshOpportunity(data.oppId);
+            refreshOpportunity(
+              data.oppId,
+              data.data.proposal.proposalDetails.bidNo
+            );
             break;
           case 'ANSWER_UPDATE':
             if (updateAnswerAction) updateAnswerAction(data.data);
@@ -334,6 +341,12 @@ const SocketContextProvider = props => {
           case 'QUESTIONS':
             // Get list of questions already locked by other users
             getQuestionLockDetails(data);
+            break;
+          case 'COST_ESTIMATE_CALCULATING':
+            setPriceModelerRecalculationStatus(true);
+            break;
+          case 'COST_ESTIMATE_UPDATE':
+            updatePriceModelerEstimate(data.data);
             break;
           default:
             break;
@@ -494,7 +507,9 @@ const mapDispatchToProps = {
   updateQuestionUnlock: updateQuestionUnlockByUser,
   getQuestionLockDetails: getQuestionLockDetailsAll,
   setProposalAnswerDatafromSocket: setProposalAnswerDatafromSocket,
-  setNotApplicableQuestionFromSocket: setNotApplicableQuestionFromSocket
+  setNotApplicableQuestionFromSocket: setNotApplicableQuestionFromSocket,
+  setPriceModelerRecalculationStatus: setPriceModelerRecalculationStatusAction,
+  updatePriceModelerEstimate: updatePriceModelerEstimateAction
 };
 
 export default connect(

@@ -134,7 +134,7 @@
       .tasksList-title-wrapper {
         display: flex;
         align-items: center;
-        justify-content: flex-end;
+        justify-content: space-between;
         padding: 0px 0 16px 0;
 
         .tasksList-title {
@@ -145,6 +145,7 @@
         .taskList-icons-wrapper {
           display: flex;
           flex-direction: row;
+          justify-content: flex-end;
           align-items: center;
 
           .taskList-checkbox-wrapper {
@@ -228,6 +229,7 @@
           font-weight: bold;
           font-size: 14px;
           padding-bottom: 10px;
+          margin: 0 -8px;
         }
 
         .clear-all {
@@ -321,7 +323,7 @@
       .tasksList-title-wrapper {
         display: flex;
         align-items: center;
-        justify-content: flex-end;
+        justify-content: space-between;
         padding: 0px 0 16px 0;
 
         .tasksList-title {
@@ -332,6 +334,7 @@
         .taskList-icons-wrapper {
           display: flex;
           flex-direction: row;
+          justify-content: flex-end;
           align-items: center;
 
           .taskList-checkbox-wrapper {
@@ -415,6 +418,7 @@
           font-weight: bold;
           font-size: 14px;
           padding-bottom: 10px;
+          margin: 0 -8px;
         }
 
         .clear-all {

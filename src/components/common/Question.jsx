@@ -144,7 +144,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
       selectedRow: false,
       iconColor: '#00c221',
       screenWidth: '',
-      enableRichtext: false
+      enableRichtext: false,
+      focusedSpan: false,
+      blurredSpan: false
     };
   }
 
@@ -218,32 +220,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
       this.context,
       proposalId,
       questionId,
-      textValue.target.value,
+      textValue,
       userData
-    ).then(() => {
-      const [deletedVal] = xor(
-        textValue.target.value?.trim()
-          ? textValue.target.value?.trim().split(',')
-          : [],
-        lastValue?.trim() ? lastValue?.trim().split(',') : []
-      );
-      const [deletedEmail] = String(deletedVal).match(
-        /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
-      );
-      if (reason === 'remove-option' && deletedEmail) {
-        setAnswerLoading(questionId, true);
-        const { sectionName, sectionOrder } = section.toJS();
-        deleteProposalUser(
-          proposalId,
-          deletedEmail,
-          sectionOrder,
-          sectionName
-        ).then(() => {
-          setAnswerLoading(questionId, false);
-        });
-      }
-    });
-    this.trackMatomoEventSubmitAnswer(textValue);
+    );
   };
 
   handleTextChange = (textValue, lastAnswer, editorData) => {
@@ -295,7 +274,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
    */
   handleRichTextChange = editorData => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
-    const { value, html, text } = editorData;
+    const { value, html, text, htmlExport } = editorData;
 
     if (isEmpty(text)) this.setState({ changeIcon: '#b7b7b7' });
     else this.setState({ changeIcon: '#00c221' });
@@ -310,7 +289,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
       userData,
       {
         value,
-        html
+        html,
+        htmlExport
       }
     );
     this.trackMatomoEventSubmitAnswer(editorData.text);
@@ -409,13 +389,15 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
       const richTextData = parseFormattedData || {
         html: '',
-        value: { blocks: [] }
+        value: { blocks: [] },
+        htmlExport: ''
       };
 
       const editorData = {
         text: lastAnswer?.answer || '',
         value: richTextData.value,
-        html: richTextData.html
+        html: richTextData.html,
+        htmlExport: richTextData.htmlExport
       };
 
       this.handleRichTextChange(editorData);
@@ -672,7 +654,26 @@ export class TaskRow extends React.PureComponent<Props, State> {
         !isCurrentBid
       );
     };
+    // onFocus for question concurrency
+    const concurrencyFocusHandler = () => {
+      this.context.questionLockWrapper(this.props.questionId);
+      this.setSelectRow(true);
+    };
+    // onBlur for question concurrency
+    const concurrencyBlurHandler = () => {
+      this.context.questionUnlockWrapper(this.props.questionId);
+      this.setSelectRow(false);
+    };
+    const onFocusCheckBox = () => {
+      this.setState({ focusedSpan: true, blurredSpan: false });
+    };
 
+    const onBlurCheckBox = () => {
+      this.setState({ focusedSpan: false, blurredSpan: true });
+    };
+
+    const focusState = this.state.focusedSpan;
+    const blurState = this.state.blurredSpan;
     if (answer) {
       if (isObject(answer)) answerValueComplex = answer.toJS();
       else answerValue = answer.toString();
@@ -748,10 +749,15 @@ export class TaskRow extends React.PureComponent<Props, State> {
         ? formattedAnswer
         : parseStringifyJson(formattedAnswer);
 
-    const richTextData = parseFormattedData || {
+    let richTextData = parseFormattedData || {
       html: '',
-      value: { blocks: [] }
+      value: { blocks: [] },
+      htmlExport: ''
     };
+
+    if (!richTextData.htmlExport && richTextData.html) {
+      richTextData.htmlExport = richTextData.html;
+    }
 
     // Richtext Props
     const richTextAnswerField = {
@@ -760,6 +766,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       richTextString: getConvertedAnsString(answerValue),
       richTextVal: richTextData.value,
       richTextHtml: richTextData.html,
+      richTextHtmlExport: richTextData.htmlExport,
       enableFocus: true,
       isEditable: false,
       placeholder: checkDisableFlag() ? '' : DEFAULT.CLICK_TO_ANS,
@@ -796,13 +803,22 @@ export class TaskRow extends React.PureComponent<Props, State> {
         if (
           !isEqual(richTextData.value, data.value) &&
           !isEmpty(data.text.trim())
-        )
-          if (
-            isEmpty(richTextData.value?.blocks) &&
-            lastAnswerJS?.answer === data.value?.blocks[0]?.text
-          )
+        ) {
+          let prevAnswerBlocks = richTextData.value.blocks.filter(
+            block => block.text.length > 0
+          );
+          let answerBlocks = data.value.blocks.filter(
+            block => block.text.length > 0
+          );
+          if (isEqual(prevAnswerBlocks, answerBlocks)) {
             saveDate = false;
-          else saveDate = true;
+          } else if (
+            isEmpty(richTextData.value?.blocks) &&
+            lastAnswerJS?.answer.trim() === data.text.trim()
+          ) {
+            saveDate = false;
+          } else saveDate = true;
+        }
         // save the data if we see any text difference.
         else if (
           previousAnsText !== data.text.trim() &&
@@ -829,21 +845,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
           quesTitleLStyle.minHeight = 'auto';
           firstChild.style.maxWidth = 'none';
         }
-
         this.setSelectRow(false);
       }
     };
 
-    // onFocus for question concurrency
-    const concurrencyFocusHandler = () => {
-      this.context.questionLockWrapper(this.props.questionId);
-      this.setSelectRow(true);
-    };
-    // onBlur for question concurrency
-    const concurrencyBlurHandler = () => {
-      this.context.questionUnlockWrapper(this.props.questionId);
-      this.setSelectRow(false);
-    };
     switch (type) {
       case 'text': {
         answerValue = getConvertedAnsString(answerValue);
@@ -1186,19 +1191,32 @@ export class TaskRow extends React.PureComponent<Props, State> {
                     }
                   : ''
               }
-              className="checkboxtype"
             >
               <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
                 {this.renderNACheckbox(checkDisableFlag, 'checkbox')}
               </span>
-              <CheckBoxQuestionsIdleStateDetection
-                answerValue={answerValueComplex || ''}
-                finalOptions={finalOptions}
-                disabled={checkDisableFlagRadio() || isNotApplicable}
-                onOpen={concurrencyFocusHandler}
-                onClose={concurrencyBlurHandler}
-                onChange={this.handleCheckboxPropsalChange}
-              />
+              <div
+                className="checkboxwrapper"
+                tabIndex={0}
+                onFocus={onFocusCheckBox}
+                onBlur={onBlurCheckBox}
+              >
+                <CheckBoxQuestionsIdleStateDetection
+                  answerValue={answerValueComplex || ''}
+                  finalOptions={finalOptions}
+                  disabled={checkDisableFlag() || isNotApplicable}
+                  currentSFanswer={this.props.currentSFanswer}
+                  sfField={sfField}
+                  sfObject={sfObject}
+                  onOpen={() => concurrencyFocusHandler()}
+                  onClose={() => {
+                    concurrencyBlurHandler();
+                  }}
+                  onChange={e => this.handleCheckboxPropsalChange(e)}
+                  focusSpan={focusState}
+                  blurSpan={blurState}
+                />
+              </div>
             </span>
           </SFAnswerValidationWrapper>
         );
@@ -1317,10 +1335,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
     const oppordata = oppdata.toJS();
     const deploymentDate = '2022-08-05';
     const proposalTimeStamp = oppordata[currentBidID]?.proposal?.proposalDate;
-    const proposalCreationDate = proposalTimeStamp.substring(
-      0,
-      proposalTimeStamp.indexOf('T')
-    );
+    const proposalCreationDate = proposalTimeStamp
+      ? proposalTimeStamp.substring(0, proposalTimeStamp.indexOf('T'))
+      : '';
+    const integrationLocked = this.isQuestionLockedByOther() ? true : false;
     const dateIsAfter = moment(proposalCreationDate).isAfter(
       moment(deploymentDate)
     );
@@ -1352,6 +1370,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       if (!questionID) lastAnswer = answers.last();
       else lastAnswer = answers.get('answers').last();
     }
+
     if (lastAnswer) {
       if (
         lastAnswer.get &&
@@ -1376,7 +1395,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
       iconColor,
       changeIcon,
       screenWidth,
-      enableRichtext
+      enableRichtext,
+      focusedSpan,
+      blurredSpan
     } = this.state;
     const smallScreenWidth = screenWidth < 641 ? [8, 4] : [10, 2];
     const mediumScreen =
@@ -1520,6 +1541,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
           <SystemIntegrations
             checkSfAnswer={checkSfAnswer}
             sficon={sficon}
+            answers={answers}
             gridColRatio={gridColRatio}
             integrationmatch={integrationmatch}
             integrationvalidation={integrationvalidation}
@@ -1541,6 +1563,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             answerText={answerText}
             handleVerifyPredictedAnsClick={this.handleVerifyPredictedAnsClick}
             hasDifferentSFanswer={hasDifferentSFanswer}
+            disabled={integrationLocked}
           />
           {/* Question Lock Info */}
           {/* {this.props.questionLockInfo &&

@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ThumbsUp from 'apollo-react-icons/ThumbsUp';
 import { Folder, Clipboard, RightArrow } from '../svg';
 import { OPPORTUNITY } from '../../routes';
 import House from 'apollo-react-icons/House';
@@ -15,7 +16,9 @@ type Props = {
   phase: string,
   therapeuticArea: string,
   verbatimIndication: string,
-  proposalId: string
+  proposalId: string,
+  approvalsCount: any,
+  isApprovalCountPresent: Boolean
 };
 
 const ProposalCard = ({
@@ -28,7 +31,9 @@ const ProposalCard = ({
   phase,
   therapeuticArea,
   verbatimIndication,
-  proposalId
+  proposalId,
+  approvalsCount,
+  isApprovalCountPresent
 }: Props) => {
   function setProposalTypeView({
     currentTarget
@@ -44,15 +49,15 @@ const ProposalCard = ({
     keyToCheck === NO_DATA ? NO_DATA_PLACEHOLDER : undefined;
 
   return (
-    <div className='card'>
-      <div className='header-section'>
+    <div className="card">
+      <div className="header-section">
         <div>
           <p className={checkNoDataClass(title)}>{title}</p>
           <p className={checkNoDataClass(opportunityName)}>{opportunityName}</p>
         </div>
       </div>
 
-      <div className='info-section'>
+      <div className="info-section">
         <div className={CLASS_SECTION_DATA}>
           <span>
             <b>Customer:</b>{' '}
@@ -97,23 +102,49 @@ const ProposalCard = ({
         </div>
       </div>
 
-      <div className='buttons-section'>
+      <div className="buttons-section">
         <div
-          className='button'
-          id='questions'
-          role='presentation'
+          className="button"
+          id="questions"
+          role="presentation"
           onClick={setProposalTypeView}
         >
           <Link to={`${OPPORTUNITY}${title}`}>
-            <House fontSize='large' htmlColor='#b350bf'></House>
+            <House fontSize="large" htmlColor="#b350bf"></House>
           </Link>
           <p>Strategy Development</p>
         </div>
 
         <div
-          className='button'
-          id='documents'
-          role='presentation'
+          className="button"
+          id="approvals"
+          role="presentation"
+          onClick={setProposalTypeView}
+          disabled={!isApprovalCountPresent}
+        >
+          {!isApprovalCountPresent ? (
+            <ThumbsUp
+              fontSize="large"
+              htmlColor={!isApprovalCountPresent ? '#7f7f7f' : '#1faa00'}
+              style={{ transform: 'scaleX(-1)' }}
+            />
+          ) : (
+            <Link to={`${OPPORTUNITY}${title}?viewType=approvals`}>
+              <ThumbsUp
+                fontSize="large"
+                htmlColor={!isApprovalCountPresent ? '#7f7f7f' : '#1faa00'}
+                style={{ transform: 'scaleX(-1)' }}
+              />
+            </Link>
+          )}
+
+          <p>Approvals</p>
+        </div>
+
+        <div
+          className="button"
+          id="documents"
+          role="presentation"
           onClick={setProposalTypeView}
         >
           <Link to={`${OPPORTUNITY}${title}?viewType=documents`}>
@@ -123,9 +154,9 @@ const ProposalCard = ({
         </div>
 
         <div
-          className='button'
-          id='documents'
-          role='presentation'
+          className="button"
+          id="documents"
+          role="presentation"
           onClick={setProposalTypeView}
         >
           <div>

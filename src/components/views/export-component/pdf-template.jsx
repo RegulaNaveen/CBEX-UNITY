@@ -233,7 +233,12 @@ function checkFormattedAnswer(answers) {
           return lastAnswer.answer.toString();
         }
       } else formattedAnswer = lastAnswer?.formattedAnswer;
-      if (formattedAnswer?.html) return formattedAnswer?.html;
+      if (formattedAnswer?.htmlExport) {
+        return formattedAnswer.htmlExport;
+      }
+      if (formattedAnswer?.html) {
+        return formattedAnswer?.html;
+      }
     }
     return lastAnswer.answer.toString();
   } catch (error) {
@@ -520,16 +525,15 @@ const MyDoc = (
               Opportunity Overview
             </Text>
           </View>
-          <Html 
+          <Html
+            collapse={false} // this will preserve whitespace
             style={{ fontSize: 10 }}
             renderers={{
-              p: ({ style, children }) => { 
-                if(children != "") {
-                  return (
-                    <View style={style}>{children}</View>
-                  )
-                } else { 
-                  return <View style={{ height:18 }}></View>;
+              p: ({ style, children }) => {
+                if (children != '') {
+                  return <View style={style}>{children}</View>;
+                } else {
+                  return <View style={{ height: 18 }}></View>;
                 }
               },
               tr: ({ style, children }) => (
@@ -544,6 +548,19 @@ const MyDoc = (
               },
               mark: ({ style, children }) => {
                 return <Text style={style}>{children}</Text>;
+              },
+              div: ({ style, children, element }) => {
+                const { _attrs } = element;
+                if (
+                  _attrs &&
+                  _attrs.class &&
+                  _attrs.class.includes(
+                    'public-DraftStyleDefault-block public-DraftStyleDefault-ltr'
+                  )
+                ) {
+                  return <Text style={style}>{children}</Text>;
+                }
+                return <View style={style}>{children}</View>;
               }
             }}
           >

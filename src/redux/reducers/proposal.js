@@ -60,9 +60,12 @@ const {
   QUESTION_LOCK_DETAILS_ALL,
   SET_EVENT_LAUNCHER_FLAG,
   SHOW_NA_CHECKBOX,
-  SET_PRICE_MODELER_FIELDS,
   ERROR_UPDATE_NOT_APPLICABLE,
-  SET_CAN_USER_TAG_IN_QUESTION
+  SET_CAN_USER_TAG_IN_QUESTION,
+  SET_APPROVAL_QUESTION_LOADING,
+  SET_PRICE_MODELER_FIELDS,
+  SET_PRICE_MODELER_RECALCULATING,
+  PRICE_MODELER_UPDATE
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -150,7 +153,12 @@ const INITIAL_STATE: Map = fromJS({
     patients: '',
     regions: ''
   }),
-  canUserTagInQuestion: false
+  approvalQuestionLoading: fromJS({
+    questionId: '',
+    value: false
+  }),
+  canUserTagInQuestion: false,
+  priceModelerRecalculating: false
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -266,6 +274,10 @@ const setOpportunityInfo = (state, action) => {
           'questionTemplateVersionNumber',
           proposal.proposal['questionTemplateVersionNumber'] || ''
         )
+        .set(
+          'isApprovalCountPresent',
+          proposal.proposal['isApprovalCountPresent'] || false
+        )
         .set('opportunityType', proposal.proposal['opportunityType'] || '')
         .set('isCurrent', true)
         .set('bidStatus', proposal.proposal['inProgress'] || false)
@@ -335,7 +347,8 @@ const onChangeBid = (state: Map, action: Object): Map => {
     accountId,
     proposalDetails,
     opportunityType,
-    questionTemplateVersionNumber: templateversion
+    questionTemplateVersionNumber: templateversion,
+    isApprovalCountPresent
   } = opportunityData.getIn([payload.bid.bidId, 'proposal']);
   let selectedBid = Map({
     id: payload.bid.bidId,
@@ -343,6 +356,7 @@ const onChangeBid = (state: Map, action: Object): Map => {
     pertinentDetails: payload.bid.pertinentDetails,
     bidName: payload.bid.bidName,
     questionTemplateVersionNumber: templateversion || '',
+    isApprovalCountPresent: isApprovalCountPresent || false,
     opportunityType: opportunityType || '',
     agreementId: agreementId || '',
     accountId: accountId || '',
@@ -433,6 +447,10 @@ const addNewBid = (state: Map, action: Object): Map => {
     .set(
       'questionTemplateVersionNumber',
       data.proposal['questionTemplateVersionNumber'] || ''
+    )
+    .set(
+      'isApprovalCountPresent',
+      data.proposal['isApprovalCountPresent'] || false
     )
     .set('opportunityType', data.proposal['opportunityType'] || '')
     .set('isCurrent', true)
@@ -577,9 +595,10 @@ const updateQuestionLockByUser = (state: Map, action: Object): Map => {
 
   if (proposalId) {
     const selectedBid = state.getIn(['selectedBid', 'id']);
-
+    const currentUserEmail = localStorage.getItem('userEmail') || '';
     // Update the current lock details if the selected Bid is equal to processed Bid
-    if (selectedBid === proposalId) {
+    // Prevent State update if the user locking the bid is same as the current user
+    if (selectedBid === proposalId && userEmail != currentUserEmail) {
       const indexOfListToUpdateCurrent = state
         .get('proposalQuestions')
         .findIndex(listItem => {
@@ -1141,6 +1160,33 @@ const setPriceModulerFields = (state, action) => {
   );
 };
 
+const setApprovalQuestionLoading = (state, action) => {
+  const { questionId, value } = action.payload;
+  return state.set('approvalQuestionLoading', fromJS({ questionId, value }));
+};
+const updatePriceModelerEstimate = (state, action) => {
+  const {
+    Cost,
+    TherapyArea__c,
+    Number_of_Sites__c,
+    Phase_P__c,
+    Patients_Enrolled__c,
+    Potential_Regions__c
+  } = action.payload;
+
+  return state.set(
+    'priceModeler',
+    fromJS({
+      cost: Cost,
+      therapeutic: TherapyArea__c,
+      sites: Number_of_Sites__c,
+      phase: Phase_P__c,
+      patients: Patients_Enrolled__c,
+      regions: Potential_Regions__c
+    })
+  );
+};
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
@@ -1202,8 +1248,12 @@ const actionMap = {
   [SHOW_NA_CHECKBOX]: (state, { payload }) =>
     state.set('showNaCheckbox', payload),
   [SET_PRICE_MODELER_FIELDS]: setPriceModulerFields,
+  [SET_APPROVAL_QUESTION_LOADING]: setApprovalQuestionLoading,
   [SET_CAN_USER_TAG_IN_QUESTION]: (state, { payload }) =>
-    state.set('canUserTagInQuestion', payload)
+    state.set('canUserTagInQuestion', payload),
+  [SET_PRICE_MODELER_RECALCULATING]: (state, { payload }) =>
+    state.set('priceModelerRecalculating', payload),
+  [PRICE_MODELER_UPDATE]: updatePriceModelerEstimate
 };
 
 export default function(

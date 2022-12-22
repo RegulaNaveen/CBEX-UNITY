@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import { Map, fromJS } from 'immutable'; // NOSONAR
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
-import { isEmpty, isString, unionBy } from 'lodash';
+import { isEmpty, isString, unionBy, isObject, has } from 'lodash';
 import { diffWordsWithSpace } from 'diff';
 import Loader from 'apollo-react/components/Loader';
-
 import {
   getProposalTeamAssignedRoles,
-  getSelectedBid
+  getSelectedBid,
+  getUserData
 } from '../../../redux/selectors';
 import { getOpportunityData } from '../../../redux/selectors/proposal';
 import { Close } from '../../svg';
@@ -21,7 +21,14 @@ import {
   getUserName
 } from '../../../utils/utils';
 import ANSWER_TYPES from '../../../constants/answerTypes';
-import { getProposalAnswerHistory } from '../../../redux/actions/proposal-actions';
+import {
+  getProposalAnswerHistory,
+  setProposalAnswerData
+} from '../../../redux/actions/proposal-actions';
+import { SocketContext } from '../../../context/SocketContext';
+import MatomoHOC from '../../HOC/MatomoHOC';
+import withIdleStateDetection from '../../HOC/IdleStateDetector';
+import { getLastAnswer } from '../../screens/Approvals/utils';
 
 type Props = {
   question: Map,
@@ -29,26 +36,111 @@ type Props = {
   opportunityData: Object,
   closeModal: () => void,
   getAnsHistory: Function,
-  selectedBid: Object
+  selectedBid: Object,
+  userData: Object,
+  setProposalAnswer: Function,
+  trackEvent: any,
+  eventCategories: any,
+  events: any,
+  tab: any,
+  isQuesFreezed: any,
+  onCascadeChange: any
 };
+let lockQuestion;
+let conditionBlankPredicted;
+let indexNo;
+let questionIdentifier;
+let bidNo = '';
+let isCurrentBid = '';
+
+function handleUserMentionInAnswer(formattedAnswer = null, answer = '') {
+  let finalAnswer = '';
+  try {
+    const formattedAnswerJSON = JSON.parse(formattedAnswer);
+    let mentions = [];
+    let offset = 0;
+
+    formattedAnswerJSON.value.blocks.forEach(block => {
+      let { text, entityRanges } = block;
+      if (Array.isArray(entityRanges) && entityRanges.length > 0) {
+        entityRanges = entityRanges.reverse();
+        entityRanges.forEach(entity => {
+          mentions.push({
+            start: offset + entity.offset,
+            end: offset + entity.offset + entity.length
+          });
+        });
+      }
+
+      let lastText = '';
+      mentions = mentions.sort((a, b) => a.start - b.start);
+      const mentionsStartList = mentions.map(m => m.start);
+      for (let i = 0; i < text.length; i++) {
+        const mentionIndex = mentionsStartList.findIndex(m => m === i + offset);
+        if (mentionIndex > -1) {
+          if (lastText.length > 0) {
+            finalAnswer += lastText;
+            lastText = '';
+          }
+          finalAnswer += `@${text.slice(
+            mentions[mentionIndex].start - offset,
+            mentions[mentionIndex].end - offset
+          )}`;
+          i = mentions[mentionIndex].end - offset - 1;
+          continue;
+        }
+        finalAnswer += text[i];
+      }
+      finalAnswer += ' ';
+      offset += text.length;
+    });
+  } catch (e) {
+    console.log(
+      '[AnswerHistory: handleUserMentionInAnswer] Error in parsing formattedAnswer for user tags',
+      e
+    );
+    finalAnswer = answer;
+  }
+  return finalAnswer;
+}
 
 class AnswerHistory extends Component<Props> {
+  static contextType = SocketContext;
+
   constructor(props: Object) {
     super(props);
-
+    const { question, isQuesFreezed } = this.props;
     this.state = {
-      question: this.props.question.set('answers', fromJS([])),
+      question: !isQuesFreezed ? question.set('answers', fromJS([])) : question,
+      lastAnswer: getLastAnswer(question.toJS()),
       loading: false
     };
+    this.setMouseMove = this.setMouseMove.bind(this);
   }
 
   componentDidMount() {
-    const { question, getAnsHistory, selectedBid } = this.props;
+    const { question, getAnsHistory, selectedBid, isQuesFreezed } = this.props;
     const questionID = question?.toJS()?.questionId;
     const proposalID = selectedBid?.toJS()?.id;
-
+    const { lastAnswer } = this.state;
+    bidNo = this.props.opportunityData?.get(proposalID)?.toJS().proposal
+      .proposalDetails.bidNo;
+    isCurrentBid =
+      this.props.opportunityData?.get(proposalID)?.toJS().isCurrent === true
+        ? this.props.opportunityData?.get(proposalID)?.toJS().proposal
+            .proposalDetails.bidNo
+        : 'NA';
+    if (
+      isCurrentBid === bidNo &&
+      lastAnswer?.userName === 'UnityPredictedAnswer'
+    ) {
+      this.context.questionLockWrapper(questionIdentifier);
+      if (this.props.toggleWatch) {
+        this.props.toggleWatch(true);
+      }
+    }
     // Set History List form Api
-    if (questionID && proposalID) {
+    if (questionID && proposalID && !isQuesFreezed) {
       (async () => {
         let modifiedAns = question.get('answers');
         this.setState({ loading: true });
@@ -62,13 +154,177 @@ class AnswerHistory extends Component<Props> {
         }));
       })();
     }
-
     if (document.body) document.body.classList.add('no-scroll');
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.forceBlur === true) {
+      if (this.props.toggleWatch) this.props.toggleWatch(false);
+      this.context?.questionUnlockWrapper(questionIdentifier);
+      this.closeModalWindow();
+    }
   }
 
   componentWillUnmount() {
     if (document.body) document.body.classList.remove('no-scroll');
   }
+
+  setMouseMove(e) {
+    if (this.props.onCascadeChange) this.props.onCascadeChange();
+  }
+
+  handleVerifyPredictedAnsClick = predictedAnswer => {
+    const {
+      trackEvent,
+      eventCategories,
+      events,
+      opportunityData,
+      tab
+    } = this.props;
+    const { question } = this.state;
+    const questionType = question.getIn(['answerConfiguration', 'type']);
+    const answers = question.get('answers').reverse();
+    const questions = question.reverse();
+    const questionId = questions.get('questionId');
+    const questionText = questions.get('questionText');
+    const proposalId = answers.get(0).get('proposalId');
+    const sectionName = question.get('section').toJS().sectionName;
+    const answer = answers.get(0).get('answer');
+    const questionHTML = questions.get('questionHtml');
+    const questionJSON = questions.get('questionJSON');
+    const questionHintJSON = questions.get('questionHintJSON');
+    const proposalDetail =
+      proposalId &&
+      opportunityData.get(proposalId)?.toJS()?.proposal?.proposalDetails;
+    const { setProposalAnswer, userData } = this.props;
+    const answerType = questionType;
+    // picklist value should not be converted to string while saving
+    if (
+      answerType === ANSWER_TYPES.PICKLIST ||
+      answerType === ANSWER_TYPES.PICKLIST_LOOKUP ||
+      answerType === ANSWER_TYPES.CHECKBOX
+    ) {
+      setProposalAnswer(
+        this.context,
+        proposalId,
+        questionId,
+        predictedAnswer.get('answer'),
+        userData
+      );
+    } else {
+      setProposalAnswer(
+        this.context,
+        proposalId,
+        questionId,
+        String(predictedAnswer.get('answer')).trim(),
+        userData,
+        '',
+        false
+      );
+    }
+    let action = 'Answer History';
+    if (tab && tab === 'Approval') {
+      action = 'Approval Answer History';
+    }
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action: `${action} Event: ${questionText} (${sectionName})`,
+      name: `Verified Answer: ${answer} by ${userData.name} ${userData.email}`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify({
+            answer: answer,
+            sectionName,
+            questionText,
+            questionHTML,
+            questionJSON,
+            questionHintJSON,
+            questionId,
+            proposalDetail
+          })
+        },
+        {
+          events: events || []
+        }
+      ]
+    });
+    this.closeModalWindow();
+  };
+
+  handleRejectPredictedAnsClick = predictedAnswer => {
+    const {
+      trackEvent,
+      eventCategories,
+      events,
+      opportunityData,
+      userData,
+      tab
+    } = this.props;
+    const { question } = this.state;
+    const questionType = question.getIn(['answerConfiguration', 'type']);
+    const answers = question.get('answers').reverse();
+    const questions = question.reverse();
+    const questionId = questions.get('questionId');
+    const questionText = questions.get('questionText');
+    const proposalId = answers.get(0).get('proposalId');
+    const answer = answers.get(0).get('answer');
+    const sectionName = question.get('section').toJS().sectionName;
+    const questionHTML = questions.get('questionHtml');
+    const questionJSON = questions.get('questionJSON');
+    const questionHintJSON = questions.get('questionHintJSON');
+    const proposalDetail =
+      proposalId &&
+      opportunityData.get(proposalId)?.toJS()?.proposal?.proposalDetails;
+    const { setProposalAnswer } = this.props;
+    const answerType = questionType;
+    // picklist value should not be converted to string while saving
+    if (
+      answerType === ANSWER_TYPES.PICKLIST ||
+      answerType === ANSWER_TYPES.PICKLIST_LOOKUP ||
+      answerType === ANSWER_TYPES.CHECKBOX
+    ) {
+      setProposalAnswer(this.context, proposalId, questionId, [], userData);
+    } else {
+      setProposalAnswer(
+        this.context,
+        proposalId,
+        questionId,
+        ' ',
+        userData,
+        '',
+        false
+      );
+    }
+    let action = 'Answer History';
+    if (tab && tab === 'Approval') {
+      action = 'Approval Answer History';
+    }
+    trackEvent({
+      category: eventCategories.pd(this.props),
+      action: `${action} Event: ${questionText} (${sectionName})`,
+      name: `Rejected Answer: ${answer} by ${userData.name} ${userData.email}`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify({
+            answer: answer,
+            sectionName,
+            questionText,
+            questionHTML,
+            questionJSON,
+            questionHintJSON,
+            questionId,
+            proposalDetail
+          })
+        },
+        {
+          events: events || []
+        }
+      ]
+    });
+    this.closeModalWindow();
+  };
 
   renderAnswerResponsables = () => {
     const { proposalTeamAnswers } = this.props;
@@ -84,15 +340,12 @@ class AnswerHistory extends Component<Props> {
     const questionResponsables = proposalTeamAnswers.filter(({ role }) => {
       return !isEmpty(questionRoleNames) && questionRoleNames.includes(role);
     });
-
     const merged = unionBy(questionResponsables, questionRoles, 'role');
-
     if (isEmpty(merged)) {
       return (
         <p className="question-responsible not-assigned">Not assigned yet</p>
       );
     }
-
     return merged.map(({ role, responsable }) => {
       return (
         <p className="question-responsible" key={uuidv4()}>
@@ -102,6 +355,23 @@ class AnswerHistory extends Component<Props> {
     });
   };
 
+  parseJson = str => {
+    try {
+      return JSON.parse(str);
+    } catch (e) {
+      return str;
+    }
+  };
+
+  extractName = str => {
+    const splirt_array = str.split('.');
+    return splirt_array // check null
+      ? splirt_array.length > 0
+        ? splirt_array[0].trim()
+        : ''
+      : '';
+  };
+
   renderContent = () => {
     const { opportunityData } = this.props;
     const { question } = this.state;
@@ -109,16 +379,43 @@ class AnswerHistory extends Component<Props> {
     const sectionName = question.getIn(['section', 'sectionName']);
     let answers = question.get('answers').reverse();
     const questionId = answers.get('questionId');
-
     if (questionId) answers = question.getIn(['answers', 'answers']).reverse();
     if (answers.isEmpty()) return this.renderAnswerResponsables();
+    const questions = question.reverse();
+    questionIdentifier = questions.get('questionId');
+    lockQuestion = questionIdentifier;
+    const lastAnswer = answers.get(0).toJS();
+    answers.forEach((_answer, index) => {
+      const currentAnswer =
+        isObject(answers?.get(index)?.get('answer')) &&
+        answers?.get(index)?.get('answer').size === 0
+          ? ' '
+          : answers?.get(index)?.get('answer');
+      conditionBlankPredicted =
+        answers.size &&
+        isString(currentAnswer) &&
+        isEmpty(currentAnswer.trim()) &&
+        answers?.get(index + 1)?.get('userName') === 'UnityPredictedAnswer';
+      if (conditionBlankPredicted) {
+        answers = answers.delete(index).delete(index);
+      }
+    });
 
     return answers.map((_answer, index) => {
       const userName = _answer.get('userName') || 'Default User';
       const date = _answer.get('date');
+      // get formattedAnswer if present or fallback to answer
+      const answerCheck = _answer.get('formattedAnswer');
       let answer = _answer.get('answer');
+      if (!isEmpty(answerCheck)) {
+        answer =
+          handleUserMentionInAnswer(answerCheck, _answer.get('answer')) ||
+          _answer.get('answer');
+      } else {
+        answer = _answer.get('answer');
+      }
       const proposalId = _answer.get('proposalId');
-      let bidNo = '';
+      indexNo = index;
       if (
         proposalId &&
         opportunityData.get(proposalId)?.toJS()?.proposal?.proposalDetails
@@ -126,11 +423,30 @@ class AnswerHistory extends Component<Props> {
       ) {
         bidNo = this.props.opportunityData.get(proposalId).toJS().proposal
           .proposalDetails.bidNo;
+        isCurrentBid =
+          this.props.opportunityData.get(proposalId).toJS().isCurrent === true
+            ? this.props.opportunityData.get(proposalId).toJS().proposal
+                .proposalDetails.bidNo
+            : 'NA';
       }
 
+      const nextAnswerCheck = answers?.get(index + 1)?.get('formattedAnswer');
       let nextAnswer = answers.get(index + 1)
         ? answers.get(index + 1).get('answer')
         : answer;
+
+      if (answers.get(index + 1)) {
+        nextAnswer = answers.get(index + 1).get('formattedAnswer');
+        if (!isEmpty(nextAnswerCheck)) {
+          nextAnswer =
+            handleUserMentionInAnswer(nextAnswerCheck, nextAnswer) ||
+            answers.get(index + 1).get('answer');
+        } else {
+          nextAnswer = answers.get(index + 1)
+            ? answers.get(index + 1).get('answer')
+            : answer;
+        }
+      }
 
       const isValidatedUnityPredictedAnswer =
         questionType !== ANSWER_TYPES.PICKLIST &&
@@ -138,7 +454,6 @@ class AnswerHistory extends Component<Props> {
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'UnityPredictedAnswer' &&
         answer === nextAnswer;
-
       // picklist answers are array so they require different check than other question types
       const isPicklistValidUnityPredAns =
         (questionType === ANSWER_TYPES.PICKLIST ||
@@ -163,12 +478,17 @@ class AnswerHistory extends Component<Props> {
         const isFirstItem = index === 0;
         const isLastItem = index === answers.toJS().length - 1;
         const isOnlyOneAnswer = answers.toJS().length === 1;
-
         if (isValidatedUnityPredictedAnswer) {
           return (
-            <span key={uuidv4()}>
-              {userName === 'UnityPredictedAnswer' ? (
-                `${_answer.get('answer')}`
+            <span key={uuidv4()} className="unity-predicted-section">
+              {answers.get(index).get('userName') === 'UnityPredictedAnswer' &&
+              answers.get(index + 1).get('userName') ===
+                'UnityPredictedAnswer' ? (
+                questionType === 'date' ? (
+                  `${parseMomentDate(_answer.get('answer'))}`
+                ) : (
+                  `${_answer.get('answer')}`
+                )
               ) : (
                 <b>Validated Unity Predicted Answer</b>
               )}
@@ -177,8 +497,18 @@ class AnswerHistory extends Component<Props> {
         }
         if (isPicklistValidUnityPredAns) {
           return (
-            <span key={uuidv4()}>
-              <b>Validated Unity Predicted Answer</b>
+            <span key={uuidv4()} className="unity-predicted-section">
+              {answers.get(index).get('userName') === 'UnityPredictedAnswer' &&
+              answers.get(index + 1).get('userName') ===
+                'UnityPredictedAnswer' ? (
+                _answer.get('answer').map(singleAnswer => (
+                  <li key={uuidv4()} className="multi-select-answer-history">
+                    {singleAnswer}
+                  </li>
+                ))
+              ) : (
+                <b>Validated Unity Predicted Answer</b>
+              )}
             </span>
           );
         }
@@ -219,16 +549,13 @@ class AnswerHistory extends Component<Props> {
                 if (intersection.includes(ans)) return renderWord(ans, '');
                 if (removed.includes(ans)) return renderWord(ans, 'removed');
                 if (added.includes(ans)) return renderWord(ans, 'changed');
-                return null;
               });
             }
             const diffAnswers = diffWordsWithSpace(nextAnswer, answer);
-
             return rearrangeDiff(diffAnswers).map(
               ({ value, added, removed }) => {
                 if (removed) return renderWord(value, 'removed');
                 if (added) return renderWord(value, 'changed');
-
                 return <span key={uuidv4()}>{value} </span>;
               }
             );
@@ -237,11 +564,9 @@ class AnswerHistory extends Component<Props> {
             const tmp = answers.toJS();
             let styleClass =
               !isOnlyOneAnswer && !isLastItem ? 'changed' : undefined;
-
             if (new Date(answer) === 'Invalid Date') {
               return renderWord('Invalid Date', 'removed');
             }
-
             // Dont add styles if answers are same
             // We use .substring(0, 10) to get only the yyyy-mm-dd out of a String like '2022-04-30T00:00:00+05:30'
             if (
@@ -287,7 +612,6 @@ class AnswerHistory extends Component<Props> {
               </>
             );
           };
-
           if (
             questionType === 'select' ||
             questionType === 'select-lookup' ||
@@ -343,7 +667,6 @@ class AnswerHistory extends Component<Props> {
             }
             return combinedAnswer() || renderWord(answer, '');
           }
-
           if (questionType === 'date') {
             answer = String(answer)
               .trimStart()
@@ -352,7 +675,7 @@ class AnswerHistory extends Component<Props> {
               return renderWord(
                 nextAnswer === 'N/A'
                   ? 'N/A'
-                  : answer === ''
+                  : nextAnswer === ''
                   ? ''
                   : parseMomentDate(nextAnswer),
                 'removed'
@@ -360,29 +683,24 @@ class AnswerHistory extends Component<Props> {
             }
             return <p>{showDate(answer, nextAnswer, index)}</p>;
           }
-
           return <p>{answer}</p>;
         }
-
         // function to convert Answer to normal JSON
         const convertAnsToJSON = ansData => {
           if (isEmpty(ansData)) return [];
           if (!isString(ansData)) return ansData?.toJS();
           return [ansData];
         };
-
         const modifiedAns = convertAnsToJSON(answer);
         const modifiedNxtAns = convertAnsToJSON(nextAnswer);
         const deletedAnswers = modifiedNxtAns?.filter(
           ans => !modifiedAns.includes(ans)
         );
-
         const deletedAnswersItems = deletedAnswers.map(ans => (
           <li className="removed" key={uuidv4()}>
             {ans}
           </li>
         ));
-
         const answerItem = modifiedAns.map(singleAnswer => (
           <li
             key={uuidv4()}
@@ -391,7 +709,6 @@ class AnswerHistory extends Component<Props> {
             {singleAnswer}
           </li>
         ));
-
         return (
           <ul>
             {deletedAnswersItems}
@@ -399,31 +716,59 @@ class AnswerHistory extends Component<Props> {
           </ul>
         );
       };
-
       return (
-        <div className="answer-container" key={uuidv4()}>
-          <div className="main-container">
-            <span
-              style={{ backgroundColor: avatarRandomColor }}
-              className="avatar"
-            >
-              {userInitials}
-            </span>
-            <div>
-              <p>{getUserName(userName)}</p>
-              {renderAnswers()}
+        <div>
+          <div className="answer-container">
+            <div className="main-container">
+              <span
+                style={{ backgroundColor: avatarRandomColor }}
+                className="avatar"
+              >
+                {userInitials}
+              </span>
+              <div>
+                <p>{getUserName(userName)}</p>
+                {renderAnswers()}
+              </div>
             </div>
-          </div>
-          <div className="answer-meta-data">
-            <p>{parsedDate}</p>
-            {bidNo ? <p>Bid {bidNo}</p> : null}
+            <div className="answer-meta-data">
+              <p className="answer-history-para">{parsedDate}</p>
+              {bidNo ? (
+                <p className="answer-history-para">Bid {bidNo}</p>
+              ) : null}
+              {indexNo === 0 &&
+              isCurrentBid === bidNo &&
+              lastAnswer?.userName === 'UnityPredictedAnswer' &&
+              userName === 'UnityPredictedAnswer' ? (
+                <div className="answer-meta-buttons">
+                  <button
+                    size="small"
+                    type="button"
+                    className="answer-history-reject"
+                    onClick={() => this.handleRejectPredictedAnsClick()}
+                  >
+                    Reject
+                  </button>
+                  <button
+                    size="small"
+                    type="button"
+                    className="answer-history-accept"
+                    onClick={() => this.handleVerifyPredictedAnsClick(_answer)}
+                  >
+                    Accept
+                  </button>
+                </div>
+              ) : null}
+            </div>
           </div>
         </div>
       );
     });
   };
 
-  closeModal = () => {
+  closeModalWindow = () => {
+    if (this.props.toggleWatch) this.props.toggleWatch(false);
+    this.context.questionUnlockWrapper(lockQuestion);
     const { closeModal } = this.props;
     closeModal();
   };
@@ -434,8 +779,7 @@ class AnswerHistory extends Component<Props> {
 
   onModalKeyPress = (event: SyntheticKeyboardEvent<EventTarget>) => {
     if (event.key === 'Escape') {
-      const { closeModal } = this.props;
-      closeModal();
+      this.closeModalWindow();
     }
   };
 
@@ -444,13 +788,13 @@ class AnswerHistory extends Component<Props> {
     const { question, loading } = this.state;
     const answers = question.get('answers');
     const questionTitle = question.get('questionText');
-
     return (
       <section
         id="answer-history-modal"
-        onClick={this.closeModal}
+        onClick={this.closeModalWindow}
         role="button" // eslint-disable-line
         tabIndex={0}
+        onMouseMove={e => this.setMouseMove(e)}
         onKeyUp={this.onModalKeyPress}
       >
         <div
@@ -459,9 +803,7 @@ class AnswerHistory extends Component<Props> {
           onClick={this.stopPropagation}
         >
           <div className="bluegrid" />
-
           {loading && <Loader isInner />}
-
           <div className="modal-header">
             <div className="header-titles">
               <h1>
@@ -469,15 +811,13 @@ class AnswerHistory extends Component<Props> {
               </h1>
               <p>{questionTitle}</p>
             </div>
-            <button type="button" onClick={closeModal}>
+            <button type="button" onClick={this.closeModalWindow}>
               <Close />
             </button>
           </div>
-
           <div className="modal-body">{!loading && this.renderContent()}</div>
-
           <div className="modal-actions">
-            <button type="button" onClick={closeModal}>
+            <button type="button" onClick={this.closeModalWindow}>
               Close
             </button>
           </div>
@@ -486,15 +826,18 @@ class AnswerHistory extends Component<Props> {
     );
   }
 }
-
 const mapStateToProps = (state: Map) => ({
   proposalTeamAnswers: getProposalTeamAssignedRoles(state),
+  userData: getUserData(state),
   opportunityData: getOpportunityData(state),
   selectedBid: getSelectedBid(state)
 });
-
 const mapDispatchToProps = {
-  getAnsHistory: getProposalAnswerHistory
+  getAnsHistory: getProposalAnswerHistory,
+  setProposalAnswer: setProposalAnswerData
 };
-
-export default connect(mapStateToProps, mapDispatchToProps)(AnswerHistory);
+const MemoizedAnswerHistory = React.memo(AnswerHistory);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MatomoHOC(withIdleStateDetection(MemoizedAnswerHistory)));
