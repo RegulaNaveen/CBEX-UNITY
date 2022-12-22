@@ -230,7 +230,7 @@ function checkFormattedAnswer(answers) {
         try {
           formattedAnswer = JSON.parse(lastAnswer?.formattedAnswer);
         } catch {
-          return lastAnswer.answer.toString();
+          return (lastAnswer && lastAnswer.answer.toString()) || '';
         }
       } else formattedAnswer = lastAnswer?.formattedAnswer;
       if (formattedAnswer?.htmlExport) {
@@ -240,7 +240,7 @@ function checkFormattedAnswer(answers) {
         return formattedAnswer?.html;
       }
     }
-    return lastAnswer.answer.toString();
+    return (lastAnswer && lastAnswer.answer.toString()) || '';
   } catch (error) {
     console.log(error);
     return '';
