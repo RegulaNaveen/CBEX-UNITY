@@ -190,8 +190,16 @@ const AutoCompleteWithAddOption = ({
         size="small"
         disableClearable={clearable}
         onBlur={() => {
-          if (
+          if (answer) {
+            if (
+              multiple &&
+              // eslint-disable-next-line react/prop-types
+              answer?.length !== modAnswer.length
+            )
+              onChange(modAnswer);
+          } else if (
             multiple &&
+            modAnswer?.length &&
             // eslint-disable-next-line react/prop-types
             answer?.length !== modAnswer.length
           )
