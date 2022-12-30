@@ -1,5 +1,10 @@
-/* eslint-disable no-else-return */
-import React, { useState, useEffect, useRef, Suspense } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  Suspense
+} from 'react';
 import { useHistory } from 'react-router-dom';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
@@ -9,6 +14,7 @@ import Typography from 'apollo-react/components/Typography';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
+import { debounce } from 'lodash';
 import Validate from '../../../screens/Opportunity/Validate';
 import {
   getSelectedBid,
@@ -23,7 +29,6 @@ import {
 import { setActiveTabIndexAction } from '../../../../redux/actions/proposal-actions';
 import { createMatomoObj, saveDataInMatomo } from '../../../../utils/utils';
 import { selectCurrentSearchResult } from '../../../../redux/selectors/search';
-import { NOTEPAD_UI_ID } from '../../../../constants/app';
 import { autoNavigationCompletedAction } from '../../../../redux/actions/search-actions';
 import lazyWithRetry from '../../../../utils/lazy';
 import VerticalTabsCollapsiblePanel from '../../../screens/Opportunity/layout/navigation/VerticalTabsCollapsiblePanel';
@@ -91,6 +96,7 @@ const UnityTab = ({
   const [showNotepadTab, setShowNotepadTab] = useState(false);
   const [showProposalTeamTab, setShowProposalTeamTab] = useState(false);
   const [isNotepadOpen, setIsNotepadOpen] = useState(true);
+  const [vtabCollpased, setVTabCollapsed] = useState(false);
 
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const proposalId = selectedBid?.id || 1;
@@ -104,6 +110,8 @@ const UnityTab = ({
   const value = useSelector(selectActiveTabIndex);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
   const dispatch = useDispatch();
+
+  const panelContainerRef = useRef(null);
 
   const { trackEvent } = useMatomo();
 
@@ -195,12 +203,14 @@ const UnityTab = ({
   }, []);
 
   useEffect(() => {
+    let shouldvtabCollapsed = vtabCollpased;
     if (selectedView && selectedView === 'documents') {
       dispatch(
         setActiveTabIndexAction(
           tabs.find(item => item.label === 'Documents').value
         )
       );
+      shouldvtabCollapsed = true;
     }
     if (selectedView && selectedView === 'approvals' && isApprovalCount) {
       const isApprovalTabVisible = approvalsFlag;
@@ -210,19 +220,33 @@ const UnityTab = ({
       dispatch(
         setActiveTabIndexAction(isApprovalTabVisible ? approvalTabValue : 0)
       ); // Shows questions tab if Approvals are not found for the proposal
+      shouldvtabCollapsed = isApprovalTabVisible ? true : false;
     }
     if (selectedView && selectedView === 'questions') {
       dispatch(setActiveTabIndexAction(0));
+      shouldvtabCollapsed = false;
     }
     if (selectedView && selectedView === 'timelines') {
       if (!allFlags?.showTimelineFlag) {
         history.push(`${window.location.pathname}`);
-        return;
+      } else {
+        const timelinesTabValue = tabs.find(item => item.label === 'Timeline')
+          .value;
+        dispatch(setActiveTabIndexAction(timelinesTabValue));
       }
-      const timelinesTabValue = tabs.find(item => item.label === 'Timeline')
-        .value;
-      dispatch(setActiveTabIndexAction(timelinesTabValue));
     }
+    // triggering click event of Panel's toggle button since Apollo's Panel component is lack of ability to control from prop
+    if (
+      panelContainerRef.current !== null &&
+      vtabCollpased !== shouldvtabCollapsed
+    ) {
+      // by inspecting DOM, found there is only one button element inside Panel component hence choosing first button
+      const toggleButton = panelContainerRef.current.children[0].getElementsByTagName(
+        'button'
+      )[0];
+      toggleButton.click();
+    }
+    setVTabCollapsed(shouldvtabCollapsed);
   }, [selectedView, approvalsFlag, showApprovalTab]);
 
   useEffect(() => {
@@ -250,6 +274,51 @@ const UnityTab = ({
       }
     }
   }, [dispatch, panelRef, currentSearchResult, isNotepadOpen]);
+
+  useEffect(() => {
+    if (panelContainerRef.current !== null) {
+      evaluateCurrentWindowWidth(window.innerWidth);
+    }
+  }, [panelContainerRef.current]);
+
+  const evaluateCurrentWindowWidth = useCallback(
+    windowWidth => {
+      let shouldCollapseVTab = vtabCollpased;
+      if (windowWidth < 850) {
+        shouldCollapseVTab = true;
+      } else {
+        if (selectedView && selectedView === 'questions' && vtabCollpased) {
+          shouldCollapseVTab = false;
+        }
+      }
+      // triggering click event of Panel's toggle button since Apollo's Panel component is lack of ability to control from prop
+      if (
+        panelContainerRef.current !== null &&
+        vtabCollpased !== shouldCollapseVTab
+      ) {
+        // by inspecting DOM, found there is only one button element inside Panel component hence choosing first button
+        const toggleButton = panelContainerRef.current.children[0].getElementsByTagName(
+          'button'
+        )[0];
+        console.log('toggle button', toggleButton);
+        toggleButton.click();
+        setVTabCollapsed(shouldCollapseVTab);
+      }
+    },
+    [selectedView, vtabCollpased, panelContainerRef.current]
+  );
+
+  const handleWindowResize = debounce(
+    e => evaluateCurrentWindowWidth(e.target.innerWidth),
+    600
+  );
+
+  useEffect(() => {
+    window.addEventListener('resize', handleWindowResize);
+    window.resizeBy(0, 0);
+
+    return () => window.removeEventListener('resize', handleWindowResize);
+  }, [selectedView, vtabCollpased, panelContainerRef.current]);
 
   const winLocationSearch = window.location.search;
   const handleChangeTab = (event, val) => {
@@ -515,6 +584,7 @@ const UnityTab = ({
       </>
     );
   };
+
   return <div className="tab-container">{renderTab()}</div>;
 };
 
