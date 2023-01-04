@@ -12,6 +12,7 @@ import {
   getQuestionSectionInfo,
   getAnswerTypes,
   getRoles,
+  getIntegrations,
   setProposalQuestionData,
   getProposalInfoUpdated,
   getProposlBoxId,
@@ -53,6 +54,9 @@ const {
   ANSWER_TYPES_ERROR,
   ROLES_INFO,
   ROLES_LOADING,
+  INTEGRATIONS_INFO,
+  INTEGRATIONS_ERROR,
+  INTEGRATIONS_LOADING,
   ROLES_ERROR,
   PROPOSAL_SET_QUESTION,
   PROPOSAL_SET_QUESTION_LOADING,
@@ -472,6 +476,27 @@ export const getRolesInfo = (): ThunkAction<string, Object> => {
     } catch (err) {
       dispatch({
         type: ROLES_ERROR,
+        payload: err
+      });
+    }
+  };
+};
+
+export const getIntegrationsData = (): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: INTEGRATIONS_LOADING,
+      payload: {}
+    });
+    try {
+      const data = await getIntegrations();
+      dispatch({
+        type: INTEGRATIONS_INFO,
+        payload: data
+      });
+    } catch (err) {
+      dispatch({
+        type: INTEGRATIONS_ERROR,
         payload: err
       });
     }

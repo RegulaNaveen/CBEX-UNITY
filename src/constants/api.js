@@ -211,6 +211,7 @@ const LOOKUP_OPTIONS_API = `${PROPOSAL_API_ENDPOINT}/api/questions/lookup-option
 const PROPOSAL_OT_LIST = `${PROPOSAL_API_URL}/opportunityTypes`;
 const PROPOSAL_SWITCH_OT = `${PROPOSAL_API_URL}/switch/opportunityType`;
 const USER_API_URL = `${PROPOSAL_API_URL}/users`;
+const INTEGRATIONS_API_URL = `${PROPOSAL_API_ENDPOINT}/api`;
 
 const MAMOTO_IQVIA = 'https://useranalytics.solutions.iqvia.com/';
 
@@ -228,7 +229,8 @@ const PROPOSAL = {
   LOOKUP_OPTIONS_API,
   PROPOSAL_OT_LIST,
   PROPOSAL_SWITCH_OT,
-  USER_API_URL
+  USER_API_URL,
+  INTEGRATIONS_API_URL
 };
 
 const NOTEPAD_API_URL = `${PROPOSAL_API_ENDPOINT}/api/notes`;

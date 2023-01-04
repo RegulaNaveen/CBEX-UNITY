@@ -141,6 +141,9 @@ export const isAnswerTypesInfoLoading = (proposal: Map): Map =>
 
 export const getRoles = (proposal: Map): Map => proposal.get('proposalRoles');
 
+export const getIntegrations = (proposal: Map): Map =>
+  proposal.get('proposalIntegrations');
+
 export const isRolesInfoLoading = (proposal: Map): Map =>
   proposal.get('isRolesLoading');
 
@@ -362,6 +365,7 @@ export const getApprovalQuestionLoading = createSelector(
   proposal => proposal?.get('approvalQuestionLoading')
 );
 
-export const selectIsPriceModelerEstimateRecalculating = createSelector(selectProposal, proposal =>
-  proposal?.get('priceModelerRecalculating', false)
+export const selectIsPriceModelerEstimateRecalculating = createSelector(
+  selectProposal,
+  proposal => proposal?.get('priceModelerRecalculating', false)
 );
