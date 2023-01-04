@@ -5,6 +5,7 @@ import { REDUX_TYPES } from '../../constants';
 import type { ApiAction } from '../actions/action-types';
 import { getUniqueMilestones } from '../selectors/proposal';
 import { getQuestionsFilterApplied } from '../actions/proposal-actions';
+import StatusExclamation from 'apollo-react-icons/StatusExclamation';
 
 const {
   PROPOSAL_INFO,
@@ -64,6 +65,7 @@ const {
   SET_CAN_USER_TAG_IN_QUESTION,
   SET_APPROVAL_QUESTION_LOADING,
   SET_PRICE_MODELER_FIELDS,
+  SET_BID_COST_DATA_FIELDS,
   SET_PRICE_MODELER_RECALCULATING,
   PRICE_MODELER_UPDATE
 } = REDUX_TYPES.PROPOSAL;
@@ -153,6 +155,7 @@ const INITIAL_STATE: Map = fromJS({
     patients: '',
     regions: ''
   }),
+
   approvalQuestionLoading: fromJS({
     questionId: '',
     value: false
@@ -1138,6 +1141,7 @@ const onDeleteQuestion = (state, action) => {
 };
 
 const setPriceModulerFields = (state, action) => {
+  console.log('state', state);
   const {
     Cost,
     TherapyArea__c,
@@ -1156,6 +1160,19 @@ const setPriceModulerFields = (state, action) => {
       phase: Phase_P__c,
       patients: Patients_Enrolled__c,
       regions: Potential_Regions__c
+    })
+  );
+};
+
+const setCostDataFields = (state, action) => {
+  const { bidValue, bottomLine, budgetTools } = action.payload;
+
+  return state.set(
+    'bidCostDetails',
+    fromJS({
+      bid: bidValue,
+      bottom: bottomLine,
+      budget: budgetTools
     })
   );
 };
@@ -1248,6 +1265,7 @@ const actionMap = {
   [SHOW_NA_CHECKBOX]: (state, { payload }) =>
     state.set('showNaCheckbox', payload),
   [SET_PRICE_MODELER_FIELDS]: setPriceModulerFields,
+  [SET_BID_COST_DATA_FIELDS]: setCostDataFields,
   [SET_APPROVAL_QUESTION_LOADING]: setApprovalQuestionLoading,
   [SET_CAN_USER_TAG_IN_QUESTION]: (state, { payload }) =>
     state.set('canUserTagInQuestion', payload),
