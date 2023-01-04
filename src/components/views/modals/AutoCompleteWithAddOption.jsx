@@ -5,7 +5,7 @@ import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete, {
-  createFilterOptions,
+  createFilterOptions
 } from '@material-ui/lab/Autocomplete';
 import { getLookUpOptionsSelector } from '../../../redux/selectors';
 
@@ -25,7 +25,7 @@ const AutoCompleteWithAddOption = ({
   loading,
   toggleWatch,
   onCascadeChange,
-  forceBlur,
+  forceBlur
 }) => {
   const getSFOptions = (sfObj, sfFld) =>
     options[`SF#${sfObj}_SF#${sfFld}`]
@@ -59,15 +59,15 @@ const AutoCompleteWithAddOption = ({
 
   const autoCompleteRef = useRef(null);
 
-  const addAnswerPicklist = (arr) => {
-    return arr.map((item) =>
+  const addAnswerPicklist = arr => {
+    return arr.map(item =>
       item.includes('add ')
         ? item.replace('add "', '').replace(/\"/g, '')
         : item
     );
   };
 
-  const addAnswerSingle = (str) => {
+  const addAnswerSingle = str => {
     if (str === null) {
       return ' ';
     }
@@ -80,6 +80,7 @@ const AutoCompleteWithAddOption = ({
    * Trigger func on select option
    */
   const handleChange = (event, newValue) => {
+    if (event.type === 'click') autoCompleteRef.current.focus();
     const modifiedAnswer = multiple
       ? addAnswerPicklist(newValue)
       : addAnswerSingle(newValue);
@@ -90,7 +91,7 @@ const AutoCompleteWithAddOption = ({
     console.log({
       selectedVal,
       newTrimVal,
-      isValid: !isEqual(selectedVal, newTrimVal),
+      isValid: !isEqual(selectedVal, newTrimVal)
     });
     if (isEqual(selectedVal, newTrimVal)) return;
 
@@ -110,7 +111,7 @@ const AutoCompleteWithAddOption = ({
     }
     const currentOptions = [...getOptions()];
     const newOptions = currentOptions.filter(
-      (el) => selectedVal.indexOf(el) === -1
+      el => selectedVal.indexOf(el) === -1
     );
     setCurrentLov(newOptions);
   }, [answer]);
@@ -120,7 +121,7 @@ const AutoCompleteWithAddOption = ({
    */
   useEffect(() => {
     setClearable(true);
-    if (selectedVal && loading) setClearable(false);
+    if (selectedVal && !loading) setClearable(false);
   }, [loading]);
   /**
    * Set Autocomplete Placeholder
@@ -139,7 +140,7 @@ const AutoCompleteWithAddOption = ({
   /**
    * onChange Autocomplete Input Text
    */
-  const onTextChange = (event) => {
+  const onTextChange = event => {
     if (onCascadeChange) onCascadeChange();
     if (event.currentTarget.value) {
       setClearable(false);
@@ -173,6 +174,7 @@ const AutoCompleteWithAddOption = ({
   return (
     <div className="auto-complete-with-add-option">
       <Autocomplete
+        data-testid="autocomplete-test"
         filterOptions={(currentList, params) => {
           const filtered = filter(currentList, params);
           const inputVal = params.inputValue.trim();
@@ -188,7 +190,20 @@ const AutoCompleteWithAddOption = ({
         size="small"
         disableClearable={clearable}
         onBlur={() => {
-          if (multiple) onChange(modAnswer);
+          if (answer) {
+            if (
+              multiple &&
+              // eslint-disable-next-line react/prop-types
+              answer?.length !== modAnswer.length
+            )
+              onChange(modAnswer);
+          } else if (
+            multiple &&
+            modAnswer?.length &&
+            // eslint-disable-next-line react/prop-types
+            answer?.length !== modAnswer.length
+          )
+            onChange(modAnswer);
           handleBlur();
         }}
         onFocus={handleFocus}
@@ -200,7 +215,7 @@ const AutoCompleteWithAddOption = ({
         freeSolo
         disableCloseOnSelect={multiple}
         value={selectedVal}
-        renderInput={(params) => {
+        renderInput={params => {
           return (
             <TextField
               onChange={onTextChange}
@@ -216,8 +231,8 @@ const AutoCompleteWithAddOption = ({
   );
 };
 
-const mapStateToProps = (state) => ({
-  options: getLookUpOptionsSelector(state),
+const mapStateToProps = state => ({
+  options: getLookUpOptionsSelector(state)
 });
 
 export default connect(mapStateToProps)(AutoCompleteWithAddOption);

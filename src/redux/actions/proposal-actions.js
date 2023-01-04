@@ -1062,6 +1062,16 @@ export const getOpportunity = (
       data = data.map(v => v['data']).flat();
       data[0].isCurrent =
         isCurrentProposal.proposal.proposalId === data[0].proposal.proposalId;
+      if (data && data.length && data[0].proposal?.switchTemplateStatus) {
+        dispatch({
+          type: SWITCH_TEMP_IN_PROGRESS,
+          payload: true
+        });
+        dispatch({
+          type: SWITCH_TEMP_STATUS,
+          payload: 'progress'
+        });
+      }
       proposalsData.push(data[0]);
       dispatch({ type: OPPORTUNITY_INFO, payload: proposalsData });
       dispatch({

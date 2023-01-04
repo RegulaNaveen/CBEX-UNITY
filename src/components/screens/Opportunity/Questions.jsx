@@ -12,7 +12,6 @@ import ApolloCheckbox from 'apollo-react/components/Checkbox';
 import classNames from 'classnames';
 import Grid from 'apollo-react/components/Grid';
 import Panel from 'apollo-react/components/Panel';
-import Typography from 'apollo-react/components/Typography';
 import Loader from 'react-loader-spinner';
 import { Add, Refresh } from '../../svg';
 import BidHistory from '../../common/Bidhistory';
@@ -60,14 +59,19 @@ import Sidebar from '../../views/Sidebar';
 import AnswerHistory from '../../views/modals/AnswerHistory';
 import { getAllUsers } from '../../../redux/actions/sso-auth-actions';
 import MatomoHOC from '../../HOC/MatomoHOC';
-import { createMatomoObj, getCountriesNameForCode, saveDataInMatomo, throttle } from '../../../utils/utils';
+import {
+  createMatomoObj,
+  getCountriesNameForCode,
+  saveDataInMatomo,
+  throttle
+} from '../../../utils/utils';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
 import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions';
-import WysiwygNotepad from '../../views/WysiwygNotepad';
 import ANSWER_TYPES from '../../../constants/answerTypes';
 import NotesSocketContext from '../../../context/notesSocketContext';
-import PriceModeler from '../../common/PriceModeler';
 import moment from 'moment';
+import ViewAboveVerticalTabs from '../../views/ViewAboveVerticalTabs';
+
 export const QuestionsRefContext = createContext(null);
 
 const QuestionsSectionMapping = React.lazy(() =>
@@ -144,10 +148,6 @@ class Questions extends Component {
       fetchUsers,
       getSFNonEditabelInfoField,
       callPickListLookupSfData,
-      userEmail,
-      userRole,
-      proposalDetail,
-      trackEvent,
       getIntegrationsData
     } = this.props;
     fetchUsers();
@@ -157,13 +157,6 @@ class Questions extends Component {
     window.addEventListener('resize', this.resize.bind(this));
     this.resize();
     this.props.fetchUserTagFlagInQuestion();
-    this.resizeObserver = new ResizeObserver(throttle((entries) =>{
-      const matamoObj = createMatomoObj(proposalDetail, userEmail, userRole, 'drag event');
-      saveDataInMatomo(trackEvent, matamoObj);
-    }, 3000));
-  if(this.resizeObserver){
-    this.resizeObserver.observe(document.querySelector(".notepad-classoverride"));
-  }
   }
 
   componentDidUpdate(prevProps: Map) {
@@ -172,7 +165,10 @@ class Questions extends Component {
       hasQuestionError,
       userRole,
       applyQuestionsFilter,
-      editQuestionsData
+      editQuestionsData,
+      userEmail,
+      proposalDetail,
+      trackEvent
     } = this.props;
     if (prevProps.isQuestionLoading && setQuestion && !hasQuestionError)
       this.onClose();
@@ -203,24 +199,49 @@ class Questions extends Component {
       }, 5000);
     }
     // bid change check ends
+
+    // Resize Observer Matomo event for Notepad component
+    this.resizeObserver = new ResizeObserver(
+      throttle(entries => {
+        const matamoObj = createMatomoObj(
+          proposalDetail,
+          userEmail,
+          userRole,
+          'drag event'
+        );
+        console.log('ResizeObserver called');
+        saveDataInMatomo(trackEvent, matamoObj);
+      }, 3000)
+    );
+    if (
+      this.resizeObserver &&
+      document.querySelector('.notepad-classoverride')
+    ) {
+      this.resizeObserver.observe(
+        document.querySelector('.notepad-classoverride')
+      );
+    }
   }
 
   componentWillUnmount() {
-    const {
-      proposalDetail,
-      trackEvent,
-      userEmail,
-      userRole
-    } = this.props;
-    if(localStorage.getItem('notepadStartDuration')){
-        const matamoObj = {}
-        matamoObj.category = `Proposal Detail (CRM#:${proposalDetail['CRM #']})`
-        matamoObj.action = `Event: Notepad ${proposalDetail['CRM #']}`
-        matamoObj.name = `Notepad: Duration ${localStorage.getItem('notepadStartDuration')} - ${moment().utc().format('MMMM Do YYYY, h:mm:ss a')}`
-        matamoObj.customDimensions = [JSON.stringify(proposalDetail),{user: userEmail},{role: userRole}]
-        saveDataInMatomo(trackEvent, matamoObj);  
-        localStorage.removeItem('notepadStartDuration');
-   }
+    const { proposalDetail, trackEvent, userEmail, userRole } = this.props;
+    if (localStorage.getItem('notepadStartDuration')) {
+      const matamoObj = {};
+      matamoObj.category = `Proposal Detail (CRM#:${proposalDetail['CRM #']})`;
+      matamoObj.action = `Event: Notepad ${proposalDetail['CRM #']}`;
+      matamoObj.name = `Notepad: Duration ${localStorage.getItem(
+        'notepadStartDuration'
+      )} - ${moment()
+        .utc()
+        .format('MMMM Do YYYY, h:mm:ss a')}`;
+      matamoObj.customDimensions = [
+        JSON.stringify(proposalDetail),
+        { user: userEmail },
+        { role: userRole }
+      ];
+      saveDataInMatomo(trackEvent, matamoObj);
+      localStorage.removeItem('notepadStartDuration');
+    }
     const { handleOpenClose, resetQuestionsFilter } = this.props;
     if (handleOpenClose) handleOpenClose(false);
 
@@ -504,22 +525,13 @@ class Questions extends Component {
       isQuestionsFiltersEnabled,
       activeQuestionsFilterCount,
       allSectionsExpanded,
-      editQuestionsData,
       isOpen,
-      noneditableField,
-      showNaCheckbox,
-      trackEvent,
-      eventCategories,
-      proposalDetail,
-      userEmail,
-      userRole
+      showNaCheckbox
     } = this.props;
     const {
       showModal,
       selectedQuestionForHistory,
-      isHistoryModalShown,
-      open,
-      isNotepadOpen
+      isHistoryModalShown
     } = this.state;
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
     const minPixelToExclude = 20;
@@ -530,22 +542,16 @@ class Questions extends Component {
       : (window.innerWidth - minPixelToExclude) * (47 / 100); // 50% of the total screen size
     return (
       <>
-        <div className="opportunity-details">
-          <BidHistory />
-        </div>
+        <ViewAboveVerticalTabs>
+          <div className="opportunity-details">
+            <BidHistory />
+          </div>
+        </ViewAboveVerticalTabs>
 
-        {/* Expand and Filter */}
-        <div>
-          <div className="tasksList-title-wrapper">
-            <Panel
-              minWidth={isNotepadOpen ? notepadMinWidthPx : 20}
-              maxWidth={isNotepadOpen ? notepadMaxWidthPx : 20}
-              width={isNotepadOpen ? notepadMaxWidthPx : 20}
-              hideButton
-              resizable
-              style={{ visibility: 'hidden' }}
-            />
-            <Panel width="100%" hideButton className="mark-na-panel">
+        <div id="panelwrapper">
+          {/* Question list */}
+          <div id="panel-questions-list">
+            <div className="tasksList-title-wrapper">
               <div className="N/A na-toggle-switch">
                 <span style={{ padding: '10px' }}>Mark N/A</span>
                 <Switch
@@ -619,59 +625,8 @@ class Questions extends Component {
                     : 'Filter'}
                 </Button>
               </div>
-            </Panel>
-          </div>
-          {this.renderFilter()}
-        </div>
-        <div id="panelwrapper">
-          {/* Notepad */}
-          <div id="panel-notepad" style={{ borderRadius: '5px' }}>
-            <Panel
-              minWidth={notepadMinWidthPx}
-              maxWidth={notepadMaxWidthPx}
-              width={notepadMaxWidthPx}
-              className="notepad-classoverride"
-              style={{ borderRadius: '5px' }}
-              resizable
-              onClose={() => {
-                this.setIsNotepadOpen(false);
-                const matamoObj = createMatomoObj(proposalDetail, userEmail, userRole, 'closed event')
-                saveDataInMatomo(trackEvent, matamoObj);
-              }}
-              onOpen={() => {
-                this.setIsNotepadOpen(true);
-              }}
-            >
-              <div
-                className={classNames('panel-notepad-inner', {
-                  hidden: !isNotepadOpen
-                })}
-              >
-                <div id="panel-notepad-header">
-                  <Typography variant="h3">Notepad</Typography>
-                </div>
-
-                {this.state.proposalNoteRender && this.context.wsInstance ? (
-                  <WysiwygNotepad trackEvent={trackEvent} eventCategories={eventCategories} />
-                ) : (
-                  <Loader
-                    type="TailSpin"
-                    color="#297DFD"
-                    width={30}
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: '100vh'
-                    }}
-                  />
-                )}
-              </div>
-            </Panel>
-          </div>
-          {/* Question list */}
-
-          <div id="panel-questions-list">
+            </div>
+            {this.renderFilter()}
             <div className="tasksList-wrapper" ref={this.questionsRef}>
               <Suspense fallback={<div>Loading...</div>}>
                 <QuestionsRefContext.Provider value={this.questionsRef}>

@@ -27,6 +27,12 @@
   }
 }
 
+.task-wrapper {
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
 @media screen and (max-width: 1200px) and (min-width: 300px) {
   .task-wrapper {
     flex: 1;

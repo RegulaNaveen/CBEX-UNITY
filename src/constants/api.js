@@ -34,7 +34,7 @@ switch (environment) {
     CLIENT_ID = '1h21m7sdoq1jr4tb00mkljn1m';
     REDIRECTION_URL = 'https://uat-unity.iqvia.app/';
     UBUILD_ARTIFACT = 'https://uat-ubuild.iqvia.app/main.js';
-    SF_HOST_URL = 'https://iqvia--uat.lightning.force.com/';
+    SF_HOST_URL = 'https://iqvia--uat.sandbox.lightning.force.com/';
     SOCKET_URL =
       'wss://l3p8o0zg48.execute-api.us-east-1.amazonaws.com/production';
     NOTES_SOCKET_URL =
@@ -136,7 +136,7 @@ switch (environment) {
     CLIENT_ID = '65ie0siehm65hisi4n1avlaa0r';
     REDIRECTION_URL = 'https://qa-unity.iqvia.app/';
     UBUILD_ARTIFACT = 'https://qa-ubuild.iqvia.app/main.js';
-    SF_HOST_URL = 'https://iqvia--staging.lightning.force.com/';
+    SF_HOST_URL = 'https://iqvia--staging.sandbox.lightning.force.com/';
     SOCKET_URL =
       'wss://nthe94se04.execute-api.us-east-1.amazonaws.com/production';
     NOTES_SOCKET_URL =
