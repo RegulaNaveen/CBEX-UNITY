@@ -1,3 +1,7 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable import/named */
+/* eslint-disable react/no-unused-prop-types */
+/* eslint-disable flowtype/no-types-missing-file-annotation */
 import React, { Component } from 'react';
 import { withRouter, Match } from 'react-router-dom';
 import { Map } from 'immutable'; // NOSONAR
@@ -18,11 +22,12 @@ import {
   updateSwitchTempStatusFromWebSocket,
   updateSwitchInProgress,
   resetProposalId,
-  setEventLauncherFlag,
+  setFlag,
   changeBid
 } from '../../../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../../../redux/actions/notepad-actions';
 import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
+import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions';
 import {
   getIsOpen,
   getProposalDetails,
@@ -84,7 +89,7 @@ type Props = {
   getOpportunityInfo: (oppId: string, flag?: boolean) => void,
   setSeenOne: Function,
   setResetProposalId: Function,
-  setEventLauncherFlg: Function,
+  setEventFlg: Function,
   bidList: any,
   changeBidInView: Function
 };
@@ -103,7 +108,7 @@ export class Opportunity extends Component<Props, State> {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const {
       getOpportunityInfo,
       authData,
@@ -112,15 +117,19 @@ export class Opportunity extends Component<Props, State> {
       expandAllSections,
       trackPageView,
       eventCategories,
+      setEventFlg,
       location: { search },
       match: { params },
       setSeenOne,
-      selectedBid
+      selectedBid,
+      getSFNonEditabelInfoField
     } = this.props;
     const winLocationSearch = window.location.search;
     const queryparams = new URLSearchParams(winLocationSearch);
     const notificationId = queryparams.get('notification_id');
     const bidNumber = queryparams.get('bidNo');
+    const flagValue = await launchDarkly(Object.values(featureFlags), false);
+    if (flagValue) setEventFlg(flagValue);
     if (notificationId) {
       setSeenOne(notificationId);
     }
@@ -129,7 +138,7 @@ export class Opportunity extends Component<Props, State> {
     if (selectedView) this.setState({ selectedView });
 
     if (!authData) getRefreshAuthData();
-
+    getSFNonEditabelInfoField();
     getOpportunityInfo(params.id, bidNumber);
 
     const proposalId = selectedBid.get('id', '');
@@ -175,7 +184,6 @@ export class Opportunity extends Component<Props, State> {
     const {
       match: { params },
       selectedBid,
-      setEventLauncherFlg,
       bidList,
       changeBidInView
     } = this.props;
@@ -214,12 +222,6 @@ export class Opportunity extends Component<Props, State> {
     // END Bid level redirection
 
     this.triggerWebsocketNotesApi(prevProposalId, thisProposalId);
-
-    // Set Event Launcher Flag
-    (async () => {
-      const flagValue = await launchDarkly(featureFlags.EVENT_LAUNCHER, false);
-      setEventLauncherFlg(flagValue);
-    })();
   }
 
   componentWillUnmount() {
@@ -432,7 +434,8 @@ export default compose(
     setSwitchInProgress: updateSwitchInProgress,
     setSeenOne: notificationActions.setSeenOne,
     setResetProposalId: resetProposalId,
-    setEventLauncherFlg: setEventLauncherFlag,
-    changeBidInView: changeBid
+    setEventFlg: setFlag,
+    changeBidInView: changeBid,
+    getSFNonEditabelInfoField: getSFNonEditabelField
   })
 )(MatomoHOC(Opportunity));

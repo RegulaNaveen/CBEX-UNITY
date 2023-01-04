@@ -1,24 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import UserInputModal from './UserInputModal';
-import { createWord, shouldInclude } from './word-template';
-import { Packer } from 'docx';
-import { saveAs } from 'file-saver';
-import Logo from '../../../../img/iqvia-main-logo.png';
-import {
-  selectProposalQuestions,
-  getSelectedBid
-} from '../../../redux/selectors/proposal';
-
-import {
-  selectNotes,
-  getRoles,
-  getProposalDetails,
-  selectEditor
-} from '../../../redux/selectors';
-import { createPdf } from './pdf-template';
-import fetchNotes from '../../../redux/actions/notepad-actions';
-import NotesSocketContext from '../../../context/notesSocketContext';
 import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
@@ -30,12 +11,31 @@ import Superscript from '@tiptap/extension-superscript';
 import CharacterCount from '@tiptap/extension-character-count';
 import Mention from '@tiptap/extension-mention';
 import Collaboration from '@tiptap/extension-collaboration';
+import { Packer } from 'docx';
+import { saveAs } from 'file-saver';
+import UserInputModal from './UserInputModal';
+import { createWord, shouldInclude } from './word-template';
+import Logo from '../../../../img/iqvia-main-logo.png';
+import {
+  selectProposalQuestions,
+  getSelectedBid
+} from '../../../redux/selectors/proposal';
 
-export let docType = {
+import {
+  selectNotes,
+  getRoles,
+  getProposalDetails
+} from '../../../redux/selectors';
+import { createPdf } from './pdf-template';
+import { fetchNotes } from '../../../redux/actions/notepad-actions';
+import NotesSocketContext from '../../../context/notesSocketContext';
+
+export const docType = {
   pdf: 'PDF',
   doc: 'DOCX'
 };
 export const defaultOption = 'All';
+
 const GenerateDocs = () => {
   const notesSocket = useContext(NotesSocketContext);
   const notesMap = useSelector(selectNotes);
@@ -82,8 +82,8 @@ const GenerateDocs = () => {
     },
     [selectedBid.get('id', ''), notesSocket.wsInstance]
   );
-  let logo = useRef(null);
-  let [filterState, filterStateUpdate] = useState({
+  const logo = useRef(null);
+  const [filterState, filterStateUpdate] = useState({
     answered: true,
     unanswered: false,
     myRole: false,
@@ -105,8 +105,8 @@ const GenerateDocs = () => {
         .then(blob => {
           logo.current = blob;
         });
-      let fileName = `Unity Export_${proposalDetails['CRM #']}_Bid ${proposalDetails['bidNo']}_${proposalDetails['Customer']}`;
-      let derivedMileStones = setMileStonesAsPerCurrentQues(
+      const fileName = `Unity Export_${proposalDetails['CRM #']}_Bid ${proposalDetails['bidNo']}_${proposalDetails['Customer']}`;
+      const derivedMileStones = setMileStonesAsPerCurrentQues(
         proposalQuestions || []
       );
       filterStateUpdate({
@@ -115,7 +115,9 @@ const GenerateDocs = () => {
         ...{ milestoneOptions: derivedMileStones },
         ...{ milestones: [...[defaultOption], ...derivedMileStones] }
       });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }, [proposalDetails, proposalQuestions]);
 
   const fetchLatestNotes = () => {
@@ -134,11 +136,14 @@ const GenerateDocs = () => {
     const tempMileStones = [];
     filteredQuestions.forEach(question => {
       try {
-        const currentMileStone = isNewMileStone
-          ? question.milestoneNew[0].Name
-          : question.milestone;
+        const currentMileStone =
+          isNewMileStone && question?.milestoneNew?.length
+            ? question.milestoneNew[0].Name
+            : question.milestone;
         if (currentMileStone) tempMileStones.push(currentMileStone);
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     });
     return [...new Set(tempMileStones)];
   };
@@ -165,9 +170,10 @@ const GenerateDocs = () => {
 
   const initExport = () => {
     try {
-      let { fileName, fileType } = filterState;
+      const { fileName, fileType } = filterState;
+      let exportBlob = null;
       if (fileType === docType.pdf) {
-        let exportBlob = createPdf({
+        exportBlob = createPdf({
           data: getSelectedBidData(),
           notes: getSelectedBidNotes(),
           filterState,
@@ -178,7 +184,7 @@ const GenerateDocs = () => {
           saveAs(blob, `${fileName}.pdf`);
         });
       } else if (fileType === docType.doc) {
-        let exportBlob = createWord({
+        exportBlob = createWord({
           data: getSelectedBidData(),
           notes: getSelectedBidNotes(),
           filterState,
@@ -201,7 +207,7 @@ const GenerateDocs = () => {
       filterStateUpdate={filterStateUpdate}
       roleList={roleList}
       fetchLatestNotes={fetchLatestNotes}
-    ></UserInputModal>
+    />
   );
 };
 

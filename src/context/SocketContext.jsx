@@ -224,7 +224,6 @@ const SocketContextProvider = props => {
     }
 
     if (!isSocketConnected()) {
-      console.log('Initiating new socket connection');
       const newSocket = new WebSocket(SOCKET_URL);
 
       newSocket.onopen = event => {

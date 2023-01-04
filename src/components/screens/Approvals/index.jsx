@@ -35,7 +35,10 @@ const Approvals = () => {
 
   // get email flag status on mount
   useEffect(() => {
-    dispatch(fetchApprovalSendEmailFlag());
+    const allFlags = useSelector(state => state.proposal.get('eventflag'));
+    if (allFlags && allFlags.approvalSendMailFlag) {
+      dispatch(fetchApprovalSendEmailFlag(allFlags.approvalSendMailFlag));
+    }
   }, []);
 
   useEffect(() => {

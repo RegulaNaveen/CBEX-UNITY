@@ -15,8 +15,7 @@ type Props = {
   sectionName?: string,
   getSelectedItem: (selectedItem: string) => void,
   withReset?: boolean,
-  className?: string,
-  defaultValue?: string
+  className?: string
 };
 
 type State = {
@@ -32,7 +31,6 @@ class Lookup extends Component<Props, State> {
     withReset: false,
     placeholder: '',
     className: '',
-    defaultValue: '',
     sectionName: '',
     error: false
   };
@@ -59,7 +57,6 @@ class Lookup extends Component<Props, State> {
 
   onSearching = ({ target: { value } }: SyntheticInputEvent<EventTarget>) => {
     const { data } = this.props;
-    const searchValue = value && value.slice(value.lastIndexOf(',') + 1).trim();
     const filteringData = data.filter(item =>
       objectContains(item, value, false)
     );
@@ -93,7 +90,10 @@ class Lookup extends Component<Props, State> {
     const { getSelectedItem, withReset } = this.props;
 
     const { previouslySelectedValue } = this.state;
-    const newValue = ( previouslySelectedValue && previouslySelectedValue.length  ? `${previouslySelectedValue}, ` : '') + textContent;
+    const newValue =
+      (previouslySelectedValue && previouslySelectedValue.length
+        ? `${previouslySelectedValue}, `
+        : '') + textContent;
     this.setState(
       {
         searchValue: textContent,
@@ -137,7 +137,6 @@ class Lookup extends Component<Props, State> {
       withReset,
       placeholder,
       className,
-      defaultValue,
       sectionName
     } = this.props;
 

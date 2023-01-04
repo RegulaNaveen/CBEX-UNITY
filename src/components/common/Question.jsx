@@ -14,9 +14,9 @@ import Tooltip from 'apollo-react/components/Tooltip';
 import Typography from 'apollo-react/components/Typography';
 import moment from 'moment';
 import classNames from 'classnames';
+import Checkbox from 'apollo-react/components/Checkbox';
 import { Edit } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import TextArea from './atoms/inputs/TextArea';
 import { parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
@@ -29,7 +29,6 @@ import {
   setEditQuestionData,
   setProposalAnswerLoading,
   deleteProposalUserFromDB,
-  setShowNaCheckbox,
   setNotApplicableQuestion,
   setNotApplicableLoader
 } from '../../redux/actions/proposal-actions';
@@ -62,11 +61,8 @@ import { SocketContext } from '../../context/SocketContext';
 import EventLauncher from '../screens/Opportunity/EventLauncher';
 import { parseStringifyJson } from '../../utils/helpers';
 import withIdleStateDetection from '../HOC/IdleStateDetector';
-import Checkbox from 'apollo-react/components/Checkbox';
-import Loader from 'apollo-react/components/Loader';
 import RadioQuestion from './atoms/inputs/RadioQuestion';
 import { getProposalAnswer } from '../../api/proposal';
-import { ListItemText } from '@material-ui/core';
 
 const DropdownWithIdleStateDetection = withIdleStateDetection(Dropdown);
 const QuestionDatePickerWithIdleStateDetection = withIdleStateDetection(
@@ -165,44 +161,47 @@ export class TaskRow extends React.PureComponent<Props, State> {
   }
 
   handlePropsalChange = (textValue, lastValue, reason) => {
-    const {
-      setProposalAnswer,
-      proposalId,
-      questionId,
-      userData,
-      section,
-      setAnswerLoading,
-      deleteProposalUser
-    } = this.props;
-    console.log('set proposal answer');
-    setProposalAnswer(
-      this.context,
-      proposalId,
-      questionId,
-      textValue,
-      userData
-    ).then(() => {
-      const [deletedVal] = xor(
-        textValue?.trim() ? textValue?.trim().split(',') : [],
-        lastValue?.trim() ? lastValue?.trim().split(',') : []
-      );
-      const [deletedEmail] = String(deletedVal).match(
-        /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
-      );
-      if (reason === 'remove-option' && deletedEmail) {
-        setAnswerLoading(questionId, true);
-        const { sectionName, sectionOrder } = section.toJS();
-        deleteProposalUser(
-          proposalId,
-          deletedEmail,
-          sectionOrder,
-          sectionName
-        ).then(() => {
-          setAnswerLoading(questionId, false);
-        });
-      }
-    });
-    this.trackMatomoEventSubmitAnswer(textValue);
+    try {
+      const {
+        setProposalAnswer,
+        proposalId,
+        questionId,
+        userData,
+        section,
+        setAnswerLoading,
+        deleteProposalUser
+      } = this.props;
+      setProposalAnswer(
+        this.context,
+        proposalId,
+        questionId,
+        textValue,
+        userData
+      ).then(() => {
+        const [deletedVal] = xor(
+          textValue?.trim() ? textValue?.trim().split(',') : [],
+          lastValue?.trim() ? lastValue?.trim().split(',') : []
+        );
+        const [deletedEmail] = String(deletedVal).match(
+          /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+        );
+        if (reason === 'remove-option' && deletedEmail) {
+          setAnswerLoading(questionId, true);
+          const { sectionName, sectionOrder } = section.toJS();
+          deleteProposalUser(
+            proposalId,
+            deletedEmail,
+            sectionOrder,
+            sectionName
+          ).then(() => {
+            setAnswerLoading(questionId, false);
+          });
+        }
+      });
+      this.trackMatomoEventSubmitAnswer(textValue);
+    } catch (error) {
+      console.log('error :>> ', error);
+    }
   };
 
   handleCheckboxPropsalChange = (textValue, lastValue, reason) => {
@@ -215,7 +214,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
       setAnswerLoading,
       deleteProposalUser
     } = this.props;
-    console.log('set proposal answer');
     setProposalAnswer(
       this.context,
       proposalId,
@@ -1321,6 +1319,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
       showNaCheckbox
     } = this.props;
     const questionID = answers.get('questionId');
+    const quesData = questionData?.toJS();
+    const hasEvent = quesData?.events && !isEmpty(quesData?.events);
     const qvicon = questionId;
     let lastAnswer;
     let answerDate = 'Not Answered';
@@ -1440,12 +1440,14 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 </div>
 
                 {/* Event Launcher Component */}
-                <EventLauncher
-                  questionData={questionData}
-                  proposalDetail={proposalDetail}
-                  eventCategories={eventCategories}
-                  trackMatomoEventLauncher={this.trackMatomoEventLauncher}
-                />
+                {hasEvent && (
+                  <EventLauncher
+                    questionData={questionData}
+                    proposalDetail={proposalDetail}
+                    eventCategories={eventCategories}
+                    trackMatomoEventLauncher={this.trackMatomoEventLauncher}
+                  />
+                )}
 
                 {/* Edit Question Icon */}
                 {isCustomQuestion && isCurrentBid && (

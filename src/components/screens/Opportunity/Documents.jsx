@@ -134,13 +134,11 @@ class Documents extends Component<Props, State> {
       url = '';
       return <p>No documents available for this proposal</p>;
     }
-    console.log('url1 :>> ', url);
     if (this.isValidURL(boxId)) {
       url = `${String(boxId).trim()}&output=embed`;
     } else {
       url = `https://app.box.com/embed/folder/${boxId}?sortColumn=date&view=list`;
     }
-    console.log('url2 :>> ', url);
     return (
       <iframe
         src={url}

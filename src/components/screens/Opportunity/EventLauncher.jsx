@@ -7,7 +7,6 @@ import RadioGroup from 'apollo-react/components/RadioGroup';
 import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
 import IconButton from 'apollo-react/components/IconButton';
-import Modal from 'apollo-react/components/Modal';
 import moment from 'moment';
 
 import CustomModal from '../../common/CustomModal';
@@ -37,9 +36,9 @@ const EventLauncher = ({
     ? [...quesData?.answers].pop()?.answer
     : '';
   const userData = useSelector(getUserData);
-  const eventFlag = useSelector(state =>
-    state.proposal.get('eventLauncherFlag')
-  );
+  const allFlags = useSelector(state => state.proposal.get('eventflag'));
+  const eventFlag = allFlags.eventLauncher || false;
+
   const { isCurrent } = useSelector(getSelectedBid)?.toJS();
 
   // Component will return null if no event found

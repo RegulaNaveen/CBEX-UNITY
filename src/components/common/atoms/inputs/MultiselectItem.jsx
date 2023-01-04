@@ -13,7 +13,6 @@ type Props = {
 };
 
 class MultiselectItem extends Component<Props> {
-
   constructor(props) {
     super(props);
     this.itemRef = React.createRef();
@@ -25,8 +24,8 @@ class MultiselectItem extends Component<Props> {
   };
 
   componentDidUpdate(prevProps) {
-    const { parentRef } = this.props;
-    if (prevProps.focused !== this.props.focused && this.props.focused) {
+    const { parentRef, focused } = this.props;
+    if (focused && prevProps.focused !== focused) {
       if (parentRef.current && this.itemRef.current) {
         parentRef.current.scrollTop = this.itemRef.current.offsetTop;
       }
@@ -40,8 +39,8 @@ class MultiselectItem extends Component<Props> {
         role="presentation"
         className={classNames({
           'multiselect-list-item': true,
-          'selected': isSelected,
-          'focused': focused
+          selected: isSelected,
+          focused: focused
         })}
         ref={this.itemRef}
         onClick={this.handleClick}

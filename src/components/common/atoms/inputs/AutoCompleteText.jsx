@@ -1,17 +1,27 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import AutocompleteV2 from 'apollo-react/components/AutocompleteV2';
 import { connect } from 'react-redux';
 import { getLookUpOptionsSelector } from '../../../../redux/selectors';
 
 const AutocompleteText = props => {
-  const { options, sfField, sfObject, multiple, lov } = props;
+  const {
+    options,
+    sfField,
+    sfObject,
+    multiple,
+    lov,
+    disabled,
+    onFocus,
+    onBlur
+  } = props;
   let text;
   let listOptions = [];
 
   if (props.text) text = multiple ? props.text : props.text.trim();
   else text = multiple ? [] : '';
 
-  let currentAnswerString = text ? text.toString() : '';
+  const currentAnswerString = text ? text.toString() : '';
 
   let finalLov = [];
   try {
@@ -21,7 +31,9 @@ const AutocompleteText = props => {
           .toArray()
           .map(v => ({ label: v }))
       : [];
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 
   listOptions = finalLov.length
     ? finalLov
@@ -32,7 +44,7 @@ const AutocompleteText = props => {
   });
   useEffect(() => {
     if (text) {
-      let val = multiple ? text.map(v => ({ label: v })) : { label: text };
+      const val = multiple ? text.map(v => ({ label: v })) : { label: text };
       setValue(val);
     } else setValue(multiple ? [] : '');
   }, [currentAnswerString]);
@@ -43,7 +55,7 @@ const AutocompleteText = props => {
       action === 'remove-option' ||
       action === 'input'
     ) {
-      let newValue = nV === null ? '' : nV;
+      const newValue = nV === null ? '' : nV;
       let answerStringify = ' ';
       setValue(newValue);
       try {
@@ -67,7 +79,7 @@ const AutocompleteText = props => {
   return (
     <div
       className={`${
-        props.disabled
+        disabled
           ? 'autocomplete-disabled autocomplete-text'
           : 'autocomplete autocomplete-text'
       }`}
@@ -84,13 +96,13 @@ const AutocompleteText = props => {
         onChange={handleChange}
         placeholder={placeholder}
         noOptionsText="No matches found"
-        onFocus={e => {
-          props.onFocus();
+        onFocus={() => {
+          onFocus();
         }}
-        onBlur={e => {
-          props.onBlur();
+        onBlur={() => {
+          onBlur();
         }}
-        disabled={props.disabled || false}
+        disabled={disabled || false}
       />
     </div>
   );

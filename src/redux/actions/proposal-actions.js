@@ -86,7 +86,7 @@ const {
   QUESTION_LOCK_BY_USER,
   QUESTION_UNLOCK_BY_USER,
   QUESTION_LOCK_DETAILS_ALL,
-  SET_EVENT_LAUNCHER_FLAG,
+  SET_FLAG,
   SHOW_NA_CHECKBOX,
   UPDATE_NOT_APPLICABLE_PROGRESS,
   UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE,
@@ -998,14 +998,14 @@ export const getOpportunity = (
       const proposalCount = allProposals.length;
       const maxLimit = 500;
 
-      let callstomake = parseInt(proposalCount / maxLimit);
-      let additionalcallstomake = proposalCount % maxLimit;
-      if (additionalcallstomake) {
-        callstomake = callstomake + 1;
-      }
+      // let callstomake = parseInt(proposalCount / maxLimit);
+      // let additionalcallstomake = proposalCount % maxLimit;
+      // if (additionalcallstomake) {
+      //   callstomake = callstomake + 1;
+      // }
       let from = 0;
       let urls = [];
-      let proposalsData = [];
+      const proposalsData = [];
       for (let index = 0; index < proposalCount; index += 1) {
         let trueOrFalse;
 
@@ -1249,10 +1249,10 @@ export const getProposalAnswerHistory = (
 /**
  * Set Flag for Event Launcher
  */
-export const setEventLauncherFlag = val => {
+export const setFlag = val => {
   return dispatch => {
     dispatch({
-      type: SET_EVENT_LAUNCHER_FLAG,
+      type: SET_FLAG,
       payload: val
     });
   };
@@ -1276,11 +1276,8 @@ export const setCanUserTagInQuestion = can => {
   };
 };
 
-export const fetchUserTagFlagInQuestion = () => {
+export const fetchUserTagFlagInQuestion = val => {
   return async dispatch => {
-    const answerUserTagFlagValue = await launchDarkly(
-      featureFlags.ANSWER_USER_TAG
-    );
-    dispatch(setCanUserTagInQuestion(answerUserTagFlagValue));
+    dispatch(setCanUserTagInQuestion(val));
   };
 };

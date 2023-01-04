@@ -17,7 +17,6 @@ const loadUbuildScript = (url, callback) => {
       if (callback) callback();
     };
     script.onerror = () => {
-      console.log('Could not load web component artifacts');
       window.location.replace(AUTH.REDIRECTION_URL);
     };
   }
@@ -40,9 +39,7 @@ export class UbuildShell extends Component<Props, State> {
       history.push(DASHBOARD);
     }
     if (loadUbuildScript && UBUILD_ARTIFACT)
-      loadUbuildScript(UBUILD_ARTIFACT, () => {
-        console.log('Ubuild web component loaded');
-      });
+      loadUbuildScript(UBUILD_ARTIFACT, () => {});
   };
 
   render() {

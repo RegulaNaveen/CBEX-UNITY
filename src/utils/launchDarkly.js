@@ -25,7 +25,7 @@ const main = async (flagKey: string, defaultValue: any) => {
     const ldclient = LDClient.initialize(LAUNCH_DARKLY_CLIENT_ID, user);
     await ldclient.waitForInitialization();
     await ldclient.waitUntilReady();
-    flagValue = ldclient.variation(flagKey, defaultValue);
+    flagValue = ldclient.allFlags(flagKey, defaultValue);
     ldclient.close();
   } catch (error) {
     console.log('launchDarky error');

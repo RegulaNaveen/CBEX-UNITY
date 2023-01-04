@@ -1,16 +1,17 @@
 // @flow
 import React, { PureComponent } from 'react';
 import type { NavigationHistory } from 'react-router-dom';
+import Button from 'apollo-react/components/Button';
+import User from 'apollo-react-icons/User';
+import Grid from 'apollo-react/components/Grid';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Map } from 'immutable'; // NOSONAR
-import Loader from 'react-loader-spinner';
 import { LOGIN, PROFILE } from '../../../routes';
 import { getRoles, isRolesInfoLoading } from '../../../redux/selectors';
 import { getRolesInfo } from '../../../redux/actions/proposal-actions';
 import { logout } from '../../../redux/actions/auth-actions';
 import { onSetUserRole } from '../../../redux/actions/sso-auth-actions';
-import Dropdown from '../../common/atoms/inputs/Dropdown';
 import {
   getUserEmail,
   getUserName,
@@ -18,10 +19,6 @@ import {
 } from '../../../SessionHandler';
 import { Pencil, Globe, ReportIssue } from '../../svg';
 import MatomoHOC from '../../HOC/MatomoHOC';
-import Button from 'apollo-react/components/Button';
-import User from 'apollo-react-icons/User';
-import Grid from 'apollo-react/components/Grid';
-import Avatar from 'apollo-react/components/Avatar';
 
 type Props = {
   rolesList: Array<string>,

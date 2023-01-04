@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 // @flow
 // eslint-disable-next-line react/destructuring-assignment
 import React, { createRef, createContext, Component, Suspense } from 'react';
@@ -11,8 +13,6 @@ import Filter from 'apollo-react-icons/Filter';
 import ApolloCheckbox from 'apollo-react/components/Checkbox';
 import classNames from 'classnames';
 import Grid from 'apollo-react/components/Grid';
-import Panel from 'apollo-react/components/Panel';
-import Loader from 'react-loader-spinner';
 import { Add, Refresh } from '../../svg';
 import BidHistory from '../../common/Bidhistory';
 import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
@@ -24,7 +24,8 @@ import {
   expandAllSectionsAction,
   callPickListLookupSfData,
   setShowNaCheckbox,
-  fetchUserTagFlagInQuestion
+  fetchUserTagFlagInQuestion,
+  getPriceModelerData
 } from '../../../redux/actions/proposal-actions';
 import {
   getProposalDetails,
@@ -42,12 +43,14 @@ import {
   getSelectedBid,
   getShowNaCheckbox,
   getUserEmail,
-  getUserRole
+  getUserRole,
+  getfetchUserTagFlag
 } from '../../../redux/selectors';
 import {
   selectUniqueMilestones,
   selectAreAllSectionsExpanded,
-  getBidList
+  getBidList,
+  getSelectedBid as getCurrentBid
 } from '../../../redux/selectors/proposal';
 import { selectUserRole } from '../../../redux/selectors/sso-auth';
 import Switch from 'apollo-react/components/Switch';
@@ -65,7 +68,6 @@ import {
   throttle
 } from '../../../utils/utils';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
-import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions';
 import ANSWER_TYPES from '../../../constants/answerTypes';
 import NotesSocketContext from '../../../context/notesSocketContext';
 import moment from 'moment';
@@ -114,7 +116,6 @@ type State = {
 };
 
 const MANUAL_REFRESH = false;
-let firstRender = true;
 class Questions extends Component {
   static contextType = NotesSocketContext;
 
@@ -141,19 +142,30 @@ class Questions extends Component {
   }
 
   componentDidMount() {
-    firstRender = false;
     window.localStorage.setItem('enableFirstExpand', 'true');
     const {
       fetchUsers,
-      getSFNonEditabelInfoField,
-      callPickListLookupSfData
+      callPickListLookupSfData,
+      fetchUserTagFlag,
+      getBid,
+      getPriceModeler
     } = this.props;
     fetchUsers();
-    getSFNonEditabelInfoField();
     callPickListLookupSfData();
+    const bid = getBid?.toJS();
+    const proposalID = bid?.id;
+    if (proposalID) getPriceModeler(proposalID);
     window.addEventListener('resize', this.resize.bind(this));
     this.resize();
-    this.props.fetchUserTagFlagInQuestion();
+    if (
+      fetchUserTagFlag &&
+      typeof fetchUserTagFlag === 'object' &&
+      fetchUserTagFlag.answerUserTagFlag
+    ) {
+      this.props.fetchUserTagFlagInQuestion(
+        fetchUserTagFlag.answerUserTagFlag || false
+      );
+    }
   }
 
   componentDidUpdate(prevProps: Map) {
@@ -206,7 +218,6 @@ class Questions extends Component {
           userRole,
           'drag event'
         );
-        console.log('ResizeObserver called');
         saveDataInMatomo(trackEvent, matamoObj);
       }, 3000)
     );
@@ -717,6 +728,8 @@ const mapStateToProps = (state: Map) => ({
   getBidList: getBidList(state),
   userEmail: getUserEmail(state),
   userRole: getUserRole(state),
+  getBid: getCurrentBid(state),
+  fetchUserTagFlag: getfetchUserTagFlag(state),
   showNaCheckbox: getShowNaCheckbox(state)
 });
 
@@ -731,8 +744,8 @@ export default compose(
     expandAllSections: expandAllSectionsAction,
     handleOpenClose: onHandleOpenClose,
     handleShowNaCheckbox: setShowNaCheckbox,
-    getSFNonEditabelInfoField: getSFNonEditabelField,
     callPickListLookupSfData,
-    fetchUserTagFlagInQuestion
+    fetchUserTagFlagInQuestion,
+    getPriceModeler: getPriceModelerData
   })
 )(MatomoHOC(Questions));

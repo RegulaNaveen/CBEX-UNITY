@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import AutocompleteV2 from 'apollo-react/components/AutocompleteV2';
-import { isEmpty } from 'lodash';
 import { API } from '../../../../constants';
 import { getAccessTokenFromLocalStorage as getAccessToken } from '../../../../SessionHandler';
 import { QUESTION_UNLOCK_TIMEOUT } from '../../../../constants/app';
@@ -10,7 +9,6 @@ const { USER_API_URL, API_KEY } = API.PROPOSAL;
 const Autocomplete = props => {
   const [options, setOptions] = useState([]);
   const [value, setValue] = useState([]);
-  const [callAccept, setCallAccept] = useState(false);
   const [inputVal, setInputVal] = useState('');
   const [getNoOptionsText, setNoOptionsText] = useState(1);
   const autocompleteRef = useRef();
@@ -20,7 +18,6 @@ const Autocomplete = props => {
     .trimEnd();
   const previousController = useRef();
   const { disabled } = props;
-  // let callAccept = false;
   function filter() {
     value.map(row => {
       let matched = row.email;
@@ -100,7 +97,6 @@ const Autocomplete = props => {
       })
         .then(response => response.json())
         .then(myJson => {
-          // if (callAccept === false) return;
           updatedOptions = myJson.data.map(p => {
             return {
               label: `${p.first_name} ${p.last_name}(${p.email.toLowerCase()})`,
@@ -115,41 +111,37 @@ const Autocomplete = props => {
     }
   };
   const handleChange = (event, newValue, reason) => {
+    const { onChange } = props;
     setValue(newValue);
     const proposaluser = newValue.map(v => {
       return v.email ? v.label + '(' + v.email + ')' : v.label;
     });
-    if (proposaluser.length === 0) props.onChange(' ', text, reason);
-    else props.onChange(proposaluser.join(','), text, reason);
+    if (proposaluser.length === 0) onChange(' ', text, reason);
+    else onChange(proposaluser.join(','), text, reason);
     resetUnlockTimer(true);
   };
+
   const onInputChange = (event, value) => {
     resetUnlockTimer();
     setInputVal(value);
     const elem = document.querySelectorAll('.a-MuiAutocomplete-popper').item(0);
     if (value) {
-      setCallAccept(true);
       // setCount(1);
       getData(value);
       elem.classList.remove('disable');
     } else {
-      setCallAccept(false);
       // setCount(1);
       setOptions([]);
       elem.className += ' disable';
     }
   };
-  const timeout = ms => {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  };
 
   const onInputFocus = async () => {
-    resetUnlockTimer();
-    props.onFocus();
-    // await timeout(500);
     const elem = document.querySelectorAll('.a-MuiAutocomplete-popper').item(0);
-    elem.className += ' disable';
-    // elem.classList.add('disable');
+    const { onFocus } = props;
+    resetUnlockTimer();
+    onFocus();
+    if (elem) elem.className += ' disable';
   };
   return (
     <div
@@ -174,8 +166,9 @@ const Autocomplete = props => {
           getNoOptionsText === 0 ? 'No Matches Found' : 'Loading...'
         }
         onFocus={onInputFocus}
-        onBlur={e => {
-          props.onBlur();
+        onBlur={() => {
+          const { onBlur } = props;
+          onBlur();
           resetUnlockTimer(true);
         }}
         disabled={disabled || false}

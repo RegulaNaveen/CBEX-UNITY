@@ -8,7 +8,7 @@ import {
 import { shouldShowQuestion } from '../components/screens/Approvals/utils';
 
 export function getProposalTeamUsers(questions = []) {
-  let answers = new Set();
+  const answers = new Set();
   try {
     questions
       .filter(
