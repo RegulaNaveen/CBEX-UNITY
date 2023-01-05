@@ -1,4 +1,11 @@
-import React, { useState, useEffect, useMemo, useRef, useContext } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useRef,
+  useContext,
+  Suspense
+} from 'react';
 import { useHistory } from 'react-router-dom';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
@@ -8,9 +15,7 @@ import { useSelector } from 'react-redux';
 import Loader from 'react-loader-spinner';
 import classNames from 'classnames';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
-import Questions from '../../../screens/Opportunity/Questions';
-import Documents from '../../../screens/Opportunity/Documents';
-import Validate from '../../../screens/Opportunity/Validate';
+
 import featureFlags from '../../../../constants/featureFlags';
 import launchDarkly from '../../../../utils/launchDarkly';
 import {
@@ -23,13 +28,31 @@ import {
   getUserEmail,
   getUserRole
 } from '../../../../redux/selectors';
-import Approvals from '../../../screens/Approvals/index';
 import VerticalTabsCollapsiblePanel from '../../../screens/Opportunity/layout/navigation/VerticalTabsCollapsiblePanel';
 import QuestionsForCustomer from '../../../screens/Opportunity/QuestionsForCustomerTab';
 import WysiwygNotepad from '../../../views/WysiwygNotepad';
 import ProposalTeam from '../../../screens/Opportunity/ProposalTeam';
 import { createMatomoObj, saveDataInMatomo } from '../../../../utils/utils';
 import NotesSocketContext from '../../../../context/notesSocketContext';
+
+const Questions = React.lazy(() =>
+  import(
+    /* webpackChunkName: "questions" */ '../../../screens/Opportunity/Questions'
+  )
+);
+const Approvals = React.lazy(() =>
+  import(/* webpackChunkName: "approvals" */ '../../../screens/Approvals/index')
+);
+const Documents = React.lazy(() =>
+  import(
+    /* webpackChunkName: "documents" */ '../../../screens/Opportunity/Documents'
+  )
+);
+const Validate = React.lazy(() =>
+  import(
+    /* webpackChunkName: "validate" */ '../../../screens/Opportunity/Validate'
+  )
+);
 
 const UnityTab = ({
   id,
@@ -322,7 +345,13 @@ const UnityTab = ({
               />
             ) : null}
             {visibleTabs().map(item => {
-              return value === item.value && item.component;
+              return (
+                value === item.value && (
+                  <Suspense fallback={<div>Loading</div>}>
+                    {item.component}
+                  </Suspense>
+                )
+              );
             })}
           </div>
         </div>

@@ -20,7 +20,9 @@ import {
 } from '../../redux/actions/sidebar-actions';
 
 const CollapsibleQuestionMapping = React.lazy(() =>
-  import('./CollapsibleQuestionMapping')
+  import(
+    /* webpackChunkName: "collapsibleQuestionMapping" */ './CollapsibleQuestionMapping'
+  )
 );
 type State = {
   isCollapsed: boolean
