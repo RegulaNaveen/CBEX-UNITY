@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // @flow
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
@@ -23,18 +24,10 @@ const loadUbuildScript = (url, callback) => {
   if (existingScript && callback) callback();
 };
 
-type State = {};
-
-type Props = {};
-
-export class UbuildShell extends Component<Props, State> {
-  constructor(props: Object) {
-    super(props);
-  }
-
+export class UbuildShell extends Component {
   componentDidMount = () => {
-    const results = isUserUbuildAdmin();
     const { history } = this.props;
+    const results = isUserUbuildAdmin();
     if (!results) {
       history.push(DASHBOARD);
     }

@@ -985,29 +985,26 @@ export const getOpportunity = (
 
     try {
       const allProposals = await getAllProposals(id);
-
       const proposal = allProposals.find(
         thisProposal => thisProposal.proposal.proposalDetails.bidNo === bidNo
       );
       const isCurrentProposal = allProposals.find(
         thisProposal => thisProposal.isCurrent === true
       );
-
       if (proposal) selectedProposalId = proposal.proposal.proposalId;
-
       const proposalCount = allProposals.length;
-      const maxLimit = 500;
-
+      // const maxLimit = 500;
+      //
       // let callstomake = parseInt(proposalCount / maxLimit);
       // let additionalcallstomake = proposalCount % maxLimit;
       // if (additionalcallstomake) {
       //   callstomake = callstomake + 1;
       // }
-      let from = 0;
-      let urls = [];
+      // let from = 0;
+      const urls = [];
       const proposalsData = [];
       for (let index = 0; index < proposalCount; index += 1) {
-        let trueOrFalse;
+        // let trueOrFalse;
 
         if (selectedProposalId) {
           // user on previous bid

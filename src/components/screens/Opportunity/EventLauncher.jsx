@@ -28,7 +28,6 @@ const EventLauncher = ({
   trackMatomoEventLauncher
 }) => {
   const [bodyStr, setBodyStr] = useState('');
-  const [url, setUrl] = useState('');
   const [bodyHtml, setBodyHtml] = useState('');
   const quesData = questionData?.toJS();
   const hasEvent = quesData?.events && !isEmpty(quesData?.events);
@@ -134,12 +133,7 @@ const EventLauncher = ({
 
   const launchRichTextButtonHandler = () => {
     const dateTimeFormat = 'YYYY-MM-DDTHH:mm:ss';
-    const {
-      EventBody: body,
-      EventSubject: subject,
-      EventHtml: html
-    } = eventData;
-    setBodyHtml(body);
+    const { EventBody: body, EventSubject: subject } = eventData;
     const dateAge = checkDateAge(eventStartDate);
     const formattedDt = moment(eventStartDate).format('YYYY-MM-DD');
     let startDate = `${formattedDt}T08:00:00`;
@@ -161,9 +155,6 @@ const EventLauncher = ({
       subject,
       filteredEmails.join(', ')
     );
-    if (geturl) {
-      setUrl(geturl);
-    }
 
     const trackEventPayload = {
       action: `Event Launched : ${subject} : ${body}`,

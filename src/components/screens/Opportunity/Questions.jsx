@@ -13,6 +13,11 @@ import Filter from 'apollo-react-icons/Filter';
 import ApolloCheckbox from 'apollo-react/components/Checkbox';
 import classNames from 'classnames';
 import Grid from 'apollo-react/components/Grid';
+import Switch from 'apollo-react/components/Switch';
+import Tooltip from 'apollo-react/components/Tooltip';
+import InfoIcon from 'apollo-react-icons/Info';
+import IconButton from 'apollo-react/components/IconButton';
+import moment from 'moment';
 import { Add, Refresh } from '../../svg';
 import BidHistory from '../../common/Bidhistory';
 import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
@@ -53,10 +58,6 @@ import {
   getSelectedBid as getCurrentBid
 } from '../../../redux/selectors/proposal';
 import { selectUserRole } from '../../../redux/selectors/sso-auth';
-import Switch from 'apollo-react/components/Switch';
-import Tooltip from 'apollo-react/components/Tooltip';
-import InfoIcon from 'apollo-react-icons/Info';
-import IconButton from 'apollo-react/components/IconButton';
 import Sidebar from '../../views/Sidebar';
 import AnswerHistory from '../../views/modals/AnswerHistory';
 import { getAllUsers } from '../../../redux/actions/sso-auth-actions';
@@ -70,7 +71,6 @@ import {
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
 import ANSWER_TYPES from '../../../constants/answerTypes';
 import NotesSocketContext from '../../../context/notesSocketContext';
-import moment from 'moment';
 import ViewAboveVerticalTabs from '../../views/ViewAboveVerticalTabs';
 
 export const QuestionsRefContext = createContext(null);

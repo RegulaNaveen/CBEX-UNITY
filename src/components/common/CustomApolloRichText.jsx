@@ -107,7 +107,6 @@ const CustomApolloRichText = ({
   onBlur,
   onChange,
   onFocus,
-  isEditable,
   enableFocus,
   className,
   error,
@@ -299,17 +298,9 @@ const CustomApolloRichText = ({
   };
 
   /**
-   * Set IsRichTextEditable state on external change
-   */
-  useEffect(() => {
-    setIsRichTextEditable(isEditable);
-  }, [isEditable]);
-
-  /**
    * OnClick ReadOnly RichText
    */
   const onClickHTML = () => {
-    setIsRichTextEditable(true);
     if (enableFocus) {
       setFocusOnEditor();
       onFocus();
@@ -320,7 +311,8 @@ const CustomApolloRichText = ({
   const handleUserMention = async () => {
     await timeout(500);
     if (richTextEditorRef.current) {
-      const editorState = richTextEditorRef.current.state.editorState;
+      const { state } = richTextEditorRef.current;
+      const editorState = state.editorState;
       const userQueryInfo = getUserTagQueryInfo(editorState);
       if (userQueryInfo.userQuery !== null) {
         setSearchTag(userQueryInfo.userQuery);
@@ -611,7 +603,6 @@ CustomApolloRichText.defaultProps = {
   onBlur: () => {},
   onChange: () => {},
   onFocus: () => {},
-  isEditable: false,
   enableFocus: false,
   className: '',
   error: false,
@@ -628,7 +619,6 @@ CustomApolloRichText.propTypes = {
   onBlur: PropTypes.func,
   onChange: PropTypes.func,
   onFocus: PropTypes.func,
-  isEditable: PropTypes.bool,
   enableFocus: PropTypes.bool,
   className: PropTypes.string,
   error: PropTypes.bool,
