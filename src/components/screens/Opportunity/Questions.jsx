@@ -76,7 +76,9 @@ import ViewAboveVerticalTabs from '../../views/ViewAboveVerticalTabs';
 export const QuestionsRefContext = createContext(null);
 
 const QuestionsSectionMapping = React.lazy(() =>
-  import('./QuestionsSectionMapping')
+  import(
+    /* webpackChunkName: "questionsSectionMapping" */ './QuestionsSectionMapping'
+  )
 );
 
 type Props = {
