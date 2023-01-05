@@ -23,7 +23,8 @@ import {
   updateSwitchInProgress,
   resetProposalId,
   setFlag,
-  changeBid
+  changeBid,
+  activateProposalLoading
 } from '../../../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../../../redux/actions/notepad-actions';
 import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
@@ -122,8 +123,11 @@ export class Opportunity extends Component<Props, State> {
       match: { params },
       setSeenOne,
       selectedBid,
-      getSFNonEditabelInfoField
+      getSFNonEditabelInfoField,
+      location,
+      ProposalLoading
     } = this.props;
+    ProposalLoading();
     const winLocationSearch = window.location.search;
     const queryparams = new URLSearchParams(winLocationSearch);
     const notificationId = queryparams.get('notification_id');
@@ -136,18 +140,13 @@ export class Opportunity extends Component<Props, State> {
     expandAllSections(false);
     const selectedView = new URLSearchParams(search).get('viewType');
     if (selectedView) this.setState({ selectedView });
-
     if (!authData) getRefreshAuthData();
     getSFNonEditabelInfoField();
     getOpportunityInfo(params.id, bidNumber);
-
     const proposalId = selectedBid.get('id', '');
     localStorage.setItem('proposalId', proposalId);
-    if (
-      (this.props && this.props?.location && this.props.location?.pathname) !==
-      UBUILD
-    ) {
-      if (this.props.location?.pathname !== DASHBOARD)
+    if ((this.props && location && location?.pathname) !== UBUILD) {
+      if (location?.pathname !== DASHBOARD)
         this.context.updateSocketOppId(params.id, proposalId);
       else this.context.updateSocketOppId(null, null);
     }
@@ -185,18 +184,15 @@ export class Opportunity extends Component<Props, State> {
       match: { params },
       selectedBid,
       bidList,
-      changeBidInView
+      changeBidInView,
+      location
     } = this.props;
     const thisProposalId = selectedBid.get('id', '');
     const prevProposalId = prevProps.selectedBid.get('id', '');
 
     // Bid changed
     if (prevProposalId !== thisProposalId) {
-      if (
-        (this.props &&
-          this.props?.location &&
-          this.props.location?.pathname) !== UBUILD
-      ) {
+      if ((this.props && location && location?.pathname) !== UBUILD) {
         this.context.updateSocketOppId(params.id, thisProposalId);
         localStorage.setItem('proposalId', thisProposalId);
       }
@@ -436,6 +432,7 @@ export default compose(
     setResetProposalId: resetProposalId,
     setEventFlg: setFlag,
     changeBidInView: changeBid,
-    getSFNonEditabelInfoField: getSFNonEditabelField
+    getSFNonEditabelInfoField: getSFNonEditabelField,
+    ProposalLoading: activateProposalLoading
   })
 )(MatomoHOC(Opportunity));

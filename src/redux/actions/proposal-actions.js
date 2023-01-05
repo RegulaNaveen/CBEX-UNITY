@@ -32,10 +32,8 @@ import {
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getUniqueMilestones } from '../selectors/proposal';
 import { getErrorMessage, getProposalIdlist } from '../../utils/utils';
-import launchDarkly from '../../utils/launchDarkly';
 import { DEFAULT } from '../../constants/app';
 import isPriceModelerQuestion from '../../utils/isPriceModelerQuestion';
-import featureFlags from '../../constants/featureFlags';
 
 const { PROPOSAL_API_URL } = API.PROPOSAL;
 const {
