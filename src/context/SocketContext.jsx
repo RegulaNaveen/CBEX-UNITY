@@ -305,6 +305,7 @@ const SocketContextProvider = props => {
               if (updateSwitchTempStatus) updateSwitchTempStatus('progress');
               break;
             case 'SWITCH_TEMPLATE_COMPLETED':
+              console.log('SWITCH_TEMPLATE_COMPLETED');
               if (updateSwitchTempStatus) updateSwitchTempStatus('success');
               break;
             case 'SWITCH_TEMPLATE_ERROR':
