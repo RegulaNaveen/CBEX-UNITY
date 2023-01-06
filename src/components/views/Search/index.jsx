@@ -35,6 +35,8 @@ export default function Search() {
   const query = useSelector(selectQuery);
   const currentSearchIndex = useSelector(selectCurrentResultIndex);
   const totalResultsCount = useSelector(selectTotalResultsFound);
+  const allFlags = useSelector(state => state.proposal.get('eventflag'));
+  const searchFlag = allFlags.searchFlag || false;
   const dispatch = useDispatch();
 
   const searchInputRef = useRef(null);
@@ -108,6 +110,10 @@ export default function Search() {
       searchInputRef.current.focus();
     }
   }, [searchInputRef.current, isOpen]);
+
+  if (!searchFlag) {
+    return null;
+  }
 
   return (
     <div
