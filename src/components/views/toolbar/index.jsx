@@ -85,7 +85,7 @@ class Toolbar extends Component<{}, State> {
 
   render() {
     const { isCollapsed, roleName } = this.state;
-    const { rolesList } = this.props;
+    const { rolesList, location } = this.props;
     const results = isUserUbuildAdmin();
     const name = getUserName();
     return (
@@ -100,9 +100,7 @@ class Toolbar extends Component<{}, State> {
             aria-hidden="true"
             style={{ cursor: 'pointer' }}
             className={
-              (this.props &&
-                this.props?.location &&
-                this.props.location?.pathname) == UBUILD
+              (this.props && location && location?.pathname) === UBUILD
                 ? 'ubuild-linkactive'
                 : 'ubuild-link'
             }

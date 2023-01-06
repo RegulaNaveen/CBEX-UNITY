@@ -17,6 +17,9 @@ export const getUserAuthStatus = (state: Object): boolean =>
 export const getUserRole = (state: Object): string =>
   ssoAuthSelectors.getUserRole(state.ssoAuth);
 
+export const getfetchUserTagFlag = (state: Object): string =>
+  proposalSelectors.getfetchUserTagFlag(state.proposal);
+
 export const getUserName = (state: Object): string =>
   ssoAuthSelectors.getUserName(state.ssoAuth);
 

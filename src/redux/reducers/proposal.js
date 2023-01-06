@@ -59,7 +59,7 @@ const {
   QUESTION_LOCK_BY_USER,
   QUESTION_UNLOCK_BY_USER,
   QUESTION_LOCK_DETAILS_ALL,
-  SET_EVENT_LAUNCHER_FLAG,
+  SET_FLAG,
   SHOW_NA_CHECKBOX,
   ERROR_UPDATE_NOT_APPLICABLE,
   SET_CAN_USER_TAG_IN_QUESTION,
@@ -145,7 +145,7 @@ const INITIAL_STATE: Map = fromJS({
   boxAdditionalLink: {},
   switchTempCallStatus: false,
   switchTempInProgress: false,
-  eventLauncherFlag: false,
+  eventflag: {},
   showNaCheckbox: false,
   priceModeler: fromJS({
     cost: '',
@@ -775,8 +775,6 @@ const onUpdateProposalNAQuestionDone = (state: Map, action: Object): Map => {
     payload: { data, questionId: referenceId, loading = false }
   } = action;
 
-  console.log('inside update proposal na ', data);
-
   let newState = fromJS({});
 
   const indexOfListToUpdate = state
@@ -784,8 +782,6 @@ const onUpdateProposalNAQuestionDone = (state: Map, action: Object): Map => {
     .findIndex((listItem) => {
       return listItem.questionId === referenceId;
     });
-
-  console.log('indexOfListToUpdate ', indexOfListToUpdate);
 
   newState = state
     .setIn(
@@ -1274,8 +1270,7 @@ const actionMap = {
   [QUESTION_LOCK_BY_USER]: updateQuestionLockByUser,
   [QUESTION_UNLOCK_BY_USER]: updateQuestionUnlockByUser,
   [QUESTION_LOCK_DETAILS_ALL]: questionLockDetails,
-  [SET_EVENT_LAUNCHER_FLAG]: (state, { payload }) =>
-    state.set('eventLauncherFlag', payload),
+  [SET_FLAG]: (state, { payload }) => state.set('eventflag', payload),
   [SHOW_NA_CHECKBOX]: (state, { payload }) =>
     state.set('showNaCheckbox', payload),
   [SET_PRICE_MODELER_FIELDS]: setPriceModulerFields,

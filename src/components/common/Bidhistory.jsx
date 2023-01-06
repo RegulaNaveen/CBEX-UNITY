@@ -5,7 +5,7 @@ import chevronDown from '../../../img/chevron-down.svg';
 import {
   getBidList,
   getSelectedBid,
-  getIsQuestionAnswered,
+  getIsQuestionAnswered
 } from '../../redux/selectors/proposal';
 import { parseMomentDate } from '../../utils/DateUtils';
 import { Checkmark } from '../svg';
@@ -26,14 +26,15 @@ const BidHistory = () => {
   const isCurrentBid = selectedBid.get('isCurrent');
   const isQuestionAnswered = useSelector(getIsQuestionAnswered);
 
-  const handleKeyPress = (event) => {
+  const handleCollapse = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
+  const handleKeyPress = event => {
     if (event.key === 'Enter') {
       event.preventDefault();
       handleCollapse();
     }
-  };
-  const handleCollapse = () => {
-    setIsCollapsed(!isCollapsed);
   };
 
   useEffect(() => {
@@ -107,7 +108,7 @@ const BidHistory = () => {
                       }}
                     >
                       {bidList.length > 0 &&
-                        bidList.map((item) => (
+                        bidList.map(item => (
                           <div
                             onClick={() => {
                               if (!isQuestionAnswered)

@@ -88,11 +88,6 @@ const AutoCompleteWithAddOption = ({
     const newTrimVal = Array.isArray(modifiedAnswer)
       ? modifiedAnswer
       : modifiedAnswer.trim();
-    console.log({
-      selectedVal,
-      newTrimVal,
-      isValid: !isEqual(selectedVal, newTrimVal)
-    });
     if (isEqual(selectedVal, newTrimVal)) return;
 
     setSelectedVal(modifiedAnswer);
@@ -162,7 +157,6 @@ const AutoCompleteWithAddOption = ({
   useEffect(() => {
     if (forceBlur === true) {
       if (autoCompleteRef.current) {
-        console.log(autoCompleteRef.current);
         autoCompleteRef.current.blur();
         setTimeout(() => {
           autoCompleteRef.current.value = '';

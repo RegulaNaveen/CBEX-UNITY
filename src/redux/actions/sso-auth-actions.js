@@ -1,5 +1,4 @@
 // @flow
-import jwtDecode from 'jwt-decode';
 import type { Dispatch, ThunkAction } from './action-types';
 import { onLoginRequest, onChangeUserRole, getUsers } from '../../api/sso-auth';
 import { REDUX_TYPES } from '../../constants';
@@ -12,8 +11,7 @@ const {
   ERROR_ON_CHANGE_ROLE,
   ON_REFRESH_USER_DATA,
   ON_GET_LOOKUP_USERS,
-  ERROR_ON_GET_LOOKUP_USERS,
-  DEFAULT_ROLE
+  ERROR_ON_GET_LOOKUP_USERS
 } = REDUX_TYPES.SSO_AUTH;
 
 export const loginUser = (code: string): ThunkAction<string, Object> => {

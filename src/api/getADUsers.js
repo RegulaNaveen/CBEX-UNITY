@@ -51,7 +51,6 @@ export class CancelableADRequestApi {
   static getUsersByQuery(query = '') {
     try {
       if (typeof query !== 'string' || query.length === 0) {
-        console.log('Invalid query. returning empty result');
         return [];
       } else {
         if (typeof this.cancel === 'function') {

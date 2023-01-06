@@ -18,25 +18,18 @@ import { Outgoing, Incoming } from '../../svg';
 const SystemIntegrations = ({
   checkSfAnswer,
   sficon,
-  integrationmatch,
   destinationArray,
   integrationvalidation,
-  priceModelerIntegration,
   answeronhistory,
   answerdate,
   isAnswerPredicted,
   isAnswered,
   lastAnswer,
   loading,
-  NaLoading,
-  showNaCheckbox,
   changeIcon,
   isCurrentBid,
-  sfObject,
   hasDifferentSFanswer,
-  answerText,
   isNotepadOpen,
-  handleVerifyPredictedAnsClick,
   disabled,
   answers
 }) => {
@@ -338,7 +331,6 @@ const SystemIntegrations = ({
                 fontSize="22px"
                 style={{ color: '#015ff1' }}
                 className="integration-icon"
-                // onClick={() => handleVerifyPredictedAnsClick(lastAnswer)}
                 onClick={answeronhistory}
               />
             </IconButton>

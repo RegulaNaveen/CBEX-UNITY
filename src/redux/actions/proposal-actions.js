@@ -33,10 +33,8 @@ import {
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getUniqueMilestones } from '../selectors/proposal';
 import { getErrorMessage, getProposalIdlist } from '../../utils/utils';
-import launchDarkly from '../../utils/launchDarkly';
 import { DEFAULT } from '../../constants/app';
 import isPriceModelerQuestion from '../../utils/isPriceModelerQuestion';
-import featureFlags from '../../constants/featureFlags';
 
 const { PROPOSAL_API_URL } = API.PROPOSAL;
 const {
@@ -90,7 +88,7 @@ const {
   QUESTION_LOCK_BY_USER,
   QUESTION_UNLOCK_BY_USER,
   QUESTION_LOCK_DETAILS_ALL,
-  SET_EVENT_LAUNCHER_FLAG,
+  SET_FLAG,
   SHOW_NA_CHECKBOX,
   UPDATE_NOT_APPLICABLE_PROGRESS,
   UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE,
@@ -1022,29 +1020,26 @@ export const getOpportunity = (
 
     try {
       const allProposals = await getAllProposals(id);
-
       const proposal = allProposals.find(
         thisProposal => thisProposal.proposal.proposalDetails.bidNo === bidNo
       );
       const isCurrentProposal = allProposals.find(
         thisProposal => thisProposal.isCurrent === true
       );
-
       if (proposal) selectedProposalId = proposal.proposal.proposalId;
-
       const proposalCount = allProposals.length;
-      const maxLimit = 500;
-
-      let callstomake = parseInt(proposalCount / maxLimit);
-      let additionalcallstomake = proposalCount % maxLimit;
-      if (additionalcallstomake) {
-        callstomake = callstomake + 1;
-      }
-      let from = 0;
-      let urls = [];
-      let proposalsData = [];
+      // const maxLimit = 500;
+      //
+      // let callstomake = parseInt(proposalCount / maxLimit);
+      // let additionalcallstomake = proposalCount % maxLimit;
+      // if (additionalcallstomake) {
+      //   callstomake = callstomake + 1;
+      // }
+      // let from = 0;
+      const urls = [];
+      const proposalsData = [];
       for (let index = 0; index < proposalCount; index += 1) {
-        let trueOrFalse;
+        // let trueOrFalse;
 
         if (selectedProposalId) {
           // user on previous bid
@@ -1286,10 +1281,10 @@ export const getProposalAnswerHistory = (
 /**
  * Set Flag for Event Launcher
  */
-export const setEventLauncherFlag = val => {
+export const setFlag = val => {
   return dispatch => {
     dispatch({
-      type: SET_EVENT_LAUNCHER_FLAG,
+      type: SET_FLAG,
       payload: val
     });
   };
@@ -1313,11 +1308,8 @@ export const setCanUserTagInQuestion = can => {
   };
 };
 
-export const fetchUserTagFlagInQuestion = () => {
+export const fetchUserTagFlagInQuestion = val => {
   return async dispatch => {
-    const answerUserTagFlagValue = await launchDarkly(
-      featureFlags.ANSWER_USER_TAG
-    );
-    dispatch(setCanUserTagInQuestion(answerUserTagFlagValue));
+    dispatch(setCanUserTagInQuestion(val));
   };
 };

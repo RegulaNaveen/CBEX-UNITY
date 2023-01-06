@@ -4,10 +4,8 @@ import {
   getApprovalsApi
 } from '../../api/approvals';
 import { DEFAULT } from '../../constants/app';
-import featureFlags from '../../constants/featureFlags';
 import { APPROVALS } from '../../constants/types';
 import { getErrorMessage, getApprovalCount } from '../../utils/utils';
-import launchDarkly from '../../utils/launchDarkly';
 
 export const setAllApprovals = data => ({
   type: APPROVALS.SET_APPROVALS,
@@ -28,12 +26,10 @@ export const fetchAllApprovals = (proposalId, questions) => async dispatch => {
     } else {
       data = finalapproval;
     }
-    console.log('fetch all Approval response: ', data);
     dispatch(setAllApprovals(data));
     return { status: true, title: DEFAULT.SUCCESS, data };
   } catch (error) {
     // Error
-    console.log(`error`, error);
     const message = getErrorMessage(error);
     return { status: false, title: DEFAULT.ALERT, message };
   }
@@ -56,7 +52,6 @@ export const deleteApproval = (proposalId, sectionId) => async (
       sectionId,
       proposalDetails['CRM #']
     );
-    console.log('Delete Approval response: ', response.data);
     dispatch(deleteApprovalAction(sectionId));
     await new Promise(resolve => setTimeout(resolve, 1000));
     return { status: true, title: DEFAULT.SUCCESS, data: response.data };
@@ -77,7 +72,6 @@ export const duplicateApproval = (proposalId, sectionId) => async dispatch => {
   try {
     // Api Response
     const response = await duplicateApprovalApi(proposalId, sectionId);
-    console.log('Duplicate Approval response: ', response.data);
     dispatch(
       duplicateApprovalAction(sectionId, proposalId, response.data.data)
     );
@@ -85,7 +79,6 @@ export const duplicateApproval = (proposalId, sectionId) => async dispatch => {
     return { status: true, title: DEFAULT.SUCCESS, data: response.data.data };
   } catch (error) {
     // Error
-    console.log(error.response);
     const message = getErrorMessage(error);
     return { status: false, title: DEFAULT.ALERT, message };
   }
@@ -100,12 +93,9 @@ export const setCanSendEmailInApprovals = can => {
   };
 };
 
-export const fetchApprovalSendEmailFlag = () => {
+export const fetchApprovalSendEmailFlag = val => {
   return async dispatch => {
-    const approvalSendEmailFlagValue = await launchDarkly(
-      featureFlags.APPROVAL_SEND_EMAIL
-    );
-    dispatch(setCanSendEmailInApprovals(approvalSendEmailFlagValue));
+    dispatch(setCanSendEmailInApprovals(val));
   };
 };
 

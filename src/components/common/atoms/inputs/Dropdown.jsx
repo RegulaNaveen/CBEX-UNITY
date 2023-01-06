@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // @flow
 import React, { PureComponent } from 'react';
 import DropdownItem from './DropdownItem';
@@ -111,17 +112,15 @@ class Dropdown extends PureComponent<Props, State> {
   };
 
   handleCollapse = () => {
-    const { isCollapsed, isFocused } = this.state;
-    const { setSelectRow } = this.props;
+    const { isCollapsed } = this.state;
     this.setState({ isCollapsed: !isCollapsed });
   };
 
   handleClick = (event: SyntheticEvent<EventTarget>, value: string) => {
-    console.log('val', value);
     event.stopPropagation();
-    const { onClick, lockedBySelf } = this.props;
+    const { onClick, setSelectRow } = this.props;
     onClick(value);
-    if (this.props.setSelectRow) this.props.setSelectRow(false);
+    if (setSelectRow) setSelectRow(false);
 
     this.setState({
       selectedValue: value,
@@ -133,34 +132,40 @@ class Dropdown extends PureComponent<Props, State> {
   handleReset = () => {
     const { onClick } = this.props;
     onClick('');
-
     this.setState({ selectedValue: '', isCollapsed: true, focusedValue: '' });
   };
 
-  handleFocusIn = event => {
+  handleFocusIn = () => {
+    const {
+      setSelectRow,
+      lockQuestionOnFocus,
+      toggleWatch,
+      questionId
+    } = this.props;
     this.setState({ isFocused: true });
-    if (this.props.setSelectRow) this.props.setSelectRow(true);
-    if (this.props.lockQuestionOnFocus) {
-      if (this.props.toggleWatch) {
-        this.props.toggleWatch(true);
+    if (setSelectRow) setSelectRow(true);
+    if (lockQuestionOnFocus) {
+      if (toggleWatch) {
+        toggleWatch(true);
       }
-      this.context?.questionLockWrapper(this.props.questionId);
+      this.context?.questionLockWrapper(questionId);
     }
   };
 
   handleFocusOut = event => {
     event.preventDefault();
     event.stopPropagation();
-    if (this.props.setSelectRow) {
+    const { setSelectRow, lockedBySelf, questionId, toggleWatch } = this.props;
+    if (setSelectRow) {
       setTimeout(() => {
         this.setState({ isFocused: false, isCollapsed: true });
-        this.props.setSelectRow(false);
-        if (this.props.lockedBySelf) {
+        setSelectRow(false);
+        if (lockedBySelf) {
           // call to unlock question
-          this.context.questionUnlockWrapper(this.props.questionId);
+          this.context.questionUnlockWrapper(questionId);
         }
-        if (this.props.toggleWatch) {
-          this.props.toggleWatch(false);
+        if (toggleWatch) {
+          toggleWatch(false);
         }
       }, 500);
     }
@@ -170,9 +175,7 @@ class Dropdown extends PureComponent<Props, State> {
     const { focusedValue } = this.state;
     const { items } = this.props;
     let focusedIndex = 0;
-
     if (items.size === 0) return;
-
     const currentFocusedIndex = items.indexOf(focusedValue);
     if (currentFocusedIndex > -1 && currentFocusedIndex <= items.size - 2) {
       focusedIndex = currentFocusedIndex + 1;
@@ -184,9 +187,7 @@ class Dropdown extends PureComponent<Props, State> {
     const { focusedValue } = this.state;
     const { items } = this.props;
     let focusedIndex = 0;
-
     if (items.size === 0) return;
-
     const currentFocusedIndex = items.indexOf(focusedValue);
     if (currentFocusedIndex > -1 && currentFocusedIndex > 0) {
       focusedIndex = currentFocusedIndex - 1;
@@ -236,13 +237,7 @@ class Dropdown extends PureComponent<Props, State> {
   };
 
   render() {
-    const {
-      isCollapsed,
-      selectedValue,
-      focusedValue,
-      offsetTop,
-      isFocused
-    } = this.state;
+    const { isCollapsed, selectedValue, focusedValue } = this.state;
     const {
       placeholder,
       id,
@@ -277,7 +272,6 @@ class Dropdown extends PureComponent<Props, State> {
                 if (!disabled) this.handleCollapse();
                 return;
               }}
-              // onBlur={this.props.onBlur}
             >
               {selectedValue || value ? (
                 <p className="dd-header-selected">{selectedValue || value}</p>

@@ -125,7 +125,6 @@ const setupWS = provider => {
 
         if (firstChar === '{' && lastChar === '}') return;
         if (event.data === 'refresg=') {
-          console.log('refresh message received');
           return;
         }
         const encoder = readMessage(

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // @flow
 import React, { PureComponent } from 'react';
 import { isEmpty, cloneDeep, isEqual } from 'lodash';
@@ -17,12 +18,12 @@ type Props = {
   lockQuestionOnFocus?: boolean,
   toggleWatch?: Function,
   onCascadeChange?: Function,
-  forceBlur?: boolean,
+  forceBlur?: boolean
 };
 
 type State = {
   isOpen: boolean,
-  selectedValues: Array<string>,
+  selectedValues: Array<string>
 };
 
 class Multiselect extends PureComponent<Props, State> {
@@ -35,12 +36,11 @@ class Multiselect extends PureComponent<Props, State> {
     value: undefined,
     error: undefined,
     disabled: false,
-    lockQuestionOnFocus: false,
+    lockQuestionOnFocus: false
   };
 
   constructor(props: Object) {
     super(props);
-
     this.ref = React.createRef();
     this.listRef = React.createRef();
 
@@ -48,16 +48,14 @@ class Multiselect extends PureComponent<Props, State> {
       isOpen: false,
       selectedValues: [],
       isFocused: false,
-      focusedValue: '',
+      focusedValue: ''
     };
   }
 
   componentDidMount() {
     window.addEventListener('click', this.handleOutsideClick);
     window.addEventListener('keydown', this.handleKeyDown);
-
     const { value: lastAnswer } = this.props;
-
     if (!isEmpty(lastAnswer)) this.setState({ selectedValues: lastAnswer });
     // add focus listener to element
     if (this.ref.current) {
@@ -68,7 +66,15 @@ class Multiselect extends PureComponent<Props, State> {
 
   componentDidUpdate(prevProps: Object, prevState: Object) {
     const { isOpen, selectedValues } = this.state;
-    const { onClick, value: lastAnswer, forceBlur } = this.props;
+    const {
+      onClick,
+      value: lastAnswer,
+      forceBlur,
+      setSelectRow,
+      toggleWatch,
+      lockedBySelf,
+      questionId
+    } = this.props;
     const { value: prevlastAnswer } = prevProps;
 
     if (!isEqual(prevlastAnswer, lastAnswer)) {
@@ -82,12 +88,12 @@ class Multiselect extends PureComponent<Props, State> {
     if (forceBlur === true) {
       if (isOpen) {
         this.setState({ isOpen: false }, () => {
-          this.props.setSelectRow(false);
+          setSelectRow(false);
         });
       }
-      if (this.props.toggleWatch) this.props.toggleWatch(false);
-      if (this.props.lockedBySelf) {
-        this.context?.questionUnlockWrapper(this.props.questionId);
+      if (toggleWatch) toggleWatch(false);
+      if (lockedBySelf) {
+        this.context?.questionUnlockWrapper(questionId);
       }
     }
   }
@@ -101,15 +107,14 @@ class Multiselect extends PureComponent<Props, State> {
   }
 
   handleOutsideClick = (event: SyntheticEvent<EventTarget>) => {
-    const { setSelectRow, lockedBySelf } = this.props;
+    const { setSelectRow, toggleWatch, questionId } = this.props;
     if (this.ref.current !== event.target) {
       this.setState({ isOpen: false });
       if (setSelectRow) {
         this.setState({ isOpen: true }, () => {
-          if (this.props.toggleWatch) this.props.toggleWatch(false);
-          this.props.setSelectRow(false);
-
-          this.context?.questionUnlockWrapper(this.props.questionId);
+          if (toggleWatch) toggleWatch(false);
+          setSelectRow(false);
+          this.context?.questionUnlockWrapper(questionId);
         });
         this.setState({ isOpen: false });
       }
@@ -117,12 +122,12 @@ class Multiselect extends PureComponent<Props, State> {
   };
 
   handleCollapse = () => {
-    const { isOpen } = this.state;
+    const { isOpen, isFocused } = this.state;
     const { setSelectRow } = this.props;
 
     this.setState({ isOpen: !isOpen }, () => {
-      if (this.props.setSelectRow) {
-        if (!this.state.isOpen && !this.state.isFocused) {
+      if (setSelectRow) {
+        if (!isOpen && !isFocused) {
           setSelectRow(false);
         }
       }
@@ -131,10 +136,14 @@ class Multiselect extends PureComponent<Props, State> {
 
   onSelect = (event: SyntheticEvent<EventTarget>, value: string) => {
     event.stopPropagation();
-    if (this.props.onCascadeChange) this.props.onCascadeChange();
-
+    const {
+      onCascadeChange,
+      lastAnswer,
+      lockedBySelf,
+      questionId
+    } = this.props;
+    if (onCascadeChange) onCascadeChange();
     const { selectedValues } = this.state;
-
     let index = -1;
     const newArray = cloneDeep(selectedValues);
 
@@ -145,17 +154,14 @@ class Multiselect extends PureComponent<Props, State> {
     }
 
     this.setState({ selectedValues: newArray });
-
-    if (value === this.props.lastAnswer && this.props.lockedBySelf) {
-      this.context?.questionUnlockWrapper(this.props.questionId);
+    if (value === lastAnswer && lockedBySelf) {
+      this.context?.questionUnlockWrapper(questionId);
     }
-
     this.forceUpdate();
   };
 
   renderSelectedItems = () => {
     const { selectedValues } = this.state;
-
     return (
       <div className="multiselect-header-selected">
         {selectedValues.map((item, index) => (
@@ -167,23 +173,23 @@ class Multiselect extends PureComponent<Props, State> {
     );
   };
 
-  handleFocusIn = (event) => {
+  handleFocusIn = event => {
+    const { setSelectRow } = this.props;
     this.setState({ isFocused: true });
-    if (this.props.setSelectRow) this.props.setSelectRow(true);
+    if (setSelectRow) setSelectRow(true);
   };
 
-  handleFocusOut = (event) => {
+  handleFocusOut = event => {
+    const { setSelectRow } = this.props;
     this.setState({ isFocused: false });
-    if (this.props.setSelectRow) this.props.setSelectRow(false);
+    if (setSelectRow) setSelectRow(false);
   };
 
   handleDownArrowPress = () => {
     const { focusedValue } = this.state;
     const { items } = this.props;
     let focusedIndex = 0;
-
     if (items.size === 0) return;
-
     const currentFocusedIndex = items.indexOf(focusedValue);
     if (currentFocusedIndex > -1 && currentFocusedIndex <= items.size - 2) {
       focusedIndex = currentFocusedIndex + 1;
@@ -195,9 +201,7 @@ class Multiselect extends PureComponent<Props, State> {
     const { focusedValue } = this.state;
     const { items } = this.props;
     let focusedIndex = 0;
-
     if (items.size === 0) return;
-
     const currentFocusedIndex = items.indexOf(focusedValue);
     if (currentFocusedIndex > -1 && currentFocusedIndex > 0) {
       focusedIndex = currentFocusedIndex - 1;
@@ -209,39 +213,41 @@ class Multiselect extends PureComponent<Props, State> {
     const { focusedValue, selectedValues } = this.state;
     let index = -1;
     const newArray = cloneDeep(selectedValues);
-
     if (!selectedValues.includes(focusedValue)) newArray.push(focusedValue);
     else {
       index = newArray.indexOf(focusedValue);
       if (index > -1) newArray.splice(index, 1);
     }
-
     this.setState({ selectedValues: newArray });
     this.forceUpdate();
   };
 
-  handleKeyDown = (event) => {
-    const { isOpen, focusedValue, isFocused, selectedValues } = this.state;
-    const { items, onClick, lastAnswer } = this.props;
-
+  handleKeyDown = event => {
+    const { isOpen, isFocused } = this.state;
+    const {
+      items,
+      toggleWatch,
+      lockQuestionOnFocus,
+      lockedBySelf,
+      questionId,
+      onCascadeChange
+    } = this.props;
     if (!isFocused) return;
-
     if (
       ['Escape', 'Enter', 'ArrowUp', 'ArrowDown', 'Space'].includes(event.code)
     ) {
       event.preventDefault();
       event.stopPropagation();
     }
-
     if (event.code === 'Escape' || event.code === 'Tab') {
       this.setState({ isOpen: false }, () => {
-        if (this.props.toggleWatch) {
-          this.props.toggleWatch(false);
+        if (toggleWatch) {
+          toggleWatch(false);
         }
-        if (this.props.lockedBySelf) {
-          if (!this.state.isOpen && !this.state.isFocused) {
+        if (lockedBySelf) {
+          if (!isOpen && !isFocused) {
           }
-          this.context?.questionUnlockWrapper(this.props.questionId);
+          this.context?.questionUnlockWrapper(questionId);
         }
       });
       return;
@@ -251,23 +257,21 @@ class Multiselect extends PureComponent<Props, State> {
       if (!isOpen) {
         this.setState({
           isOpen: true,
-          focusedValue: items.size > 0 ? items.get(0) : '',
+          focusedValue: items.size > 0 ? items.get(0) : ''
         });
-        if (this.props.lockQuestionOnFocus && !this.props.lockedBySelf) {
-          if (this.props.toggleWatch) {
-            this.props.toggleWatch(true);
+        if (lockQuestionOnFocus && !lockedBySelf) {
+          if (toggleWatch) {
+            toggleWatch(true);
           }
-          this.context?.questionLockWrapper(this.props.questionId);
+          this.context?.questionLockWrapper(questionId);
         }
       } else {
         this.setState({ isOpen: false }, () => {
-          if (this.props.toggleWatch) {
-            this.props.toggleWatch(false);
+          if (toggleWatch) {
+            toggleWatch(false);
           }
-          if (this.props.lockedBySelf) {
-            if (!this.state.isOpen && !this.state.isFocused) {
-            }
-            this.context?.questionUnlockWrapper(this.props.questionId);
+          if (lockedBySelf) {
+            this.context?.questionUnlockWrapper(questionId);
           }
         });
       }
@@ -277,18 +281,18 @@ class Multiselect extends PureComponent<Props, State> {
     if (!isOpen) return;
 
     if (event.code === 'ArrowDown') {
-      if (this.props.onCascadeChange) this.props.onCascadeChange();
+      if (onCascadeChange) onCascadeChange();
       this.handleDownArrowPress();
       return;
     }
 
     if (event.code === 'ArrowUp') {
-      if (this.props.onCascadeChange) this.props.onCascadeChange();
+      if (onCascadeChange) onCascadeChange();
       this.handleUpArrowPress();
     }
 
     if (event.code === 'Space') {
-      if (this.props.onCascadeChange) this.props.onCascadeChange();
+      if (onCascadeChange) onCascadeChange();
       this.handleOptionSelect();
     }
   };
@@ -354,7 +358,7 @@ class Multiselect extends PureComponent<Props, State> {
         </div>
         {error &&
           error.length > 0 &&
-          error.map((v) => {
+          error.map(v => {
             if (v.roleNames)
               return (
                 <p

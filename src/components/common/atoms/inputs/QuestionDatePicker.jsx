@@ -3,8 +3,6 @@ import DatePicker from 'apollo-react/components/DatePickerV2';
 import moment from 'moment';
 import { CloseCircle } from '../../../svg';
 
-const date = moment();
-
 const QuestionDatePicker = ({
   value,
   resetDate,
@@ -35,8 +33,8 @@ const QuestionDatePicker = ({
   useEffect(() => {
     if (forceBlur === true) {
       value = String(value)
-      .trimStart()
-      .trimEnd();
+        .trimStart()
+        .trimEnd();
       value =
         String(new Date(value)).includes('Invalid') || !String(value).length
           ? ''
@@ -45,7 +43,10 @@ const QuestionDatePicker = ({
       if (datePickerRef.current) {
         datePickerRef.current.closeCalendar(); // close calendar popup
         if (datePickerRef.current.inputRef.current) {
-          datePickerRef.current.inputRef.current.setAttribute("aria-invalid", "false"); // remove error state from input
+          datePickerRef.current.inputRef.current.setAttribute(
+            'aria-invalid',
+            'false'
+          ); // remove error state from input
           datePickerRef.current.inputRef.current.blur(); // closes watcher too
         }
       } else {

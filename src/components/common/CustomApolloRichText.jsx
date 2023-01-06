@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  useCallback
-} from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import {
@@ -36,7 +30,7 @@ import {
  * @returns {{ userQuery, offsetRange }}
  */
 function getUserTagQueryInfo(editorState) {
-  let queryInfo = {
+  const queryInfo = {
     userQuery: null,
     offsetRange: { start: 0, end: 0 },
     anchorKey: null
@@ -105,7 +99,6 @@ export const compositeDecoratorHidden = new CompositeDecorator([
 
 // CustomApolloRichText Component
 const CustomApolloRichText = ({
-  questionId,
   richTextString,
   richTextVal,
   richTextHtml,

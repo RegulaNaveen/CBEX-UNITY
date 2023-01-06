@@ -89,6 +89,7 @@ const PROPOSAL = {
   QUESTION_LOCK_DETAILS_ALL: 'QUESTION_LOCK_DETAILS_ALL',
   SET_EVENT_LAUNCHER_FLAG: 'set_event_launcher_flag',
   SHOW_NA_CHECKBOX: 'show_na_checkbox',
+  SET_FLAG: 'SET_FLAG',
   UPDATE_NOT_APPLICABLE_PROGRESS: 'update_not_applicable_progress',
   UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE:
     'update_not_applicable_from_socket_done',
