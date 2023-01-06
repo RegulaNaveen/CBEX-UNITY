@@ -38,7 +38,8 @@ import {
   getProposalDetails,
   getSelectedBid,
   getnoneditableField,
-  getShowNaCheckbox
+  getShowNaCheckbox,
+  getIntegrations
 } from '../../redux/selectors';
 import {
   getCanUserTagInQuestion,
@@ -113,6 +114,7 @@ type Props = {
   eventCategories: any,
   trackEvent: any,
   proposalDetail: any,
+  integrationsData: any,
   sfObject: string,
   sfField: string,
   milestone: any,
@@ -134,11 +136,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
   constructor(props: Object) {
     super(props);
-
+    const { integrationsData } = this.props;
     this.quesTextContainerRef = React.createRef();
     this.quesTextInnerLeftRef = React.createRef();
     this.quesTextInnerRightRef = React.createRef();
-
     this.state = {
       selectedDay: '',
       selectedRow: false,
@@ -1314,6 +1315,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       isNotepadOpen,
       questionId,
       events,
+      integrationsData,
       questionData,
       proposalDetail,
       eventCategories,
@@ -1331,6 +1333,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     let priceModelerIntegration;
     const sficon = sfField;
     let qvidIntegration = false;
+    let destinationArray;
     const currentBidID = selectedBid.toJS().id;
     const oppordata = oppdata.toJS();
     const deploymentDate = '2022-08-05';
@@ -1356,16 +1359,18 @@ export class TaskRow extends React.PureComponent<Props, State> {
     if (dateIsAfter) {
       integrationvalidation = true;
     }
-    integrationvalidation = has(Qvidianquestions[0], qvicon);
+    const integrationsArray = integrationsData.data.map(item => {
+      return item.questionId;
+    });
+    integrationsData.data.map(item => {
+      if (item.questionId.includes(qvicon)) destinationArray = item.destination;
+    });
+    integrationvalidation = integrationsArray.includes(qvicon);
+
     if (qvidianIntegration) {
       qvidIntegration = true;
     }
-    priceModelerIntegration = has(PriceModel[0], qvicon);
-    dateIsAfter
-      ? (integrationmatch = qvidIntegration)
-      : (integrationmatch = has(Qvidianquestions[0], qvicon)
-          ? (integrationmatch = Qvidianquestions[0][qvicon])
-          : null);
+    integrationmatch = integrationvalidation;
     if (answers) {
       if (!questionID) lastAnswer = answers.last();
       else lastAnswer = answers.get('answers').last();
@@ -1541,6 +1546,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
           <SystemIntegrations
             checkSfAnswer={checkSfAnswer}
             sficon={sficon}
+            destinationArray={destinationArray}
             answers={answers}
             gridColRatio={gridColRatio}
             integrationmatch={integrationmatch}
@@ -1586,6 +1592,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
 const mapStateToProps = (state: Object) => ({
   userData: getUserData(state),
   proposalDetail: getProposalDetails(state),
+  integrationsData: getIntegrations(state),
   selectedBid: getSelectedBid(state),
   oppdata: getOpportunityData(state),
   noneditableField: getnoneditableField(state),

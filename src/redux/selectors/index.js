@@ -115,6 +115,9 @@ export const isAnswerTypesInfoLoading = (state: Object): Boolean =>
 export const getRoles = (state: Map): Map =>
   proposalSelectors.getRoles(state.proposal);
 
+export const getIntegrations = (state: Map): Map =>
+  proposalSelectors.getIntegrations(state.proposal);
+
 export const isRolesInfoLoading = (state: Object): Boolean =>
   proposalSelectors.isRolesInfoLoading(state.proposal);
 

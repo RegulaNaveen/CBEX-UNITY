@@ -50,6 +50,7 @@ const {
   NEW_BID_CREATED,
   PROPOSAL_DETAIL_UPDATE,
   UPDATE_LOOKUP_OPTIONS,
+  INTEGRATIONS_INFO,
   BOX_ADDITIONAL_LINK,
   BOX_ADDITIONAL_LINK_ERROR,
   SWITCH_TEMP_STATUS,
@@ -1261,6 +1262,8 @@ const actionMap = {
   [PROPOSAL_DETAIL_UPDATE]: updateProposalDetail,
   [UPDATE_LOOKUP_OPTIONS]: (state, { payload }) =>
     state.set('lookUpOptions', payload),
+  [INTEGRATIONS_INFO]: (state, { payload }) =>
+    state.set('proposalIntegrations', payload),
   [BOX_ADDITIONAL_LINK]: fetchBoxAdditionalLink,
   [BOX_ADDITIONAL_LINK_ERROR]: onGettingfetchBoxAdditionalLinkError,
   [SWITCH_TEMP_STATUS]: (state, { payload }) =>
