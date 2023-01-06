@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { createContext, useRef, useEffect } from 'react';
 import { Map } from 'immutable'; // NOSONAR
 import { connect } from 'react-redux';
@@ -27,7 +28,6 @@ const currentOppNo = {
   get: localStorage.getItem('oppNo') || null,
   set: value => localStorage.setItem('oppNo', value)
 };
-
 // Exporting Context
 export const SocketContext = createContext();
 
@@ -38,14 +38,18 @@ const SocketContextProvider = props => {
    * Checks for socket connection
    */
   const isSocketConnected = () => {
-    if (
-      socket?.current?.readyState !== WebSocket.OPEN &&
-      socket?.current?.readyState !== WebSocket.CONNECTING &&
-      socket?.current?.readyState !== 1
-    ) {
-      return false;
+    try {
+      if (
+        socket?.current?.readyState !== WebSocket.OPEN &&
+        socket?.current?.readyState !== WebSocket.CONNECTING &&
+        socket?.current?.readyState !== 1
+      ) {
+        return false;
+      }
+      return true;
+    } catch (error) {
+      console.log('isSocketConnected error :>> ', error);
     }
-    return true;
   };
 
   /**
@@ -66,7 +70,7 @@ const SocketContextProvider = props => {
         })
       );
     } catch (error) {
-      console.log(error);
+      console.log('sendUpdateConnection err', error);
     }
   };
 
@@ -85,7 +89,7 @@ const SocketContextProvider = props => {
         })
       );
     } catch (error) {
-      console.log(error);
+      console.log('refreshConnection', error);
     }
   };
 
@@ -104,7 +108,7 @@ const SocketContextProvider = props => {
         })
       );
     } catch (error) {
-      console.log(error);
+      console.log('questionLock', error);
     }
   };
 
@@ -132,7 +136,7 @@ const SocketContextProvider = props => {
         })
       );
     } catch (error) {
-      console.log(error);
+      console.log('naQuestionUpdate', error);
     }
   };
   /**
@@ -156,7 +160,7 @@ const SocketContextProvider = props => {
         })
       );
     } catch (error) {
-      console.log(error);
+      console.log('questionAnswerUpdate', error);
     }
   };
 
@@ -181,7 +185,7 @@ const SocketContextProvider = props => {
         })
       );
     } catch (error) {
-      console.log(error);
+      console.log('questionUnlock', error);
     }
   };
   /**
@@ -199,7 +203,7 @@ const SocketContextProvider = props => {
         })
       );
     } catch (error) {
-      console.log(error);
+      console.log('questionLockDetails', error);
     }
   };
 
@@ -207,161 +211,171 @@ const SocketContextProvider = props => {
    * Function called after bid creation completed
    */
   const refreshOpportunity = (id, bidNo) => {
-    props.getOpportunityInfo(id, bidNo, true);
+    try {
+      props.getOpportunityInfo(id, bidNo, true);
+    } catch (error) {
+      console.log('error refreshOpportunity :>> ', error);
+    }
   };
 
   /**
    * Initiates connection only if socket is not connected
    */
   const initiateConnection = () => {
-    const userName = getUserName();
-    const userEmail = getUserEmail();
-    const userId = getUserId();
-    // return if userInfo is null
-    if (!userId && !userEmail && !userName) {
-      console.log('Socket not initiated: User not logged in');
-      return;
-    }
+    try {
+      const userName = getUserName();
+      const userEmail = getUserEmail();
+      const userId = getUserId();
+      // return if userInfo is null
+      if (!userId && !userEmail && !userName) {
+        console.log('Socket not initiated: User not logged in');
+        return;
+      }
 
-    if (!isSocketConnected()) {
-      const newSocket = new WebSocket(SOCKET_URL);
+      if (!isSocketConnected()) {
+        console.log('Initiating new socket connection');
+        const newSocket = new WebSocket(SOCKET_URL);
 
-      newSocket.onopen = event => {
-        if (newSocket) {
-          newSocket.send(
-            JSON.stringify({
-              action: 'CONNECT',
-              body: { data: { userId, userEmail, userName } }
-            })
-          );
-
-          const location = window.location?.pathname;
-
-          if (![UBUILD, DASHBOARD].includes(location)) {
-            setTimeout(() => {
-              sendUpdateConnection(
-                localStorage.getItem('oppNo'),
-                localStorage.getItem('proposalId'),
-                newSocket
-              );
-            }, 1000);
-          }
-
-          refreshInterval = setInterval(() => {
-            refreshSocketConnection();
-          }, [REFRESH_WEBSOCKET_CONNECTION]);
-        }
-      };
-
-      const {
-        addNewBid,
-        updateAnswerAction,
-        updateProposalDetail,
-        updateProposalNotes,
-        updateSwitchTempStatus,
-        setSwitchInProgress,
-        updateNotification,
-        updateQuestionLock,
-        updateQuestionUnlock,
-        getQuestionLockDetails,
-        setProposalAnswerDatafromSocket,
-        setNotApplicableQuestionFromSocket,
-        setPriceModelerRecalculationStatus,
-        updatePriceModelerEstimate
-      } = props;
-
-      // On Message Recieve
-      newSocket.addEventListener('message', async response => {
-        const data = JSON.parse(response.data);
-
-        switch (data.event) {
-          case 'IN_PROGRESS':
-            addNewBid(data.data);
-            break;
-          case 'COMPLETED':
-            refreshOpportunity(
-              data.oppId,
-              data.data.proposal.proposalDetails.bidNo
+        newSocket.onopen = event => {
+          if (newSocket) {
+            newSocket.send(
+              JSON.stringify({
+                action: 'CONNECT',
+                body: { data: { userId, userEmail, userName } }
+              })
             );
-            break;
-          case 'ANSWER_UPDATE':
-            if (updateAnswerAction) updateAnswerAction(data.data);
-            break;
-          case 'PROPOSAL_DETAIL_UPDATE':
-            if (updateProposalDetail) updateProposalDetail(data.data);
-            break;
-          case 'SWITCH_TEMPLATE_IN_PROGRESS':
-            if (setSwitchInProgress) setSwitchInProgress(true);
-            if (updateSwitchTempStatus) updateSwitchTempStatus('progress');
-            break;
-          case 'SWITCH_TEMPLATE_COMPLETED':
-            if (updateSwitchTempStatus) updateSwitchTempStatus('success');
-            break;
-          case 'SWITCH_TEMPLATE_ERROR':
-            if (setSwitchInProgress) setSwitchInProgress(false);
-            if (updateSwitchTempStatus) updateSwitchTempStatus('error');
-            break;
-          case 'IN_APP_NOTIFICATION_RECEIVED':
-            updateNotification();
-            break;
-          case 'QUESTION_LOCK':
-            // Question locked by a user
-            updateQuestionLock(data);
-            break;
-          case 'QUESTION_UNLOCK':
-            // Question unlocked by a user
 
-            updateQuestionUnlock(data);
+            const location = window.location?.pathname;
 
-            break;
-          case 'QUESTION_ANSWER_UPDATE':
-            // update question answer how it is done in action
-            if (data.data.latestAnswer) {
-              const questionId = Array.isArray(data.data.latestAnswer)
-                ? data.data.latestAnswer[data.data.latestAnswer.length - 1]
-                    .questionId
-                : data.data.latestAnswer.questionId;
-              setProposalAnswerDatafromSocket(
-                questionId,
-                data.data.latestAnswer
-              );
-            }
-            break;
-          case 'QUESTION_NA_UPDATE':
-            // update question answer how it is done in action
-            if (data.data) {
-              setNotApplicableQuestionFromSocket(
-                data.data.questionId,
-                data.data.naStatus
-              );
+            if (![UBUILD, DASHBOARD].includes(location)) {
+              setTimeout(() => {
+                sendUpdateConnection(
+                  localStorage.getItem('oppNo'),
+                  localStorage.getItem('proposalId'),
+                  newSocket
+                );
+              }, 1000);
             }
 
-            break;
-          case 'QUESTIONS':
-            // Get list of questions already locked by other users
-            getQuestionLockDetails(data);
-            break;
-          case 'COST_ESTIMATE_CALCULATING':
-            setPriceModelerRecalculationStatus(true);
-            break;
-          case 'COST_ESTIMATE_UPDATE':
-            updatePriceModelerEstimate(data.data);
-            break;
-          default:
-            break;
-        }
-      });
+            refreshInterval = setInterval(() => {
+              refreshSocketConnection();
+            }, [REFRESH_WEBSOCKET_CONNECTION]);
+          }
+        };
 
-      // On Close
-      newSocket.onclose = event => {
-        console.log('Socket onClose');
-        clearInterval(refreshInterval);
-      };
-      // On Error
-      newSocket.onerror = event => {
-        console.log('Socket onerror');
-      };
-      socket.current = newSocket;
+        const {
+          addNewBid,
+          updateAnswerAction,
+          updateProposalDetail,
+          updateProposalNotes,
+          updateSwitchTempStatus,
+          setSwitchInProgress,
+          updateNotification,
+          updateQuestionLock,
+          updateQuestionUnlock,
+          getQuestionLockDetails,
+          setProposalAnswerDatafromSocket,
+          setNotApplicableQuestionFromSocket,
+          setPriceModelerRecalculationStatus,
+          updatePriceModelerEstimate
+        } = props;
+
+        // On Message Recieve
+        newSocket.addEventListener('message', async response => {
+          const data = JSON.parse(response.data);
+
+          switch (data.event) {
+            case 'IN_PROGRESS':
+              addNewBid(data.data);
+              break;
+            case 'COMPLETED':
+              refreshOpportunity(
+                data.oppId,
+                data.data.proposal.proposalDetails.bidNo
+              );
+              break;
+            case 'ANSWER_UPDATE':
+              if (updateAnswerAction) updateAnswerAction(data.data);
+              break;
+            case 'PROPOSAL_DETAIL_UPDATE':
+              if (updateProposalDetail) updateProposalDetail(data.data);
+              break;
+            case 'SWITCH_TEMPLATE_IN_PROGRESS':
+              if (setSwitchInProgress) setSwitchInProgress(true);
+              if (updateSwitchTempStatus) updateSwitchTempStatus('progress');
+              break;
+            case 'SWITCH_TEMPLATE_COMPLETED':
+              console.log('SWITCH_TEMPLATE_COMPLETED');
+              if (updateSwitchTempStatus) updateSwitchTempStatus('success');
+              break;
+            case 'SWITCH_TEMPLATE_ERROR':
+              if (setSwitchInProgress) setSwitchInProgress(false);
+              if (updateSwitchTempStatus) updateSwitchTempStatus('error');
+              break;
+            case 'IN_APP_NOTIFICATION_RECEIVED':
+              updateNotification();
+              break;
+            case 'QUESTION_LOCK':
+              // Question locked by a user
+              updateQuestionLock(data);
+              break;
+            case 'QUESTION_UNLOCK':
+              // Question unlocked by a user
+
+              updateQuestionUnlock(data);
+
+              break;
+            case 'QUESTION_ANSWER_UPDATE':
+              // update question answer how it is done in action
+              if (data.data.latestAnswer) {
+                const questionId = Array.isArray(data.data.latestAnswer)
+                  ? data.data.latestAnswer[data.data.latestAnswer.length - 1]
+                      .questionId
+                  : data.data.latestAnswer.questionId;
+                setProposalAnswerDatafromSocket(
+                  questionId,
+                  data.data.latestAnswer
+                );
+              }
+              break;
+            case 'QUESTION_NA_UPDATE':
+              // update question answer how it is done in action
+              if (data.data) {
+                setNotApplicableQuestionFromSocket(
+                  data.data.questionId,
+                  data.data.naStatus
+                );
+              }
+
+              break;
+            case 'QUESTIONS':
+              // Get list of questions already locked by other users
+              getQuestionLockDetails(data);
+              break;
+            case 'COST_ESTIMATE_CALCULATING':
+              setPriceModelerRecalculationStatus(true);
+              break;
+            case 'COST_ESTIMATE_UPDATE':
+              updatePriceModelerEstimate(data.data);
+              break;
+            default:
+              break;
+          }
+        });
+
+        // On Close
+        newSocket.onclose = event => {
+          console.log('Socket onClose', event);
+          clearInterval(refreshInterval);
+        };
+        // On Error
+        newSocket.onerror = event => {
+          console.log('Socket onerror', event);
+        };
+        socket.current = newSocket;
+      }
+    } catch (err) {
+      console.log('initiateConnection error', err);
     }
   };
 
@@ -370,15 +384,19 @@ const SocketContextProvider = props => {
    * Retries connection every two second
    */
   const waitForSocketConnection = callback => {
-    setTimeout(() => {
-      if (isSocketConnected()) {
-        if (callback instanceof Function) {
-          callback();
+    try {
+      setTimeout(() => {
+        if (isSocketConnected()) {
+          if (callback instanceof Function) {
+            callback();
+          }
+        } else {
+          waitForSocketConnection(callback);
         }
-      } else {
-        waitForSocketConnection(callback);
-      }
-    }, 2000);
+      }, 2000);
+    } catch (error) {
+      console.log('waitForSocketConnection error :>> ', error);
+    }
   };
 
   const waitForSocketConnectionMinInterval = callback => {
@@ -400,20 +418,28 @@ const SocketContextProvider = props => {
    * function to set timer for auto unlock and auto save
    */
   const resetLockTimer = questionId => {
-    clearTimeout(timer);
-    currentQuestionToLock = questionId;
-    timer = setTimeout(() => {
+    try {
       clearTimeout(timer);
-      questionLock(questionId, null);
-      currentQuestionToLock = undefined;
-    }, 1000);
+      currentQuestionToLock = questionId;
+      timer = setTimeout(() => {
+        clearTimeout(timer);
+        questionLock(questionId, null);
+        currentQuestionToLock = undefined;
+      }, 1000);
+    } catch (error) {
+      console.log('resetLockTimer error :>> ', error);
+    }
   };
 
   const updateSocketOppId = (oppId, proposalId) => {
-    currentOppNo.set(oppId);
-    waitForSocketConnection(() =>
-      sendUpdateConnection(oppId, proposalId, null)
-    );
+    try {
+      currentOppNo.set(oppId);
+      waitForSocketConnection(() =>
+        sendUpdateConnection(oppId, proposalId, null)
+      );
+    } catch (error) {
+      console.log('updateSocketOppId error :>> ', error);
+    }
   };
   const questionLockWrapper = questionId => {
     waitForSocketConnectionMinInterval(() => resetLockTimer(questionId));
@@ -421,7 +447,6 @@ const SocketContextProvider = props => {
   const questionUnlockWrapper = (questionId, answer) => {
     waitForSocketConnectionMinInterval(() => {
       if (currentQuestionToLock === questionId) clearTimeout(timer);
-
       questionUnlock(questionId, answer, null);
     });
   };
@@ -447,14 +472,18 @@ const SocketContextProvider = props => {
   };
 
   const disconnectSocket = () => {
-    if (isSocketConnected()) {
-      socket?.current?.send(
-        JSON.stringify({
-          action: '$disconnect',
-          body: {}
-        })
-      );
-      clearInterval(refreshInterval);
+    try {
+      if (isSocketConnected()) {
+        socket?.current?.send(
+          JSON.stringify({
+            action: '$disconnect',
+            body: {}
+          })
+        );
+        clearInterval(refreshInterval);
+      }
+    } catch (error) {
+      console.log('disconnectSocket error :>> ', error);
     }
   };
 
@@ -462,9 +491,13 @@ const SocketContextProvider = props => {
    * Tries to initiate the websocket conection every 3 sec
    */
   const keepSocketAlive = () => {
-    setInterval(() => {
-      initiateConnection();
-    }, 3000);
+    try {
+      setInterval(() => {
+        initiateConnection();
+      }, 3000);
+    } catch (error) {
+      console.log('keepSocketAlive error :>> ', error);
+    }
   };
 
   useEffect(() => {

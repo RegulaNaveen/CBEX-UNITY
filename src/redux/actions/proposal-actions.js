@@ -12,6 +12,7 @@ import {
   getQuestionSectionInfo,
   getAnswerTypes,
   getRoles,
+  getIntegrations,
   setProposalQuestionData,
   getProposalInfoUpdated,
   getProposlBoxId,
@@ -51,6 +52,9 @@ const {
   ANSWER_TYPES_ERROR,
   ROLES_INFO,
   ROLES_LOADING,
+  INTEGRATIONS_INFO,
+  INTEGRATIONS_ERROR,
+  INTEGRATIONS_LOADING,
   ROLES_ERROR,
   PROPOSAL_SET_QUESTION,
   PROPOSAL_SET_QUESTION_LOADING,
@@ -90,6 +94,7 @@ const {
   UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE,
   UPDATE_NOT_APPLICABLE_DONE,
   SET_PRICE_MODELER_FIELDS,
+  SET_BID_COST_DATA_FIELDS,
   ERROR_UPDATE_NOT_APPLICABLE,
   SET_CAN_USER_TAG_IN_QUESTION,
   SET_APPROVAL_QUESTION_LOADING,
@@ -216,6 +221,17 @@ export const getPriceModelerData = proposalId => {
     try {
       const response = await priceModelerApi(proposalId);
       dispatch({ type: SET_PRICE_MODELER_FIELDS, payload: response.data });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const getBidCostData = proposalId => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    try {
+      const response = await bidCostApi(proposalId);
+      dispatch({ type: SET_BID_COST_DATA_FIELDS, payload: response.data });
     } catch (error) {
       console.error(error);
     }
@@ -470,6 +486,27 @@ export const getRolesInfo = (): ThunkAction<string, Object> => {
     } catch (err) {
       dispatch({
         type: ROLES_ERROR,
+        payload: err
+      });
+    }
+  };
+};
+
+export const getIntegrationsData = (): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: INTEGRATIONS_LOADING,
+      payload: {}
+    });
+    try {
+      const data = await getIntegrations();
+      dispatch({
+        type: INTEGRATIONS_INFO,
+        payload: data
+      });
+    } catch (err) {
+      dispatch({
+        type: INTEGRATIONS_ERROR,
         payload: err
       });
     }

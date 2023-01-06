@@ -24,7 +24,8 @@ import {
   resetProposalId,
   setFlag,
   changeBid,
-  activateProposalLoading
+  activateProposalLoading,
+  getIntegrationsData
 } from '../../../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../../../redux/actions/notepad-actions';
 import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
@@ -125,7 +126,8 @@ export class Opportunity extends Component<Props, State> {
       selectedBid,
       getSFNonEditabelInfoField,
       location,
-      ProposalLoading
+      ProposalLoading,
+      getIntegrationsData
     } = this.props;
     ProposalLoading();
     const winLocationSearch = window.location.search;
@@ -142,6 +144,7 @@ export class Opportunity extends Component<Props, State> {
     if (selectedView) this.setState({ selectedView });
     if (!authData) getRefreshAuthData();
     getSFNonEditabelInfoField();
+    getIntegrationsData();
     getOpportunityInfo(params.id, bidNumber);
     const proposalId = selectedBid.get('id', '');
     localStorage.setItem('proposalId', proposalId);
@@ -433,6 +436,7 @@ export default compose(
     setEventFlg: setFlag,
     changeBidInView: changeBid,
     getSFNonEditabelInfoField: getSFNonEditabelField,
-    ProposalLoading: activateProposalLoading
+    ProposalLoading: activateProposalLoading,
+    getIntegrationsData
   })
 )(MatomoHOC(Opportunity));
