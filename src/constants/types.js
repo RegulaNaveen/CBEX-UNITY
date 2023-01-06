@@ -91,6 +91,7 @@ const PROPOSAL = {
     'update_not_applicable_from_socket_done',
   UPDATE_NOT_APPLICABLE_DONE: 'update_not_applicable_done',
   SET_PRICE_MODELER_FIELDS: 'set_price_modeler_fields',
+  SET_BID_COST_DATA_FIELDS: 'set_bid_cost_data_fields',
   ERROR_UPDATE_NOT_APPLICABLE: 'error_update_not_applicable',
   SET_CAN_USER_TAG_IN_QUESTION: 'SET_CAN_USER_TAG_IN_QUESTION',
   SET_APPROVAL_QUESTION_LOADING: 'SET_APPROVAL_QUESTION_LOADING',

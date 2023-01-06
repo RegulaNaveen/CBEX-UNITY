@@ -156,6 +156,12 @@ const INITIAL_STATE: Map = fromJS({
     regions: ''
   }),
 
+  bidCostDetails: fromJS({
+    totalBidValue: '',
+    bottomLineLaborDiscount: '',
+    budgetTools: ''
+  }),
+
   approvalQuestionLoading: fromJS({
     questionId: '',
     value: false
@@ -1164,15 +1170,15 @@ const setPriceModulerFields = (state, action) => {
   );
 };
 
-const setCostDataFields = (state, action) => {
+const setBidCostDataFields = (state, action) => {
   const { bidValue, bottomLine, budgetTools } = action.payload;
 
   return state.set(
     'bidCostDetails',
     fromJS({
-      bid: bidValue,
-      bottom: bottomLine,
-      budget: budgetTools
+      totalBidValue: bidValue,
+      bottomLineLaborDiscount: bottomLine,
+      budgetTools
     })
   );
 };
@@ -1265,7 +1271,7 @@ const actionMap = {
   [SHOW_NA_CHECKBOX]: (state, { payload }) =>
     state.set('showNaCheckbox', payload),
   [SET_PRICE_MODELER_FIELDS]: setPriceModulerFields,
-  [SET_BID_COST_DATA_FIELDS]: setCostDataFields,
+  [SET_BID_COST_DATA_FIELDS]: setBidCostDataFields,
   [SET_APPROVAL_QUESTION_LOADING]: setApprovalQuestionLoading,
   [SET_CAN_USER_TAG_IN_QUESTION]: (state, { payload }) =>
     state.set('canUserTagInQuestion', payload),

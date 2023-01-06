@@ -5,12 +5,13 @@ import chevronDown from '../../../img/chevron-down.svg';
 import {
   getBidList,
   getSelectedBid,
-  getIsQuestionAnswered,
+  getIsQuestionAnswered
 } from '../../redux/selectors/proposal';
 import { parseMomentDate } from '../../utils/DateUtils';
 import { Checkmark } from '../svg';
 import { changeBid } from '../../redux/actions/proposal-actions';
 import PriceModeler from './PriceModeler';
+import BidCostDetails from './BidCostDetails';
 
 const BidHistory = () => {
   const winLocationSearch = window.location.search;
@@ -22,9 +23,10 @@ const BidHistory = () => {
 
   const bidList = useSelector(getBidList);
   const selectedBid = useSelector(getSelectedBid);
+  const isCurrentBid = selectedBid.get('isCurrent');
   const isQuestionAnswered = useSelector(getIsQuestionAnswered);
 
-  const handleKeyPress = (event) => {
+  const handleKeyPress = event => {
     if (event.key === 'Enter') {
       event.preventDefault();
       handleCollapse();
@@ -105,7 +107,7 @@ const BidHistory = () => {
                       }}
                     >
                       {bidList.length > 0 &&
-                        bidList.map((item) => (
+                        bidList.map(item => (
                           <div
                             onClick={() => {
                               if (!isQuestionAnswered)
@@ -157,11 +159,16 @@ const BidHistory = () => {
                     was created
                   </p>
                 </div>
-                {selectedView === 'questions' || selectedView === null ? (
+                {selectedView === 'questions' ||
+                (selectedView === null && isCurrentBid) ? (
                   <div className="bid-history-pricemodeler-content">
                     <PriceModeler />
                   </div>
-                ) : null}
+                ) : (
+                  (selectedView === 'questions' || selectedView === null) && (
+                    <BidCostDetails />
+                  )
+                )}
               </div>
             </div>
           )}
