@@ -14,7 +14,8 @@ const {
   LOOKUP_OPTIONS_API,
   PROPOSAL_OT_LIST,
   PROPOSAL_SWITCH_OT,
-  USER_API_URL
+  USER_API_URL,
+  INTEGRATIONS_API_URL
 } = API.PROPOSAL;
 
 let onGoingAnswer = {};
@@ -140,6 +141,21 @@ export const getRoles = async (): Promise<Object> => {
   return new Promise((resolve, reject) => {
     axiosInstance
       .get(`${PROPOSAL_API_URL}/roles`, {
+        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};
+
+export const getIntegrations = async (): Promise<Object> => {
+  return new Promise((resolve, reject) => {
+    axiosInstance
+      .get(`${INTEGRATIONS_API_URL}/integrations`, {
         headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
       })
       .then(response => {
@@ -366,7 +382,7 @@ export const getUsersListApiCall = async (searchTerm): Promise<Object> => {
         reject(err);
       });
   });
-}
+};
 
 /**
  * Get Price Modeler Data

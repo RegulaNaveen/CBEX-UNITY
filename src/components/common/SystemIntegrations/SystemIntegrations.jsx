@@ -19,6 +19,7 @@ const SystemIntegrations = ({
   checkSfAnswer,
   sficon,
   integrationmatch,
+  destinationArray,
   integrationvalidation,
   priceModelerIntegration,
   answeronhistory,
@@ -160,32 +161,27 @@ const SystemIntegrations = ({
   };
 
   const QvidianValidation = () => {
-    if (
-      (integrationvalidation === true && changeIcon === '#00c221') ||
-      (priceModelerIntegration === true && changeIcon === '#00c221')
-    ) {
+    if (integrationvalidation === true && changeIcon === '#00c221') {
       return (
         <Tooltip
           variant="light"
           title={
-            priceModelerIntegration && integrationvalidation ? (
+            integrationvalidation ? (
               <p>
-                <b>Destinations</b>
+                <b>
+                  {destinationArray?.length > 1
+                    ? 'Destinations'
+                    : 'Destination'}
+                </b>
                 <br />
-                Qvidian
-                <br /> Price Modeler
-              </p>
-            ) : priceModelerIntegration ? (
-              <p>
-                <b>Destination</b>
-                <br />
-                Price Modeler
-              </p>
-            ) : integrationvalidation ? (
-              <p>
-                <b>Destination</b>
-                <br />
-                Qvidian
+                {destinationArray.map(item => {
+                  return (
+                    <p>
+                      {item}
+                      <br />
+                    </p>
+                  );
+                })}
               </p>
             ) : (
               ''
@@ -203,7 +199,7 @@ const SystemIntegrations = ({
         </Tooltip>
       );
     }
-    if (integrationvalidation === true || priceModelerIntegration === true) {
+    if (integrationvalidation === true) {
       return lastAnswer
         ?.toJS()
         .answer?.toString()
@@ -211,24 +207,22 @@ const SystemIntegrations = ({
         <Tooltip
           variant="light"
           title={
-            priceModelerIntegration && integrationvalidation ? (
+            integrationvalidation ? (
               <p>
-                <b>Destination</b>
+                <b>
+                  {destinationArray?.length > 1
+                    ? 'Destinations'
+                    : 'Destination'}
+                </b>
                 <br />
-                Qvidian
-                <br /> Price Modeler
-              </p>
-            ) : priceModelerIntegration ? (
-              <p>
-                <b>Destination</b>
-                <br />
-                Price Modeler
-              </p>
-            ) : integrationvalidation ? (
-              <p>
-                <b>Destination</b>
-                <br />
-                Qvidian
+                {destinationArray.map(item => {
+                  return (
+                    <p>
+                      {item}
+                      <br />
+                    </p>
+                  );
+                })}
               </p>
             ) : (
               ''
@@ -248,23 +242,22 @@ const SystemIntegrations = ({
         <Tooltip
           variant="light"
           title={
-            priceModelerIntegration && integrationvalidation ? (
+            integrationvalidation ? (
               <p>
-                <b>Destination</b>
+                <b>
+                  {destinationArray?.length > 1
+                    ? 'Destinations'
+                    : 'Destination'}
+                </b>
                 <br />
-                Qvidian, Price Modeler
-              </p>
-            ) : priceModelerIntegration ? (
-              <p>
-                <b>Destination</b>
-                <br />
-                Price Modeler
-              </p>
-            ) : integrationvalidation ? (
-              <p>
-                <b>Destination</b>
-                <br />
-                Qvidian
+                {destinationArray.map(item => {
+                  return (
+                    <p>
+                      {item}
+                      <br />
+                    </p>
+                  );
+                })}
               </p>
             ) : (
               ''
