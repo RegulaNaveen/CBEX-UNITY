@@ -35,6 +35,7 @@ import { getUniqueMilestones } from '../selectors/proposal';
 import { getErrorMessage, getProposalIdlist } from '../../utils/utils';
 import { DEFAULT } from '../../constants/app';
 import isPriceModelerQuestion from '../../utils/isPriceModelerQuestion';
+import { fetchAllApprovals } from './approval-actions';
 
 const { PROPOSAL_API_URL } = API.PROPOSAL;
 const {
@@ -99,7 +100,8 @@ const {
   SET_CAN_USER_TAG_IN_QUESTION,
   SET_APPROVAL_QUESTION_LOADING,
   SET_PRICE_MODELER_RECALCULATING,
-  PRICE_MODELER_UPDATE
+  PRICE_MODELER_UPDATE,
+  SET_ACTIVE_TABINDEX
 } = REDUX_TYPES.PROPOSAL;
 
 /**
@@ -1081,6 +1083,19 @@ export const getOpportunity = (
       }
       proposalsData.push(data[0]);
       dispatch({ type: OPPORTUNITY_INFO, payload: proposalsData });
+      // get approvals data for current bid
+      const currentBidDetails = proposalsData.find(
+        proposal => proposal.isCurrent
+      );
+      if (currentBidDetails) {
+        dispatch(
+          fetchAllApprovals(
+            currentBidDetails.proposal.proposalId,
+            currentBidDetails.proposalQuestions
+          )
+        );
+      }
+
       dispatch({
         type: UPDATE_BOX_BIDS,
         payload: getProposalIdlist(proposalsData)
@@ -1311,5 +1326,14 @@ export const setCanUserTagInQuestion = can => {
 export const fetchUserTagFlagInQuestion = val => {
   return async dispatch => {
     dispatch(setCanUserTagInQuestion(val));
+  };
+};
+
+export const setActiveTabIndexAction = activeIndex => {
+  return dispatch => {
+    dispatch({
+      type: SET_ACTIVE_TABINDEX,
+      payload: activeIndex
+    });
   };
 };
