@@ -96,6 +96,7 @@ const {
   UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE,
   UPDATE_NOT_APPLICABLE_DONE,
   SET_PRICE_MODELER_FIELDS,
+  SET_BID_COST_DATA_FIELDS,
   ERROR_UPDATE_NOT_APPLICABLE,
   SET_CAN_USER_TAG_IN_QUESTION,
   SET_APPROVAL_QUESTION_LOADING,
@@ -222,6 +223,17 @@ export const getPriceModelerData = proposalId => {
     try {
       const response = await priceModelerApi(proposalId);
       dispatch({ type: SET_PRICE_MODELER_FIELDS, payload: response.data });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const getBidCostData = proposalId => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    try {
+      const response = await bidCostApi(proposalId);
+      dispatch({ type: SET_BID_COST_DATA_FIELDS, payload: response.data });
     } catch (error) {
       console.error(error);
     }
