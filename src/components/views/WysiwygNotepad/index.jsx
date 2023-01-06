@@ -41,7 +41,6 @@ const WysiwygNotepad = ({
   userName,
   userEmail,
   userRole,
-  updateNote,
   proposalDetails,
   trackEvent
 }) => {
@@ -52,12 +51,11 @@ const WysiwygNotepad = ({
   );
   const [notesUserTag, setNotesUserTag] = useState(false);
   const [editorloadingcount, seteditorloadingcount] = useState(0);
-
+  const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const usercolor = randomColor({ luminosity: 'light' });
 
   useEffect(() => {
     const ldApiCall = async () => {
-      const allFlags = useSelector(state => state.proposal.get('eventflag'));
       setNotesUserTag(allFlags.notesUserTag || false);
     };
     ldApiCall();
