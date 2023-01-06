@@ -1,15 +1,16 @@
-/* eslint-disable react/prop-types */
-import React, { useState, useEffect, useContext, Suspense } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
 import Panel from 'apollo-react/components/Panel';
 import Typography from 'apollo-react/components/Typography';
 import { useSelector } from 'react-redux';
-import { Loader as Spinner } from 'react-loader-spinner';
-import Loader from 'apollo-react/components/Loader';
+import Loader from 'react-loader-spinner';
 import classNames from 'classnames';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
+import Questions from '../../../screens/Opportunity/Questions';
+import Documents from '../../../screens/Opportunity/Documents';
+import Validate from '../../../screens/Opportunity/Validate';
 import { getSelectedBid } from '../../../../redux/selectors/proposal';
 import {
   getIsOpen,
@@ -17,45 +18,13 @@ import {
   getUserEmail,
   getUserRole
 } from '../../../../redux/selectors';
+import Approvals from '../../../screens/Approvals/index';
 import VerticalTabsCollapsiblePanel from '../../../screens/Opportunity/layout/navigation/VerticalTabsCollapsiblePanel';
+import QuestionsForCustomer from '../../../screens/Opportunity/QuestionsForCustomerTab';
+import WysiwygNotepad from '../../../views/WysiwygNotepad';
+import ProposalTeam from '../../../screens/Opportunity/ProposalTeam';
 import { createMatomoObj, saveDataInMatomo } from '../../../../utils/utils';
 import NotesSocketContext from '../../../../context/notesSocketContext';
-
-const WysiwygNotepad = React.lazy(() =>
-  import(
-    /* webpackChunkName: "WysiwygNotepad" */ '../../../views/WysiwygNotepad'
-  )
-);
-
-const ProposalTeam = React.lazy(() =>
-  import(
-    /* webpackChunkName: "proposalTeam" */ '../../../screens/Opportunity/ProposalTeam'
-  )
-);
-
-const QuestionsForCustomer = React.lazy(() =>
-  import(
-    /* webpackChunkName: "questionsForCustomer" */ '../../../screens/Opportunity/QuestionsForCustomerTab'
-  )
-);
-const Questions = React.lazy(() =>
-  import(
-    /* webpackChunkName: "questions" */ '../../../screens/Opportunity/Questions'
-  )
-);
-const Approvals = React.lazy(() =>
-  import(/* webpackChunkName: "approvals" */ '../../../screens/Approvals/index')
-);
-const Documents = React.lazy(() =>
-  import(
-    /* webpackChunkName: "documents" */ '../../../screens/Opportunity/Documents'
-  )
-);
-const Validate = React.lazy(() =>
-  import(
-    /* webpackChunkName: "validate" */ '../../../screens/Opportunity/Validate'
-  )
-);
 
 const UnityTab = ({
   id,
@@ -74,7 +43,7 @@ const UnityTab = ({
   const [showNotepadTab, setShowNotepadTab] = useState(false);
   const [showProposalTeamTab, setShowProposalTeamTab] = useState(false);
   const [isNotepadOpen, setIsNotepadOpen] = useState(true);
-  const allFlags = useSelector(state => state.proposal.get('eventflag'));
+
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const isApprovalCount = selectedBid?.isApprovalCountPresent || false;
   const history = useHistory();
@@ -82,8 +51,11 @@ const UnityTab = ({
   const proposalDetail = useSelector(state => getProposalDetails(state));
   const userEmail = useSelector(state => getUserEmail(state));
   const userRole = useSelector(state => getUserRole(state));
+  const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const { trackEvent } = useMatomo();
+
   const socketContext = useContext(NotesSocketContext);
+
   const minPixelToExclude = 20;
   const notepadMinWidthPx =
     (window.innerWidth - minPixelToExclude) * (30 / 100); // 30% of the total screen size
@@ -133,11 +105,11 @@ const UnityTab = ({
     ) {
       verticalTabFlag = false;
     }
+    setApprovalsFlag(approvalFlag);
     setShowVerticalTab(verticalTabFlag);
     setShowQuestionsForCustomerTab(questionsForCustomerFlag);
     setShowNotepadTab(notepadFlag);
     setShowProposalTeamTab(proposalTeamFlag);
-    setApprovalsFlag(approvalFlag);
   }
 
   useEffect(() => {
@@ -219,7 +191,7 @@ const UnityTab = ({
           })}
         </Tabs>
         <div style={{ padding: 20, paddingTop: 5 }}>
-          <div id="fullwidth-view-above-vertical-tabs" />
+          <div id="fullwidth-view-above-vertical-tabs"></div>
           <div style={{ display: 'flex', marginTop: '16px' }}>
             {isShowVerticalTab ? (
               <VerticalTabsCollapsiblePanel
@@ -238,14 +210,11 @@ const UnityTab = ({
                           style={{ borderRadius: '5px' }}
                           resizable
                         >
-                          <Suspense fallback={<Loader isInner />}>
-                            <QuestionsForCustomer />
-                          </Suspense>
+                          <QuestionsForCustomer />
                         </Panel>
                       </div>
                     );
-                  }
-                  if (activeTab === 1) {
+                  } else if (activeTab === 1) {
                     /* Notepad */
                     return (
                       <div id="panel-notepad" style={{ borderRadius: '5px' }}>
@@ -280,28 +249,26 @@ const UnityTab = ({
                             </div>
 
                             {socketContext.wsInstance ? (
-                              <Suspense fallback={<Loader isInner />}>
-                                <WysiwygNotepad
-                                  trackEvent={trackEvent}
-                                  eventCategories={{
-                                    dp: 'Unity Dashboard',
-                                    pd: props =>
-                                      `Proposal Detail (CRM#: ${
-                                        props && props.proposalDetail
-                                          ? props.proposalDetail['CRM #']
-                                          : ''
-                                      })`,
-                                    plainPd: `Proposal Detail`,
-                                    tb: `ToolBar Menu`,
-                                    pg: `Pagination`,
-                                    crmNo: `Proposal Detail (CRM#: ${localStorage.getItem(
-                                      'oppNo'
-                                    ) || ''})`
-                                  }}
-                                />
-                              </Suspense>
+                              <WysiwygNotepad
+                                trackEvent={trackEvent}
+                                eventCategories={{
+                                  dp: 'Unity Dashboard',
+                                  pd: props =>
+                                    `Proposal Detail (CRM#: ${
+                                      props && props.proposalDetail
+                                        ? props.proposalDetail['CRM #']
+                                        : ''
+                                    })`,
+                                  plainPd: `Proposal Detail`,
+                                  tb: `ToolBar Menu`,
+                                  pg: `Pagination`,
+                                  crmNo: `Proposal Detail (CRM#: ${localStorage.getItem(
+                                    'oppNo'
+                                  ) || ''})`
+                                }}
+                              />
                             ) : (
-                              <Spinner
+                              <Loader
                                 type="TailSpin"
                                 color="#297DFD"
                                 width={30}
@@ -327,9 +294,7 @@ const UnityTab = ({
                         style={{ borderRadius: '5px' }}
                         resizable
                       >
-                        <Suspense fallback={<Loader isInner />}>
-                          <ProposalTeam />
-                        </Suspense>
+                        <ProposalTeam />
                       </Panel>
                     </div>
                   );
@@ -337,13 +302,7 @@ const UnityTab = ({
               />
             ) : null}
             {visibleTabs().map(item => {
-              return (
-                value === item.value && (
-                  <Suspense fallback={<Loader isInner />}>
-                    {item.component}
-                  </Suspense>
-                )
-              );
+              return value === item.value && item.component;
             })}
           </div>
         </div>
