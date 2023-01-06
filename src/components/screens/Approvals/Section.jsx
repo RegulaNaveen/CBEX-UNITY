@@ -31,7 +31,6 @@ const Section = ({ sectionId, title, testVisibility }) => {
   const approvalFilters = useSelector(state => state.approvals.filters);
 
   useEffect(() => {
-    console.log('approvalFilters changed and Section rerendered');
     setSectionVisibility(shouldShowSection(sectionId));
   }, [approvalFilters]);
 

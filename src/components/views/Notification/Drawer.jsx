@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
+import classnames from 'classnames';
 import { RECENT_ACTIVITY } from '../../../routes';
 import { connect } from 'react-redux';
 import Bell from 'apollo-react-icons/Bell';
 import Cog from 'apollo-react-icons/Cog';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Typography from 'apollo-react/components/Typography';
-import classnames from 'classnames';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import { getUnreadNotifications } from '../../../redux/selectors';
 import * as notificationActions from '../../../redux/actions/notification-actions';
@@ -51,23 +51,23 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
 
   return (
     <>
-      <div className='toolbar-account-notification'>
+      <div className="toolbar-account-notification">
         <div
           className={classnames('notification', isDrawer && 'expanded')}
           style={{ position: 'relative', cursor: 'pointer' }}
           onClick={toggleIsDrawer}
         >
-          <div className='iconSection'>
-            <div className='toolbar-account-wrapper'>
+          <div className="iconSection">
+            <div className="toolbar-account-wrapper">
               <div
-                className='toolbar-account-info'
+                className="toolbar-account-info"
                 style={{
                   display: 'flex',
                   justifyContent: notificationCount ? 'start' : 'center'
                 }}
               >
                 {notificationCount != 0 && (
-                  <span className='iconBadge'>{notificationCount}</span>
+                  <span className="iconBadge">{notificationCount}</span>
                 )}
                 <Bell style={{ color: 'white', cursor: 'pointer' }} />
               </div>
@@ -76,14 +76,14 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
         </div>
         {isDrawer && (
           <ClickAwayListener onClickAway={closeDrawer}>
-            <div tabIndex={-1} id='notificationBar' className='notificationBar'>
-              <div className='drawer-header'>
-                <Typography variant='h3' gutterBottom>
+            <div tabIndex={-1} id="notificationBar" className="notificationBar">
+              <div className="drawer-header">
+                <Typography variant="h3" gutterBottom>
                   Notifications
                 </Typography>
                 <div>
                   <Cog
-                    className='notification-gear-icon'
+                    className="notification-gear-icon"
                     onClick={toggleIsDrawerOptions}
                   />
                   {/* Drawer Gear Icon options */}
@@ -94,7 +94,7 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
                 </div>
               </div>
               {/* Notification List items */}
-              <div className='notification-scrollbar' >
+              <div className="notification-scrollbar">
                 {notificationCount > 0 ? (
                   unreadNotifications.map(item => {
                     return (
@@ -118,12 +118,18 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
                   View All Notifications
                 </Typography>
               </div> */}
-              {notificationCount > 0 && (
-                <p className='view-All-notifications'
-                  onClick={() => {redirectAllNotifications()}}>View All Notifications</p>
-              )}
+                {notificationCount > 0 && (
+                  <p
+                    className="view-All-notifications"
+                    onClick={() => {
+                      redirectAllNotifications();
+                    }}
+                  >
+                    View All Notifications
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
           </ClickAwayListener>
         )}
       </div>

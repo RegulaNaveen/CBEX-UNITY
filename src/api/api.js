@@ -1,3 +1,4 @@
+/* eslint-disable import/no-mutable-exports */
 import { isUserUbuildAdmin } from '../utils/utils';
 
 // @flow

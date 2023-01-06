@@ -243,13 +243,6 @@ class Tabbar extends Component<Props, State> {
     }
   };
 
-  // rendorFilterLabel() {
-  //   console.log(this.state.filters);
-  //   return Object.keys(this.state.filters).map((item,index) => {
-  //     console.log(item);
-  //     return <Chip color="white" size="small" label={item} />
-  //   })
-  // }
   render() {
     const { children } = this.props;
     const { selected, showFilters, filterCount, filters } = this.state;

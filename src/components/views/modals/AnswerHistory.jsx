@@ -1,10 +1,11 @@
+/* eslint-disable react/prop-types */
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Map, fromJS } from 'immutable'; // NOSONAR
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
-import { isEmpty, isString, unionBy, isObject, has } from 'lodash';
+import { isEmpty, isString, unionBy, isObject } from 'lodash';
 import { diffWordsWithSpace } from 'diff';
 import Loader from 'apollo-react/components/Loader';
 import {
@@ -59,9 +60,10 @@ function handleUserMentionInAnswer(formattedAnswer = null, answer = '') {
     const formattedAnswerJSON = JSON.parse(formattedAnswer);
     let mentions = [];
     let offset = 0;
-
+    let lastText = '';
     formattedAnswerJSON.value.blocks.forEach(block => {
-      let { text, entityRanges } = block;
+      let { entityRanges } = block;
+      const { text } = block;
       if (Array.isArray(entityRanges) && entityRanges.length > 0) {
         entityRanges = entityRanges.reverse();
         entityRanges.forEach(entity => {
@@ -72,10 +74,9 @@ function handleUserMentionInAnswer(formattedAnswer = null, answer = '') {
         });
       }
 
-      let lastText = '';
       mentions = mentions.sort((a, b) => a.start - b.start);
       const mentionsStartList = mentions.map(m => m.start);
-      for (let i = 0; i < text.length; i++) {
+      for (let i = 0; i < text.length; i += 1) {
         const mentionIndex = mentionsStartList.findIndex(m => m === i + offset);
         if (mentionIndex > -1) {
           if (lastText.length > 0) {
@@ -119,24 +120,32 @@ class AnswerHistory extends Component<Props> {
   }
 
   componentDidMount() {
-    const { question, getAnsHistory, selectedBid, isQuesFreezed } = this.props;
+    const {
+      question,
+      getAnsHistory,
+      selectedBid,
+      isQuesFreezed,
+      opportunityData,
+      toggleWatch
+    } = this.props;
+    const { lastAnswer } = this.state;
+    const { questionLockWrapper } = this.context;
     const questionID = question?.toJS()?.questionId;
     const proposalID = selectedBid?.toJS()?.id;
-    const { lastAnswer } = this.state;
-    bidNo = this.props.opportunityData?.get(proposalID)?.toJS().proposal
-      .proposalDetails.bidNo;
+    bidNo = opportunityData?.get(proposalID)?.toJS().proposal.proposalDetails
+      .bidNo;
     isCurrentBid =
-      this.props.opportunityData?.get(proposalID)?.toJS().isCurrent === true
-        ? this.props.opportunityData?.get(proposalID)?.toJS().proposal
-            .proposalDetails.bidNo
+      opportunityData?.get(proposalID)?.toJS().isCurrent === true
+        ? opportunityData?.get(proposalID)?.toJS().proposal.proposalDetails
+            .bidNo
         : 'NA';
     if (
       isCurrentBid === bidNo &&
       lastAnswer?.userName === 'UnityPredictedAnswer'
     ) {
-      this.context.questionLockWrapper(questionIdentifier);
-      if (this.props.toggleWatch) {
-        this.props.toggleWatch(true);
+      questionLockWrapper(questionIdentifier);
+      if (toggleWatch) {
+        toggleWatch(true);
       }
     }
     // Set History List form Api
@@ -158,9 +167,11 @@ class AnswerHistory extends Component<Props> {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.forceBlur === true) {
-      if (this.props.toggleWatch) this.props.toggleWatch(false);
-      this.context?.questionUnlockWrapper(questionIdentifier);
+    const { forceBlur, toggleWatch } = this.props;
+    const { questionUnlockWrapper } = this.context;
+    if (forceBlur === true) {
+      if (toggleWatch) toggleWatch(false);
+      if (questionUnlockWrapper) questionUnlockWrapper(questionIdentifier);
       this.closeModalWindow();
     }
   }
@@ -170,7 +181,8 @@ class AnswerHistory extends Component<Props> {
   }
 
   setMouseMove(e) {
-    if (this.props.onCascadeChange) this.props.onCascadeChange();
+    const { onCascadeChange } = this.props;
+    if (onCascadeChange) onCascadeChange();
   }
 
   handleVerifyPredictedAnsClick = predictedAnswer => {
@@ -188,7 +200,7 @@ class AnswerHistory extends Component<Props> {
     const questionId = questions.get('questionId');
     const questionText = questions.get('questionText');
     const proposalId = answers.get(0).get('proposalId');
-    const sectionName = question.get('section').toJS().sectionName;
+    const { sectionName } = question.get('section').toJS();
     const answer = answers.get(0).get('answer');
     const questionHTML = questions.get('questionHtml');
     const questionJSON = questions.get('questionJSON');
@@ -234,7 +246,7 @@ class AnswerHistory extends Component<Props> {
         {
           id: 1,
           value: JSON.stringify({
-            answer: answer,
+            answer,
             sectionName,
             questionText,
             questionHTML,
@@ -252,7 +264,7 @@ class AnswerHistory extends Component<Props> {
     this.closeModalWindow();
   };
 
-  handleRejectPredictedAnsClick = predictedAnswer => {
+  handleRejectPredictedAnsClick = () => {
     const {
       trackEvent,
       eventCategories,
@@ -269,7 +281,7 @@ class AnswerHistory extends Component<Props> {
     const questionText = questions.get('questionText');
     const proposalId = answers.get(0).get('proposalId');
     const answer = answers.get(0).get('answer');
-    const sectionName = question.get('section').toJS().sectionName;
+    const { sectionName } = question.get('section').toJS();
     const questionHTML = questions.get('questionHtml');
     const questionJSON = questions.get('questionJSON');
     const questionHintJSON = questions.get('questionHintJSON');
@@ -308,7 +320,7 @@ class AnswerHistory extends Component<Props> {
         {
           id: 1,
           value: JSON.stringify({
-            answer: answer,
+            answer,
             sectionName,
             questionText,
             questionHTML,
@@ -421,12 +433,12 @@ class AnswerHistory extends Component<Props> {
         opportunityData.get(proposalId)?.toJS()?.proposal?.proposalDetails
           ?.bidNo
       ) {
-        bidNo = this.props.opportunityData.get(proposalId).toJS().proposal
-          .proposalDetails.bidNo;
+        bidNo = opportunityData.get(proposalId).toJS().proposal.proposalDetails
+          .bidNo;
         isCurrentBid =
-          this.props.opportunityData.get(proposalId).toJS().isCurrent === true
-            ? this.props.opportunityData.get(proposalId).toJS().proposal
-                .proposalDetails.bidNo
+          opportunityData.get(proposalId).toJS().isCurrent === true
+            ? opportunityData.get(proposalId).toJS().proposal.proposalDetails
+                .bidNo
             : 'NA';
       }
 
@@ -588,7 +600,7 @@ class AnswerHistory extends Component<Props> {
               styleClass
             );
             let nextdate = '';
-            if (indx + 1 == tmp.length) {
+            if (indx + 1 === tmp.length) {
               nextdate = '';
             } else if (
               nextAnswer &&
@@ -767,9 +779,10 @@ class AnswerHistory extends Component<Props> {
   };
 
   closeModalWindow = () => {
-    if (this.props.toggleWatch) this.props.toggleWatch(false);
-    this.context.questionUnlockWrapper(lockQuestion);
-    const { closeModal } = this.props;
+    const { closeModal, toggleWatch } = this.props;
+    const { questionUnlockWrapper } = this.context;
+    if (toggleWatch) toggleWatch(false);
+    if (questionUnlockWrapper) questionUnlockWrapper(lockQuestion);
     closeModal();
   };
 
@@ -784,7 +797,6 @@ class AnswerHistory extends Component<Props> {
   };
 
   render() {
-    const { closeModal } = this.props;
     const { question, loading } = this.state;
     const answers = question.get('answers');
     const questionTitle = question.get('questionText');

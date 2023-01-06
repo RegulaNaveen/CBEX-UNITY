@@ -1,17 +1,15 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import Loader from 'apollo-react/components/Loader';
 import map from 'lodash/map';
 import IconButton from 'apollo-react/components/IconButton';
 import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
 import CircularProgress from 'apollo-react/components/CircularProgress';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
-  getSelectedBid,
   getPriceModuler,
   selectIsPriceModelerEstimateRecalculating
 } from '../../redux/selectors/proposal';
-import { getPriceModelerData } from '../../redux/actions/proposal-actions';
 import CustomModal from './CustomModal';
 import { DEFAULT } from '../../constants/app';
 import { convertToInternationalCurrency } from '../../utils/helpers';
@@ -36,25 +34,17 @@ export const INITIAL_LIST_VAL = {
 // TODO
 // Fixed in a hurry, Need to add a loader on price modeler data load
 const PriceModeler = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
   const [error, setError] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
+  const [errorMsg] = useState('');
 
-  const dispatch = useDispatch();
-  const selectedBid = useSelector(getSelectedBid)?.toJS();
   const priceModeler = useSelector(getPriceModuler)?.toJS();
   const isPriceModelerRecalculating = useSelector(
     selectIsPriceModelerEstimateRecalculating
   );
-  const memoizeBid = useMemo(() => selectedBid, [selectedBid?.id]);
-  const proposalID = memoizeBid?.id;
-
-  /**
-   * Trigger Price Modeler Api on Bid change
-   */
-  useEffect(() => {
-    dispatch(getPriceModelerData(proposalID));
-  }, [memoizeBid]);
+  // /**
+  //  * Trigger Price Modeler Api on Bid change
+  //  */
 
   // Price Modeler Tooltip
   const infoIconWithTooltip = (

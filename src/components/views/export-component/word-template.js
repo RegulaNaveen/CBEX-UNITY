@@ -129,7 +129,7 @@ export function getLastAnswer(answers) {
 
 export function getFormattedTextStyles(styleMaps, index) {
   let styleId = '';
-  let styles = {
+  const styles = {
     bold: false,
     italics: false,
     strike: false,
@@ -1043,7 +1043,6 @@ export function createWord(content) {
     image,
     editor
   } = content;
-  console.log(' rdx editor', editor);
   const filteredQuestions = getFilteredQuestion(proposalQuestions, filterState);
 
   const SectionList = {

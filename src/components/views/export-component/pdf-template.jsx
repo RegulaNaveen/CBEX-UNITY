@@ -26,15 +26,9 @@ import {
   Image,
   Link as HtmlLink
 } from '@react-pdf/renderer';
-// import './AnnotationLayer.css';
 import React from 'react';
 import Html from 'react-pdf-html';
 import { isString } from 'lodash';
-import Logo from '../../../../img/iqvia-main-logo.png';
-import ProximaNova from '../../../../fonts/ProximaNova-Regular.otf';
-import ProximaNovaBold from '../../../../fonts/Proxima Nova Alt Bold.otf';
-import ProximaNovaBoldItalic from '../../../../fonts/Proxima-Nova-Bold-It.otf';
-import ProximaNovaItalic from '../../../../fonts/Proxima-Nova-Reg-It.otf';
 import moment from 'moment';
 import { generateHTML } from '@tiptap/core';
 import Link from '@tiptap/extension-link';
@@ -44,6 +38,11 @@ import Superscript from '@tiptap/extension-superscript';
 import Mention from '@tiptap/extension-mention';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
+import Logo from '../../../../img/iqvia-main-logo.png';
+import ProximaNova from '../../../../fonts/ProximaNova-Regular.otf';
+import ProximaNovaBold from '../../../../fonts/Proxima Nova Alt Bold.otf';
+import ProximaNovaBoldItalic from '../../../../fonts/Proxima-Nova-Bold-It.otf';
+import ProximaNovaItalic from '../../../../fonts/Proxima-Nova-Reg-It.otf';
 
 Font.register({
   family: 'ProximaNova',
@@ -61,7 +60,7 @@ const styles = StyleSheet.create({
   },
   header: {
     width: '83%',
-    height: '10vh', //As per your page layout
+    height: '10vh',
     borderBottom: `1px solid #${themeBlue}`,
     marginBottom: '20px',
     marginLeft: '50px',
@@ -81,7 +80,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '83%',
-    height: '15vh', //As per your page layout
+    height: '15vh',
     marginTop: '20px',
     marginLeft: '50px',
     marginRight: '50px'
@@ -252,14 +251,10 @@ function getExtraLines(t1, t2) {
   const paddingAnswerCell = parseInt(contentLength / 230);
   return new Array(paddingAnswerCell + 2 || 2).fill('<br>').join('');
 }
-function topHeading(details) {
-  return `<h1 class="mainTitle"><em>${details['CRM #'] ||
-    ''}</em> Opportunity Overview</h1>`;
-}
 function getHeaderInfoRows(details) {
   let html = `<table class="table headerInfo">`;
   try {
-    for (let key in headFields) {
+    for (const key in headFields) {
       let value = details[key] || '';
       if (key === 'Bid due date') value = moment(value).format('DD-MMM-YYYY');
 
@@ -300,7 +295,7 @@ function getProposalTeamsRows(questions) {
     html += `<th> Name</th>`;
     html += `</tr>`;
     coreTeamQuestions.forEach(question => {
-      let { questionText, answers } = question;
+      const { questionText, answers } = question;
       const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
       html += `<tr>`;
       html += `<td>${questionText} ${extraNewLines}</td>`;
@@ -315,7 +310,7 @@ function getProposalTeamsRows(questions) {
     html += `<th> Name</th>`;
     html += `</tr>`;
     otherTeamQuestions.forEach(question => {
-      let { questionText, answers } = question;
+      const { questionText, answers } = question;
       const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
       html += `<tr>`;
       html += `<td>${questionText} ${extraNewLines}</td>`;
@@ -346,12 +341,12 @@ function questionTables(proposalQuestions) {
     });
   // Section map
   const sections = {};
-  let ordereredSections = [];
+  const ordereredSections = [];
 
   // Populate the section map
   questions.forEach(question => {
     try {
-      let section = question.section.sectionName || '';
+      const section = question.section.sectionName || '';
       if (sections[section]) {
         sections[section].push(question);
       } else {
@@ -420,8 +415,8 @@ function getQuestionToCustomerRows(questions) {
   try {
     html += `<tr>`;
     html += `<td><ul>`;
-    questionsToCustomer.forEach((question, index) => {
-      let { questionText } = question;
+    questionsToCustomer.forEach(question => {
+      const { questionText } = question;
       html += `<li> ${questionText} </li>`;
     });
     html += `</ul></td>`;
@@ -446,7 +441,6 @@ function getNotesRows(notes, editor) {
   try {
     const noteText = editor.getJSON();
     try {
-      console.log('noteText pdf', noteText);
       data += generateHTML(noteText, [
         StarterKit,
         Link,
@@ -463,7 +457,6 @@ function getNotesRows(notes, editor) {
           }
         })
       ]);
-      console.log('ddata', data);
       data += `</td></tr></table>`;
       html += data;
       return html;
@@ -514,7 +507,7 @@ const MyDoc = (
     <Document>
       <Page wrap style={styles.page}>
         <View fixed style={styles.header}>
-          <Image src={Logo} style={styles.imgLogo}></Image>
+          <Image src={Logo} style={styles.imgLogo} />
         </View>
         <View style={styles.body}>
           <View style={styles.heading}>
@@ -624,7 +617,7 @@ const MyDoc = (
           <View
             style={{ display: 'flex', flexDirection: 'row', marginBottom: 0 }}
           >
-            <Text style={{ flex: 0, fontSize: '8px', color: '#999' }}></Text>
+            <Text style={{ flex: 0, fontSize: '8px', color: '#999' }} />
             <Text
               style={{
                 flex: 1,

@@ -5,7 +5,7 @@ import { createSelector } from 'reselect';
 import { shouldInclude } from '../../components/views/export-component/word-template';
 
 const generateMilestone = (proposalQuestions: Object) => {
-  const flag = proposalQuestions.filter(question => question?.milestone);
+  const flag = proposalQuestions.filter((question) => question?.milestone);
   if (flag && flag.length) {
     return true;
   }
@@ -21,7 +21,7 @@ const generateSections = (
     let sections = Map();
     const userRole = role !== '' ? role : false;
 
-    proposalQuestions.forEach(question => {
+    proposalQuestions.forEach((question) => {
       const {
         questionId,
         roleNames,
@@ -35,7 +35,7 @@ const generateSections = (
         let questions = sections.getIn([sectionName, 'questions']) || Map({});
 
         questions = questions.set(questionId, fromJS(question));
-        questions = questions.sortBy(item => item.get('questionOrder'));
+        questions = questions.sortBy((item) => item.get('questionOrder'));
 
         section = section
           .set('sectionOrder', sectionOrder)
@@ -50,7 +50,7 @@ const generateSections = (
       } else createSections();
     });
 
-    sections = sections.sortBy(section => section.get('sectionOrder'));
+    sections = sections.sortBy((section) => section.get('sectionOrder'));
 
     return sections;
   } catch (error) {
@@ -95,7 +95,7 @@ export const getSections = (proposal: Map): Map =>
 export const getProposalTeamAssignedRoles = (proposal: Map): Map => {
   const proposalTeamSectionAnswers = proposal
     .get('proposalQuestions')
-    .filter(value => value.section.sectionName === 'Proposal Team')
+    .filter((value) => value.section.sectionName === 'Proposal Team')
     .map(({ questionText, answers }) => {
       return {
         role: questionText,
@@ -111,6 +111,9 @@ export const getFilteredSections = (proposal: Map, auth: Map): Map =>
 
 export const getMilestoneSections = (proposal: Map, auth: Map): Map =>
   generateMilestone(proposal.get('proposalQuestions'));
+
+export const getfetchUserTagFlag = (proposal: Map, auth: Map): Map =>
+  proposal.get('eventflag');
 
 export const isProposalLoading = (proposal: Map): Map =>
   proposal.get('isProposalLoading');
@@ -140,6 +143,9 @@ export const isAnswerTypesInfoLoading = (proposal: Map): Map =>
   proposal.get('isAnswerTypesLoading');
 
 export const getRoles = (proposal: Map): Map => proposal.get('proposalRoles');
+
+export const getIntegrations = (proposal: Map): Map =>
+  proposal.get('proposalIntegrations');
 
 export const isRolesInfoLoading = (proposal: Map): Map =>
   proposal.get('isRolesLoading');
@@ -185,11 +191,11 @@ function createSectionsFromQuestions(questions) {
 }
 
 export function getUniqueMilestones(questions) {
-  const filteredQuestions = questions.filter(q => shouldInclude(q));
+  const filteredQuestions = questions.filter((q) => shouldInclude(q));
   const milestones = [];
   fromJS(filteredQuestions)
     .valueSeq()
-    .forEach(question => {
+    .forEach((question) => {
       if (question.get('milestone')) {
         milestones.push(question.get('milestone'));
       }
@@ -204,26 +210,27 @@ export function selectProposal(state) {
 
 export const selectProposalQuestions = createSelector(
   selectProposal,
-  proposal => proposal.get('proposalQuestions', Map({}))
+  (proposal) => proposal.get('proposalQuestions', Map({}))
 );
 
 export const selectFilteredProposalQuestions = createSelector(
   selectProposal,
-  proposal => proposal.get('filteredProposalQuestions', Map({}))
+  (proposal) => proposal.get('filteredProposalQuestions', Map({}))
 );
 
-export const selectQuestionsFilters = createSelector(selectProposal, proposal =>
-  proposal.get('questionsFilter', Map({}))
+export const selectQuestionsFilters = createSelector(
+  selectProposal,
+  (proposal) => proposal.get('questionsFilter', Map({}))
 );
 
 export const selectActiveQuestionsFilters = createSelector(
   selectQuestionsFilters,
-  questionsFilters => questionsFilters
+  (questionsFilters) => questionsFilters
 );
 
 export const selectIsQuestionsFilterEnabled = createSelector(
   selectQuestionsFilters,
-  questionsFilters => {
+  (questionsFilters) => {
     let considerFilter = false;
     questionsFilters.entrySeq().forEach(([groupName, group]) => {
       group.entrySeq().forEach(([filterName, filter]) => {
@@ -238,34 +245,36 @@ export const selectIsQuestionsFilterEnabled = createSelector(
 
 export const selectSections = createSelector(
   selectProposalQuestions,
-  proposalQuestions => createSectionsFromQuestions(proposalQuestions)
+  (proposalQuestions) => createSectionsFromQuestions(proposalQuestions)
 );
 
-export const selectSectionNames = createSelector(selectSections, sections =>
+export const selectSectionNames = createSelector(selectSections, (sections) =>
   sections
     .valueSeq()
-    .map(section => section.get('sectionName'))
+    .map((section) => section.get('sectionName'))
     .toJS()
 );
 
-export const selectSectionOrderInfo = createSelector(selectSections, sections =>
-  sections.valueSeq().map(section => ({
-    sectionName: section.get('sectionName'),
-    sectionOrder: section.get('sectionOrder')
-  }))
+export const selectSectionOrderInfo = createSelector(
+  selectSections,
+  (sections) =>
+    sections.valueSeq().map((section) => ({
+      sectionName: section.get('sectionName'),
+      sectionOrder: section.get('sectionOrder')
+    }))
 );
 
 export const selectFilteredSections = createSelector(
   selectFilteredProposalQuestions,
-  proposalQuestions => createSectionsFromQuestions(proposalQuestions)
+  (proposalQuestions) => createSectionsFromQuestions(proposalQuestions)
 );
 
 export const selectActiveQuestionsFilterCount = createSelector(
   selectActiveQuestionsFilters,
-  filters => {
+  (filters) => {
     let size = 0;
-    filters.forEach(group =>
-      group.forEach(filter => {
+    filters.forEach((group) =>
+      group.forEach((filter) => {
         if (typeof filter !== 'string' && filter.get('checked')) size++;
       })
     );
@@ -275,35 +284,34 @@ export const selectActiveQuestionsFilterCount = createSelector(
 
 export const selectUniqueMilestones = createSelector(
   selectProposalQuestions,
-  questions => getUniqueMilestones(questions)
+  (questions) => getUniqueMilestones(questions)
 );
 
 export const selectAreAllSectionsExpanded = createSelector(
   selectProposal,
-  proposal => proposal.get('areAllSectionsExpanded')
+  (proposal) => proposal.get('areAllSectionsExpanded')
 );
 
-export const getEditQuestionData = createSelector(selectProposal, proposal =>
+export const getEditQuestionData = createSelector(selectProposal, (proposal) =>
   proposal.get('editQuestionsData', Map({}))
 );
 
-export const getSelectedBid = createSelector(selectProposal, proposal =>
+export const getSelectedBid = createSelector(selectProposal, (proposal) =>
   proposal?.get('selectedBid')
 );
 export const getStatusOfNewBid = createSelector(
   selectProposal,
-  proposal => proposal.get('newbidflag') || false
+  (proposal) => proposal.get('newbidflag') || false
 );
 
-export const getOpportunityData = createSelector(selectProposal, proposal =>
+export const getOpportunityData = createSelector(selectProposal, (proposal) =>
   proposal.get('opportunityData')
 );
 
-export const getBidList = createSelector(getOpportunityData, opportunity => {
+export const getBidList = createSelector(getOpportunityData, (opportunity) => {
   if (opportunity.size > 0) {
     let bidList = [];
-    // console.log(opportunity.valueSeq().toJS());
-    opportunity.valueSeq().forEach((item, ind) => {
+    opportunity.valueSeq().forEach(item => {
       bidList.push({
         bidDueDate: item.getIn(['proposal', 'proposalDetails', 'Bid due date']),
         bidDate: item.getIn(['proposal', 'proposalDate']),
@@ -328,16 +336,16 @@ export const getBidList = createSelector(getOpportunityData, opportunity => {
   } else return [];
 });
 
-export const getProposalQuestions = createSelector(selectProposal, proposal =>
+export const getProposalQuestions = createSelector(selectProposal, (proposal) =>
   proposal.get('proposalQuestions')
 );
 
 export const getIsQuestionAnswered = createSelector(
   getProposalQuestions,
-  questions => {
+  (questions) => {
     const isQuestionAnswered =
       questions.length > 0
-        ? questions.findIndex(listItem => {
+        ? questions.findIndex((listItem) => {
             return listItem.loading;
           })
         : -1;
@@ -348,20 +356,21 @@ export const getIsQuestionAnswered = createSelector(
 export const getLookUpOptionsSelector = (proposals: Map): Object =>
   proposals.get('lookUpOptions');
 
-export const getPriceModuler = createSelector(selectProposal, proposal =>
+export const getPriceModuler = createSelector(selectProposal, (proposal) =>
   proposal?.get('priceModeler')
 );
 
 export const getCanUserTagInQuestion = createSelector(
   selectProposal,
-  proposal => proposal?.get('canUserTagInQuestion')
+  (proposal) => proposal?.get('canUserTagInQuestion')
 );
 
 export const getApprovalQuestionLoading = createSelector(
   selectProposal,
-  proposal => proposal?.get('approvalQuestionLoading')
+  (proposal) => proposal?.get('approvalQuestionLoading')
 );
 
-export const selectIsPriceModelerEstimateRecalculating = createSelector(selectProposal, proposal =>
-  proposal?.get('priceModelerRecalculating', false)
+export const selectIsPriceModelerEstimateRecalculating = createSelector(
+  selectProposal,
+  proposal => proposal?.get('priceModelerRecalculating', false)
 );

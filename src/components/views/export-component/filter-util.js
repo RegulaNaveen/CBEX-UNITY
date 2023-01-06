@@ -20,8 +20,7 @@ export const applyAnsweredFilter = questions => {
 };
 
 export const applyUnAnsweredFilter = questions => {
-  let filteredQuestions;
-  filteredQuestions = questions.filter(question => {
+  const filteredQuestions = questions.filter(question => {
     let answers;
     try {
       answers = question.answers;
@@ -43,12 +42,13 @@ export const applyUnAnsweredFilter = questions => {
 };
 
 export const applyNotApplicableFilter = questions => {
-  let filteredQuestions;
-  filteredQuestions = questions.filter(question => {
+  const filteredQuestions = questions.filter(question => {
     let na;
     try {
       na = question.notApplicable;
-    } catch (error) {}
+    } catch (e) {
+      console.log(e);
+    }
     try {
       return !na;
     } catch (error) {
@@ -66,7 +66,9 @@ export const applyMyUserRoleFilter = questions => {
       let assignedRoles = '';
       try {
         assignedRoles = question.roleNames || '';
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
       return assignedRoles.includes(role);
     });
   }
@@ -81,7 +83,9 @@ export const applyinterestedPartiesFilter = (questions, selectedParty) => {
       let assignedRoles = '';
       try {
         assignedRoles = question.interestedParties || '';
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
       return assignedRoles.includes(role);
     });
   }
@@ -90,7 +94,7 @@ export const applyinterestedPartiesFilter = (questions, selectedParty) => {
 
 export const applyMileStonesFilter = (questions, milestones) => {
   let filteredQuestions;
-  let map = {};
+  const map = {};
   const isNewMileStone = questions.some(
     question =>
       question.milestoneNew &&
@@ -103,10 +107,10 @@ export const applyMileStonesFilter = (questions, milestones) => {
 
   if (milestones) {
     filteredQuestions = questions.filter(question => {
-      let { milestoneNew, milestone } = question;
+      const { milestoneNew, milestone } = question;
       if (isNewMileStone && milestoneNew) {
         return question.milestoneNew.some(milestoneObject => {
-          let { Name } = milestoneObject;
+          const { Name } = milestoneObject;
           return Boolean(map[Name]);
         });
       } else if (milestone) {

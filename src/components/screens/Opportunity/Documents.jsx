@@ -1,3 +1,5 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable react/prop-types */
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -45,30 +47,13 @@ type State = {
 
 class Documents extends Component<Props, State> {
   oppNo = '';
+
   constructor(props: Object) {
     super(props);
     this.state = {
       selectedBid: ''
     };
   }
-  getBrowser = () => {
-    const { userAgent } = navigator;
-    let browser = '';
-    browser = /edg/i.test(userAgent) ? 'Edge' : browser;
-    switch (browser) {
-      case 'Edge':
-        return `${browser}/${this.browserVersion(
-          userAgent,
-          /(edge|edga|edgios|edg)\/([\d\.]+)/i
-        )}`;
-      default:
-        return '';
-    }
-  };
-
-  browserVersion = (userAgent, regex) => {
-    return userAgent.match(regex) ? userAgent.match(regex)[2] : null;
-  };
 
   componentDidMount() {
     const {
@@ -100,6 +85,26 @@ class Documents extends Component<Props, State> {
       this.swtichTabs(id);
     }
   }
+
+  getBrowser = () => {
+    let browser = '';
+    const { userAgent } = navigator;
+    browser = /edg/i.test(userAgent) ? 'Edge' : browser;
+    switch (browser) {
+      case 'Edge':
+        return `${browser}/${this.browserVersion(
+          userAgent,
+          /(edge|edga|edgios|edg)\/([\d\.]+)/i
+        )}`;
+      default:
+        return '';
+    }
+  };
+
+  browserVersion = (userAgent, regex) => {
+    return userAgent.match(regex) ? userAgent.match(regex)[2] : null;
+  };
+
   swtichTabs(proposalId) {
     const { getBoxId } = this.props;
     // Setting the selected proposal
@@ -109,14 +114,16 @@ class Documents extends Component<Props, State> {
     // Calling API to get boxFolderId;
     getBoxId(proposalId);
   }
+
   openAdditonalUrl(url, activelink) {
     const { updateBoxId } = this.props;
     this.setState({ selectedBid: activelink }, () => {
       updateBoxId(url);
     });
   }
+
   isValidURL(str) {
-    var res = str.match(
+    const res = str.match(
       /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
     );
     return res !== null;
@@ -134,13 +141,11 @@ class Documents extends Component<Props, State> {
       url = '';
       return <p>No documents available for this proposal</p>;
     }
-    console.log('url1 :>> ', url);
     if (this.isValidURL(boxId)) {
       url = `${String(boxId).trim()}&output=embed`;
     } else {
       url = `https://app.box.com/embed/folder/${boxId}?sortColumn=date&view=list`;
     }
-    console.log('url2 :>> ', url);
     return (
       <iframe
         src={url}

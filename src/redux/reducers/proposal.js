@@ -1,6 +1,6 @@
 // @flow
 import _, { isEqual, cloneDeep } from 'lodash';
-import { Map, fromJS, OrderedMap, is } from 'immutable'; // NOSONAR
+import { Map, fromJS, OrderedMap } from 'immutable'; // NOSONAR
 import { REDUX_TYPES } from '../../constants';
 import type { ApiAction } from '../actions/action-types';
 import { getUniqueMilestones } from '../selectors/proposal';
@@ -50,6 +50,7 @@ const {
   NEW_BID_CREATED,
   PROPOSAL_DETAIL_UPDATE,
   UPDATE_LOOKUP_OPTIONS,
+  INTEGRATIONS_INFO,
   BOX_ADDITIONAL_LINK,
   BOX_ADDITIONAL_LINK_ERROR,
   SWITCH_TEMP_STATUS,
@@ -58,12 +59,13 @@ const {
   QUESTION_LOCK_BY_USER,
   QUESTION_UNLOCK_BY_USER,
   QUESTION_LOCK_DETAILS_ALL,
-  SET_EVENT_LAUNCHER_FLAG,
+  SET_FLAG,
   SHOW_NA_CHECKBOX,
   ERROR_UPDATE_NOT_APPLICABLE,
   SET_CAN_USER_TAG_IN_QUESTION,
   SET_APPROVAL_QUESTION_LOADING,
   SET_PRICE_MODELER_FIELDS,
+  SET_BID_COST_DATA_FIELDS,
   SET_PRICE_MODELER_RECALCULATING,
   PRICE_MODELER_UPDATE
 } = REDUX_TYPES.PROPOSAL;
@@ -143,7 +145,7 @@ const INITIAL_STATE: Map = fromJS({
   boxAdditionalLink: {},
   switchTempCallStatus: false,
   switchTempInProgress: false,
-  eventLauncherFlag: false,
+  eventflag: {},
   showNaCheckbox: false,
   priceModeler: fromJS({
     cost: '',
@@ -153,6 +155,13 @@ const INITIAL_STATE: Map = fromJS({
     patients: '',
     regions: ''
   }),
+
+  bidCostDetails: fromJS({
+    totalBidValue: '',
+    bottomLineLaborDiscount: '',
+    budgetTools: ''
+  }),
+
   approvalQuestionLoading: fromJS({
     questionId: '',
     value: false
@@ -171,7 +180,7 @@ const onProsalInfoLoaded = (state: Map, action: Object): Map => {
   let opportunityData = state.get('opportunityData');
   let questionsFilter = state.get('questionsFilter');
   let selectedBid = state.get('selectedBid');
-  const items = opportunityData.filter(v => v.get('isCurrent') === false);
+  const items = opportunityData.filter((v) => v.get('isCurrent') === false);
   let obj = {
     proposal: proposal,
     proposalQuestions: proposalQuestions,
@@ -183,8 +192,8 @@ const onProsalInfoLoaded = (state: Map, action: Object): Map => {
     OrderedMap(obj)
   );
   NewopportunityData = NewopportunityData.merge(items);
-  questionsFilter = questionsFilter.map(group => {
-    return group.map(filter => {
+  questionsFilter = questionsFilter.map((group) => {
+    return group.map((filter) => {
       if (typeof filter === 'string') return filter;
 
       return filter.set('checked', false);
@@ -251,7 +260,7 @@ const updateProposalDetail = (state, action) => {
   return state;
 };
 
-const resetProposalId = state => {
+const resetProposalId = (state) => {
   let selectBid = state.toJS().selectedBid;
   selectBid.id = '';
   return state.set('selectedBid', fromJS(selectBid));
@@ -261,7 +270,7 @@ const setOpportunityInfo = (state, action) => {
   const { payload } = action;
   let opportunityData = new OrderedMap({});
   let selectedBid = Map({});
-  payload.forEach(proposal => {
+  payload.forEach((proposal) => {
     if (proposal.isCurrent) {
       selectedBid = selectedBid
         .set('id', proposal.proposal.proposalId)
@@ -311,7 +320,7 @@ const setOpportunityInfo = (state, action) => {
     const milestones = getUniqueMilestones(proposalQuestions);
     let questionsFilter = state.get('questionsFilter');
     let milestoneGroup = fromJS({});
-    milestones.forEach(milestone => {
+    milestones.forEach((milestone) => {
       milestoneGroup = milestoneGroup.set(
         milestone,
         Map({
@@ -370,7 +379,7 @@ const onChangeBid = (state: Map, action: Object): Map => {
 
     let questionsFilter = state.get('questionsFilter');
     let milestoneGroup = fromJS({});
-    milestones.forEach(milestone => {
+    milestones.forEach((milestone) => {
       milestoneGroup = milestoneGroup.set(
         milestone,
         Map({
@@ -406,8 +415,8 @@ const addNewBid = (state: Map, action: Object): Map => {
   let newopportunityData = new OrderedMap({});
   let data = payload;
   let selectedBid = Map({});
-  let newstate = state.update('opportunityData', item =>
-    item.map(keyValue => keyValue.set('isCurrent', false))
+  let newstate = state.update('opportunityData', (item) =>
+    item.map((keyValue) => keyValue.set('isCurrent', false))
   );
 
   let opportunityData = newstate.get('opportunityData');
@@ -428,7 +437,7 @@ const addNewBid = (state: Map, action: Object): Map => {
   };
   if (Array.isArray(boxBids)) {
     let isavailable = boxBids.filter(
-      v => v['proposalId'] === boxobj.proposalId
+      (v) => v['proposalId'] === boxobj.proposalId
     );
     if (!isavailable.length) {
       boxBids.unshift(boxobj);
@@ -471,7 +480,7 @@ const addNewBid = (state: Map, action: Object): Map => {
   const milestones = getUniqueMilestones(proposalQuestions);
   let questionsFilter = state.get('questionsFilter');
   let milestoneGroup = fromJS({});
-  milestones.forEach(milestone => {
+  milestones.forEach((milestone) => {
     milestoneGroup = milestoneGroup.set(
       milestone,
       Map({
@@ -511,7 +520,7 @@ const onUpdateModifiedQuestion = (state: Map, action: Object): Map => {
 
   const indexOfQuestionToUpdate = state
     .get('proposalQuestions')
-    .findIndex(listItem => listItem.questionId === question.questionId);
+    .findIndex((listItem) => listItem.questionId === question.questionId);
 
   newState = state.setIn(
     ['proposalQuestions', indexOfQuestionToUpdate],
@@ -544,7 +553,7 @@ const onProposalAnswer = (state: Map, action: Object): Map => {
 
   const indexOfListToUpdate = state
     .get('proposalQuestions')
-    .findIndex(listItem => {
+    .findIndex((listItem) => {
       return listItem.questionId === referenceId;
     });
 
@@ -601,12 +610,12 @@ const updateQuestionLockByUser = (state: Map, action: Object): Map => {
     if (selectedBid === proposalId && userEmail != currentUserEmail) {
       const indexOfListToUpdateCurrent = state
         .get('proposalQuestions')
-        .findIndex(listItem => {
+        .findIndex((listItem) => {
           return listItem.questionId === questionId;
         });
       newState = state.updateIn(
         ['proposalQuestions', indexOfListToUpdateCurrent],
-        value => ({
+        (value) => ({
           ...value,
           questionLockInfo: { userInfo: userEmail, userId, userName }
         })
@@ -656,13 +665,13 @@ const updateQuestionUnlockByUser = (state: Map, action: Object): Map => {
     if (selectedBid === proposalId) {
       const indexOfListToUpdateCurrent = state
         .get('proposalQuestions')
-        .findIndex(listItem => {
+        .findIndex((listItem) => {
           return listItem.questionId === clientQuestionId;
         });
 
       newState = state.updateIn(
         ['proposalQuestions', indexOfListToUpdateCurrent],
-        value => ({
+        (value) => ({
           ..._.omit(value, 'questionLockInfo')
         })
       );
@@ -687,7 +696,7 @@ const onProposalAnswerLoading = (state: Map, action: Object): Map => {
 
   const indexOfListToUpdate = state
     .get('proposalQuestions')
-    .findIndex(listItem => {
+    .findIndex((listItem) => {
       return listItem.questionId === referenceId;
     });
 
@@ -699,9 +708,11 @@ const onProposalAnswerLoading = (state: Map, action: Object): Map => {
   const proposalQuestions = newState.get('proposalQuestions');
   const filterQuestionsLen = state.get('filteredProposalQuestions');
   if (Array.isArray(filterQuestionsLen)) {
-    const filterindexOfListToUpdate = filterQuestionsLen.findIndex(listItem => {
-      return listItem.questionId === referenceId;
-    });
+    const filterindexOfListToUpdate = filterQuestionsLen.findIndex(
+      (listItem) => {
+        return listItem.questionId === referenceId;
+      }
+    );
     newState = state.setIn(
       ['filteredProposalQuestions', filterindexOfListToUpdate, 'loading'],
       loading
@@ -726,7 +737,7 @@ const onErrorUpdateNotApplicable = (state: Map, action: Object): Map => {
 
   const indexOfListToUpdate = state
     .get('proposalQuestions')
-    .findIndex(listItem => {
+    .findIndex((listItem) => {
       return listItem.questionId === referenceId;
     });
 
@@ -738,9 +749,11 @@ const onErrorUpdateNotApplicable = (state: Map, action: Object): Map => {
   const proposalQuestions = newState.get('proposalQuestions');
   let filterQuestionsLen = state.get('filteredProposalQuestions');
   if (Array.isArray(filterQuestionsLen)) {
-    const filterindexOfListToUpdate = filterQuestionsLen.findIndex(listItem => {
-      return listItem.questionId === referenceId;
-    });
+    const filterindexOfListToUpdate = filterQuestionsLen.findIndex(
+      (listItem) => {
+        return listItem.questionId === referenceId;
+      }
+    );
     newState = state.setIn(
       ['filteredProposalQuestions', filterindexOfListToUpdate, 'NaLoading'],
       loading
@@ -762,17 +775,13 @@ const onUpdateProposalNAQuestionDone = (state: Map, action: Object): Map => {
     payload: { data, questionId: referenceId, loading = false }
   } = action;
 
-  console.log('inside update proposal na ', data);
-
   let newState = fromJS({});
 
   const indexOfListToUpdate = state
     .get('proposalQuestions')
-    .findIndex(listItem => {
+    .findIndex((listItem) => {
       return listItem.questionId === referenceId;
     });
-
-  console.log('indexOfListToUpdate ', indexOfListToUpdate);
 
   newState = state
     .setIn(
@@ -801,7 +810,7 @@ const onUpdateProposalNAQuestionFromSocketDone = (
 
   const indexOfListToUpdate = state
     .get('proposalQuestions')
-    .findIndex(listItem => {
+    .findIndex((listItem) => {
       return listItem.questionId === referenceId;
     });
 
@@ -829,7 +838,7 @@ const onProposalNAQuestionLoading = (state: Map, action: Object): Map => {
 
   const indexOfListToUpdate = state
     .get('proposalQuestions')
-    .findIndex(listItem => {
+    .findIndex((listItem) => {
       return listItem.questionId === referenceId;
     });
 
@@ -841,9 +850,11 @@ const onProposalNAQuestionLoading = (state: Map, action: Object): Map => {
   const proposalQuestions = newState.get('proposalQuestions');
   let filterQuestionsLen = state.get('filteredProposalQuestions');
   if (Array.isArray(filterQuestionsLen)) {
-    const filterindexOfListToUpdate = filterQuestionsLen.findIndex(listItem => {
-      return listItem.questionId === referenceId;
-    });
+    const filterindexOfListToUpdate = filterQuestionsLen.findIndex(
+      (listItem) => {
+        return listItem.questionId === referenceId;
+      }
+    );
     newState = state.setIn(
       ['filteredProposalQuestions', filterindexOfListToUpdate, 'NaLoading'],
       loading
@@ -869,7 +880,7 @@ const onProposalAnswerError = (state: Map, action: Object): Map => {
 
   const indexOfListToUpdate = state
     .get('proposalQuestions')
-    .findIndex(listItem => {
+    .findIndex((listItem) => {
       return listItem.questionId === questionId;
     });
 
@@ -1067,7 +1078,7 @@ const onEditQuestion = (state, action) => {
   let questionsFilter = state.get('questionsFilter');
 
   const questionIndex = questions.findIndex(
-    item => item.questionId === data.questionId
+    (item) => item.questionId === data.questionId
   );
 
   const updatedQuestions = [
@@ -1097,7 +1108,7 @@ const onDeleteQuestion = (state, action) => {
   const filterquestions = state.get('filteredProposalQuestions');
 
   const questionIndex = questions.findIndex(
-    item => item.questionId === questionId
+    (item) => item.questionId === questionId
   );
 
   const updatedQuestions = [
@@ -1109,7 +1120,7 @@ const onDeleteQuestion = (state, action) => {
 
   if (filterquestions && Array.isArray(filterquestions)) {
     const filterquestionIndex = filterquestions.findIndex(
-      item => item.questionId === questionId
+      (item) => item.questionId === questionId
     );
     const updatedFilterQuestions = [
       ...filterquestions.slice(0, filterquestionIndex),
@@ -1138,6 +1149,7 @@ const onDeleteQuestion = (state, action) => {
 };
 
 const setPriceModulerFields = (state, action) => {
+  console.log('state', state);
   const {
     Cost,
     TherapyArea__c,
@@ -1156,6 +1168,19 @@ const setPriceModulerFields = (state, action) => {
       phase: Phase_P__c,
       patients: Patients_Enrolled__c,
       regions: Potential_Regions__c
+    })
+  );
+};
+
+const setBidCostDataFields = (state, action) => {
+  const { bidValue, bottomLine, budgetTools } = action.payload;
+
+  return state.set(
+    'bidCostDetails',
+    fromJS({
+      totalBidValue: bidValue,
+      bottomLineLaborDiscount: bottomLine,
+      budgetTools
     })
   );
 };
@@ -1233,6 +1258,8 @@ const actionMap = {
   [PROPOSAL_DETAIL_UPDATE]: updateProposalDetail,
   [UPDATE_LOOKUP_OPTIONS]: (state, { payload }) =>
     state.set('lookUpOptions', payload),
+  [INTEGRATIONS_INFO]: (state, { payload }) =>
+    state.set('proposalIntegrations', payload),
   [BOX_ADDITIONAL_LINK]: fetchBoxAdditionalLink,
   [BOX_ADDITIONAL_LINK_ERROR]: onGettingfetchBoxAdditionalLinkError,
   [SWITCH_TEMP_STATUS]: (state, { payload }) =>
@@ -1243,11 +1270,11 @@ const actionMap = {
   [QUESTION_LOCK_BY_USER]: updateQuestionLockByUser,
   [QUESTION_UNLOCK_BY_USER]: updateQuestionUnlockByUser,
   [QUESTION_LOCK_DETAILS_ALL]: questionLockDetails,
-  [SET_EVENT_LAUNCHER_FLAG]: (state, { payload }) =>
-    state.set('eventLauncherFlag', payload),
+  [SET_FLAG]: (state, { payload }) => state.set('eventflag', payload),
   [SHOW_NA_CHECKBOX]: (state, { payload }) =>
     state.set('showNaCheckbox', payload),
   [SET_PRICE_MODELER_FIELDS]: setPriceModulerFields,
+  [SET_BID_COST_DATA_FIELDS]: setBidCostDataFields,
   [SET_APPROVAL_QUESTION_LOADING]: setApprovalQuestionLoading,
   [SET_CAN_USER_TAG_IN_QUESTION]: (state, { payload }) =>
     state.set('canUserTagInQuestion', payload),

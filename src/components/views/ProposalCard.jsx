@@ -2,9 +2,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import ThumbsUp from 'apollo-react-icons/ThumbsUp';
-import { Folder, Clipboard, RightArrow } from '../svg';
-import { OPPORTUNITY } from '../../routes';
 import House from 'apollo-react-icons/House';
+import { Folder } from '../svg';
+import { OPPORTUNITY } from '../../routes';
 
 type Props = {
   title: string,
