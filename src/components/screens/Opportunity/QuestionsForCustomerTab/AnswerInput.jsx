@@ -1,29 +1,123 @@
+import { has, isEmpty, isEqual, isObject } from 'lodash';
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setProposalAnswerData } from '../../../../redux/actions/proposal-actions';
+import { setProposalAnswer } from '../../../../redux/selectors';
+import { getCanUserTagInQuestion } from '../../../../redux/selectors/proposal';
+import { parseStringifyJson } from '../../../../utils/helpers';
 import CustomApolloRichText from '../../../common/CustomApolloRichText';
+import { getLastAnswer } from '../../Approvals/utils';
 
-const AnswerInput = ({ question }) => {
+const AnswerInput = ({
+  question,
+  disabled,
+  userData,
+  socketContext,
+  checkDisableFlag,
+}) => {
+  const dispatch = useDispatch();
+  const lastAnswer = getLastAnswer(question);
+  const answerValue = lastAnswer.answer || '';
+  const formattedAnswer =
+    has(lastAnswer, 'formattedAnswer') && lastAnswer.formattedAnswer;
+  // const { questionLockWrapper, questionUnlockWrapper } = socketContext;
+  const canUserTagInQuestion = useSelector(getCanUserTagInQuestion);
+
+  const parseFormattedData =
+    !formattedAnswer || isObject(formattedAnswer)
+      ? formattedAnswer
+      : parseStringifyJson(formattedAnswer);
+
+  const richTextData = parseFormattedData || {
+    html: '',
+    value: { blocks: [] },
+  };
+
+  // Function to converted Answer String
   const getConvertedAnsString = (str) =>
     !String(str).trim() ? '' : String(str).trim();
 
-  const richTextAnswerField = {
-    questionId: question.questionId,
+  const handleRichTextChange = async (editorData) => {
+    try {
+      const { proposalId, questionId } = question;
+      const { value, html, text } = editorData;
+      const editorText = text.trim() || ' ';
+      await dispatch(
+        setProposalAnswerData(
+          socketContext,
+          proposalId,
+          questionId,
+          String(editorText),
+          userData,
+          {
+            value,
+            html,
+          },
+          true
+        )
+      );
+      questionUnlockWrapper(question?.questionId);
+    } catch (error) {
+      console.error(error);
+      questionUnlockWrapper(question?.questionId);
+    }
+  };
 
-    richTextString: getConvertedAnsString(question?.answers[0]?.answers),
-    richTextVal: question?.answers[0]?.formattedAnswer.value,
-    richTextHtml: question?.answers[0]?.formattedAnswer.html,
-    richTextHtmlExport: question?.answers[0]?.formattedAnswer?.htmlExport,
+  const richtextProps = {
+    richTextString: getConvertedAnsString(answerValue),
+    richTextVal: richTextData.value,
+    richTextHtml: richTextData.html,
     enableFocus: true,
-    isEditable: true,
-    placeholder: '',
-    disabled: false,
-    onFocus: () => {},
-    onBlur: (data) => {},
+    isEditable: false,
+    disabled: disabled,
+    canUserTagInQuestion,
+
+    onBlur: (data) => {
+      let saveDate = false;
+      const previousAnsText = getConvertedAnsString(answerValue).trim();
+
+      // save the formatting change
+      if (
+        !isEqual(richTextData.value, data.value) &&
+        !isEmpty(data.text.trim())
+      ) {
+        let prevAnswerBlocks = richTextData.value.blocks.filter(
+          (block) => block.text.length > 0
+        );
+        let answerBlocks = data.value.blocks.filter(
+          (block) => block.text.length > 0
+        );
+        if (isEqual(prevAnswerBlocks, answerBlocks)) {
+          saveDate = false;
+        } else if (
+          isEmpty(richTextData.value?.blocks) &&
+          previousAnsText === data.text.trim()
+        ) {
+          saveDate = false;
+        } else saveDate = true;
+      }
+      // save the data if we see any text difference.
+      else if (previousAnsText !== data.text.trim() && data.text.trim() !== '')
+        saveDate = true;
+      // save the data if user removes the whole answer.
+      else if (previousAnsText !== '' && data.text.trim() === '')
+        saveDate = true;
+
+      if (saveDate) {
+        handleRichTextChange(data);
+      } else {
+        // questionUnlockWrapper(question?.questionId);
+      }
+    },
+    onFocus: () => {
+      // questionLockWrapper(question?.questionId);
+    },
   };
   return (
     <>
       <div className="input-wrapper ">
         <span className="input-label">A{question.questionOrder}:</span>
-        <CustomApolloRichText {...richTextAnswerField} />
+        <CustomApolloRichText {...richtextProps} />
       </div>
     </>
   );

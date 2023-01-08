@@ -9,6 +9,7 @@ import { selectSections } from '../../../../redux/selectors';
 import Header from './Header';
 import { uuidv4 } from 'lib0/random';
 import { fromJS } from 'immutable';
+import { isString } from 'lodash';
 
 function QuestionsForCustomer() {
   const questionsList = useSelector(getProposalQuestions);
@@ -83,6 +84,58 @@ function QuestionsForCustomer() {
     });
     setQuestions(curQuestion);
   };
+
+  const getAnswer = (answers) => {
+    try {
+      let ans = answers.toJS();
+      const lastAnswer = ans[ans.length - 1];
+      console.log('before: ', { lastAnswer });
+      let formattedAnswer;
+      if (lastAnswer?.formattedAnswer) {
+        if (isString(lastAnswer?.formattedAnswer)) {
+          try {
+            formattedAnswer = JSON.parse(lastAnswer?.formattedAnswer);
+          } catch {
+            return (lastAnswer && lastAnswer.answer.toString()) || '';
+          }
+        } else formattedAnswer = lastAnswer?.formattedAnswer;
+        if (formattedAnswer?.htmlExport) {
+          return formattedAnswer.htmlExport;
+        }
+        if (formattedAnswer?.html) {
+          return formattedAnswer?.html;
+        }
+      }
+      console.log({ lastAnswer });
+      return (lastAnswer && lastAnswer.answer.toString()) || '';
+    } catch (error) {
+      console.log(error);
+      return '';
+    }
+  };
+
+  const createClipBoardContent = () => {
+    let html = '<html><body><ul>';
+
+    questions.map((questionData) => {
+      console.log('inside questions ');
+      const answer = getAnswer(questionData.get('answers'));
+      html += `<li>${questionData.get('questionText')}</li>`;
+      if (answer) html += `<ul><li>${answer}</li></ul>`;
+    });
+    html += '</ul></body></html>';
+    console.log('hhhhhhhhhhh ', html);
+    return html;
+  };
+
+  const copyToClipBoard = () => {
+    const content = createClipBoardContent();
+    // ('<html><body><ul><li>one</li><li>two</li></ul></body></html>');
+    const blob = new Blob([content], { type: 'text/html' });
+    const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
+    navigator.clipboard.write([clipboardItem]);
+  };
+
   return (
     <>
       <div className="questions-for-customer-container">
@@ -92,12 +145,13 @@ function QuestionsForCustomer() {
         <div className="questions-container">
           <ul>
             {questions?.valueSeq().map((questionData) => {
-              return (
-                <QuestionContainer
-                  deleteQuestionHandler={deleteQuestionHandler}
-                  questionData={questionData}
-                />
-              );
+              if (questionData.get('isCustomQuestion') === true)
+                return (
+                  <QuestionContainer
+                    deleteQuestionHandler={deleteQuestionHandler}
+                    questionData={questionData}
+                  />
+                );
             })}
           </ul>
         </div>
@@ -108,6 +162,7 @@ function QuestionsForCustomer() {
               icon={<Copy />}
               size="small"
               style={{ marginRight: 10 }}
+              onClick={copyToClipBoard}
             >
               Copy to clipboard
             </Button>
