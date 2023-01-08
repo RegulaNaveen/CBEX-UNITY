@@ -1,0 +1,190 @@
+.questions-for-customer-container {
+  .questions-container {
+    max-height: 75%;
+    overflow-y: auto;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .questions-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .question-container {
+    display: grid;
+    grid-template-columns: 1fr 40px;
+    margin: 10px 10px;
+    padding: 10px 5px;
+    overflow: visible;
+  }
+  .question-card {
+    width: 100%;
+    height: auto;
+    padding: 5px 5px;
+  }
+  .input-wrapper {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    margin: 5px 0;
+  }
+  .text-input {
+    height: 34px;
+  }
+  .btn-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    margin-right: 60px;
+  }
+  .divider-hr {
+    margin-left: 16px;
+    margin-right: 70px;
+    height: 0.8px;
+    border: 0.6em;
+    border-top: 1px solid #ccc;
+    padding: 0;
+  }
+  .delete-btn {
+    display: flex;
+    align-items: center;
+    margin-left: 0.5em;
+  }
+  .input-label {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    color: #000000;
+    font-family: 'Proxima Nova';
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 24px;
+    margin-right: 0.5em;
+  }
+
+  .title {
+    color: #000000;
+    font-family: 'Proxima Nova';
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 24px;
+    margin: 16px 16px 0;
+  }
+  .subtitle {
+    color: #595959;
+    font-family: 'Proxima Nova';
+    font-size: 16px;
+    letter-spacing: 0;
+    line-height: 24px;
+    margin: 0 16px 16px;
+  }
+  .icon-color {
+    font-size: 24px;
+    color: #bd0100;
+    cursor: pointer;
+  }
+  .btn-label {
+    font-family: 'Proxima Nova';
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 24px;
+  }
+  .DraftEditor-editorContainer {
+    height: 34px;
+  }
+  .public-DraftStyleDefault-block {
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+  //   .public-DraftEditor-content {
+  //     outline: none;
+  //     user-select: text;
+  //     white-space: pre-wrap;
+  //     overflow-wrap: break-word;
+  //     min-height: 38px !important;
+  //     max-height: auto;
+  //     overflow-y: auto;
+  //     resize: vertical;
+  //   }
+}
+
+// .rich-text-editor {
+//     .public-DraftEditor-content {
+//       outline: none;
+//       user-select: text;
+//       white-space: pre-wrap;
+//       overflow-wrap: break-word;
+//       min-height: 38px !important;
+//       max-height: auto;
+//       overflow-y: auto;
+//       resize: vertical;
+//     }
+//     .popover-inner {
+//       & > div {
+//         & > div:nth-child(1) {
+//           @include popoverStyle;
+//           & > div:nth-child(1) {
+//             .MuiSvgIcon-root {
+//               margin-right: 1px;
+//               color: #595959 !important;
+//             }
+//           }
+//           & > div:nth-child(2) {
+//             transition: none;
+//             .MuiInputBase-input {
+//               font: inherit;
+//               color: #000000;
+//               width: 100%;
+//               border: 1px solid #d9d9d9;
+//               height: 40px;
+//               margin: 0;
+//               display: block;
+//               padding: 8px 8px 8px 7px;
+//               min-width: 0;
+//               background: none;
+//               box-sizing: border-box;
+//               line-height: 1.5;
+//               border-radius: 4px;
+//               animation-name: mui-auto-fill-cancel;
+//               letter-spacing: inherit;
+//               animation-duration: 10ms;
+//               transition-duration: 0.4s;
+//               transition-property: border-color;
+//               -webkit-tap-highlight-color: transparent;
+//             }
+//           }
+//         }
+//       }
+//     }
+//     .style-button-group {
+//       .icon-button {
+//         height: 2.375rem;
+//         width: 2.375rem;
+//       }
+//     }
+//     [class*='RichEditor-editor'] {
+//       padding: 0;
+//     }
+//     &.readonly {
+//       display: block;
+//       [class*='public-DraftEditorPlaceholder-root'] {
+//         padding-top: 8px;
+//       }
+//       [class*='DraftEditor-editorContainer'] {
+//         cursor: pointer;
+//       }
+//       &.disabled {
+//         [class*='DraftEditor-editorContainer'] {
+//           cursor: not-allowed !important;
+//         }
+//       }
+//     }
+//     .popover-margin {
+//       margin-top: -20px;
+//       & > div > div:nth-child(1) > div:nth-child(2) {
+//         width: 17rem;
+//       }
+//     }
+//   }
