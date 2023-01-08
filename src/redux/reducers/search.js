@@ -1,6 +1,6 @@
 import { SEARCH } from '../../constants/types';
 
-const INITIAL_STATE = {
+export const INITIAL_STATE = {
   query: '',
   isOpen: false,
   currentResultIndex: -1,
