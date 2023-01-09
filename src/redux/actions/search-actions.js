@@ -2,6 +2,7 @@ import { SEARCH } from '../../constants/types';
 import { getSearchResults } from '../../utils/searchUtils';
 import { selectAllApprovals } from '../selectors/approvals';
 import {
+  getSelectedBid,
   selectActiveTabIndex,
   selectProposal,
   selectProposalQuestions,
@@ -90,11 +91,15 @@ export const doSearchAction = () => {
     const prevActiveSearchIndex = selectCurrentResultIndex(currentState);
     const sections = selectSections(currentState);
     const questions = selectProposalQuestions(currentState);
+    const selectedBid = getSelectedBid(currentState).toJS();
+    const isApprovalCount = selectedBid?.isApprovalCountPresent || false;
+    const allFlags = currentState.proposal.get('eventflag');
+    const shouldCheckApprovals = isApprovalCount && allFlags.approvalsFlag;
     const approvals = selectAllApprovals(currentState);
     let searchResults = await getSearchResults(
       questions,
       sections.toJS(),
-      approvals,
+      shouldCheckApprovals ? approvals : [],
       query
     );
     if (searchResults.count > 0) {
