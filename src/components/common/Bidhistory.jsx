@@ -12,8 +12,7 @@ import { Checkmark } from '../svg';
 import { changeBid } from '../../redux/actions/proposal-actions';
 import PriceModeler from './PriceModeler';
 import BidCostDetails from './BidCostDetails';
-import launchDarkly from '../../utils/launchDarkly';
-import featureFlags from '../../constants/featureFlags';
+import { getfetchUserTagFlag } from '../../redux/selectors';
 
 const BidHistory = () => {
   const winLocationSearch = window.location.search;
@@ -21,19 +20,20 @@ const BidHistory = () => {
   const selectedView = new URLSearchParams(winLocationSearch).get('viewType');
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [showHoverText, setShowHoverText] = useState(false);
-  const [bidcostdetailsFlag, setBidCostDetailsFlag] = useState(false);
   const dispatch = useDispatch();
 
   const bidList = useSelector(getBidList);
   const selectedBid = useSelector(getSelectedBid);
   const isCurrentBid = selectedBid.get('isCurrent');
   const isQuestionAnswered = useSelector(getIsQuestionAnswered);
+  const flags = useSelector(getfetchUserTagFlag);
+  const bidCostDetailFlag = flags.bidCostDetail;
 
   const handleCollapse = () => {
     setIsCollapsed(!isCollapsed);
   };
 
-  const handleKeyPress = event => {
+  const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
       handleCollapse();
@@ -45,16 +45,6 @@ const BidHistory = () => {
       setShowHoverText(false);
     }
   }, [isQuestionAnswered]);
-
-  useEffect(() => {
-    (async () => {
-      const bidcostdetailFlag = await launchDarkly(
-        featureFlags.BID_COST_DETAILS,
-        false
-      );
-      setBidCostDetailsFlag(bidcostdetailFlag);
-    })();
-  }, []);
 
   return (
     <>
@@ -121,7 +111,7 @@ const BidHistory = () => {
                       }}
                     >
                       {bidList.length > 0 &&
-                        bidList.map(item => (
+                        bidList.map((item) => (
                           <div
                             onClick={() => {
                               if (!isQuestionAnswered)
@@ -174,7 +164,8 @@ const BidHistory = () => {
                   </p>
                 </div>
                 {selectedView === 'questions' ||
-                (selectedView === null && isCurrentBid) ? (
+                (selectedView === null && isCurrentBid) ||
+                !bidCostDetailFlag ? (
                   <div className="bid-history-pricemodeler-content">
                     <PriceModeler />
                   </div>
