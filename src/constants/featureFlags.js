@@ -8,5 +8,6 @@ export default {
   NOTEPAD_TAB: 'notepad',
   QUESTIONS_FOR_CUSTOMER_TAB: 'questionsForCustomerTab',
   PROPOSAL_TEAM_TAB: 'proposalTeamTab',
-  SEARCH_FLAG: 'searchFlag'
+  SEARCH_FLAG: 'searchFlag',
+  BID_COST_DETAILS: 'bidCostDetail'
 };
