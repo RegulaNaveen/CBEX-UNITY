@@ -5,13 +5,15 @@ import chevronDown from '../../../img/chevron-down.svg';
 import {
   getBidList,
   getSelectedBid,
-  getIsQuestionAnswered,
+  getIsQuestionAnswered
 } from '../../redux/selectors/proposal';
 import { parseMomentDate } from '../../utils/DateUtils';
 import { Checkmark } from '../svg';
 import { changeBid } from '../../redux/actions/proposal-actions';
 import PriceModeler from './PriceModeler';
 import BidCostDetails from './BidCostDetails';
+import launchDarkly from '../../utils/launchDarkly';
+import featureFlags from '../../constants/featureFlags';
 
 const BidHistory = () => {
   const winLocationSearch = window.location.search;
@@ -19,6 +21,7 @@ const BidHistory = () => {
   const selectedView = new URLSearchParams(winLocationSearch).get('viewType');
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [showHoverText, setShowHoverText] = useState(false);
+  const [bidcostdetailsFlag, setBidCostDetailsFlag] = useState(false);
   const dispatch = useDispatch();
 
   const bidList = useSelector(getBidList);
@@ -41,6 +44,16 @@ const BidHistory = () => {
       setShowHoverText(false);
     }
   }, [isQuestionAnswered]);
+
+  useEffect(() => {
+    (async () => {
+      const bidcostdetailFlag = await launchDarkly(
+        featureFlags.BID_COST_DETAILS,
+        false
+      );
+      setBidCostDetailsFlag(bidcostdetailFlag);
+    })();
+  }, []);
 
   return (
     <>
