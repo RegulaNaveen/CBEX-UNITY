@@ -30,7 +30,13 @@ Object {
           <p
             class="task-title"
           >
-            Customer Scenarios & BTS RFPs
+            <span>
+              <span
+                class=""
+              >
+                Customer Scenarios & BTS RFPs
+              </span>
+            </span>
           </p>
         </div>
       </div>
@@ -62,7 +68,13 @@ Object {
         <p
           class="task-title"
         >
-          Customer Scenarios & BTS RFPs
+          <span>
+            <span
+              class=""
+            >
+              Customer Scenarios & BTS RFPs
+            </span>
+          </span>
         </p>
       </div>
     </div>

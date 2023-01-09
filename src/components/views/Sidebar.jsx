@@ -365,7 +365,7 @@ class Sidebar extends Component<Props, State> {
             >
               <Tab label="Index" />
             </Tabs>
-            {activeTabIndex === 0 && sections && (
+            {isOpen && activeTabIndex === 0 && sections && (
               <div className="sidebar-content-list">
                 {sections.valueSeq().map(section => {
                   const sectionName = section.get('sectionName');

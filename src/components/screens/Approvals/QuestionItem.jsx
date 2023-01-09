@@ -1,7 +1,8 @@
-import React, { useContext, useMemo, useState, useEffect } from 'react';
+import React, { useContext, useMemo, useState, useEffect, useRef } from 'react';
 import Grid from 'apollo-react/components/Grid';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import classNames from 'classnames';
+import { useDispatch, useSelector } from 'react-redux';
 import Box from 'apollo-react/components/Box';
 import Typography from 'apollo-react/components/Typography';
 import IconButton from 'apollo-react/components/IconButton';
@@ -32,6 +33,8 @@ import {
 import CustomLoader from './CustomLoader';
 import { getLastAnswer, shouldShowQuestion } from './utils';
 import { getQuestion } from '../../../redux/selectors';
+import { selectCurrentSearchResult } from '../../../redux/selectors/search';
+import { autoNavigationCompletedAction } from '../../../redux/actions/search-actions';
 
 const QuestionItem = ({
   questionId = '',
@@ -41,13 +44,32 @@ const QuestionItem = ({
   archivedQuestion,
   eventCategories,
   trackEvent,
-  updateQuestionVisibility
+  updateQuestionVisibility,
+  highlightQuestionId
 }) => {
   const question = isQuesFreezed
     ? archivedQuestion
     : useSelector(getQuestion(questionId));
   const approvalFilters = useSelector(state => state.approvals.filters);
   const isShowQuestion = shouldShowQuestion(question, approvalFilters);
+  const currentSearchResult = useSelector(selectCurrentSearchResult);
+  const questionTextRef = useRef(null);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (currentSearchResult !== null && questionTextRef.current !== null) {
+      if (currentSearchResult.searchIndex === highlightQuestionId) {
+        setTimeout(() => {
+          questionTextRef.current.scrollIntoView({
+            behaviour: 'smooth',
+            block: 'center',
+            inline: 'nearest'
+          });
+          dispatch(autoNavigationCompletedAction());
+        }, 500);
+      }
+    }
+  }, [questionTextRef.current, currentSearchResult, highlightQuestionId]);
 
   useEffect(() => {
     // Calculates the no of visibile questions
@@ -222,7 +244,14 @@ const QuestionItem = ({
     () =>
       isShowQuestion ? (
         <>
-          <Box mt={2}>
+          <Box
+            mt={2}
+            className={classNames({
+              'question-active':
+                currentSearchResult !== null &&
+                currentSearchResult.searchIndex === highlightQuestionId
+            })}
+          >
             <Grid container>
               <Grid item xs={10} className="ques-title-cover">
                 {!isEmpty(question?.questionLockInfo) &&
@@ -231,7 +260,9 @@ const QuestionItem = ({
                     {question.questionLockInfo?.userName} is typing...
                   </Typography>
                 ) : null}
-                <QuestionLabel questionLabel={question?.questionText || ''} />
+                <span ref={questionTextRef}>
+                  <QuestionLabel questionLabel={question?.questionText || ''} />
+                </span>
               </Grid>
               <Grid item xs={2}>
                 {' '}
@@ -268,7 +299,14 @@ const QuestionItem = ({
           )}
         </>
       ) : null,
-    [question, isShowHistory, isShowQuestion, approvalFilters]
+    [
+      question,
+      isShowHistory,
+      isShowQuestion,
+      approvalFilters,
+      currentSearchResult,
+      highlightQuestionId
+    ]
   );
 };
 
