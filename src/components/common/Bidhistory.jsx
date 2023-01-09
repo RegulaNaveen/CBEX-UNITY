@@ -12,6 +12,7 @@ import { Checkmark } from '../svg';
 import { changeBid } from '../../redux/actions/proposal-actions';
 import PriceModeler from './PriceModeler';
 import BidCostDetails from './BidCostDetails';
+import { getfetchUserTagFlag } from '../../redux/selectors';
 
 const BidHistory = () => {
   const winLocationSearch = window.location.search;
@@ -25,12 +26,14 @@ const BidHistory = () => {
   const selectedBid = useSelector(getSelectedBid);
   const isCurrentBid = selectedBid.get('isCurrent');
   const isQuestionAnswered = useSelector(getIsQuestionAnswered);
+  const flags = useSelector(getfetchUserTagFlag);
+  const bidCostDetailFlag = flags.bidCostDetail;
 
   const handleCollapse = () => {
     setIsCollapsed(!isCollapsed);
   };
 
-  const handleKeyPress = event => {
+  const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
       handleCollapse();
@@ -108,7 +111,7 @@ const BidHistory = () => {
                       }}
                     >
                       {bidList.length > 0 &&
-                        bidList.map(item => (
+                        bidList.map((item) => (
                           <div
                             onClick={() => {
                               if (!isQuestionAnswered)
@@ -161,7 +164,8 @@ const BidHistory = () => {
                   </p>
                 </div>
                 {selectedView === 'questions' ||
-                (selectedView === null && isCurrentBid) ? (
+                (selectedView === null && isCurrentBid) ||
+                !bidCostDetailFlag ? (
                   <div className="bid-history-pricemodeler-content">
                     <PriceModeler />
                   </div>

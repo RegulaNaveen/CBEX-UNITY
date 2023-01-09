@@ -1,0 +1,79 @@
+import { SEARCH } from '../../constants/types';
+
+export const INITIAL_STATE = {
+  query: '',
+  isOpen: false,
+  currentResultIndex: -1,
+  prevResult: null,
+  totalResultsFound: 0,
+  searching: false,
+  searchResults: [],
+  autoNavigatedToCurrentResult: true
+};
+
+export default function searchReducer(state = INITIAL_STATE, action) {
+  switch (action.type) {
+    case SEARCH.OPEN: {
+      return { ...state, isOpen: true };
+    }
+    case SEARCH.CLOSE: {
+      return { ...state, isOpen: false };
+    }
+    case SEARCH.UPDATE_QUERY: {
+      return { ...state, query: action.payload };
+    }
+    case SEARCH.CLEAR: {
+      return {
+        ...state,
+        query: '',
+        searchResults: [],
+        totalResultsFound: 0,
+        currentResultIndex: -1,
+        autoNavigatedToCurrentResult: true
+      };
+    }
+    case SEARCH.NAVIGATE_NEXT: {
+      return {
+        ...state,
+        prevResult: action.payload.prevResult,
+        currentResultIndex: state.currentResultIndex + 1,
+        autoNavigatedToCurrentResult: false
+      };
+    }
+    case SEARCH.NAVIGATE_PREVIOUS: {
+      return {
+        ...state,
+        prevResult: action.payload.prevResult,
+        currentResultIndex: state.currentResultIndex - 1,
+        autoNavigatedToCurrentResult: false
+      };
+    }
+    case SEARCH.DO_SEARCH: {
+      return { ...state, searching: true };
+    }
+    case SEARCH.AUTO_NAVIGATION_DONE: {
+      return { ...state, autoNavigatedToCurrentResult: true };
+    }
+    case SEARCH.UPDATE_SEARCH_RESULTS: {
+      return {
+        ...state,
+        searching: false,
+        searchResults: action.payload.results,
+        totalResultsFound: action.payload.count,
+        prevResult: action.payload.prevResult,
+        currentResultIndex: action.payload.newCurrentResultIndex,
+        autoNavigatedToCurrentResult:
+          action.payload.autoNavigatedToCurrentResult
+      };
+    }
+    case SEARCH.CLEAR_ACTIVE_SEARCH_HIGHLIGHT: {
+      return {
+        ...state,
+        prevResult: action.payload,
+        autoNavigatedToCurrentResult: true
+      };
+    }
+    default:
+      return state;
+  }
+}

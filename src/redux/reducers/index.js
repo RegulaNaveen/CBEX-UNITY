@@ -7,6 +7,7 @@ import NotepadReducer from './notepad';
 import profileReducer from './profile';
 import notificationReducer from './notification';
 import approvalsReducer from './approvals';
+import searchReducer from './search';
 
 const rootReducer = combineReducers({
   ssoAuth: ssoAuthReducer,
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
   notepad: NotepadReducer,
   profile: profileReducer,
   notification: notificationReducer,
-  approvals: approvalsReducer
+  approvals: approvalsReducer,
+  search: searchReducer
 });
 
 export default rootReducer;
