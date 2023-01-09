@@ -18,10 +18,13 @@ import {
   onHandleOpenClose,
   handleSelectedSection
 } from '../../redux/actions/sidebar-actions';
+import lazyWithRetry from '../../utils/lazy';
 
 const CollapsibleQuestionMapping = React.lazy(() =>
-  import(
-    /* webpackChunkName: "collapsibleQuestionMapping" */ './CollapsibleQuestionMapping'
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "collapsibleQuestionMapping" */ './CollapsibleQuestionMapping'
+    )
   )
 );
 type State = {
@@ -90,9 +93,11 @@ class CollapsibleList extends Component<Props, State> {
         0
       );
 
-    if (prevProps.isCheckedAll !== isCheckedAll)
+    if (prevProps.isCheckedAll !== isCheckedAll) {
+      console.log('1111111111111');
       // eslint-disable-next-line react/no-did-update-set-state
       setTimeout(() => this.setState({ isCollapsed: !!isCheckedAll }), 0);
+    }
   }
 
   componentWillUnmount() {

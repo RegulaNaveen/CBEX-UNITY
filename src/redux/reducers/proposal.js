@@ -180,7 +180,7 @@ const onProsalInfoLoaded = (state: Map, action: Object): Map => {
   let opportunityData = state.get('opportunityData');
   let questionsFilter = state.get('questionsFilter');
   let selectedBid = state.get('selectedBid');
-  const items = opportunityData.filter((v) => v.get('isCurrent') === false);
+  const items = opportunityData.filter(v => v.get('isCurrent') === false);
   let obj = {
     proposal: proposal,
     proposalQuestions: proposalQuestions,
@@ -192,8 +192,8 @@ const onProsalInfoLoaded = (state: Map, action: Object): Map => {
     OrderedMap(obj)
   );
   NewopportunityData = NewopportunityData.merge(items);
-  questionsFilter = questionsFilter.map((group) => {
-    return group.map((filter) => {
+  questionsFilter = questionsFilter.map(group => {
+    return group.map(filter => {
       if (typeof filter === 'string') return filter;
 
       return filter.set('checked', false);
@@ -260,7 +260,7 @@ const updateProposalDetail = (state, action) => {
   return state;
 };
 
-const resetProposalId = (state) => {
+const resetProposalId = state => {
   let selectBid = state.toJS().selectedBid;
   selectBid.id = '';
   return state.set('selectedBid', fromJS(selectBid));
@@ -270,7 +270,7 @@ const setOpportunityInfo = (state, action) => {
   const { payload } = action;
   let opportunityData = new OrderedMap({});
   let selectedBid = Map({});
-  payload.forEach((proposal) => {
+  payload.forEach(proposal => {
     if (proposal.isCurrent) {
       selectedBid = selectedBid
         .set('id', proposal.proposal.proposalId)
@@ -320,7 +320,7 @@ const setOpportunityInfo = (state, action) => {
     const milestones = getUniqueMilestones(proposalQuestions);
     let questionsFilter = state.get('questionsFilter');
     let milestoneGroup = fromJS({});
-    milestones.forEach((milestone) => {
+    milestones.forEach(milestone => {
       milestoneGroup = milestoneGroup.set(
         milestone,
         Map({
@@ -379,7 +379,7 @@ const onChangeBid = (state: Map, action: Object): Map => {
 
     let questionsFilter = state.get('questionsFilter');
     let milestoneGroup = fromJS({});
-    milestones.forEach((milestone) => {
+    milestones.forEach(milestone => {
       milestoneGroup = milestoneGroup.set(
         milestone,
         Map({
@@ -415,8 +415,8 @@ const addNewBid = (state: Map, action: Object): Map => {
   let newopportunityData = new OrderedMap({});
   let data = payload;
   let selectedBid = Map({});
-  let newstate = state.update('opportunityData', (item) =>
-    item.map((keyValue) => keyValue.set('isCurrent', false))
+  let newstate = state.update('opportunityData', item =>
+    item.map(keyValue => keyValue.set('isCurrent', false))
   );
 
   let opportunityData = newstate.get('opportunityData');
@@ -437,7 +437,7 @@ const addNewBid = (state: Map, action: Object): Map => {
   };
   if (Array.isArray(boxBids)) {
     let isavailable = boxBids.filter(
-      (v) => v['proposalId'] === boxobj.proposalId
+      v => v['proposalId'] === boxobj.proposalId
     );
     if (!isavailable.length) {
       boxBids.unshift(boxobj);
@@ -480,7 +480,7 @@ const addNewBid = (state: Map, action: Object): Map => {
   const milestones = getUniqueMilestones(proposalQuestions);
   let questionsFilter = state.get('questionsFilter');
   let milestoneGroup = fromJS({});
-  milestones.forEach((milestone) => {
+  milestones.forEach(milestone => {
     milestoneGroup = milestoneGroup.set(
       milestone,
       Map({
@@ -520,7 +520,7 @@ const onUpdateModifiedQuestion = (state: Map, action: Object): Map => {
 
   const indexOfQuestionToUpdate = state
     .get('proposalQuestions')
-    .findIndex((listItem) => listItem.questionId === question.questionId);
+    .findIndex(listItem => listItem.questionId === question.questionId);
 
   newState = state.setIn(
     ['proposalQuestions', indexOfQuestionToUpdate],
@@ -553,7 +553,7 @@ const onProposalAnswer = (state: Map, action: Object): Map => {
 
   const indexOfListToUpdate = state
     .get('proposalQuestions')
-    .findIndex((listItem) => {
+    .findIndex(listItem => {
       return listItem.questionId === referenceId;
     });
 
@@ -610,12 +610,12 @@ const updateQuestionLockByUser = (state: Map, action: Object): Map => {
     if (selectedBid === proposalId && userEmail != currentUserEmail) {
       const indexOfListToUpdateCurrent = state
         .get('proposalQuestions')
-        .findIndex((listItem) => {
+        .findIndex(listItem => {
           return listItem.questionId === questionId;
         });
       newState = state.updateIn(
         ['proposalQuestions', indexOfListToUpdateCurrent],
-        (value) => ({
+        value => ({
           ...value,
           questionLockInfo: { userInfo: userEmail, userId, userName }
         })
@@ -665,13 +665,13 @@ const updateQuestionUnlockByUser = (state: Map, action: Object): Map => {
     if (selectedBid === proposalId) {
       const indexOfListToUpdateCurrent = state
         .get('proposalQuestions')
-        .findIndex((listItem) => {
+        .findIndex(listItem => {
           return listItem.questionId === clientQuestionId;
         });
 
       newState = state.updateIn(
         ['proposalQuestions', indexOfListToUpdateCurrent],
-        (value) => ({
+        value => ({
           ..._.omit(value, 'questionLockInfo')
         })
       );
@@ -696,7 +696,7 @@ const onProposalAnswerLoading = (state: Map, action: Object): Map => {
 
   const indexOfListToUpdate = state
     .get('proposalQuestions')
-    .findIndex((listItem) => {
+    .findIndex(listItem => {
       return listItem.questionId === referenceId;
     });
 
@@ -708,11 +708,9 @@ const onProposalAnswerLoading = (state: Map, action: Object): Map => {
   const proposalQuestions = newState.get('proposalQuestions');
   const filterQuestionsLen = state.get('filteredProposalQuestions');
   if (Array.isArray(filterQuestionsLen)) {
-    const filterindexOfListToUpdate = filterQuestionsLen.findIndex(
-      (listItem) => {
-        return listItem.questionId === referenceId;
-      }
-    );
+    const filterindexOfListToUpdate = filterQuestionsLen.findIndex(listItem => {
+      return listItem.questionId === referenceId;
+    });
     newState = state.setIn(
       ['filteredProposalQuestions', filterindexOfListToUpdate, 'loading'],
       loading
@@ -737,7 +735,7 @@ const onErrorUpdateNotApplicable = (state: Map, action: Object): Map => {
 
   const indexOfListToUpdate = state
     .get('proposalQuestions')
-    .findIndex((listItem) => {
+    .findIndex(listItem => {
       return listItem.questionId === referenceId;
     });
 
@@ -749,11 +747,9 @@ const onErrorUpdateNotApplicable = (state: Map, action: Object): Map => {
   const proposalQuestions = newState.get('proposalQuestions');
   let filterQuestionsLen = state.get('filteredProposalQuestions');
   if (Array.isArray(filterQuestionsLen)) {
-    const filterindexOfListToUpdate = filterQuestionsLen.findIndex(
-      (listItem) => {
-        return listItem.questionId === referenceId;
-      }
-    );
+    const filterindexOfListToUpdate = filterQuestionsLen.findIndex(listItem => {
+      return listItem.questionId === referenceId;
+    });
     newState = state.setIn(
       ['filteredProposalQuestions', filterindexOfListToUpdate, 'NaLoading'],
       loading
@@ -779,7 +775,7 @@ const onUpdateProposalNAQuestionDone = (state: Map, action: Object): Map => {
 
   const indexOfListToUpdate = state
     .get('proposalQuestions')
-    .findIndex((listItem) => {
+    .findIndex(listItem => {
       return listItem.questionId === referenceId;
     });
 
@@ -810,7 +806,7 @@ const onUpdateProposalNAQuestionFromSocketDone = (
 
   const indexOfListToUpdate = state
     .get('proposalQuestions')
-    .findIndex((listItem) => {
+    .findIndex(listItem => {
       return listItem.questionId === referenceId;
     });
 
@@ -838,7 +834,7 @@ const onProposalNAQuestionLoading = (state: Map, action: Object): Map => {
 
   const indexOfListToUpdate = state
     .get('proposalQuestions')
-    .findIndex((listItem) => {
+    .findIndex(listItem => {
       return listItem.questionId === referenceId;
     });
 
@@ -850,11 +846,9 @@ const onProposalNAQuestionLoading = (state: Map, action: Object): Map => {
   const proposalQuestions = newState.get('proposalQuestions');
   let filterQuestionsLen = state.get('filteredProposalQuestions');
   if (Array.isArray(filterQuestionsLen)) {
-    const filterindexOfListToUpdate = filterQuestionsLen.findIndex(
-      (listItem) => {
-        return listItem.questionId === referenceId;
-      }
-    );
+    const filterindexOfListToUpdate = filterQuestionsLen.findIndex(listItem => {
+      return listItem.questionId === referenceId;
+    });
     newState = state.setIn(
       ['filteredProposalQuestions', filterindexOfListToUpdate, 'NaLoading'],
       loading
@@ -880,7 +874,7 @@ const onProposalAnswerError = (state: Map, action: Object): Map => {
 
   const indexOfListToUpdate = state
     .get('proposalQuestions')
-    .findIndex((listItem) => {
+    .findIndex(listItem => {
       return listItem.questionId === questionId;
     });
 
@@ -1078,7 +1072,7 @@ const onEditQuestion = (state, action) => {
   let questionsFilter = state.get('questionsFilter');
 
   const questionIndex = questions.findIndex(
-    (item) => item.questionId === data.questionId
+    item => item.questionId === data.questionId
   );
 
   const updatedQuestions = [
@@ -1108,7 +1102,7 @@ const onDeleteQuestion = (state, action) => {
   const filterquestions = state.get('filteredProposalQuestions');
 
   const questionIndex = questions.findIndex(
-    (item) => item.questionId === questionId
+    item => item.questionId === questionId
   );
 
   const updatedQuestions = [
@@ -1120,7 +1114,7 @@ const onDeleteQuestion = (state, action) => {
 
   if (filterquestions && Array.isArray(filterquestions)) {
     const filterquestionIndex = filterquestions.findIndex(
-      (item) => item.questionId === questionId
+      item => item.questionId === questionId
     );
     const updatedFilterQuestions = [
       ...filterquestions.slice(0, filterquestionIndex),
@@ -1149,7 +1143,6 @@ const onDeleteQuestion = (state, action) => {
 };
 
 const setPriceModulerFields = (state, action) => {
-  console.log('state', state);
   const {
     Cost,
     TherapyArea__c,
