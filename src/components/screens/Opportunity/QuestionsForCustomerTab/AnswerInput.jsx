@@ -10,12 +10,14 @@ import { getLastAnswer } from '../../Approvals/utils';
 
 const AnswerInput = ({
   question,
-  disabled,
   userData,
   socketContext,
   checkDisableFlag,
 }) => {
   const dispatch = useDispatch();
+  const quesTextInnerLeftRef = React.createRef();
+  console.log({ socketContext });
+  const { questionLockWrapper, questionUnlockWrapper } = socketContext;
   const lastAnswer = getLastAnswer(question);
   const answerValue = lastAnswer.answer || '';
   const formattedAnswer =
@@ -69,13 +71,13 @@ const AnswerInput = ({
     richTextHtml: richTextData.html,
     enableFocus: true,
     isEditable: false,
-    disabled: disabled,
+    disabled: checkDisableFlag(),
     canUserTagInQuestion,
 
     onBlur: (data) => {
       let saveDate = false;
       const previousAnsText = getConvertedAnsString(answerValue).trim();
-
+      quesTextInnerLeftRef.current.style.marginTop = 'inherit';
       // save the formatting change
       if (
         !isEqual(richTextData.value, data.value) &&
@@ -106,16 +108,18 @@ const AnswerInput = ({
       if (saveDate) {
         handleRichTextChange(data);
       } else {
-        // questionUnlockWrapper(question?.questionId);
+        questionUnlockWrapper(question?.questionId);
       }
     },
     onFocus: () => {
-      // questionLockWrapper(question?.questionId);
+      question?.questionId;
+      quesTextInnerLeftRef.current.style.marginTop = '25px';
+      questionLockWrapper(question?.questionId);
     },
   };
   return (
     <>
-      <div className="input-wrapper ">
+      <div className="input-wrapper " ref={quesTextInnerLeftRef}>
         <span className="input-label">A{question.questionOrder}:</span>
         <CustomApolloRichText {...richtextProps} />
       </div>

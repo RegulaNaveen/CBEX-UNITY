@@ -8,9 +8,18 @@ import {
 import { getSelectedBid } from '../../../../redux/selectors';
 import CustomApolloRichText from '../../../common/CustomApolloRichText';
 
-const QuestionInput = ({ question }) => {
+const QuestionInput = ({
+  question,
+  userData,
+  socketContext,
+  checkDisableFlag,
+}) => {
   const selectedBid = useSelector(getSelectedBid);
   const dispatch = useDispatch();
+
+  const quesTextInnerLeftRef = React.createRef();
+  const { questionLockWrapper, questionUnlockWrapper } = socketContext;
+
   const getConvertedAnsString = (str) =>
     !String(str).trim() ? '' : String(str).trim();
 
@@ -36,8 +45,8 @@ const QuestionInput = ({ question }) => {
   const handleRichTextChange = (editorData) => {
     const proposalId = selectedBid.get('id');
     const section = {
-      sectionOrder: 2,
-      sectionName: 'Questions for the Customer',
+      sectionOrder: 199,
+      sectionName: 'Quick questions for the Customer',
     };
     const answerType = 'text';
     const roleNames = ['Business Developer'];
@@ -53,7 +62,7 @@ const QuestionInput = ({ question }) => {
     const questionData = {
       proposalId,
       questionText: text,
-      questionJSON: value,
+      questionJSON: value ? JSON.stringify(value) : '',
       questionHTML: html,
       section,
       answerType,
@@ -63,26 +72,34 @@ const QuestionInput = ({ question }) => {
     if (question.isNewEntry) {
       console.log({ questionData });
       dispatch(setProposalQuestion(proposalId, questionData));
+      questionUnlockWrapper(question?.questionId);
     } else {
       dispatch(
         editProposalQuestion(proposalId, question.questionId, questionData)
       );
+      questionUnlockWrapper(question?.questionId);
+      console.log({ questionData });
     }
   };
 
   const richTextAnswerField = {
     questionId: question.questionId,
     richTextString: getConvertedAnsString(question.questionText),
-    richTextVal: question.questionJSON,
+    richTextVal: question.questionJSON ? JSON.parse(question.questionJSON) : '',
     richTextHtml: question.questionHTML,
     // richTextHtmlExport: question.htmlExport,
+    disabled: checkDisableFlag(),
     enableFocus: true,
     isEditable: true,
     placeholder: '',
-    disabled: false,
-    onFocus: () => {},
+
+    onFocus: () => {
+      quesTextInnerLeftRef.current.style.marginTop = '25px';
+      questionLockWrapper(question?.questionId);
+    },
     onBlur: (data) => {
       console.log('tapas question obj ', question);
+      quesTextInnerLeftRef.current.style.marginTop = 'inherit';
       let saveDate = false;
       const previousAnsText = getConvertedAnsString(
         question.questionText
@@ -124,12 +141,13 @@ const QuestionInput = ({ question }) => {
         console.log('inside save data ', data);
       }
       // this.context.questionUnlockWrapper(this.props.questionId);
+      questionUnlockWrapper(question?.questionId);
     },
   };
 
   return (
     <>
-      <div className="input-wrapper ">
+      <div className="input-wrapper " ref={quesTextInnerLeftRef}>
         <span className="input-label">Q{question.questionOrder}:</span>
         <CustomApolloRichText {...richTextAnswerField} />
       </div>

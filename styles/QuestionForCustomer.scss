@@ -1,9 +1,12 @@
 .questions-for-customer-container {
   .questions-container {
     max-height: 75%;
+    // overflow: visible;
     overflow-y: auto;
+    clip-depth: 2;
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
+    display: relative;
   }
   /* Hide scrollbar for Chrome, Safari and Opera */
   .questions-container::-webkit-scrollbar {
@@ -38,16 +41,29 @@
   }
   .divider-hr {
     margin-left: 16px;
-    margin-right: 70px;
-    height: 0.8px;
+    margin-right: 16px;
+    height: 1px;
     border: 0.6em;
-    border-top: 1px solid #ccc;
+    border-top: 1px solid #ddd;
     padding: 0;
   }
   .delete-btn {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    // align-items: center;
+    flex-wrap: wrap;
     margin-left: 0.5em;
+  }
+  .no-questions-added-t {
+    color: #999999;
+    font-family: 'Proxima Nova';
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 24px;
+    text-align: center;
+    margin: 30px 16px;
   }
   .input-label {
     display: flex;
@@ -83,6 +99,13 @@
     font-size: 24px;
     color: #bd0100;
     cursor: pointer;
+  }
+  .status-txt {
+    color: $neptune-primary;
+    font-weight: 500;
+    font-size: 12px;
+    font-style: italic;
+    margin-left: 10px;
   }
   .btn-label {
     font-family: 'Proxima Nova';
