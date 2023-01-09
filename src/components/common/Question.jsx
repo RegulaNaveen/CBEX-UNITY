@@ -220,7 +220,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
   }
 
   handlePropsalChange = (textValue, lastValue, reason) => {
-    console.log('111111111111111111', textValue);
     try {
       const {
         setProposalAnswer,

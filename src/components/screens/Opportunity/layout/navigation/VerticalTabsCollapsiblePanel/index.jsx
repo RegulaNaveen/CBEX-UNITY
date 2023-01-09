@@ -1,3 +1,7 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable dot-notation */
+/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import { styled } from '@material-ui/styles';
 import Tab from 'apollo-react/components/Tab';
@@ -32,25 +36,70 @@ function VerticalTabsCollapsiblePanel({
   renderPanel,
   showQuestionsForCustomerTab,
   showNotepadTab,
-  showProposalTeamTab
+  showProposalTeamTab,
+  activeVerticleTab
 }) {
-  const [activeTab, setActiveTab] = useState(0);
-
-  useEffect(() => {
-    if (!showQuestionsForCustomerTab) {
-      if (!showNotepadTab) {
-        setActiveTab(2);
-      } else {
-        setActiveTab(1);
-      }
-    } else {
-      setActiveTab(0);
-    }
-  }, [showQuestionsForCustomerTab, showNotepadTab, showProposalTeamTab]);
+  const [activeTab, setActiveTab] = useState(activeVerticleTab);
+  const tabArr = [
+    { showQuestionsForCustomerTab },
+    { showNotepadTab },
+    { showProposalTeamTab }
+  ];
 
   function handleTabChange(event, newActiveTab) {
     setActiveTab(newActiveTab);
   }
+  const renderTab = () => {
+    const tabs = tabArr.map(v => {
+      if (v['showQuestionsForCustomerTab']) {
+        return (
+          <div onClick={() => setActiveTab('showQuestionsForCustomerTab')}>
+            <VerticalTab
+              icon={
+                <QuestionsForCustomerIcon
+                  fill={
+                    activeTab === 'showQuestionsForCustomerTab'
+                      ? '#0557d5'
+                      : '#999999'
+                  }
+                />
+              }
+              className={`${showQuestionsForCustomerTab ? '' : 'hide'}`}
+            />
+          </div>
+        );
+      }
+      if (v['showNotepadTab']) {
+        return (
+          <div onClick={() => setActiveTab('showNotepadTab')}>
+            <VerticalTab
+              icon={
+                <NotesIcon
+                  fill={activeTab === 'showNotepadTab' ? '#0557d5' : '#999999'}
+                />
+              }
+              className={`${showNotepadTab ? '' : 'hide'}`}
+            />
+          </div>
+        );
+      }
+      if (v['showProposalTeamTab']) {
+        return (
+          <div onClick={() => setActiveTab('proposalteamtab')}>
+            <VerticalTab
+              icon={
+                <ProposalTeamIcon
+                  fill={activeTab === 'proposalteamtab' ? '#0557d5' : '#999999'}
+                />
+              }
+              className={`${showProposalTeamTab ? '' : 'hide'}`}
+            />
+          </div>
+        );
+      }
+    });
+    return <>{tabs}</>;
+  };
 
   return (
     <div
@@ -69,28 +118,7 @@ function VerticalTabsCollapsiblePanel({
             onChange={handleTabChange}
             orientation="vertical"
           >
-            <VerticalTab
-              icon={
-                <QuestionsForCustomerIcon
-                  fill={activeTab === 0 ? '#0557d5' : '#999999'}
-                />
-              }
-              className={`${showQuestionsForCustomerTab ? '' : 'hide'}`}
-            />
-            <VerticalTab
-              icon={
-                <NotesIcon fill={activeTab === 1 ? '#0557d5' : '#999999'} />
-              }
-              className={`${showNotepadTab ? '' : 'hide'}`}
-            />
-            <VerticalTab
-              icon={
-                <ProposalTeamIcon
-                  fill={activeTab === 2 ? '#0557d5' : '#999999'}
-                />
-              }
-              className={`${showProposalTeamTab ? '' : 'hide'}`}
-            />
+            {renderTab()}
           </VerticalTabs>
           {renderPanel(activeTab)}
         </>

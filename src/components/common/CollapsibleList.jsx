@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // @flow
 import React, { Component, Suspense } from 'react';
 import { connect } from 'react-redux';
@@ -19,6 +20,7 @@ import {
   onHandleOpenClose,
   handleSelectedSection
 } from '../../redux/actions/sidebar-actions';
+import lazyWithRetry from '../../utils/lazy';
 import {
   selectAutoNavigatedToCurrentResult,
   selectCurrentSearchResult,
@@ -27,8 +29,10 @@ import {
 import { autoNavigationCompletedAction } from '../../redux/actions/search-actions';
 
 const CollapsibleQuestionMapping = React.lazy(() =>
-  import(
-    /* webpackChunkName: "collapsibleQuestionMapping" */ './CollapsibleQuestionMapping'
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "collapsibleQuestionMapping" */ './CollapsibleQuestionMapping'
+    )
   )
 );
 type State = {
