@@ -163,16 +163,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
     };
   }
 
-  highlightSearchQueryDecorator = (contentBlock, callback) => {
-    const regex = new RegExp(this.props.query, 'gi');
-    const text = contentBlock.getText();
-    let matchArr, start;
-    while ((matchArr = regex.exec(text)) !== null) {
-      start = matchArr.index;
-      callback(start, start + matchArr[0].length);
-    }
-  };
-
   componentDidMount() {
     const elem = document.querySelectorAll('textarea');
     if (elem && elem.length) {
