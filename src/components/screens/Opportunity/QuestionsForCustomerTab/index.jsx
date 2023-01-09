@@ -1,28 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PlusIcon from 'apollo-react-icons/Plus';
 import Button from 'apollo-react/components/Button';
 import Copy from 'apollo-react-icons/Copy';
-import QuestionContainer from './QuestionContainer';
-import { getProposalQuestions } from '../../../../redux/selectors/proposal';
-import { selectSections } from '../../../../redux/selectors';
-import Header from './Header';
 import { uuidv4 } from 'lib0/random';
-import { fromJS } from 'immutable';
+import { fromJS, OrderedMap } from 'immutable';
 import { isString } from 'lodash';
+import QuestionContainer from './QuestionContainer';
+
+import { getProposalQuestions } from '../../../../redux/selectors/proposal';
+import { getSelectedBid, selectSections } from '../../../../redux/selectors';
+import Header from './Header';
+import { deleteProposalQuestion } from '../../../../redux/actions/proposal-actions';
+import SocketContextProvider from '../../../../context/SocketContext';
 
 function QuestionsForCustomer() {
   const questionsList = useSelector(getProposalQuestions);
-  const [questions, setQuestions] = useState(null);
+  const [questions, setQuestions] = useState(new OrderedMap());
   const sections = useSelector(selectSections);
+  const selectedBid = useSelector(getSelectedBid);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    sections.map((section, indx) => {
-      if (section.get('sectionName') === 'Questions for the Customer') {
-        const ques = section.get('questions');
-        console.log('inside section customer', ques.toJS());
-        setQuestions(ques);
-        return ques;
+    sections.map((section) => {
+      if (section.get('sectionName') === 'Quick questions for the Customer') {
+        const sectionQuestions = section.get('questions');
+        console.log('inside section customer', sectionQuestions.toJS());
+        const filteredCustomQuestion = new OrderedMap(
+          Array.from(sectionQuestions).filter((questionItem) => {
+            if (questionItem[1].get('isCustomQuestion')) {
+              console.log('true fillerted question');
+              return true;
+            }
+
+            return false;
+          })
+        );
+        console.log({ filteredCustomQuestion, sectionQuestions });
+        setQuestions(filteredCustomQuestion);
       }
     });
   }, [questionsList]);
@@ -41,7 +56,7 @@ function QuestionsForCustomer() {
       questionId: _id,
       section: {
         sectionOrder: 199,
-        sectionName: 'Quick Questions for the Customer',
+        sectionName: 'Quick questions for the Customer',
       },
       active: true,
       questionOrder: question.size + 1,
@@ -73,16 +88,21 @@ function QuestionsForCustomer() {
   };
 
   const deleteQuestionHandler = (question) => {
-    console.log({ question });
+    console.log({ question }, question.questionId);
     let curQuestion = questions;
     //  questionId
     // setQuestionList((current) => current.pop());
-    curQuestion.valueSeq().filter((ques, key) => {
-      console.log('inside', ques.toJS().questionId, question.questionId);
-      if (ques.toJS().questionId !== question.questionId) {
-      }
-    });
-    setQuestions(curQuestion);
+    // curQuestion.valueSeq().filter((ques, key) => {
+    //   console.log('inside', ques.toJS().questionId, question.questionId);
+    //   if (ques.toJS().questionId !== question.questionId) {
+    //   }
+    // });
+    const proposalId = selectedBid.get('id');
+    // this.setState({ loaderText: 'Deleting Question' });
+    const res = dispatch(
+      deleteProposalQuestion(proposalId, question.questionId)
+    );
+    // setQuestions(curQuestion);
   };
 
   const getAnswer = (answers) => {
@@ -118,10 +138,11 @@ function QuestionsForCustomer() {
     let html = '<html><body><ul>';
 
     questions.map((questionData) => {
-      console.log('inside questions ');
-      const answer = getAnswer(questionData.get('answers'));
-      html += `<li>${questionData.get('questionText')}</li>`;
-      if (answer) html += `<ul><li>${answer}</li></ul>`;
+      if (questionData.get('isCustomQuestion')) {
+        const answer = getAnswer(questionData.get('answers'));
+        html += `<li>${questionData.get('questionHtml')}</li>`;
+        if (answer) html += `<ul><li>${answer}</li></ul>`;
+      }
     });
     html += '</ul></body></html>';
     console.log('hhhhhhhhhhh ', html);
@@ -130,7 +151,7 @@ function QuestionsForCustomer() {
 
   const copyToClipBoard = () => {
     const content = createClipBoardContent();
-    // ('<html><body><ul><li>one</li><li>two</li></ul></body></html>');
+
     const blob = new Blob([content], { type: 'text/html' });
     const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
     navigator.clipboard.write([clipboardItem]);
@@ -139,47 +160,59 @@ function QuestionsForCustomer() {
   return (
     <>
       <div className="questions-for-customer-container">
-        <div>
-          <Header />
-        </div>
-        <div className="questions-container">
-          <ul>
-            {questions?.valueSeq().map((questionData) => {
-              if (questionData.get('isCustomQuestion') === true)
-                return (
-                  <QuestionContainer
-                    deleteQuestionHandler={deleteQuestionHandler}
-                    questionData={questionData}
-                  />
-                );
-            })}
-          </ul>
-        </div>
-        <div className="btn-container">
+        <SocketContextProvider>
           <div>
-            <Button
-              className="btn-label"
-              icon={<Copy />}
-              size="small"
-              style={{ marginRight: 10 }}
-              onClick={copyToClipBoard}
-            >
-              Copy to clipboard
-            </Button>
+            <Header />
           </div>
-          <div>
-            <Button
-              variant="primary"
-              icon={<PlusIcon />}
-              size="small"
-              style={{ marginRight: 10 }}
-              className="btn-label"
-              onClick={() => addQuestionHandler()}
-            >
-              Add New
-            </Button>
+          {questions?.size > 0 ? (
+            <div className="questions-container">
+              <ul>
+                {questions?.valueSeq().map((questionData) => {
+                  // if (questionData.get('isCustomQuestion') === true)
+                  return (
+                    <QuestionContainer
+                      deleteQuestionHandler={deleteQuestionHandler}
+                      questionData={questionData}
+                    />
+                  );
+                })}
+              </ul>
+            </div>
+          ) : (
+            <div className="questions-container">
+              <div className="no-questions-added-t">
+                No questions added to this opportunity
+              </div>
+            </div>
+          )}
+
+          <div className="btn-container">
+            <div>
+              <Button
+                className="btn-label"
+                icon={<Copy />}
+                size="small"
+                style={{ marginRight: 10 }}
+                onClick={copyToClipBoard}
+                disabled={questions?.size <= 0}
+              >
+                Copy to clipboard
+              </Button>
+            </div>
+            <div>
+              <Button
+                variant="primary"
+                icon={<PlusIcon />}
+                size="small"
+                style={{ marginRight: 10 }}
+                className="btn-label"
+                onClick={() => addQuestionHandler()}
+              >
+                Add New
+              </Button>
+            </div>
           </div>
-        </div>
+        </SocketContextProvider>
       </div>
     </>
   );

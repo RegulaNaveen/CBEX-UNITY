@@ -27,7 +27,7 @@ import {
   getProposalAnswer,
   priceModelerApi,
   setNotApplicableQuestionApi,
-  getAllProposals
+  getAllProposals,
 } from '../../api/proposal';
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getUniqueMilestones } from '../selectors/proposal';
@@ -96,13 +96,13 @@ const {
   SET_CAN_USER_TAG_IN_QUESTION,
   SET_APPROVAL_QUESTION_LOADING,
   SET_PRICE_MODELER_RECALCULATING,
-  PRICE_MODELER_UPDATE
+  PRICE_MODELER_UPDATE,
 } = REDUX_TYPES.PROPOSAL;
 
 /**
  * Updates bidNo Query param without page reload
  */
-const updateBidNoQueryparam = bidNo => {
+const updateBidNoQueryparam = (bidNo) => {
   if ('URLSearchParams' in window) {
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.set('bidNo', bidNo);
@@ -148,10 +148,10 @@ export const getProposalByID = (id: string): ThunkAction<string, Object> => {
 };
 
 export function setNotApplicableLoader(questionId) {
-  return async dispatch => {
+  return async (dispatch) => {
     dispatch({
       type: UPDATE_NOT_APPLICABLE_PROGRESS,
-      payload: { questionId, loading: true }
+      payload: { questionId, loading: true },
     });
   };
 }
@@ -179,14 +179,14 @@ export function setNotApplicableQuestion(
 
       dispatch({
         type: UPDATE_NOT_APPLICABLE_DONE,
-        payload: { data: data.data, questionId, questionStatus }
+        payload: { data: data.data, questionId, questionStatus },
       });
       const questionsFilter = getQuestionsFilters(getState());
       dispatch(onQuestionsFilterApplied(questionsFilter));
     } catch (err) {
       dispatch({
         type: ERROR_UPDATE_NOT_APPLICABLE,
-        payload: { questionId, loading: false }
+        payload: { questionId, loading: false },
       });
     }
   };
@@ -197,14 +197,14 @@ export function setNotApplicableQuestionFromSocket(questionId, questionStatus) {
     try {
       dispatch({
         type: UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE,
-        payload: { questionId, questionStatus }
+        payload: { questionId, questionStatus },
       });
       const questionsFilter = getQuestionsFilters(getState());
       dispatch(onQuestionsFilterApplied(questionsFilter));
     } catch (err) {
       dispatch({
         type: ERROR_UPDATE_NOT_APPLICABLE,
-        payload: { questionId, loading: false }
+        payload: { questionId, loading: false },
       });
     }
   };
@@ -213,7 +213,7 @@ export function setNotApplicableQuestionFromSocket(questionId, questionStatus) {
 /**
  * Get Price Modeler Data
  */
-export const getPriceModelerData = proposalId => {
+export const getPriceModelerData = (proposalId) => {
   return async (dispatch: Dispatch<string, Object>) => {
     try {
       const response = await priceModelerApi(proposalId);
@@ -229,7 +229,7 @@ export const setApprovalQuestionLoading = (questionId, value) => {
     try {
       dispatch({
         type: SET_APPROVAL_QUESTION_LOADING,
-        payload: { questionId, value }
+        payload: { questionId, value },
       });
     } catch (error) {
       console.error(error);
@@ -244,11 +244,11 @@ export const setApprovalQuestionLoading = (questionId, value) => {
 export const setPriceModelerRecalculationStatusAction = (
   isRecalculating = false
 ) => {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       dispatch({
         type: SET_PRICE_MODELER_RECALCULATING,
-        payload: isRecalculating
+        payload: isRecalculating,
       });
     } catch (error) {
       console.error(error);
@@ -261,7 +261,7 @@ export const setPriceModelerRecalculationStatusAction = (
  * @param {costUpdate} Object
  */
 export const updatePriceModelerEstimateAction = (costUpdate = {}) => {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       if (!isEmpty(costUpdate)) {
         dispatch({ type: PRICE_MODELER_UPDATE, payload: costUpdate });
@@ -287,7 +287,7 @@ export const setProposalAnswerData = (
     if (!disableLoader) {
       dispatch({
         type: PROPOSAL_ANSWER_LOADING,
-        payload: { questionId, loading: true }
+        payload: { questionId, loading: true },
       });
     }
     const questionsFilter = getQuestionsFilters(getState());
@@ -311,13 +311,13 @@ export const setProposalAnswerData = (
         payload: {
           data: Array.isArray(data.answers) ? data.answers : data,
           questionId,
-          hasDifferentSFanswer: data.hasDifferentSFanswer || false
-        }
+          hasDifferentSFanswer: data.hasDifferentSFanswer || false,
+        },
       });
 
       const { modifiedQuestions } = data;
       if (!isEmpty(modifiedQuestions)) {
-        modifiedQuestions.forEach(question => {
+        modifiedQuestions.forEach((question) => {
           dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
         });
       }
@@ -325,7 +325,7 @@ export const setProposalAnswerData = (
       if (!disableLoader) {
         dispatch({
           type: PROPOSAL_ANSWER_LOADING,
-          payload: { questionId, loading: false }
+          payload: { questionId, loading: false },
         });
       }
       dispatch(setApprovalQuestionLoading(questionId, false));
@@ -343,7 +343,7 @@ export const setProposalAnswerDatafromSocket = (
   return async (dispatch: Dispatch<string, Object>, getState) => {
     dispatch({
       type: PROPOSAL_ANSWER_LOADING,
-      payload: { questionId, loading: true }
+      payload: { questionId, loading: true },
     });
     const questionsFilter = getQuestionsFilters(getState());
 
@@ -353,20 +353,59 @@ export const setProposalAnswerDatafromSocket = (
         payload: {
           data: Array.isArray(data.answers) ? data.answers : data,
           questionId,
-          hasDifferentSFanswer: data.hasDifferentSFanswer || false
-        }
+          hasDifferentSFanswer: data.hasDifferentSFanswer || false,
+        },
       });
 
       const { modifiedQuestions } = data;
       if (!isEmpty(modifiedQuestions)) {
-        modifiedQuestions.forEach(question => {
+        modifiedQuestions.forEach((question) => {
           dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
         });
       }
       dispatch(onQuestionsFilterApplied(questionsFilter));
       dispatch({
         type: PROPOSAL_ANSWER_LOADING,
-        payload: { questionId, loading: false }
+        payload: { questionId, loading: false },
+      });
+    } catch (err) {
+      console.log('error occurred ', err);
+      dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err } });
+    }
+  };
+};
+
+export const setProposalQuestionfromSocket = (
+  questionId: string,
+  data: any
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>, getState) => {
+    dispatch({
+      type: PROPOSAL_ANSWER_LOADING,
+      payload: { questionId, loading: true },
+    });
+    const questionsFilter = getQuestionsFilters(getState());
+
+    try {
+      dispatch({
+        type: PROPOSAL_ANSWER,
+        payload: {
+          data: Array.isArray(data.answers) ? data.answers : data,
+          questionId,
+          hasDifferentSFanswer: data.hasDifferentSFanswer || false,
+        },
+      });
+
+      const { modifiedQuestions } = data;
+      if (!isEmpty(modifiedQuestions)) {
+        modifiedQuestions.forEach((question) => {
+          dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
+        });
+      }
+      dispatch(onQuestionsFilterApplied(questionsFilter));
+      dispatch({
+        type: PROPOSAL_ANSWER_LOADING,
+        payload: { questionId, loading: false },
       });
     } catch (err) {
       console.log('error occurred ', err);
@@ -389,8 +428,8 @@ export const updateAnswerFromWebSocket = (
           payload: {
             data: data.answers,
             questionId,
-            hasDifferentSFanswer: data.hasDifferentSFanswer || false
-          }
+            hasDifferentSFanswer: data.hasDifferentSFanswer || false,
+          },
         });
       } else {
         dispatch({
@@ -398,13 +437,13 @@ export const updateAnswerFromWebSocket = (
           payload: {
             data,
             questionId,
-            hasDifferentSFanswer: data.hasDifferentSFanswer || false
-          }
+            hasDifferentSFanswer: data.hasDifferentSFanswer || false,
+          },
         });
       }
       const { modifiedQuestions } = data;
       if (!isEmpty(modifiedQuestions)) {
-        modifiedQuestions.forEach(question => {
+        modifiedQuestions.forEach((question) => {
           dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
         });
       }
@@ -419,18 +458,18 @@ export const getQuestionSection = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: QUESTION_SECTION_LOADING,
-      payload: {}
+      payload: {},
     });
     try {
       const data = await getQuestionSectionInfo();
       dispatch({
         type: QUESTION_SECTION_INFO,
-        payload: data
+        payload: data,
       });
     } catch (err) {
       dispatch({
         type: QUESTION_SECTION_ERROR,
-        payload: err
+        payload: err,
       });
     }
   };
@@ -440,18 +479,18 @@ export const getAnswerTypesInfo = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: ANSWER_TYPES_LOADING,
-      payload: {}
+      payload: {},
     });
     try {
       const data = await getAnswerTypes();
       dispatch({
         type: ANSWER_TYPES_INFO,
-        payload: data
+        payload: data,
       });
     } catch (err) {
       dispatch({
         type: ANSWER_TYPES_ERROR,
-        payload: err
+        payload: err,
       });
     }
   };
@@ -461,18 +500,18 @@ export const getRolesInfo = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: ROLES_LOADING,
-      payload: {}
+      payload: {},
     });
     try {
       const data = await getRoles();
       dispatch({
         type: ROLES_INFO,
-        payload: data
+        payload: data,
       });
     } catch (err) {
       dispatch({
         type: ROLES_ERROR,
-        payload: err
+        payload: err,
       });
     }
   };
@@ -485,7 +524,7 @@ export const setProposalQuestion = (
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: PROPOSAL_SET_QUESTION_LOADING,
-      payload: {}
+      payload: {},
     });
     try {
       const data = await setProposalQuestionData(proposalId, questionData);
@@ -500,18 +539,18 @@ export const getProposalUpdated = (id: string): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: PROPOSAL_INFO_LOADING,
-      payload: {}
+      payload: {},
     });
     try {
       const data = await getProposalInfoUpdated(id);
       dispatch({
         type: PROPOSAL_INFO,
-        payload: data
+        payload: data,
       });
     } catch (err) {
       dispatch({
         type: PROPOSAL_INFO_ERROR,
-        payload: err
+        payload: err,
       });
     }
   };
@@ -521,7 +560,7 @@ export const updateQuestionLockByUser = (data): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: QUESTION_LOCK_BY_USER,
-      payload: data
+      payload: data,
     });
   };
 };
@@ -531,7 +570,7 @@ export const getQuestionLockDetailsAll = (
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: QUESTION_LOCK_DETAILS_ALL,
-      payload: data
+      payload: data,
     });
   };
 };
@@ -542,7 +581,7 @@ export const updateQuestionUnlockByUser = (
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: QUESTION_UNLOCK_BY_USER,
-      payload: data
+      payload: data,
     });
   };
 };
@@ -557,7 +596,7 @@ export const onGetProposalBoxId = (id: string): ThunkAction<string, Object> => {
     } catch (error) {
       dispatch({
         type: PROPOSAL_BOX_ID_ERROR,
-        payload: { error: error.error }
+        payload: { error: error.error },
       });
     }
   };
@@ -574,7 +613,7 @@ export const getAdditionalBoxLink = (
     } catch (error) {
       dispatch({
         type: BOX_ADDITIONAL_LINK_ERROR,
-        payload: { error: error }
+        payload: { error: error },
       });
     }
   };
@@ -588,7 +627,7 @@ export const setupdateBoxId = (url: string): ThunkAction<string, Object> => {
     } catch (error) {
       dispatch({
         type: PROPOSAL_BOX_ID_ERROR,
-        payload: { error: error.error }
+        payload: { error: error.error },
       });
     }
   };
@@ -606,7 +645,7 @@ export const onGetValidatedProposalDetails = (
     } catch (error) {
       dispatch({
         type: VALIDATED_PROPOSAL_DATA_ERROR,
-        payload: { error }
+        payload: { error },
       });
     }
   };
@@ -617,7 +656,7 @@ function applyMyUserRoleFilter(questions) {
   let filteredQuestions = cloneDeep(questions);
   if (role) {
     filteredQuestions = fromJS(filteredQuestions)
-      .filter(question => {
+      .filter((question) => {
         const assignedRoles = question.get('roleNames', []);
         return assignedRoles.includes(role);
       })
@@ -631,7 +670,7 @@ function applyUnAnsweredFilter(questions) {
   let filteredQuestions = cloneDeep(questions);
   if (role) {
     filteredQuestions = fromJS(filteredQuestions)
-      .filter(val => {
+      .filter((val) => {
         let Answer = val.get('answers', []);
         Answer = Answer.toJS();
         return (
@@ -654,7 +693,7 @@ function applyAnsweredFilter(questions) {
   let filteredQuestions = cloneDeep(questions);
   if (role) {
     filteredQuestions = fromJS(filteredQuestions)
-      .filter(question => {
+      .filter((question) => {
         let Answer = question.get('answers', []);
         Answer = Answer.toJS();
         return (
@@ -674,7 +713,7 @@ function applyInterestedPartyFilter(questions) {
   let filteredQuestions = cloneDeep(questions);
   if (role) {
     filteredQuestions = fromJS(filteredQuestions)
-      .filter(question => {
+      .filter((question) => {
         const interestedParties = question.get('interestedParties', []);
         return interestedParties.includes(role);
       })
@@ -691,7 +730,7 @@ function applyMilestoneFilter(questions, milestone) {
   let filteredQuestions = cloneDeep(questions);
   if (milestone) {
     filteredQuestions = fromJS(filteredQuestions)
-      .filter(question => {
+      .filter((question) => {
         const questionMilestone = question.get('milestone');
         return questionMilestone === milestone;
       })
@@ -788,7 +827,7 @@ export function onQuestionsFilterApplied(questionsFilter) {
     const state = getState();
     dispatch({
       type: ON_APPLY_QUESTIONS_FILTER,
-      payload: { questionsFilter }
+      payload: { questionsFilter },
     });
 
     let filteredQuestions = cloneDeep(selectProposalQuestions(state));
@@ -864,7 +903,7 @@ export function onQuestionsFilterApplied(questionsFilter) {
 
     dispatch({
       type: ON_QUESTIONS_FILTERED,
-      payload: { filteredQuestions }
+      payload: { filteredQuestions },
     });
   };
 }
@@ -890,8 +929,8 @@ export function onApplyQuestionsFilter(
 export function resetQuestionsFilterAction() {
   return async (dispatch, getState) => {
     let questionsFilter = getQuestionsFilters(getState());
-    questionsFilter = questionsFilter.map(group => {
-      return group.map(filter => {
+    questionsFilter = questionsFilter.map((group) => {
+      return group.map((filter) => {
         if (typeof filter === 'string') return filter;
         return filter.set('checked', false);
       });
@@ -903,8 +942,8 @@ export function resetQuestionsFilterAction() {
 export function clearQuestionsFilterAction() {
   return async (dispatch, getState) => {
     let questionsFilter = getQuestionsFilters(getState());
-    questionsFilter = questionsFilter.map(group => {
-      return group.map(filter => {
+    questionsFilter = questionsFilter.map((group) => {
+      return group.map((filter) => {
         if (typeof filter === 'string') return filter;
 
         return filter.set('checked', false);
@@ -915,13 +954,13 @@ export function clearQuestionsFilterAction() {
 }
 
 export function expandAllSectionsAction(expand = false) {
-  return async dispatch => {
+  return async (dispatch) => {
     dispatch({ type: EXPAND_ALL_SECTIONS, payload: expand });
   };
 }
 
 export function setEditQuestionData(data = {}) {
-  return async dispatch => {
+  return async (dispatch) => {
     dispatch({ type: SET_EDIT_QUESTION_DATA, payload: data });
   };
 }
@@ -929,12 +968,13 @@ export function setEditQuestionData(data = {}) {
 export const editProposalQuestion = (
   proposalId: string,
   questionId: string,
-  questionData: Object
+  questionData: Object,
+  socketContext
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: PROPOSAL_SET_QUESTION_LOADING,
-      payload: {}
+      payload: {},
     });
     try {
       const data = await editProposalQuestionData(
@@ -942,6 +982,25 @@ export const editProposalQuestion = (
         questionId,
         questionData
       );
+
+      if (socketContext) await socketContext?.questionTextUpdateWrapper(data);
+      dispatch({ type: PROPOSAL_EDIT_QUESTION, payload: data });
+    } catch (err) {
+      dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
+    }
+  };
+};
+
+export const editProposalQuestionfromSocket = (
+  questionData: Object
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: PROPOSAL_SET_QUESTION_LOADING,
+      payload: {},
+    });
+    try {
+      const data = questionData;
       dispatch({ type: PROPOSAL_EDIT_QUESTION, payload: data });
     } catch (err) {
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
@@ -956,7 +1015,7 @@ export const deleteProposalQuestion = (
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: PROPOSAL_SET_QUESTION_LOADING,
-      payload: {}
+      payload: {},
     });
     try {
       const data = await deleteProposalQuestionData(proposalId, questionId);
@@ -987,10 +1046,10 @@ export const getOpportunity = (
       const allProposals = await getAllProposals(id);
 
       const proposal = allProposals.find(
-        thisProposal => thisProposal.proposal.proposalDetails.bidNo === bidNo
+        (thisProposal) => thisProposal.proposal.proposalDetails.bidNo === bidNo
       );
       const isCurrentProposal = allProposals.find(
-        thisProposal => thisProposal.isCurrent === true
+        (thisProposal) => thisProposal.isCurrent === true
       );
 
       if (proposal) selectedProposalId = proposal.proposal.proposalId;
@@ -1034,24 +1093,24 @@ export const getOpportunity = (
         }
       }
       let data = await getPaginateProposal(urls);
-      data = data.map(v => v['data']).flat();
+      data = data.map((v) => v['data']).flat();
       data[0].isCurrent =
         isCurrentProposal.proposal.proposalId === data[0].proposal.proposalId;
       if (data && data.length && data[0].proposal?.switchTemplateStatus) {
         dispatch({
           type: SWITCH_TEMP_IN_PROGRESS,
-          payload: true
+          payload: true,
         });
         dispatch({
           type: SWITCH_TEMP_STATUS,
-          payload: 'progress'
+          payload: 'progress',
         });
       }
       proposalsData.push(data[0]);
       dispatch({ type: OPPORTUNITY_INFO, payload: proposalsData });
       dispatch({
         type: UPDATE_BOX_BIDS,
-        payload: getProposalIdlist(proposalsData)
+        payload: getProposalIdlist(proposalsData),
       });
       if (flag) {
         dispatch({ type: NEW_BID_CREATED, payload: { flag } });
@@ -1065,30 +1124,30 @@ export const getOpportunity = (
 };
 
 export const resetProposalId = () => {
-  return dispatch => dispatch({ type: RESET_PROPOSALID, payload: {} });
+  return (dispatch) => dispatch({ type: RESET_PROPOSALID, payload: {} });
 };
 
-export const changeBid = bid => {
+export const changeBid = (bid) => {
   if (bid?.bidNo) {
     updateBidNoQueryparam(bid?.bidNo);
   }
-  return async dispatch => {
+  return async (dispatch) => {
     const response = await axios.get(`${PROPOSAL_API_URL}/${bid.bidId}`);
     dispatch({
       type: CHANGE_BID,
       payload: {
         proposalDetails: { ...response.data, isCurrent: bid.isCurrent },
-        bid
-      }
+        bid,
+      },
     });
   };
 };
 
-export const UpdateNewBid = bid => {
-  return dispatch => {
+export const UpdateNewBid = (bid) => {
+  return (dispatch) => {
     dispatch({
       type: ADD_NEW_BID,
-      payload: bid
+      payload: bid,
     });
     // dispatch(fetchNotes(bid.proposal.proposalId));
   };
@@ -1100,7 +1159,7 @@ export const callPickListLookupSfData = (): ThunkAction<string, Object> => {
       let lookupMap = {};
       const response = await getPickListLookupSfData();
       const { data } = response.data;
-      data.forEach(row => {
+      data.forEach((row) => {
         const options = row.PicklistValues;
         lookupMap[`${row.PK}_${row.SK}`] = options;
       });
@@ -1130,11 +1189,11 @@ export const fetchOTListData = () => async () => {
 /**
  * Switch Temp Status Update - Action
  */
-export const updateSwitchTempStatusFromWebSocket = data => {
-  return async dispatch => {
+export const updateSwitchTempStatusFromWebSocket = (data) => {
+  return async (dispatch) => {
     dispatch({
       type: SWITCH_TEMP_STATUS,
-      payload: data
+      payload: data,
     });
   };
 };
@@ -1143,10 +1202,10 @@ export const updateSwitchTempStatusFromWebSocket = data => {
  * Activate Proposal Loading - Action
  */
 export const activateProposalLoading = () => {
-  return async dispatch => {
+  return async (dispatch) => {
     dispatch({
       type: PROPOSAL_INFO_LOADING,
-      payload: {}
+      payload: {},
     });
   };
 };
@@ -1155,10 +1214,10 @@ export const activateProposalLoading = () => {
  * Deactivate Proposal Loading - Action
  */
 export const deactivateProposalLoading = () => {
-  return async dispatch => {
+  return async (dispatch) => {
     dispatch({
       type: PROPOSAL_INFO_ERROR,
-      payload: undefined
+      payload: undefined,
     });
   };
 };
@@ -1166,7 +1225,7 @@ export const deactivateProposalLoading = () => {
 /**
  * Fetch All Opportunity Type
  */
-export const changeOpportunityType = switchTempData => async () => {
+export const changeOpportunityType = (switchTempData) => async () => {
   try {
     // Api Response
     const response = await changeProposalOT(switchTempData);
@@ -1182,11 +1241,11 @@ export const changeOpportunityType = switchTempData => async () => {
 /**
  * Switch Temp In Progress - Action
  */
-export const updateSwitchInProgress = data => {
-  return async dispatch => {
+export const updateSwitchInProgress = (data) => {
+  return async (dispatch) => {
     dispatch({
       type: SWITCH_TEMP_IN_PROGRESS,
-      payload: data
+      payload: data,
     });
   };
 };
@@ -1195,10 +1254,10 @@ export const updateSwitchInProgress = data => {
  * Set Proposal Answer Loading - Action
  */
 export const setProposalAnswerLoading = (questionId, loading) => {
-  return async dispatch => {
+  return async (dispatch) => {
     dispatch({
       type: PROPOSAL_ANSWER_LOADING,
-      payload: { questionId, loading }
+      payload: { questionId, loading },
     });
   };
 };
@@ -1216,7 +1275,7 @@ export const deleteProposalUserFromDB = (
     // Api Response
     const response = await deleteProposalUser(proposalId, {
       email,
-      section: { sectionOrder, sectionName }
+      section: { sectionOrder, sectionName },
     });
     return { status: true, title: DEFAULT.SUCCESS, data: response.data };
   } catch (error) {
@@ -1249,35 +1308,35 @@ export const getProposalAnswerHistory = (
 /**
  * Set Flag for Event Launcher
  */
-export const setEventLauncherFlag = val => {
-  return dispatch => {
+export const setEventLauncherFlag = (val) => {
+  return (dispatch) => {
     dispatch({
       type: SET_EVENT_LAUNCHER_FLAG,
-      payload: val
+      payload: val,
     });
   };
 };
 
-export const setShowNaCheckbox = val => {
-  return dispatch => {
+export const setShowNaCheckbox = (val) => {
+  return (dispatch) => {
     dispatch({
       type: SHOW_NA_CHECKBOX,
-      payload: val
+      payload: val,
     });
   };
 };
 
-export const setCanUserTagInQuestion = can => {
-  return dispatch => {
+export const setCanUserTagInQuestion = (can) => {
+  return (dispatch) => {
     dispatch({
       type: SET_CAN_USER_TAG_IN_QUESTION,
-      payload: can
+      payload: can,
     });
   };
 };
 
 export const fetchUserTagFlagInQuestion = () => {
-  return async dispatch => {
+  return async (dispatch) => {
     const answerUserTagFlagValue = await launchDarkly(
       featureFlags.ANSWER_USER_TAG
     );

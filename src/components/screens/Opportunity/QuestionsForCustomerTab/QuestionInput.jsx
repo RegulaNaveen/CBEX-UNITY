@@ -75,7 +75,12 @@ const QuestionInput = ({
       questionUnlockWrapper(question?.questionId);
     } else {
       dispatch(
-        editProposalQuestion(proposalId, question.questionId, questionData)
+        editProposalQuestion(
+          proposalId,
+          question.questionId,
+          questionData,
+          socketContext
+        )
       );
       questionUnlockWrapper(question?.questionId);
       console.log({ questionData });

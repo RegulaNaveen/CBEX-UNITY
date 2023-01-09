@@ -14,7 +14,6 @@ import AnswerInput from './AnswerInput';
 import QuestionInput from './QuestionInput';
 
 const QuestionContainer = ({ deleteQuestionHandler, questionData }) => {
-  console.log('question dataaa: ', questionData.toJS());
   const question = questionData.toJS();
   const socketContext = useContext(SocketContext);
 
@@ -25,7 +24,6 @@ const QuestionContainer = ({ deleteQuestionHandler, questionData }) => {
   });
 
   const isQuestionLocked = () => {
-    console.log('lllllllllllllllllllllllllllllll ', question?.questionLockInfo);
     return question?.questionLockInfo && question?.questionLockInfo?.userInfo;
   };
 
