@@ -50,6 +50,7 @@ const {
   NEW_BID_CREATED,
   PROPOSAL_DETAIL_UPDATE,
   UPDATE_LOOKUP_OPTIONS,
+  INTEGRATIONS_INFO,
   BOX_ADDITIONAL_LINK,
   BOX_ADDITIONAL_LINK_ERROR,
   SWITCH_TEMP_STATUS,
@@ -58,7 +59,7 @@ const {
   QUESTION_LOCK_BY_USER,
   QUESTION_UNLOCK_BY_USER,
   QUESTION_LOCK_DETAILS_ALL,
-  SET_EVENT_LAUNCHER_FLAG,
+  SET_FLAG,
   SHOW_NA_CHECKBOX,
   ERROR_UPDATE_NOT_APPLICABLE,
   SET_CAN_USER_TAG_IN_QUESTION,
@@ -144,7 +145,7 @@ const INITIAL_STATE: Map = fromJS({
   boxAdditionalLink: {},
   switchTempCallStatus: false,
   switchTempInProgress: false,
-  eventLauncherFlag: false,
+  eventflag: {},
   showNaCheckbox: false,
   priceModeler: fromJS({
     cost: '',
@@ -774,8 +775,6 @@ const onUpdateProposalNAQuestionDone = (state: Map, action: Object): Map => {
     payload: { data, questionId: referenceId, loading = false }
   } = action;
 
-  console.log('inside update proposal na ', data);
-
   let newState = fromJS({});
 
   const indexOfListToUpdate = state
@@ -783,8 +782,6 @@ const onUpdateProposalNAQuestionDone = (state: Map, action: Object): Map => {
     .findIndex((listItem) => {
       return listItem.questionId === referenceId;
     });
-
-  console.log('indexOfListToUpdate ', indexOfListToUpdate);
 
   newState = state
     .setIn(
@@ -1261,6 +1258,8 @@ const actionMap = {
   [PROPOSAL_DETAIL_UPDATE]: updateProposalDetail,
   [UPDATE_LOOKUP_OPTIONS]: (state, { payload }) =>
     state.set('lookUpOptions', payload),
+  [INTEGRATIONS_INFO]: (state, { payload }) =>
+    state.set('proposalIntegrations', payload),
   [BOX_ADDITIONAL_LINK]: fetchBoxAdditionalLink,
   [BOX_ADDITIONAL_LINK_ERROR]: onGettingfetchBoxAdditionalLinkError,
   [SWITCH_TEMP_STATUS]: (state, { payload }) =>
@@ -1271,8 +1270,7 @@ const actionMap = {
   [QUESTION_LOCK_BY_USER]: updateQuestionLockByUser,
   [QUESTION_UNLOCK_BY_USER]: updateQuestionUnlockByUser,
   [QUESTION_LOCK_DETAILS_ALL]: questionLockDetails,
-  [SET_EVENT_LAUNCHER_FLAG]: (state, { payload }) =>
-    state.set('eventLauncherFlag', payload),
+  [SET_FLAG]: (state, { payload }) => state.set('eventflag', payload),
   [SHOW_NA_CHECKBOX]: (state, { payload }) =>
     state.set('showNaCheckbox', payload),
   [SET_PRICE_MODELER_FIELDS]: setPriceModulerFields,

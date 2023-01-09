@@ -2,7 +2,7 @@
 import React from 'react';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 
-const MatomoHOC = (Component: any) => {
+const MatomoHOC = Component => {
   const categories = {
     dp: 'Unity Dashboard',
     pd: props =>
@@ -21,7 +21,7 @@ const MatomoHOC = (Component: any) => {
     scroll: 'Scrolled',
     edit: 'Edited'
   };
-  return (props: any) => {
+  return props => {
     const { trackPageView, trackEvent, pushInstruction } = useMatomo();
 
     if (!localStorage.getItem('MatomoUserIdSet')) {

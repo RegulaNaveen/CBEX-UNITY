@@ -112,6 +112,9 @@ export const getFilteredSections = (proposal: Map, auth: Map): Map =>
 export const getMilestoneSections = (proposal: Map, auth: Map): Map =>
   generateMilestone(proposal.get('proposalQuestions'));
 
+export const getfetchUserTagFlag = (proposal: Map, auth: Map): Map =>
+  proposal.get('eventflag');
+
 export const isProposalLoading = (proposal: Map): Map =>
   proposal.get('isProposalLoading');
 
@@ -140,6 +143,9 @@ export const isAnswerTypesInfoLoading = (proposal: Map): Map =>
   proposal.get('isAnswerTypesLoading');
 
 export const getRoles = (proposal: Map): Map => proposal.get('proposalRoles');
+
+export const getIntegrations = (proposal: Map): Map =>
+  proposal.get('proposalIntegrations');
 
 export const isRolesInfoLoading = (proposal: Map): Map =>
   proposal.get('isRolesLoading');
@@ -305,8 +311,7 @@ export const getOpportunityData = createSelector(selectProposal, (proposal) =>
 export const getBidList = createSelector(getOpportunityData, (opportunity) => {
   if (opportunity.size > 0) {
     let bidList = [];
-    // console.log(opportunity.valueSeq().toJS());
-    opportunity.valueSeq().forEach((item, ind) => {
+    opportunity.valueSeq().forEach(item => {
       bidList.push({
         bidDueDate: item.getIn(['proposal', 'proposalDetails', 'Bid due date']),
         bidDate: item.getIn(['proposal', 'proposalDate']),
@@ -367,5 +372,5 @@ export const getApprovalQuestionLoading = createSelector(
 
 export const selectIsPriceModelerEstimateRecalculating = createSelector(
   selectProposal,
-  (proposal) => proposal?.get('priceModelerRecalculating', false)
+  proposal => proposal?.get('priceModelerRecalculating', false)
 );

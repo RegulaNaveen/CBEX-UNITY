@@ -23,6 +23,7 @@ import ViewAboveVerticalTabs from '../../views/ViewAboveVerticalTabs';
 
 const Approvals = () => {
   const approvals = useSelector(state => state.approvals.allApprovals);
+  const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const questions = useSelector(getProposalQuestions);
   const [isShowFilters, setIsShowFilters] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -35,7 +36,9 @@ const Approvals = () => {
 
   // get email flag status on mount
   useEffect(() => {
-    dispatch(fetchApprovalSendEmailFlag());
+    if (allFlags && allFlags.approvalSendMailFlag) {
+      dispatch(fetchApprovalSendEmailFlag(allFlags.approvalSendMailFlag));
+    }
   }, []);
 
   useEffect(() => {

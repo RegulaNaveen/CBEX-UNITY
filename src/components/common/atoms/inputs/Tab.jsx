@@ -11,12 +11,7 @@ import { useMatomo } from '@datapunt/matomo-tracker-react';
 import Questions from '../../../screens/Opportunity/Questions';
 import Documents from '../../../screens/Opportunity/Documents';
 import Validate from '../../../screens/Opportunity/Validate';
-import featureFlags from '../../../../constants/featureFlags';
-import launchDarkly from '../../../../utils/launchDarkly';
-import {
-  getOpportunityData,
-  getSelectedBid
-} from '../../../../redux/selectors/proposal';
+import { getSelectedBid } from '../../../../redux/selectors/proposal';
 import {
   getIsOpen,
   getProposalDetails,
@@ -51,15 +46,12 @@ const UnityTab = ({
 
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const isApprovalCount = selectedBid?.isApprovalCountPresent || false;
-  const oppData = useSelector(getOpportunityData)?.toJS();
-  const memoizeBid = useMemo(() => selectedBid, [selectedBid?.id]);
-  const proposalID = memoizeBid?.id;
   const history = useHistory();
   const isOpen = useSelector(state => getIsOpen(state));
   const proposalDetail = useSelector(state => getProposalDetails(state));
   const userEmail = useSelector(state => getUserEmail(state));
   const userRole = useSelector(state => getUserRole(state));
-
+  const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const { trackEvent } = useMatomo();
 
   const socketContext = useContext(NotesSocketContext);
@@ -100,17 +92,11 @@ const UnityTab = ({
 
   async function fetchTabFlags() {
     // launchDarkly calls should be optimized
-    let verticalTabFlag = await launchDarkly(featureFlags.VERTICAL_TAB, false); // Vertical tab flag
-    const questionsForCustomerFlag = await launchDarkly(
-      featureFlags.QUESTIONS_FOR_CUSTOMER_TAB,
-      false
-    ); // Questions for the customer flag
-    const notepadFlag = await launchDarkly(featureFlags.NOTEPAD_TAB, false); // Notepad flag
-    const proposalTeamFlag = await launchDarkly(
-      featureFlags.PROPOSAL_TEAM_TAB,
-      false
-    ); // Proposal Team flag
-
+    let verticalTabFlag = allFlags.verticalTab || false; // Vertical tab flag
+    const questionsForCustomerFlag = allFlags.questionsForCustomerTab || false;
+    const notepadFlag = allFlags.notepad || false; // Notepad flag
+    const proposalTeamFlag = allFlags.proposalTeamTab || false; // Proposal Team flag
+    const approvalFlag = allFlags.approvalsFlag || false;
     if (
       !verticalTabFlag ||
       ![questionsForCustomerFlag, notepadFlag, proposalTeamFlag].some(
@@ -119,6 +105,7 @@ const UnityTab = ({
     ) {
       verticalTabFlag = false;
     }
+    setApprovalsFlag(approvalFlag);
     setShowVerticalTab(verticalTabFlag);
     setShowQuestionsForCustomerTab(questionsForCustomerFlag);
     setShowNotepadTab(notepadFlag);
@@ -171,13 +158,6 @@ const UnityTab = ({
       history.push(`${window.location.pathname}?${selectView.toString()}`);
     }
   };
-
-  useEffect(() => {
-    (async () => {
-      const approvalFlag = await launchDarkly(featureFlags.APPROVALS, false);
-      setApprovalsFlag(approvalFlag);
-    })();
-  }, []);
 
   /**
    * Decides which tabs to be rendered

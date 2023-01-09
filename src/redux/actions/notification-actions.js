@@ -1,6 +1,4 @@
-import { API, REDUX_TYPES } from '../../constants';
-import { getUserEmail } from '../../SessionHandler';
-import { getSelectedBid } from '../../redux/selectors';
+import { REDUX_TYPES } from '../../constants';
 import notificationAPI from '../../api/notification';
 
 const {
