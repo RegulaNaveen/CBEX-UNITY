@@ -67,7 +67,8 @@ const {
   SET_PRICE_MODELER_FIELDS,
   SET_BID_COST_DATA_FIELDS,
   SET_PRICE_MODELER_RECALCULATING,
-  PRICE_MODELER_UPDATE
+  PRICE_MODELER_UPDATE,
+  SET_ACTIVE_TABINDEX
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -167,7 +168,8 @@ const INITIAL_STATE: Map = fromJS({
     value: false
   }),
   canUserTagInQuestion: false,
-  priceModelerRecalculating: false
+  priceModelerRecalculating: false,
+  activeTabIndex: 0 // Strategy Development, Approvals, Documents
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -1212,6 +1214,10 @@ const updatePriceModelerEstimate = (state, action) => {
   );
 };
 
+const setActiveTabIndex = (state, action) => {
+  return state.set('activeTabIndex', action.payload);
+};
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
@@ -1280,7 +1286,8 @@ const actionMap = {
     state.set('canUserTagInQuestion', payload),
   [SET_PRICE_MODELER_RECALCULATING]: (state, { payload }) =>
     state.set('priceModelerRecalculating', payload),
-  [PRICE_MODELER_UPDATE]: updatePriceModelerEstimate
+  [PRICE_MODELER_UPDATE]: updatePriceModelerEstimate,
+  [SET_ACTIVE_TABINDEX]: setActiveTabIndex
 };
 
 export default function(

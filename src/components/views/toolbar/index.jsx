@@ -10,7 +10,7 @@ import ArrowDown from 'apollo-react-icons/ArrowDown';
 import ArrowUp from 'apollo-react-icons/ArrowUp';
 
 import ToolbarMenu from './ToolbarMenu';
-import { DASHBOARD, UBUILD } from '../../../routes';
+import { DASHBOARD, OPPORTUNITYS, UBUILD } from '../../../routes';
 import { isUserUbuildAdmin } from '../../../utils/utils';
 import { getUserName, getUserRole } from '../../../SessionHandler';
 import { getRolesInfo } from '../../../redux/actions/proposal-actions';
@@ -19,6 +19,8 @@ import { getRoles } from '../../../redux/selectors';
 import WelcomeModal from '../modals/WelcomeModal';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import Notification from '../Notification/index';
+import Search from '../Search';
+import PrivateRoute from '../../../PrivateRoute';
 
 type State = { isCollapsed: boolean };
 class Toolbar extends Component<{}, State> {
@@ -113,9 +115,11 @@ class Toolbar extends Component<{}, State> {
             </Link> */}
           </div>
         )}
-        <Notification />
-
+        <div style={{ flexGrow: 1 }}>
+          <PrivateRoute path={OPPORTUNITYS} component={Search} />
+        </div>
         <div className="toolbar-account-spacer" style={{ flex: 0 }}>
+          <Notification />
           <div ref={this.wrapperRef} className="toolbar-account-wrapper">
             <div
               className={classnames(

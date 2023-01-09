@@ -2,6 +2,11 @@ import { createSelector } from 'reselect';
 
 const selectApprovals = state => state.approvals;
 
+export const selectAllApprovals = createSelector(
+  selectApprovals,
+  approvals => approvals.allApprovals
+);
+
 export const selectCanSendEmail = createSelector(
   selectApprovals,
   approvals => approvals.canSendEmail

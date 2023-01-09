@@ -2,7 +2,7 @@
 /* eslint-disable react/destructuring-assignment */
 // @flow
 /* eslint-disable no-plusplus */
-import React from 'react';
+import React, { createRef } from 'react';
 import { Map, List } from 'immutable';
 import { connect } from 'react-redux';
 import { isObject, isEqual, isEmpty, xor, has, isString } from 'lodash';
@@ -15,6 +15,7 @@ import Typography from 'apollo-react/components/Typography';
 import moment from 'moment';
 import classNames from 'classnames';
 import Checkbox from 'apollo-react/components/Checkbox';
+import Highlighter from 'react-highlight-words';
 import { Edit } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
 import TextArea from './atoms/inputs/TextArea';
@@ -64,6 +65,17 @@ import { parseStringifyJson } from '../../utils/helpers';
 import withIdleStateDetection from '../HOC/IdleStateDetector';
 import RadioQuestion from './atoms/inputs/RadioQuestion';
 import { getProposalAnswer } from '../../api/proposal';
+import {
+  selectAutoNavigatedToCurrentResult,
+  selectCurrentSearchResult,
+  selectPrevSearchResult,
+  selectQuery
+} from '../../redux/selectors/search';
+import {
+  EditorState,
+  CompositeDecorator
+} from 'apollo-react/node_modules/draft-js';
+import { autoNavigationCompletedAction } from '../../redux/actions/search-actions';
 
 const DropdownWithIdleStateDetection = withIdleStateDetection(Dropdown);
 const QuestionDatePickerWithIdleStateDetection = withIdleStateDetection(
@@ -136,6 +148,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
     this.quesTextContainerRef = React.createRef();
     this.quesTextInnerLeftRef = React.createRef();
     this.quesTextInnerRightRef = React.createRef();
+    this.questionTextRef1 = React.createRef();
+    this.questionTextRef2 = React.createRef();
+    this.questionTextTitleRef = React.createRef(null);
+
     this.state = {
       selectedDay: '',
       selectedRow: false,
@@ -159,6 +175,48 @@ export class TaskRow extends React.PureComponent<Props, State> {
     }
     window.addEventListener('resize', this.resize.bind(this));
     this.resize();
+  }
+
+  componentDidUpdate(prevProps) {
+    const {
+      query,
+      currentSearchResult,
+      prevSearchResult,
+      questionId,
+      autoNavigatedToCurrentResult,
+      autoNavigationDone
+    } = this.props;
+
+    if (
+      currentSearchResult !== null &&
+      this.questionTextTitleRef.current !== null &&
+      !autoNavigatedToCurrentResult
+    ) {
+      if (currentSearchResult.searchIndex === questionId) {
+        // allow others to collapse before scrollIntoView
+        setTimeout(() => {
+          this.questionTextTitleRef.current.scrollIntoView({
+            behaviour: 'smooth',
+            block: 'center',
+            inline: 'nearest'
+          });
+          this.setSelectRow(true);
+          autoNavigationDone();
+        }, 500);
+      }
+    } else if (
+      prevSearchResult !== null &&
+      prevSearchResult.searchIndex === questionId &&
+      autoNavigatedToCurrentResult
+    ) {
+      if (
+        (currentSearchResult !== null &&
+          currentSearchResult.searchIndex !== prevSearchResult.searchIndex) ||
+        currentSearchResult === null
+      ) {
+        this.setSelectRow(false);
+      }
+    }
   }
 
   handlePropsalChange = (textValue, lastValue, reason) => {
@@ -624,7 +682,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
       loading,
       isNotApplicable,
       NaLoading,
-      canUserTagInQuestion
+      canUserTagInQuestion,
+      query
     } = this.props;
 
     const { selectedRow } = this.state;
@@ -908,6 +967,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 onFocus={e => this.onChildInputFocus(e)}
                 value={answerValue || ''}
                 disabled={checkDisableFlag() || isNotApplicable}
+                highlightQuery={query}
               />
             </span>
           </SFAnswerValidationWrapper>
@@ -941,6 +1001,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 disabled={checkDisableFlag() || isNotApplicable}
                 questionId={this.props.questionId}
                 lockedBySelf={!!this.isQuestionLockedBySelf()}
+                highlightQuery={query}
                 lockQuestionOnFocus
               />
             </span>
@@ -976,6 +1037,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 disabled={checkDisableFlag() || isNotApplicable}
                 questionId={this.props.questionId}
                 lockedBySelf={!!this.isQuestionLockedBySelf()}
+                highlightQuery={query}
                 lockQuestionOnFocus
               />
             </span>
@@ -1432,12 +1494,16 @@ export class TaskRow extends React.PureComponent<Props, State> {
               >
                 {/* Question Text */}
                 <div className="questiontext-richtext">
-                  <div className="question-title-txt">
+                  <div
+                    className="question-title-txt"
+                    ref={this.questionTextTitleRef}
+                  >
                     {questionJSON ? (
                       <RichTextEditor
                         style={{ minHeight: '0px' }}
                         variant="view"
                         defaultValue={JSON.parse(questionJSON)}
+                        ref={this.questionTextRef1}
                       />
                     ) : (
                       <p>{questionText}</p>
@@ -1490,6 +1556,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                           <RichTextEditor
                             variant="view"
                             defaultValue={JSON.parse(questionHintJSON)}
+                            ref={this.questionTextRef2}
                           />
                         ) : (
                           <div>{questionHint}</div>
@@ -1600,7 +1667,11 @@ const mapStateToProps = (state: Object) => ({
   oppdata: getOpportunityData(state),
   noneditableField: getnoneditableField(state),
   showNaCheckbox: getShowNaCheckbox(state),
-  canUserTagInQuestion: getCanUserTagInQuestion(state)
+  canUserTagInQuestion: getCanUserTagInQuestion(state),
+  query: selectQuery(state),
+  currentSearchResult: selectCurrentSearchResult(state),
+  prevSearchResult: selectPrevSearchResult(state),
+  autoNavigatedToCurrentResult: selectAutoNavigatedToCurrentResult(state)
 });
 
 export default connect(mapStateToProps, {
@@ -1609,5 +1680,7 @@ export default connect(mapStateToProps, {
   deleteProposalUser: deleteProposalUserFromDB,
   setNotApplicable: setNotApplicableQuestion,
   setNotApplicableLoading: setNotApplicableLoader,
-  setEditQuestionData
+  setEditQuestionData,
+  autoNavigationDone: () => dispatch =>
+    dispatch(autoNavigationCompletedAction())
 })(MatomoHOC(TaskRow));

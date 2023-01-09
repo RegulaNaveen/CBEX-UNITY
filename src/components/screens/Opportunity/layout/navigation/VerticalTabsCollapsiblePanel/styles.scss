@@ -1,8 +1,10 @@
+@import '../../../../../../../styles/Constants';
+
 .vertical-tabs-collapsible-panel {
   display: flex;
   height: 100vh;
   position: sticky;
-  top: 0;
+  top: $toolbarHight;
   margin-left: -16px;
   ::-webkit-scrollbar {
     width: 8px;

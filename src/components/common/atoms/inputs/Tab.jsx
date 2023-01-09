@@ -4,20 +4,24 @@ import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
 import Panel from 'apollo-react/components/Panel';
 import Typography from 'apollo-react/components/Typography';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Loader from 'react-loader-spinner';
 import classNames from 'classnames';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import Questions from '../../../screens/Opportunity/Questions';
 import Documents from '../../../screens/Opportunity/Documents';
 import Validate from '../../../screens/Opportunity/Validate';
-import { getSelectedBid } from '../../../../redux/selectors/proposal';
+import {
+  getSelectedBid,
+  selectActiveTabIndex
+} from '../../../../redux/selectors/proposal';
 import {
   getIsOpen,
   getProposalDetails,
   getUserEmail,
   getUserRole
 } from '../../../../redux/selectors';
+import { setActiveTabIndexAction } from '../../../../redux/actions/proposal-actions';
 import Approvals from '../../../screens/Approvals/index';
 import VerticalTabsCollapsiblePanel from '../../../screens/Opportunity/layout/navigation/VerticalTabsCollapsiblePanel';
 import QuestionsForCustomer from '../../../screens/Opportunity/QuestionsForCustomerTab';
@@ -32,7 +36,6 @@ const UnityTab = ({
   selectedView,
   onChangeSelectedTab
 }) => {
-  const [value, setValue] = useState(0);
   const [approvalsFlag, setApprovalsFlag] = useState(false);
   const [showApprovalTab, setShowApprovalTab] = useState(false);
   const [isShowVerticalTab, setShowVerticalTab] = useState(false);
@@ -52,6 +55,9 @@ const UnityTab = ({
   const userEmail = useSelector(state => getUserEmail(state));
   const userRole = useSelector(state => getUserRole(state));
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
+  const value = useSelector(selectActiveTabIndex);
+  const dispatch = useDispatch();
+
   const { trackEvent } = useMatomo();
 
   const socketContext = useContext(NotesSocketContext);
@@ -130,16 +136,22 @@ const UnityTab = ({
 
   useEffect(() => {
     if (selectedView && selectedView === 'documents') {
-      setValue(tabs.find(item => item.label === 'Documents').value);
+      dispatch(
+        setActiveTabIndexAction(
+          tabs.find(item => item.label === 'Documents').value
+        )
+      );
     }
     if (selectedView && selectedView === 'approvals' && isApprovalCount) {
       const isApprovalTabVisible = approvalsFlag;
       const approvalTabValue = tabs.find(item => item.label === 'Approvals')
         .value;
-      setValue(isApprovalTabVisible ? approvalTabValue : 0); // Shows questions tab if Approvals are not found for the proposal
+      dispatch(
+        setActiveTabIndexAction(isApprovalTabVisible ? approvalTabValue : 0)
+      ); // Shows questions tab if Approvals are not found for the proposal
     }
     if (selectedView && selectedView === 'questions') {
-      setValue(0);
+      dispatch(setActiveTabIndexAction(0));
     }
   }, [selectedView, approvalsFlag, showApprovalTab]);
 
@@ -148,7 +160,7 @@ const UnityTab = ({
     const selectView = new URLSearchParams(winLocationSearch);
     const currentTab = tabs.find(item => item.value === val);
     const currentPath = currentTab.path || '';
-    setValue(val);
+    dispatch(setActiveTabIndexAction(val));
     onChangeSelectedTab(currentPath);
     selectView.set('viewType', currentPath);
     if (val === 0) {

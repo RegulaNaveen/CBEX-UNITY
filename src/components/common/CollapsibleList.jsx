@@ -5,6 +5,7 @@ import { Map } from 'immutable';
 import Link from 'apollo-react/components/Link';
 import Plus from 'apollo-react-icons/Plus';
 import FolderOpen from 'apollo-react-icons/FolderOpen';
+import Highlighter from 'react-highlight-words';
 import {
   getSelectedSection,
   selectNotes,
@@ -18,6 +19,12 @@ import {
   onHandleOpenClose,
   handleSelectedSection
 } from '../../redux/actions/sidebar-actions';
+import {
+  selectAutoNavigatedToCurrentResult,
+  selectCurrentSearchResult,
+  selectQuery
+} from '../../redux/selectors/search';
+import { autoNavigationCompletedAction } from '../../redux/actions/search-actions';
 
 const CollapsibleQuestionMapping = React.lazy(() =>
   import(
@@ -50,7 +57,8 @@ type Props = {
   milestone: any,
   selectedBid: Map,
   isNotepadOpen: boolean,
-  listIndex: number
+  listIndex: number,
+  query: string
 };
 
 class CollapsibleList extends Component<Props, State> {
@@ -60,6 +68,7 @@ class CollapsibleList extends Component<Props, State> {
     super(props);
     this.taskRef = React.createRef();
     this.collapseTriggerRef = React.createRef(null);
+    this.titleRef = React.createRef(null);
     this.state = { isCollapsed: false };
   }
 
@@ -80,19 +89,61 @@ class CollapsibleList extends Component<Props, State> {
   }
 
   componentDidUpdate(prevProps) {
-    const { selectedSection, isCheckedAll } = this.props;
+    const {
+      selectedSection,
+      isCheckedAll,
+      title,
+      currentSearchResult,
+      questions,
+      autoNavigationDone,
+      autoNavigatedToCurrentResult
+    } = this.props;
     const { id } = this.taskRef.current;
 
-    if (prevProps.selectedSection !== selectedSection)
-      // eslint-disable-next-line react/no-did-update-set-state
-      setTimeout(
-        () => this.setState({ isCollapsed: id === selectedSection }),
-        0
-      );
+    let shouldBeCollapsed = this.state.isCollapsed;
 
-    if (prevProps.isCheckedAll !== isCheckedAll)
+    if (
+      prevProps.selectedSection !== selectedSection &&
+      id === selectedSection
+    ) {
+      shouldBeCollapsed = true;
+    }
+
+    if (prevProps.isCheckedAll !== isCheckedAll) {
+      shouldBeCollapsed = !!isCheckedAll;
+    }
+
+    if (
+      currentSearchResult !== null &&
+      this.titleRef.current !== null &&
+      !autoNavigatedToCurrentResult
+    ) {
+      const questionIds = questions.toArray().map(question => question[0]);
+      if (currentSearchResult.searchIndex === title) {
+        // allow other collapsibleList to collapse before scrollIntoView
+        setTimeout(() => {
+          this.titleRef.current.scrollIntoView({
+            behaviour: 'smooth',
+            block: 'center',
+            inline: 'nearest'
+          });
+          autoNavigationDone();
+        }, 500);
+      } else if (questionIds.includes(currentSearchResult.searchIndex)) {
+        shouldBeCollapsed = true;
+      } else {
+        shouldBeCollapsed = false;
+      }
+    }
+
+    if (isCheckedAll) {
+      shouldBeCollapsed = true;
+    }
+
+    if (this.state.isCollapsed !== shouldBeCollapsed) {
       // eslint-disable-next-line react/no-did-update-set-state
-      setTimeout(() => this.setState({ isCollapsed: !!isCheckedAll }), 0);
+      setTimeout(() => this.setState({ isCollapsed: shouldBeCollapsed }), 0);
+    }
   }
 
   componentWillUnmount() {
@@ -206,14 +257,16 @@ class CollapsibleList extends Component<Props, State> {
 
   render() {
     const { isCollapsed } = this.state;
-    const { onAddQuestion } = this.props;
     const {
       questions,
       title,
       milestone,
       setQuestionToDisplayHistory,
       selectedBid,
-      isNotepadOpen
+      isNotepadOpen,
+      onAddQuestion,
+      query,
+      currentSearchResult
     } = this.props;
     return (
       <div
@@ -247,7 +300,20 @@ class CollapsibleList extends Component<Props, State> {
             onKeyPress={this.handleKeyPress}
             tabIndex={-1}
           >
-            <p className="task-title">{title}</p>
+            <p className="task-title" ref={this.titleRef}>
+              <Highlighter
+                searchWords={[
+                  `${
+                    currentSearchResult !== null &&
+                    currentSearchResult.searchIndex === title
+                      ? query
+                      : ''
+                  }`
+                ]}
+                autoEscape={true}
+                textToHighlight={title}
+              />
+            </p>
           </div>
         ) : (
           <div className="task-table-wrapper">
@@ -259,9 +325,20 @@ class CollapsibleList extends Component<Props, State> {
               onKeyPress={this.handleKeyPress}
               tabIndex={-1}
             >
-              <div className="task-title">
+              <div className="task-title" ref={this.titleRef}>
                 <p>
-                  {title}
+                  <Highlighter
+                    searchWords={[
+                      `${
+                        currentSearchResult !== null &&
+                        currentSearchResult.searchIndex === title
+                          ? query
+                          : ''
+                      }`
+                    ]}
+                    autoEscape={true}
+                    textToHighlight={title}
+                  />
                   {this.showNotesCount(title)}
                 </p>
               </div>
@@ -309,13 +386,18 @@ const mapStateToProps = (state: Map) => {
     selectedSection,
     notes,
     proposalDetail,
-    selectedBid: getSelectedBid(state)
+    selectedBid: getSelectedBid(state),
+    query: selectQuery(state),
+    currentSearchResult: selectCurrentSearchResult(state),
+    autoNavigatedToCurrentResult: selectAutoNavigatedToCurrentResult(state)
   };
 };
 
 const mapDispatchToProps = {
   handleOpenClose: onHandleOpenClose,
-  changeSelectedSection: handleSelectedSection
+  changeSelectedSection: handleSelectedSection,
+  autoNavigationDone: () => dispatch =>
+    dispatch(autoNavigationCompletedAction())
 };
 
 export default connect(
