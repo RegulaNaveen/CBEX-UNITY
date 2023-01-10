@@ -69,7 +69,6 @@ import {
 } from '../../../utils/utils';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
 import ANSWER_TYPES from '../../../constants/answerTypes';
-import moment from 'moment';
 import ViewAboveVerticalTabs from '../../views/ViewAboveVerticalTabs';
 import lazyWithRetry from '../../../utils/lazy';
 
