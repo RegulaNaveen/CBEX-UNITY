@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import UserInputModal from './UserInputModal';
 import { createWord, shouldInclude } from './word-template';
@@ -18,18 +18,6 @@ import {
 } from '../../../redux/selectors';
 import { createPdf } from './pdf-template';
 import fetchNotes from '../../../redux/actions/notepad-actions';
-import NotesSocketContext from '../../../context/notesSocketContext';
-import { useEditor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Underline from '@tiptap/extension-underline';
-import Link from '@tiptap/extension-link';
-import HighLight from '@tiptap/extension-highlight';
-import TextAlign from '@tiptap/extension-text-align';
-import Subscript from '@tiptap/extension-subscript';
-import Superscript from '@tiptap/extension-superscript';
-import CharacterCount from '@tiptap/extension-character-count';
-import Mention from '@tiptap/extension-mention';
-import Collaboration from '@tiptap/extension-collaboration';
 
 export let docType = {
   pdf: 'PDF',
@@ -37,51 +25,14 @@ export let docType = {
 };
 export const defaultOption = 'All';
 const GenerateDocs = () => {
-  const notesSocket = useContext(NotesSocketContext);
   const notesMap = useSelector(selectNotes);
   const proposalQuestions = useSelector(selectProposalQuestions);
   const proposalDetails = useSelector(getProposalDetails);
   const roleList = useSelector(getRoles) || [];
   const selectedBid = useSelector(getSelectedBid);
+  const editor = useSelector(selectEditor);
   const dispatch = useDispatch();
-  const editor = useEditor(
-    {
-      extensions: [
-        StarterKit,
-        Underline,
-        Link,
-        HighLight,
-        Subscript,
-        Superscript,
-        CharacterCount,
-        TextAlign.configure({
-          types: ['heading', 'paragraph']
-        }),
-        Collaboration.configure({
-          document: notesSocket.ydoc
-        }),
-        Link.configure({
-          autolink: true,
-          linkOnPaste: false,
-          validate: href => /^https?:\/\// || /^www?:\/\//.test(href),
-          protocols: ['ftp', 'mailto'],
-          HTMLAttributes: {
-            class: 'my-custom-class'
-          }
-        }),
-        Mention.configure({
-          HTMLAttributes: {
-            class: 'mention'
-          },
-          renderLabel({ options, node }) {
-            return `${node.attrs.label ?? node.attrs.id}`;
-          },
-          suggestion: null
-        })
-      ]
-    },
-    [selectedBid.get('id', ''), notesSocket.wsInstance]
-  );
+
   let logo = useRef(null);
   let [filterState, filterStateUpdate] = useState({
     answered: true,

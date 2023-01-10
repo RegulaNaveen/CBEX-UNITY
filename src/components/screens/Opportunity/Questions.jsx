@@ -67,7 +67,6 @@ import {
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
 import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions';
 import ANSWER_TYPES from '../../../constants/answerTypes';
-import NotesSocketContext from '../../../context/notesSocketContext';
 import moment from 'moment';
 import ViewAboveVerticalTabs from '../../views/ViewAboveVerticalTabs';
 
@@ -116,8 +115,6 @@ type State = {
 const MANUAL_REFRESH = false;
 let firstRender = true;
 class Questions extends Component {
-  static contextType = NotesSocketContext;
-
   constructor(props: Object) {
     super(props);
     this.resizeObserver = null;

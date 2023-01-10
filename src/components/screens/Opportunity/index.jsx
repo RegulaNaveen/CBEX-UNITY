@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import Loader from 'react-loader-spinner';
 import classNames from 'classnames';
 import { compose } from 'redux';
-import * as Y from 'yjs';
 import isEmpty from 'lodash/isEmpty';
 import {
   UpdateNewBid,
@@ -41,10 +40,6 @@ import BidDoneBanner from '../../views/BidDoneBanner';
 import GenerateDocs from '../../views/export-component/GenerateDocs';
 import { SocketContext } from '../../../context/SocketContext';
 import * as notificationActions from '../../../redux/actions/notification-actions';
-import { WebsocketProvider } from '../../../context/y-websocket';
-import { NOTES_SOCKET_URL } from '../../../constants/api';
-import NotesSocketContext from '../../../context/notesSocketContext';
-import { websocketNotesApi } from '../../../api/notepad';
 import { UBUILD, DASHBOARD } from '../../../routes';
 import featureFlags from '../../../constants/featureFlags';
 import launchDarkly from '../../../utils/launchDarkly';
@@ -97,9 +92,7 @@ export class Opportunity extends Component<Props, State> {
     this.state = {
       selectedView: 'questions',
       enableValidateTab: false,
-      windowSize: window.innerWidth,
-      ydoc: new Y.Doc(),
-      wsInstance: undefined
+      windowSize: window.innerWidth
     };
   }
 
@@ -213,8 +206,6 @@ export class Opportunity extends Component<Props, State> {
     }
     // END Bid level redirection
 
-    this.triggerWebsocketNotesApi(prevProposalId, thisProposalId);
-
     // Set Event Launcher Flag
     (async () => {
       const flagValue = await launchDarkly(featureFlags.EVENT_LAUNCHER, false);
@@ -231,7 +222,6 @@ export class Opportunity extends Component<Props, State> {
 
     window.removeEventListener('storage', this.handleStorageChange);
     this.context.updateSocketOppId(null, null);
-    this.state.wsInstance?.destroy();
   }
 
   handleResize = () => {
@@ -260,37 +250,6 @@ export class Opportunity extends Component<Props, State> {
       }
     }
   }
-
-  triggerWebsocketNotesApi = async (prevProposalId, thisProposalId) => {
-    if (prevProposalId !== thisProposalId) {
-      await websocketNotesApi(thisProposalId);
-      // initial load case
-      if (!prevProposalId && thisProposalId) {
-        if (!this.state.wsInstance) {
-          this.createNewNotesSocketConnection(thisProposalId);
-        }
-      } else {
-        this.state.wsInstance?.destroy();
-        this.setState({ ydoc: new Y.Doc() }, () => {
-          this.createNewNotesSocketConnection(thisProposalId);
-        });
-      }
-    }
-  };
-
-  createNewNotesSocketConnection = proposalId => {
-    const { ydoc } = this.state;
-    const storedValue = `doc-${proposalId}`;
-    if (proposalId) {
-      const wsProvider = new WebsocketProvider(
-        NOTES_SOCKET_URL,
-        `?=${storedValue}&`,
-        ydoc
-      );
-      this.setState({ wsInstance: wsProvider });
-    }
-  };
-
   trackMatomoEventTabs = tab => {
     const {
       eventCategories,
@@ -339,23 +298,19 @@ export class Opportunity extends Component<Props, State> {
 
     return (
       <div className="proposal-details">
-        <NotesSocketContext.Provider
-          value={{ wsInstance: this.state.wsInstance, ydoc: this.state.ydoc }}
-        >
-          <GenerateDocs />
-          <UnityGrid
-            data={details}
-            isOpen={isOpen}
-            windowSize={windowSize}
-            bidStatus={bidStatus}
-          />
-          <UnityTab
-            id={params.id}
-            enableValidateTab={enableValidateTab}
-            selectedView={selectedView}
-            onChangeSelectedTab={this.onChangeSelectedTab}
-          />
-        </NotesSocketContext.Provider>
+        <GenerateDocs />
+        <UnityGrid
+          data={details}
+          isOpen={isOpen}
+          windowSize={windowSize}
+          bidStatus={bidStatus}
+        />
+        <UnityTab
+          id={params.id}
+          enableValidateTab={enableValidateTab}
+          selectedView={selectedView}
+          onChangeSelectedTab={this.onChangeSelectedTab}
+        />
       </div>
     );
   };

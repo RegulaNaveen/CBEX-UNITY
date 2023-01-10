@@ -1,4 +1,34 @@
 import {
+  pdf,
+  Document,
+  Page,
+  View,
+  StyleSheet,
+  Text,
+  Font,
+  Image,
+  Link as HtmlLink
+} from '@react-pdf/renderer';
+// import './AnnotationLayer.css';
+import React from 'react';
+import Html from 'react-pdf-html';
+import { isString } from 'lodash';
+import moment from 'moment';
+import { generateHTML } from '@tiptap/core';
+import Link from '@tiptap/extension-link';
+import HighLight from '@tiptap/extension-highlight';
+import Subscript from '@tiptap/extension-subscript';
+import Superscript from '@tiptap/extension-superscript';
+import Mention from '@tiptap/extension-mention';
+import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
+import { useSelector, shallowEqual, useDispatch } from 'react-redux';
+import ProximaNovaItalic from '../../../../fonts/Proxima-Nova-Reg-It.otf';
+import ProximaNovaBoldItalic from '../../../../fonts/Proxima-Nova-Bold-It.otf';
+import ProximaNovaBold from '../../../../fonts/Proxima Nova Alt Bold.otf';
+import ProximaNova from '../../../../fonts/ProximaNova-Regular.otf';
+import Logo from '../../../../img/iqvia-main-logo.png';
+import {
   getFilteredQuestion,
   headFields,
   PT_SECTION,
@@ -15,35 +45,7 @@ import {
   formatDate,
   shouldInclude
 } from './word-template';
-import {
-  pdf,
-  Document,
-  Page,
-  View,
-  StyleSheet,
-  Text,
-  Font,
-  Image,
-  Link as HtmlLink
-} from '@react-pdf/renderer';
-// import './AnnotationLayer.css';
-import React from 'react';
-import Html from 'react-pdf-html';
-import { isString } from 'lodash';
-import Logo from '../../../../img/iqvia-main-logo.png';
-import ProximaNova from '../../../../fonts/ProximaNova-Regular.otf';
-import ProximaNovaBold from '../../../../fonts/Proxima Nova Alt Bold.otf';
-import ProximaNovaBoldItalic from '../../../../fonts/Proxima-Nova-Bold-It.otf';
-import ProximaNovaItalic from '../../../../fonts/Proxima-Nova-Reg-It.otf';
-import moment from 'moment';
-import { generateHTML } from '@tiptap/core';
-import Link from '@tiptap/extension-link';
-import HighLight from '@tiptap/extension-highlight';
-import Subscript from '@tiptap/extension-subscript';
-import Superscript from '@tiptap/extension-superscript';
-import Mention from '@tiptap/extension-mention';
-import StarterKit from '@tiptap/starter-kit';
-import Underline from '@tiptap/extension-underline';
+import { selectEditor } from '../../../redux/selectors';
 
 Font.register({
   family: 'ProximaNova',
@@ -61,7 +63,7 @@ const styles = StyleSheet.create({
   },
   header: {
     width: '83%',
-    height: '10vh', //As per your page layout
+    height: '10vh', // As per your page layout
     borderBottom: `1px solid #${themeBlue}`,
     marginBottom: '20px',
     marginLeft: '50px',
@@ -81,7 +83,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '83%',
-    height: '15vh', //As per your page layout
+    height: '15vh', // As per your page layout
     marginTop: '20px',
     marginLeft: '50px',
     marginRight: '50px'
@@ -259,7 +261,7 @@ function topHeading(details) {
 function getHeaderInfoRows(details) {
   let html = `<table class="table headerInfo">`;
   try {
-    for (let key in headFields) {
+    for (const key in headFields) {
       let value = details[key] || '';
       if (key === 'Bid due date') value = moment(value).format('DD-MMM-YYYY');
 
@@ -300,7 +302,7 @@ function getProposalTeamsRows(questions) {
     html += `<th> Name</th>`;
     html += `</tr>`;
     coreTeamQuestions.forEach(question => {
-      let { questionText, answers } = question;
+      const { questionText, answers } = question;
       const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
       html += `<tr>`;
       html += `<td>${questionText} ${extraNewLines}</td>`;
@@ -315,7 +317,7 @@ function getProposalTeamsRows(questions) {
     html += `<th> Name</th>`;
     html += `</tr>`;
     otherTeamQuestions.forEach(question => {
-      let { questionText, answers } = question;
+      const { questionText, answers } = question;
       const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
       html += `<tr>`;
       html += `<td>${questionText} ${extraNewLines}</td>`;
@@ -333,7 +335,7 @@ function questionTables(proposalQuestions) {
   // Array<Table of each section>
   let html = ``;
   // Remove not visible questions
-  let questions = proposalQuestions
+  const questions = proposalQuestions
     .filter(question => {
       return (
         shouldInclude(question) &&
@@ -346,12 +348,12 @@ function questionTables(proposalQuestions) {
     });
   // Section map
   const sections = {};
-  let ordereredSections = [];
+  const ordereredSections = [];
 
   // Populate the section map
   questions.forEach(question => {
     try {
-      let section = question.section.sectionName || '';
+      const section = question.section.sectionName || '';
       if (sections[section]) {
         sections[section].push(question);
       } else {
@@ -421,7 +423,7 @@ function getQuestionToCustomerRows(questions) {
     html += `<tr>`;
     html += `<td><ul>`;
     questionsToCustomer.forEach((question, index) => {
-      let { questionText } = question;
+      const { questionText } = question;
       html += `<li> ${questionText} </li>`;
     });
     html += `</ul></td>`;
@@ -445,6 +447,7 @@ function getNotesRows(notes, editor) {
   data += `<table><tr><td style="border:1px solid black;padding:10px">`;
   try {
     const noteText = editor.getJSON();
+
     try {
       console.log('noteText pdf', noteText);
       data += generateHTML(noteText, [
@@ -493,6 +496,7 @@ function getHtml(
             ${getQuestionToCustomerRows(questions)}
             ${questionTables(filteredQuestions)}
             ${filterState.includesNotes ? getNotesRows(notes, editor) : ''}
+
         </body>
         </html>
     `;
@@ -514,7 +518,7 @@ const MyDoc = (
     <Document>
       <Page wrap style={styles.page}>
         <View fixed style={styles.header}>
-          <Image src={Logo} style={styles.imgLogo}></Image>
+          <Image src={Logo} style={styles.imgLogo} />
         </View>
         <View style={styles.body}>
           <View style={styles.heading}>
@@ -532,9 +536,8 @@ const MyDoc = (
               p: ({ style, children }) => {
                 if (children != '') {
                   return <View style={style}>{children}</View>;
-                } else {
-                  return <View style={{ height: 18 }}></View>;
                 }
+                return <View style={{ height: 18 }} />;
               },
               tr: ({ style, children }) => (
                 <View style={style}>{children}</View>
@@ -624,7 +627,7 @@ const MyDoc = (
           <View
             style={{ display: 'flex', flexDirection: 'row', marginBottom: 0 }}
           >
-            <Text style={{ flex: 0, fontSize: '8px', color: '#999' }}></Text>
+            <Text style={{ flex: 0, fontSize: '8px', color: '#999' }} />
             <Text
               style={{
                 flex: 1,
@@ -644,12 +647,13 @@ const MyDoc = (
 };
 
 export function createPdf(content) {
-  let {
+  const {
     data: { proposalQuestions, proposalDetails },
     notes,
     filterState,
     editor
   } = content;
+
   const filteredQuestions = getFilteredQuestion(proposalQuestions, filterState);
   return pdf(
     MyDoc(

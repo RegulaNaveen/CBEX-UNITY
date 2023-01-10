@@ -5,7 +5,6 @@ import Tabs from 'apollo-react/components/Tabs';
 import Panel from 'apollo-react/components/Panel';
 import Typography from 'apollo-react/components/Typography';
 import { useSelector } from 'react-redux';
-import Loader from 'react-loader-spinner';
 import classNames from 'classnames';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import Questions from '../../../screens/Opportunity/Questions';
@@ -26,10 +25,10 @@ import {
 import Approvals from '../../../screens/Approvals/index';
 import VerticalTabsCollapsiblePanel from '../../../screens/Opportunity/layout/navigation/VerticalTabsCollapsiblePanel';
 import QuestionsForCustomer from '../../../screens/Opportunity/QuestionsForCustomerTab';
-import WysiwygNotepad from '../../../views/WysiwygNotepad';
+import NotepadWrapper from '../../../views/WysiwygNotepad/NotepadWrapper';
+
 import ProposalTeam from '../../../screens/Opportunity/ProposalTeam';
 import { createMatomoObj, saveDataInMatomo } from '../../../../utils/utils';
-import NotesSocketContext from '../../../../context/notesSocketContext';
 
 const UnityTab = ({
   id,
@@ -61,8 +60,6 @@ const UnityTab = ({
   const userRole = useSelector(state => getUserRole(state));
 
   const { trackEvent } = useMatomo();
-
-  const socketContext = useContext(NotesSocketContext);
 
   const minPixelToExclude = 20;
   const notepadMinWidthPx =
@@ -268,38 +265,24 @@ const UnityTab = ({
                               <Typography variant="h3">Notepad</Typography>
                             </div>
 
-                            {socketContext.wsInstance ? (
-                              <WysiwygNotepad
-                                trackEvent={trackEvent}
-                                eventCategories={{
-                                  dp: 'Unity Dashboard',
-                                  pd: props =>
-                                    `Proposal Detail (CRM#: ${
-                                      props && props.proposalDetail
-                                        ? props.proposalDetail['CRM #']
-                                        : ''
-                                    })`,
-                                  plainPd: `Proposal Detail`,
-                                  tb: `ToolBar Menu`,
-                                  pg: `Pagination`,
-                                  crmNo: `Proposal Detail (CRM#: ${localStorage.getItem(
-                                    'oppNo'
-                                  ) || ''})`
-                                }}
-                              />
-                            ) : (
-                              <Loader
-                                type="TailSpin"
-                                color="#297DFD"
-                                width={30}
-                                style={{
-                                  display: 'flex',
-                                  justifyContent: 'center',
-                                  alignItems: 'center',
-                                  height: '100vh'
-                                }}
-                              />
-                            )}
+                            <NotepadWrapper
+                              trackEvent={trackEvent}
+                              eventCategories={{
+                                dp: 'Unity Dashboard',
+                                pd: props =>
+                                  `Proposal Detail (CRM#: ${
+                                    props && props.proposalDetail
+                                      ? props.proposalDetail['CRM #']
+                                      : ''
+                                  })`,
+                                plainPd: `Proposal Detail`,
+                                tb: `ToolBar Menu`,
+                                pg: `Pagination`,
+                                crmNo: `Proposal Detail (CRM#: ${localStorage.getItem(
+                                  'oppNo'
+                                ) || ''})`
+                              }}
+                            />
                           </div>
                         </Panel>
                       </div>
