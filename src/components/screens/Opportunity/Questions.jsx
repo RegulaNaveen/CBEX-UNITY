@@ -58,7 +58,6 @@ import {
   getSelectedBid as getCurrentBid
 } from '../../../redux/selectors/proposal';
 import { selectUserRole } from '../../../redux/selectors/sso-auth';
-import Sidebar from '../../views/Sidebar';
 import AnswerHistory from '../../views/modals/AnswerHistory';
 import { getAllUsers } from '../../../redux/actions/sso-auth-actions';
 import MatomoHOC from '../../HOC/MatomoHOC';
@@ -70,14 +69,22 @@ import {
 } from '../../../utils/utils';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
 import ANSWER_TYPES from '../../../constants/answerTypes';
-import NotesSocketContext from '../../../context/notesSocketContext';
 import ViewAboveVerticalTabs from '../../views/ViewAboveVerticalTabs';
+import lazyWithRetry from '../../../utils/lazy';
 
 export const QuestionsRefContext = createContext(null);
+// import Sidebar from '../../views/Sidebar';
+const Sidebar = React.lazy(() =>
+  lazyWithRetry(() =>
+    import(/* webpackChunkName: "Sidebar" */ '../../views/Sidebar')
+  )
+);
 
 const QuestionsSectionMapping = React.lazy(() =>
-  import(
-    /* webpackChunkName: "questionsSectionMapping" */ './QuestionsSectionMapping'
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "questionsSectionMapping" */ './QuestionsSectionMapping'
+    )
   )
 );
 
@@ -119,8 +126,6 @@ type State = {
 
 const MANUAL_REFRESH = false;
 class Questions extends Component {
-  static contextType = NotesSocketContext;
-
   constructor(props: Object) {
     super(props);
     this.resizeObserver = null;
@@ -654,42 +659,44 @@ class Questions extends Component {
             </div>
           </div>
         </div>
-        <Sidebar
-          sections={allSections}
-          id={selectedBid.get('id')}
-          onAddQuestion={value => {
-            this.setState({ currentsection: value });
-          }}
-          onscrollelement={e => this.expandsection(e)}
-          expandAll={e => {
-            this.setState({ sidebarscroll: '' }, () => {
-              this.handleIsCheckedAll();
-            });
-            if (!e) {
-              const clearsidebarselectsection = new CustomEvent(
-                'clearsidebarselectsection',
-                {
-                  detail: true
-                }
-              );
-              document.dispatchEvent(clearsidebarselectsection);
+        <Suspense fallback={<div>Loading...</div>}>
+          <Sidebar
+            sections={allSections}
+            id={selectedBid.get('id')}
+            onAddQuestion={value => {
+              this.setState({ currentsection: value });
+            }}
+            onscrollelement={e => this.expandsection(e)}
+            expandAll={e => {
+              this.setState({ sidebarscroll: '' }, () => {
+                this.handleIsCheckedAll();
+              });
+              if (!e) {
+                const clearsidebarselectsection = new CustomEvent(
+                  'clearsidebarselectsection',
+                  {
+                    detail: true
+                  }
+                );
+                document.dispatchEvent(clearsidebarselectsection);
+              }
+            }}
+            AddNewQuestion={() => {
+              this.setState({ showModal: true });
+              this.trackMatomoEventToggleQModal(true);
+            }}
+            RefreshProposal={this.getProposalInfoUpdated}
+            // eslint-disable-next-line react/destructuring-assignment
+            currentTab={this.state.currentTab}
+            // eslint-disable-next-line react/destructuring-assignment
+            selectedtitle={this.state.selectedtitle}
+            // eslint-disable-next-line react/destructuring-assignment
+            heighlightcard={this.state.heighlightcard}
+            setTabFromQuestionNotes={(val, title, flag) =>
+              this.setTabFromQuestionNotes(val, title, flag)
             }
-          }}
-          AddNewQuestion={() => {
-            this.setState({ showModal: true });
-            this.trackMatomoEventToggleQModal(true);
-          }}
-          RefreshProposal={this.getProposalInfoUpdated}
-          // eslint-disable-next-line react/destructuring-assignment
-          currentTab={this.state.currentTab}
-          // eslint-disable-next-line react/destructuring-assignment
-          selectedtitle={this.state.selectedtitle}
-          // eslint-disable-next-line react/destructuring-assignment
-          heighlightcard={this.state.heighlightcard}
-          setTabFromQuestionNotes={(val, title, flag) =>
-            this.setTabFromQuestionNotes(val, title, flag)
-          }
-        />
+          />
+        </Suspense>
         {showModal && (
           <AddQuestionModalComponent
             onClose={this.onClose}
