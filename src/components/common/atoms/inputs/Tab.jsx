@@ -62,13 +62,7 @@ const QuestionsForCustomer = React.lazy(() =>
     )
   )
 );
-const WysiwygNotepad = React.lazy(() =>
-  lazyWithRetry(() =>
-    import(
-      /* webpackChunkName: "WysiwygNotepad" */ '../../../views/WysiwygNotepad'
-    )
-  )
-);
+
 const ProposalTeam = React.lazy(() =>
   lazyWithRetry(() =>
     import(
