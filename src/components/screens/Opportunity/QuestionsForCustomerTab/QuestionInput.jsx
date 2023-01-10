@@ -13,6 +13,8 @@ const QuestionInput = ({
   userData,
   socketContext,
   checkDisableFlag,
+  setShowLoader,
+  questionIndex,
 }) => {
   const selectedBid = useSelector(getSelectedBid);
   const dispatch = useDispatch();
@@ -23,42 +25,24 @@ const QuestionInput = ({
   const getConvertedAnsString = (str) =>
     !String(str).trim() ? '' : String(str).trim();
 
-  // const lastAnswerJS = lastAnswer?.toJS();
-  // const formattedAnswer =
-  //   has(lastAnswerJS, 'formattedAnswer') && lastAnswerJS.formattedAnswer;
-
-  // const parseFormattedData =
-  //   !formattedAnswer || isObject(formattedAnswer)
-  //     ? formattedAnswer
-  //     : parseStringifyJson(formattedAnswer);
-
   let richTextData = {
-    html: '',
-    value: { blocks: [] },
+    html: question?.questionHTML,
+    value: question?.questionJSON
+      ? JSON.parse(question.questionJSON)
+      : { blocks: [] },
     htmlExport: '',
   };
 
-  // if (!richTextData.htmlExport && richTextData.html) {
-  //   richTextData.htmlExport = richTextData.html;
-  // }
-
-  const handleRichTextChange = (editorData) => {
+  const handleRichTextChange = async (editorData) => {
     const proposalId = selectedBid.get('id');
     const section = {
       sectionOrder: 199,
-      sectionName: 'Quick questions for the Customer',
+      sectionName: 'Quick Questions for the Customer',
     };
     const answerType = 'text';
     const roleNames = ['Business Developer'];
-
-    // const { setProposalAnswer, questionId, userData } = this.props;
     const { value, html, text, htmlExport } = editorData;
-
-    // if (isEmpty(text)) this.setState({ changeIcon: '#b7b7b7' });
-    // else this.setState({ changeIcon: '#00c221' });
-
     const editorText = text.trim() || ' ';
-
     const questionData = {
       proposalId,
       questionText: text,
@@ -71,10 +55,13 @@ const QuestionInput = ({
     };
     if (question.isNewEntry) {
       console.log({ questionData });
-      dispatch(setProposalQuestion(proposalId, questionData));
+      setShowLoader(true);
+      await dispatch(setProposalQuestion(proposalId, questionData));
+      setShowLoader(false);
       questionUnlockWrapper(question?.questionId);
     } else {
-      dispatch(
+      setShowLoader(true);
+      await dispatch(
         editProposalQuestion(
           proposalId,
           question.questionId,
@@ -82,6 +69,7 @@ const QuestionInput = ({
           socketContext
         )
       );
+      setShowLoader(false);
       questionUnlockWrapper(question?.questionId);
       console.log({ questionData });
     }
@@ -90,20 +78,19 @@ const QuestionInput = ({
   const richTextAnswerField = {
     questionId: question.questionId,
     richTextString: getConvertedAnsString(question.questionText),
-    richTextVal: question.questionJSON ? JSON.parse(question.questionJSON) : '',
-    richTextHtml: question.questionHTML,
-    // richTextHtmlExport: question.htmlExport,
+    richTextVal: richTextData.value,
+    richTextHtml: richTextData.html,
+    richTextHtmlExport: '',
     disabled: checkDisableFlag(),
     enableFocus: true,
-    isEditable: true,
-    placeholder: '',
+    isEditable: false,
 
     onFocus: () => {
       quesTextInnerLeftRef.current.style.marginTop = '25px';
       questionLockWrapper(question?.questionId);
     },
     onBlur: (data) => {
-      console.log('tapas question obj ', question);
+      console.log('onblur tapas question obj ', data.html);
       quesTextInnerLeftRef.current.style.marginTop = 'inherit';
       let saveDate = false;
       const previousAnsText = getConvertedAnsString(
@@ -128,11 +115,7 @@ const QuestionInput = ({
             prevAnswerBlocks,
             answerBlocks
           );
-        }
-        //  else if (isEmpty(richTextData.value?.blocks)) {
-        //   saveDate = false;
-        // }
-        else saveDate = true;
+        } else saveDate = true;
       }
       // save the data if we see any text difference.
       else if (previousAnsText !== data.text.trim() && data.text.trim() !== '')
@@ -145,7 +128,6 @@ const QuestionInput = ({
         handleRichTextChange(data);
         console.log('inside save data ', data);
       }
-      // this.context.questionUnlockWrapper(this.props.questionId);
       questionUnlockWrapper(question?.questionId);
     },
   };
@@ -153,7 +135,7 @@ const QuestionInput = ({
   return (
     <>
       <div className="input-wrapper " ref={quesTextInnerLeftRef}>
-        <span className="input-label">Q{question.questionOrder}:</span>
+        <span className="input-label">Q{questionIndex}:</span>
         <CustomApolloRichText {...richTextAnswerField} />
       </div>
     </>

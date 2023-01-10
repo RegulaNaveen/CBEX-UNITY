@@ -1,6 +1,19 @@
 .questions-for-customer-container {
   .questions-container {
+    overflow: visible;
+
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    display: relative;
+  }
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .questions-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .questions-container-over {
     max-height: 75%;
+    min-height: 25%;
     // overflow: visible;
     overflow-y: auto;
     clip-depth: 2;
@@ -9,7 +22,7 @@
     display: relative;
   }
   /* Hide scrollbar for Chrome, Safari and Opera */
-  .questions-container::-webkit-scrollbar {
+  .questions-container-over::-webkit-scrollbar {
     display: none;
   }
 

@@ -6,8 +6,9 @@ import Copy from 'apollo-react-icons/Copy';
 import { uuidv4 } from 'lib0/random';
 import { fromJS, OrderedMap } from 'immutable';
 import { isString } from 'lodash';
+import Modal from 'apollo-react/components/Modal';
+import Typography from 'apollo-react/components/Typography';
 import QuestionContainer from './QuestionContainer';
-
 import { getProposalQuestions } from '../../../../redux/selectors/proposal';
 import { getSelectedBid, selectSections } from '../../../../redux/selectors';
 import Header from './Header';
@@ -16,47 +17,44 @@ import SocketContextProvider from '../../../../context/SocketContext';
 
 function QuestionsForCustomer() {
   const questionsList = useSelector(getProposalQuestions);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [questionToDelete, setQuestionToDelete] = useState(null);
   const [questions, setQuestions] = useState(new OrderedMap());
   const sections = useSelector(selectSections);
   const selectedBid = useSelector(getSelectedBid);
   const dispatch = useDispatch();
 
   useEffect(() => {
+    setQuestions(new OrderedMap());
     sections.map((section) => {
-      if (section.get('sectionName') === 'Quick questions for the Customer') {
+      if (section.get('sectionName') === 'Quick Questions for the Customer') {
         const sectionQuestions = section.get('questions');
-        console.log('inside section customer', sectionQuestions.toJS());
+
         const filteredCustomQuestion = new OrderedMap(
           Array.from(sectionQuestions).filter((questionItem) => {
             if (questionItem[1].get('isCustomQuestion')) {
-              console.log('true fillerted question');
               return true;
             }
 
             return false;
           })
         );
-        console.log({ filteredCustomQuestion, sectionQuestions });
+
         setQuestions(filteredCustomQuestion);
       }
     });
   }, [questionsList]);
 
-  useEffect(() => {
-    console.log({ questions });
-  }, [questions]);
-
   const addQuestionHandler = () => {
     let _id = uuidv4();
     let question = questions;
-    console.log('question lengthhh ', question.size);
     let newQuestionEntry = {
       isNewEntry: true,
       isCustomQuestion: true,
       questionId: _id,
       section: {
         sectionOrder: 199,
-        sectionName: 'Quick questions for the Customer',
+        sectionName: 'Quick Questions for the Customer',
       },
       active: true,
       questionOrder: question.size + 1,
@@ -82,27 +80,53 @@ function QuestionsForCustomer() {
       events: '',
     };
     question = question.set(_id, fromJS(newQuestionEntry));
-    // question.set(newQuestionEntry);
+
     console.log(question.toJS());
     setQuestions(question);
   };
 
-  const deleteQuestionHandler = (question) => {
-    console.log({ question }, question.questionId);
-    let curQuestion = questions;
-    //  questionId
-    // setQuestionList((current) => current.pop());
-    // curQuestion.valueSeq().filter((ques, key) => {
-    //   console.log('inside', ques.toJS().questionId, question.questionId);
-    //   if (ques.toJS().questionId !== question.questionId) {
-    //   }
-    // });
+  const onForceDelete = async () => {
+    if (!questionToDelete) return;
     const proposalId = selectedBid.get('id');
-    // this.setState({ loaderText: 'Deleting Question' });
-    const res = dispatch(
-      deleteProposalQuestion(proposalId, question.questionId)
+
+    setShowDeleteModal(false);
+    await dispatch(
+      deleteProposalQuestion(proposalId, questionToDelete.questionId)
     );
-    // setQuestions(curQuestion);
+
+    setQuestionToDelete(null);
+  };
+
+  const onDelete = async (question) => {
+    if (!question) return;
+    const proposalId = selectedBid.get('id');
+
+    setShowDeleteModal(false);
+    await dispatch(deleteProposalQuestion(proposalId, question.questionId));
+
+    setQuestionToDelete(null);
+  };
+
+  const deleteQuestionHandler = (question) => {
+    console.log('inside delete', { question }, question.questionId);
+    if (question.isNewEntry) {
+      const filteredCustomQuestion = new OrderedMap(
+        Array.from(questions).filter((questionItem) => {
+          if (questionItem[1].get('questionId') !== question.questionId) {
+            console.log('true fillerted question');
+            return true;
+          }
+
+          return false;
+        })
+      );
+      setQuestions(filteredCustomQuestion);
+    } else if (question?.answers?.length) {
+      setQuestionToDelete(question);
+      setShowDeleteModal(true);
+    } else {
+      onDelete(question);
+    }
   };
 
   const getAnswer = (answers) => {
@@ -140,12 +164,13 @@ function QuestionsForCustomer() {
     questions.map((questionData) => {
       if (questionData.get('isCustomQuestion')) {
         const answer = getAnswer(questionData.get('answers'));
-        html += `<li>${questionData.get('questionHtml')}</li>`;
+        console.log('inside clipboard ', questionData.get('questionHTML'));
+        html += `<li>${questionData.get('questionHTML')}</li>`;
         if (answer) html += `<ul><li>${answer}</li></ul>`;
       }
     });
     html += '</ul></body></html>';
-    console.log('hhhhhhhhhhh ', html);
+
     return html;
   };
 
@@ -156,6 +181,9 @@ function QuestionsForCustomer() {
     const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
     navigator.clipboard.write([clipboardItem]);
   };
+  const handleClose = () => {
+    setShowDeleteModal((prev) => !prev);
+  };
 
   return (
     <>
@@ -165,14 +193,20 @@ function QuestionsForCustomer() {
             <Header />
           </div>
           {questions?.size > 0 ? (
-            <div className="questions-container">
+            <div
+              className={
+                questions?.size > 3
+                  ? 'questions-container-over'
+                  : 'questions-container'
+              }
+            >
               <ul>
-                {questions?.valueSeq().map((questionData) => {
-                  // if (questionData.get('isCustomQuestion') === true)
+                {questions?.valueSeq().map((questionData, index) => {
                   return (
                     <QuestionContainer
                       deleteQuestionHandler={deleteQuestionHandler}
                       questionData={questionData}
+                      questionIndex={index + 1}
                     />
                   );
                 })}
@@ -207,11 +241,34 @@ function QuestionsForCustomer() {
                 style={{ marginRight: 10 }}
                 className="btn-label"
                 onClick={() => addQuestionHandler()}
+                disabled={
+                  Array.from(questions)[questions.size - 1]
+                    ? Array.from(questions)[questions.size - 1][1].get(
+                        'isNewEntry'
+                      )
+                    : false
+                }
               >
                 Add New
               </Button>
             </div>
           </div>
+          <Modal
+            open={showDeleteModal}
+            variant="warning"
+            onClose={() => handleClose()}
+            title={
+              <Typography style={{ color: '#e30e0e' }} variant="h3">
+                Are you sure?
+              </Typography>
+            }
+            message="This question contains has been answered by a Unity user , are you sure you want to delete this value?"
+            buttonProps={[
+              { label: 'Cancel', onClick: handleClose },
+              { label: 'Yes, Delete', onClick: onForceDelete },
+            ]}
+            id="warning"
+          />
         </SocketContextProvider>
       </div>
     </>

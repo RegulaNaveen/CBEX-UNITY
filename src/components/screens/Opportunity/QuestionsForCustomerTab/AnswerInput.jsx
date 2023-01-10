@@ -2,7 +2,6 @@ import { has, isEmpty, isEqual, isObject } from 'lodash';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setProposalAnswerData } from '../../../../redux/actions/proposal-actions';
-import { setProposalAnswer } from '../../../../redux/selectors';
 import { getCanUserTagInQuestion } from '../../../../redux/selectors/proposal';
 import { parseStringifyJson } from '../../../../utils/helpers';
 import CustomApolloRichText from '../../../common/CustomApolloRichText';
@@ -13,6 +12,8 @@ const AnswerInput = ({
   userData,
   socketContext,
   checkDisableFlag,
+  setShowLoader,
+  questionIndex,
 }) => {
   const dispatch = useDispatch();
   const quesTextInnerLeftRef = React.createRef();
@@ -22,7 +23,7 @@ const AnswerInput = ({
   const answerValue = lastAnswer.answer || '';
   const formattedAnswer =
     has(lastAnswer, 'formattedAnswer') && lastAnswer.formattedAnswer;
-  // const { questionLockWrapper, questionUnlockWrapper } = socketContext;
+
   const canUserTagInQuestion = useSelector(getCanUserTagInQuestion);
 
   const parseFormattedData =
@@ -42,8 +43,11 @@ const AnswerInput = ({
   const handleRichTextChange = async (editorData) => {
     try {
       const { proposalId, questionId } = question;
-      const { value, html, text } = editorData;
+      const { value, html, text, htmlExport } = editorData;
+
       const editorText = text.trim() || ' ';
+      console.log({ editorData });
+      setShowLoader(true);
       await dispatch(
         setProposalAnswerData(
           socketContext,
@@ -54,10 +58,12 @@ const AnswerInput = ({
           {
             value,
             html,
+            htmlExport,
           },
           true
         )
       );
+      setShowLoader(false);
       questionUnlockWrapper(question?.questionId);
     } catch (error) {
       console.error(error);
@@ -71,7 +77,7 @@ const AnswerInput = ({
     richTextHtml: richTextData.html,
     enableFocus: true,
     isEditable: false,
-    disabled: checkDisableFlag(),
+    disabled: checkDisableFlag() || !question?.questionText,
     canUserTagInQuestion,
 
     onBlur: (data) => {
@@ -120,7 +126,7 @@ const AnswerInput = ({
   return (
     <>
       <div className="input-wrapper " ref={quesTextInnerLeftRef}>
-        <span className="input-label">A{question.questionOrder}:</span>
+        <span className="input-label">A{questionIndex}:</span>
         <CustomApolloRichText {...richtextProps} />
       </div>
     </>

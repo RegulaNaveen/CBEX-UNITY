@@ -2,7 +2,7 @@ import Trash from 'apollo-react-icons/Trash';
 import Card from 'apollo-react/components/Card';
 import Loader from 'apollo-react/components/Loader';
 import Typography from 'apollo-react/components/Typography';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { SocketContext } from '../../../../context/SocketContext';
 import {
   getUserEmail,
@@ -13,9 +13,14 @@ import {
 import AnswerInput from './AnswerInput';
 import QuestionInput from './QuestionInput';
 
-const QuestionContainer = ({ deleteQuestionHandler, questionData }) => {
+const QuestionContainer = ({
+  deleteQuestionHandler,
+  questionData,
+  questionIndex,
+}) => {
   const question = questionData.toJS();
   const socketContext = useContext(SocketContext);
+  const [showLoader, setShowLoader] = useState(false);
 
   const getUserData = () => ({
     name: getUserName(),
@@ -45,6 +50,8 @@ const QuestionContainer = ({ deleteQuestionHandler, questionData }) => {
     userData: getUserData(),
     socketContext,
     checkDisableFlag,
+    setShowLoader,
+    questionIndex,
   };
 
   return (
@@ -73,23 +80,25 @@ const QuestionContainer = ({ deleteQuestionHandler, questionData }) => {
                 }}
               />
             </div>
-            {/* <div>
-              <span
-                style={{
-                  position: 'relative',
-                  top: '2em',
-                }}
-              >
-                <Loader
-                  isInner
-                  size={20}
+            {showLoader && (
+              <div>
+                <span
                   style={{
-                    width: '20px',
-                    height: '20px',
+                    position: 'relative',
+                    top: '2em',
                   }}
-                />
-              </span>
-            </div> */}
+                >
+                  <Loader
+                    isInner
+                    size={20}
+                    style={{
+                      width: '20px',
+                      height: '20px',
+                    }}
+                  />
+                </span>
+              </div>
+            )}
           </div>
         </Card>
       </li>
