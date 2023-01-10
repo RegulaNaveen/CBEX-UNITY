@@ -42,7 +42,7 @@ const QuestionInput = ({
     const answerType = 'text';
     const roleNames = ['Business Developer'];
     const { value, html, text, htmlExport } = editorData;
-    const editorText = text.trim() || ' ';
+
     const questionData = {
       proposalId,
       questionText: text,
@@ -53,8 +53,7 @@ const QuestionInput = ({
       options: [],
       roleNames,
     };
-    if (question.isNewEntry) {
-      console.log({ questionData });
+    if (question?.isNewEntry) {
       setShowLoader(true);
       await dispatch(setProposalQuestion(proposalId, questionData));
       setShowLoader(false);
@@ -71,7 +70,6 @@ const QuestionInput = ({
       );
       setShowLoader(false);
       questionUnlockWrapper(question?.questionId);
-      console.log({ questionData });
     }
   };
 
@@ -85,12 +83,7 @@ const QuestionInput = ({
     enableFocus: true,
     isEditable: false,
 
-    onFocus: () => {
-      quesTextInnerLeftRef.current.style.marginTop = '25px';
-      questionLockWrapper(question?.questionId);
-    },
     onBlur: (data) => {
-      console.log('onblur tapas question obj ', data.html);
       quesTextInnerLeftRef.current.style.marginTop = 'inherit';
       let saveDate = false;
       const previousAnsText = getConvertedAnsString(
@@ -110,11 +103,6 @@ const QuestionInput = ({
         );
         if (isEqual(prevAnswerBlocks, answerBlocks)) {
           saveDate = false;
-          console.log(
-            'prevAnswerBlocks, answerBlocks ',
-            prevAnswerBlocks,
-            answerBlocks
-          );
         } else saveDate = true;
       }
       // save the data if we see any text difference.
@@ -126,9 +114,12 @@ const QuestionInput = ({
 
       if (saveDate) {
         handleRichTextChange(data);
-        console.log('inside save data ', data);
       }
       questionUnlockWrapper(question?.questionId);
+    },
+    onFocus: () => {
+      quesTextInnerLeftRef.current.style.marginTop = '25px';
+      questionLockWrapper(question?.questionId);
     },
   };
 

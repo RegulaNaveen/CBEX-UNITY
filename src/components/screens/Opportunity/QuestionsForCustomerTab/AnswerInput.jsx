@@ -118,7 +118,6 @@ const AnswerInput = ({
       }
     },
     onFocus: () => {
-      question?.questionId;
       quesTextInnerLeftRef.current.style.marginTop = '25px';
       questionLockWrapper(question?.questionId);
     },
