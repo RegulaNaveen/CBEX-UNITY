@@ -118,7 +118,7 @@ function QuestionsForCustomer() {
         })
       );
       setQuestions(filteredCustomQuestion);
-    } else if (question?.answers?.length) {
+    } else if (question?.answers[question?.answers?.length - 1].answer.trim()) {
       setQuestionToDelete(question);
       setShowDeleteModal(true);
     } else {
