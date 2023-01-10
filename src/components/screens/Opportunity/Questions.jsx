@@ -69,7 +69,6 @@ import {
 } from '../../../utils/utils';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
 import ANSWER_TYPES from '../../../constants/answerTypes';
-import NotesSocketContext from '../../../context/notesSocketContext';
 import ViewAboveVerticalTabs from '../../views/ViewAboveVerticalTabs';
 import lazyWithRetry from '../../../utils/lazy';
 
@@ -127,8 +126,6 @@ type State = {
 
 const MANUAL_REFRESH = false;
 class Questions extends Component {
-  static contextType = NotesSocketContext;
-
   constructor(props: Object) {
     super(props);
     this.resizeObserver = null;
