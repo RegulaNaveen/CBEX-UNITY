@@ -486,7 +486,6 @@ const SocketContextProvider = (props) => {
   };
 
   const questionTextUpdateWrapper = (questionData) => {
-    console.log('inside question text wrapper ', questionData);
     waitForSocketConnectionMinInterval(() =>
       questionTextUpdate(questionData, null)
     );
