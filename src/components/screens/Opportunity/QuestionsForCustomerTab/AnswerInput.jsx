@@ -17,7 +17,7 @@ const AnswerInput = ({
 }) => {
   const dispatch = useDispatch();
   const quesTextInnerLeftRef = React.createRef();
-  console.log({ socketContext });
+
   const { questionLockWrapper, questionUnlockWrapper } = socketContext;
   const lastAnswer = getLastAnswer(question);
   const answerValue = lastAnswer.answer || '';
@@ -46,7 +46,7 @@ const AnswerInput = ({
       const { value, html, text, htmlExport } = editorData;
 
       const editorText = text.trim() || ' ';
-      console.log({ editorData });
+
       setShowLoader(true);
       await dispatch(
         setProposalAnswerData(

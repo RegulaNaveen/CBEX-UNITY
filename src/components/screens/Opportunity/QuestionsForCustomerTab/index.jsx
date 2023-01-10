@@ -81,7 +81,6 @@ function QuestionsForCustomer() {
     };
     question = question.set(_id, fromJS(newQuestionEntry));
 
-    console.log(question.toJS());
     setQuestions(question);
   };
 
@@ -108,12 +107,10 @@ function QuestionsForCustomer() {
   };
 
   const deleteQuestionHandler = (question) => {
-    console.log('inside delete', { question }, question.questionId);
     if (question.isNewEntry) {
       const filteredCustomQuestion = new OrderedMap(
         Array.from(questions).filter((questionItem) => {
           if (questionItem[1].get('questionId') !== question.questionId) {
-            console.log('true fillerted question');
             return true;
           }
 
@@ -133,7 +130,7 @@ function QuestionsForCustomer() {
     try {
       let ans = answers.toJS();
       const lastAnswer = ans[ans.length - 1];
-      console.log('before: ', { lastAnswer });
+
       let formattedAnswer;
       if (lastAnswer?.formattedAnswer) {
         if (isString(lastAnswer?.formattedAnswer)) {
@@ -150,7 +147,7 @@ function QuestionsForCustomer() {
           return formattedAnswer?.html;
         }
       }
-      console.log({ lastAnswer });
+
       return (lastAnswer && lastAnswer.answer.toString()) || '';
     } catch (error) {
       console.log(error);
@@ -164,8 +161,7 @@ function QuestionsForCustomer() {
     questions.map((questionData) => {
       if (questionData.get('isCustomQuestion')) {
         const answer = getAnswer(questionData.get('answers'));
-        console.log('inside clipboard ', questionData.get('questionHTML'));
-        html += `<li>${questionData.get('questionHTML')}</li>`;
+        html += `<li>${questionData.get('questionText')}</li>`;
         if (answer) html += `<ul><li>${answer}</li></ul>`;
       }
     });
