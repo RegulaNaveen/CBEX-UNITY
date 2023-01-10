@@ -24,7 +24,8 @@ import {
 import {
   selectNotes,
   getRoles,
-  getProposalDetails
+  getProposalDetails,
+  selectEditor
 } from '../../../redux/selectors';
 import { createPdf } from './pdf-template';
 import fetchNotes from '../../../redux/actions/notepad-actions';

@@ -212,8 +212,6 @@ export class Opportunity extends Component<Props, State> {
       }
     }
     // END Bid level redirection
-
-    this.triggerWebsocketNotesApi(prevProposalId, thisProposalId);
   }
 
   componentWillUnmount() {

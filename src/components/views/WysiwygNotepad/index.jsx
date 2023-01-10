@@ -46,6 +46,7 @@ const WysiwygNotepad = ({
   const dispatch = useDispatch();
   const [notesUserTag, setNotesUserTag] = useState(false);
   const [editorloadingcount, seteditorloadingcount] = useState(0);
+  const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const usercolor = randomColor({ luminosity: 'light' });
 
   useEffect(() => {
