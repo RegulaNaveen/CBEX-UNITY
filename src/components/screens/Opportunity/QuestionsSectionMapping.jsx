@@ -158,7 +158,8 @@ const QuestionsSectionMapping = ({
     return (
       allSectionLength &&
       allSections.valueSeq().map((section, indx) => {
-        return renderAllSection(section, indx);
+        if (section.get('sectionName') !== 'Quick Questions for the Customer')
+          return renderAllSection(section, indx);
       })
     );
   }
