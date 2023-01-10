@@ -6,8 +6,8 @@
 }
 
 #panel-notepad {
-  min-height: 100vh;
-  max-height: 100vh;
+  min-height: calc(100vh - 57px);
+  max-height: calc(100vh - 57px);
   position: sticky;
   top: $toolbarHight;
   overflow: hidden;
@@ -94,6 +94,12 @@
         font-size: 14px;
       }
       overflow: auto;
+    }
+  }
+
+  &.show-highlight {
+    .notepad-classoverride {
+      border: 2px solid $neptune-primary;
     }
   }
 }

@@ -29,6 +29,9 @@ import WysiwygNotepad from '../../../views/WysiwygNotepad';
 import ProposalTeam from '../../../screens/Opportunity/ProposalTeam';
 import { createMatomoObj, saveDataInMatomo } from '../../../../utils/utils';
 import NotesSocketContext from '../../../../context/notesSocketContext';
+import { selectCurrentSearchResult } from '../../../../redux/selectors/search';
+import { NOTEPAD_UI_ID } from '../../../../constants/app';
+import { autoNavigationCompletedAction } from '../../../../redux/actions/search-actions';
 
 const UnityTab = ({
   id,
@@ -56,11 +59,13 @@ const UnityTab = ({
   const userRole = useSelector(state => getUserRole(state));
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const value = useSelector(selectActiveTabIndex);
+  const currentSearchResult = useSelector(selectCurrentSearchResult);
   const dispatch = useDispatch();
 
   const { trackEvent } = useMatomo();
 
   const socketContext = useContext(NotesSocketContext);
+  const notepadPanelRef = useRef(null);
 
   const minPixelToExclude = 20;
   const notepadMinWidthPx =
@@ -155,6 +160,21 @@ const UnityTab = ({
     }
   }, [selectedView, approvalsFlag, showApprovalTab]);
 
+  useEffect(() => {
+    if (currentSearchResult !== null && notepadPanelRef.current !== null) {
+      if (currentSearchResult.searchIndex === NOTEPAD_UI_ID) {
+        setTimeout(() => {
+          notepadPanelRef.current.scrollIntoView({
+            behaviour: 'smooth',
+            block: 'center',
+            inline: 'nearest'
+          });
+          dispatch(autoNavigationCompletedAction());
+        }, 500);
+      }
+    }
+  }, [notepadPanelRef, currentSearchResult]);
+
   const winLocationSearch = window.location.search;
   const handleChangeTab = (event, val) => {
     const selectView = new URLSearchParams(winLocationSearch);
@@ -229,7 +249,16 @@ const UnityTab = ({
                   } else if (activeTab === 1) {
                     /* Notepad */
                     return (
-                      <div id="panel-notepad" style={{ borderRadius: '5px' }}>
+                      <div
+                        id="panel-notepad"
+                        style={{ borderRadius: '5px' }}
+                        className={classNames({
+                          'show-highlight':
+                            currentSearchResult !== null &&
+                            currentSearchResult.vTab === activeTab
+                        })}
+                        ref={notepadPanelRef}
+                      >
                         <Panel
                           minWidth={notepadMinWidthPx}
                           maxWidth={notepadMaxWidthPx}

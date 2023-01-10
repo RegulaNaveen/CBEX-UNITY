@@ -2,10 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { styled } from '@material-ui/styles';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
+import { setVTabActiveIndexAction } from '../../../../../../redux/actions/proposal-actions';
 import NotesIcon from '../../../../../svg/Notes';
 import QuestionsForCustomerIcon from '../../../../../svg/QuestionsForCustomer';
 import ProposalTeamIcon from '../../../../../svg/ProposalTeam';
 import './styles.scss';
+import { selectActiveVTabIndex } from '../../../../../../redux/selectors/proposal';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 const VerticalTabs = styled(Tabs)({
   '&::before': {
@@ -34,22 +38,23 @@ function VerticalTabsCollapsiblePanel({
   showNotepadTab,
   showProposalTeamTab
 }) {
-  const [activeTab, setActiveTab] = useState(0);
+  const activeTab = useSelector(selectActiveVTabIndex);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!showQuestionsForCustomerTab) {
       if (!showNotepadTab) {
-        setActiveTab(2);
+        dispatch(setVTabActiveIndexAction(2));
       } else {
-        setActiveTab(1);
+        dispatch(setVTabActiveIndexAction(1));
       }
     } else {
-      setActiveTab(0);
+      dispatch(setVTabActiveIndexAction(0));
     }
   }, [showQuestionsForCustomerTab, showNotepadTab, showProposalTeamTab]);
 
   function handleTabChange(event, newActiveTab) {
-    setActiveTab(newActiveTab);
+    dispatch(setVTabActiveIndexAction(newActiveTab));
   }
 
   return (

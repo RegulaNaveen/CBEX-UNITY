@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
 import TextField from 'apollo-react/components/TextField';
 import IconButton from 'apollo-react/components/IconButton';
-import Popper from 'apollo-react/components/Popper';
 import Button from 'apollo-react/components/Button';
 import SearchIcon from 'apollo-react-icons/Search';
 import CloseIcon from 'apollo-react-icons/Close';
@@ -14,7 +13,10 @@ import {
   selectIsOpen,
   selectQuery,
   selectTotalResultsFound,
-  selectCurrentResultIndex
+  selectCurrentResultIndex,
+  selectClearInputFlag,
+  selectDataPrerequisiteSatisfied,
+  selectSearching
 } from '../../../redux/selectors/search';
 import {
   openSearchAction,
@@ -27,6 +29,8 @@ import {
 } from '../../../redux/actions/search-actions';
 import './style.scss';
 import { Typography } from 'apollo-react/components/Typography/Typography';
+import { SEARCH } from '../../../constants/types';
+import CircularProgress from 'apollo-react/components/CircularProgress';
 
 export default function Search() {
   const [searchInput, setSearchInput] = useState('');
@@ -35,6 +39,11 @@ export default function Search() {
   const query = useSelector(selectQuery);
   const currentSearchIndex = useSelector(selectCurrentResultIndex);
   const totalResultsCount = useSelector(selectTotalResultsFound);
+  const clearInputFlag = useSelector(selectClearInputFlag);
+  const doesDataPrerequisiteSatisfied = useSelector(
+    selectDataPrerequisiteSatisfied
+  );
+  const searching = useSelector(selectSearching);
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const searchFlag = allFlags.searchFlag || false;
   const dispatch = useDispatch();
@@ -91,25 +100,40 @@ export default function Search() {
 
   const handleKeyDown = useCallback(
     async e => {
-      if (e.ctrlKey && e.key === 'f') {
-        e.preventDefault();
-        e.stopPropagation();
-        dispatch(openSearchAction());
+      if (searchFlag && doesDataPrerequisiteSatisfied) {
+        if (e.ctrlKey && e.key === 'f') {
+          e.preventDefault();
+          e.stopPropagation();
+          dispatch(openSearchAction());
+        }
       }
     },
-    [dispatch]
+    [dispatch, searchFlag, doesDataPrerequisiteSatisfied]
   );
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [searchFlag, doesDataPrerequisiteSatisfied]);
 
   useEffect(() => {
     if (isOpen && searchInputRef.current !== null) {
       searchInputRef.current.focus();
     }
   }, [searchInputRef.current, isOpen]);
+
+  useEffect(() => {
+    if (clearInputFlag) {
+      if (searchInput.length > 0) {
+        setSearchInput('');
+        dispatch(clearSearchAction());
+        if (isOpen && searchInputRef.current !== null) {
+          searchInputRef.current.focus();
+        }
+      }
+      dispatch({ type: SEARCH.RESET_CLEAR_INPUT_FLAG });
+    }
+  }, [dispatch, clearInputFlag, searchInput, searchInputRef.current, isOpen]);
 
   if (!searchFlag) {
     return null;
@@ -122,10 +146,79 @@ export default function Search() {
         enabled: isOpen
       })}
     >
-      <div ref={searchIconRef}>
-        <IconButton disabled={isOpen} onClick={toggleSearchIconOpen}>
+      <div ref={searchIconRef} style={{ position: 'relative' }}>
+        <IconButton
+          disabled={isOpen || !doesDataPrerequisiteSatisfied}
+          onClick={toggleSearchIconOpen}
+        >
           <SearchIcon className="search-icon" />
         </IconButton>
+
+        {query.length >= 3 ? (
+          <div className="search-navigation-container">
+            {searching ? (
+              <div
+                style={{
+                  padding: '8px',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}
+              >
+                <CircularProgress
+                  variant="indeterminate"
+                  size={20}
+                  style={{
+                    // color: 'rgb(255, 147, 0)',
+                    width: '20px',
+                    height: '20px'
+                  }}
+                />
+                <p
+                  style={{
+                    color: '#999999',
+                    fontSize: '16px',
+                    paddingLeft: '4px'
+                  }}
+                >
+                  Searching...
+                </p>
+              </div>
+            ) : (
+              <>
+                {totalResultsCount === 0 ? (
+                  <Typography variant="body2" className="no-result-text">
+                    No Matches Found
+                  </Typography>
+                ) : (
+                  <>
+                    <Button
+                      variant="text"
+                      icon={ChevronLeftIcon}
+                      disabled={currentSearchIndex <= 0}
+                      onClick={handlePrevClick}
+                    >
+                      Previous
+                    </Button>
+                    <span style={{ whiteSpace: 'nowrap' }}>
+                      {`${currentSearchIndex + 1} of ${totalResultsCount}`}
+                    </span>
+                    <Button
+                      variant="text"
+                      icon={ChevronRightIcon}
+                      disabled={
+                        currentSearchIndex < 0 ||
+                        currentSearchIndex > totalResultsCount - 2
+                      }
+                      onClick={handleNextClick}
+                    >
+                      Next
+                    </Button>
+                  </>
+                )}
+              </>
+            )}
+          </div>
+        ) : null}
       </div>
 
       <TextField
@@ -147,42 +240,6 @@ export default function Search() {
           inputRef: searchInputRef
         }}
       ></TextField>
-      <Popper
-        open={query.length >= 3}
-        anchorEl={searchIconRef.current}
-        popperOptions={{ placement: 'bottom-start' }}
-      >
-        <div className="search-navigation-popper-container">
-          {totalResultsCount === 0 ? (
-            <Typography variant="body2" className="no-result-text">
-              No Matches Found
-            </Typography>
-          ) : (
-            <>
-              <Button
-                variant="text"
-                icon={ChevronLeftIcon}
-                disabled={currentSearchIndex <= 0}
-                onClick={handlePrevClick}
-              >
-                Previous
-              </Button>
-              <span>{[currentSearchIndex + 1, ' of ', totalResultsCount]}</span>
-              <Button
-                variant="text"
-                icon={ChevronRightIcon}
-                disabled={
-                  currentSearchIndex < 0 ||
-                  currentSearchIndex > totalResultsCount - 2
-                }
-                onClick={handleNextClick}
-              >
-                Next
-              </Button>
-            </>
-          )}
-        </div>
-      </Popper>
     </div>
   );
 }

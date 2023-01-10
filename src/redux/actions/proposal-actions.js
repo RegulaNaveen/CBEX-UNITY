@@ -31,11 +31,12 @@ import {
   getAllProposals
 } from '../../api/proposal';
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
-import { getUniqueMilestones } from '../selectors/proposal';
+import { getSelectedBid, getUniqueMilestones } from '../selectors/proposal';
 import { getErrorMessage, getProposalIdlist } from '../../utils/utils';
 import { DEFAULT } from '../../constants/app';
 import isPriceModelerQuestion from '../../utils/isPriceModelerQuestion';
 import { fetchAllApprovals } from './approval-actions';
+import { SEARCH } from '../../constants/types';
 
 const { PROPOSAL_API_URL } = API.PROPOSAL;
 const {
@@ -101,7 +102,8 @@ const {
   SET_APPROVAL_QUESTION_LOADING,
   SET_PRICE_MODELER_RECALCULATING,
   PRICE_MODELER_UPDATE,
-  SET_ACTIVE_TABINDEX
+  SET_ACTIVE_TABINDEX,
+  SET_V_TAB_ACTIVE_INDEX
 } = REDUX_TYPES.PROPOSAL;
 
 /**
@@ -1119,7 +1121,11 @@ export const changeBid = bid => {
   if (bid?.bidNo) {
     updateBidNoQueryparam(bid?.bidNo);
   }
-  return async dispatch => {
+  return async (dispatch, getState) => {
+    const selectedBid = getSelectedBid(getState()).toJS();
+    if (selectedBid.bidName !== bid?.bidName) {
+      dispatch({ type: SEARCH.SET_CLEAR_INPUT_FLAG });
+    }
     const response = await axios.get(`${PROPOSAL_API_URL}/${bid.bidId}`);
     dispatch({
       type: CHANGE_BID,
@@ -1333,6 +1339,15 @@ export const setActiveTabIndexAction = activeIndex => {
   return dispatch => {
     dispatch({
       type: SET_ACTIVE_TABINDEX,
+      payload: activeIndex
+    });
+  };
+};
+
+export const setVTabActiveIndexAction = activeIndex => {
+  return dispatch => {
+    dispatch({
+      type: SET_V_TAB_ACTIVE_INDEX,
       payload: activeIndex
     });
   };

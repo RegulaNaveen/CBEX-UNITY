@@ -1,4 +1,6 @@
 import { createSelector } from 'reselect';
+import { selectApprovalsFetching } from './approvals';
+import { isProposalLoading } from './index';
 
 const selectSearch = state => state.search;
 
@@ -44,4 +46,20 @@ export const selectPrevSearchResult = createSelector(
 export const selectAutoNavigatedToCurrentResult = createSelector(
   selectSearch,
   search => search.autoNavigatedToCurrentResult
+);
+
+export const selectClearInputFlag = createSelector(
+  selectSearch,
+  search => search.clearInputFlag
+);
+
+export const selectDataPrerequisiteSatisfied = createSelector(
+  isProposalLoading,
+  selectApprovalsFetching,
+  (proposalLoading, approvalLoading) => !proposalLoading && !approvalLoading
+);
+
+export const selectSearching = createSelector(
+  selectSearch,
+  search => search.searching
 );

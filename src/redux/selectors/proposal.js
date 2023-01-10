@@ -375,3 +375,7 @@ export const selectIsPriceModelerEstimateRecalculating = createSelector(
 export const selectActiveTabIndex = createSelector(selectProposal, proposal =>
   proposal?.get('activeTabIndex', 0)
 );
+
+export const selectActiveVTabIndex = createSelector(selectProposal, proposal =>
+  proposal?.get('activeVTabIndex', 0)
+);
