@@ -4,20 +4,17 @@ import type { NavigationHistory } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Map } from 'immutable'; // NOSONAR
-import Loader from 'react-loader-spinner';
 import Button from 'apollo-react/components/Button';
 import PencilIcon from 'apollo-react-icons/Pencil';
 import GlobeIcon from 'apollo-react-icons/Globe';
 import Grid from 'apollo-react/components/Grid';
 import User from 'apollo-react-icons/User';
-import Avatar from 'apollo-react/components/Avatar';
 import Tooltip from 'apollo-react/components/Tooltip';
 import { LOGIN, PROFILE } from '../../../routes';
 import { getRoles, isRolesInfoLoading } from '../../../redux/selectors';
 import { getRolesInfo } from '../../../redux/actions/proposal-actions';
 import { logout } from '../../../redux/actions/auth-actions';
 import { onSetUserRole } from '../../../redux/actions/sso-auth-actions';
-import Dropdown from '../../common/atoms/inputs/Dropdown';
 import {
   getUserEmail,
   getUserName,
@@ -110,8 +107,8 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
   };
 
   render() {
-    const { roleName, isNameTooltip, isEmailTooltip } = this.state;
-    const { rolesList, isRolesLoading } = this.props;
+    const { isNameTooltip, isEmailTooltip } = this.state;
+    const { history } = this.props;
     const name = getUserName();
     const email = getUserEmail();
 
@@ -189,7 +186,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
             icon={<User />}
             className="menu-link-btn"
             fullwidth
-            onClick={() => this.props.history.push(PROFILE)}
+            onClick={() => history.push(PROFILE)}
             style={{ width: '100%' }}
           >
             Go to Profile

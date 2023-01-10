@@ -75,13 +75,6 @@ function getLineOfBusinessAsPerLogic(
     if (finalLOB !== '') return false;
     const { name } = data;
     data.values.forEach(d => {
-      console.log('--------------------');
-      console.log(
-        `Logic from U-BUILD: Line Of Business = ${d.value} AND Is BioTech = ${d.isBiotech} AND FSP = ${d.isFSP}`
-      );
-      console.log(
-        `Values from  SalesForce:  Line of Business = ${salesForceLob} AND Is BioTech = ${salesForceIsIqviaBiotech} AND FSP = ${salesForceLobIsFSP}`
-      );
       if (finalLOB !== '') return false;
       if (
         d.isBiotech === salesForceIsIqviaBiotech &&
@@ -99,7 +92,6 @@ function logLobDetails(record) {
   try {
     const { proposal } = record;
     let concludedLob;
-    console.log('########## Starting the Logic Evaluation ##########');
     if (proposal.lobLogic) {
       concludedLob = getLineOfBusinessAsPerLogic(
         JSON.parse(proposal.lobLogic || ''),
@@ -108,11 +100,6 @@ function logLobDetails(record) {
         proposal.proposalDetails.IsFsp
       );
     }
-    console.log(
-      'Concluded LOB: ',
-      concludedLob || 'N/A - Not filtering question.'
-    );
-    console.log('########## Ending the Logic Evaluation ##########');
   } catch (error) {
     console.log(error);
   }
@@ -238,7 +225,6 @@ function checkNonEditableFields(PreField, sfField, sfObject) {
 }
 
 const saveDataInMatomo = (trackEvent, data) => {
-  console.log(`trackEvent`, trackEvent);
   const { category, action, name, customDimensions } = data;
   trackEvent({
     category: category,

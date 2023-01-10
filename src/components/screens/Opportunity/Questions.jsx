@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 // @flow
 // eslint-disable-next-line react/destructuring-assignment
 import React, { createRef, createContext, Component, Suspense } from 'react';
@@ -11,8 +13,11 @@ import Filter from 'apollo-react-icons/Filter';
 import ApolloCheckbox from 'apollo-react/components/Checkbox';
 import classNames from 'classnames';
 import Grid from 'apollo-react/components/Grid';
-import Panel from 'apollo-react/components/Panel';
-import Loader from 'react-loader-spinner';
+import Switch from 'apollo-react/components/Switch';
+import Tooltip from 'apollo-react/components/Tooltip';
+import InfoIcon from 'apollo-react-icons/Info';
+import IconButton from 'apollo-react/components/IconButton';
+import moment from 'moment';
 import { Add, Refresh } from '../../svg';
 import BidHistory from '../../common/Bidhistory';
 import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
@@ -24,7 +29,8 @@ import {
   expandAllSectionsAction,
   callPickListLookupSfData,
   setShowNaCheckbox,
-  fetchUserTagFlagInQuestion
+  fetchUserTagFlagInQuestion,
+  getPriceModelerData
 } from '../../../redux/actions/proposal-actions';
 import {
   getProposalDetails,
@@ -42,19 +48,16 @@ import {
   getSelectedBid,
   getShowNaCheckbox,
   getUserEmail,
-  getUserRole
+  getUserRole,
+  getfetchUserTagFlag
 } from '../../../redux/selectors';
 import {
   selectUniqueMilestones,
   selectAreAllSectionsExpanded,
-  getBidList
+  getBidList,
+  getSelectedBid as getCurrentBid
 } from '../../../redux/selectors/proposal';
 import { selectUserRole } from '../../../redux/selectors/sso-auth';
-import Switch from 'apollo-react/components/Switch';
-import Tooltip from 'apollo-react/components/Tooltip';
-import InfoIcon from 'apollo-react-icons/Info';
-import IconButton from 'apollo-react/components/IconButton';
-import Sidebar from '../../views/Sidebar';
 import AnswerHistory from '../../views/modals/AnswerHistory';
 import { getAllUsers } from '../../../redux/actions/sso-auth-actions';
 import MatomoHOC from '../../HOC/MatomoHOC';
@@ -65,15 +68,25 @@ import {
   throttle
 } from '../../../utils/utils';
 import { onHandleOpenClose } from '../../../redux/actions/sidebar-actions';
-import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions';
 import ANSWER_TYPES from '../../../constants/answerTypes';
 import moment from 'moment';
 import ViewAboveVerticalTabs from '../../views/ViewAboveVerticalTabs';
+import lazyWithRetry from '../../../utils/lazy';
 
 export const QuestionsRefContext = createContext(null);
+// import Sidebar from '../../views/Sidebar';
+const Sidebar = React.lazy(() =>
+  lazyWithRetry(() =>
+    import(/* webpackChunkName: "Sidebar" */ '../../views/Sidebar')
+  )
+);
 
 const QuestionsSectionMapping = React.lazy(() =>
-  import('./QuestionsSectionMapping')
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "questionsSectionMapping" */ './QuestionsSectionMapping'
+    )
+  )
 );
 
 type Props = {
@@ -113,7 +126,6 @@ type State = {
 };
 
 const MANUAL_REFRESH = false;
-let firstRender = true;
 class Questions extends Component {
   constructor(props: Object) {
     super(props);
@@ -138,19 +150,30 @@ class Questions extends Component {
   }
 
   componentDidMount() {
-    firstRender = false;
     window.localStorage.setItem('enableFirstExpand', 'true');
     const {
       fetchUsers,
-      getSFNonEditabelInfoField,
-      callPickListLookupSfData
+      callPickListLookupSfData,
+      fetchUserTagFlag,
+      getBid,
+      getPriceModeler
     } = this.props;
     fetchUsers();
-    getSFNonEditabelInfoField();
     callPickListLookupSfData();
+    const bid = getBid?.toJS();
+    const proposalID = bid?.id;
+    if (proposalID) getPriceModeler(proposalID);
     window.addEventListener('resize', this.resize.bind(this));
     this.resize();
-    this.props.fetchUserTagFlagInQuestion();
+    if (
+      fetchUserTagFlag &&
+      typeof fetchUserTagFlag === 'object' &&
+      fetchUserTagFlag.answerUserTagFlag
+    ) {
+      this.props.fetchUserTagFlagInQuestion(
+        fetchUserTagFlag.answerUserTagFlag || false
+      );
+    }
   }
 
   componentDidUpdate(prevProps: Map) {
@@ -203,7 +226,6 @@ class Questions extends Component {
           userRole,
           'drag event'
         );
-        console.log('ResizeObserver called');
         saveDataInMatomo(trackEvent, matamoObj);
       }, 3000)
     );
@@ -638,42 +660,44 @@ class Questions extends Component {
             </div>
           </div>
         </div>
-        <Sidebar
-          sections={allSections}
-          id={selectedBid.get('id')}
-          onAddQuestion={value => {
-            this.setState({ currentsection: value });
-          }}
-          onscrollelement={e => this.expandsection(e)}
-          expandAll={e => {
-            this.setState({ sidebarscroll: '' }, () => {
-              this.handleIsCheckedAll();
-            });
-            if (!e) {
-              const clearsidebarselectsection = new CustomEvent(
-                'clearsidebarselectsection',
-                {
-                  detail: true
-                }
-              );
-              document.dispatchEvent(clearsidebarselectsection);
+        <Suspense fallback={<div>Loading...</div>}>
+          <Sidebar
+            sections={allSections}
+            id={selectedBid.get('id')}
+            onAddQuestion={value => {
+              this.setState({ currentsection: value });
+            }}
+            onscrollelement={e => this.expandsection(e)}
+            expandAll={e => {
+              this.setState({ sidebarscroll: '' }, () => {
+                this.handleIsCheckedAll();
+              });
+              if (!e) {
+                const clearsidebarselectsection = new CustomEvent(
+                  'clearsidebarselectsection',
+                  {
+                    detail: true
+                  }
+                );
+                document.dispatchEvent(clearsidebarselectsection);
+              }
+            }}
+            AddNewQuestion={() => {
+              this.setState({ showModal: true });
+              this.trackMatomoEventToggleQModal(true);
+            }}
+            RefreshProposal={this.getProposalInfoUpdated}
+            // eslint-disable-next-line react/destructuring-assignment
+            currentTab={this.state.currentTab}
+            // eslint-disable-next-line react/destructuring-assignment
+            selectedtitle={this.state.selectedtitle}
+            // eslint-disable-next-line react/destructuring-assignment
+            heighlightcard={this.state.heighlightcard}
+            setTabFromQuestionNotes={(val, title, flag) =>
+              this.setTabFromQuestionNotes(val, title, flag)
             }
-          }}
-          AddNewQuestion={() => {
-            this.setState({ showModal: true });
-            this.trackMatomoEventToggleQModal(true);
-          }}
-          RefreshProposal={this.getProposalInfoUpdated}
-          // eslint-disable-next-line react/destructuring-assignment
-          currentTab={this.state.currentTab}
-          // eslint-disable-next-line react/destructuring-assignment
-          selectedtitle={this.state.selectedtitle}
-          // eslint-disable-next-line react/destructuring-assignment
-          heighlightcard={this.state.heighlightcard}
-          setTabFromQuestionNotes={(val, title, flag) =>
-            this.setTabFromQuestionNotes(val, title, flag)
-          }
-        />
+          />
+        </Suspense>
         {showModal && (
           <AddQuestionModalComponent
             onClose={this.onClose}
@@ -714,6 +738,8 @@ const mapStateToProps = (state: Map) => ({
   getBidList: getBidList(state),
   userEmail: getUserEmail(state),
   userRole: getUserRole(state),
+  getBid: getCurrentBid(state),
+  fetchUserTagFlag: getfetchUserTagFlag(state),
   showNaCheckbox: getShowNaCheckbox(state)
 });
 
@@ -728,8 +754,8 @@ export default compose(
     expandAllSections: expandAllSectionsAction,
     handleOpenClose: onHandleOpenClose,
     handleShowNaCheckbox: setShowNaCheckbox,
-    getSFNonEditabelInfoField: getSFNonEditabelField,
     callPickListLookupSfData,
-    fetchUserTagFlagInQuestion
+    fetchUserTagFlagInQuestion,
+    getPriceModeler: getPriceModelerData
   })
 )(MatomoHOC(Questions));

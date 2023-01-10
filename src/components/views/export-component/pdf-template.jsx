@@ -9,7 +9,6 @@ import {
   Image,
   Link as HtmlLink
 } from '@react-pdf/renderer';
-// import './AnnotationLayer.css';
 import React from 'react';
 import Html from 'react-pdf-html';
 import { isString } from 'lodash';
@@ -254,10 +253,6 @@ function getExtraLines(t1, t2) {
   const paddingAnswerCell = parseInt(contentLength / 230);
   return new Array(paddingAnswerCell + 2 || 2).fill('<br>').join('');
 }
-function topHeading(details) {
-  return `<h1 class="mainTitle"><em>${details['CRM #'] ||
-    ''}</em> Opportunity Overview</h1>`;
-}
 function getHeaderInfoRows(details) {
   let html = `<table class="table headerInfo">`;
   try {
@@ -449,7 +444,6 @@ function getNotesRows(notes, editor) {
     const noteText = editor.getJSON();
 
     try {
-      console.log('noteText pdf', noteText);
       data += generateHTML(noteText, [
         StarterKit,
         Link,
@@ -466,7 +460,6 @@ function getNotesRows(notes, editor) {
           }
         })
       ]);
-      console.log('ddata', data);
       data += `</td></tr></table>`;
       html += data;
       return html;

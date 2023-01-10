@@ -59,7 +59,6 @@ const TagUserList = ({ searchTag, onSelect, close }) => {
         ...user,
         formattedUser: formatUser(user, searchTag)
       }));
-      console.log(usersList);
       setUsers(usersList);
     } else {
       setUsers([]);

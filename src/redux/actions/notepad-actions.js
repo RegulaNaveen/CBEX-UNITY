@@ -2,7 +2,7 @@ import { fromJS } from 'immutable';
 import { REDUX_TYPES } from '../../constants';
 import { fetchNotesApi, addNoteApi, updateNoteApi } from '../../api/notepad';
 import { getUserEmail } from '../../SessionHandler';
-import { getSelectedBid } from '../../redux/selectors';
+import { getSelectedBid } from '../selectors';
 
 const {
   FETCH_NOTES,
@@ -15,7 +15,6 @@ const {
   ERROR_FETCHING_NOTES,
   ERROR_ADDING_NOTE,
   CHANGE_MODE,
-  MODE_DEFAULT,
   RESET_NOTES,
   SET_EDITOR,
   UPDATE_NOTE_IN_STORE
@@ -43,9 +42,7 @@ export const updateProposalNotesFromWebSocket = (
   data
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
-    if (data.updatedBy === getUserEmail()) {
-      console.log('skipping update because message from same user');
-    } else {
+    if (data.updatedBy !== getUserEmail()) {
       dispatch(fetchNotes(getSelectedBid(getState()).get('id', '')));
     }
   };

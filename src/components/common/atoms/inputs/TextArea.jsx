@@ -56,15 +56,12 @@ class TextArea extends PureComponent<Props, State> {
   }
   updateValueFromProps() {
     const { value } = this.props;
-    // if (!_.isEmpty(value))
     this.setState({ textValue: value });
   }
 
   componentDidUpdate(prevProps) {
     const { textValue: value } = this.state;
-
     if (prevProps.value != this.props.value) this.updateValueFromProps();
-
     if (
       this.textAreaInput.current !== null &&
       this.textAreaInput.current.id !== 'question-text-area'
@@ -80,12 +77,10 @@ class TextArea extends PureComponent<Props, State> {
   handleText = ({ target }: SyntheticInputEvent<EventTarget>) => {
     const { onChange } = this.props;
     const { value: textValue } = target;
-
     if (onChange && textValue) {
       this.resetUnlockTimer();
       onChange(textValue);
     }
-
     this.setState({ textValue });
   };
 

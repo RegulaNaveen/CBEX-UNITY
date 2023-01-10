@@ -24,8 +24,7 @@ import {
   getProposalDetails,
   getUserName,
   getUserEmail,
-  getUserRole,
-  selectIsNotesFetched
+  getUserRole
 } from '../../../redux/selectors';
 import MenuBar from './MenuBar';
 import {
@@ -53,11 +52,7 @@ const WysiwygNotepad = ({
 
   useEffect(() => {
     const ldApiCall = async () => {
-      const notesUserTagValue = await launchDarkly(
-        featureFlags.NOTES_USER_TAG,
-        false
-      );
-      setNotesUserTag(notesUserTagValue);
+      setNotesUserTag(allFlags.notesUserTag || false);
     };
     ldApiCall();
     return () => {
@@ -204,7 +199,6 @@ const WysiwygNotepad = ({
                 userRole,
                 'bold event'
               );
-              console.log('matamoObj :>> ', matamoObj);
               saveDataInMatomo(trackEvent, matamoObj);
             }
             // italic

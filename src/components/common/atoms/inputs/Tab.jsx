@@ -1,20 +1,18 @@
-import React, { useState, useEffect, useMemo, useRef, useContext } from 'react';
+/* eslint-disable no-else-return */
+import React, { useState, useEffect, useContext, Suspense } from 'react';
 import { useHistory } from 'react-router-dom';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
 import Panel from 'apollo-react/components/Panel';
+import Spinner from 'react-loader-spinner';
 import Typography from 'apollo-react/components/Typography';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
-import Questions from '../../../screens/Opportunity/Questions';
-import Documents from '../../../screens/Opportunity/Documents';
 import Validate from '../../../screens/Opportunity/Validate';
-import featureFlags from '../../../../constants/featureFlags';
-import launchDarkly from '../../../../utils/launchDarkly';
 import {
-  getOpportunityData,
-  getSelectedBid
+  getSelectedBid,
+  selectActiveTabIndex
 } from '../../../../redux/selectors/proposal';
 import {
   getIsOpen,
@@ -22,13 +20,55 @@ import {
   getUserEmail,
   getUserRole
 } from '../../../../redux/selectors';
-import Approvals from '../../../screens/Approvals/index';
-import VerticalTabsCollapsiblePanel from '../../../screens/Opportunity/layout/navigation/VerticalTabsCollapsiblePanel';
-import QuestionsForCustomer from '../../../screens/Opportunity/QuestionsForCustomerTab';
-import NotepadWrapper from '../../../views/WysiwygNotepad/NotepadWrapper';
-
-import ProposalTeam from '../../../screens/Opportunity/ProposalTeam';
+import { setActiveTabIndexAction } from '../../../../redux/actions/proposal-actions';
 import { createMatomoObj, saveDataInMatomo } from '../../../../utils/utils';
+import NotepadWrapper from '../../../views/WysiwygNotepad/NotepadWrapper';
+import lazyWithRetry from '../../../../utils/lazy';
+import VerticalTabsCollapsiblePanel from '../../../screens/Opportunity/layout/navigation/VerticalTabsCollapsiblePanel';
+
+const Questions = React.lazy(() =>
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "Questions" */ '../../../screens/Opportunity/Questions'
+    )
+  )
+);
+const Approvals = React.lazy(() =>
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "Approvals" */ '../../../screens/Approvals/index'
+    )
+  )
+);
+const Documents = React.lazy(() =>
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "Documents" */ '../../../screens/Opportunity/Documents'
+    )
+  )
+);
+
+const QuestionsForCustomer = React.lazy(() =>
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "QuestionsForCustomerTab" */ '../../../screens/Opportunity/QuestionsForCustomerTab'
+    )
+  )
+);
+const WysiwygNotepad = React.lazy(() =>
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "WysiwygNotepad" */ '../../../views/WysiwygNotepad'
+    )
+  )
+);
+const ProposalTeam = React.lazy(() =>
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "ProposalTeam" */ '../../../screens/Opportunity/ProposalTeam'
+    )
+  )
+);
 
 const UnityTab = ({
   id,
@@ -36,7 +76,6 @@ const UnityTab = ({
   selectedView,
   onChangeSelectedTab
 }) => {
-  const [value, setValue] = useState(0);
   const [approvalsFlag, setApprovalsFlag] = useState(false);
   const [showApprovalTab, setShowApprovalTab] = useState(false);
   const [isShowVerticalTab, setShowVerticalTab] = useState(false);
@@ -50,14 +89,14 @@ const UnityTab = ({
 
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const isApprovalCount = selectedBid?.isApprovalCountPresent || false;
-  const oppData = useSelector(getOpportunityData)?.toJS();
-  const memoizeBid = useMemo(() => selectedBid, [selectedBid?.id]);
-  const proposalID = memoizeBid?.id;
   const history = useHistory();
   const isOpen = useSelector(state => getIsOpen(state));
   const proposalDetail = useSelector(state => getProposalDetails(state));
   const userEmail = useSelector(state => getUserEmail(state));
   const userRole = useSelector(state => getUserRole(state));
+  const allFlags = useSelector(state => state.proposal.get('eventflag'));
+  const value = useSelector(selectActiveTabIndex);
+  const dispatch = useDispatch();
 
   const { trackEvent } = useMatomo();
 
@@ -97,17 +136,11 @@ const UnityTab = ({
 
   async function fetchTabFlags() {
     // launchDarkly calls should be optimized
-    let verticalTabFlag = await launchDarkly(featureFlags.VERTICAL_TAB, false); // Vertical tab flag
-    const questionsForCustomerFlag = await launchDarkly(
-      featureFlags.QUESTIONS_FOR_CUSTOMER_TAB,
-      false
-    ); // Questions for the customer flag
-    const notepadFlag = await launchDarkly(featureFlags.NOTEPAD_TAB, false); // Notepad flag
-    const proposalTeamFlag = await launchDarkly(
-      featureFlags.PROPOSAL_TEAM_TAB,
-      false
-    ); // Proposal Team flag
-
+    let verticalTabFlag = allFlags.verticalTab || false; // Vertical tab flag
+    const questionsForCustomerFlag = allFlags.questionsForCustomerTab || false;
+    const notepadFlag = allFlags.notepad || false; // Notepad flag
+    const proposalTeamFlag = allFlags.proposalTeamTab || false; // Proposal Team flag
+    const approvalFlag = allFlags.approvalsFlag || false;
     if (
       !verticalTabFlag ||
       ![questionsForCustomerFlag, notepadFlag, proposalTeamFlag].some(
@@ -116,6 +149,7 @@ const UnityTab = ({
     ) {
       verticalTabFlag = false;
     }
+    setApprovalsFlag(approvalFlag);
     setShowVerticalTab(verticalTabFlag);
     setShowQuestionsForCustomerTab(questionsForCustomerFlag);
     setShowNotepadTab(notepadFlag);
@@ -140,16 +174,22 @@ const UnityTab = ({
 
   useEffect(() => {
     if (selectedView && selectedView === 'documents') {
-      setValue(tabs.find(item => item.label === 'Documents').value);
+      dispatch(
+        setActiveTabIndexAction(
+          tabs.find(item => item.label === 'Documents').value
+        )
+      );
     }
     if (selectedView && selectedView === 'approvals' && isApprovalCount) {
       const isApprovalTabVisible = approvalsFlag;
       const approvalTabValue = tabs.find(item => item.label === 'Approvals')
         .value;
-      setValue(isApprovalTabVisible ? approvalTabValue : 0); // Shows questions tab if Approvals are not found for the proposal
+      dispatch(
+        setActiveTabIndexAction(isApprovalTabVisible ? approvalTabValue : 0)
+      ); // Shows questions tab if Approvals are not found for the proposal
     }
     if (selectedView && selectedView === 'questions') {
-      setValue(0);
+      dispatch(setActiveTabIndexAction(0));
     }
   }, [selectedView, approvalsFlag, showApprovalTab]);
 
@@ -158,7 +198,7 @@ const UnityTab = ({
     const selectView = new URLSearchParams(winLocationSearch);
     const currentTab = tabs.find(item => item.value === val);
     const currentPath = currentTab.path || '';
-    setValue(val);
+    dispatch(setActiveTabIndexAction(val));
     onChangeSelectedTab(currentPath);
     selectView.set('viewType', currentPath);
     if (val === 0) {
@@ -168,13 +208,6 @@ const UnityTab = ({
       history.push(`${window.location.pathname}?${selectView.toString()}`);
     }
   };
-
-  useEffect(() => {
-    (async () => {
-      const approvalFlag = await launchDarkly(featureFlags.APPROVALS, false);
-      setApprovalsFlag(approvalFlag);
-    })();
-  }, []);
 
   /**
    * Decides which tabs to be rendered
@@ -192,7 +225,154 @@ const UnityTab = ({
     return tabsToReturn;
   };
 
+  const renderVerticleTabsComponent = activeVerticleTab => {
+    if (activeVerticleTab === 'showQuestionsForCustomerTab') {
+      return (
+        <div id="panel-notepad" style={{ borderRadius: '5px' }}>
+          <Panel
+            minWidth={notepadMinWidthPx}
+            maxWidth={notepadMaxWidthPx}
+            width={notepadMaxWidthPx}
+            style={{ borderRadius: '5px' }}
+            resizable
+          >
+            <Suspense
+              fallback={
+                <Spinner
+                  type="TailSpin"
+                  color="#297DFD"
+                  width={30}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh'
+                  }}
+                />
+              }
+            >
+              <QuestionsForCustomer />
+            </Suspense>
+          </Panel>
+        </div>
+      );
+    }
+    if (activeVerticleTab === 'showNotepadTab') {
+      /* Notepad */
+      return (
+        <div id="panel-notepad" style={{ borderRadius: '5px' }}>
+          <Panel
+            minWidth={notepadMinWidthPx}
+            maxWidth={notepadMaxWidthPx}
+            width={notepadMaxWidthPx}
+            className="notepad-classoverride"
+            style={{ borderRadius: '5px' }}
+            resizable
+            onClose={() => {
+              setIsNotepadOpen(false);
+              const matamoObj = createMatomoObj(
+                proposalDetail,
+                userEmail,
+                userRole,
+                'closed event'
+              );
+              saveDataInMatomo(trackEvent, matamoObj);
+            }}
+            onOpen={() => {
+              setIsNotepadOpen(true);
+            }}
+          >
+            <div
+              className={classNames('panel-notepad-inner', {
+                hidden: !isNotepadOpen
+              })}
+            >
+              <div id="panel-notepad-header">
+                <Typography variant="h3">Notepad</Typography>
+              </div>
+              <Suspense
+                fallback={
+                  <Spinner
+                    type="TailSpin"
+                    color="#297DFD"
+                    width={30}
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '100vh'
+                    }}
+                  />
+                }
+              >
+                <NotepadWrapper
+                  trackEvent={trackEvent}
+                  eventCategories={{
+                    dp: 'Unity Dashboard',
+                    pd: props =>
+                      `Proposal Detail (CRM#: ${
+                        props && props.proposalDetail
+                          ? props.proposalDetail['CRM #']
+                          : ''
+                      })`,
+                    plainPd: `Proposal Detail`,
+                    tb: `ToolBar Menu`,
+                    pg: `Pagination`,
+                    crmNo: `Proposal Detail (CRM#: ${localStorage.getItem(
+                      'oppNo'
+                    ) || ''})`
+                  }}
+                />
+              </Suspense>
+            </div>
+          </Panel>
+        </div>
+      );
+    }
+    if (activeVerticleTab === 'proposalteamtab') {
+      return (
+        <div id="panel-notepad" style={{ borderRadius: '5px' }}>
+          <Panel
+            minWidth={notepadMinWidthPx}
+            maxWidth={notepadMaxWidthPx}
+            width={notepadMaxWidthPx}
+            style={{ borderRadius: '5px' }}
+            resizable
+          >
+            <Suspense
+              fallback={
+                <Spinner
+                  type="TailSpin"
+                  color="#297DFD"
+                  width={30}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh'
+                  }}
+                />
+              }
+            >
+              <ProposalTeam />
+            </Suspense>
+          </Panel>
+        </div>
+      );
+    }
+  };
+
   const renderTab = () => {
+    let activeVerticleTab = null;
+    if (!showQuestionsForCustomerTab) {
+      if (!showNotepadTab) {
+        activeVerticleTab = 'proposalteamtab';
+      } else {
+        activeVerticleTab = 'showNotepadTab';
+      }
+    } else {
+      activeVerticleTab = 'showQuestionsForCustomerTab';
+    }
     return (
       <>
         <Tabs
@@ -208,104 +388,40 @@ const UnityTab = ({
           })}
         </Tabs>
         <div style={{ padding: 20, paddingTop: 5 }}>
-          <div id="fullwidth-view-above-vertical-tabs"></div>
+          <div id="fullwidth-view-above-vertical-tabs" />
           <div style={{ display: 'flex', marginTop: '16px' }}>
             {isShowVerticalTab ? (
               <VerticalTabsCollapsiblePanel
                 showQuestionsForCustomerTab={showQuestionsForCustomerTab}
                 showNotepadTab={showNotepadTab}
                 showProposalTeamTab={showProposalTeamTab}
+                activeVerticleTab={activeVerticleTab}
                 renderPanel={activeTab => {
                   // Check activeTab value and render required component
-                  if (activeTab === 0) {
-                    return (
-                      <div id="panel-notepad" style={{ borderRadius: '5px' }}>
-                        <Panel
-                          minWidth={notepadMinWidthPx}
-                          maxWidth={notepadMaxWidthPx}
-                          width={notepadMaxWidthPx}
-                          style={{ borderRadius: '5px' }}
-                          resizable
-                        >
-                          <QuestionsForCustomer />
-                        </Panel>
-                      </div>
-                    );
-                  } else if (activeTab === 1) {
-                    /* Notepad */
-                    return (
-                      <div id="panel-notepad" style={{ borderRadius: '5px' }}>
-                        <Panel
-                          minWidth={notepadMinWidthPx}
-                          maxWidth={notepadMaxWidthPx}
-                          width={notepadMaxWidthPx}
-                          className="notepad-classoverride"
-                          style={{ borderRadius: '5px' }}
-                          resizable
-                          onClose={() => {
-                            setIsNotepadOpen(false);
-                            const matamoObj = createMatomoObj(
-                              proposalDetail,
-                              userEmail,
-                              userRole,
-                              'closed event'
-                            );
-                            saveDataInMatomo(trackEvent, matamoObj);
-                          }}
-                          onOpen={() => {
-                            setIsNotepadOpen(true);
-                          }}
-                        >
-                          <div
-                            className={classNames('panel-notepad-inner', {
-                              hidden: !isNotepadOpen
-                            })}
-                          >
-                            <div id="panel-notepad-header">
-                              <Typography variant="h3">Notepad</Typography>
-                            </div>
-
-                            <NotepadWrapper
-                              trackEvent={trackEvent}
-                              eventCategories={{
-                                dp: 'Unity Dashboard',
-                                pd: props =>
-                                  `Proposal Detail (CRM#: ${
-                                    props && props.proposalDetail
-                                      ? props.proposalDetail['CRM #']
-                                      : ''
-                                  })`,
-                                plainPd: `Proposal Detail`,
-                                tb: `ToolBar Menu`,
-                                pg: `Pagination`,
-                                crmNo: `Proposal Detail (CRM#: ${localStorage.getItem(
-                                  'oppNo'
-                                ) || ''})`
-                              }}
-                            />
-                          </div>
-                        </Panel>
-                      </div>
-                    );
-                  }
-                  return (
-                    <div id="panel-notepad" style={{ borderRadius: '5px' }}>
-                      <Panel
-                        minWidth={notepadMinWidthPx}
-                        maxWidth={notepadMaxWidthPx}
-                        width={notepadMaxWidthPx}
-                        style={{ borderRadius: '5px' }}
-                        resizable
-                      >
-                        <ProposalTeam />
-                      </Panel>
-                    </div>
-                  );
+                  return <>{renderVerticleTabsComponent(activeTab)}</>;
                 }}
               />
             ) : null}
             {visibleTabs().map(item => {
-              return value === item.value && item.component;
+              return (
+                <Suspense
+                  fallback={
+                    <Spinner
+                      type="TailSpin"
+                      color="#297DFD"
+                      width={30}
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '100vh'
+                      }}
+                    />
+                  }
+                >
+                  {value === item.value && item.component}
+                </Suspense>
+              );
             })}
           </div>
         </div>

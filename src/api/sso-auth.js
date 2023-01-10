@@ -62,14 +62,11 @@ export const validateToken = async (token: string) => {
 };
 
 export const InitRefreshToken = () => {
-  console.log('Initiating the refreshToken loop');
-
   if (!interval) {
     interval = setInterval(() => {
       const rToken = localStorage.getItem('refresh_token');
       if (!rToken) {
         clearInterval(interval);
-        console.log('Cleared the refreshToken loop');
         return;
       }
       const config = {
@@ -89,7 +86,6 @@ export const InitRefreshToken = () => {
       };
       axios(config)
         .then(response => {
-          console.log('Going to update the A/I token');
           const result = response.data.AuthenticationResult || null;
           if (result) {
             if (result.IdToken)

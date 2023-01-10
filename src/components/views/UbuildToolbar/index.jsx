@@ -1,14 +1,14 @@
+/* eslint-disable react/prop-types */
 // @flow
 import React, { Component, createRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import classnames from 'classnames';
-import ToolbarMenu from './ToolbarMenu';
-import { DropMenu } from '../../svg';
-import { DASHBOARD, UBUILD } from '../../../routes';
-import { isUserUbuildAdmin } from '../../../utils/utils';
 import Avatar from 'apollo-react/components/Avatar';
 import ArrowUp from 'apollo-react-icons/ArrowUp';
 import ArrowDown from 'apollo-react-icons/ArrowDown';
+import ToolbarMenu from './ToolbarMenu';
+import { DASHBOARD, UBUILD } from '../../../routes';
+import { isUserUbuildAdmin } from '../../../utils/utils';
 import { getUserName } from '../../../SessionHandler';
 
 type State = { isCollapsed: boolean };
@@ -16,7 +16,7 @@ type State = { isCollapsed: boolean };
 class Toolbar extends Component<{}, State> {
   wrapperRef: { current: any | HTMLDivElement };
 
-  constructor(props: Object) {
+  constructor(props) {
     super(props);
     this.wrapperRef = createRef();
 
@@ -33,7 +33,7 @@ class Toolbar extends Component<{}, State> {
     window.removeEventListener('mousedown', this.handleClickOutside);
   }
 
-  handleKeyPress = (event: KeyboardEvent) => {
+  handleKeyPress = event => {
     if (event.key === 'Enter') this.handleCollapse();
   };
 
@@ -42,13 +42,14 @@ class Toolbar extends Component<{}, State> {
     this.setState({ isCollapsed: !isCollapsed });
   };
 
-  handleClickOutside = (event: any) => {
+  handleClickOutside = event => {
     if (this.wrapperRef && !this.wrapperRef.current.contains(event.target))
       this.setState({ isCollapsed: false });
   };
 
   render() {
     const { isCollapsed } = this.state;
+    const { location } = this.props;
     const results = isUserUbuildAdmin();
     const name = getUserName();
     return (
@@ -60,9 +61,7 @@ class Toolbar extends Component<{}, State> {
         {results && (
           <div
             className={
-              (this.props &&
-                this.props?.location &&
-                this.props.location?.pathname) == UBUILD
+              (this.props && location && location?.pathname) === UBUILD
                 ? 'ubuild-linkactive'
                 : 'ubuild-link'
             }
