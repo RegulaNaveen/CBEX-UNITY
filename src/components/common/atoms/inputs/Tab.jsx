@@ -22,7 +22,6 @@ import {
 } from '../../../../redux/selectors';
 import { setActiveTabIndexAction } from '../../../../redux/actions/proposal-actions';
 import { createMatomoObj, saveDataInMatomo } from '../../../../utils/utils';
-import NotesSocketContext from '../../../../context/notesSocketContext';
 import lazyWithRetry from '../../../../utils/lazy';
 import VerticalTabsCollapsiblePanel from '../../../screens/Opportunity/layout/navigation/VerticalTabsCollapsiblePanel';
 
@@ -30,6 +29,14 @@ const Questions = React.lazy(() =>
   lazyWithRetry(() =>
     import(
       /* webpackChunkName: "Questions" */ '../../../screens/Opportunity/Questions'
+    )
+  )
+);
+
+const NotepadWrapper = React.lazy(() =>
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "Notepad" */ '../../../views/WysiwygNotepad/NotepadWrapper'
     )
   )
 );
@@ -55,13 +62,7 @@ const QuestionsForCustomer = React.lazy(() =>
     )
   )
 );
-const WysiwygNotepad = React.lazy(() =>
-  lazyWithRetry(() =>
-    import(
-      /* webpackChunkName: "WysiwygNotepad" */ '../../../views/WysiwygNotepad'
-    )
-  )
-);
+
 const ProposalTeam = React.lazy(() =>
   lazyWithRetry(() =>
     import(
@@ -99,8 +100,6 @@ const UnityTab = ({
   const dispatch = useDispatch();
 
   const { trackEvent } = useMatomo();
-
-  const socketContext = useContext(NotesSocketContext);
 
   const minPixelToExclude = 20;
   const notepadMinWidthPx =
@@ -307,40 +306,24 @@ const UnityTab = ({
                   />
                 }
               >
-                {socketContext && !socketContext.wsInstance ? (
-                  <>
-                    <Spinner
-                      type="TailSpin"
-                      color="#297DFD"
-                      width={30}
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        height: '100vh'
-                      }}
-                    />
-                  </>
-                ) : (
-                  <WysiwygNotepad
-                    trackEvent={trackEvent}
-                    eventCategories={{
-                      dp: 'Unity Dashboard',
-                      pd: props =>
-                        `Proposal Detail (CRM#: ${
-                          props && props.proposalDetail
-                            ? props.proposalDetail['CRM #']
-                            : ''
-                        })`,
-                      plainPd: `Proposal Detail`,
-                      tb: `ToolBar Menu`,
-                      pg: `Pagination`,
-                      crmNo: `Proposal Detail (CRM#: ${localStorage.getItem(
-                        'oppNo'
-                      ) || ''})`
-                    }}
-                  />
-                )}
+                <NotepadWrapper
+                  trackEvent={trackEvent}
+                  eventCategories={{
+                    dp: 'Unity Dashboard',
+                    pd: props =>
+                      `Proposal Detail (CRM#: ${
+                        props && props.proposalDetail
+                          ? props.proposalDetail['CRM #']
+                          : ''
+                      })`,
+                    plainPd: `Proposal Detail`,
+                    tb: `ToolBar Menu`,
+                    pg: `Pagination`,
+                    crmNo: `Proposal Detail (CRM#: ${localStorage.getItem(
+                      'oppNo'
+                    ) || ''})`
+                  }}
+                />
               </Suspense>
             </div>
           </Panel>
@@ -432,7 +415,8 @@ const UnityTab = ({
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        height: '100vh'
+                        height: '100vh',
+                        paddingLeft: '25%'
                       }}
                     />
                   }

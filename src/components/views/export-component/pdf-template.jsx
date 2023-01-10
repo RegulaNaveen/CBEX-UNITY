@@ -1,21 +1,4 @@
 import {
-  getFilteredQuestion,
-  headFields,
-  PT_SECTION,
-  CORE_TEAM,
-  QC_SECTION,
-  getLastAnswer,
-  themeBlue,
-  themeGrey,
-  getUnityPredicatedText,
-  dateNow,
-  userName,
-  yearNow,
-  getUnityLink,
-  formatDate,
-  shouldInclude
-} from './word-template';
-import {
   pdf,
   Document,
   Page,
@@ -38,11 +21,30 @@ import Superscript from '@tiptap/extension-superscript';
 import Mention from '@tiptap/extension-mention';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
-import Logo from '../../../../img/iqvia-main-logo.png';
-import ProximaNova from '../../../../fonts/ProximaNova-Regular.otf';
-import ProximaNovaBold from '../../../../fonts/Proxima Nova Alt Bold.otf';
-import ProximaNovaBoldItalic from '../../../../fonts/Proxima-Nova-Bold-It.otf';
+import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import ProximaNovaItalic from '../../../../fonts/Proxima-Nova-Reg-It.otf';
+import ProximaNovaBoldItalic from '../../../../fonts/Proxima-Nova-Bold-It.otf';
+import ProximaNovaBold from '../../../../fonts/Proxima Nova Alt Bold.otf';
+import ProximaNova from '../../../../fonts/ProximaNova-Regular.otf';
+import Logo from '../../../../img/iqvia-main-logo.png';
+import {
+  getFilteredQuestion,
+  headFields,
+  PT_SECTION,
+  CORE_TEAM,
+  QC_SECTION,
+  getLastAnswer,
+  themeBlue,
+  themeGrey,
+  getUnityPredicatedText,
+  dateNow,
+  userName,
+  yearNow,
+  getUnityLink,
+  formatDate,
+  shouldInclude
+} from './word-template';
+import { selectEditor } from '../../../redux/selectors';
 
 Font.register({
   family: 'ProximaNova',
@@ -60,7 +62,7 @@ const styles = StyleSheet.create({
   },
   header: {
     width: '83%',
-    height: '10vh',
+    height: '10vh', // As per your page layout
     borderBottom: `1px solid #${themeBlue}`,
     marginBottom: '20px',
     marginLeft: '50px',
@@ -80,7 +82,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '83%',
-    height: '15vh',
+    height: '15vh', // As per your page layout
     marginTop: '20px',
     marginLeft: '50px',
     marginRight: '50px'
@@ -328,7 +330,7 @@ function questionTables(proposalQuestions) {
   // Array<Table of each section>
   let html = ``;
   // Remove not visible questions
-  let questions = proposalQuestions
+  const questions = proposalQuestions
     .filter(question => {
       return (
         shouldInclude(question) &&
@@ -415,7 +417,7 @@ function getQuestionToCustomerRows(questions) {
   try {
     html += `<tr>`;
     html += `<td><ul>`;
-    questionsToCustomer.forEach(question => {
+    questionsToCustomer.forEach((question, index) => {
       const { questionText } = question;
       html += `<li> ${questionText} </li>`;
     });
@@ -440,6 +442,7 @@ function getNotesRows(notes, editor) {
   data += `<table><tr><td style="border:1px solid black;padding:10px">`;
   try {
     const noteText = editor.getJSON();
+
     try {
       data += generateHTML(noteText, [
         StarterKit,
@@ -486,6 +489,7 @@ function getHtml(
             ${getQuestionToCustomerRows(questions)}
             ${questionTables(filteredQuestions)}
             ${filterState.includesNotes ? getNotesRows(notes, editor) : ''}
+
         </body>
         </html>
     `;
@@ -525,9 +529,8 @@ const MyDoc = (
               p: ({ style, children }) => {
                 if (children != '') {
                   return <View style={style}>{children}</View>;
-                } else {
-                  return <View style={{ height: 18 }}></View>;
                 }
+                return <View style={{ height: 18 }} />;
               },
               tr: ({ style, children }) => (
                 <View style={style}>{children}</View>
@@ -637,12 +640,13 @@ const MyDoc = (
 };
 
 export function createPdf(content) {
-  let {
+  const {
     data: { proposalQuestions, proposalDetails },
     notes,
     filterState,
     editor
   } = content;
+
   const filteredQuestions = getFilteredQuestion(proposalQuestions, filterState);
   return pdf(
     MyDoc(
