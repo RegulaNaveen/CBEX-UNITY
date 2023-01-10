@@ -16,8 +16,6 @@ import Mention from '@tiptap/extension-mention';
 import moment from 'moment';
 
 import suggestion from './suggestion';
-import launchDarkly from '../../../utils/launchDarkly';
-import featureFlags from '../../../constants/featureFlags';
 import { saveDataInMatomo, createMatomoObj } from '../../../utils/utils';
 
 import {
