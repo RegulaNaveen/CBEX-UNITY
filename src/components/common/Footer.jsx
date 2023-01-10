@@ -12,7 +12,6 @@ import Lock from 'apollo-react-icons/Lock';
 import { PROPOSAL } from '../../constants/app';
 import SwitchTemplate from '../views/modals/SwitchTemplate';
 import { getSelectedBid } from '../../redux/selectors/proposal';
-// import CustomModal from './CustomModal';
 import {
   getOpportunity,
   updateSwitchInProgress,

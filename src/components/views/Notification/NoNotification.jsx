@@ -6,18 +6,24 @@ import { RECENT_ACTIVITY } from '../../../routes';
 const NoNotification = () => {
   const history = useHistory();
   const redirectViewAll = () => {
-   history.push(RECENT_ACTIVITY);
+    history.push(RECENT_ACTIVITY);
   };
   return (
-    <div className='no-notification'>
+    <div className="no-notification">
       <Bell
-        className='no-notification-bell'
+        className="no-notification-bell"
         style={{ color: '#595959', fontSize: 'xx-large' }}
       />
       <p>No new notifications</p>
-     <br></br>
-     <div className='no-notification-viewAll'>
-       <p onClick={() => {redirectViewAll()}}>View All Notifications</p>
+      <br />
+      <div className="no-notification-viewAll">
+        <p
+          onClick={() => {
+            redirectViewAll();
+          }}
+        >
+          View All Notifications
+        </p>
       </div>
     </div>
   );

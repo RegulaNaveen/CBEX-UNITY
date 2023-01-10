@@ -3,9 +3,18 @@
     padding: 10px;
   }
 
+  & > .tab-wrapper {
+    padding-top: $toolbarHight;
+  }
+
   .loading {
     display: flex;
     justify-content: center;
     margin: 50px auto;
   }
+}
+
+// Ubuild toolbar styles
+.ubuild-wrapper {
+  padding-top: $toolbarHight;
 }

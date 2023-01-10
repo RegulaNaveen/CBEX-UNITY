@@ -50,6 +50,7 @@ const SectionActive = ({
               key={item}
               disabled={!selectedBidIsCurrent}
               updateQuestionVisibility={updateQuestionVisibility}
+              highlightQuestionId={`${item}-approval-${ApprovalSectionId}-left-ques`}
             />
           ))}
       </Grid>
@@ -62,6 +63,7 @@ const SectionActive = ({
               key={item}
               disabled={!selectedBidIsCurrent}
               updateQuestionVisibility={updateQuestionVisibility}
+              highlightQuestionId={`${item}-approval-${ApprovalSectionId}-right-ques`}
             />
           ))}
       </Grid>

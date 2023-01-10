@@ -35,7 +35,6 @@ class Pagination extends PureComponent<Props, State> {
   setCurrentPage = (event: SyntheticInputEvent<EventTarget>) => {
     const value = Number(event.target.id);
     const { getCurrentPage } = this.props;
-
     this.setState({ currentPage: value }, () => getCurrentPage(value));
     this.trackMatomoPaginationClicks(`Page No. ${value}`);
   };
@@ -46,7 +45,6 @@ class Pagination extends PureComponent<Props, State> {
 
     if (currentChunk - 1 >= 0) {
       const lastItem = last(this.chunks[currentChunk - 1]);
-
       this.setState(
         { currentChunk: currentChunk - 1, currentPage: lastItem },
         () => getCurrentPage(lastItem)
@@ -61,7 +59,6 @@ class Pagination extends PureComponent<Props, State> {
 
     if (currentChunk + 1 < this.chunks.length) {
       const [first] = this.chunks[currentChunk + 1];
-
       this.setState(
         { currentChunk: currentChunk + 1, currentPage: first },
         () => getCurrentPage(first)
@@ -99,7 +96,6 @@ class Pagination extends PureComponent<Props, State> {
   renderRightControls() {
     const { currentChunk } = this.state;
     if (currentChunk === this.chunks.length - 1) return null;
-
     return (
       <>
         <More className="pagination__svg more__right" />

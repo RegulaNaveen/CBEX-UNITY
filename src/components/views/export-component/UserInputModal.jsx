@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import Modal from 'apollo-react/components/Modal';
+import { useSelector } from 'react-redux';
 import Checkbox from 'apollo-react/components/Checkbox';
-import { actionChannel, UI_ACTION } from '../../../uiActions/ui-actions';
+import _ from 'lodash';
 import MenuItem from 'apollo-react/components/MenuItem';
 import Select from 'apollo-react/components/Select';
 import Button from 'apollo-react/components/Button';
-import _ from 'lodash';
+import { actionChannel, UI_ACTION } from '../../../uiActions/ui-actions';
 import { defaultOption, docType } from './GenerateDocs';
 import { getSelectedBid } from '../../../redux/selectors/proposal';
-import { useSelector } from 'react-redux';
 
 const UserInputModal = ({
   initExport,
@@ -65,7 +65,6 @@ const UserInputModal = ({
     });
     return () => {
       if (subscription) subscription.unsubscribe();
-
       handleClose();
     };
   }, [selectedBid]);
@@ -138,7 +137,7 @@ const UserInputModal = ({
             value={fileName}
             onChange={handleTextChange}
             required
-          ></input>
+          />
           <span className="fileNameAlert">File Name is required.</span>
         </div>
         <div className="exportOptionsRow exportOptionsRow-second flex-dir-col">

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // @flow
 import React, { Component } from 'react';
 import classNames from 'classnames';
@@ -16,8 +17,8 @@ class DropdownItem extends Component<Props> {
   }
 
   componentDidUpdate(prevProps) {
-    const { parentRef } = this.props;
-    if (prevProps.focused !== this.props.focused && this.props.focused) {
+    const { parentRef, focused } = this.props;
+    if (prevProps.focused !== focused) {
       if (parentRef.current && this.itemRef.current) {
         parentRef.current.scrollTop = this.itemRef.current.offsetTop;
       }

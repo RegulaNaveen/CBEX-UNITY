@@ -5,7 +5,6 @@ import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
-import Badge from 'apollo-react/components/Badge';
 import PlusIcon from 'apollo-react-icons/Plus';
 import CardIcon from 'apollo-react-icons/Card';
 import SyncIcon from 'apollo-react-icons/Sync';
@@ -15,8 +14,6 @@ import IconButton from 'apollo-react/components/IconButton';
 import Typography from 'apollo-react/components/Typography';
 import Tooltip from 'apollo-react/components/Tooltip';
 import { neptunePrimaryDark, neutral7 } from 'apollo-react/colors';
-
-// import Notepad from './Notepad';
 import chevronRight from '../../../img/chevron-right.svg';
 import {
   handleSelectedSection,
@@ -34,7 +31,7 @@ import { REDUX_TYPES } from '../../constants';
 
 import MatomoHOC from '../HOC/MatomoHOC';
 import { selectAreAllSectionsExpanded } from '../../redux/selectors/proposal';
-import {actionChannel, UI_ACTION} from '../../uiActions/ui-actions'
+import { actionChannel, UI_ACTION } from '../../uiActions/ui-actions';
 const MANUAL_REFRESH = false;
 
 type Props = {
@@ -158,7 +155,7 @@ class Sidebar extends Component<Props, State> {
     const item: ?HTMLElement = document.getElementById(itemToScroll);
 
     // delayed 1s so that sidebar will close and height of question section wpn't change
-    // while fetching offsetTop of the element 
+    // while fetching offsetTop of the element
     if (item) setTimeout(() => window.scrollTo(0, item.offsetTop - 20), 1000);
 
     handleOpenClose(false);
@@ -241,9 +238,6 @@ class Sidebar extends Component<Props, State> {
     const {
       sections,
       isOpen,
-      notes,
-      id,
-      selectedtitle,
       expandAll,
       AddNewQuestion,
       RefreshProposal,
@@ -259,8 +253,11 @@ class Sidebar extends Component<Props, State> {
         className={classNames({ 'is-open': isOpen })}
       >
         <div className="sidebar-content">
-          <button onClick={this.handleItemsVisibility} type="button" 
-           className={classNames({ 'is-btnopen': isOpen })}>
+          <button
+            onClick={this.handleItemsVisibility}
+            type="button"
+            className={classNames({ 'is-btnopen': isOpen })}
+          >
             <img
               className="task-icon"
               src={chevronRight}
@@ -269,9 +266,13 @@ class Sidebar extends Component<Props, State> {
           </button>
           <div>
             <div className="titlebar">
-              <Typography variant="title1"  style={{
-                    fontSize: 20
-                  }} gutterBottom>
+              <Typography
+                variant="title1"
+                style={{
+                  fontSize: 20
+                }}
+                gutterBottom
+              >
                 Controls
               </Typography>
               <IconButton size="small" onClick={this.handleItemsVisibility}>
@@ -282,7 +283,9 @@ class Sidebar extends Component<Props, State> {
               <Tooltip title="Add New Question" placement="left">
                 <PlusIcon
                   style={{
-                    backgroundColor: selectedBid.get('isCurrent')? neptunePrimaryDark : neutral7,
+                    backgroundColor: selectedBid.get('isCurrent')
+                      ? neptunePrimaryDark
+                      : neutral7,
                     width: 20,
                     height: 20,
                     borderRadius: '50%',
@@ -290,7 +293,7 @@ class Sidebar extends Component<Props, State> {
                     padding: 3,
                     margin: 3,
                     cursor: 'pointer',
-                    pointerEvents : selectedBid.get('isCurrent')? '' : 'none'
+                    pointerEvents: selectedBid.get('isCurrent') ? '' : 'none'
                   }}
                   onClick={e => {
                     const { onAddQuestion } = this.props;
@@ -301,7 +304,7 @@ class Sidebar extends Component<Props, State> {
                   }}
                 />
               </Tooltip>
-              <Tooltip title={isOpen && "Expand All Sections"} placement="top">
+              <Tooltip title={isOpen && 'Expand All Sections'} placement="top">
                 <CardIcon
                   style={{
                     color: neptunePrimaryDark,
@@ -328,31 +331,31 @@ class Sidebar extends Component<Props, State> {
                   }}
                   onClick={e => {
                     this.handleItemsVisibility(e);
-                    actionChannel.next({ name : UI_ACTION.openGenerateModal })
+                    actionChannel.next({ name: UI_ACTION.openGenerateModal });
                   }}
                 />
               </Tooltip>
-              { MANUAL_REFRESH &&  
-              <Tooltip title="Refresh Proposal Sources" placement="right">
-                <SyncIcon
-                  style={{
-                    backgroundColor: neptunePrimaryDark,
-                    width: 20,
-                    height: 20,
-                    borderRadius: '50%',
-                    color: '#fff',
-                    padding: 3,
-                    margin: 3,
-                    cursor: 'pointer'
-                  }}
-                  onClick={e => {
-                    this.trackMatomoEventIconClick('Refresh');
-                    this.handleItemsVisibility(e);
-                    RefreshProposal();
-                  }}
-                />
-              </Tooltip>
-              }
+              {MANUAL_REFRESH && (
+                <Tooltip title="Refresh Proposal Sources" placement="right">
+                  <SyncIcon
+                    style={{
+                      backgroundColor: neptunePrimaryDark,
+                      width: 20,
+                      height: 20,
+                      borderRadius: '50%',
+                      color: '#fff',
+                      padding: 3,
+                      margin: 3,
+                      cursor: 'pointer'
+                    }}
+                    onClick={e => {
+                      this.trackMatomoEventIconClick('Refresh');
+                      this.handleItemsVisibility(e);
+                      RefreshProposal();
+                    }}
+                  />
+                </Tooltip>
+              )}
             </div>
             <Tabs
               value={activeTabIndex}
@@ -362,21 +365,24 @@ class Sidebar extends Component<Props, State> {
             >
               <Tab label="Index" />
             </Tabs>
-            {(activeTabIndex === 0 && sections) && (
+            {isOpen && activeTabIndex === 0 && sections && (
               <div className="sidebar-content-list">
                 {sections.valueSeq().map(section => {
                   const sectionName = section.get('sectionName');
-                  const sectionNameId = sectionName.toLocaleLowerCase().split(' ').join('-');
+                  const sectionNameId = sectionName
+                    .toLocaleLowerCase()
+                    .split(' ')
+                    .join('-');
                   const questions = section.get('questions');
                   const someQuestionsAreVisible = questions
-                  .valueSeq()
-                  .map(
-                    (question) =>
+                    .valueSeq()
+                    .map(
+                      question =>
                         question.get('visible', true) &&
                         (question.get('active', true) ||
                           question.get('isCustomQuestion', true))
-                  )
-                  .includes(true);
+                    )
+                    .includes(true);
 
                   if (someQuestionsAreVisible)
                     return (

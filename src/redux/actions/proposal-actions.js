@@ -12,6 +12,7 @@ import {
   getQuestionSectionInfo,
   getAnswerTypes,
   getRoles,
+  getIntegrations,
   setProposalQuestionData,
   getProposalInfoUpdated,
   getProposlBoxId,
@@ -32,10 +33,9 @@ import {
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getUniqueMilestones } from '../selectors/proposal';
 import { getErrorMessage, getProposalIdlist } from '../../utils/utils';
-import launchDarkly from '../../utils/launchDarkly';
 import { DEFAULT } from '../../constants/app';
 import isPriceModelerQuestion from '../../utils/isPriceModelerQuestion';
-import featureFlags from '../../constants/featureFlags';
+import { fetchAllApprovals } from './approval-actions';
 
 const { PROPOSAL_API_URL } = API.PROPOSAL;
 const {
@@ -53,6 +53,9 @@ const {
   ANSWER_TYPES_ERROR,
   ROLES_INFO,
   ROLES_LOADING,
+  INTEGRATIONS_INFO,
+  INTEGRATIONS_ERROR,
+  INTEGRATIONS_LOADING,
   ROLES_ERROR,
   PROPOSAL_SET_QUESTION,
   PROPOSAL_SET_QUESTION_LOADING,
@@ -86,17 +89,19 @@ const {
   QUESTION_LOCK_BY_USER,
   QUESTION_UNLOCK_BY_USER,
   QUESTION_LOCK_DETAILS_ALL,
-  SET_EVENT_LAUNCHER_FLAG,
+  SET_FLAG,
   SHOW_NA_CHECKBOX,
   UPDATE_NOT_APPLICABLE_PROGRESS,
   UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE,
   UPDATE_NOT_APPLICABLE_DONE,
   SET_PRICE_MODELER_FIELDS,
+  SET_BID_COST_DATA_FIELDS,
   ERROR_UPDATE_NOT_APPLICABLE,
   SET_CAN_USER_TAG_IN_QUESTION,
   SET_APPROVAL_QUESTION_LOADING,
   SET_PRICE_MODELER_RECALCULATING,
   PRICE_MODELER_UPDATE,
+  SET_ACTIVE_TABINDEX,
 } = REDUX_TYPES.PROPOSAL;
 
 /**
@@ -218,6 +223,17 @@ export const getPriceModelerData = (proposalId) => {
     try {
       const response = await priceModelerApi(proposalId);
       dispatch({ type: SET_PRICE_MODELER_FIELDS, payload: response.data });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const getBidCostData = (proposalId) => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    try {
+      const response = await bidCostApi(proposalId);
+      dispatch({ type: SET_BID_COST_DATA_FIELDS, payload: response.data });
     } catch (error) {
       console.error(error);
     }
@@ -511,6 +527,27 @@ export const getRolesInfo = (): ThunkAction<string, Object> => {
     } catch (err) {
       dispatch({
         type: ROLES_ERROR,
+        payload: err,
+      });
+    }
+  };
+};
+
+export const getIntegrationsData = (): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: INTEGRATIONS_LOADING,
+      payload: {},
+    });
+    try {
+      const data = await getIntegrations();
+      dispatch({
+        type: INTEGRATIONS_INFO,
+        payload: data,
+      });
+    } catch (err) {
+      dispatch({
+        type: INTEGRATIONS_ERROR,
         payload: err,
       });
     }
@@ -1044,29 +1081,26 @@ export const getOpportunity = (
 
     try {
       const allProposals = await getAllProposals(id);
-
       const proposal = allProposals.find(
         (thisProposal) => thisProposal.proposal.proposalDetails.bidNo === bidNo
       );
       const isCurrentProposal = allProposals.find(
         (thisProposal) => thisProposal.isCurrent === true
       );
-
       if (proposal) selectedProposalId = proposal.proposal.proposalId;
-
       const proposalCount = allProposals.length;
-      const maxLimit = 500;
-
-      let callstomake = parseInt(proposalCount / maxLimit);
-      let additionalcallstomake = proposalCount % maxLimit;
-      if (additionalcallstomake) {
-        callstomake = callstomake + 1;
-      }
-      let from = 0;
-      let urls = [];
-      let proposalsData = [];
+      // const maxLimit = 500;
+      //
+      // let callstomake = parseInt(proposalCount / maxLimit);
+      // let additionalcallstomake = proposalCount % maxLimit;
+      // if (additionalcallstomake) {
+      //   callstomake = callstomake + 1;
+      // }
+      // let from = 0;
+      const urls = [];
+      const proposalsData = [];
       for (let index = 0; index < proposalCount; index += 1) {
-        let trueOrFalse;
+        // let trueOrFalse;
 
         if (selectedProposalId) {
           // user on previous bid
@@ -1108,6 +1142,19 @@ export const getOpportunity = (
       }
       proposalsData.push(data[0]);
       dispatch({ type: OPPORTUNITY_INFO, payload: proposalsData });
+      // get approvals data for current bid
+      const currentBidDetails = proposalsData.find(
+        (proposal) => proposal.isCurrent
+      );
+      if (currentBidDetails) {
+        dispatch(
+          fetchAllApprovals(
+            currentBidDetails.proposal.proposalId,
+            currentBidDetails.proposalQuestions
+          )
+        );
+      }
+
       dispatch({
         type: UPDATE_BOX_BIDS,
         payload: getProposalIdlist(proposalsData),
@@ -1308,10 +1355,10 @@ export const getProposalAnswerHistory = (
 /**
  * Set Flag for Event Launcher
  */
-export const setEventLauncherFlag = (val) => {
+export const setFlag = (val) => {
   return (dispatch) => {
     dispatch({
-      type: SET_EVENT_LAUNCHER_FLAG,
+      type: SET_FLAG,
       payload: val,
     });
   };
@@ -1335,11 +1382,17 @@ export const setCanUserTagInQuestion = (can) => {
   };
 };
 
-export const fetchUserTagFlagInQuestion = () => {
+export const fetchUserTagFlagInQuestion = (val) => {
   return async (dispatch) => {
-    const answerUserTagFlagValue = await launchDarkly(
-      featureFlags.ANSWER_USER_TAG
-    );
-    dispatch(setCanUserTagInQuestion(answerUserTagFlagValue));
+    dispatch(setCanUserTagInQuestion(val));
+  };
+};
+
+export const setActiveTabIndexAction = (activeIndex) => {
+  return (dispatch) => {
+    dispatch({
+      type: SET_ACTIVE_TABINDEX,
+      payload: activeIndex,
+    });
   };
 };

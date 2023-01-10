@@ -5,12 +5,14 @@ import chevronDown from '../../../img/chevron-down.svg';
 import {
   getBidList,
   getSelectedBid,
-  getIsQuestionAnswered,
+  getIsQuestionAnswered
 } from '../../redux/selectors/proposal';
 import { parseMomentDate } from '../../utils/DateUtils';
 import { Checkmark } from '../svg';
 import { changeBid } from '../../redux/actions/proposal-actions';
 import PriceModeler from './PriceModeler';
+import BidCostDetails from './BidCostDetails';
+import { getfetchUserTagFlag } from '../../redux/selectors';
 
 const BidHistory = () => {
   const winLocationSearch = window.location.search;
@@ -22,16 +24,20 @@ const BidHistory = () => {
 
   const bidList = useSelector(getBidList);
   const selectedBid = useSelector(getSelectedBid);
+  const isCurrentBid = selectedBid.get('isCurrent');
   const isQuestionAnswered = useSelector(getIsQuestionAnswered);
+  const flags = useSelector(getfetchUserTagFlag);
+  const bidCostDetailFlag = flags.bidCostDetail;
+
+  const handleCollapse = () => {
+    setIsCollapsed(!isCollapsed);
+  };
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
       handleCollapse();
     }
-  };
-  const handleCollapse = () => {
-    setIsCollapsed(!isCollapsed);
   };
 
   useEffect(() => {
@@ -157,11 +163,17 @@ const BidHistory = () => {
                     was created
                   </p>
                 </div>
-                {selectedView === 'questions' || selectedView === null ? (
+                {selectedView === 'questions' ||
+                (selectedView === null && isCurrentBid) ||
+                !bidCostDetailFlag ? (
                   <div className="bid-history-pricemodeler-content">
                     <PriceModeler />
                   </div>
-                ) : null}
+                ) : (
+                  (selectedView === 'questions' || selectedView === null) && (
+                    <BidCostDetails />
+                  )
+                )}
               </div>
             </div>
           )}

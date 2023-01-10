@@ -7,7 +7,6 @@ import RadioGroup from 'apollo-react/components/RadioGroup';
 import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
 import IconButton from 'apollo-react/components/IconButton';
-import Modal from 'apollo-react/components/Modal';
 import moment from 'moment';
 
 import CustomModal from '../../common/CustomModal';
@@ -29,7 +28,6 @@ const EventLauncher = ({
   trackMatomoEventLauncher
 }) => {
   const [bodyStr, setBodyStr] = useState('');
-  const [url, setUrl] = useState('');
   const [bodyHtml, setBodyHtml] = useState('');
   const quesData = questionData?.toJS();
   const hasEvent = quesData?.events && !isEmpty(quesData?.events);
@@ -37,9 +35,9 @@ const EventLauncher = ({
     ? [...quesData?.answers].pop()?.answer
     : '';
   const userData = useSelector(getUserData);
-  const eventFlag = useSelector(state =>
-    state.proposal.get('eventLauncherFlag')
-  );
+  const allFlags = useSelector(state => state.proposal.get('eventflag'));
+  const eventFlag = allFlags.eventLauncher || false;
+
   const { isCurrent } = useSelector(getSelectedBid)?.toJS();
 
   // Component will return null if no event found
@@ -135,12 +133,7 @@ const EventLauncher = ({
 
   const launchRichTextButtonHandler = () => {
     const dateTimeFormat = 'YYYY-MM-DDTHH:mm:ss';
-    const {
-      EventBody: body,
-      EventSubject: subject,
-      EventHtml: html
-    } = eventData;
-    setBodyHtml(body);
+    const { EventBody: body, EventSubject: subject } = eventData;
     const dateAge = checkDateAge(eventStartDate);
     const formattedDt = moment(eventStartDate).format('YYYY-MM-DD');
     let startDate = `${formattedDt}T08:00:00`;
@@ -162,9 +155,6 @@ const EventLauncher = ({
       subject,
       filteredEmails.join(', ')
     );
-    if (geturl) {
-      setUrl(geturl);
-    }
 
     const trackEventPayload = {
       action: `Event Launched : ${subject} : ${body}`,

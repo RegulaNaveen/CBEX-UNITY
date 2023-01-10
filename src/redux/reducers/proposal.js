@@ -1,6 +1,6 @@
 // @flow
 import _, { isEqual, cloneDeep } from 'lodash';
-import { Map, fromJS, OrderedMap, is } from 'immutable'; // NOSONAR
+import { Map, fromJS, OrderedMap } from 'immutable'; // NOSONAR
 import { REDUX_TYPES } from '../../constants';
 import type { ApiAction } from '../actions/action-types';
 import { getUniqueMilestones } from '../selectors/proposal';
@@ -50,6 +50,7 @@ const {
   NEW_BID_CREATED,
   PROPOSAL_DETAIL_UPDATE,
   UPDATE_LOOKUP_OPTIONS,
+  INTEGRATIONS_INFO,
   BOX_ADDITIONAL_LINK,
   BOX_ADDITIONAL_LINK_ERROR,
   SWITCH_TEMP_STATUS,
@@ -58,14 +59,16 @@ const {
   QUESTION_LOCK_BY_USER,
   QUESTION_UNLOCK_BY_USER,
   QUESTION_LOCK_DETAILS_ALL,
-  SET_EVENT_LAUNCHER_FLAG,
+  SET_FLAG,
   SHOW_NA_CHECKBOX,
   ERROR_UPDATE_NOT_APPLICABLE,
   SET_CAN_USER_TAG_IN_QUESTION,
   SET_APPROVAL_QUESTION_LOADING,
   SET_PRICE_MODELER_FIELDS,
+  SET_BID_COST_DATA_FIELDS,
   SET_PRICE_MODELER_RECALCULATING,
-  PRICE_MODELER_UPDATE
+  PRICE_MODELER_UPDATE,
+  SET_ACTIVE_TABINDEX
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -143,7 +146,7 @@ const INITIAL_STATE: Map = fromJS({
   boxAdditionalLink: {},
   switchTempCallStatus: false,
   switchTempInProgress: false,
-  eventLauncherFlag: false,
+  eventflag: {},
   showNaCheckbox: false,
   priceModeler: fromJS({
     cost: '',
@@ -153,12 +156,20 @@ const INITIAL_STATE: Map = fromJS({
     patients: '',
     regions: ''
   }),
+
+  bidCostDetails: fromJS({
+    totalBidValue: '',
+    bottomLineLaborDiscount: '',
+    budgetTools: ''
+  }),
+
   approvalQuestionLoading: fromJS({
     questionId: '',
     value: false
   }),
   canUserTagInQuestion: false,
-  priceModelerRecalculating: false
+  priceModelerRecalculating: false,
+  activeTabIndex: 0 // Strategy Development, Approvals, Documents
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -762,8 +773,6 @@ const onUpdateProposalNAQuestionDone = (state: Map, action: Object): Map => {
     payload: { data, questionId: referenceId, loading = false }
   } = action;
 
-  console.log('inside update proposal na ', data);
-
   let newState = fromJS({});
 
   const indexOfListToUpdate = state
@@ -771,8 +780,6 @@ const onUpdateProposalNAQuestionDone = (state: Map, action: Object): Map => {
     .findIndex(listItem => {
       return listItem.questionId === referenceId;
     });
-
-  console.log('indexOfListToUpdate ', indexOfListToUpdate);
 
   newState = state
     .setIn(
@@ -1160,6 +1167,19 @@ const setPriceModulerFields = (state, action) => {
   );
 };
 
+const setBidCostDataFields = (state, action) => {
+  const { bidValue, bottomLine, budgetTools } = action.payload;
+
+  return state.set(
+    'bidCostDetails',
+    fromJS({
+      totalBidValue: bidValue,
+      bottomLineLaborDiscount: bottomLine,
+      budgetTools
+    })
+  );
+};
+
 const setApprovalQuestionLoading = (state, action) => {
   const { questionId, value } = action.payload;
   return state.set('approvalQuestionLoading', fromJS({ questionId, value }));
@@ -1185,6 +1205,10 @@ const updatePriceModelerEstimate = (state, action) => {
       regions: Potential_Regions__c
     })
   );
+};
+
+const setActiveTabIndex = (state, action) => {
+  return state.set('activeTabIndex', action.payload);
 };
 
 const actionMap = {
@@ -1233,6 +1257,8 @@ const actionMap = {
   [PROPOSAL_DETAIL_UPDATE]: updateProposalDetail,
   [UPDATE_LOOKUP_OPTIONS]: (state, { payload }) =>
     state.set('lookUpOptions', payload),
+  [INTEGRATIONS_INFO]: (state, { payload }) =>
+    state.set('proposalIntegrations', payload),
   [BOX_ADDITIONAL_LINK]: fetchBoxAdditionalLink,
   [BOX_ADDITIONAL_LINK_ERROR]: onGettingfetchBoxAdditionalLinkError,
   [SWITCH_TEMP_STATUS]: (state, { payload }) =>
@@ -1243,17 +1269,18 @@ const actionMap = {
   [QUESTION_LOCK_BY_USER]: updateQuestionLockByUser,
   [QUESTION_UNLOCK_BY_USER]: updateQuestionUnlockByUser,
   [QUESTION_LOCK_DETAILS_ALL]: questionLockDetails,
-  [SET_EVENT_LAUNCHER_FLAG]: (state, { payload }) =>
-    state.set('eventLauncherFlag', payload),
+  [SET_FLAG]: (state, { payload }) => state.set('eventflag', payload),
   [SHOW_NA_CHECKBOX]: (state, { payload }) =>
     state.set('showNaCheckbox', payload),
   [SET_PRICE_MODELER_FIELDS]: setPriceModulerFields,
+  [SET_BID_COST_DATA_FIELDS]: setBidCostDataFields,
   [SET_APPROVAL_QUESTION_LOADING]: setApprovalQuestionLoading,
   [SET_CAN_USER_TAG_IN_QUESTION]: (state, { payload }) =>
     state.set('canUserTagInQuestion', payload),
   [SET_PRICE_MODELER_RECALCULATING]: (state, { payload }) =>
     state.set('priceModelerRecalculating', payload),
-  [PRICE_MODELER_UPDATE]: updatePriceModelerEstimate
+  [PRICE_MODELER_UPDATE]: updatePriceModelerEstimate,
+  [SET_ACTIVE_TABINDEX]: setActiveTabIndex
 };
 
 export default function(

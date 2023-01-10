@@ -4,7 +4,8 @@ import { isEmpty } from 'lodash';
 import 'react-day-picker/lib/style.css';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import type { Match } from 'react-router-dom';
+import Trash from 'apollo-react-icons/Trash';
+import Tooltip from 'apollo-react/components/Tooltip';
 import { Map } from 'immutable'; // NOSONAR
 import Loader from 'react-loader-spinner';
 import { compose } from 'redux';
@@ -39,11 +40,8 @@ import {
   deleteProposalQuestion
 } from '../../../redux/actions/proposal-actions';
 import MatomoHOC from '../../HOC/MatomoHOC';
-import Trash from 'apollo-react-icons/Trash';
-import Tooltip from 'apollo-react/components/Tooltip';
 
 type Props = {
-  match: Match,
   onClose: Function,
   answerTypesList: Array<string>,
   rolesList: Array<string>,
@@ -116,21 +114,6 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     this.calculateHeight();
   }
 
-  // calculate modal window position
-  calculateHeight = () => {
-    const modalWrapperElem = document.getElementsByClassName(
-      'add-question-modal-dialog-wrapper'
-    )[0];
-
-    let wrapperTop = modalWrapperElem.getBoundingClientRect().top || null;
-
-    if (wrapperTop < 0) {
-      modalWrapperElem.style.transform = 'none';
-      modalWrapperElem.style.left = 'auto';
-      modalWrapperElem.style.top = 0;
-    }
-  };
-
   componentWillUnmount() {
     const { setEditQuestionData, editQuestionsData } = this.props;
     // clear Data on Edit mode
@@ -138,6 +121,21 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       setEditQuestionData({});
     }
   }
+
+  // calculate modal window position
+  calculateHeight = () => {
+    const modalWrapperElem = document.getElementsByClassName(
+      'add-question-modal-dialog-wrapper'
+    )[0];
+
+    const wrapperTop = modalWrapperElem.getBoundingClientRect().top || null;
+
+    if (wrapperTop < 0) {
+      modalWrapperElem.style.transform = 'none';
+      modalWrapperElem.style.left = 'auto';
+      modalWrapperElem.style.top = 0;
+    }
+  };
 
   handleTextChange = (value: string) => {
     this.setState({ questionText: value }, () => {
@@ -174,11 +172,11 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   };
 
   validateQuestionText = (...args) => {
-    const { questionText } = this.state;
-    if (args && args.length && questionText.trim().length == 0) {
+    const { questionText, error } = this.state;
+    if (args && args.length && questionText.trim().length === 0) {
       this.setState(
         {
-          error: [...this.state.error.filter(v => !v.questiontext)]
+          error: [...error.filter(v => !v.questiontext)]
         },
         () => {
           this.setState(prevState => ({
@@ -190,10 +188,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         }
       );
     } else {
-      if (
-        questionText.length === 0 &&
-        !this.state.error.some(v => v.questiontext)
-      ) {
+      if (questionText.length === 0 && !error.some(v => v.questiontext)) {
         this.setState(prevState => ({
           error: [
             ...prevState.error,
@@ -201,22 +196,19 @@ export class AddQuestionModal extends PureComponent<Props, State> {
           ]
         }));
       }
-      if (
-        questionText.length > 0 &&
-        this.state.error.some(v => v.questiontext)
-      ) {
+      if (questionText.length > 0 && error.some(v => v.questiontext)) {
         this.setState({
-          error: [...this.state.error.filter(v => !v.questiontext)]
+          error: [...error.filter(v => !v.questiontext)]
         });
       }
     }
   };
 
   validateSection = () => {
-    const { section } = this.state;
+    const { section, error } = this.state;
     if (
       (!section || section.length === 0 || section === '') &&
-      !this.state.error.some(v => v.section)
+      !error.some(v => v.section)
     ) {
       this.setState(prevState => ({
         error: [
@@ -228,17 +220,17 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     if (
       section &&
       Object.keys(section).length > 0 &&
-      this.state.error.some(v => v.section)
+      error.some(v => v.section)
     ) {
-      this.setState({ error: this.state.error.filter(v => !v.section) });
+      this.setState({ error: error.filter(v => !v.section) });
     }
   };
 
   validateAnswer = () => {
-    const { answerType } = this.state;
+    const { answerType, error } = this.state;
     if (
       (!answerType || answerType.length === 0 || answerType === '') &&
-      !this.state.error.some(v => v.answerType)
+      !error.some(v => v.answerType)
     ) {
       this.setState(prevState => ({
         error: [
@@ -247,22 +239,14 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         ]
       }));
     }
-    if (
-      answerType &&
-      answerType.length > 0 &&
-      this.state.error.some(v => v.answerType)
-    ) {
-      this.setState({ error: this.state.error.filter(v => !v.answerType) });
+    if (answerType && answerType.length > 0 && error.some(v => v.answerType)) {
+      this.setState({ error: error.filter(v => !v.answerType) });
     }
   };
 
   validateRoles = () => {
-    const { roleNames } = this.state;
-    if (
-      this.state.submit &&
-      isEmpty(roleNames) &&
-      !this.state.error.some(v => v.roleNames)
-    ) {
+    const { roleNames, submit, error } = this.state;
+    if (submit && isEmpty(roleNames) && !error.some(v => v.roleNames)) {
       this.setState(prevState => ({
         error: [
           ...prevState.error,
@@ -270,8 +254,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         ]
       }));
     }
-    if (roleNames.length > 0 && this.state.error.some(v => v.roleNames)) {
-      this.setState({ error: this.state.error.filter(v => !v.roleNames) });
+    if (roleNames.length > 0 && error.some(v => v.roleNames)) {
+      this.setState({ error: error.filter(v => !v.roleNames) });
     }
   };
 
@@ -279,7 +263,6 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     const { questionText, section, answerType, roleNames } = this.state;
     const {
       setProposalQuestionF,
-      match,
       editQuestionsData,
       editProposalQuestion,
       selectedBid
@@ -330,7 +313,6 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     const {
       deleteProposalQuestion,
       editQuestionsData,
-      match,
       selectedBid
     } = this.props;
     const proposalId = selectedBid.get('id');
@@ -370,7 +352,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       section,
       answerType,
       roleNames,
-      loaderText
+      loaderText,
+      error
     } = this.state;
     const isEditMode = editQuestionsData.size > 0 || false;
     const isQuestionAnswered = editQuestionsData.get('questionAnswered');
@@ -401,7 +384,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 title="Enter Question Text"
                 value={isEditMode ? questionText : questionText || ''}
                 type="text"
-                error={this.state.error.filter(v => v.questiontext)}
+                error={error.filter(v => v.questiontext)}
                 onChange={e => this.handleTextChange(e)}
               />
             </div>
@@ -413,7 +396,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                   items={answerTypesList}
                   title="Answer Type"
                   selectedValue={isEditMode && answerType}
-                  error={this.state.error.filter(v => v.answerType)}
+                  error={error.filter(v => v.answerType)}
                   onClick={this.onAnswerTypeChange}
                   disabled={isQuestionAnswered}
                 />
@@ -432,7 +415,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 items={sectionNames}
                 selectedValue={isEditMode ? section : selectedValue}
                 title="Section"
-                error={this.state.error.filter(v => v.section)}
+                error={error.filter(v => v.section)}
                 onClick={this.onQuestionSectionChange}
               />
             </div>
@@ -443,7 +426,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 items={rolesList}
                 title="Which team member roles will answer"
                 value={isEditMode && roleNames}
-                error={this.state.error.filter(v => v.roleNames)}
+                error={error.filter(v => v.roleNames)}
                 onClick={this.onRoleChange}
                 onChange={() => {}}
               />
@@ -538,9 +521,10 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       sectionNames,
       isSidebarOpen
     } = this.props;
+    const { error } = this.state;
     if (
-      this.state.error &&
-      this.state.error.length > 0 &&
+      error &&
+      error.length > 0 &&
       document.getElementsByClassName('modal-wrapper-body')
     ) {
       document.getElementsByClassName(
