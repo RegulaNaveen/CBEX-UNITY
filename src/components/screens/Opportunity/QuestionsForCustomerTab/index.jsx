@@ -130,7 +130,6 @@ function QuestionsForCustomer() {
     try {
       let ans = answers.toJS();
       const lastAnswer = ans[ans.length - 1];
-
       let formattedAnswer;
       if (lastAnswer?.formattedAnswer) {
         if (isString(lastAnswer?.formattedAnswer)) {
@@ -161,8 +160,11 @@ function QuestionsForCustomer() {
     questions.map((questionData) => {
       if (questionData.get('isCustomQuestion')) {
         const answer = getAnswer(questionData.get('answers'));
+        const answerJS = questionData.get('answers').toJS();
+
         html += `<li>${questionData.get('questionText')}</li>`;
-        if (answer) html += `<ul><li>${answer}</li></ul>`;
+        if (answer && answerJS[answerJS.length - 1]?.answer?.trim())
+          html += `<ul><li>${answer}</li></ul>`;
       }
     });
     html += '</ul></body></html>';
