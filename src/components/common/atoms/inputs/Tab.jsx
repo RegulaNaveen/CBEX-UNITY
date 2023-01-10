@@ -22,7 +22,6 @@ import {
 } from '../../../../redux/selectors';
 import { setActiveTabIndexAction } from '../../../../redux/actions/proposal-actions';
 import { createMatomoObj, saveDataInMatomo } from '../../../../utils/utils';
-import NotepadWrapper from '../../../views/WysiwygNotepad/NotepadWrapper';
 import lazyWithRetry from '../../../../utils/lazy';
 import VerticalTabsCollapsiblePanel from '../../../screens/Opportunity/layout/navigation/VerticalTabsCollapsiblePanel';
 
@@ -30,6 +29,14 @@ const Questions = React.lazy(() =>
   lazyWithRetry(() =>
     import(
       /* webpackChunkName: "Questions" */ '../../../screens/Opportunity/Questions'
+    )
+  )
+);
+
+const NotepadWrapper = React.lazy(() =>
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "Notepad" */ '../../../views/WysiwygNotepad/NotepadWrapper'
     )
   )
 );
