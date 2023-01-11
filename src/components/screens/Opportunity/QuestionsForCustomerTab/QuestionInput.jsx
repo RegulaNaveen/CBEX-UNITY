@@ -3,7 +3,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   editProposalQuestion,
-  setProposalQuestion,
+  setProposalQuestion
 } from '../../../../redux/actions/proposal-actions';
 import { getSelectedBid } from '../../../../redux/selectors';
 import CustomApolloRichText from '../../../common/CustomApolloRichText';
@@ -14,7 +14,7 @@ const QuestionInput = ({
   socketContext,
   checkDisableFlag,
   setShowLoader,
-  questionIndex,
+  questionIndex
 }) => {
   const selectedBid = useSelector(getSelectedBid);
   const dispatch = useDispatch();
@@ -30,14 +30,14 @@ const QuestionInput = ({
     value: question?.questionJSON
       ? JSON.parse(question.questionJSON)
       : { blocks: [] },
-    htmlExport: '',
+    htmlExport: ''
   };
 
   const handleRichTextChange = async (editorData) => {
     const proposalId = selectedBid.get('id');
     const section = {
       sectionOrder: 199,
-      sectionName: 'Quick Questions for the Customer',
+      sectionName: 'Questions_for_the_Customer_left_panel'
     };
     const answerType = 'text';
     const roleNames = ['Business Developer'];
@@ -51,7 +51,7 @@ const QuestionInput = ({
       section,
       answerType,
       options: [],
-      roleNames,
+      roleNames
     };
     if (question?.isNewEntry) {
       setShowLoader(true);
@@ -120,7 +120,7 @@ const QuestionInput = ({
     onFocus: () => {
       quesTextInnerLeftRef.current.style.marginTop = '25px';
       questionLockWrapper(question?.questionId);
-    },
+    }
   };
 
   return (
