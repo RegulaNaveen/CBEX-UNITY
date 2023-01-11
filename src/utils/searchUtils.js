@@ -27,7 +27,7 @@ export async function getSearchResults(
     .forEach(question => {
       filteredQuestionsMap[question.questionId] = question;
     });
-  const regexp = new RegExp(query, 'gi');
+  const regexp = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
 
   // searching sections
   Object.keys(sections)

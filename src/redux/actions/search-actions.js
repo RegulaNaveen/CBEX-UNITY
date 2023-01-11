@@ -14,15 +14,18 @@ import {
   selectActiveVTabIndex,
   selectProposal,
   selectProposalQuestions,
-  selectSections
+  selectSections,
+  selectAreAllSectionsExpanded
 } from '../selectors/proposal';
 import {
   selectCurrentResultIndex,
   selectCurrentSearchResult,
   selectQuery,
-  selectSearchResults
+  selectSearchResults,
+  selectAutoNavigatedToCurrentResult
 } from '../selectors/search';
 import {
+  expandAllSectionsAction,
   setActiveTabIndexAction,
   setVTabActiveIndexAction
 } from './proposal-actions';
@@ -69,6 +72,7 @@ export const navigateNextSearchAction = () => {
         type: SEARCH.NAVIGATE_NEXT,
         payload: { prevResult: searchResults[currentResultIndex] }
       });
+      dispatch(resetAutoNavigatedStateAfterDelay());
     }
   };
 };
@@ -92,6 +96,7 @@ export const navigatePrevSearchAction = () => {
         type: SEARCH.NAVIGATE_PREVIOUS,
         payload: { prevResult: searchResults[currentResultIndex] }
       });
+      dispatch(resetAutoNavigatedStateAfterDelay());
     }
   };
 };
@@ -108,6 +113,10 @@ export const doSearchAction = () => {
   return async (dispatch, getState) => {
     dispatch({ type: SEARCH.DO_SEARCH });
     const currentState = getState();
+    const allSectionsExpanded = selectAreAllSectionsExpanded(currentState);
+    if (allSectionsExpanded) {
+      dispatch(expandAllSectionsAction(false));
+    }
     const allFlags = currentState.proposal.get('eventflag');
     const query = selectQuery(currentState);
     const sections = selectSections(currentState);
@@ -205,7 +214,6 @@ export const resumeSearchAction = ({
   notepadData
 }) => {
   return async (dispatch, getState) => {
-    console.log('Notepad data', notepadData);
     const currentState = getState();
     const activeTab = selectActiveTabIndex(currentState);
     const activeVTab = selectActiveVTabIndex(currentState);
@@ -218,7 +226,6 @@ export const resumeSearchAction = ({
       approvals,
       notepadData
     );
-    console.log(searchResults);
     if (searchResults.count > 0) {
       searchResults.newCurrentResultIndex = 0;
       searchResults.autoNavigatedToCurrentResult = false;
@@ -240,5 +247,18 @@ export const resumeSearchAction = ({
       searchResults.prevResult = null;
     }
     dispatch({ type: SEARCH.UPDATE_SEARCH_RESULTS, payload: searchResults });
+    dispatch(resetAutoNavigatedStateAfterDelay());
+  };
+};
+
+const resetAutoNavigatedStateAfterDelay = () => {
+  return async (dispatch, getState) => {
+    await new Promise(resolve => {
+      setTimeout(() => resolve(), 5000);
+    });
+    const autoNavigated = selectAutoNavigatedToCurrentResult(getState());
+    if (!autoNavigated) {
+      dispatch(autoNavigationCompletedAction());
+    }
   };
 };

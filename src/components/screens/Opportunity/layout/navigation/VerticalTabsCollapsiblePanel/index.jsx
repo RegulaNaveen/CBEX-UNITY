@@ -24,7 +24,7 @@ function getTabNameFromIndex(index) {
   } else if (index === 1) {
     return 'showNotepadTab';
   } else if (index === 2) {
-    return 'showProposalTeamTab';
+    return 'proposalteamtab';
   } else {
     return '';
   }

@@ -203,6 +203,11 @@ const UnityTab = ({
   useEffect(() => {
     if (currentSearchResult !== null && notepadPanelRef.current !== null) {
       if (currentSearchResult.searchIndex === NOTEPAD_UI_ID) {
+        // by inspecting DOM, found there is only one button element inside Panel component hence choosing first button
+        const toggleButton = notepadPanelRef.current.children[0].getElementsByTagName(
+          'button'
+        )[0];
+        toggleButton.click();
         setTimeout(() => {
           notepadPanelRef.current.scrollIntoView({
             behaviour: 'smooth',
@@ -213,7 +218,7 @@ const UnityTab = ({
         }, 500);
       }
     }
-  }, [notepadPanelRef, currentSearchResult]);
+  }, [dispatch, notepadPanelRef, currentSearchResult]);
 
   const winLocationSearch = window.location.search;
   const handleChangeTab = (event, val) => {
