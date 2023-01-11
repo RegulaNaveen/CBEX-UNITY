@@ -1,9 +1,10 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import AutocompleteV2 from 'apollo-react/components/AutocompleteV2';
-import { API } from '../../../../constants';
+import { debounce } from 'lodash';
 import { getAccessTokenFromLocalStorage as getAccessToken } from '../../../../SessionHandler';
 import { QUESTION_UNLOCK_TIMEOUT } from '../../../../constants/app';
+import { API } from '../../../../constants';
 
 const { USER_API_URL, API_KEY } = API.PROPOSAL;
 const Autocomplete = props => {
@@ -121,20 +122,18 @@ const Autocomplete = props => {
     resetUnlockTimer(true);
   };
 
-  const onInputChange = (event, value) => {
-    resetUnlockTimer();
-    setInputVal(value);
+  const changeHandler = (event, value) => {
     const elem = document.querySelectorAll('.a-MuiAutocomplete-popper').item(0);
     if (value) {
-      // setCount(1);
       getData(value);
       elem.classList.remove('disable');
     } else {
-      // setCount(1);
       setOptions([]);
       elem.className += ' disable';
     }
   };
+
+  const onInputChange = useCallback(debounce(changeHandler, 1000), []);
 
   const onInputFocus = async () => {
     const elem = document.querySelectorAll('.a-MuiAutocomplete-popper').item(0);
@@ -161,7 +160,11 @@ const Autocomplete = props => {
         value={value}
         onChange={handleChange}
         inputValue={inputVal}
-        onInputChange={onInputChange}
+        onInputChange={(e, v) => {
+          resetUnlockTimer();
+          setInputVal(v);
+          onInputChange(e, v);
+        }}
         noOptionsText={
           getNoOptionsText === 0 ? 'No Matches Found' : 'Loading...'
         }

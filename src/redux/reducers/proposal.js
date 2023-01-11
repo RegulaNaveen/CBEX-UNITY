@@ -1147,7 +1147,6 @@ const onDeleteQuestion = (state, action) => {
 };
 
 const setPriceModulerFields = (state, action) => {
-  console.log('state', state);
   const {
     Cost,
     TherapyArea__c,

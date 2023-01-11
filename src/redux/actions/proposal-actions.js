@@ -393,6 +393,45 @@ export const setProposalAnswerDatafromSocket = (
   };
 };
 
+export const setProposalQuestionfromSocket = (
+  questionId: string,
+  data: any
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>, getState) => {
+    dispatch({
+      type: PROPOSAL_ANSWER_LOADING,
+      payload: { questionId, loading: true }
+    });
+    const questionsFilter = getQuestionsFilters(getState());
+
+    try {
+      dispatch({
+        type: PROPOSAL_ANSWER,
+        payload: {
+          data: Array.isArray(data.answers) ? data.answers : data,
+          questionId,
+          hasDifferentSFanswer: data.hasDifferentSFanswer || false
+        }
+      });
+
+      const { modifiedQuestions } = data;
+      if (!isEmpty(modifiedQuestions)) {
+        modifiedQuestions.forEach(question => {
+          dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
+        });
+      }
+      dispatch(onQuestionsFilterApplied(questionsFilter));
+      dispatch({
+        type: PROPOSAL_ANSWER_LOADING,
+        payload: { questionId, loading: false }
+      });
+    } catch (err) {
+      console.log('error occurred ', err);
+      dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err } });
+    }
+  };
+};
+
 export const updateAnswerFromWebSocket = (
   data = {}
 ): ThunkAction<string, Object> => {
@@ -968,7 +1007,8 @@ export function setEditQuestionData(data = {}) {
 export const editProposalQuestion = (
   proposalId: string,
   questionId: string,
-  questionData: Object
+  questionData: Object,
+  socketContext
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
@@ -981,6 +1021,25 @@ export const editProposalQuestion = (
         questionId,
         questionData
       );
+
+      if (socketContext) await socketContext?.questionTextUpdateWrapper(data);
+      dispatch({ type: PROPOSAL_EDIT_QUESTION, payload: data });
+    } catch (err) {
+      dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
+    }
+  };
+};
+
+export const editProposalQuestionfromSocket = (
+  questionData: Object
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: PROPOSAL_SET_QUESTION_LOADING,
+      payload: {}
+    });
+    try {
+      const data = questionData;
       dispatch({ type: PROPOSAL_EDIT_QUESTION, payload: data });
     } catch (err) {
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
