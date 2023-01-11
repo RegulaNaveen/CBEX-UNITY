@@ -7,7 +7,7 @@ import {
   Text,
   Font,
   Image,
-  Link as HtmlLink,
+  Link as HtmlLink
 } from '@react-pdf/renderer';
 import React from 'react';
 import Html from 'react-pdf-html';
@@ -42,7 +42,7 @@ import {
   yearNow,
   getUnityLink,
   formatDate,
-  shouldInclude,
+  shouldInclude
 } from './word-template';
 import { selectEditor } from '../../../redux/selectors';
 
@@ -52,13 +52,13 @@ Font.register({
     { src: ProximaNovaBoldItalic, fontStyle: 'italic', fontWeight: 700 },
     { src: ProximaNovaItalic, fontStyle: 'italic' },
     { src: ProximaNovaBold, fontWeight: 700 },
-    { src: ProximaNova, fontStyle: 'normal' },
-  ],
+    { src: ProximaNova, fontStyle: 'normal' }
+  ]
 });
 
 const styles = StyleSheet.create({
   page: {
-    paddingBottom: '18vh',
+    paddingBottom: '18vh'
   },
   header: {
     width: '83%',
@@ -67,16 +67,16 @@ const styles = StyleSheet.create({
     marginBottom: '20px',
     marginLeft: '50px',
     marginRight: '50px',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-end'
   },
   imgLogo: {
     width: '143px',
     height: '60px',
-    alignSelf: 'flex-end',
+    alignSelf: 'flex-end'
   },
   body: {
     width: '100%',
-    minHeight: '60vh',
+    minHeight: '60vh'
   },
   footer: {
     position: 'absolute',
@@ -85,22 +85,22 @@ const styles = StyleSheet.create({
     height: '15vh', // As per your page layout
     marginTop: '20px',
     marginLeft: '50px',
-    marginRight: '50px',
+    marginRight: '50px'
   },
   footerText: {
     color: `#999`,
-    fontSize: `7px`,
+    fontSize: `7px`
   },
   heading: {
     paddingLeft: '60px',
-    marginBottom: '-40px',
+    marginBottom: '-40px'
   },
   headingText: {
     fontSize: '14px',
     color: `#${themeBlue}`,
     fontFamily: 'ProximaNova',
-    fontWeight: 700,
-  },
+    fontWeight: 700
+  }
 });
 
 function getStyle() {
@@ -336,7 +336,7 @@ function questionTables(proposalQuestions) {
         shouldInclude(question) &&
         question.section.sectionName !== PT_SECTION &&
         question.section.sectionName !== QC_SECTION &&
-        question.section.sectionName !== 'Quick Questions for the Customer'
+        question.section.sectionName !== 'Questions_for_the_Customer_left_panel'
       );
     })
     .sort((a, b) => {
@@ -408,7 +408,7 @@ function getQuestionToCustomerRows(questions) {
     .filter(
       (question) =>
         shouldInclude(question) &&
-        question.section.sectionName === 'Quick Questions for the Customer'
+        question.section.sectionName === 'Questions_for_the_Customer_left_panel'
     )
     .sort((a, b) => a.questionOrder - b.questionOrder);
 
@@ -417,7 +417,7 @@ function getQuestionToCustomerRows(questions) {
       { questionText: 'Question 1' },
       { questionText: 'Question 2' },
       { questionText: 'Question 3' },
-      { questionText: 'Question 4' },
+      { questionText: 'Question 4' }
     ];
 
   html += `<table class="questionToCustomerTable table marginTop20">`;
@@ -486,12 +486,12 @@ function getNotesRows(notes, editor) {
         Underline,
         Mention.configure({
           HTMLAttributes: {
-            style: `color:blue;`,
+            style: `color:blue;`
           },
           renderLabel({ options, node }) {
             return `${node.attrs.id}`;
-          },
-        }),
+          }
+        })
       ]);
       data += `</td></tr></table>`;
       html += data;
@@ -590,7 +590,7 @@ const MyDoc = (
                   return <Text style={style}>{children}</Text>;
                 }
                 return <View style={style}>{children}</View>;
-              },
+              }
             }}
           >
             {getHtml(
@@ -610,7 +610,7 @@ const MyDoc = (
               fontweight: 'bold',
               color: `#${themeBlue}`,
               marginBottom: 5,
-              borderBottom: '1px solid #CCC',
+              borderBottom: '1px solid #CCC'
             }}
           >
             † Unity has provided this answer but not validated by user on
@@ -627,7 +627,7 @@ const MyDoc = (
                 flex: 1,
                 fontSize: '8px',
                 textAlign: 'right',
-                color: '#999',
+                color: '#999'
               }}
             >
               View up-to-date Unity record here:
@@ -644,7 +644,7 @@ const MyDoc = (
                 flex: 1,
                 fontSize: '8px',
                 textAlign: 'right',
-                color: '#999',
+                color: '#999'
               }}
             >
               {getUnityLink(proposalDetails)}
@@ -659,7 +659,7 @@ const MyDoc = (
                 flex: 1,
                 fontSize: '8px',
                 textAlign: 'right',
-                color: '#999',
+                color: '#999'
               }}
             >
               Copyright © {yearNow} IQVIA. All Rights Reserved. Confidential and
@@ -677,7 +677,7 @@ export function createPdf(content) {
     data: { proposalQuestions, proposalDetails },
     notes,
     filterState,
-    editor,
+    editor
   } = content;
 
   const filteredQuestions = getFilteredQuestion(proposalQuestions, filterState);
