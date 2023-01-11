@@ -68,7 +68,8 @@ const {
   SET_BID_COST_DATA_FIELDS,
   SET_PRICE_MODELER_RECALCULATING,
   PRICE_MODELER_UPDATE,
-  SET_ACTIVE_TABINDEX
+  SET_ACTIVE_TABINDEX,
+  SET_V_TAB_ACTIVE_INDEX
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -169,7 +170,8 @@ const INITIAL_STATE: Map = fromJS({
   }),
   canUserTagInQuestion: false,
   priceModelerRecalculating: false,
-  activeTabIndex: 0 // Strategy Development, Approvals, Documents
+  activeTabIndex: 0, // Strategy Development, Approvals, Documents,
+  activeVTabIndex: 0 // Questions for Customer, Notepad, Proposal Team
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -1211,6 +1213,10 @@ const setActiveTabIndex = (state, action) => {
   return state.set('activeTabIndex', action.payload);
 };
 
+const setVTabActiveTabIndex = (state, action) => {
+  return state.set('activeVTabIndex', action.payload);
+};
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
@@ -1280,7 +1286,8 @@ const actionMap = {
   [SET_PRICE_MODELER_RECALCULATING]: (state, { payload }) =>
     state.set('priceModelerRecalculating', payload),
   [PRICE_MODELER_UPDATE]: updatePriceModelerEstimate,
-  [SET_ACTIVE_TABINDEX]: setActiveTabIndex
+  [SET_ACTIVE_TABINDEX]: setActiveTabIndex,
+  [SET_V_TAB_ACTIVE_INDEX]: setVTabActiveTabIndex
 };
 
 export default function(

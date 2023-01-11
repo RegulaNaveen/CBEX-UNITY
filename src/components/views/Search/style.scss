@@ -33,7 +33,11 @@
   }
 }
 
-.search-navigation-popper-container {
+.search-navigation-container {
+  position: absolute;
+  min-width: 250px;
+  top: 100%;
+  left: 10px;
   max-width: 100%;
   display: flex;
   justify-content: space-between;

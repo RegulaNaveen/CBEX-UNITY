@@ -65,5 +65,6 @@ export const URL_REGEXP = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.
 export const PROPOSAL_TEAM_USER_MATCH_REGEXP = /([a-zA-Z0-9\W]*\w)(\(.*\))/; // matches proposal team individual user
 export const PROPOSAL_TEAM_EMAIL_MATCH_REGEXP = /[a-zA-Z\w]*\((.*)\)/; // matches proposal team user email
 export const RTE_DATA_ATTR_REGEXP = /data-[a-zA-Z0-9-]*=\"[a-zA-Z0-9-]*\"/g; // matches RichTextEditor data attributes
+export const NOTEPAD_UI_ID = Symbol('NOTEPAD');
 
 export { DEFAULT, PROPOSAL, REFRESH_WEBSOCKET_CONNECTION, PROFILE, APPROVALS };

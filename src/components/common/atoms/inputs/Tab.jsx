@@ -1,5 +1,5 @@
 /* eslint-disable no-else-return */
-import React, { useState, useEffect, useContext, Suspense } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { useHistory } from 'react-router-dom';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
@@ -22,6 +22,9 @@ import {
 } from '../../../../redux/selectors';
 import { setActiveTabIndexAction } from '../../../../redux/actions/proposal-actions';
 import { createMatomoObj, saveDataInMatomo } from '../../../../utils/utils';
+import { selectCurrentSearchResult } from '../../../../redux/selectors/search';
+import { NOTEPAD_UI_ID } from '../../../../constants/app';
+import { autoNavigationCompletedAction } from '../../../../redux/actions/search-actions';
 import lazyWithRetry from '../../../../utils/lazy';
 import VerticalTabsCollapsiblePanel from '../../../screens/Opportunity/layout/navigation/VerticalTabsCollapsiblePanel';
 
@@ -97,9 +100,12 @@ const UnityTab = ({
   const userRole = useSelector(state => getUserRole(state));
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const value = useSelector(selectActiveTabIndex);
+  const currentSearchResult = useSelector(selectCurrentSearchResult);
   const dispatch = useDispatch();
 
   const { trackEvent } = useMatomo();
+
+  const notepadPanelRef = useRef(null);
 
   const minPixelToExclude = 20;
   const notepadMinWidthPx =
@@ -194,6 +200,26 @@ const UnityTab = ({
     }
   }, [selectedView, approvalsFlag, showApprovalTab]);
 
+  useEffect(() => {
+    if (currentSearchResult !== null && notepadPanelRef.current !== null) {
+      if (currentSearchResult.searchIndex === NOTEPAD_UI_ID) {
+        // by inspecting DOM, found there is only one button element inside Panel component hence choosing first button
+        const toggleButton = notepadPanelRef.current.children[0].getElementsByTagName(
+          'button'
+        )[0];
+        toggleButton.click();
+        setTimeout(() => {
+          notepadPanelRef.current.scrollIntoView({
+            behaviour: 'smooth',
+            block: 'center',
+            inline: 'nearest'
+          });
+          dispatch(autoNavigationCompletedAction());
+        }, 500);
+      }
+    }
+  }, [dispatch, notepadPanelRef, currentSearchResult]);
+
   const winLocationSearch = window.location.search;
   const handleChangeTab = (event, val) => {
     const selectView = new URLSearchParams(winLocationSearch);
@@ -261,7 +287,15 @@ const UnityTab = ({
     if (activeVerticleTab === 'showNotepadTab') {
       /* Notepad */
       return (
-        <div id="panel-notepad" style={{ borderRadius: '5px' }}>
+        <div
+          id="panel-notepad"
+          style={{ borderRadius: '5px' }}
+          className={classNames({
+            'show-highlight':
+              currentSearchResult !== null && currentSearchResult.vTab === 1
+          })}
+          ref={notepadPanelRef}
+        >
           <Panel
             minWidth={notepadMinWidthPx}
             maxWidth={notepadMaxWidthPx}
