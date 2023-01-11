@@ -247,8 +247,6 @@ const UnityTab = ({
     return tabsToReturn;
   };
 
-  console.log('currentSearchResult', currentSearchResult);
-
   const renderVerticleTabsComponent = activeVerticleTab => {
     if (activeVerticleTab === 'showQuestionsForCustomerTab') {
       return (
