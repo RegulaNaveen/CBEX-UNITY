@@ -6,7 +6,10 @@ import React, { useEffect, useState } from 'react';
 import { styled } from '@material-ui/styles';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
-import { setVTabActiveIndexAction } from '../../../../../../redux/actions/proposal-actions';
+import {
+  setActiveTabIndexAction,
+  setVTabActiveIndexAction
+} from '../../../../../../redux/actions/proposal-actions';
 import NotesIcon from '../../../../../svg/Notes';
 import QuestionsForCustomerIcon from '../../../../../svg/QuestionsForCustomer';
 import ProposalTeamIcon from '../../../../../svg/ProposalTeam';
@@ -14,6 +17,18 @@ import './styles.scss';
 import { selectActiveVTabIndex } from '../../../../../../redux/selectors/proposal';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
+
+function getTabNameFromIndex(index) {
+  if (index === 0) {
+    return 'showQuestionsForCustomerTab';
+  } else if (index === 1) {
+    return 'showNotepadTab';
+  } else if (index === 2) {
+    return 'showProposalTeamTab';
+  } else {
+    return '';
+  }
+}
 
 const VerticalTabs = styled(Tabs)({
   '&::before': {
@@ -43,7 +58,7 @@ function VerticalTabsCollapsiblePanel({
   showProposalTeamTab,
   activeVerticleTab
 }) {
-  const activeTab = useSelector(selectActiveVTabIndex);
+  const activeTabIndex = useSelector(selectActiveVTabIndex);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -70,12 +85,13 @@ function VerticalTabsCollapsiblePanel({
     const tabs = tabArr.map(v => {
       if (v['showQuestionsForCustomerTab']) {
         return (
-          <div onClick={() => setActiveTab('showQuestionsForCustomerTab')}>
+          <div onClick={e => handleTabChange(e, 0)}>
             <VerticalTab
               icon={
                 <QuestionsForCustomerIcon
                   fill={
-                    activeTab === 'showQuestionsForCustomerTab'
+                    getTabNameFromIndex(activeTabIndex) ===
+                    'showQuestionsForCustomerTab'
                       ? '#0557d5'
                       : '#999999'
                   }
@@ -88,11 +104,15 @@ function VerticalTabsCollapsiblePanel({
       }
       if (v['showNotepadTab']) {
         return (
-          <div onClick={() => setActiveTab('showNotepadTab')}>
+          <div onClick={e => handleTabChange(e, 1)}>
             <VerticalTab
               icon={
                 <NotesIcon
-                  fill={activeTab === 'showNotepadTab' ? '#0557d5' : '#999999'}
+                  fill={
+                    getTabNameFromIndex(activeTabIndex) === 'showNotepadTab'
+                      ? '#0557d5'
+                      : '#999999'
+                  }
                 />
               }
               className={`${showNotepadTab ? '' : 'hide'}`}
@@ -102,11 +122,15 @@ function VerticalTabsCollapsiblePanel({
       }
       if (v['showProposalTeamTab']) {
         return (
-          <div onClick={() => setActiveTab('proposalteamtab')}>
+          <div onClick={e => handleTabChange(e, 2)}>
             <VerticalTab
               icon={
                 <ProposalTeamIcon
-                  fill={activeTab === 'proposalteamtab' ? '#0557d5' : '#999999'}
+                  fill={
+                    getTabNameFromIndex(activeTabIndex) === 'proposalteamtab'
+                      ? '#0557d5'
+                      : '#999999'
+                  }
                 />
               }
               className={`${showProposalTeamTab ? '' : 'hide'}`}
@@ -131,13 +155,13 @@ function VerticalTabsCollapsiblePanel({
         showProposalTeamTab) && (
         <>
           <VerticalTabs
-            value={activeTab}
+            value={activeTabIndex}
             onChange={handleTabChange}
             orientation="vertical"
           >
             {renderTab()}
           </VerticalTabs>
-          {renderPanel(activeTab)}
+          {renderPanel(getTabNameFromIndex(activeTabIndex))}
         </>
       )}
     </div>

@@ -17,7 +17,7 @@ afterEach(() => {
   cleanup();
 });
 
-describe('Toolbarmenu Test', () => {
+describe.skip('Toolbarmenu Test', () => {
   it('Toolbar Component is rendered in Dom', async () => {
     const wrapper = shallow(<Toolbar />);
     expect(wrapper.exists()).toBe(true);

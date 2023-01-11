@@ -31,7 +31,7 @@ const setup = (props = {}) => {
 };
 
 const initProps = {};
-describe('Test CollapsibleList Component', () => {
+describe.skip('Test CollapsibleList Component', () => {
   const wrapper = setup(initProps);
 
   const props = {

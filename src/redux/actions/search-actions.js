@@ -53,6 +53,7 @@ export const navigateNextSearchAction = () => {
     const searchResults = selectSearchResults(currentState);
     const currentResultIndex = selectCurrentResultIndex(currentState);
     const activeTab = selectActiveTabIndex(currentState);
+    const activeVTab = selectActiveVTabIndex(currentState);
     if (
       currentResultIndex > -1 &&
       currentResultIndex < searchResults.length - 1
@@ -78,6 +79,7 @@ export const navigatePrevSearchAction = () => {
     const searchResults = selectSearchResults(currentState);
     const currentResultIndex = selectCurrentResultIndex(currentState);
     const activeTab = selectActiveTabIndex(currentState);
+    const activeVTab = selectActiveVTabIndex(currentState);
     if (currentResultIndex > 0 && currentResultIndex < searchResults.length) {
       const newResult = searchResults[currentResultIndex - 1];
       if (newResult.tab !== activeTab) {

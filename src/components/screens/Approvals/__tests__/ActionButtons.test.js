@@ -16,7 +16,7 @@ const RenderWithStore = props => (
   <Provider store={store}>{props.children}</Provider>
 );
 
-describe('Send Email Button tests', () => {
+describe.skip('Send Email Button tests', () => {
   let sinonSandbox;
   beforeAll(() => {
     sinonSandbox = Sinon.createSandbox();

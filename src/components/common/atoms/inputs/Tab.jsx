@@ -1,5 +1,5 @@
 /* eslint-disable no-else-return */
-import React, { useState, useEffect, useContext, Suspense } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { useHistory } from 'react-router-dom';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
@@ -247,6 +247,8 @@ const UnityTab = ({
     return tabsToReturn;
   };
 
+  console.log('currentSearchResult', currentSearchResult);
+
   const renderVerticleTabsComponent = activeVerticleTab => {
     if (activeVerticleTab === 'showQuestionsForCustomerTab') {
       return (
@@ -287,8 +289,7 @@ const UnityTab = ({
           style={{ borderRadius: '5px' }}
           className={classNames({
             'show-highlight':
-              currentSearchResult !== null &&
-              currentSearchResult.vTab === activeTab
+              currentSearchResult !== null && currentSearchResult.vTab === 1
           })}
           ref={notepadPanelRef}
         >
