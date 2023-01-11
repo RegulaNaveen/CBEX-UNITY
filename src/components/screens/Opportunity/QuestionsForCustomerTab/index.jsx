@@ -189,88 +189,86 @@ function QuestionsForCustomer() {
   return (
     <>
       <div className="questions-for-customer-container">
-        <SocketContextProvider>
-          <div>
-            <Header />
+        <div>
+          <Header />
+        </div>
+        {questions?.size > 0 ? (
+          <div
+            className={
+              questions?.size > 3
+                ? 'questions-container-over'
+                : 'questions-container'
+            }
+          >
+            <ul>
+              {questions?.valueSeq().map((questionData, index) => {
+                return (
+                  <QuestionContainer
+                    deleteQuestionHandler={deleteQuestionHandler}
+                    questionData={questionData}
+                    questionIndex={index + 1}
+                  />
+                );
+              })}
+            </ul>
           </div>
-          {questions?.size > 0 ? (
-            <div
-              className={
-                questions?.size > 3
-                  ? 'questions-container-over'
-                  : 'questions-container'
+        ) : (
+          <div className="questions-container">
+            <div className="no-questions-added-t">
+              No questions added to this opportunity
+            </div>
+          </div>
+        )}
+
+        <div className="btn-container">
+          <div>
+            <Button
+              className="btn-label"
+              icon={<Copy />}
+              size="small"
+              style={{ marginRight: 10 }}
+              onClick={copyToClipBoard}
+              disabled={questions?.size <= 0}
+            >
+              Copy to clipboard
+            </Button>
+          </div>
+          <div>
+            <Button
+              variant="primary"
+              icon={<PlusIcon />}
+              size="small"
+              style={{ marginRight: 10 }}
+              className="btn-label"
+              onClick={() => addQuestionHandler()}
+              disabled={
+                Array.from(questions)[questions.size - 1]
+                  ? Array.from(questions)[questions.size - 1][1].get(
+                      'isNewEntry'
+                    )
+                  : false
               }
             >
-              <ul>
-                {questions?.valueSeq().map((questionData, index) => {
-                  return (
-                    <QuestionContainer
-                      deleteQuestionHandler={deleteQuestionHandler}
-                      questionData={questionData}
-                      questionIndex={index + 1}
-                    />
-                  );
-                })}
-              </ul>
-            </div>
-          ) : (
-            <div className="questions-container">
-              <div className="no-questions-added-t">
-                No questions added to this opportunity
-              </div>
-            </div>
-          )}
-
-          <div className="btn-container">
-            <div>
-              <Button
-                className="btn-label"
-                icon={<Copy />}
-                size="small"
-                style={{ marginRight: 10 }}
-                onClick={copyToClipBoard}
-                disabled={questions?.size <= 0}
-              >
-                Copy to clipboard
-              </Button>
-            </div>
-            <div>
-              <Button
-                variant="primary"
-                icon={<PlusIcon />}
-                size="small"
-                style={{ marginRight: 10 }}
-                className="btn-label"
-                onClick={() => addQuestionHandler()}
-                disabled={
-                  Array.from(questions)[questions.size - 1]
-                    ? Array.from(questions)[questions.size - 1][1].get(
-                        'isNewEntry'
-                      )
-                    : false
-                }
-              >
-                Add New
-              </Button>
-            </div>
+              Add New
+            </Button>
           </div>
-          <Modal
-            open={showDeleteModal}
-            variant="warning"
-            onClose={() => handleClose()}
-            title={
-              <Typography style={{ color: '#e30e0e' }} variant="h3">
-                Are you sure?
-              </Typography>
-            }
-            message="This question contains has been answered by a Unity user , are you sure you want to delete this value?"
-            buttonProps={[
-              { label: 'Cancel', onClick: handleClose },
-              { label: 'Yes, Delete', onClick: onForceDelete }
-            ]}
-            id="warning"
-          />
-        </SocketContextProvider>
+        </div>
+        <Modal
+          open={showDeleteModal}
+          variant="warning"
+          onClose={() => handleClose()}
+          title={
+            <Typography style={{ color: '#e30e0e' }} variant="h3">
+              Are you sure?
+            </Typography>
+          }
+          message="This question contains has been answered by a Unity user , are you sure you want to delete this value?"
+          buttonProps={[
+            { label: 'Cancel', onClick: handleClose },
+            { label: 'Yes, Delete', onClick: onForceDelete }
+          ]}
+          id="warning"
+        />
       </div>
     </>
   );
