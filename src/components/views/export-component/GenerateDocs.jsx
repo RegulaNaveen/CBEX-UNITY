@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -24,11 +24,11 @@ import {
 import {
   selectNotes,
   getRoles,
-  getProposalDetails
+  getProposalDetails,
+  selectEditor
 } from '../../../redux/selectors';
 import { createPdf } from './pdf-template';
-import { fetchNotes } from '../../../redux/actions/notepad-actions';
-import NotesSocketContext from '../../../context/notesSocketContext';
+import fetchNotes from '../../../redux/actions/notepad-actions';
 
 export const docType = {
   pdf: 'PDF',
@@ -37,53 +37,16 @@ export const docType = {
 export const defaultOption = 'All';
 
 const GenerateDocs = () => {
-  const notesSocket = useContext(NotesSocketContext);
   const notesMap = useSelector(selectNotes);
   const proposalQuestions = useSelector(selectProposalQuestions);
   const proposalDetails = useSelector(getProposalDetails);
   const roleList = useSelector(getRoles) || [];
   const selectedBid = useSelector(getSelectedBid);
+  const editor = useSelector(selectEditor);
   const dispatch = useDispatch();
-  const editor = useEditor(
-    {
-      extensions: [
-        StarterKit,
-        Underline,
-        Link,
-        HighLight,
-        Subscript,
-        Superscript,
-        CharacterCount,
-        TextAlign.configure({
-          types: ['heading', 'paragraph']
-        }),
-        Collaboration.configure({
-          document: notesSocket.ydoc
-        }),
-        Link.configure({
-          autolink: true,
-          linkOnPaste: false,
-          validate: href => /^https?:\/\// || /^www?:\/\//.test(href),
-          protocols: ['ftp', 'mailto'],
-          HTMLAttributes: {
-            class: 'my-custom-class'
-          }
-        }),
-        Mention.configure({
-          HTMLAttributes: {
-            class: 'mention'
-          },
-          renderLabel({ options, node }) {
-            return `${node.attrs.label ?? node.attrs.id}`;
-          },
-          suggestion: null
-        })
-      ]
-    },
-    [selectedBid.get('id', ''), notesSocket.wsInstance]
-  );
-  const logo = useRef(null);
-  const [filterState, filterStateUpdate] = useState({
+
+  let logo = useRef(null);
+  let [filterState, filterStateUpdate] = useState({
     answered: true,
     unanswered: false,
     myRole: false,

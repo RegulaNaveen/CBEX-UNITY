@@ -2,6 +2,7 @@ import { v4 as uuid } from 'uuid';
 import { APPROVALS } from '../../constants/types';
 
 const INITIAL_STATE = {
+  fetching: false,
   allApprovals: [],
   canSendEmail: false,
   filters: [
@@ -36,6 +37,7 @@ const setApprovals = (state, action) => {
   const { payload } = action;
   return {
     ...state,
+    fetching: false,
     allApprovals: payload.map(i => ({
       ...i,
       ArchivedData: i.ArchivedData?.reverse() || []
@@ -97,6 +99,7 @@ const updateFilter = (state, action) => {
 };
 
 const actionMap = {
+  [APPROVALS.FETCH_APPROVALS]: state => ({ ...state, fetching: true }),
   [APPROVALS.SET_APPROVALS]: setApprovals,
   [APPROVALS.DUPLICATE_APPROVALS]: duplicateApproval,
   [APPROVALS.DELETE_APPROVALS]: deleteApprovals,

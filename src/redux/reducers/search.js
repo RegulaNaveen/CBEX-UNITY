@@ -8,7 +8,8 @@ export const INITIAL_STATE = {
   totalResultsFound: 0,
   searching: false,
   searchResults: [],
-  autoNavigatedToCurrentResult: true
+  autoNavigatedToCurrentResult: true,
+  clearInputFlag: false
 };
 
 export default function searchReducer(state = INITIAL_STATE, action) {
@@ -71,6 +72,18 @@ export default function searchReducer(state = INITIAL_STATE, action) {
         ...state,
         prevResult: action.payload,
         autoNavigatedToCurrentResult: true
+      };
+    }
+    case SEARCH.SET_CLEAR_INPUT_FLAG: {
+      return {
+        ...state,
+        clearInputFlag: true
+      };
+    }
+    case SEARCH.RESET_CLEAR_INPUT_FLAG: {
+      return {
+        ...state,
+        clearInputFlag: false
       };
     }
     default:

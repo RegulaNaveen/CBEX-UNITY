@@ -1,4 +1,33 @@
 import {
+  pdf,
+  Document,
+  Page,
+  View,
+  StyleSheet,
+  Text,
+  Font,
+  Image,
+  Link as HtmlLink,
+} from '@react-pdf/renderer';
+import React from 'react';
+import Html from 'react-pdf-html';
+import { isString } from 'lodash';
+import moment from 'moment';
+import { generateHTML } from '@tiptap/core';
+import Link from '@tiptap/extension-link';
+import HighLight from '@tiptap/extension-highlight';
+import Subscript from '@tiptap/extension-subscript';
+import Superscript from '@tiptap/extension-superscript';
+import Mention from '@tiptap/extension-mention';
+import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
+import { useSelector, shallowEqual, useDispatch } from 'react-redux';
+import ProximaNovaItalic from '../../../../fonts/Proxima-Nova-Reg-It.otf';
+import ProximaNovaBoldItalic from '../../../../fonts/Proxima-Nova-Bold-It.otf';
+import ProximaNovaBold from '../../../../fonts/Proxima Nova Alt Bold.otf';
+import ProximaNova from '../../../../fonts/ProximaNova-Regular.otf';
+import Logo from '../../../../img/iqvia-main-logo.png';
+import {
   getFilteredQuestion,
   headFields,
   PT_SECTION,
@@ -13,36 +42,9 @@ import {
   yearNow,
   getUnityLink,
   formatDate,
-  shouldInclude
+  shouldInclude,
 } from './word-template';
-import {
-  pdf,
-  Document,
-  Page,
-  View,
-  StyleSheet,
-  Text,
-  Font,
-  Image,
-  Link as HtmlLink
-} from '@react-pdf/renderer';
-import React from 'react';
-import Html from 'react-pdf-html';
-import { isString } from 'lodash';
-import moment from 'moment';
-import { generateHTML } from '@tiptap/core';
-import Link from '@tiptap/extension-link';
-import HighLight from '@tiptap/extension-highlight';
-import Subscript from '@tiptap/extension-subscript';
-import Superscript from '@tiptap/extension-superscript';
-import Mention from '@tiptap/extension-mention';
-import StarterKit from '@tiptap/starter-kit';
-import Underline from '@tiptap/extension-underline';
-import Logo from '../../../../img/iqvia-main-logo.png';
-import ProximaNova from '../../../../fonts/ProximaNova-Regular.otf';
-import ProximaNovaBold from '../../../../fonts/Proxima Nova Alt Bold.otf';
-import ProximaNovaBoldItalic from '../../../../fonts/Proxima-Nova-Bold-It.otf';
-import ProximaNovaItalic from '../../../../fonts/Proxima-Nova-Reg-It.otf';
+import { selectEditor } from '../../../redux/selectors';
 
 Font.register({
   family: 'ProximaNova',
@@ -50,55 +52,55 @@ Font.register({
     { src: ProximaNovaBoldItalic, fontStyle: 'italic', fontWeight: 700 },
     { src: ProximaNovaItalic, fontStyle: 'italic' },
     { src: ProximaNovaBold, fontWeight: 700 },
-    { src: ProximaNova, fontStyle: 'normal' }
-  ]
+    { src: ProximaNova, fontStyle: 'normal' },
+  ],
 });
 
 const styles = StyleSheet.create({
   page: {
-    paddingBottom: '18vh'
+    paddingBottom: '18vh',
   },
   header: {
     width: '83%',
-    height: '10vh',
+    height: '10vh', // As per your page layout
     borderBottom: `1px solid #${themeBlue}`,
     marginBottom: '20px',
     marginLeft: '50px',
     marginRight: '50px',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
   imgLogo: {
     width: '143px',
     height: '60px',
-    alignSelf: 'flex-end'
+    alignSelf: 'flex-end',
   },
   body: {
     width: '100%',
-    minHeight: '60vh'
+    minHeight: '60vh',
   },
   footer: {
     position: 'absolute',
     bottom: 0,
     width: '83%',
-    height: '15vh',
+    height: '15vh', // As per your page layout
     marginTop: '20px',
     marginLeft: '50px',
-    marginRight: '50px'
+    marginRight: '50px',
   },
   footerText: {
     color: `#999`,
-    fontSize: `7px`
+    fontSize: `7px`,
   },
   heading: {
     paddingLeft: '60px',
-    marginBottom: '-40px'
+    marginBottom: '-40px',
   },
   headingText: {
     fontSize: '14px',
     color: `#${themeBlue}`,
     fontFamily: 'ProximaNova',
-    fontWeight: 700
-  }
+    fontWeight: 700,
+  },
 });
 
 function getStyle() {
@@ -273,7 +275,7 @@ function getHeaderInfoRows(details) {
 function getProposalTeamsRows(questions) {
   const coreTeamQuestions = questions
     .filter(
-      question =>
+      (question) =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
         CORE_TEAM[question.questionText]
@@ -281,7 +283,7 @@ function getProposalTeamsRows(questions) {
     .sort((a, b) => a.questionOrder - b.questionOrder);
   const otherTeamQuestions = questions
     .filter(
-      question =>
+      (question) =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
         !CORE_TEAM[question.questionText]
@@ -294,7 +296,7 @@ function getProposalTeamsRows(questions) {
     html += `<th> Core Team Members </th>`;
     html += `<th> Name</th>`;
     html += `</tr>`;
-    coreTeamQuestions.forEach(question => {
+    coreTeamQuestions.forEach((question) => {
       const { questionText, answers } = question;
       const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
       html += `<tr>`;
@@ -309,7 +311,7 @@ function getProposalTeamsRows(questions) {
     html += `<th> Specialty Team Members </th>`;
     html += `<th> Name</th>`;
     html += `</tr>`;
-    otherTeamQuestions.forEach(question => {
+    otherTeamQuestions.forEach((question) => {
       const { questionText, answers } = question;
       const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
       html += `<tr>`;
@@ -328,7 +330,7 @@ function questionTables(proposalQuestions) {
   // Array<Table of each section>
   let html = ``;
   // Remove not visible questions
-  let questions = proposalQuestions
+  const questions = proposalQuestions
     .filter((question) => {
       return (
         shouldInclude(question) &&
@@ -360,7 +362,7 @@ function questionTables(proposalQuestions) {
     }
   });
 
-  ordereredSections.forEach(section => {
+  ordereredSections.forEach((section) => {
     html += `<table class="questionTable table marginTop20">`;
     html += `<tr>`;
     html += `<th> ${section} </th>`;
@@ -369,7 +371,7 @@ function questionTables(proposalQuestions) {
 
     sections[section]
       .sort((a, b) => a.questionOrder - b.questionOrder)
-      .forEach(question => {
+      .forEach((question) => {
         const questionText = question.questionText || '';
         const extraNewLines = getExtraLines(
           getLastAnswer(question.answers),
@@ -426,7 +428,7 @@ function getQuestionToCustomerRows(questions) {
   try {
     html += `<tr>`;
     html += `<td><ul>`;
-    questionsToCustomer.forEach((question) => {
+    questionsToCustomer.forEach((question, index) => {
       const { questionText } = question;
       html += `<li> ${questionText} </li>`;
     });
@@ -473,6 +475,7 @@ function getNotesRows(notes, editor) {
   data += `<table><tr><td style="border:1px solid black;padding:10px">`;
   try {
     const noteText = editor.getJSON();
+
     try {
       data += generateHTML(noteText, [
         StarterKit,
@@ -483,12 +486,12 @@ function getNotesRows(notes, editor) {
         Underline,
         Mention.configure({
           HTMLAttributes: {
-            style: `color:blue;`
+            style: `color:blue;`,
           },
           renderLabel({ options, node }) {
             return `${node.attrs.id}`;
-          }
-        })
+          },
+        }),
       ]);
       data += `</td></tr></table>`;
       html += data;
@@ -519,6 +522,7 @@ function getHtml(
             ${getQuestionToCustomerRows(questions)}
             ${questionTables(filteredQuestions)}
             ${filterState.includesNotes ? getNotesRows(notes, editor) : ''}
+
         </body>
         </html>
     `;
@@ -558,9 +562,8 @@ const MyDoc = (
               p: ({ style, children }) => {
                 if (children != '') {
                   return <View style={style}>{children}</View>;
-                } else {
-                  return <View style={{ height: 18 }}></View>;
                 }
+                return <View style={{ height: 18 }} />;
               },
               tr: ({ style, children }) => (
                 <View style={style}>{children}</View>
@@ -587,7 +590,7 @@ const MyDoc = (
                   return <Text style={style}>{children}</Text>;
                 }
                 return <View style={style}>{children}</View>;
-              }
+              },
             }}
           >
             {getHtml(
@@ -607,7 +610,7 @@ const MyDoc = (
               fontweight: 'bold',
               color: `#${themeBlue}`,
               marginBottom: 5,
-              borderBottom: '1px solid #CCC'
+              borderBottom: '1px solid #CCC',
             }}
           >
             † Unity has provided this answer but not validated by user on
@@ -624,7 +627,7 @@ const MyDoc = (
                 flex: 1,
                 fontSize: '8px',
                 textAlign: 'right',
-                color: '#999'
+                color: '#999',
               }}
             >
               View up-to-date Unity record here:
@@ -641,7 +644,7 @@ const MyDoc = (
                 flex: 1,
                 fontSize: '8px',
                 textAlign: 'right',
-                color: '#999'
+                color: '#999',
               }}
             >
               {getUnityLink(proposalDetails)}
@@ -656,7 +659,7 @@ const MyDoc = (
                 flex: 1,
                 fontSize: '8px',
                 textAlign: 'right',
-                color: '#999'
+                color: '#999',
               }}
             >
               Copyright © {yearNow} IQVIA. All Rights Reserved. Confidential and
@@ -670,12 +673,13 @@ const MyDoc = (
 };
 
 export function createPdf(content) {
-  let {
+  const {
     data: { proposalQuestions, proposalDetails },
     notes,
     filterState,
-    editor
+    editor,
   } = content;
+
   const filteredQuestions = getFilteredQuestion(proposalQuestions, filterState);
   return pdf(
     MyDoc(

@@ -1,8 +1,7 @@
-/* eslint-disable react/prop-types */
+import React, { useEffect, useState, useContext } from 'react';
 import Collaboration from '@tiptap/extension-collaboration';
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
 import { connect, useSelector, useDispatch } from 'react-redux';
-import React, { useEffect, useState, useContext } from 'react';
 import randomColor from 'randomcolor';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -16,39 +15,35 @@ import CharacterCount from '@tiptap/extension-character-count';
 import Mention from '@tiptap/extension-mention';
 import moment from 'moment';
 
+import suggestion from './suggestion';
+import { saveDataInMatomo, createMatomoObj } from '../../../utils/utils';
+
 import {
   getProposalDetails,
-  getSelectedBid,
   getUserName,
   getUserEmail,
   getUserRole
 } from '../../../redux/selectors';
 import MenuBar from './MenuBar';
 import {
-  updateNote,
   fetchNotes,
   resetNotes,
   setEditor,
   updateNoteInStore
 } from '../../../redux/actions/notepad-actions';
-import NotesSocketContext from '../../../context/notesSocketContext';
-import suggestion from './suggestion';
-import { saveDataInMatomo, createMatomoObj } from '../../../utils/utils';
 
 const matamoObj = {};
 const WysiwygNotepad = ({
-  selectedBid,
   userName,
   userEmail,
   userRole,
   proposalDetails,
-  trackEvent
+  trackEvent,
+  wsInstance,
+  ydoc,
+  proposalId
 }) => {
-  const notesSocket = useContext(NotesSocketContext);
   const dispatch = useDispatch();
-  const [proposalIdState, setProposalIdState] = useState(
-    selectedBid.get('id', '')
-  );
   const [notesUserTag, setNotesUserTag] = useState(false);
   const [editorloadingcount, seteditorloadingcount] = useState(0);
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
@@ -64,9 +59,6 @@ const WysiwygNotepad = ({
     };
   }, []);
 
-  useEffect(() => {
-    setProposalIdState(selectedBid.get('id'));
-  }, [selectedBid]);
   useEffect(() => {
     if (document.querySelector('.notepad-classoverride')) {
       document
@@ -97,10 +89,10 @@ const WysiwygNotepad = ({
           types: ['heading', 'paragraph']
         }),
         Collaboration.configure({
-          document: notesSocket.ydoc
+          document: ydoc
         }),
         CollaborationCursor.configure({
-          provider: notesSocket.wsInstance,
+          provider: wsInstance,
           user: {
             name: `${userName} is typing....`,
             color: usercolor
@@ -127,12 +119,13 @@ const WysiwygNotepad = ({
       ],
       onUpdate: ({ editor }) => {
         // const Ejson = editor.getJSON();
+        dispatch(setEditor(editor));
       },
       onCreate: ({ editor }) => {
         seteditorloadingcount(editorloadingcount + 1);
-        const timeout = setTimeout(() => {
+        let timeout = setTimeout(() => {
           const editorTextLen = editor.storage.characterCount.characters();
-          if (editorloadingcount === 1) {
+          if (editorloadingcount == 1) {
             matamoObj.category = `Proposal Detail (CRM#:${proposalDetails['CRM #']})`;
             matamoObj.action = `Event: Notepad ${proposalDetails['CRM #']}`;
             matamoObj.name = `Notepad: char count ${editorTextLen}`;
@@ -196,8 +189,8 @@ const WysiwygNotepad = ({
           document.onkeydown = event => {
             // bold
             if (
-              (event.ctrlKey && event.code === 'KeyB') ||
-              (event.key === 'Meta' && event.code === 'KeyB')
+              (event.ctrlKey && event.code == 'KeyB') ||
+              (event.key == 'Meta' && event.code == 'KeyB')
             ) {
               const matamoObj = createMatomoObj(
                 proposalDetails,
@@ -209,8 +202,8 @@ const WysiwygNotepad = ({
             }
             // italic
             if (
-              (event.ctrlKey && event.code === 'KeyI') ||
-              (event.key === 'Meta' && event.code === 'KeyI')
+              (event.ctrlKey && event.code == 'KeyI') ||
+              (event.key == 'Meta' && event.code == 'KeyI')
             ) {
               const matamoObj = createMatomoObj(
                 proposalDetails,
@@ -222,8 +215,8 @@ const WysiwygNotepad = ({
             }
             // underline
             if (
-              (event.ctrlKey && event.code === 'KeyU') ||
-              (event.key === 'Meta' && event.code === 'KeyU')
+              (event.ctrlKey && event.code == 'KeyU') ||
+              (event.key == 'Meta' && event.code == 'KeyU')
             ) {
               const matamoObj = createMatomoObj(
                 proposalDetails,
@@ -235,8 +228,8 @@ const WysiwygNotepad = ({
             }
             // Strikethrough
             if (
-              (event.ctrlKey && event.shiftKey && event.code === 'KeyX') ||
-              (event.key === 'Meta' && event.shiftKey && event.code === 'KeyX')
+              (event.ctrlKey && event.shiftKey && event.code == 'KeyX') ||
+              (event.key == 'Meta' && event.shiftKey && event.code == 'KeyX')
             ) {
               const matamoObj = createMatomoObj(
                 proposalDetails,
@@ -248,8 +241,8 @@ const WysiwygNotepad = ({
             }
             // Highlight
             if (
-              (event.ctrlKey && event.shiftKey && event.code === 'KeyH') ||
-              (event.key === 'Meta' && event.shiftKey && event.code === 'KeyH')
+              (event.ctrlKey && event.shiftKey && event.code == 'KeyH') ||
+              (event.key == 'Meta' && event.shiftKey && event.code == 'KeyH')
             ) {
               const matamoObj = createMatomoObj(
                 proposalDetails,
@@ -261,8 +254,8 @@ const WysiwygNotepad = ({
             }
             // align-center
             if (
-              (event.ctrlKey && event.shiftKey && event.code === 'KeyE') ||
-              (event.key === 'Meta' && event.shiftKey && event.code === 'KeyE')
+              (event.ctrlKey && event.shiftKey && event.code == 'KeyE') ||
+              (event.key == 'Meta' && event.shiftKey && event.code == 'KeyE')
             ) {
               const matamoObj = createMatomoObj(
                 proposalDetails,
@@ -274,8 +267,8 @@ const WysiwygNotepad = ({
             }
             // align-left
             if (
-              (event.ctrlKey && event.shiftKey && event.code === 'KeyL') ||
-              (event.key === 'Meta' && event.shiftKey && event.code === 'KeyL')
+              (event.ctrlKey && event.shiftKey && event.code == 'KeyL') ||
+              (event.key == 'Meta' && event.shiftKey && event.code == 'KeyL')
             ) {
               const matamoObj = createMatomoObj(
                 proposalDetails,
@@ -287,8 +280,8 @@ const WysiwygNotepad = ({
             }
             // align-right
             if (
-              (event.ctrlKey && event.shiftKey && event.code === 'KeyR') ||
-              (event.key === 'Meta' && event.shiftKey && event.code === 'KeyR')
+              (event.ctrlKey && event.shiftKey && event.code == 'KeyR') ||
+              (event.key == 'Meta' && event.shiftKey && event.code == 'KeyR')
             ) {
               const matamoObj = createMatomoObj(
                 proposalDetails,
@@ -300,8 +293,8 @@ const WysiwygNotepad = ({
             }
             // subscript
             if (
-              (event.ctrlKey && event.code === 'Comma') ||
-              (event.key === 'Meta' && event.code === 'Comma')
+              (event.ctrlKey && event.code == 'Comma') ||
+              (event.key == 'Meta' && event.code == 'Comma')
             ) {
               const matamoObj = createMatomoObj(
                 proposalDetails,
@@ -313,8 +306,8 @@ const WysiwygNotepad = ({
             }
             // Superscript
             if (
-              (event.ctrlKey && event.code === 'Period') ||
-              (event.key === 'Meta' && event.code === 'Period')
+              (event.ctrlKey && event.code == 'Period') ||
+              (event.key == 'Meta' && event.code == 'Period')
             ) {
               const matamoObj = createMatomoObj(
                 proposalDetails,
@@ -326,8 +319,8 @@ const WysiwygNotepad = ({
             }
             // Heading 1
             if (
-              (event.ctrlKey && event.altKey && event.code === 'Digit1') ||
-              (event.key === 'Meta' && event.altKey && event.code === 'Digit1')
+              (event.ctrlKey && event.altKey && event.code == 'Digit1') ||
+              (event.key == 'Meta' && event.altKey && event.code == 'Digit1')
             ) {
               const matamoObj = createMatomoObj(
                 proposalDetails,
@@ -339,8 +332,8 @@ const WysiwygNotepad = ({
             }
             // Heading 2
             if (
-              (event.ctrlKey && event.altKey && event.code === 'Digit2') ||
-              (event.key === 'Meta' && event.altKey && event.code === 'Digit2')
+              (event.ctrlKey && event.altKey && event.code == 'Digit2') ||
+              (event.key == 'Meta' && event.altKey && event.code == 'Digit2')
             ) {
               const matamoObj = createMatomoObj(
                 proposalDetails,
@@ -352,8 +345,8 @@ const WysiwygNotepad = ({
             }
             // Paragraph
             if (
-              (event.ctrlKey && event.altKey && event.code === 'Digit0') ||
-              (event.key === 'Meta' && event.altKey && event.code === 'Digit0')
+              (event.ctrlKey && event.altKey && event.code == 'Digit0') ||
+              (event.key == 'Meta' && event.altKey && event.code == 'Digit0')
             ) {
               const matamoObj = createMatomoObj(
                 proposalDetails,
@@ -365,10 +358,8 @@ const WysiwygNotepad = ({
             }
             // Bullet List
             if (
-              (event.ctrlKey && event.shiftKey && event.code === 'Digit8') ||
-              (event.key === 'Meta' &&
-                event.shiftKey &&
-                event.code === 'Digit8')
+              (event.ctrlKey && event.shiftKey && event.code == 'Digit8') ||
+              (event.key == 'Meta' && event.shiftKey && event.code == 'Digit8')
             ) {
               const matamoObj = createMatomoObj(
                 proposalDetails,
@@ -380,10 +371,8 @@ const WysiwygNotepad = ({
             }
             // Ordered List
             if (
-              (event.ctrlKey && event.shiftKey && event.code === 'Digit7') ||
-              (event.key === 'Meta' &&
-                event.shiftKey &&
-                event.code === 'Digit7')
+              (event.ctrlKey && event.shiftKey && event.code == 'Digit7') ||
+              (event.key == 'Meta' && event.shiftKey && event.code == 'Digit7')
             ) {
               const matamoObj = createMatomoObj(
                 proposalDetails,
@@ -395,8 +384,8 @@ const WysiwygNotepad = ({
             }
             // Hard Break
             if (
-              (event.shiftKey && event.code === 'Enter') ||
-              (event.key === 'Meta' && event.code === 'Enter')
+              (event.shiftKey && event.code == 'Enter') ||
+              (event.key == 'Meta' && event.code == 'Enter')
             ) {
               const matamoObj = createMatomoObj(
                 proposalDetails,
@@ -408,8 +397,8 @@ const WysiwygNotepad = ({
             }
             // Undo
             if (
-              (event.ctrlKey && event.code === 'KeyZ') ||
-              (event.key === 'Meta' && event.code === 'KeyZ')
+              (event.ctrlKey && event.code == 'KeyZ') ||
+              (event.key == 'Meta' && event.code == 'KeyZ')
             ) {
               const matamoObj = createMatomoObj(
                 proposalDetails,
@@ -421,8 +410,8 @@ const WysiwygNotepad = ({
             }
             // Redo
             if (
-              (event.ctrlKey && event.code === 'KeyY') ||
-              (event.key === 'Meta' && event.code === 'KeyY')
+              (event.ctrlKey && event.code == 'KeyY') ||
+              (event.key == 'Meta' && event.code == 'KeyY')
             ) {
               const matamoObj = createMatomoObj(
                 proposalDetails,
@@ -436,16 +425,15 @@ const WysiwygNotepad = ({
         }
       }
     },
-    [proposalIdState, notesSocket.wsInstance, notesUserTag]
+    [proposalId, wsInstance, notesUserTag]
   );
-  dispatch(setEditor(editor));
   return (
     <>
-      {notesSocket.wsInstance && (
-        <div className="editor-notepad" key={proposalIdState}>
+      {wsInstance && (
+        <div className="editor-notepad" key={proposalId}>
           <div>
             <MenuBar
-              key={proposalIdState}
+              key={proposalId}
               proposalDetails={proposalDetails}
               userRole={userRole}
               userEmail={userEmail}
@@ -454,7 +442,7 @@ const WysiwygNotepad = ({
             />
           </div>
           <EditorContent
-            key={proposalIdState}
+            key={proposalId}
             editor={editor}
             className="editor-scroll"
           />
@@ -465,7 +453,6 @@ const WysiwygNotepad = ({
 };
 
 const mapStateToProps = state => ({
-  selectedBid: getSelectedBid(state),
   userName: getUserName(state),
   userEmail: getUserEmail(state),
   userRole: getUserRole(state),
@@ -473,7 +460,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  updateNote,
   fetchNotes,
   updateNoteInStore
 };

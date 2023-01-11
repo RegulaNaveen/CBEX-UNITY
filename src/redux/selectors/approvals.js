@@ -11,3 +11,8 @@ export const selectCanSendEmail = createSelector(
   selectApprovals,
   approvals => approvals.canSendEmail
 );
+
+export const selectApprovalsFetching = createSelector(
+  selectApprovals,
+  approvals => approvals.fetching
+);
