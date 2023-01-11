@@ -49,8 +49,10 @@
   .btn-container {
     display: flex;
     justify-content: flex-end;
+    flex-wrap: wrap;
     margin-top: 20px;
-    margin-right: 60px;
+    margin-right: 50px;
+    margin-left: 5px;
   }
   .divider-hr {
     margin-left: 16px;

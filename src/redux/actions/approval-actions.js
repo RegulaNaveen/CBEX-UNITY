@@ -14,6 +14,7 @@ export const setAllApprovals = data => ({
 
 export const fetchAllApprovals = (proposalId, questions) => async dispatch => {
   try {
+    dispatch({ type: APPROVALS.FETCH_APPROVALS });
     // Api Response
     const response = await getApprovalsApi(proposalId, questions);
     let { data } = response.data;
@@ -29,6 +30,7 @@ export const fetchAllApprovals = (proposalId, questions) => async dispatch => {
     dispatch(setAllApprovals(data));
     return { status: true, title: DEFAULT.SUCCESS, data };
   } catch (error) {
+    dispatch(setAllApprovals([]));
     // Error
     const message = getErrorMessage(error);
     return { status: false, title: DEFAULT.ALERT, message };

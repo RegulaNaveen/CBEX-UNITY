@@ -27,7 +27,9 @@ function QuestionsForCustomer() {
   useEffect(() => {
     setQuestions(new OrderedMap());
     sections.map((section) => {
-      if (section.get('sectionName') === 'Quick Questions for the Customer') {
+      if (
+        section.get('sectionName') === 'Questions_for_the_Customer_left_panel'
+      ) {
         const sectionQuestions = section.get('questions');
 
         const filteredCustomQuestion = new OrderedMap(
@@ -54,7 +56,7 @@ function QuestionsForCustomer() {
       questionId: _id,
       section: {
         sectionOrder: 199,
-        sectionName: 'Quick Questions for the Customer',
+        sectionName: 'Questions_for_the_Customer_left_panel'
       },
       active: true,
       questionOrder: question.size + 1,
@@ -75,9 +77,9 @@ function QuestionsForCustomer() {
       questionHintHTML: '',
       answerConfiguration: {
         type: 'text',
-        options: [],
+        options: []
       },
-      events: '',
+      events: ''
     };
     question = question.set(_id, fromJS(newQuestionEntry));
 
@@ -266,7 +268,7 @@ function QuestionsForCustomer() {
             message="This question contains has been answered by a Unity user , are you sure you want to delete this value?"
             buttonProps={[
               { label: 'Cancel', onClick: handleClose },
-              { label: 'Yes, Delete', onClick: onForceDelete },
+              { label: 'Yes, Delete', onClick: onForceDelete }
             ]}
             id="warning"
           />
