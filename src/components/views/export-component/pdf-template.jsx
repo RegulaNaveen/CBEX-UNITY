@@ -329,22 +329,24 @@ function questionTables(proposalQuestions) {
   let html = ``;
   // Remove not visible questions
   let questions = proposalQuestions
-    .filter(question => {
+    .filter((question) => {
       return (
         shouldInclude(question) &&
         question.section.sectionName !== PT_SECTION &&
-        question.section.sectionName !== QC_SECTION
+        question.section.sectionName !== QC_SECTION &&
+        question.section.sectionName !== 'Quick Questions for the Customer'
       );
     })
     .sort((a, b) => {
       return a.section.sectionOrder - b.section.sectionOrder;
     });
+
   // Section map
   const sections = {};
   const ordereredSections = [];
 
   // Populate the section map
-  questions.forEach(question => {
+  questions.forEach((question) => {
     try {
       const section = question.section.sectionName || '';
       if (sections[section]) {
@@ -392,10 +394,19 @@ function questionTables(proposalQuestions) {
 
 function getQuestionToCustomerRows(questions) {
   let html = ``;
+
   let questionsToCustomer = questions
     .filter(
-      question =>
+      (question) =>
         shouldInclude(question) && question.section.sectionName === QC_SECTION
+    )
+    .sort((a, b) => a.questionOrder - b.questionOrder);
+
+  let quickQuestionsToCustomer = questions
+    .filter(
+      (question) =>
+        shouldInclude(question) &&
+        question.section.sectionName === 'Quick Questions for the Customer'
     )
     .sort((a, b) => a.questionOrder - b.questionOrder);
 
@@ -404,7 +415,7 @@ function getQuestionToCustomerRows(questions) {
       { questionText: 'Question 1' },
       { questionText: 'Question 2' },
       { questionText: 'Question 3' },
-      { questionText: 'Question 4' }
+      { questionText: 'Question 4' },
     ];
 
   html += `<table class="questionToCustomerTable table marginTop20">`;
@@ -415,12 +426,34 @@ function getQuestionToCustomerRows(questions) {
   try {
     html += `<tr>`;
     html += `<td><ul>`;
-    questionsToCustomer.forEach(question => {
+    questionsToCustomer.forEach((question) => {
       const { questionText } = question;
       html += `<li> ${questionText} </li>`;
     });
+
     html += `</ul></td>`;
     html += `</tr>`;
+
+    quickQuestionsToCustomer.forEach((question) => {
+      const questionText = question.questionText || '';
+      const extraNewLines = getExtraLines(
+        getLastAnswer(question.answers),
+        questionText
+      );
+
+      html += `<tr>`;
+      html += `<td> ${questionText} ${extraNewLines}</td>`;
+      html += `<td> ${formatDate(
+        checkFormattedAnswer(question.answers),
+        question.answerConfiguration
+      )} <span class="blueColorText">${
+        getUnityPredicatedText(question.answers)
+          ? getUnityPredicatedText(question.answers)
+          : ''
+      }</span>${extraNewLines}</td>`;
+      html += `</tr>`;
+    });
+    html += `</table>`;
   } catch (error) {
     console.log('Error in getQuestionToCustomerRows');
   }
