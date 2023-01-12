@@ -1,11 +1,12 @@
 import { isEmpty, isEqual } from 'lodash';
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   editProposalQuestion,
   setProposalQuestion
 } from '../../../../redux/actions/proposal-actions';
 import { getSelectedBid } from '../../../../redux/selectors';
+import { getCanUserTagInQuestion } from '../../../../redux/selectors/proposal';
 import CustomApolloRichText from '../../../common/CustomApolloRichText';
 
 const QuestionInput = ({
@@ -22,7 +23,10 @@ const QuestionInput = ({
   const quesTextInnerLeftRef = React.createRef();
   const { questionLockWrapper, questionUnlockWrapper } = socketContext;
 
-  const getConvertedAnsString = (str) =>
+  const answerValue = question?.questionText || '';
+  const canUserTagInQuestion = useSelector(getCanUserTagInQuestion);
+
+  const getConvertedAnsString = str =>
     !String(str).trim() ? '' : String(str).trim();
 
   let richTextData = {
@@ -33,7 +37,7 @@ const QuestionInput = ({
     htmlExport: ''
   };
 
-  const handleRichTextChange = async (editorData) => {
+  const handleRichTextChange = async editorData => {
     const proposalId = selectedBid.get('id');
     const section = {
       sectionOrder: 199,
@@ -47,7 +51,7 @@ const QuestionInput = ({
       proposalId,
       questionText: text,
       questionJSON: value ? JSON.stringify(value) : '',
-      questionHTML: html,
+      questionHTML: htmlExport,
       section,
       answerType,
       options: [],
@@ -73,35 +77,37 @@ const QuestionInput = ({
     }
   };
 
-  const richTextAnswerField = {
-    questionId: question.questionId,
-    richTextString: getConvertedAnsString(question.questionText),
+  const richtextProps = {
+    richTextString: getConvertedAnsString(answerValue),
     richTextVal: richTextData.value,
     richTextHtml: richTextData.html,
-    richTextHtmlExport: '',
-    disabled: checkDisableFlag(),
     enableFocus: true,
     isEditable: false,
+    disabled: checkDisableFlag(),
+    canUserTagInQuestion,
 
-    onBlur: (data) => {
-      quesTextInnerLeftRef.current.style.marginTop = 'inherit';
+    onBlur: data => {
       let saveDate = false;
-      const previousAnsText = getConvertedAnsString(
-        question.questionText
-      ).trim();
+      const previousAnsText = getConvertedAnsString(answerValue).trim();
+      quesTextInnerLeftRef.current.style.marginTop = 'inherit';
 
       // save the formatting change
       if (
         !isEqual(richTextData.value, data.value) &&
         !isEmpty(data.text.trim())
       ) {
-        let prevAnswerBlocks = richTextData.value.blocks.filter(
-          (block) => block.text.length > 0
+        const prevAnswerBlocks = richTextData.value.blocks.filter(
+          block => block.text.length > 0
         );
-        let answerBlocks = data.value.blocks.filter(
-          (block) => block.text.length > 0
+        const answerBlocks = data.value.blocks.filter(
+          block => block.text.length > 0
         );
         if (isEqual(prevAnswerBlocks, answerBlocks)) {
+          saveDate = false;
+        } else if (
+          isEmpty(richTextData.value?.blocks) &&
+          previousAnsText === data.text.trim()
+        ) {
           saveDate = false;
         } else saveDate = true;
       }
@@ -112,22 +118,26 @@ const QuestionInput = ({
       else if (previousAnsText !== '' && data.text.trim() === '')
         saveDate = true;
 
+      if (data.text.trim() === '') saveDate = false;
+
       if (saveDate) {
         handleRichTextChange(data);
+      } else {
+        questionUnlockWrapper(question?.questionId);
       }
-      questionUnlockWrapper(question?.questionId);
     },
     onFocus: () => {
       quesTextInnerLeftRef.current.style.marginTop = '25px';
+
       questionLockWrapper(question?.questionId);
     }
   };
 
   return (
     <>
-      <div className="input-wrapper " ref={quesTextInnerLeftRef}>
+      <div className="input-wrapper" ref={quesTextInnerLeftRef}>
         <span className="input-label">Q{questionIndex}:</span>
-        <CustomApolloRichText {...richTextAnswerField} />
+        <CustomApolloRichText {...richtextProps} />
       </div>
     </>
   );

@@ -4,14 +4,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import Card from 'apollo-react/components/Card';
 import {
   getSelectedBid,
-  getProposalQuestions,
+  getProposalQuestions
 } from '../../redux/selectors/proposal';
 import { REDUX_TYPES } from '../../constants';
 
 const INITIAL_LIST_TITLE = {
   bidValue: 'Total Bid Value',
   bottomLine: 'Bottom Line Labor Discount',
-  budgetTools: 'Budget Tools',
+  budgetTools: 'Budget Tools'
 };
 
 const { SET_BID_COST_DATA_FIELDS } = REDUX_TYPES.PROPOSAL;
@@ -23,7 +23,7 @@ const BidCostDetails = () => {
   const [bidCostValue, setBidCostValue] = useState({
     bidValue: '',
     bottomLine: '',
-    budgetTools: '',
+    budgetTools: ''
   });
 
   const memoizeBid = useMemo(() => selectedBid, [selectedBid?.id]);
@@ -34,23 +34,23 @@ const BidCostDetails = () => {
     memoizeBid,
     bidCostValue?.bidValue,
     bidCostValue?.bottomLine,
-    bidCostValue?.budgetTools,
+    bidCostValue?.budgetTools
   ]);
 
   useEffect(() => {
     let bidValue = '';
     let budgetTools = '';
     let bottomLine = '';
-    proposalQuestion.forEach((item) => {
+    proposalQuestion.forEach(item => {
       if (item?.section?.sectionName === 'Details-For-Backend') {
         if (item?.sfField === 'Total_Bid_Value_Labor_Direct_Discount__c') {
-          item?.answers?.forEach((i) => (bidValue = i?.answer));
+          item?.answers?.forEach(i => (bidValue = String(i?.answer).trim()));
         }
         if (item?.sfField === 'Budget_Tools__c') {
-          item?.answers?.forEach((i) => (budgetTools = i?.answer));
+          item?.answers?.forEach(i => (budgetTools = String(i?.answer).trim()));
         }
         if (item?.sfField === 'Bottom_Line_Labor_Discount__c') {
-          item?.answers?.forEach((i) => (bottomLine = i?.answer));
+          item?.answers?.forEach(i => (bottomLine = String(i?.answer).trim()));
         }
       }
     });
