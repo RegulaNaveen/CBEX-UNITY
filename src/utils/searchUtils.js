@@ -393,6 +393,11 @@ function findWithRegex(regex, contentBlock, callback) {
 export function extractTextFromProseMirrorJSON(data, results = []) {
   if (typeof data === 'object' && Array.isArray(data.content)) {
     data.content.forEach(type => extractTextFromProseMirrorJSON(type, results));
+  } else if (typeof data === 'object' && data.type === 'mention') {
+    if (data.attrs && data.attrs.label) {
+      results.push(data.attrs.label);
+    }
+    return;
   } else if (data.type && data.type === 'text') {
     results.push(data.text);
     return;

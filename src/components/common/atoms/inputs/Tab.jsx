@@ -203,11 +203,13 @@ const UnityTab = ({
   useEffect(() => {
     if (currentSearchResult !== null && notepadPanelRef.current !== null) {
       if (currentSearchResult.searchIndex === NOTEPAD_UI_ID) {
-        // by inspecting DOM, found there is only one button element inside Panel component hence choosing first button
-        const toggleButton = notepadPanelRef.current.children[0].getElementsByTagName(
-          'button'
-        )[0];
-        toggleButton.click();
+        if (!isNotepadOpen) {
+          // by inspecting DOM, found there is only one button element inside Panel component hence choosing first button
+          const toggleButton = notepadPanelRef.current.children[0].getElementsByTagName(
+            'button'
+          )[0];
+          toggleButton.click();
+        }
         setTimeout(() => {
           notepadPanelRef.current.scrollIntoView({
             behaviour: 'smooth',
@@ -218,7 +220,7 @@ const UnityTab = ({
         }, 500);
       }
     }
-  }, [dispatch, notepadPanelRef, currentSearchResult]);
+  }, [dispatch, notepadPanelRef, currentSearchResult, isNotepadOpen]);
 
   const winLocationSearch = window.location.search;
   const handleChangeTab = (event, val) => {
@@ -262,6 +264,12 @@ const UnityTab = ({
             width={notepadMaxWidthPx}
             style={{ borderRadius: '5px' }}
             resizable
+            onClose={() => {
+              setIsNotepadOpen(false);
+            }}
+            onOpen={() => {
+              setIsNotepadOpen(true);
+            }}
           >
             <Suspense
               fallback={
@@ -373,6 +381,12 @@ const UnityTab = ({
             width={notepadMaxWidthPx}
             style={{ borderRadius: '5px' }}
             resizable
+            onClose={() => {
+              setIsNotepadOpen(false);
+            }}
+            onOpen={() => {
+              setIsNotepadOpen(true);
+            }}
           >
             <Suspense
               fallback={
