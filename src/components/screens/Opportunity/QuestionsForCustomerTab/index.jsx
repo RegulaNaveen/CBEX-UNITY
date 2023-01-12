@@ -26,12 +26,14 @@ function QuestionsForCustomer() {
 
   useEffect(() => {
     setQuestions(new OrderedMap());
-    sections.map(section => {
-      if (section.get('sectionName') === 'Quick Questions for the Customer') {
+    sections.map((section) => {
+      if (
+        section.get('sectionName') === 'Questions_for_the_Customer_left_panel'
+      ) {
         const sectionQuestions = section.get('questions');
 
         const filteredCustomQuestion = new OrderedMap(
-          Array.from(sectionQuestions).filter(questionItem => {
+          Array.from(sectionQuestions).filter((questionItem) => {
             if (questionItem[1].get('isCustomQuestion')) {
               return true;
             }
@@ -54,7 +56,7 @@ function QuestionsForCustomer() {
       questionId: _id,
       section: {
         sectionOrder: 199,
-        sectionName: 'Quick Questions for the Customer'
+        sectionName: 'Questions_for_the_Customer_left_panel'
       },
       active: true,
       questionOrder: question.size + 1,
@@ -96,7 +98,7 @@ function QuestionsForCustomer() {
     setQuestionToDelete(null);
   };
 
-  const onDelete = async question => {
+  const onDelete = async (question) => {
     if (!question) return;
     const proposalId = selectedBid.get('id');
 
@@ -106,10 +108,10 @@ function QuestionsForCustomer() {
     setQuestionToDelete(null);
   };
 
-  const deleteQuestionHandler = question => {
+  const deleteQuestionHandler = (question) => {
     if (question.isNewEntry) {
       const filteredCustomQuestion = new OrderedMap(
-        Array.from(questions).filter(questionItem => {
+        Array.from(questions).filter((questionItem) => {
           if (questionItem[1].get('questionId') !== question.questionId) {
             return true;
           }
@@ -129,7 +131,7 @@ function QuestionsForCustomer() {
     }
   };
 
-  const getAnswer = answers => {
+  const getAnswer = (answers) => {
     try {
       let ans = answers.toJS();
       const lastAnswer = ans[ans.length - 1];
@@ -160,7 +162,7 @@ function QuestionsForCustomer() {
   const createClipBoardContent = () => {
     let html = '<html><body><ul>';
 
-    questions.map(questionData => {
+    questions.map((questionData) => {
       if (questionData.get('isCustomQuestion')) {
         const answer = getAnswer(questionData.get('answers'));
         const answerJS = questionData.get('answers').toJS();
@@ -183,94 +185,92 @@ function QuestionsForCustomer() {
     navigator.clipboard.write([clipboardItem]);
   };
   const handleClose = () => {
-    setShowDeleteModal(prev => !prev);
+    setShowDeleteModal((prev) => !prev);
   };
 
   return (
     <>
       <div className="questions-for-customer-container">
-        <SocketContextProvider>
-          <div>
-            <Header />
+        <div>
+          <Header />
+        </div>
+        {questions?.size > 0 ? (
+          <div
+            className={
+              questions?.size > 3
+                ? 'questions-container-over'
+                : 'questions-container'
+            }
+          >
+            <ul>
+              {questions?.valueSeq().map((questionData, index) => {
+                return (
+                  <QuestionContainer
+                    deleteQuestionHandler={deleteQuestionHandler}
+                    questionData={questionData}
+                    questionIndex={index + 1}
+                  />
+                );
+              })}
+            </ul>
           </div>
-          {questions?.size > 0 ? (
-            <div
-              className={
-                questions?.size > 3
-                  ? 'questions-container-over'
-                  : 'questions-container'
+        ) : (
+          <div className="questions-container">
+            <div className="no-questions-added-t">
+              No questions added to this opportunity
+            </div>
+          </div>
+        )}
+
+        <div className="btn-container">
+          <div>
+            <Button
+              className="btn-label"
+              icon={<Copy />}
+              size="small"
+              style={{ marginRight: 10 }}
+              onClick={copyToClipBoard}
+              disabled={questions?.size <= 0}
+            >
+              Copy to clipboard
+            </Button>
+          </div>
+          <div>
+            <Button
+              variant="primary"
+              icon={<PlusIcon />}
+              size="small"
+              style={{ marginRight: 10 }}
+              className="btn-label"
+              onClick={() => addQuestionHandler()}
+              disabled={
+                Array.from(questions)[questions.size - 1]
+                  ? Array.from(questions)[questions.size - 1][1].get(
+                      'isNewEntry'
+                    )
+                  : false
               }
             >
-              <ul>
-                {questions?.valueSeq().map((questionData, index) => {
-                  return (
-                    <QuestionContainer
-                      deleteQuestionHandler={deleteQuestionHandler}
-                      questionData={questionData}
-                      questionIndex={index + 1}
-                    />
-                  );
-                })}
-              </ul>
-            </div>
-          ) : (
-            <div className="questions-container">
-              <div className="no-questions-added-t">
-                No questions added to this opportunity
-              </div>
-            </div>
-          )}
-
-          <div className="btn-container">
-            <div>
-              <Button
-                className="btn-label"
-                icon={<Copy />}
-                size="small"
-                style={{ marginRight: 10 }}
-                onClick={copyToClipBoard}
-                disabled={questions?.size <= 0}
-              >
-                Copy to clipboard
-              </Button>
-            </div>
-            <div>
-              <Button
-                variant="primary"
-                icon={<PlusIcon />}
-                size="small"
-                style={{ marginRight: 10 }}
-                className="btn-label"
-                onClick={() => addQuestionHandler()}
-                disabled={
-                  Array.from(questions)[questions.size - 1]
-                    ? Array.from(questions)[questions.size - 1][1].get(
-                        'isNewEntry'
-                      )
-                    : false
-                }
-              >
-                Add New
-              </Button>
-            </div>
+              Add New
+            </Button>
           </div>
-          <Modal
-            open={showDeleteModal}
-            variant="warning"
-            onClose={() => handleClose()}
-            title={
-              <Typography style={{ color: '#e30e0e' }} variant="h3">
-                Are you sure?
-              </Typography>
-            }
-            message="This question contains has been answered by a Unity user , are you sure you want to delete this value?"
-            buttonProps={[
-              { label: 'Cancel', onClick: handleClose },
-              { label: 'Yes, Delete', onClick: onForceDelete }
-            ]}
-            id="warning"
-          />
-        </SocketContextProvider>
+        </div>
+        <Modal
+          open={showDeleteModal}
+          variant="warning"
+          onClose={() => handleClose()}
+          title={
+            <Typography style={{ color: '#e30e0e' }} variant="h3">
+              Are you sure?
+            </Typography>
+          }
+          message="This question contains has been answered by a Unity user , are you sure you want to delete this value?"
+          buttonProps={[
+            { label: 'Cancel', onClick: handleClose },
+            { label: 'Yes, Delete', onClick: onForceDelete }
+          ]}
+          id="warning"
+        />
       </div>
     </>
   );

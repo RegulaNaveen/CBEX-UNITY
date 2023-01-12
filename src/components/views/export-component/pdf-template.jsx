@@ -275,7 +275,7 @@ function getHeaderInfoRows(details) {
 function getProposalTeamsRows(questions) {
   const coreTeamQuestions = questions
     .filter(
-      question =>
+      (question) =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
         CORE_TEAM[question.questionText]
@@ -283,7 +283,7 @@ function getProposalTeamsRows(questions) {
     .sort((a, b) => a.questionOrder - b.questionOrder);
   const otherTeamQuestions = questions
     .filter(
-      question =>
+      (question) =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
         !CORE_TEAM[question.questionText]
@@ -296,7 +296,7 @@ function getProposalTeamsRows(questions) {
     html += `<th> Core Team Members </th>`;
     html += `<th> Name</th>`;
     html += `</tr>`;
-    coreTeamQuestions.forEach(question => {
+    coreTeamQuestions.forEach((question) => {
       const { questionText, answers } = question;
       const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
       html += `<tr>`;
@@ -311,7 +311,7 @@ function getProposalTeamsRows(questions) {
     html += `<th> Specialty Team Members </th>`;
     html += `<th> Name</th>`;
     html += `</tr>`;
-    otherTeamQuestions.forEach(question => {
+    otherTeamQuestions.forEach((question) => {
       const { questionText, answers } = question;
       const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
       html += `<tr>`;
@@ -331,22 +331,24 @@ function questionTables(proposalQuestions) {
   let html = ``;
   // Remove not visible questions
   const questions = proposalQuestions
-    .filter(question => {
+    .filter((question) => {
       return (
         shouldInclude(question) &&
         question.section.sectionName !== PT_SECTION &&
-        question.section.sectionName !== QC_SECTION
+        question.section.sectionName !== QC_SECTION &&
+        question.section.sectionName !== 'Questions_for_the_Customer_left_panel'
       );
     })
     .sort((a, b) => {
       return a.section.sectionOrder - b.section.sectionOrder;
     });
+
   // Section map
   const sections = {};
   const ordereredSections = [];
 
   // Populate the section map
-  questions.forEach(question => {
+  questions.forEach((question) => {
     try {
       const section = question.section.sectionName || '';
       if (sections[section]) {
@@ -360,7 +362,7 @@ function questionTables(proposalQuestions) {
     }
   });
 
-  ordereredSections.forEach(section => {
+  ordereredSections.forEach((section) => {
     html += `<table class="questionTable table marginTop20">`;
     html += `<tr>`;
     html += `<th> ${section} </th>`;
@@ -369,7 +371,7 @@ function questionTables(proposalQuestions) {
 
     sections[section]
       .sort((a, b) => a.questionOrder - b.questionOrder)
-      .forEach(question => {
+      .forEach((question) => {
         const questionText = question.questionText || '';
         const extraNewLines = getExtraLines(
           getLastAnswer(question.answers),
@@ -394,10 +396,19 @@ function questionTables(proposalQuestions) {
 
 function getQuestionToCustomerRows(questions) {
   let html = ``;
+
   let questionsToCustomer = questions
     .filter(
-      question =>
+      (question) =>
         shouldInclude(question) && question.section.sectionName === QC_SECTION
+    )
+    .sort((a, b) => a.questionOrder - b.questionOrder);
+
+  let quickQuestionsToCustomer = questions
+    .filter(
+      (question) =>
+        shouldInclude(question) &&
+        question.section.sectionName === 'Questions_for_the_Customer_left_panel'
     )
     .sort((a, b) => a.questionOrder - b.questionOrder);
 
@@ -421,8 +432,30 @@ function getQuestionToCustomerRows(questions) {
       const { questionText } = question;
       html += `<li> ${questionText} </li>`;
     });
+
     html += `</ul></td>`;
     html += `</tr>`;
+
+    quickQuestionsToCustomer.forEach((question) => {
+      const questionText = question.questionText || '';
+      const extraNewLines = getExtraLines(
+        getLastAnswer(question.answers),
+        questionText
+      );
+
+      html += `<tr>`;
+      html += `<td> ${questionText} ${extraNewLines}</td>`;
+      html += `<td> ${formatDate(
+        checkFormattedAnswer(question.answers),
+        question.answerConfiguration
+      )} <span class="blueColorText">${
+        getUnityPredicatedText(question.answers)
+          ? getUnityPredicatedText(question.answers)
+          : ''
+      }</span>${extraNewLines}</td>`;
+      html += `</tr>`;
+    });
+    html += `</table>`;
   } catch (error) {
     console.log('Error in getQuestionToCustomerRows');
   }
