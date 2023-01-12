@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Test CollapsibleList Component matchsnapshot of collapsiblelist component 1`] = `
-Object {
+{
   "asFragment": [Function],
   "baseElement": <body>
     <div>
@@ -19,7 +19,6 @@ Object {
           <img
             alt="question arrow"
             class="task-icon"
-            src="chevron-right.svg"
           />
         </button>
         <div
@@ -57,7 +56,6 @@ Object {
         <img
           alt="question arrow"
           class="task-icon"
-          src="chevron-right.svg"
         />
       </button>
       <div
