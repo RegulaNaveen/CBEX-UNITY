@@ -92,6 +92,7 @@ const UnityTab = ({
   const [isNotepadOpen, setIsNotepadOpen] = useState(true);
 
   const selectedBid = useSelector(getSelectedBid)?.toJS();
+  const proposalId = selectedBid?.id || 1;
   const isApprovalCount = selectedBid?.isApprovalCountPresent || false;
   const history = useHistory();
   const isOpen = useSelector(state => getIsOpen(state));
@@ -341,6 +342,7 @@ const UnityTab = ({
                 }
               >
                 <NotepadWrapper
+                  key={proposalId}
                   trackEvent={trackEvent}
                   eventCategories={{
                     dp: 'Unity Dashboard',

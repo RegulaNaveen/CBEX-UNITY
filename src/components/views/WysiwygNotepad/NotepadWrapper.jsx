@@ -13,9 +13,7 @@ const NotepadWrapper = ({ trackEvent }) => {
 
   const [ydoc, setYdoc] = useState(new Y.Doc());
   const [wsInstance, setWsInstance] = useState(undefined);
-  const [proposalIdState, setProposalIdState] = useState(
-    selectedBid.get('id', '')
-  );
+  const [proposalIdState, setProposalIdState] = useState(undefined);
   const createNewNotesSocketConnection = proposalId => {
     const storedValue = `doc-${proposalId}`;
     if (proposalId) {
@@ -29,34 +27,40 @@ const NotepadWrapper = ({ trackEvent }) => {
   };
 
   const triggerWebsocketNotesApi = async proposalId => {
-    // if (prevProposalId !== thisProposalId) {
-    await websocketNotesApi(proposalId);
-    // initial load case
-    if (proposalId) {
-      if (!wsInstance) {
-        createNewNotesSocketConnection(proposalId);
-      }
+    websocketNotesApi(proposalId);
+    if (!wsInstance) {
+      createNewNotesSocketConnection(proposalId);
     } else {
-      if (wsInstance) wsInstance.destroy();
-      setYdoc(new Y.Doc());
+      await wsInstance.destroy();
+      await setWsInstance(undefined);
+      await setYdoc(new Y.Doc());
       createNewNotesSocketConnection(proposalId);
     }
-    // }
+    setProposalIdState(proposalId);
   };
   useEffect(() => {
-    triggerWebsocketNotesApi(proposalIdState);
+    const newProposalID = selectedBid.get('id');
+    if (proposalIdState !== newProposalID) {
+      triggerWebsocketNotesApi(newProposalID);
+    }
+  }, [selectedBid]);
+
+  useEffect(() => {
     return () => {
-      if (wsInstance) wsInstance.destroy();
+      if (wsInstance) {
+        wsInstance.destroy();
+        setWsInstance(undefined);
+        setYdoc(new Y.Doc());
+        setProposalIdState(undefined);
+      }
     };
   }, [wsInstance]);
-  useEffect(() => {
-    setProposalIdState(selectedBid.get('id'));
-  }, [selectedBid]);
 
   return (
     <>
       {wsInstance ? (
         <WysiwygNotepad
+          key={proposalIdState}
           selectedBid={selectedBid}
           trackEvent={trackEvent}
           wsInstance={wsInstance}
