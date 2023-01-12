@@ -86,16 +86,6 @@ export async function getSearchResults(
                 question.answers[question.answers.length - 1].answer;
               // if multiple answer
               if (Array.isArray(recentAnswer)) {
-                if (sectionKey === 'Proposal Team') {
-                  const newAnswer = [];
-                  recentAnswer.forEach(answer => {
-                    const split_array = answer.split('(');
-                    if (split_array && split_array.length > 0) {
-                      newAnswer.push(split_array[0].trim());
-                    }
-                  });
-                  recentAnswer = newAnswer;
-                }
                 recentAnswer.forEach(answerChunk => {
                   updateSearchMatches(
                     regexp,
@@ -107,18 +97,31 @@ export async function getSearchResults(
                 });
               } else if (typeof recentAnswer === 'string') {
                 if (sectionKey === 'Proposal Team') {
-                  const split_array = recentAnswer.split('(');
-                  if (split_array && split_array.length > 0) {
-                    recentAnswer = split_array[0].trim();
-                  }
+                  const newAnswer = [];
+                  recentAnswer.split(',').forEach(answer => {
+                    const split_array = answer.split('(');
+                    if (split_array && split_array.length > 0) {
+                      newAnswer.push(split_array[0].trim());
+                    }
+                  });
+                  newAnswer.forEach(answerChunk => {
+                    updateSearchMatches(
+                      regexp,
+                      answerChunk,
+                      questionKey,
+                      finalResult,
+                      0
+                    );
+                  });
+                } else {
+                  updateSearchMatches(
+                    regexp,
+                    recentAnswer,
+                    questionKey,
+                    finalResult,
+                    0
+                  );
                 }
-                updateSearchMatches(
-                  regexp,
-                  recentAnswer,
-                  questionKey,
-                  finalResult,
-                  0
-                );
               }
             }
           });
@@ -390,6 +393,11 @@ function findWithRegex(regex, contentBlock, callback) {
 export function extractTextFromProseMirrorJSON(data, results = []) {
   if (typeof data === 'object' && Array.isArray(data.content)) {
     data.content.forEach(type => extractTextFromProseMirrorJSON(type, results));
+  } else if (typeof data === 'object' && data.type === 'mention') {
+    if (data.attrs && data.attrs.label) {
+      results.push(data.attrs.label);
+    }
+    return;
   } else if (data.type && data.type === 'text') {
     results.push(data.text);
     return;
