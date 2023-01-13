@@ -26,14 +26,14 @@ function QuestionsForCustomer() {
 
   useEffect(() => {
     setQuestions(new OrderedMap());
-    sections.map((section) => {
+    sections.map(section => {
       if (
         section.get('sectionName') === 'Questions_for_the_Customer_left_panel'
       ) {
         const sectionQuestions = section.get('questions');
 
         const filteredCustomQuestion = new OrderedMap(
-          Array.from(sectionQuestions).filter((questionItem) => {
+          Array.from(sectionQuestions).filter(questionItem => {
             if (questionItem[1].get('isCustomQuestion')) {
               return true;
             }
@@ -72,7 +72,7 @@ function QuestionsForCustomer() {
       notApplicable: false,
       questionText: '',
       integration: '',
-      answers: [],
+      answers: '',
       questionHintJSON: '',
       questionHintHTML: '',
       answerConfiguration: {
@@ -98,7 +98,7 @@ function QuestionsForCustomer() {
     setQuestionToDelete(null);
   };
 
-  const onDelete = async (question) => {
+  const onDelete = async question => {
     if (!question) return;
     const proposalId = selectedBid.get('id');
 
@@ -108,10 +108,10 @@ function QuestionsForCustomer() {
     setQuestionToDelete(null);
   };
 
-  const deleteQuestionHandler = (question) => {
+  const deleteQuestionHandler = question => {
     if (question.isNewEntry) {
       const filteredCustomQuestion = new OrderedMap(
-        Array.from(questions).filter((questionItem) => {
+        Array.from(questions).filter(questionItem => {
           if (questionItem[1].get('questionId') !== question.questionId) {
             return true;
           }
@@ -131,7 +131,7 @@ function QuestionsForCustomer() {
     }
   };
 
-  const getAnswer = (answers) => {
+  const getAnswer = answers => {
     try {
       let ans = answers.toJS();
       const lastAnswer = ans[ans.length - 1];
@@ -162,12 +162,12 @@ function QuestionsForCustomer() {
   const createClipBoardContent = () => {
     let html = '<html><body><ul>';
 
-    questions.map((questionData) => {
+    questions.map(questionData => {
       if (questionData.get('isCustomQuestion')) {
         const answer = getAnswer(questionData.get('answers'));
         const answerJS = questionData.get('answers').toJS();
 
-        html += `<li>${questionData.get('questionText')}</li>`;
+        html += `<li>${questionData.get('questionHTML')}</li>`;
         if (answer && answerJS[answerJS.length - 1]?.answer?.trim())
           html += `<ul><li>${answer}</li></ul>`;
       }
@@ -185,7 +185,7 @@ function QuestionsForCustomer() {
     navigator.clipboard.write([clipboardItem]);
   };
   const handleClose = () => {
-    setShowDeleteModal((prev) => !prev);
+    setShowDeleteModal(prev => !prev);
   };
 
   return (
@@ -264,7 +264,7 @@ function QuestionsForCustomer() {
               Are you sure?
             </Typography>
           }
-          message="This question contains has been answered by a Unity user , are you sure you want to delete this value?"
+          message="This question has been answered. Are you sure you want to delete this question and its answer?"
           buttonProps={[
             { label: 'Cancel', onClick: handleClose },
             { label: 'Yes, Delete', onClick: onForceDelete }
