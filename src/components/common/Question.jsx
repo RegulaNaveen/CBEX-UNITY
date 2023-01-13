@@ -1421,13 +1421,13 @@ export class TaskRow extends React.PureComponent<Props, State> {
     if (dateIsAfter) {
       integrationvalidation = true;
     }
-    const integrationsArray = integrationsData.data.map(item => {
+    const integrationsArray = integrationsData?.data.map(item => {
       return item.questionId;
     });
-    integrationsData.data.map(item => {
+    integrationsData?.data.map(item => {
       if (item.questionId.includes(qvicon)) destinationArray = item.destination;
     });
-    integrationvalidation = integrationsArray.includes(qvicon);
+    integrationvalidation = integrationsArray?.includes(qvicon);
 
     if (qvidianIntegration) {
       qvidIntegration = true;
