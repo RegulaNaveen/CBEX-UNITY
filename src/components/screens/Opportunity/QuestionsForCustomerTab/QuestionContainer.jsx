@@ -7,7 +7,7 @@ import { SocketContext } from '../../../../context/SocketContext';
 import {
   getUserEmail,
   getUserId,
-  getUserName,
+  getUserName
 } from '../../../../SessionHandler';
 
 import AnswerInput from './AnswerInput';
@@ -16,7 +16,7 @@ import QuestionInput from './QuestionInput';
 const QuestionContainer = ({
   deleteQuestionHandler,
   questionData,
-  questionIndex,
+  questionIndex
 }) => {
   const question = questionData.toJS();
   const socketContext = useContext(SocketContext);
@@ -25,7 +25,7 @@ const QuestionContainer = ({
   const getUserData = () => ({
     name: getUserName(),
     email: getUserEmail(),
-    role: getUserId(),
+    role: getUserId()
   });
 
   const isQuestionLocked = () => {
@@ -51,7 +51,7 @@ const QuestionContainer = ({
     socketContext,
     checkDisableFlag,
     setShowLoader,
-    questionIndex,
+    questionIndex
   };
 
   return (
@@ -72,7 +72,7 @@ const QuestionContainer = ({
               <Trash
                 className="icon-color"
                 style={{
-                  cursor: checkDisableFlag() ? 'not-allowed' : 'pointer',
+                  cursor: checkDisableFlag() ? 'not-allowed' : 'pointer'
                 }}
                 onClick={() => {
                   if (checkDisableFlag()) return;
@@ -85,7 +85,7 @@ const QuestionContainer = ({
                 <span
                   style={{
                     position: 'relative',
-                    top: '2em',
+                    top: '2em'
                   }}
                 >
                   <Loader
@@ -93,7 +93,7 @@ const QuestionContainer = ({
                     size={20}
                     style={{
                       width: '20px',
-                      height: '20px',
+                      height: '20px'
                     }}
                   />
                 </span>
