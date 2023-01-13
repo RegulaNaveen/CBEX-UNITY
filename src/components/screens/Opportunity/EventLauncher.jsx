@@ -114,14 +114,14 @@ const EventLauncher = ({
   const generateEventUrl = (startDate, endDate, body, subject, email) => {
     const updatedBody = updateEventSubjectBody(body, proposalDetail);
     const updatedSubject = updateEventSubjectBody(subject, proposalDetail);
-    setBodyStr(body);
+    setBodyStr(updatedBody);
     const subjectStr = encodeURIComponent(
       updatedSubject.replace(new RegExp('\\n', 'g'), '<br />')
     );
     return `https://outlook.office.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose%20&rru=addevent&startdt=${startDate}&enddt=${endDate}&to=${email}&.&subject=${subjectStr}&body=Unity%20has%20copied%20your%20invite%20details%20to%20your%20clipboard.%20Press%20Control%20%2B%20V%20to%20paste%20this%20content%20to%20include%20it%20in%20your%20meeting%20invite%20and%20share%20it%20with%20your%20team.&online=1`;
   };
-  const newString = !isEmpty(bodyStr) ? bodyStr.html : bodyStr;
-  const content = bodytoHtml;
+
+  const content = bodyStr;
   const blob = new Blob([content], { type: 'text/html' });
   const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
   navigator.clipboard.write([clipboardItem]);
