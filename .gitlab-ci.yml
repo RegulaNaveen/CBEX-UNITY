@@ -220,7 +220,7 @@ buildl4:
   artifacts:
     paths:
       - dist/
-      - build.env
+      #- build.env
   tags:
     - docker
   environment: l4
