@@ -28,6 +28,7 @@ stages:
   - deploydev2
   - buildl4
   - deployl4
+  - pafexecution_l4
   - buildqa
   - deployqa
   - pafexecution_regression
@@ -410,6 +411,22 @@ deployprod:
   tags:
     - docker
   environment: prod
+
+pafexecution_l4:
+  stage: pafexecution_l4
+  needs:
+    - deployl4
+  #when: always
+  only:
+    - tags
+  variables:
+    ENV_NAME: l4
+  trigger:
+    project: 'CBEx/unity/Unity-QA'
+    branch: Unity_QA_Testing
+    strategy: depend
+
+
 
 pafexecution_regression:
   stage: pafexecution_regression
