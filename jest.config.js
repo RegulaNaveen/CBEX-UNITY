@@ -14,10 +14,7 @@ module.exports = {
     'src/context/__tests__/SocketContext.test.jsx',
     'src/components/screens/Approvals/__test__/utils.test.js',
     'src/components/screens/Proposal/__tests__/Sidebar.test.js',
-    'src/components/screens/Approvals/__test__/Section.test.jsx',
-    'src/components/common/__tests__/CollapsibleList.test.js',
-    'src/components/screens/Approvals/__tests__/ActionButtons.test.js',
-    'src/components/views/toolbar/__test__/index.test.js'
+    'src/components/screens/Approvals/__test__/Section.test.jsx'
   ],
   collectCoverageFrom: ['**/*.{js,jsx}', '!**/node_modules/**', '!**/dist/**'],
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],

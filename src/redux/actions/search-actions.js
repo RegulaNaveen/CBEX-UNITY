@@ -105,10 +105,6 @@ export const autoNavigationCompletedAction = () => ({
   type: SEARCH.AUTO_NAVIGATION_DONE
 });
 
-export const checkDataPrerequisiteAction = () => {
-  return async (dispatch, getState) => {};
-};
-
 export const doSearchAction = () => {
   return async (dispatch, getState) => {
     dispatch({ type: SEARCH.DO_SEARCH });
@@ -219,6 +215,9 @@ export const resumeSearchAction = ({
     const activeVTab = selectActiveVTabIndex(currentState);
     const prevSearchResults = selectSearchResults(currentState);
     const prevActiveSearchIndex = selectCurrentResultIndex(currentState);
+    console.log('Questions', JSON.stringify(questions.slice(0, 2)));
+    console.log('Sections', JSON.stringify(sections));
+    console.log('Approvals', JSON.stringify(approvals[0]));
     let searchResults = await getSearchResults(
       query,
       questions,
