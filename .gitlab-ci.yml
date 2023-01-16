@@ -31,13 +31,15 @@ stages:
   - pafexecution_l4
   - buildqa
   - deployqa
-  - pafexecution_regression
+  - pafexecution_svt
   - builddemo
   - deploydemo
   - builduat
   - deployuat
+  - pafexecution_uat
   - buildprod
   - deployprod
+  - pafexecution_prod
   - deploystack
 
 sonar:
@@ -426,10 +428,8 @@ pafexecution_l4:
     branch: Unity_QA_Testing
     strategy: depend
 
-
-
-pafexecution_regression:
-  stage: pafexecution_regression
+pafexecution_svt:
+  stage: pafexecution_svt
   needs:
     - deployqa
   #when: always
@@ -441,6 +441,35 @@ pafexecution_regression:
     project: 'CBEx/unity/Unity-QA'
     branch: Unity_QA_Testing
     strategy: depend
+
+pafexecution_uat:
+  stage: pafexecution_uat
+  needs:
+    - deployuat
+  #when: always
+  only:
+    - tags
+  variables:
+    ENV_NAME: uat
+  trigger:
+    project: 'CBEx/unity/Unity-QA'
+    branch: Unity_QA_Testing
+    strategy: depend
+
+pafexecution_prod:
+  stage: pafexecution_prod
+  needs:
+    - deployprod
+  #when: always
+  only:
+    - tags
+  variables:
+    ENV_NAME: prod
+  trigger:
+    project: 'CBEx/unity/Unity-QA'
+    branch: Unity_QA_Testing
+    strategy: depend
+
 
 deploystack:
   stage: deploystack
