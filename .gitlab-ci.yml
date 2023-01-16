@@ -380,8 +380,8 @@ prod:
     Environment: $CI_JOB_NAME
   only:
     - tags
-  needs:
-    - deployuat
+  #needs:
+    #- deployuat
   when: manual
   script:
     - cat $prod_build >> build.env
