@@ -1,7 +1,7 @@
 import * as Y from 'yjs';
 import { yDocToProsemirrorJSON } from 'y-prosemirror';
 import { NOTES_SOCKET_URL } from '../../constants/api';
-import { SEARCH } from '../../constants/types';
+import { SEARCH, UI } from '../../constants/types';
 import { WebsocketProvider } from '../../context/y-websocket';
 import {
   extractTextFromProseMirrorJSON,
@@ -64,6 +64,15 @@ export const navigateNextSearchAction = () => {
       const newResult = searchResults[currentResultIndex + 1];
       if (newResult.tab !== activeTab) {
         await dispatch(setActiveTabIndexAction(newResult.tab));
+        dispatch({
+          type: UI.SET_SNACKBAR_MSG,
+          payload: `Switched to ${
+            newResult.tab === 0 ? 'Strategy Development' : 'Approvals'
+          }`
+        });
+        dispatch({
+          type: UI.SHOW_SNACKBAR
+        });
       }
       if (newResult.vTab !== null && newResult.vTab !== activeVTab) {
         await dispatch(setVTabActiveIndexAction(newResult.vTab));
@@ -88,6 +97,15 @@ export const navigatePrevSearchAction = () => {
       const newResult = searchResults[currentResultIndex - 1];
       if (newResult.tab !== activeTab) {
         await dispatch(setActiveTabIndexAction(newResult.tab));
+        dispatch({
+          type: UI.SET_SNACKBAR_MSG,
+          payload: `Switched to ${
+            newResult.tab === 0 ? 'Strategy Development' : 'Approvals'
+          }`
+        });
+        dispatch({
+          type: UI.SHOW_SNACKBAR
+        });
       }
       if (newResult.vTab !== null && newResult.vTab !== activeVTab) {
         await dispatch(setVTabActiveIndexAction(newResult.vTab));

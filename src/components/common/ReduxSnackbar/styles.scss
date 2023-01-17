@@ -1,0 +1,10 @@
+.redux-snackbar-container {
+  display: flex !important;
+  .MuiPaper-root {
+    color: #ffffff;
+    &.MuiSnackbar-anchorOriginTopRight {
+      top: 57px;
+      right: 50px;
+    }
+  }
+}
