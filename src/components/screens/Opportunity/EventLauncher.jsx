@@ -12,10 +12,7 @@ import moment from 'moment';
 import CustomModal from '../../common/CustomModal';
 import { DEFAULT, PROPOSAL } from '../../../constants/app';
 import { extractEmails, parseStringifyJson } from '../../../utils/helpers';
-import {
-  getSelectedBid,
-  selectProposalQuestions
-} from '../../../redux/selectors/proposal';
+import { selectProposalQuestions } from '../../../redux/selectors/proposal';
 import { getUserData } from '../../../redux/selectors';
 import { updateEventSubjectBody } from '../../../utils/utils';
 
@@ -37,9 +34,9 @@ const EventLauncher = ({
   const userData = useSelector(getUserData);
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const eventFlag = allFlags.eventLauncher || false;
-
-  const { isCurrent } = useSelector(getSelectedBid)?.toJS();
-
+  const { isCurrent } = useSelector(state =>
+    state.proposal.get('selectedBid')
+  )?.toJS();
   // Component will return null if no event found
   if (!hasEvent || !eventFlag || !isCurrent) return null;
 
@@ -49,11 +46,9 @@ const EventLauncher = ({
 
   const bodytoHtml = eventData?.EventBody;
   const eventSubject = eventData?.EventSubject;
-
   // Component State
-  const [openModal, setOpenModal] = useState(false);
-  const [attendeesVal, setAttendeesVal] = React.useState(attendees[0]);
-
+  const [openModal, setOpenModal] = React.useState(false);
+  const [attendeesVal, setAttendeesVal] = useState(attendees[0]);
   const proposalTeam = useMemo(() => {
     if (!openModal) return []; // break func
     const team = [];
@@ -132,6 +127,7 @@ const EventLauncher = ({
   };
 
   const launchRichTextButtonHandler = () => {
+    console.log('1111111111111');
     const dateTimeFormat = 'YYYY-MM-DDTHH:mm:ss';
     const { EventBody: body, EventSubject: subject } = eventData;
     const dateAge = checkDateAge(eventStartDate);
@@ -179,6 +175,7 @@ const EventLauncher = ({
   const eventLauncherModal = openModal && (
     <CustomModal
       open={openModal}
+      data-testid="test-custom-model"
       title={PROPOSAL.EVENT_LAUNCHER}
       className="event-launcher__modal"
       onClose={() => setOpenModal(prev => !prev)}
@@ -213,9 +210,9 @@ const EventLauncher = ({
       </RadioGroup>
     </CustomModal>
   );
-
   const eventIcon = (
     <IconButton
+      data-testid="event-launcher-icon-id"
       className="event-launcher__tooltip-btn"
       disabled={isEmpty(eventStartDate.trim())}
       onClick={() => setOpenModal(true)}
@@ -223,7 +220,6 @@ const EventLauncher = ({
       <CalendarEvent />
     </IconButton>
   );
-
   return (
     <div className="event-launcher">
       {!isEmpty(eventStartDate.trim()) && !isEmpty(eventSubject.trim()) && (
@@ -231,6 +227,7 @@ const EventLauncher = ({
           variant="light"
           tabIndex={-1}
           placement="top"
+          data-testid="custom-element"
           title={
             <div className="event-launcher__tooltip">
               <h3>{PROPOSAL.EVENT_LAUNCHER}</h3>
