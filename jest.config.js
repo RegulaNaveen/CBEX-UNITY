@@ -17,7 +17,8 @@ module.exports = {
     'src/components/screens/Approvals/__test__/Section.test.jsx',
     'src/components/common/__tests__/CollapsibleList.test.js',
     'src/components/screens/Approvals/__tests__/ActionButtons.test.js',
-    'src/components/views/toolbar/__test__/index.test.js'
+    'src/components/views/toolbar/__test__/index.test.js',
+    'src/constants'
   ],
   collectCoverageFrom: ['**/*.{js,jsx}', '!**/node_modules/**', '!**/dist/**'],
   moduleFileExtensions: ['js', 'jsx'],
