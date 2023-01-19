@@ -132,10 +132,6 @@ export const autoNavigationCompletedAction = () => ({
   type: SEARCH.AUTO_NAVIGATION_DONE
 });
 
-export const checkDataPrerequisiteAction = () => {
-  return async (dispatch, getState) => {};
-};
-
 export const doSearchAction = () => {
   return async (dispatch, getState) => {
     dispatch({ type: SEARCH.DO_SEARCH });

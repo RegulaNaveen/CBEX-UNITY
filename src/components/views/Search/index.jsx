@@ -196,11 +196,13 @@ export default function Search() {
           'toolbar-search-container': true,
           enabled: isOpen
         })}
+        data-testid="toolbar-search-container"
       >
         <div ref={searchIconRef} style={{ position: 'relative' }}>
           <IconButton
             disabled={isOpen || !doesDataPrerequisiteSatisfied}
             onClick={toggleSearchIconOpen}
+            data-testid="search-icon-btn-testid"
           >
             <SearchIcon className="search-icon" />
           </IconButton>
@@ -269,6 +271,7 @@ export default function Search() {
                         icon={ChevronLeftIcon}
                         disabled={totalResultsCount <= 1}
                         onClick={handlePrevClick}
+                        data-testid="search-prev"
                       >
                         Previous
                       </Button>
@@ -280,6 +283,7 @@ export default function Search() {
                         icon={ChevronRightIcon}
                         disabled={totalResultsCount <= 1}
                         onClick={handleNextClick}
+                        data-testid="search-next"
                       >
                         Next
                       </Button>
@@ -296,7 +300,11 @@ export default function Search() {
           placeholder="Search"
           icon={
             searchInput.length > 0 ? (
-              <CloseIcon className="close-icon" onClick={handleClearClick} />
+              <CloseIcon
+                className="close-icon"
+                onClick={handleClearClick}
+                data-testid="search-clearicon"
+              />
             ) : null
           }
           value={searchInput}
