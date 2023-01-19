@@ -563,7 +563,7 @@ class Questions extends Component {
           </div>
         </ViewAboveVerticalTabs>
 
-        <div id="panelwrapper">
+        <div id="panelwrapper" data-testid="question-panel-testid">
           {/* Question list */}
           <div id="panel-questions-list">
             <div className="tasksList-title-wrapper">
@@ -630,6 +630,7 @@ class Questions extends Component {
                   </div>
                 )}
                 <Button
+                  data-testid="addquestionbtn"
                   variant="secondary"
                   size="small"
                   icon={<Filter fontSize="extraSmall" />}
@@ -661,6 +662,7 @@ class Questions extends Component {
         </div>
         <Suspense fallback={<div>Loading...</div>}>
           <Sidebar
+            data-testid="sidebar-test"
             sections={allSections}
             id={selectedBid.get('id')}
             onAddQuestion={value => {
