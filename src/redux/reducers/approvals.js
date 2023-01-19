@@ -98,13 +98,21 @@ const updateFilter = (state, action) => {
   return { ...state, filters: newFilters };
 };
 
+const resetFilters = (state, action) => {
+  return {
+    ...state,
+    filters: INITIAL_STATE.filters
+  };
+};
+
 const actionMap = {
   [APPROVALS.FETCH_APPROVALS]: state => ({ ...state, fetching: true }),
   [APPROVALS.SET_APPROVALS]: setApprovals,
   [APPROVALS.DUPLICATE_APPROVALS]: duplicateApproval,
   [APPROVALS.DELETE_APPROVALS]: deleteApprovals,
   [APPROVALS.SET_CAN_SEND_EMAIL_IN_APPROVALS]: setCanSendEmail,
-  [APPROVALS.UPDATE_FILTERS]: updateFilter
+  [APPROVALS.UPDATE_FILTERS]: updateFilter,
+  [APPROVALS.RESET_FILTERS]: resetFilters
 };
 
 export default function(state = INITIAL_STATE, action) {

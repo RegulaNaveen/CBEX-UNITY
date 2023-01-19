@@ -2,6 +2,9 @@
   display: flex !important;
   .MuiPaper-root {
     color: #ffffff;
+  }
+
+  @media (min-width: 600px) {
     &.MuiSnackbar-anchorOriginTopRight {
       top: 57px;
       right: 50px;

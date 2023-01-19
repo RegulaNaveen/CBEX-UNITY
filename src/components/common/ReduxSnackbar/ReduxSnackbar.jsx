@@ -2,6 +2,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
+  selectSnackbarKey,
   selectSnackbarMessage,
   selectSnackbarOpen,
   selectSnackbarOptions
@@ -17,6 +18,7 @@ function Alert(props) {
 export default function ReduxSnackbar() {
   const open = useSelector(selectSnackbarOpen);
   const message = useSelector(selectSnackbarMessage);
+  const key = useSelector(selectSnackbarKey);
   const restProps = useSelector(selectSnackbarOptions);
   const dispatch = useDispatch();
 
@@ -28,12 +30,12 @@ export default function ReduxSnackbar() {
     <Snackbar
       className="redux-snackbar-container"
       open={open}
-      autoHideDuration={3000}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right'
-      }}
+      autoHideDuration={restProps.autoHideDuration || 3000}
+      anchorOrigin={
+        restProps.anchorOrigin || { vertical: 'top', horizontal: 'right' }
+      }
       onClose={handleClose}
+      key={key}
     >
       <Alert severity="success" onClose={handleClose}>
         {message}

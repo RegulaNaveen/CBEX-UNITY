@@ -6,9 +6,10 @@ const INITIAL_STATE = {
     autoHideDuration: 3000,
     anchorOrigin: {
       vertical: 'top',
-      horizontal: 'center'
+      horizontal: 'right'
     }
   },
+  snackbarKey: null,
   showSnackbar: false
 };
 
@@ -29,13 +30,15 @@ export default function uiReducer(state = INITIAL_STATE, action) {
     case UI.SHOW_SNACKBAR: {
       return {
         ...state,
-        showSnackbar: true
+        showSnackbar: true,
+        snackbarKey: new Date().getTime()
       };
     }
     case UI.HIDE_SNACKBAR: {
       return {
         ...state,
-        showSnackbar: false
+        showSnackbar: false,
+        snackbarKey: null
       };
     }
     case UI.RESET_SNACKBAR: {

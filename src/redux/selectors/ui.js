@@ -16,3 +16,5 @@ export const selectSnackbarMessage = createSelector(
   selectUI,
   ui => ui.snackbarMessage
 );
+
+export const selectSnackbarKey = createSelector(selectUI, ui => ui.snackbarKey);

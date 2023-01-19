@@ -63,3 +63,18 @@ export const selectSearching = createSelector(
   selectSearch,
   search => search.searching
 );
+
+export const selectShowModal = createSelector(
+  selectSearch,
+  search => search.showModal
+);
+
+export const selectModalTitle = createSelector(
+  selectSearch,
+  search => search.modalTitle
+);
+
+export const selectModalContent = createSelector(
+  selectSearch,
+  search => search.modalContent
+);
