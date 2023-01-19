@@ -1,0 +1,20 @@
+module.exports = {
+  presets: [
+    [
+      '@babel/preset-env',
+      {
+        useBuiltIns: 'entry',
+        corejs: '2'
+      }
+    ],
+    '@babel/preset-react',
+    '@babel/preset-flow'
+  ],
+  plugins: [
+    '@babel/plugin-proposal-class-properties',
+    '@babel/plugin-proposal-export-default-from',
+    'react-hot-loader/babel',
+    '@babel/plugin-transform-runtime',
+    '@babel/plugin-transform-modules-commonjs'
+  ]
+};

@@ -372,23 +372,24 @@ export function updateSearchMatches(
 }
 
 // strategy function for adding highlight decorator to draftjs editor
-export function highlightQueryStrategy(
-  contentBlock,
-  callback,
-  contentState,
-  query
-) {
-  findWithRegex(new RegExp(query, 'gi'), contentBlock, callback);
-}
+// commented following function to keep it for reference in future
+// export function highlightQueryStrategy(
+//   contentBlock,
+//   callback,
+//   contentState,
+//   query
+// ) {
+//   findWithRegex(new RegExp(query, 'gi'), contentBlock, callback);
+// }
 
-function findWithRegex(regex, contentBlock, callback) {
-  const text = contentBlock.getText();
-  let matchArr, start;
-  while ((matchArr = regex.exec(text)) !== null) {
-    start = matchArr.index;
-    callback(start, start + matchArr[0].length);
-  }
-}
+// function findWithRegex(regex, contentBlock, callback) {
+//   const text = contentBlock.getText();
+//   let matchArr, start;
+//   while ((matchArr = regex.exec(text)) !== null) {
+//     start = matchArr.index;
+//     callback(start, start + matchArr[0].length);
+//   }
+// }
 
 export function extractTextFromProseMirrorJSON(data, results = []) {
   if (typeof data === 'object' && Array.isArray(data.content)) {
