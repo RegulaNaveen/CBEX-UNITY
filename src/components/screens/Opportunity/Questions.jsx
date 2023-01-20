@@ -548,6 +548,7 @@ class Questions extends Component {
       selectedQuestionForHistory,
       isHistoryModalShown
     } = this.state;
+    console.log('this.state :>> ', this.state);
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
     const minPixelToExclude = 20;
     const notepadMinWidthPx =
@@ -558,7 +559,7 @@ class Questions extends Component {
     return (
       <>
         <ViewAboveVerticalTabs>
-          <div className="opportunity-details">
+          <div className="opportunity-details" data-testid="bidhistory-testid">
             <BidHistory />
           </div>
         </ViewAboveVerticalTabs>
