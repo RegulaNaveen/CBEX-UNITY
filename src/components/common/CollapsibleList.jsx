@@ -309,13 +309,15 @@ class CollapsibleList extends Component<Props, State> {
                 searchWords={[
                   `${
                     currentSearchResult !== null &&
-                    currentSearchResult.searchIndex === title
+                    currentSearchResult.searchIndex === title &&
+                    query !== null
                       ? query
                       : ''
                   }`
                 ]}
                 autoEscape={true}
                 textToHighlight={title}
+                highlightClassName="search-highlight"
               />
             </p>
           </div>
@@ -335,13 +337,15 @@ class CollapsibleList extends Component<Props, State> {
                     searchWords={[
                       `${
                         currentSearchResult !== null &&
-                        currentSearchResult.searchIndex === title
+                        currentSearchResult.searchIndex === title &&
+                        query !== null
                           ? query
                           : ''
                       }`
                     ]}
                     autoEscape={true}
                     textToHighlight={title}
+                    highlightClassName="search-highlight"
                   />
                   {this.showNotesCount(title)}
                 </p>

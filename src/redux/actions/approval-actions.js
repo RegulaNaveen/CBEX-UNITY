@@ -3,9 +3,12 @@ import {
   duplicateApprovalApi,
   getApprovalsApi
 } from '../../api/approvals';
-import { DEFAULT } from '../../constants/app';
-import { APPROVALS } from '../../constants/types';
+import { DEFAULT, SEARCH as SEARCH_CONSTANTS } from '../../constants/app';
+import { APPROVALS, SEARCH } from '../../constants/types';
 import { getErrorMessage, getApprovalCount } from '../../utils/utils';
+import { getQuestionsFilters } from '../selectors';
+import { selectQuery } from '../selectors/search';
+import { doSearchAction } from './search-actions';
 
 export const setAllApprovals = data => ({
   type: APPROVALS.SET_APPROVALS,
@@ -101,7 +104,51 @@ export const fetchApprovalSendEmailFlag = val => {
   };
 };
 
-export const updateFilters = (name, value) => ({
-  type: APPROVALS.UPDATE_FILTERS,
-  payload: { name, value }
-});
+export const updateFilters = (name, value) => {
+  return async (dispatch, getState) => {
+    await dispatch({
+      type: APPROVALS.UPDATE_FILTERS,
+      payload: { name, value }
+    });
+    const state = getState();
+    const searchQuery = selectQuery(state);
+    const questionsFilter = getQuestionsFilters(state);
+    const approvalFilters = state.approvals.filters;
+    if (searchQuery !== null && searchQuery.length >= 3) {
+      let totalFiltersApplied = 0;
+      questionsFilter.entrySeq().forEach(([groupName, group]) => {
+        group
+          .entrySeq()
+          .filter(value => value[0] !== 'logic')
+          .forEach(([key, filter]) => {
+            if (filter.get('checked')) {
+              totalFiltersApplied++;
+            }
+          });
+      });
+      totalFiltersApplied += approvalFilters.filter(item => item.value).length;
+      console.log(totalFiltersApplied);
+      if (totalFiltersApplied === 1) {
+        dispatch({
+          type: SEARCH.SHOW_MODAL,
+          payload: {
+            modalTitle: SEARCH_CONSTANTS.TITLE_SEARCH_ACTIVE,
+            modalContent: SEARCH_CONSTANTS.CONTENT_SEARCH_ACTIVE
+          }
+        });
+      } else {
+        dispatch(doSearchAction());
+      }
+    }
+  };
+};
+
+export function resetFiltersAction() {
+  return async (dispatch, getState) => {
+    const searchQuery = selectQuery(getState());
+    dispatch({ type: APPROVALS.RESET_FILTERS });
+    if (searchQuery !== null && searchQuery.length >= 3) {
+      dispatch(doSearchAction());
+    }
+  };
+}

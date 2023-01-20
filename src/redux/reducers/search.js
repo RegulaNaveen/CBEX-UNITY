@@ -1,7 +1,7 @@
 import { SEARCH } from '../../constants/types';
 
 export const INITIAL_STATE = {
-  query: '',
+  query: null,
   isOpen: false,
   currentResultIndex: -1,
   prevResult: null,
@@ -9,7 +9,10 @@ export const INITIAL_STATE = {
   searching: false,
   searchResults: [],
   autoNavigatedToCurrentResult: true,
-  clearInputFlag: false
+  clearInputFlag: false,
+  showModal: false,
+  modalTitle: '',
+  modalContent: ''
 };
 
 export default function searchReducer(state = INITIAL_STATE, action) {
@@ -26,7 +29,7 @@ export default function searchReducer(state = INITIAL_STATE, action) {
     case SEARCH.CLEAR: {
       return {
         ...state,
-        query: '',
+        query: null,
         searchResults: [],
         totalResultsFound: 0,
         currentResultIndex: -1,
@@ -37,7 +40,7 @@ export default function searchReducer(state = INITIAL_STATE, action) {
       return {
         ...state,
         prevResult: action.payload.prevResult,
-        currentResultIndex: state.currentResultIndex + 1,
+        currentResultIndex: action.payload.newIndex,
         autoNavigatedToCurrentResult: false
       };
     }
@@ -45,7 +48,7 @@ export default function searchReducer(state = INITIAL_STATE, action) {
       return {
         ...state,
         prevResult: action.payload.prevResult,
-        currentResultIndex: state.currentResultIndex - 1,
+        currentResultIndex: action.payload.newIndex,
         autoNavigatedToCurrentResult: false
       };
     }
@@ -84,6 +87,22 @@ export default function searchReducer(state = INITIAL_STATE, action) {
       return {
         ...state,
         clearInputFlag: false
+      };
+    }
+    case SEARCH.SHOW_MODAL: {
+      return {
+        ...state,
+        showModal: true,
+        modalTitle: action.payload.modalTitle,
+        modalContent: action.payload.modalContent
+      };
+    }
+    case SEARCH.HIDE_MODAL: {
+      return {
+        ...state,
+        showModal: false,
+        modalTitle: '',
+        modalContent: ''
       };
     }
     default:

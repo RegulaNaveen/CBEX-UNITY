@@ -8,6 +8,7 @@ import profileReducer from './profile';
 import notificationReducer from './notification';
 import approvalsReducer from './approvals';
 import searchReducer from './search';
+import uiReducer from './ui';
 
 const rootReducer = combineReducers({
   ssoAuth: ssoAuthReducer,
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
   profile: profileReducer,
   notification: notificationReducer,
   approvals: approvalsReducer,
-  search: searchReducer
+  search: searchReducer,
+  ui: uiReducer
 });
 
 export default rootReducer;
