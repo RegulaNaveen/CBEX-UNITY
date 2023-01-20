@@ -13631,7 +13631,6 @@
   ],
   "userRole": "Business Developer",
   "allSectionsExpanded": false,
-  "editQuestionsData": {},
   "selectedBid": {
     "questionTemplateVersionNumber": "v2023.12",
     "agreementId": "aM701000000CbmBCAS",
@@ -13694,8 +13693,8 @@
         "bidNo": 1
       }
     ],
-    "questionsFilter": {
-    },
+    "editQuestionsData": {},
+    "questionsFilter": {},
     "selectedBid": {
       "questionTemplateVersionNumber": "v2023.12",
       "agreementId": "aM701000000CbmBCAS",
@@ -14385,7 +14384,6 @@
       "regions": "Asia Pacific"
     },
     "activeVTabIndex": 0,
-    "editQuestionsData": {},
     "proposalQuestionSection": {},
     "proposalAnswer": "",
     "proposalDetails": {

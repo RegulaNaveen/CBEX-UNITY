@@ -7,7 +7,7 @@
  * @jest-environment jsdom
  */
 import React from 'react';
-import { cleanup, render } from '@testing-library/react';
+import { cleanup, fireEvent, render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { Provider } from 'react-redux';
 import { configure, shallow, mount } from 'enzyme';
@@ -93,7 +93,7 @@ const filterDataMap = {
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 data.proposal.selectedBid = Map(data.proposal.selectedBid);
-data.editQuestionsData = Map(data.editQuestionsData);
+data.proposal.editQuestionsData = Map(data.proposal.editQuestionsData);
 data.getBid = Map(data.getBid);
 data.proposal.questionsFilter.answerGroup = Map(
   data.proposal.questionsFilter.answerGroup
@@ -107,6 +107,7 @@ data.setQuestion = Map(data.setQuestion);
 data.sidebar = Map(data.sidebar);
 data.proposal = Map(data.proposal);
 data.ssoAuth = Map(data.ssoAuth);
+data.eventCategories.pd = jest.fn();
 
 const initalstate = {
   ...data,
@@ -229,5 +230,32 @@ describe('Questions component', () => {
     expect(wrapper.length).toBeGreaterThan(0);
     expect(component.state().showModal).toBe(false);
   });
+
+  test('Questions component model render', async () => {
+    const location = window.location;
+    delete window.location;
+    window.location = {
+      ...location,
+      reload: jest.fn()
+    };
+    global.ResizeObserver = jest.fn().mockImplementation(() => ({
+      observe: jest.fn(),
+      unobserve: jest.fn(),
+      disconnect: jest.fn()
+    }));
+    const { getByText, queryByTestId } = await render(
+      <BrowserRouter>
+        <Router history={history}>
+          <Provider store={store}>
+            <Questions {...initalstate} />
+          </Provider>
+        </Router>
+      </BrowserRouter>
+    );
+    expect(queryByTestId('selectedbid-testid')).toBeInTheDocument();
+    fireEvent.click(queryByTestId('selectedbid-testid'));
+    expect(queryByTestId('question-model-testid')).toBeInTheDocument();
+  });
+
   afterAll(cleanup);
 });
