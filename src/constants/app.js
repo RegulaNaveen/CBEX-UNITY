@@ -59,6 +59,15 @@ const APPROVALS = {
     'Delete this approval section if the additional approval is not required.'
 };
 
+const SEARCH = {
+  TITLE_FILTERED_RESULTS: 'Filtered Results',
+  CONTENT_FILTERED_RESULTS:
+    'The filters you have applied will affect the search results',
+  TITLE_SEARCH_ACTIVE: 'Search Active',
+  CONTENT_SEARCH_ACTIVE:
+    'The filters you are applying will affect your search results'
+};
+
 const REFRESH_WEBSOCKET_CONNECTION = 60000; // 1 minute
 export const QUESTION_UNLOCK_TIMEOUT = 90 * 1000; // 90 seconds (1.5minutes)
 export const URL_REGEXP = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
@@ -67,4 +76,11 @@ export const PROPOSAL_TEAM_EMAIL_MATCH_REGEXP = /[a-zA-Z\w]*\((.*)\)/; // matche
 export const RTE_DATA_ATTR_REGEXP = /data-[a-zA-Z0-9-]*=\"[a-zA-Z0-9-]*\"/g; // matches RichTextEditor data attributes
 export const NOTEPAD_UI_ID = Symbol('NOTEPAD');
 
-export { DEFAULT, PROPOSAL, REFRESH_WEBSOCKET_CONNECTION, PROFILE, APPROVALS };
+export {
+  DEFAULT,
+  PROPOSAL,
+  REFRESH_WEBSOCKET_CONNECTION,
+  PROFILE,
+  APPROVALS,
+  SEARCH
+};

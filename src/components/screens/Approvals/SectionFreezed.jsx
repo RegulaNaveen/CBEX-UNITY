@@ -55,13 +55,15 @@ const SectionFreezed = ({
               `${
                 currentSearchResult !== null &&
                 currentSearchResult.searchIndex ===
-                  `${sectionId}-archive-${archiveIndex}-section-title`
+                  `${sectionId}-archive-${archiveIndex}-section-title` &&
+                query !== null
                   ? query
                   : ''
               }`
             ]}
             autoEscape={true}
             textToHighlight={title}
+            highlightClassName="search-highlight"
           />
         </span>
       </Grid>

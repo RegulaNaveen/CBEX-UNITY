@@ -8,6 +8,7 @@ import SearchIcon from 'apollo-react-icons/Search';
 import CloseIcon from 'apollo-react-icons/Close';
 import ChevronLeftIcon from 'apollo-react-icons/ChevronLeft';
 import ChevronRightIcon from 'apollo-react-icons/ChevronRight';
+import CircularProgress from 'apollo-react/components/CircularProgress';
 
 import {
   selectIsOpen,
@@ -16,7 +17,10 @@ import {
   selectCurrentResultIndex,
   selectClearInputFlag,
   selectDataPrerequisiteSatisfied,
-  selectSearching
+  selectSearching,
+  selectModalTitle,
+  selectModalContent,
+  selectShowModal
 } from '../../../redux/selectors/search';
 import {
   openSearchAction,
@@ -30,10 +34,15 @@ import {
 import './style.scss';
 import { Typography } from 'apollo-react/components/Typography/Typography';
 import { SEARCH } from '../../../constants/types';
-import CircularProgress from 'apollo-react/components/CircularProgress';
+import { DEFAULT, SEARCH as SEARCH_CONSTANTS } from '../../../constants/app';
+import { selectIsQuestionsFilterEnabled } from '../../../redux/selectors';
+import CustomModal from '../../common/CustomModal';
 
 export default function Search() {
   const [searchInput, setSearchInput] = useState('');
+  const [isApprovalFiltersEnabled, setIsApprovalFiltersEnabled] = useState(
+    false
+  );
 
   const isOpen = useSelector(selectIsOpen);
   const query = useSelector(selectQuery);
@@ -44,6 +53,11 @@ export default function Search() {
     selectDataPrerequisiteSatisfied
   );
   const searching = useSelector(selectSearching);
+  const showModal = useSelector(selectShowModal);
+  const modalTitle = useSelector(selectModalTitle);
+  const modalContent = useSelector(selectModalContent);
+  const isQuestionsFilterEnabled = useSelector(selectIsQuestionsFilterEnabled);
+  const approvalFilters = useSelector(state => state.approvals.filters);
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const searchFlag = allFlags.searchFlag || false;
   const dispatch = useDispatch();
@@ -63,15 +77,34 @@ export default function Search() {
   const handleKeyPress = useCallback(
     async e => {
       if (e.key === 'Enter') {
-        // do search
-        dispatch(updateQuerySearchAction(searchInput));
-        searchInputRef.current.blur();
-        if (searchInputRef.current !== null && searchInput.length >= 3) {
-          dispatch(doSearchAction());
+        if (searchInput.length >= 3) {
+          if (isQuestionsFilterEnabled || isApprovalFiltersEnabled) {
+            dispatch({
+              type: SEARCH.SHOW_MODAL,
+              payload: {
+                modalTitle: SEARCH_CONSTANTS.TITLE_FILTERED_RESULTS,
+                modalContent: SEARCH_CONSTANTS.CONTENT_FILTERED_RESULTS
+              }
+            });
+          } else {
+            dispatch(updateQuerySearchAction(searchInput));
+            // do search
+            if (searchInputRef.current !== null) {
+              searchInputRef.current.blur();
+              dispatch(doSearchAction());
+            }
+          }
+        } else {
+          dispatch(updateQuerySearchAction(searchInput));
         }
       }
     },
-    [searchInputRef.current, searchInput]
+    [
+      searchInputRef.current,
+      searchInput,
+      isQuestionsFilterEnabled,
+      isApprovalFiltersEnabled
+    ]
   );
 
   const handleClearClick = useCallback(async () => {
@@ -111,6 +144,16 @@ export default function Search() {
     [dispatch, searchFlag, doesDataPrerequisiteSatisfied]
   );
 
+  function handleModalClose() {
+    // do search
+    dispatch(updateQuerySearchAction(searchInput));
+    if (searchInputRef.current !== null && searchInput.length >= 3) {
+      searchInputRef.current.blur();
+      dispatch(doSearchAction());
+    }
+    dispatch({ type: SEARCH.HIDE_MODAL });
+  }
+
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
@@ -135,30 +178,37 @@ export default function Search() {
     }
   }, [dispatch, clearInputFlag, searchInput, searchInputRef.current, isOpen]);
 
+  useEffect(() => {
+    const activeApprovalFiltersCount = approvalFilters.filter(
+      item => item.value
+    ).length;
+    setIsApprovalFiltersEnabled(activeApprovalFiltersCount > 0);
+  }, [approvalFilters]);
+
   if (!searchFlag) {
     return null;
   }
 
   return (
-    <div
-      className={classNames({
-        'toolbar-search-container': true,
-        enabled: isOpen
-      })}
-      data-testid="toolbar-search-container"
-    >
-      <div ref={searchIconRef} style={{ position: 'relative' }}>
-        <IconButton
-          disabled={isOpen || !doesDataPrerequisiteSatisfied}
-          onClick={toggleSearchIconOpen}
-          data-testid="search-icon-btn-testid"
-        >
-          <SearchIcon className="search-icon" />
-        </IconButton>
+    <>
+      <div
+        className={classNames({
+          'toolbar-search-container': true,
+          enabled: isOpen
+        })}
+        data-testid="toolbar-search-container"
+      >
+        <div ref={searchIconRef} style={{ position: 'relative' }}>
+          <IconButton
+            disabled={isOpen || !doesDataPrerequisiteSatisfied}
+            onClick={toggleSearchIconOpen}
+            data-testid="search-icon-btn-testid"
+          >
+            <SearchIcon className="search-icon" />
+          </IconButton>
 
-        {query.length >= 3 ? (
-          <div className="search-navigation-container">
-            {searching ? (
+          {query !== null && query.length < 3 ? (
+            <div className="search-navigation-container">
               <div
                 style={{
                   padding: '8px',
@@ -166,14 +216,6 @@ export default function Search() {
                   alignItems: 'center'
                 }}
               >
-                <CircularProgress
-                  variant="indeterminate"
-                  size={20}
-                  style={{
-                    width: '20px',
-                    height: '20px'
-                  }}
-                />
                 <p
                   style={{
                     color: '#999999',
@@ -181,72 +223,111 @@ export default function Search() {
                     paddingLeft: '4px'
                   }}
                 >
-                  Searching...
+                  3 characters required for search
                 </p>
               </div>
-            ) : (
-              <>
-                {totalResultsCount === 0 ? (
-                  <Typography variant="body2" className="no-result-text">
-                    No Matches Found
-                  </Typography>
-                ) : (
-                  <>
-                    <Button
-                      variant="text"
-                      icon={ChevronLeftIcon}
-                      disabled={currentSearchIndex <= 0}
-                      onClick={handlePrevClick}
-                      data-testid="search-prev"
-                    >
-                      Previous
-                    </Button>
-                    <span style={{ whiteSpace: 'nowrap' }}>
-                      {`${currentSearchIndex + 1} of ${totalResultsCount}`}
-                    </span>
-                    <Button
-                      variant="text"
-                      icon={ChevronRightIcon}
-                      disabled={
-                        currentSearchIndex < 0 ||
-                        currentSearchIndex > totalResultsCount - 2
-                      }
-                      onClick={handleNextClick}
-                      data-testid="search-next"
-                    >
-                      Next
-                    </Button>
-                  </>
-                )}
-              </>
-            )}
-          </div>
-        ) : null}
-      </div>
+            </div>
+          ) : null}
 
-      <TextField
-        className={classNames({ hidden: !isOpen, 'text-input': true })}
-        placeholder="Search"
-        icon={
-          searchInput.length > 0 ? (
-            <CloseIcon
-              className="close-icon"
-              onClick={handleClearClick}
-              data-testid="search-clearicon"
-            />
-          ) : null
-        }
-        value={searchInput}
-        onChange={async e => {
-          e.persist();
-          handleInputChange(e);
-        }}
-        onKeyPress={handleKeyPress}
-        onBlur={handleSearchInputBlur}
-        InputProps={{
-          inputRef: searchInputRef
-        }}
-      ></TextField>
-    </div>
+          {query !== null && query.length >= 3 ? (
+            <div className="search-navigation-container">
+              {searching ? (
+                <div
+                  style={{
+                    padding: '8px',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                >
+                  <CircularProgress
+                    variant="indeterminate"
+                    size={20}
+                    style={{
+                      // color: 'rgb(255, 147, 0)',
+                      width: '20px',
+                      height: '20px'
+                    }}
+                  />
+                  <p
+                    style={{
+                      color: '#999999',
+                      fontSize: '16px',
+                      paddingLeft: '4px'
+                    }}
+                  >
+                    Searching...
+                  </p>
+                </div>
+              ) : (
+                <>
+                  {totalResultsCount === 0 ? (
+                    <Typography variant="body2" className="no-result-text">
+                      No Matches Found
+                    </Typography>
+                  ) : (
+                    <>
+                      <Button
+                        variant="text"
+                        icon={ChevronLeftIcon}
+                        disabled={totalResultsCount <= 1}
+                        onClick={handlePrevClick}
+                        data-testid="search-prev"
+                      >
+                        Previous
+                      </Button>
+                      <span style={{ whiteSpace: 'nowrap' }}>
+                        {`${currentSearchIndex + 1} of ${totalResultsCount}`}
+                      </span>
+                      <Button
+                        variant="text"
+                        icon={ChevronRightIcon}
+                        disabled={totalResultsCount <= 1}
+                        onClick={handleNextClick}
+                        data-testid="search-next"
+                      >
+                        Next
+                      </Button>
+                    </>
+                  )}
+                </>
+              )}
+            </div>
+          ) : null}
+        </div>
+
+        <TextField
+          className={classNames({ hidden: !isOpen, 'text-input': true })}
+          placeholder="Search"
+          icon={
+            searchInput.length > 0 ? (
+              <CloseIcon
+                className="close-icon"
+                onClick={handleClearClick}
+                data-testid="search-clearicon"
+              />
+            ) : null
+          }
+          value={searchInput}
+          onChange={async e => {
+            e.persist();
+            handleInputChange(e);
+          }}
+          onKeyPress={handleKeyPress}
+          onBlur={handleSearchInputBlur}
+          InputProps={{
+            inputRef: searchInputRef
+          }}
+        ></TextField>
+      </div>
+      <CustomModal
+        open={showModal}
+        title={modalTitle}
+        message={modalContent}
+        variant="warning"
+        onClose={() => handleModalClose()}
+        buttonProps={[{ label: DEFAULT.OK }]}
+        modalStyle={{ maxWidth: 342 }}
+      />
+    </>
   );
 }

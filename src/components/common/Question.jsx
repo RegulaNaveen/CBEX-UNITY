@@ -966,7 +966,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 onFocus={e => this.onChildInputFocus(e)}
                 value={answerValue || ''}
                 disabled={checkDisableFlag() || isNotApplicable}
-                highlightQuery={query}
+                highlightQuery={query !== null ? query : ''}
               />
             </span>
           </SFAnswerValidationWrapper>
@@ -1000,7 +1000,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 disabled={checkDisableFlag() || isNotApplicable}
                 questionId={this.props.questionId}
                 lockedBySelf={!!this.isQuestionLockedBySelf()}
-                highlightQuery={query}
+                highlightQuery={query !== null ? query : ''}
                 lockQuestionOnFocus
               />
             </span>
@@ -1036,7 +1036,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 disabled={checkDisableFlag() || isNotApplicable}
                 questionId={this.props.questionId}
                 lockedBySelf={!!this.isQuestionLockedBySelf()}
-                highlightQuery={query}
+                highlightQuery={query !== null ? query : ''}
                 lockQuestionOnFocus
               />
             </span>
