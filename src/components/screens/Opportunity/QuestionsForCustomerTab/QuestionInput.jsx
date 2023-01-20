@@ -59,7 +59,9 @@ const QuestionInput = ({
     };
     if (question?.isNewEntry) {
       setShowLoader(true);
-      await dispatch(setProposalQuestion(proposalId, questionData));
+      await dispatch(
+        setProposalQuestion(proposalId, questionData, socketContext)
+      );
       setShowLoader(false);
       questionUnlockWrapper(question?.questionId);
     } else {

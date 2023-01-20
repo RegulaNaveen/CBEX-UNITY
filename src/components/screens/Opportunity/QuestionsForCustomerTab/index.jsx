@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PlusIcon from 'apollo-react-icons/Plus';
 import Button from 'apollo-react/components/Button';
@@ -13,7 +13,7 @@ import { getProposalQuestions } from '../../../../redux/selectors/proposal';
 import { getSelectedBid, selectSections } from '../../../../redux/selectors';
 import Header from './Header';
 import { deleteProposalQuestion } from '../../../../redux/actions/proposal-actions';
-import SocketContextProvider from '../../../../context/SocketContext';
+import { SocketContext } from '../../../../context/SocketContext';
 
 function QuestionsForCustomer() {
   const questionsList = useSelector(getProposalQuestions);
@@ -23,6 +23,7 @@ function QuestionsForCustomer() {
   const sections = useSelector(selectSections);
   const selectedBid = useSelector(getSelectedBid);
   const dispatch = useDispatch();
+  const socketContext = useContext(SocketContext);
 
   useEffect(() => {
     setQuestions(new OrderedMap());
@@ -92,7 +93,11 @@ function QuestionsForCustomer() {
 
     setShowDeleteModal(false);
     await dispatch(
-      deleteProposalQuestion(proposalId, questionToDelete.questionId)
+      deleteProposalQuestion(
+        proposalId,
+        questionToDelete.questionId,
+        socketContext
+      )
     );
 
     setQuestionToDelete(null);
@@ -103,7 +108,9 @@ function QuestionsForCustomer() {
     const proposalId = selectedBid.get('id');
 
     setShowDeleteModal(false);
-    await dispatch(deleteProposalQuestion(proposalId, question.questionId));
+    await dispatch(
+      deleteProposalQuestion(proposalId, question.questionId, socketContext)
+    );
 
     setQuestionToDelete(null);
   };
