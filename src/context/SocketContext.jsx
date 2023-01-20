@@ -18,7 +18,8 @@ import {
   setPriceModelerRecalculationStatusAction,
   updatePriceModelerEstimateAction,
   editProposalQuestionfromSocket,
-  deleteProposalQuestionFromSocket
+  deleteProposalQuestionFromSocket,
+  setProposalQuestionFromSocket
 } from '../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
@@ -163,6 +164,27 @@ const SocketContextProvider = props => {
       );
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const addQuestion = (questionData, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'QUESTION',
+          body: {
+            event: 'ADD_QUESTION',
+            data: {
+              questionData
+            }
+          }
+        })
+      );
+    } catch (error) {
+      console.log('addQuestion', error);
     }
   };
 
@@ -323,7 +345,8 @@ const SocketContextProvider = props => {
           setPriceModelerRecalculationStatus,
           updatePriceModelerEstimate,
           editProposalQuestionfromSocket,
-          deleteProposalQuestionFromSocket
+          deleteProposalQuestionFromSocket,
+          setProposalQuestionFromSocket
         } = props;
 
         // On Message Recieve
@@ -402,6 +425,11 @@ const SocketContextProvider = props => {
             case 'QUESTION_DELETE':
               if (data.data.questionId) {
                 deleteProposalQuestionFromSocket(data.data.questionId);
+              }
+
+            case 'ADD_QUESTION':
+              if (data.data.questionData) {
+                setProposalQuestionFromSocket(data.data.questionData);
               }
 
             case 'QUESTIONS':
@@ -513,6 +541,10 @@ const SocketContextProvider = props => {
     );
   };
 
+  const addQuestionWrapper = questionData => {
+    waitForSocketConnectionMinInterval(() => addQuestion(questionData, null));
+  };
+
   const questionTextUpdateWrapper = questionData => {
     waitForSocketConnectionMinInterval(() =>
       questionTextUpdate(questionData, null)
@@ -584,7 +616,8 @@ const SocketContextProvider = props => {
         questionAnswerUpdateWrapper,
         naQuestionUpdateWrapper,
         questionTextUpdateWrapper,
-        questionDeleteWrapper
+        questionDeleteWrapper,
+        addQuestionWrapper
       }}
     >
       {props.children}
@@ -611,7 +644,8 @@ const mapDispatchToProps = {
   setPriceModelerRecalculationStatus: setPriceModelerRecalculationStatusAction,
   updatePriceModelerEstimate: updatePriceModelerEstimateAction,
   editProposalQuestionfromSocket: editProposalQuestionfromSocket,
-  deleteProposalQuestionFromSocket: deleteProposalQuestionFromSocket
+  deleteProposalQuestionFromSocket: deleteProposalQuestionFromSocket,
+  setProposalQuestionFromSocket: setProposalQuestionFromSocket
 };
 
 export default connect(
