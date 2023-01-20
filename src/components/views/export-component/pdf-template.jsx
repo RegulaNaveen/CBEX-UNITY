@@ -92,7 +92,8 @@ const styles = StyleSheet.create({
   body: {
     width: '485px',
     minHeight: '60vh',
-    display: 'grid'
+    display: 'grid',
+    fontFamily: ProximaNova
   },
   footer: {
     position: 'absolute',
@@ -192,6 +193,12 @@ const getStyle = `<style>
   .proposalTeam tr:first-child, .questionTable tr:first-child, .questionToCustomerTable tr:first-child, .notesTable tr:first-child{
       background: #00A3E0;
       color:#fff;
+  }
+  // .notesTable >ul>li{
+  //   padding-left: 5px;
+  // }
+  ul li{
+    padding-left: 5px;
   }
   .questionToCustomerTable li {
       padding-bottom: 5px
@@ -476,6 +483,7 @@ function getStyled() {
   li {
     align-items: flex-start;
   }
+ 
   li_bullet, .li_bullet {
     margin-botton:4px;
   }
@@ -494,7 +502,7 @@ function getHeaderInfoRows(details) {
       html += `<tr>`;
       html += `<td>${headFields[key]}</td>`;
       html += `<td>${value.toString()}</td>`;
-      html += `<td></td>`;
+      // html += `<td></td>`;
       html += `</tr>`;
     }
   } catch (error) {
@@ -662,6 +670,7 @@ function getNotesRows(notes, editor) {
   data += `<table><tr><td style="border:1px solid black;padding:10px">`;
   try {
     const noteText = editor.getJSON();
+    console.log(noteText, 'noteText');
     console.log('notepad html', editor.getHTML());
     // const str = editor.getHTML();
     // console.log(str, 'string');
@@ -752,6 +761,7 @@ Opportunity Overview
   // this is added to handle , some data having unclosed span tag.
   const SpanExp = /[^<]\/span>/g;
   if (html.match(SpanExp)) html = html?.replace(SpanExp, '</span>');
+
   const Prints = () => (
     <html>
       {ReactHtmlParser(getStyle)}
@@ -762,7 +772,14 @@ Opportunity Overview
   let string = renderToString(<Prints />);
   console.log(string, 'strfg');
 
+  const emailExp = /([(][a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
+  if (string.match(emailExp)) {
+    const matched = string.match(emailExp);
+    console.log(matched, 'matcah');
+    string = string?.replace(emailExp, ` ${matched}`);
+  }
   if (string.match('  ')) string = string?.replaceAll('&nbsp');
+  console.log(string, 'lstr');
   const pdfFooter = renderToString(<Footers />);
   console.log(pdfFooter, 'ppp');
   let pageNumber;
