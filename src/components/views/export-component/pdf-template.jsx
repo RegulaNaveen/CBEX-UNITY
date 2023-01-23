@@ -10,8 +10,6 @@ import {
   CORE_TEAM,
   QC_SECTION,
   getLastAnswer,
-  themeBlue,
-  themeGrey,
   getUnityPredicatedText,
   dateNow,
   userName,
@@ -126,140 +124,6 @@ const styles = StyleSheet.create({
     height: 'auto'
   }
 });
-const getStyle = `<style>
-  h1{
-      font-size: 20px;
-      margin: 5px;
-  }
-  h2{
-      font-size: 17px;
-      margin: 3px;
-  }
-  h3{
-      font-size: 15px;
-      margin: 2px;
-  }
-  body{
-      padding: 50px;
-      font-size: 10px;
-  }
-  table {
-    width:500px;
-    height: auto;
-  }
-  tr {    
-    border-top: 1px solid #000;
-    border-left: 1px solid #000;
-    border-right: 1px solid #000;
-    border-bottom: 1px solid #000;
-    height: auto;
-  }
-  td {    
-    border-top: 1px solid #000;
-    border-left: 1px solid #000;
-    border-right: 1px solid #000;
-    border-bottom: 1px solid #000;
-    height: auto;
-  }
-  .marginTop50 {
-      margin-top:50px
-  }
-  .marginTop20 {
-      margin-top:20px
-  }
-  .marginTop30 {
-      margin-top:30px
-  }
-  .table tr:last-child{
-      border-bottom: 1px solid #000;
-  }
-  .notesTable tr{
-      border-bottom: none;
-  }
-  .text-decoration-striket{
-    text-decoration: line-through;
-  }
-  .notesTable tr:last-child{
-      border-bottom: 1px solid #000;
-  }
-  .table td, .table th{
-      padding: 5px;
-  }
-  .table tr td:nth-child(2){
-      border-left: 1px solid #000;
-  }
-  .proposalTeam tr:first-child, .questionTable tr:first-child, .questionToCustomerTable tr:first-child, .notesTable tr:first-child{
-      background: #00A3E0;
-      color:#fff;
-  }
-  // .notesTable >ul>li{
-  //   padding-left: 5px;
-  // }
-  
-  ul li{
-    padding-left: 5px;
-  }
-  .questionToCustomerTable li {
-      padding-bottom: 5px
-  }
-  .headerInfo tr td:first-child{
-      background: #00A3E0;
-      color:#fff;
-      font-weight: bold
-  }
-  .questionTable tr td:first-child{
-      background: #EEEEEE;
-  }
-  .blueColorText{
-      color: #00A3E0;
-      font-family:Helvetica;
-      font-size: 8px;
-  }
-  .footerWrapper{
-      display:flex;
-      justify-content:space-between
-  }
-  .footerWrapper td {
-      color: #EEEEEE,
-      font-size:7px,
-  }
-  .public-DraftStyleDefault-depth0.public-DraftStyleDefault-listLTR {
-      margin-left: 5px;
-  }
-  .public-DraftStyleDefault-depth1.public-DraftStyleDefault-listLTR {
-      margin-left: 10px;
-  }
-  .public-DraftStyleDefault-depth2.public-DraftStyleDefault-listLTR {
-      margin-left: 15px;
-  }
-  .public-DraftStyleDefault-depth3.public-DraftStyleDefault-listLTR {
-      margin-left: 20px;
-  }
-  .public-DraftStyleDefault-depth4.public-DraftStyleDefault-listLTR {
-      margin-left: 25px;
-  }
-  .MuiGrid-root{
-      display:none;
-  }
-  .MuiFormControl-root{
-      padding:5px;
-      border: 1px solid #000;
-      border-top: none;
-  }
-  [data-block="true"] {
-    padding-bottom:10px;
-}
-  li {
-    align-items: flex-start;
-  }
-  li_bullet, .li_bullet {
-    margin-bottom:4px;
-  }
-  ol,ul,p{
-    margin-top:3px !important;
-    margin-bottom:3px !important;
-  }
-  </style>`;
 function checkFormattedAnswer(answers) {
   try {
     const lastAnswer = answers[answers.length - 1];
@@ -356,137 +220,159 @@ const Footers = proposalDetails => (
 );
 function getStyled() {
   return `<style>
-  h1{
-      font-size: 20px;
-      margin: 5px;
+  *{
+    font-family: ProximaNova !important;
+    border-collapse: collapse !important;
   }
-  h2{
-      font-size: 17px;
-      margin: 3px;
-  }
-  h3{
-      font-size: 15px;
-      margin: 2px;
-  }
-  body{
-      padding: 50px;
-      font-size: 10px;
-  }
-  table {
-    width:500px
-  }
-  .marginTop50 {
-      margin-top:50px
-  }
-  .marginTop20 {
-      margin-top:20px
-  }
-  .marginTop30 {
-      margin-top:30px
-  }
-  .table tr{
-      border-top: 1px solid #000;
-      border-left: 1px solid #000;
-      border-right: 1px solid #000;
-      border-bottom: 1px solid #000;
-  }
-  .table tr:last-child{
-      border-bottom: 1px solid #000;
-  }
-  .notesTable tr{
-      border-bottom: none;
-  }
-  .notesTable tr:last-child{
-      border-bottom: 1px solid #000;
-  }
-  .table td, .table th{
-      border-top: 1px solid #000;
-      border-bottom: 1px solid #000;
-      padding: 5px;
-      width: 240px
-  }
-
-  .table td{
-    padding-left: 15px;
-  }
-  .table td:first-child, .table th:first-child{
-    border-top: 1px solid #000;
-    border-left: 1px solid #000;
+h1{
+    font-size: 20px;
+    margin: 5px;
+}
+h2{
+    font-size: 17px;
+    margin: 3px;
+}
+h3{
+    font-size: 15px;
+    margin: 2px;
+}
+body{
+    padding: 50px;
+    font-size: 10px;
+    font-family: ProximaNova
+}
+table {
+  width:500px;
+  height: auto;
+}
+tr {    
+  border-top: 1px solid #000;
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
+  border-bottom: 1px solid #000;
+  height: auto;
+}
+td {    
+  border-top: 1px solid #000;
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
+  border-bottom: 1px solid #000;
+  height: auto;
+}
+.marginTop50 {
+    margin-top:50px
+}
+.marginTop20 {
+    margin-top:20px
+}
+.marginTop30 {
+    margin-top:30px
+}
+.table tr:last-child{
+    border-bottom: 1px solid #000;
+    border-right: 1px solid #000;
+}
+ol {
+  margin-top: 5px;
+}
+.notesTable tr{
+    border-bottom: none;
+}
+.notesTable tr:last-child{
+    border-bottom: 1px solid #000;
+    border-right: 1px solid #000;
+}
+.table td, .table th{
     padding: 5px;
 }
-  .table tr td:nth-child(2){
-      border-left: 1px solid #000;
-  }
-  .proposalTeam tr:first-child, .questionTable tr:first-child, .questionToCustomerTable tr:first-child, .notesTable tr:first-child{
-      background: #00A3E0;
-      color:#fff;
-  }
-  .questionToCustomerTable li {
-      padding-bottom: 5px
-  }
-  .questionToCustomerTable td:first-child{
-    padding-left: 10px;
-  }
-  .headerInfo tr td:first-child{
-      background: #00A3E0;
-      color:#fff;
-      font-weight: bold
-  }
-  .questionTable tr td:first-child{
-      background: #EEEEEE;
-  }
-  .blueColorText{
-      color: #00A3E0;
-      font-family:Helvetica;
-      font-size: 8px;
-  }
-  .footerWrapper{
-      display:flex;
-      justify-content:space-between
-  }
-  .footerWrapper td {
-      color: #EEEEEE,
-      font-size:7px,
-  }
-  .public-DraftStyleDefault-depth0.public-DraftStyleDefault-listLTR {
-      margin-left: 5px;
-  }
-  .public-DraftStyleDefault-depth1.public-DraftStyleDefault-listLTR {
-      margin-left: 10px;
-  }
-  .public-DraftStyleDefault-depth2.public-DraftStyleDefault-listLTR {
-      margin-left: 15px;
-  }
-  .public-DraftStyleDefault-depth3.public-DraftStyleDefault-listLTR {
-      margin-left: 20px;
-  }
-  .public-DraftStyleDefault-depth4.public-DraftStyleDefault-listLTR {
-      margin-left: 25px;
-  }
-  .MuiGrid-root{
-      display:none;
-  }
-  .MuiFormControl-root{
-      padding:5px;
-      border: 1px solid #000;
-      border-top: none;
-  }
-  [data-block="true"] {
+.table tr td:nth-child(2){
+    border-left: 1px solid #000;
+}
+.proposalTeam tr:first-child, .questionTable tr:first-child, .questionToCustomerTable tr:first-child, .notesTable tr:first-child{
+    background: #00A3E0;
+    color:#fff;
+}
+table tr {
+  border-bottom: 0px !important;
+}
+.notesTable >ul>li{    
+  padding-left: 5px;
+  margin-top: 5px;
+  padding-bottom: 5px;
+}
+}
+ul li{
+  padding-left: 5px;
+}
+.questionToCustomerTable li {
+    padding-bottom: 5px
+}
+.headerInfo tr td:first-child{
+    background: #00A3E0;
+    color:#fff;
+    font-weight: bold
+}
+.questionTable tr td:first-child{
+    background: #EEEEEE;
+}
+.blueColorText{
+    color: #00A3E0;
+    font-family:Helvetica;
+    font-size: 8px;
+}
+.footerWrapper{
+    display:flex;
+    justify-content:space-between
+}
+.footerWrapper td {
+    color: #EEEEEE,
+    font-size:7px,
+}
+.public-DraftStyleDefault-depth0.public-DraftStyleDefault-listLTR {
+    margin-left: 5px;
+}
+.public-DraftStyleDefault-depth1.public-DraftStyleDefault-listLTR {
+    margin-left: 10px;
+}
+.public-DraftStyleDefault-depth2.public-DraftStyleDefault-listLTR {
+    margin-left: 15px;
+}
+.public-DraftStyleDefault-depth3.public-DraftStyleDefault-listLTR {
+    margin-left: 20px;
+}
+.public-DraftStyleDefault-depth4.public-DraftStyleDefault-listLTR {
+    margin-left: 25px;
+}
+.MuiGrid-root{
+    display:none;
+}
+.MuiFormControl-root{
+    padding:5px;
+    border: 1px solid #000;
+    border-top: none;
+}
+[data-block="true"] {
     padding-bottom:10px;
 }
-
-  li {
-    align-items: flex-start;
+li {
+  align-items: flex-start;
+}
+li_bullet, .li_bullet {
+  margin-bottom:3px;
+}
+p
+{
+  margin-top:0px !important;
+  margin-bottom:3px !important;
+}
+li > ul > li {
+  list-style-type: &#x26AC !important; 
+  margin-left:-1em;
+  line-height:15px;
   }
- 
-  li_bullet, .li_bullet {
-    margin-bottom:4px;
-  }
-  ol,ul,p{
-    margin-top:3px !important;
-    margin-bottom:3px !important;
-  }
-  </style>`;
+.hg-pdf table tr {
+  page-break-inside: avoid;
+}  </style>`;
 }
 function getHeaderInfoRows(details) {
   let html = `<table class="table headerInfo">`;
@@ -750,6 +636,7 @@ Opportunity Overview
          ${getProposalTeamsRows(questions)}
          ${questionTables(filteredQuestions)}
          ${getQuestionToCustomerRows(questions)}
+         ${getNotesRows(notes, editor)}
       </div>
    </div>
 </div>
@@ -761,8 +648,7 @@ Opportunity Overview
   if (html.match(SpanExp)) html = html?.replace(SpanExp, '</span>');
 
   const Prints = () => (
-    <html style={{ fontFamily: 'Courier !important' }}>
-      {ReactHtmlParser(getStyle)}
+    <html>
       <body>{ReactHtmlParser(html)}</body>
     </html>
   );
@@ -775,6 +661,8 @@ Opportunity Overview
     // console.log(matched, 'matcah');
     string = string?.replace(emailExp, ` ${matched}`);
   }
+  if (string.match('<li'))
+    string = string?.replaceAll('<li', '<li style="list-style-type: disc"');
   let extractStyles;
   let k = 0;
   let fetchedElementArray = string.split(/(>)/g);
@@ -789,34 +677,30 @@ Opportunity Overview
             JSON.stringify(foundArray).match('line-through') &&
             JSON.stringify(foundArray).match('underline')
           ) {
+            console.log('undeline + linethourhg');
             extractStyles = `<u><s>${splitText[0]}</s></u><${splitText[1]}`;
-          } else if (JSON.stringify(foundArray).match('line-through'))
+          } else if (JSON.stringify(foundArray).match('line-through')) {
+            console.log('+ linethourhg');
             extractStyles = `<s>${splitText[0]}</s><${splitText[1]}`;
-          else if (JSON.stringify(foundArray).match('underline'))
+          } else if (JSON.stringify(foundArray).match('underline')) {
+            console.log('undeline');
             extractStyles = `<u>${splitText[0]}</u><${splitText[1]}`;
+          }
           fetchedElementArray[indexFoundArray + k] = extractStyles;
-          // console.log(fetchedElementArray, 'farray');
+          console.log(fetchedElementArray, 'farray');
           let appendedString = '';
-          fetchedElementArray.forEach(
-            value =>
-              // console.log(value, value.length, 'vue'), (appendedString += value)
-              (appendedString += value)
-          );
+          fetchedElementArray.forEach(value => (appendedString += value));
           string = appendedString;
         }
       }
     }
   });
-  // console.log(string, 'lstr');
+  console.log(string, 'lstr');
   const pdfa = new jsPDF('p', 'pt', 'a4');
-  // pdfa.addFont();
-  pdfa.setFont('Courier');
-  pdfa.setFontSize(12);
-  console.log('11111111111111', string);
   pdfa.html(string, {
     callback(pdfa2) {
       const pageCount = pdfa2.internal.getNumberOfPages();
-      for (let i = 0; i < pageCount; i += 1) {
+      for (let i = 0; i <= pageCount; i += 1) {
         pdfa2.setPage(i);
         pdfa2.addImage(image, 'PNG', 400, 20, 143, 60);
         pdfa2.addImage(Border, 'PNG', 50, 80, 500, 0);
