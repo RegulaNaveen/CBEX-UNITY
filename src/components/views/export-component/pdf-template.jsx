@@ -1,3 +1,8 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable guard-for-in */
+/* eslint-disable prefer-const */
+/* eslint-disable import/prefer-default-export */
+/* eslint-disable no-return-assign */
 import {
   getFilteredQuestion,
   headFields,
@@ -13,7 +18,8 @@ import {
   yearNow,
   getUnityLink,
   formatDate,
-  shouldInclude
+  shouldInclude,
+  getLastAnswerHtml
 } from './word-template';
 import { renderToString } from 'react-dom/server';
 import ReactHtmlParser from 'react-html-parser';
@@ -34,7 +40,7 @@ import React from 'react';
 import Html from 'react-pdf-html';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { isString } from 'lodash';
+import { constant, isString } from 'lodash';
 import ProximaNova from '../../../../fonts/ProximaNova-Regular.otf';
 import ProximaNovaBold from '../../../../fonts/Proxima Nova Alt Bold.otf';
 import ProximaNovaBoldItalic from '../../../../fonts/Proxima-Nova-Bold-It.otf';
@@ -189,6 +195,7 @@ const getStyle = `<style>
   // .notesTable >ul>li{
   //   padding-left: 5px;
   // }
+  
   ul li{
     padding-left: 5px;
   }
@@ -242,7 +249,6 @@ const getStyle = `<style>
   [data-block="true"] {
     padding-bottom:10px;
 }
-
   li {
     align-items: flex-start;
   }
@@ -525,7 +531,7 @@ function getProposalTeamsRows(questions) {
     html += `<th> Name</th>`;
     html += `</tr>`;
     coreTeamQuestions.forEach(question => {
-      let { questionText, answers } = question;
+      const { questionText, answers } = question;
       const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
       html += `<tr>`;
       html += `<td>${questionText} ${extraNewLines}</td>`;
@@ -539,7 +545,7 @@ function getProposalTeamsRows(questions) {
     html += `<th> Name</th>`;
     html += `</tr>`;
     otherTeamQuestions.forEach(question => {
-      let { questionText, answers } = question;
+      const { questionText, answers } = question;
       const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
       html += `<tr>`;
       html += `<td>${questionText} ${extraNewLines}</td>`;
@@ -593,13 +599,13 @@ function questionTables(proposalQuestions) {
     sections[section]
       .sort((a, b) => a.questionOrder - b.questionOrder)
       .forEach(question => {
-        const questionText = question.questionText || '';
+        const questionHTML = question.questionHTML || '';
         const extraNewLines = getExtraLines(
-          getLastAnswer(question.answers),
-          questionText
+          getLastAnswerHtml(question.answers),
+          questionHTML
         );
         html += `<tr>`;
-        html += `<td> ${questionText} ${extraNewLines}</td>`;
+        html += `<td> ${questionHTML} ${extraNewLines}</td>`;
         html += `<td> ${formatDate(
           checkFormattedAnswer(question.answers),
           question.answerConfiguration
@@ -634,20 +640,33 @@ function getQuestionToCustomerRows(questions) {
   html += `<th> ${QC_SECTION} </th>`;
   html += `</tr>`;
   try {
-    html += `<tr>`;
-    html += `<td><ul>`;
     questionsToCustomer.forEach((question, index) => {
-      let { questionText } = question;
-      html += `<li> ${questionText} </li>`;
+      const { questionText } = question;
+      console.log('question :>> ', question);
+      const extraNewLines = getExtraLines(
+        getLastAnswerHtml(question?.answers),
+        questionText
+      );
+      html += `<tr>`;
+      html += `<td> ${questionText} ${extraNewLines}</td>`;
+      html += `<td> ${formatDate(
+        checkFormattedAnswer(question.answers),
+        question.answerConfiguration
+      )} <span class="blueColorText">${
+        getUnityPredicatedText(question.answers)
+          ? getUnityPredicatedText(question.answers)
+          : ''
+      }</span>${extraNewLines}</td>`;
     });
-    html += `</ul></td>`;
     html += `</tr>`;
   } catch (error) {
     console.log('Error in getQuestionToCustomerRows');
   }
   html += `</table>`;
+  console.log('111111111111 :>> ', html);
   return html;
 }
+
 function getNotesRows(notes, editor) {
   let html = ``;
   html += `<table class="notesTable table marginTop20">`;
@@ -659,13 +678,13 @@ function getNotesRows(notes, editor) {
   data += `<table><tr><td style="border:1px solid black;padding:10px">`;
   try {
     const noteText = editor.getJSON();
-    console.log(noteText, 'noteText');
-    console.log('notepad html', editor.getHTML());
+    // console.log(noteText, 'noteText');
+    // console.log('notepad html', editor.getHTML());
     // const str = editor.getHTML();
     // console.log(str, 'string');
     // str.replaceAll(' ', '&nbsp;');
     try {
-      console.log('noteText pdf', noteText);
+      // console.log('noteText pdf', noteText);
       data += generateHTML(noteText, [
         StarterKit,
         Link,
@@ -690,7 +709,7 @@ function getNotesRows(notes, editor) {
           }
         })
       ]);
-      console.log('ddata', data);
+      // console.log('ddata', data);
       data += `</td></tr></table>`;
       html += data;
       return html;
@@ -713,23 +732,14 @@ function getHtml(
   let html = ` 
   ${getStyled()}
   <div id="page" style="
-
       width: 500px;">
-
             <div style="
-
             width: 500px;">
-
               <div style="width: 500px;">
-
       <div style="
-
       margin-bottom: 5px;
-
       width: 200px;">
-
     <div style="font-size:14px;color:#00a3e0;font-family:inherit;font-weight:700;width: 250px;display: flex;">
-
       <p style="font-style:italic;display: flex; margin: 0px !important;">
 ${proposalDetails['CRM #'] || ' '}${'&nbsp'}
 </p>
@@ -738,9 +748,8 @@ Opportunity Overview
 </div>
          ${getHeaderInfoRows(proposalDetails)}
          ${getProposalTeamsRows(questions)}
-         ${getQuestionToCustomerRows(questions)}
          ${questionTables(filteredQuestions)}
-         ${filterState.includesNotes ? getNotesRows(notes, editor) : ''}
+         ${getQuestionToCustomerRows(questions)}
       </div>
    </div>
 </div>
@@ -763,7 +772,7 @@ Opportunity Overview
   const emailExp = /([(][a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
   if (string.match(emailExp)) {
     const matched = string.match(emailExp);
-    console.log(matched, 'matcah');
+    // console.log(matched, 'matcah');
     string = string?.replace(emailExp, ` ${matched}`);
   }
   let extractStyles;
@@ -786,27 +795,28 @@ Opportunity Overview
           else if (JSON.stringify(foundArray).match('underline'))
             extractStyles = `<u>${splitText[0]}</u><${splitText[1]}`;
           fetchedElementArray[indexFoundArray + k] = extractStyles;
-          console.log(fetchedElementArray, 'farray');
+          // console.log(fetchedElementArray, 'farray');
           let appendedString = '';
           fetchedElementArray.forEach(
-            value => (
-              console.log(value, value.length, 'vue'), (appendedString += value)
-            )
+            value =>
+              // console.log(value, value.length, 'vue'), (appendedString += value)
+              (appendedString += value)
           );
           string = appendedString;
         }
       }
     }
   });
-  console.log(string, 'lstr');
+  // console.log(string, 'lstr');
   const pdfa = new jsPDF('p', 'pt', 'a4');
+  // pdfa.addFont();
   pdfa.setFont('Courier');
   pdfa.setFontSize(12);
-  console.log(pdfa.getFontList(), 'gflt');
+  console.log('11111111111111', string);
   pdfa.html(string, {
     callback(pdfa2) {
       const pageCount = pdfa2.internal.getNumberOfPages();
-      for (let i = 0; i < pageCount; i++) {
+      for (let i = 0; i < pageCount; i += 1) {
         pdfa2.setPage(i);
         pdfa2.addImage(image, 'PNG', 400, 20, 143, 60);
         pdfa2.addImage(Border, 'PNG', 50, 80, 500, 0);
