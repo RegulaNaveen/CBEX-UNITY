@@ -135,12 +135,7 @@ function QuestionsForCustomer() {
       if (ques.questionId === question.questionId) return true;
     });
 
-    console.log({ updatedQuestion }, updatedQuestion[0].answers.length);
-
-    if (
-      question.isNewEntry &&
-      !question?.answers[question?.answers?.length - 1]
-    ) {
+    if (question.isNewEntry) {
       const filteredCustomQuestion = new OrderedMap(
         Array.from(questions).filter(questionItem => {
           if (questionItem[1].get('questionId') !== question.questionId) {
@@ -155,10 +150,10 @@ function QuestionsForCustomer() {
     } else if (
       (question?.answers[question?.answers?.length - 1] &&
         question?.answers[question?.answers?.length - 1].answer.trim()) ||
-      (updatedQuestion[0].answers[updatedQuestion[0].answers?.length - 1] &&
-        updatedQuestion[0].answers[
-          updatedQuestion[0].answers?.length - 1
-        ].answer.trim())
+      (updatedQuestion[0]?.answers[updatedQuestion[0]?.answers?.length - 1] &&
+        updatedQuestion[0]?.answers[
+          updatedQuestion[0]?.answers?.length - 1
+        ]?.answer.trim())
     ) {
       setQuestionToDelete(question);
       setShowDeleteModal(true);
