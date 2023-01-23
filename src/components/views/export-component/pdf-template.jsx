@@ -242,21 +242,19 @@ body{
     font-family: ProximaNova
 }
 table {
-  width:500px;
+  width:480px;
   height: auto;
 }
 tr {    
   border-top: 1px solid #000;
   border-left: 1px solid #000;
   border-right: 1px solid #000;
-  border-bottom: 1px solid #000;
   height: auto;
 }
 td {    
   border-top: 1px solid #000;
   border-left: 1px solid #000;
   border-right: 1px solid #000;
-  border-bottom: 1px solid #000;
   height: auto;
 }
 .marginTop50 {
@@ -271,9 +269,6 @@ td {
 .table tr:last-child{
     border-bottom: 1px solid #000;
     border-right: 1px solid #000;
-}
-ol {
-  margin-top: 5px;
 }
 .notesTable tr{
     border-bottom: none;
@@ -292,14 +287,22 @@ ol {
     background: #00A3E0;
     color:#fff;
 }
-table tr {
-  border-bottom: 0px !important;
+.questionTable tr td {
+  width: 50%;
+  border-right: 1px solid #000;
 }
-.notesTable >ul>li{    
+.notesTable tr td {
+  width: 100%;
+  border-right: 1px solid #000;
+}
+.notesTable >ul>li{
   padding-left: 5px;
-  margin-top: 5px;
-  padding-bottom: 5px;
 }
+.proposalTeam td {
+  width: 50%;
+}
+.questionToCustomerTable tr td {
+    width: 50%;
 }
 ul li{
   padding-left: 5px;
@@ -357,22 +360,18 @@ ul li{
 li {
   align-items: flex-start;
 }
-li_bullet, .li_bullet {
-  margin-bottom:3px;
-}
-p
-{
+.questionTable ol,ul,p{
   margin-top:0px !important;
+  margin-bottom:5px !important;
+}
+.notesTable p{
+  margin-top: 0px !important;
   margin-bottom:3px !important;
 }
 li > ul > li {
   list-style-type: &#x26AC !important; 
-  margin-left:-1em;
-  line-height:15px;
-  }
-.hg-pdf table tr {
-  page-break-inside: avoid;
-}  </style>`;
+      margin-left:-1em; 
+  }</style>`;
 }
 function getHeaderInfoRows(details) {
   let html = `<table class="table headerInfo">`;
@@ -485,7 +484,7 @@ function questionTables(proposalQuestions) {
     sections[section]
       .sort((a, b) => a.questionOrder - b.questionOrder)
       .forEach(question => {
-        const questionHTML = question.questionHTML || '';
+        const questionHTML = question.questionHTML || question.questionText;
         const extraNewLines = getExtraLines(
           getLastAnswerHtml(question.answers),
           questionHTML
@@ -655,11 +654,20 @@ Opportunity Overview
   const image = Logo;
   let string = renderToString(<Prints />);
 
-  const emailExp = /([(][a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
+  const emailExp = /([(][a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+[)])/gi;
   if (string.match(emailExp)) {
-    const matched = string.match(emailExp);
-    // console.log(matched, 'matcah');
-    string = string?.replace(emailExp, ` ${matched}`);
+    const matched = string?.match(emailExp);
+    console.log(matched, 'mtched');
+    if (matched)
+      for (let mail = 0; mail <= matched.length; mail += 1) {
+        const matchEmail = new RegExp(matched[mail], 'g');
+        console.log(matchEmail, 'memail');
+        if (string?.match(matchEmail))
+          string = string?.replace(
+            matched[mail],
+            ` <p style="color: #0000FF">${matched[mail]}</p>`
+          );
+      }
   }
   if (string.match('<li'))
     string = string?.replaceAll('<li', '<li style="list-style-type: disc"');
@@ -688,9 +696,9 @@ Opportunity Overview
           }
           fetchedElementArray[indexFoundArray + k] = extractStyles;
           console.log(fetchedElementArray, 'farray');
-          let appendedString = '';
-          fetchedElementArray.forEach(value => (appendedString += value));
-          string = appendedString;
+          // let appendedString = '';
+          // fetchedElementArray.forEach(value => (appendedString += value));
+          // string = appendedString;
         }
       }
     }
@@ -705,6 +713,7 @@ Opportunity Overview
         pdfa2.addImage(image, 'PNG', 400, 20, 143, 60);
         pdfa2.addImage(Border, 'PNG', 50, 80, 500, 0);
         pdfa2.setTextColor(0, 163, 224);
+        pdfa.setFontSize(12);
         pdfa2.text(
           '† Unity has provided this answer but not validated by user on proposal team.',
           50,
