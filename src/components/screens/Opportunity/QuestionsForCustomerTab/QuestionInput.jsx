@@ -15,7 +15,8 @@ const QuestionInput = ({
   socketContext,
   checkDisableFlag,
   setShowLoader,
-  questionIndex
+  questionIndex,
+  setNewEntry
 }) => {
   const selectedBid = useSelector(getSelectedBid);
   const dispatch = useDispatch();
@@ -59,7 +60,10 @@ const QuestionInput = ({
     };
     if (question?.isNewEntry) {
       setShowLoader(true);
-      await dispatch(setProposalQuestion(proposalId, questionData));
+      await dispatch(
+        setProposalQuestion(proposalId, questionData, socketContext)
+      );
+      setNewEntry(null);
       setShowLoader(false);
       questionUnlockWrapper(question?.questionId);
     } else {
@@ -136,7 +140,7 @@ const QuestionInput = ({
   return (
     <>
       <div className="input-wrapper" ref={quesTextInnerLeftRef}>
-        <span className="input-label">Q{questionIndex}:</span>
+        <span className="input-label">Q{question?.questionOrder}:</span>
         <CustomApolloRichText {...richtextProps} />
       </div>
     </>

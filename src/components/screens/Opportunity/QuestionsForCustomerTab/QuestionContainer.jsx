@@ -3,6 +3,7 @@ import Card from 'apollo-react/components/Card';
 import Loader from 'apollo-react/components/Loader';
 import Typography from 'apollo-react/components/Typography';
 import React, { useContext, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { SocketContext } from '../../../../context/SocketContext';
 import {
   getUserEmail,
@@ -16,11 +17,14 @@ import QuestionInput from './QuestionInput';
 const QuestionContainer = ({
   deleteQuestionHandler,
   questionData,
-  questionIndex
+  questionIndex,
+  isCurrentBid,
+  setNewEntry
 }) => {
   const question = questionData.toJS();
   const socketContext = useContext(SocketContext);
   const [showLoader, setShowLoader] = useState(false);
+  const allFlags = useSelector(state => state.proposal.get('eventflag'));
 
   const getUserData = () => ({
     name: getUserName(),
@@ -40,7 +44,12 @@ const QuestionContainer = ({
   };
 
   const checkDisableFlag = () => {
-    if (isQuestionLockedByOther()) return true;
+    if (
+      isQuestionLockedByOther() ||
+      !isCurrentBid ||
+      !allFlags.isQuestionForCustomerEditable
+    )
+      return true;
 
     return false;
   };
@@ -51,7 +60,8 @@ const QuestionContainer = ({
     socketContext,
     checkDisableFlag,
     setShowLoader,
-    questionIndex
+    questionIndex,
+    setNewEntry
   };
 
   return (
