@@ -800,7 +800,6 @@ Opportunity Overview
   });
   console.log(string, 'lstr');
   const pdfa = new jsPDF('p', 'pt', 'a4');
-  pdfa.addFont();
   pdfa.setFont('Courier');
   pdfa.setFontSize(12);
   console.log(pdfa.getFontList(), 'gflt');
