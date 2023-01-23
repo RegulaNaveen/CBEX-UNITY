@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PlusIcon from 'apollo-react-icons/Plus';
 import Button from 'apollo-react/components/Button';
@@ -13,19 +13,26 @@ import { getProposalQuestions } from '../../../../redux/selectors/proposal';
 import { getSelectedBid, selectSections } from '../../../../redux/selectors';
 import Header from './Header';
 import { deleteProposalQuestion } from '../../../../redux/actions/proposal-actions';
-import SocketContextProvider from '../../../../context/SocketContext';
+import { SocketContext } from '../../../../context/SocketContext';
 
 function QuestionsForCustomer() {
   const questionsList = useSelector(getProposalQuestions);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [questionToDelete, setQuestionToDelete] = useState(null);
+  const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const [questions, setQuestions] = useState(new OrderedMap());
   const sections = useSelector(selectSections);
   const selectedBid = useSelector(getSelectedBid);
+  const isCurrentBid = selectedBid.get('isCurrent');
   const dispatch = useDispatch();
+  const socketContext = useContext(SocketContext);
+  const [newEntry, setNewEntry] = useState(null);
+  const [showScroll, setShowScroll] = useState(null);
+  const addNewEntryRef = React.createRef();
 
   useEffect(() => {
     setQuestions(new OrderedMap());
+
     sections.map(section => {
       if (
         section.get('sectionName') === 'Questions_for_the_Customer_left_panel'
@@ -43,8 +50,16 @@ function QuestionsForCustomer() {
         );
 
         setQuestions(filteredCustomQuestion);
+
+        if (newEntry) {
+          let question = filteredCustomQuestion;
+          question = question.set(newEntry.questionId, fromJS(newEntry));
+          setQuestions(question);
+        }
       }
     });
+
+    if (addNewEntryRef?.current?.offsetTop > 380) setShowScroll(true);
   }, [questionsList]);
 
   const addQuestionHandler = () => {
@@ -59,7 +74,7 @@ function QuestionsForCustomer() {
         sectionName: 'Questions_for_the_Customer_left_panel'
       },
       active: true,
-      questionOrder: question.size + 1,
+      questionOrder: '',
       questionApproval: false,
       locked: false,
       proposalId: '3cefc843-73d8-4797-9ffa-09b3e290b8bc',
@@ -82,6 +97,7 @@ function QuestionsForCustomer() {
       events: ''
     };
     question = question.set(_id, fromJS(newQuestionEntry));
+    setNewEntry(newQuestionEntry);
 
     setQuestions(question);
   };
@@ -92,7 +108,11 @@ function QuestionsForCustomer() {
 
     setShowDeleteModal(false);
     await dispatch(
-      deleteProposalQuestion(proposalId, questionToDelete.questionId)
+      deleteProposalQuestion(
+        proposalId,
+        questionToDelete.questionId,
+        socketContext
+      )
     );
 
     setQuestionToDelete(null);
@@ -103,12 +123,18 @@ function QuestionsForCustomer() {
     const proposalId = selectedBid.get('id');
 
     setShowDeleteModal(false);
-    await dispatch(deleteProposalQuestion(proposalId, question.questionId));
+    await dispatch(
+      deleteProposalQuestion(proposalId, question.questionId, socketContext)
+    );
 
     setQuestionToDelete(null);
   };
 
   const deleteQuestionHandler = question => {
+    const updatedQuestion = questionsList.filter(ques => {
+      if (ques.questionId === question.questionId) return true;
+    });
+
     if (question.isNewEntry) {
       const filteredCustomQuestion = new OrderedMap(
         Array.from(questions).filter(questionItem => {
@@ -119,10 +145,15 @@ function QuestionsForCustomer() {
           return false;
         })
       );
+      setNewEntry(null);
       setQuestions(filteredCustomQuestion);
     } else if (
-      question?.answers[question?.answers?.length - 1] &&
-      question?.answers[question?.answers?.length - 1].answer.trim()
+      (question?.answers[question?.answers?.length - 1] &&
+        question?.answers[question?.answers?.length - 1].answer.trim()) ||
+      (updatedQuestion[0]?.answers[updatedQuestion[0]?.answers?.length - 1] &&
+        updatedQuestion[0]?.answers[
+          updatedQuestion[0]?.answers?.length - 1
+        ]?.answer.trim())
     ) {
       setQuestionToDelete(question);
       setShowDeleteModal(true);
@@ -197,7 +228,7 @@ function QuestionsForCustomer() {
         {questions?.size > 0 ? (
           <div
             className={
-              questions?.size > 3
+              showScroll || questions?.size > 2
                 ? 'questions-container-over'
                 : 'questions-container'
             }
@@ -209,6 +240,9 @@ function QuestionsForCustomer() {
                     deleteQuestionHandler={deleteQuestionHandler}
                     questionData={questionData}
                     questionIndex={index + 1}
+                    isCurrentBid={isCurrentBid}
+                    setNewEntry={setNewEntry}
+                    showScroll={showScroll}
                   />
                 );
               })}
@@ -244,12 +278,15 @@ function QuestionsForCustomer() {
               className="btn-label"
               onClick={() => addQuestionHandler()}
               disabled={
-                Array.from(questions)[questions.size - 1]
+                (Array.from(questions)[questions.size - 1]
                   ? Array.from(questions)[questions.size - 1][1].get(
                       'isNewEntry'
                     )
-                  : false
+                  : false) ||
+                !isCurrentBid ||
+                !allFlags.isQuestionForCustomerEditable
               }
+              ref={addNewEntryRef}
             >
               Add New
             </Button>

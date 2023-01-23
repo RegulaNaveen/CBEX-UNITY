@@ -560,7 +560,8 @@ export const getIntegrationsData = (): ThunkAction<string, Object> => {
 
 export const setProposalQuestion = (
   proposalId: string,
-  questionData: Object
+  questionData: Object,
+  socketContext
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
@@ -569,7 +570,24 @@ export const setProposalQuestion = (
     });
     try {
       const data = await setProposalQuestionData(proposalId, questionData);
+      if (socketContext) await socketContext?.addQuestionWrapper(data);
       dispatch({ type: PROPOSAL_SET_QUESTION, payload: data });
+    } catch (err) {
+      dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
+    }
+  };
+};
+
+export const setProposalQuestionFromSocket = (
+  questionData: Object
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: PROPOSAL_SET_QUESTION_LOADING,
+      payload: {}
+    });
+    try {
+      dispatch({ type: PROPOSAL_SET_QUESTION, payload: questionData });
     } catch (err) {
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
     }
@@ -1086,7 +1104,8 @@ export const editProposalQuestionfromSocket = (
 
 export const deleteProposalQuestion = (
   proposalId: string,
-  questionId: string
+  questionId: string,
+  socketContext
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
@@ -1095,6 +1114,7 @@ export const deleteProposalQuestion = (
     });
     try {
       const data = await deleteProposalQuestionData(proposalId, questionId);
+      if (socketContext) await socketContext?.questionDeleteWrapper(questionId);
 
       dispatch({ type: PROPOSAL_DELETE_QUESTION, payload: questionId });
     } catch (err) {
@@ -1102,6 +1122,23 @@ export const deleteProposalQuestion = (
     }
   };
 };
+
+export const deleteProposalQuestionFromSocket = (
+  questionId: string
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: PROPOSAL_SET_QUESTION_LOADING,
+      payload: {}
+    });
+    try {
+      dispatch({ type: PROPOSAL_DELETE_QUESTION, payload: questionId });
+    } catch (err) {
+      dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
+    }
+  };
+};
+
 export const closeNewbidflags = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({ type: NEW_BID_CREATED, payload: { flag: false } });

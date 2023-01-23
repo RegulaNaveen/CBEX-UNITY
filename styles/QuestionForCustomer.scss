@@ -1,7 +1,10 @@
 .questions-for-customer-container {
+  .tag-user-list {
+    left: 16px;
+    width: auto;
+  }
   .questions-container {
     overflow: visible;
-
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
     display: relative;
@@ -14,9 +17,7 @@
   .questions-container-over {
     max-height: 75%;
     min-height: 25%;
-    // overflow: visible;
     overflow-y: auto;
-    clip-depth: 2;
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
     display: relative;
