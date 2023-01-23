@@ -131,7 +131,16 @@ function QuestionsForCustomer() {
   };
 
   const deleteQuestionHandler = question => {
-    if (question.isNewEntry) {
+    const updatedQuestion = questionsList.filter(ques => {
+      if (ques.questionId === question.questionId) return true;
+    });
+
+    console.log({ updatedQuestion }, updatedQuestion[0].answers.length);
+
+    if (
+      question.isNewEntry &&
+      !question?.answers[question?.answers?.length - 1]
+    ) {
       const filteredCustomQuestion = new OrderedMap(
         Array.from(questions).filter(questionItem => {
           if (questionItem[1].get('questionId') !== question.questionId) {
