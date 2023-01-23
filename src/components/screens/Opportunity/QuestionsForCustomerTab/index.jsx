@@ -19,6 +19,7 @@ function QuestionsForCustomer() {
   const questionsList = useSelector(getProposalQuestions);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [questionToDelete, setQuestionToDelete] = useState(null);
+  const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const [questions, setQuestions] = useState(new OrderedMap());
   const sections = useSelector(selectSections);
   const selectedBid = useSelector(getSelectedBid);
@@ -273,7 +274,9 @@ function QuestionsForCustomer() {
                   ? Array.from(questions)[questions.size - 1][1].get(
                       'isNewEntry'
                     )
-                  : false) || !isCurrentBid
+                  : false) ||
+                !isCurrentBid ||
+                !allFlags.isQuestionForCustomerEditable
               }
               ref={addNewEntryRef}
             >
