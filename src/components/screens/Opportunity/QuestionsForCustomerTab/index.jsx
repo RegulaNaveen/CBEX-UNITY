@@ -153,8 +153,12 @@ function QuestionsForCustomer() {
       setNewEntry(null);
       setQuestions(filteredCustomQuestion);
     } else if (
-      question?.answers[question?.answers?.length - 1] &&
-      question?.answers[question?.answers?.length - 1].answer.trim()
+      (question?.answers[question?.answers?.length - 1] &&
+        question?.answers[question?.answers?.length - 1].answer.trim()) ||
+      (updatedQuestion[0].answers[updatedQuestion[0].answers?.length - 1] &&
+        updatedQuestion[0].answers[
+          updatedQuestion[0].answers?.length - 1
+        ].answer.trim())
     ) {
       setQuestionToDelete(question);
       setShowDeleteModal(true);
