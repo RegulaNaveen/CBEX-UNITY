@@ -219,7 +219,9 @@ function QuestionsForCustomer() {
         {questions?.size > 0 ? (
           <div
             className={
-              showScroll ? 'questions-container-over' : 'questions-container'
+              showScroll || questions?.size > 2
+                ? 'questions-container-over'
+                : 'questions-container'
             }
           >
             <ul>
