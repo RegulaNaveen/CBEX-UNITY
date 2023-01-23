@@ -17,6 +17,7 @@ import {
 } from './word-template';
 import { renderToString } from 'react-dom/server';
 import ReactHtmlParser from 'react-html-parser';
+import Split from 'react-split';
 import {
   pdf,
   Document,
@@ -52,15 +53,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import Logo from '../../../../img/iqvia-main-logo.png';
 import Border from '../../../../img/border.png';
-Font.register({
-  family: 'ProximaNova',
-  fonts: [
-    { src: ProximaNovaBoldItalic, fontStyle: 'italic', fontWeight: 700 },
-    { src: ProximaNovaItalic, fontStyle: 'italic' },
-    { src: ProximaNovaBold, fontWeight: 700 },
-    { src: ProximaNova, fontStyle: 'normal' }
-  ]
-});
+
 const styles = StyleSheet.create({
   page: {
     paddingBottom: '18vh',
@@ -93,7 +86,7 @@ const styles = StyleSheet.create({
     width: '485px',
     minHeight: '60vh',
     display: 'grid',
-    fontFamily: ProximaNova
+    fontFamily: 'ProximaNova'
   },
   footer: {
     position: 'absolute',
@@ -128,9 +121,6 @@ const styles = StyleSheet.create({
   }
 });
 const getStyle = `<style>
-  *{
-      font-family: ProximaNova !important;
-    }
   h1{
       font-size: 20px;
       margin: 5px;
@@ -146,7 +136,6 @@ const getStyle = `<style>
   body{
       padding: 50px;
       font-size: 10px;
-      font-family: ProximaNova
   }
   table {
     width:500px;
@@ -180,6 +169,9 @@ const getStyle = `<style>
   }
   .notesTable tr{
       border-bottom: none;
+  }
+  .text-decoration-striket{
+    text-decoration: line-through;
   }
   .notesTable tr:last-child{
       border-bottom: 1px solid #000;
@@ -248,14 +240,14 @@ const getStyle = `<style>
       border-top: none;
   }
   [data-block="true"] {
-      padding-bottom:10px;
-  }
+    padding-bottom:10px;
+}
+
   li {
     align-items: flex-start;
-    line-height:2px;
   }
   li_bullet, .li_bullet {
-    margin-botton:4px;
+    margin-bottom:4px;
   }
   ol,ul,p{
     margin-top:3px !important;
@@ -296,7 +288,7 @@ function topHeading(details) {
   return `<h1 class="mainTitle"><em>${details['CRM #'] ||
     ''}</em> Opportunity Overview</h1>`;
 }
-const Footers = (proposalDetails) => (
+const Footers = proposalDetails => (
   <div>
     <div fixed style={styles.footer}>
       <p
@@ -358,9 +350,6 @@ const Footers = (proposalDetails) => (
 );
 function getStyled() {
   return `<style>
-  *{
-      font-family: ProximaNova !important;
-    }
   h1{
       font-size: 20px;
       margin: 5px;
@@ -376,7 +365,6 @@ function getStyled() {
   body{
       padding: 50px;
       font-size: 10px;
-      font-family: ProximaNova
   }
   table {
     width:500px
@@ -478,14 +466,15 @@ function getStyled() {
       border-top: none;
   }
   [data-block="true"] {
-      padding-bottom:10px;
-  }
+    padding-bottom:10px;
+}
+
   li {
     align-items: flex-start;
   }
  
   li_bullet, .li_bullet {
-    margin-botton:4px;
+    margin-bottom:4px;
   }
   ol,ul,p{
     margin-top:3px !important;
@@ -514,7 +503,7 @@ function getHeaderInfoRows(details) {
 function getProposalTeamsRows(questions) {
   const coreTeamQuestions = questions
     .filter(
-      (question) =>
+      question =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
         CORE_TEAM[question.questionText]
@@ -522,7 +511,7 @@ function getProposalTeamsRows(questions) {
     .sort((a, b) => a.questionOrder - b.questionOrder);
   const otherTeamQuestions = questions
     .filter(
-      (question) =>
+      question =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
         !CORE_TEAM[question.questionText]
@@ -535,7 +524,7 @@ function getProposalTeamsRows(questions) {
     html += `<th> Core Team Members </th>`;
     html += `<th> Name</th>`;
     html += `</tr>`;
-    coreTeamQuestions.forEach((question) => {
+    coreTeamQuestions.forEach(question => {
       let { questionText, answers } = question;
       const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
       html += `<tr>`;
@@ -549,7 +538,7 @@ function getProposalTeamsRows(questions) {
     html += `<th> Specialty Team Members </th>`;
     html += `<th> Name</th>`;
     html += `</tr>`;
-    otherTeamQuestions.forEach((question) => {
+    otherTeamQuestions.forEach(question => {
       let { questionText, answers } = question;
       const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
       html += `<tr>`;
@@ -568,7 +557,7 @@ function questionTables(proposalQuestions) {
   let html = ``;
   // Remove not visible questions
   let questions = proposalQuestions
-    .filter((question) => {
+    .filter(question => {
       return (
         shouldInclude(question) &&
         question.section.sectionName !== PT_SECTION &&
@@ -582,7 +571,7 @@ function questionTables(proposalQuestions) {
   const sections = {};
   let ordereredSections = [];
   // Populate the section map
-  questions.forEach((question) => {
+  questions.forEach(question => {
     try {
       let section = question.section.sectionName || '';
       if (sections[section]) {
@@ -595,7 +584,7 @@ function questionTables(proposalQuestions) {
       console.log('Error while mapping Sections');
     }
   });
-  ordereredSections.forEach((section) => {
+  ordereredSections.forEach(section => {
     html += `<table class="questionTable table marginTop20">`;
     html += `<tr>`;
     html += `<th> ${section} </th>`;
@@ -603,7 +592,7 @@ function questionTables(proposalQuestions) {
     html += `</tr>`;
     sections[section]
       .sort((a, b) => a.questionOrder - b.questionOrder)
-      .forEach((question) => {
+      .forEach(question => {
         const questionText = question.questionText || '';
         const extraNewLines = getExtraLines(
           getLastAnswer(question.answers),
@@ -629,7 +618,7 @@ function getQuestionToCustomerRows(questions) {
   let html = ``;
   let questionsToCustomer = questions
     .filter(
-      (question) =>
+      question =>
         shouldInclude(question) && question.section.sectionName === QC_SECTION
     )
     .sort((a, b) => a.questionOrder - b.questionOrder);
@@ -739,7 +728,7 @@ function getHtml(
 
       width: 200px;">
 
-    <div style="font-size:14px;color:#00a3e0;font-family:proximanova;font-weight:700;width: 250px;display: flex;">
+    <div style="font-size:14px;color:#00a3e0;font-family:inherit;font-weight:700;width: 250px;display: flex;">
 
       <p style="font-style:italic;display: flex; margin: 0px !important;">
 ${proposalDetails['CRM #'] || ' '}${'&nbsp'}
@@ -763,14 +752,13 @@ Opportunity Overview
   if (html.match(SpanExp)) html = html?.replace(SpanExp, '</span>');
 
   const Prints = () => (
-    <html>
+    <html style={{ fontFamily: 'Courier !important' }}>
       {ReactHtmlParser(getStyle)}
       <body>{ReactHtmlParser(html)}</body>
     </html>
   );
   const image = Logo;
   let string = renderToString(<Prints />);
-  console.log(string, 'strfg');
 
   const emailExp = /([(][a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
   if (string.match(emailExp)) {
@@ -778,17 +766,44 @@ Opportunity Overview
     console.log(matched, 'matcah');
     string = string?.replace(emailExp, ` ${matched}`);
   }
-  if (string.match('  ')) string = string?.replaceAll('&nbsp');
+  let extractStyles;
+  let k = 0;
+  let fetchedElementArray = string.split(/(>)/g);
+  fetchedElementArray.filter(value => {
+    if (value.match(/text-decoration:(.*?)"/g)) {
+      let foundArray = value;
+      let indexFoundArray = fetchedElementArray.indexOf(foundArray);
+      for (k; k < 7; k++) {
+        if (fetchedElementArray[indexFoundArray + k].match(/^(.+?)<\//g)) {
+          const splitText = fetchedElementArray[indexFoundArray + k].split('<');
+          if (
+            JSON.stringify(foundArray).match('line-through') &&
+            JSON.stringify(foundArray).match('underline')
+          ) {
+            extractStyles = `<u><s>${splitText[0]}</s></u><${splitText[1]}`;
+          } else if (JSON.stringify(foundArray).match('line-through'))
+            extractStyles = `<s>${splitText[0]}</s><${splitText[1]}`;
+          else if (JSON.stringify(foundArray).match('underline'))
+            extractStyles = `<u>${splitText[0]}</u><${splitText[1]}`;
+          fetchedElementArray[indexFoundArray + k] = extractStyles;
+          console.log(fetchedElementArray, 'farray');
+          let appendedString = '';
+          fetchedElementArray.forEach(
+            value => (
+              console.log(value, value.length, 'vue'), (appendedString += value)
+            )
+          );
+          string = appendedString;
+        }
+      }
+    }
+  });
   console.log(string, 'lstr');
-  const pdfFooter = renderToString(<Footers />);
-  console.log(pdfFooter, 'ppp');
-  let pageNumber;
   const pdfa = new jsPDF('p', 'pt', 'a4');
-  const width = pdfa.internal.pageSize.getWidth();
-  const height = pdfa.internal.pageSize.getHeight();
-  const doc = new DOMParser().parseFromString(string, 'text/html');
-  const idTable = doc.getElementsByClassName('table');
-  console.log(idTable, 'idt');
+  pdfa.addFont();
+  pdfa.setFont('Courier');
+  pdfa.setFontSize(12);
+  console.log(pdfa.getFontList(), 'gflt');
   pdfa.html(string, {
     callback(pdfa2) {
       const pageCount = pdfa2.internal.getNumberOfPages();
@@ -830,54 +845,12 @@ Opportunity Overview
             align: 'right'
           }
         );
-
-        // pdfa2.text('Generated by Varsha', 250, 800);
-        // pdfa2.html(pdfFooter);
-        // autoTable(idTable, { html: '#table', styles: { fontSize: 20 } });
       }
-      pdfa.save('savev');
+      pdfa2.save('savev');
     },
-    margin: [90, 50, 90, 50]
+    margin: [90, 50, 90, 50],
+    autoPaging: 'text'
   });
-  // autoTable(res.columns, res.data);
-  // pdfa2.save('fh');
-  // autoTable(pdfs, {
-  //   html: '#table',
-  //   startY: 30,
-  //   showHead: 'everyPage',
-  //   useCss: true,
-  //   tableWidth: 'wrap',
-  //   styles: { cellPadding: 0.5, fontSize: 20 },
-  //   includeHiddenHtml: true,
-  //   horizontalPageBreak: true,
-  //   rowPageBreak: 'auto'
-  // });
-  // console.log(pdfs);
-  // pdfs.save('newpdf');
-  // console.log(pageNumber, 'pnum');
-  // console.log(pdf, 'dpf');
-  // pdf.save('ankite');
-  // pdf.html(string, {
-  //   callback: function (pdf) {
-  //     // var pageCount = pdf.internal.getNumberOfPages();
-  //     // for (let i = 0; i < pageCount; i++) {
-  //     //   pdf.setPage(i);
-  //     //   pdf.addImage(
-  //     //     image,
-  //     //     'PNG',
-  //     //     450,
-  //     //     20,
-  //     //     (width / 100) * 10,
-  //     //     (height / 100) * 5
-  //     //   );
-  //     //   // autoTable(idTable, { html: '#table', styles: { fontSize: 20 } });
-  //     //   // pdf.save();
-  //     // }
-  //     return pdf;
-  //   }
-  // });
-  // pdf.save();
-  // console.log(pdf.html, 'html');
 }
 const MyDoc = (
   proposalDetails,
