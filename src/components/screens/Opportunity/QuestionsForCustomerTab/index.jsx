@@ -22,11 +22,16 @@ function QuestionsForCustomer() {
   const [questions, setQuestions] = useState(new OrderedMap());
   const sections = useSelector(selectSections);
   const selectedBid = useSelector(getSelectedBid);
+  const isCurrentBid = selectedBid.get('isCurrent');
   const dispatch = useDispatch();
   const socketContext = useContext(SocketContext);
+  const [newEntry, setNewEntry] = useState(null);
+  const [showScroll, setShowScroll] = useState(null);
+  const addNewEntryRef = React.createRef();
 
   useEffect(() => {
     setQuestions(new OrderedMap());
+
     sections.map(section => {
       if (
         section.get('sectionName') === 'Questions_for_the_Customer_left_panel'
@@ -44,8 +49,16 @@ function QuestionsForCustomer() {
         );
 
         setQuestions(filteredCustomQuestion);
+
+        if (newEntry) {
+          let question = filteredCustomQuestion;
+          question = question.set(newEntry.questionId, fromJS(newEntry));
+          setQuestions(question);
+        }
       }
     });
+
+    if (addNewEntryRef?.current?.offsetTop > 380) setShowScroll(true);
   }, [questionsList]);
 
   const addQuestionHandler = () => {
@@ -83,6 +96,7 @@ function QuestionsForCustomer() {
       events: ''
     };
     question = question.set(_id, fromJS(newQuestionEntry));
+    setNewEntry(newQuestionEntry);
 
     setQuestions(question);
   };
@@ -126,6 +140,7 @@ function QuestionsForCustomer() {
           return false;
         })
       );
+      setNewEntry(null);
       setQuestions(filteredCustomQuestion);
     } else if (
       question?.answers[question?.answers?.length - 1] &&
@@ -204,9 +219,7 @@ function QuestionsForCustomer() {
         {questions?.size > 0 ? (
           <div
             className={
-              questions?.size > 3
-                ? 'questions-container-over'
-                : 'questions-container'
+              showScroll ? 'questions-container-over' : 'questions-container'
             }
           >
             <ul>
@@ -216,6 +229,9 @@ function QuestionsForCustomer() {
                     deleteQuestionHandler={deleteQuestionHandler}
                     questionData={questionData}
                     questionIndex={index + 1}
+                    isCurrentBid={isCurrentBid}
+                    setNewEntry={setNewEntry}
+                    showScroll={showScroll}
                   />
                 );
               })}
@@ -251,12 +267,13 @@ function QuestionsForCustomer() {
               className="btn-label"
               onClick={() => addQuestionHandler()}
               disabled={
-                Array.from(questions)[questions.size - 1]
+                (Array.from(questions)[questions.size - 1]
                   ? Array.from(questions)[questions.size - 1][1].get(
                       'isNewEntry'
                     )
-                  : false
+                  : false) || !isCurrentBid
               }
+              ref={addNewEntryRef}
             >
               Add New
             </Button>

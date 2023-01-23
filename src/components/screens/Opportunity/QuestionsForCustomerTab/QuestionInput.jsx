@@ -15,7 +15,8 @@ const QuestionInput = ({
   socketContext,
   checkDisableFlag,
   setShowLoader,
-  questionIndex
+  questionIndex,
+  setNewEntry
 }) => {
   const selectedBid = useSelector(getSelectedBid);
   const dispatch = useDispatch();
@@ -62,6 +63,7 @@ const QuestionInput = ({
       await dispatch(
         setProposalQuestion(proposalId, questionData, socketContext)
       );
+      setNewEntry(null);
       setShowLoader(false);
       questionUnlockWrapper(question?.questionId);
     } else {

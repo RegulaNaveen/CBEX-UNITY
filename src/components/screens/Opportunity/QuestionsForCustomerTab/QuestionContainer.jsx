@@ -16,7 +16,10 @@ import QuestionInput from './QuestionInput';
 const QuestionContainer = ({
   deleteQuestionHandler,
   questionData,
-  questionIndex
+  questionIndex,
+  isCurrentBid,
+  setNewEntry,
+  showScroll
 }) => {
   const question = questionData.toJS();
   const socketContext = useContext(SocketContext);
@@ -40,7 +43,7 @@ const QuestionContainer = ({
   };
 
   const checkDisableFlag = () => {
-    if (isQuestionLockedByOther()) return true;
+    if (isQuestionLockedByOther() || !isCurrentBid) return true;
 
     return false;
   };
@@ -51,7 +54,8 @@ const QuestionContainer = ({
     socketContext,
     checkDisableFlag,
     setShowLoader,
-    questionIndex
+    questionIndex,
+    setNewEntry
   };
 
   return (
