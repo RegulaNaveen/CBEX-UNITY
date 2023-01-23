@@ -74,7 +74,7 @@ function QuestionsForCustomer() {
         sectionName: 'Questions_for_the_Customer_left_panel'
       },
       active: true,
-      questionOrder: question.size + 1,
+      questionOrder: '',
       questionApproval: false,
       locked: false,
       proposalId: '3cefc843-73d8-4797-9ffa-09b3e290b8bc',
