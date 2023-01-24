@@ -48,7 +48,7 @@ import TextAlign from '@tiptap/extension-text-align';
 import OrderedList from '@tiptap/extension-text-align';
 import FooterHead from '../../../../img/footerHead.png';
 import Logo from '../../../../img/iqvia-main-logo.png';
-import Border from '../../../../img/border.PNG';
+import Border from '../../../../img/border.png';
 import Proximanova from '../../../../fonts/ProximaNova-Regular-normal';
 
 const styles = StyleSheet.create({
