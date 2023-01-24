@@ -46,7 +46,6 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
   const switchTempStatus = useSelector(
     state => state.proposal.toJSON().switchTempCallStatus
   );
-
   // Get switchTempInProgress from Redux Store
   const switchTempInProgress = useSelector(
     state => state.proposal.toJSON().switchTempInProgress
@@ -116,6 +115,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
       <Footer
         className="unity-footer"
         maxWidth="100%"
+        data-testid="footer"
         buttonProps={
           templateVersion
             ? [
@@ -124,7 +124,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
                   icon: switchTempStatus ? (
                     <Lock fontSize="extraSmall" />
                   ) : (
-                    <Sync fontSize="extraSmall" />
+                    <Sync fontSize="extraSmall" data-testid="sync-icon" />
                   ),
                   size: 'small',
                   disabled: !!switchTempStatus,
@@ -142,7 +142,6 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
             : [{ label: '', style: { display: 'none' } }]
         }
       />
-
       {otProcessing && (
         <ProcessingCRM
           isOpen={otProcessing}
@@ -155,6 +154,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
       {openSwitchTempModal && (
         <SwitchTemplate
           open={openSwitchTempModal}
+          data-testid="switch-template"
           setOpenModal={setOpenSwitchTempModal}
           opportunityType={opportunityType || ''}
           selectedBidId={selectedBidId}

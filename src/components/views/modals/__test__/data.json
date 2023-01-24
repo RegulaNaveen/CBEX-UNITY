@@ -29447,5 +29447,71 @@
             "type": "date",
             "options": []
         }
+    },
+    "eventCategories": {
+        "dp": "Unity Dashboard",
+        "plainPd": "Proposal Detail",
+        "tb": "ToolBar Menu",
+        "pg": "Pagination",
+        "crmNo": "Proposal Detail (CRM#: )"
+    },
+    "selectedBid": {
+        "questionTemplateVersionNumber": "v2023.12",
+        "agreementId": "aM701000000CbmBCAS",
+        "accountId": "0010100000K3Y1WAAV",
+        "bidName": "Bid 1",
+        "opportunityType": "Opportunity Launch Call (Pilot)",
+        "opportunityId": "0060100000BAJ0tAAH",
+        "isCurrent": true,
+        "bidStatus": false,
+        "pertinentDetails": "Testing",
+        "isApprovalCountPresent": true,
+        "id": "86462966-7e94-4648-b1e7-fb908f48eaf0"
+    },
+    "opportunityData": {
+        "1b65e3e0-ada9-4efe-9ff0-e488a2a68632": {
+            "isCurrent": false,
+            "proposal": {
+                "accountId": "00101000001ukFjAAI",
+                "active": true,
+                "agreementId": "111222444666",
+                "agreementName": "Test-Sync-loxo-Phase 1",
+                "inProgress": false,
+                "isApprovalCountPresent": false,
+                "isDeleted": false,
+                "opportunityName": "Test-Sync-loxo-Phase 1",
+                "opportunityOverview": {
+                    "Opportunity Overview-H1X": "RFP",
+                    "Opportunity Overview-H8Z": "Polycythemia vera",
+                    "Opportunity Overview-J7C": "",
+                    "Opportunity Overview-N9U": "Biologic",
+                    "Opportunity Overview-Z4X": "Bioavailability/Bioequivalence (BA/BE)",
+                    "OpportunityStatus": ""
+                }, 
+                "opportunityType": "Opportuny Type value",
+                "opportunityTypeLogic": "[{\"fieldName\":\"Core Clinical\",\"operator\":\"Or\",\"conditions\":[{\"operator\":\"And\",\"condition\":[{\"fieldName\":{\"SF Object API Name\":\"Opportunity\",\"SF Field API Name\":\"Population_Age_Group__c\",\"Sub group\":\"\"},\"fieldValue\":[\"wfwefewfewfy\"],\"answerRelationship\":\"And\",\"operator\":\"Contains\"}]}]},{\"fieldName\":\"IQVIA \",\"operator\":\"Or\",\"conditions\":[{\"operator\":\"And\",\"condition\":[{\"fieldName\":{\"SF Object API Name\":\"Bid_History__c\",\"SF Field API Name\":\"Opportunity_Type__c\",\"Sub group\":\"\"},\"fieldValue\":[\"wefweeeeeeeeee\"],\"answerRelationship\":\"And\",\"operator\":\"Contains\"}]}]},{\"fieldName\":\"Newly Updated\",\"operator\":\"Or\",\"conditions\":[{\"operator\":\"And\",\"condition\":[{\"fieldName\":{\"SF Object API Name\":\"Bid_History__c\",\"SF Field API Name\":\"Opportunity_Type__c\",\"Sub group\":\"\"},\"fieldValue\":[\"fewfwfwefewfew\"],\"answerRelationship\":\"And\",\"operator\":\"Contains\"},{\"fieldName\":{\"SF Object API Name\":\"Bid_History__c\",\"SF Field API Name\":\"Budget_Deliverable__c\",\"Sub group\":\"\"},\"fieldValue\":[\"Assay Validation Document\"],\"answerRelationship\":\"And\",\"operator\":\"Contains\"}]}]},{\"fieldName\":\"Opportuny Type value\",\"operator\":\"Or\",\"conditions\":[{\"operator\":\"And\",\"condition\":[{\"fieldName\":{\"SF Object API Name\":\"Bid_History__c\",\"SF Field API Name\":\"Bid_Due_Date__c\",\"Sub group\":\"\"},\"fieldValue\":[],\"answerRelationship\":\"And\",\"operator\":\"Is Blank\"}]}]},{\"fieldName\":\"Analytics\",\"operator\":\"Or\",\"conditions\":[{\"operator\":\"And\",\"condition\":[{\"fieldName\":{\"SF Object API Name\":\"Bid_History__c\",\"SF Field API Name\":\"Opportunity_Type__c\",\"Sub group\":\"\"},\"fieldValue\":[\"wefewfwefewf\"],\"answerRelationship\":\"And\",\"operator\":\"Equal\"}]}]},{\"fieldName\":\"FSP\",\"operator\":\"Or\",\"conditions\":[{\"operator\":\"And\",\"condition\":[{\"fieldName\":{\"SF Object API Name\":\"Bid_History__c\",\"SF Field API Name\":\"Opportunity_Type__c\",\"Sub group\":\"\"},\"fieldValue\":[\"wfwefwefewfewf\"],\"answerRelationship\":\"And\",\"operator\":\"Contains\"}]}]},{\"fieldName\":\"OPT\",\"operator\":\"Or\",\"conditions\":[{\"operator\":\"And\",\"condition\":[{\"fieldName\":{\"SF Object API Name\":\"Bid_History__c\",\"SF Field API Name\":\"Bid_Due_Date__c\",\"Sub group\":\"\"},\"fieldValue\":[\"80\"],\"answerRelationship\":\"And\",\"operator\":\"Equal\"},{\"fieldName\":{\"SF Object API Name\":\"pse__Resource_Request__c\",\"SF Field API Name\":\"pse__Staffer_Resource__c\",\"Sub group\":\"AND SubGroup__c = 'DSB-LCS'\"},\"fieldValue\":[\"rst\"],\"answerRelationship\":\"And\",\"operator\":\"Not Equal\"},{\"fieldName\":{\"SF Object API Name\":\"Opportunity\",\"SF Field API Name\":\"FSP__c\"},\"fieldValue\":[\"Yes\"],\"answerRelationship\":\"And\",\"operator\":\"Equal\"},{\"fieldName\":{\"SF Object API Name\":\"Bid_History__c\",\"SF Field API Name\":\"Budget_Deliverable__c\",\"Sub group\":\"\"},\"fieldValue\":[\"Assay Validation Document\"],\"answerRelationship\":\"And\",\"operator\":\"Equal\"}]}]},{\"fieldName\":\"SD OTT\",\"operator\":\"Or\",\"conditions\":[{\"operator\":\"And\",\"condition\":[{\"fieldName\":{\"SF Object API Name\":\"Opportunity\",\"SF Field API Name\":\"Self_Serve_Analytic_Tools__c\",\"Sub group\":\"\"},\"fieldValue\":[\"E360\",\"Ark Intelligence\"],\"answerRelationship\":\"And\",\"operator\":\"Contains\"},{\"fieldName\":{\"SF Object API Name\":\"Bid_History__c\",\"SF Field API Name\":\"Patients_Screened__c\",\"Sub group\":\"\"},\"fieldValue\":[\"22\"],\"answerRelationship\":\"And\",\"operator\":\"Contains\"}]}]},{\"fieldName\":\"Test-2\",\"operator\":\"Or\",\"conditions\":[{\"operator\":\"And\",\"condition\":[{\"fieldName\":{\"SF Object API Name\":\"Opportunity\",\"SF Field API Name\":\"Potential_Regions__c\",\"Sub group\":\"\"},\"fieldValue\":[\"Japan\"],\"answerRelationship\":\"And\",\"operator\":\"Equal\"},{\"fieldName\":{\"SF Object API Name\":\"Bid_History__c\",\"SF Field API Name\":\"Budget_Deliverable__c\",\"Sub group\":\"\"},\"fieldValue\":[\"Awardable\"],\"answerRelationship\":\"And\",\"operator\":\"Does not Contain\"},{\"fieldName\":{\"SF Object API Name\":\"Opportunity\",\"SF Field API Name\":\"FSP__c\"},\"fieldValue\":[\"Yes\"],\"answerRelationship\":\"And\",\"operator\":\"Does not Contain\"},{\"fieldName\":{\"SF Object API Name\":\"Opportunity\",\"SF Field API Name\":\"FSP__c\"},\"fieldValue\":[\"Yes\"],\"answerRelationship\":\"And\",\"operator\":\"Not Equal\"},{\"fieldName\":{\"SF Object API Name\":\"Bid_History__c\",\"SF Field API Name\":\"Requested_Services__c\",\"Sub group\":\"\"},\"fieldValue\":[\"CD - ABPM\"],\"answerRelationship\":\"And\",\"operator\":\"Not Equal\"},{\"fieldName\":{\"SF Object API Name\":\"pse__Resource_Request__c\",\"SF Field API Name\":\"pse__Staffer_Resource__c\",\"Sub group\":\"AND SubGroup__c = 'Site Analytics'\"},\"fieldValue\":[\"qwer\"],\"answerRelationship\":\"And\",\"operator\":\"Equal\"}]}]},{\"fieldName\":\"Section\",\"operator\":\"Or\",\"conditions\":[{\"operator\":\"And\",\"condition\":[{\"fieldName\":{\"SF Object API Name\":\"Bid_History__c\",\"SF Field API Name\":\"Opportunity_Type__c\",\"Sub group\":\"\"},\"fieldValue\":[\"efewfwfwefwefewfew\"],\"answerRelationship\":\"And\",\"operator\":\"Equal\"}]}]},{\"fieldName\":\"Rishi Section\",\"operator\":\"Or\",\"conditions\":[{\"operator\":\"And\",\"condition\":[{\"fieldName\":{\"SF Object API Name\":\"Bid_History__c\",\"SF Field API Name\":\"Opportunity_Type__c\",\"Sub group\":\"\"},\"fieldValue\":[\"wfwqfqwfwqf\"],\"answerRelationship\":\"And\",\"operator\":\"Equal\"}]}]},{\"fieldName\":\"Logan\",\"operator\":\"Or\",\"conditions\":[{\"operator\":\"And\",\"condition\":[{\"fieldName\":{\"SF Object API Name\":\"Bid_History__c\",\"SF Field API Name\":\"Opportunity_Type__c\",\"Sub group\":\"\"},\"fieldValue\":[\"efwefewfewfwe\"],\"answerRelationship\":\"And\",\"operator\":\"Equal\"}]}]},{\"fieldName\":\"Opp\",\"operator\":\"Or\",\"conditions\":[{\"operator\":\"And\",\"condition\":[{\"fieldName\":{\"SF Object API Name\":\"Bid_History__c\",\"SF Field API Name\":\"Opportunity_Type__c\",\"Sub group\":\"\"},\"fieldValue\":[],\"answerRelationship\":\"And\",\"operator\":\"Is Blank\"}]}]},{\"fieldName\":\"Type\",\"operator\":\"Or\",\"conditions\":[{\"operator\":\"And\",\"condition\":[{\"fieldName\":{\"SF Object API Name\":\"Bid_History__c\",\"SF Field API Name\":\"Opportunity_Type__c\",\"Sub group\":\"\"},\"fieldValue\":[\"sacsacas\"],\"answerRelationship\":\"And\",\"operator\":\"Equal\"}]}]},{\"fieldName\":\"Ak update\",\"operator\":\"Or\",\"conditions\":[{\"operator\":\"And\",\"condition\":[{\"fieldName\":{\"SF Object API Name\":\"Bid_History__c\",\"SF Field API Name\":\"Opportunity_Type__c\",\"Sub group\":\"\"},\"fieldValue\":[],\"answerRelationship\":\"And\",\"operator\":\"Is Blank\"}]}]},{\"fieldName\":\"OT\",\"operator\":\"Or\",\"conditions\":[{\"operator\":\"And\",\"condition\":[{\"fieldName\":{\"SF Object API Name\":\"Opportunity\",\"SF Field API Name\":\"FSP__c\"},\"fieldValue\":[\"No\"],\"answerRelationship\":\"And\",\"operator\":\"Not Equal\"},{\"fieldName\":{\"SF Object API Name\":\"Bid_History__c\",\"SF Field API Name\":\"Bid_Due_Date__c\",\"Sub group\":\"\"},\"fieldValue\":[\"90\"],\"answerRelationship\":\"And\",\"operator\":\"Less Than\"},{\"fieldName\":{\"SF Object API Name\":\"Bid_History__c\",\"SF Field API Name\":\"Budget_Deliverable__c\",\"Sub group\":\"\"},\"fieldValue\":[],\"answerRelationship\":\"And\",\"operator\":\"Is Blank\"},{\"fieldName\":{\"SF Object API Name\":\"pse__Resource_Request__c\",\"SF Field API Name\":\"pse__Staffer_Resource__c\",\"Sub group\":\"AND SubGroup__c = 'DSB-LCS'\"},\"fieldValue\":[],\"answerRelationship\":\"And\",\"operator\":\"Is Not Blank\"}]}]},{\"fieldName\":\"aass\",\"operator\":\"Or\",\"conditions\":[{\"operator\":\"And\",\"condition\":[{\"fieldName\":{\"SF Object API Name\":\"pse__Resource_Request__c\",\"SF Field API Name\":\"pse__Staffer_Resource__c\",\"Sub group\":\"AND SubGroup__c = 'DSB-LCS'\"},\"fieldValue\":[\"asd\"],\"answerRelationship\":\"And\",\"operator\":\"Contains\"}]}]},{\"fieldName\":\"Opo\",\"operator\":\"Or\",\"conditions\":[{\"operator\":\"And\",\"condition\":[{\"fieldName\":{\"SF Object API Name\":\"Opportunity\",\"SF Field API Name\":\"FSP__c\"},\"fieldValue\":[],\"answerRelationship\":\"And\",\"operator\":\"Is Blank\"}]}]},{\"fieldName\":\"Oqvia Biotech\",\"operator\":\"Or\",\"conditions\":[{\"operator\":\"And\",\"condition\":[{\"fieldName\":{\"SF Object API Name\":\"Opportunity\",\"SF Field API Name\":\"FSP__c\"},\"fieldValue\":[\"No\"],\"answerRelationship\":\"And\",\"operator\":\"Equal\"},{\"fieldName\":{\"SF Object API Name\":\"Opportunity\",\"SF Field API Name\":\"Line_of_Business__c\",\"Sub group\":\"\"},\"fieldValue\":[\"Core Clinical\"],\"answerRelationship\":\"And\",\"operator\":\"Equal\"},{\"fieldName\":{\"SF Object API Name\":\"Opportunity\",\"SF Field API Name\":\"Is_this_IQVIA_Biotech__c\",\"Sub group\":\"\"},\"fieldValue\":[\"Yes\"],\"answerRelationship\":\"And\",\"operator\":\"Equal\"}]},{\"operator\":\"And\",\"condition\":[{\"fieldName\":{\"SF Object API Name\":\"Opportunity\",\"SF Field API Name\":\"Is_this_IQVIA_Biotech__c\",\"Sub group\":\"\"},\"fieldValue\":[\"No\"],\"answerRelationship\":\"And\",\"operator\":\"Equal\"},{\"fieldName\":{\"SF Object API Name\":\"Opportunity\",\"SF Field API Name\":\"Line_of_Business__c\",\"Sub group\":\"\"},\"fieldValue\":[\"Early Clinical Development\"],\"answerRelationship\":\"And\",\"operator\":\"Equal\"},{\"fieldName\":{\"SF Object API Name\":\"Opportunity\",\"SF Field API Name\":\"FSP__c\"},\"fieldValue\":[\"No\"],\"answerRelationship\":\"And\",\"operator\":\"Equal\"}]}]},{\"fieldName\":\"Default Type\",\"operator\":\"Or\",\"conditions\":[]}]",
+                "proposalDate": "2022-06-01T11:09:34.610Z",
+                "proposalDetails": {
+                    "Bid due date": "2023-02-10",
+                    "BoxId": "",
+                    "CRM #": "lqopn123",
+                    "Customer": "Test-Sync-loxo-Phase 1",
+                    "Is this IQVIA Biotech": "Yes",
+                    "IsFsp": "",
+                    "Line of business": "Early Clinical Development",
+                    "Phase": "Phase 1",
+                    "Product name": "test",
+                    "Protocol number": "1",
+                    "Therapeutic area": "Hematology",
+                    "Verbatim indication": "test",
+                    "opportunityId": "",
+                    "pertinentDetails": ""
+                },
+                "proposalId": "1b65e3e0-ada9-4efe-9ff0-e488a2a68632",
+                "questionTemplateVersionNumber": "v2022.173"
+
+            }
+        }
     }
+
 }

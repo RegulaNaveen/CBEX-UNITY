@@ -347,6 +347,8 @@
       "opportunityId": "00601000009fThmAAE",
       "agreementId": "aM701000000GrWqCAK"
     },
+    "switchTempCallStatus": false,
+    "switchTempInProgress": false,
     "setQuestionData": {},
     "areAllSectionsExpanded": false,
     "proposalQuestions": [
