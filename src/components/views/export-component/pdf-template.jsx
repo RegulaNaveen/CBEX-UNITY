@@ -49,6 +49,7 @@ import OrderedList from '@tiptap/extension-text-align';
 import FooterHead from '../../../../img/footerHead.png';
 import Logo from '../../../../img/iqvia-main-logo.png';
 import Border from '../../../../img/border.png';
+import Proximanova from '../../../../fonts/ProximaNova-Regular-normal';
 
 const styles = StyleSheet.create({
   page: {
@@ -77,12 +78,6 @@ const styles = StyleSheet.create({
     width: '143px',
     height: '60px',
     alignSelf: 'flex-end'
-  },
-  body: {
-    width: '485px',
-    minHeight: '60vh',
-    display: 'grid',
-    fontFamily: 'ProximaNova'
   },
   footer: {
     position: 'absolute',
@@ -150,85 +145,11 @@ function topHeading(details) {
   return `<h1 class="mainTitle"><em>${details['CRM #'] ||
     ''}</em> Opportunity Overview</h1>`;
 }
-const Footers = proposalDetails => (
-  <div>
-    {' '}
-    <div fixed style={styles.footer}>
-      {' '}
-      <p
-        style={{
-          fontSize: '10px',
-          fontweight: 'bold',
-          color: '#00A3E0',
-          marginBottom: 5,
-          borderBottom: '1px solid #CCC'
-        }}
-      >
-        {' '}
-        † Unity has provided this answer but not validated by user on proposal
-        team.{' '}
-      </p>{' '}
-      <div style={{ display: 'flex', flexDirection: 'row', marginBottom: 5 }}>
-        {' '}
-        <p style={{ flex: 1, fontSize: '8px', color: '#999' }}>
-          {' '}
-          Exported from Unity on {dateNow()}
-        </p>{' '}
-        <p
-          style={{
-            flex: 1,
-            fontSize: '8px',
-            pAlign: 'right',
-            color: '#999'
-          }}
-        >
-          {' '}
-          div up-to-date Unity record here:
-        </p>{' '}
-      </div>{' '}
-      <div style={{ display: 'flex', flexDirection: 'row', marginBottom: 5 }}>
-        {' '}
-        <p style={{ flex: 1, fontSize: '8px', color: '#999' }}>
-          by {userName}
-        </p>{' '}
-        <p
-          style={{
-            flex: 1,
-            fontSize: '8px',
-            pAlign: 'right',
-            color: '#999'
-          }}
-        >
-          {' '}
-          {getUnityLink(proposalDetails)}
-        </p>{' '}
-      </div>{' '}
-      <div style={{ display: 'flex', flexDirection: 'row', marginBottom: 0 }}>
-        {' '}
-        <p style={{ flex: 0, fontSize: '8px', color: '#999' }} />{' '}
-        <p
-          style={{
-            flex: 1,
-            fontSize: '8px',
-            pAlign: 'right',
-            color: '#999'
-          }}
-        >
-          {' '}
-          Copyright © {yearNow} IQVIA. All Rights Reserved. Confidential and
-          Proprietary.
-        </p>{' '}
-      </div>{' '}
-    </div>{' '}
-  </div>
-);
+
 function getStyled() {
   return `<style>  *{
     font-family: ProximaNova !important;
     border-collapse: collapse !important;
-  }
-  .spacing-left{
-    margin:5px;
   }
 h1{
     font-size: 20px;
@@ -242,10 +163,14 @@ h3{
     font-size: 15px;
     margin: 2px;
 }
-#pdfbody{
+body{
+  display: block;
+  margin: 8px;
+  height: 100%;
+  scroll-behavior: smooth;
+  font-family: "ProximaNova-Regular";
     padding: 50px;
     font-size: 10px;
-    font-family: ProximaNova
 }
 table {
   width:480px;
@@ -538,7 +463,6 @@ function questionTables(allQuestions, proposalQuestions) {
         html += `</tr>`;
       });
       html += `</table>`;
-      console.log('1111111111111111111 :>> ', html);
     } else {
       html += `<table class="questionTable table marginTop20">`;
       html += `<tr>`;
@@ -592,7 +516,6 @@ function getQuestionToCustomerRows(questions) {
   try {
     questionsToCustomer.forEach((question, index) => {
       const { questionText } = question;
-      // console.log('question :>> ', question);
       const extraNewLines = getExtraLines(
         getLastAnswerHtml(question?.answers),
         questionText
@@ -703,11 +626,9 @@ function getHtml(
   const emailExp = /([(][a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+[)])/gi;
   if (string.match(emailExp)) {
     const matched = string?.match(emailExp);
-    // console.log(matched, 'mtched');
     if (matched)
       for (let mail = 0; mail < matched.length; mail += 1) {
         const matchEmail = new RegExp(matched[mail], 'g');
-        // console.log(matchEmail, 'memail');
         if (string?.match(matchEmail))
           string = string?.replace(
             matched[mail],
@@ -723,28 +644,21 @@ function getHtml(
   fetchedElementArray.filter(value => {
     if (value.match(/text-decoration:(.*?)"/g)) {
       let foundArray = value;
-      // console.log(foundArray, 'array found');
       const indexFoundArray = fetchedElementArray.indexOf(foundArray);
-      // console.log(indexFoundArray, 'ifar');
       for (k; k < 7; k++) {
         if (fetchedElementArray[indexFoundArray + k].match(/^(.+?)<\//g)) {
           const splitText = fetchedElementArray[indexFoundArray + k].split('<');
-          // console.log(splitText, 'stext');
           if (
             JSON.stringify(foundArray).match('line-through') &&
             JSON.stringify(foundArray).match('underline')
           ) {
-            // console.log('undeline + linethourhg');
             extractStyles = `<u><s>${splitText[0]}</s></u><${splitText[1]}`;
           } else if (JSON.stringify(foundArray).match('line-through')) {
-            // console.log('+ linethourhg');
             extractStyles = `<s>${splitText[0]}</s><${splitText[1]}`;
           } else if (JSON.stringify(foundArray).match('underline')) {
-            // console.log('undeline');
             extractStyles = `<u>${splitText[0]}</u><${splitText[1]}`;
           }
           fetchedElementArray[indexFoundArray + k] = extractStyles;
-          // console.log(fetchedElementArray, 'farray');
           let appendedString = '';
           fetchedElementArray.forEach(value => (appendedString += value));
           string = appendedString;
@@ -752,6 +666,7 @@ function getHtml(
       }
     }
   });
+  console.log(string, 'stafhafal');
   const pdfa = new jsPDF({
     compress: true,
     orientation: 'p',
@@ -766,7 +681,7 @@ function getHtml(
         pdfa2.addImage(image, 'PNG', 400, 20, 143, 60);
         pdfa2.addImage(Border, 'PNG', 50, 80, 500, 0);
         pdfa2.setTextColor(0, 163, 224);
-        pdfa.setFontSize(12);
+        pdfa.setFontSize(8);
         pdfa2.text(
           '† Unity has provided this answer but not validated by user on proposal team.',
           50,
