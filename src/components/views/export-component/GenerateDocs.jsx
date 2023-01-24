@@ -141,11 +141,12 @@ const GenerateDocs = () => {
           notes: getSelectedBidNotes(),
           filterState,
           image: logo.current,
-          editor
+          editor,
+          fileName: `${fileName}.pdf`
         });
-        exportBlob.then(blob => {
-          saveAs(blob, `${fileName}.pdf`);
-        });
+        // exportBlob.then(blob => {
+        //   saveAs(blob, `${fileName}.pdf`);
+        // });
       } else if (fileType === docType.doc) {
         exportBlob = createWord({
           data: getSelectedBidData(),
