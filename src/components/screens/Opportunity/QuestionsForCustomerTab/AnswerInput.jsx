@@ -13,7 +13,7 @@ const AnswerInput = ({
   socketContext,
   checkDisableFlag,
   setShowLoader,
-  questionIndex,
+  questionIndex
 }) => {
   const dispatch = useDispatch();
   const quesTextInnerLeftRef = React.createRef();
@@ -33,14 +33,14 @@ const AnswerInput = ({
 
   const richTextData = parseFormattedData || {
     html: '',
-    value: { blocks: [] },
+    value: { blocks: [] }
   };
 
   // Function to converted Answer String
-  const getConvertedAnsString = (str) =>
+  const getConvertedAnsString = str =>
     !String(str).trim() ? '' : String(str).trim();
 
-  const handleRichTextChange = async (editorData) => {
+  const handleRichTextChange = async editorData => {
     try {
       const { proposalId, questionId } = question;
       const { value, html, text, htmlExport } = editorData;
@@ -58,7 +58,7 @@ const AnswerInput = ({
           {
             value,
             html,
-            htmlExport,
+            htmlExport
           },
           true
         )
@@ -80,7 +80,7 @@ const AnswerInput = ({
     disabled: checkDisableFlag() || !question?.questionText,
     canUserTagInQuestion,
 
-    onBlur: (data) => {
+    onBlur: data => {
       let saveDate = false;
       const previousAnsText = getConvertedAnsString(answerValue).trim();
       quesTextInnerLeftRef.current.style.marginTop = 'inherit';
@@ -90,10 +90,10 @@ const AnswerInput = ({
         !isEmpty(data.text.trim())
       ) {
         let prevAnswerBlocks = richTextData.value.blocks.filter(
-          (block) => block.text.length > 0
+          block => block.text.length > 0
         );
         let answerBlocks = data.value.blocks.filter(
-          (block) => block.text.length > 0
+          block => block.text.length > 0
         );
         if (isEqual(prevAnswerBlocks, answerBlocks)) {
           saveDate = false;
@@ -120,12 +120,12 @@ const AnswerInput = ({
     onFocus: () => {
       quesTextInnerLeftRef.current.style.marginTop = '25px';
       questionLockWrapper(question?.questionId);
-    },
+    }
   };
   return (
     <>
       <div className="input-wrapper " ref={quesTextInnerLeftRef}>
-        <span className="input-label">A{questionIndex}:</span>
+        <span className="input-label">A{question?.questionOrder}:</span>
         <CustomApolloRichText {...richtextProps} />
       </div>
     </>
