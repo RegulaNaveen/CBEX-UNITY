@@ -1,0 +1,283 @@
+{
+  "questions": [
+    {
+      "proposalId": "proposal_ID_1",
+      "questionId": "question_ID_1",
+      "section": { "sectionOrder": 1, "sectionName": "Test Section 1" },
+      "questionText": "Test Question 1",
+      "answers": [
+        {
+          "user": "testUser",
+          "userName": "testUser",
+          "userRole": "testRole",
+          "date": "2022-12-06T13:08:14.123Z",
+          "answer": "Test answer 1",
+          "proposalId": "proposal_ID_1",
+          "formattedAnswer": ""
+        }
+      ],
+      "questionOrder": 1,
+      "visible": true,
+      "isCustomQuestion": false,
+      "active": true,
+      "notApplicable": false,
+      "questionApproval": false
+    },
+    {
+      "proposalId": "proposal_ID_1",
+      "questionId": "question_ID_2",
+      "section": { "sectionOrder": 1, "sectionName": "Test Section 1" },
+      "questionText": "Test Question 2",
+      "answers": [
+        {
+          "user": "testUser",
+          "userName": "testUser",
+          "userRole": "testRole",
+          "date": "2022-12-06T13:08:14.123Z",
+          "answer": "Test answer 2",
+          "proposalId": "proposal_ID_1",
+          "formattedAnswer": ""
+        }
+      ],
+      "questionOrder": 2,
+      "visible": true,
+      "isCustomQuestion": true,
+      "active": false,
+      "notApplicable": false,
+      "questionApproval": false
+    }
+  ],
+  "sections": {
+    "Test Section 1": {
+      "sectionOrder": 1,
+      "sectionName": "Test Section 1",
+      "questions": {
+        "question_ID_1": {
+          "proposalId": "proposal_ID_1",
+          "questionId": "question_ID_1",
+          "section": { "sectionOrder": 1, "sectionName": "Test Section 1" },
+          "questionText": "Test Question 1",
+          "answers": [
+            {
+              "user": "testUser",
+              "userName": "testUser",
+              "userRole": "testRole",
+              "date": "2022-12-06T13:08:14.123Z",
+              "answer": "Test answer 1",
+              "proposalId": "proposal_ID_1",
+              "formattedAnswer": ""
+            }
+          ],
+          "questionOrder": 1,
+          "visible": true,
+          "isCustomQuestion": false,
+          "active": true,
+          "notApplicable": false,
+          "questionApproval": false
+        },
+        "question_multiple_ID_1": {
+          "proposalId": "proposal_ID_1",
+          "questionId": "question_multiple_ID_1",
+          "section": { "sectionOrder": 1, "sectionName": "Test Section 1" },
+          "questionText": "Test Multiple Question 1",
+          "answers": [
+            {
+              "user": "testUser",
+              "userName": "testUser",
+              "userRole": "testRole",
+              "date": "2022-12-06T13:08:14.123Z",
+              "answer": ["multiple answer 1", "multiple answer 2"],
+              "proposalId": "proposal_ID_1",
+              "formattedAnswer": ""
+            }
+          ],
+          "questionOrder": 2,
+          "visible": true,
+          "isCustomQuestion": true,
+          "active": false,
+          "notApplicable": false,
+          "questionApproval": false
+        }
+      }
+    },
+    "Test Section 2": {
+      "sectionOrder": 2,
+      "sectionName": "Test Section 2",
+      "questions": {
+        "question_ID_2": {
+          "proposalId": "proposal_ID_2",
+          "questionId": "question_ID_2",
+          "section": { "sectionOrder": 2, "sectionName": "Test Section 2" },
+          "questionText": "Test Question 2",
+          "answers": [
+            {
+              "user": "testUser",
+              "userName": "testUser",
+              "userRole": "testRole",
+              "date": "2022-12-06T13:08:14.123Z",
+              "answer": "Test answer 2",
+              "proposalId": "proposal_ID_2",
+              "formattedAnswer": ""
+            }
+          ],
+          "questionOrder": 1,
+          "visible": true,
+          "isCustomQuestion": false,
+          "active": true,
+          "notApplicable": false,
+          "questionApproval": false
+        }
+      }
+    },
+    "Proposal Team": {
+      "sectionOrder": 3,
+      "sectionName": "Proposal Team",
+      "questions": {
+        "proposal_team_que_1": {
+          "proposalId": "proposal_ID_2",
+          "questionId": "proposal_team_que_1",
+          "section": { "sectionOrder": 3, "sectionName": "Proposal Team" },
+          "questionText": "proposal team que 1",
+          "answers": [
+            {
+              "user": "testUser",
+              "userName": "testUser",
+              "userRole": "testRole",
+              "date": "2022-12-06T13:08:14.123Z",
+              "answer": "John Doe(johndoe@noone.himself), Jane Doe(janedoe@noone.herself)",
+              "proposalId": "proposal_ID_2",
+              "formattedAnswer": ""
+            }
+          ],
+          "questionOrder": 1,
+          "visible": true,
+          "isCustomQuestion": false,
+          "active": true,
+          "notApplicable": false,
+          "questionApproval": false
+        }
+      }
+    }
+  },
+  "approvals": [
+    {
+      "ApprovalSectionTitle": "approval section 1",
+      "ApprovalSectionRightQuestions": ["question_ID_1"],
+      "ApprovalSectionId": "approval_section_1",
+      "ApprovalSectionOrder": 1,
+      "ApprovalSectionLeftQuestions": ["question_ID_2"],
+      "ArchivedData": [
+        {
+          "id": 1,
+          "proposal_id": "proposal_ID_1",
+          "section_id": "archived_section_1",
+          "section_title": "archived title 1",
+          "section_order": 1,
+          "section_left_questions": [
+            {
+              "proposalId": "proposal_ID_1",
+              "questionId": "question_ID_2",
+              "section": {
+                "sectionOrder": 1,
+                "sectionName": "Archived Left Section"
+              },
+              "questionText": "Archived Left question",
+              "answers": [
+                {
+                  "user": "testUser",
+                  "userName": "testUser",
+                  "userRole": "testRole",
+                  "date": "2022-12-06T13:08:14.123Z",
+                  "answer": ["multiple answer 1", "multiple answer 2"],
+                  "proposalId": "proposal_ID_1",
+                  "formattedAnswer": ""
+                }
+              ],
+              "questionOrder": 1,
+              "visible": true,
+              "isCustomQuestion": false,
+              "active": true,
+              "notApplicable": false,
+              "questionApproval": false
+            }
+          ],
+          "section_right_questions": [
+            {
+              "proposalId": "proposal_ID_2",
+              "questionId": "question_ID_1",
+              "section": {
+                "sectionOrder": 1,
+                "sectionName": "Archived Right Section"
+              },
+              "questionText": "Archived Right question",
+              "answers": [
+                {
+                  "user": "testUser",
+                  "userName": "testUser",
+                  "userRole": "testRole",
+                  "date": "2022-12-06T13:08:14.123Z",
+                  "answer": "test answer",
+                  "proposalId": "proposal_ID_2",
+                  "formattedAnswer": ""
+                }
+              ],
+              "questionOrder": 1,
+              "visible": true,
+              "isCustomQuestion": false,
+              "active": true,
+              "notApplicable": false,
+              "questionApproval": false
+            }
+          ],
+          "created_date": "2023-01-13T15:45:11.260Z",
+          "updated_date": "2023-01-13T15:45:11.260Z"
+        },
+        {
+          "id": 2,
+          "proposal_id": "proposal_ID_1",
+          "section_id": "archived_section_2",
+          "section_title": "archived title 2",
+          "section_order": 1,
+          "section_left_questions": [
+            {
+              "proposalId": "proposal_ID_1",
+              "questionId": "question_ID_2",
+              "section": {
+                "sectionOrder": 1,
+                "sectionName": "Archived Left Section"
+              },
+              "questionText": "Archived Left question",
+              "answers": [],
+              "questionOrder": 1,
+              "visible": true,
+              "isCustomQuestion": false,
+              "active": true,
+              "notApplicable": false,
+              "questionApproval": false
+            }
+          ],
+          "section_right_questions": [
+            {
+              "proposalId": "proposal_ID_2",
+              "questionId": "question_ID_1",
+              "section": {
+                "sectionOrder": 1,
+                "sectionName": "Archived Right Section"
+              },
+              "questionText": "Archived Right question",
+              "answers": [],
+              "questionOrder": 1,
+              "visible": true,
+              "isCustomQuestion": false,
+              "active": true,
+              "notApplicable": false,
+              "questionApproval": false
+            }
+          ],
+          "created_date": "2023-01-13T15:45:11.260Z",
+          "updated_date": "2023-01-13T15:45:11.260Z"
+        }
+      ]
+    }
+  ]
+}

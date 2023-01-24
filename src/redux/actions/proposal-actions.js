@@ -33,10 +33,12 @@ import {
 import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
 import { getSelectedBid, getUniqueMilestones } from '../selectors/proposal';
 import { getErrorMessage, getProposalIdlist } from '../../utils/utils';
-import { DEFAULT } from '../../constants/app';
+import { DEFAULT, SEARCH as SEARCH_CONSTANTS } from '../../constants/app';
 import isPriceModelerQuestion from '../../utils/isPriceModelerQuestion';
 import { fetchAllApprovals } from './approval-actions';
 import { SEARCH } from '../../constants/types';
+import { doSearchAction } from './search-actions';
+import { selectQuery } from '../selectors/search';
 
 const { PROPOSAL_API_URL } = API.PROPOSAL;
 const {
@@ -558,7 +560,8 @@ export const getIntegrationsData = (): ThunkAction<string, Object> => {
 
 export const setProposalQuestion = (
   proposalId: string,
-  questionData: Object
+  questionData: Object,
+  socketContext
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
@@ -567,7 +570,24 @@ export const setProposalQuestion = (
     });
     try {
       const data = await setProposalQuestionData(proposalId, questionData);
+      if (socketContext) await socketContext?.addQuestionWrapper(data);
       dispatch({ type: PROPOSAL_SET_QUESTION, payload: data });
+    } catch (err) {
+      dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
+    }
+  };
+};
+
+export const setProposalQuestionFromSocket = (
+  questionData: Object
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: PROPOSAL_SET_QUESTION_LOADING,
+      payload: {}
+    });
+    try {
+      dispatch({ type: PROPOSAL_SET_QUESTION, payload: questionData });
     } catch (err) {
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
     }
@@ -864,6 +884,7 @@ export function getQuestionsFilterApplied(questionsArr, questionsFilter) {
 export function onQuestionsFilterApplied(questionsFilter) {
   return async (dispatch, getState) => {
     const state = getState();
+    const searchQuery = selectQuery(state);
     dispatch({
       type: ON_APPLY_QUESTIONS_FILTER,
       payload: { questionsFilter }
@@ -944,6 +965,32 @@ export function onQuestionsFilterApplied(questionsFilter) {
       type: ON_QUESTIONS_FILTERED,
       payload: { filteredQuestions }
     });
+    if (searchQuery !== null && searchQuery.length >= 3) {
+      const approvalFilters = state.approvals.filters;
+      let totalFiltersApplied = 0;
+      questionsFilter.entrySeq().forEach(([groupName, group]) => {
+        group
+          .entrySeq()
+          .filter(value => value[0] !== 'logic')
+          .forEach(([key, filter]) => {
+            if (filter.get('checked')) {
+              totalFiltersApplied++;
+            }
+          });
+      });
+      totalFiltersApplied += approvalFilters.filter(item => item.value).length;
+      if (totalFiltersApplied === 1) {
+        dispatch({
+          type: SEARCH.SHOW_MODAL,
+          payload: {
+            modalTitle: SEARCH_CONSTANTS.TITLE_SEARCH_ACTIVE,
+            modalContent: SEARCH_CONSTANTS.CONTENT_SEARCH_ACTIVE
+          }
+        });
+      } else {
+        dispatch(doSearchAction());
+      }
+    }
   };
 }
 
@@ -968,6 +1015,7 @@ export function onApplyQuestionsFilter(
 export function resetQuestionsFilterAction() {
   return async (dispatch, getState) => {
     let questionsFilter = getQuestionsFilters(getState());
+    const searchQuery = selectQuery(getState());
     questionsFilter = questionsFilter.map(group => {
       return group.map(filter => {
         if (typeof filter === 'string') return filter;
@@ -975,12 +1023,16 @@ export function resetQuestionsFilterAction() {
       });
     });
     dispatch({ type: RESET_QUESTIONS_FILTER, payload: questionsFilter });
+    if (searchQuery !== null && searchQuery.length >= 3) {
+      dispatch(doSearchAction());
+    }
   };
 }
 
 export function clearQuestionsFilterAction() {
   return async (dispatch, getState) => {
     let questionsFilter = getQuestionsFilters(getState());
+    const searchQuery = selectQuery(getState());
     questionsFilter = questionsFilter.map(group => {
       return group.map(filter => {
         if (typeof filter === 'string') return filter;
@@ -989,6 +1041,9 @@ export function clearQuestionsFilterAction() {
       });
     });
     dispatch({ type: CLEAR_QUESTIONS_FILTER, payload: { questionsFilter } });
+    if (searchQuery !== null && searchQuery.length >= 3) {
+      dispatch(doSearchAction());
+    }
   };
 }
 
@@ -1049,7 +1104,8 @@ export const editProposalQuestionfromSocket = (
 
 export const deleteProposalQuestion = (
   proposalId: string,
-  questionId: string
+  questionId: string,
+  socketContext
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
@@ -1058,6 +1114,7 @@ export const deleteProposalQuestion = (
     });
     try {
       const data = await deleteProposalQuestionData(proposalId, questionId);
+      if (socketContext) await socketContext?.questionDeleteWrapper(questionId);
 
       dispatch({ type: PROPOSAL_DELETE_QUESTION, payload: questionId });
     } catch (err) {
@@ -1065,6 +1122,23 @@ export const deleteProposalQuestion = (
     }
   };
 };
+
+export const deleteProposalQuestionFromSocket = (
+  questionId: string
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: PROPOSAL_SET_QUESTION_LOADING,
+      payload: {}
+    });
+    try {
+      dispatch({ type: PROPOSAL_DELETE_QUESTION, payload: questionId });
+    } catch (err) {
+      dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
+    }
+  };
+};
+
 export const closeNewbidflags = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({ type: NEW_BID_CREATED, payload: { flag: false } });

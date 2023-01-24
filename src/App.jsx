@@ -27,12 +27,14 @@ import '../styles/App.scss';
 import matomoInstace from './utils/Matomo';
 import SocketContextProvider from './context/SocketContext';
 import ErrorBoundaryComponent from './components/HOC/ErrorBoundary';
+import ReduxSnackbar from './components/common/ReduxSnackbar/ReduxSnackbar';
 
 const App = () => (
   <Provider store={store}>
     <SocketContextProvider>
       <MatomoProvider value={matomoInstace}>
         <ErrorBoundaryComponent>
+          <ReduxSnackbar />
           <BrowserRouter>
             <SessionHandler>
               <Switch>

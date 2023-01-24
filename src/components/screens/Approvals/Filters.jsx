@@ -3,7 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import Link from 'apollo-react/components/Link';
 import Grid from 'apollo-react/components/Grid';
 import ApolloCheckbox from 'apollo-react/components/Checkbox';
-import { updateFilters } from '../../../redux/actions/approval-actions';
+import {
+  resetFiltersAction,
+  updateFilters
+} from '../../../redux/actions/approval-actions';
 
 const Filters = props => {
   const approvalFilters = useSelector(state => state.approvals.filters);
@@ -14,10 +17,7 @@ const Filters = props => {
     dispatch(updateFilters(filterName, checked));
   };
   const clearAllFilters = () => {
-    const filterNames = approvalFilters.map(i => i.name);
-    filterNames.forEach(name => {
-      dispatch(updateFilters(name, false));
-    });
+    dispatch(resetFiltersAction());
   };
 
   return (
