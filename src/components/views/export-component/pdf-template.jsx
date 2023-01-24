@@ -48,7 +48,7 @@ import TextAlign from '@tiptap/extension-text-align';
 import OrderedList from '@tiptap/extension-text-align';
 import FooterHead from '../../../../img/footerHead.png';
 import Logo from '../../../../img/iqvia-main-logo.png';
-import Border from '../../../../img/border.png';
+import Border from '../../../../img/border.PNG';
 import Proximanova from '../../../../fonts/ProximaNova-Regular-normal';
 
 const styles = StyleSheet.create({
@@ -326,7 +326,7 @@ function getHeaderInfoRows(details) {
 function getProposalTeamsRows(questions) {
   const coreTeamQuestions = questions
     .filter(
-      question =>
+      (question) =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
         CORE_TEAM[question.questionText]
@@ -334,7 +334,7 @@ function getProposalTeamsRows(questions) {
     .sort((a, b) => a.questionOrder - b.questionOrder);
   const otherTeamQuestions = questions
     .filter(
-      question =>
+      (question) =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
         !CORE_TEAM[question.questionText]
@@ -347,7 +347,7 @@ function getProposalTeamsRows(questions) {
     html += `<th> Core Team Members </th>`;
     html += `<th> Name</th>`;
     html += `</tr>`;
-    coreTeamQuestions.forEach(question => {
+    coreTeamQuestions.forEach((question) => {
       const { questionText, answers } = question;
       const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
       html += `<tr>`;
@@ -361,7 +361,7 @@ function getProposalTeamsRows(questions) {
     html += `<th> Specialty Team Members </th>`;
     html += `<th> Name</th>`;
     html += `</tr>`;
-    otherTeamQuestions.forEach(question => {
+    otherTeamQuestions.forEach((question) => {
       const { questionText, answers } = question;
       const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
       html += `<tr>`;
@@ -380,7 +380,7 @@ function questionTables(allQuestions, proposalQuestions) {
   let html = ``;
   // Remove not visible questions
   let questions = proposalQuestions
-    .filter(question => {
+    .filter((question) => {
       return (
         shouldInclude(question) &&
         question.section.sectionName !== PT_SECTION &&
@@ -394,7 +394,7 @@ function questionTables(allQuestions, proposalQuestions) {
   const sections = {};
   let ordereredSections = [];
   // Populate the section map
-  questions.forEach(question => {
+  questions.forEach((question) => {
     try {
       let section = question.section.sectionName || '';
       if (section === 'Questions_for_the_Customer_left_panel')
@@ -409,7 +409,7 @@ function questionTables(allQuestions, proposalQuestions) {
       console.log('Error while mapping Sections');
     }
   });
-  ordereredSections.forEach(section => {
+  ordereredSections.forEach((section) => {
     if (section === QC_SECTION) {
       html += `<table class="questionTable table marginTop20">`;
       html += `<tr>`;
@@ -419,7 +419,7 @@ function questionTables(allQuestions, proposalQuestions) {
 
       sections[section]
         .sort((a, b) => a.questionOrder - b.questionOrder)
-        .forEach(question => {
+        .forEach((question) => {
           const questionHTML = question.questionHTML || question.questionText;
           const extraNewLines = getExtraLines(
             getLastAnswerHtml(question.answers),
@@ -440,12 +440,12 @@ function questionTables(allQuestions, proposalQuestions) {
 
       let questionsToCustomerRightSection = allQuestions
         .filter(
-          question =>
+          (question) =>
             shouldInclude(question) &&
             question.section.sectionName === QC_SECTION
         )
         .sort((a, b) => a.questionOrder - b.questionOrder);
-      questionsToCustomerRightSection.forEach(question => {
+      questionsToCustomerRightSection.forEach((question) => {
         const { questionText } = question;
         const extraNewLines = getExtraLines(
           getLastAnswerHtml(question?.answers),
@@ -472,7 +472,7 @@ function questionTables(allQuestions, proposalQuestions) {
       html += `</tr>`;
       sections[section]
         .sort((a, b) => a.questionOrder - b.questionOrder)
-        .forEach(question => {
+        .forEach((question) => {
           const questionHTML = question.questionHTML || question.questionText;
           const extraNewLines = getExtraLines(
             getLastAnswerHtml(question.answers),
@@ -499,7 +499,7 @@ function getQuestionToCustomerRows(questions) {
   let html = ``;
   let questionsToCustomer = questions
     .filter(
-      question =>
+      (question) =>
         shouldInclude(question) && question.section.sectionName === QC_SECTION
     )
     .sort((a, b) => a.questionOrder - b.questionOrder);
@@ -642,7 +642,7 @@ function getHtml(
   let extractStyles;
   let k = 0;
   let fetchedElementArray = string.split(/(>)/g);
-  fetchedElementArray.filter(value => {
+  fetchedElementArray.filter((value) => {
     if (value.match(/text-decoration:(.*?)"/g)) {
       let foundArray = value;
       const indexFoundArray = fetchedElementArray.indexOf(foundArray);
@@ -661,7 +661,7 @@ function getHtml(
           }
           fetchedElementArray[indexFoundArray + k] = extractStyles;
           let appendedString = '';
-          fetchedElementArray.forEach(value => (appendedString += value));
+          fetchedElementArray.forEach((value) => (appendedString += value));
           string = appendedString;
         }
       }
