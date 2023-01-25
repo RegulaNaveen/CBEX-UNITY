@@ -8,6 +8,7 @@ import {
   getFilteredQuestion,
   headFields,
   PT_SECTION,
+  SPECIALITY_SECTION,
   CORE_TEAM,
   QC_SECTION,
   getLastAnswer,
@@ -49,68 +50,8 @@ import OrderedList from '@tiptap/extension-text-align';
 import FooterHead from '../../../../img/footerHead.png';
 import Logo from '../../../../img/iqvia-main-logo.png';
 import Border from '../../../../img/borders.png';
-import Proximanova from '../../../../fonts/ProximaNova-Regular-normal';
+import ProximaNova from '../../../../fonts/ProximaNova-Regular.otf';
 
-const styles = StyleSheet.create({
-  page: {
-    paddingBottom: '18vh',
-    width: '500px',
-    marginBottom: '20px',
-    marginLeft: '50px',
-    marginRight: '50px'
-  },
-  header: {
-    width: '500px',
-    height: '10vh', // As per your page layout
-    borderBottom: `1px solid #00A3E0`,
-    marginBottom: '20px',
-    marginLeft: '50px',
-    marginRight: '50px',
-    justifyContent: 'flex-end'
-  },
-  li: {
-    lineHeight: '5px'
-  },
-  ol: {
-    lineHeight: '5px'
-  },
-  imgLogo: {
-    width: '143px',
-    height: '60px',
-    alignSelf: 'flex-end'
-  },
-  footer: {
-    position: 'absolute',
-    bottom: 0,
-    width: '485px',
-    height: '15vh', //As per your page layout
-    marginTop: '20px',
-    marginLeft: '50px',
-    marginRight: '50px'
-  },
-  footerText: {
-    color: `#999`,
-    fontSize: `7px`
-  },
-  heading: {
-    paddingLeft: '60px',
-    marginBottom: '-40px',
-    width: '200px',
-    display: 'grid'
-  },
-  headingText: {
-    fontSize: '14px',
-    color: `#00A3E0`,
-    fontFamily: 'ProximaNova',
-    fontWeight: 700
-  },
-  tr: {
-    height: 'auto'
-  },
-  td: {
-    height: 'auto'
-  }
-});
 function checkFormattedAnswer(answers) {
   try {
     const lastAnswer = answers[answers.length - 1];
@@ -141,17 +82,15 @@ function getExtraLines(t1, t2) {
   const paddingAnswerCell = parseInt(contentLength / 230);
   return new Array(paddingAnswerCell + 2 || 2).fill('<br>').join('');
 }
-function topHeading(details) {
-  return `<h1 class="mainTitle"><em>${details['CRM #'] ||
-    ''}</em> Opportunity Overview</h1>`;
-}
-
 function getStyled() {
-  return `<style>  *{
-    font-family: ProximaNova !important;
+  return `<style>  
+    *{
+    font-family: ProximaNova-Regular !important;    
     border-collapse: collapse !important;
+    
+    
   }
-h1{
+  h1{
     font-size: 20px;
     margin: 5px;
 }
@@ -163,30 +102,21 @@ h3{
     font-size: 15px;
     margin: 2px;
 }
-body{
-  display: block;
-  margin: 8px;
-  height: 100%;
-  scroll-behavior: smooth;
-  font-family: "ProximaNova-Regular";
-    padding: 50px;
-    font-size: 10px;
-}
-table {
-  width:480px;
+ .table {
+  width: 480px !important;
   height: auto;
 }
 tr {    
-  border-top: 1px solid #000;
-  border-left: 1px solid #000;
-  border-right: 1px solid #000;
+  border-top: 1px solid #000 !important;
+  border-left: 1px solid #000 !important;
+  border-right: 1px solid #000 !important;
   height: auto;
 }
 td {    
-  border-top: 1px solid #000;
-  border-left: 1px solid #000;
-  border-right: 1px solid #000;
-  border-bottom: 1px solid #000;
+  border-top: 1px solid #000 !important;
+  border-left: 1px solid #000 !important;
+  border-right: 1px solid #000 !important;
+  border-bottom: 1px solid #000 !important;
   height: auto;
 }
 .marginTop50 {
@@ -199,48 +129,68 @@ td {
     margin-top:30px
 }
 .table tr:last-child{
-    border-bottom: 1px solid #000;
-    border-right: 1px solid #000;
+    border-bottom: 1px solid #000 !important;
+    border-right: 1px solid #000 !important;
 }
 .notesTable tr{
     border-bottom: none;
 }
 .notesTable tr:last-child{
-    border-bottom: 1px solid #000;
-    border-right: 1px solid #000;
+    border-bottom: 1px solid #000 !important;
+    border-right: 1px solid #000 !important;
 }
 .table td, .table th{
     padding: 5px;
 }
 .table tr td:nth-child(2){
-    border-left: 1px solid #000;
+    border-left: 1px solid #000 !important;
 }
 .proposalTeam tr:first-child, .questionTable tr:first-child, .questionToCustomerTable tr:first-child, .notesTable tr:first-child{
     background: #00A3E0;
     color:#fff;
 }
 .questionTable tr td {
-  width: 50%;
-  border-right: 1px solid #000;
+  width: 50% !important;
+  border-right: 1px solid #000 !important;
 }
-.notesTable tr td {
-  width: 100%;
-  border-right: 1px solid #000;
-}
-.notesTable >ul>li{
+
+.notesTable ul li{
   padding-left: 5px;
+  // margin-top: 5px;
 }
 .proposalTeam td {
-  width: 50%;
+  width: 50% !important;
 }
 .questionToCustomerTable tr td {
-    width: 50%;
+    width: 50% !important;
 }
-ul li{
-  padding-left: 5px;
+li ul li{
+  list-style-type: disc;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 5px;
 }
 .questionToCustomerTable li {
-    padding-bottom: 5px
+    // padding-bottom: 5px
+}
+ul ul {
+  display: block;
+  list-style-type: disc;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 5px;
+}
+.public-DraftStyleDefault-ul li {
+  list-style-type: disc !important;
+}
+ul {
+  display: block;
+  list-style-type: disc;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
 }
 .headerInfo tr td:first-child{
     background: #00A3E0;
@@ -255,55 +205,43 @@ ul li{
     font-family:Helvetica;
     font-size: 8px;
 }
-.footerWrapper{
-    display:flex;
-    justify-content:space-between
+// .notesData p{
+  // margin-top: 0.75em;
+  // margin-bottom: 0.75em;
+// } 
+#pdfbody {
+  display: block;
+  margin: 8px;
 }
-.footerWrapper td {
-    color: #EEEEEE,
-    font-size:7px,
-}
-.public-DraftStyleDefault-depth0.public-DraftStyleDefault-listLTR {
+#pdfbody .public-DraftStyleDefault-depth0.public-DraftStyleDefault-listLTR {
     margin-left: 5px;
 }
-.public-DraftStyleDefault-depth1.public-DraftStyleDefault-listLTR {
+#pdfbody .public-DraftStyleDefault-depth1.public-DraftStyleDefault-listLTR {
     margin-left: 10px;
+    list-style-type: disc !important;
 }
-.public-DraftStyleDefault-depth2.public-DraftStyleDefault-listLTR {
+#pdfbody .public-DraftStyleDefault-depth2.public-DraftStyleDefault-listLTR {
     margin-left: 15px;
 }
-.public-DraftStyleDefault-depth3.public-DraftStyleDefault-listLTR {
+#pdfbody .public-DraftStyleDefault-depth3.public-DraftStyleDefault-listLTR {
     margin-left: 20px;
 }
-.public-DraftStyleDefault-depth4.public-DraftStyleDefault-listLTR {
+#pdfbody .public-DraftStyleDefault-depth4.public-DraftStyleDefault-listLTR {
     margin-left: 25px;
 }
-.MuiGrid-root{
+#pdfbody .MuiGrid-root{
     display:none;
 }
-.MuiFormControl-root{
+#pdfbody .MuiFormControl-root{
     padding:5px;
-    border: 1px solid #000;
+    border: 1px solid #000 !important;
     border-top: none;
 }
-[data-block="true"] {
-    padding-bottom:10px;
-}
-li {
-  align-items: flex-start;
-}
-.questionTable ol,ul,p{
-  margin-top:0px !important;
-  margin-bottom:5px !important;
-}
-.notesTable p{
-  margin-top: 0px !important;
-  margin-bottom:3px !important;
-}
+
 li > ul > li {
-  list-style-type: &#x26AC !important; 
-      margin-left:-1em; 
-  }</style>`;
+  list-style-type: disc !important;
+}
+</style>`;
 }
 function getHeaderInfoRows(details) {
   let html = `<table class="table headerInfo">`;
@@ -326,15 +264,17 @@ function getHeaderInfoRows(details) {
 function getProposalTeamsRows(questions) {
   const coreTeamQuestions = questions
     .filter(
-      question =>
-        shouldInclude(question) &&
-        question.section.sectionName === PT_SECTION &&
-        CORE_TEAM[question.questionText]
+      (question) =>
+        (shouldInclude(question) &&
+          question.section.sectionName === PT_SECTION &&
+          CORE_TEAM[question.questionText]) ||
+        (question.section.sectionName === SPECIALITY_SECTION &&
+          question.questionText === 'Medical Strategy Lead')
     )
     .sort((a, b) => a.questionOrder - b.questionOrder);
   const otherTeamQuestions = questions
     .filter(
-      question =>
+      (question) =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
         !CORE_TEAM[question.questionText]
@@ -347,26 +287,35 @@ function getProposalTeamsRows(questions) {
     html += `<th> Core Team Members </th>`;
     html += `<th> Name</th>`;
     html += `</tr>`;
-    coreTeamQuestions.forEach(question => {
-      const { questionText, answers } = question;
-      const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
-      html += `<tr>`;
-      html += `<td>${questionText} ${extraNewLines}</td>`;
-      html += `<td>${checkFormattedAnswer(answers)} ${extraNewLines}</td>`;
-      html += `</tr>`;
-    });
+    coreTeamQuestions
+      ? coreTeamQuestions.forEach((question) => {
+          console.log(question, 'question core team');
+          const { questionText, answers } = question;
+          const extraNewLines = getExtraLines(
+            questionText,
+            getLastAnswer(answers)
+          );
+          html += `<tr>`;
+          html += `<td>${questionText} </td>`;
+          html += `<td>${checkFormattedAnswer(answers)} </td>`;
+          html += `</tr>`;
+        })
+      : (html += `<tr>`);
+    html += `<td>${questionText} </td>`;
+    html += `<td>${checkFormattedAnswer(answers)} </td>`;
+    html += `</tr>`;
     html += `</table>`;
     html += `<table class="proposalTeam table">`;
     html += `<tr>`;
     html += `<th> Specialty Team Members </th>`;
     html += `<th> Name</th>`;
     html += `</tr>`;
-    otherTeamQuestions.forEach(question => {
+    otherTeamQuestions.forEach((question) => {
       const { questionText, answers } = question;
       const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
       html += `<tr>`;
-      html += `<td>${questionText} ${extraNewLines}</td>`;
-      html += `<td>${checkFormattedAnswer(answers)} ${extraNewLines}</td>`;
+      html += `<td>${questionText} </td>`;
+      html += `<td>${checkFormattedAnswer(answers)} </td>`;
       html += `</tr>`;
     });
     html += `</table>`;
@@ -380,7 +329,7 @@ function questionTables(allQuestions, proposalQuestions) {
   let html = ``;
   // Remove not visible questions
   let questions = proposalQuestions
-    .filter(question => {
+    .filter((question) => {
       return (
         shouldInclude(question) &&
         question.section.sectionName !== PT_SECTION &&
@@ -394,7 +343,7 @@ function questionTables(allQuestions, proposalQuestions) {
   const sections = {};
   let ordereredSections = [];
   // Populate the section map
-  questions.forEach(question => {
+  questions.forEach((question) => {
     try {
       let section = question.section.sectionName || '';
       if (section === 'Questions_for_the_Customer_left_panel')
@@ -409,7 +358,7 @@ function questionTables(allQuestions, proposalQuestions) {
       console.log('Error while mapping Sections');
     }
   });
-  ordereredSections.forEach(section => {
+  ordereredSections.forEach((section) => {
     if (section === QC_SECTION) {
       html += `<table class="questionTable table marginTop20">`;
       html += `<tr>`;
@@ -419,14 +368,11 @@ function questionTables(allQuestions, proposalQuestions) {
 
       sections[section]
         .sort((a, b) => a.questionOrder - b.questionOrder)
-        .forEach(question => {
+        .forEach((question) => {
           const questionHTML = question.questionHTML || question.questionText;
-          const extraNewLines = getExtraLines(
-            getLastAnswerHtml(question.answers),
-            questionHTML
-          );
+
           html += `<tr>`;
-          html += `<td> ${questionHTML} ${extraNewLines}</td>`;
+          html += `<td> ${questionHTML} </td>`;
           html += `<td> ${formatDate(
             checkFormattedAnswer(question.answers),
             question.answerConfiguration
@@ -434,23 +380,19 @@ function questionTables(allQuestions, proposalQuestions) {
             getUnityPredicatedText(question.answers)
               ? getUnityPredicatedText(question.answers)
               : ''
-          }</span>${extraNewLines}</td>`;
+          }</span></td>`;
           html += `</tr>`;
         });
 
       let questionsToCustomerRightSection = allQuestions
         .filter(
-          question =>
+          (question) =>
             shouldInclude(question) &&
             question.section.sectionName === QC_SECTION
         )
         .sort((a, b) => a.questionOrder - b.questionOrder);
-      questionsToCustomerRightSection.forEach(question => {
+      questionsToCustomerRightSection.forEach((question) => {
         const { questionText } = question;
-        const extraNewLines = getExtraLines(
-          getLastAnswerHtml(question?.answers),
-          questionText
-        );
         html += `<tr>`;
         html += `<td> ${questionText}</td>`;
         html += `<td class="spacing-left"> ${formatDate(
@@ -460,7 +402,7 @@ function questionTables(allQuestions, proposalQuestions) {
           getUnityPredicatedText(question.answers)
             ? getUnityPredicatedText(question.answers)
             : ''
-        }</span>${extraNewLines}</td>`;
+        }</span></td>`;
         html += `</tr>`;
       });
       html += `</table>`;
@@ -472,14 +414,10 @@ function questionTables(allQuestions, proposalQuestions) {
       html += `</tr>`;
       sections[section]
         .sort((a, b) => a.questionOrder - b.questionOrder)
-        .forEach(question => {
+        .forEach((question) => {
           const questionHTML = question.questionHTML || question.questionText;
-          const extraNewLines = getExtraLines(
-            getLastAnswerHtml(question.answers),
-            questionHTML
-          );
           html += `<tr>`;
-          html += `<td> ${questionHTML} ${extraNewLines}</td>`;
+          html += `<td> ${questionHTML} </td>`;
           html += `<td> ${formatDate(
             checkFormattedAnswer(question.answers),
             question.answerConfiguration
@@ -487,7 +425,7 @@ function questionTables(allQuestions, proposalQuestions) {
             getUnityPredicatedText(question.answers)
               ? getUnityPredicatedText(question.answers)
               : ''
-          }</span>${extraNewLines}</td>`;
+          }</span></td>`;
           html += `</tr>`;
         });
       html += `</table>`;
@@ -495,64 +433,21 @@ function questionTables(allQuestions, proposalQuestions) {
   });
   return html;
 }
-function getQuestionToCustomerRows(questions) {
-  let html = ``;
-  let questionsToCustomer = questions
-    .filter(
-      question =>
-        shouldInclude(question) && question.section.sectionName === QC_SECTION
-    )
-    .sort((a, b) => a.questionOrder - b.questionOrder);
-  if (!questionsToCustomer.length)
-    questionsToCustomer = [
-      { questionText: 'Question 1' },
-      { questionText: 'Question 2' },
-      { questionText: 'Question 3' },
-      { questionText: 'Question 4' }
-    ];
-  html += `<table class="questionToCustomerTable table marginTop20">`;
-  html += `<tr>`;
-  html += `<th> ${QC_SECTION} </th>`;
-  html += `</tr>`;
-  try {
-    questionsToCustomer.forEach((question, index) => {
-      const { questionText } = question;
-      const extraNewLines = getExtraLines(
-        getLastAnswerHtml(question?.answers),
-        questionText
-      );
-      html += `<tr>`;
-      html += `<td> ${questionText} ${extraNewLines}</td>`;
-      html += `<td> ${formatDate(
-        checkFormattedAnswer(question.answers),
-        question.answerConfiguration
-      )} <span class="blueColorText">${
-        getUnityPredicatedText(question.answers)
-          ? getUnityPredicatedText(question.answers)
-          : ''
-      }</span>${extraNewLines}</td>`;
-    });
-    html += `</tr>`;
-  } catch (error) {
-    console.log('Error in getQuestionToCustomerRows');
-  }
-  html += `</table>`;
-  return html;
-}
+
 function getNotesRows(notes, editor) {
   let html = ``;
-  html += `<table class="notesTable table marginTop20">`;
+  html += `<table style="width: 480px !important;" class="notesTable table marginTop20">`;
   html += `<tr>`;
   html += `<th>General Notes</th>`;
   html += `</tr>`;
   html += `</table>`;
   let data = ``;
-  data += `<table><tr><td style="border:1px solid black;padding:10px">`;
+  data += `<table class="notesData" style="width: 480px !important;"><tr><td style="border:1px solid black;padding:20px">`;
   try {
     const noteText = editor.getJSON();
     // console.log(noteText, 'noteText');
     // console.log('notepad html', editor.getHTML());
-    // const str = editor.getHTML();
+    const str = editor.getHTML();
     // console.log(str, 'string');
     // str.replaceAll(' ', '&nbsp;');
     try {
@@ -603,9 +498,9 @@ function getHtml(
 ) {
   let html = ` 
   ${getStyled()}
-  <div id="page" style="width: 500px;"> <div style="width: 500px;"><div style="width: 500px;">
-  <div style="margin-bottom: 5px;width: 200px;"><div style="font-size:14px;color:#00a3e0;font-family:inherit;font-weight:700;width: 250px;display: flex;">      
-  <p style="font-style:italic;display: flex; margin: 0px !important;">${proposalDetails[
+  <div id="page" style="width: 480px !important;"> <div style="width: 480px !important;"><div style="width: 480px !important;">
+  <div style="width: 200px;"><div style="font-size:14px;color:#00a3e0;font-family:ProximaNova-Regular;font-weight:700;width: 250px;display: flex;">      
+  <p style="font-style:italic;display: flex; "font-size:14px !important;">${proposalDetails[
     'CRM #'
   ] || ' '}${'&nbsp'}
   </p>Opportunity Overview
@@ -633,36 +528,32 @@ function getHtml(
         if (string?.match(matchEmail))
           string = string?.replace(
             matched[mail],
-            ` <span style="color: #0000FF">${matched[mail]}</p>`
+            ` <span style="color: #000 !important0FF">${matched[mail]}</p>`
           );
       }
   }
-  if (string.match('<li'))
-    string = string?.replaceAll('<li', '<li style="list-style-type: disc"');
   let extractStyles;
   let k = 0;
   let fetchedElementArray = string.split(/(>)/g);
-  fetchedElementArray.filter(value => {
+  fetchedElementArray.filter((value) => {
     if (value.match(/text-decoration:(.*?)"/g)) {
       let foundArray = value;
+      console.log(foundArray, 'array found');
       const indexFoundArray = fetchedElementArray.indexOf(foundArray);
       for (k; k < 7; k++) {
         if (fetchedElementArray[indexFoundArray + k].match(/^(.+?)<\//g)) {
           const splitText = fetchedElementArray[indexFoundArray + k].split('<');
           if (
-            JSON.stringify(foundArray).match('line-through') &&
-            JSON.stringify(foundArray).match('underline')
+            foundArray.match('line-through') &&
+            foundArray.match('underline')
           ) {
             extractStyles = `<u><s>${splitText[0]}</s></u><${splitText[1]}`;
-          } else if (JSON.stringify(foundArray).match('line-through')) {
+          } else if (foundArray.match('line-through')) {
             extractStyles = `<s>${splitText[0]}</s><${splitText[1]}`;
-          } else if (JSON.stringify(foundArray).match('underline')) {
+          } else if (foundArray.match('underline')) {
             extractStyles = `<u>${splitText[0]}</u><${splitText[1]}`;
           }
           fetchedElementArray[indexFoundArray + k] = extractStyles;
-          let appendedString = '';
-          fetchedElementArray.forEach(value => (appendedString += value));
-          string = appendedString;
         }
       }
     }
@@ -731,49 +622,43 @@ const MyDoc = (
   return (
     <Document>
       {' '}
-      <Page wrap style={styles.page}>
+      <Page>
         {' '}
-        <View fixed style={styles.header}>
+        <View>
           {' '}
-          <Image src={Logo} style={styles.imgLogo}></Image>{' '}
+          <Image></Image>{' '}
         </View>{' '}
-        <View style={styles.body}>
+        <View>
           {' '}
-          <View style={styles.heading}>
+          <View>
             {' '}
-            <Text style={styles.headingText}>
+            <Text>
               {' '}
-              <Text style={{ fontStyle: 'italic' }}>
-                {' '}
-                {proposalDetails['CRM #'] || ''}{' '}
-              </Text>{' '}
-              Opportunity Overview
+              <Text> {proposalDetails['CRM #'] || ''} </Text> Opportunity
+              Overview
             </Text>{' '}
           </View>{' '}
           <Html
             collapse={false} // this will preserve whitespace
-            style={{ fontSize: 10 }}
             renderers={{
               p: ({ style, children }) => {
                 if (children != '') {
-                  return <View style={style}>{children}</View>;
+                  return <View>{children}</View>;
                 } else {
-                  return <View style={{ height: 18 }}></View>;
+                  return <View></View>;
                 }
               },
-              tr: ({ style, children }) => (
-                <View style={style}>{children}</View>
-              ),
+              tr: ({ style, children }) => <View>{children}</View>,
               a: ({ style, element, children }) => {
                 return (
-                  <HtmlLink style={style} href={element.attrs.href}>
+                  <HtmlLink href={element.attrs.href}>
                     {' '}
                     <Text>{children}</Text>{' '}
                   </HtmlLink>
                 );
               },
               mark: ({ style, children }) => {
-                return <Text style={style}>{children}</Text>;
+                return <Text>{children}</Text>;
               },
               div: ({ style, children, element }) => {
                 const { _attrs } = element;
@@ -784,9 +669,9 @@ const MyDoc = (
                     'public-DraftStyleDefault-block public-DraftStyleDefault-ltr'
                   )
                 ) {
-                  return <Text style={style}>{children}</Text>;
+                  return <Text>{children}</Text>;
                 }
-                return <View style={style}>{children}</View>;
+                return <View>{children}</View>;
               }
             }}
           >
@@ -802,76 +687,23 @@ const MyDoc = (
             )}
           </Html>{' '}
         </View>{' '}
-        <View fixed style={styles.footer}>
+        <View>
           {' '}
-          <Text
-            style={{
-              fontSize: '10px',
-              fontweight: 'bold',
-              color: `#00A3E0`,
-              marginBottom: 5,
-              borderBottom: '1px solid #CCC'
-            }}
-          >
+          <Text> </Text>{' '}
+          <View>
             {' '}
-            † Unity has provided this answer but not validated by user on
-            proposal team.{' '}
-          </Text>{' '}
-          <View
-            style={{ display: 'flex', flexDirection: 'row', marginBottom: 5 }}
-          >
-            {' '}
-            <Text style={{ flex: 1, fontSize: '8px', color: '#999' }}>
-              {' '}
-              Exported from Unity on {dateNow()}
-            </Text>{' '}
-            <Text
-              style={{
-                flex: 1,
-                fontSize: '8px',
-                textAlign: 'right',
-                color: '#999'
-              }}
-            >
-              {' '}
-              View up-to-date Unity record here:
-            </Text>{' '}
+            <Text> Exported from Unity on {dateNow()}</Text>{' '}
+            <Text> View up-to-date Unity record here:</Text>{' '}
           </View>{' '}
-          <View
-            style={{ display: 'flex', flexDirection: 'row', marginBottom: 5 }}
-          >
+          <View>
             {' '}
-            <Text style={{ flex: 1, fontSize: '8px', color: '#999' }}>
-              {' '}
-              by {userName}
-            </Text>{' '}
-            <Text
-              style={{
-                flex: 1,
-                fontSize: '8px',
-                textAlign: 'right',
-                color: '#999'
-              }}
-            >
-              {' '}
-              {getUnityLink(proposalDetails)}
-            </Text>{' '}
+            <Text> by {userName}</Text>{' '}
+            <Text> {getUnityLink(proposalDetails)}</Text>{' '}
           </View>{' '}
-          <View
-            style={{ display: 'flex', flexDirection: 'row', marginBottom: 0 }}
-          >
+          <View>
             {' '}
-            <Text
-              style={{ flex: 0, fontSize: '8px', color: '#999' }}
-            ></Text>{' '}
-            <Text
-              style={{
-                flex: 1,
-                fontSize: '8px',
-                textAlign: 'right',
-                color: '#999'
-              }}
-            >
+            <Text></Text>{' '}
+            <Text>
               {' '}
               Copyright © {yearNow} IQVIA. All Rights Reserved. Confidential and
               Proprietary.
