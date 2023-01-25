@@ -106,15 +106,11 @@ export const fetchApprovalSendEmailFlag = val => {
 
 export const updateFilters = (name, value) => {
   return async (dispatch, getState) => {
-    await dispatch({
-      type: APPROVALS.UPDATE_FILTERS,
-      payload: { name, value }
-    });
     const state = getState();
     const searchQuery = selectQuery(state);
     const questionsFilter = getQuestionsFilters(state);
     const approvalFilters = state.approvals.filters;
-    if (searchQuery !== null && searchQuery.length >= 3) {
+    if (searchQuery !== null && searchQuery.length >= 3 && value) {
       let totalFiltersApplied = 0;
       questionsFilter.entrySeq().forEach(([groupName, group]) => {
         group
@@ -127,8 +123,7 @@ export const updateFilters = (name, value) => {
           });
       });
       totalFiltersApplied += approvalFilters.filter(item => item.value).length;
-      console.log(totalFiltersApplied);
-      if (totalFiltersApplied === 1) {
+      if (totalFiltersApplied === 0) {
         dispatch({
           type: SEARCH.SHOW_MODAL,
           payload: {
@@ -136,10 +131,13 @@ export const updateFilters = (name, value) => {
             modalContent: SEARCH_CONSTANTS.CONTENT_SEARCH_ACTIVE
           }
         });
-      } else {
-        dispatch(doSearchAction());
       }
     }
+    await dispatch({
+      type: APPROVALS.UPDATE_FILTERS,
+      payload: { name, value }
+    });
+    dispatch(doSearchAction());
   };
 };
 

@@ -884,7 +884,6 @@ export function getQuestionsFilterApplied(questionsArr, questionsFilter) {
 export function onQuestionsFilterApplied(questionsFilter) {
   return async (dispatch, getState) => {
     const state = getState();
-    const searchQuery = selectQuery(state);
     dispatch({
       type: ON_APPLY_QUESTIONS_FILTER,
       payload: { questionsFilter }
@@ -965,7 +964,21 @@ export function onQuestionsFilterApplied(questionsFilter) {
       type: ON_QUESTIONS_FILTERED,
       payload: { filteredQuestions }
     });
-    if (searchQuery !== null && searchQuery.length >= 3) {
+
+    dispatch(doSearchAction());
+  };
+}
+
+export function onApplyQuestionsFilter(
+  filterName = null,
+  checked = false,
+  groupName
+) {
+  return async (dispatch, getState) => {
+    const state = getState();
+    const searchQuery = selectQuery(state);
+    let questionsFilter = getQuestionsFilters(state);
+    if (searchQuery !== null && searchQuery.length >= 3 && checked) {
       const approvalFilters = state.approvals.filters;
       let totalFiltersApplied = 0;
       questionsFilter.entrySeq().forEach(([groupName, group]) => {
@@ -979,7 +992,7 @@ export function onQuestionsFilterApplied(questionsFilter) {
           });
       });
       totalFiltersApplied += approvalFilters.filter(item => item.value).length;
-      if (totalFiltersApplied === 1) {
+      if (totalFiltersApplied === 0) {
         dispatch({
           type: SEARCH.SHOW_MODAL,
           payload: {
@@ -987,21 +1000,8 @@ export function onQuestionsFilterApplied(questionsFilter) {
             modalContent: SEARCH_CONSTANTS.CONTENT_SEARCH_ACTIVE
           }
         });
-      } else {
-        dispatch(doSearchAction());
       }
     }
-  };
-}
-
-export function onApplyQuestionsFilter(
-  filterName = null,
-  checked = false,
-  groupName
-) {
-  return async (dispatch, getState) => {
-    const state = getState();
-    let questionsFilter = getQuestionsFilters(state);
     if (filterName && groupName) {
       questionsFilter = questionsFilter.setIn(
         [groupName, filterName, 'checked'],
