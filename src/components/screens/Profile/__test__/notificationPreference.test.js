@@ -5,8 +5,9 @@ import React from 'react';
 
 import { configure, mount, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { cleanup, render, screen, fireEvent } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { PROFILE } from '../../../../constants/app';
 
 import NotificationPreference from '../AccountPreferences/NotificationPreference';
 
@@ -15,7 +16,15 @@ afterEach(() => {
   cleanup();
 });
 
-describe.skip('Notification Preference Component is rendered in Dom', () => {
+const {
+  NOTIFICATION_PREFERENCE,
+  IN_APP,
+  EMAIL,
+  NOT_FOUND,
+  EMAIL_PREFERENCES
+} = PROFILE;
+
+describe('Notification Preference Component is rendered in Dom', () => {
   test('Notification Preference render', () => {
     const wrapper = shallow(<NotificationPreference />);
     expect(wrapper.exists()).toBe(true);
@@ -23,35 +32,28 @@ describe.skip('Notification Preference Component is rendered in Dom', () => {
   test('check for Email text', () => {
     const wrapper = shallow(<NotificationPreference />);
     expect(wrapper.exists()).toBe(true);
-    const chkText = 'Email';
+    const chkText = EMAIL;
     expect(wrapper.text().includes(chkText)).toBe(true);
   });
 
   test('check for Notification text', () => {
     const wrapper = shallow(<NotificationPreference />);
     expect(wrapper.exists()).toBe(true);
-    const chkText = 'Notification Preference';
+    const chkText = NOTIFICATION_PREFERENCE;
     expect(wrapper.text().includes(chkText)).toBe(true);
   });
 
-  test('check for Answer Changes', () => {
+  test('check for Email', () => {
     const wrapper = shallow(<NotificationPreference />);
     expect(wrapper.exists()).toBe(true);
-    const chkText = 'Answer Changes';
+    const chkText = EMAIL;
     expect(wrapper.text().includes(chkText)).toBe(true);
   });
 
-  test('check for New document added Changes', () => {
+  test('check for No Found text', () => {
     const wrapper = shallow(<NotificationPreference />);
     expect(wrapper.exists()).toBe(true);
-    const chkText = 'New document added';
-    expect(wrapper.text().includes(chkText)).toBe(true);
-  });
-
-  test('check for Question assigned to my role Changes', () => {
-    const wrapper = shallow(<NotificationPreference />);
-    expect(wrapper.exists()).toBe(true);
-    const chkText = 'Question assigned to my role';
+    const chkText = NOT_FOUND;
     expect(wrapper.text().includes(chkText)).toBe(true);
   });
 
@@ -62,7 +64,18 @@ describe.skip('Notification Preference Component is rendered in Dom', () => {
     };
     const wrapper = shallow(<NotificationPreference {...props} />);
     expect(wrapper.exists()).toBe(true);
-    const chkText = 'In-App';
+    const chkText = IN_APP;
+    expect(wrapper.text().includes(chkText)).toBe(true);
+  });
+
+  test('Check for Email-Preference', () => {
+    const props = {
+      handleEmailPreferenceChange: jest.fn(),
+      setEmailPrefList: jest.fn()
+    };
+    const wrapper = shallow(<NotificationPreference {...props} />);
+    expect(wrapper.exists()).toBe(true);
+    const chkText = EMAIL_PREFERENCES;
     expect(wrapper.text().includes(chkText)).toBe(true);
   });
 });
