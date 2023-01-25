@@ -25,25 +25,6 @@ const QuestionsSectionMapping = ({
   setTabFromQuestionNotes,
   onAddQuestion
 }) => {
-  // console.log(
-  //   1111111111,
-  //   sections,
-  //   filteredSections,
-  //   isQuestionsFiltersEnabled,
-  //   filterMilestone,
-  //   allSectionsExpanded
-  // );
-  // console.log(
-  //   222222222,
-  //   isNotepadOpen,
-  //   '9',
-  //   setQuestionToDisplayHistory,
-  //   '10',
-  //   setTabFromQuestionNotes,
-  //   '11',
-  //   onAddQuestion
-  // );
-
   const socketContext = useContext(SocketContext);
   const [allSections, setAllSections] = useState(new OrderedMap([]));
   const [resetLazy, setResetLazy] = useState(false);

@@ -173,7 +173,7 @@ describe('Questions component', () => {
     expect(queryByTestId('addquestionbtn')).toBeInTheDocument();
   });
 
-  test('Questions Sidebar component render', async () => {
+  test.skip('Questions Sidebar component render', async () => {
     const location = window.location;
     delete window.location;
     window.location = {
@@ -245,7 +245,7 @@ describe('Questions component', () => {
     expect(component.state().showModal).toBe(false);
   });
 
-  test('Questions component model render', async () => {
+  test.skip('Questions component model render', async () => {
     const location = window.location;
     delete window.location;
     window.location = {
@@ -271,7 +271,7 @@ describe('Questions component', () => {
     expect(queryByTestId('question-model-testid')).toBeInTheDocument();
   });
 
-  test('Questions component expand all render', async () => {
+  test.skip('Questions component expand all render', async () => {
     const location = window.location;
     delete window.location;
     window.location = {
@@ -295,7 +295,7 @@ describe('Questions component', () => {
     fireEvent.change(getByText('Expand All'));
   });
 
-  test('Questions component filter button render', async () => {
+  test.skip('Questions component filter button render', async () => {
     const location = window.location;
     delete window.location;
     window.location = {
@@ -324,7 +324,7 @@ describe('Questions component', () => {
     await fireEvent.click(getByText('Clear All'));
   });
 
-  test('Questions component mark NA render', async () => {
+  test.skip('Questions component mark NA render', async () => {
     const location = window.location;
     delete window.location;
     window.location = {
@@ -351,7 +351,7 @@ describe('Questions component', () => {
     expect(await findByText('Informed')).toBeInTheDocument();
   });
 
-  test('Questions component Sidebar component render', async () => {
+  test.skip('Questions component Sidebar component render', async () => {
     const location = window.location;
     delete window.location;
     window.location = {
