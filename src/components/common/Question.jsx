@@ -43,6 +43,7 @@ import {
 } from '../../redux/selectors';
 import {
   getCanUserTagInQuestion,
+  getfetchAllFlags,
   getOpportunityData
 } from '../../redux/selectors/proposal';
 import MatomoHOC from '../HOC/MatomoHOC';
@@ -137,7 +138,8 @@ type Props = {
   isNotepadOpen: boolean,
   events: Object,
   isNotApplicable: Boolean,
-  canUserTagInQuestion: Boolean
+  canUserTagInQuestion: Boolean,
+  allFlags: Boolean
 };
 export class TaskRow extends React.PureComponent<Props, State> {
   static contextType = SocketContext;
@@ -682,6 +684,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       isNotApplicable,
       NaLoading,
       canUserTagInQuestion,
+      allFlags,
       query
     } = this.props;
 
@@ -821,6 +824,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     const richTextAnswerField = {
       // questionId: this.props.questionId,
       canUserTagInQuestion,
+      allFlags,
       richTextString: getConvertedAnsString(answerValue),
       richTextVal: richTextData.value,
       richTextHtml: richTextData.html,
@@ -1667,6 +1671,7 @@ const mapStateToProps = (state: Object) => ({
   noneditableField: getnoneditableField(state),
   showNaCheckbox: getShowNaCheckbox(state),
   canUserTagInQuestion: getCanUserTagInQuestion(state),
+  allFlags: getfetchAllFlags(state),
   query: selectQuery(state),
   currentSearchResult: selectCurrentSearchResult(state),
   prevSearchResult: selectPrevSearchResult(state),

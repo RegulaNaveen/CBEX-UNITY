@@ -163,7 +163,7 @@ h3{
     font-size: 15px;
     margin: 2px;
 }
-body{
+body {
   display: block;
   margin: 8px;
   height: 100%;
@@ -250,11 +250,11 @@ ul li{
 .questionTable tr td:first-child{
     background: #EEEEEE;
 }
-.blueColorText{
-    color: #00A3E0;
-    font-family:Helvetica;
-    font-size: 8px;
-}
+// .blueColorText{
+//     color: #00A3E0;
+//     font-family:Helvetica;
+//     font-size: 8px;
+// }
 .footerWrapper{
     display:flex;
     justify-content:space-between
@@ -263,25 +263,27 @@ ul li{
     color: #EEEEEE,
     font-size:7px,
 }
-.public-DraftStyleDefault-depth0.public-DraftStyleDefault-listLTR {
+#pdfbody .public-DraftStyleDefault-depth0.public-DraftStyleDefault-listLTR {
     margin-left: 5px;
 }
 .public-DraftStyleDefault-depth1.public-DraftStyleDefault-listLTR {
-    margin-left: 10px;
+  margin-left: 10px;
+  list-style-type: disc !important;
 }
-.public-DraftStyleDefault-depth2.public-DraftStyleDefault-listLTR {
+
+#pdfbody .public-DraftStyleDefault-depth2.public-DraftStyleDefault-listLTR {
     margin-left: 15px;
 }
-.public-DraftStyleDefault-depth3.public-DraftStyleDefault-listLTR {
+#pdfbody .public-DraftStyleDefault-depth3.public-DraftStyleDefault-listLTR {
     margin-left: 20px;
 }
-.public-DraftStyleDefault-depth4.public-DraftStyleDefault-listLTR {
+#pdfbody .public-DraftStyleDefault-depth4.public-DraftStyleDefault-listLTR {
     margin-left: 25px;
 }
-.MuiGrid-root{
+#pdfbody .MuiGrid-root{
     display:none;
 }
-.MuiFormControl-root{
+#pdfbody .MuiFormControl-root{
     padding:5px;
     border: 1px solid #000;
     border-top: none;
@@ -303,7 +305,45 @@ li {
 li > ul > li {
   list-style-type: &#x26AC !important; 
       margin-left:-1em; 
-  }</style>`;
+  }
+  
+  li ul li{
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 5px;
+  }
+  ul ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 5px;
+  }
+  ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+  }
+.notesData p{
+  margin-top: 0.75em;
+}
+
+.blueColorText {
+  color: #00A3E0;
+  font-family: Helvetica;
+  font-size: 8px;
+ 
+}
+
+</style>`;
 }
 function getHeaderInfoRows(details) {
   let html = `<table class="table headerInfo">`;
@@ -326,7 +366,7 @@ function getHeaderInfoRows(details) {
 function getProposalTeamsRows(questions) {
   const coreTeamQuestions = questions
     .filter(
-      question =>
+      (question) =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
         CORE_TEAM[question.questionText]
@@ -334,7 +374,7 @@ function getProposalTeamsRows(questions) {
     .sort((a, b) => a.questionOrder - b.questionOrder);
   const otherTeamQuestions = questions
     .filter(
-      question =>
+      (question) =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
         !CORE_TEAM[question.questionText]
@@ -347,12 +387,12 @@ function getProposalTeamsRows(questions) {
     html += `<th> Core Team Members </th>`;
     html += `<th> Name</th>`;
     html += `</tr>`;
-    coreTeamQuestions.forEach(question => {
+    coreTeamQuestions.forEach((question) => {
       const { questionText, answers } = question;
       const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
       html += `<tr>`;
-      html += `<td>${questionText} ${extraNewLines}</td>`;
-      html += `<td>${checkFormattedAnswer(answers)} ${extraNewLines}</td>`;
+      html += `<td>${questionText}</td>`;
+      html += `<td>${checkFormattedAnswer(answers)}</td>`;
       html += `</tr>`;
     });
     html += `</table>`;
@@ -361,12 +401,12 @@ function getProposalTeamsRows(questions) {
     html += `<th> Specialty Team Members </th>`;
     html += `<th> Name</th>`;
     html += `</tr>`;
-    otherTeamQuestions.forEach(question => {
+    otherTeamQuestions.forEach((question) => {
       const { questionText, answers } = question;
       const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
       html += `<tr>`;
-      html += `<td>${questionText} ${extraNewLines}</td>`;
-      html += `<td>${checkFormattedAnswer(answers)} ${extraNewLines}</td>`;
+      html += `<td>${questionText} </td>`;
+      html += `<td>${checkFormattedAnswer(answers)}</td>`;
       html += `</tr>`;
     });
     html += `</table>`;
@@ -380,7 +420,7 @@ function questionTables(allQuestions, proposalQuestions) {
   let html = ``;
   // Remove not visible questions
   let questions = proposalQuestions
-    .filter(question => {
+    .filter((question) => {
       return (
         shouldInclude(question) &&
         question.section.sectionName !== PT_SECTION &&
@@ -394,7 +434,7 @@ function questionTables(allQuestions, proposalQuestions) {
   const sections = {};
   let ordereredSections = [];
   // Populate the section map
-  questions.forEach(question => {
+  questions.forEach((question) => {
     try {
       let section = question.section.sectionName || '';
       if (section === 'Questions_for_the_Customer_left_panel')
@@ -409,7 +449,7 @@ function questionTables(allQuestions, proposalQuestions) {
       console.log('Error while mapping Sections');
     }
   });
-  ordereredSections.forEach(section => {
+  ordereredSections.forEach((section) => {
     if (section === QC_SECTION) {
       html += `<table class="questionTable table marginTop20">`;
       html += `<tr>`;
@@ -419,33 +459,33 @@ function questionTables(allQuestions, proposalQuestions) {
 
       sections[section]
         .sort((a, b) => a.questionOrder - b.questionOrder)
-        .forEach(question => {
+        .forEach((question) => {
           const questionHTML = question.questionHTML || question.questionText;
           const extraNewLines = getExtraLines(
             getLastAnswerHtml(question.answers),
             questionHTML
           );
           html += `<tr>`;
-          html += `<td> ${questionHTML} ${extraNewLines}</td>`;
-          html += `<td> ${formatDate(
+          html += `<td> ${questionHTML} </td>`;
+          html += `<td>${formatDate(
             checkFormattedAnswer(question.answers),
             question.answerConfiguration
-          )} <span class="blueColorText">${
+          )}  <span class="blueColorText">${
             getUnityPredicatedText(question.answers)
               ? getUnityPredicatedText(question.answers)
               : ''
-          }</span>${extraNewLines}</td>`;
+          }</span></td>`;
           html += `</tr>`;
         });
 
       let questionsToCustomerRightSection = allQuestions
         .filter(
-          question =>
+          (question) =>
             shouldInclude(question) &&
             question.section.sectionName === QC_SECTION
         )
         .sort((a, b) => a.questionOrder - b.questionOrder);
-      questionsToCustomerRightSection.forEach(question => {
+      questionsToCustomerRightSection.forEach((question) => {
         const { questionText } = question;
         const extraNewLines = getExtraLines(
           getLastAnswerHtml(question?.answers),
@@ -453,14 +493,14 @@ function questionTables(allQuestions, proposalQuestions) {
         );
         html += `<tr>`;
         html += `<td> ${questionText}</td>`;
-        html += `<td class="spacing-left"> ${formatDate(
+        html += `<td > ${formatDate(
           checkFormattedAnswer(question.answers),
           question.answerConfiguration
-        )} <span class="blueColorText">${
+        )}<span class="blueColorText">${
           getUnityPredicatedText(question.answers)
             ? getUnityPredicatedText(question.answers)
             : ''
-        }</span>${extraNewLines}</td>`;
+        }</span></td>`;
         html += `</tr>`;
       });
       html += `</table>`;
@@ -472,14 +512,14 @@ function questionTables(allQuestions, proposalQuestions) {
       html += `</tr>`;
       sections[section]
         .sort((a, b) => a.questionOrder - b.questionOrder)
-        .forEach(question => {
+        .forEach((question) => {
           const questionHTML = question.questionHTML || question.questionText;
           const extraNewLines = getExtraLines(
             getLastAnswerHtml(question.answers),
             questionHTML
           );
           html += `<tr>`;
-          html += `<td> ${questionHTML} ${extraNewLines}</td>`;
+          html += `<td> ${questionHTML}</td>`;
           html += `<td> ${formatDate(
             checkFormattedAnswer(question.answers),
             question.answerConfiguration
@@ -487,7 +527,7 @@ function questionTables(allQuestions, proposalQuestions) {
             getUnityPredicatedText(question.answers)
               ? getUnityPredicatedText(question.answers)
               : ''
-          }</span>${extraNewLines}</td>`;
+          }</span></td>`;
           html += `</tr>`;
         });
       html += `</table>`;
@@ -499,7 +539,7 @@ function getQuestionToCustomerRows(questions) {
   let html = ``;
   let questionsToCustomer = questions
     .filter(
-      question =>
+      (question) =>
         shouldInclude(question) && question.section.sectionName === QC_SECTION
     )
     .sort((a, b) => a.questionOrder - b.questionOrder);
@@ -522,7 +562,7 @@ function getQuestionToCustomerRows(questions) {
         questionText
       );
       html += `<tr>`;
-      html += `<td> ${questionText} ${extraNewLines}</td>`;
+      html += `<td> ${questionText} </td>`;
       html += `<td> ${formatDate(
         checkFormattedAnswer(question.answers),
         question.answerConfiguration
@@ -530,7 +570,7 @@ function getQuestionToCustomerRows(questions) {
         getUnityPredicatedText(question.answers)
           ? getUnityPredicatedText(question.answers)
           : ''
-      }</span>${extraNewLines}</td>`;
+      }</span></td>`;
     });
     html += `</tr>`;
   } catch (error) {
@@ -637,12 +677,12 @@ function getHtml(
           );
       }
   }
-  if (string.match('<li'))
-    string = string?.replaceAll('<li', '<li style="list-style-type: disc"');
+  // if (string.match('<li'))
+  //   string = string?.replaceAll('<li', '<li style="list-style-type: disc"');
   let extractStyles;
   let k = 0;
   let fetchedElementArray = string.split(/(>)/g);
-  fetchedElementArray.filter(value => {
+  fetchedElementArray.filter((value) => {
     if (value.match(/text-decoration:(.*?)"/g)) {
       let foundArray = value;
       const indexFoundArray = fetchedElementArray.indexOf(foundArray);
@@ -661,7 +701,7 @@ function getHtml(
           }
           fetchedElementArray[indexFoundArray + k] = extractStyles;
           let appendedString = '';
-          fetchedElementArray.forEach(value => (appendedString += value));
+          fetchedElementArray.forEach((value) => (appendedString += value));
           string = appendedString;
         }
       }

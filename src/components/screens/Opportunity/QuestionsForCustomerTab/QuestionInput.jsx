@@ -6,7 +6,10 @@ import {
   setProposalQuestion
 } from '../../../../redux/actions/proposal-actions';
 import { getSelectedBid } from '../../../../redux/selectors';
-import { getCanUserTagInQuestion } from '../../../../redux/selectors/proposal';
+import {
+  getCanUserTagInQuestion,
+  getfetchAllFlags
+} from '../../../../redux/selectors/proposal';
 import CustomApolloRichText from '../../../common/CustomApolloRichText';
 
 const QuestionInput = ({
@@ -26,6 +29,7 @@ const QuestionInput = ({
 
   const answerValue = question?.questionText || '';
   const canUserTagInQuestion = useSelector(getCanUserTagInQuestion);
+  const allFlags = useSelector(getfetchAllFlags);
 
   const getConvertedAnsString = str =>
     !String(str).trim() ? '' : String(str).trim();
@@ -90,6 +94,7 @@ const QuestionInput = ({
     isEditable: false,
     disabled: checkDisableFlag(),
     canUserTagInQuestion,
+    allFlags,
 
     onBlur: data => {
       let saveDate = false;
