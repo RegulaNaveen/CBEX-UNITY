@@ -60,12 +60,13 @@ const QuestionInput = ({
     };
     if (question?.isNewEntry) {
       setShowLoader(true);
+      questionUnlockWrapper(question?.questionId);
+      setNewEntry(null);
       await dispatch(
         setProposalQuestion(proposalId, questionData, socketContext)
       );
-      setNewEntry(null);
+
       setShowLoader(false);
-      questionUnlockWrapper(question?.questionId);
     } else {
       setShowLoader(true);
       await dispatch(

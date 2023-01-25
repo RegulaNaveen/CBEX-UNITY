@@ -29,7 +29,8 @@ import {
   closeSearchAction,
   doSearchAction,
   navigateNextSearchAction,
-  navigatePrevSearchAction
+  navigatePrevSearchAction,
+  clearSearchResultsAction
 } from '../../../redux/actions/search-actions';
 import './style.scss';
 import { Typography } from 'apollo-react/components/Typography/Typography';
@@ -96,6 +97,7 @@ export default function Search() {
           }
         } else {
           dispatch(updateQuerySearchAction(searchInput));
+          dispatch(clearSearchResultsAction());
         }
       }
     },
