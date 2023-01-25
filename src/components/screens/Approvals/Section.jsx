@@ -125,7 +125,8 @@ const Section = ({ sectionId, title, testVisibility }) => {
                   searchWords={[
                     `${
                       currentSearchResult !== null &&
-                      currentSearchResult.searchIndex === sectionId
+                      currentSearchResult.searchIndex === sectionId &&
+                      query !== null
                         ? query
                         : ''
                     }`
@@ -134,6 +135,7 @@ const Section = ({ sectionId, title, testVisibility }) => {
                   textToHighlight={`${title}${
                     !isEmpty(ArchivedData) ? ' 1' : ''
                   }`}
+                  highlightClassName="search-highlight"
                 />
               </p>
             </CustomAccordionSummary>
