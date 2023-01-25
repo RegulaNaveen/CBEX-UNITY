@@ -362,6 +362,10 @@ export const getCanUserTagInQuestion = createSelector(
   proposal => proposal?.get('canUserTagInQuestion')
 );
 
+export const getfetchAllFlags = createSelector(selectProposal, proposal =>
+  proposal?.get('eventflag')
+);
+
 export const getApprovalQuestionLoading = createSelector(
   selectProposal,
   proposal => proposal?.get('approvalQuestionLoading')

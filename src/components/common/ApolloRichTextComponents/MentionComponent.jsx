@@ -21,3 +21,18 @@ export function MentionComponentWithEmail(props) {
     </a>
   );
 }
+
+// MENTION entity's component with HyperLink
+export function MentionComponentWithLink(props) {
+  const { decoratedText } = props;
+  return (
+    <a
+      style={mentionStyles}
+      href={`${window?.location?.origin}/opportunities/${decoratedText}`}
+      target="_blank"
+      rel="noreferrer"
+    >
+      {props.children}
+    </a>
+  );
+}

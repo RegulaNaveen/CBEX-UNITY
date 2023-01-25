@@ -49,6 +49,17 @@ export const clearSearchAction = () => {
   };
 };
 
+export const clearSearchResultsAction = () => {
+  return (dispatch, getState) => {
+    const currentSearchResult = selectCurrentSearchResult(getState());
+    dispatch({ type: SEARCH.CLEAR_SEARCH_RESULTS });
+    dispatch({
+      type: SEARCH.CLEAR_ACTIVE_SEARCH_HIGHLIGHT,
+      payload: currentSearchResult
+    });
+  };
+};
+
 export const updateQuerySearchAction = query => ({
   type: SEARCH.UPDATE_QUERY,
   payload: query
@@ -67,7 +78,7 @@ export const navigateNextSearchAction = () => {
           ? currentResultIndex + 1
           : 0;
       const newResult = searchResults[newIndex];
-      if (newResult.tab !== activeTab) {
+      if (newResult.tab !== null && newResult.tab !== activeTab) {
         await dispatch(setActiveTabIndexAction(newResult.tab));
         dispatch({
           type: UI.SET_SNACKBAR_MSG,
@@ -104,7 +115,7 @@ export const navigatePrevSearchAction = () => {
           ? currentResultIndex - 1
           : searchResults.length - 1;
       const newResult = searchResults[newIndex];
-      if (newResult.tab !== activeTab) {
+      if (newResult.tab !== null && newResult.tab !== activeTab) {
         await dispatch(setActiveTabIndexAction(newResult.tab));
         dispatch({
           type: UI.SET_SNACKBAR_MSG,
@@ -275,7 +286,7 @@ export const resumeSearchAction = ({
       searchResults.newCurrentResultIndex = 0;
       searchResults.autoNavigatedToCurrentResult = false;
       const newResult = searchResults.results[0];
-      if (newResult.tab !== activeTab) {
+      if (newResult.tab !== null && newResult.tab !== activeTab) {
         await dispatch(setActiveTabIndexAction(newResult.tab));
         dispatch({
           type: UI.SET_SNACKBAR_MSG,
