@@ -13693,6 +13693,43 @@
         "bidNo": 1
       }
     ],
+    "nonEditableSF": [
+      {
+        "questionText": "Business Developer",
+        "sfField": "Owner_Email__c",
+        "sfObject": "Opportunity"
+      },
+      {
+        "questionText": "Date risk assessed?",
+        "sfField": "Date_Risk_Assessed__c",
+        "sfObject": "Account"
+      },
+      {
+        "questionText": "Bid Number",
+        "sfField": "Bid_Number__c",
+        "sfObject": "Bid_History__c"
+      },
+      {
+        "questionText": "Opportunity Type",
+        "sfField": "Opportunity_Type__c",
+        "sfObject": "Bid_History__c"
+      },
+      {
+        "questionText": "Executive Sponsor",
+        "sfField": "Executive_Sponsor__c",
+        "sfObject": "Opportunity"
+      },
+      {
+        "questionText": "What are the CRM numbers of related studies?",
+        "sfField": "Associated_CRM_Numbers__c",
+        "sfObject": "Bid_History__c"
+      },
+      {
+        "questionText": "Credit assessment score",
+        "sfField": "Risk_Rating__c",
+        "sfObject": "Account"
+      }
+    ],
     "editQuestionsData": {},
     "questionsFilter": {},
     "selectedBid": {
@@ -40779,5 +40816,19 @@
   },
   "Sidebar": {
     "isOpen": false
+  },
+  "search": {
+    "query": "Proposal Team",
+    "isOpen": true,
+    "currentResultIndex": -1,
+    "prevResult": null,
+    "totalResultsFound": 1,
+    "searching": false,
+    "searchResults": [],
+    "autoNavigatedToCurrentResult": true,
+    "clearInputFlag": false,
+    "showModal": true,
+    "modalTitle": "",
+    "modalContent": "test"
   }
 }
