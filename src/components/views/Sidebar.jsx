@@ -245,7 +245,6 @@ class Sidebar extends Component<Props, State> {
       selectedBid
     } = this.props;
     const { selectedSection, activeTabIndex } = this.state;
-
     return (
       <div
         id="sidebar"
@@ -254,6 +253,7 @@ class Sidebar extends Component<Props, State> {
       >
         <div className="sidebar-content">
           <button
+            data-testid="sidebar-btn-testid"
             onClick={this.handleItemsVisibility}
             type="button"
             className={classNames({ 'is-btnopen': isOpen })}
@@ -282,6 +282,7 @@ class Sidebar extends Component<Props, State> {
             <div className="controls-wrapper">
               <Tooltip title="Add New Question" placement="left">
                 <PlusIcon
+                  data-testid="sidebar-panel-testid"
                   style={{
                     backgroundColor: selectedBid.get('isCurrent')
                       ? neptunePrimaryDark
@@ -306,6 +307,7 @@ class Sidebar extends Component<Props, State> {
               </Tooltip>
               <Tooltip title={isOpen && 'Expand All Sections'} placement="top">
                 <CardIcon
+                  data-testid="expandall-testid"
                   style={{
                     color: neptunePrimaryDark,
                     width: 20,
@@ -358,6 +360,7 @@ class Sidebar extends Component<Props, State> {
               )}
             </div>
             <Tabs
+              data-testid="tab-testid"
               value={activeTabIndex}
               onChange={this.handleChangeTab}
               size="small"
