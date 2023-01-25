@@ -29,6 +29,8 @@ export function MentionComponentWithLink(props) {
     <a
       style={mentionStyles}
       href={`${window?.location?.origin}/opportunities/${decoratedText}`}
+      target="_blank"
+      rel="noreferrer"
     >
       {props.children}
     </a>
