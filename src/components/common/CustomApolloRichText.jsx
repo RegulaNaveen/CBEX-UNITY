@@ -23,6 +23,8 @@ import {
   MentionComponentWithLink
 } from './ApolloRichTextComponents/MentionComponent';
 
+let CAN_DECORATE_LINKS = false;
+
 // CustomApolloRichText Utilities
 
 /**
@@ -83,6 +85,7 @@ function findWithRegex(regex, contentBlock, callback) {
  * @param {contentState} contentState
  */
 function handleLinkOpportunityStrategy(contentBlock, callback, contentState) {
+  if (!CAN_DECORATE_LINKS) return;
   const REGEX = /[A-Z]{3}[0-9]{5}/g;
   findWithRegex(REGEX, contentBlock, callback);
 }
@@ -141,7 +144,8 @@ const CustomApolloRichText = ({
   className,
   error,
   disabled,
-  canUserTagInQuestion
+  canUserTagInQuestion,
+  allFlags
 }) => {
   // Set initial blocks structure if only string available
   let richtextObject = richTextVal;
@@ -271,6 +275,7 @@ const CustomApolloRichText = ({
     if (isFocused) {
       resetUnlockTimer();
     }
+    CAN_DECORATE_LINKS = allFlags?.canLinkOpportunityNo;
   }, [richTextData, canUserTagInQuestion]);
 
   /**
