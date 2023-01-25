@@ -24,8 +24,10 @@ import {
   setFlag,
   changeBid,
   activateProposalLoading,
-  getIntegrationsData
+  getIntegrationsData,
+  resetQuestionsFilterAction
 } from '../../../redux/actions/proposal-actions';
+import { resetFiltersAction } from '../../../redux/actions/approval-actions';
 import { updateProposalNotesFromWebSocket } from '../../../redux/actions/notepad-actions';
 import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
 import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions';
@@ -215,7 +217,12 @@ export class Opportunity extends Component<Props, State> {
   }
 
   componentWillUnmount() {
-    const { handleOpenClose, setResetProposalId } = this.props;
+    const {
+      handleOpenClose,
+      setResetProposalId,
+      resetQuestionsFilter,
+      resetApprovalsFilter
+    } = this.props;
     if (handleOpenClose) handleOpenClose(false);
     setResetProposalId();
     localStorage.removeItem('proposalTypeView');
@@ -223,6 +230,8 @@ export class Opportunity extends Component<Props, State> {
 
     window.removeEventListener('storage', this.handleStorageChange);
     this.context.updateSocketOppId(null, null);
+    if (resetQuestionsFilter) resetQuestionsFilter();
+    if (resetApprovalsFilter) resetApprovalsFilter();
   }
 
   handleResize = () => {
@@ -392,6 +401,8 @@ export default compose(
     changeBidInView: changeBid,
     getSFNonEditabelInfoField: getSFNonEditabelField,
     ProposalLoading: activateProposalLoading,
-    getIntegrationsData
+    getIntegrationsData,
+    resetQuestionsFilter: resetQuestionsFilterAction,
+    resetApprovalsFilter: resetFiltersAction
   })
 )(MatomoHOC(Opportunity));

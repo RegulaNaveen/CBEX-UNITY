@@ -1,7 +1,7 @@
 import * as Y from 'yjs';
 import { yDocToProsemirrorJSON } from 'y-prosemirror';
 import { NOTES_SOCKET_URL } from '../../constants/api';
-import { SEARCH } from '../../constants/types';
+import { SEARCH, UI } from '../../constants/types';
 import { WebsocketProvider } from '../../context/y-websocket';
 import {
   extractTextFromProseMirrorJSON,
@@ -29,6 +29,10 @@ import {
   setActiveTabIndexAction,
   setVTabActiveIndexAction
 } from './proposal-actions';
+import {
+  selectFilteredSections,
+  selectIsQuestionsFilterEnabled
+} from '../selectors';
 
 export const openSearchAction = () => ({ type: SEARCH.OPEN });
 
@@ -57,20 +61,30 @@ export const navigateNextSearchAction = () => {
     const currentResultIndex = selectCurrentResultIndex(currentState);
     const activeTab = selectActiveTabIndex(currentState);
     const activeVTab = selectActiveVTabIndex(currentState);
-    if (
-      currentResultIndex > -1 &&
-      currentResultIndex < searchResults.length - 1
-    ) {
-      const newResult = searchResults[currentResultIndex + 1];
+    if (currentResultIndex > -1) {
+      const newIndex =
+        currentResultIndex < searchResults.length - 1
+          ? currentResultIndex + 1
+          : 0;
+      const newResult = searchResults[newIndex];
       if (newResult.tab !== activeTab) {
         await dispatch(setActiveTabIndexAction(newResult.tab));
+        dispatch({
+          type: UI.SET_SNACKBAR_MSG,
+          payload: `Switched to ${
+            newResult.tab === 0 ? 'Strategy Development' : 'Approvals'
+          } Tab`
+        });
+        dispatch({
+          type: UI.SHOW_SNACKBAR
+        });
       }
       if (newResult.vTab !== null && newResult.vTab !== activeVTab) {
         await dispatch(setVTabActiveIndexAction(newResult.vTab));
       }
       dispatch({
         type: SEARCH.NAVIGATE_NEXT,
-        payload: { prevResult: searchResults[currentResultIndex] }
+        payload: { prevResult: searchResults[currentResultIndex], newIndex }
       });
       dispatch(resetAutoNavigatedStateAfterDelay());
     }
@@ -84,17 +98,30 @@ export const navigatePrevSearchAction = () => {
     const currentResultIndex = selectCurrentResultIndex(currentState);
     const activeTab = selectActiveTabIndex(currentState);
     const activeVTab = selectActiveVTabIndex(currentState);
-    if (currentResultIndex > 0 && currentResultIndex < searchResults.length) {
-      const newResult = searchResults[currentResultIndex - 1];
+    if (currentResultIndex > -1) {
+      const newIndex =
+        currentResultIndex > 0 && currentResultIndex < searchResults.length
+          ? currentResultIndex - 1
+          : searchResults.length - 1;
+      const newResult = searchResults[newIndex];
       if (newResult.tab !== activeTab) {
         await dispatch(setActiveTabIndexAction(newResult.tab));
+        dispatch({
+          type: UI.SET_SNACKBAR_MSG,
+          payload: `Switched to ${
+            newResult.tab === 0 ? 'Strategy Development' : 'Approvals'
+          } Tab`
+        });
+        dispatch({
+          type: UI.SHOW_SNACKBAR
+        });
       }
       if (newResult.vTab !== null && newResult.vTab !== activeVTab) {
         await dispatch(setVTabActiveIndexAction(newResult.vTab));
       }
       dispatch({
         type: SEARCH.NAVIGATE_PREVIOUS,
-        payload: { prevResult: searchResults[currentResultIndex] }
+        payload: { prevResult: searchResults[currentResultIndex], newIndex }
       });
       dispatch(resetAutoNavigatedStateAfterDelay());
     }
@@ -104,10 +131,6 @@ export const navigatePrevSearchAction = () => {
 export const autoNavigationCompletedAction = () => ({
   type: SEARCH.AUTO_NAVIGATION_DONE
 });
-
-export const checkDataPrerequisiteAction = () => {
-  return async (dispatch, getState) => {};
-};
 
 export const doSearchAction = () => {
   return async (dispatch, getState) => {
@@ -120,6 +143,10 @@ export const doSearchAction = () => {
     const allFlags = currentState.proposal.get('eventflag');
     const query = selectQuery(currentState);
     const sections = selectSections(currentState);
+    const filteredSections = selectFilteredSections(currentState);
+    const isQuestionsFilterEnabled = selectIsQuestionsFilterEnabled(
+      currentState
+    );
     const questions = selectProposalQuestions(currentState);
     const selectedBid = getSelectedBid(currentState).toJS();
     const shouldCheckNotepad =
@@ -141,12 +168,15 @@ export const doSearchAction = () => {
           wsProvider.on('sync', async isSynced => {
             if (isSynced) {
               const proseMirrorData = yDocToProsemirrorJSON(yDoc, 'default');
+              console.log('proseMirrorData', proseMirrorData);
               notepadData = extractTextFromProseMirrorJSON(proseMirrorData);
               dispatch(
                 resumeSearchAction({
                   query,
                   questions,
-                  sections: sections.toJS(),
+                  sections: isQuestionsFilterEnabled
+                    ? filteredSections.toJS()
+                    : sections.toJS(),
                   approvals: shouldCheckApprovals ? approvals : [],
                   notepadData
                 })
@@ -160,7 +190,9 @@ export const doSearchAction = () => {
                 resumeSearchAction({
                   query,
                   questions,
-                  sections: sections.toJS(),
+                  sections: isQuestionsFilterEnabled
+                    ? filteredSections.toJS()
+                    : sections.toJS(),
                   approvals: shouldCheckApprovals ? approvals : [],
                   notepadData
                 })
@@ -173,7 +205,9 @@ export const doSearchAction = () => {
               resumeSearchAction({
                 query,
                 questions,
-                sections: sections.toJS(),
+                sections: isQuestionsFilterEnabled
+                  ? filteredSections.toJS()
+                  : sections.toJS(),
                 approvals: shouldCheckApprovals ? approvals : [],
                 notepadData
               })
@@ -186,7 +220,9 @@ export const doSearchAction = () => {
           resumeSearchAction({
             query,
             questions,
-            sections: sections.toJS(),
+            sections: isQuestionsFilterEnabled
+              ? filteredSections.toJS()
+              : sections.toJS(),
             approvals: shouldCheckApprovals ? approvals : [],
             notepadData
           })
@@ -197,7 +233,9 @@ export const doSearchAction = () => {
         resumeSearchAction({
           query,
           questions,
-          sections: sections.toJS(),
+          sections: isQuestionsFilterEnabled
+            ? filteredSections.toJS()
+            : sections.toJS(),
           approvals: shouldCheckApprovals ? approvals : [],
           notepadData
         })
@@ -219,19 +257,35 @@ export const resumeSearchAction = ({
     const activeVTab = selectActiveVTabIndex(currentState);
     const prevSearchResults = selectSearchResults(currentState);
     const prevActiveSearchIndex = selectCurrentResultIndex(currentState);
-    let searchResults = await getSearchResults(
-      query,
+    const isQuestionsFilterEnabled = selectIsQuestionsFilterEnabled(
+      currentState
+    );
+    const approvalFilters = currentState.approvals.filters;
+    let searchResults = await getSearchResults({
+      query: query !== null ? query : '',
       questions,
       sections,
       approvals,
-      notepadData
-    );
+      notepadData,
+      activeTab,
+      isQuestionsFilterEnabled,
+      approvalFilters
+    });
     if (searchResults.count > 0) {
       searchResults.newCurrentResultIndex = 0;
       searchResults.autoNavigatedToCurrentResult = false;
       const newResult = searchResults.results[0];
       if (newResult.tab !== activeTab) {
         await dispatch(setActiveTabIndexAction(newResult.tab));
+        dispatch({
+          type: UI.SET_SNACKBAR_MSG,
+          payload: `Switched to ${
+            newResult.tab === 0 ? 'Strategy Development' : 'Approvals'
+          } Tab`
+        });
+        dispatch({
+          type: UI.SHOW_SNACKBAR
+        });
       }
       if (newResult.vTab !== null && newResult.vTab !== activeVTab) {
         await dispatch(setVTabActiveIndexAction(newResult.vTab));

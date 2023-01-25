@@ -1,3 +1,4 @@
+import { shouldShowQuestion } from '../components/screens/Approvals/utils';
 import { NOTEPAD_UI_ID } from '../constants/app';
 
 /**
@@ -5,15 +6,20 @@ import { NOTEPAD_UI_ID } from '../constants/app';
  * @param {*} questions
  * @param {*} sections
  * @param {*} approvals
+ * @param {*} notepadData
+ * @param {*} activeTab
  * @param {string} query
  */
-export async function getSearchResults(
+export async function getSearchResults({
   query,
   questions,
   sections,
   approvals,
-  notepadData
-) {
+  notepadData,
+  activeTab,
+  isQuestionsFilterEnabled,
+  approvalFilters
+}) {
   let finalResult = {
     count: 0,
     results: []
@@ -28,7 +34,268 @@ export async function getSearchResults(
       filteredQuestionsMap[question.questionId] = question;
     });
   const regexp = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+  if (activeTab === 0) {
+    searchInStrategyDevelopment(
+      finalResult,
+      regexp,
+      sections,
+      isQuestionsFilterEnabled
+    );
+    searchInNotepad(finalResult, regexp, notepadData);
+    searchInApprovals(
+      finalResult,
+      regexp,
+      filteredQuestionsMap,
+      approvals,
+      approvalFilters
+    );
+  } else {
+    searchInApprovals(
+      finalResult,
+      regexp,
+      filteredQuestionsMap,
+      approvals,
+      approvalFilters
+    );
+    searchInStrategyDevelopment(
+      finalResult,
+      regexp,
+      sections,
+      isQuestionsFilterEnabled
+    );
+    searchInNotepad(finalResult, regexp, notepadData);
+  }
 
+  return finalResult;
+}
+
+export function searchInApprovals(
+  finalResult,
+  regexp,
+  questionsMap,
+  approvals,
+  approvalFilters
+) {
+  // searching approvals
+  approvals.forEach(approval => {
+    // searching in approvalTitle
+    if (approval.ApprovalSectionTitle) {
+      updateSearchMatches(
+        regexp,
+        approval.ApprovalSectionTitle,
+        approval.ApprovalSectionId,
+        finalResult,
+        1
+      );
+    }
+
+    // searching archivedData
+    if (
+      Array.isArray(approval.ArchivedData) &&
+      approval.ArchivedData.length > 0
+    ) {
+      approval.ArchivedData.forEach((archive, aIndex) => {
+        // searching in approvalTitle but not in 0 index
+        if (archive.section_title && aIndex !== 0) {
+          updateSearchMatches(
+            regexp,
+            archive.section_title,
+            `${archive.section_id}-archive-${aIndex}-section-title`,
+            finalResult,
+            1
+          );
+        }
+        archive.section_left_questions
+          .filter(
+            question =>
+              question['active'] &&
+              question['visible'] &&
+              shouldShowQuestion(question, approvalFilters)
+          )
+          .forEach(question => {
+            updateSearchMatches(
+              regexp,
+              question.questionText,
+              `${question.questionId}-archive-${aIndex}-left-ques`,
+              finalResult,
+              1
+            );
+
+            // searching in answer
+            if (
+              Array.isArray(question.answers) &&
+              question.answers.length > 0
+            ) {
+              const recentAnswer =
+                question.answers[question.answers.length - 1].answer;
+              // if multiple answer
+              if (Array.isArray(recentAnswer)) {
+                recentAnswer.forEach(answerChunk => {
+                  updateSearchMatches(
+                    regexp,
+                    answerChunk,
+                    `${question.questionId}-archive-${aIndex}-left-ques`,
+                    finalResult,
+                    1
+                  );
+                });
+              } else if (typeof recentAnswer === 'string') {
+                updateSearchMatches(
+                  regexp,
+                  recentAnswer,
+                  `${question.questionId}-archive-${aIndex}-left-ques`,
+                  finalResult,
+                  1
+                );
+              }
+            }
+          });
+
+        archive.section_right_questions
+          .filter(
+            question =>
+              question['active'] &&
+              question['visible'] &&
+              shouldShowQuestion(question, approvalFilters)
+          )
+          .forEach(question => {
+            updateSearchMatches(
+              regexp,
+              question.questionText,
+              `${question.questionId}-archive-${aIndex}-right-ques`,
+              finalResult,
+              1
+            );
+
+            // searching in answer
+            if (
+              Array.isArray(question.answers) &&
+              question.answers.length > 0
+            ) {
+              const recentAnswer =
+                question.answers[question.answers.length - 1].answer;
+              // if multiple answer
+              if (Array.isArray(recentAnswer)) {
+                recentAnswer.forEach(answerChunk => {
+                  updateSearchMatches(
+                    regexp,
+                    answerChunk,
+                    `${question.questionId}-archive-${aIndex}-right-ques`,
+                    finalResult,
+                    1
+                  );
+                });
+              } else if (typeof recentAnswer === 'string') {
+                updateSearchMatches(
+                  regexp,
+                  recentAnswer,
+                  `${question.questionId}-archive-${aIndex}-right-ques`,
+                  finalResult,
+                  1
+                );
+              }
+            }
+          });
+      });
+    }
+
+    // searching active section questions
+    if (Array.isArray(approval.ApprovalSectionLeftQuestions)) {
+      approval.ApprovalSectionLeftQuestions.filter(questionId => {
+        const question = questionsMap[questionId];
+        return question && shouldShowQuestion(question, approvalFilters);
+      }).forEach(questionId => {
+        const question = questionsMap[questionId];
+        if (question) {
+          updateSearchMatches(
+            regexp,
+            question.questionText,
+            `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
+            finalResult,
+            1
+          );
+
+          // searching in answer
+          if (Array.isArray(question.answers) && question.answers.length > 0) {
+            const recentAnswer =
+              question.answers[question.answers.length - 1].answer;
+            // if multiple answer
+            if (Array.isArray(recentAnswer)) {
+              recentAnswer.forEach(answerChunk => {
+                updateSearchMatches(
+                  regexp,
+                  answerChunk,
+                  `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
+                  finalResult,
+                  1
+                );
+              });
+            } else if (typeof recentAnswer === 'string') {
+              updateSearchMatches(
+                regexp,
+                recentAnswer,
+                `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
+                finalResult,
+                1
+              );
+            }
+          }
+        }
+      });
+    }
+    if (Array.isArray(approval.ApprovalSectionRightQuestions)) {
+      approval.ApprovalSectionRightQuestions.filter(questionId => {
+        const question = questionsMap[questionId];
+        return question && shouldShowQuestion(question, approvalFilters);
+      }).forEach(questionId => {
+        const question = questionsMap[questionId];
+        if (question) {
+          updateSearchMatches(
+            regexp,
+            question.questionText,
+            `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
+            finalResult,
+            1
+          );
+
+          // searching in answer
+          if (Array.isArray(question.answers) && question.answers.length > 0) {
+            const recentAnswer =
+              question.answers[question.answers.length - 1].answer;
+            // if multiple answer
+            if (Array.isArray(recentAnswer)) {
+              recentAnswer.forEach(answerChunk => {
+                updateSearchMatches(
+                  regexp,
+                  answerChunk,
+                  `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
+                  finalResult,
+                  1
+                );
+              });
+            } else if (typeof recentAnswer === 'string') {
+              updateSearchMatches(
+                regexp,
+                recentAnswer,
+                `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
+                finalResult,
+                1
+              );
+            }
+          }
+        }
+      });
+    }
+  });
+}
+
+export function searchInStrategyDevelopment(
+  finalResult,
+  regexp,
+  sections,
+  isQuestionsFiltersEnabled,
+  approvalFilters
+) {
   // searching sections
   Object.keys(sections)
     .sort(
@@ -42,7 +309,10 @@ export async function getSearchResults(
         questionKey =>
           questions[questionKey]['visible'] &&
           (questions[questionKey]['active'] ||
-            questions[questionKey]['isCustomQuestion'])
+            questions[questionKey]['isCustomQuestion']) &&
+          (!questions[questionKey]['notApplicable'] ||
+            isQuestionsFiltersEnabled) &&
+          !questions[questionKey]['questionApproval']
       );
 
       if (filteredQuestions.length > 0) {
@@ -127,7 +397,9 @@ export async function getSearchResults(
           });
       }
     });
+}
 
+export function searchInNotepad(finalResult, regexp, notepadData) {
   // searching in notepad
   if (notepadData.length > 0) {
     updateSearchMatches(
@@ -139,204 +411,6 @@ export async function getSearchResults(
       1 // vertical tab index of Notepad
     );
   }
-
-  // searching approvals
-  approvals.forEach(approval => {
-    // searching in approvalTitle
-    if (approval.ApprovalSectionTitle) {
-      updateSearchMatches(
-        regexp,
-        approval.ApprovalSectionTitle,
-        approval.ApprovalSectionId,
-        finalResult,
-        1
-      );
-    }
-
-    // searching archivedData
-    if (
-      Array.isArray(approval.ArchivedData) &&
-      approval.ArchivedData.length > 0
-    ) {
-      approval.ArchivedData.forEach((archive, aIndex) => {
-        // searching in approvalTitle but not in 0 index
-        if (archive.section_title && aIndex !== 0) {
-          updateSearchMatches(
-            regexp,
-            archive.section_title,
-            `${archive.section_id}-archive-${aIndex}-section-title`,
-            finalResult,
-            1
-          );
-        }
-        archive.section_left_questions
-          .filter(question => question['active'] && question['visible'])
-          .forEach(question => {
-            updateSearchMatches(
-              regexp,
-              question.questionText,
-              `${question.questionId}-archive-${aIndex}-left-ques`,
-              finalResult,
-              1
-            );
-
-            // searching in answer
-            if (
-              Array.isArray(question.answers) &&
-              question.answers.length > 0
-            ) {
-              const recentAnswer =
-                question.answers[question.answers.length - 1].answer;
-              // if multiple answer
-              if (Array.isArray(recentAnswer)) {
-                recentAnswer.forEach(answerChunk => {
-                  updateSearchMatches(
-                    regexp,
-                    answerChunk,
-                    `${question.questionId}-archive-${aIndex}-left-ques`,
-                    finalResult,
-                    1
-                  );
-                });
-              } else if (typeof recentAnswer === 'string') {
-                updateSearchMatches(
-                  regexp,
-                  recentAnswer,
-                  `${question.questionId}-archive-${aIndex}-left-ques`,
-                  finalResult,
-                  1
-                );
-              }
-            }
-          });
-
-        archive.section_right_questions
-          .filter(question => question['active'] && question['visible'])
-          .forEach(question => {
-            updateSearchMatches(
-              regexp,
-              question.questionText,
-              `${question.questionId}-archive-${aIndex}-right-ques`,
-              finalResult,
-              1
-            );
-
-            // searching in answer
-            if (
-              Array.isArray(question.answers) &&
-              question.answers.length > 0
-            ) {
-              const recentAnswer =
-                question.answers[question.answers.length - 1].answer;
-              // if multiple answer
-              if (Array.isArray(recentAnswer)) {
-                recentAnswer.forEach(answerChunk => {
-                  updateSearchMatches(
-                    regexp,
-                    answerChunk,
-                    `${question.questionId}-archive-${aIndex}-right-ques`,
-                    finalResult,
-                    1
-                  );
-                });
-              } else if (typeof recentAnswer === 'string') {
-                updateSearchMatches(
-                  regexp,
-                  recentAnswer,
-                  `${question.questionId}-archive-${aIndex}-right-ques`,
-                  finalResult,
-                  1
-                );
-              }
-            }
-          });
-      });
-    }
-
-    // searching active section questions
-    if (Array.isArray(approval.ApprovalSectionLeftQuestions)) {
-      approval.ApprovalSectionLeftQuestions.forEach(questionId => {
-        const question = filteredQuestionsMap[questionId];
-        if (question) {
-          updateSearchMatches(
-            regexp,
-            question.questionText,
-            `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
-            finalResult,
-            1
-          );
-
-          // searching in answer
-          if (Array.isArray(question.answers) && question.answers.length > 0) {
-            const recentAnswer =
-              question.answers[question.answers.length - 1].answer;
-            // if multiple answer
-            if (Array.isArray(recentAnswer)) {
-              recentAnswer.forEach(answerChunk => {
-                updateSearchMatches(
-                  regexp,
-                  answerChunk,
-                  `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
-                  finalResult,
-                  1
-                );
-              });
-            } else if (typeof recentAnswer === 'string') {
-              updateSearchMatches(
-                regexp,
-                recentAnswer,
-                `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
-                finalResult,
-                1
-              );
-            }
-          }
-        }
-      });
-    }
-    if (Array.isArray(approval.ApprovalSectionRightQuestions)) {
-      approval.ApprovalSectionRightQuestions.forEach(questionId => {
-        const question = filteredQuestionsMap[questionId];
-        if (question) {
-          updateSearchMatches(
-            regexp,
-            question.questionText,
-            `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
-            finalResult,
-            1
-          );
-
-          // searching in answer
-          if (Array.isArray(question.answers) && question.answers.length > 0) {
-            const recentAnswer =
-              question.answers[question.answers.length - 1].answer;
-            // if multiple answer
-            if (Array.isArray(recentAnswer)) {
-              recentAnswer.forEach(answerChunk => {
-                updateSearchMatches(
-                  regexp,
-                  answerChunk,
-                  `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
-                  finalResult,
-                  1
-                );
-              });
-            } else if (typeof recentAnswer === 'string') {
-              updateSearchMatches(
-                regexp,
-                recentAnswer,
-                `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
-                finalResult,
-                1
-              );
-            }
-          }
-        }
-      });
-    }
-  });
-
-  return finalResult;
 }
 
 export function updateSearchMatches(
@@ -372,23 +446,24 @@ export function updateSearchMatches(
 }
 
 // strategy function for adding highlight decorator to draftjs editor
-export function highlightQueryStrategy(
-  contentBlock,
-  callback,
-  contentState,
-  query
-) {
-  findWithRegex(new RegExp(query, 'gi'), contentBlock, callback);
-}
+// commented following function to keep it for reference in future
+// export function highlightQueryStrategy(
+//   contentBlock,
+//   callback,
+//   contentState,
+//   query
+// ) {
+//   findWithRegex(new RegExp(query, 'gi'), contentBlock, callback);
+// }
 
-function findWithRegex(regex, contentBlock, callback) {
-  const text = contentBlock.getText();
-  let matchArr, start;
-  while ((matchArr = regex.exec(text)) !== null) {
-    start = matchArr.index;
-    callback(start, start + matchArr[0].length);
-  }
-}
+// function findWithRegex(regex, contentBlock, callback) {
+//   const text = contentBlock.getText();
+//   let matchArr, start;
+//   while ((matchArr = regex.exec(text)) !== null) {
+//     start = matchArr.index;
+//     callback(start, start + matchArr[0].length);
+//   }
+// }
 
 export function extractTextFromProseMirrorJSON(data, results = []) {
   if (typeof data === 'object' && Array.isArray(data.content)) {

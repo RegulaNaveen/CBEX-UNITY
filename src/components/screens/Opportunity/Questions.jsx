@@ -260,7 +260,7 @@ class Questions extends Component {
     const { handleOpenClose, resetQuestionsFilter } = this.props;
     if (handleOpenClose) handleOpenClose(false);
 
-    if (resetQuestionsFilter) resetQuestionsFilter();
+    // if (resetQuestionsFilter) resetQuestionsFilter();
     if (this.resizeObserver && this.resizeObserver.disconnect) {
       this.resizeObserver.disconnect();
     }

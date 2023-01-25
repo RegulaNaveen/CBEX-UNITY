@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Modal from 'apollo-react/components/Modal';
 import classNames from 'classnames';
+import '../../../styles/modals/CustomModal.scss';
 
 /**
  * Custom Modal: To create a modal with extra properties
