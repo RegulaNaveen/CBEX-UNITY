@@ -57,13 +57,13 @@ export async function getSearchResults({
       approvals,
       approvalFilters
     );
+    searchInNotepad(finalResult, regexp, notepadData);
     searchInStrategyDevelopment(
       finalResult,
       regexp,
       sections,
       isQuestionsFilterEnabled
     );
-    searchInNotepad(finalResult, regexp, notepadData);
   }
 
   return finalResult;
@@ -404,10 +404,10 @@ export function searchInNotepad(finalResult, regexp, notepadData) {
   if (notepadData.length > 0) {
     updateSearchMatches(
       regexp,
-      notepadData.join(' '),
+      notepadData.join(''),
       NOTEPAD_UI_ID,
       finalResult,
-      0,
+      null,
       1 // vertical tab index of Notepad
     );
   }
@@ -418,29 +418,18 @@ export function updateSearchMatches(
   inputText,
   index,
   finalResult,
-  tab,
+  tab = null,
   vTab = null
 ) {
-  const matchesFound = inputText.match(regexp);
-  if (matchesFound === null) {
-    return;
-  }
-  if (Array.isArray(matchesFound)) {
-    matchesFound.forEach(() => {
-      finalResult.count++;
-      finalResult.results.push({
-        tab,
-        searchIndex: index,
-        inputText,
-        vTab
-      });
-    });
-  } else {
+  for (const result of inputText.matchAll(regexp)) {
     finalResult.count++;
     finalResult.results.push({
       tab,
       searchIndex: index,
-      vTab
+      inputText,
+      vTab,
+      startIndex: result['index'],
+      endIndex: result['index'] + result[0].length
     });
   }
 }
@@ -465,9 +454,22 @@ export function updateSearchMatches(
 //   }
 // }
 
-export function extractTextFromProseMirrorJSON(data, results = []) {
+export function extractTextFromProseMirrorJSON(
+  data,
+  results = [],
+  prefix = null
+) {
+  if (prefix !== null) {
+    results.push(prefix);
+  }
   if (typeof data === 'object' && Array.isArray(data.content)) {
-    data.content.forEach(type => extractTextFromProseMirrorJSON(type, results));
+    data.content.forEach((content, index) => {
+      if (index !== 0 && content.type === 'paragraph') {
+        extractTextFromProseMirrorJSON(content, results, '\n\n');
+      } else {
+        extractTextFromProseMirrorJSON(content, results);
+      }
+    });
   } else if (typeof data === 'object' && data.type === 'mention') {
     if (data.attrs && data.attrs.label) {
       results.push(data.attrs.label);
