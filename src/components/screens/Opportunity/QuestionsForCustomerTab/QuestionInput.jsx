@@ -138,9 +138,19 @@ const QuestionInput = ({
     }
   };
 
+  const property =  {
+    question,
+    userData,
+    socketContext,
+    checkDisableFlag,
+    setShowLoader,
+    questionIndex,
+    setNewEntry
+  }
+  console.log('property', property);
   return (
     <>
-      <div className="input-wrapper" ref={quesTextInnerLeftRef}>
+      <div className="input-wrapper" ref={quesTextInnerLeftRef} data-testid="question-input">
         <span className="input-label">Q{question?.questionOrder}:</span>
         <CustomApolloRichText {...richtextProps} />
       </div>

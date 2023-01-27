@@ -1,0 +1,101 @@
+{
+    "questionData": {
+        "isCustomQuestion": true,
+        "questionId": "cd7a84bb-8a85-4e7d-9bf7-31f9a93c5276",
+        "section": {
+            "sectionOrder": 199,
+            "sectionName": "Questions_for_the_Customer_left_panel"
+        },
+        "active": true,
+        "questionOrder": 1,
+        "questionApproval": false,
+        "locked": true,
+        "proposalId": "13e4cf2c-9c53-4f23-9977-b511b8dbe3c8",
+        "questionJSON": "{\"blocks\":[{\"key\":\"8t6nl\",\"text\":\"test quick thrrjjjjj\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":20,\"style\":\"fontSize-24pt\"},{\"offset\":0,\"length\":20,\"style\":\"color-#00c221\"}],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+        "milestoneNew": [],
+        "hasDifferentSFanswer": false,
+        "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"7ifnm\" data-offset-key=\"8t6nl-0-0\"><div data-offset-key=\"8t6nl-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"8t6nl-0-0\" style=\"font-size: 24pt; color: rgb(0, 194, 33);\"><span data-text=\"true\">test quick thrrjj</span></span></div></div></div>",
+        "roleNames": [
+            "Business Developer"
+        ],
+        "visible": true,
+        "notApplicable": false,
+        "questionText": "test quick thrrjjjjj",
+        "integration": "",
+        "answers": [
+            {
+                "user": "tapas.dhar@iqvia.com",
+                "userName": "Tapas Dhar",
+                "userRole": "Business Developer",
+                "date": "2023-01-11T13:40:00.253Z",
+                "answer": "test answer one",
+                "formattedAnswer": {
+                    "value": {
+                        "blocks": [
+                            {
+                                "key": "7pf98",
+                                "text": "test answer one",
+                                "type": "unstyled",
+                                "depth": 0,
+                                "inlineStyleRanges": [],
+                                "entityRanges": [],
+                                "data": {}
+                            }
+                        ],
+                        "entityMap": {}
+                    },
+                    "html": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"4ue10\" data-offset-key=\"7pf98-0-0\"><div data-offset-key=\"7pf98-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"7pf98-0-0\"><span data-text=\"true\">test answer one</span></span></div></div></div>",
+                    "htmlExport": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"60g1i\" data-offset-key=\"7pf98-0-0\"><div data-offset-key=\"7pf98-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"7pf98-0-0\"><span data-text=\"true\">test answer one</span></span></div></div></div>"
+                },
+                "proposalId": "89e34b65-c4d2-461a-84d5-53ed5ca3ef26",
+                "updatedInPG": true
+            },
+            {
+                "user": "rahul.tiwari@iqvia.com",
+                "userName": "RAHUL TIWARI",
+                "userRole": "Business Developer",
+                "date": "2023-01-25T15:27:56.432Z",
+                "answer": "test answer one @rahul tiwari",
+                "formattedAnswer": {
+                    "value": {
+                        "blocks": [
+                            {
+                                "key": "7pf98",
+                                "text": "test answer one @rahul tiwari",
+                                "type": "unstyled",
+                                "depth": 0,
+                                "inlineStyleRanges": [],
+                                "entityRanges": [],
+                                "data": {}
+                            }
+                        ],
+                        "entityMap": {}
+                    },
+                    "html": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"a5plr\" data-offset-key=\"7pf98-0-0\"><div data-offset-key=\"7pf98-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"7pf98-0-0\"><span data-text=\"true\">test answer one @rahul tiwari</span></span></div></div></div>",
+                    "htmlExport": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"au6m0\" data-offset-key=\"7pf98-0-0\"><div data-offset-key=\"7pf98-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"7pf98-0-0\"><span data-text=\"true\">test answer one @rahul tiwari</span></span></div></div></div>"
+                },
+                "proposalId": "13e4cf2c-9c53-4f23-9977-b511b8dbe3c8",
+                "updatedInPG": true
+            }
+        ],
+        "questionHintJSON": "",
+        "questionHintHTML": "",
+        "answerConfiguration": {
+            "type": "text",
+            "options": []
+        },
+        "events": ""
+    },
+    "questionIndex": 1,
+    "isCurrentBid": true,
+    "userData": {
+        "name": "Sushil Munda",
+        "email": "sushil.munda@iqvia.com",
+        "role": "1138123"
+    },
+    "socketContext": {
+        "socket": {
+            "current": {}
+        }
+    }
+}

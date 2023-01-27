@@ -1,8 +1,8 @@
+import React from 'react';
 import Trash from 'apollo-react-icons/Trash';
 import Card from 'apollo-react/components/Card';
 import Loader from 'apollo-react/components/Loader';
 import Typography from 'apollo-react/components/Typography';
-import React, { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { SocketContext } from '../../../../context/SocketContext';
 import {
@@ -22,8 +22,8 @@ const QuestionContainer = ({
   setNewEntry
 }) => {
   const question = questionData.toJS();
-  const socketContext = useContext(SocketContext);
-  const [showLoader, setShowLoader] = useState(false);
+  const socketContext = React.useContext(SocketContext);
+  const [showLoader, setShowLoader] = React.useState(false);
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
 
   const getUserData = () => ({
@@ -64,10 +64,11 @@ const QuestionContainer = ({
     setNewEntry
   };
 
+  console.log("inputprops", inputProps);
   return (
     <>
       <li className="">
-        <Card className="question-container">
+        <Card className="question-container" data-testid="question-container">
           <div>
             {isQuestionLockedByOther() ? (
               <Typography variant="subtitle1" className="status-txt">

@@ -16,20 +16,22 @@ import { deleteProposalQuestion } from '../../../../redux/actions/proposal-actio
 import { SocketContext } from '../../../../context/SocketContext';
 
 function QuestionsForCustomer() {
-  const questionsList = useSelector(getProposalQuestions);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [questionToDelete, setQuestionToDelete] = useState(null);
-  const allFlags = useSelector(state => state.proposal.get('eventflag'));
-  const [questions, setQuestions] = useState(new OrderedMap());
   const sections = useSelector(selectSections);
   const selectedBid = useSelector(getSelectedBid);
   const isCurrentBid = selectedBid.get('isCurrent');
-  const dispatch = useDispatch();
-  const socketContext = useContext(SocketContext);
-  const [newEntry, setNewEntry] = useState(null);
-  const [showScroll, setShowScroll] = useState(null);
-  const addNewEntryRef = React.createRef();
+  const questionsList = useSelector(getProposalQuestions);
+  const allFlags = useSelector(state => state.proposal.get('eventflag'));
 
+  const [questions, setQuestions] = React.useState(new OrderedMap());
+  const [showDeleteModal, setShowDeleteModal] = React.useState(false);
+  const [questionToDelete, setQuestionToDelete] = React.useState(null);
+  const [newEntry, setNewEntry] = React.useState(null);
+  const [showScroll, setShowScroll] = React.useState(null);
+
+  const dispatch = useDispatch();
+  const addNewEntryRef = React.createRef();
+  const socketContext = useContext(SocketContext);
+  
   useEffect(() => {
     setQuestions(new OrderedMap());
 
@@ -38,7 +40,7 @@ function QuestionsForCustomer() {
         section.get('sectionName') === 'Questions_for_the_Customer_left_panel'
       ) {
         const sectionQuestions = section.get('questions');
-
+        console.log('sectionQuestions', sectionQuestions);
         const filteredCustomQuestion = new OrderedMap(
           Array.from(sectionQuestions).filter(questionItem => {
             if (questionItem[1].get('isCustomQuestion')) {
@@ -61,6 +63,7 @@ function QuestionsForCustomer() {
 
     if (addNewEntryRef?.current?.offsetTop > 380) setShowScroll(true);
   }, [questionsList]);
+  console.log('sections', sections);
 
   const addQuestionHandler = () => {
     let _id = uuidv4();
@@ -218,15 +221,16 @@ function QuestionsForCustomer() {
   const handleClose = () => {
     setShowDeleteModal(prev => !prev);
   };
-
+  console.log('questions', questions);
   return (
     <>
-      <div className="questions-for-customer-container">
+      <div className="questions-for-customer-container" data-testid="question-customer-tab">
         <div>
           <Header />
         </div>
         {questions?.size > 0 ? (
           <div
+            
             className={
               showScroll || questions?.size > 2
                 ? 'questions-container-over'
@@ -237,6 +241,7 @@ function QuestionsForCustomer() {
               {questions?.valueSeq().map((questionData, index) => {
                 return (
                   <QuestionContainer
+                    data-testid="question-container"
                     deleteQuestionHandler={deleteQuestionHandler}
                     questionData={questionData}
                     questionIndex={index + 1}
@@ -257,8 +262,9 @@ function QuestionsForCustomer() {
         )}
 
         <div className="btn-container">
-          <div>
+          <div data-testid="clipboard-button">
             <Button
+              data-testid="clipboard-button"
               className="btn-label"
               icon={<Copy />}
               size="small"
@@ -293,6 +299,7 @@ function QuestionsForCustomer() {
           </div>
         </div>
         <Modal
+          data-testid="delete-modal"
           open={showDeleteModal}
           variant="warning"
           onClose={() => handleClose()}

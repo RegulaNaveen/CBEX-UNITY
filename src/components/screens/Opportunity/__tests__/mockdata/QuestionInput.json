@@ -1,0 +1,45 @@
+{
+    "question": {
+        "isCustomQuestion": true,
+        "questionId": "c605d66a-af9a-43e1-a018-dc8d27bdb696",
+        "section": {
+            "sectionOrder": 199,
+            "sectionName": "Questions_for_the_Customer_left_panel"
+        },
+        "active": true,
+        "questionOrder": 3,
+        "questionApproval": false,
+        "locked": false,
+        "proposalId": "13e4cf2c-9c53-4f23-9977-b511b8dbe3c8",
+        "questionJSON": "{\"blocks\":[{\"key\":\"b9nhf\",\"text\":\"what are you doing man\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+        "milestoneNew": [],
+        "hasDifferentSFanswer": false,
+        "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"10gnm\" data-offset-key=\"b9nhf-0-0\"><div data-offset-key=\"b9nhf-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"b9nhf-0-0\"><span data-text=\"true\">what are you doing man</span></span></div></div></div>",
+        "roleNames": [
+            "Business Developer"
+        ],
+        "visible": true,
+        "notApplicable": false,
+        "questionText": "what are you doing man",
+        "integration": "",
+        "answers": [],
+        "questionHintJSON": "",
+        "questionHintHTML": "",
+        "answerConfiguration": {
+            "type": "text",
+            "options": []
+        },
+        "events": ""
+    },
+    "userData": {
+        "name": "Sushil Munda",
+        "email": "sushil.munda@iqvia.com",
+        "role": "1138123"
+    },
+    "socketContext": {
+        "socket": {
+            "current": {}
+        }
+    },
+    "questionIndex": 4
+}
