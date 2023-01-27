@@ -49,7 +49,10 @@ import OrderedList from '@tiptap/extension-text-align';
 import FooterHead from '../../../../img/footerHead.png';
 import Logo from '../../../../img/iqvia-main-logo.png';
 import Border from '../../../../img/borders.png';
-import Proximanova from '../../../../fonts/ProximaNova-Regular-normal';
+// import '../../../../fonts/Proxima Nova Regular-normal';
+// import ProximaNovaBold from '../../../../fonts/Proxima Nova Alt Bold.otf';
+// import ProximaNovaBoldItalic from '../../../../fonts/Proxima-Nova-Bold-It.otf';
+// import ProximaNovaItalic from '../../../../fonts/Proxima-Nova-Reg-It.otf';
 
 const styles = StyleSheet.create({
   page: {
@@ -101,7 +104,7 @@ const styles = StyleSheet.create({
   headingText: {
     fontSize: '14px',
     color: `#00A3E0`,
-    fontFamily: 'ProximaNova',
+    fontFamily: 'Proxima-Nova-Regular',
     fontWeight: 700
   },
   tr: {
@@ -124,7 +127,7 @@ function checkFormattedAnswer(answers) {
         }
       } else formattedAnswer = lastAnswer?.formattedAnswer;
       if (formattedAnswer?.htmlExport) {
-        return formattedAnswer.htmlExport;
+        return formattedAnswer?.htmlExport;
       }
       if (formattedAnswer?.html) {
         return formattedAnswer?.html;
@@ -145,11 +148,9 @@ function topHeading(details) {
   return `<h1 class="mainTitle"><em>${details['CRM #'] ||
     ''}</em> Opportunity Overview</h1>`;
 }
-
 function getStyled() {
   return `<style>  *{
-    font-family: ProximaNova !important;
-    border-collapse: collapse !important;
+    font-family: ProximaNova-Regular !important;
   }
 h1{
     font-size: 20px;
@@ -163,32 +164,7 @@ h3{
     font-size: 15px;
     margin: 2px;
 }
-body {
-  display: block;
-  margin: 8px;
-  height: 100%;
-  scroll-behavior: smooth;
-  font-family: "ProximaNova-Regular";
-    padding: 50px;
-    font-size: 10px;
-}
-table {
-  width:480px;
-  height: auto;
-}
-tr {    
-  border-top: 1px solid #000;
-  border-left: 1px solid #000;
-  border-right: 1px solid #000;
-  height: auto;
-}
-td {    
-  border-top: 1px solid #000;
-  border-left: 1px solid #000;
-  border-right: 1px solid #000;
-  border-bottom: 1px solid #000;
-  height: auto;
-}
+
 .marginTop50 {
     margin-top:50px
 }
@@ -198,115 +174,24 @@ td {
 .marginTop30 {
     margin-top:30px
 }
-.table tr:last-child{
-    border-bottom: 1px solid #000;
-    border-right: 1px solid #000;
-}
 .notesTable tr{
     border-bottom: none;
-}
-.notesTable tr:last-child{
-    border-bottom: 1px solid #000;
-    border-right: 1px solid #000;
-}
-.table td, .table th{
-    padding: 5px;
-}
-.table tr td:nth-child(2){
-    border-left: 1px solid #000;
-}
-.proposalTeam tr:first-child, .questionTable tr:first-child, .questionToCustomerTable tr:first-child, .notesTable tr:first-child{
-    background: #00A3E0;
-    color:#fff;
-}
-.questionTable tr td {
-  width: 50%;
-  border-right: 1px solid #000;
-}
-.notesTable tr td {
-  width: 100%;
-  border-right: 1px solid #000;
-}
-.notesTable >ul>li{
-  padding-left: 5px;
-}
-.proposalTeam td {
-  width: 50%;
-}
-.questionToCustomerTable tr td {
-    width: 50%;
 }
 ul li{
   padding-left: 5px;
 }
-.questionToCustomerTable li {
-    padding-bottom: 5px
+.blueColorText{
+    color: #00A3E0;
+    font-family:Helvetica;
+    font-size: 8px;
 }
-.headerInfo tr td:first-child{
-    background: #00A3E0;
-    color:#fff;
-    font-weight: bold
-}
-.questionTable tr td:first-child{
-    background: #EEEEEE;
-}
-// .blueColorText{
-//     color: #00A3E0;
-//     font-family:Helvetica;
-//     font-size: 8px;
-// }
-.footerWrapper{
-    display:flex;
-    justify-content:space-between
-}
-.footerWrapper td {
-    color: #EEEEEE,
-    font-size:7px,
-}
-#pdfbody .public-DraftStyleDefault-depth0.public-DraftStyleDefault-listLTR {
-    margin-left: 5px;
-}
-.public-DraftStyleDefault-depth1.public-DraftStyleDefault-listLTR {
+ .public-DraftStyleDefault-depth1.public-DraftStyleDefault-listLTR {
   margin-left: 10px;
   list-style-type: disc !important;
-}
-
-#pdfbody .public-DraftStyleDefault-depth2.public-DraftStyleDefault-listLTR {
-    margin-left: 15px;
-}
-#pdfbody .public-DraftStyleDefault-depth3.public-DraftStyleDefault-listLTR {
-    margin-left: 20px;
-}
-#pdfbody .public-DraftStyleDefault-depth4.public-DraftStyleDefault-listLTR {
-    margin-left: 25px;
-}
-#pdfbody .MuiGrid-root{
-    display:none;
-}
-#pdfbody .MuiFormControl-root{
-    padding:5px;
-    border: 1px solid #000;
-    border-top: none;
-}
-[data-block="true"] {
-    padding-bottom:10px;
 }
 li {
   align-items: flex-start;
 }
-.questionTable ol,ul,p{
-  margin-top:0px !important;
-  margin-bottom:5px !important;
-}
-.notesTable p{
-  margin-top: 0px !important;
-  margin-bottom:3px !important;
-}
-li > ul > li {
-  list-style-type: &#x26AC !important; 
-      margin-left:-1em; 
-  }
-  
   li ul li{
     list-style-type: disc;
     margin-block-start: 1em;
@@ -332,35 +217,80 @@ li > ul > li {
     margin-inline-start: 0px;
     margin-inline-end: 0px;
   }
-.notesData p{
-  margin-top: 0.75em;
+#resp-table {
+  width: 480px;
+  height: auto;
+  display: table;
+  border: 1px solid #000;
+  border-bottom: 0px;
+  }
+  #resp-table-caption{
+    display: table-cell;
+    text-align: center;
+    font-size: 16px;
+    color: #fff;
+    font-weight: bold;
+    background-color: #00A3E0;
+    }
+    #resp-table-header {
+      display: table-cell;
+      font-size: 16px;
+      background-color: #00A3E0;
+      color: #fff;
+      font-weight: bold;
+      width: 50%;
+      text-align: center;
+  }
+  .table-header-cell {
+    display: table-cell;
+    padding: 10px;
+    text-align: left;
+    vertical-align: middle;
+    width: 50%;
+    height: auto;
+    border-bottom: 1px solid #000;
 }
-
-.blueColorText {
-  color: #00A3E0;
-  font-family: Helvetica;
-  font-size: 8px;
- 
+.table-header-cell:nth-child(odd) {
+  background-color: #EEEEEE;
+  border-right: 1px solid #000;
 }
+        #resp-table-body{
+          display: table-row-group;
+          }
+          .resp-table-row{
+            display: table-row;
+            }
+            .table-body-cell{
+              display: table-cell;
+              }
+              .headerInfo .table-header-cell:nth-child(odd) {
+                border-right: 1px solid #000;
+                background-color: #00A3E0;
+                color: #fff;
+                font-weight: bold;
+            }
+            .notes-ol ol {
+              padding-left: 15px;
+          }
 
 </style>`;
 }
 function getHeaderInfoRows(details) {
-  let html = `<table class="table headerInfo">`;
+  let html = `<div id="resp-table" class="table headerInfo">`;
   try {
     for (let key in headFields) {
       let value = details[key] || '';
       if (key === 'Bid due date') value = moment(value).format('DD-MMM-YYYY');
-      html += `<tr>`;
-      html += `<td>${headFields[key]}</td>`;
-      html += `<td>${value.toString()}</td>`;
-      // html += `<td></td>`;
-      html += `</tr>`;
+      html += `<div class="resp-table-row">`;
+      html += `<div class="table-header-cell">${headFields[key]}</div>`;
+      html += `<div class="table-header-cell">${value.toString()}</div>`;
+      // html += `<div class="table-header-cell"></div>`;
+      html += `</div>`;
     }
   } catch (error) {
     console.log('Error in getHeaderInfoRows');
   }
-  html += `</table>`;
+  html += `</div>`;
   return html;
 }
 function getProposalTeamsRows(questions) {
@@ -382,41 +312,46 @@ function getProposalTeamsRows(questions) {
     .sort((a, b) => a.questionOrder - b.questionOrder);
   let html = ``;
   try {
-    html += `<table class="proposalTeam table marginTop20">`;
-    html += `<tr>`;
-    html += `<th> Core Team Members </th>`;
-    html += `<th> Name</th>`;
-    html += `</tr>`;
+    html += `<div id="resp-table" class="proposalTeam table marginTop20">`;
+    html += `<div class="resp-table-row">`;
+    html += `<div id="resp-table-header"> Core Team Members </div>`;
+    html += `<div id="resp-table-header"> Name </div>`;
+    html += `</div>`;
     coreTeamQuestions.forEach((question) => {
       const { questionText, answers } = question;
       const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
-      html += `<tr>`;
-      html += `<td>${questionText}</td>`;
-      html += `<td>${checkFormattedAnswer(answers)}</td>`;
-      html += `</tr>`;
+      html += `<div class="resp-table-row">`;
+      html += `<div class="table-header-cell">${questionText}</div>`;
+      html += `<div class="table-header-cell">${checkFormattedAnswer(
+        answers
+      )}</div>`;
+      html += `</div>`;
+      html += `<br>`;
     });
-    html += `</table>`;
-    html += `<table class="proposalTeam table">`;
-    html += `<tr>`;
-    html += `<th> Specialty Team Members </th>`;
-    html += `<th> Name</th>`;
-    html += `</tr>`;
+    html += `</div>`;
+    html += `<div id="resp-table" class="proposalTeam table">`;
+    html += `<div class="resp-table-row">`;
+    html += `<div id="resp-table-header"> Specialty Team Members </div>`;
+    html += `<div id="resp-table-header"> Name</div>`;
+    html += `</div>`;
     otherTeamQuestions.forEach((question) => {
       const { questionText, answers } = question;
       const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
-      html += `<tr>`;
-      html += `<td>${questionText} </td>`;
-      html += `<td>${checkFormattedAnswer(answers)}</td>`;
-      html += `</tr>`;
+      html += `<div class="resp-table-row">`;
+      html += `<div class="table-header-cell">${questionText} </div>`;
+      html += `<div class="table-header-cell">${checkFormattedAnswer(
+        answers
+      )}</div>`;
+      html += `</div>`;
     });
-    html += `</table>`;
+    html += `</div>`;
   } catch (error) {
     console.log('Error in getProposalTeamsRows');
   }
   return html;
 }
 function questionTables(allQuestions, proposalQuestions) {
-  // Array<Table of each section>
+  // Array<div id="resp-table" of each section>
   let html = ``;
   // Remove not visible questions
   let questions = proposalQuestions
@@ -449,14 +384,17 @@ function questionTables(allQuestions, proposalQuestions) {
       console.log('Error while mapping Sections');
     }
   });
+  // ordereredSections = ordereredSections.filter(
+  //   (v) => v !== 'Questions for the Customer'
+  // );
+  // ordereredSections.unshift('Questions for the Customer');
   ordereredSections.forEach((section) => {
     if (section === QC_SECTION) {
-      html += `<table class="questionTable table marginTop20">`;
-      html += `<tr>`;
-      html += `<th> ${section} </th>`;
-      html += `<th> </th>`;
-      html += `</tr>`;
-
+      html += `<div id="resp-table" class="questionTable table marginTop20">`;
+      html += `<div class="resp-table-row">`;
+      html += `<div id="resp-table-caption"> ${section} </div>`;
+      html += `<div id="resp-table-caption"></div>`;
+      html += `</div>`;
       sections[section]
         .sort((a, b) => a.questionOrder - b.questionOrder)
         .forEach((question) => {
@@ -465,19 +403,18 @@ function questionTables(allQuestions, proposalQuestions) {
             getLastAnswerHtml(question.answers),
             questionHTML
           );
-          html += `<tr>`;
-          html += `<td> ${questionHTML} </td>`;
-          html += `<td>${formatDate(
+          html += `<div class="resp-table-row">`;
+          html += `<div class="table-header-cell"> ${questionHTML} </div>`;
+          html += `<div class="table-header-cell"> ${formatDate(
             checkFormattedAnswer(question.answers),
             question.answerConfiguration
-          )}  <span class="blueColorText">${
+          )} <span class="blueColorText">${
             getUnityPredicatedText(question.answers)
               ? getUnityPredicatedText(question.answers)
               : ''
-          }</span></td>`;
-          html += `</tr>`;
+          }</span></div>`;
+          html += `</div>`;
         });
-
       let questionsToCustomerRightSection = allQuestions
         .filter(
           (question) =>
@@ -491,25 +428,25 @@ function questionTables(allQuestions, proposalQuestions) {
           getLastAnswerHtml(question?.answers),
           questionText
         );
-        html += `<tr>`;
-        html += `<td> ${questionText}</td>`;
-        html += `<td > ${formatDate(
+        html += `<div class="resp-table-row">`;
+        html += `<div class="table-header-cell"> ${questionText}</div>`;
+        html += `<div class="table-header-cell"> ${formatDate(
           checkFormattedAnswer(question.answers),
           question.answerConfiguration
-        )}<span class="blueColorText">${
+        )} <span class="blueColorText">${
           getUnityPredicatedText(question.answers)
             ? getUnityPredicatedText(question.answers)
             : ''
-        }</span></td>`;
-        html += `</tr>`;
+        }</span></div>`;
+        html += `</div>`;
       });
-      html += `</table>`;
+      html += `</div>`;
     } else {
-      html += `<table class="questionTable table marginTop20">`;
-      html += `<tr>`;
-      html += `<th> ${section} </th>`;
-      html += `<th> </th>`;
-      html += `</tr>`;
+      html += `<div id="resp-table" class="questionTable table marginTop20">`;
+      html += `<div class="resp-table-row">`;
+      html += `<div id="resp-table-caption"> ${section} </div>`;
+      html += `<div id="resp-table-caption"></div>`;
+      html += `</div>`;
       sections[section]
         .sort((a, b) => a.questionOrder - b.questionOrder)
         .forEach((question) => {
@@ -518,85 +455,36 @@ function questionTables(allQuestions, proposalQuestions) {
             getLastAnswerHtml(question.answers),
             questionHTML
           );
-          html += `<tr>`;
-          html += `<td> ${questionHTML}</td>`;
-          html += `<td> ${formatDate(
+          html += `<div class="resp-table-row">`;
+          html += `<div class="table-header-cell"> ${questionHTML}</div>`;
+          html += `<div class="table-header-cell"> ${formatDate(
             checkFormattedAnswer(question.answers),
             question.answerConfiguration
           )} <span class="blueColorText">${
             getUnityPredicatedText(question.answers)
               ? getUnityPredicatedText(question.answers)
               : ''
-          }</span></td>`;
-          html += `</tr>`;
+          }</span></div>`;
+          html += `</div>`;
         });
-      html += `</table>`;
+      html += `</div>`;
     }
   });
   return html;
 }
-function getQuestionToCustomerRows(questions) {
-  let html = ``;
-  let questionsToCustomer = questions
-    .filter(
-      (question) =>
-        shouldInclude(question) && question.section.sectionName === QC_SECTION
-    )
-    .sort((a, b) => a.questionOrder - b.questionOrder);
-  if (!questionsToCustomer.length)
-    questionsToCustomer = [
-      { questionText: 'Question 1' },
-      { questionText: 'Question 2' },
-      { questionText: 'Question 3' },
-      { questionText: 'Question 4' }
-    ];
-  html += `<table class="questionToCustomerTable table marginTop20">`;
-  html += `<tr>`;
-  html += `<th> ${QC_SECTION} </th>`;
-  html += `</tr>`;
-  try {
-    questionsToCustomer.forEach((question, index) => {
-      const { questionText } = question;
-      const extraNewLines = getExtraLines(
-        getLastAnswerHtml(question?.answers),
-        questionText
-      );
-      html += `<tr>`;
-      html += `<td> ${questionText} </td>`;
-      html += `<td> ${formatDate(
-        checkFormattedAnswer(question.answers),
-        question.answerConfiguration
-      )} <span class="blueColorText">${
-        getUnityPredicatedText(question.answers)
-          ? getUnityPredicatedText(question.answers)
-          : ''
-      }</span></td>`;
-    });
-    html += `</tr>`;
-  } catch (error) {
-    console.log('Error in getQuestionToCustomerRows');
-  }
-  html += `</table>`;
-  return html;
-}
+
 function getNotesRows(notes, editor) {
   let html = ``;
-  html += `<table class="notesTable table marginTop20">`;
-  html += `<tr>`;
-  html += `<th>General Notes</th>`;
-  html += `</tr>`;
-  html += `</table>`;
+  html += `<div id="resp-table" class="notesTable table marginTop20">`;
+  html += `<div class="resp-table-row">`;
+  html += `<div id="resp-table-header">General Notes</div>`;
+  html += `</div>`;
+  html += `</div>`;
   let data = ``;
-  data += `<table><tr><td style="border:1px solid black;padding:10px">`;
+  data += `<div id="resp-table" style="border-bottom: 1px solid #000;"><div class="resp-table-row"><div class="notes-ol" style="padding: 10px;">`;
   try {
     const noteText = editor.getJSON();
-    // console.log(noteText, 'noteText');
-    // console.log('notepad html', editor.getHTML());
-    // const str = editor.getHTML();
-    // console.log(str, 'string');
-    // str.replaceAll(' ', '&nbsp;');
     try {
-      // console.log('noteText pdf', noteText);
       data += generateHTML(noteText, [
         StarterKit,
         Link,
@@ -620,8 +508,7 @@ function getNotesRows(notes, editor) {
           }
         })
       ]);
-      // console.log('ddata', data);
-      data += `</td></tr></table>`;
+      data += `</div></div></div>`;
       html += data;
       return html;
     } catch (err) {
@@ -643,9 +530,7 @@ function getHtml(
 ) {
   let html = ` 
   ${getStyled()}
-  <div id="page" style="width: 500px;"> <div style="width: 500px;"><div style="width: 500px;">
-  <div style="margin-bottom: 5px;width: 200px;"><div style="font-size:14px;color:#00a3e0;font-family:inherit;font-weight:700;width: 250px;display: flex;">      
-  <p style="font-style:italic;display: flex; margin: 0px !important;">${proposalDetails[
+  <div id="page" style="width: 500px;"> <div style="width: 500px;"><div style="width: 500px;">  <div style="margin-bottom: 5px;width: 200px;"><div style="font-size:14px;color:#00a3e0;font-family:inherit;font-weight:700;width: 250px;display: flex;">  <p style="font-style:italic;display: flex; margin: 0px !important;">${proposalDetails[
     'CRM #'
   ] || ' '}${'&nbsp'}
   </p>Opportunity Overview
@@ -677,35 +562,43 @@ function getHtml(
           );
       }
   }
-  // if (string.match('<li'))
-  //   string = string?.replaceAll('<li', '<li style="list-style-type: disc"');
   let extractStyles;
   let k = 0;
   let fetchedElementArray = string.split(/(>)/g);
+  let foundArray = [];
   fetchedElementArray.filter((value) => {
     if (value.match(/text-decoration:(.*?)"/g)) {
-      let foundArray = value;
-      const indexFoundArray = fetchedElementArray.indexOf(foundArray);
+      foundArray.push(value);
+    }
+    foundArray.forEach((item) => {
+      const indexFoundArray = fetchedElementArray.indexOf(item);
+      const currentIndex = item;
       for (k; k < 7; k++) {
-        if (fetchedElementArray[indexFoundArray + k].match(/^(.+?)<\//g)) {
+        if (fetchedElementArray[indexFoundArray + k].match(/^(.+?)<\//)) {
+          console.log(
+            fetchedElementArray[indexFoundArray + k],
+            'fetched array'
+          );
           const splitText = fetchedElementArray[indexFoundArray + k].split('<');
           if (
-            JSON.stringify(foundArray).match('line-through') &&
-            JSON.stringify(foundArray).match('underline')
+            currentIndex.match('line-through') &&
+            currentIndex.match('underline')
           ) {
             extractStyles = `<u><s>${splitText[0]}</s></u><${splitText[1]}`;
-          } else if (JSON.stringify(foundArray).match('line-through')) {
+            fetchedElementArray[indexFoundArray + k] = extractStyles;
+          } else if (currentIndex.match('line-through')) {
             extractStyles = `<s>${splitText[0]}</s><${splitText[1]}`;
-          } else if (JSON.stringify(foundArray).match('underline')) {
+            fetchedElementArray[indexFoundArray + k] = extractStyles;
+          } else if (currentIndex.match('underline')) {
             extractStyles = `<u>${splitText[0]}</u><${splitText[1]}`;
+            fetchedElementArray[indexFoundArray + k] = extractStyles;
           }
-          fetchedElementArray[indexFoundArray + k] = extractStyles;
           let appendedString = '';
           fetchedElementArray.forEach((value) => (appendedString += value));
           string = appendedString;
         }
       }
-    }
+    });
   });
   console.log(string, 'stafhafal');
   const pdfa = new jsPDF({
@@ -714,6 +607,8 @@ function getHtml(
     unit: 'pt',
     format: 'a4'
   });
+  // pdfa.setFont('ProximaNova-Regular');
+  pdfa.setFontSize(12);
   pdfa.html(string, {
     callback(pdfa2) {
       const pageCount = pdfa2.internal.getNumberOfPages();
@@ -755,8 +650,7 @@ function getHtml(
       }
       pdfa2.save(fileName);
     },
-    margin: [90, 50, 90, 50],
-    autoPaging: 'text'
+    margin: [90, 50, 90, 50]
   });
 }
 const MyDoc = (
