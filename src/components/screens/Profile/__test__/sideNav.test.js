@@ -1,91 +1,61 @@
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable react/jsx-filename-extension */
 /**
  * @jest-environment jsdom
  */
 
 import React from 'react';
 import '@testing-library/jest-dom';
-import { useHistory } from 'react-router-dom';
-import Axios from 'axios';
-import { configure, mount, render, screen, shallow } from 'enzyme';
-import expect from 'expect';
-import Adapter from 'enzyme-adapter-react-16';
-import { cleanup, fireEvent } from '@testing-library/react';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import { BrowserRouter, Router } from 'react-router-dom';
+import { cleanup, fireEvent, render } from '@testing-library/react';
 import { useDispatch, Provider } from 'react-redux';
-import createStore from '../../../../store';
-import { logout } from '../../../../redux/actions/auth-actions';
+import { createMemoryHistory } from 'history';
 import 'regenerator-runtime/runtime';
 import SideNav from '../ProfileLayout/SideNav';
 
-configure({ adapter: new Adapter() });
-afterEach(() => {
-  cleanup();
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
+const initalstate = {
+  name: 'test 123',
+  role: 'Business Developer'
+};
+const store = mockStore(initalstate);
+const history = createMemoryHistory({
+  initialEntries: [
+    {
+      pathname: '/opportunities/UZA89103',
+      search: ''
+    }
+  ]
 });
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useHistory: () => ({
-    push: jest.fn()
-  })
-}));
-
-jest.mock('react-redux', () => {
-  const { Provider, useSelector } = jest.requireActual('react-redux');
-  return {
-    useDispatch: jest.fn(),
-    // useHistory: jest.fn(),
-    useSelector,
-    Provider
-  };
-});
-
-describe.skip('Side Navbar Component is rendered in Dom', () => {
-  const dispatchMock = jest.fn();
-  const props = {
-    handleLogout: jest.fn(),
-    history: jest.fn()
-  };
-
+describe('Side Navbar Component is rendered in Dom', () => {
   test('Render Side Navbar', () => {
-    // const func = jest.fn();
-    const wrapper = mount(
-      <Provider store={createStore}>
-        <SideNav {...props} />
-      </Provider>
+    const { getByText } = render(
+      <BrowserRouter>
+        <Router history={history}>
+          <Provider store={store}>
+            <SideNav {...initalstate} />
+          </Provider>
+        </Router>
+      </BrowserRouter>
     );
-    const globalStore = wrapper.find(Provider).prop('store');
-    dispatchMock.mockImplementation(action => globalStore.dispatch(action));
-    useDispatch.mockReturnValue(dispatchMock);
-    expect(wrapper.exists()).toBe(true);
+    expect(getByText(/test 123/)).toBeInTheDocument();
   });
 
-  test('Check for total button', () => {
-    // const func = jest.fn();
-    const wrapper = mount(
-      <Provider store={createStore}>
-        <SideNav {...props} />
-      </Provider>
+  test('Side Navbar Component logout click', () => {
+    const { getByText } = render(
+      <BrowserRouter>
+        <Router history={history}>
+          <Provider store={store}>
+            <SideNav {...initalstate} />
+          </Provider>
+        </Router>
+      </BrowserRouter>
     );
-    const globalStore = wrapper.find(Provider).prop('store');
-    dispatchMock.mockImplementation(action => globalStore.dispatch(action));
-    useDispatch.mockReturnValue(dispatchMock);
-
-    expect(wrapper.exists()).toBe(true);
-    const button = wrapper.find('button');
-    expect(button).toHaveLength(1);
+    expect(getByText(/Log Out/)).toBeInTheDocument();
+    fireEvent.click(getByText(/Log Out/));
   });
-
-  test('Check for  button click', () => {
-    const wrapper = mount(
-      <Provider store={createStore}>
-        <SideNav {...props} />
-      </Provider>
-    );
-    const globalStore = wrapper.find(Provider).prop('store');
-    dispatchMock.mockImplementation(action => globalStore.dispatch(action));
-    useDispatch.mockReturnValue(dispatchMock);
-    expect(wrapper.exists()).toBe(true);
-
-    const button = wrapper.find('button').simulate('click');
-    expect(button).toEqual({});
-  });
+  afterAll(cleanup);
 });
