@@ -1,25 +1,13 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable func-names */
+/* eslint-disable no-unused-expressions */
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
 /* eslint-disable prefer-const */
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable no-return-assign */
-import {
-  getFilteredQuestion,
-  headFields,
-  PT_SECTION,
-  CORE_TEAM,
-  QC_SECTION,
-  getLastAnswer,
-  getUnityPredicatedText,
-  dateNow,
-  userName,
-  yearNow,
-  getUnityLink,
-  formatDate,
-  shouldInclude,
-  getLastAnswerHtml
-} from './word-template';
+
 import { renderToString } from 'react-dom/server';
 import ReactHtmlParser from 'react-html-parser';
 import {
@@ -49,6 +37,23 @@ import OrderedList from '@tiptap/extension-text-align';
 import FooterHead from '../../../../img/footerHead.png';
 import Logo from '../../../../img/iqvia-main-logo.png';
 import Border from '../../../../img/borders.png';
+import {
+  getFilteredQuestion,
+  headFields,
+  PT_SECTION,
+  CORE_TEAM,
+  QC_SECTION,
+  QC_SECTION_LEFT_PANEL,
+  getLastAnswer,
+  getUnityPredicatedText,
+  dateNow,
+  userName,
+  yearNow,
+  getUnityLink,
+  formatDate,
+  shouldInclude,
+  getLastAnswerHtml
+} from './word-template';
 // import '../../../../fonts/Proxima Nova Regular-normal';
 // import ProximaNovaBold from '../../../../fonts/Proxima Nova Alt Bold.otf';
 // import ProximaNovaBoldItalic from '../../../../fonts/Proxima-Nova-Bold-It.otf';
@@ -296,7 +301,7 @@ function getHeaderInfoRows(details) {
 function getProposalTeamsRows(questions) {
   const coreTeamQuestions = questions
     .filter(
-      (question) =>
+      question =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
         CORE_TEAM[question.questionText]
@@ -304,7 +309,7 @@ function getProposalTeamsRows(questions) {
     .sort((a, b) => a.questionOrder - b.questionOrder);
   const otherTeamQuestions = questions
     .filter(
-      (question) =>
+      question =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
         !CORE_TEAM[question.questionText]
@@ -317,14 +322,29 @@ function getProposalTeamsRows(questions) {
     html += `<div id="resp-table-header"> Core Team Members </div>`;
     html += `<div id="resp-table-header"> Name </div>`;
     html += `</div>`;
-    coreTeamQuestions.forEach((question) => {
+    const getEmailID = str => {
+      return String(str).match(
+        /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+      );
+    };
+    coreTeamQuestions.forEach(question => {
       const { questionText, answers } = question;
       const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
       html += `<div class="resp-table-row">`;
       html += `<div class="table-header-cell">${questionText}</div>`;
-      html += `<div class="table-header-cell">${checkFormattedAnswer(
-        answers
-      )}</div>`;
+      const coreTeamQuestionsAnswer = checkFormattedAnswer(answers);
+      let coreTeamQuestionsEmail = getEmailID(coreTeamQuestionsAnswer);
+      let emailLink = '';
+      if (coreTeamQuestionsEmail) {
+        const name = coreTeamQuestionsAnswer.substring(
+          0,
+          coreTeamQuestionsAnswer.indexOf('(')
+        );
+        let tempEmail = String(coreTeamQuestionsEmail[0]).trim();
+        emailLink = `<p><span data-type="mention" style="color:blue;" data-id="${name}" data-label="${name}">${tempEmail}</span> <br><br></p>`;
+      }
+      console.log('emailLink :>> ', emailLink);
+      html += `<div class="table-header-cell">${emailLink}</div>`;
       html += `</div>`;
       html += `<br>`;
     });
@@ -334,14 +354,24 @@ function getProposalTeamsRows(questions) {
     html += `<div id="resp-table-header"> Specialty Team Members </div>`;
     html += `<div id="resp-table-header"> Name</div>`;
     html += `</div>`;
-    otherTeamQuestions.forEach((question) => {
+    otherTeamQuestions.forEach(question => {
       const { questionText, answers } = question;
       const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
       html += `<div class="resp-table-row">`;
       html += `<div class="table-header-cell">${questionText} </div>`;
-      html += `<div class="table-header-cell">${checkFormattedAnswer(
-        answers
-      )}</div>`;
+      const otherTeamQuestionsAnswer = checkFormattedAnswer(answers);
+      let otherTeamQuestionsAnswerEmail = getEmailID(otherTeamQuestionsAnswer);
+      let otherTeamQuestionsemailLink = '';
+      if (otherTeamQuestionsAnswerEmail) {
+        const nameOther = otherTeamQuestionsAnswer.substring(
+          0,
+          otherTeamQuestionsAnswer.indexOf('(')
+        );
+        let tempEmailOther = String(otherTeamQuestionsAnswerEmail[0]).trim();
+        otherTeamQuestionsemailLink = `<p><span data-type="mention" style="color:blue" data-id=${tempEmailOther} data-label=${nameOther}>${tempEmailOther}</span> 
+        <br/><br/></p>`;
+      }
+      html += `<div class="table-header-cell">${otherTeamQuestionsemailLink}</div>`;
       html += `</div>`;
     });
     html += `</div>`;
@@ -355,7 +385,7 @@ function questionTables(allQuestions, proposalQuestions) {
   let html = ``;
   // Remove not visible questions
   let questions = proposalQuestions
-    .filter((question) => {
+    .filter(question => {
       return (
         shouldInclude(question) &&
         question.section.sectionName !== PT_SECTION &&
@@ -369,11 +399,12 @@ function questionTables(allQuestions, proposalQuestions) {
   const sections = {};
   let ordereredSections = [];
   // Populate the section map
-  questions.forEach((question) => {
+  questions.forEach(question => {
     try {
       let section = question.section.sectionName || '';
-      if (section === 'Questions_for_the_Customer_left_panel')
+      if (section === 'Questions_for_the_Customer_left_panel') {
         section = 'Questions for the Customer';
+      }
       if (sections[section]) {
         sections[section].push(question);
       } else {
@@ -384,45 +415,50 @@ function questionTables(allQuestions, proposalQuestions) {
       console.log('Error while mapping Sections');
     }
   });
-  // ordereredSections = ordereredSections.filter(
-  //   (v) => v !== 'Questions for the Customer'
-  // );
-  // ordereredSections.unshift('Questions for the Customer');
-  ordereredSections.forEach((section) => {
+  ordereredSections = ordereredSections.filter(
+    v => v !== 'Questions for the Customer'
+  );
+  ordereredSections.unshift('Questions for the Customer');
+  ordereredSections.forEach(section => {
     if (section === QC_SECTION) {
       html += `<div id="resp-table" class="questionTable table marginTop20">`;
       html += `<div class="resp-table-row">`;
       html += `<div id="resp-table-caption"> ${section} </div>`;
       html += `<div id="resp-table-caption"></div>`;
       html += `</div>`;
-      sections[section]
-        .sort((a, b) => a.questionOrder - b.questionOrder)
-        .forEach((question) => {
-          const questionHTML = question.questionHTML || question.questionText;
-          const extraNewLines = getExtraLines(
-            getLastAnswerHtml(question.answers),
-            questionHTML
-          );
-          html += `<div class="resp-table-row">`;
-          html += `<div class="table-header-cell"> ${questionHTML} </div>`;
-          html += `<div class="table-header-cell"> ${formatDate(
-            checkFormattedAnswer(question.answers),
-            question.answerConfiguration
-          )} <span class="blueColorText">${
-            getUnityPredicatedText(question.answers)
-              ? getUnityPredicatedText(question.answers)
-              : ''
-          }</span></div>`;
-          html += `</div>`;
-        });
+      let questionsToCustomerLeftSection = allQuestions
+        .filter(
+          question =>
+            shouldInclude(question) &&
+            question.section.sectionName === QC_SECTION_LEFT_PANEL
+        )
+        .sort((a, b) => a.questionOrder - b.questionOrder);
+      questionsToCustomerLeftSection.forEach(question => {
+        const questionHTML = question.questionHTML || question.questionText;
+        const extraNewLines = getExtraLines(
+          getLastAnswerHtml(question.answers),
+          questionHTML
+        );
+        html += `<div class="resp-table-row">`;
+        html += `<div class="table-header-cell"> ${questionHTML} </div>`;
+        html += `<div class="table-header-cell"> ${formatDate(
+          checkFormattedAnswer(question.answers),
+          question.answerConfiguration
+        )} <span class="blueColorText">${
+          getUnityPredicatedText(question.answers)
+            ? getUnityPredicatedText(question.answers)
+            : ''
+        }</span></div>`;
+        html += `</div>`;
+      });
       let questionsToCustomerRightSection = allQuestions
         .filter(
-          (question) =>
+          question =>
             shouldInclude(question) &&
             question.section.sectionName === QC_SECTION
         )
         .sort((a, b) => a.questionOrder - b.questionOrder);
-      questionsToCustomerRightSection.forEach((question) => {
+      questionsToCustomerRightSection.forEach(question => {
         const { questionText } = question;
         const extraNewLines = getExtraLines(
           getLastAnswerHtml(question?.answers),
@@ -449,7 +485,7 @@ function questionTables(allQuestions, proposalQuestions) {
       html += `</div>`;
       sections[section]
         .sort((a, b) => a.questionOrder - b.questionOrder)
-        .forEach((question) => {
+        .forEach(question => {
           const questionHTML = question.questionHTML || question.questionText;
           const extraNewLines = getExtraLines(
             getLastAnswerHtml(question.answers),
@@ -566,19 +602,15 @@ function getHtml(
   let k = 0;
   let fetchedElementArray = string.split(/(>)/g);
   let foundArray = [];
-  fetchedElementArray.filter((value) => {
+  fetchedElementArray.filter(value => {
     if (value.match(/text-decoration:(.*?)"/g)) {
       foundArray.push(value);
     }
-    foundArray.forEach((item) => {
+    foundArray.forEach(item => {
       const indexFoundArray = fetchedElementArray.indexOf(item);
       const currentIndex = item;
       for (k; k < 7; k++) {
         if (fetchedElementArray[indexFoundArray + k].match(/^(.+?)<\//)) {
-          console.log(
-            fetchedElementArray[indexFoundArray + k],
-            'fetched array'
-          );
           const splitText = fetchedElementArray[indexFoundArray + k].split('<');
           if (
             currentIndex.match('line-through') &&
@@ -594,7 +626,7 @@ function getHtml(
             fetchedElementArray[indexFoundArray + k] = extractStyles;
           }
           let appendedString = '';
-          fetchedElementArray.forEach((value) => (appendedString += value));
+          fetchedElementArray.forEach(value => (appendedString += value));
           string = appendedString;
         }
       }
@@ -607,6 +639,7 @@ function getHtml(
     unit: 'pt',
     format: 'a4'
   });
+
   // pdfa.setFont('ProximaNova-Regular');
   pdfa.setFontSize(12);
   pdfa.html(string, {
