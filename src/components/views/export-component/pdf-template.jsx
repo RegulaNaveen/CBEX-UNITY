@@ -54,10 +54,10 @@ import {
   shouldInclude,
   getLastAnswerHtml
 } from './word-template';
-// import '../../../../fonts/Proxima Nova Regular-normal';
-// import ProximaNovaBold from '../../../../fonts/Proxima Nova Alt Bold.otf';
-// import ProximaNovaBoldItalic from '../../../../fonts/Proxima-Nova-Bold-It.otf';
-// import ProximaNovaItalic from '../../../../fonts/Proxima-Nova-Reg-It.otf';
+import '../../../../fonts/ProximaNova-Regular-normal';
+import '../../../../fonts/Proxima-Nova-Alt-Bold-bold';
+import '../../../../fonts/Proxima-Nova-Bold-It-bolditalic';
+import '../../../../fonts/Proxima-Nova-Reg-It-italic';
 
 const styles = StyleSheet.create({
   page: {
@@ -156,6 +156,7 @@ function topHeading(details) {
 function getStyled() {
   return `<style>  *{
     font-family: ProximaNova-Regular !important;
+    font-size: 10px;
   }
 h1{
     font-size: 20px;
@@ -232,19 +233,21 @@ li {
   #resp-table-caption{
     display: table-cell;
     text-align: center;
-    font-size: 16px;
+    font-size: 12px;
     color: #fff;
     font-weight: bold;
     background-color: #00A3E0;
+    padding:5px;
     }
     #resp-table-header {
       display: table-cell;
-      font-size: 16px;
+      font-size: 12px;
       background-color: #00A3E0;
       color: #fff;
       font-weight: bold;
       width: 50%;
       text-align: center;
+      padding: 5px;
   }
   .table-header-cell {
     display: table-cell;
@@ -254,6 +257,7 @@ li {
     width: 50%;
     height: auto;
     border-bottom: 1px solid #000;
+    word-break: break-all;
 }
 .table-header-cell:nth-child(odd) {
   background-color: #EEEEEE;
@@ -345,7 +349,7 @@ function getProposalTeamsRows(questions) {
           tempEmail
         ).toUpperCase()}" data-label="${String(
           name
-        ).toUpperCase()}">vamsi.krishna@iqvia.com</span></p>`;
+        ).toUpperCase()}">${tempEmail}</span></p>`;
       }
       html += `<div class="table-header-cell">${emailLink}</div>`;
       html += `</div>`;
@@ -492,6 +496,7 @@ function questionTables(allQuestions, proposalQuestions) {
       sections[section]
         .sort((a, b) => a.questionOrder - b.questionOrder)
         .forEach(question => {
+          console.log(question, 'question');
           const questionHTML = question.questionHTML || question.questionText;
           const extraNewLines = getExtraLines(
             getLastAnswerHtml(question.answers),
