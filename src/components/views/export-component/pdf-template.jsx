@@ -154,10 +154,12 @@ function topHeading(details) {
     ''}</em> Opportunity Overview</h1>`;
 }
 function getStyled() {
-  return `<style>  *{
-    font-family: ProximaNova-Regular !important;
-    font-size: 10px;
-  }
+  return `<style>
+
+body {
+  font-family: ProximaNova-Regular !important;
+  font-size: 10px;
+}  
 h1{
     font-size: 20px;
     margin: 5px;
