@@ -346,10 +346,9 @@ function getProposalTeamsRows(questions) {
       console.log('emailLink :>> ', emailLink);
       html += `<div class="table-header-cell">${emailLink}</div>`;
       html += `</div>`;
-      html += `<br>`;
     });
     html += `</div>`;
-    html += `<div id="resp-table" class="proposalTeam table">`;
+    html += `<div id="resp-table" class="proposalTeam table marginTop20">`;
     html += `<div class="resp-table-row">`;
     html += `<div id="resp-table-header"> Specialty Team Members </div>`;
     html += `<div id="resp-table-header"> Name</div>`;
@@ -578,6 +577,11 @@ function getHtml(
   // this is added to handle , some data having unclosed span tag.
   const SpanExp = /[^<]\/span>/g;
   if (html.match(SpanExp)) html = html?.replace(SpanExp, '</span>');
+
+  // const BrackExp = /[\(\)']+/g;
+  const BrackExp = /\([^(]\/span>/g;
+  if (html.match(BrackExp)) html = html?.replace(BrackExp, '</span> ');
+
   const Prints = () => (
     <html lang="en">
       <body id="pdfbody">{ReactHtmlParser(html)}</body>
@@ -680,6 +684,9 @@ function getHtml(
             align: 'right'
           }
         );
+        pdfa2.text(` ${i}`, 270, 830, {
+          align: 'center'
+        });
       }
       pdfa2.save(fileName);
     },
