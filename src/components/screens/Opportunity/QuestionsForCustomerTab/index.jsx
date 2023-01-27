@@ -12,7 +12,10 @@ import QuestionContainer from './QuestionContainer';
 import { getProposalQuestions } from '../../../../redux/selectors/proposal';
 import { getSelectedBid, selectSections } from '../../../../redux/selectors';
 import Header from './Header';
-import { deleteProposalQuestion } from '../../../../redux/actions/proposal-actions';
+import {
+  deleteProposalQuestion,
+  setProposalQuestion
+} from '../../../../redux/actions/proposal-actions';
 import { SocketContext } from '../../../../context/SocketContext';
 
 function QuestionsForCustomer() {
@@ -29,6 +32,7 @@ function QuestionsForCustomer() {
   const [newEntry, setNewEntry] = useState(null);
   const [showScroll, setShowScroll] = useState(null);
   const addNewEntryRef = React.createRef();
+  const [showAddQuestionLoader, setShowAddQuestionLoader] = useState(false);
 
   useEffect(() => {
     setQuestions(new OrderedMap());
@@ -51,55 +55,50 @@ function QuestionsForCustomer() {
 
         setQuestions(filteredCustomQuestion);
 
-        if (newEntry) {
-          let question = filteredCustomQuestion;
-          question = question.set(newEntry.questionId, fromJS(newEntry));
-          setQuestions(question);
-        }
+        // if (newEntry) {
+        //   let question = filteredCustomQuestion;
+        //   question = question.set(newEntry.questionId, fromJS(newEntry));
+        //   setQuestions(question);
+        // }
       }
     });
 
     if (addNewEntryRef?.current?.offsetTop > 380) setShowScroll(true);
+    const objDiv = document.getElementById('question-container-area');
+    objDiv.scrollIntoView({
+      behavior: 'smooth',
+      block: 'end',
+      inline: 'nearest'
+    });
   }, [questionsList]);
 
-  const addQuestionHandler = () => {
-    let _id = uuidv4();
-    let question = questions;
-    let newQuestionEntry = {
-      isNewEntry: true,
-      isCustomQuestion: true,
-      questionId: _id,
-      section: {
-        sectionOrder: 199,
-        sectionName: 'Questions_for_the_Customer_left_panel'
-      },
-      active: true,
-      questionOrder: '',
-      questionApproval: false,
-      locked: false,
-      proposalId: '3cefc843-73d8-4797-9ffa-09b3e290b8bc',
-      questionJSON: '',
-      milestoneNew: [],
-      hasDifferentSFanswer: false,
-      questionHTML: '',
-      roleNames: ['Business Developer'],
-      visible: true,
-      notApplicable: false,
-      questionText: '',
-      integration: '',
-      answers: '',
-      questionHintJSON: '',
-      questionHintHTML: '',
-      answerConfiguration: {
-        type: 'text',
-        options: []
-      },
-      events: ''
+  const addQuestionHandler = async () => {
+    const proposalId = selectedBid.get('id');
+    const section = {
+      sectionOrder: 199,
+      sectionName: 'Questions_for_the_Customer_left_panel'
     };
-    question = question.set(_id, fromJS(newQuestionEntry));
-    setNewEntry(newQuestionEntry);
+    const answerType = 'text';
+    const roleNames = ['Business Developer'];
 
-    setQuestions(question);
+    const questionData = {
+      proposalId,
+      questionText: ' ',
+      questionJSON: '',
+      questionHTML: '',
+      section,
+      answerType,
+      options: [],
+      roleNames
+    };
+
+    setShowAddQuestionLoader(true);
+
+    await dispatch(
+      setProposalQuestion(proposalId, questionData, socketContext)
+    );
+
+    setShowAddQuestionLoader(false);
   };
 
   const onForceDelete = async () => {
@@ -227,6 +226,7 @@ function QuestionsForCustomer() {
         </div>
         {questions?.size > 0 ? (
           <div
+            id="question-container-area"
             className={
               showScroll || questions?.size > 2
                 ? 'questions-container-over'
@@ -249,7 +249,7 @@ function QuestionsForCustomer() {
             </ul>
           </div>
         ) : (
-          <div className="questions-container">
+          <div id="question-container-area" className="questions-container">
             <div className="no-questions-added-t">
               No questions added to this opportunity
             </div>
@@ -284,7 +284,8 @@ function QuestionsForCustomer() {
                     )
                   : false) ||
                 !isCurrentBid ||
-                !allFlags.isQuestionForCustomerEditable
+                !allFlags.isQuestionForCustomerEditable ||
+                showAddQuestionLoader
               }
               ref={addNewEntryRef}
             >

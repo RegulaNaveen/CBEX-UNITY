@@ -79,6 +79,7 @@ const AnswerInput = ({
     isEditable: false,
     disabled: checkDisableFlag() || !question?.questionText,
     canUserTagInQuestion,
+    questionId: question.questionId,
 
     onBlur: data => {
       let saveDate = false;

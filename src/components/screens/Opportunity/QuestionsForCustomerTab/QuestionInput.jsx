@@ -49,6 +49,7 @@ const QuestionInput = ({
     const { value, html, text, htmlExport } = editorData;
 
     const questionData = {
+      questionId: question.questionId,
       proposalId,
       questionText: text,
       questionJSON: value ? JSON.stringify(value) : '',
