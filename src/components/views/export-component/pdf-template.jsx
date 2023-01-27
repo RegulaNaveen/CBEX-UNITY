@@ -341,9 +341,12 @@ function getProposalTeamsRows(questions) {
           coreTeamQuestionsAnswer.indexOf('(')
         );
         let tempEmail = String(coreTeamQuestionsEmail[0]).trim();
-        emailLink = `<p><span data-type="mention" style="color:blue;" data-id="${name}" data-label="${name}">${tempEmail}</span> <br><br></p>`;
+        emailLink = `<p><span data-type="mention" style="color:blue;" data-id="${String(
+          tempEmail
+        ).toUpperCase()}" data-label="${String(
+          name
+        ).toUpperCase()}">vamsi.krishna@iqvia.com</span></p>`;
       }
-      console.log('emailLink :>> ', emailLink);
       html += `<div class="table-header-cell">${emailLink}</div>`;
       html += `</div>`;
     });
@@ -367,7 +370,11 @@ function getProposalTeamsRows(questions) {
           otherTeamQuestionsAnswer.indexOf('(')
         );
         let tempEmailOther = String(otherTeamQuestionsAnswerEmail[0]).trim();
-        otherTeamQuestionsemailLink = `<p><span data-type="mention" style="color:blue" data-id=${tempEmailOther} data-label=${nameOther}>${tempEmailOther}</span> 
+        otherTeamQuestionsemailLink = `<p><span data-type="mention" style="color:blue" data-id=${String(
+          tempEmailOther
+        ).toUpperCase()} data-label=${String(
+          nameOther
+        ).toUpperCase()}>${tempEmailOther}</span> 
         <br/><br/></p>`;
       }
       html += `<div class="table-header-cell">${otherTeamQuestionsemailLink}</div>`;
@@ -589,19 +596,19 @@ function getHtml(
   );
   const image = Logo;
   let string = renderToString(<Prints />);
-  const emailExp = /([(][a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+[)])/gi;
-  if (string.match(emailExp)) {
-    const matched = string?.match(emailExp);
-    if (matched)
-      for (let mail = 0; mail < matched.length; mail += 1) {
-        const matchEmail = new RegExp(matched[mail], 'g');
-        if (string?.match(matchEmail))
-          string = string?.replace(
-            matched[mail],
-            ` <span style="color: #0000FF">${matched[mail]}</p>`
-          );
-      }
-  }
+  // const emailExp = /([(][a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+[)])/gi;
+  // if (string.match(emailExp)) {
+  //   const matched = string?.match(emailExp);
+  //   if (matched)
+  //     for (let mail = 0; mail < matched.length; mail += 1) {
+  //       const matchEmail = new RegExp(matched[mail], 'g');
+  //       if (string?.match(matchEmail))
+  //         string = string?.replace(
+  //           matched[mail],
+  //           ` <span style="color: #0000FF">${matched[mail]}</p>`
+  //         );
+  //     }
+  // }
   let extractStyles;
   let k = 0;
   let fetchedElementArray = string.split(/(>)/g);
