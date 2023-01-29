@@ -19,57 +19,112 @@ import {
 import { SocketContext } from '../../../../context/SocketContext';
 
 function QuestionsForCustomer() {
+  const socketContext = useContext(SocketContext);
   const questionsList = useSelector(getProposalQuestions);
+
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [questionToDelete, setQuestionToDelete] = useState(null);
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const [questions, setQuestions] = useState(new OrderedMap());
-  const sections = useSelector(selectSections);
+  let sections = new Map();
   const selectedBid = useSelector(getSelectedBid);
   const isCurrentBid = selectedBid.get('isCurrent');
   const dispatch = useDispatch();
-  const socketContext = useContext(SocketContext);
-  const [newEntry, setNewEntry] = useState(null);
+
+  // const [newEntry, setNewEntry] = useState(null);
   const [showScroll, setShowScroll] = useState(null);
   const addNewEntryRef = React.createRef();
   const [showAddQuestionLoader, setShowAddQuestionLoader] = useState(false);
 
+  const generateSections = proposalQuestions => {
+    try {
+      let sectionQuestions = new OrderedMap();
+      console.log({ proposalQuestions });
+      proposalQuestions.forEach(question => {
+        const {
+          questionId,
+          section: { sectionName }
+        } = question;
+
+        if (sectionName === 'Questions_for_the_Customer_left_panel') {
+          sectionQuestions = sectionQuestions.set(questionId, fromJS(question));
+          sectionQuestions = sectionQuestions.sortBy(item =>
+            item.get('questionOrder')
+          );
+        }
+      });
+      setQuestions(sectionQuestions);
+      console.log('tapas questionssssssss ', sectionQuestions.toJS());
+
+      // sections.map(section => {
+      //   if (
+      //     section.get('sectionName') === 'Questions_for_the_Customer_left_panel'
+      //   ) {
+      //     const sectionQuestions = section.get('questions');
+
+      //     const filteredCustomQuestion = new OrderedMap(
+      //       Array.from(sectionQuestions).filter(questionItem => {
+      //         if (questionItem[1].get('isCustomQuestion')) {
+      //           return true;
+      //         }
+
+      //         return false;
+      //       })
+      //     );
+
+      //     setQuestions(filteredCustomQuestion);
+      //     //return filteredCustomQuestion;
+
+      //     // if (newEntry) {
+      //     //   let question = filteredCustomQuestion;
+      //     //   question = question.set(newEntry.questionId, fromJS(newEntry));
+      //     //   setQuestions(question);
+      //     // }
+      //   }
+      // });
+
+      // return sections;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    setQuestions(new OrderedMap());
+    // setQuestions(new OrderedMap());
 
-    sections.map(section => {
-      if (
-        section.get('sectionName') === 'Questions_for_the_Customer_left_panel'
-      ) {
-        const sectionQuestions = section.get('questions');
+    generateSections(questionsList);
 
-        const filteredCustomQuestion = new OrderedMap(
-          Array.from(sectionQuestions).filter(questionItem => {
-            if (questionItem[1].get('isCustomQuestion')) {
-              return true;
-            }
+    // sections.map(section => {
+    //   if (
+    //     section.get('sectionName') === 'Questions_for_the_Customer_left_panel'
+    //   ) {
+    //     const sectionQuestions = section.get('questions');
 
-            return false;
-          })
-        );
+    //     const filteredCustomQuestion = new OrderedMap(
+    //       Array.from(sectionQuestions).filter(questionItem => {
+    //         if (questionItem[1].get('isCustomQuestion')) {
+    //           return true;
+    //         }
 
-        setQuestions(filteredCustomQuestion);
+    //         return false;
+    //       })
+    //     );
 
-        // if (newEntry) {
-        //   let question = filteredCustomQuestion;
-        //   question = question.set(newEntry.questionId, fromJS(newEntry));
-        //   setQuestions(question);
-        // }
-      }
-    });
+    //     // if (newEntry) {
+    //     //   let question = filteredCustomQuestion;
+    //     //   question = question.set(newEntry.questionId, fromJS(newEntry));
+    //     //   setQuestions(question);
+    //     // }
+    //   }
+    // });
 
-    if (addNewEntryRef?.current?.offsetTop > 380) setShowScroll(true);
-    const objDiv = document.getElementById('question-container-area');
-    objDiv.scrollIntoView({
-      behavior: 'smooth',
-      block: 'end',
-      inline: 'nearest'
-    });
+    // if (addNewEntryRef?.current?.offsetTop > 380) setShowScroll(true);
+    // const objDiv = document.getElementById('question-container-area');
+    // objDiv.scrollIntoView({
+    //   behavior: 'smooth',
+    //   block: 'end',
+    //   inline: 'nearest'
+    // });
   }, [questionsList]);
 
   const addQuestionHandler = async () => {
@@ -130,9 +185,10 @@ function QuestionsForCustomer() {
   };
 
   const deleteQuestionHandler = question => {
-    const updatedQuestion = questionsList.filter(ques => {
-      if (ques.questionId === question.questionId) return true;
-    });
+    console.log('called delete');
+    // const updatedQuestion = questionsList.filter(ques => {
+    //   if (ques.questionId === question.questionId) return true;
+    // });
 
     if (question.isNewEntry) {
       const filteredCustomQuestion = new OrderedMap(
@@ -144,15 +200,11 @@ function QuestionsForCustomer() {
           return false;
         })
       );
-      setNewEntry(null);
+      // setNewEntry(null);
       setQuestions(filteredCustomQuestion);
     } else if (
-      (question?.answers[question?.answers?.length - 1] &&
-        question?.answers[question?.answers?.length - 1].answer.trim()) ||
-      (updatedQuestion[0]?.answers[updatedQuestion[0]?.answers?.length - 1] &&
-        updatedQuestion[0]?.answers[
-          updatedQuestion[0]?.answers?.length - 1
-        ]?.answer.trim())
+      question?.answers[question?.answers?.length - 1] &&
+      question?.answers[question?.answers?.length - 1].answer.trim()
     ) {
       setQuestionToDelete(question);
       setShowDeleteModal(true);
@@ -241,8 +293,9 @@ function QuestionsForCustomer() {
                     questionData={questionData}
                     questionIndex={index + 1}
                     isCurrentBid={isCurrentBid}
-                    setNewEntry={setNewEntry}
+                    // setNewEntry={setNewEntry}
                     showScroll={showScroll}
+                    socketContext={socketContext}
                   />
                 );
               })}
@@ -276,7 +329,7 @@ function QuestionsForCustomer() {
               size="small"
               style={{ marginRight: 10 }}
               className="btn-label"
-              onClick={() => addQuestionHandler()}
+              onClick={addQuestionHandler}
               disabled={
                 (Array.from(questions)[questions.size - 1]
                   ? Array.from(questions)[questions.size - 1][1].get(

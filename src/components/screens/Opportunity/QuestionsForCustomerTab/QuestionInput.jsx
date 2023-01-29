@@ -15,8 +15,8 @@ const QuestionInput = ({
   socketContext,
   checkDisableFlag,
   setShowLoader,
-  questionIndex,
-  setNewEntry
+  questionIndex
+  // setNewEntry
 }) => {
   const selectedBid = useSelector(getSelectedBid);
   const dispatch = useDispatch();
@@ -39,6 +39,7 @@ const QuestionInput = ({
   };
 
   const handleRichTextChange = async editorData => {
+    console.log('called');
     const proposalId = selectedBid.get('id');
     const section = {
       sectionOrder: 199,
@@ -62,7 +63,7 @@ const QuestionInput = ({
     if (question?.isNewEntry) {
       setShowLoader(true);
       questionUnlockWrapper(question?.questionId);
-      setNewEntry(null);
+      // setNewEntry(null);
       await dispatch(
         setProposalQuestion(proposalId, questionData, socketContext)
       );
