@@ -15,7 +15,6 @@ const QuestionInput = ({
   checkDisableFlag,
   setShowLoader,
   questionIndex
-  // setNewEntry
 }) => {
   const selectedBid = useSelector(getSelectedBid);
   const dispatch = useDispatch();
@@ -47,7 +46,7 @@ const QuestionInput = ({
       };
       const answerType = 'text';
       const roleNames = ['Business Developer'];
-      const { value, html, text, htmlExport } = editorData;
+      const { value, text, htmlExport } = editorData;
 
       const questionData = {
         questionId: question.questionId,
