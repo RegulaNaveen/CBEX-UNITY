@@ -885,6 +885,7 @@ export function getQuestionsFilterApplied(questionsArr, questionsFilter) {
 export function onQuestionsFilterApplied(questionsFilter) {
   return async (dispatch, getState) => {
     const state = getState();
+    const searchQuery = selectQuery(getState());
     dispatch({
       type: ON_APPLY_QUESTIONS_FILTER,
       payload: { questionsFilter }
@@ -966,7 +967,9 @@ export function onQuestionsFilterApplied(questionsFilter) {
       payload: { filteredQuestions }
     });
 
-    dispatch(doSearchAction());
+    if (searchQuery !== null && searchQuery.length >= 3) {
+      dispatch(doSearchAction());
+    }
   };
 }
 
