@@ -352,7 +352,6 @@ const SocketContextProvider = props => {
         // On Message Recieve
         newSocket.addEventListener('message', async response => {
           const data = JSON.parse(response.data);
-          console.log('message: ', { data });
 
           switch (data.event) {
             case 'IN_PROGRESS':

@@ -570,8 +570,9 @@ export const setProposalQuestion = (
     });
     try {
       const data = await setProposalQuestionData(proposalId, questionData);
-      if (socketContext) await socketContext?.addQuestionWrapper(data);
+
       dispatch({ type: PROPOSAL_SET_QUESTION, payload: data });
+      if (socketContext) await socketContext?.addQuestionWrapper(data);
     } catch (err) {
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
     }
@@ -1114,9 +1115,9 @@ export const deleteProposalQuestion = (
     });
     try {
       const data = await deleteProposalQuestionData(proposalId, questionId);
-      if (socketContext) await socketContext?.questionDeleteWrapper(questionId);
 
       dispatch({ type: PROPOSAL_DELETE_QUESTION, payload: questionId });
+      if (socketContext) await socketContext?.questionDeleteWrapper(questionId);
     } catch (err) {
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
     }

@@ -3,14 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import PlusIcon from 'apollo-react-icons/Plus';
 import Button from 'apollo-react/components/Button';
 import Copy from 'apollo-react-icons/Copy';
-import { uuidv4 } from 'lib0/random';
 import { fromJS, OrderedMap } from 'immutable';
 import { isString } from 'lodash';
 import Modal from 'apollo-react/components/Modal';
 import Typography from 'apollo-react/components/Typography';
 import QuestionContainer from './QuestionContainer';
 import { getProposalQuestions } from '../../../../redux/selectors/proposal';
-import { getSelectedBid, selectSections } from '../../../../redux/selectors';
+import { getSelectedBid } from '../../../../redux/selectors';
 import Header from './Header';
 import {
   deleteProposalQuestion,
@@ -20,26 +19,25 @@ import { SocketContext } from '../../../../context/SocketContext';
 
 function QuestionsForCustomer() {
   const socketContext = useContext(SocketContext);
+  const { questionLockWrapper, questionUnlockWrapper } = socketContext;
   const questionsList = useSelector(getProposalQuestions);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [questionToDelete, setQuestionToDelete] = useState(null);
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const [questions, setQuestions] = useState(new OrderedMap());
-  let sections = new Map();
   const selectedBid = useSelector(getSelectedBid);
   const isCurrentBid = selectedBid.get('isCurrent');
   const dispatch = useDispatch();
 
-  // const [newEntry, setNewEntry] = useState(null);
   const [showScroll, setShowScroll] = useState(null);
   const addNewEntryRef = React.createRef();
   const [showAddQuestionLoader, setShowAddQuestionLoader] = useState(false);
 
-  const generateSections = proposalQuestions => {
+  const getSectionQuestions = proposalQuestions => {
     try {
       let sectionQuestions = new OrderedMap();
-      console.log({ proposalQuestions });
+
       proposalQuestions.forEach(question => {
         const {
           questionId,
@@ -54,155 +52,90 @@ function QuestionsForCustomer() {
         }
       });
       setQuestions(sectionQuestions);
-      console.log('tapas questionssssssss ', sectionQuestions.toJS());
-
-      // sections.map(section => {
-      //   if (
-      //     section.get('sectionName') === 'Questions_for_the_Customer_left_panel'
-      //   ) {
-      //     const sectionQuestions = section.get('questions');
-
-      //     const filteredCustomQuestion = new OrderedMap(
-      //       Array.from(sectionQuestions).filter(questionItem => {
-      //         if (questionItem[1].get('isCustomQuestion')) {
-      //           return true;
-      //         }
-
-      //         return false;
-      //       })
-      //     );
-
-      //     setQuestions(filteredCustomQuestion);
-      //     //return filteredCustomQuestion;
-
-      //     // if (newEntry) {
-      //     //   let question = filteredCustomQuestion;
-      //     //   question = question.set(newEntry.questionId, fromJS(newEntry));
-      //     //   setQuestions(question);
-      //     // }
-      //   }
-      // });
-
-      // return sections;
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    // setQuestions(new OrderedMap());
-
-    generateSections(questionsList);
-
-    // sections.map(section => {
-    //   if (
-    //     section.get('sectionName') === 'Questions_for_the_Customer_left_panel'
-    //   ) {
-    //     const sectionQuestions = section.get('questions');
-
-    //     const filteredCustomQuestion = new OrderedMap(
-    //       Array.from(sectionQuestions).filter(questionItem => {
-    //         if (questionItem[1].get('isCustomQuestion')) {
-    //           return true;
-    //         }
-
-    //         return false;
-    //       })
-    //     );
-
-    //     // if (newEntry) {
-    //     //   let question = filteredCustomQuestion;
-    //     //   question = question.set(newEntry.questionId, fromJS(newEntry));
-    //     //   setQuestions(question);
-    //     // }
-    //   }
-    // });
-
-    // if (addNewEntryRef?.current?.offsetTop > 380) setShowScroll(true);
-    // const objDiv = document.getElementById('question-container-area');
-    // objDiv.scrollIntoView({
-    //   behavior: 'smooth',
-    //   block: 'end',
-    //   inline: 'nearest'
-    // });
+    getSectionQuestions(questionsList);
+    if (addNewEntryRef?.current?.offsetTop > 380) setShowScroll(true);
   }, [questionsList]);
 
   const addQuestionHandler = async () => {
-    const proposalId = selectedBid.get('id');
-    const section = {
-      sectionOrder: 199,
-      sectionName: 'Questions_for_the_Customer_left_panel'
-    };
-    const answerType = 'text';
-    const roleNames = ['Business Developer'];
+    try {
+      const proposalId = selectedBid.get('id');
+      const section = {
+        sectionOrder: 199,
+        sectionName: 'Questions_for_the_Customer_left_panel'
+      };
+      const answerType = 'text';
+      const roleNames = ['Business Developer'];
 
-    const questionData = {
-      proposalId,
-      questionText: ' ',
-      questionJSON: '',
-      questionHTML: '',
-      section,
-      answerType,
-      options: [],
-      roleNames
-    };
+      const questionData = {
+        proposalId,
+        questionText: ' ',
+        questionJSON: '',
+        questionHTML: '',
+        section,
+        answerType,
+        options: [],
+        roleNames
+      };
 
-    setShowAddQuestionLoader(true);
+      setShowAddQuestionLoader(true);
 
-    await dispatch(
-      setProposalQuestion(proposalId, questionData, socketContext)
-    );
+      await dispatch(
+        setProposalQuestion(proposalId, questionData, socketContext)
+      );
 
-    setShowAddQuestionLoader(false);
+      setShowAddQuestionLoader(false);
+    } catch (error) {
+      console.log('Error Add question: ', error);
+    }
   };
 
   const onForceDelete = async () => {
     if (!questionToDelete) return;
-    const proposalId = selectedBid.get('id');
+    try {
+      const proposalId = selectedBid.get('id');
 
-    setShowDeleteModal(false);
-    await dispatch(
-      deleteProposalQuestion(
-        proposalId,
-        questionToDelete.questionId,
-        socketContext
-      )
-    );
-
-    setQuestionToDelete(null);
+      setShowDeleteModal(false);
+      await dispatch(
+        deleteProposalQuestion(
+          proposalId,
+          questionToDelete.questionId,
+          socketContext
+        )
+      );
+      questionUnlockWrapper(questionToDelete?.questionId);
+      setQuestionToDelete(null);
+    } catch (error) {
+      questionUnlockWrapper(questionToDelete?.questionId);
+      console.log('Error Delete question : ', error);
+    }
   };
 
   const onDelete = async question => {
     if (!question) return;
-    const proposalId = selectedBid.get('id');
+    try {
+      const proposalId = selectedBid.get('id');
 
-    setShowDeleteModal(false);
-    await dispatch(
-      deleteProposalQuestion(proposalId, question.questionId, socketContext)
-    );
-
-    setQuestionToDelete(null);
+      setShowDeleteModal(false);
+      await dispatch(
+        deleteProposalQuestion(proposalId, question.questionId, socketContext)
+      );
+      questionUnlockWrapper(question?.questionId);
+      setQuestionToDelete(null);
+    } catch (error) {
+      questionUnlockWrapper(question?.questionId);
+      console.log('Error delete question: ', error);
+    }
   };
 
   const deleteQuestionHandler = question => {
-    console.log('called delete');
-    // const updatedQuestion = questionsList.filter(ques => {
-    //   if (ques.questionId === question.questionId) return true;
-    // });
-
-    if (question.isNewEntry) {
-      const filteredCustomQuestion = new OrderedMap(
-        Array.from(questions).filter(questionItem => {
-          if (questionItem[1].get('questionId') !== question.questionId) {
-            return true;
-          }
-
-          return false;
-        })
-      );
-      // setNewEntry(null);
-      setQuestions(filteredCustomQuestion);
-    } else if (
+    questionLockWrapper(question?.questionId);
+    if (
       question?.answers[question?.answers?.length - 1] &&
       question?.answers[question?.answers?.length - 1].answer.trim()
     ) {
@@ -267,6 +200,7 @@ function QuestionsForCustomer() {
     navigator.clipboard.write([clipboardItem]);
   };
   const handleClose = () => {
+    if (questionToDelete) questionUnlockWrapper(questionToDelete?.questionId);
     setShowDeleteModal(prev => !prev);
   };
 
@@ -293,7 +227,6 @@ function QuestionsForCustomer() {
                     questionData={questionData}
                     questionIndex={index + 1}
                     isCurrentBid={isCurrentBid}
-                    // setNewEntry={setNewEntry}
                     showScroll={showScroll}
                     socketContext={socketContext}
                   />
