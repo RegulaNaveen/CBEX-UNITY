@@ -1,16 +1,27 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable func-names */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable guard-for-in */
+/* eslint-disable prefer-const */
+/* eslint-disable import/prefer-default-export */
+/* eslint-disable no-return-assign */
+
+import { renderToString } from 'react-dom/server';
+import ReactHtmlParser from 'react-html-parser';
 import {
-  pdf,
   Document,
   Page,
   View,
   StyleSheet,
   Text,
-  Font,
   Image,
   Link as HtmlLink
 } from '@react-pdf/renderer';
 import React from 'react';
 import Html from 'react-pdf-html';
+import jsPDF from 'jspdf';
 import { isString } from 'lodash';
 import moment from 'moment';
 import { generateHTML } from '@tiptap/core';
@@ -21,68 +32,66 @@ import Superscript from '@tiptap/extension-superscript';
 import Mention from '@tiptap/extension-mention';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
-import { useSelector, shallowEqual, useDispatch } from 'react-redux';
-import ProximaNovaItalic from '../../../../fonts/Proxima-Nova-Reg-It.otf';
-import ProximaNovaBoldItalic from '../../../../fonts/Proxima-Nova-Bold-It.otf';
-import ProximaNovaBold from '../../../../fonts/Proxima Nova Alt Bold.otf';
-import ProximaNova from '../../../../fonts/ProximaNova-Regular.otf';
+import TextAlign from '@tiptap/extension-text-align';
+import OrderedList from '@tiptap/extension-text-align';
+import FooterHead from '../../../../img/footerHead.png';
 import Logo from '../../../../img/iqvia-main-logo.png';
+import Border from '../../../../img/borders.png';
 import {
   getFilteredQuestion,
   headFields,
   PT_SECTION,
   CORE_TEAM,
   QC_SECTION,
+  QC_SECTION_LEFT_PANEL,
   getLastAnswer,
-  themeBlue,
-  themeGrey,
   getUnityPredicatedText,
   dateNow,
   userName,
   yearNow,
   getUnityLink,
   formatDate,
-  shouldInclude
+  shouldInclude,
+  getLastAnswerHtml
 } from './word-template';
-import { selectEditor } from '../../../redux/selectors';
-
-Font.register({
-  family: 'ProximaNova',
-  fonts: [
-    { src: ProximaNovaBoldItalic, fontStyle: 'italic', fontWeight: 700 },
-    { src: ProximaNovaItalic, fontStyle: 'italic' },
-    { src: ProximaNovaBold, fontWeight: 700 },
-    { src: ProximaNova, fontStyle: 'normal' }
-  ]
-});
+import '../../../../fonts/ProximaNova-Regular-normal';
+import '../../../../fonts/Proxima-Nova-Alt-Bold-bold';
+import '../../../../fonts/Proxima-Nova-Bold-It-bolditalic';
+import '../../../../fonts/Proxima-Nova-Reg-It-italic';
 
 const styles = StyleSheet.create({
   page: {
-    paddingBottom: '18vh'
+    paddingBottom: '18vh',
+    width: '500px',
+    marginBottom: '20px',
+    marginLeft: '50px',
+    marginRight: '50px'
   },
   header: {
-    width: '83%',
+    width: '500px',
     height: '10vh', // As per your page layout
-    borderBottom: `1px solid #${themeBlue}`,
+    borderBottom: `1px solid #00A3E0`,
     marginBottom: '20px',
     marginLeft: '50px',
     marginRight: '50px',
     justifyContent: 'flex-end'
+  },
+  li: {
+    lineHeight: '5px'
+  },
+  ol: {
+    lineHeight: '5px'
   },
   imgLogo: {
     width: '143px',
     height: '60px',
     alignSelf: 'flex-end'
   },
-  body: {
-    width: '100%',
-    minHeight: '60vh'
-  },
   footer: {
     position: 'absolute',
     bottom: 0,
-    width: '83%',
-    height: '15vh', // As per your page layout
+    width: '485px',
+    height: '15vh', //As per your page layout
     marginTop: '20px',
     marginLeft: '50px',
     marginRight: '50px'
@@ -93,135 +102,23 @@ const styles = StyleSheet.create({
   },
   heading: {
     paddingLeft: '60px',
-    marginBottom: '-40px'
+    marginBottom: '-40px',
+    width: '200px',
+    display: 'grid'
   },
   headingText: {
     fontSize: '14px',
-    color: `#${themeBlue}`,
-    fontFamily: 'ProximaNova',
+    color: `#00A3E0`,
+    fontFamily: 'Proxima-Nova-Regular',
     fontWeight: 700
+  },
+  tr: {
+    height: 'auto'
+  },
+  td: {
+    height: 'auto'
   }
 });
-
-function getStyle() {
-  return `<style>
-    *{
-        font-family: ProximaNova !important;
-      }
-    h1{
-        font-size: 20px;
-        margin: 5px;
-    }
-    h2{
-        font-size: 17px;
-        margin: 3px;
-    }
-    h3{
-        font-size: 15px;
-        margin: 2px;
-    }
-    body{
-        padding: 50px;
-        font-size: 10px;
-        font-family: ProximaNova
-    }
-    .marginTop50 {
-        margin-top:50px
-    }
-    .marginTop20 {
-        margin-top:20px
-    }
-    .marginTop30 {
-        margin-top:30px
-    }
-    .table tr{
-        border-top: 1px solid #000;
-        border-left: 1px solid #000;
-        border-right: 1px solid #000;
-    }
-    .table tr:last-child{
-        border-bottom: 1px solid #000;
-    }
-    .notesTable tr{
-        border-bottom: none;
-    }
-    .notesTable tr:last-child{
-        border-bottom: 1px solid #000;
-    }
-    .table td, .table th{
-        padding: 5px;
-    }
-    .table tr td:nth-child(2){
-        border-left: 1px solid #000;
-    }
-    .proposalTeam tr:first-child, .questionTable tr:first-child, .questionToCustomerTable tr:first-child, .notesTable tr:first-child{
-        background: #${themeBlue};
-        color:#fff;
-    }
-    .questionToCustomerTable li {
-        padding-bottom: 5px
-    }
-    .headerInfo tr td:first-child{
-        background: #${themeBlue};
-        color:#fff;
-        font-weight: bold
-    }
-    .questionTable tr td:first-child{
-        background: #${themeGrey};
-    }
-    .blueColorText{
-        color: #${themeBlue};
-        font-family:Helvetica;
-        font-size: 8px;
-    }
-    .footerWrapper{
-        display:flex;
-        justify-content:space-between
-    }
-    .footerWrapper td {
-        color: #${themeGrey},
-        font-size:7px,
-    }
-    .public-DraftStyleDefault-depth0.public-DraftStyleDefault-listLTR {
-        margin-left: 5px;
-    }
-    .public-DraftStyleDefault-depth1.public-DraftStyleDefault-listLTR {
-        margin-left: 10px;
-    }
-    .public-DraftStyleDefault-depth2.public-DraftStyleDefault-listLTR {
-        margin-left: 15px;
-    }
-    .public-DraftStyleDefault-depth3.public-DraftStyleDefault-listLTR {
-        margin-left: 20px;
-    }
-    .public-DraftStyleDefault-depth4.public-DraftStyleDefault-listLTR {
-        margin-left: 25px;
-    }
-    .MuiGrid-root{
-        display:none;
-    }
-    .MuiFormControl-root{
-        padding:5px;
-        border: 1px solid #000;
-        border-top: none;
-    }
-    [data-block="true"] {
-        padding-bottom:10px;
-    }
-    li {
-      align-items: flex-start;
-      line-height:2px;
-    }
-    li_bullet, .li_bullet {
-      margin-botton:4px;
-    }
-    ol,ul,p{
-      margin-top:3px !important;
-      margin-bottom:3px !important;
-    }
- </style>`;
-}
-
 function checkFormattedAnswer(answers) {
   try {
     const lastAnswer = answers[answers.length - 1];
@@ -235,7 +132,7 @@ function checkFormattedAnswer(answers) {
         }
       } else formattedAnswer = lastAnswer?.formattedAnswer;
       if (formattedAnswer?.htmlExport) {
-        return formattedAnswer.htmlExport;
+        return formattedAnswer?.htmlExport;
       }
       if (formattedAnswer?.html) {
         return formattedAnswer?.html;
@@ -247,35 +144,171 @@ function checkFormattedAnswer(answers) {
     return '';
   }
 }
-
 function getExtraLines(t1, t2) {
   const contentLength = Math.max(t1.length, t2.length);
   const paddingAnswerCell = parseInt(contentLength / 230);
   return new Array(paddingAnswerCell + 2 || 2).fill('<br>').join('');
 }
+function topHeading(details) {
+  return `<h1 class="mainTitle"><em>${details['CRM #'] ||
+    ''}</em> Opportunity Overview</h1>`;
+}
+function getStyled() {
+  return `<style>
+
+body {
+  font-family: ProximaNova-Regular !important;
+  font-size: 10px;
+}  
+h1{
+    font-size: 20px;
+    margin: 5px;
+}
+h2{
+    font-size: 17px;
+    margin: 3px;
+}
+h3{
+    font-size: 15px;
+    margin: 2px;
+}
+
+.marginTop50 {
+    margin-top:50px
+}
+.marginTop20 {
+    margin-top:20px
+}
+.marginTop30 {
+    margin-top:30px
+}
+.notesTable tr{
+    border-bottom: none;
+}
+ul li{
+  padding-left: 5px;
+}
+.blueColorText{
+    color: #00A3E0;
+    font-family:Helvetica;
+    font-size: 10px;
+}
+ .public-DraftStyleDefault-depth1.public-DraftStyleDefault-listLTR {
+  margin-left: 10px;
+  list-style-type: disc !important;
+}
+li {
+  align-items: flex-start;
+}
+  li ul li{
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 5px;
+  }
+  ul ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 5px;
+  }
+  ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+  }
+#resp-table {
+  width: 480px;
+  height: auto;
+  display: table;
+  border: 1px solid #000;
+  border-bottom: 0px;
+  }
+  #resp-table-caption{
+    display: table-cell;
+    text-align: center;
+    font-size: 12px;
+    color: #fff;
+    font-weight: bold;
+    background-color: #00A3E0;
+    padding:5px;
+    }
+    #resp-table-header {
+      display: table-cell;
+      font-size: 12px;
+      background-color: #00A3E0;
+      color: #fff;
+      font-weight: bold;
+      width: 50%;
+      text-align: center;
+      padding: 5px;
+      border-bottom: 1px solid #000;
+  }
+  .table-header-cell {
+    display: table-cell;
+    padding: 5px;
+    text-align: left;
+    vertical-align: middle;
+    width: 50%;
+    height: auto;
+    border-bottom: 1px solid #000;
+    word-break: break-all;
+}
+.table-header-cell:nth-child(odd) {
+  background-color: #EEEEEE;
+  border-right: 1px solid #000;
+}
+        #resp-table-body{
+          display: table-row-group;
+          }
+          .resp-table-row{
+            display: table-row;
+            }
+            .table-body-cell{
+              display: table-cell;
+              }
+              .headerInfo .table-header-cell:nth-child(odd) {
+                border-right: 1px solid #000;
+                background-color: #00A3E0;
+                color: #fff;
+                font-weight: bold;
+            }
+            .notes-ol ol {
+              padding-left: 15px;
+          }
+
+</style>`;
+}
 function getHeaderInfoRows(details) {
-  let html = `<table class="table headerInfo">`;
+  let html = `<div id="resp-table" class="table headerInfo">`;
   try {
-    for (const key in headFields) {
+    for (let key in headFields) {
       let value = details[key] || '';
       if (key === 'Bid due date') value = moment(value).format('DD-MMM-YYYY');
-
-      html += `<tr>`;
-      html += `<td>${headFields[key]}</td>`;
-      html += `<td>${value.toString()}</td>`;
-      html += `<td></td>`;
-      html += `</tr>`;
+      html += `<div class="resp-table-row">`;
+      html += `<div class="table-header-cell">${headFields[key]}</div>`;
+      html += `<div class="table-header-cell">${value.toString()}</div>`;
+      // html += `<div class="table-header-cell"></div>`;
+      html += `</div>`;
     }
   } catch (error) {
     console.log('Error in getHeaderInfoRows');
   }
-  html += `</table>`;
+  html += `</div>`;
   return html;
 }
 function getProposalTeamsRows(questions) {
   const coreTeamQuestions = questions
     .filter(
-      (question) =>
+      question =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
         CORE_TEAM[question.questionText]
@@ -283,7 +316,7 @@ function getProposalTeamsRows(questions) {
     .sort((a, b) => a.questionOrder - b.questionOrder);
   const otherTeamQuestions = questions
     .filter(
-      (question) =>
+      question =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
         !CORE_TEAM[question.questionText]
@@ -291,66 +324,100 @@ function getProposalTeamsRows(questions) {
     .sort((a, b) => a.questionOrder - b.questionOrder);
   let html = ``;
   try {
-    html += `<table class="proposalTeam table marginTop20">`;
-    html += `<tr>`;
-    html += `<th> Core Team Members </th>`;
-    html += `<th> Name</th>`;
-    html += `</tr>`;
-    coreTeamQuestions.forEach((question) => {
+    html += `<div id="resp-table" class="proposalTeam table marginTop20">`;
+    html += `<div class="resp-table-row">`;
+    html += `<div id="resp-table-header"> Core Team Members </div>`;
+    html += `<div id="resp-table-header"> Name </div>`;
+    html += `</div>`;
+    const getEmailID = str => {
+      return String(str).match(
+        /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+      );
+    };
+    coreTeamQuestions.forEach(question => {
       const { questionText, answers } = question;
       const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
-      html += `<tr>`;
-      html += `<td>${questionText} ${extraNewLines}</td>`;
-      html += `<td>${checkFormattedAnswer(answers)} ${extraNewLines}</td>`;
-      html += `</tr>`;
+      html += `<div class="resp-table-row">`;
+      html += `<div class="table-header-cell">${questionText}</div>`;
+      const coreTeamQuestionsAnswer = checkFormattedAnswer(answers);
+      let coreTeamQuestionsEmail = getEmailID(coreTeamQuestionsAnswer);
+      let emailLink = '';
+      if (coreTeamQuestionsEmail) {
+        const name = coreTeamQuestionsAnswer.substring(
+          0,
+          coreTeamQuestionsAnswer.indexOf('(')
+        );
+        let tempEmail = String(coreTeamQuestionsEmail[0]).trim();
+        emailLink = `<p><span data-type="mention" style="color:blue;" data-id="${String(
+          tempEmail
+        ).toUpperCase()}" data-label="${String(
+          name
+        ).toUpperCase()}">${tempEmail}</span></p>`;
+      }
+      html += `<div class="table-header-cell">${emailLink}</div>`;
+      html += `</div>`;
     });
-
-    html += `</table>`;
-    html += `<table class="proposalTeam table">`;
-    html += `<tr>`;
-    html += `<th> Specialty Team Members </th>`;
-    html += `<th> Name</th>`;
-    html += `</tr>`;
-    otherTeamQuestions.forEach((question) => {
+    html += `</div>`;
+    html += `<div id="resp-table" class="proposalTeam table marginTop20">`;
+    html += `<div class="resp-table-row">`;
+    html += `<div id="resp-table-header"> Specialty Team Members </div>`;
+    html += `<div id="resp-table-header"> Name</div>`;
+    html += `</div>`;
+    otherTeamQuestions.forEach(question => {
       const { questionText, answers } = question;
       const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
-      html += `<tr>`;
-      html += `<td>${questionText} ${extraNewLines}</td>`;
-      html += `<td>${checkFormattedAnswer(answers)} ${extraNewLines}</td>`;
-      html += `</tr>`;
+      html += `<div class="resp-table-row">`;
+      html += `<div class="table-header-cell">${questionText} </div>`;
+      const otherTeamQuestionsAnswer = checkFormattedAnswer(answers);
+      let otherTeamQuestionsAnswerEmail = getEmailID(otherTeamQuestionsAnswer);
+      let otherTeamQuestionsemailLink = '';
+      if (otherTeamQuestionsAnswerEmail) {
+        const nameOther = otherTeamQuestionsAnswer.substring(
+          0,
+          otherTeamQuestionsAnswer.indexOf('(')
+        );
+        let tempEmailOther = String(otherTeamQuestionsAnswerEmail[0]).trim();
+        otherTeamQuestionsemailLink = `<p><span data-type="mention" style="color:blue" data-id=${String(
+          tempEmailOther
+        ).toUpperCase()} data-label=${String(
+          nameOther
+        ).toUpperCase()}>${tempEmailOther}</span> 
+        <br/><br/></p>`;
+      }
+      html += `<div class="table-header-cell">${otherTeamQuestionsemailLink}</div>`;
+      html += `</div>`;
     });
-    html += `</table>`;
+    html += `</div>`;
   } catch (error) {
     console.log('Error in getProposalTeamsRows');
   }
   return html;
 }
-
-function questionTables(proposalQuestions) {
-  // Array<Table of each section>
+function questionTables(allQuestions, proposalQuestions) {
+  // Array<div id="resp-table" of each section>
   let html = ``;
   // Remove not visible questions
-  const questions = proposalQuestions
-    .filter((question) => {
+  let questions = proposalQuestions
+    .filter(question => {
       return (
         shouldInclude(question) &&
         question.section.sectionName !== PT_SECTION &&
-        question.section.sectionName !== QC_SECTION &&
-        question.section.sectionName !== 'Questions_for_the_Customer_left_panel'
+        question.section.sectionName !== QC_SECTION
       );
     })
     .sort((a, b) => {
       return a.section.sectionOrder - b.section.sectionOrder;
     });
-
   // Section map
   const sections = {};
-  const ordereredSections = [];
-
+  let ordereredSections = [];
   // Populate the section map
-  questions.forEach((question) => {
+  questions.forEach(question => {
     try {
-      const section = question.section.sectionName || '';
+      let section = question.section.sectionName || '';
+      if (section === 'Questions_for_the_Customer_left_panel') {
+        section = 'Questions for the Customer';
+      }
       if (sections[section]) {
         sections[section].push(question);
       } else {
@@ -361,121 +428,112 @@ function questionTables(proposalQuestions) {
       console.log('Error while mapping Sections');
     }
   });
-
-  ordereredSections.forEach((section) => {
-    html += `<table class="questionTable table marginTop20">`;
-    html += `<tr>`;
-    html += `<th> ${section} </th>`;
-    html += `<th> </th>`;
-    html += `</tr>`;
-
-    sections[section]
-      .sort((a, b) => a.questionOrder - b.questionOrder)
-      .forEach((question) => {
-        const questionText = question.questionText || '';
+  ordereredSections = ordereredSections.filter(
+    v => v !== 'Questions for the Customer'
+  );
+  ordereredSections.unshift('Questions for the Customer');
+  ordereredSections.forEach(section => {
+    if (section === QC_SECTION) {
+      html += `<div id="resp-table" class="questionTable table marginTop20">`;
+      html += `<div class="resp-table-row">`;
+      html += `<div id="resp-table-caption"> ${section} </div>`;
+      html += `<div id="resp-table-caption"></div>`;
+      html += `</div>`;
+      let questionsToCustomerLeftSection = allQuestions
+        .filter(
+          question =>
+            shouldInclude(question) &&
+            question.section.sectionName === QC_SECTION_LEFT_PANEL
+        )
+        .sort((a, b) => a.questionOrder - b.questionOrder);
+      questionsToCustomerLeftSection.forEach(question => {
+        const questionHTML = question.questionHTML || question.questionText;
         const extraNewLines = getExtraLines(
-          getLastAnswer(question.answers),
-          questionText
+          getLastAnswerHtml(question.answers),
+          questionHTML
         );
-        html += `<tr>`;
-        html += `<td> ${questionText} ${extraNewLines}</td>`;
-        html += `<td> ${formatDate(
+        html += `<div class="resp-table-row">`;
+        html += `<div class="table-header-cell"> ${questionHTML} </div>`;
+        html += `<div class="table-header-cell"> ${formatDate(
           checkFormattedAnswer(question.answers),
           question.answerConfiguration
         )} <span class="blueColorText">${
           getUnityPredicatedText(question.answers)
             ? getUnityPredicatedText(question.answers)
             : ''
-        }</span>${extraNewLines}</td>`;
-        html += `</tr>`;
+        }</span></div>`;
+        html += `</div>`;
       });
-    html += `</table>`;
+      let questionsToCustomerRightSection = allQuestions
+        .filter(
+          question =>
+            shouldInclude(question) &&
+            question.section.sectionName === QC_SECTION
+        )
+        .sort((a, b) => a.questionOrder - b.questionOrder);
+      questionsToCustomerRightSection.forEach(question => {
+        const { questionText } = question;
+        const extraNewLines = getExtraLines(
+          getLastAnswerHtml(question?.answers),
+          questionText
+        );
+        html += `<div class="resp-table-row">`;
+        html += `<div class="table-header-cell"> ${questionText}</div>`;
+        html += `<div class="table-header-cell"> ${formatDate(
+          checkFormattedAnswer(question.answers),
+          question.answerConfiguration
+        )} <span class="blueColorText">${
+          getUnityPredicatedText(question.answers)
+            ? getUnityPredicatedText(question.answers)
+            : ''
+        }</span></div>`;
+        html += `</div>`;
+      });
+      html += `</div>`;
+    } else {
+      html += `<div id="resp-table" class="questionTable table marginTop20">`;
+      html += `<div class="resp-table-row">`;
+      html += `<div id="resp-table-caption"> ${section} </div>`;
+      html += `<div id="resp-table-caption"></div>`;
+      html += `</div>`;
+      sections[section]
+        .sort((a, b) => a.questionOrder - b.questionOrder)
+        .forEach(question => {
+          console.log(question, 'question');
+          const questionHTML = question.questionHTML || question.questionText;
+          const extraNewLines = getExtraLines(
+            getLastAnswerHtml(question.answers),
+            questionHTML
+          );
+          html += `<div class="resp-table-row">`;
+          html += `<div class="table-header-cell"> ${questionHTML}</div>`;
+          html += `<div class="table-header-cell"> ${formatDate(
+            checkFormattedAnswer(question.answers),
+            question.answerConfiguration
+          )} <span class="blueColorText">${
+            getUnityPredicatedText(question.answers)
+              ? getUnityPredicatedText(question.answers)
+              : ''
+          }</span></div>`;
+          html += `</div>`;
+        });
+      html += `</div>`;
+    }
   });
-  return html;
-}
-
-function getQuestionToCustomerRows(questions) {
-  let html = ``;
-
-  let questionsToCustomer = questions
-    .filter(
-      (question) =>
-        shouldInclude(question) && question.section.sectionName === QC_SECTION
-    )
-    .sort((a, b) => a.questionOrder - b.questionOrder);
-
-  let quickQuestionsToCustomer = questions
-    .filter(
-      (question) =>
-        shouldInclude(question) &&
-        question.section.sectionName === 'Questions_for_the_Customer_left_panel'
-    )
-    .sort((a, b) => a.questionOrder - b.questionOrder);
-
-  if (!questionsToCustomer.length)
-    questionsToCustomer = [
-      { questionText: 'Question 1' },
-      { questionText: 'Question 2' },
-      { questionText: 'Question 3' },
-      { questionText: 'Question 4' }
-    ];
-
-  html += `<table class="questionToCustomerTable table marginTop20">`;
-  html += `<tr>`;
-  html += `<th> ${QC_SECTION} </th>`;
-  html += `</tr>`;
-
-  try {
-    html += `<tr>`;
-    html += `<td><ul>`;
-    questionsToCustomer.forEach((question, index) => {
-      const { questionText } = question;
-      html += `<li> ${questionText} </li>`;
-    });
-
-    html += `</ul></td>`;
-    html += `</tr>`;
-
-    quickQuestionsToCustomer.forEach((question) => {
-      const questionText = question.questionText || '';
-      const extraNewLines = getExtraLines(
-        getLastAnswer(question.answers),
-        questionText
-      );
-
-      html += `<tr>`;
-      html += `<td> ${questionText} ${extraNewLines}</td>`;
-      html += `<td> ${formatDate(
-        checkFormattedAnswer(question.answers),
-        question.answerConfiguration
-      )} <span class="blueColorText">${
-        getUnityPredicatedText(question.answers)
-          ? getUnityPredicatedText(question.answers)
-          : ''
-      }</span>${extraNewLines}</td>`;
-      html += `</tr>`;
-    });
-    html += `</table>`;
-  } catch (error) {
-    console.log('Error in getQuestionToCustomerRows');
-  }
-
-  html += `</table>`;
   return html;
 }
 
 function getNotesRows(notes, editor) {
   let html = ``;
-  html += `<table class="notesTable table marginTop20">`;
-  html += `<tr>`;
-  html += `<th>General Notes</th>`;
-  html += `</tr>`;
-  html += `</table>`;
+  html += `<div id="resp-table" class="notesTable table marginTop20">`;
+  html += `<div class="resp-table-row">`;
+  html += `<div id="resp-table-header">General Notes</div>`;
+  html += `</div>`;
+  html += `</div>`;
   let data = ``;
-  data += `<table><tr><td style="border:1px solid black;padding:10px">`;
+  data += `<div id="resp-table" style="border-bottom: 1px solid #000;"><div class="resp-table-row"><div class="notes-ol" style="padding: 10px;">`;
   try {
     const noteText = editor.getJSON();
-
     try {
       data += generateHTML(noteText, [
         StarterKit,
@@ -484,6 +542,13 @@ function getNotesRows(notes, editor) {
         Subscript,
         Superscript,
         Underline,
+        OrderedList.configure({
+          itemTypeName: 'listItem'
+        }),
+        TextAlign.configure({
+          types: ['heading', 'paragraph', 'OrderedList', 'listItem', 'Text'],
+          alignments: ['left', 'center', 'right', 'justify']
+        }),
         Mention.configure({
           HTMLAttributes: {
             style: `color:blue;`
@@ -493,7 +558,7 @@ function getNotesRows(notes, editor) {
           }
         })
       ]);
-      data += `</td></tr></table>`;
+      data += `</div></div></div>`;
       html += data;
       return html;
     } catch (err) {
@@ -504,33 +569,144 @@ function getNotesRows(notes, editor) {
   }
   return html;
 }
-
 function getHtml(
   proposalDetails,
   questions,
   filteredQuestions,
   notes,
   filterState,
-  editor
+  editor,
+  fileName
 ) {
-  let html = `
-        <html>
-        <body>
-            ${getStyle()}
-            ${getHeaderInfoRows(proposalDetails)}
-            ${getProposalTeamsRows(questions)}
-            ${getQuestionToCustomerRows(questions)}
-            ${questionTables(filteredQuestions)}
-            ${filterState.includesNotes ? getNotesRows(notes, editor) : ''}
-
-        </body>
-        </html>
-    `;
-
+  let html = ` 
+  ${getStyled()}
+  <div id="page" style="width: 500px;"> <div style="width: 500px;"><div style="width: 500px;">  <div style="margin-bottom: 5px;width: 200px;"><div style="font-size:14px;color:#00a3e0;font-family:inherit;font-weight:700;width: 250px;display: flex;">  <p style="font-style:italic;display: flex; margin: 0px !important;">${proposalDetails[
+    'CRM #'
+  ] || ' '}${'&nbsp'}
+  </p>Opportunity Overview
+</div></div>${getHeaderInfoRows(proposalDetails)}
+         ${getProposalTeamsRows(questions)}
+         ${questionTables(questions, filteredQuestions)}
+         ${getNotesRows(notes, editor)}
+      </div>   </div></div>    `;
   // this is added to handle , some data having unclosed span tag.
   const SpanExp = /[^<]\/span>/g;
   if (html.match(SpanExp)) html = html?.replace(SpanExp, '</span>');
-  return html;
+
+  // const BrackExp = /[\(\)']+/g;
+  const BrackExp = /\([^(]\/span>/g;
+  if (html.match(BrackExp)) html = html?.replace(BrackExp, '</span> ');
+
+  const Prints = () => (
+    <html lang="en">
+      <body id="pdfbody">{ReactHtmlParser(html)}</body>
+    </html>
+  );
+  const image = Logo;
+  let string = renderToString(<Prints />);
+  // const emailExp = /([(][a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+[)])/gi;
+  // if (string.match(emailExp)) {
+  //   const matched = string?.match(emailExp);
+  //   if (matched)
+  //     for (let mail = 0; mail < matched.length; mail += 1) {
+  //       const matchEmail = new RegExp(matched[mail], 'g');
+  //       if (string?.match(matchEmail))
+  //         string = string?.replace(
+  //           matched[mail],
+  //           ` <span style="color: #0000FF">${matched[mail]}</p>`
+  //         );
+  //     }
+  // }
+  let extractStyles;
+  let k = 0;
+  let fetchedElementArray = string.split(/(>)/g);
+  let foundArray = [];
+  fetchedElementArray.filter(value => {
+    if (value.match(/text-decoration:(.*?)"/g)) {
+      foundArray.push(value);
+    }
+    foundArray.forEach(item => {
+      const indexFoundArray = fetchedElementArray.indexOf(item);
+      const currentIndex = item;
+      for (k; k < 7; k++) {
+        if (fetchedElementArray[indexFoundArray + k].match(/^(.+?)<\//)) {
+          const splitText = fetchedElementArray[indexFoundArray + k].split('<');
+          if (
+            currentIndex.match('line-through') &&
+            currentIndex.match('underline')
+          ) {
+            extractStyles = `<u><s>${splitText[0]}</s></u><${splitText[1]}`;
+            fetchedElementArray[indexFoundArray + k] = extractStyles;
+          } else if (currentIndex.match('line-through')) {
+            extractStyles = `<s>${splitText[0]}</s><${splitText[1]}`;
+            fetchedElementArray[indexFoundArray + k] = extractStyles;
+          } else if (currentIndex.match('underline')) {
+            extractStyles = `<u>${splitText[0]}</u><${splitText[1]}`;
+            fetchedElementArray[indexFoundArray + k] = extractStyles;
+          }
+          let appendedString = '';
+          fetchedElementArray.forEach(value => (appendedString += value));
+          string = appendedString;
+        }
+      }
+    });
+  });
+  console.log(string, 'stafhafal');
+  const pdfa = new jsPDF({
+    compress: true,
+    orientation: 'p',
+    unit: 'pt',
+    format: 'a4'
+  });
+
+  // pdfa.setFont('ProximaNova-Regular');
+  pdfa.setFontSize(12);
+  pdfa.html(string, {
+    callback(pdfa2) {
+      const pageCount = pdfa2.internal.getNumberOfPages();
+      for (let i = 0; i <= pageCount; i += 1) {
+        pdfa2.setPage(i);
+        pdfa2.addImage(image, 'PNG', 400, 20, 143, 60);
+        pdfa2.addImage(Border, 'PNG', 50, 80, 500, 0);
+        pdfa2.setTextColor(0, 163, 224);
+        pdfa.setFontSize(8);
+        pdfa2.text(
+          '† Unity has provided this answer but not validated by user on proposal team.',
+          50,
+          782,
+          { align: 'left' }
+        );
+        pdfa2.addImage(FooterHead, 'PNG', 50, 785, 500, 0);
+        pdfa2.setTextColor(153, 153, 153);
+        pdfa2.setFontSize(8);
+        pdfa2.text(`Exported from Unity on ${dateNow()}`, 50, 800, {
+          align: 'left'
+        });
+        pdfa2.text(`by ${userName}`, 50, 810, {
+          align: 'left'
+        });
+        pdfa2.text(`View up-to-date Unity record here:`, 550, 800, {
+          align: 'right'
+        });
+        pdfa2.text(`${getUnityLink(proposalDetails)}`, 550, 810, {
+          align: 'right'
+        });
+        pdfa2.text(
+          ` Copyright © ${yearNow} IQVIA. All Rights Reserved. Confidential and Proprietary.`,
+          550,
+          820,
+          {
+            align: 'right'
+          }
+        );
+        pdfa2.text(` ${i}`, 270, 830, {
+          align: 'center'
+        });
+      }
+      pdfa2.save(fileName);
+    },
+    margin: [90, 50, 90, 50]
+  });
 }
 const MyDoc = (
   proposalDetails,
@@ -538,23 +714,31 @@ const MyDoc = (
   filteredQuestions,
   notes,
   filterState,
-  editor
+  editor,
+  fileName
 ) => {
   return (
     <Document>
+      {' '}
       <Page wrap style={styles.page}>
+        {' '}
         <View fixed style={styles.header}>
-          <Image src={Logo} style={styles.imgLogo} />
-        </View>
+          {' '}
+          <Image src={Logo} style={styles.imgLogo}></Image>{' '}
+        </View>{' '}
         <View style={styles.body}>
+          {' '}
           <View style={styles.heading}>
+            {' '}
             <Text style={styles.headingText}>
+              {' '}
               <Text style={{ fontStyle: 'italic' }}>
+                {' '}
                 {proposalDetails['CRM #'] || ''}{' '}
-              </Text>
+              </Text>{' '}
               Opportunity Overview
-            </Text>
-          </View>
+            </Text>{' '}
+          </View>{' '}
           <Html
             collapse={false} // this will preserve whitespace
             style={{ fontSize: 10 }}
@@ -562,8 +746,9 @@ const MyDoc = (
               p: ({ style, children }) => {
                 if (children != '') {
                   return <View style={style}>{children}</View>;
+                } else {
+                  return <View style={{ height: 18 }}></View>;
                 }
-                return <View style={{ height: 18 }} />;
               },
               tr: ({ style, children }) => (
                 <View style={style}>{children}</View>
@@ -571,7 +756,8 @@ const MyDoc = (
               a: ({ style, element, children }) => {
                 return (
                   <HtmlLink style={style} href={element.attrs.href}>
-                    <Text>{children}</Text>
+                    {' '}
+                    <Text>{children}</Text>{' '}
                   </HtmlLink>
                 );
               },
@@ -593,35 +779,41 @@ const MyDoc = (
               }
             }}
           >
+            {' '}
             {getHtml(
               proposalDetails,
               questions,
               filteredQuestions,
               notes,
               filterState,
-              editor
+              editor,
+              fileName
             )}
-          </Html>
-        </View>
+          </Html>{' '}
+        </View>{' '}
         <View fixed style={styles.footer}>
+          {' '}
           <Text
             style={{
               fontSize: '10px',
               fontweight: 'bold',
-              color: `#${themeBlue}`,
+              color: `#00A3E0`,
               marginBottom: 5,
               borderBottom: '1px solid #CCC'
             }}
           >
+            {' '}
             † Unity has provided this answer but not validated by user on
             proposal team.{' '}
-          </Text>
+          </Text>{' '}
           <View
             style={{ display: 'flex', flexDirection: 'row', marginBottom: 5 }}
           >
+            {' '}
             <Text style={{ flex: 1, fontSize: '8px', color: '#999' }}>
+              {' '}
               Exported from Unity on {dateNow()}
-            </Text>
+            </Text>{' '}
             <Text
               style={{
                 flex: 1,
@@ -630,15 +822,18 @@ const MyDoc = (
                 color: '#999'
               }}
             >
+              {' '}
               View up-to-date Unity record here:
-            </Text>
-          </View>
+            </Text>{' '}
+          </View>{' '}
           <View
             style={{ display: 'flex', flexDirection: 'row', marginBottom: 5 }}
           >
+            {' '}
             <Text style={{ flex: 1, fontSize: '8px', color: '#999' }}>
+              {' '}
               by {userName}
-            </Text>
+            </Text>{' '}
             <Text
               style={{
                 flex: 1,
@@ -647,13 +842,17 @@ const MyDoc = (
                 color: '#999'
               }}
             >
+              {' '}
               {getUnityLink(proposalDetails)}
-            </Text>
-          </View>
+            </Text>{' '}
+          </View>{' '}
           <View
             style={{ display: 'flex', flexDirection: 'row', marginBottom: 0 }}
           >
-            <Text style={{ flex: 0, fontSize: '8px', color: '#999' }} />
+            {' '}
+            <Text
+              style={{ flex: 0, fontSize: '8px', color: '#999' }}
+            ></Text>{' '}
             <Text
               style={{
                 flex: 1,
@@ -662,33 +861,32 @@ const MyDoc = (
                 color: '#999'
               }}
             >
+              {' '}
               Copyright © {yearNow} IQVIA. All Rights Reserved. Confidential and
               Proprietary.
-            </Text>
-          </View>
-        </View>
-      </Page>
+            </Text>{' '}
+          </View>{' '}
+        </View>{' '}
+      </Page>{' '}
     </Document>
   );
 };
-
 export function createPdf(content) {
-  const {
+  let {
     data: { proposalQuestions, proposalDetails },
     notes,
     filterState,
-    editor
+    editor,
+    fileName
   } = content;
-
   const filteredQuestions = getFilteredQuestion(proposalQuestions, filterState);
-  return pdf(
-    MyDoc(
-      proposalDetails,
-      proposalQuestions,
-      filteredQuestions,
-      notes,
-      filterState,
-      editor
-    )
-  ).toBlob();
+  return MyDoc(
+    proposalDetails,
+    proposalQuestions,
+    filteredQuestions,
+    notes,
+    filterState,
+    editor,
+    fileName
+  );
 }

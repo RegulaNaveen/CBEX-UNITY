@@ -74,6 +74,7 @@ export default function searchReducer(state = INITIAL_STATE, action) {
       return {
         ...state,
         prevResult: action.payload,
+        currentResultIndex: -1,
         autoNavigatedToCurrentResult: true
       };
     }

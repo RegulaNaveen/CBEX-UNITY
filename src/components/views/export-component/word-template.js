@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {
   Document,
   Paragraph,
@@ -37,6 +38,8 @@ export const themeGrey = 'EEEEEE';
 export const DEFAULT_FONT = 'Arial';
 export const PT_SECTION = 'Proposal Team';
 export const QC_SECTION = 'Questions for the Customer';
+export const QC_SECTION_LEFT_PANEL = 'Questions_for_the_Customer_left_panel';
+
 const questionCellWidth50 = {
   size: convertInchesToTwip(3.1),
   type: WidthType.DXA
@@ -120,7 +123,17 @@ function topHeading(details) {
 export function getLastAnswer(answers) {
   try {
     const lastAnswer = answers[answers.length - 1];
-    return (lastAnswer && lastAnswer.answer.toString()) || '';
+    return (lastAnswer && lastAnswer?.answer.toString()) || '';
+  } catch (error) {
+    console.log(error);
+    return '';
+  }
+}
+
+export function getLastAnswerHtml(answers) {
+  try {
+    const lastAnswer = answers[answers.length - 1];
+    return (lastAnswer && lastAnswer?.formattedAnswer?.html) || '';
   } catch (error) {
     console.log(error);
     return '';
@@ -391,13 +404,13 @@ export function getUnityPredicatedText(answers) {
     return '';
   }
 }
-function getQuestionTextCell(questionText) {
+function getquestionHTMLCell(questionHTML) {
   return new TableCell({
     children: [
       new Paragraph({
         children: [
           new TextRun({
-            text: questionText,
+            text: questionHTML,
             font: DEFAULT_FONT
           })
         ]
@@ -521,14 +534,14 @@ function questionTables(proposalQuestions) {
     sections[section]
       .sort((a, b) => a.questionOrder - b.questionOrder)
       .forEach(question => {
-        const questionText = question.questionText || '';
+        const questionHTML = question.questionHTML || '';
         rows.push(
           isContainFormattedAnswer(
             question?.answers[question?.answers.length - 1]
           )
             ? new TableRow({
                 children: [
-                  getQuestionTextCell(questionText),
+                  getquestionHTMLCell(questionHTML),
                   getFormattedTextTable(
                     question?.answers[question?.answers.length - 1]
                       .formattedAnswer
@@ -537,7 +550,7 @@ function questionTables(proposalQuestions) {
               })
             : new TableRow({
                 children: [
-                  getQuestionTextCell(questionText),
+                  getquestionHTMLCell(questionHTML),
                   getAnswerCell(
                     formatDate(
                       getLastAnswer(question.answers),
@@ -696,7 +709,7 @@ function getProposalTeamsRows(questions) {
       question =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
-        CORE_TEAM[question.questionText]
+        CORE_TEAM[question.questionHTML]
     )
     .sort((a, b) => a.questionOrder - b.questionOrder);
   const otherTeamQuestions = questions
@@ -704,7 +717,7 @@ function getProposalTeamsRows(questions) {
       question =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
-        !CORE_TEAM[question.questionText]
+        !CORE_TEAM[question.questionHTML]
     )
     .sort((a, b) => a.questionOrder - b.questionOrder);
 
@@ -727,14 +740,14 @@ function getProposalTeamsRows(questions) {
 
   try {
     coreTeamQuestions.forEach(question => {
-      let { questionText, answers } = question;
+      let { questionHTML, answers } = question;
       coreTeamRows.push(
         isContainFormattedAnswer(
           question?.answers[question?.answers.length - 1]
         )
           ? new TableRow({
               children: [
-                getAnswerCell(questionText, '', questionCellWidth50),
+                getAnswerCell(questionHTML, '', questionCellWidth50),
                 getFormattedTextTable(
                   answers[question?.answers.length - 1].formattedAnswer
                 )
@@ -742,7 +755,7 @@ function getProposalTeamsRows(questions) {
             })
           : new TableRow({
               children: [
-                getAnswerCell(questionText, '', questionCellWidth50),
+                getAnswerCell(questionHTML, '', questionCellWidth50),
                 getAnswerCell(getLastAnswer(answers), '', questionCellWidth50)
               ]
             })
@@ -750,18 +763,18 @@ function getProposalTeamsRows(questions) {
     });
 
     otherTeamQuestions.forEach(question => {
-      const { questionText, answers } = question;
+      const { questionHTML, answers } = question;
       otherTeamRows.push(
         isContainFormattedAnswer(answers[answers.length - 1])
           ? new TableRow({
               children: [
-                getAnswerCell(questionText, '', questionCellWidth50),
+                getAnswerCell(questionHTML, '', questionCellWidth50),
                 getFormattedTextTable(answers[answers.length - 1])
               ]
             })
           : new TableRow({
               children: [
-                getAnswerCell(questionText, '', questionCellWidth50),
+                getAnswerCell(questionHTML, '', questionCellWidth50),
                 getAnswerCell(getLastAnswer(answers), '', questionCellWidth50)
               ]
             })
@@ -788,10 +801,10 @@ function getQuestionToCustomerRows(questions) {
 
   if (!questionsToCustomer.length)
     questionsToCustomer = [
-      { questionText: 'Question 1' },
-      { questionText: 'Question 2' },
-      { questionText: 'Question 3' },
-      { questionText: 'Question 4' }
+      { questionHTML: 'Question 1' },
+      { questionHTML: 'Question 2' },
+      { questionHTML: 'Question 3' },
+      { questionHTML: 'Question 4' }
     ];
 
   const qTcRows = [
@@ -802,12 +815,12 @@ function getQuestionToCustomerRows(questions) {
   const qTcParas = [];
   try {
     questionsToCustomer.forEach((question, index) => {
-      const { questionText } = question;
+      const { questionHTML } = question;
       qTcParas.push(
         new Paragraph({
           children: [
             new TextRun({
-              text: questionText,
+              text: questionHTML,
               font: DEFAULT_FONT
             })
           ],

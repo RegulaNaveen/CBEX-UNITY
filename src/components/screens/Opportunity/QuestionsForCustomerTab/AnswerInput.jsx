@@ -2,7 +2,10 @@ import { has, isEmpty, isEqual, isObject } from 'lodash';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setProposalAnswerData } from '../../../../redux/actions/proposal-actions';
-import { getCanUserTagInQuestion } from '../../../../redux/selectors/proposal';
+import {
+  getCanUserTagInQuestion,
+  getfetchAllFlags
+} from '../../../../redux/selectors/proposal';
 import { parseStringifyJson } from '../../../../utils/helpers';
 import CustomApolloRichText from '../../../common/CustomApolloRichText';
 import { getLastAnswer } from '../../Approvals/utils';
@@ -25,6 +28,7 @@ const AnswerInput = ({
     has(lastAnswer, 'formattedAnswer') && lastAnswer.formattedAnswer;
 
   const canUserTagInQuestion = useSelector(getCanUserTagInQuestion);
+  const allFlags = useSelector(getfetchAllFlags);
 
   const parseFormattedData =
     !formattedAnswer || isObject(formattedAnswer)
@@ -79,7 +83,7 @@ const AnswerInput = ({
     isEditable: false,
     disabled: checkDisableFlag() || !question?.questionText,
     canUserTagInQuestion,
-    questionId: question.questionId,
+    allFlags,
 
     onBlur: data => {
       let saveDate = false;

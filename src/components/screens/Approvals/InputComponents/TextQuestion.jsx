@@ -8,7 +8,10 @@ import isEmpty from 'lodash/isEmpty';
 import CustomApolloRichText from '../../../common/CustomApolloRichText';
 import { parseStringifyJson } from '../../../../utils/helpers';
 import { setProposalAnswerData } from '../../../../redux/actions/proposal-actions';
-import { getCanUserTagInQuestion } from '../../../../redux/selectors/proposal';
+import {
+  getCanUserTagInQuestion,
+  getfetchAllFlags
+} from '../../../../redux/selectors/proposal';
 
 // Function to converted Answer String
 const getConvertedAnsString = str =>
@@ -29,6 +32,7 @@ const TextQuestion = ({
     has(lastAnswer, 'formattedAnswer') && lastAnswer.formattedAnswer;
   const { questionLockWrapper, questionUnlockWrapper } = socketContext;
   const canUserTagInQuestion = useSelector(getCanUserTagInQuestion);
+  const allFlags = useSelector(getfetchAllFlags);
 
   const parseFormattedData =
     !formattedAnswer || isObject(formattedAnswer)
@@ -75,6 +79,7 @@ const TextQuestion = ({
     isEditable: false,
     disabled: checkDisableFlag() || disabled,
     canUserTagInQuestion,
+    allFlags,
 
     onBlur: data => {
       let saveDate = false;
