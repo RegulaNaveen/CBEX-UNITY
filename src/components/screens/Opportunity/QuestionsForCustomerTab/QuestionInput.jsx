@@ -11,7 +11,6 @@ import CustomApolloRichText from '../../../common/CustomApolloRichText';
 
 const QuestionInput = ({
   question,
-  userData,
   socketContext,
   checkDisableFlag,
   setShowLoader,

@@ -4,7 +4,7 @@ import Loader from 'apollo-react/components/Loader';
 import Typography from 'apollo-react/components/Typography';
 import React, { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
-// import { SocketContext } from '../../../../context/SocketContext';
+
 import {
   getUserEmail,
   getUserId,
@@ -19,11 +19,10 @@ const QuestionContainer = ({
   questionData,
   questionIndex,
   isCurrentBid,
-  setNewEntry,
   socketContext
 }) => {
   const question = questionData.toJS();
-  // const socketContext = useContext(SocketContext);
+
   const [showLoader, setShowLoader] = useState(false);
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
 

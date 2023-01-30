@@ -32,6 +32,7 @@ function QuestionsForCustomer() {
 
   const [showScroll, setShowScroll] = useState(null);
   const addNewEntryRef = React.createRef();
+  const questionContainerRef = React.createRef();
   const [showAddQuestionLoader, setShowAddQuestionLoader] = useState(false);
 
   const getSectionQuestions = proposalQuestions => {
@@ -62,6 +63,15 @@ function QuestionsForCustomer() {
     if (addNewEntryRef?.current?.offsetTop > 380) setShowScroll(true);
   }, [questionsList]);
 
+  useEffect(() => {
+    if (!showAddQuestionLoader && questionContainerRef?.current) {
+      questionContainerRef.current.scroll({
+        top: questionContainerRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  }, [showAddQuestionLoader]);
+
   const addQuestionHandler = async () => {
     try {
       const proposalId = selectedBid.get('id');
@@ -88,7 +98,6 @@ function QuestionsForCustomer() {
       await dispatch(
         setProposalQuestion(proposalId, questionData, socketContext)
       );
-
       setShowAddQuestionLoader(false);
     } catch (error) {
       console.log('Error Add question: ', error);
@@ -218,6 +227,7 @@ function QuestionsForCustomer() {
                 ? 'questions-container-over'
                 : 'questions-container'
             }
+            ref={questionContainerRef}
           >
             <ul>
               {questions?.valueSeq().map((questionData, index) => {
