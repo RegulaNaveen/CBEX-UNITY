@@ -34,7 +34,6 @@
   "plugins": ["react", "prettier", "flowtype"],
   "rules": {
     "prettier/prettier": [
-      "error",
       {
         "singleQuote": true
       }
