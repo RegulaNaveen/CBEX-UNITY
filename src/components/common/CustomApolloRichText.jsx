@@ -19,8 +19,11 @@ import TagUserList from './TagUserList';
 import { QUESTION_UNLOCK_TIMEOUT } from '../../constants/app';
 import {
   MentionComponentWithEmail,
-  MentionComponentWithName
+  MentionComponentWithName,
+  MentionComponentWithLink
 } from './ApolloRichTextComponents/MentionComponent';
+
+let CAN_DECORATE_LINKS = false;
 
 // CustomApolloRichText Utilities
 
@@ -66,6 +69,27 @@ function getUserTagQueryInfo(editorState) {
   return queryInfo;
 }
 
+function findWithRegex(regex, contentBlock, callback) {
+  const text = contentBlock.getText();
+  let matchArr, start;
+  while ((matchArr = regex.exec(text)) !== null) {
+    start = matchArr.index;
+    callback(start, start + matchArr[0].length);
+  }
+}
+
+/**
+ * DraftJS decorator strategy function to find entities of type 'MENTION'
+ * @param {contentBlock} EditorState
+ * @param {callback} callback
+ * @param {contentState} contentState
+ */
+function handleLinkOpportunityStrategy(contentBlock, callback, contentState) {
+  if (!CAN_DECORATE_LINKS) return;
+  const REGEX = /[A-Z]{3}[0-9]{5}/g;
+  findWithRegex(REGEX, contentBlock, callback);
+}
+
 /**
  * DraftJS decorator strategy function to find entities of type 'MENTION'
  * @param {contentBlock} EditorState
@@ -87,6 +111,10 @@ export const compositeDecorator = new CompositeDecorator([
   {
     strategy: handleUserTagStrategy,
     component: MentionComponentWithName
+  },
+  {
+    strategy: handleLinkOpportunityStrategy,
+    component: MentionComponentWithLink
   }
 ]);
 
@@ -94,6 +122,10 @@ export const compositeDecoratorHidden = new CompositeDecorator([
   {
     strategy: handleUserTagStrategy,
     component: MentionComponentWithEmail
+  },
+  {
+    strategy: handleLinkOpportunityStrategy,
+    component: MentionComponentWithLink
   }
 ]);
 
@@ -112,7 +144,8 @@ const CustomApolloRichText = ({
   className,
   error,
   disabled,
-  canUserTagInQuestion
+  canUserTagInQuestion,
+  allFlags
 }) => {
   // Set initial blocks structure if only string available
   let richtextObject = richTextVal;
@@ -242,6 +275,7 @@ const CustomApolloRichText = ({
     if (isFocused) {
       resetUnlockTimer();
     }
+    CAN_DECORATE_LINKS = allFlags?.canLinkOpportunityNo;
   }, [richTextData, canUserTagInQuestion]);
 
   /**

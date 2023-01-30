@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {
   Document,
   Paragraph,
@@ -37,6 +38,8 @@ export const themeGrey = 'EEEEEE';
 export const DEFAULT_FONT = 'Arial';
 export const PT_SECTION = 'Proposal Team';
 export const QC_SECTION = 'Questions for the Customer';
+export const QC_SECTION_LEFT_PANEL = 'Questions_for_the_Customer_left_panel';
+
 const questionCellWidth50 = {
   size: convertInchesToTwip(3.1),
   type: WidthType.DXA
