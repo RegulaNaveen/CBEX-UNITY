@@ -34,9 +34,10 @@
   "plugins": ["react", "prettier", "flowtype"],
   "rules": {
     "prettier/prettier": [
-      "error",
       {
-        "singleQuote": true
+        "singleQuote": true,
+        "parser": "flow",
+        "usePrettierrc": false
       }
     ],
     "react/jsx-no-bind": [

@@ -15,15 +15,6 @@ const AnswerInput = ({
   setShowLoader,
   questionIndex
 }) => {
-  const property = {
-    question,
-    userData,
-    socketContext,
-    checkDisableFlag,
-    setShowLoader,
-    questionIndex
-  }
-  console.log('property', property);
   const dispatch = useDispatch();
   const quesTextInnerLeftRef = React.createRef();
 

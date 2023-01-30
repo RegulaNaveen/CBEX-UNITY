@@ -40,7 +40,6 @@ function QuestionsForCustomer() {
         section.get('sectionName') === 'Questions_for_the_Customer_left_panel'
       ) {
         const sectionQuestions = section.get('questions');
-        console.log('sectionQuestions', sectionQuestions);
         const filteredCustomQuestion = new OrderedMap(
           Array.from(sectionQuestions).filter(questionItem => {
             if (questionItem[1].get('isCustomQuestion')) {
@@ -63,7 +62,6 @@ function QuestionsForCustomer() {
 
     if (addNewEntryRef?.current?.offsetTop > 380) setShowScroll(true);
   }, [questionsList]);
-  console.log('sections', sections);
 
   const addQuestionHandler = () => {
     let _id = uuidv4();
@@ -221,7 +219,7 @@ function QuestionsForCustomer() {
   const handleClose = () => {
     setShowDeleteModal(prev => !prev);
   };
-  console.log('questions', questions);
+
   return (
     <>
       <div className="questions-for-customer-container" data-testid="question-customer-tab">
