@@ -21,6 +21,7 @@ function QuestionsForCustomer() {
   const socketContext = useContext(SocketContext);
   const { questionLockWrapper, questionUnlockWrapper } = socketContext;
   const questionsList = useSelector(getProposalQuestions);
+  const [autoScroll, setAutoScroll] = useState(false);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [questionToDelete, setQuestionToDelete] = useState(null);
@@ -64,13 +65,14 @@ function QuestionsForCustomer() {
   }, [questionsList]);
 
   useEffect(() => {
-    if (!showAddQuestionLoader && questionContainerRef?.current) {
+    if (autoScroll && questionContainerRef?.current) {
       questionContainerRef.current.scroll({
         top: questionContainerRef.current.scrollHeight,
         behavior: 'smooth'
       });
+      setAutoScroll(false);
     }
-  }, [showAddQuestionLoader]);
+  }, [autoScroll]);
 
   const addQuestionHandler = async () => {
     try {
@@ -99,6 +101,7 @@ function QuestionsForCustomer() {
         setProposalQuestion(proposalId, questionData, socketContext)
       );
       setShowAddQuestionLoader(false);
+      setAutoScroll(true);
     } catch (error) {
       console.log('Error Add question: ', error);
     }
