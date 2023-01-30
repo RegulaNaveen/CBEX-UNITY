@@ -39,26 +39,26 @@ const BidCostDetails = () => {
 
   useEffect(() => {
     let bidValue = '';
-    let budgetTools = '';
     let bottomLine = '';
-    proposalQuestion.forEach(item => {
+    let budgetTools = '';
+
+    proposalQuestion.forEach((item) => {
       if (item?.section?.sectionName === 'Details-For-Backend') {
         if (item?.sfField === 'Total_Bid_Value_Labor_Direct_Discount__c') {
-          item?.answers?.forEach(i => (bidValue = String(i?.answer).trim()));
-        }
-        if (item?.sfField === 'Budget_Tools__c') {
-          item?.answers?.forEach(i => (budgetTools = String(i?.answer).trim()));
+          item?.answers?.forEach((i) => (bidValue = String(i?.answer).trim()));
         }
         if (item?.sfField === 'Bottom_Line_Labor_Discount__c') {
-          item?.answers?.forEach(i => (bottomLine = String(i?.answer).trim()));
+          item?.answers?.forEach(
+            (i) => (bottomLine = String(i?.answer).trim())
+          );
         }
       }
     });
-    setBidCostValue({ bidValue, budgetTools, bottomLine });
+    setBidCostValue({ bidValue, bottomLine, budgetTools });
   }, [proposalQuestion]);
 
   return (
-    <Card className="bid-cost-details-card">
+    <div className="bid-cost-details">
       <div className="bid-cost ">
         <h2 className="bid-cost_title">Bid Cost Details</h2>
         <div className=" bid-cost_details">
@@ -72,7 +72,7 @@ const BidCostDetails = () => {
           })}
         </div>
       </div>
-    </Card>
+    </div>
   );
 };
 export default BidCostDetails;
