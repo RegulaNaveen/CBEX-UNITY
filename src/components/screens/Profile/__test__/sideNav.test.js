@@ -12,7 +12,6 @@ import { BrowserRouter, Router } from 'react-router-dom';
 import { cleanup, fireEvent, render } from '@testing-library/react';
 import { useDispatch, Provider } from 'react-redux';
 import { createMemoryHistory } from 'history';
-import 'regenerator-runtime/runtime';
 import SideNav from '../ProfileLayout/SideNav';
 
 const middlewares = [thunk];

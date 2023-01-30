@@ -12,8 +12,6 @@ import { cleanup, fireEvent } from '@testing-library/react';
 import { useDispatch, Provider } from 'react-redux';
 import createStore from '../../../../store';
 
-import 'regenerator-runtime/runtime';
-
 // import AccountPreference from '../AccountPreferences/AccountPreference';
 // import NotificationPreference from '../AccountPreferences/NotificationPreference';
 // import SideNav from '../ProfileLayout/SideNav';
