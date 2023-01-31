@@ -186,7 +186,7 @@ h3{
 .blueColorText{
     color: #00A3E0;
     font-family:Helvetica;
-    font-size: 8px;
+    font-size: 10px;
 }
   li ul li{
     display: block;
@@ -232,10 +232,11 @@ h3{
       width: 50%;
       text-align: center;
       padding: 5px;
+      border-bottom: 1px solid #000;
   }
   .table-header-cell {
     display: table-cell;
-    padding: 10px;
+    padding: 5px;
     text-align: left;
     vertical-align: middle;
     width: 50%;
