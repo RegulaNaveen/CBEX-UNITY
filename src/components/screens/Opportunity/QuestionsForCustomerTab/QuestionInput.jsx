@@ -1,10 +1,7 @@
 import { isEmpty, isEqual } from 'lodash';
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  editProposalQuestion,
-  setProposalQuestion
-} from '../../../../redux/actions/proposal-actions';
+import { editProposalQuestion } from '../../../../redux/actions/proposal-actions';
 import { getSelectedBid } from '../../../../redux/selectors';
 import {
   getCanUserTagInQuestion,
@@ -14,12 +11,10 @@ import CustomApolloRichText from '../../../common/CustomApolloRichText';
 
 const QuestionInput = ({
   question,
-  userData,
   socketContext,
   checkDisableFlag,
   setShowLoader,
-  questionIndex,
-  setNewEntry
+  questionIndex
 }) => {
   const selectedBid = useSelector(getSelectedBid);
   const dispatch = useDispatch();
@@ -43,35 +38,28 @@ const QuestionInput = ({
   };
 
   const handleRichTextChange = async editorData => {
-    const proposalId = selectedBid.get('id');
-    const section = {
-      sectionOrder: 199,
-      sectionName: 'Questions_for_the_Customer_left_panel'
-    };
-    const answerType = 'text';
-    const roleNames = ['Business Developer'];
-    const { value, html, text, htmlExport } = editorData;
+    try {
+      const proposalId = selectedBid.get('id');
+      const section = {
+        sectionOrder: 199,
+        sectionName: 'Questions_for_the_Customer_left_panel'
+      };
+      const answerType = 'text';
+      const roleNames = ['Business Developer'];
+      const { value, text, htmlExport } = editorData;
 
-    const questionData = {
-      proposalId,
-      questionText: text,
-      questionJSON: value ? JSON.stringify(value) : '',
-      questionHTML: htmlExport,
-      section,
-      answerType,
-      options: [],
-      roleNames
-    };
-    if (question?.isNewEntry) {
-      setShowLoader(true);
-      questionUnlockWrapper(question?.questionId);
-      setNewEntry(null);
-      await dispatch(
-        setProposalQuestion(proposalId, questionData, socketContext)
-      );
+      const questionData = {
+        questionId: question.questionId,
+        proposalId,
+        questionText: text,
+        questionJSON: value ? JSON.stringify(value) : '',
+        questionHTML: htmlExport,
+        section,
+        answerType,
+        options: [],
+        roleNames
+      };
 
-      setShowLoader(false);
-    } else {
       setShowLoader(true);
       await dispatch(
         editProposalQuestion(
@@ -82,6 +70,9 @@ const QuestionInput = ({
         )
       );
       setShowLoader(false);
+      questionUnlockWrapper(question?.questionId);
+    } catch (error) {
+      console.log('Error edit question :', error);
       questionUnlockWrapper(question?.questionId);
     }
   };
@@ -145,8 +136,12 @@ const QuestionInput = ({
 
   return (
     <>
-      <div className="input-wrapper" ref={quesTextInnerLeftRef} data-testid="question-input">
-        <span className="input-label">Q{question?.questionOrder}:</span>
+      <div
+        className="input-wrapper"
+        ref={quesTextInnerLeftRef}
+        data-testid="question-input"
+      >
+        <span className="input-label">Q{questionIndex}:</span>
         <CustomApolloRichText {...richtextProps} />
       </div>
     </>
