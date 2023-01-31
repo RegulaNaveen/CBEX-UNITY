@@ -25,7 +25,7 @@ const BidCostDetails = () => {
     bottomLine: '',
     budgetTools: ''
   });
-
+  console.log('var', bidCostValue);
   const memoizeBid = useMemo(() => selectedBid, [selectedBid?.id]);
 
   useEffect(() => {
@@ -36,6 +36,18 @@ const BidCostDetails = () => {
     bidCostValue?.bottomLine,
     bidCostValue?.budgetTools
   ]);
+
+  const options2 = { currency: 'USD' };
+  const numberFormat2 = new Intl.NumberFormat('en-US', options2);
+
+  const bidVal = numberFormat2.format(bidCostValue?.bidValue);
+  console.log('bidVal', bidVal);
+
+  const options3 = { currency: 'USD' };
+  const numberFormat3 = new Intl.NumberFormat('en-US', options3);
+
+  const bootomLineVal = numberFormat3.format(bidCostValue?.bottomLine);
+  console.log('bottomLine', bootomLineVal);
 
   useEffect(() => {
     let bidValue = '';
@@ -50,6 +62,11 @@ const BidCostDetails = () => {
         if (item?.sfField === 'Bottom_Line_Labor_Discount__c') {
           item?.answers?.forEach(
             (i) => (bottomLine = String(i?.answer).trim())
+          );
+        }
+        if (item?.sfField === 'Budget_Tools__c') {
+          item?.answers?.forEach(
+            (i) => (budgetTools = String(i?.answer).trim())
           );
         }
       }
@@ -67,6 +84,17 @@ const BidCostDetails = () => {
               <div className="bid-cost_details-item" key={key}>
                 <h3>{INITIAL_LIST_TITLE[key]}:</h3>
                 <i>{item === '' || item === '' ? 'N/A' : item || 'N/A'}</i>
+                {/* <i>
+                  {item === '' || item === '' ? (
+                    'N/A'
+                  ) : (
+                    <i> */}
+                {/* <i>USD {bidCostValue.bidValue}</i> */}
+                {/* <i>{bootomLineVal}</i> */}
+                {/* <i>{bidCostValue.budgetTools}</i> */}
+                {/* </i>
+                  )}
+                </i> */}
               </div>
             );
           })}
