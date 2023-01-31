@@ -183,27 +183,32 @@ h3{
 .notesTable tr{
     border-bottom: none;
 }
+.notesTable ul li{
+  display: block;
+  list-style-type: disc !important;
+  padding-inline-start: 5px;
+}
+li ul li{
+  list-style-type: disc;
+  padding-inline-start: 5px;
+}
+ul ul {
+  display: block;
+  list-style-type: disc;
+  padding-inline-start: 5px;
+}
+ul {
+  display: block;
+  list-style-type: disc;
+  padding-inline-start: 5px;
+}
+
 .blueColorText{
     color: #00A3E0;
     font-family:Helvetica;
     font-size: 10px;
 }
-  li ul li{
-    display: block;
-    list-style-type: disc !important;
-  }
-  ul li {
-    display: block;
-    list-style-type: disc !important;
-  }
-  ul ul {
-    
-    display: block;
-    list-style-type: disc !important;
-  }
-  ul {
-    list-style-type: disc !important;
-  }
+ 
 #resp-table {
   width: 493px;
   height: auto;
@@ -264,8 +269,10 @@ h3{
                 font-weight: bold;
             }
             .notes-ol ol {
-              padding-left: 15px;
+              padding-left: 7px;
           }
+         
+          
 
 </style>`;
 }
@@ -297,7 +304,7 @@ function getHeaderInfoRows(details) {
 function getProposalTeamsRows(questions) {
   const coreTeamQuestions = questions
     .filter(
-      question =>
+      (question) =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
         CORE_TEAM[question.questionText]
@@ -305,7 +312,7 @@ function getProposalTeamsRows(questions) {
     .sort((a, b) => a.questionOrder - b.questionOrder);
   const otherTeamQuestions = questions
     .filter(
-      question =>
+      (question) =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
         !CORE_TEAM[question.questionText]
@@ -318,12 +325,12 @@ function getProposalTeamsRows(questions) {
     html += `<div id="resp-table-header"> Core Team Members </div>`;
     html += `<div id="resp-table-header"> Name </div>`;
     html += `</div>`;
-    const getEmailID = str => {
+    const getEmailID = (str) => {
       return String(str).match(
         /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
       );
     };
-    coreTeamQuestions.forEach(question => {
+    coreTeamQuestions.forEach((question) => {
       const { questionText, answers } = question;
       html += `<div class="resp-table-row">`;
       html += `<div class="table-header-cell">${questionText}</div>`;
@@ -357,7 +364,7 @@ function getProposalTeamsRows(questions) {
     html += `<div id="resp-table-header"> Specialty Team Members </div>`;
     html += `<div id="resp-table-header"> Name</div>`;
     html += `</div>`;
-    otherTeamQuestions.forEach(question => {
+    otherTeamQuestions.forEach((question) => {
       const { questionText, answers } = question;
       html += `<div class="resp-table-row">`;
       html += `<div class="table-header-cell">${questionText} </div>`;
@@ -397,7 +404,7 @@ function questionTables(allQuestions, proposalQuestions) {
   let html = ``;
   // Remove not visible questions
   let questions = proposalQuestions
-    .filter(question => {
+    .filter((question) => {
       return (
         shouldInclude(question) &&
         question.section.sectionName !== PT_SECTION &&
@@ -411,7 +418,7 @@ function questionTables(allQuestions, proposalQuestions) {
   const sections = {};
   let ordereredSections = [];
   // Populate the section map
-  questions.forEach(question => {
+  questions.forEach((question) => {
     try {
       let section = question.section.sectionName || '';
       if (section === 'Questions_for_the_Customer_left_panel') {
@@ -428,10 +435,10 @@ function questionTables(allQuestions, proposalQuestions) {
     }
   });
   ordereredSections = ordereredSections.filter(
-    v => v !== 'Questions for the Customer'
+    (v) => v !== 'Questions for the Customer'
   );
   ordereredSections.unshift('Questions for the Customer');
-  ordereredSections.forEach(section => {
+  ordereredSections.forEach((section) => {
     if (section === QC_SECTION) {
       html += `<div id="resp-table" class="questionTable table marginTop20">`;
       html += `<div class="resp-table-row">`;
@@ -440,12 +447,12 @@ function questionTables(allQuestions, proposalQuestions) {
       html += `</div>`;
       let questionsToCustomerLeftSection = allQuestions
         .filter(
-          question =>
+          (question) =>
             shouldInclude(question) &&
             question.section.sectionName === QC_SECTION_LEFT_PANEL
         )
         .sort((a, b) => a.questionOrder - b.questionOrder);
-      questionsToCustomerLeftSection.forEach(question => {
+      questionsToCustomerLeftSection.forEach((question) => {
         const questionHTML = question.questionHTML || question.questionText;
         html += `<div class="resp-table-row">`;
         html += `<div class="table-header-cell"> ${questionHTML} </div>`;
@@ -467,12 +474,12 @@ function questionTables(allQuestions, proposalQuestions) {
       });
       let questionsToCustomerRightSection = allQuestions
         .filter(
-          question =>
+          (question) =>
             shouldInclude(question) &&
             question.section.sectionName === QC_SECTION
         )
         .sort((a, b) => a.questionOrder - b.questionOrder);
-      questionsToCustomerRightSection.forEach(question => {
+      questionsToCustomerRightSection.forEach((question) => {
         const { questionText } = question;
         html += `<div class="resp-table-row">`;
         html += `<div class="table-header-cell"> ${questionText}</div>`;
@@ -501,7 +508,7 @@ function questionTables(allQuestions, proposalQuestions) {
       html += `</div>`;
       sections[section]
         .sort((a, b) => a.questionOrder - b.questionOrder)
-        .forEach(question => {
+        .forEach((question) => {
           const questionHTML = question.questionHTML || question.questionText;
           html += `<div class="resp-table-row">`;
           html += `<div class="table-header-cell"> ${questionHTML}</div>`;
@@ -597,7 +604,7 @@ function getHtml(
 </div></div>${getHeaderInfoRows(proposalDetails)}
          ${getProposalTeamsRows(questions)}
          ${questionTables(questions, filteredQuestions)}
-         ${getNotesRows(notes, editor)}
+         ${filterState.includesNotes ? getNotesRows(notes, editor) : ''}
       </div>   </div></div>    `;
   // this is added to handle , some data having unclosed span tag.
   const SpanExp = new RegExp('([^<])/span>', 'g');
@@ -629,12 +636,12 @@ function getHtml(
   let k = 0;
   let fetchedElementArray = string.split(/(>)/g);
   let foundArray = [];
-  fetchedElementArray.filter(value => {
+  fetchedElementArray.filter((value) => {
     if (value.match(/text-decoration:(.*?)"/g)) {
       foundArray.push(value);
     }
   });
-  foundArray.forEach(item => {
+  foundArray.forEach((item) => {
     const indexFoundArray = fetchedElementArray.indexOf(item);
     for (k; k < 7; k++) {
       if (fetchedElementArray[indexFoundArray + k].match(/[^>](.+?)<\//gi)) {
@@ -671,14 +678,14 @@ function getHtml(
     }
   });
   let appendedString = '';
-  fetchedElementArray.forEach(value => (appendedString += value));
+  fetchedElementArray.forEach((value) => (appendedString += value));
   string = appendedString;
   // const dom = new DOMParser().parseFromString(string, 'text/html');
   // const stringArray = dom.getElementById('pdfbody').outerHTML;
   const stringArray = string.split(/(<\/div>)/g);
   console.log(stringArray, 'asaara');
   let newSize = 0;
-  stringArray.forEach(item => {
+  stringArray.forEach((item) => {
     newSize += getRenderedSize(<div>{item}</div>).height;
     if (newSize > 800) {
       item = item + `<div class="breaking-it"></div>`;
@@ -735,6 +742,7 @@ function getHtml(
     },
     margin: [100, 50, 100, 50]
   });
+  console.log('string', string);
 }
 const MyDoc = (
   proposalDetails,
