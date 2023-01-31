@@ -157,6 +157,7 @@ body {
   font-family: ProximaNova-Regular !important;
   font-size: 10px;
   word-spacing: 1px;
+  letter-spacing: 0.2px;
 }  
 h1{
     font-size: 20px;
@@ -227,6 +228,7 @@ ul {
     font-weight: bold;
     background-color: #00A3E0;
     padding:5px;
+    word-break: break-word;
     }
     #resp-table-header {
       display: table-cell;
@@ -247,12 +249,17 @@ ul {
     width: 50%;
     height: auto;
     border-bottom: 1px solid #000;
-    word-break: break-all;
+    word-break: break-word;
 }
 .table-header-cell:nth-child(odd) {
   background-color: #EEEEEE;
   border-right: 1px solid #000;
 }
+.notesData p {
+  display: block;
+  margin-block-start: 1em;
+    margin-block-end: 1em;
+} 
         #resp-table-body{
           display: table-row-group;
           }
@@ -442,7 +449,7 @@ function questionTables(allQuestions, proposalQuestions) {
     if (section === QC_SECTION) {
       html += `<div id="resp-table" class="questionTable table marginTop20">`;
       html += `<div class="resp-table-row">`;
-      html += `<div id="resp-table-caption"> ${section} </div>`;
+      html += `<div id="resp-table-caption" style="word-spacing: 1px"> ${section}  </div>`;
       html += `<div id="resp-table-caption"></div>`;
       html += `</div>`;
       let questionsToCustomerLeftSection = allQuestions
@@ -503,16 +510,20 @@ function questionTables(allQuestions, proposalQuestions) {
     } else {
       html += `<div id="resp-table" class="questionTable table marginTop20">`;
       html += `<div class="resp-table-row">`;
-      html += `<div id="resp-table-caption"> ${section} </div>`;
+      html += `<div id="resp-table-caption" style="word-spacing: 1px"> ${section} </div>`;
       html += `<div id="resp-table-caption"></div>`;
       html += `</div>`;
       sections[section]
         .sort((a, b) => a.questionOrder - b.questionOrder)
         .forEach((question) => {
-          const questionHTML = question.questionHTML || question.questionText;
+          const questionHTML = question.questionText;
+          const questionType = question?.answerConfiguration?.type;
+
+          const questionTypeValidation =
+            questionType === 'picklist-lookup' ? 'word-spacing:1px' : '';
           html += `<div class="resp-table-row">`;
           html += `<div class="table-header-cell"> ${questionHTML}</div>`;
-          html += `<div class="table-header-cell"> ${formatDate(
+          html += `<div class="table-header-cell" style=${questionTypeValidation}> ${formatDate(
             checkFormattedAnswer(question.answers),
             question.answerConfiguration
           )} <span class="blueColorText">${
@@ -542,7 +553,7 @@ function getNotesRows(notes, editor) {
   html += `</div>`;
   html += `</div>`;
   let data = ``;
-  data += `<div id="resp-table" style="border-bottom: 1px solid #000;"><div class="resp-table-row"><div class="notes-ol" style="padding: 10px;">`;
+  data += `<div id="resp-table" class="notesData" style="border-bottom: 1px solid #000;"><div class="resp-table-row"><div class="notes-ol" style="padding: 10px;">`;
   try {
     const noteText = editor.getJSON();
     try {
