@@ -272,6 +272,7 @@ export const resumeSearchAction = ({
       currentState
     );
     const approvalFilters = currentState.approvals.filters;
+    const allFlags = currentState.proposal.get('eventflag');
     let searchResults = await getSearchResults({
       query: query !== null ? query : '',
       questions,
@@ -280,7 +281,8 @@ export const resumeSearchAction = ({
       notepadData,
       activeTab,
       isQuestionsFilterEnabled,
-      approvalFilters
+      approvalFilters,
+      questionsForCustomersEnabled: allFlags.questionsForCustomerTab
     });
     if (searchResults.count > 0) {
       searchResults.newCurrentResultIndex = 0;
