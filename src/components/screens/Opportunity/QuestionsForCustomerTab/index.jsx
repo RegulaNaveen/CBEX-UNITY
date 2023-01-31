@@ -20,13 +20,8 @@ import { SocketContext } from '../../../../context/SocketContext';
 function QuestionsForCustomer() {
   const socketContext = useContext(SocketContext);
   const { questionLockWrapper, questionUnlockWrapper } = socketContext;
-  const questionsList = useSelector(getProposalQuestions);
   const [autoScroll, setAutoScroll] = useState(false);
 
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [questionToDelete, setQuestionToDelete] = useState(null);
-  const allFlags = useSelector(state => state.proposal.get('eventflag'));
-  const [questions, setQuestions] = useState(new OrderedMap());
   const selectedBid = useSelector(getSelectedBid);
   const isCurrentBid = selectedBid.get('isCurrent');
   const questionsList = useSelector(getProposalQuestions);
@@ -40,7 +35,6 @@ function QuestionsForCustomer() {
 
   const dispatch = useDispatch();
 
-  const [showScroll, setShowScroll] = useState(null);
   const addNewEntryRef = React.createRef();
   const questionContainerRef = React.createRef();
   const [showAddQuestionLoader, setShowAddQuestionLoader] = useState(false);

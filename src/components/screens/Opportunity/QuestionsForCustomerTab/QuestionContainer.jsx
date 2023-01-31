@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Trash from 'apollo-react-icons/Trash';
 import Card from 'apollo-react/components/Card';
 import Loader from 'apollo-react/components/Loader';
 import Typography from 'apollo-react/components/Typography';
-import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import {
