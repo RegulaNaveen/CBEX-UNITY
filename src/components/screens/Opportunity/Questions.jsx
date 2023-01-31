@@ -408,7 +408,7 @@ class Questions extends Component {
 
   onClose = () => {
     const { showModal } = this.state;
-    this.setState({ showModal: false });
+    if (showModal) this.setState({ showModal: false });
     this.trackMatomoEventToggleQModal(!showModal);
   };
 
