@@ -86,7 +86,7 @@ function findWithRegex(regex, contentBlock, callback) {
  */
 function handleLinkOpportunityStrategy(contentBlock, callback, contentState) {
   if (!CAN_DECORATE_LINKS) return;
-  const REGEX = /[A-Z]{3}[0-9]{5}/g;
+  const REGEX = /\b[A-Z]{3}[0-9]{5}\b/g;
   findWithRegex(REGEX, contentBlock, callback);
 }
 

@@ -408,7 +408,7 @@ class Questions extends Component {
 
   onClose = () => {
     const { showModal } = this.state;
-    this.setState({ showModal: false });
+    if (showModal) this.setState({ showModal: false });
     this.trackMatomoEventToggleQModal(!showModal);
   };
 
@@ -558,12 +558,12 @@ class Questions extends Component {
     return (
       <>
         <ViewAboveVerticalTabs>
-          <div className="opportunity-details">
+          <div className="opportunity-details" data-testid="bidhistory-testid">
             <BidHistory />
           </div>
         </ViewAboveVerticalTabs>
 
-        <div id="panelwrapper">
+        <div id="panelwrapper" data-testid="question-panel-testid">
           {/* Question list */}
           <div id="panel-questions-list">
             <div className="tasksList-title-wrapper">
@@ -618,6 +618,7 @@ class Questions extends Component {
                 )}
                 {selectedBid.get('isCurrent') && (
                   <div
+                    data-testid="selectedbid-testid"
                     title="Add New Question"
                     className="tasksList-add-icon-wrapper"
                     role="presentation"
@@ -630,6 +631,7 @@ class Questions extends Component {
                   </div>
                 )}
                 <Button
+                  data-testid="addquestionbtn"
                   variant="secondary"
                   size="small"
                   icon={<Filter fontSize="extraSmall" />}
@@ -661,6 +663,7 @@ class Questions extends Component {
         </div>
         <Suspense fallback={<div>Loading...</div>}>
           <Sidebar
+            data-testid="sidebar-test"
             sections={allSections}
             id={selectedBid.get('id')}
             onAddQuestion={value => {

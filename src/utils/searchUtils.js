@@ -1,4 +1,7 @@
-import { shouldShowQuestion } from '../components/screens/Approvals/utils';
+import {
+  shouldShowQuestion,
+  shouldShowSection
+} from '../components/screens/Approvals/utils';
 import { NOTEPAD_UI_ID } from '../constants/app';
 
 /**
@@ -18,7 +21,8 @@ export async function getSearchResults({
   notepadData,
   activeTab,
   isQuestionsFilterEnabled,
-  approvalFilters
+  approvalFilters,
+  questionsForCustomersEnabled
 }) {
   let finalResult = {
     count: 0,
@@ -41,6 +45,9 @@ export async function getSearchResults({
       sections,
       isQuestionsFilterEnabled
     );
+    if (questionsForCustomersEnabled) {
+      searchInQuestionsForCustomer(finalResult, regexp, sections);
+    }
     searchInNotepad(finalResult, regexp, notepadData);
     searchInApprovals(
       finalResult,
@@ -49,7 +56,7 @@ export async function getSearchResults({
       approvals,
       approvalFilters
     );
-  } else {
+  } else if (activeTab === 1) {
     searchInApprovals(
       finalResult,
       regexp,
@@ -57,12 +64,33 @@ export async function getSearchResults({
       approvals,
       approvalFilters
     );
+    if (questionsForCustomersEnabled) {
+      searchInQuestionsForCustomer(finalResult, regexp, sections);
+    }
     searchInNotepad(finalResult, regexp, notepadData);
     searchInStrategyDevelopment(
       finalResult,
       regexp,
       sections,
       isQuestionsFilterEnabled
+    );
+  } else {
+    if (questionsForCustomersEnabled) {
+      searchInQuestionsForCustomer(finalResult, regexp, sections);
+    }
+    searchInNotepad(finalResult, regexp, notepadData);
+    searchInStrategyDevelopment(
+      finalResult,
+      regexp,
+      sections,
+      isQuestionsFilterEnabled
+    );
+    searchInApprovals(
+      finalResult,
+      regexp,
+      filteredQuestionsMap,
+      approvals,
+      approvalFilters
     );
   }
 
@@ -78,6 +106,9 @@ export function searchInApprovals(
 ) {
   // searching approvals
   approvals.forEach(approval => {
+    if (!shouldShowSection(approval.ApprovalSectionId)) {
+      return;
+    }
     // searching in approvalTitle
     if (approval.ApprovalSectionTitle) {
       updateSearchMatches(
@@ -302,6 +333,11 @@ export function searchInStrategyDevelopment(
       (key1, key2) =>
         sections[key1]['sectionOrder'] - sections[key2]['sectionOrder']
     )
+    .filter(
+      section =>
+        sections[section].sectionName !==
+        'Questions_for_the_Customer_left_panel'
+    )
     .forEach(sectionKey => {
       const section = sections[sectionKey];
       const questions = section['questions'];
@@ -411,6 +447,64 @@ export function searchInNotepad(finalResult, regexp, notepadData) {
       1 // vertical tab index of Notepad
     );
   }
+}
+
+export function searchInQuestionsForCustomer(finalResult, regexp, sections) {
+  Object.keys(sections)
+    .filter(
+      section =>
+        sections[section].sectionName ===
+        'Questions_for_the_Customer_left_panel'
+    )
+    .forEach(sectionKey => {
+      const section = sections[sectionKey];
+      const questions = section['questions'];
+
+      if (Object.keys(questions).length > 0) {
+        // searching questions
+        Object.keys(questions).forEach(questionKey => {
+          const question = questions[questionKey];
+          // searching in questionText
+          if (question['questionText']) {
+            updateSearchMatches(
+              regexp,
+              question['questionText'],
+              questionKey,
+              finalResult,
+              null,
+              0
+            );
+          }
+          // searching in answer
+          if (Array.isArray(question.answers) && question.answers.length > 0) {
+            let recentAnswer =
+              question.answers[question.answers.length - 1].answer;
+            // if multiple answer
+            if (Array.isArray(recentAnswer)) {
+              recentAnswer.forEach(answerChunk => {
+                updateSearchMatches(
+                  regexp,
+                  answerChunk,
+                  questionKey,
+                  finalResult,
+                  null,
+                  0
+                );
+              });
+            } else if (typeof recentAnswer === 'string') {
+              updateSearchMatches(
+                regexp,
+                recentAnswer,
+                questionKey,
+                finalResult,
+                null,
+                0
+              );
+            }
+          }
+        });
+      }
+    });
 }
 
 export function updateSearchMatches(

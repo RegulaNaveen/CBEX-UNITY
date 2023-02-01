@@ -137,7 +137,9 @@ export const updateFilters = (name, value) => {
       type: APPROVALS.UPDATE_FILTERS,
       payload: { name, value }
     });
-    dispatch(doSearchAction());
+    if (searchQuery !== null && searchQuery.length >= 3) {
+      dispatch(doSearchAction());
+    }
   };
 };
 

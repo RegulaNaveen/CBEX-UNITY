@@ -130,7 +130,7 @@ const AnswerInput = ({
   return (
     <>
       <div className="input-wrapper " ref={quesTextInnerLeftRef}>
-        <span className="input-label">A{question?.questionOrder}:</span>
+        <span className="input-label">A{questionIndex}:</span>
         <CustomApolloRichText {...richtextProps} />
       </div>
     </>

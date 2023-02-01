@@ -1,10 +1,17 @@
+import React, { useState, useRef, useEffect } from 'react';
 import Trash from 'apollo-react-icons/Trash';
 import Card from 'apollo-react/components/Card';
 import Loader from 'apollo-react/components/Loader';
 import Typography from 'apollo-react/components/Typography';
-import React, { useContext, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { SocketContext } from '../../../../context/SocketContext';
+import classNames from 'classnames';
+import { useSelector, useDispatch } from 'react-redux';
+
+import {
+  selectAutoNavigatedToCurrentResult,
+  selectCurrentSearchResult,
+  selectPrevSearchResult,
+  selectQuery
+} from '../../../../redux/selectors/search';
 import {
   getUserEmail,
   getUserId,
@@ -13,18 +20,28 @@ import {
 
 import AnswerInput from './AnswerInput';
 import QuestionInput from './QuestionInput';
+import { autoNavigationCompletedAction } from '../../../../redux/actions/search-actions';
 
 const QuestionContainer = ({
   deleteQuestionHandler,
   questionData,
   questionIndex,
   isCurrentBid,
-  setNewEntry
+  socketContext
 }) => {
   const question = questionData.toJS();
-  const socketContext = useContext(SocketContext);
+
   const [showLoader, setShowLoader] = useState(false);
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
+  const searchQuery = useSelector(selectQuery);
+  const currentSearchResult = useSelector(selectCurrentSearchResult);
+  const autoNavigatedToCurrentResult = useSelector(
+    selectAutoNavigatedToCurrentResult
+  );
+  const prevSearchResult = useSelector(selectPrevSearchResult);
+  const dispatch = useDispatch();
+
+  const questionContainerRef = useRef(null);
 
   const getUserData = () => ({
     name: getUserName(),
@@ -60,15 +77,48 @@ const QuestionContainer = ({
     socketContext,
     checkDisableFlag,
     setShowLoader,
-    questionIndex,
-    setNewEntry
+    questionIndex
   };
+
+  useEffect(() => {
+    if (
+      currentSearchResult !== null &&
+      questionContainerRef.current !== null &&
+      !autoNavigatedToCurrentResult
+    ) {
+      if (currentSearchResult.searchIndex === question.questionId) {
+        // allow others to collapse before scrollIntoView
+        setTimeout(() => {
+          questionContainerRef.current.scrollIntoView({
+            behaviour: 'smooth',
+            block: 'center',
+            inline: 'nearest'
+          });
+          dispatch(autoNavigationCompletedAction());
+        }, 500);
+      }
+    }
+  }, [
+    questionContainerRef,
+    searchQuery,
+    currentSearchResult,
+    prevSearchResult,
+    autoNavigatedToCurrentResult
+  ]);
 
   return (
     <>
       <li className="">
-        <Card className="question-container">
-          <div>
+        <Card
+          className={classNames({
+            'question-container': true,
+            'search-highlight':
+              currentSearchResult !== null &&
+              currentSearchResult.searchIndex === question.questionId
+          })}
+          data-testid="question-container"
+        >
+          <div ref={questionContainerRef}>
             {isQuestionLockedByOther() ? (
               <Typography variant="subtitle1" className="status-txt">
                 {question?.questionLockInfo?.userName} is typing...

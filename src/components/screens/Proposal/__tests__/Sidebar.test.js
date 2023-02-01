@@ -46,7 +46,7 @@ let initalstate = {
 };
 const store = mockStore(initalstate);
 
-describe.skip('Sidebar component', () => {
+describe('Sidebar component', () => {
   beforeAll(() => {
     render(
       <Provider store={store}>
@@ -57,7 +57,7 @@ describe.skip('Sidebar component', () => {
     );
   });
 
-  test.only('Sidebar section Load', async () => {
+  test('Sidebar section Load', async () => {
     const { container } = await render(
       <Provider store={store}>
         <Router>
