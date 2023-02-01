@@ -136,7 +136,11 @@ const QuestionInput = ({
 
   return (
     <>
-      <div className="input-wrapper" ref={quesTextInnerLeftRef}>
+      <div
+        className="input-wrapper"
+        ref={quesTextInnerLeftRef}
+        data-testid="question-input"
+      >
         <span className="input-label">Q{questionIndex}:</span>
         <CustomApolloRichText {...richtextProps} />
       </div>

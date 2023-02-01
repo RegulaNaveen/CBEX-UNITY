@@ -499,7 +499,6 @@ function questionTables(allQuestions, proposalQuestions) {
       sections[section]
         .sort((a, b) => a.questionOrder - b.questionOrder)
         .forEach(question => {
-          console.log(question, 'question');
           const questionHTML = question.questionHTML || question.questionText;
           const extraNewLines = getExtraLines(
             getLastAnswerHtml(question.answers),
@@ -651,7 +650,6 @@ function getHtml(
       }
     });
   });
-  console.log(string, 'stafhafal');
   const pdfa = new jsPDF({
     compress: true,
     orientation: 'p',

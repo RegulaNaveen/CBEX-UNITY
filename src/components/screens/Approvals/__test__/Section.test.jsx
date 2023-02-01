@@ -27,7 +27,6 @@ describe('Approval Section Component', () => {
         </ApprovalContext.Provider>
       </Provider>
     );
-    // console.log(wrapper.debug());
   });
 
   it('should component render', () => {

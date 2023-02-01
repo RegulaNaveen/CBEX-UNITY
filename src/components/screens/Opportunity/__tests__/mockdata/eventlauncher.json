@@ -1,37 +1,15 @@
 {
-  "isGettingBoxId": false,
-  "boxId": "186605979335",
-  "bids": [
-    {
-      "proposalId": "86462966-7e94-4648-b1e7-fb908f48eaf0",
-      "bidNo": 1
-    }
-  ],
-  "selectedBid": {
-    "questionTemplateVersionNumber": "v2023.12",
-    "agreementId": "aM701000000CbmBCAS",
-    "accountId": "0010100000K3Y1WAAV",
-    "bidName": "Bid 1",
-    "opportunityType": "Opportunity Launch Call (Pilot)",
-    "opportunityId": "0060100000BAJ0tAAH",
-    "isCurrent": true,
-    "bidStatus": false,
-    "pertinentDetails": "Testing",
-    "isApprovalCountPresent": true,
-    "id": "86462966-7e94-4648-b1e7-fb908f48eaf0"
-  },
-  "boxLinks": {
-    "data": [
+  "ssoAuth": {
+    "isAuthenticated": true,
+    "email": "rahul.tiwari@iqvia.com",
+    "name": "RAHUL TIWARI",
+    "role": "Medic - Core",
+    "lookupUsers": [
       {
-        "linkdesc": "Budget Templates",
-        "link": "https://quintiles.app.box.com/folder/2184390931?s=kp3fdefe5cy1jecit3pm"
-      },
-      {
-        "linkdesc": "Client-Specific Reference Documents",
-        "link": "https://quintiles.app.box.com/folder/2295477981?s=89cfwk8ojjo3ywcp2njl"
+        "name": "Juan Cruz",
+        "email": "juanc@rockitdata.com"
       }
-    ],
-    "oppfolderID": "UZA89103"
+    ]
   },
   "proposalDetail": {
     "Customer": "Test_V",
@@ -44,14 +22,65 @@
     "Therapeutic area": "Cardiology",
     "Protocol number": "12345678",
     "Product name": "32456789",
-    "BoxId": "186605979335",
+    "BoxId": "",
     "IsFsp": "No",
     "pertinentDetails": "Testing",
     "opportunityId": "0060100000BAJ0tAAH",
     "bidNo": 1
   },
+  "questionData": {
+    "isCustomQuestion": false,
+    "questionId": "997768e2-37b7-4a17-b74c-500a85f4e830",
+    "section": {
+      "sectionOrder": 12,
+      "sectionName": "Key Milestones & Deliverable Timelines"
+    },
+    "active": true,
+    "sfField": "n/a",
+    "questionOrder": 2,
+    "questionApproval": false,
+    "locked": false,
+    "opportunityType": "Core Strategy Call Template - AMR/EMEA,Opportunity Launch Call (Pilot),Core Strategy Call Template - APAC,Default Type,Core Strategy and Data Planning Calls - AMR/EMEA",
+    "proposalId": "86462966-7e94-4648-b1e7-fb908f48eaf0",
+    "questionJSON": "{\"blocks\":[{\"key\":\"yczuv\",\"text\":\"Questions for Customer due\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+    "milestone": "Overview",
+    "milestoneNew": [
+      {
+        "Name": "Overview",
+        "Color": "#015ff1"
+      }
+    ],
+    "hasDifferentSFanswer": false,
+    "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"9g9ls\" data-offset-key=\"yczuv-0-0\"><div data-offset-key=\"yczuv-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"yczuv-0-0\"><span data-text=\"true\">Questions for Customer due</span></span></div></div></div>",
+    "roleNames": ["Proposal Developer"],
+    "visible": true,
+    "notApplicable": false,
+    "sfObject": "n/a",
+    "questionText": "Questions for Customer due",
+    "integration": "",
+    "answers": [
+      {
+        "user": "UnityPredictedAnswer",
+        "userName": "UnityPredictedAnswer",
+        "userRole": "UnityPredictedAnswer",
+        "date": "2023-01-13T09:12:40.978Z",
+        "answer": "20-Dec-2022",
+        "formattedAnswer": "",
+        "proposalId": "86462966-7e94-4648-b1e7-fb908f48eaf0",
+        "updatedInPG": false
+      }
+    ],
+    "questionHintJSON": "",
+    "questionHintHTML": "",
+    "answerConfiguration": {
+      "type": "date",
+      "options": []
+    },
+    "events": "{\"EventSubject\":\"test\",\"EventBody\":\"test\",\"EventPrimaryCondition\":\"Bid History Creation\",\"ModifiedAt\":\"2022-12-19T08:56:52.573Z\",\"EventRoles\":[\"Business Developer\"],\"EntityType\":\"Events\",\"ModifiedBy\":\"Kiahna Hamilton\",\"EventUnitType\":\"Business Days\",\"EventQuestionId\":\"997768e2-37b7-4a17-b74c-500a85f4e830\",\"SK\":\"EVENTS#88d95494-2a04-4d43-908f-4d27f52725ee\",\"EventId\":\"88d95494-2a04-4d43-908f-4d27f52725ee\",\"EventNoOfUnits\":2,\"PK\":\"EVENTS#88d95494-2a04-4d43-908f-4d27f52725ee\",\"EventOperator\":\"addition\",\"CreatedAt\":\"2022-12-19T08:56:52.573Z\",\"questionId\":\"997768e2-37b7-4a17-b74c-500a85f4e830\"}",
+    "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer",
+    "businessRule": "{\"conditions\":[{\"operator\":\"Or\",\"condition\":[{\"fieldName\":\"CONDITION_TRUE\",\"fieldValue\":\"CONDITION_TRUE\",\"answerRelationship\":\"Or\",\"Operator\":\"Equal\"}],\"action\":[{\"fieldName\":\"997768e2-37b7-4a17-b74c-500a85f4e830\",\"action\":\"CalculeteEventDate\",\"operator\":\"addition\",\"numberOfUnits\":2}]}]}"
+  },
   "proposal": {
-    "boxId": "186605979335",
     "isProposalLoading": false,
     "boxBids": [
       {
@@ -759,6 +788,7 @@
         "logic": "OR"
       }
     },
+    "boxId": "",
     "eventflag": {
       "answerUserTagFlag": true,
       "approvalSendMailFlag": true,
@@ -803,19 +833,7 @@
       "xAdmin"
     ],
     "isGettingBoxId": false,
-    "boxAdditionalLink": {
-      "data": [
-        {
-          "linkdesc": "Budget Templates",
-          "link": "https://quintiles.app.box.com/folder/2184390931?s=kp3fdefe5cy1jecit3pm"
-        },
-        {
-          "linkdesc": "Client-Specific Reference Documents",
-          "link": "https://quintiles.app.box.com/folder/2295477981?s=89cfwk8ojjo3ywcp2njl"
-        }
-      ],
-      "oppfolderID": "UZA89103"
-    },
+    "boxAdditionalLink": {},
     "priceModeler": {
       "cost": "0",
       "therapeutic": "Cardiology",
@@ -839,7 +857,7 @@
       "Therapeutic area": "Cardiology",
       "Protocol number": "12345678",
       "Product name": "32456789",
-      "BoxId": "186605979335",
+      "BoxId": "",
       "IsFsp": "No",
       "pertinentDetails": "Testing",
       "opportunityId": "0060100000BAJ0tAAH",
@@ -14227,7 +14245,7 @@
             "Therapeutic area": "Cardiology",
             "Protocol number": "12345678",
             "Product name": "32456789",
-            "BoxId": "186605979335",
+            "BoxId": "",
             "IsFsp": "No",
             "pertinentDetails": "Testing",
             "opportunityId": "0060100000BAJ0tAAH",
