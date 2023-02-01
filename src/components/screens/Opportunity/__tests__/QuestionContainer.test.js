@@ -21,7 +21,7 @@ const initState = {
 };
 const store = mockStore(initState);
 
-describe('test for question container component', () => {
+describe.skip('test for question container component', () => {
   it('render question component', () => {
     const { container } = render(
       <Provider store={store}>

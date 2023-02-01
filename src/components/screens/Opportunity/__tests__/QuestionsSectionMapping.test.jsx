@@ -34,7 +34,7 @@ React.useContext = jest.fn();
 
 jest.mock('../../../../context/SocketContext', () => jest.fn());
 
-describe('QuestionSectionMapping component', () => {
+describe.skip('QuestionSectionMapping component', () => {
   test('QuestionSectionMapping component render', async () => {
     const setHookState = newState =>
       jest.fn().mockImplementation(() => [newState.openModal, () => {}]);

@@ -17,7 +17,7 @@ module.exports = {
     'src/components/screens/Proposal/__tests__/Sidebar.test.js',
     'src/components/screens/Approvals/__test__/Section.test.jsx',
     'src/components/screens/Opportunity/__tests__/QuestionsSectionMapping.test.jsx',
-    'src/components/screens/Opportunity/__tests__/indexQCT.test.js',
+    'src/components/screens/Opportunity/__tests__/questioncustomer.test.jsx',
     'src/components/screens/Opportunity/__tests__/QuestionContainer.test.js'
   ],
   collectCoverageFrom: ['**/*.{js,jsx}', '!**/node_modules/**', '!**/dist/**'],
