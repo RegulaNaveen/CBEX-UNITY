@@ -45,8 +45,9 @@ export async function getSearchResults({
       sections,
       isQuestionsFilterEnabled
     );
-    questionsForCustomersEnabled &&
+    if (questionsForCustomersEnabled) {
       searchInQuestionsForCustomer(finalResult, regexp, sections);
+    }
     searchInNotepad(finalResult, regexp, notepadData);
     searchInApprovals(
       finalResult,
@@ -55,7 +56,7 @@ export async function getSearchResults({
       approvals,
       approvalFilters
     );
-  } else {
+  } else if (activeTab === 1) {
     searchInApprovals(
       finalResult,
       regexp,
@@ -63,14 +64,33 @@ export async function getSearchResults({
       approvals,
       approvalFilters
     );
-    questionsForCustomersEnabled &&
+    if (questionsForCustomersEnabled) {
       searchInQuestionsForCustomer(finalResult, regexp, sections);
+    }
     searchInNotepad(finalResult, regexp, notepadData);
     searchInStrategyDevelopment(
       finalResult,
       regexp,
       sections,
       isQuestionsFilterEnabled
+    );
+  } else {
+    if (questionsForCustomersEnabled) {
+      searchInQuestionsForCustomer(finalResult, regexp, sections);
+    }
+    searchInNotepad(finalResult, regexp, notepadData);
+    searchInStrategyDevelopment(
+      finalResult,
+      regexp,
+      sections,
+      isQuestionsFilterEnabled
+    );
+    searchInApprovals(
+      finalResult,
+      regexp,
+      filteredQuestionsMap,
+      approvals,
+      approvalFilters
     );
   }
 
@@ -314,7 +334,9 @@ export function searchInStrategyDevelopment(
         sections[key1]['sectionOrder'] - sections[key2]['sectionOrder']
     )
     .filter(
-      section => section.sectionName !== 'Questions_for_the_Customer_left_panel'
+      section =>
+        sections[section].sectionName !==
+        'Questions_for_the_Customer_left_panel'
     )
     .forEach(sectionKey => {
       const section = sections[sectionKey];
@@ -430,7 +452,9 @@ export function searchInNotepad(finalResult, regexp, notepadData) {
 export function searchInQuestionsForCustomer(finalResult, regexp, sections) {
   Object.keys(sections)
     .filter(
-      section => section.sectionName === 'Questions_for_the_Customer_left_panel'
+      section =>
+        sections[section].sectionName ===
+        'Questions_for_the_Customer_left_panel'
     )
     .forEach(sectionKey => {
       const section = sections[sectionKey];

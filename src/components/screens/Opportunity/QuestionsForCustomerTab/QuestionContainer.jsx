@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Trash from 'apollo-react-icons/Trash';
 import Card from 'apollo-react/components/Card';
 import Loader from 'apollo-react/components/Loader';
 import Typography from 'apollo-react/components/Typography';
-import React, { useContext, useState, useRef, useEffect } from 'react';
 import classNames from 'classnames';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import {
   selectAutoNavigatedToCurrentResult,
@@ -40,6 +39,7 @@ const QuestionContainer = ({
     selectAutoNavigatedToCurrentResult
   );
   const prevSearchResult = useSelector(selectPrevSearchResult);
+  const dispatch = useDispatch();
 
   const questionContainerRef = useRef(null);
 
