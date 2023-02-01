@@ -181,27 +181,29 @@ h3{
 .marginTop30 {
     margin-top:30px
 }
+.underline-fix{
+  border-bottom: 1px solid black;
+}
 .notesTable tr{
     border-bottom: none;
 }
 .notesTable ul li{
   display: block;
   list-style-type: disc !important;
-  padding-inline-start: 5px;
 }
 li ul li{
   list-style-type: disc;
-  padding-inline-start: 5px;
+}
+ol.public-DraftStyleDefault-ol {
+  list-style-type: decimal;
 }
 ul ul {
   display: block;
   list-style-type: disc;
-  padding-inline-start: 5px;
 }
 ul {
   display: block;
   list-style-type: disc;
-  padding-inline-start: 5px;
 }
 
 .blueColorText{
@@ -210,6 +212,14 @@ ul {
     font-size: 10px;
 }
  
+.public-DraftStyleDefault-depth1.public-DraftStyleDefault-listLTR {
+  list-style-type: disc;
+}
+.public-DraftStyleDefault-depth2.public-DraftStyleDefault-listLTR {
+  list-style-type: disc;
+}
+
+
 #resp-table {
   width: 493px;
   height: auto;
@@ -218,7 +228,11 @@ ul {
   border-bottom: 0px;
   }
   .breaking-it {
-    padding-top: 130px;
+    padding: 20px;
+    text-align: left;
+    vertical-align: middle;
+    width: 50%;
+    height: auto;
   }
   #resp-table-caption{
     display: table-cell;
@@ -260,6 +274,11 @@ ul {
   margin-block-start: 1em;
     margin-block-end: 1em;
 } 
+ul {
+  display: block;
+  list-style-type: disc;
+  padding-inline-start: 7px;
+}
         #resp-table-body{
           display: table-row-group;
           }
@@ -314,7 +333,7 @@ function getProposalTeamsRows(questions) {
       question =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
-        CORE_TEAM[question.questionText]
+        question.questionId === 'Proposal Team-P0C'
     )
     .sort((a, b) => a.questionOrder - b.questionOrder);
   const otherTeamQuestions = questions
@@ -388,7 +407,7 @@ function getProposalTeamsRows(questions) {
           tempEmailOther
         ).toUpperCase()} data-label=${String(
           nameOther
-        ).toUpperCase()}>${nameOther}<p style="opacity: 0.0; padding-left">${tempEmailOther}</p></span> 
+        ).toUpperCase()}>${tempEmailOther}<p style="opacity: 0.0; padding-left"></p></span> 
         </p>`;
       }
       html += `<div class="table-header-cell">${otherTeamQuestionsemailLink}</div>`;
@@ -665,7 +684,7 @@ function getHtml(
             'underline'
           )
         ) {
-          extractStyles = `<s><u>${splitText[0]}</u></s><${splitText[1]}`;
+          extractStyles = `<span class="underline-fix"><s>${splitText[0]}</s></span><${splitText[1]}`;
           fetchedElementArray[indexFoundArray + k] = extractStyles;
           return fetchedElementArray;
         } else if (
@@ -694,17 +713,22 @@ function getHtml(
   // const dom = new DOMParser().parseFromString(string, 'text/html');
   // const stringArray = dom.getElementById('pdfbody').outerHTML;
   const stringArray = string.split(/(<\/div>)/g);
-  console.log(stringArray, 'asaara');
   let newSize = 0;
-  stringArray.forEach(item => {
+  stringArray.forEach((item, i) => {
     newSize += getRenderedSize(<div>{item}</div>).height;
-    if (newSize > 800) {
-      item = item + `<div class="breaking-it"></div>`;
-      console.log(item, 'itm');
+    console.log(newSize, item, 'nsize, item');
+    if (newSize > 1122 && item.match('resp-table-row')) {
+      const paddingOnTop = 1122 - newSize;
+      stringArray[i - 1] = `${
+        stringArray[i - 1]
+      } <div class="resp-table-row"><div class="breaking-it" style="padding-top: ${paddingOnTop}"></div><div class="breaking-it" style="padding-top: ${paddingOnTop}"></div></div>`;
       newSize = 0;
     }
   });
-  console.log(newSize, 'newSize');
+
+  let puttingTogether = '';
+  stringArray.forEach(value => (puttingTogether += value));
+  string = puttingTogether;
   const pdfa = new jsPDF('p', 'pt', 'a4');
   pdfa.html(string, {
     callback(pdfa2) {
