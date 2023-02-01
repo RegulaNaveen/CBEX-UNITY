@@ -11,7 +11,6 @@ module.exports = {
     '/dist',
     'src/components/screens/Approvals/__test__/index.test.js',
     'src/components/views/modals/__test__/AnswerHistory.test.js',
-    'src/components/screens/Approvals/__test__/Approvals.test.jsx',
     'src/context/__tests__/SocketContext.test.jsx',
     'src/components/screens/Approvals/__test__/utils.test.js',
     'src/components/screens/Proposal/__tests__/Sidebar.test.js',
