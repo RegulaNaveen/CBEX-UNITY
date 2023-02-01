@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 /* eslint-disable no-unused-vars */
 /* eslint-disable func-names */
 /* eslint-disable no-unused-expressions */
@@ -24,6 +25,7 @@ import Html from 'react-pdf-html';
 import jsPDF from 'jspdf';
 import { isString } from 'lodash';
 import moment from 'moment';
+import html2pdf from 'html2pdf.js';
 import { generateHTML } from '@tiptap/core';
 import Link from '@tiptap/extension-link';
 import HighLight from '@tiptap/extension-highlight';
@@ -348,11 +350,12 @@ function getProposalTeamsRows(questions) {
           coreTeamQuestionsAnswer.indexOf('(')
         );
         let tempEmail = String(coreTeamQuestionsEmail[0]).trim();
-        emailLink = `<p><span data-type="mention" style="color:blue;" data-id="${String(
-          tempEmail
-        ).toUpperCase()}" data-label="${String(
-          name
-        ).toUpperCase()}">${tempEmail}</span></p>`;
+        // emailLink = `<p><span data-type="mention" style="color:blue;" data-id="${String(
+        //   tempEmail
+        // ).toUpperCase()}" data-label="${String(
+        //   name
+        // ).toUpperCase()}">${tempEmail}</span></p>`;
+        emailLink = `<a href="mailto:${tempEmail}">${name}</a>`;
       }
       html += `<div class="table-header-cell">${emailLink}</div>`;
       html += `</div>`;
@@ -377,12 +380,13 @@ function getProposalTeamsRows(questions) {
           otherTeamQuestionsAnswer.indexOf('(')
         );
         let tempEmailOther = String(otherTeamQuestionsAnswerEmail[0]).trim();
-        otherTeamQuestionsemailLink = `<p><span data-type="mention" style="color:blue" data-id=${String(
-          tempEmailOther
-        ).toUpperCase()} data-label=${String(
-          nameOther
-        ).toUpperCase()}>${tempEmailOther}</span> 
-        <br/><br/></p>`;
+        // otherTeamQuestionsemailLink = `<p><span data-type="mention" style="color:blue" data-id=${String(
+        //   tempEmailOther
+        // ).toUpperCase()} data-label=${String(
+        //   nameOther
+        // ).toUpperCase()}>${tempEmailOther}</span>
+        // <br/><br/></p>`;
+        otherTeamQuestionsemailLink = `<a href="mailto:${tempEmailOther}">${nameOther}</a>`;
       }
       html += `<div class="table-header-cell">${otherTeamQuestionsemailLink}</div>`;
       html += `</div>`;
@@ -650,61 +654,66 @@ function getHtml(
       }
     });
   });
-  const pdfa = new jsPDF({
-    compress: true,
-    orientation: 'p',
-    unit: 'pt',
-    format: 'a4'
-  });
-
+  // console.log('string :>> ', string);
+  const opt = {
+    // margin: 1,
+    filename: fileName,
+    enableLinks: true,
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'pt', format: 'a4', orientation: 'p', compress: true }
+  };
+  html2pdf()
+    .set(opt)
+    .from(string)
+    .save();
   // pdfa.setFont('ProximaNova-Regular');
-  pdfa.setFontSize(12);
-  pdfa.html(string, {
-    callback(pdfa2) {
-      const pageCount = pdfa2.internal.getNumberOfPages();
-      for (let i = 0; i <= pageCount; i += 1) {
-        pdfa2.setPage(i);
-        pdfa2.addImage(image, 'PNG', 400, 20, 143, 60);
-        pdfa2.addImage(Border, 'PNG', 50, 80, 500, 0);
-        pdfa2.setTextColor(0, 163, 224);
-        pdfa.setFontSize(8);
-        pdfa2.text(
-          '† Unity has provided this answer but not validated by user on proposal team.',
-          50,
-          782,
-          { align: 'left' }
-        );
-        pdfa2.addImage(FooterHead, 'PNG', 50, 785, 500, 0);
-        pdfa2.setTextColor(153, 153, 153);
-        pdfa2.setFontSize(8);
-        pdfa2.text(`Exported from Unity on ${dateNow()}`, 50, 800, {
-          align: 'left'
-        });
-        pdfa2.text(`by ${userName}`, 50, 810, {
-          align: 'left'
-        });
-        pdfa2.text(`View up-to-date Unity record here:`, 550, 800, {
-          align: 'right'
-        });
-        pdfa2.text(`${getUnityLink(proposalDetails)}`, 550, 810, {
-          align: 'right'
-        });
-        pdfa2.text(
-          ` Copyright © ${yearNow} IQVIA. All Rights Reserved. Confidential and Proprietary.`,
-          550,
-          820,
-          {
-            align: 'right'
-          }
-        );
-        pdfa2.text(` ${i}`, 270, 830, {
-          align: 'center'
-        });
-      }
-      pdfa2.save(fileName);
-    },
-    margin: [90, 50, 90, 50]
-  });
+  // pdfa.setFontSize(12);
+  // pdfa.html(string, {
+  //   callback(pdfa2) {
+  //     const pageCount = pdfa2.internal.getNumberOfPages();
+  //     for (let i = 0; i <= pageCount; i += 1) {
+  //       pdfa2.setPage(i);
+  //       pdfa2.addImage(image, 'PNG', 400, 20, 143, 60);
+  //       pdfa2.addImage(Border, 'PNG', 50, 80, 500, 0);
+  //       pdfa2.setTextColor(0, 163, 224);
+  //       pdfa.setFontSize(8);
+  //       pdfa2.text(
+  //         '† Unity has provided this answer but not validated by user on proposal team.',
+  //         50,
+  //         782,
+  //         { align: 'left' }
+  //       );
+  //       pdfa2.addImage(FooterHead, 'PNG', 50, 785, 500, 0);
+  //       pdfa2.setTextColor(153, 153, 153);
+  //       pdfa2.setFontSize(8);
+  //       pdfa2.text(`Exported from Unity on ${dateNow()}`, 50, 800, {
+  //         align: 'left'
+  //       });
+  //       pdfa2.text(`by ${userName}`, 50, 810, {
+  //         align: 'left'
+  //       });
+  //       pdfa2.text(`View up-to-date Unity record here:`, 550, 800, {
+  //         align: 'right'
+  //       });
+  //       pdfa2.text(`${getUnityLink(proposalDetails)}`, 550, 810, {
+  //         align: 'right'
+  //       });
+  //       pdfa2.text(
+  //         ` Copyright © ${yearNow} IQVIA. All Rights Reserved. Confidential and Proprietary.`,
+  //         550,
+  //         820,
+  //         {
+  //           align: 'right'
+  //         }
+  //       );
+  //       pdfa2.text(` ${i}`, 270, 830, {
+  //         align: 'center'
+  //       });
+  //     }
+  //     pdfa2.save(fileName);
+  //   },
+  //   margin: [90, 50, 90, 50]
+  // });
 }
 const MyDoc = (
   proposalDetails,
