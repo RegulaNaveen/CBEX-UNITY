@@ -312,14 +312,7 @@ function getHeaderInfoRows(details) {
       html += `<div class="resp-table-row">`;
       html += `<div class="table-header-cell">${headFields[key]}</div>`;
       html += `<div class="table-header-cell">${value.toString()}</div>`;
-      // html += `<div class="table-header-cell"></div>`;
       html += `</div>`;
-      // size += getRenderedSize(<div>{html}</div>).height;
-      // if (size > 1050) {
-      //   size = 0;
-      //   html += `<div class="breaking-it"></div>`;
-      // }
-      // console.log(size, 'sze');
     }
   } catch (error) {
     console.log('Error in getHeaderInfoRows');
@@ -341,7 +334,8 @@ function getProposalTeamsRows(questions) {
       question =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
-        !CORE_TEAM[question.questionText]
+        !CORE_TEAM[question.questionText] &&
+        question.questionId !== 'Proposal Team-P0C'
     )
     .sort((a, b) => a.questionOrder - b.questionOrder);
   let html = ``;
@@ -377,12 +371,6 @@ function getProposalTeamsRows(questions) {
       }
       html += `<div class="table-header-cell">${emailLink}</div>`;
       html += `</div>`;
-      // size += getRenderedSize(<div>{html}</div>).height;
-      // if (size > 950) {
-      //   size = 0;
-      //   html += `<div class="breaking-it"></div>`;
-      // }
-      // console.log(size, 'sze');
     });
     html += `</div>`;
     html += `<div id="resp-table" class="proposalTeam table marginTop20">`;
@@ -390,7 +378,7 @@ function getProposalTeamsRows(questions) {
     html += `<div id="resp-table-header"> Specialty Team Members </div>`;
     html += `<div id="resp-table-header"> Name</div>`;
     html += `</div>`;
-    otherTeamQuestions.forEach(question => {
+    otherTeamQuestions.forEach((question, index) => {
       const { questionText, answers } = question;
       html += `<div class="resp-table-row">`;
       html += `<div class="table-header-cell">${questionText} </div>`;
@@ -412,12 +400,6 @@ function getProposalTeamsRows(questions) {
       }
       html += `<div class="table-header-cell">${otherTeamQuestionsemailLink}</div>`;
       html += `</div>`;
-      // size += getRenderedSize(<div>{html}</div>).height;
-      // if (size > 950) {
-      //   size = 0;
-      //   html += `<div class="breaking-it"></div>`;
-      // }
-      // console.log(size, 'sze');
     });
     html += `</div>`;
   } catch (error) {
@@ -491,12 +473,6 @@ function questionTables(allQuestions, proposalQuestions) {
             : ''
         }</span></div>`;
         html += `</div>`;
-        // size += getRenderedSize(<div>{html}</div>).height;
-        // if (size > 950) {
-        //   size = 0;
-        //   html += `<div class="breaking-it"></div>`;
-        // }
-        // console.log(size, 'sze');
       });
       let questionsToCustomerRightSection = allQuestions
         .filter(
@@ -518,12 +494,6 @@ function questionTables(allQuestions, proposalQuestions) {
             : ''
         }</span></div>`;
         html += `</div>`;
-        // size += getRenderedSize(<div>{html}</div>).height;
-        // if (size > 950) {
-        //   size = 0;
-        //   html += `<div class="breaking-it"></div>`;
-        // }
-        // console.log(size, 'sze');
       });
       html += `</div>`;
     } else {
@@ -551,12 +521,6 @@ function questionTables(allQuestions, proposalQuestions) {
               : ''
           }</span></div>`;
           html += `</div>`;
-          // size += getRenderedSize(<div>{html}</div>).height;
-          // if (size > 950) {
-          //   size = 0;
-          //   html += `<div class="breaking-it"></div>`;
-          // }
-          // console.log(size, 'sze');
         });
       html += `</div>`;
     }
@@ -601,12 +565,6 @@ function getNotesRows(notes, editor) {
       ]);
       data += `</div></div></div>`;
       html += data;
-      // size += getRenderedSize(<div>{html}</div>).height;
-      // if (size > 950) {
-      //   size = 0;
-      //   html += `<div class="breaking-it"></div>`;
-      // }
-      // console.log(size, 'sze');
       return html;
     } catch (err) {
       console.log('pdf notes error', err);
@@ -710,25 +668,6 @@ function getHtml(
   let appendedString = '';
   fetchedElementArray.forEach(value => (appendedString += value));
   string = appendedString;
-  // const dom = new DOMParser().parseFromString(string, 'text/html');
-  // const stringArray = dom.getElementById('pdfbody').outerHTML;
-  const stringArray = string.split(/(<\/div>)/g);
-  let newSize = 0;
-  stringArray.forEach((item, i) => {
-    newSize += getRenderedSize(<div>{item}</div>).height;
-    console.log(newSize, item, 'nsize, item');
-    if (newSize > 1122 && item.match('resp-table-row')) {
-      const paddingOnTop = 1122 - newSize;
-      stringArray[i - 1] = `${
-        stringArray[i - 1]
-      } <div class="resp-table-row"><div class="breaking-it" style="padding-top: ${paddingOnTop}"></div><div class="breaking-it" style="padding-top: ${paddingOnTop}"></div></div>`;
-      newSize = 0;
-    }
-  });
-
-  let puttingTogether = '';
-  stringArray.forEach(value => (puttingTogether += value));
-  string = puttingTogether;
   const pdfa = new jsPDF('p', 'pt', 'a4');
   pdfa.html(string, {
     callback(pdfa2) {
