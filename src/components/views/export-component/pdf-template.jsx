@@ -139,7 +139,9 @@ function checkFormattedAnswer(answers) {
         return formattedAnswer?.html;
       }
     }
-    return (lastAnswer && lastAnswer.answer.toString()) || '';
+    return (
+      (lastAnswer && lastAnswer.answer.toString())?.replace(/,/g, ', ') || ''
+    );
   } catch (error) {
     console.log(error);
     return '';
@@ -156,7 +158,6 @@ function getStyled() {
 body {
   font-family: ProximaNova-Regular !important;
   font-size: 10px;
-  word-spacing: 1px;
   letter-spacing: 0.2px;
 }  
 h1{
@@ -196,6 +197,11 @@ li ul li{
 }
 ol.public-DraftStyleDefault-ol {
   list-style-type: decimal;
+}
+ol li {
+  list-style-type: decimal;
+  display: list-item;
+  padding-left: 1px;
 }
 ul ul {
   display: block;
@@ -294,9 +300,7 @@ ul {
                 color: #fff;
                 font-weight: bold;
             }
-            .notes-ol ol {
-              padding-left: 7px;
-          }
+         
          
           
 
@@ -716,7 +720,6 @@ function getHtml(
     },
     margin: [100, 50, 100, 50]
   });
-  console.log('string', string);
 }
 const MyDoc = (
   proposalDetails,
