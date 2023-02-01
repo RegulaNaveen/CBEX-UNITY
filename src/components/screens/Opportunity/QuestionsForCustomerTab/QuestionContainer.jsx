@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import Trash from 'apollo-react-icons/Trash';
 import Card from 'apollo-react/components/Card';
 import Loader from 'apollo-react/components/Loader';
@@ -5,7 +6,7 @@ import Typography from 'apollo-react/components/Typography';
 import React, { useContext, useState, useRef, useEffect } from 'react';
 import classNames from 'classnames';
 import { useSelector } from 'react-redux';
-import { SocketContext } from '../../../../context/SocketContext';
+
 import {
   selectAutoNavigatedToCurrentResult,
   selectCurrentSearchResult,
@@ -27,10 +28,10 @@ const QuestionContainer = ({
   questionData,
   questionIndex,
   isCurrentBid,
-  setNewEntry
+  socketContext
 }) => {
   const question = questionData.toJS();
-  const socketContext = useContext(SocketContext);
+
   const [showLoader, setShowLoader] = useState(false);
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const searchQuery = useSelector(selectQuery);
@@ -76,8 +77,7 @@ const QuestionContainer = ({
     socketContext,
     checkDisableFlag,
     setShowLoader,
-    questionIndex,
-    setNewEntry
+    questionIndex
   };
 
   useEffect(() => {
@@ -116,6 +116,7 @@ const QuestionContainer = ({
               currentSearchResult !== null &&
               currentSearchResult.searchIndex === question.questionId
           })}
+          data-testid="question-container"
         >
           <div ref={questionContainerRef}>
             {isQuestionLockedByOther() ? (

@@ -540,6 +540,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     }
     return (
       <div
+        data-testid="question-model-testid"
         className={classNames('add-question-modal-wrapper', {
           'sidebar-open': isSidebarOpen
         })}

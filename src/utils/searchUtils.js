@@ -1,4 +1,7 @@
-import { shouldShowQuestion } from '../components/screens/Approvals/utils';
+import {
+  shouldShowQuestion,
+  shouldShowSection
+} from '../components/screens/Approvals/utils';
 import { NOTEPAD_UI_ID } from '../constants/app';
 
 /**
@@ -83,6 +86,9 @@ export function searchInApprovals(
 ) {
   // searching approvals
   approvals.forEach(approval => {
+    if (!shouldShowSection(approval.ApprovalSectionId)) {
+      return;
+    }
     // searching in approvalTitle
     if (approval.ApprovalSectionTitle) {
       updateSearchMatches(

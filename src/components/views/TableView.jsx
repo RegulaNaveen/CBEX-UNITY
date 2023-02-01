@@ -18,7 +18,9 @@ const TableView = ({ data, hideStatus }: Props) => {
     'proposalId',
     'opportunityName',
     'therapeuticArea',
-    'usersList'
+    'usersList',
+    'approvalsCount',
+    'isApprovalCountPresent'
   ];
   const DATE_COLUMN = 'bid due date';
   const LINK_COLUMN = 'opportunity number';

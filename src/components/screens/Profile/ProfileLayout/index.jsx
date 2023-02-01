@@ -19,6 +19,12 @@ const ProfileLayout = ({ children }) => {
   const token = useSelector(getAccessToken);
   const [roleName, setRoleName] = useState('');
 
+  const state = {
+    name,
+    email,
+    role,
+    token
+  };
   return (
     <div className="profile-wrapper">
       <Toolbar selected="dashboard" />
