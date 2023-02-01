@@ -46,8 +46,30 @@ const BidCostDetails = () => {
   const options3 = { currency: 'USD' };
   const numberFormat3 = new Intl.NumberFormat('en-US', options3);
 
-  const bootomLineVal = numberFormat3.format(bidCostValue?.bottomLine);
-  console.log('bottomLine', bootomLineVal);
+  const bottomLineVal = numberFormat3.format(bidCostValue?.bottomLine);
+  console.log('bottomLine', bottomLineVal);
+
+  // useEffect(() => {
+  //   setBidCostValue({
+  //     bidValue: bidVal,
+  //     bottomLine: bottomLineVal,
+  //     budgetTools: bidCostValue?.budgetTools
+  //   });
+  // }, [bidCostValue]);
+
+  // const newBidItem = [];
+  // newBidItem.push(bidVal, bootomLineVal, bidCostValue?.budgetTools);
+  // newBidItem.push(bootomLineVal);
+  // newBidItem.push(bidCostValue?.budgetTools);
+
+  const newBidItem = [
+    {
+      'Total Bid Value: ':
+        bidVal === 0 || bidVal === '0' ? 'N/A' : `USD ${bidVal}`
+    },
+    { 'Bottom Line Labor Discount: ': bottomLineVal },
+    { 'Budget Tools: ': bidCostValue?.budgetTools }
+  ];
 
   useEffect(() => {
     let bidValue = '';
@@ -71,7 +93,12 @@ const BidCostDetails = () => {
         }
       }
     });
-    setBidCostValue({ bidValue, bottomLine, budgetTools });
+    console.log('somu', budgetTools.split(';').join('; '));
+    setBidCostValue({
+      bidValue,
+      bottomLine,
+      budgetTools: budgetTools?.split(';')?.join('; ')
+    });
   }, [proposalQuestion]);
 
   return (
@@ -79,22 +106,18 @@ const BidCostDetails = () => {
       <div className="bid-cost ">
         <h2 className="bid-cost_title">Bid Cost Details</h2>
         <div className=" bid-cost_details">
-          {map(bidCostValue, (item, key) => {
+          {map(newBidItem, (item, key) => {
             return (
               <div className="bid-cost_details-item" key={key}>
-                <h3>{INITIAL_LIST_TITLE[key]}:</h3>
-                <i>{item === '' || item === '' ? 'N/A' : item || 'N/A'}</i>
-                {/* <i>
-                  {item === '' || item === '' ? (
-                    'N/A'
-                  ) : (
-                    <i> */}
-                {/* <i>USD {bidCostValue.bidValue}</i> */}
-                {/* <i>{bootomLineVal}</i> */}
-                {/* <i>{bidCostValue.budgetTools}</i> */}
-                {/* </i>
-                  )}
-                </i> */}
+                {console.log('item', Object.keys(item)[0], item)}
+                <h3>{Object.keys(item)[0]}</h3>
+                <i>
+                  {Object.values(item)[0] === '' ||
+                  Object.values(item)[0] === 0 ||
+                  Object.values(item)[0] === '0'
+                    ? 'N/A'
+                    : Object.values(item)[0] || 'N/A'}
+                </i>
               </div>
             );
           })}
