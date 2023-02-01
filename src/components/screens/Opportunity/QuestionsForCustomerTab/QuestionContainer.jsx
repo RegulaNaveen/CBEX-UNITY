@@ -63,7 +63,6 @@ const QuestionContainer = ({
     questionIndex
   };
 
-  console.log('inputprops', inputProps);
   return (
     <>
       <li className="">

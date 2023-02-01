@@ -23,9 +23,8 @@ const ProfileLayout = ({ children }) => {
     name,
     email,
     role,
-    token,
-  }
-  console.log('children', state);
+    token
+  };
   return (
     <div className="profile-wrapper">
       <Toolbar selected="dashboard" />

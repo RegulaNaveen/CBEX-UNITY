@@ -135,7 +135,6 @@ const EventLauncher = ({
   };
 
   const launchRichTextButtonHandler = () => {
-    console.log('1111111111111');
     const dateTimeFormat = 'YYYY-MM-DDTHH:mm:ss';
     const { EventBody: body, EventSubject: subject } = eventData;
     const dateAge = checkDateAge(eventStartDate);
