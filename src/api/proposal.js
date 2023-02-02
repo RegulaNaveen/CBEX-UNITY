@@ -5,7 +5,7 @@ import { axiosInstance } from '../store';
 import { API } from '../constants';
 import { getAccessTokenFromLocalStorage as getAccessToken } from '../SessionHandler';
 import { logLobDetails } from '../utils/utils';
-
+import FileSaver from 'file-saver';
 const {
   PROPOSAL_API_URL,
   PROPOSAL_QUESTIONS_API_URL,
@@ -35,6 +35,35 @@ export const getProposalInfo = async (id: string): Promise<Object> => {
         reject(err);
       });
   });
+};
+
+const getPDF = (pdfHtml, url, userName, oppId) => {
+  const obj = {
+    html: pdfHtml,
+    url,
+    time: Date.now(),
+    year: new Date().getFullYear(),
+    userName,
+    oppId
+  };
+  // ${PROPOSAL_API_URL}
+  return axiosInstance.post(`${PROPOSAL_API_URL}/downloadpdf`, obj, {
+    responseType: 'arraybuffer',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/pdf'
+    }
+  });
+};
+export const savePDF = (pdfHtml, url, userName, oppId, fileName) => {
+  getPDF(pdfHtml, url, userName, oppId)
+    .then(response => {
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      FileSaver.saveAs(blob, fileName);
+    })
+    .catch(err => {
+      console.log(err);
+    });
 };
 
 export const getProposalAnswer = async (

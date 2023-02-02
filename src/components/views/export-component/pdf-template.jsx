@@ -62,6 +62,7 @@ import '../../../../fonts/ProximaNova-Regular-normal';
 import '../../../../fonts/Proxima-Nova-Alt-Bold-bold';
 import '../../../../fonts/Proxima-Nova-Bold-It-bolditalic';
 import '../../../../fonts/Proxima-Nova-Reg-It-italic';
+import { savePDF } from '../../../api/proposal';
 
 const styles = StyleSheet.create({
   page: {
@@ -157,12 +158,15 @@ function getExtraLines(t1, t2) {
 }
 function getStyled() {
   return `<style>
-
-body {
-  font-family: ProximaNova-Regular !important;
-  font-size: 10px;
-  letter-spacing: 0.2px;
-}  
+  html {
+    -webkit-print-color-adjust: exact;
+  }
+  FONTCHANGE
+  body {
+    font-family: ProximaNova-Regular !important;
+    font-size: 10px;
+    letter-spacing: 0.2px;
+  }  
 h1{
     font-size: 20px;
     margin: 5px;
@@ -227,10 +231,8 @@ ul {
 .public-DraftStyleDefault-depth2.public-DraftStyleDefault-listLTR {
   list-style-type: disc;
 }
-
-
 #resp-table {
-  width: 595px;
+  width: 100%;
   height: auto;
   display: table;
   border: 1px solid #000;
@@ -594,7 +596,7 @@ function getHtml(
 ) {
   let html = ` 
   ${getStyled()}
-  <div id="page" style="width: 595px;"> <div style="width: 595px;"><div style="width: 595px;">  <div style="margin-bottom: 5px;width: 595px;"><div style="font-size:14px;color:#00a3e0;font-family:inherit;font-weight:700;width: 595px;display: flex;">  <p style="font-style:italic;display: flex; margin: 0px !important;">${proposalDetails[
+  <div id="page" style="width: 100%;"> <div style="width: 100%;"><div style="width: 100%;">  <div style="margin-bottom: 5px;width: 100%;"><div style="font-size:14px;color:#00a3e0;font-family:inherit;font-weight:700;width: 100%;display: flex;">  <p style="font-style:italic;display: flex; margin: 0px !important;">${proposalDetails[
     'CRM #'
   ] || ' '}${'&nbsp'}
    Opportunity Overview</p>
@@ -678,65 +680,71 @@ function getHtml(
   fetchedElementArray.forEach(value => (appendedString += value));
   string = appendedString;
 
-  const opt = {
-    margin: [100, 75, 100, 50],
-    filename: fileName,
-    pagebreak: { mode: ['css', 'legacy'] },
-    enableLinks: true,
-    html2canvas: { scale: 5 },
-    jsPDF: { unit: 'pt', format: 'a4', orientation: 'p', compress: true }
-  };
+  // const opt = {
+  //   margin: [100, 75, 100, 50],
+  //   filename: fileName,
+  //   pagebreak: { mode: ['css', 'legacy'] },
+  //   enableLinks: true,
+  //   html2canvas: { scale: 5 },
+  //   jsPDF: { unit: 'pt', format: 'a4', orientation: 'p', compress: true }
+  // };
   console.log('opt :>> ', string);
-  html2pdf()
-    .from(string)
-    .set(opt)
-    .toPdf()
-    .get('pdf')
-    .then(pdfa2 => {
-      const totalPages = pdfa2.internal.getNumberOfPages();
+  const url = getUnityLink(proposalDetails);
+  const oppId = proposalDetails['CRM #'];
+  // const Name = localStorage.getItem('userName');
+  console.log('userName :>> ', userName);
+  savePDF(string, url, userName, oppId, fileName);
 
-      for (let i = 1; i <= totalPages; i += 1) {
-        pdfa2.setPage(i);
-        pdfa2.addImage(image, 'PNG', 403, 20, 143, 60);
-        pdfa2.addImage(Border, 'PNG', 50, 80, 595, 1);
-        pdfa2.setFont('ProximaNova-Regular');
-        pdfa2.setTextColor(0, 163, 224);
-        pdfa2.setFontSize(8);
-        pdfa2.text(
-          '† Unity has provided this answer but not validated by user on proposal team.',
-          50,
-          752,
-          { align: 'left' }
-        );
-        pdfa2.addImage(FooterHead, 'PNG', 50, 755, 595, 1);
-        pdfa2.setTextColor(153, 153, 153);
-        pdfa2.setFontSize(8);
-        pdfa2.text(`Exported from Unity on ${dateNow()}`, 50, 770, {
-          align: 'left'
-        });
-        pdfa2.text(`by ${userName}`, 50, 780, {
-          align: 'left'
-        });
-        pdfa2.text(`View up-to-date Unity record here:`, 543, 770, {
-          align: 'right'
-        });
-        pdfa2.text(`${getUnityLink(proposalDetails)}`, 543, 780, {
-          align: 'right'
-        });
-        pdfa2.text(
-          ` Copyright © ${yearNow} IQVIA. All Rights Reserved. Confidential and Proprietary.`,
-          543,
-          790,
-          {
-            align: 'right'
-          }
-        );
-        pdfa2.text(` ${i}`, 297.5, 810, {
-          align: 'center'
-        });
-      }
-    })
-    .save();
+  // html2pdf()
+  //   .from(string)
+  //   .set(opt)
+  //   .toPdf()
+  //   .get('pdf')
+  //   .then(pdfa2 => {
+  //     const totalPages = pdfa2.internal.getNumberOfPages();
+
+  //     for (let i = 1; i <= totalPages; i += 1) {
+  //       pdfa2.setPage(i);
+  //       pdfa2.addImage(image, 'PNG', 403, 20, 143, 60);
+  //       pdfa2.addImage(Border, 'PNG', 50, 80, 595, 1);
+  //       pdfa2.setFont('ProximaNova-Regular');
+  //       pdfa2.setTextColor(0, 163, 224);
+  //       pdfa2.setFontSize(8);
+  //       pdfa2.text(
+  //         '† Unity has provided this answer but not validated by user on proposal team.',
+  //         50,
+  //         752,
+  //         { align: 'left' }
+  //       );
+  //       pdfa2.addImage(FooterHead, 'PNG', 50, 755, 595, 1);
+  //       pdfa2.setTextColor(153, 153, 153);
+  //       pdfa2.setFontSize(8);
+  //       pdfa2.text(`Exported from Unity on ${dateNow()}`, 50, 770, {
+  //         align: 'left'
+  //       });
+  //       pdfa2.text(`by ${userName}`, 50, 780, {
+  //         align: 'left'
+  //       });
+  //       pdfa2.text(`View up-to-date Unity record here:`, 543, 770, {
+  //         align: 'right'
+  //       });
+  //       pdfa2.text(`${getUnityLink(proposalDetails)}`, 543, 780, {
+  //         align: 'right'
+  //       });
+  //       pdfa2.text(
+  //         ` Copyright © ${yearNow} IQVIA. All Rights Reserved. Confidential and Proprietary.`,
+  //         543,
+  //         790,
+  //         {
+  //           align: 'right'
+  //         }
+  //       );
+  //       pdfa2.text(` ${i}`, 297.5, 810, {
+  //         align: 'center'
+  //       });
+  //     }
+  //   })
+  //   .save();
 
   // const pdfa = new jsPDF('p', 'pt', 'a4');
   // pdfa.html(string, {
