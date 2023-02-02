@@ -804,7 +804,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     const lastAnswerJS = lastAnswer?.toJS();
     const formattedAnswer =
       has(lastAnswerJS, 'formattedAnswer') && lastAnswerJS.formattedAnswer;
-
+    
     const parseFormattedData =
       !formattedAnswer || isObject(formattedAnswer)
         ? formattedAnswer
@@ -1149,7 +1149,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 )}
               </span>
               <span
-                style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
+                style={`${this.props.showNaCheckbox}` ? { minWidth: '100%' } : ''}
               >
                 <AutoCompleteWithAddOptionWithIdleStateDetection
                   // sectionName={sectionName}
