@@ -4,6 +4,8 @@ import { List } from 'immutable';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import TextField from '@material-ui/core/TextField';
+import Chip from '@material-ui/core/Chip';
+import Typography from '@material-ui/core/Typography';
 import Autocomplete, {
   createFilterOptions
 } from '@material-ui/lab/Autocomplete';
@@ -209,9 +211,19 @@ const AutoCompleteWithAddOption = ({
         freeSolo
         disableCloseOnSelect={multiple}
         value={selectedVal}
+        renderTags={(value, getTagProps) =>
+          value.map((option, index) => (
+            <Chip
+              label={<Typography style={{whiteSpace: 'normal'}}>{option}</Typography>}
+              {...getTagProps({ index })}
+              style={{height:"100%"}}
+            />
+          ))
+        }
         renderInput={params => {
           return (
             <TextField
+              multiline
               onChange={onTextChange}
               placeholder={placeholder}
               {...params}
