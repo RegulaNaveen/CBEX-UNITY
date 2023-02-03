@@ -23,10 +23,8 @@ import {
 } from '@react-pdf/renderer';
 import React from 'react';
 import Html from 'react-pdf-html';
-import jsPDF from 'jspdf';
 import { isString } from 'lodash';
 import moment from 'moment';
-import html2pdf from 'html2pdf.js';
 import { generateHTML } from '@tiptap/core';
 import Link from '@tiptap/extension-link';
 import HighLight from '@tiptap/extension-highlight';
@@ -37,10 +35,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
 import OrderedList from '@tiptap/extension-text-align';
-import getRenderedSize from 'react-rendered-size';
-import FooterHead from '../../../../img/footerHead.png';
 import Logo from '../../../../img/iqvia-hd-logo.png';
-import Border from '../../../../img/borders.png';
 import {
   getFilteredQuestion,
   headFields,
@@ -165,7 +160,6 @@ function getStyled() {
   body {
     font-family: ProximaNova-Regular !important;
     font-size: 10px;
-    letter-spacing: 0.2px;
   }  
 h1{
     font-size: 20px;
@@ -189,62 +183,35 @@ h3{
 .marginTop30 {
     margin-top:30px
 }
-.underline-fix{
-  border-bottom: 1px solid black;
-}
 .notesTable tr{
     border-bottom: none;
 }
-.notesTable ul li{
-  display: block;
-  list-style-type: disc !important;
-}
-li ul li{
-  list-style-type: disc;
-}
-ol.public-DraftStyleDefault-ol {
-  list-style-type: decimal;
-}
-ol li {
-  list-style-type: decimal;
-  display: list-item;
-  padding-left: 1px;
-}
-ul ul {
-  display: block;
-  list-style-type: disc;
-}
-ul {
-  display: block;
-  list-style-type: disc;
-}
-
 .blueColorText{
     color: #00A3E0;
     font-family:Helvetica;
     font-size: 10px;
 }
- 
-.public-DraftStyleDefault-depth1.public-DraftStyleDefault-listLTR {
-  list-style-type: disc;
+ol {
+  padding-inline-start: 5px !important;
 }
-.public-DraftStyleDefault-depth2.public-DraftStyleDefault-listLTR {
-  list-style-type: disc;
+ul {
+  padding-inline-start: 7px !important;
 }
-#resp-table {
+ #resp-table {
   width: 100%;
   height: auto;
   display: table;
   border: 1px solid #000;
   border-bottom: 0px;
   }
-  .breaking-it {
-    padding: 20px;
-    text-align: left;
-    vertical-align: middle;
-    width: 50%;
-    height: auto;
-  }
+  .notesData p {
+    display: block;
+    margin-block-start: 3px;
+      margin-block-end: 3px;
+  } 
+  .notesTable #resp-table-header {
+    border-bottom: 0px;
+}
   #resp-table-caption{
     display: table-cell;
     text-align: center;
@@ -254,6 +221,7 @@ ul {
     background-color: #00A3E0;
     padding:5px;
     word-break: break-word;
+    border-bottom: 1px solid #000;
     }
     #resp-table-header {
       display: table-cell;
@@ -280,16 +248,6 @@ ul {
   background-color: #EEEEEE;
   border-right: 1px solid #000;
 }
-.notesData p {
-  display: block;
-  margin-block-start: 1em;
-    margin-block-end: 1em;
-} 
-ul {
-  display: block;
-  list-style-type: disc;
-  padding-inline-start: 7px;
-}
         #resp-table-body{
           display: table-row-group;
           }
@@ -304,11 +262,12 @@ ul {
                 background-color: #00A3E0;
                 color: #fff;
                 font-weight: bold;
+                width: 30% !important;
             }
-         
-         
-          
-
+            [data-block=true] {
+              margin-left: 10px;
+          }
+      
 </style>`;
 }
 let size = 30;
@@ -372,11 +331,6 @@ function getProposalTeamsRows(questions) {
           coreTeamQuestionsAnswer.indexOf('(')
         );
         let tempEmail = String(coreTeamQuestionsEmail[0]).trim();
-        // emailLink = `<p><span data-type="mention" style="color:blue;" data-id="${String(
-        //   tempEmail
-        // ).toUpperCase()}" data-label="${String(
-        //   name
-        // ).toUpperCase()}">${tempEmail}</span></p>`;
         emailLink = `<a href="mailto:${tempEmail}">${name}</a>`;
       }
       html += `<div class="table-header-cell">${emailLink}</div>`;
@@ -472,7 +426,7 @@ function questionTables(allQuestions, proposalQuestions) {
         )
         .sort((a, b) => a.questionOrder - b.questionOrder);
       questionsToCustomerLeftSection.forEach(question => {
-        const questionHTML = question.questionHTML || question.questionText;
+        const questionHTML = question.questionText;
         html += `<div class="resp-table-row">`;
         html += `<div class="table-header-cell"> ${questionHTML} </div>`;
         html += `<div class="table-header-cell"> ${formatDate(
@@ -547,13 +501,26 @@ function getNotesRows(notes, editor) {
   html += `</div>`;
   html += `</div>`;
   let data = ``;
-  data += `<div id="resp-table" class="notesData" style="border-bottom: 1px solid #000;"><div class="resp-table-row"><div class="notes-ol" style="padding: 10px;">`;
+  const getEmailID = str => {
+    return String(str).match(
+      /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+    );
+  };
+  data += `<div id="resp-table" class="notesData" style="border-bottom: 1px solid #000;"><div class="resp-table-row"><div class="notes-ol" style="padding: 15px;">`;
   try {
     const noteText = editor.getJSON();
     try {
       data += generateHTML(noteText, [
         StarterKit,
-        Link,
+        Link.configure({
+          autolink: true,
+          linkOnPaste: false,
+          validate: href => /^https?:\/\// || /^www?:\/\//.test(href),
+          protocols: ['ftp', 'mailto'],
+          HTMLAttributes: {
+            class: 'my-custom-class'
+          }
+        }),
         HighLight,
         Subscript,
         Superscript,
@@ -567,15 +534,26 @@ function getNotesRows(notes, editor) {
         }),
         Mention.configure({
           HTMLAttributes: {
-            style: `color:blue;`
+            style: `color:blue;`,
+            class: 'mention'
           },
           renderLabel({ options, node }) {
-            return `${node.attrs.id}`;
+            console.log(options, node, 'test tip');
+            return `${node.marks.link ?? node.attrs.id}`;
           }
         })
       ]);
       data += `</div></div></div>`;
       html += data;
+      // const emailList = getEmailID(data);
+      // console.log(emailList, 'elist');
+      // const mentionTag = /(<span data-type="mention".*>)(.*)(<\/span>)/;
+      // for (let i = 0; i < emailList.length; i += 1) {
+      //   html = html?.replace(
+      //     mentionTag,
+      //     `<a href="mailto:${emailList[i]}">$2</a>`
+      //   );
+      // }
       return html;
     } catch (err) {
       console.log('pdf notes error', err);
@@ -618,182 +596,11 @@ function getHtml(
   );
   const image = Logo;
   let string = renderToString(<Prints />);
-  // const emailExp = /([(][a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+[)])/gi;
-  // if (string.match(emailExp)) {
-  //   const matched = string?.match(emailExp);
-  //   if (matched)
-  //     for (let mail = 0; mail < matched.length; mail += 1) {
-  //       const matchEmail = new RegExp(matched[mail], 'g');
-  //       if (string?.match(matchEmail))
-  //         string = string?.replace(
-  //           matched[mail],
-  //           ` <span style="color: #0000FF">${matched[mail]}</p>`
-  //         );
-  //     }
-  // }
-  let extractStyles;
-  let k = 0;
-  let fetchedElementArray = string.split(/(>)/g);
-  let foundArray = [];
-  fetchedElementArray.filter(value => {
-    if (value.match(/text-decoration:(.*?)"/g)) {
-      foundArray.push(value);
-    }
-  });
-  foundArray.forEach(item => {
-    const indexFoundArray = fetchedElementArray.indexOf(item);
-    for (k; k < 7; k++) {
-      if (fetchedElementArray[indexFoundArray + k].match(/[^>](.+?)<\//gi)) {
-        const splitText = fetchedElementArray[indexFoundArray + k].split('<');
-        if (
-          JSON.stringify(fetchedElementArray[indexFoundArray]).match(
-            'line-through'
-          ) &&
-          JSON.stringify(fetchedElementArray[indexFoundArray]).match(
-            'underline'
-          )
-        ) {
-          extractStyles = `<span class="underline-fix"><s>${splitText[0]}</s></span><${splitText[1]}`;
-          fetchedElementArray[indexFoundArray + k] = extractStyles;
-          return fetchedElementArray;
-        } else if (
-          JSON.stringify(fetchedElementArray[indexFoundArray]).match(
-            'line-through'
-          )
-        ) {
-          extractStyles = `<s>${splitText[0]}</s><${splitText[1]}`;
-          fetchedElementArray[indexFoundArray + k] = extractStyles;
-          return fetchedElementArray;
-        } else if (
-          JSON.stringify(fetchedElementArray[indexFoundArray]).match(
-            'underline'
-          )
-        ) {
-          extractStyles = `<u>${splitText[0]}</u><${splitText[1]}`;
-          fetchedElementArray[indexFoundArray + k] = extractStyles;
-          return fetchedElementArray;
-        }
-      }
-    }
-  });
-  let appendedString = '';
-  fetchedElementArray.forEach(value => (appendedString += value));
-  string = appendedString;
-
-  // const opt = {
-  //   margin: [100, 75, 100, 50],
-  //   filename: fileName,
-  //   pagebreak: { mode: ['css', 'legacy'] },
-  //   enableLinks: true,
-  //   html2canvas: { scale: 5 },
-  //   jsPDF: { unit: 'pt', format: 'a4', orientation: 'p', compress: true }
-  // };
   console.log('opt :>> ', string);
   const url = getUnityLink(proposalDetails);
   const oppId = proposalDetails['CRM #'];
-  // const Name = localStorage.getItem('userName');
   console.log('userName :>> ', userName);
   savePDF(string, url, userName, oppId, fileName);
-
-  // html2pdf()
-  //   .from(string)
-  //   .set(opt)
-  //   .toPdf()
-  //   .get('pdf')
-  //   .then(pdfa2 => {
-  //     const totalPages = pdfa2.internal.getNumberOfPages();
-
-  //     for (let i = 1; i <= totalPages; i += 1) {
-  //       pdfa2.setPage(i);
-  //       pdfa2.addImage(image, 'PNG', 403, 20, 143, 60);
-  //       pdfa2.addImage(Border, 'PNG', 50, 80, 595, 1);
-  //       pdfa2.setFont('ProximaNova-Regular');
-  //       pdfa2.setTextColor(0, 163, 224);
-  //       pdfa2.setFontSize(8);
-  //       pdfa2.text(
-  //         '† Unity has provided this answer but not validated by user on proposal team.',
-  //         50,
-  //         752,
-  //         { align: 'left' }
-  //       );
-  //       pdfa2.addImage(FooterHead, 'PNG', 50, 755, 595, 1);
-  //       pdfa2.setTextColor(153, 153, 153);
-  //       pdfa2.setFontSize(8);
-  //       pdfa2.text(`Exported from Unity on ${dateNow()}`, 50, 770, {
-  //         align: 'left'
-  //       });
-  //       pdfa2.text(`by ${userName}`, 50, 780, {
-  //         align: 'left'
-  //       });
-  //       pdfa2.text(`View up-to-date Unity record here:`, 543, 770, {
-  //         align: 'right'
-  //       });
-  //       pdfa2.text(`${getUnityLink(proposalDetails)}`, 543, 780, {
-  //         align: 'right'
-  //       });
-  //       pdfa2.text(
-  //         ` Copyright © ${yearNow} IQVIA. All Rights Reserved. Confidential and Proprietary.`,
-  //         543,
-  //         790,
-  //         {
-  //           align: 'right'
-  //         }
-  //       );
-  //       pdfa2.text(` ${i}`, 297.5, 810, {
-  //         align: 'center'
-  //       });
-  //     }
-  //   })
-  //   .save();
-
-  // const pdfa = new jsPDF('p', 'pt', 'a4');
-  // pdfa.html(string, {
-  //   callback(pdfa2) {
-  //     const pageCount = pdfa2.internal.getNumberOfPages();
-  //     for (let i = 0; i <= pageCount; i += 1) {
-  //       pdfa2.setPage(i);
-  //       pdfa2.addImage(image, 'PNG', 403, 20, 143, 60);
-  //       pdfa2.addImage(Border, 'PNG', 50, 80, 595, 1);
-  //       pdfa.setFont('ProximaNova-Regular');
-  //       pdfa2.setTextColor(0, 163, 224);
-  //       pdfa2.setFontSize(8);
-  //       pdfa2.text(
-  //         '† Unity has provided this answer but not validated by user on proposal team.',
-  //         50,
-  //         752,
-  //         { align: 'left' }
-  //       );
-  //       pdfa2.addImage(FooterHead, 'PNG', 50, 755, 595, 1);
-  //       pdfa2.setTextColor(153, 153, 153);
-  //       pdfa2.setFontSize(8);
-  //       pdfa2.text(`Exported from Unity on ${dateNow()}`, 50, 770, {
-  //         align: 'left'
-  //       });
-  //       pdfa2.text(`by ${userName}`, 50, 780, {
-  //         align: 'left'
-  //       });
-  //       pdfa2.text(`View up-to-date Unity record here:`, 543, 770, {
-  //         align: 'right'
-  //       });
-  //       pdfa2.text(`${getUnityLink(proposalDetails)}`, 543, 780, {
-  //         align: 'right'
-  //       });
-  //       pdfa2.text(
-  //         ` Copyright © ${yearNow} IQVIA. All Rights Reserved. Confidential and Proprietary.`,
-  //         543,
-  //         790,
-  //         {
-  //           align: 'right'
-  //         }
-  //       );
-  //       pdfa2.text(` ${i}`, 297.5, 810, {
-  //         align: 'center'
-  //       });
-  //     }
-  //     pdfa2.save(fileName);
-  //   },
-  //   margin: [100, 50, 100, 50]
-  // });
 }
 const MyDoc = (
   proposalDetails,
