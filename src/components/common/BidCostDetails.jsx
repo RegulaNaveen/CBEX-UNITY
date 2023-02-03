@@ -1,18 +1,11 @@
 import { map } from 'lodash';
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Card from 'apollo-react/components/Card';
 import {
   getSelectedBid,
   getProposalQuestions
 } from '../../redux/selectors/proposal';
 import { REDUX_TYPES } from '../../constants';
-
-const INITIAL_LIST_TITLE = {
-  bidValue: 'Total Bid Value',
-  bottomLine: 'Bottom Line Labor Discount',
-  budgetTools: 'Budget Tools'
-};
 
 const { SET_BID_COST_DATA_FIELDS } = REDUX_TYPES.PROPOSAL;
 
@@ -25,7 +18,7 @@ const BidCostDetails = () => {
     bottomLine: '',
     budgetTools: ''
   });
-  console.log('var', bidCostValue);
+
   const memoizeBid = useMemo(() => selectedBid, [selectedBid?.id]);
 
   useEffect(() => {
@@ -41,26 +34,11 @@ const BidCostDetails = () => {
   const numberFormat2 = new Intl.NumberFormat('en-US', options2);
 
   const bidVal = numberFormat2.format(bidCostValue?.bidValue);
-  console.log('bidVal', bidVal);
 
   const options3 = { currency: 'USD' };
   const numberFormat3 = new Intl.NumberFormat('en-US', options3);
 
   const bottomLineVal = numberFormat3.format(bidCostValue?.bottomLine);
-  console.log('bottomLine', bottomLineVal);
-
-  // useEffect(() => {
-  //   setBidCostValue({
-  //     bidValue: bidVal,
-  //     bottomLine: bottomLineVal,
-  //     budgetTools: bidCostValue?.budgetTools
-  //   });
-  // }, [bidCostValue]);
-
-  // const newBidItem = [];
-  // newBidItem.push(bidVal, bootomLineVal, bidCostValue?.budgetTools);
-  // newBidItem.push(bootomLineVal);
-  // newBidItem.push(bidCostValue?.budgetTools);
 
   const newBidItem = [
     {
@@ -93,7 +71,6 @@ const BidCostDetails = () => {
         }
       }
     });
-    console.log('somu', budgetTools.split(';').join('; '));
     setBidCostValue({
       bidValue,
       bottomLine,
@@ -109,7 +86,6 @@ const BidCostDetails = () => {
           {map(newBidItem, (item, key) => {
             return (
               <div className="bid-cost_details-item" key={key}>
-                {console.log('item', Object.keys(item)[0], item)}
                 <h3>{Object.keys(item)[0]}</h3>
                 <i>
                   {Object.values(item)[0] === '' ||
