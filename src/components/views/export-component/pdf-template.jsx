@@ -193,10 +193,10 @@ h3{
     font-size: 10px;
 }
 ol {
-  padding-inline-start: 5px !important;
+  padding-inline-start: 10px !important;
 }
 ul {
-  padding-inline-start: 7px !important;
+  padding-inline-start: 10px !important;
 }
  #resp-table {
   width: 100%;
@@ -265,6 +265,30 @@ ul {
                 font-weight: bold;
                 width: 30% !important;
             }
+            .public-DraftStyleDefault-depth0.public-DraftStyleDefault-listLTR {
+              margin-left: 5px;
+          }
+          .public-DraftStyleDefault-depth1.public-DraftStyleDefault-listLTR {
+              margin-left: 10px;
+          }
+          .public-DraftStyleDefault-depth2.public-DraftStyleDefault-listLTR {
+              margin-left: 15px;
+          }
+          .public-DraftStyleDefault-depth3.public-DraftStyleDefault-listLTR {
+              margin-left: 20px;
+          }
+          .public-DraftStyleDefault-depth4.public-DraftStyleDefault-listLTR {
+              margin-left: 25px;
+          }
+          .MuiGrid-root{
+              display:none;
+          }
+          .MuiFormControl-root{
+              padding:5px;
+              border: 1px solid #000;
+              border-top: none;
+          }
+      
             [data-block=true] {
               margin-left: 10px;
           }
@@ -427,7 +451,7 @@ function questionTables(allQuestions, proposalQuestions) {
         )
         .sort((a, b) => a.questionOrder - b.questionOrder);
       questionsToCustomerLeftSection.forEach(question => {
-        const questionHTML = question.questionText;
+        const questionHTML = question.questionHTML || question.questionText;
         html += `<div class="resp-table-row">`;
         html += `<div class="table-header-cell"> ${questionHTML} </div>`;
         html += `<div class="table-header-cell"> ${formatDate(
@@ -471,7 +495,7 @@ function questionTables(allQuestions, proposalQuestions) {
       sections[section]
         .sort((a, b) => a.questionOrder - b.questionOrder)
         .forEach(question => {
-          const questionHTML = question.questionText;
+          const questionHTML = question.questionHTML || question.questionText;
           const questionType = question?.answerConfiguration?.type;
 
           const questionTypeValidation =
