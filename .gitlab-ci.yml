@@ -245,8 +245,7 @@ deployl4:
     - docker
   environment: l4
 
-
-demo:  
+demo:
   stage: builddemo
   image: node:14
   variables:

@@ -20,18 +20,21 @@ import { SocketContext } from '../../../../context/SocketContext';
 function QuestionsForCustomer() {
   const socketContext = useContext(SocketContext);
   const { questionLockWrapper, questionUnlockWrapper } = socketContext;
-  const questionsList = useSelector(getProposalQuestions);
   const [autoScroll, setAutoScroll] = useState(false);
 
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [questionToDelete, setQuestionToDelete] = useState(null);
-  const allFlags = useSelector(state => state.proposal.get('eventflag'));
-  const [questions, setQuestions] = useState(new OrderedMap());
   const selectedBid = useSelector(getSelectedBid);
   const isCurrentBid = selectedBid.get('isCurrent');
+  const questionsList = useSelector(getProposalQuestions);
+  const allFlags = useSelector(state => state.proposal.get('eventflag'));
+
+  const [questions, setQuestions] = React.useState(new OrderedMap());
+  const [showDeleteModal, setShowDeleteModal] = React.useState(false);
+  const [questionToDelete, setQuestionToDelete] = React.useState(null);
+  const [newEntry, setNewEntry] = React.useState(null);
+  const [showScroll, setShowScroll] = React.useState(null);
+
   const dispatch = useDispatch();
 
-  const [showScroll, setShowScroll] = useState(null);
   const addNewEntryRef = React.createRef();
   const questionContainerRef = React.createRef();
   const [showAddQuestionLoader, setShowAddQuestionLoader] = useState(false);
@@ -218,7 +221,10 @@ function QuestionsForCustomer() {
 
   return (
     <>
-      <div className="questions-for-customer-container">
+      <div
+        className="questions-for-customer-container"
+        data-testid="question-customer-tab"
+      >
         <div>
           <Header />
         </div>
@@ -236,6 +242,7 @@ function QuestionsForCustomer() {
               {questions?.valueSeq().map((questionData, index) => {
                 return (
                   <QuestionContainer
+                    data-testid="question-container"
                     deleteQuestionHandler={deleteQuestionHandler}
                     questionData={questionData}
                     questionIndex={index + 1}
@@ -256,8 +263,9 @@ function QuestionsForCustomer() {
         )}
 
         <div className="btn-container">
-          <div>
+          <div data-testid="clipboard-button">
             <Button
+              data-testid="clipboard-button"
               className="btn-label"
               icon={<Copy />}
               size="small"
@@ -293,6 +301,7 @@ function QuestionsForCustomer() {
           </div>
         </div>
         <Modal
+          data-testid="delete-modal"
           open={showDeleteModal}
           variant="warning"
           onClose={() => handleClose()}

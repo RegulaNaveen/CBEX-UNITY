@@ -89,7 +89,7 @@ describe.skip('Questions component', () => {
     );
   });
 
-  test.only('Questions component Load', async () => {
+  test.skip('Questions component Load', async () => {
     const { container } = await render(
       <Provider store={store}>
         <Router>
