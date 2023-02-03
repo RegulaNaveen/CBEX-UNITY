@@ -6,6 +6,7 @@ import thunk from 'redux-thunk';
 import { Map } from 'immutable';
 import { Provider } from 'react-redux';
 import Adapter from 'enzyme-adapter-react-16';
+import SocketContext from '../../../../context/SocketContext';
 
 import DateQuestion from '../InputComponents/DateQuestion';
 import RadioQuestion from '../InputComponents/RadioQuestion';
@@ -29,17 +30,17 @@ const store = mockStore(initialState);
 const mockDispatch = store.dispatch;
 store.dispatch = jest.fn(mockDispatch);
 
-describe.skip('Snapshot Test Approval Input Components', () => {
+describe('Snapshot Test Approval Input Components', () => {
   beforeEach(() => {});
   test('Test DateQuestion', () => {
     const question = dummyQuestions.find(
       item => item.answerConfiguration.type === 'date'
     );
     const lastAnswer = getLastAnswer(question);
-    const props = { question, lastAnswer };
+    const props = { question, lastAnswer, checkDisableFlag: jest.fn() };
     const container = render(
       <Provider store={store}>
-        <DateQuestion {...props} />
+         <DateQuestion {...props} socketContext={{ questionLockWrapper() {} }}/>
       </Provider>
     );
     expect(container).toMatchSnapshot();
@@ -49,10 +50,10 @@ describe.skip('Snapshot Test Approval Input Components', () => {
       item => item.answerConfiguration.type === 'radio'
     );
     const lastAnswer = getLastAnswer(question);
-    const props = { question, lastAnswer };
+    const props = { question, lastAnswer, checkDisableFlag: jest.fn() };
     const container = render(
       <Provider store={store}>
-        <RadioQuestion {...props} />
+        <RadioQuestion {...props} socketContext={{ questionLockWrapper() {} }}/>
       </Provider>
     );
     expect(container).toMatchSnapshot();
@@ -62,10 +63,10 @@ describe.skip('Snapshot Test Approval Input Components', () => {
       item => item.answerConfiguration.type === 'select-lookup'
     );
     const lastAnswer = getLastAnswer(question);
-    const props = { question, lastAnswer };
+    const props = { question, lastAnswer, checkDisableFlag: jest.fn() };
     const container = render(
       <Provider store={store}>
-        <SelectQuestion {...props} />
+        <SelectQuestion {...props} socketContext={{ questionLockWrapper() {} }}/>
       </Provider>
     );
     expect(container).toMatchSnapshot();
@@ -78,7 +79,9 @@ describe.skip('Snapshot Test Approval Input Components', () => {
     const props = { question, lastAnswer };
     const container = render(
       <Provider store={store}>
-        <MultiSelectQuestion {...props} />
+        <SocketContext>
+          <MultiSelectQuestion {...props} />
+        </SocketContext>
       </Provider>
     );
     expect(container).toMatchSnapshot();
@@ -101,10 +104,10 @@ describe.skip('Snapshot Test Approval Input Components', () => {
       item => item.answerConfiguration.type === 'number'
     );
     const lastAnswer = getLastAnswer(question);
-    const props = { question, lastAnswer };
+    const props = { question, lastAnswer, checkDisableFlag: jest.fn() };
     const container = render(
       <Provider store={store}>
-        <NumberQuestion {...props} />
+        <NumberQuestion {...props} socketContext={{ questionLockWrapper() {} }}/>
       </Provider>
     );
     expect(container).toMatchSnapshot();

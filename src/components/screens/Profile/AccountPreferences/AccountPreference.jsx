@@ -56,12 +56,8 @@ const AccountPreference = ({
 
   return (
     <div>
-      <Card interactive className="card-wrapper">
-        <Typography
-          className="card-heading"
-          variant="title2"
-          gutterBottom
-        >
+      <Card interactive className="card-wrapper" data-testid="account-pref">
+        <Typography className="card-heading" variant="title2" gutterBottom>
           {ACCOUNT_PREFERENCES}
         </Typography>
         <div className="top-space">
@@ -98,6 +94,7 @@ const AccountPreference = ({
             <>
               <Dropdown
                 id="dd-team-member"
+                data-testid="account-pref-dropdown"
                 title={
                   <Typography
                     className="card-label"

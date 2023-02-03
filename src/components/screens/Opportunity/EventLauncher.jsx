@@ -12,10 +12,7 @@ import moment from 'moment';
 import CustomModal from '../../common/CustomModal';
 import { DEFAULT, PROPOSAL } from '../../../constants/app';
 import { extractEmails, parseStringifyJson } from '../../../utils/helpers';
-import {
-  getSelectedBid,
-  selectProposalQuestions
-} from '../../../redux/selectors/proposal';
+import { selectProposalQuestions } from '../../../redux/selectors/proposal';
 import { getUserData } from '../../../redux/selectors';
 import { updateEventSubjectBody } from '../../../utils/utils';
 
@@ -37,9 +34,9 @@ const EventLauncher = ({
   const userData = useSelector(getUserData);
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const eventFlag = allFlags.eventLauncher || false;
-
-  const { isCurrent } = useSelector(getSelectedBid)?.toJS();
-
+  const { isCurrent } = useSelector(state =>
+    state.proposal.get('selectedBid')
+  )?.toJS();
   // Component will return null if no event found
   if (!hasEvent || !eventFlag || !isCurrent) return null;
 
@@ -49,11 +46,9 @@ const EventLauncher = ({
 
   const bodytoHtml = eventData?.EventBody;
   const eventSubject = eventData?.EventSubject;
-
   // Component State
-  const [openModal, setOpenModal] = useState(false);
-  const [attendeesVal, setAttendeesVal] = React.useState(attendees[0]);
-
+  const [openModal, setOpenModal] = React.useState(false);
+  const [attendeesVal, setAttendeesVal] = useState(attendees[0]);
   const proposalTeam = useMemo(() => {
     if (!openModal) return []; // break func
     const team = [];
@@ -112,23 +107,31 @@ const EventLauncher = ({
   const generateEventUrl = (startDate, endDate, body, subject, email) => {
     const updatedBody = updateEventSubjectBody(body, proposalDetail);
     const updatedSubject = updateEventSubjectBody(subject, proposalDetail);
-    setBodyStr(body);
+    setBodyStr(updatedBody);
     const subjectStr = encodeURIComponent(
       updatedSubject.replace(new RegExp('\\n', 'g'), '<br />')
     );
     return `https://outlook.office.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose%20&rru=addevent&startdt=${startDate}&enddt=${endDate}&to=${email}&.&subject=${subjectStr}&body=Unity%20has%20copied%20your%20invite%20details%20to%20your%20clipboard.%20Press%20Control%20%2B%20V%20to%20paste%20this%20content%20to%20include%20it%20in%20your%20meeting%20invite%20and%20share%20it%20with%20your%20team.&online=1`;
   };
-  const newString = !isEmpty(bodyStr) ? bodyStr.html : bodyStr;
-  const content = bodytoHtml;
-  const blob = new Blob([content], { type: 'text/html' });
-  const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
-  navigator.clipboard.write([clipboardItem]);
+
   const checkDateAge = date => {
     const formattedDt = moment(date).format('YYYY-MM-DD');
     if (moment(formattedDt).isSame(moment(), 'day')) return 'today';
     if (moment(formattedDt).isAfter(moment(), 'day')) return 'future';
     if (moment(formattedDt).isBefore(moment(), 'day')) return null;
     return null;
+  };
+
+  const copyToClipboardAndOpenModal = async () => {
+    try {
+      const updatedBody = updateEventSubjectBody(bodytoHtml, proposalDetail);
+      const blob = new Blob([updatedBody], { type: 'text/html' });
+      const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
+      await navigator.clipboard.write([clipboardItem]);
+      setOpenModal(true);
+    } catch (error) {
+      console.log('Error copy email body to clipboard ', error);
+    }
   };
 
   const launchRichTextButtonHandler = () => {
@@ -179,6 +182,7 @@ const EventLauncher = ({
   const eventLauncherModal = openModal && (
     <CustomModal
       open={openModal}
+      data-testid="test-custom-model"
       title={PROPOSAL.EVENT_LAUNCHER}
       className="event-launcher__modal"
       onClose={() => setOpenModal(prev => !prev)}
@@ -213,17 +217,16 @@ const EventLauncher = ({
       </RadioGroup>
     </CustomModal>
   );
-
   const eventIcon = (
     <IconButton
+      data-testid="event-launcher-icon-id"
       className="event-launcher__tooltip-btn"
       disabled={isEmpty(eventStartDate.trim())}
-      onClick={() => setOpenModal(true)}
+      onClick={() => copyToClipboardAndOpenModal()}
     >
       <CalendarEvent />
     </IconButton>
   );
-
   return (
     <div className="event-launcher">
       {!isEmpty(eventStartDate.trim()) && !isEmpty(eventSubject.trim()) && (
@@ -231,6 +234,7 @@ const EventLauncher = ({
           variant="light"
           tabIndex={-1}
           placement="top"
+          data-testid="custom-element"
           title={
             <div className="event-launcher__tooltip">
               <h3>{PROPOSAL.EVENT_LAUNCHER}</h3>

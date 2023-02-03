@@ -3,157 +3,156 @@ import { useDispatch, useSelector } from 'react-redux';
 import PlusIcon from 'apollo-react-icons/Plus';
 import Button from 'apollo-react/components/Button';
 import Copy from 'apollo-react-icons/Copy';
-import { uuidv4 } from 'lib0/random';
 import { fromJS, OrderedMap } from 'immutable';
 import { isString } from 'lodash';
 import Modal from 'apollo-react/components/Modal';
 import Typography from 'apollo-react/components/Typography';
 import QuestionContainer from './QuestionContainer';
 import { getProposalQuestions } from '../../../../redux/selectors/proposal';
-import { getSelectedBid, selectSections } from '../../../../redux/selectors';
+import { getSelectedBid } from '../../../../redux/selectors';
 import Header from './Header';
-import { deleteProposalQuestion } from '../../../../redux/actions/proposal-actions';
+import {
+  deleteProposalQuestion,
+  setProposalQuestion
+} from '../../../../redux/actions/proposal-actions';
 import { SocketContext } from '../../../../context/SocketContext';
 
 function QuestionsForCustomer() {
-  const questionsList = useSelector(getProposalQuestions);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [questionToDelete, setQuestionToDelete] = useState(null);
-  const allFlags = useSelector(state => state.proposal.get('eventflag'));
-  const [questions, setQuestions] = useState(new OrderedMap());
-  const sections = useSelector(selectSections);
+  const socketContext = useContext(SocketContext);
+  const { questionLockWrapper, questionUnlockWrapper } = socketContext;
+  const [autoScroll, setAutoScroll] = useState(false);
+
   const selectedBid = useSelector(getSelectedBid);
   const isCurrentBid = selectedBid.get('isCurrent');
+  const questionsList = useSelector(getProposalQuestions);
+  const allFlags = useSelector(state => state.proposal.get('eventflag'));
+
+  const [questions, setQuestions] = React.useState(new OrderedMap());
+  const [showDeleteModal, setShowDeleteModal] = React.useState(false);
+  const [questionToDelete, setQuestionToDelete] = React.useState(null);
+  const [newEntry, setNewEntry] = React.useState(null);
+  const [showScroll, setShowScroll] = React.useState(null);
+
   const dispatch = useDispatch();
-  const socketContext = useContext(SocketContext);
-  const [newEntry, setNewEntry] = useState(null);
-  const [showScroll, setShowScroll] = useState(null);
+
   const addNewEntryRef = React.createRef();
+  const questionContainerRef = React.createRef();
+  const [showAddQuestionLoader, setShowAddQuestionLoader] = useState(false);
+
+  const getSectionQuestions = proposalQuestions => {
+    try {
+      let sectionQuestions = new OrderedMap();
+
+      proposalQuestions.forEach(question => {
+        const {
+          questionId,
+          section: { sectionName }
+        } = question;
+
+        if (sectionName === 'Questions_for_the_Customer_left_panel') {
+          sectionQuestions = sectionQuestions.set(questionId, fromJS(question));
+          sectionQuestions = sectionQuestions.sortBy(item =>
+            item.get('questionOrder')
+          );
+        }
+      });
+      setQuestions(sectionQuestions);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    setQuestions(new OrderedMap());
-
-    sections.map(section => {
-      if (
-        section.get('sectionName') === 'Questions_for_the_Customer_left_panel'
-      ) {
-        const sectionQuestions = section.get('questions');
-
-        const filteredCustomQuestion = new OrderedMap(
-          Array.from(sectionQuestions).filter(questionItem => {
-            if (questionItem[1].get('isCustomQuestion')) {
-              return true;
-            }
-
-            return false;
-          })
-        );
-
-        setQuestions(filteredCustomQuestion);
-
-        if (newEntry) {
-          let question = filteredCustomQuestion;
-          question = question.set(newEntry.questionId, fromJS(newEntry));
-          setQuestions(question);
-        }
-      }
-    });
-
+    getSectionQuestions(questionsList);
     if (addNewEntryRef?.current?.offsetTop > 380) setShowScroll(true);
   }, [questionsList]);
 
-  const addQuestionHandler = () => {
-    let _id = uuidv4();
-    let question = questions;
-    let newQuestionEntry = {
-      isNewEntry: true,
-      isCustomQuestion: true,
-      questionId: _id,
-      section: {
+  useEffect(() => {
+    if (autoScroll && questionContainerRef?.current) {
+      questionContainerRef.current.scroll({
+        top: questionContainerRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+      setAutoScroll(false);
+    }
+  }, [autoScroll]);
+
+  const addQuestionHandler = async () => {
+    try {
+      const proposalId = selectedBid.get('id');
+      const section = {
         sectionOrder: 199,
         sectionName: 'Questions_for_the_Customer_left_panel'
-      },
-      active: true,
-      questionOrder: '',
-      questionApproval: false,
-      locked: false,
-      proposalId: '3cefc843-73d8-4797-9ffa-09b3e290b8bc',
-      questionJSON: '',
-      milestoneNew: [],
-      hasDifferentSFanswer: false,
-      questionHTML: '',
-      roleNames: ['Business Developer'],
-      visible: true,
-      notApplicable: false,
-      questionText: '',
-      integration: '',
-      answers: '',
-      questionHintJSON: '',
-      questionHintHTML: '',
-      answerConfiguration: {
-        type: 'text',
-        options: []
-      },
-      events: ''
-    };
-    question = question.set(_id, fromJS(newQuestionEntry));
-    setNewEntry(newQuestionEntry);
+      };
+      const answerType = 'text';
+      const roleNames = ['Business Developer'];
 
-    setQuestions(question);
+      const questionData = {
+        proposalId,
+        questionText: ' ',
+        questionJSON: '',
+        questionHTML: '',
+        section,
+        answerType,
+        options: [],
+        roleNames
+      };
+
+      setShowAddQuestionLoader(true);
+
+      await dispatch(
+        setProposalQuestion(proposalId, questionData, socketContext)
+      );
+      setShowAddQuestionLoader(false);
+      setAutoScroll(true);
+    } catch (error) {
+      console.log('Error Add question: ', error);
+    }
   };
 
   const onForceDelete = async () => {
     if (!questionToDelete) return;
-    const proposalId = selectedBid.get('id');
+    try {
+      const proposalId = selectedBid.get('id');
 
-    setShowDeleteModal(false);
-    await dispatch(
-      deleteProposalQuestion(
-        proposalId,
-        questionToDelete.questionId,
-        socketContext
-      )
-    );
-
-    setQuestionToDelete(null);
+      setShowDeleteModal(false);
+      await dispatch(
+        deleteProposalQuestion(
+          proposalId,
+          questionToDelete.questionId,
+          socketContext
+        )
+      );
+      questionUnlockWrapper(questionToDelete?.questionId);
+      setQuestionToDelete(null);
+    } catch (error) {
+      questionUnlockWrapper(questionToDelete?.questionId);
+      console.log('Error Delete question : ', error);
+    }
   };
 
   const onDelete = async question => {
     if (!question) return;
-    const proposalId = selectedBid.get('id');
+    try {
+      const proposalId = selectedBid.get('id');
 
-    setShowDeleteModal(false);
-    await dispatch(
-      deleteProposalQuestion(proposalId, question.questionId, socketContext)
-    );
-
-    setQuestionToDelete(null);
+      setShowDeleteModal(false);
+      await dispatch(
+        deleteProposalQuestion(proposalId, question.questionId, socketContext)
+      );
+      questionUnlockWrapper(question?.questionId);
+      setQuestionToDelete(null);
+    } catch (error) {
+      questionUnlockWrapper(question?.questionId);
+      console.log('Error delete question: ', error);
+    }
   };
 
   const deleteQuestionHandler = question => {
-    const updatedQuestion = questionsList.filter(ques => {
-      if (ques.questionId === question.questionId) return true;
-    });
-
-    if (question.isNewEntry) {
-      const filteredCustomQuestion = new OrderedMap(
-        Array.from(questions).filter(questionItem => {
-          if (questionItem[1].get('questionId') !== question.questionId) {
-            return true;
-          }
-
-          return false;
-        })
-      );
-      setNewEntry(null);
-      setQuestions(filteredCustomQuestion);
-    } else if (
-      (question?.answers[question?.answers?.length - 1] &&
-        question?.answers[question?.answers?.length - 1].answer.trim()) ||
-      (updatedQuestion[0]?.answers[updatedQuestion[0]?.answers?.length - 1] &&
-        updatedQuestion[0]?.answers[
-          updatedQuestion[0]?.answers?.length - 1
-        ]?.answer.trim())
+    questionLockWrapper(question?.questionId);
+    if (
+      question?.answers[question?.answers?.length - 1] &&
+      question?.answers[question?.answers?.length - 1].answer.trim()
     ) {
       setQuestionToDelete(question);
       setShowDeleteModal(true);
@@ -216,40 +215,47 @@ function QuestionsForCustomer() {
     navigator.clipboard.write([clipboardItem]);
   };
   const handleClose = () => {
+    if (questionToDelete) questionUnlockWrapper(questionToDelete?.questionId);
     setShowDeleteModal(prev => !prev);
   };
 
   return (
     <>
-      <div className="questions-for-customer-container">
+      <div
+        className="questions-for-customer-container"
+        data-testid="question-customer-tab"
+      >
         <div>
           <Header />
         </div>
         {questions?.size > 0 ? (
           <div
+            id="question-container-area"
             className={
               showScroll || questions?.size > 2
                 ? 'questions-container-over'
                 : 'questions-container'
             }
+            ref={questionContainerRef}
           >
             <ul>
               {questions?.valueSeq().map((questionData, index) => {
                 return (
                   <QuestionContainer
+                    data-testid="question-container"
                     deleteQuestionHandler={deleteQuestionHandler}
                     questionData={questionData}
                     questionIndex={index + 1}
                     isCurrentBid={isCurrentBid}
-                    setNewEntry={setNewEntry}
                     showScroll={showScroll}
+                    socketContext={socketContext}
                   />
                 );
               })}
             </ul>
           </div>
         ) : (
-          <div className="questions-container">
+          <div id="question-container-area" className="questions-container">
             <div className="no-questions-added-t">
               No questions added to this opportunity
             </div>
@@ -257,8 +263,9 @@ function QuestionsForCustomer() {
         )}
 
         <div className="btn-container">
-          <div>
+          <div data-testid="clipboard-button">
             <Button
+              data-testid="clipboard-button"
               className="btn-label"
               icon={<Copy />}
               size="small"
@@ -276,7 +283,7 @@ function QuestionsForCustomer() {
               size="small"
               style={{ marginRight: 10 }}
               className="btn-label"
-              onClick={() => addQuestionHandler()}
+              onClick={addQuestionHandler}
               disabled={
                 (Array.from(questions)[questions.size - 1]
                   ? Array.from(questions)[questions.size - 1][1].get(
@@ -284,7 +291,8 @@ function QuestionsForCustomer() {
                     )
                   : false) ||
                 !isCurrentBid ||
-                !allFlags.isQuestionForCustomerEditable
+                !allFlags.isQuestionForCustomerEditable ||
+                showAddQuestionLoader
               }
               ref={addNewEntryRef}
             >
@@ -293,6 +301,7 @@ function QuestionsForCustomer() {
           </div>
         </div>
         <Modal
+          data-testid="delete-modal"
           open={showDeleteModal}
           variant="warning"
           onClose={() => handleClose()}

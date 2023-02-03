@@ -1,0 +1,146 @@
+{
+    "currentTimezoneID": "",
+    "email": "sushil.munda@iqvia.com",
+    "errorUpdatingTimezone": "",
+    "isFetchingTimezone": false,
+    "role": "Business Account Manager",
+    "roleName": "",
+    "timezoneID": 41,
+    "timezoneList": [
+        {
+            "description": "(UTC-12:00) International Date Line West",
+            "offset_hours": -12,
+            "time_zone": "Etc/GMT+12",
+            "time_zone_id": 1
+        },
+        {
+            "description": "(UTC-11:00) Coordinated Universal Time-11",
+            "offset_hours": -11,
+            "time_zone": "Etc/GMT+11",
+            "time_zone_id": 2
+        },
+        {
+            "description": "(UTC-10:00) Aleutian Islands",
+            "offset_hours": -10,
+            "time_zone": "Pacific/Honolulu",
+            "time_zone_id": 3
+        }
+    ],
+    "userPreference": [
+        {
+            "created_by": "SYSTEM",
+            "created_date": "2022-09-16T11:11:11.506Z",
+            "default_type": "CHECKED",
+            "description":"",
+            "display_order": 1,
+            "is_deleted": false,
+            "mandatory": "FALSE",
+            "preference_code": "REAL_TIME",
+            "preference_id": "2fbc583a-7c6e-4d21-be7e-fefbd43fe885",
+            "preference_type": "EMAIL",
+            "title": "Real time email updates",
+            "updated_by": "SYSTEM",
+            "updated_date": "2022-09-16T11:11:11.506Z",
+            "visible": true
+        },
+        {
+            "created_by": "SYSTEM",
+            "created_date": "2022-09-16T11:11:11.955Z",
+            "default_type": "BOTH",
+            "description": "",
+            "display_order": 1,
+            "is_deleted": false,
+            "mandatory": "FALSE",
+            "preference_code": "ASSIGN_OPPORTUNITY",
+            "preference_id": "29395943-77fe-4740-ae75-c16cb708160b",
+            "preference_type": "NOTIFICATION",
+            "title": "Assigned to an opportunity",
+            "updated_by": "SYSTEM",
+            "updated_date": "2022-09-16T11:11:11.955Z",
+            "visible": true
+        },
+        {
+            "created_by": "SYSTEM",
+            "created_date": "2022-09-16T11:11:11.528Z",
+            "default_type": "UN-CHECKED",
+            "description": "",
+            "display_order": 2,
+            "is_deleted": false,
+            "mandatory": "FALSE",
+            "preference_code": "HOURLY",
+            "preference_id": "e6c2131b-36c4-491e-b595-8a9e2796150d",
+            "preference_type": "EMAIL",
+            "title": "Hourly email digest",
+            "updated_by": "SYSTEM",
+            "updated_date": "2022-09-16T11:11:11.528Z",
+            "visible": true
+        },
+        {
+            "created_by": "SYSTEM",
+            "created_date": "2022-09-26T08:30:35.493Z",
+            "default_type": "BOTH",
+            "description": "",
+            "display_order": 2,
+            "is_deleted": false,
+            "mandatory": "FALSE",
+            "preference_code": "NEW_DOCUMENT",
+            "preference_id": "34b98739-6b88-475d-8b32-8b0377133513",
+            "preference_type": "NOTIFICATION",
+            "title": "New document added",
+            "updated_by": "SYSTEM",
+            "updated_date": "2023-01-13T10:42:04.858Z",
+            "visible": true
+        },
+        {
+            "created_by": "SYSTEM",
+            "created_date": "2022-09-16T11:11:11.867Z",
+            "default_type": "UN-CHECKED",
+            "description": "",
+            "display_order": 3,
+            "is_deleted": false,
+            "mandatory": "FALSE",
+            "preference_code": "ONCE_DAILY",
+            "preference_id": "085d58ef-5d66-49ae-af7f-30734d07e676",
+            "preference_type": "EMAIL",
+            "title": "Once daily email digest",
+            "updated_by": "SYSTEM",
+            "updated_date": "2022-09-16T11:11:11.867Z",
+            "visible": true
+        },
+        {
+            "created_by": "SYSTEM",
+            "created_date": "2022-09-29T10:10:09.841Z",
+            "default_type": "BOTH",
+            "description": "",
+            "display_order": 3,
+            "is_deleted": false,
+            "mandatory": "FALSE",
+            "preference_code": "NOTEPAD_TAG",
+            "preference_id": "1b161c88-a335-4738-9381-163a1ab6644d",
+            "preference_type": "NOTIFICATION",
+            "title": "Tagged in Notepad",
+            "updated_by": "SYSTEM",
+            "updated_date": "2022-09-29T10:10:09.841Z",
+            "visible": true
+        },
+        {
+            "created_by": "SYSTEM",
+            "created_date": "2022-11-29T14:03:55.008Z",
+            "default_type": "BOTH",
+            "description": "",
+            "display_order": 3,
+            "is_deleted": false,
+            "mandatory": "FALSE",
+            "preference_code": "ANSWER_TAG",
+            "preference_id": "0aef0893-3899-4ea6-9bf3-06ef7267102f",
+            "preference_type": "NOTIFICATION",
+            "title": "Tagged in Answer",
+            "updated_by": "SYSTEM",
+            "updated_date": "2023-01-23T09:39:33.987Z",
+            "visible": true
+        }
+    ],
+    "proposal": {
+        "isRolesLoading": false
+    }
+}
