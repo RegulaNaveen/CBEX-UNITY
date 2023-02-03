@@ -1,3 +1,4 @@
+/* eslint-disable prefer-template */
 /* eslint-disable no-else-return */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable no-unused-vars */
@@ -538,22 +539,15 @@ function getNotesRows(notes, editor) {
             class: 'mention'
           },
           renderLabel({ options, node }) {
-            console.log(options, node, 'test tip');
-            return `${node.marks.link ?? node.attrs.id}`;
+            return `breakemail${node.attrs.id}"starttag${node.attrs.label}closetag`;
           }
         })
       ]);
       data += `</div></div></div>`;
       html += data;
-      // const emailList = getEmailID(data);
-      // console.log(emailList, 'elist');
-      // const mentionTag = /(<span data-type="mention".*>)(.*)(<\/span>)/;
-      // for (let i = 0; i < emailList.length; i += 1) {
-      //   html = html?.replace(
-      //     mentionTag,
-      //     `<a href="mailto:${emailList[i]}">$2</a>`
-      //   );
-      // }
+      html = html.replaceAll('breakemail', '<a href="mailto:');
+      html = html.replaceAll('starttag', '">');
+      html = html.replaceAll('closetag', '</a>');
       return html;
     } catch (err) {
       console.log('pdf notes error', err);
@@ -599,7 +593,6 @@ function getHtml(
   console.log('opt :>> ', string);
   const url = getUnityLink(proposalDetails);
   const oppId = proposalDetails['CRM #'];
-  console.log('userName :>> ', userName);
   savePDF(string, url, userName, oppId, fileName);
 }
 const MyDoc = (
