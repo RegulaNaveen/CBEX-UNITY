@@ -1,11 +1,13 @@
 // @flow
 import newAxios from 'axios';
 import omit from 'lodash/omit';
+import FileSaver from 'file-saver';
+import moment from 'moment';
 import { axiosInstance } from '../store';
 import { API } from '../constants';
 import { getAccessTokenFromLocalStorage as getAccessToken } from '../SessionHandler';
 import { logLobDetails } from '../utils/utils';
-import FileSaver from 'file-saver';
+
 const {
   PROPOSAL_API_URL,
   PROPOSAL_QUESTIONS_API_URL,
@@ -41,7 +43,7 @@ const getPDF = (pdfHtml, url, userName, oppId) => {
   const obj = {
     html: pdfHtml,
     url,
-    time: Date.now(),
+    time: moment().format('DD-MMM-YYYY h:mm:ss a'),
     year: new Date().getFullYear(),
     userName,
     oppId
