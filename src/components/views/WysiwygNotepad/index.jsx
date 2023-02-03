@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import Collaboration from '@tiptap/extension-collaboration';
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
 import { connect, useSelector, useDispatch } from 'react-redux';
@@ -31,6 +31,12 @@ import {
   setEditor,
   updateNoteInStore
 } from '../../../redux/actions/notepad-actions';
+import {
+  selectCurrentSearchResult,
+  selectQuery
+} from '../../../redux/selectors/search';
+import { NOTEPAD_UI_ID } from '../../../constants/app';
+import { SearchHighlight } from './SearchHighlightExtension';
 
 const matamoObj = {};
 const WysiwygNotepad = ({
@@ -47,6 +53,8 @@ const WysiwygNotepad = ({
   const [notesUserTag, setNotesUserTag] = useState(false);
   const [editorloadingcount, seteditorloadingcount] = useState(0);
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
+  const query = useSelector(selectQuery);
+  const currentSearchResult = useSelector(selectCurrentSearchResult);
   const usercolor = randomColor({ luminosity: 'light' });
 
   useEffect(() => {
@@ -81,7 +89,9 @@ const WysiwygNotepad = ({
         StarterKit,
         Underline,
         Link,
-        HighLight,
+        HighLight.configure({
+          multicolor: true
+        }),
         Subscript,
         Superscript,
         CharacterCount,
@@ -115,6 +125,9 @@ const WysiwygNotepad = ({
             return `${node.attrs.label ?? node.attrs.id}`;
           },
           suggestion: notesUserTag ? suggestion : null
+        }),
+        SearchHighlight.configure({
+          enable: query !== null && query.length >= 3
         })
       ],
       onUpdate: ({ editor }) => {
@@ -427,6 +440,29 @@ const WysiwygNotepad = ({
     },
     [proposalId, wsInstance, notesUserTag]
   );
+
+  useEffect(() => {
+    if (
+      editor &&
+      currentSearchResult &&
+      currentSearchResult.searchIndex === NOTEPAD_UI_ID
+    ) {
+      if (query !== null && query.length >= 3 && wsInstance.synced) {
+        !editor.isDestroyed &&
+          editor.commands.search(
+            query !== null ? query : '',
+            currentSearchResult.matchIndex
+          );
+      }
+    }
+
+    return () => {
+      if (editor && !editor.isDestroyed) {
+        editor.commands.reset();
+      }
+    };
+  }, [editor, query, currentSearchResult, wsInstance.synced]);
+
   return (
     <>
       {wsInstance && (
