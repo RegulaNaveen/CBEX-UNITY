@@ -168,8 +168,8 @@ switch (environment) {
       'https://byp6zagvkb.execute-api.us-east-1.amazonaws.com/unity-dev';
     COGNITO_HOST = 'https://dev-unity.auth.us-east-1.amazoncognito.com';
     CLIENT_ID = 'uf2jbhv4jcprcdiqc5rupg665';
-    REDIRECTION_URL = 'https://dev-unity.dev.iqvia.app/';
-    // REDIRECTION_URL = 'http://localhost:8080';
+    //REDIRECTION_URL = 'https://dev-unity.dev.iqvia.app/';
+    REDIRECTION_URL = 'http://localhost:8080';
     UBUILD_ARTIFACT = 'https://dev-ubuild.dev.iqvia.app/main.js';
     SF_HOST_URL = 'https://iqvia--crm.lightning.force.com/';
     SOCKET_URL =
@@ -197,7 +197,7 @@ const AUTH = {
   ROLE_ENDPOINT,
   NORMAL_AUTH_API_ENDPOINT,
   AUTH_API_URL,
-  VALIDATE_TOKEN
+  VALIDATE_TOKEN,
 };
 
 const PROPOSAL_API_URL = `${PROPOSAL_API_ENDPOINT}/api/proposals`;
@@ -230,7 +230,7 @@ const PROPOSAL = {
   PROPOSAL_OT_LIST,
   PROPOSAL_SWITCH_OT,
   USER_API_URL,
-  INTEGRATIONS_API_URL
+  INTEGRATIONS_API_URL,
 };
 
 const NOTEPAD_API_URL = `${PROPOSAL_API_ENDPOINT}/api/notes`;
@@ -238,15 +238,15 @@ const PROFILE_API_URL = `${PROPOSAL_API_ENDPOINT}/api/user`;
 const NOTIFICATION_API_URL = `${PROPOSAL_API_ENDPOINT}/api/app-notification`;
 
 const NOTEPAD = {
-  NOTEPAD_API_URL
+  NOTEPAD_API_URL,
 };
 
 const PROFILE = {
   PROFILE_API_URL,
-  PROPOSAL_API_ENDPOINT
+  PROPOSAL_API_ENDPOINT,
 };
 const NOTIFICATION = {
-  NOTIFICATION_API_URL
+  NOTIFICATION_API_URL,
 };
 
 const APPROVALS_URL = `${PROPOSAL_API_URL}/approvals`;
@@ -263,5 +263,5 @@ export {
   NOTIFICATION,
   NOTES_SOCKET_URL,
   LAUNCH_DARKLY_CLIENT_ID,
-  APPROVALS_URL
+  APPROVALS_URL,
 };
