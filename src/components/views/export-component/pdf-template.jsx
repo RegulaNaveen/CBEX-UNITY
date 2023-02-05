@@ -290,7 +290,7 @@ ul {
           }
       
             [data-block=true] {
-              margin-left: 10px;
+              margin-left: 1px;
           }
       
 </style>`;
@@ -614,7 +614,7 @@ function getHtml(
   );
   const image = Logo;
   let string = renderToString(<Prints />);
-  // console.log('opt :>> ', string);
+  console.log('opt :>> ', string);
   const url = getUnityLink(proposalDetails);
   const oppId = proposalDetails['CRM #'];
   savePDF(string, url, userName, oppId, fileName);
