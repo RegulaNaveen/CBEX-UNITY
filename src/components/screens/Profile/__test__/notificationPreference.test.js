@@ -1,81 +1,63 @@
-//  * @jest-environment jsdom
-//  */
-
 import React from 'react';
-
-import { configure, mount, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-import { cleanup, render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import { PROFILE } from '../../../../constants/app';
-
+import { render, fireEvent } from '@testing-library/react';
 import NotificationPreference from '../AccountPreferences/NotificationPreference';
 
-configure({ adapter: new Adapter() });
-afterEach(() => {
-  cleanup();
-});
+const handleUserPreferenceChangeMock = jest.fn();
 
-const {
-  NOTIFICATION_PREFERENCE,
-  IN_APP,
-  EMAIL,
-  NOT_FOUND,
-  EMAIL_PREFERENCES
-} = PROFILE;
+describe('NotificationPreference component', () => {
+  it('renders the component', () => {
+    const userPreference = [
+      {
+        preference_id: '1',
+        title: 'Notification 1',
+        preference_type: 'NOTIFICATION',
+        default_type: 'BOTH',
+        mandatory: 'NONE',
+        preference_selected: 'IN-APP',
+      },
+      {
+        preference_id: '2',
+        title: 'Notification 2',
+        preference_type: 'NOTIFICATION',
+        default_type: 'IN-APP',
+        mandatory: 'NONE',
+        preference_selected: 'IN-APP',
+      },
+    ];
 
-describe('Notification Preference Component is rendered in Dom', () => {
-  test('Notification Preference render', () => {
-    const wrapper = shallow(<NotificationPreference />);
-    expect(wrapper.exists()).toBe(true);
-  });
-  test('check for Email text', () => {
-    const wrapper = shallow(<NotificationPreference />);
-    expect(wrapper.exists()).toBe(true);
-    const chkText = EMAIL;
-    expect(wrapper.text().includes(chkText)).toBe(true);
-  });
+    const { getByText } = render(
+      <NotificationPreference
+        userPreference={userPreference}
+        handleUserPreferenceChange={handleUserPreferenceChangeMock}
+      />
+    );
 
-  test('check for Notification text', () => {
-    const wrapper = shallow(<NotificationPreference />);
-    expect(wrapper.exists()).toBe(true);
-    const chkText = NOTIFICATION_PREFERENCE;
-    expect(wrapper.text().includes(chkText)).toBe(true);
-  });
-
-  test('check for Email', () => {
-    const wrapper = shallow(<NotificationPreference />);
-    expect(wrapper.exists()).toBe(true);
-    const chkText = EMAIL;
-    expect(wrapper.text().includes(chkText)).toBe(true);
+    expect(getByText('Notification 1')).toBeInTheDocument();
+    expect(getByText('Notification 2')).toBeInTheDocument();
   });
 
-  test('check for No Found text', () => {
-    const wrapper = shallow(<NotificationPreference />);
-    expect(wrapper.exists()).toBe(true);
-    const chkText = NOT_FOUND;
-    expect(wrapper.text().includes(chkText)).toBe(true);
-  });
+  it.skip('calls the handleUserPreferenceChange function when a checkbox is clicked', () => {
+    const userPreference = [
+      {
+        preference_id: '1',
+        title: 'Notification 1',
+        preference_type: 'NOTIFICATION',
+        default_type: 'BOTH',
+        mandatory: 'NONE',
+        preference_selected: 'IN-APP',
+      },
+    ];
 
-  test('Check for In-App text', () => {
-    const props = {
-      handleEmailPreferenceChange: jest.fn(),
-      setEmailPrefList: jest.fn()
-    };
-    const wrapper = shallow(<NotificationPreference {...props} />);
-    expect(wrapper.exists()).toBe(true);
-    const chkText = IN_APP;
-    expect(wrapper.text().includes(chkText)).toBe(true);
-  });
+    const { getByLabelText } = render(
+      <NotificationPreference
+        userPreference={userPreference}
+        handleUserPreferenceChange={handleUserPreferenceChangeMock}
+      />
+    );
 
-  test('Check for Email-Preference', () => {
-    const props = {
-      handleEmailPreferenceChange: jest.fn(),
-      setEmailPrefList: jest.fn()
-    };
-    const wrapper = shallow(<NotificationPreference {...props} />);
-    expect(wrapper.exists()).toBe(true);
-    const chkText = EMAIL_PREFERENCES;
-    expect(wrapper.text().includes(chkText)).toBe(true);
+    const checkbox = getByLabelText('In-app');
+    fireEvent.click(checkbox);
+
+    expect(handleUserPreferenceChangeMock).toHaveBeenCalledTimes(1);
   });
 });

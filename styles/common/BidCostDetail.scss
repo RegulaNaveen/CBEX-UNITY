@@ -10,7 +10,12 @@
   }
 
   &_title {
-    font-size: 1rem;
+    color: #000000;
+    font-family: 'ProximaNova-Regular';
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 19px;
   }
   &_details {
     grid-template-columns: minmax(0, 1fr) minmax(0, 0.7fr);
@@ -32,8 +37,11 @@
     }
   }
 }
-.bid-cost-details-card {
-  margin-left: 25px;
-  width: 326px;
+.bid-cost-details {
+  // margin-left: 25px;
+  // width: 326px;
+  padding: 0.5rem 1rem;
   height: auto;
+  flex: 30%;
+  border-left: 1px solid #dfdfdf;
 }
