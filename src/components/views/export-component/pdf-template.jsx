@@ -249,6 +249,10 @@ ul {
   background-color: #EEEEEE;
   border-right: 1px solid #000;
 }
+* {
+  text-rendering: geometricprecision !important;
+}
+* { -webkit-font-smoothing: antialiased; }
         #resp-table-body{
           display: table-row-group;
           }
@@ -613,11 +617,12 @@ function getHtml(
     </html>
   );
   const image = Logo;
+  const time = dateNow();
   let string = renderToString(<Prints />);
   // console.log('opt :>> ', string);
   const url = getUnityLink(proposalDetails);
   const oppId = proposalDetails['CRM #'];
-  savePDF(string, url, userName, oppId, fileName);
+  savePDF(string, url, userName, time, oppId, fileName);
 }
 const MyDoc = (
   proposalDetails,
