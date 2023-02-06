@@ -515,6 +515,7 @@ export function updateSearchMatches(
   tab = null,
   vTab = null
 ) {
+  let matchIndex = 0;
   for (const result of inputText.matchAll(regexp)) {
     finalResult.count++;
     finalResult.results.push({
@@ -523,8 +524,11 @@ export function updateSearchMatches(
       inputText,
       vTab,
       startIndex: result['index'],
-      endIndex: result['index'] + result[0].length
+      endIndex: result['index'] + result[0].length,
+      matchIndex
     });
+
+    matchIndex++;
   }
 }
 
@@ -558,8 +562,10 @@ export function extractTextFromProseMirrorJSON(
   }
   if (typeof data === 'object' && Array.isArray(data.content)) {
     data.content.forEach((content, index) => {
-      if (index !== 0 && content.type === 'paragraph') {
-        extractTextFromProseMirrorJSON(content, results, '\n\n');
+      if (content.type === 'listItem') {
+        extractTextFromProseMirrorJSON(content, results, '  ');
+      } else if (index !== 0 && content.type === 'paragraph') {
+        extractTextFromProseMirrorJSON(content, results, '  ');
       } else {
         extractTextFromProseMirrorJSON(content, results);
       }
