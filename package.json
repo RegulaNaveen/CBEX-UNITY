@@ -69,7 +69,6 @@
     "file-saver": "^2.0.5",
     "formik": "^2.2.9",
     "html2canvas": "^1.4.1",
-    "html2pdf.js": "^0.10.1",
     "immutable": "^4.0.0-rc.12",
     "jsondiffpatch": "^0.4.1",
     "jspdf": "^2.5.1",
