@@ -39,11 +39,11 @@ export const getProposalInfo = async (id: string): Promise<Object> => {
   });
 };
 
-const getPDF = (pdfHtml, url, userName, oppId) => {
+const getPDF = (pdfHtml, url, userName, time, oppId) => {
   const obj = {
     html: pdfHtml,
     url,
-    time: moment().format('DD-MMM-YYYY h:mm:ss a'),
+    time,
     year: new Date().getFullYear(),
     userName,
     oppId
@@ -57,8 +57,8 @@ const getPDF = (pdfHtml, url, userName, oppId) => {
     }
   });
 };
-export const savePDF = (pdfHtml, url, userName, oppId, fileName) => {
-  getPDF(pdfHtml, url, userName, oppId)
+export const savePDF = (pdfHtml, url, userName, time, oppId, fileName) => {
+  getPDF(pdfHtml, url, userName, time, oppId)
     .then(response => {
       const blob = new Blob([response.data], { type: 'application/pdf' });
       FileSaver.saveAs(blob, fileName);
