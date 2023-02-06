@@ -1,6 +1,8 @@
 // @flow
 import newAxios from 'axios';
 import omit from 'lodash/omit';
+import FileSaver from 'file-saver';
+import moment from 'moment';
 import { axiosInstance } from '../store';
 import { API } from '../constants';
 import { getAccessTokenFromLocalStorage as getAccessToken } from '../SessionHandler';
@@ -35,6 +37,35 @@ export const getProposalInfo = async (id: string): Promise<Object> => {
         reject(err);
       });
   });
+};
+
+const getPDF = (pdfHtml, url, userName, time, oppId) => {
+  const obj = {
+    html: pdfHtml,
+    url,
+    time,
+    year: new Date().getFullYear(),
+    userName,
+    oppId
+  };
+  // ${PROPOSAL_API_URL}
+  return axiosInstance.post(`${PROPOSAL_API_URL}/downloadpdf`, obj, {
+    responseType: 'arraybuffer',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/pdf'
+    }
+  });
+};
+export const savePDF = (pdfHtml, url, userName, time, oppId, fileName) => {
+  getPDF(pdfHtml, url, userName, time, oppId)
+    .then(response => {
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      FileSaver.saveAs(blob, fileName);
+    })
+    .catch(err => {
+      console.log(err);
+    });
 };
 
 export const getProposalAnswer = async (
