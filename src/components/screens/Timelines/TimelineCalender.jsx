@@ -36,6 +36,7 @@ export default function DnDOutsideResource({
   const [displayDragItemInCell, setDisplayDragItemInCell] = useState(true);
   const [counters, setCounters] = useState({ item1: 0, item2: 0 });
   const dispatch = useDispatch();
+  const [selectedEvent, setSelectedEvent] = useState(undefined);
 
   // const eventPropGetter = useCallback(
   //   event => ({
@@ -151,29 +152,57 @@ export default function DnDOutsideResource({
 
   const onDropFromOutside = useCallback(
     ({ start, end, allDay: isAllDay }) => {
+      console.log('tapasdfasdf ', selectedEvent);
       if (draggedEvent === 'undroppable') {
         setDraggedEvent(null);
         return;
       }
 
-      const { name } = draggedEvent;
-      const event = {
-        title: formatName(name, counters[name]),
-        start,
-        end,
-        isAllDay
-      };
-      setDraggedEvent(null);
-      setCounters(prev => {
-        const { [name]: count } = prev;
-        return {
-          ...prev,
-          [name]: count + 1
+      if (selectedEvent) {
+        handleDayChange(start, selectedEvent?.question);
+        const { name } = draggedEvent;
+        const event = {
+          title: formatName(selectedEvent.title, counters[selectedEvent.title]),
+          start,
+          end,
+          isAllDay
         };
-      });
-      newEvent(event);
+        setDraggedEvent(null);
+        setCounters(prev => {
+          const { [name]: count } = prev;
+          return {
+            ...prev,
+            [name]: count + 1
+          };
+        });
+        newEvent(event);
+      } else {
+        const { name } = draggedEvent;
+        const event = {
+          title: formatName(name, counters[name]),
+          start,
+          end,
+          isAllDay
+        };
+        setDraggedEvent(null);
+        setCounters(prev => {
+          const { [name]: count } = prev;
+          return {
+            ...prev,
+            [name]: count + 1
+          };
+        });
+        newEvent(event);
+      }
     },
-    [draggedEvent, counters, setDraggedEvent, setCounters, newEvent]
+    [
+      draggedEvent,
+      counters,
+      setDraggedEvent,
+      setCounters,
+      newEvent,
+      selectedEvent
+    ]
   );
 
   const resizeEvent = useCallback(
@@ -186,6 +215,12 @@ export default function DnDOutsideResource({
     },
     [setMyEvents]
   );
+
+  const handleSelectedEvent = event => {
+    console.log({ event });
+    setSelectedEvent(event.event);
+    // setModalState(true)
+  };
 
   const defaultDate = useMemo(() => new Date(proposalDate), [proposalDate]);
 
@@ -264,13 +299,12 @@ export default function DnDOutsideResource({
           onEventDrop={moveEvent}
           onEventResize={resizeEvent}
           onSelectSlot={newEvent}
+          onSelectEvent={e => handleSelectedEvent(e)}
+          onDragStart={e => handleSelectedEvent(e)}
           resizable={false}
           selectable
-          // eventPropGetter={event => {
-          //   const backgroundColor = event.allday ? 'yellow' : 'blue';
-          //   return { style: { backgroundColor } };
-          // }}
-          // views={['month']}
+          popup
+          views={['month']}
         />
       </div>
     </>

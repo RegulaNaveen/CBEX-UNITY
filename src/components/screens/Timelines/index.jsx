@@ -108,8 +108,11 @@ const Timeline = () => {
     if (searchKey.trim()) {
       filteredQuestions = questionsToFilter.filter(
         item =>
-          item.questionText.toLowerCase().includes(key.trim().toLowerCase()) &&
-          item.answerConfiguration.type === 'date'
+          (item.questionText.toLowerCase().includes(key.trim().toLowerCase()) &&
+            item.answerConfiguration.type === 'date') ||
+          item.section.sectionName
+            .toLowerCase()
+            .includes(key.trim().toLowerCase())
       );
     }
 
