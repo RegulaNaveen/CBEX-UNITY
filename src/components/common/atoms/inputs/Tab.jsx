@@ -27,6 +27,7 @@ import { NOTEPAD_UI_ID } from '../../../../constants/app';
 import { autoNavigationCompletedAction } from '../../../../redux/actions/search-actions';
 import lazyWithRetry from '../../../../utils/lazy';
 import VerticalTabsCollapsiblePanel from '../../../screens/Opportunity/layout/navigation/VerticalTabsCollapsiblePanel';
+import Timelines from '../../../screens/Timelines';
 
 const Questions = React.lazy(() =>
   lazyWithRetry(() =>
@@ -123,20 +124,26 @@ const UnityTab = ({
       path: 'questions'
     },
     {
-      label: 'Approvals',
+      label: 'Timelines',
       value: 1,
+      component: <Timelines key="Timelines" proposalID={id} />,
+      path: 'timelines'
+    },
+    {
+      label: 'Approvals',
+      value: 2,
       component: <Approvals key="Approvals" />,
       path: 'approvals'
     },
     {
       label: 'Documents',
-      value: 2,
+      value: 3,
       component: <Documents key="Documents" />,
       path: 'documents'
     },
     {
       label: 'Validate',
-      value: 3,
+      value: 4,
       component: <Validate key="Validate" />,
       path: 'validate'
     }
@@ -150,7 +157,7 @@ const UnityTab = ({
     const proposalTeamFlag = allFlags.proposalTeamTab || false; // Proposal Team flag
     const approvalFlag = allFlags.approvalsFlag || false;
     if (
-      !verticalTabFlag ||
+      verticalTabFlag ||
       ![questionsForCustomerFlag, notepadFlag, proposalTeamFlag].some(
         flag => !!flag
       )
@@ -192,12 +199,18 @@ const UnityTab = ({
       const isApprovalTabVisible = approvalsFlag;
       const approvalTabValue = tabs.find(item => item.label === 'Approvals')
         .value;
+
       dispatch(
         setActiveTabIndexAction(isApprovalTabVisible ? approvalTabValue : 0)
       ); // Shows questions tab if Approvals are not found for the proposal
     }
     if (selectedView && selectedView === 'questions') {
       dispatch(setActiveTabIndexAction(0));
+    }
+    if (selectedView && selectedView === 'timelines') {
+      const timelinesTabValue = tabs.find(item => item.label === 'Timelines')
+        .value;
+      dispatch(setActiveTabIndexAction(timelinesTabValue));
     }
   }, [selectedView, approvalsFlag, showApprovalTab]);
 

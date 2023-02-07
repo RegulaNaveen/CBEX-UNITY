@@ -62,3 +62,6 @@
 @import './common/CustomAccordion.scss';
 @import './Approvals.scss';
 @import './QuestionForCustomer.scss';
+@import './Timeline.scss';
+@import 'react-big-calendar/lib/sass/styles';
+@import 'react-big-calendar/lib/addons/dragAndDrop/styles'; // if using DnD

@@ -1,0 +1,116 @@
+#Timeline-main-wrapper {
+  //   grid-template-columns: 1fr;
+  .timeline-container {
+    // background: #fff;
+    width: 97vw;
+    display: flex;
+
+    .react-resizable:nth-child(2) {
+      border-right: none;
+      margin-left: 0;
+      width: 100% !important;
+      display: flex;
+      justify-content: space-around;
+    }
+    .react-resizable:nth-child(1) {
+      margin-left: -20px;
+      background-color: #f6f7fb;
+      // border: none;
+      box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.08);
+      .MuiIconButton-root {
+        top: 50%;
+      }
+    }
+  }
+  .title {
+    height: 32px;
+    width: 258px;
+    color: #000000;
+    font-family: 'Proxima Nova';
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 32px;
+  }
+  .subtitle {
+    height: 24px;
+    width: 258px;
+    color: #444444;
+    font-family: 'Proxima Nova';
+    font-size: 16px;
+    letter-spacing: 0;
+    line-height: 24px;
+  }
+  .MuiAccordion-root {
+    background-color: #f6f7fb;
+    // box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.08);
+  }
+  .btn-container {
+    margin: 1em 0;
+  }
+
+  // .background {
+  //   background-color: #f6f7fb;
+  //   box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.08);
+  // }
+  .section-tile {
+    overflow-wrap: anywhere;
+  }
+  .timeline-question-header {
+    padding: 1em;
+    box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.08);
+    background-color: #fff;
+  }
+  .timeline-search-container {
+    padding: 5px 1em;
+    background-color: #f6f7fb;
+  }
+  .timeline-questions-container {
+    height: 76.5vh;
+    overflow-y: auto;
+
+    .MuiAccordion-root {
+      border-bottom: none;
+    }
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(155, 155, 155, 0.5);
+    border-radius: 20px;
+    border: transparent;
+  }
+
+  .timeline-questions-list-container {
+    overflow-wrap: break-word;
+    list-style-type: none;
+    color: #000;
+  }
+  .timeline-question-listitem {
+    margin: 10px 0px;
+    cursor: pointer;
+    color: #000000;
+    font-family: 'Proxima Nova';
+    font-size: 16px;
+    letter-spacing: 0;
+    line-height: 24px;
+  }
+  // .questions-for-custom {
+
+  //   width: 268px;
+  // }
+  .timeline-calender-container {
+    padding: 20px;
+    width: 72vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin-left: 2em;
+  }
+}
