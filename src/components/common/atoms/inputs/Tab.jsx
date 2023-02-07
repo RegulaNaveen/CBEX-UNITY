@@ -107,7 +107,7 @@ const UnityTab = ({
 
   const { trackEvent } = useMatomo();
 
-  const notepadPanelRef = useRef(null);
+  const panelRef = useRef(null);
 
   const minPixelToExclude = 20;
   const notepadMinWidthPx =
@@ -215,17 +215,21 @@ const UnityTab = ({
   }, [selectedView, approvalsFlag, showApprovalTab]);
 
   useEffect(() => {
-    if (currentSearchResult !== null && notepadPanelRef.current !== null) {
-      if (currentSearchResult.searchIndex === NOTEPAD_UI_ID) {
+    if (currentSearchResult !== null && panelRef.current !== null) {
+      if (
+        currentSearchResult.vTab !== null &&
+        currentSearchResult.vTab >= 0 &&
+        currentSearchResult.vTab <= 2
+      ) {
         if (!isNotepadOpen) {
           // by inspecting DOM, found there is only one button element inside Panel component hence choosing first button
-          const toggleButton = notepadPanelRef.current.children[0].getElementsByTagName(
+          const toggleButton = panelRef.current.children[0].getElementsByTagName(
             'button'
           )[0];
           toggleButton.click();
         }
         setTimeout(() => {
-          notepadPanelRef.current.scrollIntoView({
+          panelRef.current.scrollIntoView({
             behaviour: 'smooth',
             block: 'center',
             inline: 'nearest'
@@ -234,7 +238,7 @@ const UnityTab = ({
         }, 500);
       }
     }
-  }, [dispatch, notepadPanelRef, currentSearchResult, isNotepadOpen]);
+  }, [dispatch, panelRef, currentSearchResult, isNotepadOpen]);
 
   const winLocationSearch = window.location.search;
   const handleChangeTab = (event, val) => {
@@ -271,7 +275,7 @@ const UnityTab = ({
   const renderVerticleTabsComponent = activeVerticleTab => {
     if (activeVerticleTab === 'showQuestionsForCustomerTab') {
       return (
-        <div id="panel-notepad" style={{ borderRadius: '5px' }}>
+        <div id="panel-notepad" style={{ borderRadius: '5px' }} ref={panelRef}>
           <Panel
             minWidth={notepadMinWidthPx}
             maxWidth={notepadMaxWidthPx}
@@ -316,7 +320,7 @@ const UnityTab = ({
             'show-highlight':
               currentSearchResult !== null && currentSearchResult.vTab === 1
           })}
-          ref={notepadPanelRef}
+          ref={panelRef}
         >
           <Panel
             minWidth={notepadMinWidthPx}
@@ -389,7 +393,7 @@ const UnityTab = ({
     }
     if (activeVerticleTab === 'proposalteamtab') {
       return (
-        <div id="panel-notepad" style={{ borderRadius: '5px' }}>
+        <div id="panel-notepad" style={{ borderRadius: '5px' }} ref={panelRef}>
           <Panel
             minWidth={notepadMinWidthPx}
             maxWidth={notepadMaxWidthPx}

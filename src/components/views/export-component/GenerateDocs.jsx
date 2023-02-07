@@ -130,7 +130,6 @@ const GenerateDocs = () => {
       return [];
     }
   };
-
   const initExport = () => {
     try {
       const { fileName, fileType } = filterState;

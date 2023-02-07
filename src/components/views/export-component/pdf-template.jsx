@@ -1,3 +1,6 @@
+/* eslint-disable prefer-template */
+/* eslint-disable no-else-return */
+/* eslint-disable import/no-unresolved */
 /* eslint-disable no-unused-vars */
 /* eslint-disable func-names */
 /* eslint-disable no-unused-expressions */
@@ -21,7 +24,6 @@ import {
 } from '@react-pdf/renderer';
 import React from 'react';
 import Html from 'react-pdf-html';
-import jsPDF from 'jspdf';
 import { isString } from 'lodash';
 import moment from 'moment';
 import { generateHTML } from '@tiptap/core';
@@ -34,9 +36,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
 import OrderedList from '@tiptap/extension-text-align';
-import FooterHead from '../../../../img/footerHead.png';
-import Logo from '../../../../img/iqvia-main-logo.png';
-import Border from '../../../../img/borders.png';
+import Logo from '../../../../img/iqvia-hd-logo.png';
 import {
   getFilteredQuestion,
   headFields,
@@ -58,6 +58,7 @@ import '../../../../fonts/ProximaNova-Regular-normal';
 import '../../../../fonts/Proxima-Nova-Alt-Bold-bold';
 import '../../../../fonts/Proxima-Nova-Bold-It-bolditalic';
 import '../../../../fonts/Proxima-Nova-Reg-It-italic';
+import { savePDF } from '../../../api/proposal';
 
 const styles = StyleSheet.create({
   page: {
@@ -138,7 +139,9 @@ function checkFormattedAnswer(answers) {
         return formattedAnswer?.html;
       }
     }
-    return (lastAnswer && lastAnswer.answer.toString()) || '';
+    return (
+      (lastAnswer && lastAnswer.answer.toString())?.replace(/,/g, ', ') || ''
+    );
   } catch (error) {
     console.log(error);
     return '';
@@ -149,17 +152,16 @@ function getExtraLines(t1, t2) {
   const paddingAnswerCell = parseInt(contentLength / 230);
   return new Array(paddingAnswerCell + 2 || 2).fill('<br>').join('');
 }
-function topHeading(details) {
-  return `<h1 class="mainTitle"><em>${details['CRM #'] ||
-    ''}</em> Opportunity Overview</h1>`;
-}
 function getStyled() {
   return `<style>
-
-body {
-  font-family: ProximaNova-Regular !important;
-  font-size: 10px;
-}  
+  html {
+    -webkit-print-color-adjust: exact;
+  }
+  FONTCHANGE
+  body {
+    font-family: ProximaNova-Regular !important;
+    font-size: 10px;
+  }  
 h1{
     font-size: 20px;
     margin: 5px;
@@ -185,65 +187,46 @@ h3{
 .notesTable tr{
     border-bottom: none;
 }
-ul li{
-  padding-left: 5px;
-}
 .blueColorText{
     color: #00A3E0;
     font-family:Helvetica;
     font-size: 10px;
 }
- .public-DraftStyleDefault-depth1.public-DraftStyleDefault-listLTR {
-  margin-left: 10px;
-  list-style-type: disc !important;
+ol {
+  padding-inline-start: 10px !important;
 }
-li {
-  align-items: flex-start;
+ul {
+  padding-inline-start: 10px !important;
 }
-  li ul li{
-    list-style-type: disc;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-    padding-inline-start: 5px;
-  }
-  ul ul {
-    display: block;
-    list-style-type: disc;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-    padding-inline-start: 5px;
-  }
-  ul {
-    display: block;
-    list-style-type: disc;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-  }
-#resp-table {
-  width: 480px;
+ #resp-table {
+  width: 100%;
   height: auto;
   display: table;
   border: 1px solid #000;
   border-bottom: 0px;
   }
+  .notesData p {
+    display: block;
+    margin-block-start: 3px;
+      margin-block-end: 3px;
+  } 
+  .notesTable #resp-table-header {
+    border-bottom: 0px;
+}
   #resp-table-caption{
     display: table-cell;
     text-align: center;
-    font-size: 12px;
+    font-size: 10px;
     color: #fff;
     font-weight: bold;
     background-color: #00A3E0;
     padding:5px;
+    word-break: break-word;
+    border-bottom: 1px solid #000;
     }
     #resp-table-header {
       display: table-cell;
-      font-size: 12px;
+      font-size: 10px;
       background-color: #00A3E0;
       color: #fff;
       font-weight: bold;
@@ -260,12 +243,16 @@ li {
     width: 50%;
     height: auto;
     border-bottom: 1px solid #000;
-    word-break: break-all;
+    word-break: break-word;
 }
 .table-header-cell:nth-child(odd) {
   background-color: #EEEEEE;
   border-right: 1px solid #000;
 }
+* {
+  text-rendering: geometricprecision !important;
+}
+* { -webkit-font-smoothing: antialiased; }
         #resp-table-body{
           display: table-row-group;
           }
@@ -280,13 +267,39 @@ li {
                 background-color: #00A3E0;
                 color: #fff;
                 font-weight: bold;
+                width: 30% !important;
             }
-            .notes-ol ol {
-              padding-left: 15px;
+            .public-DraftStyleDefault-depth0.public-DraftStyleDefault-listLTR {
+              margin-left: 5px;
           }
-
+          .public-DraftStyleDefault-depth1.public-DraftStyleDefault-listLTR {
+              margin-left: 10px;
+          }
+          .public-DraftStyleDefault-depth2.public-DraftStyleDefault-listLTR {
+              margin-left: 15px;
+          }
+          .public-DraftStyleDefault-depth3.public-DraftStyleDefault-listLTR {
+              margin-left: 20px;
+          }
+          .public-DraftStyleDefault-depth4.public-DraftStyleDefault-listLTR {
+              margin-left: 25px;
+          }
+          .MuiGrid-root{
+              display:none;
+          }
+          .MuiFormControl-root{
+              padding:5px;
+              border: 1px solid #000;
+              border-top: none;
+          }
+      
+            [data-block=true] {
+              margin-left: 1px;
+          }
+      
 </style>`;
 }
+let size = 30;
 function getHeaderInfoRows(details) {
   let html = `<div id="resp-table" class="table headerInfo">`;
   try {
@@ -296,7 +309,6 @@ function getHeaderInfoRows(details) {
       html += `<div class="resp-table-row">`;
       html += `<div class="table-header-cell">${headFields[key]}</div>`;
       html += `<div class="table-header-cell">${value.toString()}</div>`;
-      // html += `<div class="table-header-cell"></div>`;
       html += `</div>`;
     }
   } catch (error) {
@@ -311,7 +323,7 @@ function getProposalTeamsRows(questions) {
       question =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
-        CORE_TEAM[question.questionText]
+        question.questionId === 'Proposal Team-P0C'
     )
     .sort((a, b) => a.questionOrder - b.questionOrder);
   const otherTeamQuestions = questions
@@ -319,7 +331,8 @@ function getProposalTeamsRows(questions) {
       question =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
-        !CORE_TEAM[question.questionText]
+        !CORE_TEAM[question.questionText] &&
+        question.questionId !== 'Proposal Team-P0C'
     )
     .sort((a, b) => a.questionOrder - b.questionOrder);
   let html = ``;
@@ -336,7 +349,6 @@ function getProposalTeamsRows(questions) {
     };
     coreTeamQuestions.forEach(question => {
       const { questionText, answers } = question;
-      const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
       html += `<div class="resp-table-row">`;
       html += `<div class="table-header-cell">${questionText}</div>`;
       const coreTeamQuestionsAnswer = checkFormattedAnswer(answers);
@@ -348,11 +360,7 @@ function getProposalTeamsRows(questions) {
           coreTeamQuestionsAnswer.indexOf('(')
         );
         let tempEmail = String(coreTeamQuestionsEmail[0]).trim();
-        emailLink = `<p><span data-type="mention" style="color:blue;" data-id="${String(
-          tempEmail
-        ).toUpperCase()}" data-label="${String(
-          name
-        ).toUpperCase()}">${tempEmail}</span></p>`;
+        emailLink = `<a href="mailto:${tempEmail}">${name}</a>`;
       }
       html += `<div class="table-header-cell">${emailLink}</div>`;
       html += `</div>`;
@@ -363,9 +371,8 @@ function getProposalTeamsRows(questions) {
     html += `<div id="resp-table-header"> Specialty Team Members </div>`;
     html += `<div id="resp-table-header"> Name</div>`;
     html += `</div>`;
-    otherTeamQuestions.forEach(question => {
+    otherTeamQuestions.forEach((question, index) => {
       const { questionText, answers } = question;
-      const extraNewLines = getExtraLines(questionText, getLastAnswer(answers));
       html += `<div class="resp-table-row">`;
       html += `<div class="table-header-cell">${questionText} </div>`;
       const otherTeamQuestionsAnswer = checkFormattedAnswer(answers);
@@ -377,12 +384,13 @@ function getProposalTeamsRows(questions) {
           otherTeamQuestionsAnswer.indexOf('(')
         );
         let tempEmailOther = String(otherTeamQuestionsAnswerEmail[0]).trim();
-        otherTeamQuestionsemailLink = `<p><span data-type="mention" style="color:blue" data-id=${String(
-          tempEmailOther
-        ).toUpperCase()} data-label=${String(
-          nameOther
-        ).toUpperCase()}>${tempEmailOther}</span> 
-        <br/><br/></p>`;
+        // otherTeamQuestionsemailLink = `<p><span data-type="mention" style="color:blue" data-id=${String(
+        //   tempEmailOther
+        // ).toUpperCase()} data-label=${String(
+        //   nameOther
+        // ).toUpperCase()}>${tempEmailOther}</span>
+        // <br/><br/></p>`;
+        otherTeamQuestionsemailLink = `<a href="mailto:${tempEmailOther}">${nameOther}</a>`;
       }
       html += `<div class="table-header-cell">${otherTeamQuestionsemailLink}</div>`;
       html += `</div>`;
@@ -436,7 +444,7 @@ function questionTables(allQuestions, proposalQuestions) {
     if (section === QC_SECTION) {
       html += `<div id="resp-table" class="questionTable table marginTop20">`;
       html += `<div class="resp-table-row">`;
-      html += `<div id="resp-table-caption"> ${section} </div>`;
+      html += `<div id="resp-table-caption" style="word-spacing: 1px"> ${section}  </div>`;
       html += `<div id="resp-table-caption"></div>`;
       html += `</div>`;
       let questionsToCustomerLeftSection = allQuestions
@@ -448,10 +456,6 @@ function questionTables(allQuestions, proposalQuestions) {
         .sort((a, b) => a.questionOrder - b.questionOrder);
       questionsToCustomerLeftSection.forEach(question => {
         const questionHTML = question.questionHTML || question.questionText;
-        const extraNewLines = getExtraLines(
-          getLastAnswerHtml(question.answers),
-          questionHTML
-        );
         html += `<div class="resp-table-row">`;
         html += `<div class="table-header-cell"> ${questionHTML} </div>`;
         html += `<div class="table-header-cell"> ${formatDate(
@@ -473,10 +477,6 @@ function questionTables(allQuestions, proposalQuestions) {
         .sort((a, b) => a.questionOrder - b.questionOrder);
       questionsToCustomerRightSection.forEach(question => {
         const { questionText } = question;
-        const extraNewLines = getExtraLines(
-          getLastAnswerHtml(question?.answers),
-          questionText
-        );
         html += `<div class="resp-table-row">`;
         html += `<div class="table-header-cell"> ${questionText}</div>`;
         html += `<div class="table-header-cell"> ${formatDate(
@@ -493,20 +493,20 @@ function questionTables(allQuestions, proposalQuestions) {
     } else {
       html += `<div id="resp-table" class="questionTable table marginTop20">`;
       html += `<div class="resp-table-row">`;
-      html += `<div id="resp-table-caption"> ${section} </div>`;
+      html += `<div id="resp-table-caption" style="word-spacing: 1px"> ${section} </div>`;
       html += `<div id="resp-table-caption"></div>`;
       html += `</div>`;
       sections[section]
         .sort((a, b) => a.questionOrder - b.questionOrder)
         .forEach(question => {
           const questionHTML = question.questionHTML || question.questionText;
-          const extraNewLines = getExtraLines(
-            getLastAnswerHtml(question.answers),
-            questionHTML
-          );
+          const questionType = question?.answerConfiguration?.type;
+
+          const questionTypeValidation =
+            questionType === 'picklist-lookup' ? 'word-spacing:1px' : '';
           html += `<div class="resp-table-row">`;
           html += `<div class="table-header-cell"> ${questionHTML}</div>`;
-          html += `<div class="table-header-cell"> ${formatDate(
+          html += `<div class="table-header-cell" style=${questionTypeValidation}> ${formatDate(
             checkFormattedAnswer(question.answers),
             question.answerConfiguration
           )} <span class="blueColorText">${
@@ -530,13 +530,26 @@ function getNotesRows(notes, editor) {
   html += `</div>`;
   html += `</div>`;
   let data = ``;
-  data += `<div id="resp-table" style="border-bottom: 1px solid #000;"><div class="resp-table-row"><div class="notes-ol" style="padding: 10px;">`;
+  const getEmailID = str => {
+    return String(str).match(
+      /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+    );
+  };
+  data += `<div id="resp-table" class="notesData" style="border-bottom: 1px solid #000;"><div class="resp-table-row"><div class="notes-ol" style="padding: 15px;">`;
   try {
     const noteText = editor.getJSON();
     try {
       data += generateHTML(noteText, [
         StarterKit,
-        Link,
+        Link.configure({
+          autolink: true,
+          linkOnPaste: false,
+          validate: href => /^https?:\/\// || /^www?:\/\//.test(href),
+          protocols: ['ftp', 'mailto'],
+          HTMLAttributes: {
+            class: 'my-custom-class'
+          }
+        }),
         HighLight,
         Subscript,
         Superscript,
@@ -550,15 +563,19 @@ function getNotesRows(notes, editor) {
         }),
         Mention.configure({
           HTMLAttributes: {
-            style: `color:blue;`
+            style: `color:blue;`,
+            class: 'mention'
           },
           renderLabel({ options, node }) {
-            return `${node.attrs.id}`;
+            return `breakemail${node.attrs.id}"starttag${node.attrs.label}closetag`;
           }
         })
       ]);
       data += `</div></div></div>`;
       html += data;
+      html = html.replaceAll('breakemail', '<a href="mailto:');
+      html = html.replaceAll('starttag', '">');
+      html = html.replaceAll('closetag', '</a>');
       return html;
     } catch (err) {
       console.log('pdf notes error', err);
@@ -579,132 +596,33 @@ function getHtml(
 ) {
   let html = ` 
   ${getStyled()}
-  <div id="page" style="width: 500px;"> <div style="width: 500px;"><div style="width: 500px;">  <div style="margin-bottom: 5px;width: 200px;"><div style="font-size:14px;color:#00a3e0;font-family:inherit;font-weight:700;width: 250px;display: flex;">  <p style="font-style:italic;display: flex; margin: 0px !important;">${proposalDetails[
+  <div id="page" style="width: 100%;"> <div style="width: 100%;"><div style="width: 100%;">  <div style="margin-bottom: 5px;width: 100%;"><div style="font-size:14px;color:#00a3e0;font-family:inherit;font-weight:700;width: 100%;display: flex;">  <p style="font-style:italic;display: flex; margin: 0px !important;">${proposalDetails[
     'CRM #'
   ] || ' '}${'&nbsp'}
-  </p>Opportunity Overview
+   Opportunity Overview</p>
 </div></div>${getHeaderInfoRows(proposalDetails)}
          ${getProposalTeamsRows(questions)}
          ${questionTables(questions, filteredQuestions)}
-         ${getNotesRows(notes, editor)}
+         ${filterState.includesNotes ? getNotesRows(notes, editor) : ''}
       </div>   </div></div>    `;
   // this is added to handle , some data having unclosed span tag.
-  const SpanExp = /[^<]\/span>/g;
-  if (html.match(SpanExp)) html = html?.replace(SpanExp, '</span>');
-
-  // const BrackExp = /[\(\)']+/g;
-  const BrackExp = /\([^(]\/span>/g;
-  if (html.match(BrackExp)) html = html?.replace(BrackExp, '</span> ');
-
+  const SpanExp = new RegExp('([^<])/span>', 'g');
+  if (html.match(SpanExp)) {
+    // const expression = html?.match(SpanExp)?.split('/');
+    html = html?.replaceAll(SpanExp, `$1</span>`);
+  }
   const Prints = () => (
     <html lang="en">
       <body id="pdfbody">{ReactHtmlParser(html)}</body>
     </html>
   );
   const image = Logo;
+  const time = dateNow();
   let string = renderToString(<Prints />);
-  // const emailExp = /([(][a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+[)])/gi;
-  // if (string.match(emailExp)) {
-  //   const matched = string?.match(emailExp);
-  //   if (matched)
-  //     for (let mail = 0; mail < matched.length; mail += 1) {
-  //       const matchEmail = new RegExp(matched[mail], 'g');
-  //       if (string?.match(matchEmail))
-  //         string = string?.replace(
-  //           matched[mail],
-  //           ` <span style="color: #0000FF">${matched[mail]}</p>`
-  //         );
-  //     }
-  // }
-  let extractStyles;
-  let k = 0;
-  let fetchedElementArray = string.split(/(>)/g);
-  let foundArray = [];
-  fetchedElementArray.filter(value => {
-    if (value.match(/text-decoration:(.*?)"/g)) {
-      foundArray.push(value);
-    }
-    foundArray.forEach(item => {
-      const indexFoundArray = fetchedElementArray.indexOf(item);
-      const currentIndex = item;
-      for (k; k < 7; k++) {
-        if (fetchedElementArray[indexFoundArray + k].match(/^(.+?)<\//)) {
-          const splitText = fetchedElementArray[indexFoundArray + k].split('<');
-          if (
-            currentIndex.match('line-through') &&
-            currentIndex.match('underline')
-          ) {
-            extractStyles = `<u><s>${splitText[0]}</s></u><${splitText[1]}`;
-            fetchedElementArray[indexFoundArray + k] = extractStyles;
-          } else if (currentIndex.match('line-through')) {
-            extractStyles = `<s>${splitText[0]}</s><${splitText[1]}`;
-            fetchedElementArray[indexFoundArray + k] = extractStyles;
-          } else if (currentIndex.match('underline')) {
-            extractStyles = `<u>${splitText[0]}</u><${splitText[1]}`;
-            fetchedElementArray[indexFoundArray + k] = extractStyles;
-          }
-          let appendedString = '';
-          fetchedElementArray.forEach(value => (appendedString += value));
-          string = appendedString;
-        }
-      }
-    });
-  });
-  const pdfa = new jsPDF({
-    compress: true,
-    orientation: 'p',
-    unit: 'pt',
-    format: 'a4'
-  });
-
-  // pdfa.setFont('ProximaNova-Regular');
-  pdfa.setFontSize(12);
-  pdfa.html(string, {
-    callback(pdfa2) {
-      const pageCount = pdfa2.internal.getNumberOfPages();
-      for (let i = 0; i <= pageCount; i += 1) {
-        pdfa2.setPage(i);
-        pdfa2.addImage(image, 'PNG', 400, 20, 143, 60);
-        pdfa2.addImage(Border, 'PNG', 50, 80, 500, 0);
-        pdfa2.setTextColor(0, 163, 224);
-        pdfa.setFontSize(8);
-        pdfa2.text(
-          '† Unity has provided this answer but not validated by user on proposal team.',
-          50,
-          782,
-          { align: 'left' }
-        );
-        pdfa2.addImage(FooterHead, 'PNG', 50, 785, 500, 0);
-        pdfa2.setTextColor(153, 153, 153);
-        pdfa2.setFontSize(8);
-        pdfa2.text(`Exported from Unity on ${dateNow()}`, 50, 800, {
-          align: 'left'
-        });
-        pdfa2.text(`by ${userName}`, 50, 810, {
-          align: 'left'
-        });
-        pdfa2.text(`View up-to-date Unity record here:`, 550, 800, {
-          align: 'right'
-        });
-        pdfa2.text(`${getUnityLink(proposalDetails)}`, 550, 810, {
-          align: 'right'
-        });
-        pdfa2.text(
-          ` Copyright © ${yearNow} IQVIA. All Rights Reserved. Confidential and Proprietary.`,
-          550,
-          820,
-          {
-            align: 'right'
-          }
-        );
-        pdfa2.text(` ${i}`, 270, 830, {
-          align: 'center'
-        });
-      }
-      pdfa2.save(fileName);
-    },
-    margin: [90, 50, 90, 50]
-  });
+  // console.log('opt :>> ', string);
+  const url = getUnityLink(proposalDetails);
+  const oppId = proposalDetails['CRM #'];
+  savePDF(string, url, userName, time, oppId, fileName);
 }
 const MyDoc = (
   proposalDetails,
@@ -717,155 +635,19 @@ const MyDoc = (
 ) => {
   return (
     <Document>
-      {' '}
-      <Page wrap style={styles.page}>
-        {' '}
-        <View fixed style={styles.header}>
-          {' '}
-          <Image src={Logo} style={styles.imgLogo}></Image>{' '}
-        </View>{' '}
-        <View style={styles.body}>
-          {' '}
-          <View style={styles.heading}>
-            {' '}
-            <Text style={styles.headingText}>
-              {' '}
-              <Text style={{ fontStyle: 'italic' }}>
-                {' '}
-                {proposalDetails['CRM #'] || ''}{' '}
-              </Text>{' '}
-              Opportunity Overview
-            </Text>{' '}
-          </View>{' '}
-          <Html
-            collapse={false} // this will preserve whitespace
-            style={{ fontSize: 10 }}
-            renderers={{
-              p: ({ style, children }) => {
-                if (children != '') {
-                  return <View style={style}>{children}</View>;
-                } else {
-                  return <View style={{ height: 18 }}></View>;
-                }
-              },
-              tr: ({ style, children }) => (
-                <View style={style}>{children}</View>
-              ),
-              a: ({ style, element, children }) => {
-                return (
-                  <HtmlLink style={style} href={element.attrs.href}>
-                    {' '}
-                    <Text>{children}</Text>{' '}
-                  </HtmlLink>
-                );
-              },
-              mark: ({ style, children }) => {
-                return <Text style={style}>{children}</Text>;
-              },
-              div: ({ style, children, element }) => {
-                const { _attrs } = element;
-                if (
-                  _attrs &&
-                  _attrs.class &&
-                  _attrs.class.includes(
-                    'public-DraftStyleDefault-block public-DraftStyleDefault-ltr'
-                  )
-                ) {
-                  return <Text style={style}>{children}</Text>;
-                }
-                return <View style={style}>{children}</View>;
-              }
-            }}
-          >
-            {' '}
-            {getHtml(
-              proposalDetails,
-              questions,
-              filteredQuestions,
-              notes,
-              filterState,
-              editor,
-              fileName
-            )}
-          </Html>{' '}
-        </View>{' '}
-        <View fixed style={styles.footer}>
-          {' '}
-          <Text
-            style={{
-              fontSize: '10px',
-              fontweight: 'bold',
-              color: `#00A3E0`,
-              marginBottom: 5,
-              borderBottom: '1px solid #CCC'
-            }}
-          >
-            {' '}
-            † Unity has provided this answer but not validated by user on
-            proposal team.{' '}
-          </Text>{' '}
-          <View
-            style={{ display: 'flex', flexDirection: 'row', marginBottom: 5 }}
-          >
-            {' '}
-            <Text style={{ flex: 1, fontSize: '8px', color: '#999' }}>
-              {' '}
-              Exported from Unity on {dateNow()}
-            </Text>{' '}
-            <Text
-              style={{
-                flex: 1,
-                fontSize: '8px',
-                textAlign: 'right',
-                color: '#999'
-              }}
-            >
-              {' '}
-              View up-to-date Unity record here:
-            </Text>{' '}
-          </View>{' '}
-          <View
-            style={{ display: 'flex', flexDirection: 'row', marginBottom: 5 }}
-          >
-            {' '}
-            <Text style={{ flex: 1, fontSize: '8px', color: '#999' }}>
-              {' '}
-              by {userName}
-            </Text>{' '}
-            <Text
-              style={{
-                flex: 1,
-                fontSize: '8px',
-                textAlign: 'right',
-                color: '#999'
-              }}
-            >
-              {' '}
-              {getUnityLink(proposalDetails)}
-            </Text>{' '}
-          </View>{' '}
-          <View
-            style={{ display: 'flex', flexDirection: 'row', marginBottom: 0 }}
-          >
-            {' '}
-            <Text
-              style={{ flex: 0, fontSize: '8px', color: '#999' }}
-            ></Text>{' '}
-            <Text
-              style={{
-                flex: 1,
-                fontSize: '8px',
-                textAlign: 'right',
-                color: '#999'
-              }}
-            >
-              {' '}
-              Copyright © {yearNow} IQVIA. All Rights Reserved. Confidential and
-              Proprietary.
-            </Text>{' '}
-          </View>{' '}
-        </View>{' '}
-      </Page>{' '}
+      <Html
+        collapse={false} // this will preserve whitespace
+      >
+        {getHtml(
+          proposalDetails,
+          questions,
+          filteredQuestions,
+          notes,
+          filterState,
+          editor,
+          fileName
+        )}
+      </Html>
     </Document>
   );
 };
