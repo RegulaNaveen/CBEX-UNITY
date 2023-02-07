@@ -12,11 +12,7 @@ const TimelineSections = ({ sectionName, sectionOrder, questions }) => {
 
   return (
     <>
-      <Accordion
-        variant="alternate"
-        defaultExpanded={sectionOrder === 1}
-        style={{ width: '100%' }}
-      >
+      <Accordion defaultExpanded={sectionOrder === 1} style={{ width: '100%' }}>
         <AccordionSummary>
           <Typography className="section-tile">{sectionName}</Typography>
         </AccordionSummary>

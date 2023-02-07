@@ -16,8 +16,9 @@
     .react-resizable:nth-child(1) {
       margin-left: -20px;
       background-color: #f6f7fb;
-      // border: none;
+      border: none;
       box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.08);
+
       .MuiIconButton-root {
         top: 50%;
       }
@@ -48,6 +49,7 @@
   }
   .btn-container {
     margin: 1em 0;
+    align-self: flex-end;
     .MuiButtonBase-root {
       margin-right: 0 !important;
     }
@@ -64,13 +66,14 @@
     padding: 1em;
     box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.08);
     background-color: #fff;
+    border-right: 1px solid #ededed;
   }
   .timeline-search-container {
     padding: 5px 1em;
     background-color: #f6f7fb;
   }
   .timeline-questions-container {
-    height: 76vh;
+    height: 75vh;
     overflow-y: auto;
 
     .MuiAccordion-root {
@@ -109,12 +112,13 @@
   //   width: 268px;
   // }
   .timeline-calender-container {
-    padding: 1em;
+    padding: 5px 20px 20px 20px;
     width: 72vw;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     align-items: flex-end;
-    margin-left: 2em;
+    // margin-left: 2em;
+    // margin-left: 2em;
   }
 }
