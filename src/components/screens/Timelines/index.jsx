@@ -7,7 +7,11 @@ import PlusIcon from 'apollo-react-icons/Plus';
 import Button from 'apollo-react/components/Button';
 import { fromJS, Map } from 'immutable';
 import TimelineCalender from './TimelineCalender';
-import { getProposalDetails, selectSections } from '../../../redux/selectors';
+import {
+  getProposalDetails,
+  isSetQuestionLoading,
+  selectSections
+} from '../../../redux/selectors';
 import TimelineSections from './TimelineSections';
 import {
   getProposalQuestions,
@@ -30,6 +34,7 @@ const Timeline = () => {
   const proposalDetail = useSelector(getProposalDetails);
   const [filteredSections, setFilteredSections] = useState(null);
   const [searchKey, setSearchKey] = useState('');
+  const isSetQuestionLoadingData = useSelector(isSetQuestionLoading);
 
   const getUserData = () => ({
     name: getUserName(),
@@ -61,6 +66,12 @@ const Timeline = () => {
       }
     });
   }, [questions]);
+
+  useEffect(() => {
+    if (showModal) {
+      setTimeout(() => setShowModal(false), 1000);
+    }
+  }, [isSetQuestionLoadingData]);
 
   const generateSections = (proposalQuestions: Object): Map => {
     try {
