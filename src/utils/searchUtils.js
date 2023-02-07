@@ -171,13 +171,32 @@ export function searchInApprovals(
                   );
                 });
               } else if (typeof recentAnswer === 'string') {
-                updateSearchMatches(
-                  regexp,
-                  recentAnswer,
-                  `${question.questionId}-archive-${aIndex}-left-ques`,
-                  finalResult,
-                  1
-                );
+                if (question.section.sectionName === 'Proposal Team') {
+                  const newAnswer = [];
+                  recentAnswer.split(',').forEach(answer => {
+                    const split_array = answer.split('(');
+                    if (split_array && split_array.length > 0) {
+                      newAnswer.push(split_array[0].trim());
+                    }
+                  });
+                  newAnswer.forEach(answerChunk => {
+                    updateSearchMatches(
+                      regexp,
+                      answerChunk,
+                      `${question.questionId}-archive-${aIndex}-left-ques`,
+                      finalResult,
+                      1
+                    );
+                  });
+                } else {
+                  updateSearchMatches(
+                    regexp,
+                    recentAnswer,
+                    `${question.questionId}-archive-${aIndex}-left-ques`,
+                    finalResult,
+                    1
+                  );
+                }
               }
             }
           });
@@ -217,13 +236,32 @@ export function searchInApprovals(
                   );
                 });
               } else if (typeof recentAnswer === 'string') {
-                updateSearchMatches(
-                  regexp,
-                  recentAnswer,
-                  `${question.questionId}-archive-${aIndex}-right-ques`,
-                  finalResult,
-                  1
-                );
+                if (question.section.sectionName === 'Proposal Team') {
+                  const newAnswer = [];
+                  recentAnswer.split(',').forEach(answer => {
+                    const split_array = answer.split('(');
+                    if (split_array && split_array.length > 0) {
+                      newAnswer.push(split_array[0].trim());
+                    }
+                  });
+                  newAnswer.forEach(answerChunk => {
+                    updateSearchMatches(
+                      regexp,
+                      answerChunk,
+                      `${question.questionId}-archive-${aIndex}-right-ques`,
+                      finalResult,
+                      1
+                    );
+                  });
+                } else {
+                  updateSearchMatches(
+                    regexp,
+                    recentAnswer,
+                    `${question.questionId}-archive-${aIndex}-right-ques`,
+                    finalResult,
+                    1
+                  );
+                }
               }
             }
           });
@@ -262,13 +300,32 @@ export function searchInApprovals(
                 );
               });
             } else if (typeof recentAnswer === 'string') {
-              updateSearchMatches(
-                regexp,
-                recentAnswer,
-                `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
-                finalResult,
-                1
-              );
+              if (question.section.sectionName === 'Proposal Team') {
+                const newAnswer = [];
+                recentAnswer.split(',').forEach(answer => {
+                  const split_array = answer.split('(');
+                  if (split_array && split_array.length > 0) {
+                    newAnswer.push(split_array[0].trim());
+                  }
+                });
+                newAnswer.forEach(answerChunk => {
+                  updateSearchMatches(
+                    regexp,
+                    answerChunk,
+                    `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
+                    finalResult,
+                    1
+                  );
+                });
+              } else {
+                updateSearchMatches(
+                  regexp,
+                  recentAnswer,
+                  `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
+                  finalResult,
+                  1
+                );
+              }
             }
           }
         }
@@ -305,13 +362,32 @@ export function searchInApprovals(
                 );
               });
             } else if (typeof recentAnswer === 'string') {
-              updateSearchMatches(
-                regexp,
-                recentAnswer,
-                `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
-                finalResult,
-                1
-              );
+              if (question.section.sectionName === 'Proposal Team') {
+                const newAnswer = [];
+                recentAnswer.split(',').forEach(answer => {
+                  const split_array = answer.split('(');
+                  if (split_array && split_array.length > 0) {
+                    newAnswer.push(split_array[0].trim());
+                  }
+                });
+                newAnswer.forEach(answerChunk => {
+                  updateSearchMatches(
+                    regexp,
+                    answerChunk,
+                    `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
+                    finalResult,
+                    1
+                  );
+                });
+              } else {
+                updateSearchMatches(
+                  regexp,
+                  recentAnswer,
+                  `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
+                  finalResult,
+                  1
+                );
+              }
             }
           }
         }
