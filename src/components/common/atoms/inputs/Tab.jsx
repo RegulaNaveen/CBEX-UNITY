@@ -156,8 +156,9 @@ const UnityTab = ({
     const notepadFlag = allFlags.notepad || false; // Notepad flag
     const proposalTeamFlag = allFlags.proposalTeamTab || false; // Proposal Team flag
     const approvalFlag = allFlags.approvalsFlag || false;
+
     if (
-      verticalTabFlag ||
+      !verticalTabFlag ||
       ![questionsForCustomerFlag, notepadFlag, proposalTeamFlag].some(
         flag => !!flag
       )
@@ -173,10 +174,10 @@ const UnityTab = ({
 
   useEffect(() => {
     fetchTabFlags();
+    const urlParams = new URLSearchParams(window.location.search);
     if (isApprovalCount) {
       setShowApprovalTab(true);
     } else {
-      const urlParams = new URLSearchParams(window.location.search);
       setShowApprovalTab(false);
       if (urlParams && urlParams?.get('viewType')?.includes('approval')) {
         history.push(`${window.location.pathname}`);
@@ -185,6 +186,8 @@ const UnityTab = ({
         }
       }
     }
+    if (urlParams && urlParams?.get('viewType')?.includes('timelines'))
+      setShowVerticalTab(false);
   }, []);
 
   useEffect(() => {
@@ -248,6 +251,10 @@ const UnityTab = ({
     dispatch(setActiveTabIndexAction(val));
     onChangeSelectedTab(currentPath);
     selectView.set('viewType', currentPath);
+    if (selectView && selectView?.get('viewType')?.includes('timelines'))
+      setShowVerticalTab(false);
+    else if (allFlags.verticalTab) setShowVerticalTab(true);
+
     if (val === 0) {
       // No need to update pathname for question tab
       history.push(`${window.location.pathname}`);
