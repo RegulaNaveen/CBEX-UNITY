@@ -172,11 +172,14 @@ const Timeline = () => {
                 })
               : sections.valueSeq().map(section => {
                   return (
-                    <TimelineSections
-                      sectionName={section.get('sectionName')}
-                      sectionOrder={section.get('sectionOrder')}
-                      questions={section.get('questions')}
-                    />
+                    section.get('sectionName') !==
+                      'Questions_for_the_Customer_left_panel' && (
+                      <TimelineSections
+                        sectionName={section.get('sectionName')}
+                        sectionOrder={section.get('sectionOrder')}
+                        questions={section.get('questions')}
+                      />
+                    )
                   );
                 })}
           </div>
@@ -200,6 +203,7 @@ const Timeline = () => {
             proposalDate={proposalDate}
             socketContext={socketContext}
             userData={getUserData()}
+            isCurrent={isCurrent}
           />
         </Panel>
       </div>

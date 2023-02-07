@@ -309,7 +309,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
           editProposalQuestion(
             proposalId,
             editQuestionsData.get('questionId'),
-            questionData
+            questionData,
+            this.context
           );
         } else {
           setProposalQuestionF(proposalId, questionData, this.context);
@@ -329,7 +330,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     this.setState({ loaderText: 'Deleting Question' });
     const res = deleteProposalQuestion(
       proposalId,
-      editQuestionsData.get('questionId')
+      editQuestionsData.get('questionId'),
+      this.context
     );
   };
 

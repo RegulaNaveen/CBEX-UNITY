@@ -27,7 +27,8 @@ export default function DnDOutsideResource({
   timelineEvents,
   proposalDate,
   socketContext,
-  userData
+  userData,
+  isCurrent
 }) {
   const localizer = momentLocalizer(moment);
   const [myEvents, setMyEvents] = useState(timelineEvents);
@@ -96,7 +97,7 @@ export default function DnDOutsideResource({
     }
   };
 
-  const handleDragStart = useCallback(event => setDraggedEvent(event), []);
+  // const handleDragStart = useCallback(event => setDraggedEvent(event), []);
 
   const dragFromOutsideItem = useCallback(() => draggedEvent, [draggedEvent]);
 
@@ -294,13 +295,17 @@ export default function DnDOutsideResource({
           eventPropGetter={eventPropGetter}
           events={myEvents}
           localizer={localizer}
-          onDropFromOutside={onDropFromOutside}
-          onDragOver={customOnDragOver}
-          onEventDrop={moveEvent}
-          onEventResize={resizeEvent}
+          onDropFromOutside={isCurrent ? onDropFromOutside : null}
+          onDragOver={isCurrent ? customOnDragOver : null}
+          onEventDrop={isCurrent ? moveEvent : null}
+          onEventResize={isCurrent ? resizeEvent : null}
           onSelectSlot={newEvent}
-          onSelectEvent={e => handleSelectedEvent(e)}
-          onDragStart={e => handleSelectedEvent(e)}
+          onSelectEvent={e => {
+            if (isCurrent) handleSelectedEvent(e);
+          }}
+          onDragStart={e => {
+            if (isCurrent) handleSelectedEvent(e);
+          }}
           resizable={false}
           selectable
           popup
