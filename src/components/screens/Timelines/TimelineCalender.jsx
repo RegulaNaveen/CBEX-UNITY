@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { Calendar, Views, momentLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment from 'moment';
-import events from './resources/events';
+// import events from './resources/events';
 import { parseMomentDate } from '../../../utils/DateUtils';
 import { setProposalAnswerData } from '../../../redux/actions/proposal-actions';
 import { useDispatch } from 'react-redux';
