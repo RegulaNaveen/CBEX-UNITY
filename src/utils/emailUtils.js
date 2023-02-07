@@ -6,6 +6,7 @@ import {
   PROPOSAL_TEAM_EMAIL_MATCH_REGEXP
 } from '../constants/app';
 import { shouldShowQuestion } from '../components/screens/Approvals/utils';
+import { cloneDeep } from 'lodash';
 
 export function getProposalTeamUsers(questions = []) {
   const answers = new Set();
@@ -193,9 +194,16 @@ export function generateApprovalEmailInfo(
     }
     toUsers = getProposalTeamUsers(allQuestions);
     if (approvalQuestionIds.length > 0) {
-      questionsForThisApproval = allQuestions.filter(question =>
-        approvalQuestionIds.includes(question.questionId)
-      );
+      // create a map of questions with questionId as key
+      let allQuestionsMap = {};
+      allQuestions.forEach(question => {
+        allQuestionsMap[question.questionId] = cloneDeep(question);
+      });
+      approvalQuestionIds.forEach(questionId => {
+        if (allQuestionsMap[questionId]) {
+          questionsForThisApproval.push(allQuestionsMap[questionId]);
+        }
+      });
       // applying approval filter(s)
       questionsForThisApproval = questionsForThisApproval.filter(q =>
         shouldShowQuestion(q, approvalFilters)
