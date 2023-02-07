@@ -13,6 +13,7 @@ import moment from 'moment';
 import { parseMomentDate } from '../../../utils/DateUtils';
 import { setProposalAnswerData } from '../../../redux/actions/proposal-actions';
 import { useDispatch } from 'react-redux';
+import MatomoHOC from '../../HOC/MatomoHOC';
 
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 
@@ -23,13 +24,15 @@ const DragAndDropCalendar = withDragAndDrop(Calendar);
 
 const formatName = (name, count) => `${name} ID ${count}`;
 
-export default function DnDOutsideResource({
+const DnDOutsideResource = ({
   timelineEvents,
   proposalDate,
   socketContext,
   userData,
-  isCurrent
-}) {
+  isCurrent,
+  eventCategories,
+  trackEvent
+}) => {
   const localizer = momentLocalizer(moment);
   const [myEvents, setMyEvents] = useState(timelineEvents);
   const [draggedEvent, setDraggedEvent] = useState();
@@ -66,6 +69,38 @@ export default function DnDOutsideResource({
 
   //,
 
+  const trackMatomoEventSubmitAnswer = (answer, question) => {
+    const {
+      section,
+      questionText,
+      questionHTML,
+      questionJSON,
+      questionHintJSON,
+      questionId
+    } = question;
+    const { sectionName } = section;
+
+    trackEvent({
+      category: eventCategories.crmNo,
+      action: `Edit Timeline Question : ${questionText} (${sectionName}) `,
+      name: `Answer: ${answer}`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify({
+            answer,
+            sectionName,
+            questionText,
+            questionHTML,
+            questionJSON,
+            questionHintJSON,
+            questionId
+          })
+        }
+      ]
+    });
+  };
+
   const handleDayChange = async (selectedDay, question) => {
     try {
       const { proposalId, questionId } = question;
@@ -87,9 +122,7 @@ export default function DnDOutsideResource({
             true
           )
         );
-        // console.log({ selectedDay });
-        // questionUnlockWrapper(question?.questionId);
-        // trackMatomoEventSubmitAnswer(selectedDay);
+        trackMatomoEventSubmitAnswer(selectedDay, question);
       }
     } catch (error) {
       console.error(error);
@@ -314,7 +347,9 @@ export default function DnDOutsideResource({
       </div>
     </>
   );
-}
+};
 DnDOutsideResource.propTypes = {
   //   localizer: PropTypes.instanceOf(DateLocalizer)
 };
+
+export default MatomoHOC(DnDOutsideResource);
