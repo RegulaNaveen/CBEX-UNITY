@@ -8,7 +8,7 @@ import TimelineQuestions from './TimelineQuestions';
 import { OrderedMap } from 'immutable';
 
 const TimelineSections = ({ sectionName, sectionOrder, questions }) => {
-  console.log({ sectionName, sectionOrder, questions });
+  // console.log({ sectionName, sectionOrder, questions });
 
   return (
     <>

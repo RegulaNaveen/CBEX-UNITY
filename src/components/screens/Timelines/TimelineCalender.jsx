@@ -10,6 +10,9 @@ import { Calendar, Views, momentLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment from 'moment';
 import events from './resources/events';
+import { parseMomentDate } from '../../../utils/DateUtils';
+import { setProposalAnswerData } from '../../../redux/actions/proposal-actions';
+import { useDispatch } from 'react-redux';
 
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 
@@ -20,13 +23,19 @@ const DragAndDropCalendar = withDragAndDrop(Calendar);
 
 const formatName = (name, count) => `${name} ID ${count}`;
 
-export default function DnDOutsideResource({ timelineEvents, proposalDate }) {
+export default function DnDOutsideResource({
+  timelineEvents,
+  proposalDate,
+  socketContext,
+  userData
+}) {
   const localizer = momentLocalizer(moment);
-  const [myEvents, setMyEvents] = useState([timelineEvents]);
+  const [myEvents, setMyEvents] = useState(timelineEvents);
   const [draggedEvent, setDraggedEvent] = useState();
   const [date, setDate] = useState(new Date());
   const [displayDragItemInCell, setDisplayDragItemInCell] = useState(true);
   const [counters, setCounters] = useState({ item1: 0, item2: 0 });
+  const dispatch = useDispatch();
 
   // const eventPropGetter = useCallback(
   //   event => ({
@@ -41,7 +50,7 @@ export default function DnDOutsideResource({ timelineEvents, proposalDate }) {
   }, [timelineEvents]);
 
   const eventPropGetter = useCallback(event => {
-    const backgroundColor = event.allday ? 'green' : '#0557D5';
+    const backgroundColor = event.color; //? 'green' : '#0557D5'; //#00C221  green//#297DFD blue
     const dragClass = event.isDraggable ? 'isDraggable' : 'nonDraggable';
     return {
       style: { backgroundColor },
@@ -54,6 +63,38 @@ export default function DnDOutsideResource({ timelineEvents, proposalDate }) {
   // }}
 
   //,
+
+  const handleDayChange = async (selectedDay, question) => {
+    try {
+      const { proposalId, questionId } = question;
+      const lastAnswerValue =
+        question?.answers[question?.answers?.length - 1].answer;
+      if (
+        parseMomentDate(lastAnswerValue.trim()) !==
+          parseMomentDate(selectedDay) &&
+        selectedDay
+      ) {
+        await dispatch(
+          setProposalAnswerData(
+            socketContext,
+            proposalId,
+            questionId,
+            selectedDay,
+            userData,
+            null,
+            true
+          )
+        );
+        // console.log({ selectedDay });
+        // questionUnlockWrapper(question?.questionId);
+        // trackMatomoEventSubmitAnswer(selectedDay);
+      }
+    } catch (error) {
+      console.error(error);
+      // questionUnlockWrapper(question?.questionId);
+    }
+  };
+
   const handleDragStart = useCallback(event => setDraggedEvent(event), []);
 
   const dragFromOutsideItem = useCallback(() => draggedEvent, [draggedEvent]);
@@ -80,8 +121,10 @@ export default function DnDOutsideResource({ timelineEvents, proposalDate }) {
 
   const moveEvent = useCallback(
     ({ event, start, end, isAllDay: droppedOnAllDaySlot = false }) => {
-      const { allDay } = event;
+      const { allDay, question } = event;
+
       console.log('called move: ', { event, start, end });
+      handleDayChange(start, question);
       if (!allDay && droppedOnAllDaySlot) {
         event.allDay = true;
       }
@@ -97,11 +140,11 @@ export default function DnDOutsideResource({ timelineEvents, proposalDate }) {
 
   const newEvent = useCallback(
     event => {
-      setMyEvents(prev => {
-        const idList = prev.map(item => item.id);
-        const newId = Math.max(...idList) + 1;
-        return [...prev, { ...event, id: newId }];
-      });
+      // setMyEvents(prev => {
+      //   const idList = prev.map(item => item.id);
+      //   const newId = Math.max(...idList) + 1;
+      //   return [...prev, { ...event, id: newId }];
+      // });
     },
     [setMyEvents]
   );
@@ -221,7 +264,7 @@ export default function DnDOutsideResource({ timelineEvents, proposalDate }) {
           onEventDrop={moveEvent}
           onEventResize={resizeEvent}
           onSelectSlot={newEvent}
-          resizable
+          resizable={false}
           selectable
           // eventPropGetter={event => {
           //   const backgroundColor = event.allday ? 'yellow' : 'blue';

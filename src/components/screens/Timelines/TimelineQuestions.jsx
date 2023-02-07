@@ -3,7 +3,7 @@ import propTypes from 'prop-types';
 
 const TimelineQuestions = ({ question }) => {
   const { questionId, questionOrder, questionText } = question.toJS();
-  console.log('inside questionafkadfashdf ', { question });
+  // console.log('inside questionafkadfashdf ', { question });
   return (
     <li key={questionId} className="timeline-question-listitem">
       {questionText}

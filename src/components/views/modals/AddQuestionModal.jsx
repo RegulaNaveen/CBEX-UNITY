@@ -40,6 +40,7 @@ import {
   deleteProposalQuestion
 } from '../../../redux/actions/proposal-actions';
 import MatomoHOC from '../../HOC/MatomoHOC';
+import { SocketContext } from '../../../context/SocketContext';
 
 type Props = {
   onClose: Function,
@@ -76,6 +77,8 @@ type State = {
 
 const MSG_FIELD_REQUIRED = 'This field is required';
 export class AddQuestionModal extends PureComponent<Props, State> {
+  static contextType = SocketContext;
+
   constructor(props: Object) {
     super(props);
 
@@ -309,7 +312,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
             questionData
           );
         } else {
-          setProposalQuestionF(proposalId, questionData);
+          setProposalQuestionF(proposalId, questionData, this.context);
           this.trackMatomoEventCreateQ(questionData);
         }
       }
