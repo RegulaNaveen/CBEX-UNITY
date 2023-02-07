@@ -11,6 +11,7 @@
       width: 100% !important;
       display: flex;
       justify-content: space-around;
+      margin-right: -20px;
     }
     .react-resizable:nth-child(1) {
       margin-left: -20px;
@@ -47,6 +48,9 @@
   }
   .btn-container {
     margin: 1em 0;
+    .MuiButtonBase-root {
+      margin-right: 0 !important;
+    }
   }
 
   // .background {
@@ -66,7 +70,7 @@
     background-color: #f6f7fb;
   }
   .timeline-questions-container {
-    height: 76.5vh;
+    height: 76vh;
     overflow-y: auto;
 
     .MuiAccordion-root {
@@ -105,7 +109,7 @@
   //   width: 268px;
   // }
   .timeline-calender-container {
-    padding: 20px;
+    padding: 1em;
     width: 72vw;
     display: flex;
     flex-direction: column;

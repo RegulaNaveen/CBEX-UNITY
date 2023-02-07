@@ -25,7 +25,7 @@ const Timeline = () => {
   const proposal = useSelector(selectProposal);
   const [showModal, setShowModal] = useState(false);
   const selectedBid = useSelector(getSelectedBid)?.toJS();
-  const { proposalDate } = selectedBid;
+  const { proposalDate, isCurrent } = selectedBid;
   console.log('sectionsssssss ', selectedBid);
   const [timelineEvents, setTimelineEvents] = useState([]);
   const proposalDetail = useSelector(getProposalDetails);
@@ -41,7 +41,7 @@ const Timeline = () => {
           title: question.questionText,
           start: new Date(question?.answers[0]?.answer),
           end: new Date(question?.answers[0]?.answer),
-          isDraggable: true
+          isDraggable: !!isCurrent
         };
         setTimelineEvents(current => [...current, eventss]);
       }
@@ -94,6 +94,7 @@ const Timeline = () => {
               size="small"
               style={{ marginRight: 10 }}
               onClick={() => setShowModal(true)}
+              disabled={!isCurrent}
             >
               Add New
             </Button>
@@ -104,15 +105,15 @@ const Timeline = () => {
             proposalDate={proposalDate}
           />
         </Panel>
-        {showModal && (
-          <AddQuestionModalComponent
-            onClose={onCloseAddModal}
-            isOnlyDateAnswer={true}
-            // eslint-disable-next-line react/destructuring-assignment
-            // currentsection={this.state.currentsection || ''}
-          />
-        )}
       </div>
+      {showModal && (
+        <AddQuestionModalComponent
+          onClose={onCloseAddModal}
+          isOnlyDateAnswer={true}
+          // eslint-disable-next-line react/destructuring-assignment
+          // currentsection={this.state.currentsection || ''}
+        />
+      )}
     </div>
   );
 };

@@ -10,21 +10,19 @@ import { Calendar, Views, momentLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment from 'moment';
 import events from './resources/events';
-import Card from './resources/Card';
-import DemoLink from './DemoLink.component';
 
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 
-const adjEvents = events.map((it, ind) => ({
-  ...it,
-  isDraggable: true
-}));
+// const adjEvents = events.map((it, ind) => ({
+//   ...it,
+//   isDraggable: true
+// }));
 
 const formatName = (name, count) => `${name} ID ${count}`;
 
 export default function DnDOutsideResource({ timelineEvents, proposalDate }) {
   const localizer = momentLocalizer(moment);
-  const [myEvents, setMyEvents] = useState(adjEvents);
+  const [myEvents, setMyEvents] = useState([timelineEvents]);
   const [draggedEvent, setDraggedEvent] = useState();
   const [date, setDate] = useState(new Date());
   const [displayDragItemInCell, setDisplayDragItemInCell] = useState(true);
@@ -38,6 +36,9 @@ export default function DnDOutsideResource({ timelineEvents, proposalDate }) {
   //   }),
   //   []
   // );
+  useEffect(() => {
+    setMyEvents(timelineEvents);
+  }, [timelineEvents]);
 
   const eventPropGetter = useCallback(event => {
     const backgroundColor = event.allday ? 'green' : '#0557D5';
@@ -213,7 +214,7 @@ export default function DnDOutsideResource({ timelineEvents, proposalDate }) {
           }
           draggableAccessor="isDraggable"
           eventPropGetter={eventPropGetter}
-          events={timelineEvents}
+          events={myEvents}
           localizer={localizer}
           onDropFromOutside={onDropFromOutside}
           onDragOver={customOnDragOver}
