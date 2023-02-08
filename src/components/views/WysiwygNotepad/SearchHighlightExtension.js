@@ -92,7 +92,11 @@ export const SearchHighlight = Mark.create({
           const { texts, mentionIndices } = extractTextFromDoc(state.doc);
           let results = [];
           let matchResults = [
-            ...texts.join('').matchAll(new RegExp(query, 'gi'))
+            ...texts
+              .join('')
+              .matchAll(
+                new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi')
+              )
           ];
           matchResults.forEach(match => {
             let originalSelection = {

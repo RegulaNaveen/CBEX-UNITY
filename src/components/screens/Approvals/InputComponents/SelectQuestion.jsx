@@ -38,6 +38,7 @@ const SelectQuestion = ({
 
   return (
     <AutoCompleteWithAddOption
+      multilineFlag={true}
       sfObject={question.sfObject}
       sfField={question.sfField}
       lov={question?.answerConfiguration?.options}
