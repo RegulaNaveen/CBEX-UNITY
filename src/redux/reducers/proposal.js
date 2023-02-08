@@ -303,7 +303,8 @@ const setOpportunityInfo = (state, action) => {
         .set(
           'pertinentDetails',
           proposal.proposal.proposalDetails.pertinentDetails
-        );
+        )
+        .set('proposalDate', proposal.proposal.proposalDate);
     }
     opportunityData = opportunityData.set(
       proposal.proposal.proposalId,
@@ -361,7 +362,8 @@ const onChangeBid = (state: Map, action: Object): Map => {
     proposalDetails,
     opportunityType,
     questionTemplateVersionNumber: templateversion,
-    isApprovalCountPresent
+    isApprovalCountPresent,
+    proposalDate
   } = opportunityData.getIn([payload.bid.bidId, 'proposal']);
   let selectedBid = Map({
     id: payload.bid.bidId,
@@ -373,7 +375,8 @@ const onChangeBid = (state: Map, action: Object): Map => {
     opportunityType: opportunityType || '',
     agreementId: agreementId || '',
     accountId: accountId || '',
-    opportunityId: proposalDetails['opportunityId']
+    opportunityId: proposalDetails['opportunityId'],
+    proposalDate
   });
 
   const proposalQuestions = payload.proposalDetails.proposalQuestions;
