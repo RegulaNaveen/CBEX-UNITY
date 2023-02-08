@@ -645,7 +645,6 @@ function getHtml(
     rightAlign,
     'class="DraftEditor-alignCenter" style="text-align: center;"'
   );
-  console.log('string', string);
   const url = getUnityLink(proposalDetails);
   const oppId = proposalDetails['CRM #'];
   savePDF(string, url, userName, time, oppId, fileName);
