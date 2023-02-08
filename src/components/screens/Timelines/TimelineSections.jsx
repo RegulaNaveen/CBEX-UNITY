@@ -8,8 +8,6 @@ import TimelineQuestions from './TimelineQuestions';
 import { OrderedMap } from 'immutable';
 
 const TimelineSections = ({ sectionName, sectionOrder, questions }) => {
-  // console.log({ sectionName, sectionOrder, questions });
-
   return (
     <>
       <Accordion defaultExpanded={sectionOrder === 1} style={{ width: '100%' }}>

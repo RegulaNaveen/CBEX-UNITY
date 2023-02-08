@@ -124,9 +124,9 @@ const UnityTab = ({
       path: 'questions'
     },
     {
-      label: 'Timelines',
+      label: 'Timeline',
       value: 1,
-      component: <Timelines key="Timelines" proposalID={id} />,
+      component: <Timelines key="Timeline" proposalID={id} />,
       path: 'timelines'
     },
     {
@@ -186,7 +186,11 @@ const UnityTab = ({
         }
       }
     }
-    if (urlParams && urlParams?.get('viewType')?.includes('timelines'))
+    if (
+      urlParams &&
+      urlParams?.get('viewType')?.includes('timelines') &&
+      allFlags.showTimelineFlag
+    )
       setShowVerticalTab(false);
   }, []);
 
@@ -215,7 +219,7 @@ const UnityTab = ({
         history.push(`${window.location.pathname}`);
         return;
       }
-      const timelinesTabValue = tabs.find(item => item.label === 'Timelines')
+      const timelinesTabValue = tabs.find(item => item.label === 'Timeline')
         .value;
       dispatch(setActiveTabIndexAction(timelinesTabValue));
     }
@@ -278,7 +282,7 @@ const UnityTab = ({
       tabsToReturn = tabsToReturn.filter(item => item.label !== 'Approvals');
     }
     if (!allFlags?.showTimelineFlag) {
-      tabsToReturn = tabsToReturn.filter(item => item.label !== 'Timelines');
+      tabsToReturn = tabsToReturn.filter(item => item.label !== 'Timeline');
     }
     if (!enableValidateTab) {
       tabsToReturn = tabsToReturn.filter(item => item.label !== 'Validate');
