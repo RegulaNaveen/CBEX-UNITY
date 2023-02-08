@@ -28,7 +28,8 @@ type Props = {
   page: Number,
   numRows: Number,
   setPage: Function,
-  setRows: Function
+  setRows: Function,
+  allFlags: Object
 };
 
 type State = {
@@ -44,12 +45,15 @@ class RecentTab extends Component<Props, State> {
       pageContent: []
     };
   }
-  componentDidMount(){
-    const {
-      setRows
-    } = this.props;
-    setRows(15)
+
+  componentDidMount() {
+    const { setRows, allFlags } = this.props;
+
+    setRows(15);
+
+    console.log('tapas all flag', allFlags);
   }
+
   componentDidUpdate(prevProps) {
     const {
       page,
@@ -75,12 +79,12 @@ class RecentTab extends Component<Props, State> {
   }
 
   renderSelectedView = () => {
-    const { selectedViewType } = this.props;
+    const { selectedViewType, allFlags } = this.props;
     const { pageContent } = this.state;
 
     if (selectedViewType === 0)
       return <TableView data={pageContent} hideStatus />;
-    return <GridView data={pageContent} />;
+    return <GridView data={pageContent} allFlags={allFlags} />;
   };
 
   setPageContent = (pageContent: Array<Object>) =>
