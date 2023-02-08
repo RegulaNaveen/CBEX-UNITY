@@ -24,7 +24,6 @@ import { SocketContext } from '../../../context/SocketContext';
 import { getUserEmail, getUserId, getUserName } from '../../../SessionHandler';
 
 const Timeline = () => {
-  const sections = useSelector(selectSections);
   const socketContext = useContext(SocketContext);
   const questions = useSelector(getProposalQuestions);
   const [showModal, setShowModal] = useState(false);
@@ -33,6 +32,7 @@ const Timeline = () => {
   const [timelineEvents, setTimelineEvents] = useState([]);
   const proposalDetail = useSelector(getProposalDetails);
   const [filteredSections, setFilteredSections] = useState(null);
+  const [sections, setSections] = useState(Map());
   const [searchKey, setSearchKey] = useState('');
   const isSetQuestionLoadingData = useSelector(isSetQuestionLoading);
 
@@ -41,31 +41,6 @@ const Timeline = () => {
     email: getUserEmail(),
     role: getUserId()
   });
-
-  useEffect(() => {
-    // console.log('questionssss ', questions);
-    // console.log({ proposalDetail });
-    setTimelineEvents([]);
-    questions.map(question => {
-      if (question?.answerConfiguration?.type === 'date') {
-        // console.log('question ', question);
-        const lastAnswer = question?.answers[question?.answers.length - 1];
-        // console.log({ lastAnswer });
-        const eventss = {
-          id: question.questionId,
-          title: question.questionText,
-          start: new Date(lastAnswer?.answer),
-          end: new Date(lastAnswer?.answer),
-          isDraggable: isCurrent,
-          color:
-            lastAnswer?.user === 'UnityPredictedAnswer' ? '#297DFD' : '#00C221',
-          question
-        };
-        setTimelineEvents(current => [...current, eventss]);
-        // console.log('timeline eventssss ', eventss);
-      }
-    });
-  }, [questions]);
 
   useEffect(() => {
     if (showModal) {
@@ -105,7 +80,7 @@ const Timeline = () => {
       });
 
       sections = sections.sortBy(section => section.get('sectionOrder'));
-      console.log({ sections });
+
       return sections;
     } catch (error) {
       console.log(error);
@@ -120,10 +95,14 @@ const Timeline = () => {
       filteredQuestions = questionsToFilter.filter(
         item =>
           (item.questionText.toLowerCase().includes(key.trim().toLowerCase()) &&
-            item.answerConfiguration.type === 'date') ||
-          item.section.sectionName
+            item.answerConfiguration.type === 'date' &&
+            item.visible &&
+            item.active) ||
+          (item.section.sectionName
             .toLowerCase()
-            .includes(key.trim().toLowerCase())
+            .includes(key.trim().toLowerCase()) &&
+            item.visible &&
+            item.active)
       );
     }
 
@@ -138,6 +117,35 @@ const Timeline = () => {
     }
     getFilteredSections(searchKey);
   }, [searchKey]);
+
+  useEffect(() => {
+    const activeQuestions = questions.filter(item => {
+      if (item.visible && item.active) {
+        return true;
+      }
+    });
+    setTimelineEvents([]);
+    const sectionsMatched = generateSections(activeQuestions);
+    setSections(sectionsMatched);
+
+    activeQuestions.map(question => {
+      if (question?.answerConfiguration?.type === 'date') {
+        const lastAnswer = question?.answers[question?.answers.length - 1];
+
+        const eventss = {
+          id: question.questionId,
+          title: question.questionText,
+          start: new Date(lastAnswer?.answer),
+          end: new Date(lastAnswer?.answer),
+          isDraggable: isCurrent,
+          color:
+            lastAnswer?.user === 'UnityPredictedAnswer' ? '#297DFD' : '#00C221',
+          question
+        };
+        setTimelineEvents(current => [...current, eventss]);
+      }
+    });
+  }, [questions]);
 
   const onCloseAddModal = () => {
     setShowModal(prev => !prev);
@@ -222,8 +230,6 @@ const Timeline = () => {
         <AddQuestionModalComponent
           onClose={onCloseAddModal}
           isOnlyDateAnswer={true}
-          // eslint-disable-next-line react/destructuring-assignment
-          // currentsection={this.state.currentsection || ''}
         />
       )}
     </div>

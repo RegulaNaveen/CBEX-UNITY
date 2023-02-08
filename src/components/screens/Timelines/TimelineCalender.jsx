@@ -42,32 +42,18 @@ const DnDOutsideResource = ({
   const dispatch = useDispatch();
   const [selectedEvent, setSelectedEvent] = useState(undefined);
 
-  // const eventPropGetter = useCallback(
-  //   event => ({
-  //     ...(event.isDraggable
-  //       ? { className: 'isDraggable' }
-  //       : { className: 'nonDraggable' })
-  //   }),
-  //   []
-  // );
   useEffect(() => {
     setMyEvents(timelineEvents);
   }, [timelineEvents]);
 
   const eventPropGetter = useCallback(event => {
-    const backgroundColor = event.color; //? 'green' : '#0557D5'; //#00C221  green//#297DFD blue
+    const backgroundColor = event.color;
     const dragClass = event.isDraggable ? 'isDraggable' : 'nonDraggable';
     return {
       style: { backgroundColor },
       className: `${dragClass}`
     };
   }, []);
-  // eventPropGetter={(event) => {
-  //   const backgroundColor = event.allday ? 'yellow' : 'blue';
-  //   return { style: { backgroundColor } }
-  // }}
-
-  //,
 
   const trackMatomoEventSubmitAnswer = (answer, question) => {
     const {
@@ -126,23 +112,14 @@ const DnDOutsideResource = ({
       }
     } catch (error) {
       console.error(error);
-      // questionUnlockWrapper(question?.questionId);
     }
   };
-
-  // const handleDragStart = useCallback(event => setDraggedEvent(event), []);
 
   const dragFromOutsideItem = useCallback(() => draggedEvent, [draggedEvent]);
 
   const customOnDragOver = useCallback(
     dragEvent => {
-      // check for undroppable is specific to this example
-      // and not part of API. This just demonstrates that
-      // onDragOver can optionally be passed to conditionally
-      // allow draggable items to be dropped on cal, based on
-      // whether event.preventDefault is called
       if (draggedEvent !== 'undroppable') {
-        console.log('preventDefault');
         dragEvent.preventDefault();
       }
     },
@@ -158,7 +135,6 @@ const DnDOutsideResource = ({
     ({ event, start, end, isAllDay: droppedOnAllDaySlot = false }) => {
       const { allDay, question } = event;
 
-      console.log('called move: ', { event, start, end });
       handleDayChange(start, question);
       if (!allDay && droppedOnAllDaySlot) {
         event.allDay = true;
@@ -173,20 +149,10 @@ const DnDOutsideResource = ({
     [setMyEvents]
   );
 
-  const newEvent = useCallback(
-    event => {
-      // setMyEvents(prev => {
-      //   const idList = prev.map(item => item.id);
-      //   const newId = Math.max(...idList) + 1;
-      //   return [...prev, { ...event, id: newId }];
-      // });
-    },
-    [setMyEvents]
-  );
+  const newEvent = useCallback(event => {}, [setMyEvents]);
 
   const onDropFromOutside = useCallback(
     ({ start, end, allDay: isAllDay }) => {
-      console.log('tapasdfasdf ', selectedEvent);
       if (draggedEvent === 'undroppable') {
         setDraggedEvent(null);
         return;
@@ -251,9 +217,7 @@ const DnDOutsideResource = ({
   );
 
   const handleSelectedEvent = event => {
-    console.log({ event });
     setSelectedEvent(event.event);
-    // setModalState(true)
   };
 
   const defaultDate = useMemo(() => new Date(proposalDate), [proposalDate]);
@@ -276,44 +240,6 @@ const DnDOutsideResource = ({
 
   return (
     <>
-      {/* <Card className="dndOutsideSourceExample">
-        {/* <div className="inner">
-          <h4>Outside Drag Sources</h4>
-          <p>
-            Lighter colored events, in the Calendar, have an `isDraggable` key
-            of `false`.
-          </p>
-          {Object.entries(counters).map(([name, count]) => (
-            <div
-              draggable="true"
-              key={name}
-              onDragStart={() =>
-                handleDragStart({ title: formatName(name, count), name })
-              }
-            >
-              {formatName(name, count)}
-            </div>
-          ))}
-          <div
-            draggable="true"
-            onDragStart={() => handleDragStart('undroppable')}
-          >
-            Draggable but not for calendar.
-          </div>
-        </div>
-
-        <div>
-          <label>
-            <input
-              type="checkbox"
-              checked={displayDragItemInCell}
-              onChange={handleDisplayDragItemInCell}
-            />
-            Display dragged item in cell while dragging over
-          </label>
-        </div> 
-      </Card> */}
-
       <div style={{ height: '75vh', width: '100%' }}>
         <DragAndDropCalendar
           date={date}
@@ -348,8 +274,6 @@ const DnDOutsideResource = ({
     </>
   );
 };
-DnDOutsideResource.propTypes = {
-  //   localizer: PropTypes.instanceOf(DateLocalizer)
-};
+DnDOutsideResource.propTypes = {};
 
 export default MatomoHOC(DnDOutsideResource);
