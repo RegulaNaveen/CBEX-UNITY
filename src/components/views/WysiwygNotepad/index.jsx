@@ -438,8 +438,10 @@ const WysiwygNotepad = ({
         }
       }
     },
-    [proposalId, wsInstance, notesUserTag]
+    [proposalId, wsInstance, notesUserTag, query]
   );
+
+  let dataSynced = wsInstance.synced;
 
   useEffect(() => {
     if (
@@ -447,7 +449,7 @@ const WysiwygNotepad = ({
       currentSearchResult &&
       currentSearchResult.searchIndex === NOTEPAD_UI_ID
     ) {
-      if (query !== null && query.length >= 3 && wsInstance.synced) {
+      if (query !== null && query.length >= 3 && dataSynced) {
         !editor.isDestroyed &&
           editor.commands.search(
             query !== null ? query : '',
@@ -461,7 +463,7 @@ const WysiwygNotepad = ({
         editor.commands.reset();
       }
     };
-  }, [editor, query, currentSearchResult, wsInstance.synced]);
+  }, [query, currentSearchResult, editor, dataSynced]);
 
   return (
     <>
