@@ -1,7 +1,5 @@
 #Timeline-main-wrapper {
-  //   grid-template-columns: 1fr;
   .timeline-container {
-    // background: #fff;
     width: 97vw;
     display: flex;
 
@@ -45,7 +43,6 @@
   }
   .MuiAccordion-root {
     background-color: #f6f7fb;
-    // box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.08);
   }
   .btn-container {
     margin: 1em 0;
@@ -55,10 +52,6 @@
     }
   }
 
-  // .background {
-  //   background-color: #f6f7fb;
-  //   box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.08);
-  // }
   .section-tile {
     overflow-wrap: anywhere;
   }
@@ -107,10 +100,7 @@
     letter-spacing: 0;
     line-height: 24px;
   }
-  // .questions-for-custom {
 
-  //   width: 268px;
-  // }
   .timeline-calender-container {
     padding: 5px 20px 20px 20px;
     width: 72vw;
@@ -118,7 +108,5 @@
     flex-direction: column;
     justify-content: flex-end;
     align-items: flex-end;
-    // margin-left: 2em;
-    // margin-left: 2em;
   }
 }
