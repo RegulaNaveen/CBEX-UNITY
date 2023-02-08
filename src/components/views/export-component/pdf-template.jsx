@@ -24,7 +24,7 @@ import {
 } from '@react-pdf/renderer';
 import React from 'react';
 import Html from 'react-pdf-html';
-import { isString } from 'lodash';
+import { isEmpty, isEqual, isString } from 'lodash';
 import moment from 'moment';
 import { generateHTML } from '@tiptap/core';
 import Link from '@tiptap/extension-link';
@@ -147,11 +147,6 @@ function checkFormattedAnswer(answers) {
     return '';
   }
 }
-function getExtraLines(t1, t2) {
-  const contentLength = Math.max(t1.length, t2.length);
-  const paddingAnswerCell = parseInt(contentLength / 230);
-  return new Array(paddingAnswerCell + 2 || 2).fill('<br>').join('');
-}
 function getStyled() {
   return `<style>
   html {
@@ -161,6 +156,9 @@ function getStyled() {
   body {
     font-family: ProximaNova-Regular !important;
     font-size: 10px;
+  }
+  li span {
+    vertical-align:middle;
   }  
 h1{
     font-size: 20px;
@@ -321,9 +319,7 @@ function getProposalTeamsRows(questions) {
   const coreTeamQuestions = questions
     .filter(
       question =>
-        shouldInclude(question) &&
-        question.section.sectionName === PT_SECTION &&
-        question.questionId === 'Proposal Team-P0C'
+        shouldInclude(question) && question.section.sectionName === PT_SECTION
     )
     .sort((a, b) => a.questionOrder - b.questionOrder);
   const otherTeamQuestions = questions
@@ -384,12 +380,6 @@ function getProposalTeamsRows(questions) {
           otherTeamQuestionsAnswer.indexOf('(')
         );
         let tempEmailOther = String(otherTeamQuestionsAnswerEmail[0]).trim();
-        // otherTeamQuestionsemailLink = `<p><span data-type="mention" style="color:blue" data-id=${String(
-        //   tempEmailOther
-        // ).toUpperCase()} data-label=${String(
-        //   nameOther
-        // ).toUpperCase()}>${tempEmailOther}</span>
-        // <br/><br/></p>`;
         otherTeamQuestionsemailLink = `<a href="mailto:${tempEmailOther}">${nameOther}</a>`;
       }
       html += `<div class="table-header-cell">${otherTeamQuestionsemailLink}</div>`;
@@ -455,7 +445,15 @@ function questionTables(allQuestions, proposalQuestions) {
         )
         .sort((a, b) => a.questionOrder - b.questionOrder);
       questionsToCustomerLeftSection.forEach(question => {
-        const questionHTML = question.questionHTML || question.questionText;
+        const temporalDivElement = document.createElement('div');
+        temporalDivElement.innerHTML = question.questionHTML;
+        const finalAnswer = !isEqual(
+          temporalDivElement.innerText,
+          question.questionText
+        )
+          ? question.questionText
+          : question.questionHTML;
+        const questionHTML = finalAnswer;
         html += `<div class="resp-table-row">`;
         html += `<div class="table-header-cell"> ${questionHTML} </div>`;
         html += `<div class="table-header-cell"> ${formatDate(
@@ -499,7 +497,15 @@ function questionTables(allQuestions, proposalQuestions) {
       sections[section]
         .sort((a, b) => a.questionOrder - b.questionOrder)
         .forEach(question => {
-          const questionHTML = question.questionHTML || question.questionText;
+          const temporalDivElement = document.createElement('div');
+          temporalDivElement.innerHTML = question.questionHTML;
+          const finalAnswer = !isEqual(
+            temporalDivElement.innerText,
+            question.questionText
+          )
+            ? question.questionText
+            : question.questionHTML;
+          const questionHTML = finalAnswer;
           const questionType = question?.answerConfiguration?.type;
 
           const questionTypeValidation =
@@ -619,7 +625,27 @@ function getHtml(
   const image = Logo;
   const time = dateNow();
   let string = renderToString(<Prints />);
-  console.log('opt :>> ', string);
+  const extraStyleExp = new RegExp(
+    'style="color:red;border:2px solid red"',
+    'g'
+  );
+  string = string?.replaceAll(extraStyleExp, '');
+  const extraStyleGreenExp = new RegExp(
+    'style="color:green;border:2px solid green"',
+    'g'
+  );
+  string = string?.replaceAll(extraStyleGreenExp, '');
+  const alignRight = new RegExp('class="DraftEditor-alignRight"', 'g');
+  string = string?.replaceAll(
+    alignRight,
+    'class="DraftEditor-alignRight" style="text-align: end;"'
+  );
+  const rightAlign = new RegExp('class="DraftEditor-alignCenter"', 'g');
+  string = string?.replaceAll(
+    rightAlign,
+    'class="DraftEditor-alignCenter" style="text-align: center;"'
+  );
+  console.log('string', string);
   const url = getUnityLink(proposalDetails);
   const oppId = proposalDetails['CRM #'];
   savePDF(string, url, userName, time, oppId, fileName);
