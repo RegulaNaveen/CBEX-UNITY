@@ -40,6 +40,7 @@ import {
   deleteProposalQuestion
 } from '../../../redux/actions/proposal-actions';
 import MatomoHOC from '../../HOC/MatomoHOC';
+import { SocketContext } from '../../../context/SocketContext';
 
 type Props = {
   onClose: Function,
@@ -63,7 +64,8 @@ type Props = {
   editQuestionsData: Map,
   editProposalQuestion: (data: Object) => void,
   deleteProposalQuestion: (data: Object) => void,
-  selectedBid: Map
+  selectedBid: Map,
+  isOnlyDateAnswer: boolean
 };
 
 type State = {
@@ -75,6 +77,8 @@ type State = {
 
 const MSG_FIELD_REQUIRED = 'This field is required';
 export class AddQuestionModal extends PureComponent<Props, State> {
+  static contextType = SocketContext;
+
   constructor(props: Object) {
     super(props);
 
@@ -93,7 +97,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     const {
       getAnswerTypesDataF,
       getRolesInfoF,
-      editQuestionsData
+      editQuestionsData,
+      isOnlyDateAnswer
     } = this.props;
     getAnswerTypesDataF();
     getRolesInfoF();
@@ -107,6 +112,11 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         answerType: editQuestionsData.get('answerType'),
         roleNames: editQuestionsData.get('roleNames').toJS()
       });
+    }
+
+    if (isOnlyDateAnswer) {
+      this.setState({ answerType: 'date' });
+      console.log('inside answer type', this.state.answerType);
     }
   }
 
@@ -299,10 +309,11 @@ export class AddQuestionModal extends PureComponent<Props, State> {
           editProposalQuestion(
             proposalId,
             editQuestionsData.get('questionId'),
-            questionData
+            questionData,
+            this.context
           );
         } else {
-          setProposalQuestionF(proposalId, questionData);
+          setProposalQuestionF(proposalId, questionData, this.context);
           this.trackMatomoEventCreateQ(questionData);
         }
       }
@@ -319,7 +330,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     this.setState({ loaderText: 'Deleting Question' });
     const res = deleteProposalQuestion(
       proposalId,
-      editQuestionsData.get('questionId')
+      editQuestionsData.get('questionId'),
+      this.context
     );
   };
 
@@ -346,7 +358,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     selectedValue: String
   ) => {
     if (rolesList) rolesList = rolesList.sort();
-    const { editQuestionsData } = this.props;
+    const { editQuestionsData, isOnlyDateAnswer } = this.props;
     const {
       questionText,
       section,
@@ -395,10 +407,13 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                   placeholder="Select"
                   items={answerTypesList}
                   title="Answer Type"
-                  selectedValue={isEditMode && answerType}
+                  selectedValue={
+                    (isEditMode && answerType) ||
+                    (isOnlyDateAnswer && answerType)
+                  }
                   error={error.filter(v => v.answerType)}
                   onClick={this.onAnswerTypeChange}
-                  disabled={isQuestionAnswered}
+                  disabled={isQuestionAnswered || isOnlyDateAnswer}
                 />
                 {isQuestionAnswered && (
                   <p className="disabled-text">
