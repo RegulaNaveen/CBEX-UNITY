@@ -211,6 +211,10 @@ const UnityTab = ({
       dispatch(setActiveTabIndexAction(0));
     }
     if (selectedView && selectedView === 'timelines') {
+      if (!allFlags?.showTimelineFlag) {
+        history.push(`${window.location.pathname}`);
+        return;
+      }
       const timelinesTabValue = tabs.find(item => item.label === 'Timelines')
         .value;
       dispatch(setActiveTabIndexAction(timelinesTabValue));
@@ -272,6 +276,9 @@ const UnityTab = ({
     const isApprovalTab = approvalsFlag;
     if (!isApprovalTab || !showApprovalTab) {
       tabsToReturn = tabsToReturn.filter(item => item.label !== 'Approvals');
+    }
+    if (!allFlags?.showTimelineFlag) {
+      tabsToReturn = tabsToReturn.filter(item => item.label !== 'Timelines');
     }
     if (!enableValidateTab) {
       tabsToReturn = tabsToReturn.filter(item => item.label !== 'Validate');
