@@ -27,7 +27,8 @@ const AutoCompleteWithAddOption = ({
   loading,
   toggleWatch,
   onCascadeChange,
-  forceBlur
+  forceBlur,
+  multilineFlag
 }) => {
   const getSFOptions = (sfObj, sfFld) =>
     options[`SF#${sfObj}_SF#${sfFld}`]
@@ -212,18 +213,43 @@ const AutoCompleteWithAddOption = ({
         disableCloseOnSelect={multiple}
         value={selectedVal}
         renderTags={(value, getTagProps) =>
-          value.map((option, index) => (
-            <Chip
-              label={<Typography style={{whiteSpace: 'normal'}}>{option}</Typography>}
-              {...getTagProps({ index })}
-              style={{height:"100%"}}
-            />
-          ))
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "5px",
+              paddingTop: "5px",
+              paddingBottom: "5px",
+              width: "100%",
+              overflow: "hidden",
+              overflowX: "auto"
+            }}
+          >
+            {value.map((option, index) => (
+              <div
+                key={index}
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                }}
+              >
+                <Chip
+                  label={
+                    <Typography style={{ whiteSpace: "normal" }}>
+                      {option}
+                    </Typography>
+                  }
+                  {...getTagProps({ index })}
+                  style={{ height: "100%" }}
+                />
+              </div>
+            ))}
+          </div>
         }
         renderInput={params => {
           return (
             <TextField
-              multiline
+              multiline={multilineFlag}
               onChange={onTextChange}
               placeholder={placeholder}
               {...params}
