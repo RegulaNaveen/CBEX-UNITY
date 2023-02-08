@@ -14,6 +14,7 @@ import Superscript from '@tiptap/extension-superscript';
 import CharacterCount from '@tiptap/extension-character-count';
 import Mention from '@tiptap/extension-mention';
 import moment from 'moment';
+import OpportunityLinker from './OpportunityLinker';
 
 import suggestion from './suggestion';
 import { saveDataInMatomo, createMatomoObj } from '../../../utils/utils';
@@ -49,6 +50,7 @@ const WysiwygNotepad = ({
   ydoc,
   proposalId
 }) => {
+  let CAN_DECORATE_LINKS = false;
   const dispatch = useDispatch();
   const [notesUserTag, setNotesUserTag] = useState(false);
   const [editorloadingcount, seteditorloadingcount] = useState(0);
@@ -128,7 +130,11 @@ const WysiwygNotepad = ({
         }),
         SearchHighlight.configure({
           enable: query !== null && query.length >= 3
-        })
+        }),
+
+        (CAN_DECORATE_LINKS = allFlags?.canLinkOpportunityNo
+          ? OpportunityLinker
+          : false)
       ],
       onUpdate: ({ editor }) => {
         // const Ejson = editor.getJSON();

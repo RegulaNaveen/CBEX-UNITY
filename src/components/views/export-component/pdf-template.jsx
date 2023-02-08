@@ -37,6 +37,7 @@ import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
 import OrderedList from '@tiptap/extension-text-align';
 import Logo from '../../../../img/iqvia-hd-logo.png';
+import OpportunityLinker from '../WysiwygNotepad/OpportunityLinker';
 import {
   getFilteredQuestion,
   headFields,
@@ -575,7 +576,8 @@ function getNotesRows(notes, editor) {
           renderLabel({ options, node }) {
             return `breakemail${node.attrs.id}"starttag${node.attrs.label}closetag`;
           }
-        })
+        }),
+        OpportunityLinker
       ]);
       data += `</div></div></div>`;
       html += data;
