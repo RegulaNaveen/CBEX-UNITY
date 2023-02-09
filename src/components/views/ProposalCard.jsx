@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import ThumbsUp from 'apollo-react-icons/ThumbsUp';
+import CalenderWithNumber from '../svg/CalenderWithNumber';
 import House from 'apollo-react-icons/House';
 import { Folder } from '../svg';
 import { OPPORTUNITY } from '../../routes';
@@ -18,7 +19,8 @@ type Props = {
   verbatimIndication: string,
   proposalId: string,
   approvalsCount: any,
-  isApprovalCountPresent: Boolean
+  isApprovalCountPresent: Boolean,
+  allFlags: object
 };
 
 const ProposalCard = ({
@@ -33,7 +35,8 @@ const ProposalCard = ({
   verbatimIndication,
   proposalId,
   approvalsCount,
-  isApprovalCountPresent
+  isApprovalCountPresent,
+  allFlags
 }: Props) => {
   function setProposalTypeView({
     currentTarget
@@ -110,10 +113,23 @@ const ProposalCard = ({
           onClick={setProposalTypeView}
         >
           <Link to={`${OPPORTUNITY}${title}`}>
-            <House fontSize="large" htmlColor="#b350bf"></House>
+            <House fontSize="large" htmlColor="#b350bf" />
           </Link>
           <p>Strategy Development</p>
         </div>
+        {allFlags?.showTimelineFlag && (
+          <div
+            className="button"
+            id="timelines"
+            role="presentation"
+            onClick={setProposalTypeView}
+          >
+            <Link to={`${OPPORTUNITY}${title}?viewType=timelines`}>
+              <CalenderWithNumber fontSize="large" style={{ height: '36px' }} />
+            </Link>
+            <p>Timeline</p>
+          </div>
+        )}
 
         <div
           className="button"
@@ -126,14 +142,14 @@ const ProposalCard = ({
             <ThumbsUp
               fontSize="large"
               htmlColor={!isApprovalCountPresent ? '#7f7f7f' : '#1faa00'}
-              style={{ transform: 'scaleX(-1)' }}
+              style={{ transform: 'scaleX(-1)', height: '41px' }}
             />
           ) : (
             <Link to={`${OPPORTUNITY}${title}?viewType=approvals`}>
               <ThumbsUp
                 fontSize="large"
                 htmlColor={!isApprovalCountPresent ? '#7f7f7f' : '#1faa00'}
-                style={{ transform: 'scaleX(-1)' }}
+                style={{ transform: 'scaleX(-1)', height: '36px' }}
               />
             </Link>
           )}
