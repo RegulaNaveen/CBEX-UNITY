@@ -33,6 +33,18 @@ const DnDOutsideResource = ({
   eventCategories,
   trackEvent
 }) => {
+
+  const property = {
+    timelineEvents,
+    proposalDate,
+    socketContext,
+    userData,
+    isCurrent,
+    eventCategories,
+    trackEvent
+  }
+  console.log("property", property);
+
   const localizer = momentLocalizer(moment);
   const [myEvents, setMyEvents] = useState(timelineEvents);
   const [draggedEvent, setDraggedEvent] = useState();
@@ -94,7 +106,7 @@ const DnDOutsideResource = ({
         question?.answers[question?.answers?.length - 1].answer;
       if (
         parseMomentDate(lastAnswerValue.trim()) !==
-          parseMomentDate(selectedDay) &&
+        parseMomentDate(selectedDay) &&
         selectedDay
       ) {
         await dispatch(
@@ -149,7 +161,7 @@ const DnDOutsideResource = ({
     [setMyEvents]
   );
 
-  const newEvent = useCallback(event => {}, [setMyEvents]);
+  const newEvent = useCallback(event => { }, [setMyEvents]);
 
   const onDropFromOutside = useCallback(
     ({ start, end, allDay: isAllDay }) => {

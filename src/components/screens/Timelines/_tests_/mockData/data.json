@@ -1,0 +1,583 @@
+{
+    "timelineEvents": [
+        {
+            "id": "14b89bd0-60a3-4c7c-99e0-2613d3d217d0",
+            "title": "testcsqa5",
+            "start": null,
+            "end": null,
+            "isDraggable": true,
+            "color": "#00C221",
+            "question": {
+                "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                "questionId": "14b89bd0-60a3-4c7c-99e0-2613d3d217d0",
+                "section": {
+                    "sectionOrder": 4,
+                    "sectionName": "Proposal Team"
+                },
+                "questionText": "testcsqa5",
+                "answerConfiguration": {
+                    "type": "date",
+                    "options": []
+                },
+                "roleNames": [
+                    "Analytics Strategy Lead"
+                ],
+                "answers": [
+                    {
+                        "user": "sapthmimeghraja.shetty@iqvia.com",
+                        "userName": "Sapthmi Meghraja Shetty",
+                        "userRole": "Analytics Strategy Lead",
+                        "date": "2023-02-08T05:51:52.057Z",
+                        "answer": "Sapthmi Meghraja Shetty(sapthmimeghraja.shetty@iqvia.com)",
+                        "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                        "updatedInPG": true
+                    },
+                    {
+                        "user": "AnswerPulledFromSalesforce",
+                        "userName": "AnswerPulledFromSalesforce",
+                        "userRole": "AnswerPulledFromSalesforce",
+                        "date": "2023-02-08T09:42:41.712Z",
+                        "answer": "",
+                        "formattedAnswer": "",
+                        "proposalId": "a81d91c0-1974-47fc-aff9-b13e20a69d34",
+                        "updatedInPG": false
+                    }
+                ],
+                "questionOrder": 30,
+                "visible": true,
+                "locked": false,
+                "milestoneNew": [],
+                "hasDifferentSFanswer": false,
+                "isCustomQuestion": true,
+                "questionJSON": "",
+                "questionHTML": "",
+                "questionHintJSON": "",
+                "questionHintHTML": "",
+                "active": true,
+                "integration": "",
+                "events": "",
+                "notApplicable": false,
+                "questionApproval": false
+            }
+        },
+        {
+            "id": "17b6d7f5-5a0d-4376-a5d6-5d6e53e0cfbb",
+            "title": "testqa8welcome",
+            "start": "2023-02-17T18:30:00.000Z",
+            "end": "2023-02-17T18:30:00.000Z",
+            "isDraggable": true,
+            "color": "#00C221",
+            "question": {
+                "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                "questionId": "17b6d7f5-5a0d-4376-a5d6-5d6e53e0cfbb",
+                "section": {
+                    "sectionOrder": 29,
+                    "sectionName": "Event with subject"
+                },
+                "questionText": "testqa8welcome",
+                "answerConfiguration": {
+                    "type": "date",
+                    "options": []
+                },
+                "roleNames": [
+                    "Analytics Strategy Lead"
+                ],
+                "answers": [
+                    {
+                        "user": "sapthmimeghraja.shetty@iqvia.com",
+                        "userName": "Sapthmi Meghraja Shetty",
+                        "userRole": "Analytics Strategy Lead",
+                        "date": "2023-02-08T05:55:56.679Z",
+                        "answer": "2023-02-17T18:30:00.000Z",
+                        "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                        "updatedInPG": true
+                    }
+                ],
+                "questionOrder": 2,
+                "visible": true,
+                "locked": true,
+                "milestoneNew": [],
+                "hasDifferentSFanswer": false,
+                "isCustomQuestion": true,
+                "questionJSON": "",
+                "questionHTML": "",
+                "questionHintJSON": "",
+                "questionHintHTML": "",
+                "active": true,
+                "integration": "",
+                "events": "",
+                "notApplicable": false,
+                "questionApproval": false
+            }
+        },
+        {
+            "id": "199c0e15-7635-46ea-957d-09ee2378a69e",
+            "title": "test",
+            "start": null,
+            "end": null,
+            "isDraggable": true,
+            "color": "#00C221",
+            "question": {
+                "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                "questionId": "199c0e15-7635-46ea-957d-09ee2378a69e",
+                "section": {
+                    "sectionOrder": 1,
+                    "sectionName": "RFP Prep for BD (to be completed prior to triage)"
+                },
+                "questionText": "test",
+                "answerConfiguration": {
+                    "type": "date",
+                    "options": []
+                },
+                "roleNames": [
+                    "Analytics Strategy Lead"
+                ],
+                "answers": [],
+                "questionOrder": 58,
+                "visible": true,
+                "locked": false,
+                "milestoneNew": [],
+                "hasDifferentSFanswer": false,
+                "isCustomQuestion": true,
+                "questionJSON": "",
+                "questionHTML": "",
+                "questionHintJSON": "",
+                "questionHintHTML": "",
+                "active": true,
+                "integration": "",
+                "events": "",
+                "notApplicable": false,
+                "questionApproval": false
+            }
+        },
+        {
+            "id": "3aa0c56b-e69e-49a6-834c-dd3cae205933",
+            "title": "welcome date",
+            "start": "2023-02-18T18:30:00.000Z",
+            "end": "2023-02-18T18:30:00.000Z",
+            "isDraggable": true,
+            "color": "#00C221",
+            "question": {
+                "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                "questionId": "3aa0c56b-e69e-49a6-834c-dd3cae205933",
+                "section": {
+                    "sectionOrder": 1,
+                    "sectionName": "RFP Prep for BD (to be completed prior to triage)"
+                },
+                "questionText": "welcome date",
+                "answerConfiguration": {
+                    "type": "date",
+                    "options": []
+                },
+                "roleNames": [
+                    "Analytics Strategy Lead"
+                ],
+                "answers": [
+                    {
+                        "user": "vamsi.krishna5@iqvia.com",
+                        "userName": "Vamsi Krishna",
+                        "userRole": "Business Developer",
+                        "date": "2023-02-08T09:20:52.289Z",
+                        "answer": "2023-02-18T18:30:00.000Z",
+                        "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                        "updatedInPG": true
+                    }
+                ],
+                "questionOrder": 56,
+                "visible": true,
+                "locked": true,
+                "milestoneNew": [],
+                "hasDifferentSFanswer": false,
+                "isCustomQuestion": true,
+                "questionJSON": "",
+                "questionHTML": "",
+                "questionHintJSON": "",
+                "questionHintHTML": "",
+                "active": true,
+                "integration": "",
+                "events": "",
+                "notApplicable": false,
+                "questionApproval": false
+            }
+        },
+        {
+            "id": "67ccf550-122c-4060-b6a9-4248caf95ec8",
+            "title": "testqa",
+            "start": "2023-02-07T18:30:00.000Z",
+            "end": "2023-02-07T18:30:00.000Z",
+            "isDraggable": true,
+            "color": "#00C221",
+            "question": {
+                "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                "questionId": "67ccf550-122c-4060-b6a9-4248caf95ec8",
+                "section": {
+                    "sectionOrder": 1,
+                    "sectionName": "RFP Prep for BD (to be completed prior to triage)"
+                },
+                "questionText": "testqa",
+                "answerConfiguration": {
+                    "type": "date",
+                    "options": []
+                },
+                "roleNames": [
+                    "Analytics Strategy Lead"
+                ],
+                "answers": [
+                    {
+                        "user": "sapthmimeghraja.shetty@iqvia.com",
+                        "userName": "Sapthmi Meghraja Shetty",
+                        "userRole": "Analytics Strategy Lead",
+                        "date": "2023-02-07T15:25:08.406Z",
+                        "answer": "2023-02-08T00:00:00+05:30",
+                        "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                        "updatedInPG": true
+                    }
+                ],
+                "questionOrder": 59,
+                "visible": true,
+                "locked": true,
+                "milestoneNew": [],
+                "hasDifferentSFanswer": false,
+                "isCustomQuestion": true,
+                "questionJSON": "",
+                "questionHTML": "",
+                "questionHintJSON": "",
+                "questionHintHTML": "",
+                "active": true,
+                "integration": "",
+                "events": "",
+                "notApplicable": false,
+                "questionApproval": false
+            }
+        },
+        {
+            "id": "69ba2551-049a-446b-bcab-1bfad317b6af",
+            "title": "adding in timeline-New update12",
+            "start": "2023-02-20T18:30:00.000Z",
+            "end": "2023-02-20T18:30:00.000Z",
+            "isDraggable": true,
+            "color": "#00C221",
+            "question": {
+                "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                "questionId": "69ba2551-049a-446b-bcab-1bfad317b6af",
+                "section": {
+                    "sectionOrder": 1,
+                    "sectionName": "RFP Prep for BD (to be completed prior to triage)"
+                },
+                "questionText": "adding in timeline-New update12",
+                "answerConfiguration": {
+                    "type": "date",
+                    "options": []
+                },
+                "roleNames": [
+                    "Analytics Strategy Lead"
+                ],
+                "answers": [
+                    {
+                        "user": "sapthmimeghraja.shetty@iqvia.com",
+                        "userName": "Sapthmi Meghraja Shetty",
+                        "userRole": "Analytics Strategy Lead",
+                        "date": "2023-02-07T15:31:25.185Z",
+                        "answer": "2023-02-21T00:00:00+05:30",
+                        "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                        "updatedInPG": true
+                    }
+                ],
+                "questionOrder": 54,
+                "visible": true,
+                "locked": true,
+                "milestoneNew": [],
+                "hasDifferentSFanswer": false,
+                "isCustomQuestion": true,
+                "questionJSON": "",
+                "questionHTML": "",
+                "questionHintJSON": "",
+                "questionHintHTML": "",
+                "active": true,
+                "integration": "",
+                "events": "",
+                "notApplicable": false,
+                "questionApproval": false
+            }
+        },
+        {
+            "id": "72c5edda-89ac-4e75-b5f1-e8686fe8e054",
+            "title": "test text updated",
+            "start": null,
+            "end": null,
+            "isDraggable": true,
+            "color": "#00C221",
+            "question": {
+                "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                "questionId": "72c5edda-89ac-4e75-b5f1-e8686fe8e054",
+                "section": {
+                    "sectionOrder": 1,
+                    "sectionName": "RFP Prep for BD (to be completed prior to triage)"
+                },
+                "questionText": "test text updated",
+                "answerConfiguration": {
+                    "type": "date",
+                    "options": []
+                },
+                "roleNames": [
+                    "Analytics Strategy Lead"
+                ],
+                "answers": [
+                    {
+                        "user": "sapthmimeghraja.shetty@iqvia.com",
+                        "userName": "Sapthmi Meghraja Shetty",
+                        "userRole": "Analytics Strategy Lead",
+                        "date": "2023-02-07T15:32:53.077Z",
+                        "answer": " ",
+                        "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                        "updatedInPG": true
+                    }
+                ],
+                "questionOrder": 53,
+                "visible": true,
+                "locked": true,
+                "milestoneNew": [],
+                "hasDifferentSFanswer": false,
+                "isCustomQuestion": true,
+                "questionJSON": "",
+                "questionHTML": "",
+                "questionHintJSON": "",
+                "questionHintHTML": "",
+                "active": true,
+                "integration": "",
+                "events": "",
+                "notApplicable": false,
+                "questionApproval": false
+            }
+        },
+        {
+            "id": "853d90e6-f997-42d1-91d2-42bf80bead4c",
+            "title": "test",
+            "start": null,
+            "end": null,
+            "isDraggable": true,
+            "color": "#00C221",
+            "question": {
+                "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                "questionId": "853d90e6-f997-42d1-91d2-42bf80bead4c",
+                "section": {
+                    "sectionOrder": 1,
+                    "sectionName": "RFP Prep for BD (to be completed prior to triage)"
+                },
+                "questionText": "test",
+                "answerConfiguration": {
+                    "type": "date",
+                    "options": []
+                },
+                "roleNames": [
+                    "Analytics Strategy Lead"
+                ],
+                "answers": [],
+                "questionOrder": 55,
+                "visible": true,
+                "locked": false,
+                "milestoneNew": [],
+                "hasDifferentSFanswer": false,
+                "isCustomQuestion": true,
+                "questionJSON": "",
+                "questionHTML": "",
+                "questionHintJSON": "",
+                "questionHintHTML": "",
+                "active": true,
+                "integration": "",
+                "events": "",
+                "notApplicable": false,
+                "questionApproval": false
+            }
+        },
+        {
+            "id": "8e030140-2655-454c-89ca-432ab784cdbf",
+            "title": "testdatecustom_updted",
+            "start": "2023-02-16T18:30:00.000Z",
+            "end": "2023-02-16T18:30:00.000Z",
+            "isDraggable": true,
+            "color": "#00C221",
+            "question": {
+                "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                "questionId": "8e030140-2655-454c-89ca-432ab784cdbf",
+                "section": {
+                    "sectionOrder": 1,
+                    "sectionName": "RFP Prep for BD (to be completed prior to triage)"
+                },
+                "questionText": "testdatecustom_updted",
+                "answerConfiguration": {
+                    "type": "date",
+                    "options": []
+                },
+                "roleNames": [
+                    "Clinical DS&B"
+                ],
+                "answers": [
+                    {
+                        "user": "sapthmimeghraja.shetty@iqvia.com",
+                        "userName": "Sapthmi Meghraja Shetty",
+                        "userRole": "Analytics Strategy Lead",
+                        "date": "2023-02-08T06:51:13.618Z",
+                        "answer": "2023-02-17T00:00:00+05:30",
+                        "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                        "updatedInPG": true
+                    }
+                ],
+                "questionOrder": 57,
+                "visible": true,
+                "locked": true,
+                "milestoneNew": [],
+                "hasDifferentSFanswer": false,
+                "isCustomQuestion": true,
+                "questionJSON": "",
+                "questionHTML": "",
+                "questionHintJSON": "",
+                "questionHintHTML": "",
+                "active": true,
+                "integration": "",
+                "events": "",
+                "notApplicable": false,
+                "questionApproval": false
+            }
+        },
+        {
+            "id": "9338308a-4b98-4b55-9896-482b39ef05f2",
+            "title": "testqa7",
+            "start": null,
+            "end": null,
+            "isDraggable": true,
+            "color": "#00C221",
+            "question": {
+                "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                "questionId": "9338308a-4b98-4b55-9896-482b39ef05f2",
+                "section": {
+                    "sectionOrder": 199,
+                    "sectionName": "Questions_for_the_Customer_left_panel"
+                },
+                "questionText": "testqa7",
+                "answerConfiguration": {
+                    "type": "date",
+                    "options": []
+                },
+                "roleNames": [
+                    "Analytics Strategy Lead"
+                ],
+                "answers": [],
+                "questionOrder": 3,
+                "visible": true,
+                "locked": false,
+                "milestoneNew": [],
+                "hasDifferentSFanswer": false,
+                "isCustomQuestion": true,
+                "questionJSON": "",
+                "questionHTML": "",
+                "questionHintJSON": "",
+                "questionHintHTML": "",
+                "active": true,
+                "integration": "",
+                "events": "",
+                "notApplicable": false,
+                "questionApproval": false
+            }
+        },
+        {
+            "id": "b3e686f4-c884-4139-a07f-86faf0d9010b",
+            "title": "testqa6",
+            "start": null,
+            "end": null,
+            "isDraggable": true,
+            "color": "#00C221",
+            "question": {
+                "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                "questionId": "b3e686f4-c884-4139-a07f-86faf0d9010b",
+                "section": {
+                    "sectionOrder": 199,
+                    "sectionName": "Questions_for_the_Customer_left_panel"
+                },
+                "questionText": "testqa6",
+                "answerConfiguration": {
+                    "type": "date",
+                    "options": []
+                },
+                "roleNames": [
+                    "Analytics Strategy Lead"
+                ],
+                "answers": [],
+                "questionOrder": 2,
+                "visible": true,
+                "locked": false,
+                "milestoneNew": [],
+                "hasDifferentSFanswer": false,
+                "isCustomQuestion": true,
+                "questionJSON": "",
+                "questionHTML": "",
+                "questionHintJSON": "",
+                "questionHintHTML": "",
+                "active": true,
+                "integration": "",
+                "events": "",
+                "notApplicable": false,
+                "questionApproval": false
+            }
+        },
+        {
+            "id": "d36da7e1-def2-4eeb-a778-50dedc8ef2e4",
+            "title": "vamsi",
+            "start": null,
+            "end": null,
+            "isDraggable": true,
+            "color": "#00C221",
+            "question": {
+                "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                "questionId": "d36da7e1-def2-4eeb-a778-50dedc8ef2e4",
+                "section": {
+                    "sectionOrder": 2,
+                    "sectionName": "Questions for the Customer"
+                },
+                "questionText": "vamsi",
+                "answerConfiguration": {
+                    "type": "date",
+                    "options": []
+                },
+                "roleNames": [
+                    "Analytics Strategy Lead"
+                ],
+                "answers": [],
+                "questionOrder": 7,
+                "visible": true,
+                "locked": false,
+                "milestoneNew": [],
+                "hasDifferentSFanswer": false,
+                "isCustomQuestion": true,
+                "questionJSON": "",
+                "questionHTML": "",
+                "questionHintJSON": "",
+                "questionHintHTML": "",
+                "active": true,
+                "integration": "",
+                "events": "",
+                "notApplicable": false,
+                "questionApproval": false
+            }
+        }
+    ],
+    "proposalDate": "2023-02-08T09:47:35.521Z",
+    "socketContext": {
+        "socket": {
+            "current": {}
+        }
+    },
+    "userData": {
+        "name": "Sushil Munda",
+        "email": "sushil.munda@iqvia.com",
+        "role": "1138123"
+    },
+    "isCurrent": true,
+    "eventCategories": {
+        "dp": "Unity Dashboard",
+        "plainPd": "Proposal Detail",
+        "tb": "ToolBar Menu",
+        "pg": "Pagination",
+        "crmNo": "Proposal Detail (CRM#: HAB77503)"
+    }
+}
