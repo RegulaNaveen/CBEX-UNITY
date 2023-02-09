@@ -152,10 +152,14 @@ function getStyled() {
   html {
     -webkit-print-color-adjust: exact;
   }
+  * {
+  text-rendering: geometricprecision !important;
+  letter-spacing: 0.5px
+}
   FONTCHANGE
   body {
     font-family: ProximaNova-Regular !important;
-    font-size: 10px;
+    font-size: 12px;
   }
   li span {
     vertical-align:middle;
@@ -214,7 +218,7 @@ ul {
   #resp-table-caption{
     display: table-cell;
     text-align: center;
-    font-size: 10px;
+    font-size: 12px;
     color: #fff;
     font-weight: bold;
     background-color: #00A3E0;
@@ -224,7 +228,7 @@ ul {
     }
     #resp-table-header {
       display: table-cell;
-      font-size: 10px;
+      font-size: 12px;
       background-color: #00A3E0;
       color: #fff;
       font-weight: bold;
@@ -319,7 +323,9 @@ function getProposalTeamsRows(questions) {
   const coreTeamQuestions = questions
     .filter(
       question =>
-        shouldInclude(question) && question.section.sectionName === PT_SECTION
+        shouldInclude(question) &&
+        CORE_TEAM[question.questionText] &&
+        question.section.sectionName === PT_SECTION
     )
     .sort((a, b) => a.questionOrder - b.questionOrder);
   const otherTeamQuestions = questions
@@ -327,8 +333,7 @@ function getProposalTeamsRows(questions) {
       question =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
-        !CORE_TEAM[question.questionText] &&
-        question.questionId !== 'Proposal Team-P0C'
+        !CORE_TEAM[question.questionText]
     )
     .sort((a, b) => a.questionOrder - b.questionOrder);
   let html = ``;
