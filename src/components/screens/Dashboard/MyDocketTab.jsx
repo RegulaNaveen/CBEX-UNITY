@@ -50,8 +50,6 @@ class RecentTab extends Component<Props, State> {
     const { setRows, allFlags } = this.props;
 
     setRows(15);
-
-    console.log('tapas all flag', allFlags);
   }
 
   componentDidUpdate(prevProps) {
