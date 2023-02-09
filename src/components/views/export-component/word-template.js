@@ -85,6 +85,7 @@ export const CORE_TEAM = {
   'Business Developer': 'BD',
   TSL: 'TSL',
   'Medical Advisor': 'Medical Advisor',
+  'Medical Strategy Lead': 'Medical Strategy Lead',
   'Project Lead': 'Project Leadership',
   Clinical: 'Clinical DS&B',
   'Analytics Strategy Lead': 'Analytics Strategy Lead'
