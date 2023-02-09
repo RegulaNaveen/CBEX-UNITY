@@ -53,7 +53,7 @@ describe('DrawerOptions component', () => {
     );
   });
 
-  test.skip('it should call setSeenBatch prop when mark as read option is clicked', async () => {
+  test('it should call setSeenBatch prop when mark as read option is clicked', async () => {
     const setSeenBatch = jest.fn();
     const { getByText } = render(
       <Provider store={store}>

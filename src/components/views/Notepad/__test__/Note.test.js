@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import Note from '../Notepad/Note';
+import Note from '../Note';
 
 describe('Note component', () => {
   test('renders Note component with userName, date, section and content', () => {
