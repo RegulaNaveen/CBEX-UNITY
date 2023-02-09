@@ -33,18 +33,6 @@ const DnDOutsideResource = ({
   eventCategories,
   trackEvent
 }) => {
-
-  const property = {
-    timelineEvents,
-    proposalDate,
-    socketContext,
-    userData,
-    isCurrent,
-    eventCategories,
-    trackEvent
-  }
-  console.log("property", property);
-
   const localizer = momentLocalizer(moment);
   const [myEvents, setMyEvents] = useState(timelineEvents);
   const [draggedEvent, setDraggedEvent] = useState();
