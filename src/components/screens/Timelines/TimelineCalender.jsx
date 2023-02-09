@@ -14,6 +14,8 @@ import { parseMomentDate } from '../../../utils/DateUtils';
 import { setProposalAnswerData } from '../../../redux/actions/proposal-actions';
 import { useDispatch } from 'react-redux';
 import MatomoHOC from '../../HOC/MatomoHOC';
+import Typography from 'apollo-react/components/Typography';
+import CustomComponents from './CustomComponents';
 
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 
@@ -31,12 +33,13 @@ const DnDOutsideResource = ({
   userData,
   isCurrent,
   eventCategories,
-  trackEvent
+  trackEvent,
+  currentBidDetails
 }) => {
   const localizer = momentLocalizer(moment);
   const [myEvents, setMyEvents] = useState(timelineEvents);
   const [draggedEvent, setDraggedEvent] = useState();
-  const [date, setDate] = useState(new Date());
+  const [currentDate, setDate] = useState(new Date());
   const [displayDragItemInCell, setDisplayDragItemInCell] = useState(true);
   const [counters, setCounters] = useState({ item1: 0, item2: 0 });
   const dispatch = useDispatch();
@@ -242,7 +245,7 @@ const DnDOutsideResource = ({
     <>
       <div style={{ height: '75vh', width: '100%' }}>
         <DragAndDropCalendar
-          date={date}
+          date={currentDate}
           onNavigate={newDate => {
             setDate(newDate);
           }}
@@ -269,6 +272,15 @@ const DnDOutsideResource = ({
           selectable
           popup
           views={['month']}
+          components={{
+            dateCellWrapper: props => (
+              // eslint-disable-next-line react/jsx-pascal-case
+              <CustomComponents.dateCellWrapper
+                {...props}
+                currentBidDetails={currentBidDetails}
+              />
+            )
+          }}
         />
       </div>
     </>

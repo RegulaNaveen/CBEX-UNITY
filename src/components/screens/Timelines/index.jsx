@@ -7,6 +7,7 @@ import PlusIcon from 'apollo-react-icons/Plus';
 import Button from 'apollo-react/components/Button';
 import { fromJS, Map } from 'immutable';
 import TimelineCalender from './TimelineCalender';
+import { v4 as uuidv4 } from 'uuid';
 import {
   getProposalDetails,
   isSetQuestionLoading,
@@ -14,6 +15,7 @@ import {
 } from '../../../redux/selectors';
 import TimelineSections from './TimelineSections';
 import {
+  getBidList,
   getProposalQuestions,
   getSelectedBid
 } from '../../../redux/selectors/proposal';
@@ -28,6 +30,8 @@ const Timeline = () => {
   const questions = useSelector(getProposalQuestions);
   const [showModal, setShowModal] = useState(false);
   const selectedBid = useSelector(getSelectedBid)?.toJS();
+  const bidList = useSelector(getBidList);
+  const [currentBidDetails, setCurrentBidDetails] = useState({});
   const { proposalDate, isCurrent, proposalId } = selectedBid;
   const [timelineEvents, setTimelineEvents] = useState([]);
   const proposalDetail = useSelector(getProposalDetails);
@@ -145,7 +149,9 @@ const Timeline = () => {
         setTimelineEvents(current => [...current, eventss]);
       }
     });
-  }, [questions]);
+    const matchedBid = bidList.filter(bid => bid.bidId === selectedBid.id);
+    setCurrentBidDetails(matchedBid);
+  }, [questions, proposalDate]);
 
   const onCloseAddModal = () => {
     setShowModal(prev => !prev);
@@ -218,11 +224,13 @@ const Timeline = () => {
           </div>
 
           <TimelineCalender
+            key={uuidv4()}
             timelineEvents={timelineEvents}
             proposalDate={proposalDate}
             socketContext={socketContext}
             userData={getUserData()}
             isCurrent={isCurrent}
+            currentBidDetails={currentBidDetails}
           />
         </Panel>
       </div>
