@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
 });
 function checkFormattedAnswer(answers) {
   try {
-    const lastAnswer = answers[answers.length - 1];
+    let lastAnswer = answers[answers.length - 1];
     let formattedAnswer;
     if (lastAnswer?.formattedAnswer) {
       if (isString(lastAnswer?.formattedAnswer)) {
@@ -153,10 +153,6 @@ function getStyled() {
   html {
     -webkit-print-color-adjust: exact;
   }
-  * {
-  text-rendering: geometricprecision !important;
-  letter-spacing: 0.5px
-}
   FONTCHANGE
   body {
     font-family: ProximaNova-Regular !important;
@@ -460,17 +456,19 @@ function questionTables(allQuestions, proposalQuestions) {
           ? question.questionText
           : question.questionHTML;
         const questionHTML = finalAnswer;
-        html += `<div class="resp-table-row">`;
-        html += `<div class="table-header-cell"> ${questionHTML} </div>`;
-        html += `<div class="table-header-cell"> ${formatDate(
-          checkFormattedAnswer(question.answers),
-          question.answerConfiguration
-        )} <span class="blueColorText">${
-          getUnityPredicatedText(question.answers)
-            ? getUnityPredicatedText(question.answers)
-            : ''
-        }</span></div>`;
-        html += `</div>`;
+        if (question.questionText.length > 1) {
+          html += `<div class="resp-table-row">`;
+          html += `<div class="table-header-cell"> ${questionHTML} </div>`;
+          html += `<div class="table-header-cell"> ${formatDate(
+            checkFormattedAnswer(question.answers),
+            question.answerConfiguration
+          )} <span class="blueColorText">${
+            getUnityPredicatedText(question.answers)
+              ? getUnityPredicatedText(question.answers)
+              : ''
+          }</span></div>`;
+          html += `</div>`;
+        }
       });
       let questionsToCustomerRightSection = allQuestions
         .filter(
@@ -503,6 +501,7 @@ function questionTables(allQuestions, proposalQuestions) {
       sections[section]
         .sort((a, b) => a.questionOrder - b.questionOrder)
         .forEach(question => {
+          const { answers } = question;
           const temporalDivElement = document.createElement('div');
           temporalDivElement.innerHTML = question.questionHTML;
           const finalAnswer = !isEqual(
@@ -513,20 +512,26 @@ function questionTables(allQuestions, proposalQuestions) {
             : question.questionHTML;
           const questionHTML = finalAnswer;
           const questionType = question?.answerConfiguration?.type;
-
+          const getEmailID = str => {
+            return String(str).match(
+              /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+            );
+          };
           const questionTypeValidation =
             questionType === 'picklist-lookup' ? 'word-spacing:1px' : '';
-          html += `<div class="resp-table-row">`;
-          html += `<div class="table-header-cell"> ${questionHTML}</div>`;
-          html += `<div class="table-header-cell" style=${questionTypeValidation}> ${formatDate(
-            checkFormattedAnswer(question.answers),
-            question.answerConfiguration
-          )} <span class="blueColorText">${
-            getUnityPredicatedText(question.answers)
-              ? getUnityPredicatedText(question.answers)
-              : ''
-          }</span></div>`;
-          html += `</div>`;
+          if (question.questionText.length > 1) {
+            html += `<div class="resp-table-row">`;
+            html += `<div class="table-header-cell"> ${questionHTML}</div>`;
+            html += `<div class="table-header-cell" style=${questionTypeValidation}> ${formatDate(
+              checkFormattedAnswer(question.answers),
+              question.answerConfiguration
+            )} <span class="blueColorText">${
+              getUnityPredicatedText(question.answers)
+                ? getUnityPredicatedText(question.answers)
+                : ''
+            }</span></div>`;
+            html += `</div>`;
+          }
         });
       html += `</div>`;
     }
