@@ -240,7 +240,10 @@ const DnDOutsideResource = ({
 
   return (
     <>
-      <div style={{ height: '75vh', width: '100%' }}>
+      <div
+        style={{ height: '75vh', width: '100%' }}
+        data-testid="dnd-outside-resource"
+      >
         <DragAndDropCalendar
           data-testid="drag-and-drop-calender"
           date={date}
