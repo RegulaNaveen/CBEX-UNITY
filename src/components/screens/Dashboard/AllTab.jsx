@@ -28,7 +28,8 @@ type Props = {
   page: Number,
   numRows: Number,
   setPage: Function,
-  setRows: Function
+  setRows: Function,
+  allFlags: object
 };
 
 type State = {
@@ -45,11 +46,9 @@ class AllTab extends Component<Props, State> {
     };
   }
 
-  componentDidMount(){
-    const {
-      setRows
-    } = this.props;
-    setRows(15)
+  componentDidMount() {
+    const { setRows } = this.props;
+    setRows(15);
   }
 
   componentDidUpdate(prevProps) {
@@ -77,11 +76,11 @@ class AllTab extends Component<Props, State> {
   }
 
   renderSelectedView = () => {
-    const { selectedViewType } = this.props;
+    const { selectedViewType, allFlags } = this.props;
     const { pageContent } = this.state;
 
     if (selectedViewType === 0) return <TableView data={pageContent} />;
-    return <GridView data={pageContent} />;
+    return <GridView data={pageContent} allFlags={allFlags} />;
   };
 
   setPageContent = (pageContent: Array<Object>) =>
@@ -134,6 +133,7 @@ const mapStateToProps = state => ({
   loading: getProposalsLoading(state),
   filteredProposals: getFilteredProposals(state),
   isFilteringProposals: getIsFilteringProposals(state),
+
   page: getPage(state.proposals),
   numRows: getNumOfRows(state.proposals)
 });

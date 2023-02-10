@@ -14,6 +14,7 @@ import Superscript from '@tiptap/extension-superscript';
 import CharacterCount from '@tiptap/extension-character-count';
 import Mention from '@tiptap/extension-mention';
 import moment from 'moment';
+import OpportunityLinker from './OpportunityLinker';
 
 import suggestion from './suggestion';
 import { saveDataInMatomo, createMatomoObj } from '../../../utils/utils';
@@ -49,6 +50,7 @@ const WysiwygNotepad = ({
   ydoc,
   proposalId
 }) => {
+  let CAN_DECORATE_LINKS = false;
   const dispatch = useDispatch();
   const [notesUserTag, setNotesUserTag] = useState(false);
   const [editorloadingcount, seteditorloadingcount] = useState(0);
@@ -128,7 +130,11 @@ const WysiwygNotepad = ({
         }),
         SearchHighlight.configure({
           enable: query !== null && query.length >= 3
-        })
+        }),
+
+        (CAN_DECORATE_LINKS = allFlags?.canLinkOpportunityNo
+          ? OpportunityLinker
+          : false)
       ],
       onUpdate: ({ editor }) => {
         // const Ejson = editor.getJSON();
@@ -438,8 +444,10 @@ const WysiwygNotepad = ({
         }
       }
     },
-    [proposalId, wsInstance, notesUserTag]
+    [proposalId, wsInstance, notesUserTag, query]
   );
+
+  let dataSynced = wsInstance.synced;
 
   useEffect(() => {
     if (
@@ -447,7 +455,7 @@ const WysiwygNotepad = ({
       currentSearchResult &&
       currentSearchResult.searchIndex === NOTEPAD_UI_ID
     ) {
-      if (query !== null && query.length >= 3 && wsInstance.synced) {
+      if (query !== null && query.length >= 3 && dataSynced) {
         !editor.isDestroyed &&
           editor.commands.search(
             query !== null ? query : '',
@@ -461,7 +469,7 @@ const WysiwygNotepad = ({
         editor.commands.reset();
       }
     };
-  }, [editor, query, currentSearchResult, wsInstance.synced]);
+  }, [query, currentSearchResult, editor, dataSynced]);
 
   return (
     <>

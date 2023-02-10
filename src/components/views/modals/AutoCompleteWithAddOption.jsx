@@ -4,6 +4,8 @@ import { List } from 'immutable';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import TextField from '@material-ui/core/TextField';
+import Chip from '@material-ui/core/Chip';
+import Typography from '@material-ui/core/Typography';
 import Autocomplete, {
   createFilterOptions
 } from '@material-ui/lab/Autocomplete';
@@ -25,7 +27,8 @@ const AutoCompleteWithAddOption = ({
   loading,
   toggleWatch,
   onCascadeChange,
-  forceBlur
+  forceBlur,
+  multilineFlag
 }) => {
   const getSFOptions = (sfObj, sfFld) =>
     options[`SF#${sfObj}_SF#${sfFld}`]
@@ -209,9 +212,44 @@ const AutoCompleteWithAddOption = ({
         freeSolo
         disableCloseOnSelect={multiple}
         value={selectedVal}
+        renderTags={(value, getTagProps) =>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "5px",
+              paddingTop: "5px",
+              paddingBottom: "5px",
+              width: "100%",
+              overflow: "hidden",
+              overflowX: "auto"
+            }}
+          >
+            {value.map((option, index) => (
+              <div
+                key={index}
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                }}
+              >
+                <Chip
+                  label={
+                    <Typography style={{ whiteSpace: "normal" }}>
+                      {option}
+                    </Typography>
+                  }
+                  {...getTagProps({ index })}
+                  style={{ height: "100%" }}
+                />
+              </div>
+            ))}
+          </div>
+        }
         renderInput={params => {
           return (
             <TextField
+              multiline={multilineFlag}
               onChange={onTextChange}
               placeholder={placeholder}
               {...params}
