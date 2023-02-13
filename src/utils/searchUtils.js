@@ -56,7 +56,7 @@ export async function getSearchResults({
       approvals,
       approvalFilters
     );
-  } else if (activeTab === 1) {
+  } else if (activeTab === 2) {
     searchInApprovals(
       finalResult,
       regexp,
@@ -116,7 +116,7 @@ export function searchInApprovals(
         approval.ApprovalSectionTitle,
         approval.ApprovalSectionId,
         finalResult,
-        1
+        2
       );
     }
 
@@ -133,7 +133,7 @@ export function searchInApprovals(
             archive.section_title,
             `${archive.section_id}-archive-${aIndex}-section-title`,
             finalResult,
-            1
+            2
           );
         }
         archive.section_left_questions
@@ -149,7 +149,7 @@ export function searchInApprovals(
               question.questionText,
               `${question.questionId}-archive-${aIndex}-left-ques`,
               finalResult,
-              1
+              2
             );
 
             // searching in answer
@@ -167,7 +167,7 @@ export function searchInApprovals(
                     answerChunk,
                     `${question.questionId}-archive-${aIndex}-left-ques`,
                     finalResult,
-                    1
+                    2
                   );
                 });
               } else if (typeof recentAnswer === 'string') {
@@ -185,7 +185,7 @@ export function searchInApprovals(
                       answerChunk,
                       `${question.questionId}-archive-${aIndex}-left-ques`,
                       finalResult,
-                      1
+                      2
                     );
                   });
                 } else {
@@ -194,7 +194,7 @@ export function searchInApprovals(
                     recentAnswer,
                     `${question.questionId}-archive-${aIndex}-left-ques`,
                     finalResult,
-                    1
+                    2
                   );
                 }
               }
@@ -214,7 +214,7 @@ export function searchInApprovals(
               question.questionText,
               `${question.questionId}-archive-${aIndex}-right-ques`,
               finalResult,
-              1
+              2
             );
 
             // searching in answer
@@ -232,7 +232,7 @@ export function searchInApprovals(
                     answerChunk,
                     `${question.questionId}-archive-${aIndex}-right-ques`,
                     finalResult,
-                    1
+                    2
                   );
                 });
               } else if (typeof recentAnswer === 'string') {
@@ -250,7 +250,7 @@ export function searchInApprovals(
                       answerChunk,
                       `${question.questionId}-archive-${aIndex}-right-ques`,
                       finalResult,
-                      1
+                      2
                     );
                   });
                 } else {
@@ -259,7 +259,7 @@ export function searchInApprovals(
                     recentAnswer,
                     `${question.questionId}-archive-${aIndex}-right-ques`,
                     finalResult,
-                    1
+                    2
                   );
                 }
               }
@@ -281,7 +281,7 @@ export function searchInApprovals(
             question.questionText,
             `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
             finalResult,
-            1
+            2
           );
 
           // searching in answer
@@ -296,7 +296,7 @@ export function searchInApprovals(
                   answerChunk,
                   `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
                   finalResult,
-                  1
+                  2
                 );
               });
             } else if (typeof recentAnswer === 'string') {
@@ -314,7 +314,7 @@ export function searchInApprovals(
                     answerChunk,
                     `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
                     finalResult,
-                    1
+                    2
                   );
                 });
               } else {
@@ -323,7 +323,7 @@ export function searchInApprovals(
                   recentAnswer,
                   `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
                   finalResult,
-                  1
+                  2
                 );
               }
             }
@@ -343,7 +343,7 @@ export function searchInApprovals(
             question.questionText,
             `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
             finalResult,
-            1
+            2
           );
 
           // searching in answer
@@ -358,7 +358,7 @@ export function searchInApprovals(
                   answerChunk,
                   `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
                   finalResult,
-                  1
+                  2
                 );
               });
             } else if (typeof recentAnswer === 'string') {
@@ -376,7 +376,7 @@ export function searchInApprovals(
                     answerChunk,
                     `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
                     finalResult,
-                    1
+                    2
                   );
                 });
               } else {
@@ -385,7 +385,7 @@ export function searchInApprovals(
                   recentAnswer,
                   `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
                   finalResult,
-                  1
+                  2
                 );
               }
             }
