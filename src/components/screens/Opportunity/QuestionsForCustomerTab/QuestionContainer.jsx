@@ -95,7 +95,7 @@ const QuestionContainer = ({
             inline: 'nearest'
           });
           dispatch(autoNavigationCompletedAction());
-        }, 500);
+        }, 1000);
       }
     }
   }, [
@@ -108,7 +108,7 @@ const QuestionContainer = ({
 
   return (
     <>
-      <li className="">
+      <li className="" ref={questionContainerRef}>
         <Card
           className={classNames({
             'question-container': true,
@@ -118,7 +118,7 @@ const QuestionContainer = ({
           })}
           data-testid="question-container"
         >
-          <div ref={questionContainerRef}>
+          <div>
             {isQuestionLockedByOther() ? (
               <Typography variant="subtitle1" className="status-txt">
                 {question?.questionLockInfo?.userName} is typing...
