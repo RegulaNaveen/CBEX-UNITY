@@ -367,6 +367,9 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       loaderText,
       error
     } = this.state;
+    const filteredSectionNames = sectionNames.filter(
+      sectionName => sectionName !== 'Questions_for_the_Customer_left_panel'
+    );
     const isEditMode = editQuestionsData.size > 0 || false;
     const isQuestionAnswered = editQuestionsData.get('questionAnswered');
     if (!isLoading) {
@@ -427,7 +430,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
               <Dropdown
                 id="dd-team-member"
                 placeholder="Select"
-                items={sectionNames}
+                items={filteredSectionNames}
                 selectedValue={isEditMode ? section : selectedValue}
                 title="Section"
                 error={error.filter(v => v.section)}

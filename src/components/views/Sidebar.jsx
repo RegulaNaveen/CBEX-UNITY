@@ -32,6 +32,7 @@ import { REDUX_TYPES } from '../../constants';
 import MatomoHOC from '../HOC/MatomoHOC';
 import { selectAreAllSectionsExpanded } from '../../redux/selectors/proposal';
 import { actionChannel, UI_ACTION } from '../../uiActions/ui-actions';
+import NotepadWrapper from './WysiwygNotepad/NotepadWrapper';
 const MANUAL_REFRESH = false;
 
 type Props = {
@@ -242,7 +243,8 @@ class Sidebar extends Component<Props, State> {
       AddNewQuestion,
       RefreshProposal,
       allSectionsExpanded,
-      selectedBid
+      selectedBid,
+      id
     } = this.props;
     const { selectedSection, activeTabIndex } = this.state;
     return (
@@ -337,6 +339,11 @@ class Sidebar extends Component<Props, State> {
                   }}
                 />
               </Tooltip>
+              {isOpen && (
+                <div style={{ display: 'none' }}>
+                  <NotepadWrapper key={id} />
+                </div>
+              )}
               {MANUAL_REFRESH && (
                 <Tooltip title="Refresh Proposal Sources" placement="right">
                   <SyncIcon
