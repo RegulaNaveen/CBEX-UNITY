@@ -3,7 +3,7 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
-  useState
+  useState,
 } from 'react';
 import PropTypes from 'prop-types';
 import { Calendar, Views, momentLocalizer } from 'react-big-calendar';
@@ -31,7 +31,7 @@ const DnDOutsideResource = ({
   userData,
   isCurrent,
   eventCategories,
-  trackEvent
+  trackEvent,
 }) => {
   const localizer = momentLocalizer(moment);
   const [myEvents, setMyEvents] = useState(timelineEvents);
@@ -51,7 +51,7 @@ const DnDOutsideResource = ({
     const dragClass = event.isDraggable ? 'isDraggable' : 'nonDraggable';
     return {
       style: { backgroundColor },
-      className: `${dragClass}`
+      className: `${dragClass}`,
     };
   }, []);
 
@@ -62,7 +62,7 @@ const DnDOutsideResource = ({
       questionHTML,
       questionJSON,
       questionHintJSON,
-      questionId
+      questionId,
     } = question;
     const { sectionName } = section;
 
@@ -80,10 +80,10 @@ const DnDOutsideResource = ({
             questionHTML,
             questionJSON,
             questionHintJSON,
-            questionId
-          })
-        }
-      ]
+            questionId,
+          }),
+        },
+      ],
     });
   };
 
@@ -165,14 +165,14 @@ const DnDOutsideResource = ({
           title: formatName(selectedEvent.title, counters[selectedEvent.title]),
           start,
           end,
-          isAllDay
+          isAllDay,
         };
         setDraggedEvent(null);
         setCounters(prev => {
           const { [name]: count } = prev;
           return {
             ...prev,
-            [name]: count + 1
+            [name]: count + 1,
           };
         });
         newEvent(event);
@@ -182,14 +182,14 @@ const DnDOutsideResource = ({
           title: formatName(name, counters[name]),
           start,
           end,
-          isAllDay
+          isAllDay,
         };
         setDraggedEvent(null);
         setCounters(prev => {
           const { [name]: count } = prev;
           return {
             ...prev,
-            [name]: count + 1
+            [name]: count + 1,
           };
         });
         newEvent(event);
@@ -201,7 +201,7 @@ const DnDOutsideResource = ({
       setDraggedEvent,
       setCounters,
       newEvent,
-      selectedEvent
+      selectedEvent,
     ]
   );
 
@@ -231,8 +231,8 @@ const DnDOutsideResource = ({
       views: {
         month: true,
         week: false,
-        day: false
-      }
+        day: false,
+      },
       // ... other props
     }),
     []
@@ -240,8 +240,12 @@ const DnDOutsideResource = ({
 
   return (
     <>
-      <div style={{ height: '75vh', width: '100%' }}>
+      <div
+        style={{ height: '75vh', width: '100%' }}
+        data-testid="dnd-outside-resource"
+      >
         <DragAndDropCalendar
+          data-testid="drag-and-drop-calender"
           date={date}
           onNavigate={newDate => {
             setDate(newDate);

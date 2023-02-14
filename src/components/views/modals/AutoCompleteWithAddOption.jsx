@@ -214,24 +214,12 @@ const AutoCompleteWithAddOption = ({
         value={selectedVal}
         renderTags={(value, getTagProps) =>
           <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "5px",
-              paddingTop: "5px",
-              paddingBottom: "5px",
-              width: "100%",
-              overflow: "hidden",
-              overflowX: "auto"
-            }}
+            className='autocomplete-multiline-chip'
           >
             {value.map((option, index) => (
               <div
+                className='autocomplete-chip'
                 key={index}
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                }}
               >
                 <Chip
                   label={
