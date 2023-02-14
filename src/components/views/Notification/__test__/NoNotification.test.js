@@ -1,13 +1,13 @@
 import React from 'react';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, render, screen, fireEvent } from '@testing-library/react';
 import NoNotification from '../NoNotification';
 import { useHistory } from 'react-router-dom';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useHistory: () => ({
-    push: jest.fn()
-  })
+    push: jest.fn(),
+  }),
 }));
 
 describe('NoNotification Test', () => {
@@ -16,7 +16,13 @@ describe('NoNotification Test', () => {
   });
   it('Should have No new notifications text', async () => {
     render(<NoNotification />);
+    const onClick = jest.fn();
     const noNotificationText = screen.getByText('No new notifications');
     expect(noNotificationText).toBeInTheDocument();
+    const viewAllNotifications = screen.getByText('View All Notifications');
+    expect(viewAllNotifications).toBeInTheDocument();
+    fireEvent.click(viewAllNotifications);
+
+    expect(onClick).toBeCalledTimes(0);
   });
 });

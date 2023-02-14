@@ -12,10 +12,19 @@ const TimelineSections = ({ sectionName, sectionOrder, questions }) => {
     <>
       <Accordion defaultExpanded={sectionOrder === 1} style={{ width: '100%' }}>
         <AccordionSummary>
-          <Typography className="section-tile">{sectionName}</Typography>
+          <Typography
+            className="section-tile"
+            data-testid="timeline-section-title"
+          >
+            {' '}
+            {sectionName}
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <ul className="timeline-questions-list-container">
+          <ul
+            className="timeline-questions-list-container"
+            data-testid="timeline-timeline-questions-list-container"
+          >
             {questions.valueSeq().map(question => {
               if (question.get('answerConfiguration').get('type') === 'date') {
                 return <TimelineQuestions question={question} />;
@@ -31,13 +40,13 @@ const TimelineSections = ({ sectionName, sectionOrder, questions }) => {
 TimelineSections.defaultProps = {
   sectionName: '',
   sectionOrder: '',
-  questions: new OrderedMap()
+  questions: new OrderedMap(),
 };
 
 TimelineSections.propTypes = {
   sectionName: propTypes.string,
   sectionOrder: propTypes.string,
-  questions: propTypes.map
+  questions: propTypes.map,
 };
 
 export default TimelineSections;
