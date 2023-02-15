@@ -10,12 +10,12 @@ import TimelineCalender from './TimelineCalender';
 import {
   getProposalDetails,
   isSetQuestionLoading,
-  selectSections
+  selectSections,
 } from '../../../redux/selectors';
 import TimelineSections from './TimelineSections';
 import {
   getProposalQuestions,
-  getSelectedBid
+  getSelectedBid,
 } from '../../../redux/selectors/proposal';
 import BidHistory from '../../common/Bidhistory';
 import ViewAboveVerticalTabs from '../../views/ViewAboveVerticalTabs';
@@ -39,7 +39,7 @@ const Timeline = () => {
   const getUserData = () => ({
     name: getUserName(),
     email: getUserEmail(),
-    role: getUserId()
+    role: getUserId(),
   });
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const Timeline = () => {
         const {
           questionId,
           roleNames,
-          section: { sectionName, sectionOrder }
+          section: { sectionName, sectionOrder },
         } = question;
 
         const roles = roleNames || [];
@@ -140,7 +140,7 @@ const Timeline = () => {
           isDraggable: isCurrent,
           color:
             lastAnswer?.user === 'UnityPredictedAnswer' ? '#297DFD' : '#00C221',
-          question
+          question,
         };
         setTimelineEvents(current => [...current, eventss]);
       }
@@ -171,6 +171,7 @@ const Timeline = () => {
           <div className="timeline-questions-container">
             <div className="timeline-search-container">
               <Search
+                data-testid="TimelineCalender-Search"
                 fullWidth={true}
                 size="small"
                 placeholder="Search"
