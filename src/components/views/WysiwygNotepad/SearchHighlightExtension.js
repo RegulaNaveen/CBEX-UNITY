@@ -47,7 +47,8 @@ function extractTextFromDoc(
     doc.type &&
     (doc.type.name === 'paragraph' ||
       doc.type.name === 'bulletList' ||
-      doc.type.name === 'orderedList')
+      doc.type.name === 'orderedList' ||
+      doc.type.name === 'heading')
   ) {
     refs.texts.push('  ');
     refs.offset += 2;

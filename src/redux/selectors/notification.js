@@ -62,7 +62,7 @@ export const getAllNotifications = notification =>
 export const getNotificationLoading = notification => notification.isLoading;
 export const getUnreadNotifications = notification =>
   notification.notifications
-    .filter(item => !item.read)
+    ?.filter(item => !item.read)
     .map(item => {
       // Add onClick url
       item.url = onClickLink(
