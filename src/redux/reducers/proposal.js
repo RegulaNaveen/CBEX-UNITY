@@ -69,7 +69,8 @@ const {
   SET_PRICE_MODELER_RECALCULATING,
   PRICE_MODELER_UPDATE,
   SET_ACTIVE_TABINDEX,
-  SET_V_TAB_ACTIVE_INDEX
+  SET_V_TAB_ACTIVE_INDEX,
+  SET_V_TAB_USER_PREFERENCE
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -171,7 +172,8 @@ const INITIAL_STATE: Map = fromJS({
   canUserTagInQuestion: false,
   priceModelerRecalculating: false,
   activeTabIndex: 0, // Strategy Development, Approvals, Documents,
-  activeVTabIndex: 0 // Questions for Customer, Notepad, Proposal Team
+  activeVTabIndex: 0, // Questions for Customer, Notepad, Proposal Team
+  vTabUserPreference: {}
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -1220,6 +1222,13 @@ const setVTabActiveTabIndex = (state, action) => {
   return state.set('activeVTabIndex', action.payload);
 };
 
+const setVTabUserPreference = (state, action) => {
+  let currentUserPreference = state.get('vTabUserPreference', {}).toJS();
+  const { tabIndex, keepOpen } = action.payload;
+  currentUserPreference[tabIndex] = { keepOpen };
+  return state.set('vTabUserPreference', fromJS(currentUserPreference));
+};
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
@@ -1290,7 +1299,8 @@ const actionMap = {
     state.set('priceModelerRecalculating', payload),
   [PRICE_MODELER_UPDATE]: updatePriceModelerEstimate,
   [SET_ACTIVE_TABINDEX]: setActiveTabIndex,
-  [SET_V_TAB_ACTIVE_INDEX]: setVTabActiveTabIndex
+  [SET_V_TAB_ACTIVE_INDEX]: setVTabActiveTabIndex,
+  [SET_V_TAB_USER_PREFERENCE]: setVTabUserPreference
 };
 
 export default function(
