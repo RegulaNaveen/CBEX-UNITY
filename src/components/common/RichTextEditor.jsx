@@ -410,6 +410,7 @@ function RichTextEditor({
 
   return (
     <div
+      data-testid="rich-text-editor"
       className={classNames({
         "MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth": true,
         "RichEditor-hidePlaceholder":
@@ -456,7 +457,7 @@ RichTextEditor.defaultProps = {
   disabled: false,
   hideControls: [],
   customStyles: {},
-  onChange: () => {},
+  onChange: () => { },
 };
 
 Lowercase.propTypes = {
