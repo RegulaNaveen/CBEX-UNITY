@@ -45,7 +45,7 @@ const DashboardFilters = ({
   });
 
   return (
-    <div id="dashboard-filters">
+    <div id="dashboard-filters" data-testid="dashboard-filters">
       <div className="filter-clear">
         <Link
           style={{ borderBottom: 'none' }}
