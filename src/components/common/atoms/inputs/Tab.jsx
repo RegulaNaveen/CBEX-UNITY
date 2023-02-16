@@ -1,5 +1,10 @@
-/* eslint-disable no-else-return */
-import React, { useState, useEffect, useRef, Suspense } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  Suspense
+} from 'react';
 import { useHistory } from 'react-router-dom';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
@@ -9,10 +14,12 @@ import Typography from 'apollo-react/components/Typography';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
+import { debounce } from 'lodash';
 import Validate from '../../../screens/Opportunity/Validate';
 import {
   getSelectedBid,
-  selectActiveTabIndex
+  selectActiveTabIndex,
+  selectVTabUserPreference
 } from '../../../../redux/selectors/proposal';
 import {
   getIsOpen,
@@ -20,13 +27,16 @@ import {
   getUserEmail,
   getUserRole
 } from '../../../../redux/selectors';
-import { setActiveTabIndexAction } from '../../../../redux/actions/proposal-actions';
+import {
+  setActiveTabIndexAction,
+  setVTabUserPreferenceAction
+} from '../../../../redux/actions/proposal-actions';
 import { createMatomoObj, saveDataInMatomo } from '../../../../utils/utils';
 import { selectCurrentSearchResult } from '../../../../redux/selectors/search';
-import { NOTEPAD_UI_ID } from '../../../../constants/app';
 import { autoNavigationCompletedAction } from '../../../../redux/actions/search-actions';
 import lazyWithRetry from '../../../../utils/lazy';
 import VerticalTabsCollapsiblePanel from '../../../screens/Opportunity/layout/navigation/VerticalTabsCollapsiblePanel';
+import Timelines from '../../../screens/Timelines';
 
 const Questions = React.lazy(() =>
   lazyWithRetry(() =>
@@ -90,6 +100,7 @@ const UnityTab = ({
   const [showNotepadTab, setShowNotepadTab] = useState(false);
   const [showProposalTeamTab, setShowProposalTeamTab] = useState(false);
   const [isNotepadOpen, setIsNotepadOpen] = useState(true);
+  const [vtabCollpased, setVTabCollapsed] = useState(false);
 
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const proposalId = selectedBid?.id || 1;
@@ -102,11 +113,12 @@ const UnityTab = ({
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const value = useSelector(selectActiveTabIndex);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
+  const vTabUserPreference = useSelector(selectVTabUserPreference);
   const dispatch = useDispatch();
 
   const { trackEvent } = useMatomo();
 
-  const notepadPanelRef = useRef(null);
+  const [panelRef, setPanelRef] = useState(null);
 
   const minPixelToExclude = 20;
   const notepadMinWidthPx =
@@ -123,20 +135,26 @@ const UnityTab = ({
       path: 'questions'
     },
     {
-      label: 'Approvals',
+      label: 'Timeline',
       value: 1,
+      component: <Timelines key="Timeline" proposalID={id} />,
+      path: 'timelines'
+    },
+    {
+      label: 'Approvals',
+      value: 2,
       component: <Approvals key="Approvals" />,
       path: 'approvals'
     },
     {
       label: 'Documents',
-      value: 2,
+      value: 3,
       component: <Documents key="Documents" />,
       path: 'documents'
     },
     {
       label: 'Validate',
-      value: 3,
+      value: 4,
       component: <Validate key="Validate" />,
       path: 'validate'
     }
@@ -149,6 +167,7 @@ const UnityTab = ({
     const notepadFlag = allFlags.notepad || false; // Notepad flag
     const proposalTeamFlag = allFlags.proposalTeamTab || false; // Proposal Team flag
     const approvalFlag = allFlags.approvalsFlag || false;
+
     if (
       !verticalTabFlag ||
       ![questionsForCustomerFlag, notepadFlag, proposalTeamFlag].some(
@@ -166,10 +185,10 @@ const UnityTab = ({
 
   useEffect(() => {
     fetchTabFlags();
+    const urlParams = new URLSearchParams(window.location.search);
     if (isApprovalCount) {
       setShowApprovalTab(true);
     } else {
-      const urlParams = new URLSearchParams(window.location.search);
       setShowApprovalTab(false);
       if (urlParams && urlParams?.get('viewType')?.includes('approval')) {
         history.push(`${window.location.pathname}`);
@@ -178,41 +197,90 @@ const UnityTab = ({
         }
       }
     }
+    if (
+      urlParams &&
+      urlParams?.get('viewType')?.includes('timelines') &&
+      allFlags.showTimelineFlag
+    )
+      setShowVerticalTab(false);
   }, []);
 
   useEffect(() => {
+    let shouldvtabCollapsed = vtabCollpased;
     if (selectedView && selectedView === 'documents') {
       dispatch(
         setActiveTabIndexAction(
           tabs.find(item => item.label === 'Documents').value
         )
       );
+      shouldvtabCollapsed = true;
+      if (vTabUserPreference && vTabUserPreference[3]) {
+        shouldvtabCollapsed = !vTabUserPreference[3].keepOpen;
+      }
     }
     if (selectedView && selectedView === 'approvals' && isApprovalCount) {
       const isApprovalTabVisible = approvalsFlag;
       const approvalTabValue = tabs.find(item => item.label === 'Approvals')
         .value;
+
       dispatch(
         setActiveTabIndexAction(isApprovalTabVisible ? approvalTabValue : 0)
       ); // Shows questions tab if Approvals are not found for the proposal
+      shouldvtabCollapsed = isApprovalTabVisible ? true : false;
+      if (vTabUserPreference && vTabUserPreference[2]) {
+        shouldvtabCollapsed = !vTabUserPreference[2].keepOpen;
+      }
     }
     if (selectedView && selectedView === 'questions') {
       dispatch(setActiveTabIndexAction(0));
+      shouldvtabCollapsed = false;
+      if (vTabUserPreference && vTabUserPreference[0]) {
+        shouldvtabCollapsed = !vTabUserPreference[0].keepOpen;
+      }
     }
-  }, [selectedView, approvalsFlag, showApprovalTab]);
+    if (selectedView && selectedView === 'timelines') {
+      if (!allFlags?.showTimelineFlag) {
+        history.push(`${window.location.pathname}`);
+      } else {
+        const timelinesTabValue = tabs.find(item => item.label === 'Timeline')
+          .value;
+        dispatch(setActiveTabIndexAction(timelinesTabValue));
+      }
+    }
+
+    // triggering click event of Panel's toggle button since Apollo's Panel component is lack of ability to control from prop
+    if (
+      panelRef !== null &&
+      vtabCollpased !== shouldvtabCollapsed &&
+      window.innerWidth >= 850
+    ) {
+      // by inspecting DOM, found there is only one button element inside Panel component hence choosing first button
+      const toggleButton = panelRef.children[0].children[1];
+      toggleButton.click();
+      setVTabCollapsed(shouldvtabCollapsed);
+    }
+  }, [selectedView, approvalsFlag, showApprovalTab, vtabCollpased, panelRef]);
 
   useEffect(() => {
-    if (currentSearchResult !== null && notepadPanelRef.current !== null) {
-      if (currentSearchResult.searchIndex === NOTEPAD_UI_ID) {
+    if (panelRef !== null) {
+      evaluateCurrentWindowWidth(window.innerWidth);
+    }
+  }, [panelRef]);
+
+  useEffect(() => {
+    if (currentSearchResult !== null && panelRef !== null) {
+      if (
+        currentSearchResult.vTab !== null &&
+        currentSearchResult.vTab >= 0 &&
+        currentSearchResult.vTab <= 2
+      ) {
         if (!isNotepadOpen) {
           // by inspecting DOM, found there is only one button element inside Panel component hence choosing first button
-          const toggleButton = notepadPanelRef.current.children[0].getElementsByTagName(
-            'button'
-          )[0];
+          const toggleButton = panelRef.children[0].children[1];
           toggleButton.click();
         }
         setTimeout(() => {
-          notepadPanelRef.current.scrollIntoView({
+          panelRef.scrollIntoView({
             behaviour: 'smooth',
             block: 'center',
             inline: 'nearest'
@@ -221,7 +289,40 @@ const UnityTab = ({
         }, 500);
       }
     }
-  }, [dispatch, notepadPanelRef, currentSearchResult, isNotepadOpen]);
+  }, [dispatch, panelRef, currentSearchResult, isNotepadOpen]);
+
+  const evaluateCurrentWindowWidth = useCallback(
+    windowWidth => {
+      let shouldCollapseVTab = vtabCollpased;
+      if (windowWidth < 850) {
+        shouldCollapseVTab = true;
+      } else {
+        if (selectedView && selectedView === 'questions' && vtabCollpased) {
+          shouldCollapseVTab = false;
+        }
+      }
+      // triggering click event of Panel's toggle button since Apollo's Panel component is lack of ability to control from prop
+      if (panelRef !== null && vtabCollpased !== shouldCollapseVTab) {
+        // by inspecting DOM, found there is only one button element inside Panel component hence choosing first button
+        const toggleButton = panelRef.children[0].children[1];
+        toggleButton.click();
+        setVTabCollapsed(shouldCollapseVTab);
+      }
+    },
+    [selectedView, vtabCollpased, panelRef]
+  );
+
+  const handleWindowResize = debounce(
+    e => evaluateCurrentWindowWidth(e.target.innerWidth),
+    600
+  );
+
+  useEffect(() => {
+    window.addEventListener('resize', handleWindowResize);
+    window.resizeBy(0, 0);
+
+    return () => window.removeEventListener('resize', handleWindowResize);
+  }, [selectedView, vtabCollpased, panelRef]);
 
   const winLocationSearch = window.location.search;
   const handleChangeTab = (event, val) => {
@@ -231,6 +332,10 @@ const UnityTab = ({
     dispatch(setActiveTabIndexAction(val));
     onChangeSelectedTab(currentPath);
     selectView.set('viewType', currentPath);
+    if (selectView && selectView?.get('viewType')?.includes('timelines'))
+      setShowVerticalTab(false);
+    else if (allFlags.verticalTab) setShowVerticalTab(true);
+
     if (val === 0) {
       // No need to update pathname for question tab
       history.push(`${window.location.pathname}`);
@@ -249,6 +354,9 @@ const UnityTab = ({
     if (!isApprovalTab || !showApprovalTab) {
       tabsToReturn = tabsToReturn.filter(item => item.label !== 'Approvals');
     }
+    if (!allFlags?.showTimelineFlag) {
+      tabsToReturn = tabsToReturn.filter(item => item.label !== 'Timeline');
+    }
     if (!enableValidateTab) {
       tabsToReturn = tabsToReturn.filter(item => item.label !== 'Validate');
     }
@@ -258,7 +366,11 @@ const UnityTab = ({
   const renderVerticleTabsComponent = activeVerticleTab => {
     if (activeVerticleTab === 'showQuestionsForCustomerTab') {
       return (
-        <div id="panel-notepad" style={{ borderRadius: '5px' }}>
+        <div
+          id="panel-notepad"
+          style={{ borderRadius: '5px' }}
+          ref={refVal => setPanelRef(refVal)}
+        >
           <Panel
             minWidth={notepadMinWidthPx}
             maxWidth={notepadMaxWidthPx}
@@ -267,9 +379,11 @@ const UnityTab = ({
             resizable
             onClose={() => {
               setIsNotepadOpen(false);
+              dispatch(setVTabUserPreferenceAction(value, false));
             }}
             onOpen={() => {
               setIsNotepadOpen(true);
+              dispatch(setVTabUserPreferenceAction(value, true));
             }}
           >
             <Suspense
@@ -303,7 +417,7 @@ const UnityTab = ({
             'show-highlight':
               currentSearchResult !== null && currentSearchResult.vTab === 1
           })}
-          ref={notepadPanelRef}
+          ref={refVal => setPanelRef(refVal)}
         >
           <Panel
             minWidth={notepadMinWidthPx}
@@ -321,9 +435,11 @@ const UnityTab = ({
                 'closed event'
               );
               saveDataInMatomo(trackEvent, matamoObj);
+              dispatch(setVTabUserPreferenceAction(value, false));
             }}
             onOpen={() => {
               setIsNotepadOpen(true);
+              dispatch(setVTabUserPreferenceAction(value, true));
             }}
           >
             <div
@@ -376,7 +492,11 @@ const UnityTab = ({
     }
     if (activeVerticleTab === 'proposalteamtab') {
       return (
-        <div id="panel-notepad" style={{ borderRadius: '5px' }}>
+        <div
+          id="panel-notepad"
+          style={{ borderRadius: '5px' }}
+          ref={refVal => setPanelRef(refVal)}
+        >
           <Panel
             minWidth={notepadMinWidthPx}
             maxWidth={notepadMaxWidthPx}
@@ -385,9 +505,11 @@ const UnityTab = ({
             resizable
             onClose={() => {
               setIsNotepadOpen(false);
+              dispatch(setVTabUserPreferenceAction(value, false));
             }}
             onOpen={() => {
               setIsNotepadOpen(true);
+              dispatch(setVTabUserPreferenceAction(value, true));
             }}
           >
             <Suspense
@@ -480,6 +602,7 @@ const UnityTab = ({
       </>
     );
   };
+
   return <div className="tab-container">{renderTab()}</div>;
 };
 

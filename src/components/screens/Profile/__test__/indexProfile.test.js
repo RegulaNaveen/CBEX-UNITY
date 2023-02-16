@@ -3,78 +3,45 @@
  */
 
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { configure, mount, render, screen, shallow } from 'enzyme';
-import expect from 'expect';
-import Adapter from 'enzyme-adapter-react-16';
-import { cleanup, fireEvent } from '@testing-library/react';
-import { useDispatch, Provider } from 'react-redux';
-import createStore from '../../../../store';
+import { Provider } from 'react-redux';
+import { store } from '../../../../store';
+import { BrowserRouter } from 'react-router-dom';
 
-// import AccountPreference from '../AccountPreferences/AccountPreference';
-// import NotificationPreference from '../AccountPreferences/NotificationPreference';
-// import SideNav from '../ProfileLayout/SideNav';
+import mockData from './mockData/AccountPreference.json';
+import AccountPreferences from '../AccountPreferences';
 
-configure({ adapter: new Adapter() });
-afterEach(() => {
-  cleanup();
-});
+const defaultProps = {
+  isFetchingTimezone: false,
+  isUpdatingTimezone: false,
+  timezoneList: mockData.timezoneList,
+  timezoneID: mockData.timezoneID,
+  errorUpdatingTimezone: "",
+  userPreference: mockData.userPreference,
+  name: mockData.name,
+  email: mockData.email,
+  role: mockData.role,
+  isUpdatingUserPreference: false,
+  errorFetchingUserPreference: "",
+  handleClose: jest.fn(),
+  updateUserPreference: jest.fn(),
+  handleUpdateTimezone: jest.fn(),
+  handleUserPreferenceChange: jest.fn()
+};
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useHistory: () => ({
-    push: jest.fn()
-  })
-}));
+describe('testing for accountpreference component', () => {
 
-jest.mock('react-redux', () => {
-  const { Provider, useSelector } = jest.requireActual('react-redux');
-
-  return {
-    useDispatch: jest.fn(),
-    useSelector,
-    Provider
-  };
-});
-
-describe.skip('Account preference, Notification preference SidNav  Component is rendered in Dom', () => {
-  const dispatchMock = jest.fn();
-
-  test('Render Account Preference', () => {
-    // const func = jest.fn();
-    const wrapper = mount(
-      <Provider store={createStore}>{/* <AccountPreference /> */}</Provider>
-    );
-    const globalStore = wrapper.find(Provider).prop('store');
-    dispatchMock.mockImplementation(action => globalStore.dispatch(action));
-    useDispatch.mockReturnValue(dispatchMock);
-
-    expect(wrapper.exists()).toBe(true);
-  });
-
-  test('Render Notification Preference', () => {
-    const wrapper = mount(
-      <Provider store={createStore}>
-        {/* <NotificationPreference /> */}
+  test('render the component without crashing', () => {
+    const { container } = render(
+      <Provider store={store}>
+        <BrowserRouter>
+          <AccountPreferences {...defaultProps} />
+        </BrowserRouter>
       </Provider>
     );
-    const globalStore = wrapper.find(Provider).prop('store');
-    dispatchMock.mockImplementation(action => globalStore.dispatch(action));
-    useDispatch.mockReturnValue(dispatchMock);
 
-    expect(wrapper.exists()).toBe(true);
-  });
+    expect(container).toBeTruthy();
+  })
 
-  test('Render SideNav', () => {
-    // const func = jest.fn();
-    const wrapper = mount(
-      <Provider store={createStore}>{/* <SideNav /> */}</Provider>
-    );
-    const globalStore = wrapper.find(Provider).prop('store');
-    dispatchMock.mockImplementation(action => globalStore.dispatch(action));
-    useDispatch.mockReturnValue(dispatchMock);
-
-    expect(wrapper.exists()).toBe(true);
-  });
 });

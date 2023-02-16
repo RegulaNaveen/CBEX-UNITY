@@ -4,6 +4,10 @@ function extractTextFromDoc(
   doc,
   refs = { texts: [], mentionIndices: [], offset: 0 }
 ) {
+  if (doc.type && doc.type && doc.type.name === 'hardBreak') {
+    refs.texts.push(' ');
+    refs.offset += 1;
+  }
   if (doc.type && doc.type && doc.type.name === 'listItem') {
     refs.texts.push('  ');
     refs.offset += 2;
@@ -43,7 +47,8 @@ function extractTextFromDoc(
     doc.type &&
     (doc.type.name === 'paragraph' ||
       doc.type.name === 'bulletList' ||
-      doc.type.name === 'orderedList')
+      doc.type.name === 'orderedList' ||
+      doc.type.name === 'heading')
   ) {
     refs.texts.push('  ');
     refs.offset += 2;
@@ -92,7 +97,11 @@ export const SearchHighlight = Mark.create({
           const { texts, mentionIndices } = extractTextFromDoc(state.doc);
           let results = [];
           let matchResults = [
-            ...texts.join('').matchAll(new RegExp(query, 'gi'))
+            ...texts
+              .join('')
+              .matchAll(
+                new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi')
+              )
           ];
           matchResults.forEach(match => {
             let originalSelection = {
@@ -179,7 +188,9 @@ export const SearchHighlight = Mark.create({
             // do highlight the selection in index
             chain()
               .setTextSelection(results[index])
-              .setMark(this.name);
+              .setMark(this.name)
+              .focus()
+              .scrollIntoView();
           }
         }
         return true;

@@ -1,6 +1,6 @@
 .card {
   display: grid;
-  width: 420px;
+  width: 480px;
   grid-template-rows: 80px auto 81px auto;
   box-sizing: border-box;
   border: $border;
@@ -96,7 +96,7 @@
 
         &:first-child {
           color: $pink;
-          font-size: 29.5px;
+          font-size: 33.5px;
           font-weight: 600;
         }
       }

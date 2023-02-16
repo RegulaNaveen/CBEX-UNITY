@@ -74,7 +74,7 @@ const BidCostDetails = () => {
     setBidCostValue({
       bidValue,
       bottomLine,
-      budgetTools: budgetTools?.split(';')?.join('; ')
+      budgetTools: budgetTools?.split(',')?.join(', ')
     });
   }, [proposalQuestion]);
 

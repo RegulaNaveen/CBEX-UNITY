@@ -24,7 +24,7 @@ import {
 } from '@react-pdf/renderer';
 import React from 'react';
 import Html from 'react-pdf-html';
-import { isString } from 'lodash';
+import { isEmpty, isEqual, isString } from 'lodash';
 import moment from 'moment';
 import { generateHTML } from '@tiptap/core';
 import Link from '@tiptap/extension-link';
@@ -37,6 +37,7 @@ import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
 import OrderedList from '@tiptap/extension-text-align';
 import Logo from '../../../../img/iqvia-hd-logo.png';
+import OpportunityLinker from '../WysiwygNotepad/OpportunityLinker';
 import {
   getFilteredQuestion,
   headFields,
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
 });
 function checkFormattedAnswer(answers) {
   try {
-    const lastAnswer = answers[answers.length - 1];
+    let lastAnswer = answers[answers.length - 1];
     let formattedAnswer;
     if (lastAnswer?.formattedAnswer) {
       if (isString(lastAnswer?.formattedAnswer)) {
@@ -147,11 +148,6 @@ function checkFormattedAnswer(answers) {
     return '';
   }
 }
-function getExtraLines(t1, t2) {
-  const contentLength = Math.max(t1.length, t2.length);
-  const paddingAnswerCell = parseInt(contentLength / 230);
-  return new Array(paddingAnswerCell + 2 || 2).fill('<br>').join('');
-}
 function getStyled() {
   return `<style>
   html {
@@ -160,7 +156,10 @@ function getStyled() {
   FONTCHANGE
   body {
     font-family: ProximaNova-Regular !important;
-    font-size: 10px;
+    font-size: 12px;
+  }
+  li span {
+    vertical-align:middle;
   }  
 h1{
     font-size: 20px;
@@ -216,7 +215,7 @@ ul {
   #resp-table-caption{
     display: table-cell;
     text-align: center;
-    font-size: 10px;
+    font-size: 12px;
     color: #fff;
     font-weight: bold;
     background-color: #00A3E0;
@@ -226,7 +225,7 @@ ul {
     }
     #resp-table-header {
       display: table-cell;
-      font-size: 10px;
+      font-size: 12px;
       background-color: #00A3E0;
       color: #fff;
       font-weight: bold;
@@ -322,8 +321,8 @@ function getProposalTeamsRows(questions) {
     .filter(
       question =>
         shouldInclude(question) &&
-        question.section.sectionName === PT_SECTION &&
-        question.questionId === 'Proposal Team-P0C'
+        CORE_TEAM[question.questionText] &&
+        question.section.sectionName === PT_SECTION
     )
     .sort((a, b) => a.questionOrder - b.questionOrder);
   const otherTeamQuestions = questions
@@ -331,8 +330,7 @@ function getProposalTeamsRows(questions) {
       question =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
-        !CORE_TEAM[question.questionText] &&
-        question.questionId !== 'Proposal Team-P0C'
+        !CORE_TEAM[question.questionText]
     )
     .sort((a, b) => a.questionOrder - b.questionOrder);
   let html = ``;
@@ -384,12 +382,6 @@ function getProposalTeamsRows(questions) {
           otherTeamQuestionsAnswer.indexOf('(')
         );
         let tempEmailOther = String(otherTeamQuestionsAnswerEmail[0]).trim();
-        // otherTeamQuestionsemailLink = `<p><span data-type="mention" style="color:blue" data-id=${String(
-        //   tempEmailOther
-        // ).toUpperCase()} data-label=${String(
-        //   nameOther
-        // ).toUpperCase()}>${tempEmailOther}</span>
-        // <br/><br/></p>`;
         otherTeamQuestionsemailLink = `<a href="mailto:${tempEmailOther}">${nameOther}</a>`;
       }
       html += `<div class="table-header-cell">${otherTeamQuestionsemailLink}</div>`;
@@ -455,18 +447,28 @@ function questionTables(allQuestions, proposalQuestions) {
         )
         .sort((a, b) => a.questionOrder - b.questionOrder);
       questionsToCustomerLeftSection.forEach(question => {
-        const questionHTML = question.questionHTML || question.questionText;
-        html += `<div class="resp-table-row">`;
-        html += `<div class="table-header-cell"> ${questionHTML} </div>`;
-        html += `<div class="table-header-cell"> ${formatDate(
-          checkFormattedAnswer(question.answers),
-          question.answerConfiguration
-        )} <span class="blueColorText">${
-          getUnityPredicatedText(question.answers)
-            ? getUnityPredicatedText(question.answers)
-            : ''
-        }</span></div>`;
-        html += `</div>`;
+        const temporalDivElement = document.createElement('div');
+        temporalDivElement.innerHTML = question.questionHTML;
+        const finalAnswer = !isEqual(
+          temporalDivElement.innerText,
+          question.questionText
+        )
+          ? question.questionText
+          : question.questionHTML;
+        const questionHTML = finalAnswer;
+        if (question.questionText.length > 1) {
+          html += `<div class="resp-table-row">`;
+          html += `<div class="table-header-cell"> ${questionHTML} </div>`;
+          html += `<div class="table-header-cell"> ${formatDate(
+            checkFormattedAnswer(question.answers),
+            question.answerConfiguration
+          )} <span class="blueColorText">${
+            getUnityPredicatedText(question.answers)
+              ? getUnityPredicatedText(question.answers)
+              : ''
+          }</span></div>`;
+          html += `</div>`;
+        }
       });
       let questionsToCustomerRightSection = allQuestions
         .filter(
@@ -499,22 +501,37 @@ function questionTables(allQuestions, proposalQuestions) {
       sections[section]
         .sort((a, b) => a.questionOrder - b.questionOrder)
         .forEach(question => {
-          const questionHTML = question.questionHTML || question.questionText;
+          const { answers } = question;
+          const temporalDivElement = document.createElement('div');
+          temporalDivElement.innerHTML = question.questionHTML;
+          const finalAnswer = !isEqual(
+            temporalDivElement.innerText,
+            question.questionText
+          )
+            ? question.questionText
+            : question.questionHTML;
+          const questionHTML = finalAnswer;
           const questionType = question?.answerConfiguration?.type;
-
+          const getEmailID = str => {
+            return String(str).match(
+              /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+            );
+          };
           const questionTypeValidation =
             questionType === 'picklist-lookup' ? 'word-spacing:1px' : '';
-          html += `<div class="resp-table-row">`;
-          html += `<div class="table-header-cell"> ${questionHTML}</div>`;
-          html += `<div class="table-header-cell" style=${questionTypeValidation}> ${formatDate(
-            checkFormattedAnswer(question.answers),
-            question.answerConfiguration
-          )} <span class="blueColorText">${
-            getUnityPredicatedText(question.answers)
-              ? getUnityPredicatedText(question.answers)
-              : ''
-          }</span></div>`;
-          html += `</div>`;
+          if (question.questionText.length > 1) {
+            html += `<div class="resp-table-row">`;
+            html += `<div class="table-header-cell"> ${questionHTML}</div>`;
+            html += `<div class="table-header-cell" style=${questionTypeValidation}> ${formatDate(
+              checkFormattedAnswer(question.answers),
+              question.answerConfiguration
+            )} <span class="blueColorText">${
+              getUnityPredicatedText(question.answers)
+                ? getUnityPredicatedText(question.answers)
+                : ''
+            }</span></div>`;
+            html += `</div>`;
+          }
         });
       html += `</div>`;
     }
@@ -569,7 +586,8 @@ function getNotesRows(notes, editor) {
           renderLabel({ options, node }) {
             return `breakemail${node.attrs.id}"starttag${node.attrs.label}closetag`;
           }
-        })
+        }),
+        OpportunityLinker
       ]);
       data += `</div></div></div>`;
       html += data;
@@ -619,7 +637,26 @@ function getHtml(
   const image = Logo;
   const time = dateNow();
   let string = renderToString(<Prints />);
-  // console.log('opt :>> ', string);
+  const extraStyleExp = new RegExp(
+    'style="color:red;border:2px solid red"',
+    'g'
+  );
+  string = string?.replaceAll(extraStyleExp, '');
+  const extraStyleGreenExp = new RegExp(
+    'style="color:green;border:2px solid green"',
+    'g'
+  );
+  string = string?.replaceAll(extraStyleGreenExp, '');
+  const alignRight = new RegExp('class="DraftEditor-alignRight"', 'g');
+  string = string?.replaceAll(
+    alignRight,
+    'class="DraftEditor-alignRight" style="text-align: end;"'
+  );
+  const rightAlign = new RegExp('class="DraftEditor-alignCenter"', 'g');
+  string = string?.replaceAll(
+    rightAlign,
+    'class="DraftEditor-alignCenter" style="text-align: center;"'
+  );
   const url = getUnityLink(proposalDetails);
   const oppId = proposalDetails['CRM #'];
   savePDF(string, url, userName, time, oppId, fileName);

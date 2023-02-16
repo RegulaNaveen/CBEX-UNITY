@@ -51,7 +51,7 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
 
   return (
     <>
-      <div className="toolbar-account-notification">
+      <div className="toolbar-account-notification" data-testid="drawer">
         <div
           className={classnames('notification', isDrawer && 'expanded')}
           style={{ position: 'relative', cursor: 'pointer' }}
@@ -63,7 +63,7 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
                 className="toolbar-account-info"
                 style={{
                   display: 'flex',
-                  justifyContent: notificationCount ? 'start' : 'center'
+                  justifyContent: notificationCount ? 'start' : 'center',
                 }}
               >
                 {notificationCount != 0 && (
@@ -94,7 +94,7 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
                 </div>
               </div>
               {/* Notification List items */}
-              <div className="notification-scrollbar">
+              <div className="notification-scrollbar" data-testid="badge">
                 {notificationCount > 0 ? (
                   unreadNotifications.map(item => {
                     return (
@@ -138,10 +138,10 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
 };
 
 const mapStateToProps = (state: Map) => ({
-  unreadNotifications: getUnreadNotifications(state)
+  unreadNotifications: getUnreadNotifications(state),
 });
 
 const mapDispatchToProps = {
-  setNotifications: notificationActions.setNotification
+  setNotifications: notificationActions.setNotification,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(MatomoHOC(Drawer));

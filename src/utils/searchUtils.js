@@ -56,7 +56,7 @@ export async function getSearchResults({
       approvals,
       approvalFilters
     );
-  } else if (activeTab === 1) {
+  } else if (activeTab === 2) {
     searchInApprovals(
       finalResult,
       regexp,
@@ -116,7 +116,7 @@ export function searchInApprovals(
         approval.ApprovalSectionTitle,
         approval.ApprovalSectionId,
         finalResult,
-        1
+        2
       );
     }
 
@@ -133,7 +133,7 @@ export function searchInApprovals(
             archive.section_title,
             `${archive.section_id}-archive-${aIndex}-section-title`,
             finalResult,
-            1
+            2
           );
         }
         archive.section_left_questions
@@ -149,7 +149,7 @@ export function searchInApprovals(
               question.questionText,
               `${question.questionId}-archive-${aIndex}-left-ques`,
               finalResult,
-              1
+              2
             );
 
             // searching in answer
@@ -167,17 +167,36 @@ export function searchInApprovals(
                     answerChunk,
                     `${question.questionId}-archive-${aIndex}-left-ques`,
                     finalResult,
-                    1
+                    2
                   );
                 });
               } else if (typeof recentAnswer === 'string') {
-                updateSearchMatches(
-                  regexp,
-                  recentAnswer,
-                  `${question.questionId}-archive-${aIndex}-left-ques`,
-                  finalResult,
-                  1
-                );
+                if (question.section.sectionName === 'Proposal Team') {
+                  const newAnswer = [];
+                  recentAnswer.split(',').forEach(answer => {
+                    const split_array = answer.split('(');
+                    if (split_array && split_array.length > 0) {
+                      newAnswer.push(split_array[0].trim());
+                    }
+                  });
+                  newAnswer.forEach(answerChunk => {
+                    updateSearchMatches(
+                      regexp,
+                      answerChunk,
+                      `${question.questionId}-archive-${aIndex}-left-ques`,
+                      finalResult,
+                      2
+                    );
+                  });
+                } else {
+                  updateSearchMatches(
+                    regexp,
+                    recentAnswer,
+                    `${question.questionId}-archive-${aIndex}-left-ques`,
+                    finalResult,
+                    2
+                  );
+                }
               }
             }
           });
@@ -195,7 +214,7 @@ export function searchInApprovals(
               question.questionText,
               `${question.questionId}-archive-${aIndex}-right-ques`,
               finalResult,
-              1
+              2
             );
 
             // searching in answer
@@ -213,17 +232,36 @@ export function searchInApprovals(
                     answerChunk,
                     `${question.questionId}-archive-${aIndex}-right-ques`,
                     finalResult,
-                    1
+                    2
                   );
                 });
               } else if (typeof recentAnswer === 'string') {
-                updateSearchMatches(
-                  regexp,
-                  recentAnswer,
-                  `${question.questionId}-archive-${aIndex}-right-ques`,
-                  finalResult,
-                  1
-                );
+                if (question.section.sectionName === 'Proposal Team') {
+                  const newAnswer = [];
+                  recentAnswer.split(',').forEach(answer => {
+                    const split_array = answer.split('(');
+                    if (split_array && split_array.length > 0) {
+                      newAnswer.push(split_array[0].trim());
+                    }
+                  });
+                  newAnswer.forEach(answerChunk => {
+                    updateSearchMatches(
+                      regexp,
+                      answerChunk,
+                      `${question.questionId}-archive-${aIndex}-right-ques`,
+                      finalResult,
+                      2
+                    );
+                  });
+                } else {
+                  updateSearchMatches(
+                    regexp,
+                    recentAnswer,
+                    `${question.questionId}-archive-${aIndex}-right-ques`,
+                    finalResult,
+                    2
+                  );
+                }
               }
             }
           });
@@ -243,7 +281,7 @@ export function searchInApprovals(
             question.questionText,
             `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
             finalResult,
-            1
+            2
           );
 
           // searching in answer
@@ -258,17 +296,36 @@ export function searchInApprovals(
                   answerChunk,
                   `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
                   finalResult,
-                  1
+                  2
                 );
               });
             } else if (typeof recentAnswer === 'string') {
-              updateSearchMatches(
-                regexp,
-                recentAnswer,
-                `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
-                finalResult,
-                1
-              );
+              if (question.section.sectionName === 'Proposal Team') {
+                const newAnswer = [];
+                recentAnswer.split(',').forEach(answer => {
+                  const split_array = answer.split('(');
+                  if (split_array && split_array.length > 0) {
+                    newAnswer.push(split_array[0].trim());
+                  }
+                });
+                newAnswer.forEach(answerChunk => {
+                  updateSearchMatches(
+                    regexp,
+                    answerChunk,
+                    `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
+                    finalResult,
+                    2
+                  );
+                });
+              } else {
+                updateSearchMatches(
+                  regexp,
+                  recentAnswer,
+                  `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
+                  finalResult,
+                  2
+                );
+              }
             }
           }
         }
@@ -286,7 +343,7 @@ export function searchInApprovals(
             question.questionText,
             `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
             finalResult,
-            1
+            2
           );
 
           // searching in answer
@@ -301,17 +358,36 @@ export function searchInApprovals(
                   answerChunk,
                   `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
                   finalResult,
-                  1
+                  2
                 );
               });
             } else if (typeof recentAnswer === 'string') {
-              updateSearchMatches(
-                regexp,
-                recentAnswer,
-                `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
-                finalResult,
-                1
-              );
+              if (question.section.sectionName === 'Proposal Team') {
+                const newAnswer = [];
+                recentAnswer.split(',').forEach(answer => {
+                  const split_array = answer.split('(');
+                  if (split_array && split_array.length > 0) {
+                    newAnswer.push(split_array[0].trim());
+                  }
+                });
+                newAnswer.forEach(answerChunk => {
+                  updateSearchMatches(
+                    regexp,
+                    answerChunk,
+                    `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
+                    finalResult,
+                    2
+                  );
+                });
+              } else {
+                updateSearchMatches(
+                  regexp,
+                  recentAnswer,
+                  `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
+                  finalResult,
+                  2
+                );
+              }
             }
           }
         }
