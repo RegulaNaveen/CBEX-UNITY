@@ -383,3 +383,8 @@ export const selectActiveTabIndex = createSelector(selectProposal, proposal =>
 export const selectActiveVTabIndex = createSelector(selectProposal, proposal =>
   proposal?.get('activeVTabIndex', 0)
 );
+
+export const selectVTabUserPreference = createSelector(
+  selectProposal,
+  proposal => proposal?.get('vTabUserPreference', {}).toJS()
+);

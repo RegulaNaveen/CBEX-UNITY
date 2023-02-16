@@ -105,7 +105,8 @@ const {
   SET_PRICE_MODELER_RECALCULATING,
   PRICE_MODELER_UPDATE,
   SET_ACTIVE_TABINDEX,
-  SET_V_TAB_ACTIVE_INDEX
+  SET_V_TAB_ACTIVE_INDEX,
+  SET_V_TAB_USER_PREFERENCE
 } = REDUX_TYPES.PROPOSAL;
 
 /**
@@ -1486,6 +1487,18 @@ export const setVTabActiveIndexAction = activeIndex => {
     dispatch({
       type: SET_V_TAB_ACTIVE_INDEX,
       payload: activeIndex
+    });
+  };
+};
+
+export const setVTabUserPreferenceAction = (tabIndex, keepOpen = false) => {
+  return dispatch => {
+    dispatch({
+      type: SET_V_TAB_USER_PREFERENCE,
+      payload: {
+        tabIndex,
+        keepOpen
+      }
     });
   };
 };
