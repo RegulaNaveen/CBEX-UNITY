@@ -55,10 +55,10 @@ const informedFilter: Boolean = question => {
   return false;
 };
 
-export const shouldShowQuestion = (question = {}, approvalfilters): Boolean => {
+export const shouldShowQuestion = (question = {}, unityTabfilters): Boolean => {
   try {
     const filterAnswers = [];
-    const appliedFilters = approvalfilters
+    const appliedFilters = unityTabfilters
       .filter(i => i.value)
       .map(i => i.name);
     if (question.visible && question.active) {
@@ -94,25 +94,21 @@ export const shouldShowQuestion = (question = {}, approvalfilters): Boolean => {
   }
 };
 
-export const shouldShowSection = sectionId => {
+export const shouldShowSection = (sectionId, tabId) => {
   try {
     const state = store.getState();
-    const allApprovals = state.approvals.allApprovals;
-    const approvalsFilters = state.approvals.filters;
+    const tab = state.unitytab.allTabs[tabId];
+    const unityFilters = state.unitytab.filters;
     const proposalQuestions = state.proposal.get('proposalQuestions');
-    const approvalSection =
-      allApprovals.find(i => i.ApprovalSectionId === sectionId) || {};
-    const leftQuestions = approvalSection.ApprovalSectionLeftQuestions || [];
-    const rightQuestions = approvalSection.ApprovalSectionRightQuestions || [];
-    const questionIds = [...leftQuestions, ...rightQuestions];
+    const unityTabSection =
+      tab.find(i => i.UnityTabSectionId === sectionId) || {};
+    const leftQuestions = unityTabSection.UnityTabSectionQuestions || [];
+    const questionIds = leftQuestions;
     const visibilityArr = [];
     questionIds.forEach(questionId => {
       const questionObj =
         proposalQuestions.find(i => i.questionId === questionId) || {};
-      const isQuestionVisible = shouldShowQuestion(
-        questionObj,
-        approvalsFilters
-      );
+      const isQuestionVisible = shouldShowQuestion(questionObj, unityFilters);
       visibilityArr.push(isQuestionVisible);
     });
     const returnValue =

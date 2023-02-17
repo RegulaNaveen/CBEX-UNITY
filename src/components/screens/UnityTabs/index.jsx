@@ -1,62 +1,19 @@
+/* eslint-disable react/prop-types */
 import { isEmpty } from 'lodash';
-import React, { useEffect, useState, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Loader from 'apollo-react/components/Loader';
-
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import ClipboardCheck from 'apollo-react-icons/ClipboardCheck';
 import Card from 'apollo-react/components/Card';
-import {
-  fetchAllApprovals,
-  fetchApprovalSendEmailFlag
-} from '../../../redux/actions/approval-actions';
-import {
-  getSelectedBid,
-  getProposalQuestions
-} from '../../../redux/selectors/proposal';
 import Section from './Section';
 import BidHistory from '../../common/Bidhistory';
-import { DEFAULT } from '../../../constants/app';
-import CustomModal from '../../common/CustomModal';
 import Filters from './Filters';
 import FilterButton from './FilterButton';
 import ViewAboveVerticalTabs from '../../views/ViewAboveVerticalTabs';
 
-const CustomTabs = ({ tabId }) => {
-  const approvals = useSelector(state => state.approvals.allApprovals);
-  const allFlags = useSelector(state => state.proposal.get('eventflag'));
-  const questions = useSelector(getProposalQuestions);
+const CustomTabs = ({ tabId, key }) => {
+  const allTab = useSelector(state => state.unitytab.allTabs);
+  const tab = allTab[tabId];
   const [isShowFilters, setIsShowFilters] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [warning, setWarning] = useState(false);
-  const [warningTitle, setWarningTitle] = useState('');
-  const [warningText, setWarningText] = useState('');
-  const selectedBid = useSelector(getSelectedBid)?.toJS();
-  const memoizeBid = useMemo(() => selectedBid, [selectedBid?.id]);
-  const dispatch = useDispatch();
-
-  // get email flag status on mount
-  useEffect(() => {
-    if (allFlags && allFlags.approvalSendMailFlag) {
-      dispatch(fetchApprovalSendEmailFlag(allFlags.approvalSendMailFlag));
-    }
-  }, []);
-
-  useEffect(() => {
-    const proposalId = memoizeBid?.id;
-    if (!proposalId) return () => {};
-    setLoading(true);
-
-    (async () => {
-      const response = await dispatch(fetchAllApprovals(proposalId, questions));
-      setLoading(false);
-      if (!response.status) {
-        setWarningTitle(response.title);
-        setWarningText(response.message);
-        setWarning(true);
-      }
-    })();
-    return () => {};
-  }, [memoizeBid]);
 
   return (
     <div className="approvals-tab">
@@ -72,15 +29,13 @@ const CustomTabs = ({ tabId }) => {
       </div>
 
       <div className="all-approvals-container">
-        {/* Modal Loading */}
-        {loading && <Loader isInner />}
-
-        {!isEmpty(approvals) ? (
-          approvals.map(approval => (
+        {!isEmpty(tab) ? (
+          tab.map(tabs => (
             <Section
-              key={approval.ApprovalSectionId}
-              sectionId={approval.ApprovalSectionId}
-              title={approval.ApprovalSectionTitle}
+              key={tabs.UnityTabSectionId}
+              sectionId={tabs.UnityTabSectionId}
+              title={tabs.UnityTabSectionTitle}
+              tabId={tabId}
             />
           ))
         ) : (
@@ -102,25 +57,12 @@ const CustomTabs = ({ tabId }) => {
                   style={{ fontSize: '48px', marginBottom: '10px' }}
                   data-testid="No_approvals"
                 />
-                No Approval associated with your selected bid
+                No Question associated with your selected Tab
               </Card>
             </div>
           </>
         )}
       </div>
-
-      {/* Warning Modal */}
-      {warning && (
-        <CustomModal
-          open={warning}
-          title={warningTitle}
-          message={warningText}
-          variant="error"
-          onClose={() => setWarning(false)}
-          buttonProps={[{ className: 'hidden' }, { label: DEFAULT.CLOSE }]}
-          modalStyle={{ maxWidth: 342 }}
-        />
-      )}
     </div>
   );
 };

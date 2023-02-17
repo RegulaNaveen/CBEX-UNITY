@@ -9,9 +9,9 @@ import {
 } from '../../../redux/actions/approval-actions';
 
 const Filters = props => {
-  const approvalFilters = useSelector(state => state.approvals.filters);
+  const unityTabFilters = useSelector(state => state.unitytab.filters);
   const dispatch = useDispatch();
-  const filterGroups = [...new Set(approvalFilters.map(i => i.group))];
+  const filterGroups = [...new Set(unityTabFilters.map(i => i.group))];
 
   const updateFilter = (filterName, checked) => {
     dispatch(updateFilters(filterName, checked));
@@ -38,7 +38,7 @@ const Filters = props => {
         {filterGroups.map((group, index) => (
           <div key={group}>
             <Grid container spacing={2}>
-              {approvalFilters
+              {unityTabFilters
                 .filter(i => i.group === group)
                 .map(item => (
                   <Grid item xs={3} key={item.name}>

@@ -1,3 +1,4 @@
+/* eslint-disable no-lonely-if */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-plusplus */
 /* eslint-disable dot-notation */
@@ -194,7 +195,18 @@ const UnityTab = ({
     }
   }, [customTabs]);
 
-  console.log('tabs :>> ', tabs);
+  useEffect(() => {
+    if (
+      tabs.length > 5 &&
+      (selectedView !== 'documents' ||
+        selectedView !== 'approval' ||
+        selectedView !== 'timelines' ||
+        selectedView !== 'questions')
+    ) {
+      const custompath = tabs.find(item => item.path === selectedView);
+      dispatch(setActiveTabIndexAction(custompath?.value));
+    }
+  }, [tabs]);
 
   async function fetchTabFlags() {
     // launchDarkly calls should be optimized
