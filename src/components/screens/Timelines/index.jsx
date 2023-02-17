@@ -152,7 +152,7 @@ const Timeline = () => {
   };
 
   return (
-    <div id="Timeline-main-wrapper">
+    <div id="Timeline-main-wrapper" data-testid="timeline">
       {/* <div> */}
       <ViewAboveVerticalTabs>
         <BidHistory />
@@ -182,26 +182,26 @@ const Timeline = () => {
 
             {filteredSections
               ? filteredSections.valueSeq().map(section => {
-                  return (
+                return (
+                  <TimelineSections
+                    sectionName={section.get('sectionName')}
+                    sectionOrder={section.get('sectionOrder')}
+                    questions={section.get('questions')}
+                  />
+                );
+              })
+              : sections.valueSeq().map(section => {
+                return (
+                  section.get('sectionName') !==
+                  'Questions_for_the_Customer_left_panel' && (
                     <TimelineSections
                       sectionName={section.get('sectionName')}
                       sectionOrder={section.get('sectionOrder')}
                       questions={section.get('questions')}
                     />
-                  );
-                })
-              : sections.valueSeq().map(section => {
-                  return (
-                    section.get('sectionName') !==
-                      'Questions_for_the_Customer_left_panel' && (
-                      <TimelineSections
-                        sectionName={section.get('sectionName')}
-                        sectionOrder={section.get('sectionOrder')}
-                        questions={section.get('questions')}
-                      />
-                    )
-                  );
-                })}
+                  )
+                );
+              })}
           </div>
         </Panel>
         <Panel hideButton className="timeline-calender-container">

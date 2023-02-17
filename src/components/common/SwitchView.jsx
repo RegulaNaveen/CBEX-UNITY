@@ -39,15 +39,15 @@ class SwitchView extends Component<Props> {
     const { selectedViewType } = this.props;
 
     return (
-      <div className="switch-view">
-        <button type="button" onClick={this.setViewToList}>
+      <div className="switch-view" data-testid="swicth-view">
+        <button type="button" onClick={this.setViewToList} data-testid="list-view">
           <ListView
             className={classNames('switch-view__icon', {
               'is-active': selectedViewType === 0
             })}
           />
         </button>
-        <button type="button" onClick={this.setViewToGrid}>
+        <button type="button" onClick={this.setViewToGrid} data-testid="card-view">
           <CardView
             className={classNames('switch-view__icon', {
               'is-active': selectedViewType === 1

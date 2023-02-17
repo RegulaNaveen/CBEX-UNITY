@@ -94,7 +94,7 @@ const DnDOutsideResource = ({
         question?.answers[question?.answers?.length - 1].answer;
       if (
         parseMomentDate(lastAnswerValue.trim()) !==
-          parseMomentDate(selectedDay) &&
+        parseMomentDate(selectedDay) &&
         selectedDay
       ) {
         await dispatch(
@@ -149,7 +149,7 @@ const DnDOutsideResource = ({
     [setMyEvents]
   );
 
-  const newEvent = useCallback(event => {}, [setMyEvents]);
+  const newEvent = useCallback(event => { }, [setMyEvents]);
 
   const onDropFromOutside = useCallback(
     ({ start, end, allDay: isAllDay }) => {
