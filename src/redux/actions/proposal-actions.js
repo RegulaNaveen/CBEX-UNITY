@@ -5,7 +5,6 @@ import axios from 'axios';
 import type { Dispatch, ThunkAction } from './action-types';
 
 import { REDUX_TYPES, API } from '../../constants';
-
 import {
   getProposalInfo,
   setProposalAnswer,
@@ -36,7 +35,7 @@ import { getErrorMessage, getProposalIdlist } from '../../utils/utils';
 import { DEFAULT, SEARCH as SEARCH_CONSTANTS } from '../../constants/app';
 import isPriceModelerQuestion from '../../utils/isPriceModelerQuestion';
 import { fetchAllApprovals } from './approval-actions';
-import { SEARCH } from '../../constants/types';
+import { SEARCH, UNITY_TABS } from '../../constants/types';
 import { doSearchAction } from './search-actions';
 import { selectQuery } from '../selectors/search';
 
@@ -1223,6 +1222,10 @@ export const getOpportunity = (
       }
       proposalsData.push(data[0]);
       dispatch({ type: OPPORTUNITY_INFO, payload: proposalsData });
+      dispatch({
+        type: UNITY_TABS.SET_UNITY_TABS,
+        payload: data[0]?.proposal?.customUnityTabs || []
+      });
       // get approvals data for current bid
       const currentBidDetails = proposalsData.find(
         proposal => proposal.isCurrent

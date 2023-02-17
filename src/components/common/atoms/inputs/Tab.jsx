@@ -1,3 +1,7 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-plusplus */
+/* eslint-disable dot-notation */
+/* eslint-disable no-restricted-syntax */
 import React, {
   useState,
   useEffect,
@@ -84,50 +88,21 @@ const ProposalTeam = React.lazy(() =>
   )
 );
 
+const CustomTabs = React.lazy(() =>
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "Approvals" */ '../../../screens/UnityTabs/index'
+    )
+  )
+);
+
 const UnityTab = ({
   id,
   enableValidateTab,
   selectedView,
   onChangeSelectedTab
 }) => {
-  const [approvalsFlag, setApprovalsFlag] = useState(false);
-  const [showApprovalTab, setShowApprovalTab] = useState(false);
-  const [isShowVerticalTab, setShowVerticalTab] = useState(false);
-  const [
-    showQuestionsForCustomerTab,
-    setShowQuestionsForCustomerTab
-  ] = useState(false);
-  const [showNotepadTab, setShowNotepadTab] = useState(false);
-  const [showProposalTeamTab, setShowProposalTeamTab] = useState(false);
-  const [isNotepadOpen, setIsNotepadOpen] = useState(true);
-  const [vtabCollpased, setVTabCollapsed] = useState(false);
-
-  const selectedBid = useSelector(getSelectedBid)?.toJS();
-  const proposalId = selectedBid?.id || 1;
-  const isApprovalCount = selectedBid?.isApprovalCountPresent || false;
-  const history = useHistory();
-  const isOpen = useSelector(state => getIsOpen(state));
-  const proposalDetail = useSelector(state => getProposalDetails(state));
-  const userEmail = useSelector(state => getUserEmail(state));
-  const userRole = useSelector(state => getUserRole(state));
-  const allFlags = useSelector(state => state.proposal.get('eventflag'));
-  const value = useSelector(selectActiveTabIndex);
-  const currentSearchResult = useSelector(selectCurrentSearchResult);
-  const vTabUserPreference = useSelector(selectVTabUserPreference);
-  const dispatch = useDispatch();
-
-  const { trackEvent } = useMatomo();
-
-  const [panelRef, setPanelRef] = useState(null);
-
-  const minPixelToExclude = 20;
-  const notepadMinWidthPx =
-    (window.innerWidth - minPixelToExclude) * (30 / 100); // 30% of the total screen size
-  const notepadMaxWidthPx = isOpen
-    ? notepadMinWidthPx
-    : (window.innerWidth - minPixelToExclude) * (47 / 100); // 50% of the total screen size
-
-  const tabs = [
+  const defaultTabs = [
     {
       label: 'Strategy Development',
       value: 0,
@@ -159,6 +134,67 @@ const UnityTab = ({
       path: 'validate'
     }
   ];
+  const [tabs, setTabs] = useState(defaultTabs);
+  const [approvalsFlag, setApprovalsFlag] = useState(false);
+  const [showApprovalTab, setShowApprovalTab] = useState(false);
+  const [isShowVerticalTab, setShowVerticalTab] = useState(false);
+  const [
+    showQuestionsForCustomerTab,
+    setShowQuestionsForCustomerTab
+  ] = useState(false);
+  const [showNotepadTab, setShowNotepadTab] = useState(false);
+  const [showProposalTeamTab, setShowProposalTeamTab] = useState(false);
+  const [isNotepadOpen, setIsNotepadOpen] = useState(true);
+  const [vtabCollpased, setVTabCollapsed] = useState(false);
+
+  const selectedBid = useSelector(getSelectedBid)?.toJS();
+  const proposalId = selectedBid?.id || 1;
+  const isApprovalCount = selectedBid?.isApprovalCountPresent || false;
+  const history = useHistory();
+  const isOpen = useSelector(state => getIsOpen(state));
+  const proposalDetail = useSelector(state => getProposalDetails(state));
+  const userEmail = useSelector(state => getUserEmail(state));
+  const userRole = useSelector(state => getUserRole(state));
+  const allFlags = useSelector(state => state.proposal.get('eventflag'));
+  const value = useSelector(selectActiveTabIndex);
+  const currentSearchResult = useSelector(selectCurrentSearchResult);
+  const vTabUserPreference = useSelector(selectVTabUserPreference);
+  const customTabs = useSelector(state => state.unitytab.allTabs);
+  const dispatch = useDispatch();
+  const { trackEvent } = useMatomo();
+  const [panelRef, setPanelRef] = useState(null);
+
+  const minPixelToExclude = 20;
+  const notepadMinWidthPx =
+    (window.innerWidth - minPixelToExclude) * (30 / 100); // 30% of the total screen size
+  const notepadMaxWidthPx = isOpen
+    ? notepadMinWidthPx
+    : (window.innerWidth - minPixelToExclude) * (47 / 100); // 50% of the total screen size
+
+  useEffect(() => {
+    if (customTabs && Object.keys(customTabs)?.length > 0) {
+      const newTab = [];
+      let len = tabs.length;
+      for (const [key, value] of Object.entries(customTabs)) {
+        const tabID = value[0]['UnityTabId'];
+        const title = String(value[0]['UnityTabTitle'])
+          .trim()
+          .toLowerCase();
+        newTab.push({
+          label: value[0]['UnityTabTitle'],
+          value: len++,
+          component: <CustomTabs tabId={tabID} key={title} />,
+          path: String(value[0]['UnityTabTitle'])
+            .replace(' ', '_')
+            .trim()
+            .toLowerCase()
+        });
+      }
+      setTabs([...tabs, ...newTab]);
+    }
+  }, [customTabs]);
+
+  console.log('tabs :>> ', tabs);
 
   async function fetchTabFlags() {
     // launchDarkly calls should be optimized
@@ -335,7 +371,6 @@ const UnityTab = ({
     if (selectView && selectView?.get('viewType')?.includes('timelines'))
       setShowVerticalTab(false);
     else if (allFlags.verticalTab) setShowVerticalTab(true);
-
     if (val === 0) {
       // No need to update pathname for question tab
       history.push(`${window.location.pathname}`);
