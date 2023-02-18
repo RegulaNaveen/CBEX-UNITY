@@ -4,7 +4,8 @@
 }
 .proposal-team-answer {
   padding-left: 15px;
-  max-width: 400px;
+  // max-width: 400px;
+  min-width: 500px !important;
   margin-top: 5px;
   margin-bottom: 5px;
   overflow-y: auto !important;
@@ -17,4 +18,28 @@
   border: 0.6em;
   border-top: 1px solid #ddd;
   padding: 0;
+}
+.add-quest-modal {
+  position: absolute;
+  z-index: 1;
+}
+
+.proposal-team-wrapper-container {
+  overflow-y: auto;
+  height: 442px !important;
+  margin: 2px 0px;
+}
+
+.add-question {
+  padding-left: 15px;
+}
+
+.proposal-team-wrapper {
+  display: flex;
+  justify-content: start;
+}
+
+.integrations-icon {
+  margin-top: 3rem;
+  margin-left: -6rem;
 }

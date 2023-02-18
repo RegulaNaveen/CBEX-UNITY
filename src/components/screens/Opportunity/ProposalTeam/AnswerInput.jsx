@@ -12,192 +12,358 @@ import {
   selectFilteredSections,
   selectIsQuestionsFilterEnabled,
   isSetQuestionLoading,
-  getSelectedBid
+  getSelectedBid,
+  setProposalAnswer,
+  getIntegrations,
+  getShowNaCheckbox,
+  getUserData
 } from '../../../../redux/selectors';
+import { Map, List } from 'immutable';
 import {
   getUserEmail,
   getUserId,
   getUserName
 } from '../../../../SessionHandler';
-import setProposalAnswerData from '../../../../redux/actions/proposal-actions';
+
+import Typography from 'apollo-react/components/Typography';
+import {
+  setProposalAnswerData,
+  deleteProposalUserFromDB,
+  setProposalAnswerLoading
+} from '../../../../redux/actions/proposal-actions';
 import QuestionsSectionMapping from '../QuestionsSectionMapping';
 import CollapsibleList from '../../../common/CollapsibleList';
 import AddQuestionModalComponent from '../../../views/modals/AddQuestionModal';
 import { SocketContext } from '../../../../context/SocketContext';
-
-const AnswerInput = () => {
+import { isObject } from 'lodash';
+import { fromJS } from 'immutable';
+import isEmpty from 'lodash/isEmpty';
+const AnswerInput = (isNotepadOpen, proposalId) => {
+  console.log('proposalId', proposalId);
   const [showModal, setShowModal] = useState(false);
+  const [iconColor, setIconColor] = useState('#00c221');
+  const [changeIcon, setChangeIcon] = useState('');
   const sections = useSelector(selectSections);
   const isSetQuestionLoadingData = useSelector(isSetQuestionLoading);
   const isQuestionsFiltersEnabled = useSelector(selectIsQuestionsFilterEnabled);
   const filteredSections = useSelector(selectFilteredSections);
+  const proposalAns = useSelector(setProposalAnswer);
+  const userData = useSelector((state) => getUserData(state));
+  console.log('userData', userData);
   const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
   const selectedBid = useSelector(getSelectedBid);
   const isCurrentBid = selectedBid.get('isCurrent');
   const socketContext = useContext(SocketContext);
   const allFlags = useSelector((state) => state.proposal.get('eventflag'));
   const { questionLockWrapper, questionUnlockWrapper } = socketContext;
-  let answerValue = '';
-  let checkSFAnswer = [];
-  let currentSFAnswer;
   const proposalTeam = [];
-  const questionData = Object.keys(proposalTeam[0].questions).map((item) => {
-    return proposalTeam[0]?.questions[item];
+  let questionData;
+  const integrationsData = useSelector((state) => getIntegrations(state));
+  const showNaCheckbox = useSelector((state) => getShowNaCheckbox(state));
+  const gridColRatio = [10, 2];
+  allSections.map((item) => {
+    if (item.get('sectionName') === 'Proposal Team') {
+      proposalTeam.push(item.toJS());
+    }
   });
-  console.log('keys', questionData);
-
-  const getUserData = () => ({
-    name: getUserName(),
-    email: getUserEmail(),
-    role: getUserId()
+  useEffect(() => {
+    allSections.map((item) => {
+      if (item.get('sectionName') === 'Proposal Team') {
+        proposalTeam.push(item.toJS());
+      }
+    });
+  }, [allSections]);
+  Object.keys(proposalTeam[0].questions).map((item) => {
+    questionData = proposalTeam[0].questions[item];
   });
-
-  const isQuestionLocked = () => {
-    return (
-      questionData?.questionLockInfo && questionData?.questionLockInfo?.userInfo
-    );
-  };
-  const isQuestionLockedByOther = () => {
-    return (
-      isQuestionLocked() &&
-      getUserEmail() !== questionData?.questionLockInfo?.userInfo
-    );
-  };
-
-  const checkDisableFlag = () => {
-    if (isQuestionLockedByOther() || !isCurrentBid || !allFlags.proposalTeamTab)
-      return true;
-
-    return false;
-  };
-
+  console.log(socketContext, 'scok');
+  // eslint-disable-next-line react/destructuring-assignment
+  // socketContext.questionLockWrapper(questionData.questionId);
   // const inputProps = {
-  //   question,
+  //   proposalTeam,
   //   userData: getUserData(),
   //   socketContext,
   //   checkDisableFlag,
   //   setShowLoader,
   //   questionIndex
   // };
-  allSections.map((item) => {
-    if (item.get('sectionName') === 'Proposal Team') {
-      proposalTeam.push(item.toJS());
-      checkSFAnswer.push(item.toJS().checkSfAnswer);
-    }
-    console.log('proposalTeam', proposalTeam);
-  });
-
   useEffect(() => {
     if (showModal) {
       setTimeout(() => setShowModal(false), 1000);
     }
   }, [isSetQuestionLoadingData]);
-
   const onCloseAddModal = () => {
     setShowModal((prev) => !prev);
   };
+  const NaLoading = questionData?.NaLoading;
 
-  //   handlePropsalChange = (textValue, lastValue, reason) => {
-  //     try {
-  //       setProposalAnswerData(
-  //         context,
-  //         proposalId,
-  //         questionId,
-  //         textValue,
-  //         userData
-  //       ).then(() => {
-  //         const [deletedVal] = xor(
-  //           textValue?.trim() ? textValue?.trim().split(',') : [],
-  //           lastValue?.trim() ? lastValue?.trim().split(',') : []
-  //         );
-  //         const [deletedEmail] = String(deletedVal).match(
-  //           /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
-  //         );
-  //         if (reason === 'remove-option' && deletedEmail) {
-  //           setAnswerLoading(questionId, true);
-  //           const { sectionName, sectionOrder } = section.toJS();
-  //           deleteProposalUser(
-  //             proposalId,
-  //             deletedEmail,
-  //             sectionOrder,
-  //             sectionName
-  //           ).then(() => {
-  //             setAnswerLoading(questionId, false);
-  //           });
-  //         }
-  //       });
-  //       this.trackMatomoEventSubmitAnswer(textValue);
-  //     } catch (error) {
-  //       console.log('error :>> ', error);
-  //     }
-  //   };
+  // trackMatomoEventSubmitAnswer = data => {
+  //   const {
+  //     eventCategories,
+  //     proposalDetail,
+  //     questionText,
+  //     questionHTML,
+  //     questionJSON,
+  //     questionHintJSON,
+  //     sectionName,
+  //     trackEvent,
+  //     questionId,
+  //     events
+  //   }
+  //   trackEvent({
+  //     category: eventCategories.pd(this.props),
+  //     action: events
+  //       ? `Event: ${questionText} (${sectionName})`
+  //       : `Question: ${questionText} (${sectionName})`,
+  //     name: `Answer: ${data}`,
+  //     customDimensions: [
+  //       {
+  //         id: 1,
+  //         value: JSON.stringify({
+  //           answer: data,
+  //           sectionName,
+  //           questionText,
+  //           questionHTML,
+  //           questionJSON,
+  //           questionHintJSON,
+  //           questionId,
+  //           proposalDetail
+  //         })
+  //       },
+  //       {
+  //         events: events || []
+  //       }
+  //     ]
+  //   });
+  // };
+  const handlePropsalChange = (questionId, answerValue, lastValue, reason) => {
+    try {
+      setProposalAnswerData(
+        socketContext,
+        proposalId,
+        questionId,
+        answerValue,
+        userData
+      ).then(() => {
+        const [deletedVal] = xor(
+          answerValue?.trim() ? answerValue?.trim().split(',') : [],
+          lastValue?.trim() ? lastValue?.trim().split(',') : []
+        );
+        const [deletedEmail] = String(deletedVal).match(
+          /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+        );
+        if (reason === 'remove-option' && deletedEmail) {
+          setProposalAnswerLoading(questionId, true);
+          const { sectionName, sectionOrder } = section.toJS();
+          deleteProposalUserFromDB(
+            proposalId,
+            deletedEmail,
+            sectionOrder,
+            sectionName
+          ).then(() => {
+            setProposalAnswerLoading(questionId, false);
+          });
+        }
+      });
+      // trackMatomoEventSubmitAnswer(answerValue);
+    } catch (error) {
+      console.log('error :>> ', error);
+    }
+  };
   return (
     <>
-      <Grid>
+      {' '}
+      <div className="proposal-team-wrapper-container">
+        {' '}
         {Object.keys(proposalTeam[0].questions).map((item) => {
-          return (
-            <>
-              <p className="proposal-team-title">
-                {proposalTeam[0].questions[item].questionText}
-              </p>
-              <Grid className="proposal-team-answer">
-                <Autocomplete
-                  sectionName={proposalTeam[0].sectionName}
-                  onFocus={() => {
-                    // call question lock
-                    questionLockWrapper(
-                      proposalTeam[0].questions[item].questionId
-                    );
-                    // this.setSelectRow(true);
-                  }}
-                  onBlur={() => {
-                    questionUnlockWrapper(
-                      proposalTeam[0].questions[item].questionId
-                    );
-
-                    // this.setSelectRow(false);
-                  }}
-                  // onChange={handlePropsalChange}
-                  text={answerValue}
-                  disabled={checkDisableFlag()}
-                />
-              </Grid>
-              <Grid>
-                {/* <SystemIntegrations
-                checkSfAnswer={checkSFAnswer}
-                sficon={sficon}
-                destinationArray={destinationArray}
-                answers={answers}
-                gridColRatio={gridColRatio}
-                integrationmatch={integrationmatch}
-                integrationvalidation={integrationvalidation}
-                priceModelerIntegration={priceModelerIntegration}
-                answeronhistory={this.displayAnswerOnHistory}
-                answerdate={answerDate}
-                isAnswerPredicted={isAnswerPredicted}
-                isAnswered={this.isAnswered}
-                lastAnswer={lastAnswer}
-                iconColor={iconColor}
-                loading={loading}
-                NaLoading={NaLoading}
-                showNaCheckbox={showNaCheckbox}
-                isNotepadOpen={isNotepadOpen}
-                changeIcon={changeIcon}
-                isCurrentBid={isCurrentBid}
-                sfObject={sfObject}
-                answer={answerValue}
-                answerText={answerText}
-                handleVerifyPredictedAnsClick={
-                  this.handleVerifyPredictedAnsClick
-                }
-                hasDifferentSFanswer={hasDifferentSFanswer}
-                disabled={integrationLocked}
-                /> */}
-              </Grid>
-            </>
+          const isQuestionLocked = () => {
+            return (
+              proposalTeam[0].questions[item].questionLockInfo &&
+              proposalTeam[0].questions[item].questionLockInfo?.userInfo
+            );
+          };
+          const isQuestionLockedByOther = () => {
+            return (
+              isQuestionLocked() &&
+              getUserEmail() !==
+                proposalTeam[0].questions[item].questionLockInfo?.userInfo
+            );
+          };
+          const callSelectRow = (value) => {
+            // call question unlock
+            setSelectedRow(value);
+          };
+          const checkDisableFlag = () => {
+            if (
+              isQuestionLockedByOther() ||
+              !isCurrentBid ||
+              !allFlags.proposalTeamTab
+            )
+              return true;
+            return false;
+          };
+          console.log(
+            'proposalTeam[0].questions[item]',
+            proposalTeam[0].questions[item].questionLockInfo
           );
+          const [selectedRow, setSelectedRow] = useState(false);
+          if (
+            proposalTeam[0].questions[item].active &&
+            proposalTeam[0].questions[item].visible
+          ) {
+            currentSFAnswer = proposalTeam[0].questions[item].currentSFanswer;
+            const sficon = proposalTeam[0].questions[item].sfField;
+            const qvicon = proposalTeam[0].questions[item].questionId;
+            const answers = fromJS(proposalTeam[0].questions[item].answers);
+            const loading = proposalTeam[0].questions[item].loading ?? false;
+            const sfObject = proposalTeam[0].questions[item]?.sfObject;
+            const integrationLocked = isQuestionLockedByOther() ? true : false;
+            let checkSFAnswer = [];
+            let currentSFAnswer;
+            let destinationArray;
+            let integrationvalidation;
+            let integrationmatch;
+            let answerDate = 'Not Answered';
+            let lastAnswer;
+            let isAnswerPredicted = false;
+            let answerValue = '';
+            const questionId = proposalTeam[0].questions[item].questionId;
+            const hasDifferentSFanswer =
+              proposalTeam[0].questions[item]?.hasDifferentSFanswer;
+            if (answers) {
+              if (!proposalTeam[0].questions[item].questionID)
+                lastAnswer = answers.last();
+              else lastAnswer = answers.get('answers').last();
+            }
+            if (lastAnswer) {
+              if (
+                lastAnswer.get &&
+                lastAnswer.userName &&
+                lastAnswer.userName.length &&
+                lastAnswer.userName === 'UnityPredictedAnswer'
+              ) {
+                isAnswerPredicted = true;
+                answerDate = 'Not Answered';
+              }
+            }
+            const answer = lastAnswer && lastAnswer?.get('answer');
+            const integrationsArray = integrationsData?.data.map((item) => {
+              return item.questionId;
+            });
+            integrationvalidation = integrationsArray?.includes(qvicon);
+            integrationmatch = integrationvalidation;
+            integrationsData?.data.map((item) => {
+              if (item.questionId.includes(qvicon))
+                destinationArray = item.destination;
+            });
+            if (
+              typeof currentSFAnswer !== 'undefined' &&
+              _.isEmpty(currentSFAnswer) !== true
+            ) {
+              checkSFAnswer = currentSFAnswer.value;
+            }
+            if (answer) {
+              if (!isEmpty(answer)) {
+                answerValue = answer.toString();
+              } else {
+                answerValue = '';
+              }
+            }
+            // const handleVerifyPredictedAnsClick = (predictedAnswer) => {
+            //   setIconColor('#015ff1');
+            //   setProposalAnswerData(
+            //     socketContext,
+            //     proposalId,
+            //     questionId,
+            //     String(predictedAnswer.get('answer')).trim(),
+            //     userData
+            //   );
+            // };
+            return (
+              <>
+                <div className="proposal-team-wrapper">
+                  <div
+                    className={`task-table-row question-row ${
+                      selectedRow ? 'selected-task-table-row' : ''
+                    } ${NaLoading ? 'fade-area' : ''} `}
+                    style={{ margin: '2px 0px' }}
+                  >
+                    <p className="proposal-team-title">
+                      {proposalTeam[0].questions[item].questionText}
+                    </p>
+                    {isQuestionLockedByOther() ? (
+                      <Typography variant="subtitle1" className="status-txt">
+                        {
+                          proposalTeam[0].questions[item].questionLockInfo
+                            .userName
+                        }
+                        is typing...
+                      </Typography>
+                    ) : null}
+                    <div
+                      className="proposal-team-answer"
+                      style={{ maxWidth: 600 }}
+                    >
+                      <SFAnswerValidationWrapper
+                        hasDifferentSFanswer={
+                          hasDifferentSFanswer && isCurrentBid
+                        }
+                        sfObject={sfObject}
+                      >
+                        <Autocomplete
+                          sectionName={proposalTeam[0].sectionName}
+                          onFocus={() => {
+                            // call question lock
+                            questionLockWrapper(questionId);
+                            callSelectRow(true);
+                          }}
+                          onBlur={() => {
+                            questionUnlockWrapper(questionId);
+                            callSelectRow(false);
+                          }}
+                          onChange={handlePropsalChange(
+                            questionId,
+                            answerValue
+                          )}
+                          text={answerValue}
+                          disabled={checkDisableFlag()}
+                        />
+                      </SFAnswerValidationWrapper>
+                    </div>
+                  </div>
+                  <div className="integrations-icon">
+                    <SystemIntegrations
+                      checkSfAnswer={checkSFAnswer}
+                      sficon={sficon}
+                      destinationArray={destinationArray}
+                      answers={answers}
+                      gridColRatio={gridColRatio}
+                      integrationmatch={integrationmatch}
+                      integrationvalidation={integrationvalidation}
+                      // answeronhistory={this.displayAnswerOnHistory}
+                      answerdate={answerDate}
+                      isAnswerPredicted={isAnswerPredicted}
+                      // isAnswered={this.isAnswered}
+                      lastAnswer={lastAnswer}
+                      iconColor={iconColor}
+                      loading={loading}
+                      NaLoading={NaLoading}
+                      showNaCheckbox={showNaCheckbox}
+                      isNotepadOpen={isNotepadOpen}
+                      changeIcon={changeIcon}
+                      isCurrentBid={isCurrentBid}
+                      sfObject={sfObject}
+                      // handleVerifyPredictedAnsClick={handleVerifyPredictedAnsClick()}
+                      hasDifferentSFanswer={hasDifferentSFanswer}
+                      disabled={integrationLocked}
+                    />
+                  </div>
+                </div>
+              </>
+            );
+          }
         })}
-      </Grid>
+      </div>
       <div className="add-question">
         <Link
           style={{ borderBottom: 'none' }}
@@ -208,7 +374,11 @@ const AnswerInput = () => {
           <span style={{ verticalAlign: 'top' }}> Add New Question</span>
         </Link>
       </div>
-      {showModal && <AddQuestionModalComponent onClose={onCloseAddModal} />}
+      {showModal && (
+        <div className="add-quest-modal">
+          <AddQuestionModalComponent onClose={onCloseAddModal} />
+        </div>
+      )}
     </>
   );
 };
