@@ -1,4 +1,5 @@
 import Typography from 'apollo-react/components/Typography';
+import moment from 'moment';
 import React from 'react';
 import { parseMomentDate } from '../../../utils/DateUtils';
 
@@ -16,7 +17,13 @@ const CustomComponents = {
       display: 'flex',
       flex: 1,
       borderLeft: '1px solid #DDD',
-      backgroundColor: '#fff'
+      backgroundColor: `${
+        moment(parseMomentDate(dateCellWrapperProps.value)).isBefore(
+          parseMomentDate(dateCellWrapperProps.currentBidDetails[0].bidDate)
+        )
+          ? '#F6F7FB'
+          : '#fff'
+      }`
     };
 
     return (
@@ -27,7 +34,7 @@ const CustomComponents = {
             style={{
               color: '#999999',
               fontFamily: 'Proxima Nova',
-              fontSize: '20px',
+              fontSize: '16px',
               fontWeight: 600,
               alignSelf: 'flex-end',
               justifyContent: 'center'
@@ -42,7 +49,7 @@ const CustomComponents = {
             style={{
               color: '#999999',
               fontFamily: 'Proxima Nova',
-              fontSize: '20px',
+              fontSize: '16px',
               fontWeight: 600,
               alignSelf: 'flex-end',
               justifyContent: 'center'

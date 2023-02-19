@@ -206,6 +206,13 @@ const UI = {
 };
 
 const UBUILD_ADMIN = 'ubuildAdmin';
+
+const TIMELINE = {
+  SET_START_DATE: 'timeline/SET_START_DATE',
+  SET_END_DATE: 'timeline/SET_END_DATE',
+  SET_TIMELINE_DATE_RANGE: 'SET_TIMELINE_DATE_RANGE',
+  SET_SHOW_ADD_MODAL: 'SET_SHOW_ADD_MODAL'
+};
 export {
   AUTH,
   SSO_AUTH,
@@ -218,5 +225,6 @@ export {
   NOTIFICATION,
   APPROVALS,
   SEARCH,
-  UI
+  UI,
+  TIMELINE
 };

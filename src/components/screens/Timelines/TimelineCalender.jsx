@@ -12,10 +12,12 @@ import moment from 'moment';
 // import events from './resources/events';
 import { parseMomentDate } from '../../../utils/DateUtils';
 import { setProposalAnswerData } from '../../../redux/actions/proposal-actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import Typography from 'apollo-react/components/Typography';
 import CustomComponents from './CustomComponents';
+import CustomTimelineMonth from './CustomTimelineMonth';
+import { selectTimelineDateRange } from '../../../redux/selectors';
 
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 
@@ -34,7 +36,9 @@ const DnDOutsideResource = ({
   isCurrent,
   eventCategories,
   trackEvent,
-  currentBidDetails
+  currentBidDetails,
+  draggedQuestionData,
+  setDraggedQuestionData
 }) => {
   const localizer = momentLocalizer(moment);
   const [myEvents, setMyEvents] = useState(timelineEvents);
@@ -44,6 +48,7 @@ const DnDOutsideResource = ({
   const [counters, setCounters] = useState({ item1: 0, item2: 0 });
   const dispatch = useDispatch();
   const [selectedEvent, setSelectedEvent] = useState(undefined);
+  const timelineDateRange = useSelector(selectTimelineDateRange);
 
   useEffect(() => {
     setMyEvents(timelineEvents);
@@ -53,7 +58,7 @@ const DnDOutsideResource = ({
     const backgroundColor = event.color;
     const dragClass = event.isDraggable ? 'isDraggable' : 'nonDraggable';
     return {
-      style: { backgroundColor },
+      style: { backgroundColor, textOverflow: 'ellipsis' },
       className: `${dragClass}`
     };
   }, []);
@@ -94,9 +99,9 @@ const DnDOutsideResource = ({
     try {
       const { proposalId, questionId } = question;
       const lastAnswerValue =
-        question?.answers[question?.answers?.length - 1].answer;
+        question?.answers[question?.answers?.length - 1]?.answer;
       if (
-        parseMomentDate(lastAnswerValue.trim()) !==
+        parseMomentDate(lastAnswerValue?.trim()) !==
           parseMomentDate(selectedDay) &&
         selectedDay
       ) {
@@ -156,8 +161,49 @@ const DnDOutsideResource = ({
 
   const onDropFromOutside = useCallback(
     ({ start, end, allDay: isAllDay }) => {
+      console.log({ draggedQuestionData });
+      if (draggedQuestionData) {
+        // const eventss = {
+        //   id: question.questionId,
+        //   title: question.questionText,
+        //   start: new Date(lastAnswer?.answer),
+        //   end: new Date(lastAnswer?.answer),
+        //   isDraggable: isCurrent,
+        //   color:
+        //     lastAnswer?.user === 'UnityPredictedAnswer' ? '#297DFD' : '#00C221',
+        //   question
+        // };
+
+        // const { name } = draggedEvent;
+        const event = {
+          id: draggedQuestionData?.id,
+          title: formatName(
+            draggedQuestionData?.title,
+            counters[draggedQuestionData?.title]
+          ),
+          start,
+          end,
+          isAllDay,
+          isDraggable: isCurrent,
+          question: draggedQuestionData,
+          color: '#00C221'
+        };
+        setDraggedEvent(null);
+        setCounters(prev => {
+          const { [draggedQuestionData?.title]: count } = prev;
+          return {
+            ...prev,
+            [draggedQuestionData?.title]: count + 1
+          };
+        });
+        newEvent(event);
+        handleDayChange(start, draggedQuestionData);
+        setDraggedQuestionData(null);
+        return;
+      }
       if (draggedEvent === 'undroppable') {
         setDraggedEvent(null);
+
         return;
       }
 
@@ -229,12 +275,13 @@ const DnDOutsideResource = ({
     setDate(proposalDate);
   }, [proposalDate]);
 
+  CustomTimelineMonth.title = () => 'title text';
+  // CustomTimelineMonth.toolbar.navigate = () => false;
   const { views } = useMemo(
     () => ({
       views: {
-        month: true,
-        week: false,
-        day: false
+        customMonth: CustomTimelineMonth,
+        month: false
       }
       // ... other props
     }),
@@ -243,13 +290,16 @@ const DnDOutsideResource = ({
 
   return (
     <>
-      <div style={{ height: '75vh', width: '100%' }}>
+      <div style={{ height: '85vh', width: '100%' }}>
         <DragAndDropCalendar
-          date={currentDate}
+          toolbar={false}
+          date={timelineDateRange[0]}
+          min={timelineDateRange[0]}
+          max={timelineDateRange[1]}
           onNavigate={newDate => {
             setDate(newDate);
           }}
-          defaultView={Views.MONTH}
+          defaultView={'customMonth'}
           dragFromOutsideItem={
             displayDragItemInCell ? dragFromOutsideItem : null
           }
@@ -271,7 +321,29 @@ const DnDOutsideResource = ({
           resizable={false}
           selectable
           popup
-          views={['month']}
+          // views={views}
+          // views={['month']}
+          // rtl={{
+          //   previous: '',
+          //   next: '',
+          //   today: ''
+          // }}
+          views={{
+            customMonth: CustomTimelineMonth,
+            // props => (
+            //   <CustomTimelineMonth
+            //     {...props}
+            //     timelineStartingDate={moment(new Date(2022, 11, 18))}
+            //     timelineEndingDate={moment(new Date(2023, 0, 14))}
+            //     title="myMonth"
+            //   />
+            // ),
+            month: true
+          }}
+          messages={{
+            customMonth: 'custom month',
+            month: 'Month'
+          }}
           components={{
             dateCellWrapper: props => (
               // eslint-disable-next-line react/jsx-pascal-case

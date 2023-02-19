@@ -7,7 +7,13 @@ import propTypes from 'prop-types';
 import TimelineQuestions from './TimelineQuestions';
 import { OrderedMap } from 'immutable';
 
-const TimelineSections = ({ sectionName, sectionOrder, questions }) => {
+const TimelineSections = ({
+  sectionName,
+  sectionOrder,
+  questions,
+  draggedQuestionData,
+  setDraggedQuestionData
+}) => {
   return (
     <>
       <Accordion defaultExpanded={sectionOrder === 1} style={{ width: '100%' }}>
@@ -18,7 +24,13 @@ const TimelineSections = ({ sectionName, sectionOrder, questions }) => {
           <ul className="timeline-questions-list-container">
             {questions.valueSeq().map(question => {
               if (question.get('answerConfiguration').get('type') === 'date') {
-                return <TimelineQuestions question={question} />;
+                return (
+                  <TimelineQuestions
+                    question={question}
+                    draggedQuestionData={draggedQuestionData}
+                    setDraggedQuestionData={setDraggedQuestionData}
+                  />
+                );
               }
             })}
           </ul>
