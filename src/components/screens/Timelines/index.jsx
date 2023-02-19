@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
 import Panel from 'apollo-react/components/Panel';
 import React, { useContext, useEffect, useState } from 'react';

@@ -1483,6 +1483,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         className={`task-table-row question-row ${selectedRow ? 'selected-task-table-row' : ''
           } ${NaLoading ? 'fade-area' : ''} `}
         style={{ margin: '2px 0px' }}
+        data-testid='question'
       >
         <Grid container className="question-title-grid">
           <Grid item xs={gridColRatio[0]} className="question-grid-item">
