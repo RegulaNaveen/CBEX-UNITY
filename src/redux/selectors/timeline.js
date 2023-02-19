@@ -10,3 +10,7 @@ export const selectTimelineDateRange = state => {
 export const selectShowAddModal = state => {
   return selectTimeline(state).get('showAddModal');
 };
+
+export const selectDraggedEvent = state => {
+  return selectTimeline(state).get('draggedEvent');
+};

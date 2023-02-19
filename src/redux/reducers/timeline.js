@@ -2,11 +2,16 @@ import { fromJS } from 'immutable';
 import moment from 'moment';
 import { REDUX_TYPES } from '../../constants';
 
-const { SET_TIMELINE_DATE_RANGE, SET_SHOW_ADD_MODAL } = REDUX_TYPES.TIMELINE;
+const {
+  SET_TIMELINE_DATE_RANGE,
+  SET_SHOW_ADD_MODAL,
+  SET_DRAGGED_EVENT
+} = REDUX_TYPES.TIMELINE;
 
 const INITIAL_STATE = fromJS({
   timelineDateRange: [],
-  showAddModal: false
+  showAddModal: false,
+  draggedEvent: {}
 });
 
 const onSetTimelineDateRange = (state, action) => {
@@ -29,10 +34,19 @@ const onSetShowAddModal = (state, action) => {
 
   return state.set('showAddModal', value);
 };
+const onSetDraggedEvent = (state, action) => {
+  const {
+    payload: { event }
+  } = action;
+  console.log('tapas inside reducer date ', action.payload, event);
+
+  return state.set('draggedEvent', event);
+};
 
 const actionMap = {
   [SET_TIMELINE_DATE_RANGE]: onSetTimelineDateRange,
-  [SET_SHOW_ADD_MODAL]: onSetShowAddModal
+  [SET_SHOW_ADD_MODAL]: onSetShowAddModal,
+  [SET_DRAGGED_EVENT]: onSetDraggedEvent
 };
 
 export default function(state = INITIAL_STATE, action) {

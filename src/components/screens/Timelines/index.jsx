@@ -1,18 +1,15 @@
+/* eslint-disable array-callback-return */
 import Panel from 'apollo-react/components/Panel';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Typography from 'apollo-react/components/Typography';
 import Search from 'apollo-react/components/Search';
-import PlusIcon from 'apollo-react-icons/Plus';
-import Button from 'apollo-react/components/Button';
 import { fromJS, Map } from 'immutable';
 import moment from 'moment';
-import TimelineCalender from './TimelineCalender';
 import { v4 as uuidv4 } from 'uuid';
+import TimelineCalender from './TimelineCalender';
 import {
-  getProposalDetails,
   isSetQuestionLoading,
-  selectSections,
   selectShowAddModal,
   selectTimelineDateRange
 } from '../../../redux/selectors';
@@ -35,18 +32,16 @@ import {
 const Timeline = () => {
   const socketContext = useContext(SocketContext);
   const questions = useSelector(getProposalQuestions);
-  // const [showModal, setShowAddModal] = useState(false);
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const bidList = useSelector(getBidList);
   const [currentBidDetails, setCurrentBidDetails] = useState({});
-  const { proposalDate, isCurrent, proposalId } = selectedBid;
+  const { proposalDate, isCurrent } = selectedBid;
   const [timelineEvents, setTimelineEvents] = useState([]);
-  const proposalDetail = useSelector(getProposalDetails);
   const [filteredSections, setFilteredSections] = useState(null);
   const [sections, setSections] = useState(Map());
   const [searchKey, setSearchKey] = useState('');
   const isSetQuestionLoadingData = useSelector(isSetQuestionLoading);
-  const [draggedQuestionData, setDraggedQuestionData] = useState({});
+  const [draggedQuestionData, setDraggedQuestionData] = useState(null);
   const timelineDateRange = useSelector(selectTimelineDateRange);
   const showAddModal = useSelector(selectShowAddModal);
   const dispatch = useDispatch();
@@ -63,40 +58,42 @@ const Timeline = () => {
     }
   }, [isSetQuestionLoadingData]);
 
-  const generateSections = (proposalQuestions: Object): Map => {
+  const generateSections = proposalQuestions => {
     try {
-      let sections = Map();
+      let sectionsData = Map();
 
       proposalQuestions.forEach(question => {
         const {
           questionId,
-          roleNames,
           section: { sectionName, sectionOrder }
         } = question;
 
-        const roles = roleNames || [];
-
         const createSections = () => {
           let section = Map({});
-          let questions = sections.getIn([sectionName, 'questions']) || Map({});
+          let questionsData =
+            sectionsData.getIn([sectionName, 'questions']) || Map({});
 
-          questions = questions.set(questionId, fromJS(question));
-          questions = questions.sortBy(item => item.get('questionOrder'));
+          questionsData = questionsData.set(questionId, fromJS(question));
+          questionsData = questionsData.sortBy(item =>
+            item.get('questionOrder')
+          );
 
           section = section
             .set('sectionOrder', sectionOrder)
             .set('sectionName', sectionName)
-            .set('questions', questions);
+            .set('questions', questionsData);
 
-          sections = sections.set(sectionName, section);
+          sectionsData = sectionsData.set(sectionName, section);
         };
 
         createSections();
       });
 
-      sections = sections.sortBy(section => section.get('sectionOrder'));
+      sectionsData = sectionsData.sortBy(section =>
+        section.get('sectionOrder')
+      );
 
-      return sections;
+      return sectionsData;
     } catch (error) {
       console.log(error);
     }
@@ -121,7 +118,7 @@ const Timeline = () => {
       );
     }
 
-    let sectionsMatched = generateSections(filteredQuestions);
+    const sectionsMatched = generateSections(filteredQuestions);
     setFilteredSections(sectionsMatched);
   };
 
@@ -176,21 +173,12 @@ const Timeline = () => {
     );
   }, [questions, proposalDate]);
 
-  useEffect(() => {
-    console.log('tapas timeline date range redux ', timelineDateRange);
-
-    // return () => {
-    //   second
-    // }
-  }, [timelineDateRange]);
-
   const onCloseAddModal = () => {
     dispatch(setShowAddModal(false));
   };
 
   return (
     <div id="Timeline-main-wrapper">
-      {/* <div> */}
       <ViewAboveVerticalTabs>
         <BidHistory />
       </ViewAboveVerticalTabs>
@@ -208,7 +196,7 @@ const Timeline = () => {
           <div className="timeline-questions-container">
             <div className="timeline-search-container">
               <Search
-                fullWidth={true}
+                fullWidth
                 size="small"
                 placeholder="Search"
                 value={searchKey}
@@ -220,6 +208,7 @@ const Timeline = () => {
               ? filteredSections.valueSeq().map(section => {
                   return (
                     <TimelineSections
+                      key={section.get('sectionName')}
                       sectionName={section.get('sectionName')}
                       sectionOrder={section.get('sectionOrder')}
                       questions={section.get('questions')}
@@ -233,6 +222,7 @@ const Timeline = () => {
                     section.get('sectionName') !==
                       'Questions_for_the_Customer_left_panel' && (
                       <TimelineSections
+                        key={section.get('sectionName')}
                         sectionName={section.get('sectionName')}
                         sectionOrder={section.get('sectionOrder')}
                         questions={section.get('questions')}
@@ -245,19 +235,6 @@ const Timeline = () => {
           </div>
         </Panel>
         <Panel hideButton className="timeline-calender-container">
-          {/* <div className="btn-container">
-            <Button
-              variant="primary"
-              icon={<PlusIcon />}
-              size="small"
-              style={{ marginRight: 10 }}
-              onClick={() => setShowModal(true)}
-              disabled={!isCurrent}
-            >
-              Add New
-            </Button>
-          </div> */}
-
           {timelineDateRange.length && (
             <TimelineCalender
               key={uuidv4()}
@@ -274,10 +251,7 @@ const Timeline = () => {
         </Panel>
       </div>
       {showAddModal && (
-        <AddQuestionModalComponent
-          onClose={onCloseAddModal}
-          isOnlyDateAnswer={true}
-        />
+        <AddQuestionModalComponent onClose={onCloseAddModal} isOnlyDateAnswer />
       )}
     </div>
   );

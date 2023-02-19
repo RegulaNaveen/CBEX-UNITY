@@ -1,18 +1,21 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/sort-comp */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/require-default-props */
 import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
 import chunk from 'lodash/chunk';
-import DatePicker from 'apollo-react/components/DatePickerV2';
+
 import DateRangePicker from 'apollo-react/components/DateRangePickerV2';
 
 import * as animationFrame from 'dom-helpers/animationFrame';
-import { navigate, views } from 'react-big-calendar/lib/utils/constants';
-import { notify } from 'react-big-calendar/lib/utils/helpers'; // './utils/helpers';
+import { views } from 'react-big-calendar/lib/utils/constants';
+import { notify } from 'react-big-calendar/lib/utils/helpers';
 import getPosition from 'dom-helpers/position';
 
-/* import Popup from './Popup'
-import Overlay from 'react-overlays/Overlay' */
 import PopOverlay from 'react-big-calendar/lib/PopOverlay';
 import DateContentRow from 'react-big-calendar/lib/DateContentRow';
 import Header from 'react-big-calendar/lib/Header';
@@ -21,14 +24,13 @@ import DateHeader from 'react-big-calendar/lib/DateHeader';
 import { inRange, sortEvents } from 'react-big-calendar/lib/utils/eventLevels';
 import moment from 'moment';
 import { connect } from 'react-redux';
+import PlusIcon from 'apollo-react-icons/Plus';
+import Button from 'apollo-react/components/Button';
 import { selectTimelineDateRange } from '../../../redux/selectors';
 import {
   setShowAddModal,
   setTimelineDateRange
 } from '../../../redux/actions/timeline-actions';
-import { parseMomentDate } from '../../../utils/DateUtils';
-import PlusIcon from 'apollo-react-icons/Plus';
-import Button from 'apollo-react/components/Button';
 
 let eventsForWeek = (evts, start, end, accessors, localizer) =>
   evts.filter(e => inRange(e, start, end, accessors, localizer));
@@ -40,9 +42,7 @@ class MonthView extends React.Component {
     this.state = {
       rowLimit: 5,
       needLimitMeasure: true,
-      date: null,
-      timelineStartingDate: moment(new Date(2022, 11, 19)),
-      timelineEndingDate: moment(new Date(2023, 0, 14))
+      date: null
     };
     this.containerRef = createRef();
     this.slotRowRef = createRef();
@@ -125,36 +125,23 @@ class MonthView extends React.Component {
 
   handleDateRangeChange = value => {
     if (!value[0] || !value[1]) return;
-    const { setTimelineDateRange } = this.props;
-    setTimelineDateRange([moment(`${value[0]}`), moment(`${value[1]}`)]);
+
+    this.props.setTimelineDateRange([
+      moment(`${value[0]}`),
+      moment(`${value[1]}`)
+    ]);
   };
 
   render() {
-    let { date, localizer, className, timelineDateRange } = this.props;
-
-    // // (month = localizer.visibleDays(date, localizer)),
-
-    // let timelineStartingDate = moment(new Date(2022, 11, 18));
-    // let timelineEndingDate = moment(new Date(2023, 0, 14));
-    console.log('tapas date range', this.props.timelineDateRange);
-    let month = this.getDatesBetween(
+    const { className, timelineDateRange } = this.props;
+    const month = this.getDatesBetween(
       timelineDateRange[0]?._d,
       timelineDateRange[1]?._d
     );
-    // (month = localizer.visibleDays(date, localizer)),
-    let weeks = chunk(month, 7);
 
-    let seeks = this.getWeeks();
-    // let { date, localizer, className } = this.props,
-    //   month = localizer.visibleDays(date, localizer),
-    //   weeks = chunk(month, 7);
+    const weeks = chunk(month, 7);
 
     this._weekCount = weeks.length;
-
-    // console.log(
-    //   'tapas week ',
-    //   moment(`${this.props.timelineDateRange[0]._d}`).startOf('week')
-    // );
 
     this._weekCount = weeks.length;
 
@@ -168,12 +155,6 @@ class MonthView extends React.Component {
               onChange={value => {
                 console.log('tapas val ', value);
                 this.handleDateRangeChange(value);
-                // this.setState({
-                //   timelineDateRange: [
-                //     value[0]?.startOf('week'),
-                //     value[1]?.endOf('week')
-                //   ]
-                // });
               }}
               placeholder="mm/dd/yyyy"
               helperText=""
@@ -216,7 +197,7 @@ class MonthView extends React.Component {
   }
 
   renderWeek = (week, weekIdx) => {
-    let {
+    const {
       events,
       components,
       selectable,
@@ -356,37 +337,6 @@ class MonthView extends React.Component {
         />
       </div>
     );
-
-    /* return (
-      <Overlay
-        rootClose
-        placement="bottom"
-        show={!!overlay.position}
-        onHide={() => this.setState({ overlay: null })}
-        target={() => overlay.target}
-      >
-        {({ props }) => (
-          <Popup
-            {...props}
-            popupOffset={popupOffset}
-            accessors={accessors}
-            getters={getters}
-            selected={selected}
-            components={components}
-            localizer={localizer}
-            position={overlay.position}
-            show={this.overlayDisplay}
-            events={overlay.events}
-            slotStart={overlay.date}
-            slotEnd={overlay.end}
-            onSelect={this.handleSelectEvent}
-            onDoubleClick={this.handleDoubleClickEvent}
-            onKeyPress={this.handleKeyPressEvent}
-            handleDragStart={this.props.handleDragStart}
-          />
-        )}
-      </Overlay>
-    ) */
   }
 
   measureRowLimit() {
@@ -529,25 +479,6 @@ MonthView.propTypes = {
   ])
 };
 
-MonthView.range = (date, { localizer }) => {
-  let start = moment(new Date(2022, 11, 18)); //localizer.firstVisibleDay(date, localizer);
-  let end = moment(new Date(2023, 11, 18)); //localizer.lastVisibleDay(date, localizer);
-  return { start, end };
-};
-
-MonthView.navigate = (date, action, { localizer }) => {
-  switch (action) {
-    case navigate.PREVIOUS:
-      return localizer.add(this.state.timelineStartingDate, -1, 'month');
-
-    case navigate.NEXT:
-      return localizer.add(this.state.timelineStartingDate, 1, 'month');
-
-    default:
-      return date;
-  }
-};
-
 MonthView.title = (date, { localizer }) =>
   localizer.format(date, 'monthHeaderFormat');
 
@@ -556,7 +487,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  // setNotifications: notificationActions.setNotification
   setTimelineDateRange,
   setShowAddModal
 };

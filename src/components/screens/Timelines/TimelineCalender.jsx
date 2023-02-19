@@ -1,30 +1,17 @@
-import React, {
-  Fragment,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Calendar, Views, momentLocalizer } from 'react-big-calendar';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment from 'moment';
-// import events from './resources/events';
+import { useDispatch, useSelector } from 'react-redux';
 import { parseMomentDate } from '../../../utils/DateUtils';
 import { setProposalAnswerData } from '../../../redux/actions/proposal-actions';
-import { useDispatch, useSelector } from 'react-redux';
 import MatomoHOC from '../../HOC/MatomoHOC';
-import Typography from 'apollo-react/components/Typography';
 import CustomComponents from './CustomComponents';
 import CustomTimelineMonth from './CustomTimelineMonth';
 import { selectTimelineDateRange } from '../../../redux/selectors';
 
 const DragAndDropCalendar = withDragAndDrop(Calendar);
-
-// const adjEvents = events.map((it, ind) => ({
-//   ...it,
-//   isDraggable: true
-// }));
 
 const formatName = (name, count) => `${name} ID ${count}`;
 
@@ -163,6 +150,7 @@ const DnDOutsideResource = ({
     ({ start, end, allDay: isAllDay }) => {
       console.log({ draggedQuestionData });
       if (draggedQuestionData) {
+        console.log('11111111111111');
         // const eventss = {
         //   id: question.questionId,
         //   title: question.questionText,
@@ -189,13 +177,13 @@ const DnDOutsideResource = ({
           color: '#00C221'
         };
         setDraggedEvent(null);
-        setCounters(prev => {
-          const { [draggedQuestionData?.title]: count } = prev;
-          return {
-            ...prev,
-            [draggedQuestionData?.title]: count + 1
-          };
-        });
+        // setCounters(prev => {
+        //   const { [draggedQuestionData?.title]: count } = prev;
+        //   return {
+        //     ...prev,
+        //     [draggedQuestionData?.title]: count + 1
+        //   };
+        // });
         newEvent(event);
         handleDayChange(start, draggedQuestionData);
         setDraggedQuestionData(null);
@@ -208,24 +196,32 @@ const DnDOutsideResource = ({
       }
 
       if (selectedEvent) {
+        console.log('222222222222222222');
         handleDayChange(start, selectedEvent?.question);
-        const { name } = draggedEvent;
+        // const { name } = draggedEvent;
         const event = {
           title: formatName(selectedEvent.title, counters[selectedEvent.title]),
           start,
           end,
-          isAllDay
+          isAllDay,
+
+          id: selectedEvent?.question?.id,
+
+          isDraggable: isCurrent,
+          question: selectedEvent?.question,
+          color: '#00C221'
         };
         setDraggedEvent(null);
-        setCounters(prev => {
-          const { [name]: count } = prev;
-          return {
-            ...prev,
-            [name]: count + 1
-          };
-        });
+        // setCounters(prev => {
+        //   const { [name]: count } = prev;
+        //   return {
+        //     ...prev,
+        //     [name]: count + 1
+        //   };
+        // });
         newEvent(event);
       } else {
+        console.log('333333333333');
         const { name } = draggedEvent;
         const event = {
           title: formatName(name, counters[name]),
@@ -293,13 +289,11 @@ const DnDOutsideResource = ({
       <div style={{ height: '85vh', width: '100%' }}>
         <DragAndDropCalendar
           toolbar={false}
-          date={timelineDateRange[0]}
-          min={timelineDateRange[0]}
-          max={timelineDateRange[1]}
+          date={new Date(timelineDateRange[0]?._i)}
           onNavigate={newDate => {
             setDate(newDate);
           }}
-          defaultView={'customMonth'}
+          defaultView="customMonth"
           dragFromOutsideItem={
             displayDragItemInCell ? dragFromOutsideItem : null
           }
@@ -321,23 +315,9 @@ const DnDOutsideResource = ({
           resizable={false}
           selectable
           popup
-          // views={views}
-          // views={['month']}
-          // rtl={{
-          //   previous: '',
-          //   next: '',
-          //   today: ''
-          // }}
           views={{
             customMonth: CustomTimelineMonth,
-            // props => (
-            //   <CustomTimelineMonth
-            //     {...props}
-            //     timelineStartingDate={moment(new Date(2022, 11, 18))}
-            //     timelineEndingDate={moment(new Date(2023, 0, 14))}
-            //     title="myMonth"
-            //   />
-            // ),
+
             month: true
           }}
           messages={{

@@ -1,11 +1,13 @@
+/* eslint-disable consistent-return */
+/* eslint-disable array-callback-return */
 import React from 'react';
 import Accordion from 'apollo-react/components/Accordion';
 import AccordionDetails from 'apollo-react/components/AccordionDetails';
 import AccordionSummary from 'apollo-react/components/AccordionSummary';
 import Typography from 'apollo-react/components/Typography';
 import propTypes from 'prop-types';
-import TimelineQuestions from './TimelineQuestions';
 import { OrderedMap } from 'immutable';
+import TimelineQuestions from './TimelineQuestions';
 
 const TimelineSections = ({
   sectionName,
@@ -26,6 +28,7 @@ const TimelineSections = ({
               if (question.get('answerConfiguration').get('type') === 'date') {
                 return (
                   <TimelineQuestions
+                    key={question.get('questionId')}
                     question={question}
                     draggedQuestionData={draggedQuestionData}
                     setDraggedQuestionData={setDraggedQuestionData}
@@ -42,14 +45,18 @@ const TimelineSections = ({
 
 TimelineSections.defaultProps = {
   sectionName: '',
-  sectionOrder: '',
-  questions: new OrderedMap()
+  sectionOrder: 0,
+  questions: new OrderedMap(),
+  draggedQuestionData: {},
+  setDraggedQuestionData: () => {}
 };
 
 TimelineSections.propTypes = {
   sectionName: propTypes.string,
-  sectionOrder: propTypes.string,
-  questions: propTypes.map
+  sectionOrder: propTypes.number,
+  questions: propTypes.object,
+  draggedQuestionData: propTypes.object,
+  setDraggedQuestionData: propTypes.func
 };
 
 export default TimelineSections;
