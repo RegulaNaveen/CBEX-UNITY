@@ -1,10 +1,15 @@
 import Typography from 'apollo-react/components/Typography';
 import moment from 'moment';
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { getSelectedBid } from '../../../redux/selectors/proposal';
 import { parseMomentDate } from '../../../utils/DateUtils';
 
 const CustomComponents = {
   dateCellWrapper: dateCellWrapperProps => {
+    const selectedBid = useSelector(getSelectedBid)?.toJS();
+    const { isCurrent } = selectedBid;
+
     const BidCreationDateAnnotation =
       parseMomentDate(dateCellWrapperProps.value) ===
       parseMomentDate(dateCellWrapperProps.currentBidDetails[0].bidDate);
@@ -12,6 +17,11 @@ const CustomComponents = {
     const BidDueDateAnnotation =
       parseMomentDate(dateCellWrapperProps.value) ===
       parseMomentDate(dateCellWrapperProps.currentBidDetails[0].bidDueDate);
+
+    console.log(
+      'tapas date cell props custommmmmmmmmmmmm ',
+      dateCellWrapperProps
+    );
 
     const style = {
       display: 'flex',
@@ -30,7 +40,6 @@ const CustomComponents = {
       <div style={style}>
         {BidCreationDateAnnotation && (
           <Typography
-            varient="h4"
             style={{
               color: '#999999',
               fontFamily: 'Proxima Nova',
@@ -45,7 +54,6 @@ const CustomComponents = {
         )}
         {BidDueDateAnnotation && (
           <Typography
-            varient="h4"
             style={{
               color: '#999999',
               fontFamily: 'Proxima Nova',

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
@@ -17,7 +17,6 @@ const formatName = (name, count) => `${name} ID ${count}`;
 
 const DnDOutsideResource = ({
   timelineEvents,
-  proposalDate,
   socketContext,
   userData,
   isCurrent,
@@ -30,7 +29,7 @@ const DnDOutsideResource = ({
   const localizer = momentLocalizer(moment);
   const [myEvents, setMyEvents] = useState(timelineEvents);
   const [draggedEvent, setDraggedEvent] = useState();
-  const [currentDate, setDate] = useState(new Date());
+
   const [displayDragItemInCell, setDisplayDragItemInCell] = useState(true);
   const [counters, setCounters] = useState({ item1: 0, item2: 0 });
   const dispatch = useDispatch();
@@ -121,11 +120,6 @@ const DnDOutsideResource = ({
     [draggedEvent]
   );
 
-  const handleDisplayDragItemInCell = useCallback(
-    () => setDisplayDragItemInCell(prev => !prev),
-    []
-  );
-
   const moveEvent = useCallback(
     ({ event, start, end, isAllDay: droppedOnAllDaySlot = false }) => {
       const { allDay, question } = event;
@@ -151,18 +145,7 @@ const DnDOutsideResource = ({
       console.log({ draggedQuestionData });
       if (draggedQuestionData) {
         console.log('11111111111111');
-        // const eventss = {
-        //   id: question.questionId,
-        //   title: question.questionText,
-        //   start: new Date(lastAnswer?.answer),
-        //   end: new Date(lastAnswer?.answer),
-        //   isDraggable: isCurrent,
-        //   color:
-        //     lastAnswer?.user === 'UnityPredictedAnswer' ? '#297DFD' : '#00C221',
-        //   question
-        // };
 
-        // const { name } = draggedEvent;
         const event = {
           id: draggedQuestionData?.id,
           title: formatName(
@@ -177,13 +160,7 @@ const DnDOutsideResource = ({
           color: '#00C221'
         };
         setDraggedEvent(null);
-        // setCounters(prev => {
-        //   const { [draggedQuestionData?.title]: count } = prev;
-        //   return {
-        //     ...prev,
-        //     [draggedQuestionData?.title]: count + 1
-        //   };
-        // });
+
         newEvent(event);
         handleDayChange(start, draggedQuestionData);
         setDraggedQuestionData(null);
@@ -198,7 +175,6 @@ const DnDOutsideResource = ({
       if (selectedEvent) {
         console.log('222222222222222222');
         handleDayChange(start, selectedEvent?.question);
-        // const { name } = draggedEvent;
         const event = {
           title: formatName(selectedEvent.title, counters[selectedEvent.title]),
           start,
@@ -212,31 +188,7 @@ const DnDOutsideResource = ({
           color: '#00C221'
         };
         setDraggedEvent(null);
-        // setCounters(prev => {
-        //   const { [name]: count } = prev;
-        //   return {
-        //     ...prev,
-        //     [name]: count + 1
-        //   };
-        // });
-        newEvent(event);
-      } else {
-        console.log('333333333333');
-        const { name } = draggedEvent;
-        const event = {
-          title: formatName(name, counters[name]),
-          start,
-          end,
-          isAllDay
-        };
-        setDraggedEvent(null);
-        setCounters(prev => {
-          const { [name]: count } = prev;
-          return {
-            ...prev,
-            [name]: count + 1
-          };
-        });
+
         newEvent(event);
       }
     },
@@ -265,24 +217,7 @@ const DnDOutsideResource = ({
     setSelectedEvent(event.event);
   };
 
-  const defaultDate = useMemo(() => new Date(proposalDate), [proposalDate]);
-
-  useEffect(() => {
-    setDate(proposalDate);
-  }, [proposalDate]);
-
   CustomTimelineMonth.title = () => 'title text';
-  // CustomTimelineMonth.toolbar.navigate = () => false;
-  const { views } = useMemo(
-    () => ({
-      views: {
-        customMonth: CustomTimelineMonth,
-        month: false
-      }
-      // ... other props
-    }),
-    []
-  );
 
   return (
     <>
@@ -290,9 +225,6 @@ const DnDOutsideResource = ({
         <DragAndDropCalendar
           toolbar={false}
           date={new Date(timelineDateRange[0]?._i)}
-          onNavigate={newDate => {
-            setDate(newDate);
-          }}
           defaultView="customMonth"
           dragFromOutsideItem={
             displayDragItemInCell ? dragFromOutsideItem : null
@@ -316,13 +248,10 @@ const DnDOutsideResource = ({
           selectable
           popup
           views={{
-            customMonth: CustomTimelineMonth,
-
-            month: true
+            customMonth: CustomTimelineMonth
           }}
           messages={{
-            customMonth: 'custom month',
-            month: 'Month'
+            customMonth: 'custom month'
           }}
           components={{
             dateCellWrapper: props => (
@@ -338,6 +267,19 @@ const DnDOutsideResource = ({
     </>
   );
 };
-DnDOutsideResource.propTypes = {};
+
+DnDOutsideResource.defaultProps = {
+  timelineEvents: [],
+  draggedQuestionData: null
+};
+DnDOutsideResource.propTypes = {
+  timelineEvents: PropTypes.array,
+  socketContext: PropTypes.object.isRequired,
+  userData: PropTypes.object.isRequired,
+  isCurrent: PropTypes.bool.isRequired,
+  currentBidDetails: PropTypes.object.isRequired,
+  draggedQuestionData: PropTypes.object,
+  setDraggedQuestionData: PropTypes.func.isRequired
+};
 
 export default MatomoHOC(DnDOutsideResource);
