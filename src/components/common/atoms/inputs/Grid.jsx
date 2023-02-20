@@ -356,7 +356,6 @@ const loadSidebar = props => {
                   variant="body2"
                   className="boldtext header-ellipses"
                   ref={linebusiness}
-                  sty
                 >
                   {lineOfBusiness || placeholder}
                 </Typography>
