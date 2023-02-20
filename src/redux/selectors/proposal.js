@@ -25,7 +25,7 @@ const generateSections = (
       const {
         questionId,
         roleNames,
-        section: { sectionName, sectionOrder }
+        section: { sectionName, sectionOrder },
       } = question;
 
       const roles = roleNames || [];
@@ -99,7 +99,7 @@ export const getProposalTeamAssignedRoles = (proposal: Map): Map => {
     .map(({ questionText, answers }) => {
       return {
         role: questionText,
-        responsable: getRecentAnswer(answers)
+        responsable: getRecentAnswer(answers),
       };
     });
 
@@ -170,7 +170,7 @@ export const getProposalBoxId = (proposal: Map): Map => proposal.get('boxId');
 export const getValidatedProposalData = (proposal: Map): Object => ({
   isLoading: proposal.get('fetchingValidatedProposalData'),
   data: proposal.get('validatedProposalData'),
-  error: proposal.get('validatedProposalDataError')
+  error: proposal.get('validatedProposalDataError'),
 });
 
 export const getPendingValidatedItems = (propoal: Map): number => {
@@ -257,7 +257,7 @@ export const selectSectionNames = createSelector(selectSections, sections =>
 export const selectSectionOrderInfo = createSelector(selectSections, sections =>
   sections.valueSeq().map(section => ({
     sectionName: section.get('sectionName'),
-    sectionOrder: section.get('sectionOrder')
+    sectionOrder: section.get('sectionOrder'),
   }))
 );
 
@@ -320,11 +320,11 @@ export const getBidList = createSelector(getOpportunityData, opportunity => {
         pertinentDetails: item.getIn([
           'proposal',
           'proposalDetails',
-          'pertinentDetails'
+          'pertinentDetails',
         ]),
         bidNo: String(
           item.getIn(['proposal', 'proposalDetails', 'bidNo']) || ''
-        )
+        ),
       });
     });
 
@@ -351,7 +351,7 @@ export const getIsQuestionAnswered = createSelector(
 );
 
 export const getLookUpOptionsSelector = (proposals: Map): Object =>
-  proposals.get('lookUpOptions');
+  proposals?.get('lookUpOptions');
 
 export const getPriceModuler = createSelector(selectProposal, proposal =>
   proposal?.get('priceModeler')

@@ -12,7 +12,7 @@ const CalendarIcon = ({ question }) => {
   const color = {
     unityPredicted: '#0768fd',
     answered: '#00c221',
-    unAnswered: '#b7b7b7'
+    unAnswered: '#b7b7b7',
   };
 
   // Empty Answers are stored with a spaces
@@ -21,21 +21,36 @@ const CalendarIcon = ({ question }) => {
   const renderCalendarIcon = () => {
     // No Answers i.e lastAnswer is an Empty Object {}
     if (Object.keys(lastAnswer).length === 0) {
-      return <Calendar style={{ color: color.unAnswered }} />;
+      return (
+        <Calendar
+          data-testid="noanswers-icon"
+          style={{ color: color.unAnswered }}
+        />
+      );
     }
     // UnityPredictedAnswer
     if (
       !isAnswerEmpty(lastAnswer.answer) &&
       lastAnswer?.userName === 'UnityPredictedAnswer'
     ) {
-      return <CalendarCheck style={{ color: color.unityPredicted }} />;
+      return (
+        <CalendarCheck
+          data-testid="unity-predicted-calender-icon"
+          style={{ color: color.unityPredicted }}
+        />
+      );
     }
     // Answered
     if (!isAnswerEmpty(lastAnswer.answer)) {
-      return <CalendarCheck style={{ color: color.answered }} />;
+      return (
+        <CalendarCheck
+          data-testid="unity-nonpredicted-calender-icon"
+          style={{ color: color.answered }}
+        />
+      );
     }
     // Indertermined | Unanswered
-    return <IndeterminateIcon />;
+    return <IndeterminateIcon data-testid="indeterminate-icon" />;
   };
   return renderCalendarIcon();
 };

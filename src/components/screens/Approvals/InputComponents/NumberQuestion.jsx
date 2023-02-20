@@ -12,7 +12,7 @@ const NumberQuestion = ({
   userData,
   socketContext,
   trackMatomoEventSubmitAnswer,
-  checkDisableFlag
+  checkDisableFlag,
 }) => {
   const dispatch = useDispatch();
   const { questionLockWrapper, questionUnlockWrapper } = socketContext;
@@ -78,6 +78,7 @@ const NumberQuestion = ({
       <TextArea
         disabled={checkDisableFlag() || !!disabled}
         className="proposal-text-area"
+        data-testid="proposal--text--area"
         type="number"
         value={lastAnswer.answer}
         onBlur={handleTextChange}
@@ -88,7 +89,7 @@ const NumberQuestion = ({
 };
 
 NumberQuestion.defaultProps = {
-  disabled: false
+  disabled: false,
 };
 NumberQuestion.propTypes = {
   question: PropTypes.object.isRequired,
@@ -96,7 +97,7 @@ NumberQuestion.propTypes = {
   disabled: PropTypes.any,
   userData: PropTypes.any.isRequired,
   socketContext: PropTypes.object.isRequired,
-  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired
+  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired,
 };
 
 export default NumberQuestion;

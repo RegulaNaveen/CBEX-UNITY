@@ -5,7 +5,7 @@ import xor from 'lodash/xor';
 import AutoComplete from '../../../common/atoms/inputs/AutoComplete';
 import {
   setProposalAnswerData,
-  deleteProposalUserFromDB
+  deleteProposalUserFromDB,
 } from '../../../../redux/actions/proposal-actions';
 
 const ProposalTeamQuestion = ({
@@ -15,7 +15,7 @@ const ProposalTeamQuestion = ({
   userData,
   socketContext,
   trackMatomoEventSubmitAnswer,
-  checkDisableFlag
+  checkDisableFlag,
 }) => {
   try {
     const dispatch = useDispatch();
@@ -62,6 +62,7 @@ const ProposalTeamQuestion = ({
     return (
       <>
         <AutoComplete
+          data-testid="proposal-team-section-id"
           sectionName={question.section?.sectionName}
           onFocus={() => {
             questionLockWrapper(question?.questionId);
@@ -82,7 +83,7 @@ const ProposalTeamQuestion = ({
 };
 
 ProposalTeamQuestion.defaultProps = {
-  disabled: false
+  disabled: false,
 };
 ProposalTeamQuestion.propTypes = {
   question: PropTypes.object.isRequired,
@@ -90,7 +91,7 @@ ProposalTeamQuestion.propTypes = {
   disabled: PropTypes.any,
   userData: PropTypes.any.isRequired,
   socketContext: PropTypes.object.isRequired,
-  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired
+  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired,
 };
 
 export default ProposalTeamQuestion;

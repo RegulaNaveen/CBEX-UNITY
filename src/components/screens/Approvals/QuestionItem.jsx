@@ -28,7 +28,7 @@ import SFAnswerValidationWrapper from '../../common/SFAnswerValidationWrapper';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import {
   getOpportunityData,
-  getSelectedBid
+  getSelectedBid,
 } from '../../../redux/selectors/proposal';
 import CustomLoader from './CustomLoader';
 import { getLastAnswer, shouldShowQuestion } from './utils';
@@ -45,7 +45,7 @@ const QuestionItem = ({
   eventCategories,
   trackEvent,
   updateQuestionVisibility,
-  highlightQuestionId
+  highlightQuestionId,
 }) => {
   const question = isQuesFreezed
     ? archivedQuestion
@@ -63,7 +63,7 @@ const QuestionItem = ({
           questionTextRef.current.scrollIntoView({
             behaviour: 'smooth',
             block: 'center',
-            inline: 'nearest'
+            inline: 'nearest',
           });
           dispatch(autoNavigationCompletedAction());
         }, 500);
@@ -93,7 +93,7 @@ const QuestionItem = ({
   const getUserData = () => ({
     name: getUserName(),
     email: getUserEmail(),
-    role: getUserId()
+    role: getUserId(),
   });
 
   const prepareAnswerHistoryData = questionData => {
@@ -144,7 +144,7 @@ const QuestionItem = ({
       questionHTML,
       questionJSON,
       questionHintJSON,
-      questionId
+      questionId,
     } = question;
     const { sectionName } = section;
     const proposalDetail = opportunityData?.proposal?.proposalDetails;
@@ -164,10 +164,10 @@ const QuestionItem = ({
             questionHintJSON,
             questionId,
             proposalDetail,
-            approvalSectionTitle
-          })
-        }
-      ]
+            approvalSectionTitle,
+          }),
+        },
+      ],
     });
   };
 
@@ -197,7 +197,7 @@ const QuestionItem = ({
       userData: getUserData(),
       socketContext,
       trackMatomoEventSubmitAnswer,
-      checkDisableFlag
+      checkDisableFlag,
     };
     if (
       inputProps.lastAnswer &&
@@ -219,7 +219,7 @@ const QuestionItem = ({
       [ANSWER_TYPES.PICKLIST]: <MultiSelectQuestion {...inputProps} />,
       [ANSWER_TYPES.PICKLIST_LOOKUP]: <MultiSelectQuestion {...inputProps} />,
       [ANSWER_TYPES.YES_NO]: <YesNoQuestion {...inputProps} />,
-      [ANSWER_TYPES.CHECKBOX]: <CheckBoxQuestion {...inputProps} />
+      [ANSWER_TYPES.CHECKBOX]: <CheckBoxQuestion {...inputProps} />,
     };
 
     const SFNestedAnswerItem = () => {
@@ -245,11 +245,12 @@ const QuestionItem = ({
       isShowQuestion ? (
         <>
           <Box
+            data-testid="question-item-id"
             mt={2}
             className={classNames({
               'question-active':
                 currentSearchResult !== null &&
-                currentSearchResult.searchIndex === highlightQuestionId
+                currentSearchResult.searchIndex === highlightQuestionId,
             })}
           >
             <Grid container>
@@ -305,7 +306,7 @@ const QuestionItem = ({
       isShowQuestion,
       approvalFilters,
       currentSearchResult,
-      highlightQuestionId
+      highlightQuestionId,
     ]
   );
 };
@@ -318,13 +319,13 @@ QuestionItem.defaultProps = {
     questionId: '',
     questionText: '',
     answerConfiguration: {
-      type: 'number'
+      type: 'number',
     },
     answers: [],
     visible: false,
-    active: false
+    active: false,
   },
-  updateQuestionVisibility: () => {}
+  updateQuestionVisibility: () => {},
 };
 QuestionItem.propTypes = {
   questionId: PropTypes.string.isRequired,
@@ -334,7 +335,7 @@ QuestionItem.propTypes = {
   eventCategories: PropTypes.object.isRequired,
   trackEvent: PropTypes.func.isRequired,
   archivedQuestion: PropTypes.any,
-  updateQuestionVisibility: PropTypes.func
+  updateQuestionVisibility: PropTypes.func,
 };
 
 export default MatomoHOC(QuestionItem);

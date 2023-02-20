@@ -12,7 +12,7 @@ const SectionActive = ({
   ApprovalSectionTitle = '',
   ApprovalSectionLeftQuestions: leftQues = [],
   ApprovalSectionRightQuestions: rightQues = [],
-  setIsAllActiveDisplayed
+  setIsAllActiveDisplayed,
 }) => {
   const { id: proposalId, isCurrent } = useSelector(getSelectedBid)?.toJS();
   const selectedBidIsCurrent = !!isCurrent;
@@ -83,7 +83,7 @@ SectionActive.propTypes = {
   ApprovalSectionTitle: PropTypes.string.isRequired,
   ApprovalSectionLeftQuestions: PropTypes.array.isRequired,
   ApprovalSectionRightQuestions: PropTypes.array.isRequired,
-  setIsAllActiveDisplayed: PropTypes.func.isRequired
+  setIsAllActiveDisplayed: PropTypes.func.isRequired,
 };
 
 export default SectionActive;

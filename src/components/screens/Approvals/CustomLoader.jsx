@@ -4,7 +4,10 @@ import Loader from 'apollo-react/components/Loader';
 import { getApprovalQuestionLoading } from '../../../redux/selectors/proposal';
 
 const CustomLoader = props => {
-  const approvalQuestionLoading = useSelector(getApprovalQuestionLoading).toJS();
+  const approvalQuestionLoading = useSelector(
+    getApprovalQuestionLoading
+  ).toJS();
+
   return (
     <span className="loader-cover">
       {approvalQuestionLoading.questionId === props.questionId &&
