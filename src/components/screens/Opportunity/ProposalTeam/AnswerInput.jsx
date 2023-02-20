@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import Plus from 'apollo-react-icons/Plus';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'apollo-react/components/Link';
-import { isEmpty, xor } from 'lodash';
+import { isEmpty, xor, isString } from 'lodash';
 import { List, fromJS } from 'immutable';
 import InfoIcon from 'apollo-react-icons/Info';
 import Typography from 'apollo-react/components/Typography';
@@ -33,9 +33,11 @@ import AnswerHistory from '../../../views/modals/AnswerHistory';
 import IconButton from 'apollo-react/components/IconButton';
 import Tooltip from 'apollo-react/components/Tooltip';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
+import ChipView from '../../../common/Chip/ChipView';
+import MatomoHOC from '../../../HOC/MatomoHOC';
 
-const AnswerInput = (isNotepadOpen) => {
-  const [showModal, setShowModal] = useState(false);
+const AnswerInput = (props) => {
+  const { isNotepadOpen, trackEvent, eventCategories } = props;
   const dispatch = useDispatch();
   const [iconColor, setIconColor] = useState('#00c221');
   const [changeIcon, setChangeIcon] = useState('');
@@ -57,6 +59,7 @@ const AnswerInput = (isNotepadOpen) => {
   const { questionLockWrapper, questionUnlockWrapper } = socketContext;
   const proposalTeam = [];
   let questionData;
+  let milestoneCond = false;
   const integrationsData = useSelector((state) => getIntegrations(state));
   const showNaCheckbox = useSelector((state) => getShowNaCheckbox(state));
   const gridColRatio = [10, 2];
@@ -76,20 +79,13 @@ const AnswerInput = (isNotepadOpen) => {
     questionData = proposalTeam[0].questions[item];
   });
   const proposalId = questionData.proposalId;
+  const proposalDetail = questionData.proposalDetail;
 
-  // useEffect(() => {
-  //   if (showModal) {
-  //     setTimeout(() => setShowModal(false), 1000);
-  //   }
-  // }, [isSetQuestionLoadingData]);
-  // const onCloseAddModal = () => {
-  //   setShowModal((prev) => !prev);
-  // };
   const NaLoading = questionData?.NaLoading;
   const closeAnswerHistoryModal = () => {
     setIsHistoryModalShown(false);
   };
-  // trackMatomoEventSubmitAnswer = data => {
+
   //   const {
   //     eventCategories,
   //     proposalDetail,
@@ -128,6 +124,7 @@ const AnswerInput = (isNotepadOpen) => {
   //     ]
   //   });
   // };
+
   const isAnswered = (answer, isAnswerPredicted) => {
     if (isAnswerPredicted) return false;
     if (answer && answer.get && answer.get('answer')) {
@@ -145,7 +142,9 @@ const AnswerInput = (isNotepadOpen) => {
   };
   return (
     <>
+      {' '}
       <div className="proposal-team-wrapper-container">
+        {' '}
         {Object.keys(proposalTeam[0].questions).map((item) => {
           const isQuestionLocked = () => {
             return (
@@ -172,16 +171,32 @@ const AnswerInput = (isNotepadOpen) => {
           ) {
             currentSFAnswer = proposalTeam[0].questions[item].currentSFanswer;
             const sficon = proposalTeam[0].questions[item].sfField;
+            const milestone = fromJS(proposalTeam[0].questions[item].milestone);
+            const milestoneNew = fromJS(
+              proposalTeam[0].questions[item].milestoneNew
+            );
+            const lastAns = isString(lastAnswer) ? lastAnswer : '';
+            console.log('milestoneNew, milestone', milestoneNew, milestone);
+            if (milestoneNew && !isEmpty(milestoneNew)) {
+              milestoneCond = true;
+            }
             const qvicon = proposalTeam[0].questions[item].questionId;
             const answers = fromJS(proposalTeam[0].questions[item].answers);
             const loading = proposalTeam[0].questions[item].loading ?? false;
             const sfObject = proposalTeam[0].questions[item]?.sfObject;
             const integrationLocked = isQuestionLockedByOther() ? true : false;
             const section = proposalTeam[0].questions[item]?.section;
+
             const questionText = proposalTeam[0].questions[item]?.questionText;
             const questionHint = proposalTeam[0].questions[item]?.questionHint;
             const questionHintJSON =
               proposalTeam[0].questions[item]?.questionHintJSON;
+            const questionHTML = proposalTeam[0].questions[item]?.questionHTML;
+            const sectionName = section?.sectionName;
+            console.log('sectionName', sectionName);
+            const events = proposalTeam[0].questions[item]?.events || {};
+            const questionJSON = proposalTeam[0].questions[item]?.questionJSON;
+
             const checkDisableFlag = () => {
               if (isQuestionLockedByOther() || !isCurrentBid) return true;
               if (NaLoading) return true;
@@ -193,7 +208,6 @@ const AnswerInput = (isNotepadOpen) => {
             const isNotApplicable =
               proposalTeam[0].questions[item]?.notApplicable;
             let checkSFAnswer = [];
-
             let destinationArray;
             let integrationvalidation;
             let integrationmatch;
@@ -247,6 +261,59 @@ const AnswerInput = (isNotepadOpen) => {
                 answerValue = '';
               }
             }
+            const trackMatomoEventSubmitAnswer = (data) => {
+              trackEvent({
+                category: eventCategories.pd(),
+                action: events
+                  ? `Event: ${questionText} (${sectionName})`
+                  : `Question: ${questionText} (${sectionName})`,
+                name: `Answer: ${data}`,
+                customDimensions: [
+                  {
+                    id: 1,
+                    value: JSON.stringify({
+                      answer: data,
+                      sectionName,
+                      questionText,
+                      questionHTML,
+                      questionJSON,
+                      questionHintJSON,
+                      questionId,
+                      proposalDetail
+                    })
+                  },
+                  {
+                    events: events || []
+                  }
+                ]
+              });
+            };
+
+            const trackMatomoEventAnswerHistory = (data) => {
+              trackEvent({
+                category: eventCategories.pd(),
+                action: `Answer History: Clicked On ${questionText} (${sectionName})`,
+                customDimensions: [
+                  {
+                    id: 1,
+                    value: JSON.stringify({
+                      answer: data,
+                      sectionName,
+                      questionText,
+                      questionHTML,
+                      questionJSON,
+                      questionHintJSON,
+                      questionId,
+                      proposalDetail
+                    })
+                  },
+                  {
+                    events: events || []
+                  }
+                ]
+              });
+            };
+
             const handleVerifyPredictedAnsClick = (predictedAnswer) => {
               setIconColor('#015ff1');
               dispatch(
@@ -296,7 +363,7 @@ const AnswerInput = (isNotepadOpen) => {
                     });
                   }
                 });
-                // trackMatomoEventSubmitAnswer(answerValue);
+                trackMatomoEventSubmitAnswer(textValue);
               } catch (error) {
                 console.log('error :>> ', error);
               }
@@ -311,23 +378,29 @@ const AnswerInput = (isNotepadOpen) => {
             };
             const displayAnswerOnHistory = () => {
               setQuestionToDisplayHistory(questionId);
-              // this.trackMatomoEventAnswerHistory();
+              trackMatomoEventAnswerHistory();
             };
             return (
               <>
+                {' '}
                 <div className="proposal-team-wrapper">
+                  {' '}
                   <div
                     className={`task-table-row question-row ${
                       selectedRow ? 'selected-task-table-row' : ''
                     } ${NaLoading ? 'fade-area' : ''} `}
                     style={{ margin: '2px 0px' }}
                   >
+                    {' '}
                     <div className="proposal-tema-tooltip">
+                      {' '}
                       <Typography className="proposal-team-title">
+                        {' '}
                         {proposalTeam[0].questions[item].questionText}
-                      </Typography>
+                      </Typography>{' '}
                       {questionHint && (
                         <div>
+                          {' '}
                           <Tooltip
                             variant="light"
                             tabIndex={-1}
@@ -344,15 +417,37 @@ const AnswerInput = (isNotepadOpen) => {
                             }
                             placement="top"
                           >
+                            {' '}
                             <IconButton
                               color="primary"
                               style={{ margin: 0 }}
                               size="small"
                               className="question-tooltip-icon"
                             >
-                              <InfoIcon style={{ fontSize: '16px' }} />
-                            </IconButton>
-                          </Tooltip>
+                              {' '}
+                              <InfoIcon style={{ fontSize: '16px' }} />{' '}
+                            </IconButton>{' '}
+                          </Tooltip>{' '}
+                        </div>
+                      )}
+                      {milestoneCond ? (
+                        <div
+                        // className="chipview"
+                        // style={{ display: 'flex !important' }}
+                        >
+                          {milestoneNew ? (
+                            <ChipView
+                              label={milestoneNew}
+                              style={{ display: 'flex !important' }}
+                              answer={lastAns}
+                            />
+                          ) : null}
+                        </div>
+                      ) : (
+                        <div>
+                          {milestone ? (
+                            <ChipView label={milestone} answer={lastAns} />
+                          ) : null}
                         </div>
                       )}
                     </div>
@@ -390,7 +485,7 @@ const AnswerInput = (isNotepadOpen) => {
                           text={answerValue}
                           disabled={checkDisableFlag()}
                         />
-                      </SFAnswerValidationWrapper>{' '}
+                      </SFAnswerValidationWrapper>
                     </div>
                   </div>
                   <div className="integrations-icon">
@@ -421,37 +516,21 @@ const AnswerInput = (isNotepadOpen) => {
                       }
                       hasDifferentSFanswer={hasDifferentSFanswer}
                       disabled={integrationLocked}
-                    />
-                  </div>
-                </div>
+                    />{' '}
+                  </div>{' '}
+                </div>{' '}
               </>
             );
           }
         })}
-      </div>
-      {/* <div className="add-question">
-        <Link
-          style={{ borderBottom: 'none' }}
-          onClick={() => setShowModal(true)}
-          size="small"
-        >
-          <Plus fontSize="extraSmall" />
-          <span style={{ verticalAlign: 'top' }}> Add New Question</span>
-        </Link>
-      </div> */}
-
+      </div>{' '}
       {isHistoryModalShown && (
         <AnswerHistory
           question={selectedQuestionForHistory}
           closeModal={closeAnswerHistoryModal}
         />
       )}
-      {/* {showModal && (
-        <div className="add-quest-modal">
-          <AddQuestionModalComponent onClose={onCloseAddModal} />
-        </div>
-      )} */}
     </>
   );
 };
-export default AnswerInput;
+export default MatomoHOC(AnswerInput);
