@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as Y from 'yjs';
 import { useSelector } from 'react-redux';
 import Loader from 'react-loader-spinner';
+import { IndexeddbPersistence } from 'y-indexeddb';
 import { websocketNotesApi } from '../../../api/notepad';
 import { WebsocketProvider } from '../../../context/y-websocket';
 import { NOTES_SOCKET_URL } from '../../../constants/api';
@@ -14,15 +15,20 @@ const NotepadWrapper = ({ trackEvent }) => {
   const [ydoc, setYdoc] = useState(new Y.Doc());
   const [wsInstance, setWsInstance] = useState(undefined);
   const [proposalIdState, setProposalIdState] = useState(undefined);
+
   const createNewNotesSocketConnection = proposalId => {
     const storedValue = `doc-${proposalId}`;
     if (proposalId) {
+      const provider = new IndexeddbPersistence(storedValue, ydoc);
       const wsProvider = new WebsocketProvider(
         NOTES_SOCKET_URL,
         `?=${storedValue}&`,
         ydoc
       );
       setWsInstance(wsProvider);
+      provider.on('synced', () => {
+        console.log('content from the database is loaded');
+      });
     }
   };
 
