@@ -1,22 +1,31 @@
 import React from 'react';
 import propTypes from 'prop-types';
 
-const TimelineQuestions = ({ question }) => {
-  const { questionId, questionOrder, questionText } = question.toJS();
+const TimelineQuestions = ({ question, setDraggedQuestionData }) => {
+  const { questionId, questionText } = question.toJS();
 
   return (
-    <li key={questionId} className="timeline-question-listitem">
+    <li
+      key={questionId}
+      className="timeline-question-listitem"
+      draggable
+      onDragStart={() => {
+        setDraggedQuestionData(question?.toJS());
+      }}
+    >
       {questionText}
     </li>
   );
 };
 
 TimelineQuestions.defaultProps = {
-  question: {}
+  question: {},
+  setDraggedQuestionData: () => {}
 };
 
-TimelineQuestions.prototypes = {
-  question: propTypes.object
+TimelineQuestions.propTypes = {
+  question: propTypes.object,
+  setDraggedQuestionData: propTypes.object
 };
 
 export default TimelineQuestions;

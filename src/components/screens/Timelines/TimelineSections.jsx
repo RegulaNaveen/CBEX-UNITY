@@ -1,13 +1,21 @@
+/* eslint-disable consistent-return */
+/* eslint-disable array-callback-return */
 import React from 'react';
 import Accordion from 'apollo-react/components/Accordion';
 import AccordionDetails from 'apollo-react/components/AccordionDetails';
 import AccordionSummary from 'apollo-react/components/AccordionSummary';
 import Typography from 'apollo-react/components/Typography';
 import propTypes from 'prop-types';
-import TimelineQuestions from './TimelineQuestions';
 import { OrderedMap } from 'immutable';
+import TimelineQuestions from './TimelineQuestions';
 
-const TimelineSections = ({ sectionName, sectionOrder, questions }) => {
+const TimelineSections = ({
+  sectionName,
+  sectionOrder,
+  questions,
+  draggedQuestionData,
+  setDraggedQuestionData
+}) => {
   return (
     <>
       <Accordion defaultExpanded={sectionOrder === 1} style={{ width: '100%' }}>
@@ -27,7 +35,14 @@ const TimelineSections = ({ sectionName, sectionOrder, questions }) => {
           >
             {questions.valueSeq().map(question => {
               if (question.get('answerConfiguration').get('type') === 'date') {
-                return <TimelineQuestions question={question} />;
+                return (
+                  <TimelineQuestions
+                    key={question.get('questionId')}
+                    question={question}
+                    draggedQuestionData={draggedQuestionData}
+                    setDraggedQuestionData={setDraggedQuestionData}
+                  />
+                );
               }
             })}
           </ul>
@@ -39,14 +54,18 @@ const TimelineSections = ({ sectionName, sectionOrder, questions }) => {
 
 TimelineSections.defaultProps = {
   sectionName: '',
-  sectionOrder: '',
+  sectionOrder: 0,
   questions: new OrderedMap(),
+  draggedQuestionData: {},
+  setDraggedQuestionData: () => {}
 };
 
 TimelineSections.propTypes = {
   sectionName: propTypes.string,
-  sectionOrder: propTypes.string,
-  questions: propTypes.map,
+  sectionOrder: propTypes.number,
+  questions: propTypes.object,
+  draggedQuestionData: propTypes.object,
+  setDraggedQuestionData: propTypes.func
 };
 
 export default TimelineSections;
