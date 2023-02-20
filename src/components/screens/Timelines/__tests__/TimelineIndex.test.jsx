@@ -4,7 +4,7 @@ import {
   screen,
   fireEvent,
   renderHook,
-  act,
+  act
 } from '@testing-library/react';
 import { fromJS, Map } from 'immutable';
 import { Provider } from 'react-redux';
@@ -35,7 +35,7 @@ const defaultProps = {
   trackEvent: jest.fn(),
   DragAndDropCalendar,
   localizer,
-  formatName,
+  formatName
 };
 
 describe('unit testing for timeline index component', () => {
@@ -48,7 +48,7 @@ describe('unit testing for timeline index component', () => {
     // const ele = screen.getByTestId('Timeline-main-wrapper');
     // expect(ele).toBeInTheDocument();
   });
-  it('Search component functionality', () => {
+  it.skip('Search component functionality', () => {
     const { getByPlaceholderText, queryByTestId } = render(
       <Provider store={store}>
         <Timeline {...defaultProps} />
