@@ -1,46 +1,40 @@
-import React, {
-  Fragment,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Calendar, Views, momentLocalizer } from 'react-big-calendar';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment from 'moment';
-// import events from './resources/events';
+import { useDispatch, useSelector } from 'react-redux';
 import { parseMomentDate } from '../../../utils/DateUtils';
 import { setProposalAnswerData } from '../../../redux/actions/proposal-actions';
-import { useDispatch } from 'react-redux';
 import MatomoHOC from '../../HOC/MatomoHOC';
+import CustomComponents from './CustomComponents';
+import CustomTimelineMonth from './CustomTimelineMonth';
+import { selectTimelineDateRange } from '../../../redux/selectors';
 
 const DragAndDropCalendar = withDragAndDrop(Calendar);
-
-// const adjEvents = events.map((it, ind) => ({
-//   ...it,
-//   isDraggable: true
-// }));
 
 const formatName = (name, count) => `${name} ID ${count}`;
 
 const DnDOutsideResource = ({
   timelineEvents,
-  proposalDate,
   socketContext,
   userData,
   isCurrent,
   eventCategories,
   trackEvent,
+  currentBidDetails,
+  draggedQuestionData,
+  setDraggedQuestionData
 }) => {
   const localizer = momentLocalizer(moment);
   const [myEvents, setMyEvents] = useState(timelineEvents);
   const [draggedEvent, setDraggedEvent] = useState();
-  const [date, setDate] = useState(new Date());
+
   const [displayDragItemInCell, setDisplayDragItemInCell] = useState(true);
   const [counters, setCounters] = useState({ item1: 0, item2: 0 });
   const dispatch = useDispatch();
   const [selectedEvent, setSelectedEvent] = useState(undefined);
+  const timelineDateRange = useSelector(selectTimelineDateRange);
 
   useEffect(() => {
     setMyEvents(timelineEvents);
@@ -50,8 +44,8 @@ const DnDOutsideResource = ({
     const backgroundColor = event.color;
     const dragClass = event.isDraggable ? 'isDraggable' : 'nonDraggable';
     return {
-      style: { backgroundColor },
-      className: `${dragClass}`,
+      style: { backgroundColor, textOverflow: 'ellipsis' },
+      className: `${dragClass}`
     };
   }, []);
 
@@ -62,7 +56,7 @@ const DnDOutsideResource = ({
       questionHTML,
       questionJSON,
       questionHintJSON,
-      questionId,
+      questionId
     } = question;
     const { sectionName } = section;
 
@@ -80,10 +74,10 @@ const DnDOutsideResource = ({
             questionHTML,
             questionJSON,
             questionHintJSON,
-            questionId,
-          }),
-        },
-      ],
+            questionId
+          })
+        }
+      ]
     });
   };
 
@@ -91,9 +85,9 @@ const DnDOutsideResource = ({
     try {
       const { proposalId, questionId } = question;
       const lastAnswerValue =
-        question?.answers[question?.answers?.length - 1].answer;
+        question?.answers[question?.answers?.length - 1]?.answer;
       if (
-        parseMomentDate(lastAnswerValue.trim()) !==
+        parseMomentDate(lastAnswerValue?.trim()) !==
           parseMomentDate(selectedDay) &&
         selectedDay
       ) {
@@ -126,11 +120,6 @@ const DnDOutsideResource = ({
     [draggedEvent]
   );
 
-  const handleDisplayDragItemInCell = useCallback(
-    () => setDisplayDragItemInCell(prev => !prev),
-    []
-  );
-
   const moveEvent = useCallback(
     ({ event, start, end, isAllDay: droppedOnAllDaySlot = false }) => {
       const { allDay, question } = event;
@@ -153,45 +142,49 @@ const DnDOutsideResource = ({
 
   const onDropFromOutside = useCallback(
     ({ start, end, allDay: isAllDay }) => {
+      if (draggedQuestionData) {
+        const event = {
+          id: draggedQuestionData?.id,
+          title: formatName(
+            draggedQuestionData?.title,
+            counters[draggedQuestionData?.title]
+          ),
+          start,
+          end,
+          isAllDay,
+          isDraggable: isCurrent,
+          question: draggedQuestionData,
+          color: '#00C221'
+        };
+        setDraggedEvent(null);
+
+        newEvent(event);
+        handleDayChange(start, draggedQuestionData);
+        setDraggedQuestionData(null);
+        return;
+      }
       if (draggedEvent === 'undroppable') {
         setDraggedEvent(null);
+
         return;
       }
 
       if (selectedEvent) {
         handleDayChange(start, selectedEvent?.question);
-        const { name } = draggedEvent;
         const event = {
           title: formatName(selectedEvent.title, counters[selectedEvent.title]),
           start,
           end,
           isAllDay,
+
+          id: selectedEvent?.question?.id,
+
+          isDraggable: isCurrent,
+          question: selectedEvent?.question,
+          color: '#00C221'
         };
         setDraggedEvent(null);
-        setCounters(prev => {
-          const { [name]: count } = prev;
-          return {
-            ...prev,
-            [name]: count + 1,
-          };
-        });
-        newEvent(event);
-      } else {
-        const { name } = draggedEvent;
-        const event = {
-          title: formatName(name, counters[name]),
-          start,
-          end,
-          isAllDay,
-        };
-        setDraggedEvent(null);
-        setCounters(prev => {
-          const { [name]: count } = prev;
-          return {
-            ...prev,
-            [name]: count + 1,
-          };
-        });
+
         newEvent(event);
       }
     },
@@ -201,7 +194,7 @@ const DnDOutsideResource = ({
       setDraggedEvent,
       setCounters,
       newEvent,
-      selectedEvent,
+      selectedEvent
     ]
   );
 
@@ -220,37 +213,15 @@ const DnDOutsideResource = ({
     setSelectedEvent(event.event);
   };
 
-  const defaultDate = useMemo(() => new Date(proposalDate), [proposalDate]);
-
-  useEffect(() => {
-    setDate(proposalDate);
-  }, [proposalDate]);
-
-  const { views } = useMemo(
-    () => ({
-      views: {
-        month: true,
-        week: false,
-        day: false,
-      },
-      // ... other props
-    }),
-    []
-  );
+  CustomTimelineMonth.title = () => 'title text';
 
   return (
     <>
-      <div
-        style={{ height: '75vh', width: '100%' }}
-        data-testid="dnd-outside-resource"
-      >
+      <div style={{ height: '85vh', width: '100%' }}>
         <DragAndDropCalendar
-          data-testid="drag-and-drop-calender"
-          date={date}
-          onNavigate={newDate => {
-            setDate(newDate);
-          }}
-          defaultView={Views.MONTH}
+          toolbar={false}
+          date={new Date(timelineDateRange[0]?._i)}
+          defaultView="customMonth"
           dragFromOutsideItem={
             displayDragItemInCell ? dragFromOutsideItem : null
           }
@@ -272,12 +243,39 @@ const DnDOutsideResource = ({
           resizable={false}
           selectable
           popup
-          views={['month']}
+          views={{
+            customMonth: CustomTimelineMonth
+          }}
+          messages={{
+            customMonth: 'custom month'
+          }}
+          components={{
+            dateCellWrapper: props => (
+              // eslint-disable-next-line react/jsx-pascal-case
+              <CustomComponents.dateCellWrapper
+                {...props}
+                currentBidDetails={currentBidDetails}
+              />
+            )
+          }}
         />
       </div>
     </>
   );
 };
-DnDOutsideResource.propTypes = {};
+
+DnDOutsideResource.defaultProps = {
+  timelineEvents: [],
+  draggedQuestionData: null
+};
+DnDOutsideResource.propTypes = {
+  timelineEvents: PropTypes.array,
+  socketContext: PropTypes.object.isRequired,
+  userData: PropTypes.object.isRequired,
+  isCurrent: PropTypes.bool.isRequired,
+  currentBidDetails: PropTypes.object.isRequired,
+  draggedQuestionData: PropTypes.object,
+  setDraggedQuestionData: PropTypes.func.isRequired
+};
 
 export default MatomoHOC(DnDOutsideResource);

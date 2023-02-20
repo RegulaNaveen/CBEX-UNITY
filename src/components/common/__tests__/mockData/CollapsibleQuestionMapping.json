@@ -1,0 +1,2605 @@
+{
+    "questions": {
+        "Key stakeholders-Y0L": {
+            "isCustomQuestion": false,
+            "questionId": "Key stakeholders-Y0L",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": false,
+            "sfField": "n/a",
+            "questionOrder": 1,
+            "questionApproval": false,
+            "locked": false,
+            "opportunityType": "Default Type",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"sauv1\",\"text\":\"Who is the decision maker in the customer's org?\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestoneNew": [],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"62iyg\" data-offset-key=\"sauv1-0-0\"><div data-offset-key=\"sauv1-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"sauv1-0-0\"><span data-text=\"true\">Who is the decision maker in the customer's org?/span></span></div></div></div>",
+            "roleNames": [
+                "Business Developer"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "n/a",
+            "questionText": "Who is the decision maker in the customer's org?",
+            "integration": "",
+            "answers": [
+                {
+                    "user": "upendrareddy.mannuru@iqvia.com",
+                    "userName": "Upendra Reddy Mannuru",
+                    "userRole": "Business Developer",
+                    "date": "2023-02-01T13:16:56.651Z",
+                    "answer": "Leslie Knope",
+                    "formattedAnswer": {
+                        "value": {
+                            "blocks": [
+                                {
+                                    "key": "9egbs",
+                                    "text": "Leslie Knope",
+                                    "type": "unstyled",
+                                    "depth": 0,
+                                    "inlineStyleRanges": [],
+                                    "entityRanges": [],
+                                    "data": {}
+                                }
+                            ],
+                            "entityMap": {}
+                        },
+                        "html": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"97gp4\" data-offset-key=\"9egbs-0-0\"><div data-offset-key=\"9egbs-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"9egbs-0-0\"><span data-text=\"true\">Leslie Knope</span></span></div></div></div>",
+                        "htmlExport": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"c1n9s\" data-offset-key=\"9egbs-0-0\"><div data-offset-key=\"9egbs-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"9egbs-0-0\"><span data-text=\"true\">Leslie Knope</span></span></div></div></div>"
+                    },
+                    "proposalId": "93c77a01-5e31-4191-9b2f-cfac782a21af",
+                    "updatedInPG": true
+                }
+            ],
+            "questionHintJSON": "",
+            "questionHintHTML": "",
+            "answerConfiguration": {
+                "type": "text",
+                "options": []
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,TSL"
+        },
+        "8959b856-0f49-4c4e-8ec8-f5955320866a": {
+            "isCustomQuestion": false,
+            "questionId": "8959b856-0f49-4c4e-8ec8-f5955320866a",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "Indication__c",
+            "questionOrder": 2,
+            "questionApproval": false,
+            "currentSFanswer": {
+                "value": [
+                    "Diabetes mellitus"
+                ],
+                "time": "2023-02-08T09:47:45.821Z"
+            },
+            "locked": true,
+            "opportunityType": "Opportunity Launch Call (Pilot),Core Strategy Call Template - AMR/EMEA,Default Type,Core Strategy Call Template - APAC,Core Strategy and Data Planning Calls - AMR/EMEA,Ballpark,Non-Core Clinical Studies",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"fao2w\",\"text\":\"Indication\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": true,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"8vq7g\" data-offset-key=\"fao2w-0-0\"><div data-offset-key=\"fao2w-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"fao2w-0-0\"><span data-text=\"true\">Indication(</span></span></div></div></div>",
+            "roleNames": [
+                "Business Developer"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "Opportunity",
+            "questionText": "Indication",
+            "integration": "Qvidian",
+            "answers": [
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-01T12:56:41.433Z",
+                    "answer": [
+                        "Viral hepatitis C"
+                    ],
+                    "formattedAnswer": [
+                        "Viral hepatitis C"
+                    ],
+                    "proposalId": "93c77a01-5e31-4191-9b2f-cfac782a21af",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "upendrareddy.mannuru@iqvia.com",
+                    "userName": "Upendra Reddy Mannuru",
+                    "userRole": "Business Developer",
+                    "date": "2023-02-01T13:13:25.746Z",
+                    "answer": [],
+                    "proposalId": "93c77a01-5e31-4191-9b2f-cfac782a21af",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-01T13:24:05.042Z",
+                    "answer": [
+                        "Viral hepatitis C"
+                    ],
+                    "formattedAnswer": [
+                        "Viral hepatitis C"
+                    ],
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "upendrareddy.mannuru@iqvia.com",
+                    "userName": "Upendra Reddy Mannuru",
+                    "userRole": "Business Developer",
+                    "date": "2023-02-01T14:13:04.849Z",
+                    "answer": [],
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-08T08:40:03.201Z",
+                    "answer": [
+                        "Cardiovascular Disease"
+                    ],
+                    "formattedAnswer": [
+                        "Cardiovascular Disease"
+                    ],
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-08T09:06:14.676Z",
+                    "answer": [
+                        "Basal cell carcinoma"
+                    ],
+                    "formattedAnswer": [
+                        "Basal cell carcinoma"
+                    ],
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-08T09:06:56.112Z",
+                    "answer": [
+                        "Diabetes mellitus"
+                    ],
+                    "formattedAnswer": [
+                        "Diabetes mellitus"
+                    ],
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-08T09:42:41.608Z",
+                    "answer": [
+                        "Diabetes mellitus"
+                    ],
+                    "formattedAnswer": [
+                        "Diabetes mellitus"
+                    ],
+                    "proposalId": "a81d91c0-1974-47fc-aff9-b13e20a69d34",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-08T09:47:45.821Z",
+                    "answer": [
+                        "Diabetes mellitus"
+                    ],
+                    "formattedAnswer": [
+                        "Diabetes mellitus"
+                    ],
+                    "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "sushil.munda@iqvia.com",
+                    "userName": "Sushil Munda",
+                    "userRole": "Business Account Manager",
+                    "date": "2023-02-08T15:16:01.082Z",
+                    "answer": [],
+                    "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                    "updatedInPG": false
+                }
+            ],
+            "questionHintJSON": "",
+            "questionHintHTML": "",
+            "answerConfiguration": {
+                "type": "picklist-lookup",
+                "options": []
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,TSL,Biostats,Business Account Manager,CEVA,Data Management,Executive Oversight,Feasibility,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics,Strategic Pricing"
+        },
+        "c717c432-fed0-4d91-b7d8-cb970ef3700a": {
+            "isCustomQuestion": false,
+            "questionId": "c717c432-fed0-4d91-b7d8-cb970ef3700a",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "Verbatim_Indication_Term__c",
+            "questionOrder": 3,
+            "questionApproval": false,
+            "currentSFanswer": {
+                "value": "chronic hcv",
+                "time": "2023-02-08T09:47:45.879Z"
+            },
+            "locked": false,
+            "opportunityType": "Opportunity Launch Call (Pilot),Core Strategy Call Template - AMR/EMEA,Default Type,Core Strategy Call Template - APAC,Core Strategy and Data Planning Calls - AMR/EMEA,Ballpark,Non-Core Clinical Studies",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"8rhw7\",\"text\":\"Verbatim Indication Term\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"5itil\" data-offset-key=\"8rhw7-0-0\"><div data-offset-key=\"8rhw7-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"8rhw7-0-0\"><span data-text=\"true\">Verbatim Indication Term/span></span></div></div></div>",
+            "roleNames": [
+                "Business Developer"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "Opportunity",
+            "questionText": "Verbatim Indication Term",
+            "integration": "Qvidian",
+            "answers": [
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-01T12:56:41.489Z",
+                    "answer": "chronic hcv",
+                    "formattedAnswer": "chronic hcv",
+                    "proposalId": "93c77a01-5e31-4191-9b2f-cfac782a21af",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "upendrareddy.mannuru@iqvia.com",
+                    "userName": "Upendra Reddy Mannuru",
+                    "userRole": "Business Developer",
+                    "date": "2023-02-01T13:13:33.361Z",
+                    "answer": "chronic",
+                    "formattedAnswer": {
+                        "value": {
+                            "blocks": [
+                                {
+                                    "key": "bfavj",
+                                    "text": "chronic ",
+                                    "type": "unstyled",
+                                    "depth": 0,
+                                    "inlineStyleRanges": [],
+                                    "entityRanges": [],
+                                    "data": {}
+                                }
+                            ],
+                            "entityMap": {}
+                        },
+                        "html": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"5hcho\" data-offset-key=\"bfavj-0-0\"><div data-offset-key=\"bfavj-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"bfavj-0-0\"><span data-text=\"true\">chronic h</span></span></div></div></div>",
+                        "htmlExport": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"ejgp2\" data-offset-key=\"bfavj-0-0\"><div data-offset-key=\"bfavj-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"bfavj-0-0\"><span data-text=\"true\">chronic </span></span></div></div></div>"
+                    },
+                    "proposalId": "93c77a01-5e31-4191-9b2f-cfac782a21af",
+                    "updatedInPG": true
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-01T13:24:05.098Z",
+                    "answer": "chronic hcv",
+                    "formattedAnswer": "chronic hcv",
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-02T06:35:19.507Z",
+                    "answer": "chronic hcv",
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "formattedAnswer": "chronic hcv",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-07T15:11:13.411Z",
+                    "answer": "chronic hcv",
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "formattedAnswer": "chronic hcv",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-08T09:42:41.660Z",
+                    "answer": "chronic hcv",
+                    "formattedAnswer": "chronic hcv",
+                    "proposalId": "a81d91c0-1974-47fc-aff9-b13e20a69d34",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-08T09:47:45.879Z",
+                    "answer": "chronic hcv",
+                    "formattedAnswer": "chronic hcv",
+                    "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                    "updatedInPG": false
+                }
+            ],
+            "questionHintJSON": "",
+            "questionHintHTML": "",
+            "answerConfiguration": {
+                "type": "text",
+                "options": []
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,TSL,Biostats,Business Account Manager,CEVA,Data Management,Executive Oversight,Feasibility,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics,Strategic Pricing"
+        },
+        "1cdc6d7c-2826-4617-b645-37c6d48adbb5": {
+            "isCustomQuestion": false,
+            "questionId": "1cdc6d7c-2826-4617-b645-37c6d48adbb5",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "Intervention_Type__c",
+            "questionOrder": 4,
+            "questionApproval": false,
+            "currentSFanswer": {
+                "value": "Chemical/Small Molecule",
+                "time": "2023-02-08T09:47:45.765Z"
+            },
+            "locked": false,
+            "opportunityType": "Opportunity Launch Call (Pilot),Core Strategy Call Template - AMR/EMEA,Default Type,Core Strategy and Data Planning Calls - AMR/EMEA,Core Strategy Call Template - APAC,Ballpark,Non-Core Clinical Studies",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"gm8wm\",\"text\":\"Intervention Type\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"2pr27\" data-offset-key=\"gm8wm-0-0\"><div data-offset-key=\"gm8wm-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"gm8wm-0-0\"><span data-text=\"true\">Intervention Type/span></span></div></div></div>",
+            "roleNames": [
+                "Business Developer"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "Bid_History__c",
+            "questionText": "Intervention Type",
+            "integration": "",
+            "answers": [
+                {
+                    "userRole": "Business Account Manager",
+                    "questionId": "1cdc6d7c-2826-4617-b645-37c6d48adbb5",
+                    "created_date": "2023-02-06T05:17:42.312Z",
+                    "user": "sushil.munda@iqvia.com",
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "created_by": "1138123",
+                    "date": "Mon Feb 06 2023 05:17:42 GMT+0000 (Coordinated Universal Time)",
+                    "updated_date": "2023-02-06T05:17:42.312Z",
+                    "userName": "Sushil Munda",
+                    "updatedInPG": true,
+                    "formattedAnswer": null,
+                    "updated_by": "1138123",
+                    "answer": " "
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-08T09:42:41.556Z",
+                    "answer": "Chemical/Small Molecule",
+                    "formattedAnswer": "Chemical/Small Molecule",
+                    "proposalId": "a81d91c0-1974-47fc-aff9-b13e20a69d34",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-08T09:47:45.765Z",
+                    "answer": "Chemical/Small Molecule",
+                    "formattedAnswer": "Chemical/Small Molecule",
+                    "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                    "updatedInPG": false
+                }
+            ],
+            "questionHintJSON": "",
+            "questionHintHTML": "",
+            "answerConfiguration": {
+                "type": "select-lookup",
+                "options": []
+            },
+            "events": "",
+            "interestedParties": "Clinical DS&B,Medical Strategy Lead,Analytics Strategy Lead,Business Developer,Project Lead,Proposal Developer,TSL,Biostats,Business Account Manager,CEVA,Data Management,Executive Oversight,Feasibility,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics,Strategic Pricing"
+        },
+        "ce73b86a-a641-4dc2-bfdf-f883ad95b8e6": {
+            "isCustomQuestion": false,
+            "questionId": "ce73b86a-a641-4dc2-bfdf-f883ad95b8e6",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "n/a",
+            "questionOrder": 5,
+            "questionApproval": false,
+            "locked": false,
+            "opportunityType": "Opportunity Launch Call (Pilot),Core Strategy Call Template - AMR/EMEA,Default Type,Core Strategy and Data Planning Calls - AMR/EMEA,Core Strategy Call Template - APAC,Ballpark,Non-Core Clinical Studies",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"881it\",\"text\":\"Rare Disease\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"fz0u1\" data-offset-key=\"881it-0-0\"><div data-offset-key=\"881it-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"881it-0-0\"><span data-text=\"true\">Rare Disease/span></span></div></div></div>",
+            "roleNames": [
+                "Business Developer"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "n/a",
+            "questionText": "Rare Disease",
+            "integration": "",
+            "answers": [
+                {
+                    "user": "UnityPredictedAnswer",
+                    "userName": "UnityPredictedAnswer",
+                    "userRole": "UnityPredictedAnswer",
+                    "date": "2023-02-08T09:47:48.442Z",
+                    "answer": "No",
+                    "formattedAnswer": "No",
+                    "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                    "updatedInPG": false
+                }
+            ],
+            "questionHintJSON": "",
+            "questionHintHTML": "",
+            "answerConfiguration": {
+                "type": "select",
+                "options": [
+                    "Yes",
+                    "No"
+                ]
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,TSL,Biostats,Business Account Manager,CEVA,Data Management,Executive Oversight,Feasibility,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics,Strategic Pricing",
+            "businessRule": "{\"conditions\":[{\"operator\":\"Or\",\"condition\":[{\"fieldName\":\"a9fcf94d-ad9b-45ce-8974-e007f1f10369\",\"fieldValue\":[\"true\"],\"answerRelationship\":\"Or\",\"Operator\":\"Equal\"}],\"action\":[{\"fieldName\":\"ce73b86a-a641-4dc2-bfdf-f883ad95b8e6\",\"fieldValue\":[\"Yes\"],\"fieldAction\":\"Equal\",\"action\":\"setAnswer\"}]},{\"operator\":\"Or\",\"condition\":[{\"fieldName\":\"a9fcf94d-ad9b-45ce-8974-e007f1f10369\",\"fieldValue\":[\"false\"],\"answerRelationship\":\"Or\",\"Operator\":\"Equal\"}],\"action\":[{\"fieldName\":\"ce73b86a-a641-4dc2-bfdf-f883ad95b8e6\",\"fieldValue\":[\"No\"],\"fieldAction\":\"Equal\",\"action\":\"setAnswer\"}]}]}"
+        },
+        "78e6f9ff-dc5c-4dfd-a6d7-b98321145577": {
+            "isCustomQuestion": false,
+            "questionId": "78e6f9ff-dc5c-4dfd-a6d7-b98321145577",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "n/a",
+            "questionOrder": 6,
+            "questionApproval": false,
+            "locked": false,
+            "opportunityType": "Opportunity Launch Call (Pilot),Default Type,Non-Core Clinical Studies",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"mqh2n\",\"text\":\"Feedback on recent proposal and customer preferences?\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"8spwr\" data-offset-key=\"mqh2n-0-0\"><div data-offset-key=\"mqh2n-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"mqh2n-0-0\"><span data-text=\"true\">Feedback on recent proposal and customer preferences?/span></span></div></div></div>",
+            "roleNames": [
+                "Business Developer"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "n/a",
+            "questionText": "Feedback on recent proposal and customer preferences?",
+            "integration": "",
+            "answers": [],
+            "questionHintJSON": "",
+            "questionHintHTML": "",
+            "answerConfiguration": {
+                "type": "text",
+                "options": []
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,Biostats,TSL,Business Account Manager,CEVA,Data Management,Executive Oversight,Feasibility,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics,Strategic Pricing"
+        },
+        "e5af294c-7050-4786-a617-70aba8434c39": {
+            "isCustomQuestion": false,
+            "questionId": "e5af294c-7050-4786-a617-70aba8434c39",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "n/a",
+            "questionOrder": 7,
+            "questionApproval": false,
+            "locked": false,
+            "opportunityType": "Opportunity Launch Call (Pilot),Default Type,Non-Core Clinical Studies",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"maaq8\",\"text\":\"High-level scope for opportunity. What customers want and what they definitely don't want.\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"d0j0l\" data-offset-key=\"maaq8-0-0\"><div data-offset-key=\"maaq8-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"maaq8-0-0\"><span data-text=\"true\">High-level scope for opportunity. What customers want and what they definitely don't want./span></span></div></div></div>",
+            "roleNames": [
+                "Business Developer"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "n/a",
+            "questionText": "High-level scope for opportunity. What customers want and what they definitely don't want.",
+            "integration": "",
+            "answers": [],
+            "questionHintJSON": "",
+            "questionHintHTML": "",
+            "answerConfiguration": {
+                "type": "text",
+                "options": []
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,TSL,Biostats,Business Account Manager,CEVA,Data Management,Executive Oversight,Feasibility,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics,Strategic Pricing"
+        },
+        "5251961b-24a0-4762-8449-dade3f6064b4": {
+            "isCustomQuestion": false,
+            "questionId": "5251961b-24a0-4762-8449-dade3f6064b4",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "n/a",
+            "questionOrder": 8,
+            "questionApproval": false,
+            "locked": false,
+            "opportunityType": "Opportunity Launch Call (Pilot),Default Type,Non-Core Clinical Studies",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"owfvm\",\"text\":\"Key People Involved\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"b2p77\" data-offset-key=\"owfvm-0-0\"><div data-offset-key=\"owfvm-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"owfvm-0-0\"><span data-text=\"true\">Key People Involved</span></span></div></div></div>",
+            "roleNames": [
+                "Business Developer"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "n/a",
+            "questionText": "Key People Involved",
+            "integration": "",
+            "answers": [
+                {
+                    "user": "UnityPredictedAnswer",
+                    "userName": "UnityPredictedAnswer",
+                    "userRole": "UnityPredictedAnswer",
+                    "date": "2023-02-08T09:47:48.326Z",
+                    "answer": "See Proposal Team section for assignments from Salesforce.",
+                    "formattedAnswer": "See Proposal Team section for assignments from Salesforce.",
+                    "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                    "updatedInPG": false
+                }
+            ],
+            "questionHintJSON": "",
+            "questionHintHTML": "",
+            "answerConfiguration": {
+                "type": "text",
+                "options": []
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Proposal Developer,Project Lead,TSL,Biostats,Business Account Manager,CEVA,Data Management,Executive Oversight,Feasibility,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics,Strategic Pricing",
+            "businessRule": "{\"conditions\":[{\"operator\":\"Or\",\"condition\":[{\"fieldName\":\"Opportunity Overview-M9D\",\"fieldValue\":[],\"answerRelationship\":\"Or\",\"Operator\":\"Is Not Blank\"}],\"action\":[{\"fieldName\":\"5251961b-24a0-4762-8449-dade3f6064b4\",\"fieldValue\":[\"See Proposal Team section for assignments from Salesforce.\"],\"fieldAction\":\"Equal\",\"action\":\"setAnswer\"}]}]}"
+        },
+        "8e89a496-c3c5-47ce-b193-b7406fbf9ae1": {
+            "isCustomQuestion": false,
+            "questionId": "8e89a496-c3c5-47ce-b193-b7406fbf9ae1",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "n/a",
+            "questionOrder": 9,
+            "questionApproval": false,
+            "locked": false,
+            "opportunityType": "Opportunity Launch Call (Pilot),Default Type,Non-Core Clinical Studies",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"wwqx9\",\"text\":\"Materials\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"150xd\" data-offset-key=\"wwqx9-0-0\"><div data-offset-key=\"wwqx9-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"wwqx9-0-0\"><span data-text=\"true\">Materials/span></span></div></div></div>",
+            "roleNames": [
+                "Business Developer"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "n/a",
+            "questionText": "Materials",
+            "integration": "",
+            "answers": [
+                {
+                    "user": "UnityPredictedAnswer",
+                    "userName": "UnityPredictedAnswer",
+                    "userRole": "UnityPredictedAnswer",
+                    "date": "2023-02-08T09:47:48.770Z",
+                    "answer": "See the \"Documents\" tab for the list of relevant Box folders.",
+                    "formattedAnswer": "See the \"Documents\" tab for the list of relevant Box folders.",
+                    "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                    "updatedInPG": false
+                }
+            ],
+            "questionHintJSON": "",
+            "questionHintHTML": "",
+            "answerConfiguration": {
+                "type": "text",
+                "options": []
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,TSL,Biostats,Business Account Manager,CEVA,Data Management,Executive Oversight,Feasibility,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics,Strategic Pricing",
+            "businessRule": "{\"conditions\":[{\"operator\":\"Or\",\"condition\":[{\"fieldName\":\"Opportunity Overview-M9D\",\"fieldValue\":[],\"answerRelationship\":\"Or\",\"Operator\":\"Is Not Blank\"}],\"action\":[{\"fieldName\":\"8e89a496-c3c5-47ce-b193-b7406fbf9ae1\",\"fieldValue\":[\"See the \\\"Documents\\\" tab for the list of relevant Box folders.\"],\"fieldAction\":\"Equal\",\"action\":\"setAnswer\"}]}]}"
+        },
+        "Country Strategy-H7V": {
+            "isCustomQuestion": false,
+            "questionId": "Country Strategy-H7V",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "Potential_Regions__c",
+            "questionOrder": 10,
+            "questionApproval": false,
+            "currentSFanswer": {
+                "value": [
+                    "Asia Pacific"
+                ],
+                "time": "2023-02-08T09:47:45.843Z"
+            },
+            "locked": true,
+            "opportunityType": "Default Type,Opportunity Launch Call (Pilot),Core Strategy Call Template - AMR/EMEA,Core Strategy Call Template - APAC,Core Strategy and Data Planning Calls - AMR/EMEA,Ballpark,Non-Core Clinical Studies",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"u3mqn\",\"text\":\"Did the customer specify any target regions?\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"8n3hl\" data-offset-key=\"u3mqn-0-0\"><div data-offset-key=\"u3mqn-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"u3mqn-0-0\"><span data-text=\"true\">Did the customer specify any target regions?/span></span></div></div></div>",
+            "roleNames": [
+                "Business Developer"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "Opportunity",
+            "questionText": "Did the customer specify any target regions?",
+            "integration": "Qvidian",
+            "answers": [
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-01T12:56:41.451Z",
+                    "answer": [
+                        "Asia Pacific"
+                    ],
+                    "formattedAnswer": [
+                        "Asia Pacific"
+                    ],
+                    "proposalId": "93c77a01-5e31-4191-9b2f-cfac782a21af",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "upendrareddy.mannuru@iqvia.com",
+                    "userName": "Upendra Reddy Mannuru",
+                    "userRole": "Business Developer",
+                    "date": "2023-02-01T13:13:50.916Z",
+                    "answer": [
+                        "Asia Pacific",
+                        "Japan"
+                    ],
+                    "proposalId": "93c77a01-5e31-4191-9b2f-cfac782a21af",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-01T13:24:05.060Z",
+                    "answer": [
+                        "Asia Pacific"
+                    ],
+                    "formattedAnswer": [
+                        "Asia Pacific"
+                    ],
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-02T06:35:17.782Z",
+                    "answer": [
+                        "Asia Pacific"
+                    ],
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "formattedAnswer": [
+                        "Asia Pacific"
+                    ],
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-07T15:11:11.391Z",
+                    "answer": [
+                        "Asia Pacific"
+                    ],
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "formattedAnswer": [
+                        "Asia Pacific"
+                    ],
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-08T09:42:41.625Z",
+                    "answer": [
+                        "Asia Pacific"
+                    ],
+                    "formattedAnswer": [
+                        "Asia Pacific"
+                    ],
+                    "proposalId": "a81d91c0-1974-47fc-aff9-b13e20a69d34",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-08T09:47:45.843Z",
+                    "answer": [
+                        "Asia Pacific"
+                    ],
+                    "formattedAnswer": [
+                        "Asia Pacific"
+                    ],
+                    "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "sushil.munda@iqvia.com",
+                    "userName": "Sushil Munda",
+                    "userRole": "Business Account Manager",
+                    "date": "2023-02-08T15:17:20.082Z",
+                    "answer": [],
+                    "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "sushil.munda@iqvia.com",
+                    "userName": "Sushil Munda",
+                    "userRole": "Business Account Manager",
+                    "date": "2023-02-08T15:17:27.916Z",
+                    "answer": [
+                        "Asia Pacific"
+                    ],
+                    "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                    "updatedInPG": false
+                }
+            ],
+            "questionHintJSON": "",
+            "questionHintHTML": "",
+            "answerConfiguration": {
+                "type": "picklist-lookup",
+                "options": []
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,TSL,Biostats,CEVA,Business Account Manager,Data Management,Executive Oversight,Feasibility,Medical Writing,Safety,Global Site Activation (GSA),Site Analytics,Strategic Pricing"
+        },
+        "Country Strategy-N9P": {
+            "isCustomQuestion": false,
+            "questionId": "Country Strategy-N9P",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "Targeted_Countries__c",
+            "questionOrder": 11,
+            "questionApproval": false,
+            "currentSFanswer": {
+                "value": [
+                    "United States of America"
+                ],
+                "time": "2023-02-08T09:47:45.861Z"
+            },
+            "locked": true,
+            "opportunityType": "Default Type,Opportunity Launch Call (Pilot),Core Strategy Call Template - AMR/EMEA,Core Strategy and Data Planning Calls - AMR/EMEA,Core Strategy Call Template - APAC,Ballpark,Non-Core Clinical Studies",
+            "questionHint": " Note: The information entered here can be pulled into the Challenge Call template in Qvidian for AMR/EMEA-led RFPs.",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"c062q\",\"text\":\"Which countries did the customer specify?\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": true,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"7gvuu\" data-offset-key=\"c062q-0-0\"><div data-offset-key=\"c062q-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"c062q-0-0\"><span data-text=\"true\">Which countries did the customer specify?</span></span></div></div></div>",
+            "roleNames": [
+                "Business Developer"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "Bid_History__c",
+            "questionText": "Which countries did the customer specify?",
+            "integration": "Qvidian",
+            "answers": [
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-01T12:56:41.469Z",
+                    "answer": [
+                        "United States of America"
+                    ],
+                    "formattedAnswer": [
+                        "United States of America"
+                    ],
+                    "proposalId": "93c77a01-5e31-4191-9b2f-cfac782a21af",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-01T13:24:05.079Z",
+                    "answer": [
+                        "United States of America"
+                    ],
+                    "formattedAnswer": [
+                        "United States of America"
+                    ],
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "sushil.munda@iqvia.com",
+                    "userName": "Sushil Munda",
+                    "userRole": "Business Account Manager",
+                    "date": "2023-02-02T06:02:21.486Z",
+                    "answer": [
+                        "Afghanistan",
+                        "Aland Islands",
+                        "Albania",
+                        "Algeria",
+                        "Andorra",
+                        "Angola",
+                        "Anguilla",
+                        "Antarctica",
+                        "Antigua and Barbuda",
+                        "Argentina",
+                        "Aruba",
+                        "Australia",
+                        "Bahrain",
+                        "Bangladesh",
+                        "Belize",
+                        "Benin",
+                        "Bosnia and Herzegovina",
+                        "United States of America"
+                    ],
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-08T09:42:41.642Z",
+                    "answer": [
+                        "United States of America"
+                    ],
+                    "formattedAnswer": [
+                        "United States of America"
+                    ],
+                    "proposalId": "a81d91c0-1974-47fc-aff9-b13e20a69d34",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-08T09:47:45.861Z",
+                    "answer": [
+                        "United States of America"
+                    ],
+                    "formattedAnswer": [
+                        "United States of America"
+                    ],
+                    "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "sushil.munda@iqvia.com",
+                    "userName": "Sushil Munda",
+                    "userRole": "Business Account Manager",
+                    "date": "2023-02-08T15:16:31.903Z",
+                    "answer": [],
+                    "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                    "updatedInPG": false
+                }
+            ],
+            "questionHintJSON": "{\"blocks\":[{\"key\":\"f073l\",\"text\":\" Note: The information entered here can be pulled into the Challenge Call template in Qvidian for AMR/EMEA-led RFPs.\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":1,\"length\":115,\"style\":\"ITALIC\"}],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "questionHintHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"d7cts\" data-offset-key=\"f073l-0-0\"><div data-offset-key=\"f073l-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"f073l-0-0\"><span data-text=\"true\"> </span></span><span data-offset-key=\"f073l-0-1\" style=\"font-style: italic;\"><span data-text=\"true\">Note: The information entered here can be pulled into the Challenge Call template in Qvidian for AMR/EMEA-led RFPss.</span></span></div></div></div>",
+            "answerConfiguration": {
+                "type": "picklist-lookup",
+                "options": [
+                    "United States of America",
+                    "Afghanistan",
+                    "Aland Islands",
+                    "Albania",
+                    "Algeria",
+                    "American Samoa",
+                    "Andorra",
+                    "Angola",
+                    "Anguilla",
+                    "Antarctica",
+                    "Antigua and Barbuda",
+                    "Argentina",
+                    "Armenia",
+                    "Aruba",
+                    "Australia",
+                    "Austria",
+                    "Azerbaijan",
+                    "Bahamas",
+                    "Bahrain",
+                    "Bangladesh",
+                    "Barbados",
+                    "Belarus",
+                    "Belgium",
+                    "Belize",
+                    "Benin",
+                    "Bermuda",
+                    "Bhutan",
+                    "Bolivia",
+                    "Bosnia and Herzegovina",
+                    "Botswana",
+                    "Bouvet Island",
+                    "Brazil",
+                    "British Virgin Islands",
+                    "British Indian Ocean Territory",
+                    "Brunei Darussalam",
+                    "Bulgaria",
+                    "Burkina Faso",
+                    "Burundi",
+                    "Cambodia",
+                    "Cameroon",
+                    "Canada",
+                    "Cape Verde",
+                    "Cayman Islands",
+                    "Central African Republic",
+                    "Chad",
+                    "Chile",
+                    "China",
+                    "Hong Kong",
+                    "SAR China",
+                    "Macao",
+                    "SAR China",
+                    "Christmas Island",
+                    "Cocos (Keeling) Islands",
+                    "Colombia",
+                    "Comoros",
+                    "Congo (Brazzaville)",
+                    "Congo",
+                    "(Kinshasa)",
+                    "Cook Islands",
+                    "Costa Rica",
+                    "Côte d'Ivoire",
+                    "Croatia",
+                    "Cuba",
+                    "Cyprus",
+                    "Czech Republic",
+                    "Denmark",
+                    "Djibouti",
+                    "Dominica",
+                    "Dominican Republic",
+                    "Ecuador",
+                    "Egypt",
+                    "El Salvador",
+                    "Equatorial Guinea",
+                    "Eritrea",
+                    "Estonia",
+                    "Ethiopia",
+                    "Falkland Islands (Malvinas)",
+                    "Faroe Islands",
+                    "Fiji",
+                    "Finland",
+                    "France",
+                    "French Guiana",
+                    "French Polynesia",
+                    "French Southern Territories",
+                    "Gabon",
+                    "Gambia",
+                    "Georgia",
+                    "Germany",
+                    "Ghana",
+                    "Gibraltar",
+                    "Greece",
+                    "Greenland",
+                    "Grenada",
+                    "Guadeloupe",
+                    "Guam",
+                    "Guatemala",
+                    "Guernsey",
+                    "Guinea",
+                    "Guinea-Bissau",
+                    "Guyana",
+                    "Haiti",
+                    "Heard and Mcdonald Islands",
+                    "Holy See (Vatican City State)",
+                    "Honduras",
+                    "Hungary",
+                    "Iceland",
+                    "India",
+                    "Indonesia",
+                    "Iran",
+                    "Islamic Republic of",
+                    "Iraq",
+                    "Ireland",
+                    "Isle of Man",
+                    "Israel",
+                    "Italy",
+                    "Jamaica",
+                    "Japan",
+                    "Jersey",
+                    "Jordan",
+                    "Kazakhstan",
+                    "Kenya",
+                    "Kiribati",
+                    "Korea (North)",
+                    "Korea (South)",
+                    "Kuwait",
+                    "Kyrgyzstan",
+                    "Lao PDR",
+                    "Latvia",
+                    "Lebanon",
+                    "Lesotho",
+                    "Liberia",
+                    "Libya",
+                    "Liechtenstein",
+                    "Lithuania",
+                    "Luxembourg",
+                    "Macedonia",
+                    "Republic of",
+                    "Madagascar",
+                    "Malawi",
+                    "Malaysia",
+                    "Maldives",
+                    "Mali",
+                    "Malta",
+                    "Marshall Islands",
+                    "Martinique",
+                    "Mauritania",
+                    "Mauritius",
+                    "Mayotte",
+                    "Mexico",
+                    "Micronesia",
+                    "Federated States of",
+                    "Moldova",
+                    "Monaco",
+                    "Mongolia",
+                    "Montenegro",
+                    "Montserrat",
+                    "Morocco",
+                    "Mozambique",
+                    "Myanmar",
+                    "Namibia",
+                    "Nauru",
+                    "Nepal",
+                    "Netherlands",
+                    "Netherlands Antilles",
+                    "New Caledonia",
+                    "New Zealand",
+                    "Nicaragua",
+                    "Niger",
+                    "Nigeria",
+                    "Niue",
+                    "Norfolk Island",
+                    "Northern Mariana Islands",
+                    "Norway",
+                    "Oman",
+                    "Pakistan",
+                    "Palau",
+                    "Palestinian Territory",
+                    "Panama",
+                    "Papua New Guinea",
+                    "Paraguay",
+                    "Peru",
+                    "Philippines",
+                    "Pitcairn",
+                    "Poland",
+                    "Portugal",
+                    "Puerto Rico",
+                    "Qatar",
+                    "Réunion",
+                    "Romania",
+                    "Russian Federation",
+                    "Rwanda",
+                    "Saint-Barthélemy",
+                    "Saint Helena",
+                    "Saint Kitts and Nevis",
+                    "Saint Lucia",
+                    "Saint-Martin (French part)",
+                    "Saint Pierre and Miquelon",
+                    "Saint Vincent and Grenadines",
+                    "Samoa",
+                    "San Marino",
+                    "Sao Tome and Principe",
+                    "Saudi Arabia",
+                    "Senegal",
+                    "Serbia",
+                    "Seychelles",
+                    "Sierra Leone",
+                    "Singapore",
+                    "Slovakia",
+                    "Slovenia",
+                    "Solomon Islands",
+                    "Somalia",
+                    "South Africa",
+                    "South Georgia and the South Sandwich Islands",
+                    "South Sudan",
+                    "Spain",
+                    "Sri Lanka",
+                    "Sudan",
+                    "Suriname",
+                    "Svalbard and Jan Mayen Islands",
+                    "Swaziland",
+                    "Sweden",
+                    "Switzerland",
+                    "Syrian Arab Republic (Syria)",
+                    "Taiwan",
+                    "Republic of China",
+                    "Tajikistan",
+                    "Tanzania",
+                    "United Republic of",
+                    "Thailand",
+                    "Timor-Leste",
+                    "Togo",
+                    "Tokelau",
+                    "Tonga",
+                    "Trinidad and Tobago",
+                    "Tunisia",
+                    "Turkey",
+                    "Turkmenistan",
+                    "Turks and Caicos Islands",
+                    "Tuvalu",
+                    "Uganda",
+                    "Ukraine",
+                    "United Arab Emirates",
+                    "United Kingdom",
+                    "US Minor Outlying Islands",
+                    "Uruguay",
+                    "Uzbekistan",
+                    "Vanuatu",
+                    "Venezuela (Bolivarian Republic)",
+                    "Viet Nam",
+                    "Virgin Islands",
+                    "US",
+                    "Wallis and Futuna Islands",
+                    "Western Sahara",
+                    "Yemen",
+                    "Zambia",
+                    "Zimbabwe"
+                ]
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Medical Strategy Lead,Business Developer,Clinical DS&B,Project Lead,TSL,Proposal Developer,Biostats,Business Account Manager,CEVA,Data Management,Executive Oversight,Feasibility,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics,Strategic Pricing"
+        },
+        "755d16da-4d68-48bb-aba0-a33c60298b5e": {
+            "isCustomQuestion": false,
+            "questionId": "755d16da-4d68-48bb-aba0-a33c60298b5e",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "n/a",
+            "questionOrder": 12,
+            "questionApproval": false,
+            "locked": false,
+            "opportunityType": "Opportunity Launch Call (Pilot),Default Type,Non-Core Clinical Studies",
+            "questionHint": "Which and why?",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"nf1w6\",\"text\":\"Are there any countries / regions the customer would like us to avoid?\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"foak9\" data-offset-key=\"nf1w6-0-0\"><div data-offset-key=\"nf1w6-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"nf1w6-0-0\"><span data-text=\"true\">Are there any countries / regions the customer would like us to avoid?</span></span></div></div></div>",
+            "roleNames": [
+                "Business Developer"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "n/a",
+            "questionText": "Are there any countries / regions the customer would like us to avoid?",
+            "integration": "",
+            "answers": [],
+            "questionHintJSON": "{\"blocks\":[{\"key\":\"7923u\",\"text\":\"Which and why?\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "questionHintHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"3llrh\" data-offset-key=\"7923u-0-0\"><div data-offset-key=\"7923u-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"7923u-0-0\"><span data-text=\"true\">Which and why?</span></span></div></div></div>",
+            "answerConfiguration": {
+                "type": "picklist-lookup",
+                "options": [
+                    "United States of America",
+                    "Afghanistan",
+                    "Aland Islands",
+                    "Albania",
+                    "Algeria",
+                    "American Samoa",
+                    "Andorra",
+                    "Angola",
+                    "Anguilla",
+                    "Antarctica",
+                    "Antigua and Barbuda",
+                    "Argentina",
+                    "Armenia",
+                    "Aruba",
+                    "Australia",
+                    "Austria",
+                    "Azerbaijan",
+                    "Bahamas",
+                    "Bahrain",
+                    "Bangladesh",
+                    "Barbados",
+                    "Belarus",
+                    "Belgium",
+                    "Belize",
+                    "Benin",
+                    "Bermuda",
+                    "Bhutan",
+                    "Bolivia",
+                    "Bosnia and Herzegovina",
+                    "Botswana",
+                    "Bouvet Island",
+                    "Brazil",
+                    "British Virgin Islands",
+                    "British Indian Ocean Territory",
+                    "Brunei Darussalam",
+                    "Bulgaria",
+                    "Burkina Faso",
+                    "Burundi",
+                    "Cambodia",
+                    "Cameroon",
+                    "Canada",
+                    "Cape Verde",
+                    "Cayman Islands",
+                    "Central African Republic",
+                    "Chad",
+                    "Chile",
+                    "China",
+                    "Hong Kong",
+                    "SAR China",
+                    "Macao",
+                    "SAR China",
+                    "Christmas Island",
+                    "Cocos (Keeling) Islands",
+                    "Colombia",
+                    "Comoros",
+                    "Congo (Brazzaville)",
+                    "Congo",
+                    "(Kinshasa)",
+                    "Cook Islands",
+                    "Costa Rica",
+                    "Côte d'Ivoire",
+                    "Croatia",
+                    "Cuba",
+                    "Cyprus",
+                    "Czech Republic",
+                    "Denmark",
+                    "Djibouti",
+                    "Dominica",
+                    "Dominican Republic",
+                    "Ecuador",
+                    "Egypt",
+                    "El Salvador",
+                    "Equatorial Guinea",
+                    "Eritrea",
+                    "Estonia",
+                    "Ethiopia",
+                    "Falkland Islands (Malvinas)",
+                    "Faroe Islands",
+                    "Fiji",
+                    "Finland",
+                    "France",
+                    "French Guiana",
+                    "French Polynesia",
+                    "French Southern Territories",
+                    "Gabon",
+                    "Gambia",
+                    "Georgia",
+                    "Germany",
+                    "Ghana",
+                    "Gibraltar",
+                    "Greece",
+                    "Greenland",
+                    "Grenada",
+                    "Guadeloupe",
+                    "Guam",
+                    "Guatemala",
+                    "Guernsey",
+                    "Guinea",
+                    "Guinea-Bissau",
+                    "Guyana",
+                    "Haiti",
+                    "Heard and Mcdonald Islands",
+                    "Holy See (Vatican City State)",
+                    "Honduras",
+                    "Hungary",
+                    "Iceland",
+                    "India",
+                    "Indonesia",
+                    "Iran",
+                    "Islamic Republic of",
+                    "Iraq",
+                    "Ireland",
+                    "Isle of Man",
+                    "Israel",
+                    "Italy",
+                    "Jamaica",
+                    "Japan",
+                    "Jersey",
+                    "Jordan",
+                    "Kazakhstan",
+                    "Kenya",
+                    "Kiribati",
+                    "Korea (North)",
+                    "Korea (South)",
+                    "Kuwait",
+                    "Kyrgyzstan",
+                    "Lao PDR",
+                    "Latvia",
+                    "Lebanon",
+                    "Lesotho",
+                    "Liberia",
+                    "Libya",
+                    "Liechtenstein",
+                    "Lithuania",
+                    "Luxembourg",
+                    "Macedonia",
+                    "Republic of",
+                    "Madagascar",
+                    "Malawi",
+                    "Malaysia",
+                    "Maldives",
+                    "Mali",
+                    "Malta",
+                    "Marshall Islands",
+                    "Martinique",
+                    "Mauritania",
+                    "Mauritius",
+                    "Mayotte",
+                    "Mexico",
+                    "Micronesia",
+                    "Federated States of",
+                    "Moldova",
+                    "Monaco",
+                    "Mongolia",
+                    "Montenegro",
+                    "Montserrat",
+                    "Morocco",
+                    "Mozambique",
+                    "Myanmar",
+                    "Namibia",
+                    "Nauru",
+                    "Nepal",
+                    "Netherlands",
+                    "Netherlands Antilles",
+                    "New Caledonia",
+                    "New Zealand",
+                    "Nicaragua",
+                    "Niger",
+                    "Nigeria",
+                    "Niue",
+                    "Norfolk Island",
+                    "Northern Mariana Islands",
+                    "Norway",
+                    "Oman",
+                    "Pakistan",
+                    "Palau",
+                    "Palestinian Territory",
+                    "Panama",
+                    "Papua New Guinea",
+                    "Paraguay",
+                    "Peru",
+                    "Philippines",
+                    "Pitcairn",
+                    "Poland",
+                    "Portugal",
+                    "Puerto Rico",
+                    "Qatar",
+                    "Réunion",
+                    "Romania",
+                    "Russian Federation",
+                    "Rwanda",
+                    "Saint-Barthélemy",
+                    "Saint Helena",
+                    "Saint Kitts and Nevis",
+                    "Saint Lucia",
+                    "Saint-Martin (French part)",
+                    "Saint Pierre and Miquelon",
+                    "Saint Vincent and Grenadines",
+                    "Samoa",
+                    "San Marino",
+                    "Sao Tome and Principe",
+                    "Saudi Arabia",
+                    "Senegal",
+                    "Serbia",
+                    "Seychelles",
+                    "Sierra Leone",
+                    "Singapore",
+                    "Slovakia",
+                    "Slovenia",
+                    "Solomon Islands",
+                    "Somalia",
+                    "South Africa",
+                    "South Georgia and the South Sandwich Islands",
+                    "South Sudan",
+                    "Spain",
+                    "Sri Lanka",
+                    "Sudan",
+                    "Suriname",
+                    "Svalbard and Jan Mayen Islands",
+                    "Swaziland",
+                    "Sweden",
+                    "Switzerland",
+                    "Syrian Arab Republic (Syria)",
+                    "Taiwan",
+                    "Republic of China",
+                    "Tajikistan",
+                    "Tanzania",
+                    "United Republic of",
+                    "Thailand",
+                    "Timor-Leste",
+                    "Togo",
+                    "Tokelau",
+                    "Tonga",
+                    "Trinidad and Tobago",
+                    "Tunisia",
+                    "Turkey",
+                    "Turkmenistan",
+                    "Turks and Caicos Islands",
+                    "Tuvalu",
+                    "Uganda",
+                    "Ukraine",
+                    "United Arab Emirates",
+                    "United Kingdom",
+                    "US Minor Outlying Islands",
+                    "Uruguay",
+                    "Uzbekistan",
+                    "Vanuatu",
+                    "Venezuela (Bolivarian Republic)",
+                    "Viet Nam",
+                    "Virgin Islands",
+                    "US",
+                    "Wallis and Futuna Islands",
+                    "Western Sahara",
+                    "Yemen",
+                    "Zambia",
+                    "Zimbabwe"
+                ]
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,TSL,Biostats,Business Account Manager,CEVA,Data Management,Executive Oversight,Feasibility,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics,Strategic Pricing"
+        },
+        "10c7fa62-63e1-40c1-9995-3b3a5cd1be33": {
+            "isCustomQuestion": false,
+            "questionId": "10c7fa62-63e1-40c1-9995-3b3a5cd1be33",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "n/a",
+            "questionOrder": 13,
+            "questionApproval": false,
+            "locked": false,
+            "opportunityType": "Opportunity Launch Call (Pilot),Default Type,Non-Core Clinical Studies",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"xpu1y\",\"text\":\"Recent / relevant opportunities with same sponsor\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"9fea4\" data-offset-key=\"xpu1y-0-0\"><div data-offset-key=\"xpu1y-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"xpu1y-0-0\"><span data-text=\"true\">Recent / relevant opportunities with same sponsor/span></span></div></div></div>",
+            "roleNames": [
+                "Business Developer"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "n/a",
+            "questionText": "Recent / relevant opportunities with same sponsor",
+            "integration": "",
+            "answers": [],
+            "questionHintJSON": "",
+            "questionHintHTML": "",
+            "answerConfiguration": {
+                "type": "text",
+                "options": []
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,TSL,Biostats,Business Account Manager,CEVA,Data Management,Executive Oversight,Feasibility,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics,Strategic Pricing"
+        },
+        "86ba5974-f4b1-4598-90ae-a1b476fac829": {
+            "isCustomQuestion": false,
+            "questionId": "86ba5974-f4b1-4598-90ae-a1b476fac829",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "n/a",
+            "questionOrder": 14,
+            "questionApproval": false,
+            "locked": false,
+            "opportunityType": "Opportunity Launch Call (Pilot),Default Type,Non-Core Clinical Studies",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"0lm6e\",\"text\":\"Recent / relevant opportunities with similar indication\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"6iljb\" data-offset-key=\"0lm6e-0-0\"><div data-offset-key=\"0lm6e-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"0lm6e-0-0\"><span data-text=\"true\">Recent / relevant opportunities with similar indication/span></span></div></div></div>",
+            "roleNames": [
+                "Business Developer"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "n/a",
+            "questionText": "Recent / relevant opportunities with similar indication",
+            "integration": "",
+            "answers": [],
+            "questionHintJSON": "",
+            "questionHintHTML": "",
+            "answerConfiguration": {
+                "type": "text",
+                "options": []
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,TSL,Biostats,Business Account Manager,CEVA,Data Management,Feasibility,Executive Oversight,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics,Strategic Pricing"
+        },
+        "eb38911c-d4ec-4500-a0cf-2b0e392f5dca": {
+            "isCustomQuestion": false,
+            "questionId": "eb38911c-d4ec-4500-a0cf-2b0e392f5dca",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "n/a",
+            "questionOrder": 15,
+            "questionApproval": false,
+            "locked": false,
+            "opportunityType": "Opportunity Launch Call (Pilot),Default Type,Non-Core Clinical Studies",
+            "questionHint": "Consider win/loss history. If blank, consider pulling from customer fact sheet. See Documents tab for Box folder.  ",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"v30tj\",\"text\":\"Where are we with customer relationship?\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"y02ag\" data-offset-key=\"v30tj-0-0\"><div data-offset-key=\"v30tj-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"v30tj-0-0\"><span data-text=\"true\">Where are we with customer relationship?/span></span></div></div></div>",
+            "roleNames": [
+                "Business Developer"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "n/a",
+            "questionText": "Where are we with customer relationship?",
+            "integration": "",
+            "answers": [],
+            "questionHintJSON": "{\"blocks\":[{\"key\":\"29uvp\",\"text\":\"Consider win/loss history. If blank, consider pulling from customer fact sheet. See Documents tab for Box folder.  \",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "questionHintHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"h6ykl\" data-offset-key=\"29uvp-0-0\"><div data-offset-key=\"29uvp-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"29uvp-0-0\"><span data-text=\"true\">Consider win/loss history. If blank, consider pulling from customer fact sheet. See Documents tab for Box folder.  /span></span></div></div></div>",
+            "answerConfiguration": {
+                "type": "text",
+                "options": []
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,TSL,Biostats,Business Account Manager,CEVA,Data Management,Executive Oversight,Feasibility,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics,Strategic Pricing"
+        },
+        "7173f68b-7e59-4139-9476-5389bcc1e90d": {
+            "isCustomQuestion": false,
+            "questionId": "7173f68b-7e59-4139-9476-5389bcc1e90d",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "n/a",
+            "questionOrder": 16,
+            "questionApproval": false,
+            "locked": false,
+            "opportunityType": "Opportunity Launch Call (Pilot),Default Type,Non-Core Clinical Studies",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"cxrg7\",\"text\":\"Ongoing delivery status / issues?\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"zyel2\" data-offset-key=\"cxrg7-0-0\"><div data-offset-key=\"cxrg7-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"cxrg7-0-0\"><span data-text=\"true\">Ongoing delivery status / issues?/span></span></div></div></div>",
+            "roleNames": [
+                "Project Lead"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "n/a",
+            "questionText": "Ongoing delivery status / issues?",
+            "integration": "",
+            "answers": [],
+            "questionHintJSON": "",
+            "questionHintHTML": "",
+            "answerConfiguration": {
+                "type": "text",
+                "options": []
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,TSL,Business Account Manager,Biostats,CEVA,Data Management,Executive Oversight,Feasibility,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics,Strategic Pricing"
+        },
+        "Pricing-W9S": {
+            "isCustomQuestion": false,
+            "questionId": "Pricing-W9S",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "n/a",
+            "questionOrder": 17,
+            "questionApproval": false,
+            "locked": false,
+            "opportunityType": "Default Type,Opportunity Launch Call (Pilot),Non-Core Clinical Studies",
+            "questionHint": " Note: The information entered here can be pulled into the Challenge Call template in Qvidian for AMR/EMEA.",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"g04es\",\"text\":\"What is the customer's price point, if known?\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"9knoo\" data-offset-key=\"g04es-0-0\"><div data-offset-key=\"g04es-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"g04es-0-0\"><span data-text=\"true\">Clin</span></span></div></div></div>",
+            "roleNames": [
+                "Business Developer"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "n/a",
+            "questionText": "What is the customer's price point, if known?",
+            "integration": "Qvidian",
+            "answers": [],
+            "questionHintJSON": "{\"blocks\":[{\"key\":\"8nbaj\",\"text\":\" Note: The information entered here can be pulled into the Challenge Call template in Qvidian for AMR/EMEA.\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":1,\"length\":106,\"style\":\"ITALIC\"}],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "questionHintHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"900sk\" data-offset-key=\"8nbaj-0-0\"><div data-offset-key=\"8nbaj-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"8nbaj-0-0\"><span data-text=\"true\"> </span></span><span data-offset-key=\"8nbaj-0-1\" style=\"font-style: italic;\"><span data-text=\"true\">Note: The information entered here can be pulled into the Challenge Call template in Qvidian for AMR/EMEA.</span></span></div></div></div>",
+            "answerConfiguration": {
+                "type": "text",
+                "options": []
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Strategic Pricing,Site Analytics,Safety,Global Site Activation (GSA),Medical Writing,Feasibility,Executive Oversight,Data Management,CEVA,Business Account Manager,Biostats,TSL,Proposal Developer,Project Lead,Medical Strategy Lead"
+        },
+        "fe86ef4a-1889-4ae4-af71-e303ce85fa45": {
+            "isCustomQuestion": false,
+            "questionId": "fe86ef4a-1889-4ae4-af71-e303ce85fa45",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "n/a",
+            "questionOrder": 18,
+            "questionApproval": false,
+            "locked": false,
+            "opportunityType": "Opportunity Launch Call (Pilot),Default Type,Non-Core Clinical Studies",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"z0jgm\",\"text\":\"DICT by client request or FDA mandated patient population\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"ugify\" data-offset-key=\"z0jgm-0-0\"><div data-offset-key=\"z0jgm-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"z0jgm-0-0\"><span data-text=\"true\">DICT by client request or FDA mandated patient population/span></span></div></div></div>",
+            "roleNames": [
+                "Business Developer"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "n/a",
+            "questionText": "DICT by client request or FDA mandated patient population",
+            "integration": "",
+            "answers": [],
+            "questionHintJSON": "",
+            "questionHintHTML": "",
+            "answerConfiguration": {
+                "type": "text",
+                "options": []
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,TSL,Biostats,Business Account Manager,CEVA,Data Management,Executive Oversight,Feasibility,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics,Strategic Pricing"
+        },
+        "305a3072-5b71-41b4-854a-978e095a7f0c": {
+            "isCustomQuestion": false,
+            "questionId": "305a3072-5b71-41b4-854a-978e095a7f0c",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "Proposal_Deliverable__c",
+            "questionOrder": 19,
+            "questionApproval": false,
+            "currentSFanswer": {
+                "value": [
+                    "Full Proposal"
+                ],
+                "time": "2023-02-08T09:47:45.783Z"
+            },
+            "locked": false,
+            "opportunityType": "Opportunity Launch Call (Pilot),Default Type,Core Strategy Call Template - AMR/EMEA,Core Strategy and Data Planning Calls - AMR/EMEA,Core Strategy Call Template - APAC,Ballpark,Non-Core Clinical Studies",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"j9lt7\",\"text\":\"Proposal Deliverable Type\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"dss18\" data-offset-key=\"j9lt7-0-0\"><div data-offset-key=\"j9lt7-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"j9lt7-0-0\"><span data-text=\"true\">Proposal Deliverable Type</span></span></div></div></div>",
+            "roleNames": [
+                "Business Developer"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "Bid_History__c",
+            "questionText": "Proposal Deliverable Type",
+            "integration": "",
+            "answers": [
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-01T12:56:41.393Z",
+                    "answer": [
+                        "Experience tables and budget range"
+                    ],
+                    "formattedAnswer": [
+                        "Experience tables and budget range"
+                    ],
+                    "proposalId": "93c77a01-5e31-4191-9b2f-cfac782a21af",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-01T13:24:05.009Z",
+                    "answer": [
+                        "Experience tables and budget range"
+                    ],
+                    "formattedAnswer": [
+                        "Experience tables and budget range"
+                    ],
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-02T06:35:17.335Z",
+                    "answer": [
+                        "Experience tables and budget range"
+                    ],
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "formattedAnswer": [
+                        "Experience tables and budget range"
+                    ],
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-07T15:11:10.828Z",
+                    "answer": [
+                        "Experience tables and budget range"
+                    ],
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "formattedAnswer": [
+                        "Experience tables and budget range"
+                    ],
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-08T09:42:41.574Z",
+                    "answer": [
+                        "Full Proposal"
+                    ],
+                    "formattedAnswer": [
+                        "Full Proposal"
+                    ],
+                    "proposalId": "a81d91c0-1974-47fc-aff9-b13e20a69d34",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-08T09:47:45.783Z",
+                    "answer": [
+                        "Full Proposal"
+                    ],
+                    "formattedAnswer": [
+                        "Full Proposal"
+                    ],
+                    "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                    "updatedInPG": false
+                }
+            ],
+            "questionHintJSON": "",
+            "questionHintHTML": "",
+            "answerConfiguration": {
+                "type": "picklist-lookup",
+                "options": []
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,TSL,Business Account Manager,Biostats,CEVA,Data Management,Executive Oversight,Feasibility,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics,Strategic Pricing"
+        },
+        "0387d640-ec10-4d27-afde-a44f567e3595": {
+            "isCustomQuestion": false,
+            "questionId": "0387d640-ec10-4d27-afde-a44f567e3595",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "Budget_Deliverable__c",
+            "questionOrder": 20,
+            "questionApproval": false,
+            "currentSFanswer": {
+                "value": "Full Budget",
+                "time": "2023-02-08T09:47:45.749Z"
+            },
+            "locked": false,
+            "opportunityType": "Default Type,Core Strategy Call Template - AMR/EMEA,Opportunity Launch Call (Pilot),Ballpark,Core Strategy and Data Planning Calls - AMR/EMEA,Core Strategy Call Template - APAC,Non-Core Clinical Studies",
+            "questionHint": "Most common options are: Awardable - Customer Grid Awardable - IQVIA Grid Ballpark - Customer Grid Ballpark - IQVIA Grid Price per patient",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"6smea\",\"text\":\"Budget Deliverable\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"bpg22\" data-offset-key=\"6smea-0-0\"><div data-offset-key=\"6smea-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"6smea-0-0\"><span data-text=\"true\">Budget Deliverable</span></span></div></div></div>",
+            "roleNames": [
+                "Business Developer"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "Bid_History__c",
+            "questionText": "Budget Deliverable",
+            "integration": "",
+            "answers": [
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-01T12:56:41.352Z",
+                    "answer": "Rounded Ballpark",
+                    "formattedAnswer": "Rounded Ballpark",
+                    "proposalId": "93c77a01-5e31-4191-9b2f-cfac782a21af",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "upendrareddy.mannuru@iqvia.com",
+                    "userName": "Upendra Reddy Mannuru",
+                    "userRole": "Business Developer",
+                    "date": "2023-02-01T13:14:03.535Z",
+                    "answer": "Rounded Ballparkcc",
+                    "proposalId": "93c77a01-5e31-4191-9b2f-cfac782a21af",
+                    "updatedInPG": true
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-01T13:24:04.974Z",
+                    "answer": "Price per Patient Range",
+                    "formattedAnswer": "Price per Patient Range",
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-02T06:35:17.191Z",
+                    "answer": "Price per Patient Range",
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "formattedAnswer": "Price per Patient Range",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-07T15:11:10.680Z",
+                    "answer": "Price per Patient Range",
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "formattedAnswer": "Price per Patient Range",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-08T09:42:41.536Z",
+                    "answer": "Full Budget",
+                    "formattedAnswer": "Full Budget",
+                    "proposalId": "a81d91c0-1974-47fc-aff9-b13e20a69d34",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-08T09:47:45.749Z",
+                    "answer": "Full Budget",
+                    "formattedAnswer": "Full Budget",
+                    "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                    "updatedInPG": false
+                }
+            ],
+            "questionHintJSON": "{\"blocks\":[{\"key\":\"coed0\",\"text\":\"Most common options are:\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}},{\"key\":\"45qgj\",\"text\":\"Awardable - Customer Grid\",\"type\":\"unordered-list-item\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}},{\"key\":\"g9f7\",\"text\":\"Awardable - IQVIA Grid\",\"type\":\"unordered-list-item\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}},{\"key\":\"1ip56\",\"text\":\"Ballpark - Customer Grid\",\"type\":\"unordered-list-item\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}},{\"key\":\"12fo4\",\"text\":\"Ballpark - IQVIA Grid\",\"type\":\"unordered-list-item\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}},{\"key\":\"bvf8v\",\"text\":\"Price per patient\",\"type\":\"unordered-list-item\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "questionHintHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"6tc1m\" data-offset-key=\"coed0-0-0\"><div data-offset-key=\"coed0-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"coed0-0-0\"><br data-text=\"true\"></span></div></div><div data-block=\"true\" data-editor=\"6tc1m\" data-offset-key=\"dojuu-0-0\"><div data-offset-key=\"dojuu-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"dojuu-0-0\"><span data-text=\"true\">Most common options are:</span></span></div></div><ul class=\"public-DraftStyleDefault-ul\" data-offset-key=\"45qgj-0-0\"><li class=\"public-DraftStyleDefault-unorderedListItem public-DraftStyleDefault-reset public-DraftStyleDefault-depth0 public-DraftStyleDefault-listLTR\" data-block=\"true\" data-editor=\"6tc1m\" data-offset-key=\"45qgj-0-0\"><div data-offset-key=\"45qgj-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"45qgj-0-0\"><span data-text=\"true\">Awardable - Customer Grid</span></span></div></li><li class=\"public-DraftStyleDefault-unorderedListItem public-DraftStyleDefault-depth0 public-DraftStyleDefault-listLTR\" data-block=\"true\" data-editor=\"6tc1m\" data-offset-key=\"g9f7-0-0\"><div data-offset-key=\"g9f7-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"g9f7-0-0\"><span data-text=\"true\">Awardable - IQVIA Grid</span></span></div></li><li class=\"public-DraftStyleDefault-unorderedListItem public-DraftStyleDefault-depth0 public-DraftStyleDefault-listLTR\" data-block=\"true\" data-editor=\"6tc1m\" data-offset-key=\"1ip56-0-0\"><div data-offset-key=\"1ip56-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"1ip56-0-0\"><span data-text=\"true\">Ballpark - Customer Grid</span></span></div></li><li class=\"public-DraftStyleDefault-unorderedListItem public-DraftStyleDefault-depth0 public-DraftStyleDefault-listLTR\" data-block=\"true\" data-editor=\"6tc1m\" data-offset-key=\"12fo4-0-0\"><div data-offset-key=\"12fo4-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"12fo4-0-0\"><span data-text=\"true\">Ballpark - IQVIA Grid</span></span></div></li><li class=\"public-DraftStyleDefault-unorderedListItem public-DraftStyleDefault-depth0 public-DraftStyleDefault-listLTR\" data-block=\"true\" data-editor=\"6tc1m\" data-offset-key=\"bvf8v-0-0\"><div data-offset-key=\"bvf8v-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"bvf8v-0-0\"><span data-text=\"true\">Price per patient</span></span></div></li></ul></div>",
+            "answerConfiguration": {
+                "type": "select-lookup",
+                "options": []
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,TSL,Biostats,Business Account Manager,Data Management,CEVA,Executive Oversight,Strategic Pricing,Feasibility,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics"
+        },
+        "c9b640d1-ffe2-4f66-b7c4-5369a2393e78": {
+            "isCustomQuestion": false,
+            "questionId": "c9b640d1-ffe2-4f66-b7c4-5369a2393e78",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "Budget_Deliverable__c",
+            "questionOrder": 21,
+            "questionApproval": false,
+            "currentSFanswer": {
+                "value": "Full Budget",
+                "time": "2023-02-08T09:47:45.896Z"
+            },
+            "locked": false,
+            "opportunityType": "Default Type,Core Strategy Call Template - APAC,Opportunity Launch Call (Pilot),Core Strategy Call Template - AMR/EMEA,Core Strategy and Data Planning Calls - AMR/EMEA,Ballpark,Non-Core Clinical Studies",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"he1b\",\"text\":\"Pricing Tool\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"drg5n\" data-offset-key=\"he1b-0-0\"><div data-offset-key=\"he1b-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"he1b-0-0\"><span data-text=\"true\">Pricing Tool1</span></span></div></div></div>",
+            "roleNames": [
+                "Business Developer"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "Bid_History__c",
+            "questionText": "Pricing Tool",
+            "integration": "",
+            "answers": [
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-01T12:56:41.505Z",
+                    "answer": "Rounded Ballpark",
+                    "formattedAnswer": "Rounded Ballpark",
+                    "proposalId": "93c77a01-5e31-4191-9b2f-cfac782a21af",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-01T13:24:05.116Z",
+                    "answer": "Price per Patient Range",
+                    "formattedAnswer": "Price per Patient Range",
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-02T06:35:19.610Z",
+                    "answer": "Price per Patient Range",
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "formattedAnswer": "Price per Patient Range",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-07T15:11:13.507Z",
+                    "answer": "Price per Patient Range",
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "formattedAnswer": "Price per Patient Range",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-08T09:42:41.677Z",
+                    "answer": "Full Budget",
+                    "formattedAnswer": "Full Budget",
+                    "proposalId": "a81d91c0-1974-47fc-aff9-b13e20a69d34",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-08T09:47:45.896Z",
+                    "answer": "Full Budget",
+                    "formattedAnswer": "Full Budget",
+                    "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                    "updatedInPG": false
+                }
+            ],
+            "questionHintJSON": "",
+            "questionHintHTML": "",
+            "answerConfiguration": {
+                "type": "select-lookup",
+                "options": []
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,TSL,Biostats,Business Account Manager,CEVA,Data Management,Executive Oversight,Feasibility,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics,Strategic Pricing"
+        },
+        "e01b3c3e-87b8-4ab4-bc7e-a32f62f7abf1": {
+            "isCustomQuestion": false,
+            "questionId": "e01b3c3e-87b8-4ab4-bc7e-a32f62f7abf1",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "Patients_Enrolled__c",
+            "questionOrder": 22,
+            "questionApproval": false,
+            "currentSFanswer": {
+                "value": "100",
+                "time": "2023-02-08T09:47:45.913Z"
+            },
+            "locked": false,
+            "opportunityType": "Opportunity Launch Call (Pilot),Default Type,Ballpark,Core Strategy Call Template - AMR/EMEA,Core Strategy Call Template - APAC,Core Strategy and Data Planning Calls - AMR/EMEA,Non-Core Clinical Studies",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"i077b\",\"text\":\"Number of patients enrolled\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"t4dd3\" data-offset-key=\"i077b-0-0\"><div data-offset-key=\"i077b-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"i077b-0-0\"><span data-text=\"true\">Number of patients enrolled/span></span></div></div></div>",
+            "roleNames": [
+                "Business Developer"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "Bid_History__c",
+            "questionText": "Number of patients enrolled",
+            "integration": "Qvidian",
+            "answers": [
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-01T12:56:41.523Z",
+                    "answer": "100",
+                    "formattedAnswer": "100",
+                    "proposalId": "93c77a01-5e31-4191-9b2f-cfac782a21af",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-01T13:24:05.132Z",
+                    "answer": "100",
+                    "formattedAnswer": "100",
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-02T06:35:19.715Z",
+                    "answer": "100",
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "formattedAnswer": "100",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-07T15:11:13.636Z",
+                    "answer": "100",
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "formattedAnswer": "100",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-08T09:42:41.694Z",
+                    "answer": "100",
+                    "formattedAnswer": "100",
+                    "proposalId": "a81d91c0-1974-47fc-aff9-b13e20a69d34",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-08T09:47:45.913Z",
+                    "answer": "100",
+                    "formattedAnswer": "100",
+                    "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                    "updatedInPG": false
+                }
+            ],
+            "questionHintJSON": "",
+            "questionHintHTML": "",
+            "answerConfiguration": {
+                "type": "number",
+                "options": []
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,TSL,Biostats,CEVA,Business Account Manager,Data Management,Executive Oversight,Feasibility,Global Site Activation (GSA),Medical Writing,Safety,Site Analytics,Strategic Pricing"
+        },
+        "71aacb8c-f7a9-42d7-922e-e2387eabf6c8": {
+            "isCustomQuestion": false,
+            "questionId": "71aacb8c-f7a9-42d7-922e-e2387eabf6c8",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "Number_of_Sites__c",
+            "questionOrder": 23,
+            "questionApproval": false,
+            "currentSFanswer": {
+                "value": "3",
+                "time": "2023-02-08T09:47:45.802Z"
+            },
+            "locked": false,
+            "opportunityType": "Default Type,Core Strategy Call Template - AMR/EMEA,Core Strategy Call Template - APAC,Core Strategy and Data Planning Calls - AMR/EMEA,Non-Core Clinical Studies,Ballpark,Opportunity Launch Call (Pilot)",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"9gmc3\",\"text\":\"Number of Sites\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"777pv\" data-offset-key=\"9gmc3-0-0\"><div data-offset-key=\"9gmc3-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"9gmc3-0-0\"><span data-text=\"true\">Number of Sites</span></span></div></div></div>",
+            "roleNames": [
+                "Proposal Developer"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "Bid_History__c",
+            "questionText": "Number of Sites",
+            "integration": "Qvidian",
+            "answers": [
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-01T12:56:41.412Z",
+                    "answer": "3",
+                    "formattedAnswer": "3",
+                    "proposalId": "93c77a01-5e31-4191-9b2f-cfac782a21af",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "upendrareddy.mannuru@iqvia.com",
+                    "userName": "Upendra Reddy Mannuru",
+                    "userRole": "Business Developer",
+                    "date": "2023-02-01T13:14:28.837Z",
+                    "answer": "2",
+                    "proposalId": "93c77a01-5e31-4191-9b2f-cfac782a21af",
+                    "updatedInPG": true
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-01T13:24:05.025Z",
+                    "answer": "3",
+                    "formattedAnswer": "3",
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-02T06:35:17.411Z",
+                    "answer": "3",
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "formattedAnswer": "3",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-07T15:11:10.916Z",
+                    "answer": "3",
+                    "proposalId": "4a920393-3040-4dc7-b03d-024704589023",
+                    "formattedAnswer": "3",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-08T09:42:41.591Z",
+                    "answer": "3",
+                    "formattedAnswer": "3",
+                    "proposalId": "a81d91c0-1974-47fc-aff9-b13e20a69d34",
+                    "updatedInPG": false
+                },
+                {
+                    "user": "AnswerPulledFromSalesforce",
+                    "userName": "AnswerPulledFromSalesforce",
+                    "userRole": "AnswerPulledFromSalesforce",
+                    "date": "2023-02-08T09:47:45.802Z",
+                    "answer": "3",
+                    "formattedAnswer": "3",
+                    "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+                    "updatedInPG": false
+                }
+            ],
+            "questionHintJSON": "",
+            "questionHintHTML": "",
+            "answerConfiguration": {
+                "type": "number",
+                "options": []
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Biostats,Business Account Manager,Business Developer,CEVA,Clinical DS&B,Data Management,Executive Oversight,Proposal Developer,Project Lead,TSL,Site Analytics,Medical Strategy Lead,Medical Writing,Global Site Activation (GSA),Safety,Strategic Pricing,Feasibility"
+        },
+        "7ef751be-4a4f-4d55-8d2a-fbd6cc2b7012": {
+            "isCustomQuestion": false,
+            "questionId": "7ef751be-4a4f-4d55-8d2a-fbd6cc2b7012",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "n/a",
+            "questionOrder": 24,
+            "questionApproval": false,
+            "locked": false,
+            "opportunityType": "Opportunity Launch Call (Pilot),Default Type,Non-Core Clinical Studies",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"91zr7\",\"text\":\"Eligibility Criteria\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"bvoyr\" data-offset-key=\"91zr7-0-0\"><div data-offset-key=\"91zr7-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"91zr7-0-0\"><span data-text=\"true\">Eligibility Criteria/span></span></div></div></div>",
+            "roleNames": [
+                "TSL"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "n/a",
+            "questionText": "Eligibility Criteria",
+            "integration": "",
+            "answers": [],
+            "questionHintJSON": "",
+            "questionHintHTML": "",
+            "answerConfiguration": {
+                "type": "text",
+                "options": []
+            },
+            "events": "",
+            "interestedParties": "Business Developer,Clinical DS&B,Analytics Strategy Lead,Medical Strategy Lead,Project Lead,Proposal Developer,TSL,Biostats,Business Account Manager,CEVA,Data Management,Executive Oversight,Feasibility,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics,Strategic Pricing"
+        },
+        "c716890a-23b8-426a-a5b6-1c727949eb10": {
+            "isCustomQuestion": false,
+            "questionId": "c716890a-23b8-426a-a5b6-1c727949eb10",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "n/a",
+            "questionOrder": 25,
+            "questionApproval": false,
+            "locked": false,
+            "opportunityType": "Opportunity Launch Call (Pilot),Default Type,Non-Core Clinical Studies",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"09vqt\",\"text\":\"Client Hot buttons\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"hs0w2\" data-offset-key=\"09vqt-0-0\"><div data-offset-key=\"09vqt-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"09vqt-0-0\"><span data-text=\"true\">Client Hot buttons/span></span></div></div></div>",
+            "roleNames": [
+                "Proposal Developer"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "n/a",
+            "questionText": "Client Hot buttons",
+            "integration": "",
+            "answers": [],
+            "questionHintJSON": "",
+            "questionHintHTML": "",
+            "answerConfiguration": {
+                "type": "text",
+                "options": []
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,TSL,Biostats,Business Account Manager,CEVA,Data Management,Executive Oversight,Feasibility,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics,Strategic Pricing"
+        },
+        "Team structure & location-I1P": {
+            "isCustomQuestion": false,
+            "questionId": "Team structure & location-I1P",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "n/a",
+            "questionOrder": 26,
+            "questionApproval": false,
+            "locked": false,
+            "opportunityType": "Opportunity Launch Call (Pilot),Default Type,Non-Core Clinical Studies",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"xtbo3\",\"text\":\"Which resources do we need CVs for?\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"ckgy0\" data-offset-key=\"xtbo3-0-0\"><div data-offset-key=\"xtbo3-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"xtbo3-0-0\"><span data-text=\"true\">Which resources do we need CVs for?/span></span></div></div></div>",
+            "roleNames": [
+                "Proposal Developer"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "n/a",
+            "questionText": "Which resources do we need CVs for?",
+            "integration": "",
+            "answers": [],
+            "questionHintJSON": "",
+            "questionHintHTML": "",
+            "answerConfiguration": {
+                "type": "picklist-lookup",
+                "options": [
+                    "Program director",
+                    "Project lead(s)",
+                    "Project integration manager",
+                    "Clinical lead(s)",
+                    "Global/regional medical advisor",
+                    "Data team lead",
+                    "Biostatistical lead",
+                    "Medical writing lead",
+                    "CEVA lead",
+                    "Site activation manager",
+                    "Regulatory advisor",
+                    "Patient recruitment & retention lead",
+                    "Epidemiologist (if LOB = outcome)"
+                ]
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,TSL,Biostats,CEVA,Business Account Manager,Data Management,Executive Oversight,Feasibility,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics,Strategic Pricing"
+        },
+        "13512a31-c51a-4036-bacd-6802e353f096": {
+            "isCustomQuestion": false,
+            "questionId": "13512a31-c51a-4036-bacd-6802e353f096",
+            "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+            },
+            "active": true,
+            "sfField": "n/a",
+            "questionOrder": 27,
+            "questionApproval": false,
+            "locked": false,
+            "opportunityType": "Opportunity Launch Call (Pilot),Default Type,Non-Core Clinical Studies",
+            "proposalId": "63b635ef-c764-4643-a7ff-59590a472a0a",
+            "questionJSON": "{\"blocks\":[{\"key\":\"kk0pe\",\"text\":\"Strategy Approval Call Risk-level ranking\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "milestone": "Overview",
+            "milestoneNew": [
+                {
+                    "Name": "Overview",
+                    "Color": "#015ff1"
+                }
+            ],
+            "hasDifferentSFanswer": false,
+            "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"7i27n\" data-offset-key=\"kk0pe-0-0\"><div data-offset-key=\"kk0pe-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"kk0pe-0-0\"><span data-text=\"true\">Strategy Approval Call Risk-level ranking/span></span></div></div></div>",
+            "roleNames": [
+                "TSL"
+            ],
+            "visible": true,
+            "notApplicable": false,
+            "sfObject": "n/a",
+            "questionText": "Strategy Approval Call Risk-level ranking",
+            "integration": "",
+            "answers": [],
+            "questionHintJSON": "",
+            "questionHintHTML": "",
+            "answerConfiguration": {
+                "type": "text",
+                "options": []
+            },
+            "events": "",
+            "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,TSL,Biostats,Business Account Manager,CEVA,Data Management,Executive Oversight,Feasibility,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics,Strategic Pricing"
+        }
+    },
+    "milestone": true,
+    "title": "Opportunity Information from CRM (for Team review)",
+    "isNotepadOpen": true,
+    "selectedBid": {
+        "proposalDate": "2023-02-08T09:47:35.521Z",
+        "questionTemplateVersionNumber": "v2023.37",
+        "agreementId": "aM701000000Cd54CAC",
+        "accountId": "0010100000mY6zdAAC",
+        "bidName": "Bid 4",
+        "opportunityType": "Default Type",
+        "opportunityId": "0060100000BBXHsAAP",
+        "isCurrent": true,
+        "bidStatus": false,
+        "pertinentDetails": "QA",
+        "isApprovalCountPresent": true,
+        "id": "63b635ef-c764-4643-a7ff-59590a472a0a"
+    }
+}

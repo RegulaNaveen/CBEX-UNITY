@@ -69,7 +69,7 @@ class ComplexPagination extends Component<Props, State> {
     };
 
     return (
-      <div className="cmplx">
+      <div className="cmplx" data-testid="complex-pagination">
         <div className="cmplx__rows">
           <p>Rows</p>
           <div className="cmplx__dd__container">

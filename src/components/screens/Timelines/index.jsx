@@ -1,87 +1,100 @@
+/* eslint-disable consistent-return */
+/* eslint-disable array-callback-return */
 import Panel from 'apollo-react/components/Panel';
 import React, { useContext, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Typography from 'apollo-react/components/Typography';
 import Search from 'apollo-react/components/Search';
-import PlusIcon from 'apollo-react-icons/Plus';
-import Button from 'apollo-react/components/Button';
 import { fromJS, Map } from 'immutable';
+import moment from 'moment';
+import { v4 as uuidv4 } from 'uuid';
 import TimelineCalender from './TimelineCalender';
 import {
-  getProposalDetails,
   isSetQuestionLoading,
-  selectSections,
+  selectShowAddModal,
+  selectTimelineDateRange
 } from '../../../redux/selectors';
 import TimelineSections from './TimelineSections';
 import {
+  getBidList,
   getProposalQuestions,
-  getSelectedBid,
+  getSelectedBid
 } from '../../../redux/selectors/proposal';
 import BidHistory from '../../common/Bidhistory';
 import ViewAboveVerticalTabs from '../../views/ViewAboveVerticalTabs';
 import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
 import { SocketContext } from '../../../context/SocketContext';
 import { getUserEmail, getUserId, getUserName } from '../../../SessionHandler';
+import {
+  setShowAddModal,
+  setTimelineDateRange
+} from '../../../redux/actions/timeline-actions';
 
 const Timeline = () => {
   const socketContext = useContext(SocketContext);
   const questions = useSelector(getProposalQuestions);
-  const [showModal, setShowModal] = useState(false);
   const selectedBid = useSelector(getSelectedBid)?.toJS();
-  const { proposalDate, isCurrent, proposalId } = selectedBid;
+  const bidList = useSelector(getBidList);
+  const [currentBidDetails, setCurrentBidDetails] = useState({});
+  const { proposalDate, isCurrent } = selectedBid;
   const [timelineEvents, setTimelineEvents] = useState([]);
-  const proposalDetail = useSelector(getProposalDetails);
   const [filteredSections, setFilteredSections] = useState(null);
   const [sections, setSections] = useState(Map());
   const [searchKey, setSearchKey] = useState('');
   const isSetQuestionLoadingData = useSelector(isSetQuestionLoading);
+  const [draggedQuestionData, setDraggedQuestionData] = useState(null);
+  const timelineDateRange = useSelector(selectTimelineDateRange);
+  const showAddModal = useSelector(selectShowAddModal);
+  const dispatch = useDispatch();
 
   const getUserData = () => ({
     name: getUserName(),
     email: getUserEmail(),
-    role: getUserId(),
+    role: getUserId()
   });
 
   useEffect(() => {
-    if (showModal) {
-      setTimeout(() => setShowModal(false), 1000);
+    if (showAddModal) {
+      setTimeout(() => dispatch(setShowAddModal(false)), 1000);
     }
   }, [isSetQuestionLoadingData]);
 
-  const generateSections = (proposalQuestions: Object): Map => {
+  const generateSections = proposalQuestions => {
     try {
-      let sections = Map();
+      let sectionsData = Map();
 
       proposalQuestions.forEach(question => {
         const {
           questionId,
-          roleNames,
-          section: { sectionName, sectionOrder },
+          section: { sectionName, sectionOrder }
         } = question;
-
-        const roles = roleNames || [];
 
         const createSections = () => {
           let section = Map({});
-          let questions = sections.getIn([sectionName, 'questions']) || Map({});
+          let questionsData =
+            sectionsData.getIn([sectionName, 'questions']) || Map({});
 
-          questions = questions.set(questionId, fromJS(question));
-          questions = questions.sortBy(item => item.get('questionOrder'));
+          questionsData = questionsData.set(questionId, fromJS(question));
+          questionsData = questionsData.sortBy(item =>
+            item.get('questionOrder')
+          );
 
           section = section
             .set('sectionOrder', sectionOrder)
             .set('sectionName', sectionName)
-            .set('questions', questions);
+            .set('questions', questionsData);
 
-          sections = sections.set(sectionName, section);
+          sectionsData = sectionsData.set(sectionName, section);
         };
 
         createSections();
       });
 
-      sections = sections.sortBy(section => section.get('sectionOrder'));
+      sectionsData = sectionsData.sortBy(section =>
+        section.get('sectionOrder')
+      );
 
-      return sections;
+      return sectionsData;
     } catch (error) {
       console.log(error);
     }
@@ -106,7 +119,7 @@ const Timeline = () => {
       );
     }
 
-    let sectionsMatched = generateSections(filteredQuestions);
+    const sectionsMatched = generateSections(filteredQuestions);
     setFilteredSections(sectionsMatched);
   };
 
@@ -140,20 +153,31 @@ const Timeline = () => {
           isDraggable: isCurrent,
           color:
             lastAnswer?.user === 'UnityPredictedAnswer' ? '#297DFD' : '#00C221',
-          question,
+          question
         };
         setTimelineEvents(current => [...current, eventss]);
       }
     });
-  }, [questions]);
+  }, [questions, proposalDate]);
+
+  useEffect(() => {
+    const matchedBid = bidList.filter(bid => bid.bidId === selectedBid.id);
+    setCurrentBidDetails(matchedBid);
+
+    dispatch(
+      setTimelineDateRange([
+        moment(`${matchedBid[0].bidDate}`),
+        moment(`${matchedBid[0].bidDueDate}`)
+      ])
+    );
+  }, [proposalDate]);
 
   const onCloseAddModal = () => {
-    setShowModal(prev => !prev);
+    dispatch(setShowAddModal(false));
   };
 
   return (
     <div id="Timeline-main-wrapper">
-      {/* <div> */}
       <ViewAboveVerticalTabs>
         <BidHistory />
       </ViewAboveVerticalTabs>
@@ -171,8 +195,7 @@ const Timeline = () => {
           <div className="timeline-questions-container">
             <div className="timeline-search-container">
               <Search
-                data-testid="TimelineCalender-Search"
-                fullWidth={true}
+                fullWidth
                 size="small"
                 placeholder="Search"
                 value={searchKey}
@@ -184,9 +207,12 @@ const Timeline = () => {
               ? filteredSections.valueSeq().map(section => {
                   return (
                     <TimelineSections
+                      key={section.get('sectionName')}
                       sectionName={section.get('sectionName')}
                       sectionOrder={section.get('sectionOrder')}
                       questions={section.get('questions')}
+                      draggedQuestionData={draggedQuestionData}
+                      setDraggedQuestionData={setDraggedQuestionData}
                     />
                   );
                 })
@@ -195,9 +221,12 @@ const Timeline = () => {
                     section.get('sectionName') !==
                       'Questions_for_the_Customer_left_panel' && (
                       <TimelineSections
+                        key={section.get('sectionName')}
                         sectionName={section.get('sectionName')}
                         sectionOrder={section.get('sectionOrder')}
                         questions={section.get('questions')}
+                        draggedQuestionData={draggedQuestionData}
+                        setDraggedQuestionData={setDraggedQuestionData}
                       />
                     )
                   );
@@ -205,33 +234,23 @@ const Timeline = () => {
           </div>
         </Panel>
         <Panel hideButton className="timeline-calender-container">
-          <div className="btn-container">
-            <Button
-              variant="primary"
-              icon={<PlusIcon />}
-              size="small"
-              style={{ marginRight: 10 }}
-              onClick={() => setShowModal(true)}
-              disabled={!isCurrent}
-            >
-              Add New
-            </Button>
-          </div>
-
-          <TimelineCalender
-            timelineEvents={timelineEvents}
-            proposalDate={proposalDate}
-            socketContext={socketContext}
-            userData={getUserData()}
-            isCurrent={isCurrent}
-          />
+          {timelineDateRange.length && (
+            <TimelineCalender
+              key={uuidv4()}
+              timelineEvents={timelineEvents}
+              proposalDate={proposalDate}
+              socketContext={socketContext}
+              userData={getUserData()}
+              isCurrent={isCurrent}
+              currentBidDetails={currentBidDetails}
+              draggedQuestionData={draggedQuestionData}
+              setDraggedQuestionData={setDraggedQuestionData}
+            />
+          )}
         </Panel>
       </div>
-      {showModal && (
-        <AddQuestionModalComponent
-          onClose={onCloseAddModal}
-          isOnlyDateAnswer={true}
-        />
+      {showAddModal && (
+        <AddQuestionModalComponent onClose={onCloseAddModal} isOnlyDateAnswer />
       )}
     </div>
   );
