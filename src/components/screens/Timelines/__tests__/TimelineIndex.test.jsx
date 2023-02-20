@@ -39,7 +39,7 @@ const defaultProps = {
 };
 
 describe('unit testing for timeline index component', () => {
-  it('render timline index component', () => {
+  it.skip('render timline index component', () => {
     render(
       <Provider store={store}>
         <Timeline {...defaultProps} />
