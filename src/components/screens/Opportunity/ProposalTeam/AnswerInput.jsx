@@ -176,7 +176,7 @@ const AnswerInput = (props) => {
               proposalTeam[0].questions[item].milestoneNew
             );
             const lastAns = isString(lastAnswer) ? lastAnswer : '';
-            console.log('milestoneNew, milestone', milestoneNew, milestone);
+
             if (milestoneNew && !isEmpty(milestoneNew)) {
               milestoneCond = true;
             }
@@ -193,7 +193,7 @@ const AnswerInput = (props) => {
               proposalTeam[0].questions[item]?.questionHintJSON;
             const questionHTML = proposalTeam[0].questions[item]?.questionHTML;
             const sectionName = section?.sectionName;
-            console.log('sectionName', sectionName);
+
             const events = proposalTeam[0].questions[item]?.events || {};
             const questionJSON = proposalTeam[0].questions[item]?.questionJSON;
 
