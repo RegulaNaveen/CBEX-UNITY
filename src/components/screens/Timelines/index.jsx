@@ -158,21 +158,19 @@ const Timeline = () => {
         setTimelineEvents(current => [...current, eventss]);
       }
     });
+  }, [questions, proposalDate]);
+
+  useEffect(() => {
     const matchedBid = bidList.filter(bid => bid.bidId === selectedBid.id);
     setCurrentBidDetails(matchedBid);
-    console.log('tapas matched bid ', matchedBid);
 
     dispatch(
-      setTimelineDateRange(
-        timelineDateRange.length
-          ? timelineDateRange
-          : [
-              moment(`${matchedBid[0].bidDate}`),
-              moment(`${matchedBid[0].bidDueDate}`)
-            ]
-      )
+      setTimelineDateRange([
+        moment(`${matchedBid[0].bidDate}`),
+        moment(`${matchedBid[0].bidDueDate}`)
+      ])
     );
-  }, [questions, proposalDate]);
+  }, [proposalDate]);
 
   const onCloseAddModal = () => {
     dispatch(setShowAddModal(false));
