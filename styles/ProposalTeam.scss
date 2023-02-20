@@ -19,10 +19,6 @@
   border-top: 1px solid #ddd;
   padding: 0;
 }
-.add-quest-modal {
-  position: absolute;
-  z-index: 1;
-}
 
 .proposal-team-wrapper-container {
   overflow-y: auto;
@@ -42,4 +38,12 @@
 .integrations-icon {
   margin-top: 3rem;
   margin-left: -6rem;
+}
+
+.proposal-tema-tooltip {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 5px;
+  width: 100%;
+  transition: width 0.2s;
 }

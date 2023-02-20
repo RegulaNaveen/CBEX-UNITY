@@ -2,54 +2,53 @@ import React, { useEffect, useState, useContext } from 'react';
 import Plus from 'apollo-react-icons/Plus';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'apollo-react/components/Link';
+import { isEmpty, xor } from 'lodash';
+import { List, fromJS } from 'immutable';
+import InfoIcon from 'apollo-react-icons/Info';
+import Typography from 'apollo-react/components/Typography';
 import Autocomplete from '../../../common/atoms/inputs/AutoComplete';
-import Grid from 'apollo-react/components/Grid';
 import SFAnswerValidationWrapper from '../../../common/SFAnswerValidationWrapper';
 import SystemIntegrations from '../../../common/SystemIntegrations/SystemIntegrations';
 import {
-  getQuestion,
   selectSections,
   selectFilteredSections,
   selectIsQuestionsFilterEnabled,
   isSetQuestionLoading,
   getSelectedBid,
-  setProposalAnswer,
+  getnoneditableField,
   getIntegrations,
   getShowNaCheckbox,
   getUserData
 } from '../../../../redux/selectors';
-import { Map, List } from 'immutable';
-import {
-  getUserEmail,
-  getUserId,
-  getUserName
-} from '../../../../SessionHandler';
-
-import Typography from 'apollo-react/components/Typography';
+import { getUserEmail } from '../../../../SessionHandler';
 import {
   setProposalAnswerData,
   deleteProposalUserFromDB,
   setProposalAnswerLoading
 } from '../../../../redux/actions/proposal-actions';
-import QuestionsSectionMapping from '../QuestionsSectionMapping';
-import CollapsibleList from '../../../common/CollapsibleList';
 import AddQuestionModalComponent from '../../../views/modals/AddQuestionModal';
 import { SocketContext } from '../../../../context/SocketContext';
-import { isObject } from 'lodash';
-import { fromJS } from 'immutable';
-import isEmpty from 'lodash/isEmpty';
-const AnswerInput = (isNotepadOpen, proposalId) => {
-  console.log('proposalId', proposalId);
+import { checkNonEditableFields } from '../../../../utils/utils';
+import AnswerHistory from '../../../views/modals/AnswerHistory';
+import IconButton from 'apollo-react/components/IconButton';
+import Tooltip from 'apollo-react/components/Tooltip';
+import RichTextEditor from 'apollo-react/components/RichTextEditor';
+
+const AnswerInput = (isNotepadOpen) => {
   const [showModal, setShowModal] = useState(false);
+  const dispatch = useDispatch();
   const [iconColor, setIconColor] = useState('#00c221');
   const [changeIcon, setChangeIcon] = useState('');
+  const [isHistoryModalShown, setIsHistoryModalShown] = useState(false);
+  const [selectedQuestionForHistory, setSelectedQuestionForHistory] = useState(
+    ''
+  );
   const sections = useSelector(selectSections);
+  const noneditableField = useSelector((state) => getnoneditableField(state));
   const isSetQuestionLoadingData = useSelector(isSetQuestionLoading);
   const isQuestionsFiltersEnabled = useSelector(selectIsQuestionsFilterEnabled);
   const filteredSections = useSelector(selectFilteredSections);
-  const proposalAns = useSelector(setProposalAnswer);
   const userData = useSelector((state) => getUserData(state));
-  console.log('userData', userData);
   const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
   const selectedBid = useSelector(getSelectedBid);
   const isCurrentBid = selectedBid.get('isCurrent');
@@ -76,27 +75,20 @@ const AnswerInput = (isNotepadOpen, proposalId) => {
   Object.keys(proposalTeam[0].questions).map((item) => {
     questionData = proposalTeam[0].questions[item];
   });
-  console.log(socketContext, 'scok');
-  // eslint-disable-next-line react/destructuring-assignment
-  // socketContext.questionLockWrapper(questionData.questionId);
-  // const inputProps = {
-  //   proposalTeam,
-  //   userData: getUserData(),
-  //   socketContext,
-  //   checkDisableFlag,
-  //   setShowLoader,
-  //   questionIndex
-  // };
-  useEffect(() => {
-    if (showModal) {
-      setTimeout(() => setShowModal(false), 1000);
-    }
-  }, [isSetQuestionLoadingData]);
-  const onCloseAddModal = () => {
-    setShowModal((prev) => !prev);
-  };
-  const NaLoading = questionData?.NaLoading;
+  const proposalId = questionData.proposalId;
 
+  // useEffect(() => {
+  //   if (showModal) {
+  //     setTimeout(() => setShowModal(false), 1000);
+  //   }
+  // }, [isSetQuestionLoadingData]);
+  // const onCloseAddModal = () => {
+  //   setShowModal((prev) => !prev);
+  // };
+  const NaLoading = questionData?.NaLoading;
+  const closeAnswerHistoryModal = () => {
+    setIsHistoryModalShown(false);
+  };
   // trackMatomoEventSubmitAnswer = data => {
   //   const {
   //     eventCategories,
@@ -136,45 +128,24 @@ const AnswerInput = (isNotepadOpen, proposalId) => {
   //     ]
   //   });
   // };
-  const handlePropsalChange = (questionId, answerValue, lastValue, reason) => {
-    try {
-      setProposalAnswerData(
-        socketContext,
-        proposalId,
-        questionId,
-        answerValue,
-        userData
-      ).then(() => {
-        const [deletedVal] = xor(
-          answerValue?.trim() ? answerValue?.trim().split(',') : [],
-          lastValue?.trim() ? lastValue?.trim().split(',') : []
-        );
-        const [deletedEmail] = String(deletedVal).match(
-          /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
-        );
-        if (reason === 'remove-option' && deletedEmail) {
-          setProposalAnswerLoading(questionId, true);
-          const { sectionName, sectionOrder } = section.toJS();
-          deleteProposalUserFromDB(
-            proposalId,
-            deletedEmail,
-            sectionOrder,
-            sectionName
-          ).then(() => {
-            setProposalAnswerLoading(questionId, false);
-          });
-        }
-      });
-      // trackMatomoEventSubmitAnswer(answerValue);
-    } catch (error) {
-      console.log('error :>> ', error);
+  const isAnswered = (answer, isAnswerPredicted) => {
+    if (isAnswerPredicted) return false;
+    if (answer && answer.get && answer.get('answer')) {
+      if (List.isList(answer.get('answer'))) {
+        return Boolean(answer.get('answer').size);
+      }
+      return Boolean(
+        answer
+          .get('answer')
+          .toString()
+          .trim()
+      );
     }
+    return false;
   };
   return (
     <>
-      {' '}
       <div className="proposal-team-wrapper-container">
-        {' '}
         {Object.keys(proposalTeam[0].questions).map((item) => {
           const isQuestionLocked = () => {
             return (
@@ -193,20 +164,8 @@ const AnswerInput = (isNotepadOpen, proposalId) => {
             // call question unlock
             setSelectedRow(value);
           };
-          const checkDisableFlag = () => {
-            if (
-              isQuestionLockedByOther() ||
-              !isCurrentBid ||
-              !allFlags.proposalTeamTab
-            )
-              return true;
-            return false;
-          };
-          console.log(
-            'proposalTeam[0].questions[item]',
-            proposalTeam[0].questions[item].questionLockInfo
-          );
           const [selectedRow, setSelectedRow] = useState(false);
+          let currentSFAnswer;
           if (
             proposalTeam[0].questions[item].active &&
             proposalTeam[0].questions[item].visible
@@ -218,8 +177,23 @@ const AnswerInput = (isNotepadOpen, proposalId) => {
             const loading = proposalTeam[0].questions[item].loading ?? false;
             const sfObject = proposalTeam[0].questions[item]?.sfObject;
             const integrationLocked = isQuestionLockedByOther() ? true : false;
+            const section = proposalTeam[0].questions[item]?.section;
+            const questionText = proposalTeam[0].questions[item]?.questionText;
+            const questionHint = proposalTeam[0].questions[item]?.questionHint;
+            const questionHintJSON =
+              proposalTeam[0].questions[item]?.questionHintJSON;
+            const checkDisableFlag = () => {
+              if (isQuestionLockedByOther() || !isCurrentBid) return true;
+              if (NaLoading) return true;
+              return (
+                checkNonEditableFields(noneditableField, sficon, sfObject) ||
+                !isCurrentBid
+              );
+            };
+            const isNotApplicable =
+              proposalTeam[0].questions[item]?.notApplicable;
             let checkSFAnswer = [];
-            let currentSFAnswer;
+
             let destinationArray;
             let integrationvalidation;
             let integrationmatch;
@@ -227,13 +201,16 @@ const AnswerInput = (isNotepadOpen, proposalId) => {
             let lastAnswer;
             let isAnswerPredicted = false;
             let answerValue = '';
-            const questionId = proposalTeam[0].questions[item].questionId;
+            const { questionId } = proposalTeam[0].questions[item];
             const hasDifferentSFanswer =
               proposalTeam[0].questions[item]?.hasDifferentSFanswer;
             if (answers) {
-              if (!proposalTeam[0].questions[item].questionID)
+              if (!answers.get('questionId')) {
                 lastAnswer = answers.last();
-              else lastAnswer = answers.get('answers').last();
+              } else {
+                lastAnswer = answers.get('answers').last();
+                answerDate = answer?.toString();
+              }
             }
             if (lastAnswer) {
               if (
@@ -265,20 +242,77 @@ const AnswerInput = (isNotepadOpen, proposalId) => {
             if (answer) {
               if (!isEmpty(answer)) {
                 answerValue = answer.toString();
+                answerDate = answer.toString();
               } else {
                 answerValue = '';
               }
             }
-            // const handleVerifyPredictedAnsClick = (predictedAnswer) => {
-            //   setIconColor('#015ff1');
-            //   setProposalAnswerData(
-            //     socketContext,
-            //     proposalId,
-            //     questionId,
-            //     String(predictedAnswer.get('answer')).trim(),
-            //     userData
-            //   );
-            // };
+            const handleVerifyPredictedAnsClick = (predictedAnswer) => {
+              setIconColor('#015ff1');
+              dispatch(
+                setProposalAnswerData(
+                  socketContext,
+                  proposalId,
+                  questionId,
+                  String(predictedAnswer.get('answer')).trim(),
+                  userData
+                )
+              );
+            };
+            const handlePropsalChange = async (
+              textValue,
+              lastValue,
+              reason
+            ) => {
+              try {
+                dispatch(
+                  setProposalAnswerData(
+                    socketContext,
+                    proposalId,
+                    questionId,
+                    textValue,
+                    userData
+                  )
+                ).then(() => {
+                  const [deletedVal] = xor(
+                    textValue?.trim() ? textValue?.trim().split(',') : [],
+                    lastValue?.trim() ? lastValue?.trim().split(',') : []
+                  );
+                  const [deletedEmail] = String(deletedVal).match(
+                    /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+                  );
+                  if (reason === 'remove-option' && deletedEmail) {
+                    setProposalAnswerLoading(questionId, true);
+                    const { sectionName, sectionOrder } = section.toJS();
+                    dispatch(
+                      deleteProposalUserFromDB(
+                        proposalId,
+                        deletedEmail,
+                        sectionOrder,
+                        sectionName
+                      )
+                    ).then(() => {
+                      setProposalAnswerLoading(questionId, false);
+                    });
+                  }
+                });
+                // trackMatomoEventSubmitAnswer(answerValue);
+              } catch (error) {
+                console.log('error :>> ', error);
+              }
+            };
+            const setQuestionToDisplayHistory = (selectedAnswer: string) => {
+              let questionHistory = allSections
+                .valueSeq()
+                .find((section) => section.getIn(['questions', selectedAnswer]))
+                .getIn(['questions', selectedAnswer]);
+              setSelectedQuestionForHistory(questionHistory);
+              setIsHistoryModalShown(true);
+            };
+            const displayAnswerOnHistory = () => {
+              setQuestionToDisplayHistory(questionId);
+              // this.trackMatomoEventAnswerHistory();
+            };
             return (
               <>
                 <div className="proposal-team-wrapper">
@@ -288,9 +322,40 @@ const AnswerInput = (isNotepadOpen, proposalId) => {
                     } ${NaLoading ? 'fade-area' : ''} `}
                     style={{ margin: '2px 0px' }}
                   >
-                    <p className="proposal-team-title">
-                      {proposalTeam[0].questions[item].questionText}
-                    </p>
+                    <div className="proposal-tema-tooltip">
+                      <Typography className="proposal-team-title">
+                        {proposalTeam[0].questions[item].questionText}
+                      </Typography>
+                      {questionHint && (
+                        <div>
+                          <Tooltip
+                            variant="light"
+                            tabIndex={-1}
+                            title={
+                              questionHintJSON ? (
+                                <RichTextEditor
+                                  variant="view"
+                                  defaultValue={JSON.parse(questionHintJSON)}
+                                  // ref={this.questionTextRef2}
+                                />
+                              ) : (
+                                <div>{questionHint}</div>
+                              )
+                            }
+                            placement="top"
+                          >
+                            <IconButton
+                              color="primary"
+                              style={{ margin: 0 }}
+                              size="small"
+                              className="question-tooltip-icon"
+                            >
+                              <InfoIcon style={{ fontSize: '16px' }} />
+                            </IconButton>
+                          </Tooltip>
+                        </div>
+                      )}
+                    </div>
                     {isQuestionLockedByOther() ? (
                       <Typography variant="subtitle1" className="status-txt">
                         {
@@ -321,14 +386,11 @@ const AnswerInput = (isNotepadOpen, proposalId) => {
                             questionUnlockWrapper(questionId);
                             callSelectRow(false);
                           }}
-                          onChange={handlePropsalChange(
-                            questionId,
-                            answerValue
-                          )}
+                          onChange={handlePropsalChange}
                           text={answerValue}
                           disabled={checkDisableFlag()}
                         />
-                      </SFAnswerValidationWrapper>
+                      </SFAnswerValidationWrapper>{' '}
                     </div>
                   </div>
                   <div className="integrations-icon">
@@ -340,20 +402,23 @@ const AnswerInput = (isNotepadOpen, proposalId) => {
                       gridColRatio={gridColRatio}
                       integrationmatch={integrationmatch}
                       integrationvalidation={integrationvalidation}
-                      // answeronhistory={this.displayAnswerOnHistory}
+                      answeronhistory={displayAnswerOnHistory}
                       answerdate={answerDate}
                       isAnswerPredicted={isAnswerPredicted}
-                      // isAnswered={this.isAnswered}
+                      isAnswered={isAnswered}
                       lastAnswer={lastAnswer}
                       iconColor={iconColor}
                       loading={loading}
+                      questionText={questionText}
                       NaLoading={NaLoading}
                       showNaCheckbox={showNaCheckbox}
                       isNotepadOpen={isNotepadOpen}
                       changeIcon={changeIcon}
                       isCurrentBid={isCurrentBid}
                       sfObject={sfObject}
-                      // handleVerifyPredictedAnsClick={handleVerifyPredictedAnsClick()}
+                      handleVerifyPredictedAnsClick={(predictedAnswer) =>
+                        handleVerifyPredictedAnsClick(predictedAnswer)
+                      }
                       hasDifferentSFanswer={hasDifferentSFanswer}
                       disabled={integrationLocked}
                     />
@@ -364,7 +429,7 @@ const AnswerInput = (isNotepadOpen, proposalId) => {
           }
         })}
       </div>
-      <div className="add-question">
+      {/* <div className="add-question">
         <Link
           style={{ borderBottom: 'none' }}
           onClick={() => setShowModal(true)}
@@ -373,12 +438,19 @@ const AnswerInput = (isNotepadOpen, proposalId) => {
           <Plus fontSize="extraSmall" />
           <span style={{ verticalAlign: 'top' }}> Add New Question</span>
         </Link>
-      </div>
-      {showModal && (
+      </div> */}
+
+      {isHistoryModalShown && (
+        <AnswerHistory
+          question={selectedQuestionForHistory}
+          closeModal={closeAnswerHistoryModal}
+        />
+      )}
+      {/* {showModal && (
         <div className="add-quest-modal">
           <AddQuestionModalComponent onClose={onCloseAddModal} />
         </div>
-      )}
+      )} */}
     </>
   );
 };
