@@ -18,11 +18,6 @@ const CustomComponents = {
       parseMomentDate(dateCellWrapperProps.value) ===
       parseMomentDate(dateCellWrapperProps.currentBidDetails[0].bidDueDate);
 
-    console.log(
-      'tapas date cell props custommmmmmmmmmmmm ',
-      dateCellWrapperProps
-    );
-
     const style = {
       display: 'flex',
       flex: 1,

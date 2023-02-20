@@ -18,14 +18,11 @@
 
 #Timeline-main-wrapper {
   .month-range-label {
-    // height: 32px;
-    // width: 109px;
     color: #0768fd;
     font-family: 'Proxima Nova';
     font-size: 16px;
     font-weight: 600;
-    // letter-spacing: 0;
-    // line-height: 32px;
+
     text-align: center;
     margin-bottom: 10px;
   }
@@ -41,10 +38,8 @@
     width: 320px !important;
   }
   .rbc-now button {
-    // background: #00f;
     border-radius: 50%;
-    // height: 24px;
-    // width: 24px;
+
     color: #fff;
     height: 26px;
     width: 26px;
@@ -54,16 +49,10 @@
     font-weight: 500;
   }
 
-  // .custom-time {
   .rbc-off-range-bg {
     background: #fff !important;
   }
-  // }
-  .rbc-toolbar {
-    // .custom-time {
-    // display: none;
-    // }
-  }
+
   .timeline-container {
     width: 97vw;
     display: flex;
@@ -74,7 +63,6 @@
       width: 100% !important;
       display: flex;
       justify-content: space-around;
-      // margin-right: -20px;
     }
     .react-resizable:nth-child(1) {
       margin-left: -20px;

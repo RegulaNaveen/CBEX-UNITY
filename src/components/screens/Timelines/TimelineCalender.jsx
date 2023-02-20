@@ -142,10 +142,7 @@ const DnDOutsideResource = ({
 
   const onDropFromOutside = useCallback(
     ({ start, end, allDay: isAllDay }) => {
-      console.log({ draggedQuestionData });
       if (draggedQuestionData) {
-        console.log('11111111111111');
-
         const event = {
           id: draggedQuestionData?.id,
           title: formatName(
@@ -173,7 +170,6 @@ const DnDOutsideResource = ({
       }
 
       if (selectedEvent) {
-        console.log('222222222222222222');
         handleDayChange(start, selectedEvent?.question);
         const event = {
           title: formatName(selectedEvent.title, counters[selectedEvent.title]),

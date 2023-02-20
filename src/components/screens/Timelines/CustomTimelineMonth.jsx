@@ -108,7 +108,7 @@ class MonthView extends React.Component {
     const startOfMonth = moment(new Date(2022, 11, 18));
 
     const endOfMonth = moment(new Date(2023, 0, 14));
-    console.log('start of month ', startOfMonth._d);
+
     let currentDay = startOfMonth;
     let curentWeek = [];
     while (currentDay <= endOfMonth) {
@@ -153,7 +153,6 @@ class MonthView extends React.Component {
               size="small"
               value={timelineDateRange}
               onChange={value => {
-                console.log('tapas val ', value);
                 this.handleDateRangeChange(value);
               }}
               placeholder="mm/dd/yyyy"
