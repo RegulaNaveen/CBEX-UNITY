@@ -24,10 +24,11 @@ const DnDOutsideResource = ({
   trackEvent,
   currentBidDetails,
   draggedQuestionData,
-  setDraggedQuestionData
+  setDraggedQuestionData,
+  setTimelineEvents
 }) => {
   const localizer = momentLocalizer(moment);
-  const [myEvents, setMyEvents] = useState(timelineEvents);
+
   const [draggedEvent, setDraggedEvent] = useState();
 
   const [displayDragItemInCell, setDisplayDragItemInCell] = useState(true);
@@ -36,9 +37,9 @@ const DnDOutsideResource = ({
   const [selectedEvent, setSelectedEvent] = useState(undefined);
   const timelineDateRange = useSelector(selectTimelineDateRange);
 
-  useEffect(() => {
-    setMyEvents(timelineEvents);
-  }, [timelineEvents]);
+  // useEffect(() => {
+  //   setTimelineEvents(timelineEvents);
+  // }, [timelineEvents]);
 
   const eventPropGetter = useCallback(event => {
     const backgroundColor = event.color;
@@ -123,22 +124,21 @@ const DnDOutsideResource = ({
   const moveEvent = useCallback(
     ({ event, start, end, isAllDay: droppedOnAllDaySlot = false }) => {
       const { allDay, question } = event;
-
-      handleDayChange(start, question);
       if (!allDay && droppedOnAllDaySlot) {
         event.allDay = true;
       }
-
-      setMyEvents(prev => {
+      setTimelineEvents(prev => {
         const existing = prev.find(ev => ev.id === event.id) ?? {};
         const filtered = prev.filter(ev => ev.id !== event.id);
         return [...filtered, { ...existing, start, end, allDay }];
       });
+
+      handleDayChange(start, question);
     },
-    [setMyEvents]
+    [setTimelineEvents]
   );
 
-  const newEvent = useCallback(event => {}, [setMyEvents]);
+  const newEvent = useCallback(event => {}, [setTimelineEvents]);
 
   const onDropFromOutside = useCallback(
     ({ start, end, allDay: isAllDay }) => {
@@ -159,6 +159,7 @@ const DnDOutsideResource = ({
         setDraggedEvent(null);
 
         newEvent(event);
+
         handleDayChange(start, draggedQuestionData);
         setDraggedQuestionData(null);
         return;
@@ -200,13 +201,13 @@ const DnDOutsideResource = ({
 
   const resizeEvent = useCallback(
     ({ event, start, end }) => {
-      setMyEvents(prev => {
+      setTimelineEvents(prev => {
         const existing = prev.find(ev => ev.id === event.id) ?? {};
         const filtered = prev.filter(ev => ev.id !== event.id);
         return [...filtered, { ...existing, start, end }];
       });
     },
-    [setMyEvents]
+    [setTimelineEvents]
   );
 
   const handleSelectedEvent = event => {
@@ -227,7 +228,7 @@ const DnDOutsideResource = ({
           }
           draggableAccessor="isDraggable"
           eventPropGetter={eventPropGetter}
-          events={myEvents}
+          events={timelineEvents}
           localizer={localizer}
           onDropFromOutside={isCurrent ? onDropFromOutside : null}
           onDragOver={isCurrent ? customOnDragOver : null}
