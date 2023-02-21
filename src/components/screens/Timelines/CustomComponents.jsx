@@ -23,19 +23,21 @@ const CustomComponents = {
     const style = {
       display: 'flex',
       flex: 1,
-      borderLeft: '1px solid #DDD',
-      backgroundColor: '#fff'
-    };
-
-    const pastDateStyle = {
-      display: 'flex',
-      flex: 1,
-      borderLeft: '1px solid #DDD',
-      background: '#F6F7FB '
+      border: `${
+        BidCreationDateAnnotation || BidDueDateAnnotation
+          ? '3px solid #A9A9A9'
+          : ''
+      }`,
+      borderLeft: `${
+        BidCreationDateAnnotation || BidDueDateAnnotation
+          ? '3px solid #A9A9A9'
+          : '1px solid #DDD'
+      }`,
+      backgroundColor: `${isPastDate ? '#F6F7FB ' : '#fff'}`
     };
 
     return (
-      <div style={isPastDate ? pastDateStyle : style}>
+      <div style={style}>
         {BidCreationDateAnnotation && (
           <Typography
             style={{
