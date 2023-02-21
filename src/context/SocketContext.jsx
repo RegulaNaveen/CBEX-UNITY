@@ -26,6 +26,12 @@ import { setNotification } from '../redux/actions/notification-actions';
 import { getUserName, getUserEmail, getUserId } from '../SessionHandler';
 import { REFRESH_WEBSOCKET_CONNECTION } from '../constants/app';
 import { UBUILD, DASHBOARD } from '../routes';
+import {
+  onApprovalSectionDuplicatingAction,
+  onApprovalSectionDuplicatedAction,
+  onApprovalSectionDeletedAction,
+  onApprovalSectionDeletingAction
+} from '../redux/actions/approval-actions';
 
 const currentOppNo = {
   get: localStorage.getItem('oppNo') || null,
@@ -346,7 +352,11 @@ const SocketContextProvider = props => {
           updatePriceModelerEstimate,
           editProposalQuestionfromSocket,
           deleteProposalQuestionFromSocket,
-          setProposalQuestionFromSocket
+          setProposalQuestionFromSocket,
+          onApprovalSectionDuplicating,
+          onApprovalSectionDuplicated,
+          onApprovalSectionDeleting,
+          onApprovalSectionDeleted
         } = props;
 
         // On Message Recieve
@@ -450,6 +460,23 @@ const SocketContextProvider = props => {
               // Get list of questions already locked by other users
               getQuestionLockDetails(data);
               break;
+
+            case 'APPROVALS_DUPLICATING':
+              onApprovalSectionDuplicating(data.data);
+              break;
+
+            case 'APPROVALS_DUPLICATED':
+              onApprovalSectionDuplicated(data.data);
+              break;
+
+            case 'APPROVALS_DELETING':
+              onApprovalSectionDeleting(data.data);
+              break;
+
+            case 'APPROVALS_DELETED':
+              onApprovalSectionDeleted(data.data);
+              break;
+
             case 'COST_ESTIMATE_CALCULATING':
               setPriceModelerRecalculationStatus(true);
               break;
@@ -539,6 +566,75 @@ const SocketContextProvider = props => {
       console.log('updateSocketOppId error :>> ', error);
     }
   };
+
+  const approvalDuplicating = data => {
+    try {
+      const ws = socket.current;
+      ws.send(
+        JSON.stringify({
+          action: 'APPROVALS',
+          body: {
+            event: 'APPROVALS_DUPLICATING',
+            data
+          }
+        })
+      );
+    } catch (error) {
+      console.error('Error in Approval duplicating', error);
+    }
+  };
+
+  const approvalDuplicated = data => {
+    try {
+      const ws = socket.current;
+      ws.send(
+        JSON.stringify({
+          action: 'APPROVALS',
+          body: {
+            event: 'APPROVALS_DUPLICATED',
+            data
+          }
+        })
+      );
+    } catch (error) {
+      console.error('Error in Approval duplicated', error);
+    }
+  };
+
+  const approvalDeleting = data => {
+    try {
+      const ws = socket.current;
+      ws.send(
+        JSON.stringify({
+          action: 'APPROVALS',
+          body: {
+            event: 'APPROVALS_DELETING',
+            data
+          }
+        })
+      );
+    } catch (error) {
+      console.error('Error in Approval deletion', error);
+    }
+  };
+
+  const approvalDeleted = data => {
+    try {
+      const ws = socket.current;
+      ws.send(
+        JSON.stringify({
+          action: 'APPROVALS',
+          body: {
+            event: 'APPROVALS_DELETED',
+            data
+          }
+        })
+      );
+    } catch (error) {
+      console.error('Error in Approval deleted', error);
+    }
+  };
+
   const questionLockWrapper = questionId => {
     waitForSocketConnectionMinInterval(() => resetLockTimer(questionId));
   };
@@ -577,6 +673,30 @@ const SocketContextProvider = props => {
 
   const questionLockDetailsWrapper = () => {
     waitForSocketConnectionMinInterval(() => questionLockDetails(null));
+  };
+
+  // Approval's Questions - duplicating - socket message wrapper
+  // info - sectionId, duplicating(bool)
+  const approvalSectionDuplicatingWrapper = data => {
+    waitForSocketConnectionMinInterval(() => approvalDuplicating(data));
+  };
+
+  // Approval's Questions - duplicate update - socket message wrapper
+  // info - sectionId
+  const approvalSectionDuplicatedWrapper = data => {
+    waitForSocketConnectionMinInterval(() => approvalDuplicated(data));
+  };
+
+  // Approval's Questions - deleting - socket message wrapper
+  // info - sectionId, deleting(bool)
+  const approvalSectionDeletingWrapper = data => {
+    waitForSocketConnectionMinInterval(() => approvalDeleting(data));
+  };
+
+  // Approval's Questions - delete update - socket message wrapper
+  // info - sectionId
+  const approvalSectionDeletedWrapper = data => {
+    waitForSocketConnectionMinInterval(() => approvalDeleted(data));
   };
 
   const refreshSocketConnection = () => {
@@ -631,7 +751,11 @@ const SocketContextProvider = props => {
         naQuestionUpdateWrapper,
         questionTextUpdateWrapper,
         questionDeleteWrapper,
-        addQuestionWrapper
+        addQuestionWrapper,
+        approvalSectionDuplicatingWrapper,
+        approvalSectionDuplicatedWrapper,
+        approvalSectionDeletingWrapper,
+        approvalSectionDeletedWrapper
       }}
     >
       {props.children}
@@ -659,7 +783,11 @@ const mapDispatchToProps = {
   updatePriceModelerEstimate: updatePriceModelerEstimateAction,
   editProposalQuestionfromSocket: editProposalQuestionfromSocket,
   deleteProposalQuestionFromSocket: deleteProposalQuestionFromSocket,
-  setProposalQuestionFromSocket: setProposalQuestionFromSocket
+  setProposalQuestionFromSocket: setProposalQuestionFromSocket,
+  onApprovalSectionDuplicating: onApprovalSectionDuplicatingAction,
+  onApprovalSectionDuplicated: onApprovalSectionDuplicatedAction,
+  onApprovalSectionDeleting: onApprovalSectionDeletingAction,
+  onApprovalSectionDeleted: onApprovalSectionDeletedAction
 };
 
 export default connect(

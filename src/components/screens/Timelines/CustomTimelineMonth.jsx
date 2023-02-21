@@ -31,6 +31,7 @@ import {
   setShowAddModal,
   setTimelineDateRange
 } from '../../../redux/actions/timeline-actions';
+import { getSelectedBid } from '../../../redux/selectors/proposal';
 
 let eventsForWeek = (evts, start, end, accessors, localizer) =>
   evts.filter(e => inRange(e, start, end, accessors, localizer));
@@ -168,7 +169,7 @@ class MonthView extends React.Component {
               size="small"
               style={{ marginRight: 10, marginBottom: 10 }}
               onClick={() => this.props.setShowAddModal(true)}
-              // disabled={!isCurrent}
+              disabled={!this.props.selectedBid.isCurrent}
             >
               Add New
             </Button>
@@ -482,7 +483,8 @@ MonthView.title = (date, { localizer }) =>
   localizer.format(date, 'monthHeaderFormat');
 
 const mapStateToProps = state => ({
-  timelineDateRange: selectTimelineDateRange(state)
+  timelineDateRange: selectTimelineDateRange(state),
+  selectedBid: getSelectedBid(state).toJS()
 });
 
 const mapDispatchToProps = {

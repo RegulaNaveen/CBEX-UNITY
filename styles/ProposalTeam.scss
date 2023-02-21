@@ -1,0 +1,61 @@
+.proposal-team-title {
+  padding-left: 15px;
+  margin-top: 10px;
+}
+.proposal-team-answer {
+  padding-left: 15px;
+  min-width: 500px !important;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  overflow-y: auto !important;
+}
+
+.proposalTeammarkNaAutoActive {
+  margin-bottom: -3px;
+  margin-left: -40px;
+  margin-top: -2px;
+}
+
+.divider-hr-proposal-team {
+  margin-left: 16px;
+  margin-right: 16px;
+  height: 1px;
+  border: 0.6em;
+  border-top: 1px solid #ddd;
+  padding: 0;
+}
+.proposal-team-flex {
+  display: flex;
+}
+.proposal-team-chipview {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 69px;
+}
+.proposal-team-wrapper-container {
+  overflow-y: auto;
+  height: 442px !important;
+  margin: 2px 0px;
+}
+
+.add-question {
+  padding-left: 15px;
+}
+
+.proposal-team-wrapper {
+  display: flex;
+  justify-content: start;
+}
+
+.integrations-icon {
+  margin-top: 3rem;
+  margin-left: -6rem;
+}
+
+.proposal-tema-tooltip {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 5px;
+  width: 100%;
+  transition: width 0.2s;
+}

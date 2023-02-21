@@ -22,7 +22,76 @@ describe('SFAnswerValidationWrapper', () => {
             </Provider>
         );
         expect(container).toBeInTheDocument();
+    });
 
+    it('should render child components', () => {
+        const props = {
+            hasDifferentSFanswer: true,
+            sfObject: 'Opportunity',
+            selectedBid: Map(Object.entries(mockData.selectedBid)),
+        }
+        const { container } = render(
+            <Provider store={store}>
+                <SFAnswerValidationWrapper {...props} />
+            </Provider>
+        );
+        expect(container).toBeInTheDocument();
+    });
+
+    it('should render child components', () => {
+        const props = {
+            hasDifferentSFanswer: true,
+            sfObject: 'Bid_History__c',
+            selectedBid: Map(Object.entries(mockData.selectedBid)),
+        }
+        const { container } = render(
+            <Provider store={store}>
+                <SFAnswerValidationWrapper {...props} />
+            </Provider>
+        );
+        expect(container).toBeInTheDocument();
+    });
+
+    it('should render child components', () => {
+        const props = {
+            hasDifferentSFanswer: true,
+            sfObject: 'Account',
+            selectedBid: Map(Object.entries(mockData.selectedBid)),
+        }
+        const { container } = render(
+            <Provider store={store}>
+                <SFAnswerValidationWrapper {...props} />
+            </Provider>
+        );
+        expect(container).toBeInTheDocument();
+    });
+
+    it('should render child components', () => {
+        const props = {
+            hasDifferentSFanswer: true,
+            sfObject: '',
+            selectedBid: Map(Object.entries(mockData.selectedBid)),
+        }
+        const { container } = render(
+            <Provider store={store}>
+                <SFAnswerValidationWrapper {...props} />
+            </Provider>
+        );
+        expect(container).toBeInTheDocument();
+    });
+
+    it('should render child components', () => {
+        const props = {
+            hasDifferentSFanswer: false,
+            sfObject: '',
+            selectedBid: Map(Object.entries(mockData.selectedBid)),
+        }
+        const { container } = render(
+            <Provider store={store}>
+                <SFAnswerValidationWrapper {...props} />
+            </Provider>
+        );
+        expect(container).toBeInTheDocument();
     });
 
 });
