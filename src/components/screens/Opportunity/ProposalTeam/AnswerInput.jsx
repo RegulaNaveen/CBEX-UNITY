@@ -82,7 +82,7 @@ const AnswerInput = (props) => {
   const closeAnswerHistoryModal = () => {
     setIsHistoryModalShown(false);
   };
-  //     questionText,
+
   //     questionHTML,
   //     questionJSON,
   //     questionHintJSON,
