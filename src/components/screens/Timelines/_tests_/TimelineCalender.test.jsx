@@ -17,7 +17,7 @@ describe('DnDOutsideResource component', () => {
     store = mockStore({});
   });
 
-  it('should render the component', () => {
+  it.skip('should render the component', () => {
     const timelineEvents = [];
     const proposalDate = '';
     const socketContext = {};

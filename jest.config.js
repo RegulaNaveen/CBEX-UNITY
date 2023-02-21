@@ -12,9 +12,14 @@ module.exports = {
     // 'src/components/screens/Approvals/__test__/index.test.js',
     'src/components/views/modals/__test__/AnswerHistory.test.js',
     'src/context/__tests__/SocketContext.test.jsx',
+<<<<<<< HEAD
     //'src/components/screens/Approvals/__test__/utils.test.js',
     'src/components/screens/Proposal/__tests__/Sidebar.test.js',
     //'src/components/screens/Approvals/__test__/Section.test.jsx',
+=======
+    'src/components/screens/Approvals/__test__/utils.test.js',
+    'src/components/screens/Approvals/__test__/Section.test.jsx',
+>>>>>>> 01372e56fbbaeb074d6d48f466793b1355f1fc7d
     'src/components/screens/Opportunity/__tests__/QuestionsSectionMapping.test.jsx',
     'src/components/screens/Opportunity/__tests__/questioncustomer.test.jsx',
     'src/components/screens/Opportunity/__tests__/QuestionContainer.test.js',
@@ -28,6 +33,7 @@ module.exports = {
   },
   transformIgnorePatterns: [
     'node_modules/(?!' +
+<<<<<<< HEAD
       [
         '@tiptap',
         'y-protocols',
@@ -37,6 +43,18 @@ module.exports = {
         'uuid',
       ].join('|') +
       ')',
+=======
+    [
+      '@tiptap',
+      'y-protocols',
+      'y-prosemirror',
+      'lib0',
+      'remixicon',
+      'uuid',
+      'register-service-worker'
+    ].join('|') +
+    ')'
+>>>>>>> 01372e56fbbaeb074d6d48f466793b1355f1fc7d
   ],
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
