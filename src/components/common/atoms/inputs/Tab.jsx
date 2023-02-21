@@ -178,18 +178,24 @@ const UnityTab = ({
       let len = tabs.length;
       for (const [key, value] of Object.entries(customTabs)) {
         const tabID = value[0]['UnityTabId'];
-        const title = String(value[0]['UnityTabTitle'])
-          .trim()
-          .toLowerCase();
-        newTab.push({
-          label: value[0]['UnityTabTitle'],
-          value: len++,
-          component: <CustomTabs tabId={tabID} key={title} />,
-          path: String(value[0]['UnityTabTitle'])
-            .replace(' ', '_')
+        const questionCount = value.some(
+          v => v['UnityTabSectionQuestions'].length > 0
+        );
+        const filterTitle = value.filter(v => v['UnityTabTitle']);
+        if (filterTitle.length && questionCount) {
+          const title = String(filterTitle[0]['UnityTabTitle'])
             .trim()
-            .toLowerCase()
-        });
+            .toLowerCase();
+          newTab.push({
+            label: filterTitle[0]['UnityTabTitle'],
+            value: len++,
+            component: <CustomTabs tabId={tabID} key={title} />,
+            path: String(value[0]['UnityTabTitle'])
+              .replace(' ', '_')
+              .trim()
+              .toLowerCase()
+          });
+        }
       }
       setTabs([...tabs, ...newTab]);
     }

@@ -30,14 +30,19 @@ const CustomTabs = ({ tabId, key }) => {
 
       <div className="all-approvals-container">
         {!isEmpty(tab) ? (
-          tab.map(tabs => (
-            <Section
-              key={tabs.UnityTabSectionId}
-              sectionId={tabs.UnityTabSectionId}
-              title={tabs.UnityTabSectionTitle}
-              tabId={tabId}
-            />
-          ))
+          tab.map(tabs => {
+            if (tabs?.UnityTabSectionQuestions?.length > 0) {
+              return (
+                <Section
+                  key={tabs.UnityTabSectionId}
+                  sectionId={tabs.UnityTabSectionId}
+                  title={tabs.UnityTabSectionTitle}
+                  tabId={tabId}
+                />
+              );
+            }
+            return null;
+          })
         ) : (
           <>
             <div className="no-approval-wrapper">

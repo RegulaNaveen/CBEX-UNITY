@@ -6,7 +6,7 @@ import ApolloCheckbox from 'apollo-react/components/Checkbox';
 import {
   resetFiltersAction,
   updateFilters
-} from '../../../redux/actions/approval-actions';
+} from '../../../redux/actions/unitytab-action';
 
 const Filters = props => {
   const unityTabFilters = useSelector(state => state.unitytab.filters);

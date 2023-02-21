@@ -14,7 +14,7 @@ import {
   selectCurrentSearchResult
 } from '../../../redux/selectors/search';
 
-export const ApprovalContext = createContext();
+export const UnityTabContext = createContext();
 
 const Section = ({ sectionId, title, tabId }) => {
   const [expanded, setExpanded] = useState(false);
@@ -43,7 +43,7 @@ const Section = ({ sectionId, title, tabId }) => {
   return (
     <>
       {sectionVisibility ? (
-        <ApprovalContext.Provider
+        <UnityTabContext.Provider
           value={{ sectionLoading, dispatchLoadingEvent }}
         >
           <CustomAccordion
@@ -82,7 +82,7 @@ const Section = ({ sectionId, title, tabId }) => {
               />
             </AccordionDetails>
           </CustomAccordion>
-        </ApprovalContext.Provider>
+        </UnityTabContext.Provider>
       ) : null}
     </>
   );

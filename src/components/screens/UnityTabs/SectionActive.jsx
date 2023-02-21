@@ -23,7 +23,7 @@ const SectionActive = ({
           UnityTabSectionQuestions.map(item => (
             <QuestionItem
               questionId={item}
-              approvalSectionTitle={UnityTabSectionTitle}
+              UnityTabSectionTitle={UnityTabSectionTitle}
               key={item}
               disabled={!selectedBidIsCurrent}
             />

@@ -238,6 +238,9 @@ class AnswerHistory extends Component<Props> {
     if (tab && tab === 'Approval') {
       action = 'Approval Answer History';
     }
+    if (tab && tab === 'UnityTab') {
+      action = 'UnityTab Answer History';
+    }
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `${action} Event: ${questionText} (${sectionName})`,

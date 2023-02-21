@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 import React from 'react';
 import Tag from 'apollo-react/components/Tag';
 import PropTypes from 'prop-types';
@@ -10,7 +11,11 @@ const ChipView = ({ label, answer }) => {
 
   if (typeof label === 'object') {
     try {
-      milestonetojs = label.toJS();
+      if (Array.isArray(label)) {
+        milestonetojs = label;
+      } else {
+        milestonetojs = label.toJS();
+      }
     } catch (error) {
       console.log(error);
     }
