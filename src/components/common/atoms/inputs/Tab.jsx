@@ -172,32 +172,39 @@ const UnityTab = ({
     ? notepadMinWidthPx
     : (window.innerWidth - minPixelToExclude) * (47 / 100); // 50% of the total screen size
 
+  const newTab = [];
+  let len = tabs.length;
+  for (const [key, value] of Object.entries(customTabs)) {
+    const tabID = value[0]['UnityTabId'];
+    const questionCount = value.some(
+      v => v['UnityTabSectionQuestions'].length > 0
+    );
+    const filterTitle = value.filter(v => v['UnityTabTitle']);
+    if (filterTitle.length && questionCount) {
+      const title = String(filterTitle[0]['UnityTabTitle'])
+        .trim()
+        .toLowerCase();
+      newTab.push({
+        label: filterTitle[0]['UnityTabTitle'],
+        value: len++,
+        component: <CustomTabs tabId={tabID} key={title} />,
+        path: String(value[0]['UnityTabTitle'])
+          .replace(' ', '_')
+          .trim()
+          .toLowerCase()
+      });
+    }
+  }
   useEffect(() => {
-    if (customTabs && Object.keys(customTabs)?.length > 0) {
-      const newTab = [];
-      let len = tabs.length;
-      for (const [key, value] of Object.entries(customTabs)) {
-        const tabID = value[0]['UnityTabId'];
-        const questionCount = value.some(
-          v => v['UnityTabSectionQuestions'].length > 0
-        );
-        const filterTitle = value.filter(v => v['UnityTabTitle']);
-        if (filterTitle.length && questionCount) {
-          const title = String(filterTitle[0]['UnityTabTitle'])
-            .trim()
-            .toLowerCase();
-          newTab.push({
-            label: filterTitle[0]['UnityTabTitle'],
-            value: len++,
-            component: <CustomTabs tabId={tabID} key={title} />,
-            path: String(value[0]['UnityTabTitle'])
-              .replace(' ', '_')
-              .trim()
-              .toLowerCase()
-          });
-        }
-      }
+    if (newTab && Object.keys(newTab)?.length > 0) {
       setTabs([...tabs, ...newTab]);
+    }
+    if (!Object.keys(newTab)?.length) {
+      const custompath = tabs.find(item => item.path === selectedView);
+      if (custompath) {
+        dispatch(setActiveTabIndexAction(0));
+        setTabs(defaultTabs);
+      }
     }
   }, [customTabs]);
 
