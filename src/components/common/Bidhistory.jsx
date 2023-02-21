@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import chevronRight from '../../../img/chevron-right.svg';
@@ -18,6 +20,7 @@ const BidHistory = () => {
   const winLocationSearch = window.location.search;
 
   const selectedView = new URLSearchParams(winLocationSearch).get('viewType');
+  const currentbidNo = new URLSearchParams(winLocationSearch).get('bidNo');
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [showHoverText, setShowHoverText] = useState(false);
   const dispatch = useDispatch();
@@ -33,7 +36,7 @@ const BidHistory = () => {
     setIsCollapsed(!isCollapsed);
   };
 
-  const handleKeyPress = (event) => {
+  const handleKeyPress = event => {
     if (event.key === 'Enter') {
       event.preventDefault();
       handleCollapse();
@@ -111,10 +114,13 @@ const BidHistory = () => {
                       }}
                     >
                       {bidList.length > 0 &&
-                        bidList.map((item) => (
+                        bidList.map(item => (
                           <div
                             onClick={() => {
-                              if (!isQuestionAnswered)
+                              if (
+                                !isQuestionAnswered &&
+                                currentbidNo !== item.bidNo
+                              )
                                 dispatch(changeBid(item));
                             }}
                             className={`bid-list-row ${

@@ -79,7 +79,6 @@ const QuestionItem = ({
   useEffect(() => {
     setLoading(unityTabQuestionLoading?.questionId === questionId);
   }, [unityTabQuestionLoading]);
-  console.log('loading :>> ', loading);
   // useEffect(() => {
   //   if (currentSearchResult !== null && questionTextRef.current !== null) {
   //     if (currentSearchResult.searchIndex === highlightQuestionId) {
