@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom';
 import Typography from 'apollo-react/components/Typography';
 import AnswerInput from './AnswerInput';
 import AddQuestionModalComponent from '../../../views/modals/AddQuestionModal';
@@ -6,6 +7,11 @@ import { isSetQuestionLoading } from '../../../../redux/selectors';
 import { useSelector } from 'react-redux';
 import Link from 'apollo-react/components/Link';
 import Plus from 'apollo-react-icons/Plus';
+
+const CustomModal = (props) => {
+  const modalRoot = document.getElementById('modal-wrapper');
+  return ReactDOM.createPortal(props.children, modalRoot);
+};
 
 function ProposalTeam() {
   const [showModal, setShowModal] = useState(false);
@@ -44,7 +50,11 @@ function ProposalTeam() {
         </Link>
       </div>
 
-      {showModal && <AddQuestionModalComponent onClose={onCloseAddModal} />}
+      {showModal && (
+        <CustomModal>
+          <AddQuestionModalComponent onClose={onCloseAddModal} />
+        </CustomModal>
+      )}
     </div>
   );
 }

@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
-import Plus from 'apollo-react-icons/Plus';
+import Grid from 'apollo-react/components/Grid';
 import { useDispatch, useSelector } from 'react-redux';
-import Link from 'apollo-react/components/Link';
 import { isEmpty, xor, isString } from 'lodash';
 import { List, fromJS } from 'immutable';
 import InfoIcon from 'apollo-react-icons/Info';
 import Typography from 'apollo-react/components/Typography';
+import ReactDOM from 'react-dom';
 import Autocomplete from '../../../common/atoms/inputs/AutoComplete';
 import SFAnswerValidationWrapper from '../../../common/SFAnswerValidationWrapper';
 import SystemIntegrations from '../../../common/SystemIntegrations/SystemIntegrations';
@@ -13,7 +13,6 @@ import {
   selectSections,
   selectFilteredSections,
   selectIsQuestionsFilterEnabled,
-  isSetQuestionLoading,
   getSelectedBid,
   getnoneditableField,
   getIntegrations,
@@ -26,7 +25,6 @@ import {
   deleteProposalUserFromDB,
   setProposalAnswerLoading
 } from '../../../../redux/actions/proposal-actions';
-import AddQuestionModalComponent from '../../../views/modals/AddQuestionModal';
 import { SocketContext } from '../../../../context/SocketContext';
 import { checkNonEditableFields } from '../../../../utils/utils';
 import AnswerHistory from '../../../views/modals/AnswerHistory';
@@ -47,7 +45,6 @@ const AnswerInput = (props) => {
   );
   const sections = useSelector(selectSections);
   const noneditableField = useSelector((state) => getnoneditableField(state));
-  const isSetQuestionLoadingData = useSelector(isSetQuestionLoading);
   const isQuestionsFiltersEnabled = useSelector(selectIsQuestionsFilterEnabled);
   const filteredSections = useSelector(selectFilteredSections);
   const userData = useSelector((state) => getUserData(state));
@@ -85,10 +82,6 @@ const AnswerInput = (props) => {
   const closeAnswerHistoryModal = () => {
     setIsHistoryModalShown(false);
   };
-
-  //   const {
-  //     eventCategories,
-  //     proposalDetail,
   //     questionText,
   //     questionHTML,
   //     questionJSON,
@@ -140,11 +133,14 @@ const AnswerInput = (props) => {
     }
     return false;
   };
+
+  const CustomModal = (props) => {
+    const modalRoot = document.getElementById('proposalTeam-answer-history');
+    return ReactDOM.createPortal(props.children, modalRoot);
+  };
   return (
     <>
-      {' '}
       <div className="proposal-team-wrapper-container">
-        {' '}
         {Object.keys(proposalTeam[0].questions).map((item) => {
           const isQuestionLocked = () => {
             return (
@@ -207,6 +203,7 @@ const AnswerInput = (props) => {
             };
             const isNotApplicable =
               proposalTeam[0].questions[item]?.notApplicable;
+
             let checkSFAnswer = [];
             let destinationArray;
             let integrationvalidation;
@@ -229,9 +226,9 @@ const AnswerInput = (props) => {
             if (lastAnswer) {
               if (
                 lastAnswer.get &&
-                lastAnswer.userName &&
-                lastAnswer.userName.length &&
-                lastAnswer.userName === 'UnityPredictedAnswer'
+                lastAnswer.get('userName') &&
+                lastAnswer.get('userName').length &&
+                lastAnswer.get('userName') === 'UnityPredictedAnswer'
               ) {
                 isAnswerPredicted = true;
                 answerDate = 'Not Answered';
@@ -326,6 +323,7 @@ const AnswerInput = (props) => {
                 )
               );
             };
+
             const handlePropsalChange = async (
               textValue,
               lastValue,
@@ -382,75 +380,80 @@ const AnswerInput = (props) => {
             };
             return (
               <>
-                {' '}
                 <div className="proposal-team-wrapper">
-                  {' '}
                   <div
                     className={`task-table-row question-row ${
                       selectedRow ? 'selected-task-table-row' : ''
                     } ${NaLoading ? 'fade-area' : ''} `}
                     style={{ margin: '2px 0px' }}
                   >
-                    {' '}
-                    <div className="proposal-tema-tooltip">
-                      {' '}
-                      <Typography className="proposal-team-title">
-                        {' '}
-                        {proposalTeam[0].questions[item].questionText}
-                      </Typography>{' '}
-                      {questionHint && (
-                        <div>
-                          {' '}
-                          <Tooltip
-                            variant="light"
-                            tabIndex={-1}
-                            title={
-                              questionHintJSON ? (
-                                <RichTextEditor
-                                  variant="view"
-                                  defaultValue={JSON.parse(questionHintJSON)}
-                                  // ref={this.questionTextRef2}
-                                />
-                              ) : (
-                                <div>{questionHint}</div>
-                              )
-                            }
-                            placement="top"
-                          >
-                            {' '}
-                            <IconButton
-                              color="primary"
-                              style={{ margin: 0 }}
-                              size="small"
-                              className="question-tooltip-icon"
-                            >
-                              {' '}
-                              <InfoIcon style={{ fontSize: '16px' }} />{' '}
-                            </IconButton>{' '}
-                          </Tooltip>{' '}
+                    <Grid container className="question-title-grid">
+                      <Grid
+                        item
+                        xs={10}
+                        className="question-grid-item"
+                        style={{ maxWidth: 'none' }}
+                      >
+                        <div className="proposal-tema-tooltip">
+                          <div className="proposal-team-flex">
+                            <Typography className="proposal-team-title">
+                              {proposalTeam[0].questions[item].questionText}
+                            </Typography>
+                            {questionHint && (
+                              <div>
+                                <Tooltip
+                                  variant="light"
+                                  className="tooltip"
+                                  tabIndex={-1}
+                                  title={
+                                    questionHintJSON ? (
+                                      <RichTextEditor
+                                        variant="view"
+                                        defaultValue={JSON.parse(
+                                          questionHintJSON
+                                        )}
+                                      />
+                                    ) : (
+                                      <div>{questionHint}</div>
+                                    )
+                                  }
+                                  placement="top"
+                                >
+                                  <IconButton
+                                    color="primary"
+                                    style={{ margin: 0 }}
+                                    size="small"
+                                    className="question-tooltip-icon"
+                                  >
+                                    <InfoIcon style={{ fontSize: '16px' }} />
+                                  </IconButton>
+                                </Tooltip>
+                              </div>
+                            )}
+                          </div>
+                          {milestoneCond ? (
+                            <div className="proposal-team-chipview">
+                              {milestoneNew ? (
+                                <div className="test">
+                                  <ChipView
+                                    label={milestoneNew}
+                                    style={{ display: 'flex !important' }}
+                                    answer={lastAns}
+                                  />
+                                </div>
+                              ) : null}
+                            </div>
+                          ) : (
+                            <div>
+                              {milestone ? (
+                                <ChipView label={milestone} answer={lastAns} />
+                              ) : null}
+                            </div>
+                          )}
                         </div>
-                      )}
-                      {milestoneCond ? (
-                        <div
-                        // className="chipview"
-                        // style={{ display: 'flex !important' }}
-                        >
-                          {milestoneNew ? (
-                            <ChipView
-                              label={milestoneNew}
-                              style={{ display: 'flex !important' }}
-                              answer={lastAns}
-                            />
-                          ) : null}
-                        </div>
-                      ) : (
-                        <div>
-                          {milestone ? (
-                            <ChipView label={milestone} answer={lastAns} />
-                          ) : null}
-                        </div>
-                      )}
-                    </div>
+                      </Grid>
+                      <Grid item xs={2} className="empty-grid-item" />
+                    </Grid>
                     {isQuestionLockedByOther() ? (
                       <Typography variant="subtitle1" className="status-txt">
                         {
@@ -460,75 +463,79 @@ const AnswerInput = (props) => {
                         is typing...
                       </Typography>
                     ) : null}
-                    <div
-                      className="proposal-team-answer"
-                      style={{ maxWidth: 600 }}
-                    >
-                      <SFAnswerValidationWrapper
-                        hasDifferentSFanswer={
-                          hasDifferentSFanswer && isCurrentBid
-                        }
-                        sfObject={sfObject}
-                      >
-                        <Autocomplete
-                          sectionName={proposalTeam[0].sectionName}
-                          onFocus={() => {
-                            // call question lock
-                            questionLockWrapper(questionId);
-                            callSelectRow(true);
-                          }}
-                          onBlur={() => {
-                            questionUnlockWrapper(questionId);
-                            callSelectRow(false);
-                          }}
-                          onChange={handlePropsalChange}
-                          text={answerValue}
-                          disabled={checkDisableFlag()}
-                        />
-                      </SFAnswerValidationWrapper>
+                    <div className="proposal-team-answer">
+                      <Grid container className="answer-grid">
+                        <Grid item xs={10} className="answer-grid-item">
+                          <SFAnswerValidationWrapper
+                            style={{ paddingLeft: '40px' }}
+                            hasDifferentSFanswer={
+                              hasDifferentSFanswer && isCurrentBid
+                            }
+                            sfObject={sfObject}
+                          >
+                            <Autocomplete
+                              sectionName={proposalTeam[0].sectionName}
+                              onFocus={() => {
+                                // call question lock
+                                questionLockWrapper(questionId);
+                                callSelectRow(true);
+                              }}
+                              onBlur={() => {
+                                questionUnlockWrapper(questionId);
+                                callSelectRow(false);
+                              }}
+                              onChange={handlePropsalChange}
+                              text={answerValue}
+                              disabled={checkDisableFlag()}
+                            />
+                          </SFAnswerValidationWrapper>
+                        </Grid>
+                        <Grid item xs={2} className="question-grid-item">
+                          <SystemIntegrations
+                            checkSfAnswer={checkSFAnswer}
+                            sficon={sficon}
+                            destinationArray={destinationArray}
+                            answers={answers}
+                            gridColRatio={gridColRatio}
+                            integrationmatch={integrationmatch}
+                            integrationvalidation={integrationvalidation}
+                            answeronhistory={displayAnswerOnHistory}
+                            answerdate={answerDate}
+                            isAnswerPredicted={isAnswerPredicted}
+                            isAnswered={isAnswered}
+                            lastAnswer={lastAnswer}
+                            iconColor={iconColor}
+                            loading={loading}
+                            questionText={questionText}
+                            NaLoading={NaLoading}
+                            showNaCheckbox={showNaCheckbox}
+                            isNotepadOpen={isNotepadOpen}
+                            changeIcon={changeIcon}
+                            isCurrentBid={isCurrentBid}
+                            sfObject={sfObject}
+                            handleVerifyPredictedAnsClick={(predictedAnswer) =>
+                              handleVerifyPredictedAnsClick(predictedAnswer)
+                            }
+                            hasDifferentSFanswer={hasDifferentSFanswer}
+                            disabled={integrationLocked}
+                          />
+                        </Grid>
+                      </Grid>
                     </div>
                   </div>
-                  <div className="integrations-icon">
-                    <SystemIntegrations
-                      checkSfAnswer={checkSFAnswer}
-                      sficon={sficon}
-                      destinationArray={destinationArray}
-                      answers={answers}
-                      gridColRatio={gridColRatio}
-                      integrationmatch={integrationmatch}
-                      integrationvalidation={integrationvalidation}
-                      answeronhistory={displayAnswerOnHistory}
-                      answerdate={answerDate}
-                      isAnswerPredicted={isAnswerPredicted}
-                      isAnswered={isAnswered}
-                      lastAnswer={lastAnswer}
-                      iconColor={iconColor}
-                      loading={loading}
-                      questionText={questionText}
-                      NaLoading={NaLoading}
-                      showNaCheckbox={showNaCheckbox}
-                      isNotepadOpen={isNotepadOpen}
-                      changeIcon={changeIcon}
-                      isCurrentBid={isCurrentBid}
-                      sfObject={sfObject}
-                      handleVerifyPredictedAnsClick={(predictedAnswer) =>
-                        handleVerifyPredictedAnsClick(predictedAnswer)
-                      }
-                      hasDifferentSFanswer={hasDifferentSFanswer}
-                      disabled={integrationLocked}
-                    />{' '}
-                  </div>{' '}
-                </div>{' '}
+                </div>
               </>
             );
           }
         })}
-      </div>{' '}
+      </div>
       {isHistoryModalShown && (
-        <AnswerHistory
-          question={selectedQuestionForHistory}
-          closeModal={closeAnswerHistoryModal}
-        />
+        <CustomModal>
+          <AnswerHistory
+            question={selectedQuestionForHistory}
+            closeModal={closeAnswerHistoryModal}
+          />
+        </CustomModal>
       )}
     </>
   );

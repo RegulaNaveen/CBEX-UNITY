@@ -4,13 +4,18 @@
 }
 .proposal-team-answer {
   padding-left: 15px;
-  // max-width: 400px;
   min-width: 500px !important;
   margin-top: 5px;
   margin-bottom: 5px;
   overflow-y: auto !important;
-  // height: 466px !important;
 }
+
+.proposalTeammarkNaAutoActive {
+  margin-bottom: -3px;
+  margin-left: -40px;
+  margin-top: -2px;
+}
+
 .divider-hr-proposal-team {
   margin-left: 16px;
   margin-right: 16px;
@@ -19,7 +24,14 @@
   border-top: 1px solid #ddd;
   padding: 0;
 }
-
+.proposal-team-flex {
+  display: flex;
+}
+.proposal-team-chipview {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 69px;
+}
 .proposal-team-wrapper-container {
   overflow-y: auto;
   height: 442px !important;
