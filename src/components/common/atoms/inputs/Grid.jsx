@@ -3,8 +3,10 @@ import Grid from 'apollo-react/components/Grid';
 import Paper from 'apollo-react/components/Paper';
 import Typography from 'apollo-react/components/Typography';
 import Tooltip from 'apollo-react/components/Tooltip';
+import { useSelector } from 'react-redux';
 import { parseMomentDate, remainingDays } from '../../../../utils/DateUtils';
 import { SF_HOST_URL } from '../../../../constants/api';
+import { getProposalQuestions } from '../../../../redux/selectors/proposal';
 
 const styles = { padding: 10 };
 const containerStyle = {
@@ -16,6 +18,11 @@ const containerStyle = {
 
 const loadSidebar = props => {
   const { data, isOpen, windowSize, bidStatus } = props;
+  const questions = useSelector(getProposalQuestions);
+  const [
+    detailsForBackendSectionData,
+    setDetailsForBackendSectionData
+  ] = useState({});
   // Setup a ref
   const protocol = useRef();
   const product = useRef();
@@ -136,6 +143,48 @@ const loadSidebar = props => {
     isOpen
   ]);
 
+  const setDetailsForBackendAnswers = proposalQuestions => {
+    try {
+      const detailsForBackendData = {};
+      proposalQuestions.forEach(question => {
+        if (question.sfObject === 'Opportunity') {
+          if (question.sfField === 'Therapy_Area__c') {
+            detailsForBackendData.therapeuticArea =
+              question?.answers[question?.answers?.length - 1]?.answer;
+          }
+          if (question.sfField === 'Phase_P__c') {
+            detailsForBackendData.phase =
+              question?.answers[question?.answers?.length - 1]?.answer;
+          }
+          if (question.sfField === 'Drug_Product_Name__c') {
+            detailsForBackendData.productName =
+              question?.answers[question?.answers?.length - 1]?.answer;
+          }
+          if (question.sfField === 'Protocol_Number__c') {
+            detailsForBackendData.protocolNumber =
+              question?.answers[question?.answers?.length - 1]?.answer;
+          }
+          if (question.sfField === 'Line_of_Business__c') {
+            detailsForBackendData.lineOfBusiness =
+              question?.answers[question?.answers?.length - 1]?.answer;
+          }
+          if (question.sfField === 'Is_this_IQVIA_Biotech__c') {
+            detailsForBackendData.IsIqviaBiotech =
+              question?.answers[question?.answers?.length - 1]?.answer;
+          }
+        }
+      });
+      setDetailsForBackendSectionData(detailsForBackendData);
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    setDetailsForBackendAnswers(questions);
+  }, [questions]);
+
   const renderProcessingTxt = (
     <span className="processing-txt">Processing</span>
   );
@@ -190,7 +239,12 @@ const loadSidebar = props => {
             </Typography>
             <Tooltip
               variant="dark"
-              body={isLinebusinessTooltipHalfscreen ? lineOfBusiness : null}
+              body={
+                isLinebusinessTooltipHalfscreen
+                  ? detailsForBackendSectionData?.lineOfBusiness ||
+                    lineOfBusiness
+                  : null
+              }
               placement="bottom"
             >
               <Typography
@@ -198,7 +252,9 @@ const loadSidebar = props => {
                 className={headerClassName}
                 ref={linebusinesshalfscreen}
               >
-                {lineOfBusiness || placeholder}
+                {detailsForBackendSectionData.lineOfBusiness ||
+                  lineOfBusiness ||
+                  placeholder}
               </Typography>
             </Tooltip>
           </Paper>
@@ -207,7 +263,9 @@ const loadSidebar = props => {
               IQVIA Biotech
             </Typography>
             <Typography variant="body2" className="boldtext sidebaropenfont">
-              {iqviaBiotech || placeholder}
+              {detailsForBackendSectionData.IsIqviaBiotech ||
+                iqviaBiotech ||
+                placeholder}
             </Typography>
           </Paper>
           <Paper style={styles} className="sidebarduedatedsg open">
@@ -215,7 +273,10 @@ const loadSidebar = props => {
               Phase
             </Typography>
             <Typography variant="body2" className="boldtext sidebaropenfont">
-              {phase ? phase.split(' ')[1] : placeholder}
+              {phase
+                ? detailsForBackendSectionData?.phase?.split(' ')[1] ||
+                  phase.split(' ')[1]
+                : placeholder}
             </Typography>
           </Paper>
           <Paper style={styles} className="sidebarduedatedsg open">
@@ -224,7 +285,12 @@ const loadSidebar = props => {
             </Typography>
             <Tooltip
               variant="dark"
-              body={isTherapeuticTooltipHalfscreen ? therapeuticArea : null}
+              body={
+                isTherapeuticTooltipHalfscreen
+                  ? detailsForBackendSectionData?.therapeuticArea ||
+                    therapeuticArea
+                  : null
+              }
               placement="bottom"
             >
               <Typography
@@ -232,7 +298,9 @@ const loadSidebar = props => {
                 className={headerClassName}
                 ref={therapeutichalfscreen}
               >
-                {therapeuticArea || placeholder}
+                {detailsForBackendSectionData?.therapeuticArea ||
+                  therapeuticArea ||
+                  placeholder}
               </Typography>
             </Tooltip>
           </Paper>
@@ -245,7 +313,11 @@ const loadSidebar = props => {
             </Typography>
             <Tooltip
               variant="dark"
-              body={isProductTooltipHalfscreen ? productName : null}
+              body={
+                isProductTooltipHalfscreen
+                  ? detailsForBackendSectionData?.productName || productName
+                  : null
+              }
               placement="bottom"
             >
               <Typography
@@ -253,7 +325,9 @@ const loadSidebar = props => {
                 className={headerClassName}
                 ref={producthalfscreen}
               >
-                {productName || placeholder}
+                {detailsForBackendSectionData?.productName ||
+                  productName ||
+                  placeholder}
               </Typography>
             </Tooltip>
           </Paper>
@@ -266,7 +340,12 @@ const loadSidebar = props => {
             </Typography>
             <Tooltip
               variant="dark"
-              body={isProtocolTooltipHalfscreen ? protocolNumber : null}
+              body={
+                isProtocolTooltipHalfscreen
+                  ? detailsForBackendSectionData?.protocolNumber ||
+                    protocolNumber
+                  : null
+              }
               placement="bottom"
             >
               <Typography
@@ -274,7 +353,9 @@ const loadSidebar = props => {
                 className={headerClassName}
                 ref={protocolhalfscreen}
               >
-                {protocolNumber || placeholder}
+                {detailsForBackendSectionData?.protocolNumber ||
+                  protocolNumber ||
+                  placeholder}
               </Typography>
             </Tooltip>
           </Paper>
@@ -349,7 +430,12 @@ const loadSidebar = props => {
               </Typography>
               <Tooltip
                 variant="dark"
-                body={isLinebusinessTooltip ? lineOfBusiness : null}
+                body={
+                  isLinebusinessTooltip
+                    ? detailsForBackendSectionData.lineOfBusiness ||
+                      lineOfBusiness
+                    : null
+                }
                 placement="bottom"
               >
                 <Typography
@@ -357,7 +443,9 @@ const loadSidebar = props => {
                   className="boldtext header-ellipses"
                   ref={linebusiness}
                 >
-                  {lineOfBusiness || placeholder}
+                  {detailsForBackendSectionData.lineOfBusiness ||
+                    lineOfBusiness ||
+                    placeholder}
                 </Typography>
               </Tooltip>
             </Paper>
@@ -370,7 +458,9 @@ const loadSidebar = props => {
                 IQVIA Biotech
               </Typography>
               <Typography variant="body2" className="boldtext">
-                {iqviaBiotech || placeholder}
+                {detailsForBackendSectionData.IsIqviaBiotech ||
+                  iqviaBiotech ||
+                  placeholder}
               </Typography>
             </Paper>
           </Grid>
@@ -380,7 +470,10 @@ const loadSidebar = props => {
                 Phase
               </Typography>
               <Typography variant="body2" className="boldtext">
-                {phase ? phase.split(' ')[1] : placeholder}
+                {phase
+                  ? detailsForBackendSectionData?.phase?.split(' ')[1] ||
+                    phase.split(' ')[1]
+                  : placeholder}
               </Typography>
             </Paper>
           </Grid>
@@ -391,7 +484,12 @@ const loadSidebar = props => {
               </Typography>
               <Tooltip
                 variant="dark"
-                body={isTherapeuticTooltip ? therapeuticArea : null}
+                body={
+                  isTherapeuticTooltip
+                    ? detailsForBackendSectionData?.therapeuticArea ||
+                      therapeuticArea
+                    : null
+                }
                 placement="bottom"
               >
                 <Typography
@@ -399,7 +497,9 @@ const loadSidebar = props => {
                   className="boldtext header-ellipses"
                   ref={therapeutic}
                 >
-                  {therapeuticArea || placeholder}
+                  {detailsForBackendSectionData?.therapeuticArea ||
+                    therapeuticArea ||
+                    placeholder}
                 </Typography>
               </Tooltip>
             </Paper>
@@ -413,7 +513,11 @@ const loadSidebar = props => {
               </Typography>
               <Tooltip
                 variant="dark"
-                body={isProductTooltip ? productName : null}
+                body={
+                  isProductTooltip
+                    ? detailsForBackendSectionData?.productName || productName
+                    : null
+                }
                 placement="bottom"
               >
                 <Typography
@@ -421,7 +525,9 @@ const loadSidebar = props => {
                   className="boldtext header-ellipses"
                   ref={product}
                 >
-                  {productName || placeholder}
+                  {detailsForBackendSectionData?.productName ||
+                    productName ||
+                    placeholder}
                 </Typography>
               </Tooltip>
             </Paper>
@@ -433,7 +539,12 @@ const loadSidebar = props => {
               </Typography>
               <Tooltip
                 variant="dark"
-                body={isProtocolTooltip ? protocolNumber : null}
+                body={
+                  isProtocolTooltip
+                    ? detailsForBackendSectionData?.protocolNumber ||
+                      protocolNumber
+                    : null
+                }
                 placement="bottom"
               >
                 <Typography
@@ -441,7 +552,9 @@ const loadSidebar = props => {
                   className="boldtext header-ellipses"
                   ref={protocol}
                 >
-                  {protocolNumber || placeholder}
+                  {detailsForBackendSectionData?.protocolNumber ||
+                    protocolNumber ||
+                    placeholder}
                 </Typography>
               </Tooltip>
             </Paper>
