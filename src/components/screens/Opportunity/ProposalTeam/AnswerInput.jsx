@@ -6,6 +6,9 @@ import { List, fromJS } from 'immutable';
 import InfoIcon from 'apollo-react-icons/Info';
 import Typography from 'apollo-react/components/Typography';
 import ReactDOM from 'react-dom';
+import IconButton from 'apollo-react/components/IconButton';
+import Tooltip from 'apollo-react/components/Tooltip';
+import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import Autocomplete from '../../../common/atoms/inputs/AutoComplete';
 import SFAnswerValidationWrapper from '../../../common/SFAnswerValidationWrapper';
 import SystemIntegrations from '../../../common/SystemIntegrations/SystemIntegrations';
@@ -28,9 +31,6 @@ import {
 import { SocketContext } from '../../../../context/SocketContext';
 import { checkNonEditableFields } from '../../../../utils/utils';
 import AnswerHistory from '../../../views/modals/AnswerHistory';
-import IconButton from 'apollo-react/components/IconButton';
-import Tooltip from 'apollo-react/components/Tooltip';
-import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import ChipView from '../../../common/Chip/ChipView';
 import MatomoHOC from '../../../HOC/MatomoHOC';
 
@@ -82,41 +82,6 @@ const AnswerInput = (props) => {
   const closeAnswerHistoryModal = () => {
     setIsHistoryModalShown(false);
   };
-
-  //     questionHTML,
-  //     questionJSON,
-  //     questionHintJSON,
-  //     sectionName,
-  //     trackEvent,
-  //     questionId,
-  //     events
-  //   }
-  //   trackEvent({
-  //     category: eventCategories.pd(this.props),
-  //     action: events
-  //       ? `Event: ${questionText} (${sectionName})`
-  //       : `Question: ${questionText} (${sectionName})`,
-  //     name: `Answer: ${data}`,
-  //     customDimensions: [
-  //       {
-  //         id: 1,
-  //         value: JSON.stringify({
-  //           answer: data,
-  //           sectionName,
-  //           questionText,
-  //           questionHTML,
-  //           questionJSON,
-  //           questionHintJSON,
-  //           questionId,
-  //           proposalDetail
-  //         })
-  //       },
-  //       {
-  //         events: events || []
-  //       }
-  //     ]
-  //   });
-  // };
 
   const isAnswered = (answer, isAnswerPredicted) => {
     if (isAnswerPredicted) return false;
