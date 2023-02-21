@@ -13,7 +13,6 @@ module.exports = {
     'src/components/views/modals/__test__/AnswerHistory.test.js',
     'src/context/__tests__/SocketContext.test.jsx',
     'src/components/screens/Approvals/__test__/utils.test.js',
-    'src/components/screens/Proposal/__tests__/Sidebar.test.js',
     'src/components/screens/Approvals/__test__/Section.test.jsx',
     'src/components/screens/Opportunity/__tests__/QuestionsSectionMapping.test.jsx',
     'src/components/screens/Opportunity/__tests__/questioncustomer.test.jsx',
@@ -28,15 +27,16 @@ module.exports = {
   },
   transformIgnorePatterns: [
     'node_modules/(?!' +
-      [
-        '@tiptap',
-        'y-protocols',
-        'y-prosemirror',
-        'lib0',
-        'remixicon',
-        'uuid'
-      ].join('|') +
-      ')'
+    [
+      '@tiptap',
+      'y-protocols',
+      'y-prosemirror',
+      'lib0',
+      'remixicon',
+      'uuid',
+      'register-service-worker'
+    ].join('|') +
+    ')'
   ],
   transform: {
     '^.+\\.tsx?$': 'ts-jest',

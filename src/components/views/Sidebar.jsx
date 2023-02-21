@@ -326,6 +326,7 @@ class Sidebar extends Component<Props, State> {
               </Tooltip>
               <Tooltip title="Export Opportunity" placement="top">
                 <Download
+                  data-testid="export-opportunity-testid"
                   style={{
                     color: neptunePrimaryDark,
                     width: 20,
@@ -347,6 +348,7 @@ class Sidebar extends Component<Props, State> {
               {MANUAL_REFRESH && (
                 <Tooltip title="Refresh Proposal Sources" placement="right">
                   <SyncIcon
+                    data-testid="sync-icon-testid"
                     style={{
                       backgroundColor: neptunePrimaryDark,
                       width: 20,
