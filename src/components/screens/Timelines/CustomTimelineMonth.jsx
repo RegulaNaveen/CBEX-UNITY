@@ -125,12 +125,14 @@ class MonthView extends React.Component {
   };
 
   handleDateRangeChange = value => {
-    if (!value[0] || !value[1]) return;
+    const start = moment(`${value[0]}`).isValid()
+      ? moment(`${value[0]}`)
+      : this.props.timelineDateRange[0];
+    const end = moment(`${value[1]}`).isValid()
+      ? moment(`${value[1]}`)
+      : this.props.timelineDateRange[1];
 
-    this.props.setTimelineDateRange([
-      moment(`${value[0]}`),
-      moment(`${value[1]}`)
-    ]);
+    this.props.setTimelineDateRange([start, end]);
   };
 
   render() {
