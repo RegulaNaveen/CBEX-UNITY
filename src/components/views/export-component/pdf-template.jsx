@@ -1,16 +1,3 @@
-/* eslint-disable prefer-template */
-/* eslint-disable no-else-return */
-/* eslint-disable import/no-unresolved */
-/* eslint-disable no-unused-vars */
-/* eslint-disable func-names */
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-use-before-define */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable guard-for-in */
-/* eslint-disable prefer-const */
-/* eslint-disable import/prefer-default-export */
-/* eslint-disable no-return-assign */
-
 import { renderToString } from 'react-dom/server';
 import ReactHtmlParser from 'react-html-parser';
 import {
@@ -318,7 +305,7 @@ function getHeaderInfoRows(details) {
 function getProposalTeamsRows(questions) {
   const coreTeamQuestions = questions
     .filter(
-      question =>
+      (question) =>
         shouldInclude(question) &&
         CORE_TEAM[question.questionText] &&
         question.section.sectionName === PT_SECTION
@@ -326,7 +313,7 @@ function getProposalTeamsRows(questions) {
     .sort((a, b) => a.questionOrder - b.questionOrder);
   const otherTeamQuestions = questions
     .filter(
-      question =>
+      (question) =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
         !CORE_TEAM[question.questionText]
@@ -339,25 +326,34 @@ function getProposalTeamsRows(questions) {
     html += `<div id="resp-table-header"> Core Team Members </div>`;
     html += `<div id="resp-table-header"> Name </div>`;
     html += `</div>`;
-    const getEmailID = str => {
+    const getEmailID = (str) => {
       return String(str).match(
         /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
       );
     };
-    coreTeamQuestions.forEach(question => {
+    coreTeamQuestions.forEach((question) => {
       const { questionText, answers } = question;
       html += `<div class="resp-table-row">`;
       html += `<div class="table-header-cell">${questionText}</div>`;
       const coreTeamQuestionsAnswer = checkFormattedAnswer(answers);
-      let coreTeamQuestionsEmail = getEmailID(coreTeamQuestionsAnswer);
       let emailLink = '';
-      if (coreTeamQuestionsEmail) {
-        const name = coreTeamQuestionsAnswer.substring(
-          0,
-          coreTeamQuestionsAnswer.indexOf('(')
-        );
-        let tempEmail = String(coreTeamQuestionsEmail[0]).trim();
-        emailLink = `<a href="mailto:${tempEmail}">${name}</a>`;
+      let otherTeamArray;
+      if (coreTeamQuestionsAnswer) {
+        otherTeamArray = coreTeamQuestionsAnswer.split(',');
+      }
+      let Arrayedanother = [];
+      otherTeamArray?.forEach((item) => {
+        const nameArray = item.substring(0, item.indexOf('('));
+        const emailId = getEmailID(item);
+        return Arrayedanother.push({ name: nameArray, email: emailId });
+      });
+      if (Arrayedanother.length > 0) {
+        Arrayedanother.forEach((item, index) => {
+          const commaHandle = index + 1 === Arrayedanother.length ? '' : ', ';
+          emailLink += `<a href="mailto:${
+            item?.email !== null ? item?.email[0] : ''
+          }">${item.name}</a>${Arrayedanother.length > 1 ? commaHandle : ''}`;
+        });
       }
       html += `<div class="table-header-cell">${emailLink}</div>`;
       html += `</div>`;
@@ -373,22 +369,31 @@ function getProposalTeamsRows(questions) {
       html += `<div class="resp-table-row">`;
       html += `<div class="table-header-cell">${questionText} </div>`;
       const otherTeamQuestionsAnswer = checkFormattedAnswer(answers);
-      let otherTeamQuestionsAnswerEmail = getEmailID(otherTeamQuestionsAnswer);
+      let otherTeamArray;
+      if (otherTeamQuestionsAnswer) {
+        otherTeamArray = otherTeamQuestionsAnswer.split(',');
+      }
+      let Arrayedanother = [];
+      otherTeamArray?.forEach((item) => {
+        const nameArray = item.substring(0, item.indexOf('('));
+        const emailId = getEmailID(item);
+        return Arrayedanother.push({ name: nameArray, email: emailId });
+      });
       let otherTeamQuestionsemailLink = '';
-      if (otherTeamQuestionsAnswerEmail) {
-        const nameOther = otherTeamQuestionsAnswer.substring(
-          0,
-          otherTeamQuestionsAnswer.indexOf('(')
-        );
-        let tempEmailOther = String(otherTeamQuestionsAnswerEmail[0]).trim();
-        otherTeamQuestionsemailLink = `<a href="mailto:${tempEmailOther}">${nameOther}</a>`;
+      if (Arrayedanother.length > 0) {
+        Arrayedanother.forEach((item, index2) => {
+          const commaHandle = index2 + 1 === Arrayedanother.length ? '' : ', ';
+          otherTeamQuestionsemailLink += `<a href="mailto:${
+            item?.email !== null ? item?.email[0] : ''
+          }">${item.name}</a>${Arrayedanother.length > 1 ? commaHandle : ''}`;
+        });
       }
       html += `<div class="table-header-cell">${otherTeamQuestionsemailLink}</div>`;
       html += `</div>`;
     });
     html += `</div>`;
   } catch (error) {
-    console.log('Error in getProposalTeamsRows');
+    console.log('Error in getProposalTeamsRows', error);
   }
   return html;
 }
@@ -397,7 +402,7 @@ function questionTables(allQuestions, proposalQuestions) {
   let html = ``;
   // Remove not visible questions
   let questions = proposalQuestions
-    .filter(question => {
+    .filter((question) => {
       return (
         shouldInclude(question) &&
         question.section.sectionName !== PT_SECTION &&
@@ -411,7 +416,7 @@ function questionTables(allQuestions, proposalQuestions) {
   const sections = {};
   let ordereredSections = [];
   // Populate the section map
-  questions.forEach(question => {
+  questions.forEach((question) => {
     try {
       let section = question.section.sectionName || '';
       if (section === 'Questions_for_the_Customer_left_panel') {
@@ -428,10 +433,10 @@ function questionTables(allQuestions, proposalQuestions) {
     }
   });
   ordereredSections = ordereredSections.filter(
-    v => v !== 'Questions for the Customer'
+    (v) => v !== 'Questions for the Customer'
   );
   ordereredSections.unshift('Questions for the Customer');
-  ordereredSections.forEach(section => {
+  ordereredSections.forEach((section) => {
     if (section === QC_SECTION) {
       html += `<div id="resp-table" class="questionTable table marginTop20">`;
       html += `<div class="resp-table-row">`;
@@ -440,12 +445,12 @@ function questionTables(allQuestions, proposalQuestions) {
       html += `</div>`;
       let questionsToCustomerLeftSection = allQuestions
         .filter(
-          question =>
+          (question) =>
             shouldInclude(question) &&
             question.section.sectionName === QC_SECTION_LEFT_PANEL
         )
         .sort((a, b) => a.questionOrder - b.questionOrder);
-      questionsToCustomerLeftSection.forEach(question => {
+      questionsToCustomerLeftSection.forEach((question) => {
         const temporalDivElement = document.createElement('div');
         temporalDivElement.innerHTML = question.questionHTML;
         const finalAnswer = !isEqual(
@@ -471,12 +476,12 @@ function questionTables(allQuestions, proposalQuestions) {
       });
       let questionsToCustomerRightSection = allQuestions
         .filter(
-          question =>
+          (question) =>
             shouldInclude(question) &&
             question.section.sectionName === QC_SECTION
         )
         .sort((a, b) => a.questionOrder - b.questionOrder);
-      questionsToCustomerRightSection.forEach(question => {
+      questionsToCustomerRightSection.forEach((question) => {
         const { questionText } = question;
         html += `<div class="resp-table-row">`;
         html += `<div class="table-header-cell"> ${questionText}</div>`;
@@ -499,7 +504,7 @@ function questionTables(allQuestions, proposalQuestions) {
       html += `</div>`;
       sections[section]
         .sort((a, b) => a.questionOrder - b.questionOrder)
-        .forEach(question => {
+        .forEach((question) => {
           const { answers } = question;
           const temporalDivElement = document.createElement('div');
           temporalDivElement.innerHTML = question.questionHTML;
@@ -511,7 +516,7 @@ function questionTables(allQuestions, proposalQuestions) {
             : question.questionHTML;
           const questionHTML = finalAnswer;
           const questionType = question?.answerConfiguration?.type;
-          const getEmailID = str => {
+          const getEmailID = (str) => {
             return String(str).match(
               /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
             );
@@ -546,7 +551,7 @@ function getNotesRows(notes, editor) {
   html += `</div>`;
   html += `</div>`;
   let data = ``;
-  const getEmailID = str => {
+  const getEmailID = (str) => {
     return String(str).match(
       /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
     );
@@ -560,7 +565,7 @@ function getNotesRows(notes, editor) {
         Link.configure({
           autolink: true,
           linkOnPaste: false,
-          validate: href => /^https?:\/\// || /^www?:\/\//.test(href),
+          validate: (href) => /^https?:\/\// || /^www?:\/\//.test(href),
           protocols: ['ftp', 'mailto'],
           HTMLAttributes: {
             class: 'my-custom-class'
