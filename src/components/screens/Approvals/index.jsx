@@ -1,5 +1,5 @@
 import { isEmpty } from 'lodash';
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from 'apollo-react/components/Loader';
 
@@ -20,6 +20,7 @@ import CustomModal from '../../common/CustomModal';
 import Filters from './Filters';
 import FilterButton from './FilterButton';
 import ViewAboveVerticalTabs from '../../views/ViewAboveVerticalTabs';
+import { SocketContext } from '../../../context/SocketContext';
 
 const Approvals = () => {
   const approvals = useSelector(state => state.approvals.allApprovals);
@@ -33,12 +34,16 @@ const Approvals = () => {
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const memoizeBid = useMemo(() => selectedBid, [selectedBid?.id]);
   const dispatch = useDispatch();
+  const socketContext = useContext(SocketContext);
 
   // get email flag status on mount
   useEffect(() => {
     if (allFlags && allFlags.approvalSendMailFlag) {
       dispatch(fetchApprovalSendEmailFlag(allFlags.approvalSendMailFlag));
     }
+    setTimeout(() => {
+      socketContext.questionLockDetailsWrapper();
+    }, 2000);
   }, []);
 
   useEffect(() => {

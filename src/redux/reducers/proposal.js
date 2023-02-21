@@ -626,7 +626,7 @@ const updateQuestionLockByUser = (state: Map, action: Object): Map => {
         ['proposalQuestions', indexOfListToUpdateCurrent],
         value => ({
           ...value,
-          questionLockInfo: { userInfo: userEmail, userId, userName }
+          questionLockInfo: { userInfo: userEmail, userEmail, userId, userName }
         })
       );
 
