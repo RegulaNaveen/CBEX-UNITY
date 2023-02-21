@@ -263,7 +263,9 @@ class MonthView extends React.Component {
     let isOffRange = localizer.neq(date, currentDate, 'month');
     let isCurrent = localizer.isSameDate(date, currentDate);
     let drilldownView = getDrilldownView(date);
-    let label = localizer.format(date, 'dateFormat');
+    let label = localizer.isSameDate(date, new Date())
+      ? localizer.format(date, 'dateFormat')
+      : localizer.format(date, 'MMM DD');
     let DateHeaderComponent = this.props.components.dateHeader || DateHeader;
 
     return (
