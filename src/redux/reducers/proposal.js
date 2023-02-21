@@ -1233,8 +1233,8 @@ const setVTabActiveTabIndex = (state, action) => {
 
 const setVTabUserPreference = (state, action) => {
   let currentUserPreference = state.get('vTabUserPreference', {}).toJS();
-  const { tabIndex, keepOpen } = action.payload;
-  currentUserPreference[tabIndex] = { keepOpen };
+  const { tabIndex, collapsed } = action.payload;
+  currentUserPreference[tabIndex] = { collapsed };
   return state.set('vTabUserPreference', fromJS(currentUserPreference));
 };
 

@@ -1,4 +1,58 @@
+.rbc-overlay {
+  max-width: 280px !important;
+
+  .rbc-event {
+    width: 265px !important;
+    border-radius: 5px;
+    height: 25px;
+    text-overflow: ellipsis;
+    .rbc-event-content {
+      width: 260px !important;
+      white-space: nowrap;
+      overflow: hidden;
+      height: 25px;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
 #Timeline-main-wrapper {
+  .month-range-label {
+    color: #0768fd;
+    font-family: 'Proxima Nova';
+    font-size: 16px;
+    font-weight: 600;
+
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  .timeline-calender-rtl {
+    display: grid;
+    grid-template-columns: 1fr 0.2fr 0.2fr;
+    align-items: end;
+  }
+  .rbc-event-continues-after {
+    text-overflow: ellipsis;
+  }
+  .rbc-overlay {
+    width: 320px !important;
+  }
+  .rbc-now button {
+    border-radius: 50%;
+
+    color: #fff;
+    height: 26px;
+    width: 26px;
+    background-color: #0768fd;
+    font-family: 'Proxima Nova';
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .rbc-off-range-bg {
+    background: #fff !important;
+  }
+
   .timeline-container {
     width: 97vw;
     display: flex;
@@ -9,7 +63,6 @@
       width: 100% !important;
       display: flex;
       justify-content: space-around;
-      margin-right: -20px;
     }
     .react-resizable:nth-child(1) {
       margin-left: -20px;

@@ -153,10 +153,9 @@ function getStyled() {
   html {
     -webkit-print-color-adjust: exact;
   }
-  FONTCHANGE
   body {
     font-family: ProximaNova-Regular !important;
-    font-size: 12px;
+    font-size: 13px;
   }
   li span {
     vertical-align:middle;
@@ -215,7 +214,7 @@ ul {
   #resp-table-caption{
     display: table-cell;
     text-align: center;
-    font-size: 12px;
+    font-size: 13px;
     color: #fff;
     font-weight: bold;
     background-color: #00A3E0;
@@ -225,7 +224,7 @@ ul {
     }
     #resp-table-header {
       display: table-cell;
-      font-size: 12px;
+      font-size: 13px;
       background-color: #00A3E0;
       color: #fff;
       font-weight: bold;

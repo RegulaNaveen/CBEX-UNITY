@@ -10,6 +10,7 @@ import approvalsReducer from './approvals';
 import searchReducer from './search';
 import uiReducer from './ui';
 import unityTabsReducer from './unityTabs';
+import timelineReducer from './timeline';
 
 const rootReducer = combineReducers({
   ssoAuth: ssoAuthReducer,
@@ -22,7 +23,8 @@ const rootReducer = combineReducers({
   approvals: approvalsReducer,
   search: searchReducer,
   ui: uiReducer,
-  unitytab: unityTabsReducer
+  unitytab: unityTabsReducer,
+  timeline: timelineReducer
 });
 
 export default rootReducer;

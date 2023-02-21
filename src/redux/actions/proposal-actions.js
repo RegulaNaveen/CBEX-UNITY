@@ -1518,13 +1518,13 @@ export const setVTabActiveIndexAction = activeIndex => {
   };
 };
 
-export const setVTabUserPreferenceAction = (tabIndex, keepOpen = false) => {
+export const setVTabUserPreferenceAction = (tabIndex, collapsed = false) => {
   return dispatch => {
     dispatch({
       type: SET_V_TAB_USER_PREFERENCE,
       payload: {
         tabIndex,
-        keepOpen
+        collapsed
       }
     });
   };
