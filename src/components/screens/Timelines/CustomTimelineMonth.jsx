@@ -43,7 +43,8 @@ class MonthView extends React.Component {
     this.state = {
       rowLimit: 5,
       needLimitMeasure: true,
-      date: null
+      date: null,
+      showDateRangeError: false
     };
     this.containerRef = createRef();
     this.slotRowRef = createRef();
@@ -125,6 +126,15 @@ class MonthView extends React.Component {
   };
 
   handleDateRangeChange = value => {
+    if (!moment(`${value[0]}`).isValid() || !moment(`${value[1]}`).isValid()) {
+      this.setState({ showDateRangeError: true });
+    } else this.setState({ showDateRangeError: false });
+    if (
+      !moment(`${value[0]}`).isBefore(`${value[1]}`) ||
+      !moment(`${value[1]}`).isAfter(`${value[0]}`)
+    ) {
+      return;
+    }
     const start = moment(`${value[0]}`).isValid()
       ? moment(`${value[0]}`)
       : this.props.timelineDateRange[0];
@@ -155,6 +165,7 @@ class MonthView extends React.Component {
             <DateRangePicker
               size="small"
               value={timelineDateRange}
+              error={this.state.showDateRangeError}
               onChange={value => {
                 this.handleDateRangeChange(value);
               }}
