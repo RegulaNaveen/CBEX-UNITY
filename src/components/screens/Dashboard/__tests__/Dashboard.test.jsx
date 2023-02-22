@@ -6,98 +6,107 @@ import Dashboard from '../index';
 import { BrowserRouter } from 'react-router-dom';
 
 describe('Dashboard', () => {
-    let wrapper;
+  let wrapper;
 
-    beforeEach(() => {
-        const props = {
-            proposals: [
-                {
-                    'opportunity number': 'OPP123',
-                    'opportunity name': 'Test Opportunity',
-                    'bid due date': '2022-01-01',
-                    'opportunity status': 'Active',
-                },
-                {
-                    'opportunity number': 'OPP456',
-                    'opportunity name': 'Test Opportunity 2',
-                    'bid due date': '2022-02-01',
-                    'opportunity status': 'Inactive',
-                },
-            ],
-            loading: false,
-            isFilteringProposals: true,
-            filteredProposals: [
-                {
-                    'opportunity number': 'OPP123',
-                    'opportunity name': 'Test Opportunity',
-                    'bid due date': '2022-01-01',
-                    'opportunity status': 'Active',
-                },
-                {
-                    'opportunity number': 'OPP456',
-                    'opportunity name': 'Test Opportunity 2',
-                    'bid due date': '2022-02-01',
-                    'opportunity status': 'Inactive',
-                },
-            ],
-            setPage: jest.fn(),
-            setRows: jest.fn(),
-            selectedViewType: false,
-            allFlags: {
-                "answerUserTagFlag": true,
-                "approvalSendMailFlag": true,
-                "approvalsFlag": true,
-                "bidCostDetail": true,
-                "canLinkOpportunityNo": true,
-                "eventLauncher": true,
-                "isQuestionForCustomerEditable": true,
-                "notepad": true,
-                "notesUserTag": true,
-                "proposalTeamTab": true,
-                "questionsForCustomerTab": true,
-                "schedule-events": false,
-                "searchFlag": true,
-                "showTimelineFlag": true,
-                "verticalTab": true
-            }
-        };
-        wrapper = mount(
-            <Provider store={store}>
-                <BrowserRouter>
-                    <Dashboard {...props} />
-                </BrowserRouter>
-            </Provider>
-        );
-    });
+  beforeEach(() => {
+    const props = {
+      proposals: [
+        {
+          'opportunity number': 'OPP123',
+          'opportunity name': 'Test Opportunity',
+          'bid due date': '2022-01-01',
+          'opportunity status': 'Active'
+        },
+        {
+          'opportunity number': 'OPP456',
+          'opportunity name': 'Test Opportunity 2',
+          'bid due date': '2022-02-01',
+          'opportunity status': 'Inactive'
+        }
+      ],
+      loading: false,
+      isFilteringProposals: true,
+      filteredProposals: [
+        {
+          'opportunity number': 'OPP123',
+          'opportunity name': 'Test Opportunity',
+          'bid due date': '2022-01-01',
+          'opportunity status': 'Active'
+        },
+        {
+          'opportunity number': 'OPP456',
+          'opportunity name': 'Test Opportunity 2',
+          'bid due date': '2022-02-01',
+          'opportunity status': 'Inactive'
+        }
+      ],
+      setPage: jest.fn(),
+      setRows: jest.fn(),
+      selectedViewType: false,
+      allFlags: {
+        answerUserTagFlag: true,
+        approvalSendMailFlag: true,
+        approvalsFlag: true,
+        bidCostDetail: true,
+        canLinkOpportunityNo: true,
+        eventLauncher: true,
+        isQuestionForCustomerEditable: true,
+        notepad: true,
+        notesUserTag: true,
+        proposalTeamTab: true,
+        questionsForCustomerTab: true,
+        'schedule-events': false,
+        searchFlag: true,
+        showTimelineFlag: true,
+        verticalTab: true
+      }
+    };
+    wrapper = mount(
+      <Provider store={store}>
+        <BrowserRouter>
+          <Dashboard {...props} />
+        </BrowserRouter>
+      </Provider>
+    );
+  });
 
-    afterEach(() => {
-        wrapper.unmount();
-    });
+  afterEach(() => {
+    wrapper.unmount();
+  });
 
-    it('renders a Toolbar component', () => {
-        expect(wrapper.find('Toolbar')).toHaveLength(1);
-    });
+  it('renders a Toolbar component', () => {
+    expect(wrapper.find('Toolbar')).toHaveLength(1);
+  });
 
-    it('renders a Tabbar component with three tabs', () => {
-        expect(wrapper.find('Tabbar')).toHaveLength(1);
-        expect(wrapper.find('TabItem')).toHaveLength(3);
-    });
+  it('renders a Tabbar component with three tabs', () => {
+    expect(wrapper.find('Tabbar')).toHaveLength(1);
+    expect(wrapper.find('TabItem')).toHaveLength(3);
+  });
 
-    it.skip('passes down allFlags prop to child components', () => {
-        const myDocketTab = wrapper.find('MyDocketTab');
-        const recentTab = wrapper.find('RecentTab');
-        const allTab = wrapper.find('AllTab');
+  it.skip('passes down allFlags prop to child components', () => {
+    const myDocketTab = wrapper.find('MyDocketTab');
+    const recentTab = wrapper.find('RecentTab');
+    const allTab = wrapper.find('AllTab');
 
-        expect(myDocketTab.prop('allFlags')).toEqual(store.getState().proposal.eventflag);
-        expect(recentTab.prop('allFlags')).toEqual(store.getState().proposal.eventflag);
-        expect(allTab.prop('allFlags')).toEqual(store.getState().proposal.eventflag);
-    });
+    expect(myDocketTab.prop('allFlags')).toEqual(
+      store.getState().proposal.eventflag
+    );
+    expect(recentTab.prop('allFlags')).toEqual(
+      store.getState().proposal.eventflag
+    );
+    expect(allTab.prop('allFlags')).toEqual(
+      store.getState().proposal.eventflag
+    );
+  });
 
-    it.skip('calls trackPageView and getLaunchdarklyFlags on mount', () => {
-        //const trackPageViewSpy = jest.spyOn(wrapper.find('Tabbar').instance(), 'trackPageView');
-        const getLaunchdarklyFlagsSpy = jest.spyOn(wrapper.find('Tabbar').instance(), 'getLaunchdarklyFlags');
+  it.skip('calls trackPageView and getLaunchdarklyFlags on mount', () => {
+    //const trackPageViewSpy = jest.spyOn(wrapper.find('Tabbar').instance(), 'trackPageView');
+    const getLaunchdarklyFlagsSpy = jest.spyOn(
+      wrapper.find('Tabbar').instance(),
+      'getLaunchdarklyFlags'
+    );
 
-        //expect(trackPageViewSpy).toHaveBeenCalledTimes(1);
-        expect(getLaunchdarklyFlagsSpy).toHaveBeenCalledTimes(1);
-    });
+    //expect(trackPageViewSpy).toHaveBeenCalledTimes(1);
+    expect(getLaunchdarklyFlagsSpy).toHaveBeenCalledTimes(1);
+  });
 });

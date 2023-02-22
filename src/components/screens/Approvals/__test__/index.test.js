@@ -4,7 +4,7 @@ import * as ReactDOM from 'react-dom';
 import {
   fireEvent,
   screen,
-  render as reactTestingRender,
+  render as reactTestingRender
 } from '@testing-library/react';
 
 import configureMockStore from 'redux-mock-store';
@@ -46,31 +46,31 @@ const approvals = {
       name: 'answered',
       displayName: 'Answered',
       group: 'answer',
-      value: false,
+      value: false
     },
     {
       name: 'unanswered',
       displayName: 'Unanswered',
       group: 'answer',
-      value: false,
+      value: false
     },
     {
       name: 'responsible',
       displayName: 'Responsible',
       group: 'roles',
-      value: false,
+      value: false
     },
     {
       name: 'informed',
       displayName: 'Informed',
       group: 'roles',
-      value: false,
-    },
-  ],
+      value: false
+    }
+  ]
 };
 jest.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
-  useSelector: jest.fn(),
+  useSelector: jest.fn()
 }));
 let initialState = {
   ssoAuth,
@@ -109,7 +109,7 @@ let initialState = {
   AddNewQuestion: jest.fn(),
   RefreshProposal: jest.fn(),
   getBidList: jest.fn(),
-  currentTab: null,
+  currentTab: null
 };
 describe.skip('Testing approvals', () => {
   let store;
@@ -135,10 +135,10 @@ describe.skip('Testing approvals', () => {
       clearQuestionsFilter: jest.fn(),
       selectQuestionsFilters: jest.fn(),
       getSelectedBid: jest.fn(),
-      getOpportunityData: jest.fn(),
+      getOpportunityData: jest.fn()
     };
     useSelector.mockImplementation(() => ({
-      allApprovals,
+      allApprovals
     }));
 
     sinonSandbox
@@ -173,7 +173,7 @@ describe.skip('Testing approvals', () => {
       clearQuestionsFilter: jest.fn(),
       selectQuestionsFilters: jest.fn(),
       getSelectedBid: jest.fn(),
-      getOpportunityData: jest.fn(),
+      getOpportunityData: jest.fn()
     };
     const renderFilterFunc = jest.fn();
     const mockFunc = renderFilterFunc();
@@ -203,7 +203,7 @@ describe.skip('Testing approvals', () => {
       clearQuestionsFilter: jest.fn(),
       selectQuestionsFilters: jest.fn(),
       getSelectedBid: jest.fn(),
-      getOpportunityData: jest.fn(),
+      getOpportunityData: jest.fn()
     };
     sinonSandbox
       .stub(ApprovalActions, 'fetchAllApprovals')

@@ -15,14 +15,14 @@ module.exports = {
 
     'src/components/screens/Opportunity/__tests__/QuestionsSectionMapping.test.jsx',
     'src/components/screens/Opportunity/__tests__/questioncustomer.test.jsx',
-    'src/components/screens/Opportunity/__tests__/QuestionContainer.test.js',
+    'src/components/screens/Opportunity/__tests__/QuestionContainer.test.js'
   ],
   collectCoverageFrom: ['**/*.{js,jsx}', '!**/node_modules/**', '!**/dist/**'],
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
   moduleDirectories: ['node_modules', __dirname],
   coverageDirectory: '<rootDir>/coverage',
   moduleNameMapper: {
-    '\\.(css|scss|less)$': 'identity-obj-proxy',
+    '\\.(css|scss|less)$': 'identity-obj-proxy'
   },
   transformIgnorePatterns: [
     'node_modules/(?!' +
@@ -33,16 +33,16 @@ module.exports = {
         'lib0',
         'remixicon',
         'uuid',
-        'register-service-worker',
+        'register-service-worker'
       ].join('|') +
-      ')',
+      ')'
   ],
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
     '^.+\\.jsx?$': 'babel-jest',
     '^.+\\.svg$': 'jest-transformer-svg',
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      '<rootDir>/fileTransformer.js',
+      '<rootDir>/fileTransformer.js'
   },
-  testEnvironment: 'jsdom',
+  testEnvironment: 'jsdom'
 };

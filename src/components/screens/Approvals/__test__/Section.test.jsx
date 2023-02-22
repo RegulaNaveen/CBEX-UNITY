@@ -12,13 +12,13 @@ const approvals = { allApprovals, quesHashData };
 const store = mockStore({ approvals });
 jest.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
-  useSelector: jest.fn(),
+  useSelector: jest.fn()
 }));
 describe('Approval Section Component', () => {
   let wrapper;
   jest.mock('react-redux', () => ({
     ...jest.requireActual('react-redux'),
-    useSelector: jest.fn(),
+    useSelector: jest.fn()
   }));
   beforeEach(() => {
     wrapper = mount(
@@ -37,7 +37,7 @@ describe('Approval Section Component', () => {
 
   it.skip('should component render', () => {
     useSelector.mockImplementation(() => ({
-      allApprovals,
+      allApprovals
     }));
     expect(wrapper).toBeDefined();
     expect(wrapper.exists('.accordion-container')).toEqual(true);

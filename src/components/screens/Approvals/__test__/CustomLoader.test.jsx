@@ -17,7 +17,7 @@ describe.skip('CustomLoader', () => {
   it('should not render the Loader when approvalQuestionLoading is false', () => {
     const wrapper = shallow(<CustomLoader questionId="1" />);
     wrapper.setProps({
-      approvalQuestionLoading: { questionId: '1', value: false },
+      approvalQuestionLoading: { questionId: '1', value: false }
     });
     expect(wrapper.find('.loader-cover').children().length).toBe(0);
   });
@@ -25,7 +25,7 @@ describe.skip('CustomLoader', () => {
   it('should render the Loader when approvalQuestionLoading is true', () => {
     const wrapper = shallow(<CustomLoader questionId="1" />);
     wrapper.setProps({
-      approvalQuestionLoading: { questionId: '1', value: true },
+      approvalQuestionLoading: { questionId: '1', value: true }
     });
     expect(wrapper.find('.loader-cover').children().length).toBe(1);
   });

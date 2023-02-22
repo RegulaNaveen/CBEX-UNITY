@@ -14,9 +14,9 @@ describe('FilterButton', () => {
         filters: [
           { label: 'Approved', value: false },
           { label: 'Pending', value: true },
-          { label: 'Rejected', value: false },
-        ],
-      },
+          { label: 'Rejected', value: false }
+        ]
+      }
     });
   });
 
@@ -46,9 +46,9 @@ describe('FilterButton', () => {
         filters: [
           { label: 'Approved', value: false },
           { label: 'Pending', value: false },
-          { label: 'Rejected', value: false },
-        ],
-      },
+          { label: 'Rejected', value: false }
+        ]
+      }
     });
 
     const { getByText } = render(

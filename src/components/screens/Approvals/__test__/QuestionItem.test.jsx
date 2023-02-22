@@ -15,7 +15,7 @@ describe.skip('<QuestionItem />', () => {
     trackEvent: jest.fn(),
     updateQuestionVisibility: jest.fn(),
     highlightQuestionId: null,
-    isShowQuestion: true,
+    isShowQuestion: true
   };
 
   beforeEach(() => {

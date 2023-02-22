@@ -11,7 +11,7 @@ const props = {
   ApprovalSectionTitle: 'Title',
   ApprovalSectionLeftQuestions: ['2', '3'],
   ApprovalSectionRightQuestions: ['4', '5'],
-  setIsAllActiveDisplayed: mockSetIsAllActiveDisplayed,
+  setIsAllActiveDisplayed: mockSetIsAllActiveDisplayed
 };
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);

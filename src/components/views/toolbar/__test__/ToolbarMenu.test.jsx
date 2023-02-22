@@ -30,7 +30,7 @@ const rolesList = [
   'Site Analytics',
   'Strategic Pricing',
   'TSL',
-  'xAdmin',
+  'xAdmin'
 ];
 
 const proposal = Map(stateData.proposal);
@@ -43,7 +43,7 @@ const eventCategories = {
   plainPd: 'Proposal Detail',
   tb: 'ToolBar Menu',
   pg: 'Pagination',
-  crmNo: 'Proposal Detail (CRM#: UZA89202)',
+  crmNo: 'Proposal Detail (CRM#: UZA89202)'
 };
 const trackEvent = jest.fn();
 const userActions = {
@@ -51,7 +51,7 @@ const userActions = {
   changed: 'Changed',
   submit: 'Submitted',
   scroll: 'Scrolled',
-  edit: 'Edited',
+  edit: 'Edited'
 };
 const history = {
   length: 16,
@@ -60,8 +60,8 @@ const history = {
     pathname: '/profile/',
     search: '',
     hash: '',
-    key: 'kq170x',
-  },
+    key: 'kq170x'
+  }
 };
 const onClick = jest.fn();
 const trackMatomoLinkClicks = jest.fn();
@@ -79,7 +79,7 @@ const initState = {
   trackEvent,
   handleLogout,
   trackMatomoLinkClicks,
-  onclick,
+  onclick
 };
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);

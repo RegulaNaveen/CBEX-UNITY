@@ -12,7 +12,7 @@ describe('CalendarIcon', () => {
 
   it('renders the unity-predicted-calender-icon when the last answer is predicted by Unity', () => {
     const question = {
-      answers: [{ answer: 'Some answer', userName: 'UnityPredictedAnswer' }],
+      answers: [{ answer: 'Some answer', userName: 'UnityPredictedAnswer' }]
     };
     const wrapper = shallow(<CalendarIcon question={question} />);
     const icon = wrapper.find('[data-testid="unity-predicted-calender-icon"]');
@@ -21,7 +21,7 @@ describe('CalendarIcon', () => {
 
   it('renders the unity-nonpredicted-calender-icon when the last answer is not predicted by Unity', () => {
     const question = {
-      answers: [{ answer: 'Some answer', userName: 'Some User' }],
+      answers: [{ answer: 'Some answer', userName: 'Some User' }]
     };
     const wrapper = shallow(<CalendarIcon question={question} />);
     const icon = wrapper.find(
@@ -32,7 +32,7 @@ describe('CalendarIcon', () => {
 
   it('renders the indeterminate icon when the last answer is empty or has spaces', () => {
     const question = {
-      answers: [{ answer: '  ' }],
+      answers: [{ answer: '  ' }]
     };
     const wrapper = shallow(<CalendarIcon question={question} />);
     expect(wrapper.find('[data-testid="indeterminate-icon"]').exists()).toBe(
