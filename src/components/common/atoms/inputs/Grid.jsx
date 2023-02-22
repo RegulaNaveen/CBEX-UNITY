@@ -147,35 +147,62 @@ const loadSidebar = props => {
     try {
       const detailsForBackendData = {};
       proposalQuestions.forEach(question => {
-        if (question.sfObject === 'Opportunity') {
-          if (question.sfField === 'Therapy_Area__c') {
-            detailsForBackendData.therapeuticArea =
-              question?.answers[question?.answers?.length - 1]?.answer;
-          }
-          if (question.sfField === 'Phase_P__c') {
-            detailsForBackendData.phase =
-              question?.answers[question?.answers?.length - 1]?.answer;
-          }
-          if (question.sfField === 'Drug_Product_Name__c') {
-            detailsForBackendData.productName =
-              question?.answers[question?.answers?.length - 1]?.answer;
-          }
-          if (question.sfField === 'Protocol_Number__c') {
-            detailsForBackendData.protocolNumber =
-              question?.answers[question?.answers?.length - 1]?.answer;
-          }
-          if (question.sfField === 'Line_of_Business__c') {
-            detailsForBackendData.lineOfBusiness =
-              question?.answers[question?.answers?.length - 1]?.answer;
-          }
-          if (question.sfField === 'Is_this_IQVIA_Biotech__c') {
-            detailsForBackendData.IsIqviaBiotech =
-              question?.answers[question?.answers?.length - 1]?.answer;
-          }
+        if (
+          question.sfField === 'Therapy_Area__c' &&
+          question.sfObject === 'Opportunity'
+        ) {
+          detailsForBackendData.therapeuticArea =
+            question?.answers[question?.answers?.length - 1]?.answer;
+        }
+        if (
+          question.sfField === 'Phase_P__c' &&
+          question.sfObject === 'Opportunity'
+        ) {
+          detailsForBackendData.phase =
+            question?.answers[question?.answers?.length - 1]?.answer;
+        }
+        if (
+          question.sfField === 'Drug_Product_Name__c' &&
+          question.sfObject === 'Opportunity'
+        ) {
+          detailsForBackendData.productName =
+            question?.answers[question?.answers?.length - 1]?.answer;
+        }
+        if (
+          question.sfField === 'Protocol_Number__c' &&
+          question.sfObject === 'Opportunity'
+        ) {
+          detailsForBackendData.protocolNumber =
+            question?.answers[question?.answers?.length - 1]?.answer;
+        }
+        if (
+          question.sfField === 'Line_of_Business__c' &&
+          question.sfObject === 'Opportunity'
+        ) {
+          detailsForBackendData.lineOfBusiness =
+            question?.answers[question?.answers?.length - 1]?.answer;
+        }
+        if (
+          question.sfField === 'Is_this_IQVIA_Biotech__c' &&
+          question.sfObject === 'Opportunity'
+        ) {
+          detailsForBackendData.IsIqviaBiotech =
+            question?.answers[question?.answers?.length - 1]?.answer;
+        }
+        if (
+          question.sfField === 'Bid_Due_Date__c' &&
+          question.sfObject === 'Bid_History__c'
+        ) {
+          detailsForBackendData.bidDueDate = remainingDays(
+            new Date(question?.answers[question?.answers?.length - 1]?.answer)
+          );
+        }
+        if (question.sfField === 'Name' && question.sfObject === 'Account') {
+          detailsForBackendData.customer =
+            question?.answers[question?.answers?.length - 1]?.answer;
         }
       });
       setDetailsForBackendSectionData(detailsForBackendData);
-
     } catch (error) {
       console.log(error);
     }
@@ -221,7 +248,11 @@ const loadSidebar = props => {
             </Typography>
             <Tooltip
               variant="dark"
-              body={isCustomerTooltipHalfscreen ? Customer : null}
+              body={
+                isCustomerTooltipHalfscreen
+                  ? detailsForBackendSectionData?.customer || Customer
+                  : null
+              }
               placement="bottom"
             >
               <Typography
@@ -229,7 +260,9 @@ const loadSidebar = props => {
                 className={headerClassName}
                 ref={customerhalfscreen}
               >
-                {Customer || placeholder}
+                {detailsForBackendSectionData?.customer ||
+                  Customer ||
+                  placeholder}
               </Typography>
             </Tooltip>
           </Paper>
@@ -252,7 +285,7 @@ const loadSidebar = props => {
                 className={headerClassName}
                 ref={linebusinesshalfscreen}
               >
-                {detailsForBackendSectionData.lineOfBusiness ||
+                {detailsForBackendSectionData?.lineOfBusiness ||
                   lineOfBusiness ||
                   placeholder}
               </Typography>
@@ -376,7 +409,9 @@ const loadSidebar = props => {
               Days Until Due
             </Typography>
             <p className="boldtext greencolorsidebaropenfont lesslineheight">
-              {bidStatus ? renderProcessingTxt : daysRemain}
+              {bidStatus
+                ? renderProcessingTxt
+                : detailsForBackendSectionData?.bidDueDate || daysRemain}
             </p>
           </Paper>
         </Grid>
@@ -410,7 +445,11 @@ const loadSidebar = props => {
               </Typography>
               <Tooltip
                 variant="dark"
-                body={isCustomerTooltip ? Customer : null}
+                body={
+                  isCustomerTooltip
+                    ? detailsForBackendSectionData?.customer || Customer
+                    : null
+                }
                 placement="bottom"
               >
                 <Typography
@@ -418,7 +457,9 @@ const loadSidebar = props => {
                   className="boldtext header-ellipses"
                   ref={customer}
                 >
-                  {Customer || placeholder}
+                  {detailsForBackendSectionData?.customer ||
+                    Customer ||
+                    placeholder}
                 </Typography>
               </Tooltip>
             </Paper>
@@ -432,7 +473,7 @@ const loadSidebar = props => {
                 variant="dark"
                 body={
                   isLinebusinessTooltip
-                    ? detailsForBackendSectionData.lineOfBusiness ||
+                    ? detailsForBackendSectionData?.lineOfBusiness ||
                       lineOfBusiness
                     : null
                 }
@@ -443,7 +484,7 @@ const loadSidebar = props => {
                   className="boldtext header-ellipses"
                   ref={linebusiness}
                 >
-                  {detailsForBackendSectionData.lineOfBusiness ||
+                  {detailsForBackendSectionData?.lineOfBusiness ||
                     lineOfBusiness ||
                     placeholder}
                 </Typography>
@@ -577,7 +618,9 @@ const loadSidebar = props => {
                 Days Until Due
               </Typography>
               <p className="boldtext greencolor lesslineheight">
-                {bidStatus ? renderProcessingTxt : daysRemain}
+                {bidStatus
+                  ? renderProcessingTxt
+                  : detailsForBackendSectionData?.bidDueDate || daysRemain}
               </p>
             </Paper>
           </Grid>
