@@ -158,8 +158,9 @@ const loadSidebar = props => {
           question.sfField === 'Phase_P__c' &&
           question.sfObject === 'Opportunity'
         ) {
-          detailsForBackendData.phase =
-            question?.answers[question?.answers?.length - 1]?.answer;
+          detailsForBackendData.phase = question?.answers[
+            question?.answers?.length - 1
+          ]?.answer.toString();
         }
         if (
           question.sfField === 'Drug_Product_Name__c' &&
@@ -308,7 +309,7 @@ const loadSidebar = props => {
             <Typography variant="body2" className="boldtext sidebaropenfont">
               {phase
                 ? detailsForBackendSectionData?.phase?.split(' ')[1] ||
-                  phase.split(' ')[1]
+                  phase?.split(' ')[1]
                 : placeholder}
             </Typography>
           </Paper>
@@ -513,7 +514,7 @@ const loadSidebar = props => {
               <Typography variant="body2" className="boldtext">
                 {phase
                   ? detailsForBackendSectionData?.phase?.split(' ')[1] ||
-                    phase.split(' ')[1]
+                    phase?.split(' ')[1]
                   : placeholder}
               </Typography>
             </Paper>
