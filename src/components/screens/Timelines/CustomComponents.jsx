@@ -18,17 +18,22 @@ const CustomComponents = {
       parseMomentDate(dateCellWrapperProps.value) ===
       parseMomentDate(dateCellWrapperProps.currentBidDetails[0].bidDueDate);
 
+    const isPastDate = moment(dateCellWrapperProps.value).isBefore(new Date());
+
     const style = {
       display: 'flex',
       flex: 1,
-      borderLeft: '1px solid #DDD',
-      backgroundColor: `${
-        moment(parseMomentDate(dateCellWrapperProps.value)).isBefore(
-          parseMomentDate(dateCellWrapperProps.currentBidDetails[0].bidDate)
-        )
-          ? '#F6F7FB'
-          : '#fff'
-      }`
+      border: `${
+        BidCreationDateAnnotation || BidDueDateAnnotation
+          ? '3px solid #A9A9A9'
+          : ''
+      }`,
+      borderLeft: `${
+        BidCreationDateAnnotation || BidDueDateAnnotation
+          ? '3px solid #A9A9A9'
+          : '1px solid #DDD'
+      }`,
+      backgroundColor: `${isPastDate ? '#F6F7FB ' : '#fff'}`
     };
 
     return (

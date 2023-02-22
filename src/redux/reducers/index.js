@@ -9,6 +9,7 @@ import notificationReducer from './notification';
 import approvalsReducer from './approvals';
 import searchReducer from './search';
 import uiReducer from './ui';
+import unityTabsReducer from './unityTabs';
 import timelineReducer from './timeline';
 
 const rootReducer = combineReducers({
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   approvals: approvalsReducer,
   search: searchReducer,
   ui: uiReducer,
+  unitytab: unityTabsReducer,
   timeline: timelineReducer
 });
 

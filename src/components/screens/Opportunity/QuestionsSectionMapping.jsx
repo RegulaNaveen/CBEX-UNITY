@@ -33,7 +33,7 @@ const QuestionsSectionMapping = ({
   const sectionsData = isQuestionsFiltersEnabled ? filteredSections : sections;
 
   const bidId = useSelector(
-    state => state.proposal.get('selectedBid').toJS().id
+    (state) => state.proposal.get('selectedBid').toJS().id
   );
 
   // Reset Lazy onUpdate allSectionsExpanded
@@ -55,12 +55,12 @@ const QuestionsSectionMapping = ({
 
   // Get filtered Sections logic
   const getFilteredSections = useMemo(() => {
-    return sectionsData.valueSeq().filter(section => {
+    return sectionsData.valueSeq().filter((section) => {
       const questions = section.get('questions');
       return questions
         .valueSeq()
         .map(
-          question =>
+          (question) =>
             question.get('visible', true) &&
             (question.get('active', true) ||
               question.get('isCustomQuestion', true))
@@ -82,9 +82,9 @@ const QuestionsSectionMapping = ({
   /**
    * Get limited Section Data for Lazy Loading
    */
-  const onGrabData = currentPage => {
+  const onGrabData = (currentPage) => {
     setResetLazy(false);
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       setTimeout(() => {
         const data = allSections
           .valueSeq()
@@ -116,35 +116,37 @@ const QuestionsSectionMapping = ({
     const sectionName = section.get('sectionName');
     const sectionOrder = section.get('sectionOrder');
     const questions = section.get('questions');
-    return (
-      <QuestionsRefContext.Consumer key={sectionName}>
-        {questionsRef => (
-          <CollapsibleList
-            data-testid="question-section-test-id"
-            questions={questions}
-            title={sectionName}
-            milestone={filterMilestone}
-            key={sectionOrder}
-            setTabFromQuestionNotes={(val, title, flag) =>
-              setTabFromQuestionNotes(val, title, flag)
-            }
-            onAddQuestion={value => onAddQuestion(value)}
-            isCheckedAll={
-              sidebarscroll &&
-              sidebarscroll.length &&
-              sidebarscroll === sectionName
-                ? true
-                : allSectionsExpanded
-            }
-            isFirstSection={indx < 1}
-            setQuestionToDisplayHistory={setQuestionToDisplayHistory}
-            isNotepadOpen={isNotepadOpen}
-            listIndex={indx}
-            questionsRef={questionsRef}
-          />
-        )}
-      </QuestionsRefContext.Consumer>
-    );
+
+    if (sectionName !== 'Proposal Team')
+      return (
+        <QuestionsRefContext.Consumer key={sectionName}>
+          {(questionsRef) => (
+            <CollapsibleList
+              data-testid="question-section-test-id"
+              questions={questions}
+              title={sectionName}
+              milestone={filterMilestone}
+              key={sectionOrder}
+              setTabFromQuestionNotes={(val, title, flag) =>
+                setTabFromQuestionNotes(val, title, flag)
+              }
+              onAddQuestion={(value) => onAddQuestion(value)}
+              isCheckedAll={
+                sidebarscroll &&
+                sidebarscroll.length &&
+                sidebarscroll === sectionName
+                  ? true
+                  : allSectionsExpanded
+              }
+              isFirstSection={indx < 1}
+              setQuestionToDisplayHistory={setQuestionToDisplayHistory}
+              isNotepadOpen={isNotepadOpen}
+              listIndex={indx}
+              questionsRef={questionsRef}
+            />
+          )}
+        </QuestionsRefContext.Consumer>
+      );
   };
 
   const allSectionLength = [...allSections.values()].length;
