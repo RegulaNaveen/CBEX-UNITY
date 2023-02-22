@@ -151,8 +151,9 @@ const loadSidebar = props => {
           question.sfField === 'Therapy_Area__c' &&
           question.sfObject === 'Opportunity'
         ) {
-          detailsForBackendData.therapeuticArea =
-            question?.answers[question?.answers?.length - 1]?.answer;
+          detailsForBackendData.therapeuticArea = question?.answers[
+            question?.answers?.length - 1
+          ]?.answer?.toString();
         }
         if (
           question.sfField === 'Phase_P__c' &&
@@ -166,41 +167,50 @@ const loadSidebar = props => {
           question.sfField === 'Drug_Product_Name__c' &&
           question.sfObject === 'Opportunity'
         ) {
-          detailsForBackendData.productName =
-            question?.answers[question?.answers?.length - 1]?.answer;
+          detailsForBackendData.productName = question?.answers[
+            question?.answers?.length - 1
+          ]?.answer?.toString();
         }
         if (
           question.sfField === 'Protocol_Number__c' &&
           question.sfObject === 'Opportunity'
         ) {
-          detailsForBackendData.protocolNumber =
-            question?.answers[question?.answers?.length - 1]?.answer;
+          detailsForBackendData.protocolNumber = question?.answers[
+            question?.answers?.length - 1
+          ]?.answer?.toString();
         }
         if (
           question.sfField === 'Line_of_Business__c' &&
           question.sfObject === 'Opportunity'
         ) {
-          detailsForBackendData.lineOfBusiness =
-            question?.answers[question?.answers?.length - 1]?.answer;
+          detailsForBackendData.lineOfBusiness = question?.answers[
+            question?.answers?.length - 1
+          ]?.answer?.toString();
         }
         if (
           question.sfField === 'Is_this_IQVIA_Biotech__c' &&
           question.sfObject === 'Opportunity'
         ) {
-          detailsForBackendData.IsIqviaBiotech =
-            question?.answers[question?.answers?.length - 1]?.answer;
+          detailsForBackendData.IsIqviaBiotech = question?.answers[
+            question?.answers?.length - 1
+          ]?.answer?.toString();
         }
         if (
           question.sfField === 'Bid_Due_Date__c' &&
           question.sfObject === 'Bid_History__c'
         ) {
           detailsForBackendData.bidDueDate = remainingDays(
-            new Date(question?.answers[question?.answers?.length - 1]?.answer)
+            new Date(
+              question?.answers[
+                question?.answers?.length - 1
+              ]?.answer?.toString()
+            )
           );
         }
         if (question.sfField === 'Name' && question.sfObject === 'Account') {
-          detailsForBackendData.customer =
-            question?.answers[question?.answers?.length - 1]?.answer;
+          detailsForBackendData.customer = question?.answers[
+            question?.answers?.length - 1
+          ]?.answer?.toString();
         }
       });
       setDetailsForBackendSectionData(detailsForBackendData);
