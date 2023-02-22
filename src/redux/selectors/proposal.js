@@ -371,6 +371,11 @@ export const getApprovalQuestionLoading = createSelector(
   proposal => proposal?.get('approvalQuestionLoading')
 );
 
+export const getUnityTabQuestionLoading = createSelector(
+  selectProposal,
+  proposal => proposal?.get('unityTabQuestionLoading')
+);
+
 export const selectIsPriceModelerEstimateRecalculating = createSelector(
   selectProposal,
   proposal => proposal?.get('priceModelerRecalculating', false)

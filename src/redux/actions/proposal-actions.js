@@ -5,7 +5,6 @@ import axios from 'axios';
 import type { Dispatch, ThunkAction } from './action-types';
 
 import { REDUX_TYPES, API } from '../../constants';
-
 import {
   getProposalInfo,
   setProposalAnswer,
@@ -36,7 +35,7 @@ import { getErrorMessage, getProposalIdlist } from '../../utils/utils';
 import { DEFAULT, SEARCH as SEARCH_CONSTANTS } from '../../constants/app';
 import isPriceModelerQuestion from '../../utils/isPriceModelerQuestion';
 import { fetchAllApprovals } from './approval-actions';
-import { SEARCH } from '../../constants/types';
+import { SEARCH, UNITY_TABS } from '../../constants/types';
 import { doSearchAction } from './search-actions';
 import { selectQuery } from '../selectors/search';
 
@@ -102,6 +101,7 @@ const {
   ERROR_UPDATE_NOT_APPLICABLE,
   SET_CAN_USER_TAG_IN_QUESTION,
   SET_APPROVAL_QUESTION_LOADING,
+  SET_UNITY_TAB_QUESTION_LOADING,
   SET_PRICE_MODELER_RECALCULATING,
   PRICE_MODELER_UPDATE,
   SET_ACTIVE_TABINDEX,
@@ -258,6 +258,19 @@ export const setApprovalQuestionLoading = (questionId, value) => {
   };
 };
 
+export const setUnityTabQuestionLoading = (questionId, value) => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    try {
+      dispatch({
+        type: SET_UNITY_TAB_QUESTION_LOADING,
+        payload: { questionId, value }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
 /**
  * Redux action function to set price modeler recalculating status
  * @param {isRecalculating} boolean
@@ -305,6 +318,7 @@ export const setProposalAnswerData = (
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
     dispatch(setApprovalQuestionLoading(questionId, true));
+    dispatch(setUnityTabQuestionLoading(questionId, true));
     if (!disableLoader) {
       dispatch({
         type: PROPOSAL_ANSWER_LOADING,
@@ -350,6 +364,7 @@ export const setProposalAnswerData = (
         });
       }
       dispatch(setApprovalQuestionLoading(questionId, false));
+      dispatch(setUnityTabQuestionLoading(questionId, false));
     } catch (err) {
       console.log('error occurred ', err);
       dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err } });
@@ -1223,6 +1238,10 @@ export const getOpportunity = (
       }
       proposalsData.push(data[0]);
       dispatch({ type: OPPORTUNITY_INFO, payload: proposalsData });
+      dispatch({
+        type: UNITY_TABS.SET_UNITY_TABS,
+        payload: data[0]?.proposal?.customUnityTabs || []
+      });
       // get approvals data for current bid
       const currentBidDetails = proposalsData.find(
         proposal => proposal.isCurrent
@@ -1264,7 +1283,15 @@ export const changeBid = bid => {
     if (selectedBid.bidName !== bid?.bidName) {
       dispatch({ type: SEARCH.SET_CLEAR_INPUT_FLAG });
     }
+    dispatch({
+      type: UNITY_TABS.SET_UNITY_TABS,
+      payload: []
+    });
     const response = await axios.get(`${PROPOSAL_API_URL}/${bid.bidId}`);
+    dispatch({
+      type: UNITY_TABS.SET_UNITY_TABS,
+      payload: response?.data.proposal?.customUnityTabs || []
+    });
     dispatch({
       type: CHANGE_BID,
       payload: {

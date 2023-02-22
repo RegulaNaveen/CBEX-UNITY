@@ -47,14 +47,28 @@ const QuestionItem = ({
   updateQuestionVisibility,
   highlightQuestionId,
 }) => {
+  const [locked, setLocked] = useState(false);
   const question = isQuesFreezed
     ? archivedQuestion
     : useSelector(getQuestion(questionId));
+  const activeQuestionInfo = useSelector(getQuestion(questionId));
   const approvalFilters = useSelector(state => state.approvals.filters);
   const isShowQuestion = shouldShowQuestion(question, approvalFilters);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
   const questionTextRef = useRef(null);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (
+      !isQuesFreezed &&
+      activeQuestionInfo &&
+      activeQuestionInfo.questionLockInfo
+    ) {
+      setLocked(true);
+    } else {
+      setLocked(false);
+    }
+  }, [isQuesFreezed, activeQuestionInfo]);
 
   useEffect(() => {
     if (currentSearchResult !== null && questionTextRef.current !== null) {
@@ -171,25 +185,10 @@ const QuestionItem = ({
     });
   };
 
-  const isQuestionLocked = () => {
-    return question?.questionLockInfo && question?.questionLockInfo?.userInfo;
-  };
-
-  const isQuestionLockedByOther = () => {
-    return (
-      isQuestionLocked() &&
-      getUserEmail() !== question?.questionLockInfo?.userInfo
-    );
-  };
-
   const renderQuestion = () => {
     const lastAnswer = getLastAnswer(question);
 
-    const checkDisableFlag = () => {
-      if (isQuestionLockedByOther()) return true;
-
-      return false;
-    };
+    const checkDisableFlag = () => locked;
     const inputProps = {
       question,
       lastAnswer,
@@ -209,6 +208,7 @@ const QuestionItem = ({
       return <ProposalTeamQuestion {...inputProps} />;
     }
 
+<<<<<<< HEAD
     const ComponentMapper = {
       [ANSWER_TYPES.TEXT]: <TextQuestion {...inputProps} />,
       [ANSWER_TYPES.NUMBER]: <NumberQuestion {...inputProps} />,
@@ -221,23 +221,100 @@ const QuestionItem = ({
       [ANSWER_TYPES.YES_NO]: <YesNoQuestion {...inputProps} />,
       [ANSWER_TYPES.CHECKBOX]: <CheckBoxQuestion {...inputProps} />,
     };
+=======
+    if (
+      !Object.values(ANSWER_TYPES).includes(question?.answerConfiguration?.type)
+    ) {
+      return <FallbackComponent />;
+    }
+>>>>>>> 6720ab5b6b22c1226e99d32ec8e6e1706848b9f9
 
-    const SFNestedAnswerItem = () => {
-      return (
-        <SFAnswerValidationWrapper
-          hasDifferentSFanswer={question.hasDifferentSFanswer}
-          sfObject={question.sfObject}
-        >
-          {ComponentMapper[question?.answerConfiguration?.type]}
-        </SFAnswerValidationWrapper>
-      );
-    };
-
-    return ComponentMapper[question?.answerConfiguration?.type] ? (
-      <SFNestedAnswerItem />
-    ) : (
-      <FallbackComponent />
-    );
+    switch (question?.answerConfiguration?.type) {
+      case ANSWER_TYPES.TEXT: {
+        return (
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={question.hasDifferentSFanswer}
+            sfObject={question.sfObject}
+          >
+            <TextQuestion {...inputProps} />
+          </SFAnswerValidationWrapper>
+        );
+      }
+      case ANSWER_TYPES.NUMBER: {
+        return (
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={question.hasDifferentSFanswer}
+            sfObject={question.sfObject}
+          >
+            <NumberQuestion {...inputProps} />
+          </SFAnswerValidationWrapper>
+        );
+      }
+      case ANSWER_TYPES.DATE: {
+        return (
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={question.hasDifferentSFanswer}
+            sfObject={question.sfObject}
+          >
+            <DateQuestion {...inputProps} />
+          </SFAnswerValidationWrapper>
+        );
+      }
+      case ANSWER_TYPES.RADIO: {
+        return (
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={question.hasDifferentSFanswer}
+            sfObject={question.sfObject}
+          >
+            <RadioQuestion {...inputProps} />
+          </SFAnswerValidationWrapper>
+        );
+      }
+      case ANSWER_TYPES.SELECT:
+      case ANSWER_TYPES.SELECT_LOOKUP: {
+        return (
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={question.hasDifferentSFanswer}
+            sfObject={question.sfObject}
+          >
+            <SelectQuestion {...inputProps} />
+          </SFAnswerValidationWrapper>
+        );
+      }
+      case ANSWER_TYPES.PICKLIST_LOOKUP:
+      case ANSWER_TYPES.PICKLIST: {
+        return (
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={question.hasDifferentSFanswer}
+            sfObject={question.sfObject}
+          >
+            <MultiSelectQuestion {...inputProps} />
+          </SFAnswerValidationWrapper>
+        );
+      }
+      case ANSWER_TYPES.YES_NO: {
+        return (
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={question.hasDifferentSFanswer}
+            sfObject={question.sfObject}
+          >
+            <YesNoQuestion {...inputProps} />
+          </SFAnswerValidationWrapper>
+        );
+      }
+      case ANSWER_TYPES.CHECKBOX: {
+        return (
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={question.hasDifferentSFanswer}
+            sfObject={question.sfObject}
+          >
+            <CheckBoxQuestion {...inputProps} />
+          </SFAnswerValidationWrapper>
+        );
+      }
+      default:
+        return <FallbackComponent />;
+    }
   };
 
   return useMemo(
@@ -255,15 +332,14 @@ const QuestionItem = ({
           >
             <Grid container>
               <Grid item xs={10} className="ques-title-cover">
-                {!isEmpty(question?.questionLockInfo) &&
-                isQuestionLockedByOther() ? (
-                  <Typography variant="subtitle1" className="status-txt">
-                    {question.questionLockInfo?.userName} is typing...
-                  </Typography>
-                ) : null}
                 <span ref={questionTextRef}>
                   <QuestionLabel questionLabel={question?.questionText || ''} />
                 </span>
+                {locked ? (
+                  <Typography variant="subtitle1" className="status-txt">
+                    {activeQuestionInfo.questionLockInfo?.userName} is typing...
+                  </Typography>
+                ) : null}
               </Grid>
               <Grid item xs={2}>
                 {' '}
@@ -307,6 +383,10 @@ const QuestionItem = ({
       approvalFilters,
       currentSearchResult,
       highlightQuestionId,
+<<<<<<< HEAD
+=======
+      locked
+>>>>>>> 6720ab5b6b22c1226e99d32ec8e6e1706848b9f9
     ]
   );
 };

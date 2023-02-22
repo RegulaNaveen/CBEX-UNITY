@@ -1,6 +1,7 @@
-import { Mark, markPasteRule, markInputRule } from '@tiptap/core';
+import { markPasteRule, markInputRule } from '@tiptap/core';
+import Link from '@tiptap/extension-link';
 
-const OpportunityLinker = Mark.create({
+const OpportunityLinker = Link.extend({
   name: 'opportunityLinker',
   addAttributes() {
     return {
