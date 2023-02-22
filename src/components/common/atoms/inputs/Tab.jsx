@@ -448,7 +448,16 @@ const UnityTab = ({
               })}
             >
               <div id="panel-notepad-header">
-                <Typography variant="h3">Notepad</Typography>
+                <Typography
+                  variant="h3"
+                  className={classNames('network-heading')}
+                >
+                  Notepad
+                  <div
+                    id="notepad-interrupt"
+                    className={classNames('network-interrupt')}
+                  />
+                </Typography>
               </div>
               <Suspense
                 fallback={
