@@ -160,7 +160,7 @@ const loadSidebar = props => {
         ) {
           detailsForBackendData.phase = question?.answers[
             question?.answers?.length - 1
-          ]?.answer.toString();
+          ]?.answer?.toString();
         }
         if (
           question.sfField === 'Drug_Product_Name__c' &&
