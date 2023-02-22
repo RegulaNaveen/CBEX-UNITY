@@ -58,7 +58,7 @@ const APPROVALS = {
   DELETE_MSG:
     'Delete this approval section if the additional approval is not required.',
   ACTION_BUTTON_LOCKED_TOOLTIP_MSG:
-    'Another user is editing this Approval. This page will refresh once they have completed and saved.'
+    'Another user is editing this Approval. These buttons will be enabled once they have completed and saved.'
 };
 
 const SEARCH = {
