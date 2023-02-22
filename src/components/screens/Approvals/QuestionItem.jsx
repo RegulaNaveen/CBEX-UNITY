@@ -28,7 +28,7 @@ import SFAnswerValidationWrapper from '../../common/SFAnswerValidationWrapper';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import {
   getOpportunityData,
-  getSelectedBid,
+  getSelectedBid
 } from '../../../redux/selectors/proposal';
 import CustomLoader from './CustomLoader';
 import { getLastAnswer, shouldShowQuestion } from './utils';
@@ -45,7 +45,7 @@ const QuestionItem = ({
   eventCategories,
   trackEvent,
   updateQuestionVisibility,
-  highlightQuestionId,
+  highlightQuestionId
 }) => {
   const [locked, setLocked] = useState(false);
   const question = isQuesFreezed
@@ -77,7 +77,7 @@ const QuestionItem = ({
           questionTextRef.current.scrollIntoView({
             behaviour: 'smooth',
             block: 'center',
-            inline: 'nearest',
+            inline: 'nearest'
           });
           dispatch(autoNavigationCompletedAction());
         }, 500);
@@ -107,7 +107,7 @@ const QuestionItem = ({
   const getUserData = () => ({
     name: getUserName(),
     email: getUserEmail(),
-    role: getUserId(),
+    role: getUserId()
   });
 
   const prepareAnswerHistoryData = questionData => {
@@ -158,7 +158,7 @@ const QuestionItem = ({
       questionHTML,
       questionJSON,
       questionHintJSON,
-      questionId,
+      questionId
     } = question;
     const { sectionName } = section;
     const proposalDetail = opportunityData?.proposal?.proposalDetails;
@@ -178,10 +178,10 @@ const QuestionItem = ({
             questionHintJSON,
             questionId,
             proposalDetail,
-            approvalSectionTitle,
-          }),
-        },
-      ],
+            approvalSectionTitle
+          })
+        }
+      ]
     });
   };
 
@@ -196,7 +196,7 @@ const QuestionItem = ({
       userData: getUserData(),
       socketContext,
       trackMatomoEventSubmitAnswer,
-      checkDisableFlag,
+      checkDisableFlag
     };
     if (
       inputProps.lastAnswer &&
@@ -208,26 +208,11 @@ const QuestionItem = ({
       return <ProposalTeamQuestion {...inputProps} />;
     }
 
-<<<<<<< HEAD
-    const ComponentMapper = {
-      [ANSWER_TYPES.TEXT]: <TextQuestion {...inputProps} />,
-      [ANSWER_TYPES.NUMBER]: <NumberQuestion {...inputProps} />,
-      [ANSWER_TYPES.DATE]: <DateQuestion {...inputProps} />,
-      [ANSWER_TYPES.RADIO]: <RadioQuestion {...inputProps} />,
-      [ANSWER_TYPES.SELECT_LOOKUP]: <SelectQuestion {...inputProps} />,
-      [ANSWER_TYPES.SELECT]: <SelectQuestion {...inputProps} />,
-      [ANSWER_TYPES.PICKLIST]: <MultiSelectQuestion {...inputProps} />,
-      [ANSWER_TYPES.PICKLIST_LOOKUP]: <MultiSelectQuestion {...inputProps} />,
-      [ANSWER_TYPES.YES_NO]: <YesNoQuestion {...inputProps} />,
-      [ANSWER_TYPES.CHECKBOX]: <CheckBoxQuestion {...inputProps} />,
-    };
-=======
     if (
       !Object.values(ANSWER_TYPES).includes(question?.answerConfiguration?.type)
     ) {
       return <FallbackComponent />;
     }
->>>>>>> 6720ab5b6b22c1226e99d32ec8e6e1706848b9f9
 
     switch (question?.answerConfiguration?.type) {
       case ANSWER_TYPES.TEXT: {
@@ -327,7 +312,7 @@ const QuestionItem = ({
             className={classNames({
               'question-active':
                 currentSearchResult !== null &&
-                currentSearchResult.searchIndex === highlightQuestionId,
+                currentSearchResult.searchIndex === highlightQuestionId
             })}
           >
             <Grid container>
@@ -383,10 +368,7 @@ const QuestionItem = ({
       approvalFilters,
       currentSearchResult,
       highlightQuestionId,
-<<<<<<< HEAD
-=======
       locked
->>>>>>> 6720ab5b6b22c1226e99d32ec8e6e1706848b9f9
     ]
   );
 };
@@ -399,13 +381,13 @@ QuestionItem.defaultProps = {
     questionId: '',
     questionText: '',
     answerConfiguration: {
-      type: 'number',
+      type: 'number'
     },
     answers: [],
     visible: false,
-    active: false,
+    active: false
   },
-  updateQuestionVisibility: () => {},
+  updateQuestionVisibility: () => {}
 };
 QuestionItem.propTypes = {
   questionId: PropTypes.string.isRequired,
@@ -415,7 +397,7 @@ QuestionItem.propTypes = {
   eventCategories: PropTypes.object.isRequired,
   trackEvent: PropTypes.func.isRequired,
   archivedQuestion: PropTypes.any,
-  updateQuestionVisibility: PropTypes.func,
+  updateQuestionVisibility: PropTypes.func
 };
 
 export default MatomoHOC(QuestionItem);
