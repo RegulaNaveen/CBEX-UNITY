@@ -11,6 +11,7 @@ import {
   setCanSendEmailInApprovals
 } from '../../../../redux/actions/approval-actions';
 import * as emailUtils from '../../../../utils/emailUtils';
+import { SocketContext } from '../../../../context/SocketContext';
 
 const RenderWithStore = props => (
   <Provider store={store}>{props.children}</Provider>
@@ -32,6 +33,8 @@ describe('Send Email Button tests', () => {
       setAllApprovals([
         {
           ApprovalSectionId: 'test-id',
+          ApprovalSectionLeftQuestions: [],
+          ApprovalSectionRightQuestions: [],
           ArchivedData: []
         }
       ])
@@ -46,7 +49,29 @@ describe('Send Email Button tests', () => {
             dispatchLoadingEvent: loadingEventMock
           }}
         >
-          <ActionButtons {...props} />
+          <SocketContext.Provider
+            value={{
+              socket: null,
+              initiateConnection: jest.fn(),
+              updateSocketOppId: jest.fn(),
+              disconnectSocket: jest.fn(),
+              isSocketConnected: false,
+              questionLockWrapper: jest.fn(),
+              questionUnlockWrapper: jest.fn(),
+              questionLockDetailsWrapper: jest.fn(),
+              questionAnswerUpdateWrapper: jest.fn(),
+              naQuestionUpdateWrapper: jest.fn(),
+              questionTextUpdateWrapper: jest.fn(),
+              questionDeleteWrapper: jest.fn(),
+              addQuestionWrapper: jest.fn(),
+              approvalSectionDuplicatingWrapper: jest.fn(),
+              approvalSectionDuplicatedWrapper: jest.fn(),
+              approvalSectionDeletingWrapper: jest.fn(),
+              approvalSectionDeletedWrapper: jest.fn()
+            }}
+          >
+            <ActionButtons {...props} />
+          </SocketContext.Provider>
         </ApprovalContext.Provider>
       </RenderWithStore>
     );
@@ -61,6 +86,8 @@ describe('Send Email Button tests', () => {
       setAllApprovals([
         {
           ApprovalSectionId: 'test-id',
+          ApprovalSectionLeftQuestions: [],
+          ApprovalSectionRightQuestions: [],
           ArchivedData: []
         }
       ])
@@ -75,7 +102,29 @@ describe('Send Email Button tests', () => {
             dispatchLoadingEvent: loadingEventMock
           }}
         >
-          <ActionButtons {...props} />
+          <SocketContext.Provider
+            value={{
+              socket: null,
+              initiateConnection: jest.fn(),
+              updateSocketOppId: jest.fn(),
+              disconnectSocket: jest.fn(),
+              isSocketConnected: false,
+              questionLockWrapper: jest.fn(),
+              questionUnlockWrapper: jest.fn(),
+              questionLockDetailsWrapper: jest.fn(),
+              questionAnswerUpdateWrapper: jest.fn(),
+              naQuestionUpdateWrapper: jest.fn(),
+              questionTextUpdateWrapper: jest.fn(),
+              questionDeleteWrapper: jest.fn(),
+              addQuestionWrapper: jest.fn(),
+              approvalSectionDuplicatingWrapper: jest.fn(),
+              approvalSectionDuplicatedWrapper: jest.fn(),
+              approvalSectionDeletingWrapper: jest.fn(),
+              approvalSectionDeletedWrapper: jest.fn()
+            }}
+          >
+            <ActionButtons {...props} />
+          </SocketContext.Provider>
         </ApprovalContext.Provider>
       </RenderWithStore>
     );
@@ -94,6 +143,8 @@ describe('Send Email Button tests', () => {
       setAllApprovals([
         {
           ApprovalSectionId: 'test-id',
+          ApprovalSectionLeftQuestions: [],
+          ApprovalSectionRightQuestions: [],
           ArchivedData: []
         }
       ])
@@ -115,7 +166,29 @@ describe('Send Email Button tests', () => {
             dispatchLoadingEvent: loadingEventMock
           }}
         >
-          <ActionButtons {...props} />
+          <SocketContext.Provider
+            value={{
+              socket: null,
+              initiateConnection: jest.fn(),
+              updateSocketOppId: jest.fn(),
+              disconnectSocket: jest.fn(),
+              isSocketConnected: false,
+              questionLockWrapper: jest.fn(),
+              questionUnlockWrapper: jest.fn(),
+              questionLockDetailsWrapper: jest.fn(),
+              questionAnswerUpdateWrapper: jest.fn(),
+              naQuestionUpdateWrapper: jest.fn(),
+              questionTextUpdateWrapper: jest.fn(),
+              questionDeleteWrapper: jest.fn(),
+              addQuestionWrapper: jest.fn(),
+              approvalSectionDuplicatingWrapper: jest.fn(),
+              approvalSectionDuplicatedWrapper: jest.fn(),
+              approvalSectionDeletingWrapper: jest.fn(),
+              approvalSectionDeletedWrapper: jest.fn()
+            }}
+          >
+            <ActionButtons {...props} />
+          </SocketContext.Provider>
         </ApprovalContext.Provider>
       </RenderWithStore>
     );

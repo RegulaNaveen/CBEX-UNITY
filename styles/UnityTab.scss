@@ -1,0 +1,17 @@
+.unity-tab-chip > p {
+  height: max-content;
+}
+
+.chipview.unity-tab-chip {
+  margin-top: 5px;
+}
+
+.unity-tab-action-item {
+  display: flex;
+}
+
+.unity-tab-question {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}

@@ -63,6 +63,7 @@ const {
   SHOW_NA_CHECKBOX,
   ERROR_UPDATE_NOT_APPLICABLE,
   SET_CAN_USER_TAG_IN_QUESTION,
+  SET_UNITY_TAB_QUESTION_LOADING,
   SET_APPROVAL_QUESTION_LOADING,
   SET_PRICE_MODELER_FIELDS,
   SET_BID_COST_DATA_FIELDS,
@@ -166,6 +167,10 @@ const INITIAL_STATE: Map = fromJS({
   }),
 
   approvalQuestionLoading: fromJS({
+    questionId: '',
+    value: false
+  }),
+  unityTabQuestionLoading: fromJS({
     questionId: '',
     value: false
   }),
@@ -626,7 +631,7 @@ const updateQuestionLockByUser = (state: Map, action: Object): Map => {
         ['proposalQuestions', indexOfListToUpdateCurrent],
         value => ({
           ...value,
-          questionLockInfo: { userInfo: userEmail, userId, userName }
+          questionLockInfo: { userInfo: userEmail, userEmail, userId, userName }
         })
       );
 
@@ -1186,6 +1191,10 @@ const setBidCostDataFields = (state, action) => {
     })
   );
 };
+const setUnityTabQuestionLoading = (state, action) => {
+  const { questionId, value } = action.payload;
+  return state.set('unityTabQuestionLoading', fromJS({ questionId, value }));
+};
 
 const setApprovalQuestionLoading = (state, action) => {
   const { questionId, value } = action.payload;
@@ -1224,8 +1233,8 @@ const setVTabActiveTabIndex = (state, action) => {
 
 const setVTabUserPreference = (state, action) => {
   let currentUserPreference = state.get('vTabUserPreference', {}).toJS();
-  const { tabIndex, keepOpen } = action.payload;
-  currentUserPreference[tabIndex] = { keepOpen };
+  const { tabIndex, collapsed } = action.payload;
+  currentUserPreference[tabIndex] = { collapsed };
   return state.set('vTabUserPreference', fromJS(currentUserPreference));
 };
 
@@ -1293,6 +1302,7 @@ const actionMap = {
   [SET_PRICE_MODELER_FIELDS]: setPriceModulerFields,
   [SET_BID_COST_DATA_FIELDS]: setBidCostDataFields,
   [SET_APPROVAL_QUESTION_LOADING]: setApprovalQuestionLoading,
+  [SET_UNITY_TAB_QUESTION_LOADING]: setUnityTabQuestionLoading,
   [SET_CAN_USER_TAG_IN_QUESTION]: (state, { payload }) =>
     state.set('canUserTagInQuestion', payload),
   [SET_PRICE_MODELER_RECALCULATING]: (state, { payload }) =>

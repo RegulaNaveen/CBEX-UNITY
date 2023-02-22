@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-  Suspense
-} from 'react';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { useHistory } from 'react-router-dom';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
@@ -14,7 +8,7 @@ import Typography from 'apollo-react/components/Typography';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
-import { debounce } from 'lodash';
+import { useWindowSize } from '../../../../hooks';
 import Validate from '../../../screens/Opportunity/Validate';
 import {
   getSelectedBid,
@@ -84,50 +78,21 @@ const ProposalTeam = React.lazy(() =>
   )
 );
 
+const CustomTabs = React.lazy(() =>
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "Approvals" */ '../../../screens/UnityTabs/index'
+    )
+  )
+);
+
 const UnityTab = ({
   id,
   enableValidateTab,
   selectedView,
   onChangeSelectedTab
 }) => {
-  const [approvalsFlag, setApprovalsFlag] = useState(false);
-  const [showApprovalTab, setShowApprovalTab] = useState(false);
-  const [isShowVerticalTab, setShowVerticalTab] = useState(false);
-  const [
-    showQuestionsForCustomerTab,
-    setShowQuestionsForCustomerTab
-  ] = useState(false);
-  const [showNotepadTab, setShowNotepadTab] = useState(false);
-  const [showProposalTeamTab, setShowProposalTeamTab] = useState(false);
-  const [isNotepadOpen, setIsNotepadOpen] = useState(true);
-  const [vtabCollpased, setVTabCollapsed] = useState(false);
-
-  const selectedBid = useSelector(getSelectedBid)?.toJS();
-  const proposalId = selectedBid?.id || 1;
-  const isApprovalCount = selectedBid?.isApprovalCountPresent || false;
-  const history = useHistory();
-  const isOpen = useSelector(state => getIsOpen(state));
-  const proposalDetail = useSelector(state => getProposalDetails(state));
-  const userEmail = useSelector(state => getUserEmail(state));
-  const userRole = useSelector(state => getUserRole(state));
-  const allFlags = useSelector(state => state.proposal.get('eventflag'));
-  const value = useSelector(selectActiveTabIndex);
-  const currentSearchResult = useSelector(selectCurrentSearchResult);
-  const vTabUserPreference = useSelector(selectVTabUserPreference);
-  const dispatch = useDispatch();
-
-  const { trackEvent } = useMatomo();
-
-  const [panelRef, setPanelRef] = useState(null);
-
-  const minPixelToExclude = 20;
-  const notepadMinWidthPx =
-    (window.innerWidth - minPixelToExclude) * (30 / 100); // 30% of the total screen size
-  const notepadMaxWidthPx = isOpen
-    ? notepadMinWidthPx
-    : (window.innerWidth - minPixelToExclude) * (47 / 100); // 50% of the total screen size
-
-  const tabs = [
+  const defaultTabs = [
     {
       label: 'Strategy Development',
       value: 0,
@@ -159,6 +124,93 @@ const UnityTab = ({
       path: 'validate'
     }
   ];
+  const [tabs, setTabs] = useState(defaultTabs);
+  const [approvalsFlag, setApprovalsFlag] = useState(false);
+  const [showApprovalTab, setShowApprovalTab] = useState(false);
+  const [isShowVerticalTab, setShowVerticalTab] = useState(false);
+  const [
+    showQuestionsForCustomerTab,
+    setShowQuestionsForCustomerTab
+  ] = useState(false);
+  const [showNotepadTab, setShowNotepadTab] = useState(false);
+  const [showProposalTeamTab, setShowProposalTeamTab] = useState(false);
+  const [isNotepadOpen, setIsNotepadOpen] = useState(true);
+  const [vtabCollpased, setVTabCollapsed] = useState(false);
+  const [systemTriggeredClick, setSystemTriggeredClick] = useState(false);
+
+  const selectedBid = useSelector(getSelectedBid)?.toJS();
+  const proposalId = selectedBid?.id || 1;
+  const isApprovalCount = selectedBid?.isApprovalCountPresent || false;
+  const history = useHistory();
+  const isOpen = useSelector(state => getIsOpen(state));
+  const proposalDetail = useSelector(state => getProposalDetails(state));
+  const userEmail = useSelector(state => getUserEmail(state));
+  const userRole = useSelector(state => getUserRole(state));
+  const allFlags = useSelector(state => state.proposal.get('eventflag'));
+  const value = useSelector(selectActiveTabIndex);
+  const currentSearchResult = useSelector(selectCurrentSearchResult);
+  const vTabUserPreference = useSelector(selectVTabUserPreference);
+  const customTabs = useSelector(state => state.unitytab.allTabs);
+  const dispatch = useDispatch();
+  const { trackEvent } = useMatomo();
+  const [panelRef, setPanelRef] = useState(null);
+  const [windowWidth, windowHeight] = useWindowSize();
+
+  const minPixelToExclude = 20;
+  const notepadMinWidthPx =
+    (window.innerWidth - minPixelToExclude) * (30 / 100); // 30% of the total screen size
+  const notepadMaxWidthPx = isOpen
+    ? notepadMinWidthPx
+    : (window.innerWidth - minPixelToExclude) * (47 / 100); // 50% of the total screen size
+
+  const newTab = [];
+  let len = tabs.length;
+  for (const [key, value] of Object.entries(customTabs)) {
+    const tabID = value[0]['UnityTabId'];
+    const questionCount = value.some(
+      v => v['UnityTabSectionQuestions'].length > 0
+    );
+    const filterTitle = value.filter(v => v['UnityTabTitle']);
+    if (filterTitle.length && questionCount) {
+      const title = String(filterTitle[0]['UnityTabTitle'])
+        .trim()
+        .toLowerCase();
+      newTab.push({
+        label: filterTitle[0]['UnityTabTitle'],
+        value: len++,
+        component: <CustomTabs tabId={tabID} key={title} />,
+        path: String(value[0]['UnityTabTitle'])
+          .replace(' ', '_')
+          .trim()
+          .toLowerCase()
+      });
+    }
+  }
+  useEffect(() => {
+    if (newTab && Object.keys(newTab)?.length > 0) {
+      setTabs([...tabs, ...newTab]);
+    }
+    if (!Object.keys(newTab)?.length) {
+      const custompath = tabs.find(item => item.path === selectedView);
+      if (custompath) {
+        dispatch(setActiveTabIndexAction(0));
+        setTabs(defaultTabs);
+      }
+    }
+  }, [customTabs]);
+
+  useEffect(() => {
+    if (
+      tabs.length > 5 &&
+      (selectedView !== 'documents' ||
+        selectedView !== 'approval' ||
+        selectedView !== 'timelines' ||
+        selectedView !== 'questions')
+    ) {
+      const custompath = tabs.find(item => item.path === selectedView);
+      dispatch(setActiveTabIndexAction(custompath?.value));
+    }
+  }, [tabs]);
 
   async function fetchTabFlags() {
     // launchDarkly calls should be optimized
@@ -183,6 +235,50 @@ const UnityTab = ({
     setShowProposalTeamTab(proposalTeamFlag);
   }
 
+  const evalAndSetVTabCollapse = useCallback(
+    windowWidth => {
+      // we can only make change if panelRef is captured
+      if (panelRef !== null) {
+        if (value === 1) {
+          // do nothing. if active tab is timelines
+          return;
+        }
+        let shouldvtabCollapsed = vtabCollpased;
+        if (vtabCollpased && windowWidth < 850) {
+          return;
+        }
+        if (windowWidth < 850) {
+          shouldvtabCollapsed = true;
+        } else {
+          if (value === 0) {
+            shouldvtabCollapsed = false;
+            if (vTabUserPreference && vTabUserPreference[0]) {
+              shouldvtabCollapsed = vTabUserPreference[0].collapsed;
+            }
+          }
+          if (value === 2) {
+            shouldvtabCollapsed = true;
+            if (vTabUserPreference && vTabUserPreference[2]) {
+              shouldvtabCollapsed = vTabUserPreference[2].collapsed;
+            }
+          }
+          if (value === 3) {
+            shouldvtabCollapsed = true;
+            if (vTabUserPreference && vTabUserPreference[3]) {
+              shouldvtabCollapsed = vTabUserPreference[3].collapsed;
+            }
+          }
+        }
+        // triggering click event of Panel's toggle button since Apollo's Panel component lacks ability to control it through prop
+        if (vtabCollpased !== shouldvtabCollapsed) {
+          setSystemTriggeredClick(true);
+          setVTabCollapsed(shouldvtabCollapsed);
+        }
+      }
+    },
+    [panelRef, vtabCollpased, vTabUserPreference]
+  );
+
   useEffect(() => {
     fetchTabFlags();
     const urlParams = new URLSearchParams(window.location.search);
@@ -206,19 +302,14 @@ const UnityTab = ({
   }, []);
 
   useEffect(() => {
-    let shouldvtabCollapsed = vtabCollpased;
     if (selectedView && selectedView === 'documents') {
       dispatch(
         setActiveTabIndexAction(
           tabs.find(item => item.label === 'Documents').value
         )
       );
-      shouldvtabCollapsed = true;
-      if (vTabUserPreference && vTabUserPreference[3]) {
-        shouldvtabCollapsed = !vTabUserPreference[3].keepOpen;
-      }
     }
-    if (selectedView && selectedView === 'approvals' && isApprovalCount) {
+    if (selectedView && selectedView === 'approvals' && approvalsFlag) {
       const isApprovalTabVisible = approvalsFlag;
       const approvalTabValue = tabs.find(item => item.label === 'Approvals')
         .value;
@@ -226,17 +317,9 @@ const UnityTab = ({
       dispatch(
         setActiveTabIndexAction(isApprovalTabVisible ? approvalTabValue : 0)
       ); // Shows questions tab if Approvals are not found for the proposal
-      shouldvtabCollapsed = isApprovalTabVisible ? true : false;
-      if (vTabUserPreference && vTabUserPreference[2]) {
-        shouldvtabCollapsed = !vTabUserPreference[2].keepOpen;
-      }
     }
     if (selectedView && selectedView === 'questions') {
       dispatch(setActiveTabIndexAction(0));
-      shouldvtabCollapsed = false;
-      if (vTabUserPreference && vTabUserPreference[0]) {
-        shouldvtabCollapsed = !vTabUserPreference[0].keepOpen;
-      }
     }
     if (selectedView && selectedView === 'timelines') {
       if (!allFlags?.showTimelineFlag) {
@@ -247,25 +330,24 @@ const UnityTab = ({
         dispatch(setActiveTabIndexAction(timelinesTabValue));
       }
     }
-
-    // triggering click event of Panel's toggle button since Apollo's Panel component is lack of ability to control from prop
-    if (
-      panelRef !== null &&
-      vtabCollpased !== shouldvtabCollapsed &&
-      window.innerWidth >= 850
-    ) {
-      // by inspecting DOM, found there is only one button element inside Panel component hence choosing first button
-      const toggleButton = panelRef.children[0].children[1];
-      toggleButton.click();
-      setVTabCollapsed(shouldvtabCollapsed);
-    }
-  }, [selectedView, approvalsFlag, showApprovalTab, vtabCollpased, panelRef]);
+  }, [selectedView, approvalsFlag]);
 
   useEffect(() => {
-    if (panelRef !== null) {
-      evaluateCurrentWindowWidth(window.innerWidth);
+    evalAndSetVTabCollapse(window.innerWidth);
+  }, [value, panelRef]);
+
+  useEffect(() => {
+    evalAndSetVTabCollapse(windowWidth);
+  }, [windowWidth]);
+
+  useEffect(() => {
+    if (panelRef !== null && systemTriggeredClick) {
+      setTimeout(() => {
+        const toggleButton = panelRef.children[0].children[1];
+        toggleButton.click();
+      }, 500);
     }
-  }, [panelRef]);
+  }, [panelRef, systemTriggeredClick]);
 
   useEffect(() => {
     if (currentSearchResult !== null && panelRef !== null) {
@@ -275,9 +357,7 @@ const UnityTab = ({
         currentSearchResult.vTab <= 2
       ) {
         if (!isNotepadOpen) {
-          // by inspecting DOM, found there is only one button element inside Panel component hence choosing first button
-          const toggleButton = panelRef.children[0].children[1];
-          toggleButton.click();
+          setSystemTriggeredClick(true);
         }
         setTimeout(() => {
           panelRef.scrollIntoView({
@@ -289,40 +369,7 @@ const UnityTab = ({
         }, 500);
       }
     }
-  }, [dispatch, panelRef, currentSearchResult, isNotepadOpen]);
-
-  const evaluateCurrentWindowWidth = useCallback(
-    windowWidth => {
-      let shouldCollapseVTab = vtabCollpased;
-      if (windowWidth < 850) {
-        shouldCollapseVTab = true;
-      } else {
-        if (selectedView && selectedView === 'questions' && vtabCollpased) {
-          shouldCollapseVTab = false;
-        }
-      }
-      // triggering click event of Panel's toggle button since Apollo's Panel component is lack of ability to control from prop
-      if (panelRef !== null && vtabCollpased !== shouldCollapseVTab) {
-        // by inspecting DOM, found there is only one button element inside Panel component hence choosing first button
-        const toggleButton = panelRef.children[0].children[1];
-        toggleButton.click();
-        setVTabCollapsed(shouldCollapseVTab);
-      }
-    },
-    [selectedView, vtabCollpased, panelRef]
-  );
-
-  const handleWindowResize = debounce(
-    e => evaluateCurrentWindowWidth(e.target.innerWidth),
-    600
-  );
-
-  useEffect(() => {
-    window.addEventListener('resize', handleWindowResize);
-    window.resizeBy(0, 0);
-
-    return () => window.removeEventListener('resize', handleWindowResize);
-  }, [selectedView, vtabCollpased, panelRef]);
+  }, [currentSearchResult]);
 
   const winLocationSearch = window.location.search;
   const handleChangeTab = (event, val) => {
@@ -335,7 +382,6 @@ const UnityTab = ({
     if (selectView && selectView?.get('viewType')?.includes('timelines'))
       setShowVerticalTab(false);
     else if (allFlags.verticalTab) setShowVerticalTab(true);
-
     if (val === 0) {
       // No need to update pathname for question tab
       history.push(`${window.location.pathname}`);
@@ -370,6 +416,9 @@ const UnityTab = ({
           id="panel-notepad"
           style={{ borderRadius: '5px' }}
           ref={refVal => setPanelRef(refVal)}
+          className={classNames({
+            collapsed: vtabCollpased
+          })}
         >
           <Panel
             minWidth={notepadMinWidthPx}
@@ -377,13 +426,21 @@ const UnityTab = ({
             width={notepadMaxWidthPx}
             style={{ borderRadius: '5px' }}
             resizable
-            onClose={() => {
+            onClose={e => {
               setIsNotepadOpen(false);
-              dispatch(setVTabUserPreferenceAction(value, false));
+              setVTabCollapsed(true);
+              if (!systemTriggeredClick) {
+                dispatch(setVTabUserPreferenceAction(value, true));
+              }
+              setSystemTriggeredClick(false);
             }}
-            onOpen={() => {
+            onOpen={e => {
               setIsNotepadOpen(true);
-              dispatch(setVTabUserPreferenceAction(value, true));
+              setVTabCollapsed(false);
+              if (!systemTriggeredClick) {
+                dispatch(setVTabUserPreferenceAction(value, false));
+              }
+              setSystemTriggeredClick(false);
             }}
           >
             <Suspense
@@ -415,7 +472,8 @@ const UnityTab = ({
           style={{ borderRadius: '5px' }}
           className={classNames({
             'show-highlight':
-              currentSearchResult !== null && currentSearchResult.vTab === 1
+              currentSearchResult !== null && currentSearchResult.vTab === 1,
+            collapsed: vtabCollpased
           })}
           ref={refVal => setPanelRef(refVal)}
         >
@@ -428,6 +486,11 @@ const UnityTab = ({
             resizable
             onClose={() => {
               setIsNotepadOpen(false);
+              setVTabCollapsed(true);
+              if (!systemTriggeredClick) {
+                dispatch(setVTabUserPreferenceAction(value, true));
+              }
+              setSystemTriggeredClick(false);
               const matamoObj = createMatomoObj(
                 proposalDetail,
                 userEmail,
@@ -435,11 +498,14 @@ const UnityTab = ({
                 'closed event'
               );
               saveDataInMatomo(trackEvent, matamoObj);
-              dispatch(setVTabUserPreferenceAction(value, false));
             }}
             onOpen={() => {
               setIsNotepadOpen(true);
-              dispatch(setVTabUserPreferenceAction(value, true));
+              setVTabCollapsed(false);
+              if (!systemTriggeredClick) {
+                dispatch(setVTabUserPreferenceAction(value, false));
+              }
+              setSystemTriggeredClick(false);
             }}
           >
             <div
@@ -505,6 +571,9 @@ const UnityTab = ({
           id="panel-notepad"
           style={{ borderRadius: '5px' }}
           ref={refVal => setPanelRef(refVal)}
+          className={classNames({
+            collapsed: vtabCollpased
+          })}
         >
           <Panel
             minWidth={notepadMinWidthPx}
@@ -514,11 +583,19 @@ const UnityTab = ({
             resizable
             onClose={() => {
               setIsNotepadOpen(false);
-              dispatch(setVTabUserPreferenceAction(value, false));
+              setVTabCollapsed(true);
+              if (!systemTriggeredClick) {
+                dispatch(setVTabUserPreferenceAction(value, true));
+              }
+              setSystemTriggeredClick(false);
             }}
             onOpen={() => {
               setIsNotepadOpen(true);
-              dispatch(setVTabUserPreferenceAction(value, true));
+              setVTabCollapsed(false);
+              if (!systemTriggeredClick) {
+                dispatch(setVTabUserPreferenceAction(value, false));
+              }
+              setSystemTriggeredClick(false);
             }}
           >
             <Suspense

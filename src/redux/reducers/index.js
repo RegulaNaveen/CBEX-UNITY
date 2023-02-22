@@ -9,6 +9,8 @@ import notificationReducer from './notification';
 import approvalsReducer from './approvals';
 import searchReducer from './search';
 import uiReducer from './ui';
+import unityTabsReducer from './unityTabs';
+import timelineReducer from './timeline';
 
 const rootReducer = combineReducers({
   ssoAuth: ssoAuthReducer,
@@ -20,7 +22,9 @@ const rootReducer = combineReducers({
   notification: notificationReducer,
   approvals: approvalsReducer,
   search: searchReducer,
-  ui: uiReducer
+  ui: uiReducer,
+  unitytab: unityTabsReducer,
+  timeline: timelineReducer
 });
 
 export default rootReducer;
