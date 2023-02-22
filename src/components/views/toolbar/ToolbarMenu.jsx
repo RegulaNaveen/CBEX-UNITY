@@ -18,7 +18,7 @@ import { onSetUserRole } from '../../../redux/actions/sso-auth-actions';
 import {
   getUserEmail,
   getUserName,
-  getUserRole,
+  getUserRole
 } from '../../../SessionHandler';
 import { ReportIssue } from '../../svg';
 import MatomoHOC from '../../HOC/MatomoHOC';
@@ -32,11 +32,11 @@ type Props = {
   logoutUser: Function,
   eventCategories: any,
   userActions: any,
-  trackEvent: any,
+  trackEvent: any
 };
 
 type State = {
-  roleName: string,
+  roleName: string
 };
 
 export class ToolbarMenuComponent extends PureComponent<Props, State> {
@@ -45,7 +45,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     this.state = {
       roleName: '',
       isNameTooltip: false,
-      isEmailTooltip: false,
+      isEmailTooltip: false
     };
     this.nameRef = React.createRef();
     this.emailRef = React.createRef();
@@ -61,12 +61,12 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
   componentDidUpdate() {
     if (this.nameRef.current.clientWidth < this.nameRef.current.scrollWidth) {
       this.setState({
-        isNameTooltip: true,
+        isNameTooltip: true
       });
     }
     if (this.emailRef.current.clientWidth < this.emailRef.current.scrollWidth) {
       this.setState({
-        isEmailTooltip: true,
+        isEmailTooltip: true
       });
     }
   }
@@ -95,7 +95,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
 
     trackEvent({
       category: eventCategories.tb,
-      action: `ToolBar: ${userActions.click} On ${link} Link`,
+      action: `ToolBar: ${userActions.click} On ${link} Link`
     });
   };
 
@@ -103,7 +103,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     const { userActions, eventCategories, trackEvent } = this.props;
     trackEvent({
       category: eventCategories.tb,
-      action: `ToolBar: ${userActions.changed} User Role to ${role}`,
+      action: `ToolBar: ${userActions.changed} User Role to ${role}`
     });
   };
 
@@ -115,10 +115,10 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     console.log('eventCategories', this.props);
     const TooltipStyle = {
       width: '100%',
-      cursor: 'pointer',
+      cursor: 'pointer'
     };
     const style = {
-      width: '100%',
+      width: '100%'
     };
 
     return (
@@ -247,13 +247,13 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
 
 const mapStateToProps = (state: Map) => ({
   rolesList: getRoles(state),
-  isRolesLoading: isRolesInfoLoading(state),
+  isRolesLoading: isRolesInfoLoading(state)
 });
 
 export default withRouter(
   connect(mapStateToProps, {
     getRolesInfoF: getRolesInfo,
     logoutUser: logout,
-    changeUserRole: onSetUserRole,
+    changeUserRole: onSetUserRole
   })(MatomoHOC(ToolbarMenuComponent))
 );

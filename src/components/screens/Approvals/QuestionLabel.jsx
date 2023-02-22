@@ -7,7 +7,7 @@ const QuestionLabel = ({ questionLabel }) => {
 };
 
 QuestionLabel.propTypes = {
-  questionLabel: PropTypes.string.isRequired,
+  questionLabel: PropTypes.string.isRequired
 };
 
 export default QuestionLabel;

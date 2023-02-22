@@ -11,7 +11,7 @@ const YesNoQuestion = ({
   userData,
   socketContext,
   trackMatomoEventSubmitAnswer,
-  checkDisableFlag,
+  checkDisableFlag
 }) => {
   try {
     const dispatch = useDispatch();
@@ -64,7 +64,7 @@ const YesNoQuestion = ({
 };
 
 YesNoQuestion.defaultProps = {
-  disabled: false,
+  disabled: false
 };
 YesNoQuestion.propTypes = {
   question: PropTypes.object.isRequired,
@@ -72,7 +72,7 @@ YesNoQuestion.propTypes = {
   disabled: PropTypes.any,
   userData: PropTypes.any.isRequired,
   socketContext: PropTypes.object.isRequired,
-  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired,
+  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired
 };
 
 export default YesNoQuestion;

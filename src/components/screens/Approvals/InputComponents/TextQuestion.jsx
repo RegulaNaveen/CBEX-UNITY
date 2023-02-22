@@ -10,7 +10,7 @@ import { parseStringifyJson } from '../../../../utils/helpers';
 import { setProposalAnswerData } from '../../../../redux/actions/proposal-actions';
 import {
   getCanUserTagInQuestion,
-  getfetchAllFlags,
+  getfetchAllFlags
 } from '../../../../redux/selectors/proposal';
 
 // Function to converted Answer String
@@ -24,7 +24,7 @@ const TextQuestion = ({
   userData,
   socketContext,
   trackMatomoEventSubmitAnswer,
-  checkDisableFlag,
+  checkDisableFlag
 }) => {
   const dispatch = useDispatch();
   const answerValue = lastAnswer.answer || '';
@@ -41,7 +41,7 @@ const TextQuestion = ({
 
   const richTextData = parseFormattedData || {
     html: '',
-    value: { blocks: [] },
+    value: { blocks: [] }
   };
 
   const handleRichTextChange = async editorData => {
@@ -58,7 +58,7 @@ const TextQuestion = ({
           userData,
           {
             value,
-            html,
+            html
           },
           true
         )
@@ -120,7 +120,7 @@ const TextQuestion = ({
     },
     onFocus: () => {
       questionLockWrapper(question?.questionId);
-    },
+    }
   };
 
   return (
@@ -133,7 +133,7 @@ const TextQuestion = ({
 };
 
 TextQuestion.defaultProps = {
-  disabled: false,
+  disabled: false
 };
 TextQuestion.propTypes = {
   question: PropTypes.object.isRequired,
@@ -141,7 +141,7 @@ TextQuestion.propTypes = {
   disabled: PropTypes.any,
   userData: PropTypes.any.isRequired,
   socketContext: PropTypes.object.isRequired,
-  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired,
+  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired
 };
 
 export default TextQuestion;

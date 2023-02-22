@@ -12,7 +12,7 @@ const CalendarIcon = ({ question }) => {
   const color = {
     unityPredicted: '#0768fd',
     answered: '#00c221',
-    unAnswered: '#b7b7b7',
+    unAnswered: '#b7b7b7'
   };
 
   // Empty Answers are stored with a spaces

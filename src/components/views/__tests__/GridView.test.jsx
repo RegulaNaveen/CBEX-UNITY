@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import GridView from '../GridView';
 import { BrowserRouter } from 'react-router-dom';
+import GridView from '../GridView';
 
 describe('GridView component', () => {
   test('displays a message when no data is provided', () => {
