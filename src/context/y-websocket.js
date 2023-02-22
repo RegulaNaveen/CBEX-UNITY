@@ -243,7 +243,7 @@ const setupWS = provider => {
  */
 const broadcastMessage = (provider, buf) => {
   if (provider.wsconnected) {
-    /** @type {WebSocket} */ (provider.ws).send(toBase64(buf));
+    /** @type {WebSocket} */ (provider.ws).send(buf);
   }
   if (provider.bcconnected) {
     bc.publish(provider.bcChannel, buf, provider);
