@@ -315,12 +315,14 @@ export class Opportunity extends Component<Props, State> {
           windowSize={windowSize}
           bidStatus={bidStatus}
         />
-        <UnityTab
-          id={params.id}
-          enableValidateTab={enableValidateTab}
-          selectedView={selectedView}
-          onChangeSelectedTab={this.onChangeSelectedTab}
-        />
+        <span className="unity-tabs-container-wrapper">
+          <UnityTab
+            id={params.id}
+            enableValidateTab={enableValidateTab}
+            selectedView={selectedView}
+            onChangeSelectedTab={this.onChangeSelectedTab}
+          />
+        </span>
       </div>
     );
   };
