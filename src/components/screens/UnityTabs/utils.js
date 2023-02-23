@@ -99,12 +99,12 @@ export const shouldShowSection = (sectionId, tabId) => {
     const state = store.getState();
     const tab = state.unitytab.allTabs[tabId];
     const unityFilters = state.unitytab.filters;
-    const proposalQuestions = state.proposal.get('proposalQuestions');
     const unityTabSection =
       tab.find(i => i.UnityTabSectionId === sectionId) || {};
     const leftQuestions = unityTabSection.UnityTabSectionQuestions || [];
     const questionIds = leftQuestions;
     const visibilityArr = [];
+    const proposalQuestions = state.proposal.get('proposalQuestions');
     questionIds.forEach(questionId => {
       const questionObj =
         proposalQuestions.find(i => i.questionId === questionId) || {};

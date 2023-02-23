@@ -12,6 +12,9 @@ import ViewAboveVerticalTabs from '../../views/ViewAboveVerticalTabs';
 
 const CustomTabs = ({ tabId, key }) => {
   const allTab = useSelector(state => state.unitytab.allTabs);
+  const allQuestion = useSelector(state =>
+    state.proposal.get('proposalQuestions')
+  );
   const tab = allTab[tabId];
   const [isShowFilters, setIsShowFilters] = useState(false);
 
@@ -25,7 +28,7 @@ const CustomTabs = ({ tabId, key }) => {
         <div className="filter-btn">
           <FilterButton setIsShowFilters={setIsShowFilters} />
         </div>
-        {isShowFilters && <Filters />}
+        {isShowFilters && <Filters allQuestion={allQuestion} />}
       </div>
 
       <div className="all-approvals-container">

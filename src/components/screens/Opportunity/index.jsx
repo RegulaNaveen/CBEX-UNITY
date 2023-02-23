@@ -139,8 +139,8 @@ export class Opportunity extends Component<Props, State> {
     if (selectedView) this.setState({ selectedView });
     if (!authData) getRefreshAuthData();
     getSFNonEditabelInfoField();
-    getIntegrationsData();
     getOpportunityInfo(params.id, bidNumber);
+    getIntegrationsData();
     const proposalId = selectedBid.get('id', '');
     localStorage.setItem('proposalId', proposalId);
     if ((this.props && location && location?.pathname) !== UBUILD) {

@@ -127,6 +127,7 @@ const UnityTab = ({
   const [tabs, setTabs] = useState(defaultTabs);
   const [approvalsFlag, setApprovalsFlag] = useState(false);
   const [showApprovalTab, setShowApprovalTab] = useState(false);
+  const [tabloaded, settabloaded] = useState(false);
   const [isShowVerticalTab, setShowVerticalTab] = useState(false);
   const [
     showQuestionsForCustomerTab,
@@ -165,6 +166,7 @@ const UnityTab = ({
 
   const newTab = [];
   let len = tabs.length;
+  // eslint-disable-next-line no-restricted-syntax
   for (const [key, value] of Object.entries(customTabs)) {
     const tabID = value[0]['UnityTabId'];
     const questionCount = value.some(
@@ -175,28 +177,37 @@ const UnityTab = ({
       const title = String(filterTitle[0]['UnityTabTitle'])
         .trim()
         .toLowerCase();
+      const tabpath = String(value[0]['UnityTabTitle'])
+        .replace(' ', '_')
+        .trim()
+        .toLowerCase();
       newTab.push({
         label: filterTitle[0]['UnityTabTitle'],
         value: len++,
         component: <CustomTabs tabId={tabID} key={title} />,
-        path: String(value[0]['UnityTabTitle'])
-          .replace(' ', '_')
-          .trim()
-          .toLowerCase()
+        path: tabpath
       });
     }
   }
   useEffect(() => {
-    if (newTab && Object.keys(newTab)?.length > 0) {
+    if (newTab && Object.keys(newTab)?.length > 0 && !tabloaded) {
       setTabs([...tabs, ...newTab]);
+      settabloaded(true);
     }
-    if (!Object.keys(newTab)?.length) {
-      const custompath = tabs.find(item => item.path === selectedView);
-      if (custompath) {
-        dispatch(setActiveTabIndexAction(0));
-        setTabs(defaultTabs);
-      }
-    }
+    // if (!Object.keys(newTab)?.length) {
+    //   const custompath = tabs.find(item => item.path === selectedView);
+    //   if (
+    //     custompath &&
+    //     (selectedView !== 'documents' ||
+    //       selectedView !== 'approval' ||
+    //       selectedView !== 'timelines' ||
+    //       selectedView !== 'questions')
+    //   ) {
+    //     console.log(`3333333333`, selectedView, custompath);
+    //     // dispatch(setActiveTabIndexAction(0));
+    //     setTabs(defaultTabs);
+    //   }
+    // }
   }, [customTabs]);
 
   useEffect(() => {

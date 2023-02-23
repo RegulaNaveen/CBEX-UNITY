@@ -47,6 +47,7 @@ import { selectCurrentSearchResult } from '../../../redux/selectors/search';
 import ChipView from '../../common/Chip/ChipView';
 import { parseMomentDate } from '../../../utils/DateUtils';
 import SystemIntegrations from '../../common/SystemIntegrations/SystemIntegrations';
+import CustomLoader from './CustomLoader';
 
 const QuestionItem = ({
   questionId = '',
@@ -65,9 +66,6 @@ const QuestionItem = ({
   const unityTabFilters = useSelector(state => state.unitytab.filters);
   const isShowQuestion = shouldShowQuestion(question, unityTabFilters);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
-  const unityTabQuestionLoading = useSelector(
-    getUnityTabQuestionLoading
-  ).toJS();
   const [loading, setLoading] = useState(false);
   const [screenSize, setScreen] = useState('');
   const [iconColor, seticonColor] = useState('#00c221');
@@ -76,9 +74,6 @@ const QuestionItem = ({
   const dispatch = useDispatch();
   const questionTextRef2 = useRef(null);
 
-  useEffect(() => {
-    setLoading(unityTabQuestionLoading?.questionId === questionId);
-  }, [unityTabQuestionLoading]);
   // useEffect(() => {
   //   if (currentSearchResult !== null && questionTextRef.current !== null) {
   //     if (currentSearchResult.searchIndex === highlightQuestionId) {
@@ -105,8 +100,6 @@ const QuestionItem = ({
       window.removeEventListener('resize', resize);
     };
   }, []);
-
-  useEffect(() => {}, [unityTabQuestionLoading]);
 
   // Component will return null in case of empty question value
   if (isEmpty(question)) return null;
@@ -454,7 +447,7 @@ const QuestionItem = ({
         isAnswered={(c, v) => isAnswered(c, v)}
         lastAnswer={lastAnswer}
         iconColor={iconColor}
-        loading={loading}
+        loading={false}
         NaLoading={false}
         showNaCheckbox={false}
         isNotepadOpen={false}
@@ -485,14 +478,14 @@ const QuestionItem = ({
                 xs={10}
                 className="ques-title-cover unity-tab-question"
               >
-                {!isEmpty(question?.questionLockInfo) &&
-                isQuestionLockedByOther() ? (
-                  <Typography variant="subtitle1" className="status-txt">
-                    {question.questionLockInfo?.userName} is typing...
-                  </Typography>
-                ) : null}
                 <span ref={questionTextRef}>
                   <QuestionLabel questionLabel={question?.questionText || ''} />
+                  {!isEmpty(question?.questionLockInfo) &&
+                  isQuestionLockedByOther() ? (
+                    <Typography variant="subtitle1" className="status-txt">
+                      {question.questionLockInfo?.userName} is typing...
+                    </Typography>
+                  ) : null}
                 </span>
                 <div className="unity-tab-action-item">
                   {renderQuestionHint()}
@@ -504,20 +497,11 @@ const QuestionItem = ({
                 {renderQuestion()}
               </Grid>
               <Grid item xs={2} className="answer-actions">
-                {/* <div>
-                  <IconButton
-                    size="small"
-                    onClick={() => {
-                      setIsShowHistory(true);
-                    }}
-                  >
-                    <CalendarIcon question={question} />
-                  </IconButton>
-                </div> */}
-                <div>{SystemIcon()}</div>
-                {/* {!isQuesFreezed && (
-                  <CustomLoader questionId={question.questionId} />
-                )} */}
+                <div className="system-icon-custom-tab">
+                  {SystemIcon()}
+                  {<CustomLoader questionId={questionId} />}
+                </div>
+                {/* !isQuesFreezed && */}
               </Grid>
             </Grid>
           </Box>

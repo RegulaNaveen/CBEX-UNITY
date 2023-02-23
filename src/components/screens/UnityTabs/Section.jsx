@@ -36,8 +36,9 @@ const Section = ({ sectionId, title, tabId }) => {
   const sectionTitleRef = useRef(null);
 
   useEffect(() => {
-    setSectionVisibility(shouldShowSection(sectionId, tabId));
-  }, [unityTabFilters]);
+    const result = shouldShowSection(sectionId, tabId);
+    setSectionVisibility(result);
+  }, [tabId, unityTabFilters, tabSection]);
 
   const style = { display: !isAllActiveDisplayed ? 'none' : '' };
   return (

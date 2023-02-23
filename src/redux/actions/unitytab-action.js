@@ -10,12 +10,18 @@ export const setAllUnityTab = data => ({
   payload: data
 });
 
+export const updateNewFilters = data => ({
+  type: UNITY_TABS.UPDATE_NEW_FILTER,
+  payload: data
+});
+
 export const updateFilters = (name, value) => {
   return async (dispatch, getState) => {
     const state = getState();
     const searchQuery = selectQuery(state);
     const questionsFilter = getQuestionsFilters(state);
     const unityTabFilters = state.unitytab.filters;
+    console.log(`unityTabFilters`, unityTabFilters);
     if (searchQuery !== null && searchQuery.length >= 3 && value) {
       let totalFiltersApplied = 0;
       questionsFilter.entrySeq().forEach(([groupName, group]) => {

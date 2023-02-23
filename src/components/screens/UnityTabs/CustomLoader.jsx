@@ -1,14 +1,16 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import Loader from 'apollo-react/components/Loader';
-import { getApprovalQuestionLoading } from '../../../redux/selectors/proposal';
+import { getUnityTabQuestionLoading } from '../../../redux/selectors/proposal';
 
 const CustomLoader = props => {
-  const approvalQuestionLoading = useSelector(getApprovalQuestionLoading).toJS();
+  const unityTabQuestionLoading = useSelector(
+    getUnityTabQuestionLoading
+  ).toJS();
   return (
     <span className="loader-cover">
-      {approvalQuestionLoading.questionId === props.questionId &&
-      approvalQuestionLoading.value ? (
+      {unityTabQuestionLoading.questionId === props?.questionId &&
+      unityTabQuestionLoading.value ? (
         <Loader isInner size={20} style={{ width: '20px', height: '20px' }} />
       ) : null}
     </span>
