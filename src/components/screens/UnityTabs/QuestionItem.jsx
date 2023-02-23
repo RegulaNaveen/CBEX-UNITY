@@ -66,29 +66,15 @@ const QuestionItem = ({
   const unityTabFilters = useSelector(state => state.unitytab.filters);
   const isShowQuestion = shouldShowQuestion(question, unityTabFilters);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
-  const [loading, setLoading] = useState(false);
   const [screenSize, setScreen] = useState('');
   const [iconColor, seticonColor] = useState('#00c221');
   const [changeIcon, setchangeIcon] = useState('');
   const questionTextRef = useRef(null);
-  const dispatch = useDispatch();
   const questionTextRef2 = useRef(null);
 
-  // useEffect(() => {
-  //   if (currentSearchResult !== null && questionTextRef.current !== null) {
-  //     if (currentSearchResult.searchIndex === highlightQuestionId) {
-  //       setTimeout(() => {
-  //         questionTextRef.current.scrollIntoView({
-  //           behaviour: 'smooth',
-  //           block: 'center',
-  //           inline: 'nearest'
-  //         });
-  //         dispatch(autoNavigationCompletedAction());
-  //       }, 500);
-  //     }
-  //   }
-  // }, [questionTextRef.current, currentSearchResult, highlightQuestionId]);
-
+  useEffect(() => {
+    updateQuestionVisibility(questionId, isShowQuestion);
+  }, [unityTabFilters]);
   const resize = () => {
     setScreen(window.innerWidth);
   };

@@ -43,6 +43,11 @@ const responsibleFilter: Boolean = question => {
     Array.isArray(question.roleNames) && question.roleNames.includes(userRole)
   );
 };
+
+const milestoneFilters: Boolean = question => {
+  return !isAnswerEmpty(question.milestone);
+};
+
 const informedFilter: Boolean = question => {
   const userRole = localStorage.getItem('userRole') || '';
   if (question.interestedParties) {
@@ -58,6 +63,7 @@ const informedFilter: Boolean = question => {
 export const shouldShowQuestion = (question = {}, unityTabfilters): Boolean => {
   try {
     const filterAnswers = [];
+    const alltabFilter = unityTabfilters;
     const appliedFilters = unityTabfilters
       .filter(i => i.value)
       .map(i => i.name);
@@ -86,6 +92,15 @@ export const shouldShowQuestion = (question = {}, unityTabfilters): Boolean => {
           filterAnswers.push(unansweredFilter(question));
         }
       }
+      const milestonefilter = alltabFilter.filter(
+        v => v.value === true && v.group === 'milestone'
+      );
+      if (milestonefilter && milestonefilter.length > 0) {
+        for (let index = 0; index < milestonefilter.length; index += 1) {
+          filterAnswers.push(milestoneFilters(question));
+        }
+      }
+      // console.log(`filterAnswers`, filterAnswers);
     }
     return filterAnswers.length > 0 && filterAnswers.every(i => i === true);
   } catch (error) {

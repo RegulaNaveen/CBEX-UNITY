@@ -21,7 +21,6 @@ export const updateFilters = (name, value) => {
     const searchQuery = selectQuery(state);
     const questionsFilter = getQuestionsFilters(state);
     const unityTabFilters = state.unitytab.filters;
-    console.log(`unityTabFilters`, unityTabFilters);
     if (searchQuery !== null && searchQuery.length >= 3 && value) {
       let totalFiltersApplied = 0;
       questionsFilter.entrySeq().forEach(([groupName, group]) => {
