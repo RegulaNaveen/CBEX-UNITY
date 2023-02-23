@@ -324,8 +324,7 @@ const ActionButtons = ({
                   } else {
                     approvalSectionDuplicatedWrapper({
                       sectionId,
-                      proposalId,
-                      approvalData: response.data
+                      proposalId
                     });
                   }
                 })();
