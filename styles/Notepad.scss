@@ -45,6 +45,14 @@
         border-bottom: $border;
       }
     }
+    .network-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .network-interrupt {
+        font-size: 12px;
+      }
+    }
   }
 
   .react-resizable {

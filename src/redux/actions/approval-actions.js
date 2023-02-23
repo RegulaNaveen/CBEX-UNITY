@@ -10,6 +10,7 @@ import { getUserEmail } from '../../SessionHandler';
 import { getErrorMessage, getApprovalCount } from '../../utils/utils';
 import { getQuestionsFilters } from '../selectors';
 import { selectAllApprovals } from '../selectors/approvals';
+import { getProposalQuestions } from '../selectors/proposal';
 import { selectQuery } from '../selectors/search';
 import { doSearchAction } from './search-actions';
 
@@ -173,15 +174,12 @@ export function onApprovalSectionDuplicatingAction(info) {
   };
 }
 
-export function onApprovalSectionDuplicatedAction({
-  proposalId,
-  sectionId,
-  approvalData,
-  userEmail
-}) {
-  return async dispatch => {
+export function onApprovalSectionDuplicatedAction({ proposalId, userEmail }) {
+  return async (dispatch, getState) => {
+    const currentState = getState();
     if (userEmail !== getUserEmail()) {
-      dispatch(duplicateApprovalAction(sectionId, proposalId, approvalData));
+      const questions = getProposalQuestions(currentState);
+      await dispatch(fetchAllApprovals(proposalId, questions));
     }
   };
 }
