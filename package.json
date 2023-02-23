@@ -114,7 +114,7 @@
     "ua-parser-js": "^1.0.2",
     "url-loader": "^4.0.0",
     "uuid": "^8.3.0",
-    "y-indexeddb": "^9.0.9",
+    "y-prosemirror": "^1.2.0",
     "y-protocols": "^1.0.5",
     "y-websocket": "^1.4.3",
     "yarn": "^1.22.19",

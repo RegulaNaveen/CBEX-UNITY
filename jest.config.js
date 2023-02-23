@@ -12,7 +12,7 @@ module.exports = {
 
     'src/components/views/modals/__test__/AnswerHistory.test.js',
     'src/context/__tests__/SocketContext.test.jsx',
-
+    'src/components/screens/Proposal/__tests__/Sidebar.test.js',
     'src/components/screens/Opportunity/__tests__/QuestionsSectionMapping.test.jsx',
     'src/components/screens/Opportunity/__tests__/questioncustomer.test.jsx',
     'src/components/screens/Opportunity/__tests__/QuestionContainer.test.js'
