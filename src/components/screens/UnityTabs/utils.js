@@ -44,8 +44,8 @@ const responsibleFilter: Boolean = question => {
   );
 };
 
-const milestoneFilters: Boolean = question => {
-  return !isAnswerEmpty(question.milestone);
+const milestoneFilters: Boolean = (question, filter) => {
+  return filter.some(v => v.displayName === question.milestone);
 };
 
 const informedFilter: Boolean = question => {
@@ -95,9 +95,11 @@ export const shouldShowQuestion = (question = {}, unityTabfilters): Boolean => {
       const milestonefilter = alltabFilter.filter(
         v => v.value === true && v.group === 'milestone'
       );
+      // console.log(`milestonefilter`, milestonefilter);
+
       if (milestonefilter && milestonefilter.length > 0) {
         for (let index = 0; index < milestonefilter.length; index += 1) {
-          filterAnswers.push(milestoneFilters(question));
+          filterAnswers.push(milestoneFilters(question, milestonefilter));
         }
       }
       // console.log(`filterAnswers`, filterAnswers);
