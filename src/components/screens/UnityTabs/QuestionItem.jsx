@@ -36,8 +36,7 @@ import SFAnswerValidationWrapper from '../../common/SFAnswerValidationWrapper';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import {
   getOpportunityData,
-  getSelectedBid,
-  getUnityTabQuestionLoading
+  getSelectedBid
 } from '../../../redux/selectors/proposal';
 import { getIntegrations, getQuestion } from '../../../redux/selectors';
 // import CustomLoader from './CustomLoader';
@@ -48,6 +47,7 @@ import ChipView from '../../common/Chip/ChipView';
 import { parseMomentDate } from '../../../utils/DateUtils';
 import SystemIntegrations from '../../common/SystemIntegrations/SystemIntegrations';
 import CustomLoader from './CustomLoader';
+import EventLauncher from '../Opportunity/EventLauncher';
 
 const QuestionItem = ({
   questionId = '',
@@ -95,9 +95,9 @@ const QuestionItem = ({
 
   const selectedBid = useSelector(getSelectedBid);
   const allOppData = useSelector(getOpportunityData)?.toJS();
-  const proposalId = selectedBid?.id;
+  const proposalId = selectedBid?.toJS()?.id;
   const opportunityData = allOppData[proposalId];
-
+  const proposalDetail = opportunityData?.proposal?.proposalDetails;
   const getUserData = () => ({
     name: getUserName(),
     email: getUserEmail(),
@@ -446,12 +446,21 @@ const QuestionItem = ({
       />
     );
   };
+
+  const trackMatomoEventLauncher = data => {
+    trackEvent({
+      category: eventCategories.pd(proposalDetail),
+      action: `Unity Tab: Event Launcher: ${question.questionText}`,
+      customDimensions: [question, data, proposalDetail]
+    });
+  };
   return useMemo(
     () =>
       isShowQuestion ? (
         <>
           <Box
             mt={2}
+            className="unity-tab-question-item"
             // className={classNames({
             //   'question-active':
             //     currentSearchResult !== null &&
@@ -464,18 +473,32 @@ const QuestionItem = ({
                 xs={10}
                 className="ques-title-cover unity-tab-question"
               >
-                <span ref={questionTextRef}>
-                  <QuestionLabel questionLabel={question?.questionText || ''} />
-                  {!isEmpty(question?.questionLockInfo) &&
-                  isQuestionLockedByOther() ? (
-                    <Typography variant="subtitle1" className="status-txt">
-                      {question.questionLockInfo?.userName} is typing...
-                    </Typography>
-                  ) : null}
-                </span>
-                <div className="unity-tab-action-item">
-                  {renderQuestionHint()}
-                  {renderTags()}
+                <div className="question-label-container">
+                  <div className="question-label-inner">
+                    <div ref={questionTextRef} className="question-title-txt">
+                      <QuestionLabel
+                        questionLabel={question?.questionText || ''}
+                      />
+                      {!isEmpty(question?.questionLockInfo) &&
+                      isQuestionLockedByOther() ? (
+                        <Typography variant="subtitle1" className="status-txt">
+                          {question.questionLockInfo?.userName} is typing...
+                        </Typography>
+                      ) : null}
+                    </div>
+                    {question.events && (
+                      <EventLauncher
+                        questionData={Map(question)}
+                        proposalDetail={proposalDetail}
+                        eventCategories={eventCategories}
+                        trackMatomoEventLauncher={c =>
+                          trackMatomoEventLauncher(c)
+                        }
+                      />
+                    )}
+                    <div className="question-hint">{renderQuestionHint()}</div>
+                  </div>
+                  <div className="milestone-chip">{renderTags()}</div>
                 </div>
               </Grid>
               <Grid item xs={2} />

@@ -49,6 +49,7 @@ const CustomTabs = ({ tabId, key }) => {
             c.visible
         );
         if (res?.length) {
+          console.log('res :>> ', res);
           return {
             displayName: res[0]?.milestone
           };

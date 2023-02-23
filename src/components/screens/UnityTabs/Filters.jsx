@@ -21,7 +21,7 @@ const Filters = props => {
   const clearAllFilters = () => {
     dispatch(resetFiltersAction());
   };
-
+  console.log(unityTabFilters);
   return (
     <div className="questions-filter__container">
       <div className="questions-filter__grid column_style">
