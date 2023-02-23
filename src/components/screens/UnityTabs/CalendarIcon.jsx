@@ -21,21 +21,36 @@ const CalendarIcon = ({ question }) => {
   const renderCalendarIcon = () => {
     // No Answers i.e lastAnswer is an Empty Object {}
     if (Object.keys(lastAnswer).length === 0) {
-      return <Calendar style={{ color: color.unAnswered }} />;
+      return (
+        <Calendar
+          data-testid="noanswers-icon-unitytab"
+          style={{ color: color.unAnswered }}
+        />
+      );
     }
     // UnityPredictedAnswer
     if (
       !isAnswerEmpty(lastAnswer.answer) &&
       lastAnswer?.userName === 'UnityPredictedAnswer'
     ) {
-      return <CalendarCheck style={{ color: color.unityPredicted }} />;
+      return (
+        <CalendarCheck
+          data-testid="unity-predicted-calender-icon-unitytab"
+          style={{ color: color.unityPredicted }}
+        />
+      );
     }
     // Answered
     if (!isAnswerEmpty(lastAnswer.answer)) {
-      return <CalendarCheck style={{ color: color.answered }} />;
+      return (
+        <CalendarCheck
+          data-testid="unity-nonpredicted-calender-icon-unitytab"
+          style={{ color: color.answered }}
+        />
+      );
     }
     // Indertermined | Unanswered
-    return <IndeterminateIcon />;
+    return <IndeterminateIcon data-testid="indeterminate-icon-unitytab" />;
   };
   return renderCalendarIcon();
 };
