@@ -82,31 +82,4 @@ describe('Dashboard', () => {
     expect(wrapper.find('Tabbar')).toHaveLength(1);
     expect(wrapper.find('TabItem')).toHaveLength(3);
   });
-
-  it.skip('passes down allFlags prop to child components', () => {
-    const myDocketTab = wrapper.find('MyDocketTab');
-    const recentTab = wrapper.find('RecentTab');
-    const allTab = wrapper.find('AllTab');
-
-    expect(myDocketTab.prop('allFlags')).toEqual(
-      store.getState().proposal.eventflag
-    );
-    expect(recentTab.prop('allFlags')).toEqual(
-      store.getState().proposal.eventflag
-    );
-    expect(allTab.prop('allFlags')).toEqual(
-      store.getState().proposal.eventflag
-    );
-  });
-
-  it.skip('calls trackPageView and getLaunchdarklyFlags on mount', () => {
-    //const trackPageViewSpy = jest.spyOn(wrapper.find('Tabbar').instance(), 'trackPageView');
-    const getLaunchdarklyFlagsSpy = jest.spyOn(
-      wrapper.find('Tabbar').instance(),
-      'getLaunchdarklyFlags'
-    );
-
-    //expect(trackPageViewSpy).toHaveBeenCalledTimes(1);
-    expect(getLaunchdarklyFlagsSpy).toHaveBeenCalledTimes(1);
-  });
 });

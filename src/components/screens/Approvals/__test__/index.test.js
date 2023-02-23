@@ -111,7 +111,7 @@ let initialState = {
   getBidList: jest.fn(),
   currentTab: null
 };
-describe.skip('Testing approvals', () => {
+describe('Testing approvals', () => {
   let store;
   let sinonSandbox;
   beforeAll(() => {
@@ -129,7 +129,7 @@ describe.skip('Testing approvals', () => {
     store = mockStore(initialState);
   });
 
-  test('render Approval component', async () => {
+  test.skip('render Approval component', async () => {
     const props = {
       applyQuestionsFilter: jest.fn(),
       clearQuestionsFilter: jest.fn(),
@@ -159,7 +159,7 @@ describe.skip('Testing approvals', () => {
     );
     await expect(queryAllByTestId('bid-history')).toBeTruthy();
   });
-  test.skip('Test filter function', () => {
+  test('Test filter function', () => {
     const renderFilterFunc = jest.fn();
     const mockFunc = renderFilterFunc();
     expect(mockFunc).toBeUndefined();
@@ -167,7 +167,7 @@ describe.skip('Testing approvals', () => {
     expect(renderFilterFunc).toHaveBeenCalledWith();
   });
 
-  test('test component when there is no approval', async () => {
+  test.skip('test component when there is no approval', async () => {
     const props = {
       applyQuestionsFilter: jest.fn(),
       clearQuestionsFilter: jest.fn(),
@@ -197,7 +197,7 @@ describe.skip('Testing approvals', () => {
     await expect(queryAllByTestId('No_approvals')).toBeTruthy();
   });
 
-  test('Click event ', async () => {
+  test.skip('Click event ', async () => {
     const props = {
       applyQuestionsFilter: jest.fn(),
       clearQuestionsFilter: jest.fn(),

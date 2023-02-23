@@ -47,25 +47,4 @@ describe('NumberQuestion', () => {
     );
     expect(wrapper.exists()).toBe(true);
   });
-
-  it.skip('calls the onFocus function when the text area is focused', () => {
-    const wrapper = shallow(
-      <Provider store={store}>
-        {' '}
-        <NumberQuestion
-          question={mockQuestion}
-          lastAnswer={mockLastAnswer}
-          userData={mockUserData}
-          socketContext={mockSocketContext}
-          trackMatomoEventSubmitAnswer={mockTrackMatomoEventSubmitAnswer}
-          checkDisableFlag={mockCheckDisableFlag}
-        />
-      </Provider>
-    );
-    const mockEvent = { target: { value: '4' } };
-    wrapper
-      .find('[data-testid="proposal--text--area"]')
-      .simulate('focus', mockEvent);
-    expect(mockSocketContext.questionLockWrapper).toHaveBeenCalledWith('2');
-  });
 });

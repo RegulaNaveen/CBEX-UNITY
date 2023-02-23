@@ -10,19 +10,19 @@ import { setProposalAnswerData } from '../../../../../redux/actions/proposal-act
 const question = {
   questionId: 1,
   answerConfiguration: {
-    options: ['Yes', 'No'],
-  },
+    options: ['Yes', 'No']
+  }
 };
 const lastAnswer = {
-  answer: 'Yes',
+  answer: 'Yes'
 };
 const userData = {
   id: 1,
-  name: 'John Doe',
+  name: 'John Doe'
 };
 const socketContext = {
   questionLockWrapper: jest.fn(),
-  questionUnlockWrapper: jest.fn(),
+  questionUnlockWrapper: jest.fn()
 };
 const trackMatomoEventSubmitAnswer = jest.fn();
 const checkDisableFlag = jest.fn();
@@ -33,7 +33,7 @@ const initState = {
   userData,
   socketContext,
   trackMatomoEventSubmitAnswer,
-  checkDisableFlag,
+  checkDisableFlag
 };
 
 const middlewares = [thunk];
@@ -47,63 +47,5 @@ describe('<RadioQuestionInput />', () => {
       </Provider>
     );
     expect(wrapper.exists()).toBe(true);
-  });
-
-  it.skip('should call dispatch when the answer changes', () => {
-    const dispatch = jest.fn();
-    const wrapper = shallow(
-      <Provider store={store}>
-        <RadioQuestionInput
-          question={question}
-          lastAnswer={lastAnswer}
-          userData={userData}
-          socketContext={socketContext}
-          trackMatomoEventSubmitAnswer={trackMatomoEventSubmitAnswer}
-          checkDisableFlag={checkDisableFlag}
-        />
-      </Provider>
-    );
-    wrapper.instance().changeHandler('No', 'Yes');
-    expect(dispatch).toHaveBeenCalledWith(
-      setProposalAnswerData(socketContext, question.questionId, 'No', userData)
-    );
-  });
-
-  it.skip('should call questionLockWrapper when the input is focused', () => {
-    const wrapper = shallow(
-      <Provider store={store}>
-        <RadioQuestionInput
-          question={question}
-          lastAnswer={lastAnswer}
-          userData={userData}
-          socketContext={socketContext}
-          trackMatomoEventSubmitAnswer={trackMatomoEventSubmitAnswer}
-          checkDisableFlag={checkDisableFlag}
-        />
-      </Provider>
-    );
-    wrapper.find(RadioQuestion).simulate('focus');
-    expect(socketContext.questionLockWrapper).toHaveBeenCalledWith(
-      question.questionId
-    );
-  });
-
-  it.skip('should call questionUnlockWrapper when the input is blurred', () => {
-    const wrapper = shallow(
-      <Provider store={store}>
-        <RadioQuestionInput
-          question={question}
-          lastAnswer={lastAnswer}
-          userData={userData}
-          socketContext={socketContext}
-          trackMatomoEventSubmitAnswer={trackMatomoEventSubmitAnswer}
-          checkDisableFlag={checkDisableFlag}
-        />
-      </Provider>
-    );
-    wrapper.find(RadioQuestion).simulate('blur');
-    expect(socketContext.questionUnlockWrapper).toHaveBeenCalledWith(
-      question.questionId
-    );
   });
 });
