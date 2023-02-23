@@ -245,6 +245,7 @@ const Timeline = () => {
               currentBidDetails={currentBidDetails}
               draggedQuestionData={draggedQuestionData}
               setDraggedQuestionData={setDraggedQuestionData}
+              setTimelineEvents={setTimelineEvents}
             />
           )}
         </Panel>
