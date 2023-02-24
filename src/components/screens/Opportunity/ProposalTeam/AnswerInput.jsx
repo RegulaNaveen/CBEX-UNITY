@@ -90,7 +90,7 @@ const AnswerInput = (props) => {
   const [selectedQuestionForHistory, setSelectedQuestionForHistory] = useState(
     ''
   );
-  const [selectedDay, setSelectedDay] = useState('');
+  const [selectedDay, setSelectedDay] = useState(' ');
   const noneditableField = useSelector((state) => getnoneditableField(state));
   // const issetNotApplicableQuestion = useSelector(setNotApplicableQuestion);
 
@@ -385,7 +385,6 @@ const AnswerInput = (props) => {
   };
 
   const handleDayChange = (selectedDay: string, lastAnswer: Date) => {
-    // const { setProposalAnswer, proposalId, questionId, userData } = this.props;
     setSelectedDay(selectedDay);
     if (
       parseMomentDate(lastAnswer.trim()) !==
@@ -406,18 +405,17 @@ const AnswerInput = (props) => {
   };
 
   const resetDate = () => {
-    setSelectedRow({ selectedDay: ' ' }, () => {
-      dispatch(
-        setProposalAnswerData(
-          socketContext,
-          proposalId,
-          questionId,
-          selectedDay,
-          userData
-        )
-      );
-      trackMatomoEventSubmitAnswer(' ');
-    });
+    setSelectedDay(' ');
+    dispatch(
+      setProposalAnswerData(
+        socketContext,
+        proposalId,
+        questionId,
+        selectedDay,
+        userData
+      )
+    );
+    trackMatomoEventSubmitAnswer(' ');
   };
 
   const handleTextChange = (textValue, editorData) => {
