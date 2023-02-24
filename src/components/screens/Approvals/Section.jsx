@@ -35,6 +35,8 @@ const Section = ({ sectionId, title, testVisibility }) => {
   const approval = useSelector(state =>
     state.approvals.allApprovals.find(i => i.ApprovalSectionId === sectionId)
   );
+  const approvalDuplicating = approval.duplicating || false;
+  const approvalDeleting = approval.deleting || false;
   const approvalFilters = useSelector(state => state.approvals.filters);
   const query = useSelector(selectQuery);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
@@ -103,6 +105,14 @@ const Section = ({ sectionId, title, testVisibility }) => {
       }
     }
   }, [currentSearchResult, sectionId, dispatch, approval, expanded]);
+
+  useEffect(() => {
+    if (!approvalDeleting && !approvalDuplicating) {
+      dispatchLoadingEvent('SET_LOADING', false);
+    } else {
+      dispatchLoadingEvent('SET_LOADING', true);
+    }
+  }, [approvalDuplicating, approvalDeleting]);
 
   const { ArchivedData = [] } = approval;
   const style = { display: !isAllActiveDisplayed ? 'none' : '' };

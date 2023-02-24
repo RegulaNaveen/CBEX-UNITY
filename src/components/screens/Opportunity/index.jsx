@@ -260,6 +260,7 @@ export class Opportunity extends Component<Props, State> {
       }
     }
   }
+
   trackMatomoEventTabs = tab => {
     const {
       eventCategories,
@@ -305,7 +306,6 @@ export class Opportunity extends Component<Props, State> {
           <Loader type="TailSpin" color="#297DFD" height={100} width={100} />
         </div>
       );
-
     return (
       <div className="proposal-details">
         <GenerateDocs />

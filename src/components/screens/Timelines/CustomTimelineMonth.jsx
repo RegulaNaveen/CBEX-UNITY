@@ -31,6 +31,7 @@ import {
   setShowAddModal,
   setTimelineDateRange
 } from '../../../redux/actions/timeline-actions';
+import { getSelectedBid } from '../../../redux/selectors/proposal';
 
 let eventsForWeek = (evts, start, end, accessors, localizer) =>
   evts.filter(e => inRange(e, start, end, accessors, localizer));
@@ -42,7 +43,8 @@ class MonthView extends React.Component {
     this.state = {
       rowLimit: 5,
       needLimitMeasure: true,
-      date: null
+      date: null,
+      showDateRangeError: false
     };
     this.containerRef = createRef();
     this.slotRowRef = createRef();
@@ -124,12 +126,23 @@ class MonthView extends React.Component {
   };
 
   handleDateRangeChange = value => {
-    if (!value[0] || !value[1]) return;
+    if (!moment(`${value[0]}`).isValid() || !moment(`${value[1]}`).isValid()) {
+      this.setState({ showDateRangeError: true });
+    } else this.setState({ showDateRangeError: false });
+    if (
+      !moment(`${value[0]}`).isBefore(`${value[1]}`) ||
+      !moment(`${value[1]}`).isAfter(`${value[0]}`)
+    ) {
+      return;
+    }
+    const start = moment(`${value[0]}`).isValid()
+      ? moment(`${value[0]}`)
+      : this.props.timelineDateRange[0];
+    const end = moment(`${value[1]}`).isValid()
+      ? moment(`${value[1]}`)
+      : this.props.timelineDateRange[1];
 
-    this.props.setTimelineDateRange([
-      moment(`${value[0]}`),
-      moment(`${value[1]}`)
-    ]);
+    this.props.setTimelineDateRange([start, end]);
   };
 
   render() {
@@ -152,6 +165,7 @@ class MonthView extends React.Component {
             <DateRangePicker
               size="small"
               value={timelineDateRange}
+              error={this.state.showDateRangeError}
               onChange={value => {
                 this.handleDateRangeChange(value);
               }}
@@ -168,7 +182,7 @@ class MonthView extends React.Component {
               size="small"
               style={{ marginRight: 10, marginBottom: 10 }}
               onClick={() => this.props.setShowAddModal(true)}
-              // disabled={!isCurrent}
+              disabled={!this.props.selectedBid.isCurrent}
             >
               Add New
             </Button>
@@ -260,7 +274,9 @@ class MonthView extends React.Component {
     let isOffRange = localizer.neq(date, currentDate, 'month');
     let isCurrent = localizer.isSameDate(date, currentDate);
     let drilldownView = getDrilldownView(date);
-    let label = localizer.format(date, 'dateFormat');
+    let label = localizer.isSameDate(date, new Date())
+      ? localizer.format(date, 'dateFormat')
+      : localizer.format(date, 'MMM DD');
     let DateHeaderComponent = this.props.components.dateHeader || DateHeader;
 
     return (
@@ -482,7 +498,8 @@ MonthView.title = (date, { localizer }) =>
   localizer.format(date, 'monthHeaderFormat');
 
 const mapStateToProps = state => ({
-  timelineDateRange: selectTimelineDateRange(state)
+  timelineDateRange: selectTimelineDateRange(state),
+  selectedBid: getSelectedBid(state).toJS()
 });
 
 const mapDispatchToProps = {

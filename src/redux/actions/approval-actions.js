@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import {
   deleteApprovalsApi,
   duplicateApprovalApi,
@@ -5,8 +6,11 @@ import {
 } from '../../api/approvals';
 import { DEFAULT, SEARCH as SEARCH_CONSTANTS } from '../../constants/app';
 import { APPROVALS, SEARCH } from '../../constants/types';
+import { getUserEmail } from '../../SessionHandler';
 import { getErrorMessage, getApprovalCount } from '../../utils/utils';
 import { getQuestionsFilters } from '../selectors';
+import { selectAllApprovals } from '../selectors/approvals';
+import { getProposalQuestions } from '../selectors/proposal';
 import { selectQuery } from '../selectors/search';
 import { doSearchAction } from './search-actions';
 
@@ -149,6 +153,58 @@ export function resetFiltersAction() {
     dispatch({ type: APPROVALS.RESET_FILTERS });
     if (searchQuery !== null && searchQuery.length >= 3) {
       dispatch(doSearchAction());
+    }
+  };
+}
+
+export function onApprovalSectionDuplicatingAction(info) {
+  return async (dispatch, getState) => {
+    if (info.userEmail !== getUserEmail()) {
+      const currentState = getState();
+      const prevApprovals = selectAllApprovals(currentState);
+      let newApprovals = cloneDeep(prevApprovals);
+      const approvalIndex = newApprovals.findIndex(
+        approval => approval.ApprovalSectionId === info.sectionId
+      );
+      if (approvalIndex > -1) {
+        newApprovals[approvalIndex]['duplicating'] = info.duplicating;
+        dispatch(setAllApprovals(newApprovals));
+      }
+    }
+  };
+}
+
+export function onApprovalSectionDuplicatedAction({ proposalId, userEmail }) {
+  return async (dispatch, getState) => {
+    const currentState = getState();
+    if (userEmail !== getUserEmail()) {
+      const questions = getProposalQuestions(currentState);
+      await dispatch(fetchAllApprovals(proposalId, questions));
+    }
+  };
+}
+
+export function onApprovalSectionDeletingAction(info) {
+  return async (dispatch, getState) => {
+    if (info.userEmail !== getUserEmail()) {
+      const currentState = getState();
+      const prevApprovals = selectAllApprovals(currentState);
+      let newApprovals = cloneDeep(prevApprovals);
+      const approvalIndex = newApprovals.findIndex(
+        approval => approval.ApprovalSectionId === info.sectionId
+      );
+      if (approvalIndex > -1) {
+        newApprovals[approvalIndex]['deleting'] = info.deleting;
+        dispatch(setAllApprovals(newApprovals));
+      }
+    }
+  };
+}
+
+export function onApprovalSectionDeletedAction({ sectionId, userEmail }) {
+  return async dispatch => {
+    if (userEmail !== getUserEmail()) {
+      dispatch(deleteApprovalAction(sectionId));
     }
   };
 }

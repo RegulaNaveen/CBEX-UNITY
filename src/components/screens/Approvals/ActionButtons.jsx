@@ -1,9 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Trash from 'apollo-react-icons/Trash';
 import EmailClick from 'apollo-react-icons/EmailClick';
 import isEmpty from 'lodash/isEmpty';
 import Button from 'apollo-react/components/Button';
+import Tooltip from 'apollo-react/components/Tooltip';
 import PropTypes from 'prop-types';
 import { ApprovalContext } from './Section';
 import {
@@ -25,6 +26,8 @@ import { APPROVALS, DEFAULT } from '../../../constants/app';
 import CustomModal from '../../common/CustomModal';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import { cloneDeep } from 'lodash';
+import { SocketContext } from '../../../context/SocketContext';
+import { getUserEmail } from '../../../SessionHandler';
 
 const ActionButtons = ({
   sectionId,
@@ -34,10 +37,17 @@ const ActionButtons = ({
   selectedBidIsCurrent
 }) => {
   const { dispatchLoadingEvent } = useContext(ApprovalContext);
+  const {
+    approvalSectionDuplicatingWrapper,
+    approvalSectionDuplicatedWrapper,
+    approvalSectionDeletingWrapper,
+    approvalSectionDeletedWrapper
+  } = useContext(SocketContext);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [warning, setWarning] = useState(false);
   const [warningTitle, setWarningTitle] = useState('');
   const [warningText, setWarningText] = useState('');
+  const [sectionLocked, setSectionLocked] = useState(false);
   const approval = useSelector(state =>
     state.approvals.allApprovals.find(i => i.ApprovalSectionId === sectionId)
   );
@@ -45,6 +55,7 @@ const ActionButtons = ({
   const proposalDetails = useSelector(getProposalDetails);
   const proposalQuestions = useSelector(selectProposalQuestions);
   const approvalFilters = useSelector(state => state.approvals.filters);
+  const questions = useSelector(selectProposalQuestions);
 
   const { ArchivedData = [] } = approval;
 
@@ -54,6 +65,24 @@ const ActionButtons = ({
   const opportunityData = allOppData[pId];
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    let questionIds = [];
+    if (approval) {
+      questionIds = approval.ApprovalSectionLeftQuestions.concat(
+        approval.ApprovalSectionRightQuestions
+      );
+    }
+    const approvalSectionQuestions = questions.filter(question =>
+      questionIds.includes(question.questionId)
+    );
+    const lockStatus = approvalSectionQuestions.some(
+      question =>
+        question.questionLockInfo &&
+        question.questionLockInfo.userInfo !== getUserEmail()
+    );
+    setSectionLocked(lockStatus);
+  }, [approval, questions]);
 
   const deleteEventMatomo = (action, aprovaldata) => {
     const proposalDetail = opportunityData?.proposal?.proposalDetails;
@@ -188,17 +217,30 @@ const ActionButtons = ({
   }
   const deleteAfterConfirmHandler = () => {
     setShowDeleteModal(false);
+    approvalSectionDeletingWrapper({
+      sectionId,
+      deleting: true
+    });
     dispatchLoadingEvent('SET_LOADING', true);
     (async () => {
       const response = await dispatch(deleteApproval(proposalId, sectionId));
       if (response) {
         trackMatomoEventSubmitAnswer('Delete', approval);
       }
+      approvalSectionDeletingWrapper({
+        sectionId,
+        deleting: false
+      });
       dispatchLoadingEvent('SET_LOADING', false);
       if (!response.status) {
         setWarningTitle(response.title);
         setWarningText(response.message);
         setWarning(true);
+      } else {
+        approvalSectionDeletedWrapper({
+          sectionId,
+          proposalId
+        });
       }
     })();
   };
@@ -209,16 +251,25 @@ const ActionButtons = ({
     renderDeleteAndDuplicate = (
       <>
         {!isEmpty(ArchivedData) && (
-          <Button
-            variant="text"
-            size="small"
-            icon={<Trash fontSize="extraSmall" />}
-            style={{ marginRight: 10 }}
-            className="delete-btn"
-            onClick={() => setShowDeleteModal(true)}
+          <Tooltip
+            title={
+              sectionLocked ? APPROVALS.ACTION_BUTTON_LOCKED_TOOLTIP_MSG : ''
+            }
           >
-            {DEFAULT.DELETE}
-          </Button>
+            <span style={{ display: 'inline-block' }}>
+              <Button
+                variant="text"
+                size="small"
+                icon={<Trash fontSize="extraSmall" />}
+                style={{ marginRight: 10 }}
+                className="delete-btn"
+                onClick={() => setShowDeleteModal(true)}
+                disabled={sectionLocked}
+              >
+                {DEFAULT.DELETE}
+              </Button>
+            </span>
+          </Tooltip>
         )}
 
         {/* Delete Confirmation Modal */}
@@ -239,29 +290,50 @@ const ActionButtons = ({
             modalStyle={{ maxWidth: 460 }}
           />
         )}
-
-        <Button
-          variant="secondary"
-          style={{ marginRight: 10 }}
-          className="duplicate-btn"
-          onClick={() => {
-            dispatchLoadingEvent('SET_LOADING', true);
-            (async () => {
-              const response = await dispatch(
-                duplicateApproval(proposalId, sectionId)
-              );
-              dispatchLoadingEvent('SET_LOADING', false);
-              trackMatomoEventSubmitAnswer('Duplicate', approval);
-              if (!response.status) {
-                setWarningTitle(response.title);
-                setWarningText(response.message);
-                setWarning(true);
-              }
-            })();
-          }}
+        <Tooltip
+          title={
+            sectionLocked ? APPROVALS.ACTION_BUTTON_LOCKED_TOOLTIP_MSG : ''
+          }
         >
-          {DEFAULT.DUPLICATE}
-        </Button>
+          <span style={{ display: 'inline-block' }}>
+            <Button
+              disabled={sectionLocked}
+              variant="secondary"
+              style={{ marginRight: 10 }}
+              className="duplicate-btn"
+              onClick={() => {
+                approvalSectionDuplicatingWrapper({
+                  sectionId,
+                  duplicating: true
+                });
+                dispatchLoadingEvent('SET_LOADING', true);
+                (async () => {
+                  const response = await dispatch(
+                    duplicateApproval(proposalId, sectionId)
+                  );
+                  approvalSectionDuplicatingWrapper({
+                    sectionId,
+                    duplicating: false
+                  });
+                  dispatchLoadingEvent('SET_LOADING', false);
+                  trackMatomoEventSubmitAnswer('Duplicate', approval);
+                  if (!response.status) {
+                    setWarningTitle(response.title);
+                    setWarningText(response.message);
+                    setWarning(true);
+                  } else {
+                    approvalSectionDuplicatedWrapper({
+                      sectionId,
+                      proposalId
+                    });
+                  }
+                })();
+              }}
+            >
+              {DEFAULT.DUPLICATE}
+            </Button>
+          </span>
+        </Tooltip>
       </>
     );
   }
