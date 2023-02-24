@@ -208,7 +208,10 @@ function ProposalTeam() {
 
       {showModal && (
         <CustomModal>
-          <AddQuestionModalComponent onClose={onCloseAddModal} />
+          <AddQuestionModalComponent
+            onClose={onCloseAddModal}
+            currentsection={'Proposal Team' || ''}
+          />
         </CustomModal>
       )}
     </div>
