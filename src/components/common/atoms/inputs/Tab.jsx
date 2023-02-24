@@ -1,3 +1,5 @@
+/* eslint-disable no-shadow */
+/* eslint-disable no-restricted-syntax */
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { useHistory } from 'react-router-dom';
 import Tab from 'apollo-react/components/Tab';
@@ -31,6 +33,7 @@ import { autoNavigationCompletedAction } from '../../../../redux/actions/search-
 import lazyWithRetry from '../../../../utils/lazy';
 import VerticalTabsCollapsiblePanel from '../../../screens/Opportunity/layout/navigation/VerticalTabsCollapsiblePanel';
 import Timelines from '../../../screens/Timelines';
+import { checkTabRender } from '../../../screens/UnityTabs/utils';
 
 const Questions = React.lazy(() =>
   lazyWithRetry(() =>
@@ -163,26 +166,37 @@ const UnityTab = ({
   const notepadMaxWidthPx = isOpen
     ? notepadMinWidthPx
     : (window.innerWidth - minPixelToExclude) * (47 / 100); // 50% of the total screen size
-
+  const calculateTab = val => {
+    const questionCount = val.some(v => v?.UnityTabSectionQuestions.length > 0);
+    if (questionCount) {
+      const final = val.map(c => {
+        const result = checkTabRender(
+          c.UnityTabSectionQuestions,
+          selectedBid?.opportunityType
+        );
+        return result;
+      });
+      return final.some(c => c === true);
+    }
+    return false;
+  };
   const newTab = [];
   let len = tabs.length;
   // eslint-disable-next-line no-restricted-syntax
   for (const [key, value] of Object.entries(customTabs)) {
-    const tabID = value[0]['UnityTabId'];
-    const questionCount = value.some(
-      v => v['UnityTabSectionQuestions'].length > 0
-    );
-    const filterTitle = value.filter(v => v['UnityTabTitle']);
-    if (filterTitle.length && questionCount) {
-      const title = String(filterTitle[0]['UnityTabTitle'])
+    const response = calculateTab(value);
+    const tabID = value[0]?.UnityTabId;
+    const filterTitle = value.filter(v => v.UnityTabTitle);
+    if (filterTitle.length && response) {
+      const title = String(filterTitle[0]?.UnityTabTitle)
         .trim()
         .toLowerCase();
-      const tabpath = String(value[0]['UnityTabTitle'])
+      const tabpath = String(value[0]?.UnityTabTitle)
         .replace(' ', '_')
         .trim()
         .toLowerCase();
       newTab.push({
-        label: filterTitle[0]['UnityTabTitle'],
+        label: filterTitle[0]?.UnityTabTitle,
         value: len++,
         component: <CustomTabs tabId={tabID} key={title} />,
         path: tabpath
@@ -194,22 +208,7 @@ const UnityTab = ({
       setTabs([...tabs, ...newTab]);
       settabloaded(true);
     }
-    // if (!Object.keys(newTab)?.length) {
-    //   const custompath = tabs.find(item => item.path === selectedView);
-    //   if (
-    //     custompath &&
-    //     (selectedView !== 'documents' ||
-    //       selectedView !== 'approval' ||
-    //       selectedView !== 'timelines' ||
-    //       selectedView !== 'questions')
-    //   ) {
-    //     console.log(`3333333333`, selectedView, custompath);
-    //     // dispatch(setActiveTabIndexAction(0));
-    //     setTabs(defaultTabs);
-    //   }
-    // }
   }, [customTabs]);
-
   useEffect(() => {
     if (
       tabs.length > 5 &&

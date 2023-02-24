@@ -136,3 +136,28 @@ export const shouldShowSection = (sectionId, tabId) => {
     return true;
   }
 };
+
+export const checkTabRender = (question, OT) => {
+  try {
+    const state = store.getState();
+    const proposalQuestions = state.proposal.get('proposalQuestions');
+    const arr = [];
+    if (question && question.length > 0) {
+      question.forEach(questionId => {
+        const questionObj =
+          proposalQuestions.find(i => i.questionId === questionId) || {};
+        if (
+          questionObj.active &&
+          questionObj.visible &&
+          questionObj.opportunityType.split(',').includes(OT)
+        ) {
+          arr.push(true);
+        }
+      });
+    }
+    return arr.some(v => v === true);
+  } catch (error) {
+    console.error(error);
+    return true;
+  }
+};

@@ -17,7 +17,6 @@ import { shouldShowSection } from './utils';
 
 const CustomTabs = ({ tabId, key }) => {
   const allTab = useSelector(state => state.unitytab.allTabs);
-  console.log('tabId :>> ', tabId);
   const allQuestion = useSelector(state =>
     state.proposal.get('proposalQuestions')
   );
@@ -28,7 +27,7 @@ const CustomTabs = ({ tabId, key }) => {
   useEffect(() => {
     dispatch(resetFiltersAction());
     let arr = [];
-    for (let index = 0; index < tab.length; index += 1) {
+    for (let index = 0; index < tab?.length; index += 1) {
       const element = tab[index];
       const flag = shouldShowSection(element.UnityTabSectionId, tabId);
       if (flag) {
@@ -49,7 +48,6 @@ const CustomTabs = ({ tabId, key }) => {
             c.visible
         );
         if (res?.length) {
-          console.log('res :>> ', res);
           return {
             displayName: res[0]?.milestone
           };
