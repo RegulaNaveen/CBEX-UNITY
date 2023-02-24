@@ -75,6 +75,22 @@ const QuestionItem = ({
   useEffect(() => {
     updateQuestionVisibility(questionId, isShowQuestion);
   }, [unityTabFilters]);
+
+  useEffect(() => {
+    if (currentSearchResult !== null && questionTextRef.current !== null) {
+      if (currentSearchResult.searchIndex === questionId) {
+        setTimeout(() => {
+          questionTextRef.current.scrollIntoView({
+            behaviour: 'smooth',
+            block: 'center',
+            inline: 'nearest'
+          });
+          dispatch(autoNavigationCompletedAction());
+        }, 500);
+      }
+    }
+  }, [questionTextRef.current, currentSearchResult, questionId]);
+
   const resize = () => {
     setScreen(window.innerWidth);
   };
@@ -460,12 +476,12 @@ const QuestionItem = ({
         <>
           <Box
             mt={2}
-            className="unity-tab-question-item"
-            // className={classNames({
-            //   'question-active':
-            //     currentSearchResult !== null &&
-            //     currentSearchResult.searchIndex === highlightQuestionId
-            // })}
+            className={classNames({
+              'unity-tab-question-item': true,
+              'question-active':
+                currentSearchResult !== null &&
+                currentSearchResult.searchIndex === questionId
+            })}
           >
             <Grid container>
               <Grid

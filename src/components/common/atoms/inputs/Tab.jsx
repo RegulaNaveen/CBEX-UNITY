@@ -181,7 +181,7 @@ const UnityTab = ({
     return false;
   };
   const newTab = [];
-  let len = tabs.length;
+  let len = tabs.length - 1;
   // eslint-disable-next-line no-restricted-syntax
   for (const [key, value] of Object.entries(customTabs)) {
     const response = calculateTab(value);
@@ -211,7 +211,7 @@ const UnityTab = ({
   }, [customTabs]);
   useEffect(() => {
     if (
-      tabs.length > 5 &&
+      tabs.length > 4 &&
       (selectedView !== 'documents' ||
         selectedView !== 'approval' ||
         selectedView !== 'timelines' ||
