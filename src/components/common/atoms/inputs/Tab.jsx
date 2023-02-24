@@ -165,7 +165,7 @@ const UnityTab = ({
     : (window.innerWidth - minPixelToExclude) * (47 / 100); // 50% of the total screen size
 
   const newTab = [];
-  let len = tabs.length;
+  let len = tabs.length - 1;
   // eslint-disable-next-line no-restricted-syntax
   for (const [key, value] of Object.entries(customTabs)) {
     const tabID = value[0]['UnityTabId'];
@@ -212,7 +212,7 @@ const UnityTab = ({
 
   useEffect(() => {
     if (
-      tabs.length > 5 &&
+      tabs.length > 4 &&
       (selectedView !== 'documents' ||
         selectedView !== 'approval' ||
         selectedView !== 'timelines' ||
