@@ -2,10 +2,7 @@ import { renderToString } from 'react-dom/server';
 import ReactHtmlParser from 'react-html-parser';
 import {
   Document,
-  Page,
-  View,
   StyleSheet,
-  Text,
   Image,
   Link as HtmlLink
 } from '@react-pdf/renderer';
@@ -345,14 +342,18 @@ function getProposalTeamsRows(questions) {
       otherTeamArray?.forEach((item) => {
         const nameArray = item.substring(0, item.indexOf('('));
         const emailId = getEmailID(item);
-        return Arrayedanother.push({ name: nameArray, email: emailId });
+        return emailId !== null
+          ? Arrayedanother.push({ name: nameArray, email: emailId })
+          : Arrayedanother.push({ name: item });
       });
       if (Arrayedanother.length > 0) {
         Arrayedanother.forEach((item, index) => {
           const commaHandle = index + 1 === Arrayedanother.length ? '' : ', ';
-          emailLink += `<a href="mailto:${
-            item?.email !== null ? item?.email[0] : ''
-          }">${item.name}</a>${Arrayedanother.length > 1 ? commaHandle : ''}`;
+          emailLink += item?.email
+            ? `<a href=mailto:${item?.email !== null ? item?.email[0] : ''}>${
+                item.name
+              }</a>${Arrayedanother.length > 1 ? commaHandle : ''}`
+            : `${item?.name} ${Arrayedanother.length > 1 ? commaHandle : ''}`;
         });
       }
       html += `<div class="table-header-cell">${emailLink}</div>`;
@@ -377,15 +378,19 @@ function getProposalTeamsRows(questions) {
       otherTeamArray?.forEach((item) => {
         const nameArray = item.substring(0, item.indexOf('('));
         const emailId = getEmailID(item);
-        return Arrayedanother.push({ name: nameArray, email: emailId });
+        return emailId !== null
+          ? Arrayedanother.push({ name: nameArray, email: emailId })
+          : Arrayedanother.push({ name: item });
       });
       let otherTeamQuestionsemailLink = '';
       if (Arrayedanother.length > 0) {
         Arrayedanother.forEach((item, index2) => {
           const commaHandle = index2 + 1 === Arrayedanother.length ? '' : ', ';
-          otherTeamQuestionsemailLink += `<a href="mailto:${
-            item?.email !== null ? item?.email[0] : ''
-          }">${item.name}</a>${Arrayedanother.length > 1 ? commaHandle : ''}`;
+          otherTeamQuestionsemailLink += item?.email
+            ? `<a href=mailto:${item?.email !== null ? item?.email[0] : ''}>${
+                item.name
+              }</a>${Arrayedanother.length > 1 ? commaHandle : ''}`
+            : `${item?.name} ${Arrayedanother.length > 1 ? commaHandle : ''}`;
         });
       }
       html += `<div class="table-header-cell">${otherTeamQuestionsemailLink}</div>`;
