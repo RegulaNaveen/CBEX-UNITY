@@ -1,5 +1,5 @@
 import React, { useState, createContext, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import AccordionDetails from '@material-ui/core/AccordionDetails';
@@ -11,7 +11,8 @@ import SectionActive from './SectionActive';
 import { shouldShowSection } from './utils';
 import {
   selectQuery,
-  selectCurrentSearchResult
+  selectCurrentSearchResult,
+  selectAutoNavigatedToCurrentResult
 } from '../../../redux/selectors/search';
 
 export const UnityTabContext = createContext();
@@ -33,11 +34,46 @@ const Section = ({ sectionId, title, tabId }) => {
   const unityTabFilters = useSelector(state => state.unitytab.filters);
   const query = useSelector(selectQuery);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
+  const autoNavigatedToCurrentResult = useSelector(
+    selectAutoNavigatedToCurrentResult
+  );
   const sectionTitleRef = useRef(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    setSectionVisibility(shouldShowSection(sectionId, tabId));
-  }, [unityTabFilters]);
+    const result = shouldShowSection(sectionId, tabId);
+    setSectionVisibility(result);
+  }, [tabId, unityTabFilters, tabSection]);
+
+  useEffect(() => {
+    let shouldExpand = expanded;
+    if (
+      currentSearchResult !== null &&
+      sectionTitleRef.current !== null &&
+      !autoNavigatedToCurrentResult
+    ) {
+      const questionAndSectionTitleIds = tabSection.UnityTabSectionQuestions;
+      if (currentSearchResult.searchIndex === title) {
+        setTimeout(() => {
+          sectionTitleRef.current.scrollIntoView({
+            behaviour: 'smooth',
+            block: 'center',
+            inline: 'nearest'
+          });
+          dispatch(autoNavigationCompletedAction());
+        }, 500);
+      } else if (
+        questionAndSectionTitleIds.includes(currentSearchResult.searchIndex)
+      ) {
+        shouldExpand = true;
+      } else {
+        shouldExpand = false;
+      }
+      if (expanded !== shouldExpand) {
+        setExpanded(shouldExpand);
+      }
+    }
+  }, [currentSearchResult, title, dispatch, tabSection, expanded]);
 
   const style = { display: !isAllActiveDisplayed ? 'none' : '' };
   return (
@@ -58,7 +94,7 @@ const Section = ({ sectionId, title, tabId }) => {
                   searchWords={[
                     `${
                       currentSearchResult !== null &&
-                      currentSearchResult.searchIndex === sectionId &&
+                      currentSearchResult.searchIndex === title &&
                       query !== null
                         ? query
                         : ''
