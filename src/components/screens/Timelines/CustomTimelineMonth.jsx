@@ -95,34 +95,12 @@ class MonthView extends React.Component {
     if (!startDate || !endDate) return [new Date()];
     const dates = [];
 
-    let currentDate = new Date(startDate);
+    const currentDate = new Date(startDate);
     while (currentDate <= endDate) {
       dates.push(new Date(currentDate));
       currentDate.setDate(currentDate.getDate() + 1);
     }
     return dates;
-  };
-
-  getWeeks = () => {
-    const days = [];
-    const week = [];
-
-    const startOfMonth = moment(new Date(2022, 11, 18));
-
-    const endOfMonth = moment(new Date(2023, 0, 14));
-
-    let currentDay = startOfMonth;
-    let curentWeek = [];
-    while (currentDay <= endOfMonth) {
-      days.push(currentDay.toDate()._d);
-      curentWeek.push(currentDay.toDate());
-      if (curentWeek.length === 7) {
-        week.push(currentDay.toDate());
-        curentWeek = [];
-      }
-      currentDay = currentDay.clone().add(1, 'day');
-    }
-    return week;
   };
 
   handleDateRangeChange = value => {
@@ -169,29 +147,30 @@ class MonthView extends React.Component {
               onChange={value => {
                 this.handleDateRangeChange(value);
               }}
-              placeholder="mm/dd/yyyy"
+              placeholder="DD-MMM-YY"
+              dateFormat="DD-MMM-YY"
               helperText=""
-              startLabel="Start Week"
-              endLabel="End Week"
+              startLabel="Start"
+              endLabel="End"
             />
           </div>
+          <div className="month-range-label">{`${moment(
+            this.props.timelineDateRange[0]
+          ).format('MMMM')} - ${moment(this.props.timelineDateRange[1]).format(
+            'MMMM YY'
+          )}`}</div>
           <div>
             <Button
               variant="primary"
               icon={<PlusIcon />}
               size="small"
-              style={{ marginRight: 10, marginBottom: 10 }}
+              style={{ marginRight: 0, marginBottom: 10 }}
               onClick={() => this.props.setShowAddModal(true)}
               disabled={!this.props.selectedBid.isCurrent}
             >
               Add New
             </Button>
           </div>
-          <div className="month-range-label">{`${moment(
-            this.props.timelineDateRange[0]
-          ).format('MMM DD')} - ${moment(
-            this.props.timelineDateRange[1]
-          ).format('MMM DD')}`}</div>
         </div>
         <div
           className={clsx('rbc-month-view custom-time', className)}
