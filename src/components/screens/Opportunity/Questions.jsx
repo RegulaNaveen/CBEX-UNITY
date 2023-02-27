@@ -570,6 +570,7 @@ class Questions extends Component {
               <div className="N/A na-toggle-switch">
                 <span style={{ padding: '10px' }}>Mark N/A</span>
                 <Switch
+                  data-testid="mark-na-btn"
                   style={{ marginRight: '-2px' }}
                   checked={showNaCheckbox}
                   onChange={this.handleOnChangeNaSwitch}
