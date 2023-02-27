@@ -43,6 +43,11 @@ const responsibleFilter: Boolean = question => {
     Array.isArray(question.roleNames) && question.roleNames.includes(userRole)
   );
 };
+
+const milestoneFilters: Boolean = (question, filter) => {
+  return filter.some(v => v.displayName === question.milestone);
+};
+
 const informedFilter: Boolean = question => {
   const userRole = localStorage.getItem('userRole') || '';
   if (question.interestedParties) {
@@ -58,6 +63,7 @@ const informedFilter: Boolean = question => {
 export const shouldShowQuestion = (question = {}, unityTabfilters): Boolean => {
   try {
     const filterAnswers = [];
+    const alltabFilter = unityTabfilters;
     const appliedFilters = unityTabfilters
       .filter(i => i.value)
       .map(i => i.name);
@@ -86,6 +92,17 @@ export const shouldShowQuestion = (question = {}, unityTabfilters): Boolean => {
           filterAnswers.push(unansweredFilter(question));
         }
       }
+      const milestonefilter = alltabFilter.filter(
+        v => v.value === true && v.group === 'milestone'
+      );
+      // console.log(`milestonefilter`, milestonefilter);
+
+      if (milestonefilter && milestonefilter.length > 0) {
+        for (let index = 0; index < milestonefilter.length; index += 1) {
+          filterAnswers.push(milestoneFilters(question, milestonefilter));
+        }
+      }
+      // console.log(`filterAnswers`, filterAnswers);
     }
     return filterAnswers.length > 0 && filterAnswers.every(i => i === true);
   } catch (error) {
@@ -99,12 +116,12 @@ export const shouldShowSection = (sectionId, tabId) => {
     const state = store.getState();
     const tab = state.unitytab.allTabs[tabId];
     const unityFilters = state.unitytab.filters;
-    const proposalQuestions = state.proposal.get('proposalQuestions');
     const unityTabSection =
       tab.find(i => i.UnityTabSectionId === sectionId) || {};
     const leftQuestions = unityTabSection.UnityTabSectionQuestions || [];
     const questionIds = leftQuestions;
     const visibilityArr = [];
+    const proposalQuestions = state.proposal.get('proposalQuestions');
     questionIds.forEach(questionId => {
       const questionObj =
         proposalQuestions.find(i => i.questionId === questionId) || {};
@@ -114,6 +131,31 @@ export const shouldShowSection = (sectionId, tabId) => {
     const returnValue =
       visibilityArr.length > 0 && visibilityArr.some(i => i === true);
     return returnValue;
+  } catch (error) {
+    console.error(error);
+    return true;
+  }
+};
+
+export const checkTabRender = (question, OT) => {
+  try {
+    const state = store.getState();
+    const proposalQuestions = state.proposal.get('proposalQuestions');
+    const arr = [];
+    if (question && question.length > 0) {
+      question.forEach(questionId => {
+        const questionObj =
+          proposalQuestions.find(i => i.questionId === questionId) || {};
+        if (
+          questionObj.active &&
+          questionObj.visible &&
+          questionObj.opportunityType.split(',').includes(OT)
+        ) {
+          arr.push(true);
+        }
+      });
+    }
+    return arr.some(v => v === true);
   } catch (error) {
     console.error(error);
     return true;
