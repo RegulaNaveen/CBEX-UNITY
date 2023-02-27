@@ -157,7 +157,7 @@ class MonthView extends React.Component {
           <div className="month-range-label">{`${moment(
             this.props.timelineDateRange[0]
           ).format('MMMM')} - ${moment(this.props.timelineDateRange[1]).format(
-            'MMMM YY'
+            'MMMM YYYY'
           )}`}</div>
           <div>
             <Button
