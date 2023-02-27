@@ -218,7 +218,7 @@ class Questions extends Component {
 
     // Resize Observer Matomo event for Notepad component
     this.resizeObserver = new ResizeObserver(
-      throttle((entries) => {
+      throttle(entries => {
         const matamoObj = createMatomoObj(
           proposalDetail,
           userEmail,
@@ -284,7 +284,7 @@ class Questions extends Component {
     applyQuestionsFilter(filterName, checked, groupName);
   }
 
-  scrollToSelectedElement = (title) => {
+  scrollToSelectedElement = title => {
     setTimeout(() => {
       const item = document.getElementById(
         `notepad-${String(title).toLocaleLowerCase()}`
@@ -304,11 +304,11 @@ class Questions extends Component {
     );
   };
 
-  onAddQuestion = (value) => {
+  onAddQuestion = value => {
     this.setState({ currentsection: value, showModal: true });
   };
 
-  trackMatomoEventForCheckBoxes = (item) => {
+  trackMatomoEventForCheckBoxes = item => {
     const {
       userActions,
       eventCategories,
@@ -342,7 +342,7 @@ class Questions extends Component {
     });
   };
 
-  trackMatomoEventSidebarToggle = (action) => {
+  trackMatomoEventSidebarToggle = action => {
     const openOrclose = action ? 'Open' : 'Close';
     const { userActions } = this.props;
     this.trackMatomoEvent({
@@ -360,7 +360,7 @@ class Questions extends Component {
     this.trackMatomoEventSidebarToggle(!isOpen);
   };
 
-  trackMatomoEventToggleQModal = (action) => {
+  trackMatomoEventToggleQModal = action => {
     const openOrclose = action ? 'Open' : 'Close';
     const {
       userActions,
@@ -401,7 +401,7 @@ class Questions extends Component {
 
   getProposalInfoUpdated = () => {
     const { getProposalInfoUpdated, getBidList } = this.props;
-    const currentbid = getBidList.filter((v) => v.isCurrent === true);
+    const currentbid = getBidList.filter(v => v.isCurrent === true);
     getProposalInfoUpdated(currentbid[0].bidId);
     this.trackMatomoEventRefreshInfo();
   };
@@ -431,7 +431,7 @@ class Questions extends Component {
 
     let question = allSections
       .valueSeq()
-      .find((section) => section.getIn(['questions', selectedAnswer]))
+      .find(section => section.getIn(['questions', selectedAnswer]))
       .getIn(['questions', selectedAnswer]);
 
     const answerConfigType = question
@@ -451,7 +451,7 @@ class Questions extends Component {
 
       if (questionId) newAnswers = newAnswers.getIn(['answers', 'answers']);
       if (newAnswers) {
-        newAnswers = newAnswers.map((ans) => {
+        newAnswers = newAnswers.map(ans => {
           const newAns = getCountriesNameForCode(ans.get('answer', List()));
           return ans.set('answer', newAns);
         });
@@ -469,7 +469,7 @@ class Questions extends Component {
     this.setState({ isNotepadOpen: value });
   };
 
-  expandsection = (e) => {
+  expandsection = e => {
     const { expandAllSections } = this.props;
     expandAllSections(false);
     this.setState({ sidebarscroll: e });
@@ -500,7 +500,7 @@ class Questions extends Component {
               <Grid container spacing={2} key={groupName} className={groupName}>
                 {group
                   .entrySeq()
-                  .filter((value) => value[0] !== 'logic')
+                  .filter(value => value[0] !== 'logic')
                   .map(([key, filter]) => (
                     <Grid
                       item
@@ -656,6 +656,7 @@ class Questions extends Component {
                     }
                     setTabFromQuestionNotes={this.setTabFromQuestionNotes}
                     onAddQuestion={this.onAddQuestion}
+                    onExpandDone={() => this.expandsection(null)}
                   />
                 </QuestionsRefContext.Provider>
               </Suspense>
@@ -667,11 +668,11 @@ class Questions extends Component {
             data-testid="sidebar-test"
             sections={allSections}
             id={selectedBid.get('id')}
-            onAddQuestion={(value) => {
+            onAddQuestion={value => {
               this.setState({ currentsection: value });
             }}
-            onscrollelement={(e) => this.expandsection(e)}
-            expandAll={(e) => {
+            onscrollelement={e => this.expandsection(e)}
+            expandAll={e => {
               this.setState({ sidebarscroll: '' }, () => {
                 this.handleIsCheckedAll();
               });

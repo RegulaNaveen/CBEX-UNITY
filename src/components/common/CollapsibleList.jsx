@@ -159,7 +159,12 @@ class CollapsibleList extends Component<Props, State> {
 
   handleCollapse = () => {
     const { isCollapsed } = this.state;
-    const { title, selectedSection, changeSelectedSection } = this.props;
+    const {
+      title,
+      selectedSection,
+      changeSelectedSection,
+      onExpandDone
+    } = this.props;
     this.trackMatomoEventBladeToggle(!isCollapsed);
     const titleId = title
       .toLocaleLowerCase()
@@ -167,6 +172,7 @@ class CollapsibleList extends Component<Props, State> {
       .join('-');
     if (titleId === selectedSection) {
       changeSelectedSection(null);
+      onExpandDone();
     }
     this.setState({ isCollapsed: !isCollapsed });
   };

@@ -25,15 +25,15 @@ const CustomComponents = {
       flex: 1,
       border: `${
         BidCreationDateAnnotation || BidDueDateAnnotation
-          ? '3px solid #A9A9A9'
+          ? '1px solid #A9A9A9'
           : ''
       }`,
       borderLeft: `${
         BidCreationDateAnnotation || BidDueDateAnnotation
-          ? '3px solid #A9A9A9'
+          ? '1px solid #A9A9A9'
           : '1px solid #DDD'
       }`,
-      backgroundColor: `${isPastDate ? '#F6F7FB ' : '#fff'}`
+      backgroundColor: `${isPastDate ? '#F2F2F2' : '#fff'}`
     };
 
     return (
@@ -46,7 +46,8 @@ const CustomComponents = {
               fontSize: '16px',
               fontWeight: 600,
               alignSelf: 'flex-end',
-              justifyContent: 'center'
+              justifyContent: 'flex-end',
+              textAlign: 'center'
             }}
           >
             Bid Created
@@ -60,7 +61,8 @@ const CustomComponents = {
               fontSize: '16px',
               fontWeight: 600,
               alignSelf: 'flex-end',
-              justifyContent: 'center'
+              justifyContent: 'flex-end',
+              textAlign: 'center'
             }}
           >
             Bid Due
