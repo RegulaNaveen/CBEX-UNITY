@@ -23,7 +23,8 @@ const QuestionsSectionMapping = ({
   isNotepadOpen,
   setQuestionToDisplayHistory,
   setTabFromQuestionNotes,
-  onAddQuestion
+  onAddQuestion,
+  onExpandDone
 }) => {
   const socketContext = useContext(SocketContext);
   const [allSections, setAllSections] = useState(new OrderedMap([]));
@@ -33,7 +34,7 @@ const QuestionsSectionMapping = ({
   const sectionsData = isQuestionsFiltersEnabled ? filteredSections : sections;
 
   const bidId = useSelector(
-    (state) => state.proposal.get('selectedBid').toJS().id
+    state => state.proposal.get('selectedBid').toJS().id
   );
 
   // Reset Lazy onUpdate allSectionsExpanded
@@ -55,12 +56,12 @@ const QuestionsSectionMapping = ({
 
   // Get filtered Sections logic
   const getFilteredSections = useMemo(() => {
-    return sectionsData.valueSeq().filter((section) => {
+    return sectionsData.valueSeq().filter(section => {
       const questions = section.get('questions');
       return questions
         .valueSeq()
         .map(
-          (question) =>
+          question =>
             question.get('visible', true) &&
             (question.get('active', true) ||
               question.get('isCustomQuestion', true))
@@ -82,9 +83,9 @@ const QuestionsSectionMapping = ({
   /**
    * Get limited Section Data for Lazy Loading
    */
-  const onGrabData = (currentPage) => {
+  const onGrabData = currentPage => {
     setResetLazy(false);
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       setTimeout(() => {
         const data = allSections
           .valueSeq()
@@ -120,7 +121,7 @@ const QuestionsSectionMapping = ({
     if (sectionName !== 'Proposal Team')
       return (
         <QuestionsRefContext.Consumer key={sectionName}>
-          {(questionsRef) => (
+          {questionsRef => (
             <CollapsibleList
               data-testid="question-section-test-id"
               questions={questions}
@@ -130,7 +131,7 @@ const QuestionsSectionMapping = ({
               setTabFromQuestionNotes={(val, title, flag) =>
                 setTabFromQuestionNotes(val, title, flag)
               }
-              onAddQuestion={(value) => onAddQuestion(value)}
+              onAddQuestion={value => onAddQuestion(value)}
               isCheckedAll={
                 sidebarscroll &&
                 sidebarscroll.length &&
@@ -143,6 +144,7 @@ const QuestionsSectionMapping = ({
               isNotepadOpen={isNotepadOpen}
               listIndex={indx}
               questionsRef={questionsRef}
+              onExpandDone={onExpandDone}
             />
           )}
         </QuestionsRefContext.Consumer>
