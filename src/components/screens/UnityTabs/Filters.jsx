@@ -1,11 +1,13 @@
-import React from 'react';
+/* eslint-disable no-restricted-syntax */
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'apollo-react/components/Link';
 import Grid from 'apollo-react/components/Grid';
 import ApolloCheckbox from 'apollo-react/components/Checkbox';
 import {
   resetFiltersAction,
-  updateFilters
+  updateFilters,
+  updateNewFilters
 } from '../../../redux/actions/unitytab-action';
 
 const Filters = props => {
@@ -19,7 +21,6 @@ const Filters = props => {
   const clearAllFilters = () => {
     dispatch(resetFiltersAction());
   };
-
   return (
     <div className="questions-filter__container">
       <div className="questions-filter__grid column_style">
