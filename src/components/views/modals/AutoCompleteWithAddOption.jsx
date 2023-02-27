@@ -103,13 +103,15 @@ const AutoCompleteWithAddOption = ({
    * setCurrentLov onUpdate answer state
    */
   useEffect(() => {
-    setSelectedVal(getAnswer());
-    if (isEmpty(selectedVal)) {
+    let newSelectedValue = getAnswer();
+    setSelectedVal(newSelectedValue);
+    setModAnswer(newSelectedValue);
+    if (isEmpty(newSelectedValue)) {
       setClearable(true);
     }
     const currentOptions = [...getOptions()];
     const newOptions = currentOptions.filter(
-      el => selectedVal.indexOf(el) === -1
+      el => newSelectedValue.indexOf(el) === -1
     );
     setCurrentLov(newOptions);
   }, [answer]);
@@ -212,28 +214,23 @@ const AutoCompleteWithAddOption = ({
         freeSolo
         disableCloseOnSelect={multiple}
         value={selectedVal}
-        renderTags={(value, getTagProps) =>
-          <div
-            className='autocomplete-multiline-chip'
-          >
+        renderTags={(value, getTagProps) => (
+          <div className="autocomplete-multiline-chip">
             {value.map((option, index) => (
-              <div
-                className='autocomplete-chip'
-                key={index}
-              >
+              <div className="autocomplete-chip" key={index}>
                 <Chip
                   label={
-                    <Typography style={{ whiteSpace: "normal" }}>
+                    <Typography style={{ whiteSpace: 'normal' }}>
                       {option}
                     </Typography>
                   }
                   {...getTagProps({ index })}
-                  style={{ height: "100%" }}
+                  style={{ height: '100%' }}
                 />
               </div>
             ))}
           </div>
-        }
+        )}
         renderInput={params => {
           return (
             <TextField
