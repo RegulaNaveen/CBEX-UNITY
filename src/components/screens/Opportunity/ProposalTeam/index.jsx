@@ -51,9 +51,12 @@ function ProposalTeam() {
   // eslint-disable-next-line no-unused-expressions
   !isEmpty(proposalTeam[0]) &&
     Object.keys(proposalTeam[0]?.questions).map(item => {
+      console.log(
+        'proposalTeam[0].questions[item].questionLock',
+        proposalTeam[0].questions[item].questionLockInfo
+      );
       questionData = fromJS(proposalTeam[0].questions[item]);
       const { proposalId } = proposalTeam[0].questions[item];
-      console.log(proposalId, 'pid');
       const { proposalDetail } = proposalTeam[0];
       const proposalTeamData = proposalTeam[0].questions[item];
       const isNotApplicable = proposalTeamData?.notApplicable;
@@ -71,7 +74,7 @@ function ProposalTeam() {
         const answerConfiguration = fromJS(
           proposalTeamData?.answerConfiguration
         );
-        const roleNames = proposalTeamData?.roleNames;
+        const roleNames = fromJS(proposalTeamData?.roleNames);
         if (milestoneNew && !isEmpty(milestoneNew)) {
           milestoneCond = true;
         }
@@ -86,10 +89,12 @@ function ProposalTeam() {
         const questionHintJSON = proposalTeamData?.questionHintJSON;
         const questionHTML = proposalTeamData?.questionHTML;
         const sectionName = section?.sectionName;
+        const qvidianIntegration = proposalTeamData?.integration;
         const events = proposalTeamData?.events || {};
         const questionJSON = proposalTeamData?.questionJSON;
         const isCustomQuestion = proposalTeamData?.isCustomQuestion;
-        const questionLockInfo = fromJS(proposalTeamData?.questionLockInfo);
+        const questionLockInfo = fromJS(proposalTeam[0].questions[item]);
+        const hasDifferentSFanswer = proposalTeamData?.hasDifferentSFanswer;
         const visible =
           proposalTeamData?.visible &&
           (proposalTeamData?.active || proposalTeamData?.isCustomQuestion) &&
@@ -98,6 +103,7 @@ function ProposalTeam() {
         wholeData.push({
           questionId: questionId,
           proposalId: proposalId,
+          qvidianIntegration: qvidianIntegration,
           proposalDetail: proposalDetail,
           isNotApplicable: isNotApplicable,
           milestoneCond: milestoneCond,
@@ -127,7 +133,8 @@ function ProposalTeam() {
           answerConfiguration: answerConfiguration,
           roleNames: roleNames,
           questionLockInfo: questionLockInfo,
-          visible: visible
+          visible: visible,
+          hasDifferentSFanswer: hasDifferentSFanswer
         });
       }
     });
@@ -182,7 +189,7 @@ function ProposalTeam() {
         })}
       >
         {wholeData?.map(items => {
-          console.log('proposalId', items.proposalId);
+          console.log(items.questionId, 'qid');
           return (
             (items.visible || typeof items.visible === 'undefined') && (
               <Question
@@ -220,6 +227,8 @@ function ProposalTeam() {
                 roleNames={items.roleNames}
                 visible={items.visible}
                 setQuestionToDisplayHistory={setQuestionToDisplayHistory}
+                hasDifferentSFanswer={items.hasDifferentSFanswer}
+                qvidianIntegration={items.qvidianIntegration}
               />
             )
           );

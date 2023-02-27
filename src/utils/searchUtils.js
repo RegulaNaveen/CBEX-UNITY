@@ -212,6 +212,17 @@ export function searchInTab({
                 tabName
               });
             }
+            if (question['questionText'] && sectionKey === 'Proposal Team') {
+              updateSearchMatches({
+                regexp,
+                inputText: question['questionText'],
+                index: questionKey,
+                finalResult,
+                tab: null,
+                vTab: 2,
+                tabName
+              });
+            }
             // searching in answer
             if (
               Array.isArray(question.answers) &&
