@@ -247,8 +247,8 @@ export function searchInTab({
                       inputText: answerChunk,
                       index: questionKey,
                       finalResult,
-                      tab: tabIndex,
-                      vTab: null,
+                      tab: null,
+                      vTab: 2,
                       tabName
                     });
                   });
@@ -258,8 +258,8 @@ export function searchInTab({
                     inputText: recentAnswer,
                     index: questionKey,
                     finalResult,
-                    tab: tabIndex,
-                    vTab: null,
+                    tab: null,
+                    vTab: 2,
                     tabName
                   });
                 }
