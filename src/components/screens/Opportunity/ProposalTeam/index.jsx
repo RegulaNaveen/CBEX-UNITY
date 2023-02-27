@@ -6,17 +6,21 @@ import Link from 'apollo-react/components/Link';
 import Plus from 'apollo-react-icons/Plus';
 import { isEmpty, xor, isString, has, isObject } from 'lodash';
 import { List, fromJS } from 'immutable';
+import classNames from 'classnames';
 import AddQuestionModalComponent from '../../../views/modals/AddQuestionModal';
 import AnswerInput from './AnswerInput';
+import Question from '../../../common/Question';
 import {
   selectSections,
   selectFilteredSections,
   selectIsQuestionsFilterEnabled,
   isSetQuestionLoading,
-  getSelectedBid
+  getSelectedBid,
+  getShowNaCheckbox
 } from '../../../../redux/selectors';
+import AnswerHistory from '../../../views/modals/AnswerHistory';
 
-const CustomModal = (props) => {
+const CustomModal = props => {
   const modalRoot = document.getElementById('modal-wrapper');
   return ReactDOM.createPortal(props.children, modalRoot);
 };
@@ -30,20 +34,29 @@ function ProposalTeam() {
   const filteredSections = useSelector(selectFilteredSections);
   const sections = useSelector(selectSections);
   const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
+  const showNaCheckbox = useSelector(state => getShowNaCheckbox(state));
+  const [selectedQuestionForHistory, setSelectedQuestionForHistory] = useState(
+    ''
+  );
+  const [isHistoryModalShown, setIsHistoryModalShown] = useState(false);
   const proposalTeam = [];
   let questionData;
   const wholeData = [];
 
-  allSections.map((item) => {
+  allSections.map(item => {
     if (item.get('sectionName') === 'Proposal Team') {
       proposalTeam.push(item.toJS());
     }
   });
   // eslint-disable-next-line no-unused-expressions
   !isEmpty(proposalTeam[0]) &&
-    Object.keys(proposalTeam[0]?.questions).map((item) => {
-      questionData = proposalTeam[0].questions[item];
-      const { proposalId } = questionData;
+    Object.keys(proposalTeam[0]?.questions).map(item => {
+      console.log(
+        'proposalTeam[0].questions[item].questionLock',
+        proposalTeam[0].questions[item].questionLockInfo
+      );
+      questionData = fromJS(proposalTeam[0].questions[item]);
+      const { proposalId } = proposalTeam[0].questions[item];
       const { proposalDetail } = proposalTeam[0];
       const proposalTeamData = proposalTeam[0].questions[item];
       const isNotApplicable = proposalTeamData?.notApplicable;
@@ -58,8 +71,10 @@ function ProposalTeam() {
         const milestone = fromJS(proposalTeamData?.milestone);
         const milestoneNew = fromJS(proposalTeamData?.milestoneNew);
         const lastAns = isString(lastAnswer) ? lastAnswer : '';
-        const answerConfiguration = proposalTeamData?.answerConfiguration;
-        const roleNames = proposalTeamData?.roleNames;
+        const answerConfiguration = fromJS(
+          proposalTeamData?.answerConfiguration
+        );
+        const roleNames = fromJS(proposalTeamData?.roleNames);
         if (milestoneNew && !isEmpty(milestoneNew)) {
           milestoneCond = true;
         }
@@ -74,10 +89,12 @@ function ProposalTeam() {
         const questionHintJSON = proposalTeamData?.questionHintJSON;
         const questionHTML = proposalTeamData?.questionHTML;
         const sectionName = section?.sectionName;
+        const qvidianIntegration = proposalTeamData?.integration;
         const events = proposalTeamData?.events || {};
         const questionJSON = proposalTeamData?.questionJSON;
         const isCustomQuestion = proposalTeamData?.isCustomQuestion;
-        const questionLockInfo = proposalTeamData?.questionLockInfo;
+        const questionLockInfo = fromJS(proposalTeam[0].questions[item]);
+        const hasDifferentSFanswer = proposalTeamData?.hasDifferentSFanswer;
         const visible =
           proposalTeamData?.visible &&
           (proposalTeamData?.active || proposalTeamData?.isCustomQuestion) &&
@@ -86,6 +103,7 @@ function ProposalTeam() {
         wholeData.push({
           questionId: questionId,
           proposalId: proposalId,
+          qvidianIntegration: qvidianIntegration,
           proposalDetail: proposalDetail,
           isNotApplicable: isNotApplicable,
           milestoneCond: milestoneCond,
@@ -115,13 +133,14 @@ function ProposalTeam() {
           answerConfiguration: answerConfiguration,
           roleNames: roleNames,
           questionLockInfo: questionLockInfo,
-          visible: visible
+          visible: visible,
+          hasDifferentSFanswer: hasDifferentSFanswer
         });
       }
     });
 
   useEffect(() => {
-    allSections.map((items) => {
+    allSections.map(items => {
       if (items.get('sectionName') === 'Proposal Team') {
         proposalTeam.push(items.toJS());
       }
@@ -134,8 +153,21 @@ function ProposalTeam() {
     }
   }, [isSetQuestionLoadingData]);
 
+  const setQuestionToDisplayHistory = (selectedAnswer: string) => {
+    const questionHistory = allSections
+      .valueSeq()
+      .find(sections => sections.getIn(['questions', selectedAnswer]))
+      .getIn(['questions', selectedAnswer]);
+    setSelectedQuestionForHistory(questionHistory);
+    setIsHistoryModalShown(true);
+  };
+
+  const closeAnswerHistoryModal = () => {
+    setIsHistoryModalShown(false);
+  };
+
   const onCloseAddModal = () => {
-    setShowModal((prev) => !prev);
+    setShowModal(prev => !prev);
   };
   return (
     <div id="proposal-team-left-section">
@@ -151,11 +183,16 @@ function ProposalTeam() {
         Team
       </Typography>
       <hr className="divider-hr-proposal-team" />
-      <div className="proposal-team-wrapper-container">
-        {wholeData?.map((items) => {
+      <div
+        className={classNames('proposal-team-wrapper-container', {
+          'padding-Na': showNaCheckbox
+        })}
+      >
+        {wholeData?.map(items => {
+          console.log(items.questionId, 'qid');
           return (
             (items.visible || typeof items.visible === 'undefined') && (
-              <AnswerInput
+              <Question
                 key={items.questionId}
                 proposalId={items.proposalId}
                 questionId={items.questionId}
@@ -189,6 +226,9 @@ function ProposalTeam() {
                 questionLockInfo={items.questionLockInfo}
                 roleNames={items.roleNames}
                 visible={items.visible}
+                setQuestionToDisplayHistory={setQuestionToDisplayHistory}
+                hasDifferentSFanswer={items.hasDifferentSFanswer}
+                qvidianIntegration={items.qvidianIntegration}
               />
             )
           );
@@ -211,6 +251,14 @@ function ProposalTeam() {
           <AddQuestionModalComponent
             onClose={onCloseAddModal}
             currentsection={'Proposal Team' || ''}
+          />
+        </CustomModal>
+      )}
+      {isHistoryModalShown && (
+        <CustomModal>
+          <AnswerHistory
+            question={selectedQuestionForHistory}
+            closeModal={closeAnswerHistoryModal}
           />
         </CustomModal>
       )}
