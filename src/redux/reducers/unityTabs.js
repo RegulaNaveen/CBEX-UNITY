@@ -36,7 +36,7 @@ const INITIAL_STATE = {
 const setUnityTab = (state, action) => {
   const { payload } = action;
   const data = _.groupBy(payload, 'TabID');
-  console.log(`data`, data);
+  // console.log(`data`, data);
   return {
     ...state,
     fetching: false,
@@ -59,12 +59,21 @@ const resetFilters = (state, action) => {
     filters: INITIAL_STATE.filters
   };
 };
+const addNewFilter = (state, action) => {
+  const { payload } = action;
+
+  return {
+    ...state,
+    filters: [...state.filters, ...payload]
+  };
+};
 
 const actionMap = {
   [UNITY_TABS.FETCH_UNITY_TABS]: state => ({ ...state, fetching: true }),
   [UNITY_TABS.SET_UNITY_TABS]: setUnityTab,
   [UNITY_TABS.UPDATE_FILTERS]: updateFilter,
-  [UNITY_TABS.RESET_FILTERS]: resetFilters
+  [UNITY_TABS.RESET_FILTERS]: resetFilters,
+  [UNITY_TABS.UPDATE_NEW_FILTER]: addNewFilter
 };
 
 export default function(state = INITIAL_STATE, action) {

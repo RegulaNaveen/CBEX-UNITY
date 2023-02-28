@@ -1287,17 +1287,18 @@ export const changeBid = bid => {
       type: UNITY_TABS.SET_UNITY_TABS,
       payload: []
     });
+    dispatch({ type: UNITY_TABS.RESET_FILTERS });
     const response = await axios.get(`${PROPOSAL_API_URL}/${bid.bidId}`);
-    dispatch({
-      type: UNITY_TABS.SET_UNITY_TABS,
-      payload: response?.data.proposal?.customUnityTabs || []
-    });
     dispatch({
       type: CHANGE_BID,
       payload: {
         proposalDetails: { ...response.data, isCurrent: bid.isCurrent },
         bid
       }
+    });
+    dispatch({
+      type: UNITY_TABS.SET_UNITY_TABS,
+      payload: response?.data.proposal?.customUnityTabs || []
     });
   };
 };

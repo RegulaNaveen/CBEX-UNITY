@@ -36,8 +36,7 @@ import SFAnswerValidationWrapper from '../../common/SFAnswerValidationWrapper';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import {
   getOpportunityData,
-  getSelectedBid,
-  getUnityTabQuestionLoading
+  getSelectedBid
 } from '../../../redux/selectors/proposal';
 import { getIntegrations, getQuestion } from '../../../redux/selectors';
 // import CustomLoader from './CustomLoader';
@@ -47,6 +46,8 @@ import { selectCurrentSearchResult } from '../../../redux/selectors/search';
 import ChipView from '../../common/Chip/ChipView';
 import { parseMomentDate } from '../../../utils/DateUtils';
 import SystemIntegrations from '../../common/SystemIntegrations/SystemIntegrations';
+import CustomLoader from './CustomLoader';
+import EventLauncher from '../Opportunity/EventLauncher';
 
 const QuestionItem = ({
   questionId = '',
@@ -65,34 +66,30 @@ const QuestionItem = ({
   const unityTabFilters = useSelector(state => state.unitytab.filters);
   const isShowQuestion = shouldShowQuestion(question, unityTabFilters);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
-  const unityTabQuestionLoading = useSelector(
-    getUnityTabQuestionLoading
-  ).toJS();
-  const [loading, setLoading] = useState(false);
   const [screenSize, setScreen] = useState('');
   const [iconColor, seticonColor] = useState('#00c221');
   const [changeIcon, setchangeIcon] = useState('');
   const questionTextRef = useRef(null);
-  const dispatch = useDispatch();
   const questionTextRef2 = useRef(null);
 
   useEffect(() => {
-    setLoading(unityTabQuestionLoading?.questionId === questionId);
-  }, [unityTabQuestionLoading]);
-  // useEffect(() => {
-  //   if (currentSearchResult !== null && questionTextRef.current !== null) {
-  //     if (currentSearchResult.searchIndex === highlightQuestionId) {
-  //       setTimeout(() => {
-  //         questionTextRef.current.scrollIntoView({
-  //           behaviour: 'smooth',
-  //           block: 'center',
-  //           inline: 'nearest'
-  //         });
-  //         dispatch(autoNavigationCompletedAction());
-  //       }, 500);
-  //     }
-  //   }
-  // }, [questionTextRef.current, currentSearchResult, highlightQuestionId]);
+    updateQuestionVisibility(questionId, isShowQuestion);
+  }, [unityTabFilters]);
+
+  useEffect(() => {
+    if (currentSearchResult !== null && questionTextRef.current !== null) {
+      if (currentSearchResult.searchIndex === questionId) {
+        setTimeout(() => {
+          questionTextRef.current.scrollIntoView({
+            behaviour: 'smooth',
+            block: 'center',
+            inline: 'nearest'
+          });
+          dispatch(autoNavigationCompletedAction());
+        }, 500);
+      }
+    }
+  }, [questionTextRef.current, currentSearchResult, questionId]);
 
   const resize = () => {
     setScreen(window.innerWidth);
@@ -106,8 +103,6 @@ const QuestionItem = ({
     };
   }, []);
 
-  useEffect(() => {}, [unityTabQuestionLoading]);
-
   // Component will return null in case of empty question value
   if (isEmpty(question)) return null;
 
@@ -116,9 +111,9 @@ const QuestionItem = ({
 
   const selectedBid = useSelector(getSelectedBid);
   const allOppData = useSelector(getOpportunityData)?.toJS();
-  const proposalId = selectedBid?.id;
+  const proposalId = selectedBid?.toJS()?.id;
   const opportunityData = allOppData[proposalId];
-
+  const proposalDetail = opportunityData?.proposal?.proposalDetails;
   const getUserData = () => ({
     name: getUserName(),
     email: getUserEmail(),
@@ -454,7 +449,7 @@ const QuestionItem = ({
         isAnswered={(c, v) => isAnswered(c, v)}
         lastAnswer={lastAnswer}
         iconColor={iconColor}
-        loading={loading}
+        loading={false}
         NaLoading={false}
         showNaCheckbox={false}
         isNotepadOpen={false}
@@ -467,17 +462,26 @@ const QuestionItem = ({
       />
     );
   };
+
+  const trackMatomoEventLauncher = data => {
+    trackEvent({
+      category: eventCategories.pd(proposalDetail),
+      action: `Unity Tab: Event Launcher: ${question.questionText}`,
+      customDimensions: [question, data, proposalDetail]
+    });
+  };
   return useMemo(
     () =>
       isShowQuestion ? (
         <>
           <Box
             mt={2}
-            // className={classNames({
-            //   'question-active':
-            //     currentSearchResult !== null &&
-            //     currentSearchResult.searchIndex === highlightQuestionId
-            // })}
+            className={classNames({
+              'unity-tab-question-item': true,
+              'question-active':
+                currentSearchResult !== null &&
+                currentSearchResult.searchIndex === questionId
+            })}
           >
             <Grid container>
               <Grid
@@ -485,18 +489,32 @@ const QuestionItem = ({
                 xs={10}
                 className="ques-title-cover unity-tab-question"
               >
-                {!isEmpty(question?.questionLockInfo) &&
-                isQuestionLockedByOther() ? (
-                  <Typography variant="subtitle1" className="status-txt">
-                    {question.questionLockInfo?.userName} is typing...
-                  </Typography>
-                ) : null}
-                <span ref={questionTextRef}>
-                  <QuestionLabel questionLabel={question?.questionText || ''} />
-                </span>
-                <div className="unity-tab-action-item">
-                  {renderQuestionHint()}
-                  {renderTags()}
+                <div className="question-label-container">
+                  <div className="question-label-inner">
+                    <div ref={questionTextRef} className="question-title-txt">
+                      <QuestionLabel
+                        questionLabel={question?.questionText || ''}
+                      />
+                      {!isEmpty(question?.questionLockInfo) &&
+                      isQuestionLockedByOther() ? (
+                        <Typography variant="subtitle1" className="status-txt">
+                          {question.questionLockInfo?.userName} is typing...
+                        </Typography>
+                      ) : null}
+                    </div>
+                    {question.events && (
+                      <EventLauncher
+                        questionData={Map(question)}
+                        proposalDetail={proposalDetail}
+                        eventCategories={eventCategories}
+                        trackMatomoEventLauncher={c =>
+                          trackMatomoEventLauncher(c)
+                        }
+                      />
+                    )}
+                    <div className="question-hint">{renderQuestionHint()}</div>
+                  </div>
+                  <div className="milestone-chip">{renderTags()}</div>
                 </div>
               </Grid>
               <Grid item xs={2} />
@@ -504,20 +522,11 @@ const QuestionItem = ({
                 {renderQuestion()}
               </Grid>
               <Grid item xs={2} className="answer-actions">
-                {/* <div>
-                  <IconButton
-                    size="small"
-                    onClick={() => {
-                      setIsShowHistory(true);
-                    }}
-                  >
-                    <CalendarIcon question={question} />
-                  </IconButton>
-                </div> */}
-                <div>{SystemIcon()}</div>
-                {/* {!isQuesFreezed && (
-                  <CustomLoader questionId={question.questionId} />
-                )} */}
+                <div className="system-icon-custom-tab">
+                  {SystemIcon()}
+                  {<CustomLoader questionId={questionId} />}
+                </div>
+                {/* !isQuesFreezed && */}
               </Grid>
             </Grid>
           </Box>

@@ -27,6 +27,7 @@ const TextQuestion = ({
   checkDisableFlag
 }) => {
   const dispatch = useDispatch();
+  const quesTextInnerLeftRef = React.createRef();
   const answerValue = lastAnswer.answer || '';
   const formattedAnswer =
     has(lastAnswer, 'formattedAnswer') && lastAnswer.formattedAnswer;
@@ -117,17 +118,21 @@ const TextQuestion = ({
       } else {
         questionUnlockWrapper(question?.questionId);
       }
+      quesTextInnerLeftRef.current.style.marginTop = 'inherit';
     },
     onFocus: () => {
       questionLockWrapper(question?.questionId);
+      quesTextInnerLeftRef.current.style.marginTop = '25px';
     }
   };
 
   return (
-    <CustomApolloRichText
-      className="approval-text-question"
-      {...richtextProps}
-    />
+    <div ref={quesTextInnerLeftRef}>
+      <CustomApolloRichText
+        className="approval-text-question"
+        {...richtextProps}
+      />
+    </div>
   );
 };
 
