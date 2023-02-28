@@ -1287,6 +1287,7 @@ export const changeBid = bid => {
       type: UNITY_TABS.SET_UNITY_TABS,
       payload: []
     });
+    dispatch({ type: UNITY_TABS.RESET_FILTERS });
     const response = await axios.get(`${PROPOSAL_API_URL}/${bid.bidId}`);
     dispatch({
       type: CHANGE_BID,
