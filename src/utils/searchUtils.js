@@ -212,6 +212,17 @@ export function searchInTab({
                 tabName
               });
             }
+            if (question['questionText'] && sectionKey === 'Proposal Team') {
+              updateSearchMatches({
+                regexp,
+                inputText: question['questionText'],
+                index: questionKey,
+                finalResult,
+                tab: null,
+                vTab: 2,
+                tabName
+              });
+            }
             // searching in answer
             if (
               Array.isArray(question.answers) &&
@@ -247,8 +258,8 @@ export function searchInTab({
                       inputText: answerChunk,
                       index: questionKey,
                       finalResult,
-                      tab: tabIndex,
-                      vTab: null,
+                      tab: null,
+                      vTab: 2,
                       tabName
                     });
                   });
@@ -258,8 +269,8 @@ export function searchInTab({
                     inputText: recentAnswer,
                     index: questionKey,
                     finalResult,
-                    tab: tabIndex,
-                    vTab: null,
+                    tab: null,
+                    vTab: 2,
                     tabName
                   });
                 }

@@ -18,17 +18,17 @@
 
 #Timeline-main-wrapper {
   .month-range-label {
-    color: #0768fd;
     font-family: 'Proxima Nova';
     font-size: 16px;
     font-weight: 600;
 
-    text-align: center;
     margin-bottom: 10px;
   }
   .timeline-calender-rtl {
     display: grid;
-    grid-template-columns: 1fr 0.2fr 0.2fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-content: flex-start;
+    justify-items: center;
     align-items: end;
   }
   .rbc-event-continues-after {
@@ -56,7 +56,7 @@
     color: inherit;
   }
   .rbc-today {
-    background: #fff !important;
+    background: #fff;
   }
 
   .timeline-container {
@@ -167,5 +167,18 @@
     flex-direction: column;
     justify-content: flex-end;
     align-items: flex-end;
+  }
+
+  .rbc-button-link {
+    font-size: 16px !important;
+    font-family: 'ProximaNova-Regular';
+  }
+  .rbc-event-content {
+    font-size: 14px !important;
+    font-family: 'ProximaNova-Regular';
+  }
+  .rbc-header {
+    color: #7f7f7f;
+    font-family: 'ProximaNova-Regular';
   }
 }

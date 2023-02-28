@@ -95,7 +95,7 @@ class MonthView extends React.Component {
     if (!startDate || !endDate) return [new Date()];
     const dates = [];
 
-    let currentDate = new Date(startDate);
+    const currentDate = new Date(startDate);
     while (currentDate <= endDate) {
       dates.push(new Date(currentDate));
       currentDate.setDate(currentDate.getDate() + 1);
@@ -103,26 +103,18 @@ class MonthView extends React.Component {
     return dates;
   };
 
-  getWeeks = () => {
-    const days = [];
-    const week = [];
+  getDateHeadingLabel = date => {
+    const { localizer, timelineDateRange } = this.props;
 
-    const startOfMonth = moment(new Date(2022, 11, 18));
-
-    const endOfMonth = moment(new Date(2023, 0, 14));
-
-    let currentDay = startOfMonth;
-    let curentWeek = [];
-    while (currentDay <= endOfMonth) {
-      days.push(currentDay.toDate()._d);
-      curentWeek.push(currentDay.toDate());
-      if (curentWeek.length === 7) {
-        week.push(currentDay.toDate());
-        curentWeek = [];
-      }
-      currentDay = currentDay.clone().add(1, 'day');
+    if (
+      (localizer.format(date, 'D').toString() === '1' ||
+        localizer.isSameDate(date, new Date(timelineDateRange[0]?._d))) &&
+      !localizer.isSameDate(date, new Date())
+    ) {
+      return localizer.format(date, 'MMM D');
     }
-    return week;
+
+    return localizer.format(date, 'D');
   };
 
   handleDateRangeChange = value => {
@@ -161,7 +153,7 @@ class MonthView extends React.Component {
     return (
       <>
         <div className="timeline-calender-rtl">
-          <div>
+          <div style={{ justifySelf: 'flex-start' }}>
             <DateRangePicker
               size="small"
               value={timelineDateRange}
@@ -169,29 +161,41 @@ class MonthView extends React.Component {
               onChange={value => {
                 this.handleDateRangeChange(value);
               }}
-              placeholder="mm/dd/yyyy"
+              placeholder="DD-MMM-YY"
+              dateFormat="DD-MMM-YY"
               helperText=""
-              startLabel="Start Week"
-              endLabel="End Week"
+              startLabel="Start"
+              endLabel="End"
             />
           </div>
-          <div>
+          {moment(this.props.timelineDateRange[0])
+            .format('MMMM')
+            .toString() ===
+          moment(this.props.timelineDateRange[1])
+            .format('MMMM')
+            .toString() ? (
+            <div className="month-range-label">{`${moment(
+              this.props.timelineDateRange[1]
+            ).format('MMMM YYYY')}`}</div>
+          ) : (
+            <div className="month-range-label">{`${moment(
+              this.props.timelineDateRange[0]
+            ).format('MMMM')} - ${moment(
+              this.props.timelineDateRange[1]
+            ).format('MMMM YYYY')}`}</div>
+          )}
+          <div style={{ justifySelf: 'end' }}>
             <Button
               variant="primary"
               icon={<PlusIcon />}
               size="small"
-              style={{ marginRight: 10, marginBottom: 10 }}
+              style={{ marginRight: 0, marginBottom: 10 }}
               onClick={() => this.props.setShowAddModal(true)}
               disabled={!this.props.selectedBid.isCurrent}
             >
               Add New
             </Button>
           </div>
-          <div className="month-range-label">{`${moment(
-            this.props.timelineDateRange[0]
-          ).format('MMM DD')} - ${moment(
-            this.props.timelineDateRange[1]
-          ).format('MMM DD')}`}</div>
         </div>
         <div
           className={clsx('rbc-month-view custom-time', className)}
@@ -274,9 +278,8 @@ class MonthView extends React.Component {
     let isOffRange = localizer.neq(date, currentDate, 'month');
     let isCurrent = localizer.isSameDate(date, currentDate);
     let drilldownView = getDrilldownView(date);
-    let label = localizer.isSameDate(date, new Date())
-      ? localizer.format(date, 'dateFormat')
-      : localizer.format(date, 'MMM DD');
+    let label = this.getDateHeadingLabel(date);
+
     let DateHeaderComponent = this.props.components.dateHeader || DateHeader;
 
     return (
