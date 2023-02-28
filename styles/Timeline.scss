@@ -22,13 +22,13 @@
     font-size: 16px;
     font-weight: 600;
 
-    text-align: center;
     margin-bottom: 10px;
-    justify-self: center;
   }
   .timeline-calender-rtl {
     display: grid;
-    grid-template-columns: 0.1fr 1fr 0.1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-content: flex-start;
+    justify-items: center;
     align-items: end;
   }
   .rbc-event-continues-after {
