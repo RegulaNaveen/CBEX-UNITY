@@ -183,26 +183,36 @@ const UnityTab = ({
   const newTab = [];
   let len = tabs.length - 1;
   // eslint-disable-next-line no-restricted-syntax
-  for (const [key, value] of Object.entries(customTabs)) {
-    const response = calculateTab(value);
-    const tabID = value[0]?.UnityTabId;
-    const filterTitle = value.filter(v => v.UnityTabTitle);
-    if (filterTitle.length && response) {
-      const title = String(filterTitle[0]?.UnityTabTitle)
+  let orderedCustomTabs = Object.values(customTabs)
+    .filter(
+      sections => sections.filter(section => section['UnityTabTitle']).length
+    )
+    .sort(
+      (sectionsA, sectionsB) =>
+        sectionsA[0].UnityTabOrder - sectionsB[0].UnityTabOrder
+    );
+  orderedCustomTabs.forEach(customTabSections => {
+    const tabID = customTabSections[0]['UnityTabId'];
+    const questionCount = customTabSections.some(
+      v => v['UnityTabSectionQuestions'].length > 0
+    );
+    const filterTitle = customTabSections.filter(v => v['UnityTabTitle']);
+    if (filterTitle.length && questionCount) {
+      const title = String(filterTitle[0]['UnityTabTitle'])
         .trim()
         .toLowerCase();
-      const tabpath = String(value[0]?.UnityTabTitle)
+      const tabpath = String(customTabSections[0]['UnityTabTitle'])
         .replace(' ', '_')
         .trim()
         .toLowerCase();
       newTab.push({
-        label: filterTitle[0]?.UnityTabTitle,
+        label: customTabSections[0]['UnityTabTitle'],
         value: len++,
         component: <CustomTabs tabId={tabID} key={title} />,
         path: tabpath
       });
     }
-  }
+  });
   useEffect(() => {
     if (newTab && Object.keys(newTab)?.length > 0 && !tabloaded) {
       setTabs([...tabs, ...newTab]);
