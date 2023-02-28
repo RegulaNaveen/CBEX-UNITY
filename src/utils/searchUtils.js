@@ -3,7 +3,7 @@ import {
   shouldShowSection
 } from '../components/screens/Approvals/utils';
 import {
-  shouldShowSection as customTabShoulsShowSection,
+  shouldShowSection as customTabShouldShowSection,
   shouldShowQuestion as customTabShouldShowQuestion
 } from '../components/screens/UnityTabs/utils';
 import { DEFAULT_TABS_LEN, NOTEPAD_UI_ID } from '../constants/app';
@@ -26,6 +26,7 @@ export async function getSearchResults({
   activeTab,
   isQuestionsFilterEnabled,
   approvalFilters,
+  unityTabFilters,
   questionsForCustomersEnabled,
   allTabs,
   filteredQuestionsMap
@@ -52,7 +53,8 @@ export async function getSearchResults({
       isQuestionsFilterEnabled,
       approvals,
       filteredQuestionsMap,
-      approvalFilters
+      approvalFilters,
+      unityTabFilters
     });
     if (activeTab !== 1) {
       if (questionsForCustomersEnabled) {
@@ -67,6 +69,12 @@ export async function getSearchResults({
         finalResult,
         regexp,
         notepadData,
+        allTabs[activeTab].tabName
+      );
+      searchInProposalTeam(
+        finalResult,
+        regexp,
+        sections,
         allTabs[activeTab].tabName
       );
       verticalTabSearched = true;
@@ -90,7 +98,8 @@ export async function getSearchResults({
           isQuestionsFilterEnabled,
           approvals,
           filteredQuestionsMap,
-          approvalFilters
+          approvalFilters,
+          unityTabFilters
         });
         if (tab.tabIndex !== 1 && !verticalTabSearched) {
           if (questionsForCustomersEnabled) {
@@ -102,6 +111,7 @@ export async function getSearchResults({
             );
           }
           searchInNotepad(finalResult, regexp, notepadData, tab.tabName);
+          searchInProposalTeam(finalResult, regexp, sections, tab.tabName);
           verticalTabSearched = true;
         }
       });
@@ -121,7 +131,8 @@ export function searchInTab({
   isQuestionsFilterEnabled,
   approvals,
   filteredQuestionsMap,
-  approvalFilters
+  approvalFilters,
+  unityTabFilters
 }) {
   // do nothing on timeline, documents tabs
   if (tabIndex === 1 || tabIndex === 3) {
@@ -146,13 +157,14 @@ export function searchInTab({
     .filter(
       section =>
         sections[section].sectionName !==
-        'Questions_for_the_Customer_left_panel'
+          'Questions_for_the_Customer_left_panel' &&
+        sections[section].sectionName !== 'Proposal Team'
     )
     .forEach(sectionKey => {
       const section = sections[sectionKey];
       const questions = section['questions'];
       if (tabIndex >= DEFAULT_TABS_LEN) {
-        if (!customTabShoulsShowSection(section.sectionId, tabId)) {
+        if (!customTabShouldShowSection(section.sectionId, tabId)) {
           return;
         }
       }
@@ -161,8 +173,7 @@ export function searchInTab({
           return (
             questions[questionKey]['active'] &&
             questions[questionKey]['visible'] &&
-            true
-            // customTabShouldShowQuestion(questions[questionKey], approvalFilters)
+            customTabShouldShowQuestion(questions[questionKey], unityTabFilters)
           );
         } else {
           return (
@@ -185,7 +196,8 @@ export function searchInTab({
           finalResult,
           tab: tabIndex,
           vTab: null,
-          tabName
+          tabName,
+          sectionName: section.sectionName
         });
 
         // searching questions
@@ -209,17 +221,21 @@ export function searchInTab({
                 finalResult,
                 tab: tabIndex,
                 vTab: null,
-                tabName
+                tabName,
+                sectionName: section.sectionName
               });
             }
-            if (question['questionText'] && sectionKey === 'Proposal Team') {
+            if (
+              question['questionText'] &&
+              question.answerConfiguration.type === 'proposal_team'
+            ) {
               updateSearchMatches({
                 regexp,
                 inputText: question['questionText'],
                 index: questionKey,
                 finalResult,
-                tab: null,
-                vTab: 2,
+                tab: tabIndex,
+                vTab: null,
                 tabName
               });
             }
@@ -238,13 +254,14 @@ export function searchInTab({
                     inputText: answerChunk,
                     index: questionKey,
                     finalResult,
-                    tab: null,
+                    tab: tabIndex,
                     vTab: null,
-                    tabName
+                    tabName,
+                    sectionName: section.sectionName
                   });
                 });
               } else if (typeof recentAnswer === 'string') {
-                if (sectionKey === 'Proposal Team') {
+                if (question.answerConfiguration.type === 'proposal_team') {
                   const newAnswer = [];
                   recentAnswer.split(',').forEach(answer => {
                     const split_array = answer.split('(');
@@ -258,9 +275,10 @@ export function searchInTab({
                       inputText: answerChunk,
                       index: questionKey,
                       finalResult,
-                      tab: null,
-                      vTab: 2,
-                      tabName
+                      tab: tabIndex,
+                      vTab: null,
+                      tabName,
+                      sectionName: section.sectionName
                     });
                   });
                 } else {
@@ -269,9 +287,10 @@ export function searchInTab({
                     inputText: recentAnswer,
                     index: questionKey,
                     finalResult,
-                    tab: null,
-                    vTab: 2,
-                    tabName
+                    tab: tabIndex,
+                    vTab: null,
+                    tabName,
+                    sectionName: section.sectionName
                   });
                 }
               }
@@ -302,7 +321,8 @@ export function searchInApprovals(
         finalResult,
         tab: 2,
         vTab: null,
-        tabName: 'Approvals'
+        tabName: 'Approvals',
+        sectionName: approval.ApprovalSectionTitle
       });
     }
 
@@ -321,7 +341,8 @@ export function searchInApprovals(
             finalResult,
             tab: 2,
             vTab: null,
-            tabName: 'Approvals'
+            tabName: 'Approvals',
+            sectionName: approval.ApprovalSectionTitle
           });
         }
         archive.section_left_questions
@@ -339,7 +360,8 @@ export function searchInApprovals(
               finalResult,
               tab: 2,
               vTab: null,
-              tabName: 'Approvals'
+              tabName: 'Approvals',
+              sectionName: approval.ApprovalSectionTitle
             });
 
             // searching in answer
@@ -359,11 +381,12 @@ export function searchInApprovals(
                     finalResult,
                     tab: 2,
                     vTab: null,
-                    tabName: 'Approvals'
+                    tabName: 'Approvals',
+                    sectionName: approval.ApprovalSectionTitle
                   });
                 });
               } else if (typeof recentAnswer === 'string') {
-                if (question.section.sectionName === 'Proposal Team') {
+                if (question.answerConfiguration.type === 'proposal_team') {
                   const newAnswer = [];
                   recentAnswer.split(',').forEach(answer => {
                     const split_array = answer.split('(');
@@ -379,7 +402,8 @@ export function searchInApprovals(
                       finalResult,
                       tab: 2,
                       vTab: null,
-                      tabName: 'Approvals'
+                      tabName: 'Approvals',
+                      sectionName: approval.ApprovalSectionTitle
                     });
                   });
                 } else {
@@ -390,7 +414,8 @@ export function searchInApprovals(
                     finalResult,
                     tab: 2,
                     vTab: null,
-                    tabName: 'Approvals'
+                    tabName: 'Approvals',
+                    sectionName: approval.ApprovalSectionTitle
                   });
                 }
               }
@@ -412,7 +437,8 @@ export function searchInApprovals(
               finalResult,
               tab: 2,
               vTab: null,
-              tabName: 'Approvals'
+              tabName: 'Approvals',
+              sectionName: approval.ApprovalSectionTitle
             });
 
             // searching in answer
@@ -432,11 +458,12 @@ export function searchInApprovals(
                     finalResult,
                     tab: 2,
                     vTab: null,
-                    tabName: 'Approvals'
+                    tabName: 'Approvals',
+                    sectionName: approval.ApprovalSectionTitle
                   });
                 });
               } else if (typeof recentAnswer === 'string') {
-                if (question.section.sectionName === 'Proposal Team') {
+                if (question.answerConfiguration.type === 'proposal_team') {
                   const newAnswer = [];
                   recentAnswer.split(',').forEach(answer => {
                     const split_array = answer.split('(');
@@ -452,7 +479,8 @@ export function searchInApprovals(
                       finalResult,
                       tab: 2,
                       vTab: null,
-                      tabName: 'Approvals'
+                      tabName: 'Approvals',
+                      sectionName: approval.ApprovalSectionTitle
                     });
                   });
                 } else {
@@ -463,7 +491,8 @@ export function searchInApprovals(
                     finalResult,
                     tab: 2,
                     vTab: null,
-                    tabName: 'Approvals'
+                    tabName: 'Approvals',
+                    sectionName: approval.ApprovalSectionTitle
                   });
                 }
               }
@@ -487,7 +516,8 @@ export function searchInApprovals(
             finalResult,
             tab: 2,
             vTab: null,
-            tabName: 'Approvals'
+            tabName: 'Approvals',
+            sectionName: approval.ApprovalSectionTitle
           });
 
           // searching in answer
@@ -504,11 +534,12 @@ export function searchInApprovals(
                   finalResult,
                   tab: 2,
                   vTab: null,
-                  tabName: 'Approvals'
+                  tabName: 'Approvals',
+                  sectionName: approval.ApprovalSectionTitle
                 });
               });
             } else if (typeof recentAnswer === 'string') {
-              if (question.section.sectionName === 'Proposal Team') {
+              if (question.answerConfiguration.type === 'proposal_team') {
                 const newAnswer = [];
                 recentAnswer.split(',').forEach(answer => {
                   const split_array = answer.split('(');
@@ -524,7 +555,8 @@ export function searchInApprovals(
                     finalResult,
                     tab: 2,
                     vTab: null,
-                    tabName: 'Approvals'
+                    tabName: 'Approvals',
+                    sectionName: approval.ApprovalSectionTitle
                   });
                 });
               } else {
@@ -535,7 +567,8 @@ export function searchInApprovals(
                   finalResult,
                   tab: 2,
                   vTab: null,
-                  tabName: 'Approvals'
+                  tabName: 'Approvals',
+                  sectionName: approval.ApprovalSectionTitle
                 });
               }
             }
@@ -557,7 +590,8 @@ export function searchInApprovals(
             finalResult,
             tab: 2,
             vTab: null,
-            tabName: 'Approvals'
+            tabName: 'Approvals',
+            sectionName: approval.ApprovalSectionTitle
           });
 
           // searching in answer
@@ -574,11 +608,12 @@ export function searchInApprovals(
                   finalResult,
                   tab: 2,
                   vTab: null,
-                  tabName: 'Approvals'
+                  tabName: 'Approvals',
+                  sectionName: approval.ApprovalSectionTitle
                 });
               });
             } else if (typeof recentAnswer === 'string') {
-              if (question.section.sectionName === 'Proposal Team') {
+              if (question.answerConfiguration.type === 'proposal_team') {
                 const newAnswer = [];
                 recentAnswer.split(',').forEach(answer => {
                   const split_array = answer.split('(');
@@ -594,7 +629,8 @@ export function searchInApprovals(
                     finalResult,
                     tab: 2,
                     vTab: null,
-                    tabName: 'Approvals'
+                    tabName: 'Approvals',
+                    sectionName: approval.ApprovalSectionTitle
                   });
                 });
               } else {
@@ -605,7 +641,8 @@ export function searchInApprovals(
                   finalResult,
                   tab: 2,
                   vTab: null,
-                  tabName: 'Approvals'
+                  tabName: 'Approvals',
+                  sectionName: approval.ApprovalSectionTitle
                 });
               }
             }
@@ -697,6 +734,57 @@ export function searchInQuestionsForCustomer(
     });
 }
 
+export function searchInProposalTeam(finalResult, regexp, sections, tabName) {
+  Object.keys(sections)
+    .filter(section => sections[section].sectionName === 'Proposal Team')
+    .forEach(sectionKey => {
+      const section = sections[sectionKey];
+      const questions = section['questions'];
+
+      if (Object.keys(questions).length > 0) {
+        // searching questions
+        Object.keys(questions).forEach(questionKey => {
+          const question = questions[questionKey];
+          // searching in questionText
+          if (question['questionText']) {
+            updateSearchMatches({
+              regexp,
+              inputText: question['questionText'],
+              index: questionKey,
+              finalResult,
+              tab: null,
+              vTab: 2,
+              tabName
+            });
+          }
+          // searching in answer
+          if (Array.isArray(question.answers) && question.answers.length > 0) {
+            let recentAnswer =
+              question.answers[question.answers.length - 1].answer;
+            const newAnswer = [];
+            recentAnswer.split(',').forEach(answer => {
+              const split_array = answer.split('(');
+              if (split_array && split_array.length > 0) {
+                newAnswer.push(split_array[0].trim());
+              }
+            });
+            newAnswer.forEach(answerChunk => {
+              updateSearchMatches({
+                regexp,
+                inputText: answerChunk,
+                index: questionKey,
+                finalResult,
+                tab: null,
+                vTab: 2,
+                tabName
+              });
+            });
+          }
+        });
+      }
+    });
+}
+
 export function updateSearchMatches({
   regexp,
   inputText,
@@ -704,7 +792,8 @@ export function updateSearchMatches({
   finalResult,
   tab = null,
   vTab = null,
-  tabName = ''
+  tabName = '',
+  sectionName = null
 }) {
   let matchIndex = 0;
   for (const result of inputText.matchAll(regexp)) {
@@ -717,7 +806,8 @@ export function updateSearchMatches({
       startIndex: result['index'],
       endIndex: result['index'] + result[0].length,
       matchIndex,
-      tabName
+      tabName,
+      sectionName
     });
 
     matchIndex++;

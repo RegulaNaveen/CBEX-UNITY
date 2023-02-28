@@ -204,7 +204,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
           });
           this.setSelectRow(true);
           autoNavigationDone();
-        }, 500);
+        }, 700);
       }
     } else if (
       prevSearchResult !== null &&

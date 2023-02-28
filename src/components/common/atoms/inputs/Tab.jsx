@@ -386,7 +386,7 @@ const UnityTab = ({
             inline: 'nearest'
           });
           dispatch(autoNavigationCompletedAction());
-        }, 500);
+        }, 700);
       }
     }
   }, [currentSearchResult]);

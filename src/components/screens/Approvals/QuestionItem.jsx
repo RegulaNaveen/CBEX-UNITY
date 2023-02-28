@@ -80,7 +80,7 @@ const QuestionItem = ({
             inline: 'nearest'
           });
           dispatch(autoNavigationCompletedAction());
-        }, 500);
+        }, 700);
       }
     }
   }, [questionTextRef.current, currentSearchResult, highlightQuestionId]);
