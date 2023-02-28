@@ -153,7 +153,7 @@ class MonthView extends React.Component {
     return (
       <>
         <div className="timeline-calender-rtl">
-          <div>
+          <div style={{ justifySelf: 'flex-start' }}>
             <DateRangePicker
               size="small"
               value={timelineDateRange}
@@ -184,7 +184,7 @@ class MonthView extends React.Component {
               this.props.timelineDateRange[1]
             ).format('MMMM YYYY')}`}</div>
           )}
-          <div>
+          <div style={{ justifySelf: 'end' }}>
             <Button
               variant="primary"
               icon={<PlusIcon />}
