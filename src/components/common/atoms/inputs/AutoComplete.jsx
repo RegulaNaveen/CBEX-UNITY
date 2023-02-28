@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import AutocompleteV2 from 'apollo-react/components/AutocompleteV2';
-import { debounce } from 'lodash';
+
 import { getAccessTokenFromLocalStorage as getAccessToken } from '../../../../SessionHandler';
 import { QUESTION_UNLOCK_TIMEOUT } from '../../../../constants/app';
 import { API } from '../../../../constants';
@@ -123,31 +123,18 @@ const Autocomplete = (props) => {
     resetUnlockTimer(true);
   };
 
-  // const changeHandler = (event, value) => {
-  //   const elem = document.querySelectorAll('.a-MuiAutocomplete-popper').item(0);
-  //   if (value) {
-  //     getData(value);
-  //     elem.classList.remove('disable');
-  //   } else {
-  //     setOptions([]);
-  //     elem.className += ' disable';
-  //   }
-  // };
-
-  // const onInputChange = useCallback(debounce(changeHandler, 1000), []);
-
   const onInputChange = (event, value) => {
     resetUnlockTimer();
     setInputVal(value);
     const elem = document.querySelectorAll('.a-MuiAutocomplete-popper').item(0);
     if (value) {
       setCallAccept(true);
-      // setCount(1);
+
       getData(value);
       elem.classList.remove('disable');
     } else {
       setCallAccept(false);
-      // setCount(1);
+
       setOptions([]);
       elem.className += ' disable';
     }
