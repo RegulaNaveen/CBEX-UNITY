@@ -103,6 +103,20 @@ class MonthView extends React.Component {
     return dates;
   };
 
+  getDateHeadingLabel = date => {
+    const { localizer, timelineDateRange } = this.props;
+
+    if (
+      (localizer.format(date, 'D').toString() === '1' ||
+        localizer.isSameDate(date, new Date(timelineDateRange[0]?._d))) &&
+      !localizer.isSameDate(date, new Date())
+    ) {
+      return localizer.format(date, 'MMM D');
+    }
+
+    return localizer.format(date, 'D');
+  };
+
   handleDateRangeChange = value => {
     if (!moment(`${value[0]}`).isValid() || !moment(`${value[1]}`).isValid()) {
       this.setState({ showDateRangeError: true });
@@ -154,11 +168,22 @@ class MonthView extends React.Component {
               endLabel="End"
             />
           </div>
-          <div className="month-range-label">{`${moment(
-            this.props.timelineDateRange[0]
-          ).format('MMMM')} - ${moment(this.props.timelineDateRange[1]).format(
-            'MMMM YYYY'
-          )}`}</div>
+          {moment(this.props.timelineDateRange[0])
+            .format('MMMM')
+            .toString() ===
+          moment(this.props.timelineDateRange[1])
+            .format('MMMM')
+            .toString() ? (
+            <div className="month-range-label">{`${moment(
+              this.props.timelineDateRange[1]
+            ).format('MMMM YYYY')}`}</div>
+          ) : (
+            <div className="month-range-label">{`${moment(
+              this.props.timelineDateRange[0]
+            ).format('MMMM')} - ${moment(
+              this.props.timelineDateRange[1]
+            ).format('MMMM YYYY')}`}</div>
+          )}
           <div>
             <Button
               variant="primary"
@@ -253,9 +278,8 @@ class MonthView extends React.Component {
     let isOffRange = localizer.neq(date, currentDate, 'month');
     let isCurrent = localizer.isSameDate(date, currentDate);
     let drilldownView = getDrilldownView(date);
-    let label = localizer.isSameDate(date, new Date())
-      ? localizer.format(date, 'dateFormat')
-      : localizer.format(date, 'MMM DD');
+    let label = this.getDateHeadingLabel(date);
+
     let DateHeaderComponent = this.props.components.dateHeader || DateHeader;
 
     return (
