@@ -473,29 +473,27 @@ const SystemIntegrations = ({
           {QvidianValidation()}
           {CalendarCondition()}
         </div>
-        {!customtab && (
-          <div style={{ display: 'flex', height: '20px', width: '24px' }}>
-            {loading ? (
-              <span
+        <div style={{ display: 'flex', height: '20px', width: '24px' }}>
+          {loading ? (
+            <span
+              style={{
+                marginLeft: '0px',
+                marginTop: '6px',
+                position: 'relative',
+                top: '15px'
+              }}
+            >
+              <Loader
+                isInner
+                size={20}
                 style={{
-                  marginLeft: '0px',
-                  marginTop: '6px',
-                  position: 'relative',
-                  top: '15px'
+                  width: '20px',
+                  height: '20px'
                 }}
-              >
-                <Loader
-                  isInner
-                  size={20}
-                  style={{
-                    width: '20px',
-                    height: '20px'
-                  }}
-                />
-              </span>
-            ) : null}
-          </div>
-        )}
+              />
+            </span>
+          ) : null}
+        </div>
       </div>
     </Grid>
   );
