@@ -33,7 +33,7 @@ function ProposalTeam() {
   const isQuestionsFiltersEnabled = useSelector(selectIsQuestionsFilterEnabled);
   const filteredSections = useSelector(selectFilteredSections);
   const sections = useSelector(selectSections);
-  const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
+  const allSections = sections;
   const showNaCheckbox = useSelector(state => getShowNaCheckbox(state));
   const [selectedQuestionForHistory, setSelectedQuestionForHistory] = useState(
     ''
@@ -51,23 +51,19 @@ function ProposalTeam() {
   // eslint-disable-next-line no-unused-expressions
   !isEmpty(proposalTeam[0]) &&
     Object.keys(proposalTeam[0]?.questions).map(item => {
-      console.log(
-        'proposalTeam[0].questions[item].questionLock',
-        proposalTeam[0].questions[item].questionLockInfo
-      );
-      questionData = fromJS(proposalTeam[0].questions[item]);
-      const { proposalId } = proposalTeam[0].questions[item];
-      const { proposalDetail } = proposalTeam[0];
       const proposalTeamData = proposalTeam[0].questions[item];
-      const isNotApplicable = proposalTeamData?.notApplicable;
-      const { notApplicable } = questionData;
+      questionData = fromJS(proposalTeamData);
+      const { proposalId } = proposalTeamData;
+      const { proposalDetail } = proposalTeam[0];
+      const { notApplicable } = proposalTeamData;
       let milestoneCond = false;
       const NaLoading = questionData?.NaLoading;
       let currentSFAnswer;
       if (proposalTeamData?.active && proposalTeamData?.visible) {
         let lastAnswer;
-        currentSFAnswer = proposalTeamData?.currentSFanswer;
+        currentSFAnswer = fromJS(proposalTeamData?.currentSFanswer);
         const sficon = proposalTeamData?.sfField;
+        const { sfField } = proposalTeamData;
         const milestone = fromJS(proposalTeamData?.milestone);
         const milestoneNew = fromJS(proposalTeamData?.milestoneNew);
         const lastAns = isString(lastAnswer) ? lastAnswer : '';
@@ -81,7 +77,7 @@ function ProposalTeam() {
         const qvicon = proposalTeamData.questionId;
         const answers = fromJS(proposalTeamData?.answers);
         const loading = proposalTeamData.loading ?? false;
-        const sfObject = proposalTeamData?.sfObject;
+        const { sfObject } = proposalTeamData;
         const section = proposalTeamData?.section;
         const questionText = proposalTeamData?.questionText;
         const questionId = proposalTeamData?.questionId;
@@ -93,7 +89,9 @@ function ProposalTeam() {
         const events = proposalTeamData?.events || {};
         const questionJSON = proposalTeamData?.questionJSON;
         const isCustomQuestion = proposalTeamData?.isCustomQuestion;
-        const questionLockInfo = fromJS(proposalTeam[0].questions[item]);
+        const questionLockInfo = fromJS(
+          proposalTeam[0].questions[item].questionLockInfo
+        );
         const hasDifferentSFanswer = proposalTeamData?.hasDifferentSFanswer;
         const visible =
           proposalTeamData?.visible &&
@@ -103,9 +101,10 @@ function ProposalTeam() {
         wholeData.push({
           questionId: questionId,
           proposalId: proposalId,
+          sfField: sfField,
           qvidianIntegration: qvidianIntegration,
           proposalDetail: proposalDetail,
-          isNotApplicable: isNotApplicable,
+          isNotApplicable: notApplicable,
           milestoneCond: milestoneCond,
           NaLoading: NaLoading,
           currentSFAnswer: currentSFAnswer,
@@ -124,7 +123,6 @@ function ProposalTeam() {
           questionText: questionText,
           questionJSON: questionJSON,
           isCustomQuestion: isCustomQuestion,
-          notApplicable: notApplicable,
           isSetQuestionLoadingData: isSetQuestionLoadingData,
           questionData: questionData,
           section: section,
@@ -189,11 +187,11 @@ function ProposalTeam() {
         })}
       >
         {wholeData?.map(items => {
-          console.log(items.questionId, 'qid');
           return (
             (items.visible || typeof items.visible === 'undefined') && (
               <Question
                 key={items.questionId}
+                sfField={items.sfField}
                 proposalId={items.proposalId}
                 questionId={items.questionId}
                 proposalDetail={items.proposalDetail}
