@@ -33,7 +33,7 @@ function ProposalTeam() {
   const isQuestionsFiltersEnabled = useSelector(selectIsQuestionsFilterEnabled);
   const filteredSections = useSelector(selectFilteredSections);
   const sections = useSelector(selectSections);
-  const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
+  const allSections = sections;
   const showNaCheckbox = useSelector(state => getShowNaCheckbox(state));
   const [selectedQuestionForHistory, setSelectedQuestionForHistory] = useState(
     ''
