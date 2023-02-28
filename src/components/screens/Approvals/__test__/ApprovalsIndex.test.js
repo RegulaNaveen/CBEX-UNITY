@@ -2,25 +2,19 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import * as ReactDOM from 'react-dom';
 import {
-  fireEvent,
-  screen,
   render as reactTestingRender
 } from '@testing-library/react';
-import configureMockStore from 'redux-mock-store';
-import { configure, render } from 'enzyme';
 import { Map, fromJS } from 'immutable';
 import { Provider } from 'react-redux';
-import Adapter from 'enzyme-adapter-react-16';
 import Sinon from 'sinon';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { store } from '../../../../store';
 import Approvals from '../index';
 import * as data from '../../Proposal/__tests__/data.json';
 import { allApprovals, quesHashData } from './data';
 import * as ApprovalActions from '../../../../redux/actions/approval-actions';
 import * as ProposalActions from '../../../../redux/actions/proposal-actions';
 
-configure({ adapter: new Adapter() });
-const mockStore = configureMockStore();
 const ssoAuth = Map(Object.entries(data.ssoAuth));
 const sidebar = Map(Object.entries(data.sidebar));
 const notepad = Map(Object.entries(data.notepad));
@@ -108,7 +102,6 @@ let initialState = {
   currentTab: null
 };
 describe('Testing approvals', () => {
-  let store;
   let sinonSandbox;
   beforeAll(() => {
     ReactDOM.createPortal = jest.fn((element, node) => {
@@ -119,10 +112,6 @@ describe('Testing approvals', () => {
 
   afterEach(() => {
     sinonSandbox.restore();
-  });
-
-  beforeEach(() => {
-    store = mockStore(initialState);
   });
 
   test('render Approval component', async () => {

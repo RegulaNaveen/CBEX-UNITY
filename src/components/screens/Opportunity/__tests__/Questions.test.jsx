@@ -16,9 +16,6 @@ import {
 import '@testing-library/jest-dom/extend-expect';
 import { Provider } from 'react-redux';
 import { shallow } from 'enzyme';
-// import Adapter from 'enzyme-adapter-react-16';
-// import configureMockStore from 'redux-mock-store';
-// import thunk from 'redux-thunk';
 import { Map } from 'immutable';
 import { createMemoryHistory } from 'history';
 import { BrowserRouter, Router } from 'react-router-dom';
@@ -32,7 +29,6 @@ const Sidebar = React.lazy(() =>
     import(/* webpackChunkName: "Sidebar" */ '../../../views/Sidebar')
   )
 );
-// configure({ adapter: new Adapter() });
 
 const filterDataMap = {
   answerGroup: {
@@ -101,9 +97,6 @@ const filterDataMap = {
   },
 };
 
-// const middlewares = [thunk];
-// const mockStore = configureMockStore(middlewares);
-// data.proposal.selectedBid = Map(data.proposal.selectedBid);
 data.proposal.editQuestionsData = Map(data.proposal.editQuestionsData);
 data.getBid = Map(data.getBid);
 data.proposal.questionsFilter.answerGroup = Map(
@@ -137,7 +130,7 @@ const initalstate = {
     resetQuestionsFilter: jest.fn(),
   },
 };
-// const store = mockStore(initalstate);
+
 const history = createMemoryHistory({
   initialEntries: [
     {
