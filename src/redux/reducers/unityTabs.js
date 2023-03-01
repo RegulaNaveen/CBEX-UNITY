@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable guard-for-in */
 import _ from 'lodash';
 import { UNITY_TABS } from '../../constants/types';
 
@@ -36,7 +38,6 @@ const INITIAL_STATE = {
 const setUnityTab = (state, action) => {
   const { payload } = action;
   const data = _.groupBy(payload, 'TabID');
-  // console.log(`data`, data);
   return {
     ...state,
     fetching: false,
@@ -59,6 +60,14 @@ const resetFilters = (state, action) => {
     filters: INITIAL_STATE.filters
   };
 };
+
+const resetTab = (state, action) => {
+  return {
+    ...state,
+    filters: INITIAL_STATE.allTabs
+  };
+};
+
 const addNewFilter = (state, action) => {
   const { payload } = action;
 
@@ -73,6 +82,7 @@ const actionMap = {
   [UNITY_TABS.SET_UNITY_TABS]: setUnityTab,
   [UNITY_TABS.UPDATE_FILTERS]: updateFilter,
   [UNITY_TABS.RESET_FILTERS]: resetFilters,
+  [UNITY_TABS.RESET_TAB]: resetTab,
   [UNITY_TABS.UPDATE_NEW_FILTER]: addNewFilter
 };
 

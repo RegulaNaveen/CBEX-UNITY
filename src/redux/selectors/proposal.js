@@ -305,6 +305,10 @@ export const getOpportunityData = createSelector(selectProposal, proposal =>
   proposal.get('opportunityData')
 );
 
+export const getPanelStatus = createSelector(selectProposal, proposal =>
+  proposal.get('panelStatus')
+);
+
 export const getBidList = createSelector(getOpportunityData, opportunity => {
   if (opportunity.size > 0) {
     let bidList = [];
