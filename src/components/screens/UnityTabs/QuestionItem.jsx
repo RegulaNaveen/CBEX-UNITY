@@ -232,7 +232,14 @@ const QuestionItem = ({
       trackMatomoEventSubmitAnswer(inputProps.lastAnswer.answer);
     }
     if (question?.section?.sectionName === 'Proposal Team') {
-      return <ProposalTeamQuestion {...inputProps} />;
+      return (
+        <SFAnswerValidationWrapper
+          hasDifferentSFanswer={question.hasDifferentSFanswer}
+          sfObject={question.sfObject}
+        >
+          <ProposalTeamQuestion {...inputProps} />
+        </SFAnswerValidationWrapper>
+      );
     }
 
     const ComponentMapper = {
