@@ -133,7 +133,7 @@ const DnDOutsideResource = ({
         return [...filtered, { ...existing, start, end, allDay }];
       });
 
-      handleDayChange(start, question);
+      handleDayChange(moment(start).format(), question);
     },
     [setTimelineEvents]
   );
@@ -160,7 +160,7 @@ const DnDOutsideResource = ({
 
         newEvent(event);
 
-        handleDayChange(start, draggedQuestionData);
+        handleDayChange(moment(start).format(), draggedQuestionData);
         setDraggedQuestionData(null);
         return;
       }
@@ -171,7 +171,7 @@ const DnDOutsideResource = ({
       }
 
       if (selectedEvent) {
-        handleDayChange(start, selectedEvent?.question);
+        handleDayChange(moment(start).format(), selectedEvent?.question);
         const event = {
           title: formatName(selectedEvent.title, counters[selectedEvent.title]),
           start,
