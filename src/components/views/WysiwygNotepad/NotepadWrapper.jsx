@@ -39,14 +39,15 @@ const NotepadWrapper = ({ trackEvent }) => {
         console.log('wsProvider', event);
         if (event.status === 'connected') {
           setShowNetworkChip(false);
+          setIsOnline(true);
           console.log('connected: How to sync with ws provider', wsProvider);
-          console.log('db', provider);
+          console.log('connected: persistence', provider);
         }
         if (event.status === 'disconnected') {
           setShowNetworkChip(true);
+          setIsOnline(false);
         }
       });
-
       setWsInstance(wsProvider);
     }
   };
@@ -56,19 +57,25 @@ const NotepadWrapper = ({ trackEvent }) => {
     if (!wsInstance) {
       createNewNotesSocketConnection(proposalId);
     } else {
-      await wsInstance.destroy();
-      await setWsInstance(undefined);
-      await setYdoc(new Y.Doc());
+      wsInstance.destroy();
+      setWsInstance(undefined);
+      setYdoc(new Y.Doc());
       createNewNotesSocketConnection(proposalId);
     }
     setProposalIdState(proposalId);
   };
 
   useEffect(() => {
+    let loaderReference;
     const newProposalID = selectedBid.get('id');
     if (proposalIdState !== newProposalID) {
-      triggerWebsocketNotesApi(newProposalID);
+      loaderReference = setTimeout(() => {
+        triggerWebsocketNotesApi(newProposalID);
+      }, 1500);
     }
+    return () => {
+      clearTimeout(loaderReference);
+    };
   }, [selectedBid]);
 
   useEffect(() => {
@@ -133,10 +140,15 @@ const NotepadWrapper = ({ trackEvent }) => {
       {!isOnline && showNetworkChip && (
         <HeaderMessage>
           <Chip
-            color="white"
             label="Network Interruptions: This may prevent your work from autosaving"
-            icon={<StatusExclamation style={{ color: 'red' }} />}
+            icon={<StatusExclamation style={{ color: 'white' }} />}
             onDelete={handleClose}
+            style={{
+              backgroundColor: 'red',
+              borderColor: 'red',
+              whiteSpace: 'normal',
+              fontSize: '12px'
+            }}
           />
         </HeaderMessage>
       )}

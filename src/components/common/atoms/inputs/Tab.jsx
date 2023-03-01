@@ -185,36 +185,36 @@ const UnityTab = ({
   let newTab = [];
   let len = tabs.length - 1;
   // eslint-disable-next-line no-restricted-syntax
-  for (const [key, value] of Object.entries(customTabs)) {
-    const response = calculateTab(value);
-    const tabID = value[0]?.UnityTabId;
-    const filterTitle = value.filter(v => v.UnityTabTitle);
-    const taborder = value.filter(v => v.UnityTabOrder);
-    if (filterTitle?.length > 0 && response) {
-      const title = String(filterTitle[0]?.UnityTabTitle)
+  let orderedCustomTabs = Object.values(customTabs)
+    .filter(
+      sections => sections.filter(section => section['UnityTabTitle']).length
+    )
+    .sort(
+      (sectionsA, sectionsB) =>
+        sectionsA[0].UnityTabOrder - sectionsB[0].UnityTabOrder
+    );
+  orderedCustomTabs.forEach(customTabSections => {
+    const tabID = customTabSections[0]['UnityTabId'];
+    const questionCount = customTabSections.some(
+      v => v['UnityTabSectionQuestions'].length > 0
+    );
+    const filterTitle = customTabSections.filter(v => v['UnityTabTitle']);
+    if (filterTitle.length && questionCount) {
+      const title = String(filterTitle[0]['UnityTabTitle'])
         .trim()
         .toLowerCase();
-      const tabpath = String(value[0]?.UnityTabTitle)
+      const tabpath = String(customTabSections[0]['UnityTabTitle'])
         .replace(' ', '_')
         .trim()
         .toLowerCase();
-      const indx = len++;
       newTab.push({
-        label: filterTitle[0]?.UnityTabTitle,
-        value: indx,
+        label: customTabSections[0]['UnityTabTitle'],
+        value: len++,
         component: <CustomTabs tabId={tabID} key={title} />,
-        path: tabpath,
-        order:
-          taborder && taborder?.length > 0 ? taborder[0].UnityTabOrder : indx
+        path: tabpath
       });
     }
-  }
-  newTab = _.sortBy(newTab, [
-    function(o) {
-      return o.order;
-    }
-  ]);
-
+  });
   useEffect(() => {
     if (newTab && Object.keys(newTab)?.length > 0 && !tabloaded) {
       setTabs([...tabs, ...newTab]);
@@ -415,7 +415,7 @@ const UnityTab = ({
             inline: 'nearest'
           });
           dispatch(autoNavigationCompletedAction());
-        }, 500);
+        }, 700);
       }
     }
   }, [currentSearchResult]);

@@ -132,7 +132,7 @@ class CollapsibleList extends Component<Props, State> {
             inline: 'nearest'
           });
           autoNavigationDone();
-        }, 500);
+        }, 700);
       } else if (questionIds.includes(currentSearchResult.searchIndex)) {
         shouldBeCollapsed = true;
       } else {
