@@ -9,7 +9,7 @@ import Grid from 'apollo-react/components/Grid';
 import PropTypes from 'prop-types';
 import InfoIcon from 'apollo-react-icons/Info';
 import classNames from 'classnames';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Box from 'apollo-react/components/Box';
 import Typography from 'apollo-react/components/Typography';
 import Tooltip from 'apollo-react/components/Tooltip';
@@ -37,7 +37,8 @@ import MatomoHOC from '../../HOC/MatomoHOC';
 import {
   getOpportunityData,
   getSelectedBid,
-  getUnityTabQuestionLoading
+  getUnityTabQuestionLoading,
+  getPanelStatus
 } from '../../../redux/selectors/proposal';
 import { getIntegrations, getQuestion } from '../../../redux/selectors';
 import { getLastAnswer, shouldShowQuestion } from './utils';
@@ -46,6 +47,7 @@ import ChipView from '../../common/Chip/ChipView';
 import { parseMomentDate } from '../../../utils/DateUtils';
 import SystemIntegrations from '../../common/SystemIntegrations/SystemIntegrations';
 import EventLauncher from '../Opportunity/EventLauncher';
+import { autoNavigationCompletedAction } from '../../../redux/actions/search-actions';
 
 const QuestionItem = ({
   questionId = '',
@@ -61,6 +63,7 @@ const QuestionItem = ({
     getUnityTabQuestionLoading
   ).toJS();
   const oppdata = useSelector(state => getOpportunityData(state));
+  const panelStatus = useSelector(state => getPanelStatus(state));
   const integrationsData = useSelector(state => getIntegrations(state));
   const unityTabFilters = useSelector(state => state.unitytab.filters);
   const isShowQuestion = shouldShowQuestion(question, unityTabFilters);
@@ -70,7 +73,7 @@ const QuestionItem = ({
   const [changeIcon, setchangeIcon] = useState('');
   const questionTextRef = useRef(null);
   const questionTextRef2 = useRef(null);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     updateQuestionVisibility(questionId, isShowQuestion);
   }, [unityTabFilters]);
@@ -229,7 +232,14 @@ const QuestionItem = ({
       trackMatomoEventSubmitAnswer(inputProps.lastAnswer.answer);
     }
     if (question?.section?.sectionName === 'Proposal Team') {
-      return <ProposalTeamQuestion {...inputProps} />;
+      return (
+        <SFAnswerValidationWrapper
+          hasDifferentSFanswer={question.hasDifferentSFanswer}
+          sfObject={question.sfObject}
+        >
+          <ProposalTeamQuestion {...inputProps} />
+        </SFAnswerValidationWrapper>
+      );
     }
 
     const ComponentMapper = {
@@ -472,6 +482,9 @@ const QuestionItem = ({
       customDimensions: [question, data, proposalDetail]
     });
   };
+  const fullGrid = [11, 1];
+  const mediumGrid = [10, 2];
+  const conditionalGrid = panelStatus ? fullGrid : mediumGrid;
   return useMemo(
     () =>
       isShowQuestion ? (
@@ -488,7 +501,7 @@ const QuestionItem = ({
             <Grid container>
               <Grid
                 item
-                xs={11}
+                xs={conditionalGrid[0]}
                 className="ques-title-cover unity-tab-question"
               >
                 <div className="question-label-container">
@@ -519,11 +532,11 @@ const QuestionItem = ({
                   <div className="milestone-chip">{renderTags()}</div>
                 </div>
               </Grid>
-              <Grid item xs={1} />
-              <Grid item xs={11} className="answer-input">
+              <Grid item xs={conditionalGrid[1]} />
+              <Grid item xs={conditionalGrid[0]} className="answer-input">
                 {renderQuestion()}
               </Grid>
-              <Grid item xs={1} className="answer-actions">
+              <Grid item xs={conditionalGrid[1]} className="answer-actions">
                 <div className="system-icon-custom-tab">
                   {SystemIcon(unityTabQuestionLoading)}
                 </div>
@@ -551,7 +564,8 @@ const QuestionItem = ({
       isShowQuestion,
       unityTabFilters,
       currentSearchResult,
-      unityTabQuestionLoading
+      unityTabQuestionLoading,
+      conditionalGrid
       // highlightQuestionId
     ]
   );

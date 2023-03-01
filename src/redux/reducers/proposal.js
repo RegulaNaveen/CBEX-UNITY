@@ -70,6 +70,7 @@ const {
   SET_PRICE_MODELER_RECALCULATING,
   PRICE_MODELER_UPDATE,
   SET_ACTIVE_TABINDEX,
+  SET_PANEL_STATUS,
   SET_V_TAB_ACTIVE_INDEX,
   SET_V_TAB_USER_PREFERENCE
 } = REDUX_TYPES.PROPOSAL;
@@ -178,7 +179,8 @@ const INITIAL_STATE: Map = fromJS({
   priceModelerRecalculating: false,
   activeTabIndex: 0, // Strategy Development, Approvals, Documents,
   activeVTabIndex: 0, // Questions for Customer, Notepad, Proposal Team
-  vTabUserPreference: {}
+  vTabUserPreference: {},
+  panelStatus: false
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -1309,6 +1311,7 @@ const actionMap = {
     state.set('priceModelerRecalculating', payload),
   [PRICE_MODELER_UPDATE]: updatePriceModelerEstimate,
   [SET_ACTIVE_TABINDEX]: setActiveTabIndex,
+  [SET_PANEL_STATUS]: (state, { payload }) => state.set('panelStatus', payload),
   [SET_V_TAB_ACTIVE_INDEX]: setVTabActiveTabIndex,
   [SET_V_TAB_USER_PREFERENCE]: setVTabUserPreference
 };

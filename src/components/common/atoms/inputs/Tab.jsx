@@ -25,6 +25,7 @@ import {
 } from '../../../../redux/selectors';
 import {
   setActiveTabIndexAction,
+  setPanelStatus,
   setVTabUserPreferenceAction
 } from '../../../../redux/actions/proposal-actions';
 import { createMatomoObj, saveDataInMatomo } from '../../../../utils/utils';
@@ -141,6 +142,7 @@ const UnityTab = ({
   const [isNotepadOpen, setIsNotepadOpen] = useState(true);
   const [vtabCollpased, setVTabCollapsed] = useState(false);
   const [systemTriggeredClick, setSystemTriggeredClick] = useState(false);
+  const [tabRefresh] = useState('notrefresh');
 
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const proposalId = selectedBid?.id || 1;
@@ -180,7 +182,7 @@ const UnityTab = ({
     }
     return false;
   };
-  const newTab = [];
+  let newTab = [];
   let len = tabs.length - 1;
   // eslint-disable-next-line no-restricted-syntax
   let orderedCustomTabs = Object.values(customTabs)
@@ -217,8 +219,35 @@ const UnityTab = ({
     if (newTab && Object.keys(newTab)?.length > 0 && !tabloaded) {
       setTabs([...tabs, ...newTab]);
       settabloaded(true);
+      newTab.length = 0;
     }
   }, [customTabs]);
+
+  useEffect(() => {
+    if ('URLSearchParams' in window) {
+      const searchParams = new URLSearchParams(window.location.search);
+      const currentviewType = searchParams.get('viewType');
+      if (
+        Boolean(!Object.keys(customTabs)?.length) &&
+        tabloaded &&
+        (currentviewType !== 'documents' ||
+          currentviewType !== 'approval' ||
+          currentviewType !== 'timelines' ||
+          currentviewType !== 'questions')
+      ) {
+        setTabs(defaultTabs);
+        dispatch(setActiveTabIndexAction(0));
+      }
+    }
+    if (Object.keys(customTabs)?.length > 0 && tabloaded) {
+      setTabs([...tabs, ...newTab]);
+    }
+  }, [customTabs]);
+
+  useEffect(() => {
+    dispatch(setPanelStatus(vtabCollpased));
+  }, [vtabCollpased]);
+
   useEffect(() => {
     if (
       tabs.length > 4 &&
@@ -657,6 +686,7 @@ const UnityTab = ({
         <Tabs
           value={value}
           onChange={handleChangeTab}
+          key={tabRefresh}
           truncate
           className="_question-tab"
         >

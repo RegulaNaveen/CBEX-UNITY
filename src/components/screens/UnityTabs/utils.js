@@ -1,6 +1,7 @@
 // @flow
 /* eslint no-param-reassign: 0 */
 import isEmpty from 'lodash/isEmpty';
+import sortBy from 'lodash/sortBy';
 import { store } from '../../../store';
 
 /**
@@ -114,7 +115,12 @@ export const shouldShowQuestion = (question = {}, unityTabfilters): Boolean => {
 export const shouldShowSection = (sectionId, tabId) => {
   try {
     const state = store.getState();
-    const tab = state.unitytab.allTabs[tabId];
+    let tab = state.unitytab.allTabs[tabId];
+    tab = sortBy(tab, [
+      o => {
+        return o.UnityTabSectionOrder;
+      }
+    ]);
     const unityFilters = state.unitytab.filters;
     const unityTabSection =
       tab.find(i => i.UnityTabSectionId === sectionId) || {};
