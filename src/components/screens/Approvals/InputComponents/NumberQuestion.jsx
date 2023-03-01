@@ -78,6 +78,7 @@ const NumberQuestion = ({
       <TextArea
         disabled={checkDisableFlag() || !!disabled}
         className="proposal-text-area"
+        data-testid="proposal--text--area"
         type="number"
         value={lastAnswer.answer}
         onBlur={handleTextChange}

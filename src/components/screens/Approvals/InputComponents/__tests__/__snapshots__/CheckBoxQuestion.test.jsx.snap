@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CheckBoxQuestion should render correctly with default props 1`] = `ReactWrapper {}`;
+
+exports[`CheckBoxQuestion should render correctly with disabled prop 1`] = `ReactWrapper {}`;

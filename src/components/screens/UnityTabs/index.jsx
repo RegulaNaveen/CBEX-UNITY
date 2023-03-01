@@ -2,6 +2,7 @@
 import { isEmpty } from 'lodash';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import sortBy from 'lodash/sortBy';
 import ClipboardCheck from 'apollo-react-icons/ClipboardCheck';
 import Card from 'apollo-react/components/Card';
 import Section from './Section';
@@ -20,7 +21,12 @@ const CustomTabs = ({ tabId, key }) => {
   const allQuestion = useSelector(state =>
     state.proposal.get('proposalQuestions')
   );
-  const tab = allTab[tabId];
+  let tab = allTab[tabId];
+  tab = sortBy(tab, [
+    o => {
+      return o.UnityTabSectionOrder;
+    }
+  ]);
   const [isShowFilters, setIsShowFilters] = useState(false);
   const dispatch = useDispatch();
 

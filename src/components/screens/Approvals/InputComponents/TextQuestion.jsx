@@ -126,6 +126,7 @@ const TextQuestion = ({
   return (
     <CustomApolloRichText
       className="approval-text-question"
+      id="approval-text-qustion-id"
       {...richtextProps}
     />
   );

@@ -13,7 +13,7 @@ const mockStore = configureMockStore(middleWares);
 const approvals = { allApprovals, quesHashData, filters };
 const initialState = {
   updateFilters: jest.fn(),
-  approvalFilters: jest.fn(),
+  approvalFilters: jest.fn()
 };
 const store = mockStore({ approvals, initialState });
 

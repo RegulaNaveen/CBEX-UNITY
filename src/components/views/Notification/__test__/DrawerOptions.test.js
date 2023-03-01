@@ -53,26 +53,6 @@ describe('DrawerOptions component', () => {
     );
   });
 
-  test.skip('it should call setSeenBatch prop when mark as read option is clicked', async () => {
-    const setSeenBatch = jest.fn();
-    const { getByText } = render(
-      <Provider store={store}>
-        <Router history={history}>
-          <DrawerOptions
-            isShow
-            closeIsDrawerOptions={() => {}}
-            setSeenBatch={setSeenBatch}
-          />
-        </Router>
-      </Provider>
-    );
-
-    const markAsReadOption = getByText('Mark all as read');
-    fireEvent.click(markAsReadOption);
-
-    await waitFor(() => expect(setSeenBatch).toHaveBeenCalledTimes(0));
-  });
-
   test('it should not display options when is show prop is false', async () => {
     const { queryByText } = render(
       <Provider store={store}>

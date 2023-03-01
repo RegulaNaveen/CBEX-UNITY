@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import GridView from '../GridView';
 import { BrowserRouter } from 'react-router-dom';
+import GridView from '../GridView';
 
 describe('GridView component', () => {
   test('displays a message when no data is provided', () => {
@@ -29,12 +29,12 @@ describe('GridView component', () => {
         opportunityName: 'Opportunity 2',
         customer: 'Customer 2',
         proposalId: 'P2',
-        'verbatim indication': 'Indication 2',
-      },
+        'verbatim indication': 'Indication 2'
+      }
     ];
     const allFlags = {
       showTimelineFlag: true
-    }
+    };
     render(
       <BrowserRouter>
         <GridView data={data} allFlags={allFlags} />
@@ -46,7 +46,6 @@ describe('GridView component', () => {
     expect(screen.getByText('Opportunity 2')).toBeInTheDocument();
     expect(screen.getByText('Customer 2')).toBeInTheDocument();
     expect(screen.getByText('Indication 2')).toBeInTheDocument();
-
   });
 
   test('check for timeline button click', () => {
@@ -56,12 +55,12 @@ describe('GridView component', () => {
         opportunityName: 'Opportunity 2',
         customer: 'Customer 2',
         proposalId: 'P2',
-        'verbatim indication': 'Indication 2',
-      },
+        'verbatim indication': 'Indication 2'
+      }
     ];
     const allFlags = {
       showTimelineFlag: true
-    }
+    };
     render(
       <BrowserRouter>
         <GridView data={data} allFlags={allFlags} />
@@ -70,5 +69,5 @@ describe('GridView component', () => {
 
     const timelineButton = screen.getByRole('link', { name: 'Artboard' });
     fireEvent.click(timelineButton);
-  })
+  });
 });

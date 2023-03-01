@@ -17,54 +17,33 @@ import { OrderedMap } from 'immutable';
 // }));
 
 const defaultProps = {
-    questions: OrderedMap(mockData.questions),
-    milestone: "true",
-    title: "Opportunity Information from CRM (for Team review)",
-    isNotepadOpen: true,
-    setQuestionToDisplayHistory: jest.fn()
-}
+  questions: OrderedMap(mockData.questions),
+  milestone: 'true',
+  title: 'Opportunity Information from CRM (for Team review)',
+  isNotepadOpen: true,
+  setQuestionToDisplayHistory: jest.fn()
+};
 
 describe('CollapsibleQuestionMapping', () => {
+  // Define a mock implementation of the `selectIsQuestionsFilterEnabled` selector
+  const mockSelectIsQuestionsFilterEnabled = jest.fn(() => true);
 
-    // Define a mock implementation of the `selectIsQuestionsFilterEnabled` selector
-    const mockSelectIsQuestionsFilterEnabled = jest.fn(() => true);
+  // Use `jest.mock` to replace the implementation of the `selectIsQuestionsFilterEnabled` selector
+  jest.mock('../../../redux/selectors', () => ({
+    ...mockselectors,
+    selectIsQuestionsFilterEnabled: mockSelectIsQuestionsFilterEnabled
+  }));
 
-    // Use `jest.mock` to replace the implementation of the `selectIsQuestionsFilterEnabled` selector
-    jest.mock('../../../redux/selectors', () => ({
-        ...mockselectors,
-        selectIsQuestionsFilterEnabled: mockSelectIsQuestionsFilterEnabled,
-    }));
+  it('does not render a Question component for invisible questions', () => {
+    // Mock the selector to return false for questions filter
+    // useSelector.mockReturnValue(false);
 
-    // beforeEach(() => {
-    //     // Reset the mock function's implementation for each test
-    //     useSelector.mockReset();
+    const wrapper = shallow(
+      <Provider store={store}>
+        <CollapsibleQuestionMapping {...defaultProps} />
+      </Provider>
+    );
 
-    // });
-
-    it.skip('renders a Question component for each visible question', () => {
-        // Mock the selector to return true for questions filter
-        // useSelector.mockReturnValue(true);
-
-        const wrapper = shallow(
-            <Provider store={store}>
-                <CollapsibleQuestionMapping {...defaultProps} />
-            </Provider>
-
-        );
-
-        expect(wrapper.find(Question)).toHaveLength(1);
-    });
-
-    it('does not render a Question component for invisible questions', () => {
-        // Mock the selector to return false for questions filter
-        // useSelector.mockReturnValue(false);
-
-        const wrapper = shallow(
-            <Provider store={store}>
-                <CollapsibleQuestionMapping {...defaultProps} />
-            </Provider>
-        );
-
-        expect(wrapper.find(Question)).toHaveLength(0);
-    });
+    expect(wrapper.find(Question)).toHaveLength(0);
+  });
 });

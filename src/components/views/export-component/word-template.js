@@ -702,7 +702,10 @@ function getHeaderInfoTable(details) {
 
 export function shouldInclude(question) {
   return (
-    question.visible === true && (question.active || question.isCustomQuestion)
+    question?.visible &&
+    (question?.active || question?.isCustomQuestion) &&
+    !question?.notApplicable &&
+    !question?.questionApproval
   );
 }
 function getProposalTeamsRows(questions) {
