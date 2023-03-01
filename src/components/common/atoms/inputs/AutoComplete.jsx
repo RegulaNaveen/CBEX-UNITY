@@ -1,16 +1,17 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import AutocompleteV2 from 'apollo-react/components/AutocompleteV2';
-import { debounce } from 'lodash';
+
 import { getAccessTokenFromLocalStorage as getAccessToken } from '../../../../SessionHandler';
 import { QUESTION_UNLOCK_TIMEOUT } from '../../../../constants/app';
 import { API } from '../../../../constants';
 
 const { USER_API_URL, API_KEY } = API.PROPOSAL;
-const Autocomplete = props => {
+const Autocomplete = (props) => {
   const [options, setOptions] = useState([]);
   const [value, setValue] = useState([]);
   const [inputVal, setInputVal] = useState('');
+  const [callAccept, setCallAccept] = useState(false);
   const [getNoOptionsText, setNoOptionsText] = useState(1);
   const autocompleteRef = useRef();
   const [unlockTimeout, setUnlockTimeout] = useState(null);
@@ -20,12 +21,12 @@ const Autocomplete = props => {
   const previousController = useRef();
   const { disabled } = props;
   function filter() {
-    value.map(row => {
+    value.map((row) => {
       let matched = row.email;
-      options.map(row2 => {
+      options.map((row2) => {
         let matcharray = row2.mail;
         if (matcharray == matched) {
-          const index = options.findIndex(x => x.mail === matched);
+          const index = options.findIndex((x) => x.mail === matched);
           if (index > -1) {
             options.splice(index, 1);
           }
@@ -72,7 +73,7 @@ const Autocomplete = props => {
   }
   useEffect(() => {
     if (Boolean(text.length)) {
-      let Val = text.split(',').map(v => {
+      let Val = text.split(',').map((v) => {
         let email = extractEmails(v) || v;
         let label = extractName(v) || email;
         return { label, email };
@@ -80,7 +81,7 @@ const Autocomplete = props => {
       setValue(Val);
     } else setValue([]);
   }, [text]);
-  const getData = async searchTerm => {
+  const getData = async (searchTerm) => {
     if (previousController.current) {
       previousController.current.abort();
     }
@@ -96,9 +97,9 @@ const Autocomplete = props => {
           'x-access-token': getAccessToken()
         }
       })
-        .then(response => response.json())
-        .then(myJson => {
-          updatedOptions = myJson.data.map(p => {
+        .then((response) => response.json())
+        .then((myJson) => {
+          updatedOptions = myJson.data.map((p) => {
             return {
               label: `${p.first_name} ${p.last_name}(${p.email.toLowerCase()})`,
               mail: `${p.email.toLowerCase()}`
@@ -114,7 +115,7 @@ const Autocomplete = props => {
   const handleChange = (event, newValue, reason) => {
     const { onChange } = props;
     setValue(newValue);
-    const proposaluser = newValue.map(v => {
+    const proposaluser = newValue.map((v) => {
       return v.email ? v.label + '(' + v.email + ')' : v.label;
     });
     if (proposaluser.length === 0) onChange(' ', text, reason);
@@ -122,18 +123,22 @@ const Autocomplete = props => {
     resetUnlockTimer(true);
   };
 
-  const changeHandler = (event, value) => {
+  const onInputChange = (event, value) => {
+    resetUnlockTimer();
+    setInputVal(value);
     const elem = document.querySelectorAll('.a-MuiAutocomplete-popper').item(0);
     if (value) {
+      setCallAccept(true);
+
       getData(value);
       elem.classList.remove('disable');
     } else {
+      setCallAccept(false);
+
       setOptions([]);
       elem.className += ' disable';
     }
   };
-
-  const onInputChange = useCallback(debounce(changeHandler, 1000), []);
 
   const onInputFocus = async () => {
     const elem = document.querySelectorAll('.a-MuiAutocomplete-popper').item(0);
@@ -160,11 +165,7 @@ const Autocomplete = props => {
         value={value}
         onChange={handleChange}
         inputValue={inputVal}
-        onInputChange={(e, v) => {
-          resetUnlockTimer();
-          setInputVal(v);
-          onInputChange(e, v);
-        }}
+        onInputChange={onInputChange}
         noOptionsText={
           getNoOptionsText === 0 ? 'No Matches Found' : 'Loading...'
         }
