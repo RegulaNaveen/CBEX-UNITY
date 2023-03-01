@@ -62,6 +62,7 @@ const ProposalTeamQuestion = ({
     return (
       <>
         <AutoComplete
+          data-testid="proposal-team-section-id"
           sectionName={question.section?.sectionName}
           onFocus={() => {
             questionLockWrapper(question?.questionId);
