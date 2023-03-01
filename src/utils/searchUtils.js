@@ -1,3 +1,4 @@
+import moment from 'moment';
 import {
   shouldShowQuestion,
   shouldShowSection
@@ -207,7 +208,9 @@ export function searchInTab({
             return (
               question['visible'] &&
               (question['active'] || question['isCustomQuestion']) &&
-              !question['questionApproval']
+              (tabIndex >= DEFAULT_TABS_LEN
+                ? true
+                : !question['questionApproval'])
             );
           })
           .forEach(questionKey => {
@@ -280,6 +283,19 @@ export function searchInTab({
                       tabName,
                       sectionName: section.sectionName
                     });
+                  });
+                } else if (question.answerConfiguration.type === 'date') {
+                  updateSearchMatches({
+                    regexp,
+                    inputText: moment(recentAnswer).isValid()
+                      ? moment(recentAnswer).format('DD-MMM-YYY')
+                      : recentAnswer,
+                    index: questionKey,
+                    finalResult,
+                    tab: tabIndex,
+                    vTab: null,
+                    tabName,
+                    sectionName: section.sectionName
                   });
                 } else {
                   updateSearchMatches({
@@ -406,6 +422,19 @@ export function searchInApprovals(
                       sectionName: approval.ApprovalSectionTitle
                     });
                   });
+                } else if (question.answerConfiguration.type === 'date') {
+                  updateSearchMatches({
+                    regexp,
+                    inputText: moment(recentAnswer).isValid()
+                      ? moment(recentAnswer).format('DD-MMM-YYY')
+                      : recentAnswer,
+                    index: `${question.questionId}-archive-${aIndex}-left-ques`,
+                    finalResult,
+                    tab: 2,
+                    vTab: null,
+                    tabName: 'Approvals',
+                    sectionName: approval.ApprovalSectionTitle
+                  });
                 } else {
                   updateSearchMatches({
                     regexp,
@@ -483,6 +512,19 @@ export function searchInApprovals(
                       sectionName: approval.ApprovalSectionTitle
                     });
                   });
+                } else if (question.answerConfiguration.type === 'date') {
+                  updateSearchMatches({
+                    regexp,
+                    inputText: moment(recentAnswer).isValid()
+                      ? moment(recentAnswer).format('DD-MMM-YYYY')
+                      : recentAnswer,
+                    index: `${question.questionId}-archive-${aIndex}-right-ques`,
+                    finalResult,
+                    tab: 2,
+                    vTab: null,
+                    tabName: 'Approvals',
+                    sectionName: approval.ApprovalSectionTitle
+                  });
                 } else {
                   updateSearchMatches({
                     regexp,
@@ -559,6 +601,19 @@ export function searchInApprovals(
                     sectionName: approval.ApprovalSectionTitle
                   });
                 });
+              } else if (question.answerConfiguration.type === 'date') {
+                updateSearchMatches({
+                  regexp,
+                  inputText: moment(recentAnswer).isValid()
+                    ? moment(recentAnswer).format('DD-MMM-YYYY')
+                    : recentAnswer,
+                  index: `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
+                  finalResult,
+                  tab: 2,
+                  vTab: null,
+                  tabName: 'Approvals',
+                  sectionName: approval.ApprovalSectionTitle
+                });
               } else {
                 updateSearchMatches({
                   regexp,
@@ -632,6 +687,19 @@ export function searchInApprovals(
                     tabName: 'Approvals',
                     sectionName: approval.ApprovalSectionTitle
                   });
+                });
+              } else if (question.answerConfiguration.type === 'date') {
+                updateSearchMatches({
+                  regexp,
+                  inputText: moment(recentAnswer).isValid()
+                    ? moment(recentAnswer).format('DD-MMM-YYYY')
+                    : recentAnswer,
+                  index: `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
+                  finalResult,
+                  tab: 2,
+                  vTab: null,
+                  tabName: 'Approvals',
+                  sectionName: approval.ApprovalSectionTitle
                 });
               } else {
                 updateSearchMatches({
