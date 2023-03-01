@@ -269,7 +269,7 @@ const CustomApolloRichText = ({
           });
         }
       }
-    }, 500);
+    }, 700);
     if (isEqual(richTextData.value, INITIAL_DATA.value)) return; // break func
     // enable timer only if field is focused
     if (isFocused) {
