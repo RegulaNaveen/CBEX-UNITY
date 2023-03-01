@@ -45,7 +45,7 @@ const DnDOutsideResource = ({
     const backgroundColor = event.color;
     const dragClass = event.isDraggable ? 'isDraggable' : 'nonDraggable';
     return {
-      style: { backgroundColor, textOverflow: 'ellipsis' },
+      style: { backgroundColor, textOverflow: 'ellipsis', marginTop: '2px' },
       className: `${dragClass}`
     };
   }, []);

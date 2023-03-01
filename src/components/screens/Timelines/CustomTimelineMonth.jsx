@@ -118,14 +118,18 @@ class MonthView extends React.Component {
           )}
           <Typography
             style={{
+              display: 'flex',
               borderRadius: '50%',
               color: '#fff',
-              height: '26px',
-              width: '26px',
+              height: '28px',
+              width: '28px',
               backgroundColor: '#0768fd',
-              fontFamily: 'Proxima Nova',
+              fontFamily: 'ProximaNova-Regular',
               fontSize: '16px',
-              fontweight: '500'
+              fontweight: '500',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '2px'
             }}
           >
             {localizer.format(date, 'D')}
@@ -386,9 +390,10 @@ class MonthView extends React.Component {
   }
 
   measureRowLimit() {
+    const customRowLimit = this.slotRowRef.current.getRowLimit() - 1;
     this.setState({
       needLimitMeasure: false,
-      rowLimit: this.slotRowRef.current.getRowLimit()
+      rowLimit: customRowLimit
     });
   }
 
