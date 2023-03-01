@@ -28,7 +28,7 @@ const questionsFilters = fromJS(data.questionsFilters);
 const userActions = fromJS(data.userActions);
 const milestones = fromJS(data.milestones);
 const proposalID = fromJS(data.proposalID);
-const selectedBid = fromJS(data.proposalID);
+const selectedBid = fromJS(proposalID);
 const userRole = fromJS(data.userRole);
 const sections = fromJS(data.sections);
 const approvals = {
@@ -101,6 +101,7 @@ let initialState = {
   getBidList: jest.fn(),
   currentTab: null
 };
+
 describe('Testing approvals', () => {
   let sinonSandbox;
   beforeAll(() => {
@@ -123,6 +124,7 @@ describe('Testing approvals', () => {
       getOpportunityData: jest.fn()
     };
 
+
     sinonSandbox
       .stub(ApprovalActions, 'fetchAllApprovals')
       .returns({ type: 'FETCH_ALL_APPROVALS' });
@@ -141,7 +143,8 @@ describe('Testing approvals', () => {
     );
     await expect(queryAllByTestId('bid-history')).toBeTruthy();
   });
-  test.skip('Test filter function', () => {
+
+  test('Test filter function', () => {
     const renderFilterFunc = jest.fn();
     const mockFunc = renderFilterFunc();
     expect(mockFunc).toBeUndefined();

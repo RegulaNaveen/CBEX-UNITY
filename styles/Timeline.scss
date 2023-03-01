@@ -6,6 +6,8 @@
     border-radius: 5px;
     height: 25px;
     text-overflow: ellipsis;
+    font-size: 14px;
+    font-family: 'ProximaNova-Regular';
     .rbc-event-content {
       width: 260px !important;
       white-space: nowrap;
@@ -37,17 +39,6 @@
   .rbc-overlay {
     width: 320px !important;
   }
-  .rbc-now button {
-    border-radius: 50%;
-
-    color: #fff;
-    height: 26px;
-    width: 26px;
-    background-color: #0768fd;
-    font-family: 'Proxima Nova';
-    font-size: 16px;
-    font-weight: 500;
-  }
 
   .rbc-off-range-bg {
     background: inherit;
@@ -75,6 +66,7 @@
       background-color: #f6f7fb;
       border: none;
       box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.08);
+      height: inherit;
 
       .MuiIconButton-root {
         top: 50%;
@@ -170,15 +162,30 @@
   }
 
   .rbc-button-link {
-    font-size: 16px !important;
+    font-size: 16px;
     font-family: 'ProximaNova-Regular';
+    color: #595959;
+  }
+  .rbc-show-more {
+    font-size: 14px !important;
+    font-family: 'ProximaNova-Regular';
+    color: #015ff1;
   }
   .rbc-event-content {
     font-size: 14px !important;
     font-family: 'ProximaNova-Regular';
   }
   .rbc-header {
-    color: #7f7f7f;
+    color: #999999;
     font-family: 'ProximaNova-Regular';
+    font-size: 14px;
+    font-weight: normal;
+  }
+  .rbc-addons-dnd-row-body {
+    margin-top: 3px;
+  }
+  .rbc-row-segment {
+    padding-left: 5px;
+    padding-right: 5px;
   }
 }

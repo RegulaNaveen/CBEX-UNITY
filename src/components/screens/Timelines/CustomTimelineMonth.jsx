@@ -32,6 +32,7 @@ import {
   setTimelineDateRange
 } from '../../../redux/actions/timeline-actions';
 import { getSelectedBid } from '../../../redux/selectors/proposal';
+import Typography from 'apollo-react/components/Typography';
 
 let eventsForWeek = (evts, start, end, accessors, localizer) =>
   evts.filter(e => inRange(e, start, end, accessors, localizer));
@@ -105,6 +106,37 @@ class MonthView extends React.Component {
 
   getDateHeadingLabel = date => {
     const { localizer, timelineDateRange } = this.props;
+
+    if (localizer.isSameDate(date, new Date())) {
+      return (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          {localizer.format(date, 'D').toString() === '1' && (
+            <div style={{ marginRight: '3px' }}>{`${localizer.format(
+              date,
+              'MMM'
+            )} `}</div>
+          )}
+          <Typography
+            style={{
+              display: 'flex',
+              borderRadius: '50%',
+              color: '#fff',
+              height: '28px',
+              width: '28px',
+              backgroundColor: '#0768fd',
+              fontFamily: 'ProximaNova-Regular',
+              fontSize: '16px',
+              fontweight: '500',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '2px'
+            }}
+          >
+            {localizer.format(date, 'D')}
+          </Typography>
+        </div>
+      );
+    }
 
     if (
       (localizer.format(date, 'D').toString() === '1' ||
@@ -358,9 +390,10 @@ class MonthView extends React.Component {
   }
 
   measureRowLimit() {
+    const customRowLimit = this.slotRowRef.current.getRowLimit() - 1;
     this.setState({
       needLimitMeasure: false,
-      rowLimit: this.slotRowRef.current.getRowLimit()
+      rowLimit: customRowLimit
     });
   }
 

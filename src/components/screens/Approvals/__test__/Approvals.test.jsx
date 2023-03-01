@@ -34,7 +34,7 @@ describe.skip('Snapshot Test Approval Input Components', () => {
   beforeEach(() => {});
   test('Test DateQuestion', () => {
     const question = dummyQuestions.find(
-      (item) => item.answerConfiguration.type === 'date'
+      item => item.answerConfiguration.type === 'date'
     );
     const lastAnswer = getLastAnswer(question);
     const props = { question, lastAnswer, checkDisableFlag: jest.fn() };
@@ -47,7 +47,7 @@ describe.skip('Snapshot Test Approval Input Components', () => {
   });
   test('Test RadioQuestion', () => {
     const question = dummyQuestions.find(
-      (item) => item.answerConfiguration.type === 'radio'
+      item => item.answerConfiguration.type === 'radio'
     );
     const lastAnswer = getLastAnswer(question);
     const props = { question, lastAnswer, checkDisableFlag: jest.fn() };
@@ -63,7 +63,7 @@ describe.skip('Snapshot Test Approval Input Components', () => {
   });
   test('Test SelectQuestion', () => {
     const question = dummyQuestions.find(
-      (item) => item.answerConfiguration.type === 'select-lookup'
+      item => item.answerConfiguration.type === 'select-lookup'
     );
     const lastAnswer = getLastAnswer(question);
     const props = { question, lastAnswer, checkDisableFlag: jest.fn() };
@@ -79,7 +79,7 @@ describe.skip('Snapshot Test Approval Input Components', () => {
   });
   test('Test MultiSelectQuestion', () => {
     const question = dummyQuestions.find(
-      (item) => item.answerConfiguration.type === 'picklist-lookup'
+      item => item.answerConfiguration.type === 'picklist-lookup'
     );
     const lastAnswer = getLastAnswer(question);
     const props = { question, lastAnswer };
@@ -94,7 +94,7 @@ describe.skip('Snapshot Test Approval Input Components', () => {
   });
   test('Test ProposalTeamQuestion', () => {
     const question = dummyQuestions.find(
-      (item) => item.section.sectionName === 'Proposal Team'
+      item => item.section.sectionName === 'Proposal Team'
     );
     const lastAnswer = getLastAnswer(question);
     const props = { question, lastAnswer };
@@ -107,7 +107,7 @@ describe.skip('Snapshot Test Approval Input Components', () => {
   });
   test('Test NumberQuestion', () => {
     const question = dummyQuestions.find(
-      (item) => item.answerConfiguration.type === 'number'
+      item => item.answerConfiguration.type === 'number'
     );
     const lastAnswer = getLastAnswer(question);
     const props = { question, lastAnswer, checkDisableFlag: jest.fn() };
@@ -123,7 +123,7 @@ describe.skip('Snapshot Test Approval Input Components', () => {
   });
   test('Test YesNoQuestion', () => {
     const question = dummyQuestions.find(
-      (item) => item.answerConfiguration.type === 'y/n'
+      item => item.answerConfiguration.type === 'y/n'
     );
     const lastAnswer = getLastAnswer(question);
     const props = { question, lastAnswer };
@@ -136,7 +136,7 @@ describe.skip('Snapshot Test Approval Input Components', () => {
   });
   test('Test CheckboxQuestion', () => {
     const question = dummyQuestions.find(
-      (item) => item.answerConfiguration.type === 'checkbox'
+      item => item.answerConfiguration.type === 'checkbox'
     );
     const lastAnswer = getLastAnswer(question);
     const props = { question, lastAnswer };

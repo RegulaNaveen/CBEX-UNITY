@@ -45,7 +45,12 @@ const DnDOutsideResource = ({
     const backgroundColor = event.color;
     const dragClass = event.isDraggable ? 'isDraggable' : 'nonDraggable';
     return {
-      style: { backgroundColor, textOverflow: 'ellipsis' },
+      style: {
+        backgroundColor,
+        textOverflow: 'ellipsis',
+        marginTop: '2px',
+        borderRadius: '2px'
+      },
       className: `${dragClass}`
     };
   }, []);
@@ -133,7 +138,7 @@ const DnDOutsideResource = ({
         return [...filtered, { ...existing, start, end, allDay }];
       });
 
-      handleDayChange(start, question);
+      handleDayChange(moment(start).format(), question);
     },
     [setTimelineEvents]
   );
@@ -160,7 +165,7 @@ const DnDOutsideResource = ({
 
         newEvent(event);
 
-        handleDayChange(start, draggedQuestionData);
+        handleDayChange(moment(start).format(), draggedQuestionData);
         setDraggedQuestionData(null);
         return;
       }
@@ -171,7 +176,7 @@ const DnDOutsideResource = ({
       }
 
       if (selectedEvent) {
-        handleDayChange(start, selectedEvent?.question);
+        handleDayChange(moment(start).format(), selectedEvent?.question);
         const event = {
           title: formatName(selectedEvent.title, counters[selectedEvent.title]),
           start,

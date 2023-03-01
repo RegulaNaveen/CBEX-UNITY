@@ -41,7 +41,7 @@ const SectionFreezed = ({
             inline: 'nearest'
           });
           dispatch(autoNavigationCompletedAction());
-        }, 500);
+        }, 700);
       }
     }
   }, [sectionTitleRef.current, archiveIndex, currentSearchResult, sectionId]);

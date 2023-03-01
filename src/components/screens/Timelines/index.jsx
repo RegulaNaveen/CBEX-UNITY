@@ -152,7 +152,7 @@ const Timeline = () => {
           end: new Date(lastAnswer?.answer),
           isDraggable: isCurrent,
           color:
-            lastAnswer?.user === 'UnityPredictedAnswer' ? '#297DFD' : '#00C221',
+            lastAnswer?.user === 'UnityPredictedAnswer' ? '#0768FD' : '#00C221',
           question
         };
         setTimelineEvents(current => [...current, eventss]);
