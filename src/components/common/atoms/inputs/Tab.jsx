@@ -25,6 +25,7 @@ import {
 } from '../../../../redux/selectors';
 import {
   setActiveTabIndexAction,
+  setPanelStatus,
   setVTabUserPreferenceAction
 } from '../../../../redux/actions/proposal-actions';
 import { createMatomoObj, saveDataInMatomo } from '../../../../utils/utils';
@@ -141,6 +142,7 @@ const UnityTab = ({
   const [isNotepadOpen, setIsNotepadOpen] = useState(true);
   const [vtabCollpased, setVTabCollapsed] = useState(false);
   const [systemTriggeredClick, setSystemTriggeredClick] = useState(false);
+  const [tabRefresh] = useState('notrefresh');
 
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const proposalId = selectedBid?.id || 1;
@@ -180,35 +182,72 @@ const UnityTab = ({
     }
     return false;
   };
-  const newTab = [];
+  let newTab = [];
   let len = tabs.length - 1;
   // eslint-disable-next-line no-restricted-syntax
-  for (const [key, value] of Object.entries(customTabs)) {
-    const response = calculateTab(value);
-    const tabID = value[0]?.UnityTabId;
-    const filterTitle = value.filter(v => v.UnityTabTitle);
-    if (filterTitle.length && response) {
-      const title = String(filterTitle[0]?.UnityTabTitle)
+  let orderedCustomTabs = Object.values(customTabs)
+    .filter(
+      sections => sections.filter(section => section['UnityTabTitle']).length
+    )
+    .sort(
+      (sectionsA, sectionsB) =>
+        sectionsA[0].UnityTabOrder - sectionsB[0].UnityTabOrder
+    );
+  orderedCustomTabs.forEach(customTabSections => {
+    const tabID = customTabSections[0]['UnityTabId'];
+    const questionCount = customTabSections.some(
+      v => v['UnityTabSectionQuestions'].length > 0
+    );
+    const filterTitle = customTabSections.filter(v => v['UnityTabTitle']);
+    if (filterTitle.length && questionCount) {
+      const title = String(filterTitle[0]['UnityTabTitle'])
         .trim()
         .toLowerCase();
-      const tabpath = String(value[0]?.UnityTabTitle)
+      const tabpath = String(customTabSections[0]['UnityTabTitle'])
         .replace(' ', '_')
         .trim()
         .toLowerCase();
       newTab.push({
-        label: filterTitle[0]?.UnityTabTitle,
+        label: customTabSections[0]['UnityTabTitle'],
         value: len++,
         component: <CustomTabs tabId={tabID} key={title} />,
         path: tabpath
       });
     }
-  }
+  });
   useEffect(() => {
     if (newTab && Object.keys(newTab)?.length > 0 && !tabloaded) {
       setTabs([...tabs, ...newTab]);
       settabloaded(true);
+      newTab.length = 0;
     }
   }, [customTabs]);
+
+  useEffect(() => {
+    if ('URLSearchParams' in window) {
+      const searchParams = new URLSearchParams(window.location.search);
+      const currentviewType = searchParams.get('viewType');
+      if (
+        Boolean(!Object.keys(customTabs)?.length) &&
+        tabloaded &&
+        (currentviewType !== 'documents' ||
+          currentviewType !== 'approval' ||
+          currentviewType !== 'timelines' ||
+          currentviewType !== 'questions')
+      ) {
+        setTabs(defaultTabs);
+        dispatch(setActiveTabIndexAction(0));
+      }
+    }
+    if (Object.keys(customTabs)?.length > 0 && tabloaded) {
+      setTabs([...tabs, ...newTab]);
+    }
+  }, [customTabs]);
+
+  useEffect(() => {
+    dispatch(setPanelStatus(vtabCollpased));
+  }, [vtabCollpased]);
+
   useEffect(() => {
     if (
       tabs.length > 4 &&
@@ -376,7 +415,7 @@ const UnityTab = ({
             inline: 'nearest'
           });
           dispatch(autoNavigationCompletedAction());
-        }, 500);
+        }, 700);
       }
     }
   }, [currentSearchResult]);
@@ -647,6 +686,7 @@ const UnityTab = ({
         <Tabs
           value={value}
           onChange={handleChangeTab}
+          key={tabRefresh}
           truncate
           className="_question-tab"
         >

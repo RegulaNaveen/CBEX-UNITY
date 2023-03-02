@@ -18,19 +18,24 @@ const CustomComponents = {
       parseMomentDate(dateCellWrapperProps.value) ===
       parseMomentDate(dateCellWrapperProps.currentBidDetails[0].bidDueDate);
 
-    const isPastDate = moment(dateCellWrapperProps.value).isBefore(new Date());
+    const isPastDate =
+      moment(dateCellWrapperProps.value).isBefore(new Date()) &&
+      !(
+        parseMomentDate(dateCellWrapperProps.value) ===
+        parseMomentDate(new Date())
+      );
 
     const style = {
       display: 'flex',
       flex: 1,
       border: `${
         BidCreationDateAnnotation || BidDueDateAnnotation
-          ? '1px solid #A9A9A9'
+          ? '1.2px solid #999999'
           : ''
       }`,
       borderLeft: `${
         BidCreationDateAnnotation || BidDueDateAnnotation
-          ? '1px solid #A9A9A9'
+          ? '1.2px solid #999999'
           : '1px solid #DDD'
       }`,
       backgroundColor: `${isPastDate ? '#F2F2F2' : '#fff'}`
@@ -41,10 +46,10 @@ const CustomComponents = {
         {BidCreationDateAnnotation && (
           <Typography
             style={{
-              color: '#999999',
-              fontFamily: 'Proxima Nova',
+              color: '#444444',
+              fontFamily: 'ProximaNova-Regular',
               fontSize: '16px',
-              fontWeight: 600,
+              width: '100%',
               alignSelf: 'flex-end',
               justifyContent: 'flex-end',
               textAlign: 'center'
@@ -56,10 +61,10 @@ const CustomComponents = {
         {BidDueDateAnnotation && (
           <Typography
             style={{
-              color: '#999999',
-              fontFamily: 'Proxima Nova',
+              color: '#444444',
+              fontFamily: 'ProximaNova-Regular',
               fontSize: '16px',
-              fontWeight: 600,
+              width: '100%',
               alignSelf: 'flex-end',
               justifyContent: 'flex-end',
               textAlign: 'center'

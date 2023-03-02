@@ -105,6 +105,7 @@ const {
   SET_PRICE_MODELER_RECALCULATING,
   PRICE_MODELER_UPDATE,
   SET_ACTIVE_TABINDEX,
+  SET_PANEL_STATUS,
   SET_V_TAB_ACTIVE_INDEX,
   SET_V_TAB_USER_PREFERENCE
 } = REDUX_TYPES.PROPOSAL;
@@ -1506,6 +1507,15 @@ export const setActiveTabIndexAction = activeIndex => {
     dispatch({
       type: SET_ACTIVE_TABINDEX,
       payload: activeIndex
+    });
+  };
+};
+
+export const setPanelStatus = val => {
+  return dispatch => {
+    dispatch({
+      type: SET_PANEL_STATUS,
+      payload: val
     });
   };
 };

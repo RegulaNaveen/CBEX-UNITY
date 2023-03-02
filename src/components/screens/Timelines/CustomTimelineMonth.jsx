@@ -32,6 +32,7 @@ import {
   setTimelineDateRange
 } from '../../../redux/actions/timeline-actions';
 import { getSelectedBid } from '../../../redux/selectors/proposal';
+import Typography from 'apollo-react/components/Typography';
 
 let eventsForWeek = (evts, start, end, accessors, localizer) =>
   evts.filter(e => inRange(e, start, end, accessors, localizer));
@@ -103,6 +104,51 @@ class MonthView extends React.Component {
     return dates;
   };
 
+  getDateHeadingLabel = date => {
+    const { localizer, timelineDateRange } = this.props;
+
+    if (localizer.isSameDate(date, new Date())) {
+      return (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          {localizer.format(date, 'D').toString() === '1' && (
+            <div style={{ marginRight: '3px' }}>{`${localizer.format(
+              date,
+              'MMM'
+            )} `}</div>
+          )}
+          <Typography
+            style={{
+              display: 'flex',
+              borderRadius: '50%',
+              color: '#fff',
+              height: '28px',
+              width: '28px',
+              backgroundColor: '#0768fd',
+              fontFamily: 'ProximaNova-Regular',
+              fontSize: '16px',
+              fontweight: '500',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '2px'
+            }}
+          >
+            {localizer.format(date, 'D')}
+          </Typography>
+        </div>
+      );
+    }
+
+    if (
+      (localizer.format(date, 'D').toString() === '1' ||
+        localizer.isSameDate(date, new Date(timelineDateRange[0]?._d))) &&
+      !localizer.isSameDate(date, new Date())
+    ) {
+      return localizer.format(date, 'MMM D');
+    }
+
+    return localizer.format(date, 'D');
+  };
+
   handleDateRangeChange = value => {
     if (!moment(`${value[0]}`).isValid() || !moment(`${value[1]}`).isValid()) {
       this.setState({ showDateRangeError: true });
@@ -139,7 +185,7 @@ class MonthView extends React.Component {
     return (
       <>
         <div className="timeline-calender-rtl">
-          <div>
+          <div style={{ justifySelf: 'flex-start' }}>
             <DateRangePicker
               size="small"
               value={timelineDateRange}
@@ -154,12 +200,23 @@ class MonthView extends React.Component {
               endLabel="End"
             />
           </div>
-          <div className="month-range-label">{`${moment(
-            this.props.timelineDateRange[0]
-          ).format('MMMM')} - ${moment(this.props.timelineDateRange[1]).format(
-            'MMMM YYYY'
-          )}`}</div>
-          <div>
+          {moment(this.props.timelineDateRange[0])
+            .format('MMMM')
+            .toString() ===
+          moment(this.props.timelineDateRange[1])
+            .format('MMMM')
+            .toString() ? (
+            <div className="month-range-label">{`${moment(
+              this.props.timelineDateRange[1]
+            ).format('MMMM YYYY')}`}</div>
+          ) : (
+            <div className="month-range-label">{`${moment(
+              this.props.timelineDateRange[0]
+            ).format('MMMM')} - ${moment(
+              this.props.timelineDateRange[1]
+            ).format('MMMM YYYY')}`}</div>
+          )}
+          <div style={{ justifySelf: 'end' }}>
             <Button
               variant="primary"
               icon={<PlusIcon />}
@@ -253,9 +310,8 @@ class MonthView extends React.Component {
     let isOffRange = localizer.neq(date, currentDate, 'month');
     let isCurrent = localizer.isSameDate(date, currentDate);
     let drilldownView = getDrilldownView(date);
-    let label = localizer.isSameDate(date, new Date())
-      ? localizer.format(date, 'dateFormat')
-      : localizer.format(date, 'MMM DD');
+    let label = this.getDateHeadingLabel(date);
+
     let DateHeaderComponent = this.props.components.dateHeader || DateHeader;
 
     return (
@@ -334,9 +390,10 @@ class MonthView extends React.Component {
   }
 
   measureRowLimit() {
+    const customRowLimit = this.slotRowRef.current.getRowLimit() - 1;
     this.setState({
       needLimitMeasure: false,
-      rowLimit: this.slotRowRef.current.getRowLimit()
+      rowLimit: customRowLimit
     });
   }
 

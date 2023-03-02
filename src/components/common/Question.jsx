@@ -204,7 +204,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
           });
           this.setSelectRow(true);
           autoNavigationDone();
-        }, 500);
+        }, 700);
       }
     } else if (
       prevSearchResult !== null &&
@@ -866,16 +866,16 @@ export class TaskRow extends React.PureComponent<Props, State> {
           !isEqual(richTextData.value, data.value) &&
           !isEmpty(data.text.trim())
         ) {
-          let prevAnswerBlocks = richTextData.value.blocks.filter(
+          let prevAnswerBlocks = richTextData?.value?.blocks.filter(
             block => block.text.length > 0
           );
-          let answerBlocks = data.value.blocks.filter(
+          let answerBlocks = data?.value?.blocks.filter(
             block => block.text.length > 0
           );
           if (isEqual(prevAnswerBlocks, answerBlocks)) {
             saveDate = false;
           } else if (
-            isEmpty(richTextData.value?.blocks) &&
+            isEmpty(richTextData?.value?.blocks) &&
             lastAnswerJS?.answer.trim() === data.text.trim()
           ) {
             saveDate = false;

@@ -88,7 +88,10 @@ const WysiwygNotepad = ({
   const editor = useEditor(
     {
       extensions: [
-        StarterKit,
+        StarterKit.configure({
+          // The Collaboration extension comes with its own history handling
+          history: false
+        }),
         Underline,
         Link,
         HighLight.configure({
@@ -461,12 +464,6 @@ const WysiwygNotepad = ({
           );
       }
     }
-
-    return () => {
-      if (editor && !editor.isDestroyed) {
-        editor.commands.reset();
-      }
-    };
   }, [query, currentSearchResult, editor, dataSynced]);
 
   return (

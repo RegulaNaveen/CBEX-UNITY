@@ -61,9 +61,12 @@ const Section = ({ sectionId, title, tabId }) => {
             inline: 'nearest'
           });
           dispatch(autoNavigationCompletedAction());
-        }, 500);
+        }, 700);
       } else if (
-        questionAndSectionTitleIds.includes(currentSearchResult.searchIndex)
+        questionAndSectionTitleIds.includes(currentSearchResult.searchIndex) &&
+        ((currentSearchResult.sectionName !== null &&
+          currentSearchResult.sectionName === title) ||
+          currentSearchResult.sectionName === null)
       ) {
         shouldExpand = true;
       } else {

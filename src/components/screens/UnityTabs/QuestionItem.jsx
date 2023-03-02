@@ -1,14 +1,15 @@
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable no-shadow */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable prefer-const */
 /* eslint-disable no-unused-expressions */
 import React, { useContext, useMemo, useState, useEffect, useRef } from 'react';
-import { isObject, isEqual, isEmpty, xor, has, isString } from 'lodash';
+import { isEmpty, isString } from 'lodash';
 import Grid from 'apollo-react/components/Grid';
 import PropTypes from 'prop-types';
 import InfoIcon from 'apollo-react-icons/Info';
 import classNames from 'classnames';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Box from 'apollo-react/components/Box';
 import Typography from 'apollo-react/components/Typography';
 import Tooltip from 'apollo-react/components/Tooltip';
@@ -16,7 +17,6 @@ import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import IconButton from 'apollo-react/components/IconButton';
 import { Map, List, fromJS } from 'immutable';
 import moment from 'moment';
-import CalendarIcon from './CalendarIcon';
 import QuestionLabel from './QuestionLabel';
 import AnswerHistory from '../../views/modals/AnswerHistory';
 import ANSWER_TYPES from '../../../constants/answerTypes';
@@ -36,32 +36,34 @@ import SFAnswerValidationWrapper from '../../common/SFAnswerValidationWrapper';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import {
   getOpportunityData,
-  getSelectedBid
+  getSelectedBid,
+  getUnityTabQuestionLoading,
+  getPanelStatus
 } from '../../../redux/selectors/proposal';
 import { getIntegrations, getQuestion } from '../../../redux/selectors';
-// import CustomLoader from './CustomLoader';
 import { getLastAnswer, shouldShowQuestion } from './utils';
 import { selectCurrentSearchResult } from '../../../redux/selectors/search';
-// import { autoNavigationCompletedAction } from '../../../redux/actions/search-actions';
 import ChipView from '../../common/Chip/ChipView';
 import { parseMomentDate } from '../../../utils/DateUtils';
 import SystemIntegrations from '../../common/SystemIntegrations/SystemIntegrations';
-import CustomLoader from './CustomLoader';
 import EventLauncher from '../Opportunity/EventLauncher';
+import { autoNavigationCompletedAction } from '../../../redux/actions/search-actions';
 
 const QuestionItem = ({
   questionId = '',
   UnityTabSectionTitle = '',
   disabled,
   isQuesFreezed,
-  // archivedQuestion,
   eventCategories,
   trackEvent,
   updateQuestionVisibility
-  // highlightQuestionId
 }) => {
   const question = useSelector(getQuestion(questionId));
+  const unityTabQuestionLoading = useSelector(
+    getUnityTabQuestionLoading
+  ).toJS();
   const oppdata = useSelector(state => getOpportunityData(state));
+  const panelStatus = useSelector(state => getPanelStatus(state));
   const integrationsData = useSelector(state => getIntegrations(state));
   const unityTabFilters = useSelector(state => state.unitytab.filters);
   const isShowQuestion = shouldShowQuestion(question, unityTabFilters);
@@ -71,7 +73,7 @@ const QuestionItem = ({
   const [changeIcon, setchangeIcon] = useState('');
   const questionTextRef = useRef(null);
   const questionTextRef2 = useRef(null);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     updateQuestionVisibility(questionId, isShowQuestion);
   }, [unityTabFilters]);
@@ -86,7 +88,7 @@ const QuestionItem = ({
             inline: 'nearest'
           });
           dispatch(autoNavigationCompletedAction());
-        }, 500);
+        }, 700);
       }
     }
   }, [questionTextRef.current, currentSearchResult, questionId]);
@@ -230,7 +232,14 @@ const QuestionItem = ({
       trackMatomoEventSubmitAnswer(inputProps.lastAnswer.answer);
     }
     if (question?.section?.sectionName === 'Proposal Team') {
-      return <ProposalTeamQuestion {...inputProps} />;
+      return (
+        <SFAnswerValidationWrapper
+          hasDifferentSFanswer={question.hasDifferentSFanswer}
+          sfObject={question.sfObject}
+        >
+          <ProposalTeamQuestion {...inputProps} />
+        </SFAnswerValidationWrapper>
+      );
     }
 
     const ComponentMapper = {
@@ -338,7 +347,7 @@ const QuestionItem = ({
     return false;
   };
 
-  const SystemIcon = () => {
+  const SystemIcon = unityQuestionStatus => {
     let {
       currentSFanswer,
       sfField,
@@ -348,6 +357,9 @@ const QuestionItem = ({
       sfObject,
       hasDifferentSFanswer
     } = question;
+    const loading =
+      unityQuestionStatus?.questionId === questionId &&
+      unityQuestionStatus?.value;
     currentSFanswer = Map(currentSFanswer);
     answers = answers.map(v => Map(v));
     answers = List(answers);
@@ -449,7 +461,7 @@ const QuestionItem = ({
         isAnswered={(c, v) => isAnswered(c, v)}
         lastAnswer={lastAnswer}
         iconColor={iconColor}
-        loading={false}
+        loading={loading}
         NaLoading={false}
         showNaCheckbox={false}
         isNotepadOpen={false}
@@ -470,6 +482,9 @@ const QuestionItem = ({
       customDimensions: [question, data, proposalDetail]
     });
   };
+  const fullGrid = [11, 1];
+  const mediumGrid = [10, 2];
+  const conditionalGrid = panelStatus ? fullGrid : mediumGrid;
   return useMemo(
     () =>
       isShowQuestion ? (
@@ -486,7 +501,7 @@ const QuestionItem = ({
             <Grid container>
               <Grid
                 item
-                xs={10}
+                xs={conditionalGrid[0]}
                 className="ques-title-cover unity-tab-question"
               >
                 <div className="question-label-container">
@@ -517,14 +532,13 @@ const QuestionItem = ({
                   <div className="milestone-chip">{renderTags()}</div>
                 </div>
               </Grid>
-              <Grid item xs={2} />
-              <Grid item xs={10} className="answer-input">
+              <Grid item xs={conditionalGrid[1]} />
+              <Grid item xs={conditionalGrid[0]} className="answer-input">
                 {renderQuestion()}
               </Grid>
-              <Grid item xs={2} className="answer-actions">
+              <Grid item xs={conditionalGrid[1]} className="answer-actions">
                 <div className="system-icon-custom-tab">
-                  {SystemIcon()}
-                  {<CustomLoader questionId={questionId} />}
+                  {SystemIcon(unityTabQuestionLoading)}
                 </div>
                 {/* !isQuesFreezed && */}
               </Grid>
@@ -549,7 +563,9 @@ const QuestionItem = ({
       isShowHistory,
       isShowQuestion,
       unityTabFilters,
-      currentSearchResult
+      currentSearchResult,
+      unityTabQuestionLoading,
+      conditionalGrid
       // highlightQuestionId
     ]
   );
@@ -558,17 +574,6 @@ const QuestionItem = ({
 QuestionItem.defaultProps = {
   disabled: false,
   isQuesFreezed: false,
-  // archivedQuestion: {
-  //   proposalId: '',
-  //   questionId: '',
-  //   questionText: '',
-  //   answerConfiguration: {
-  //     type: 'number'
-  //   },
-  //   answers: [],
-  //   visible: false,
-  //   active: false
-  // },
   updateQuestionVisibility: () => {}
 };
 QuestionItem.propTypes = {
@@ -578,7 +583,6 @@ QuestionItem.propTypes = {
   isQuesFreezed: PropTypes.any,
   eventCategories: PropTypes.object.isRequired,
   trackEvent: PropTypes.func.isRequired,
-  // archivedQuestion: PropTypes.any,
   updateQuestionVisibility: PropTypes.func
 };
 

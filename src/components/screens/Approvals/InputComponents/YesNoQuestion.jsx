@@ -42,6 +42,7 @@ const YesNoQuestion = ({
     return (
       <>
         <YNDropdown
+          data-testid="YNFropdown-yes-no question"
           items={optionsYN}
           disabled={checkDisableFlag() || !!disabled}
           questionId={question.questionId}
