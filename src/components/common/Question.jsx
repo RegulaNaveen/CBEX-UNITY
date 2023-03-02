@@ -186,7 +186,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
       prevSearchResult,
       questionId,
       autoNavigatedToCurrentResult,
-      autoNavigationDone
+      autoNavigationDone,
+      sectionName
     } = this.props;
 
     if (
@@ -194,7 +195,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
       this.questionTextTitleRef.current !== null &&
       !autoNavigatedToCurrentResult
     ) {
-      if (currentSearchResult.searchIndex === questionId) {
+      if (
+        currentSearchResult.searchIndex === questionId &&
+        ((currentSearchResult.sectionName !== null &&
+          currentSearchResult.sectionName === sectionName) ||
+          currentSearchResult.sectionName === null)
+      ) {
         // allow others to collapse before scrollIntoView
         setTimeout(() => {
           this.questionTextTitleRef.current.scrollIntoView({
