@@ -56,10 +56,14 @@ export const updateFilters = (name, value) => {
 
 export function resetFiltersAction() {
   return async (dispatch, getState) => {
-    const searchQuery = selectQuery(getState());
     dispatch({ type: UNITY_TABS.RESET_FILTERS });
     // if (searchQuery !== null && searchQuery.length >= 3) {
     //   dispatch(doSearchAction());
     // }
+  };
+}
+export function resetSingleTabFiltersAction() {
+  return async (dispatch, getState) => {
+    dispatch({ type: UNITY_TABS.RESET_SINGLE_TAB_FILTERS });
   };
 }

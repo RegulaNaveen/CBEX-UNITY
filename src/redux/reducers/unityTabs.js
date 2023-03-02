@@ -61,10 +61,21 @@ const resetFilters = (state, action) => {
   };
 };
 
+const resetSingleFilters = (state, action) => {
+  const filter = state.filters.map(v => {
+    v.value = false;
+    return v;
+  });
+  return {
+    ...state,
+    filters: filter
+  };
+};
+
 const resetTab = (state, action) => {
   return {
     ...state,
-    filters: INITIAL_STATE.allTabs
+    allTabs: INITIAL_STATE.allTabs
   };
 };
 
@@ -82,6 +93,7 @@ const actionMap = {
   [UNITY_TABS.SET_UNITY_TABS]: setUnityTab,
   [UNITY_TABS.UPDATE_FILTERS]: updateFilter,
   [UNITY_TABS.RESET_FILTERS]: resetFilters,
+  [UNITY_TABS.RESET_SINGLE_TAB_FILTERS]: resetSingleFilters,
   [UNITY_TABS.RESET_TAB]: resetTab,
   [UNITY_TABS.UPDATE_NEW_FILTER]: addNewFilter
 };

@@ -1,3 +1,4 @@
+/* eslint-disable dot-notation */
 /* eslint-disable no-shadow */
 /* eslint-disable no-restricted-syntax */
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
@@ -207,12 +208,15 @@ const UnityTab = ({
         .replace(' ', '_')
         .trim()
         .toLowerCase();
-      newTab.push({
-        label: customTabSections[0]['UnityTabTitle'],
-        value: len++,
-        component: <CustomTabs tabId={tabID} key={title} />,
-        path: tabpath
-      });
+      const response = calculateTab(customTabSections);
+      if (filterTitle && response) {
+        newTab.push({
+          label: customTabSections[0]['UnityTabTitle'],
+          value: len++,
+          component: <CustomTabs tabId={tabID} key={title} />,
+          path: tabpath
+        });
+      }
     }
   });
   useEffect(() => {
@@ -247,6 +251,26 @@ const UnityTab = ({
   useEffect(() => {
     dispatch(setPanelStatus(vtabCollpased));
   }, [vtabCollpased]);
+
+  useEffect(() => {
+    if ('URLSearchParams' in window) {
+      const searchParams = new URLSearchParams(window.location.search);
+      const currentviewType = searchParams.get('viewType');
+      if (
+        currentviewType &&
+        currentviewType !== 'documents' &&
+        currentviewType !== 'approvals' &&
+        currentviewType !== 'timelines' &&
+        currentviewType !== 'questions' &&
+        Boolean(!Object.keys(customTabs)?.length)
+      ) {
+        const className = '._question-tab > div > div > button:nth-child(1)';
+        if (document && document.querySelector(className)) {
+          document.querySelector(className).click();
+        }
+      }
+    }
+  }, [customTabs]);
 
   useEffect(() => {
     if (
