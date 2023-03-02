@@ -247,7 +247,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
           /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
         );
         if (reason === 'remove-option' && deletedEmail) {
-          setAnswerLoading(questionId, true);
+          setAnswerLoading(questionId, false);
           const { sectionName, sectionOrder } = section.toJS();
           deleteProposalUser(
             proposalId,
