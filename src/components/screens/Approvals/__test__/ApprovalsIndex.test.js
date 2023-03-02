@@ -2,26 +2,19 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import * as ReactDOM from 'react-dom';
 import {
-  fireEvent,
-  screen,
   render as reactTestingRender
 } from '@testing-library/react';
-
-import configureMockStore from 'redux-mock-store';
-import { configure, render } from 'enzyme';
 import { Map, fromJS } from 'immutable';
-import { Provider, useSelector } from 'react-redux';
-import Adapter from 'enzyme-adapter-react-16';
+import { Provider } from 'react-redux';
 import Sinon from 'sinon';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { store } from '../../../../store';
 import Approvals from '../index';
 import * as data from '../../Proposal/__tests__/data.json';
 import { allApprovals, quesHashData } from './data';
 import * as ApprovalActions from '../../../../redux/actions/approval-actions';
 import * as ProposalActions from '../../../../redux/actions/proposal-actions';
 
-configure({ adapter: new Adapter() });
-const mockStore = configureMockStore();
 const ssoAuth = Map(Object.entries(data.ssoAuth));
 const sidebar = Map(Object.entries(data.sidebar));
 const notepad = Map(Object.entries(data.notepad));
@@ -68,10 +61,7 @@ const approvals = {
     }
   ]
 };
-jest.mock('react-redux', () => ({
-  ...jest.requireActual('react-redux'),
-  useSelector: jest.fn()
-}));
+
 let initialState = {
   ssoAuth,
   sidebar,
@@ -111,8 +101,8 @@ let initialState = {
   getBidList: jest.fn(),
   currentTab: null
 };
+
 describe('Testing approvals', () => {
-  let store;
   let sinonSandbox;
   beforeAll(() => {
     ReactDOM.createPortal = jest.fn((element, node) => {
@@ -125,11 +115,7 @@ describe('Testing approvals', () => {
     sinonSandbox.restore();
   });
 
-  beforeEach(() => {
-    store = mockStore(initialState);
-  });
-
-  test.skip('render Approval component', async () => {
+  test('render Approval component', async () => {
     const props = {
       applyQuestionsFilter: jest.fn(),
       clearQuestionsFilter: jest.fn(),
@@ -137,9 +123,7 @@ describe('Testing approvals', () => {
       getSelectedBid: jest.fn(),
       getOpportunityData: jest.fn()
     };
-    useSelector.mockImplementation(() => ({
-      allApprovals
-    }));
+
 
     sinonSandbox
       .stub(ApprovalActions, 'fetchAllApprovals')
@@ -159,6 +143,7 @@ describe('Testing approvals', () => {
     );
     await expect(queryAllByTestId('bid-history')).toBeTruthy();
   });
+
   test('Test filter function', () => {
     const renderFilterFunc = jest.fn();
     const mockFunc = renderFilterFunc();
@@ -167,7 +152,7 @@ describe('Testing approvals', () => {
     expect(renderFilterFunc).toHaveBeenCalledWith();
   });
 
-  test.skip('test component when there is no approval', async () => {
+  test('test component when there is no approval', async () => {
     const props = {
       applyQuestionsFilter: jest.fn(),
       clearQuestionsFilter: jest.fn(),
@@ -187,7 +172,7 @@ describe('Testing approvals', () => {
     sinonSandbox
       .stub(ProposalActions, 'getPriceModelerData')
       .returns({ type: 'GET_PRICE_MODELERDATA' });
-    const { queryAllByTestId } = render(
+    const { queryAllByTestId } = reactTestingRender(
       <Provider store={store}>
         <Router>
           <Approvals {...props} />
@@ -197,7 +182,7 @@ describe('Testing approvals', () => {
     await expect(queryAllByTestId('No_approvals')).toBeTruthy();
   });
 
-  test.skip('Click event ', async () => {
+  test('Click event ', async () => {
     const props = {
       applyQuestionsFilter: jest.fn(),
       clearQuestionsFilter: jest.fn(),
@@ -214,7 +199,7 @@ describe('Testing approvals', () => {
     sinonSandbox
       .stub(ProposalActions, 'getPriceModelerData')
       .returns({ type: 'GET_PRICE_MODELERDATA' });
-    render(
+    reactTestingRender(
       <Provider store={store}>
         <Router>
           <Approvals {...props} />
