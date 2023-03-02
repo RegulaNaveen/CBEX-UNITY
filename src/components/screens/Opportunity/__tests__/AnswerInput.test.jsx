@@ -10,7 +10,7 @@ const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 const initialState = {
   ...mockData,
-  checkDisableFlag: jest.fn(),
+  checkDisableFlag: jest.fn()
 };
 const store = mockStore(initialState);
 describe('testing answer input component', () => {
