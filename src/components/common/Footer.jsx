@@ -18,6 +18,7 @@ import {
   updateSwitchTempStatusFromWebSocket
 } from '../../redux/actions/proposal-actions';
 import ProcessingCRM from '../views/modals/ProcessingCRM';
+import { setTabRefresh } from '../../redux/actions/unitytab-action';
 
 const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
   const selectedBidState = useSelector(getSelectedBid);
@@ -67,6 +68,11 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
         dispatch(updateSwitchInProgress(false));
         setAlertModal(true);
         dispatch(updateSwitchTempStatusFromWebSocket(false));
+        const className = '._question-tab > div > div > button:nth-child(1)';
+        if (document && document.querySelector(className)) {
+          document.querySelector(className).click();
+          dispatch(setTabRefresh(`Refresh${Date.now().toString()}`));
+        }
       });
     }
     if (switchTempStatus === 'error') {

@@ -72,7 +72,8 @@ const {
   SET_ACTIVE_TABINDEX,
   SET_PANEL_STATUS,
   SET_V_TAB_ACTIVE_INDEX,
-  SET_V_TAB_USER_PREFERENCE
+  SET_V_TAB_USER_PREFERENCE,
+  CHANGE_BID_STATUS_OPERATION
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -82,6 +83,7 @@ const INITIAL_STATE: Map = fromJS({
   proposalDetails: Map({}),
   proposalQuestions: Map({}),
   isProposalLoading: false,
+  changeBidStatus: false,
   proposalError: undefined,
   proposalAnswer: '',
   isProposalAnswerLoading: false,
@@ -1313,7 +1315,9 @@ const actionMap = {
   [SET_ACTIVE_TABINDEX]: setActiveTabIndex,
   [SET_PANEL_STATUS]: (state, { payload }) => state.set('panelStatus', payload),
   [SET_V_TAB_ACTIVE_INDEX]: setVTabActiveTabIndex,
-  [SET_V_TAB_USER_PREFERENCE]: setVTabUserPreference
+  [SET_V_TAB_USER_PREFERENCE]: setVTabUserPreference,
+  [CHANGE_BID_STATUS_OPERATION]: (state, { payload }) =>
+    state.set('changeBidStatus', payload)
 };
 
 export default function(
