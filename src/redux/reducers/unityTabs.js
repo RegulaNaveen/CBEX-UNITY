@@ -7,6 +7,7 @@ const INITIAL_STATE = {
   fetching: false,
   allTabs: {},
   canSendEmail: false,
+  tabRefresh: `Refresh${Date.now().toString()}`,
   filters: [
     {
       name: 'answered',
@@ -79,6 +80,14 @@ const resetTab = (state, action) => {
   };
 };
 
+const customTabRefresh = (state, action) => {
+  const { payload } = action;
+  return {
+    ...state,
+    tabRefresh: payload
+  };
+};
+
 const addNewFilter = (state, action) => {
   const { payload } = action;
 
@@ -95,6 +104,7 @@ const actionMap = {
   [UNITY_TABS.RESET_FILTERS]: resetFilters,
   [UNITY_TABS.RESET_SINGLE_TAB_FILTERS]: resetSingleFilters,
   [UNITY_TABS.RESET_TAB]: resetTab,
+  [UNITY_TABS.SET_TAB_REFRESH]: customTabRefresh,
   [UNITY_TABS.UPDATE_NEW_FILTER]: addNewFilter
 };
 

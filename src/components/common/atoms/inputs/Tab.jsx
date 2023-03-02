@@ -132,19 +132,22 @@ const UnityTab = ({
   const [tabs, setTabs] = useState(defaultTabs);
   const [approvalsFlag, setApprovalsFlag] = useState(false);
   const [showApprovalTab, setShowApprovalTab] = useState(false);
-  const [tabloaded, settabloaded] = useState(false);
+  const [tabloaded, settabloaded] = useState(0);
   const [isShowVerticalTab, setShowVerticalTab] = useState(false);
   const [
     showQuestionsForCustomerTab,
     setShowQuestionsForCustomerTab
   ] = useState(false);
+  const switchTempStatus = useSelector(
+    state => state.proposal?.toJSON()?.switchTempCallStatus
+  );
+  const tabRefresh = useSelector(state => state.unitytab.tabRefresh);
   const [showNotepadTab, setShowNotepadTab] = useState(false);
   const [showProposalTeamTab, setShowProposalTeamTab] = useState(false);
   const [isNotepadOpen, setIsNotepadOpen] = useState(true);
   const [vtabCollpased, setVTabCollapsed] = useState(false);
   const [systemTriggeredClick, setSystemTriggeredClick] = useState(false);
-  const [tabRefresh] = useState('notrefresh');
-
+  const [currentRefreshRate, setRefreshTab] = useState('');
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const proposalId = selectedBid?.id || 1;
   const isApprovalCount = selectedBid?.isApprovalCountPresent || false;
@@ -220,9 +223,28 @@ const UnityTab = ({
     }
   });
   useEffect(() => {
-    if (newTab && Object.keys(newTab)?.length > 0 && !tabloaded) {
+    if (switchTempStatus === 'success') {
+      if (newTab && newTab?.length > 0) {
+        setTabs([]);
+        setTabs([...defaultTabs, ...newTab]);
+      }
+    }
+  }, [switchTempStatus]);
+
+  useEffect(() => {
+    setRefreshTab(tabRefresh);
+  }, [tabRefresh]);
+
+  useEffect(() => {
+    if (
+      newTab &&
+      Object.keys(newTab)?.length > 0 &&
+      tabloaded === 0 &&
+      switchTempStatus !== 'progress' &&
+      switchTempStatus !== 'success'
+    ) {
       setTabs([...tabs, ...newTab]);
-      settabloaded(true);
+      settabloaded(tabloaded + 1);
       newTab.length = 0;
     }
   }, [customTabs]);
@@ -268,6 +290,22 @@ const UnityTab = ({
         if (document && document.querySelector(className)) {
           document.querySelector(className).click();
         }
+      }
+    }
+  }, [customTabs]);
+
+  useEffect(() => {
+    if ('URLSearchParams' in window) {
+      const searchParams = new URLSearchParams(window.location.search);
+      const currentviewType = searchParams.get('viewType');
+      if (
+        (currentviewType === 'documents' ||
+          currentviewType === 'approvals' ||
+          currentviewType === 'timelines' ||
+          currentviewType === 'questions') &&
+        Boolean(!Object.keys(customTabs)?.length)
+      ) {
+        setTabs(defaultTabs);
       }
     }
   }, [customTabs]);
@@ -710,7 +748,7 @@ const UnityTab = ({
         <Tabs
           value={value}
           onChange={handleChangeTab}
-          key={tabRefresh}
+          key={currentRefreshRate}
           truncate
           className="_question-tab"
         >

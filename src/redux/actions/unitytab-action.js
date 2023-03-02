@@ -10,6 +10,11 @@ export const setAllUnityTab = data => ({
   payload: data
 });
 
+export const setTabRefresh = data => ({
+  type: UNITY_TABS.SET_TAB_REFRESH,
+  payload: data
+});
+
 export const updateNewFilters = data => ({
   type: UNITY_TABS.UPDATE_NEW_FILTER,
   payload: data
@@ -48,18 +53,12 @@ export const updateFilters = (name, value) => {
       type: UNITY_TABS.UPDATE_FILTERS,
       payload: { name, value }
     });
-    // if (searchQuery !== null && searchQuery.length >= 3) {
-    //   dispatch(doSearchAction());
-    // }
   };
 };
 
 export function resetFiltersAction() {
   return async (dispatch, getState) => {
     dispatch({ type: UNITY_TABS.RESET_FILTERS });
-    // if (searchQuery !== null && searchQuery.length >= 3) {
-    //   dispatch(doSearchAction());
-    // }
   };
 }
 export function resetSingleTabFiltersAction() {
