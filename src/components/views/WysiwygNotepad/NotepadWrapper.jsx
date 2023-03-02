@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import Loader from 'react-loader-spinner';
 import Chip from 'apollo-react/components/Chip';
 import StatusExclamation from 'apollo-react-icons/StatusExclamation';
-import { IndexeddbPersistence } from 'y-indexeddb';
 import { websocketNotesApi } from '../../../api/notepad';
 import { WebsocketProvider } from '../../../context/y-websocket';
 import { NOTES_SOCKET_URL } from '../../../constants/api';
@@ -29,31 +28,17 @@ const NotepadWrapper = ({ trackEvent }) => {
   const createNewNotesSocketConnection = proposalId => {
     const storedValue = `doc-${proposalId}`;
     if (proposalId) {
-      const provider = new IndexeddbPersistence(storedValue, ydoc);
       const wsProvider = new WebsocketProvider(
         NOTES_SOCKET_URL,
         `?=${storedValue}&`,
         ydoc
       );
-      wsProvider.on('status', event => {
-        console.log('wsProvider', event);
-        if (event.status === 'connected') {
-          setShowNetworkChip(false);
-          setIsOnline(true);
-          console.log('connected: How to sync with ws provider', wsProvider);
-          console.log('connected: persistence', provider);
-        }
-        if (event.status === 'disconnected') {
-          setShowNetworkChip(true);
-          setIsOnline(false);
-        }
-      });
       setWsInstance(wsProvider);
     }
   };
 
   const triggerWebsocketNotesApi = async proposalId => {
-    websocketNotesApi(proposalId);
+    await websocketNotesApi(proposalId);
     if (!wsInstance) {
       createNewNotesSocketConnection(proposalId);
     } else {
@@ -71,7 +56,7 @@ const NotepadWrapper = ({ trackEvent }) => {
     if (proposalIdState !== newProposalID) {
       loaderReference = setTimeout(() => {
         triggerWebsocketNotesApi(newProposalID);
-      }, 1500);
+      }, 2000);
     }
     return () => {
       clearTimeout(loaderReference);

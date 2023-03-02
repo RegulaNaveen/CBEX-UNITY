@@ -133,7 +133,12 @@ class CollapsibleList extends Component<Props, State> {
           });
           autoNavigationDone();
         }, 700);
-      } else if (questionIds.includes(currentSearchResult.searchIndex)) {
+      } else if (
+        questionIds.includes(currentSearchResult.searchIndex) &&
+        ((currentSearchResult.sectionName !== null &&
+          currentSearchResult.sectionName === title) ||
+          currentSearchResult.sectionName === null)
+      ) {
         shouldBeCollapsed = true;
       } else {
         shouldBeCollapsed = false;
