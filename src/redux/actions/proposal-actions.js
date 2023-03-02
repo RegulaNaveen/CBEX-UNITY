@@ -81,6 +81,7 @@ const {
   UPDATE_BOX_BIDS,
   CHANGE_BID,
   ADD_NEW_BID,
+  CHANGE_BID_STATUS_OPERATION,
   NEW_BID_CREATED,
   UPDATE_LOOKUP_OPTIONS,
   BOX_ADDITIONAL_LINK,
@@ -1300,6 +1301,19 @@ export const changeBid = bid => {
     dispatch({
       type: UNITY_TABS.SET_UNITY_TABS,
       payload: response?.data.proposal?.customUnityTabs || []
+    });
+    dispatch({
+      type: CHANGE_BID_STATUS_OPERATION,
+      payload: true
+    });
+  };
+};
+
+export const updateChangeBidStatusOperation = status => {
+  return dispatch => {
+    dispatch({
+      type: CHANGE_BID_STATUS_OPERATION,
+      payload: status
     });
   };
 };

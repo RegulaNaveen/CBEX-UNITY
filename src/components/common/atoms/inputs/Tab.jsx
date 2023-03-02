@@ -14,6 +14,7 @@ import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { useWindowSize } from '../../../../hooks';
 import Validate from '../../../screens/Opportunity/Validate';
 import {
+  getChangeBidStatus,
   getSelectedBid,
   selectActiveTabIndex,
   selectVTabUserPreference
@@ -27,7 +28,8 @@ import {
 import {
   setActiveTabIndexAction,
   setPanelStatus,
-  setVTabUserPreferenceAction
+  setVTabUserPreferenceAction,
+  updateChangeBidStatusOperation
 } from '../../../../redux/actions/proposal-actions';
 import { createMatomoObj, saveDataInMatomo } from '../../../../utils/utils';
 import { selectCurrentSearchResult } from '../../../../redux/selectors/search';
@@ -36,6 +38,7 @@ import lazyWithRetry from '../../../../utils/lazy';
 import VerticalTabsCollapsiblePanel from '../../../screens/Opportunity/layout/navigation/VerticalTabsCollapsiblePanel';
 import Timelines from '../../../screens/Timelines';
 import { checkTabRender } from '../../../screens/UnityTabs/utils';
+import { setTabRefresh } from '../../../../redux/actions/unitytab-action';
 
 const Questions = React.lazy(() =>
   lazyWithRetry(() =>
@@ -132,7 +135,7 @@ const UnityTab = ({
   const [tabs, setTabs] = useState(defaultTabs);
   const [approvalsFlag, setApprovalsFlag] = useState(false);
   const [showApprovalTab, setShowApprovalTab] = useState(false);
-  const [tabloaded, settabloaded] = useState(0);
+  const [tabLoaded, setTabloaded] = useState(false);
   const [isShowVerticalTab, setShowVerticalTab] = useState(false);
   const [
     showQuestionsForCustomerTab,
@@ -156,6 +159,7 @@ const UnityTab = ({
   const proposalDetail = useSelector(state => getProposalDetails(state));
   const userEmail = useSelector(state => getUserEmail(state));
   const userRole = useSelector(state => getUserRole(state));
+  const changeBidStatus = useSelector(state => getChangeBidStatus(state));
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const value = useSelector(selectActiveTabIndex);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
@@ -186,129 +190,134 @@ const UnityTab = ({
     }
     return false;
   };
-  let newTab = [];
-  let len = tabs.length - 1;
-  // eslint-disable-next-line no-restricted-syntax
-  let orderedCustomTabs = Object.values(customTabs)
-    .filter(
-      sections => sections.filter(section => section['UnityTabTitle']).length
-    )
-    .sort(
-      (sectionsA, sectionsB) =>
-        sectionsA[0].UnityTabOrder - sectionsB[0].UnityTabOrder
-    );
-  orderedCustomTabs.forEach(customTabSections => {
-    const tabID = customTabSections[0]['UnityTabId'];
-    const questionCount = customTabSections.some(
-      v => v['UnityTabSectionQuestions'].length > 0
-    );
-    const filterTitle = customTabSections.filter(v => v['UnityTabTitle']);
-    if (filterTitle.length && questionCount) {
-      const title = String(filterTitle[0]['UnityTabTitle'])
-        .trim()
-        .toLowerCase();
-      const tabpath = String(customTabSections[0]['UnityTabTitle'])
-        .replace(' ', '_')
-        .trim()
-        .toLowerCase();
-      const response = calculateTab(customTabSections);
-      if (filterTitle && response) {
-        newTab.push({
-          label: customTabSections[0]['UnityTabTitle'],
-          value: len++,
-          component: <CustomTabs tabId={tabID} key={title} />,
-          path: tabpath
-        });
-      }
-    }
-  });
+
   useEffect(() => {
-    if (switchTempStatus === 'success') {
-      if (newTab && newTab?.length > 0) {
-        setTabs([]);
-        setTabs([...defaultTabs, ...newTab]);
-      }
+    const searchParams = new URLSearchParams(window.location.search);
+    const currentviewType = searchParams.get('bidNo');
+    // without bid no url
+    if (!currentviewType) {
+      setTabloaded(false);
+      const newTab = [];
+      let len = tabs.length - 1;
+      // eslint-disable-next-line no-restricted-syntax
+      const orderedCustomTabs = Object.values(customTabs)
+        .filter(
+          sections =>
+            sections.filter(section => section['UnityTabTitle']).length
+        )
+        .sort(
+          (sectionsA, sectionsB) =>
+            sectionsA[0].UnityTabOrder - sectionsB[0].UnityTabOrder
+        );
+      orderedCustomTabs.forEach(customTabSections => {
+        const tabID = customTabSections[0]['UnityTabId'];
+        const questionCount = customTabSections.some(
+          v => v['UnityTabSectionQuestions'].length > 0
+        );
+        const filterTitle = customTabSections.filter(v => v['UnityTabTitle']);
+        if (filterTitle.length && questionCount) {
+          const title = String(filterTitle[0]['UnityTabTitle'])
+            .trim()
+            .toLowerCase();
+          const tabpath = String(customTabSections[0]['UnityTabTitle'])
+            .replace(' ', '_')
+            .trim()
+            .toLowerCase();
+          const response = calculateTab(customTabSections);
+          if (filterTitle && response) {
+            newTab.push({
+              label: customTabSections[0]['UnityTabTitle'],
+              value: len++,
+              component: <CustomTabs tabId={tabID} key={title} />,
+              path: tabpath
+            });
+          }
+        }
+      });
+      const finalTab = [...tabs, ...newTab];
+      setTabs(finalTab);
+      setTabloaded(true);
+      dispatch(setTabRefresh(`Refresh${Date.now().toString()}`));
     }
-  }, [switchTempStatus]);
+  }, [customTabs, changeBidStatus]);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const currentviewType = searchParams.get('bidNo');
+    // without bid no url
+    if (changeBidStatus && currentviewType) {
+      setTabs(defaultTabs);
+      setTabloaded(false);
+      const newTab = [];
+      let len = tabs.length - 1;
+      // eslint-disable-next-line no-restricted-syntax
+      const orderedCustomTabs = Object.values(customTabs)
+        .filter(
+          sections =>
+            sections.filter(section => section['UnityTabTitle']).length
+        )
+        .sort(
+          (sectionsA, sectionsB) =>
+            sectionsA[0].UnityTabOrder - sectionsB[0].UnityTabOrder
+        );
+      orderedCustomTabs.forEach(customTabSections => {
+        const tabID = customTabSections[0]['UnityTabId'];
+        const questionCount = customTabSections.some(
+          v => v['UnityTabSectionQuestions'].length > 0
+        );
+        const filterTitle = customTabSections.filter(v => v['UnityTabTitle']);
+        if (filterTitle.length && questionCount) {
+          const title = String(filterTitle[0]['UnityTabTitle'])
+            .trim()
+            .toLowerCase();
+          const tabpath = String(customTabSections[0]['UnityTabTitle'])
+            .replace(' ', '_')
+            .trim()
+            .toLowerCase();
+          const response = calculateTab(customTabSections);
+          if (filterTitle && response) {
+            newTab.push({
+              label: customTabSections[0]['UnityTabTitle'],
+              value: len++,
+              component: <CustomTabs tabId={tabID} key={title} />,
+              path: tabpath
+            });
+          }
+        }
+      });
+      if (newTab && !newTab?.length) {
+        setTabs(defaultTabs);
+        const searchParams = new URLSearchParams(window.location.search);
+        const currentviewType = searchParams.get('viewType');
+        if (
+          currentviewType &&
+          currentviewType !== 'documents' &&
+          currentviewType !== 'approvals' &&
+          currentviewType !== 'timelines' &&
+          currentviewType !== 'questions'
+        ) {
+          const className = '._question-tab > div > div > button:nth-child(1)';
+          if (document && document.querySelector(className)) {
+            document.querySelector(className).click();
+          }
+        }
+      } else {
+        const finalTab = [...tabs, ...newTab];
+        setTabs(finalTab);
+      }
+      setTabloaded(true);
+      dispatch(setTabRefresh(`Refresh${Date.now().toString()}`));
+      dispatch(updateChangeBidStatusOperation(false));
+    }
+  }, [customTabs, changeBidStatus]);
 
   useEffect(() => {
     setRefreshTab(tabRefresh);
   }, [tabRefresh]);
 
   useEffect(() => {
-    if (
-      newTab &&
-      Object.keys(newTab)?.length > 0 &&
-      tabloaded === 0 &&
-      switchTempStatus !== 'progress' &&
-      switchTempStatus !== 'success'
-    ) {
-      setTabs([...tabs, ...newTab]);
-      settabloaded(tabloaded + 1);
-      newTab.length = 0;
-    }
-  }, [customTabs]);
-
-  useEffect(() => {
-    if ('URLSearchParams' in window) {
-      const searchParams = new URLSearchParams(window.location.search);
-      const currentviewType = searchParams.get('viewType');
-      if (
-        Boolean(!Object.keys(customTabs)?.length) &&
-        tabloaded &&
-        (currentviewType !== 'documents' ||
-          currentviewType !== 'approval' ||
-          currentviewType !== 'timelines' ||
-          currentviewType !== 'questions')
-      ) {
-        setTabs(defaultTabs);
-        dispatch(setActiveTabIndexAction(0));
-      }
-    }
-    if (Object.keys(customTabs)?.length > 0 && tabloaded) {
-      setTabs([...tabs, ...newTab]);
-    }
-  }, [customTabs]);
-
-  useEffect(() => {
     dispatch(setPanelStatus(vtabCollpased));
   }, [vtabCollpased]);
-
-  useEffect(() => {
-    if ('URLSearchParams' in window) {
-      const searchParams = new URLSearchParams(window.location.search);
-      const currentviewType = searchParams.get('viewType');
-      if (
-        currentviewType &&
-        currentviewType !== 'documents' &&
-        currentviewType !== 'approvals' &&
-        currentviewType !== 'timelines' &&
-        currentviewType !== 'questions' &&
-        Boolean(!Object.keys(customTabs)?.length)
-      ) {
-        const className = '._question-tab > div > div > button:nth-child(1)';
-        if (document && document.querySelector(className)) {
-          document.querySelector(className).click();
-        }
-      }
-    }
-  }, [customTabs]);
-
-  useEffect(() => {
-    if ('URLSearchParams' in window) {
-      const searchParams = new URLSearchParams(window.location.search);
-      const currentviewType = searchParams.get('viewType');
-      if (
-        (currentviewType === 'documents' ||
-          currentviewType === 'approvals' ||
-          currentviewType === 'timelines' ||
-          currentviewType === 'questions') &&
-        Boolean(!Object.keys(customTabs)?.length)
-      ) {
-        setTabs(defaultTabs);
-      }
-    }
-  }, [customTabs]);
 
   useEffect(() => {
     if (
