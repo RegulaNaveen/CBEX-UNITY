@@ -2,17 +2,14 @@
  * @jest-environment jsdom
  */
 import React from 'react';
-import { cleanup, render, screen, fireEvent } from '@testing-library/react';
+import { cleanup, render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import AnswerHistory from '../AnswerHistory';
 import { Provider } from 'react-redux';
-import configureMockStore from 'redux-mock-store';
 import * as data from './data.json';
-import thunk from 'redux-thunk';
 import { Map, fromJS } from 'immutable';
-
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
+import { store } from '../../../../store';
+import { SocketContext } from '../../../../context/SocketContext';
+import AnswerHistory from '../AnswerHistory';
 
 const ssoAuth = Map(Object.entries(data.ssoAuth));
 const sidebar = Map(Object.entries(data.sidebar));
@@ -30,20 +27,23 @@ let initalstate = {
   proposal,
   closeModal
 };
-const store = mockStore(initalstate);
 
 describe('Answer History component', () => {
   beforeAll(() => {
     render(
       <Provider store={store}>
-        <AnswerHistory {...initalstate} />
+        <SocketContext.Provider value={{ socket: null, questionLockWrapper: jest.fn() }}>
+          <AnswerHistory {...initalstate} />
+        </SocketContext.Provider>
       </Provider>
     );
   });
   test('Answer History component Load', async () => {
     const { container } = await render(
       <Provider store={store}>
-        <AnswerHistory {...initalstate} />
+        <SocketContext.Provider value={{ socket: null, questionLockWrapper: jest.fn() }}>
+          <AnswerHistory {...initalstate} />
+        </SocketContext.Provider>
       </Provider>
     );
     expect(
@@ -54,7 +54,9 @@ describe('Answer History component', () => {
   test('Answer History modal Load', async () => {
     const { container } = await render(
       <Provider store={store}>
-        <AnswerHistory {...initalstate} />
+        <SocketContext.Provider value={{ socket: null, questionLockWrapper: jest.fn() }}>
+          <AnswerHistory {...initalstate} />
+        </SocketContext.Provider>
       </Provider>
     );
     expect(
@@ -65,7 +67,9 @@ describe('Answer History component', () => {
   test.skip('Answer History Count', async () => {
     const { container } = await render(
       <Provider store={store}>
-        <AnswerHistory {...initalstate} />
+        <SocketContext.Provider value={{ socket: null, questionLockWrapper: jest.fn() }}>
+          <AnswerHistory {...initalstate} />
+        </SocketContext.Provider>
       </Provider>
     );
     expect(container.getElementsByClassName('answer-container')).toHaveLength(
@@ -91,10 +95,12 @@ describe('Answer History component', () => {
       proposal,
       closeModal
     };
-    const dumystore = mockStore(initalstate);
+
     await render(
-      <Provider store={dumystore}>
-        <AnswerHistory {...initalstate} />
+      <Provider store={store}>
+        <SocketContext.Provider value={{ socket: null, questionLockWrapper: jest.fn() }}>
+          <AnswerHistory {...initalstate} />
+        </SocketContext.Provider>
       </Provider>
     );
   });
@@ -116,10 +122,12 @@ describe('Answer History component', () => {
       proposal,
       closeModal
     };
-    const dumystore = mockStore(initalstate);
+
     await render(
-      <Provider store={dumystore}>
-        <AnswerHistory {...initalstate} />
+      <Provider store={store}>
+        <SocketContext.Provider value={{ socket: null, questionLockWrapper: jest.fn() }}>
+          <AnswerHistory {...initalstate} />
+        </SocketContext.Provider>
       </Provider>
     );
   });
@@ -142,10 +150,12 @@ describe('Answer History component', () => {
       proposal,
       closeModal
     };
-    const dumystore = mockStore(initalstate);
+
     await render(
-      <Provider store={dumystore}>
-        <AnswerHistory {...initalstate} />
+      <Provider store={store}>
+        <SocketContext.Provider value={{ socket: null, questionLockWrapper: jest.fn() }}>
+          <AnswerHistory {...initalstate} />
+        </SocketContext.Provider>
       </Provider>
     );
   });
@@ -167,10 +177,12 @@ describe('Answer History component', () => {
       proposal,
       closeModal
     };
-    const dumystore = mockStore(initalstate);
+
     await render(
-      <Provider store={dumystore}>
-        <AnswerHistory {...initalstate} />
+      <Provider store={store}>
+        <SocketContext.Provider value={{ socket: null, questionLockWrapper: jest.fn() }}>
+          <AnswerHistory {...initalstate} />
+        </SocketContext.Provider>
       </Provider>
     );
   });
@@ -193,10 +205,12 @@ describe('Answer History component', () => {
       proposal,
       closeModal
     };
-    const dumystore = mockStore(initalstate);
+
     await render(
-      <Provider store={dumystore}>
-        <AnswerHistory {...initalstate} />
+      <Provider store={store}>
+        <SocketContext.Provider value={{ socket: null, questionLockWrapper: jest.fn() }}>
+          <AnswerHistory {...initalstate} />
+        </SocketContext.Provider>
       </Provider>
     );
   });
