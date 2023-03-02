@@ -13,7 +13,6 @@ import Index from '../QuestionsForCustomerTab/index';
 const initialState = {
   userData: MockState.userData,
   allFlags: MockState.allFlags,
-  SocketContext: SocketContext,
   isCurrentBid: MockState.isCurrentBid,
   questionsList: MockState.questionsList,
   proposal: Map(Object.entries(proposalData.proposal)),
@@ -26,7 +25,9 @@ const initialState = {
 const QuestionsForCustomer = () => {
   return (
     <Provider store={store}>
-      <Index {...initialState} />
+      <SocketContext.Provider value={{ questionLockWrapper: jest.fn(), questionUnlockWrapper: jest.fn() }}>
+        <Index {...initialState} />
+      </SocketContext.Provider>
     </Provider>
   );
 };
@@ -34,7 +35,7 @@ const QuestionsForCustomer = () => {
 describe('test question for customer tab', () => {
   it('Render question for customer tab', () => {
     const setHookState = newState =>
-      jest.fn().mockImplementation(() => [newState, () => {}]);
+      jest.fn().mockImplementation(() => [newState, () => { }]);
     React.useState = setHookState({
       showDeleteModal: false,
       questionToDelete: null,
@@ -47,7 +48,7 @@ describe('test question for customer tab', () => {
 
   it.skip('check for copy to clipboard', async () => {
     const setHookState = newState =>
-      jest.fn().mockImplementation(() => [newState.questions, () => {}]);
+      jest.fn().mockImplementation(() => [newState.questions, () => { }]);
     React.useState = setHookState({
       questions: new OrderedMap(),
       howDeleteModal: false,
@@ -67,7 +68,7 @@ describe('test question for customer tab', () => {
     window.ClipboardItem = jest.fn();
     Object.assign(navigator, {
       clipboard: {
-        copy: () => {}
+        copy: () => { }
       }
     });
     jest.spyOn(navigator.clipboard, 'copy');
@@ -76,7 +77,7 @@ describe('test question for customer tab', () => {
 
   it('test for adding new question', async () => {
     const setHookState = newState =>
-      jest.fn().mockImplementation(() => [newState.questions, () => {}]);
+      jest.fn().mockImplementation(() => [newState.questions, () => { }]);
     React.useState = setHookState({
       questions: new OrderedMap(),
       showDeleteModal: false,
@@ -93,7 +94,7 @@ describe('test question for customer tab', () => {
 
   it.skip('check for show delete modal', async () => {
     const setHookState = newState =>
-      jest.fn().mockImplementation(() => [newState.showDeleteModal, () => {}]);
+      jest.fn().mockImplementation(() => [newState.showDeleteModal, () => { }]);
     React.useState = setHookState({
       questions: new OrderedMap(),
       showDeleteModal: true,
