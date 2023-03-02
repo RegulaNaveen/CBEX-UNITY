@@ -5,8 +5,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { render } from '@testing-library/react';
 import { Map, OrderedMap } from 'immutable';
-import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+import { store } from '../../../../store';
 import QuestionsSectionMapping from '../QuestionsSectionMapping';
 import StateData from './mockdata/QuestionSectionMapping.json';
 
@@ -27,17 +26,11 @@ const initState = {
   setTabFromQuestionNotes: jest.fn(),
   onAddQuestion: jest.fn()
 };
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
-const store = mockStore(initState);
-React.useContext = jest.fn();
 
-jest.mock('../../../../context/SocketContext', () => jest.fn());
-
-describe.skip('QuestionSectionMapping component', () => {
+describe('QuestionSectionMapping component', () => {
   test('QuestionSectionMapping component render', async () => {
     const setHookState = newState =>
-      jest.fn().mockImplementation(() => [newState.openModal, () => {}]);
+      jest.fn().mockImplementation(() => [newState.openModal, () => { }]);
     React.useState = setHookState({
       openModal: true
     });
