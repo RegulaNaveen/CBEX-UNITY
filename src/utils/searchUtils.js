@@ -228,20 +228,6 @@ export function searchInTab({
                 sectionName: section.sectionName
               });
             }
-            if (
-              question['questionText'] &&
-              question.answerConfiguration.type === 'proposal_team'
-            ) {
-              updateSearchMatches({
-                regexp,
-                inputText: question['questionText'],
-                index: questionKey,
-                finalResult,
-                tab: tabIndex,
-                vTab: null,
-                tabName
-              });
-            }
             // searching in answer
             if (
               Array.isArray(question.answers) &&
