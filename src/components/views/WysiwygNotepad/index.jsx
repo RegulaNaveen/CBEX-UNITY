@@ -54,7 +54,7 @@ const WysiwygNotepad = ({
   const dispatch = useDispatch();
   const [notesUserTag, setNotesUserTag] = useState(false);
   const [editorloadingcount, seteditorloadingcount] = useState(0);
-  const allFlags = useSelector(state => state.proposal.get('eventflag'));
+  const allFlags = useSelector((state) => state.proposal.get('eventflag'));
   const query = useSelector(selectQuery);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
   const usercolor = randomColor({ luminosity: 'light' });
@@ -113,7 +113,7 @@ const WysiwygNotepad = ({
         Link.configure({
           autolink: true,
           linkOnPaste: false,
-          validate: href => /^https?:\/\// || /^www?:\/\//.test(href),
+          validate: (href) => /^https?:\/\// || /^www?:\/\//.test(href),
           protocols: ['ftp', 'mailto'],
           HTMLAttributes: {
             class: 'my-custom-class'
@@ -132,7 +132,7 @@ const WysiwygNotepad = ({
           enable: query !== null && query.length >= 3
         }),
 
-        allFlags?.canLinkOpportunityNo ? OpportunityLinker : RemoveLinkers
+        allFlags?.notepadLinker ? OpportunityLinker : RemoveLinkers
       ],
       onUpdate: ({ editor }) => {
         // const Ejson = editor.getJSON();
@@ -203,7 +203,7 @@ const WysiwygNotepad = ({
           ' '
         );
         if (text) {
-          document.onkeydown = event => {
+          document.onkeydown = (event) => {
             // bold
             if (
               (event.ctrlKey && event.code == 'KeyB') ||
@@ -494,7 +494,7 @@ const WysiwygNotepad = ({
   );
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   userName: getUserName(state),
   userEmail: getUserEmail(state),
   userRole: getUserRole(state),
