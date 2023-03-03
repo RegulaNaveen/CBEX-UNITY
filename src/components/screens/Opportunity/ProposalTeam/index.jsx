@@ -236,6 +236,7 @@ function ProposalTeam() {
             );
           })}
         </div>
+        <hr className="divider-hr-proposal-team" />
         <div className="proposal-team-btn-wrapper">
           <Link
             style={{ borderBottom: 'none' }}
