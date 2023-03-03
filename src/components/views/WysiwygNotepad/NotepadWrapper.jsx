@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import Loader from 'react-loader-spinner';
 import Chip from 'apollo-react/components/Chip';
 import StatusExclamation from 'apollo-react-icons/StatusExclamation';
-import { IndexeddbPersistence } from 'y-indexeddb';
 import { websocketNotesApi } from '../../../api/notepad';
 import { WebsocketProvider } from '../../../context/y-websocket';
 import { NOTES_SOCKET_URL } from '../../../constants/api';
@@ -29,46 +28,39 @@ const NotepadWrapper = ({ trackEvent }) => {
   const createNewNotesSocketConnection = proposalId => {
     const storedValue = `doc-${proposalId}`;
     if (proposalId) {
-      const provider = new IndexeddbPersistence(storedValue, ydoc);
       const wsProvider = new WebsocketProvider(
         NOTES_SOCKET_URL,
         `?=${storedValue}&`,
         ydoc
       );
-      wsProvider.on('status', event => {
-        console.log('wsProvider', event);
-        if (event.status === 'connected') {
-          setShowNetworkChip(false);
-          console.log('connected: How to sync with ws provider', wsProvider);
-          console.log('db', provider);
-        }
-        if (event.status === 'disconnected') {
-          setShowNetworkChip(true);
-        }
-      });
-
       setWsInstance(wsProvider);
     }
   };
 
   const triggerWebsocketNotesApi = async proposalId => {
-    websocketNotesApi(proposalId);
+    await websocketNotesApi(proposalId);
     if (!wsInstance) {
       createNewNotesSocketConnection(proposalId);
     } else {
-      await wsInstance.destroy();
-      await setWsInstance(undefined);
-      await setYdoc(new Y.Doc());
+      wsInstance.destroy();
+      setWsInstance(undefined);
+      setYdoc(new Y.Doc());
       createNewNotesSocketConnection(proposalId);
     }
     setProposalIdState(proposalId);
   };
 
   useEffect(() => {
+    let loaderReference;
     const newProposalID = selectedBid.get('id');
     if (proposalIdState !== newProposalID) {
-      triggerWebsocketNotesApi(newProposalID);
+      loaderReference = setTimeout(() => {
+        triggerWebsocketNotesApi(newProposalID);
+      }, 2000);
     }
+    return () => {
+      clearTimeout(loaderReference);
+    };
   }, [selectedBid]);
 
   useEffect(() => {
@@ -133,10 +125,15 @@ const NotepadWrapper = ({ trackEvent }) => {
       {!isOnline && showNetworkChip && (
         <HeaderMessage>
           <Chip
-            color="white"
             label="Network Interruptions: This may prevent your work from autosaving"
-            icon={<StatusExclamation style={{ color: 'red' }} />}
+            icon={<StatusExclamation style={{ color: 'white' }} />}
             onDelete={handleClose}
+            style={{
+              backgroundColor: 'red',
+              borderColor: 'red',
+              whiteSpace: 'normal',
+              fontSize: '12px'
+            }}
           />
         </HeaderMessage>
       )}

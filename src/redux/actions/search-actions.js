@@ -191,6 +191,7 @@ export const doSearchAction = () => {
                 })
               );
             }
+            wsProvider = null;
           });
           wsProvider.on('connection-close', () => {
             if (wsProvider.wsUnsuccessfulReconnects >= 3) {
@@ -270,6 +271,7 @@ export const resumeSearchAction = ({
       currentState
     );
     const approvalFilters = currentState.approvals.filters;
+    const unityTabFilters = currentState.unitytab.filters;
     const allFlags = currentState.proposal.get('eventflag');
     let allTabs = Array.from({ length: DEFAULT_TABS_LEN }).fill({
       sections: {}
@@ -292,6 +294,13 @@ export const resumeSearchAction = ({
     });
     let filteredQuestionsMap = {};
     questions
+      .map(question => {
+        let modQuestion = cloneDeep(question);
+        if (question.section.sectionName === 'Proposal Team') {
+          modQuestion.answerConfiguration.type = 'proposal_team';
+        }
+        return modQuestion;
+      })
       .filter(
         question =>
           question.visible && (question.active || question.isCustomQuestion)
@@ -341,6 +350,7 @@ export const resumeSearchAction = ({
       activeTab,
       isQuestionsFilterEnabled,
       approvalFilters,
+      unityTabFilters,
       questionsForCustomersEnabled: allFlags.questionsForCustomerTab,
       allTabs,
       filteredQuestionsMap

@@ -168,82 +168,86 @@ function ProposalTeam() {
     setShowModal(prev => !prev);
   };
   return (
-    <div id="proposal-team-left-section">
-      <Typography
-        style={{
-          margin: '16px',
-          fontSize: '20px',
-          color: '#000000',
-          fontWeight: 600,
-          lineHeight: 1.04
-        }}
-      >
-        Team
-      </Typography>
-      <hr className="divider-hr-proposal-team" />
-      <div
-        className={classNames('proposal-team-wrapper-container', {
-          'padding-Na': showNaCheckbox
-        })}
-      >
-        {wholeData?.map(items => {
-          return (
-            (items.visible || typeof items.visible === 'undefined') && (
-              <Question
-                key={items.questionId}
-                sfField={items.sfField}
-                proposalId={items.proposalId}
-                questionId={items.questionId}
-                proposalDetail={items.proposalDetail}
-                isNotApplicable={items.isNotApplicable}
-                milestoneCond={items.milestoneCond}
-                NaLoading={items.NaLoading}
-                currentSFAnswer={items.currentSFAnswer}
-                sficon={items.sficon}
-                milestone={items.milestone}
-                lastAns={items.lastAns}
-                qvicon={items.qvicon}
-                answers={items.answers}
-                loading={items.loading}
-                sfObject={items.sfObject}
-                questionHint={items.questionHint}
-                questionHintJSON={items.questionHintJSON}
-                questionHTML={items.questionHTML}
-                sectionName={items.sectionName}
-                events={items.events}
-                questionText={items.questionText}
-                questionJSON={items.questionJSON}
-                isCustomQuestion={items.isCustomQuestion}
-                notApplicable={items.notApplicable}
-                isSetQuestionLoadingData={isSetQuestionLoadingData}
-                questionData={items.questionData}
-                section={items.section}
-                milestoneNew={items.milestoneNew}
-                allSections={allSections}
-                answerConfiguration={items.answerConfiguration}
-                questionLockInfo={items.questionLockInfo}
-                roleNames={items.roleNames}
-                visible={items.visible}
-                setQuestionToDisplayHistory={setQuestionToDisplayHistory}
-                hasDifferentSFanswer={items.hasDifferentSFanswer}
-                qvidianIntegration={items.qvidianIntegration}
-              />
-            )
-          );
-        })}
-      </div>
-      <div>
-        <Link
-          style={{ borderBottom: 'none' }}
-          onClick={() => setShowModal(true)}
-          size="small"
-          disabled={!isCurrentBid}
-        >
-          <Plus fontSize="extraSmall" />
-          <span style={{ verticalAlign: 'top' }}> Add New Question</span>
-        </Link>
-      </div>
+    <>
+      <div id="proposal-team-left-section">
+        <div>
+          <Typography
+            style={{
+              margin: '15px 0',
+              fontSize: '20px',
+              color: '#000000',
+              fontWeight: 600,
+              lineHeight: 1.04
+            }}
+          >
+            Team
+          </Typography>
+          <hr className="divider-hr-proposal-team" />
+        </div>
 
+        <div
+          className={classNames('proposal-team-wrapper-container', {
+            'padding-Na': showNaCheckbox
+          })}
+        >
+          {wholeData?.map(items => {
+            return (
+              (items.visible || typeof items.visible === 'undefined') && (
+                <Question
+                  key={items.questionId}
+                  sfField={items.sfField}
+                  proposalId={items.proposalId}
+                  questionId={items.questionId}
+                  proposalDetail={items.proposalDetail}
+                  isNotApplicable={items.isNotApplicable}
+                  milestoneCond={items.milestoneCond}
+                  NaLoading={items.NaLoading}
+                  currentSFAnswer={items.currentSFAnswer}
+                  sficon={items.sficon}
+                  milestone={items.milestone}
+                  lastAns={items.lastAns}
+                  qvicon={items.qvicon}
+                  answers={items.answers}
+                  loading={items.loading}
+                  sfObject={items.sfObject}
+                  questionHint={items.questionHint}
+                  questionHintJSON={items.questionHintJSON}
+                  questionHTML={items.questionHTML}
+                  sectionName={items.sectionName}
+                  events={items.events}
+                  questionText={items.questionText}
+                  questionJSON={items.questionJSON}
+                  isCustomQuestion={items.isCustomQuestion}
+                  notApplicable={items.notApplicable}
+                  isSetQuestionLoadingData={isSetQuestionLoadingData}
+                  questionData={items.questionData}
+                  section={items.section}
+                  milestoneNew={items.milestoneNew}
+                  allSections={allSections}
+                  answerConfiguration={items.answerConfiguration}
+                  questionLockInfo={items.questionLockInfo}
+                  roleNames={items.roleNames}
+                  visible={items.visible}
+                  setQuestionToDisplayHistory={setQuestionToDisplayHistory}
+                  hasDifferentSFanswer={items.hasDifferentSFanswer}
+                  qvidianIntegration={items.qvidianIntegration}
+                />
+              )
+            );
+          })}
+        </div>
+        <div className="proposal-team-btn-wrapper">
+          <Link
+            style={{ borderBottom: 'none' }}
+            onClick={() => setShowModal(true)}
+            size="small"
+            disabled={!isCurrentBid}
+          >
+            <Plus fontSize="extraSmall" />
+            <span style={{ verticalAlign: 'top' }}> Add New Question</span>
+          </Link>
+        </div>
+      </div>
       {showModal && (
         <CustomModal>
           <AddQuestionModalComponent
@@ -260,7 +264,7 @@ function ProposalTeam() {
           />
         </CustomModal>
       )}
-    </div>
+    </>
   );
 }
 

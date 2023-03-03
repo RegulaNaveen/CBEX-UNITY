@@ -33,6 +33,7 @@ import MatomoHOC from '../HOC/MatomoHOC';
 import { selectAreAllSectionsExpanded } from '../../redux/selectors/proposal';
 import { actionChannel, UI_ACTION } from '../../uiActions/ui-actions';
 import NotepadWrapper from './WysiwygNotepad/NotepadWrapper';
+import { setTabRefresh } from '../../redux/actions/unitytab-action';
 const MANUAL_REFRESH = false;
 
 type Props = {
@@ -126,9 +127,15 @@ class Sidebar extends Component<Props, State> {
   handleItemsVisibility = (e: SyntheticEvent<EventTarget>) => {
     e.stopPropagation();
 
-    const { isOpen, handleOpenClose, setTabFromQuestionNotes } = this.props;
+    const {
+      isOpen,
+      handleOpenClose,
+      setTabFromQuestionNotes,
+      RefreshTabUI
+    } = this.props;
     this.setState({ activeTabIndex: 0 });
     setTabFromQuestionNotes(0, '', true);
+    RefreshTabUI(`Refresh${Date.now().toString()}`);
     handleOpenClose(!isOpen);
     if (isOpen) this.setState({ activeTabIndex: 0 });
     this.trackMatomoEventSidebarToggle(!isOpen);
@@ -435,5 +442,6 @@ const mapStateToProps = (state: Object) => ({
 export default connect(mapStateToProps, {
   setSelectedSection: handleSelectedSection,
   handleOpenClose: onHandleOpenClose,
-  change: changeMode
+  change: changeMode,
+  RefreshTabUI: setTabRefresh
 })(MatomoHOC(Sidebar));

@@ -167,7 +167,7 @@ class Dropdown extends PureComponent<Props, State> {
         if (toggleWatch) {
           toggleWatch(false);
         }
-      }, 500);
+      }, 700);
     }
   };
 

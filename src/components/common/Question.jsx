@@ -186,7 +186,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
       prevSearchResult,
       questionId,
       autoNavigatedToCurrentResult,
-      autoNavigationDone
+      autoNavigationDone,
+      sectionName
     } = this.props;
 
     if (
@@ -194,7 +195,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
       this.questionTextTitleRef.current !== null &&
       !autoNavigatedToCurrentResult
     ) {
-      if (currentSearchResult.searchIndex === questionId) {
+      if (
+        currentSearchResult.searchIndex === questionId &&
+        ((currentSearchResult.sectionName !== null &&
+          currentSearchResult.sectionName === sectionName) ||
+          currentSearchResult.sectionName === null)
+      ) {
         // allow others to collapse before scrollIntoView
         setTimeout(() => {
           this.questionTextTitleRef.current.scrollIntoView({
@@ -204,7 +210,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
           });
           this.setSelectRow(true);
           autoNavigationDone();
-        }, 500);
+        }, 700);
       }
     } else if (
       prevSearchResult !== null &&
@@ -247,7 +253,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
           /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
         );
         if (reason === 'remove-option' && deletedEmail) {
-          setAnswerLoading(questionId, true);
+          setAnswerLoading(questionId, false);
           const { sectionName, sectionOrder } = section.toJS();
           deleteProposalUser(
             proposalId,

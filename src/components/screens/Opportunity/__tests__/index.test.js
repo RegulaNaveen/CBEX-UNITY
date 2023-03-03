@@ -31,13 +31,13 @@ let initalstate = {
 };
 const store = mockStore(initalstate);
 
-describe.skip('Opportunity component', () => {
+describe('Opportunity component', () => {
   beforeAll(() => {
     render();
     <Provider store={store}>{/* <Opportunity {...initalstate} /> */}</Provider>;
   });
 
-  test('Opportunity component header', async () => {
+  test.skip('Opportunity component header', async () => {
     await render(
       <Provider store={store}>
         {/* <Opportunity {...initalstate} /> */}

@@ -18,7 +18,7 @@ const props = {
   verbatimIndication: 'Cancer treatment',
   proposalId: '12345',
   approvalsCount: 3,
-  isApprovalCountPresent: true,
+  isApprovalCountPresent: true
 };
 
 describe('ProposalCard component', () => {
@@ -47,16 +47,6 @@ describe('ProposalCard component', () => {
     );
 
     expect(getByText('Strategy Development')).toBeInTheDocument();
-  });
-
-  it.skip('renders the approvals count if it is present', () => {
-    const { getByText } = render(
-      <Router>
-        <ProposalCard {...props} />
-      </Router>
-    );
-
-    expect(getByText('3')).toBeInTheDocument();
   });
 
   it('does not render the approvals count if it is not present', () => {

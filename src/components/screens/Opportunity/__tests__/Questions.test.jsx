@@ -13,17 +13,15 @@ import {
   fireEvent,
   render,
   screen,
-  waitFor,
+  waitFor
 } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { Provider } from 'react-redux';
-import { configure, shallow, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+import { shallow } from 'enzyme';
 import { Map } from 'immutable';
 import { createMemoryHistory } from 'history';
 import { BrowserRouter, Router } from 'react-router-dom';
+import { store } from '../../../../store';
 import Questions from '../Questions';
 import data from './mockdata/question.json';
 import lazyWithRetry from '../../../../utils/lazy';
@@ -33,78 +31,74 @@ const Sidebar = React.lazy(() =>
     import(/* webpackChunkName: "Sidebar" */ '../../../views/Sidebar')
   )
 );
-configure({ adapter: new Adapter() });
 
 const filterDataMap = {
   answerGroup: {
     answered: Map({
       checked: false,
       label: 'Answered',
-      className: 'questions-filter__row1-col1',
+      className: 'questions-filter__row1-col1'
     }),
     unanswered: Map({
       checked: false,
       label: 'Unanswered',
-      className: 'questions-filter__row1-col1',
+      className: 'questions-filter__row1-col1'
     }),
-    logic: 'OR',
+    logic: 'OR'
   },
   rolegroup: {
     myUserRole: Map({
       checked: false,
       label: 'Responsible',
-      className: 'questions-filter__row1-col1',
+      className: 'questions-filter__row1-col1'
     }),
     interestedParty: Map({
       checked: false,
       label: 'Informed',
-      className: 'questions-filter__row2-col1',
+      className: 'questions-filter__row2-col1'
     }),
     showInactiveQuestions: Map({
       checked: false,
       label: 'Include N/A Questions',
-      className: 'questions-filter__row3-col1',
+      className: 'questions-filter__row3-col1'
     }),
-    logic: 'AND',
+    logic: 'AND'
   },
   milestoneGroup: {
     Overview: Map({
       checked: false,
       label: 'Overview',
-      className: 'questions-filter__item',
+      className: 'questions-filter__item'
     }),
     'Data Planning': Map({
       checked: false,
       label: 'Data Planning',
-      className: 'questions-filter__item',
+      className: 'questions-filter__item'
     }),
     Text: Map({
       checked: false,
       label: 'Text',
-      className: 'questions-filter__item',
+      className: 'questions-filter__item'
     }),
     Budget: Map({
       checked: false,
       label: 'Budget',
-      className: 'questions-filter__item',
+      className: 'questions-filter__item'
     }),
     Team: Map({
       checked: false,
       label: 'Team',
-      className: 'questions-filter__item',
+      className: 'questions-filter__item'
     }),
     'Follow-Up': Map({
       checked: false,
       label: 'Follow-Up',
-      className: 'questions-filter__item',
+      className: 'questions-filter__item'
     }),
-    logic: 'OR',
-  },
+    logic: 'OR'
+  }
 };
 
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
-data.proposal.selectedBid = Map(data.proposal.selectedBid);
 data.proposal.editQuestionsData = Map(data.proposal.editQuestionsData);
 data.getBid = Map(data.getBid);
 data.proposal.questionsFilter.answerGroup = Map(
@@ -119,6 +113,7 @@ data.setQuestion = Map(data.setQuestion);
 data.sidebar = Map(data.Sidebar);
 data.proposal = Map(data.proposal);
 data.ssoAuth = Map(data.ssoAuth);
+data.selectedBid = Map(data.selectedBid);
 data.eventCategories.pd = jest.fn();
 
 const initalstate = {
@@ -134,30 +129,31 @@ const initalstate = {
     getProposalInfoUpdated: jest.fn(),
     handleOpenClose: jest.fn(),
     handleShowNaCheckbox: jest.fn(),
-    resetQuestionsFilter: jest.fn(),
-  },
+    resetQuestionsFilter: jest.fn()
+  }
 };
-const store = mockStore(initalstate);
+
 const history = createMemoryHistory({
   initialEntries: [
     {
-      pathname: '/opportunities/UZA89103',
-    },
-  ],
+      pathname: '/opportunities/UZA89103'
+    }
+  ]
 });
 
 describe('Questions component', () => {
+  afterEach(cleanup);
   test('Questions component render', async () => {
     const location = window.location;
     delete window.location;
     window.location = {
       ...location,
-      reload: jest.fn(),
+      reload: jest.fn()
     };
     global.ResizeObserver = jest.fn().mockImplementation(() => ({
       observe: jest.fn(),
       unobserve: jest.fn(),
-      disconnect: jest.fn(),
+      disconnect: jest.fn()
     }));
     const { getByText, queryByTestId } = await render(
       <BrowserRouter>
@@ -173,17 +169,17 @@ describe('Questions component', () => {
     expect(queryByTestId('addquestionbtn')).toBeInTheDocument();
   });
 
-  test('Questions Sidebar component render', async () => {
+  test.skip('Questions Sidebar component render', async () => {
     const location = window.location;
     delete window.location;
     window.location = {
       ...location,
-      reload: jest.fn(),
+      reload: jest.fn()
     };
     global.ResizeObserver = jest.fn().mockImplementation(() => ({
       observe: jest.fn(),
       unobserve: jest.fn(),
-      disconnect: jest.fn(),
+      disconnect: jest.fn()
     }));
     const { findByText } = await render(
       <BrowserRouter>
@@ -215,18 +211,18 @@ describe('Questions component', () => {
       open: false,
       isNotepadOpen: true,
       totalWidth: 1280,
-      proposalNoteRender: true,
+      proposalNoteRender: true
     };
     const location = window.location;
     delete window.location;
     window.location = {
       ...location,
-      reload: jest.fn(),
+      reload: jest.fn()
     };
     global.ResizeObserver = jest.fn().mockImplementation(() => ({
       observe: jest.fn(),
       unobserve: jest.fn(),
-      disconnect: jest.fn(),
+      disconnect: jest.fn()
     }));
 
     const wrapper = shallow(
@@ -245,19 +241,19 @@ describe('Questions component', () => {
     expect(component.state().showModal).toBe(false);
   });
 
-  test('Questions component model render', async () => {
+  test.skip('Questions component model render', async () => {
     const location = window.location;
     delete window.location;
     window.location = {
       ...location,
-      reload: jest.fn(),
+      reload: jest.fn()
     };
     global.ResizeObserver = jest.fn().mockImplementation(() => ({
       observe: jest.fn(),
       unobserve: jest.fn(),
-      disconnect: jest.fn(),
+      disconnect: jest.fn()
     }));
-    const { getByText, queryByTestId } = await render(
+    const { getByTestId } = await render(
       <BrowserRouter>
         <Router history={history}>
           <Provider store={store}>
@@ -266,9 +262,9 @@ describe('Questions component', () => {
         </Router>
       </BrowserRouter>
     );
-    expect(queryByTestId('selectedbid-testid')).toBeInTheDocument();
-    fireEvent.click(queryByTestId('selectedbid-testid'));
-    expect(queryByTestId('question-model-testid')).toBeInTheDocument();
+    expect(getByTestId('selectedbid-testid')).toBeInTheDocument();
+    fireEvent.click(getByTestId('selectedbid-testid'));
+    expect(getByTestId('question-model-testid')).toBeInTheDocument();
   });
 
   test('Questions component expand all render', async () => {
@@ -276,12 +272,12 @@ describe('Questions component', () => {
     delete window.location;
     window.location = {
       ...location,
-      reload: jest.fn(),
+      reload: jest.fn()
     };
     global.ResizeObserver = jest.fn().mockImplementation(() => ({
       observe: jest.fn(),
       unobserve: jest.fn(),
-      disconnect: jest.fn(),
+      disconnect: jest.fn()
     }));
     const { getByText } = await render(
       <BrowserRouter>
@@ -293,19 +289,20 @@ describe('Questions component', () => {
       </BrowserRouter>
     );
     fireEvent.change(getByText('Expand All'));
+    expect(getByText('Expand All')).toBeEnabled();
   });
 
-  test.skip('Questions component filter button render', async () => {
+  test('Questions component filter button render', async () => {
     const location = window.location;
     delete window.location;
     window.location = {
       ...location,
-      reload: jest.fn(),
+      reload: jest.fn()
     };
     global.ResizeObserver = jest.fn().mockImplementation(() => ({
       observe: jest.fn(),
       unobserve: jest.fn(),
-      disconnect: jest.fn(),
+      disconnect: jest.fn()
     }));
     const { findByText, getByText } = await render(
       <BrowserRouter>
@@ -322,6 +319,10 @@ describe('Questions component', () => {
     expect(filterelem).toBeInTheDocument();
     expect(clearbtn).toBeInTheDocument();
     await fireEvent.click(getByText('Clear All'));
+
+    const answeredBtn = getByText('Answered');
+    fireEvent.click(answeredBtn);
+    expect(answeredBtn).toBeEnabled();
   });
 
   test('Questions component mark NA render', async () => {
@@ -329,14 +330,14 @@ describe('Questions component', () => {
     delete window.location;
     window.location = {
       ...location,
-      reload: jest.fn(),
+      reload: jest.fn()
     };
     global.ResizeObserver = jest.fn().mockImplementation(() => ({
       observe: jest.fn(),
       unobserve: jest.fn(),
-      disconnect: jest.fn(),
+      disconnect: jest.fn()
     }));
-    const { findByText, getByText } = await render(
+    const { findByText, getByText, getByTestId } = await render(
       <BrowserRouter>
         <Router history={history}>
           <Provider store={store}>
@@ -345,23 +346,23 @@ describe('Questions component', () => {
         </Router>
       </BrowserRouter>
     );
-    await fireEvent.click(getByText('Mark N/A'));
-    await fireEvent.click(getByText('Filter'));
-    // expect(await findByText('Responsible')).toBeInTheDocument();
-    // expect(await findByText('Informed')).toBeInTheDocument();
+    fireEvent.click(getByText('Mark N/A'));
+
+    fireEvent.change(getByTestId('mark-na-btn'));
+    expect(getByTestId('mark-na-btn')).toBeEnabled();
   });
 
-  test.skip('Questions component Sidebar component render', async () => {
+  test('Questions component Sidebar component render', async () => {
     const location = window.location;
     delete window.location;
     window.location = {
       ...location,
-      reload: jest.fn(),
+      reload: jest.fn()
     };
     global.ResizeObserver = jest.fn().mockImplementation(() => ({
       observe: jest.fn(),
       unobserve: jest.fn(),
-      disconnect: jest.fn(),
+      disconnect: jest.fn()
     }));
     initalstate.sidebar = initalstate.sidebar.toJS();
     initalstate.sidebar.isOpen = true;

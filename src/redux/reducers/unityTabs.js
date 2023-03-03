@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable guard-for-in */
 import _ from 'lodash';
 import { UNITY_TABS } from '../../constants/types';
 
@@ -5,6 +7,7 @@ const INITIAL_STATE = {
   fetching: false,
   allTabs: {},
   canSendEmail: false,
+  tabRefresh: `Refresh${Date.now().toString()}`,
   filters: [
     {
       name: 'answered',
@@ -36,7 +39,6 @@ const INITIAL_STATE = {
 const setUnityTab = (state, action) => {
   const { payload } = action;
   const data = _.groupBy(payload, 'TabID');
-  // console.log(`data`, data);
   return {
     ...state,
     fetching: false,
@@ -59,6 +61,33 @@ const resetFilters = (state, action) => {
     filters: INITIAL_STATE.filters
   };
 };
+
+const resetSingleFilters = (state, action) => {
+  const filter = state.filters.map(v => {
+    v.value = false;
+    return v;
+  });
+  return {
+    ...state,
+    filters: filter
+  };
+};
+
+const resetTab = (state, action) => {
+  return {
+    ...state,
+    allTabs: INITIAL_STATE.allTabs
+  };
+};
+
+const customTabRefresh = (state, action) => {
+  const { payload } = action;
+  return {
+    ...state,
+    tabRefresh: payload
+  };
+};
+
 const addNewFilter = (state, action) => {
   const { payload } = action;
 
@@ -73,6 +102,9 @@ const actionMap = {
   [UNITY_TABS.SET_UNITY_TABS]: setUnityTab,
   [UNITY_TABS.UPDATE_FILTERS]: updateFilter,
   [UNITY_TABS.RESET_FILTERS]: resetFilters,
+  [UNITY_TABS.RESET_SINGLE_TAB_FILTERS]: resetSingleFilters,
+  [UNITY_TABS.RESET_TAB]: resetTab,
+  [UNITY_TABS.SET_TAB_REFRESH]: customTabRefresh,
   [UNITY_TABS.UPDATE_NEW_FILTER]: addNewFilter
 };
 
