@@ -169,6 +169,7 @@ const UnityTab = ({
   const { trackEvent } = useMatomo();
   const [panelRef, setPanelRef] = useState(null);
   const [windowWidth, windowHeight] = useWindowSize();
+  const [newTab, setNewTab] = useState([]);
 
   const minPixelToExclude = 20;
   const notepadMinWidthPx =
@@ -192,12 +193,22 @@ const UnityTab = ({
   };
 
   useEffect(() => {
+    if (switchTempStatus === 'success' && tabs?.length > 5) {
+      dispatch(setTabRefresh(`Refresh${Date.now().toString()}`));
+    }
+  }, [switchTempStatus]);
+
+  useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const currentviewType = searchParams.get('bidNo');
     // without bid no url
     if (!currentviewType) {
       setTabloaded(false);
-      const newTab = [];
+      if (tabs.length > 5) {
+        const refreshTab = tabs.slice(0, 5);
+        setTabs([...refreshTab]);
+      }
+      const tempTab = [];
       let len = tabs.length - 1;
       // eslint-disable-next-line no-restricted-syntax
       const orderedCustomTabs = Object.values(customTabs)
@@ -225,7 +236,7 @@ const UnityTab = ({
             .toLowerCase();
           const response = calculateTab(customTabSections);
           if (filterTitle && response) {
-            newTab.push({
+            tempTab.push({
               label: customTabSections[0]['UnityTabTitle'],
               value: len++,
               component: <CustomTabs tabId={tabID} key={title} />,
@@ -234,10 +245,8 @@ const UnityTab = ({
           }
         }
       });
-      const finalTab = [...tabs, ...newTab];
-      setTabs(finalTab);
+      setNewTab(tempTab);
       setTabloaded(true);
-      dispatch(setTabRefresh(`Refresh${Date.now().toString()}`));
     }
   }, [customTabs, changeBidStatus]);
 
@@ -246,9 +255,12 @@ const UnityTab = ({
     const currentviewType = searchParams.get('bidNo');
     // without bid no url
     if (changeBidStatus && currentviewType) {
-      setTabs(defaultTabs);
+      if (tabs.length > 5) {
+        const refreshTab = tabs.slice(0, 5);
+        setTabs([...refreshTab]);
+      }
       setTabloaded(false);
-      const newTab = [];
+      const tempTab = [];
       let len = tabs.length - 1;
       // eslint-disable-next-line no-restricted-syntax
       const orderedCustomTabs = Object.values(customTabs)
@@ -276,7 +288,7 @@ const UnityTab = ({
             .toLowerCase();
           const response = calculateTab(customTabSections);
           if (filterTitle && response) {
-            newTab.push({
+            tempTab.push({
               label: customTabSections[0]['UnityTabTitle'],
               value: len++,
               component: <CustomTabs tabId={tabID} key={title} />,
@@ -285,7 +297,7 @@ const UnityTab = ({
           }
         }
       });
-      if (newTab && !newTab?.length) {
+      if (tempTab && !tempTab?.length) {
         setTabs(defaultTabs);
         const searchParams = new URLSearchParams(window.location.search);
         const currentviewType = searchParams.get('viewType');
@@ -302,18 +314,25 @@ const UnityTab = ({
           }
         }
       } else {
-        const finalTab = [...tabs, ...newTab];
-        setTabs(finalTab);
+        setNewTab([...tempTab]);
       }
       setTabloaded(true);
-      dispatch(setTabRefresh(`Refresh${Date.now().toString()}`));
-      dispatch(updateChangeBidStatusOperation(false));
+      tempTab.length = 0;
     }
   }, [customTabs, changeBidStatus]);
-
   useEffect(() => {
     setRefreshTab(tabRefresh);
   }, [tabRefresh]);
+  // Refresh Tab more button when switch template
+
+  useEffect(() => {
+    if (newTab && newTab?.length) {
+      const finalTab = [...tabs, ...newTab];
+      setTabs(finalTab);
+      setNewTab([...[]]);
+      dispatch(setTabRefresh(`Refresh${Date.now().toString()}`));
+    }
+  }, [newTab]);
 
   useEffect(() => {
     dispatch(setPanelStatus(vtabCollpased));
