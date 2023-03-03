@@ -484,7 +484,27 @@ const QuestionItem = ({
   };
   const fullGrid = [11, 1];
   const mediumGrid = [10, 2];
-  const conditionalGrid = panelStatus ? fullGrid : mediumGrid;
+  let finalGrid = [10, 2];
+  const screenResolution = window.screen.availWidth;
+  switch (true) {
+    case screenResolution >= 1920 && screenResolution < 2300:
+      finalGrid = fullGrid;
+      break;
+    case screenResolution >= 1536 && screenResolution < 1920:
+      if (panelStatus) finalGrid = fullGrid;
+      else finalGrid = mediumGrid;
+      break;
+    case screenResolution >= 1280 && screenResolution < 1536:
+      if (panelStatus) finalGrid = fullGrid;
+      else finalGrid = mediumGrid;
+      break;
+    case screenResolution >= 1098 && screenResolution < 1280:
+      if (panelStatus) finalGrid = fullGrid;
+      else finalGrid = mediumGrid;
+      break;
+    default:
+      break;
+  }
   return useMemo(
     () =>
       isShowQuestion ? (
@@ -501,7 +521,7 @@ const QuestionItem = ({
             <Grid container>
               <Grid
                 item
-                xs={conditionalGrid[0]}
+                xs={finalGrid[0]}
                 className="ques-title-cover unity-tab-question"
               >
                 <div className="question-label-container">
@@ -532,11 +552,11 @@ const QuestionItem = ({
                   <div className="milestone-chip">{renderTags()}</div>
                 </div>
               </Grid>
-              <Grid item xs={conditionalGrid[1]} />
-              <Grid item xs={conditionalGrid[0]} className="answer-input">
+              <Grid item xs={finalGrid[1]} />
+              <Grid item xs={finalGrid[0]} className="answer-input">
                 {renderQuestion()}
               </Grid>
-              <Grid item xs={conditionalGrid[1]} className="answer-actions">
+              <Grid item xs={finalGrid[1]} className="answer-actions">
                 <div className="system-icon-custom-tab">
                   {SystemIcon(unityTabQuestionLoading)}
                 </div>
@@ -565,7 +585,7 @@ const QuestionItem = ({
       unityTabFilters,
       currentSearchResult,
       unityTabQuestionLoading,
-      conditionalGrid
+      finalGrid
       // highlightQuestionId
     ]
   );
