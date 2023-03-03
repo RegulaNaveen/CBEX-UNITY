@@ -4,7 +4,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
-import { parseMomentDate, formatTheDate } from '../../../utils/DateUtils';
+import { parseMomentDate } from '../../../utils/DateUtils';
 import { setProposalAnswerData } from '../../../redux/actions/proposal-actions';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import CustomComponents from './CustomComponents';
@@ -102,7 +102,8 @@ const DnDOutsideResource = ({
             socketContext,
             proposalId,
             questionId,
-            formatTheDate(selectedDay),
+            selectedDay,
+            userData,
             null,
             true
           )
@@ -137,7 +138,7 @@ const DnDOutsideResource = ({
         return [...filtered, { ...existing, start, end, allDay }];
       });
 
-      handleDayChange(moment(start).format("DD MMM YYYY"), question);
+      handleDayChange(moment(start).format(), question);
     },
     [setTimelineEvents]
   );
@@ -164,7 +165,7 @@ const DnDOutsideResource = ({
 
         newEvent(event);
 
-        handleDayChange(moment(start).format("DD MMM YYYY"), draggedQuestionData);
+        handleDayChange(moment(start).format(), draggedQuestionData);
         setDraggedQuestionData(null);
         return;
       }
@@ -175,7 +176,7 @@ const DnDOutsideResource = ({
       }
 
       if (selectedEvent) {
-        handleDayChange(moment(start).format("DD MMM YYYY"), selectedEvent?.question);
+        handleDayChange(moment(start).format(), selectedEvent?.question);
         const event = {
           title: formatName(selectedEvent.title, counters[selectedEvent.title]),
           start,

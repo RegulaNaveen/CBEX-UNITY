@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import QuestionDatePicker from '../../../common/atoms/inputs/QuestionDatePicker';
-import { parseMomentDate, formatTheDate } from '../../../../utils/DateUtils';
+import { parseMomentDate } from '../../../../utils/DateUtils';
 import { setProposalAnswerData } from '../../../../redux/actions/proposal-actions';
 
 const DateQuestion = ({
@@ -51,7 +51,7 @@ const DateQuestion = ({
             socketContext,
             proposalId,
             questionId,
-            formatTheDate(selectedDay),
+            selectedDay,
             userData,
             null,
             true
