@@ -130,6 +130,7 @@ const CustomTabs = ({ tabId, key }) => {
             </div>
           </>
         )}
+        <div id="modal-wrapper" />
       </div>
     </div>
   );
