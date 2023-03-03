@@ -170,7 +170,7 @@ const UnityTab = ({
   const [panelRef, setPanelRef] = useState(null);
   const [windowWidth, windowHeight] = useWindowSize();
   const [newTab, setNewTab] = useState([]);
-
+  const resolution = window.screen.availWidth;
   const minPixelToExclude = 20;
   const notepadMinWidthPx =
     (window.innerWidth - minPixelToExclude) * (30 / 100); // 30% of the total screen size
@@ -197,6 +197,12 @@ const UnityTab = ({
       dispatch(setTabRefresh(`Refresh${Date.now().toString()}`));
     }
   }, [switchTempStatus]);
+
+  useEffect(() => {
+    if (resolution) {
+      dispatch(setTabRefresh(`Refresh${Date.now().toString()}`));
+    }
+  }, [resolution]);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
