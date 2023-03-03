@@ -305,6 +305,9 @@ export const getOpportunityData = createSelector(selectProposal, proposal =>
   proposal.get('opportunityData')
 );
 
+export const getChangeBidStatus = createSelector(selectProposal, proposal =>
+  proposal.get('changeBidStatus')
+);
 export const getPanelStatus = createSelector(selectProposal, proposal =>
   proposal.get('panelStatus')
 );

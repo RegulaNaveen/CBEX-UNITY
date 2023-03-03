@@ -1,3 +1,4 @@
+/* eslint-disable dot-notation */
 /* eslint-disable no-shadow */
 /* eslint-disable no-restricted-syntax */
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
@@ -13,6 +14,7 @@ import { useMatomo } from '@datapunt/matomo-tracker-react';
 import { useWindowSize } from '../../../../hooks';
 import Validate from '../../../screens/Opportunity/Validate';
 import {
+  getChangeBidStatus,
   getSelectedBid,
   selectActiveTabIndex,
   selectVTabUserPreference
@@ -26,7 +28,8 @@ import {
 import {
   setActiveTabIndexAction,
   setPanelStatus,
-  setVTabUserPreferenceAction
+  setVTabUserPreferenceAction,
+  updateChangeBidStatusOperation
 } from '../../../../redux/actions/proposal-actions';
 import { createMatomoObj, saveDataInMatomo } from '../../../../utils/utils';
 import { selectCurrentSearchResult } from '../../../../redux/selectors/search';
@@ -35,6 +38,7 @@ import lazyWithRetry from '../../../../utils/lazy';
 import VerticalTabsCollapsiblePanel from '../../../screens/Opportunity/layout/navigation/VerticalTabsCollapsiblePanel';
 import Timelines from '../../../screens/Timelines';
 import { checkTabRender } from '../../../screens/UnityTabs/utils';
+import { setTabRefresh } from '../../../../redux/actions/unitytab-action';
 
 const Questions = React.lazy(() =>
   lazyWithRetry(() =>
@@ -131,19 +135,22 @@ const UnityTab = ({
   const [tabs, setTabs] = useState(defaultTabs);
   const [approvalsFlag, setApprovalsFlag] = useState(false);
   const [showApprovalTab, setShowApprovalTab] = useState(false);
-  const [tabloaded, settabloaded] = useState(false);
+  const [tabLoaded, setTabloaded] = useState(false);
   const [isShowVerticalTab, setShowVerticalTab] = useState(false);
   const [
     showQuestionsForCustomerTab,
     setShowQuestionsForCustomerTab
   ] = useState(false);
+  const switchTempStatus = useSelector(
+    state => state.proposal?.toJSON()?.switchTempCallStatus
+  );
+  const tabRefresh = useSelector(state => state.unitytab.tabRefresh);
   const [showNotepadTab, setShowNotepadTab] = useState(false);
   const [showProposalTeamTab, setShowProposalTeamTab] = useState(false);
   const [isNotepadOpen, setIsNotepadOpen] = useState(true);
   const [vtabCollpased, setVTabCollapsed] = useState(false);
   const [systemTriggeredClick, setSystemTriggeredClick] = useState(false);
-  const [tabRefresh] = useState('notrefresh');
-
+  const [currentRefreshRate, setRefreshTab] = useState('');
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const proposalId = selectedBid?.id || 1;
   const isApprovalCount = selectedBid?.isApprovalCountPresent || false;
@@ -152,6 +159,7 @@ const UnityTab = ({
   const proposalDetail = useSelector(state => getProposalDetails(state));
   const userEmail = useSelector(state => getUserEmail(state));
   const userRole = useSelector(state => getUserRole(state));
+  const changeBidStatus = useSelector(state => getChangeBidStatus(state));
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const value = useSelector(selectActiveTabIndex);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
@@ -182,67 +190,130 @@ const UnityTab = ({
     }
     return false;
   };
-  let newTab = [];
-  let len = tabs.length - 1;
-  // eslint-disable-next-line no-restricted-syntax
-  let orderedCustomTabs = Object.values(customTabs)
-    .filter(
-      sections => sections.filter(section => section['UnityTabTitle']).length
-    )
-    .sort(
-      (sectionsA, sectionsB) =>
-        sectionsA[0].UnityTabOrder - sectionsB[0].UnityTabOrder
-    );
-  orderedCustomTabs.forEach(customTabSections => {
-    const tabID = customTabSections[0]['UnityTabId'];
-    const questionCount = customTabSections.some(
-      v => v['UnityTabSectionQuestions'].length > 0
-    );
-    const filterTitle = customTabSections.filter(v => v['UnityTabTitle']);
-    if (filterTitle.length && questionCount) {
-      const title = String(filterTitle[0]['UnityTabTitle'])
-        .trim()
-        .toLowerCase();
-      const tabpath = String(customTabSections[0]['UnityTabTitle'])
-        .replace(' ', '_')
-        .trim()
-        .toLowerCase();
-      newTab.push({
-        label: customTabSections[0]['UnityTabTitle'],
-        value: len++,
-        component: <CustomTabs tabId={tabID} key={title} />,
-        path: tabpath
-      });
-    }
-  });
-  useEffect(() => {
-    if (newTab && Object.keys(newTab)?.length > 0 && !tabloaded) {
-      setTabs([...tabs, ...newTab]);
-      settabloaded(true);
-      newTab.length = 0;
-    }
-  }, [customTabs]);
 
   useEffect(() => {
-    if ('URLSearchParams' in window) {
-      const searchParams = new URLSearchParams(window.location.search);
-      const currentviewType = searchParams.get('viewType');
-      if (
-        Boolean(!Object.keys(customTabs)?.length) &&
-        tabloaded &&
-        (currentviewType !== 'documents' ||
-          currentviewType !== 'approval' ||
-          currentviewType !== 'timelines' ||
-          currentviewType !== 'questions')
-      ) {
+    const searchParams = new URLSearchParams(window.location.search);
+    const currentviewType = searchParams.get('bidNo');
+    // without bid no url
+    if (!currentviewType) {
+      setTabloaded(false);
+      const newTab = [];
+      let len = tabs.length - 1;
+      // eslint-disable-next-line no-restricted-syntax
+      const orderedCustomTabs = Object.values(customTabs)
+        .filter(
+          sections =>
+            sections.filter(section => section['UnityTabTitle']).length
+        )
+        .sort(
+          (sectionsA, sectionsB) =>
+            sectionsA[0].UnityTabOrder - sectionsB[0].UnityTabOrder
+        );
+      orderedCustomTabs.forEach(customTabSections => {
+        const tabID = customTabSections[0]['UnityTabId'];
+        const questionCount = customTabSections.some(
+          v => v['UnityTabSectionQuestions'].length > 0
+        );
+        const filterTitle = customTabSections.filter(v => v['UnityTabTitle']);
+        if (filterTitle.length && questionCount) {
+          const title = String(filterTitle[0]['UnityTabTitle'])
+            .trim()
+            .toLowerCase();
+          const tabpath = String(customTabSections[0]['UnityTabTitle'])
+            .replace(' ', '_')
+            .trim()
+            .toLowerCase();
+          const response = calculateTab(customTabSections);
+          if (filterTitle && response) {
+            newTab.push({
+              label: customTabSections[0]['UnityTabTitle'],
+              value: len++,
+              component: <CustomTabs tabId={tabID} key={title} />,
+              path: tabpath
+            });
+          }
+        }
+      });
+      const finalTab = [...tabs, ...newTab];
+      setTabs(finalTab);
+      setTabloaded(true);
+      dispatch(setTabRefresh(`Refresh${Date.now().toString()}`));
+    }
+  }, [customTabs, changeBidStatus]);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const currentviewType = searchParams.get('bidNo');
+    // without bid no url
+    if (changeBidStatus && currentviewType) {
+      setTabs(defaultTabs);
+      setTabloaded(false);
+      const newTab = [];
+      let len = tabs.length - 1;
+      // eslint-disable-next-line no-restricted-syntax
+      const orderedCustomTabs = Object.values(customTabs)
+        .filter(
+          sections =>
+            sections.filter(section => section['UnityTabTitle']).length
+        )
+        .sort(
+          (sectionsA, sectionsB) =>
+            sectionsA[0].UnityTabOrder - sectionsB[0].UnityTabOrder
+        );
+      orderedCustomTabs.forEach(customTabSections => {
+        const tabID = customTabSections[0]['UnityTabId'];
+        const questionCount = customTabSections.some(
+          v => v['UnityTabSectionQuestions'].length > 0
+        );
+        const filterTitle = customTabSections.filter(v => v['UnityTabTitle']);
+        if (filterTitle.length && questionCount) {
+          const title = String(filterTitle[0]['UnityTabTitle'])
+            .trim()
+            .toLowerCase();
+          const tabpath = String(customTabSections[0]['UnityTabTitle'])
+            .replace(' ', '_')
+            .trim()
+            .toLowerCase();
+          const response = calculateTab(customTabSections);
+          if (filterTitle && response) {
+            newTab.push({
+              label: customTabSections[0]['UnityTabTitle'],
+              value: len++,
+              component: <CustomTabs tabId={tabID} key={title} />,
+              path: tabpath
+            });
+          }
+        }
+      });
+      if (newTab && !newTab?.length) {
         setTabs(defaultTabs);
-        dispatch(setActiveTabIndexAction(0));
+        const searchParams = new URLSearchParams(window.location.search);
+        const currentviewType = searchParams.get('viewType');
+        if (
+          currentviewType &&
+          currentviewType !== 'documents' &&
+          currentviewType !== 'approvals' &&
+          currentviewType !== 'timelines' &&
+          currentviewType !== 'questions'
+        ) {
+          const className = '._question-tab > div > div > button:nth-child(1)';
+          if (document && document.querySelector(className)) {
+            document.querySelector(className).click();
+          }
+        }
+      } else {
+        const finalTab = [...tabs, ...newTab];
+        setTabs(finalTab);
       }
+      setTabloaded(true);
+      dispatch(setTabRefresh(`Refresh${Date.now().toString()}`));
+      dispatch(updateChangeBidStatusOperation(false));
     }
-    if (Object.keys(customTabs)?.length > 0 && tabloaded) {
-      setTabs([...tabs, ...newTab]);
-    }
-  }, [customTabs]);
+  }, [customTabs, changeBidStatus]);
+
+  useEffect(() => {
+    setRefreshTab(tabRefresh);
+  }, [tabRefresh]);
 
   useEffect(() => {
     dispatch(setPanelStatus(vtabCollpased));
@@ -438,6 +509,19 @@ const UnityTab = ({
       history.push(`${window.location.pathname}?${selectView.toString()}`);
     }
   };
+
+  function handleVerticalTabClick(tab) {
+    if (vtabCollpased) {
+      setVTabCollapsed(false);
+      if (panelRef !== null) {
+        setTimeout(() => {
+          const toggleButton = panelRef.children[0].children[1];
+          toggleButton.click();
+        }, 500);
+      }
+      dispatch(setVTabUserPreferenceAction(tab, true));
+    }
+  }
 
   /**
    * Decides which tabs to be rendered
@@ -686,7 +770,7 @@ const UnityTab = ({
         <Tabs
           value={value}
           onChange={handleChangeTab}
-          key={tabRefresh}
+          key={currentRefreshRate}
           truncate
           className="_question-tab"
         >
@@ -709,6 +793,7 @@ const UnityTab = ({
                   // Check activeTab value and render required component
                   return <>{renderVerticleTabsComponent(activeTab)}</>;
                 }}
+                onTabClick={handleVerticalTabClick}
               />
             ) : null}
             {visibleTabs().map(item => {
