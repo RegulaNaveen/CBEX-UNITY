@@ -510,6 +510,19 @@ const UnityTab = ({
     }
   };
 
+  function handleVerticalTabClick(tab) {
+    if (vtabCollpased) {
+      setVTabCollapsed(false);
+      if (panelRef !== null) {
+        setTimeout(() => {
+          const toggleButton = panelRef.children[0].children[1];
+          toggleButton.click();
+        }, 500);
+      }
+      dispatch(setVTabUserPreferenceAction(tab, true));
+    }
+  }
+
   /**
    * Decides which tabs to be rendered
    * @returns Array of objects
@@ -780,6 +793,7 @@ const UnityTab = ({
                   // Check activeTab value and render required component
                   return <>{renderVerticleTabsComponent(activeTab)}</>;
                 }}
+                onTabClick={handleVerticalTabClick}
               />
             ) : null}
             {visibleTabs().map(item => {
