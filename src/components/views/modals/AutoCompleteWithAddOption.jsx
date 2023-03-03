@@ -59,6 +59,7 @@ const AutoCompleteWithAddOption = ({
   const [modAnswer, setModAnswer] = useState(getAnswer());
   const [currentLov, setCurrentLov] = useState(getOptions());
   const [clearable, setClearable] = useState(true);
+  const [openState, setOpenState] = useState(false);
 
   const autoCompleteRef = useRef(null);
 
@@ -95,7 +96,10 @@ const AutoCompleteWithAddOption = ({
 
     setSelectedVal(modifiedAnswer);
     setModAnswer(modifiedAnswer);
-    if (!multiple) onChange(modifiedAnswer);
+    if (!multiple) {
+      onChange(modifiedAnswer);
+      setOpenState(false)
+    };
     if (onCascadeChange) onCascadeChange();
   };
 
@@ -150,6 +154,7 @@ const AutoCompleteWithAddOption = ({
   };
 
   const handleFocus = useCallback(() => {
+    setOpenState(true);
     if (toggleWatch) toggleWatch(true);
     onFocus();
   }, []);
@@ -171,8 +176,9 @@ const AutoCompleteWithAddOption = ({
   }, [forceBlur]);
 
   return (
-    <div className="auto-complete-with-add-option">
+    <div className="auto-complete-with-add-option" >
       <Autocomplete
+        open={openState}
         data-testid="autocomplete-test"
         filterOptions={(currentList, params) => {
           const filtered = filter(currentList, params);
@@ -187,13 +193,13 @@ const AutoCompleteWithAddOption = ({
           return filtered;
         }}
         size="small"
-        disableClearable={clearable}
+        // disableClearable={clearable}
         onBlur={() => {
           if (answer) {
             if (
               multiple &&
               // eslint-disable-next-line react/prop-types
-              answer?.length !== modAnswer.length
+              (answer?.length !== modAnswer.length || !isEqual(answer, modAnswer))
             )
               onChange(modAnswer);
           } else if (
@@ -204,6 +210,7 @@ const AutoCompleteWithAddOption = ({
           )
             onChange(modAnswer);
           handleBlur();
+          setOpenState(false);
         }}
         onFocus={handleFocus}
         disabled={disabled}
@@ -220,7 +227,7 @@ const AutoCompleteWithAddOption = ({
               <div className="autocomplete-chip" key={index}>
                 <Chip
                   label={
-                    <Typography style={{ whiteSpace: 'normal' }}>
+                    <Typography style={{ whiteSpace: 'normal', lineHeight: 1 }}>
                       {option}
                     </Typography>
                   }
