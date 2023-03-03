@@ -56,7 +56,8 @@ function VerticalTabsCollapsiblePanel({
   showQuestionsForCustomerTab,
   showNotepadTab,
   showProposalTeamTab,
-  activeVerticleTab
+  activeVerticleTab,
+  onTabClick
 }) {
   const activeTabIndex = useSelector(selectActiveVTabIndex);
   const dispatch = useDispatch();
@@ -80,6 +81,7 @@ function VerticalTabsCollapsiblePanel({
 
   function handleTabChange(event, newActiveTab) {
     dispatch(setVTabActiveIndexAction(newActiveTab));
+    onTabClick(newActiveTab);
   }
   const renderTab = () => {
     const tabs = tabArr.map(v => {
