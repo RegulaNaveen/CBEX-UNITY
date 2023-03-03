@@ -169,7 +169,8 @@ const UnityTab = ({
   const { trackEvent } = useMatomo();
   const [panelRef, setPanelRef] = useState(null);
   const [windowWidth, windowHeight] = useWindowSize();
-
+  const [newTab, setNewTab] = useState([]);
+  const resolution = window.screen.availWidth;
   const minPixelToExclude = 20;
   const notepadMinWidthPx =
     (window.innerWidth - minPixelToExclude) * (30 / 100); // 30% of the total screen size
@@ -190,6 +191,17 @@ const UnityTab = ({
     }
     return false;
   };
+  useEffect(() => {
+    if (switchTempStatus === 'success' && tabs?.length > 5) {
+      dispatch(setTabRefresh(`Refresh${Date.now().toString()}`));
+    }
+  }, [switchTempStatus]);
+
+  useEffect(() => {
+    if (resolution) {
+      dispatch(setTabRefresh(`Refresh${Date.now().toString()}`));
+    }
+  }, [resolution]);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -197,8 +209,12 @@ const UnityTab = ({
     // without bid no url
     if (!currentviewType) {
       setTabloaded(false);
-      const newTab = [];
-      let len = tabs.length - 1;
+      if (tabs.length > 5) {
+        const refreshTab = tabs.slice(0, 5);
+        setTabs([...refreshTab]);
+      }
+      const tempTab = [];
+      let len = 5;
       // eslint-disable-next-line no-restricted-syntax
       const orderedCustomTabs = Object.values(customTabs)
         .filter(
@@ -225,7 +241,7 @@ const UnityTab = ({
             .toLowerCase();
           const response = calculateTab(customTabSections);
           if (filterTitle && response) {
-            newTab.push({
+            tempTab.push({
               label: customTabSections[0]['UnityTabTitle'],
               value: len++,
               component: <CustomTabs tabId={tabID} key={title} />,
@@ -234,10 +250,8 @@ const UnityTab = ({
           }
         }
       });
-      const finalTab = [...tabs, ...newTab];
-      setTabs(finalTab);
+      setNewTab(tempTab);
       setTabloaded(true);
-      dispatch(setTabRefresh(`Refresh${Date.now().toString()}`));
     }
   }, [customTabs, changeBidStatus]);
 
@@ -246,10 +260,13 @@ const UnityTab = ({
     const currentviewType = searchParams.get('bidNo');
     // without bid no url
     if (changeBidStatus && currentviewType) {
-      setTabs(defaultTabs);
+      if (tabs.length > 5) {
+        const refreshTab = tabs.slice(0, 5);
+        setTabs([...refreshTab]);
+      }
       setTabloaded(false);
-      const newTab = [];
-      let len = tabs.length - 1;
+      const tempTab = [];
+      let len = 5
       // eslint-disable-next-line no-restricted-syntax
       const orderedCustomTabs = Object.values(customTabs)
         .filter(
@@ -276,7 +293,7 @@ const UnityTab = ({
             .toLowerCase();
           const response = calculateTab(customTabSections);
           if (filterTitle && response) {
-            newTab.push({
+            tempTab.push({
               label: customTabSections[0]['UnityTabTitle'],
               value: len++,
               component: <CustomTabs tabId={tabID} key={title} />,
@@ -285,7 +302,7 @@ const UnityTab = ({
           }
         }
       });
-      if (newTab && !newTab?.length) {
+      if (tempTab && !tempTab?.length) {
         setTabs(defaultTabs);
         const searchParams = new URLSearchParams(window.location.search);
         const currentviewType = searchParams.get('viewType');
@@ -302,18 +319,24 @@ const UnityTab = ({
           }
         }
       } else {
-        const finalTab = [...tabs, ...newTab];
-        setTabs(finalTab);
+        setNewTab([...tempTab]);
       }
       setTabloaded(true);
-      dispatch(setTabRefresh(`Refresh${Date.now().toString()}`));
-      dispatch(updateChangeBidStatusOperation(false));
+      tempTab.length = 0;
     }
   }, [customTabs, changeBidStatus]);
-
   useEffect(() => {
     setRefreshTab(tabRefresh);
   }, [tabRefresh]);
+  // Refresh Tab more button when switch template
+
+  useEffect(() => {
+    if (newTab && newTab?.length) {
+      const finalTab = [...tabs, ...newTab];
+      setTabs(finalTab);
+      setNewTab([...[]]);
+    }
+  }, [newTab]);
 
   useEffect(() => {
     dispatch(setPanelStatus(vtabCollpased));
@@ -509,6 +532,19 @@ const UnityTab = ({
       history.push(`${window.location.pathname}?${selectView.toString()}`);
     }
   };
+
+  function handleVerticalTabClick(tab) {
+    if (vtabCollpased) {
+      setVTabCollapsed(false);
+      if (panelRef !== null) {
+        setTimeout(() => {
+          const toggleButton = panelRef.children[0].children[1];
+          toggleButton.click();
+        }, 500);
+      }
+      dispatch(setVTabUserPreferenceAction(tab, true));
+    }
+  }
 
   /**
    * Decides which tabs to be rendered
@@ -754,19 +790,22 @@ const UnityTab = ({
     }
     return (
       <>
-        <Tabs
-          value={value}
-          onChange={handleChangeTab}
-          key={currentRefreshRate}
-          truncate
-          className="_question-tab"
-        >
-          {visibleTabs().map(item => {
-            return (
-              <Tab key={item.label} label={item.label} value={item.value} />
-            );
-          })}
-        </Tabs>
+        <div className="tab-size">
+          <Tabs
+            value={value}
+            onChange={handleChangeTab}
+            key={currentRefreshRate}
+            truncate
+            size="small"
+            className="_question-tab"
+          >
+            {visibleTabs().map(item => {
+              return (
+                <Tab key={item.label} label={item.label} value={item.value} />
+              );
+            })}
+          </Tabs>
+        </div>
         <div style={{ padding: 20, paddingTop: 5 }}>
           <div id="fullwidth-view-above-vertical-tabs" />
           <div style={{ display: 'flex', marginTop: '16px' }}>
@@ -780,6 +819,7 @@ const UnityTab = ({
                   // Check activeTab value and render required component
                   return <>{renderVerticleTabsComponent(activeTab)}</>;
                 }}
+                onTabClick={handleVerticalTabClick}
               />
             ) : null}
             {visibleTabs().map(item => {
