@@ -262,7 +262,7 @@ function QuestionsForCustomer() {
           </div>
         )}
 
-        <div className="btn-container">
+        <div className="btn-container" ref={addNewEntryRef}>
           <div data-testid="clipboard-button">
             <Button
               data-testid="clipboard-button"
@@ -285,16 +285,10 @@ function QuestionsForCustomer() {
               className="btn-label"
               onClick={addQuestionHandler}
               disabled={
-                (Array.from(questions)[questions.size - 1]
-                  ? Array.from(questions)[questions.size - 1][1].get(
-                      'isNewEntry'
-                    )
-                  : false) ||
                 !isCurrentBid ||
                 !allFlags.isQuestionForCustomerEditable ||
                 showAddQuestionLoader
               }
-              ref={addNewEntryRef}
             >
               Add New
             </Button>
