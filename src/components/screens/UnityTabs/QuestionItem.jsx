@@ -80,7 +80,12 @@ const QuestionItem = ({
 
   useEffect(() => {
     if (currentSearchResult !== null && questionTextRef.current !== null) {
-      if (currentSearchResult.searchIndex === questionId) {
+      if (
+        currentSearchResult.searchIndex === questionId &&
+        ((currentSearchResult.sectionName !== null &&
+          currentSearchResult.sectionName === UnityTabSectionTitle) ||
+          currentSearchResult.sectionName === null)
+      ) {
         setTimeout(() => {
           questionTextRef.current.scrollIntoView({
             behaviour: 'smooth',
@@ -495,7 +500,9 @@ const QuestionItem = ({
               'unity-tab-question-item': true,
               'question-active':
                 currentSearchResult !== null &&
-                currentSearchResult.searchIndex === questionId
+                currentSearchResult.searchIndex === questionId &&
+                currentSearchResult.sectionName !== null &&
+                  currentSearchResult.sectionName === UnityTabSectionTitle
             })}
           >
             <Grid container>
