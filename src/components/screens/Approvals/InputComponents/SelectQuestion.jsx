@@ -11,7 +11,10 @@ const SelectQuestion = ({
   userData,
   socketContext,
   trackMatomoEventSubmitAnswer,
-  checkDisableFlag
+  checkDisableFlag,
+  toggleWatch,
+  onCascadeChange,
+  forceBlur
 }) => {
   const dispatch = useDispatch();
   const { questionLockWrapper, questionUnlockWrapper } = socketContext;
@@ -51,12 +54,18 @@ const SelectQuestion = ({
       disabled={checkDisableFlag() || !!disabled}
       answer={lastAnswer.answer}
       onChange={changeHandler}
+      toggleWatch={toggleWatch}
+      onCascadeChange={onCascadeChange}
+      forceBlur={forceBlur}
     />
   );
 };
 
 SelectQuestion.defaultProps = {
-  disabled: false
+  disabled: false,
+  toggleWatch: () => {},
+  onCascadeChange: () => {},
+  forceBlur: false
 };
 SelectQuestion.propTypes = {
   question: PropTypes.object.isRequired,
@@ -64,7 +73,10 @@ SelectQuestion.propTypes = {
   disabled: PropTypes.any,
   userData: PropTypes.any.isRequired,
   socketContext: PropTypes.object.isRequired,
-  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired
+  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired,
+  toggleWatch: PropTypes.func,
+  onCascadeChange: PropTypes.func,
+  forceBlur: PropTypes.bool
 };
 
 export default SelectQuestion;
