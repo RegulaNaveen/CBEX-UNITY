@@ -39,6 +39,7 @@ import VerticalTabsCollapsiblePanel from '../../../screens/Opportunity/layout/na
 import Timelines from '../../../screens/Timelines';
 import { checkTabRender } from '../../../screens/UnityTabs/utils';
 import { setTabRefresh } from '../../../../redux/actions/unitytab-action';
+import { DEFAULT_TABS_LEN } from '../../../../constants/app';
 
 const Questions = React.lazy(() =>
   lazyWithRetry(() =>
@@ -393,10 +394,10 @@ const UnityTab = ({
         if (windowWidth < 850) {
           shouldvtabCollapsed = true;
         } else {
-          if (value === 0) {
+          if (value === 0 || value >= DEFAULT_TABS_LEN) {
             shouldvtabCollapsed = false;
-            if (vTabUserPreference && vTabUserPreference[0]) {
-              shouldvtabCollapsed = vTabUserPreference[0].collapsed;
+            if (vTabUserPreference && vTabUserPreference[value]) {
+              shouldvtabCollapsed = vTabUserPreference[value].collapsed;
             }
           }
           if (value === 2) {

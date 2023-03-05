@@ -64,10 +64,11 @@ const QuestionDatePicker = ({
         disabled={disabled}
         inputProps={{
           onFocus: e => {
-            onFocus();
             if (toggleWatch) toggleWatch(true);
+            onFocus();
           },
           onBlur: e => {
+            if (toggleWatch) toggleWatch(false);
             onBlur();
           }
         }}

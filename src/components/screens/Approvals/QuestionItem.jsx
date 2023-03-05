@@ -35,6 +35,22 @@ import { getLastAnswer, shouldShowQuestion } from './utils';
 import { getQuestion } from '../../../redux/selectors';
 import { selectCurrentSearchResult } from '../../../redux/selectors/search';
 import { autoNavigationCompletedAction } from '../../../redux/actions/search-actions';
+import withIdleStateDetection from '../../HOC/IdleStateDetector';
+
+const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
+const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
+  SelectQuestion
+);
+const MultiSelectQuestionWithIdleStateDetection = withIdleStateDetection(
+  MultiSelectQuestion
+);
+const YesNoQuestionWithIdleStateDetection = withIdleStateDetection(
+  YesNoQuestion
+);
+
+const CheckBoxQuestionWithIdleStateDetection = withIdleStateDetection(
+  CheckBoxQuestion
+);
 
 const QuestionItem = ({
   questionId = '',
@@ -241,7 +257,7 @@ const QuestionItem = ({
             hasDifferentSFanswer={question.hasDifferentSFanswer}
             sfObject={question.sfObject}
           >
-            <DateQuestion {...inputProps} />
+            <DateQuestionWithIdleStateDetection {...inputProps} />
           </SFAnswerValidationWrapper>
         );
       }
@@ -262,7 +278,7 @@ const QuestionItem = ({
             hasDifferentSFanswer={question.hasDifferentSFanswer}
             sfObject={question.sfObject}
           >
-            <SelectQuestion {...inputProps} />
+            <SelectQuestionWithIdleStateDetection {...inputProps} />
           </SFAnswerValidationWrapper>
         );
       }
@@ -273,7 +289,7 @@ const QuestionItem = ({
             hasDifferentSFanswer={question.hasDifferentSFanswer}
             sfObject={question.sfObject}
           >
-            <MultiSelectQuestion {...inputProps} />
+            <MultiSelectQuestionWithIdleStateDetection {...inputProps} />
           </SFAnswerValidationWrapper>
         );
       }
@@ -283,7 +299,7 @@ const QuestionItem = ({
             hasDifferentSFanswer={question.hasDifferentSFanswer}
             sfObject={question.sfObject}
           >
-            <YesNoQuestion {...inputProps} />
+            <YesNoQuestionWithIdleStateDetection {...inputProps} />
           </SFAnswerValidationWrapper>
         );
       }
@@ -293,7 +309,7 @@ const QuestionItem = ({
             hasDifferentSFanswer={question.hasDifferentSFanswer}
             sfObject={question.sfObject}
           >
-            <CheckBoxQuestion {...inputProps} />
+            <CheckBoxQuestionWithIdleStateDetection {...inputProps} />
           </SFAnswerValidationWrapper>
         );
       }

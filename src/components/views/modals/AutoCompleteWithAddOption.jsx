@@ -95,8 +95,15 @@ const AutoCompleteWithAddOption = ({
 
     setSelectedVal(modifiedAnswer);
     setModAnswer(modifiedAnswer);
-    if (!multiple) onChange(modifiedAnswer);
-    if (onCascadeChange) onCascadeChange();
+    if (!multiple) {
+      onChange(modifiedAnswer);
+      if (toggleWatch) toggleWatch(false);
+      if (autoCompleteRef.current) {
+        autoCompleteRef.current.blur();
+      }
+    } else {
+      if (onCascadeChange) onCascadeChange();
+    }
   };
 
   /**
@@ -163,9 +170,9 @@ const AutoCompleteWithAddOption = ({
     if (forceBlur === true) {
       if (autoCompleteRef.current) {
         autoCompleteRef.current.blur();
-        setTimeout(() => {
-          autoCompleteRef.current.value = '';
-        }, 100);
+        // setTimeout(() => {
+        //   autoCompleteRef.current.value = '';
+        // }, 100);
       }
     }
   }, [forceBlur]);
