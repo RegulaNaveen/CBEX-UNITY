@@ -71,7 +71,6 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
         const className = '._question-tab > div > div > button:nth-child(1)';
         if (document && document.querySelector(className)) {
           document.querySelector(className).click();
-          dispatch(setTabRefresh(`Refresh${Date.now().toString()}`));
         }
       });
     }

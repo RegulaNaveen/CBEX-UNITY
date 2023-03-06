@@ -966,6 +966,13 @@ const onRolesError = (state: Map, action: Object): Map => {
 const onSetQuestion = (state: Map, action: Object): Map => {
   const data = action.payload;
   const updatedProposalQuestions = state.get('proposalQuestions');
+  const isQuestionExist = updatedProposalQuestions.find(
+    item => item?.questionId === data?.questionId
+  );
+  if (isQuestionExist) {
+    return;
+  }
+
   updatedProposalQuestions.push(data);
 
   let questionsFilter = state.get('questionsFilter');
@@ -1122,6 +1129,8 @@ const onDeleteQuestion = (state, action) => {
   const questionIndex = questions.findIndex(
     item => item.questionId === questionId
   );
+
+  if (questionIndex === -1) return;
 
   const updatedQuestions = [
     ...questions.slice(0, questionIndex),
