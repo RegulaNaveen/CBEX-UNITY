@@ -100,11 +100,12 @@ const AutoCompleteWithAddOption = ({
     if (!multiple) {
       onChange(modifiedAnswer);
       setOpenState(false);
-    }
-    if (onCascadeChange) onCascadeChange();
-    if (toggleWatch) toggleWatch(false);
-    if (autoCompleteRef.current) {
-      autoCompleteRef.current.blur();
+      if (toggleWatch) toggleWatch(false);
+      if (autoCompleteRef.current) {
+        autoCompleteRef.current.blur();
+      }
+    } else {
+      if (onCascadeChange) onCascadeChange();
     }
   };
 
