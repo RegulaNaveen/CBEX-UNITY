@@ -78,6 +78,7 @@ const TextQuestion = ({
     richTextHtml: richTextData.html,
     enableFocus: true,
     isEditable: false,
+    customTab: true,
     disabled: checkDisableFlag() || disabled,
     canUserTagInQuestion,
     allFlags,
@@ -122,7 +123,7 @@ const TextQuestion = ({
     },
     onFocus: () => {
       questionLockWrapper(question?.questionId);
-      quesTextInnerLeftRef.current.style.marginTop = '25px';
+      // quesTextInnerLeftRef.current.style.marginTop = '25px';
     }
   };
 
@@ -131,6 +132,7 @@ const TextQuestion = ({
       <CustomApolloRichText
         className="approval-text-question"
         {...richtextProps}
+        iscustomtab
       />
     </div>
   );
