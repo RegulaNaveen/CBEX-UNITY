@@ -33,6 +33,19 @@ const NotepadWrapper = ({ trackEvent }) => {
         `?=${storedValue}&`,
         ydoc
       );
+      wsProvider.on('status', event => {
+        console.log('wsProvider', event);
+        if (event.status === 'connected') {
+          setShowNetworkChip(false);
+          setIsOnline(true);
+          console.log('connected: Auto sync may not work.');
+        }
+        if (event.status === 'disconnected') {
+          setShowNetworkChip(true);
+          setIsOnline(false);
+        }
+      });
+
       setWsInstance(wsProvider);
     }
   };

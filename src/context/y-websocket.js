@@ -96,7 +96,8 @@ messageHandlers[messageAuth] = (
 };
 
 // @todo - this should depend on awareness.outdatedTime
-const messageReconnectTimeout = 25000;
+const messageReconnectTimeout = 480000;
+const refreshConnectionTimeout = 30000;
 
 let refreshInterval;
 
@@ -529,6 +530,6 @@ const setupRefresh = websocket => {
   if (websocket) {
     refreshInterval = setInterval(() => {
       websocket.send(JSON.stringify({ action: 'REFRESH' }));
-    }, messageReconnectTimeout);
+    }, refreshConnectionTimeout);
   }
 };
