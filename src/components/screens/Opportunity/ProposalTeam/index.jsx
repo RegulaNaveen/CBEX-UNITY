@@ -16,7 +16,8 @@ import {
   selectIsQuestionsFilterEnabled,
   isSetQuestionLoading,
   getSelectedBid,
-  getShowNaCheckbox
+  getShowNaCheckbox,
+  getEditQuestionData
 } from '../../../../redux/selectors';
 import AnswerHistory from '../../../views/modals/AnswerHistory';
 
@@ -39,6 +40,7 @@ function ProposalTeam() {
     ''
   );
   const [isHistoryModalShown, setIsHistoryModalShown] = useState(false);
+  const editQuestionsData = useSelector(getEditQuestionData);
   const proposalTeam = [];
   let questionData;
   const wholeData = [];
@@ -151,6 +153,12 @@ function ProposalTeam() {
     }
   }, [isSetQuestionLoadingData]);
 
+  useEffect(() => {
+    if (editQuestionsData.size > 0) {
+      setShowModal(true);
+    }
+  }, [editQuestionsData]);
+
   const setQuestionToDisplayHistory = (selectedAnswer: string) => {
     const questionHistory = allSections
       .valueSeq()
@@ -236,6 +244,7 @@ function ProposalTeam() {
             );
           })}
         </div>
+        <hr className="divider-hr-proposal-team" />
         <div className="proposal-team-btn-wrapper">
           <Link
             style={{ borderBottom: 'none' }}
