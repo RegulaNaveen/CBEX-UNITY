@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { List } from 'immutable';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
+import { v4 as uuidv4 } from 'uuid';
 import TextField from '@material-ui/core/TextField';
 import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
@@ -14,6 +15,7 @@ import { getLookUpOptionsSelector } from '../../../redux/selectors';
 const filter = createFilterOptions();
 
 const AutoCompleteWithAddOption = ({
+  key,
   options,
   sfObject,
   lov,
@@ -61,7 +63,9 @@ const AutoCompleteWithAddOption = ({
   const [clearable, setClearable] = useState(true);
   const [openState, setOpenState] = useState(false);
 
+  const autocompleteParentRef = useRef(null);
   const autoCompleteRef = useRef(null);
+  const lookupListRef = useRef(null);
 
   const addAnswerPicklist = arr => {
     return arr.map(item =>
@@ -98,7 +102,7 @@ const AutoCompleteWithAddOption = ({
     setModAnswer(modifiedAnswer);
     if (!multiple) {
       onChange(modifiedAnswer);
-      setOpenState(false)
+      setOpenState(false);
     };
     if (onCascadeChange) onCascadeChange();
   };
@@ -110,9 +114,7 @@ const AutoCompleteWithAddOption = ({
     let newSelectedValue = getAnswer();
     setSelectedVal(newSelectedValue);
     setModAnswer(newSelectedValue);
-    if (isEmpty(newSelectedValue)) {
-      setClearable(true);
-    }
+
     const currentOptions = [...getOptions()];
     const newOptions = currentOptions.filter(
       el => newSelectedValue.indexOf(el) === -1
@@ -176,8 +178,11 @@ const AutoCompleteWithAddOption = ({
   }, [forceBlur]);
 
   return (
-    <div className="auto-complete-with-add-option" >
+    <div className="auto-complete-with-add-option"
+      ref={autocompleteParentRef}
+    >
       <Autocomplete
+        key={multiple ? key : null}
         open={openState}
         data-testid="autocomplete-test"
         filterOptions={(currentList, params) => {
@@ -193,7 +198,7 @@ const AutoCompleteWithAddOption = ({
           return filtered;
         }}
         size="small"
-        // disableClearable={clearable}
+        disableClearable={clearable}
         onBlur={() => {
           if (answer) {
             if (
@@ -222,17 +227,18 @@ const AutoCompleteWithAddOption = ({
         disableCloseOnSelect={multiple}
         value={selectedVal}
         renderTags={(value, getTagProps) => (
-          <div className="autocomplete-multiline-chip">
+          <div className="autocomplete-multiline-chip" ref={lookupListRef}>
             {value.map((option, index) => (
-              <div className="autocomplete-chip" key={index}>
+              <div className="autocomplete-chip" key={uuidv4}>
                 <Chip
                   label={
-                    <Typography style={{ whiteSpace: 'normal', lineHeight: 1 }}>
+                    <Typography style={{ whiteSpace: 'normal' }}>
                       {option}
                     </Typography>
                   }
                   {...getTagProps({ index })}
                   style={{ height: '100%' }}
+                  parentRef={lookupListRef}
                 />
               </div>
             ))}
