@@ -100,8 +100,13 @@ const AutoCompleteWithAddOption = ({
     if (!multiple) {
       onChange(modifiedAnswer);
       setOpenState(false);
+      if (toggleWatch) toggleWatch(false);
+      if (autoCompleteRef.current) {
+        autoCompleteRef.current.blur();
+      }
+    } else {
+      if (onCascadeChange) onCascadeChange();
     }
-    if (onCascadeChange) onCascadeChange();
   };
 
   /**
@@ -177,9 +182,9 @@ const AutoCompleteWithAddOption = ({
     if (forceBlur === true) {
       if (autoCompleteRef.current) {
         autoCompleteRef.current.blur();
-        setTimeout(() => {
-          autoCompleteRef.current.value = '';
-        }, 100);
+        // setTimeout(() => {
+        //   autoCompleteRef.current.value = '';
+        // }, 100);
       }
     }
   }, [forceBlur]);
