@@ -61,6 +61,7 @@ const AutoCompleteWithAddOption = ({
   const [currentLov, setCurrentLov] = useState(getOptions());
   const [clearable, setClearable] = useState(true);
   const [openState, setOpenState] = useState(false);
+  const [answerCommaSeparated, setAnswerCommaSeparated] = useState('');
 
   const autoCompleteRef = useRef(null);
 
@@ -100,7 +101,7 @@ const AutoCompleteWithAddOption = ({
     if (!multiple) {
       onChange(modifiedAnswer);
       setOpenState(false);
-    };
+    }
     if (onCascadeChange) onCascadeChange();
   };
 
@@ -109,15 +110,25 @@ const AutoCompleteWithAddOption = ({
    */
   useEffect(() => {
     let newSelectedValue = getAnswer();
-    setSelectedVal(newSelectedValue);
-    setModAnswer(newSelectedValue);
-
+    if (multiple) {
+      setAnswerCommaSeparated(newSelectedValue.join(','));
+    }
     const currentOptions = [...getOptions()];
     const newOptions = currentOptions.filter(
       el => newSelectedValue.indexOf(el) === -1
     );
     setCurrentLov(newOptions);
   }, [answer]);
+
+  useEffect(() => {
+    const answers = answerCommaSeparated
+      .split(',')
+      .filter(answer => answer.length > 0);
+    if (answers.length > 0) {
+      setSelectedVal(answers);
+      setModAnswer(answers);
+    }
+  }, [answerCommaSeparated]);
 
   /**
    * setClearable onUpdate loading state
@@ -198,7 +209,8 @@ const AutoCompleteWithAddOption = ({
             if (
               multiple &&
               // eslint-disable-next-line react/prop-types
-              (answer?.length !== modAnswer.length || !isEqual(answer, modAnswer))
+              (answer?.length !== modAnswer.length ||
+                !isEqual(answer, modAnswer))
             )
               onChange(modAnswer);
           } else if (
