@@ -159,7 +159,11 @@ const Section = ({ sectionId, title, testVisibility }) => {
               {/* Render all SectionFreezed Component */}
               {!isEmpty(ArchivedData) &&
                 ArchivedData.map((item, index) => (
-                  <SectionFreezed archiveIndex={index} {...item} />
+                  <SectionFreezed
+                    archiveIndex={index}
+                    {...item}
+                    key={`archive-${index}-${item.id}`}
+                  />
                 ))}
 
               {/* Component for Active Active */}

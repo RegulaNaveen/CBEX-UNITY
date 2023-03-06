@@ -19,7 +19,10 @@ type Props = {
   blurSpan: any,
   focusSpan: any,
   sfField: any,
-  sfObject: any
+  sfObject: any,
+  toggleWatch: Function,
+  onCascadeChange: Function,
+  forceBlur: Boolean
 };
 const CheckBoxQuestions = (props: Props) => {
   const {
@@ -34,7 +37,10 @@ const CheckBoxQuestions = (props: Props) => {
     isNotApplicable,
     options,
     sfObject,
-    sfField
+    sfField,
+    toggleWatch,
+    onCascadeChange,
+    forceBlur
   } = props;
   const [changeItem, setChangeItem] = useState(answerValue || []);
   const [getFocus, setFocus] = useState(false);
@@ -128,29 +134,41 @@ const CheckBoxQuestions = (props: Props) => {
       (!getFocus && isString(answerValue) && !isEmpty(changeItem))
     ) {
       onChange(changeItem);
+      if (onCascadeChange) onCascadeChange();
       setFocus(false);
     }
     if (!getFocus) {
       setFocus(false);
       onClose();
+      if (toggleWatch) toggleWatch(false);
     }
   };
   useUpdateEffect(() => {
     if (changeItem.length !== answerValue.length) setChangeItem(answerValue);
   }, [answerValue.length]);
   const onFocusCheckBox = event => {
-    if (getFocus || event.target.localName === 'li') onOpen();
+    if (getFocus || event.target.localName === 'li') {
+      onOpen();
+      if (toggleWatch) toggleWatch(true);
+    }
   };
   const handleKeyDown = event => {
-    if (event.key === 'Tab') onClose();
+    if (event.key === 'Tab') {
+      onClose();
+      if (toggleWatch) toggleWatch(false);
+    }
   };
+
+  useEffect(() => {
+    if (forceBlur) {
+      const popovers = document.getElementsByClassName('MuiPopover-root');
+      popovers[0].children[0].click();
+      onClose();
+    }
+  }, [forceBlur]);
+
   return (
-    <div
-      tabIndex={0}
-      className="selectSpan"
-      onFocus={onFocusCheckBox}
-      ref={checkBoxRef}
-    >
+    <div tabIndex={0} className="selectSpan" onFocus={onFocusCheckBox}>
       <FormControl
         className="checkboxtype"
         fullWidth
@@ -169,6 +187,9 @@ const CheckBoxQuestions = (props: Props) => {
           placeholder={!isEmpty(changeItem) ? '' : 'Select'}
           fullWidth
           multiple
+          SelectProps={{
+            ref: checkBoxRef
+          }}
         >
           {selectItems}
         </Select>

@@ -16,7 +16,10 @@ const MultiSelectQuestion = ({
   userData,
   socketContext,
   trackMatomoEventSubmitAnswer,
-  checkDisableFlag
+  checkDisableFlag,
+  toggleWatch,
+  onCascadeChange,
+  forceBlur
 }) => {
   try {
     const dispatch = useDispatch();
@@ -76,6 +79,9 @@ const MultiSelectQuestion = ({
         multiple
         answer={answerValue}
         onChange={changeHandler}
+        toggleWatch={toggleWatch}
+        onCascadeChange={onCascadeChange}
+        forceBlur={forceBlur}
       />
     );
   } catch (error) {
@@ -85,7 +91,10 @@ const MultiSelectQuestion = ({
 };
 
 MultiSelectQuestion.defaultProps = {
-  disabled: false
+  disabled: false,
+  toggleWatch: () => {},
+  onCascadeChange: () => {},
+  forceBlur: false
 };
 MultiSelectQuestion.propTypes = {
   question: PropTypes.object.isRequired,
@@ -93,7 +102,10 @@ MultiSelectQuestion.propTypes = {
   disabled: PropTypes.any,
   userData: PropTypes.any.isRequired,
   socketContext: PropTypes.object.isRequired,
-  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired
+  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired,
+  toggleWatch: PropTypes.func,
+  onCascadeChange: PropTypes.func,
+  forceBlur: PropTypes.bool
 };
 
 export default MultiSelectQuestion;

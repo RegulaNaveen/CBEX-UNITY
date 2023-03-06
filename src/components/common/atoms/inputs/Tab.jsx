@@ -39,6 +39,7 @@ import VerticalTabsCollapsiblePanel from '../../../screens/Opportunity/layout/na
 import Timelines from '../../../screens/Timelines';
 import { checkTabRender } from '../../../screens/UnityTabs/utils';
 import { setTabRefresh } from '../../../../redux/actions/unitytab-action';
+import { DEFAULT_TABS_LEN } from '../../../../constants/app';
 
 const Questions = React.lazy(() =>
   lazyWithRetry(() =>
@@ -266,7 +267,7 @@ const UnityTab = ({
       }
       setTabloaded(false);
       const tempTab = [];
-      let len = 5
+      let len = 5;
       // eslint-disable-next-line no-restricted-syntax
       const orderedCustomTabs = Object.values(customTabs)
         .filter(
@@ -393,10 +394,10 @@ const UnityTab = ({
         if (windowWidth < 850) {
           shouldvtabCollapsed = true;
         } else {
-          if (value === 0) {
+          if (value === 0 || value >= DEFAULT_TABS_LEN) {
             shouldvtabCollapsed = false;
-            if (vTabUserPreference && vTabUserPreference[0]) {
-              shouldvtabCollapsed = vTabUserPreference[0].collapsed;
+            if (vTabUserPreference && vTabUserPreference[value]) {
+              shouldvtabCollapsed = vTabUserPreference[value].collapsed;
             }
           }
           if (value === 2) {
@@ -562,6 +563,10 @@ const UnityTab = ({
     if (!enableValidateTab) {
       tabsToReturn = tabsToReturn.filter(item => item.label !== 'Validate');
     }
+    tabsToReturn = tabsToReturn.map((vc, i) => {
+      vc.value = i;
+      return vc;
+    });
     return tabsToReturn;
   };
 
@@ -796,7 +801,7 @@ const UnityTab = ({
             onChange={handleChangeTab}
             key={currentRefreshRate}
             truncate
-            size="small"
+            size="medium"
             className="_question-tab"
           >
             {visibleTabs().map(item => {
