@@ -14,7 +14,6 @@ import { getLookUpOptionsSelector } from '../../../redux/selectors';
 const filter = createFilterOptions();
 
 const AutoCompleteWithAddOption = ({
-  key,
   options,
   sfObject,
   lov,
@@ -111,7 +110,7 @@ const AutoCompleteWithAddOption = ({
   useEffect(() => {
     let newSelectedValue = getAnswer();
     if (multiple) {
-      setAnswerCommaSeparated(newSelectedValue.join(','));
+      setAnswerCommaSeparated(newSelectedValue.join(';;'));
     }
     const currentOptions = [...getOptions()];
     const newOptions = currentOptions.filter(
@@ -122,7 +121,7 @@ const AutoCompleteWithAddOption = ({
 
   useEffect(() => {
     const answers = answerCommaSeparated
-      .split(',')
+      .split(';;')
       .filter(answer => answer.length > 0);
     if (answers.length > 0) {
       setSelectedVal(answers);
