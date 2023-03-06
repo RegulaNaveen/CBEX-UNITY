@@ -1161,7 +1161,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
               >
                 <AutoCompleteWithAddOptionWithIdleStateDetection
                   // sectionName={sectionName}
-                  key={this.props.questionId}
                   sfObject={sfObject}
                   lov={finalOptions}
                   sfField={sfField}

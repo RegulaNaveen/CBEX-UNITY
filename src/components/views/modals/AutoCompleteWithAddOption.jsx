@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { List } from 'immutable';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
-import { v4 as uuidv4 } from 'uuid';
 import TextField from '@material-ui/core/TextField';
 import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
@@ -63,9 +62,7 @@ const AutoCompleteWithAddOption = ({
   const [clearable, setClearable] = useState(true);
   const [openState, setOpenState] = useState(false);
 
-  const autocompleteParentRef = useRef(null);
   const autoCompleteRef = useRef(null);
-  const lookupListRef = useRef(null);
 
   const addAnswerPicklist = arr => {
     return arr.map(item =>
@@ -178,11 +175,8 @@ const AutoCompleteWithAddOption = ({
   }, [forceBlur]);
 
   return (
-    <div className="auto-complete-with-add-option"
-      ref={autocompleteParentRef}
-    >
+    <div className="auto-complete-with-add-option">
       <Autocomplete
-        key={multiple ? key : null}
         open={openState}
         data-testid="autocomplete-test"
         filterOptions={(currentList, params) => {
@@ -227,9 +221,9 @@ const AutoCompleteWithAddOption = ({
         disableCloseOnSelect={multiple}
         value={selectedVal}
         renderTags={(value, getTagProps) => (
-          <div className="autocomplete-multiline-chip" ref={lookupListRef}>
+          <div className="autocomplete-multiline-chip">
             {value.map((option, index) => (
-              <div className="autocomplete-chip" key={uuidv4}>
+              <div className="autocomplete-chip">
                 <Chip
                   label={
                     <Typography style={{ whiteSpace: 'normal' }}>
@@ -238,7 +232,6 @@ const AutoCompleteWithAddOption = ({
                   }
                   {...getTagProps({ index })}
                   style={{ height: '100%' }}
-                  parentRef={lookupListRef}
                 />
               </div>
             ))}
