@@ -19,7 +19,7 @@ const ChipView = ({ label, answer }) => {
     } catch (error) {
       console.log(error);
     }
-    if (milestonetojs.length) {
+    if (milestonetojs?.length) {
       label = milestonetojs[0].Name || '';
       color = milestonetojs[0].Color || '';
       selectColors.map(item => {

@@ -30,9 +30,9 @@ export default function ReduxSnackbar() {
     <Snackbar
       className="redux-snackbar-container"
       open={open}
-      autoHideDuration={restProps.autoHideDuration || 3000}
+      autoHideDuration={restProps?.autoHideDuration || 3000}
       anchorOrigin={
-        restProps.anchorOrigin || { vertical: 'top', horizontal: 'right' }
+        restProps?.anchorOrigin || { vertical: 'top', horizontal: 'right' }
       }
       onClose={handleClose}
       key={key}
