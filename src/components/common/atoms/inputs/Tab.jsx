@@ -266,7 +266,7 @@ const UnityTab = ({
       }
       setTabloaded(false);
       const tempTab = [];
-      let len = 5
+      let len = 5;
       // eslint-disable-next-line no-restricted-syntax
       const orderedCustomTabs = Object.values(customTabs)
         .filter(
@@ -562,6 +562,10 @@ const UnityTab = ({
     if (!enableValidateTab) {
       tabsToReturn = tabsToReturn.filter(item => item.label !== 'Validate');
     }
+    tabsToReturn = tabsToReturn.map((vc, i) => {
+      vc.value = i;
+      return vc;
+    });
     return tabsToReturn;
   };
 
@@ -796,7 +800,7 @@ const UnityTab = ({
             onChange={handleChangeTab}
             key={currentRefreshRate}
             truncate
-            size="small"
+            size="medium"
             className="_question-tab"
           >
             {visibleTabs().map(item => {
