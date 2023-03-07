@@ -406,10 +406,7 @@ const SocketContextProvider = props => {
               break;
             case 'QUESTION_ANSWER_UPDATE':
               // update question answer how it is done in action
-              if (
-                data.data.latestAnswer &&
-                data.data.userEmail !== getUserEmail()
-              ) {
+              if (data.data.latestAnswer) {
                 const questionId = Array.isArray(data.data.latestAnswer)
                   ? data.data.latestAnswer[data.data.latestAnswer.length - 1]
                       .questionId
@@ -430,28 +427,19 @@ const SocketContextProvider = props => {
               }
               break;
             case 'QUESTION_TEXT_UPDATE':
-              if (
-                data.data.questionData &&
-                data.data.userEmail !== getUserEmail()
-              ) {
+              if (data.data.questionData) {
                 editProposalQuestionfromSocket(data.data.questionData);
               }
               break;
 
             case 'QUESTION_DELETE':
-              if (
-                data.data.questionId &&
-                data.data.userEmail !== getUserEmail()
-              ) {
+              if (data.data.questionId) {
                 deleteProposalQuestionFromSocket(data.data.questionId);
               }
               break;
 
             case 'ADD_QUESTION':
-              if (
-                data.data.questionData &&
-                data.data.userEmail !== getUserEmail()
-              ) {
+              if (data.data.questionData) {
                 setProposalQuestionFromSocket(data.data.questionData);
               }
               break;

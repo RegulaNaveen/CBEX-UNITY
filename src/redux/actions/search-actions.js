@@ -35,6 +35,7 @@ import {
 } from '../selectors';
 import { DEFAULT_TABS_LEN } from '../../constants/app';
 import { cloneDeep } from 'lodash';
+import { checkTabRender } from '../../components/screens/UnityTabs/utils';
 
 export const openSearchAction = () => ({ type: SEARCH.OPEN });
 
@@ -191,6 +192,7 @@ export const doSearchAction = () => {
                 })
               );
             }
+            wsProvider = null;
           });
           wsProvider.on('connection-close', () => {
             if (wsProvider.wsUnsuccessfulReconnects >= 3) {
@@ -270,7 +272,9 @@ export const resumeSearchAction = ({
       currentState
     );
     const approvalFilters = currentState.approvals.filters;
+    const unityTabFilters = currentState.unitytab.filters;
     const allFlags = currentState.proposal.get('eventflag');
+    const selectedBid = getSelectedBid(currentState).toJS();
     let allTabs = Array.from({ length: DEFAULT_TABS_LEN }).fill({
       sections: {}
     });
@@ -280,9 +284,9 @@ export const resumeSearchAction = ({
         tabName = 'Strategy Development';
       } else if (index === 1) {
         tabName = 'Timeline';
-      } else if (index === 3) {
+      } else if (index === 2) {
         tabName = 'Approvals';
-      } else if (index === 4) {
+      } else if (index === 3) {
         tabName = 'Documents';
       }
       return {
@@ -292,6 +296,13 @@ export const resumeSearchAction = ({
     });
     let filteredQuestionsMap = {};
     questions
+      .map(question => {
+        let modQuestion = cloneDeep(question);
+        if (question.section.sectionName === 'Proposal Team') {
+          modQuestion.answerConfiguration.type = 'proposal_team';
+        }
+        return modQuestion;
+      })
       .filter(
         question =>
           question.visible && (question.active || question.isCustomQuestion)
@@ -301,7 +312,18 @@ export const resumeSearchAction = ({
       });
     Object.entries(currentState.unitytab.allTabs).forEach(
       ([tabId, tabSections]) => {
-        if (tabSections.filter(sec => sec.UnityTabTitle).length > 0) {
+        if (
+          tabSections.filter(sec => sec.UnityTabTitle.length > 0).length > 0 &&
+          tabSections.some(
+            section => section['UnityTabSectionQuestions'].length > 0
+          ) &&
+          tabSections.some(section => {
+            return checkTabRender(
+              section.UnityTabSectionQuestions,
+              selectedBid.opportunityType
+            );
+          })
+        ) {
           let sections = {};
           let tabOrder = 1;
           tabSections.forEach(section => {
@@ -341,6 +363,7 @@ export const resumeSearchAction = ({
       activeTab,
       isQuestionsFilterEnabled,
       approvalFilters,
+      unityTabFilters,
       questionsForCustomersEnabled: allFlags.questionsForCustomerTab,
       allTabs,
       filteredQuestionsMap

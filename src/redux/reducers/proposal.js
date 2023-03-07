@@ -70,8 +70,10 @@ const {
   SET_PRICE_MODELER_RECALCULATING,
   PRICE_MODELER_UPDATE,
   SET_ACTIVE_TABINDEX,
+  SET_PANEL_STATUS,
   SET_V_TAB_ACTIVE_INDEX,
-  SET_V_TAB_USER_PREFERENCE
+  SET_V_TAB_USER_PREFERENCE,
+  CHANGE_BID_STATUS_OPERATION
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -81,6 +83,7 @@ const INITIAL_STATE: Map = fromJS({
   proposalDetails: Map({}),
   proposalQuestions: Map({}),
   isProposalLoading: false,
+  changeBidStatus: false,
   proposalError: undefined,
   proposalAnswer: '',
   isProposalAnswerLoading: false,
@@ -178,7 +181,8 @@ const INITIAL_STATE: Map = fromJS({
   priceModelerRecalculating: false,
   activeTabIndex: 0, // Strategy Development, Approvals, Documents,
   activeVTabIndex: 0, // Questions for Customer, Notepad, Proposal Team
-  vTabUserPreference: {}
+  vTabUserPreference: {},
+  panelStatus: false
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -962,6 +966,13 @@ const onRolesError = (state: Map, action: Object): Map => {
 const onSetQuestion = (state: Map, action: Object): Map => {
   const data = action.payload;
   const updatedProposalQuestions = state.get('proposalQuestions');
+  const isQuestionExist = updatedProposalQuestions.find(
+    item => item?.questionId === data?.questionId
+  );
+  if (isQuestionExist) {
+    return;
+  }
+
   updatedProposalQuestions.push(data);
 
   let questionsFilter = state.get('questionsFilter');
@@ -1118,6 +1129,8 @@ const onDeleteQuestion = (state, action) => {
   const questionIndex = questions.findIndex(
     item => item.questionId === questionId
   );
+
+  if (questionIndex === -1) return;
 
   const updatedQuestions = [
     ...questions.slice(0, questionIndex),
@@ -1309,8 +1322,11 @@ const actionMap = {
     state.set('priceModelerRecalculating', payload),
   [PRICE_MODELER_UPDATE]: updatePriceModelerEstimate,
   [SET_ACTIVE_TABINDEX]: setActiveTabIndex,
+  [SET_PANEL_STATUS]: (state, { payload }) => state.set('panelStatus', payload),
   [SET_V_TAB_ACTIVE_INDEX]: setVTabActiveTabIndex,
-  [SET_V_TAB_USER_PREFERENCE]: setVTabUserPreference
+  [SET_V_TAB_USER_PREFERENCE]: setVTabUserPreference,
+  [CHANGE_BID_STATUS_OPERATION]: (state, { payload }) =>
+    state.set('changeBidStatus', payload)
 };
 
 export default function(

@@ -186,7 +186,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
       prevSearchResult,
       questionId,
       autoNavigatedToCurrentResult,
-      autoNavigationDone
+      autoNavigationDone,
+      sectionName
     } = this.props;
 
     if (
@@ -194,7 +195,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
       this.questionTextTitleRef.current !== null &&
       !autoNavigatedToCurrentResult
     ) {
-      if (currentSearchResult.searchIndex === questionId) {
+      if (
+        currentSearchResult.searchIndex === questionId &&
+        ((currentSearchResult.sectionName !== null &&
+          currentSearchResult.sectionName === sectionName) ||
+          currentSearchResult.sectionName === null)
+      ) {
         // allow others to collapse before scrollIntoView
         setTimeout(() => {
           this.questionTextTitleRef.current.scrollIntoView({
@@ -204,14 +210,16 @@ export class TaskRow extends React.PureComponent<Props, State> {
           });
           this.setSelectRow(true);
           autoNavigationDone();
-        }, 500);
+        }, 700);
       }
     } else if (
       prevSearchResult !== null &&
       prevSearchResult.searchIndex === questionId &&
       autoNavigatedToCurrentResult
     ) {
-      if (
+      if (sectionName === 'Proposal Team' && prevSearchResult.vTab === 2) {
+        this.setSelectRow(false);
+      } else if (
         (currentSearchResult !== null &&
           currentSearchResult.searchIndex !== prevSearchResult.searchIndex) ||
         currentSearchResult === null
@@ -247,7 +255,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
           /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
         );
         if (reason === 'remove-option' && deletedEmail) {
-          setAnswerLoading(questionId, true);
+          setAnswerLoading(questionId, false);
           const { sectionName, sectionOrder } = section.toJS();
           deleteProposalUser(
             proposalId,
@@ -413,7 +421,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     this.setState({ selectedDay }, () => {
       if (
         parseMomentDate(lastAnswer.trim()) !==
-        parseMomentDate(selectedDay.trim()) &&
+          parseMomentDate(selectedDay.trim()) &&
         selectedDay
       )
         setProposalAnswer(
@@ -750,10 +758,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
             style={
               `${this.props.showNaCheckbox}`
                 ? {
-                  display: 'flex',
-                  alignItems: 'stretch'
-                  // border: '1px solid blue',
-                }
+                    display: 'flex',
+                    alignItems: 'stretch'
+                    // border: '1px solid blue',
+                  }
                 : ''
             }
           >
@@ -866,16 +874,16 @@ export class TaskRow extends React.PureComponent<Props, State> {
           !isEqual(richTextData.value, data.value) &&
           !isEmpty(data.text.trim())
         ) {
-          let prevAnswerBlocks = richTextData.value.blocks.filter(
+          let prevAnswerBlocks = richTextData?.value?.blocks.filter(
             block => block.text.length > 0
           );
-          let answerBlocks = data.value.blocks.filter(
+          let answerBlocks = data?.value?.blocks.filter(
             block => block.text.length > 0
           );
           if (isEqual(prevAnswerBlocks, answerBlocks)) {
             saveDate = false;
           } else if (
-            isEmpty(richTextData.value?.blocks) &&
+            isEmpty(richTextData?.value?.blocks) &&
             lastAnswerJS?.answer.trim() === data.text.trim()
           ) {
             saveDate = false;
@@ -923,10 +931,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
-                    display: 'flex',
-                    alignItems: 'stretch'
-                    // border: '1px solid blue',
-                  }
+                      display: 'flex',
+                      alignItems: 'stretch'
+                      // border: '1px solid blue',
+                    }
                   : ''
               }
             >
@@ -953,9 +961,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
-                    display: 'flex'
-                    // alignItems: 'stretch',
-                  }
+                      display: 'flex'
+                      // alignItems: 'stretch',
+                    }
                   : ''
               }
             >
@@ -985,9 +993,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
-                    display: 'flex'
-                    // alignItems: 'stretch',
-                  }
+                      display: 'flex'
+                      // alignItems: 'stretch',
+                    }
                   : ''
               }
             >
@@ -1020,10 +1028,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
-                    display: 'flex'
-                    // alignItems: 'stretch',
-                    // border: '1px solid blue',
-                  }
+                      display: 'flex'
+                      // alignItems: 'stretch',
+                      // border: '1px solid blue',
+                    }
                   : ''
               }
             >
@@ -1057,10 +1065,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
-                    display: 'flex',
-                    alignItems: 'stretch'
-                    // border: '1px solid blue',
-                  }
+                      display: 'flex',
+                      alignItems: 'stretch'
+                      // border: '1px solid blue',
+                    }
                   : ''
               }
             >
@@ -1098,10 +1106,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
-                    display: 'flex'
-                    // alignItems: 'stretch',
-                    // border: '1px solid blue',
-                  }
+                      display: 'flex'
+                      // alignItems: 'stretch',
+                      // border: '1px solid blue',
+                    }
                   : ''
               }
             >
@@ -1134,10 +1142,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
-                    display: 'flex',
-                    alignItems: 'stretch'
-                    // border: '1px solid blue',
-                  }
+                      display: 'flex',
+                      alignItems: 'stretch'
+                      // border: '1px solid blue',
+                    }
                   : ''
               }
             >
@@ -1149,7 +1157,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 )}
               </span>
               <span
-                style={`${this.props.showNaCheckbox}` ? { minWidth: "100%" } : ''}
+                style={
+                  `${this.props.showNaCheckbox}` ? { minWidth: '100%' } : ''
+                }
               >
                 <AutoCompleteWithAddOptionWithIdleStateDetection
                   // sectionName={sectionName}
@@ -1180,10 +1190,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
-                    display: 'flex',
-                    alignItems: 'stretch'
-                    // border: '1px solid blue',
-                  }
+                      display: 'flex',
+                      alignItems: 'stretch'
+                      // border: '1px solid blue',
+                    }
                   : ''
               }
             >
@@ -1195,7 +1205,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 )}
               </span>
               <span
-                style={`${this.props.showNaCheckbox}` ? { minWidth: "100%" } : ''}
+                style={
+                  `${this.props.showNaCheckbox}` ? { minWidth: '100%' } : ''
+                }
               >
                 <AutoCompleteWithAddOptionWithIdleStateDetection
                   sfObject={sfObject}
@@ -1224,10 +1236,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
-                    display: 'flex'
-                    // alignItems: 'stretch',
-                    // border: '1px solid blue',
-                  }
+                      display: 'flex'
+                      // alignItems: 'stretch',
+                      // border: '1px solid blue',
+                    }
                   : ''
               }
             >
@@ -1256,8 +1268,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
-                    display: 'flex'
-                  }
+                      display: 'flex'
+                    }
                   : ''
               }
             >
@@ -1480,10 +1492,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
     const gridColRatio = isNotepadOpen ? smallScreenWidth : mediumScreen;
     return (
       <div
-        className={`task-table-row question-row ${selectedRow ? 'selected-task-table-row' : ''
-          } ${NaLoading ? 'fade-area' : ''} `}
+        className={`task-table-row question-row ${
+          selectedRow ? 'selected-task-table-row' : ''
+        } ${NaLoading ? 'fade-area' : ''} `}
         style={{ margin: '2px 0px' }}
-        data-testid='question'
+        data-testid="question"
       >
         <Grid container className="question-title-grid">
           <Grid item xs={gridColRatio[0]} className="question-grid-item">
@@ -1610,11 +1623,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
             <div>
               {answerConfiguration
                 ? this.renderAnswer(
-                  answerConfiguration.get('type'),
-                  answerConfiguration.get('options'),
-                  answers,
-                  lastAnswer
-                )
+                    answerConfiguration.get('type'),
+                    answerConfiguration.get('options'),
+                    answers,
+                    lastAnswer
+                  )
                 : this.renderAnswer('', [], [], undefined)}
             </div>
           </Grid>

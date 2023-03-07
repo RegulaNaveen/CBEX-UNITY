@@ -16,7 +16,8 @@ import {
   selectIsQuestionsFilterEnabled,
   isSetQuestionLoading,
   getSelectedBid,
-  getShowNaCheckbox
+  getShowNaCheckbox,
+  getEditQuestionData
 } from '../../../../redux/selectors';
 import AnswerHistory from '../../../views/modals/AnswerHistory';
 
@@ -33,12 +34,13 @@ function ProposalTeam() {
   const isQuestionsFiltersEnabled = useSelector(selectIsQuestionsFilterEnabled);
   const filteredSections = useSelector(selectFilteredSections);
   const sections = useSelector(selectSections);
-  const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
+  const allSections = sections;
   const showNaCheckbox = useSelector(state => getShowNaCheckbox(state));
   const [selectedQuestionForHistory, setSelectedQuestionForHistory] = useState(
     ''
   );
   const [isHistoryModalShown, setIsHistoryModalShown] = useState(false);
+  const editQuestionsData = useSelector(getEditQuestionData);
   const proposalTeam = [];
   let questionData;
   const wholeData = [];
@@ -51,23 +53,19 @@ function ProposalTeam() {
   // eslint-disable-next-line no-unused-expressions
   !isEmpty(proposalTeam[0]) &&
     Object.keys(proposalTeam[0]?.questions).map(item => {
-      console.log(
-        'proposalTeam[0].questions[item].questionLock',
-        proposalTeam[0].questions[item].questionLockInfo
-      );
-      questionData = fromJS(proposalTeam[0].questions[item]);
-      const { proposalId } = proposalTeam[0].questions[item];
-      const { proposalDetail } = proposalTeam[0];
       const proposalTeamData = proposalTeam[0].questions[item];
-      const isNotApplicable = proposalTeamData?.notApplicable;
-      const { notApplicable } = questionData;
+      questionData = fromJS(proposalTeamData);
+      const { proposalId } = proposalTeamData;
+      const { proposalDetail } = proposalTeam[0];
+      const { notApplicable } = proposalTeamData;
       let milestoneCond = false;
       const NaLoading = questionData?.NaLoading;
       let currentSFAnswer;
       if (proposalTeamData?.active && proposalTeamData?.visible) {
         let lastAnswer;
-        currentSFAnswer = proposalTeamData?.currentSFanswer;
+        currentSFAnswer = fromJS(proposalTeamData?.currentSFanswer);
         const sficon = proposalTeamData?.sfField;
+        const { sfField } = proposalTeamData;
         const milestone = fromJS(proposalTeamData?.milestone);
         const milestoneNew = fromJS(proposalTeamData?.milestoneNew);
         const lastAns = isString(lastAnswer) ? lastAnswer : '';
@@ -81,7 +79,7 @@ function ProposalTeam() {
         const qvicon = proposalTeamData.questionId;
         const answers = fromJS(proposalTeamData?.answers);
         const loading = proposalTeamData.loading ?? false;
-        const sfObject = proposalTeamData?.sfObject;
+        const { sfObject } = proposalTeamData;
         const section = proposalTeamData?.section;
         const questionText = proposalTeamData?.questionText;
         const questionId = proposalTeamData?.questionId;
@@ -93,7 +91,9 @@ function ProposalTeam() {
         const events = proposalTeamData?.events || {};
         const questionJSON = proposalTeamData?.questionJSON;
         const isCustomQuestion = proposalTeamData?.isCustomQuestion;
-        const questionLockInfo = fromJS(proposalTeam[0].questions[item]);
+        const questionLockInfo = fromJS(
+          proposalTeam[0].questions[item].questionLockInfo
+        );
         const hasDifferentSFanswer = proposalTeamData?.hasDifferentSFanswer;
         const visible =
           proposalTeamData?.visible &&
@@ -103,9 +103,10 @@ function ProposalTeam() {
         wholeData.push({
           questionId: questionId,
           proposalId: proposalId,
+          sfField: sfField,
           qvidianIntegration: qvidianIntegration,
           proposalDetail: proposalDetail,
-          isNotApplicable: isNotApplicable,
+          isNotApplicable: notApplicable,
           milestoneCond: milestoneCond,
           NaLoading: NaLoading,
           currentSFAnswer: currentSFAnswer,
@@ -124,7 +125,6 @@ function ProposalTeam() {
           questionText: questionText,
           questionJSON: questionJSON,
           isCustomQuestion: isCustomQuestion,
-          notApplicable: notApplicable,
           isSetQuestionLoadingData: isSetQuestionLoadingData,
           questionData: questionData,
           section: section,
@@ -153,6 +153,12 @@ function ProposalTeam() {
     }
   }, [isSetQuestionLoadingData]);
 
+  useEffect(() => {
+    if (editQuestionsData.size > 0) {
+      setShowModal(true);
+    }
+  }, [editQuestionsData]);
+
   const setQuestionToDisplayHistory = (selectedAnswer: string) => {
     const questionHistory = allSections
       .valueSeq()
@@ -170,82 +176,87 @@ function ProposalTeam() {
     setShowModal(prev => !prev);
   };
   return (
-    <div id="proposal-team-left-section">
-      <Typography
-        style={{
-          margin: '16px',
-          fontSize: '20px',
-          color: '#000000',
-          fontWeight: 600,
-          lineHeight: 1.04
-        }}
-      >
-        Team
-      </Typography>
-      <hr className="divider-hr-proposal-team" />
-      <div
-        className={classNames('proposal-team-wrapper-container', {
-          'padding-Na': showNaCheckbox
-        })}
-      >
-        {wholeData?.map(items => {
-          console.log(items.questionId, 'qid');
-          return (
-            (items.visible || typeof items.visible === 'undefined') && (
-              <Question
-                key={items.questionId}
-                proposalId={items.proposalId}
-                questionId={items.questionId}
-                proposalDetail={items.proposalDetail}
-                isNotApplicable={items.isNotApplicable}
-                milestoneCond={items.milestoneCond}
-                NaLoading={items.NaLoading}
-                currentSFAnswer={items.currentSFAnswer}
-                sficon={items.sficon}
-                milestone={items.milestone}
-                lastAns={items.lastAns}
-                qvicon={items.qvicon}
-                answers={items.answers}
-                loading={items.loading}
-                sfObject={items.sfObject}
-                questionHint={items.questionHint}
-                questionHintJSON={items.questionHintJSON}
-                questionHTML={items.questionHTML}
-                sectionName={items.sectionName}
-                events={items.events}
-                questionText={items.questionText}
-                questionJSON={items.questionJSON}
-                isCustomQuestion={items.isCustomQuestion}
-                notApplicable={items.notApplicable}
-                isSetQuestionLoadingData={isSetQuestionLoadingData}
-                questionData={items.questionData}
-                section={items.section}
-                milestoneNew={items.milestoneNew}
-                allSections={allSections}
-                answerConfiguration={items.answerConfiguration}
-                questionLockInfo={items.questionLockInfo}
-                roleNames={items.roleNames}
-                visible={items.visible}
-                setQuestionToDisplayHistory={setQuestionToDisplayHistory}
-                hasDifferentSFanswer={items.hasDifferentSFanswer}
-                qvidianIntegration={items.qvidianIntegration}
-              />
-            )
-          );
-        })}
-      </div>
-      <div>
-        <Link
-          style={{ borderBottom: 'none' }}
-          onClick={() => setShowModal(true)}
-          size="small"
-          disabled={!isCurrentBid}
-        >
-          <Plus fontSize="extraSmall" />
-          <span style={{ verticalAlign: 'top' }}> Add New Question</span>
-        </Link>
-      </div>
+    <>
+      <div id="proposal-team-left-section">
+        <div>
+          <Typography
+            style={{
+              margin: '15px 0',
+              fontSize: '20px',
+              color: '#000000',
+              fontWeight: 600,
+              lineHeight: 1.04
+            }}
+          >
+            Team
+          </Typography>
+          <hr className="divider-hr-proposal-team" />
+        </div>
 
+        <div
+          className={classNames('proposal-team-wrapper-container', {
+            'padding-Na': showNaCheckbox
+          })}
+        >
+          {wholeData?.map(items => {
+            return (
+              (items.visible || typeof items.visible === 'undefined') && (
+                <Question
+                  key={items.questionId}
+                  sfField={items.sfField}
+                  proposalId={items.proposalId}
+                  questionId={items.questionId}
+                  proposalDetail={items.proposalDetail}
+                  isNotApplicable={items.isNotApplicable}
+                  milestoneCond={items.milestoneCond}
+                  NaLoading={items.NaLoading}
+                  currentSFAnswer={items.currentSFAnswer}
+                  sficon={items.sficon}
+                  milestone={items.milestone}
+                  lastAns={items.lastAns}
+                  qvicon={items.qvicon}
+                  answers={items.answers}
+                  loading={items.loading}
+                  sfObject={items.sfObject}
+                  questionHint={items.questionHint}
+                  questionHintJSON={items.questionHintJSON}
+                  questionHTML={items.questionHTML}
+                  sectionName={items.sectionName}
+                  events={items.events}
+                  questionText={items.questionText}
+                  questionJSON={items.questionJSON}
+                  isCustomQuestion={items.isCustomQuestion}
+                  notApplicable={items.notApplicable}
+                  isSetQuestionLoadingData={isSetQuestionLoadingData}
+                  questionData={items.questionData}
+                  section={items.section}
+                  milestoneNew={items.milestoneNew}
+                  allSections={allSections}
+                  answerConfiguration={items.answerConfiguration}
+                  questionLockInfo={items.questionLockInfo}
+                  roleNames={items.roleNames}
+                  visible={items.visible}
+                  setQuestionToDisplayHistory={setQuestionToDisplayHistory}
+                  hasDifferentSFanswer={items.hasDifferentSFanswer}
+                  qvidianIntegration={items.qvidianIntegration}
+                />
+              )
+            );
+          })}
+        </div>
+        <hr className="divider-hr-proposal-team" />
+        <div className="proposal-team-btn-wrapper">
+          <Link
+            style={{ borderBottom: 'none' }}
+            onClick={() => setShowModal(true)}
+            size="small"
+            disabled={!isCurrentBid}
+          >
+            <Plus fontSize="extraSmall" />
+            <span style={{ verticalAlign: 'top' }}> Add New Question</span>
+          </Link>
+        </div>
+      </div>
       {showModal && (
         <CustomModal>
           <AddQuestionModalComponent
@@ -262,7 +273,7 @@ function ProposalTeam() {
           />
         </CustomModal>
       )}
-    </div>
+    </>
   );
 }
 

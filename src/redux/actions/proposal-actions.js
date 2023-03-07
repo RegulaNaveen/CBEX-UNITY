@@ -81,6 +81,7 @@ const {
   UPDATE_BOX_BIDS,
   CHANGE_BID,
   ADD_NEW_BID,
+  CHANGE_BID_STATUS_OPERATION,
   NEW_BID_CREATED,
   UPDATE_LOOKUP_OPTIONS,
   BOX_ADDITIONAL_LINK,
@@ -105,6 +106,7 @@ const {
   SET_PRICE_MODELER_RECALCULATING,
   PRICE_MODELER_UPDATE,
   SET_ACTIVE_TABINDEX,
+  SET_PANEL_STATUS,
   SET_V_TAB_ACTIVE_INDEX,
   SET_V_TAB_USER_PREFERENCE
 } = REDUX_TYPES.PROPOSAL;
@@ -1300,6 +1302,19 @@ export const changeBid = bid => {
       type: UNITY_TABS.SET_UNITY_TABS,
       payload: response?.data.proposal?.customUnityTabs || []
     });
+    dispatch({
+      type: CHANGE_BID_STATUS_OPERATION,
+      payload: true
+    });
+  };
+};
+
+export const updateChangeBidStatusOperation = status => {
+  return dispatch => {
+    dispatch({
+      type: CHANGE_BID_STATUS_OPERATION,
+      payload: status
+    });
   };
 };
 
@@ -1506,6 +1521,15 @@ export const setActiveTabIndexAction = activeIndex => {
     dispatch({
       type: SET_ACTIVE_TABINDEX,
       payload: activeIndex
+    });
+  };
+};
+
+export const setPanelStatus = val => {
+  return dispatch => {
+    dispatch({
+      type: SET_PANEL_STATUS,
+      payload: val
     });
   };
 };

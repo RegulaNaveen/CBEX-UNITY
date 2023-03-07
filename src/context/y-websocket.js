@@ -1,8 +1,4 @@
 /* eslint-disable import/prefer-default-export */
-/*
-Unlike stated in the LICENSE file, it is not necessary to include the copyright notice and permission notice when you copy code from this file.
-*/
-
 /**
  * @module provider/websocket
  */
@@ -100,7 +96,8 @@ messageHandlers[messageAuth] = (
 };
 
 // @todo - this should depend on awareness.outdatedTime
-const messageReconnectTimeout = 30000;
+const messageReconnectTimeout = 480000;
+const refreshConnectionTimeout = 30000;
 
 let refreshInterval;
 
@@ -150,7 +147,6 @@ const setupWS = provider => {
       if (event.data === 'refresg=') {
         return;
       }
-
       provider.wsLastMessageReceived = time.getUnixTime();
       const encoder = readMessage(
         provider,
@@ -162,6 +158,7 @@ const setupWS = provider => {
       }
     };
     websocket.onerror = event => {
+      clearInterval(refreshInterval);
       provider.emit('connection-error', [event, provider]);
     };
     websocket.onclose = event => {
@@ -243,7 +240,7 @@ const setupWS = provider => {
  */
 const broadcastMessage = (provider, buf) => {
   if (provider.wsconnected) {
-    /** @type {WebSocket} */ (provider.ws).send(buf);
+    /** @type {WebSocket} */ (provider.ws).send(toBase64(buf));
   }
   if (provider.bcconnected) {
     bc.publish(provider.bcChannel, buf, provider);
@@ -357,11 +354,7 @@ export class WebsocketProvider extends Observable {
           false
         );
         if (encoding.length(encoder) > 1) {
-          bc.publish(
-            this.bcChannel,
-            toBase64(encoding.toUint8Array(encoder)),
-            this
-          );
+          bc.publish(this.bcChannel, encoding.toUint8Array(encoder), this);
         }
       }
     };
@@ -375,7 +368,7 @@ export class WebsocketProvider extends Observable {
         const encoder = encoding.createEncoder();
         encoding.writeVarUint(encoder, messageSync);
         syncProtocol.writeUpdate(encoder, update);
-        broadcastMessage(this, toBase64(encoding.toUint8Array(encoder)));
+        broadcastMessage(this, encoding.toUint8Array(encoder));
       }
     };
     this.doc.on('update', this._updateHandler);
@@ -391,7 +384,7 @@ export class WebsocketProvider extends Observable {
         encoder,
         awarenessProtocol.encodeAwarenessUpdate(awareness, changedClients)
       );
-      broadcastMessage(this, toBase64(encoding.toUint8Array(encoder)));
+      broadcastMessage(this, encoding.toUint8Array(encoder));
     };
     this._unloadHandler = () => {
       awarenessProtocol.removeAwarenessStates(
@@ -467,26 +460,18 @@ export class WebsocketProvider extends Observable {
     const encoderSync = encoding.createEncoder();
     encoding.writeVarUint(encoderSync, messageSync);
     syncProtocol.writeSyncStep1(encoderSync, this.doc);
-    bc.publish(
-      this.bcChannel,
-      toBase64(encoding.toUint8Array(encoderSync)),
-      this
-    );
+    bc.publish(this.bcChannel, encoding.toUint8Array(encoderSync), this);
     // broadcast local state
     const encoderState = encoding.createEncoder();
     encoding.writeVarUint(encoderState, messageSync);
     syncProtocol.writeSyncStep2(encoderState, this.doc);
-    bc.publish(
-      this.bcChannel,
-      toBase64(encoding.toUint8Array(encoderState)),
-      this
-    );
+    bc.publish(this.bcChannel, encoding.toUint8Array(encoderState), this);
     // write queryAwareness
     const encoderAwarenessQuery = encoding.createEncoder();
     encoding.writeVarUint(encoderAwarenessQuery, messageQueryAwareness);
     bc.publish(
       this.bcChannel,
-      toBase64(encoding.toUint8Array(encoderAwarenessQuery)),
+      encoding.toUint8Array(encoderAwarenessQuery),
       this
     );
     // broadcast local awareness state
@@ -500,7 +485,7 @@ export class WebsocketProvider extends Observable {
     );
     bc.publish(
       this.bcChannel,
-      toBase64(encoding.toUint8Array(encoderAwarenessState)),
+      encoding.toUint8Array(encoderAwarenessState),
       this
     );
   }
@@ -517,7 +502,7 @@ export class WebsocketProvider extends Observable {
         new Map()
       )
     );
-    broadcastMessage(this, toBase64(encoding.toUint8Array(encoder)));
+    broadcastMessage(this, encoding.toUint8Array(encoder));
     if (this.bcconnected) {
       bc.unsubscribe(this.bcChannel, this._bcSubscriber);
       this.bcconnected = false;
@@ -545,6 +530,6 @@ const setupRefresh = websocket => {
   if (websocket) {
     refreshInterval = setInterval(() => {
       websocket.send(JSON.stringify({ action: 'REFRESH' }));
-    }, messageReconnectTimeout);
+    }, refreshConnectionTimeout);
   }
 };
