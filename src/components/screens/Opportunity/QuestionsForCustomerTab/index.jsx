@@ -286,6 +286,7 @@ function QuestionsForCustomer() {
               style={{ marginRight: 10 }}
               className="btn-label"
               onMouseDown={addQuestionHandler}
+              onKeyDown={event => event.key === 'Enter' && addQuestionHandler()}
               disabled={
                 !isCurrentBid ||
                 !allFlags.isQuestionForCustomerEditable ||
