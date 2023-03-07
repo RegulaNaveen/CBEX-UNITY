@@ -285,7 +285,7 @@ function QuestionsForCustomer() {
               size="small"
               style={{ marginRight: 10 }}
               className="btn-label"
-              onClick={addQuestionHandler}
+              onMouseDown={addQuestionHandler}
               disabled={
                 !isCurrentBid ||
                 !allFlags.isQuestionForCustomerEditable ||
