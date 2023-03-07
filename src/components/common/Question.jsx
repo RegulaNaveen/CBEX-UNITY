@@ -217,7 +217,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
       prevSearchResult.searchIndex === questionId &&
       autoNavigatedToCurrentResult
     ) {
-      if (
+      if (sectionName === 'Proposal Team' && prevSearchResult.vTab === 2) {
+        this.setSelectRow(false);
+      } else if (
         (currentSearchResult !== null &&
           currentSearchResult.searchIndex !== prevSearchResult.searchIndex) ||
         currentSearchResult === null
@@ -419,7 +421,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     this.setState({ selectedDay }, () => {
       if (
         parseMomentDate(lastAnswer.trim()) !==
-        parseMomentDate(selectedDay.trim()) &&
+          parseMomentDate(selectedDay.trim()) &&
         selectedDay
       )
         setProposalAnswer(
@@ -756,10 +758,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
             style={
               `${this.props.showNaCheckbox}`
                 ? {
-                  display: 'flex',
-                  alignItems: 'stretch'
-                  // border: '1px solid blue',
-                }
+                    display: 'flex',
+                    alignItems: 'stretch'
+                    // border: '1px solid blue',
+                  }
                 : ''
             }
           >
@@ -929,10 +931,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
-                    display: 'flex',
-                    alignItems: 'stretch'
-                    // border: '1px solid blue',
-                  }
+                      display: 'flex',
+                      alignItems: 'stretch'
+                      // border: '1px solid blue',
+                    }
                   : ''
               }
             >
@@ -959,9 +961,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
-                    display: 'flex'
-                    // alignItems: 'stretch',
-                  }
+                      display: 'flex'
+                      // alignItems: 'stretch',
+                    }
                   : ''
               }
             >
@@ -991,9 +993,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
-                    display: 'flex'
-                    // alignItems: 'stretch',
-                  }
+                      display: 'flex'
+                      // alignItems: 'stretch',
+                    }
                   : ''
               }
             >
@@ -1026,10 +1028,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
-                    display: 'flex'
-                    // alignItems: 'stretch',
-                    // border: '1px solid blue',
-                  }
+                      display: 'flex'
+                      // alignItems: 'stretch',
+                      // border: '1px solid blue',
+                    }
                   : ''
               }
             >
@@ -1063,10 +1065,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
-                    display: 'flex',
-                    alignItems: 'stretch'
-                    // border: '1px solid blue',
-                  }
+                      display: 'flex',
+                      alignItems: 'stretch'
+                      // border: '1px solid blue',
+                    }
                   : ''
               }
             >
@@ -1104,10 +1106,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
-                    display: 'flex'
-                    // alignItems: 'stretch',
-                    // border: '1px solid blue',
-                  }
+                      display: 'flex'
+                      // alignItems: 'stretch',
+                      // border: '1px solid blue',
+                    }
                   : ''
               }
             >
@@ -1140,10 +1142,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
-                    display: 'flex',
-                    alignItems: 'stretch'
-                    // border: '1px solid blue',
-                  }
+                      display: 'flex',
+                      alignItems: 'stretch'
+                      // border: '1px solid blue',
+                    }
                   : ''
               }
             >
@@ -1188,10 +1190,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
-                    display: 'flex',
-                    alignItems: 'stretch'
-                    // border: '1px solid blue',
-                  }
+                      display: 'flex',
+                      alignItems: 'stretch'
+                      // border: '1px solid blue',
+                    }
                   : ''
               }
             >
@@ -1234,10 +1236,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
-                    display: 'flex'
-                    // alignItems: 'stretch',
-                    // border: '1px solid blue',
-                  }
+                      display: 'flex'
+                      // alignItems: 'stretch',
+                      // border: '1px solid blue',
+                    }
                   : ''
               }
             >
@@ -1266,8 +1268,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
-                    display: 'flex'
-                  }
+                      display: 'flex'
+                    }
                   : ''
               }
             >
@@ -1490,8 +1492,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
     const gridColRatio = isNotepadOpen ? smallScreenWidth : mediumScreen;
     return (
       <div
-        className={`task-table-row question-row ${selectedRow ? 'selected-task-table-row' : ''
-          } ${NaLoading ? 'fade-area' : ''} `}
+        className={`task-table-row question-row ${
+          selectedRow ? 'selected-task-table-row' : ''
+        } ${NaLoading ? 'fade-area' : ''} `}
         style={{ margin: '2px 0px' }}
         data-testid="question"
       >
@@ -1620,11 +1623,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
             <div>
               {answerConfiguration
                 ? this.renderAnswer(
-                  answerConfiguration.get('type'),
-                  answerConfiguration.get('options'),
-                  answers,
-                  lastAnswer
-                )
+                    answerConfiguration.get('type'),
+                    answerConfiguration.get('options'),
+                    answers,
+                    lastAnswer
+                  )
                 : this.renderAnswer('', [], [], undefined)}
             </div>
           </Grid>
