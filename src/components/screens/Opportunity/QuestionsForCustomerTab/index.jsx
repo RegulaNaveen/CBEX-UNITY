@@ -78,36 +78,38 @@ function QuestionsForCustomer() {
   }, [autoScroll]);
 
   const addQuestionHandler = async () => {
-    try {
-      const proposalId = selectedBid.get('id');
-      const section = {
-        sectionOrder: 199,
-        sectionName: 'Questions_for_the_Customer_left_panel'
-      };
-      const answerType = 'text';
-      const roleNames = ['Business Developer'];
+    setTimeout(async () => {
+      try {
+        const proposalId = selectedBid.get('id');
+        const section = {
+          sectionOrder: 199,
+          sectionName: 'Questions_for_the_Customer_left_panel'
+        };
+        const answerType = 'text';
+        const roleNames = ['Business Developer'];
 
-      const questionData = {
-        proposalId,
-        questionText: ' ',
-        questionJSON: '',
-        questionHTML: '',
-        section,
-        answerType,
-        options: [],
-        roleNames
-      };
+        const questionData = {
+          proposalId,
+          questionText: ' ',
+          questionJSON: '',
+          questionHTML: '',
+          section,
+          answerType,
+          options: [],
+          roleNames
+        };
 
-      setShowAddQuestionLoader(true);
+        setShowAddQuestionLoader(true);
 
-      await dispatch(
-        setProposalQuestion(proposalId, questionData, socketContext)
-      );
-      setShowAddQuestionLoader(false);
-      setAutoScroll(true);
-    } catch (error) {
-      console.log('Error Add question: ', error);
-    }
+        await dispatch(
+          setProposalQuestion(proposalId, questionData, socketContext)
+        );
+        setShowAddQuestionLoader(false);
+        setAutoScroll(true);
+      } catch (error) {
+        console.log('Error Add question: ', error);
+      }
+    }, 100);
   };
 
   const onForceDelete = async () => {
