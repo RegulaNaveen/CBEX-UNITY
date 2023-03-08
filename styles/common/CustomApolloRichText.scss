@@ -1,7 +1,7 @@
 @mixin popoverStyle {
   display: inline-flex;
   position: absolute;
-  right: 0;
+  right: -30px;
   bottom: calc(100% + 6px);
 }
 
