@@ -116,6 +116,12 @@ const AutoCompleteWithAddOption = ({
     let newSelectedValue = getAnswer();
     if (multiple) {
       setAnswerCommaSeparated(newSelectedValue.join(';;'));
+    } else {
+      setSelectedVal(newSelectedValue);
+      setModAnswer(newSelectedValue);
+      if (isEmpty(newSelectedValue)) {
+        setClearable(true);
+      }
     }
     const currentOptions = [...getOptions()];
     const newOptions = currentOptions.filter(
@@ -125,12 +131,17 @@ const AutoCompleteWithAddOption = ({
   }, [answer]);
 
   useEffect(() => {
-    const answers = answerCommaSeparated
-      .split(';;')
-      .filter(answer => answer.length > 0);
-    if (answers.length > 0) {
-      setSelectedVal(answers);
-      setModAnswer(answers);
+    if (multiple) {
+      const answers = answerCommaSeparated
+        .split(';;')
+        .filter(answer => answer.length > 0);
+      if (answers.length > 0) {
+        setSelectedVal(answers);
+        setModAnswer(answers);
+      } else {
+        setSelectedVal([]);
+        setModAnswer([]);
+      }
     }
   }, [answerCommaSeparated]);
 

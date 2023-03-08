@@ -145,4 +145,9 @@
       }
     }
   }
+  & > div > div > div > svg {
+    position: absolute;
+    bottom: 3px;
+    left: 5px;
+  }
 }
