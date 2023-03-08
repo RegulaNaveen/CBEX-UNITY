@@ -596,6 +596,7 @@ const CustomApolloRichText = ({
         <div
           className={classNames('custom-rich-text-inner', {
             'popover-inner': !disabled,
+            'popover-inner-custom-tab': iscustomtab,
             error: !!error,
             focused: isFocused,
             'unity-customtab': iscustomtab
