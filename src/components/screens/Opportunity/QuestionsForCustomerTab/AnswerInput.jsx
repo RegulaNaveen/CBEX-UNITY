@@ -131,7 +131,7 @@ const AnswerInput = ({
     <>
       <div className="input-wrapper " ref={quesTextInnerLeftRef}>
         <span className="input-label">A{questionIndex}:</span>
-        <CustomApolloRichText {...richtextProps} />
+        <CustomApolloRichText {...richtextProps} isQuestionCustomerTab />
       </div>
     </>
   );
