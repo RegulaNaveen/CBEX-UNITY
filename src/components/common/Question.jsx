@@ -1502,9 +1502,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
           <Grid item xs={gridColRatio[0]} className="question-grid-item">
             {/* Question Text and Milestone */}
             <div
-              className={classNames('question-label-container', {
-                'has-richtext-icon': enableRichtext
-              })}
+              className="question-label-container"
               ref={this.quesTextContainerRef}
             >
               <div

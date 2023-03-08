@@ -153,7 +153,6 @@ const UserInputModal = ({
               <MenuItem
                 value={docType.pdf}
               >{`${docType.pdf} (Default)`}</MenuItem>
-              <MenuItem value={docType.doc}>{docType.doc}</MenuItem>
             </Select>
           </div>
         </div>
