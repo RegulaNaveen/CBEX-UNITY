@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import RichTextEditor from 'apollo-react/components/RichTextEditor/RichTextEditor';
-import userEvent from '@testing-library/user-event';
+
 import Select from 'apollo-react/components/Select';
 import AddNoteForm from '../AddNote';
 
