@@ -274,7 +274,7 @@ export function searchInTab({
                   updateSearchMatches({
                     regexp,
                     inputText: moment(recentAnswer).isValid()
-                      ? moment(recentAnswer).format('DD-MMM-YYY')
+                      ? moment(recentAnswer).format('DD-MMM-YYYY')
                       : recentAnswer,
                     index: questionKey,
                     finalResult,
@@ -412,7 +412,7 @@ export function searchInApprovals(
                   updateSearchMatches({
                     regexp,
                     inputText: moment(recentAnswer).isValid()
-                      ? moment(recentAnswer).format('DD-MMM-YYY')
+                      ? moment(recentAnswer).format('DD-MMM-YYYY')
                       : recentAnswer,
                     index: `${question.questionId}-archive-${aIndex}-left-ques`,
                     finalResult,

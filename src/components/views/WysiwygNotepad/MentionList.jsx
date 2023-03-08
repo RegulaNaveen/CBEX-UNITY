@@ -5,7 +5,6 @@ import React, {
   useState,
   useRef
 } from 'react';
-import { updateMentions } from '../../../api/notepad';
 
 export default forwardRef((props, ref) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -17,12 +16,13 @@ export default forwardRef((props, ref) => {
     const item = props.items[index];
     if (item) {
       props.command(item);
-      const proposalId = props.proposalId;
-      const email = item.id;
-      const emp_id = item.emp_id;
-      if (proposalId && email && emp_id) {
-        updateMentions(proposalId, email, emp_id);
-      }
+      // No API required (Handled in Websocket)
+      // const proposalId = props.proposalId;
+      // const email = item.id;
+      // const emp_id = item.emp_id;
+      // if (proposalId && email && emp_id) {
+      //   updateMentions(proposalId, email, emp_id);
+      // }
     }
   };
 
@@ -74,11 +74,11 @@ export default forwardRef((props, ref) => {
   }));
 
   return (
-    <div className='mention-items'>
+    <div className="mention-items">
       {props?.items?.length
         ? props?.items.map((item, index) => (
             <button
-              type='button'
+              type="button"
               className={`mention-item ${
                 index === selectedIndex ? 'is-selected' : ''
               }`}

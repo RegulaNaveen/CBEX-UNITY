@@ -217,7 +217,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
       prevSearchResult.searchIndex === questionId &&
       autoNavigatedToCurrentResult
     ) {
-      if (
+      if (sectionName === 'Proposal Team' && prevSearchResult.vTab === 2) {
+        this.setSelectRow(false);
+      } else if (
         (currentSearchResult !== null &&
           currentSearchResult.searchIndex !== prevSearchResult.searchIndex) ||
         currentSearchResult === null
