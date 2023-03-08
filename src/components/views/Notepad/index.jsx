@@ -41,7 +41,6 @@ function Notepad({
   trackMatomoNoteSubmit,
   selectedBid
 }) {
-  console.log('fetchingNotes', fetchingNotes);
   const [selectedNote, setSelectedNote] = useState(Map());
 
   function handleOnAddNote(note) {

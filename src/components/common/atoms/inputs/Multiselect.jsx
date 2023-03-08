@@ -306,7 +306,6 @@ class Multiselect extends PureComponent<Props, State> {
         {title && <p className="multiselect-title">{title}</p>}
         <div
           className="multiselect-wrapper"
-          data-testid="multiselect-testId"
           // onBlur={() =>
           //   this.props.onBlur(this.state.isOpen, this.state.isFocused)
           // }
