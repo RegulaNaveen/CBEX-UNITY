@@ -142,7 +142,7 @@ const QuestionInput = ({
         data-testid="question-input"
       >
         <span className="input-label">Q{questionIndex}:</span>
-        <CustomApolloRichText {...richtextProps} />
+        <CustomApolloRichText {...richtextProps} isQuestionCustomerTab />
       </div>
     </>
   );
