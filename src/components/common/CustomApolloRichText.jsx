@@ -146,7 +146,8 @@ const CustomApolloRichText = ({
   disabled,
   canUserTagInQuestion,
   allFlags,
-  iscustomtab = false
+  iscustomtab = false,
+  isQuestionCustomerTab = false
 }) => {
   // Set initial blocks structure if only string available
   let richtextObject = richTextVal;
@@ -596,6 +597,8 @@ const CustomApolloRichText = ({
         <div
           className={classNames('custom-rich-text-inner', {
             'popover-inner': !disabled,
+            'popover-inner-custom-tab': iscustomtab,
+            'question-customer-right': isQuestionCustomerTab,
             error: !!error,
             focused: isFocused,
             'unity-customtab': iscustomtab

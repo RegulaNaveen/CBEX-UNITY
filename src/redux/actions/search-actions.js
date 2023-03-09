@@ -187,6 +187,7 @@ export const doSearchAction = () => {
                   sections: isQuestionsFilterEnabled
                     ? filteredSections.toJS()
                     : sections.toJS(),
+                  sectionsUnfiltered: sections.toJS(),
                   approvals: shouldCheckApprovals ? approvals : [],
                   notepadData
                 })
@@ -204,6 +205,7 @@ export const doSearchAction = () => {
                   sections: isQuestionsFilterEnabled
                     ? filteredSections.toJS()
                     : sections.toJS(),
+                  sectionsUnfiltered: sections.toJS(),
                   approvals: shouldCheckApprovals ? approvals : [],
                   notepadData
                 })
@@ -219,6 +221,7 @@ export const doSearchAction = () => {
                 sections: isQuestionsFilterEnabled
                   ? filteredSections.toJS()
                   : sections.toJS(),
+                sectionsUnfiltered: sections.toJS(),
                 approvals: shouldCheckApprovals ? approvals : [],
                 notepadData
               })
@@ -234,6 +237,7 @@ export const doSearchAction = () => {
             sections: isQuestionsFilterEnabled
               ? filteredSections.toJS()
               : sections.toJS(),
+            sectionsUnfiltered: sections.toJS(),
             approvals: shouldCheckApprovals ? approvals : [],
             notepadData
           })
@@ -247,6 +251,7 @@ export const doSearchAction = () => {
           sections: isQuestionsFilterEnabled
             ? filteredSections.toJS()
             : sections.toJS(),
+          sectionsUnfiltered: sections.toJS(),
           approvals: shouldCheckApprovals ? approvals : [],
           notepadData
         })
@@ -259,6 +264,7 @@ export const resumeSearchAction = ({
   query,
   questions,
   sections,
+  sectionsUnfiltered,
   approvals,
   notepadData
 }) => {
@@ -366,7 +372,8 @@ export const resumeSearchAction = ({
       unityTabFilters,
       questionsForCustomersEnabled: allFlags.questionsForCustomerTab,
       allTabs,
-      filteredQuestionsMap
+      filteredQuestionsMap,
+      sectionsUnfiltered
     });
     if (searchResults.count > 0) {
       searchResults.newCurrentResultIndex = 0;
