@@ -263,7 +263,7 @@ function QuestionsForCustomer() {
             </div>
           </div>
         )}
-
+        <hr className="divider-hr" />
         <div className="btn-container" ref={addNewEntryRef}>
           <div data-testid="clipboard-button">
             <Button
