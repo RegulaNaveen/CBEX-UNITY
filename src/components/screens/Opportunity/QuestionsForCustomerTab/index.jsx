@@ -261,7 +261,7 @@ function QuestionsForCustomer() {
             </div>
           </div>
         )}
-
+        <hr className="divider-hr" />
         <div className="btn-container">
           <div data-testid="clipboard-button">
             <Button
