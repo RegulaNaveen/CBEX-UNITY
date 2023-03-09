@@ -150,7 +150,6 @@ const CustomApolloRichText = ({
   isQuestionCustomerTab = false
 }) => {
   // Set initial blocks structure if only string available
-  console.log('isQuestionCustomerTab', isQuestionCustomerTab);
   let richtextObject = richTextVal;
   if (richTextString && isEmpty(richTextVal?.blocks)) {
     richtextObject = {
