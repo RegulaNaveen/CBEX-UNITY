@@ -126,6 +126,7 @@ const Approvals = () => {
           modalStyle={{ maxWidth: 342 }}
         />
       )}
+      <div id="modal-wrapper" />
     </div>
   );
 };

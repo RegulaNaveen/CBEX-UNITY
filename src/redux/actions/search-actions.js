@@ -33,6 +33,9 @@ import {
   selectFilteredSections,
   selectIsQuestionsFilterEnabled
 } from '../selectors';
+import { DEFAULT_TABS_LEN } from '../../constants/app';
+import { cloneDeep } from 'lodash';
+import { checkTabRender } from '../../components/screens/UnityTabs/utils';
 
 export const openSearchAction = () => ({ type: SEARCH.OPEN });
 
@@ -82,9 +85,7 @@ export const navigateNextSearchAction = () => {
         await dispatch(setActiveTabIndexAction(newResult.tab));
         dispatch({
           type: UI.SET_SNACKBAR_MSG,
-          payload: `Switched to ${
-            newResult.tab === 0 ? 'Strategy Development' : 'Approvals'
-          } Tab`
+          payload: `Switched to ${newResult.tabName} Tab`
         });
         dispatch({
           type: UI.SHOW_SNACKBAR
@@ -119,9 +120,7 @@ export const navigatePrevSearchAction = () => {
         await dispatch(setActiveTabIndexAction(newResult.tab));
         dispatch({
           type: UI.SET_SNACKBAR_MSG,
-          payload: `Switched to ${
-            newResult.tab === 0 ? 'Strategy Development' : 'Approvals'
-          } Tab`
+          payload: `Switched to ${newResult.tabName} Tab`
         });
         dispatch({
           type: UI.SHOW_SNACKBAR
@@ -193,6 +192,7 @@ export const doSearchAction = () => {
                 })
               );
             }
+            wsProvider = null;
           });
           wsProvider.on('connection-close', () => {
             if (wsProvider.wsUnsuccessfulReconnects >= 3) {
@@ -272,7 +272,88 @@ export const resumeSearchAction = ({
       currentState
     );
     const approvalFilters = currentState.approvals.filters;
+    const unityTabFilters = currentState.unitytab.filters;
     const allFlags = currentState.proposal.get('eventflag');
+    const selectedBid = getSelectedBid(currentState).toJS();
+    let allTabs = Array.from({ length: DEFAULT_TABS_LEN }).fill({
+      sections: {}
+    });
+    allTabs = allTabs.map((tab, index) => {
+      let tabName = '';
+      if (index === 0) {
+        tabName = 'Strategy Development';
+      } else if (index === 1) {
+        tabName = 'Timeline';
+      } else if (index === 2) {
+        tabName = 'Approvals';
+      } else if (index === 3) {
+        tabName = 'Documents';
+      }
+      return {
+        ...tab,
+        tabName
+      };
+    });
+    let filteredQuestionsMap = {};
+    questions
+      .map(question => {
+        let modQuestion = cloneDeep(question);
+        if (question.section.sectionName === 'Proposal Team') {
+          modQuestion.answerConfiguration.type = 'proposal_team';
+        }
+        return modQuestion;
+      })
+      .filter(
+        question =>
+          question.visible && (question.active || question.isCustomQuestion)
+      )
+      .forEach(question => {
+        filteredQuestionsMap[question.questionId] = question;
+      });
+    Object.entries(currentState.unitytab.allTabs).forEach(
+      ([tabId, tabSections]) => {
+        if (
+          tabSections.filter(sec => sec.UnityTabTitle.length > 0).length > 0 &&
+          tabSections.some(
+            section => section['UnityTabSectionQuestions'].length > 0
+          ) &&
+          tabSections.some(section => {
+            return checkTabRender(
+              section.UnityTabSectionQuestions,
+              selectedBid.opportunityType
+            );
+          })
+        ) {
+          let sections = {};
+          let tabOrder = 1;
+          tabSections.forEach(section => {
+            let newSection = {};
+            let questionDetails = section.UnityTabSectionQuestions.map(
+              questionId => filteredQuestionsMap[questionId]
+            ).filter(question => !!question);
+            newSection.sectionOrder = section.UnityTabSectionOrder;
+            newSection.sectionName = section.UnityTabSectionTitle;
+            newSection.sectionId = section.UnityTabSectionId;
+            newSection.questions = {};
+            questionDetails.forEach(question => {
+              newSection.questions[question.questionId] = cloneDeep(question);
+            });
+            sections[newSection.sectionName] = newSection;
+            if (section.UnityTabOrder >= 0) {
+              tabOrder = section.UnityTabOrder;
+            }
+          });
+
+          allTabs.push({
+            tabId,
+            sections,
+            tabName: tabSections[0].UnityTabTitle,
+            tabOrder
+          });
+        }
+      }
+    );
+    allTabs = allTabs.sort((tab1, tab2) => tab1.tabOrder - tab2.tabOrder);
     let searchResults = await getSearchResults({
       query: query !== null ? query : '',
       questions,
@@ -282,7 +363,10 @@ export const resumeSearchAction = ({
       activeTab,
       isQuestionsFilterEnabled,
       approvalFilters,
-      questionsForCustomersEnabled: allFlags.questionsForCustomerTab
+      unityTabFilters,
+      questionsForCustomersEnabled: allFlags.questionsForCustomerTab,
+      allTabs,
+      filteredQuestionsMap
     });
     if (searchResults.count > 0) {
       searchResults.newCurrentResultIndex = 0;
@@ -292,9 +376,7 @@ export const resumeSearchAction = ({
         await dispatch(setActiveTabIndexAction(newResult.tab));
         dispatch({
           type: UI.SET_SNACKBAR_MSG,
-          payload: `Switched to ${
-            newResult.tab === 0 ? 'Strategy Development' : 'Approvals'
-          } Tab`
+          payload: `Switched to ${newResult.tabName} Tab`
         });
         dispatch({
           type: UI.SHOW_SNACKBAR

@@ -51,6 +51,9 @@
       align-items: center;
       .network-interrupt {
         font-size: 12px;
+        .MuiChip-label {
+          white-space: normal;
+        }
       }
     }
   }

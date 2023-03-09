@@ -92,9 +92,12 @@ const Section = ({ sectionId, title, testVisibility }) => {
             inline: 'nearest'
           });
           dispatch(autoNavigationCompletedAction());
-        }, 500);
+        }, 700);
       } else if (
-        questionAndSectionTitleIds.includes(currentSearchResult.searchIndex)
+        questionAndSectionTitleIds.includes(currentSearchResult.searchIndex) &&
+        ((currentSearchResult.sectionName !== null &&
+          currentSearchResult.sectionName === title) ||
+          currentSearchResult.sectionName === null)
       ) {
         shouldExpand = true;
       } else {
@@ -156,7 +159,11 @@ const Section = ({ sectionId, title, testVisibility }) => {
               {/* Render all SectionFreezed Component */}
               {!isEmpty(ArchivedData) &&
                 ArchivedData.map((item, index) => (
-                  <SectionFreezed archiveIndex={index} {...item} />
+                  <SectionFreezed
+                    archiveIndex={index}
+                    {...item}
+                    key={`archive-${index}-${item.id}`}
+                  />
                 ))}
 
               {/* Component for Active Active */}

@@ -77,6 +77,7 @@ export const PROPOSAL_TEAM_USER_MATCH_REGEXP = /([a-zA-Z0-9\W]*\w)(\(.*\))/; // 
 export const PROPOSAL_TEAM_EMAIL_MATCH_REGEXP = /[a-zA-Z\w]*\((.*)\)/; // matches proposal team user email
 export const RTE_DATA_ATTR_REGEXP = /data-[a-zA-Z0-9-]*=\"[a-zA-Z0-9-]*\"/g; // matches RichTextEditor data attributes
 export const NOTEPAD_UI_ID = Symbol('NOTEPAD');
+export const DEFAULT_TABS_LEN = 4;
 
 export {
   DEFAULT,

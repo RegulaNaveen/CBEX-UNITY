@@ -1,4 +1,14 @@
 .proposal-wrapper {
+  &.is-collapsed {
+    margin-right: 0px;
+    width: 85%;
+    .proposal-details {
+      .unity-tabs-container-wrapper {
+        // display: flex;
+        width: 99.8% !important;
+      }
+    }
+  }
   .proposal-details {
     padding-top: $toolbarHight;
     background-color: $neutral1;
@@ -13,7 +23,7 @@
     }
   }
   ._question-tab {
-    padding: 0 20px;
+    padding-left: 20px;
     background-color: $white;
     &::before {
       left: 0;
@@ -615,4 +625,8 @@
   justify-content: space-between;
   align-items: center;
   padding-left: 1rem;
+}
+
+._question-tab > div > div > button {
+  margin-right: 25px !important;
 }

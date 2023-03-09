@@ -145,7 +145,9 @@ const CustomApolloRichText = ({
   error,
   disabled,
   canUserTagInQuestion,
-  allFlags
+  allFlags,
+  iscustomtab = false,
+  isQuestionCustomerTab = false
 }) => {
   // Set initial blocks structure if only string available
   let richtextObject = richTextVal;
@@ -269,7 +271,7 @@ const CustomApolloRichText = ({
           });
         }
       }
-    }, 500);
+    }, 700);
     if (isEqual(richTextData.value, INITIAL_DATA.value)) return; // break func
     // enable timer only if field is focused
     if (isFocused) {
@@ -595,8 +597,11 @@ const CustomApolloRichText = ({
         <div
           className={classNames('custom-rich-text-inner', {
             'popover-inner': !disabled,
+            'popover-inner-custom-tab': iscustomtab,
+            'question-customer-right': isQuestionCustomerTab,
             error: !!error,
-            focused: isFocused
+            focused: isFocused,
+            'unity-customtab': iscustomtab
           })}
           ref={richTextContainerRef}
         >

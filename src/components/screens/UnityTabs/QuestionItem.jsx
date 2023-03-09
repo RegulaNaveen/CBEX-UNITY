@@ -1,14 +1,15 @@
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable no-shadow */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable prefer-const */
 /* eslint-disable no-unused-expressions */
 import React, { useContext, useMemo, useState, useEffect, useRef } from 'react';
-import { isObject, isEqual, isEmpty, xor, has, isString } from 'lodash';
+import { isEmpty, isString } from 'lodash';
 import Grid from 'apollo-react/components/Grid';
 import PropTypes from 'prop-types';
 import InfoIcon from 'apollo-react-icons/Info';
 import classNames from 'classnames';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Box from 'apollo-react/components/Box';
 import Typography from 'apollo-react/components/Typography';
 import Tooltip from 'apollo-react/components/Tooltip';
@@ -16,7 +17,6 @@ import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import IconButton from 'apollo-react/components/IconButton';
 import { Map, List, fromJS } from 'immutable';
 import moment from 'moment';
-import CalendarIcon from './CalendarIcon';
 import QuestionLabel from './QuestionLabel';
 import AnswerHistory from '../../views/modals/AnswerHistory';
 import ANSWER_TYPES from '../../../constants/answerTypes';
@@ -37,62 +37,66 @@ import MatomoHOC from '../../HOC/MatomoHOC';
 import {
   getOpportunityData,
   getSelectedBid,
-  getUnityTabQuestionLoading
+  getUnityTabQuestionLoading,
+  getPanelStatus
 } from '../../../redux/selectors/proposal';
 import { getIntegrations, getQuestion } from '../../../redux/selectors';
-// import CustomLoader from './CustomLoader';
 import { getLastAnswer, shouldShowQuestion } from './utils';
 import { selectCurrentSearchResult } from '../../../redux/selectors/search';
-// import { autoNavigationCompletedAction } from '../../../redux/actions/search-actions';
 import ChipView from '../../common/Chip/ChipView';
 import { parseMomentDate } from '../../../utils/DateUtils';
 import SystemIntegrations from '../../common/SystemIntegrations/SystemIntegrations';
+import EventLauncher from '../Opportunity/EventLauncher';
+import { autoNavigationCompletedAction } from '../../../redux/actions/search-actions';
 
 const QuestionItem = ({
   questionId = '',
   UnityTabSectionTitle = '',
   disabled,
   isQuesFreezed,
-  // archivedQuestion,
   eventCategories,
   trackEvent,
   updateQuestionVisibility
-  // highlightQuestionId
 }) => {
   const question = useSelector(getQuestion(questionId));
+  const unityTabQuestionLoading = useSelector(
+    getUnityTabQuestionLoading
+  ).toJS();
   const oppdata = useSelector(state => getOpportunityData(state));
+  const panelStatus = useSelector(state => getPanelStatus(state));
   const integrationsData = useSelector(state => getIntegrations(state));
   const unityTabFilters = useSelector(state => state.unitytab.filters);
   const isShowQuestion = shouldShowQuestion(question, unityTabFilters);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
-  const unityTabQuestionLoading = useSelector(
-    getUnityTabQuestionLoading
-  ).toJS();
-  const [loading, setLoading] = useState(false);
   const [screenSize, setScreen] = useState('');
   const [iconColor, seticonColor] = useState('#00c221');
   const [changeIcon, setchangeIcon] = useState('');
   const questionTextRef = useRef(null);
-  const dispatch = useDispatch();
   const questionTextRef2 = useRef(null);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    updateQuestionVisibility(questionId, isShowQuestion);
+  }, [unityTabFilters]);
 
   useEffect(() => {
-    setLoading(unityTabQuestionLoading?.questionId === questionId);
-  }, [unityTabQuestionLoading]);
-  // useEffect(() => {
-  //   if (currentSearchResult !== null && questionTextRef.current !== null) {
-  //     if (currentSearchResult.searchIndex === highlightQuestionId) {
-  //       setTimeout(() => {
-  //         questionTextRef.current.scrollIntoView({
-  //           behaviour: 'smooth',
-  //           block: 'center',
-  //           inline: 'nearest'
-  //         });
-  //         dispatch(autoNavigationCompletedAction());
-  //       }, 500);
-  //     }
-  //   }
-  // }, [questionTextRef.current, currentSearchResult, highlightQuestionId]);
+    if (currentSearchResult !== null && questionTextRef.current !== null) {
+      if (
+        currentSearchResult.searchIndex === questionId &&
+        ((currentSearchResult.sectionName !== null &&
+          currentSearchResult.sectionName === UnityTabSectionTitle) ||
+          currentSearchResult.sectionName === null)
+      ) {
+        setTimeout(() => {
+          questionTextRef.current.scrollIntoView({
+            behaviour: 'smooth',
+            block: 'center',
+            inline: 'nearest'
+          });
+          dispatch(autoNavigationCompletedAction());
+        }, 700);
+      }
+    }
+  }, [questionTextRef.current, currentSearchResult, questionId]);
 
   const resize = () => {
     setScreen(window.innerWidth);
@@ -106,8 +110,6 @@ const QuestionItem = ({
     };
   }, []);
 
-  useEffect(() => {}, [unityTabQuestionLoading]);
-
   // Component will return null in case of empty question value
   if (isEmpty(question)) return null;
 
@@ -116,9 +118,9 @@ const QuestionItem = ({
 
   const selectedBid = useSelector(getSelectedBid);
   const allOppData = useSelector(getOpportunityData)?.toJS();
-  const proposalId = selectedBid?.id;
+  const proposalId = selectedBid?.toJS()?.id;
   const opportunityData = allOppData[proposalId];
-
+  const proposalDetail = opportunityData?.proposal?.proposalDetails;
   const getUserData = () => ({
     name: getUserName(),
     email: getUserEmail(),
@@ -235,7 +237,14 @@ const QuestionItem = ({
       trackMatomoEventSubmitAnswer(inputProps.lastAnswer.answer);
     }
     if (question?.section?.sectionName === 'Proposal Team') {
-      return <ProposalTeamQuestion {...inputProps} />;
+      return (
+        <SFAnswerValidationWrapper
+          hasDifferentSFanswer={question.hasDifferentSFanswer}
+          sfObject={question.sfObject}
+        >
+          <ProposalTeamQuestion {...inputProps} />
+        </SFAnswerValidationWrapper>
+      );
     }
 
     const ComponentMapper = {
@@ -343,7 +352,7 @@ const QuestionItem = ({
     return false;
   };
 
-  const SystemIcon = () => {
+  const SystemIcon = unityQuestionStatus => {
     let {
       currentSFanswer,
       sfField,
@@ -353,6 +362,9 @@ const QuestionItem = ({
       sfObject,
       hasDifferentSFanswer
     } = question;
+    const loading =
+      unityQuestionStatus?.questionId === questionId &&
+      unityQuestionStatus?.value;
     currentSFanswer = Map(currentSFanswer);
     answers = answers.map(v => Map(v));
     answers = List(answers);
@@ -467,57 +479,95 @@ const QuestionItem = ({
       />
     );
   };
+
+  const trackMatomoEventLauncher = data => {
+    trackEvent({
+      category: eventCategories.pd(proposalDetail),
+      action: `Unity Tab: Event Launcher: ${question.questionText}`,
+      customDimensions: [question, data, proposalDetail]
+    });
+  };
+  const fullGrid = [11, 1];
+  const mediumGrid = [10, 2];
+  let finalGrid = [10, 2];
+  const screenResolution = window.screen.availWidth;
+  switch (true) {
+    case screenResolution >= 1920 && screenResolution < 2300:
+      finalGrid = fullGrid;
+      break;
+    case screenResolution >= 1536 && screenResolution < 1920:
+      if (panelStatus) finalGrid = fullGrid;
+      else finalGrid = mediumGrid;
+      break;
+    case screenResolution >= 1280 && screenResolution < 1536:
+      if (panelStatus) finalGrid = fullGrid;
+      else finalGrid = mediumGrid;
+      break;
+    case screenResolution >= 1098 && screenResolution < 1280:
+      if (panelStatus) finalGrid = fullGrid;
+      else finalGrid = mediumGrid;
+      break;
+    default:
+      break;
+  }
   return useMemo(
     () =>
       isShowQuestion ? (
         <>
           <Box
             mt={2}
-            // className={classNames({
-            //   'question-active':
-            //     currentSearchResult !== null &&
-            //     currentSearchResult.searchIndex === highlightQuestionId
-            // })}
+            className={classNames({
+              'unity-tab-question-item': true,
+              'question-active':
+                currentSearchResult !== null &&
+                currentSearchResult.searchIndex === questionId &&
+                currentSearchResult.sectionName !== null &&
+                  currentSearchResult.sectionName === UnityTabSectionTitle
+            })}
           >
             <Grid container>
               <Grid
                 item
-                xs={10}
+                xs={finalGrid[0]}
                 className="ques-title-cover unity-tab-question"
               >
-                {!isEmpty(question?.questionLockInfo) &&
-                isQuestionLockedByOther() ? (
-                  <Typography variant="subtitle1" className="status-txt">
-                    {question.questionLockInfo?.userName} is typing...
-                  </Typography>
-                ) : null}
-                <span ref={questionTextRef}>
-                  <QuestionLabel questionLabel={question?.questionText || ''} />
-                </span>
-                <div className="unity-tab-action-item">
-                  {renderQuestionHint()}
-                  {renderTags()}
+                <div className="question-label-container">
+                  <div className="question-label-inner">
+                    <div ref={questionTextRef} className="question-title-txt">
+                      <QuestionLabel
+                        questionLabel={question?.questionText || ''}
+                      />
+                      {!isEmpty(question?.questionLockInfo) &&
+                      isQuestionLockedByOther() ? (
+                        <Typography variant="subtitle1" className="status-txt">
+                          {question.questionLockInfo?.userName} is typing...
+                        </Typography>
+                      ) : null}
+                    </div>
+                    {question.events && (
+                      <EventLauncher
+                        questionData={Map(question)}
+                        proposalDetail={proposalDetail}
+                        eventCategories={eventCategories}
+                        trackMatomoEventLauncher={c =>
+                          trackMatomoEventLauncher(c)
+                        }
+                      />
+                    )}
+                    <div className="question-hint">{renderQuestionHint()}</div>
+                  </div>
+                  <div className="milestone-chip">{renderTags()}</div>
                 </div>
               </Grid>
-              <Grid item xs={2} />
-              <Grid item xs={10} className="answer-input">
+              <Grid item xs={finalGrid[1]} />
+              <Grid item xs={finalGrid[0]} className="answer-input">
                 {renderQuestion()}
               </Grid>
-              <Grid item xs={2} className="answer-actions">
-                {/* <div>
-                  <IconButton
-                    size="small"
-                    onClick={() => {
-                      setIsShowHistory(true);
-                    }}
-                  >
-                    <CalendarIcon question={question} />
-                  </IconButton>
-                </div> */}
-                <div>{SystemIcon()}</div>
-                {/* {!isQuesFreezed && (
-                  <CustomLoader questionId={question.questionId} />
-                )} */}
+              <Grid item xs={finalGrid[1]} className="answer-actions">
+                <div className="system-icon-custom-tab">
+                  {SystemIcon(unityTabQuestionLoading)}
+                </div>
+                {/* !isQuesFreezed && */}
               </Grid>
             </Grid>
           </Box>
@@ -540,7 +590,9 @@ const QuestionItem = ({
       isShowHistory,
       isShowQuestion,
       unityTabFilters,
-      currentSearchResult
+      currentSearchResult,
+      unityTabQuestionLoading,
+      finalGrid
       // highlightQuestionId
     ]
   );
@@ -549,17 +601,6 @@ const QuestionItem = ({
 QuestionItem.defaultProps = {
   disabled: false,
   isQuesFreezed: false,
-  // archivedQuestion: {
-  //   proposalId: '',
-  //   questionId: '',
-  //   questionText: '',
-  //   answerConfiguration: {
-  //     type: 'number'
-  //   },
-  //   answers: [],
-  //   visible: false,
-  //   active: false
-  // },
   updateQuestionVisibility: () => {}
 };
 QuestionItem.propTypes = {
@@ -569,7 +610,6 @@ QuestionItem.propTypes = {
   isQuesFreezed: PropTypes.any,
   eventCategories: PropTypes.object.isRequired,
   trackEvent: PropTypes.func.isRequired,
-  // archivedQuestion: PropTypes.any,
   updateQuestionVisibility: PropTypes.func
 };
 

@@ -59,6 +59,8 @@ const AutoCompleteWithAddOption = ({
   const [modAnswer, setModAnswer] = useState(getAnswer());
   const [currentLov, setCurrentLov] = useState(getOptions());
   const [clearable, setClearable] = useState(true);
+  const [openState, setOpenState] = useState(false);
+  const [answerCommaSeparated, setAnswerCommaSeparated] = useState('');
 
   const autoCompleteRef = useRef(null);
 
@@ -95,24 +97,53 @@ const AutoCompleteWithAddOption = ({
 
     setSelectedVal(modifiedAnswer);
     setModAnswer(modifiedAnswer);
-    if (!multiple) onChange(modifiedAnswer);
-    if (onCascadeChange) onCascadeChange();
+    if (!multiple) {
+      onChange(modifiedAnswer);
+      setOpenState(false);
+      if (toggleWatch) toggleWatch(false);
+      if (autoCompleteRef.current) {
+        autoCompleteRef.current.blur();
+      }
+    } else {
+      if (onCascadeChange) onCascadeChange();
+    }
   };
 
   /**
    * setCurrentLov onUpdate answer state
    */
   useEffect(() => {
-    setSelectedVal(getAnswer());
-    if (isEmpty(selectedVal)) {
-      setClearable(true);
+    let newSelectedValue = getAnswer();
+    if (multiple) {
+      setAnswerCommaSeparated(newSelectedValue.join(';;'));
+    } else {
+      setSelectedVal(newSelectedValue);
+      setModAnswer(newSelectedValue);
+      if (isEmpty(newSelectedValue)) {
+        setClearable(true);
+      }
     }
     const currentOptions = [...getOptions()];
     const newOptions = currentOptions.filter(
-      el => selectedVal.indexOf(el) === -1
+      el => newSelectedValue.indexOf(el) === -1
     );
     setCurrentLov(newOptions);
   }, [answer]);
+
+  useEffect(() => {
+    if (multiple) {
+      const answers = answerCommaSeparated
+        .split(';;')
+        .filter(answer => answer.length > 0);
+      if (answers.length > 0) {
+        setSelectedVal(answers);
+        setModAnswer(answers);
+      } else {
+        setSelectedVal([]);
+        setModAnswer([]);
+      }
+    }
+  }, [answerCommaSeparated]);
 
   /**
    * setClearable onUpdate loading state
@@ -148,6 +179,7 @@ const AutoCompleteWithAddOption = ({
   };
 
   const handleFocus = useCallback(() => {
+    setOpenState(true);
     if (toggleWatch) toggleWatch(true);
     onFocus();
   }, []);
@@ -161,9 +193,9 @@ const AutoCompleteWithAddOption = ({
     if (forceBlur === true) {
       if (autoCompleteRef.current) {
         autoCompleteRef.current.blur();
-        setTimeout(() => {
-          autoCompleteRef.current.value = '';
-        }, 100);
+        // setTimeout(() => {
+        //   autoCompleteRef.current.value = '';
+        // }, 100);
       }
     }
   }, [forceBlur]);
@@ -171,6 +203,7 @@ const AutoCompleteWithAddOption = ({
   return (
     <div className="auto-complete-with-add-option">
       <Autocomplete
+        open={openState}
         data-testid="autocomplete-test"
         filterOptions={(currentList, params) => {
           const filtered = filter(currentList, params);
@@ -191,7 +224,8 @@ const AutoCompleteWithAddOption = ({
             if (
               multiple &&
               // eslint-disable-next-line react/prop-types
-              answer?.length !== modAnswer.length
+              (answer?.length !== modAnswer.length ||
+                !isEqual(answer, modAnswer))
             )
               onChange(modAnswer);
           } else if (
@@ -202,6 +236,7 @@ const AutoCompleteWithAddOption = ({
           )
             onChange(modAnswer);
           handleBlur();
+          setOpenState(false);
         }}
         onFocus={handleFocus}
         disabled={disabled}
@@ -212,28 +247,23 @@ const AutoCompleteWithAddOption = ({
         freeSolo
         disableCloseOnSelect={multiple}
         value={selectedVal}
-        renderTags={(value, getTagProps) =>
-          <div
-            className='autocomplete-multiline-chip'
-          >
+        renderTags={(value, getTagProps) => (
+          <div className="autocomplete-multiline-chip">
             {value.map((option, index) => (
-              <div
-                className='autocomplete-chip'
-                key={index}
-              >
+              <div className="autocomplete-chip">
                 <Chip
                   label={
-                    <Typography style={{ whiteSpace: "normal" }}>
+                    <Typography style={{ whiteSpace: 'normal' }}>
                       {option}
                     </Typography>
                   }
                   {...getTagProps({ index })}
-                  style={{ height: "100%" }}
+                  style={{ height: '100%' }}
                 />
               </div>
             ))}
           </div>
-        }
+        )}
         renderInput={params => {
           return (
             <TextField

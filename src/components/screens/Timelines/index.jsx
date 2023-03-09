@@ -152,7 +152,7 @@ const Timeline = () => {
           end: new Date(lastAnswer?.answer),
           isDraggable: isCurrent,
           color:
-            lastAnswer?.user === 'UnityPredictedAnswer' ? '#297DFD' : '#00C221',
+            lastAnswer?.user === 'UnityPredictedAnswer' ? '#0768FD' : '#00C221',
           question
         };
         setTimelineEvents(current => [...current, eventss]);
@@ -166,8 +166,8 @@ const Timeline = () => {
 
     dispatch(
       setTimelineDateRange([
-        moment(`${matchedBid[0].bidDate}`),
-        moment(`${matchedBid[0].bidDueDate}`)
+        moment(`${matchedBid[0]?.bidDate}`),
+        moment(`${matchedBid[0]?.bidDueDate}`)
       ])
     );
   }, [proposalDate]);
@@ -234,20 +234,22 @@ const Timeline = () => {
           </div>
         </Panel>
         <Panel hideButton className="timeline-calender-container">
-          {timelineDateRange.length && (
-            <TimelineCalender
-              key={uuidv4()}
-              timelineEvents={timelineEvents}
-              proposalDate={proposalDate}
-              socketContext={socketContext}
-              userData={getUserData()}
-              isCurrent={isCurrent}
-              currentBidDetails={currentBidDetails}
-              draggedQuestionData={draggedQuestionData}
-              setDraggedQuestionData={setDraggedQuestionData}
-              setTimelineEvents={setTimelineEvents}
-            />
-          )}
+          {timelineDateRange.length &&
+            currentBidDetails[0]?.bidDate &&
+            currentBidDetails[0]?.bidDueDate && (
+              <TimelineCalender
+                key={uuidv4()}
+                timelineEvents={timelineEvents}
+                proposalDate={proposalDate}
+                socketContext={socketContext}
+                userData={getUserData()}
+                isCurrent={isCurrent}
+                currentBidDetails={currentBidDetails}
+                draggedQuestionData={draggedQuestionData}
+                setDraggedQuestionData={setDraggedQuestionData}
+                setTimelineEvents={setTimelineEvents}
+              />
+            )}
         </Panel>
       </div>
       {showAddModal && (

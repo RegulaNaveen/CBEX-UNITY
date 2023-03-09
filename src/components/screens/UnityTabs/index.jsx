@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 import { isEmpty } from 'lodash';
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import sortBy from 'lodash/sortBy';
 import ClipboardCheck from 'apollo-react-icons/ClipboardCheck';
 import Card from 'apollo-react/components/Card';
 import Section from './Section';
@@ -9,11 +10,73 @@ import BidHistory from '../../common/Bidhistory';
 import Filters from './Filters';
 import FilterButton from './FilterButton';
 import ViewAboveVerticalTabs from '../../views/ViewAboveVerticalTabs';
+import {
+  updateNewFilters,
+  resetFiltersAction
+} from '../../../redux/actions/unitytab-action';
+import { shouldShowSection } from './utils';
 
 const CustomTabs = ({ tabId, key }) => {
   const allTab = useSelector(state => state.unitytab.allTabs);
-  const tab = allTab[tabId];
+  const allQuestion = useSelector(state =>
+    state.proposal.get('proposalQuestions')
+  );
+  let tab = allTab[tabId];
+  tab = sortBy(tab, [
+    o => {
+      return o.UnityTabSectionOrder;
+    }
+  ]);
   const [isShowFilters, setIsShowFilters] = useState(false);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(resetFiltersAction());
+    let arr = [];
+    for (let index = 0; index < tab?.length; index += 1) {
+      const element = tab[index];
+      const flag = shouldShowSection(element.UnityTabSectionId, tabId);
+      if (flag) {
+        arr.push(...element.UnityTabSectionQuestions);
+      }
+    }
+    arr = arr.flat(1);
+    const allquestion = allQuestion;
+
+    let result = arr
+      .map(v => {
+        const res = allquestion.filter(
+          c =>
+            c.questionId === v &&
+            c?.milestone &&
+            c?.milestoneNew?.length > 0 &&
+            c.active &&
+            c.visible
+        );
+        if (res?.length) {
+          return {
+            displayName: res[0]?.milestone
+          };
+        }
+      })
+      .filter(v => v && typeof v === 'object' && Object.keys(v)?.length > 0);
+    result = [...new Set(result.map(i => i.displayName))];
+
+    if (result && result.length) {
+      const resp = [];
+      for (let index = 0; index < result.length; index += 1) {
+        const element = result[index];
+        const obj = {
+          displayName: element,
+          group: 'milestone',
+          name: String(element).toLowerCase(),
+          value: false
+        };
+        resp.push(obj);
+      }
+      dispatch(updateNewFilters(resp));
+    }
+  }, []);
 
   return (
     <div className="approvals-tab">
@@ -67,6 +130,7 @@ const CustomTabs = ({ tabId, key }) => {
             </div>
           </>
         )}
+        <div id="modal-wrapper" />
       </div>
     </div>
   );

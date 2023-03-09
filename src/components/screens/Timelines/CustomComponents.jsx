@@ -18,22 +18,27 @@ const CustomComponents = {
       parseMomentDate(dateCellWrapperProps.value) ===
       parseMomentDate(dateCellWrapperProps.currentBidDetails[0].bidDueDate);
 
-    const isPastDate = moment(dateCellWrapperProps.value).isBefore(new Date());
+    const isPastDate =
+      moment(dateCellWrapperProps.value).isBefore(new Date()) &&
+      !(
+        parseMomentDate(dateCellWrapperProps.value) ===
+        parseMomentDate(new Date())
+      );
 
     const style = {
       display: 'flex',
       flex: 1,
       border: `${
         BidCreationDateAnnotation || BidDueDateAnnotation
-          ? '3px solid #A9A9A9'
+          ? '1.2px solid #999999'
           : ''
       }`,
       borderLeft: `${
         BidCreationDateAnnotation || BidDueDateAnnotation
-          ? '3px solid #A9A9A9'
+          ? '1.2px solid #999999'
           : '1px solid #DDD'
       }`,
-      backgroundColor: `${isPastDate ? '#F6F7FB ' : '#fff'}`
+      backgroundColor: `${isPastDate ? '#F2F2F2' : '#fff'}`
     };
 
     return (
@@ -41,12 +46,13 @@ const CustomComponents = {
         {BidCreationDateAnnotation && (
           <Typography
             style={{
-              color: '#999999',
-              fontFamily: 'Proxima Nova',
+              color: '#444444',
+              fontFamily: 'ProximaNova-Regular',
               fontSize: '16px',
-              fontWeight: 600,
+              width: '100%',
               alignSelf: 'flex-end',
-              justifyContent: 'center'
+              justifyContent: 'flex-end',
+              textAlign: 'center'
             }}
           >
             Bid Created
@@ -55,12 +61,13 @@ const CustomComponents = {
         {BidDueDateAnnotation && (
           <Typography
             style={{
-              color: '#999999',
-              fontFamily: 'Proxima Nova',
+              color: '#444444',
+              fontFamily: 'ProximaNova-Regular',
               fontSize: '16px',
-              fontWeight: 600,
+              width: '100%',
               alignSelf: 'flex-end',
-              justifyContent: 'center'
+              justifyContent: 'flex-end',
+              textAlign: 'center'
             }}
           >
             Bid Due

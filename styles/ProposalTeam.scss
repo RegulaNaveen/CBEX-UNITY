@@ -15,8 +15,6 @@
   margin-top: -2px;
 }
 .divider-hr-proposal-team {
-  margin-left: 16px;
-  margin-right: 16px;
   height: 1px;
   border: 0.6em;
   border-top: 1px solid #ddd;
@@ -29,11 +27,7 @@
   display: flex;
   justify-content: flex-end;
 }
-.proposal-team-wrapper-container {
-  overflow-y: auto;
-  height: 442px !important;
-  margin: 2px 0px;
-}
+
 .add-question {
   padding-left: 15px;
 }
@@ -61,4 +55,29 @@
 .proposal-team-edit-icon {
   padding-left: 1rem;
   cursor: pointer;
+}
+.padding-Na {
+  padding-left: 40px;
+}
+
+#proposal-team-left-section {
+  display: grid;
+  grid-template-rows: 0.1fr 1fr 0.1fr;
+  padding: 15px;
+
+  .proposal-team-wrapper-container {
+    overflow-y: auto;
+    margin: 2px 0px;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .proposal-team-wrapper-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .proposal-team-btn-wrapper {
+    align-self: center;
+  }
 }
