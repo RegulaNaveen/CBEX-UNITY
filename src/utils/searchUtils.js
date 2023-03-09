@@ -30,7 +30,8 @@ export async function getSearchResults({
   unityTabFilters,
   questionsForCustomersEnabled,
   allTabs,
-  filteredQuestionsMap
+  filteredQuestionsMap,
+  sectionsUnfiltered
 }) {
   let finalResult = {
     count: 0,
@@ -55,14 +56,15 @@ export async function getSearchResults({
       approvals,
       filteredQuestionsMap,
       approvalFilters,
-      unityTabFilters
+      unityTabFilters,
+      sectionsUnfiltered
     });
     if (activeTab !== 1) {
       if (questionsForCustomersEnabled) {
         searchInQuestionsForCustomer(
           finalResult,
           regexp,
-          sections,
+          sectionsUnfiltered,
           allTabs[activeTab].tabName
         );
       }
@@ -75,7 +77,7 @@ export async function getSearchResults({
       searchInProposalTeam(
         finalResult,
         regexp,
-        sections,
+        sectionsUnfiltered,
         allTabs[activeTab].tabName
       );
       verticalTabSearched = true;
@@ -100,19 +102,25 @@ export async function getSearchResults({
           approvals,
           filteredQuestionsMap,
           approvalFilters,
-          unityTabFilters
+          unityTabFilters,
+          sectionsUnfiltered
         });
         if (tab.tabIndex !== 1 && !verticalTabSearched) {
           if (questionsForCustomersEnabled) {
             searchInQuestionsForCustomer(
               finalResult,
               regexp,
-              sections,
+              sectionsUnfiltered,
               tab.tabName
             );
           }
           searchInNotepad(finalResult, regexp, notepadData, tab.tabName);
-          searchInProposalTeam(finalResult, regexp, sections, tab.tabName);
+          searchInProposalTeam(
+            finalResult,
+            regexp,
+            sectionsUnfiltered,
+            tab.tabName
+          );
           verticalTabSearched = true;
         }
       });
@@ -794,47 +802,69 @@ export function searchInProposalTeam(finalResult, regexp, sections, tabName) {
     .forEach(sectionKey => {
       const section = sections[sectionKey];
       const questions = section['questions'];
+      const filteredQuestions = Object.keys(questions).filter(questionKey => {
+        return (
+          questions[questionKey]['visible'] &&
+          (questions[questionKey]['active'] ||
+            questions[questionKey]['isCustomQuestion']) &&
+          (!questions[questionKey]['notApplicable'] ||
+            isQuestionsFilterEnabled) &&
+          !questions[questionKey]['questionApproval']
+        );
+      });
 
-      if (Object.keys(questions).length > 0) {
+      if (filteredQuestions.length > 0) {
         // searching questions
-        Object.keys(questions).forEach(questionKey => {
-          const question = questions[questionKey];
-          // searching in questionText
-          if (question['questionText']) {
-            updateSearchMatches({
-              regexp,
-              inputText: question['questionText'],
-              index: questionKey,
-              finalResult,
-              tab: null,
-              vTab: 2,
-              tabName
-            });
-          }
-          // searching in answer
-          if (Array.isArray(question.answers) && question.answers.length > 0) {
-            let recentAnswer =
-              question.answers[question.answers.length - 1].answer;
-            const newAnswer = [];
-            recentAnswer.split(',').forEach(answer => {
-              const split_array = answer.split('(');
-              if (split_array && split_array.length > 0) {
-                newAnswer.push(split_array[0].trim());
-              }
-            });
-            newAnswer.forEach(answerChunk => {
+        filteredQuestions
+          .filter(questionKey => {
+            const question = questions[questionKey];
+            return (
+              question['visible'] &&
+              (question['active'] || question['isCustomQuestion']) &&
+              !question['questionApproval']
+            );
+          })
+          .forEach(questionKey => {
+            const question = questions[questionKey];
+            // searching in questionText
+            if (question['questionText']) {
               updateSearchMatches({
                 regexp,
-                inputText: answerChunk,
+                inputText: question['questionText'],
                 index: questionKey,
                 finalResult,
                 tab: null,
                 vTab: 2,
                 tabName
               });
-            });
-          }
-        });
+            }
+            // searching in answer
+            if (
+              Array.isArray(question.answers) &&
+              question.answers.length > 0
+            ) {
+              let recentAnswer =
+                question.answers[question.answers.length - 1].answer;
+              const newAnswer = [];
+              recentAnswer.split(',').forEach(answer => {
+                const split_array = answer.split('(');
+                if (split_array && split_array.length > 0) {
+                  newAnswer.push(split_array[0].trim());
+                }
+              });
+              newAnswer.forEach(answerChunk => {
+                updateSearchMatches({
+                  regexp,
+                  inputText: answerChunk,
+                  index: questionKey,
+                  finalResult,
+                  tab: null,
+                  vTab: 2,
+                  tabName
+                });
+              });
+            }
+          });
       }
     });
 }
