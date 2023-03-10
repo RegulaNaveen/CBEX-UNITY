@@ -147,7 +147,8 @@ const CustomApolloRichText = ({
   canUserTagInQuestion,
   allFlags,
   iscustomtab = false,
-  isQuestionCustomerTab = false
+  isQuestionCustomerTab = false,
+  setFocus = false
 }) => {
   // Set initial blocks structure if only string available
   let richtextObject = richTextVal;
@@ -342,6 +343,15 @@ const CustomApolloRichText = ({
   useEffect(() => {
     setIsRichTextEditable(isEditable);
   }, [isEditable]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (richTextEditorRef.current && setFocus) {
+        richTextEditorRef.current.focus();
+      }
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [setFocus]);
 
   /**
    * OnClick ReadOnly RichText
