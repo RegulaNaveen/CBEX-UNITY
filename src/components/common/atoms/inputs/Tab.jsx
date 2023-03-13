@@ -446,6 +446,15 @@ const UnityTab = ({
   }, []);
 
   useEffect(() => {
+    let verticalTabFlag = allFlags.verticalTab || false;
+    if (value === 1) {
+      setShowVerticalTab(false);
+    } else if (verticalTabFlag) {
+      setShowVerticalTab(true);
+    }
+  }, [value, allFlags]);
+
+  useEffect(() => {
     if (selectedView && selectedView === 'documents') {
       dispatch(
         setActiveTabIndexAction(
