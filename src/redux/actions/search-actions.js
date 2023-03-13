@@ -36,6 +36,7 @@ import {
 import { DEFAULT_TABS_LEN } from '../../constants/app';
 import { cloneDeep } from 'lodash';
 import { checkTabRender } from '../../components/screens/UnityTabs/utils';
+import { getWebsocketNotesApi } from '../../api/notepad';
 
 export const openSearchAction = () => ({ type: SEARCH.OPEN });
 
@@ -168,50 +169,10 @@ export const doSearchAction = () => {
     if (shouldCheckNotepad) {
       try {
         if (selectedBid.id) {
-          const yDoc = new Y.Doc();
-          const storedValue = `doc-${selectedBid.id}`;
-          let wsProvider = new WebsocketProvider(
-            NOTES_SOCKET_URL,
-            `?=${storedValue}&`,
-            yDoc
+          const notepadJSON = await getWebsocketNotesApi(
+            `doc-${selectedBid.id}`
           );
-          wsProvider.on('sync', async isSynced => {
-            if (isSynced) {
-              const proseMirrorData = yDocToProsemirrorJSON(yDoc, 'default');
-              console.log('proseMirrorData', proseMirrorData);
-              notepadData = extractTextFromProseMirrorJSON(proseMirrorData);
-              dispatch(
-                resumeSearchAction({
-                  query,
-                  questions,
-                  sections: isQuestionsFilterEnabled
-                    ? filteredSections.toJS()
-                    : sections.toJS(),
-                  approvals: shouldCheckApprovals ? approvals : [],
-                  notepadData
-                })
-              );
-            }
-            wsProvider = null;
-          });
-          wsProvider.on('connection-close', () => {
-            if (wsProvider.wsUnsuccessfulReconnects >= 3) {
-              wsProvider = null;
-              dispatch(
-                resumeSearchAction({
-                  query,
-                  questions,
-                  sections: isQuestionsFilterEnabled
-                    ? filteredSections.toJS()
-                    : sections.toJS(),
-                  approvals: shouldCheckApprovals ? approvals : [],
-                  notepadData
-                })
-              );
-            }
-          });
-          wsProvider.on('connection-error', () => {
-            wsProvider = null;
+          if (notepadJSON.status === 'success') {
             dispatch(
               resumeSearchAction({
                 query,
@@ -220,10 +181,14 @@ export const doSearchAction = () => {
                   ? filteredSections.toJS()
                   : sections.toJS(),
                 approvals: shouldCheckApprovals ? approvals : [],
-                notepadData
+                notepadData: extractTextFromProseMirrorJSON(
+                  notepadJSON.noteJson
+                )
               })
             );
-          });
+          } else {
+            throw 'Error in fetching notepad data';
+          }
         }
       } catch (e) {
         console.error('Error in retrieving and processing notepad data: ', e);
