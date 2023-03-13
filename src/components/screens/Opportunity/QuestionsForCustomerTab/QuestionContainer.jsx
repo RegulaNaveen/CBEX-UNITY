@@ -27,7 +27,8 @@ const QuestionContainer = ({
   questionData,
   questionIndex,
   isCurrentBid,
-  socketContext
+  socketContext,
+  newQuestionData
 }) => {
   const question = questionData.toJS();
 
@@ -77,7 +78,8 @@ const QuestionContainer = ({
     socketContext,
     checkDisableFlag,
     setShowLoader,
-    questionIndex
+    questionIndex,
+    newQuestionData
   };
 
   useEffect(() => {
