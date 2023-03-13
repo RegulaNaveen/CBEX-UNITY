@@ -210,7 +210,7 @@ function ProposalTeam() {
                   isNotApplicable={items.isNotApplicable}
                   milestoneCond={items.milestoneCond}
                   NaLoading={items.NaLoading}
-                  currentSFAnswer={items.currentSFAnswer}
+                  currentSFanswer={items.currentSFAnswer}
                   sficon={items.sficon}
                   milestone={items.milestone}
                   lastAns={items.lastAns}
