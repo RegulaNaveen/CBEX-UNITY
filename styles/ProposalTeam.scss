@@ -62,7 +62,7 @@
 
 #proposal-team-left-section {
   display: grid;
-  grid-template-rows: 0.1fr 1fr 0.1fr;
+  grid-template-rows: 0.1fr 1fr;
   padding: 15px;
 
   .proposal-team-wrapper-container {
@@ -79,5 +79,6 @@
 
   .proposal-team-btn-wrapper {
     align-self: center;
+    margin: 4% 0 0 2%;
   }
 }

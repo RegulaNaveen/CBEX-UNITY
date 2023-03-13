@@ -53,6 +53,10 @@ import { UBUILD, DASHBOARD } from '../../../routes';
 import featureFlags from '../../../constants/featureFlags';
 import launchDarkly from '../../../utils/launchDarkly';
 import { getBidList } from '../../../redux/selectors/proposal';
+import {
+  clearSearchAction,
+  closeSearchAction
+} from '../../../redux/actions/search-actions';
 
 type State = {
   selectedView: string
@@ -221,7 +225,9 @@ export class Opportunity extends Component<Props, State> {
       handleOpenClose,
       setResetProposalId,
       resetQuestionsFilter,
-      resetApprovalsFilter
+      resetApprovalsFilter,
+      closeSearch,
+      clearSearch
     } = this.props;
     if (handleOpenClose) handleOpenClose(false);
     setResetProposalId();
@@ -232,6 +238,8 @@ export class Opportunity extends Component<Props, State> {
     this.context.updateSocketOppId(null, null);
     if (resetQuestionsFilter) resetQuestionsFilter();
     if (resetApprovalsFilter) resetApprovalsFilter();
+    clearSearch();
+    closeSearch();
   }
 
   handleResize = () => {
@@ -405,6 +413,8 @@ export default compose(
     ProposalLoading: activateProposalLoading,
     getIntegrationsData,
     resetQuestionsFilter: resetQuestionsFilterAction,
-    resetApprovalsFilter: resetFiltersAction
+    resetApprovalsFilter: resetFiltersAction,
+    closeSearch: closeSearchAction,
+    clearSearch: clearSearchAction
   })
 )(MatomoHOC(Opportunity));
