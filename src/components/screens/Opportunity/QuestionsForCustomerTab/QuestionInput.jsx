@@ -14,7 +14,8 @@ const QuestionInput = ({
   socketContext,
   checkDisableFlag,
   setShowLoader,
-  questionIndex
+  questionIndex,
+  newQuestionData
 }) => {
   const selectedBid = useSelector(getSelectedBid);
   const dispatch = useDispatch();
@@ -86,6 +87,7 @@ const QuestionInput = ({
     disabled: checkDisableFlag(),
     canUserTagInQuestion,
     allFlags,
+    setFocus: newQuestionData === question?.questionId,
 
     onBlur: data => {
       let saveDate = false;
