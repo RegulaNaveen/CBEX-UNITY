@@ -360,7 +360,15 @@ export const resumeSearchAction = ({
       searchResults.autoNavigatedToCurrentResult = true;
     }
 
-    if (prevSearchResults.length > 0 && prevActiveSearchIndex > -1) {
+    if (
+      (prevSearchResults.length > 0 &&
+        prevActiveSearchIndex > -1 &&
+        searchResults.newCurrentResultIndex > -1 &&
+        searchResults.results[searchResults.newCurrentResultIndex]
+          .searchIndex !==
+          prevSearchResults[prevActiveSearchIndex].searchIndex) ||
+      searchResults.newCurrentResultIndex === -1
+    ) {
       searchResults.prevResult = prevSearchResults[prevActiveSearchIndex];
     } else {
       searchResults.prevResult = null;
