@@ -65,20 +65,23 @@ export async function getSearchResults({
           finalResult,
           regexp,
           sectionsUnfiltered,
-          allTabs[activeTab].tabName
+          allTabs[activeTab].tabName,
+          activeTab
         );
       }
       searchInNotepad(
         finalResult,
         regexp,
         notepadData,
-        allTabs[activeTab].tabName
+        allTabs[activeTab].tabName,
+        activeTab
       );
       searchInProposalTeam(
         finalResult,
         regexp,
         sectionsUnfiltered,
-        allTabs[activeTab].tabName
+        allTabs[activeTab].tabName,
+        activeTab
       );
       verticalTabSearched = true;
     }
@@ -111,15 +114,23 @@ export async function getSearchResults({
               finalResult,
               regexp,
               sectionsUnfiltered,
-              tab.tabName
+              tab.tabName,
+              tab.tabIndex
             );
           }
-          searchInNotepad(finalResult, regexp, notepadData, tab.tabName);
+          searchInNotepad(
+            finalResult,
+            regexp,
+            notepadData,
+            tab.tabName,
+            tab.tabIndex
+          );
           searchInProposalTeam(
             finalResult,
             regexp,
             sectionsUnfiltered,
-            tab.tabName
+            tab.tabName,
+            tab.tabIndex
           );
           verticalTabSearched = true;
         }
@@ -715,7 +726,13 @@ export function searchInApprovals(
   });
 }
 
-export function searchInNotepad(finalResult, regexp, notepadData, tabName) {
+export function searchInNotepad(
+  finalResult,
+  regexp,
+  notepadData,
+  tabName,
+  tab
+) {
   // searching in notepad
   if (notepadData.length > 0) {
     updateSearchMatches({
@@ -723,7 +740,7 @@ export function searchInNotepad(finalResult, regexp, notepadData, tabName) {
       inputText: notepadData.join(''),
       index: NOTEPAD_UI_ID,
       finalResult,
-      tab: null,
+      tab,
       vTab: 1,
       tabName
     });
@@ -734,7 +751,8 @@ export function searchInQuestionsForCustomer(
   finalResult,
   regexp,
   sections,
-  tabName
+  tabName,
+  tab
 ) {
   Object.keys(sections)
     .filter(
@@ -757,7 +775,7 @@ export function searchInQuestionsForCustomer(
               inputText: question['questionText'],
               index: questionKey,
               finalResult,
-              tab: null,
+              tab,
               vTab: 0,
               tabName
             });
@@ -774,7 +792,7 @@ export function searchInQuestionsForCustomer(
                   inputText: answerChunk,
                   index: questionKey,
                   finalResult,
-                  tab: null,
+                  tab,
                   vTab: 0,
                   tabName
                 });
@@ -785,7 +803,7 @@ export function searchInQuestionsForCustomer(
                 inputText: recentAnswer,
                 index: questionKey,
                 finalResult,
-                tab: null,
+                tab,
                 vTab: 0,
                 tabName
               });
@@ -796,7 +814,13 @@ export function searchInQuestionsForCustomer(
     });
 }
 
-export function searchInProposalTeam(finalResult, regexp, sections, tabName) {
+export function searchInProposalTeam(
+  finalResult,
+  regexp,
+  sections,
+  tabName,
+  tab
+) {
   Object.keys(sections)
     .filter(section => sections[section].sectionName === 'Proposal Team')
     .forEach(sectionKey => {
@@ -833,7 +857,7 @@ export function searchInProposalTeam(finalResult, regexp, sections, tabName) {
                 inputText: question['questionText'],
                 index: questionKey,
                 finalResult,
-                tab: null,
+                tab,
                 vTab: 2,
                 tabName
               });
@@ -858,7 +882,7 @@ export function searchInProposalTeam(finalResult, regexp, sections, tabName) {
                   inputText: answerChunk,
                   index: questionKey,
                   finalResult,
-                  tab: null,
+                  tab,
                   vTab: 2,
                   tabName
                 });
