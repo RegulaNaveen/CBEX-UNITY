@@ -14,6 +14,7 @@ import {
   selectCurrentSearchResult,
   selectAutoNavigatedToCurrentResult
 } from '../../../redux/selectors/search';
+import { autoNavigationCompletedAction } from '../../../redux/actions/search-actions';
 
 export const UnityTabContext = createContext();
 
