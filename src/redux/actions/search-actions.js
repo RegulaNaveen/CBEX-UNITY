@@ -364,7 +364,7 @@ export const resumeSearchAction = ({
       searchResults.prevResult = null;
     } else if (
       prevSearchResults.length > 0 &&
-      searchResults.length > 0 &&
+      searchResults.count > 0 &&
       prevActiveSearchIndex > -1 &&
       searchResults.newCurrentResultIndex > -1 &&
       prevSearchResults[prevActiveSearchIndex] &&
