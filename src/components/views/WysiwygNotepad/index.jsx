@@ -16,10 +16,8 @@ import Mention from '@tiptap/extension-mention';
 import moment from 'moment';
 import OpportunityLinker from './OpportunityLinker';
 import RemoveLinkers from './RemoveLinkers';
-
 import suggestion from './suggestion';
 import { saveDataInMatomo, createMatomoObj } from '../../../utils/utils';
-
 import {
   getProposalDetails,
   getUserName,
@@ -54,11 +52,11 @@ const WysiwygNotepad = ({
   const dispatch = useDispatch();
   const [notesUserTag, setNotesUserTag] = useState(false);
   const [editorloadingcount, seteditorloadingcount] = useState(0);
+  const [pressedKey, getPressedKey] = useState('');
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const query = useSelector(selectQuery);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
   const usercolor = randomColor({ luminosity: 'light' });
-
   useEffect(() => {
     const ldApiCall = async () => {
       setNotesUserTag(allFlags.notesUserTag || false);
@@ -68,7 +66,6 @@ const WysiwygNotepad = ({
       dispatch(resetNotes());
     };
   }, []);
-
   useEffect(() => {
     if (document.querySelector('.notepad-classoverride')) {
       document
@@ -93,7 +90,6 @@ const WysiwygNotepad = ({
           history: false
         }),
         Underline,
-        Link,
         HighLight.configure({
           multicolor: true
         }),
@@ -115,8 +111,11 @@ const WysiwygNotepad = ({
         }),
         Link.configure({
           autolink: true,
-          linkOnPaste: false,
-          validate: href => /^https?:\/\// || /^www?:\/\//.test(href),
+          linkOnPaste: true,
+          validate: href =>
+            /^https?:\/\// ||
+            /^www?:\/\//.test(href) ||
+            /^(?:https?:\/\/)?(?:www\.)?[a-zA-Z0-9./]+$/gim,
           protocols: ['ftp', 'mailto'],
           HTMLAttributes: {
             class: 'my-custom-class'
@@ -134,7 +133,6 @@ const WysiwygNotepad = ({
         SearchHighlight.configure({
           enable: query !== null && query.length >= 3
         }),
-
         allFlags?.notepadLinker ? OpportunityLinker : RemoveLinkers
       ],
       onUpdate: ({ editor }) => {
@@ -447,9 +445,39 @@ const WysiwygNotepad = ({
     },
     [proposalId, wsInstance, notesUserTag, query]
   );
-
   let dataSynced = wsInstance.synced;
+  let view,
+    state = '';
+  if (editor) {
+    view = editor.view;
+    state = editor.state;
+  }
+  const from = view?.state.selection?.from;
+  const to = view?.state.selection?.to;
+  const linkerRegex = /(?:^|\s*)^([A-Z]{3}[0-9]{5})$/;
+  useEffect(() => {
+    document.onkeydown = event => {
+      getPressedKey(event.code);
+    };
+    const typeLink = view?.state?.selection?.$head?.marks()[0]?.type?.name;
+    const urlOpp = view?.state?.selection?.$head?.marks()[0]?.attrs?.href;
+    const parentName =
+      view?.state?.selection?.$head?.parent?.content?.content[0]?.text;
 
+    if (urlOpp) {
+      if (urlOpp && typeLink === 'opportunityLinker') {
+        if (pressedKey === 'Backspace' || pressedKey === 'Delete') {
+          editor.commands.unsetLink();
+        }
+      }
+    }
+    console.log(from, to, 'fr, to');
+    if (parentName && typeLink === 'opportunityLinker') {
+      if (!parentName?.match(linkerRegex)) {
+        editor.commands.unsetLink();
+      }
+    }
+  }, [from]);
   useEffect(() => {
     if (
       editor &&
@@ -471,7 +499,6 @@ const WysiwygNotepad = ({
       !editor.isDestroyed && editor.commands.reset();
     }
   }, [query, currentSearchResult, editor, dataSynced]);
-
   return (
     <>
       {wsInstance && (
@@ -496,14 +523,12 @@ const WysiwygNotepad = ({
     </>
   );
 };
-
 const mapStateToProps = state => ({
   userName: getUserName(state),
   userEmail: getUserEmail(state),
   userRole: getUserRole(state),
   proposalDetails: getProposalDetails(state)
 });
-
 const mapDispatchToProps = {
   fetchNotes,
   updateNoteInStore
