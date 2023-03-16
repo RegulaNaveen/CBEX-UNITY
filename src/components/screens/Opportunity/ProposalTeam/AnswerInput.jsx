@@ -42,11 +42,11 @@ import { getProposalAnswer } from '../../../../api/proposal';
 import TextArea from '../../../common/atoms/inputs/TextArea';
 import QuestionDatePicker from '../../../common/atoms/inputs/QuestionDatePicker';
 import withIdleStateDetection from '../../../HOC/IdleStateDetector';
-import { parseMomentDate } from '../../../../utils/DateUtils';
+import { formatTheDate, parseMomentDate } from '../../../../utils/DateUtils';
 const QuestionDatePickerWithIdleStateDetection = withIdleStateDetection(
   QuestionDatePicker
 );
-const AnswerInput = (props) => {
+const AnswerInput = props => {
   const {
     // eslint-disable-next-line react/prop-types
     isNotepadOpen,
@@ -396,7 +396,7 @@ const AnswerInput = (props) => {
           socketContext,
           proposalId,
           questionId,
-          selectedDay,
+          formatTheDate(selectedDay),
           userData
         )
       );
