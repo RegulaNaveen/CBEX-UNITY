@@ -471,7 +471,6 @@ const WysiwygNotepad = ({
         }
       }
     }
-    console.log(from, to, 'fr, to');
     if (parentName && typeLink === 'opportunityLinker') {
       if (!parentName?.match(linkerRegex)) {
         editor.commands.unsetLink();
