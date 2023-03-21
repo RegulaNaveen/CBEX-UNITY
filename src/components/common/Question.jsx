@@ -990,6 +990,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
             sfObject={sfObject}
           >
             <span
+              id="y/n-question-answer"
+              tabIndex={-1}
+              onBlur={() => {
+                concurrencyBlurHandler();
+              }}
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
@@ -1025,6 +1030,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
             sfObject={sfObject}
           >
             <span
+              id="select-question-answer"
+              tabIndex={-1}
+              onBlur={() => {
+                concurrencyBlurHandler();
+              }}
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
@@ -1233,6 +1243,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
             sfObject={sfObject}
           >
             <span
+              id="radio-question-answer"
+              tabIndex={-1}
+              onBlur={() => {
+                concurrencyBlurHandler();
+              }}
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
@@ -1265,6 +1280,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
             sfObject={sfObject}
           >
             <span
+              id="checkbox-question-answer"
+              tabIndex={-1}
+              onBlur={() => {
+                concurrencyBlurHandler();
+              }}
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
