@@ -556,6 +556,7 @@ class AnswerHistory extends Component<Props> {
     const { question } = this.state;
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const sectionName = question.getIn(['section', 'sectionName']);
+    const lastChangedInBid = question.get('latestAnsweredBidNo', null);
     let answers = question.get('answers').reverse();
     const questionId = answers.get('questionId');
     if (questionId) answers = question.getIn(['answers', 'answers']).reverse();
