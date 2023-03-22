@@ -341,6 +341,10 @@ class AnswerHistory extends Component<Props> {
     this.closeModalWindow();
   };
 
+  onAcceptCarryForwardedAnswer = () => {};
+
+  onRejectCarryForwardedAnswer = () => {};
+
   renderAnswerResponsables = () => {
     const { proposalTeamAnswers } = this.props;
     const { question } = this.state;
@@ -392,6 +396,7 @@ class AnswerHistory extends Component<Props> {
     const { question } = this.state;
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const sectionName = question.getIn(['section', 'sectionName']);
+    const lastChangedInBid = question.get('latestAnsweredBidNo', null);
     let answers = question.get('answers').reverse();
     const questionId = answers.get('questionId');
     if (questionId) answers = question.getIn(['answers', 'answers']).reverse();
@@ -486,7 +491,8 @@ class AnswerHistory extends Component<Props> {
             .get('answer')
             .toJS()
             .join(',');
-      const userInitials = getUserInitials(userName);
+
+      const userInitials = getUserInitials(userName, lastChangedInBid);
       const parsedDate = parseMomentDate(date);
       const avatarRandomColor = randomColor({ luminosity: 'dark' });
       const renderAnswers = () => {
@@ -742,7 +748,7 @@ class AnswerHistory extends Component<Props> {
                 {userInitials}
               </span>
               <div>
-                <p>{getUserName(userName)}</p>
+                <p>{getUserName(userName, lastChangedInBid)}</p>
                 {renderAnswers()}
               </div>
             </div>
@@ -769,6 +775,29 @@ class AnswerHistory extends Component<Props> {
                     type="button"
                     className="answer-history-accept"
                     onClick={() => this.handleVerifyPredictedAnsClick(_answer)}
+                  >
+                    Accept
+                  </button>
+                </div>
+              ) : null}
+              {indexNo === 0 &&
+              isCurrentBid === bidNo &&
+              lastAnswer?.userName === 'CarryForwardedAnswer' &&
+              userName === 'CarryForwardedAnswer' ? (
+                <div className="answer-meta-buttons">
+                  <button
+                    size="small"
+                    type="button"
+                    className="answer-history-reject"
+                    onClick={() => this.onRejectCarryForwardedAnswer()}
+                  >
+                    Reject
+                  </button>
+                  <button
+                    size="small"
+                    type="button"
+                    className="answer-history-accept"
+                    onClick={() => this.onAcceptCarryForwardedAnswer(_answer)}
                   >
                     Accept
                   </button>

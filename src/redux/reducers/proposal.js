@@ -121,6 +121,14 @@ const INITIAL_STATE: Map = fromJS({
       },
       logic: 'OR'
     },
+    verificationGroup: {
+      verificationRequired: {
+        checked: false,
+        label: 'Verification Required',
+        className: CLASS_QUES_FIL_R1_C1
+      },
+      logic: 'OR'
+    },
     rolegroup: {
       myUserRole: {
         checked: false,
@@ -328,10 +336,14 @@ const setOpportunityInfo = (state, action) => {
     'proposal',
     'proposalDetails'
   ]);
-  const proposalQuestions = opportunityData.getIn([
+  let proposalQuestions = opportunityData.getIn([
     selectedBid.get('id'),
     'proposalQuestions'
   ]);
+  proposalQuestions = proposalQuestions.map(que => ({
+    ...que,
+    latestAnsweredBidNo: 1 // HARDCODED SHOULD BE REMOVED
+  }));
   if (proposalQuestions) {
     const milestones = getUniqueMilestones(proposalQuestions);
     let questionsFilter = state.get('questionsFilter');
