@@ -340,6 +340,10 @@ const setOpportunityInfo = (state, action) => {
     selectedBid.get('id'),
     'proposalQuestions'
   ]);
+  proposalQuestions = proposalQuestions.map(que => ({
+    ...que,
+    latestAnsweredBidNo: 1 // HARDCODED SHOULD BE REMOVED
+  }));
   if (proposalQuestions) {
     const milestones = getUniqueMilestones(proposalQuestions);
     let questionsFilter = state.get('questionsFilter');
