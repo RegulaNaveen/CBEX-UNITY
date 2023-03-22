@@ -117,7 +117,7 @@
     "y-indexeddb": "^9.0.9",
     "y-protocols": "^1.0.5",
     "y-websocket": "^1.4.3",
-    "yjs": "13.5.41"
+    "yjs": "13.5.51"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
