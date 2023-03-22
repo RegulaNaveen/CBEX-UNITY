@@ -8,12 +8,13 @@ import Calendar from 'apollo-react-icons/Calendar';
 import CalendarCheck from 'apollo-react-icons/CalendarCheck';
 import IconButton from 'apollo-react/components/IconButton';
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import Loader from 'apollo-react/components/Loader';
 import Tooltip from 'apollo-react/components/Tooltip';
 import isEmpty from 'lodash/isEmpty';
 import Grid from 'apollo-react/components/Grid';
 import indeterminate from '../../../../img/Indeterminate.svg';
-import { Outgoing, Incoming } from '../../svg';
+import { Outgoing, Incoming, CalendarWithNum } from '../../svg';
 
 const SystemIntegrations = ({
   checkSfAnswer,
@@ -31,10 +32,18 @@ const SystemIntegrations = ({
   hasDifferentSFanswer,
   isNotepadOpen,
   disabled,
-  answers
+  answers,
+  bidAnswerCopy = false,
+  latestAnsweredBidNo = null
 }) => {
   const answer = answers.reverse();
   const [latestSfAnswer, setLatestSfAnswer] = useState(false);
+  const [
+    canShowCarryForwardIndication,
+    setCanShowCarryForwardIndication
+  ] = useState(false);
+
+  const allFlags = useSelector(state => state.proposal.get('eventflag'));
 
   useEffect(() => {
     if (
@@ -46,6 +55,21 @@ const SystemIntegrations = ({
       setLatestSfAnswer(false);
     }
   }, [answers?.get(0)?.get('answer')]);
+
+  useEffect(() => {
+    let willShowCarryForwardIndication = canShowCarryForwardIndication;
+    if (Object.keys(allFlags).length > 0) {
+      if (allFlags['carryForwardAnswerFlag']) {
+        willShowCarryForwardIndication = true;
+      } else {
+        willShowCarryForwardIndication = false;
+      }
+
+      if (willShowCarryForwardIndication !== canShowCarryForwardIndication) {
+        setCanShowCarryForwardIndication(willShowCarryForwardIndication);
+      }
+    }
+  }, [allFlags]);
 
   const gridColRatio = isNotepadOpen ? [10, 2] : [11, 1];
   const SalesForceCondition = () => {
@@ -271,6 +295,41 @@ const SystemIntegrations = ({
   };
 
   const CalendarCondition = () => {
+    // calculate to show carry forward indication icon only if flag is enabled
+    if (canShowCarryForwardIndication) {
+      let showCarryForwardIndication = false;
+      if (bidAnswerCopy && latestAnsweredBidNo !== null) {
+        showCarryForwardIndication = true;
+      }
+
+      if (showCarryForwardIndication) {
+        return (
+          <Tooltip
+            variant="light"
+            title={`Answer derived from bid ${latestAnsweredBidNo}`}
+            placement="top"
+            tabIndex={-1}
+          >
+            <span>
+              <IconButton
+                style={{
+                  height: '24px',
+                  width: '24px',
+                  paddingLeft: '0px',
+                  paddingRight: '0px'
+                }}
+                onClick={answeronhistory}
+                className="bluecalendar"
+                tabIndex={-1}
+              >
+                <CalendarWithNum number={latestAnsweredBidNo} />
+              </IconButton>
+            </span>
+          </Tooltip>
+        );
+      }
+    }
+
     if (
       (answerdate === 'Not Answered' && !isAnswerPredicted) ||
       (lastAnswer
