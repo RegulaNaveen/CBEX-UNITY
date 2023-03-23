@@ -95,7 +95,7 @@ dev:
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
     - yarn cache clean
-    - yarn install
+    - yarn install --legacy-peer-deps
     - yarn build:$Environment
   artifacts:
     paths:
