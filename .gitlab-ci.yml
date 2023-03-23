@@ -89,14 +89,18 @@ dev:
   only:
     - dev
     - tags
+    - dev-buildcheck
   script:
     - cat $devaccount >> build.env
     - cat $frontendacmdev >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
-    - yarn cache clean
-    - yarn install --legacy-peer-deps
-    - yarn build:$Environment
+    #- yarn cache clean
+    #- yarn install --legacy-peer-deps
+    #- yarn build:$Environment
+    - npm cache clean
+    - npm install --legacy-peer-deps
+    - npm run build:$Environment
   artifacts:
     paths:
       - dist/
