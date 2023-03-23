@@ -98,7 +98,7 @@ dev:
     #- yarn cache clean
     #- yarn install --legacy-peer-deps
     #- yarn build:$Environment
-    #- npm cache clean --force
+    - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
   artifacts:
@@ -142,7 +142,7 @@ dev2:
     #- yarn cache clean
     #- yarn install --legacy-peer-deps
     #- yarn build:$Environment
-    #- npm cache clean --force
+    - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
   artifacts:
@@ -186,7 +186,7 @@ deploydev2:
     #- yarn cache clean
     #- yarn install --legacy-peer-deps
     #- yarn build:$Environment
-    #- npm cache clean --force
+    - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
   artifacts:
@@ -230,7 +230,7 @@ buildl4:
     #- yarn cache clean
     #- yarn install --legacy-peer-deps
     #- yarn build:$Environment
-    #- npm cache clean --force
+    - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
   artifacts:
@@ -276,7 +276,7 @@ demo:
     #- yarn cache clean
     #- yarn install --legacy-peer-deps
     #- yarn build:$Environment
-    #- npm cache clean --force
+    - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
   artifacts:
@@ -322,7 +322,7 @@ qa:
     #- yarn cache clean
     #- yarn install --legacy-peer-deps
     #- yarn build:$Environment
-    #- npm cache clean --force
+    - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
   artifacts:
@@ -367,7 +367,7 @@ uat:
     #- yarn cache clean
     #- yarn install --legacy-peer-deps
     #- yarn build:$Environment
-    #- npm cache clean --force
+    - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
   artifacts:
@@ -411,7 +411,7 @@ prod:
     #- yarn cache clean
     #- yarn install --legacy-peer-deps
     #- yarn build:$Environment
-    #- npm cache clean --force
+    - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
   artifacts:
