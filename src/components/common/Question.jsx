@@ -717,12 +717,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
     const checkDisableFlag = () => {
       if (this.isQuestionLockedByOther()) return true;
       if (NaLoading) return true;
-      if (sfField !== 'Associated_CRM_Numbers__c')
-        return (
-          checkNonEditableFields(noneditableField, sfField, sfObject) ||
-          !isCurrentBid
-        );
-      return !isCurrentBid;
+
+      return (
+        checkNonEditableFields(noneditableField, sfField, sfObject) ||
+        !isCurrentBid
+      );
     };
     // onFocus for question concurrency
     const concurrencyFocusHandler = () => {
