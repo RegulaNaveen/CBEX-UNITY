@@ -89,14 +89,18 @@ dev:
   only:
     - dev
     - tags
+    - dev-buildcheck
   script:
     - cat $devaccount >> build.env
     - cat $frontendacmdev >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
-    - yarn cache clean
-    - yarn install --legacy-peer-deps
-    - yarn build:$Environment
+    #- yarn cache clean
+    #- yarn install --legacy-peer-deps
+    #- yarn build:$Environment
+    #- npm cache clean --force
+    - npm install --legacy-peer-deps
+    - npm run build:$Environment
   artifacts:
     paths:
       - dist/
@@ -135,9 +139,12 @@ dev2:
     - cat $devaccount > build.env #(Skip if creating env in production account)
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
-    - yarn cache clean
-    - yarn install
-    - yarn build:$Environment
+    #- yarn cache clean
+    #- yarn install --legacy-peer-deps
+    #- yarn build:$Environment
+    #- npm cache clean --force
+    - npm install --legacy-peer-deps
+    - npm run build:$Environment
   artifacts:
     paths:
       - dist/
@@ -176,9 +183,12 @@ deploydev2:
     - cat $frontendacmdev >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
-    - yarn cache clean
-    - yarn install
-    - yarn build:$Environment
+    #- yarn cache clean
+    #- yarn install --legacy-peer-deps
+    #- yarn build:$Environment
+    #- npm cache clean --force
+    - npm install --legacy-peer-deps
+    - npm run build:$Environment
   artifacts:
     paths:
       - dist/
@@ -217,9 +227,12 @@ buildl4:
     - cat $prod_build >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
-    - yarn cache clean
-    - yarn install
-    - yarn build:$Environment
+    #- yarn cache clean
+    #- yarn install --legacy-peer-deps
+    #- yarn build:$Environment
+    #- npm cache clean --force
+    - npm install --legacy-peer-deps
+    - npm run build:$Environment
   artifacts:
     paths:
       - dist/
@@ -260,9 +273,12 @@ demo:
     - cat $frontendacmdev >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
-    - yarn cache clean
-    - yarn install
-    - yarn build:$Environment
+    #- yarn cache clean
+    #- yarn install --legacy-peer-deps
+    #- yarn build:$Environment
+    #- npm cache clean --force
+    - npm install --legacy-peer-deps
+    - npm run build:$Environment
   artifacts:
     paths:
       - dist/
@@ -303,9 +319,12 @@ qa:
     - cat $prod_build >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
-    - yarn cache clean
-    - yarn install
-    - yarn build:$Environment
+    #- yarn cache clean
+    #- yarn install --legacy-peer-deps
+    #- yarn build:$Environment
+    #- npm cache clean --force
+    - npm install --legacy-peer-deps
+    - npm run build:$Environment
   artifacts:
     paths:
       - dist/
@@ -345,9 +364,12 @@ uat:
     - cat $prod_build >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
-    - yarn cache clean
-    - yarn install
-    - yarn build:$Environment
+    #- yarn cache clean
+    #- yarn install --legacy-peer-deps
+    #- yarn build:$Environment
+    #- npm cache clean --force
+    - npm install --legacy-peer-deps
+    - npm run build:$Environment
   artifacts:
     paths:
       - dist/
@@ -386,9 +408,12 @@ prod:
     - cat $prod_build >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
-    - yarn cache clean
-    - yarn install
-    - yarn build:$Environment
+    #- yarn cache clean
+    #- yarn install --legacy-peer-deps
+    #- yarn build:$Environment
+    #- npm cache clean --force
+    - npm install --legacy-peer-deps
+    - npm run build:$Environment
   artifacts:
     paths:
       - dist/
