@@ -23,6 +23,9 @@ function QuestionsForCustomer() {
   const [autoScroll, setAutoScroll] = useState(false);
 
   const selectedBid = useSelector(getSelectedBid);
+  const lastSetQuestionData = useSelector(state =>
+    state.proposal.get('lastAddedQuestionData')
+  );
   const isCurrentBid = selectedBid.get('isCurrent');
   const questionsList = useSelector(getProposalQuestions);
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
@@ -30,8 +33,6 @@ function QuestionsForCustomer() {
   const [questions, setQuestions] = React.useState(new OrderedMap());
   const [showDeleteModal, setShowDeleteModal] = React.useState(false);
   const [questionToDelete, setQuestionToDelete] = React.useState(null);
-  const [newQuestionData, setNewQuestionData] = React.useState(null);
-  const [isNewQuestionAdded, setIsNewQuestionAdded] = React.useState(false);
   const [showScroll, setShowScroll] = React.useState(null);
 
   const dispatch = useDispatch();
@@ -57,14 +58,6 @@ function QuestionsForCustomer() {
           );
         }
       });
-
-      if (isNewQuestionAdded && sectionQuestions?.size > 0) {
-        setIsNewQuestionAdded(false);
-        setNewQuestionData(
-          Array.from(sectionQuestions)[sectionQuestions.size - 1][1]?.toJS()
-            .questionId
-        );
-      }
 
       setQuestions(sectionQuestions);
     } catch (error) {
@@ -110,7 +103,7 @@ function QuestionsForCustomer() {
         };
 
         setShowAddQuestionLoader(true);
-        setIsNewQuestionAdded(true);
+
         await dispatch(
           setProposalQuestion(proposalId, questionData, socketContext)
         );
@@ -261,7 +254,7 @@ function QuestionsForCustomer() {
                     isCurrentBid={isCurrentBid}
                     showScroll={showScroll}
                     socketContext={socketContext}
-                    newQuestionData={newQuestionData}
+                    newQuestionData={lastSetQuestionData?.questionId}
                   />
                 );
               })}
