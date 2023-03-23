@@ -98,7 +98,7 @@ dev:
     #- yarn cache clean
     #- yarn install --legacy-peer-deps
     #- yarn build:$Environment
-    - npm cache clean
+    #- npm cache clean
     - npm install --legacy-peer-deps
     - npm run build:$Environment
   artifacts:
