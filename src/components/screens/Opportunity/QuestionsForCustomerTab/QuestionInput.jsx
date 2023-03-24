@@ -15,7 +15,8 @@ const QuestionInput = ({
   checkDisableFlag,
   setShowLoader,
   questionIndex,
-  newQuestionData
+  newQuestionData,
+  setLastSetQuestionData
 }) => {
   const selectedBid = useSelector(getSelectedBid);
   const dispatch = useDispatch();
@@ -130,6 +131,7 @@ const QuestionInput = ({
       }
     },
     onFocus: () => {
+      setLastSetQuestionData({});
       quesTextInnerLeftRef.current.style.marginTop = '25px';
 
       questionLockWrapper(question?.questionId);

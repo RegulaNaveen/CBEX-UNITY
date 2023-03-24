@@ -249,6 +249,7 @@ function QuestionsForCustomer() {
               {questions?.valueSeq().map((questionData, index) => {
                 return (
                   <QuestionContainer
+                    key={`quesCont-${questionData.get('questionId')}`}
                     data-testid="question-container"
                     deleteQuestionHandler={deleteQuestionHandler}
                     questionData={questionData}
@@ -257,6 +258,7 @@ function QuestionsForCustomer() {
                     showScroll={showScroll}
                     socketContext={socketContext}
                     newQuestionData={lastSetQuestionData?.questionId}
+                    setLastSetQuestionData={setLastSetQuestionData}
                   />
                 );
               })}
