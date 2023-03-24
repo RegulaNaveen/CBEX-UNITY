@@ -360,16 +360,20 @@ export const resumeSearchAction = ({
       searchResults.autoNavigatedToCurrentResult = true;
     }
 
-    if (
-      (prevSearchResults.length > 0 &&
-        prevActiveSearchIndex > -1 &&
-        searchResults.newCurrentResultIndex > -1 &&
-        searchResults.results[searchResults.newCurrentResultIndex]
-          .searchIndex !==
-          prevSearchResults[prevActiveSearchIndex].searchIndex) ||
-      searchResults.newCurrentResultIndex === -1
+    if (searchResults.newCurrentResultIndex === -1) {
+      searchResults.prevResult = null;
+    } else if (
+      prevSearchResults.length > 0 &&
+      searchResults.count > 0 &&
+      prevActiveSearchIndex > -1 &&
+      searchResults.newCurrentResultIndex > -1 &&
+      prevSearchResults[prevActiveSearchIndex] &&
+      searchResults.results[searchResults.newCurrentResultIndex] &&
+      searchResults.results[searchResults.newCurrentResultIndex].searchIndex !==
+        prevSearchResults[prevActiveSearchIndex].searchIndex
     ) {
-      searchResults.prevResult = prevSearchResults[prevActiveSearchIndex];
+      searchResults.prevResult =
+        prevSearchResults[prevActiveSearchIndex] || null;
     } else {
       searchResults.prevResult = null;
     }
