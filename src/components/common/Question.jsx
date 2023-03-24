@@ -1271,7 +1271,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 onClick={val => {
                   this.onClickChange(val, answerValue).then(dataResponse => {
                     if (dataResponse && dataResponse.success) {
-                      this.context.questionUnlockWrapper(this.props.questionId);
+                      concurrencyBlurHandler();
                     }
                   });
                 }}
