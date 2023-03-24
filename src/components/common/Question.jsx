@@ -411,7 +411,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         userData
       );
     }
-    this.context.questionUnlockWrapper(questionId);
+    this.trackMatomoEventSubmitAnswer(selectedValue);
     // this.setSelectRow(false);
   };
 
