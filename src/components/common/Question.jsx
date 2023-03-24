@@ -1266,7 +1266,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 items={finalOptions}
                 onClick={val => {
                   this.onClickChange(val, answerValue);
-                  concurrencyBlurHandler();
                 }}
                 value={answerValue}
                 disabled={checkDisableFlagRadio() || isNotApplicable}
