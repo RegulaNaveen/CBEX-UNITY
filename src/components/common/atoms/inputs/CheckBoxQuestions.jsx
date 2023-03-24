@@ -163,6 +163,7 @@ const CheckBoxQuestions = (props: Props) => {
     if (forceBlur) {
       const popovers = document.getElementsByClassName('MuiPopover-root');
       popovers[0].children[0].click();
+      setFocus(false);
       onClose();
     }
   }, [forceBlur]);
