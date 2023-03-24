@@ -29,6 +29,7 @@ import {
 } from '../../../redux/selectors';
 import { createPdf } from './pdf-template';
 import fetchNotes from '../../../redux/actions/notepad-actions';
+import { getWebsocketNotesApi } from '../../../api/notepad';
 
 export const docType = {
   pdf: 'PDF',
@@ -130,10 +131,13 @@ const GenerateDocs = () => {
       return [];
     }
   };
-  const initExport = () => {
+  const initExport = async () => {
     try {
       const { fileName, fileType } = filterState;
       let exportBlob = null;
+      const notepadJSON = await getWebsocketNotesApi(
+        `doc-${selectedBid.get('id', '')}`
+      );
       if (fileType === docType.pdf) {
         exportBlob = createPdf({
           data: getSelectedBidData(),
@@ -141,7 +145,8 @@ const GenerateDocs = () => {
           filterState,
           image: logo.current,
           editor,
-          fileName: `${fileName}.pdf`
+          fileName: `${fileName}.pdf`,
+          notepadJSON
         });
         // exportBlob.then(blob => {
         //   saveAs(blob, `${fileName}.pdf`);
