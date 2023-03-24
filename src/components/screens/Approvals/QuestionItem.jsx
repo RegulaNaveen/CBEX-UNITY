@@ -109,9 +109,6 @@ const QuestionItem = ({
     }
   }, [approvalFilters]);
 
-  // Component will return null in case of empty question value
-  if (isEmpty(question)) return null;
-
   const socketContext = useContext(SocketContext);
   const [isShowHistory, setIsShowHistory] = useState(false);
 
@@ -318,7 +315,7 @@ const QuestionItem = ({
     }
   };
 
-  return useMemo(
+  const questionRender = useMemo(
     () =>
       isShowQuestion ? (
         <>
@@ -387,6 +384,11 @@ const QuestionItem = ({
       locked
     ]
   );
+
+  // Component will return null in case of empty question value
+  if (isEmpty(question)) return null;
+
+  return questionRender;
 };
 
 QuestionItem.defaultProps = {
@@ -403,7 +405,7 @@ QuestionItem.defaultProps = {
     visible: false,
     active: false
   },
-  updateQuestionVisibility: () => {}
+  updateQuestionVisibility: () => { }
 };
 QuestionItem.propTypes = {
   questionId: PropTypes.string.isRequired,
