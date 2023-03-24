@@ -166,7 +166,7 @@ const DnDOutsideResource = ({
         newEvent(event);
 
         handleDayChange(
-          moment(start).format('DD MMM YYYY'),
+          moment(start).format('DD-MMM-YYYY'),
           draggedQuestionData
         );
         setDraggedQuestionData(null);
@@ -180,7 +180,7 @@ const DnDOutsideResource = ({
 
       if (selectedEvent) {
         handleDayChange(
-          moment(start).format('DD MMM YYYY'),
+          moment(start).format('DD-MMM-YYYY'),
           selectedEvent?.question
         );
         const event = {
