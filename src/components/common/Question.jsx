@@ -411,7 +411,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         userData
       );
     }
-    this.trackMatomoEventSubmitAnswer(selectedValue);
+    this.context.questionUnlockWrapper(questionId);
     // this.setSelectRow(false);
   };
 
@@ -1264,7 +1264,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
               <RadioQuestionIdleStateDetection
                 id="dd-proposal-answer"
                 items={finalOptions}
-                onClick={val => this.onClickChange(val, answerValue)}
+                onClick={val => {
+                  this.onClickChange(val, answerValue);
+                  concurrencyBlurHandler();
+                }}
                 value={answerValue}
                 disabled={checkDisableFlagRadio() || isNotApplicable}
                 onFocus={concurrencyFocusHandler}
