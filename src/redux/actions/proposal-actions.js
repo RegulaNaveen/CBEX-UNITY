@@ -367,6 +367,7 @@ export const setProposalAnswerData = (
       }
       dispatch(setApprovalQuestionLoading(questionId, false));
       dispatch(setUnityTabQuestionLoading(questionId, false));
+      return { success: true };
     } catch (err) {
       console.log('error occurred ', err);
       dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err } });
@@ -591,6 +592,7 @@ export const setProposalQuestion = (
 
       dispatch({ type: PROPOSAL_SET_QUESTION, payload: data });
       if (socketContext) await socketContext?.addQuestionWrapper(data);
+      return data;
     } catch (err) {
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
     }

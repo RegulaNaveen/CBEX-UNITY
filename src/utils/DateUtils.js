@@ -27,5 +27,5 @@ export const parseMomentDate = (date: Date | string) => {
 };
 
 export const formatTheDate = (date: Date | string) => {
-  return !date ? date : moment(date).format('DD MMM YYYY');
+  return !date ? date : moment(date).format('DD-MMM-YYYY');
 };

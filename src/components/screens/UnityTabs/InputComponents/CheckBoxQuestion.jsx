@@ -16,7 +16,10 @@ const CheckBoxQuestion = ({
   userData,
   socketContext,
   trackMatomoEventSubmitAnswer,
-  checkDisableFlag
+  checkDisableFlag,
+  toggleWatch,
+  onCascadeChange,
+  forceBlur
 }) => {
   try {
     const dispatch = useDispatch();
@@ -74,6 +77,9 @@ const CheckBoxQuestion = ({
           onChange={e => changeHandler(e)}
           sfField={sfField}
           sfObject={sfObject}
+          toggleWatch={toggleWatch}
+          onCascadeChange={onCascadeChange}
+          forceBlur={forceBlur}
         />
       </div>
     );
@@ -84,7 +90,10 @@ const CheckBoxQuestion = ({
 };
 
 CheckBoxQuestion.defaultProps = {
-  disabled: false
+  disabled: false,
+  toggleWatch: () => {},
+  onCascadeChange: () => {},
+  forceBlur: false
 };
 CheckBoxQuestion.propTypes = {
   question: PropTypes.object.isRequired,

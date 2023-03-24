@@ -28,7 +28,8 @@ const QuestionContainer = ({
   questionIndex,
   isCurrentBid,
   socketContext,
-  newQuestionData
+  newQuestionData,
+  setLastSetQuestionData
 }) => {
   const question = questionData.toJS();
 
@@ -79,7 +80,8 @@ const QuestionContainer = ({
     checkDisableFlag,
     setShowLoader,
     questionIndex,
-    newQuestionData
+    newQuestionData,
+    setLastSetQuestionData
   };
 
   useEffect(() => {
@@ -110,7 +112,7 @@ const QuestionContainer = ({
 
   return (
     <>
-      <li className="" ref={questionContainerRef}>
+      <li key={`quesCard-${question.questionId}`} ref={questionContainerRef}>
         <Card
           className={classNames({
             'question-container': true,

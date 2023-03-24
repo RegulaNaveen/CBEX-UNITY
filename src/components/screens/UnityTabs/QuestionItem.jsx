@@ -21,15 +21,6 @@ import QuestionLabel from './QuestionLabel';
 import AnswerHistory from '../../views/modals/AnswerHistory';
 import ANSWER_TYPES from '../../../constants/answerTypes';
 import { getCountriesNameForCode } from '../../../utils/utils';
-import TextQuestion from './InputComponents/TextQuestion';
-import NumberQuestion from './InputComponents/NumberQuestion';
-import DateQuestion from './InputComponents/DateQuestion';
-import RadioQuestion from './InputComponents/RadioQuestion';
-import SelectQuestion from './InputComponents/SelectQuestion';
-import MultiSelectQuestion from './InputComponents/MultiSelectQuestion';
-import YesNoQuestion from './InputComponents/YesNoQuestion';
-import CheckBoxQuestion from './InputComponents/CheckBoxQuestion';
-import ProposalTeamQuestion from './InputComponents/ProposalTeamQuestion';
 import { getUserName, getUserEmail, getUserId } from '../../../SessionHandler';
 import { SocketContext } from '../../../context/SocketContext';
 import SFAnswerValidationWrapper from '../../common/SFAnswerValidationWrapper';
@@ -48,16 +39,42 @@ import { parseMomentDate } from '../../../utils/DateUtils';
 import SystemIntegrations from '../../common/SystemIntegrations/SystemIntegrations';
 import EventLauncher from '../Opportunity/EventLauncher';
 import { autoNavigationCompletedAction } from '../../../redux/actions/search-actions';
+import withIdleStateDetection from '../../HOC/IdleStateDetector';
+
+import TextQuestion from './InputComponents/TextQuestion';
+import NumberQuestion from './InputComponents/NumberQuestion';
+import DateQuestion from './InputComponents/DateQuestion';
+import RadioQuestion from './InputComponents/RadioQuestion';
+import SelectQuestion from './InputComponents/SelectQuestion';
+import MultiSelectQuestion from './InputComponents/MultiSelectQuestion';
+import YesNoQuestion from './InputComponents/YesNoQuestion';
+import CheckBoxQuestion from './InputComponents/CheckBoxQuestion';
+import ProposalTeamQuestion from './InputComponents/ProposalTeamQuestion';
+
+const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
+const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
+  SelectQuestion
+);
+const MultiSelectQuestionWithIdleStateDetection = withIdleStateDetection(
+  MultiSelectQuestion
+);
+const YesNoQuestionWithIdleStateDetection = withIdleStateDetection(
+  YesNoQuestion
+);
+
+const CheckBoxQuestionWithIdleStateDetection = withIdleStateDetection(
+  CheckBoxQuestion
+);
 
 const QuestionItem = ({
   questionId = '',
   UnityTabSectionTitle = '',
   disabled,
-  isQuesFreezed,
   eventCategories,
   trackEvent,
   updateQuestionVisibility
 }) => {
+  const [locked, setLocked] = useState(false);
   const question = useSelector(getQuestion(questionId));
   const unityTabQuestionLoading = useSelector(
     getUnityTabQuestionLoading
@@ -77,6 +94,14 @@ const QuestionItem = ({
   useEffect(() => {
     updateQuestionVisibility(questionId, isShowQuestion);
   }, [unityTabFilters]);
+
+  useEffect(() => {
+    if (question && question.questionLockInfo) {
+      setLocked(true);
+    } else {
+      setLocked(false);
+    }
+  }, [question]);
 
   useEffect(() => {
     if (currentSearchResult !== null && questionTextRef.current !== null) {
@@ -216,11 +241,7 @@ const QuestionItem = ({
   const renderQuestion = () => {
     const lastAnswer = getLastAnswer(question);
 
-    const checkDisableFlag = () => {
-      if (isQuestionLockedByOther()) return true;
-
-      return false;
-    };
+    const checkDisableFlag = () => locked;
     const inputProps = {
       question,
       lastAnswer,
@@ -247,36 +268,100 @@ const QuestionItem = ({
       );
     }
 
-    const ComponentMapper = {
-      [ANSWER_TYPES.TEXT]: <TextQuestion {...inputProps} />,
-      [ANSWER_TYPES.NUMBER]: <NumberQuestion {...inputProps} />,
-      [ANSWER_TYPES.DATE]: <DateQuestion {...inputProps} />,
-      [ANSWER_TYPES.RADIO]: <RadioQuestion {...inputProps} />,
-      [ANSWER_TYPES.SELECT_LOOKUP]: <SelectQuestion {...inputProps} />,
-      [ANSWER_TYPES.SELECT]: <SelectQuestion {...inputProps} />,
-      [ANSWER_TYPES.PICKLIST]: <MultiSelectQuestion {...inputProps} />,
-      [ANSWER_TYPES.PICKLIST_LOOKUP]: <MultiSelectQuestion {...inputProps} />,
-      [ANSWER_TYPES.YES_NO]: <YesNoQuestion {...inputProps} />,
-      [ANSWER_TYPES.CHECKBOX]: <CheckBoxQuestion {...inputProps} />
-    };
+    if (
+      !Object.values(ANSWER_TYPES).includes(question?.answerConfiguration?.type)
+    ) {
+      return <FallbackComponent />;
+    }
 
-    const SFNestedAnswerItem = () => {
-      return (
-        <SFAnswerValidationWrapper
-          hasDifferentSFanswer={question.hasDifferentSFanswer}
-          sfObject={question.sfObject}
-        >
-          {ComponentMapper[question?.answerConfiguration?.type]}
-        </SFAnswerValidationWrapper>
-      );
-    };
-
-    return ComponentMapper[question?.answerConfiguration?.type] ? (
-      <SFNestedAnswerItem />
-    ) : (
-      <FallbackComponent />
-    );
+    switch (question?.answerConfiguration?.type) {
+      case ANSWER_TYPES.TEXT: {
+        return (
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={question.hasDifferentSFanswer}
+            sfObject={question.sfObject}
+          >
+            <TextQuestion {...inputProps} />
+          </SFAnswerValidationWrapper>
+        );
+      }
+      case ANSWER_TYPES.NUMBER: {
+        return (
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={question.hasDifferentSFanswer}
+            sfObject={question.sfObject}
+          >
+            <NumberQuestion {...inputProps} />
+          </SFAnswerValidationWrapper>
+        );
+      }
+      case ANSWER_TYPES.DATE: {
+        return (
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={question.hasDifferentSFanswer}
+            sfObject={question.sfObject}
+          >
+            <DateQuestionWithIdleStateDetection {...inputProps} />
+          </SFAnswerValidationWrapper>
+        );
+      }
+      case ANSWER_TYPES.RADIO: {
+        return (
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={question.hasDifferentSFanswer}
+            sfObject={question.sfObject}
+          >
+            <RadioQuestion {...inputProps} />
+          </SFAnswerValidationWrapper>
+        );
+      }
+      case ANSWER_TYPES.SELECT:
+      case ANSWER_TYPES.SELECT_LOOKUP: {
+        return (
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={question.hasDifferentSFanswer}
+            sfObject={question.sfObject}
+          >
+            <SelectQuestionWithIdleStateDetection {...inputProps} />
+          </SFAnswerValidationWrapper>
+        );
+      }
+      case ANSWER_TYPES.PICKLIST_LOOKUP:
+      case ANSWER_TYPES.PICKLIST: {
+        return (
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={question.hasDifferentSFanswer}
+            sfObject={question.sfObject}
+          >
+            <MultiSelectQuestionWithIdleStateDetection {...inputProps} />
+          </SFAnswerValidationWrapper>
+        );
+      }
+      case ANSWER_TYPES.YES_NO: {
+        return (
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={question.hasDifferentSFanswer}
+            sfObject={question.sfObject}
+          >
+            <YesNoQuestionWithIdleStateDetection {...inputProps} />
+          </SFAnswerValidationWrapper>
+        );
+      }
+      case ANSWER_TYPES.CHECKBOX: {
+        return (
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={question.hasDifferentSFanswer}
+            sfObject={question.sfObject}
+          >
+            <CheckBoxQuestionWithIdleStateDetection {...inputProps} />
+          </SFAnswerValidationWrapper>
+        );
+      }
+      default:
+        return <FallbackComponent />;
+    }
   };
+
   const renderTags = () => {
     const { milestone, milestoneNew } = question;
     const lastAnswer = getLastAnswer(question);
@@ -522,7 +607,7 @@ const QuestionItem = ({
                 currentSearchResult !== null &&
                 currentSearchResult.searchIndex === questionId &&
                 currentSearchResult.sectionName !== null &&
-                  currentSearchResult.sectionName === UnityTabSectionTitle
+                currentSearchResult.sectionName === UnityTabSectionTitle
             })}
           >
             <Grid container>
@@ -567,7 +652,6 @@ const QuestionItem = ({
                 <div className="system-icon-custom-tab">
                   {SystemIcon(unityTabQuestionLoading)}
                 </div>
-                {/* !isQuesFreezed && */}
               </Grid>
             </Grid>
           </Box>
@@ -577,7 +661,6 @@ const QuestionItem = ({
             <AnswerHistory
               question={prepareAnswerHistoryData(question)}
               tab="UnityTab"
-              isQuesFreezed={!!isQuesFreezed}
               closeModal={() => {
                 setIsShowHistory(false);
               }}
@@ -600,14 +683,12 @@ const QuestionItem = ({
 
 QuestionItem.defaultProps = {
   disabled: false,
-  isQuesFreezed: false,
   updateQuestionVisibility: () => {}
 };
 QuestionItem.propTypes = {
   questionId: PropTypes.string.isRequired,
   UnityTabSectionTitle: PropTypes.string.isRequired,
   disabled: PropTypes.any,
-  isQuesFreezed: PropTypes.any,
   eventCategories: PropTypes.object.isRequired,
   trackEvent: PropTypes.func.isRequired,
   updateQuestionVisibility: PropTypes.func
