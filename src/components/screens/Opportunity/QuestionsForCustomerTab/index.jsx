@@ -23,9 +23,8 @@ function QuestionsForCustomer() {
   const [autoScroll, setAutoScroll] = useState(false);
 
   const selectedBid = useSelector(getSelectedBid);
-  const lastSetQuestionData = useSelector(state =>
-    state.proposal.get('lastAddedQuestionData')
-  );
+
+  const [lastSetQuestionData, setLastSetQuestionData] = useState({});
   const isCurrentBid = selectedBid.get('isCurrent');
   const questionsList = useSelector(getProposalQuestions);
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
@@ -106,7 +105,10 @@ function QuestionsForCustomer() {
 
         await dispatch(
           setProposalQuestion(proposalId, questionData, socketContext)
-        );
+        ).then(response => {
+          setLastSetQuestionData(response);
+        });
+
         setShowAddQuestionLoader(false);
         setAutoScroll(true);
       } catch (error) {
@@ -247,6 +249,7 @@ function QuestionsForCustomer() {
               {questions?.valueSeq().map((questionData, index) => {
                 return (
                   <QuestionContainer
+                    key={`quesCont-${questionData.get('questionId')}`}
                     data-testid="question-container"
                     deleteQuestionHandler={deleteQuestionHandler}
                     questionData={questionData}
@@ -255,6 +258,7 @@ function QuestionsForCustomer() {
                     showScroll={showScroll}
                     socketContext={socketContext}
                     newQuestionData={lastSetQuestionData?.questionId}
+                    setLastSetQuestionData={setLastSetQuestionData}
                   />
                 );
               })}

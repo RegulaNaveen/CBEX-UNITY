@@ -182,8 +182,7 @@ const INITIAL_STATE: Map = fromJS({
   activeTabIndex: 0, // Strategy Development, Approvals, Documents,
   activeVTabIndex: 0, // Questions for Customer, Notepad, Proposal Team
   vTabUserPreference: {},
-  panelStatus: false,
-  lastAddedQuestionData: {}
+  panelStatus: false
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -991,7 +990,6 @@ const onSetQuestion = (state: Map, action: Object): Map => {
       cloneDeep(updatedProposalQuestions)
     )
     .set('setQuestionData', data)
-    .set('lastAddedQuestionData', data)
     .set('isSetQuestionLoading', false);
 };
 
