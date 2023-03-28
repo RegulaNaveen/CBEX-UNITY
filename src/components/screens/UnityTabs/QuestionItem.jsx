@@ -21,15 +21,7 @@ import QuestionLabel from './QuestionLabel';
 import AnswerHistory from '../../views/modals/AnswerHistory';
 import ANSWER_TYPES from '../../../constants/answerTypes';
 import { getCountriesNameForCode } from '../../../utils/utils';
-import TextQuestion from './InputComponents/TextQuestion';
-import NumberQuestion from './InputComponents/NumberQuestion';
-import DateQuestion from './InputComponents/DateQuestion';
-import RadioQuestion from './InputComponents/RadioQuestion';
-import SelectQuestion from './InputComponents/SelectQuestion';
-import MultiSelectQuestion from './InputComponents/MultiSelectQuestion';
-import YesNoQuestion from './InputComponents/YesNoQuestion';
-import CheckBoxQuestion from './InputComponents/CheckBoxQuestion';
-import ProposalTeamQuestion from './InputComponents/ProposalTeamQuestion';
+
 import { getUserName, getUserEmail, getUserId } from '../../../SessionHandler';
 import { SocketContext } from '../../../context/SocketContext';
 import SFAnswerValidationWrapper from '../../common/SFAnswerValidationWrapper';
@@ -48,6 +40,32 @@ import { parseMomentDate } from '../../../utils/DateUtils';
 import SystemIntegrations from '../../common/SystemIntegrations/SystemIntegrations';
 import EventLauncher from '../Opportunity/EventLauncher';
 import { autoNavigationCompletedAction } from '../../../redux/actions/search-actions';
+import withIdleStateDetection from '../../HOC/IdleStateDetector';
+
+import TextQuestion from './InputComponents/TextQuestion';
+import NumberQuestion from './InputComponents/NumberQuestion';
+import DateQuestion from './InputComponents/DateQuestion';
+import RadioQuestion from './InputComponents/RadioQuestion';
+import SelectQuestion from './InputComponents/SelectQuestion';
+import MultiSelectQuestion from './InputComponents/MultiSelectQuestion';
+import YesNoQuestion from './InputComponents/YesNoQuestion';
+import CheckBoxQuestion from './InputComponents/CheckBoxQuestion';
+import ProposalTeamQuestion from './InputComponents/ProposalTeamQuestion';
+
+const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
+const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
+  SelectQuestion
+);
+const MultiSelectQuestionWithIdleStateDetection = withIdleStateDetection(
+  MultiSelectQuestion
+);
+const YesNoQuestionWithIdleStateDetection = withIdleStateDetection(
+  YesNoQuestion
+);
+
+const CheckBoxQuestionWithIdleStateDetection = withIdleStateDetection(
+  CheckBoxQuestion
+);
 
 const QuestionItem = ({
   questionId = '',
@@ -58,6 +76,7 @@ const QuestionItem = ({
   trackEvent,
   updateQuestionVisibility
 }) => {
+  const [locked, setLocked] = useState(false);
   const question = useSelector(getQuestion(questionId));
   const unityTabQuestionLoading = useSelector(
     getUnityTabQuestionLoading
@@ -77,6 +96,14 @@ const QuestionItem = ({
   useEffect(() => {
     updateQuestionVisibility(questionId, isShowQuestion);
   }, [unityTabFilters]);
+
+  useEffect(() => {
+    if (question && question.questionLockInfo) {
+      setLocked(true);
+    } else {
+      setLocked(false);
+    }
+  }, [question]);
 
   useEffect(() => {
     if (currentSearchResult !== null && questionTextRef.current !== null) {
@@ -216,11 +243,7 @@ const QuestionItem = ({
   const renderQuestion = () => {
     const lastAnswer = getLastAnswer(question);
 
-    const checkDisableFlag = () => {
-      if (isQuestionLockedByOther()) return true;
-
-      return false;
-    };
+    const checkDisableFlag = () => locked;
     const inputProps = {
       question,
       lastAnswer,
@@ -522,7 +545,7 @@ const QuestionItem = ({
                 currentSearchResult !== null &&
                 currentSearchResult.searchIndex === questionId &&
                 currentSearchResult.sectionName !== null &&
-                  currentSearchResult.sectionName === UnityTabSectionTitle
+                currentSearchResult.sectionName === UnityTabSectionTitle
             })}
           >
             <Grid container>

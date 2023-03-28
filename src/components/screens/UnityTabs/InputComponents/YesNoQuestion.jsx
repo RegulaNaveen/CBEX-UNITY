@@ -11,7 +11,10 @@ const YesNoQuestion = ({
   userData,
   socketContext,
   trackMatomoEventSubmitAnswer,
-  checkDisableFlag
+  checkDisableFlag,
+  toggleWatch,
+  onCascadeChange,
+  forceBlur
 }) => {
   try {
     const dispatch = useDispatch();
@@ -42,6 +45,7 @@ const YesNoQuestion = ({
     return (
       <>
         <YNDropdown
+          data-testid="YNFropdown-yes-no question"
           items={optionsYN}
           disabled={checkDisableFlag() || !!disabled}
           questionId={question.questionId}
@@ -53,6 +57,9 @@ const YesNoQuestion = ({
           onBlur={() => {
             questionUnlockWrapper(question?.questionId);
           }}
+          toggleWatch={toggleWatch}
+          onCascadeChange={onCascadeChange}
+          forceBlur={forceBlur}
         />
       </>
     );
@@ -63,7 +70,10 @@ const YesNoQuestion = ({
 };
 
 YesNoQuestion.defaultProps = {
-  disabled: false
+  disabled: false,
+  toggleWatch: () => {},
+  onCascadeChange: () => {},
+  forceBlur: false
 };
 YesNoQuestion.propTypes = {
   question: PropTypes.object.isRequired,
@@ -71,7 +81,10 @@ YesNoQuestion.propTypes = {
   disabled: PropTypes.any,
   userData: PropTypes.any.isRequired,
   socketContext: PropTypes.object.isRequired,
-  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired
+  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired,
+  toggleWatch: PropTypes.func,
+  onCascadeChange: PropTypes.func,
+  forceBlur: PropTypes.bool
 };
 
 export default YesNoQuestion;

@@ -89,6 +89,7 @@ class Multiselect extends PureComponent<Props, State> {
       if (isOpen) {
         this.setState({ isOpen: false }, () => {
           setSelectRow(false);
+          this.context?.questionUnlockWrapper(questionId);
         });
       }
       if (toggleWatch) toggleWatch(false);
