@@ -16,7 +16,8 @@ const AnswerInput = ({
   socketContext,
   checkDisableFlag,
   setShowLoader,
-  questionIndex
+  questionIndex,
+  setLastSetQuestionData
 }) => {
   const dispatch = useDispatch();
   const quesTextInnerLeftRef = React.createRef();
@@ -123,6 +124,7 @@ const AnswerInput = ({
       }
     },
     onFocus: () => {
+      setLastSetQuestionData({});
       quesTextInnerLeftRef.current.style.marginTop = '25px';
       questionLockWrapper(question?.questionId);
     }

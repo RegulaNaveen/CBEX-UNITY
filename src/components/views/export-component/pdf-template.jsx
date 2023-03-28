@@ -548,7 +548,7 @@ function questionTables(allQuestions, proposalQuestions) {
   return html;
 }
 
-function getNotesRows(notes, editor) {
+function getNotesRows(notes, notepadJSON) {
   let html = ``;
   html += `<div id="resp-table" class="notesTable table marginTop20">`;
   html += `<div class="resp-table-row">`;
@@ -556,21 +556,21 @@ function getNotesRows(notes, editor) {
   html += `</div>`;
   html += `</div>`;
   let data = ``;
-  const getEmailID = (str) => {
+  const getEmailID = str => {
     return String(str).match(
       /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
     );
   };
   data += `<div id="resp-table" class="notesData" style="border-bottom: 1px solid #000;"><div class="resp-table-row"><div class="notes-ol" style="padding: 15px;">`;
   try {
-    const noteText = editor.getJSON();
+    const noteText = notepadJSON?.noteJson;
     try {
       data += generateHTML(noteText, [
         StarterKit,
         Link.configure({
           autolink: true,
           linkOnPaste: false,
-          validate: (href) => /^https?:\/\// || /^www?:\/\//.test(href),
+          validate: href => /^https?:\/\// || /^www?:\/\//.test(href),
           protocols: ['ftp', 'mailto'],
           HTMLAttributes: {
             class: 'my-custom-class'
@@ -619,7 +619,8 @@ function getHtml(
   notes,
   filterState,
   editor,
-  fileName
+  fileName,
+  notepadJSON
 ) {
   let html = ` 
   ${getStyled()}
@@ -630,7 +631,7 @@ function getHtml(
 </div></div>${getHeaderInfoRows(proposalDetails)}
          ${getProposalTeamsRows(questions)}
          ${questionTables(questions, filteredQuestions)}
-         ${filterState.includesNotes ? getNotesRows(notes, editor) : ''}
+         ${filterState.includesNotes ? getNotesRows(notes, notepadJSON) : ''}
       </div>   </div></div>    `;
   // this is added to handle , some data having unclosed span tag.
   const SpanExp = new RegExp('([^<])/span>', 'g');
@@ -677,7 +678,8 @@ const MyDoc = (
   notes,
   filterState,
   editor,
-  fileName
+  fileName,
+  notepadJSON
 ) => {
   return (
     <Document>
@@ -691,7 +693,8 @@ const MyDoc = (
           notes,
           filterState,
           editor,
-          fileName
+          fileName,
+          notepadJSON
         )}
       </Html>
     </Document>
@@ -703,7 +706,8 @@ export function createPdf(content) {
     notes,
     filterState,
     editor,
-    fileName
+    fileName,
+    notepadJSON
   } = content;
   const filteredQuestions = getFilteredQuestion(proposalQuestions, filterState);
   return MyDoc(
@@ -713,6 +717,7 @@ export function createPdf(content) {
     notes,
     filterState,
     editor,
-    fileName
+    fileName,
+    notepadJSON
   );
 }
