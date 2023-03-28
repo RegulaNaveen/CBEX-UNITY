@@ -116,8 +116,8 @@
     "uuid": "^8.3.0",
     "y-indexeddb": "^9.0.9",
     "y-protocols": "^1.0.5",
-    "y-websocket": "^1.4.3",
-    "yjs": "13.5.12"
+    "y-websocket": "^1.5.0",
+    "yjs": "^13.5.50"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
