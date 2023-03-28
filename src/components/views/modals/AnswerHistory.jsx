@@ -806,7 +806,6 @@ class AnswerHistory extends Component<Props> {
                 if (added.includes(ans)) return renderWord(ans, 'changed');
               });
             }
-            console.log('nextAnswer, answer', nextAnswer, answer);
             const diffAnswers = diffWordsWithSpace(nextAnswer, answer);
             return rearrangeDiff(diffAnswers).map(
               ({ value, added, removed }) => {
