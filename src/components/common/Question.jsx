@@ -19,7 +19,7 @@ import Highlighter from 'react-highlight-words';
 import { Edit } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
 import TextArea from './atoms/inputs/TextArea';
-import { parseMomentDate } from '../../utils/DateUtils';
+import { formatTheDate, parseMomentDate } from '../../utils/DateUtils';
 import Multiselect from './atoms/inputs/Multiselect';
 import CheckBoxQuestions from './atoms/inputs/CheckBoxQuestions';
 import Qvidianquestions from './qvidian';
@@ -433,7 +433,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
           this.context,
           proposalId,
           questionId,
-          selectedDay,
+          formatTheDate(selectedDay),
           userData
         );
     });
