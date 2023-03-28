@@ -556,7 +556,6 @@ class AnswerHistory extends Component<Props> {
     const { question } = this.state;
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const sectionName = question.getIn(['section', 'sectionName']);
-    const lastChangedInBid = question.get('latestAnsweredBidNo', null);
     let answers = question.get('answers').reverse();
     const questionId = answers.get('questionId');
     if (questionId) answers = question.getIn(['answers', 'answers']).reverse();
@@ -807,6 +806,7 @@ class AnswerHistory extends Component<Props> {
                 if (added.includes(ans)) return renderWord(ans, 'changed');
               });
             }
+            console.log('nextAnswer, answer', nextAnswer, answer);
             const diffAnswers = diffWordsWithSpace(nextAnswer, answer);
             return rearrangeDiff(diffAnswers).map(
               ({ value, added, removed }) => {
