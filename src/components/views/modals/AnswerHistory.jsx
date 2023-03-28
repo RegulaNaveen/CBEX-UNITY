@@ -347,7 +347,8 @@ class AnswerHistory extends Component<Props> {
       eventCategories,
       events,
       opportunityData,
-      tab
+      tab,
+      selectedBid
     } = this.props;
     const { question } = this.state;
     const questionType = question.getIn(['answerConfiguration', 'type']);
@@ -374,7 +375,7 @@ class AnswerHistory extends Component<Props> {
     ) {
       setProposalAnswer(
         this.context,
-        proposalId,
+        selectedBid.get('id'),
         questionId,
         carryForwardAnswer.get('answer'),
         userData
@@ -382,7 +383,7 @@ class AnswerHistory extends Component<Props> {
     } else {
       setProposalAnswer(
         this.context,
-        proposalId,
+        selectedBid.get('id'),
         questionId,
         String(carryForwardAnswer.get('answer')).trim(),
         userData,
@@ -430,7 +431,8 @@ class AnswerHistory extends Component<Props> {
       events,
       opportunityData,
       userData,
-      tab
+      tab,
+      selectedBid
     } = this.props;
     const { question } = this.state;
     const questionType = question.getIn(['answerConfiguration', 'type']);
@@ -455,11 +457,17 @@ class AnswerHistory extends Component<Props> {
       answerType === ANSWER_TYPES.PICKLIST_LOOKUP ||
       answerType === ANSWER_TYPES.CHECKBOX
     ) {
-      setProposalAnswer(this.context, proposalId, questionId, [], userData);
+      setProposalAnswer(
+        this.context,
+        selectedBid.get('id'),
+        questionId,
+        [],
+        userData
+      );
     } else {
       setProposalAnswer(
         this.context,
-        proposalId,
+        selectedBid.get('id'),
         questionId,
         ' ',
         userData,
@@ -544,7 +552,7 @@ class AnswerHistory extends Component<Props> {
   };
 
   renderContent = () => {
-    const { opportunityData } = this.props;
+    const { opportunityData, selectedBid } = this.props;
     const { question } = this.state;
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const sectionName = question.getIn(['section', 'sectionName']);
@@ -607,7 +615,7 @@ class AnswerHistory extends Component<Props> {
         : answer;
 
       if (answers.get(index + 1)) {
-        nextAnswer = answers.get(index + 1).get('formattedAnswer');
+        // nextAnswer = answers.get(index + 1).get('answer');
         if (!isEmpty(nextAnswerCheck)) {
           nextAnswer =
             handleUserMentionInAnswer(nextAnswerCheck, nextAnswer) ||
@@ -625,6 +633,20 @@ class AnswerHistory extends Component<Props> {
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'UnityPredictedAnswer' &&
         answer === nextAnswer;
+
+      const isAcceptedCarryForwardedAnswer =
+        questionType !== ANSWER_TYPES.PICKLIST &&
+        questionType !== ANSWER_TYPES.PICKLIST_LOOKUP &&
+        answers.get(index + 1) &&
+        answers.get(index + 1).get('userName') === 'CarryForwardAnswer' &&
+        answer !== ' ' &&
+        answer === nextAnswer;
+
+      const isRejectedCarryForwardedAnswer =
+        answers.get(index + 1) &&
+        answers.get(index + 1).get('userName') === 'CarryForwardAnswer' &&
+        answer === ' ';
+
       // picklist answers are array so they require different check than other question types
       const isPicklistValidUnityPredAns =
         (questionType === ANSWER_TYPES.PICKLIST ||
@@ -632,6 +654,23 @@ class AnswerHistory extends Component<Props> {
         answers &&
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'UnityPredictedAnswer' &&
+        answers
+          .get(index + 1)
+          .get('answer')
+          .toJS()
+          .join(',') ===
+          answers
+            .get(index)
+            .get('answer')
+            .toJS()
+            .join(',');
+
+      const doesPicklistAcceptedCarryForwardAnswer =
+        (questionType === ANSWER_TYPES.PICKLIST ||
+          questionType === ANSWER_TYPES.PICKLIST_LOOKUP) &&
+        answers &&
+        answers.get(index + 1) &&
+        answers.get(index + 1).get('userName') === 'CarryForwardAnswer' &&
         answers
           .get(index + 1)
           .get('answer')
@@ -684,6 +723,50 @@ class AnswerHistory extends Component<Props> {
             </span>
           );
         }
+
+        if (isAcceptedCarryForwardedAnswer) {
+          return (
+            <span key={uuidv4()} className="carry-forwarded-section">
+              {answers.get(index).get('userName') === 'CarryForwardAnswer' &&
+              answers.get(index + 1).get('userName') ===
+                'CarryForwardAnswer' ? (
+                questionType === 'date' ? (
+                  `${parseMomentDate(_answer.get('answer'))}`
+                ) : (
+                  `${_answer.get('answer')}`
+                )
+              ) : (
+                <b>Validated Unity Predicted Answer</b>
+              )}
+            </span>
+          );
+        }
+
+        if (doesPicklistAcceptedCarryForwardAnswer)
+          return (
+            <span key={uuidv4()} className="carry-forwarded-section">
+              {answers.get(index).get('userName') === 'CarryForwardAnswer' &&
+              answers.get(index + 1).get('userName') ===
+                'CarryForwardAnswer' ? (
+                _answer.get('answer').map(singleAnswer => (
+                  <li key={uuidv4()} className="multi-select-answer-history">
+                    {singleAnswer}
+                  </li>
+                ))
+              ) : (
+                <b>Accepted Carry Forwarded Answer</b>
+              )}
+            </span>
+          );
+
+        if (isRejectedCarryForwardedAnswer) {
+          return (
+            <span key={uuidv4()} className="carry-forwarded-section">
+              {<b>Rejected Carry Forwarded Answer</b>}
+            </span>
+          );
+        }
+
         if (
           questionType !== ANSWER_TYPES.PICKLIST &&
           questionType !== ANSWER_TYPES.PICKLIST_LOOKUP &&
@@ -723,7 +806,6 @@ class AnswerHistory extends Component<Props> {
                 if (added.includes(ans)) return renderWord(ans, 'changed');
               });
             }
-            console.log('nextAnswer, answer', nextAnswer, answer);
             const diffAnswers = diffWordsWithSpace(nextAnswer, answer);
             return rearrangeDiff(diffAnswers).map(
               ({ value, added, removed }) => {
@@ -933,7 +1015,7 @@ class AnswerHistory extends Component<Props> {
                 </div>
               ) : null}
               {indexNo === 0 &&
-              isCurrentBid === bidNo &&
+              selectedBid.get('isCurrent', false) &&
               lastAnswer?.userName === 'CarryForwardAnswer' &&
               userName === 'CarryForwardAnswer' ? (
                 <div className="answer-meta-buttons">
