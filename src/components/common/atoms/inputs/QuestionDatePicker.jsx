@@ -93,7 +93,7 @@ const QuestionDatePicker = ({
           if (dte && dateregx.test(dte)) {
             dte = String(dte).split('-');
             dte = `${yr.indexOf(dte[1]) + 1}/${dte[0]}/${dte[2]}`;
-            handleDayChange(moment(dte).format(), value);
+            handleDayChange(moment(dte).format('DD-MMM-YYYY'), value);
           }
           if (!dte) handleDayChange(' ', value);
           if (onCascadeChange) onCascadeChange();
