@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import QuestionDatePicker from '../../../common/atoms/inputs/QuestionDatePicker';
@@ -12,7 +12,10 @@ const DateQuestion = ({
   userData,
   socketContext,
   trackMatomoEventSubmitAnswer,
-  checkDisableFlag
+  checkDisableFlag,
+  toggleWatch,
+  onCascadeChange,
+  forceBlur
 }) => {
   const dispatch = useDispatch();
   const { questionLockWrapper, questionUnlockWrapper } = socketContext;
@@ -63,27 +66,37 @@ const DateQuestion = ({
     } catch (error) {
       console.error(error);
       questionUnlockWrapper(question?.questionId);
+    } finally {
+      if (toggleWatch) toggleWatch(false);
     }
   };
+  const handleFocus = useCallback(() => {
+    questionLockWrapper(question?.questionId);
+  }, [socketContext, question]);
 
+  const handleBlur = useCallback(() => {
+    questionUnlockWrapper(question?.questionId);
+  }, [socketContext, question]);
   return (
     <QuestionDatePicker
       disabled={checkDisableFlag() || !!disabled}
       value={lastAnswer.answer}
       resetDate={resetDate}
       handleDayChange={handleDayChange}
-      onFocus={() => {
-        questionLockWrapper(question?.questionId);
-      }}
-      onBlur={() => {
-        questionUnlockWrapper(question?.questionId);
-      }}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      toggleWatch={toggleWatch}
+      onCascadeChange={onCascadeChange}
+      forceBlur={forceBlur}
     />
   );
 };
 
 DateQuestion.defaultProps = {
-  disabled: false
+  disabled: false,
+  toggleWatch: () => {},
+  onCascadeChange: () => {},
+  forceBlur: false
 };
 DateQuestion.propTypes = {
   question: PropTypes.object.isRequired,
@@ -91,7 +104,10 @@ DateQuestion.propTypes = {
   disabled: PropTypes.any,
   userData: PropTypes.any.isRequired,
   socketContext: PropTypes.object.isRequired,
-  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired
+  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired,
+  toggleWatch: PropTypes.func,
+  onCascadeChange: PropTypes.func,
+  forceBlur: PropTypes.bool
 };
 
 export default DateQuestion;

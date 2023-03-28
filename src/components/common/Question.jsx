@@ -399,20 +399,25 @@ export class TaskRow extends React.PureComponent<Props, State> {
     }
   };
 
-  onClickChange = (selectedValue: string, lastAnswer: string) => {
+  onClickChange = async (selectedValue: string, lastAnswer: string) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
 
     if (lastAnswer !== selectedValue) {
-      setProposalAnswer(
+      const dataResponse = await setProposalAnswer(
         this.context,
         proposalId,
         questionId,
         selectedValue,
         userData
       );
+      this.trackMatomoEventSubmitAnswer(selectedValue);
+      return dataResponse;
+      // eslint-disable-next-line no-else-return
+    } else {
+      this.context.questionUnlockWrapper(questionId);
+      this.trackMatomoEventSubmitAnswer(selectedValue);
+      return null;
     }
-    this.trackMatomoEventSubmitAnswer(selectedValue);
-    // this.setSelectRow(false);
   };
 
   handleDayChange = (selectedDay: string, lastAnswer: Date) => {
@@ -990,6 +995,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
             sfObject={sfObject}
           >
             <span
+              id="y/n-question-answer"
+              tabIndex={-1}
+              onBlur={() => {
+                concurrencyBlurHandler();
+              }}
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
@@ -1025,6 +1035,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
             sfObject={sfObject}
           >
             <span
+              id="select-question-answer"
+              tabIndex={-1}
+              onBlur={() => {
+                concurrencyBlurHandler();
+              }}
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
@@ -1233,6 +1248,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
             sfObject={sfObject}
           >
             <span
+              id="radio-question-answer"
+              tabIndex={-1}
+              onBlur={() => {
+                concurrencyBlurHandler();
+              }}
               style={
                 `${this.props.showNaCheckbox}`
                   ? {
@@ -1249,7 +1269,13 @@ export class TaskRow extends React.PureComponent<Props, State> {
               <RadioQuestionIdleStateDetection
                 id="dd-proposal-answer"
                 items={finalOptions}
-                onClick={val => this.onClickChange(val, answerValue)}
+                onClick={val => {
+                  this.onClickChange(val, answerValue).then(dataResponse => {
+                    if (dataResponse && dataResponse.success) {
+                      concurrencyBlurHandler();
+                    }
+                  });
+                }}
                 value={answerValue}
                 disabled={checkDisableFlagRadio() || isNotApplicable}
                 onFocus={concurrencyFocusHandler}
@@ -1265,6 +1291,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
             sfObject={sfObject}
           >
             <span
+              id="checkbox-question-answer"
+              tabIndex={-1}
+              onBlur={() => {
+                concurrencyBlurHandler();
+              }}
               style={
                 `${this.props.showNaCheckbox}`
                   ? {

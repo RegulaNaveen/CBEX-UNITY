@@ -367,6 +367,7 @@ export const setProposalAnswerData = (
       }
       dispatch(setApprovalQuestionLoading(questionId, false));
       dispatch(setUnityTabQuestionLoading(questionId, false));
+      return { success: true };
     } catch (err) {
       console.log('error occurred ', err);
       dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err } });
