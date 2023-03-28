@@ -782,7 +782,7 @@ function applyVerificationRequiredFilter(questions) {
             Answer[Answer.length - 1].userName === 'UnityPredictedAnswer') ||
           (Answer &&
             Answer.length &&
-            Answer[Answer.length - 1].userName === 'CarryForwardedAnswer')
+            Answer[Answer.length - 1].userName === 'CarryForwardAnswer')
         );
       })
       .toJS();

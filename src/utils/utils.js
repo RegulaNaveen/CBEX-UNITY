@@ -187,7 +187,7 @@ function rearrangeDiff(diffAnswers) {
 function getUserInitials(userName, lastChangedInBid) {
   if (userName === 'AnswerPulledFromSalesforce') return 'SA';
   if (userName === 'UnityPredictedAnswer') return 'UA';
-  if (userName === 'CarryForwardedAnswer') {
+  if (userName === 'CarryForwardAnswer') {
     if (lastChangedInBid) return `B${lastChangedInBid}`;
     return 'B';
   }
@@ -197,7 +197,7 @@ function getUserInitials(userName, lastChangedInBid) {
 function getUserName(userName, lastChangedInBid) {
   if (userName === 'AnswerPulledFromSalesforce') return 'Salesforce Answer';
   if (userName === 'UnityPredictedAnswer') return 'Unity Predicted Answer';
-  if (userName === 'CarryForwardedAnswer') {
+  if (userName === 'CarryForwardAnswer') {
     if (lastChangedInBid) return `Answer derived from bid ${lastChangedInBid}`;
     return 'Answer derived from bid';
   }
