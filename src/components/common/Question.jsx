@@ -1430,7 +1430,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
       proposalDetail,
       eventCategories,
       NaLoading,
-      showNaCheckbox
+      showNaCheckbox,
+      bidAnswerCopy,
+      latestAnsweredBidNo
     } = this.props;
     const questionID = answers.get('questionId');
     const quesData = questionData?.toJS();
@@ -1688,6 +1690,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
             handleVerifyPredictedAnsClick={this.handleVerifyPredictedAnsClick}
             hasDifferentSFanswer={hasDifferentSFanswer}
             disabled={integrationLocked}
+            bidAnswerCopy={bidAnswerCopy}
+            latestAnsweredBidNo={latestAnsweredBidNo}
           />
           {/* Question Lock Info */}
           {/* {this.props.questionLockInfo &&

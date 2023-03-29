@@ -239,6 +239,8 @@ function ProposalTeam() {
                   setQuestionToDisplayHistory={setQuestionToDisplayHistory}
                   hasDifferentSFanswer={items.hasDifferentSFanswer}
                   qvidianIntegration={items.qvidianIntegration}
+                  bidAnswerCopy={items.bidAnswerCopy}
+                  latestAnsweredBidNo={items.latestAnsweredBidNo}
                 />
               )
             );

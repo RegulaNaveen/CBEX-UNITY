@@ -184,15 +184,23 @@ function rearrangeDiff(diffAnswers) {
   return rearrangedDiffAnswers;
 }
 
-function getUserInitials(userName) {
+function getUserInitials(userName, lastChangedInBid) {
   if (userName === 'AnswerPulledFromSalesforce') return 'SA';
   if (userName === 'UnityPredictedAnswer') return 'UA';
+  if (userName === 'CarryForwardAnswer') {
+    if (lastChangedInBid) return `B${lastChangedInBid}`;
+    return 'B';
+  }
   return userName.split(' ')[0].charAt(0) + userName.split(' ')[1].charAt(0);
 }
 
-function getUserName(userName) {
+function getUserName(userName, lastChangedInBid) {
   if (userName === 'AnswerPulledFromSalesforce') return 'Salesforce Answer';
   if (userName === 'UnityPredictedAnswer') return 'Unity Predicted Answer';
+  if (userName === 'CarryForwardAnswer') {
+    if (lastChangedInBid) return `Answer derived from bid ${lastChangedInBid}`;
+    return 'Answer derived from bid';
+  }
   return userName;
 }
 
