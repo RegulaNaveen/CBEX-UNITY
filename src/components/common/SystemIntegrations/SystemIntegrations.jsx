@@ -325,7 +325,17 @@ const SystemIntegrations = ({
   const CalendarCondition = () => {
     // calculate to show carry forward indication icon only if flag is enabled
     if (canShowCarryForwardIndication && answers.size > 0) {
-      if (bidAnswerCopy && latestAnsweredBidNo !== null) {
+      let latestAnswer = null;
+      if (Array.isArray(answer.toJS())) {
+        latestAnswer = answer.toJS()[0];
+      }
+      const isLatestAnsRejectedCFA =
+        answer.get(1) &&
+        answer.get(1).get('userName') === 'CarryForwardAnswer' &&
+        latestAnswer === ' ';
+      const isLatestAnswerCFA =
+        answer.get(0) && answer.get(0).get('userName') === 'CarryForwardAnswer';
+      if (bidAnswerCopy && latestAnsweredBidNo !== null && isLatestAnswerCFA) {
         return (
           <Tooltip
             variant="light"
@@ -350,7 +360,10 @@ const SystemIntegrations = ({
             </span>
           </Tooltip>
         );
-      } else if (!bidAnswerCopy && latestAnsweredBidNo !== null) {
+      } else if (
+        isLatestAnsRejectedCFA ||
+        (!bidAnswerCopy && latestAnsweredBidNo !== null)
+      ) {
         return (
           <IconButton
             style={{

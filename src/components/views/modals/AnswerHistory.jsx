@@ -640,7 +640,7 @@ class AnswerHistory extends Component<Props> {
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'CarryForwardAnswer' &&
         answer !== ' ' &&
-        answer === nextAnswer;
+        answer.trim() === nextAnswer.trim();
 
       const isRejectedCarryForwardedAnswer =
         answers.get(index + 1) &&
@@ -736,7 +736,7 @@ class AnswerHistory extends Component<Props> {
                   `${_answer.get('answer')}`
                 )
               ) : (
-                <b>Validated Unity Predicted Answer</b>
+                <b>Validated Carry Forwarded Answer</b>
               )}
             </span>
           );
@@ -754,7 +754,7 @@ class AnswerHistory extends Component<Props> {
                   </li>
                 ))
               ) : (
-                <b>Accepted Carry Forwarded Answer</b>
+                <b>Validated Carry Forwarded Answer</b>
               )}
             </span>
           );
