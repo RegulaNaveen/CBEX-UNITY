@@ -582,6 +582,8 @@ class AnswerHistory extends Component<Props> {
 
     return answers.map((_answer, index) => {
       const userName = _answer.get('userName') || 'Default User';
+      const cfProposalId = _answer.get('cfProposalId');
+      let cfBidNo = null;
       const date = _answer.get('date');
       // get formattedAnswer if present or fallback to answer
       const answerCheck = _answer.get('formattedAnswer');
@@ -607,6 +609,14 @@ class AnswerHistory extends Component<Props> {
             ? opportunityData.get(proposalId).toJS().proposal.proposalDetails
                 .bidNo
             : 'NA';
+      }
+
+      if (
+        cfProposalId &&
+        opportunityData.get(cfProposalId).toJS().proposal.proposalDetails?.bidNo
+      ) {
+        cfBidNo = opportunityData.get(cfProposalId).toJS().proposal
+          .proposalDetails.bidNo;
       }
 
       const nextAnswerCheck = answers?.get(index + 1)?.get('formattedAnswer');
@@ -682,7 +692,7 @@ class AnswerHistory extends Component<Props> {
             .toJS()
             .join(',');
 
-      const userInitials = getUserInitials(userName, bidNo);
+      const userInitials = getUserInitials(userName, cfBidNo);
       const parsedDate = parseMomentDate(date);
       const avatarRandomColor = randomColor({ luminosity: 'dark' });
       const renderAnswers = () => {
@@ -982,7 +992,7 @@ class AnswerHistory extends Component<Props> {
                 {userInitials}
               </span>
               <div>
-                <p>{getUserName(userName, bidNo)}</p>
+                <p>{getUserName(userName, cfBidNo)}</p>
                 {renderAnswers()}
               </div>
             </div>
