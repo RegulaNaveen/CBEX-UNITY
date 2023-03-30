@@ -2,7 +2,7 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Map, fromJS } from 'immutable'; // NOSONAR
+import { Map, fromJS, List } from 'immutable'; // NOSONAR
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
 import { isEmpty, isString, unionBy, isObject } from 'lodash';
@@ -103,6 +103,24 @@ function handleUserMentionInAnswer(formattedAnswer = null, answer = '') {
     finalAnswer = answer;
   }
   return finalAnswer;
+}
+
+// function to check both answers are same
+function areBothAnswersSame(answer1, answer2) {
+  if (List.isList(answer1)) {
+    return answer1.equals(answer2);
+  } else if (typeof answer1 === 'string') {
+    return answer1.trim() === answer2.trim();
+  }
+  return answer1 === answer2;
+}
+
+function isAnswerEmpty(answer) {
+  if (List.isList(answer)) {
+    return answer.size === 0;
+  } else {
+    return answer === ' ';
+  }
 }
 
 class AnswerHistory extends Component<Props> {
@@ -649,13 +667,13 @@ class AnswerHistory extends Component<Props> {
         questionType !== ANSWER_TYPES.PICKLIST_LOOKUP &&
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'CarryForwardAnswer' &&
-        answer !== ' ' &&
-        answer.trim() === nextAnswer.trim();
+        !isAnswerEmpty(answer) &&
+        areBothAnswersSame(answer, nextAnswer);
 
       const isRejectedCarryForwardedAnswer =
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'CarryForwardAnswer' &&
-        answer === ' ';
+        isAnswerEmpty(answer);
 
       // picklist answers are array so they require different check than other question types
       const isPicklistValidUnityPredAns =

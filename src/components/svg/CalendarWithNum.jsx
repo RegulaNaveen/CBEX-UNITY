@@ -16,8 +16,8 @@ const Calendar = ({ className, number = 0 }: Props) => {
       <text
         x="50%"
         y="67%"
-        dominant-baseline="middle"
-        text-anchor="middle"
+        dominantBaseline="middle"
+        textAnchor="middle"
         fontSize={'12px'}
         fontWeight={600}
         fill="#015ff1"
