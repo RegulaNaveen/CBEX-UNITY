@@ -932,7 +932,6 @@ export function getQuestionsFilterApplied(questionsArr, questionsFilter) {
 }
 
 export function onQuestionsFilterApplied(questionsFilter) {
-  console.log('questionsFilter', questionsFilter);
   return async (dispatch, getState) => {
     const state = getState();
     const searchQuery = selectQuery(getState());
@@ -1070,7 +1069,6 @@ export function onApplyQuestionsFilter(
         checked
       );
     }
-    console.log('questionsFilter', questionsFilter);
     dispatch(onQuestionsFilterApplied(questionsFilter));
   };
 }
