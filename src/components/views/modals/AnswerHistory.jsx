@@ -2,7 +2,7 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Map, fromJS } from 'immutable'; // NOSONAR
+import { Map, fromJS, List } from 'immutable'; // NOSONAR
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
 import { isEmpty, isString, unionBy, isObject } from 'lodash';
@@ -103,6 +103,24 @@ function handleUserMentionInAnswer(formattedAnswer = null, answer = '') {
     finalAnswer = answer;
   }
   return finalAnswer;
+}
+
+// function to check both answers are same
+function areBothAnswersSame(answer1, answer2) {
+  if (List.isList(answer1)) {
+    return answer1.equals(answer2);
+  } else if (typeof answer1 === 'string') {
+    return answer1.trim() === answer2.trim();
+  }
+  return answer1 === answer2;
+}
+
+function isAnswerEmpty(answer) {
+  if (List.isList(answer)) {
+    return answer.size === 0;
+  } else {
+    return answer === ' ';
+  }
 }
 
 class AnswerHistory extends Component<Props> {
@@ -582,6 +600,8 @@ class AnswerHistory extends Component<Props> {
 
     return answers.map((_answer, index) => {
       const userName = _answer.get('userName') || 'Default User';
+      const cfProposalId = _answer.get('cfProposalId');
+      let cfBidNo = null;
       const date = _answer.get('date');
       // get formattedAnswer if present or fallback to answer
       const answerCheck = _answer.get('formattedAnswer');
@@ -607,6 +627,14 @@ class AnswerHistory extends Component<Props> {
             ? opportunityData.get(proposalId).toJS().proposal.proposalDetails
                 .bidNo
             : 'NA';
+      }
+
+      if (
+        cfProposalId &&
+        opportunityData.get(cfProposalId).toJS().proposal.proposalDetails?.bidNo
+      ) {
+        cfBidNo = opportunityData.get(cfProposalId).toJS().proposal
+          .proposalDetails.bidNo;
       }
 
       const nextAnswerCheck = answers?.get(index + 1)?.get('formattedAnswer');
@@ -639,13 +667,13 @@ class AnswerHistory extends Component<Props> {
         questionType !== ANSWER_TYPES.PICKLIST_LOOKUP &&
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'CarryForwardAnswer' &&
-        answer !== ' ' &&
-        answer.trim() === nextAnswer.trim();
+        !isAnswerEmpty(answer) &&
+        areBothAnswersSame(answer, nextAnswer);
 
       const isRejectedCarryForwardedAnswer =
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'CarryForwardAnswer' &&
-        answer === ' ';
+        isAnswerEmpty(answer);
 
       // picklist answers are array so they require different check than other question types
       const isPicklistValidUnityPredAns =
@@ -682,7 +710,7 @@ class AnswerHistory extends Component<Props> {
             .toJS()
             .join(',');
 
-      const userInitials = getUserInitials(userName, bidNo);
+      const userInitials = getUserInitials(userName, cfBidNo);
       const parsedDate = parseMomentDate(date);
       const avatarRandomColor = randomColor({ luminosity: 'dark' });
       const renderAnswers = () => {
@@ -982,7 +1010,7 @@ class AnswerHistory extends Component<Props> {
                 {userInitials}
               </span>
               <div>
-                <p>{getUserName(userName, bidNo)}</p>
+                <p>{getUserName(userName, cfBidNo)}</p>
                 {renderAnswers()}
               </div>
             </div>
