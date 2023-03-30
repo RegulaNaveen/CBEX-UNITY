@@ -5,7 +5,7 @@ import Calendar from 'apollo-react-icons/Calendar';
 import CalendarCheck from 'apollo-react-icons/CalendarCheck';
 import { getLastAnswer } from './utils';
 import indeterminate from '../../../../img/Indeterminate.svg';
-import { Tooltip } from '@material-ui/core';
+import Tooltip from 'apollo-react/components/Tooltip';
 import { CalendarWithMinus, CalendarWithNum } from '../../svg';
 
 const IndeterminateIcon = () => <img src={indeterminate} alt="indeterminate" />;
