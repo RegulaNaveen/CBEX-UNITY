@@ -90,7 +90,10 @@ const CheckBoxQuestion = ({
 };
 
 CheckBoxQuestion.defaultProps = {
-  disabled: false
+  disabled: false,
+  toggleWatch: () => {},
+  onCascadeChange: () => {},
+  forceBlur: false
 };
 CheckBoxQuestion.propTypes = {
   question: PropTypes.object.isRequired,
