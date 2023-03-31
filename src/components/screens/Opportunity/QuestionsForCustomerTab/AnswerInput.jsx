@@ -89,7 +89,13 @@ const AnswerInput = ({
     onBlur: data => {
       let saveDate = false;
       const previousAnsText = getConvertedAnsString(answerValue).trim();
-      quesTextInnerLeftRef.current.style.marginTop = 'inherit';
+      if (
+        quesTextInnerLeftRef &&
+        quesTextInnerLeftRef.current &&
+        quesTextInnerLeftRef.current.style
+      ) {
+        quesTextInnerLeftRef.current.style.marginTop = 'inherit';
+      }
       // save the formatting change
       if (
         !isEqual(richTextData.value, data.value) &&

@@ -70,6 +70,9 @@ const DateQuestion = ({
       if (toggleWatch) toggleWatch(false);
     }
   };
+  const handleFocus = useCallback(() => {
+    questionLockWrapper(question?.questionId);
+  }, [socketContext, question]);
 
   const handleFocus = useCallback(() => {
     questionLockWrapper(question?.questionId);
