@@ -72,7 +72,7 @@ const CalendarIcon = ({ question }) => {
         );
       } else if (
         isLatestAnsRejectedCFA ||
-        (!bidAnswerCopy && latestAnsweredBidNo !== null)
+        (bidAnswerCopy === false && latestAnsweredBidNo !== null)
       ) {
         return <CalendarWithMinus />;
       }
