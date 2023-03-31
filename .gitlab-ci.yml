@@ -380,7 +380,7 @@ prod:
   only:
     - tags
   needs:
-    - deployuat
+    - deployl4
   when: manual
   script:
     - cat $prod_build >> build.env
