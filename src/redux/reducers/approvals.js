@@ -19,6 +19,12 @@ const INITIAL_STATE = {
       value: false
     },
     {
+      name: 'verificationRequired',
+      displayName: 'Verification Required',
+      group: 'verification',
+      value: false
+    },
+    {
       name: 'responsible',
       displayName: 'Responsible',
       group: 'roles',
