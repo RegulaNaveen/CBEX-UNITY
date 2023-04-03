@@ -261,36 +261,15 @@ const CustomApolloRichText = ({
         });
         richTextEditorRef.current.setState({ editorState: newEditorState });
         if (richTextEditorRefHidden.current) {
-          if (typeof richTextData.value === 'object') {
-            let { blocks } = richTextData.value;
-            if (!(Array.isArray(blocks) && blocks.length > 0)) {
-              blocks = [
-                {
-                  text: '',
-                  type: 'unstyled',
-                  depth: 0,
-                  inlineStyleRanges: [],
-                  entityRanges: [],
-                  data: {}
-                }
-              ];
+          const newEditorStateHidden = EditorState.set(
+            EditorState.createWithContent(convertFromRaw(richTextData.value)),
+            {
+              decorator: compositeDecoratorHidden
             }
-            const newEditorStateHidden = EditorState.set(
-              EditorState.createWithContent(
-                convertFromRaw({
-                  entityMap: {},
-                  ...richTextData.value,
-                  blocks
-                })
-              ),
-              {
-                decorator: compositeDecoratorHidden
-              }
-            );
-            richTextEditorRefHidden.current.setState({
-              editorState: newEditorStateHidden
-            });
-          }
+          );
+          richTextEditorRefHidden.current.setState({
+            editorState: newEditorStateHidden
+          });
         }
       }
     }, 700);

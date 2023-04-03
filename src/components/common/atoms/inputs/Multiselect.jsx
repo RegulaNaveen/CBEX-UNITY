@@ -84,6 +84,7 @@ class Multiselect extends PureComponent<Props, State> {
     if (prevState.isOpen !== isOpen) {
       if (!isOpen) onClick(selectedValues, lastAnswer || []);
     }
+
     if (forceBlur === true) {
       if (isOpen) {
         this.setState({ isOpen: false }, () => {

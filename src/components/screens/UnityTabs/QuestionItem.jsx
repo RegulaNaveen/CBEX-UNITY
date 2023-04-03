@@ -21,6 +21,7 @@ import QuestionLabel from './QuestionLabel';
 import AnswerHistory from '../../views/modals/AnswerHistory';
 import ANSWER_TYPES from '../../../constants/answerTypes';
 import { getCountriesNameForCode } from '../../../utils/utils';
+
 import { getUserName, getUserEmail, getUserId } from '../../../SessionHandler';
 import { SocketContext } from '../../../context/SocketContext';
 import SFAnswerValidationWrapper from '../../common/SFAnswerValidationWrapper';
@@ -70,6 +71,7 @@ const QuestionItem = ({
   questionId = '',
   UnityTabSectionTitle = '',
   disabled,
+  isQuesFreezed,
   eventCategories,
   trackEvent,
   updateQuestionVisibility
@@ -268,100 +270,36 @@ const QuestionItem = ({
       );
     }
 
-    if (
-      !Object.values(ANSWER_TYPES).includes(question?.answerConfiguration?.type)
-    ) {
-      return <FallbackComponent />;
-    }
+    const ComponentMapper = {
+      [ANSWER_TYPES.TEXT]: <TextQuestion {...inputProps} />,
+      [ANSWER_TYPES.NUMBER]: <NumberQuestion {...inputProps} />,
+      [ANSWER_TYPES.DATE]: <DateQuestion {...inputProps} />,
+      [ANSWER_TYPES.RADIO]: <RadioQuestion {...inputProps} />,
+      [ANSWER_TYPES.SELECT_LOOKUP]: <SelectQuestion {...inputProps} />,
+      [ANSWER_TYPES.SELECT]: <SelectQuestion {...inputProps} />,
+      [ANSWER_TYPES.PICKLIST]: <MultiSelectQuestion {...inputProps} />,
+      [ANSWER_TYPES.PICKLIST_LOOKUP]: <MultiSelectQuestion {...inputProps} />,
+      [ANSWER_TYPES.YES_NO]: <YesNoQuestion {...inputProps} />,
+      [ANSWER_TYPES.CHECKBOX]: <CheckBoxQuestion {...inputProps} />
+    };
 
-    switch (question?.answerConfiguration?.type) {
-      case ANSWER_TYPES.TEXT: {
-        return (
-          <SFAnswerValidationWrapper
-            hasDifferentSFanswer={question.hasDifferentSFanswer}
-            sfObject={question.sfObject}
-          >
-            <TextQuestion {...inputProps} />
-          </SFAnswerValidationWrapper>
-        );
-      }
-      case ANSWER_TYPES.NUMBER: {
-        return (
-          <SFAnswerValidationWrapper
-            hasDifferentSFanswer={question.hasDifferentSFanswer}
-            sfObject={question.sfObject}
-          >
-            <NumberQuestion {...inputProps} />
-          </SFAnswerValidationWrapper>
-        );
-      }
-      case ANSWER_TYPES.DATE: {
-        return (
-          <SFAnswerValidationWrapper
-            hasDifferentSFanswer={question.hasDifferentSFanswer}
-            sfObject={question.sfObject}
-          >
-            <DateQuestionWithIdleStateDetection {...inputProps} />
-          </SFAnswerValidationWrapper>
-        );
-      }
-      case ANSWER_TYPES.RADIO: {
-        return (
-          <SFAnswerValidationWrapper
-            hasDifferentSFanswer={question.hasDifferentSFanswer}
-            sfObject={question.sfObject}
-          >
-            <RadioQuestion {...inputProps} />
-          </SFAnswerValidationWrapper>
-        );
-      }
-      case ANSWER_TYPES.SELECT:
-      case ANSWER_TYPES.SELECT_LOOKUP: {
-        return (
-          <SFAnswerValidationWrapper
-            hasDifferentSFanswer={question.hasDifferentSFanswer}
-            sfObject={question.sfObject}
-          >
-            <SelectQuestionWithIdleStateDetection {...inputProps} />
-          </SFAnswerValidationWrapper>
-        );
-      }
-      case ANSWER_TYPES.PICKLIST_LOOKUP:
-      case ANSWER_TYPES.PICKLIST: {
-        return (
-          <SFAnswerValidationWrapper
-            hasDifferentSFanswer={question.hasDifferentSFanswer}
-            sfObject={question.sfObject}
-          >
-            <MultiSelectQuestionWithIdleStateDetection {...inputProps} />
-          </SFAnswerValidationWrapper>
-        );
-      }
-      case ANSWER_TYPES.YES_NO: {
-        return (
-          <SFAnswerValidationWrapper
-            hasDifferentSFanswer={question.hasDifferentSFanswer}
-            sfObject={question.sfObject}
-          >
-            <YesNoQuestionWithIdleStateDetection {...inputProps} />
-          </SFAnswerValidationWrapper>
-        );
-      }
-      case ANSWER_TYPES.CHECKBOX: {
-        return (
-          <SFAnswerValidationWrapper
-            hasDifferentSFanswer={question.hasDifferentSFanswer}
-            sfObject={question.sfObject}
-          >
-            <CheckBoxQuestionWithIdleStateDetection {...inputProps} />
-          </SFAnswerValidationWrapper>
-        );
-      }
-      default:
-        return <FallbackComponent />;
-    }
+    const SFNestedAnswerItem = () => {
+      return (
+        <SFAnswerValidationWrapper
+          hasDifferentSFanswer={question.hasDifferentSFanswer}
+          sfObject={question.sfObject}
+        >
+          {ComponentMapper[question?.answerConfiguration?.type]}
+        </SFAnswerValidationWrapper>
+      );
+    };
+
+    return ComponentMapper[question?.answerConfiguration?.type] ? (
+      <SFNestedAnswerItem />
+    ) : (
+      <FallbackComponent />
+    );
   };
-
   const renderTags = () => {
     const { milestone, milestoneNew } = question;
     const lastAnswer = getLastAnswer(question);
@@ -652,6 +590,7 @@ const QuestionItem = ({
                 <div className="system-icon-custom-tab">
                   {SystemIcon(unityTabQuestionLoading)}
                 </div>
+                {/* !isQuesFreezed && */}
               </Grid>
             </Grid>
           </Box>
@@ -661,6 +600,7 @@ const QuestionItem = ({
             <AnswerHistory
               question={prepareAnswerHistoryData(question)}
               tab="UnityTab"
+              isQuesFreezed={!!isQuesFreezed}
               closeModal={() => {
                 setIsShowHistory(false);
               }}
@@ -683,12 +623,14 @@ const QuestionItem = ({
 
 QuestionItem.defaultProps = {
   disabled: false,
+  isQuesFreezed: false,
   updateQuestionVisibility: () => {}
 };
 QuestionItem.propTypes = {
   questionId: PropTypes.string.isRequired,
   UnityTabSectionTitle: PropTypes.string.isRequired,
   disabled: PropTypes.any,
+  isQuesFreezed: PropTypes.any,
   eventCategories: PropTypes.object.isRequired,
   trackEvent: PropTypes.func.isRequired,
   updateQuestionVisibility: PropTypes.func

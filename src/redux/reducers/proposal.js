@@ -121,14 +121,6 @@ const INITIAL_STATE: Map = fromJS({
       },
       logic: 'OR'
     },
-    verificationGroup: {
-      verificationRequired: {
-        checked: false,
-        label: 'Verification Required',
-        className: CLASS_QUES_FIL_R1_C1
-      },
-      logic: 'OR'
-    },
     rolegroup: {
       myUserRole: {
         checked: false,
@@ -336,7 +328,7 @@ const setOpportunityInfo = (state, action) => {
     'proposal',
     'proposalDetails'
   ]);
-  let proposalQuestions = opportunityData.getIn([
+  const proposalQuestions = opportunityData.getIn([
     selectedBid.get('id'),
     'proposalQuestions'
   ]);

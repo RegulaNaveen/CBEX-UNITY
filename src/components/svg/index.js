@@ -31,8 +31,6 @@ import Info from './Info';
 import ReportIssue from './ReportIssue';
 import Pencil from './Pencil';
 import Globe from './Globe';
-import CalendarWithNum from './CalendarWithNum';
-import CalendarWithMinus from './CalendarWithMinus';
 
 export {
   Checkmark,
@@ -66,7 +64,5 @@ export {
   Info,
   ReportIssue,
   Pencil,
-  Globe,
-  CalendarWithNum,
-  CalendarWithMinus
+  Globe
 };

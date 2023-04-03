@@ -401,6 +401,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
   onClickChange = async (selectedValue: string, lastAnswer: string) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+
     if (lastAnswer !== selectedValue) {
       const dataResponse = await setProposalAnswer(
         this.context,
@@ -1430,9 +1431,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       proposalDetail,
       eventCategories,
       NaLoading,
-      showNaCheckbox,
-      bidAnswerCopy,
-      latestAnsweredBidNo
+      showNaCheckbox
     } = this.props;
     const questionID = answers.get('questionId');
     const quesData = questionData?.toJS();
@@ -1690,8 +1689,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
             handleVerifyPredictedAnsClick={this.handleVerifyPredictedAnsClick}
             hasDifferentSFanswer={hasDifferentSFanswer}
             disabled={integrationLocked}
-            bidAnswerCopy={bidAnswerCopy}
-            latestAnsweredBidNo={latestAnsweredBidNo}
           />
           {/* Question Lock Info */}
           {/* {this.props.questionLockInfo &&

@@ -26,8 +26,6 @@ export const getLastAnswer = question => {
 const isAnswerEmpty = answer => isEmpty(answer) || answer === ' ';
 const isUnityPredicted = (lastAnswer = {}) =>
   lastAnswer?.userName === 'UnityPredictedAnswer';
-const isCarryForwarded = (answer = {}) =>
-  answer.userName === 'CarryForwardAnswer';
 
 // answeredFilter => Only answered
 const answeredFilter: Boolean = question => {
@@ -37,7 +35,7 @@ const answeredFilter: Boolean = question => {
 // UnansweredFilter => No Answers, Indetermined Answers and Unity Predicted Answers
 const unansweredFilter: Boolean = question => {
   const lastAnswer = getLastAnswer(question);
-  return isAnswerEmpty(lastAnswer.answer);
+  return isAnswerEmpty(lastAnswer.answer) || isUnityPredicted(lastAnswer);
 };
 const responsibleFilter: Boolean = question => {
   const userRole = localStorage.getItem('userRole') || '';
@@ -55,11 +53,6 @@ const informedFilter: Boolean = question => {
     );
   }
   return false;
-};
-
-const verificationRequiredFilter = question => {
-  const lastAnswer = getLastAnswer(question);
-  return isUnityPredicted(lastAnswer) || isCarryForwarded(lastAnswer);
 };
 
 export const shouldShowQuestion = (question = {}, approvalfilters): Boolean => {
@@ -92,10 +85,6 @@ export const shouldShowQuestion = (question = {}, approvalfilters): Boolean => {
         if (appliedFilters.includes('unanswered')) {
           filterAnswers.push(unansweredFilter(question));
         }
-      }
-
-      if (appliedFilters.includes('verificationRequired')) {
-        filterAnswers.push(verificationRequiredFilter(question));
       }
     }
     return filterAnswers.length > 0 && filterAnswers.every(i => i === true);

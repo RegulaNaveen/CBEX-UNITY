@@ -3,7 +3,6 @@
 /* eslint-disable no-restricted-syntax */
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { useHistory } from 'react-router-dom';
-import { v4 as uuid } from 'uuid';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
 import Panel from 'apollo-react/components/Panel';
@@ -234,16 +233,19 @@ const UnityTab = ({
         );
         const filterTitle = customTabSections.filter(v => v['UnityTabTitle']);
         if (filterTitle.length && questionCount) {
+          const title = String(filterTitle[0]['UnityTabTitle'])
+            .trim()
+            .toLowerCase();
           const tabpath = String(customTabSections[0]['UnityTabTitle'])
-            .toLowerCase()
-            .replaceAll(' ', '_')
-            .trim();
+            .replace(' ', '_')
+            .trim()
+            .toLowerCase();
           const response = calculateTab(customTabSections);
           if (filterTitle && response) {
             tempTab.push({
               label: customTabSections[0]['UnityTabTitle'],
               value: len++,
-              component: <CustomTabs tabId={tabID} key={uuid()} />,
+              component: <CustomTabs tabId={tabID} key={title} />,
               path: tabpath
             });
           }
@@ -283,16 +285,19 @@ const UnityTab = ({
         );
         const filterTitle = customTabSections.filter(v => v['UnityTabTitle']);
         if (filterTitle.length && questionCount) {
+          const title = String(filterTitle[0]['UnityTabTitle'])
+            .trim()
+            .toLowerCase();
           const tabpath = String(customTabSections[0]['UnityTabTitle'])
-            .toLowerCase()
             .replace(' ', '_')
-            .trim();
+            .trim()
+            .toLowerCase();
           const response = calculateTab(customTabSections);
           if (filterTitle && response) {
             tempTab.push({
               label: customTabSections[0]['UnityTabTitle'],
               value: len++,
-              component: <CustomTabs tabId={tabID} key={uuid()} />,
+              component: <CustomTabs tabId={tabID} key={title} />,
               path: tabpath
             });
           }
@@ -809,7 +814,9 @@ const UnityTab = ({
             className="_question-tab"
           >
             {visibleTabs().map(item => {
-              return <Tab key={uuid()} label={item.label} value={item.value} />;
+              return (
+                <Tab key={item.label} label={item.label} value={item.value} />
+              );
             })}
           </Tabs>
         </div>

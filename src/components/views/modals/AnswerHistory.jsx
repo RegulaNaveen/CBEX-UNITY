@@ -2,7 +2,7 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Map, fromJS, List } from 'immutable'; // NOSONAR
+import { Map, fromJS } from 'immutable'; // NOSONAR
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
 import { isEmpty, isString, unionBy, isObject } from 'lodash';
@@ -103,24 +103,6 @@ function handleUserMentionInAnswer(formattedAnswer = null, answer = '') {
     finalAnswer = answer;
   }
   return finalAnswer;
-}
-
-// function to check both answers are same
-function areBothAnswersSame(answer1, answer2) {
-  if (List.isList(answer1)) {
-    return answer1.equals(answer2);
-  } else if (typeof answer1 === 'string') {
-    return answer1.trim() === answer2.trim();
-  }
-  return answer1 === answer2;
-}
-
-function isAnswerEmpty(answer) {
-  if (List.isList(answer)) {
-    return answer.size === 0;
-  } else {
-    return answer === ' ';
-  }
 }
 
 class AnswerHistory extends Component<Props> {
@@ -359,170 +341,6 @@ class AnswerHistory extends Component<Props> {
     this.closeModalWindow();
   };
 
-  onAcceptCarryForwardAnswer = carryForwardAnswer => {
-    const {
-      trackEvent,
-      eventCategories,
-      events,
-      opportunityData,
-      tab,
-      selectedBid
-    } = this.props;
-    const { question } = this.state;
-    const questionType = question.getIn(['answerConfiguration', 'type']);
-    const answers = question.get('answers').reverse();
-    const questions = question.reverse();
-    const questionId = questions.get('questionId');
-    const questionText = questions.get('questionText');
-    const proposalId = answers.get(0).get('proposalId');
-    const { sectionName } = question.get('section').toJS();
-    const answer = answers.get(0).get('answer');
-    const questionHTML = questions.get('questionHtml');
-    const questionJSON = questions.get('questionJSON');
-    const questionHintJSON = questions.get('questionHintJSON');
-    const proposalDetail =
-      proposalId &&
-      opportunityData.get(proposalId)?.toJS()?.proposal?.proposalDetails;
-    const { setProposalAnswer, userData } = this.props;
-    const answerType = questionType;
-    // picklist value should not be converted to string while saving
-    if (
-      answerType === ANSWER_TYPES.PICKLIST ||
-      answerType === ANSWER_TYPES.PICKLIST_LOOKUP ||
-      answerType === ANSWER_TYPES.CHECKBOX
-    ) {
-      setProposalAnswer(
-        this.context,
-        selectedBid.get('id'),
-        questionId,
-        carryForwardAnswer.get('answer'),
-        userData
-      );
-    } else {
-      setProposalAnswer(
-        this.context,
-        selectedBid.get('id'),
-        questionId,
-        String(carryForwardAnswer.get('answer')).trim(),
-        userData,
-        '',
-        false
-      );
-    }
-    let action = 'Answer History';
-    if (tab && tab === 'Approval') {
-      action = 'Approval Answer History';
-    }
-    if (tab && tab === 'UnityTab') {
-      action = 'UnityTab Answer History';
-    }
-    trackEvent({
-      category: eventCategories.pd(this.props),
-      action: `${action} Event: ${questionText} (${sectionName})`,
-      name: `Verified Answer: ${answer} by ${userData.name} ${userData.email}`,
-      customDimensions: [
-        {
-          id: 1,
-          value: JSON.stringify({
-            answer,
-            sectionName,
-            questionText,
-            questionHTML,
-            questionJSON,
-            questionHintJSON,
-            questionId,
-            proposalDetail
-          })
-        },
-        {
-          events: events || []
-        }
-      ]
-    });
-    this.closeModalWindow();
-  };
-
-  onRejectCarryForwardAnswer = () => {
-    const {
-      trackEvent,
-      eventCategories,
-      events,
-      opportunityData,
-      userData,
-      tab,
-      selectedBid
-    } = this.props;
-    const { question } = this.state;
-    const questionType = question.getIn(['answerConfiguration', 'type']);
-    const answers = question.get('answers').reverse();
-    const questions = question.reverse();
-    const questionId = questions.get('questionId');
-    const questionText = questions.get('questionText');
-    const proposalId = answers.get(0).get('proposalId');
-    const answer = answers.get(0).get('answer');
-    const { sectionName } = question.get('section').toJS();
-    const questionHTML = questions.get('questionHtml');
-    const questionJSON = questions.get('questionJSON');
-    const questionHintJSON = questions.get('questionHintJSON');
-    const proposalDetail =
-      proposalId &&
-      opportunityData.get(proposalId)?.toJS()?.proposal?.proposalDetails;
-    const { setProposalAnswer } = this.props;
-    const answerType = questionType;
-    // picklist value should not be converted to string while saving
-    if (
-      answerType === ANSWER_TYPES.PICKLIST ||
-      answerType === ANSWER_TYPES.PICKLIST_LOOKUP ||
-      answerType === ANSWER_TYPES.CHECKBOX
-    ) {
-      setProposalAnswer(
-        this.context,
-        selectedBid.get('id'),
-        questionId,
-        [],
-        userData
-      );
-    } else {
-      setProposalAnswer(
-        this.context,
-        selectedBid.get('id'),
-        questionId,
-        ' ',
-        userData,
-        '',
-        false
-      );
-    }
-    let action = 'Answer History';
-    if (tab && tab === 'Approval') {
-      action = 'Approval Answer History';
-    }
-    trackEvent({
-      category: eventCategories.pd(this.props),
-      action: `${action} Event: ${questionText} (${sectionName})`,
-      name: `Rejected Answer: ${answer} by ${userData.name} ${userData.email}`,
-      customDimensions: [
-        {
-          id: 1,
-          value: JSON.stringify({
-            answer,
-            sectionName,
-            questionText,
-            questionHTML,
-            questionJSON,
-            questionHintJSON,
-            questionId,
-            proposalDetail
-          })
-        },
-        {
-          events: events || []
-        }
-      ]
-    });
-    this.closeModalWindow();
-  };
-
   renderAnswerResponsables = () => {
     const { proposalTeamAnswers } = this.props;
     const { question } = this.state;
@@ -570,7 +388,7 @@ class AnswerHistory extends Component<Props> {
   };
 
   renderContent = () => {
-    const { opportunityData, selectedBid } = this.props;
+    const { opportunityData } = this.props;
     const { question } = this.state;
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const sectionName = question.getIn(['section', 'sectionName']);
@@ -600,8 +418,6 @@ class AnswerHistory extends Component<Props> {
 
     return answers.map((_answer, index) => {
       const userName = _answer.get('userName') || 'Default User';
-      const cfProposalId = _answer.get('cfProposalId');
-      let cfBidNo = null;
       const date = _answer.get('date');
       // get formattedAnswer if present or fallback to answer
       const answerCheck = _answer.get('formattedAnswer');
@@ -629,21 +445,13 @@ class AnswerHistory extends Component<Props> {
             : 'NA';
       }
 
-      if (
-        cfProposalId &&
-        opportunityData.get(cfProposalId).toJS().proposal.proposalDetails?.bidNo
-      ) {
-        cfBidNo = opportunityData.get(cfProposalId).toJS().proposal
-          .proposalDetails.bidNo;
-      }
-
       const nextAnswerCheck = answers?.get(index + 1)?.get('formattedAnswer');
       let nextAnswer = answers.get(index + 1)
         ? answers.get(index + 1).get('answer')
         : answer;
 
       if (answers.get(index + 1)) {
-        // nextAnswer = answers.get(index + 1).get('answer');
+        nextAnswer = answers.get(index + 1).get('formattedAnswer');
         if (!isEmpty(nextAnswerCheck)) {
           nextAnswer =
             handleUserMentionInAnswer(nextAnswerCheck, nextAnswer) ||
@@ -661,20 +469,6 @@ class AnswerHistory extends Component<Props> {
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'UnityPredictedAnswer' &&
         answer === nextAnswer;
-
-      const isAcceptedCarryForwardedAnswer =
-        questionType !== ANSWER_TYPES.PICKLIST &&
-        questionType !== ANSWER_TYPES.PICKLIST_LOOKUP &&
-        answers.get(index + 1) &&
-        answers.get(index + 1).get('userName') === 'CarryForwardAnswer' &&
-        !isAnswerEmpty(answer) &&
-        areBothAnswersSame(answer, nextAnswer);
-
-      const isRejectedCarryForwardedAnswer =
-        answers.get(index + 1) &&
-        answers.get(index + 1).get('userName') === 'CarryForwardAnswer' &&
-        isAnswerEmpty(answer);
-
       // picklist answers are array so they require different check than other question types
       const isPicklistValidUnityPredAns =
         (questionType === ANSWER_TYPES.PICKLIST ||
@@ -692,25 +486,7 @@ class AnswerHistory extends Component<Props> {
             .get('answer')
             .toJS()
             .join(',');
-
-      const doesPicklistAcceptedCarryForwardAnswer =
-        (questionType === ANSWER_TYPES.PICKLIST ||
-          questionType === ANSWER_TYPES.PICKLIST_LOOKUP) &&
-        answers &&
-        answers.get(index + 1) &&
-        answers.get(index + 1).get('userName') === 'CarryForwardAnswer' &&
-        answers
-          .get(index + 1)
-          .get('answer')
-          .toJS()
-          .join(',') ===
-          answers
-            .get(index)
-            .get('answer')
-            .toJS()
-            .join(',');
-
-      const userInitials = getUserInitials(userName, cfBidNo);
+      const userInitials = getUserInitials(userName);
       const parsedDate = parseMomentDate(date);
       const avatarRandomColor = randomColor({ luminosity: 'dark' });
       const renderAnswers = () => {
@@ -751,50 +527,6 @@ class AnswerHistory extends Component<Props> {
             </span>
           );
         }
-
-        if (isAcceptedCarryForwardedAnswer) {
-          return (
-            <span key={uuidv4()} className="carry-forwarded-section">
-              {answers.get(index).get('userName') === 'CarryForwardAnswer' &&
-              answers.get(index + 1).get('userName') ===
-                'CarryForwardAnswer' ? (
-                questionType === 'date' ? (
-                  `${parseMomentDate(_answer.get('answer'))}`
-                ) : (
-                  `${_answer.get('answer')}`
-                )
-              ) : (
-                <b>Validated Carry Forwarded Answer</b>
-              )}
-            </span>
-          );
-        }
-
-        if (doesPicklistAcceptedCarryForwardAnswer)
-          return (
-            <span key={uuidv4()} className="carry-forwarded-section">
-              {answers.get(index).get('userName') === 'CarryForwardAnswer' &&
-              answers.get(index + 1).get('userName') ===
-                'CarryForwardAnswer' ? (
-                _answer.get('answer').map(singleAnswer => (
-                  <li key={uuidv4()} className="multi-select-answer-history">
-                    {singleAnswer}
-                  </li>
-                ))
-              ) : (
-                <b>Validated Carry Forwarded Answer</b>
-              )}
-            </span>
-          );
-
-        if (isRejectedCarryForwardedAnswer) {
-          return (
-            <span key={uuidv4()} className="carry-forwarded-section">
-              {<b>Rejected Carry Forwarded Answer</b>}
-            </span>
-          );
-        }
-
         if (
           questionType !== ANSWER_TYPES.PICKLIST &&
           questionType !== ANSWER_TYPES.PICKLIST_LOOKUP &&
@@ -1010,7 +742,7 @@ class AnswerHistory extends Component<Props> {
                 {userInitials}
               </span>
               <div>
-                <p>{getUserName(userName, cfBidNo)}</p>
+                <p>{getUserName(userName)}</p>
                 {renderAnswers()}
               </div>
             </div>
@@ -1037,29 +769,6 @@ class AnswerHistory extends Component<Props> {
                     type="button"
                     className="answer-history-accept"
                     onClick={() => this.handleVerifyPredictedAnsClick(_answer)}
-                  >
-                    Accept
-                  </button>
-                </div>
-              ) : null}
-              {indexNo === 0 &&
-              selectedBid.get('isCurrent', false) &&
-              lastAnswer?.userName === 'CarryForwardAnswer' &&
-              userName === 'CarryForwardAnswer' ? (
-                <div className="answer-meta-buttons">
-                  <button
-                    size="small"
-                    type="button"
-                    className="answer-history-reject"
-                    onClick={() => this.onRejectCarryForwardAnswer()}
-                  >
-                    Reject
-                  </button>
-                  <button
-                    size="small"
-                    type="button"
-                    className="answer-history-accept"
-                    onClick={() => this.onAcceptCarryForwardAnswer(_answer)}
                   >
                     Accept
                   </button>
