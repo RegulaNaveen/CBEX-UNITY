@@ -1,6 +1,7 @@
 import { isEmpty, isEqual } from 'lodash';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { QUESTION_UNLOCK_TIMEOUT } from '../../../../constants/app';
 import { editProposalQuestion } from '../../../../redux/actions/proposal-actions';
 import { getSelectedBid } from '../../../../redux/selectors';
 import {
@@ -8,7 +9,6 @@ import {
   getfetchAllFlags
 } from '../../../../redux/selectors/proposal';
 import CustomApolloRichText from '../../../common/CustomApolloRichText';
-
 const QuestionInput = ({
   question,
   socketContext,
@@ -23,7 +23,6 @@ const QuestionInput = ({
 
   const quesTextInnerLeftRef = React.createRef();
   const { questionLockWrapper, questionUnlockWrapper } = socketContext;
-
   const answerValue = question?.questionText || '';
   const canUserTagInQuestion = useSelector(getCanUserTagInQuestion);
   const allFlags = useSelector(getfetchAllFlags);
@@ -93,8 +92,13 @@ const QuestionInput = ({
     onBlur: data => {
       let saveDate = false;
       const previousAnsText = getConvertedAnsString(answerValue).trim();
-      quesTextInnerLeftRef.current.style.marginTop = 'inherit';
-
+      if (
+        quesTextInnerLeftRef &&
+        quesTextInnerLeftRef.current &&
+        quesTextInnerLeftRef.current.style
+      ) {
+        quesTextInnerLeftRef.current.style.marginTop = 'inherit';
+      }
       // save the formatting change
       if (
         !isEqual(richTextData.value, data.value) &&
@@ -133,7 +137,6 @@ const QuestionInput = ({
     onFocus: () => {
       setLastSetQuestionData({});
       quesTextInnerLeftRef.current.style.marginTop = '25px';
-
       questionLockWrapper(question?.questionId);
     }
   };
