@@ -753,6 +753,20 @@ class AnswerHistory extends Component<Props> {
         }
 
         if (isAcceptedCarryForwardedAnswer) {
+          let cfBidNoPrevAnswer = null;
+          const cfProposalIdPrevAnswer = answers
+            .get(index + 1)
+            .get('cfProposalId');
+          if (
+            cfProposalIdPrevAnswer &&
+            opportunityData.get(cfProposalIdPrevAnswer).toJS().proposal
+              .proposalDetails?.bidNo
+          ) {
+            cfBidNoPrevAnswer = opportunityData
+              .get(cfProposalIdPrevAnswer)
+              .toJS().proposal.proposalDetails.bidNo;
+          }
+
           return (
             <span key={uuidv4()} className="carry-forwarded-section">
               {answers.get(index).get('userName') === 'CarryForwardAnswer' &&
@@ -764,13 +778,33 @@ class AnswerHistory extends Component<Props> {
                   `${_answer.get('answer')}`
                 )
               ) : (
-                <b>Validated Carry Forwarded Answer</b>
+                <b>
+                  Validated{' '}
+                  {getUserName(
+                    'CarryForwardAnswer',
+                    cfBidNoPrevAnswer
+                  ).toLowerCase()}
+                </b>
               )}
             </span>
           );
         }
 
-        if (doesPicklistAcceptedCarryForwardAnswer)
+        if (doesPicklistAcceptedCarryForwardAnswer) {
+          let cfBidNoPrevAnswer = null;
+          const cfProposalIdPrevAnswer = answers
+            .get(index + 1)
+            .get('cfProposalId');
+          if (
+            cfProposalIdPrevAnswer &&
+            opportunityData.get(cfProposalIdPrevAnswer).toJS().proposal
+              .proposalDetails?.bidNo
+          ) {
+            cfBidNoPrevAnswer = opportunityData
+              .get(cfProposalIdPrevAnswer)
+              .toJS().proposal.proposalDetails.bidNo;
+          }
+
           return (
             <span key={uuidv4()} className="carry-forwarded-section">
               {answers.get(index).get('userName') === 'CarryForwardAnswer' &&
@@ -782,15 +816,44 @@ class AnswerHistory extends Component<Props> {
                   </li>
                 ))
               ) : (
-                <b>Validated Carry Forwarded Answer</b>
+                <b>
+                  Validated{' '}
+                  {getUserName(
+                    'CarryForwardAnswer',
+                    cfBidNoPrevAnswer
+                  ).toLowerCase()}
+                </b>
               )}
             </span>
           );
+        }
 
         if (isRejectedCarryForwardedAnswer) {
+          let cfBidNoPrevAnswer = null;
+          const cfProposalIdPrevAnswer = answers
+            .get(index + 1)
+            .get('cfProposalId');
+          if (
+            cfProposalIdPrevAnswer &&
+            opportunityData.get(cfProposalIdPrevAnswer).toJS().proposal
+              .proposalDetails?.bidNo
+          ) {
+            cfBidNoPrevAnswer = opportunityData
+              .get(cfProposalIdPrevAnswer)
+              .toJS().proposal.proposalDetails.bidNo;
+          }
+
           return (
             <span key={uuidv4()} className="carry-forwarded-section">
-              {<b>Rejected Carry Forwarded Answer</b>}
+              {
+                <b>
+                  Rejected{' '}
+                  {getUserName(
+                    'CarryForwardAnswer',
+                    cfBidNoPrevAnswer
+                  ).toLowerCase()}
+                </b>
+              }
             </span>
           );
         }
