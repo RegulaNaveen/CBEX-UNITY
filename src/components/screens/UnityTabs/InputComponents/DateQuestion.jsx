@@ -74,10 +74,6 @@ const DateQuestion = ({
     questionLockWrapper(question?.questionId);
   }, [socketContext, question]);
 
-  const handleFocus = useCallback(() => {
-    questionLockWrapper(question?.questionId);
-  }, [socketContext, question]);
-
   const handleBlur = useCallback(() => {
     questionUnlockWrapper(question?.questionId);
   }, [socketContext, question]);
