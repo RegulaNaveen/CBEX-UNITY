@@ -135,9 +135,6 @@ const QuestionItem = ({
     };
   }, []);
 
-  // Component will return null in case of empty question value
-  if (isEmpty(question)) return null;
-
   const socketContext = useContext(SocketContext);
   const [isShowHistory, setIsShowHistory] = useState(false);
 
@@ -445,7 +442,9 @@ const QuestionItem = ({
       integration,
       questionId,
       sfObject,
-      hasDifferentSFanswer
+      hasDifferentSFanswer,
+      bidAnswerCopy = false,
+      latestAnsweredBidNo = null
     } = question;
     const loading =
       unityQuestionStatus?.questionId === questionId &&
@@ -561,6 +560,8 @@ const QuestionItem = ({
         answerText={answerText}
         hasDifferentSFanswer={hasDifferentSFanswer}
         disabled={integrationLocked}
+        bidAnswerCopy={bidAnswerCopy}
+        latestAnsweredBidNo={latestAnsweredBidNo}
       />
     );
   };
@@ -595,7 +596,7 @@ const QuestionItem = ({
     default:
       break;
   }
-  return useMemo(
+  const questionRender = useMemo(
     () =>
       isShowQuestion ? (
         <>
@@ -679,6 +680,11 @@ const QuestionItem = ({
       // highlightQuestionId
     ]
   );
+
+  // Component will return null in case of empty question value
+  if (isEmpty(question)) return null;
+
+  return questionRender;
 };
 
 QuestionItem.defaultProps = {
