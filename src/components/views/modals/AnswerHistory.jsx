@@ -570,7 +570,7 @@ class AnswerHistory extends Component<Props> {
   };
 
   renderContent = () => {
-    const { opportunityData, selectedBid } = this.props;
+    const { opportunityData, selectedBid, isQuesFreezed } = this.props;
     const { question } = this.state;
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const sectionName = question.getIn(['section', 'sectionName']);
@@ -1106,6 +1106,7 @@ class AnswerHistory extends Component<Props> {
                 </div>
               ) : null}
               {indexNo === 0 &&
+              !isQuesFreezed &&
               selectedBid.get('isCurrent', false) &&
               lastAnswer?.userName === 'CarryForwardAnswer' &&
               userName === 'CarryForwardAnswer' ? (
