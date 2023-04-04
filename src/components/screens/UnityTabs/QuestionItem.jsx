@@ -42,14 +42,14 @@ import { autoNavigationCompletedAction } from '../../../redux/actions/search-act
 import withIdleStateDetection from '../../HOC/IdleStateDetector';
 
 import TextQuestion from './InputComponents/TextQuestion';
-import NumberQuestion from './InputComponents/NumberQuestion';
-import DateQuestion from './InputComponents/DateQuestion';
-import RadioQuestion from './InputComponents/RadioQuestion';
-import SelectQuestion from './InputComponents/SelectQuestion';
-import MultiSelectQuestion from './InputComponents/MultiSelectQuestion';
-import YesNoQuestion from './InputComponents/YesNoQuestion';
-import CheckBoxQuestion from './InputComponents/CheckBoxQuestion';
-import ProposalTeamQuestion from './InputComponents/ProposalTeamQuestion';
+import NumberQuestion from '../Approvals/InputComponents/NumberQuestion';
+import DateQuestion from '../Approvals/InputComponents/DateQuestion';
+import RadioQuestion from '../Approvals/InputComponents/RadioQuestion';
+import SelectQuestion from '../Approvals/InputComponents/SelectQuestion';
+import MultiSelectQuestion from '../Approvals/InputComponents/MultiSelectQuestion';
+import YesNoQuestion from '../Approvals/InputComponents/YesNoQuestion';
+import CheckBoxQuestion from '../Approvals/InputComponents/CheckBoxQuestion';
+import ProposalTeamQuestion from '../Approvals/InputComponents/ProposalTeamQuestion';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
 const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
