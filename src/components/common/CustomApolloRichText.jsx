@@ -698,15 +698,6 @@ const CustomApolloRichText = ({
 
       const entityKey = contentState.getLastCreatedEntityKey();
 
-      // selectionState = SelectionState.createEmpty(selectionState.getAnchorKey());
-
-      // selectionState = selectionState.merge({
-      //   anchorOffset: selectionState.getAnchorOffset(),
-      //   focusKey: selectionState.getAnchorKey(),
-      //   focusOffset: selectionState.getFocusOffset()
-      // });
-
-      // const linkName = selectedText;
       const contentStateWithLink = Modifier.replaceText(
         contentState,
         selectionState,
@@ -723,8 +714,6 @@ const CustomApolloRichText = ({
         newSelectionState,
         entityKey
       );
-      // const testlink = convertToRaw(contentStateWithEntity.getCurrentContent())
-      //   .blocks;
 
       let newEditorState = EditorState.set(editorState, {
         currentContent: contentStateWithEntity
@@ -734,12 +723,6 @@ const CustomApolloRichText = ({
         newEditorState,
         newSelectionState
       );
-
-      // const newState = EditorState.push(
-      //   editorState,
-      //   contentStateWithEntity,
-      //   'applied link entity'
-      // );
 
       const newContentStateRaw = convertToRaw(
         newEditorState.getCurrentContent()
