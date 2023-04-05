@@ -3,6 +3,7 @@
 import isEmpty from 'lodash/isEmpty';
 import sortBy from 'lodash/sortBy';
 import { store } from '../../../store';
+import { verificationRequiredFilter } from '../Approvals/utils';
 
 /**
  * Function to get the last answer object from a proposal question object
@@ -102,6 +103,10 @@ export const shouldShowQuestion = (question = {}, unityTabfilters): Boolean => {
         for (let index = 0; index < milestonefilter.length; index += 1) {
           filterAnswers.push(milestoneFilters(question, milestonefilter));
         }
+      }
+
+      if (appliedFilters.includes('verificationRequired')) {
+        filterAnswers.push(verificationRequiredFilter(question));
       }
       // console.log(`filterAnswers`, filterAnswers);
     }

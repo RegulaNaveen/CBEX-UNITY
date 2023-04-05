@@ -355,7 +355,7 @@ uat:
   variables:
     Environment: $CI_JOB_NAME
   needs:
-    - deployqa
+    - deploydev
     #- pafexecution_regression
   when: manual
   only:
@@ -402,7 +402,7 @@ prod:
   only:
     - tags
   needs:
-    - deployl4
+    - deploydev
   when: manual
   script:
     - cat $prod_build >> build.env

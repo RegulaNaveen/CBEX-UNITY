@@ -578,12 +578,12 @@ const SystemIntegrations = ({
           justifyContent: 'center'
         }}
       >
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex', flexBasis: '24px', height: '24px' }}>
           {SalesForceCondition()}
           {QvidianValidation()}
           {CalendarCondition()}
         </div>
-        <div style={{ display: 'flex', height: '20px', width: '24px' }}>
+        <div style={{ display: 'flex', height: '24px', width: '24px' }}>
           {loading ? (
             <span
               style={{
