@@ -36,3 +36,52 @@ export function MentionComponentWithLink(props) {
     </a>
   );
 }
+// Function to add http to the link address
+function parseUrl(decoratedText) {
+  let urlWithHttp;
+  if (decoratedText.startsWith('http')) {
+    urlWithHttp = decoratedText;
+  } else {
+    urlWithHttp = `https://${decoratedText}`;
+  }
+  // console.log('decorated text ', decoratedText);
+  return urlWithHttp;
+}
+// MENTION entity's component with HyperLink(Copied hyperlink)
+export function MentionComponentWithCopiedHyperlink(props) {
+  const { decoratedText } = props;
+  const data = props.contentState.getEntity(props.entityKey).getData();
+  const urlWithHttp = parseUrl(data.url);
+
+  // console.log('link Address', data.url);
+  // console.log('decorated text from link entity match', decoratedText);
+  return (
+    <span>
+      <a
+        style={mentionStyles}
+        href={urlWithHttp}
+        target="_blank"
+        rel="noreferrer"
+      >
+        {props.children}
+      </a>
+    </span>
+  );
+}
+// Mention component with all types of links
+export function MentionComponentWithHyperLink(props) {
+  const { decoratedText } = props;
+  const urlWithHttp = parseUrl(decoratedText);
+  // console.log('decorated text from regex match', decoratedText);
+
+  return (
+    <a
+      style={mentionStyles}
+      href={urlWithHttp}
+      target="_blank"
+      rel="noreferrer"
+    >
+      {props.children}
+    </a>
+  );
+}
