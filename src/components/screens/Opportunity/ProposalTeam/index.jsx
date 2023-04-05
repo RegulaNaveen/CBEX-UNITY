@@ -134,7 +134,9 @@ function ProposalTeam() {
           roleNames: roleNames,
           questionLockInfo: questionLockInfo,
           visible: visible,
-          hasDifferentSFanswer: hasDifferentSFanswer
+          hasDifferentSFanswer: hasDifferentSFanswer,
+          bidAnswerCopy: proposalTeamData.bidAnswerCopy,
+          latestAnsweredBidNo: proposalTeamData.latestAnsweredBidNo
         });
       }
     });
