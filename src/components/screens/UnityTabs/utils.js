@@ -3,6 +3,7 @@
 import isEmpty from 'lodash/isEmpty';
 import sortBy from 'lodash/sortBy';
 import { store } from '../../../store';
+import { verificationRequiredFilter } from '../Approvals/utils';
 
 /**
  * Function to get the last answer object from a proposal question object
@@ -27,16 +28,22 @@ export const getLastAnswer = question => {
 const isAnswerEmpty = answer => isEmpty(answer) || answer === ' ';
 const isUnityPredicted = (lastAnswer = {}) =>
   lastAnswer?.userName === 'UnityPredictedAnswer';
+const isCarryForwarded = (answer = {}) =>
+  answer.userName === 'CarryForwardAnswer';
 
 // answeredFilter => Only answered
 const answeredFilter: Boolean = question => {
   const lastAnswer = getLastAnswer(question);
-  return !isAnswerEmpty(lastAnswer.answer) && !isUnityPredicted(lastAnswer);
+  return (
+    !isAnswerEmpty(lastAnswer.answer) &&
+    !isUnityPredicted(lastAnswer) &&
+    !isCarryForwarded(lastAnswer)
+  );
 };
 // UnansweredFilter => No Answers, Indetermined Answers and Unity Predicted Answers
 const unansweredFilter: Boolean = question => {
   const lastAnswer = getLastAnswer(question);
-  return isAnswerEmpty(lastAnswer.answer) || isUnityPredicted(lastAnswer);
+  return isAnswerEmpty(lastAnswer.answer);
 };
 const responsibleFilter: Boolean = question => {
   const userRole = localStorage.getItem('userRole') || '';
@@ -102,6 +109,10 @@ export const shouldShowQuestion = (question = {}, unityTabfilters): Boolean => {
         for (let index = 0; index < milestonefilter.length; index += 1) {
           filterAnswers.push(milestoneFilters(question, milestonefilter));
         }
+      }
+
+      if (appliedFilters.includes('verificationRequired')) {
+        filterAnswers.push(verificationRequiredFilter(question));
       }
       // console.log(`filterAnswers`, filterAnswers);
     }
