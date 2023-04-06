@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable array-callback-return */
 import jwt_decode from 'jwt-decode';
-import { cloneDeep, isEmpty, isString } from 'lodash';
+import { cloneDeep, isArray, isEmpty, isString } from 'lodash';
 import { DEFAULT } from '../constants/app';
 import CountryMap from '../constants/country.json';
 import { UBUILD_ADMIN } from '../constants/types';
@@ -60,7 +60,9 @@ const getAnswer = ans => {
 };
 
 const getFullProposalTeamString = proposalUsers => {
+  if (!isArray(proposalUsers)) return '';
   let proposalTeamStr = ``;
+
   proposalUsers?.map(({ userName, userEmail }) => {
     proposalTeamStr += userName ? `<a href=${userEmail}>${userName}</a>, ` : ``;
   });

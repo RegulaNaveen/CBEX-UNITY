@@ -18,6 +18,7 @@ import {
 } from '../../../redux/selectors/proposal';
 import { getUserData } from '../../../redux/selectors';
 import { updateEventSubjectBody } from '../../../utils/utils';
+import { isMap } from 'lodash';
 // import { getOpportunityData } from '../../../redux/selectors/proposal';
 
 const modalStyle = { maxWidth: 545, width: '100%' };
@@ -113,7 +114,9 @@ const EventLauncher = ({
   const generateEventUrl = (startDate, endDate, body, subject, email) => {
     const placeholderData = {
       proposalDetail,
-      proposalUsers: opportunityData?.toJS()[`${proposalId}`]?.proposalUsers,
+      proposalUsers:
+        isMap(opportunityData) &&
+        opportunityData?.toJS()[`${proposalId}`]?.proposalUsers,
       proposalQuestions
     };
 
