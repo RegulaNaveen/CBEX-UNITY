@@ -74,7 +74,6 @@ export function MentionComponentWithCopiedHyperlink(props) {
 export function MentionComponentWithHyperLink(props) {
   const { decoratedText } = props;
   const urlWithHttp = parseUrl(decoratedText);
-  // console.log('decorated text from regex match', decoratedText);
 
   return (
     <a
