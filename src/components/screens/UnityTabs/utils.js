@@ -28,16 +28,22 @@ export const getLastAnswer = question => {
 const isAnswerEmpty = answer => isEmpty(answer) || answer === ' ';
 const isUnityPredicted = (lastAnswer = {}) =>
   lastAnswer?.userName === 'UnityPredictedAnswer';
+const isCarryForwarded = (answer = {}) =>
+  answer.userName === 'CarryForwardAnswer';
 
 // answeredFilter => Only answered
 const answeredFilter: Boolean = question => {
   const lastAnswer = getLastAnswer(question);
-  return !isAnswerEmpty(lastAnswer.answer) && !isUnityPredicted(lastAnswer);
+  return (
+    !isAnswerEmpty(lastAnswer.answer) &&
+    !isUnityPredicted(lastAnswer) &&
+    !isCarryForwarded(lastAnswer)
+  );
 };
 // UnansweredFilter => No Answers, Indetermined Answers and Unity Predicted Answers
 const unansweredFilter: Boolean = question => {
   const lastAnswer = getLastAnswer(question);
-  return isAnswerEmpty(lastAnswer.answer) || isUnityPredicted(lastAnswer);
+  return isAnswerEmpty(lastAnswer.answer);
 };
 const responsibleFilter: Boolean = question => {
   const userRole = localStorage.getItem('userRole') || '';
