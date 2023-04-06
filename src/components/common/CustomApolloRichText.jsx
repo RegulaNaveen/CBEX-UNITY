@@ -660,16 +660,15 @@ const CustomApolloRichText = ({
       const startKey = selectionState.getStartKey();
 
       const blockWithLinkAtBeginning = contentState.getBlockForKey(startKey);
-      console.log(blockWithLinkAtBeginning.toJS(), 'blockWithLinkAtBeginning');
+
       const index = selectionState.getStartOffset();
       const linkKey = blockWithLinkAtBeginning.getEntityAt(index);
-      console.log(linkKey, 'link key');
+
       if (linkKey !== null) {
         linkInstance = Entity.get(linkKey);
 
-        console.log(linkInstance, 'linkInstance');
         const datatest = linkInstance.getData();
-        console.log('data', datatest);
+
         const { url } = datatest;
         if (url !== null) {
           linkAddress = window.prompt('Link Address:', url);
@@ -684,7 +683,7 @@ const CustomApolloRichText = ({
     }
 
     linkAddress = getLinkAddress();
-    console.log(linkAddress, 'linkAddress');
+
     if (linkAddress !== null) {
       const editorStateHidden =
         richTextEditorRefHidden.current.state.editorState;

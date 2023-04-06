@@ -44,17 +44,19 @@ function parseUrl(decoratedText) {
   } else {
     urlWithHttp = `https://${decoratedText}`;
   }
-  // console.log('decorated text ', decoratedText);
+
   return urlWithHttp;
 }
 // MENTION entity's component with HyperLink(Copied hyperlink)
 export function MentionComponentWithCopiedHyperlink(props) {
   const { decoratedText } = props;
   const data = props.contentState.getEntity(props.entityKey).getData();
-  const urlWithHttp = parseUrl(data.url);
+  const { url } = data;
+  let urlWithHttp;
+  if (url) {
+    urlWithHttp = parseUrl(url);
+  }
 
-  // console.log('link Address', data.url);
-  // console.log('decorated text from link entity match', decoratedText);
   return (
     <span>
       <a
