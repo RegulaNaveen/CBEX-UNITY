@@ -31,7 +31,9 @@ export const applyUnAnsweredFilter = questions => {
       return (
         (answers &&
           answers.length &&
-          !Boolean(String(answers[answers.length - 1].answer).trim().length)) ||
+          (!Boolean(String(answers[answers.length - 1].answer).trim().length) ||
+            answers[answers.length - 1].userName === 'UnityPredictedAnswer' ||
+            answers[answers.length - 1].userName === 'CarryForwardAnswer')) ||
         !Boolean(answers.length)
       );
     } catch (error) {
