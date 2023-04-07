@@ -83,7 +83,8 @@ const QuestionItem = ({
   const panelStatus = useSelector(state => getPanelStatus(state));
   const integrationsData = useSelector(state => getIntegrations(state));
   const unityTabFilters = useSelector(state => state.unitytab.filters);
-  const isShowQuestion = shouldShowQuestion(question, unityTabFilters);
+  const flags = useSelector(state => state.proposal.get('eventflag'));
+  const isShowQuestion = shouldShowQuestion(question, unityTabFilters, flags);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
   const [screenSize, setScreen] = useState('');
   const [iconColor, seticonColor] = useState('#00c221');

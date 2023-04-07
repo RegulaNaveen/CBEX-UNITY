@@ -986,7 +986,8 @@ const onSetQuestion = (state: Map, action: Object): Map => {
   let questionsFilter = state.get('questionsFilter');
   const filterQuestionsVal = getQuestionsFilterApplied(
     updatedProposalQuestions,
-    questionsFilter
+    questionsFilter,
+    state.get('eventflag')
   );
   let selectedBidId = state.getIn(['selectedBid', 'id']);
 
@@ -1115,7 +1116,8 @@ const onEditQuestion = (state, action) => {
   ];
   const filterQuestionsVal = getQuestionsFilterApplied(
     updatedQuestions,
-    questionsFilter
+    questionsFilter,
+    state.get('eventflag')
   );
 
   return state

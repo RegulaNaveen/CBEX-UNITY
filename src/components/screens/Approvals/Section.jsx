@@ -43,12 +43,13 @@ const Section = ({ sectionId, title, testVisibility }) => {
   const autoNavigatedToCurrentResult = useSelector(
     selectAutoNavigatedToCurrentResult
   );
+  const flags = useSelector(state => state.proposal.get('eventflag'));
   const sectionTitleRef = useRef(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setSectionVisibility(shouldShowSection(sectionId));
-  }, [approvalFilters]);
+    setSectionVisibility(shouldShowSection(sectionId, flags));
+  }, [approvalFilters, flags]);
 
   useEffect(() => {
     let shouldExpand = expanded;
