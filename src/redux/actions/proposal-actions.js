@@ -757,10 +757,7 @@ function applyUnAnsweredFilter(questions) {
           (Answer &&
             Answer.length &&
             !Boolean(String(Answer[Answer.length - 1].answer).trim().length)) ||
-          !Boolean(Answer.length) ||
-          (Answer &&
-            Answer.length &&
-            Answer[Answer.length - 1].userName === 'UnityPredictedAnswer')
+          !Boolean(Answer.length)
         );
       })
       .toJS();
@@ -802,7 +799,8 @@ function applyAnsweredFilter(questions) {
           Answer &&
           Answer.length &&
           String(Answer[Answer.length - 1].answer).trim().length > 0 &&
-          Answer[Answer.length - 1].userName !== 'UnityPredictedAnswer'
+          Answer[Answer.length - 1].userName !== 'UnityPredictedAnswer' &&
+          Answer[Answer.length - 1].userName !== 'CarryForwardAnswer'
         );
       })
       .toJS();
